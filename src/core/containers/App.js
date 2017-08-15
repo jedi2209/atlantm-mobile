@@ -3,7 +3,7 @@ import { AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 import { store } from '../store';
-import Router from '../router';
+import getRouter from '../router';
 
 export default class App extends Component {
   state = { rehydrated: false }
@@ -41,6 +41,8 @@ export default class App extends Component {
     if (!this.state.rehydrated) {
       return null;
     }
+
+    const Router = getRouter('IntroScreen');
 
     return (
       <Provider store={store}>

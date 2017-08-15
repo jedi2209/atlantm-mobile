@@ -1,0 +1,57 @@
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  Image,
+  View,
+} from 'react-native';
+import PropTypes from 'prop-types';
+import {
+  Container,
+  Content,
+  Text,
+} from 'native-base';
+
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+import styleConst from '../../../core/style-const';
+import { scale } from '../../../utils/scale';
+import styleHeader from '../../../core/components/Header/style';
+
+const styles = StyleSheet.create({
+  content: {
+    backgroundColor: styleConst.color.content,
+  },
+});
+
+const mapStateToProps = () => {
+  return {
+
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+
+  }, dispatch);
+};
+
+class FeedbackScreen extends Component {
+  static navigationOptions = () => ({
+    headerTitle: 'Написать нам',
+    headerStyle: styleHeader.common,
+    headerTitleStyle: styleHeader.title,
+  })
+
+  render() {
+    return (
+      <Container>
+        <Content>
+          <Text>Форма отправки сообщения</Text>
+        </Content>
+      </Container>
+    );
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FeedbackScreen);

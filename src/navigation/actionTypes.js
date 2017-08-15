@@ -1,0 +1,1 @@
+export const NAVIGATION__CHANGE = 'NAVIGATION__CHANGE';
