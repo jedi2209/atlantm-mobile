@@ -1,8 +1,47 @@
-import React from 'react';
-import { StackNavigator, TabNavigator } from 'react-navigation';
+import { StackNavigator } from 'react-navigation';
 
-import IntroScreen from '../intro/container/IntroScreen';
+// global
+import IntroScreen from '../intro/containers/IntroScreen';
+import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
+import MenuScreen from '../menu/containers/MenuScreen';
 
-export default StackNavigator({
-    Intro: { screen: IntroScreen },
-});
+// contacts
+import ContactsScreen from '../contacts/containers/ContactsScreen';
+import AboutScreen from '../contacts/about/containers/AboutScreen';
+import FeedbackScreen from '../contacts/feedback/containers/FeedbackScreen';
+import MapScreen from '../contacts/map/containers/MapScreen';
+import HelpDeskScreen from '../contacts/helpdesk/containers/HelpDeskScreen';
+import AboutHoldingScreen from '../contacts/aboutholding/containers/AboutHoldingScreen';
+
+// info
+import InfoListScreen from '../info/containers/InfoListScreen';
+import InfoPostScreen from '../info/containers/InfoPostScreen';
+
+const getRouter = initialRouteName => StackNavigator(
+  {
+    IntroScreen: { screen: IntroScreen },
+    MenuScreen: { screen: MenuScreen },
+    ChooseDealerScreen: { screen: ChooseDealerScreen },
+    ContactsScreen: {
+      screen: StackNavigator({
+        ContactsScreen: { screen: ContactsScreen },
+        AboutScreen: { screen: AboutScreen },
+        FeedbackScreen: { screen: FeedbackScreen },
+        MapScreen: { screen: MapScreen },
+        HelpDeskScreen: { screen: HelpDeskScreen },
+        AboutHoldingScreen: { screen: AboutHoldingScreen },
+      }),
+    },
+    InfoScreen: {
+      screen: StackNavigator({
+        InfoListScreen: { screen: InfoListScreen },
+        InfoPostScreen: { screen: InfoPostScreen },
+      }),
+    },
+  },
+  {
+    initialRouteName,
+  },
+);
+
+export default getRouter;
