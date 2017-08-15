@@ -24,16 +24,21 @@ import { connect } from 'react-redux';
 import styleConst from '../../core/style-const';
 import { scale } from '../../utils/scale';
 import styleHeader from '../../core/components/Header/style';
+import {
+  RUSSIA,
+  BELARUSSIA,
+  UKRAINE,
+} from '../countryConst';
 
 // actions
-import { fetchDealers, setDealer } from '../actions';
+import { fetchDealers, selectDealer, selectCountry } from '../actions';
 
 const styles = StyleSheet.create({
   content: {
-    backgroundColor: styleConst.color.content,
+    backgroundColor: '#fff',
   },
   tabs: {
-    backgroundColor: 'grey',
+    backgroundColor: styleConst.color.header,
   },
   brands: {
     flexDirection: 'row',
@@ -42,7 +47,10 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ dealer }) => {
   return {
-    list: dealer.list,
+    country: dealer.country,
+    listRussia: dealer.listRussia,
+    listBelarussia: dealer.listBelarussia,
+    listUkraine: dealer.listUkraine,
     isFetch: dealer.meta.isFetch,
   };
 };
@@ -50,7 +58,8 @@ const mapStateToProps = ({ dealer }) => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
     fetchDealers,
-    setDealer,
+    selectDealer,
+    selectCountry,
   }, dispatch);
 };
 
@@ -64,7 +73,8 @@ class ChooseDealerScreen extends Component {
   static propTypes = {
     isFetch: PropTypes.bool.isRequired,
     fetchDealers: PropTypes.func.isRequired,
-    setDealer: PropTypes.func.isRequired,
+    selectDealer: PropTypes.func.isRequired,
+    selectCountry: PropTypes.func.isRequired,
   }
 
   static defaultProps = {}
@@ -74,33 +84,84 @@ class ChooseDealerScreen extends Component {
   }
 
   render() {
+    const {
+      listRussia,
+      listBelarussia,
+      listUkraine,
+      country,
+      selectCountry,
+    } = this.props;
+
+    let list = [];
+
+    switch (country) {
+      case RUSSIA:
+        list = listRussia;
+        break;
+      case BELARUSSIA:
+        list = listBelarussia;
+        break;
+      case UKRAINE:
+        list = listUkraine;
+        break;
+      default:
+        list = listRussia;
+    }
+
     return (
       <Container>
         <Spinner visible={this.props.isFetch} color={styleConst.color.blue} />
         <Content style={styles.content}>
           <View style={styles.tabs} >
             <Segment>
-                <Button first><Text>Россия</Text></Button>
-                <Button><Text>Беларусь</Text></Button>
-                <Button last active><Text>Украина</Text></Button>
+                <Button
+                  first
+                  active={country === RUSSIA}
+                  onPress={() => selectCountry(RUSSIA)}
+                >
+                  <Text>Россия</Text>
+                </Button>
+                <Button
+                  active={country === BELARUSSIA}
+                  onPress={() => selectCountry(BELARUSSIA)}
+                >
+                  <Text>Беларусь</Text>
+                </Button>
+                <Button
+                  last
+                  active={country === UKRAINE}
+                  onPress={() => selectCountry(UKRAINE)}
+                >
+                  <Text>Украина</Text>
+                </Button>
             </Segment>
           </View>
 
-          <List style={styles.list} >
-            <ListItem style={styles.listItem}>
-              <Body>
-                <Text style={styles.city} >Смоленск</Text>
-                <Text style={styles.name} >Атлант-М Балтика</Text>
-              </Body>
-              <Right>
-                <View style={styles.brands} >
-                  {/* <CachedImage
-                    style={styles.brandLogo}
-                    source=
-                  /> */}
-                </View>
-              </Right>
-            </ListItem>
+          <List
+            key={country}
+            style={styles.list}
+            dataArray={list}
+            renderRow={dealer => {
+              return (
+                <ListItem style={styles.listItem}>
+                  <Body
+                    style={styles.listItemBody}
+                  >
+                    {dealer.city ? <Text style={styles.city}>{dealer.city}</Text> : null}
+                    {dealer.name ? <Text style={styles.name}>{dealer.name}</Text> : null}
+                  </Body>
+                  <Right>
+                    <View style={styles.brands} >
+                      {/* <CachedImage
+                        style={styles.brandLogo}
+                        source=
+                      /> */}
+                    </View>
+                  </Right>
+                </ListItem>
+              );
+            }}
+          >
           </List>
         </Content>
       </Container>
