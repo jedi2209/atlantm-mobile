@@ -7,13 +7,10 @@ import {
 import PropTypes from 'prop-types';
 import {
   Container,
-  Content,
   Footer,
   FooterTab,
   Button,
   Text,
-  StyleProvider,
-  Icon,
 } from 'native-base';
 
 import { bindActionCreators } from 'redux';
@@ -22,6 +19,7 @@ import { connect } from 'react-redux';
 import styleConst from '../../core/style-const';
 import { scale } from '../../utils/scale';
 
+const buttonIconSize = 20;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: styleConst.color.blue,
@@ -43,6 +41,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: 'HelveticaNeue-Medium',
     fontSize: 15,
+  },
+  buttonIcon: {
+    marginLeft: 5,
+    width: buttonIconSize,
+    resizeMode: 'contain',
   },
 });
 
@@ -80,7 +83,10 @@ class IntroScreen extends Component {
               style={styles.button}
             >
               <Text style={styles.buttonText}>ВЫБЕРЕТЕ СВОЙ АВТОЦЕНТР</Text>
-              <Icon name="magnify" />
+              <Image
+                source={require('../../core/components/CustomIcon/assets/arrow-right.png')}
+                style={styles.buttonIcon}
+              />
             </Button>
           </FooterTab>
         </Footer>
