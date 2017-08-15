@@ -14,6 +14,7 @@ import {
   ListItem,
   Body,
   Right,
+  StyleProvider,
 } from 'native-base';
 import CachedImage from 'react-native-cached-image';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -21,6 +22,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import { scale } from '../../utils/scale';
 import styleHeader from '../../core/components/Header/style';
@@ -109,62 +111,64 @@ class ChooseDealerScreen extends Component {
     }
 
     return (
-      <Container>
-        <Spinner visible={this.props.isFetch} color={styleConst.color.blue} />
-        <Content style={styles.content}>
-          <View style={styles.tabs} >
-            <Segment>
-                <Button
-                  first
-                  active={country === RUSSIA}
-                  onPress={() => selectCountry(RUSSIA)}
-                >
-                  <Text>Россия</Text>
-                </Button>
-                <Button
-                  active={country === BELARUSSIA}
-                  onPress={() => selectCountry(BELARUSSIA)}
-                >
-                  <Text>Беларусь</Text>
-                </Button>
-                <Button
-                  last
-                  active={country === UKRAINE}
-                  onPress={() => selectCountry(UKRAINE)}
-                >
-                  <Text>Украина</Text>
-                </Button>
-            </Segment>
-          </View>
-
-          <List
-            key={country}
-            style={styles.list}
-            dataArray={list}
-            renderRow={dealer => {
-              return (
-                <ListItem style={styles.listItem}>
-                  <Body
-                    style={styles.listItemBody}
+      <StyleProvider style={getTheme()}>
+        <Container>
+          <Spinner visible={this.props.isFetch} color={styleConst.color.blue} />
+          <Content style={styles.content}>
+            <View style={styles.tabs} >
+              <Segment>
+                  <Button
+                    first
+                    active={country === RUSSIA}
+                    onPress={() => selectCountry(RUSSIA)}
                   >
-                    {dealer.city ? <Text style={styles.city}>{dealer.city}</Text> : null}
-                    {dealer.name ? <Text style={styles.name}>{dealer.name}</Text> : null}
-                  </Body>
-                  <Right>
-                    <View style={styles.brands} >
-                      {/* <CachedImage
-                        style={styles.brandLogo}
-                        source=
-                      /> */}
-                    </View>
-                  </Right>
-                </ListItem>
-              );
-            }}
-          >
-          </List>
-        </Content>
-      </Container>
+                    <Text>Россия</Text>
+                  </Button>
+                  <Button
+                    active={country === BELARUSSIA}
+                    onPress={() => selectCountry(BELARUSSIA)}
+                  >
+                    <Text>Беларусь</Text>
+                  </Button>
+                  <Button
+                    last
+                    active={country === UKRAINE}
+                    onPress={() => selectCountry(UKRAINE)}
+                  >
+                    <Text>Украина</Text>
+                  </Button>
+              </Segment>
+            </View>
+
+            <List
+              key={country}
+              style={styles.list}
+              dataArray={list}
+              renderRow={dealer => {
+                return (
+                  <ListItem style={styles.listItem}>
+                    <Body
+                      style={styles.listItemBody}
+                    >
+                      {dealer.city ? <Text style={styles.city}>{dealer.city}</Text> : null}
+                      {dealer.name ? <Text style={styles.name}>{dealer.name}</Text> : null}
+                    </Body>
+                    <Right>
+                      <View style={styles.brands} >
+                        {/* <CachedImage
+                          style={styles.brandLogo}
+                          source=
+                        /> */}
+                      </View>
+                    </Right>
+                  </ListItem>
+                );
+              }}
+            >
+            </List>
+          </Content>
+        </Container>
+      </StyleProvider>
     );
   }
 }
