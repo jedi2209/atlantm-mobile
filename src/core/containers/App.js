@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 import { store } from '../store';
 import getRouter from '../router';
+import _ from 'lodash';
 
 export default class App extends Component {
   state = { rehydrated: false }
@@ -42,7 +43,8 @@ export default class App extends Component {
       return null;
     }
 
-    const Router = getRouter('IntroScreen');
+    const isDealer = _.get(store.getState(), 'dealer.data');
+    const Router = getRouter(isDealer ? 'MenuScreen' : 'IntroScreen');
 
     return (
       <Provider store={store}>
