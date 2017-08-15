@@ -1,4 +1,6 @@
-export const DEALER__SET = 'DEALER__SET';
+export const COUNTRY__SELECT = 'COUNTRY__SELECT';
+
+export const DEALER__SELECT = 'DEALER__SELECT';
 
 export const DEALERS__REQUEST = 'DEALERS__REQUEST';
 export const DEALERS__SUCCESS = 'DEALERS__SUCCESS';
