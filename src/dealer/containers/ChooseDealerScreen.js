@@ -20,7 +20,6 @@ import {
 } from 'native-base';
 import CachedImage from 'react-native-cached-image';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { NavigationActions } from 'react-navigation';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -44,8 +43,8 @@ const styles = StyleSheet.create({
   },
   tabs: {
     backgroundColor: styleConst.color.header,
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#b2b2b2',
+    borderBottomWidth: styleConst.ui.borderWidth,
+    borderBottomColor: styleConst.color.border,
   },
   brands: {
     flexDirection: 'row',
