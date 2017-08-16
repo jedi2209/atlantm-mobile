@@ -59,6 +59,8 @@ export const fetchDealers = () => {
         const { data: dealers, error: errorDealers } = response[0];
         const { data: brands, error: errorBrands } = response[1];
 
+        console.log('dealers', dealers);
+
         if (errorDealers) {
           return dispatch({
             type: DEALERS__FAIL,
@@ -118,12 +120,11 @@ export const fetchDealers = () => {
           const dealersByCountries = response.reduce((result, responseItem, index) => {
             const baseData = dealers[index] || {};
 
-            const country = dealersCountries[baseData.country];
+            const country = dealersCountries[baseData.region];
 
             responseItem.id = baseData.id;
-            responseItem.country = baseData.country;
+            responseItem.country = baseData.region;
             result[country].push(responseItem);
-
 
             return result;
           }, {

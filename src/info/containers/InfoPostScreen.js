@@ -46,10 +46,12 @@ const textStyles = StyleSheet.create({
   p: {
     fontFamily: styleConst.font.regular,
     fontSize: 15,
+    letterSpacing: styleConst.ui.letterSpacing,
   },
   li: {
     fontFamily: styleConst.font.regular,
     fontSize: 15,
+    letterSpacing: styleConst.ui.letterSpacing,
   },
 });
 

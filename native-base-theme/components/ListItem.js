@@ -1,5 +1,6 @@
 import { Platform, PixelRatio } from "react-native";
 
+import styleConst from '../../src/core/style-const';
 import pickerTheme from "./Picker";
 import variable from "./../variables/platform";
 
@@ -84,18 +85,16 @@ export default (variables = variable) => {
       marginLeft: null,
       padding: variables.listItemPadding,
       paddingLeft: variables.listItemPadding + 5,
-      paddingTop: platform === "ios"
-        ? variables.listItemPadding + 25
-        : undefined,
-      paddingBottom: platform === "android"
-        ? variables.listItemPadding + 20
-        : undefined,
+      paddingTop: variables.listItemPadding + 20,
+      paddingBottom: variables.listItemPadding,
       flexDirection: "row",
       borderColor: variables.listBorderColor,
       "NativeBase.Text": {
+        letterSpacing: styleConst.ui.letterSpacing,
         fontSize: 14,
-        color: platform === "ios" ? undefined : variables.listNoteColor
-      }
+        color: styleConst.color.greyText3,
+        fontWeight: '500',
+      },
     },
     ".itemDivider": {
       borderBottomWidth: null,

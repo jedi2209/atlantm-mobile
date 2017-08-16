@@ -1,5 +1,6 @@
 import { Platform } from 'react-native';
 
+import styleConst from '../../src/core/style-const';
 import variable from './../variables/platform';
 
 export default (variables = variable) => {
@@ -22,13 +23,14 @@ export default (variables = variable) => {
 				top: null,
 				left: null,
 				right: null,
-				flex: 1,
+				flex: 1.2,
 				height: null,
 				width: null,
-				fontSize: variables.inputFontSize,
+        fontSize: variables.inputFontSize,
+        letterSpacing: styleConst.ui.letterSpacing,
 			},
 			'NativeBase.Input': {
-				flex: 2,
+				flex: 3,
 				fontSize: variables.inputFontSize,
 			},
 		},
