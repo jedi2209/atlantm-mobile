@@ -217,7 +217,7 @@ export default (variables = variable) => {
         color: variables.listNoteColor,
         fontWeight: "200"
       },
-      alignSelf: 'center'
+      alignSelf: 'center',
     },
 
     ".last": {
@@ -251,7 +251,7 @@ export default (variables = variable) => {
         alignSelf: "stretch",
         paddingVertical: variables.listItemPadding,
         borderBottomWidth: variables.borderWidth,
-        borderColor: variables.listBorderColor
+        borderColor: variables.listBorderColor,
       },
       borderBottomWidth: null,
       paddingVertical: null,
@@ -342,7 +342,9 @@ export default (variables = variable) => {
       "NativeBase.Body": {
         "NativeBase.Text": {
           marginLeft: null,
-          fontSize: 17
+          fontSize: 17,
+          fontFamily: styleConst.font.regular,
+          letterSpacing: styleConst.ui.letterSpacing,
         },
         flex: 1,
         height: 44,

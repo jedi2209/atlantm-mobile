@@ -123,7 +123,7 @@ class InfoPostScreen extends Component {
                   <View style={styles.textContainer}>
                     <HTMLView
                       value={this.processText(post.text)}
-                      stylesheet={styles}
+                      stylesheet={textStyles}
                     />
                   </View>
                 </View>

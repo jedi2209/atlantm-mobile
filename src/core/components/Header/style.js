@@ -14,7 +14,7 @@ export default StyleSheet.create({
   common: {
     backgroundColor: styleConst.color.header,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#b2b2b2',
+    borderBottomColor: styleConst.color.border,
     shadowRadius: null,
     shadowOpacity: null,
     shadowOffset: null,

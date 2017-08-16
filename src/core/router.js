@@ -25,18 +25,27 @@ const getRouter = initialRouteName => StackNavigator(
     ChooseDealerScreen: { screen: ChooseDealerScreen },
     ContactsScreen: {
       screen: StackNavigator({
-        ContactsScreen: { screen: ContactsScreen },
+        index: { screen: ContactsScreen },
         AboutScreen: { screen: AboutScreen },
         FeedbackScreen: { screen: FeedbackScreen },
         MapScreen: { screen: MapScreen },
         ReferenceScreen: { screen: ReferenceScreen },
         AboutHoldingScreen: { screen: AboutHoldingScreen },
-      }),
+      },
+        {
+          // initialRouteName: 'AboutScreen',
+          headerMode: 'float',
+        }),
+      navigationOptions: {
+        header: null,
+      },
     },
     InfoScreen: {
       screen: StackNavigator({
         InfoListScreen: { screen: InfoListScreen },
         InfoPostScreen: { screen: InfoPostScreen },
+      }, {
+        headerMode: 'float',
       }),
       navigationOptions: {
         header: null,
@@ -46,6 +55,7 @@ const getRouter = initialRouteName => StackNavigator(
   },
   {
     initialRouteName,
+    headerMode: 'float',
   },
 );
 
