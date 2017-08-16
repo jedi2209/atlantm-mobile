@@ -7,6 +7,7 @@ export default {
     bg: '#f0f3f5',
     greyText: 'rgba(97,110,122,1)',
     greyText2: 'rgba(128,128,128,1)',
+    greyText3: 'rgba(102,102,102,1)',
     header: '#f7f7f8',
     select: '#c8dffa',
     border: '#b2b2b2',
@@ -22,6 +23,7 @@ export default {
     borderWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
     horizontalGap: 11,
     verticalGap: 22,
+    letterSpacing: -0.3,
   },
 };
 

@@ -9,6 +9,7 @@ export default StyleSheet.create({
     fontWeight: '600',
     alignSelf: 'center',
     fontFamily: styleConst.font.regular,
+    letterSpacing: styleConst.ui.letterSpacing,
   },
   common: {
     backgroundColor: styleConst.color.header,

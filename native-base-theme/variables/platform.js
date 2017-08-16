@@ -179,10 +179,10 @@ export default {
   inputErrorBorderColor: "#ed2f2f",
 
   get inputColor() {
-    return this.textColor;
+    return styleConst.color.greyText;
   },
   get inputColorPlaceholder() {
-    return "#575757";
+    return styleConst.color.greyText;
   },
 
   inputGroupMarginBottom: 10,

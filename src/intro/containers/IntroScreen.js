@@ -19,7 +19,7 @@ import { connect } from 'react-redux';
 import styleConst from '../../core/style-const';
 import { scale } from '../../utils/scale';
 
-const buttonIconSize = 20;
+const buttonIconSize = 18;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: styleConst.color.blue,
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontFamily: 'HelveticaNeue-Medium',
     fontSize: 15,
+    letterSpacing: styleConst.ui.letterSpacing,
   },
   buttonIcon: {
     marginLeft: 5,

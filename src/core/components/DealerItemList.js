@@ -29,11 +29,13 @@ const styles = StyleSheet.create({
   city: {
     fontFamily: styleConst.font.regular,
     fontSize: 17,
+    letterSpacing: styleConst.ui.letterSpacing,
   },
   name: {
     color: styleConst.color.greyText,
     fontFamily: styleConst.font.light,
     fontSize: 17,
+    letterSpacing: styleConst.ui.letterSpacing,
   },
   listItem: {
     minHeight: 44,

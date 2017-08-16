@@ -44,17 +44,21 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: styleConst.font.regular,
     fontSize: 17,
+    letterSpacing: styleConst.ui.letterSpacing,
   },
   date: {
     color: styleConst.color.greyText2,
     fontFamily: styleConst.font.regular,
     fontSize: 14,
+    letterSpacing: styleConst.ui.letterSpacing,
+    marginTop: verticalScale(5),
   },
   message: {
     fontFamily: styleConst.font.regular,
     fontSize: 14,
     alignSelf: 'center',
     marginTop: verticalScale(60),
+    letterSpacing: styleConst.ui.letterSpacing,
   },
 });
 
@@ -170,8 +174,7 @@ class InfoListScreen extends Component {
                   style={styles.list}
                   dataArray={list}
                   renderRow={info => {
-                      {/* const isVisited = visited.includes(info.id); */}
-                      const isVisited = false;
+                      const isVisited = visited.includes(info.id);
 
                       return (
                       <ListItem
@@ -186,11 +189,10 @@ class InfoListScreen extends Component {
                           {
                               info.name ?
                               <Text style={[
-                                  styles.name,
-                                  { color: isVisited ? styleConst.color.greyText : '#000' },
-                              ]}
-                              >
-                                  {info.name}
+                                styles.name,
+                                { color: isVisited ? styleConst.color.greyText : '#000' },
+                              ]}>
+                                {info.name}
                               </Text> :
                               null
                           }
@@ -204,12 +206,8 @@ class InfoListScreen extends Component {
                           <Icon
                               name="arrow-forward"
                               style={[
-                              styles.icon,
-                              { color:
-                                  isVisited ?
-                                  styleConst.color.systemGrey :
-                                  styleConst.color.systemBlue,
-                              },
+                                styles.icon,
+                                { color: isVisited ? styleConst.color.systemGrey : styleConst.color.systemBlue },
                               ]}
                           />
                           </Right>

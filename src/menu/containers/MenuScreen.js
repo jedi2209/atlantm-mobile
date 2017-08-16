@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: styleConst.font.regular,
     textAlign: 'center',
+    letterSpacing: styleConst.ui.letterSpacing,
   },
   item: {
     alignItems: 'center',

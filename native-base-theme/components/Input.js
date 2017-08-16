@@ -1,3 +1,4 @@
+import styleConst from '../../src/core/style-const';
 import variable from './../variables/platform';
 
 export default (variables = variable) => {
@@ -7,11 +8,11 @@ export default (variables = variable) => {
 		},
 		height: variables.inputHeightBase,
 		color: variables.inputColor,
-		paddingLeft: 5,
-		paddingRight: 5,
 		flex: 1,
 		fontSize: variables.inputFontSize,
-		lineHeight: variables.inputLineHeight,
+    lineHeight: variables.inputLineHeight,
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.light,
 	};
 
 	return inputTheme;
