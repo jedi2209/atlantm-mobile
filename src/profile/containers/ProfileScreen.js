@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {
   StyleSheet,
-  Image,
   View,
 } from 'react-native';
 import PropTypes from 'prop-types';
@@ -12,7 +11,6 @@ import {
   List,
   ListItem,
   StyleProvider,
-  Form,
   Item,
   Input,
   Label,
@@ -21,11 +19,12 @@ import {
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { nameFill, phoneFill, emailFill } from '../actions';
+
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import { scale } from '../../utils/scale';
 import styleHeader from '../../core/components/Header/style';
 
 const styles = StyleSheet.create({
@@ -46,20 +45,26 @@ const styles = StyleSheet.create({
   listItem: {
     paddingRight: 0,
     paddingTop: 0,
+    paddingBottom: 0,
   },
   listHeaderContainer: {
   },
 });
 
-const mapStateToProps = ({ dealer }) => {
+const mapStateToProps = ({ dealer, profile }) => {
   return {
     dealerSelected: dealer.selected,
+    name: profile.name,
+    phone: profile.phone,
+    email: profile.email,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-
+    nameFill,
+    phoneFill,
+    emailFill,
   }, dispatch);
 };
 
@@ -76,6 +81,12 @@ class ProfileScreen extends Component {
     const {
       dealerSelected,
       navigation,
+      nameFill,
+      phoneFill,
+      emailFill,
+      name,
+      phone,
+      email,
     } = this.props;
 
     return (
@@ -106,7 +117,12 @@ class ProfileScreen extends Component {
                     <Item style={styles.inputItem} fixedLabel>
                       <Label style={styles.label}>ФИО</Label>
                       <Input
-                        placeholder="Поле для заполнения"
+                          autoCapitalize="none"
+                          autoCorrect={false}
+                          placeholder="Поле для заполнения"
+                          onChangeText={text => nameFill(text)}
+                          value={name}
+                          returnKeyType="done"
                       />
                     </Item>
                   </Body>
@@ -119,7 +135,13 @@ class ProfileScreen extends Component {
                     <Item style={styles.inputItem} fixedLabel>
                         <Label style={styles.label}>Телефон</Label>
                         <Input
+                          autoCapitalize="none"
+                          autoCorrect={false}
                           placeholder="Поле для заполнения"
+                          onChangeText={text => phoneFill(text)}
+                          value={phone}
+                          keyboardType="numeric"
+                          returnKeyType="done"
                         />
                       </Item>
                   </Body>
@@ -132,7 +154,13 @@ class ProfileScreen extends Component {
                     <Item style={styles.inputItem} fixedLabel last>
                       <Label style={styles.label}>Email</Label>
                       <Input
+                        autoCapitalize="none"
+                        autoCorrect={false}
                         placeholder="Поле для заполнения"
+                        onChangeText={text => emailFill(text)}
+                        value={email}
+                        keyboardType="email-address"
+                        returnKeyType="done"
                       />
                   </Item>
                   </Body>
