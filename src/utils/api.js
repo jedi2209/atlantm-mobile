@@ -25,6 +25,14 @@ export default {
     return this.request('/brands/info/get/', baseRequestParams);
   },
 
+  fetchInfoList(region = 0, dealer = 0) {
+    return this.request(`/info/actions/get/?region=${region}&dealer=${dealer}`, baseRequestParams);
+  },
+
+  fetchInfoPost(infoID) {
+    return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
+  },
+
   request(path, requestParams) {
     const url = `https://api.atlantm.com${path}`;
 

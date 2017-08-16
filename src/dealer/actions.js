@@ -121,6 +121,7 @@ export const fetchDealers = () => {
             const country = dealersCountries[baseData.country];
 
             responseItem.id = baseData.id;
+            responseItem.country = baseData.country;
             result[country].push(responseItem);
 
 
