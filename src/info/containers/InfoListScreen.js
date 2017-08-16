@@ -207,7 +207,7 @@ class InfoListScreen extends Component {
                               name="arrow-forward"
                               style={[
                                 styles.icon,
-                                { color: isVisited ? styleConst.color.systemGrey : styleConst.color.systemBlue },
+                                { color: isVisited ? styleConst.color.systemGray : styleConst.color.systemBlue },
                               ]}
                           />
                           </Right>

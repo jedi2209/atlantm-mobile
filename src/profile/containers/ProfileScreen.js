@@ -94,11 +94,11 @@ class ProfileScreen extends Component {
         <Container>
           <Content style={styles.content} >
             <List style={styles.list}>
-            <View style={styles.listHeaderContainer}>
-              <ListItem itemHeader>
-                <Text>МОЙ АВТОЦЕНТР</Text>
-              </ListItem>
-            </View>
+              <View style={styles.listHeaderContainer}>
+                <ListItem itemHeader>
+                  <Text>МОЙ АВТОЦЕНТР</Text>
+                </ListItem>
+              </View>
               <DealerItemList
                 navigation={navigation}
                 city={dealerSelected.city}
@@ -117,12 +117,12 @@ class ProfileScreen extends Component {
                     <Item style={styles.inputItem} fixedLabel>
                       <Label style={styles.label}>ФИО</Label>
                       <Input
-                          autoCapitalize="none"
-                          autoCorrect={false}
-                          placeholder="Поле для заполнения"
-                          onChangeText={text => nameFill(text)}
-                          value={name}
-                          returnKeyType="done"
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        placeholder="Поле для заполнения"
+                        onChangeText={text => nameFill(text)}
+                        value={name}
+                        returnKeyType="done"
                       />
                     </Item>
                   </Body>
