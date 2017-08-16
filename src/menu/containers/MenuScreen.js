@@ -41,6 +41,7 @@ class MenuScreen extends Component {
     headerTitle: 'Атлант-М',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
+    headerLeft: null,
   })
 
   render() {

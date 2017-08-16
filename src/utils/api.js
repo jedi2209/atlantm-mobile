@@ -21,6 +21,10 @@ export default {
     return this.request(`/dealer/info/get/${id}/`, baseRequestParams);
   },
 
+  fetchBrands() {
+    return this.request('/brands/info/get/', baseRequestParams);
+  },
+
   request(path, requestParams) {
     const url = `https://api.atlantm.com${path}`;
 

@@ -1,4 +1,5 @@
 import color from "color";
+import styleConst from '../../src/core/style-const';
 
 import { Platform, Dimensions, PixelRatio } from "react-native";
 
@@ -204,7 +205,7 @@ export default {
   listBorderColor: "#c9c9c9",
   listDividerBg: "#f4f4f4",
   listItemHeight: 45,
-  listBtnUnderlayColor: "#DDD",
+  listBtnUnderlayColor: styleConst.color.select,
 
   // Card
   cardBorderColor: "#ccc",

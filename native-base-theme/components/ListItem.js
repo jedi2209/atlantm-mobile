@@ -206,6 +206,10 @@ export default (variables = variable) => {
       "NativeBase.Switch": {
         alignSelf: null
       },
+
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
       padding: null,
       flex: 0.28
     },
@@ -396,7 +400,7 @@ export default (variables = variable) => {
     alignItems: "center",
     flexDirection: "row",
     paddingRight: variables.listItemPadding + 5,
-    paddingVertical: variables.listItemPadding + 3,
+    paddingVertical: 6,
     marginLeft: variables.listItemPadding + 5,
     borderBottomWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
     backgroundColor: variables.listBg,
