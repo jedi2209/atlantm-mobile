@@ -38,6 +38,9 @@ const getRouter = initialRouteName => StackNavigator(
         InfoListScreen: { screen: InfoListScreen },
         InfoPostScreen: { screen: InfoPostScreen },
       }),
+      navigationOptions: {
+        header: null,
+      },
     },
     ProfileScreen: { screen: ProfileScreen },
   },

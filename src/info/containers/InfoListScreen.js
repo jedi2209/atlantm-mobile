@@ -9,6 +9,12 @@ import {
   Container,
   Content,
   Text,
+  List,
+  ListItem,
+  Body,
+  Right,
+  StyleProvider,
+  Icon,
 } from 'native-base';
 
 import { bindActionCreators } from 'redux';
@@ -17,16 +23,17 @@ import { connect } from 'react-redux';
 import styleConst from '../../core/style-const';
 import { scale } from '../../utils/scale';
 import styleHeader from '../../core/components/Header/style';
+import DealerItemList from '../../core/components/DealerItemList';
 
 const styles = StyleSheet.create({
   content: {
-    backgroundColor: styleConst.color.content,
+    backgroundColor: styleConst.color.bg,
   },
 });
 
-const mapStateToProps = () => {
+const mapStateToProps = ({ dealer }) => {
   return {
-
+    dealerSelected: dealer.selected,
   };
 };
 
@@ -41,13 +48,26 @@ class InfoListScreen extends Component {
     headerTitle: 'Акции',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
+    headerLeft: null,
   })
 
   render() {
+    const {
+      navigation,
+      dealerSelected,
+    } = this.props;
+
     return (
       <Container>
         <Content>
-          <Text>Список акций</Text>
+
+        <DealerItemList
+          navigation={navigation}
+          city={dealerSelected.city}
+          name={dealerSelected.name}
+          brands={dealerSelected.brand}
+        />
+
         </Content>
       </Container>
     );
