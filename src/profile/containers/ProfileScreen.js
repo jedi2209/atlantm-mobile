@@ -14,9 +14,9 @@ import {
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import styleConst from '../../../core/style-const';
-import { scale } from '../../../utils/scale';
-import styleHeader from '../../../core/components/Header/style';
+import styleConst from '../../core/style-const';
+import { scale } from '../../utils/scale';
+import styleHeader from '../../core/components/Header/style';
 
 const styles = StyleSheet.create({
   content: {
@@ -36,9 +36,9 @@ const mapDispatchToProps = dispatch => {
   }, dispatch);
 };
 
-class HelpDeskScreen extends Component {
+class ProfileScreen extends Component {
   static navigationOptions = () => ({
-    headerTitle: 'Справочная',
+    headerTitle: 'Личный кабинет',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
   })
@@ -47,11 +47,11 @@ class HelpDeskScreen extends Component {
     return (
       <Container>
         <Content>
-          <Text>Контакты справочных служб</Text>
+          <Text>Личный кабинет</Text>
         </Content>
       </Container>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(HelpDeskScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);

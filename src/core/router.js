@@ -4,13 +4,14 @@ import { StackNavigator } from 'react-navigation';
 import IntroScreen from '../intro/containers/IntroScreen';
 import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
 import MenuScreen from '../menu/containers/MenuScreen';
+import ProfileScreen from '../profile/containers/ProfileScreen';
 
 // contacts
 import ContactsScreen from '../contacts/containers/ContactsScreen';
 import AboutScreen from '../contacts/about/containers/AboutScreen';
 import FeedbackScreen from '../contacts/feedback/containers/FeedbackScreen';
 import MapScreen from '../contacts/map/containers/MapScreen';
-import HelpDeskScreen from '../contacts/helpdesk/containers/HelpDeskScreen';
+import ReferenceScreen from '../contacts/reference/containers/ReferenceScreen';
 import AboutHoldingScreen from '../contacts/aboutholding/containers/AboutHoldingScreen';
 
 // info
@@ -28,7 +29,7 @@ const getRouter = initialRouteName => StackNavigator(
         AboutScreen: { screen: AboutScreen },
         FeedbackScreen: { screen: FeedbackScreen },
         MapScreen: { screen: MapScreen },
-        HelpDeskScreen: { screen: HelpDeskScreen },
+        ReferenceScreen: { screen: ReferenceScreen },
         AboutHoldingScreen: { screen: AboutHoldingScreen },
       }),
     },
@@ -38,6 +39,7 @@ const getRouter = initialRouteName => StackNavigator(
         InfoPostScreen: { screen: InfoPostScreen },
       }),
     },
+    ProfileScreen: { screen: ProfileScreen },
   },
   {
     initialRouteName,
