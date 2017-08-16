@@ -26,7 +26,6 @@ import { connect } from 'react-redux';
 
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import { scale } from '../../utils/scale';
 import styleHeader from '../../core/components/Header/style';
 import {
   RUSSIA,
