@@ -4,7 +4,6 @@ import {
   StyleSheet,
   RefreshControl,
   ActivityIndicator,
-  Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {
@@ -56,7 +55,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     alignSelf: 'center',
     marginTop: verticalScale(60),
-  }
+  },
 });
 
 const mapStateToProps = ({ dealer, info }) => {
@@ -96,6 +95,7 @@ class InfoListScreen extends Component {
     list: PropTypes.array.isRequired,
     visited: PropTypes.array.isRequired,
     fetchInfoList: PropTypes.func.isRequired,
+    isFetchInfoList: PropTypes.bool.isRequired,
   }
 
   componentWillMount() {
@@ -157,7 +157,7 @@ class InfoListScreen extends Component {
                   isFetchInfoList ?
                   (
                       <View style={styles.spinnerContainer} >
-                      <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
+                        <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
                       </View>
                   ) :
                   (
@@ -176,7 +176,7 @@ class InfoListScreen extends Component {
                       return (
                       <ListItem
                           onPress={() => {
-                          navigation.navigate('InfoPostScreen', { infoID: info.id });
+                          navigation.navigate('InfoPostScreen', { id: info.id });
                           }}
                           style={styles.listItem}
                       >
