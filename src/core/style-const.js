@@ -20,6 +20,7 @@ export default {
   },
   ui: {
     borderWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
+    horizontalGap: 11,
   },
 };
 

@@ -24,6 +24,7 @@ import styleConst from '../../core/style-const';
 import { scale } from '../../utils/scale';
 import styleHeader from '../../core/components/Header/style';
 import DealerItemList from '../../core/components/DealerItemList';
+import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
 const styles = StyleSheet.create({
   content: {
@@ -44,11 +45,12 @@ const mapDispatchToProps = dispatch => {
 };
 
 class InfoListScreen extends Component {
-  static navigationOptions = () => ({
+  static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Акции',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
     headerLeft: null,
+    headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 
   render() {
