@@ -2,8 +2,9 @@ export default {
   color: {
     blue: '#0458a7',
     lightBlue: '#157efa',
-    grey: '#f0f3f5',
+    bg: '#f0f3f5',
     greyText: 'rgba(97,110,122,1)',
+    greyText2: 'rgba(128,128,128,1)',
     header: '#f7f7f8',
     select: '#c8dffa',
     systemBlue: '#007aff',
