@@ -24,24 +24,9 @@ import {
 } from './countryConst';
 
 const dealersCountries = {
-  113: RUSSIA,
-  117: RUSSIA,
-  174: RUSSIA,
-  181: RUSSIA,
-  107: RUSSIA,
-  178: RUSSIA,
-  102: BELARUSSIA,
-  111: BELARUSSIA,
-  112: BELARUSSIA,
-  105: BELARUSSIA,
-  120: BELARUSSIA,
-  129: BELARUSSIA,
-  137: BELARUSSIA,
-  119: UKRAINE,
-  116: UKRAINE,
-  126: UKRAINE,
-  822: UKRAINE,
-  922: UKRAINE,
+  ru: RUSSIA,
+  by: BELARUSSIA,
+  ua: UKRAINE,
 };
 
 export const selectCountry = country => {
@@ -66,38 +51,79 @@ export const fetchDealers = () => {
   return dispatch => {
     dispatch({ type: DEALERS__REQUEST });
 
-    return API.fetchDealers()
+    return Promise.all([
+      API.fetchDealers(),
+      API.fetchBrands(),
+    ])
       .then(response => {
-        const { data: dealerList, error } = response;
+        const { data: dealers, error: errorDealers } = response[0];
+        const { data: brands, error: errorBrands } = response[1];
 
-        if (error) {
+        if (errorDealers) {
           return dispatch({
             type: DEALERS__FAIL,
             payload: {
-              code: error.code,
-              error: error.message,
-            }
+              code: errorDealers.code,
+              error: errorDealers.message,
+              errorSource: 'fetchDealers',
+            },
           });
         }
 
-        if (dealerList.length === 0) {
+        if (errorBrands) {
+          return dispatch({
+            type: DEALERS__FAIL,
+            payload: {
+              code: errorBrands.code,
+              error: errorBrands.message,
+              errorSource: 'fetchBrands',
+            },
+          });
+        }
+
+        if (dealers.length === 0) {
           dispatch({
             type: DEALERS__SUCCESS,
             payload: [],
           });
         }
 
-        Promise.all(dealerList.map(dealer => {
+        Promise.all(dealers.map(dealer => {
           // получаем подробную информацию
-          return API.fetchDealer(dealer.id);
+          return API.fetchDealer(dealer.id)
+            .then(dealerDetailsResponse => {
+
+              if (dealerDetailsResponse.error) {
+                return dispatch({
+                  type: DEALERS__FAIL,
+                  payload: {
+                    error: error.message,
+                    errorSource: 'fetchDealer',
+                  },
+                });
+              }
+
+              const result = { ...dealerDetailsResponse.data };
+
+              result.brand = Object.keys(result.brand).map(brandId => {
+                return _.find(brands, (item) => {
+                  return item.id === +brandId;
+                });
+              });
+
+              return result;
+            });
         }))
-        .then(dealersResponse => {
-          const dealersByCountries = dealersResponse.reduce((result, responseItem, index) => {
-            const dealer = responseItem.data;
-            // порядок совпадает, поэтому мы можем сматчить дилера по id
-            // TODO: уточнить у Саши насчет правильной структуры данных
-            const country = dealersCountries[_.get(dealerList[index], 'id')];
-            result[country].push(dealer);
+        .then(response => {
+          const dealersByCountries = response.reduce((result, responseItem, index) => {
+            const baseData = dealers[index] || {};
+
+            const country = dealersCountries[baseData.country];
+
+            responseItem.id = baseData.id;
+            result[country].push(responseItem);
+
+
             return result;
           }, {
             [RUSSIA]: [],

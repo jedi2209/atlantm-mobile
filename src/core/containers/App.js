@@ -43,8 +43,8 @@ export default class App extends Component {
       return null;
     }
 
-    const isDealer = _.get(store.getState(), 'dealer.data');
-    const Router = getRouter(isDealer ? 'MenuScreen' : 'IntroScreen');
+    const isDealerSelected = _.get(store.getState(), 'dealer.selected.id');
+    const Router = getRouter(isDealerSelected ? 'MenuScreen' : 'IntroScreen');
 
     return (
       <Provider store={store}>

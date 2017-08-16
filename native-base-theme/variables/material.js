@@ -210,7 +210,7 @@ export default {
   cardBorderColor: "#ccc",
 
   // Changed Variable
-  listItemPadding: platform === "ios" ? 10 : 12,
+  listItemPadding: 10,
 
   listNoteColor: "#808080",
   listNoteSize: 13,

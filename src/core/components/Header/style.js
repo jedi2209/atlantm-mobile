@@ -4,12 +4,19 @@ import { StyleSheet } from 'react-native';
 import styleConst from '../../style-const';
 
 export default StyleSheet.create({
-  headerTitleCommon: {
-    // fontSize: 17,
-    fontWeight: 'normal',
+  title: {
+    fontSize: 17,
+    fontWeight: '600',
     alignSelf: 'center',
+    fontFamily: styleConst.font.regular,
   },
-  headerCommon: {
-    // backgroundColor: styleVars.color.greyBar,
+  common: {
+    backgroundColor: styleConst.color.header,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#b2b2b2',
+    shadowRadius: null,
+    shadowOpacity: null,
+    shadowOffset: null,
+    shadowColor: null,
   },
 });
