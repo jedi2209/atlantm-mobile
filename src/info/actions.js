@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import {
   INFO_LIST__REQUEST,
   INFO_LIST__SUCCESS,
@@ -76,7 +78,10 @@ export const fetchInfoPost = (infoID) => {
 
         dispatch({
           type: INFO_POST__SUCCESS,
-          payload: data || {},
+          payload: {
+            id: infoID,
+            text: _.get(data, '0.text', ''),
+          },
         });
       })
       .catch(error => {

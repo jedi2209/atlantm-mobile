@@ -30,6 +30,7 @@ export default {
   },
 
   fetchInfoPost(infoID) {
+    console.log('infoID', infoID);
     return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
   },
 

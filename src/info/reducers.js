@@ -20,7 +20,7 @@ function visited(state = [], action) {
     case INFO_POST__SUCCESS:
       return [
         ...state,
-        action.payload,
+        action.payload.id,
       ];
     case DEALER__SELECT:
       return [];
@@ -66,12 +66,15 @@ function list(state = [], action) {
   }
 }
 
-function post(state = {}, action) {
+function posts(state = {}, action) {
   switch (action.type) {
     case REHYDRATE:
       return {};
     case INFO_POST__SUCCESS:
-      return action.payload;
+      return {
+        ...state,
+        [action.payload.id]: action.payload,
+      };
     default:
       return state;
   }
@@ -80,7 +83,7 @@ function post(state = {}, action) {
 export default combineReducers({
   visited,
   list,
-  post,
+  posts,
   meta: combineReducers({
     isFetchInfoList,
     isFetchInfoPost,
