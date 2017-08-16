@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {
@@ -17,7 +18,9 @@ import {
 } from 'native-base';
 import _ from 'lodash';
 import CachedImage from 'react-native-cached-image';
-import HTMLView from 'react-native-htmlview';
+// import HTMLView from 'react-native-htmlview';
+
+import Communications from 'react-native-communications';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -206,7 +209,11 @@ class AboutScreen extends Component {
                                   <Text style={styles.leftText}>Телефон</Text>
                                 </Body>
                                 <Right>
-                                  <Text style={styles.rightText}>{phone}</Text>
+                                  <TouchableOpacity
+                                    onPress={() => Communications.phonecall(phone, true)}
+                                  >
+                                    <Text style={styles.rightText}>{phone}</Text>
+                                  </TouchableOpacity>
                                 </Right>
                               </ListItem>
                             );
@@ -243,7 +250,11 @@ class AboutScreen extends Component {
                           <Text style={styles.leftText}>Веб-сайт</Text>
                         </Body>
                         <Right>
+                        <TouchableOpacity
+                          onPress={() => Communications.web(selectedDealer.site)}
+                        >
                           <Text style={styles.rightText}>{selectedDealer.site}</Text>
+                        </TouchableOpacity>
                         </Right>
                       </ListItem>
                     ) : null

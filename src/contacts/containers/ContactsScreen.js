@@ -19,6 +19,7 @@ import {
   Icon,
 } from 'native-base';
 import _ from 'lodash';
+import Communications from 'react-native-communications';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -84,6 +85,7 @@ class ContactsScreen extends Component {
       dealerSelected,
       navigation,
     } = this.props;
+    const phones = _.get(dealerSelected, 'phone', []);
 
     return (
       <StyleProvider style={getTheme()}>
@@ -123,13 +125,13 @@ class ContactsScreen extends Component {
                 </ListItem>
 
                 {
-                  _.get(dealerSelected, 'phone', []).lenght !== 0 ?
+                  phones.length !== 0 ?
                     (
                       <ListItem
                         icon
                         style={styles.listItem}
                         onPress={() => {
-                          Alert.alert('звоним');
+                          Communications.phonecall(phones[0], true);
                         }}
                       >
                         <Left>
