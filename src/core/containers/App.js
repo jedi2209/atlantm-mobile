@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
+import _ from 'lodash';
 import { store } from '../store';
 import getRouter from '../router';
-import _ from 'lodash';
 
 export default class App extends Component {
   state = { rehydrated: false }
