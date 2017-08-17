@@ -30,8 +30,21 @@ export default {
   },
 
   fetchInfoPost(infoID) {
-    console.log('infoID', infoID);
     return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
+  },
+
+  callMe(dealerID, name, phone) {
+    const requestParams = _.merge(baseRequestParams, {
+      method: 'POST',
+      body: JSON.stringify({
+        f_Dealer: dealerID,
+        f_Name: name,
+        f_Phone: '' + phone,
+        f_Source: 3,
+      }),
+    });
+
+    return this.request('/orders/callme/post/', requestParams);
   },
 
   request(path, requestParams) {

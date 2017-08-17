@@ -20,9 +20,16 @@ import {
 } from 'native-base';
 import _ from 'lodash';
 import Communications from 'react-native-communications';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { callMe } from '../actions';
+import {
+  CALL_ME__REQUEST,
+  CALL_ME__SUCCESS,
+  CALL_ME__FAIL,
+} from '../actionTypes';
 
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
@@ -59,19 +66,29 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer }) => {
+const mapStateToProps = ({ dealer, profile, contacts }) => {
   return {
+    profile,
     dealerSelected: dealer.selected,
+    isСallMeRequest: contacts.isСallMeRequest,
+    isСallMeSuccess: contacts.isСallMeSuccess,
+    isСallMeFail: contacts.isСallMeFail,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-
+    callMe,
   }, dispatch);
 };
 
 class ContactsScreen extends Component {
+  constructor(props) {
+    super(props);
+
+    this.onPressCallMe = this.onPressCallMe.bind(this);
+  }
+
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Контакты',
     headerStyle: styleHeader.common,
@@ -80,12 +97,55 @@ class ContactsScreen extends Component {
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 
+  onPressCallMe() {
+    const {
+      callMe,
+      profile,
+      dealerSelected,
+      navigation,
+    } = this.props;
+
+    const dealerID = dealerSelected.id;
+    const { name, phone } = profile;
+
+    if (!name || !phone) {
+      return Alert.alert(
+        'Не хватает информации',
+        'Для обратного звонка необходимо заполните ФИО и номер контактного телефона в профиле',
+        [
+          { text: 'Отмена', style: 'cancel' },
+          {
+            text: 'Заполнить',
+            onPress() { navigation.navigate('ProfileScreen'); },
+          },
+        ],
+      );
+    }
+
+    callMe(dealerID, name, phone)
+      .then(action => {
+        if (action.type === CALL_ME__SUCCESS) {
+          setTimeout(() => Alert.alert('Успешно', 'Ваш запрос на обратный звонок принят'), 100);
+        }
+
+        if (action.type === CALL_ME__FAIL) {
+          setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
+        }
+      });
+  }
+
   render() {
     const {
       dealerSelected,
       navigation,
+      isСallMeRequest,
+      isСallMeSuccess,
+      isСallMeFail,
     } = this.props;
     const phones = _.get(dealerSelected, 'phone', []);
+
+    // TODO: удалить перед релизом!
+    dealerSelected.email = 'me@google.com';
 
     return (
       <StyleProvider style={getTheme()}>
@@ -97,6 +157,7 @@ class ContactsScreen extends Component {
               name={dealerSelected.name}
               brands={dealerSelected.brand}
             />
+            <Spinner visible={isСallMeRequest} color={styleConst.color.blue} />
 
             <List style={styles.list}>
               <View style={styles.listItemContainer}>
@@ -154,7 +215,12 @@ class ContactsScreen extends Component {
                         icon
                         style={styles.listItem}
                         onPress={() => {
-                          Alert.alert('пишем');
+                          Communications.email(
+                            [dealerSelected.email],
+                            null,
+                            null,
+                            'Из приложения iOS Атлант-М',
+                          );
                         }}
                       >
                         <Left>
@@ -202,9 +268,7 @@ class ContactsScreen extends Component {
                 <ListItem
                   icon
                   style={styles.listItem}
-                  onPress={() => {
-                    Alert.alert('Запрашиваем звонок');
-                  }}
+                  onPress={this.onPressCallMe}
                 >
                   <Left>
                     <Image
