@@ -176,7 +176,7 @@ class ChooseDealerScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <Container>
-          <Spinner visible={isFetchDealer} color={'red'} />
+          <Spinner visible={isFetchDealer} color={styleConst.color.blue} />
           <Content
             style={styles.content}
             refreshControl={
