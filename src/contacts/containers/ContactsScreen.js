@@ -177,7 +177,7 @@ class ContactsScreen extends Component {
                         icon
                         style={styles.listItem}
                         onPress={() => {
-                          navigation.navigate('AboutScreen');
+                          navigation.navigate('MapScreen');
                         }}
                       >
                         <Left>
