@@ -33,16 +33,23 @@ export default {
     return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
   },
 
-  callMe(dealerID, name, phone) {
+  callMe(dealerID, name, phone, device) {
+    console.log('dealerID', typeof dealerID);
+    console.log('name', typeof name);
+    console.log('phone', typeof phone);
+    console.log('device', typeof device);
+
     const requestParams = _.merge(baseRequestParams, {
       method: 'POST',
       body: JSON.stringify({
         f_Dealer: dealerID,
         f_Name: name,
         f_Phone: '' + phone,
-        f_Source: 3,
+        f_Source: device,
       }),
     });
+
+    console.log('requestParams', requestParams);
 
     return this.request('/orders/callme/post/', requestParams);
   },

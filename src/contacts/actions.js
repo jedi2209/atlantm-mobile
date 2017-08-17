@@ -6,7 +6,7 @@ import {
   CALL_ME__FAIL,
 } from './actionTypes';
 
-export const callMe = (dealerID, name, phone) => {
+export const callMe = (dealerID, name, phone, device) => {
   return dispatch => {
     dispatch({
       type: CALL_ME__REQUEST,
@@ -17,7 +17,7 @@ export const callMe = (dealerID, name, phone) => {
       },
     });
 
-    return API.callMe(dealerID, name, phone)
+    return API.callMe(dealerID, name, phone, device)
       .then(response => {
         const { data, error, status } = response;
 
