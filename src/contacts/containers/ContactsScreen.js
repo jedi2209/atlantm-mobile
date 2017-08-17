@@ -144,9 +144,6 @@ class ContactsScreen extends Component {
     } = this.props;
     const phones = _.get(dealerSelected, 'phone', []);
 
-    // TODO: удалить перед релизом!
-    dealerSelected.email = 'me@google.com';
-
     return (
       <StyleProvider style={getTheme()}>
         <Container>
@@ -267,6 +264,7 @@ class ContactsScreen extends Component {
                 }
 
                 <ListItem
+                  last
                   icon
                   style={styles.listItem}
                   onPress={this.onPressCallMe}
@@ -282,7 +280,7 @@ class ContactsScreen extends Component {
                   </Body>
                 </ListItem>
 
-                <ListItem
+                {/* <ListItem
                   last
                   icon
                   style={styles.listItem}
@@ -305,7 +303,7 @@ class ContactsScreen extends Component {
                       style={styles.iconArrow}
                     />
                   </Right>
-                </ListItem>
+                </ListItem> */}
               </View>
             </List>
 

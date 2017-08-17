@@ -17,6 +17,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchInfoPost } from '../actions';
 
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import styleConst from '../../core/style-const';
 import styleHeader from '../../core/components/Header/style';
 import { verticalScale } from '../../utils/scale';
@@ -70,10 +71,11 @@ const mapDispatchToProps = dispatch => {
 };
 
 class InfoPostScreen extends Component {
-  static navigationOptions = () => ({
+  static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Об акции',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
+    headerLeft: <HeaderIconBack navigation={navigation} />,
   })
 
   componentWillMount() {

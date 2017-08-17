@@ -17,6 +17,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // Helpers
+import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import styleConst from '../../../core/style-const';
 import styleHeader from '../../../core/components/Header/style';
 
@@ -49,10 +50,11 @@ const mapDispatchToProps = dispatch => {
 };
 
 class MapScreen extends Component {
-  static navigationOptions = () => ({
+  static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Найти нас',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
+    headerLeft: <HeaderIconBack navigation={navigation} />,
   })
 
   render() {
