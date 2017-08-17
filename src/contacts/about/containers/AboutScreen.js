@@ -25,6 +25,7 @@ import Communications from 'react-native-communications';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import { verticalScale } from '../../../utils/scale';
@@ -113,11 +114,12 @@ const mapDispatchToProps = dispatch => {
 };
 
 class AboutScreen extends Component {
-  static navigationOptions = () => ({
+  static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Об автоцентре',
     headerStyle: [styleHeader.common, { borderBottomWidth: 0 }],
     headerTitleStyle: styleHeader.title,
     headerTruncatedBackTitle: 'Return',
+    headerLeft: <HeaderIconBack navigation={navigation} />,
   })
 
   processText(text) {

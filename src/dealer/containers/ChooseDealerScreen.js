@@ -24,6 +24,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import styleHeader from '../../core/components/Header/style';
@@ -87,10 +88,11 @@ const mapDispatchToProps = dispatch => {
 };
 
 class ChooseDealerScreen extends Component {
-  static navigationOptions = () => ({
+  static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Мой автоцентр',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
+    headerLeft: <HeaderIconBack navigation={navigation} />,
   })
 
   static propTypes = {
