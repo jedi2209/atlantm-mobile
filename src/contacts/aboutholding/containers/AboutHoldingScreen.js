@@ -50,6 +50,8 @@ const styles = StyleSheet.create({
   list: {
     backgroundColor: '#fff',
     marginTop: verticalScale(35),
+    borderTopWidth: styleConst.ui.borderWidth,
+    borderTopColor: styleConst.color.border,
   },
   rightText: {
     color: styleConst.color.greyText,
