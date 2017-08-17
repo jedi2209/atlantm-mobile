@@ -3,6 +3,7 @@ import { AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
 import _ from 'lodash';
+import SplashScreen from 'react-native-splash-screen';
 import { store } from '../store';
 import getRouter from '../router';
 
@@ -44,6 +45,8 @@ export default class App extends Component {
 
     const isDealerSelected = _.get(store.getState(), 'dealer.selected.id');
     const Router = getRouter(isDealerSelected ? 'ContactsScreen' : 'IntroScreen');
+
+    SplashScreen.hide();
 
     return (
       <Provider store={store}>
