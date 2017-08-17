@@ -21,12 +21,12 @@ import {
 import _ from 'lodash';
 import Communications from 'react-native-communications';
 import Spinner from 'react-native-loading-spinner-overlay';
+import DeviceInfo from 'react-native-device-info';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { callMe } from '../actions';
 import {
-  CALL_ME__REQUEST,
   CALL_ME__SUCCESS,
   CALL_ME__FAIL,
 } from '../actionTypes';
@@ -122,7 +122,9 @@ class ContactsScreen extends Component {
       );
     }
 
-    callMe(dealerID, name, phone)
+    const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
+
+    callMe(dealerID, name, phone, device)
       .then(action => {
         if (action.type === CALL_ME__SUCCESS) {
           setTimeout(() => Alert.alert('Успешно', 'Ваш запрос на обратный звонок принят'), 100);
