@@ -1,9 +1,7 @@
 import _ from 'lodash';
 
 import {
-  COUNTRY__SELECT,
-
-  DEALER__SELECT,
+  REGION__SELECT,
 
   DEALERS__REQUEST,
   DEALERS__SUCCESS,
@@ -21,29 +19,55 @@ import {
   RUSSIA,
   BELARUSSIA,
   UKRAINE,
-} from './countryConst';
+} from './regionConst';
 
-const dealersCountries = {
-  ru: RUSSIA,
-  by: BELARUSSIA,
-  ua: UKRAINE,
-};
-
-export const selectCountry = country => {
+export const selectRegion = region => {
   return dispatch => {
     return dispatch({
-      type: COUNTRY__SELECT,
-      payload: country,
+      type: REGION__SELECT,
+      payload: region,
     });
   };
 };
 
-export const selectDealer = dealer => {
+export const selectDealer = dealerBaseData => {
   return dispatch => {
-    return dispatch({
-      type: DEALER__SELECT,
-      payload: dealer,
+    dispatch({
+      type: DEALER__REQUEST,
+      payload: dealerBaseData,
     });
+
+    return API.fetchDealer(dealerBaseData.id)
+      .then(response => {
+
+        if (response.error) {
+          return dispatch({
+            type: DEALER__FAIL,
+            payload: {
+              error: response.error.message,
+            },
+          });
+        }
+
+        const dealer = { ...response.data };
+
+        dealer.id = dealerBaseData.id;
+        dealer.region = dealerBaseData.region;
+        dealer.brands = dealerBaseData.brands;
+
+        return dispatch({
+          type: DEALER__SUCCESS,
+          payload: dealer,
+        });
+      })
+      .catch(error => {
+        return dispatch({
+          type: DEALER__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
   };
 };
 
@@ -51,100 +75,32 @@ export const fetchDealers = () => {
   return dispatch => {
     dispatch({ type: DEALERS__REQUEST });
 
-    return Promise.all([
-      API.fetchDealers(),
-      API.fetchBrands(),
-    ])
+    return API.fetchDealers()
       .then(response => {
-        const { data: dealers, error: errorDealers } = response[0];
-        const { data: brands, error: errorBrands } = response[1];
+        const { data: dealers, error } = response;
 
-        console.log('dealers', dealers);
-
-        if (errorDealers) {
+        if (error) {
           return dispatch({
             type: DEALERS__FAIL,
             payload: {
-              code: errorDealers.code,
-              error: errorDealers.message,
-              errorSource: 'fetchDealers',
-            },
-          });
-        }
-
-        if (errorBrands) {
-          return dispatch({
-            type: DEALERS__FAIL,
-            payload: {
-              code: errorBrands.code,
-              error: errorBrands.message,
-              errorSource: 'fetchBrands',
-            },
-          });
-        }
-
-        if (dealers.length === 0) {
-          dispatch({
-            type: DEALERS__SUCCESS,
-            payload: [],
-          });
-        }
-
-        Promise.all(dealers.map(dealer => {
-          // получаем подробную информацию
-          return API.fetchDealer(dealer.id)
-            .then(dealerDetailsResponse => {
-
-              if (dealerDetailsResponse.error) {
-                return dispatch({
-                  type: DEALERS__FAIL,
-                  payload: {
-                    error: error.message,
-                    errorSource: 'fetchDealer',
-                  },
-                });
-              }
-
-              const result = { ...dealerDetailsResponse.data };
-
-              result.brand = Object.keys(result.brand).map(brandId => {
-                return _.find(brands, (item) => {
-                  return item.id === +brandId;
-                });
-              });
-
-              return result;
-            });
-        }))
-        .then(response => {
-          const dealersByCountries = response.reduce((result, responseItem, index) => {
-            const baseData = dealers[index] || {};
-
-            const country = dealersCountries[baseData.region];
-
-            responseItem.id = baseData.id;
-            responseItem.country = baseData.region;
-            result[country].push(responseItem);
-
-            return result;
-          }, {
-            [RUSSIA]: [],
-            [BELARUSSIA]: [],
-            [UKRAINE]: [],
-          });
-
-          dispatch({
-            type: DEALERS__SUCCESS,
-            payload: dealersByCountries,
-          });
-        })
-        .catch(error => {
-          return dispatch({
-            type: DEALERS__FAIL,
-            payload: {
+              code: error.code,
               error: error.message,
             },
           });
+        }
+
+        const dealersByRegions = dealers.reduce((result, dealer) => {
+          result[dealer.region].push(dealer);
+          return result;
+        }, {
+          [RUSSIA]: [],
+          [BELARUSSIA]: [],
+          [UKRAINE]: [],
+        });
+
+        dispatch({
+          type: DEALERS__SUCCESS,
+          payload: dealersByRegions,
         });
       })
       .catch(error => {

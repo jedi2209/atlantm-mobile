@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontFamily: 'HelveticaNeue-Medium',
+    fontFamily: styleConst.font.medium,
+    fontWeight: '500',
     fontSize: 15,
     letterSpacing: styleConst.ui.letterSpacing,
   },

@@ -154,7 +154,7 @@ class ContactsScreen extends Component {
               navigation={navigation}
               city={dealerSelected.city}
               name={dealerSelected.name}
-              brands={dealerSelected.brand}
+              brands={dealerSelected.brands}
             />
             <Spinner visible={isСallMeRequest} color={styleConst.color.blue} />
 

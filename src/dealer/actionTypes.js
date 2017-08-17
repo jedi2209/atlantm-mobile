@@ -1,6 +1,8 @@
-export const COUNTRY__SELECT = 'COUNTRY__SELECT';
+export const REGION__SELECT = 'REGION__SELECT';
 
-export const DEALER__SELECT = 'DEALER__SELECT';
+export const DEALER__REQUEST = 'DEALER__REQUEST';
+export const DEALER__SUCCESS = 'DEALER__SUCCESS';
+export const DEALER__FAIL = 'DEALER__FAIL';
 
 export const DEALERS__REQUEST = 'DEALERS__REQUEST';
 export const DEALERS__SUCCESS = 'DEALERS__SUCCESS';

@@ -27,6 +27,12 @@ import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import styleHeader from '../../../core/components/Header/style';
 
+import {
+  RUSSIA,
+  BELARUSSIA,
+  UKRAINE,
+} from '../../../dealer/regionConst';
+
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
@@ -77,17 +83,17 @@ class AboutHoldingScreen extends Component {
     headerLeft: <HeaderIconBack navigation={navigation} />,
   })
 
-  getSite(country) {
+  getSite(region) {
     return {
-      ru: 'https://www.atlantm.ru/',
-      by: 'https://www.atlant-m.by/',
-      ua: 'https://www.atlant-m.ua/',
-    }[country];
+      [RUSSIA]: 'https://www.atlantm.ru/',
+      [BELARUSSIA]: 'https://www.atlant-m.by/',
+      [UKRAINE]: 'https://www.atlant-m.ua/',
+    }[region];
   }
 
   render() {
     const { dealerSelected } = this.props;
-    const site = this.getSite(dealerSelected.country);
+    const site = this.getSite(dealerSelected.region);
 
     return (
       <StyleProvider style={getTheme()}>

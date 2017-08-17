@@ -104,7 +104,7 @@ class InfoListScreen extends Component {
 
   componentWillMount() {
     const { dealerSelected, list, fetchInfoList } = this.props;
-    const { country: region, id: dealer } = dealerSelected;
+    const { region, id: dealer } = dealerSelected;
 
     if (list.length === 0) {
       fetchInfoList(region, dealer);
@@ -113,7 +113,7 @@ class InfoListScreen extends Component {
 
   onRefresh() {
     const { dealerSelected, list, fetchInfoList } = this.props;
-    const { country: region, id: dealer } = dealerSelected;
+    const { region, id: dealer } = dealerSelected;
 
     this.setState({ isRefreshing: true });
     fetchInfoList(region, dealer).then(() => {
@@ -152,7 +152,7 @@ class InfoListScreen extends Component {
               navigation={navigation}
               city={dealerSelected.city}
               name={dealerSelected.name}
-              brands={dealerSelected.brand}
+              brands={dealerSelected.brands}
             />
 
             {

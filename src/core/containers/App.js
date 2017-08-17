@@ -13,8 +13,8 @@ export default class App extends Component {
     this.defaultHandler = ErrorUtils.getGlobalHandler();
     ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
 
-    // this.getPersistStore().purge();
-    this.getPersistStore();
+    this.getPersistStore().purge();
+    // this.getPersistStore();
   }
 
   getPersistStore() {

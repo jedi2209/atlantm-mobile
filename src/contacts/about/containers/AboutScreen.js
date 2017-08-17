@@ -147,7 +147,7 @@ class AboutScreen extends Component {
             >
               <View style={styles.brandsLine}>
                 {
-                  selectedDealer.brand.map(brand => {
+                  selectedDealer.brands.map(brand => {
                     return (
                       <CachedImage
                         resizeMode="contain"
