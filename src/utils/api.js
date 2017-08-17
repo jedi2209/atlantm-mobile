@@ -34,22 +34,13 @@ export default {
   },
 
   callMe(dealerID, name, phone, device) {
-    console.log('dealerID', typeof dealerID);
-    console.log('name', typeof name);
-    console.log('phone', typeof phone);
-    console.log('device', typeof device);
-
     const requestParams = _.merge(baseRequestParams, {
-      method: 'POST',
-      body: JSON.stringify({
-        f_Dealer: dealerID,
-        f_Name: name,
-        f_Phone: '' + phone,
-        f_Source: device,
-      }),
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `f_Dealer=${dealerID}&f_Name=${name}&f_Phone=${phone}&f_Email=&f_Text=&f_URL=&f_Source=${device}`,
     });
-
-    console.log('requestParams', requestParams);
 
     return this.request('/orders/callme/post/', requestParams);
   },
