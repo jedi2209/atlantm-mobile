@@ -219,7 +219,8 @@ class ContactsScreen extends Component {
                             [dealerSelected.email],
                             null,
                             null,
-                            'Из приложения iOS Атлант-М',
+                            `Из приложения iOS Атлант-М, мой автоцентр ${dealerSelected.name}`,
+                            null,
                           );
                         }}
                       >
