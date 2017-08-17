@@ -2,34 +2,40 @@ import { combineReducers } from 'redux';
 import { REHYDRATE } from 'redux-persist/constants';
 import _ from 'lodash';
 import {
-  COUNTRY__SELECT,
+  REGION__SELECT,
 
-  DEALER__SELECT,
+  DEALER__REQUEST,
+  DEALER__SUCCESS,
+  DEALER__FAIL,
 
   DEALERS__REQUEST,
   DEALERS__SUCCESS,
   DEALERS__FAIL,
+
 } from './actionTypes';
 
-import { RUSSIA } from './countryConst';
+import {
+  RUSSIA,
+  BELARUSSIA,
+  UKRAINE,
+} from './regionConst';
 
 function selected(state = {}, action) {
   switch (action.type) {
     case REHYDRATE:
       return _.get(action.payload, 'dealer.selected', {});
-    case DEALER__SELECT:
+    case DEALER__SUCCESS:
       return { ...action.payload };
     default:
       return state;
   }
 }
 
-const initialState = RUSSIA;
-function country(state = initialState, action) {
+function region(state = RUSSIA, action) {
   switch (action.type) {
     case REHYDRATE:
-      return _.get(action.payload, 'dealer.country', RUSSIA);
-    case COUNTRY__SELECT:
+      return _.get(action.payload, 'dealer.region', RUSSIA);
+    case REGION__SELECT:
       return action.payload;
     default:
       return state;
@@ -42,7 +48,7 @@ function listRussia(state = [], action) {
       return _.get(action.payload, 'dealer.listRussia', []);
     case DEALERS__SUCCESS:
       return {
-        ...action.payload.russia,
+        ...action.payload[RUSSIA],
       };
     default:
       return state;
@@ -55,7 +61,7 @@ function listBelarussia(state = [], action) {
       return _.get(action.payload, 'dealer.listBelarussia', []);
     case DEALERS__SUCCESS:
       return {
-        ...action.payload.belarussia,
+        ...action.payload[BELARUSSIA],
       };
     default:
       return state;
@@ -68,14 +74,14 @@ function listUkraine(state = [], action) {
       return _.get(action.payload, 'dealer.listUkraine', []);
     case DEALERS__SUCCESS:
       return {
-        ...action.payload.ukraine,
+        ...action.payload[UKRAINE],
       };
     default:
       return state;
   }
 }
 
-function isFetch(state = false, action) {
+function isFetchDealersList(state = false, action) {
   switch (action.type) {
     case DEALERS__REQUEST:
       return true;
@@ -87,13 +93,26 @@ function isFetch(state = false, action) {
   }
 }
 
+function isFetchDealer(state = false, action) {
+  switch (action.type) {
+    case DEALER__REQUEST:
+      return true;
+    case DEALER__SUCCESS:
+    case DEALER__FAIL:
+      return false;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   selected,
-  country,
+  region,
   listRussia,
   listBelarussia,
   listUkraine,
   meta: combineReducers({
-    isFetch,
+    isFetchDealersList,
+    isFetchDealer,
   }),
 });

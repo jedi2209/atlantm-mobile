@@ -103,7 +103,7 @@ class ProfileScreen extends Component {
                 navigation={navigation}
                 city={dealerSelected.city}
                 name={dealerSelected.name}
-                brands={dealerSelected.brand}
+                brands={dealerSelected.brands}
               />
               <View style={styles.listHeaderContainer}>
                 <ListItem itemHeader>

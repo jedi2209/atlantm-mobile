@@ -3,6 +3,8 @@ import {
   StyleSheet,
   View,
   RefreshControl,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {
@@ -28,14 +30,16 @@ import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack'
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import styleHeader from '../../core/components/Header/style';
+import { verticalScale } from '../../utils/scale';
+
+// actions
+import { fetchDealers, selectDealer, selectRegion } from '../actions';
+
 import {
   RUSSIA,
   BELARUSSIA,
   UKRAINE,
-} from '../countryConst';
-
-// actions
-import { fetchDealers, selectDealer, selectCountry } from '../actions';
+} from '../regionConst';
 
 const styles = StyleSheet.create({
   content: {
@@ -66,16 +70,21 @@ const styles = StyleSheet.create({
   listItem: {
     minHeight: 44,
   },
+  spinner: {
+    alignSelf: 'center',
+    marginTop: verticalScale(60),
+  },
 });
 
 const mapStateToProps = ({ dealer }) => {
   return {
     selected: dealer.selected,
-    country: dealer.country,
+    region: dealer.region,
     listRussia: dealer.listRussia,
     listBelarussia: dealer.listBelarussia,
     listUkraine: dealer.listUkraine,
-    isFetch: dealer.meta.isFetch,
+    isFetchDealersList: dealer.meta.isFetchDealersList,
+    isFetchDealer: dealer.meta.isFetchDealer,
   };
 };
 
@@ -83,7 +92,7 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({
     fetchDealers,
     selectDealer,
-    selectCountry,
+    selectRegion,
   }, dispatch);
 };
 
@@ -96,10 +105,10 @@ class ChooseDealerScreen extends Component {
   })
 
   static propTypes = {
-    isFetch: PropTypes.bool.isRequired,
+    isFetchDealer: PropTypes.bool.isRequired,
     fetchDealers: PropTypes.func.isRequired,
     selectDealer: PropTypes.func.isRequired,
-    selectCountry: PropTypes.func.isRequired,
+    selectRegion: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -117,7 +126,14 @@ class ChooseDealerScreen extends Component {
   }
 
   componentWillMount() {
-    this.props.listRussia.length === 0 && this.props.fetchDealers();
+    const {
+      listRussia,
+      fetchDealers,
+    } = this.props;
+
+    if (listRussia.length === 0) {
+      fetchDealers();
+    }
   }
 
   onRefresh() {
@@ -133,15 +149,17 @@ class ChooseDealerScreen extends Component {
       listRussia,
       listBelarussia,
       listUkraine,
-      country,
-      selectCountry,
+      region,
+      selectRegion,
       selectDealer,
       navigation,
+      isFetchDealersList,
+      isFetchDealer,
     } = this.props;
 
     let list = [];
 
-    switch (country) {
+    switch (region) {
       case RUSSIA:
         list = listRussia;
         break;
@@ -158,7 +176,7 @@ class ChooseDealerScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <Container>
-          <Spinner visible={this.props.isFetch} color={styleConst.color.blue} />
+          <Spinner visible={isFetchDealer} color={'red'} />
           <Content
             style={styles.content}
             refreshControl={
@@ -173,76 +191,96 @@ class ChooseDealerScreen extends Component {
               <Segment>
                   <Button
                     first
-                    active={country === RUSSIA}
-                    onPress={() => selectCountry(RUSSIA)}
+                    active={region === RUSSIA}
+                    onPress={() => selectRegion(RUSSIA)}
                   >
                     <Text>Россия</Text>
                   </Button>
                   <Button
-                    active={country === BELARUSSIA}
-                    onPress={() => selectCountry(BELARUSSIA)}
+                    active={region === BELARUSSIA}
+                    onPress={() => selectRegion(BELARUSSIA)}
                   >
                     <Text>Беларусь</Text>
                   </Button>
                   <Button
                     last
-                    active={country === UKRAINE}
-                    onPress={() => selectCountry(UKRAINE)}
+                    active={region === UKRAINE}
+                    onPress={() => selectRegion(UKRAINE)}
                   >
                     <Text>Украина</Text>
                   </Button>
               </Segment>
             </View>
 
-            <List
-              key={country + selected.id}
-              style={styles.list}
-              dataArray={list}
-              renderRow={dealer => {
-                return (
-                  <ListItem
-                    onPress={() => {
-                      selectDealer(dealer);
-                      navigation.navigate('MenuScreen');
+            {
+              listRussia.length === 0 ?
+                (
+                  <View style={styles.spinnerContainer} >
+                    <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
+                  </View>
+                ) :
+                (
+                  <List
+                    key={region + selected.id}
+                    style={styles.list}
+                    dataArray={list}
+                    renderRow={dealer => {
+                      return (
+                        <ListItem
+                          onPress={() => {
+                            selectDealer(dealer)
+                              .then(action => {
+                                console.log('action', action);
+                                if (action.type === 'DEALER__SUCCESS') {
+                                  return navigation.navigate('MenuScreen');
+                                }
+
+                                if (action.type === 'DEALER__FAIL') {
+                                  Alert.alert('Ошибка', 'Не удалось получить данные по выбранному автоцентру, попробуйте снова');
+                                }
+                              })
+                              .catch();
+                          }}
+                          style={styles.listItem}
+                        >
+                          <Body
+                            style={styles.listItemBody}
+                          >
+                            {dealer.city ? <Text style={styles.city}>{dealer.city.name}</Text> : null}
+                            {dealer.name ? <Text style={styles.name}>{dealer.name}</Text> : null}
+                          </Body>
+                          <Right>
+                            <View style={styles.brands} >
+                              {
+                                dealer.brands.map(brand => {
+                                  return (
+                                    <CachedImage
+                                      resizeMode="contain"
+                                      key={brand.id}
+                                      style={styles.brandLogo}
+                                      source={{ uri: brand.logo }}
+                                    />
+                                  );
+                                })
+                              }
+                            </View>
+                            {
+                              selected.id === dealer.id ?
+                                (
+                                  <Icon
+                                    name="ios-checkmark"
+                                    style={{ fontSize: 30, color: styleConst.color.systemBlue }}
+                                  />
+                                ) : null
+                            }
+                          </Right>
+                        </ListItem>
+                      );
                     }}
-                    style={styles.listItem}
                   >
-                    <Body
-                      style={styles.listItemBody}
-                    >
-                      {dealer.city ? <Text style={styles.city}>{dealer.city}</Text> : null}
-                      {dealer.name ? <Text style={styles.name}>{dealer.name}</Text> : null}
-                    </Body>
-                    <Right>
-                      <View style={styles.brands} >
-                        {
-                          dealer.brand.map(brand => {
-                            return (
-                              <CachedImage
-                                resizeMode="contain"
-                                key={brand.id}
-                                style={styles.brandLogo}
-                                source={{ uri: brand.logo }}
-                              />
-                            );
-                          })
-                        }
-                      </View>
-                      {
-                        selected.id === dealer.id ?
-                          (
-                            <Icon
-                              name="ios-checkmark"
-                              style={{ fontSize: 30, color: styleConst.color.systemBlue }}
-                            />
-                          ) : null
-                      }
-                    </Right>
-                  </ListItem>
-                );
-              }}
-            >
-            </List>
+                  </List>
+                )
+            }
           </Content>
         </Container>
       </StyleProvider>
