@@ -123,6 +123,7 @@ class ProfileScreen extends Component {
                         onChangeText={text => nameFill(text)}
                         value={name}
                         returnKeyType="done"
+                        underlineColorAndroid={'transparent'}
                       />
                     </Item>
                   </Body>
@@ -138,10 +139,14 @@ class ProfileScreen extends Component {
                           autoCapitalize="none"
                           autoCorrect={false}
                           placeholder="Поле для заполнения"
-                          onChangeText={text => phoneFill(text)}
+                          onChangeText={text => {
+                            phoneFill(text);
+                          }}
                           value={phone}
                           keyboardType="numeric"
                           returnKeyType="done"
+                          underlineColorAndroid={'transparent'}
+                          maxLength={20}
                         />
                       </Item>
                   </Body>
@@ -161,6 +166,7 @@ class ProfileScreen extends Component {
                         value={email}
                         keyboardType="email-address"
                         returnKeyType="done"
+                        underlineColorAndroid={'transparent'}
                       />
                   </Item>
                   </Body>
