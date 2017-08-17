@@ -33,7 +33,7 @@ const getRouter = initialRouteName => StackNavigator(
         AboutHoldingScreen: { screen: AboutHoldingScreen },
       },
         {
-          initialRouteName: 'MapScreen',
+          // initialRouteName: 'MapScreen',
           headerMode: 'float',
         }),
       navigationOptions: {
