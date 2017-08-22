@@ -133,7 +133,10 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-device-info')
+    compile(project(':react-native-device-info')){
+        exclude group: 'com.google.android.gms', module: 'play-services-gcm'
+    }
+    compile 'com.google.android.gms:play-services-gcm:10.2.4'
     compile project(':react-native-maps')
     compile project(':react-native-vector-icons')
     compile project(':react-native-splash-screen')
