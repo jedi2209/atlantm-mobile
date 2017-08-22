@@ -123,6 +123,8 @@ class ContactsScreen extends Component {
     }
 
     const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
+    console.log('device', device);
+    // const device = '';
 
     callMe(dealerID, name, phone, device)
       .then(action => {
@@ -145,6 +147,9 @@ class ContactsScreen extends Component {
       isСallMeFail,
     } = this.props;
     const phones = _.get(dealerSelected, 'phone', []);
+
+    const device = `${DeviceInfo.getModel()} ${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
+    console.log('device', device);
 
     return (
       <StyleProvider style={getTheme()}>
