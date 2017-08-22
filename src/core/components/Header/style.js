@@ -8,6 +8,7 @@ export default StyleSheet.create({
     fontSize: 17,
     fontWeight: '600',
     alignSelf: 'center',
+    alignItems: 'center',
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
   },
@@ -19,5 +20,7 @@ export default StyleSheet.create({
     shadowOpacity: null,
     shadowOffset: null,
     shadowColor: null,
+    left: 0,
+    right: 0,
   },
 });
