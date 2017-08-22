@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "postinstall": "cd ./ios && pod install",
+    "watchman-stop": "watchman watch-del-all",
     "test": "jest"
   },
   "dependencies": {
