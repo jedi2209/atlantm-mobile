@@ -12,7 +12,7 @@ import {
   StyleProvider,
   Text,
 } from 'native-base';
-import CachedImage from 'react-native-cached-image';
+import { CachedImage } from 'react-native-cached-image';
 
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';

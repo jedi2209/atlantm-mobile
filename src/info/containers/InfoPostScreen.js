@@ -11,7 +11,7 @@ import {
   Container,
   Content,
 } from 'native-base';
-import CachedImage from 'react-native-cached-image';
+import { CachedImage } from 'react-native-cached-image';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
