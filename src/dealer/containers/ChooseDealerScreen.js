@@ -20,7 +20,7 @@ import {
   StyleProvider,
   Icon,
 } from 'native-base';
-import CachedImage from 'react-native-cached-image';
+import { CachedImage } from 'react-native-cached-image';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import { bindActionCreators } from 'redux';

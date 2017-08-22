@@ -17,7 +17,7 @@ import {
   StyleProvider,
 } from 'native-base';
 import _ from 'lodash';
-import CachedImage from 'react-native-cached-image';
+import { CachedImage } from 'react-native-cached-image';
 // import HTMLView from 'react-native-htmlview';
 
 import Communications from 'react-native-communications';
