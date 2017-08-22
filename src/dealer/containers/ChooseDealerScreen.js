@@ -102,6 +102,7 @@ class ChooseDealerScreen extends Component {
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
+    headerRight: <View />,
   })
 
   static propTypes = {

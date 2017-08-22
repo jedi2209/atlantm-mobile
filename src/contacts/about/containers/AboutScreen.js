@@ -4,6 +4,7 @@ import {
   View,
   Dimensions,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {
@@ -118,8 +119,8 @@ class AboutScreen extends Component {
     headerTitle: 'Об автоцентре',
     headerStyle: [styleHeader.common, { borderBottomWidth: 0 }],
     headerTitleStyle: styleHeader.title,
-    headerTruncatedBackTitle: 'Return',
     headerLeft: <HeaderIconBack navigation={navigation} />,
+    headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
   })
 
   processText(text) {
@@ -137,7 +138,15 @@ class AboutScreen extends Component {
       <StyleProvider style={getTheme()}>
         <Container>
           <Content style={styles.content} >
-            <View style={styles.titleContainer}>
+            <View style={[
+              styles.titleContainer,
+              Platform.OS === 'android' ? {
+                marginTop: 15,
+                marginBottom: 10,
+                borderBottomWidth: 0,
+                backgroundColor: 'transparent',
+               } : {},
+              ]}>
               <Text style={styles.title}>{selectedDealer.name}</Text>
             </View>
             <CachedImage

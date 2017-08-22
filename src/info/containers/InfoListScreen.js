@@ -90,7 +90,7 @@ class InfoListScreen extends Component {
     headerTitle: 'Акции',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
-    headerLeft: null,
+    headerLeft: <View />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 

@@ -73,7 +73,7 @@ class ProfileScreen extends Component {
     headerTitle: 'Личный кабинет',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
-    headerLeft: null,
+    headerLeft: <View />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 

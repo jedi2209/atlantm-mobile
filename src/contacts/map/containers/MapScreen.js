@@ -55,6 +55,7 @@ class MapScreen extends Component {
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
+    headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
   })
 
   render() {

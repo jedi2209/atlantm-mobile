@@ -76,6 +76,7 @@ class InfoPostScreen extends Component {
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
+    headerRight: <View />,
   })
 
   componentWillMount() {

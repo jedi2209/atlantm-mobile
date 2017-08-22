@@ -93,7 +93,7 @@ class ContactsScreen extends Component {
     headerTitle: 'Контакты',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
-    headerLeft: null,
+    headerLeft: <View />, // для выравнивания заголовка по центру на обоих платформах
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 
@@ -149,7 +149,6 @@ class ContactsScreen extends Component {
     const phones = _.get(dealerSelected, 'phone', []);
 
     const device = `${DeviceInfo.getModel()} ${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
-    console.log('device', device);
 
     return (
       <StyleProvider style={getTheme()}>

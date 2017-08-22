@@ -9,7 +9,6 @@ import ProfileScreen from '../profile/containers/ProfileScreen';
 // contacts
 import ContactsScreen from '../contacts/containers/ContactsScreen';
 import AboutScreen from '../contacts/about/containers/AboutScreen';
-import FeedbackScreen from '../contacts/feedback/containers/FeedbackScreen';
 import MapScreen from '../contacts/map/containers/MapScreen';
 import ReferenceScreen from '../contacts/reference/containers/ReferenceScreen';
 import AboutHoldingScreen from '../contacts/aboutholding/containers/AboutHoldingScreen';
@@ -27,7 +26,6 @@ const getRouter = initialRouteName => StackNavigator(
       screen: StackNavigator({
         index: { screen: ContactsScreen },
         AboutScreen: { screen: AboutScreen },
-        FeedbackScreen: { screen: FeedbackScreen },
         MapScreen: { screen: MapScreen },
         ReferenceScreen: { screen: ReferenceScreen },
         AboutHoldingScreen: { screen: AboutHoldingScreen },
