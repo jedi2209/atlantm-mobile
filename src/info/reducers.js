@@ -11,7 +11,7 @@ import {
   INFO_POST__FAIL,
 } from './actionTypes';
 
-import { DEALER__SELECT } from '../dealer/actionTypes';
+import { DEALER__SUCCESS } from '../dealer/actionTypes';
 
 function visited(state = [], action) {
   switch (action.type) {
@@ -22,7 +22,7 @@ function visited(state = [], action) {
         ...state,
         action.payload.id,
       ];
-    case DEALER__SELECT:
+    case DEALER__SUCCESS:
       return [];
     default:
       return state;
@@ -59,7 +59,8 @@ function list(state = [], action) {
       return _.get(action.payload, 'info.list', []);
     case INFO_LIST__SUCCESS:
       return action.payload;
-    case DEALER__SELECT:
+    case DEALER__SUCCESS:
+    case DEALER__SUCCESS:
       return [];
     default:
       return state;

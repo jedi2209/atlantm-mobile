@@ -104,6 +104,7 @@ class ProfileScreen extends Component {
                 city={dealerSelected.city}
                 name={dealerSelected.name}
                 brands={dealerSelected.brands}
+                returnScreen="ProfileScreen"
               />
               <View style={styles.listHeaderContainer}>
                 <ListItem itemHeader>

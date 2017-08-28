@@ -3,6 +3,7 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native';
 import styleConst from '../../style-const';
 
@@ -24,7 +25,10 @@ const HeaderIconMenu = props => {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => props.navigation.navigate('MenuScreen')}
+      onPress={() => {
+        Keyboard.dismiss();
+        props.navigation.navigate('MenuScreen');
+      }}
     >
       <Image
         style={styles.icon}
