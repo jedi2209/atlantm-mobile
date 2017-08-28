@@ -57,12 +57,14 @@ export default class DealerItemList extends Component {
     city: PropTypes.string,
     name: PropTypes.string,
     brands: PropTypes.array,
+    returnScreen: PropTypes.string,
   }
 
   static defaultProps = {
     city: null,
     name: null,
     brands: [],
+    returnScreen: null,
   }
 
   render() {
@@ -71,6 +73,7 @@ export default class DealerItemList extends Component {
       city,
       name,
       brands,
+      returnScreen,
     } = this.props;
 
     return (
@@ -78,7 +81,7 @@ export default class DealerItemList extends Component {
         <View style={styles.container} >
           <ListItem
             onPress={() => {
-              navigation.navigate('ChooseDealerScreen');
+              navigation.navigate('ChooseDealerScreen', { returnScreen });
             }}
             style={styles.listItem}
           >

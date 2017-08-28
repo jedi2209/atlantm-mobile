@@ -153,6 +153,7 @@ class InfoListScreen extends Component {
               city={dealerSelected.city}
               name={dealerSelected.name}
               brands={dealerSelected.brands}
+              returnScreen="InfoListScreen"
             />
 
             {

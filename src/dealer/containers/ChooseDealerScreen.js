@@ -6,6 +6,7 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import {
   Container,
@@ -158,6 +159,7 @@ class ChooseDealerScreen extends Component {
       isFetchDealer,
     } = this.props;
 
+    const returnScreen = _.get(navigation, 'state.params.returnScreen');
     let list = [];
 
     switch (region) {
@@ -231,9 +233,8 @@ class ChooseDealerScreen extends Component {
                           onPress={() => {
                             selectDealer(dealer)
                               .then(action => {
-                                console.log('action', action);
                                 if (action.type === 'DEALER__SUCCESS') {
-                                  return navigation.navigate('MenuScreen');
+                                  return navigation.navigate(returnScreen || 'MenuScreen');
                                 }
 
                                 if (action.type === 'DEALER__FAIL') {
