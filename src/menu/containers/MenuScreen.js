@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   StyleSheet,
   Image,
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import PropTypes from 'prop-types';
 import {
   Container,
   Text,
@@ -13,9 +12,6 @@ import {
   Col,
   Row,
 } from 'native-base';
-
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 
 import styleConst from '../../core/style-const';
 import { scale, verticalScale } from '../../utils/scale';
@@ -51,19 +47,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = () => {
-  return {
-
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-
-  }, dispatch);
-};
-
-class MenuScreen extends Component {
+export default class MenuScreen extends PureComponent {
   static navigationOptions = () => ({
     headerTitle: 'Атлант-М',
     headerStyle: styleHeader.common,
@@ -71,9 +55,12 @@ class MenuScreen extends Component {
     headerLeft: null,
   })
 
-  render() {
-    const { navigation } = this.props;
+  onPressContacts = () => this.props.navigation.navigate('ContactsScreen')
+  onPressInfoList = () => this.props.navigation.navigate('InfoListScreen')
+  onPressProfile = () => this.props.navigation.navigate('ProfileScreen')
+  onPressNotReadyScreen = () => Alert.alert('Раздел появится в ближайших обновлениях');
 
+  render() {
     return (
       <Container style={styles.container} >
         <Grid style={styles.menu} >
@@ -81,9 +68,7 @@ class MenuScreen extends Component {
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={() => {
-                  navigation.navigate('ContactsScreen');
-                }}
+                onPress={this.onPressContacts}
               >
                 <Image
                   style={styles.icon}
@@ -95,9 +80,7 @@ class MenuScreen extends Component {
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={() => {
-                  navigation.navigate('InfoListScreen');
-                }}
+                onPress={this.onPressInfoList}
               >
                 <Image
                   style={styles.icon}
@@ -111,9 +94,7 @@ class MenuScreen extends Component {
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={() => {
-                  Alert.alert('Раздел появится в ближайших обновлениях');
-                }}
+                onPress={this.onPressActions}
               >
                 <Image
                   style={styles.icon}
@@ -124,11 +105,8 @@ class MenuScreen extends Component {
             </Col>
             <Col>
               <TouchableOpacity
-              style={styles.item}
-
-                onPress={() => {
-                  Alert.alert('Раздел появится в ближайших обновлениях');
-                }}
+                style={styles.item}
+                onPress={this.onPressNotReadyScreen}
               >
                 <Image
                   style={styles.icon}
@@ -142,9 +120,7 @@ class MenuScreen extends Component {
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={() => {
-                  Alert.alert('Раздел появится в ближайших обновлениях');
-                }}
+                onPress={this.onPressNotReadyScreen}
               >
                 <Image
                   style={styles.icon}
@@ -156,9 +132,7 @@ class MenuScreen extends Component {
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={() => {
-                  Alert.alert('Раздел появится в ближайших обновлениях');
-                }}
+                onPress={this.onPressNotReadyScreen}
               >
                 <Image
                   style={styles.icon}
@@ -172,9 +146,7 @@ class MenuScreen extends Component {
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={() => {
-                  Alert.alert('Раздел появится в ближайших обновлениях');
-                }}
+                onPress={this.onPressNotReadyScreen}
               >
                 <Image
                   style={styles.icon}
@@ -186,9 +158,7 @@ class MenuScreen extends Component {
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={() => {
-                  navigation.navigate('ProfileScreen');
-                }}
+                onPress={this.onPressProfile}
               >
                 <Image
                   style={styles.icon}
@@ -203,5 +173,3 @@ class MenuScreen extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(MenuScreen);

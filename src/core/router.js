@@ -17,44 +17,48 @@ import AboutHoldingScreen from '../contacts/aboutholding/containers/AboutHolding
 import InfoListScreen from '../info/containers/InfoListScreen';
 import InfoPostScreen from '../info/containers/InfoPostScreen';
 
-const getRouter = initialRouteName => StackNavigator(
-  {
-    IntroScreen: { screen: IntroScreen },
-    MenuScreen: { screen: MenuScreen },
-    ChooseDealerScreen: { screen: ChooseDealerScreen },
-    ContactsScreen: {
-      screen: StackNavigator({
-        index: { screen: ContactsScreen },
-        AboutScreen: { screen: AboutScreen },
-        MapScreen: { screen: MapScreen },
-        ReferenceScreen: { screen: ReferenceScreen },
-        AboutHoldingScreen: { screen: AboutHoldingScreen },
+const getRouter = initialRouteName => {
+  console.log('getRouter');
+
+  return StackNavigator(
+    {
+      IntroScreen: { screen: IntroScreen },
+      MenuScreen: { screen: MenuScreen },
+      ChooseDealerScreen: { screen: ChooseDealerScreen },
+      ContactsScreen: {
+        screen: StackNavigator({
+          index: { screen: ContactsScreen },
+          AboutScreen: { screen: AboutScreen },
+          MapScreen: { screen: MapScreen },
+          ReferenceScreen: { screen: ReferenceScreen },
+          AboutHoldingScreen: { screen: AboutHoldingScreen },
+        },
+          {
+            // initialRouteName: 'MapScreen',
+            // headerMode: 'float',
+          }),
+        navigationOptions: {
+          header: null,
+        },
       },
-        {
-          // initialRouteName: 'MapScreen',
+      InfoScreen: {
+        screen: StackNavigator({
+          InfoListScreen: { screen: InfoListScreen },
+          InfoPostScreen: { screen: InfoPostScreen },
+        }, {
           headerMode: 'float',
         }),
-      navigationOptions: {
-        header: null,
+        navigationOptions: {
+          header: null,
+        },
       },
+      ProfileScreen: { screen: ProfileScreen },
     },
-    InfoScreen: {
-      screen: StackNavigator({
-        InfoListScreen: { screen: InfoListScreen },
-        InfoPostScreen: { screen: InfoPostScreen },
-      }, {
-        headerMode: 'float',
-      }),
-      navigationOptions: {
-        header: null,
-      },
+    {
+      initialRouteName,
+      // headerMode: 'float',
     },
-    ProfileScreen: { screen: ProfileScreen },
-  },
-  {
-    initialRouteName,
-    headerMode: 'float',
-  },
-);
+  );
+};
 
 export default getRouter;
