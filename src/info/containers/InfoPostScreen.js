@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   StyleSheet,
   View,
   ActivityIndicator,
   Dimensions,
+  InteractionManager,
 } from 'react-native';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
@@ -70,7 +71,7 @@ const mapDispatchToProps = dispatch => {
   }, dispatch);
 };
 
-class InfoPostScreen extends Component {
+class InfoPostScreen extends PureComponent {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Об акции',
     headerStyle: styleHeader.common,
@@ -79,19 +80,21 @@ class InfoPostScreen extends Component {
     headerRight: <View />,
   })
 
-  componentWillMount() {
-    const {
-      navigation,
-      posts,
-      fetchInfoPost,
-    } = this.props;
+  componentDidMount() {
+    InteractionManager.runAfterInteractions(() => {
+      const {
+        navigation,
+        posts,
+        fetchInfoPost,
+      } = this.props;
 
-    const id = navigation.state.params.id;
-    const post = posts[id];
+      const id = navigation.state.params.id;
+      const post = posts[id];
 
-    if (!post) {
-      fetchInfoPost(id);
-    }
+      if (!post) {
+        fetchInfoPost(id);
+      }
+    });
   }
 
   processText(text) {

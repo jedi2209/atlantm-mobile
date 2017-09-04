@@ -83,12 +83,6 @@ const mapDispatchToProps = dispatch => {
 };
 
 class ContactsScreen extends Component {
-  constructor(props) {
-    super(props);
-
-    this.onPressCallMe = this.onPressCallMe.bind(this);
-  }
-
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Контакты',
     headerStyle: styleHeader.common,
@@ -97,7 +91,7 @@ class ContactsScreen extends Component {
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 
-  onPressCallMe() {
+  onPressCallMe = () => {
     const {
       callMe,
       profile,
@@ -123,8 +117,6 @@ class ContactsScreen extends Component {
     }
 
     const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
-    console.log('device', device);
-    // const device = '';
 
     callMe(dealerID, name, phone, device)
       .then(action => {

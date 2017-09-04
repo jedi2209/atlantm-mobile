@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
@@ -7,10 +7,41 @@ import SplashScreen from 'react-native-splash-screen';
 import { store } from '../store';
 import getRouter from '../router';
 
-export default class App extends Component {
+if (!__DEV__) {
+  // eslint-disable-line no-undef
+  [
+    'assert',
+    'clear',
+    'count',
+    'debug',
+    'dir',
+    'dirxml',
+    'error',
+    'exception',
+    'group',
+    'groupCollapsed',
+    'groupEnd',
+    'info',
+    'log',
+    'profile',
+    'profileEnd',
+    'table',
+    'time',
+    'timeEnd',
+    'timeStamp',
+    'trace',
+    'warn',
+  ].forEach(methodName => {
+    console[methodName] = () => {
+      /* noop */
+    };
+  });
+}
+
+export default class App extends PureComponent {
   state = { rehydrated: false }
 
-  componentWillMount() {
+  componentDidMount() {
     this.defaultHandler = ErrorUtils.getGlobalHandler();
     ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
 
@@ -43,14 +74,14 @@ export default class App extends Component {
       return null;
     }
 
-    const isDealerSelected = _.get(store.getState(), 'dealer.selected.id');
-    const Router = getRouter(isDealerSelected ? 'ContactsScreen' : 'IntroScreen');
+    const isShowIntro = _.get(store.getState(), 'dealer.showIntro');
+    const Router = getRouter(isShowIntro ? 'ContactsScreen' : 'IntroScreen');
 
     SplashScreen.hide();
 
     return (
       <Provider store={store}>
-        <Router />
+        <Router onNavigationStateChange={null} />
       </Provider>
     );
   }

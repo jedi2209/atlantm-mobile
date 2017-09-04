@@ -31,6 +31,17 @@ function selected(state = {}, action) {
   }
 }
 
+function showIntro(state = true, action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return _.get(action.payload, 'dealer.showIntro', true);
+    case DEALER__SUCCESS:
+      return false;
+    default:
+      return state;
+  }
+}
+
 function region(state = RUSSIA, action) {
   switch (action.type) {
     case REHYDRATE:
@@ -106,6 +117,7 @@ function isFetchDealer(state = false, action) {
 }
 
 export default combineReducers({
+  showIntro,
   selected,
   region,
   listRussia,

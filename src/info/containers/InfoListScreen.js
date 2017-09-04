@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
   View,
   StyleSheet,
   RefreshControl,
   ActivityIndicator,
+  InteractionManager,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {
@@ -77,13 +78,10 @@ const mapDispatchToProps = dispatch => {
   }, dispatch);
 };
 
-class InfoListScreen extends Component {
+class InfoListScreen extends PureComponent {
   constructor(props) {
     super(props);
-
     this.state = { isRefreshing: false };
-
-    this.onRefresh = this.onRefresh.bind(this);
   }
 
   static navigationOptions = ({ navigation }) => ({
@@ -102,16 +100,18 @@ class InfoListScreen extends Component {
     isFetchInfoList: PropTypes.bool.isRequired,
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { dealerSelected, list, fetchInfoList } = this.props;
     const { region, id: dealer } = dealerSelected;
 
-    if (list.length === 0) {
-      fetchInfoList(region, dealer);
-    }
+    InteractionManager.runAfterInteractions(() => {
+      if (list.length === 0) {
+        fetchInfoList(region, dealer);
+      }
+    });
   }
 
-  onRefresh() {
+  onRefresh = () => {
     const { dealerSelected, list, fetchInfoList } = this.props;
     const { region, id: dealer } = dealerSelected;
 
@@ -124,6 +124,8 @@ class InfoListScreen extends Component {
   processDate(date) {
     return `c ${dayMonth(date)} по ${dayMonthYear(date)}`;
   }
+
+  onPressPost = (id) => this.props.navigation.navigate('InfoPostScreen', { id });
 
   render() {
     const {
@@ -170,53 +172,50 @@ class InfoListScreen extends Component {
                   )
               ) :
               (
-                  <List
+                <List
                   key={visited.length}
                   style={styles.list}
                   dataArray={list}
                   renderRow={info => {
-                      const isVisited = visited.includes(info.id);
+                    const isVisited = visited.includes(info.id);
 
-                      return (
+                    return (
                       <ListItem
-                          onPress={() => {
-                          navigation.navigate('InfoPostScreen', { id: info.id });
-                          }}
-                          style={styles.listItem}
+                        onPress={() => this.onPressPost(info.id)}
+                        style={styles.listItem}
                       >
-                          <Body
-                          style={styles.listItemBody}
-                          >
-                          {
-                              info.name ?
-                              <Text style={[
-                                styles.name,
-                                { color: isVisited ? styleConst.color.greyText : '#000' },
-                              ]}>
-                                {info.name}
-                              </Text> :
-                              null
-                          }
-                          {
-                              info.date ?
-                              <Text style={styles.date}>{this.processDate(info.date.from)}</Text> :
-                              null
-                              }
-                          </Body>
-                          <Right>
-                          <Icon
-                              name="arrow-forward"
-                              style={[
-                                styles.icon,
-                                { color: isVisited ? styleConst.color.systemGray : styleConst.color.systemBlue },
-                              ]}
-                          />
-                          </Right>
+                        <Body
+                        style={styles.listItemBody}
+                        >
+                        {
+                            info.name ?
+                            <Text style={[
+                              styles.name,
+                              { color: isVisited ? styleConst.color.greyText : '#000' },
+                            ]}>
+                              {info.name}
+                            </Text> :
+                            null
+                        }
+                        {
+                            info.date ?
+                            <Text style={styles.date}>{this.processDate(info.date.from)}</Text> :
+                            null
+                            }
+                        </Body>
+                        <Right>
+                        <Icon
+                            name="arrow-forward"
+                            style={[
+                              styles.icon,
+                              { color: isVisited ? styleConst.color.systemGray : styleConst.color.systemBlue },
+                            ]}
+                        />
+                        </Right>
                       </ListItem>
-                      );
-                  }}
-                  >
-                  </List>
+                    );
+                  }
+                } />
               )
           }
           </Content>
