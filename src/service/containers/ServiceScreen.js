@@ -20,6 +20,7 @@ import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
 // helpres
+import { yearMonthDay } from '../../utils/date';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import styleHeader from '../../core/components/Header/style';
@@ -103,11 +104,12 @@ class ServiceScreen extends Component {
       );
     }
 
+    const orderDate = yearMonthDay(date.date);
     const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
 
     orderService({
       car,
-      date: date.formatted,
+      date: orderDate,
       name,
       email,
       phone,

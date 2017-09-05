@@ -66,7 +66,7 @@ export default {
       dealerID,
     } = props;
 
-    const body = `f_Dealer=${dealerID}&f_Model=${car}&f_Name=${name}&f_Phone=${phone}&f_Email=${email}&f_Text=${date}&f_URL=&f_Source=${device}`;
+    const body = `f_Dealer=${dealerID}&f_Model=${car}&f_Name=${name}&f_Phone=${phone}&f_Email=${email}&f_Date=${date}&f_URL=&f_Source=${device}`;
     const requestParams = _.merge(baseRequestParams, {
       method: 'post',
       headers: {
