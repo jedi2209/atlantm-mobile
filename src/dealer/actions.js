@@ -51,9 +51,6 @@ export const selectDealer = dealerBaseData => {
 
         const dealer = { ...response.data };
 
-        console.log('dealerBaseData', dealerBaseData);
-        console.log('dealer', dealer);
-
         dealer.id = dealerBaseData.id;
         dealer.region = dealerBaseData.region;
         dealer.brands = dealerBaseData.brands;

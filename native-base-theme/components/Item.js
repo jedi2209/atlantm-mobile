@@ -28,9 +28,10 @@ export default (variables = variable) => {
 				width: null,
         fontSize: variables.inputFontSize,
         letterSpacing: styleConst.ui.letterSpacing,
-			},
+      },
+      // Менять ширину инпута здесь
 			'NativeBase.Input': {
-				flex: 3,
+				flex: 2.5,
 				fontSize: variables.inputFontSize,
 			},
 		},

@@ -22,7 +22,7 @@ const LIST_ITEM_HEIGHT = 44;
 const styles = StyleSheet.create({
   datePicker: {
     alignSelf: Platform.OS === 'ios' ? 'stretch' : 'flex-start',
-    flex: 2.5,
+    flex: 2.1,
   },
 });
 const datePickerStyles = {
@@ -32,7 +32,6 @@ const datePickerStyles = {
   dateInput: {
     borderWidth: 0,
     height: LIST_ITEM_HEIGHT,
-    // backgroundColor: 'red',
     alignItems: 'flex-start',
   },
   placeholderText: {
