@@ -1,28 +1,20 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  View,
-} from 'react-native';
 import PropTypes from 'prop-types';
-import {
-  Container,
-  Content,
-  Text,
-  List,
-  ListItem,
-  StyleProvider,
-  Item,
-  Input,
-  Label,
-  Body,
-} from 'native-base';
+import { StyleSheet, View } from 'react-native';
+import { Container, Content, List, StyleProvider } from 'native-base';
 
+// redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { nameFill, phoneFill, emailFill } from '../actions';
 
+// components
+import ProfileForm from '../components/ProfileForm';
+import ListItemHeader from '../components/ListItemHeader';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
+
+// helpres
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import styleHeader from '../../core/components/Header/style';
@@ -30,24 +22,6 @@ import styleHeader from '../../core/components/Header/style';
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
-  },
-  label: {
-    fontSize: 18,
-    fontFamily: styleConst.font.regular,
-    color: '#000',
-  },
-  inputItem: {
-    borderBottomWidth: 0,
-  },
-  listItemContainer: {
-    backgroundColor: '#fff',
-  },
-  listItem: {
-    paddingRight: 0,
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
-  listHeaderContainer: {
   },
 });
 
@@ -77,6 +51,17 @@ class ProfileScreen extends Component {
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 
+  static propTypes = {
+    dealerSelected: PropTypes.object,
+    navigation: PropTypes.object,
+    nameFill: PropTypes.func,
+    phoneFill: PropTypes.func,
+    emailFill: PropTypes.func,
+    name: PropTypes.string,
+    phone: PropTypes.string,
+    email: PropTypes.string,
+  }
+
   render() {
     const {
       dealerSelected,
@@ -94,11 +79,8 @@ class ProfileScreen extends Component {
         <Container>
           <Content style={styles.content} >
             <List style={styles.list}>
-              <View style={styles.listHeaderContainer}>
-                <ListItem itemHeader>
-                  <Text>МОЙ АВТОЦЕНТР</Text>
-                </ListItem>
-              </View>
+              <ListItemHeader text="МОЙ АВТОЦЕНТР" />
+
               <DealerItemList
                 navigation={navigation}
                 city={dealerSelected.city}
@@ -106,73 +88,17 @@ class ProfileScreen extends Component {
                 brands={dealerSelected.brands}
                 returnScreen="ProfileScreen"
               />
-              <View style={styles.listHeaderContainer}>
-                <ListItem itemHeader>
-                  <Text>КОНТАКТНАЯ ИНФОРМАЦИЯ</Text>
-                </ListItem>
-              </View>
 
-              <View style={styles.listItemContainer}>
-                <ListItem style={styles.listItem} >
-                  <Body>
-                    <Item style={styles.inputItem} fixedLabel>
-                      <Label style={styles.label}>ФИО</Label>
-                      <Input
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        placeholder="Поле для заполнения"
-                        onChangeText={text => nameFill(text)}
-                        value={name}
-                        returnKeyType="done"
-                        underlineColorAndroid={'transparent'}
-                      />
-                    </Item>
-                  </Body>
-                </ListItem>
-              </View>
+              <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
 
-              <View style={styles.listItemContainer}>
-                <ListItem style={styles.listItem}>
-                  <Body>
-                    <Item style={styles.inputItem} fixedLabel>
-                        <Label style={styles.label}>Телефон</Label>
-                        <Input
-                          autoCapitalize="none"
-                          autoCorrect={false}
-                          placeholder="Поле для заполнения"
-                          onChangeText={text => {
-                            phoneFill(text);
-                          }}
-                          value={phone}
-                          keyboardType="phone-pad"
-                          returnKeyType="done"
-                          underlineColorAndroid={'transparent'}
-                          maxLength={20}
-                        />
-                      </Item>
-                  </Body>
-                </ListItem>
-              </View>
-
-              <View style={styles.listItemContainer}>
-                <ListItem last style={styles.listItem}>
-                  <Body>
-                    <Item style={styles.inputItem} fixedLabel last>
-                      <Label style={styles.label}>Email</Label>
-                      <Input
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        placeholder="Поле для заполнения"
-                        onChangeText={text => emailFill(text)}
-                        value={email}
-                        keyboardType="email-address"
-                        returnKeyType="done"
-                        underlineColorAndroid={'transparent'}
-                      />
-                  </Item>
-                  </Body>
-                </ListItem>
-              </View>
+              <ProfileForm
+                name={name}
+                phone={phone}
+                email={email}
+                nameFill={nameFill}
+                phoneFill={phoneFill}
+                emailFill={emailFill}
+              />
             </List>
           </Content>
         </Container>

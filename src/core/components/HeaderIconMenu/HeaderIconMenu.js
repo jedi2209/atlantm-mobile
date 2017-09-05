@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Image,
@@ -32,7 +32,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export class HeaderIconMenu extends PureComponent {
+export default class HeaderIconMenu extends Component {
+  shouldComponentUpdate() {
+    return false;
+  }
+
   onPressIcon = () => {
     Keyboard.dismiss();
     this.props.navigation.navigate('MenuScreen');
@@ -54,5 +58,3 @@ export class HeaderIconMenu extends PureComponent {
     );
   }
 }
-
-export default HeaderIconMenu;
