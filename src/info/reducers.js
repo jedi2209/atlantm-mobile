@@ -9,6 +9,10 @@ import {
   INFO_POST__REQUEST,
   INFO_POST__SUCCESS,
   INFO_POST__FAIL,
+
+  CALL_ME_INFO__REQUEST,
+  CALL_ME_INFO__SUCCESS,
+  CALL_ME_INFO__FAIL,
 } from './actionTypes';
 
 import { DEALER__SUCCESS } from '../dealer/actionTypes';
@@ -53,6 +57,18 @@ function isFetchInfoPost(state = false, action) {
   }
 }
 
+function isCallMeRequest(state = false, action) {
+  switch (action.type) {
+    case CALL_ME_INFO__REQUEST:
+      return true;
+    case CALL_ME_INFO__SUCCESS:
+    case CALL_ME_INFO__FAIL:
+      return false;
+    default:
+      return state;
+  }
+}
+
 function list(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
@@ -87,5 +103,6 @@ export default combineReducers({
   meta: combineReducers({
     isFetchInfoList,
     isFetchInfoPost,
+    isCallMeRequest,
   }),
 });

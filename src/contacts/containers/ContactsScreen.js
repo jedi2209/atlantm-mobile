@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   StyleSheet,
   Image,
   View,
   Alert,
 } from 'react-native';
-import PropTypes from 'prop-types';
 import {
   Container,
   Content,
@@ -18,21 +18,22 @@ import {
   Right,
   Icon,
 } from 'native-base';
-import _ from 'lodash';
-import Communications from 'react-native-communications';
-import Spinner from 'react-native-loading-spinner-overlay';
-import DeviceInfo from 'react-native-device-info';
 
+// redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { callMe } from '../actions';
-import {
-  CALL_ME__SUCCESS,
-  CALL_ME__FAIL,
-} from '../actionTypes';
+import { CALL_ME__SUCCESS, CALL_ME__FAIL } from '../actionTypes';
 
+// components
+import DeviceInfo from 'react-native-device-info';
+import Communications from 'react-native-communications';
+import Spinner from 'react-native-loading-spinner-overlay';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
+
+// helpers
+import { get } from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import { verticalScale } from '../../utils/scale';
@@ -71,8 +72,6 @@ const mapStateToProps = ({ dealer, profile, contacts }) => {
     profile,
     dealerSelected: dealer.selected,
     isСallMeRequest: contacts.isСallMeRequest,
-    isСallMeSuccess: contacts.isСallMeSuccess,
-    isСallMeFail: contacts.isСallMeFail,
   };
 };
 
@@ -95,17 +94,16 @@ class ContactsScreen extends Component {
     const {
       callMe,
       profile,
-      dealerSelected,
       navigation,
+      dealerSelected,
     } = this.props;
 
-    const dealerID = dealerSelected.id;
-    const { name, phone } = profile;
+    const { name, phone, email } = profile;
 
     if (!name || !phone) {
       return Alert.alert(
         'Не хватает информации',
-        'Для обратного звонка необходимо заполните ФИО и номер контактного телефона в профиле',
+        'Для обратного звонка необходимо заполнить ФИО и номер контактного телефона в профиле',
         [
           { text: 'Отмена', style: 'cancel' },
           {
@@ -116,9 +114,16 @@ class ContactsScreen extends Component {
       );
     }
 
+    const dealerID = dealerSelected.id;
     const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
 
-    callMe(dealerID, name, phone, device)
+    callMe({
+      name,
+      email,
+      phone,
+      device,
+      dealerID,
+    })
       .then(action => {
         if (action.type === CALL_ME__SUCCESS) {
           setTimeout(() => Alert.alert('Успешно', 'Ваш запрос на обратный звонок принят'), 100);
@@ -143,12 +148,10 @@ class ContactsScreen extends Component {
       dealerSelected,
       navigation,
       isСallMeRequest,
-      isСallMeSuccess,
-      isСallMeFail,
     } = this.props;
-    const phones = _.get(dealerSelected, 'phone', []);
 
-    const device = `${DeviceInfo.getModel()} ${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
+    const PHONES = [];
+    const phones = get(dealerSelected, 'phone', PHONES);
 
     return (
       <StyleProvider style={getTheme()}>
@@ -242,7 +245,7 @@ class ContactsScreen extends Component {
                 }
 
                 {
-                  _.get(dealerSelected, 'coords.lat') && _.get(dealerSelected, 'coords.lon') ?
+                  get(dealerSelected, 'coords.lat') && get(dealerSelected, 'coords.lon') ?
                     (
                       <ListItem
                         icon

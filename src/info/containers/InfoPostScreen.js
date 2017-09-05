@@ -19,6 +19,7 @@ import { fetchInfoPost, callMeForInfo } from '../actions';
 // components
 import DeviceInfo from 'react-native-device-info';
 import { CachedImage } from 'react-native-cached-image';
+import Spinner from 'react-native-loading-spinner-overlay';
 import { Container, Content, Button, Footer, FooterTab } from 'native-base';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
@@ -69,7 +70,9 @@ const mapStateToProps = ({ dealer, info, profile }) => {
     posts: info.posts,
     name: profile.name,
     phone: profile.phone,
+    email: profile.email,
     dealerSelected: dealer.selected,
+    isCallMeRequest: info.meta.isCallMeRequest,
     isFetchInfoPost: info.meta.isFetchInfoPost,
   };
 };
@@ -103,8 +106,8 @@ class InfoPostScreen extends Component {
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       const {
-        navigation,
         posts,
+        navigation,
         fetchInfoPost,
       } = this.props;
 
@@ -141,9 +144,17 @@ class InfoPostScreen extends Component {
     });
   }
 
+  getPost = () => {
+    const { posts, navigation } = this.props;
+    const id = navigation.state.params.id;
+
+    return posts[id];
+  }
+
   onPressCallMe = () => {
     const {
       name,
+      email,
       phone,
       navigation,
       callMeForInfo,
@@ -153,7 +164,7 @@ class InfoPostScreen extends Component {
     if (!name || !phone) {
       return Alert.alert(
         'Не хватает информации',
-        'Для обратного звонка необходимо заполните ФИО и номер контактного телефона в профиле',
+        'Для обратного звонка необходимо заполнить ФИО и номер контактного телефона в профиле',
         [
           { text: 'Отмена', style: 'cancel' },
           {
@@ -164,9 +175,19 @@ class InfoPostScreen extends Component {
       );
     }
 
+    const post = this.getPost();
+    const action = post.id;
+    const dealerID = dealerSelected.id;
     const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
 
-    callMeForInfo(dealerSelected.id, name, phone, device)
+    callMeForInfo({
+      name,
+      email,
+      phone,
+      device,
+      action,
+      dealerID,
+    })
       .then(action => {
         if (action.type === CALL_ME_INFO__SUCCESS) {
           setTimeout(() => Alert.alert('Успешно', 'Ваш запрос на обратный звонок принят'), 100);
@@ -179,14 +200,10 @@ class InfoPostScreen extends Component {
   }
 
   render() {
-    const {
-      list,
-      posts,
-      navigation,
-    } = this.props;
+    const { list, navigation, isCallMeRequest } = this.props;
 
     const id = navigation.state.params.id;
-    const post = posts[id];
+    const post = this.getPost();
     const currentPostInList = _.find(list, { id });
     let text = _.get(post, 'text');
 
@@ -197,6 +214,9 @@ class InfoPostScreen extends Component {
     return (
       <Container>
         <Content style={styles.content}>
+
+        <Spinner visible={isCallMeRequest} color={styleConst.color.blue} />
+
           {
             !text ?
               <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} /> :

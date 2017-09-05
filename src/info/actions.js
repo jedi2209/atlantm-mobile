@@ -27,8 +27,8 @@ export const fetchInfoList = (region, dealer) => {
     });
 
     return API.fetchInfoList(region, dealer)
-      .then(response => {
-        const { data, error } = response;
+      .then(res => {
+        const { data, error } = res;
 
         if (error) {
           return dispatch({
@@ -66,8 +66,8 @@ export const fetchInfoPost = (infoID) => {
     });
 
     return API.fetchInfoPost(infoID)
-      .then(response => {
-        const { data, error } = response;
+      .then(res => {
+        const { data, error } = res;
 
         if (error) {
           return dispatch({
@@ -98,20 +98,16 @@ export const fetchInfoPost = (infoID) => {
   };
 };
 
-export const callMeForInfo = (dealerID, name, phone, device, action) => {
+export const callMeForInfo = (props) => {
   return dispatch => {
     dispatch({
       type: CALL_ME_INFO__REQUEST,
-      payload: {
-        dealerID,
-        name,
-        phone,
-      },
+      payload: { ...props },
     });
 
-    return API.callMe(dealerID, name, phone, device, action)
-      .then(response => {
-        const { data, error, status } = response;
+    return API.callMe(props)
+      .then(res => {
+        const { error, status } = res;
 
         if (status !== 'success') {
           return dispatch({
