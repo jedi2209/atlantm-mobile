@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import {
   View,
-  WebView,
   Platform,
   Dimensions,
   StyleSheet,
@@ -26,6 +25,7 @@ import { connect } from 'react-redux';
 import { CachedImage } from 'react-native-cached-image';
 import Communications from 'react-native-communications';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import WebViewAutoHeight from '../../../core/components/WebViewAutoHeight';
 
 // helpers
 import _ from 'lodash';
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
   },
   descriptionContainer: {
+    flex: 1,
     paddingVertical: styleConst.ui.verticalGap - 5,
     paddingHorizontal: styleConst.ui.horizontalGap + 5,
   },
@@ -112,7 +113,6 @@ class AboutScreen extends PureComponent {
       imageWidth: width,
       imageHeight: scale(155),
       webViewWidth: width - styleConst.ui.verticalGap,
-      webViewHeight: height,
     };
   }
 
@@ -129,15 +129,9 @@ class AboutScreen extends PureComponent {
   }
 
   onLayoutWebView= (e) => {
-    const {
-      width: webViewWidth,
-      height: webViewHeight,
-    } = e.nativeEvent.layout;
+    const { width: webViewWidth } = e.nativeEvent.layout;
 
-    this.setState({
-      webViewWidth,
-      webViewHeight,
-    });
+    this.setState({ webViewWidth });
   }
 
   shouldComponentUpdate(nextProps) {
@@ -150,7 +144,7 @@ class AboutScreen extends PureComponent {
     let description = selectedDealer.description;
 
     if (description) {
-      description = processHtml(description);
+      description = processHtml(description, this.state.webViewWidth, this.state.webViewHeight);
     }
 
     return (
@@ -305,18 +299,7 @@ class AboutScreen extends PureComponent {
                     style={styles.descriptionContainer}
                     onLayout={this.onLayoutWebView}
                   >
-                    <WebView
-                      dataDetectorTypes="none"
-                      style={{
-                        width: this.state.webViewWidth,
-                        height: this.state.webViewHeight + 10,
-                        paddingBottom: 20,
-                      }}
-                      automaticallyAdjustContentInsets={false}
-                      scalesPageToFit={false}
-                      scrollEnabled={true}
-                      source={{ html: description }}
-                    />
+                    <WebViewAutoHeight source={{ html: description }} />
                   </View>
                 ) : null
             }

@@ -4,7 +4,6 @@ import {
   Text,
   Alert,
   Image,
-  WebView,
   Dimensions,
   StyleSheet,
   ActivityIndicator,
@@ -22,6 +21,8 @@ import { CachedImage } from 'react-native-cached-image';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Container, Content, Button, Footer, FooterTab } from 'native-base';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
+import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
+
 
 // helpers
 import _ from 'lodash';
@@ -42,6 +43,7 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(60),
   },
   textContainer: {
+    flex: 1,
     marginVertical: 10,
     marginHorizontal: styleConst.ui.horizontalGap,
   },
@@ -91,7 +93,6 @@ class InfoPostScreen extends Component {
       imageWidth: width,
       imageHeight: scale(155),
       webViewWidth: width - styleConst.ui.verticalGap,
-      webViewHeight: height,
     };
   }
 
@@ -133,15 +134,9 @@ class InfoPostScreen extends Component {
   }
 
   onLayoutWebView= (e) => {
-    const {
-      width: webViewWidth,
-      height: webViewHeight,
-    } = e.nativeEvent.layout;
+    const { width: webViewWidth } = e.nativeEvent.layout;
 
-    this.setState({
-      webViewWidth,
-      webViewHeight,
-    });
+    this.setState({ webViewWidth });
   }
 
   getPost = () => {
@@ -208,7 +203,7 @@ class InfoPostScreen extends Component {
     let text = _.get(post, 'text');
 
     if (text) {
-      text = processHtml(text);
+      text = processHtml(text, this.state.webViewWidth);
     }
 
     return (
@@ -235,17 +230,9 @@ class InfoPostScreen extends Component {
                   />
                   <View
                     style={styles.textContainer}
-                    onLayout={this.onLayoutWebView}>
-                    <WebView
-                      dataDetectorTypes="none"
-                      style={{
-                        width: this.state.webViewWidth,
-                        height: this.state.webViewHeight,
-                      }}
-                      automaticallyAdjustContentInsets={false}
-                      scalesPageToFit={false}
-                      source={{ html: text }}
-                    />
+                    onLayout={this.onLayoutWebView}
+                  >
+                    <WebViewAutoHeight source={{ html: text }} />
                   </View>
                 </View>
               )
