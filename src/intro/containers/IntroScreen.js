@@ -13,9 +13,6 @@ import {
   Text,
 } from 'native-base';
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
-
 import styleConst from '../../core/style-const';
 import { scale } from '../../utils/scale';
 
@@ -51,22 +48,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = () => {
-  return {
-
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-
-  }, dispatch);
-};
-
-class IntroScreen extends Component {
+export default class IntroScreen extends Component {
   static navigationOptions = () => ({
     header: null,
   })
+
+  shouldComponentUpdate() {
+    return false;
+  }
 
   render() {
     return (
@@ -96,5 +85,3 @@ class IntroScreen extends Component {
     );
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(IntroScreen);

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import {
   View,
   StyleSheet,
@@ -18,6 +18,8 @@ import {
   StyleProvider,
   Icon,
 } from 'native-base';
+
+import { isEqual } from 'lodash';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -78,7 +80,7 @@ const mapDispatchToProps = dispatch => {
   }, dispatch);
 };
 
-class InfoListScreen extends PureComponent {
+class InfoListScreen extends Component {
   constructor(props) {
     super(props);
     this.state = { isRefreshing: false };
@@ -101,14 +103,16 @@ class InfoListScreen extends PureComponent {
   }
 
   componentDidMount() {
-    const { dealerSelected, list, fetchInfoList } = this.props;
+    const { dealerSelected, list, fetchInfoList, isFetchInfoList } = this.props;
     const { region, id: dealer } = dealerSelected;
 
-    InteractionManager.runAfterInteractions(() => {
-      if (list.length === 0) {
-        fetchInfoList(region, dealer);
-      }
-    });
+    if (list.length === 0 && !isFetchInfoList) {
+      fetchInfoList(region, dealer);
+    }
+
+    // InteractionManager.runAfterInteractions(() => {
+
+    // });
   }
 
   onRefresh = () => {
@@ -121,8 +125,8 @@ class InfoListScreen extends PureComponent {
     });
   }
 
-  processDate(date) {
-    return `c ${dayMonth(date)} по ${dayMonthYear(date)}`;
+  processDate(date = {}) {
+    return `c ${dayMonth(date.from)} по ${dayMonthYear(date.to)}`;
   }
 
   onPressPost = (id) => this.props.navigation.navigate('InfoPostScreen', { id });
@@ -199,7 +203,7 @@ class InfoListScreen extends PureComponent {
                         }
                         {
                             info.date ?
-                            <Text style={styles.date}>{this.processDate(info.date.from)}</Text> :
+                            <Text style={styles.date}>{this.processDate(info.date)}</Text> :
                             null
                             }
                         </Body>

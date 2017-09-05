@@ -65,6 +65,17 @@ class MapScreen extends Component {
     const LONGITUDE = +dealerSelected.coords.lon;
     const LATITUDE_DELTA = 0.0922;
     const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+    const city = dealerSelected.city | '';
+    const address = dealerSelected.address | '';
+    let description;
+
+    if (city) {
+      description = city;
+    }
+
+    if (address) {
+      description = description + ' ' + address;
+    }
 
     return (
       <Container style={styles.container} >
@@ -91,7 +102,7 @@ class MapScreen extends Component {
               }}
               pinColor={styleConst.color.blue}
               title={dealerSelected.name}
-              description={`${dealerSelected.city} ${dealerSelected.address || ''}`}
+              description={description}
             />
           </MapView>
         </View>

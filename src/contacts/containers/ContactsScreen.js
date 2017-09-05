@@ -130,6 +130,14 @@ class ContactsScreen extends Component {
       });
   }
 
+  shouldComponentUpdate(nextProps) {
+    if (this.props.dealerSelected.id !== nextProps.dealerSelected.id) {
+      return true;
+    }
+
+    return false;
+  }
+
   render() {
     const {
       dealerSelected,

@@ -54,7 +54,9 @@ const styles = StyleSheet.create({
 export default class DealerItemList extends Component {
   static propTypes = {
     navigation: PropTypes.object.isRequired,
-    city: PropTypes.string,
+    city: PropTypes.shape({
+      name: PropTypes.string,
+    }),
     name: PropTypes.string,
     brands: PropTypes.array,
     returnScreen: PropTypes.string,
@@ -65,6 +67,12 @@ export default class DealerItemList extends Component {
     name: null,
     brands: [],
     returnScreen: null,
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (this.props.name !== nextProps.name) return true;
+
+    return false;
   }
 
   render() {
@@ -88,7 +96,7 @@ export default class DealerItemList extends Component {
             <Body
               style={styles.listItemBody}
             >
-              {city ? <Text style={styles.city}>{city}</Text> : null}
+              {city && city.name ? <Text style={styles.city}>{city.name}</Text> : null}
               {name ? <Text style={styles.name}>{name}</Text> : null}
             </Body>
             <Right>
