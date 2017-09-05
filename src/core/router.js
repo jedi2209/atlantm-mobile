@@ -5,6 +5,7 @@ import IntroScreen from '../intro/containers/IntroScreen';
 import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
 import MenuScreen from '../menu/containers/MenuScreen';
 import ProfileScreen from '../profile/containers/ProfileScreen';
+import ServiceScreen from '../service/containers/ServiceScreen';
 
 // contacts
 import ContactsScreen from '../contacts/containers/ContactsScreen';
@@ -51,6 +52,7 @@ const getRouter = initialRouteName => {
         },
       },
       ProfileScreen: { screen: ProfileScreen },
+      ServiceScreen: { screen: ServiceScreen },
     },
     {
       initialRouteName,

@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
@@ -11,27 +11,8 @@ import {
   Input,
 } from 'native-base';
 
-// helpers
-import styleConst from '../../core/style-const';
-
-const styles = StyleSheet.create({
-  label: {
-    color: '#000',
-    fontSize: 18,
-    fontFamily: styleConst.font.regular,
-  },
-  inputItem: {
-    borderBottomWidth: 0,
-  },
-  listItemContainer: {
-    backgroundColor: '#fff',
-  },
-  listItem: {
-    paddingRight: 0,
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
-});
+// styles
+import styles from '../../core/components/Lists/style';
 
 export default class ProfileForm extends PureComponent {
   static propTypes = {

@@ -33,28 +33,49 @@ export default {
     return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
   },
 
-  callMe(dealerID, name, phone, device, action) {
+  callMe(props) {
+    const {
+      name,
+      phone,
+      email,
+      action,
+      device,
+      dealerID,
+    } = props;
+
+    const body = `f_Dealer=${dealerID}&f_Name=${name}&f_Phone=${phone}&f_Action=${action}&f_Email=${email}&f_Text=&f_URL=&f_Source=${device}`;
     const requestParams = _.merge(baseRequestParams, {
       method: 'post',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `f_Dealer=${dealerID}&f_Name=${name}&f_Phone=${phone}&f_Action=${action}&f_Email=&f_Text=&f_URL=&f_Source=${device}`,
+      body,
     });
 
     return this.request('/orders/callme/post/', requestParams);
   },
 
-  callMeForInfo(dealerID, name, phone, device) {
+  orderService(props) {
+    const {
+      car,
+      date,
+      name,
+      email,
+      phone,
+      device,
+      dealerID,
+    } = props;
+
+    const body = `f_Dealer=${dealerID}&f_Model=${car}&f_Name=${name}&f_Phone=${phone}&f_Email=${email}&f_Text=${date}&f_URL=&f_Source=${device}`;
     const requestParams = _.merge(baseRequestParams, {
       method: 'post',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `f_Dealer=${dealerID}&f_Name=${name}&f_Phone=${phone}&f_Email=&f_Text=&f_URL=&f_Source=${device}`,
+      body,
     });
 
-    return this.request('/orders/callme/post/', requestParams);
+    return this.request('/orders/service/post/', requestParams);
   },
 
   request(path, requestParams) {
