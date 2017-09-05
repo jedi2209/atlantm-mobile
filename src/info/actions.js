@@ -9,6 +9,9 @@ import {
   INFO_POST__SUCCESS,
   INFO_POST__FAIL,
 
+  CALL_ME_INFO__REQUEST,
+  CALL_ME_INFO__SUCCESS,
+  CALL_ME_INFO__FAIL,
 } from './actionTypes';
 
 import API from '../utils/api';
@@ -89,6 +92,45 @@ export const fetchInfoPost = (infoID) => {
           type: INFO_POST__FAIL,
           payload: {
             error: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const callMeForInfo = (dealerID, name, phone, device, action) => {
+  return dispatch => {
+    dispatch({
+      type: CALL_ME_INFO__REQUEST,
+      payload: {
+        dealerID,
+        name,
+        phone,
+      },
+    });
+
+    return API.callMe(dealerID, name, phone, device, action)
+      .then(response => {
+        const { data, error, status } = response;
+
+        if (status !== 'success') {
+          return dispatch({
+            type: CALL_ME_INFO__FAIL,
+            payload: {
+              code: error.code,
+              error: error.message,
+            },
+          });
+        }
+
+        return dispatch({ type: CALL_ME_INFO__SUCCESS });
+      })
+      .catch(error => {
+        return dispatch({
+          type: CALL_ME_INFO__FAIL,
+          payload: {
+            error: error.message,
+            code: error.code,
           },
         });
       });

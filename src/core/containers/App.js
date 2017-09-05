@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { AsyncStorage } from 'react-native';
 import { Provider } from 'react-redux';
 import { persistStore } from 'redux-persist';
@@ -38,7 +38,7 @@ if (!__DEV__) {
   });
 }
 
-export default class App extends PureComponent {
+export default class App extends Component {
   state = { rehydrated: false }
 
   componentDidMount() {
@@ -69,13 +69,17 @@ export default class App extends PureComponent {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.rehydrated !== nextState.rehydrated;
+  }
+
   render() {
     if (!this.state.rehydrated) {
       return null;
     }
 
-    const isShowIntro = _.get(store.getState(), 'dealer.showIntro');
-    const Router = getRouter(isShowIntro ? 'ContactsScreen' : 'IntroScreen');
+    const isShowIntro = _.get(store.getState(), 'dealer.selected.id');
+    const Router = getRouter(isShowIntro ? 'MenuScreen' : 'IntroScreen');
 
     SplashScreen.hide();
 

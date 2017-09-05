@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import {
-  StyleSheet,
   View,
-  Dimensions,
-  TouchableOpacity,
+  WebView,
   Platform,
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {
@@ -17,22 +18,24 @@ import {
   Right,
   StyleProvider,
 } from 'native-base';
-import _ from 'lodash';
-import { CachedImage } from 'react-native-cached-image';
-// import HTMLView from 'react-native-htmlview';
 
-import Communications from 'react-native-communications';
-
-import { bindActionCreators } from 'redux';
+// redux
 import { connect } from 'react-redux';
 
+// components
+import { CachedImage } from 'react-native-cached-image';
+import Communications from 'react-native-communications';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+
+// helpers
+import _ from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import { verticalScale } from '../../../utils/scale';
+import { scale, verticalScale } from '../../../utils/scale';
 import styleHeader from '../../../core/components/Header/style';
+import processHtml from '../../../utils/process-html';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
@@ -81,24 +84,10 @@ const styles = StyleSheet.create({
     height: 22,
     paddingHorizontal: styleConst.ui.horizontalGap,
     alignItems: 'flex-start',
-    // justifyContent: 'center',
     flexDirection: 'row',
   },
   list: {
     backgroundColor: '#fff',
-  },
-});
-
-const textStyles = StyleSheet.create({
-  p: {
-    fontFamily: styleConst.font.regular,
-    fontSize: 15,
-    letterSpacing: styleConst.ui.letterSpacing,
-  },
-  li: {
-    fontFamily: styleConst.font.regular,
-    fontSize: 15,
-    letterSpacing: styleConst.ui.letterSpacing,
   },
 });
 
@@ -108,13 +97,7 @@ const mapStateToProps = ({ dealer }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-
-  }, dispatch);
-};
-
-class AboutScreen extends Component {
+class AboutScreen extends PureComponent {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Об автоцентре',
     headerStyle: [styleHeader.common, { borderBottomWidth: 0 }],
@@ -123,16 +106,52 @@ class AboutScreen extends Component {
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
   })
 
-  processText(text) {
-    if (!text) return null;
-    return text.replace(/\r\n/g, '');
+  constructor(props) {
+    super(props);
+    this.state = {
+      imageWidth: width,
+      imageHeight: scale(155),
+      webViewWidth: width - styleConst.ui.verticalGap,
+      webViewHeight: height,
+    };
+  }
+
+  onLayoutImage = (e) => {
+    const {
+      width: imageWidth,
+      height: imageHeight,
+    } = e.nativeEvent.layout;
+
+    this.setState({
+      imageWidth,
+      imageHeight,
+    });
+  }
+
+  onLayoutWebView= (e) => {
+    const {
+      width: webViewWidth,
+      height: webViewHeight,
+    } = e.nativeEvent.layout;
+
+    this.setState({
+      webViewWidth,
+      webViewHeight,
+    });
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.selectedDealer.id !== nextProps.selectedDealer.id;
   }
 
   render() {
     const { selectedDealer } = this.props;
     const phones = _.get(selectedDealer, 'phone', []);
+    let description = selectedDealer.description;
 
-    // selectedDealer.description = 'Компания «Атлант-М Балтика» является петербургским отделением международного холдинга \"Атлант-М\" - одной из крупнейших компаний в СНГ, специализирующейся на продаже, гарантийном и сервисном обслуживании автомобилей различных марок, а также на продаже запасных частей.';
+    if (description) {
+      description = processHtml(description);
+    }
 
     return (
       <StyleProvider style={getTheme()}>
@@ -150,8 +169,14 @@ class AboutScreen extends Component {
               <Text style={styles.title}>{selectedDealer.name}</Text>
             </View>
             <CachedImage
-              style={styles.image}
-              resizeMode="cover"
+              onLayout={this.onLayoutImage}
+              style={[
+                styles.image,
+                {
+                  width: this.state.imageWidth,
+                  height: this.state.imageHeight,
+                },
+              ]}
               source={{ uri: selectedDealer.img }}
             >
               <View style={styles.brandsLine}>
@@ -183,7 +208,7 @@ class AboutScreen extends Component {
                           <Text>Город</Text>
                         </Body>
                         <Right>
-                          <Text style={styles.rightText}>{selectedDealer.city}</Text>
+                          <Text style={styles.rightText}>{selectedDealer.city.name}</Text>
                         </Right>
                       </ListItem>
                     ) : null
@@ -274,12 +299,24 @@ class AboutScreen extends Component {
             </List>
 
             {
-              selectedDealer.description ?
+              description ?
                 (
-                  <View style={styles.descriptionContainer}>
-                    <Text style={styles.description}>
-                      {this.processText(selectedDealer.description)}
-                    </Text>
+                  <View
+                    style={styles.descriptionContainer}
+                    onLayout={this.onLayoutWebView}
+                  >
+                    <WebView
+                      dataDetectorTypes="none"
+                      style={{
+                        width: this.state.webViewWidth,
+                        height: this.state.webViewHeight + 10,
+                        paddingBottom: 20,
+                      }}
+                      automaticallyAdjustContentInsets={false}
+                      scalesPageToFit={false}
+                      scrollEnabled={true}
+                      source={{ html: description }}
+                    />
                   </View>
                 ) : null
             }
@@ -290,4 +327,4 @@ class AboutScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AboutScreen);
+export default connect(mapStateToProps)(AboutScreen);

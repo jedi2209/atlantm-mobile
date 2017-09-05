@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import {
+  View,
   Image,
   StyleSheet,
   TouchableOpacity,
@@ -7,35 +8,51 @@ import {
 } from 'react-native';
 import styleConst from '../../style-const';
 
+const containerSize = 40;
 const size = 23;
 const styles = StyleSheet.create({
   container: {
-    marginRight: styleConst.ui.horizontalGap,
-    width: size,
-    height: size,
+    paddingLeft: styleConst.ui.horizontalGap * 2,
+    paddingRight: styleConst.ui.horizontalGap * 2,
+    width: containerSize,
+    height: containerSize,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  inner: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   icon: {
     width: size,
     height: size,
     resizeMode: 'contain',
+    alignSelf: 'center',
   },
 });
 
-const HeaderIconMenu = props => {
-  return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => {
-        Keyboard.dismiss();
-        props.navigation.navigate('MenuScreen');
-      }}
-    >
-      <Image
-        style={styles.icon}
-        source={require('./assets/menu.png')}
-      />
-    </TouchableOpacity>
-  );
-};
+export class HeaderIconMenu extends PureComponent {
+  onPressIcon = () => {
+    Keyboard.dismiss();
+    this.props.navigation.navigate('MenuScreen');
+  };
+
+  render() {
+    return (
+      <TouchableOpacity
+        style={styles.container}
+        onPress={this.onPressIcon}
+      >
+        <View style={styles.inner}>
+          <Image
+            style={styles.icon}
+            source={require('./assets/menu.png')}
+          />
+        </View>
+      </TouchableOpacity>
+    );
+  }
+}
 
 export default HeaderIconMenu;

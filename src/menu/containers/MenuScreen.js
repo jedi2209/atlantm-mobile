@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import {
   StyleSheet,
   Image,
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: styleConst.color.greyText,
-    fontSize: 12,
+    fontSize: 14,
     fontFamily: styleConst.font.regular,
     textAlign: 'center',
     letterSpacing: styleConst.ui.letterSpacing,
@@ -47,13 +47,17 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class MenuScreen extends PureComponent {
+export default class MenuScreen extends Component {
   static navigationOptions = () => ({
     headerTitle: 'Атлант-М',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
     headerLeft: null,
   })
+
+  shouldComponentUpdate() {
+    return false;
+  }
 
   onPressContacts = () => this.props.navigation.navigate('ContactsScreen')
   onPressInfoList = () => this.props.navigation.navigate('InfoListScreen')

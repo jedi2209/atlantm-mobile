@@ -255,6 +255,7 @@ class ChooseDealerScreen extends Component {
                             <View style={styles.brands} >
                               {
                                 dealer.brands.map(brand => {
+                                  console.log('brand.logo', brand.logo);
                                   return (
                                     <CachedImage
                                       resizeMode="contain"

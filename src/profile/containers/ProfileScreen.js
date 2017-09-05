@@ -144,7 +144,7 @@ class ProfileScreen extends Component {
                             phoneFill(text);
                           }}
                           value={phone}
-                          keyboardType="numeric"
+                          keyboardType="phone-pad"
                           returnKeyType="done"
                           underlineColorAndroid={'transparent'}
                           maxLength={20}

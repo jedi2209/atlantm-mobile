@@ -18,8 +18,6 @@ import InfoListScreen from '../info/containers/InfoListScreen';
 import InfoPostScreen from '../info/containers/InfoPostScreen';
 
 const getRouter = initialRouteName => {
-  console.log('getRouter');
-
   return StackNavigator(
     {
       IntroScreen: { screen: IntroScreen },

@@ -60,7 +60,6 @@ function list(state = [], action) {
     case INFO_LIST__SUCCESS:
       return action.payload;
     case DEALER__SUCCESS:
-    case DEALER__SUCCESS:
       return [];
     default:
       return state;

@@ -5,3 +5,7 @@ export const INFO_LIST__FAIL = 'INFO_LIST__FAIL';
 export const INFO_POST__REQUEST = 'INFO_POST__REQUEST';
 export const INFO_POST__SUCCESS = 'INFO_POST__SUCCESS';
 export const INFO_POST__FAIL = 'INFO_POST__FAIL';
+
+export const CALL_ME_INFO__REQUEST = 'CALL_ME_INFO__REQUEST';
+export const CALL_ME_INFO__SUCCESS = 'CALL_ME_INFO__SUCCESS';
+export const CALL_ME_INFO__FAIL = 'CALL_ME_INFO__FAIL';
