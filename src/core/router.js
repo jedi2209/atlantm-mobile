@@ -26,7 +26,7 @@ const getRouter = initialRouteName => {
       ChooseDealerScreen: { screen: ChooseDealerScreen },
       ContactsScreen: {
         screen: StackNavigator({
-          index: { screen: ContactsScreen },
+          ContactsScreen: { screen: ContactsScreen },
           AboutScreen: { screen: AboutScreen },
           MapScreen: { screen: MapScreen },
           ReferenceScreen: { screen: ReferenceScreen },

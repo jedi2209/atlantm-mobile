@@ -127,6 +127,18 @@ class ServiceScreen extends Component {
       });
   }
 
+  shouldComponentUpdate(nextProps) {
+    const { dealerSelected, date, name, phone, email, car, navigation } = this.props;
+    const isActiveRoute = navigation.state.routeName === 'ServiceScreen';
+
+    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveRoute) ||
+        (name !== nextProps.name && isActiveRoute) ||
+          (phone !== nextProps.phone && isActiveRoute) ||
+            (email !== nextProps.email && isActiveRoute) ||
+              (car !== nextProps.car && isActiveRoute) ||
+                (date.date !== nextProps.date.date && isActiveRoute);
+  }
+
   render() {
     const {
       car,
@@ -143,6 +155,8 @@ class ServiceScreen extends Component {
       dealerSelected,
       isOrderServiceRequest,
     } = this.props;
+
+    console.log('== Service ==');
 
     return (
       <StyleProvider style={getTheme()}>

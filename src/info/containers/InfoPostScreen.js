@@ -206,6 +206,8 @@ class InfoPostScreen extends Component {
       text = processHtml(text, this.state.webViewWidth);
     }
 
+    console.log('render info post screen');
+
     return (
       <Container>
         <Content style={styles.content}>

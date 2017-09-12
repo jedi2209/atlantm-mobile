@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Platform,
@@ -28,14 +28,14 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import WebViewAutoHeight from '../../../core/components/WebViewAutoHeight';
 
 // helpers
-import _ from 'lodash';
+import { get } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import { scale, verticalScale } from '../../../utils/scale';
 import styleHeader from '../../../core/components/Header/style';
 import processHtml from '../../../utils/process-html';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
@@ -63,12 +63,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: styleConst.ui.verticalGap - 5,
     paddingHorizontal: styleConst.ui.horizontalGap + 5,
-  },
-  description: {
-    fontSize: 15,
-    color: styleConst.color.greyText4,
-    fontFamily: styleConst.font.regular,
-    letterSpacing: styleConst.ui.letterSpacing,
   },
   image: {
     height: 150,
@@ -98,7 +92,7 @@ const mapStateToProps = ({ dealer }) => {
   };
 };
 
-class AboutScreen extends PureComponent {
+class AboutScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Об автоцентре',
     headerStyle: [styleHeader.common, { borderBottomWidth: 0 }],
@@ -135,17 +129,39 @@ class AboutScreen extends PureComponent {
   }
 
   shouldComponentUpdate(nextProps) {
-    return this.props.selectedDealer.id !== nextProps.selectedDealer.id;
+    return this.props.selectedDealer.id !== nextProps.selectedDealer.id &&
+      this.props.navigation.state.routeName === 'AboutScreen';
+  }
+
+  renderEmails = (emails) => {
+    if (!emails) return null;
+
+    return emails.map(emailAddress => (
+      <ListItem
+        key={emailAddress}
+        icon
+        style={styles.listItem}
+      >
+        <Body>
+          <Text style={styles.leftText}>Email</Text>
+        </Body>
+        <Right>
+          <Text style={styles.rightText}>{emailAddress}</Text>
+        </Right>
+      </ListItem>
+    ));
   }
 
   render() {
     const { selectedDealer } = this.props;
-    const phones = _.get(selectedDealer, 'phone', []);
+    const phones = get(selectedDealer, 'phone', []);
     let description = selectedDealer.description;
 
     if (description) {
       description = processHtml(description, this.state.webViewWidth, this.state.webViewHeight);
     }
+
+    console.log('== About ==');
 
     return (
       <StyleProvider style={getTheme()}>
@@ -252,22 +268,7 @@ class AboutScreen extends PureComponent {
                       </View>
                     ) : null
                 }
-                {
-                  selectedDealer.email ?
-                    (
-                      <ListItem
-                        icon
-                        style={styles.listItem}
-                      >
-                        <Body>
-                          <Text style={styles.leftText}>Email</Text>
-                        </Body>
-                        <Right>
-                          <Text style={styles.rightText}>{selectedDealer.email}</Text>
-                        </Right>
-                      </ListItem>
-                    ) : null
-                }
+                {this.renderEmails(selectedDealer.email)}
                 {
                   selectedDealer.site ?
                     (
