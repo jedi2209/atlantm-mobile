@@ -4,57 +4,35 @@ import {
   StyleSheet,
   RefreshControl,
   ActivityIndicator,
-  InteractionManager,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {
-  Container,
-  Content,
-  Text,
-  List,
-  ListItem,
-  Body,
-  Right,
-  StyleProvider,
-  Icon,
-} from 'native-base';
+import { Container, Content, Text, List, StyleProvider } from 'native-base';
+import { OptimizedFlatList } from 'react-native-optimized-flatlist';
 
-import { isEqual } from 'lodash';
-
+// redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { fetchInfoList } from '../actions';
 
+// helpers
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import styleHeader from '../../core/components/Header/style';
+import { verticalScale } from '../../utils/scale';
+
+// components
+import InfoListItem from '../components/InfoListItem';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
-// actions
-import { fetchInfoList } from '../actions';
-
-import { verticalScale } from '../../utils/scale';
-import { dayMonth, dayMonthYear } from '../../utils/date';
-
 const styles = StyleSheet.create({
-  content: {
+  container: {
     backgroundColor: styleConst.color.bg,
+    flex: 1,
   },
   spinner: {
     alignSelf: 'center',
     marginTop: verticalScale(60),
-  },
-  name: {
-    fontFamily: styleConst.font.regular,
-    fontSize: 17,
-    letterSpacing: styleConst.ui.letterSpacing,
-  },
-  date: {
-    color: styleConst.color.greyText2,
-    fontFamily: styleConst.font.regular,
-    fontSize: 14,
-    letterSpacing: styleConst.ui.letterSpacing,
-    marginTop: verticalScale(5),
   },
   message: {
     fontFamily: styleConst.font.regular,
@@ -67,9 +45,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ dealer, info }) => {
   return {
-    dealerSelected: dealer.selected,
     list: info.list,
     visited: info.visited,
+    dealerSelected: dealer.selected,
     isFetchInfoList: info.meta.isFetchInfoList,
   };
 };
@@ -81,10 +59,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 class InfoListScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { isRefreshing: false };
-  }
+  state = { isRefreshing: false }
 
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Акции',
@@ -109,10 +84,6 @@ class InfoListScreen extends Component {
     if (list.length === 0 && !isFetchInfoList) {
       fetchInfoList(region, dealer);
     }
-
-    // InteractionManager.runAfterInteractions(() => {
-
-    // });
   }
 
   onRefresh = () => {
@@ -125,107 +96,75 @@ class InfoListScreen extends Component {
     });
   }
 
-  processDate(date = {}) {
-    return `c ${dayMonth(date.from)} по ${dayMonthYear(date.to)}`;
+  shouldComponentUpdate(nextProps) {
+    const {
+      list,
+      navigation,
+      dealerSelected,
+    } = this.props;
+    const isActiveScreen = navigation.state.routeName === 'InfoListScreen';
+
+    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
+      (list.length !== nextProps.list.length);
   }
 
-  onPressPost = (id) => this.props.navigation.navigate('InfoPostScreen', { id });
+  renderItem = ({ item }) => {
+    return (
+      <InfoListItem
+        info={item}
+        visited={this.props.visited}
+        navigate={this.props.navigation.navigate}
+      />
+    );
+  }
+
+  renderEmptyComponent = () => {
+    return this.props.isFetchInfoList ?
+      (
+          <View style={styles.spinnerContainer} >
+            <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
+          </View>
+      ) :
+      (
+          <Text style={styles.message}>В данный момент нет акций</Text>
+      );
+  }
+
+  renderHeaderComponent = () => {
+    return (
+      <DealerItemList
+        navigation={this.props.navigation}
+        city={this.props.dealerSelected.city}
+        name={this.props.dealerSelected.name}
+        brands={this.props.dealerSelected.brands}
+        returnScreen="InfoListScreen"
+      />
+    );
+  }
 
   render() {
     const {
-      navigation,
-      dealerSelected,
       list,
       visited,
+      navigation,
+      dealerSelected,
       isFetchInfoList,
     } = this.props;
 
-    console.log('render info list screen');
-
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content
-            contentContainerStyle={styles.contentContainer}
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.isRefreshing}
-                onRefresh={this.onRefresh}
-                title="Обновляем список акций"
-              />
-            }
-            style={styles.content}
-          >
-            <DealerItemList
-              navigation={navigation}
-              city={dealerSelected.city}
-              name={dealerSelected.name}
-              brands={dealerSelected.brands}
-              returnScreen="InfoListScreen"
-            />
-
-            {
-              list.length === 0 ?
-              (
-                  isFetchInfoList ?
-                  (
-                      <View style={styles.spinnerContainer} >
-                        <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
-                      </View>
-                  ) :
-                  (
-                      <Text style={styles.message}>В данный момент нет акций</Text>
-                  )
-              ) :
-              (
-                <List
-                  key={visited.length}
-                  style={styles.list}
-                  dataArray={list}
-                  renderRow={info => {
-                    const isVisited = visited.includes(info.id);
-
-                    return (
-                      <ListItem
-                        onPress={() => this.onPressPost(info.id)}
-                        style={styles.listItem}
-                      >
-                        <Body
-                        style={styles.listItemBody}
-                        >
-                        {
-                            info.name ?
-                            <Text style={[
-                              styles.name,
-                              { color: isVisited ? styleConst.color.greyText : '#000' },
-                            ]}>
-                              {info.name}
-                            </Text> :
-                            null
-                        }
-                        {
-                            info.date ?
-                            <Text style={styles.date}>{this.processDate(info.date)}</Text> :
-                            null
-                            }
-                        </Body>
-                        <Right>
-                        <Icon
-                            name="arrow-forward"
-                            style={[
-                              styles.icon,
-                              { color: isVisited ? styleConst.color.systemGray : styleConst.color.systemBlue },
-                            ]}
-                        />
-                        </Right>
-                      </ListItem>
-                    );
-                  }
-                } />
-              )
-          }
-          </Content>
-        </Container>
+        <View style={styles.container}>
+          <OptimizedFlatList
+            ListHeaderComponent={this.renderHeaderComponent}
+            data={list.length === 0 ? null : list}
+            onRefresh={this.onRefresh}
+            refreshing={this.state.isRefreshing}
+            ListEmptyComponent={this.renderEmptyComponent}
+            style={styles.list}
+            renderItem={this.renderItem}
+            keyExtractor={item => item.id}
+          />
+        </View>
       </StyleProvider>
     );
   }

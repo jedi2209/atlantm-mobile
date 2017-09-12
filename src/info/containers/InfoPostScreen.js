@@ -87,13 +87,10 @@ const mapDispatchToProps = dispatch => {
 };
 
 class InfoPostScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      imageWidth: width,
-      imageHeight: scale(155),
-      webViewWidth: width - styleConst.ui.verticalGap,
-    };
+  state = {
+    imageWidth: width,
+    imageHeight: scale(155),
+    webViewWidth: width - styleConst.ui.verticalGap,
   }
 
   static navigationOptions = ({ navigation }) => ({
@@ -105,20 +102,21 @@ class InfoPostScreen extends Component {
   })
 
   componentDidMount() {
-    InteractionManager.runAfterInteractions(() => {
-      const {
-        posts,
-        navigation,
-        fetchInfoPost,
-      } = this.props;
+    const {
+      posts,
+      navigation,
+      fetchInfoPost,
+    } = this.props;
 
-      const id = navigation.state.params.id;
-      const post = posts[id];
+    const id = navigation.state.params.id;
+    const post = posts[id];
 
-      if (!post) {
-        fetchInfoPost(id);
-      }
-    });
+    if (!post) {
+      fetchInfoPost(id);
+    }
+    // InteractionManager.runAfterInteractions(() => {
+
+    // });
   }
 
   onLayoutImage = (e) => {
@@ -206,7 +204,7 @@ class InfoPostScreen extends Component {
       text = processHtml(text, this.state.webViewWidth);
     }
 
-    console.log('render info post screen');
+    console.log('== InfoPost ==');
 
     return (
       <Container>
