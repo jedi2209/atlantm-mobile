@@ -40,12 +40,13 @@ const getRouter = initialRouteName => {
           header: null,
         },
       },
-      InfoScreen: {
+      InfoListScreen: {
         screen: StackNavigator({
           InfoListScreen: { screen: InfoListScreen },
           InfoPostScreen: { screen: InfoPostScreen },
         }, {
-          headerMode: 'float',
+          initialRouteName: 'InfoListScreen',
+          // headerMode: 'float',
         }),
         navigationOptions: {
           header: null,
