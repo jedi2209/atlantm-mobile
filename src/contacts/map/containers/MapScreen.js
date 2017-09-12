@@ -13,7 +13,6 @@ import {
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 // Redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // Helpers
@@ -43,12 +42,6 @@ const mapStateToProps = ({ dealer }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-
-  }, dispatch);
-};
-
 class MapScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Найти нас',
@@ -57,6 +50,11 @@ class MapScreen extends Component {
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
   })
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.selectedDealer.id !== nextProps.selectedDealer.id &&
+      this.props.navigation.state.routeName === 'MapScreen';
+  }
 
   render() {
     const { dealerSelected } = this.props;
@@ -76,6 +74,8 @@ class MapScreen extends Component {
     if (address) {
       description = description + ' ' + address;
     }
+
+    console.log('== MapScreen == ');
 
     return (
       <Container style={styles.container} >
@@ -111,4 +111,4 @@ class MapScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);
+export default connect(mapStateToProps)(MapScreen);

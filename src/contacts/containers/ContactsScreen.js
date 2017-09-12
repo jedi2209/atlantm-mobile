@@ -136,11 +136,8 @@ class ContactsScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if (this.props.dealerSelected.id !== nextProps.dealerSelected.id) {
-      return true;
-    }
-
-    return false;
+    return this.props.dealerSelected.id !== nextProps.dealerSelected.id &&
+      this.props.navigation.state.routeName === 'ContactsScreen';
   }
 
   render() {
@@ -152,6 +149,8 @@ class ContactsScreen extends Component {
 
     const PHONES = [];
     const phones = get(dealerSelected, 'phone', PHONES);
+
+    console.log('== Contacts ==');
 
     return (
       <StyleProvider style={getTheme()}>

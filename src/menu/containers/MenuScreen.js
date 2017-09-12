@@ -66,6 +66,8 @@ export default class MenuScreen extends Component {
   onPressNotReadyScreen = () => Alert.alert('Раздел появится в ближайших обновлениях');
 
   render() {
+    console.log('== Menu ==');
+
     return (
       <Container style={styles.container} >
         <Grid style={styles.menu} >

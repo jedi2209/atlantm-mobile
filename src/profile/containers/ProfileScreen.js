@@ -62,6 +62,16 @@ class ProfileScreen extends Component {
     email: PropTypes.string,
   }
 
+  shouldComponentUpdate(nextProps) {
+    const { dealerSelected, name, phone, email, navigation } = this.props;
+    const isActiveRoute = navigation.state.routeName === 'ProfileScreen';
+
+    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveRoute) ||
+        (name !== nextProps.name && isActiveRoute) ||
+          (phone !== nextProps.phone && isActiveRoute) ||
+            (email !== nextProps.email && isActiveRoute);
+  }
+
   render() {
     const {
       dealerSelected,
@@ -73,6 +83,8 @@ class ProfileScreen extends Component {
       phone,
       email,
     } = this.props;
+
+    console.log('== Profile ==');
 
     return (
       <StyleProvider style={getTheme()}>

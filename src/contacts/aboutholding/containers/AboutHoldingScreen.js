@@ -86,17 +86,26 @@ class AboutHoldingScreen extends Component {
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
   })
 
-  getSite(region) {
+  getSite = () => {
     return {
       [RUSSIA]: 'https://www.atlantm.ru/',
       [BELARUSSIA]: 'https://www.atlant-m.by/',
       [UKRAINE]: 'https://www.atlant-m.ua/',
-    }[region];
+    }[this.props.dealerSelected.region];
+  }
+
+  onPressWebsite = () => Communications.web(this.getSite())
+
+  shouldComponentUpdate() {
+    return this.props.selectedDealer.id !== nextProps.selectedDealer.id &&
+      this.props.navigation.state.routeName === 'AboutHoldingScreen';
   }
 
   render() {
     const { dealerSelected } = this.props;
-    const site = this.getSite(dealerSelected.region);
+    const site = this.getSite();
+
+    console.log('== AboutHolding ==');
 
     return (
       <StyleProvider style={getTheme()}>
@@ -105,18 +114,12 @@ class AboutHoldingScreen extends Component {
             <List style={[styles.list, styles.listHolding]}>
               <View style={styles.listItemContainer}>
                 {
-                  <ListItem
-                    last
-                    icon
-                    style={styles.listItem}
-                  >
+                  <ListItem last icon style={styles.listItem}>
                     <Body>
                       <Text>Веб-сайт</Text>
                     </Body>
                     <Right>
-                      <TouchableOpacity
-                        onPress={() => Communications.web(site)}
-                      >
+                      <TouchableOpacity onPress={this.onPressWebsite}>
                         <Text style={styles.rightText}>{site}</Text>
                       </TouchableOpacity>
                     </Right>

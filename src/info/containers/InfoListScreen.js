@@ -140,6 +140,8 @@ class InfoListScreen extends Component {
       isFetchInfoList,
     } = this.props;
 
+    console.log('render info list screen');
+
     return (
       <StyleProvider style={getTheme()}>
         <Container>
