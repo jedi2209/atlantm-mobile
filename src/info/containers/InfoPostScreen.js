@@ -7,7 +7,6 @@ import {
   Dimensions,
   StyleSheet,
   ActivityIndicator,
-  InteractionManager,
 } from 'react-native';
 
 // redux
@@ -31,6 +30,7 @@ import processHtml from '../../utils/process-html';
 import { scale, verticalScale } from '../../utils/scale';
 import styleHeader from '../../core/components/Header/style';
 import { CALL_ME_INFO__SUCCESS, CALL_ME_INFO__FAIL } from '../actionTypes';
+import { dayMonth, dayMonthYear } from '../../utils/date';
 
 const buttonIconSize = 28;
 const { width, height } = Dimensions.get('window');
@@ -63,6 +63,13 @@ const styles = StyleSheet.create({
     marginRight: 10,
     width: buttonIconSize,
     height: buttonIconSize,
+  },
+  date: {
+    color: styleConst.color.greyText2,
+    fontFamily: styleConst.font.regular,
+    fontSize: 14,
+    letterSpacing: styleConst.ui.letterSpacing,
+    marginTop: verticalScale(5),
   },
 });
 
@@ -114,9 +121,6 @@ class InfoPostScreen extends Component {
     if (!post) {
       fetchInfoPost(id);
     }
-    // InteractionManager.runAfterInteractions(() => {
-
-    // });
   }
 
   onLayoutImage = (e) => {
@@ -192,10 +196,15 @@ class InfoPostScreen extends Component {
       });
   }
 
+  processDate(date = {}) {
+    return `c ${dayMonth(date.from)} по ${dayMonthYear(date.to)}`;
+  }
+
   render() {
     const { list, navigation, isCallMeRequest } = this.props;
 
     const id = navigation.state.params.id;
+    const date = navigation.state.params.date;
     const post = this.getPost();
     const currentPostInList = _.find(list, { id });
     let text = _.get(post, 'text');
@@ -232,6 +241,11 @@ class InfoPostScreen extends Component {
                     style={styles.textContainer}
                     onLayout={this.onLayoutWebView}
                   >
+                  {
+                    date ?
+                      <Text style={styles.date}>{this.processDate(date)}</Text> :
+                      null
+                  }
                     <WebViewAutoHeight source={{ html: text }} />
                   </View>
                 </View>

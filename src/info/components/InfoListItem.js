@@ -35,7 +35,7 @@ export default class InfoListItem extends Component {
   onPressInfo = () => {
     const { navigate, info } = this.props;
 
-    return navigate('InfoPostScreen', { id: info.id });
+    return navigate('InfoPostScreen', { id: info.id, date: info.date });
   }
 
   processDate(date = {}) {
@@ -60,7 +60,7 @@ export default class InfoListItem extends Component {
     return (
       <ListItem onPress={this.onPressInfo}>
         <Body>
-        {
+          {
             info.name ?
               (
                 <Text style={[
@@ -71,12 +71,12 @@ export default class InfoListItem extends Component {
                 </Text>
               ) :
               null
-        }
-        {
+          }
+          {
             info.date ?
               <Text style={styles.date}>{this.processDate(info.date)}</Text> :
               null
-            }
+          }
         </Body>
         <Right>
         <Icon
