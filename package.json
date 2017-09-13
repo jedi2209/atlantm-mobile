@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "cd ./ios && pod install",
+    "postinstall": "rndebugger-open",
+    "pods": "cd ./ios && pod install",
     "watchman-stop": "watchman watch-del-all",
-    "test": "jest"
+    "test": "jest",
+    "react-devtools": "react-devtools"
   },
   "dependencies": {
     "babel-eslint": "^7.2.3",
@@ -45,6 +47,8 @@
     "eslint-plugin-react": "^6.10.3",
     "eslint-plugin-react-native": "^2.3.2",
     "jest": "20.0.4",
+    "react-devtools": "^2.5.0",
+    "react-native-debugger-open": "^0.3.12",
     "react-test-renderer": "16.0.0-alpha.12"
   },
   "jest": {
