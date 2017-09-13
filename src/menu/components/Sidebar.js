@@ -6,16 +6,29 @@ import {
   Alert,
   StyleSheet,
   TouchableOpacity,
+  TouchableHighlight,
 } from 'react-native';
 import PropTypes from 'prop-types';
+
+// redux
+import { connect } from 'react-redux';
 
 // helpers
 import styleConst from '../../core/style-const';
 import { MENU_CONTACTS, MENU_INFO, MENU_PROFILE, MENU_SERVICE } from '../actionTypes';
 
+const HEIGHT_ITEM = 55;
+const HEIGHT_ICON = 35;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: styleConst.color.bg,
+  },
+  header: {
+    height: 64,
+    backgroundColor: styleConst.color.header,
+    justifyContent: 'center',
   },
   logo: {
     width: 150,
@@ -25,31 +38,48 @@ const styles = StyleSheet.create({
   },
   item: {
     flexDirection: 'row',
+    alignItems: 'center',
+    height: HEIGHT_ITEM,
+  },
+  textContainer: {
+    borderBottomWidth: styleConst.ui.borderWidth,
+    borderBottomColor: styleConst.color.border,
+    height: HEIGHT_ITEM,
+    justifyContent: 'center',
+    flex: 1,
   },
   text: {
-    fontSize: 24,
+    color: styleConst.color.greyText,
+    fontSize: 18,
     fontFamily: styleConst.font.light,
     letterSpacing: styleConst.ui.letterSpacing,
   },
+  icon: {
+    width: HEIGHT_ICON,
+    height: HEIGHT_ICON,
+    marginHorizontal: 15,
+    resizeMode: 'contain',
+  },
   itemActive: {
-    backgroundColor: styleConst.color.lightBlue,
+    backgroundColor: styleConst.color.select,
   },
   textActive: {
     color: styleConst.color.blue,
   },
 });
 
-export default class Sidebar extends Component {
+const mapStateToProps = ({ nav }) => ({ nav });
+
+class Sidebar extends Component {
   static propTypes = {
     navigation: PropTypes.object,
   }
 
-  static defaultProps = {
-  }
+  static defaultProps = {}
 
-  // shouldComponentUpdate(nextProps) {
-  //   return this.props.nav !== nextProps.nav;
-  // }
+  shouldComponentUpdate(nextProps) {
+    return this.props.nav !== nextProps.nav;
+  }
 
   getActiveScreen() {
     switch (this.props.nav) {
@@ -59,20 +89,26 @@ export default class Sidebar extends Component {
       case 'ServiceScreen':
         return MENU_SERVICE;
       case 'ProfileScreen':
-        return MENU_SERVICE;
+        return MENU_PROFILE;
       default:
         return MENU_CONTACTS;
     }
   }
 
-  onPressContacts = () => this.props.navigation.navigate('ContactsScreen')
-  onPressInfoList = () => this.props.navigation.navigate('InfoListScreen')
-  onPressProfile = () => this.props.navigation.navigate('ProfileScreen')
-  onPressService = () => this.props.navigation.navigate('ServiceScreen')
+  onPressContacts = () => window.atlantmNavigation.navigate('ContactsScreen')
+  onPressInfoList = () => window.atlantmNavigation.navigate('InfoListScreen')
+  onPressProfile = () => window.atlantmNavigation.navigate('ProfileScreen')
+  onPressService = () => window.atlantmNavigation.navigate('ServiceScreen')
   onPressNotReadyScreen = () => Alert.alert('Раздел появится в ближайших обновлениях');
 
   render() {
     const activeScreen = this.getActiveScreen();
+    const isContact = activeScreen === MENU_CONTACTS;
+    const isInfo = activeScreen === MENU_INFO;
+    const isProfile = activeScreen === MENU_PROFILE;
+    const isService = activeScreen === MENU_SERVICE;
+
+    console.log('== Sidebar ==');
 
     return (
       <View style={styles.container}>
@@ -84,83 +120,91 @@ export default class Sidebar extends Component {
           />
         </View>
 
-        <TouchableOpacity onPress={this.onPressContacts} style={[styles.item, activeScreen === MENU_CONTACTS ? styles.itemActive : {}]}>
+        <TouchableOpacity onPress={this.onPressContacts} style={[styles.item, isContact ? styles.itemActive : {}]}>
           <Image
             style={styles.icon}
             source={require('../assets/contacts.png')}
           />
           <View style={styles.textContainer}>
-            <Text style={styles.text}>Контакты</Text>
+            <Text style={[styles.text, isContact ? styles.textActive : {}]}>Контакты</Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={this.onPressInfoList} style={[styles.item, activeScreen === MENU_INFO ? styles.itemActive : {}]}>
+        <TouchableOpacity onPress={this.onPressInfoList} style={[styles.item, isInfo ? styles.itemActive : {}]}>
           <Image
             style={styles.icon}
             source={require('../assets/info.png')}
           />
           <View style={styles.textContainer}>
-            <Text style={styles.text}>Акции</Text>
+            <Text style={[styles.text, isInfo ? styles.textActive : {}]}>Акции</Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={this.onPressService} style={[styles.item, activeScreen === MENU_SERVICE ? styles.itemActive : {}]}>
+        <TouchableOpacity onPress={this.onPressService} style={[styles.item, isService ? styles.itemActive : {}]}>
           <Image
             style={styles.icon}
             source={require('../assets/service.png')}
           />
           <View style={styles.textContainer}>
-            <Text style={styles.text}>Заявка на СТО</Text>
+            <Text style={[styles.text, isService ? styles.textActive : {}]}>Заявка на СТО</Text>
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.item} onPress={this.onPressNotReadyScreen}>
-          <Image
-            style={styles.icon}
-            source={require('../assets/car_delivery.png')}
-          />
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>Табло выдачи авто</Text>
+        <TouchableHighlight underlayColor={styleConst.color.select} onPress={this.onPressNotReadyScreen}>
+          <View style={styles.item}>
+            <Image
+              style={styles.icon}
+              source={require('../assets/car_delivery.png')}
+            />
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>Табло выдачи авто</Text>
+            </View>
           </View>
-        </TouchableOpacity>
+        </TouchableHighlight>
 
-        <TouchableOpacity style={styles.item} onPress={this.onPressNotReadyScreen}>
-          <Image
-            style={styles.icon}
-            source={require('../assets/catalog_auto.png')}
-          />
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>Каталог автомобилей</Text>
+        <TouchableHighlight underlayColor={styleConst.color.select} onPress={this.onPressNotReadyScreen}>
+          <View style={styles.item}>
+            <Image
+              style={styles.icon}
+              source={require('../assets/catalog_auto.png')}
+            />
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>Каталог автомобилей</Text>
+            </View>
           </View>
-        </TouchableOpacity>
+        </TouchableHighlight>
 
-        <TouchableOpacity style={styles.item} onPress={this.onPressNotReadyScreen}>
-          <Image
-            style={styles.icon}
-            source={require('../assets/indicators.png')}
-          />
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>Индикаторы</Text>
+        <TouchableHighlight underlayColor={styleConst.color.select} onPress={this.onPressNotReadyScreen}>
+          <View style={styles.item}>
+            <Image
+              style={styles.icon}
+              source={require('../assets/indicators.png')}
+            />
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>Индикаторы</Text>
+            </View>
           </View>
-        </TouchableOpacity>
+        </TouchableHighlight>
 
-        <TouchableOpacity style={styles.item} onPress={this.onPressNotReadyScreen}>
-          <Image
-            style={styles.icon}
-            source={require('../assets/reviews.png')}
-          />
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>Отзывы и предложения</Text>
+        <TouchableHighlight underlayColor={styleConst.color.select} onPress={this.onPressNotReadyScreen}>
+          <View style={styles.item}>
+            <Image
+              style={styles.icon}
+              source={require('../assets/reviews.png')}
+            />
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>Отзывы и предложения</Text>
+            </View>
           </View>
-        </TouchableOpacity>
+        </TouchableHighlight>
 
-        <TouchableOpacity onPress={this.onPressProfile} style={[styles.item, activeScreen === MENU_PROFILE ? styles.itemActive : {}]}>
+        <TouchableOpacity onPress={this.onPressProfile} style={[styles.item, isProfile ? styles.itemActive : {}]}>
           <Image
             style={styles.icon}
             source={require('../assets/profile.png')}
           />
           <View style={styles.textContainer}>
-            <Text style={styles.text}>Личный кабинет</Text>
+            <Text style={[styles.text, isProfile ? styles.textActive : {}]}>Личный кабинет</Text>
           </View>
         </TouchableOpacity>
 
@@ -168,3 +212,5 @@ export default class Sidebar extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(Sidebar);
