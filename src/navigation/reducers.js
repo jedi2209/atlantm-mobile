@@ -1,6 +1,6 @@
 import { NAVIGATION__CHANGE } from './actionTypes';
 
-const navReducer = (state = '', action) => {
+const nav = (state = '', action) => {
   switch (action.type) {
     case NAVIGATION__CHANGE:
       return action.payload;
@@ -9,4 +9,4 @@ const navReducer = (state = '', action) => {
   }
 };
 
-export default navReducer;
+export default nav;

@@ -36,8 +36,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, profile, service }) => {
+const mapStateToProps = ({ dealer, profile, service, nav }) => {
   return {
+    nav,
     car: service.car,
     date: service.date,
     name: profile.name,
@@ -129,7 +130,7 @@ class ServiceScreen extends Component {
 
   shouldComponentUpdate(nextProps) {
     const { dealerSelected, date, name, phone, email, car, navigation } = this.props;
-    const isActiveRoute = navigation.state.routeName === 'ServiceScreen';
+    const isActiveRoute = nextProps.nav === 'ServiceScreen';
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveRoute) ||
         (name !== nextProps.name && isActiveRoute) ||

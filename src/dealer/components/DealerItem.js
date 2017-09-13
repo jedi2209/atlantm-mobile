@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 // components
 import { CachedImage } from 'react-native-cached-image';
+import { NavigationActions } from 'react-navigation';
 
 // helpers
 import styleConst from '../../core/style-const';
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
 
 export default class DealerItem extends Component {
   static propTypes = {
-    navigate: PropTypes.func,
+    // navigate: PropTypes.func,
     returnScreen: PropTypes.string,
     selectDealer: PropTypes.func,
     dealer: PropTypes.object,
@@ -47,12 +48,23 @@ export default class DealerItem extends Component {
   }
 
   onPressDealer = () => {
-    const { navigate, returnScreen, selectDealer, dealer } = this.props;
+    const { navigation, returnScreen, selectDealer, dealer } = this.props;
+
+    console.log('returnScreen', returnScreen);
 
     return selectDealer(dealer)
       .then((action) => {
         if (action.type === DEALER__SUCCESS) {
-          return navigate(returnScreen || 'MenuScreen');
+          const resetAction = NavigationActions.reset({
+            index: 0,
+            key: 'ChooseDealerScreen',
+            actions: [
+              NavigationActions.navigate({ routeName: returnScreen || 'MenuScreen' }),
+            ],
+          });
+          this.props.navigation.dispatch(resetAction);
+
+          // return navigate(returnScreen || 'MenuScreen');
         }
 
         if (action.type === DEALER__FAIL) {

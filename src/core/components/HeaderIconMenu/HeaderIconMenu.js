@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Keyboard,
 } from 'react-native';
+import { NavigationActions } from 'react-navigation';
 import styleConst from '../../style-const';
 
 const containerSize = 40;
