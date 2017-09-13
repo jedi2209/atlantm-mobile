@@ -53,10 +53,6 @@ export default class IntroScreen extends Component {
     header: null,
   })
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     return (
       <Container style={styles.container} >

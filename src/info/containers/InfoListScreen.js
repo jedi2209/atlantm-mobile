@@ -43,8 +43,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, info }) => {
+const mapStateToProps = ({ dealer, info, nav }) => {
   return {
+    nav,
     list: info.list,
     visited: info.visited,
     dealerSelected: dealer.selected,
@@ -102,7 +103,7 @@ class InfoListScreen extends Component {
       navigation,
       dealerSelected,
     } = this.props;
-    const isActiveScreen = navigation.state.routeName === 'InfoListScreen';
+    const isActiveScreen = nextProps.nav === 'InfoListScreen';
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (list.length !== nextProps.list.length);

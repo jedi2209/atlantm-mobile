@@ -47,9 +47,9 @@ function listRussia(state = [], action) {
     case REHYDRATE:
       return _.get(action.payload, 'dealer.listRussia', []);
     case DEALERS__SUCCESS:
-      return {
+      return [
         ...action.payload[RUSSIA],
-      };
+      ];
     default:
       return state;
   }
@@ -60,9 +60,9 @@ function listBelarussia(state = [], action) {
     case REHYDRATE:
       return _.get(action.payload, 'dealer.listBelarussia', []);
     case DEALERS__SUCCESS:
-      return {
+      return [
         ...action.payload[BELARUSSIA],
-      };
+      ];
     default:
       return state;
   }
@@ -73,9 +73,9 @@ function listUkraine(state = [], action) {
     case REHYDRATE:
       return _.get(action.payload, 'dealer.listUkraine', []);
     case DEALERS__SUCCESS:
-      return {
+      return [
         ...action.payload[UKRAINE],
-      };
+      ];
     default:
       return state;
   }

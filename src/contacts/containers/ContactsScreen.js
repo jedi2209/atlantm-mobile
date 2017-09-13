@@ -67,8 +67,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, profile, contacts }) => {
+const mapStateToProps = ({ dealer, profile, contacts, nav }) => {
   return {
+    nav,
     profile,
     dealerSelected: dealer.selected,
     isСallMeRequest: contacts.isСallMeRequest,
@@ -136,8 +137,11 @@ class ContactsScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
+    // console.log('Contact this.props.nav', this.props.nav);
+    // console.log('Contact nextProps.nav', nextProps.nav);
+
     return this.props.dealerSelected.id !== nextProps.dealerSelected.id &&
-      this.props.navigation.state.routeName === 'ContactsScreen';
+      nextProps.nav === 'ContactsScreen';
   }
 
   render() {

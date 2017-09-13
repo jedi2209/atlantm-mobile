@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, RefreshControl, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, RefreshControl, FlatList, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 import {
   List,
@@ -16,6 +16,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // components
+// import { OptimizedFlatList } from 'react-native-optimized-flatlist';
 import Spinner from 'react-native-loading-spinner-overlay';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import DealerItem from '../components/DealerItem';
@@ -49,10 +50,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: verticalScale(60),
   },
+  list: {
+    flex: 1,
+  },
 });
 
-const mapStateToProps = ({ dealer }) => {
+const mapStateToProps = ({ dealer, nav }) => {
   return {
+    nav,
     dealerSelected: dealer.selected,
     region: dealer.region,
     listRussia: dealer.listRussia,
@@ -95,6 +100,9 @@ class ChooseDealerScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
+    // console.log('Choose this.props.nav', this.props.nav);
+    // console.log('Choose nextProps.nav', nextProps.nav);
+
     return this.props.isFetchDealer !== nextProps.isFetchDealer ||
       this.props.region !== nextProps.region ||
         this.props.listRussia.length !== nextProps.listRussia.length ||
@@ -124,23 +132,36 @@ class ChooseDealerScreen extends Component {
   selectRegionUkraine = () => this.props.selectRegion(UKRAINE)
   selectRegionBelarussia = () => this.props.selectRegion(BELARUSSIA)
 
+  renderEmptyComponent = () => (
+    <View style={styles.spinnerContainer} >
+      <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
+    </View>
+  )
+
+  renderItem = ({ item }) => {
+    const returnScreen = get(this.props.navigation, 'state.params.returnScreen');
+
+    return <DealerItem
+      dealer={item}
+      navigation={this.props.navigation}
+      dealerSelected={this.props.dealerSelected}
+      returnScreen={returnScreen}
+      selectDealer={this.props.selectDealer}
+      region={this.props.region}
+    />;
+  }
+
   render() {
     const {
-      dealerSelected,
-      listRussia,
-      listBelarussia,
-      listUkraine,
       region,
-      selectRegion,
-      selectDealer,
-      navigation,
-      isFetchDealersList,
+      listRussia,
+      listUkraine,
+      listBelarussia,
       isFetchDealer,
     } = this.props;
 
     console.log('== ChooseDealer ==');
 
-    const returnScreen = get(navigation, 'state.params.returnScreen');
     let list = [];
 
     switch (region) {
@@ -159,67 +180,43 @@ class ChooseDealerScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content
-            style={styles.content}
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.isRefreshing}
-                onRefresh={this.onRefresh}
-                title="Обновляем автоцентры"
-              />
-            }
-          >
+        <Container style={styles.content}>
           <Spinner visible={isFetchDealer} color={styleConst.color.blue} />
-            <View style={styles.tabs} >
-              <Segment>
-                  <Button
-                    first
-                    active={region === RUSSIA}
-                    onPress={this.selectRegionRussia}
-                  >
-                    <Text>Россия</Text>
-                  </Button>
-                  <Button
-                    active={region === BELARUSSIA}
-                    onPress={this.selectRegionBelarussia}
-                  >
-                    <Text>Беларусь</Text>
-                  </Button>
-                  <Button
-                    last
-                    active={region === UKRAINE}
-                    onPress={this.selectRegionUkraine}
-                  >
-                    <Text>Украина</Text>
-                  </Button>
-              </Segment>
-            </View>
+          <View style={styles.tabs}>
+            <Segment>
+                <Button
+                  first
+                  active={region === RUSSIA}
+                  onPress={this.selectRegionRussia}
+                >
+                  <Text>Россия</Text>
+                </Button>
+                <Button
+                  active={region === BELARUSSIA}
+                  onPress={this.selectRegionBelarussia}
+                >
+                  <Text>Беларусь</Text>
+                </Button>
+                <Button
+                  last
+                  active={region === UKRAINE}
+                  onPress={this.selectRegionUkraine}
+                >
+                  <Text>Украина</Text>
+                </Button>
+            </Segment>
+          </View>
 
-            {
-              listRussia.length === 0 ?
-                (
-                  <View style={styles.spinnerContainer} >
-                    <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
-                  </View>
-                ) :
-                (
-                  <List
-                    key={region + dealerSelected.id}
-                    style={styles.list}
-                    dataArray={list}
-                    renderRow={dealer => <DealerItem
-                      dealer={dealer}
-                      navigate={navigation.navigate}
-                      dealerSelected={dealerSelected}
-                      returnScreen={returnScreen}
-                      selectDealer={selectDealer}
-                      region={region}
-                    />}
-                  />
-                )
-            }
-          </Content>
+          <FlatList
+            style={styles.list}
+            data={list}
+            extraData={this.props}
+            onRefresh={this.onRefresh}
+            refreshing={this.state.isRefreshing}
+            ListEmptyComponent={this.renderEmptyComponent}
+            renderItem={this.renderItem}
+            keyExtractor={item => item.id}
+          />
         </Container>
       </StyleProvider>
     );

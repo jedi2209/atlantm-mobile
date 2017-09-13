@@ -25,8 +25,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, profile }) => {
+const mapStateToProps = ({ dealer, profile, nav }) => {
   return {
+    nav,
     dealerSelected: dealer.selected,
     name: profile.name,
     phone: profile.phone,
@@ -64,7 +65,10 @@ class ProfileScreen extends Component {
 
   shouldComponentUpdate(nextProps) {
     const { dealerSelected, name, phone, email, navigation } = this.props;
-    const isActiveRoute = navigation.state.routeName === 'ProfileScreen';
+    const isActiveRoute = nextProps.nav === 'ProfileScreen';
+
+    // console.log('Profile this.props.navigation', this.props.navigation);
+    // console.log('Profile nextProps.navigation', nextProps.navigation);
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveRoute) ||
         (name !== nextProps.name && isActiveRoute) ||

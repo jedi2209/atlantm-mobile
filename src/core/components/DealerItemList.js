@@ -72,6 +72,10 @@ export default class DealerItemList extends Component {
     return false;
   }
 
+  onPressDealer = () => {
+    return this.props.navigation.navigate('ChooseDealerScreen', { returnScreen: this.props.returnScreen });
+  }
+
   render() {
     const {
       navigation,
@@ -83,11 +87,9 @@ export default class DealerItemList extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <View style={styles.container} >
+        <View style={styles.container}>
           <ListItem
-            onPress={() => {
-              navigation.navigate('ChooseDealerScreen', { returnScreen });
-            }}
+            onPress={this.onPressDealer}
             style={styles.listItem}
           >
             <Body

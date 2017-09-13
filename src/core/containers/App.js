@@ -1,92 +1,36 @@
 import React, { Component } from 'react';
-import { AsyncStorage } from 'react-native';
-import { Provider } from 'react-redux';
-import { persistStore } from 'redux-persist';
-import _ from 'lodash';
-import SplashScreen from 'react-native-splash-screen';
+
+// redux
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { store } from '../store';
+import { navigationChange } from '../../navigation/actions';
+
+// helpers
+import { get } from 'lodash';
+
+// components
 import getRouter from '../router';
 
-if (!__DEV__) {
-  // eslint-disable-line no-undef
-  [
-    'assert',
-    'clear',
-    'count',
-    'debug',
-    'dir',
-    'dirxml',
-    'error',
-    'exception',
-    'group',
-    'groupCollapsed',
-    'groupEnd',
-    'info',
-    'log',
-    'profile',
-    'profileEnd',
-    'table',
-    'time',
-    'timeEnd',
-    'timeStamp',
-    'trace',
-    'warn',
-  ].forEach(methodName => {
-    console[methodName] = () => {
-      /* noop */
-    };
-  });
-}
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    navigationChange,
+  }, dispatch);
+};
 
-export default class App extends Component {
-  state = { rehydrated: false }
-
-  componentDidMount() {
-    this.defaultHandler = ErrorUtils.getGlobalHandler();
-    ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
-
-    // this.getPersistStore().purge();
-    this.getPersistStore();
-  }
-
-  getPersistStore() {
-    return persistStore(store, {
-      storage: AsyncStorage,
-      blacklist: ['form'],
-      keyPrefix: 'atlantm',
-    }, () => {
-      this.setState({ rehydrated: true });
-    });
-  }
-
-  async wrapGlobalHandler(error, isFatal) {
-    if (isFatal && !__DEV__) {
-      this.getPersistStore().purge();
-    }
-
-    if (this.defaultHandler) {
-      this.defaultHandler(error, isFatal);
-    }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.state.rehydrated !== nextState.rehydrated;
-  }
-
+class App extends Component {
   render() {
-    if (!this.state.rehydrated) {
-      return null;
-    }
-
-    const isShowIntro = _.get(store.getState(), 'dealer.selected.id');
+    const isShowIntro = get(store.getState(), 'dealer.selected.id');
     const Router = getRouter(isShowIntro ? 'MenuScreen' : 'IntroScreen');
 
-    SplashScreen.hide();
+    const defaultGetStateForAction = Router.router.getStateForAction;
+    Router.router.getStateForAction = (action, state) => {
+      this.props.navigationChange(action.routeName ? action.routeName : 'MenuScreen');
+      return defaultGetStateForAction(action, state);
+    };
 
-    return (
-      <Provider store={store}>
-        <Router onNavigationStateChange={null} />
-      </Provider>
-    );
+    return <Router />;
   }
 }
+
+export default connect(null, mapDispatchToProps)(App);
