@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { BackHandler, Platform } from 'react-native';
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -19,6 +19,16 @@ const mapDispatchToProps = dispatch => {
 };
 
 class App extends Component {
+  // initBackButton() {
+  //   if (Platform.OS !== 'android') return;
+
+  //   BackHandler.addEventListener('hardwareBackPress', this.onBackButton);
+  // }
+
+  // onBackButton() {
+  //   const state = store.getState();
+  // }
+
   render() {
     const isShowIntro = get(store.getState(), 'dealer.selected.id');
     const Router = getRouter(isShowIntro ? 'MenuScreen' : 'IntroScreen');
