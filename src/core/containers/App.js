@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -8,15 +9,17 @@ import { navigationChange } from '../../navigation/actions';
 
 // helpers
 import { get } from 'lodash';
+import styleConst from '../style-const';
 
 // components
-import getRouter from '../router';
 import Sidebar from '../../menu/components/Sidebar';
 import DeviceInfo from 'react-native-device-info';
 
-const mapStateToProps = ({ nav }) => {
+// routes
+import getRouter from '../router';
+
+const mapStateToProps = () => {
   return {
-    nav,
   };
 };
 
@@ -32,9 +35,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   menu: {
-    flex: 1,
-    borderRightWidth: 5,
-    borderRightColor: '#000',
+    flex: 1.3,
+    borderRightWidth: 1,
+    borderRightColor: styleConst.color.greyText2,
   },
   app: {
     flex: 2,
@@ -59,10 +62,7 @@ class App extends Component {
       return (
         <View style={styles.container}>
           <View style={styles.menu}>
-            <Sidebar
-              nav={this.props.nav}
-              navigation={this.props.navigation}
-            />
+            <Sidebar />
           </View>
           <View style={styles.app}>
             <Router />
