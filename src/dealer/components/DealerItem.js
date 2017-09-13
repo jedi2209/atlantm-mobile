@@ -9,6 +9,7 @@ import { NavigationActions } from 'react-navigation';
 
 // helpers
 import styleConst from '../../core/style-const';
+import DeviceInfo from 'react-native-device-info';
 import { DEALER__SUCCESS, DEALER__FAIL } from '../actionTypes';
 
 const styles = StyleSheet.create({
@@ -49,8 +50,7 @@ export default class DealerItem extends Component {
 
   onPressDealer = () => {
     const { navigation, returnScreen, selectDealer, dealer } = this.props;
-
-    console.log('returnScreen', returnScreen);
+    const mainScreen = DeviceInfo.isTablet() ? 'ContactsScreen' : 'MenuScreen';
 
     return selectDealer(dealer)
       .then((action) => {
@@ -59,12 +59,10 @@ export default class DealerItem extends Component {
             index: 0,
             key: 'ChooseDealerScreen',
             actions: [
-              NavigationActions.navigate({ routeName: returnScreen || 'MenuScreen' }),
+              NavigationActions.navigate({ routeName: returnScreen || mainScreen }),
             ],
           });
           this.props.navigation.dispatch(resetAction);
-
-          // return navigate(returnScreen || 'MenuScreen');
         }
 
         if (action.type === DEALER__FAIL) {

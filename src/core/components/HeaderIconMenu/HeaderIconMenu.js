@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   Keyboard,
 } from 'react-native';
-import { NavigationActions } from 'react-navigation';
+
+// helpers
 import styleConst from '../../style-const';
+import DeviceInfo from 'react-native-device-info';
 
 const containerSize = 40;
 const size = 23;
@@ -44,6 +46,8 @@ export default class HeaderIconMenu extends Component {
   };
 
   render() {
+    if (DeviceInfo.isTablet()) return null;
+
     return (
       <TouchableOpacity
         style={styles.container}

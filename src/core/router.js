@@ -31,11 +31,7 @@ const getRouter = initialRouteName => {
           MapScreen: { screen: MapScreen },
           ReferenceScreen: { screen: ReferenceScreen },
           AboutHoldingScreen: { screen: AboutHoldingScreen },
-        },
-          {
-            // initialRouteName: 'MapScreen',
-            // headerMode: 'float',
-          }),
+        }),
         navigationOptions: {
           header: null,
         },
@@ -44,9 +40,6 @@ const getRouter = initialRouteName => {
         screen: StackNavigator({
           InfoListScreen: { screen: InfoListScreen },
           InfoPostScreen: { screen: InfoPostScreen },
-        }, {
-          initialRouteName: 'InfoListScreen',
-          // headerMode: 'float',
         }),
         navigationOptions: {
           header: null,
@@ -57,7 +50,6 @@ const getRouter = initialRouteName => {
     },
     {
       initialRouteName,
-      // headerMode: 'float',
     },
   );
 };
