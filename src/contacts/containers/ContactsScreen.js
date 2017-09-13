@@ -137,11 +137,10 @@ class ContactsScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    // console.log('Contact this.props.nav', this.props.nav);
-    // console.log('Contact nextProps.nav', nextProps.nav);
+    const isActiveScreen = nextProps.nav === 'ContactsScreen';
 
-    return this.props.dealerSelected.id !== nextProps.dealerSelected.id &&
-      nextProps.nav === 'ContactsScreen';
+    return (this.props.dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
+      (this.props.isСallMeRequest !== nextProps.isСallMeRequest && isActiveScreen);
   }
 
   render() {
