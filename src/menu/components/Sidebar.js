@@ -82,7 +82,10 @@ class Sidebar extends Component {
   }
 
   getActiveScreen() {
-    switch (this.props.nav) {
+    const nav = this.props.nav.newState;
+    const currentScreen = nav.routes[nav.index].routeName;
+
+    switch (currentScreen) {
       case 'InfoListScreen':
       case 'InfoPostScreen':
         return MENU_INFO;

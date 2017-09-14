@@ -223,6 +223,16 @@ class InfoPostScreen extends Component {
     return `c ${dayMonth(date.from)} по ${dayMonthYear(date.to)}`;
   }
 
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   const nav = nextProps.nav.newState;
+  //   const isActiveScreen = nav.routes[nav.index].routeName === 'InfoPostScreen';
+
+  //   return (this.state.imageWidth !== nextState.imageWidth) ||
+  //     (this.state.imageHeight !== nextState.imageHeight) ||
+  //       (this.state.webViewWidth !== nextState.webViewWidth) ||
+  //         (this.props.isСallMeRequest !== nextProps.isСallMeRequest && isActiveScreen);
+  // }
+
   render() {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;

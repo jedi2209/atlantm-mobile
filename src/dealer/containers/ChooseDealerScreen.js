@@ -53,9 +53,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, nav }) => {
+const mapStateToProps = ({ dealer }) => {
   return {
-    nav,
     dealerSelected: dealer.selected,
     region: dealer.region,
     listRussia: dealer.listRussia,

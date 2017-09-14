@@ -102,7 +102,9 @@ class InfoListScreen extends Component {
       navigation,
       dealerSelected,
     } = this.props;
-    const isActiveScreen = nextProps.nav === 'InfoListScreen';
+
+    const nav = nextProps.nav.newState;
+    const isActiveScreen = nav.routes[nav.index].routeName === 'InfoListScreen';
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (list.length !== nextProps.list.length);
@@ -111,6 +113,7 @@ class InfoListScreen extends Component {
   renderItem = ({ item }) => {
     return (
       <InfoListItem
+        nav={this.props.nav}
         info={item}
         visited={this.props.visited}
         navigate={this.props.navigation.navigate}

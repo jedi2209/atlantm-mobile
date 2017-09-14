@@ -153,10 +153,12 @@ class AboutScreen extends Component {
     this.setState({ webViewWidth });
   }
 
-  shouldComponentUpdate(nextProps) {
-    return this.props.selectedDealer.id !== nextProps.selectedDealer.id &&
-      this.props.navigation.state.routeName === 'AboutScreen';
-  }
+  // shouldComponentUpdate(nextProps) {
+  //   const nav = nextProps.nav.newState;
+  //   const isActiveScreen = nav.routes[nav.index].routeName === 'AboutScreen';
+
+  //   return this.props.selectedDealer.id !== nextProps.selectedDealer.id && isActiveScreen;
+  // }
 
   renderEmails = (emails) => {
     if (!emails) return null;

@@ -1,6 +1,23 @@
+
+import DeviceInfo from 'react-native-device-info';
+
 import { NAVIGATION__CHANGE } from './actionTypes';
 
-const nav = (state = '', action) => {
+const nav = (state = {
+  prevState: {
+    index: 0,
+    routes: [],
+  },
+  newState: {
+    index: 0,
+    routes: [
+      {
+        index: 0,
+        routeName: DeviceInfo.isTablet() ? 'ContactsScreen' : 'MenuScreen',
+      }
+    ],
+  },
+}, action) => {
   switch (action.type) {
     case NAVIGATION__CHANGE:
       return action.payload;
