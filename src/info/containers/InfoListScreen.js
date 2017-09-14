@@ -106,7 +106,8 @@ class InfoListScreen extends Component {
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'InfoListScreen';
 
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
+    return (this.props.isFetchInfoList !== nextProps.isFetchInfoList && isActiveScreen) ||
+      (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (list.length !== nextProps.list.length);
   }
 
@@ -164,7 +165,7 @@ class InfoListScreen extends Component {
         <View style={styles.container}>
           <FlatList
             ListHeaderComponent={this.renderHeaderComponent}
-            data={list.length === 0 ? null : list}
+            data={list}
             onRefresh={this.onRefresh}
             refreshing={this.state.isRefreshing}
             ListEmptyComponent={this.renderEmptyComponent}

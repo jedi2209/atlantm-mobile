@@ -94,7 +94,11 @@ class ServiceScreen extends Component {
       email,
       orderService,
       dealerSelected,
+      isOrderServiceRequest,
     } = this.props;
+
+    // предотвращаем повторную отправку формы
+    if (isOrderServiceRequest) return;
 
     const dealerID = dealerSelected.id;
 
@@ -135,12 +139,12 @@ class ServiceScreen extends Component {
     const isActiveScreen = nav.routes[nav.index].routeName === 'ServiceScreen';
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-        (name !== nextProps.name && isActiveScreen) ||
-          (phone !== nextProps.phone && isActiveScreen) ||
-            (email !== nextProps.email && isActiveScreen) ||
-              (car !== nextProps.car && isActiveScreen) ||
-                (date.date !== nextProps.date.date && isActiveScreen) ||
-                  (isOrderServiceRequest !== nextProps.isOrderServiceRequest && isActiveScreen);
+        (name !== nextProps.name) ||
+          (phone !== nextProps.phone) ||
+            (email !== nextProps.email) ||
+              (car !== nextProps.car) ||
+                (date.date !== nextProps.date.date) ||
+                  (isOrderServiceRequest !== nextProps.isOrderServiceRequest);
   }
 
   render() {

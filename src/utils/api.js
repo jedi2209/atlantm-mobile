@@ -52,6 +52,8 @@ export default {
       body,
     });
 
+    console.log('body', body);
+
     return this.request('/orders/callme/post/', requestParams);
   },
 
@@ -82,6 +84,9 @@ export default {
     const url = `https://api.atlantm.com${path}`;
 
     return fetch(url, requestParams)
-      .then(response => response.json());
+      .then(response => {
+        console.log('response', response);
+        return response.json();
+      });
   },
 };

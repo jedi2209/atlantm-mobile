@@ -12,7 +12,7 @@ import { get } from 'lodash';
 import styleConst from '../style-const';
 
 // components
-import Sidebar from '../../menu/components/Sidebar';
+import Sidebar from '../../menu/containers/Sidebar';
 import DeviceInfo from 'react-native-device-info';
 
 // routes

@@ -97,7 +97,11 @@ class ContactsScreen extends Component {
       profile,
       navigation,
       dealerSelected,
+      isСallMeRequest,
     } = this.props;
+
+    // предотвращаем повторную отправку формы
+    if (isСallMeRequest) return;
 
     const { name, phone, email } = profile;
 
@@ -141,7 +145,7 @@ class ContactsScreen extends Component {
     const isActiveScreen = nav.routes[nav.index].routeName === 'ContactsScreen';
 
     return (this.props.dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-      (this.props.isСallMeRequest !== nextProps.isСallMeRequest && isActiveScreen);
+      (this.props.isСallMeRequest !== nextProps.isСallMeRequest);
   }
 
   render() {

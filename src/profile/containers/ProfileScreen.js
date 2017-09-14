@@ -72,9 +72,9 @@ class ProfileScreen extends Component {
     // console.log('Profile nextProps.navigation', nextProps.navigation);
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-        (name !== nextProps.name && isActiveScreen) ||
-          (phone !== nextProps.phone && isActiveScreen) ||
-            (email !== nextProps.email && isActiveScreen);
+        (name !== nextProps.name) ||
+          (phone !== nextProps.phone) ||
+            (email !== nextProps.email);
   }
 
   render() {
