@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import {
   View,
+  FlatList,
   StyleSheet,
-  RefreshControl,
   ActivityIndicator,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import { Container, Content, Text, List, StyleProvider } from 'native-base';
-import { OptimizedFlatList } from 'react-native-optimized-flatlist';
+import { Text, StyleProvider } from 'native-base';
 
 // redux
 import { bindActionCreators } from 'redux';
@@ -152,10 +151,15 @@ class InfoListScreen extends Component {
       isFetchInfoList,
     } = this.props;
 
+    // Для iPad меню, которое находится вне роутера
+    window.atlantmNavigation = navigation;
+
+    console.log('== InfoListScreen ==');
+
     return (
       <StyleProvider style={getTheme()}>
         <View style={styles.container}>
-          <OptimizedFlatList
+          <FlatList
             ListHeaderComponent={this.renderHeaderComponent}
             data={list.length === 0 ? null : list}
             onRefresh={this.onRefresh}

@@ -22,18 +22,24 @@ import { Container, Content, Button, Footer, FooterTab } from 'native-base';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
 
-
 // helpers
 import _ from 'lodash';
 import styleConst from '../../core/style-const';
 import processHtml from '../../utils/process-html';
-import { scale, verticalScale } from '../../utils/scale';
+import { verticalScale } from '../../utils/scale';
 import styleHeader from '../../core/components/Header/style';
 import { CALL_ME_INFO__SUCCESS, CALL_ME_INFO__FAIL } from '../actionTypes';
 import { dayMonth, dayMonthYear } from '../../utils/date';
 
+const isTablet = DeviceInfo.isTablet();
+
+// image
+let IMAGE_HEIGHT_GUARD = 0;
+const { width: appWidth } = Dimensions.get('window');
+const imageWidth = isTablet ? null : appWidth;
+
 const buttonIconSize = 28;
-const { width, height } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
@@ -95,16 +101,16 @@ const mapDispatchToProps = dispatch => {
 
 class InfoPostScreen extends Component {
   state = {
-    imageWidth: width,
-    imageHeight: scale(155),
-    webViewWidth: width - styleConst.ui.verticalGap,
+    imageWidth: isTablet ? null : imageWidth,
+    imageHeight: isTablet ? 220 : 150,
+    webViewWidth: appWidth - styleConst.ui.verticalGap,
   }
 
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Об акции',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
+    headerLeft: <HeaderIconBack navigation={navigation} returnScreen="InfoListScreen" />,
     headerRight: <View />,
   })
 
@@ -123,15 +129,32 @@ class InfoPostScreen extends Component {
     }
   }
 
+  onLayoutImageTablet = () => {
+    this.refs.imageContainer.measure((ox, oy, width, height, px, py) => {
+      if (!IMAGE_HEIGHT_GUARD) {
+        IMAGE_HEIGHT_GUARD = 1;
+
+        this.setState({
+          imageWidth: width,
+          imageHeight: height,
+        });
+      }
+    });
+  }
+
   onLayoutImage = (e) => {
     const {
-      width: imageWidth,
-      height: imageHeight,
+      width: imageDynamicWidth,
+      height: imageDynamicHeight,
     } = e.nativeEvent.layout;
 
+    if (isTablet) {
+      return this.onLayoutImageTablet();
+    }
+
     this.setState({
-      imageWidth,
-      imageHeight,
+      imageHeight: imageDynamicHeight,
+      imageWidth: imageDynamicWidth,
     });
   }
 
@@ -201,6 +224,9 @@ class InfoPostScreen extends Component {
   }
 
   render() {
+    // Для iPad меню, которое находится вне роутера
+    window.atlantmNavigation = this.props.navigation;
+
     const { list, navigation, isCallMeRequest } = this.props;
 
     const id = navigation.state.params.id;
@@ -226,6 +252,7 @@ class InfoPostScreen extends Component {
               <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} /> :
               (
                 <View>
+                  <View ref="imageContainer">
                   <CachedImage
                     onLayout={this.onLayoutImage}
                     style={[
@@ -237,6 +264,7 @@ class InfoPostScreen extends Component {
                     ]}
                     source={{ uri: _.get(currentPostInList, 'img') }}
                   />
+                  </View>
                   <View
                     style={styles.textContainer}
                     onLayout={this.onLayoutWebView}

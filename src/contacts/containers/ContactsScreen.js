@@ -91,11 +91,6 @@ class ContactsScreen extends Component {
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 
-  componentDidMount() {
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
-  }
-
   onPressCallMe = () => {
     const {
       callMe,
@@ -149,6 +144,9 @@ class ContactsScreen extends Component {
   }
 
   render() {
+    // Для iPad меню, которое находится вне роутера
+    window.atlantmNavigation = this.props.navigation;
+
     const {
       dealerSelected,
       navigation,
