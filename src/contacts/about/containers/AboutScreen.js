@@ -22,6 +22,7 @@ import {
 import { connect } from 'react-redux';
 
 // components
+import DeviceInfo from 'react-native-device-info';
 import { CachedImage } from 'react-native-cached-image';
 import Communications from 'react-native-communications';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
@@ -31,11 +32,17 @@ import WebViewAutoHeight from '../../../core/components/WebViewAutoHeight';
 import { get } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import { scale, verticalScale } from '../../../utils/scale';
+import { verticalScale } from '../../../utils/scale';
 import styleHeader from '../../../core/components/Header/style';
 import processHtml from '../../../utils/process-html';
 
-const { width } = Dimensions.get('window');
+const isTablet = DeviceInfo.isTablet();
+
+// image
+let IMAGE_HEIGHT_GUARD = 0;
+const { width: appWidth } = Dimensions.get('window');
+const imageWidth = isTablet ? null : appWidth;
+
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
@@ -66,20 +73,21 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 150,
-    width,
+    width: imageWidth,
     justifyContent: 'flex-end',
   },
   brand: {
-    minWidth: 24,
-    height: 20,
+    minWidth: 26,
+    height: 22,
     marginRight: 4,
   },
   brandsLine: {
-    backgroundColor: 'rgba(255,255,255, 0.7)',
-    height: 22,
+    backgroundColor: 'rgba(255,255,255, 0.8)',
+    height: 30,
     paddingHorizontal: styleConst.ui.horizontalGap,
     alignItems: 'flex-start',
     flexDirection: 'row',
+    alignItems: 'center',
   },
   list: {
     backgroundColor: '#fff',
@@ -104,21 +112,38 @@ class AboutScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      imageWidth: width,
-      imageHeight: scale(155),
-      webViewWidth: width - styleConst.ui.verticalGap,
+      imageWidth: isTablet ? null : imageWidth,
+      imageHeight: isTablet ? 220 : 150,
+      webViewWidth: appWidth - styleConst.ui.verticalGap,
     };
   }
 
+  onLayoutImageTablet = () => {
+    this.refs.imageContainer.measure((ox, oy, width, height, px, py) => {
+      if (!IMAGE_HEIGHT_GUARD) {
+        IMAGE_HEIGHT_GUARD = 1;
+
+        this.setState({
+          imageWidth: width,
+          imageHeight: height,
+        });
+      }
+    });
+  }
+
   onLayoutImage = (e) => {
+    if (isTablet) {
+      return this.onLayoutImageTablet();
+    }
+
     const {
-      width: imageWidth,
-      height: imageHeight,
+      width: imageDynamicWidth,
+      height: imageDynamicHeight,
     } = e.nativeEvent.layout;
 
     this.setState({
-      imageWidth,
-      imageHeight,
+      imageHeight: imageDynamicHeight,
+      imageWidth: imageDynamicWidth,
     });
   }
 
@@ -153,6 +178,9 @@ class AboutScreen extends Component {
   }
 
   render() {
+    // Для iPad меню, которое находится вне роутера
+    window.atlantmNavigation = this.props.navigation;
+
     const { selectedDealer } = this.props;
     const phones = get(selectedDealer, 'phone', []);
     let description = selectedDealer.description;
@@ -166,7 +194,7 @@ class AboutScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <Container>
-          <Content style={styles.content} >
+          <Content style={styles.content}>
             <View style={[
               styles.titleContainer,
               Platform.OS === 'android' ? {
@@ -178,32 +206,34 @@ class AboutScreen extends Component {
               ]}>
               <Text style={styles.title}>{selectedDealer.name}</Text>
             </View>
-            <CachedImage
-              onLayout={this.onLayoutImage}
-              style={[
-                styles.image,
-                {
-                  width: this.state.imageWidth,
-                  height: this.state.imageHeight,
-                },
-              ]}
-              source={{ uri: selectedDealer.img }}
-            >
-              <View style={styles.brandsLine}>
-                {
-                  selectedDealer.brands.map(brand => {
-                    return (
-                      <CachedImage
-                        resizeMode="contain"
-                        key={brand.id}
-                        style={styles.brand}
-                        source={{ uri: brand.logo }}
-                      />
-                    );
-                  })
-                }
-              </View>
-            </CachedImage>
+            <View ref="imageContainer">
+              <CachedImage
+                onLayout={this.onLayoutImage}
+                style={[
+                  styles.image,
+                  {
+                    width: this.state.imageWidth,
+                    height: this.state.imageHeight,
+                  },
+                ]}
+                source={{ uri: selectedDealer.img }}
+              >
+                <View style={styles.brandsLine}>
+                  {
+                    selectedDealer.brands.map(brand => {
+                      return (
+                        <CachedImage
+                          resizeMode="contain"
+                          key={brand.id}
+                          style={styles.brand}
+                          source={{ uri: brand.logo }}
+                        />
+                      );
+                    })
+                  }
+                </View>
+              </CachedImage>
+            </View>
 
             <List style={[styles.list, styles.listHolding]}>
               <View style={styles.listItemContainer}>

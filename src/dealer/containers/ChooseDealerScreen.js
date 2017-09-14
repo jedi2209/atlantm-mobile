@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, RefreshControl, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 import {
-  List,
   Text,
   Button,
-  Content,
   Segment,
   Container,
   StyleProvider,
@@ -152,6 +150,9 @@ class ChooseDealerScreen extends Component {
   }
 
   render() {
+    // Для iPad меню, которое находится вне роутера
+    window.atlantmNavigation = this.props.navigation;
+
     const {
       region,
       listRussia,

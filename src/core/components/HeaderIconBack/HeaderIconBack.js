@@ -5,6 +5,11 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+
+// components
+import DeviceInfo from 'react-native-device-info';
+
+// helpers
 import styleConst from '../../style-const';
 
 const containerSize = 40;
@@ -35,11 +40,25 @@ export default class HeaderIconBack extends Component {
     return false;
   }
 
+  defaultProps = {}
+
+  onPressBack = () => {
+    const { returnScreen, navigation } = this.props;
+
+    if (DeviceInfo.isTablet()) {
+      returnScreen ?
+        navigation.navigate(returnScreen) :
+        navigation.goBack();
+    } else {
+      navigation.goBack();
+    }
+  }
+
   render() {
     return (
       <TouchableOpacity
         style={styles.container}
-        onPress={() => this.props.navigation.goBack()}
+        onPress={this.onPressBack}
       >
         <View style={styles.inner}>
           <Image
