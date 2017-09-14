@@ -34,11 +34,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
-  menu: {
-    flex: 1.3,
-    borderRightWidth: 1,
-    borderRightColor: styleConst.color.greyText2,
-  },
   app: {
     flex: 2,
     overflow: 'hidden',
@@ -49,8 +44,8 @@ class App extends Component {
   render() {
     const isTablet = DeviceInfo.isTablet();
     const mainScreen = isTablet ? 'ContactsScreen' : 'MenuScreen';
-    const isShowIntro = get(store.getState(), 'dealer.selected.id');
-    const Router = getRouter(isShowIntro ? mainScreen : 'IntroScreen');
+    const isDealerSelected = get(store.getState(), 'dealer.selected.id');
+    const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
 
     const defaultGetStateForAction = Router.router.getStateForAction;
     Router.router.getStateForAction = (action, state) => {
@@ -61,15 +56,10 @@ class App extends Component {
     if (isTablet) {
       return (
         <View style={styles.container}>
-          <View style={styles.menu}>
-            <Sidebar />
-          </View>
+          <Sidebar />
           <View style={styles.app}>
             <Router onNavigationStateChange={(prevState, newState) => {
-              this.props.navigationChange({
-                prevState,
-                newState,
-              });
+              this.props.navigationChange({ prevState, newState });
             }}
             />
           </View>

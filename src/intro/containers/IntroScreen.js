@@ -13,6 +13,10 @@ import {
   Text,
 } from 'native-base';
 
+// components
+import DeviceInfo from 'react-native-device-info';
+
+// helpers
 import styleConst from '../../core/style-const';
 import { scale } from '../../utils/scale';
 
