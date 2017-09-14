@@ -103,11 +103,35 @@ class Sidebar extends Component {
     }
   }
 
-  onPressContacts = () => window.atlantmNavigation.navigate('ContactsScreen')
-  onPressInfoList = () => window.atlantmNavigation.navigate('InfoListScreen')
-  onPressProfile = () => window.atlantmNavigation.navigate('ProfileScreen')
-  onPressService = () => window.atlantmNavigation.navigate('ServiceScreen')
-  onPressNotReadyScreen = () => Alert.alert('Раздел появится в ближайших обновлениях');
+  isMenuAvailable = () => this.props.dealerSelected.id
+
+  showIntroWarning = () => Alert.alert('Для начала выберите автоцентр')
+
+  onPressContacts = () => {
+    this.isMenuAvailable() ?
+      window.atlantmNavigation.navigate('ContactsScreen') :
+      this.showIntroWarning();
+  }
+  onPressInfoList = () => {
+    this.isMenuAvailable() ?
+      window.atlantmNavigation.navigate('InfoListScreen') :
+      this.showIntroWarning();
+  }
+  onPressProfile = () => {
+    this.isMenuAvailable() ?
+      window.atlantmNavigation.navigate('ProfileScreen') :
+      this.showIntroWarning();
+  }
+  onPressService = () => {
+    this.isMenuAvailable() ?
+      window.atlantmNavigation.navigate('ServiceScreen') :
+      this.showIntroWarning();
+  }
+  onPressNotReadyScreen = () => {
+    this.isMenuAvailable() ?
+      Alert.alert('Раздел появится в ближайших обновлениях') :
+      this.showIntroWarning();
+  }
 
   render() {
     const nav = this.props.nav.newState;

@@ -42,6 +42,7 @@
 		36C21038C2F147F4BCF32F56 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0CAA5891A43F4078837141CC /* Octicons.ttf */; };
 		434C2B91C6E04734A17F9144 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 284AA30378FA4394BC7577D3 /* SimpleLineIcons.ttf */; };
 		4E26233F06B84C06BF1A24DF /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A43D6A1E78B04B9280F56695 /* MaterialIcons.ttf */; };
+		4F22D4111F6A922D0038CE71 /* Default-568h.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F22D4101F6A922D0038CE71 /* Default-568h.png */; };
 		4FD5B02B1F5FF051001048E1 /* AIRGMSMarker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD5B0061F5FF051001048E1 /* AIRGMSMarker.m */; };
 		4FD5B02C1F5FF051001048E1 /* AIRGMSPolygon.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD5B0081F5FF051001048E1 /* AIRGMSPolygon.m */; };
 		4FD5B02D1F5FF051001048E1 /* AIRGMSPolyline.m in Sources */ = {isa = PBXBuildFile; fileRef = 4FD5B00A1F5FF051001048E1 /* AIRGMSPolyline.m */; };
@@ -366,6 +367,7 @@
 		3EAFA8E5B4DE42F9B7A0B8DA /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		46F30A044F2044EC91E0BE98 /* libRNFetchBlob.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFetchBlob.a; sourceTree = "<group>"; };
 		47A960BEEBBF473DAB5CFEED /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
+		4F22D4101F6A922D0038CE71 /* Default-568h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h.png"; path = "atlantm/Default-568h.png"; sourceTree = "<group>"; };
 		4FD5B0051F5FF051001048E1 /* AIRGMSMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRGMSMarker.h; sourceTree = "<group>"; };
 		4FD5B0061F5FF051001048E1 /* AIRGMSMarker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AIRGMSMarker.m; sourceTree = "<group>"; };
 		4FD5B0071F5FF051001048E1 /* AIRGMSPolygon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AIRGMSPolygon.h; sourceTree = "<group>"; };
@@ -576,6 +578,7 @@
 		13B07FAE1A68108700A75B9A /* atlantm */ = {
 			isa = PBXGroup;
 			children = (
+				4F22D4101F6A922D0038CE71 /* Default-568h.png */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -889,7 +892,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = FTMAYHZZLR;
+						DevelopmentTeam = YNA37LTZ5W;
 						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -1248,6 +1251,7 @@
 				9B4166172A054DCE864F7E35 /* Entypo.ttf in Resources */,
 				866CFD3EE08644C6BEEA1FE2 /* EvilIcons.ttf in Resources */,
 				DBA5D390334048CAA1104641 /* FontAwesome.ttf in Resources */,
+				4F22D4111F6A922D0038CE71 /* Default-568h.png in Resources */,
 				2D4DC53526764A358920E1BB /* Foundation.ttf in Resources */,
 				2D69C378B2D842D9AE2E4372 /* Ionicons.ttf in Resources */,
 				D666F572C5FC42499DD1D19E /* MaterialCommunityIcons.ttf in Resources */,
@@ -1499,7 +1503,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = FTMAYHZZLR;
+				DEVELOPMENT_TEAM = YNA37LTZ5W;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
@@ -1509,7 +1513,7 @@
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 				);
 				INFOPLIST_FILE = atlantm/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1536,7 +1540,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FTMAYHZZLR;
+				DEVELOPMENT_TEAM = YNA37LTZ5W;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fetch-blob/ios/**",
@@ -1546,7 +1550,7 @@
 					"$(SRCROOT)/../node_modules/react-native-device-info/RNDeviceInfo",
 				);
 				INFOPLIST_FILE = atlantm/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
