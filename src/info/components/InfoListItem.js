@@ -43,12 +43,13 @@ export default class InfoListItem extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return this.checkVisited(nextProps);
+    const nav = nextProps.nav.newState;
+    const isActiveScreen = nav.routes[nav.index].routeName === 'InfoListScreen';
+    return this.checkVisited(nextProps) && isActiveScreen;
   }
 
   checkVisited = (nextProps = {}) => {
-    const visited = nextProps.visited || this.props.visited;
-    return visited.includes(this.props.info.id);
+    return this.props.visited.includes(this.props.info.id);
   };
 
   render() {

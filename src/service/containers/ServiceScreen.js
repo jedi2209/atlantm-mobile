@@ -129,16 +129,18 @@ class ServiceScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { dealerSelected, date, name, phone, email, car, navigation, isOrderServiceRequest } = this.props;
-    const isActiveRoute = nextProps.nav === 'ServiceScreen';
+    const { dealerSelected, date, name, phone, email, car, isOrderServiceRequest } = this.props;
 
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveRoute) ||
-        (name !== nextProps.name && isActiveRoute) ||
-          (phone !== nextProps.phone && isActiveRoute) ||
-            (email !== nextProps.email && isActiveRoute) ||
-              (car !== nextProps.car && isActiveRoute) ||
-                (date.date !== nextProps.date.date && isActiveRoute) ||
-                  (isOrderServiceRequest !== nextProps.isOrderServiceRequest && isActiveRoute);
+    const nav = nextProps.nav.newState;
+    const isActiveScreen = nav.routes[nav.index].routeName === 'ServiceScreen';
+
+    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
+        (name !== nextProps.name && isActiveScreen) ||
+          (phone !== nextProps.phone && isActiveScreen) ||
+            (email !== nextProps.email && isActiveScreen) ||
+              (car !== nextProps.car && isActiveScreen) ||
+                (date.date !== nextProps.date.date && isActiveScreen) ||
+                  (isOrderServiceRequest !== nextProps.isOrderServiceRequest && isActiveScreen);
   }
 
   render() {

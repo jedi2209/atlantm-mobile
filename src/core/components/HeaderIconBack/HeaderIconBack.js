@@ -40,8 +40,6 @@ export default class HeaderIconBack extends Component {
     return false;
   }
 
-  defaultProps = {}
-
   onPressBack = () => {
     const { returnScreen, navigation } = this.props;
 

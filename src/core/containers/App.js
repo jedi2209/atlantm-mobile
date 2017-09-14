@@ -54,7 +54,7 @@ class App extends Component {
 
     const defaultGetStateForAction = Router.router.getStateForAction;
     Router.router.getStateForAction = (action, state) => {
-      this.props.navigationChange(action.routeName ? action.routeName : mainScreen);
+      // this.props.navigationChange(action.routeName ? action.routeName : mainScreen);
       return defaultGetStateForAction(action, state);
     };
 
@@ -65,7 +65,13 @@ class App extends Component {
             <Sidebar />
           </View>
           <View style={styles.app}>
-            <Router />
+            <Router onNavigationStateChange={(prevState, newState) => {
+              this.props.navigationChange({
+                prevState,
+                newState,
+              });
+            }}
+            />
           </View>
         </View>
       );

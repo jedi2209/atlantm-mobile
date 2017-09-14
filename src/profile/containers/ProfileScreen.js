@@ -65,15 +65,16 @@ class ProfileScreen extends Component {
 
   shouldComponentUpdate(nextProps) {
     const { dealerSelected, name, phone, email, navigation } = this.props;
-    const isActiveRoute = nextProps.nav === 'ProfileScreen';
+    const nav = nextProps.nav.newState;
+    const isActiveScreen = nav.routes[nav.index].routeName === 'ProfileScreen';
 
     // console.log('Profile this.props.navigation', this.props.navigation);
     // console.log('Profile nextProps.navigation', nextProps.navigation);
 
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveRoute) ||
-        (name !== nextProps.name && isActiveRoute) ||
-          (phone !== nextProps.phone && isActiveRoute) ||
-            (email !== nextProps.email && isActiveRoute);
+    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
+        (name !== nextProps.name && isActiveScreen) ||
+          (phone !== nextProps.phone && isActiveScreen) ||
+            (email !== nextProps.email && isActiveScreen);
   }
 
   render() {

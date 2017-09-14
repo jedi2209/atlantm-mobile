@@ -59,7 +59,7 @@ export default class Wrapper extends Component {
   getPersistStore() {
     return persistStore(store, {
       storage: AsyncStorage,
-      blacklist: ['form'],
+      blacklist: ['form', 'nav'],
       keyPrefix: 'atlantm',
     }, () => {
       this.setState({ rehydrated: true });
