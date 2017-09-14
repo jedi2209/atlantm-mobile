@@ -22,8 +22,10 @@ const HEIGHT_ICON = 35;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: styleConst.color.bg,
+    flex: 1.3,
+    borderRightWidth: 1,
+    borderRightColor: styleConst.color.greyText2,
   },
   header: {
     height: 64,
@@ -68,7 +70,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ nav }) => ({ nav });
+const mapStateToProps = ({ nav, dealer }) => ({
+  nav,
+  dealerSelected: dealer.selected,
+});
 
 class Sidebar extends Component {
   static propTypes = {
@@ -105,6 +110,11 @@ class Sidebar extends Component {
   onPressNotReadyScreen = () => Alert.alert('Раздел появится в ближайших обновлениях');
 
   render() {
+    const nav = this.props.nav.newState;
+    const isChooseDealerScreen = nav.routes[nav.index].routeName === 'ChooseDealerScreen';
+
+    if (!this.props.dealerSelected.id && !isChooseDealerScreen) return null;
+
     const activeScreen = this.getActiveScreen();
     const isContact = activeScreen === MENU_CONTACTS;
     const isInfo = activeScreen === MENU_INFO;

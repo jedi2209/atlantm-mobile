@@ -14,7 +14,7 @@ const nav = (state = {
       {
         index: 0,
         routeName: DeviceInfo.isTablet() ? 'ContactsScreen' : 'MenuScreen',
-      }
+      },
     ],
   },
 }, action) => {
