@@ -12,6 +12,20 @@ import styleConst from '../../core/style-const';
 import DeviceInfo from 'react-native-device-info';
 import { DEALER__SUCCESS, DEALER__FAIL } from '../actionTypes';
 
+const brandsLogos = {
+  chevrolet: require('../assets/chevrolet.png'),
+  ford: require('../assets/ford.png'),
+  jaguar: require('../assets/jaguar.png'),
+  kia: require('../assets/kia.png'),
+  landrover: require('../assets/landrover.png'),
+  mazda: require('../assets/mazda.png'),
+  nissan: require('../assets/nissan.png'),
+  opel: require('../assets/opel.png'),
+  renault: require('../assets/renault.png'),
+  skoda: require('../assets/skoda.png'),
+  volkswagen: require('../assets/volkswagen.png'),
+};
+
 const styles = StyleSheet.create({
   brands: {
     flexDirection: 'row',
@@ -88,14 +102,17 @@ export default class DealerItem extends Component {
         <Right>
           <View style={styles.brands} >
             {
-              dealer.brands.map(brand => (
-                <CachedImage
-                  resizeMode="contain"
-                  key={brand.id}
-                  style={styles.brandLogo}
-                  source={{ uri: brand.logo }}
-                />
-              ))
+              dealer.brands.map(brand => {
+                const name = brand.name === 'land rover' ? 'landrover' : brand.name;
+                return (
+                  <CachedImage
+                    resizeMode="contain"
+                    key={brand.id}
+                    style={styles.brandLogo}
+                    source={brandsLogos[name]}
+                  />
+                );
+              })
             }
           </View>
           {
