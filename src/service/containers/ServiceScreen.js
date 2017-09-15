@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert, NetInfo } from 'react-native';
 import { Container, Content, List, StyleProvider } from 'native-base';
 
 // redux
@@ -86,50 +86,57 @@ class ServiceScreen extends Component {
   }
 
   onPressOrder = () => {
-    const {
-      car,
-      date,
-      name,
-      phone,
-      email,
-      orderService,
-      dealerSelected,
-      isOrderServiceRequest,
-    } = this.props;
+    NetInfo.isConnected.fetch().then(isConnected => {
+      if (!isConnected) {
+        setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
+        return;
+      }
 
-    // предотвращаем повторную отправку формы
-    if (isOrderServiceRequest) return;
+      const {
+        car,
+        date,
+        name,
+        phone,
+        email,
+        orderService,
+        dealerSelected,
+        isOrderServiceRequest,
+      } = this.props;
 
-    const dealerID = dealerSelected.id;
+      // предотвращаем повторную отправку формы
+      if (isOrderServiceRequest) return;
 
-    if (!name || !phone || !car || !date) {
-      return Alert.alert(
-        'Не хватает информации',
-        `Для заявки на СТО необходимо заполнить ФИО, номер контактного телефона, название автомобиля и желаемую дату`,
-      );
-    }
+      const dealerID = dealerSelected.id;
 
-    const orderDate = yearMonthDay(date.date);
-    const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
+      if (!name || !phone || !car || !date) {
+        return Alert.alert(
+          'Не хватает информации',
+          `Для заявки на СТО необходимо заполнить ФИО, номер контактного телефона, название автомобиля и желаемую дату`,
+        );
+      }
 
-    orderService({
-      car,
-      date: orderDate,
-      name,
-      email,
-      phone,
-      device,
-      dealerID,
-    })
-      .then(action => {
-        if (action.type === SERVICE_ORDER__SUCCESS) {
-          setTimeout(() => Alert.alert('Успешно', 'Ваша заявка на СТО принята'), 100);
-        }
+      const orderDate = yearMonthDay(date.date);
+      const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
 
-        if (action.type === SERVICE_ORDER__FAIL) {
-          setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
-        }
-      });
+      orderService({
+        car,
+        date: orderDate,
+        name,
+        email,
+        phone,
+        device,
+        dealerID,
+      })
+        .then(action => {
+          if (action.type === SERVICE_ORDER__SUCCESS) {
+            setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
+          }
+
+          if (action.type === SERVICE_ORDER__FAIL) {
+            setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
+          }
+        });
+    });
   }
 
   shouldComponentUpdate(nextProps) {

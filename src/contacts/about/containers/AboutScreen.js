@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255, 0.8)',
     height: 30,
     paddingHorizontal: styleConst.ui.horizontalGap,
-    alignItems: 'flex-start',
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -112,8 +111,8 @@ class AboutScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      imageWidth: isTablet ? null : imageWidth,
-      imageHeight: isTablet ? 220 : 150,
+      imageWidth: null,
+      imageHeight: isTablet ? 220 : 180,
       webViewWidth: appWidth - styleConst.ui.verticalGap,
     };
   }
@@ -132,19 +131,19 @@ class AboutScreen extends Component {
   }
 
   onLayoutImage = (e) => {
-    if (isTablet) {
+    // if (isTablet) {
       return this.onLayoutImageTablet();
-    }
+    // }
 
-    const {
-      width: imageDynamicWidth,
-      height: imageDynamicHeight,
-    } = e.nativeEvent.layout;
+    // const {
+    //   width: imageDynamicWidth,
+    //   height: imageDynamicHeight,
+    // } = e.nativeEvent.layout;
 
-    this.setState({
-      imageHeight: imageDynamicHeight,
-      imageWidth: imageDynamicWidth,
-    });
+    // this.setState({
+    //   imageHeight: imageDynamicHeight,
+    //   imageWidth: imageDynamicWidth,
+    // });
   }
 
   onLayoutWebView= (e) => {
@@ -170,7 +169,7 @@ class AboutScreen extends Component {
         style={styles.listItem}
       >
         <Body>
-          <Text style={styles.leftText}>Email</Text>
+          <Text style={styles.leftText}>E-mail</Text>
         </Body>
         <Right>
           <Text style={styles.rightText}>{emailAddress}</Text>
@@ -186,6 +185,7 @@ class AboutScreen extends Component {
     const { selectedDealer } = this.props;
     const phones = get(selectedDealer, 'phone', []);
     let description = selectedDealer.description;
+    const imageUrl = get(selectedDealer, isTablet ? 'img.10000x220' : 'img.10000x220');
 
     if (description) {
       description = processHtml(description, this.state.webViewWidth, this.state.webViewHeight);
@@ -218,7 +218,7 @@ class AboutScreen extends Component {
                     height: this.state.imageHeight,
                   },
                 ]}
-                source={{ uri: selectedDealer.img }}
+                source={{ uri: imageUrl }}
               >
                 <View style={styles.brandsLine}>
                   {

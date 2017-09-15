@@ -57,7 +57,6 @@ export default class DealerItem extends Component {
         if (action.type === DEALER__SUCCESS) {
           const resetAction = NavigationActions.reset({
             index: 0,
-            key: 'ChooseDealerScreen',
             actions: [
               NavigationActions.navigate({ routeName: returnScreen || mainScreen }),
             ],

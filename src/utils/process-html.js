@@ -1,7 +1,7 @@
 import styleConst from '../core/style-const';
 
 const processHtml = (text, width, height) => {
-  const result = text.replace(/<a[^>]*>([^<]*)<\/a>/ig, (i1, i2) => `<p>${i2}</p>`);
+  // const result = text.replace(/<a[^>]*>([^<]*)<\/a>/ig, (i1, i2) => `<p>${i2}</p>`);
 
   return `
     <!DOCTYPE html>
@@ -29,7 +29,7 @@ const processHtml = (text, width, height) => {
       font-size: 13px;
     }
   </style>
-      ${result}
+      ${text}
     </body>
     </html>
   `;

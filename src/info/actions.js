@@ -40,7 +40,7 @@ export const fetchInfoList = (region, dealer) => {
           });
         }
 
-        dispatch({
+        return dispatch({
           type: INFO_LIST__SUCCESS,
           payload: data || [],
         });

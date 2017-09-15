@@ -1,11 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyleSheet,
-  Image,
-  View,
-  Alert,
-} from 'react-native';
+import { Image, View, Alert, NetInfo, StyleSheet } from 'react-native';
 import {
   Container,
   Content,
@@ -92,52 +87,59 @@ class ContactsScreen extends Component {
   })
 
   onPressCallMe = () => {
-    const {
-      callMe,
-      profile,
-      navigation,
-      dealerSelected,
-      isСallMeRequest,
-    } = this.props;
+    NetInfo.isConnected.fetch().then(isConnected => {
+      if (!isConnected) {
+        setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
+        return;
+      }
 
-    // предотвращаем повторную отправку формы
-    if (isСallMeRequest) return;
+      const {
+        callMe,
+        profile,
+        navigation,
+        dealerSelected,
+        isСallMeRequest,
+      } = this.props;
 
-    const { name, phone, email } = profile;
+      // предотвращаем повторную отправку формы
+      if (isСallMeRequest) return;
 
-    if (!name || !phone) {
-      return Alert.alert(
-        'Не хватает информации',
-        'Для обратного звонка необходимо заполнить ФИО и номер контактного телефона в профиле',
-        [
-          { text: 'Отмена', style: 'cancel' },
-          {
-            text: 'Заполнить',
-            onPress() { navigation.navigate('ProfileScreen'); },
-          },
-        ],
-      );
-    }
+      const { name, phone, email } = profile;
 
-    const dealerID = dealerSelected.id;
-    const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
+      if (!name || !phone) {
+        return Alert.alert(
+          'Не хватает информации',
+          'Для обратного звонка необходимо заполнить ФИО и номер контактного телефона в профиле',
+          [
+            { text: 'Отмена', style: 'cancel' },
+            {
+              text: 'Заполнить',
+              onPress() { navigation.navigate('ProfileScreen'); },
+            },
+          ],
+        );
+      }
 
-    callMe({
-      name,
-      email,
-      phone,
-      device,
-      dealerID,
-    })
-      .then(action => {
-        if (action.type === CALL_ME__SUCCESS) {
-          setTimeout(() => Alert.alert('Успешно', 'Ваш запрос на обратный звонок принят'), 100);
-        }
+      const dealerID = dealerSelected.id;
+      const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
 
-        if (action.type === CALL_ME__FAIL) {
-          setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
-        }
-      });
+      callMe({
+        name,
+        email,
+        phone,
+        device,
+        dealerID,
+      })
+        .then(action => {
+          if (action.type === CALL_ME__SUCCESS) {
+            setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
+          }
+
+          if (action.type === CALL_ME__FAIL) {
+            setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
+          }
+        });
+    });
   }
 
   shouldComponentUpdate(nextProps) {
@@ -226,14 +228,14 @@ class ContactsScreen extends Component {
                 }
 
                 {
-                  dealerSelected.email ?
+                  dealerSelected.email && dealerSelected.email.length !== 0 ?
                     (
                       <ListItem
                         icon
                         style={styles.listItem}
                         onPress={() => {
                           Communications.email(
-                            [dealerSelected.email],
+                            [dealerSelected.email[0]],
                             null,
                             null,
                             `Из приложения iOS Атлант-М, мой автоцентр ${dealerSelected.name}`,

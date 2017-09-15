@@ -4,6 +4,7 @@ import {
   Text,
   Alert,
   Image,
+  NetInfo,
   Dimensions,
   StyleSheet,
   ActivityIndicator,
@@ -23,7 +24,7 @@ import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack'
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
 
 // helpers
-import _ from 'lodash';
+import { get, find } from 'lodash';
 import styleConst from '../../core/style-const';
 import processHtml from '../../utils/process-html';
 import { verticalScale } from '../../utils/scale';
@@ -36,7 +37,6 @@ const isTablet = DeviceInfo.isTablet();
 // image
 let IMAGE_HEIGHT_GUARD = 0;
 const { width: appWidth } = Dimensions.get('window');
-const imageWidth = isTablet ? null : appWidth;
 
 const buttonIconSize = 28;
 
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: styleConst.color.border,
     justifyContent: 'flex-start',
+    paddingLeft: styleConst.ui.horizontalGap,
   },
   buttonText: {
     fontSize: 18,
@@ -101,8 +102,8 @@ const mapDispatchToProps = dispatch => {
 
 class InfoPostScreen extends Component {
   state = {
-    imageWidth: isTablet ? null : imageWidth,
-    imageHeight: isTablet ? 220 : 150,
+    imageWidth: null,
+    imageHeight: isTablet ? 220 : 178,
     webViewWidth: appWidth - styleConst.ui.verticalGap,
   }
 
@@ -148,14 +149,14 @@ class InfoPostScreen extends Component {
       height: imageDynamicHeight,
     } = e.nativeEvent.layout;
 
-    if (isTablet) {
+    // if (isTablet) {
       return this.onLayoutImageTablet();
-    }
+    // }
 
-    this.setState({
-      imageHeight: imageDynamicHeight,
-      imageWidth: imageDynamicWidth,
-    });
+    // this.setState({
+    //   imageHeight: imageDynamicHeight,
+    //   imageWidth: imageDynamicWidth,
+    // });
   }
 
   onLayoutWebView= (e) => {
@@ -172,51 +173,58 @@ class InfoPostScreen extends Component {
   }
 
   onPressCallMe = () => {
-    const {
-      name,
-      email,
-      phone,
-      navigation,
-      callMeForInfo,
-      dealerSelected,
-    } = this.props;
+    NetInfo.isConnected.fetch().then(isConnected => {
+      if (!isConnected) {
+        setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
+        return;
+      }
 
-    if (!name || !phone) {
-      return Alert.alert(
-        'Не хватает информации',
-        'Для обратного звонка необходимо заполнить ФИО и номер контактного телефона в профиле',
-        [
-          { text: 'Отмена', style: 'cancel' },
-          {
-            text: 'Заполнить',
-            onPress() { navigation.navigate('ProfileScreen'); },
-          },
-        ],
-      );
-    }
+      const {
+        name,
+        email,
+        phone,
+        navigation,
+        callMeForInfo,
+        dealerSelected,
+      } = this.props;
 
-    const post = this.getPost();
-    const action = post.id;
-    const dealerID = dealerSelected.id;
-    const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
+      if (!name || !phone) {
+        return Alert.alert(
+          'Не хватает информации',
+          'Для обратного звонка необходимо заполнить ФИО и номер контактного телефона в профиле',
+          [
+            { text: 'Отмена', style: 'cancel' },
+            {
+              text: 'Заполнить',
+              onPress() { navigation.navigate('ProfileScreen'); },
+            },
+          ],
+        );
+      }
 
-    callMeForInfo({
-      name,
-      email,
-      phone,
-      device,
-      action,
-      dealerID,
-    })
-      .then(action => {
-        if (action.type === CALL_ME_INFO__SUCCESS) {
-          setTimeout(() => Alert.alert('Успешно', 'Ваш запрос на обратный звонок принят'), 100);
-        }
+      const post = this.getPost();
+      const action = post.id;
+      const dealerID = dealerSelected.id;
+      const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
 
-        if (action.type === CALL_ME_INFO__FAIL) {
-          setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
-        }
-      });
+      callMeForInfo({
+        name,
+        email,
+        phone,
+        device,
+        action,
+        dealerID,
+      })
+        .then(action => {
+          if (action.type === CALL_ME_INFO__SUCCESS) {
+            setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
+          }
+
+          if (action.type === CALL_ME_INFO__FAIL) {
+            setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
+          }
+        });
+    });
   }
 
   processDate(date = {}) {
@@ -239,11 +247,14 @@ class InfoPostScreen extends Component {
 
     const { list, navigation, isCallMeRequest } = this.props;
 
+    // nav params
     const id = navigation.state.params.id;
     const date = navigation.state.params.date;
+
     const post = this.getPost();
-    const currentPostInList = _.find(list, { id });
-    let text = _.get(post, 'text');
+    let text = get(post, 'text');
+    const currentPostInList = find(list, { id });
+    const imageUrl = get(currentPostInList, isTablet ? 'img.10000x220' : 'img.10000x150');
 
     if (text) {
       text = processHtml(text, this.state.webViewWidth);
@@ -264,6 +275,7 @@ class InfoPostScreen extends Component {
                 <View>
                   <View ref="imageContainer">
                   <CachedImage
+                    resizeMode="contain"
                     onLayout={this.onLayoutImage}
                     style={[
                       styles.image,
@@ -272,7 +284,7 @@ class InfoPostScreen extends Component {
                         height: this.state.imageHeight,
                       },
                     ]}
-                    source={{ uri: _.get(currentPostInList, 'img') }}
+                    source={{ uri: imageUrl }}
                   />
                   </View>
                   <View
@@ -284,7 +296,7 @@ class InfoPostScreen extends Component {
                       <Text style={styles.date}>{this.processDate(date)}</Text> :
                       null
                   }
-                    <WebViewAutoHeight source={{ html: text }} />
+                    <WebViewAutoHeight dataDetectorTypes={'phoneNumber'} source={{ html: text }} />
                   </View>
                 </View>
               )
