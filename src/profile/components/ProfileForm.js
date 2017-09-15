@@ -52,6 +52,7 @@ export default class ProfileForm extends PureComponent {
                   onChangeText={this.onChangeName}
                   value={name}
                   returnKeyType="done"
+                  returnKeyLabel="Готово"
                   underlineColorAndroid="transparent"
                 />
               </Item>

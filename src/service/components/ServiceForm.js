@@ -91,6 +91,7 @@ export default class ProfileForm extends PureComponent {
                   onChangeText={this.onChangeCar}
                   value={car}
                   returnKeyType="done"
+                  returnKeyLabel="Готово"
                   underlineColorAndroid="transparent"
                 />
               </Item>

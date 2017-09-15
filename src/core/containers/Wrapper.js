@@ -14,6 +14,9 @@ import SplashScreen from 'react-native-splash-screen';
 // components
 import App from './App';
 
+// helpers
+import { isFunction } from 'lodash';
+
 if (!__DEV__) {
   // eslint-disable-line no-undef
   [
@@ -45,30 +48,42 @@ if (!__DEV__) {
   });
 }
 
-export default class Wrapper extends Component {
-  state = { rehydrated: false }
+export const getPersistStore = (cb) => {
+  return persistStore(store, {
+    storage: AsyncStorage,
+    blacklist: ['form', 'nav'],
+    keyPrefix: 'atlantm',
+  }, () => {
+    console.log('persistStore sync complete');
+    isFunction(cb) && cb();
+  });
+};
+
+export class Wrapper extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { rehydrated: false };
+  }
 
   componentDidMount() {
     this.defaultHandler = ErrorUtils.getGlobalHandler();
     ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
 
-    // this.getPersistStore().purge();
-    this.getPersistStore();
+    this.persistStore().purge();
+    // console.log('', );
+    // this.persistStore();
   }
 
-  getPersistStore() {
-    return persistStore(store, {
-      storage: AsyncStorage,
-      blacklist: ['form', 'nav'],
-      keyPrefix: 'atlantm',
-    }, () => {
+  persistStore = () => {
+    return getPersistStore(() => {
       this.setState({ rehydrated: true });
     });
   }
 
   async wrapGlobalHandler(error, isFatal) {
     if (isFatal && !__DEV__) {
-      this.getPersistStore().purge();
+      this.persistStore().purge();
     }
 
     if (this.defaultHandler) {
@@ -84,6 +99,8 @@ export default class Wrapper extends Component {
     if (!this.state.rehydrated) {
       return null;
     }
+
+    console.log('rehydrated');
 
     SplashScreen.hide();
 
