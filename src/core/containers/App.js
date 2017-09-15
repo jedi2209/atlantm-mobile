@@ -45,9 +45,12 @@ const styles = StyleSheet.create({
 });
 
 class App extends Component {
-  // componentDidMount() {
-
-  // }
+  componentDidMount() {
+    if (!this.props.appVersion) {
+      getPersistStore().purge();
+      this.props.setAppVersion(1);
+    }
+  }
 
   onNavigationStateChange = (prevState, newState) => {
     this.props.navigationChange({ prevState, newState });
@@ -59,13 +62,7 @@ class App extends Component {
     const isDealerSelected = get(store.getState(), 'dealer.selected.id');
     const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
 
-    if (!this.props.appVersion) {
-      getPersistStore(() => {
-        getPersistStore(() => {
-          this.props.setAppVersion(1);
-        }).purge();
-      });
-    }
+    console.log('render');
 
     if (isTablet) {
       return (

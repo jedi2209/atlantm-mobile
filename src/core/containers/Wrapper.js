@@ -48,8 +48,12 @@ if (!__DEV__) {
   });
 }
 
+let persistor;
+
 export const getPersistStore = (cb) => {
-  return persistStore(store, {
+  if (persistor) return persistor;
+
+  persistor = persistStore(store, {
     storage: AsyncStorage,
     blacklist: ['form', 'nav'],
     keyPrefix: 'atlantm',
@@ -57,6 +61,8 @@ export const getPersistStore = (cb) => {
     console.log('persistStore sync complete');
     isFunction(cb) && cb();
   });
+
+  return persistor;
 };
 
 export class Wrapper extends Component {
@@ -70,9 +76,8 @@ export class Wrapper extends Component {
     this.defaultHandler = ErrorUtils.getGlobalHandler();
     ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
 
-    this.persistStore().purge();
-    // console.log('', );
-    // this.persistStore();
+    // this.persistStore().purge();
+    this.persistStore();
   }
 
   persistStore = () => {
