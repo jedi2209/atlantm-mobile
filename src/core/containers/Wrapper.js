@@ -105,8 +105,6 @@ export class Wrapper extends Component {
       return null;
     }
 
-    console.log('rehydrated');
-
     SplashScreen.hide();
 
     return (
