@@ -40,8 +40,12 @@ const isTablet = DeviceInfo.isTablet();
 
 // image
 let IMAGE_HEIGHT_GUARD = 0;
-const { width: appWidth } = Dimensions.get('window');
-const imageWidth = isTablet ? null : appWidth;
+
+const { width: screenWidth } = Dimensions.get('window');
+const IMAGE_WIDTH = isTablet ? null : screenWidth;
+const IMAGE_HEIGHT = isTablet ? 220 : 180;
+
+const isAndroid = Platform.OS === 'android';
 
 const styles = StyleSheet.create({
   content: {
@@ -72,8 +76,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: styleConst.ui.horizontalGap + 5,
   },
   image: {
-    height: 150,
-    width: imageWidth,
+    width: IMAGE_WIDTH,
+    height: IMAGE_HEIGHT,
     justifyContent: 'flex-end',
   },
   brand: {
@@ -112,8 +116,8 @@ class AboutScreen extends Component {
     super(props);
     this.state = {
       imageWidth: null,
-      imageHeight: isTablet ? 220 : 180,
-      webViewWidth: appWidth - styleConst.ui.verticalGap,
+      imageHeight: IMAGE_HEIGHT,
+      webViewWidth: screenWidth - styleConst.ui.verticalGap,
     };
   }
 
@@ -131,19 +135,19 @@ class AboutScreen extends Component {
   }
 
   onLayoutImage = (e) => {
-    // if (isTablet) {
+    if (isTablet) {
       return this.onLayoutImageTablet();
-    // }
+    }
 
-    // const {
-    //   width: imageDynamicWidth,
-    //   height: imageDynamicHeight,
-    // } = e.nativeEvent.layout;
+    const {
+      width: imageDynamicWidth,
+      height: imageDynamicHeight,
+    } = e.nativeEvent.layout;
 
-    // this.setState({
-    //   imageHeight: imageDynamicHeight,
-    //   imageWidth: imageDynamicWidth,
-    // });
+    this.setState({
+      imageHeight: imageDynamicHeight,
+      imageWidth: imageDynamicWidth,
+    });
   }
 
   onLayoutWebView= (e) => {
@@ -199,7 +203,7 @@ class AboutScreen extends Component {
           <Content style={styles.content}>
             <View style={[
               styles.titleContainer,
-              Platform.OS === 'android' ? {
+              isAndroid ? {
                 marginTop: 15,
                 marginBottom: 10,
                 borderBottomWidth: 0,

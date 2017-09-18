@@ -45,12 +45,12 @@ const styles = StyleSheet.create({
 });
 
 class App extends Component {
-  componentDidMount() {
-    if (!this.props.appVersion) {
-      getPersistStore().purge();
-      this.props.setAppVersion(1);
-    }
-  }
+  // componentDidMount() {
+  //   if (!this.props.appVersion) {
+  //     getPersistStore().purge();
+  //     this.props.setAppVersion(1);
+  //   }
+  // }
 
   onNavigationStateChange = (prevState, newState) => {
     this.props.navigationChange({ prevState, newState });

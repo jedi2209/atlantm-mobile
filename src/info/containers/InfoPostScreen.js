@@ -5,6 +5,7 @@ import {
   Alert,
   Image,
   NetInfo,
+  Platform,
   Dimensions,
   StyleSheet,
   ActivityIndicator,
@@ -36,7 +37,11 @@ const isTablet = DeviceInfo.isTablet();
 
 // image
 let IMAGE_HEIGHT_GUARD = 0;
-const { width: appWidth } = Dimensions.get('window');
+const { width: screenWidth } = Dimensions.get('window');
+const IMAGE_WIDTH = isTablet ? null : screenWidth;
+const IMAGE_HEIGHT = isTablet ? 220 : 178;
+
+const isAndroid = Platform.OS === 'android';
 
 const buttonIconSize = 28;
 
@@ -78,6 +83,10 @@ const styles = StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
     marginTop: verticalScale(5),
   },
+  image: {
+    width: IMAGE_WIDTH,
+    height: IMAGE_HEIGHT,
+  },
 });
 
 const mapStateToProps = ({ dealer, info, profile }) => {
@@ -103,8 +112,8 @@ const mapDispatchToProps = dispatch => {
 class InfoPostScreen extends Component {
   state = {
     imageWidth: null,
-    imageHeight: isTablet ? 220 : 178,
-    webViewWidth: appWidth - styleConst.ui.verticalGap,
+    imageHeight: IMAGE_HEIGHT,
+    webViewWidth: screenWidth - styleConst.ui.verticalGap,
   }
 
   static navigationOptions = ({ navigation }) => ({
@@ -144,19 +153,19 @@ class InfoPostScreen extends Component {
   }
 
   onLayoutImage = (e) => {
+    if (isTablet) {
+      return this.onLayoutImageTablet();
+    }
+
     const {
       width: imageDynamicWidth,
       height: imageDynamicHeight,
     } = e.nativeEvent.layout;
 
-    // if (isTablet) {
-      return this.onLayoutImageTablet();
-    // }
-
-    // this.setState({
-    //   imageHeight: imageDynamicHeight,
-    //   imageWidth: imageDynamicWidth,
-    // });
+    this.setState({
+      imageHeight: imageDynamicHeight,
+      imageWidth: imageDynamicWidth,
+    });
   }
 
   onLayoutWebView= (e) => {
@@ -274,18 +283,17 @@ class InfoPostScreen extends Component {
               (
                 <View>
                   <View ref="imageContainer">
-                  <CachedImage
-                    resizeMode="contain"
-                    onLayout={this.onLayoutImage}
-                    style={[
-                      styles.image,
-                      {
-                        width: this.state.imageWidth,
-                        height: this.state.imageHeight,
-                      },
-                    ]}
-                    source={{ uri: imageUrl }}
-                  />
+                    <CachedImage
+                      onLayout={this.onLayoutImage}
+                      style={[
+                        styles.image,
+                        {
+                          width: this.state.imageWidth,
+                          height: this.state.imageHeight,
+                        },
+                      ]}
+                      source={{ uri: imageUrl }}
+                    />
                   </View>
                   <View
                     style={styles.textContainer}
