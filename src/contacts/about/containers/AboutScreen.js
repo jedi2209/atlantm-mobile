@@ -43,7 +43,7 @@ let IMAGE_HEIGHT_GUARD = 0;
 
 const { width: screenWidth } = Dimensions.get('window');
 const IMAGE_WIDTH = isTablet ? null : screenWidth;
-const IMAGE_HEIGHT = isTablet ? 220 : 180;
+const IMAGE_HEIGHT = isTablet ? 220 : 160;
 
 const isAndroid = Platform.OS === 'android';
 
