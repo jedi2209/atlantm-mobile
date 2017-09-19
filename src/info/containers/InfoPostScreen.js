@@ -39,9 +39,9 @@ const isTablet = DeviceInfo.isTablet();
 let IMAGE_HEIGHT_GUARD = 0;
 const { width: screenWidth } = Dimensions.get('window');
 const IMAGE_WIDTH = isTablet ? null : screenWidth;
-const IMAGE_HEIGHT = isTablet ? 220 : 160;
+const IMAGE_HEIGHT = isTablet ? 220 : 170;
 
-const isAndroid = Platform.OS === 'android';
+// const isAndroid = Platform.OS === 'android';
 
 const buttonIconSize = 28;
 
@@ -111,7 +111,7 @@ const mapDispatchToProps = dispatch => {
 
 class InfoPostScreen extends Component {
   state = {
-    imageWidth: null,
+    imageWidth: IMAGE_WIDTH,
     imageHeight: IMAGE_HEIGHT,
     webViewWidth: screenWidth - styleConst.ui.verticalGap,
   }
@@ -164,7 +164,7 @@ class InfoPostScreen extends Component {
 
     this.setState({
       imageHeight: imageDynamicHeight,
-      imageWidth: imageDynamicWidth,
+      // imageWidth: imageDynamicWidth,
     });
   }
 
@@ -263,13 +263,13 @@ class InfoPostScreen extends Component {
     const post = this.getPost();
     let text = get(post, 'text');
     const currentPostInList = find(list, { id });
-    const imageUrl = get(currentPostInList, isTablet ? 'img.10000x220' : 'img.10000x150');
+    const imageUrl = get(currentPostInList, isTablet ? 'img.10000x440' : 'img.10000x300');
 
     if (text) {
       text = processHtml(text, this.state.webViewWidth);
     }
 
-    console.log('== InfoPost ==');
+    console.log('== InfoPost ==', imageUrl);
 
     return (
       <Container>
@@ -282,8 +282,9 @@ class InfoPostScreen extends Component {
               <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} /> :
               (
                 <View>
-                  <View ref="imageContainer">
+                  <View style={styles.imageContainer} ref="imageContainer">
                     <CachedImage
+                      resizeMode={isTablet ? 'contain' : null}
                       onLayout={this.onLayoutImage}
                       style={[
                         styles.image,

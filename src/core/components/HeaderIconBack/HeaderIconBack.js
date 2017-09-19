@@ -67,4 +67,4 @@ export default class HeaderIconBack extends Component {
       </TouchableOpacity>
     );
   }
-};
+}

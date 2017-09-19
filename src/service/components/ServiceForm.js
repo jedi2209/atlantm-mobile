@@ -83,7 +83,7 @@ export default class ProfileForm extends PureComponent {
           <ListItem style={styleListProfile.listItem} >
             <Body>
               <Item style={styleListProfile.inputItem} fixedLabel>
-                <Label style={styleListProfile.label}>Автомобиль</Label>
+                <Label style={styleListProfile.label}>Авто</Label>
                 <Input
                   autoCapitalize="none"
                   autoCorrect={false}
