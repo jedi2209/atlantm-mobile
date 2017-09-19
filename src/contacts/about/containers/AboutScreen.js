@@ -189,7 +189,7 @@ class AboutScreen extends Component {
     const { selectedDealer } = this.props;
     const phones = get(selectedDealer, 'phone', []);
     let description = selectedDealer.description;
-    const imageUrl = get(selectedDealer, isTablet ? 'img.10000x220' : 'img.10000x220');
+    const imageUrl = get(selectedDealer, isTablet ? 'img.10000x440' : 'img.10000x300');
 
     if (description) {
       description = processHtml(description, this.state.webViewWidth, this.state.webViewHeight);

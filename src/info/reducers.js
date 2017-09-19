@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { REHYDRATE } from 'redux-persist/constants';
-import _ from 'lodash';
+import { get } from 'lodash';
 import {
   INFO_LIST__REQUEST,
   INFO_LIST__SUCCESS,
@@ -20,7 +20,7 @@ import { DEALER__SUCCESS } from '../dealer/actionTypes';
 function visited(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
-      return [];
+      return get(action, 'payload.info.visited');
     case INFO_POST__SUCCESS:
       return [
         ...state,
@@ -72,7 +72,7 @@ function isCallMeRequest(state = false, action) {
 function list(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
-      return _.get(action.payload, 'info.list', []);
+      return get(action.payload, 'info.list', []);
     case INFO_LIST__SUCCESS:
       return action.payload;
     case DEALER__SUCCESS:

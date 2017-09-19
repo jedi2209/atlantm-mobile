@@ -62,7 +62,12 @@ class App extends Component {
     const isDealerSelected = get(store.getState(), 'dealer.selected.id');
     const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
 
-    console.log('render');
+    // const defaultGetStateForAction = Router.router.getStateForAction;
+    // Router.router.getStateForAction = (action, state) => {
+    //   console.log('state', state);
+    //   // this.props.navigationChange(action.routeName ? action.routeName : mainScreen);
+    //   return defaultGetStateForAction(action, state);
+    // };
 
     if (isTablet) {
       return (
