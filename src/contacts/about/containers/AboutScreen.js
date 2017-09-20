@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ dealer }) => {
   return {
-    selectedDealer: dealer.selected,
+    dealerSelected: dealer.selected,
   };
 };
 
@@ -160,10 +160,10 @@ class AboutScreen extends Component {
   //   const nav = nextProps.nav.newState;
   //   const isActiveScreen = nav.routes[nav.index].routeName === 'AboutScreen';
 
-  //   return this.props.selectedDealer.id !== nextProps.selectedDealer.id && isActiveScreen;
+  //   return this.props.dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen;
   // }
 
-  renderEmails = (emails) => {
+  renderEmails = (emails, name) => {
     if (!emails) return null;
 
     return emails.map(emailAddress => (
@@ -176,7 +176,7 @@ class AboutScreen extends Component {
             [emailAddress],
             null,
             null,
-            `Из приложения iOS Атлант-М, мой автоцентр ${this.props.dealerSelected.name}`,
+            `Из приложения ${Platform.OS === 'android' ? 'Android' : 'iOS'} Атлант-М, мой автоцентр ${name}`,
             null,
           );
         }}
@@ -195,10 +195,10 @@ class AboutScreen extends Component {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
-    const { selectedDealer } = this.props;
-    const phones = get(selectedDealer, 'phone', []);
-    let description = selectedDealer.description;
-    const imageUrl = get(selectedDealer, isTablet ? 'img.10000x440' : 'img.10000x300');
+    const { dealerSelected } = this.props;
+    const phones = get(dealerSelected, 'phone', []);
+    let description = dealerSelected.description;
+    const imageUrl = get(dealerSelected, isTablet ? 'img.10000x440' : 'img.10000x300');
 
     if (description) {
       description = processHtml(description, this.state.webViewWidth, this.state.webViewHeight);
@@ -219,7 +219,7 @@ class AboutScreen extends Component {
                 backgroundColor: 'transparent',
                } : {},
               ]}>
-              <Text style={styles.title}>{selectedDealer.name}</Text>
+              <Text style={styles.title}>{dealerSelected.name}</Text>
             </View>
             <View ref="imageContainer">
               <CachedImage
@@ -235,7 +235,7 @@ class AboutScreen extends Component {
               >
                 <View style={styles.brandsLine}>
                   {
-                    selectedDealer.brands.map(brand => {
+                    dealerSelected.brands.map(brand => {
                       return (
                         <CachedImage
                           resizeMode="contain"
@@ -253,7 +253,7 @@ class AboutScreen extends Component {
             <List style={[styles.list, styles.listHolding]}>
               <View style={styles.listItemContainer}>
               {
-                  selectedDealer.city ?
+                  dealerSelected.city ?
                     (
                       <ListItem
                         icon
@@ -263,13 +263,13 @@ class AboutScreen extends Component {
                           <Text>Город</Text>
                         </Body>
                         <Right>
-                          <Text style={styles.rightText}>{selectedDealer.city.name}</Text>
+                          <Text style={styles.rightText}>{dealerSelected.city.name}</Text>
                         </Right>
                       </ListItem>
                     ) : null
                 }
                 {
-                  selectedDealer.address ?
+                  dealerSelected.address ?
                     (
                       <ListItem
                         icon
@@ -279,7 +279,7 @@ class AboutScreen extends Component {
                           <Text>Адрес</Text>
                         </Body>
                         <Right>
-                          <Text style={styles.rightText}>{selectedDealer.address}</Text>
+                          <Text style={styles.rightText}>{dealerSelected.address}</Text>
                         </Right>
                       </ListItem>
                     ) : null
@@ -313,9 +313,9 @@ class AboutScreen extends Component {
                       </View>
                     ) : null
                 }
-                {this.renderEmails(selectedDealer.email)}
+                {this.renderEmails(dealerSelected.email, dealerSelected.name)}
                 {
-                  selectedDealer.site ?
+                  dealerSelected.site ?
                     (
                       <ListItem
                         last
@@ -327,9 +327,9 @@ class AboutScreen extends Component {
                         </Body>
                         <Right>
                         <TouchableOpacity
-                          onPress={() => Communications.web(selectedDealer.site)}
+                          onPress={() => Communications.web(dealerSelected.site)}
                         >
-                          <Text style={styles.rightText}>{selectedDealer.site}</Text>
+                          <Text style={styles.rightText}>{dealerSelected.site}</Text>
                         </TouchableOpacity>
                         </Right>
                       </ListItem>
