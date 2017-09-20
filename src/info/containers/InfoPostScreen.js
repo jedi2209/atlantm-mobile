@@ -5,7 +5,8 @@ import {
   Alert,
   Image,
   NetInfo,
-  Platform,
+  Linking,
+  // Platform,
   Dimensions,
   StyleSheet,
   ActivityIndicator,
@@ -108,6 +109,16 @@ const mapDispatchToProps = dispatch => {
     callMeForInfo,
   }, dispatch);
 };
+
+const injectScript = `
+(function () {
+  window.onclick = function(e) {
+    e.preventDefault();
+    window.postMessage(e.target.href);
+    e.stopPropagation()
+  }
+}());
+`;
 
 class InfoPostScreen extends Component {
   state = {
@@ -250,6 +261,14 @@ class InfoPostScreen extends Component {
   //         (this.props.isСallMeRequest !== nextProps.isСallMeRequest && isActiveScreen);
   // }
 
+  onMessage({ nativeEvent }) {
+    const data = nativeEvent.data;
+
+    if (data !== undefined && data !== null) {
+      Linking.openURL(data);
+    }
+  }
+
   render() {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
@@ -284,7 +303,7 @@ class InfoPostScreen extends Component {
                 <View>
                   <View style={styles.imageContainer} ref="imageContainer">
                     <CachedImage
-                      resizeMode={isTablet ? 'contain' : null}
+                      resizeMode="contain"
                       onLayout={this.onLayoutImage}
                       style={[
                         styles.image,
@@ -305,7 +324,11 @@ class InfoPostScreen extends Component {
                       <Text style={styles.date}>{this.processDate(date)}</Text> :
                       null
                   }
-                    <WebViewAutoHeight dataDetectorTypes={'phoneNumber'} source={{ html: text }} />
+                    <WebViewAutoHeight
+                      source={{ html: text }}
+                      injectedJavaScript={injectScript}
+                      onMessage={this.onMessage}
+                    />
                   </View>
                 </View>
               )

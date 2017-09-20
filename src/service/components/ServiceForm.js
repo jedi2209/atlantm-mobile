@@ -17,6 +17,7 @@ import styleListProfile from '../../core/components/Lists/style';
 
 // helpers
 import styleConst from '../../core/style-const';
+import { yearMonthDay } from '../../utils/date';
 
 const LIST_ITEM_HEIGHT = 44;
 const styles = StyleSheet.create({
@@ -112,6 +113,7 @@ export default class ProfileForm extends PureComponent {
                     showIcon={false}
                     date={date.formatted}
                     mode="date"
+                    minDate={yearMonthDay(Date.now())}
                     placeholder="Выбрать"
                     format="DD MMMM YYYY"
                     confirmBtnText="Выбрать"
