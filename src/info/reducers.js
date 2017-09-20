@@ -20,7 +20,7 @@ import { DEALER__SUCCESS } from '../dealer/actionTypes';
 function visited(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action, 'payload.info.visited');
+      return get(action, 'payload.info.visited', []);
     case INFO_POST__SUCCESS:
       return [
         ...state,

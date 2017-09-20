@@ -12,6 +12,7 @@ import {
   Body,
   Right,
   Icon,
+  Platform,
 } from 'native-base';
 
 // redux
@@ -238,7 +239,7 @@ class ContactsScreen extends Component {
                             [dealerSelected.email[0]],
                             null,
                             null,
-                            `Из приложения iOS Атлант-М, мой автоцентр ${dealerSelected.name}`,
+                            `Из приложения ${Platform.OS === 'android' ? 'Android' : 'iOS'} Атлант-М, мой автоцентр ${dealerSelected.name}`,
                             null,
                           );
                         }}
