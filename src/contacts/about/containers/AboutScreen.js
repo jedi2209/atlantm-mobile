@@ -171,6 +171,15 @@ class AboutScreen extends Component {
         key={emailAddress}
         icon
         style={styles.listItem}
+        onPress={() => {
+          Communications.email(
+            [emailAddress],
+            null,
+            null,
+            `Из приложения iOS Атлант-М, мой автоцентр ${this.props.dealerSelected.name}`,
+            null,
+          );
+        }}
       >
         <Body>
           <Text style={styles.leftText}>E-mail</Text>
