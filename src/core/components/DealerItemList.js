@@ -9,8 +9,11 @@ import {
   StyleProvider,
   Text,
 } from 'native-base';
-import { CachedImage } from 'react-native-cached-image';
 
+// component
+import Imager from '../components/Imager';
+
+// helpers
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 
@@ -103,7 +106,7 @@ export default class DealerItemList extends Component {
                 {
                   brands.map(brand => {
                     return (
-                      <CachedImage
+                      <Imager
                         resizeMode="contain"
                         key={brand.id}
                         style={styles.brandLogo}

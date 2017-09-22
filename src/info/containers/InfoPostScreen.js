@@ -19,11 +19,11 @@ import { fetchInfoPost, callMeForInfo } from '../actions';
 
 // components
 import DeviceInfo from 'react-native-device-info';
-import { CachedImage } from 'react-native-cached-image';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Container, Content, Button, Footer, FooterTab } from 'native-base';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
+import Imager from '../../core/components/Imager';
 
 // helpers
 import { get, find } from 'lodash';
@@ -302,7 +302,7 @@ class InfoPostScreen extends Component {
               (
                 <View>
                   <View style={styles.imageContainer} ref="imageContainer">
-                    <CachedImage
+                    <Imager
                       resizeMode="contain"
                       onLayout={this.onLayoutImage}
                       style={[
