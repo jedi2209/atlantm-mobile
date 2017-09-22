@@ -4,6 +4,11 @@ import { AppRegistry } from 'react-native';
 // component
 import { Wrapper } from './src/core/containers/Wrapper';
 
+import { Sentry } from 'react-native-sentry';
+
+Sentry.config("https://XXXX:4df609d533fd4ce3be4fa721e6583c87@sentry.io/219899").install();
+
+
 class AtlantmAndroidApplication extends Component {
   render() {
     return <Wrapper />;
