@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Image, View, Alert, NetInfo, StyleSheet } from 'react-native';
+import { Image, View, Alert, NetInfo, StyleSheet, Platform } from 'react-native';
 import {
   Container,
   Content,
@@ -12,7 +12,6 @@ import {
   Body,
   Right,
   Icon,
-  Platform,
 } from 'native-base';
 
 // redux

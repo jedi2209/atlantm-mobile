@@ -6,7 +6,6 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import PropTypes from 'prop-types';
 import {
   Container,
   Content,
@@ -23,10 +22,10 @@ import { connect } from 'react-redux';
 
 // components
 import DeviceInfo from 'react-native-device-info';
-import { CachedImage } from 'react-native-cached-image';
 import Communications from 'react-native-communications';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../../core/components/WebViewAutoHeight';
+import Imager from '../../../core/components/Imager';
 
 // helpers
 import { get } from 'lodash';
@@ -115,6 +114,7 @@ class AboutScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      update: null,
       imageWidth: null,
       imageHeight: IMAGE_HEIGHT,
       webViewWidth: screenWidth - styleConst.ui.verticalGap,
@@ -222,7 +222,7 @@ class AboutScreen extends Component {
               <Text style={styles.title}>{dealerSelected.name}</Text>
             </View>
             <View ref="imageContainer">
-              <CachedImage
+              <Imager
                 onLayout={this.onLayoutImage}
                 style={[
                   styles.image,
@@ -237,7 +237,7 @@ class AboutScreen extends Component {
                   {
                     dealerSelected.brands.map(brand => {
                       return (
-                        <CachedImage
+                        <Imager
                           resizeMode="contain"
                           key={brand.id}
                           style={styles.brand}
@@ -247,7 +247,7 @@ class AboutScreen extends Component {
                     })
                   }
                 </View>
-              </CachedImage>
+              </Imager>
             </View>
 
             <List style={[styles.list, styles.listHolding]}>
