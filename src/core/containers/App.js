@@ -10,8 +10,6 @@ import { setAppVersion } from '../actions';
 
 // helpers
 import { get } from 'lodash';
-import { getPersistStore } from './Wrapper';
-import styleConst from '../style-const';
 
 // components
 import Sidebar from '../../menu/containers/Sidebar';

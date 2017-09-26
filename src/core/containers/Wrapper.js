@@ -48,24 +48,7 @@ if (!__DEV__) {
   });
 }
 
-let persistor;
-
-export const getPersistStore = (cb) => {
-  if (persistor) return persistor;
-
-  persistor = persistStore(store, {
-    storage: AsyncStorage,
-    blacklist: ['form', 'nav'],
-    keyPrefix: 'atlantm',
-  }, () => {
-    console.log('persistStore sync complete');
-    isFunction(cb) && cb();
-  });
-
-  return persistor;
-};
-
-export class Wrapper extends Component {
+export default class Wrapper extends Component {
   constructor(props) {
     super(props);
 
@@ -76,14 +59,12 @@ export class Wrapper extends Component {
     this.defaultHandler = ErrorUtils.getGlobalHandler();
     ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
 
-    // this.persistStore().purge();
-    this.persistStore();
-  }
-
-  persistStore = () => {
-    return getPersistStore(() => {
-      this.setState({ rehydrated: true });
-    });
+    // persistStore().purge();
+    persistStore(store, {
+      storage: AsyncStorage,
+      blacklist: ['form', 'nav'],
+      keyPrefix: 'atlantm',
+    }, () => this.setState({ rehydrated: true }));
   }
 
   async wrapGlobalHandler(error, isFatal) {
