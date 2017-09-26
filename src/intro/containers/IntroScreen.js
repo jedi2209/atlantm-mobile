@@ -73,7 +73,7 @@ export default class IntroScreen extends Component {
               full
               style={styles.button}
             >
-              <Text style={styles.buttonText}>ВЫБЕРЕТЕ СВОЙ АВТОЦЕНТР</Text>
+              <Text style={styles.buttonText}>ВЫБЕРИТЕ СВОЙ АВТОЦЕНТР</Text>
               <Image
                 source={require('../../core/components/CustomIcon/assets/arrow-right.png')}
                 style={styles.buttonIcon}
