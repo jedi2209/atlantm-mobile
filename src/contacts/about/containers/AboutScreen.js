@@ -221,23 +221,25 @@ class AboutScreen extends Component {
   renderSites = (sites) => {
     if (!sites || !sites.length) return null;
 
-    return sites.map(site => (
-      <ListItem
-        key={site}
-        last
-        icon
-        style={styles.listItem}
-      >
-        <Body>
-          <Text style={styles.leftText}>Веб-сайт</Text>
-        </Body>
-        <Right>
-        <TouchableOpacity onPress={() => Communications.web(site)}>
-          <Text style={styles.rightText}>{site}</Text>
-        </TouchableOpacity>
-        </Right>
-      </ListItem>
-    ));
+    return sites.map((site, idx) => {
+      return (
+        <ListItem
+          key={site}
+          last={sites.length - 1 === idx}
+          icon
+          style={styles.listItem}
+        >
+          <Body>
+            <Text style={styles.leftText}>Веб-сайт</Text>
+          </Body>
+          <Right>
+          <TouchableOpacity onPress={() => Communications.web(site)}>
+            <Text style={styles.rightText}>{site}</Text>
+          </TouchableOpacity>
+          </Right>
+        </ListItem>
+      );
+    });
   }
 
   render() {
