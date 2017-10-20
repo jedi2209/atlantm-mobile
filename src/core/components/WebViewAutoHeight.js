@@ -39,7 +39,7 @@ body, html, #height-wrapper {
     padding: 0;
 }
 a, a:visited, a.hover {
-    color: #FFCC55;
+    color: #0072e7;
 }
 #height-wrapper {
     position: absolute;
