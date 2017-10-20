@@ -91,23 +91,27 @@ class InfoListScreen extends Component {
     const { region, id: dealer } = dealerSelected;
 
     this.setState({ isRefreshing: true });
+
     fetchInfoList(region, dealer).then(() => {
       this.setState({ isRefreshing: false });
     });
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
     const {
       list,
       visited,
       navigation,
       dealerSelected,
+      isFetchInfoList,
     } = this.props;
 
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'InfoListScreen';
 
-    return (visited !== nextProps.visited) || (this.props.isFetchInfoList !== nextProps.isFetchInfoList && isActiveScreen) ||
+    return (this.state.isRefreshing !== nextState.isRefreshing) ||
+      (visited !== nextProps.visited) ||
+      (isFetchInfoList !== nextProps.isFetchInfoList && isActiveScreen) ||
       (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (list.length !== nextProps.list.length);
   }
