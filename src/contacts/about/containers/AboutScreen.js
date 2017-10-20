@@ -163,8 +163,35 @@ class AboutScreen extends Component {
   //   return this.props.dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen;
   // }
 
+  renderPhones = (phones) => {
+    if (!phones || !phones.length) return null;
+
+    return (
+      <View>
+        {
+          phones.map(phone => (
+            <ListItem
+              key={phone}
+              icon
+              style={styles.listItem}
+            >
+              <Body>
+                <Text style={styles.leftText}>Телефон</Text>
+              </Body>
+              <Right>
+                <TouchableOpacity onPress={() => Communications.phonecall(phone, true)}>
+                  <Text style={styles.rightText}>{phone}</Text>
+                </TouchableOpacity>
+              </Right>
+            </ListItem>
+          ))
+        }
+      </View>
+    );
+  }
+
   renderEmails = (emails, name) => {
-    if (!emails) return null;
+    if (!emails || !emails.length) return null;
 
     return emails.map(emailAddress => (
       <ListItem
@@ -186,6 +213,28 @@ class AboutScreen extends Component {
         </Body>
         <Right>
           <Text style={styles.rightText}>{emailAddress}</Text>
+        </Right>
+      </ListItem>
+    ));
+  }
+
+  renderSites = (sites) => {
+    if (!sites || !sites.length) return null;
+
+    return sites.map(site => (
+      <ListItem
+        key={site}
+        last
+        icon
+        style={styles.listItem}
+      >
+        <Body>
+          <Text style={styles.leftText}>Веб-сайт</Text>
+        </Body>
+        <Right>
+        <TouchableOpacity onPress={() => Communications.web(site)}>
+          <Text style={styles.rightText}>{site}</Text>
+        </TouchableOpacity>
         </Right>
       </ListItem>
     ));
@@ -284,57 +333,9 @@ class AboutScreen extends Component {
                       </ListItem>
                     ) : null
                 }
-                {
-                  phones.length !== 0 ?
-                    (
-                      <View>
-                        {
-                          phones.map(phone => {
-                            return (
-                              <ListItem
-                                key={phone}
-                                icon
-                                style={styles.listItem}
-                              >
-                                <Body>
-                                  <Text style={styles.leftText}>Телефон</Text>
-                                </Body>
-                                <Right>
-                                  <TouchableOpacity
-                                    onPress={() => Communications.phonecall(phone, true)}
-                                  >
-                                    <Text style={styles.rightText}>{phone}</Text>
-                                  </TouchableOpacity>
-                                </Right>
-                              </ListItem>
-                            );
-                          })
-                        }
-                      </View>
-                    ) : null
-                }
+                {this.renderPhones(phones)}
                 {this.renderEmails(dealerSelected.email, dealerSelected.name)}
-                {
-                  dealerSelected.site ?
-                    (
-                      <ListItem
-                        last
-                        icon
-                        style={styles.listItem}
-                      >
-                        <Body>
-                          <Text style={styles.leftText}>Веб-сайт</Text>
-                        </Body>
-                        <Right>
-                        <TouchableOpacity
-                          onPress={() => Communications.web(dealerSelected.site)}
-                        >
-                          <Text style={styles.rightText}>{dealerSelected.site}</Text>
-                        </TouchableOpacity>
-                        </Right>
-                      </ListItem>
-                    ) : null
-                }
+                {this.renderSites(dealerSelected.site)}
               </View>
             </List>
 
