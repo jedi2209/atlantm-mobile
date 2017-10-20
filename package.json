@@ -18,7 +18,7 @@
     "prop-types": "^15.5.10",
     "react": "16.0.0-alpha.12",
     "react-native": "0.47.1",
-    "react-native-cached-image": "^1.4.0-rc",
+    "react-native-cached-image": "github:flatfox-ag/react-native-cached-image#d8e1ddd5d1f5cc3213457a05d4ef74c4ec4ea959",
     "react-native-communications": "^2.2.1",
     "react-native-datepicker": "github:xgfe/react-native-datepicker",
     "react-native-device-info": "^0.11.0",
