@@ -24,7 +24,7 @@ function car(state = '', action) {
 function date(state = {}, action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'service.date', {});
+      return {};
     case SERVICE_DATE__FILL:
       return action.payload;
     default:
