@@ -13,7 +13,7 @@ export const carFill = (car) => {
   return dispatch => {
     dispatch({
       type: SERVICE_CAR__FILL,
-      payload: car,
+      payload: car ? car.trim() : '',
     });
   };
 };
