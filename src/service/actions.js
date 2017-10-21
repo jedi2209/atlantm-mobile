@@ -10,10 +10,14 @@ import {
 } from './actionTypes';
 
 export const carFill = (car) => {
+  if (car && car.length <= 3) {
+    car = car.trim();
+  }
+
   return dispatch => {
     dispatch({
       type: SERVICE_CAR__FILL,
-      payload: car ? car.trim() : '',
+      payload: car,
     });
   };
 };
