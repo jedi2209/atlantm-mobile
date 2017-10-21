@@ -5,10 +5,14 @@ import {
 } from './actionTypes';
 
 export const nameFill = (name) => {
+  if (name && name.length <= 3) {
+    name = name.trim();
+  }
+
   return dispatch => {
     dispatch({
       type: PROFILE_NAME__FILL,
-      payload: name ? name.trim() : '',
+      payload: name,
     });
   };
 };
