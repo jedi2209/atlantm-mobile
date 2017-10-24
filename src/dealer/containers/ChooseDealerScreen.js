@@ -14,7 +14,6 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // components
-// import { OptimizedFlatList } from 'react-native-optimized-flatlist';
 import Spinner from 'react-native-loading-spinner-overlay';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import DealerItem from '../components/DealerItem';
