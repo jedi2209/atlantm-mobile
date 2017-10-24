@@ -111,13 +111,13 @@ export default class WebViewAutoHeight extends Component{
 
 };
 
-WebViewAutoHeight.propTypes={
-        source: React.PropTypes.object.isRequired,
-        injectedJavaScript: React.PropTypes.string,
-        minHeight: React.PropTypes.number,
-        onNavigationStateChange: React.PropTypes.func,
-        style: WebView.propTypes.style,
-};
+// WebViewAutoHeight.propTypes={
+//         source: React.PropTypes.object.isRequired,
+//         injectedJavaScript: React.PropTypes.string,
+//         minHeight: React.PropTypes.number,
+//         onNavigationStateChange: React.PropTypes.func,
+//         style: WebView.propTypes.style,
+// };
 
 WebViewAutoHeight.defaultProps = {
   minHeight: 100
