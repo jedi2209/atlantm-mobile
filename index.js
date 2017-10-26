@@ -8,13 +8,12 @@ import { Sentry } from 'react-native-sentry';
 
 Sentry.config("https://2e35f2a2455b4a3d97a1687270845d33:4df609d533fd4ce3be4fa721e6583c87@sentry.io/219899").install();
 
-
-class AtlantmAndroidApplication extends Component {
+class AtlantmApplication extends Component {
   render() {
     return <Wrapper />;
   }
 }
 
-AppRegistry.registerComponent('atlantm', () => AtlantmAndroidApplication);
+AppRegistry.registerComponent('atlantm', () => AtlantmApplication);
 
 console.ignoredYellowBox = ['Remote debugger'];
