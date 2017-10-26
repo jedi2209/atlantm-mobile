@@ -49,6 +49,17 @@ const usedCarPages = (state = {}, action) => {
   }
 };
 
+const usedCarPrices = (state = {}, action) => {
+  switch (action.type) {
+    case REHYDRATE:
+      return {};
+    case USED_CAR_LIST__SUCCESS:
+      return action.payload.prices;
+    default:
+      return state;
+  }
+};
+
 const usedCarCity = (state = null, action) => {
   switch (action.type) {
     case REHYDRATE:
@@ -79,6 +90,7 @@ export default combineReducers({
     total: usedCarTotal,
     pages: usedCarPages,
     city: usedCarCity,
+    prices: usedCarPrices,
     meta: combineReducers({
       isFetchItems: isFetchUsedCarItems,
     }),
