@@ -33,6 +33,13 @@ export default {
     return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
   },
 
+  fetchUsedCar(city, nextPageUrl) {
+    console.log('city', city);
+    console.log('nextPagePosition', nextPageUrl);
+    const defaultUrl = `/stock/trade-in/cars/get/city/${city}/`;
+    return this.request(nextPageUrl || defaultUrl, baseRequestParams);
+  },
+
   callMe(props) {
     const {
       name,
@@ -51,8 +58,6 @@ export default {
       },
       body,
     });
-
-    console.log('body', body);
 
     return this.request('/orders/callme/post/', requestParams);
   },
@@ -85,7 +90,6 @@ export default {
 
     return fetch(url, requestParams)
       .then(response => {
-        console.log('response', response);
         return response.json();
       });
   },

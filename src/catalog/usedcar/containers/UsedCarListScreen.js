@@ -6,11 +6,12 @@ import { Container, Content, StyleProvider, Button } from 'native-base';
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-// import {} from '../actions';
+import { actionFetchUsedCar, actionSetUsedCarCity } from '../../actions';
 
 // components
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import CarList from '../../components/CarList';
 
 // helpres
 import getTheme from '../../../../native-base-theme/components';
@@ -21,21 +22,27 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     flex: 1,
   },
 });
 
-const mapStateToProps = ({ dealer, nav }) => {
+const mapStateToProps = ({ dealer, nav, catalog }) => {
   return {
     nav,
+    city: catalog.usedCar.city,
+    items: catalog.usedCar.items,
+    total: catalog.usedCar.total,
+    pages: catalog.usedCar.pages,
+    isFetchItems: catalog.usedCar.meta.isFetchItems,
     dealerSelected: dealer.selected,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-
+    actionFetchUsedCar,
+    actionSetUsedCarCity,
   }, dispatch);
 };
 
@@ -48,32 +55,53 @@ class UserCarListScreen extends Component {
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 
-  static propTypes = {
-    dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
-  }
-
   shouldComponentUpdate(nextProps) {
-    const { dealerSelected } = this.props;
+    const { dealerSelected, items, isFetchItems } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'UserCarListScreen';
 
     // console.log('Catalog this.props.navigation', this.props.navigation);
     // console.log('Catalog nextProps.navigation', nextProps.navigation);
 
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen);
+    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
+      (items.length !== nextProps.items.length) ||
+      (isFetchItems !== nextProps.isFetchItems);
+  }
+
+  fetchUsedCar = (type) => {
+    const { actionFetchUsedCar, city, pages } = this.props;
+
+    return actionFetchUsedCar(type, city, pages.next);
   }
 
   render() {
     const {
-      dealerSelected,
+      city,
+      items,
+      total,
+      pages,
       navigation,
+      isFetchItems,
+      dealerSelected,
     } = this.props;
 
     console.log('== UsedCarListScreen ==');
+    console.log('city', city);
+    console.log('items', items);
+    console.log('total', total);
+    console.log('pages', pages);
 
     return (
-      <View style={styles.content}></View>
+      <View style={styles.content}>
+        <CarList
+          items={items}
+          pages={pages}
+          itemScreen="UsedCarItemScreen"
+          dataHandler={this.fetchUsedCar}
+          isFetchItems={isFetchItems}
+          navigation={navigation}
+        />
+      </View>
     );
   }
 }

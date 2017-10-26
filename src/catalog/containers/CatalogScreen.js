@@ -6,7 +6,7 @@ import { Container, Content, StyleProvider, Button } from 'native-base';
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-// import {} from '../actions';
+import { actionSetUsedCarCity } from '../actions';
 
 // components
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
@@ -79,7 +79,7 @@ const mapStateToProps = ({ dealer, nav }) => {
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-
+    actionSetUsedCarCity,
   }, dispatch);
 };
 
@@ -95,6 +95,12 @@ class CatalogScreen extends Component {
   static propTypes = {
     dealerSelected: PropTypes.object,
     navigation: PropTypes.object,
+  }
+
+  componentWillMount() {
+    const { actionSetUsedCarCity, dealerSelected } = this.props;
+
+    actionSetUsedCarCity(dealerSelected.city.id);
   }
 
   shouldComponentUpdate(nextProps) {
