@@ -3,7 +3,7 @@ import { PixelRatio } from 'react-native';
 export default {
   color: {
     blue: '#0458a7',
-    lightBlue: '#157efa',
+    lightBlue: '#027aff',
     bg: 'rgba(240,243,245,1)',
     greyText: 'rgba(97,110,122,1)',
     greyText2: 'rgba(128,128,128,1)',

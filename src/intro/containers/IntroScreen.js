@@ -1,20 +1,6 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Image,
-  View,
-} from 'react-native';
-import PropTypes from 'prop-types';
-import {
-  Container,
-  Footer,
-  FooterTab,
-  Button,
-  Text,
-} from 'native-base';
-
-// components
-import DeviceInfo from 'react-native-device-info';
+import { StyleSheet, Image, View } from 'react-native';
+import { Container, Footer, FooterTab, Button, Text } from 'native-base';
 
 // helpers
 import styleConst from '../../core/style-const';

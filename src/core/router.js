@@ -18,6 +18,14 @@ import AboutHoldingScreen from '../contacts/aboutholding/containers/AboutHolding
 import InfoListScreen from '../info/containers/InfoListScreen';
 import InfoPostScreen from '../info/containers/InfoPostScreen';
 
+// catalog
+import CatalogScreen from '../catalog/containers/CatalogScreen';
+import UsedCarListScreen from '../catalog/usedcar/containers/UsedCarListScreen';
+import UsedCarItemScreen from '../catalog/usedcar/containers/UsedCarItemScreen';
+import NewCarFilterScreen from '../catalog/newcar/containers/NewCarFilterScreen';
+import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
+import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
+
 const getRouter = initialRouteName => {
   return StackNavigator(
     {
@@ -47,6 +55,19 @@ const getRouter = initialRouteName => {
       },
       ProfileScreen: { screen: ProfileScreen },
       ServiceScreen: { screen: ServiceScreen },
+      CatalogScreen: {
+        screen: StackNavigator({
+          CatalogScreen: { screen: CatalogScreen },
+          UsedCarListScreen: { screen: UsedCarListScreen },
+          UsedCarItemScreen: { screen: UsedCarItemScreen },
+          NewCarFilterScreen: { screen: NewCarFilterScreen },
+          NewCarListScreen: { screen: NewCarListScreen },
+          NewCarItemScreen: { screen: NewCarItemScreen },
+        }),
+        navigationOptions: {
+          header: null,
+        },
+      },
     },
     {
       initialRouteName,
