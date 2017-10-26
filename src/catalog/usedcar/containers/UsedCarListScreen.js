@@ -34,6 +34,7 @@ const mapStateToProps = ({ dealer, nav, catalog }) => {
     items: catalog.usedCar.items,
     total: catalog.usedCar.total,
     pages: catalog.usedCar.pages,
+    prices: catalog.usedCar.prices,
     isFetchItems: catalog.usedCar.meta.isFetchItems,
     dealerSelected: dealer.selected,
   };
@@ -80,22 +81,20 @@ class UserCarListScreen extends Component {
       items,
       total,
       pages,
+      prices,
       navigation,
       isFetchItems,
       dealerSelected,
     } = this.props;
 
     console.log('== UsedCarListScreen ==');
-    console.log('city', city);
-    console.log('items', items);
-    console.log('total', total);
-    console.log('pages', pages);
 
     return (
       <View style={styles.content}>
         <CarList
           items={items}
           pages={pages}
+          prices={prices}
           itemScreen="UsedCarItemScreen"
           dataHandler={this.fetchUsedCar}
           isFetchItems={isFetchItems}

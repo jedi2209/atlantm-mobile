@@ -44,12 +44,14 @@ export default class CarList extends Component {
     itemScreen: PropTypes.string,
     isFetchItems: PropTypes.bool,
     navigation: PropTypes.object,
+    prices: PropTypes.object,
   }
 
   static defaultProps = {
     pages: {},
-    navigation: {},
+    prices: {},
     items: null,
+    navigation: {},
     itemScreen: null,
     isFetchItems: false,
   }
@@ -76,8 +78,8 @@ export default class CarList extends Component {
   }
 
   renderItem = ({ item }) => {
-    const { itemScreen, navigation } = this.props;
-    return <CarListItem car={item} navigate={navigation.navigate} itemScreen={itemScreen} />;
+    const { itemScreen, navigation, prices } = this.props;
+    return <CarListItem car={item} prices={prices} navigate={navigation.navigate} itemScreen={itemScreen} />;
   }
 
   renderFooter = () => {

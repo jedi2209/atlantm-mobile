@@ -23,7 +23,7 @@ export const actionFetchUsedCar = (type, city, nextPage) => {
 
     return API.fetchUsedCar(city, nextPageUrl)
       .then(res => {
-        const { data, error, total, pages } = res;
+        const { data, error, total, pages, prices } = res;
 
         if (error) {
           return dispatch({
@@ -42,6 +42,7 @@ export const actionFetchUsedCar = (type, city, nextPage) => {
             data,
             total,
             pages,
+            prices,
           },
         });
       })
