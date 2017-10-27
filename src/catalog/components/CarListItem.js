@@ -17,7 +17,12 @@ import { verticalScale } from '../../utils/scale';
 
 const styles = StyleSheet.create({
   container: {
-    margin: styleConst.ui.horizontalGap,
+    paddingTop: styleConst.ui.horizontalGap,
+    paddingRight: styleConst.ui.horizontalGap,
+    paddingBottom: styleConst.ui.horizontalGap,
+    marginLeft: styleConst.ui.horizontalGap,
+    borderBottomWidth: styleConst.ui.borderWidth,
+    borderBottomColor: styleConst.color.systemGray,
   },
   card: {
     flexDirection: 'row',
@@ -71,7 +76,17 @@ export default class CarListItem extends Component {
   onPress = () => {
     const { navigate, itemScreen, car } = this.props;
     navigate(itemScreen, { car });
-  };
+  }
+
+  shouldComponentUpdate(nextProps) {
+    const { car } = this.props;
+
+    return (car.id.api !== nextProps.car.id.api);
+  }
+
+  numberSet = (price) => {
+    return String(price).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
+  }
 
   render() {
     const { car, prices } = this.props;
@@ -82,7 +97,7 @@ export default class CarListItem extends Component {
       <TouchableHighlight
         onPress={this.onPress}
         style={styles.container}
-        underlayColor={styleConst.color.lightBlue}
+        underlayColor={styleConst.color.select}
       >
         <View style={styles.card}>
           <Imager
@@ -91,16 +106,16 @@ export default class CarListItem extends Component {
           />
           <View style={styles.info}>
             <Text style={styles.title}>{`${car.brand.name} ${car.model}`}</Text>
-            <Text style={styles.price}>{`${car.price.rec} ${prices.curr.name}`}</Text>
+            <Text style={styles.price}>{`${this.numberSet(car.price.app)} ${prices.curr.name}`}</Text>
             <View style={styles.extra}>
               <View style={styles.extraItem}>
                 <View style={styles.extraTextContainer}><Text style={styles.extraText}>{car.engine.type}</Text></View>
-                <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${car.engine.volume} л.c.`}</Text></View>
+                <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${car.engine.volume.short} л`}</Text></View>
               </View>
               <View style={styles.extraItem}>
                 <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${car.year} г.в.`}</Text></View>
                 <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`пробег ${car.mileage}`}</Text></View>
-                <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${car.gearbox.name}`}</Text></View>
+                <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${car.gearbox.name || ''}`}</Text></View>
               </View>
             </View>
           </View>

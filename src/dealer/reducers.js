@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
 import { REHYDRATE } from 'redux-persist/constants';
-import _ from 'lodash';
+import { get } from 'lodash';
 import {
-  REGION__SELECT,
+  DEALERS_REGION__SELECT,
 
   DEALER__REQUEST,
   DEALER__SUCCESS,
@@ -14,16 +14,12 @@ import {
 
 } from './actionTypes';
 
-import {
-  RUSSIA,
-  BELARUSSIA,
-  UKRAINE,
-} from './regionConst';
+import { RUSSIA, BELARUSSIA, UKRAINE } from '../core/const';
 
 function selected(state = {}, action) {
   switch (action.type) {
     case REHYDRATE:
-      return _.get(action.payload, 'dealer.selected', {});
+      return get(action.payload, 'dealer.selected', {});
     case DEALER__SUCCESS:
       return { ...action.payload };
     default:
@@ -34,8 +30,8 @@ function selected(state = {}, action) {
 function region(state = RUSSIA, action) {
   switch (action.type) {
     case REHYDRATE:
-      return _.get(action.payload, 'dealer.region', RUSSIA);
-    case REGION__SELECT:
+      return get(action.payload, 'dealer.region', RUSSIA);
+    case DEALERS_REGION__SELECT:
       return action.payload;
     default:
       return state;
@@ -45,7 +41,7 @@ function region(state = RUSSIA, action) {
 function listRussia(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
-      return _.get(action.payload, 'dealer.listRussia', []);
+      return get(action.payload, 'dealer.listRussia', []);
     case DEALERS__SUCCESS:
       return [
         ...action.payload[RUSSIA],
@@ -58,7 +54,7 @@ function listRussia(state = [], action) {
 function listBelarussia(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
-      return _.get(action.payload, 'dealer.listBelarussia', []);
+      return get(action.payload, 'dealer.listBelarussia', []);
     case DEALERS__SUCCESS:
       return [
         ...action.payload[BELARUSSIA],
@@ -71,7 +67,7 @@ function listBelarussia(state = [], action) {
 function listUkraine(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
-      return _.get(action.payload, 'dealer.listUkraine', []);
+      return get(action.payload, 'dealer.listUkraine', []);
     case DEALERS__SUCCESS:
       return [
         ...action.payload[UKRAINE],

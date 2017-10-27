@@ -34,8 +34,6 @@ export default {
   },
 
   fetchUsedCar(city, nextPageUrl) {
-    console.log('city', city);
-    console.log('nextPagePosition', nextPageUrl);
     const defaultUrl = `/stock/trade-in/cars/get/city/${city}/`;
     return this.request(nextPageUrl || defaultUrl, baseRequestParams);
   },

@@ -45,7 +45,7 @@ class UserCarItemScreen extends Component {
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <HeaderIconMenu navigation={navigation} />,
+    headerRight: <View />,
   })
 
   static propTypes = {

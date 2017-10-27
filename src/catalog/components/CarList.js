@@ -16,18 +16,17 @@ import styleConst from '../../core/style-const';
 import { verticalScale } from '../../utils/scale';
 
 const styles = StyleSheet.create({
-  list: {
-    // backgroundColor: 'red',
-  },
   spinner: {
     alignSelf: 'center',
+    marginTop: verticalScale(60),
+  },
+  messageContainer: {
     marginTop: verticalScale(60),
   },
   message: {
     fontFamily: styleConst.font.regular,
     fontSize: 18,
     alignSelf: 'center',
-    marginTop: verticalScale(60),
     letterSpacing: styleConst.ui.letterSpacing,
     textAlign: 'center',
   },
@@ -65,6 +64,15 @@ export default class CarList extends Component {
     };
   }
 
+  // shouldComponentUpdate(nextProps) {
+  //   const { items } = this.props;
+
+  //   // console.log('Catalog this.props.navigation', this.props.navigation);
+  //   // console.log('Catalog nextProps.navigation', nextProps.navigation);
+
+  //   return (items.length !== nextProps.items.length);
+  // }
+
   componentDidMount() {
     const { dataHandler, dealerSelected } = this.props;
 
@@ -72,9 +80,15 @@ export default class CarList extends Component {
   }
 
   renderEmptyComponent = () => {
-    return this.props.isFetchItems ?
+    const { isFetchItems, dealerSelected } = this.props;
+    return isFetchItems ?
       <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} /> :
-      <Text style={styles.message}>На данный момент в онлайн-складе нет подержанных авто</Text>;
+      (
+        <View style={styles.messageContainer}>
+          <Text style={styles.message}>{`Онлайн-склад ${dealerSelected.city.name}`}</Text>
+          <Text style={styles.message}>{`нет подержанных авто`}</Text>
+        </View>
+      );
   }
 
   renderItem = ({ item }) => {
@@ -141,9 +155,9 @@ export default class CarList extends Component {
 
     return (
       <FlatList
-        contentContainerStyle={styles.list}
+        onEndReachedThreshold={0}
+        initialNumToRender={10}
         data={items}
-        extraData={items}
         onRefresh={this.onRefresh}
         refreshing={this.state.isRefreshing}
         ListEmptyComponent={this.renderEmptyComponent}
