@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
-import { Container, Content, StyleProvider, Button } from 'native-base';
+import { StyleSheet, View, Text } from 'react-native';
 
 // redux
 import { bindActionCreators } from 'redux';
@@ -9,20 +7,19 @@ import { connect } from 'react-redux';
 import { actionFetchUsedCar, actionSetUsedCarCity } from '../../actions';
 
 // components
+import FooterFilter from '../components/FooterFilter';
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import CarList from '../../components/CarList';
 
-// helpres
-import getTheme from '../../../../native-base-theme/components';
+// helpers
 import styleConst from '../../../core/style-const';
 import styleHeader from '../../../core/components/Header/style';
+import declOfNum from '../../../utils/decl-of-num';
 
-const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
-    // justifyContent: 'center',
     flex: 1,
   },
 });
@@ -48,16 +45,31 @@ const mapDispatchToProps = dispatch => {
 };
 
 class UserCarListScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Автомобили с пробегом',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <HeaderIconMenu navigation={navigation} />,
-  })
+  static navigationOptions = ({ navigation }) => {
+    const { params = { total: {} } } = navigation.state;
+    const count = params.total.count;
+
+    const titleVariants = ['автомобиль', 'автомобиля', 'автомобилей'];
+    const title = count ?
+      `${count} ${declOfNum(count, titleVariants)}` :
+      'Автомобили с пробегом';
+
+    return {
+      headerTitle: title,
+      headerStyle: styleHeader.common,
+      headerTitleStyle: styleHeader.title,
+      headerLeft: <HeaderIconBack navigation={navigation} />,
+      headerRight: <HeaderIconMenu navigation={navigation} />,
+    };
+  }
+
+  componentWillUpdate() {
+    const { navigation, total } = this.props;
+    navigation.setParams({ total });
+  }
 
   shouldComponentUpdate(nextProps) {
-    const { dealerSelected, items, isFetchItems } = this.props;
+    const { dealerSelected, items, isFetchItems, total } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'UserCarListScreen';
 
@@ -66,20 +78,32 @@ class UserCarListScreen extends Component {
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (items.length !== nextProps.items.length) ||
-      (isFetchItems !== nextProps.isFetchItems);
+      (isFetchItems !== nextProps.isFetchItems) ||
+      (total.count !== nextProps.total.count);
   }
 
   fetchUsedCar = (type) => {
-    const { actionFetchUsedCar, city, pages } = this.props;
+    const { actionFetchUsedCar, city, pages, navigation, total } = this.props;
 
-    return actionFetchUsedCar(type, city, pages.next);
+    return actionFetchUsedCar(type, city, pages.next)
+      .then(() => {
+        return setTimeout(() => {
+          this.props.navigation.setParams({ total: this.props.total });
+        }, 100);
+      });
+  }
+
+  onPressCity = () => {
+    this.props.navigation.navigate('UsedCarCityScreen', { returnScreen: 'UsedCarListScreen' });
+  }
+
+  onPressPrice = () => {
+
   }
 
   render() {
     const {
-      city,
       items,
-      total,
       pages,
       prices,
       navigation,
@@ -97,8 +121,14 @@ class UserCarListScreen extends Component {
           prices={prices}
           itemScreen="UsedCarItemScreen"
           dataHandler={this.fetchUsedCar}
+          dealerSelected={dealerSelected}
           isFetchItems={isFetchItems}
           navigation={navigation}
+        />
+
+        <FooterFilter
+          onPressCity={this.onPressCity}
+          onPressPrice={this.onPressPrice}
         />
       </View>
     );

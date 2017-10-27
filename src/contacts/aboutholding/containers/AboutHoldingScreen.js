@@ -27,11 +27,7 @@ import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import styleHeader from '../../../core/components/Header/style';
 
-import {
-  RUSSIA,
-  BELARUSSIA,
-  UKRAINE,
-} from '../../../dealer/regionConst';
+import { RUSSIA, BELARUSSIA, UKRAINE } from '../../../core/const';
 
 const styles = StyleSheet.create({
   content: {

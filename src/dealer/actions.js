@@ -1,7 +1,5 @@
-import _ from 'lodash';
-
 import {
-  REGION__SELECT,
+  DEALERS_REGION__SELECT,
 
   DEALERS__REQUEST,
   DEALERS__SUCCESS,
@@ -15,16 +13,12 @@ import {
 
 import API from '../utils/api';
 
-import {
-  RUSSIA,
-  BELARUSSIA,
-  UKRAINE,
-} from './regionConst';
+import { RUSSIA, BELARUSSIA, UKRAINE } from '../core/const';
 
 export const selectRegion = region => {
   return dispatch => {
     return dispatch({
-      type: REGION__SELECT,
+      type: DEALERS_REGION__SELECT,
       payload: region,
     });
   };
@@ -98,7 +92,7 @@ export const fetchDealers = () => {
           [UKRAINE]: [],
         });
 
-        dispatch({
+        return dispatch({
           type: DEALERS__SUCCESS,
           payload: dealersByRegions,
         });

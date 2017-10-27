@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Alert, View, StyleSheet } from 'react-native';
 import { Text, ListItem, Body, Right, Icon } from 'native-base';
-import PropTypes from 'prop-types';
 
 // components
-import { CachedImage } from 'react-native-cached-image';
+import DeviceInfo from 'react-native-device-info';
 import { NavigationActions } from 'react-navigation';
+import { CachedImage } from 'react-native-cached-image';
 
 // helpers
+import PropTypes from 'prop-types';
 import styleConst from '../../core/style-const';
-import DeviceInfo from 'react-native-device-info';
-import { DEALER__SUCCESS, DEALER__FAIL } from '../actionTypes';
+import { DEALER__SUCCESS, DEALER__FAIL } from '../../dealer/actionTypes';
 
 const brandsLogos = {
   chevrolet: require('../assets/chevrolet.png'),
@@ -53,20 +53,21 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class DealerItem extends Component {
+export default class SelectItemByCountry extends Component {
   static propTypes = {
-    // navigate: PropTypes.func,
+    item: PropTypes.object,
+    navigation: PropTypes.object,
+    selectItem: PropTypes.func,
+    itemLayout: PropTypes.string,
+    selectedItem: PropTypes.object,
     returnScreen: PropTypes.string,
-    selectDealer: PropTypes.func,
-    dealer: PropTypes.object,
-    dealerSelected: PropTypes.object,
   }
 
-  onPressDealer = () => {
-    const { navigation, returnScreen, selectDealer, dealer } = this.props;
+  onPressItem = () => {
+    const { navigation, returnScreen, selectItem, item } = this.props;
     const mainScreen = DeviceInfo.isTablet() ? 'ContactsScreen' : 'MenuScreen';
 
-    return selectDealer(dealer)
+    selectItem(item)
       .then((action) => {
         if (action.type === DEALER__SUCCESS) {
           const resetAction = NavigationActions.reset({
@@ -75,7 +76,7 @@ export default class DealerItem extends Component {
               NavigationActions.navigate({ routeName: returnScreen || mainScreen }),
             ],
           });
-          this.props.navigation.dispatch(resetAction);
+          navigation.dispatch(resetAction);
         }
 
         if (action.type === DEALER__FAIL) {
@@ -84,25 +85,19 @@ export default class DealerItem extends Component {
       });
   }
 
-  shouldComponentUpdate(nextProps) {
-    return this.props.dealer.id === nextProps.dealerSelected.id;
-  }
-
-  render() {
-    const { dealer, dealerSelected } = this.props;
-
-    console.log('== DealerItem ==');
+  renderDealer = () => {
+    const { item, selectedItem } = this.props;
 
     return (
-      <ListItem onPress={this.onPressDealer} style={styles.listItem}>
+      <ListItem onPress={this.onPressItem} style={styles.listItem}>
         <Body style={styles.listItemBody}>
-          {dealer.city ? <Text style={styles.city}>{dealer.city.name}</Text> : null}
-          {dealer.name ? <Text style={styles.name}>{dealer.name}</Text> : null}
+          {item.city ? <Text style={styles.city}>{item.city.name}</Text> : null}
+          {item.name ? <Text style={styles.name}>{item.name}</Text> : null}
         </Body>
         <Right>
           <View style={styles.brands} >
             {
-              dealer.brands.map(brand => {
+              item.brands.map(brand => {
                 const name = brand.name === 'land rover' ? 'landrover' : brand.name;
                 return (
                   <CachedImage
@@ -116,12 +111,22 @@ export default class DealerItem extends Component {
             }
           </View>
           {
-            dealerSelected.id === dealer.id ?
+            selectedItem.id === item.id ?
               <Icon name="ios-checkmark" style={styles.iconCheck} /> :
               null
           }
         </Right>
       </ListItem>
     );
+  }
+
+  render() {
+    const { itemLayout } = this.props;
+
+    console.log('== SelectItemByCountry: %s ==', itemLayout);
+
+    return itemLayout === 'dealer' ?
+      this.renderDealer() :
+      this.renderCity();
   }
 }

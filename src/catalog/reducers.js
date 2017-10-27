@@ -9,9 +9,12 @@ import {
   EVENT_LOAD_MORE,
 } from './actionTypes';
 
+import { DEALER__SUCCESS } from '../dealer/actionTypes';
+
 const usedCarItems = (state = [], action) => {
   switch (action.type) {
     case REHYDRATE:
+    case DEALER__SUCCESS:
       return [];
     case USED_CAR_LIST__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {
@@ -30,6 +33,7 @@ const usedCarItems = (state = [], action) => {
 const usedCarTotal = (state = {}, action) => {
   switch (action.type) {
     case REHYDRATE:
+    case DEALER__SUCCESS:
       return {};
     case USED_CAR_LIST__SUCCESS:
       return action.payload.total;
@@ -41,9 +45,10 @@ const usedCarTotal = (state = {}, action) => {
 const usedCarPages = (state = {}, action) => {
   switch (action.type) {
     case REHYDRATE:
+    case DEALER__SUCCESS:
       return {};
     case USED_CAR_LIST__SUCCESS:
-      return action.payload.pages;
+      return action.payload.pages || {};
     default:
       return state;
   }
@@ -52,6 +57,7 @@ const usedCarPages = (state = {}, action) => {
 const usedCarPrices = (state = {}, action) => {
   switch (action.type) {
     case REHYDRATE:
+    case DEALER__SUCCESS:
       return {};
     case USED_CAR_LIST__SUCCESS:
       return action.payload.prices;
@@ -63,6 +69,7 @@ const usedCarPrices = (state = {}, action) => {
 const usedCarCity = (state = null, action) => {
   switch (action.type) {
     case REHYDRATE:
+    case DEALER__SUCCESS:
       return null;
     case USED_CAR__CITY:
       return action.payload;
