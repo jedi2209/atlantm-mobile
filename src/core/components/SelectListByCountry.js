@@ -39,10 +39,10 @@ export default class SelectListByCountry extends PureComponent {
     listRussia: PropTypes.array,
     listBelarussia: PropTypes.array,
     listUkraine: PropTypes.array,
-    isFetchList: PropTypes.bool.isRequired,
-    dataHandler: PropTypes.func.isRequired,
-    selectRegion: PropTypes.func.isRequired,
-    selectItem: PropTypes.func.isRequired,
+    isFetchList: PropTypes.bool,
+    dataHandler: PropTypes.func,
+    selectRegion: PropTypes.func,
+    selectItem: PropTypes.func,
     selectedItem: PropTypes.object,
     itemLayout: PropTypes.string,
   }
@@ -58,9 +58,9 @@ export default class SelectListByCountry extends PureComponent {
   }
 
   componentDidMount() {
-    const { listRussia, dataHandler } = this.props;
+    const { listRussia, dataHandler, itemLayout } = this.props;
 
-    if (listRussia.length === 0) {
+    if (itemLayout === 'dealer' && listRussia.length === 0) {
       dataHandler();
     }
   }
@@ -99,13 +99,14 @@ export default class SelectListByCountry extends PureComponent {
   render() {
     const {
       region,
+      itemLayout,
       isFetchList,
       listRussia,
       listUkraine,
       listBelarussia,
     } = this.props;
 
-    console.log('== SelectListByCountry ==');
+    // console.log('== SelectListByCountry ==');
 
     let list = [];
 
@@ -155,8 +156,7 @@ export default class SelectListByCountry extends PureComponent {
           <FlatList
             style={styles.list}
             data={list}
-            extraData={this.props}
-            onRefresh={this.onRefresh}
+            onRefresh={itemLayout === 'dealer' && this.onRefresh}
             refreshing={this.state.isRefreshing}
             ListEmptyComponent={this.renderEmptyComponent}
             renderItem={this.renderItem}

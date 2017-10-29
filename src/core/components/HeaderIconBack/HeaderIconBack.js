@@ -43,13 +43,15 @@ export default class HeaderIconBack extends Component {
   onPressBack = () => {
     const { returnScreen, navigation } = this.props;
 
-    if (DeviceInfo.isTablet()) {
+    // console.log('returnScreen', returnScreen);
+
+    // if (DeviceInfo.isTablet()) {
       returnScreen ?
         navigation.navigate(returnScreen) :
         navigation.goBack();
-    } else {
-      navigation.goBack();
-    }
+    // } else {
+    //   navigation.goBack();
+    // }
   }
 
   render() {

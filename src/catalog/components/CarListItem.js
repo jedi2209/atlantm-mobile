@@ -91,7 +91,7 @@ export default class CarListItem extends Component {
   render() {
     const { car, prices } = this.props;
 
-    console.log('== CarListItem ==');
+    // console.log('== CarListItem ==');
 
     return (
       <TouchableHighlight

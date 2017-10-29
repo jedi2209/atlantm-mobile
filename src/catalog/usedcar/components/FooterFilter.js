@@ -5,6 +5,7 @@ import { TouchableOpacity, View, Image, StyleSheet, Dimensions } from 'react-nat
 import { Footer } from 'native-base';
 
 // helpers
+import PropTypes from 'prop-types';
 import styleConst from '../../../core/style-const';
 
 const size = 26;
@@ -38,13 +39,18 @@ const styles = StyleSheet.create({
 });
 
 export default class FooterFilter extends Component {
+  static propTypes = {
+    onPressCity: PropTypes.func,
+    onPressPrice: PropTypes.func,
+  }
+
   render() {
     return (
       <Footer style={styles.footer}>
           <View style={styles.container}>
             <TouchableOpacity
               style={styles.icon}
-              onPress={this.onPressCity}
+              onPress={this.props.onPressCity}
             >
               <View style={styles.iconInner}>
                 <Image
@@ -56,7 +62,7 @@ export default class FooterFilter extends Component {
 
             <TouchableOpacity
               style={styles.icon}
-              onPress={this.onPressPress}
+              onPress={this.props.onPressPrice}
             >
               <View style={styles.iconInner}>
                 <Image

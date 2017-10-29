@@ -4,7 +4,9 @@ import {
   USED_CAR_LIST__REQUEST,
   USED_CAR_LIST__SUCCESS,
   USED_CAR_LIST__FAIL,
-  USED_CAR__CITY,
+  USED_CAR_LIST__RESET,
+  USED_CAR_CITY__SELECT,
+  USED_CAR_REGION__SELECT,
 
   EVENT_LOAD_MORE,
 } from './actionTypes';
@@ -57,11 +59,29 @@ export const actionFetchUsedCar = (type, city, nextPage) => {
   };
 };
 
-export const actionSetUsedCarCity = (city) => {
+export const actionSelectUsedCarCity = (city) => {
   return dispatch => {
     dispatch({
-      type: USED_CAR__CITY,
+      type: USED_CAR_CITY__SELECT,
       payload: city,
+    });
+  };
+};
+
+export const actionSelectUsedCarRegion = (region) => {
+  return dispatch => {
+    return dispatch({
+      type: USED_CAR_REGION__SELECT,
+      payload: region,
+    });
+  };
+};
+
+export const actionResetUsedCarList = (region) => {
+  return dispatch => {
+    return dispatch({
+      type: USED_CAR_LIST__RESET,
+      payload: region,
     });
   };
 };

@@ -5,6 +5,8 @@ import {
   DEALERS__SUCCESS,
   DEALERS__FAIL,
 
+  DEALERS_BY_CITIES__SET,
+
   DEALER__REQUEST,
   DEALER__SUCCESS,
   DEALER__FAIL,
@@ -105,5 +107,14 @@ export const fetchDealers = () => {
           },
         });
       });
+  };
+};
+
+export const actionSetDealersByCities = (dealersByRegions) => {
+  return dispatch => {
+    return dispatch({
+      type: DEALERS_BY_CITIES__SET,
+      payload: dealersByRegions,
+    });
   };
 };

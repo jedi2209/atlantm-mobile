@@ -59,23 +59,25 @@ export default class Wrapper extends Component {
     this.defaultHandler = ErrorUtils.getGlobalHandler();
     ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
 
-    // persistStore().purge();
-    persistStore(store, {
-      storage: AsyncStorage,
-      blacklist: ['form', 'nav'],
-      keyPrefix: 'atlantm',
-    }, () => this.setState({ rehydrated: true }));
+    // this.getPersistStore().purge();
+    this.getPersistStore();
   }
 
   async wrapGlobalHandler(error, isFatal) {
     if (isFatal && !__DEV__) {
-      this.persistStore().purge();
+      this.getPersistStore().purge();
     }
 
     if (this.defaultHandler) {
       this.defaultHandler(error, isFatal);
     }
   }
+
+  getPersistStore = () => persistStore(store, {
+    storage: AsyncStorage,
+    blacklist: ['form', 'nav'],
+    keyPrefix: 'atlantm',
+  }, () => this.setState({ rehydrated: true }))
 
   shouldComponentUpdate(nextProps, nextState) {
     return this.state.rehydrated !== nextState.rehydrated;
