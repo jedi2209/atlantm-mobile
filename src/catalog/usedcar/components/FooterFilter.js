@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, View, Image, StyleSheet, Dimensions } from 'react-native';
 
-// containers
+// components
 import { Footer } from 'native-base';
+import PricePicker from '../../../core/components/PricePicker';
 
 // helpers
 import PropTypes from 'prop-types';
@@ -42,9 +43,22 @@ export default class FooterFilter extends Component {
   static propTypes = {
     onPressCity: PropTypes.func,
     onPressPrice: PropTypes.func,
+    currency: PropTypes.string,
+    min: PropTypes.number,
+    max: PropTypes.number,
+    step: PropTypes.number,
   }
 
   render() {
+    const {
+      min,
+      max,
+      step,
+      currency,
+      onPressPrice,
+      onClosePrice,
+    } = this.props;
+
     return (
       <Footer style={styles.footer}>
           <View style={styles.container}>
@@ -60,9 +74,14 @@ export default class FooterFilter extends Component {
               </View>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            <PricePicker
               style={styles.icon}
-              onPress={this.props.onPressPrice}
+              min={min}
+              max={max}
+              step={step}
+              currency={currency}
+              onPressModal={onPressPrice}
+              onCloseModal={onClosePrice}
             >
               <View style={styles.iconInner}>
                 <Image
@@ -70,7 +89,7 @@ export default class FooterFilter extends Component {
                   source={require('../assets/price.png')}
                 />
               </View>
-            </TouchableOpacity>
+            </PricePicker>
           </View>
       </Footer>
     );

@@ -7,23 +7,31 @@ import {
   USED_CAR_LIST__RESET,
   USED_CAR_CITY__SELECT,
   USED_CAR_REGION__SELECT,
+  USED_CAR_PRICE_FILTER__SHOW,
+  USED_CAR_PRICE_FILTER__HIDE,
 
   EVENT_LOAD_MORE,
 } from './actionTypes';
 
-export const actionFetchUsedCar = (type, city, nextPage) => {
+export const actionFetchUsedCar = ({ type, city, nextPage, prices }) => {
   return dispatch => {
     dispatch({
       type: USED_CAR_LIST__REQUEST,
       payload: {
         type,
         city,
+        nextPage,
+        prices,
       },
     });
 
     const nextPageUrl = type === EVENT_LOAD_MORE ? nextPage : null;
 
-    return API.fetchUsedCar(city, nextPageUrl)
+    return API.fetchUsedCar({
+      city,
+      prices,
+      nextPageUrl,
+    })
       .then(res => {
         const { data, error, total, pages, prices } = res;
 
@@ -81,6 +89,24 @@ export const actionResetUsedCarList = (region) => {
   return dispatch => {
     return dispatch({
       type: USED_CAR_LIST__RESET,
+      payload: region,
+    });
+  };
+};
+
+export const actionShowPriceFilter = (region) => {
+  return dispatch => {
+    return dispatch({
+      type: USED_CAR_PRICE_FILTER__SHOW,
+      payload: region,
+    });
+  };
+};
+
+export const actionHidePriceFilter = (region) => {
+  return dispatch => {
+    return dispatch({
+      type: USED_CAR_PRICE_FILTER__HIDE,
       payload: region,
     });
   };
