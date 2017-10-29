@@ -37,7 +37,7 @@ export default {
     let url = `/stock/trade-in/cars/get/city/${city}/`;
 
     if (priceRange) {
-      url += `?price[from]=${priceRange.minPrice}&price[to]=${priceRange.maxPrice}`;
+      url += `?price_from=${priceRange.minPrice}&price_to=${priceRange.maxPrice}`;
     }
 
     return this.request(nextPageUrl || url, baseRequestParams);

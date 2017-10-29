@@ -98,7 +98,7 @@ export default class CarListItem extends Component {
         <View style={styles.card}>
           <Imager
             style={styles.image}
-            source={{ uri: get(car, 'img.0') }}
+            source={{ uri: get(car, 'img.10000x300.0') }}
           />
           <View style={styles.info}>
             <Text style={styles.title}>{`${car.brand.name} ${car.model}`}</Text>
