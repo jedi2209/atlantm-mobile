@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux';
+import { get } from 'lodash';
 import { REHYDRATE } from 'redux-persist/constants';
-import { get, uniqBy } from 'lodash';
 import {
   USED_CAR_LIST__REQUEST,
   USED_CAR_LIST__SUCCESS,
   USED_CAR_LIST__FAIL,
-  USED_CAR__CITY,
+  USED_CAR_LIST__RESET,
+  USED_CAR_CITY__SELECT,
+  USED_CAR_REGION__SELECT,
   EVENT_LOAD_MORE,
 } from './actionTypes';
 
@@ -15,6 +17,7 @@ const usedCarItems = (state = [], action) => {
   switch (action.type) {
     case REHYDRATE:
     case DEALER__SUCCESS:
+    case USED_CAR_LIST__RESET:
       return [];
     case USED_CAR_LIST__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {
@@ -22,7 +25,6 @@ const usedCarItems = (state = [], action) => {
           ...state,
           ...action.payload.data,
         ];
-        // return uniqBy(, item => { item.id.api; });
       }
       return action.payload.data;
     default:
@@ -69,9 +71,19 @@ const usedCarPrices = (state = {}, action) => {
 const usedCarCity = (state = null, action) => {
   switch (action.type) {
     case REHYDRATE:
-    case DEALER__SUCCESS:
       return null;
-    case USED_CAR__CITY:
+    case USED_CAR_CITY__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const usedCarRegion = (state = null, action) => {
+  switch (action.type) {
+    case REHYDRATE:
+      return null;
+    case USED_CAR_REGION__SELECT:
       return action.payload;
     default:
       return state;
@@ -93,11 +105,12 @@ const isFetchUsedCarItems = (state = false, action) => {
 
 export default combineReducers({
   usedCar: combineReducers({
-    items: usedCarItems,
+    city: usedCarCity,
     total: usedCarTotal,
     pages: usedCarPages,
-    city: usedCarCity,
+    items: usedCarItems,
     prices: usedCarPrices,
+    region: usedCarRegion,
     meta: combineReducers({
       isFetchItems: isFetchUsedCarItems,
     }),

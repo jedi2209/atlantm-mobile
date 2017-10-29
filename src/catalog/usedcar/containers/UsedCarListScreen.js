@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 // redux
 import { bindActionCreators } from 'redux';
@@ -58,7 +58,7 @@ class UserCarListScreen extends Component {
       headerTitle: title,
       headerStyle: styleHeader.common,
       headerTitleStyle: styleHeader.title,
-      headerLeft: <HeaderIconBack navigation={navigation} />,
+      headerLeft: <HeaderIconBack navigation={navigation} returnScreen="CatalogScreen" />,
       headerRight: <HeaderIconMenu navigation={navigation} />,
     };
   }
@@ -85,7 +85,7 @@ class UserCarListScreen extends Component {
   fetchUsedCar = (type) => {
     const { actionFetchUsedCar, city, pages, navigation, total } = this.props;
 
-    return actionFetchUsedCar(type, city, pages.next)
+    return actionFetchUsedCar(type, city.id, pages.next)
       .then(() => {
         return setTimeout(() => {
           this.props.navigation.setParams({ total: this.props.total });

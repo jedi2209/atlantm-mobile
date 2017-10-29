@@ -63,7 +63,7 @@ export default class MenuScreen extends Component {
   onPressInfoList = () => this.props.navigation.navigate('InfoListScreen')
   onPressProfile = () => this.props.navigation.navigate('ProfileScreen')
   onPressService = () => this.props.navigation.navigate('ServiceScreen')
-  onPressCatalog = () => this.props.navigation.navigate('CatalogScreen')
+  onPressCatalog = () => this.props.navigation.navigate('Catalog2Screen')
   onPressNotReadyScreen = () => Alert.alert('Раздел появится в ближайших обновлениях');
 
   render() {

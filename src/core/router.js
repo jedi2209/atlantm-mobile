@@ -22,6 +22,7 @@ import InfoPostScreen from '../info/containers/InfoPostScreen';
 import CatalogScreen from '../catalog/containers/CatalogScreen';
 import UsedCarListScreen from '../catalog/usedcar/containers/UsedCarListScreen';
 import UsedCarItemScreen from '../catalog/usedcar/containers/UsedCarItemScreen';
+import UsedCarCityScreen from '../catalog/usedcar/containers/UsedCarCityScreen';
 import NewCarFilterScreen from '../catalog/newcar/containers/NewCarFilterScreen';
 import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
@@ -55,11 +56,12 @@ const getRouter = initialRouteName => {
       },
       ProfileScreen: { screen: ProfileScreen },
       ServiceScreen: { screen: ServiceScreen },
-      CatalogScreen: {
+      Catalog2Screen: {
         screen: StackNavigator({
           CatalogScreen: { screen: CatalogScreen },
           UsedCarListScreen: { screen: UsedCarListScreen },
           UsedCarItemScreen: { screen: UsedCarItemScreen },
+          UsedCarCityScreen: { screen: UsedCarCityScreen },
           NewCarFilterScreen: { screen: NewCarFilterScreen },
           NewCarListScreen: { screen: NewCarListScreen },
           NewCarItemScreen: { screen: NewCarItemScreen },

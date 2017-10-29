@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
-import { Container, Content, StyleProvider, Button } from 'native-base';
+import { Button } from 'native-base';
 
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionSetUsedCarCity } from '../actions';
+import { actionSelectUsedCarCity, actionSelectUsedCarRegion } from '../actions';
+import { actionSetDealersByCities } from '../../dealer/actions';
 
 // components
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
 // helpres
-import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import styleHeader from '../../core/components/Header/style';
+import { RUSSIA, BELARUSSIA, UKRAINE } from '../../core/const';
 
 const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -73,13 +74,19 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ dealer, nav }) => {
   return {
     nav,
+    listRussiaByCities: dealer.listRussiaByCities,
+    listRussia: dealer.listRussia,
+    listBelarussia: dealer.listBelarussia,
+    listUkraine: dealer.listUkraine,
     dealerSelected: dealer.selected,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    actionSetUsedCarCity,
+    actionSelectUsedCarCity,
+    actionSelectUsedCarRegion,
+    actionSetDealersByCities,
   }, dispatch);
 };
 
@@ -98,9 +105,29 @@ class CatalogScreen extends Component {
   }
 
   componentWillMount() {
-    const { actionSetUsedCarCity, dealerSelected } = this.props;
+    const {
+      dealerSelected,
+      listRussiaByCities,
+      listRussia,
+      listUkraine,
+      listBelarussia,
+      actionSelectUsedCarCity,
+      actionSelectUsedCarRegion,
+      actionSetDealersByCities,
+    } = this.props;
 
-    actionSetUsedCarCity(dealerSelected.city.id);
+    actionSelectUsedCarCity(dealerSelected.city);
+    actionSelectUsedCarRegion(dealerSelected.region);
+
+    // для перехода с версии 4.1.0 -> 4.2.0, когда еще нет данных
+    // с дилерами по городам
+    if (listRussiaByCities.length === 0) {
+      actionSetDealersByCities({
+        [RUSSIA]: listRussia,
+        [BELARUSSIA]: listBelarussia,
+        [UKRAINE]: listUkraine,
+      });
+    }
   }
 
   shouldComponentUpdate(nextProps) {

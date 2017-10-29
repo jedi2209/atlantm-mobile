@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import { StyleProvider } from 'native-base';
 
 // redux
 import { EVENT_LOAD_MORE, EVENT_REFRESH, EVENT_DEFAULT } from '../actionTypes';
@@ -11,7 +10,6 @@ import CarListItem from './CarListItem';
 
 // helpers
 import { debounce } from 'lodash';
-import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import { verticalScale } from '../../utils/scale';
 
@@ -74,18 +72,16 @@ export default class CarList extends Component {
   // }
 
   componentDidMount() {
-    const { dataHandler, dealerSelected } = this.props;
-
-    dataHandler(EVENT_DEFAULT);
+    this.props.dataHandler(EVENT_DEFAULT);
   }
 
   renderEmptyComponent = () => {
-    const { isFetchItems, dealerSelected } = this.props;
+    const { isFetchItems } = this.props;
     return isFetchItems ?
       <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} /> :
       (
         <View style={styles.messageContainer}>
-          <Text style={styles.message}>{`Онлайн-склад ${dealerSelected.city.name}`}</Text>
+          <Text style={styles.message}>{`На онлайн-складе`}</Text>
           <Text style={styles.message}>{`нет подержанных авто`}</Text>
         </View>
       );
@@ -151,7 +147,7 @@ export default class CarList extends Component {
   render() {
     const { items } = this.props;
 
-    console.log('== CarList ==');
+    // console.log('== CarList ==');
 
     return (
       <FlatList

@@ -63,7 +63,7 @@ export default class SelectItemByCountry extends Component {
     returnScreen: PropTypes.string,
   }
 
-  onPressItem = () => {
+  onPressDealerItem = () => {
     const { navigation, returnScreen, selectItem, item } = this.props;
     const mainScreen = DeviceInfo.isTablet() ? 'ContactsScreen' : 'MenuScreen';
 
@@ -85,11 +85,38 @@ export default class SelectItemByCountry extends Component {
       });
   }
 
+  onPressCityItem = () => {
+    const { navigation, returnScreen, selectItem, item } = this.props;
+    const mainScreen = DeviceInfo.isTablet() ? 'ContactsScreen' : 'MenuScreen';
+
+    selectItem(item);
+
+    navigation.navigate(returnScreen);
+    // const resetAction = NavigationActions.reset({
+    //   index: 0,
+    //   actions: [
+    //     NavigationActions.navigate({ routeName: returnScreen }),
+    //   ],
+    // });
+    // navigation.dispatch(resetAction);
+
+    // navigation.goBack();
+
+    // const resetAction = NavigationActions.reset({
+    //   index: 0,
+    //   actions: [
+    //     NavigationActions.navigate({ routeName: returnScreen || mainScreen }),
+    //   ],
+    // });
+
+    // navigation.dispatch({ type: returnScreen });
+  }
+
   renderDealer = () => {
     const { item, selectedItem } = this.props;
 
     return (
-      <ListItem onPress={this.onPressItem} style={styles.listItem}>
+      <ListItem onPress={this.onPressDealerItem} style={styles.listItem}>
         <Body style={styles.listItemBody}>
           {item.city ? <Text style={styles.city}>{item.city.name}</Text> : null}
           {item.name ? <Text style={styles.name}>{item.name}</Text> : null}
@@ -120,10 +147,31 @@ export default class SelectItemByCountry extends Component {
     );
   }
 
+  renderCity = () => {
+    const { item, selectedItem } = this.props;
+
+    // console.log('item', item);
+
+    return (
+      <ListItem onPress={this.onPressCityItem} style={styles.listItem}>
+        <Body style={styles.listItemBody}>
+          {item.name ? <Text style={styles.city}>{item.name}</Text> : null}
+        </Body>
+        <Right>
+          {
+            selectedItem.id === item.id ?
+              <Icon name="ios-checkmark" style={styles.iconCheck} /> :
+              null
+          }
+        </Right>
+      </ListItem>
+    );
+  }
+
   render() {
     const { itemLayout } = this.props;
 
-    console.log('== SelectItemByCountry: %s ==', itemLayout);
+    // console.log('== SelectItemByCountry: %s ==', itemLayout);
 
     return itemLayout === 'dealer' ?
       this.renderDealer() :
