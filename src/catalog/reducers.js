@@ -12,6 +12,10 @@ import {
   USED_CAR_PRICE_FILTER__SHOW,
   USED_CAR_PRICE_FILTER__HIDE,
   EVENT_LOAD_MORE,
+
+  CATALOG_DEALER__REQUEST,
+  CATALOG_DEALER__SUCCESS,
+  CATALOG_DEALER__FAIL,
 } from './actionTypes';
 
 import { DEALER__SUCCESS } from '../dealer/actionTypes';
@@ -130,7 +134,34 @@ const isUsedCarPriceFilterShow = (state = false, action) => {
   }
 };
 
+const dealer = (state = null, action) => {
+  switch (action.type) {
+    case CATALOG_DEALER__REQUEST:
+      return null;
+    case CATALOG_DEALER__SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const isFetchingDealer = (state = false, action) => {
+  switch (action.type) {
+    case CATALOG_DEALER__REQUEST:
+      return true;
+    case CATALOG_DEALER__SUCCESS:
+    case CATALOG_DEALER__FAIL:
+      return false;
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
+  dealer,
+  meta: combineReducers({
+    isFetchingDealer,
+  }),
   usedCar: combineReducers({
     city: usedCarCity,
     total: usedCarTotal,
