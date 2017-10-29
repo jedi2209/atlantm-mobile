@@ -11,6 +11,10 @@ import {
   USED_CAR_PRICE_FILTER__SHOW,
   USED_CAR_PRICE_FILTER__HIDE,
 
+  CATALOG_DEALER__REQUEST,
+  CATALOG_DEALER__SUCCESS,
+  CATALOG_DEALER__FAIL,
+
   EVENT_LOAD_MORE,
 } from './actionTypes';
 
@@ -119,5 +123,46 @@ export const actionHidePriceFilter = (region) => {
       type: USED_CAR_PRICE_FILTER__HIDE,
       payload: region,
     });
+  };
+};
+
+export const actionFetchDealer = dealerBaseData => {
+  return dispatch => {
+    dispatch({
+      type: CATALOG_DEALER__REQUEST,
+      payload: dealerBaseData,
+    });
+
+    return API.fetchDealer(dealerBaseData.id)
+      .then(response => {
+
+        if (response.error) {
+          return dispatch({
+            type: CATALOG_DEALER__FAIL,
+            payload: {
+              error: response.error.message,
+            },
+          });
+        }
+
+        const dealer = { ...response.data };
+
+        dealer.id = dealerBaseData.id;
+        dealer.region = dealerBaseData.region;
+        dealer.brands = dealerBaseData.brands;
+
+        return dispatch({
+          type: CATALOG_DEALER__SUCCESS,
+          payload: dealer,
+        });
+      })
+      .catch(error => {
+        return dispatch({
+          type: CATALOG_DEALER__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
   };
 };

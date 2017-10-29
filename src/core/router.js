@@ -20,6 +20,7 @@ import InfoPostScreen from '../info/containers/InfoPostScreen';
 
 // catalog
 import CatalogScreen from '../catalog/containers/CatalogScreen';
+import AboutDealerScreen from '../catalog/containers/AboutDealerScreen';
 import UsedCarListScreen from '../catalog/usedcar/containers/UsedCarListScreen';
 import UsedCarItemScreen from '../catalog/usedcar/containers/UsedCarItemScreen';
 import UsedCarCityScreen from '../catalog/usedcar/containers/UsedCarCityScreen';
@@ -59,6 +60,7 @@ const getRouter = initialRouteName => {
       Catalog2Screen: {
         screen: StackNavigator({
           CatalogScreen: { screen: CatalogScreen },
+          AboutDealerScreen: { screen: AboutDealerScreen },
           UsedCarListScreen: { screen: UsedCarListScreen },
           UsedCarItemScreen: { screen: UsedCarItemScreen },
           UsedCarCityScreen: { screen: UsedCarCityScreen },

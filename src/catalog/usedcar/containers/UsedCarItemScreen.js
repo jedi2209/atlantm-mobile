@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Dimensions,
+  TouchableHighlight,
+} from 'react-native';
 import { Container, Content, StyleProvider, Button, Grid, Row, Col } from 'native-base';
 
 // redux
@@ -12,7 +19,7 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import PhotoSlider from '../../../core/components/PhotoSlider';
 
 // helpers
-import { get } from 'lodash';
+import { get, find } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import styleHeader from '../../../core/components/Header/style';
@@ -41,11 +48,15 @@ const styles = StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
   },
   section: {
-    padding: styleConst.ui.horizontalGap,
+    paddingTop: styleConst.ui.horizontalGap,
+    paddingRight: styleConst.ui.horizontalGap,
+    paddingBottom: styleConst.ui.horizontalGap,
+    marginLeft: styleConst.ui.horizontalGap,
+    borderBottomWidth: styleConst.ui.borderWidth,
+    borderBottomColor: styleConst.color.border,
   },
   descrContainer: {
     padding: styleConst.ui.horizontalGap,
-    paddingTop: 0,
   },
   descr: {
     lineHeight: 18,
@@ -70,11 +81,20 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
     fontSize: 15,
   },
+  sectionTitleValue: {
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.light,
+    fontSize: 18,
+    color: styleConst.color.greyText4,
+  },
 });
 
 const mapStateToProps = ({ dealer, nav }) => {
   return {
     nav,
+    listRussia: dealer.listRussia,
+    listUkraine: dealer.listUkraine,
+    listBelarussia: dealer.listBelarussia,
     dealerSelected: dealer.selected,
   };
 };
@@ -107,11 +127,23 @@ class UserCarItemScreen extends Component {
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen);
   }
 
-  render() {
+  onPressDealer = () => {
     const {
       navigation,
-      dealerSelected,
+      listRussia,
+      listUkraine,
+      listBelarussia,
     } = this.props;
+
+    const car = get(navigation, 'state.params.car');
+    const list = [].concat(listRussia, listBelarussia, listUkraine);
+    const dealerBaseData = find(list, { id: car.dealer.id });
+
+    navigation.navigate('AboutDealerScreen', { dealerBaseData });
+  }
+
+  render() {
+    const { navigation } = this.props;
 
     const car = get(navigation, 'state.params.car');
 
@@ -253,6 +285,26 @@ class UserCarItemScreen extends Component {
               }
             </Grid>
           </View>
+
+          {
+            (car.dealer && car.dealer.name) ?
+              (
+                <TouchableHighlight
+                  onPress={this.onPressDealer}
+                  underlayColor={styleConst.color.select}
+                >
+                  <Grid style={styles.section}>
+                    <Col><Text style={styles.sectionTitle}>Где</Text></Col>
+                    <Col>
+                      <View>
+                        <Text style={styles.sectionTitleValue}>{car.dealer.name}</Text>
+                      </View>
+                    </Col>
+                  </Grid>
+                </TouchableHighlight>
+              ) :
+              null
+          }
 
           {
             car.text ?
