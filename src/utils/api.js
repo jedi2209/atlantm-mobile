@@ -33,11 +33,11 @@ export default {
     return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
   },
 
-  fetchUsedCar({ city, nextPageUrl, prices }) {
+  fetchUsedCar({ city, nextPageUrl, priceRange }) {
     let url = `/stock/trade-in/cars/get/city/${city}/`;
 
-    if (prices) {
-      url += `?price[from]=${prices.minPrice}&price[to]=${prices.maxPrice}`;
+    if (priceRange) {
+      url += `?price[from]=${priceRange.minPrice}&price[to]=${priceRange.maxPrice}`;
     }
 
     return this.request(nextPageUrl || url, baseRequestParams);

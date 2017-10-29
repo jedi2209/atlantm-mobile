@@ -47,6 +47,8 @@ export default class FooterFilter extends Component {
     min: PropTypes.number,
     max: PropTypes.number,
     step: PropTypes.number,
+    currentMinPrice: PropTypes.number,
+    currentMaxPrice: PropTypes.number,
   }
 
   render() {
@@ -57,6 +59,8 @@ export default class FooterFilter extends Component {
       currency,
       onPressPrice,
       onClosePrice,
+      currentMinPrice,
+      currentMaxPrice,
     } = this.props;
 
     return (
@@ -79,6 +83,8 @@ export default class FooterFilter extends Component {
               min={min}
               max={max}
               step={step}
+              currentMinPrice={currentMinPrice}
+              currentMaxPrice={currentMaxPrice}
               currency={currency}
               onPressModal={onPressPrice}
               onCloseModal={onClosePrice}
