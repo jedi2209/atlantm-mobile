@@ -1,28 +1,74 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
-import { Container, Content, StyleProvider, Button } from 'native-base';
+import { Container, Content, StyleProvider, Button, Grid, Row, Col } from 'native-base';
 
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-// import {} from '../actions';
 
 // components
-import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import PhotoSlider from '../../../core/components/PhotoSlider';
 
-// helpres
+// helpers
+import { get } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import styleHeader from '../../../core/components/Header/style';
+import priceSet from '../../../utils/price-set';
 
-const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
-    justifyContent: 'center',
     flex: 1,
+  },
+  gallery: {
+    // marginBottom: 20,
+    position: 'relative',
+  },
+  titleContainer: {
+    paddingBottom: 10,
+    alignItems: 'center',
+    backgroundColor: styleConst.color.header,
+  },
+  title: {
+    paddingTop: styleConst.ui.horizontalGap,
+    paddingLeft: styleConst.ui.horizontalGap,
+    paddingRight: styleConst.ui.horizontalGap,
+    fontSize: 20,
+    fontFamily: styleConst.font.regular,
+    letterSpacing: styleConst.ui.letterSpacing,
+  },
+  section: {
+    padding: styleConst.ui.horizontalGap,
+  },
+  descrContainer: {
+    padding: styleConst.ui.horizontalGap,
+    paddingTop: 0,
+  },
+  descr: {
+    lineHeight: 18,
+  },
+  sectionTitle: {
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontSize: 18,
+    fontFamily: styleConst.font.regular,
+    marginBottom: 4,
+  },
+  sectionRow: {
+    marginBottom: 5,
+  },
+  sectionPropText: {
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
+    fontSize: 15,
+    color: styleConst.color.greyText,
+  },
+  sectionValueText: {
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
+    fontSize: 15,
   },
 });
 
@@ -58,22 +104,168 @@ class UserCarItemScreen extends Component {
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'UserCarItemScreen';
 
-    // console.log('Catalog this.props.navigation', this.props.navigation);
-    // console.log('Catalog nextProps.navigation', nextProps.navigation);
-
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen);
   }
 
   render() {
     const {
-      dealerSelected,
       navigation,
+      dealerSelected,
     } = this.props;
+
+    const car = get(navigation, 'state.params.car');
+
+    console.log('car', car);
 
     console.log('== UsedCarItemScreen ==');
 
     return (
-      <View style={styles.content}></View>
+      <StyleProvider style={getTheme()}>
+        <Container>
+          <Content style={styles.content}>
+
+          <View style={styles.gallery}>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>{`${car.brand.name} ${car.model}`}</Text>
+            </View>
+            <PhotoSlider photos={car.img['10000x300']} />
+          </View>
+
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Основные</Text>
+            <Grid>
+              {
+                car.year &&
+                  (
+                    <Row style={styles.sectionRow}>
+                      <Col style={styles.sectionProp}>
+                        <Text style={styles.sectionPropText}>Год выпуска:</Text>
+                      </Col>
+                      <Col style={styles.sectionValue}>
+                        <Text style={styles.sectionValueText}>{`${car.year} г.`}</Text>
+                      </Col>
+                    </Row>
+                  )
+              }
+              {
+                car.mileage &&
+                  (
+                    <Row style={styles.sectionRow}>
+                      <Col style={styles.sectionProp}>
+                        <Text style={styles.sectionPropText}>Пробег:</Text>
+                      </Col>
+                      <Col style={styles.sectionValue}>
+                        <Text style={styles.sectionValueText}>{`${priceSet(car.mileage)} км.`}</Text>
+                      </Col>
+                    </Row>
+                  )
+              }
+              {
+                car.engine && car.engine.type &&
+                  (
+                    <Row style={styles.sectionRow}>
+                      <Col style={styles.sectionProp}>
+                        <Text style={styles.sectionPropText}>Топливо:</Text>
+                      </Col>
+                      <Col style={styles.sectionValue}>
+                        <Text style={styles.sectionValueText}>{car.engine.type}</Text>
+                      </Col>
+                    </Row>
+                  )
+              }
+              {
+                car.engine && car.engine.volume && car.engine.volume.short &&
+                  (
+                    <Row style={styles.sectionRow}>
+                      <Col style={styles.sectionProp}>
+                        <Text style={styles.sectionPropText}>Двигатель:</Text>
+                      </Col>
+                      <Col style={styles.sectionValue}>
+                        <Text style={styles.sectionValueText}>{`${car.engine.volume.short} л.`}</Text>
+                      </Col>
+                    </Row>
+                  )
+              }
+              {
+                car.gearbox && car.gearbox.name &&
+                  (
+                    <Row style={styles.sectionRow}>
+                      <Col style={styles.sectionProp}>
+                        <Text style={styles.sectionPropText}>КПП:</Text>
+                      </Col>
+                      <Col style={styles.sectionValue}>
+                        <Text style={styles.sectionValueText}>{car.gearbox.name}</Text>
+                      </Col>
+                    </Row>
+                  )
+              }
+              {
+                car.color && car.color.name && car.color.name.simple &&
+                  (
+                    <Row style={styles.sectionRow}>
+                      <Col style={styles.sectionProp}>
+                        <Text style={styles.sectionPropText}>Цвет:</Text>
+                      </Col>
+                      <Col style={styles.sectionValue}>
+                        <Text style={styles.sectionValueText}>{car.color.name.simple}</Text>
+                      </Col>
+                    </Row>
+                  )
+              }
+              {
+                car.body && car.body.name &&
+                  (
+                    <Row style={styles.sectionRow}>
+                      <Col style={styles.sectionProp}>
+                        <Text style={styles.sectionPropText}>Тип кузова:</Text>
+                      </Col>
+                      <Col style={styles.sectionValue}>
+                        <Text style={styles.sectionValueText}>{car.body.name}</Text>
+                      </Col>
+                    </Row>
+                  )
+              }
+              {
+                (car.interior && car.interior.name) ?
+                  (
+                    <Row style={styles.sectionRow}>
+                      <Col style={styles.sectionProp}>
+                        <Text style={styles.sectionPropText}>Салон:</Text>
+                      </Col>
+                      <Col style={styles.sectionValue}>
+                        <Text style={styles.sectionValueText}>{car.interior.name}</Text>
+                      </Col>
+                    </Row>
+                  ) : null
+              }
+              {
+                car.vin &&
+                  (
+                    <Row style={styles.sectionRow}>
+                      <Col style={styles.sectionProp}>
+                        <Text style={styles.sectionPropText}>VIN:</Text>
+                      </Col>
+                      <Col style={styles.sectionValue}>
+                        <Text style={styles.sectionValueText}>{car.vin}</Text>
+                      </Col>
+                    </Row>
+                  )
+              }
+            </Grid>
+          </View>
+
+          {
+            car.text ?
+              (
+                <View style={styles.descrContainer}>
+                  <Text style={styles.descr}>{car.text}</Text>
+                </View>
+              ) :
+              null
+          }
+          </Content>
+        </Container>
+      </StyleProvider>
     );
   }
 }
