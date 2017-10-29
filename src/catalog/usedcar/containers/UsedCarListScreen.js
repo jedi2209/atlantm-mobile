@@ -10,6 +10,7 @@ import {
   actionShowPriceFilter,
   actionHidePriceFilter,
   actionResetUsedCarList,
+  actionSelectUsedCarPriceRange,
 } from '../../actions';
 
 // components
@@ -40,6 +41,7 @@ const mapStateToProps = ({ dealer, nav, catalog }) => {
     total: catalog.usedCar.total,
     pages: catalog.usedCar.pages,
     prices: catalog.usedCar.prices,
+    priceRange: catalog.usedCar.priceRange,
     isFetchItems: catalog.usedCar.meta.isFetchItems,
     isPriceFilterShow: catalog.usedCar.meta.isPriceFilterShow,
     dealerSelected: dealer.selected,
@@ -53,6 +55,7 @@ const mapDispatchToProps = dispatch => {
     actionShowPriceFilter,
     actionHidePriceFilter,
     actionResetUsedCarList,
+    actionSelectUsedCarPriceRange,
   }, dispatch);
 };
 
@@ -95,12 +98,19 @@ class UserCarListScreen extends Component {
       (isPriceFilterShow !== nextProps.isPriceFilterShow);
   }
 
-  fetchUsedCar = (type, prices) => {
-    const { actionFetchUsedCar, city, pages, navigation, total } = this.props;
+  fetchUsedCar = (type, priceRangeFromFilter) => {
+    const {
+      city,
+      total,
+      pages,
+      priceRange,
+      navigation,
+      actionFetchUsedCar,
+    } = this.props;
 
     return actionFetchUsedCar({
       type,
-      prices,
+      priceRange: priceRangeFromFilter || priceRange,
       city: city.id,
       nextPage: pages.next,
     })
@@ -119,14 +129,20 @@ class UserCarListScreen extends Component {
     this.props.actionShowPriceFilter();
   }
 
-  onClosePrice = (value) => {
-    const { actionHidePriceFilter, actionResetUsedCarList, fetchUsedCar } = this.props;
+  onClosePrice = (priceRange) => {
+    const {
+      fetchUsedCar,
+      actionHidePriceFilter,
+      actionResetUsedCarList,
+      actionSelectUsedCarPriceRange,
+    } = this.props;
 
     actionHidePriceFilter();
 
-    if (value) {
+    if (priceRange) {
       actionResetUsedCarList();
-      this.fetchUsedCar(EVENT_DEFAULT, value);
+      actionSelectUsedCarPriceRange(priceRange);
+      this.fetchUsedCar(EVENT_DEFAULT, priceRange);
     }
   }
 
@@ -136,9 +152,9 @@ class UserCarListScreen extends Component {
       pages,
       prices,
       navigation,
+      priceRange,
       isFetchItems,
       dealerSelected,
-
       isPriceFilterShow,
     } = this.props;
 
@@ -162,6 +178,8 @@ class UserCarListScreen extends Component {
           min={prices.min}
           max={prices.max}
           step={prices.step}
+          currentMinPrice={priceRange && priceRange.minPrice}
+          currentMaxPrice={priceRange && priceRange.maxPrice}
           onPressCity={this.onPressCity}
           onPressPrice={this.onPressPrice}
           onClosePrice={this.onClosePrice}

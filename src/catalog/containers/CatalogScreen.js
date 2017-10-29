@@ -6,7 +6,11 @@ import { Button } from 'native-base';
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionSelectUsedCarCity, actionSelectUsedCarRegion } from '../actions';
+import {
+  actionSelectUsedCarCity,
+  actionSelectUsedCarRegion,
+  actionSelectUsedCarPriceRange,
+} from '../actions';
 import { actionSetDealersByCities } from '../../dealer/actions';
 
 // components
@@ -87,6 +91,7 @@ const mapDispatchToProps = dispatch => {
     actionSelectUsedCarCity,
     actionSelectUsedCarRegion,
     actionSetDealersByCities,
+    actionSelectUsedCarPriceRange,
   }, dispatch);
 };
 
@@ -114,10 +119,12 @@ class CatalogScreen extends Component {
       actionSelectUsedCarCity,
       actionSelectUsedCarRegion,
       actionSetDealersByCities,
+      actionSelectUsedCarPriceRange,
     } = this.props;
 
     actionSelectUsedCarCity(dealerSelected.city);
     actionSelectUsedCarRegion(dealerSelected.region);
+    actionSelectUsedCarPriceRange(null);
 
     // для перехода с версии 4.1.0 -> 4.2.0, когда еще нет данных
     // с дилерами по городам

@@ -74,6 +74,8 @@ export default class PricePicker extends PureComponent {
     min: PropTypes.number,
     max: PropTypes.number,
     step: PropTypes.number,
+    currentMinPrice: PropTypes.number,
+    currentMaxPrice: PropTypes.number,
   }
 
   static defaultProps = {
@@ -84,9 +86,12 @@ export default class PricePicker extends PureComponent {
   constructor(props) {
     super(props);
 
+    console.log('props.currentMinPrice', props.currentMinPrice);
+    console.log('props.currentMaxPrice', props.currentMaxPrice);
+
     this.state = {
-      minPrice: '',
-      maxPrice: '',
+      minPrice: props.currentMinPrice,
+      maxPrice: props.currentMaxPrice,
       modalVisible: false,
       animatedHeight: new Animated.Value(0),
     };

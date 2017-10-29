@@ -8,6 +8,7 @@ import {
   USED_CAR_LIST__RESET,
   USED_CAR_CITY__SELECT,
   USED_CAR_REGION__SELECT,
+  USED_CAR_PRICE_RANGE__SELECT,
   USED_CAR_PRICE_FILTER__SHOW,
   USED_CAR_PRICE_FILTER__HIDE,
   EVENT_LOAD_MORE,
@@ -81,6 +82,17 @@ const usedCarCity = (state = null, action) => {
   }
 };
 
+const usedCarPriceRange = (state = null, action) => {
+  switch (action.type) {
+    case REHYDRATE:
+      return null;
+    case USED_CAR_PRICE_RANGE__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 const usedCarRegion = (state = null, action) => {
   switch (action.type) {
     case REHYDRATE:
@@ -126,6 +138,7 @@ export default combineReducers({
     items: usedCarItems,
     prices: usedCarPrices,
     region: usedCarRegion,
+    priceRange: usedCarPriceRange,
     meta: combineReducers({
       isFetchItems: isFetchUsedCarItems,
       isPriceFilterShow: isUsedCarPriceFilterShow,

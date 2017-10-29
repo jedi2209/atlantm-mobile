@@ -6,6 +6,7 @@ import {
   USED_CAR_LIST__FAIL,
   USED_CAR_LIST__RESET,
   USED_CAR_CITY__SELECT,
+  USED_CAR_PRICE_RANGE__SELECT,
   USED_CAR_REGION__SELECT,
   USED_CAR_PRICE_FILTER__SHOW,
   USED_CAR_PRICE_FILTER__HIDE,
@@ -13,7 +14,7 @@ import {
   EVENT_LOAD_MORE,
 } from './actionTypes';
 
-export const actionFetchUsedCar = ({ type, city, nextPage, prices }) => {
+export const actionFetchUsedCar = ({ type, city, nextPage, priceRange }) => {
   return dispatch => {
     dispatch({
       type: USED_CAR_LIST__REQUEST,
@@ -21,7 +22,7 @@ export const actionFetchUsedCar = ({ type, city, nextPage, prices }) => {
         type,
         city,
         nextPage,
-        prices,
+        priceRange,
       },
     });
 
@@ -29,7 +30,7 @@ export const actionFetchUsedCar = ({ type, city, nextPage, prices }) => {
 
     return API.fetchUsedCar({
       city,
-      prices,
+      priceRange,
       nextPageUrl,
     })
       .then(res => {
@@ -64,6 +65,15 @@ export const actionFetchUsedCar = ({ type, city, nextPage, prices }) => {
           },
         });
       });
+  };
+};
+
+export const actionSelectUsedCarPriceRange = (prices) => {
+  return dispatch => {
+    dispatch({
+      type: USED_CAR_PRICE_RANGE__SELECT,
+      payload: prices,
+    });
   };
 };
 
