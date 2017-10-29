@@ -9,6 +9,7 @@ import {
   Keyboard,
   StyleSheet,
   Picker,
+  Alert,
 } from 'react-native';
 
 // helpers
@@ -86,9 +87,6 @@ export default class PricePicker extends PureComponent {
   constructor(props) {
     super(props);
 
-    console.log('props.currentMinPrice', props.currentMinPrice);
-    console.log('props.currentMaxPrice', props.currentMaxPrice);
-
     this.state = {
       minPrice: props.currentMinPrice,
       maxPrice: props.currentMaxPrice,
@@ -133,7 +131,21 @@ export default class PricePicker extends PureComponent {
   }
 
   onPressConfirm = () => {
-    const { minPrice, maxPrice } = this.state;
+    const { onCloseModal, min, max } = this.props;
+    let { minPrice, maxPrice } = this.state;
+
+    if (minPrice > maxPrice) {
+      return setTimeout(() => Alert.alert('Цена ОТ должна быть меньше ДО'), 100);
+    }
+
+    if (minPrice === 'min') {
+      minPrice = min;
+    }
+
+    if (maxPrice === 'max') {
+      maxPrice = max;
+    }
+
     this.props.onCloseModal({ minPrice, maxPrice });
     this.setModalVisible(false);
   }
@@ -216,11 +228,11 @@ export default class PricePicker extends PureComponent {
 
                   <View style={styles.pickersContainer}>
                     <Picker style={styles.picker} selectedValue={this.state.minPrice} onValueChange={this.onChangeMinPrice}>
-                      <Picker.Item key="key-min" label="c" value="min" />
+                      <Picker.Item key="key-min" label="От" value="min" />
                       {this.renderItems()}
                     </Picker>
                     <Picker style={styles.picker} selectedValue={this.state.maxPrice} onValueChange={this.onChangeMaxPrice}>
-                      <Picker.Item key="key-max" label="до" value="max" />
+                      <Picker.Item key="key-max" label="До" value="max" />
                       {this.renderItems()}
                     </Picker>
                   </View>
