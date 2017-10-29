@@ -92,30 +92,30 @@ class App extends Component {
     const isDealerSelected = get(store.getState(), 'dealer.selected.id');
     const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
 
-    const defaultGetStateForAction = Router.router.getStateForAction;
-    Router.router.getStateForAction = (action, state) => {
-      // console.log('action', action);
-      // console.log('state', state);
+    // const defaultGetStateForAction = Router.router.getStateForAction;
+    // Router.router.getStateForAction = (action, state) => {
+    //   // console.log('action', action);
+    //   // console.log('state', state);
 
-      // if (state && action && action.routeName === 'UsedCarCityScreen') {
-      //   console.log('state.routes[1].routes', state.routes[1].routes);
-      //   state.routes[1].routes = state.routes[1].routes.filter(route => {
-      //     console.log('route', route);
-      //     // return route.routeName !== 'UsedCarListScreen';
-      //     return true;
-      //   });
-      // }
+    //   // if (state && action && action.routeName === 'UsedCarCityScreen') {
+    //   //   console.log('state.routes[1].routes', state.routes[1].routes);
+    //   //   state.routes[1].routes = state.routes[1].routes.filter(route => {
+    //   //     console.log('route', route);
+    //   //     // return route.routeName !== 'UsedCarListScreen';
+    //   //     return true;
+    //   //   });
+    //   // }
 
-      if (state) {
-        console.log('before', state);
-        let newState = { ...state };
-        newState = removeDuplicateRoutes(state);
-        console.log('after', newState);
-      }
+    //   if (state) {
+    //     console.log('before', state);
+    //     let newState = { ...state };
+    //     newState = removeDuplicateRoutes(state);
+    //     console.log('after', newState);
+    //   }
 
-      // this.props.navigationChange(action.routeName ? action.routeName : mainScreen);
-      return defaultGetStateForAction(action, state);
-    };
+    //   // this.props.navigationChange(action.routeName ? action.routeName : mainScreen);
+    //   return defaultGetStateForAction(action, state);
+    // };
 
     if (isTablet) {
       return (

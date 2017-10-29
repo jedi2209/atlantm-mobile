@@ -33,9 +33,14 @@ export default {
     return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
   },
 
-  fetchUsedCar(city, nextPageUrl) {
-    const defaultUrl = `/stock/trade-in/cars/get/city/${city}/`;
-    return this.request(nextPageUrl || defaultUrl, baseRequestParams);
+  fetchUsedCar({ city, nextPageUrl, prices }) {
+    let url = `/stock/trade-in/cars/get/city/${city}/`;
+
+    if (prices) {
+      url += `?price[from]=${prices.minPrice}&price[to]=${prices.maxPrice}`;
+    }
+
+    return this.request(nextPageUrl || url, baseRequestParams);
   },
 
   callMe(props) {

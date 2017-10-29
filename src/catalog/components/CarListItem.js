@@ -12,8 +12,8 @@ import Imager from '../../core/components/Imager';
 
 // helpers
 import { get } from 'lodash';
+import priceSet from '../../utils/price-set';
 import styleConst from '../../core/style-const';
-import { verticalScale } from '../../utils/scale';
 
 const styles = StyleSheet.create({
   container: {
@@ -84,10 +84,6 @@ export default class CarListItem extends Component {
     return (car.id.api !== nextProps.car.id.api);
   }
 
-  numberSet = (price) => {
-    return String(price).replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1 ");
-  }
-
   render() {
     const { car, prices } = this.props;
 
@@ -106,7 +102,7 @@ export default class CarListItem extends Component {
           />
           <View style={styles.info}>
             <Text style={styles.title}>{`${car.brand.name} ${car.model}`}</Text>
-            <Text style={styles.price}>{`${this.numberSet(car.price.app)} ${prices.curr.name}`}</Text>
+            <Text style={styles.price}>{`${priceSet(car.price.app)} ${prices.curr.name}`}</Text>
             <View style={styles.extra}>
               <View style={styles.extraItem}>
                 <View style={styles.extraTextContainer}><Text style={styles.extraText}>{car.engine.type}</Text></View>

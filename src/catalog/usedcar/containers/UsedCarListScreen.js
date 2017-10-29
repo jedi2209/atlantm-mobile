@@ -4,7 +4,13 @@ import { StyleSheet, View } from 'react-native';
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionFetchUsedCar, actionSetUsedCarCity } from '../../actions';
+import {
+  actionFetchUsedCar,
+  actionSetUsedCarCity,
+  actionShowPriceFilter,
+  actionHidePriceFilter,
+  actionResetUsedCarList,
+} from '../../actions';
 
 // components
 import FooterFilter from '../components/FooterFilter';
@@ -13,9 +19,11 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import CarList from '../../components/CarList';
 
 // helpers
+import { get } from 'lodash';
 import styleConst from '../../../core/style-const';
 import styleHeader from '../../../core/components/Header/style';
 import declOfNum from '../../../utils/decl-of-num';
+import { EVENT_DEFAULT } from '../../actionTypes';
 
 const styles = StyleSheet.create({
   content: {
@@ -33,6 +41,7 @@ const mapStateToProps = ({ dealer, nav, catalog }) => {
     pages: catalog.usedCar.pages,
     prices: catalog.usedCar.prices,
     isFetchItems: catalog.usedCar.meta.isFetchItems,
+    isPriceFilterShow: catalog.usedCar.meta.isPriceFilterShow,
     dealerSelected: dealer.selected,
   };
 };
@@ -41,6 +50,9 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({
     actionFetchUsedCar,
     actionSetUsedCarCity,
+    actionShowPriceFilter,
+    actionHidePriceFilter,
+    actionResetUsedCarList,
   }, dispatch);
 };
 
@@ -69,7 +81,7 @@ class UserCarListScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { dealerSelected, items, isFetchItems, total } = this.props;
+    const { dealerSelected, items, isFetchItems, total, isPriceFilterShow } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'UserCarListScreen';
 
@@ -79,13 +91,19 @@ class UserCarListScreen extends Component {
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (items.length !== nextProps.items.length) ||
       (isFetchItems !== nextProps.isFetchItems) ||
-      (total.count !== nextProps.total.count);
+      (total.count !== nextProps.total.count) ||
+      (isPriceFilterShow !== nextProps.isPriceFilterShow);
   }
 
-  fetchUsedCar = (type) => {
+  fetchUsedCar = (type, prices) => {
     const { actionFetchUsedCar, city, pages, navigation, total } = this.props;
 
-    return actionFetchUsedCar(type, city.id, pages.next)
+    return actionFetchUsedCar({
+      type,
+      prices,
+      city: city.id,
+      nextPage: pages.next,
+    })
       .then(() => {
         return setTimeout(() => {
           this.props.navigation.setParams({ total: this.props.total });
@@ -98,7 +116,18 @@ class UserCarListScreen extends Component {
   }
 
   onPressPrice = () => {
+    this.props.actionShowPriceFilter();
+  }
 
+  onClosePrice = (value) => {
+    const { actionHidePriceFilter, actionResetUsedCarList, fetchUsedCar } = this.props;
+
+    actionHidePriceFilter();
+
+    if (value) {
+      actionResetUsedCarList();
+      this.fetchUsedCar(EVENT_DEFAULT, value);
+    }
   }
 
   render() {
@@ -109,6 +138,8 @@ class UserCarListScreen extends Component {
       navigation,
       isFetchItems,
       dealerSelected,
+
+      isPriceFilterShow,
     } = this.props;
 
     console.log('== UsedCarListScreen ==');
@@ -127,8 +158,13 @@ class UserCarListScreen extends Component {
         />
 
         <FooterFilter
+          currency={get(prices, 'curr.name')}
+          min={prices.min}
+          max={prices.max}
+          step={prices.step}
           onPressCity={this.onPressCity}
           onPressPrice={this.onPressPrice}
+          onClosePrice={this.onClosePrice}
         />
       </View>
     );
