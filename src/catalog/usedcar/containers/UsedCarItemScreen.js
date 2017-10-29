@@ -147,8 +147,6 @@ class UserCarItemScreen extends Component {
 
     const car = get(navigation, 'state.params.car');
 
-    console.log('car', car);
-
     console.log('== UsedCarItemScreen ==');
 
     return (

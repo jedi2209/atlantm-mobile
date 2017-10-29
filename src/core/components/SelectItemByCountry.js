@@ -29,6 +29,7 @@ const brandsLogos = {
 const styles = StyleSheet.create({
   brands: {
     flexDirection: 'row',
+    marginTop: 3,
   },
   brandLogo: {
     minWidth: 24,
@@ -150,12 +151,47 @@ export default class SelectItemByCountry extends Component {
   renderCity = () => {
     const { item, selectedItem } = this.props;
 
-    // console.log('item', item);
+    let existBrands = [];
 
     return (
       <ListItem onPress={this.onPressCityItem} style={styles.listItem}>
         <Body style={styles.listItemBody}>
           {item.name ? <Text style={styles.city}>{item.name}</Text> : null}
+          {
+              item.dealers && item.dealers.length !== 0 ?
+              (
+                <View style={styles.brands}>
+                  {item.dealers.map(dealer => {
+                    return (
+                      <View key={dealer.id} style={styles.brands} >
+                        {
+                          dealer.brands.map(brand => {
+                            const name = brand.name === 'land rover' ? 'landrover' : brand.name;
+
+                            if (existBrands.includes(name)) {
+                              return null;
+                            } else {
+                              existBrands.push(name);
+                            }
+
+                            return (
+                              <CachedImage
+                                resizeMode="contain"
+                                key={brand.id}
+                                style={styles.brandLogo}
+                                source={brandsLogos[name]}
+                              />
+                            );
+                          })
+                        }
+                      </View>
+                    );
+                  })
+                }
+                </View>
+              ) :
+              null
+          }
         </Body>
         <Right>
           {
