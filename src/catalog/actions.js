@@ -184,8 +184,6 @@ export const actionCommentOrderCarFill = (comment) => {
 
 export const actionOrderCar = (props) => {
   return dispatch => {
-    console.log('DISPATCH!!!!');
-
     dispatch({
       type: CATALOG_ORDER__REQUEST,
       payload: { ...props },
