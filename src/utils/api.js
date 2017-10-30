@@ -90,8 +90,7 @@ export default {
 
   orderCar(props) {
     const {
-      brand,
-      model,
+      carId,
       comment,
       name,
       email,
@@ -99,7 +98,7 @@ export default {
       dealerId,
     } = props;
 
-    const body = `f_Dealer=${dealerId}&f_Model=${model}&f_Name=${name}&f_Phone=${phone}&f_Email=${email}&f_Brand=${brand}&f_Text=${comment}&f_Source=3`;
+    const body = `f_Dealer=${dealerId}&f_Car=${carId}&f_Name=${name}&f_Phone=${phone}&f_Email=${email}&f_Text=${comment}&f_Source=3`;
     const requestParams = _.merge(baseRequestParams, {
       method: 'post',
       headers: {

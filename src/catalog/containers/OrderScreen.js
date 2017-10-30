@@ -120,8 +120,7 @@ class OrderScreen extends Component {
       if (isOrderCarRequest) return;
 
       const dealerId = get(navigation, 'state.params.dealerId');
-      const car = get(navigation, 'state.params.car');
-      const { brand, model } = car;
+      const carId = get(navigation, 'state.params.carId');
 
       if (!name || !phone) {
         return setTimeout(() => {
@@ -137,15 +136,14 @@ class OrderScreen extends Component {
         phone,
         dealerId,
         email,
-        brand,
-        model,
+        carId,
         comment,
       })
         .then(action => {
           if (action.type === CATALOG_ORDER__SUCCESS) {
             setTimeout(() => {
               Alert.alert('Ваша заявка успешно отправлена');
-              // navigation.goBack();
+              navigation.goBack();
             }, 100);
           }
 

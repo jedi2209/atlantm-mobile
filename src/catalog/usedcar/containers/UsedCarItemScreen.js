@@ -104,14 +104,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: styleConst.ui.header,
   },
   orderPriceText: {
     fontFamily: styleConst.font.regular,
     fontSize: 19,
     letterSpacing: styleConst.ui.letterSpacing,
+    color: '#000',
   },
   footer: {
     height: FOOTER_HEIGHT,
+    backgroundColor: '#fff',
   },
 });
 
@@ -183,6 +186,7 @@ class UserCarItemScreen extends Component {
       },
       currency: prices.curr.name,
       dealerId: car.dealer.id,
+      carId: car.id.api,
     });
   }
 
