@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
+  ActivityIndicator,
   TouchableHighlight,
 } from 'react-native';
 import {
@@ -20,6 +20,7 @@ import {
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { actionFetchUsedCarDetails } from '../../actions';
 
 // components
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
@@ -33,126 +34,25 @@ import styleConst from '../../../core/style-const';
 import styleHeader from '../../../core/components/Header/style';
 import priceSet from '../../../utils/price-set';
 
-const FOOTER_HEIGHT = 50;
-const styles = StyleSheet.create({
-  content: {
-    backgroundColor: styleConst.color.bg,
-    flex: 1,
-  },
-  gallery: {
-    // marginBottom: 20,
-    position: 'relative',
-  },
-  titleContainer: {
-    paddingBottom: 10,
-    alignItems: 'center',
-    backgroundColor: styleConst.color.header,
-  },
-  title: {
-    paddingTop: styleConst.ui.horizontalGap,
-    paddingLeft: styleConst.ui.horizontalGap,
-    paddingRight: styleConst.ui.horizontalGap,
-    fontSize: 20,
-    fontFamily: styleConst.font.regular,
-    letterSpacing: styleConst.ui.letterSpacing,
-  },
-  section: {
-    paddingTop: styleConst.ui.horizontalGap,
-    paddingRight: styleConst.ui.horizontalGap,
-    paddingBottom: styleConst.ui.horizontalGap,
-    marginLeft: styleConst.ui.horizontalGap,
-    borderBottomWidth: styleConst.ui.borderWidth,
-    borderBottomColor: styleConst.color.border,
-  },
-  descrContainer: {
-    padding: styleConst.ui.horizontalGap,
-  },
-  descr: {
-    lineHeight: 18,
-  },
-  sectionTitle: {
-    letterSpacing: styleConst.ui.letterSpacing,
-    fontSize: 18,
-    fontFamily: styleConst.font.regular,
-    marginBottom: 4,
-  },
-  sectionRow: {
-    marginBottom: 5,
-  },
-  sectionPropText: {
-    letterSpacing: styleConst.ui.letterSpacing,
-    fontFamily: styleConst.font.regular,
-    fontSize: 15,
-    color: styleConst.color.greyText,
-  },
-  sectionValueText: {
-    letterSpacing: styleConst.ui.letterSpacing,
-    fontFamily: styleConst.font.regular,
-    fontSize: 15,
-  },
-  sectionTitleValue: {
-    letterSpacing: styleConst.ui.letterSpacing,
-    fontFamily: styleConst.font.light,
-    fontSize: 18,
-    color: styleConst.color.greyText4,
-  },
-  button: {
-    backgroundColor: styleConst.color.lightBlue,
-    height: FOOTER_HEIGHT,
-    flex: 1,
-  },
-  buttonText: {
-    color: '#fff',
-    fontFamily: styleConst.font.medium,
-    fontSize: 16,
-    letterSpacing: styleConst.ui.letterSpacing,
-  },
-  orderPriceContainer: {
-    height: FOOTER_HEIGHT,
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: styleConst.ui.header,
-  },
-  orderPriceText: {
-    fontFamily: styleConst.font.regular,
-    fontSize: 19,
-    letterSpacing: styleConst.ui.letterSpacing,
-    color: '#000',
-  },
-  footer: {
-    height: FOOTER_HEIGHT,
-    backgroundColor: '#fff',
-  },
-  tabText: {
-    color: styleConst.color.greyBlueText,
-  },
-  tabTextActive: {
-    color: '#fff',
-  },
-  tabButton: {
-    borderColor: styleConst.color.greyBlue,
-  },
-  tabButtonActive: {
-    backgroundColor: styleConst.color.greyBlue,
-    borderColor: styleConst.color.greyBlue,
-  },
-});
+// styles
+import styles from './UsedCarItemScreenStyles';
 
 const mapStateToProps = ({ catalog, dealer, nav }) => {
   return {
     nav,
     prices: catalog.usedCar.prices,
+    dealerSelected: dealer.selected,
     listRussia: dealer.listRussia,
     listUkraine: dealer.listUkraine,
     listBelarussia: dealer.listBelarussia,
-    dealerSelected: dealer.selected,
+    carDetails: catalog.usedCar.carDetails,
+    isFetchingCarDetails: catalog.usedCar.meta.isFetchingCarDetails,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-
+    actionFetchUsedCarDetails,
   }, dispatch);
 };
 
@@ -176,62 +76,70 @@ class UserCarItemScreen extends Component {
     this.state = { tabName: 'base' };
   }
 
+  componentDidMount() {
+    const carId = get(this.props.navigation, 'state.params.carId');
+    this.props.actionFetchUsedCarDetails(carId);
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
-    const { dealerSelected } = this.props;
+    const { dealerSelected, carDetails, isFetchingCarDetails } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'UserCarItemScreen';
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-      (this.state.tabName !== nextState.tabName);
+      (this.state.tabName !== nextState.tabName) ||
+      (isFetchingCarDetails !== nextProps.isFetchingCarDetails) ||
+      (get(carDetails, 'id.api') !== get(nextProps, 'carDetails.id.api'));
   }
 
   onPressDealer = () => {
     const {
+      carDetails,
       navigation,
       listRussia,
       listUkraine,
       listBelarussia,
     } = this.props;
 
-    const car = get(navigation, 'state.params.car');
     const list = [].concat(listRussia, listBelarussia, listUkraine);
-    const dealerBaseData = find(list, { id: car.dealer.id });
+    const dealerBaseData = find(list, { id: carDetails.dealer.id });
 
     navigation.navigate('AboutDealerScreen', { dealerBaseData });
   }
 
   onPressOrder = () => {
-    const { navigation, prices } = this.props;
-    const car = get(navigation, 'state.params.car');
+    const { navigation, prices, carDetails } = this.props;
 
     navigation.navigate('OrderScreen', {
       car: {
-        brand: car.brand.name,
-        model: car.model,
-        price: car.price.app,
+        brand: carDetails.brand.name,
+        model: carDetails.model,
+        price: carDetails.price.app,
       },
       currency: prices.curr.name,
-      dealerId: car.dealer.id,
-      carId: car.id.api,
+      dealerId: carDetails.dealer.id,
+      carId: carDetails.id.api,
     });
   }
 
-  selectBaseTab = () => {
-    console.log('selectBaseTab');
-    this.setState({ tabName: 'base' });
-  }
+  selectBaseTab = () => this.setState({ tabName: 'base' })
 
-  selectOptionsTab = () => {
-    console.log('selectOptionsTab');
-    this.setState({ tabName: 'options' });
-  }
+  selectOptionsTab = () => this.setState({ tabName: 'options' })
 
   render() {
     const { tabName } = this.state;
     const isActiveBaseTab = tabName === 'base';
     const isActiveOptionsTab = tabName === 'options';
-    const { navigation, prices } = this.props;
-    const car = get(navigation, 'state.params.car');
+
+    const { prices, carDetails, isFetchingCarDetails } = this.props;
+
+    if (!carDetails || isFetchingCarDetails) {
+      return (
+        <View style={styles.spinnerContainer} >
+          <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
+        </View>
+      );
+    }
 
     // console.log('car', car);
 
@@ -244,9 +152,9 @@ class UserCarItemScreen extends Component {
 
             <View style={styles.gallery}>
               <View style={styles.titleContainer}>
-                <Text style={styles.title}>{`${car.brand.name} ${car.model}`}</Text>
+                <Text style={styles.title}>{`${carDetails.brand.name} ${carDetails.model}`}</Text>
               </View>
-              <PhotoSlider photos={car.img['10000x300']} />
+              <PhotoSlider photos={carDetails.img['10000x300']} />
             </View>
 
             <Segment style={styles.segment}>
@@ -276,105 +184,105 @@ class UserCarItemScreen extends Component {
                       <Text style={styles.sectionTitle}>Основные</Text>
                       <Grid>
                         {
-                          car.year &&
+                          carDetails.year &&
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
                                   <Text style={styles.sectionPropText}>Год выпуска:</Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{`${car.year} г.`}</Text>
+                                  <Text style={styles.sectionValueText}>{`${carDetails.year} г.`}</Text>
                                 </Col>
                               </Row>
                             )
                         }
                         {
-                          car.mileage &&
+                          carDetails.mileage &&
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
                                   <Text style={styles.sectionPropText}>Пробег:</Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{`${priceSet(car.mileage)} км.`}</Text>
+                                  <Text style={styles.sectionValueText}>{`${priceSet(carDetails.mileage)} км.`}</Text>
                                 </Col>
                               </Row>
                             )
                         }
                         {
-                          car.engine && car.engine.type &&
+                          carDetails.engine && carDetails.engine.type &&
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
                                   <Text style={styles.sectionPropText}>Топливо:</Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{car.engine.type}</Text>
+                                  <Text style={styles.sectionValueText}>{carDetails.engine.type}</Text>
                                 </Col>
                               </Row>
                             )
                         }
                         {
-                          car.engine && car.engine.volume && car.engine.volume.short &&
+                          carDetails.engine && carDetails.engine.volume && carDetails.engine.volume.short &&
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
                                   <Text style={styles.sectionPropText}>Двигатель:</Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{`${car.engine.volume.short} л.`}</Text>
+                                  <Text style={styles.sectionValueText}>{`${carDetails.engine.volume.short} л.`}</Text>
                                 </Col>
                               </Row>
                             )
                         }
                         {
-                          car.gearbox && car.gearbox.name &&
+                          carDetails.gearbox && carDetails.gearbox.name &&
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
                                   <Text style={styles.sectionPropText}>КПП:</Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{car.gearbox.name}</Text>
+                                  <Text style={styles.sectionValueText}>{carDetails.gearbox.name}</Text>
                                 </Col>
                               </Row>
                             )
                         }
                         {
-                          car.color && car.color.name && car.color.name.simple &&
+                          carDetails.color && carDetails.color.name && carDetails.color.name.simple &&
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
                                   <Text style={styles.sectionPropText}>Цвет:</Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{car.color.name.simple}</Text>
+                                  <Text style={styles.sectionValueText}>{carDetails.color.name.simple}</Text>
                                 </Col>
                               </Row>
                             )
                         }
                         {
-                          car.body && car.body.name &&
+                          carDetails.body && carDetails.body.name &&
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
                                   <Text style={styles.sectionPropText}>Тип кузова:</Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{car.body.name}</Text>
+                                  <Text style={styles.sectionValueText}>{carDetails.body.name}</Text>
                                 </Col>
                               </Row>
                             )
                         }
                         {
-                          (car.interior && car.interior.name) ?
+                          (carDetails.interior && carDetails.interior.name) ?
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
                                   <Text style={styles.sectionPropText}>Салон:</Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{car.interior.name}</Text>
+                                  <Text style={styles.sectionValueText}>{carDetails.interior.name}</Text>
                                 </Col>
                               </Row>
                             ) : null
@@ -383,7 +291,7 @@ class UserCarItemScreen extends Component {
                     </View>
 
                     {
-                      (car.dealer && car.dealer.name) ?
+                      (carDetails.dealer && carDetails.dealer.name) ?
                         (
                           <TouchableHighlight
                             onPress={this.onPressDealer}
@@ -393,7 +301,7 @@ class UserCarItemScreen extends Component {
                               <Col><Text style={styles.sectionTitle}>Где</Text></Col>
                               <Col>
                                 <View>
-                                  <Text style={styles.sectionTitleValue}>{car.dealer.name}</Text>
+                                  <Text style={styles.sectionTitleValue}>{carDetails.dealer.name}</Text>
                                 </View>
                               </Col>
                             </Grid>
@@ -403,10 +311,10 @@ class UserCarItemScreen extends Component {
                     }
 
                     {
-                      car.text ?
+                      carDetails.text ?
                         (
                           <View style={styles.descrContainer}>
-                            <Text style={styles.descr}>{car.text}</Text>
+                            <Text style={styles.descr}>{carDetails.text}</Text>
                           </View>
                         ) :
                         null
@@ -415,7 +323,33 @@ class UserCarItemScreen extends Component {
                 ) :
                 (
                   <View style={styles.tabContent}>
-                    <Text>tab2</Text>
+                    <View style={styles.section}>
+                      <Text style={styles.sectionTitle}>{get(carDetails, 'options.additional.1.name')}</Text>
+                      {
+                        get(carDetails, 'options.additional.1.data', []).map(item => {
+                          return (
+                            <Grid key={item.id}>
+                              {
+                                item.name && item.value ?
+                                  (
+                                    <Row style={styles.sectionRow}>
+                                      <Col style={styles.sectionProp}>
+                                        <Text style={styles.sectionPropText}>{item.name}</Text>
+                                      </Col>
+                                      <Col style={styles.sectionValue}>
+                                        <Text style={styles.sectionValueText}>{item.value}</Text>
+                                      </Col>
+                                    </Row>
+                                  ) :
+                                  (
+                                    <Text style={[styles.sectionPropText, styles.sectionRow]}>{item.name}</Text>
+                                  )
+                              }
+                            </Grid>
+                          );
+                        })
+                      }
+                    </View>
                   </View>
                 )
             }
@@ -423,15 +357,15 @@ class UserCarItemScreen extends Component {
 
           <Footer style={styles.footer}>
             <View style={styles.orderPriceContainer}>
-              <Text style={styles.orderPriceText}>{`${priceSet(car.price.app)} ${prices.curr.name}`}</Text>
+              <Text style={styles.orderPriceText}>{`${priceSet(carDetails.price.app)} ${prices.curr.name}`}</Text>
             </View>
             <Button
-                onPress={this.onPressOrder}
-                full
-                style={styles.button}
-              >
-                <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
-              </Button>
+              onPress={this.onPressOrder}
+              full
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
+            </Button>
           </Footer>
         </Container>
       </StyleProvider>

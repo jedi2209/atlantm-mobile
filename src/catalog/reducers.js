@@ -11,6 +11,10 @@ import {
   USED_CAR_PRICE_RANGE__SELECT,
   USED_CAR_PRICE_FILTER__SHOW,
   USED_CAR_PRICE_FILTER__HIDE,
+  USED_CAR_DETAILS__REQUEST,
+  USED_CAR_DETAILS__SUCCESS,
+  USED_CAR_DETAILS__FAIL,
+
   EVENT_LOAD_MORE,
 
   CATALOG_DEALER__REQUEST,
@@ -184,6 +188,29 @@ const orderComment = (state = '', action) => {
   }
 };
 
+const isFetchingUsedCarDetails = (state = false, action) => {
+  switch (action.type) {
+    case USED_CAR_DETAILS__REQUEST:
+      return true;
+    case USED_CAR_DETAILS__SUCCESS:
+    case USED_CAR_DETAILS__FAIL:
+      return false;
+    default:
+      return state;
+  }
+};
+
+const usedCarDetails = (state = null, action) => {
+  switch (action.type) {
+    case USED_CAR_DETAILS__REQUEST:
+      return null;
+    case USED_CAR_DETAILS__SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   dealer,
   orderComment,
@@ -192,6 +219,7 @@ export default combineReducers({
     isOrderCarRequest,
   }),
   usedCar: combineReducers({
+    carDetails: usedCarDetails,
     city: usedCarCity,
     total: usedCarTotal,
     pages: usedCarPages,
@@ -202,6 +230,7 @@ export default combineReducers({
     meta: combineReducers({
       isFetchItems: isFetchUsedCarItems,
       isPriceFilterShow: isUsedCarPriceFilterShow,
+      isFetchingCarDetails: isFetchingUsedCarDetails,
     }),
   }),
 });
