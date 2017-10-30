@@ -4,7 +4,6 @@ import {
   View,
   Text,
   Image,
-  Dimensions,
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
@@ -16,17 +15,17 @@ import { connect } from 'react-redux';
 import { actionFetchNewCarFilterData } from '../../actions';
 
 // components
+import CityItemList from '../components/CityItemList';
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
-import { get } from 'lodash';
+import { get, find } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import styleHeader from '../../../core/components/Header/style';
 import { verticalScale } from '../../../utils/scale';
 
-const { width } = Dimensions.get('window');
 const FOOTER_HEIGHT = 50;
 const styles = StyleSheet.create({
   content: {
@@ -68,6 +67,9 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
   return {
     nav,
     dealerSelected: dealer.selected,
+    listRussiaByCities: dealer.listRussiaByCities,
+    listBelarussiaByCities: dealer.listBelarussiaByCities,
+    listUkraineByCities: dealer.listUkraineByCities,
     city: catalog.newCar.city,
     region: catalog.newCar.region,
     priceRange: catalog.newCar.priceRange,
@@ -112,8 +114,28 @@ class NewCarFilterScreen extends Component {
       (get(filterData, 'pages.next') !== get(nextProps, 'filterData.pages.next'));
   }
 
+  getCityData = () => {
+    const {
+      city,
+      listRussiaByCities,
+      listUkraineByCities,
+      listBelarussiaByCities,
+    } = this.props;
+
+    const list = [].concat(
+      listRussiaByCities,
+      listUkraineByCities,
+      listBelarussiaByCities,
+    );
+
+    const cityData = find(list, { id: city.id });
+    console.log('cityData', cityData);
+    return cityData;
+  }
+
   render() {
     const {
+      city,
       filterData,
       navigation,
       dealerSelected,
@@ -135,7 +157,12 @@ class NewCarFilterScreen extends Component {
         <Container>
           <Content style={styles.content}>
 
-
+          <CityItemList
+            navigation={navigation}
+            cityName={city.name}
+            cityData={this.getCityData()}
+            returnScreen="NewCarFilterScreen"
+          />
 
           </Content>
           <Footer style={styles.footer}>
