@@ -9,6 +9,8 @@ export default {
     greyText2: 'rgba(128,128,128,1)',
     greyText3: 'rgba(102,102,102,1)',
     greyText4: 'rgba(51,51,51,1)',
+    greyBlue: '#616e7a',
+    greyBlueText: '#a8b0b7',
     header: '#f7f7f8',
     select: '#c8dffa',
     border: '#c7c7c7',
