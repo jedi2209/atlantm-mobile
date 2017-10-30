@@ -14,6 +14,14 @@ import {
   USED_CAR_DETAILS__SUCCESS,
   USED_CAR_DETAILS__FAIL,
 
+  NEW_CAR_CITY__SELECT,
+  NEW_CAR_PRICE_RANGE__SELECT,
+  NEW_CAR_REGION__SELECT,
+
+  NEW_CAR_FILTER_DATA__REQUEST,
+  NEW_CAR_FILTER_DATA__SUCCESS,
+  NEW_CAR_FILTER_DATA__FAIL,
+
   CATALOG_DEALER__REQUEST,
   CATALOG_DEALER__SUCCESS,
   CATALOG_DEALER__FAIL,
@@ -248,6 +256,68 @@ export const actionFetchUsedCarDetails = carId => {
       .catch(error => {
         return dispatch({
           type: USED_CAR_DETAILS__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
+  };
+};
+
+// newcar
+export const actionSelectNewCarPriceRange = (prices) => {
+  return dispatch => {
+    dispatch({
+      type: NEW_CAR_PRICE_RANGE__SELECT,
+      payload: prices,
+    });
+  };
+};
+
+export const actionSelectNewCarCity = (city) => {
+  return dispatch => {
+    dispatch({
+      type: NEW_CAR_CITY__SELECT,
+      payload: city,
+    });
+  };
+};
+
+export const actionSelectNewCarRegion = (region) => {
+  return dispatch => {
+    return dispatch({
+      type: NEW_CAR_REGION__SELECT,
+      payload: region,
+    });
+  };
+};
+
+export const actionFetchNewCarFilterData = props => {
+  return dispatch => {
+    dispatch({
+      type: NEW_CAR_FILTER_DATA__REQUEST,
+      payload: props,
+    });
+
+    return API.fetchNewCarFilterData(props)
+      .then(response => {
+        if (response.error) {
+          return dispatch({
+            type: NEW_CAR_FILTER_DATA__FAIL,
+            payload: {
+              error: response.error.message,
+            },
+          });
+        }
+
+        return dispatch({
+          type: NEW_CAR_FILTER_DATA__SUCCESS,
+          payload: { ...response },
+        });
+      })
+      .catch(error => {
+        return dispatch({
+          type: NEW_CAR_FILTER_DATA__FAIL,
           payload: {
             error: error.message,
           },

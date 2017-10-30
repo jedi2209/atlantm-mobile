@@ -63,14 +63,10 @@ class UserCarListScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     const { params = { total: {} } } = navigation.state;
     const count = params.total.count;
-
     const titleVariants = ['автомобиль', 'автомобиля', 'автомобилей'];
-    const title = count ?
-      `${count} ${declOfNum(count, titleVariants)}` :
-      'Автомобили с пробегом';
 
     return {
-      headerTitle: title,
+      headerTitle: count ? `${count} ${declOfNum(count, titleVariants)}` : null,
       headerStyle: styleHeader.common,
       headerTitleStyle: styleHeader.title,
       headerLeft: <HeaderIconBack navigation={navigation} returnScreen="CatalogScreen" />,
