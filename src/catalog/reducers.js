@@ -16,6 +16,12 @@ import {
   CATALOG_DEALER__REQUEST,
   CATALOG_DEALER__SUCCESS,
   CATALOG_DEALER__FAIL,
+
+  CATALOG_ORDER__REQUEST,
+  CATALOG_ORDER__SUCCESS,
+  CATALOG_ORDER__FAIL,
+
+  CATALOG_ORDER_COMMENT__FILL,
 } from './actionTypes';
 
 import { DEALER__SUCCESS } from '../dealer/actionTypes';
@@ -157,10 +163,33 @@ const isFetchingDealer = (state = false, action) => {
   }
 };
 
+const isOrderCarRequest = (state = false, action) => {
+  switch (action.type) {
+    case CATALOG_ORDER__REQUEST:
+      return true;
+    case CATALOG_ORDER__SUCCESS:
+    case CATALOG_ORDER__FAIL:
+      return false;
+    default:
+      return state;
+  }
+};
+
+const orderComment = (state = '', action) => {
+  switch (action.type) {
+    case CATALOG_ORDER_COMMENT__FILL:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   dealer,
+  orderComment,
   meta: combineReducers({
     isFetchingDealer,
+    isOrderCarRequest,
   }),
   usedCar: combineReducers({
     city: usedCarCity,
