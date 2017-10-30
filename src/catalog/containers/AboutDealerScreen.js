@@ -57,6 +57,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: styleConst.color.bg,
   },
+  spinner: {
+    alignSelf: 'center',
+    marginTop: verticalScale(60),
+  },
   titleContainer: {
     backgroundColor: styleConst.color.header,
     borderBottomWidth: styleConst.ui.borderWidth,
@@ -100,10 +104,6 @@ const styles = StyleSheet.create({
   },
   list: {
     backgroundColor: '#fff',
-  },
-  spinner: {
-    alignSelf: 'center',
-    marginTop: verticalScale(60),
   },
 });
 
@@ -270,6 +270,8 @@ class AboutDealerScreen extends Component {
   render() {
     const { dealer, isFetchingDealer } = this.props;
 
+    console.log('== About Dealer ==');
+
     if (!dealer || isFetchingDealer) {
       return (
         <View style={styles.spinnerContainer} >
@@ -285,8 +287,6 @@ class AboutDealerScreen extends Component {
     if (description) {
       description = processHtml(description, this.state.webViewWidth, this.state.webViewHeight);
     }
-
-    console.log('== About Dealer ==');
 
     return (
       <StyleProvider style={getTheme()}>

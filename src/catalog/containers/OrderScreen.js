@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#fff',
-    fontSize: 20,
-    fontFamily: styleConst.font.regular,
+    fontSize: 18,
+    fontFamily: styleConst.font.medium,
     letterSpacing: styleConst.ui.letterSpacing,
   },
   buttonIcon: {
@@ -227,7 +227,7 @@ class OrderScreen extends Component {
 
           <Footer style={styles.footer}>
             <Button onPress={this.onPressOrder} full style={styles.button}>
-              <Text style={styles.buttonText}>Отправить</Text>
+              <Text style={styles.buttonText}>ОТПРАВИТЬ</Text>
               <Image
                 source={require('../../core/components/CustomIcon/assets/arrow-right.png')}
                 style={styles.buttonIcon}

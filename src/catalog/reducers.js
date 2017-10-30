@@ -15,6 +15,13 @@ import {
   USED_CAR_DETAILS__SUCCESS,
   USED_CAR_DETAILS__FAIL,
 
+  NEW_CAR_CITY__SELECT,
+  NEW_CAR_REGION__SELECT,
+  NEW_CAR_PRICE_RANGE__SELECT,
+  NEW_CAR_FILTER_DATA__REQUEST,
+  NEW_CAR_FILTER_DATA__SUCCESS,
+  NEW_CAR_FILTER_DATA__FAIL,
+
   EVENT_LOAD_MORE,
 
   CATALOG_DEALER__REQUEST,
@@ -211,6 +218,63 @@ const usedCarDetails = (state = null, action) => {
   }
 };
 
+// newCar
+const isFetchingFilterData = (state = false, action) => {
+  switch (action.type) {
+    case NEW_CAR_FILTER_DATA__REQUEST:
+      return true;
+    case NEW_CAR_FILTER_DATA__SUCCESS:
+    case NEW_CAR_FILTER_DATA__FAIL:
+      return false;
+    default:
+      return state;
+  }
+};
+
+const newCarFilterData = (state = null, action) => {
+  switch (action.type) {
+    case NEW_CAR_FILTER_DATA__REQUEST:
+      return null;
+    case NEW_CAR_FILTER_DATA__SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const newCarCity = (state = null, action) => {
+  switch (action.type) {
+    case REHYDRATE:
+      return null;
+    case NEW_CAR_CITY__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const newCarPriceRange = (state = null, action) => {
+  switch (action.type) {
+    case REHYDRATE:
+      return null;
+    case NEW_CAR_PRICE_RANGE__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const newCarRegion = (state = null, action) => {
+  switch (action.type) {
+    case REHYDRATE:
+      return null;
+    case NEW_CAR_REGION__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   dealer,
   orderComment,
@@ -218,6 +282,7 @@ export default combineReducers({
     isFetchingDealer,
     isOrderCarRequest,
   }),
+
   usedCar: combineReducers({
     carDetails: usedCarDetails,
     city: usedCarCity,
@@ -231,6 +296,21 @@ export default combineReducers({
       isFetchItems: isFetchUsedCarItems,
       isPriceFilterShow: isUsedCarPriceFilterShow,
       isFetchingCarDetails: isFetchingUsedCarDetails,
+    }),
+  }),
+
+  newCar: combineReducers({
+    filterData: newCarFilterData,
+    // carDetails: usedCarDetails,
+    city: newCarCity,
+    // items: newCarItems,
+    region: newCarRegion,
+    priceRange: newCarPriceRange,
+    meta: combineReducers({
+      isFetchingFilterData,
+      // isFetchItems: isFetchNewCarItems,
+      // isPriceFilterShow: isNewCarPriceFilterShow,
+      // isFetchingCarDetails: isFetchingNewCarDetails,
     }),
   }),
 });
