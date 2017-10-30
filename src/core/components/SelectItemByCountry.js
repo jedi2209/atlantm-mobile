@@ -13,17 +13,17 @@ import styleConst from '../../core/style-const';
 import { DEALER__SUCCESS, DEALER__FAIL } from '../../dealer/actionTypes';
 
 const brandsLogos = {
-  chevrolet: require('../assets/chevrolet.png'),
-  ford: require('../assets/ford.png'),
-  jaguar: require('../assets/jaguar.png'),
-  kia: require('../assets/kia.png'),
-  landrover: require('../assets/landrover.png'),
-  mazda: require('../assets/mazda.png'),
-  nissan: require('../assets/nissan.png'),
-  opel: require('../assets/opel.png'),
-  renault: require('../assets/renault.png'),
-  skoda: require('../assets/skoda.png'),
-  volkswagen: require('../assets/volkswagen.png'),
+  8: require('../assets/chevrolet.png'),
+  9: require('../assets/ford.png'),
+  12: require('../assets/jaguar.png'),
+  10: require('../assets/kia.png'),
+  13: require('../assets/landrover.png'),
+  14: require('../assets/mazda.png'),
+  17: require('../assets/nissan.png'),
+  1: require('../assets/opel.png'),
+  16: require('../assets/renault.png'),
+  7: require('../assets/skoda.png'),
+  6: require('../assets/volkswagen.png'),
 };
 
 const styles = StyleSheet.create({
@@ -126,13 +126,12 @@ export default class SelectItemByCountry extends Component {
           <View style={styles.brands} >
             {
               item.brands.map(brand => {
-                const name = brand.name === 'land rover' ? 'landrover' : brand.name;
                 return (
                   <CachedImage
                     resizeMode="contain"
                     key={brand.id}
                     style={styles.brandLogo}
-                    source={brandsLogos[name]}
+                    source={brandsLogos[brand.id]}
                   />
                 );
               })
@@ -179,7 +178,7 @@ export default class SelectItemByCountry extends Component {
                                 resizeMode="contain"
                                 key={brand.id}
                                 style={styles.brandLogo}
-                                source={brandsLogos[name]}
+                                source={brandsLogos[brand.id]}
                               />
                             );
                           })
