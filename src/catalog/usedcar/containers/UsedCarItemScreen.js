@@ -8,7 +8,7 @@ import {
   Dimensions,
   TouchableHighlight,
 } from 'react-native';
-import { Container, Content, StyleProvider, Button, Grid, Row, Col } from 'native-base';
+import { Container, Content, StyleProvider, Footer, Button, Grid, Row, Col } from 'native-base';
 
 // redux
 import { bindActionCreators } from 'redux';
@@ -25,6 +25,7 @@ import styleConst from '../../../core/style-const';
 import styleHeader from '../../../core/components/Header/style';
 import priceSet from '../../../utils/price-set';
 
+const FOOTER_HEIGHT = 50;
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
@@ -87,11 +88,37 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: styleConst.color.greyText4,
   },
+  button: {
+    backgroundColor: styleConst.color.lightBlue,
+    height: FOOTER_HEIGHT,
+    flex: 1,
+  },
+  buttonText: {
+    color: '#fff',
+    fontFamily: styleConst.font.medium,
+    fontSize: 16,
+    letterSpacing: styleConst.ui.letterSpacing,
+  },
+  orderPriceContainer: {
+    height: FOOTER_HEIGHT,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  orderPriceText: {
+    fontFamily: styleConst.font.regular,
+    fontSize: 19,
+    letterSpacing: styleConst.ui.letterSpacing,
+  },
+  footer: {
+    height: FOOTER_HEIGHT,
+  },
 });
 
-const mapStateToProps = ({ dealer, nav }) => {
+const mapStateToProps = ({ catalog, dealer, nav }) => {
   return {
     nav,
+    prices: catalog.usedCar.prices,
     listRussia: dealer.listRussia,
     listUkraine: dealer.listUkraine,
     listBelarussia: dealer.listBelarussia,
@@ -142,10 +169,29 @@ class UserCarItemScreen extends Component {
     navigation.navigate('AboutDealerScreen', { dealerBaseData });
   }
 
+  onPressOrder = () => {
+    const { navigation, prices } = this.props;
+    const car = get(navigation, 'state.params.car');
+
+    console.log('car', car);
+
+    navigation.navigate('OrderScreen', {
+      car: {
+        brand: car.brand.name,
+        model: car.model,
+        price: car.price.app,
+      },
+      currency: prices.curr.name,
+      dealerId: car.dealer.id,
+    });
+  }
+
   render() {
-    const { navigation } = this.props;
+    const { navigation, prices } = this.props;
 
     const car = get(navigation, 'state.params.car');
+
+    // console.log('car', car);
 
     console.log('== UsedCarItemScreen ==');
 
@@ -314,6 +360,19 @@ class UserCarItemScreen extends Component {
               null
           }
           </Content>
+
+          <Footer style={styles.footer}>
+            <View style={styles.orderPriceContainer}>
+              <Text style={styles.orderPriceText}>{`${priceSet(car.price.app)} ${prices.curr.name}`}</Text>
+            </View>
+            <Button
+                onPress={this.onPressOrder}
+                full
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
+              </Button>
+          </Footer>
         </Container>
       </StyleProvider>
     );

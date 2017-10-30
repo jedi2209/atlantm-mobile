@@ -12,6 +12,7 @@ export default StyleSheet.create({
   },
   inputItem: {
     borderBottomWidth: 0,
+    minHeight: 44,
   },
   listItemContainer: {
     backgroundColor: '#fff',

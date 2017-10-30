@@ -88,6 +88,31 @@ export default {
     return this.request('/orders/service/post/', requestParams);
   },
 
+  orderCar(props) {
+    const {
+      brand,
+      model,
+      comment,
+      name,
+      email,
+      phone,
+      dealerId,
+    } = props;
+
+    const body = `f_Dealer=${dealerId}&f_Model=${model}&f_Name=${name}&f_Phone=${phone}&f_Email=${email}&f_Brand=${brand}&f_Text=${comment}&f_Source=3`;
+    const requestParams = _.merge(baseRequestParams, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    });
+
+    console.log('body', body);
+
+    return this.request('/orders/trade-in/post/', requestParams);
+  },
+
   request(path, requestParams) {
     const url = `https://api.atlantm.com${path}`;
 

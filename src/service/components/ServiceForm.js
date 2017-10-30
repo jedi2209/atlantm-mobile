@@ -55,7 +55,7 @@ const datePickerStyles = {
   },
 };
 
-export default class ProfileForm extends PureComponent {
+export default class ServiceForm extends PureComponent {
   static propTypes = {
     car: PropTypes.string,
     date: PropTypes.object,

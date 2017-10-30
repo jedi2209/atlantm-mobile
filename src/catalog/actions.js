@@ -15,6 +15,12 @@ import {
   CATALOG_DEALER__SUCCESS,
   CATALOG_DEALER__FAIL,
 
+  CATALOG_ORDER__REQUEST,
+  CATALOG_ORDER__SUCCESS,
+  CATALOG_ORDER__FAIL,
+
+  CATALOG_ORDER_COMMENT__FILL,
+
   EVENT_LOAD_MORE,
 } from './actionTypes';
 
@@ -161,6 +167,52 @@ export const actionFetchDealer = dealerBaseData => {
           type: CATALOG_DEALER__FAIL,
           payload: {
             error: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const actionCommentOrderCarFill = (comment) => {
+  return dispatch => {
+    return dispatch({
+      type: CATALOG_ORDER_COMMENT__FILL,
+      payload: comment,
+    });
+  };
+};
+
+export const actionOrderCar = (props) => {
+  return dispatch => {
+    console.log('DISPATCH!!!!');
+
+    dispatch({
+      type: CATALOG_ORDER__REQUEST,
+      payload: { ...props },
+    });
+
+    return API.orderCar(props)
+      .then(res => {
+        const { error, status } = res;
+
+        if (status !== 'success') {
+          return dispatch({
+            type: CATALOG_ORDER__FAIL,
+            payload: {
+              code: error.code,
+              error: error.message,
+            },
+          });
+        }
+
+        return dispatch({ type: CATALOG_ORDER__SUCCESS });
+      })
+      .catch(error => {
+        return dispatch({
+          type: CATALOG_ORDER__FAIL,
+          payload: {
+            error: error.message,
+            code: error.code,
           },
         });
       });
