@@ -10,6 +10,9 @@ import {
   USED_CAR_REGION__SELECT,
   USED_CAR_PRICE_FILTER__SHOW,
   USED_CAR_PRICE_FILTER__HIDE,
+  USED_CAR_DETAILS__REQUEST,
+  USED_CAR_DETAILS__SUCCESS,
+  USED_CAR_DETAILS__FAIL,
 
   CATALOG_DEALER__REQUEST,
   CATALOG_DEALER__SUCCESS,
@@ -211,6 +214,42 @@ export const actionOrderCar = (props) => {
           payload: {
             error: error.message,
             code: error.code,
+          },
+        });
+      });
+  };
+};
+
+export const actionFetchUsedCarDetails = carId => {
+  return dispatch => {
+    dispatch({
+      type: USED_CAR_DETAILS__REQUEST,
+      payload: carId,
+    });
+
+    return API.fetchUsedCarDetails(carId)
+      .then(response => {
+        if (response.error) {
+          return dispatch({
+            type: USED_CAR_DETAILS__FAIL,
+            payload: {
+              error: response.error.message,
+            },
+          });
+        }
+
+        const details = { ...response.data };
+
+        return dispatch({
+          type: USED_CAR_DETAILS__SUCCESS,
+          payload: details,
+        });
+      })
+      .catch(error => {
+        return dispatch({
+          type: USED_CAR_DETAILS__FAIL,
+          payload: {
+            error: error.message,
           },
         });
       });

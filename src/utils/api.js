@@ -43,13 +43,16 @@ export default {
     return this.request(nextPageUrl || url, baseRequestParams);
   },
 
+  fetchUsedCarDetails(carId) {
+    return this.request(`/stock/trade-in/cars/get/car/${carId}/`, baseRequestParams);
+  },
+
   callMe(props) {
     const {
       name,
       phone,
       email,
       action,
-      device,
       dealerID,
     } = props;
 
@@ -72,7 +75,6 @@ export default {
       name,
       email,
       phone,
-      device,
       dealerID,
     } = props;
 
@@ -106,8 +108,6 @@ export default {
       },
       body,
     });
-
-    console.log('body', body);
 
     return this.request('/orders/trade-in/post/', requestParams);
   },

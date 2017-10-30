@@ -53,6 +53,10 @@ const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
   },
+  spinnerContainer: {
+    flex: 1,
+    backgroundColor: styleConst.color.bg,
+  },
   titleContainer: {
     backgroundColor: styleConst.color.header,
     borderBottomWidth: styleConst.ui.borderWidth,
