@@ -102,7 +102,7 @@ android {
         applicationId "com.atlantm"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 35
+        versionCode 36
         versionName "4.2.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
