@@ -28,6 +28,7 @@ import UsedCarCityScreen from '../catalog/usedcar/containers/UsedCarCityScreen';
 import NewCarFilterScreen from '../catalog/newcar/containers/NewCarFilterScreen';
 import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
+import NewCarCityScreen from '../catalog/newcar/containers/NewCarCityScreen';
 
 const getRouter = initialRouteName => {
   return StackNavigator(
@@ -69,6 +70,7 @@ const getRouter = initialRouteName => {
           NewCarFilterScreen: { screen: NewCarFilterScreen },
           NewCarListScreen: { screen: NewCarListScreen },
           NewCarItemScreen: { screen: NewCarItemScreen },
+          NewCarCityScreen: { screen: NewCarCityScreen },
         }),
         navigationOptions: {
           header: null,

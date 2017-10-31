@@ -128,9 +128,7 @@ class NewCarFilterScreen extends Component {
       listBelarussiaByCities,
     );
 
-    const cityData = find(list, { id: city.id });
-    console.log('cityData', cityData);
-    return cityData;
+    return find(list, { id: city.id });
   }
 
   render() {
