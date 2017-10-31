@@ -58,9 +58,7 @@ class NewCarCityScreen extends Component {
             (listUkraine.length !== nextProps.listUkraine.length);
   }
 
-  selectItem = (item) => {
-    this.props.actionSelectNewCarCity(item);
-  }
+  selectItem = item => this.props.actionSelectNewCarCity(item)
 
   render() {
     const {
