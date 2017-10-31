@@ -84,10 +84,6 @@ const styles = StyleSheet.create({
   right: {
     flex: 2,
   },
-  listItem: {
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
 });
 
 const mapStateToProps = ({ catalog, dealer, nav }) => {
@@ -97,6 +93,9 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
     listRussiaByCities: dealer.listRussiaByCities,
     listBelarussiaByCities: dealer.listBelarussiaByCities,
     listUkraineByCities: dealer.listUkraineByCities,
+
+    filterBrands: catalog.newCar.filterBrands,
+    filterModels: catalog.newCar.filterModels,
     city: catalog.newCar.city,
     region: catalog.newCar.region,
     priceRange: catalog.newCar.priceRange,
@@ -132,13 +131,14 @@ class NewCarFilterScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { dealerSelected, filterData, isFetchingFilterData } = this.props;
+    const { dealerSelected, filterData, isFetchingFilterData, filterBrands } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'NewCarFilterScreen';
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (isFetchingFilterData !== nextProps.isFetchingFilterData) ||
-      (get(filterData, 'pages.next') !== get(nextProps, 'filterData.pages.next'));
+      (get(filterData, 'pages.next') !== get(nextProps, 'filterData.pages.next')) ||
+      (filterBrands.length !== nextProps.filterBrands);
   }
 
   getCityData = () => {
@@ -158,9 +158,7 @@ class NewCarFilterScreen extends Component {
     return find(list, { id: city.id });
   }
 
-  onPressBrands = () => {
-
-  }
+  onPressBrands = () => this.props.navigation.navigate('NewCarFilterBrandsScreen')
 
   onPressModels = () => {
 
@@ -189,6 +187,8 @@ class NewCarFilterScreen extends Component {
   render() {
     const {
       city,
+      filterBrands,
+      filterModels,
       filterData,
       navigation,
       dealerSelected,
@@ -220,38 +220,26 @@ class NewCarFilterScreen extends Component {
             <ListItemHeader text="ПАРАМЕТРЫ ПОИСКА" />
 
             <View style={styleListProfile.listItemContainer}>
-              <ListItem style={styles.listItem} onPress={this.onPressBrands}>
+              <ListItem style={styleListProfile.listItemPressable} onPress={this.onPressBrands}>
                 <Body style={styles.body} >
-                  <Item style={styleListProfile.inputItem} fixedLabel>
-                    <Label style={styleListProfile.label}>Марка</Label>
-                  </Item>
+                  <Label style={styleListProfile.label}>Марка</Label>
                 </Body>
                 <Right style={styles.right}>
-                  {/* <Text style={styleListProfile.listItemValue}>Выбрать</Text> */}
+                  {
+                    filterBrands.length !== 0 &&
+                      <Text style={styleListProfile.listItemValue}>
+                        {`Выбрано: ${filterBrands.length}`}
+                      </Text>
+                  }
                   <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
                 </Right>
               </ListItem>
             </View>
 
             <View style={styleListProfile.listItemContainer}>
-              <ListItem style={styles.listItem} onPress={this.onPressModels}>
+              <ListItem style={styleListProfile.listItemPressable} onPress={this.onPressModels}>
                 <Body style={styles.body} >
-                  <Item style={styleListProfile.inputItem} fixedLabel>
-                    <Label style={styleListProfile.label}>Модель</Label>
-                  </Item>
-                </Body>
-                <Right style={styles.right}>
-                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
-                </Right>
-              </ListItem>
-            </View>
-
-            <View style={styleListProfile.listItemContainer}>
-              <ListItem style={styles.listItem} onPress={this.onPressPrice}>
-                <Body style={styles.body} >
-                  <Item style={styleListProfile.inputItem} fixedLabel>
-                    <Label style={styleListProfile.label}>Цена</Label>
-                  </Item>
+                  <Label style={styleListProfile.label}>Модель</Label>
                 </Body>
                 <Right style={styles.right}>
                   <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
@@ -260,11 +248,9 @@ class NewCarFilterScreen extends Component {
             </View>
 
             <View style={styleListProfile.listItemContainer}>
-              <ListItem style={styles.listItem} onPress={this.onPressBody}>
+              <ListItem style={styleListProfile.listItemPressable} onPress={this.onPressPrice}>
                 <Body style={styles.body} >
-                  <Item style={styleListProfile.inputItem} fixedLabel>
-                    <Label style={styleListProfile.label}>Тип кузова</Label>
-                  </Item>
+                  <Label style={styleListProfile.label}>Цена</Label>
                 </Body>
                 <Right style={styles.right}>
                   <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
@@ -273,11 +259,9 @@ class NewCarFilterScreen extends Component {
             </View>
 
             <View style={styleListProfile.listItemContainer}>
-              <ListItem style={styles.listItem} onPress={this.onPressGearbox}>
+              <ListItem style={styleListProfile.listItemPressable} onPress={this.onPressBody}>
                 <Body style={styles.body} >
-                  <Item style={styleListProfile.inputItem} fixedLabel>
-                    <Label style={styleListProfile.label}>КПП</Label>
-                  </Item>
+                  <Label style={styleListProfile.label}>Тип кузова</Label>
                 </Body>
                 <Right style={styles.right}>
                   <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
@@ -286,11 +270,20 @@ class NewCarFilterScreen extends Component {
             </View>
 
             <View style={styleListProfile.listItemContainer}>
-              <ListItem style={styles.listItem} onPress={this.onPressEngineType}>
+              <ListItem style={styleListProfile.listItemPressable} onPress={this.onPressGearbox}>
+                <Body style={styles.body} >
+                  <Label style={styleListProfile.label}>КПП</Label>
+                </Body>
+                <Right style={styles.right}>
+                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                </Right>
+              </ListItem>
+            </View>
+
+            <View style={styleListProfile.listItemContainer}>
+              <ListItem style={styleListProfile.listItemPressable} onPress={this.onPressEngineType}>
                 <Body style={styles.body}>
-                  <Item style={styleListProfile.inputItem} fixedLabel>
-                    <Label style={styleListProfile.label}>Тип двигателя</Label>
-                  </Item>
+                  <Label style={styleListProfile.label}>Тип двигателя</Label>
                 </Body>
                 <Right style={styles.right}>
                   <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
@@ -299,11 +292,9 @@ class NewCarFilterScreen extends Component {
             </View>
 
             <View style={styleListProfile.listItemContainer}>
-              <ListItem last style={styles.listItem} onPress={this.onPressDrive}>
+              <ListItem last style={styleListProfile.listItemPressable} onPress={this.onPressDrive}>
                 <Body style={styles.body}>
-                  <Item style={styleListProfile.inputItem} fixedLabel>
-                    <Label style={styleListProfile.label}>Привод</Label>
-                  </Item>
+                  <Label style={styleListProfile.label}>Привод</Label>
                 </Body>
                 <Right style={styles.right}>
                   <Icon name="arrow-forward" style={styleListProfile.iconArrow} />

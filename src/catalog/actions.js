@@ -22,6 +22,9 @@ import {
   NEW_CAR_FILTER_DATA__SUCCESS,
   NEW_CAR_FILTER_DATA__FAIL,
 
+  NEW_CAR_FILTER_BRANDS__SELECT,
+  NEW_CAR_FILTER_MODELS__SELECT,
+
   CATALOG_DEALER__REQUEST,
   CATALOG_DEALER__SUCCESS,
   CATALOG_DEALER__FAIL,
@@ -323,5 +326,23 @@ export const actionFetchNewCarFilterData = props => {
           },
         });
       });
+  };
+};
+
+export const actionSelectNewCarFilterBrands = (brands) => {
+  return dispatch => {
+    return dispatch({
+      type: NEW_CAR_FILTER_BRANDS__SELECT,
+      payload: brands,
+    });
+  };
+};
+
+export const actionSelectNewCarFilterModels = (models) => {
+  return dispatch => {
+    return dispatch({
+      type: NEW_CAR_FILTER_MODELS__SELECT,
+      payload: models,
+    });
   };
 };
