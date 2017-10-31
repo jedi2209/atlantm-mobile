@@ -15,7 +15,6 @@ import {
   USED_CAR_DETAILS__FAIL,
 
   NEW_CAR_CITY__SELECT,
-  NEW_CAR_PRICE_RANGE__SELECT,
   NEW_CAR_REGION__SELECT,
 
   NEW_CAR_FILTER_DATA__REQUEST,
@@ -24,6 +23,10 @@ import {
 
   NEW_CAR_FILTER_BRANDS__SELECT,
   NEW_CAR_FILTER_MODELS__SELECT,
+  NEW_CAR_FILTER_GEARBOX__SELECT,
+  NEW_CAR_FILTER_ENGINE_TYPE__SELECT,
+  NEW_CAR_FILTER_DRIVE__SELECT,
+  NEW_CAR_FILTER_PRICE__SELECT,
 
   CATALOG_DEALER__REQUEST,
   CATALOG_DEALER__SUCCESS,
@@ -268,15 +271,6 @@ export const actionFetchUsedCarDetails = carId => {
 };
 
 // newcar
-export const actionSelectNewCarPriceRange = (prices) => {
-  return dispatch => {
-    dispatch({
-      type: NEW_CAR_PRICE_RANGE__SELECT,
-      payload: prices,
-    });
-  };
-};
-
 export const actionSelectNewCarCity = (city) => {
   return dispatch => {
     dispatch({
@@ -343,6 +337,42 @@ export const actionSelectNewCarFilterModels = (models) => {
     return dispatch({
       type: NEW_CAR_FILTER_MODELS__SELECT,
       payload: models,
+    });
+  };
+};
+
+export const actionSelectNewCarFilterGearbox = (gearbox) => {
+  return dispatch => {
+    dispatch({
+      type: NEW_CAR_FILTER_GEARBOX__SELECT,
+      payload: gearbox,
+    });
+  };
+};
+
+export const actionSelectNewCarFilterDrive = (drive) => {
+  return dispatch => {
+    dispatch({
+      type: NEW_CAR_FILTER_DRIVE__SELECT,
+      payload: drive,
+    });
+  };
+};
+
+export const actionSelectNewCarFilterEngineType = (engineType) => {
+  return dispatch => {
+    dispatch({
+      type: NEW_CAR_FILTER_ENGINE_TYPE__SELECT,
+      payload: engineType,
+    });
+  };
+};
+
+export const actionSelectNewCarFilterPrice = (prices) => {
+  return dispatch => {
+    dispatch({
+      type: NEW_CAR_FILTER_PRICE__SELECT,
+      payload: prices,
     });
   };
 };
