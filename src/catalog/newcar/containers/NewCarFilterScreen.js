@@ -7,7 +7,19 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { Container, Content, StyleProvider, Button, Footer } from 'native-base';
+import {
+  Body,
+  Item,
+  Icon,
+  Label,
+  Right,
+  Footer,
+  Button,
+  Content,
+  ListItem,
+  Container,
+  StyleProvider,
+} from 'native-base';
 
 // redux
 import { bindActionCreators } from 'redux';
@@ -18,6 +30,10 @@ import { actionFetchNewCarFilterData } from '../../actions';
 import CityItemList from '../components/CityItemList';
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import ListItemHeader from '../../../profile/components/ListItemHeader';
+
+// styles
+import styleListProfile from '../../../core/components/Lists/style';
 
 // helpers
 import { get, find } from 'lodash';
@@ -31,6 +47,7 @@ const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
     flex: 1,
+    paddingBottom: 100,
   },
   spinnerContainer: {
     flex: 1,
@@ -60,6 +77,16 @@ const styles = StyleSheet.create({
   },
   footer: {
     height: FOOTER_HEIGHT,
+  },
+  body: {
+    flex: 1.5,
+  },
+  right: {
+    flex: 2,
+  },
+  listItem: {
+    paddingTop: 0,
+    paddingBottom: 0,
   },
 });
 
@@ -131,6 +158,34 @@ class NewCarFilterScreen extends Component {
     return find(list, { id: city.id });
   }
 
+  onPressBrands = () => {
+
+  }
+
+  onPressModels = () => {
+
+  }
+
+  onPressPrice = () => {
+
+  }
+
+  onPressBody = () => {
+
+  }
+
+  onPressGearbox = () => {
+
+  }
+
+  onPressEngineType = () => {
+
+  }
+
+  onPressDrive = () => {
+
+  }
+
   render() {
     const {
       city,
@@ -155,13 +210,106 @@ class NewCarFilterScreen extends Component {
         <Container>
           <Content style={styles.content}>
 
-          <CityItemList
-            navigation={navigation}
-            cityName={city.name}
-            cityData={this.getCityData()}
-            returnScreen="NewCarFilterScreen"
-          />
+            <CityItemList
+              navigation={navigation}
+              cityName={city.name}
+              cityData={this.getCityData()}
+              returnScreen="NewCarFilterScreen"
+            />
 
+            <ListItemHeader text="ПАРАМЕТРЫ ПОИСКА" />
+
+            <View style={styleListProfile.listItemContainer}>
+              <ListItem style={styles.listItem} onPress={this.onPressBrands}>
+                <Body style={styles.body} >
+                  <Item style={styleListProfile.inputItem} fixedLabel>
+                    <Label style={styleListProfile.label}>Марка</Label>
+                  </Item>
+                </Body>
+                <Right style={styles.right}>
+                  {/* <Text style={styleListProfile.listItemValue}>Выбрать</Text> */}
+                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                </Right>
+              </ListItem>
+            </View>
+
+            <View style={styleListProfile.listItemContainer}>
+              <ListItem style={styles.listItem} onPress={this.onPressModels}>
+                <Body style={styles.body} >
+                  <Item style={styleListProfile.inputItem} fixedLabel>
+                    <Label style={styleListProfile.label}>Модель</Label>
+                  </Item>
+                </Body>
+                <Right style={styles.right}>
+                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                </Right>
+              </ListItem>
+            </View>
+
+            <View style={styleListProfile.listItemContainer}>
+              <ListItem style={styles.listItem} onPress={this.onPressPrice}>
+                <Body style={styles.body} >
+                  <Item style={styleListProfile.inputItem} fixedLabel>
+                    <Label style={styleListProfile.label}>Цена</Label>
+                  </Item>
+                </Body>
+                <Right style={styles.right}>
+                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                </Right>
+              </ListItem>
+            </View>
+
+            <View style={styleListProfile.listItemContainer}>
+              <ListItem style={styles.listItem} onPress={this.onPressBody}>
+                <Body style={styles.body} >
+                  <Item style={styleListProfile.inputItem} fixedLabel>
+                    <Label style={styleListProfile.label}>Тип кузова</Label>
+                  </Item>
+                </Body>
+                <Right style={styles.right}>
+                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                </Right>
+              </ListItem>
+            </View>
+
+            <View style={styleListProfile.listItemContainer}>
+              <ListItem style={styles.listItem} onPress={this.onPressGearbox}>
+                <Body style={styles.body} >
+                  <Item style={styleListProfile.inputItem} fixedLabel>
+                    <Label style={styleListProfile.label}>КПП</Label>
+                  </Item>
+                </Body>
+                <Right style={styles.right}>
+                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                </Right>
+              </ListItem>
+            </View>
+
+            <View style={styleListProfile.listItemContainer}>
+              <ListItem style={styles.listItem} onPress={this.onPressEngineType}>
+                <Body style={styles.body}>
+                  <Item style={styleListProfile.inputItem} fixedLabel>
+                    <Label style={styleListProfile.label}>Тип двигателя</Label>
+                  </Item>
+                </Body>
+                <Right style={styles.right}>
+                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                </Right>
+              </ListItem>
+            </View>
+
+            <View style={styleListProfile.listItemContainer}>
+              <ListItem last style={styles.listItem} onPress={this.onPressDrive}>
+                <Body style={styles.body}>
+                  <Item style={styleListProfile.inputItem} fixedLabel>
+                    <Label style={styleListProfile.label}>Привод</Label>
+                  </Item>
+                </Body>
+                <Right style={styles.right}>
+                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                </Right>
+              </ListItem>
+            </View>
           </Content>
           <Footer style={styles.footer}>
             <Button onPress={this.onPressOrder} full style={styles.button}>
