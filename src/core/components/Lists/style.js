@@ -10,6 +10,9 @@ export default StyleSheet.create({
     fontSize: 18,
     fontFamily: styleConst.font.regular,
   },
+  bodyWithLeftGap: {
+    marginLeft: 10,
+  },
   inputItem: {
     borderBottomWidth: 0,
     minHeight: 44,
@@ -21,6 +24,11 @@ export default StyleSheet.create({
     paddingRight: 0,
     paddingTop: 0,
     paddingBottom: 0,
+  },
+  listItemPressable: {
+    paddingTop: 0,
+    paddingBottom: 0,
+    minHeight: 44,
   },
   listItemValue: {
     fontSize: 17,

@@ -18,9 +18,12 @@ import {
   NEW_CAR_CITY__SELECT,
   NEW_CAR_REGION__SELECT,
   NEW_CAR_PRICE_RANGE__SELECT,
+
   NEW_CAR_FILTER_DATA__REQUEST,
   NEW_CAR_FILTER_DATA__SUCCESS,
   NEW_CAR_FILTER_DATA__FAIL,
+  NEW_CAR_FILTER_BRANDS__SELECT,
+  NEW_CAR_FILTER_MODELS__SELECT,
 
   EVENT_LOAD_MORE,
 
@@ -275,6 +278,24 @@ const newCarRegion = (state = null, action) => {
   }
 };
 
+const newCarFilterBrands = (state = [], action) => {
+  switch (action.type) {
+    case NEW_CAR_FILTER_BRANDS__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const newCarFilterModels = (state = [], action) => {
+  switch (action.type) {
+    case NEW_CAR_FILTER_MODELS__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   dealer,
   orderComment,
@@ -300,6 +321,8 @@ export default combineReducers({
   }),
 
   newCar: combineReducers({
+    filterBrands: newCarFilterBrands,
+    filterModels: newCarFilterModels,
     filterData: newCarFilterData,
     // carDetails: usedCarDetails,
     city: newCarCity,
