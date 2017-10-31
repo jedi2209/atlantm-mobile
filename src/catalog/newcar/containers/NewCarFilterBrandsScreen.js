@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
 import {
   Body,
-  Item,
-  Left,
   Label,
   Content,
   CheckBox,
@@ -24,6 +22,7 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import styleListProfile from '../../../core/components/Lists/style';
 
 // helpers
+import { get } from 'lodash';
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
@@ -64,6 +63,10 @@ class NewCarFilterBrandsScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
+    const { nav } = this.props;
+    console.log('nav', nav);
+    console.log('nextProps', nextProps);
+
     return this.props.filterBrands.length !== nextProps.filterBrands.length;
   }
 
@@ -86,12 +89,14 @@ class NewCarFilterBrandsScreen extends Component {
     const {
       filterData,
       filterBrands,
-      navigation,
     } = this.props;
+
+    if (!filterData) return null;
 
     console.log('== NewCarFilterBrandsScreen ==');
 
-    const brands = filterData.data.brand;
+    const brands = get(filterData, 'data.brand');
+
     const brandsKeys = Object.keys(brands);
 
     return (

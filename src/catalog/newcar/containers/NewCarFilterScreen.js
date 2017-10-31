@@ -100,6 +100,7 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
     region: catalog.newCar.region,
     priceRange: catalog.newCar.priceRange,
     filterData: catalog.newCar.filterData,
+    needFetchFilterData: catalog.newCar.meta.needFetchFilterData,
     isFetchingFilterData: catalog.newCar.meta.isFetchingFilterData,
   };
 };
@@ -128,6 +129,24 @@ class NewCarFilterScreen extends Component {
     const { actionFetchNewCarFilterData, city } = this.props;
 
     actionFetchNewCarFilterData({ city: city.id });
+  }
+
+  componentDidUpdate() {
+    const {
+      city,
+      filterBrands,
+      filterModels,
+      needFetchFilterData,
+      actionFetchNewCarFilterData,
+    } = this.props;
+
+    if (needFetchFilterData) {
+      actionFetchNewCarFilterData({
+        city: city.id,
+        filterBrands,
+        filterModels,
+      });
+    }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -160,9 +179,7 @@ class NewCarFilterScreen extends Component {
 
   onPressBrands = () => this.props.navigation.navigate('NewCarFilterBrandsScreen')
 
-  onPressModels = () => {
-
-  }
+  onPressModels = () => this.props.navigation.navigate('NewCarFilterModelsScreen')
 
   onPressPrice = () => {
 
@@ -242,6 +259,12 @@ class NewCarFilterScreen extends Component {
                   <Label style={styleListProfile.label}>Модель</Label>
                 </Body>
                 <Right style={styles.right}>
+                  {
+                    filterModels.length !== 0 &&
+                      <Text style={styleListProfile.listItemValue}>
+                        {`Выбрано: ${filterModels.length}`}
+                      </Text>
+                  }
                   <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
                 </Right>
               </ListItem>

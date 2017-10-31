@@ -47,8 +47,54 @@ export default {
     return this.request(`/stock/trade-in/cars/get/car/${carId}/`, baseRequestParams);
   },
 
-  fetchNewCarFilterData({ city }) {
-    return this.request(`/stock/new/cars/search/?city=${city}`, baseRequestParams);
+  fetchNewCarFilterData({
+    city,
+    filterBrands,
+    filterModels,
+    filterGearbox,
+    filterDrive,
+    filterEngineType,
+    filterPrice,
+  }) {
+    let url = `/stock/new/cars/search/?city=${city}`;
+
+    if (filterBrands) {
+      filterBrands.forEach(id => {
+        url += `&brand[]=${id}`;
+      });
+    }
+
+    if (filterModels) {
+      filterModels.forEach(item => {
+        url += `&model[]=${item.modelId}`;
+      });
+    }
+
+    if (filterGearbox) {
+      filterGearbox.forEach(id => {
+        url += `&gearbox[]=${id}`;
+      });
+    }
+
+    if (filterDrive) {
+      filterDrive.forEach(id => {
+        url += `&drive[]=${id}`;
+      });
+    }
+
+    if (filterEngineType) {
+      filterEngineType.forEach(id => {
+        url += `&enginetype[]=${id}`;
+      });
+    }
+
+    if (filterPrice) {
+      url += `&price_from=${filterPrice.minPrice}&price_to=${filterPrice.maxPrice}`;
+    }
+
+    console.log('API url', url);
+
+    return this.request(url, baseRequestParams);
   },
 
   callMe(props) {

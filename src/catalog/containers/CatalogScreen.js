@@ -13,7 +13,7 @@ import {
 
   actionSelectNewCarCity,
   actionSelectNewCarRegion,
-  actionSelectNewCarPriceRange,
+  actionSelectNewCarFilterPrice,
 } from '../actions';
 import { actionSetDealersByCities } from '../../dealer/actions';
 
@@ -99,7 +99,7 @@ const mapDispatchToProps = dispatch => {
 
     actionSelectNewCarCity,
     actionSelectNewCarRegion,
-    actionSelectNewCarPriceRange,
+    actionSelectNewCarFilterPrice,
   }, dispatch);
 };
 
@@ -131,7 +131,7 @@ class CatalogScreen extends Component {
 
       actionSelectNewCarCity,
       actionSelectNewCarRegion,
-      actionSelectNewCarPriceRange,
+      actionSelectNewCarFilterPrice,
     } = this.props;
 
     const { city, region } = dealerSelected;
@@ -142,7 +142,7 @@ class CatalogScreen extends Component {
 
     actionSelectNewCarCity(city);
     actionSelectNewCarRegion(region);
-    actionSelectNewCarPriceRange(null);
+    actionSelectNewCarFilterPrice(null);
 
     // для перехода с версии 4.1.0 -> 4.2.0, когда еще нет данных
     // с дилерами по городам

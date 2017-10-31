@@ -27,6 +27,7 @@ import UsedCarItemScreen from '../catalog/usedcar/containers/UsedCarItemScreen';
 import UsedCarCityScreen from '../catalog/usedcar/containers/UsedCarCityScreen';
 import NewCarFilterScreen from '../catalog/newcar/containers/NewCarFilterScreen';
 import NewCarFilterBrandsScreen from '../catalog/newcar/containers/NewCarFilterBrandsScreen';
+import NewCarFilterModelsScreen from '../catalog/newcar/containers/NewCarFilterModelsScreen';
 import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
 import NewCarCityScreen from '../catalog/newcar/containers/NewCarCityScreen';
@@ -70,6 +71,7 @@ const getRouter = initialRouteName => {
           UsedCarCityScreen: { screen: UsedCarCityScreen },
           NewCarFilterScreen: { screen: NewCarFilterScreen },
           NewCarFilterBrandsScreen: { screen: NewCarFilterBrandsScreen },
+          NewCarFilterModelsScreen: { screen: NewCarFilterModelsScreen },
           NewCarListScreen: { screen: NewCarListScreen },
           NewCarItemScreen: { screen: NewCarItemScreen },
           NewCarCityScreen: { screen: NewCarCityScreen },
