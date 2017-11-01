@@ -267,11 +267,22 @@ const newCarFilterData = (state = null, action) => {
   }
 };
 
-const newCarByFilter = (state = null, action) => {
+const newCarByFilter = (state = {}, action) => {
   switch (action.type) {
-    case NEW_CAR_BY_FILTER__REQUEST:
-      return null;
+    // case NEW_CAR_BY_FILTER__REQUEST:
+    //   return {};
     case NEW_CAR_BY_FILTER__SUCCESS:
+      if (action.payload.type === EVENT_LOAD_MORE) {
+        const newState = { ...action.payload };
+
+        newState.data = [].concat(
+          state.data,
+          newState.data,
+        );
+
+        return newState;
+      }
+
       return action.payload;
     default:
       return state;

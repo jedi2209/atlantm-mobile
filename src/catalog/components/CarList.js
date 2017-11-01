@@ -9,7 +9,7 @@ import { EVENT_LOAD_MORE, EVENT_REFRESH, EVENT_DEFAULT } from '../actionTypes';
 import CarListItem from './CarListItem';
 
 // helpers
-import { debounce } from 'lodash';
+import { debounce, isObject } from 'lodash';
 import styleConst from '../../core/style-const';
 import { verticalScale } from '../../utils/scale';
 
@@ -81,8 +81,8 @@ export default class CarList extends Component {
       <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} /> :
       (
         <View style={styles.messageContainer}>
-          <Text style={styles.message}>{`На онлайн-складе`}</Text>
-          <Text style={styles.message}>{`нет подержанных авто`}</Text>
+          <Text style={styles.message}>На онлайн-складе</Text>
+          <Text style={styles.message}>нет авто</Text>
         </View>
       );
   }
@@ -103,7 +103,7 @@ export default class CarList extends Component {
   }
 
   onRefresh = () => {
-    const { items, dataHandler } = this.props;
+    const { dataHandler } = this.props;
 
     this.setState({
       bounces: false,

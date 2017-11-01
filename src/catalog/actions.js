@@ -336,7 +336,13 @@ export const actionFetchNewCarByFilter = props => {
       payload: props,
     });
 
-    return API.fetchNewCarByFilter(props)
+    const newProps = { ...props };
+
+    if (props.type === EVENT_LOAD_MORE) {
+      newProps.searchUrl = props.nextPage;
+    }
+
+    return API.fetchNewCarByFilter(newProps)
       .then(response => {
         if (response.error) {
           return dispatch({
