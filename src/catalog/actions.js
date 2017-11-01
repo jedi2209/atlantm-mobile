@@ -20,6 +20,9 @@ import {
   NEW_CAR_FILTER_DATA__REQUEST,
   NEW_CAR_FILTER_DATA__SUCCESS,
   NEW_CAR_FILTER_DATA__FAIL,
+  NEW_CAR_BY_FILTER__REQUEST,
+  NEW_CAR_BY_FILTER__SUCCESS,
+  NEW_CAR_BY_FILTER__FAIL,
 
   NEW_CAR_FILTER_BRANDS__SELECT,
   NEW_CAR_FILTER_MODELS__SELECT,
@@ -316,6 +319,40 @@ export const actionFetchNewCarFilterData = props => {
       .catch(error => {
         return dispatch({
           type: NEW_CAR_FILTER_DATA__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const actionFetchNewCarByFilter = props => {
+  return dispatch => {
+    dispatch({
+      type: NEW_CAR_BY_FILTER__REQUEST,
+      payload: props,
+    });
+
+    return API.fetchNewCarByFilter(props)
+      .then(response => {
+        if (response.error) {
+          return dispatch({
+            type: NEW_CAR_BY_FILTER__FAIL,
+            payload: {
+              error: response.error.message,
+            },
+          });
+        }
+
+        return dispatch({
+          type: NEW_CAR_BY_FILTER__SUCCESS,
+          payload: { ...response },
+        });
+      })
+      .catch(error => {
+        return dispatch({
+          type: NEW_CAR_BY_FILTER__FAIL,
           payload: {
             error: error.message,
           },

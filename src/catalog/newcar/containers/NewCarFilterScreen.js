@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {
   Body,
-  Item,
   Icon,
   Label,
   Right,
@@ -24,7 +23,7 @@ import {
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionFetchNewCarFilterData } from '../../actions';
+import { actionFetchNewCarFilterData, actionFetchNewCarByFilter } from '../../actions';
 
 // components
 import CityItemList from '../components/CityItemList';
@@ -56,6 +55,13 @@ const styles = StyleSheet.create({
   spinner: {
     alignSelf: 'center',
     marginTop: verticalScale(60),
+  },
+  spinnerButton: {
+    alignSelf: 'center',
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   button: {
     flex: 1,
@@ -94,6 +100,8 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
     listBelarussiaByCities: dealer.listBelarussiaByCities,
     listUkraineByCities: dealer.listUkraineByCities,
 
+    items: catalog.newCar.items,
+    filterData: catalog.newCar.filterData,
     filterBrands: catalog.newCar.filterBrands,
     filterModels: catalog.newCar.filterModels,
     filterBody: catalog.newCar.filterBody,
@@ -104,15 +112,16 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
 
     city: catalog.newCar.city,
     region: catalog.newCar.region,
-    filterData: catalog.newCar.filterData,
     needFetchFilterData: catalog.newCar.meta.needFetchFilterData,
     isFetchingFilterData: catalog.newCar.meta.isFetchingFilterData,
+    isFetchingNewCarByFilter: catalog.newCar.meta.isFetchingNewCarByFilter,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
     actionFetchNewCarFilterData,
+    actionFetchNewCarByFilter,
   }, dispatch);
 };
 
@@ -138,7 +147,7 @@ class NewCarFilterScreen extends Component {
 
   componentDidUpdate() {
     const {
-      city,
+      filterData,
       filterBrands,
       filterModels,
       filterBody,
@@ -147,12 +156,12 @@ class NewCarFilterScreen extends Component {
       filterEngineType,
       filterPrice,
       needFetchFilterData,
-      actionFetchNewCarFilterData,
+      actionFetchNewCarByFilter,
     } = this.props;
 
     if (needFetchFilterData) {
-      actionFetchNewCarFilterData({
-        city: city.id,
+      actionFetchNewCarByFilter({
+        searchUrl: filterData.search_url,
         filterBrands,
         filterModels,
         filterBody,
@@ -165,13 +174,20 @@ class NewCarFilterScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { dealerSelected, filterData, isFetchingFilterData, filterBrands } = this.props;
+    const {
+      items,
+      filterData,
+      filterBrands,
+      dealerSelected,
+      isFetchingFilterData,
+    } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'NewCarFilterScreen';
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (isFetchingFilterData !== nextProps.isFetchingFilterData) ||
       (get(filterData, 'pages.next') !== get(nextProps, 'filterData.pages.next')) ||
+      (get(items, 'pages.next') !== get(nextProps, 'items.pages.next')) ||
       (filterBrands.length !== nextProps.filterBrands);
   }
 
@@ -217,6 +233,7 @@ class NewCarFilterScreen extends Component {
   render() {
     const {
       city,
+      items,
       filterBrands,
       filterModels,
       filterBody,
@@ -228,6 +245,7 @@ class NewCarFilterScreen extends Component {
       navigation,
       dealerSelected,
       isFetchingFilterData,
+      isFetchingNewCarByFilter,
     } = this.props;
 
     console.log('== NewCarFilterScreen ==');
@@ -322,6 +340,12 @@ class NewCarFilterScreen extends Component {
                   <Label style={styleListProfile.label}>КПП</Label>
                 </Body>
                 <Right style={styles.right}>
+                  {
+                    filterGearbox.length !== 0 &&
+                      <Text style={styleListProfile.listItemValue}>
+                        {`Выбрано: ${filterGearbox.length}`}
+                      </Text>
+                  }
                   <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
                 </Right>
               </ListItem>
@@ -333,6 +357,12 @@ class NewCarFilterScreen extends Component {
                   <Label style={styleListProfile.label}>Тип двигателя</Label>
                 </Body>
                 <Right style={styles.right}>
+                  {
+                    filterEngineType.length !== 0 &&
+                      <Text style={styleListProfile.listItemValue}>
+                        {`Выбрано: ${filterEngineType.length}`}
+                      </Text>
+                  }
                   <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
                 </Right>
               </ListItem>
@@ -344,6 +374,12 @@ class NewCarFilterScreen extends Component {
                   <Label style={styleListProfile.label}>Привод</Label>
                 </Body>
                 <Right style={styles.right}>
+                  {
+                    filterDrive.length !== 0 &&
+                      <Text style={styleListProfile.listItemValue}>
+                        {`Выбрано: ${filterDrive.length}`}
+                      </Text>
+                  }
                   <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
                 </Right>
               </ListItem>
@@ -351,11 +387,23 @@ class NewCarFilterScreen extends Component {
           </Content>
           <Footer style={styles.footer}>
             <Button onPress={this.onPressOrder} full style={styles.button}>
-              <Text style={styles.buttonText}>{`НАЙДЕНО ${filterData.total.count}`}</Text>
-              <Image
-                source={require('../../../core/components/CustomIcon/assets/arrow-right.png')}
-                style={styles.buttonIcon}
-              />
+              {
+                isFetchingNewCarByFilter ?
+                  (
+                    <ActivityIndicator color="#fff" style={styles.spinnerButton} />
+                  ) :
+                  (
+                    <View style={styles.buttonContent} >
+                      <Text style={styles.buttonText}>
+                        {`НАЙДЕНО ${items ? items.total.count : filterData.total.count}`}
+                      </Text>
+                      <Image
+                        source={require('../../../core/components/CustomIcon/assets/arrow-right.png')}
+                        style={styles.buttonIcon}
+                      />
+                    </View>
+                  )
+              }
             </Button>
           </Footer>
         </Container>

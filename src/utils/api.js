@@ -47,8 +47,12 @@ export default {
     return this.request(`/stock/trade-in/cars/get/car/${carId}/`, baseRequestParams);
   },
 
-  fetchNewCarFilterData({
-    city,
+  fetchNewCarFilterData({ city }) {
+    return this.request(`/stock/new/cars/search/?city=${city}`, baseRequestParams);
+  },
+
+  fetchNewCarByFilter({
+    searchUrl,
     filterBrands,
     filterModels,
     filterBody,
@@ -57,46 +61,55 @@ export default {
     filterEngineType,
     filterPrice,
   }) {
-    let url = `/stock/new/cars/search/?city=${city}`;
+    let url = searchUrl;
+    let isAmp = false;
+    const setParamDivider = () => isAmp ? '&' : '?';
 
     if (filterBrands) {
       filterBrands.forEach(id => {
-        url += `&brand[]=${id}`;
+        url += `${setParamDivider()}brand[]=${id}`;
+        if (!isAmp) isAmp = true;
       });
     }
 
     if (filterModels) {
       filterModels.forEach(item => {
-        url += `&model[]=${item.modelId}`;
+        url += `${setParamDivider()}model[]=${item.modelId}`;
+        if (!isAmp) isAmp = true;
       });
     }
 
     if (filterGearbox) {
       filterGearbox.forEach(id => {
-        url += `&gearbox[]=${id}`;
+        url += `${setParamDivider()}gearbox[]=${id}`;
+        if (!isAmp) isAmp = true;
       });
     }
 
     if (filterBody) {
       filterBody.forEach(id => {
-        url += `&body[]=${id}`;
+        url += `${setParamDivider()}body[]=${id}`;
+        if (!isAmp) isAmp = true;
       });
     }
 
     if (filterDrive) {
       filterDrive.forEach(id => {
-        url += `&drive[]=${id}`;
+        url += `${setParamDivider()}drive[]=${id}`;
+        if (!isAmp) isAmp = true;
       });
     }
 
     if (filterEngineType) {
       filterEngineType.forEach(id => {
-        url += `&enginetype[]=${id}`;
+        url += `${setParamDivider()}enginetype[]=${id}`;
+        if (!isAmp) isAmp = true;
       });
     }
 
     if (filterPrice) {
-      url += `&price_from=${filterPrice.minPrice}&price_to=${filterPrice.maxPrice}`;
+      url += `${setParamDivider()}price_from=${filterPrice.minPrice}&price_to=${filterPrice.maxPrice}`;
+      if (!isAmp) isAmp = true;
     }
 
     console.log('API url', url);

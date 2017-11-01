@@ -21,6 +21,9 @@ import {
   NEW_CAR_FILTER_DATA__REQUEST,
   NEW_CAR_FILTER_DATA__SUCCESS,
   NEW_CAR_FILTER_DATA__FAIL,
+  NEW_CAR_BY_FILTER__REQUEST,
+  NEW_CAR_BY_FILTER__SUCCESS,
+  NEW_CAR_BY_FILTER__FAIL,
 
   NEW_CAR_FILTER_BRANDS__SELECT,
   NEW_CAR_FILTER_MODELS__SELECT,
@@ -239,11 +242,34 @@ const isFetchingFilterData = (state = false, action) => {
   }
 };
 
+const isFetchingNewCarByFilter = (state = false, action) => {
+  switch (action.type) {
+    case NEW_CAR_BY_FILTER__REQUEST:
+      return true;
+    case NEW_CAR_BY_FILTER__SUCCESS:
+    case NEW_CAR_BY_FILTER__FAIL:
+      return false;
+    default:
+      return state;
+  }
+};
+
 const newCarFilterData = (state = null, action) => {
   switch (action.type) {
     case NEW_CAR_FILTER_DATA__REQUEST:
       return null;
     case NEW_CAR_FILTER_DATA__SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const newCarByFilter = (state = null, action) => {
+  switch (action.type) {
+    case NEW_CAR_BY_FILTER__REQUEST:
+      return null;
+    case NEW_CAR_BY_FILTER__SUCCESS:
       return action.payload;
     default:
       return state;
@@ -350,6 +376,7 @@ const needFetchFilterData = (state = false, action) => {
     case NEW_CAR_FILTER_PRICE__SELECT:
       return true;
     case NEW_CAR_FILTER_DATA__REQUEST:
+    case NEW_CAR_BY_FILTER__REQUEST:
       return false;
     default:
       return state;
@@ -381,6 +408,7 @@ export default combineReducers({
   }),
 
   newCar: combineReducers({
+    // carDetails: usedCarDetails,
     filterBrands: newCarFilterBrands,
     filterModels: newCarFilterModels,
     filterBody: newCarFilterBody,
@@ -389,12 +417,12 @@ export default combineReducers({
     filterEngineType: newCarFilterEngineType,
     filterPrice: newCarFilterPrice,
     filterData: newCarFilterData,
-    // carDetails: usedCarDetails,
+    items: newCarByFilter,
     city: newCarCity,
-    // items: newCarItems,
     region: newCarRegion,
     meta: combineReducers({
       isFetchingFilterData,
+      isFetchingNewCarByFilter,
       needFetchFilterData,
       // isFetchItems: isFetchNewCarItems,
       // isPriceFilterShow: isNewCarPriceFilterShow,
