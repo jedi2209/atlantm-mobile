@@ -27,8 +27,8 @@ export default class CarOrderList extends PureComponent {
             <Body>
               <Item style={[styleListProfile.inputItem, { justifyContent: 'flex-start' }]} fixedLabel>
                 <Label style={styleListProfile.label}>Марка</Label>
-                <View style={styles.listItemValueContainer}>
-                  <Text style={styles.listItemValue}>{brand}</Text>
+                <View style={styleListProfile.listItemValueContainer}>
+                  <Text style={styleListProfile.listItemValue}>{brand}</Text>
                 </View>
               </Item>
             </Body>
@@ -40,8 +40,8 @@ export default class CarOrderList extends PureComponent {
             <Body>
               <Item style={styleListProfile.inputItem} fixedLabel>
                 <Label style={styleListProfile.label}>Модель</Label>
-                <View style={styles.listItemValueContainer}>
-                  <Text style={styles.listItemValue}>{model}</Text>
+                <View style={styleListProfile.listItemValueContainer}>
+                  <Text style={styleListProfile.listItemValue}>{model}</Text>
                 </View>
               </Item>
             </Body>
@@ -53,8 +53,8 @@ export default class CarOrderList extends PureComponent {
             <Body>
               <Item style={styleListProfile.inputItem} fixedLabel>
                 <Label style={styleListProfile.label}>Цена</Label>
-                <View style={styles.listItemValueContainer}>
-                  <Text style={styles.listItemValue}>{price}</Text>
+                <View style={styleListProfile.listItemValueContainer}>
+                  <Text style={styleListProfile.listItemValue}>{price}</Text>
                 </View>
               </Item>
             </Body>

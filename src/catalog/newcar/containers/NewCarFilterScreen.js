@@ -96,9 +96,14 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
 
     filterBrands: catalog.newCar.filterBrands,
     filterModels: catalog.newCar.filterModels,
+    filterBody: catalog.newCar.filterBody,
+    filterGearbox: catalog.newCar.filterGearbox,
+    filterDrive: catalog.newCar.filterDrive,
+    filterEngineType: catalog.newCar.filterEngineType,
+    filterPrice: catalog.newCar.filterPrice,
+
     city: catalog.newCar.city,
     region: catalog.newCar.region,
-    priceRange: catalog.newCar.priceRange,
     filterData: catalog.newCar.filterData,
     needFetchFilterData: catalog.newCar.meta.needFetchFilterData,
     isFetchingFilterData: catalog.newCar.meta.isFetchingFilterData,
@@ -136,6 +141,11 @@ class NewCarFilterScreen extends Component {
       city,
       filterBrands,
       filterModels,
+      filterBody,
+      filterGearbox,
+      filterDrive,
+      filterEngineType,
+      filterPrice,
       needFetchFilterData,
       actionFetchNewCarFilterData,
     } = this.props;
@@ -145,6 +155,11 @@ class NewCarFilterScreen extends Component {
         city: city.id,
         filterBrands,
         filterModels,
+        filterBody,
+        filterGearbox,
+        filterDrive,
+        filterEngineType,
+        filterPrice,
       });
     }
   }
@@ -185,9 +200,7 @@ class NewCarFilterScreen extends Component {
 
   }
 
-  onPressBody = () => {
-
-  }
+  onPressBody = () => this.props.navigation.navigate('NewCarFilterBodyScreen')
 
   onPressGearbox = () => {
 
@@ -206,6 +219,11 @@ class NewCarFilterScreen extends Component {
       city,
       filterBrands,
       filterModels,
+      filterBody,
+      filterGearbox,
+      filterDrive,
+      filterEngineType,
+      filterPrice,
       filterData,
       navigation,
       dealerSelected,
@@ -287,6 +305,12 @@ class NewCarFilterScreen extends Component {
                   <Label style={styleListProfile.label}>Тип кузова</Label>
                 </Body>
                 <Right style={styles.right}>
+                    {
+                      filterBody.length !== 0 &&
+                        <Text style={styleListProfile.listItemValue}>
+                          {`Выбрано: ${filterBody.length}`}
+                        </Text>
+                    }
                   <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
                 </Right>
               </ListItem>

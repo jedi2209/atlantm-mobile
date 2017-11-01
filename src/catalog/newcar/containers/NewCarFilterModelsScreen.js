@@ -104,7 +104,7 @@ class NewCarFilterBrandsScreen extends Component {
 
                 return (
                   <View key={`brand-${brandId}`}>
-                    <ListItemHeader text={item.name} />
+                    {item.name && <ListItemHeader text={(item.name).toUpperCase()} />}
                     {
                       modelsKeys.map((modelId, idx) => {
                         return (

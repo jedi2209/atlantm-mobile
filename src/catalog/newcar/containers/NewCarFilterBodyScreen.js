@@ -13,7 +13,7 @@ import {
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionSelectNewCarFilterBrands } from '../../actions';
+import { actionSelectNewCarFilterBody } from '../../actions';
 
 // components
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
@@ -38,20 +38,20 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ catalog, nav }) => {
   return {
     nav,
-    filterBrands: catalog.newCar.filterBrands,
+    filterBody: catalog.newCar.filterBody,
     filterData: catalog.newCar.filterData,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    actionSelectNewCarFilterBrands,
+    actionSelectNewCarFilterBody,
   }, dispatch);
 };
 
-class NewCarFilterBrandsScreen extends Component {
+class NewCarFilterBodyScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Марка',
+    headerTitle: 'Тип кузова',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
@@ -63,61 +63,57 @@ class NewCarFilterBrandsScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    // const { nav } = this.props;
-    // console.log('nav', nav);
-    // console.log('nextProps', nextProps);
-
-    return this.props.filterBrands.length !== nextProps.filterBrands.length;
+    return this.props.filterBody.length !== nextProps.filterBody.length;
   }
 
-  onPressItem = (selectedBrand) => {
-    const { filterBrands } = this.props;
-    let newBrands = [];
+  onPressItem = (selectedBody) => {
+    const { filterBody } = this.props;
+    let newBody = [];
 
-    if (this.isBrandSelected(selectedBrand)) {
-      newBrands = filterBrands.filter(brand => brand !== selectedBrand);
+    if (this.isBodySelected(selectedBody)) {
+      newBody = filterBody.filter(body => body !== selectedBody);
     } else {
-      newBrands = [].concat(filterBrands, selectedBrand);
+      newBody = [].concat(filterBody, selectedBody);
     }
 
-    this.props.actionSelectNewCarFilterBrands(newBrands);
+    this.props.actionSelectNewCarFilterBody(newBody);
   }
 
-  isBrandSelected = brandId => this.props.filterBrands.includes(brandId)
+  isBodySelected = bodyId => this.props.filterBody.includes(bodyId)
 
   render() {
     const {
       filterData,
-      filterBrands,
+      filterBody,
     } = this.props;
 
     if (!filterData) return null;
 
-    console.log('== NewCarFilterBrandsScreen ==');
+    console.log('== NewCarFilterBodyScreen ==');
 
-    const brands = get(filterData, 'data.brand');
+    const body = get(filterData, 'data.body');
 
-    const brandsKeys = Object.keys(brands);
+    const bodyKeys = Object.keys(body);
 
     return (
       <StyleProvider style={getTheme()}>
         <Container>
           <Content style={styles.content}>
             {
-              brandsKeys.map((brandId, idx) => {
-                const item = brands[brandId];
+              bodyKeys.map((bodyId, idx) => {
+                const item = body[bodyId];
 
                 return (
-                  <View key={brandId} style={styleListProfile.listItemContainer}>
+                  <View key={bodyId} style={styleListProfile.listItemContainer}>
                     <ListItem
-                      last={(brandsKeys.length - 1) === idx}
+                      last={(bodyKeys.length - 1) === idx}
                       icon
                       style={styleListProfile.listItemPressable}
-                      onPress={() => this.onPressItem(brandId)}
+                      onPress={() => this.onPressItem(bodyId)}
                     >
-                      <CheckBox checked={this.isBrandSelected(brandId)} />
+                      <CheckBox checked={this.isBodySelected(bodyId)} />
                       <Body style={styleListProfile.bodyWithLeftGap} >
-                        <Label style={styleListProfile.label}>{item.name}</Label>
+                        <Label style={styleListProfile.label}>{item}</Label>
                       </Body>
                     </ListItem>
                   </View>
@@ -131,4 +127,4 @@ class NewCarFilterBrandsScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewCarFilterBrandsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(NewCarFilterBodyScreen);
