@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
 
 export default class PricePicker extends PureComponent {
   static propTypes = {
-    currency: PropTypes.string,
+    // currency: PropTypes.string,
     height: PropTypes.number,
     duration: PropTypes.number,
     onPressModal: PropTypes.func,

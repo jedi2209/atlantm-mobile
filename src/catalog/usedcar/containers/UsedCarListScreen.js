@@ -80,12 +80,19 @@ class UserCarListScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { dealerSelected, items, isFetchItems, total, isPriceFilterShow } = this.props;
+    const {
+      total,
+      items,
+      isFetchItems,
+      dealerSelected,
+      isPriceFilterShow,
+    } = this.props;
+
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'UserCarListScreen';
 
-    // console.log('Catalog this.props.navigation', this.props.navigation);
-    // console.log('Catalog nextProps.navigation', nextProps.navigation);
+    console.log('items.length', items.length);
+    console.log('nextProps.items.length', items.length);
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (items.length !== nextProps.items.length) ||

@@ -67,7 +67,7 @@ export const actionFetchUsedCar = ({ type, city, nextPage, priceRange }) => {
       nextPageUrl,
     })
       .then(res => {
-        const { data, error, total, pages, prices } = res;
+        let { data, error, total, pages, prices } = res;
 
         if (error) {
           return dispatch({
@@ -77,6 +77,13 @@ export const actionFetchUsedCar = ({ type, city, nextPage, priceRange }) => {
               error: error.message,
             },
           });
+        }
+
+        if (data.length === 0) {
+          data.push({ type: 'empty', id: { api: 1 } });
+
+          // TODO: разобраться, почему перестает работать priceFilter если null
+          prices = {};
         }
 
         return dispatch({
