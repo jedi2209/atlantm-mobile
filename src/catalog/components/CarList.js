@@ -77,17 +77,25 @@ export default class CarList extends Component {
 
   renderEmptyComponent = () => {
     const { isFetchItems } = this.props;
+
     return isFetchItems ?
       <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} /> :
       (
         <View style={styles.messageContainer}>
-          <Text style={styles.message}>На онлайн-складе</Text>
-          <Text style={styles.message}>нет авто</Text>
+          <Text style={styles.message}>Нет автомобилей для отображения</Text>
         </View>
       );
   }
 
   renderItem = ({ item }) => {
+    if (item.type === 'empty') {
+      return (
+        <View style={styles.messageContainer}>
+          <Text style={styles.message}>Нет автомобилей для отображения</Text>
+        </View>
+      );
+    }
+
     const { itemScreen, navigation, prices } = this.props;
     return <CarListItem car={item} prices={prices} navigate={navigation.navigate} itemScreen={itemScreen} />;
   }
@@ -147,7 +155,7 @@ export default class CarList extends Component {
   render() {
     const { items } = this.props;
 
-    // console.log('== CarList ==');
+    console.log('== CarList ==', items);
 
     return (
       <FlatList
