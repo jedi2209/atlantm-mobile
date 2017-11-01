@@ -82,6 +82,7 @@ export default class PricePicker extends PureComponent {
   static defaultProps = {
     height: 259,
     duration: 300,
+    TouchableComponent: TouchableOpacity,
   }
 
   constructor(props) {
@@ -184,7 +185,12 @@ export default class PricePicker extends PureComponent {
   }
 
   render() {
-    const { currency } = this.props;
+    const {
+      style,
+      children,
+      currency,
+      TouchableComponent,
+    } = this.props;
 
     return (
       <View>
@@ -242,9 +248,9 @@ export default class PricePicker extends PureComponent {
           </View>
         </Modal>
 
-        <TouchableOpacity style={this.props.style} onPress={this.onPress}>
-          {this.props.children}
-        </TouchableOpacity>
+        <TouchableComponent underlayColor={styleConst.color.select} style={style} onPress={this.onPress}>
+          {children}
+        </TouchableComponent>
 
       </View>
     );

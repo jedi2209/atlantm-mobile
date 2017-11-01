@@ -151,7 +151,6 @@ class UserCarListScreen extends Component {
       priceRange,
       isFetchItems,
       dealerSelected,
-      isPriceFilterShow,
     } = this.props;
 
     console.log('== UsedCarListScreen ==');

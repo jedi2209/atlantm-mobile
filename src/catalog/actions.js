@@ -31,6 +31,8 @@ import {
   NEW_CAR_FILTER_ENGINE_TYPE__SELECT,
   NEW_CAR_FILTER_DRIVE__SELECT,
   NEW_CAR_FILTER_PRICE__SELECT,
+  NEW_CAR_FILTER_PRICE__SHOW,
+  NEW_CAR_FILTER_PRICE__HIDE,
 
   CATALOG_DEALER__REQUEST,
   CATALOG_DEALER__SUCCESS,
@@ -421,5 +423,17 @@ export const actionSelectNewCarFilterPrice = (prices) => {
       type: NEW_CAR_FILTER_PRICE__SELECT,
       payload: prices,
     });
+  };
+};
+
+export const actionShowNewCarFilterPrice = () => {
+  return dispatch => {
+    return dispatch({ type: NEW_CAR_FILTER_PRICE__SHOW });
+  };
+};
+
+export const actionHideNewCarFilterPrice = () => {
+  return dispatch => {
+    return dispatch({ type: NEW_CAR_FILTER_PRICE__HIDE });
   };
 };
