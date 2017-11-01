@@ -8,6 +8,7 @@ import {
 import {
   Col,
   Row,
+  Icon,
   Grid,
   Footer,
   Button,
@@ -300,8 +301,9 @@ class UserCarItemScreen extends Component {
                             <Grid style={styles.section}>
                               <Col><Text style={styles.sectionTitle}>Где</Text></Col>
                               <Col>
-                                <View>
+                                <View style={styles.dealerContainer} >
                                   <Text style={styles.sectionTitleValue}>{carDetails.dealer.name}</Text>
+                                  <Icon name="arrow-forward" style={styles.iconArrow} />
                                 </View>
                               </Col>
                             </Grid>

@@ -124,4 +124,15 @@ export default StyleSheet.create({
     alignSelf: 'center',
     marginTop: verticalScale(60),
   },
+  iconArrow: {
+    fontSize: 20,
+    color: styleConst.color.greyBlueText,
+    marginTop: 3,
+    marginLeft: 3,
+  },
+  dealerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
 });
