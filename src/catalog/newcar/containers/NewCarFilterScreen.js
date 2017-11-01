@@ -224,9 +224,7 @@ class NewCarFilterScreen extends Component {
 
   }
 
-  onPressDrive = () => {
-
-  }
+  onPressDrive = () => this.props.navigation.navigate('NewCarFilterDriveScreen')
 
   render() {
     const {
