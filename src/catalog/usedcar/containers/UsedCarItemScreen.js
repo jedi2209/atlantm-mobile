@@ -250,14 +250,14 @@ class UserCarItemScreen extends Component {
                             )
                         }
                         {
-                          carDetails.color && carDetails.color.name && carDetails.color.name.simple &&
+                          carDetails.color && carDetails.color.name && carDetails.color.name.official &&
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
                                   <Text style={styles.sectionPropText}>Цвет:</Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{carDetails.color.name.simple}</Text>
+                                  <Text style={styles.sectionValueText}>{carDetails.color.name.official}</Text>
                                 </Col>
                               </Row>
                             )
