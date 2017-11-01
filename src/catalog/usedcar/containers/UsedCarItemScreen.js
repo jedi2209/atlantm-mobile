@@ -311,16 +311,6 @@ class UserCarItemScreen extends Component {
                         ) :
                         null
                     }
-
-                    {
-                      carDetails.text ?
-                        (
-                          <View style={styles.descrContainer}>
-                            <Text style={styles.descr}>{carDetails.text}</Text>
-                          </View>
-                        ) :
-                        null
-                    }
                   </View>
                 ) :
                 (
@@ -352,6 +342,16 @@ class UserCarItemScreen extends Component {
                         })
                       }
                     </View>
+
+                    {
+                      carDetails.text ?
+                        (
+                          <View style={styles.descrContainer}>
+                            <Text style={styles.descr}>{carDetails.text}</Text>
+                          </View>
+                        ) :
+                        null
+                    }
                   </View>
                 )
             }
