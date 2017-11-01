@@ -51,6 +51,7 @@ export default {
     city,
     filterBrands,
     filterModels,
+    filterBody,
     filterGearbox,
     filterDrive,
     filterEngineType,
@@ -73,6 +74,12 @@ export default {
     if (filterGearbox) {
       filterGearbox.forEach(id => {
         url += `&gearbox[]=${id}`;
+      });
+    }
+
+    if (filterBody) {
+      filterBody.forEach(id => {
+        url += `&body[]=${id}`;
       });
     }
 

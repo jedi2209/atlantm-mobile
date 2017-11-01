@@ -23,6 +23,7 @@ import {
 
   NEW_CAR_FILTER_BRANDS__SELECT,
   NEW_CAR_FILTER_MODELS__SELECT,
+  NEW_CAR_FILTER_BODY__SELECT,
   NEW_CAR_FILTER_GEARBOX__SELECT,
   NEW_CAR_FILTER_ENGINE_TYPE__SELECT,
   NEW_CAR_FILTER_DRIVE__SELECT,
@@ -337,6 +338,15 @@ export const actionSelectNewCarFilterModels = (models) => {
     return dispatch({
       type: NEW_CAR_FILTER_MODELS__SELECT,
       payload: models,
+    });
+  };
+};
+
+export const actionSelectNewCarFilterBody = (body) => {
+  return dispatch => {
+    return dispatch({
+      type: NEW_CAR_FILTER_BODY__SELECT,
+      payload: body,
     });
   };
 };
