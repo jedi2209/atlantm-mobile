@@ -4,6 +4,7 @@ import {
   View,
   Text,
   Image,
+  Alert,
   StyleSheet,
   ActivityIndicator,
   TouchableHighlight,
@@ -228,7 +229,15 @@ class NewCarFilterScreen extends Component {
 
   onPressBrands = () => this.props.navigation.navigate('NewCarFilterBrandsScreen')
 
-  onPressModels = () => this.props.navigation.navigate('NewCarFilterModelsScreen')
+  onPressModels = () => {
+    const { navigation, filterBrands } = this.props;
+
+    if (filterBrands.length === 0) {
+      setTimeout(() => Alert.alert('Вы не выбрали ни одной марки'), 100);
+    } else {
+      navigation.navigate('NewCarFilterModelsScreen');
+    }
+  }
 
   onPressPrice = () => this.props.actionShowNewCarFilterPrice()
 
