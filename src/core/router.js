@@ -30,6 +30,7 @@ import NewCarFilterBrandsScreen from '../catalog/newcar/containers/NewCarFilterB
 import NewCarFilterModelsScreen from '../catalog/newcar/containers/NewCarFilterModelsScreen';
 import NewCarFilterBodyScreen from '../catalog/newcar/containers/NewCarFilterBodyScreen';
 import NewCarFilterGearboxScreen from '../catalog/newcar/containers/NewCarFilterGearboxScreen';
+import NewCarFilterEngineTypeScreen from '../catalog/newcar/containers/NewCarFilterEngineTypeScreen';
 import NewCarFilterDriveScreen from '../catalog/newcar/containers/NewCarFilterDriveScreen';
 import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
@@ -77,6 +78,7 @@ const getRouter = initialRouteName => {
           NewCarFilterModelsScreen: { screen: NewCarFilterModelsScreen },
           NewCarFilterBodyScreen: { screen: NewCarFilterBodyScreen },
           NewCarFilterGearboxScreen: { screen: NewCarFilterGearboxScreen },
+          NewCarFilterEngineTypeScreen: { screen: NewCarFilterEngineTypeScreen },
           NewCarFilterDriveScreen: { screen: NewCarFilterDriveScreen },
           NewCarListScreen: { screen: NewCarListScreen },
           NewCarItemScreen: { screen: NewCarItemScreen },
