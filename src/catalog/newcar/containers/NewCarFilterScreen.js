@@ -6,6 +6,7 @@ import {
   Image,
   StyleSheet,
   ActivityIndicator,
+  TouchableHighlight,
 } from 'react-native';
 import {
   Body,
@@ -23,10 +24,17 @@ import {
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionFetchNewCarFilterData, actionFetchNewCarByFilter } from '../../actions';
+import {
+  actionFetchNewCarByFilter,
+  actionFetchNewCarFilterData,
+  actionShowNewCarFilterPrice,
+  actionHideNewCarFilterPrice,
+  actionSelectNewCarFilterPrice,
+} from '../../actions';
 
 // components
 import CityItemList from '../components/CityItemList';
+import PricePicker from '../../../core/components/PricePicker';
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import ListItemHeader from '../../../profile/components/ListItemHeader';
@@ -90,6 +98,10 @@ const styles = StyleSheet.create({
   right: {
     flex: 2,
   },
+  hiddenListItemContainer: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 1,
+  },
 });
 
 const mapStateToProps = ({ catalog, dealer, nav }) => {
@@ -114,6 +126,7 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
     region: catalog.newCar.region,
     needFetchFilterData: catalog.newCar.meta.needFetchFilterData,
     isFetchingFilterData: catalog.newCar.meta.isFetchingFilterData,
+    isNewCarFilterPriceShow: catalog.newCar.meta.isNewCarFilterPriceShow,
     isFetchingNewCarByFilter: catalog.newCar.meta.isFetchingNewCarByFilter,
   };
 };
@@ -122,6 +135,9 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({
     actionFetchNewCarFilterData,
     actionFetchNewCarByFilter,
+    actionShowNewCarFilterPrice,
+    actionHideNewCarFilterPrice,
+    actionSelectNewCarFilterPrice,
   }, dispatch);
 };
 
@@ -180,6 +196,7 @@ class NewCarFilterScreen extends Component {
       filterBrands,
       dealerSelected,
       isFetchingFilterData,
+      isNewCarFilterPriceShow,
     } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'NewCarFilterScreen';
@@ -188,7 +205,8 @@ class NewCarFilterScreen extends Component {
       (isFetchingFilterData !== nextProps.isFetchingFilterData) ||
       (get(filterData, 'pages.next') !== get(nextProps, 'filterData.pages.next')) ||
       (get(items, 'pages.next') !== get(nextProps, 'items.pages.next')) ||
-      (filterBrands.length !== nextProps.filterBrands);
+      (filterBrands.length !== nextProps.filterBrands) ||
+      (isNewCarFilterPriceShow !== nextProps.isNewCarFilterPriceShow);
   }
 
   getCityData = () => {
@@ -212,8 +230,16 @@ class NewCarFilterScreen extends Component {
 
   onPressModels = () => this.props.navigation.navigate('NewCarFilterModelsScreen')
 
-  onPressPrice = () => {
+  onPressPrice = () => this.props.actionShowNewCarFilterPrice()
 
+  onClosePrice = (prices) => {
+    const { actionHideNewCarFilterPrice, actionSelectNewCarFilterPrice } = this.props;
+
+    actionHideNewCarFilterPrice();
+
+    if (prices) {
+      actionSelectNewCarFilterPrice(prices);
+    }
   }
 
   onPressBody = () => this.props.navigation.navigate('NewCarFilterBodyScreen')
@@ -251,6 +277,11 @@ class NewCarFilterScreen extends Component {
         </View>
       );
     }
+
+    const minPrice = get(items, 'prices.min') || get(filterData, 'prices.min');
+    const maxPrice = get(items, 'prices.max') || get(filterData, 'prices.max');
+    const step = get(items, 'prices.step') || get(filterData, 'prices.step');
+    const currency = get(filterData, 'prices.curr.name');
 
     return (
       <StyleProvider style={getTheme()}>
@@ -300,18 +331,40 @@ class NewCarFilterScreen extends Component {
               </ListItem>
             </View>
 
-            <View style={styleListProfile.listItemContainer}>
-              <ListItem style={styleListProfile.listItemPressable} onPress={this.onPressPrice}>
-                <Body style={styles.body} >
-                  <Label style={styleListProfile.label}>Цена</Label>
-                </Body>
-                <Right style={styles.right}>
-                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
-                </Right>
-              </ListItem>
-            </View>
+            <PricePicker
+              style={styles.icon}
+              min={minPrice}
+              max={maxPrice}
+              step={step}
+              currentMinPrice={filterPrice && filterPrice.minPrice}
+              currentMaxPrice={filterPrice && filterPrice.maxPrice}
+              currency={currency}
+              onPressModal={this.onPressPrice}
+              onCloseModal={this.onClosePrice}
+              TouchableComponent={TouchableHighlight}
+            >
+              <View style={styleListProfile.listItemContainer}>
+                <View style={styles.hiddenListItemContainer} />
+                <ListItem button={false} style={styleListProfile.listItemPressable}>
+                  <Body style={styles.body} >
+                    <Label style={styleListProfile.label}>Цена</Label>
+                  </Body>
+                  <Right style={styles.right}>
+                    {
+                      <Text style={styleListProfile.listItemValue}>
+                        {`от ${minPrice} ${currency}`}
+                      </Text>
+                    }
+                    <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                  </Right>
+                </ListItem>
+              </View>
+            </PricePicker>
 
-            <View style={styleListProfile.listItemContainer}>
+            <View style={[
+              styles.listItemContainer,
+              styleListProfile.listItemContainer,
+            ]}>
               <ListItem style={styleListProfile.listItemPressable} onPress={this.onPressBody}>
                 <Body style={styles.body} >
                   <Label style={styleListProfile.label}>Тип кузова</Label>

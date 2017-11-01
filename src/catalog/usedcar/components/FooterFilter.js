@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, View, Image, StyleSheet, Dimensions } from 'react-native';
+import { TouchableOpacity, View, Image, StyleSheet } from 'react-native';
 
 // components
 import { Footer } from 'native-base';

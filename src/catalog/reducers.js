@@ -32,6 +32,8 @@ import {
   NEW_CAR_FILTER_ENGINE_TYPE__SELECT,
   NEW_CAR_FILTER_DRIVE__SELECT,
   NEW_CAR_FILTER_PRICE__SELECT,
+  NEW_CAR_FILTER_PRICE__SHOW,
+  NEW_CAR_FILTER_PRICE__HIDE,
 
   EVENT_LOAD_MORE,
 
@@ -365,6 +367,19 @@ const newCarFilterPrice = (state = null, action) => {
   }
 };
 
+const isNewCarFilterPriceShow = (state = false, action) => {
+  switch (action.type) {
+    case REHYDRATE:
+      return false;
+    case NEW_CAR_FILTER_PRICE__HIDE:
+      return false;
+    case NEW_CAR_FILTER_PRICE__SHOW:
+      return true;
+    default:
+      return state;
+  }
+};
+
 const needFetchFilterData = (state = false, action) => {
   switch (action.type) {
     case NEW_CAR_FILTER_BRANDS__SELECT:
@@ -421,11 +436,10 @@ export default combineReducers({
     city: newCarCity,
     region: newCarRegion,
     meta: combineReducers({
-      isFetchingFilterData,
-      isFetchingNewCarByFilter,
       needFetchFilterData,
-      // isFetchItems: isFetchNewCarItems,
-      // isPriceFilterShow: isNewCarPriceFilterShow,
+      isFetchingFilterData,
+      isNewCarFilterPriceShow,
+      isFetchingNewCarByFilter,
       // isFetchingCarDetails: isFetchingNewCarDetails,
     }),
   }),
