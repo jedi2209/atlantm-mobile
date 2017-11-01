@@ -11,7 +11,7 @@ import {
 import Imager from '../../core/components/Imager';
 
 // helpers
-import { get } from 'lodash';
+import { get, isString } from 'lodash';
 import priceSet from '../../utils/price-set';
 import styleConst from '../../core/style-const';
 
@@ -86,6 +86,12 @@ export default class CarListItem extends Component {
 
   render() {
     const { car, prices } = this.props;
+    const modelName = get(car, 'model.name', '');
+    const complectation = get(car, 'complectation.name', '');
+    const engineVolume = get(car, 'engine.volume.short');
+    const mileage = get(car, 'mileage');
+    const gearbox = get(car, 'gearbox.name');
+    const year = get(car, 'year');
 
     // console.log('== CarListItem ==');
 
@@ -97,21 +103,22 @@ export default class CarListItem extends Component {
       >
         <View style={styles.card}>
           <Imager
+            resizeMode="contain"
             style={styles.image}
             source={{ uri: get(car, 'img.10000x300.0') }}
           />
           <View style={styles.info}>
-            <Text style={styles.title}>{`${car.brand.name} ${car.model}`}</Text>
+            <Text style={styles.title}>{`${car.brand.name} ${modelName || ''} ${complectation}`}</Text>
             <Text style={styles.price}>{`${priceSet(car.price.app)} ${prices.curr.name}`}</Text>
             <View style={styles.extra}>
               <View style={styles.extraItem}>
                 <View style={styles.extraTextContainer}><Text style={styles.extraText}>{car.engine.type}</Text></View>
-                <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${car.engine.volume.short} л`}</Text></View>
+                {engineVolume ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${engineVolume} л`}</Text></View> : null}
               </View>
               <View style={styles.extraItem}>
-                <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${car.year} г.в.`}</Text></View>
-                <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`пробег ${car.mileage}`}</Text></View>
-                <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${car.gearbox.name || ''}`}</Text></View>
+                {year ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${year} г.в.`}</Text></View> : null}
+                {mileage ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`пробег ${mileage}`}</Text></View> : null}
+                {gearbox ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${gearbox}`}</Text></View> : null}
               </View>
             </View>
           </View>

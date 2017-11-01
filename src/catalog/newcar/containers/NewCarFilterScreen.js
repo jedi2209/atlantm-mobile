@@ -259,6 +259,14 @@ class NewCarFilterScreen extends Component {
 
   onPressDrive = () => this.props.navigation.navigate('NewCarFilterDriveScreen')
 
+  onPressFilterButton = () => {
+    const { navigation, isFetchingNewCarByFilter } = this.props;
+
+    if (!isFetchingNewCarByFilter) {
+      navigation.navigate('NewCarListScreen');
+    }
+  }
+
   render() {
     const {
       city,
@@ -442,7 +450,7 @@ class NewCarFilterScreen extends Component {
             </View>
           </Content>
           <Footer style={styles.footer}>
-            <Button onPress={this.onPressOrder} full style={styles.button}>
+            <Button onPress={this.onPressFilterButton} full style={styles.button}>
               {
                 isFetchingNewCarByFilter ?
                   (
@@ -451,7 +459,7 @@ class NewCarFilterScreen extends Component {
                   (
                     <View style={styles.buttonContent} >
                       <Text style={styles.buttonText}>
-                        {`НАЙДЕНО ${items ? items.total.count : filterData.total.count}`}
+                        {`НАЙДЕНО ${get(items, 'total.count') || get(filterData, 'total.count')}`}
                       </Text>
                       <Image
                         source={require('../../../core/components/CustomIcon/assets/arrow-right.png')}
