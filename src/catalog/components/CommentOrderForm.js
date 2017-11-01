@@ -9,7 +9,9 @@ const styles = StyleSheet.create({
   container: {
     padding: styleConst.ui.horizontalGap,
     backgroundColor: '#fff',
-    minHeight: 200,
+    minHeight: 80,
+    borderBottomWidth: styleConst.ui.borderWidth,
+    borderBottomColor: styleConst.color.greyText
   },
   textarea: {
     backgroundColor: '#fff',
@@ -39,10 +41,11 @@ export default class CarOrderList extends PureComponent {
         <TextInput
           style={styles.textarea}
           multiline={true}
-          numberOfLines={12}
+          numberOfLines={4}
           onChangeText={this.onChangeText}
           value={comment}
           placeholder="Поле для заполнения"
+          underlineColorAndroid="transparent"
         />
       </View>
     );
