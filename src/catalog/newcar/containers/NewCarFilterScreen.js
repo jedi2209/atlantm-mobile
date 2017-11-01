@@ -220,9 +220,7 @@ class NewCarFilterScreen extends Component {
 
   onPressGearbox = () => this.props.navigation.navigate('NewCarFilterGearboxScreen')
 
-  onPressEngineType = () => {
-
-  }
+  onPressEngineType = () => this.props.navigation.navigate('NewCarFilterEngineTypeScreen')
 
   onPressDrive = () => this.props.navigation.navigate('NewCarFilterDriveScreen')
 

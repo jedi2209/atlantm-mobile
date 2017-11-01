@@ -71,7 +71,7 @@ class NewCarFilterDriveScreen extends Component {
     let newDrive = [];
 
     if (this.isDriveSelected(selectedDrive)) {
-      newDrive = filterDrive.filter(body => body !== selectedDrive);
+      newDrive = filterDrive.filter(drive => drive !== selectedDrive);
     } else {
       newDrive = [].concat(filterDrive, selectedDrive);
     }

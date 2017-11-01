@@ -13,7 +13,7 @@ import {
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionSelectNewCarFilterGearbox } from '../../actions';
+import { actionSelectNewCarFilterEngineType } from '../../actions';
 
 // components
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
@@ -38,20 +38,20 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ catalog, nav }) => {
   return {
     nav,
-    filterGearbox: catalog.newCar.filterGearbox,
+    filterEngineType: catalog.newCar.filterEngineType,
     filterData: catalog.newCar.filterData,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-    actionSelectNewCarFilterGearbox,
+    actionSelectNewCarFilterEngineType,
   }, dispatch);
 };
 
 class NewCarFilterGearboxScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'КПП',
+    headerTitle: 'Тип двигателя',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
@@ -63,55 +63,55 @@ class NewCarFilterGearboxScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return this.props.filterGearbox.length !== nextProps.filterGearbox.length;
+    return this.props.filterEngineType.length !== nextProps.filterEngineType.length;
   }
 
-  onPressItem = (selectedGearbox) => {
-    const { filterGearbox } = this.props;
-    let newGearbox = [];
+  onPressItem = (selectedEngineType) => {
+    const { filterEngineType } = this.props;
+    let newEngineType = [];
 
-    if (this.isGearboxSelected(selectedGearbox)) {
-      newGearbox = filterGearbox.filter(gearbox => gearbox !== selectedGearbox);
+    if (this.isEngineTypeSelected(selectedEngineType)) {
+      newEngineType = filterEngineType.filter(engineType => engineType !== selectedEngineType);
     } else {
-      newGearbox = [].concat(filterGearbox, selectedGearbox);
+      newEngineType = [].concat(filterEngineType, selectedEngineType);
     }
 
-    this.props.actionSelectNewCarFilterGearbox(newGearbox);
+    this.props.actionSelectNewCarFilterEngineType(newEngineType);
   }
 
-  isGearboxSelected = gearboxId => this.props.filterGearbox.includes(gearboxId)
+  isEngineTypeSelected = engineTypeId => this.props.filterEngineType.includes(engineTypeId)
 
   render() {
     const {
       filterData,
-      filterGearbox,
+      filterEngineType,
     } = this.props;
 
     if (!filterData) return null;
 
     console.log('== NewCarFilterGearboxScreen ==');
 
-    const gearbox = get(filterData, 'data.gearbox');
+    const engineType = get(filterData, 'data.enginetype');
 
-    const gearboxKeys = Object.keys(gearbox);
+    const engineTypeKeys = Object.keys(engineType);
 
     return (
       <StyleProvider style={getTheme()}>
         <Container>
           <Content style={styles.content}>
             {
-              gearboxKeys.map((gearboxId, idx) => {
-                const item = gearbox[gearboxId];
+              engineTypeKeys.map((engineTypeId, idx) => {
+                const item = engineType[engineTypeId];
 
                 return (
-                  <View key={gearboxId} style={styleListProfile.listItemContainer}>
+                  <View key={engineTypeId} style={styleListProfile.listItemContainer}>
                     <ListItem
-                      last={(gearboxKeys.length - 1) === idx}
+                      last={(engineTypeKeys.length - 1) === idx}
                       icon
                       style={styleListProfile.listItemPressable}
-                      onPress={() => this.onPressItem(gearboxId)}
+                      onPress={() => this.onPressItem(engineTypeId)}
                     >
-                      <CheckBox checked={this.isGearboxSelected(gearboxId)} />
+                      <CheckBox checked={this.isEngineTypeSelected(engineTypeId)} />
                       <Body style={styleListProfile.bodyWithLeftGap} >
                         <Label style={styleListProfile.label}>{item}</Label>
                       </Body>
