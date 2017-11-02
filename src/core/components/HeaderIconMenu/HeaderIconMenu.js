@@ -10,6 +10,7 @@ import {
 // helpers
 import styleConst from '../../style-const';
 import DeviceInfo from 'react-native-device-info';
+import { NavigationActions } from 'react-navigation';
 
 const containerSize = 40;
 const size = 23;
@@ -42,7 +43,15 @@ export default class HeaderIconMenu extends Component {
 
   onPressIcon = () => {
     Keyboard.dismiss();
-    this.props.navigation.navigate('MenuScreen');
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      key: null,
+      actions: [
+        NavigationActions.navigate({ routeName: 'MenuScreen' }),
+      ],
+    });
+    this.props.navigation.dispatch(resetAction);
+    // this.props.navigation.navigate('MenuScreen');
   };
 
   render() {

@@ -75,12 +75,19 @@ class UserCarListScreen extends Component {
   }
 
   componentWillUpdate() {
-    const { navigation, total } = this.props;
-    navigation.setParams({ total });
+    console.log('componentWillUpdate');
+
+    const { isFetchItems, navigation, total } = this.props;
+
+    if (!isFetchItems) {
+      this.fetchUsedCar('default')
+        .then(() => setTimeout(() => navigation.setParams({ total: this.props.total }), 100));
+    }
   }
 
   shouldComponentUpdate(nextProps) {
     const {
+      city,
       total,
       items,
       isFetchItems,
@@ -91,11 +98,15 @@ class UserCarListScreen extends Component {
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'UserCarListScreen';
 
+    console.log('city', city.id);
+    console.log('nextProps.city', nextProps.city.id);
+
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (items.length !== nextProps.items.length) ||
       (isFetchItems !== nextProps.isFetchItems) ||
       (total.count !== nextProps.total.count) ||
-      (isPriceFilterShow !== nextProps.isPriceFilterShow);
+      (isPriceFilterShow !== nextProps.isPriceFilterShow) ||
+      (city.id !== nextProps.city.id);
   }
 
   fetchUsedCar = (type, priceRangeFromFilter) => {
@@ -122,7 +133,10 @@ class UserCarListScreen extends Component {
   }
 
   onPressCity = () => {
-    this.props.navigation.navigate('UsedCarCityScreen', { returnScreen: 'UsedCarListScreen' });
+    const { navigation } = this.props;
+    const returnScreenKey = navigation.state.key;
+    console.log('returnScreenKey', returnScreenKey);
+    navigation.navigate('UsedCarCityScreen', { returnScreen: returnScreenKey });
   }
 
   onPressPrice = () => {
