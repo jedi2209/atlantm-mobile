@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, InteractionManager } from 'react-native';
 import {
   Body,
   Label,
@@ -69,16 +69,18 @@ class NewCarFilterBrandsScreen extends Component {
   }
 
   onPressItem = (brandId, selectedModelId) => {
-    const { filterModels } = this.props;
-    let newModels = [];
+    InteractionManager.runAfterInteractions(() => {
+      const { filterModels } = this.props;
+      let newModels = [];
 
-    if (this.isModelSelected(selectedModelId)) {
-      newModels = filterModels.filter(item => item.modelId !== selectedModelId);
-    } else {
-      newModels = [].concat(filterModels, { brandId, modelId: selectedModelId });
-    }
+      if (this.isModelSelected(selectedModelId)) {
+        newModels = filterModels.filter(item => item.modelId !== selectedModelId);
+      } else {
+        newModels = [].concat(filterModels, { brandId, modelId: selectedModelId });
+      }
 
-    this.props.actionSelectNewCarFilterModels(newModels);
+      this.props.actionSelectNewCarFilterModels(newModels);
+    });
   }
 
   isModelSelected = modelId => !!find(this.props.filterModels, { modelId })

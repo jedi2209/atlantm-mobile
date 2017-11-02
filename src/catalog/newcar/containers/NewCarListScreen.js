@@ -52,7 +52,7 @@ class NewCarListScreen extends Component {
       headerTitle: count ? `${count} ${declOfNum(count, titleVariants)}` : null,
       headerStyle: styleHeader.common,
       headerTitleStyle: styleHeader.title,
-      headerLeft: <HeaderIconBack navigation={navigation} returnScreen="CatalogScreen" />,
+      headerLeft: <HeaderIconBack navigation={navigation} />,
       headerRight: <HeaderIconMenu navigation={navigation} />,
     };
   }
