@@ -48,6 +48,8 @@ class NewCarListScreen extends Component {
     const count = get(params, 'total.count');
     const titleVariants = ['автомобиль', 'автомобиля', 'автомобилей'];
 
+    console.log('navigation.state', navigation.state);
+
     return {
       headerTitle: count ? `${count} ${declOfNum(count, titleVariants)}` : null,
       headerStyle: styleHeader.common,
@@ -57,11 +59,16 @@ class NewCarListScreen extends Component {
     };
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     const { navigation, items } = this.props;
 
+    console.log('newCarList update');
+    console.log('items.total', items.total);
+
     if (items.total) {
-      navigation.setParams({ total: items.total });
+      return setTimeout(() => {
+        this.props.navigation.setParams({ total: get(this.props.items, 'total') });
+      }, 200);
     }
   }
 

@@ -274,10 +274,11 @@ class NewCarFilterScreen extends Component {
   onPressDrive = () => this.props.navigation.navigate('NewCarFilterDriveScreen')
 
   onPressFilterButton = () => {
-    const { navigation, isFetchingNewCarByFilter } = this.props;
+    const { items, navigation, isFetchingNewCarByFilter } = this.props;
 
     if (!isFetchingNewCarByFilter) {
-      navigation.navigate('NewCarListScreen');
+      const total = get(items, 'total');
+      navigation.navigate('NewCarListScreen', { total });
     }
   }
 
