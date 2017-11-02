@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     minHeight: 80,
     borderBottomWidth: styleConst.ui.borderWidth,
-    borderBottomColor: styleConst.color.greyText
+    borderBottomColor: styleConst.color.greyText,
   },
   textarea: {
     backgroundColor: '#fff',

@@ -75,6 +75,7 @@ export default class CarListItem extends Component {
 
   onPress = () => {
     const { navigate, itemScreen, car } = this.props;
+
     navigate(itemScreen, { carId: car.id.api });
   }
 

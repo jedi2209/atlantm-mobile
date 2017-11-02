@@ -1,51 +1,69 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
-import { Container, Content, StyleProvider, Button } from 'native-base';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  TouchableHighlight,
+} from 'react-native';
+import {
+  Col,
+  Row,
+  Icon,
+  Grid,
+  Footer,
+  Button,
+  Content,
+  Segment,
+  Container,
+  StyleProvider,
+} from 'native-base';
 
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-// import {} from '../actions';
+import { actionFetchNewCarDetails } from '../../actions';
 
 // components
-import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import PhotoSlider from '../../../core/components/PhotoSlider';
 
-// helpres
+// helpers
+import PropTypes from 'prop-types';
+import { get, find } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import styleHeader from '../../../core/components/Header/style';
+import priceSet from '../../../utils/price-set';
 
-const { width } = Dimensions.get('window');
-const styles = StyleSheet.create({
-  content: {
-    backgroundColor: styleConst.color.bg,
-    justifyContent: 'center',
-    flex: 1,
-  },
-});
+// styles
+import styles from '../../usedcar/containers/UsedCarItemScreenStyles';
 
-const mapStateToProps = ({ dealer, nav }) => {
+const mapStateToProps = ({ catalog, dealer, nav }) => {
   return {
     nav,
     dealerSelected: dealer.selected,
+    listRussia: dealer.listRussia,
+    listUkraine: dealer.listUkraine,
+    listBelarussia: dealer.listBelarussia,
+    filterData: catalog.newCar.filterData,
+    carDetails: catalog.newCar.carDetails,
+    isFetchingCarDetails: catalog.newCar.meta.isFetchingCarDetails,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-
+    actionFetchNewCarDetails,
   }, dispatch);
 };
 
 class NewCarItemScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Polo',
+    headerTitle: 'Новые автомобили',
     headerStyle: styleHeader.common,
     headerTitleStyle: styleHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <HeaderIconMenu navigation={navigation} />,
+    headerRight: <View />,
   })
 
   static propTypes = {
@@ -53,27 +71,311 @@ class NewCarItemScreen extends Component {
     navigation: PropTypes.object,
   }
 
-  shouldComponentUpdate(nextProps) {
-    const { dealerSelected } = this.props;
+  constructor(props) {
+    super(props);
+
+    this.state = { tabName: 'base' };
+  }
+
+  componentDidMount() {
+    const carId = get(this.props.navigation, 'state.params.carId');
+    this.props.actionFetchNewCarDetails(carId);
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { dealerSelected, carDetails, isFetchingCarDetails } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'NewCarItemScreen';
 
-    // console.log('Catalog this.props.navigation', this.props.navigation);
-    // console.log('Catalog nextProps.navigation', nextProps.navigation);
+    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
+      (this.state.tabName !== nextState.tabName) ||
+      (isFetchingCarDetails !== nextProps.isFetchingCarDetails) ||
+      (get(carDetails, 'id.api') !== get(nextProps, 'carDetails.id.api'));
+  }
 
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen);
+  onPressDealer = () => {
+    const {
+      carDetails,
+      navigation,
+      listRussia,
+      listUkraine,
+      listBelarussia,
+    } = this.props;
+
+    const list = [].concat(listRussia, listBelarussia, listUkraine);
+    const dealerBaseData = find(list, { id: carDetails.dealer.id });
+
+    navigation.navigate('AboutDealerScreen', { dealerBaseData });
+  }
+
+  onPressOrder = () => {
+    const { navigation, filterData, carDetails } = this.props;
+
+    navigation.navigate('OrderScreen', {
+      car: {
+        brand: carDetails.brand.name,
+        model: carDetails.model,
+        price: carDetails.price.app,
+      },
+      currency: filterData.prices.curr.name,
+      dealerId: carDetails.dealer.id,
+      carId: carDetails.id.api,
+    });
+  }
+
+  selectBaseTab = () => this.setState({ tabName: 'base' })
+
+  selectOptionsTab = () => this.setState({ tabName: 'options' })
+
+  renderDealer = (dealerName) => {
+    return (
+      dealerName ?
+        (
+          <TouchableHighlight
+            onPress={this.onPressDealer}
+            underlayColor={styleConst.color.select}
+          >
+            <Grid style={styles.section}>
+              <Col><Text style={styles.sectionTitle}>Где</Text></Col>
+              <Col>
+                <View style={styles.dealerContainer} >
+                  <Text style={styles.sectionTitleValue}>{dealerName}</Text>
+                  <Icon name="arrow-forward" style={styles.iconArrow} />
+                </View>
+              </Col>
+            </Grid>
+          </TouchableHighlight>
+        ) :
+        null
+    );
+  }
+
+  renderItem = (title, value, postfix) => {
+    return (
+      value ?
+        (
+          <Row key={`${title} ${value} ${postfix}`} style={styles.sectionRow}>
+            <Col style={styles.sectionProp}>
+              <Text style={styles.sectionPropText}>{title}</Text>
+            </Col>
+            <Col style={styles.sectionValue}>
+              <Text style={styles.sectionValueText}>{`${value} ${postfix || ''}`}</Text>
+            </Col>
+          </Row>
+        ) : null
+    );
+  }
+
+  renderComplectationItem = (title, data) => {
+    if (data.length === 0) return null;
+
+    return (
+      <View key={title} style={styles.section}>
+        <Text style={styles.sectionTitle}>{title}</Text>
+        {
+          data.map(item => {
+            return (
+              <Grid key={`${item.name} ${item.id}`}>
+                {
+                  item.name && item.value ?
+                    (
+                      <Row style={styles.sectionRow}>
+                        <Col style={styles.sectionProp}>
+                          <Text style={styles.sectionPropText}>{item.name}</Text>
+                        </Col>
+                        <Col style={styles.sectionValue}>
+                          <Text style={styles.sectionValueText}>{item.value}</Text>
+                        </Col>
+                      </Row>
+                    ) :
+                    (
+                      <Text style={[styles.sectionPropText, styles.sectionRow]}>{item.name}</Text>
+                    )
+                }
+              </Grid>
+            );
+          })
+        }
+      </View>
+    );
   }
 
   render() {
-    const {
-      dealerSelected,
-      navigation,
-    } = this.props;
+    const { tabName } = this.state;
+    const isActiveBaseTab = tabName === 'base';
+    const isActiveOptionsTab = tabName === 'options';
+
+    const { filterData, carDetails, isFetchingCarDetails } = this.props;
+
+    if (!carDetails || isFetchingCarDetails) {
+      return (
+        <View style={styles.spinnerContainer} >
+          <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
+        </View>
+      );
+    }
+
+    // console.log('carDetails', carDetails);
 
     console.log('== NewCarItemScreen ==');
 
+    const { brand, model, complectation } = carDetails;
+    const brandName = brand.name || '';
+    const modelName = model.name || '';
+    const stock = get(carDetails, 'options.stock', {});
+    const stockKeys = Object.keys(stock);
+    const additional = get(carDetails, 'options.additional', {});
+    const additionalKeys = Object.keys(additional);
+    const photos = get(carDetails, 'img.10000x300') || get(carDetails, 'foto.10000x300');
+
     return (
-      <View style={styles.content}></View>
+      <StyleProvider style={getTheme()}>
+        <Container>
+          <Content style={styles.content}>
+
+            <View style={styles.gallery}>
+              <View style={styles.titleContainer}>
+                <Text style={styles.title}>{`${brandName} ${modelName} ${get(complectation, 'name', '')}`}</Text>
+              </View>
+              <PhotoSlider photos={photos} />
+            </View>
+
+            <Segment style={styles.segment}>
+              <Button
+                first
+                active={isActiveBaseTab}
+                onPress={this.selectBaseTab}
+                style={isActiveBaseTab ? styles.tabButtonActive : styles.tabButton}
+              >
+                <Text style={isActiveBaseTab ? styles.tabTextActive : styles.tabText}>Характеристики</Text>
+              </Button>
+              <Button
+                last
+                active={isActiveOptionsTab}
+                onPress={this.selectOptionsTab}
+                style={isActiveOptionsTab ? styles.tabButtonActive : styles.tabButton}
+              >
+                <Text style={isActiveOptionsTab ? styles.tabTextActive : styles.tabText}>Комплектация</Text>
+              </Button>
+            </Segment>
+
+            {
+              tabName === 'base' ?
+                (
+                  <View style={styles.tabContent}>
+                    <View style={styles.section}>
+                      <Text style={styles.sectionTitle}>Основные</Text>
+                      <Grid>
+                        {this.renderItem('Цвет:', get(carDetails, 'color.name.official'))}
+                        {this.renderItem('Тип кузова:', get(carDetails, 'body.name'))}
+                        {this.renderItem('Год выпуска:', get(carDetails, 'year'), 'г.')}
+                      </Grid>
+                    </View>
+
+                    <View style={styles.section}>
+                      <Text style={styles.sectionTitle}>Двигатель</Text>
+                      <Grid>
+                        {this.renderItem('Тип:', get(carDetails, 'engine.type'))}
+                        {this.renderItem('Рабочий объём:', get(carDetails, 'engine.volume.short'), 'л.')}
+                        {this.renderItem('Мощность:', get(carDetails, 'power.hp'), 'л.с.')}
+                      </Grid>
+                    </View>
+
+                    <View style={styles.section}>
+                      <Text style={styles.sectionTitle}>Кузов</Text>
+                      <Grid>
+                        {this.renderItem('Длина:', get(carDetails, 'body.high'), 'мм.')}
+                        {this.renderItem('Ширина:', get(carDetails, 'body.width'), 'мм.')}
+                        {this.renderItem('Высота:', get(carDetails, 'body.height'), 'мм.')}
+                        {this.renderItem('Клиренс:', get(carDetails, 'body.clirens'), 'мм.')}
+                        {this.renderItem('Объём багажника:', get(carDetails, 'body.trunk.min'), 'л.')}
+                        {this.renderItem('Объём топливного бака:', get(carDetails, 'fuel.fuel'), 'л.')}
+                      </Grid>
+                    </View>
+
+                    <View style={styles.section}>
+                      <Text style={styles.sectionTitle}>Трансмиссия</Text>
+                      <Grid>
+                        {this.renderItem('Тип:', get(carDetails, 'gearbox.name'))}
+                        {this.renderItem('Количество передач:', get(carDetails, 'gearbox.count'))}
+                        {this.renderItem('Привод:', get(carDetails, 'gearbox.wheel'))}
+                      </Grid>
+                    </View>
+
+                    <View style={styles.section}>
+                      <Text style={styles.sectionTitle}>Эксплуатационные характеристики</Text>
+                      <Grid>
+                        {this.renderItem('Максимальная скорость:', get(carDetails, 'speed.max'), 'км/ч.')}
+                        {this.renderItem('Разгон с 0 до 100 км/ч:', get(carDetails, 'speed.dispersal'), 'сек.')}
+                        {this.renderItem('Расход топлива (городской цикл):', get(carDetails, 'fuel.city'), 'л.')}
+                        {this.renderItem('Расход топлива (загородный цикл):', get(carDetails, 'fuel.track'), 'л.')}
+                        {this.renderItem('Расход топлива (смешанный цикл):', get(carDetails, 'fuel.both'), 'л.')}
+                      </Grid>
+                    </View>
+
+                    {this.renderDealer(get(carDetails, 'dealer.name'))}
+                  </View>
+                ) :
+                (
+                  <View style={styles.tabContent}>
+                    {
+                      stockKeys ?
+                        (
+                          <View>
+                            {
+                              stockKeys.map(key => {
+                                const item = stock[key];
+
+                                return this.renderComplectationItem(item.name, item.data);
+                              })
+                            }
+                          </View>
+                        ) : null
+                    }
+
+                    {
+                      additionalKeys ?
+                      (
+                        <View>
+                          {
+                            additionalKeys.map(key => {
+                              const item = additional[key];
+
+                              return this.renderComplectationItem(item.name, item.data);
+                            })
+                          }
+                        </View>
+                      ) : null
+                    }
+
+                    {
+                      carDetails.text ?
+                        (
+                          <View style={styles.descrContainer}>
+                            <Text style={styles.descr}>{carDetails.text}</Text>
+                          </View>
+                        ) :
+                        null
+                    }
+                  </View>
+                )
+            }
+          </Content>
+
+          <Footer style={styles.footer}>
+            <View style={styles.orderPriceContainer}>
+              <Text style={styles.orderPriceText}>{`${priceSet(carDetails.price.app)} ${filterData.prices.curr.name}`}</Text>
+            </View>
+            <Button
+              onPress={this.onPressOrder}
+              full
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
+            </Button>
+          </Footer>
+        </Container>
+      </StyleProvider>
     );
   }
 }

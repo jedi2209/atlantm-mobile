@@ -13,12 +13,13 @@ export default class CarOrderList extends PureComponent {
     brand: PropTypes.string,
     model: PropTypes.string,
     price: PropTypes.string,
+    complectation: PropTypes.string,
   }
 
   static defaultProps = {}
 
   render() {
-    const { brand, model, price } = this.props;
+    const { brand, model, price, complectation } = this.props;
 
     return (
       <View>
@@ -47,6 +48,24 @@ export default class CarOrderList extends PureComponent {
             </Body>
           </ListItem>
         </View>
+
+        {
+          complectation ?
+          (
+            <View style={styleListProfile.listItemContainer}>
+              <ListItem style={styleListProfile.listItem} >
+                <Body>
+                  <Item style={styleListProfile.inputItem} fixedLabel>
+                    <Label style={styleListProfile.label}>Комплектация</Label>
+                    <View style={styleListProfile.listItemValueContainer}>
+                      <Text style={styleListProfile.listItemValue}>{complectation}</Text>
+                    </View>
+                  </Item>
+                </Body>
+              </ListItem>
+            </View>
+          ) : null
+        }
 
         <View style={styleListProfile.listItemContainer}>
           <ListItem last style={styleListProfile.listItem} >

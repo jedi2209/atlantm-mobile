@@ -33,6 +33,9 @@ import {
   NEW_CAR_FILTER_PRICE__SELECT,
   NEW_CAR_FILTER_PRICE__SHOW,
   NEW_CAR_FILTER_PRICE__HIDE,
+  NEW_CAR_DETAILS__REQUEST,
+  NEW_CAR_DETAILS__SUCCESS,
+  NEW_CAR_DETAILS__FAIL,
 
   CATALOG_DEALER__REQUEST,
   CATALOG_DEALER__SUCCESS,
@@ -448,5 +451,41 @@ export const actionShowNewCarFilterPrice = () => {
 export const actionHideNewCarFilterPrice = () => {
   return dispatch => {
     return dispatch({ type: NEW_CAR_FILTER_PRICE__HIDE });
+  };
+};
+
+export const actionFetchNewCarDetails = carId => {
+  return dispatch => {
+    dispatch({
+      type: NEW_CAR_DETAILS__REQUEST,
+      payload: carId,
+    });
+
+    return API.fetchNewCarDetails(carId)
+      .then(response => {
+        if (response.error) {
+          return dispatch({
+            type: NEW_CAR_DETAILS__FAIL,
+            payload: {
+              error: response.error.message,
+            },
+          });
+        }
+
+        const details = { ...response.data };
+
+        return dispatch({
+          type: NEW_CAR_DETAILS__SUCCESS,
+          payload: details,
+        });
+      })
+      .catch(error => {
+        return dispatch({
+          type: NEW_CAR_DETAILS__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
   };
 };
