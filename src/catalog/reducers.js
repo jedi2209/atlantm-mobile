@@ -123,6 +123,7 @@ const usedCarCity = (state = null, action) => {
 const usedCarPriceRange = (state = null, action) => {
   switch (action.type) {
     case REHYDRATE:
+    case USED_CAR_CITY__SELECT:
       return null;
     case USED_CAR_PRICE_RANGE__SELECT:
       return action.payload;
@@ -262,6 +263,7 @@ const isFetchingNewCarByFilter = (state = false, action) => {
 
 const newCarFilterData = (state = null, action) => {
   switch (action.type) {
+    case NEW_CAR_CITY__SELECT:
     case NEW_CAR_FILTER_DATA__REQUEST:
       return null;
     case NEW_CAR_FILTER_DATA__SUCCESS:
@@ -273,8 +275,8 @@ const newCarFilterData = (state = null, action) => {
 
 const newCarByFilter = (state = {}, action) => {
   switch (action.type) {
-    // case NEW_CAR_BY_FILTER__REQUEST:
-    //   return {};
+    case NEW_CAR_CITY__SELECT:
+      return {};
     case NEW_CAR_BY_FILTER__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {
         const newState = { ...action.payload };
@@ -317,6 +319,8 @@ const newCarRegion = (state = null, action) => {
 
 const newCarFilterBrands = (state = [], action) => {
   switch (action.type) {
+    case NEW_CAR_CITY__SELECT:
+      return [];
     case NEW_CAR_FILTER_BRANDS__SELECT:
       return action.payload;
     default:
@@ -326,6 +330,8 @@ const newCarFilterBrands = (state = [], action) => {
 
 const newCarFilterModels = (state = [], action) => {
   switch (action.type) {
+    case NEW_CAR_CITY__SELECT:
+      return [];
     case NEW_CAR_FILTER_BRANDS__SELECT:
       return state.filter(item => {
         return action.payload.includes(item.brandId);
@@ -339,6 +345,8 @@ const newCarFilterModels = (state = [], action) => {
 
 const newCarFilterBody = (state = [], action) => {
   switch (action.type) {
+    case NEW_CAR_CITY__SELECT:
+      return [];
     case NEW_CAR_FILTER_BODY__SELECT:
       return action.payload;
     default:
@@ -348,6 +356,8 @@ const newCarFilterBody = (state = [], action) => {
 
 const newCarFilterGearbox = (state = [], action) => {
   switch (action.type) {
+    case NEW_CAR_CITY__SELECT:
+      return [];
     case NEW_CAR_FILTER_GEARBOX__SELECT:
       return action.payload;
     default:
@@ -357,6 +367,8 @@ const newCarFilterGearbox = (state = [], action) => {
 
 const newCarFilterEngineType = (state = [], action) => {
   switch (action.type) {
+    case NEW_CAR_CITY__SELECT:
+      return [];
     case NEW_CAR_FILTER_ENGINE_TYPE__SELECT:
       return action.payload;
     default:
@@ -366,6 +378,8 @@ const newCarFilterEngineType = (state = [], action) => {
 
 const newCarFilterDrive = (state = [], action) => {
   switch (action.type) {
+    case NEW_CAR_CITY__SELECT:
+      return [];
     case NEW_CAR_FILTER_DRIVE__SELECT:
       return action.payload;
     default:
@@ -375,6 +389,8 @@ const newCarFilterDrive = (state = [], action) => {
 
 const newCarFilterPrice = (state = null, action) => {
   switch (action.type) {
+    case NEW_CAR_CITY__SELECT:
+      return null;
     case NEW_CAR_FILTER_PRICE__SELECT:
       return action.payload;
     default:
