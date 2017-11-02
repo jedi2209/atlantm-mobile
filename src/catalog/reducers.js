@@ -265,7 +265,6 @@ const isFetchingNewCarByFilter = (state = false, action) => {
 
 const newCarFilterData = (state = null, action) => {
   switch (action.type) {
-    case NEW_CAR_CITY__SELECT:
     case NEW_CAR_FILTER_DATA__REQUEST:
       return null;
     case NEW_CAR_FILTER_DATA__SUCCESS:
@@ -431,6 +430,18 @@ const needFetchFilterData = (state = false, action) => {
   }
 };
 
+const needFetchFilterDataAfterCity = (state = false, action) => {
+  switch (action.type) {
+    case NEW_CAR_CITY__SELECT:
+      return true;
+    case NEW_CAR_FILTER_DATA__REQUEST:
+    case NEW_CAR_BY_FILTER__REQUEST:
+      return false;
+    default:
+      return state;
+  }
+};
+
 const isFetchingNewCarDetails = (state = false, action) => {
   switch (action.type) {
     case NEW_CAR_DETAILS__REQUEST:
@@ -493,6 +504,7 @@ export default combineReducers({
     region: newCarRegion,
     meta: combineReducers({
       needFetchFilterData,
+      needFetchFilterDataAfterCity,
       isFetchingFilterData,
       isNewCarFilterPriceShow,
       isFetchingNewCarByFilter,

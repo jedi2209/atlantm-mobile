@@ -126,6 +126,7 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
     city: catalog.newCar.city,
     region: catalog.newCar.region,
     needFetchFilterData: catalog.newCar.meta.needFetchFilterData,
+    needFetchFilterDataAfterCity: catalog.newCar.meta.needFetchFilterDataAfterCity,
     isFetchingFilterData: catalog.newCar.meta.isFetchingFilterData,
     isNewCarFilterPriceShow: catalog.newCar.meta.isNewCarFilterPriceShow,
     isFetchingNewCarByFilter: catalog.newCar.meta.isFetchingNewCarByFilter,
@@ -172,12 +173,23 @@ class NewCarFilterScreen extends Component {
       filterDrive,
       filterEngineType,
       filterPrice,
+
+      // обновление экрана после выбора фильтров
+      city,
       needFetchFilterData,
       actionFetchNewCarByFilter,
+
+      // обновление экрана после выбора города
+      needFetchFilterDataAfterCity,
+      actionFetchNewCarFilterData
     } = this.props;
 
+    if (needFetchFilterDataAfterCity) {
+      return actionFetchNewCarFilterData({ city: city.id });
+    }
+
     if (needFetchFilterData) {
-      actionFetchNewCarByFilter({
+      return actionFetchNewCarByFilter({
         searchUrl: filterData.search_url,
         filterBrands,
         filterModels,
@@ -192,6 +204,7 @@ class NewCarFilterScreen extends Component {
 
   shouldComponentUpdate(nextProps) {
     const {
+      city,
       items,
       filterData,
       filterBrands,
@@ -207,7 +220,8 @@ class NewCarFilterScreen extends Component {
       (get(filterData, 'pages.next') !== get(nextProps, 'filterData.pages.next')) ||
       (get(items, 'pages.next') !== get(nextProps, 'items.pages.next')) ||
       (filterBrands.length !== nextProps.filterBrands) ||
-      (isNewCarFilterPriceShow !== nextProps.isNewCarFilterPriceShow);
+      (isNewCarFilterPriceShow !== nextProps.isNewCarFilterPriceShow) ||
+      (city.id !== nextProps.city.id);
   }
 
   getCityData = () => {
