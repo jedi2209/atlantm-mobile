@@ -69,7 +69,7 @@ class UserCarListScreen extends Component {
       headerTitle: count ? `${count} ${declOfNum(count, titleVariants)}` : null,
       headerStyle: styleHeader.common,
       headerTitleStyle: styleHeader.title,
-      headerLeft: <HeaderIconBack navigation={navigation} returnScreen="CatalogScreen" />,
+      headerLeft: <HeaderIconBack navigation={navigation} />,
       headerRight: <HeaderIconMenu navigation={navigation} />,
     };
   }
@@ -97,9 +97,6 @@ class UserCarListScreen extends Component {
 
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'UserCarListScreen';
-
-    console.log('city', city.id);
-    console.log('nextProps.city', nextProps.city.id);
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (items.length !== nextProps.items.length) ||
