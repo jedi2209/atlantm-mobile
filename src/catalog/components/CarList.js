@@ -74,7 +74,7 @@ export default class CarList extends Component {
   componentDidMount() {
     const { items, dataHandler } = this.props;
 
-    if (!items) {
+    if (!items || items.length === 0) {
       dataHandler(EVENT_DEFAULT);
     }
   }
