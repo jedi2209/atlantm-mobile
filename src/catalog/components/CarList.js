@@ -72,7 +72,11 @@ export default class CarList extends Component {
   // }
 
   componentDidMount() {
-    this.props.dataHandler(EVENT_DEFAULT);
+    const { items, dataHandler } = this.props;
+
+    if (items.length === 0) {
+      dataHandler(EVENT_DEFAULT);
+    }
   }
 
   renderEmptyComponent = () => {
