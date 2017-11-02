@@ -206,6 +206,8 @@ const isOrderCarRequest = (state = false, action) => {
 
 const orderComment = (state = '', action) => {
   switch (action.type) {
+    case CATALOG_ORDER__SUCCESS:
+      return '';
     case CATALOG_ORDER_COMMENT__FILL:
       return action.payload;
     default:

@@ -91,9 +91,6 @@ class UserCarListScreen extends Component {
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'UserCarListScreen';
 
-    console.log('items.length', items.length);
-    console.log('nextProps.items.length', items.length);
-
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (items.length !== nextProps.items.length) ||
       (isFetchItems !== nextProps.isFetchItems) ||

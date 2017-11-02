@@ -113,13 +113,15 @@ class NewCarItemScreen extends Component {
 
     navigation.navigate('OrderScreen', {
       car: {
-        brand: carDetails.brand.name,
+        brand: get(carDetails, 'brand.name'),
         model: carDetails.model,
-        price: carDetails.price.app,
+        price: get(carDetails, 'price.app'),
+        complectation: get(carDetails, 'complectation.name'),
       },
       currency: filterData.prices.curr.name,
       dealerId: carDetails.dealer.id,
       carId: carDetails.id.api,
+      isNewCar: true,
     });
   }
 

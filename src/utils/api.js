@@ -116,7 +116,7 @@ export default {
       if (!isAmp) isAmp = true;
     }
 
-    console.log('API url', url);
+    __DEV__ && console.log('API fetchNewCarByFilter url', url);
 
     return this.request(url, baseRequestParams);
   },
@@ -172,6 +172,7 @@ export default {
       email,
       phone,
       dealerId,
+      isNewCar,
     } = props;
 
     const body = `f_Dealer=${dealerId}&f_Car=${carId}&f_Name=${name}&f_Phone=${phone}&f_Email=${email}&f_Text=${comment}&f_Source=3`;
@@ -183,7 +184,12 @@ export default {
       body,
     });
 
-    return this.request('/orders/trade-in/post/', requestParams);
+    const url = isNewCar ? '/orders/stock/post/' : '/orders/trade-in/post/';
+
+    __DEV__ && console.log('API order car url', url);
+    __DEV__ && console.log('API order car body', body);
+
+    return this.request(url, requestParams);
   },
 
   request(path, requestParams) {
