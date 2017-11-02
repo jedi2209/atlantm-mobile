@@ -13,7 +13,12 @@ import SelectListByCountry from '../../../core/components/SelectListByCountry';
 import styleHeader from '../../../core/components/Header/style';
 
 // actions
-import { actionSelectUsedCarCity, actionSelectUsedCarRegion, actionResetUsedCarList } from '../../actions';
+import {
+  actionSelectUsedCarCity,
+  actionSelectUsedCarRegion,
+  actionResetUsedCarList,
+  actionSetNeedUpdateUsedCarList,
+} from '../../actions';
 
 const mapStateToProps = ({ catalog, dealer }) => {
   return {
@@ -30,6 +35,7 @@ const mapDispatchToProps = dispatch => {
     actionSelectUsedCarCity,
     actionSelectUsedCarRegion,
     actionResetUsedCarList,
+    actionSetNeedUpdateUsedCarList,
   }, dispatch);
 };
 
@@ -58,6 +64,7 @@ class UsedCarCityScreen extends Component {
 
   selectItem = (item) => {
     this.props.actionResetUsedCarList();
+    this.props.actionSetNeedUpdateUsedCarList();
     this.props.actionSelectUsedCarCity(item);
   }
 
