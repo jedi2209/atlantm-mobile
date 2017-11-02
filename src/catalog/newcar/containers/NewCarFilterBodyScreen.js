@@ -67,16 +67,18 @@ class NewCarFilterBodyScreen extends Component {
   }
 
   onPressItem = (selectedBody) => {
-    const { filterBody } = this.props;
-    let newBody = [];
+    requestAnimationFrame(() => {
+      const { filterBody } = this.props;
+      let newBody = [];
 
-    if (this.isBodySelected(selectedBody)) {
-      newBody = filterBody.filter(body => body !== selectedBody);
-    } else {
-      newBody = [].concat(filterBody, selectedBody);
-    }
+      if (this.isBodySelected(selectedBody)) {
+        newBody = filterBody.filter(body => body !== selectedBody);
+      } else {
+        newBody = [].concat(filterBody, selectedBody);
+      }
 
-    this.props.actionSelectNewCarFilterBody(newBody);
+      this.props.actionSelectNewCarFilterBody(newBody);
+    });
   }
 
   isBodySelected = bodyId => this.props.filterBody.includes(bodyId)
@@ -92,7 +94,6 @@ class NewCarFilterBodyScreen extends Component {
     console.log('== NewCarFilterBodyScreen ==');
 
     const body = get(filterData, 'data.body');
-
     const bodyKeys = Object.keys(body);
 
     return (
@@ -102,6 +103,7 @@ class NewCarFilterBodyScreen extends Component {
             {
               bodyKeys.map((bodyId, idx) => {
                 const item = body[bodyId];
+                const handler = () => this.onPressItem(bodyId);
 
                 return (
                   <View key={bodyId} style={styleListProfile.listItemContainer}>
@@ -109,9 +111,9 @@ class NewCarFilterBodyScreen extends Component {
                       last={(bodyKeys.length - 1) === idx}
                       icon
                       style={styleListProfile.listItemPressable}
-                      onPress={() => this.onPressItem(bodyId)}
+                      onPress={handler}
                     >
-                      <CheckBox checked={this.isBodySelected(bodyId)} />
+                      <CheckBox onPress={handler} checked={this.isBodySelected(bodyId)} />
                       <Body style={styleListProfile.bodyWithLeftGap} >
                         <Label style={styleListProfile.label}>{item}</Label>
                       </Body>

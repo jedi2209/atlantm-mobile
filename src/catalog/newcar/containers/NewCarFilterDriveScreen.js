@@ -67,16 +67,18 @@ class NewCarFilterDriveScreen extends Component {
   }
 
   onPressItem = (selectedDrive) => {
-    const { filterDrive } = this.props;
-    let newDrive = [];
+    requestAnimationFrame(() => {
+      const { filterDrive } = this.props;
+      let newDrive = [];
 
-    if (this.isDriveSelected(selectedDrive)) {
-      newDrive = filterDrive.filter(drive => drive !== selectedDrive);
-    } else {
-      newDrive = [].concat(filterDrive, selectedDrive);
-    }
+      if (this.isDriveSelected(selectedDrive)) {
+        newDrive = filterDrive.filter(drive => drive !== selectedDrive);
+      } else {
+        newDrive = [].concat(filterDrive, selectedDrive);
+      }
 
-    this.props.actionSelectNewCarFilterDrive(newDrive);
+      this.props.actionSelectNewCarFilterDrive(newDrive);
+    });
   }
 
   isDriveSelected = driveId => this.props.filterDrive.includes(driveId)
@@ -92,7 +94,6 @@ class NewCarFilterDriveScreen extends Component {
     console.log('== NewCarFilterDriveScreen ==');
 
     const drive = get(filterData, 'data.drive');
-
     const driveKeys = Object.keys(drive);
 
     return (
@@ -102,6 +103,7 @@ class NewCarFilterDriveScreen extends Component {
             {
               driveKeys.map((driveId, idx) => {
                 const item = drive[driveId];
+                const handler = () => this.onPressItem(driveId);
 
                 return (
                   <View key={driveId} style={styleListProfile.listItemContainer}>
@@ -109,9 +111,9 @@ class NewCarFilterDriveScreen extends Component {
                       last={(driveKeys.length - 1) === idx}
                       icon
                       style={styleListProfile.listItemPressable}
-                      onPress={() => this.onPressItem(driveId)}
+                      onPress={handler}
                     >
-                      <CheckBox checked={this.isDriveSelected(driveId)} />
+                      <CheckBox onPress={handler} checked={this.isDriveSelected(driveId)} />
                       <Body style={styleListProfile.bodyWithLeftGap} >
                         <Label style={styleListProfile.label}>{item}</Label>
                       </Body>
