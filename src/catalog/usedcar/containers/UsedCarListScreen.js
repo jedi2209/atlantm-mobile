@@ -74,8 +74,15 @@ class UserCarListScreen extends Component {
     };
   }
 
+  componentDidMount() {
+    console.log('component DID Mount');
+    setTimeout(() => {
+      this.props.navigation.setParams({ total: this.props.total });
+    }, 200);
+  }
+
   componentWillUpdate() {
-    console.log('componentWillUpdate');
+    console.log('component WILL Update');
 
     const { isFetchItems, navigation, total } = this.props;
 
@@ -84,7 +91,7 @@ class UserCarListScreen extends Component {
         .then(() => {
           setTimeout(() => {
             this.props.navigation.setParams({ total: this.props.total });
-          }, 150);
+          }, 200);
         });
     }
   }
