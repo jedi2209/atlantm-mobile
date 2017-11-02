@@ -121,6 +121,7 @@ class OrderScreen extends Component {
 
       const dealerId = get(navigation, 'state.params.dealerId');
       const carId = get(navigation, 'state.params.carId');
+      const isNewCar = get(navigation, 'state.params.isNewCar');
 
       if (!name || !phone) {
         return setTimeout(() => {
@@ -138,6 +139,7 @@ class OrderScreen extends Component {
         email,
         carId,
         comment,
+        isNewCar,
       })
         .then(action => {
           if (action.type === CATALOG_ORDER__SUCCESS) {
@@ -185,7 +187,7 @@ class OrderScreen extends Component {
 
     const car = get(navigation, 'state.params.car');
     const currency = get(navigation, 'state.params.currency');
-    const { brand, model, price } = car;
+    const { brand, model, price, complectation } = car;
     const processedPrice = `${priceSet(price)} ${currency}`;
 
     console.log('== Order ==');
@@ -203,6 +205,7 @@ class OrderScreen extends Component {
                 brand={brand}
                 model={model}
                 price={processedPrice}
+                complectation={complectation}
               />
 
               <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
