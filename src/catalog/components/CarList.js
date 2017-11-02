@@ -155,7 +155,7 @@ export default class CarList extends Component {
   render() {
     const { items } = this.props;
 
-    console.log('== CarList ==', items);
+    console.log('== CarList ==');
 
     return (
       <FlatList

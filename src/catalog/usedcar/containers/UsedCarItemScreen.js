@@ -185,7 +185,7 @@ class UserCarItemScreen extends Component {
                       <Text style={styles.sectionTitle}>Основные</Text>
                       <Grid>
                         {
-                          carDetails.year &&
+                          carDetails.year ?
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
@@ -195,10 +195,10 @@ class UserCarItemScreen extends Component {
                                   <Text style={styles.sectionValueText}>{`${carDetails.year} г.`}</Text>
                                 </Col>
                               </Row>
-                            )
+                            ) : null
                         }
                         {
-                          carDetails.mileage &&
+                          carDetails.mileage ?
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
@@ -208,10 +208,10 @@ class UserCarItemScreen extends Component {
                                   <Text style={styles.sectionValueText}>{`${priceSet(carDetails.mileage)} км.`}</Text>
                                 </Col>
                               </Row>
-                            )
+                            ) : null
                         }
                         {
-                          carDetails.engine && carDetails.engine.type &&
+                          (carDetails.engine && carDetails.engine.type) ?
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
@@ -221,10 +221,10 @@ class UserCarItemScreen extends Component {
                                   <Text style={styles.sectionValueText}>{carDetails.engine.type}</Text>
                                 </Col>
                               </Row>
-                            )
+                            ) : null
                         }
                         {
-                          carDetails.engine && carDetails.engine.volume && carDetails.engine.volume.short &&
+                          (carDetails.engine && carDetails.engine.volume && carDetails.engine.volume.short) ?
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
@@ -234,10 +234,10 @@ class UserCarItemScreen extends Component {
                                   <Text style={styles.sectionValueText}>{`${carDetails.engine.volume.short} л.`}</Text>
                                 </Col>
                               </Row>
-                            )
+                            ) : null
                         }
                         {
-                          carDetails.gearbox && carDetails.gearbox.name &&
+                          (carDetails.gearbox && carDetails.gearbox.name) ?
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
@@ -247,10 +247,10 @@ class UserCarItemScreen extends Component {
                                   <Text style={styles.sectionValueText}>{carDetails.gearbox.name}</Text>
                                 </Col>
                               </Row>
-                            )
+                            ) : null
                         }
                         {
-                          carDetails.color && carDetails.color.name && carDetails.color.name.official &&
+                          (carDetails.color && carDetails.color.name && carDetails.color.name.official) ?
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
@@ -260,10 +260,10 @@ class UserCarItemScreen extends Component {
                                   <Text style={styles.sectionValueText}>{carDetails.color.name.official}</Text>
                                 </Col>
                               </Row>
-                            )
+                            ) : null
                         }
                         {
-                          carDetails.body && carDetails.body.name &&
+                          (carDetails.body && carDetails.body.name) ?
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
@@ -273,7 +273,7 @@ class UserCarItemScreen extends Component {
                                   <Text style={styles.sectionValueText}>{carDetails.body.name}</Text>
                                 </Col>
                               </Row>
-                            )
+                            ) : null
                         }
                         {
                           (carDetails.interior && carDetails.interior.name) ?

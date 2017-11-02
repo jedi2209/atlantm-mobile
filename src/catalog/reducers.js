@@ -35,6 +35,10 @@ import {
   NEW_CAR_FILTER_PRICE__SHOW,
   NEW_CAR_FILTER_PRICE__HIDE,
 
+  NEW_CAR_DETAILS__REQUEST,
+  NEW_CAR_DETAILS__SUCCESS,
+  NEW_CAR_DETAILS__FAIL,
+
   EVENT_LOAD_MORE,
 
   CATALOG_DEALER__REQUEST,
@@ -409,6 +413,29 @@ const needFetchFilterData = (state = false, action) => {
   }
 };
 
+const isFetchingNewCarDetails = (state = false, action) => {
+  switch (action.type) {
+    case NEW_CAR_DETAILS__REQUEST:
+      return true;
+    case NEW_CAR_DETAILS__SUCCESS:
+    case NEW_CAR_DETAILS__FAIL:
+      return false;
+    default:
+      return state;
+  }
+};
+
+const newCarDetails = (state = null, action) => {
+  switch (action.type) {
+    case NEW_CAR_DETAILS__REQUEST:
+      return null;
+    case NEW_CAR_DETAILS__SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   dealer,
   orderComment,
@@ -434,7 +461,7 @@ export default combineReducers({
   }),
 
   newCar: combineReducers({
-    // carDetails: usedCarDetails,
+    carDetails: newCarDetails,
     filterBrands: newCarFilterBrands,
     filterModels: newCarFilterModels,
     filterBody: newCarFilterBody,
@@ -451,7 +478,7 @@ export default combineReducers({
       isFetchingFilterData,
       isNewCarFilterPriceShow,
       isFetchingNewCarByFilter,
-      // isFetchingCarDetails: isFetchingNewCarDetails,
+      isFetchingCarDetails: isFetchingNewCarDetails,
     }),
   }),
 });

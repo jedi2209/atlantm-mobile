@@ -47,6 +47,10 @@ export default {
     return this.request(`/stock/trade-in/cars/get/car/${carId}/`, baseRequestParams);
   },
 
+  fetchNewCarDetails(carId) {
+    return this.request(`/stock/new/cars/get/car/${carId}/`, baseRequestParams);
+  },
+
   fetchNewCarFilterData({ city }) {
     return this.request(`/stock/new/cars/search/?city=${city}`, baseRequestParams);
   },
