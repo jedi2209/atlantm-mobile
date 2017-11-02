@@ -36,6 +36,85 @@ import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
 import NewCarCityScreen from '../catalog/newcar/containers/NewCarCityScreen';
 
+const CatalogScreenNavigator = StackNavigator({
+  CatalogScreen: { screen: CatalogScreen },
+  AboutDealerScreen: { screen: AboutDealerScreen },
+  OrderScreen: { screen: OrderScreen },
+  UsedCarListScreen: { screen: UsedCarListScreen },
+  UsedCarItemScreen: { screen: UsedCarItemScreen },
+  UsedCarCityScreen: { screen: UsedCarCityScreen },
+  NewCarFilterScreen: { screen: NewCarFilterScreen },
+  NewCarFilterBrandsScreen: { screen: NewCarFilterBrandsScreen },
+  NewCarFilterModelsScreen: { screen: NewCarFilterModelsScreen },
+  NewCarFilterBodyScreen: { screen: NewCarFilterBodyScreen },
+  NewCarFilterGearboxScreen: { screen: NewCarFilterGearboxScreen },
+  NewCarFilterEngineTypeScreen: { screen: NewCarFilterEngineTypeScreen },
+  NewCarFilterDriveScreen: { screen: NewCarFilterDriveScreen },
+  NewCarListScreen: { screen: NewCarListScreen },
+  NewCarItemScreen: { screen: NewCarItemScreen },
+  NewCarCityScreen: { screen: NewCarCityScreen },
+});
+
+const removeDuplicateRoutes = (state) => {
+  if (!state.routes) return state
+
+  let duplicateRoutesCount = 0
+
+  const routes = state.routes.reduce((out, route, index) => {
+    const cleanRoute = removeDuplicateRoutes(route)
+
+    if (!index) {
+      out.push(cleanRoute)
+    } else {
+      const prevIndex = index - 1
+      const prevRouteName = out[prevIndex].routeName
+      if (prevRouteName === route.routeName) {
+        ++duplicateRoutesCount
+        out[prevIndex] = cleanRoute
+      } else {
+        out.push(cleanRoute)
+      }
+    }
+
+    return out
+  }, [])
+
+  // don't clone state, we want to keep references intact (at least at the top
+  // level)
+  state.routes = routes
+  state.index -= duplicateRoutesCount
+
+  return state
+};
+
+const defaultGetStateForAction = CatalogScreenNavigator.router.getStateForAction;
+CatalogScreenNavigator.router.getStateForAction = (action, state) => {
+  // console.log('action', action);
+  // console.log('state', state);
+
+  // if (state && action && action.routeName === 'UsedCarCityScreen') {
+  //   console.log('state.routes[1].routes', state.routes[1].routes);
+  //   state.routes[1].routes = state.routes[1].routes.filter(route => {
+  //     console.log('route', route);
+  //     // return route.routeName !== 'UsedCarListScreen';
+  //     return true;
+  //   });
+  // }
+
+  // if (state) {
+  //   console.log('before', state);
+  //   let newState = { ...state };
+  //   newState = removeDuplicateRoutes(state);
+  //   console.log('after', newState);
+  // }
+
+  console.log('action', action);
+  console.log('state', state);
+
+  // this.props.navigationChange(action.routeName ? action.routeName : mainScreen);
+  return defaultGetStateForAction(action, state);
+};
+
 const getRouter = initialRouteName => {
   return StackNavigator(
     {
@@ -66,24 +145,7 @@ const getRouter = initialRouteName => {
       ProfileScreen: { screen: ProfileScreen },
       ServiceScreen: { screen: ServiceScreen },
       Catalog2Screen: {
-        screen: StackNavigator({
-          CatalogScreen: { screen: CatalogScreen },
-          AboutDealerScreen: { screen: AboutDealerScreen },
-          OrderScreen: { screen: OrderScreen },
-          UsedCarListScreen: { screen: UsedCarListScreen },
-          UsedCarItemScreen: { screen: UsedCarItemScreen },
-          UsedCarCityScreen: { screen: UsedCarCityScreen },
-          NewCarFilterScreen: { screen: NewCarFilterScreen },
-          NewCarFilterBrandsScreen: { screen: NewCarFilterBrandsScreen },
-          NewCarFilterModelsScreen: { screen: NewCarFilterModelsScreen },
-          NewCarFilterBodyScreen: { screen: NewCarFilterBodyScreen },
-          NewCarFilterGearboxScreen: { screen: NewCarFilterGearboxScreen },
-          NewCarFilterEngineTypeScreen: { screen: NewCarFilterEngineTypeScreen },
-          NewCarFilterDriveScreen: { screen: NewCarFilterDriveScreen },
-          NewCarListScreen: { screen: NewCarListScreen },
-          NewCarItemScreen: { screen: NewCarItemScreen },
-          NewCarCityScreen: { screen: NewCarCityScreen },
-        }),
+        screen: CatalogScreenNavigator,
         navigationOptions: {
           header: null,
         },

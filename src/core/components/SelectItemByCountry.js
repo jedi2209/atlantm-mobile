@@ -73,6 +73,7 @@ export default class SelectItemByCountry extends Component {
         if (action.type === DEALER__SUCCESS) {
           const resetAction = NavigationActions.reset({
             index: 0,
+            key: null,
             actions: [
               NavigationActions.navigate({ routeName: returnScreen || mainScreen }),
             ],
@@ -92,7 +93,7 @@ export default class SelectItemByCountry extends Component {
 
     selectItem(item);
 
-    navigation.navigate(returnScreen);
+    // navigation.navigate(returnScreen);
     // const resetAction = NavigationActions.reset({
     //   index: 0,
     //   actions: [
@@ -101,7 +102,9 @@ export default class SelectItemByCountry extends Component {
     // });
     // navigation.dispatch(resetAction);
 
-    // navigation.goBack();
+    // console.log('navigation', navigation);
+    // navigation.goBack(returnScreen);
+    navigation.goBack();
 
     // const resetAction = NavigationActions.reset({
     //   index: 0,
