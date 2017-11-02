@@ -81,7 +81,11 @@ class UserCarListScreen extends Component {
 
     if (!isFetchItems) {
       this.fetchUsedCar('default')
-        .then(() => setTimeout(() => navigation.setParams({ total: this.props.total }), 100));
+        .then(() => {
+          setTimeout(() => {
+            this.props.navigation.setParams({ total: this.props.total });
+          }, 150);
+        });
     }
   }
 

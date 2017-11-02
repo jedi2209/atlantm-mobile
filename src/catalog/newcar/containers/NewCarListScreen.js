@@ -90,8 +90,8 @@ class NewCarListScreen extends Component {
     })
       .then(() => {
         return setTimeout(() => {
-          navigation.setParams({ total: get(this.props.items, 'total') });
-        }, 100);
+          this.props.navigation.setParams({ total: get(this.props.items, 'total') });
+        }, 150);
       });
   }
 
