@@ -71,7 +71,7 @@ class NewCarFilterBrandsScreen extends Component {
   }
 
   onPressItem = (selectedBrand) => {
-    InteractionManager.runAfterInteractions(() => {
+    requestAnimationFrame(() => {
       const { filterBrands } = this.props;
       let newBrands = [];
 
@@ -98,7 +98,6 @@ class NewCarFilterBrandsScreen extends Component {
     console.log('== NewCarFilterBrandsScreen ==');
 
     const brands = get(filterData, 'data.brand');
-
     const brandsKeys = Object.keys(brands);
 
     return (
@@ -108,16 +107,17 @@ class NewCarFilterBrandsScreen extends Component {
             {
               brandsKeys.map((brandId, idx) => {
                 const item = brands[brandId];
+                const handler = () => this.onPressItem(brandId);
 
                 return (
                   <View key={brandId} style={styleListProfile.listItemContainer}>
                     <ListItem
-                      last={(brandsKeys.length - 1) === idx}
                       icon
+                      onPress={handler}
+                      last={(brandsKeys.length - 1) === idx}
                       style={styleListProfile.listItemPressable}
-                      onPress={() => this.onPressItem(brandId)}
                     >
-                      <CheckBox checked={this.isBrandSelected(brandId)} />
+                      <CheckBox onPress={handler} checked={this.isBrandSelected(brandId)} />
                       <Body style={styleListProfile.bodyWithLeftGap} >
                         <Label style={styleListProfile.label}>{item.name}</Label>
                       </Body>

@@ -67,16 +67,18 @@ class NewCarFilterGearboxScreen extends Component {
   }
 
   onPressItem = (selectedGearbox) => {
-    const { filterGearbox } = this.props;
-    let newGearbox = [];
+    requestAnimationFrame(() => {
+      const { filterGearbox } = this.props;
+      let newGearbox = [];
 
-    if (this.isGearboxSelected(selectedGearbox)) {
-      newGearbox = filterGearbox.filter(gearbox => gearbox !== selectedGearbox);
-    } else {
-      newGearbox = [].concat(filterGearbox, selectedGearbox);
-    }
+      if (this.isGearboxSelected(selectedGearbox)) {
+        newGearbox = filterGearbox.filter(gearbox => gearbox !== selectedGearbox);
+      } else {
+        newGearbox = [].concat(filterGearbox, selectedGearbox);
+      }
 
-    this.props.actionSelectNewCarFilterGearbox(newGearbox);
+      this.props.actionSelectNewCarFilterGearbox(newGearbox);
+    });
   }
 
   isGearboxSelected = gearboxId => this.props.filterGearbox.includes(gearboxId)
@@ -92,7 +94,6 @@ class NewCarFilterGearboxScreen extends Component {
     console.log('== NewCarFilterGearboxScreen ==');
 
     const gearbox = get(filterData, 'data.gearbox');
-
     const gearboxKeys = Object.keys(gearbox);
 
     return (
@@ -102,16 +103,17 @@ class NewCarFilterGearboxScreen extends Component {
             {
               gearboxKeys.map((gearboxId, idx) => {
                 const item = gearbox[gearboxId];
+                const handler = () => this.onPressItem(gearboxId);
 
                 return (
                   <View key={gearboxId} style={styleListProfile.listItemContainer}>
                     <ListItem
-                      last={(gearboxKeys.length - 1) === idx}
                       icon
+                      onPress={handler}
+                      last={(gearboxKeys.length - 1) === idx}
                       style={styleListProfile.listItemPressable}
-                      onPress={() => this.onPressItem(gearboxId)}
                     >
-                      <CheckBox checked={this.isGearboxSelected(gearboxId)} />
+                      <CheckBox onPress={handler} checked={this.isGearboxSelected(gearboxId)} />
                       <Body style={styleListProfile.bodyWithLeftGap} >
                         <Label style={styleListProfile.label}>{item}</Label>
                       </Body>

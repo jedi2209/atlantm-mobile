@@ -67,16 +67,18 @@ class NewCarFilterGearboxScreen extends Component {
   }
 
   onPressItem = (selectedEngineType) => {
-    const { filterEngineType } = this.props;
-    let newEngineType = [];
+    requestAnimationFrame(() => {
+      const { filterEngineType } = this.props;
+      let newEngineType = [];
 
-    if (this.isEngineTypeSelected(selectedEngineType)) {
-      newEngineType = filterEngineType.filter(engineType => engineType !== selectedEngineType);
-    } else {
-      newEngineType = [].concat(filterEngineType, selectedEngineType);
-    }
+      if (this.isEngineTypeSelected(selectedEngineType)) {
+        newEngineType = filterEngineType.filter(engineType => engineType !== selectedEngineType);
+      } else {
+        newEngineType = [].concat(filterEngineType, selectedEngineType);
+      }
 
-    this.props.actionSelectNewCarFilterEngineType(newEngineType);
+      this.props.actionSelectNewCarFilterEngineType(newEngineType);
+    });
   }
 
   isEngineTypeSelected = engineTypeId => this.props.filterEngineType.includes(engineTypeId)
@@ -92,7 +94,6 @@ class NewCarFilterGearboxScreen extends Component {
     console.log('== NewCarFilterGearboxScreen ==');
 
     const engineType = get(filterData, 'data.enginetype');
-
     const engineTypeKeys = Object.keys(engineType);
 
     return (
@@ -102,16 +103,17 @@ class NewCarFilterGearboxScreen extends Component {
             {
               engineTypeKeys.map((engineTypeId, idx) => {
                 const item = engineType[engineTypeId];
+                const handler = () => this.onPressItem(engineTypeId);
 
                 return (
                   <View key={engineTypeId} style={styleListProfile.listItemContainer}>
                     <ListItem
-                      last={(engineTypeKeys.length - 1) === idx}
                       icon
+                      onPress={handler}
+                      last={(engineTypeKeys.length - 1) === idx}
                       style={styleListProfile.listItemPressable}
-                      onPress={() => this.onPressItem(engineTypeId)}
                     >
-                      <CheckBox checked={this.isEngineTypeSelected(engineTypeId)} />
+                      <CheckBox onPress={handler} checked={this.isEngineTypeSelected(engineTypeId)} />
                       <Body style={styleListProfile.bodyWithLeftGap} >
                         <Label style={styleListProfile.label}>{item}</Label>
                       </Body>

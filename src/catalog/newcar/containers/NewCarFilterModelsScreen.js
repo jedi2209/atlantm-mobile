@@ -69,7 +69,7 @@ class NewCarFilterBrandsScreen extends Component {
   }
 
   onPressItem = (brandId, selectedModelId) => {
-    InteractionManager.runAfterInteractions(() => {
+    requestAnimationFrame(() => {
       const { filterModels } = this.props;
       let newModels = [];
 
@@ -109,15 +109,17 @@ class NewCarFilterBrandsScreen extends Component {
                     {item.name && <ListItemHeader text={(item.name).toUpperCase()} />}
                     {
                       modelsKeys.map((modelId, idx) => {
+                        const handler = () => this.onPressItem(brandId, modelId);
+
                         return (
                           <View key={`model-${modelId}`} style={styleListProfile.listItemContainer}>
                             <ListItem
                               last={(modelsKeys.length - 1) === idx}
                               icon
                               style={styleListProfile.listItemPressable}
-                              onPress={() => this.onPressItem(brandId, modelId)}
+                              onPress={handler}
                             >
-                              <CheckBox checked={this.isModelSelected(modelId)} />
+                              <CheckBox onPress={handler} checked={this.isModelSelected(modelId)} />
                               <Body style={styleListProfile.bodyWithLeftGap} >
                                 <Label style={styleListProfile.label}>{models[modelId]}</Label>
                               </Body>

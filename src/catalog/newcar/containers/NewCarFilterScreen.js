@@ -213,15 +213,24 @@ class NewCarFilterScreen extends Component {
       isNewCarFilterPriceShow,
     } = this.props;
     const nav = nextProps.nav.newState;
-    const isActiveScreen = nav.routes[nav.index].routeName === 'NewCarFilterScreen';
+    let isActiveScreen = false;
+
+    if (nav) {
+      const rootLevel = nav.routes[nav.index];
+      if (rootLevel) {
+        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'NewCarFilterScreen';
+      }
+    }
+
+    console.log('isActiveScreen', isActiveScreen);
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-      (isFetchingFilterData !== nextProps.isFetchingFilterData) ||
-      (get(filterData, 'pages.next') !== get(nextProps, 'filterData.pages.next')) ||
-      (get(items, 'pages.next') !== get(nextProps, 'items.pages.next')) ||
-      (filterBrands.length !== nextProps.filterBrands) ||
-      (isNewCarFilterPriceShow !== nextProps.isNewCarFilterPriceShow) ||
-      (city.id !== nextProps.city.id);
+      (isFetchingFilterData !== nextProps.isFetchingFilterData && isActiveScreen) ||
+      (get(filterData, 'pages.next') !== get(nextProps, 'filterData.pages.next') && isActiveScreen) ||
+      (get(items, 'pages.next') !== get(nextProps, 'items.pages.next') && isActiveScreen) ||
+      (filterBrands.length !== nextProps.filterBrands && isActiveScreen) ||
+      (isNewCarFilterPriceShow !== nextProps.isNewCarFilterPriceShow && isActiveScreen) ||
+      (city.id !== nextProps.city.id && isActiveScreen);
   }
 
   getCityData = () => {
