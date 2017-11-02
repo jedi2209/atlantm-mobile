@@ -365,7 +365,10 @@ export const actionFetchNewCarByFilter = props => {
 
         return dispatch({
           type: NEW_CAR_BY_FILTER__SUCCESS,
-          payload: { ...response },
+          payload: {
+            ...response,
+            type: props.type,
+          },
         });
       })
       .catch(error => {
