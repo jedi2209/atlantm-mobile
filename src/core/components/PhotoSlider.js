@@ -99,8 +99,9 @@ export default class PhotoSlider extends Component {
     return (
       <Swiper
         id={1}
+        dotColor="#fff"
         showsButtons={false}
-        showsPagination={false}
+        showsPagination={true}
         height={this.state.height}
         rootStyle={styles.photoSlider}
         loadMinimal={false}
