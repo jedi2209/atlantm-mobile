@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  Platform,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 
 // redux
 import { EVENT_LOAD_MORE, EVENT_REFRESH, EVENT_DEFAULT } from '../actionTypes';
@@ -72,9 +79,9 @@ export default class CarList extends Component {
   // }
 
   componentDidMount() {
-    const { items, dataHandler } = this.props;
+    const { items, isFetchItems, dataHandler } = this.props;
 
-    if (!items || items.length === 0) {
+    if ((!items || items.length === 0) && !isFetchItems) {
       dataHandler(EVENT_DEFAULT);
     }
   }
@@ -163,7 +170,7 @@ export default class CarList extends Component {
 
     return (
       <FlatList
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={Platform.OS === 'android' ? 1 : 0.1}
         initialNumToRender={20}
         data={items}
         onRefresh={this.onRefresh}

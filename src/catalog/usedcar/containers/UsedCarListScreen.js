@@ -11,6 +11,8 @@ import {
   actionHidePriceFilter,
   actionResetUsedCarList,
   actionSelectUsedCarPriceRange,
+  actionSetNeedUpdateUsedCarList,
+  actionSetStopNeedUpdateUsedCarList,
 } from '../../actions';
 
 // components
@@ -42,6 +44,7 @@ const mapStateToProps = ({ dealer, nav, catalog }) => {
     pages: catalog.usedCar.pages,
     prices: catalog.usedCar.prices,
     priceRange: catalog.usedCar.priceRange,
+    needUpdate: catalog.usedCar.meta.needUpdate,
     isFetchItems: catalog.usedCar.meta.isFetchItems,
     isPriceFilterShow: catalog.usedCar.meta.isPriceFilterShow,
     dealerSelected: dealer.selected,
@@ -56,6 +59,8 @@ const mapDispatchToProps = dispatch => {
     actionHidePriceFilter,
     actionResetUsedCarList,
     actionSelectUsedCarPriceRange,
+    actionSetNeedUpdateUsedCarList,
+    actionSetStopNeedUpdateUsedCarList,
   }, dispatch);
 };
 
@@ -75,20 +80,24 @@ class UserCarListScreen extends Component {
   }
 
   componentDidMount() {
-    console.log('component DID Mount');
     setTimeout(() => {
       this.props.navigation.setParams({ total: this.props.total });
     }, 200);
   }
 
-  componentWillUpdate() {
-    console.log('component WILL Update');
+  componentDidUpdate() {
+    const {
+      total,
+      navigation,
+      needUpdate,
+      isFetchItems,
+      actionSetStopNeedUpdateUsedCarList,
+    } = this.props;
 
-    const { isFetchItems, navigation, total } = this.props;
-
-    if (!isFetchItems) {
+    if (needUpdate && !isFetchItems) {
       this.fetchUsedCar('default')
         .then(() => {
+          actionSetStopNeedUpdateUsedCarList();
           setTimeout(() => {
             this.props.navigation.setParams({ total: this.props.total });
           }, 200);
@@ -101,6 +110,7 @@ class UserCarListScreen extends Component {
       city,
       total,
       items,
+      needUpdate,
       isFetchItems,
       dealerSelected,
       isPriceFilterShow,
@@ -114,7 +124,8 @@ class UserCarListScreen extends Component {
       (isFetchItems !== nextProps.isFetchItems) ||
       (total.count !== nextProps.total.count) ||
       (isPriceFilterShow !== nextProps.isPriceFilterShow) ||
-      (city.id !== nextProps.city.id);
+      (city.id !== nextProps.city.id) ||
+      (needUpdate !== nextProps.needUpdate);
   }
 
   fetchUsedCar = (type, priceRangeFromFilter) => {
@@ -143,7 +154,6 @@ class UserCarListScreen extends Component {
   onPressCity = () => {
     const { navigation } = this.props;
     const returnScreenKey = navigation.state.key;
-    console.log('returnScreenKey', returnScreenKey);
     navigation.navigate('UsedCarCityScreen', { returnScreen: returnScreenKey });
   }
 
@@ -157,12 +167,14 @@ class UserCarListScreen extends Component {
       actionHidePriceFilter,
       actionResetUsedCarList,
       actionSelectUsedCarPriceRange,
+      actionSetNeedUpdateUsedCarList,
     } = this.props;
 
     actionHidePriceFilter();
 
     if (priceRange) {
       actionResetUsedCarList();
+      actionSetNeedUpdateUsedCarList();
       actionSelectUsedCarPriceRange(priceRange);
       this.fetchUsedCar(EVENT_DEFAULT, priceRange);
     }

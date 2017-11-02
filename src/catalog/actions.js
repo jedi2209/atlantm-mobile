@@ -5,6 +5,8 @@ import {
   USED_CAR_LIST__SUCCESS,
   USED_CAR_LIST__FAIL,
   USED_CAR_LIST__RESET,
+  USED_CAR_LIST_UPDATE__SET,
+  USED_CAR_LIST_STOP_UPDATE__SET,
   USED_CAR_CITY__SELECT,
   USED_CAR_PRICE_RANGE__SELECT,
   USED_CAR_REGION__SELECT,
@@ -283,6 +285,22 @@ export const actionFetchUsedCarDetails = carId => {
           },
         });
       });
+  };
+};
+
+export const actionSetNeedUpdateUsedCarList = () => {
+  return dispatch => {
+    dispatch({
+      type: USED_CAR_LIST_UPDATE__SET,
+    });
+  };
+};
+
+export const actionSetStopNeedUpdateUsedCarList = () => {
+  return dispatch => {
+    dispatch({
+      type: USED_CAR_LIST_STOP_UPDATE__SET,
+    });
   };
 };
 

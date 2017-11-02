@@ -6,6 +6,8 @@ import {
   USED_CAR_LIST__SUCCESS,
   USED_CAR_LIST__FAIL,
   USED_CAR_LIST__RESET,
+  USED_CAR_LIST_UPDATE__SET,
+  USED_CAR_LIST_STOP_UPDATE__SET,
   USED_CAR_CITY__SELECT,
   USED_CAR_REGION__SELECT,
   USED_CAR_PRICE_RANGE__SELECT,
@@ -79,6 +81,12 @@ const usedCarTotal = (state = {}, action) => {
     case DEALER__SUCCESS:
       return {};
     case USED_CAR_LIST__SUCCESS:
+      if (action.payload.type === EVENT_LOAD_MORE) {
+        return {
+          ...state,
+          ...action.payload.total,
+        };
+      }
       return action.payload.total;
     default:
       return state;
@@ -91,6 +99,12 @@ const usedCarPages = (state = {}, action) => {
     case DEALER__SUCCESS:
       return {};
     case USED_CAR_LIST__SUCCESS:
+      if (action.payload.type === EVENT_LOAD_MORE) {
+        return {
+          ...state,
+          ...action.payload.pages,
+        };
+      }
       return action.payload.pages || {};
     default:
       return state;
@@ -103,6 +117,12 @@ const usedCarPrices = (state = {}, action) => {
     case DEALER__SUCCESS:
       return {};
     case USED_CAR_LIST__SUCCESS:
+      if (action.payload.type === EVENT_LOAD_MORE) {
+        return {
+          ...state,
+          ...action.payload.prices,
+        };
+      }
       return action.payload.prices;
     default:
       return state;
@@ -233,6 +253,17 @@ const usedCarDetails = (state = null, action) => {
       return null;
     case USED_CAR_DETAILS__SUCCESS:
       return action.payload;
+    default:
+      return state;
+  }
+};
+
+const needUpdateUsedCarList = (state = false, action) => {
+  switch (action.type) {
+    case USED_CAR_LIST_STOP_UPDATE__SET:
+      return false;
+    case USED_CAR_LIST_UPDATE__SET:
+      return true;
     default:
       return state;
   }
@@ -483,6 +514,7 @@ export default combineReducers({
     region: usedCarRegion,
     priceRange: usedCarPriceRange,
     meta: combineReducers({
+      needUpdate: needUpdateUsedCarList,
       isFetchItems: isFetchUsedCarItems,
       isPriceFilterShow: isUsedCarPriceFilterShow,
       isFetchingCarDetails: isFetchingUsedCarDetails,
