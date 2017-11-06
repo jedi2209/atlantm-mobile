@@ -167,7 +167,7 @@ export default class PricePicker extends PureComponent {
     this.setState({ maxPrice });
   }
 
-  renderItems = () => {
+  renderItems = isReversed => {
     const { min, max, step } = this.props;
 
     let data = [];
@@ -181,7 +181,7 @@ export default class PricePicker extends PureComponent {
       data.push(<Picker.Item key={max} label={`${priceSet(max)}`} value={max} />);
     }
 
-    return data;
+    return isReversed ? data.reverse() : data;
   }
 
   render() {
@@ -234,12 +234,10 @@ export default class PricePicker extends PureComponent {
 
                   <View style={styles.pickersContainer}>
                     <Picker style={styles.picker} selectedValue={this.state.minPrice} onValueChange={this.onChangeMinPrice}>
-                      <Picker.Item key="key-min" label="От" value="min" />
                       {this.renderItems()}
                     </Picker>
                     <Picker style={styles.picker} selectedValue={this.state.maxPrice} onValueChange={this.onChangeMaxPrice}>
-                      <Picker.Item key="key-max" label="До" value="max" />
-                      {this.renderItems()}
+                      {this.renderItems(true)}
                     </Picker>
                   </View>
                 </Animated.View>
