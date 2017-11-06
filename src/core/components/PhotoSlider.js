@@ -4,26 +4,32 @@ import { View, Image, StyleSheet, ActivityIndicator, Dimensions, Platform } from
 
 // components
 import Swiper from 'react-native-swiper';
+import { isTablet } from 'react-native-device-info';
 
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../style-const';
 
 const { width } = Dimensions.get('window');
-const height = 200;
+const height = isTablet() ? 260 : 200;
 const styles = StyleSheet.create({
+  container: {
+    // marginHorizontal: -50,
+  },
   photoSlider: {
     position: 'relative',
     width,
   },
   item: {
+    // backgroundColor: 'red',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    width,
+    // width,
     height,
   },
   image: {
+    alignSelf: 'center',
     width,
     height,
   },
@@ -37,6 +43,7 @@ const Slide = props => {
   return (
     <View style={[styles.item, { height: props.height }]}>
       <Image
+          resizeMode="contain"
           style={styles.image}
           onLoad={props.loadHandle.bind(null, props.i)}
           source={{
@@ -99,6 +106,7 @@ export default class PhotoSlider extends Component {
     return (
       <Swiper
         id={1}
+        containerStyle={styles.container}
         dotColor="#fff"
         showsButtons={false}
         showsPagination={true}
