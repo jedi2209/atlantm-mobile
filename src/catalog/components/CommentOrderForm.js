@@ -42,10 +42,13 @@ export default class CarOrderList extends PureComponent {
           style={styles.textarea}
           multiline={true}
           numberOfLines={4}
-          onChangeText={this.onChangeText}
           value={comment}
+          returnKeyType="done"
+          returnKeyLabel="Готово"
           placeholder="Поле для заполнения"
+          onChangeText={this.onChangeText}
           underlineColorAndroid="transparent"
+          blurOnSubmit={true}
         />
       </View>
     );
