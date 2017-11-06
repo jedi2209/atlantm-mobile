@@ -25,6 +25,7 @@ export default class CarOrderList extends PureComponent {
     const { brand, model, price, complectation } = this.props;
     const modelName = get(model, 'name') || model;
 
+
     return (
       <View>
         <View style={styleListProfile.listItemContainer}>

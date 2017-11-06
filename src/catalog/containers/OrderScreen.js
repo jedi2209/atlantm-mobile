@@ -203,7 +203,7 @@ class OrderScreen extends Component {
 
               <CarOrderList
                 brand={brand}
-                model={model}
+                model={String(model)}
                 price={processedPrice}
                 complectation={complectation}
               />
@@ -229,13 +229,14 @@ class OrderScreen extends Component {
           </Content>
 
           <Footer style={styles.footer}>
-            <Button onPress={this.onPressOrder} full style={styles.button}>
-              <Text style={styles.buttonText}>ОТПРАВИТЬ</Text>
-              <Image
-                source={require('../../core/components/CustomIcon/assets/arrow-right.png')}
-                style={styles.buttonIcon}
-              />
-            </Button>
+              <Button onPress={this.onPressOrder} full style={styles.button}>
+                <Text style={styles.buttonText}>ОТПРАВИТЬ</Text>
+                <Image
+                  source={require('../../core/components/CustomIcon/assets/arrow-right.png')}
+                  style={styles.buttonIcon}
+                />
+              </Button>
+
           </Footer>
 
         </Container>
