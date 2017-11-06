@@ -331,19 +331,19 @@ export const actionFetchNewCarFilterData = props => {
     });
 
     return API.fetchNewCarFilterData(props)
-      .then(response => {
-        if (response.error) {
+      .then(res => {
+        if (res.error) {
           return dispatch({
             type: NEW_CAR_FILTER_DATA__FAIL,
             payload: {
-              error: response.error.message,
+              error: res.error.message,
             },
           });
         }
 
         return dispatch({
           type: NEW_CAR_FILTER_DATA__SUCCESS,
-          payload: { ...response },
+          payload: { ...res },
         });
       })
       .catch(error => {
