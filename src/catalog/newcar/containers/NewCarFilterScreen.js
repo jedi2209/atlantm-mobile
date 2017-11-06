@@ -281,13 +281,44 @@ class NewCarFilterScreen extends Component {
 
   onPressDrive = () => this.props.navigation.navigate('NewCarFilterDriveScreen')
 
-  onPressFilterButton = () => {
+  onPressFilterButton = (count) => {
     const { items, navigation, isFetchingNewCarByFilter } = this.props;
+
+    if (!count) {
+      return setTimeout(() => Alert.alert('Не найдено ни одного авто'), 100);
+    }
 
     if (!isFetchingNewCarByFilter) {
       const total = get(items, 'total');
       navigation.navigate('NewCarListScreen', { total });
     }
+  }
+
+  getCount = () => {
+    const {
+      items,
+      filterBrands,
+      filterModels,
+      filterBody,
+      filterGearbox,
+      filterDrive,
+      filterEngineType,
+      filterPrice,
+      filterData,
+    } = this.props;
+    const filterDataCount = get(filterData, 'total.count');
+    const filterCount = get(items, 'total.count');
+
+    const isItemsCount = [
+      filterBrands,
+      filterModels,
+      filterBody,
+      filterGearbox,
+      filterDrive,
+      filterEngineType,
+    ].some(filter => filter.length !== 0);
+
+    return isItemsCount ? filterCount : filterDataCount;
   }
 
   render() {
@@ -327,6 +358,7 @@ class NewCarFilterScreen extends Component {
     const maxPrice = get(items, 'prices.max') || get(filterData, 'prices.max');
     const step = get(items, 'prices.step') || get(filterData, 'prices.step');
     const currency = get(filterData, 'prices.curr.name');
+    const count = this.getCount();
 
     return (
       <StyleProvider style={getTheme()}>
@@ -478,7 +510,7 @@ class NewCarFilterScreen extends Component {
             </View>
           </Content>
           <Footer style={styles.footer}>
-            <Button onPress={this.onPressFilterButton} full style={styles.button}>
+            <Button onPress={() => this.onPressFilterButton(count)} full style={styles.button}>
               {
                 isFetchingNewCarByFilter ?
                   (
@@ -487,7 +519,7 @@ class NewCarFilterScreen extends Component {
                   (
                     <View style={styles.buttonContent} >
                       <Text style={styles.buttonText}>
-                        {`НАЙДЕНО ${get(items, 'total.count') || get(filterData, 'total.count')}`}
+                        {`НАЙДЕНО ${count}`}
                       </Text>
                       <Image
                         source={require('../../../core/components/CustomIcon/assets/arrow-right.png')}
