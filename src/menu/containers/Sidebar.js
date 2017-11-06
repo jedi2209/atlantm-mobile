@@ -15,7 +15,13 @@ import { connect } from 'react-redux';
 
 // helpers
 import styleConst from '../../core/style-const';
-import { MENU_CONTACTS, MENU_INFO, MENU_PROFILE, MENU_SERVICE } from '../actionTypes';
+import {
+  MENU_INFO,
+  MENU_CATALOG,
+  MENU_SERVICE,
+  MENU_PROFILE,
+  MENU_CONTACTS,
+} from '../actionTypes';
 
 const HEIGHT_ITEM = 55;
 const HEIGHT_ICON = 35;
@@ -98,6 +104,8 @@ class Sidebar extends Component {
         return MENU_SERVICE;
       case 'ProfileScreen':
         return MENU_PROFILE;
+      case 'Catalog2Screen':
+        return MENU_CATALOG;
       default:
         return MENU_CONTACTS;
     }
@@ -133,6 +141,12 @@ class Sidebar extends Component {
       this.showIntroWarning();
   }
 
+  onPressCatalog = () => {
+    this.isMenuAvailable() ?
+      window.atlantmNavigation.navigate('Catalog2Screen') :
+      this.showIntroWarning();
+  }
+
   render() {
     const nav = this.props.nav.newState;
     const isChooseDealerScreen = nav.routes[nav.index].routeName === 'ChooseDealerScreen';
@@ -144,6 +158,7 @@ class Sidebar extends Component {
     const isInfo = activeScreen === MENU_INFO;
     const isProfile = activeScreen === MENU_PROFILE;
     const isService = activeScreen === MENU_SERVICE;
+    const isCatalog = activeScreen === MENU_CATALOG;
 
     console.log('== Sidebar ==');
 
@@ -199,17 +214,15 @@ class Sidebar extends Component {
           </View>
         </TouchableHighlight>
 
-        <TouchableHighlight underlayColor={styleConst.color.select} onPress={this.onPressNotReadyScreen}>
-          <View style={styles.item}>
-            <Image
-              style={styles.icon}
-              source={require('../assets/catalog_auto.png')}
-            />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Каталог автомобилей</Text>
-            </View>
+        <TouchableOpacity onPress={this.onPressCatalog} style={[styles.item, isCatalog ? styles.itemActive : {}]}>
+          <Image
+            style={styles.icon}
+            source={require('../assets/catalog_auto.png')}
+          />
+          <View style={styles.textContainer}>
+            <Text style={[styles.text, isCatalog ? styles.textActive : {}]}>Каталог автомобилей</Text>
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
 
         <TouchableHighlight underlayColor={styleConst.color.select} onPress={this.onPressNotReadyScreen}>
           <View style={styles.item}>
