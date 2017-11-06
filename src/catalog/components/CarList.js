@@ -13,10 +13,11 @@ import {
 import { EVENT_LOAD_MORE, EVENT_REFRESH, EVENT_DEFAULT } from '../actionTypes';
 
 // components
+import EmptyMessage from './EmptyMessage';
 import CarListItem from './CarListItem';
 
 // helpers
-import { debounce, isObject } from 'lodash';
+import { debounce } from 'lodash';
 import styleConst from '../../core/style-const';
 import { verticalScale } from '../../utils/scale';
 
@@ -69,15 +70,6 @@ export default class CarList extends Component {
     };
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   const { items } = this.props;
-
-  //   // console.log('Catalog this.props.navigation', this.props.navigation);
-  //   // console.log('Catalog nextProps.navigation', nextProps.navigation);
-
-  //   return (items.length !== nextProps.items.length);
-  // }
-
   componentDidMount() {
     const { items, isFetchItems, dataHandler } = this.props;
 
@@ -91,20 +83,12 @@ export default class CarList extends Component {
 
     return isFetchItems ?
       <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} /> :
-      (
-        <View style={styles.messageContainer}>
-          <Text style={styles.message}>Нет автомобилей для отображения</Text>
-        </View>
-      );
+      <EmptyMessage />;
   }
 
   renderItem = ({ item }) => {
     if (item.type === 'empty') {
-      return (
-        <View style={styles.messageContainer}>
-          <Text style={styles.message}>Нет автомобилей для отображения</Text>
-        </View>
-      );
+      return <EmptyMessage />;
     }
 
     const { itemScreen, navigation, prices } = this.props;

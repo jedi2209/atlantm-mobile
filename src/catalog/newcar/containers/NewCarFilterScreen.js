@@ -34,6 +34,7 @@ import {
 } from '../../actions';
 
 // components
+import EmptyMessage from '../../components/EmptyMessage';
 import CityItemList from '../components/CityItemList';
 import PricePicker from '../../../core/components/PricePicker';
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
@@ -222,8 +223,6 @@ class NewCarFilterScreen extends Component {
       }
     }
 
-    console.log('isActiveScreen', isActiveScreen);
-
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (isFetchingFilterData !== nextProps.isFetchingFilterData && isActiveScreen) ||
       (get(filterData, 'pages.next') !== get(nextProps, 'filterData.pages.next') && isActiveScreen) ||
@@ -317,6 +316,11 @@ class NewCarFilterScreen extends Component {
           <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
         </View>
       );
+    }
+
+
+    if (get(filterData, 'total.count') === 0) {
+      return <EmptyMessage />;
     }
 
     const minPrice = get(items, 'prices.min') || get(filterData, 'prices.min');
