@@ -100,21 +100,29 @@ export default StyleSheet.create({
     marginHorizontal: styleConst.ui.horizontalGap,
   },
   tabText: {
+    fontFamily: styleConst.font.regular,
+    letterSpacing: styleConst.ui.letterSpacing,
     color: styleConst.color.greyBlueText,
   },
   tabTextActive: {
     color: '#fff',
+    fontFamily: styleConst.font.regular,
+    letterSpacing: styleConst.ui.letterSpacing,
   },
   tabButton: {
     borderColor: styleConst.color.greyBlue,
     flex: 1,
     justifyContent: 'center',
+    paddingLeft: 0,
+    paddingRight: 0,
   },
   tabButtonActive: {
     backgroundColor: styleConst.color.greyBlue,
     borderColor: styleConst.color.greyBlue,
     flex: 1,
     justifyContent: 'center',
+    paddingLeft: 0,
+    paddingRight: 0,
   },
   spinnerContainer: {
     flex: 1,
