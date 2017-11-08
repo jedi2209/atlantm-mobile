@@ -224,14 +224,14 @@ class UserCarItemScreen extends Component {
                             ) : null
                         }
                         {
-                          (carDetails.engine && carDetails.engine.volume && carDetails.engine.volume.short) ?
+                          (carDetails.engine && carDetails.engine.volume && carDetails.engine.volume.full) ?
                             (
                               <Row style={styles.sectionRow}>
                                 <Col style={styles.sectionProp}>
                                   <Text style={styles.sectionPropText}>Двигатель:</Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{`${carDetails.engine.volume.short} л.`}</Text>
+                                  <Text style={styles.sectionValueText}>{`${carDetails.engine.volume.full} см3`}</Text>
                                 </Col>
                               </Row>
                             ) : null

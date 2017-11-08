@@ -89,7 +89,7 @@ export default class CarListItem extends Component {
     const { car, prices } = this.props;
     const modelName = get(car, 'model.name', '');
     const complectation = get(car, 'complectation.name', '');
-    const engineVolume = get(car, 'engine.volume.short');
+    const engineVolume = get(car, 'engine.volume.full');
     const mileage = get(car, 'mileage');
     const gearbox = get(car, 'gearbox.name');
     const year = get(car, 'year');
@@ -114,7 +114,7 @@ export default class CarListItem extends Component {
             <View style={styles.extra}>
               <View style={styles.extraItem}>
                 <View style={styles.extraTextContainer}><Text style={styles.extraText}>{car.engine.type}</Text></View>
-                {engineVolume ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${engineVolume} л`}</Text></View> : null}
+                {engineVolume ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${engineVolume} см3`}</Text></View> : null}
               </View>
               <View style={styles.extraItem}>
                 {year ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${year} г.в.`}</Text></View> : null}
