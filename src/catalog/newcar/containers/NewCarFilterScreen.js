@@ -209,6 +209,7 @@ class NewCarFilterScreen extends Component {
       items,
       filterData,
       filterBrands,
+      filterPrice,
       dealerSelected,
       isFetchingFilterData,
       isNewCarFilterPriceShow,
@@ -229,7 +230,9 @@ class NewCarFilterScreen extends Component {
       (get(items, 'pages.next') !== get(nextProps, 'items.pages.next') && isActiveScreen) ||
       (filterBrands.length !== nextProps.filterBrands && isActiveScreen) ||
       (isNewCarFilterPriceShow !== nextProps.isNewCarFilterPriceShow && isActiveScreen) ||
-      (city.id !== nextProps.city.id && isActiveScreen);
+      (city.id !== nextProps.city.id && isActiveScreen) ||
+      (get(filterPrice, 'minPrice') !== get(nextProps, 'filterPrice.minPrice') && isActiveScreen) ||
+      (get(filterPrice, 'maxPrice') !== get(nextProps, 'filterPrice.maxPrice') && isActiveScreen);
   }
 
   getCityData = () => {
@@ -309,7 +312,7 @@ class NewCarFilterScreen extends Component {
     const filterDataCount = get(filterData, 'total.count');
     const filterCount = get(items, 'total.count');
 
-    const isItemsCount = [
+    let isItemsCount = [
       filterBrands,
       filterModels,
       filterBody,
@@ -317,6 +320,10 @@ class NewCarFilterScreen extends Component {
       filterDrive,
       filterEngineType,
     ].some(filter => filter.length !== 0);
+
+    if (filterPrice) {
+      isItemsCount = true;
+    }
 
     return isItemsCount ? filterCount : filterDataCount;
   }
@@ -351,6 +358,7 @@ class NewCarFilterScreen extends Component {
 
     const minPrice = get(items, 'prices.min') || get(filterData, 'prices.min');
     const maxPrice = get(items, 'prices.max') || get(filterData, 'prices.max');
+    const minPriceByFilter = get(filterPrice, 'minPrice');
     const step = get(items, 'prices.step') || get(filterData, 'prices.step');
     const currency = get(filterData, 'prices.curr.name');
     const count = this.getCount();
@@ -438,7 +446,7 @@ class NewCarFilterScreen extends Component {
                   <Right style={styles.right}>
                     {
                       <Text style={styleListProfile.listItemValue}>
-                        {`от ${minPrice} ${currency}`}
+                        {`от ${minPriceByFilter || minPrice} ${currency}`}
                       </Text>
                     }
                     <Icon name="arrow-forward" style={styleListProfile.iconArrow} />

@@ -48,8 +48,6 @@ class NewCarListScreen extends Component {
     const count = get(params, 'total.count');
     const titleVariants = ['автомобиль', 'автомобиля', 'автомобилей'];
 
-    console.log('navigation.state', navigation.state);
-
     return {
       headerTitle: count ? `${count} ${declOfNum(count, titleVariants)}` : null,
       headerStyle: styleHeader.common,
