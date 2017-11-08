@@ -26,16 +26,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: verticalScale(60),
   },
-  messageContainer: {
-    marginTop: verticalScale(60),
-  },
-  message: {
-    fontFamily: styleConst.font.regular,
-    fontSize: 18,
-    alignSelf: 'center',
-    letterSpacing: styleConst.ui.letterSpacing,
-    textAlign: 'center',
-  },
   footer: {
     paddingTop: 10,
     paddingBottom: 20,
