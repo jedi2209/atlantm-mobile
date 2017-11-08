@@ -14,7 +14,7 @@ import { get } from 'lodash';
 export default class CarOrderList extends PureComponent {
   static propTypes = {
     brand: PropTypes.string,
-    model: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    model: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
     price: PropTypes.string,
     complectation: PropTypes.string,
   }

@@ -203,7 +203,7 @@ class OrderScreen extends Component {
 
               <CarOrderList
                 brand={brand}
-                model={String(model)}
+                model={model}
                 price={processedPrice}
                 complectation={complectation}
               />
