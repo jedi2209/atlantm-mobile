@@ -41,7 +41,7 @@ export default class CarOrderList extends PureComponent {
         <TextInput
           style={styles.textarea}
           multiline={true}
-          numberOfLines={4}
+          numberOfLines={2}
           value={comment}
           returnKeyType="done"
           returnKeyLabel="Готово"
@@ -49,6 +49,7 @@ export default class CarOrderList extends PureComponent {
           onChangeText={this.onChangeText}
           underlineColorAndroid="transparent"
           blurOnSubmit={true}
+          textAlignVertical="top"
         />
       </View>
     );
