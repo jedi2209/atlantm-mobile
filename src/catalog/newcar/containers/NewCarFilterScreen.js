@@ -349,16 +349,25 @@ class NewCarFilterScreen extends Component {
       );
     }
 
-
-    if (get(filterData, 'total.count') === 0) {
-      return <EmptyMessage />;
-    }
-
     const minPrice = get(items, 'prices.min') || get(filterData, 'prices.min');
     const maxPrice = get(items, 'prices.max') || get(filterData, 'prices.max');
     const step = get(items, 'prices.step') || get(filterData, 'prices.step');
     const currency = get(filterData, 'prices.curr.name');
     const count = this.getCount();
+
+    if (get(filterData, 'total.count') === 0) {
+      return (
+        <View style={styles.content}>
+          <CityItemList
+            navigation={navigation}
+            cityName={city.name}
+            cityData={this.getCityData()}
+            returnScreen="NewCarFilterScreen"
+          />
+          <EmptyMessage />
+        </View>
+      );
+    }
 
     return (
       <StyleProvider style={getTheme()}>
