@@ -112,10 +112,15 @@ export default class CarListItem extends Component {
             <Text style={styles.title}>{`${car.brand.name} ${modelName || ''} ${complectation}`}</Text>
             <Text style={styles.price}>{`${priceSet(car.price.app)} ${prices.curr.name}`}</Text>
             <View style={styles.extra}>
-              <View style={styles.extraItem}>
-                <View style={styles.extraTextContainer}><Text style={styles.extraText}>{car.engine.type}</Text></View>
-                {engineVolume ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${engineVolume} см3`}</Text></View> : null}
-              </View>
+              {
+                (get(car, 'engine.type') || engineVolume) ?
+                  (
+                  <View style={styles.extraItem}>
+                    <View style={styles.extraTextContainer}><Text style={styles.extraText}>{car.engine.type}</Text></View>
+                    {engineVolume ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${engineVolume} см3`}</Text></View> : null}
+                  </View>
+                  ) : null
+              }
               <View style={styles.extraItem}>
                 {year ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${year} г.в.`}</Text></View> : null}
                 {mileage ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`пробег ${mileage}`}</Text></View> : null}
