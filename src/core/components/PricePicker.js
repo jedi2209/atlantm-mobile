@@ -89,8 +89,8 @@ export default class PricePicker extends PureComponent {
     super(props);
 
     this.state = {
-      minPrice: props.currentMinPrice,
-      maxPrice: props.currentMaxPrice,
+      minPrice: props.currentMinPrice || props.min,
+      maxPrice: props.currentMaxPrice || props.max,
       modalVisible: false,
       animatedHeight: new Animated.Value(0),
     };
@@ -137,14 +137,6 @@ export default class PricePicker extends PureComponent {
 
     if (minPrice > maxPrice) {
       return setTimeout(() => Alert.alert('Цена ОТ должна быть меньше ДО'), 100);
-    }
-
-    if (minPrice === 'min') {
-      minPrice = min;
-    }
-
-    if (maxPrice === 'max') {
-      maxPrice = max;
     }
 
     this.props.onCloseModal({ minPrice, maxPrice });
