@@ -278,8 +278,17 @@ class NewCarItemScreen extends Component {
                       <Text style={styles.sectionTitle}>Двигатель</Text>
                       <Grid>
                         {this.renderItem('Тип:', get(carDetails, 'engine.type'))}
-                        {this.renderItem('Рабочий объём:', get(carDetails, 'engine.volume.short'), 'л.')}
+                        {this.renderItem('Рабочий объём:', get(carDetails, 'engine.volume.full'), 'см3')}
                         {this.renderItem('Мощность:', get(carDetails, 'power.hp'), 'л.с.')}
+                      </Grid>
+                    </View>
+
+                    <View style={styles.section}>
+                      <Text style={styles.sectionTitle}>Трансмиссия</Text>
+                      <Grid>
+                        {this.renderItem('Тип:', get(carDetails, 'gearbox.name'))}
+                        {this.renderItem('Количество передач:', get(carDetails, 'gearbox.count'))}
+                        {this.renderItem('Привод:', get(carDetails, 'gearbox.wheel'))}
                       </Grid>
                     </View>
 
@@ -292,15 +301,6 @@ class NewCarItemScreen extends Component {
                         {this.renderItem('Клиренс:', get(carDetails, 'body.clirens'), 'мм.')}
                         {this.renderItem('Объём багажника:', get(carDetails, 'body.trunk.min'), 'л.')}
                         {this.renderItem('Объём топливного бака:', get(carDetails, 'fuel.fuel'), 'л.')}
-                      </Grid>
-                    </View>
-
-                    <View style={styles.section}>
-                      <Text style={styles.sectionTitle}>Трансмиссия</Text>
-                      <Grid>
-                        {this.renderItem('Тип:', get(carDetails, 'gearbox.name'))}
-                        {this.renderItem('Количество передач:', get(carDetails, 'gearbox.count'))}
-                        {this.renderItem('Привод:', get(carDetails, 'gearbox.wheel'))}
                       </Grid>
                     </View>
 
