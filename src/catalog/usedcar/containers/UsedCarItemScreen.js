@@ -153,7 +153,7 @@ class UserCarItemScreen extends Component {
 
             <View style={styles.gallery}>
               <View style={styles.titleContainer}>
-                <Text style={styles.title}>{`${carDetails.brand.name} ${carDetails.model}`}</Text>
+                <Text style={styles.title}>{`${carDetails.brand.name} ${get(carDetails, 'model.name')}`}</Text>
               </View>
               <PhotoSlider photos={carDetails.img['10000x300']} />
             </View>
