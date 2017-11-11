@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 
 // helpers
 import styleConst from '../../core/style-const';
+import { NavigationActions } from 'react-navigation';
 import {
   MENU_INFO,
   MENU_CATALOG,
@@ -116,34 +117,72 @@ class Sidebar extends Component {
   showIntroWarning = () => Alert.alert('Для начала выберите автоцентр')
 
   onPressContacts = () => {
-    this.isMenuAvailable() ?
-      window.atlantmNavigation.navigate('ContactsScreen') :
-      this.showIntroWarning();
+    if (!this.isMenuAvailable()) return this.showIntroWarning();
+
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      key: null,
+      actions: [
+        NavigationActions.navigate({ routeName: 'ContactsScreen' }),
+      ],
+    });
+    window.atlantmNavigation.dispatch(resetAction);
   }
   onPressInfoList = () => {
-    this.isMenuAvailable() ?
-      window.atlantmNavigation.navigate('InfoListScreen') :
-      this.showIntroWarning();
+    if (!this.isMenuAvailable()) return this.showIntroWarning();
+
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      key: null,
+      actions: [
+        NavigationActions.navigate({ routeName: 'InfoListScreen' }),
+      ],
+    });
+    window.atlantmNavigation.dispatch(resetAction);
   }
+
   onPressProfile = () => {
-    this.isMenuAvailable() ?
-      window.atlantmNavigation.navigate('ProfileScreen') :
-      this.showIntroWarning();
+    if (!this.isMenuAvailable()) return this.showIntroWarning();
+
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      key: null,
+      actions: [
+        NavigationActions.navigate({ routeName: 'ProfileScreen' }),
+      ],
+    });
+    window.atlantmNavigation.dispatch(resetAction);
   }
+
   onPressService = () => {
-    this.isMenuAvailable() ?
-      window.atlantmNavigation.navigate('ServiceScreen') :
-      this.showIntroWarning();
-  }
-  onPressNotReadyScreen = () => {
-    this.isMenuAvailable() ?
-      Alert.alert('Раздел появится в ближайших обновлениях') :
-      this.showIntroWarning();
+    if (!this.isMenuAvailable()) return this.showIntroWarning();
+
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      key: null,
+      actions: [
+        NavigationActions.navigate({ routeName: 'ServiceScreen' }),
+      ],
+    });
+    window.atlantmNavigation.dispatch(resetAction);
   }
 
   onPressCatalog = () => {
+    if (!this.isMenuAvailable()) return this.showIntroWarning();
+
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      key: null,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Catalog2Screen' }),
+      ],
+    });
+    window.atlantmNavigation.dispatch(resetAction);
+  }
+
+  onPressNotReadyScreen = () => {
     this.isMenuAvailable() ?
-      window.atlantmNavigation.navigate('Catalog2Screen') :
+      Alert.alert('Раздел появится в ближайших обновлениях') :
       this.showIntroWarning();
   }
 
