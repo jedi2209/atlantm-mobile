@@ -27,6 +27,7 @@ export default {
     horizontalGap: 11,
     verticalGap: 22,
     letterSpacing: -0.3,
+    footerHeight: 50,
   },
 };
 

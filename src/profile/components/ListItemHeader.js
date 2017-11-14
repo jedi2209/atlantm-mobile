@@ -36,7 +36,7 @@ export default class ListItemHeader extends PureComponent {
 
     return (
       <View>
-        <ListItem itemHeader>
+        <ListItem onPress={onPress} itemHeader>
           {
               radio ?
                 (

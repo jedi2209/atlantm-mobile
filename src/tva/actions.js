@@ -14,6 +14,59 @@ import {
   TVA_ORDER_ID__SET,
 } from './actionTypes';
 
+const dumpTvaAnswer= {
+  "status": "success",
+  "data": {
+      "car": {
+          "brand": "SKODA",
+          "model": "OCTAVIA A7",
+          "number": "O556MM777"
+      },
+      "info": [
+          {
+              "id": "000004171237",
+              "name": "Шелухин Д. А.",
+              "date": "2017-11-14T17:00:00+03:00",
+              "status": "В работе"
+          },
+          {
+              "id": "0100004171237",
+              "name": "Шелухинскийщик Д. А.",
+              "date": "2017-11-14T17:00:00+03:00",
+              "status": "В работе"
+          },
+          {
+              "id": "0200004171237",
+              "name": "Шелухин Д. А.",
+              "date": "2017-11-14T17:00:00+03:00",
+              "status": "В работе"
+          }
+      ],
+      "dealer": {
+          "id": 117,
+          "name": "Атлант-М Тушино",
+          "city": {
+              "id": 1,
+              "name": "Москва"
+          },
+          "address": "Строительный проезд, 7А, корп. 11",
+          "coords": {
+              "lat": "55.836731",
+              "lon": "37.428073"
+          },
+          "site": [
+              "http://www.atlant-motors.ru/"
+          ],
+          "phone": [
+              "+7 (495) 380-14-05"
+          ],
+          "email": [
+              "7809780@atlant-motors.ru"
+          ]
+      }
+  }
+};
+
 export const carNumberFill = (carNumber) => {
   if (carNumber && carNumber.length <= 5) {
     carNumber = carNumber.trim();
@@ -58,11 +111,8 @@ export const actionFetchTva = (props) => {
 
     return API.fetchTva(props)
       .then(res => {
-        const {
-          error,
-          status,
-          data,
-        } = res;
+        const { error, status, data } = res;
+        // const { error, status, data } = dumpTvaAnswer;
 
         if (status !== 'success') {
           return dispatch({
@@ -100,7 +150,7 @@ export const actionTvaMessageSend = (props) => {
 
     return API.tvaMessageSend(props)
       .then(res => {
-        const { error, status } = res;
+        const { error, status, data } = res;
 
         if (status !== 'success') {
           return dispatch({
@@ -112,7 +162,10 @@ export const actionTvaMessageSend = (props) => {
           });
         }
 
-        return dispatch({ type: TVA_SEND_MESSAGE__SUCCESS });
+        return dispatch({
+          type: TVA_SEND_MESSAGE__SUCCESS,
+          payload: { ...data },
+        });
       })
       .catch(error => {
         return dispatch({

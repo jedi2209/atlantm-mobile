@@ -18,6 +18,8 @@ import { actionTvaMessageSend, actionTvaMessageFill, actionSetActiveTvaOrderId }
 
 // components
 import Spinner from 'react-native-loading-spinner-overlay';
+import ButtonFull from '../../core/components/ButtonFull';
+import MessageForm from '../../core/components/MessageForm';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import ListItemHeader from '../../profile/components/ListItemHeader';
@@ -60,6 +62,9 @@ const styles = StyleSheet.create({
   },
   itemTitle: {
     fontSize: 20,
+  },
+  button: {
+    // marginTop: 10,
   },
 });
 
@@ -111,25 +116,6 @@ class TvaResultsScreen extends Component {
     actionSetActiveTvaOrderId(activeTvaOrderId);
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   const { dealerSelected, isMessageSending, message, results, activeOrderId } = this.props;
-  //   const nav = nextProps.nav.newState;
-  //   let isActiveScreen = false;
-
-  //   if (nav) {
-  //     const rootLevel = nav.routes[nav.index];
-  //     if (rootLevel) {
-  //       isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'TvaResultsScreen';
-  //     }
-  //   }
-
-  //   return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-  //     (isMessageSending !== nextProps.isMessageSending && isActiveScreen) ||
-  //     (message !== nextProps.message && isActiveScreen) ||
-  //     (results !== nextProps.results && isActiveScreen) ||
-  //     (activeOrderId !== nextProps.activeOrderId && isActiveScreen);
-  // }
-
   onPressMessageButton = () => {
     NetInfo.isConnected.fetch().then(isConnected => {
       if (!isConnected) {
@@ -142,6 +128,7 @@ class TvaResultsScreen extends Component {
         dealerSelected,
         activeOrderId,
         isMessageSending,
+        actionTvaMessageFill,
         actionTvaMessageSend,
       } = this.props;
 
@@ -154,20 +141,23 @@ class TvaResultsScreen extends Component {
         dealer: dealerSelected.id,
       })
         .then(action => {
-          if (action.type === TVA_SEND_MESSAGE__SUCCESS) {
-            setTimeout(() => Alert.alert('Ваше сообщение мастеру успешно отправлено'), 100);
+          const { type, payload } = action;
+
+          if (type === TVA_SEND_MESSAGE__SUCCESS) {
+            setTimeout(() => {
+              actionTvaMessageFill('');
+              Alert.alert(payload.status);
+            }, 100);
           }
 
-          if (action.type === TVA_SEND_MESSAGE__FAIL) {
+          if (type === TVA_SEND_MESSAGE__FAIL) {
             setTimeout(() => Alert.alert('', 'Произошла ошибка, попробуйте снова'), 100);
           }
         });
     });
   }
 
-  onPressOrder = (orderId) => {
-    actionSetActiveTvaOrderId(orderId);
-  }
+  onPressOrder = (orderId) => this.props.actionSetActiveTvaOrderId(orderId)
 
   processDate = (date) => dayMonthYearTime(date)
 
@@ -189,7 +179,13 @@ class TvaResultsScreen extends Component {
   }
 
   render() {
-    const { navigation, dealerSelected, isMessageSending, results, activeOrderId } = this.props;
+    const {
+      message,
+      results,
+      activeOrderId,
+      isMessageSending,
+      actionTvaMessageFill,
+    } = this.props;
 
     const { car, info } = results;
     const titleCar = `${car.brand} ${car.model}`;
@@ -235,6 +231,20 @@ class TvaResultsScreen extends Component {
                 );
               })
             }
+
+            <ListItemHeader text="СООБЩЕНИЕ МАСТЕРУ"/>
+
+            <MessageForm
+              message={message}
+              messageFill={actionTvaMessageFill}
+            />
+
+            <ButtonFull
+              text="ОТПРАВИТЬ"
+              arrow={true}
+              style={styles.button}
+              onPressButton={this.onPressMessageButton}
+            />
 
           </Content>
         </Container>
