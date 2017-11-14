@@ -36,6 +36,9 @@ import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
 import NewCarCityScreen from '../catalog/newcar/containers/NewCarCityScreen';
 
+// tva
+import TvaScreen from '../tva/containers/TvaScreen';
+
 const CatalogScreenNavigator = StackNavigator({
   CatalogScreen: { screen: CatalogScreen },
   AboutDealerScreen: { screen: AboutDealerScreen },
@@ -146,6 +149,14 @@ const getRouter = initialRouteName => {
       ServiceScreen: { screen: ServiceScreen },
       Catalog2Screen: {
         screen: CatalogScreenNavigator,
+        navigationOptions: {
+          header: null,
+        },
+      },
+      Tva2Screen: {
+        screen: StackNavigator({
+          TvaScreen: { screen: TvaScreen },
+        }),
         navigationOptions: {
           header: null,
         },

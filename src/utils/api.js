@@ -36,6 +36,10 @@ export default {
     return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
   },
 
+  fetchTva({ dealer, region, number }) {
+    return this.request(`/tva/get/?number=${number}&region=${region}&dealer=${dealer}`, baseRequestParams);
+  },
+
   fetchUsedCar({ city, nextPageUrl, priceRange }) {
     let url = `/stock/trade-in/cars/get/city/${city}/`;
 
