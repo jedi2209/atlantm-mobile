@@ -20,7 +20,6 @@ import { actionFetchTva, carNumberFill } from '../actions';
 // components
 import Spinner from 'react-native-loading-spinner-overlay';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import ListItemHeader from '../../profile/components/ListItemHeader';
 import DealerItemList from '../../core/components/DealerItemList';
 import FooterButton from '../../core/components/FooterButton';
@@ -103,8 +102,7 @@ class TvaScreen extends Component {
       region: dealerSelected.region,
     }).then(action => {
       if (action.type === TVA__SUCCESS) {
-        console.log('action.payload', action.payload);
-        // navigation.navigate('TvaSearchResultsScreen');
+        navigation.navigate('TvaResultsScreen');
       }
 
       if (action.type === TVA__FAIL) {

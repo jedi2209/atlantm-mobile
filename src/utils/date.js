@@ -16,3 +16,7 @@ export const yearMonthDay = (date) => {
 export const dayMonthYear = (date) => {
   return date ? moment(date).format('D MMMM YYYY') : null;
 };
+
+export const dayMonthYearTime = (date) => {
+  return date ? moment(date).format('D.MM.YYYY, HH:mm') : null;
+};

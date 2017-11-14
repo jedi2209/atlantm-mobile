@@ -199,6 +199,21 @@ export default {
     return this.request(url, requestParams);
   },
 
+  tvaMessageSend({ id, dealer, text }) {
+    const body = `id=${id}&dealer=${dealer}&text=${text}`;
+    const requestParams = _.merge(baseRequestParams, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    });
+
+    __DEV__ && console.log('API tva message body', body);
+
+    return this.request('/tva/message/post/', requestParams);
+  },
+
   request(path, requestParams) {
     const url = `https://api.atlantm.com${path}`;
 
