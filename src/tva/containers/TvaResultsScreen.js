@@ -1,15 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Text, View, Alert, StyleSheet, Platform, TouchableOpacity, NetInfo } from 'react-native';
-import {
-  Body,
-  Label,
-  Item,
-  Content,
-  ListItem,
-  Container,
-  StyleProvider,
-} from 'native-base';
+import { Body, Label, Item, Content, ListItem, Container, StyleProvider } from 'native-base';
 
 // redux
 import { bindActionCreators } from 'redux';
@@ -45,10 +37,21 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     backgroundColor: styleConst.color.header,
-    borderBottomWidth: styleConst.ui.borderWidth,
-    borderBottomColor: styleConst.color.border,
-    marginBottom: 0.3,
     paddingBottom: verticalScale(5),
+
+    ...Platform.select({
+      ios: {
+        marginBottom: 0.3,
+        borderBottomWidth: styleConst.ui.borderWidth,
+        borderBottomColor: styleConst.color.border,
+      },
+      android: {
+        marginTop: 15,
+        marginBottom: 10,
+        borderBottomWidth: 0,
+        backgroundColor: 'transparent',
+      },
+    }),
   },
   title: {
     fontSize: 18,
@@ -200,15 +203,7 @@ class TvaResultsScreen extends Component {
 
             <Spinner visible={isMessageSending} color={styleConst.color.blue} />
 
-            <View style={[
-              styles.titleContainer,
-              Platform.OS === 'android' && {
-                marginTop: 15,
-                marginBottom: 10,
-                borderBottomWidth: 0,
-                backgroundColor: 'transparent',
-               },
-            ]}>
+            <View style={styles.titleContainer}>
               <Text style={styles.title}>{titleCar}</Text>
               <Text style={styles.title}>{titleCarNumber}</Text>
             </View>
