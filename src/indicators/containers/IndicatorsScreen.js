@@ -12,6 +12,7 @@ import { actionSetActiveIndicator, actionFetchIndicators } from '../actions';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 import SpinnerView from '../../core/components/SpinnerView';
 import EmptyMessage from '../../core/components/EmptyMessage';
+import IndicatorsRow from '../components/IndicatorsRow';
 
 // helpers
 import { get } from 'lodash';
@@ -61,19 +62,22 @@ class IndicatorsScreen extends Component {
   }
 
   componentDidMount() {
-    const { items, actionFetchIndicators } = this.props;
+    const { items, actionFetchIndicators, actionSetActiveIndicator } = this.props;
 
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (!isConnected) {
-        if (items.length === 0) {
-          setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
-        }
+    // NetInfo.isConnected.fetch().then(isConnected => {
+    //   if (!isConnected) {
+    //     if (items.length === 0) {
+    //       setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
+    //     }
 
-        return false;
-      }
+    //     return false;
+    //   }
 
-      actionFetchIndicators();
-    });
+
+    // });
+
+    actionSetActiveIndicator({});
+    actionFetchIndicators();
   }
 
   shouldComponentUpdate(nextProps) {
@@ -82,8 +86,13 @@ class IndicatorsScreen extends Component {
     const isActiveScreen = nav.routes[nav.index].routeName === 'IndicatorsScreen';
 
     return (items.length !== nextProps.items.length && isActiveScreen) ||
-      (activeItem !== nextProps.activeItem && isActiveScreen) ||
+      (activeItem.id !== nextProps.activeItem.id && isActiveScreen) ||
       (isRequest !== nextProps.isRequest && isActiveScreen);
+  }
+
+  onPressIndicator = (indicator) => {
+    console.log('on press indicator');
+    this.props.actionSetActiveIndicator(indicator);
   }
 
   render() {
@@ -103,6 +112,21 @@ class IndicatorsScreen extends Component {
       <StyleProvider style={getTheme()}>
         <Container>
           <Content style={styles.content}>
+
+          {
+            items.map((indicators, idx) => {
+              console.log('indicators', indicators);
+
+              return (
+                <IndicatorsRow
+                  key={`indicator-row-${idx}`}
+                  items={indicators}
+                  activeItem={activeItem}
+                  onPressItem={this.onPressIndicator}
+                />
+              );
+            })
+          }
 
           </Content>
         </Container>

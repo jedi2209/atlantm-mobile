@@ -35,9 +35,26 @@ export const actionFetchIndicators = () => {
           });
         }
 
+        // Разбиваем массив массивов по 4 индикатора
+        let newData = [];
+        data.reduce((prev, next, idx) => {
+          prev.push(next);
+
+          if ((idx + 1) % 4 === 0) {
+            newData.push(prev);
+            return [];
+          }
+
+          if (idx === (data.length - 1)) {
+            newData.push(prev);
+          }
+
+          return prev;
+        }, []);
+
         return dispatch({
           type: INDICATORS__SUCCESS,
-          payload: data,
+          payload: newData,
         });
       })
       .catch(error => {
