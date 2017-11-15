@@ -1,25 +1,12 @@
 import { combineReducers } from 'redux';
-import { get } from 'lodash';
 import { REHYDRATE } from 'redux-persist/constants';
 import {
   SERVICE_ORDER__REQUEST,
   SERVICE_ORDER__SUCCESS,
   SERVICE_ORDER__FAIL,
 
-  SERVICE_CAR__FILL,
   SERVICE_DATE__FILL,
 } from './actionTypes';
-
-function car(state = '', action) {
-  switch (action.type) {
-    case REHYDRATE:
-      return get(action.payload, 'service.car', '');
-    case SERVICE_CAR__FILL:
-      return action.payload;
-    default:
-      return state;
-  }
-}
 
 function date(state = {}, action) {
   switch (action.type) {
@@ -46,7 +33,6 @@ function isOrderServiceRequest(state = false, action) {
 }
 
 export default combineReducers({
-  car,
   date,
   meta: combineReducers({
     isOrderServiceRequest,

@@ -4,7 +4,6 @@ import {
   TVA__REQUEST,
   TVA__SUCCESS,
   TVA__FAIL,
-  TVA_CAR_NUMBER__FILL,
 
   TVA_SEND_MESSAGE__REQUEST,
   TVA_SEND_MESSAGE__SUCCESS,
@@ -65,19 +64,6 @@ const dumpTvaAnswer= {
           ]
       }
   }
-};
-
-export const carNumberFill = (carNumber) => {
-  if (carNumber && carNumber.length <= 5) {
-    carNumber = carNumber.trim();
-  }
-
-  return dispatch => {
-    dispatch({
-      type: TVA_CAR_NUMBER__FILL,
-      payload: carNumber,
-    });
-  };
 };
 
 export const actionTvaMessageFill = (message) => {

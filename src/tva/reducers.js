@@ -1,11 +1,9 @@
 import { combineReducers } from 'redux';
-import { get } from 'lodash';
 import { REHYDRATE } from 'redux-persist/constants';
 import {
   TVA__REQUEST,
   TVA__SUCCESS,
   TVA__FAIL,
-  TVA_CAR_NUMBER__FILL,
 
   TVA_SEND_MESSAGE__REQUEST,
   TVA_SEND_MESSAGE__SUCCESS,
@@ -15,19 +13,20 @@ import {
   TVA_ORDER_ID__SET,
 } from './actionTypes';
 
-function carNumber(state = '', action) {
+function message(state = '', action) {
   switch (action.type) {
-    case TVA_CAR_NUMBER__FILL:
+    case TVA_MESSAGE__FILL:
       return action.payload;
     default:
       return state;
   }
 }
 
-function message(state = '', action) {
+// TODO: разобраться, почему не удается удалить поле, падает redux
+function carNumber(state = null, action) {
   switch (action.type) {
-    case TVA_MESSAGE__FILL:
-      return action.payload;
+    case REHYDRATE:
+      return null;
     default:
       return state;
   }
@@ -81,9 +80,9 @@ function isMessageSending(state = false, action) {
 }
 
 export default combineReducers({
+  carNumber,
   results,
   message,
-  carNumber,
   activeOrderId,
   meta: combineReducers({
     isRequest,

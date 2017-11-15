@@ -15,7 +15,8 @@ import {
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionFetchTva, carNumberFill } from '../actions';
+import { actionFetchTva } from '../actions';
+import { carNumberFill } from '../../profile/actions';
 
 // components
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -42,10 +43,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, nav, tva }) => {
+const mapStateToProps = ({ dealer, nav, tva, profile }) => {
   return {
     nav,
-    carNumber: tva.carNumber,
+    carNumber: profile.carNumber,
     isTvaRequest: tva.meta.isRequest,
     dealerSelected: dealer.selected,
   };
@@ -96,8 +97,17 @@ class TvaScreen extends Component {
   onPressButton = () => {
     const { dealerSelected, actionFetchTva, carNumber, navigation } = this.props;
 
+    if (!carNumber) {
+      return setTimeout(() => {
+        Alert.alert(
+          'Не хватает информации',
+          'Необходимо заполнить гос. номер автомобиля',
+        );
+      }, 100);
+    }
+
     actionFetchTva({
-      number: carNumber,
+      number: carNumber.replace(/\s/g, ''),
       dealer: dealerSelected.id,
       region: dealerSelected.region,
     }).then(action => {
@@ -118,7 +128,7 @@ class TvaScreen extends Component {
 
     return (
       <View style={styleListProfile.listItemContainer}>
-        <ListItem style={styleListProfile.listItem} >
+        <ListItem style={styleListProfile.listItem} last>
           <Body>
             <Item style={styleListProfile.inputItem} fixedLabel>
               <Label style={styleListProfile.label}>Гос. номер</Label>
