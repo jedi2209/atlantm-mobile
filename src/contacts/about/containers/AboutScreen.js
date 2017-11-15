@@ -1,11 +1,5 @@
 import React, { Component } from 'react';
-import {
-  View,
-  Platform,
-  Dimensions,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Platform, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import {
   Container,
   Content,
@@ -44,18 +38,27 @@ const { width: screenWidth } = Dimensions.get('window');
 const IMAGE_WIDTH = isTablet ? null : screenWidth;
 const IMAGE_HEIGHT = isTablet ? 220 : 160;
 
-const isAndroid = Platform.OS === 'android';
-
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
   },
   titleContainer: {
     backgroundColor: styleConst.color.header,
-    borderBottomWidth: styleConst.ui.borderWidth,
-    borderBottomColor: styleConst.color.border,
-    marginBottom: 0.3,
     paddingBottom: verticalScale(5),
+
+    ...Platform.select({
+      ios: {
+        marginBottom: 0.3,
+        borderBottomWidth: styleConst.ui.borderWidth,
+        borderBottomColor: styleConst.color.border,
+      },
+      android: {
+        marginTop: 15,
+        marginBottom: 10,
+        borderBottomWidth: 0,
+        backgroundColor: 'transparent',
+      },
+    }),
   },
   title: {
     fontSize: 18,
@@ -261,15 +264,7 @@ class AboutScreen extends Component {
       <StyleProvider style={getTheme()}>
         <Container>
           <Content style={styles.content}>
-            <View style={[
-              styles.titleContainer,
-              isAndroid ? {
-                marginTop: 15,
-                marginBottom: 10,
-                borderBottomWidth: 0,
-                backgroundColor: 'transparent',
-               } : {},
-              ]}>
+            <View style={styles.titleContainer}>
               <Text style={styles.title}>{dealerSelected.name}</Text>
             </View>
             <View ref="imageContainer">

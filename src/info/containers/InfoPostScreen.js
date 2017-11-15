@@ -42,8 +42,6 @@ const { width: screenWidth } = Dimensions.get('window');
 const IMAGE_WIDTH = isTablet ? null : screenWidth;
 const IMAGE_HEIGHT = isTablet ? 220 : 170;
 
-// const isAndroid = Platform.OS === 'android';
-
 const buttonIconSize = 28;
 
 const styles = StyleSheet.create({
