@@ -22,8 +22,8 @@ function activeItem(state = {}, action) {
 
 function items(state = [], action) {
   switch (action.type) {
-    case REHYDRATE:
-      return get(action, 'payload.indicators.items', []);
+    // case REHYDRATE:
+    //   return get(action, 'payload.indicators.items', []);
     case INDICATORS__REQUEST:
     case INDICATORS__FAIL:
       return [];
