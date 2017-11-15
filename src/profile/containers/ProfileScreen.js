@@ -6,7 +6,7 @@ import { Container, Content, List, StyleProvider } from 'native-base';
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { nameFill, phoneFill, emailFill } from '../actions';
+import { nameFill, phoneFill, emailFill, carFill, carNumberFill } from '../actions';
 
 // components
 import ProfileForm from '../components/ProfileForm';
@@ -32,6 +32,8 @@ const mapStateToProps = ({ dealer, profile, nav }) => {
     name: profile.name,
     phone: profile.phone,
     email: profile.email,
+    car: profile.car,
+    carNumber: profile.carNumber,
   };
 };
 
@@ -40,6 +42,8 @@ const mapDispatchToProps = dispatch => {
     nameFill,
     phoneFill,
     emailFill,
+    carFill,
+    carNumberFill,
   }, dispatch);
 };
 
@@ -58,23 +62,33 @@ class ProfileScreen extends Component {
     nameFill: PropTypes.func,
     phoneFill: PropTypes.func,
     emailFill: PropTypes.func,
+    carFill: PropTypes.func,
+    carNumberFill: PropTypes.func,
     name: PropTypes.string,
     phone: PropTypes.string,
     email: PropTypes.string,
+    car: PropTypes.string,
+    carNumber: PropTypes.string,
   }
 
   shouldComponentUpdate(nextProps) {
-    const { dealerSelected, name, phone, email, navigation } = this.props;
+    const {
+      name,
+      phone,
+      email,
+      car,
+      carNumber,
+      dealerSelected,
+    } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'ProfileScreen';
-
-    // console.log('Profile this.props.navigation', this.props.navigation);
-    // console.log('Profile nextProps.navigation', nextProps.navigation);
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
         (name !== nextProps.name) ||
           (phone !== nextProps.phone) ||
-            (email !== nextProps.email);
+            (email !== nextProps.email) ||
+              (car !== nextProps.car) ||
+                (carNumber !== nextProps.carNumber);
   }
 
   render() {
@@ -87,9 +101,13 @@ class ProfileScreen extends Component {
       nameFill,
       phoneFill,
       emailFill,
+      carFill,
+      carNumberFill,
       name,
       phone,
       email,
+      car,
+      carNumber,
     } = this.props;
 
     console.log('== Profile ==');
@@ -112,12 +130,17 @@ class ProfileScreen extends Component {
               <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
 
               <ProfileForm
+                carSection={true}
                 name={name}
                 phone={phone}
                 email={email}
+                car={car}
+                carNumber={carNumber}
                 nameFill={nameFill}
                 phoneFill={phoneFill}
                 emailFill={emailFill}
+                carFill={carFill}
+                carNumberFill={carNumberFill}
               />
             </List>
           </Content>

@@ -6,8 +6,8 @@ import { Container, Content, List, StyleProvider } from 'native-base';
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { carFill, dateFill, orderService } from '../actions';
-import { nameFill, phoneFill, emailFill } from '../../profile/actions';
+import { dateFill, orderService } from '../actions';
+import { carFill, nameFill, phoneFill, emailFill } from '../../profile/actions';
 
 // components
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ dealer, profile, service, nav }) => {
   return {
     nav,
-    car: service.car,
     date: service.date,
+    car: profile.car,
     name: profile.name,
     phone: profile.phone,
     email: profile.email,

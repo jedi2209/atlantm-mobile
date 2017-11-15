@@ -5,22 +5,8 @@ import {
   SERVICE_ORDER__SUCCESS,
   SERVICE_ORDER__FAIL,
 
-  SERVICE_CAR__FILL,
   SERVICE_DATE__FILL,
 } from './actionTypes';
-
-export const carFill = (car) => {
-  if (car && car.length <= 3) {
-    car = car.trim();
-  }
-
-  return dispatch => {
-    dispatch({
-      type: SERVICE_CAR__FILL,
-      payload: car,
-    });
-  };
-};
 
 export const dateFill = (date) => {
   return dispatch => {
