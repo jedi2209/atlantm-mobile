@@ -22,16 +22,6 @@ function message(state = '', action) {
   }
 }
 
-// TODO: разобраться, почему не удается удалить поле, падает redux
-function carNumber(state = null, action) {
-  switch (action.type) {
-    case REHYDRATE:
-      return null;
-    default:
-      return state;
-  }
-}
-
 function activeOrderId(state = '', action) {
   switch (action.type) {
     case TVA_ORDER_ID__SET:
@@ -80,7 +70,6 @@ function isMessageSending(state = false, action) {
 }
 
 export default combineReducers({
-  carNumber,
   results,
   message,
   activeOrderId,

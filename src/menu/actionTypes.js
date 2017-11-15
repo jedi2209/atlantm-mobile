@@ -1,3 +1,4 @@
+export const MENU_TVA = 'MENU_TVA';
 export const MENU_INFO = 'MENU_INFO';
 export const MENU_CONTACTS = 'MENU_CONTACTS';
 export const MENU_PROFILE = 'MENU_PROFILE';
