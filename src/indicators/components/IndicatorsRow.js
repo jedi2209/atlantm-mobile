@@ -1,24 +1,12 @@
 import React, { PureComponent } from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Dimensions,
-  TouchableHighlight,
-  Image,
-} from 'react-native';
-
-const { width } = Dimensions.get('window');
-const itemWidth = ((width - 22) / 4) - 8;
-
-// components
-import Imager from '../../core/components/Imager';
+import { Text, View, StyleSheet, Dimensions, TouchableHighlight, Image } from 'react-native';
 
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../../core/style-const';
-import { scale } from '../../utils/scale';
 
+const { width } = Dimensions.get('window');
+const itemWidth = ((width - 22) / 4) - 8;
 const HEIGHT_TRIANGLE = 10;
 
 const styles = StyleSheet.create({
@@ -49,18 +37,26 @@ const styles = StyleSheet.create({
   },
   triangle: {
     position: 'absolute',
-    bottom: -(HEIGHT_TRIANGLE + styleConst.ui.borderWidth),
-    left: (itemWidth / 2) - (HEIGHT_TRIANGLE / 2),
+    left: (itemWidth / 2) - (HEIGHT_TRIANGLE - 1),
     width: 0,
     height: 0,
     backgroundColor: 'transparent',
     borderStyle: 'solid',
-    borderLeftWidth: HEIGHT_TRIANGLE / 2,
-    borderRightWidth: HEIGHT_TRIANGLE / 2,
+    borderLeftWidth: HEIGHT_TRIANGLE - 1,
+    borderRightWidth: HEIGHT_TRIANGLE - 1,
     borderBottomWidth: HEIGHT_TRIANGLE,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
+  },
+  triangleWhite: {
+    zIndex: 2,
+    bottom: -(HEIGHT_TRIANGLE + 1 + styleConst.ui.borderWidth),
     borderBottomColor: '#fff',
+  },
+  triangleBorder: {
+    zIndex: 1,
+    bottom: -(HEIGHT_TRIANGLE),
+    borderBottomColor: styleConst.color.border,
   },
   descriptionContainer: {
     zIndex: 1,
@@ -69,8 +65,8 @@ const styles = StyleSheet.create({
     paddingVertical: styleConst.ui.horizontalGap,
     paddingHorizontal: styleConst.ui.verticalGap,
     borderColor: styleConst.color.border,
-    borderTopWidth: styleConst.ui.borderWidth,
-    borderBottomWidth: styleConst.ui.borderWidth,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
   },
   descriptionTitle: {
     fontSize: 19,
@@ -132,7 +128,14 @@ export default class IndicatorRow extends PureComponent {
           </View>
         </TouchableHighlight>
 
-        {isActive ? <View style={styles.triangle} /> : null}
+        {
+          isActive ?
+            (
+              <View>
+                <View style={[styles.triangle, styles.triangleWhite]} />
+                <View style={[styles.triangle, styles.triangleBorder]} />
+              </View>
+            ) : null}
       </View>
     );
   }
