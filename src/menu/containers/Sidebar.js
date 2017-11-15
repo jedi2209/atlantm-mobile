@@ -17,6 +17,7 @@ import { connect } from 'react-redux';
 import styleConst from '../../core/style-const';
 import { NavigationActions } from 'react-navigation';
 import {
+  MENU_TVA,
   MENU_INFO,
   MENU_CATALOG,
   MENU_SERVICE,
@@ -82,6 +83,18 @@ const mapStateToProps = ({ nav, dealer }) => ({
   dealerSelected: dealer.selected,
 });
 
+const icons = {
+  car_delivery: require('../assets/car_delivery.png'),
+  catalog_auto: require('../assets/catalog_auto.png'),
+  contacts: require('../assets/contacts.png'),
+  indicators: require('../assets/indicators.png'),
+  info: require('../assets/info.png'),
+  profile: require('../assets/profile.png'),
+  reference: require('../assets/reference.png'),
+  reviews: require('../assets/reviews.png'),
+  service: require('../assets/service.png'),
+};
+
 class Sidebar extends Component {
   static propTypes = {
     navigation: PropTypes.object,
@@ -107,6 +120,8 @@ class Sidebar extends Component {
         return MENU_PROFILE;
       case 'Catalog2Screen':
         return MENU_CATALOG;
+      case 'Tva2Screen':
+        return MENU_TVA;
       default:
         return MENU_CONTACTS;
     }
@@ -116,65 +131,26 @@ class Sidebar extends Component {
 
   showIntroWarning = () => Alert.alert('Для начала выберите автоцентр')
 
-  onPressContacts = () => {
+  onPressContacts = () => this.onPressItem('ContactsScreen')
+
+  onPressInfoList = () => this.onPressItem('InfoListScreen')
+
+  onPressProfile = () => this.onPressItem('ProfileScreen')
+
+  onPressService = () => this.onPressItem('ServiceScreen')
+
+  onPressCatalog = () => this.onPressItem('Catalog2Screen')
+
+  onPressTva = () => this.onPressItem('Tva2Screen')
+
+  onPressItem = (routeName) => {
     if (!this.isMenuAvailable()) return this.showIntroWarning();
 
     const resetAction = NavigationActions.reset({
       index: 0,
       key: null,
       actions: [
-        NavigationActions.navigate({ routeName: 'ContactsScreen' }),
-      ],
-    });
-    window.atlantmNavigation.dispatch(resetAction);
-  }
-  onPressInfoList = () => {
-    if (!this.isMenuAvailable()) return this.showIntroWarning();
-
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      key: null,
-      actions: [
-        NavigationActions.navigate({ routeName: 'InfoListScreen' }),
-      ],
-    });
-    window.atlantmNavigation.dispatch(resetAction);
-  }
-
-  onPressProfile = () => {
-    if (!this.isMenuAvailable()) return this.showIntroWarning();
-
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      key: null,
-      actions: [
-        NavigationActions.navigate({ routeName: 'ProfileScreen' }),
-      ],
-    });
-    window.atlantmNavigation.dispatch(resetAction);
-  }
-
-  onPressService = () => {
-    if (!this.isMenuAvailable()) return this.showIntroWarning();
-
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      key: null,
-      actions: [
-        NavigationActions.navigate({ routeName: 'ServiceScreen' }),
-      ],
-    });
-    window.atlantmNavigation.dispatch(resetAction);
-  }
-
-  onPressCatalog = () => {
-    if (!this.isMenuAvailable()) return this.showIntroWarning();
-
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      key: null,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Catalog2Screen' }),
+        NavigationActions.navigate({ routeName }),
       ],
     });
     window.atlantmNavigation.dispatch(resetAction);
@@ -184,6 +160,36 @@ class Sidebar extends Component {
     this.isMenuAvailable() ?
       Alert.alert('Раздел появится в ближайших обновлениях') :
       this.showIntroWarning();
+  }
+
+  renderMenuItem = (type, text, icon, onPressHandler, isActive) => {
+    if (type === 'ready') {
+      return (
+        <TouchableOpacity onPress={onPressHandler} style={[styles.item, isActive ? styles.itemActive : {}]}>
+          <Image
+            style={styles.icon}
+            source={icons[icon]}
+          />
+          <View style={styles.textContainer}>
+            <Text style={[styles.text, isActive ? styles.textActive : {}]}>{text}</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
+
+    return (
+      <TouchableHighlight underlayColor={styleConst.color.select} onPress={this.onPressNotReadyScreen}>
+        <View style={styles.item}>
+          <Image
+            style={styles.icon}
+            source={icons[icon]}
+          />
+          <View style={styles.textContainer}>
+            <Text style={styles.text}>{text}</Text>
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
   }
 
   render() {
@@ -198,6 +204,7 @@ class Sidebar extends Component {
     const isProfile = activeScreen === MENU_PROFILE;
     const isService = activeScreen === MENU_SERVICE;
     const isCatalog = activeScreen === MENU_CATALOG;
+    const isTva = activeScreen === MENU_TVA;
 
     console.log('== Sidebar ==');
 
@@ -211,92 +218,14 @@ class Sidebar extends Component {
           />
         </View>
 
-        <TouchableOpacity onPress={this.onPressContacts} style={[styles.item, isContact ? styles.itemActive : {}]}>
-          <Image
-            style={styles.icon}
-            source={require('../assets/contacts.png')}
-          />
-          <View style={styles.textContainer}>
-            <Text style={[styles.text, isContact ? styles.textActive : {}]}>Контакты</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={this.onPressInfoList} style={[styles.item, isInfo ? styles.itemActive : {}]}>
-          <Image
-            style={styles.icon}
-            source={require('../assets/info.png')}
-          />
-          <View style={styles.textContainer}>
-            <Text style={[styles.text, isInfo ? styles.textActive : {}]}>Акции</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={this.onPressService} style={[styles.item, isService ? styles.itemActive : {}]}>
-          <Image
-            style={styles.icon}
-            source={require('../assets/service.png')}
-          />
-          <View style={styles.textContainer}>
-            <Text style={[styles.text, isService ? styles.textActive : {}]}>Заявка на СТО</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableHighlight underlayColor={styleConst.color.select} onPress={this.onPressNotReadyScreen}>
-          <View style={styles.item}>
-            <Image
-              style={styles.icon}
-              source={require('../assets/car_delivery.png')}
-            />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Табло выдачи авто</Text>
-            </View>
-          </View>
-        </TouchableHighlight>
-
-        <TouchableOpacity onPress={this.onPressCatalog} style={[styles.item, isCatalog ? styles.itemActive : {}]}>
-          <Image
-            style={styles.icon}
-            source={require('../assets/catalog_auto.png')}
-          />
-          <View style={styles.textContainer}>
-            <Text style={[styles.text, isCatalog ? styles.textActive : {}]}>Каталог автомобилей</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableHighlight underlayColor={styleConst.color.select} onPress={this.onPressNotReadyScreen}>
-          <View style={styles.item}>
-            <Image
-              style={styles.icon}
-              source={require('../assets/indicators.png')}
-            />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Индикаторы</Text>
-            </View>
-          </View>
-        </TouchableHighlight>
-
-        <TouchableHighlight underlayColor={styleConst.color.select} onPress={this.onPressNotReadyScreen}>
-          <View style={styles.item}>
-            <Image
-              style={styles.icon}
-              source={require('../assets/reviews.png')}
-            />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Отзывы и предложения</Text>
-            </View>
-          </View>
-        </TouchableHighlight>
-
-        <TouchableOpacity onPress={this.onPressProfile} style={[styles.item, isProfile ? styles.itemActive : {}]}>
-          <Image
-            style={styles.icon}
-            source={require('../assets/profile.png')}
-          />
-          <View style={styles.textContainer}>
-            <Text style={[styles.text, isProfile ? styles.textActive : {}]}>Личный кабинет</Text>
-          </View>
-        </TouchableOpacity>
-
+        {this.renderMenuItem('ready', 'Контакты', 'contacts', this.onPressContacts, isContact)}
+        {this.renderMenuItem('ready', 'Акции', 'info', this.onPressInfoList, isInfo)}
+        {this.renderMenuItem('ready', 'Заявка на СТО', 'service', this.onPressService, isService)}
+        {this.renderMenuItem('ready', 'Табло выдачи авто', 'car_delivery', this.onPressTva, isTva)}
+        {this.renderMenuItem('ready', 'Каталог автомобилей', 'catalog_auto', this.onPressCatalog, isCatalog)}
+        {this.renderMenuItem('not-ready', 'Индикаторы', 'indicators')}
+        {this.renderMenuItem('not-ready', 'Отзывы и предложения', 'reviews')}
+        {this.renderMenuItem('ready', 'Личный кабинет', 'profile', this.onPressProfile, isProfile)}
       </View>
     );
   }
