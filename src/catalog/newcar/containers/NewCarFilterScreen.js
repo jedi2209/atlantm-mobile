@@ -34,7 +34,7 @@ import {
 } from '../../actions';
 
 // components
-import EmptyMessage from '../../components/EmptyMessage';
+import EmptyMessage from '../../../core/components/EmptyMessage';
 import CityItemList from '../components/CityItemList';
 import PricePicker from '../../../core/components/PricePicker';
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
@@ -50,6 +50,7 @@ import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import styleHeader from '../../../core/components/Header/style';
 import { verticalScale } from '../../../utils/scale';
+import { TEXT_EMPTY_CAR_LIST } from '../../constants';
 
 const FOOTER_HEIGHT = 50;
 const styles = StyleSheet.create({
@@ -372,7 +373,7 @@ class NewCarFilterScreen extends Component {
             cityData={this.getCityData()}
             returnScreen="NewCarFilterScreen"
           />
-          <EmptyMessage />
+          <EmptyMessage text={TEXT_EMPTY_CAR_LIST} />
         </View>
       );
     }

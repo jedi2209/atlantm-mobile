@@ -40,6 +40,10 @@ export default {
     return this.request(`/tva/get/?number=${number}&region=${region}&dealer=${dealer}`, baseRequestParams);
   },
 
+  fetchIndicators() {
+    return this.request('/info/indicator/get/', baseRequestParams);
+  },
+
   fetchUsedCar({ city, nextPageUrl, priceRange }) {
     let url = `/stock/trade-in/cars/get/city/${city}/`;
 
