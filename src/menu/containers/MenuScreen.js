@@ -65,6 +65,7 @@ export default class MenuScreen extends Component {
   onPressService = () => this.props.navigation.navigate('ServiceScreen')
   onPressCatalog = () => this.props.navigation.navigate('Catalog2Screen')
   onPressTva = () => this.props.navigation.navigate('Tva2Screen')
+  onPressIndicators = () => this.props.navigation.navigate('IndicatorsScreen')
   onPressNotReadyScreen = () => Alert.alert('Раздел появится в ближайших обновлениях');
 
   render() {
@@ -141,7 +142,7 @@ export default class MenuScreen extends Component {
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={this.onPressNotReadyScreen}
+                onPress={this.onPressIndicators}
               >
                 <Image
                   style={styles.icon}

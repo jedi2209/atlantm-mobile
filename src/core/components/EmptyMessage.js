@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 // helpers
-import styleConst from '../../core/style-const';
+import styleConst from '../style-const';
 import { verticalScale } from '../../utils/scale';
 
 const styles = StyleSheet.create({
@@ -20,10 +20,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const emptyMessageComponent = () => (
+const emptyMessage = ({ text }) => (
   <View style={styles.messageContainer}>
-    <Text style={styles.message}>Нет автомобилей для отображения</Text>
+    <Text style={styles.message}>{text}</Text>
   </View>
 );
 
-export default emptyMessageComponent;
+export default emptyMessage;

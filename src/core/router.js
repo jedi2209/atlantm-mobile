@@ -6,6 +6,7 @@ import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
 import MenuScreen from '../menu/containers/MenuScreen';
 import ProfileScreen from '../profile/containers/ProfileScreen';
 import ServiceScreen from '../service/containers/ServiceScreen';
+import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
 
 // contacts
 import ContactsScreen from '../contacts/containers/ContactsScreen';
@@ -148,6 +149,7 @@ const getRouter = initialRouteName => {
       },
       ProfileScreen: { screen: ProfileScreen },
       ServiceScreen: { screen: ServiceScreen },
+      IndicatorsScreen: { screen: IndicatorsScreen },
       Catalog2Screen: {
         screen: CatalogScreenNavigator,
         navigationOptions: {

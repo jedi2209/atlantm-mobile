@@ -1,25 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  View,
-  Text,
-  FlatList,
-  Platform,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import { View, FlatList, Platform, StyleSheet, ActivityIndicator } from 'react-native';
 
 // redux
 import { EVENT_LOAD_MORE, EVENT_REFRESH, EVENT_DEFAULT } from '../actionTypes';
 
 // components
-import EmptyMessage from './EmptyMessage';
+import EmptyMessage from '../../core/components/EmptyMessage';
 import CarListItem from './CarListItem';
 
 // helpers
 import { debounce } from 'lodash';
 import styleConst from '../../core/style-const';
 import { verticalScale } from '../../utils/scale';
+import { TEXT_EMPTY_CAR_LIST } from '../constants';
 
 const styles = StyleSheet.create({
   spinner: {
@@ -73,12 +67,12 @@ export default class CarList extends Component {
 
     return isFetchItems ?
       <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} /> :
-      <EmptyMessage />;
+      <EmptyMessage text={TEXT_EMPTY_CAR_LIST} />;
   }
 
   renderItem = ({ item }) => {
     if (item.type === 'empty') {
-      return <EmptyMessage />;
+      return <EmptyMessage text={TEXT_EMPTY_CAR_LIST} />;
     }
 
     const { itemScreen, navigation, prices } = this.props;

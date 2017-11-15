@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Text,
-  View,
-  Image,
-  Alert,
-  StyleSheet,
-  TouchableOpacity,
-  TouchableHighlight,
-} from 'react-native';
+import { Text, View, Image, Alert, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
 
 // redux
@@ -23,6 +15,7 @@ import {
   MENU_SERVICE,
   MENU_PROFILE,
   MENU_CONTACTS,
+  MENU_INDICATORS,
 } from '../actionTypes';
 
 const HEIGHT_ITEM = 55;
@@ -122,6 +115,8 @@ class Sidebar extends Component {
         return MENU_CATALOG;
       case 'Tva2Screen':
         return MENU_TVA;
+      case 'IndicatorsScreen':
+        return MENU_INDICATORS;
       default:
         return MENU_CONTACTS;
     }
@@ -142,6 +137,8 @@ class Sidebar extends Component {
   onPressCatalog = () => this.onPressItem('Catalog2Screen')
 
   onPressTva = () => this.onPressItem('Tva2Screen')
+
+  onPressIndicators = () => this.onPressItem('IndicatorsScreen')
 
   onPressItem = (routeName) => {
     if (!this.isMenuAvailable()) return this.showIntroWarning();
@@ -205,6 +202,7 @@ class Sidebar extends Component {
     const isService = activeScreen === MENU_SERVICE;
     const isCatalog = activeScreen === MENU_CATALOG;
     const isTva = activeScreen === MENU_TVA;
+    const isIndicators = activeScreen === MENU_INDICATORS;
 
     console.log('== Sidebar ==');
 
@@ -223,7 +221,7 @@ class Sidebar extends Component {
         {this.renderMenuItem('ready', 'Заявка на СТО', 'service', this.onPressService, isService)}
         {this.renderMenuItem('ready', 'Табло выдачи авто', 'car_delivery', this.onPressTva, isTva)}
         {this.renderMenuItem('ready', 'Каталог автомобилей', 'catalog_auto', this.onPressCatalog, isCatalog)}
-        {this.renderMenuItem('not-ready', 'Индикаторы', 'indicators')}
+        {this.renderMenuItem('ready', 'Индикаторы', 'indicators', this.onPressIndicators, isIndicators)}
         {this.renderMenuItem('not-ready', 'Отзывы и предложения', 'reviews')}
         {this.renderMenuItem('ready', 'Личный кабинет', 'profile', this.onPressProfile, isProfile)}
       </View>

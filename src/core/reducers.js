@@ -8,6 +8,7 @@ import profile from '../profile/reducers';
 import service from '../service/reducers';
 import contacts from '../contacts/reducers';
 import catalog from '../catalog/reducers';
+import indicators from '../indicators/reducers';
 
 import { APP_VERSION__SET } from './actionTypes';
 import { REHYDRATE } from 'redux-persist/constants';
@@ -37,6 +38,7 @@ const rootReducer = combineReducers({
   profile,
   catalog,
   contacts,
+  indicators,
   core: coreReducer,
   form: formReducer,
 });
