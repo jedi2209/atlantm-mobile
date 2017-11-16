@@ -1,5 +1,8 @@
 import React, { PureComponent } from 'react';
-import { Text, View, StyleSheet, Dimensions, TouchableHighlight, Image } from 'react-native';
+import { View, StyleSheet, Dimensions, TouchableHighlight, Image } from 'react-native';
+
+// components
+import IndicatorDescription from '../components/IndicatorDescription';
 
 // helpers
 import PropTypes from 'prop-types';
@@ -58,28 +61,6 @@ const styles = StyleSheet.create({
     bottom: -(HEIGHT_TRIANGLE),
     borderBottomColor: styleConst.color.border,
   },
-  descriptionContainer: {
-    zIndex: 1,
-    backgroundColor: '#fff',
-    marginTop: HEIGHT_TRIANGLE,
-    paddingVertical: styleConst.ui.horizontalGap,
-    paddingHorizontal: styleConst.ui.verticalGap,
-    borderColor: styleConst.color.border,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-  },
-  descriptionTitle: {
-    fontSize: 19,
-    fontFamily: styleConst.font.regular,
-    letterSpacing: styleConst.ui.letterSpacing,
-    marginBottom: 5,
-  },
-  descriptionText: {
-    fontSize: 17,
-    color: styleConst.color.greyText4,
-    fontFamily: styleConst.font.light,
-    letterSpacing: styleConst.ui.letterSpacing,
-  },
 });
 
 export default class IndicatorRow extends PureComponent {
@@ -128,16 +109,18 @@ export default class IndicatorRow extends PureComponent {
           </View>
         </TouchableHighlight>
 
-        {
-          isActive ?
-            (
-              <View>
-                <View style={[styles.triangle, styles.triangleWhite]} />
-                <View style={[styles.triangle, styles.triangleBorder]} />
-              </View>
-            ) : null}
+        <View style={[styles.triangle, styles.triangleWhite]} />
+        <View style={[styles.triangle, styles.triangleBorder]} />
       </View>
     );
+  }
+
+  renderDescription = (indicator) => {
+    const { id, name, description } = indicator;
+
+    if (!this.isActive(id)) return null;
+
+    return <IndicatorDescription key={id} name={name} description={description} />;
   }
 
   render() {
@@ -150,12 +133,8 @@ export default class IndicatorRow extends PureComponent {
         </View>
         {
           this.isActiveRow() ?
-            (
-              <View style={styles.descriptionContainer}>
-                <Text style={styles.descriptionTitle}>{activeItem.name}</Text>
-                <Text style={styles.descriptionText}>{activeItem.description}</Text>
-              </View>
-            ) : null
+            items.map(indicator => this.renderDescription(indicator)) :
+            null
         }
       </View>
     );
