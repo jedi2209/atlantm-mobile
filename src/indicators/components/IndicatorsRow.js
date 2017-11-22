@@ -86,7 +86,7 @@ export default class IndicatorRow extends PureComponent {
     return (
       <View key={`indicator-${id}`} style={styles.iconItemContainer}>
         <TouchableHighlight
-          onPress={() => onPressItem(indicator)}
+          onPress={(event) => onPressItem(this.descriptionRef, indicator)}
           style={[styles.iconItem, isActive ? styles.iconItemActive : null]}
           underlayColor={styleConst.color.select}
         >
@@ -138,11 +138,14 @@ export default class IndicatorRow extends PureComponent {
         <View style={styles.iconsContainer}>
           {items.map(indicator => this.renderIndicator(indicator))}
         </View>
-        {
-          this.isActiveRow() ?
-            items.map(indicator => this.renderDescription(indicator)) :
-            null
-        }
+
+        <View ref={(ref) => this.descriptionRef = ref}>
+          {
+            this.isActiveRow() ?
+              items.map(indicator => this.renderDescription(indicator)) :
+              null
+          }
+        </View>
       </View>
     );
   }

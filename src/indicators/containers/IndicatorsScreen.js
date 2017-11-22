@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, View, StyleSheet, NetInfo } from 'react-native';
+import { Alert, View, StyleSheet, NetInfo, findNodeHandle } from 'react-native';
 import { Content, Container, StyleProvider } from 'native-base';
 
 // redux
@@ -90,9 +90,17 @@ class IndicatorsScreen extends Component {
       (isRequest !== nextProps.isRequest && isActiveScreen);
   }
 
-  onPressIndicator = (indicator) => {
-    console.log('on press indicator');
-    this.props.actionSetActiveIndicator(indicator);
+  onPressIndicator = (descriptionRef, indicator) => {
+    const { activeItem, actionSetActiveIndicator } = this.props;
+    const newIndicator = indicator.id === activeItem.id ? {} : indicator;
+
+    actionSetActiveIndicator(newIndicator);
+    this.setScrollPosition(descriptionRef);
+  }
+
+  setScrollPosition(descriptionRef) {
+    const target = findNodeHandle(descriptionRef);
+    this.scrollView._root.scrollToFocusedInput(target);
   }
 
   render() {
@@ -111,12 +119,12 @@ class IndicatorsScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <Container>
-          <Content style={styles.content}>
-
+          <Content
+            style={styles.content}
+            ref={(scrollView) => { this.scrollView = scrollView; }}
+          >
           {
             items.map((indicators, idx) => {
-              console.log('indicators', indicators);
-
               return (
                 <IndicatorsRow
                   key={`indicator-row-${idx}`}
