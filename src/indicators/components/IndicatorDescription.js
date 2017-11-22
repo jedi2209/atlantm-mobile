@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
 });
 
 let IndicatorDescription = ({ name, description }) => {
+  // избавляюсь в android от символов-артефактов
+  const cleanDescription = description.trim();
+
   return (
     <Animatable.View
       style={styles.descriptionContainer}
@@ -44,7 +47,7 @@ let IndicatorDescription = ({ name, description }) => {
       duration={300}
     >
       <Text style={styles.descriptionTitle}>{name}</Text>
-      <Text style={styles.descriptionText}>{description}</Text>
+      <Text style={styles.descriptionText}>{cleanDescription}</Text>
     </Animatable.View>
   );
 };

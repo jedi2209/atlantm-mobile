@@ -109,8 +109,15 @@ export default class IndicatorRow extends PureComponent {
           </View>
         </TouchableHighlight>
 
-        <View style={[styles.triangle, styles.triangleWhite]} />
-        <View style={[styles.triangle, styles.triangleBorder]} />
+        {
+          isActive ?
+            (
+              <View>
+                <View style={[styles.triangle, styles.triangleWhite]} />
+                <View style={[styles.triangle, styles.triangleBorder]} />
+              </View>
+            ) : null
+        }
       </View>
     );
   }
