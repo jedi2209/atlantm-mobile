@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, View, StyleSheet, NetInfo, findNodeHandle } from 'react-native';
+import { View, StyleSheet, findNodeHandle } from 'react-native';
 import { Content, Container, StyleProvider } from 'native-base';
 
 // redux
@@ -15,7 +15,6 @@ import EmptyMessage from '../../core/components/EmptyMessage';
 import IndicatorsRow from '../components/IndicatorsRow';
 
 // helpers
-import { get } from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import styleHeader from '../../core/components/Header/style';
@@ -62,19 +61,7 @@ class IndicatorsScreen extends Component {
   }
 
   componentDidMount() {
-    const { items, actionFetchIndicators, actionSetActiveIndicator } = this.props;
-
-    // NetInfo.isConnected.fetch().then(isConnected => {
-    //   if (!isConnected) {
-    //     if (items.length === 0) {
-    //       setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
-    //     }
-
-    //     return false;
-    //   }
-
-
-    // });
+    const { actionFetchIndicators, actionSetActiveIndicator } = this.props;
 
     actionSetActiveIndicator({});
     actionFetchIndicators();

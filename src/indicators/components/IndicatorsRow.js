@@ -2,14 +2,16 @@ import React, { PureComponent } from 'react';
 import { View, StyleSheet, Dimensions, TouchableHighlight, Image } from 'react-native';
 
 // components
+import DeviceInfo from 'react-native-device-info';
 import IndicatorDescription from '../components/IndicatorDescription';
 
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../../core/style-const';
 
+const isTablet = DeviceInfo.isTablet();
+
 const { width } = Dimensions.get('window');
-const itemWidth = ((width - 22) / 4) - 8;
 const HEIGHT_TRIANGLE = 10;
 
 const styles = StyleSheet.create({
@@ -34,13 +36,8 @@ const styles = StyleSheet.create({
   iconItemActive: {
     backgroundColor: styleConst.color.systemBlue,
   },
-  iconImage: {
-    width: itemWidth,
-    height: itemWidth,
-  },
   triangle: {
     position: 'absolute',
-    left: (itemWidth / 2) - (HEIGHT_TRIANGLE - 1),
     width: 0,
     height: 0,
     backgroundColor: 'transparent',
@@ -70,6 +67,16 @@ export default class IndicatorRow extends PureComponent {
     onPressItem: PropTypes.func,
   }
 
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+
+    if (!isTablet) {
+      this.state.itemWidth = this.getItemWidth(width);
+    }
+  }
+
   isActive = (id) => this.props.activeItem.id === id;
 
   isActiveRow = () => {
@@ -78,34 +85,32 @@ export default class IndicatorRow extends PureComponent {
     return items.some(item => item.id === activeItem.id);
   }
 
+  getItemWidth = contentWidth => ((contentWidth - 22) / 4) - 8
+
   renderIndicator = (indicator) => {
     const { img, id } = indicator;
     const { onPressItem } = this.props;
     const isActive = this.isActive(id);
+    const triangleLeftPos = {
+      left: (this.state.itemWidth / 2) - (HEIGHT_TRIANGLE - 1),
+    };
+    const indicatorStyle = {
+      width: this.state.itemWidth,
+      height: this.state.itemWidth,
+    };
 
     return (
       <View key={`indicator-${id}`} style={styles.iconItemContainer}>
         <TouchableHighlight
-          onPress={(event) => onPressItem(this.descriptionRef, indicator)}
+          onPress={() => onPressItem(this.descriptionRef, indicator)}
           style={[styles.iconItem, isActive ? styles.iconItemActive : null]}
           underlayColor={styleConst.color.select}
         >
           <View>
-            {
-              isActive ?
-                (
-                  <Image
-                    style={styles.iconImage}
-                    source={{ uri: img.white }}
-                  />
-                ) :
-                (
-                  <Image
-                    style={styles.iconImage}
-                    source={{ uri: img.blue }}
-                  />
-                )
-            }
+            <Image
+              style={indicatorStyle}
+              source={{ uri: isActive ? img.white : img.blue }}
+            />
           </View>
         </TouchableHighlight>
 
@@ -113,8 +118,8 @@ export default class IndicatorRow extends PureComponent {
           isActive ?
             (
               <View>
-                <View style={[styles.triangle, styles.triangleWhite]} />
-                <View style={[styles.triangle, styles.triangleBorder]} />
+                <View style={[styles.triangle, styles.triangleWhite, triangleLeftPos]} />
+                <View style={[styles.triangle, styles.triangleBorder, triangleLeftPos]} />
               </View>
             ) : null
         }
@@ -130,11 +135,19 @@ export default class IndicatorRow extends PureComponent {
     return <IndicatorDescription key={id} name={name} description={description} />;
   }
 
+  onLayout = (e) => {
+    if (!isTablet) return false;
+
+    const { width: contentWidth } = e.nativeEvent.layout;
+
+    this.setState({ itemWidth: this.getItemWidth(contentWidth) });
+  }
+
   render() {
-    const { items, activeItem } = this.props;
+    const { items } = this.props;
 
     return (
-      <View style={styles.container}>
+      <View style={styles.container} onLayout={this.onLayout}>
         <View style={styles.iconsContainer}>
           {items.map(indicator => this.renderIndicator(indicator))}
         </View>
