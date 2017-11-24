@@ -58,9 +58,9 @@ export default class SelectListByCountry extends PureComponent {
   }
 
   componentDidMount() {
-    const { listRussia, dataHandler, itemLayout } = this.props;
+    const { dataHandler, itemLayout } = this.props;
 
-    if (itemLayout === 'dealer' && listRussia.length === 0) {
+    if (itemLayout === 'dealer') {
       dataHandler();
     }
   }
@@ -105,8 +105,6 @@ export default class SelectListByCountry extends PureComponent {
       listUkraine,
       listBelarussia,
     } = this.props;
-
-    // console.log('== SelectListByCountry ==');
 
     let list = [];
 
