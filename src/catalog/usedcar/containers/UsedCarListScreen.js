@@ -24,7 +24,7 @@ import CarList from '../../components/CarList';
 // helpers
 import { get } from 'lodash';
 import styleConst from '../../../core/style-const';
-import styleHeader from '../../../core/components/Header/style';
+import stylesHeader from '../../../core/components/Header/style';
 import declOfNum from '../../../utils/decl-of-num';
 import { EVENT_DEFAULT } from '../../actionTypes';
 
@@ -72,8 +72,8 @@ class UserCarListScreen extends Component {
 
     return {
       headerTitle: count ? `${count} ${declOfNum(count, titleVariants)}` : null,
-      headerStyle: styleHeader.common,
-      headerTitleStyle: styleHeader.title,
+      headerStyle: stylesHeader.common,
+      headerTitleStyle: stylesHeader.title,
       headerLeft: <HeaderIconBack navigation={navigation} />,
       headerRight: <HeaderIconMenu navigation={navigation} />,
     };

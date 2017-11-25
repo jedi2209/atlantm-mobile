@@ -42,13 +42,13 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import ListItemHeader from '../../../profile/components/ListItemHeader';
 
 // styles
-import styleListProfile from '../../../core/components/Lists/style';
+import stylesList from '../../../core/components/Lists/style';
 
 // helpers
 import { get, find } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import styleHeader from '../../../core/components/Header/style';
+import stylesHeader from '../../../core/components/Header/style';
 import { verticalScale } from '../../../utils/scale';
 import { TEXT_EMPTY_CAR_LIST } from '../../constants';
 
@@ -148,8 +148,8 @@ const mapDispatchToProps = dispatch => {
 class NewCarFilterScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Новые автомобили',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
@@ -392,36 +392,36 @@ class NewCarFilterScreen extends Component {
 
             <ListItemHeader text="ПАРАМЕТРЫ ПОИСКА" />
 
-            <View style={styleListProfile.listItemContainer}>
-              <ListItem style={styleListProfile.listItemPressable} onPress={this.onPressBrands}>
+            <View style={stylesList.listItemContainer}>
+              <ListItem style={stylesList.listItemPressable} onPress={this.onPressBrands}>
                 <Body style={styles.body} >
-                  <Label style={styleListProfile.label}>Марка</Label>
+                  <Label style={stylesList.label}>Марка</Label>
                 </Body>
                 <Right style={styles.right}>
                   {
                     filterBrands.length !== 0 &&
-                      <Text style={styleListProfile.listItemValue}>
+                      <Text style={stylesList.listItemValue}>
                         {`Выбрано: ${filterBrands.length}`}
                       </Text>
                   }
-                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                  <Icon name="arrow-forward" style={stylesList.iconArrow} />
                 </Right>
               </ListItem>
             </View>
 
-            <View style={styleListProfile.listItemContainer}>
-              <ListItem style={styleListProfile.listItemPressable} onPress={this.onPressModels}>
+            <View style={stylesList.listItemContainer}>
+              <ListItem style={stylesList.listItemPressable} onPress={this.onPressModels}>
                 <Body style={styles.body} >
-                  <Label style={styleListProfile.label}>Модель</Label>
+                  <Label style={stylesList.label}>Модель</Label>
                 </Body>
                 <Right style={styles.right}>
                   {
                     filterModels.length !== 0 &&
-                      <Text style={styleListProfile.listItemValue}>
+                      <Text style={stylesList.listItemValue}>
                         {`Выбрано: ${filterModels.length}`}
                       </Text>
                   }
-                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                  <Icon name="arrow-forward" style={stylesList.iconArrow} />
                 </Right>
               </ListItem>
             </View>
@@ -438,91 +438,88 @@ class NewCarFilterScreen extends Component {
               onCloseModal={this.onClosePrice}
               TouchableComponent={TouchableHighlight}
             >
-              <View style={styleListProfile.listItemContainer}>
+              <View style={stylesList.listItemContainer}>
                 <View style={styles.hiddenListItemContainer} />
-                <ListItem button={false} style={styleListProfile.listItemPressable}>
+                <ListItem button={false} style={stylesList.listItemPressable}>
                   <Body style={styles.body} >
-                    <Label style={styleListProfile.label}>Цена</Label>
+                    <Label style={stylesList.label}>Цена</Label>
                   </Body>
                   <Right style={styles.right}>
                     {
-                      <Text style={styleListProfile.listItemValue}>
+                      <Text style={stylesList.listItemValue}>
                         {`от ${minPriceByFilter || minPrice} ${currency}`}
                       </Text>
                     }
-                    <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                    <Icon name="arrow-forward" style={stylesList.iconArrow} />
                   </Right>
                 </ListItem>
               </View>
             </PricePicker>
 
-            <View style={[
-              styles.listItemContainer,
-              styleListProfile.listItemContainer,
-            ]}>
-              <ListItem style={styleListProfile.listItemPressable} onPress={this.onPressBody}>
+            <View style={stylesList.listItemContainer}>
+              <ListItem style={stylesList.listItemPressable} onPress={this.onPressBody}>
                 <Body style={styles.body} >
-                  <Label style={styleListProfile.label}>Тип кузова</Label>
+                  <Label style={stylesList.label}>Тип кузова</Label>
                 </Body>
                 <Right style={styles.right}>
                     {
                       filterBody.length !== 0 &&
-                        <Text style={styleListProfile.listItemValue}>
+                        <Text style={stylesList.listItemValue}>
                           {`Выбрано: ${filterBody.length}`}
                         </Text>
                     }
-                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                  <Icon name="arrow-forward" style={stylesList.iconArrow} />
                 </Right>
               </ListItem>
             </View>
 
-            <View style={styleListProfile.listItemContainer}>
-              <ListItem style={styleListProfile.listItemPressable} onPress={this.onPressGearbox}>
+            <View style={stylesList.listItemContainer}>
+              <ListItem style={stylesList.listItemPressable} onPress={this.onPressGearbox}>
                 <Body style={styles.body} >
-                  <Label style={styleListProfile.label}>КПП</Label>
+                  <Label style={stylesList.label}>КПП</Label>
                 </Body>
                 <Right style={styles.right}>
                   {
                     filterGearbox.length !== 0 &&
-                      <Text style={styleListProfile.listItemValue}>
+                      <Text style={stylesList.listItemValue}>
                         {`Выбрано: ${filterGearbox.length}`}
                       </Text>
                   }
-                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                  <Icon name="arrow-forward" style={stylesList.iconArrow} />
                 </Right>
               </ListItem>
             </View>
 
-            <View style={styleListProfile.listItemContainer}>
-              <ListItem style={styleListProfile.listItemPressable} onPress={this.onPressEngineType}>
+            <View style={stylesList.listItemContainer}>
+              <ListItem style={stylesList.listItemPressable} onPress={this.onPressEngineType}>
                 <Body style={styles.body}>
-                  <Label style={styleListProfile.label}>Тип двигателя</Label>
+                  <Label style={stylesList.label}>Тип двигателя</Label>
                 </Body>
                 <Right style={styles.right}>
                   {
                     filterEngineType.length !== 0 &&
-                      <Text style={styleListProfile.listItemValue}>
+                      <Text style={stylesList.listItemValue}>
                         {`Выбрано: ${filterEngineType.length}`}
                       </Text>
                   }
-                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                  <Icon name="arrow-forward" style={stylesList.iconArrow} />
                 </Right>
               </ListItem>
             </View>
 
-            <View style={styleListProfile.listItemContainer}>
-              <ListItem last style={styleListProfile.listItemPressable} onPress={this.onPressDrive}>
+            <View style={stylesList.listItemContainer}>
+              <ListItem last style={stylesList.listItemPressable} onPress={this.onPressDrive}>
                 <Body style={styles.body}>
-                  <Label style={styleListProfile.label}>Привод</Label>
+                  <Label style={stylesList.label}>Привод</Label>
                 </Body>
                 <Right style={styles.right}>
                   {
                     filterDrive.length !== 0 &&
-                      <Text style={styleListProfile.listItemValue}>
+                      <Text style={stylesList.listItemValue}>
                         {`Выбрано: ${filterDrive.length}`}
                       </Text>
                   }
-                  <Icon name="arrow-forward" style={styleListProfile.iconArrow} />
+                  <Icon name="arrow-forward" style={stylesList.iconArrow} />
                 </Right>
               </ListItem>
             </View>

@@ -9,3 +9,6 @@
 Решение:
 
 https://github.com/airbnb/react-native-maps/issues/1300
+
+## TODO:
+- вынести в один компонент AboutScreen и AboutDealerScreen

@@ -1,4 +1,3 @@
-import React from 'React';
 import { StyleSheet } from 'react-native';
 
 import styleConst from '../../style-const';

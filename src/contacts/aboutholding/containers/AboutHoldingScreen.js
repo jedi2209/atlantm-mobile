@@ -1,31 +1,19 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Image,
-  View,
-  TouchableOpacity,
-} from 'react-native';
-import PropTypes from 'prop-types';
-import {
-  Container,
-  Content,
-  Text,
-  List,
-  ListItem,
-  Body,
-  Right,
-  StyleProvider,
-} from 'native-base';
+import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
+import { Container, Content, Text, List, ListItem, Body, Right, StyleProvider } from 'native-base';
 
+// components
 import Communications from 'react-native-communications';
+import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
+// redux
 import { connect } from 'react-redux';
 
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
-import { verticalScale } from '../../../utils/scale';
+// helpers
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import styleHeader from '../../../core/components/Header/style';
+import stylesHeader from '../../../core/components/Header/style';
+import stylesList from '../../../core/components/Lists/style';
 
 import { RUSSIA, BELARUSSIA, UKRAINE } from '../../../core/const';
 
@@ -41,17 +29,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: styleConst.color.greyText4,
     fontFamily: styleConst.font.regular,
-    letterSpacing: styleConst.ui.letterSpacing,
-  },
-  list: {
-    backgroundColor: '#fff',
-    marginTop: verticalScale(35),
-    borderTopWidth: styleConst.ui.borderWidth,
-    borderTopColor: styleConst.color.border,
-  },
-  rightText: {
-    color: styleConst.color.greyText,
-    fontFamily: styleConst.font.light,
     letterSpacing: styleConst.ui.letterSpacing,
   },
 });
@@ -76,8 +53,8 @@ class AboutHoldingScreen extends Component {
         source={require('../assets/company_logo.png')}
       />
     ),
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
   })
@@ -110,16 +87,16 @@ class AboutHoldingScreen extends Component {
       <StyleProvider style={getTheme()}>
         <Container>
           <Content style={styles.content}>
-            <List style={[styles.list, styles.listHolding]}>
-              <View style={styles.listItemContainer}>
+            <List style={stylesList.list}>
+              <View style={[stylesList.listItemContainer, stylesList.listItemContainerFirst]}>
                 {
-                  <ListItem last icon style={styles.listItem}>
+                  <ListItem last icon style={stylesList.listItem}>
                     <Body>
                       <Text>Веб-сайт</Text>
                     </Body>
                     <Right>
                       <TouchableOpacity onPress={this.onPressWebsite}>
-                        <Text style={styles.rightText}>{site}</Text>
+                        <Text style={stylesList.listItemValue}>{site}</Text>
                       </TouchableOpacity>
                     </Right>
                   </ListItem>
@@ -153,4 +130,4 @@ class AboutHoldingScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, null)(AboutHoldingScreen);
+export default connect(mapStateToProps)(AboutHoldingScreen);

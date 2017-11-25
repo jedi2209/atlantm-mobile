@@ -32,7 +32,7 @@ import PropTypes from 'prop-types';
 import { get, find } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import styleHeader from '../../../core/components/Header/style';
+import stylesHeader from '../../../core/components/Header/style';
 import priceSet from '../../../utils/price-set';
 
 // styles
@@ -60,8 +60,8 @@ const mapDispatchToProps = dispatch => {
 class NewCarItemScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Новые автомобили',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
   })

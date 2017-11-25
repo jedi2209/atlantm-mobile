@@ -10,7 +10,7 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import SelectListByCountry from '../../../core/components/SelectListByCountry';
 
 // helpers
-import styleHeader from '../../../core/components/Header/style';
+import stylesHeader from '../../../core/components/Header/style';
 
 // actions
 import {
@@ -42,8 +42,8 @@ const mapDispatchToProps = dispatch => {
 class UsedCarCityScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Выбор города',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
   })

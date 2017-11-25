@@ -21,13 +21,13 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import ListItemHeader from '../../../profile/components/ListItemHeader';
 
 // styles
-import styleListProfile from '../../../core/components/Lists/style';
+import stylesList from '../../../core/components/Lists/style';
 
 // helpers
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import styleHeader from '../../../core/components/Header/style';
+import stylesHeader from '../../../core/components/Header/style';
 
 const styles = StyleSheet.create({
   content: {
@@ -54,8 +54,8 @@ const mapDispatchToProps = dispatch => {
 class NewCarFilterBrandsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Модель',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
   })
@@ -112,16 +112,16 @@ class NewCarFilterBrandsScreen extends Component {
                         const handler = () => this.onPressItem(brandId, modelId);
 
                         return (
-                          <View key={`model-${modelId}`} style={styleListProfile.listItemContainer}>
+                          <View key={`model-${modelId}`} style={stylesList.listItemContainer}>
                             <ListItem
                               last={(modelsKeys.length - 1) === idx}
                               icon
-                              style={styleListProfile.listItemPressable}
+                              style={stylesList.listItemPressable}
                               onPress={handler}
                             >
                               <CheckBox onPress={handler} checked={this.isModelSelected(modelId)} />
-                              <Body style={styleListProfile.bodyWithLeftGap} >
-                                <Label style={styleListProfile.label}>{models[modelId]}</Label>
+                              <Body style={stylesList.bodyWithLeftGap} >
+                                <Label style={stylesList.label}>{models[modelId]}</Label>
                               </Body>
                             </ListItem>
                           </View>

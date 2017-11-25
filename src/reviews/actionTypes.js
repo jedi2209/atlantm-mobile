@@ -1,0 +1,11 @@
+export const TVA__REQUEST = 'TVA__REQUEST';
+export const TVA__SUCCESS = 'TVA__SUCCESS';
+export const TVA__FAIL = 'TVA__FAIL';
+
+export const TVA_SEND_MESSAGE__REQUEST = 'TVA_SEND_MESSAGE__REQUEST';
+export const TVA_SEND_MESSAGE__SUCCESS = 'TVA_SEND_MESSAGE__SUCCESS';
+export const TVA_SEND_MESSAGE__FAIL = 'TVA_SEND_MESSAGE__FAIL';
+
+export const TVA_MESSAGE__FILL = 'TVA_MESSAGE__FILL';
+
+export const TVA_ORDER_ID__SET = 'TVA_ORDER_ID__SET';

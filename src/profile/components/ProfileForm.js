@@ -6,9 +6,8 @@ import PropTypes from 'prop-types';
 import { ListItem, Body, Item, Label, Input } from 'native-base';
 import ListItemHeader from '../components/ListItemHeader';
 
-// styles
-// TODO: сделать единый компонент списков
-import styles from '../../core/components/Lists/style';
+// stylesList
+import stylesList from '../../core/components/Lists/style';
 
 export default class ProfileForm extends PureComponent {
   static propTypes = {
@@ -43,11 +42,11 @@ export default class ProfileForm extends PureComponent {
 
   renderListItem = (label, value, onChangeHandler, inputProps = {}, isLast) => {
     return (
-      <View style={styles.listItemContainer}>
-        <ListItem last={isLast} style={styles.listItem} >
+      <View style={stylesList.listItemContainer}>
+        <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]} >
           <Body>
-            <Item style={styles.inputItem} fixedLabel>
-              <Label style={styles.label}>{label}</Label>
+            <Item style={stylesList.inputItem} fixedLabel>
+              <Label style={stylesList.label}>{label}</Label>
               <Input
                 autoCapitalize="none"
                 autoCorrect={false}

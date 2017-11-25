@@ -10,7 +10,7 @@ import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack'
 import SelectListByCountry from '../../core/components/SelectListByCountry';
 
 // helpers
-import styleHeader from '../../core/components/Header/style';
+import stylesHeader from '../../core/components/Header/style';
 
 // actions
 import { fetchDealers, selectDealer, selectRegion } from '../actions';
@@ -38,8 +38,8 @@ const mapDispatchToProps = dispatch => {
 class ChooseDealerScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Мой автоцентр',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
   })

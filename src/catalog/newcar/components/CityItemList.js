@@ -9,6 +9,7 @@ import Imager from '../../../core/components/Imager';
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
+import stylesList from '../../../core/components/Lists/style';
 
 const styles = StyleSheet.create({
   brands: {
@@ -77,9 +78,9 @@ export default class CityItemList extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <View style={styles.container}>
-          <ListItem onPress={this.onPressDealer} style={styles.listItem}>
-            <Body style={styles.listItemBody}>
+        <View style={stylesList.listItemContainer}>
+          <ListItem last onPress={this.onPressDealer} style={stylesList.listItem}>
+            <Body>
               <Text style={styles.city}>Город</Text>
               <Text style={styles.name}>{cityName}</Text>
             </Body>
@@ -121,7 +122,7 @@ export default class CityItemList extends Component {
                 null
                 }
               </View>
-              <Icon name="arrow-forward" style={styles.iconArrow} />
+              <Icon name="arrow-forward" style={stylesList.iconArrow} />
             </Right>
           </ListItem>
         </View>

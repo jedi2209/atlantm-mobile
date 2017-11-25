@@ -19,14 +19,14 @@ import { actionSelectNewCarFilterBody } from '../../actions';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // styles
-import styleListProfile from '../../../core/components/Lists/style';
+import stylesList from '../../../core/components/Lists/style';
 
 // helpers
 import { get } from 'lodash';
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import styleHeader from '../../../core/components/Header/style';
+import stylesHeader from '../../../core/components/Header/style';
 
 const styles = StyleSheet.create({
   content: {
@@ -52,8 +52,8 @@ const mapDispatchToProps = dispatch => {
 class NewCarFilterBodyScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Тип кузова',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
   })
@@ -106,16 +106,16 @@ class NewCarFilterBodyScreen extends Component {
                 const handler = () => this.onPressItem(bodyId);
 
                 return (
-                  <View key={bodyId} style={styleListProfile.listItemContainer}>
+                  <View key={bodyId} style={stylesList.listItemContainer}>
                     <ListItem
                       last={(bodyKeys.length - 1) === idx}
                       icon
-                      style={styleListProfile.listItemPressable}
+                      style={stylesList.listItemPressable}
                       onPress={handler}
                     >
                       <CheckBox onPress={handler} checked={this.isBodySelected(bodyId)} />
-                      <Body style={styleListProfile.bodyWithLeftGap} >
-                        <Label style={styleListProfile.label}>{item}</Label>
+                      <Body style={stylesList.bodyWithLeftGap} >
+                        <Label style={stylesList.label}>{item}</Label>
                       </Body>
                     </ListItem>
                   </View>

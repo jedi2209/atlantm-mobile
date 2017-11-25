@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import styleConst from '../../../core/style-const';
 import { scale } from '../../../utils/scale';
-import styleHeader from '../../../core/components/Header/style';
+import stylesHeader from '../../../core/components/Header/style';
 
 const styles = StyleSheet.create({
   content: {
@@ -40,8 +40,8 @@ const mapDispatchToProps = dispatch => {
 class ReferenceScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Справочная',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
   })

@@ -29,13 +29,14 @@ import Communications from 'react-native-communications';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
 import Imager from '../../core/components/Imager';
+import HeaderSubtitle from '../../core/components/HeaderSubtitle';
 
 // helpers
 import { get } from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import { verticalScale } from '../../utils/scale';
-import styleHeader from '../../core/components/Header/style';
+import stylesHeader from '../../core/components/Header/style';
 import processHtml from '../../utils/process-html';
 
 const isTablet = DeviceInfo.isTablet();
@@ -58,31 +59,6 @@ const styles = StyleSheet.create({
   spinner: {
     alignSelf: 'center',
     marginTop: verticalScale(60),
-  },
-  titleContainer: {
-    backgroundColor: styleConst.color.header,
-    paddingBottom: verticalScale(5),
-
-    ...Platform.select({
-      ios: {
-        borderBottomWidth: styleConst.ui.borderWidth,
-        borderBottomColor: styleConst.color.border,
-        marginBottom: 0.3,
-      },
-      android: {
-        marginTop: 15,
-        marginBottom: 10,
-        borderBottomWidth: 0,
-        backgroundColor: 'transparent',
-      },
-    }),
-  },
-  title: {
-    fontSize: 18,
-    color: styleConst.color.greyText4,
-    fontFamily: styleConst.font.light,
-    letterSpacing: styleConst.ui.letterSpacing,
-    textAlign: 'center',
   },
   rightText: {
     color: styleConst.color.greyText,
@@ -132,8 +108,8 @@ const mapDispatchToProps = dispatch => {
 class AboutDealerScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Об автоцентре',
-    headerStyle: [styleHeader.common, { borderBottomWidth: 0 }],
-    headerTitleStyle: styleHeader.title,
+    headerStyle: [stylesHeader.common, { borderBottomWidth: 0 }],
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
   })
@@ -301,9 +277,7 @@ class AboutDealerScreen extends Component {
       <StyleProvider style={getTheme()}>
         <Container>
           <Content style={styles.content}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>{dealer.name}</Text>
-            </View>
+            <HeaderSubtitle content={dealer.name} />
             <View ref="imageContainer">
               <Imager
                 onLayout={this.onLayoutImage}

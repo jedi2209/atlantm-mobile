@@ -17,7 +17,7 @@ import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu'
 // helpres
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import styleHeader from '../../core/components/Header/style';
+import stylesHeader from '../../core/components/Header/style';
 
 const styles = StyleSheet.create({
   content: {
@@ -50,8 +50,8 @@ const mapDispatchToProps = dispatch => {
 class ProfileScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Личный кабинет',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <View />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })

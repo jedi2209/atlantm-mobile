@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Image, View, Alert, NetInfo, StyleSheet, Platform } from 'react-native';
 import {
   Container,
@@ -31,30 +30,13 @@ import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu'
 import { get } from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import { verticalScale } from '../../utils/scale';
-import styleHeader from '../../core/components/Header/style';
+import stylesHeader from '../../core/components/Header/style';
+import stylesList from '../../core/components/Lists/style';
 
 const iconSize = 28;
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
-  },
-  iconArrow: {
-    color: styleConst.color.systemGray,
-  },
-  listItem: {
-    minHeight: 44,
-  },
-  list: {
-    marginTop: verticalScale(28),
-  },
-  listHolding: {
-    marginTop: verticalScale(35),
-  },
-  listItemContainer: {
-    backgroundColor: '#fff',
-    borderTopWidth: styleConst.ui.borderWidth,
-    borderTopColor: styleConst.color.border,
   },
   icon: {
     width: iconSize,
@@ -80,8 +62,8 @@ const mapDispatchToProps = dispatch => {
 class ContactsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Контакты',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <View />, // для выравнивания заголовка по центру на обоих платформах
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
@@ -150,6 +132,8 @@ class ContactsScreen extends Component {
       (this.props.isСallMeRequest !== nextProps.isСallMeRequest);
   }
 
+  onPressAbout = () => this.props.navigation.navigate('AboutScreen')
+
   render() {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
@@ -178,14 +162,12 @@ class ContactsScreen extends Component {
             />
             <Spinner visible={isСallMeRequest} color={styleConst.color.blue} />
 
-            <List style={styles.list}>
-              <View style={styles.listItemContainer}>
+            <List style={stylesList.list}>
+              <View style={[stylesList.listItemContainer, stylesList.listItemContainerFirst]}>
                 <ListItem
                   icon
-                  style={styles.listItem}
-                  onPress={() => {
-                    navigation.navigate('AboutScreen');
-                  }}
+                  style={stylesList.listItem}
+                  onPress={this.onPressAbout}
                 >
                   <Left>
                     <Image
@@ -199,7 +181,7 @@ class ContactsScreen extends Component {
                   <Right>
                     <Icon
                       name="arrow-forward"
-                      style={styles.iconArrow}
+                      style={stylesList.iconArrow}
                     />
                   </Right>
                 </ListItem>
@@ -209,7 +191,7 @@ class ContactsScreen extends Component {
                     (
                       <ListItem
                         icon
-                        style={styles.listItem}
+                        style={stylesList.listItem}
                         onPress={() => {
                           Communications.phonecall(phones[0], true);
                         }}
@@ -232,7 +214,7 @@ class ContactsScreen extends Component {
                     (
                       <ListItem
                         icon
-                        style={styles.listItem}
+                        style={stylesList.listItem}
                         onPress={() => {
                           Communications.email(
                             [dealerSelected.email[0]],
@@ -261,7 +243,7 @@ class ContactsScreen extends Component {
                     (
                       <ListItem
                         icon
-                        style={styles.listItem}
+                        style={stylesList.listItem}
                         onPress={() => {
                           navigation.navigate('MapScreen');
                         }}
@@ -278,7 +260,7 @@ class ContactsScreen extends Component {
                         <Right>
                           <Icon
                             name="arrow-forward"
-                            style={styles.iconArrow}
+                            style={stylesList.iconArrow}
                           />
                         </Right>
                       </ListItem>
@@ -288,7 +270,7 @@ class ContactsScreen extends Component {
                 <ListItem
                   last
                   icon
-                  style={styles.listItem}
+                  style={stylesList.listItem}
                   onPress={this.onPressCallMe}
                 >
                   <Left>
@@ -305,7 +287,7 @@ class ContactsScreen extends Component {
                 {/* <ListItem
                   last
                   icon
-                  style={styles.listItem}
+                  style={stylesList.listItem}
                   onPress={() => {
                     navigation.navigate('ReferenceScreen');
                   }}
@@ -322,19 +304,19 @@ class ContactsScreen extends Component {
                   <Right>
                     <Icon
                       name="arrow-forward"
-                      style={styles.iconArrow}
+                      style={stylesList.iconArrow}
                     />
                   </Right>
                 </ListItem> */}
               </View>
             </List>
 
-            <List style={[styles.list, styles.listHolding]}>
-              <View style={styles.listItemContainer}>
+            <List style={stylesList.list}>
+              <View style={[stylesList.listItemContainer, stylesList.listItemContainerFirst]}>
                 <ListItem
                   last
                   icon
-                  style={styles.listItem}
+                  style={stylesList.listItem}
                   onPress={() => {
                     navigation.navigate('AboutHoldingScreen');
                   }}
@@ -351,7 +333,7 @@ class ContactsScreen extends Component {
                   <Right>
                     <Icon
                       name="arrow-forward"
-                      style={styles.iconArrow}
+                      style={stylesList.iconArrow}
                     />
                   </Right>
                 </ListItem>

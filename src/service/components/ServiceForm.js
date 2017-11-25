@@ -3,17 +3,11 @@ import { View, StyleSheet, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import {
-  ListItem,
-  Body,
-  Item,
-  Label,
-  Input,
-} from 'native-base';
+import { ListItem, Body, Item, Label, Input } from 'native-base';
 import DatePicker from 'react-native-datepicker';
 
 // styles
-import styleListProfile from '../../core/components/Lists/style';
+import stylesList from '../../core/components/Lists/style';
 
 // helpers
 import styleConst from '../../core/style-const';
@@ -81,11 +75,11 @@ export default class ServiceForm extends PureComponent {
 
     return (
       <View>
-        <View style={styleListProfile.listItemContainer}>
-          <ListItem style={styleListProfile.listItem} >
+        <View style={[stylesList.listItemContainer, stylesList.listItemContainerFirst]}>
+          <ListItem style={[stylesList.listItem, stylesList.listItemReset]} >
             <Body>
-              <Item style={styleListProfile.inputItem} fixedLabel>
-                <Label style={styleListProfile.label}>Авто</Label>
+              <Item style={stylesList.inputItem} fixedLabel>
+                <Label style={stylesList.label}>Авто</Label>
                 <Input
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -101,12 +95,12 @@ export default class ServiceForm extends PureComponent {
           </ListItem>
         </View>
 
-        <View style={styleListProfile.listItemContainer}>
-          <ListItem last style={styleListProfile.listItem}>
+        <View style={stylesList.listItemContainer}>
+          <ListItem last style={[stylesList.listItem, stylesList.listItemReset]}>
             <Body>
-              <Item style={styleListProfile.inputItem} fixedLabel last>
+              <Item style={stylesList.inputItem} fixedLabel last>
                   <Label style={[
-                    styleListProfile.label,
+                    stylesList.label,
                     { flex: 1 },
                   ]}>Дата</Label>
                   <DatePicker

@@ -18,7 +18,7 @@ import { connect } from 'react-redux';
 // Helpers
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import styleConst from '../../../core/style-const';
-import styleHeader from '../../../core/components/Header/style';
+import stylesHeader from '../../../core/components/Header/style';
 
 const { width, height } = Dimensions.get('window');
 
@@ -45,8 +45,8 @@ const mapStateToProps = ({ dealer }) => {
 class MapScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Найти нас',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
   })

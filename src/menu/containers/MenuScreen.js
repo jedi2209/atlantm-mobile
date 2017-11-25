@@ -15,7 +15,7 @@ import {
 
 import styleConst from '../../core/style-const';
 import { scale, verticalScale } from '../../utils/scale';
-import styleHeader from '../../core/components/Header/style';
+import stylesHeader from '../../core/components/Header/style';
 
 const styles = StyleSheet.create({
   container: {
@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
 export default class MenuScreen extends Component {
   static navigationOptions = () => ({
     headerTitle: 'Атлант-М',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: null,
   })
 

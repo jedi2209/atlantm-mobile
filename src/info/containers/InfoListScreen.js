@@ -16,7 +16,7 @@ import { fetchInfoList } from '../actions';
 // helpers
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import styleHeader from '../../core/components/Header/style';
+import stylesHeader from '../../core/components/Header/style';
 import { verticalScale } from '../../utils/scale';
 
 // components
@@ -63,8 +63,8 @@ class InfoListScreen extends Component {
 
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Акции',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <View />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, Alert, StyleSheet, Platform, TouchableOpacity, NetInfo } from 'react-native';
+import { Text, View, Alert, StyleSheet, TouchableOpacity, NetInfo } from 'react-native';
 import { Body, Label, Item, Content, ListItem, Container, StyleProvider } from 'native-base';
 
 // redux
@@ -15,18 +15,17 @@ import MessageForm from '../../core/components/MessageForm';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import ListItemHeader from '../../profile/components/ListItemHeader';
-// import FooterButton from '../../core/components/FooterButton';
+import HeaderSubtitle from '../../core/components/HeaderSubtitle';
 
 // styles
-import styleListProfile from '../../core/components/Lists/style';
+import stylesList from '../../core/components/Lists/style';
 
 // helpers
 import { get } from 'lodash';
 import { dayMonthYearTime } from '../../utils/date';
-import { verticalScale } from '../../utils/scale';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import styleHeader from '../../core/components/Header/style';
+import stylesHeader from '../../core/components/Header/style';
 import { TVA_SEND_MESSAGE__SUCCESS, TVA_SEND_MESSAGE__FAIL } from '../actionTypes';
 
 const styles = StyleSheet.create({
@@ -35,39 +34,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: 100,
   },
-  titleContainer: {
-    backgroundColor: styleConst.color.header,
-    paddingBottom: verticalScale(5),
-
-    ...Platform.select({
-      ios: {
-        marginBottom: 0.3,
-        borderBottomWidth: styleConst.ui.borderWidth,
-        borderBottomColor: styleConst.color.border,
-      },
-      android: {
-        marginTop: 15,
-        marginBottom: 10,
-        borderBottomWidth: 0,
-        backgroundColor: 'transparent',
-      },
-    }),
-  },
-  title: {
-    fontSize: 18,
-    color: styleConst.color.greyText4,
-    fontFamily: styleConst.font.regular,
-    textAlign: 'center',
-    marginBottom: 3,
-  },
   label: {
     flex: 2.5,
   },
   itemTitle: {
     fontSize: 20,
-  },
-  button: {
-    // marginTop: 10,
   },
 });
 
@@ -93,8 +64,8 @@ const mapDispatchToProps = dispatch => {
 class TvaResultsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Табло выдачи авто',
-    headerStyle: [styleHeader.common, { borderBottomWidth: 0 }],
-    headerTitleStyle: styleHeader.title,
+    headerStyle: [stylesHeader.common, { borderBottomWidth: 0 }],
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
@@ -166,13 +137,13 @@ class TvaResultsScreen extends Component {
 
   renderListItem = (label, value, isLast) => {
     return (
-      <View style={styleListProfile.listItemContainer}>
-        <ListItem last={isLast} style={[styleListProfile.listItem]}>
+      <View style={stylesList.listItemContainer}>
+        <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]}>
           <Body>
-            <Item style={[styleListProfile.inputItem, { justifyContent: 'flex-start' }]} fixedLabel>
-              <Label style={[styleListProfile.label, styles.label]}>{label}</Label>
-              <View style={styleListProfile.listItemValueContainer}>
-                <Text style={styleListProfile.listItemValue}>{value}</Text>
+            <Item style={[stylesList.inputItem, { justifyContent: 'flex-start' }]} fixedLabel>
+              <Label style={[stylesList.label, styles.label]}>{label}</Label>
+              <View style={stylesList.listItemValueContainer}>
+                <Text style={stylesList.listItemValue}>{value}</Text>
               </View>
             </Item>
           </Body>
@@ -193,6 +164,7 @@ class TvaResultsScreen extends Component {
     const { car, info } = results;
     const titleCar = `${car.brand} ${car.model}`;
     const titleCarNumber = car.number;
+    const textList = [titleCar, titleCarNumber];
 
     console.log('== TvaResultsScreen ==');
 
@@ -200,14 +172,8 @@ class TvaResultsScreen extends Component {
       <StyleProvider style={getTheme()}>
         <Container>
           <Content style={styles.content}>
-
             <Spinner visible={isMessageSending} color={styleConst.color.blue} />
-
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>{titleCar}</Text>
-              <Text style={styles.title}>{titleCarNumber}</Text>
-            </View>
-
+            <HeaderSubtitle content={textList} isBig={true} />
             {
               info.map(item => {
                 return (
@@ -237,7 +203,6 @@ class TvaResultsScreen extends Component {
             <ButtonFull
               text="ОТПРАВИТЬ"
               arrow={true}
-              style={styles.button}
               onPressButton={this.onPressMessageButton}
             />
 
