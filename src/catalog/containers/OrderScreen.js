@@ -22,7 +22,7 @@ import { get } from 'lodash';
 import priceSet from '../../utils/price-set';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import styleHeader from '../../core/components/Header/style';
+import stylesHeader from '../../core/components/Header/style';
 import { CATALOG_ORDER__SUCCESS, CATALOG_ORDER__FAIL } from '../actionTypes';
 
 const FOOTER_HEIGHT = 50;
@@ -77,8 +77,8 @@ const mapDispatchToProps = dispatch => {
 class OrderScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Заявка на покупку',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
   })

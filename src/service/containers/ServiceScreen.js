@@ -23,7 +23,7 @@ import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu'
 import { yearMonthDay } from '../../utils/date';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import styleHeader from '../../core/components/Header/style';
+import stylesHeader from '../../core/components/Header/style';
 import { SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL } from '../actionTypes';
 
 const styles = StyleSheet.create({
@@ -63,8 +63,8 @@ const mapDispatchToProps = dispatch => {
 class ServiceScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Заявка на СТО',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <View />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })

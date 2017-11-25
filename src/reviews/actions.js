@@ -97,8 +97,8 @@ export const actionFetchTva = (props) => {
 
     return API.fetchTva(props)
       .then(res => {
-        // const { error, status, data } = res;
-        const { error, status, data } = dumpTvaAnswer;
+        const { error, status, data } = res;
+        // const { error, status, data } = dumpTvaAnswer;
 
         if (status !== 'success') {
           return dispatch({

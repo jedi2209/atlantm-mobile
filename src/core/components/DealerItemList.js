@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
-import {
-  ListItem,
-  Body,
-  Right,
-  Icon,
-  StyleProvider,
-  Text,
-} from 'native-base';
+import { ListItem, Body, Right, Icon, StyleProvider, Text } from 'native-base';
 
 // component
 import Imager from '../components/Imager';
@@ -16,6 +9,7 @@ import Imager from '../components/Imager';
 // helpers
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
+import stylesList from '../../core/components/Lists/style';
 
 const styles = StyleSheet.create({
   brands: {
@@ -36,18 +30,6 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.light,
     fontSize: 17,
     letterSpacing: styleConst.ui.letterSpacing,
-  },
-  listItem: {
-    minHeight: 44,
-    borderBottomWidth: 0,
-  },
-  iconArrow: {
-    color: styleConst.color.systemGray,
-  },
-  container: {
-    backgroundColor: '#fff',
-    borderBottomWidth: styleConst.ui.borderWidth,
-    borderBottomColor: styleConst.color.border,
   },
 });
 
@@ -70,9 +52,7 @@ export default class DealerItemList extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if (this.props.name !== nextProps.name) return true;
-
-    return false;
+    return this.props.name !== nextProps.name;
   }
 
   onPressDealer = () => {
@@ -80,24 +60,17 @@ export default class DealerItemList extends Component {
   }
 
   render() {
-    const {
-      navigation,
-      city,
-      name,
-      brands,
-      returnScreen,
-    } = this.props;
+    const { city, name, brands } = this.props;
 
     return (
       <StyleProvider style={getTheme()}>
-        <View style={styles.container}>
+        <View style={stylesList.listItemContainer}>
           <ListItem
+            last
             onPress={this.onPressDealer}
-            style={styles.listItem}
+            style={stylesList.listItem}
           >
-            <Body
-              style={styles.listItemBody}
-            >
+            <Body>
               {city && city.name ? <Text style={styles.city}>{city.name}</Text> : null}
               {name ? <Text style={styles.name}>{name}</Text> : null}
             </Body>
@@ -118,7 +91,7 @@ export default class DealerItemList extends Component {
               </View>
               <Icon
                 name="arrow-forward"
-                style={styles.iconArrow}
+                style={stylesList.iconArrow}
               />
             </Right>
           </ListItem>

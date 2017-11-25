@@ -30,7 +30,7 @@ import { get, find } from 'lodash';
 import styleConst from '../../core/style-const';
 import processHtml from '../../utils/process-html';
 import { verticalScale } from '../../utils/scale';
-import styleHeader from '../../core/components/Header/style';
+import stylesHeader from '../../core/components/Header/style';
 import { CALL_ME_INFO__SUCCESS, CALL_ME_INFO__FAIL } from '../actionTypes';
 import { dayMonth, dayMonthYear } from '../../utils/date';
 
@@ -127,8 +127,8 @@ class InfoPostScreen extends Component {
 
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Об акции',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} returnScreen="InfoListScreen" />,
     headerRight: <View />,
   })

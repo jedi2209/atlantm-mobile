@@ -19,14 +19,14 @@ import { actionSelectNewCarFilterEngineType } from '../../actions';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // styles
-import styleListProfile from '../../../core/components/Lists/style';
+import stylesList from '../../../core/components/Lists/style';
 
 // helpers
 import { get } from 'lodash';
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import styleHeader from '../../../core/components/Header/style';
+import stylesHeader from '../../../core/components/Header/style';
 
 const styles = StyleSheet.create({
   content: {
@@ -52,8 +52,8 @@ const mapDispatchToProps = dispatch => {
 class NewCarFilterGearboxScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Тип двигателя',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
   })
@@ -106,16 +106,16 @@ class NewCarFilterGearboxScreen extends Component {
                 const handler = () => this.onPressItem(engineTypeId);
 
                 return (
-                  <View key={engineTypeId} style={styleListProfile.listItemContainer}>
+                  <View key={engineTypeId} style={stylesList.listItemContainer}>
                     <ListItem
                       icon
                       onPress={handler}
                       last={(engineTypeKeys.length - 1) === idx}
-                      style={styleListProfile.listItemPressable}
+                      style={stylesList.listItemPressable}
                     >
                       <CheckBox onPress={handler} checked={this.isEngineTypeSelected(engineTypeId)} />
-                      <Body style={styleListProfile.bodyWithLeftGap} >
-                        <Label style={styleListProfile.label}>{item}</Label>
+                      <Body style={stylesList.bodyWithLeftGap} >
+                        <Label style={stylesList.label}>{item}</Label>
                       </Body>
                     </ListItem>
                   </View>

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { ListItem, Body, Item, Label } from 'native-base';
 
 // styles
-import styleListProfile from '../../core/components/Lists/style';
+import stylesList from '../../core/components/Lists/style';
 
 // helpers
 import { get } from 'lodash';
@@ -21,75 +21,35 @@ export default class CarOrderList extends PureComponent {
 
   static defaultProps = {}
 
+  renderItem = (label, value, isLast) => {
+    if (!value) return null;
+
+    return (
+      <View style={stylesList.listItemContainer}>
+        <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]}>
+          <Body>
+            <Item style={stylesList.inputItem} fixedLabel>
+              <Label style={stylesList.label}>{label}</Label>
+              <View style={stylesList.listItemValueContainer}>
+                <Text style={stylesList.listItemValue}>{value}</Text>
+              </View>
+            </Item>
+          </Body>
+        </ListItem>
+      </View>
+    );
+  }
+
   render() {
     const { brand, model, price, complectation } = this.props;
     const modelName = get(model, 'name') || model;
 
-
     return (
       <View>
-        <View style={styleListProfile.listItemContainer}>
-          <ListItem style={[styleListProfile.listItem]}>
-            <Body>
-              <Item style={[styleListProfile.inputItem, { justifyContent: 'flex-start' }]} fixedLabel>
-                <Label style={styleListProfile.label}>Марка</Label>
-                <View style={styleListProfile.listItemValueContainer}>
-                  <Text style={styleListProfile.listItemValue}>{brand}</Text>
-                </View>
-              </Item>
-            </Body>
-          </ListItem>
-        </View>
-
-        {
-          modelName ?
-            (
-              <View style={styleListProfile.listItemContainer}>
-                <ListItem style={styleListProfile.listItem} >
-                  <Body>
-                    <Item style={styleListProfile.inputItem} fixedLabel>
-                      <Label style={styleListProfile.label}>Модель</Label>
-                      <View style={styleListProfile.listItemValueContainer}>
-                        <Text style={styleListProfile.listItemValue}>{modelName}</Text>
-                      </View>
-                    </Item>
-                  </Body>
-                </ListItem>
-              </View>
-            ) : null
-        }
-
-        {
-          complectation ?
-            (
-              <View style={styleListProfile.listItemContainer}>
-                <ListItem style={styleListProfile.listItem} >
-                  <Body>
-                    <Item style={styleListProfile.inputItem} fixedLabel>
-                      <Label style={styleListProfile.label}>Комплект.</Label>
-                      <View style={styleListProfile.listItemValueContainer}>
-                        <Text style={styleListProfile.listItemValue}>{complectation}</Text>
-                      </View>
-                    </Item>
-                  </Body>
-                </ListItem>
-              </View>
-            ) : null
-        }
-
-        <View style={styleListProfile.listItemContainer}>
-          <ListItem last style={styleListProfile.listItem} >
-            <Body>
-              <Item style={styleListProfile.inputItem} fixedLabel>
-                <Label style={styleListProfile.label}>Цена</Label>
-                <View style={styleListProfile.listItemValueContainer}>
-                  <Text style={styleListProfile.listItemValue}>{price}</Text>
-                </View>
-              </Item>
-            </Body>
-          </ListItem>
-        </View>
-
+        {this.renderItem('Марка', brand)}
+        {this.renderItem('Модель', modelName)}
+        {this.renderItem('Комплект.', complectation)}
+        {this.renderItem('Цена', price, true)}
       </View>
     );
   }

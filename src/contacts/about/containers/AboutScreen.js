@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { View, Platform, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
-import {
-  Container,
-  Content,
-  Text,
-  List,
-  ListItem,
-  Body,
-  Right,
-  StyleProvider,
-} from 'native-base';
+import { Container, Content, Text, List, ListItem, Body, Right, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -20,13 +11,14 @@ import Communications from 'react-native-communications';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../../core/components/WebViewAutoHeight';
 import Imager from '../../../core/components/Imager';
+import HeaderSubtitle from '../../../core/components/HeaderSubtitle';
 
 // helpers
 import { get } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import { verticalScale } from '../../../utils/scale';
-import styleHeader from '../../../core/components/Header/style';
+import stylesHeader from '../../../core/components/Header/style';
+import stylesList from '../../../core/components/Lists/style';
 import processHtml from '../../../utils/process-html';
 
 const isTablet = DeviceInfo.isTablet();
@@ -41,36 +33,6 @@ const IMAGE_HEIGHT = isTablet ? 220 : 160;
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
-  },
-  titleContainer: {
-    backgroundColor: styleConst.color.header,
-    paddingBottom: verticalScale(5),
-
-    ...Platform.select({
-      ios: {
-        marginBottom: 0.3,
-        borderBottomWidth: styleConst.ui.borderWidth,
-        borderBottomColor: styleConst.color.border,
-      },
-      android: {
-        marginTop: 15,
-        marginBottom: 10,
-        borderBottomWidth: 0,
-        backgroundColor: 'transparent',
-      },
-    }),
-  },
-  title: {
-    fontSize: 18,
-    color: styleConst.color.greyText4,
-    fontFamily: styleConst.font.light,
-    letterSpacing: styleConst.ui.letterSpacing,
-    textAlign: 'center',
-  },
-  rightText: {
-    color: styleConst.color.greyText,
-    fontFamily: styleConst.font.light,
-    letterSpacing: styleConst.ui.letterSpacing,
   },
   descriptionContainer: {
     flex: 1,
@@ -94,9 +56,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  list: {
-    backgroundColor: '#fff',
-  },
 });
 
 const mapStateToProps = ({ dealer }) => {
@@ -108,8 +67,8 @@ const mapStateToProps = ({ dealer }) => {
 class AboutScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Об автоцентре',
-    headerStyle: [styleHeader.common, { borderBottomWidth: 0 }],
-    headerTitleStyle: styleHeader.title,
+    headerStyle: [stylesHeader.common, { borderBottomWidth: 0 }],
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
   })
@@ -169,80 +128,64 @@ class AboutScreen extends Component {
   renderPhones = (phones) => {
     if (!phones || !phones.length) return null;
 
-    return (
-      <View>
-        {
-          phones.map(phone => (
-            <ListItem
-              key={phone}
-              icon
-              style={styles.listItem}
-            >
-              <Body>
-                <Text style={styles.leftText}>Телефон</Text>
-              </Body>
-              <Right>
-                <TouchableOpacity onPress={() => Communications.phonecall(phone, true)}>
-                  <Text style={styles.rightText}>{phone}</Text>
-                </TouchableOpacity>
-              </Right>
-            </ListItem>
-          ))
-        }
-      </View>
-    );
+    return phones.map(phone => {
+      const onPress = () => Communications.phonecall(phone, true);
+      return this.renderItem('Телефон', phone, false, onPress);
+    });
   }
 
   renderEmails = (emails, name) => {
     if (!emails || !emails.length) return null;
 
-    return emails.map(emailAddress => (
-      <ListItem
-        key={emailAddress}
-        icon
-        style={styles.listItem}
-        onPress={() => {
-          Communications.email(
-            [emailAddress],
-            null,
-            null,
-            `Из приложения ${Platform.OS === 'android' ? 'Android' : 'iOS'} Атлант-М, мой автоцентр ${name}`,
-            null,
-          );
-        }}
-      >
-        <Body>
-          <Text style={styles.leftText}>E-mail</Text>
-        </Body>
-        <Right>
-          <Text style={styles.rightText}>{emailAddress}</Text>
-        </Right>
-      </ListItem>
-    ));
+    return emails.map(emailAddress => {
+      const onPress = () => {
+        Communications.email(
+          [emailAddress],
+          null,
+          null,
+          `Из приложения ${Platform.OS === 'android' ? 'Android' : 'iOS'} Атлант-М, мой автоцентр ${name}`,
+          null,
+        );
+      };
+
+      return this.renderItem('E-mail', emailAddress, false, onPress);
+    });
   }
 
   renderSites = (sites) => {
     if (!sites || !sites.length) return null;
 
     return sites.map((site, idx) => {
-      return (
-        <ListItem
-          key={site}
-          last={sites.length - 1 === idx}
-          icon
-          style={styles.listItem}
-        >
+      const onPress = () => Communications.web(site);
+      const isLast = sites.length - 1 === idx;
+
+      return this.renderItem('Веб-сайт', site, isLast, onPress);
+    });
+  }
+
+  renderItem = (label, value, isLast, onPressHandler) => {
+    return (
+      <View key={value} style={stylesList.listItemContainer}>
+        <ListItem icon style={stylesList.listItem} last={isLast}>
           <Body>
-            <Text style={styles.leftText}>Веб-сайт</Text>
+            <Text>{label}</Text>
           </Body>
           <Right>
-          <TouchableOpacity onPress={() => Communications.web(site)}>
-            <Text style={styles.rightText}>{site}</Text>
-          </TouchableOpacity>
+            {
+              onPressHandler ?
+                (
+                  <TouchableOpacity onPress={onPressHandler}>
+                    <Text style={stylesList.listItemValue}>{value}</Text>
+                  </TouchableOpacity>
+                ) :
+                (
+                  <Text style={stylesList.listItemValue}>{value}</Text>
+                )
+            }
           </Right>
         </ListItem>
-      );
-    });
+      </View>
+    );
   }
 
   render() {
@@ -264,9 +207,7 @@ class AboutScreen extends Component {
       <StyleProvider style={getTheme()}>
         <Container>
           <Content style={styles.content}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>{dealerSelected.name}</Text>
-            </View>
+            <HeaderSubtitle content={dealerSelected.name} />
             <View ref="imageContainer">
               <Imager
                 onLayout={this.onLayoutImage}
@@ -297,43 +238,11 @@ class AboutScreen extends Component {
             </View>
 
             <List style={[styles.list, styles.listHolding]}>
-              <View style={styles.listItemContainer}>
-              {
-                  dealerSelected.city ?
-                    (
-                      <ListItem
-                        icon
-                        style={styles.listItem}
-                      >
-                        <Body>
-                          <Text>Город</Text>
-                        </Body>
-                        <Right>
-                          <Text style={styles.rightText}>{dealerSelected.city.name}</Text>
-                        </Right>
-                      </ListItem>
-                    ) : null
-                }
-                {
-                  dealerSelected.address ?
-                    (
-                      <ListItem
-                        icon
-                        style={styles.listItem}
-                      >
-                        <Body>
-                          <Text>Адрес</Text>
-                        </Body>
-                        <Right>
-                          <Text style={styles.rightText}>{dealerSelected.address}</Text>
-                        </Right>
-                      </ListItem>
-                    ) : null
-                }
-                {this.renderPhones(phones)}
-                {this.renderEmails(dealerSelected.email, dealerSelected.name)}
-                {this.renderSites(dealerSelected.site)}
-              </View>
+              {dealerSelected.city ? this.renderItem('Город', dealerSelected.city.name) : null}
+              {dealerSelected.address ? this.renderItem('Адрес', dealerSelected.address) : null}
+              {this.renderPhones(phones)}
+              {this.renderEmails(dealerSelected.email, dealerSelected.name)}
+              {this.renderSites(dealerSelected.site)}
             </List>
 
             {

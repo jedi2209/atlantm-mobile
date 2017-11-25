@@ -26,13 +26,13 @@ import DealerItemList from '../../core/components/DealerItemList';
 import FooterButton from '../../core/components/FooterButton';
 
 // styles
-import styleListProfile from '../../core/components/Lists/style';
+import stylesList from '../../core/components/Lists/style';
 
 // helpers
 import { get } from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import styleHeader from '../../core/components/Header/style';
+import stylesHeader from '../../core/components/Header/style';
 import { TVA__SUCCESS, TVA__FAIL } from '../actionTypes';
 
 const styles = StyleSheet.create({
@@ -62,8 +62,8 @@ const mapDispatchToProps = dispatch => {
 class TvaScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Табло выдачи авто',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <View />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
@@ -127,11 +127,11 @@ class TvaScreen extends Component {
     const { carNumber } = this.props;
 
     return (
-      <View style={styleListProfile.listItemContainer}>
-        <ListItem style={styleListProfile.listItem} last>
+      <View style={stylesList.listItemContainer}>
+        <ListItem style={[stylesList.listItem, stylesList.listItemReset]} last>
           <Body>
-            <Item style={styleListProfile.inputItem} fixedLabel>
-              <Label style={styleListProfile.label}>Гос. номер</Label>
+            <Item style={stylesList.inputItem} fixedLabel>
+              <Label style={stylesList.label}>Гос. номер</Label>
               <Input
                 autoCapitalize="none"
                 autoCorrect={false}

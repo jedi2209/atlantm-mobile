@@ -21,7 +21,7 @@ import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu'
 
 // helpres
 import styleConst from '../../core/style-const';
-import styleHeader from '../../core/components/Header/style';
+import stylesHeader from '../../core/components/Header/style';
 import { RUSSIA, BELARUSSIA, UKRAINE } from '../../core/const';
 
 const { width } = Dimensions.get('window');
@@ -97,8 +97,8 @@ const mapDispatchToProps = dispatch => {
 class CatalogScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Каталог авто',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <View />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })

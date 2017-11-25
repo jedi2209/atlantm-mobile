@@ -28,6 +28,7 @@ export default {
     verticalGap: 22,
     letterSpacing: -0.3,
     footerHeight: 50,
+    listHeight: 44,
   },
 };
 

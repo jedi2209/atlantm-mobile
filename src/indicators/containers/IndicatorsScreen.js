@@ -17,7 +17,7 @@ import IndicatorsRow from '../components/IndicatorsRow';
 // helpers
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import styleHeader from '../../core/components/Header/style';
+import stylesHeader from '../../core/components/Header/style';
 
 const styles = StyleSheet.create({
   content: {
@@ -45,8 +45,8 @@ const mapDispatchToProps = dispatch => {
 class IndicatorsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Индикаторы',
-    headerStyle: styleHeader.common,
-    headerTitleStyle: styleHeader.title,
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: <View />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
