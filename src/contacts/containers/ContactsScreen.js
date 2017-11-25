@@ -33,15 +33,10 @@ import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import stylesList from '../../core/components/Lists/style';
 
-const iconSize = 28;
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
-  },
-  icon: {
-    width: iconSize,
-    height: iconSize,
-  },
+  }
 });
 
 const mapStateToProps = ({ dealer, profile, contacts, nav }) => {
@@ -171,7 +166,7 @@ class ContactsScreen extends Component {
                 >
                   <Left>
                     <Image
-                      style={styles.icon}
+                      style={stylesList.iconLeft}
                       source={require('../assets/about_dealer.png')}
                     />
                   </Left>
@@ -198,7 +193,7 @@ class ContactsScreen extends Component {
                       >
                         <Left>
                           <Image
-                            style={styles.icon}
+                            style={stylesList.iconLeft}
                             source={require('../assets/call.png')}
                           />
                         </Left>
@@ -227,7 +222,7 @@ class ContactsScreen extends Component {
                       >
                         <Left>
                           <Image
-                            style={styles.icon}
+                            style={stylesList.iconLeft}
                             source={require('../assets/feedback.png')}
                           />
                         </Left>
@@ -250,7 +245,7 @@ class ContactsScreen extends Component {
                       >
                         <Left>
                           <Image
-                            style={styles.icon}
+                            style={stylesList.iconLeft}
                             source={require('../assets/map.png')}
                           />
                         </Left>
@@ -275,7 +270,7 @@ class ContactsScreen extends Component {
                 >
                   <Left>
                     <Image
-                      style={styles.icon}
+                      style={stylesList.iconLeft}
                       source={require('../assets/call_me.png')}
                     />
                   </Left>
@@ -294,7 +289,7 @@ class ContactsScreen extends Component {
                 >
                   <Left>
                     <Image
-                      style={styles.icon}
+                      style={stylesList.iconLeft}
                       source={require('../assets/reference.png')}
                     />
                   </Left>
@@ -323,7 +318,7 @@ class ContactsScreen extends Component {
                 >
                   <Left>
                     <Image
-                      style={styles.icon}
+                      style={stylesList.iconLeft}
                       source={require('../assets/about_holding.png')}
                     />
                   </Left>

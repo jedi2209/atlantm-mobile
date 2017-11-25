@@ -41,6 +41,9 @@ import NewCarCityScreen from '../catalog/newcar/containers/NewCarCityScreen';
 import TvaScreen from '../tva/containers/TvaScreen';
 import TvaResultsScreen from '../tva/containers/TvaResultsScreen';
 
+// eko
+import EkoScreen from '../eko/containers/EkoScreen';
+
 const CatalogScreenNavigator = StackNavigator({
   CatalogScreen: { screen: CatalogScreen },
   AboutDealerScreen: { screen: AboutDealerScreen },
@@ -160,6 +163,14 @@ const getRouter = initialRouteName => {
         screen: StackNavigator({
           TvaScreen: { screen: TvaScreen },
           TvaResultsScreen: { screen: TvaResultsScreen },
+        }),
+        navigationOptions: {
+          header: null,
+        },
+      },
+      Eko2Screen: {
+        screen: StackNavigator({
+          EkoScreen: { screen: EkoScreen },
         }),
         navigationOptions: {
           header: null,

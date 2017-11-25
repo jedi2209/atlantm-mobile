@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Image, Alert, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
+import { Text, View, Image, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 
 // redux
@@ -10,6 +10,7 @@ import styleConst from '../../core/style-const';
 import { NavigationActions } from 'react-navigation';
 import {
   MENU_TVA,
+  MENU_EKO,
   MENU_INFO,
   MENU_CATALOG,
   MENU_SERVICE,
@@ -117,6 +118,8 @@ class Sidebar extends Component {
         return MENU_TVA;
       case 'IndicatorsScreen':
         return MENU_INDICATORS;
+      case 'Eko2Screen':
+        return MENU_EKO;
       default:
         return MENU_CONTACTS;
     }
@@ -138,6 +141,8 @@ class Sidebar extends Component {
 
   onPressTva = () => this.onPressItem('Tva2Screen')
 
+  onPressEko = () => this.onPressItem('Eko2Screen')
+
   onPressIndicators = () => this.onPressItem('IndicatorsScreen')
 
   onPressItem = (routeName) => {
@@ -153,39 +158,17 @@ class Sidebar extends Component {
     window.atlantmNavigation.dispatch(resetAction);
   }
 
-  onPressNotReadyScreen = () => {
-    this.isMenuAvailable() ?
-      Alert.alert('Раздел появится в ближайших обновлениях') :
-      this.showIntroWarning();
-  }
-
   renderMenuItem = (type, text, icon, onPressHandler, isActive) => {
-    if (type === 'ready') {
-      return (
-        <TouchableOpacity onPress={onPressHandler} style={[styles.item, isActive ? styles.itemActive : {}]}>
-          <Image
-            style={styles.icon}
-            source={icons[icon]}
-          />
-          <View style={styles.textContainer}>
-            <Text style={[styles.text, isActive ? styles.textActive : {}]}>{text}</Text>
-          </View>
-        </TouchableOpacity>
-      );
-    }
-
     return (
-      <TouchableHighlight underlayColor={styleConst.color.select} onPress={this.onPressNotReadyScreen}>
-        <View style={styles.item}>
-          <Image
-            style={styles.icon}
-            source={icons[icon]}
-          />
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>{text}</Text>
-          </View>
+      <TouchableOpacity onPress={onPressHandler} style={[styles.item, isActive ? styles.itemActive : {}]}>
+        <Image
+          style={styles.icon}
+          source={icons[icon]}
+        />
+        <View style={styles.textContainer}>
+          <Text style={[styles.text, isActive ? styles.textActive : {}]}>{text}</Text>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 
@@ -199,6 +182,7 @@ class Sidebar extends Component {
     const isContact = activeScreen === MENU_CONTACTS;
     const isInfo = activeScreen === MENU_INFO;
     const isProfile = activeScreen === MENU_PROFILE;
+    const isEko = activeScreen === MENU_EKO;
     const isService = activeScreen === MENU_SERVICE;
     const isCatalog = activeScreen === MENU_CATALOG;
     const isTva = activeScreen === MENU_TVA;
@@ -222,7 +206,7 @@ class Sidebar extends Component {
         {this.renderMenuItem('ready', 'Табло выдачи авто', 'car_delivery', this.onPressTva, isTva)}
         {this.renderMenuItem('ready', 'Каталог автомобилей', 'catalog_auto', this.onPressCatalog, isCatalog)}
         {this.renderMenuItem('ready', 'Индикаторы', 'indicators', this.onPressIndicators, isIndicators)}
-        {this.renderMenuItem('not-ready', 'Отзывы и предложения', 'reviews')}
+        {this.renderMenuItem('ready', 'Отзывы и предложения', 'reviews', this.onPressEko, isEko)}
         {this.renderMenuItem('ready', 'Личный кабинет', 'profile', this.onPressProfile, isProfile)}
       </View>
     );
