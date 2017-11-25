@@ -4,6 +4,8 @@ import { StyleSheet } from 'react-native';
 import styleConst from '../../style-const';
 import { verticalScale } from '../../../utils/scale';
 
+const iconLeftSize = 28;
+
 export default StyleSheet.create({
   list: {
     marginTop: verticalScale(28),
@@ -54,5 +56,9 @@ export default StyleSheet.create({
     color: styleConst.color.systemGray,
     // marginTop: 3,
     marginLeft: styleConst.ui.horizontalGap,
+  },
+  iconLeft: {
+    width: iconLeftSize,
+    height: iconLeftSize,
   },
 });

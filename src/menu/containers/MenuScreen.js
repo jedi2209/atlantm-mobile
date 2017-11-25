@@ -1,18 +1,8 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import {
-  Container,
-  Text,
-  Grid,
-  Col,
-  Row,
-} from 'native-base';
+import { StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Container, Text, Grid, Col, Row } from 'native-base';
 
+// helpers
 import styleConst from '../../core/style-const';
 import { scale, verticalScale } from '../../utils/scale';
 import stylesHeader from '../../core/components/Header/style';
@@ -55,9 +45,7 @@ export default class MenuScreen extends Component {
     headerLeft: null,
   })
 
-  shouldComponentUpdate() {
-    return false;
-  }
+  shouldComponentUpdate() { return false; }
 
   onPressContacts = () => this.props.navigation.navigate('ContactsScreen')
   onPressInfoList = () => this.props.navigation.navigate('InfoListScreen')
@@ -65,8 +53,8 @@ export default class MenuScreen extends Component {
   onPressService = () => this.props.navigation.navigate('ServiceScreen')
   onPressCatalog = () => this.props.navigation.navigate('Catalog2Screen')
   onPressTva = () => this.props.navigation.navigate('Tva2Screen')
+  onPressEko = () => this.props.navigation.navigate('Eko2Screen')
   onPressIndicators = () => this.props.navigation.navigate('IndicatorsScreen')
-  onPressNotReadyScreen = () => Alert.alert('Раздел появится в ближайших обновлениях');
 
   render() {
     console.log('== Menu ==');
@@ -156,7 +144,7 @@ export default class MenuScreen extends Component {
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={this.onPressNotReadyScreen}
+                onPress={this.onPressEko}
               >
                 <Image
                   style={styles.icon}
