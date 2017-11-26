@@ -1,48 +1,36 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { View, FlatList, Platform, StyleSheet, ActivityIndicator } from 'react-native';
-
-// redux
-import { EVENT_LOAD_MORE, EVENT_REFRESH, EVENT_DEFAULT } from '../../core/actionTypes';
+import { FlatList, Platform } from 'react-native';
 
 // components
-import EmptyMessage from '../../core/components/EmptyMessage';
-import CarListItem from './CarListItem';
+import EmptyMessage from '../../../core/components/EmptyMessage';
+import SpinnerView from '../../../core/components/SpinnerView';
+import FlatListFooter from '../../../core/components/FlatListFooter';
+import ReviewsListItem from './ReviewsListItem';
 
 // helpers
 import { debounce } from 'lodash';
-import styleConst from '../../core/style-const';
-import { verticalScale } from '../../utils/scale';
-import { TEXT_EMPTY_CAR_LIST } from '../constants';
+import PropTypes from 'prop-types';
+import styleConst from '../../../core/style-const';
+import { EVENT_DEFAULT, EVENT_LOAD_MORE, EVENT_REFRESH } from '../../../core/actionTypes';
 
-const styles = StyleSheet.create({
-  spinner: {
-    alignSelf: 'center',
-    marginTop: verticalScale(60),
-  },
-  footer: {
-    paddingTop: 10,
-    paddingBottom: 20,
-  },
-});
+const TEXT_EMPTY = 'Нет отзывов для отображения';
 
-export default class CarList extends Component {
+export default class ReviewsList extends Component {
   static propTypes = {
     pages: PropTypes.object,
     items: PropTypes.array,
-    itemScreen: PropTypes.string,
+    dataHandler: PropTypes.func,
     isFetchItems: PropTypes.bool,
     navigation: PropTypes.object,
-    prices: PropTypes.object,
+    onPressItemHandler: PropTypes.func,
   }
 
   static defaultProps = {
     pages: {},
-    prices: {},
     items: null,
     navigation: {},
-    itemScreen: null,
     isFetchItems: false,
+    onPressItemHandler: null,
   }
 
   constructor(props) {
@@ -66,27 +54,27 @@ export default class CarList extends Component {
     const { isFetchItems } = this.props;
 
     return isFetchItems ?
-      <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} /> :
-      <EmptyMessage text={TEXT_EMPTY_CAR_LIST} />;
+      <SpinnerView /> :
+      <EmptyMessage text={TEXT_EMPTY} />;
   }
 
   renderItem = ({ item }) => {
     if (item.type === 'empty') {
-      return <EmptyMessage text={TEXT_EMPTY_CAR_LIST} />;
+      return <EmptyMessage text={TEXT_EMPTY} />;
     }
 
-    const { itemScreen, navigation, prices } = this.props;
-    return <CarListItem car={item} prices={prices} navigate={navigation.navigate} itemScreen={itemScreen} />;
+    const { navigation, onPressItemHandler } = this.props;
+    return <ReviewsListItem
+      review={item}
+      navigate={navigation.navigate}
+      onPressHandler={onPressItemHandler}
+    />;
   }
 
   renderFooter = () => {
     if (!this.state.loadingNextPage) return null;
 
-    return (
-      <View style={styles.footer}>
-        <ActivityIndicator animating color={styleConst.color.blue} />
-      </View>
-    );
+    return <FlatListFooter />;
   }
 
   onRefresh = () => {
@@ -108,11 +96,7 @@ export default class CarList extends Component {
   getOnEndReached = () => debounce(this.handleLoadMore, 1000)
 
   handleLoadMore = () => {
-    const {
-      items,
-      pages,
-      dataHandler,
-    } = this.props;
+    const { items, pages, dataHandler } = this.props;
 
     if (!pages.next || items.length === 0 || this.state.loadingNextPage) return false;
 
@@ -134,8 +118,6 @@ export default class CarList extends Component {
   render() {
     const { items } = this.props;
 
-    console.log('== CarList ==');
-
     return (
       <FlatList
         onEndReachedThreshold={Platform.OS === 'android' ? 1 : 0.1}
@@ -146,7 +128,7 @@ export default class CarList extends Component {
         ListEmptyComponent={this.renderEmptyComponent}
         ListFooterComponent={this.renderFooter}
         renderItem={this.renderItem}
-        keyExtractor={item => item.id.api}
+        keyExtractor={item => item.hash}
         onEndReached={this.getOnEndReached()}
       />
     );

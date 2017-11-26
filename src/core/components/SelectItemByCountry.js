@@ -69,6 +69,10 @@ export default class SelectItemByCountry extends Component {
     selectItem(item)
       .then((action) => {
         if (action.type === DEALER__SUCCESS) {
+          if (returnScreen === 'ReviewsScreen') {
+            return navigation.goBack();
+          }
+
           const resetAction = NavigationActions.reset({
             index: 0,
             key: null,

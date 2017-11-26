@@ -5,18 +5,12 @@ moment.locale('ru');
 
 // moment.js playground https://codepen.io/widmoser/pen/NNOQEx
 
-export const dayMonth = (ts) => {
-  return ts ? moment(ts).format('D MMMM') : null;
-};
+export const dayMonth = (ts) => ts ? moment(ts).format('D MMMM') : null;
 
-export const yearMonthDay = (date) => {
-  return date ? moment(date).format('YYYY-MM-DD') : null;
-};
+export const yearMonthDay = (date) => date ? moment(date).format('YYYY-MM-DD') : null;
 
-export const dayMonthYear = (date) => {
-  return date ? moment(date).format('D MMMM YYYY') : null;
-};
+export const dayMonthYear = (date) => date ? moment(date).format('D MMMM YYYY') : null;
 
-export const dayMonthYearTime = (date) => {
-  return date ? moment(date).format('D.MM.YYYY, HH:mm') : null;
-};
+export const dayMonthYearTime = (date) => date ? moment(date).format('D.MM.YYYY, HH:mm') : null;
+
+export const firstDayOfMonth = () => moment().startOf('month').format('YYYY-MM-DD');

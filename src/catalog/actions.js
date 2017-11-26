@@ -48,9 +48,9 @@ import {
   CATALOG_ORDER__FAIL,
 
   CATALOG_ORDER_COMMENT__FILL,
-
-  EVENT_LOAD_MORE,
 } from './actionTypes';
+
+import { EVENT_LOAD_MORE } from '../core/actionTypes';
 
 export const actionFetchUsedCar = ({ type, city, nextPage, priceRange }) => {
   return dispatch => {

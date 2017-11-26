@@ -1,1 +1,5 @@
 export const APP_VERSION__SET = 'APP_VERSION__SET';
+
+export const EVENT_DEFAULT = 'EVENT_DEFAULT';
+export const EVENT_REFRESH = 'EVENT_REFRESH';
+export const EVENT_LOAD_MORE = 'EVENT_LOAD_MORE';

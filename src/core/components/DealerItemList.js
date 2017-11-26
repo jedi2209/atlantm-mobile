@@ -56,7 +56,12 @@ export default class DealerItemList extends Component {
   }
 
   onPressDealer = () => {
-    return this.props.navigation.navigate('ChooseDealerScreen', { returnScreen: this.props.returnScreen });
+    const {
+      navigation,
+      returnScreen,
+    } = this.props;
+
+    return navigation.navigate('ChooseDealerScreen', { returnScreen });
   }
 
   render() {

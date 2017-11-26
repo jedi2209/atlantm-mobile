@@ -205,16 +205,6 @@ class NewCarFilterScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const {
-      city,
-      items,
-      filterData,
-      filterBrands,
-      filterPrice,
-      dealerSelected,
-      isFetchingFilterData,
-      isNewCarFilterPriceShow,
-    } = this.props;
     const nav = nextProps.nav.newState;
     let isActiveScreen = false;
 
@@ -225,15 +215,7 @@ class NewCarFilterScreen extends Component {
       }
     }
 
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-      (isFetchingFilterData !== nextProps.isFetchingFilterData && isActiveScreen) ||
-      (get(filterData, 'pages.next') !== get(nextProps, 'filterData.pages.next') && isActiveScreen) ||
-      (get(items, 'pages.next') !== get(nextProps, 'items.pages.next') && isActiveScreen) ||
-      (filterBrands.length !== nextProps.filterBrands && isActiveScreen) ||
-      (isNewCarFilterPriceShow !== nextProps.isNewCarFilterPriceShow && isActiveScreen) ||
-      (city.id !== nextProps.city.id && isActiveScreen) ||
-      (get(filterPrice, 'minPrice') !== get(nextProps, 'filterPrice.minPrice') && isActiveScreen) ||
-      (get(filterPrice, 'maxPrice') !== get(nextProps, 'filterPrice.maxPrice') && isActiveScreen);
+    return isActiveScreen;
   }
 
   getCityData = () => {

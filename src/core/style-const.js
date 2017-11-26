@@ -16,6 +16,8 @@ export default {
     border: '#c7c7c7',
     systemBlue: '#007aff',
     systemGray: '#c7c7c7',
+    green: '#4cd864',
+    red: '#ff3c30',
   },
   font: {
     regular: 'Helvetica Neue',

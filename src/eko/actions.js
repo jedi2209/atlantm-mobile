@@ -1,64 +1,93 @@
 import API from '../utils/api';
 
 import {
+  REVIEWS__REQUEST,
+  REVIEWS__SUCCESS,
+  REVIEWS__FAIL,
+  REVIEWS__RESET,
 
+  REVIEWS_DATE_TO__FILL,
+  REVIEWS_DATE_FROM__FILL,
+
+  REVIEW__VISIT,
 } from './actionTypes';
 
-export const actionTvaMessageFill = (message) => {
-  if (message && message.length <= 3) {
-    message = message.trim();
-  }
+import { EVENT_LOAD_MORE } from '../core/actionTypes';
 
+export const actionReviewVisit = (reviewId) => {
   return dispatch => {
     dispatch({
-      type: TVA_MESSAGE__FILL,
-      payload: message,
+      type: REVIEW__VISIT,
+      payload: reviewId,
     });
   };
 };
 
-export const actionSetActiveTvaOrderId = (orderId) => {
+export const actionReviewsDateFromFill = (dateFrom) => {
   return dispatch => {
     dispatch({
-      type: TVA_ORDER_ID__SET,
-      payload: orderId,
+      type: REVIEWS_DATE_FROM__FILL,
+      payload: dateFrom,
     });
   };
 };
 
-export const actionFetchTva = (props) => {
+export const actionReviewsDateToFill = (dateTo) => {
   return dispatch => {
     dispatch({
-      type: TVA__REQUEST,
-      payload: { ...props },
+      type: REVIEWS_DATE_TO__FILL,
+      payload: dateTo,
+    });
+  };
+};
+
+export const actionReviewsReset = () => {
+  return dispatch => {
+    dispatch({ type: REVIEWS__RESET });
+  };
+};
+
+export const actionFetchReviews = ({ type, dealerId, nextPage, dateFrom, dateTo }) => {
+  return dispatch => {
+    dispatch({
+      type: REVIEWS__REQUEST,
+      payload: { type, dealerId, nextPage, dateFrom, dateTo },
     });
 
-    return API.fetchTva(props)
+    const nextPageUrl = type === EVENT_LOAD_MORE ? nextPage : null;
+
+    return API.fetchReviews({ dealerId, dateFrom, dateTo, nextPageUrl })
       .then(res => {
-        const { error, status, data } = res;
-        // const { error, status, data } = dumpTvaAnswer;
-
-        if (status !== 'success') {
+        if (res.error) {
           return dispatch({
-            type: TVA__FAIL,
+            type: REVIEWS__FAIL,
             payload: {
-              code: error.code,
-              message: error.message,
+              code: res.error.code,
+              error: res.error.message,
             },
           });
         }
 
+        const result = { ...res };
+        result.data = result.data[dealerId];
+
+        if (result.data.length === 0) {
+          result.data.push({ type: 'empty', id: 1 });
+        }
+
         return dispatch({
-          type: TVA__SUCCESS,
-          payload: data,
+          type: REVIEWS__SUCCESS,
+          payload: {
+            type,
+            ...result,
+          },
         });
       })
       .catch(error => {
         return dispatch({
-          type: TVA__FAIL,
+          type: REVIEWS__FAIL,
           payload: {
             error: error.message,
-            code: error.code,
           },
         });
       });

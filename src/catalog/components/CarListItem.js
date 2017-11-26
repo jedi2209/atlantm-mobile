@@ -1,17 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableHighlight,
-} from 'react-native';
+import { Text, View, StyleSheet, TouchableHighlight } from 'react-native';
 
 // components
 import Imager from '../../core/components/Imager';
 
 // helpers
-import { get, isString } from 'lodash';
+import { get } from 'lodash';
 import priceSet from '../../utils/price-set';
 import styleConst from '../../core/style-const';
 
