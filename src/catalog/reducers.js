@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { get } from 'lodash';
 import { REHYDRATE } from 'redux-persist/constants';
 import {
   USED_CAR_LIST__REQUEST,
@@ -41,8 +40,6 @@ import {
   NEW_CAR_DETAILS__SUCCESS,
   NEW_CAR_DETAILS__FAIL,
 
-  EVENT_LOAD_MORE,
-
   CATALOG_DEALER__REQUEST,
   CATALOG_DEALER__SUCCESS,
   CATALOG_DEALER__FAIL,
@@ -54,6 +51,7 @@ import {
   CATALOG_ORDER_COMMENT__FILL,
 } from './actionTypes';
 
+import { EVENT_LOAD_MORE } from '../core/actionTypes';
 import { DEALER__SUCCESS } from '../dealer/actionTypes';
 
 const usedCarItems = (state = [], action) => {

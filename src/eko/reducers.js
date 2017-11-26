@@ -1,80 +1,140 @@
 import { combineReducers } from 'redux';
 import { REHYDRATE } from 'redux-persist/constants';
 import {
-  TVA__REQUEST,
-  TVA__SUCCESS,
-  TVA__FAIL,
+  REVIEWS__REQUEST,
+  REVIEWS__SUCCESS,
+  REVIEWS__FAIL,
+  REVIEWS__RESET,
 
-  TVA_SEND_MESSAGE__REQUEST,
-  TVA_SEND_MESSAGE__SUCCESS,
-  TVA_SEND_MESSAGE__FAIL,
-  TVA_MESSAGE__FILL,
+  REVIEWS_DATE_TO__FILL,
+  REVIEWS_DATE_FROM__FILL,
 
-  TVA_ORDER_ID__SET,
+  REVIEW__VISIT,
 } from './actionTypes';
 
-function message(state = '', action) {
-  switch (action.type) {
-    case TVA_MESSAGE__FILL:
-      return action.payload;
-    default:
-      return state;
-  }
-}
+import { EVENT_LOAD_MORE } from '../core/actionTypes';
+import { DEALER__SUCCESS } from '../dealer/actionTypes';
 
-function activeOrderId(state = '', action) {
-  switch (action.type) {
-    case TVA_ORDER_ID__SET:
-      return action.payload;
-    default:
-      return state;
-  }
-}
-
-function isRequest(state = false, action) {
+function isFetchReviews(state = false, action) {
   switch (action.type) {
     case REHYDRATE:
-    case TVA__SUCCESS:
-    case TVA__FAIL:
+    case REVIEWS__SUCCESS:
+    case REVIEWS__FAIL:
+    case REVIEWS__RESET:
       return false;
-    case TVA__REQUEST:
+    case REVIEWS__REQUEST:
       return true;
     default:
       return state;
   }
 }
 
-function results(state = {}, action) {
+function reviewsItems(state = [], action) {
   switch (action.type) {
-    case TVA__SUCCESS:
-      return action.payload;
-    case TVA__FAIL:
-    case TVA__REQUEST:
+    case REHYDRATE:
+    case DEALER__SUCCESS:
+    case REVIEWS__RESET:
+      return [];
+    case REVIEWS__SUCCESS:
+      console.log('action.payload.type', action.payload.type);
+      if (action.payload.type === EVENT_LOAD_MORE) {
+        return [
+          ...state,
+          ...action.payload.data,
+        ];
+      }
+      return action.payload.data;
+    default:
+      return state;
+  }
+}
+
+function reviewsPages(state = {}, action) {
+  switch (action.type) {
+    case REHYDRATE:
+    case DEALER__SUCCESS:
+    case REVIEWS__RESET:
       return {};
+    case REVIEWS__SUCCESS:
+      return action.payload.pages;
     default:
       return state;
   }
 }
 
-function isMessageSending(state = false, action) {
+function reviewsTotal(state = {}, action) {
   switch (action.type) {
     case REHYDRATE:
-    case TVA_SEND_MESSAGE__SUCCESS:
-    case TVA_SEND_MESSAGE__FAIL:
-      return false;
-    case TVA_SEND_MESSAGE__REQUEST:
+    case DEALER__SUCCESS:
+    case REVIEWS__RESET:
+      return {};
+    case REVIEWS__SUCCESS:
+      return action.payload.total;
+    default:
+      return state;
+  }
+}
+
+function reviewDateFrom(state = null, action) {
+  switch (action.type) {
+    case REVIEWS__RESET:
+    case DEALER__SUCCESS:
+      return null;
+    case REVIEWS_DATE_FROM__FILL:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+function reviewDateTo(state = null, action) {
+  switch (action.type) {
+    case REVIEWS__RESET:
+    case DEALER__SUCCESS:
+      return null;
+    case REVIEWS_DATE_TO__FILL:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+function needFetchReviews(state = false, action) {
+  switch (action.type) {
+    case DEALER__SUCCESS:
       return true;
+    case REVIEWS__SUCCESS:
+      return false;
+    default:
+      return state;
+  }
+}
+function reviewsVisited(state = [], action) {
+  switch (action.type) {
+    case REVIEWS__RESET:
+    case DEALER__SUCCESS:
+      return [];
+    case REVIEW__VISIT:
+      return [
+        ...state,
+        action.payload,
+      ];
     default:
       return state;
   }
 }
 
 export default combineReducers({
-  results,
-  message,
-  activeOrderId,
-  meta: combineReducers({
-    isRequest,
-    isMessageSending,
+  reviews: combineReducers({
+    items: reviewsItems,
+    pages: reviewsPages,
+    total: reviewsTotal,
+    visited: reviewsVisited,
+    dateFrom: reviewDateFrom,
+    dateTo: reviewDateTo,
+    meta: combineReducers({
+      isFetchReviews,
+      needFetchReviews,
+    }),
   }),
 });

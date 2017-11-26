@@ -44,6 +44,16 @@ export default {
     return this.request('/info/indicator/get/', baseRequestParams);
   },
 
+  fetchReviews({ dealerId, dateFrom, dateTo, nextPageUrl }) {
+    let url = `/eko/review/get/${dealerId}/?date_from=${dateFrom}`;
+
+    if (dateTo) {
+      url += `&date_to=${dateTo}`;
+    }
+
+    return this.request(nextPageUrl || url, baseRequestParams);
+  },
+
   fetchUsedCar({ city, nextPageUrl, priceRange }) {
     let url = `/stock/trade-in/cars/get/city/${city}/`;
 

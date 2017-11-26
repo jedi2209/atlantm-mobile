@@ -43,6 +43,7 @@ import TvaResultsScreen from '../tva/containers/TvaResultsScreen';
 
 // eko
 import EkoScreen from '../eko/containers/EkoScreen';
+import ReviewsScreen from '../eko/reviews/containers/ReviewsScreen';
 
 const CatalogScreenNavigator = StackNavigator({
   CatalogScreen: { screen: CatalogScreen },
@@ -171,6 +172,7 @@ const getRouter = initialRouteName => {
       Eko2Screen: {
         screen: StackNavigator({
           EkoScreen: { screen: EkoScreen },
+          ReviewsScreen: { screen: ReviewsScreen },
         }),
         navigationOptions: {
           header: null,

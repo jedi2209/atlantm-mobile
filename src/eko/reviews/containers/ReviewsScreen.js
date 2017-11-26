@@ -1,0 +1,158 @@
+import React, { Component } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Container, Content, StyleProvider } from 'native-base';
+
+// redux
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import {
+  actionReviewVisit,
+  actionFetchReviews,
+  actionReviewsDateFromFill,
+  actionReviewsDateToFill,
+} from '../../actions';
+
+// components
+import ReviewsList from '../components/ReviewsList';
+import DealerItemList from '../../../core/components/DealerItemList';
+import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
+import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+
+// helpers
+import { get } from 'lodash';
+import getTheme from '../../../../native-base-theme/components';
+import styleConst from '../../../core/style-const';
+import stylesHeader from '../../../core/components/Header/style';
+import { firstDayOfMonth } from '../../../utils/date';
+
+const styles = StyleSheet.create({
+  content: {
+    backgroundColor: styleConst.color.bg,
+  },
+});
+
+const mapStateToProps = ({ dealer, nav, eko }) => {
+  return {
+    nav,
+    dealerSelected: dealer.selected,
+    reviews: eko.reviews.items,
+    pages: eko.reviews.pages,
+    total: eko.reviews.total,
+    dateFrom: eko.reviews.dateFrom,
+    dateTo: eko.reviews.dateTo,
+    isFetchReviews: eko.reviews.meta.isFetchReviews,
+    needFetchReviews: eko.reviews.meta.needFetchReviews,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({
+    actionReviewVisit,
+    actionFetchReviews,
+    actionReviewsDateToFill,
+    actionReviewsDateFromFill,
+  }, dispatch);
+};
+
+class ReviewsScreen extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: 'Отзывы',
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
+    headerLeft: <HeaderIconBack navigation={navigation} />,
+    headerRight: <HeaderIconMenu navigation={navigation} />,
+  })
+
+  componentDidUpdate() {
+    const { needFetchReviews } = this.props;
+
+    if (needFetchReviews) {
+      this.fetchReviews();
+    }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    const nav = nextProps.nav.newState;
+    let isActiveScreen = false;
+
+    if (nav) {
+      const rootLevel = nav.routes[nav.index];
+      if (rootLevel) {
+        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'ReviewsScreen';
+      }
+    }
+
+    return isActiveScreen;
+  }
+
+  onPressItem = reviewId => this.props.actionReviewVisit(reviewId)
+
+  fetchReviews = (type) => {
+    let {
+      pages,
+      dateTo,
+      dateFrom,
+      navigation,
+      dealerSelected,
+      actionFetchReviews,
+      actionReviewsDateFromFill,
+    } = this.props;
+
+    if (!dateFrom) {
+      dateFrom = firstDayOfMonth();
+      actionReviewsDateFromFill(dateFrom);
+    }
+
+    console.log('type', type);
+
+    return actionFetchReviews({
+      type,
+      dateTo,
+      dateFrom,
+      nextPage: pages.next,
+      dealerId: dealerSelected.id,
+    });
+  }
+
+  render() {
+    const {
+      pages,
+      reviews,
+      navigation,
+      dealerSelected,
+      isFetchReviews,
+    } = this.props;
+
+    console.log('== ReviewsScreen ==');
+
+    return (
+      <StyleProvider style={getTheme()}>
+        <Container>
+          <Content style={styles.content}>
+
+            <DealerItemList
+              navigation={navigation}
+              city={dealerSelected.city}
+              name={dealerSelected.name}
+              brands={dealerSelected.brands}
+              returnScreen="ReviewsScreen"
+            />
+
+            <View style={styles.list}>
+              <ReviewsList
+                items={reviews}
+                pages={pages}
+                dataHandler={this.fetchReviews}
+                onPressItemHandler={this.onPressItem}
+                navigation={navigation}
+                isFetchItems={isFetchReviews}
+              />
+            </View>
+          </Content>
+        </Container>
+      </StyleProvider>
+    );
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReviewsScreen);

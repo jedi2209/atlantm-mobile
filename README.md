@@ -12,3 +12,4 @@ https://github.com/airbnb/react-native-maps/issues/1300
 
 ## TODO:
 - вынести в один компонент AboutScreen и AboutDealerScreen
+- вынести в один компонент Flatlist с pull-to-refresh и infinity scroll

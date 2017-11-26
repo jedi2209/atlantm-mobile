@@ -5,6 +5,7 @@ import { Container, Content, Text, StyleProvider, List, ListItem, Left, Body, Ri
 // redux
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { actionReviewsReset } from '../actions';
 
 // components
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
@@ -30,15 +31,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ nav }) => {
+const mapStateToProps = ({ nav, dealer }) => {
   return {
     nav,
+    dealerSelected: dealer.selected,
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators({
-
+    actionReviewsReset,
   }, dispatch);
 };
 
@@ -51,7 +53,20 @@ class EkoScreen extends Component {
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 
-  shouldComponentUpdate() { return false; }
+  componentDidMount() {
+    this.props.actionReviewsReset();
+  }
+
+  shouldComponentUpdate(nextProps) {
+    const { dealerSelected } = this.props;
+    const nav = nextProps.nav.newState;
+    const isActiveScreen = nav.routes[nav.index].routeName === 'EkoScreen';
+
+    // console.log('Catalog this.props.navigation', this.props.navigation);
+    // console.log('Catalog nextProps.navigation', nextProps.navigation);
+
+    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen);
+  }
 
   onPressReviews = () => this.props.navigation.navigate('ReviewsScreen')
   onPressContactMe = () => this.props.navigation.navigate('ContactMeScreen')
