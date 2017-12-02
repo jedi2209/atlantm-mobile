@@ -10,6 +10,10 @@ import {
   REVIEWS_DATE_FROM__FILL,
 
   REVIEW__VISIT,
+
+  REVIEW_DEALER_RATING__REQUEST,
+  REVIEW_DEALER_RATING__SUCCESS,
+  REVIEW_DEALER_RATING__FAIL,
 } from './actionTypes';
 
 import { EVENT_LOAD_MORE } from '../core/actionTypes';
@@ -29,6 +33,19 @@ function isFetchReviews(state = false, action) {
   }
 }
 
+function isFetchDealerRating(state = false, action) {
+  switch (action.type) {
+    case REHYDRATE:
+    case REVIEW_DEALER_RATING__SUCCESS:
+    case REVIEW_DEALER_RATING__FAIL:
+      return false;
+    case REVIEW_DEALER_RATING__REQUEST:
+      return true;
+    default:
+      return state;
+  }
+}
+
 function reviewsItems(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
@@ -36,7 +53,6 @@ function reviewsItems(state = [], action) {
     case REVIEWS__RESET:
       return [];
     case REVIEWS__SUCCESS:
-      console.log('action.payload.type', action.payload.type);
       if (action.payload.type === EVENT_LOAD_MORE) {
         return [
           ...state,
@@ -56,7 +72,7 @@ function reviewsPages(state = {}, action) {
     case REVIEWS__RESET:
       return {};
     case REVIEWS__SUCCESS:
-      return action.payload.pages;
+      return action.payload.pages || {}; // на случай если пришел пустой массив
     default:
       return state;
   }
@@ -69,7 +85,7 @@ function reviewsTotal(state = {}, action) {
     case REVIEWS__RESET:
       return {};
     case REVIEWS__SUCCESS:
-      return action.payload.total;
+      return action.payload.total || {}; // на случай если пришел пустой массив
     default:
       return state;
   }
@@ -124,6 +140,19 @@ function reviewsVisited(state = [], action) {
   }
 }
 
+function reviewDealerRating(state = null, action) {
+  switch (action.type) {
+    case REVIEWS__SUCCESS:
+    case REVIEWS__RESET:
+    case DEALER__SUCCESS:
+      return null;
+    case REVIEW_DEALER_RATING__SUCCESS:
+      return action.payload.rating;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   reviews: combineReducers({
     items: reviewsItems,
@@ -132,8 +161,10 @@ export default combineReducers({
     visited: reviewsVisited,
     dateFrom: reviewDateFrom,
     dateTo: reviewDateTo,
+    reviewDealerRating,
     meta: combineReducers({
       isFetchReviews,
+      isFetchDealerRating,
       needFetchReviews,
     }),
   }),

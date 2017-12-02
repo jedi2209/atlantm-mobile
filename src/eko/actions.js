@@ -1,5 +1,5 @@
 import API from '../utils/api';
-
+import { get } from 'lodash';
 import {
   REVIEWS__REQUEST,
   REVIEWS__SUCCESS,
@@ -10,6 +10,10 @@ import {
   REVIEWS_DATE_FROM__FILL,
 
   REVIEW__VISIT,
+
+  REVIEW_DEALER_RATING__REQUEST,
+  REVIEW_DEALER_RATING__SUCCESS,
+  REVIEW_DEALER_RATING__FAIL,
 } from './actionTypes';
 
 import { EVENT_LOAD_MORE } from '../core/actionTypes';
@@ -58,7 +62,9 @@ export const actionFetchReviews = ({ type, dealerId, nextPage, dateFrom, dateTo 
 
     return API.fetchReviews({ dealerId, dateFrom, dateTo, nextPageUrl })
       .then(res => {
-        if (res.error) {
+        const { data, pages, total, error } = res;
+
+        if (error) {
           return dispatch({
             type: REVIEWS__FAIL,
             payload: {
@@ -69,10 +75,12 @@ export const actionFetchReviews = ({ type, dealerId, nextPage, dateFrom, dateTo 
         }
 
         const result = { ...res };
-        result.data = result.data[dealerId];
 
+        // в случае если отзывов нет, в data приходит пустой массив
         if (result.data.length === 0) {
-          result.data.push({ type: 'empty', id: 1 });
+          result.data.push({ type: 'empty', id: Number(new Date()) });
+        } else {
+          result.data = result.data[dealerId];
         }
 
         return dispatch({
@@ -86,6 +94,46 @@ export const actionFetchReviews = ({ type, dealerId, nextPage, dateFrom, dateTo 
       .catch(error => {
         return dispatch({
           type: REVIEWS__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const actionFetchDealerRating = ({ dealerId }) => {
+  return dispatch => {
+    dispatch({
+      type: REVIEW_DEALER_RATING__REQUEST,
+      payload: { dealerId },
+    });
+
+    return API.fetchDealerRating({ dealerId })
+      .then(res => {
+        const { data, error } = res;
+
+        if (error || !data) {
+          return dispatch({
+            type: REVIEW_DEALER_RATING__FAIL,
+            payload: {
+              code: res.error.code,
+              error: res.error.message,
+            },
+          });
+        }
+
+        return dispatch({
+          type: REVIEW_DEALER_RATING__SUCCESS,
+          payload: {
+            dealerId,
+            ...data,
+          },
+        });
+      })
+      .catch(error => {
+        return dispatch({
+          type: REVIEW_DEALER_RATING__FAIL,
           payload: {
             error: error.message,
           },

@@ -10,7 +10,6 @@ import ReviewsListItem from './ReviewsListItem';
 // helpers
 import { debounce } from 'lodash';
 import PropTypes from 'prop-types';
-import styleConst from '../../../core/style-const';
 import { EVENT_DEFAULT, EVENT_LOAD_MORE, EVENT_REFRESH } from '../../../core/actionTypes';
 
 const TEXT_EMPTY = 'Нет отзывов для отображения';
@@ -21,14 +20,12 @@ export default class ReviewsList extends Component {
     items: PropTypes.array,
     dataHandler: PropTypes.func,
     isFetchItems: PropTypes.bool,
-    navigation: PropTypes.object,
     onPressItemHandler: PropTypes.func,
   }
 
   static defaultProps = {
     pages: {},
     items: null,
-    navigation: {},
     isFetchItems: false,
     onPressItemHandler: null,
   }
@@ -63,10 +60,9 @@ export default class ReviewsList extends Component {
       return <EmptyMessage text={TEXT_EMPTY} />;
     }
 
-    const { navigation, onPressItemHandler } = this.props;
+    const { onPressItemHandler } = this.props;
     return <ReviewsListItem
       review={item}
-      navigate={navigation.navigate}
       onPressHandler={onPressItemHandler}
     />;
   }

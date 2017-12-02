@@ -45,13 +45,19 @@ export default {
   },
 
   fetchReviews({ dealerId, dateFrom, dateTo, nextPageUrl }) {
-    let url = `/eko/review/get/${dealerId}/?date_from=${dateFrom}`;
+    // let url = `/eko/review/get/${dealerId}/?date_from=${dateFrom}`;
+    // TODO: временно, убрать при релизе
+    let url = `/eko/review/get/${dealerId}/?date_from=2017-10-01`;
 
     if (dateTo) {
       url += `&date_to=${dateTo}`;
     }
 
     return this.request(nextPageUrl || url, baseRequestParams);
+  },
+
+  fetchDealerRating({ dealerId }) {
+    return this.request(`/eko/rating/get/${dealerId}/`, baseRequestParams);
   },
 
   fetchUsedCar({ city, nextPageUrl, priceRange }) {

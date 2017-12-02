@@ -85,7 +85,13 @@ class ReviewsScreen extends Component {
     return isActiveScreen;
   }
 
-  onPressItem = reviewId => this.props.actionReviewVisit(reviewId)
+  onPressItem = review => {
+    const { navigation, actionReviewVisit } = this.props;
+
+    navigation.navigate('ReviewScreen', { review });
+
+    this.props.actionReviewVisit(review.id);
+  }
 
   fetchReviews = (type) => {
     let {
@@ -102,8 +108,6 @@ class ReviewsScreen extends Component {
       dateFrom = firstDayOfMonth();
       actionReviewsDateFromFill(dateFrom);
     }
-
-    console.log('type', type);
 
     return actionFetchReviews({
       type,
@@ -144,7 +148,6 @@ class ReviewsScreen extends Component {
                 pages={pages}
                 dataHandler={this.fetchReviews}
                 onPressItemHandler={this.onPressItem}
-                navigation={navigation}
                 isFetchItems={isFetchReviews}
               />
             </View>
