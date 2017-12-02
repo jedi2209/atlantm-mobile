@@ -144,7 +144,6 @@ function reviewDealerRating(state = null, action) {
   switch (action.type) {
     case REVIEWS__SUCCESS:
     case REVIEWS__RESET:
-    case DEALER__SUCCESS:
       return null;
     case REVIEW_DEALER_RATING__SUCCESS:
       return action.payload.rating;

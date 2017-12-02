@@ -7,13 +7,16 @@ import { Icon, ListItem, Body, Right } from 'native-base';
 import RatingStars from './RatingStars';
 
 // helpers
-import { get } from 'lodash';
 import { dayMonthYear } from '../../../utils/date';
 import styleConst from '../../../core/style-const';
 
 const styles = StyleSheet.create({
+  item: {
+    paddingTop: 10,
+    paddingBottom: 3,
+  },
   name: {
-    fontSize: 18,
+    fontSize: 20,
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
   },
@@ -50,22 +53,25 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
     marginTop: -2,
+    fontSize: 16,
   },
   row: {
-    marginBottom: 5,
+    marginBottom: 7,
   },
 });
 
-export default class ReviewsListItem extends Component {
+export default class Review extends Component {
   static propTypes = {
     review: PropTypes.object,
     visited: PropTypes.array,
     onPressHandler: PropTypes.func,
+    inList: PropTypes.bool,
   }
 
   static defaultProps = {
     review: null,
     visited: [],
+    inList: false,
     onPressHandler: null,
   }
 
@@ -76,10 +82,6 @@ export default class ReviewsListItem extends Component {
   }
 
   processDate = (date) => dayMonthYear(date)
-
-  processReviewText = (text) => {
-
-  }
 
   checkVisited = () => {
     const { visited, review } = this.props;
@@ -117,10 +119,15 @@ export default class ReviewsListItem extends Component {
   renderReview = (type, text) => {
     if (!text) return null;
 
+    const { inList } = this.props;
     const isPlus = type === 'plus';
 
     return (
-      <View style={[styles.review, styles.row]}>
+      <View style={[styles.review, styles.row, inList ? null : {
+        marginBottom: 15,
+        marginRight: 40,
+        // paddingRight: styleConst.ui.horizontalGapInList,
+      }]}>
         <Icon
           name={isPlus ? 'ios-add-circle-outline' : 'ios-remove-circle-outline'}
           style={[
@@ -128,30 +135,41 @@ export default class ReviewsListItem extends Component {
             isPlus ? styles.reviewIconPlus : styles.reviewIconMinus,
           ]}
         />
-        <Text style={styles.reviewText} numberOfLines={2}>{text}</Text>
+        <Text
+          style={styles.reviewText}
+          numberOfLines={inList ? 2 : null}>
+            {text}
+          </Text>
       </View>
     );
   }
 
   render() {
-    const { review, visited } = this.props;
+    const { review, visited, inList } = this.props;
     const { name, satisfy, date, text, id } = review;
     const isVisited = this.checkVisited();
 
     return (
-      <ListItem onPress={this.onPress}>
+      <ListItem onPress={inList ? this.onPress : null} style={styles.item}>
         <Body>
           {this.renderName(name, isVisited)}
           {this.renderRatingAndDate(satisfy, date, id)}
           {this.renderPlusReview(text.plus)}
           {this.renderMinusReview(text.minus)}
         </Body>
-        <Right>
-          <Icon
-            name="arrow-forward"
-            style={{ color: isVisited ? styleConst.color.systemGray : styleConst.color.systemBlue }}
-          />
-        </Right>
+          {
+            inList ?
+              (
+                <Right>
+                  <Icon
+                    name="arrow-forward"
+                    style={{
+                      color: isVisited ? styleConst.color.systemGray : styleConst.color.systemBlue
+                    }}
+                  />
+                </Right>
+              ) : null
+          }
       </ListItem>
     );
   }

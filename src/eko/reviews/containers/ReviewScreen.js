@@ -8,6 +8,8 @@ import { bindActionCreators } from 'redux';
 import { actionFetchDealerRating } from '../../actions';
 
 // components
+import Review from '../components/Review';
+import ReviewDealerAnswer from '../components/ReviewDealerAnswer';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import HeaderSubtitle from '../../../core/components/HeaderSubtitle';
 import SpinnerView from '../../../core/components/SpinnerView';
@@ -21,6 +23,9 @@ import stylesHeader from '../../../core/components/Header/style';
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
+  },
+  review: {
+    marginBottom: styleConst.ui.horizontalGap,
   },
 });
 
@@ -102,6 +107,12 @@ class ReviewScreen extends Component {
         <Container>
           <Content style={styles.content}>
             <HeaderSubtitle content={subtitle} isBig={true} />
+
+            <View style={styles.review}>
+              <Review review={review} />
+            </View>
+
+            { review.answer ? <ReviewDealerAnswer text={review.answer} /> : null }
           </Content>
         </Container>
       </StyleProvider>

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { FlatList, Platform } from 'react-native';
 
 // components
+import Review from './Review';
 import EmptyMessage from '../../../core/components/EmptyMessage';
 import SpinnerView from '../../../core/components/SpinnerView';
 import FlatListFooter from '../../../core/components/FlatListFooter';
-import ReviewsListItem from './ReviewsListItem';
 
 // helpers
 import { debounce } from 'lodash';
@@ -61,7 +61,8 @@ export default class ReviewsList extends Component {
     }
 
     const { onPressItemHandler } = this.props;
-    return <ReviewsListItem
+    return <Review
+      inList={true}
       review={item}
       onPressHandler={onPressItemHandler}
     />;

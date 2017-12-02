@@ -47,7 +47,7 @@ export default {
   fetchReviews({ dealerId, dateFrom, dateTo, nextPageUrl }) {
     // let url = `/eko/review/get/${dealerId}/?date_from=${dateFrom}`;
     // TODO: временно, убрать при релизе
-    let url = `/eko/review/get/${dealerId}/?date_from=2017-10-01`;
+    let url = `/eko/review/get/${dealerId}/?date_from=2017-01-01`;
 
     if (dateTo) {
       url += `&date_to=${dateTo}`;
