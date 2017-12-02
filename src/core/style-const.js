@@ -27,6 +27,7 @@ export default {
   ui: {
     borderWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
     horizontalGap: 11,
+    horizontalGapInList: 14,
     verticalGap: 22,
     letterSpacing: -0.3,
     footerHeight: 50,
