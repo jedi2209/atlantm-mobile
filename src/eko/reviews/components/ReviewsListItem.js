@@ -59,24 +59,20 @@ const styles = StyleSheet.create({
 export default class ReviewsListItem extends Component {
   static propTypes = {
     review: PropTypes.object,
-    navigate: PropTypes.func,
     visited: PropTypes.array,
     onPressHandler: PropTypes.func,
   }
 
   static defaultProps = {
     review: null,
-    navigate: null,
     visited: [],
     onPressHandler: null,
   }
 
   onPress = () => {
-    const { navigate, review, onPressHandler } = this.props;
+    const { review, onPressHandler } = this.props;
 
-    onPressHandler && onPressHandler(review.id);
-
-    navigate('ReviewScreen', { review });
+    onPressHandler && onPressHandler(review);
   }
 
   processDate = (date) => dayMonthYear(date)
@@ -143,7 +139,7 @@ export default class ReviewsListItem extends Component {
     const isVisited = this.checkVisited();
 
     return (
-      <ListItem onPress={this.onPressInfo}>
+      <ListItem onPress={this.onPress}>
         <Body>
           {this.renderName(name, isVisited)}
           {this.renderRatingAndDate(satisfy, date, id)}

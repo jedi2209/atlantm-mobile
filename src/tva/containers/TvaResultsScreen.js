@@ -64,7 +64,7 @@ const mapDispatchToProps = dispatch => {
 class TvaResultsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Табло выдачи авто',
-    headerStyle: [stylesHeader.common, { borderBottomWidth: 0 }],
+    headerStyle: [stylesHeader.common, stylesHeader.resetBorder],
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
