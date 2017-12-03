@@ -142,7 +142,7 @@ class ReviewsScreen extends Component {
 
   onPressRating = () => this.props.navigation.navigate('ReviewsFilterRatingScreen')
   onPressDate = () => this.props.navigation.navigate('ReviewsFilterDateScreen')
-  onPressAddReview = () => this.props.navigation.navigate('ReviewAddScreen')
+  onPressAddReview = () => this.props.navigation.navigate('ReviewAddMessageStepScreen')
 
   render() {
     const {

@@ -50,6 +50,7 @@ export default class MessageForm extends PureComponent {
           underlineColorAndroid="transparent"
           blurOnSubmit={true}
           textAlignVertical="top"
+          placeholderTextColor={styleConst.color.greyText}
         />
       </View>
     );

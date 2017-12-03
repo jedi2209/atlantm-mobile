@@ -12,7 +12,6 @@ import stylesList from '../../core/components/Lists/style';
 // helpers
 import styleConst from '../../core/style-const';
 
-const LIST_ITEM_HEIGHT = 44;
 const styles = StyleSheet.create({
   datePicker: {
     alignSelf: Platform.OS === 'ios' ? 'stretch' : 'flex-start',
@@ -21,11 +20,11 @@ const styles = StyleSheet.create({
 });
 const datePickerStyles = {
   dateTouchBody: {
-    height: LIST_ITEM_HEIGHT,
+    height: styleConst.ui.listHeight,
   },
   dateInput: {
     borderWidth: 0,
-    height: LIST_ITEM_HEIGHT,
+    height: styleConst.ui.listHeight,
     alignItems: 'flex-start',
   },
   placeholderText: {
