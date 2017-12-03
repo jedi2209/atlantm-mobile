@@ -39,6 +39,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  reviewFull: {
+    marginBottom: 15,
+    marginRight: 40,
+    alignItems: 'flex-start',
+  },
   reviewIcon: {
     fontSize: 28,
     marginRight: 15,
@@ -123,11 +128,7 @@ export default class Review extends Component {
     const isPlus = type === 'plus';
 
     return (
-      <View style={[styles.review, styles.row, inList ? null : {
-        marginBottom: 15,
-        marginRight: 40,
-        // paddingRight: styleConst.ui.horizontalGapInList,
-      }]}>
+      <View style={[styles.review, styles.row, inList ? null : styles.reviewFull]}>
         <Icon
           name={isPlus ? 'ios-add-circle-outline' : 'ios-remove-circle-outline'}
           style={[

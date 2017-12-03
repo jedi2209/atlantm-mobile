@@ -21,3 +21,4 @@ https://medium.com/@jidefr/the-most-unknown-redux-performance-trick-986fdfe871fa
 - Удалить код про выставления версии приложения
 - Разобраться с react-native-debugger, отключить redux-logger
 - Переделать все места, где что-то вложено внутрь Image (для обновления 0.51)
+- Заиспользовать везде FooterButton

@@ -47,6 +47,8 @@ import ReviewsScreen from '../eko/reviews/containers/ReviewsScreen';
 import ReviewScreen from '../eko/reviews/containers/ReviewScreen';
 import ReviewsFilterDateScreen from '../eko/reviews/containers/ReviewsFilterDateScreen';
 import ReviewsFilterRatingScreen from '../eko/reviews/containers/ReviewsFilterRatingScreen';
+import ReviewAddMessageStepScreen from '../eko/reviews/containers/ReviewAddMessageStepScreen';
+import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRatingStepScreen';
 
 const CatalogScreenNavigator = StackNavigator({
   CatalogScreen: { screen: CatalogScreen },
@@ -179,6 +181,8 @@ const getRouter = initialRouteName => {
           ReviewScreen: { screen: ReviewScreen },
           ReviewsFilterDateScreen: { screen: ReviewsFilterDateScreen },
           ReviewsFilterRatingScreen: { screen: ReviewsFilterRatingScreen },
+          ReviewAddMessageStepScreen: { screen: ReviewAddMessageStepScreen },
+          ReviewAddRatingStepScreen: { screen: ReviewAddRatingStepScreen },
         }),
         navigationOptions: {
           header: null,

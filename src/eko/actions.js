@@ -16,6 +16,9 @@ import {
 
   REVIEWS_RATING_FROM__SELECT,
   REVIEWS_RATING_TO__SELECT,
+
+  REVIEW_ADD_MESSAGE_PLUS__FILL,
+  REVIEW_ADD_MESSAGE_MINUS__FILL,
 } from './actionTypes';
 
 import { EVENT_LOAD_MORE } from '../core/actionTypes';
@@ -70,6 +73,24 @@ export const actionSelectFilterRatingTo = (rating) => {
     dispatch({
       type: REVIEWS_RATING_TO__SELECT,
       payload: rating,
+    });
+  };
+};
+
+export const actionAddReviewPlusFill = (message) => {
+  return dispatch => {
+    dispatch({
+      type: REVIEW_ADD_MESSAGE_PLUS__FILL,
+      payload: message,
+    });
+  };
+};
+
+export const actionAddReviewMinusFill = (message) => {
+  return dispatch => {
+    dispatch({
+      type: REVIEW_ADD_MESSAGE_MINUS__FILL,
+      payload: message,
     });
   };
 };

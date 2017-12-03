@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 import { actionReviewsReset } from '../actions';
 
 // components
-import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 import InfoLine from '../components/InfoLine';
+import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
 // helpers
 import getTheme from '../../../native-base-theme/components';

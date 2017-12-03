@@ -18,6 +18,13 @@ import {
 
   REVIEWS_RATING_FROM__SELECT,
   REVIEWS_RATING_TO__SELECT,
+
+  REVIEW_ADD_MESSAGE_PLUS__FILL,
+  REVIEW_ADD_MESSAGE_MINUS__FILL,
+
+  REVIEW_ADD__REQUEST,
+  REVIEW_ADD__SUCCESS,
+  REVIEW_ADD__FAIL,
 } from './actionTypes';
 
 import { EVENT_LOAD_MORE } from '../core/actionTypes';
@@ -44,6 +51,19 @@ function isFetchDealerRating(state = false, action) {
     case REVIEW_DEALER_RATING__FAIL:
       return false;
     case REVIEW_DEALER_RATING__REQUEST:
+      return true;
+    default:
+      return state;
+  }
+}
+
+function isReviewAddRequest(state = false, action) {
+  switch (action.type) {
+    case REHYDRATE:
+    case REVIEW_ADD__SUCCESS:
+    case REVIEW_ADD__FAIL:
+      return false;
+    case REVIEW_ADD__REQUEST:
       return true;
     default:
       return state;
@@ -158,6 +178,30 @@ function filterRatingTo(state = null, action) {
   }
 }
 
+function messagePlus(state = '', action) {
+  switch (action.type) {
+    case REVIEWS__RESET:
+    case REVIEW_ADD__SUCCESS:
+      return '';
+    case REVIEW_ADD_MESSAGE_PLUS__FILL:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+function messageMinus(state = '', action) {
+  switch (action.type) {
+    case REVIEWS__RESET:
+    case REVIEW_ADD__SUCCESS:
+      return '';
+    case REVIEW_ADD_MESSAGE_MINUS__FILL:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 function needFetchReviews(state = false, action) {
   switch (action.type) {
     case DEALER__SUCCESS:
@@ -208,9 +252,12 @@ export default combineReducers({
     filterDatePeriod,
     filterRatingFrom,
     filterRatingTo,
+    messagePlus,
+    messageMinus,
     meta: combineReducers({
       isFetchReviews,
       isFetchDealerRating,
+      isReviewAddRequest,
       needFetchReviews,
     }),
   }),
