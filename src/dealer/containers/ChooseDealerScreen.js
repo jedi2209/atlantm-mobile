@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 // components
@@ -27,12 +26,10 @@ const mapStateToProps = ({ dealer }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    fetchDealers,
-    selectDealer,
-    selectRegion,
-  }, dispatch);
+const mapDispatchToProps = {
+  fetchDealers,
+  selectDealer,
+  selectRegion,
 };
 
 class ChooseDealerScreen extends Component {

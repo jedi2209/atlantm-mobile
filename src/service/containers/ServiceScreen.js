@@ -4,7 +4,6 @@ import { StyleSheet, View, Alert, NetInfo } from 'react-native';
 import { Container, Content, List, StyleProvider } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { dateFill, orderService } from '../actions';
 import { carFill, nameFill, phoneFill, emailFill } from '../../profile/actions';
@@ -49,15 +48,13 @@ const mapStateToProps = ({ dealer, profile, service, nav }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    carFill,
-    dateFill,
-    nameFill,
-    phoneFill,
-    emailFill,
-    orderService,
-  }, dispatch);
+const mapDispatchToProps = {
+  carFill,
+  dateFill,
+  nameFill,
+  phoneFill,
+  emailFill,
+  orderService,
 };
 
 class ServiceScreen extends Component {

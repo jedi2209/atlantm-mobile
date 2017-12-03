@@ -23,7 +23,6 @@ import {
 } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
   actionFetchNewCarByFilter,
@@ -135,14 +134,12 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    actionFetchNewCarFilterData,
-    actionFetchNewCarByFilter,
-    actionShowNewCarFilterPrice,
-    actionHideNewCarFilterPrice,
-    actionSelectNewCarFilterPrice,
-  }, dispatch);
+const mapDispatchToProps = {
+  actionFetchNewCarFilterData,
+  actionFetchNewCarByFilter,
+  actionShowNewCarFilterPrice,
+  actionHideNewCarFilterPrice,
+  actionSelectNewCarFilterPrice,
 };
 
 class NewCarFilterScreen extends Component {

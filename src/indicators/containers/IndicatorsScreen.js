@@ -4,7 +4,6 @@ import { View, StyleSheet, findNodeHandle } from 'react-native';
 import { Content, Container, StyleProvider } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionSetActiveIndicator, actionFetchIndicators } from '../actions';
 
@@ -35,11 +34,9 @@ const mapStateToProps = ({ nav, indicators }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    actionSetActiveIndicator,
-    actionFetchIndicators,
-  }, dispatch);
+const mapDispatchToProps = {
+  actionSetActiveIndicator,
+  actionFetchIndicators,
 };
 
 class IndicatorsScreen extends Component {

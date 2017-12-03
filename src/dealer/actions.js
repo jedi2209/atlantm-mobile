@@ -75,8 +75,6 @@ export const fetchDealers = () => {
       .then(response => {
         const { data: dealers, error } = response;
 
-        console.log('dealers', dealers);
-
         if (error) {
           return dispatch({
             type: DEALERS__FAIL,

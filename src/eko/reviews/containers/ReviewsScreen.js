@@ -3,7 +3,6 @@ import { View, StyleSheet } from 'react-native';
 import { Container, Content, StyleProvider } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
   actionReviewVisit,
@@ -49,15 +48,13 @@ const mapStateToProps = ({ dealer, nav, eko }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    actionReviewVisit,
-    actionFetchReviews,
-    actionReviewsReset,
-    actionReviewsDateToFill,
-    actionReviewsDateFromFill,
-    actionSelectReviewsFilterDatePeriod,
-  }, dispatch);
+const mapDispatchToProps = {
+  actionReviewVisit,
+  actionFetchReviews,
+  actionReviewsReset,
+  actionReviewsDateToFill,
+  actionReviewsDateFromFill,
+  actionSelectReviewsFilterDatePeriod,
 };
 
 class ReviewsScreen extends Component {

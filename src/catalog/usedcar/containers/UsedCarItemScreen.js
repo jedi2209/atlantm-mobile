@@ -19,7 +19,6 @@ import {
 } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionFetchUsedCarDetails } from '../../actions';
 
@@ -51,10 +50,8 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    actionFetchUsedCarDetails,
-  }, dispatch);
+const mapDispatchToProps = {
+  actionFetchUsedCarDetails,
 };
 
 class UserCarItemScreen extends Component {

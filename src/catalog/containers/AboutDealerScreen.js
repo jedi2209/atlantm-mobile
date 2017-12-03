@@ -19,7 +19,6 @@ import {
 } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionFetchDealer } from '../actions';
 
@@ -99,10 +98,8 @@ const mapStateToProps = ({ catalog }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    actionFetchDealer,
-  }, dispatch);
+const mapDispatchToProps = {
+  actionFetchDealer,
 };
 
 class AboutDealerScreen extends Component {

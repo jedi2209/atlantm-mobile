@@ -18,3 +18,4 @@ https://medium.com/@jidefr/the-most-unknown-redux-performance-trick-986fdfe871fa
 - Обновиться до react-navigation beta 20
 - Поддержать iphone x
 - Еко: если нет отзывов в массив нет выбранного дилера, а должен быть всегда, смотри actions.js
+- Удалить код про выставления версии приложения
