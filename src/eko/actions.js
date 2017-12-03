@@ -19,9 +19,45 @@ import {
 
   REVIEW_ADD_MESSAGE_PLUS__FILL,
   REVIEW_ADD_MESSAGE_MINUS__FILL,
+
+  REVIEW_ADD_RATING_VALUE__SELECT,
+  REVIEW_ADD_RATING_VARIANT__SELECT,
+
+  REVIEW_ADD__REQUEST,
+  REVIEW_ADD__SUCCESS,
+  REVIEW_ADD__FAIL,
+
+  REVIEW_ADD_PUBLIC_AGREE__SELECT,
 } from './actionTypes';
 
 import { EVENT_LOAD_MORE } from '../core/actionTypes';
+
+export const actionSelectAddReviewPublicAgree = (isAgree) => {
+  return dispatch => {
+    dispatch({
+      type: REVIEW_ADD_PUBLIC_AGREE__SELECT,
+      payload: isAgree,
+    });
+  };
+};
+
+export const actionSelectAddReviewRating = (rating) => {
+  return dispatch => {
+    dispatch({
+      type: REVIEW_ADD_RATING_VALUE__SELECT,
+      payload: rating,
+    });
+  };
+};
+
+export const actionSelectAddReviewRatingVariant = (rating) => {
+  return dispatch => {
+    dispatch({
+      type: REVIEW_ADD_RATING_VARIANT__SELECT,
+      payload: rating,
+    });
+  };
+};
 
 export const actionReviewVisit = (reviewId) => {
   return dispatch => {
@@ -186,6 +222,41 @@ export const actionFetchDealerRating = ({ dealerId }) => {
           type: REVIEW_DEALER_RATING__FAIL,
           payload: {
             error: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const actionReviewAdd = (props) => {
+  return dispatch => {
+    dispatch({
+      type: REVIEW_ADD__REQUEST,
+      payload: { ...props },
+    });
+
+    return API.reviewAdd(props)
+      .then(res => {
+        const { error, status } = res;
+        // if (status !== 'success') {
+        if (error && error.message !== 'Сообщение успешно отправлено') {
+          return dispatch({
+            type: REVIEW_ADD__FAIL,
+            payload: {
+              code: error.code,
+              error: error.message,
+            },
+          });
+        }
+
+        return dispatch({ type: REVIEW_ADD__SUCCESS });
+      })
+      .catch(error => {
+        return dispatch({
+          type: REVIEW_ADD__FAIL,
+          payload: {
+            error: error.message,
+            code: error.code,
           },
         });
       });

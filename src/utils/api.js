@@ -232,6 +232,21 @@ export default {
     return this.request('/tva/message/post/', requestParams);
   },
 
+  reviewAdd({ dealerId, name, phone, email, rating, messagePlus, messageMinus, publicAgree }) {
+    const body = `f_Dealer=${dealerId}&posting=1&f_Name=${name}&f_Phone=${phone}&f_Email=${email}&f_Satisfy=${rating}&f_PublicAgree=${publicAgree}&f_IP=mobile_app&f_Plus=${messagePlus}&f_Minus=${messageMinus}`;
+    const requestParams = _.merge(baseRequestParams, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    });
+
+    __DEV__ && console.log('API review add body', body);
+
+    return this.request('/eko/review/post/', requestParams);
+  },
+
   request(path, requestParams) {
     const url = `https://api.atlantm.com${path}`;
 
