@@ -1,20 +1,10 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import { ListItem, Icon } from 'native-base';
-
-// helpers
-import styleConst from '../../core/style-const';
-
-const styles = StyleSheet.create({
-  icon: {
-    color: styleConst.color.systemBlue,
-    marginRight: 10,
-    marginTop: 1,
-  },
-});
+import { ListItem } from 'native-base';
+import RadioIcon from '../../core/components/RadioIcon';
 
 export default class ListItemHeader extends PureComponent {
   static propTypes = {
@@ -37,18 +27,11 @@ export default class ListItemHeader extends PureComponent {
     return (
       <View>
         <ListItem onPress={onPress} itemHeader>
-          {
-              radio ?
-                (
-                  <Icon
-                    name={radioSelected ? 'md-radio-button-on' : 'md-radio-button-off'}
-                    style={[
-                      styles.icon,
-                    ]}
-                  />
-                ) : null
-            }
-          <Text style={textStyle}>{this.props.text}</Text>
+          { radio ? <RadioIcon containerStyle={{
+            marginRight: 10,
+            marginTop: 1,
+          }} selected={radioSelected} /> : null }
+          <Text style={textStyle}>{text}</Text>
         </ListItem>
       </View>
     );
