@@ -8,6 +8,7 @@ import {
 
   REVIEWS_DATE_TO__FILL,
   REVIEWS_DATE_FROM__FILL,
+  REVIEWS_DATE_PERIOD__SELECT,
 
   REVIEW__VISIT,
 
@@ -51,6 +52,7 @@ function reviewsItems(state = [], action) {
     case REHYDRATE:
     case DEALER__SUCCESS:
     case REVIEWS__RESET:
+    case REVIEWS_DATE_PERIOD__SELECT:
       return [];
     case REVIEWS__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {
@@ -70,6 +72,7 @@ function reviewsPages(state = {}, action) {
     case REHYDRATE:
     case DEALER__SUCCESS:
     case REVIEWS__RESET:
+    case REVIEWS_DATE_PERIOD__SELECT:
       return {};
     case REVIEWS__SUCCESS:
       return action.payload.pages || {}; // на случай если пришел пустой массив
@@ -83,6 +86,7 @@ function reviewsTotal(state = {}, action) {
     case REHYDRATE:
     case DEALER__SUCCESS:
     case REVIEWS__RESET:
+    case REVIEWS_DATE_PERIOD__SELECT:
       return {};
     case REVIEWS__SUCCESS:
       return action.payload.total || {}; // на случай если пришел пустой массив
@@ -115,9 +119,22 @@ function reviewDateTo(state = null, action) {
   }
 }
 
+function filterDatePeriod(state = null, action) {
+  switch (action.type) {
+    case REVIEWS__RESET:
+    case DEALER__SUCCESS:
+      return null;
+    case REVIEWS_DATE_PERIOD__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 function needFetchReviews(state = false, action) {
   switch (action.type) {
     case DEALER__SUCCESS:
+    case REVIEWS_DATE_PERIOD__SELECT:
       return true;
     case REVIEWS__SUCCESS:
       return false;
@@ -161,6 +178,7 @@ export default combineReducers({
     dateFrom: reviewDateFrom,
     dateTo: reviewDateTo,
     reviewDealerRating,
+    filterDatePeriod,
     meta: combineReducers({
       isFetchReviews,
       isFetchDealerRating,

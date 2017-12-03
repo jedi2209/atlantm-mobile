@@ -13,4 +13,10 @@ export const dayMonthYear = (date) => date ? moment(date).format('D MMMM YYYY') 
 
 export const dayMonthYearTime = (date) => date ? moment(date).format('D.MM.YYYY, HH:mm') : null;
 
-export const firstDayOfMonth = () => moment().startOf('month').format('YYYY-MM-DD');
+export const substructMonth = () => moment().subtract(1, 'months').format('YYYY-MM-DD');
+
+export const substructWeek = () => moment().subtract(1, 'week').format('YYYY-MM-DD');
+
+export const substructYear = () => moment().subtract(1, 'year').format('YYYY-MM-DD');
+
+export const substruct10Years = () => moment().subtract(10, 'year').format('YYYY-MM-DD');

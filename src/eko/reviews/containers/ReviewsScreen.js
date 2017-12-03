@@ -8,22 +8,26 @@ import { connect } from 'react-redux';
 import {
   actionReviewVisit,
   actionFetchReviews,
+  actionReviewsReset,
   actionReviewsDateFromFill,
   actionReviewsDateToFill,
+  actionSelectReviewsFilterDatePeriod,
 } from '../../actions';
 
 // components
 import ReviewsList from '../components/ReviewsList';
+import ReviewsFilter from '../components/ReviewsFilter';
 import DealerItemList from '../../../core/components/DealerItemList';
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
+import { REVIEWS_FILTER_DATE_PERIOD__MONTH } from '../../constants';
 import { get } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
-import { firstDayOfMonth } from '../../../utils/date';
+import { substructMonth } from '../../../utils/date';
 
 const styles = StyleSheet.create({
   content: {
@@ -49,8 +53,10 @@ const mapDispatchToProps = dispatch => {
   return bindActionCreators({
     actionReviewVisit,
     actionFetchReviews,
+    actionReviewsReset,
     actionReviewsDateToFill,
     actionReviewsDateFromFill,
+    actionSelectReviewsFilterDatePeriod,
   }, dispatch);
 };
 
@@ -64,9 +70,10 @@ class ReviewsScreen extends Component {
   })
 
   componentDidUpdate() {
-    const { needFetchReviews } = this.props;
+    const { needFetchReviews, isFetchReviews, actionReviewsReset } = this.props;
 
-    if (needFetchReviews) {
+    if (needFetchReviews && !isFetchReviews) {
+      // actionReviewsReset();
       this.fetchReviews();
     }
   }
@@ -102,11 +109,13 @@ class ReviewsScreen extends Component {
       dealerSelected,
       actionFetchReviews,
       actionReviewsDateFromFill,
+      actionSelectReviewsFilterDatePeriod,
     } = this.props;
 
     if (!dateFrom) {
-      dateFrom = firstDayOfMonth();
+      dateFrom = substructMonth();
       actionReviewsDateFromFill(dateFrom);
+      actionSelectReviewsFilterDatePeriod(REVIEWS_FILTER_DATE_PERIOD__MONTH);
     }
 
     return actionFetchReviews({
@@ -117,6 +126,10 @@ class ReviewsScreen extends Component {
       dealerId: dealerSelected.id,
     });
   }
+
+  onPressRating = () => this.props.navigation.navigate('ReviewsFilterRatingScreen')
+  onPressDate = () => this.props.navigation.navigate('ReviewsFilterDateScreen')
+  onPressAddReview = () => this.props.navigation.navigate('ReviewAddScreen')
 
   render() {
     const {
@@ -152,6 +165,11 @@ class ReviewsScreen extends Component {
               />
             </View>
           </Content>
+          <ReviewsFilter
+            onPressRating={this.onPressRating}
+            onPressDate={this.onPressDate}
+            onPressAddReview={this.onPressAddReview}
+          />
         </Container>
       </StyleProvider>
     );

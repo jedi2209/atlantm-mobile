@@ -1,15 +1,14 @@
 import API from '../utils/api';
-import { get } from 'lodash';
 import {
   REVIEWS__REQUEST,
   REVIEWS__SUCCESS,
   REVIEWS__FAIL,
   REVIEWS__RESET,
 
+  REVIEW__VISIT,
   REVIEWS_DATE_TO__FILL,
   REVIEWS_DATE_FROM__FILL,
-
-  REVIEW__VISIT,
+  REVIEWS_DATE_PERIOD__SELECT,
 
   REVIEW_DEALER_RATING__REQUEST,
   REVIEW_DEALER_RATING__SUCCESS,
@@ -41,6 +40,15 @@ export const actionReviewsDateToFill = (dateTo) => {
     dispatch({
       type: REVIEWS_DATE_TO__FILL,
       payload: dateTo,
+    });
+  };
+};
+
+export const actionSelectReviewsFilterDatePeriod = (period) => {
+  return dispatch => {
+    dispatch({
+      type: REVIEWS_DATE_PERIOD__SELECT,
+      payload: period,
     });
   };
 };

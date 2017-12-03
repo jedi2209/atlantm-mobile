@@ -45,6 +45,7 @@ import TvaResultsScreen from '../tva/containers/TvaResultsScreen';
 import EkoScreen from '../eko/containers/EkoScreen';
 import ReviewsScreen from '../eko/reviews/containers/ReviewsScreen';
 import ReviewScreen from '../eko/reviews/containers/ReviewScreen';
+import ReviewsFilterDateScreen from '../eko/reviews/containers/ReviewsFilterDateScreen';
 
 const CatalogScreenNavigator = StackNavigator({
   CatalogScreen: { screen: CatalogScreen },
@@ -175,6 +176,7 @@ const getRouter = initialRouteName => {
           EkoScreen: { screen: EkoScreen },
           ReviewsScreen: { screen: ReviewsScreen },
           ReviewScreen: { screen: ReviewScreen },
+          ReviewsFilterDateScreen: { screen: ReviewsFilterDateScreen },
         }),
         navigationOptions: {
           header: null,
