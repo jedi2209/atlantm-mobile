@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View, StyleSheet, Platform } from 'react-native';
+import { Image, View, StyleSheet, Platform, Linking } from 'react-native';
 import { Container, Content, Text, StyleProvider, List, ListItem, Left, Body, Right, Icon } from 'native-base';
 
 // redux
@@ -71,6 +71,16 @@ class EkoScreen extends Component {
   onPressReviews = () => this.props.navigation.navigate('ReviewsScreen')
   onPressContactMe = () => this.props.navigation.navigate('ContactMeScreen')
   onPressAdvocate = () => this.props.navigation.navigate('AdvocateScreen')
+  onPressRateApp = () => {
+    const APP_STORE_LINK = 'itms://itunes.apple.com/gb/app/atlant-m/id515931794?mt=8';
+    const PLAY_STORE_LINK = 'market://details?id=com.atlantm';
+
+    if (Platform.OS === 'ios') {
+      Linking.openURL(APP_STORE_LINK).catch(err => console.error('APP_STORE_LINK failed', err));
+    } else {
+      Linking.openURL(PLAY_STORE_LINK).catch(err => console.error('PLAY_STORE_LINK failed', err));
+    }
+  }
 
   getRateAppLabel = () => {
     return `Оставить отзыв в ${this.getPlatformStore()}`;
@@ -150,7 +160,7 @@ class EkoScreen extends Component {
                 iconName: 'reviews',
                 isFirst: true,
                 isLast: true,
-                onPressHandler: this.onPressReviews,
+                onPressHandler: this.onPressRateApp,
               })}
             </List>
 
