@@ -4,7 +4,7 @@ import { Body, Label, Content, ListItem, Container, StyleProvider } from 'native
 
 // redux
 import { connect } from 'react-redux';
-import { actionReviewsDateFromFill, actionSelectReviewsFilterDatePeriod } from '../../actions';
+import { actionDateFromFill, actionSelectFilterDatePeriod } from '../../actions';
 
 // components
 import RadioIcon from '../../../core/components/RadioIcon';
@@ -42,8 +42,8 @@ const mapStateToProps = ({ eko, nav }) => {
 };
 
 const mapDispatchToProps = {
-  actionReviewsDateFromFill,
-  actionSelectReviewsFilterDatePeriod,
+  actionDateFromFill,
+  actionSelectFilterDatePeriod,
 };
 
 class ReviewsFilterDateScreen extends Component {
@@ -66,21 +66,21 @@ class ReviewsFilterDateScreen extends Component {
 
   onPressItem = (selectedDatePeriod) => {
     const {
-      actionReviewsDateFromFill,
-      actionSelectReviewsFilterDatePeriod,
+      actionDateFromFill,
+      actionSelectFilterDatePeriod,
     } = this.props;
 
     requestAnimationFrame(() => {
       if (this.isDatePeriodSelected(selectedDatePeriod)) return false;
 
-      actionSelectReviewsFilterDatePeriod(selectedDatePeriod);
+      actionSelectFilterDatePeriod(selectedDatePeriod);
 
       this.processDate(selectedDatePeriod);
     });
   }
 
   processDate = (datePeriod) => {
-    const { dateFrom, actionReviewsDateFromFill } = this.props;
+    const { dateFrom, actionDateFromFill } = this.props;
     let newDateFrom = null;
 
     switch (datePeriod) {
@@ -100,7 +100,7 @@ class ReviewsFilterDateScreen extends Component {
         newDateFrom = dateFrom;
     }
 
-    actionReviewsDateFromFill(newDateFrom);
+    actionDateFromFill(newDateFrom);
   }
 
   isDatePeriodSelected = selectedDatePeriod => this.props.filterDatePeriod === selectedDatePeriod

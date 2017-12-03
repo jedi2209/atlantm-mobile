@@ -13,6 +13,9 @@ import {
   REVIEW_DEALER_RATING__REQUEST,
   REVIEW_DEALER_RATING__SUCCESS,
   REVIEW_DEALER_RATING__FAIL,
+
+  REVIEWS_RATING_FROM__SELECT,
+  REVIEWS_RATING_TO__SELECT,
 } from './actionTypes';
 
 import { EVENT_LOAD_MORE } from '../core/actionTypes';
@@ -26,7 +29,7 @@ export const actionReviewVisit = (reviewId) => {
   };
 };
 
-export const actionReviewsDateFromFill = (dateFrom) => {
+export const actionDateFromFill = (dateFrom) => {
   return dispatch => {
     dispatch({
       type: REVIEWS_DATE_FROM__FILL,
@@ -35,7 +38,7 @@ export const actionReviewsDateFromFill = (dateFrom) => {
   };
 };
 
-export const actionReviewsDateToFill = (dateTo) => {
+export const actionDateToFill = (dateTo) => {
   return dispatch => {
     dispatch({
       type: REVIEWS_DATE_TO__FILL,
@@ -44,11 +47,29 @@ export const actionReviewsDateToFill = (dateTo) => {
   };
 };
 
-export const actionSelectReviewsFilterDatePeriod = (period) => {
+export const actionSelectFilterDatePeriod = (period) => {
   return dispatch => {
     dispatch({
       type: REVIEWS_DATE_PERIOD__SELECT,
       payload: period,
+    });
+  };
+};
+
+export const actionSelectFilterRatingFrom = (rating) => {
+  return dispatch => {
+    dispatch({
+      type: REVIEWS_RATING_FROM__SELECT,
+      payload: rating,
+    });
+  };
+};
+
+export const actionSelectFilterRatingTo = (rating) => {
+  return dispatch => {
+    dispatch({
+      type: REVIEWS_RATING_TO__SELECT,
+      payload: rating,
     });
   };
 };

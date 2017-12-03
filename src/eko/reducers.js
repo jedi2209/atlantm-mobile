@@ -15,6 +15,9 @@ import {
   REVIEW_DEALER_RATING__REQUEST,
   REVIEW_DEALER_RATING__SUCCESS,
   REVIEW_DEALER_RATING__FAIL,
+
+  REVIEWS_RATING_FROM__SELECT,
+  REVIEWS_RATING_TO__SELECT,
 } from './actionTypes';
 
 import { EVENT_LOAD_MORE } from '../core/actionTypes';
@@ -131,6 +134,30 @@ function filterDatePeriod(state = null, action) {
   }
 }
 
+function filterRatingFrom(state = null, action) {
+  switch (action.type) {
+    case REVIEWS__RESET:
+    case DEALER__SUCCESS:
+      return null;
+    case REVIEWS_RATING_FROM__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+function filterRatingTo(state = null, action) {
+  switch (action.type) {
+    case REVIEWS__RESET:
+    case DEALER__SUCCESS:
+      return null;
+    case REVIEWS_RATING_TO__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 function needFetchReviews(state = false, action) {
   switch (action.type) {
     case DEALER__SUCCESS:
@@ -179,6 +206,8 @@ export default combineReducers({
     dateTo: reviewDateTo,
     reviewDealerRating,
     filterDatePeriod,
+    filterRatingFrom,
+    filterRatingTo,
     meta: combineReducers({
       isFetchReviews,
       isFetchDealerRating,
