@@ -22,9 +22,14 @@ import {
   REVIEW_ADD_MESSAGE_PLUS__FILL,
   REVIEW_ADD_MESSAGE_MINUS__FILL,
 
+  REVIEW_ADD_RATING_VALUE__SELECT,
+  REVIEW_ADD_RATING_VARIANT__SELECT,
+
   REVIEW_ADD__REQUEST,
   REVIEW_ADD__SUCCESS,
   REVIEW_ADD__FAIL,
+
+  REVIEW_ADD_PUBLIC_AGREE__SELECT,
 } from './actionTypes';
 
 import { EVENT_LOAD_MORE } from '../core/actionTypes';
@@ -178,9 +183,30 @@ function filterRatingTo(state = null, action) {
   }
 }
 
+function reviewAddRating(state = null, action) {
+  switch (action.type) {
+    case REVIEW_ADD__SUCCESS:
+      return null;
+    case REVIEW_ADD_RATING_VALUE__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+function reviewAddRatingVariant(state = null, action) {
+  switch (action.type) {
+    case REVIEW_ADD__SUCCESS:
+      return null;
+    case REVIEW_ADD_RATING_VARIANT__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 function messagePlus(state = '', action) {
   switch (action.type) {
-    case REVIEWS__RESET:
     case REVIEW_ADD__SUCCESS:
       return '';
     case REVIEW_ADD_MESSAGE_PLUS__FILL:
@@ -192,7 +218,6 @@ function messagePlus(state = '', action) {
 
 function messageMinus(state = '', action) {
   switch (action.type) {
-    case REVIEWS__RESET:
     case REVIEW_ADD__SUCCESS:
       return '';
     case REVIEW_ADD_MESSAGE_MINUS__FILL:
@@ -240,6 +265,18 @@ function reviewDealerRating(state = null, action) {
   }
 }
 
+function publicAgree(state = true, action) {
+  switch (action.type) {
+    case REVIEWS__SUCCESS:
+    case REVIEWS__RESET:
+      return true;
+    case REVIEW_ADD_PUBLIC_AGREE__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   reviews: combineReducers({
     items: reviewsItems,
@@ -254,6 +291,9 @@ export default combineReducers({
     filterRatingTo,
     messagePlus,
     messageMinus,
+    reviewAddRating,
+    reviewAddRatingVariant,
+    publicAgree,
     meta: combineReducers({
       isFetchReviews,
       isFetchDealerRating,

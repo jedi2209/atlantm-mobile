@@ -4,6 +4,12 @@ export const TEXT_RATE_APP = 'Если вам понравилось наше п
 export const TEXT_REVIEW_ADD_QUESTION__PLUS = 'Что вам понравилось в работе автоцентра? Кому бы вы хотели выразить благодарность?';
 export const TEXT_REVIEW_ADD_QUESTION__MINUS = 'Чем вы остались недовольны в работе автоцентра?';
 
+export const REVIEW_ADD_RATING_5 = 'В высшей степени доволен';
+export const REVIEW_ADD_RATING_4 = 'Очень доволен';
+export const REVIEW_ADD_RATING_3 = 'Вполне доволен';
+export const REVIEW_ADD_RATING_2 = 'Не очень доволен';
+export const REVIEW_ADD_RATING_1 = 'Совсем недоволен';
+
 export const REVIEWS_FILTER_DATE_PERIOD__ALL = 'все';
 export const REVIEWS_FILTER_DATE_PERIOD__WEEK = 'неделя';
 export const REVIEWS_FILTER_DATE_PERIOD__MONTH = 'месяц';

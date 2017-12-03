@@ -14,8 +14,8 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import HeaderSubtitle from '../../../core/components/HeaderSubtitle';
 
 // helpers
-import { TEXT_MESSAGE_CONTROL } from '../../constants';
 import { get } from 'lodash';
+import { TEXT_MESSAGE_CONTROL } from '../../constants';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
