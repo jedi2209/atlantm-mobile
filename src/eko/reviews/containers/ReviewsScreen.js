@@ -8,9 +8,11 @@ import {
   actionReviewVisit,
   actionFetchReviews,
   actionReviewsReset,
-  actionReviewsDateFromFill,
-  actionReviewsDateToFill,
-  actionSelectReviewsFilterDatePeriod,
+  actionDateFromFill,
+  actionDateToFill,
+  actionSelectFilterDatePeriod,
+  actionSelectFilterRatingFrom,
+  actionSelectFilterRatingTo,
 } from '../../actions';
 
 // components
@@ -43,6 +45,8 @@ const mapStateToProps = ({ dealer, nav, eko }) => {
     total: eko.reviews.total,
     dateFrom: eko.reviews.dateFrom,
     dateTo: eko.reviews.dateTo,
+    filterRatingFrom: eko.reviews.filterRatingFrom,
+    filterRatingTo: eko.reviews.filterRatingTo,
     isFetchReviews: eko.reviews.meta.isFetchReviews,
     needFetchReviews: eko.reviews.meta.needFetchReviews,
   };
@@ -52,9 +56,11 @@ const mapDispatchToProps = {
   actionReviewVisit,
   actionFetchReviews,
   actionReviewsReset,
-  actionReviewsDateToFill,
-  actionReviewsDateFromFill,
-  actionSelectReviewsFilterDatePeriod,
+  actionDateToFill,
+  actionDateFromFill,
+  actionSelectFilterDatePeriod,
+  actionSelectFilterRatingFrom,
+  actionSelectFilterRatingTo,
 };
 
 class ReviewsScreen extends Component {
@@ -67,10 +73,9 @@ class ReviewsScreen extends Component {
   })
 
   componentDidUpdate() {
-    const { needFetchReviews, isFetchReviews, actionReviewsReset } = this.props;
+    const { needFetchReviews, isFetchReviews } = this.props;
 
     if (needFetchReviews && !isFetchReviews) {
-      // actionReviewsReset();
       this.fetchReviews();
     }
   }
@@ -102,23 +107,34 @@ class ReviewsScreen extends Component {
       pages,
       dateTo,
       dateFrom,
+      filterRatingFrom,
+      filterRatingTo,
       navigation,
       dealerSelected,
       actionFetchReviews,
-      actionReviewsDateFromFill,
-      actionSelectReviewsFilterDatePeriod,
+      actionDateFromFill,
+      actionSelectFilterDatePeriod,
+      actionSelectFilterRatingFrom,
+      actionSelectFilterRatingTo,
     } = this.props;
 
     if (!dateFrom) {
       dateFrom = substructMonth();
-      actionReviewsDateFromFill(dateFrom);
-      actionSelectReviewsFilterDatePeriod(REVIEWS_FILTER_DATE_PERIOD__MONTH);
+      actionDateFromFill(dateFrom);
+      actionSelectFilterDatePeriod(REVIEWS_FILTER_DATE_PERIOD__MONTH);
+    }
+
+    if (!filterRatingFrom) {
+      actionSelectFilterRatingFrom(1);
+      actionSelectFilterRatingTo(5);
     }
 
     return actionFetchReviews({
       type,
       dateTo,
       dateFrom,
+      ratingFrom: filterRatingFrom,
+      ratingTo: filterRatingTo,
       nextPage: pages.next,
       dealerId: dealerSelected.id,
     });
