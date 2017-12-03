@@ -11,7 +11,6 @@ import {
   Text,
 } from 'native-base';
 
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
@@ -31,10 +30,8 @@ const mapStateToProps = () => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
+const mapDispatchToProps = {
 
-  }, dispatch);
 };
 
 class ReferenceScreen extends Component {

@@ -13,7 +13,6 @@ import {
 } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionFetchTva } from '../actions';
 import { carNumberFill } from '../../profile/actions';
@@ -52,11 +51,9 @@ const mapStateToProps = ({ dealer, nav, tva, profile }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    carNumberFill,
-    actionFetchTva,
-  }, dispatch);
+const mapDispatchToProps = {
+  carNumberFill,
+  actionFetchTva,
 };
 
 class TvaScreen extends Component {

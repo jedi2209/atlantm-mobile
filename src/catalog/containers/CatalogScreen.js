@@ -4,7 +4,6 @@ import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
 import { Button } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {
   actionSelectUsedCarCity,
@@ -82,16 +81,14 @@ const mapStateToProps = ({ dealer, nav }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    actionSelectUsedCarCity,
-    actionSelectUsedCarRegion,
-    actionSetDealersByCities,
-    actionSelectUsedCarPriceRange,
+const mapDispatchToProps = {
+  actionSelectUsedCarCity,
+  actionSelectUsedCarRegion,
+  actionSetDealersByCities,
+  actionSelectUsedCarPriceRange,
 
-    actionSelectNewCarCity,
-    actionSelectNewCarRegion,
-  }, dispatch);
+  actionSelectNewCarCity,
+  actionSelectNewCarRegion,
 };
 
 class CatalogScreen extends Component {

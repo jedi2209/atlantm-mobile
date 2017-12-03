@@ -11,7 +11,6 @@ import {
 } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionSelectNewCarFilterDrive } from '../../actions';
 
@@ -43,10 +42,8 @@ const mapStateToProps = ({ catalog, nav }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    actionSelectNewCarFilterDrive,
-  }, dispatch);
+const mapDispatchToProps = {
+  actionSelectNewCarFilterDrive,
 };
 
 class NewCarFilterDriveScreen extends Component {

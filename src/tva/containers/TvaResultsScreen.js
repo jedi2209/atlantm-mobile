@@ -4,7 +4,6 @@ import { Text, View, Alert, StyleSheet, TouchableOpacity, NetInfo } from 'react-
 import { Body, Label, Item, Content, ListItem, Container, StyleProvider } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionTvaMessageSend, actionTvaMessageFill, actionSetActiveTvaOrderId } from '../actions';
 
@@ -53,12 +52,10 @@ const mapStateToProps = ({ dealer, nav, tva }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    actionTvaMessageFill,
-    actionTvaMessageSend,
-    actionSetActiveTvaOrderId,
-  }, dispatch);
+const mapDispatchToProps = {
+  actionTvaMessageFill,
+  actionTvaMessageSend,
+  actionSetActiveTvaOrderId,
 };
 
 class TvaResultsScreen extends Component {

@@ -3,7 +3,6 @@ import { Image, View, StyleSheet, Platform, Linking } from 'react-native';
 import { Container, Content, Text, StyleProvider, List, ListItem, Left, Body, Right, Icon } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionReviewsReset } from '../actions';
 
@@ -38,10 +37,8 @@ const mapStateToProps = ({ nav, dealer }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    actionReviewsReset,
-  }, dispatch);
+const mapDispatchToProps = {
+  actionReviewsReset,
 };
 
 class EkoScreen extends Component {

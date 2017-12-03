@@ -4,7 +4,6 @@ import { StyleSheet, View } from 'react-native';
 import { Container, Content, List, StyleProvider } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { nameFill, phoneFill, emailFill, carFill, carNumberFill } from '../actions';
 
@@ -37,14 +36,12 @@ const mapStateToProps = ({ dealer, profile, nav }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    nameFill,
-    phoneFill,
-    emailFill,
-    carFill,
-    carNumberFill,
-  }, dispatch);
+const mapDispatchToProps = {
+  nameFill,
+  phoneFill,
+  emailFill,
+  carFill,
+  carNumberFill,
 };
 
 class ProfileScreen extends Component {

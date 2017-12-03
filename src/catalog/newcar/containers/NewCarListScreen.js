@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionFetchNewCarByFilter } from '../../actions';
 
@@ -35,10 +34,8 @@ const mapStateToProps = ({ dealer, nav, catalog }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    actionFetchNewCarByFilter,
-  }, dispatch);
+const mapDispatchToProps = {
+  actionFetchNewCarByFilter,
 };
 
 class NewCarListScreen extends Component {

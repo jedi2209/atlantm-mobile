@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchInfoPost, callMeForInfo } from '../actions';
 
@@ -101,11 +100,9 @@ const mapStateToProps = ({ dealer, info, profile }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    fetchInfoPost,
-    callMeForInfo,
-  }, dispatch);
+const mapDispatchToProps = {
+  fetchInfoPost,
+  callMeForInfo,
 };
 
 const injectScript = `

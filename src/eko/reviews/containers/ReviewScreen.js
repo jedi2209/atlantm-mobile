@@ -4,7 +4,6 @@ import { Container, Content, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { actionFetchDealerRating } from '../../actions';
 
 // components
@@ -38,10 +37,8 @@ const mapStateToProps = ({ dealer, eko, nav }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    actionFetchDealerRating,
-  }, dispatch);
+const mapDispatchToProps = {
+  actionFetchDealerRating,
 };
 
 class ReviewScreen extends Component {

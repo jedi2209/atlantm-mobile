@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { store } from '../store';
 import { navigationChange } from '../../navigation/actions';
@@ -24,11 +23,9 @@ const mapStateToProps = ({ core }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    setAppVersion,
-    navigationChange,
-  }, dispatch);
+const mapDispatchToProps = {
+  setAppVersion,
+  navigationChange,
 };
 
 const styles = StyleSheet.create({

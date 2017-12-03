@@ -4,7 +4,6 @@ import { StyleSheet, View, Alert, NetInfo, Text, Image } from 'react-native';
 import { Container, Content, List, StyleProvider, Footer, Button } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionCommentOrderCarFill, actionOrderCar } from '../actions';
 import { nameFill, phoneFill, emailFill } from '../../profile/actions';
@@ -64,14 +63,12 @@ const mapStateToProps = ({ catalog, profile }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    nameFill,
-    phoneFill,
-    emailFill,
-    actionOrderCar,
-    actionCommentOrderCarFill,
-  }, dispatch);
+const mapDispatchToProps = {
+  nameFill,
+  phoneFill,
+  emailFill,
+  actionOrderCar,
+  actionCommentOrderCarFill,
 };
 
 class OrderScreen extends Component {

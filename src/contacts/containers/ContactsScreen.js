@@ -14,7 +14,6 @@ import {
 } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { callMe } from '../actions';
 import { CALL_ME__SUCCESS, CALL_ME__FAIL } from '../actionTypes';
@@ -48,10 +47,8 @@ const mapStateToProps = ({ dealer, profile, contacts, nav }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    callMe,
-  }, dispatch);
+const mapDispatchToProps = {
+  callMe,
 };
 
 class ContactsScreen extends Component {

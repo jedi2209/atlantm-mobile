@@ -9,7 +9,6 @@ import PropTypes from 'prop-types';
 import { Text, StyleProvider } from 'native-base';
 
 // redux
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchInfoList } from '../actions';
 
@@ -52,10 +51,8 @@ const mapStateToProps = ({ dealer, info, nav }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    fetchInfoList,
-  }, dispatch);
+const mapDispatchToProps = {
+  fetchInfoList,
 };
 
 class InfoListScreen extends Component {

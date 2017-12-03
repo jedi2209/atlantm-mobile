@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, InteractionManager } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import {
   Body,
   Label,
@@ -12,7 +12,6 @@ import {
 
 // redux
 import { find } from 'lodash';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { actionSelectNewCarFilterModels } from '../../actions';
 
@@ -45,10 +44,8 @@ const mapStateToProps = ({ catalog, nav }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    actionSelectNewCarFilterModels,
-  }, dispatch);
+const mapDispatchToProps = {
+  actionSelectNewCarFilterModels,
 };
 
 class NewCarFilterBrandsScreen extends Component {
