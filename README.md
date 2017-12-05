@@ -22,3 +22,4 @@ https://medium.com/@jidefr/the-most-unknown-redux-performance-trick-986fdfe871fa
 - Разобраться с react-native-debugger, отключить redux-logger
 - Переделать все места, где что-то вложено внутрь Image (для обновления 0.51)
 - Заиспользовать везде FooterButton
+- Всегда при попытка обратиться к API проверять наличие соединения и реагировать в этом случае соответствующим сообщением

@@ -14,8 +14,9 @@ import stylesHeader from '../../core/components/Header/style';
 // actions
 import { fetchDealers, selectDealer, selectRegion } from '../actions';
 
-const mapStateToProps = ({ dealer }) => {
+const mapStateToProps = ({ dealer, nav, }) => {
   return {
+    nav,
     dealerSelected: dealer.selected,
     region: dealer.region,
     listRussia: dealer.listRussia,
@@ -42,19 +43,10 @@ class ChooseDealerScreen extends Component {
   })
 
   shouldComponentUpdate(nextProps) {
-    const {
-      region,
-      listRussia,
-      listUkraine,
-      listBelarussia,
-      isFetchDealer,
-    } = this.props;
+    const nav = nextProps.nav.newState;
+    const isActiveScreen = nav.routes[nav.index].routeName === 'ChooseDealerScreen';
 
-    return (isFetchDealer !== nextProps.isFetchDealer) ||
-      (region !== nextProps.region) ||
-        (listRussia.length !== nextProps.listRussia.length) ||
-          (listBelarussia.length !== nextProps.listBelarussia.length) ||
-            (listUkraine.length !== nextProps.listUkraine.length);
+    return isActiveScreen;
   }
 
   render() {
@@ -72,6 +64,7 @@ class ChooseDealerScreen extends Component {
       selectRegion,
       selectDealer,
       dealerSelected,
+      isFetchDealersList,
     } = this.props;
 
     console.log('== ChooseDealer ==');
@@ -80,7 +73,7 @@ class ChooseDealerScreen extends Component {
       itemLayout="dealer"
       region={region}
       dataHandler={fetchDealers}
-      isFetchList={isFetchDealer}
+      isFetchList={isFetchDealersList || isFetchDealer}
       listRussia={listRussia}
       listUkraine={listUkraine}
       listBelarussia={listBelarussia}
