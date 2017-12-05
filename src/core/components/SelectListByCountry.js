@@ -106,6 +106,8 @@ export default class SelectListByCountry extends PureComponent {
       listBelarussia,
     } = this.props;
 
+    console.log('isFetchList', isFetchList);
+
     let list = [];
 
     switch (region) {

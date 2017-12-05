@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
     marginBottom: 7,
+    color: '#000',
   },
   text: {
     fontSize: 16,

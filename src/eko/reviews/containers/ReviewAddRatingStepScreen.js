@@ -191,7 +191,7 @@ class ReviewAddRatingStepScreen extends Component {
               selectRatingVariant={actionSelectAddReviewRatingVariant}
             />
             {this.renderPublicAgree()}
-            <InfoLine infoIcon={true} text={TEXT_MESSAGE_CONTROL} />
+            <InfoLine gap={true} infoIcon={true} text={TEXT_MESSAGE_CONTROL} />
           </Content>
           <FooterButton
             text="ОТПРАВИТЬ"

@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
     height: 70,
     marginRight: styleConst.ui.horizontalGap,
   },
+  titleContainer: {
+    flex: 1,
+  },
   title: {
     fontSize: 15,
     fontFamily: styleConst.font.medium,
@@ -38,6 +41,8 @@ const styles = StyleSheet.create({
   },
   info: {
     marginTop: -4,
+    flex: 1,
+    flexWrap: 'wrap',
   },
   extra: {
     flexDirection: 'row',
@@ -103,8 +108,14 @@ export default class CarListItem extends Component {
             style={styles.image}
             source={{ uri: get(car, 'img.10000x300.0') }}
           />
+
           <View style={styles.info}>
-            <Text style={styles.title}>{`${car.brand.name} ${modelName || ''} ${complectation}`}</Text>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>
+                {`${car.brand.name} ${modelName || ''} ${complectation}`}
+              </Text>
+            </View>
+
             <Text style={styles.price}>{`${priceSet(car.price.app)} ${prices.curr.name}`}</Text>
             <View style={styles.extra}>
               {

@@ -31,21 +31,25 @@ const styles = StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
   },
+  gap: {
+    marginBottom: styleConst.ui.footerHeight,
+  },
 });
 
 export default class InfoLine extends Component {
   static propTypes = {
     text: PropTypes.string.isRequired,
     infoIcon: PropTypes.bool,
+    gap: PropTypes.bool,
   }
 
   render() {
-    const { text, infoIcon } = this.props;
+    const { gap, text, infoIcon } = this.props;
 
     if (!text) return null;
 
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, gap ? styles.gap : null]}>
         {infoIcon ? <Icon name="ios-information-circle-outline" style={styles.icon} /> : null}
         <View style={styles.textContainer}>
           <Text style={styles.text}>{text}</Text>
