@@ -81,7 +81,7 @@ export default (variables = variable) => {
       ".first": {
         paddingTop: variables.listItemPadding + 3
       },
-      borderBottomWidth: platform === "ios" ? variables.borderWidth : null,
+      borderBottomWidth: variables.borderWidth,
       marginLeft: null,
       padding: variables.listItemPadding,
       paddingLeft: variables.listItemPadding + 5,
