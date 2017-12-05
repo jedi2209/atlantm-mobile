@@ -137,20 +137,18 @@ export const actionReviewsReset = () => {
   };
 };
 
-export const actionFetchReviews = ({ type, dealerId, nextPage, dateFrom, dateTo, ratingFrom, ratingTo }) => {
+export const actionFetchReviews = (props) => {
   return dispatch => {
     dispatch({
       type: REVIEWS__REQUEST,
-      payload: { type, dealerId, nextPage, dateFrom, dateTo },
+      payload: { ...props },
     });
 
-    const nextPageUrl = type === EVENT_LOAD_MORE ? nextPage : null;
+    const nextPageUrl = (props.type === EVENT_LOAD_MORE) ? props.nextPage : null;
 
-    return API.fetchReviews({ dealerId, dateFrom, dateTo, ratingFrom, ratingTo, nextPageUrl })
+    return API.fetchReviews({ ...props, nextPageUrl })
       .then(res => {
-        const { data, pages, total, error } = res;
-
-        if (error) {
+        if (res.error) {
           return dispatch({
             type: REVIEWS__FAIL,
             payload: {
@@ -166,13 +164,13 @@ export const actionFetchReviews = ({ type, dealerId, nextPage, dateFrom, dateTo,
         if (result.data.length === 0) {
           result.data.push({ type: 'empty', id: Number(new Date()) });
         } else {
-          result.data = result.data[dealerId];
+          result.data = result.data[props.dealerId];
         }
 
         return dispatch({
           type: REVIEWS__SUCCESS,
           payload: {
-            type,
+            type: props.type,
             ...result,
           },
         });
