@@ -81,6 +81,8 @@ function reviewsItems(state = [], action) {
     case DEALER__SUCCESS:
     case REVIEWS__RESET:
     case REVIEWS_DATE_PERIOD__SELECT:
+    case REVIEWS_RATING_FROM__SELECT:
+    case REVIEWS_RATING_TO__SELECT:
       return [];
     case REVIEWS__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {
@@ -101,6 +103,8 @@ function reviewsPages(state = {}, action) {
     case DEALER__SUCCESS:
     case REVIEWS__RESET:
     case REVIEWS_DATE_PERIOD__SELECT:
+    case REVIEWS_RATING_FROM__SELECT:
+    case REVIEWS_RATING_TO__SELECT:
       return {};
     case REVIEWS__SUCCESS:
       return action.payload.pages || {}; // на случай если пришел пустой массив
@@ -115,6 +119,8 @@ function reviewsTotal(state = {}, action) {
     case DEALER__SUCCESS:
     case REVIEWS__RESET:
     case REVIEWS_DATE_PERIOD__SELECT:
+    case REVIEWS_RATING_FROM__SELECT:
+    case REVIEWS_RATING_TO__SELECT:
       return {};
     case REVIEWS__SUCCESS:
       return action.payload.total || {}; // на случай если пришел пустой массив
@@ -231,6 +237,8 @@ function needFetchReviews(state = false, action) {
   switch (action.type) {
     case DEALER__SUCCESS:
     case REVIEWS_DATE_PERIOD__SELECT:
+    case REVIEWS_RATING_FROM__SELECT:
+    case REVIEWS_RATING_TO__SELECT:
       return true;
     case REVIEWS__SUCCESS:
       return false;
