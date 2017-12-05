@@ -15,6 +15,7 @@ import { get } from 'lodash';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import declOfNum from '../../../utils/decl-of-num';
+import { EVENT_REFRESH } from '../../../core/actionTypes';
 
 const styles = StyleSheet.create({
   content: {
@@ -31,6 +32,15 @@ const mapStateToProps = ({ dealer, nav, catalog }) => {
     items: catalog.newCar.items,
     filterData: catalog.newCar.filterData,
     isFetchingNewCarByFilter: catalog.newCar.meta.isFetchingNewCarByFilter,
+
+    // для pull-to-refresh
+    filterBrands: catalog.newCar.filterBrands,
+    filterModels: catalog.newCar.filterModels,
+    filterBody: catalog.newCar.filterBody,
+    filterGearbox: catalog.newCar.filterGearbox,
+    filterDrive: catalog.newCar.filterDrive,
+    filterEngineType: catalog.newCar.filterEngineType,
+    filterPrice: catalog.newCar.filterPrice,
   };
 };
 
@@ -82,18 +92,42 @@ class NewCarListScreen extends Component {
       filterData,
       navigation,
       actionFetchNewCarByFilter,
+
+      filterBrands,
+      filterModels,
+      filterBody,
+      filterGearbox,
+      filterDrive,
+      filterEngineType,
+      filterPrice,
     } = this.props;
+
+    const onResult = () => {
+      return setTimeout(() => {
+        this.props.navigation.setParams({ total: get(this.props.items, 'total') });
+      }, 150);
+    };
+
+    if (type === EVENT_REFRESH) {
+      return actionFetchNewCarByFilter({
+        searchUrl: filterData.search_url,
+        filterBrands,
+        filterModels,
+        filterBody,
+        filterGearbox,
+        filterDrive,
+        filterEngineType,
+        filterPrice,
+      })
+      .then(onResult);
+    }
 
     return actionFetchNewCarByFilter({
       type,
       searchUrl: filterData.search_url,
       nextPage: get(items, 'pages.next'),
     })
-      .then(() => {
-        return setTimeout(() => {
-          this.props.navigation.setParams({ total: get(this.props.items, 'total') });
-        }, 150);
-      });
+    .then(onResult);
   }
 
   render() {
