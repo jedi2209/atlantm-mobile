@@ -137,7 +137,7 @@ export const actionReviewsReset = () => {
   };
 };
 
-export const actionFetchReviews = ({ type, dealerId, nextPage, dateFrom, dateTo }) => {
+export const actionFetchReviews = ({ type, dealerId, nextPage, dateFrom, dateTo, ratingFrom, ratingTo }) => {
   return dispatch => {
     dispatch({
       type: REVIEWS__REQUEST,
@@ -146,7 +146,7 @@ export const actionFetchReviews = ({ type, dealerId, nextPage, dateFrom, dateTo 
 
     const nextPageUrl = type === EVENT_LOAD_MORE ? nextPage : null;
 
-    return API.fetchReviews({ dealerId, dateFrom, dateTo, nextPageUrl })
+    return API.fetchReviews({ dealerId, dateFrom, dateTo, ratingFrom, ratingTo, nextPageUrl })
       .then(res => {
         const { data, pages, total, error } = res;
 
@@ -238,8 +238,8 @@ export const actionReviewAdd = (props) => {
     return API.reviewAdd(props)
       .then(res => {
         const { error, status } = res;
-        // if (status !== 'success') {
-        if (error && error.message !== 'Сообщение успешно отправлено') {
+
+        if (status !== 'success') {
           return dispatch({
             type: REVIEW_ADD__FAIL,
             payload: {

@@ -134,9 +134,10 @@ class EkoScreen extends Component {
                 label: 'Отзывы о работе автоцентра',
                 iconName: 'reviews',
                 isFirst: true,
+                isLast: true,
                 onPressHandler: this.onPressReviews,
               })}
-              {this.renderItem({
+              {/* {this.renderItem({
                 label: 'Потребовать связаться с вами',
                 iconName: 'contactMe',
                 onPressHandler: this.onPressContactMe,
@@ -146,7 +147,7 @@ class EkoScreen extends Component {
                 iconName: 'advocate',
                 isLast: true,
                 onPressHandler: this.onPressAdvocate,
-              })}
+              })} */}
             </List>
 
             <InfoLine infoIcon={true} text={TEXT_MESSAGE_CONTROL} />

@@ -124,6 +124,9 @@ class ReviewsScreen extends Component {
       actionSelectFilterDatePeriod(REVIEWS_FILTER_DATE_PERIOD__MONTH);
     }
 
+    console.log('filterRatingFrom', filterRatingFrom);
+    console.log('filterRatingTo', filterRatingTo);
+
     if (!filterRatingFrom) {
       actionSelectFilterRatingFrom(1);
       actionSelectFilterRatingTo(5);

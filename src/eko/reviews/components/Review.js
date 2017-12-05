@@ -105,13 +105,13 @@ export default class Review extends Component {
     );
   }
 
-  renderRatingAndDate = (satisfy, date, id) => {
-    if (!satisfy && !date) return null;
+  renderRatingAndDate = (grade, date, id) => {
+    if (!grade && !date) return null;
 
     return (
       <View style={[styles.ratingRow, styles.row]}>
-        {satisfy ? <RatingStars rating={satisfy} itemId={id} /> : null}
-        {satisfy && date ? <Text style={styles.dash}>—</Text> : null}
+        {grade ? <RatingStars rating={grade} itemId={id} /> : null}
+        {grade && date ? <Text style={styles.dash}>—</Text> : null}
         {date ? <Text style={styles.date}>{this.processDate(date)}</Text> : null}
       </View>
     );
@@ -147,14 +147,14 @@ export default class Review extends Component {
 
   render() {
     const { review, visited, inList } = this.props;
-    const { name, satisfy, date, text, id } = review;
+    const { name, grade, date, text, id } = review;
     const isVisited = this.checkVisited();
 
     return (
       <ListItem onPress={inList ? this.onPress : null} style={styles.item}>
         <Body>
           {this.renderName(name, isVisited)}
-          {this.renderRatingAndDate(satisfy, date, id)}
+          {this.renderRatingAndDate(grade, date, id)}
           {this.renderPlusReview(text.plus)}
           {this.renderMinusReview(text.minus)}
         </Body>

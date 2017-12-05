@@ -44,14 +44,26 @@ export default {
     return this.request('/info/indicator/get/', baseRequestParams);
   },
 
-  fetchReviews({ dealerId, dateFrom, dateTo, nextPageUrl }) {
+  fetchReviews({ dealerId, dateFrom, dateTo, ratingFrom, ratingTo, nextPageUrl }) {
     let url = `/eko/review/get/${dealerId}/?date_from=${dateFrom}`;
 
     if (dateTo) {
       url += `&date_to=${dateTo}`;
     }
 
-    return this.request(nextPageUrl || url, baseRequestParams);
+    if (ratingFrom) {
+      url += `&grade_from=${ratingFrom}`;
+    }
+
+    if (ratingTo) {
+      url += `&grade_to=${ratingTo}`;
+    }
+
+    url = nextPageUrl || url;
+
+    __DEV__ && console.log('API fetchReviews url', url);
+
+    return this.request(url, baseRequestParams);
   },
 
   fetchDealerRating({ dealerId }) {
@@ -232,8 +244,28 @@ export default {
     return this.request('/tva/message/post/', requestParams);
   },
 
-  reviewAdd({ dealerId, name, phone, email, rating, messagePlus, messageMinus, publicAgree }) {
-    const body = `f_Dealer=${dealerId}&posting=1&f_Name=${name}&f_Phone=${phone}&f_Email=${email}&f_Satisfy=${rating}&f_PublicAgree=${publicAgree}&f_IP=mobile_app&f_Plus=${messagePlus}&f_Minus=${messageMinus}`;
+  reviewAdd({
+    name,
+    phone,
+    email,
+    rating,
+    dealerId,
+    publicAgree,
+    messagePlus,
+    messageMinus,
+  }) {
+    const body = [
+      'posting=1',
+      `f_Dealer=${dealerId}`,
+      `f_Name=${name}`,
+      `f_Phone=${phone}`,
+      `f_Email=${email}`,
+      `f_Grade=${rating}`,
+      `f_PublicAgree=${publicAgree}`,
+      `f_Plus=${messagePlus}`,
+      `f_Minus=${messageMinus}`,
+    ].join('&');
+
     const requestParams = _.merge(baseRequestParams, {
       method: 'post',
       headers: {
