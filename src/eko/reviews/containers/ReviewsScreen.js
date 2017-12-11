@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Container, Content, StyleProvider } from 'native-base';
+import { StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -20,7 +20,6 @@ import ReviewsList from '../components/ReviewsList';
 import ReviewsFilter from '../components/ReviewsFilter';
 import DealerItemList from '../../../core/components/DealerItemList';
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import { REVIEWS_FILTER_DATE_PERIOD__MONTH } from '../../constants';
@@ -69,7 +68,7 @@ class ReviewsScreen extends Component {
     headerTitle: 'Отзывы',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
+    headerLeft: <View />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 
