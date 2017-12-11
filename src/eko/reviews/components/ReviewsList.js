@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, Platform } from 'react-native';
+import { FlatList, Platform, View, StyleSheet } from 'react-native';
 
 // components
 import Review from './Review';
@@ -13,6 +13,13 @@ import PropTypes from 'prop-types';
 import { EVENT_DEFAULT, EVENT_LOAD_MORE, EVENT_REFRESH } from '../../../core/actionTypes';
 
 const TEXT_EMPTY = 'Нет отзывов для отображения';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 1,
+  },
+});
 
 export default class ReviewsList extends Component {
   static propTypes = {
@@ -116,18 +123,21 @@ export default class ReviewsList extends Component {
     const { items } = this.props;
 
     return (
-      <FlatList
-        onEndReachedThreshold={Platform.OS === 'android' ? 1 : 0.1}
-        initialNumToRender={20}
-        data={items}
-        onRefresh={this.onRefresh}
-        refreshing={this.state.isRefreshing}
-        ListEmptyComponent={this.renderEmptyComponent}
-        ListFooterComponent={this.renderFooter}
-        renderItem={this.renderItem}
-        keyExtractor={item => item.hash}
-        onEndReached={this.getOnEndReached()}
-      />
+      <View style={styles.container}>
+        <FlatList
+          onEndReachedThreshold={Platform.OS === 'android' ? 1 : 0.1}
+          initialNumToRender={5}
+          data={items}
+          onRefresh={this.onRefresh}
+          refreshing={this.state.isRefreshing}
+          ListEmptyComponent={this.renderEmptyComponent}
+          ListFooterComponent={this.renderFooter}
+          renderItem={this.renderItem}
+          keyExtractor={item => item.hash}
+          onEndReached={this.getOnEndReached()}
+          scrollEventThrottle={100}
+        />
+      </View>
     );
   }
 }

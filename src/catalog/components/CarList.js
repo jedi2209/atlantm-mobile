@@ -148,6 +148,7 @@ export default class CarList extends Component {
         renderItem={this.renderItem}
         keyExtractor={item => item.id.api}
         onEndReached={this.getOnEndReached()}
+        scrollEventThrottle={100}
       />
     );
   }

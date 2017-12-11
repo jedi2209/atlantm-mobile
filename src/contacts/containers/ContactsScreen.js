@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, View, Alert, NetInfo, StyleSheet, Platform } from 'react-native';
+import { Image, View, Alert, NetInfo, StyleSheet, Platform, Linking } from 'react-native';
 import {
   Container,
   Content,
@@ -24,6 +24,7 @@ import Communications from 'react-native-communications';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
+import InfoLine from '../../eko/components/InfoLine';
 
 // helpers
 import { get } from 'lodash';
@@ -125,6 +126,25 @@ class ContactsScreen extends Component {
   }
 
   onPressAbout = () => this.props.navigation.navigate('AboutScreen')
+
+  onPressRateApp = () => {
+    const APP_STORE_LINK = 'itms://itunes.apple.com/gb/app/atlant-m/id515931794?mt=8';
+    const PLAY_STORE_LINK = 'market://details?id=com.atlantm';
+
+    if (Platform.OS === 'ios') {
+      Linking.openURL(APP_STORE_LINK).catch(err => console.error('APP_STORE_LINK failed', err));
+    } else {
+      Linking.openURL(PLAY_STORE_LINK).catch(err => console.error('PLAY_STORE_LINK failed', err));
+    }
+  }
+
+  getRateAppInfoText = () => {
+    return `Если вам понравилось наше приложение, оставьте, пожайлуста, положительный отзыв в ${this.getPlatformStore()}`;
+  }
+
+  getRateAppLabel = () => `Оставить отзыв в ${this.getPlatformStore()}`
+
+  getPlatformStore = () => Platform.OS === 'ios' ? 'App Store' : 'Google Play'
 
   render() {
     // Для iPad меню, которое находится вне роутера
@@ -331,6 +351,34 @@ class ContactsScreen extends Component {
                 </ListItem>
               </View>
             </List>
+
+            <List style={stylesList.list}>
+              <View style={[stylesList.listItemContainer, stylesList.listItemContainerFirst]}>
+                <ListItem
+                  last
+                  icon
+                  style={stylesList.listItem}
+                  onPress={this.onPressRateApp}
+                >
+                  <Left>
+                    <Image
+                      style={stylesList.iconLeft}
+                      source={require('../assets/rate_app.png')}
+                    />
+                  </Left>
+                  <Body>
+                    <Text>{this.getRateAppLabel()}</Text>
+                  </Body>
+                  <Right>
+                    <Icon
+                      name="arrow-forward"
+                      style={stylesList.iconArrow}
+                    />
+                  </Right>
+                </ListItem>
+              </View>
+            </List>
+            <InfoLine text={this.getRateAppInfoText()} />
           </Content>
         </Container>
       </StyleProvider>
