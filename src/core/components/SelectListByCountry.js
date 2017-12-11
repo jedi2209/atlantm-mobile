@@ -161,6 +161,7 @@ export default class SelectListByCountry extends PureComponent {
             ListEmptyComponent={this.renderEmptyComponent}
             renderItem={this.renderItem}
             keyExtractor={item => item.id}
+            scrollEventThrottle={100}
           />
         </Container>
       </StyleProvider>

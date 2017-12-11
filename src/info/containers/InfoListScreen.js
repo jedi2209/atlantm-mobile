@@ -175,6 +175,7 @@ class InfoListScreen extends Component {
             style={styles.list}
             renderItem={this.renderItem}
             keyExtractor={item => item.id}
+            scrollEventThrottle={100}
           />
         </View>
       </StyleProvider>

@@ -115,8 +115,8 @@ export default class ReviewAddMessageForm extends PureComponent {
 
     return (
       <View>
-        {this.renderMessage('minus', messageMinus, messageMinusFill)}
-        {this.renderMessage('plus', messagePlus, messagePlusFill, true)}
+        {this.renderMessage('plus', messagePlus, messagePlusFill)}
+        {this.renderMessage('minus', messageMinus, messageMinusFill, true)}
       </View>
     );
   }

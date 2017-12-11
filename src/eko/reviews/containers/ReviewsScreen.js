@@ -33,6 +33,7 @@ import { substructMonth } from '../../../utils/date';
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
+    flex: 1,
   },
 });
 
@@ -160,33 +161,29 @@ class ReviewsScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <View style={styles.content}>
+          <DealerItemList
+            navigation={navigation}
+            city={dealerSelected.city}
+            name={dealerSelected.name}
+            brands={dealerSelected.brands}
+            returnScreen="ReviewsScreen"
+          />
 
-            <DealerItemList
-              navigation={navigation}
-              city={dealerSelected.city}
-              name={dealerSelected.name}
-              brands={dealerSelected.brands}
-              returnScreen="ReviewsScreen"
-            />
+          <ReviewsList
+            items={reviews}
+            pages={pages}
+            dataHandler={this.fetchReviews}
+            onPressItemHandler={this.onPressItem}
+            isFetchItems={isFetchReviews}
+          />
 
-            <View style={styles.list}>
-              <ReviewsList
-                items={reviews}
-                pages={pages}
-                dataHandler={this.fetchReviews}
-                onPressItemHandler={this.onPressItem}
-                isFetchItems={isFetchReviews}
-              />
-            </View>
-          </Content>
           <ReviewsFilter
             onPressRating={this.onPressRating}
             onPressDate={this.onPressDate}
             onPressAddReview={this.onPressAddReview}
           />
-        </Container>
+        </View>
       </StyleProvider>
     );
   }

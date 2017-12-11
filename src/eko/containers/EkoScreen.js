@@ -1,3 +1,5 @@
+// Вводный экран ЭКО, сейчас отключен, возможно вернется в скором будущем.
+
 import React, { Component } from 'react';
 import { Image, View, StyleSheet, Platform, Linking } from 'react-native';
 import { Container, Content, Text, StyleProvider, List, ListItem, Left, Body, Right, Icon } from 'native-base';
@@ -20,7 +22,7 @@ import { TEXT_MESSAGE_CONTROL, TEXT_RATE_APP } from '../constants';
 const icons = {
   advocate: require('../assets/advocate.png'),
   contactMe: require('../assets/contact_me.png'),
-  rateApp: require('../assets/rate_app.png'),
+  // rateApp: require('../assets/rate_app.png'),
   reviews: require('../assets/reviews.png'),
 };
 
