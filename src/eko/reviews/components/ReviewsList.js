@@ -125,8 +125,8 @@ export default class ReviewsList extends Component {
     return (
       <View style={styles.container}>
         <FlatList
-          onEndReachedThreshold={Platform.OS === 'android' ? 1 : 0.1}
-          initialNumToRender={5}
+          onEndReachedThreshold={1}
+          initialNumToRender={7}
           data={items}
           onRefresh={this.onRefresh}
           refreshing={this.state.isRefreshing}
