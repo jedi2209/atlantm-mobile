@@ -97,7 +97,7 @@ export default class ReviewsList extends Component {
     });
   }
 
-  getOnEndReached = () => debounce(this.handleLoadMore, 1000)
+  // getOnEndReached = () => debounce(this.handleLoadMore, 100)
 
   handleLoadMore = () => {
     const { items, pages, dataHandler } = this.props;
@@ -125,7 +125,7 @@ export default class ReviewsList extends Component {
     return (
       <View style={styles.container}>
         <FlatList
-          onEndReachedThreshold={1}
+          onEndReachedThreshold={15}
           initialNumToRender={7}
           data={items}
           onRefresh={this.onRefresh}
@@ -134,8 +134,7 @@ export default class ReviewsList extends Component {
           ListFooterComponent={this.renderFooter}
           renderItem={this.renderItem}
           keyExtractor={item => item.hash}
-          onEndReached={this.getOnEndReached()}
-          scrollEventThrottle={100}
+          onEndReached={this.handleLoadMore}
         />
       </View>
     );

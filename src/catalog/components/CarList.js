@@ -105,7 +105,7 @@ export default class CarList extends Component {
     });
   }
 
-  getOnEndReached = () => debounce(this.handleLoadMore, 1000)
+  // getOnEndReached = () => debounce(this.handleLoadMore, 1000)
 
   handleLoadMore = () => {
     const {
@@ -138,8 +138,8 @@ export default class CarList extends Component {
 
     return (
       <FlatList
-        onEndReachedThreshold={Platform.OS === 'android' ? 1 : 0.1}
-        initialNumToRender={20}
+        onEndReachedThreshold={15}
+        initialNumToRender={15}
         data={items}
         onRefresh={this.onRefresh}
         refreshing={this.state.isRefreshing}
@@ -147,8 +147,7 @@ export default class CarList extends Component {
         ListFooterComponent={this.renderFooter}
         renderItem={this.renderItem}
         keyExtractor={item => item.id.api}
-        onEndReached={this.getOnEndReached()}
-        scrollEventThrottle={100}
+        onEndReached={this.handleLoadMore}
       />
     );
   }
