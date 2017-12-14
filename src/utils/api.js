@@ -262,9 +262,11 @@ export default {
       `f_Email=${email}`,
       `f_Grade=${rating}`,
       `f_PublicAgree=${publicAgree}`,
-      `f_Plus=${messagePlus}`,
-      `f_Minus=${messageMinus}`,
+      `f_TextPlus=${messagePlus}`,
+      `f_TextMinus=${messageMinus}`,
     ].join('&');
+
+    console.log('body', body);
 
     const requestParams = _.merge(baseRequestParams, {
       method: 'post',
