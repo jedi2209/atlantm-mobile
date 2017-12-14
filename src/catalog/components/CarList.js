@@ -139,7 +139,7 @@ export default class CarList extends Component {
     return (
       <FlatList
         onEndReachedThreshold={15}
-        initialNumToRender={15}
+        initialNumToRender={10}
         data={items}
         onRefresh={this.onRefresh}
         refreshing={this.state.isRefreshing}
