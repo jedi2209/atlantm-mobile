@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import {
   actionReviewVisit,
   actionFetchReviews,
-  actionReviewsReset,
   actionDateFromFill,
   actionDateToFill,
   actionSelectFilterDatePeriod,
@@ -22,12 +21,12 @@ import DealerItemList from '../../../core/components/DealerItemList';
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 
 // helpers
-import { REVIEWS_FILTER_DATE_PERIOD__MONTH } from '../../constants';
+import { REVIEWS_FILTER_DATE_PERIOD__ALL } from '../../constants';
 import { get } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
-import { substructMonth } from '../../../utils/date';
+import { substruct10Years } from '../../../utils/date';
 
 const styles = StyleSheet.create({
   content: {
@@ -55,7 +54,6 @@ const mapStateToProps = ({ dealer, nav, eko }) => {
 const mapDispatchToProps = {
   actionReviewVisit,
   actionFetchReviews,
-  actionReviewsReset,
   actionDateToFill,
   actionDateFromFill,
   actionSelectFilterDatePeriod,
@@ -119,9 +117,9 @@ class ReviewsScreen extends Component {
     } = this.props;
 
     if (!dateFrom) {
-      dateFrom = substructMonth();
+      dateFrom = substruct10Years();
       actionDateFromFill(dateFrom);
-      actionSelectFilterDatePeriod(REVIEWS_FILTER_DATE_PERIOD__MONTH);
+      actionSelectFilterDatePeriod(REVIEWS_FILTER_DATE_PERIOD__ALL);
     }
 
     console.log('filterRatingFrom', filterRatingFrom);
