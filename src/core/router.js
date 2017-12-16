@@ -5,6 +5,7 @@ import IntroScreen from '../intro/containers/IntroScreen';
 import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
 import MenuScreen from '../menu/containers/MenuScreen';
 import ProfileScreen from '../profile/containers/ProfileScreen';
+import RegisterScreen from '../profile/containers/RegisterScreen';
 import ServiceScreen from '../service/containers/ServiceScreen';
 import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
 
@@ -156,7 +157,15 @@ const getRouter = initialRouteName => {
           header: null,
         },
       },
-      ProfileScreen: { screen: ProfileScreen },
+      Profile2Screen: {
+        screen: StackNavigator({
+          ProfileScreen: { screen: ProfileScreen },
+          RegisterScreen: { screen: RegisterScreen },
+        }),
+        navigationOptions: {
+          header: null,
+        },
+      },
       ServiceScreen: { screen: ServiceScreen },
       IndicatorsScreen: { screen: IndicatorsScreen },
       Catalog2Screen: {

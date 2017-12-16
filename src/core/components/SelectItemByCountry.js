@@ -63,13 +63,13 @@ export default class SelectItemByCountry extends Component {
   }
 
   onPressDealerItem = () => {
-    const { navigation, returnScreen, selectItem, item } = this.props;
+    const { navigation, returnScreen, selectItem, item, isGoBack } = this.props;
     const mainScreen = DeviceInfo.isTablet() ? 'ContactsScreen' : 'MenuScreen';
 
     selectItem(item)
       .then((action) => {
         if (action.type === DEALER__SUCCESS) {
-          if (returnScreen === 'ReviewsScreen') {
+          if (returnScreen === 'ReviewsScreen' || returnScreen === 'RegisterScreen') {
             return navigation.goBack();
           }
 

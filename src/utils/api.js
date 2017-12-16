@@ -300,6 +300,7 @@ export default {
     carNumber,
   }) {
     const body = [
+      'posting=1',
       `f_Dealer=${dealerId}`,
       `f_Name=${name}`,
       `f_Phone=${phone}`,
@@ -319,7 +320,7 @@ export default {
 
     __DEV__ && console.log('API register body', body);
 
-    return this.request('/eko/review/post/', requestParams);
+    return this.request('/lkk/register/', requestParams);
   },
 
   request(path, requestParams) {
