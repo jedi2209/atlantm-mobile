@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
@@ -10,7 +10,7 @@ import ListItemHeader from '../components/ListItemHeader';
 import stylesList from '../../core/components/Lists/style';
 
 // helpers
-// import styleConst from '../../core/style-const';
+import styleConst from '../../core/style-const';
 
 const styles = StyleSheet.create({
   container: {
@@ -19,39 +19,56 @@ const styles = StyleSheet.create({
   inputItem: {
     paddingRight: 7,
   },
+  textContainer: {
+    paddingHorizontal: styleConst.ui.horizontalGapInList,
+    paddingTop: styleConst.ui.horizontalGap,
+  },
+  text: {
+    color: styleConst.color.greyText3,
+    fontSize: styleConst.ui.smallTextSize,
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
+  },
 });
 
 export default class ProfileForm extends PureComponent {
   static propTypes = {
     auth: PropTypes.object,
+    isRegisterForm: PropTypes.bool,
 
     name: PropTypes.string,
     phone: PropTypes.string,
     email: PropTypes.string,
     car: PropTypes.string,
+    carVIN: PropTypes.string,
     carNumber: PropTypes.string,
 
     nameFill: PropTypes.func,
     phoneFill: PropTypes.func,
     emailFill: PropTypes.func,
     carFill: PropTypes.func,
+    carVINFill: PropTypes.func,
     carNumberFill: PropTypes.func,
     carSection: PropTypes.bool,
   }
 
   static defaultProps = {
+    auth: {},
     name: '',
     phone: '',
     email: '',
     car: '',
+    carVIN: '',
     carNumber: '',
     carSection: false,
+    isRegisterForm: false,
   }
 
   onChangeName = (value) => this.props.nameFill(value)
   onChangePhone = (value) => this.props.phoneFill(value)
   onChangeEmail = (value) => this.props.emailFill(value)
   onChangeCar = (value) => this.props.carFill(value)
+  onChangeCarVIN = (value) => this.props.carVINFill(value)
   onChangeCarNumber = (value) => this.props.carNumberFill(value)
 
   getCarSectionTitle = () => {
@@ -110,7 +127,7 @@ export default class ProfileForm extends PureComponent {
   }
 
   render() {
-    const { auth, name, phone, email, car, carNumber, carSection } = this.props;
+    const { isRegisterForm, auth, name, phone, email, car, carNumber, carSection, carVIN, carVINFill } = this.props;
 
     return (
       <View style={styles.container}>
@@ -124,11 +141,21 @@ export default class ProfileForm extends PureComponent {
         }, true)}
 
         {
+          isRegisterForm ?
+            (
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>* – обязательно заполните все поля</Text>
+              </View>
+            ) : null
+        }
+
+        {
           carSection ?
             (
               <View>
                 <ListItemHeader text={this.getCarSectionTitle()} />
-                {!auth.cars ? this.renderListItem('Авто', car, this.onChangeCar) : null}
+                {carVINFill ? this.renderListItem('VIN', carVIN, this.onChangeCarVIN) : null}
+                {!auth.cars && !carVINFill ? this.renderListItem('Авто', car, this.onChangeCar) : null}
                 {!auth.cars ? this.renderListItem('Гос. номер', carNumber, this.onChangeCarNumber, {}, true) : null}
 
                 { auth.cars ? this.renderCars() : null }

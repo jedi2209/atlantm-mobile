@@ -75,7 +75,8 @@ export const carFill = (car) => {
 };
 
 export const carVINFill = (carVIN) => {
-  const result = carVIN.replace(/\s/g, '');
+  let result = carVIN.replace(/\s/g, '');
+  result = result && result.toUpperCase();
 
   return dispatch => {
     dispatch({

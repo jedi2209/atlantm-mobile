@@ -25,6 +25,7 @@ import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
 // helpres
+import { get } from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
@@ -118,6 +119,10 @@ class ProfileScreen extends Component {
     isLoginRequest: PropTypes.bool,
   }
 
+  static defaultProps = {
+    auth: {},
+  }
+
   shouldComponentUpdate(nextProps) {
     const {
       name,
@@ -133,7 +138,14 @@ class ProfileScreen extends Component {
       isLoginRequest,
     } = this.props;
     const nav = nextProps.nav.newState;
-    const isActiveScreen = nav.routes[nav.index].routeName === 'ProfileScreen';
+    let isActiveScreen = false;
+
+    if (nav) {
+      const rootLevel = nav.routes[nav.index];
+      if (rootLevel) {
+        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'ProfileScreen';
+      }
+    }
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
         (name !== nextProps.name) ||
@@ -204,6 +216,7 @@ class ProfileScreen extends Component {
                 !auth.token ?
                   (
                     <Auth
+                      navigation={navigation}
                       loginHandler={actionLogin}
                       isRequest={isLoginRequest}
                       login={login}

@@ -69,11 +69,14 @@ export default class Auth extends Component {
     password: PropTypes.string,
     loginFill: PropTypes.func,
     passwordFill: PropTypes.func,
+    navigation: PropTypes.object,
   }
 
   static defaultProps = {
     isRequest: false,
   }
+
+  onPressRegister = () => this.props.navigation.navigate('RegisterScreen')
 
   onPressLogin = () => {
     const { login, password, loginHandler } = this.props;
