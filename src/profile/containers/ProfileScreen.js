@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View } from 'react-native';
-import { Container, Content, List, StyleProvider } from 'native-base';
+import { Alert, StyleSheet, View, Text } from 'react-native';
+import { Container, Content, List, StyleProvider, Button, Icon } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
-import { nameFill, phoneFill, emailFill, carFill, carNumberFill } from '../actions';
+import {
+  nameFill,
+  phoneFill,
+  emailFill,
+  carFill,
+  carNumberFill,
+  loginFill,
+  passwordFill,
+  actionLogin,
+  actionLogout,
+} from '../actions';
 
 // components
+import Auth from '../components/Auth';
 import ProfileForm from '../components/ProfileForm';
 import ListItemHeader from '../components/ListItemHeader';
 import DealerItemList from '../../core/components/DealerItemList';
@@ -22,6 +33,28 @@ const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
   },
+  button: {
+    height: styleConst.ui.footerHeight,
+    backgroundColor: '#fff',
+    borderTopWidth: styleConst.ui.borderWidth,
+    borderBottomWidth: 1,
+    borderTopColor: styleConst.color.border,
+    borderBottomColor: styleConst.color.border,
+    marginBottom: 30,
+  },
+  buttonText: {
+    fontFamily: styleConst.font.medium,
+    fontSize: 16,
+    letterSpacing: styleConst.ui.letterSpacing,
+    color: styleConst.color.lightBlue,
+    paddingRight: styleConst.ui.horizontalGapInList,
+  },
+  buttonIcon: {
+    fontSize: 30,
+    marginRight: 10,
+    color: styleConst.color.lightBlue,
+    paddingLeft: styleConst.ui.horizontalGapInList,
+  },
 });
 
 const mapStateToProps = ({ dealer, profile, nav }) => {
@@ -33,6 +66,11 @@ const mapStateToProps = ({ dealer, profile, nav }) => {
     email: profile.email,
     car: profile.car,
     carNumber: profile.carNumber,
+
+    auth: profile.auth,
+    login: profile.login,
+    password: profile.password,
+    isLoginRequest: profile.meta.isLoginRequest,
   };
 };
 
@@ -42,6 +80,11 @@ const mapDispatchToProps = {
   emailFill,
   carFill,
   carNumberFill,
+
+  loginFill,
+  passwordFill,
+  actionLogin,
+  actionLogout,
 };
 
 class ProfileScreen extends Component {
@@ -66,6 +109,13 @@ class ProfileScreen extends Component {
     email: PropTypes.string,
     car: PropTypes.string,
     carNumber: PropTypes.string,
+
+    auth: PropTypes.object,
+    loginFill: PropTypes.func,
+    passwordFill: PropTypes.func,
+    login: PropTypes.string,
+    password: PropTypes.string,
+    isLoginRequest: PropTypes.bool,
   }
 
   shouldComponentUpdate(nextProps) {
@@ -76,17 +126,45 @@ class ProfileScreen extends Component {
       car,
       carNumber,
       dealerSelected,
+
+      auth,
+      login,
+      password,
+      isLoginRequest,
     } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'ProfileScreen';
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
         (name !== nextProps.name) ||
-          (phone !== nextProps.phone) ||
-            (email !== nextProps.email) ||
-              (car !== nextProps.car) ||
-                (carNumber !== nextProps.carNumber);
+        (phone !== nextProps.phone) ||
+        (email !== nextProps.email) ||
+        (car !== nextProps.car) ||
+        (carNumber !== nextProps.carNumber) ||
+        (login !== nextProps.login) ||
+        (password !== nextProps.password) ||
+        (isLoginRequest !== nextProps.isLoginRequest) ||
+        (auth.token !== nextProps.auth.token);
   }
+
+  onPressLogout = () => {
+    const { actionLogout } = this.props;
+
+    return Alert.alert(
+      'Подтвердите действие',
+      '',
+      [
+        { text: 'Отмена', style: 'cancel' },
+        {
+          text: 'Выйти',
+          onPress() {
+            actionLogout();
+            setTimeout(() => Alert.alert('Вы вышли из личного кабинета'), 100);
+          },
+        },
+      ],
+    );
+  };
 
   render() {
     // Для iPad меню, которое находится вне роутера
@@ -105,6 +183,14 @@ class ProfileScreen extends Component {
       email,
       car,
       carNumber,
+
+      auth,
+      login,
+      password,
+      loginFill,
+      passwordFill,
+      actionLogin,
+      isLoginRequest,
     } = this.props;
 
     console.log('== Profile ==');
@@ -114,6 +200,20 @@ class ProfileScreen extends Component {
         <Container>
           <Content style={styles.content} >
             <List style={styles.list}>
+              {
+                !auth.token ?
+                  (
+                    <Auth
+                      loginHandler={actionLogin}
+                      isRequest={isLoginRequest}
+                      login={login}
+                      password={password}
+                      loginFill={loginFill}
+                      passwordFill={passwordFill}
+                    />
+                  ) : null
+              }
+
               <ListItemHeader text="МОЙ АВТОЦЕНТР" />
 
               <DealerItemList
@@ -127,6 +227,7 @@ class ProfileScreen extends Component {
               <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
 
               <ProfileForm
+                auth={auth}
                 carSection={true}
                 name={name}
                 phone={phone}
@@ -140,6 +241,16 @@ class ProfileScreen extends Component {
                 carNumberFill={carNumberFill}
               />
             </List>
+
+            {
+              auth.token ?
+                (
+                  <Button onPress={this.onPressLogout} full style={styles.button}>
+                    <Icon name="ios-exit-outline" style={styles.buttonIcon} />
+                    <Text numberOfLines={1} style={styles.buttonText}>ВЫЙТИ ИЗ ЛИЧНОГО КАБИНЕТА</Text>
+                  </Button>
+                ) : null
+            }
           </Content>
         </Container>
       </StyleProvider>

@@ -3,14 +3,14 @@ import _ from 'lodash';
 import DeviceInfo from 'react-native-device-info';
 
 // credentials
-const token = 'old_secret_token';
+const authToken = 'old_secret_token';
 
 const baseRequestParams = {
   method: 'GET',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${authToken}`,
     'App-Version': DeviceInfo.getVersion(),
   },
 };
@@ -277,6 +277,47 @@ export default {
     });
 
     __DEV__ && console.log('API review add body', body);
+
+    return this.request('/eko/review/post/', requestParams);
+  },
+
+  fetchCars({ token }) {
+    return this.request(`/lkk/cars/?token=${token}`, baseRequestParams);
+  },
+
+  loginRequest({ login, password }) {
+    __DEV__ && console.log('API register login: %s, password: %s', login, password);
+
+    return this.request(`/lkk/auth/login/?login=${login}&password=${password}`, baseRequestParams);
+  },
+
+  registerRequest({
+    dealerId,
+    name,
+    phone,
+    email,
+    carVIN,
+    carNumber,
+  }) {
+    const body = [
+      `f_Dealer=${dealerId}`,
+      `f_Name=${name}`,
+      `f_Phone=${phone}`,
+      `f_Email=${email}`,
+      'f_Source=3',
+      `f_VIN=${carVIN}`,
+      `f_Number=${carNumber}`,
+    ].join('&');
+
+    const requestParams = _.merge(baseRequestParams, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    });
+
+    __DEV__ && console.log('API register body', body);
 
     return this.request('/eko/review/post/', requestParams);
   },

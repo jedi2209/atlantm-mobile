@@ -32,6 +32,7 @@ export default {
     letterSpacing: -0.3,
     footerHeight: 50,
     listHeight: 44,
+    smallTextSize: 15,
   },
 };
 
