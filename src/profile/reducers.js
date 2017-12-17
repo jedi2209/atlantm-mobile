@@ -14,7 +14,6 @@ import {
   PROFILE_PASSWORD__FILL,
   PROFILE_BONUS_LEVEL1__SET,
   PROFILE_BONUS_LEVEL2__SET,
-  PROFILE_BONUS_LEVEL3__SET,
 
   LOGOUT,
   LOGIN__SUCCESS,
@@ -233,19 +232,6 @@ function level2Hash(state = null, action) {
   }
 }
 
-function level3Hash(state = null, action) {
-  switch (action.type) {
-    case REHYDRATE:
-    case LOGIN__SUCCESS:
-    case LOGOUT:
-      return null;
-    case PROFILE_BONUS_LEVEL3__SET:
-      return action.payload;
-    default:
-      return state;
-  }
-}
-
 export default combineReducers({
   name,
   phone,
@@ -264,7 +250,6 @@ export default combineReducers({
     data: bonusData,
     level1Hash,
     level2Hash,
-    level3Hash,
   }),
 
   meta: combineReducers({
