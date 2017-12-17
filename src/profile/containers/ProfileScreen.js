@@ -21,6 +21,7 @@ import {
 import Auth from '../components/Auth';
 import ProfileForm from '../components/ProfileForm';
 import ListItemHeader from '../components/ListItemHeader';
+import BonusDiscount from '../components/BonusDiscount';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
@@ -72,6 +73,9 @@ const mapStateToProps = ({ dealer, profile, nav }) => {
     login: profile.login,
     password: profile.password,
     isLoginRequest: profile.meta.isLoginRequest,
+
+    bonus: profile.bonus,
+    discounts: profile.discounts,
   };
 };
 
@@ -117,6 +121,9 @@ class ProfileScreen extends Component {
     login: PropTypes.string,
     password: PropTypes.string,
     isLoginRequest: PropTypes.bool,
+
+    bonus: PropTypes.object,
+    discounts: PropTypes.array,
   }
 
   static defaultProps = {
@@ -203,6 +210,8 @@ class ProfileScreen extends Component {
       passwordFill,
       actionLogin,
       isLoginRequest,
+      bonus,
+      discounts,
     } = this.props;
 
     console.log('== Profile ==');
@@ -225,6 +234,15 @@ class ProfileScreen extends Component {
                       passwordFill={passwordFill}
                     />
                   ) : null
+              }
+
+              {
+                auth.token ?
+                  <BonusDiscount
+                    bonus={get(bonus, 'saldo.value')}
+                    discounts={discounts.length}
+                  /> :
+                  null
               }
 
               <ListItemHeader text="МОЙ АВТОЦЕНТР" />

@@ -122,6 +122,8 @@ export const actionLogin = (props) => {
     });
 
     function onError(error) {
+      console.log('error', error);
+
       return dispatch({
         type: LOGIN__FAIL,
         payload: {
@@ -132,6 +134,7 @@ export const actionLogin = (props) => {
     }
 
     try {
+      // 1. Получаем данные пользователя
       const authResponse = await API.loginRequest(props);
       const { error, status, data } = authResponse;
 
@@ -142,20 +145,34 @@ export const actionLogin = (props) => {
 
       const { user, token } = data;
 
+      // 2. С помощью полученного токена, получаем автомобили пользователя
       let cars = [];
       const carsResponse = await API.fetchCars({ token });
-      const { status: carsStatus } = carsResponse;
-
-      if (carsStatus === 'success') {
+      if (carsResponse.status === 'success') {
         cars = carsResponse.data;
+      }
+
+      // 3. С помощью полученного токена, получаем бонусы и скидки пользователя
+      let bonus = {};
+      const bonusResponse = await API.fetchBonus({ token });
+      if (bonusResponse.status === 'success') {
+        bonus = bonusResponse.data;
+      }
+
+      let discounts = [];
+      const discountsResponse = await API.fetchDiscounts({ token });
+      if (discountsResponse.status === 'success') {
+        discounts = discountsResponse.data;
       }
 
       return dispatch({
         type: LOGIN__SUCCESS,
         payload: {
           token,
-          ...user,
           cars,
+          bonus,
+          discounts,
+          ...user,
         },
       });
     } catch (e) {

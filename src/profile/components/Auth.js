@@ -98,7 +98,13 @@ export default class Auth extends Component {
         }
 
         if (action.type === LOGIN__FAIL) {
-          setTimeout(() => Alert.alert(get(action, 'payload.message', 'Произошла ошибка, попробуйте снова')), 100);
+          const defaultMessage = 'Произошла ошибка, попробуйте снова';
+          const code = get(action, 'payload.code');
+          const message = get(action, 'payload.message');
+
+          setTimeout(() => {
+            Alert.alert(!code || code === 500 ? defaultMessage : message);
+          }, 100);
         }
       });
   }
