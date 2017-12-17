@@ -9,8 +9,12 @@ import {
   PROFILE_CAR_NUMBER__FILL,
   PROFILE_CAR_VIN__FILL,
 
+
   PROFILE_LOGIN__FILL,
   PROFILE_PASSWORD__FILL,
+  PROFILE_BONUS_LEVEL1__SET,
+  PROFILE_BONUS_LEVEL2__SET,
+  PROFILE_BONUS_LEVEL3__SET,
 
   LOGOUT,
   LOGIN__SUCCESS,
@@ -177,10 +181,10 @@ function isRegisterRequest(state = false, action) {
   }
 }
 
-function bonus(state = {}, action) {
+function bonusData(state = {}, action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.bonus', {});
+      return get(action.payload, 'profile.bonus.data', {});
     case LOGIN__SUCCESS:
       return action.payload.bonus;
     case LOGOUT:
@@ -203,6 +207,45 @@ function discounts(state = [], action) {
   }
 }
 
+function level1Hash(state = null, action) {
+  switch (action.type) {
+    case REHYDRATE:
+    case LOGIN__SUCCESS:
+    case LOGOUT:
+      return null;
+    case PROFILE_BONUS_LEVEL1__SET:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+function level2Hash(state = null, action) {
+  switch (action.type) {
+    case REHYDRATE:
+    case LOGIN__SUCCESS:
+    case LOGOUT:
+      return null;
+    case PROFILE_BONUS_LEVEL2__SET:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+function level3Hash(state = null, action) {
+  switch (action.type) {
+    case REHYDRATE:
+    case LOGIN__SUCCESS:
+    case LOGOUT:
+      return null;
+    case PROFILE_BONUS_LEVEL3__SET:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   name,
   phone,
@@ -215,8 +258,14 @@ export default combineReducers({
   password,
   cars,
   carVIN,
-  bonus,
   discounts,
+
+  bonus: combineReducers({
+    data: bonusData,
+    level1Hash,
+    level2Hash,
+    level3Hash,
+  }),
 
   meta: combineReducers({
     isLoginRequest,

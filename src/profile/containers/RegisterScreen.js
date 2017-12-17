@@ -139,17 +139,7 @@ class RegisterScreen extends Component {
       }
     }
 
-    console.log('isActiveScreen', isActiveScreen);
-
     return isActiveScreen;
-
-    // return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-    //     (name !== nextProps.name) ||
-    //     (phone !== nextProps.phone) ||
-    //     (email !== nextProps.email) ||
-    //     (carVIN !== nextProps.carVIN) ||
-    //     (carNumber !== nextProps.carNumber) ||
-    //     (isRegisterRequest !== nextProps.isRegisterRequest);
   }
 
   onPressRegister = () => {
@@ -217,7 +207,7 @@ class RegisterScreen extends Component {
       isRegisterRequest,
     } = this.props;
 
-    console.log('== Profile ==');
+    console.log('== Register Screen ==');
 
     return (
       <StyleProvider style={getTheme()}>

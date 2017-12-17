@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
@@ -8,21 +8,6 @@ import { ListItem, Body, Left, Right, Icon } from 'native-base';
 
 // styles
 import stylesList from '../../core/components/Lists/style';
-
-// helpers
-import styleConst from '../../core/style-const';
-
-const styles = StyleSheet.create({
-  listItemBadge: {
-    color: styleConst.color.greyText3,
-    fontSize: styleConst.ui.smallTextSize,
-    letterSpacing: styleConst.ui.letterSpacing,
-    fontFamily: styleConst.font.regular,
-  },
-  iconArrow: {
-    marginLeft: 0,
-  },
-});
 
 const icons = {
   bonus: require('../assets/bonus.png'),
@@ -41,6 +26,9 @@ export default class Auth extends Component {
     discounts: null,
   }
 
+  onPressBonus = () => this.props.navigation.navigate('BonusScreen')
+  onPressDiscount = () => this.props.navigation.navigate('DiscountScreen')
+
   renderItem = (label, iconName, onPressHandler, badge, isLast) => {
     return (
       <View style={stylesList.listItemContainer}>
@@ -57,8 +45,8 @@ export default class Auth extends Component {
             <Text style={stylesList.label}>{label}</Text>
           </Body>
           <Right>
-            {badge ? <Text style={styles.listItemBadge}>{badge}</Text> : null}
-            <Icon name="arrow-forward" style={[stylesList.iconArrow, styles.iconArrow]} />
+            {badge ? <Text style={stylesList.badgeText}>{badge}</Text> : null}
+            <Icon name="arrow-forward" style={[stylesList.iconArrow, stylesList.iconArrowWithText]} />
           </Right>
         </ListItem>
       </View>
@@ -69,7 +57,7 @@ export default class Auth extends Component {
     const { bonus, discounts } = this.props;
 
     return (
-      <View style={styles.container}>
+      <View>
          <ListItemHeader text="БОНУСЫ И СКИДКИ" />
          {this.renderItem('Бонусные баллы', 'bonus', this.onPressBonus, bonus)}
          {this.renderItem('Персональные скидки', 'discount', this.onPressDiscount, discounts, true)}
