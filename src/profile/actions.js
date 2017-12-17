@@ -9,6 +9,9 @@ import {
   PROFILE_CAR_VIN__FILL,
   PROFILE_LOGIN__FILL,
   PROFILE_PASSWORD__FILL,
+  PROFILE_BONUS_LEVEL1__SET,
+  PROFILE_BONUS_LEVEL2__SET,
+  PROFILE_BONUS_LEVEL3__SET,
 
   LOGOUT,
   LOGIN__SUCCESS,
@@ -147,20 +150,20 @@ export const actionLogin = (props) => {
 
       // 2. С помощью полученного токена, получаем автомобили пользователя
       let cars = [];
-      const carsResponse = await API.fetchCars({ token });
+      const carsResponse = await API.fetchCars({ token: token.id });
       if (carsResponse.status === 'success') {
         cars = carsResponse.data;
       }
 
       // 3. С помощью полученного токена, получаем бонусы и скидки пользователя
       let bonus = {};
-      const bonusResponse = await API.fetchBonus({ token });
+      const bonusResponse = await API.fetchBonus({ token: token.id });
       if (bonusResponse.status === 'success') {
         bonus = bonusResponse.data;
       }
 
       let discounts = [];
-      const discountsResponse = await API.fetchDiscounts({ token });
+      const discountsResponse = await API.fetchDiscounts({ token: token.id });
       if (discountsResponse.status === 'success') {
         discounts = discountsResponse.data;
       }
@@ -211,5 +214,32 @@ export const actionRegister = (props) => {
     } catch (e) {
       return onError(e);
     }
+  };
+};
+
+export const actionSetBonusLevel1 = (hash) => {
+  return dispatch => {
+    dispatch({
+      type: PROFILE_BONUS_LEVEL1__SET,
+      payload: hash,
+    });
+  };
+};
+
+export const actionSetBonusLevel2 = (hash) => {
+  return dispatch => {
+    dispatch({
+      type: PROFILE_BONUS_LEVEL2__SET,
+      payload: hash,
+    });
+  };
+};
+
+export const actionSetBonusLevel3 = (hash) => {
+  return dispatch => {
+    dispatch({
+      type: PROFILE_BONUS_LEVEL3__SET,
+      payload: hash,
+    });
   };
 };

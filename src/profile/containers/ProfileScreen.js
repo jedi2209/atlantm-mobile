@@ -25,7 +25,7 @@ import BonusDiscount from '../components/BonusDiscount';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
-// helpres
+// helpers
 import { get } from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
@@ -74,7 +74,7 @@ const mapStateToProps = ({ dealer, profile, nav }) => {
     password: profile.password,
     isLoginRequest: profile.meta.isLoginRequest,
 
-    bonus: profile.bonus,
+    bonus: profile.bonus.data,
     discounts: profile.discounts,
   };
 };
@@ -163,7 +163,7 @@ class ProfileScreen extends Component {
         (login !== nextProps.login) ||
         (password !== nextProps.password) ||
         (isLoginRequest !== nextProps.isLoginRequest) ||
-        (auth.token !== nextProps.auth.token);
+        (get(auth, 'token.id') !== get(nextProps, 'auth.token.id'));
   }
 
   onPressLogout = () => {
@@ -241,6 +241,7 @@ class ProfileScreen extends Component {
                   <BonusDiscount
                     bonus={get(bonus, 'saldo.value')}
                     discounts={discounts.length}
+                    navigation={navigation}
                   /> :
                   null
               }

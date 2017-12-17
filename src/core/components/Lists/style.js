@@ -54,11 +54,19 @@ export default StyleSheet.create({
   },
   iconArrow: {
     color: styleConst.color.systemGray,
-    // marginTop: 3,
     marginLeft: styleConst.ui.horizontalGap,
+  },
+  iconArrowWithText: {
+    marginLeft: 0,
   },
   iconLeft: {
     width: iconLeftSize,
     height: iconLeftSize,
+  },
+  badgeText: {
+    color: styleConst.color.greyText3,
+    fontSize: styleConst.ui.smallTextSize,
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
   },
 });
