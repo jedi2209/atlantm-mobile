@@ -5,7 +5,7 @@ import { Container, Content, ListItem, StyleProvider, Icon, Body, Right } from '
 
 // redux
 import { connect } from 'react-redux';
-import { actionSetBonusLevel1, actionSetBonusLevel2, actionSetBonusLevel3 } from '../../actions';
+import { actionSetBonusLevel1, actionSetBonusLevel2 } from '../../actions';
 
 // components
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
@@ -55,14 +55,12 @@ const mapStateToProps = ({ profile, nav }) => {
     bonus: profile.bonus.data,
     level1hash: profile.bonus.level1Hash,
     level2hash: profile.bonus.level2Hash,
-    level3hash: profile.bonus.level3Hash,
   };
 };
 
 const mapDispatchToProps = {
   actionSetBonusLevel1,
   actionSetBonusLevel2,
-  actionSetBonusLevel3,
 };
 
 class BonusScreen extends Component {
@@ -94,11 +92,9 @@ class BonusScreen extends Component {
 
   onPressLevel1 = hash => this.props.actionSetBonusLevel1(hash)
   onPressLevel2 = hash => this.props.actionSetBonusLevel2(hash)
-  onPressLevel3 = hash => this.props.actionSetBonusLevel3(hash)
 
   isActiveLevel1 = hash => this.props.level1hash === hash;
   isActiveLevel2 = hash => this.props.level2hash === hash;
-  isActiveLevel3 = hash => this.props.level3hash === hash;
 
   renderLevel1 = (bonuses) => {
     return Object.keys(bonuses).map((bonusYear, idx, yearsArray) => {
@@ -122,17 +118,39 @@ class BonusScreen extends Component {
     });
   }
 
-  renderLevel2 = () => {
+  renderLevel2 = (bonusesByMonth) => {
+    return Object.keys(bonusesByMonth).map((bonusMonth, idx, monthArray) => {
+      const bonus = bonusesByMonth[bonusMonth];
+      const isLast = (monthArray.length - 1) === idx;
+      const hash = bonus.hash;
+      const isActive = this.isActiveLevel2(hash);
+      const onPressHander = () => this.onPressLevel2(hash);
 
+      return (
+        <View key={hash} style={styles.acc}>
+          {this.renderItemHeader(MONTH_TEXT[bonusMonth], bonus.total, onPressHander, 'itemLevel2', isActive, isLast, true)}
+          {
+            isActive ?
+              (
+                <View style={[styles.accContent, styles.accContentLevel1]}>{this.renderLevel3(bonus.history)}</View>
+              ) : null
+          }
+        </View>
+      );
+    });
   }
 
-  renderLevel3 = () => {
+  renderLevel3 = (history) => {
+    return history.map((bonus, idx) => {
+      const isLast = (history.length - 1) === idx;
 
+      return this.renderItemHeader(bonus.name, bonus.summ, null, 'itemLevel3', null, isLast, null, bonus.hash);
+    });
   }
 
-  renderItemHeader = (label, total, onPressHandler, theme, isActive, isLast, isArrow) => {
+  renderItemHeader = (label, total, onPressHandler, theme, isActive, isLast, isArrow, key) => {
     return (
-      <View style={[stylesList.listItemContainer, styles[theme]]}>
+      <View key={key} style={[stylesList.listItemContainer, styles[theme]]}>
         <ListItem
           icon
           last={isLast}

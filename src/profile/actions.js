@@ -11,7 +11,6 @@ import {
   PROFILE_PASSWORD__FILL,
   PROFILE_BONUS_LEVEL1__SET,
   PROFILE_BONUS_LEVEL2__SET,
-  PROFILE_BONUS_LEVEL3__SET,
 
   LOGOUT,
   LOGIN__SUCCESS,
@@ -230,15 +229,6 @@ export const actionSetBonusLevel2 = (hash) => {
   return dispatch => {
     dispatch({
       type: PROFILE_BONUS_LEVEL2__SET,
-      payload: hash,
-    });
-  };
-};
-
-export const actionSetBonusLevel3 = (hash) => {
-  return dispatch => {
-    dispatch({
-      type: PROFILE_BONUS_LEVEL3__SET,
       payload: hash,
     });
   };
