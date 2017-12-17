@@ -177,6 +177,32 @@ function isRegisterRequest(state = false, action) {
   }
 }
 
+function bonus(state = {}, action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'profile.bonus', {});
+    case LOGIN__SUCCESS:
+      return action.payload.bonus;
+    case LOGOUT:
+      return {};
+    default:
+      return state;
+  }
+}
+
+function discounts(state = [], action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'profile.discounts', []);
+    case LOGIN__SUCCESS:
+      return action.payload.discounts;
+    case LOGOUT:
+      return [];
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   name,
   phone,
@@ -189,6 +215,8 @@ export default combineReducers({
   password,
   cars,
   carVIN,
+  bonus,
+  discounts,
 
   meta: combineReducers({
     isLoginRequest,

@@ -44,6 +44,14 @@ export default {
     return this.request('/info/indicator/get/', baseRequestParams);
   },
 
+  fetchBonus({ token }) {
+    return this.request(`/lkk/bonus/list/?token=${token}`, baseRequestParams);
+  },
+
+  fetchDiscounts({ token }) {
+    return this.request(`/lkk/actions/list/?token=${token}`, baseRequestParams);
+  },
+
   fetchReviews({ dealerId, dateFrom, dateTo, ratingFrom, ratingTo, nextPageUrl }) {
     let url = `/eko/review/get/${dealerId}/?date_from=${dateFrom}`;
 
@@ -328,6 +336,7 @@ export default {
 
     return fetch(url, requestParams)
       .then(response => {
+        console.log('response', response);
         return response.json();
       });
   },
