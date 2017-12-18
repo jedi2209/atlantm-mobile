@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
-import { Container, Content, ListItem, StyleProvider, Icon, Body, Right } from 'native-base';
+import { Container, Content, ListItem, StyleProvider, Icon, Body, Right, Button } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -9,6 +9,7 @@ import { actionSetBonusLevel1, actionSetBonusLevel2 } from '../../actions';
 
 // components
 import * as Animatable from 'react-native-animatable';
+import Communications from 'react-native-communications';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // styles
@@ -78,14 +79,51 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
     marginBottom: 5,
   },
+  total: {
+    marginHorizontal: styleConst.ui.horizontalGapInList,
+    marginTop: 15,
+    alignItems: 'flex-end',
+  },
+  totalText: {
+    fontSize: 18,
+    color: styleConst.color.greyText,
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
+  },
+  totalValue: {
+    color: '#000',
+  },
+  button: {
+    height: styleConst.ui.footerHeight,
+    backgroundColor: '#fff',
+    borderTopWidth: styleConst.ui.borderWidth,
+    borderBottomWidth: 1,
+    borderTopColor: styleConst.color.border,
+    borderBottomColor: styleConst.color.border,
+    marginVertical: 30,
+  },
+  buttonText: {
+    fontFamily: styleConst.font.medium,
+    fontSize: 16,
+    letterSpacing: styleConst.ui.letterSpacing,
+    color: styleConst.color.lightBlue,
+    paddingRight: styleConst.ui.horizontalGapInList,
+  },
+  buttonIcon: {
+    fontSize: 30,
+    marginRight: 10,
+    color: styleConst.color.lightBlue,
+    paddingLeft: styleConst.ui.horizontalGapInList,
+  },
 });
 
-const mapStateToProps = ({ profile, nav }) => {
+const mapStateToProps = ({ dealer, profile, nav }) => {
   return {
     nav,
     bonus: profile.bonus.data,
     level1hash: profile.bonus.level1Hash,
     level2hash: profile.bonus.level2Hash,
+    dealerSelected: dealer.selected,
   };
 };
 
@@ -235,6 +273,16 @@ class BonusScreen extends Component {
     );
   }
 
+  onPressBonusInfo = () => {
+    const links = {
+      ru: 'https://www.atlantm.ru/expert/bonus/',
+      ua: 'https://www.atlant-m.ua/expert/bonus/',
+      by: 'https://www.atlant-m.by/expert/bonus/',
+    };
+
+    Communications.web(links[this.props.dealerSelected.region]);
+  }
+
   render() {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
@@ -259,6 +307,15 @@ class BonusScreen extends Component {
         <Container>
           <Content style={styles.content} >
             {Object.keys(get(bonus, 'items'), []).length ? this.renderLevel1(bonus.items) : null}
+
+            <View style={styles.total}>
+              <Text style={styles.totalText}>Всего: <Text style={styles.totalValue}>{get(bonus, 'saldo.value')}</Text> баллов</Text>
+            </View>
+
+            <Button onPress={this.onPressBonusInfo} full style={styles.button}>
+              <Icon name="ios-information-circle-outline" style={styles.buttonIcon} />
+              <Text numberOfLines={1} style={styles.buttonText}>БОНУСНАЯ ПРОГРАММА</Text>
+            </Button>
           </Content>
         </Container>
       </StyleProvider>

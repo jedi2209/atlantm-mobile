@@ -55,7 +55,7 @@ export default class SelectItemByCountry extends Component {
     selectItem(item)
       .then((action) => {
         if (action.type === DEALER__SUCCESS) {
-          if (returnScreen === 'ReviewsScreen' || returnScreen === 'RegisterScreen') {
+          if (['ProfileScreen', 'RegisterScreen', 'ReviewsScreen'].indexOf(returnScreen) !== -1) {
             return navigation.goBack();
           }
 

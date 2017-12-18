@@ -131,19 +131,6 @@ class ProfileScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const {
-      name,
-      phone,
-      email,
-      car,
-      carNumber,
-      dealerSelected,
-
-      auth,
-      login,
-      password,
-      isLoginRequest,
-    } = this.props;
     const nav = nextProps.nav.newState;
     let isActiveScreen = false;
 
@@ -154,16 +141,7 @@ class ProfileScreen extends Component {
       }
     }
 
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-        (name !== nextProps.name) ||
-        (phone !== nextProps.phone) ||
-        (email !== nextProps.email) ||
-        (car !== nextProps.car) ||
-        (carNumber !== nextProps.carNumber) ||
-        (login !== nextProps.login) ||
-        (password !== nextProps.password) ||
-        (isLoginRequest !== nextProps.isLoginRequest) ||
-        (get(auth, 'token.id') !== get(nextProps, 'auth.token.id'));
+    return isActiveScreen;
   }
 
   onPressLogout = () => {
