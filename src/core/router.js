@@ -11,6 +11,7 @@ import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
 import ProfileScreen from '../profile/containers/ProfileScreen';
 import RegisterScreen from '../profile/containers/RegisterScreen';
 import BonusScreen from '../profile/bonus/containers/BonusScreen';
+import DiscountsScreen from '../profile/discounts/containers/DiscountsScreen';
 
 // contacts
 import ContactsScreen from '../contacts/containers/ContactsScreen';
@@ -165,6 +166,7 @@ const getRouter = initialRouteName => {
           ProfileScreen: { screen: ProfileScreen },
           RegisterScreen: { screen: RegisterScreen },
           BonusScreen: { screen: BonusScreen },
+          DiscountsScreen: { screen: DiscountsScreen },
         }),
         navigationOptions: {
           header: null,

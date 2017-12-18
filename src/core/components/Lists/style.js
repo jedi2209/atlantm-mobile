@@ -65,8 +65,9 @@ export default StyleSheet.create({
   },
   badgeText: {
     color: styleConst.color.greyText3,
-    fontSize: styleConst.ui.smallTextSize,
+    fontSize: 17,
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
+    marginLeft: 10,
   },
 });
