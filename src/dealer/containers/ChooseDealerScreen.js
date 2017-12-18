@@ -65,6 +65,7 @@ class ChooseDealerScreen extends Component {
       selectDealer,
       dealerSelected,
       isFetchDealersList,
+      isGoBack,
     } = this.props;
 
     console.log('== ChooseDealer ==');
@@ -81,6 +82,7 @@ class ChooseDealerScreen extends Component {
       navigation={navigation}
       selectItem={selectDealer}
       selectedItem={dealerSelected}
+      isGoBack={isGoBack}
     />;
   }
 }

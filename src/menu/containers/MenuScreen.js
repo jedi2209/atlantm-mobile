@@ -49,7 +49,7 @@ export default class MenuScreen extends Component {
 
   onPressContacts = () => this.props.navigation.navigate('ContactsScreen')
   onPressInfoList = () => this.props.navigation.navigate('InfoListScreen')
-  onPressProfile = () => this.props.navigation.navigate('ProfileScreen')
+  onPressProfile = () => this.props.navigation.navigate('Profile2Screen')
   onPressService = () => this.props.navigation.navigate('ServiceScreen')
   onPressCatalog = () => this.props.navigation.navigate('Catalog2Screen')
   onPressTva = () => this.props.navigation.navigate('Tva2Screen')

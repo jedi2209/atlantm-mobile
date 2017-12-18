@@ -111,7 +111,7 @@ class ReviewAddRatingStepScreen extends Component {
             { text: 'Отмена', style: 'cancel' },
             {
               text: 'Заполнить',
-              onPress() { navigation.navigate('ProfileScreen'); },
+              onPress() { navigation.navigate('Profile2Screen'); },
             },
           ],
         );

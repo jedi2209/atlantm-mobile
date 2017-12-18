@@ -59,9 +59,10 @@ export default class DealerItemList extends Component {
     const {
       navigation,
       returnScreen,
+      isGoBack,
     } = this.props;
 
-    return navigation.navigate('ChooseDealerScreen', { returnScreen });
+    return navigation.navigate('ChooseDealerScreen', { returnScreen, isGoBack });
   }
 
   render() {

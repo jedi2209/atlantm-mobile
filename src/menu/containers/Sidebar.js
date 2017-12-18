@@ -110,7 +110,7 @@ class Sidebar extends Component {
         return MENU_INFO;
       case 'ServiceScreen':
         return MENU_SERVICE;
-      case 'ProfileScreen':
+      case 'Profile2Screen':
         return MENU_PROFILE;
       case 'Catalog2Screen':
         return MENU_CATALOG;
@@ -133,7 +133,7 @@ class Sidebar extends Component {
 
   onPressInfoList = () => this.onPressItem('InfoListScreen')
 
-  onPressProfile = () => this.onPressItem('ProfileScreen')
+  onPressProfile = () => this.onPressItem('Profile2Screen')
 
   onPressService = () => this.onPressItem('ServiceScreen')
 

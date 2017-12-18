@@ -9,21 +9,18 @@ import {
   nameFill,
   phoneFill,
   emailFill,
-  carFill,
+  carVINFill,
   carNumberFill,
-  loginFill,
-  passwordFill,
-  actionLogin,
-  actionLogout,
+  actionRegister,
 } from '../actions';
+import { REGISTER__SUCCESS, REGISTER__FAIL } from '../actionTypes';
 
 // components
-import Auth from '../components/Auth';
+import Spinner from 'react-native-loading-spinner-overlay';
 import ProfileForm from '../components/ProfileForm';
 import ListItemHeader from '../components/ListItemHeader';
-import BonusDiscount from '../components/BonusDiscount';
 import DealerItemList from '../../core/components/DealerItemList';
-import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import { get } from 'lodash';
@@ -34,6 +31,16 @@ import stylesHeader from '../../core/components/Header/style';
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
+  },
+  textContainer: {
+    paddingHorizontal: styleConst.ui.horizontalGapInList,
+    paddingTop: styleConst.ui.horizontalGap,
+  },
+  text: {
+    color: styleConst.color.greyText3,
+    fontSize: styleConst.ui.smallTextSize,
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
   },
   button: {
     height: styleConst.ui.footerHeight,
@@ -66,16 +73,10 @@ const mapStateToProps = ({ dealer, profile, nav }) => {
     name: profile.name,
     phone: profile.phone,
     email: profile.email,
-    car: profile.car,
+    carVIN: profile.carVIN,
     carNumber: profile.carNumber,
 
-    auth: profile.auth,
-    login: profile.login,
-    password: profile.password,
-    isLoginRequest: profile.meta.isLoginRequest,
-
-    bonus: profile.bonus.data,
-    discounts: profile.discounts,
+    isRegisterRequest: profile.meta.isRegisterRequest,
   };
 };
 
@@ -83,51 +84,39 @@ const mapDispatchToProps = {
   nameFill,
   phoneFill,
   emailFill,
-  carFill,
+  carVINFill,
   carNumberFill,
 
-  loginFill,
-  passwordFill,
-  actionLogin,
-  actionLogout,
+  actionRegister,
 };
 
-class ProfileScreen extends Component {
+class RegisterScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Личный кабинет',
+    headerTitle: 'Регистрация',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
-    headerLeft: <View />,
-    headerRight: <HeaderIconMenu navigation={navigation} />,
+    headerLeft: <HeaderIconBack navigation={navigation} />,
+    headerRight: <View />,
   })
 
   static propTypes = {
     dealerSelected: PropTypes.object,
     navigation: PropTypes.object,
+
     nameFill: PropTypes.func,
     phoneFill: PropTypes.func,
     emailFill: PropTypes.func,
-    carFill: PropTypes.func,
+    carVINFill: PropTypes.func,
     carNumberFill: PropTypes.func,
+
     name: PropTypes.string,
     phone: PropTypes.string,
     email: PropTypes.string,
-    car: PropTypes.string,
+    carVIN: PropTypes.string,
     carNumber: PropTypes.string,
 
-    auth: PropTypes.object,
-    loginFill: PropTypes.func,
-    passwordFill: PropTypes.func,
-    login: PropTypes.string,
-    password: PropTypes.string,
-    isLoginRequest: PropTypes.bool,
-
-    bonus: PropTypes.object,
-    discounts: PropTypes.array,
-  }
-
-  static defaultProps = {
-    auth: {},
+    actionRegister: PropTypes.func,
+    isRegisterRequest: PropTypes.bool,
   }
 
   shouldComponentUpdate(nextProps) {
@@ -135,14 +124,10 @@ class ProfileScreen extends Component {
       name,
       phone,
       email,
-      car,
+      carVIN,
       carNumber,
       dealerSelected,
-
-      auth,
-      login,
-      password,
-      isLoginRequest,
+      isRegisterRequest,
     } = this.props;
     const nav = nextProps.nav.newState;
     let isActiveScreen = false;
@@ -150,39 +135,55 @@ class ProfileScreen extends Component {
     if (nav) {
       const rootLevel = nav.routes[nav.index];
       if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'ProfileScreen';
+        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'RegisterScreen';
       }
     }
 
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-        (name !== nextProps.name) ||
-        (phone !== nextProps.phone) ||
-        (email !== nextProps.email) ||
-        (car !== nextProps.car) ||
-        (carNumber !== nextProps.carNumber) ||
-        (login !== nextProps.login) ||
-        (password !== nextProps.password) ||
-        (isLoginRequest !== nextProps.isLoginRequest) ||
-        (get(auth, 'token.id') !== get(nextProps, 'auth.token.id'));
+    return isActiveScreen;
   }
 
-  onPressLogout = () => {
-    const { actionLogout } = this.props;
+  onPressRegister = () => {
+    const {
+      name,
+      email,
+      phone,
+      carVIN,
+      carNumber,
+      navigation,
+      actionRegister,
+      dealerSelected,
+    } = this.props;
 
-    return Alert.alert(
-      'Подтвердите действие',
-      '',
-      [
-        { text: 'Отмена', style: 'cancel' },
-        {
-          text: 'Выйти',
-          onPress() {
-            actionLogout();
-            setTimeout(() => Alert.alert('Вы вышли из личного кабинета'), 100);
-          },
-        },
-      ],
-    );
+    if (!name) {
+      return setTimeout(() => Alert.alert('Заполните ФИО'), 100);
+    }
+
+    if (!phone) {
+      return setTimeout(() => Alert.alert('Заполните контактный телефон'), 100);
+    }
+
+    if (!email) {
+      return setTimeout(() => Alert.alert('Заполните email'), 100);
+    }
+
+    actionRegister({
+      dealerId: dealerSelected.id,
+      name,
+      phone,
+      email,
+      carVIN,
+      carNumber,
+    })
+      .then(action => {
+        if (action.type === REGISTER__SUCCESS) {
+          setTimeout(() => Alert.alert(`Ваша заявка на регистрацию успешно отправлена специалистам автоцентра ${dealerSelected.name}`), 100);
+          navigation.goBack();
+        }
+
+        if (action.type === REGISTER__FAIL) {
+          setTimeout(() => Alert.alert(get(action, 'payload.message', 'Произошла ошибка, попробуйте снова')), 100);
+        }
+      });
   };
 
   render() {
@@ -195,56 +196,33 @@ class ProfileScreen extends Component {
       nameFill,
       phoneFill,
       emailFill,
-      carFill,
+      carVINFill,
       carNumberFill,
       name,
       phone,
       email,
-      car,
+      carVIN,
       carNumber,
 
-      auth,
-      login,
-      password,
-      loginFill,
-      passwordFill,
-      actionLogin,
-      isLoginRequest,
-      bonus,
-      discounts,
+      isRegisterRequest,
     } = this.props;
 
-    console.log('== Profile ==');
+    console.log('== Register Screen ==');
 
     return (
       <StyleProvider style={getTheme()}>
         <Container>
           <Content style={styles.content} >
+            <Spinner visible={isRegisterRequest} color={styleConst.color.blue} />
             <List style={styles.list}>
-              {
-                !auth.token ?
-                  (
-                    <Auth
-                      navigation={navigation}
-                      loginHandler={actionLogin}
-                      isRequest={isLoginRequest}
-                      login={login}
-                      password={password}
-                      loginFill={loginFill}
-                      passwordFill={passwordFill}
-                    />
-                  ) : null
-              }
 
-              {
-                auth.token ?
-                  <BonusDiscount
-                    bonus={get(bonus, 'saldo.value')}
-                    discounts={discounts.length}
-                    navigation={navigation}
-                  /> :
-                  null
-              }
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>
+                Чтобы зарегистрироваться, заполните, пожалуйста, форму ниже.
+                Специалисты автоцентра сообщат вам логин и пароль по СМС и электронной почте.
+                Обращаем ваше внимание на то, что доступ к Личному кабинету могут получить только Клиенты Атлант-М.
+              </Text>
+            </View>
 
               <ListItemHeader text="МОЙ АВТОЦЕНТР" />
 
@@ -253,36 +231,32 @@ class ProfileScreen extends Component {
                 city={dealerSelected.city}
                 name={dealerSelected.name}
                 brands={dealerSelected.brands}
-                returnScreen="ProfileScreen"
+                returnScreen="RegisterScreen"
+                isGoBack={true}
               />
 
-              <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
+              <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ*" />
 
               <ProfileForm
-                auth={auth}
+                isRegisterForm={true}
                 carSection={true}
                 name={name}
                 phone={phone}
                 email={email}
-                car={car}
+                carVIN={carVIN}
                 carNumber={carNumber}
                 nameFill={nameFill}
                 phoneFill={phoneFill}
                 emailFill={emailFill}
-                carFill={carFill}
+                carVINFill={carVINFill}
                 carNumberFill={carNumberFill}
               />
             </List>
 
-            {
-              auth.token ?
-                (
-                  <Button onPress={this.onPressLogout} full style={styles.button}>
-                    <Icon name="ios-exit-outline" style={styles.buttonIcon} />
-                    <Text numberOfLines={1} style={styles.buttonText}>ВЫЙТИ ИЗ ЛИЧНОГО КАБИНЕТА</Text>
-                  </Button>
-                ) : null
-            }
+            <Button onPress={this.onPressRegister} full style={styles.button}>
+              <Icon name="ios-car" style={styles.buttonIcon} />
+              <Text numberOfLines={1} style={styles.buttonText}>ЗАРЕГИСТРИРОВАТЬСЯ</Text>
+            </Button>
           </Content>
         </Container>
       </StyleProvider>
@@ -290,4 +264,4 @@ class ProfileScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);

@@ -3,14 +3,14 @@ import _ from 'lodash';
 import DeviceInfo from 'react-native-device-info';
 
 // credentials
-const token = 'old_secret_token';
+const authToken = 'old_secret_token';
 
 const baseRequestParams = {
   method: 'GET',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${authToken}`,
     'App-Version': DeviceInfo.getVersion(),
   },
 };
@@ -42,6 +42,14 @@ export default {
 
   fetchIndicators() {
     return this.request('/info/indicator/get/', baseRequestParams);
+  },
+
+  fetchBonus({ token }) {
+    return this.request(`/lkk/bonus/list/?token=${token}`, baseRequestParams);
+  },
+
+  fetchDiscounts({ token }) {
+    return this.request(`/lkk/actions/list/?token=${token}`, baseRequestParams);
   },
 
   fetchReviews({ dealerId, dateFrom, dateTo, ratingFrom, ratingTo, nextPageUrl }) {
@@ -281,11 +289,54 @@ export default {
     return this.request('/eko/review/post/', requestParams);
   },
 
+  fetchCars({ token }) {
+    return this.request(`/lkk/cars/?token=${token}`, baseRequestParams);
+  },
+
+  loginRequest({ login, password }) {
+    __DEV__ && console.log('API register login: %s, password: %s', login, password);
+
+    return this.request(`/lkk/auth/login/?login=${login}&password=${password}`, baseRequestParams);
+  },
+
+  registerRequest({
+    dealerId,
+    name,
+    phone,
+    email,
+    carVIN,
+    carNumber,
+  }) {
+    const body = [
+      'posting=1',
+      `f_Dealer=${dealerId}`,
+      `f_Name=${name}`,
+      `f_Phone=${phone}`,
+      `f_Email=${email}`,
+      'f_Source=3',
+      `f_VIN=${carVIN}`,
+      `f_Number=${carNumber}`,
+    ].join('&');
+
+    const requestParams = _.merge(baseRequestParams, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    });
+
+    __DEV__ && console.log('API register body', body);
+
+    return this.request('/lkk/register/', requestParams);
+  },
+
   request(path, requestParams) {
     const url = `https://api.atlantm.com${path}`;
 
     return fetch(url, requestParams)
       .then(response => {
+        console.log('response', response);
         return response.json();
       });
   },
