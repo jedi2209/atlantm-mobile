@@ -5,27 +5,13 @@ import { Text, ListItem, Body, Right, Icon } from 'native-base';
 // components
 import DeviceInfo from 'react-native-device-info';
 import { NavigationActions } from 'react-navigation';
-import { CachedImage } from 'react-native-cached-image';
+import Imager from '../components/Imager';
 
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
 import { DEALER__SUCCESS, DEALER__FAIL } from '../../dealer/actionTypes';
-
-const brandsLogos = {
-  8: require('../assets/chevrolet.png'),
-  9: require('../assets/ford.png'),
-  12: require('../assets/jaguar.png'),
-  10: require('../assets/kia.png'),
-  13: require('../assets/landrover.png'),
-  14: require('../assets/mazda.png'),
-  17: require('../assets/nissan.png'),
-  1: require('../assets/opel.png'),
-  16: require('../assets/renault.png'),
-  7: require('../assets/skoda.png'),
-  6: require('../assets/volkswagen.png'),
-};
 
 const styles = StyleSheet.create({
   brands: {
@@ -111,11 +97,11 @@ export default class SelectItemByCountry extends Component {
             {
               item.brands.map(brand => {
                 return (
-                  <CachedImage
+                  <Imager
                     resizeMode="contain"
                     key={brand.id}
                     style={styles.brandLogo}
-                    source={brandsLogos[brand.id]}
+                    source={{ uri: brand.logo }}
                   />
                 );
               })
@@ -158,11 +144,11 @@ export default class SelectItemByCountry extends Component {
                             }
 
                             return (
-                              <CachedImage
+                              <Imager
                                 resizeMode="contain"
                                 key={brand.id}
                                 style={styles.brandLogo}
-                                source={brandsLogos[brand.id]}
+                                source={{ uri: brand.logo }}
                               />
                             );
                           })
