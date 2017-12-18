@@ -4,9 +4,14 @@ import { StackNavigator } from 'react-navigation';
 import IntroScreen from '../intro/containers/IntroScreen';
 import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
 import MenuScreen from '../menu/containers/MenuScreen';
-import ProfileScreen from '../profile/containers/ProfileScreen';
 import ServiceScreen from '../service/containers/ServiceScreen';
 import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
+
+// profile
+import ProfileScreen from '../profile/containers/ProfileScreen';
+import RegisterScreen from '../profile/containers/RegisterScreen';
+import BonusScreen from '../profile/bonus/containers/BonusScreen';
+import DiscountsScreen from '../profile/discounts/containers/DiscountsScreen';
 
 // contacts
 import ContactsScreen from '../contacts/containers/ContactsScreen';
@@ -156,7 +161,17 @@ const getRouter = initialRouteName => {
           header: null,
         },
       },
-      ProfileScreen: { screen: ProfileScreen },
+      Profile2Screen: {
+        screen: StackNavigator({
+          ProfileScreen: { screen: ProfileScreen },
+          RegisterScreen: { screen: RegisterScreen },
+          BonusScreen: { screen: BonusScreen },
+          DiscountsScreen: { screen: DiscountsScreen },
+        }),
+        navigationOptions: {
+          header: null,
+        },
+      },
       ServiceScreen: { screen: ServiceScreen },
       IndicatorsScreen: { screen: IndicatorsScreen },
       Catalog2Screen: {

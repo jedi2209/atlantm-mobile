@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: styleConst.color.greyText3,
-    fontSize: 15,
+    fontSize: styleConst.ui.smallTextSize,
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
   },

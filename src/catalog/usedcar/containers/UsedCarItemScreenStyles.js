@@ -1,9 +1,7 @@
-import React from 'react';
 import { StyleSheet } from 'react-native';
 import styleConst from '../../../core/style-const';
 import { verticalScale } from '../../../utils/scale';
 
-const FOOTER_HEIGHT = 50;
 export default StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
@@ -70,7 +68,7 @@ export default StyleSheet.create({
   },
   button: {
     backgroundColor: styleConst.color.lightBlue,
-    height: FOOTER_HEIGHT,
+    height: styleConst.ui.footerHeight,
     flex: 1,
   },
   buttonText: {
@@ -80,7 +78,7 @@ export default StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
   },
   orderPriceContainer: {
-    height: FOOTER_HEIGHT,
+    height: styleConst.ui.footerHeight,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -93,7 +91,7 @@ export default StyleSheet.create({
     color: '#000',
   },
   footer: {
-    height: FOOTER_HEIGHT,
+    height: styleConst.ui.footerHeight,
     backgroundColor: '#fff',
   },
   segment: {

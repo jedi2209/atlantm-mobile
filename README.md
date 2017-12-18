@@ -24,3 +24,5 @@ https://medium.com/@jidefr/the-most-unknown-redux-performance-trick-986fdfe871fa
 - Заиспользовать везде FooterButton
 - Всегда при попытка обратиться к API проверять наличие соединения и реагировать в этом случае соответствующим сообщением
 - Разобраться со списками в android, рисовать бордер если элемент `last`
+- Перейти везде на async/await в actions
+- Прокинуть в компонент DealerItemList параметр `isGoBack`

@@ -83,7 +83,7 @@ export default class SelectListByCountry extends PureComponent {
   )
 
   renderItem = ({ item }) => {
-    const { navigation, selectedItem, selectItem, itemLayout } = this.props;
+    const { navigation, selectedItem, selectItem, itemLayout, isGoBack } = this.props;
     const returnScreen = get(navigation, 'state.params.returnScreen');
 
     return <SelectItemByCountry
@@ -93,6 +93,7 @@ export default class SelectListByCountry extends PureComponent {
       navigation={navigation}
       selectedItem={selectedItem}
       returnScreen={returnScreen}
+      isGoBack={isGoBack}
     />;
   }
 
@@ -161,7 +162,6 @@ export default class SelectListByCountry extends PureComponent {
             ListEmptyComponent={this.renderEmptyComponent}
             renderItem={this.renderItem}
             keyExtractor={item => item.id}
-            scrollEventThrottle={100}
           />
         </Container>
       </StyleProvider>
