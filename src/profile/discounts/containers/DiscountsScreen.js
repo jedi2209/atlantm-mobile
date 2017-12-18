@@ -1,0 +1,142 @@
+import React, { Component } from 'react';
+import { View, FlatList, StyleSheet } from 'react-native';
+import { Text, StyleProvider, ListItem, Body } from 'native-base';
+
+// redux
+import { connect } from 'react-redux';
+
+// components
+import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+
+// helpers
+import { get } from 'lodash';
+import PropTypes from 'prop-types';
+import getTheme from '../../../../native-base-theme/components';
+import styleConst from '../../../core/style-const';
+import stylesHeader from '../../../core/components/Header/style';
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: styleConst.color.bg,
+    flex: 1,
+  },
+  message: {
+    textAlign: 'center',
+    fontFamily: styleConst.font.regular,
+    fontSize: 17,
+    marginTop: 50,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  percent: {
+    color: '#000',
+    fontFamily: styleConst.font.regular,
+    letterSpacing: styleConst.ui.letterSpacing,
+  },
+  title: {
+    color: '#000',
+    fontFamily: styleConst.font.regular,
+    letterSpacing: styleConst.ui.letterSpacing,
+  },
+  dealer: {
+    fontSize: 14,
+    color: styleConst.color.greyText2,
+    fontFamily: styleConst.font.light,
+    letterSpacing: styleConst.ui.letterSpacing,
+  },
+  description: {
+    fontSize: 16,
+    color: styleConst.color.greyText3,
+    fontFamily: styleConst.font.regular,
+    letterSpacing: styleConst.ui.letterSpacing,
+    marginTop: 5,
+  },
+  body: {
+    paddingVertical: 5,
+  },
+});
+
+const mapStateToProps = ({ profile, nav }) => {
+  return {
+    nav,
+    discounts: profile.discounts,
+  };
+};
+
+class DiscountsScreen extends Component {
+  state = { isRefreshing: false }
+
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: 'Скидки',
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
+    headerLeft: <HeaderIconBack navigation={navigation} />,
+    headerRight: <View />,
+  })
+
+  static propTypes = {
+    discounts: PropTypes.array,
+  }
+
+  shouldComponentUpdate(nextProps) {
+    const nav = nextProps.nav.newState;
+    let isActiveScreen = false;
+
+    if (nav) {
+      const rootLevel = nav.routes[nav.index];
+      if (rootLevel) {
+        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'DiscountsScreen';
+      }
+    }
+
+    return isActiveScreen;
+  }
+
+  renderItem = ({ item: discount, index }) => {
+    const { discounts } = this.props;
+
+    return (
+      <ListItem last={(discounts.length - 1) === index}>
+        <Body style={styles.body}>
+          <View style={styles.header}>
+            { discount.value ? <Text style={styles.percent}>{discount.value}%</Text> : null}
+            { discount.dealer && discount.dealer.name ? <Text style={styles.dealer}>{discount.dealer.name}</Text> : null}
+          </View>
+          { discount.name ? <Text style={styles.title}>{discount.name}</Text> : null}
+          { discount.additional ? <Text style={styles.description}>{discount.additional}</Text> : null}
+        </Body>
+      </ListItem>
+    );
+  }
+
+  renderEmptyComponent = () => {
+    return <Text style={styles.message}>Скидок пока нет</Text>;
+  }
+
+  render() {
+    // Для iPad меню, которое находится вне роутера
+    window.atlantmNavigation = this.props.navigation;
+
+    console.log('== DiscountsScreen ==');
+
+    const { discounts } = this.props;
+
+    return (
+      <StyleProvider style={getTheme()}>
+        <View style={styles.container}>
+          <FlatList
+            data={discounts}
+            style={styles.list}
+            ListEmptyComponent={this.renderEmptyComponent}
+            renderItem={this.renderItem}
+            keyExtractor={item => item.hash}
+          />
+        </View>
+      </StyleProvider>
+    );
+  }
+}
+
+export default connect(mapStateToProps)(DiscountsScreen);

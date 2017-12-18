@@ -8,13 +8,15 @@ import { connect } from 'react-redux';
 import { actionSetBonusLevel1, actionSetBonusLevel2 } from '../../actions';
 
 // components
+import * as Animatable from 'react-native-animatable';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // styles
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
+import { dayMonthYear } from '../../../utils/date';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
@@ -38,14 +40,43 @@ const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
   },
+  emptyContainer: {
+    flex: 1,
+  },
+  emptyText: {
+    textAlign: 'center',
+    fontFamily: styleConst.font.regular,
+    fontSize: 17,
+    marginTop: 50,
+  },
   itemLevel1: {
-
+    marginBottom: 1,
   },
   itemLevel2: {
-
+    backgroundColor: styleConst.color.accordeonGrey1,
+    marginBottom: 1,
   },
   itemLevel3: {
-
+    backgroundColor: styleConst.color.accordeonGrey2,
+    marginBottom: 1,
+  },
+  label: {
+    fontSize: 16,
+    marginTop: 5,
+  },
+  listItem: {
+    height: null,
+  },
+  body: {
+    height: null,
+    minHeight: styleConst.ui.listHeight,
+  },
+  date: {
+    fontSize: 15,
+    color: styleConst.color.greyText3,
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
+    marginBottom: 5,
   },
 });
 
@@ -90,8 +121,12 @@ class BonusScreen extends Component {
     return isActiveScreen;
   }
 
-  onPressLevel1 = hash => this.props.actionSetBonusLevel1(hash)
-  onPressLevel2 = hash => this.props.actionSetBonusLevel2(hash)
+  onPressLevel1 = hash => {
+    this.props.actionSetBonusLevel1(this.isActiveLevel1(hash) ? null : hash);
+  }
+  onPressLevel2 = hash => {
+    this.props.actionSetBonusLevel2(this.isActiveLevel2(hash) ? null : hash);
+  }
 
   isActiveLevel1 = hash => this.props.level1hash === hash;
   isActiveLevel2 = hash => this.props.level2hash === hash;
@@ -110,7 +145,14 @@ class BonusScreen extends Component {
           {
             isActive ?
               (
-                <View style={[styles.accContent, styles.accContentLevel1]}>{this.renderLevel2(bonus.history)}</View>
+                <Animatable.View
+                  style={[styles.accContent, styles.accContentLevel1]}
+                  animation="slideInDown"
+                  useNativeDriver={true}
+                  duration={700}
+                >
+                  {this.renderLevel2(bonus.history)}
+                </Animatable.View>
               ) : null
           }
         </View>
@@ -132,7 +174,13 @@ class BonusScreen extends Component {
           {
             isActive ?
               (
-                <View style={[styles.accContent, styles.accContentLevel1]}>{this.renderLevel3(bonus.history)}</View>
+                <Animatable.View
+                  animation="pulse"
+                  useNativeDriver={true}
+                  duration={700}
+                >
+                {this.renderLevel3(bonus.history)}
+              </Animatable.View>
               ) : null
           }
         </View>
@@ -144,21 +192,31 @@ class BonusScreen extends Component {
     return history.map((bonus, idx) => {
       const isLast = (history.length - 1) === idx;
 
-      return this.renderItemHeader(bonus.name, bonus.summ, null, 'itemLevel3', null, isLast, null, bonus.hash);
+      return this.renderItemHeader(bonus.name, bonus.summ, null, 'itemLevel3', null, isLast, null, bonus.hash, bonus.date);
     });
   }
 
-  renderItemHeader = (label, total, onPressHandler, theme, isActive, isLast, isArrow, key) => {
+  renderItemHeader = (label, total, onPressHandler, theme, isActive, isLast, isArrow, key, date) => {
+    const isLevel1 = theme === 'itemLevel1';
+    const isLevel2 = theme === 'itemLevel2';
+    const isLevel3 = theme === 'itemLevel3';
+
     return (
       <View key={key} style={[stylesList.listItemContainer, styles[theme]]}>
         <ListItem
           icon
-          last={isLast}
-          style={stylesList.listItem}
+          last
+          style={[stylesList.listItem, isLevel3 ? styles.listItem : null]}
           onPress={onPressHandler}
         >
-          <Body>
-            <Text style={stylesList.label}>{label}</Text>
+          <Body style={isLevel3 ? styles.body : null}>
+            <Text style={[stylesList.label, isLevel3 ? styles.label : null]}>{label}</Text>
+            {
+              isLevel3 ?
+                (
+                  <Text style={styles.date}>{dayMonthYear(date)}</Text>
+                ) : null
+            }
           </Body>
           <Right>
             {total ? <Text style={stylesList.badgeText}>{total}</Text> : null}
@@ -167,7 +225,7 @@ class BonusScreen extends Component {
                 (
                   <Icon
                     name={isActive ? 'ios-arrow-down' : 'ios-arrow-forward'}
-                    style={[stylesList.iconArrow, stylesList.stylesList]}
+                    style={[stylesList.iconArrow, stylesList.iconArrowWithText]}
                   />
                 ) : null
             }
@@ -181,9 +239,20 @@ class BonusScreen extends Component {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
-    const { bonus } = this.props;
-
     console.log('== Bonus Screen ==');
+
+    const { bonus } = this.props;
+    console.log('bonus', bonus);
+
+    if (isEmpty(bonus) || !bonus.items) {
+      return (
+        <View style={[styles.emptyContainer, styles.content]}>
+          <Text style={styles.emptyText}>
+            Бонусов пока нет
+          </Text>
+        </View>
+      );
+    }
 
     return (
       <StyleProvider style={getTheme()}>

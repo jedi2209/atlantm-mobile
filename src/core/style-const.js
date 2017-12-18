@@ -5,6 +5,8 @@ export default {
     blue: '#0458a7',
     lightBlue: '#027aff',
     bg: '#f0f3f5',
+    accordeonGrey1: '#ededed',
+    accordeonGrey2: '#dedfe0',
     greyText: 'rgba(97,110,122,1)',
     greyText2: 'rgba(128,128,128,1)',
     greyText3: 'rgba(102,102,102,1)',

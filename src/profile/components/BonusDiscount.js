@@ -27,7 +27,7 @@ export default class Auth extends Component {
   }
 
   onPressBonus = () => this.props.navigation.navigate('BonusScreen')
-  onPressDiscount = () => this.props.navigation.navigate('DiscountScreen')
+  onPressDiscounts = () => this.props.navigation.navigate('DiscountsScreen')
 
   renderItem = (label, iconName, onPressHandler, badge, isLast) => {
     return (
@@ -60,7 +60,7 @@ export default class Auth extends Component {
       <View>
          <ListItemHeader text="БОНУСЫ И СКИДКИ" />
          {this.renderItem('Бонусные баллы', 'bonus', this.onPressBonus, bonus)}
-         {this.renderItem('Персональные скидки', 'discount', this.onPressDiscount, discounts, true)}
+         {this.renderItem('Персональные скидки', 'discount', this.onPressDiscounts, discounts, true)}
       </View>
     );
   }
