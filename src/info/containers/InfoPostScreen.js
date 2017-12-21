@@ -126,7 +126,7 @@ class InfoPostScreen extends Component {
     headerTitle: 'Об акции',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} returnScreen="InfoListScreen" />,
+    headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
   })
 

@@ -8,6 +8,7 @@ import {
   INFO_POST__REQUEST,
   INFO_POST__SUCCESS,
   INFO_POST__FAIL,
+  INFO_LIST__RESET,
 
   CALL_ME_INFO__REQUEST,
   CALL_ME_INFO__SUCCESS,
@@ -130,5 +131,11 @@ export const callMeForInfo = (props) => {
           },
         });
       });
+  };
+};
+
+export const actionListReset = () => {
+  return dispatch => {
+    dispatch({ type: INFO_LIST__RESET });
   };
 };
