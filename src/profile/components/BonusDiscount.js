@@ -45,7 +45,7 @@ export default class Auth extends Component {
             <Text style={stylesList.label}>{label}</Text>
           </Body>
           <Right>
-            {badge ? <Text style={stylesList.badgeText}>{badge}</Text> : null}
+            <Text style={stylesList.badgeText}>{badge}</Text>
             <Icon name="arrow-forward" style={[stylesList.iconArrow, stylesList.iconArrowWithText]} />
           </Right>
         </ListItem>

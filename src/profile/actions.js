@@ -1,5 +1,7 @@
 import API from '../utils/api';
 
+import { get, find } from 'lodash';
+
 import {
   PROFILE_CAR__FILL,
   PROFILE_NAME__FILL,
@@ -20,6 +22,8 @@ import {
   REGISTER__FAIL,
   REGISTER__REQUEST,
 } from './actionTypes';
+
+import { DEALER__SUCCESS } from '../dealer/actionTypes';
 
 export const nameFill = (name) => {
   if (name && name.length <= 3) {
@@ -77,7 +81,8 @@ export const carFill = (car) => {
 };
 
 export const carVINFill = (carVIN) => {
-  let result = carVIN.replace(/\s/g, '');
+  // let result = carVIN.replace(/\s/g, '');
+  let result = carVIN;
   result = result && result.toUpperCase();
 
   return dispatch => {
@@ -167,12 +172,32 @@ export const actionLogin = (props) => {
         discounts = discountsResponse.data;
       }
 
+      // 4. Обновляем данные автоцентра
+      let dealer = {};
+      const dealerId = get(user, 'dealer.id');
+      if (dealerId) {
+        const dealerResponse = await API.fetchDealer(dealerId);
+        if (dealerResponse.status === 'success') {
+          dealer = dealerResponse.data;
+
+          const dealerBaseData = find(props.dealers, { id: dealerId });
+          dealer.id = dealerBaseData.id;
+          dealer.brands = dealerBaseData.brands;
+
+          dispatch({
+            type: DEALER__SUCCESS,
+            payload: dealer,
+          });
+        }
+      }
+
       return dispatch({
         type: LOGIN__SUCCESS,
         payload: {
           token,
           cars,
           bonus,
+          dealer,
           discounts,
           ...user,
         },
@@ -202,14 +227,19 @@ export const actionRegister = (props) => {
 
     try {
       const res = await API.registerRequest(props);
-      const { error, status } = res;
+      const { error, status, data } = res;
 
       if (status !== 'success') {
         __DEV__ && console.log('error register', res);
         return onError(error);
       }
 
-      return dispatch({ type: REGISTER__SUCCESS });
+      return dispatch({
+        type: REGISTER__SUCCESS,
+        payload: {
+          data,
+        },
+      });
     } catch (e) {
       return onError(e);
     }

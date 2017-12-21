@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Platform } from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
@@ -12,12 +12,26 @@ import stylesList from '../../core/components/Lists/style';
 // helpers
 import styleConst from '../../core/style-const';
 
+const isAndroid = Platform.OS === 'android';
+
 const styles = StyleSheet.create({
   container: {
     marginBottom: 30,
   },
   inputItem: {
     paddingRight: 7,
+  },
+  inputItemCar: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    paddingVertical: 7,
+  },
+  carNumber: {
+    marginTop: 5,
+    color: styleConst.color.greyText3,
+    fontSize: 16,
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
   },
   textContainer: {
     paddingHorizontal: styleConst.ui.horizontalGapInList,
@@ -28,6 +42,22 @@ const styles = StyleSheet.create({
     fontSize: styleConst.ui.smallTextSize,
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
+  },
+  input: {
+    ...Platform.select({
+      android: {
+        width: 2000,
+      },
+    }),
+  },
+  inputContainer: {
+    ...Platform.select({
+      android: {
+        flex: 3,
+        justifyContent: 'center',
+        overflow: 'hidden',
+      },
+    }),
   },
 });
 
@@ -91,8 +121,13 @@ export default class ProfileForm extends PureComponent {
         <View key={`${car.brand}${idx}`} style={stylesList.listItemContainer}>
           <ListItem last={(carArray.length - 1) === idx} style={[stylesList.listItem, stylesList.listItemReset]} >
             <Body>
-              <Item style={stylesList.inputItem} fixedLabel>
-                <Label style={stylesList.label}>{car.brand} {car.model}</Label>
+              <Item style={[stylesList.inputItem, styles.inputItemCar]} fixedLabel>
+                <Label style={stylesList.label}>
+                  <Text style={styles.carName}>{car.brand} {car.model}</Text>
+                </Label>
+                <View style={styles.carNumberContainer}>
+                    <Text style={styles.carNumber}>{car.number}</Text>
+                  </View>
               </Item>
             </Body>
           </ListItem>
@@ -102,23 +137,33 @@ export default class ProfileForm extends PureComponent {
   }
 
   renderListItem = (label, value, onChangeHandler, inputProps = {}, isLast) => {
+    const renderInput = () => (
+      <Input
+        multiline={isAndroid}
+        numberOfLines={1}
+        style={styles.input}
+        autoCapitalize="none"
+        autoCorrect={false}
+        placeholder="Поле для заполнения"
+        onChangeText={onChangeHandler}
+        value={value}
+        returnKeyType="done"
+        returnKeyLabel="Готово"
+        underlineColorAndroid="transparent"
+        {...inputProps}
+      />
+    );
+
     return (
       <View style={stylesList.listItemContainer}>
         <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]} >
           <Body>
             <Item style={[stylesList.inputItem, styles.inputItem]} fixedLabel>
-              <Label style={stylesList.label}>{label}</Label>
-              <Input
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholder="Поле для заполнения"
-                onChangeText={onChangeHandler}
-                value={value}
-                returnKeyType="done"
-                returnKeyLabel="Готово"
-                underlineColorAndroid="transparent"
-                {...inputProps}
-              />
+              <Label style={[stylesList.label, styles.label]}>{label}</Label>
+              {isAndroid ?
+                <View style={styles.inputContainer}>{renderInput()}</View> :
+                renderInput()
+              }
             </Item>
           </Body>
         </ListItem>
