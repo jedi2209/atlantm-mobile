@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Picker,
   Alert,
+  Platform,
 } from 'react-native';
 
 // helpers
@@ -58,10 +59,27 @@ const styles = StyleSheet.create({
   },
   pickersContainer: {
     flexDirection: 'row',
+  },
+  priceContainer: {
     flex: 1,
   },
-  picker: {
-    flex: 1,
+  priceLabelContainer: {
+    marginTop: 20,
+
+    ...Platform.select({
+      ios: {
+        alignItems: 'center',
+      },
+      android: {
+        marginLeft: 9,
+      },
+    }),
+  },
+  priceLabelText: {
+    color: styleConst.color.greyText3,
+    fontSize: 17,
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
   },
 });
 
@@ -225,12 +243,22 @@ export default class PricePicker extends PureComponent {
                   </View>
 
                   <View style={styles.pickersContainer}>
-                    <Picker style={styles.picker} selectedValue={this.state.minPrice} onValueChange={this.onChangeMinPrice}>
-                      {this.renderItems()}
-                    </Picker>
-                    <Picker style={styles.picker} selectedValue={this.state.maxPrice} onValueChange={this.onChangeMaxPrice}>
-                      {this.renderItems(true)}
-                    </Picker>
+                    <View style={styles.priceContainer}>
+                      <View style={styles.priceLabelContainer}>
+                        <Text style={styles.priceLabelText}>От</Text>
+                      </View>
+                      <Picker selectedValue={this.state.minPrice} onValueChange={this.onChangeMinPrice}>
+                        {this.renderItems()}
+                      </Picker>
+                    </View>
+                    <View style={styles.priceContainer}>
+                      <View style={styles.priceLabelContainer}>
+                        <Text style={styles.priceLabelText}>До</Text>
+                      </View>
+                      <Picker selectedValue={this.state.maxPrice} onValueChange={this.onChangeMaxPrice}>
+                        {this.renderItems(true)}
+                      </Picker>
+                    </View>
                   </View>
                 </Animated.View>
               </TouchableHighlight>

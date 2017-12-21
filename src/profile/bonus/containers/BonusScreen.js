@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Platform } from 'react-native';
 import { Container, Content, ListItem, StyleProvider, Icon, Body, Right, Button } from 'native-base';
 
 // redux
@@ -97,10 +97,15 @@ const styles = StyleSheet.create({
     height: styleConst.ui.footerHeight,
     backgroundColor: '#fff',
     borderTopWidth: styleConst.ui.borderWidth,
-    borderBottomWidth: 1,
     borderTopColor: styleConst.color.border,
-    borderBottomColor: styleConst.color.border,
     marginVertical: 30,
+
+    ...Platform.select({
+      ios: {
+        borderBottomWidth: styleConst.ui.borderWidth,
+        borderBottomColor: styleConst.color.border,
+      },
+    }),
   },
   buttonText: {
     fontFamily: styleConst.font.medium,
@@ -257,7 +262,7 @@ class BonusScreen extends Component {
             }
           </Body>
           <Right>
-            {total ? <Text style={stylesList.badgeText}>{total}</Text> : null}
+            {total || total === 0 ? <Text style={stylesList.badgeText}>{total}</Text> : null}
             {
               isArrow ?
                 (

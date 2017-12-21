@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, StyleSheet, View, Text } from 'react-native';
+import { Alert, StyleSheet, View, Text, Platform } from 'react-native';
 import { Container, Content, List, StyleProvider, Button, Icon } from 'native-base';
 
 // redux
@@ -39,10 +39,15 @@ const styles = StyleSheet.create({
     height: styleConst.ui.footerHeight,
     backgroundColor: '#fff',
     borderTopWidth: styleConst.ui.borderWidth,
-    borderBottomWidth: 1,
     borderTopColor: styleConst.color.border,
-    borderBottomColor: styleConst.color.border,
     marginBottom: 30,
+
+    ...Platform.select({
+      ios: {
+        borderBottomWidth: styleConst.ui.borderWidth,
+        borderBottomColor: styleConst.color.border,
+      },
+    }),
   },
   buttonText: {
     fontFamily: styleConst.font.medium,
@@ -62,6 +67,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ dealer, profile, nav }) => {
   return {
     nav,
+    listRussia: dealer.listRussia,
+    listUkraine: dealer.listUkraine,
+    listBelarussia: dealer.listBelarussia,
     dealerSelected: dealer.selected,
     name: profile.name,
     phone: profile.phone,
@@ -156,12 +164,17 @@ class ProfileScreen extends Component {
           text: 'Выйти',
           onPress() {
             actionLogout();
-            setTimeout(() => Alert.alert('Вы вышли из личного кабинета'), 100);
+            // setTimeout(() => Alert.alert('Вы вышли из личного кабинета'), 100);
           },
         },
       ],
     );
   };
+
+  getDealersList = () => {
+    const { listRussia, listUkraine, listBelarussia } = this.props;
+    return [].concat(listRussia, listUkraine, listBelarussia);
+  }
 
   render() {
     // Для iPad меню, которое находится вне роутера
@@ -203,6 +216,7 @@ class ProfileScreen extends Component {
                 !auth.token ?
                   (
                     <Auth
+                      dealers={this.getDealersList()}
                       navigation={navigation}
                       loginHandler={actionLogin}
                       isRequest={isLoginRequest}

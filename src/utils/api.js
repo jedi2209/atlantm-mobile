@@ -1,16 +1,14 @@
 import _ from 'lodash';
 
+import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-
-// credentials
-const authToken = 'old_secret_token';
 
 const baseRequestParams = {
   method: 'GET',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${authToken}`,
+    Authorization: `Bearer ${Platform.OS === 'android' ? 'M8ttryMRXs6aTqfH4zNFSPUC78eKoVr3bw5cRwDe' : 'kZJt475LBU3B7aL82j43l7IBab165xbiuIqIqcv9'}`,
     'App-Version': DeviceInfo.getVersion(),
   },
 };

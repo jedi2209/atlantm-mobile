@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, StyleSheet, View, Text } from 'react-native';
+import { Alert, StyleSheet, View, Text, Platform } from 'react-native';
 import { Container, Content, List, StyleProvider, Button, Icon } from 'native-base';
 
 // redux
@@ -46,10 +46,15 @@ const styles = StyleSheet.create({
     height: styleConst.ui.footerHeight,
     backgroundColor: '#fff',
     borderTopWidth: styleConst.ui.borderWidth,
-    borderBottomWidth: 1,
     borderTopColor: styleConst.color.border,
-    borderBottomColor: styleConst.color.border,
     marginBottom: 30,
+
+    ...Platform.select({
+      ios: {
+        borderBottomWidth: styleConst.ui.borderWidth,
+        borderBottomColor: styleConst.color.border,
+      },
+    }),
   },
   buttonText: {
     fontFamily: styleConst.font.medium,
@@ -176,7 +181,9 @@ class RegisterScreen extends Component {
     })
       .then(action => {
         if (action.type === REGISTER__SUCCESS) {
-          setTimeout(() => Alert.alert(`Ваша заявка на регистрацию успешно отправлена специалистам автоцентра ${dealerSelected.name}`), 100);
+          const defaultMessage = `Ваша заявка на регистрацию успешно отправлена специалистам автоцентра ${dealerSelected.name}`;
+          // setTimeout(() => Alert.alert(`Ваша заявка на регистрацию успешно отправлена специалистам автоцентра ${dealerSelected.name}`), 100);
+          setTimeout(() => Alert.alert(get(action, 'payload.data.message', defaultMessage)), 100);
           navigation.goBack();
         }
 
