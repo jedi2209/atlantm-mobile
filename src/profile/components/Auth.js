@@ -126,10 +126,10 @@ export default class Auth extends Component {
                 placeholder="Поле для заполнения"
                 onChangeText={onChangeHandler}
                 value={value}
+                keyboardType="phone-pad"
                 returnKeyType="done"
                 returnKeyLabel="Готово"
                 underlineColorAndroid="transparent"
-                keyboardType="numeric"
                 {...inputProps}
               />
             </Item>
