@@ -1,6 +1,7 @@
 export const INFO_LIST__REQUEST = 'INFO_LIST__REQUEST';
 export const INFO_LIST__SUCCESS = 'INFO_LIST__SUCCESS';
 export const INFO_LIST__FAIL = 'INFO_LIST__FAIL';
+export const INFO_LIST__RESET = 'INFO_LIST__RESET';
 
 export const INFO_POST__REQUEST = 'INFO_POST__REQUEST';
 export const INFO_POST__SUCCESS = 'INFO_POST__SUCCESS';

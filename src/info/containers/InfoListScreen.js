@@ -10,7 +10,7 @@ import { Text, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
-import { fetchInfoList } from '../actions';
+import { fetchInfoList, actionListReset } from '../actions';
 
 // helpers
 import getTheme from '../../../native-base-theme/components';
@@ -53,6 +53,7 @@ const mapStateToProps = ({ dealer, info, nav }) => {
 
 const mapDispatchToProps = {
   fetchInfoList,
+  actionListReset,
 };
 
 class InfoListScreen extends Component {
@@ -75,10 +76,11 @@ class InfoListScreen extends Component {
   }
 
   componentDidMount() {
-    const { dealerSelected, list, fetchInfoList, isFetchInfoList } = this.props;
+    const { dealerSelected, list, fetchInfoList, isFetchInfoList, actionListReset } = this.props;
     const { region, id: dealer } = dealerSelected;
 
-    if (list.length === 0 && !isFetchInfoList) {
+    if (!isFetchInfoList) {
+      actionListReset();
       fetchInfoList(region, dealer);
     }
   }
@@ -94,23 +96,11 @@ class InfoListScreen extends Component {
     });
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const {
-      list,
-      visited,
-      navigation,
-      dealerSelected,
-      isFetchInfoList,
-    } = this.props;
-
+  shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'InfoListScreen';
 
-    return (this.state.isRefreshing !== nextState.isRefreshing) ||
-      (visited !== nextProps.visited) ||
-      (isFetchInfoList !== nextProps.isFetchInfoList && isActiveScreen) ||
-      (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-      (list.length !== nextProps.list.length);
+    return isActiveScreen;
   }
 
   renderItem = ({ item }) => {

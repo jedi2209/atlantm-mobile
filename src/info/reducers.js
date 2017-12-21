@@ -9,6 +9,7 @@ import {
   INFO_POST__REQUEST,
   INFO_POST__SUCCESS,
   INFO_POST__FAIL,
+  INFO_LIST__RESET,
 
   CALL_ME_INFO__REQUEST,
   CALL_ME_INFO__SUCCESS,
@@ -76,6 +77,7 @@ function list(state = [], action) {
     case INFO_LIST__SUCCESS:
       return action.payload;
     case DEALER__SUCCESS:
+    case INFO_LIST__RESET:
       return [];
     default:
       return state;
