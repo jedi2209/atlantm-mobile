@@ -105,7 +105,7 @@ class ReviewAddRatingStepScreen extends Component {
     if (!name && !phone && !email) {
       return setTimeout(() => {
         Alert.alert(
-          'Не хватает информации',
+          'Недостаточно информации',
           'Для отправки отзыва необходимо заполнить ФИО, номер контактного телефона и email',
           [
             { text: 'Отмена', style: 'cancel' },

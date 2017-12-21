@@ -97,7 +97,7 @@ class TvaScreen extends Component {
     if (!carNumber) {
       return setTimeout(() => {
         Alert.alert(
-          'Не хватает информации',
+          'Недостаточно информации',
           'Необходимо заполнить гос. номер автомобиля',
         );
       }, 100);
