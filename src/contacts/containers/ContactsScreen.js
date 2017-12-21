@@ -83,7 +83,7 @@ class ContactsScreen extends Component {
 
       if (!name || !phone) {
         return Alert.alert(
-          'Не хватает информации',
+          'Недостаточно информации',
           'Для обратного звонка необходимо заполнить ФИО и номер контактного телефона в профиле',
           [
             { text: 'Отмена', style: 'cancel' },
