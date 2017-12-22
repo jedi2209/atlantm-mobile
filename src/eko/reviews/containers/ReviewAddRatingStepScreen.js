@@ -102,7 +102,7 @@ class ReviewAddRatingStepScreen extends Component {
       actionReviewAdd,
     } = this.props;
 
-    if (!name && !phone && !email) {
+    if (!name || !phone || !email) {
       return setTimeout(() => {
         Alert.alert(
           'Недостаточно информации',
