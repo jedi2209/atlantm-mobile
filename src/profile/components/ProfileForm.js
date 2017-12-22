@@ -10,6 +10,7 @@ import ListItemHeader from '../components/ListItemHeader';
 import stylesList from '../../core/components/Lists/style';
 
 // helpers
+import { get } from 'lodash';
 import styleConst from '../../core/style-const';
 
 const isAndroid = Platform.OS === 'android';
@@ -174,6 +175,8 @@ export default class ProfileForm extends PureComponent {
   render() {
     const { isRegisterForm, auth, name, phone, email, car, carNumber, carSection, carVIN, carVINFill } = this.props;
 
+    const isCars = get(auth, 'cars', []).length !== 0;
+
     return (
       <View style={styles.container}>
         {this.renderListItem('ФИО', name, this.onChangeName)}
@@ -200,10 +203,10 @@ export default class ProfileForm extends PureComponent {
               <View>
                 <ListItemHeader text={this.getCarSectionTitle()} />
                 {carVINFill ? this.renderListItem('VIN', carVIN, this.onChangeCarVIN) : null}
-                {!auth.cars && !carVINFill ? this.renderListItem('Авто', car, this.onChangeCar) : null}
-                {!auth.cars ? this.renderListItem('Гос. номер', carNumber, this.onChangeCarNumber, {}, true) : null}
+                {!isCars && !carVINFill ? this.renderListItem('Авто', car, this.onChangeCar) : null}
+                {!isCars ? this.renderListItem('Гос. номер', carNumber, this.onChangeCarNumber, {}, true) : null}
 
-                { auth.cars ? this.renderCars() : null }
+                {isCars ? this.renderCars() : null }
               </View>
             ) : null
         }
