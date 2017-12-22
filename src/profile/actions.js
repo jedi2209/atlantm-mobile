@@ -81,14 +81,10 @@ export const carFill = (car) => {
 };
 
 export const carVINFill = (carVIN) => {
-  // let result = carVIN.replace(/\s/g, '');
-  let result = carVIN;
-  result = result && result.toUpperCase();
-
   return dispatch => {
     dispatch({
       type: PROFILE_CAR_VIN__FILL,
-      payload: result,
+      payload: carVIN,
     });
   };
 };

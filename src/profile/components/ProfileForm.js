@@ -179,7 +179,9 @@ export default class ProfileForm extends PureComponent {
 
     return (
       <View style={styles.container}>
-        {this.renderListItem('ФИО', name, this.onChangeName)}
+        {this.renderListItem('ФИО', name, this.onChangeName, {
+          autoCapitalize: 'words',
+        })}
         {this.renderListItem('Телефон', phone, this.onChangePhone, {
           maxLength: 20,
           keyboardType: 'phone-pad',
