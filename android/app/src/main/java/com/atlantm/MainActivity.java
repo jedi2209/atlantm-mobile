@@ -1,9 +1,11 @@
 package com.atlantm;
 
 import android.os.Bundle;
+import android.content.Intent;
 
 import org.devio.rn.splashscreen.SplashScreen;
 import com.facebook.react.ReactActivity;
+import com.evollu.react.fcm.FIRMessagingPackage;
 
 public class MainActivity extends ReactActivity {
 
@@ -11,6 +13,12 @@ public class MainActivity extends ReactActivity {
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.show(this);  // here
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onNewIntent (Intent intent) {
+      super.onNewIntent(intent);
+        setIntent(intent);
     }
 
     /**
