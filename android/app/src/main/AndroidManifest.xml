@@ -11,7 +11,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- Вручную удаляем лишние права -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove" />
@@ -55,18 +54,6 @@
             </intent-filter>
         </service>
         <!-- Firebase cloud messages -->
-
-        <!-- Local notification -->
-        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap/ic_notif"/>
-        <receiver android:name="com.evollu.react.fcm.FIRLocalMessagingPublisher"/>
-        <receiver android:enabled="true" android:exported="true"  android:name="com.evollu.react.fcm.FIRSystemBootEventReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

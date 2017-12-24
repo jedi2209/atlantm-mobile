@@ -45,6 +45,10 @@ export default class MenuScreen extends Component {
     headerLeft: null,
   })
 
+  componentDidMount() {
+    console.log('MENU did mount');
+  }
+
   shouldComponentUpdate() { return false; }
 
   onPressContacts = () => this.props.navigation.navigate('ContactsScreen')

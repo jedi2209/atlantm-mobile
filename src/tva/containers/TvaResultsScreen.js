@@ -172,7 +172,7 @@ class TvaResultsScreen extends Component {
             <Spinner visible={isMessageSending} color={styleConst.color.blue} />
             <HeaderSubtitle content={textList} isBig={true} />
             {
-              info.map(item => {
+              (info || []).map(item => {
                 return (
                   <TouchableOpacity key={item.id} onPress={this.onPressBack} style={styles.item}>
                     <ListItemHeader
