@@ -1,4 +1,5 @@
-export const APP_VERSION__SET = 'APP_VERSION__SET';
+export const APP_FCM_TOKEN__SET = 'APP_FCM_TOKEN__SET';
+export const APP_PUSH_GRANTED__SET = 'APP_PUSH_GRANTED__SET';
 
 export const EVENT_DEFAULT = 'EVENT_DEFAULT';
 export const EVENT_REFRESH = 'EVENT_REFRESH';

@@ -18,7 +18,6 @@ https://medium.com/@jidefr/the-most-unknown-redux-performance-trick-986fdfe871fa
 - Обновиться до react-navigation beta 20
 - Поддержать iphone x
 - Еко: если нет отзывов в массив нет выбранного дилера, а должен быть всегда, смотри actions.js
-- Удалить код про выставления версии приложения
 - Разобраться с react-native-debugger, отключить redux-logger
 - Переделать все места, где что-то вложено внутрь Image (для обновления 0.51)
 - Заиспользовать везде FooterButton

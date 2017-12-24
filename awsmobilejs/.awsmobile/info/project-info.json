@@ -1,0 +1,22 @@
+{
+	"ProjectName": "atlantm",
+	"ProjectPath": "/Users/tavria/sites/atlantm",
+	"SourceDir": "src",
+	"DistributionDir": "dist",
+	"BuildCommand": "npm run-script build",
+	"StartCommand": "npm run-script start",
+	"InitializationTime": "2017-12-24-17-21-12",
+	"LastConfigurationTime": "2017-12-24-17-22-23",
+	"LastNPMInstallTime": "",
+	"FrontendLastBuildTime": "",
+	"LastPublishTime": "",
+	"BackendFormat": "yml",
+	"BackendLastBuildTime": "",
+	"BackendLastUpdateTime": "",
+	"BackendLastUpdateSuccessful": false,
+	"BackendProjectID": "1b9f0ae3-c2ef-476a-9f6b-4ef9546ff12e",
+	"BackendProjectName": "Atlant-M",
+	"BackendProjectConsoleUrl": "https://console.aws.amazon.com/mobilehub/home#/1b9f0ae3-c2ef-476a-9f6b-4ef9546ff12e/build",
+	"BackendProjectCreationTime": "2017-12-24T14:20:39.203Z",
+	"BackendProjectLastUpdatedTime": "2017-12-24T14:20:57.403Z"
+}

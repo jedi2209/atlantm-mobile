@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Alert, StyleSheet } from 'react-native';
+import { View, Alert, StyleSheet, PushNotificationIOS } from 'react-native';
 import {
   Body,
+  Right,
   Label,
   Item,
   Input,
+  Switch,
   Content,
   ListItem,
   Container,
@@ -14,10 +16,12 @@ import {
 
 // redux
 import { connect } from 'react-redux';
-import { actionFetchTva } from '../actions';
+import { actionFetchTva, actionSetPushTracking } from '../actions';
 import { carNumberFill } from '../../profile/actions';
 
 // components
+import FCM from 'react-native-fcm';
+
 import Spinner from 'react-native-loading-spinner-overlay';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 import ListItemHeader from '../../profile/components/ListItemHeader';
@@ -42,18 +46,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, nav, tva, profile }) => {
+const mapStateToProps = ({ dealer, nav, tva, profile, core }) => {
   return {
     nav,
     carNumber: profile.carNumber,
+    pushTracking: tva.pushTracking,
     isTvaRequest: tva.meta.isRequest,
     dealerSelected: dealer.selected,
+    fcmToken: core.fcmToken,
   };
 };
 
 const mapDispatchToProps = {
   carNumberFill,
   actionFetchTva,
+  actionSetPushTracking,
 };
 
 class TvaScreen extends Component {
@@ -72,10 +79,10 @@ class TvaScreen extends Component {
     actionFetchTva: PropTypes.func,
     carNumberFill: PropTypes.func,
     carNumber: PropTypes.string,
+    pushTracking: PropTypes.bool,
   }
 
   shouldComponentUpdate(nextProps) {
-    const { dealerSelected, isTvaRequest, carNumber } = this.props;
     const nav = nextProps.nav.newState;
     let isActiveScreen = false;
 
@@ -86,13 +93,11 @@ class TvaScreen extends Component {
       }
     }
 
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-      (isTvaRequest !== nextProps.isTvaRequest && isActiveScreen) ||
-      (carNumber !== nextProps.carNumber && isActiveScreen);
+    return isActiveScreen;
   }
 
   onPressButton = () => {
-    const { dealerSelected, actionFetchTva, carNumber, navigation } = this.props;
+    const { dealerSelected, actionFetchTva, carNumber, navigation, fcmToken } = this.props;
 
     if (!carNumber) {
       return setTimeout(() => {
@@ -107,6 +112,7 @@ class TvaScreen extends Component {
       number: carNumber.replace(/\s/g, ''),
       dealer: dealerSelected.id,
       region: dealerSelected.region,
+      fcmToken,
     }).then(action => {
       if (action.type === TVA__SUCCESS) {
         navigation.navigate('TvaResultsScreen');
@@ -120,30 +126,61 @@ class TvaScreen extends Component {
 
   onChangeCarNumber = (value) => this.props.carNumberFill(value);
 
-  renderListItem = () => {
-    const { carNumber } = this.props;
+  renderListItems = () => {
+    const { carNumber, pushTracking } = this.props;
 
     return (
-      <View style={stylesList.listItemContainer}>
-        <ListItem style={[stylesList.listItem, stylesList.listItemReset]} last>
-          <Body>
-            <Item style={stylesList.inputItem} fixedLabel>
-              <Label style={stylesList.label}>Гос. номер</Label>
-              <Input
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholder="Поле для заполнения"
-                onChangeText={this.onChangeCarNumber}
-                value={carNumber}
-                returnKeyType="done"
-                returnKeyLabel="Готово"
-                underlineColorAndroid="transparent"
-              />
-            </Item>
-          </Body>
-        </ListItem>
+      <View>
+        <View style={stylesList.listItemContainer}>
+          <ListItem style={[stylesList.listItem, stylesList.listItemReset]}>
+            <Body>
+              <Item style={stylesList.inputItem} fixedLabel>
+                <Label style={stylesList.label}>Гос. номер</Label>
+                <Input
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholder="Поле для заполнения"
+                  onChangeText={this.onChangeCarNumber}
+                  value={carNumber}
+                  returnKeyType="done"
+                  returnKeyLabel="Готово"
+                  underlineColorAndroid="transparent"
+                />
+              </Item>
+            </Body>
+          </ListItem>
+        </View>
+
+        <View style={stylesList.listItemContainer}>
+          <ListItem style={stylesList.listItem} last>
+            <Body>
+              <Label style={stylesList.label}>Отслеживание</Label>
+            </Body>
+            <Right>
+              <Switch onValueChange={this.onPressPushTracking} style={styles.switch} value={pushTracking} />
+            </Right>
+          </ListItem>
+        </View>
+
       </View>
     );
+  }
+
+  onPressPushTracking = (isPushTracking) => {
+    FCM.requestPermissions({ badge: true, sound: true, alert: true })
+      .then(() => {
+        this.props.actionSetPushTracking(isPushTracking);
+      })
+      .catch(() => console.log('reject'));
+
+    PushNotificationIOS.checkPermissions(
+      (permissions) => {
+        if (permissions.alert === 1 || permissions.badge === 1 || permissions.sound === 1) {
+          console.log('ios granted');
+        } else {
+          console.log('ios reject');
+        }
+      });
   }
 
   render() {
@@ -168,7 +205,7 @@ class TvaScreen extends Component {
 
             <ListItemHeader text="АВТОМОБИЛЬ" />
 
-            {this.renderListItem()}
+            {this.renderListItems()}
           </Content>
           <FooterButton
             text="ПРОВЕРИТЬ"
