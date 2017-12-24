@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Alert, StyleSheet, PushNotificationIOS } from 'react-native';
+import { View, Alert, StyleSheet, Platform, Linking } from 'react-native';
 import {
   Body,
   Right,
@@ -18,6 +18,7 @@ import {
 import { connect } from 'react-redux';
 import { actionFetchTva, actionSetPushTracking } from '../actions';
 import { carNumberFill } from '../../profile/actions';
+import { actionSetFCMToken, actionSetPushGranted } from '../../core/actions';
 
 // components
 import FCM from 'react-native-fcm';
@@ -54,6 +55,7 @@ const mapStateToProps = ({ dealer, nav, tva, profile, core }) => {
     isTvaRequest: tva.meta.isRequest,
     dealerSelected: dealer.selected,
     fcmToken: core.fcmToken,
+    pushGranted: core.pushGranted,
   };
 };
 
@@ -61,6 +63,8 @@ const mapDispatchToProps = {
   carNumberFill,
   actionFetchTva,
   actionSetPushTracking,
+  actionSetFCMToken,
+  actionSetPushGranted,
 };
 
 class TvaScreen extends Component {
@@ -82,6 +86,15 @@ class TvaScreen extends Component {
     pushTracking: PropTypes.bool,
   }
 
+  componentDidMount() {
+    const { navigation } = this.props;
+    const params = get(navigation, 'state.params', {});
+
+    // if (params.push) {
+    //   this.onPressButton(params.carNumber);
+    // }
+  }
+
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
     let isActiveScreen = false;
@@ -97,7 +110,14 @@ class TvaScreen extends Component {
   }
 
   onPressButton = () => {
-    const { dealerSelected, actionFetchTva, carNumber, navigation, fcmToken } = this.props;
+    const {
+      carNumber,
+      navigation,
+      fcmToken,
+      pushGranted,
+      dealerSelected,
+      actionFetchTva,
+    } = this.props;
 
     if (!carNumber) {
       return setTimeout(() => {
@@ -109,10 +129,11 @@ class TvaScreen extends Component {
     }
 
     actionFetchTva({
-      number: carNumber.replace(/\s/g, ''),
+      number: carNumber,
       dealer: dealerSelected.id,
       region: dealerSelected.region,
       fcmToken,
+      pushGranted,
     }).then(action => {
       if (action.type === TVA__SUCCESS) {
         navigation.navigate('TvaResultsScreen');
@@ -167,18 +188,37 @@ class TvaScreen extends Component {
   }
 
   onPressPushTracking = (isPushTracking) => {
+    const { fcmToken, actionSetFCMToken, actionSetPushTracking, actionSetPushGranted } = this.props;
+
     FCM.requestPermissions({ badge: true, sound: true, alert: true })
       .then(() => {
-        this.props.actionSetPushTracking(isPushTracking);
-      })
-      .catch(() => console.log('reject'));
-
-    PushNotificationIOS.checkPermissions(
-      (permissions) => {
-        if (permissions.alert === 1 || permissions.badge === 1 || permissions.sound === 1) {
-          console.log('ios granted');
+        if (!fcmToken) {
+          FCM.getFCMToken().then(token => {
+            actionSetFCMToken(token || null);
+            actionSetPushGranted(true);
+            actionSetPushTracking(isPushTracking);
+          });
         } else {
-          console.log('ios reject');
+          actionSetPushTracking(isPushTracking);
+        }
+      })
+      .catch(() => {
+        if (Platform.OS === 'ios') {
+          setTimeout(() => {
+            return Alert.alert(
+              'Отслеживание невозможно',
+              'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
+              [
+                { text: 'Ок', style: 'cancel' },
+                {
+                  text: 'Настройки',
+                  onPress() {
+                    Linking.openURL('app-settings://notification/com.atlant-m');
+                  },
+                },
+              ],
+            );
+          }, 100);
         }
       });
   }

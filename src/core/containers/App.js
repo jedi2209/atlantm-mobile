@@ -5,7 +5,7 @@ import { StyleSheet, View, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { store } from '../store';
 import { navigationChange } from '../../navigation/actions';
-import { actionSetFCMToken, actionSetPushGranted } from '../actions';
+import { actionSetFCMToken, actionSetPushGranted, actionSetPreviousFCMToken } from '../actions';
 
 // helpers
 import { get } from 'lodash';
@@ -13,7 +13,7 @@ import { get } from 'lodash';
 // components
 import Sidebar from '../../menu/containers/Sidebar';
 import DeviceInfo from 'react-native-device-info';
-import FCM, { FCMEvent, NotificationType, RemoteNotificationResult } from 'react-native-fcm';
+import FCM, { FCMEvent, NotificationType, RemoteNotificationResult, WillPresentNotificationResult } from 'react-native-fcm';
 
 // routes
 import getRouter from '../router';
@@ -28,6 +28,7 @@ const mapDispatchToProps = {
   navigationChange,
   actionSetFCMToken,
   actionSetPushGranted,
+  actionSetPreviousFCMToken,
 };
 
 const styles = StyleSheet.create({
@@ -46,52 +47,74 @@ class App extends Component {
     FCM.requestPermissions()
       .then(this.onPushPermissionGranted)
       .catch(this.onPushPermissionRejected);
-  }
 
-  componentWillUnmount() {
-    this.notificationListener.remove();
-    this.refreshUnsubscribe();
-  }
-
-  onPushPermissionRejected = () => {
-    this.props.actionSetPushGranted(false);
-    console.log('notification permission rejected');
-  }
-
-  onPushPermissionGranted = () => {
-    const { actionSetFCMToken, actionSetPushGranted } = this.props;
-
-    actionSetPushGranted(true);
 
     FCM.getFCMToken().then(token => {
-      // console.log('getFCMToken', token);
       actionSetFCMToken(token || null);
     });
 
-    FCM.subscribeToTopic('/topics/foo-bar');
+    FCM.subscribeToTopic('foo-bar');
+    FCM.subscribeToTopic('bazhova');
+
+    const {
+      fcmToken,
+      actionSetFCMToken,
+      actionSetPushGranted,
+      actionSetPreviousFCMToken,
+    } = this.props;
 
     this.refreshUnsubscribe = FCM.on(FCMEvent.RefreshToken, token => {
       console.log('refresh FCM token', token);
-      actionSetFCMToken(token || null);
+      this.props.actionSetPreviousFCMToken(fcmToken);
+      this.props.actionSetFCMToken(token);
     });
 
     FCM.getInitialNotification().then(notif => {
       console.log('getInitialNotification', notif);
+
+      // navigation.navigate('Tva2Screen', { push: true, carNumber: 'A999AA99' });
     });
 
-    this.notificationListener = FCM.on(FCMEvent.Notification, async (notif) => {
-      if (Platform.OS === 'android' && !notif.local_notification) {
+    this.notificationListener = FCM.on(FCMEvent.Notification, (notif) => {
+      if (Platform.os === 'android' && !notif.local_notification) {
         this.sendLocalNotification(notif);
       }
 
-      if (Platform.OS ==='ios') {
+      // console.log('notif', notif);
+
+      if (Platform.OS === 'ios') {
         switch (notif._notificationType) {
           case NotificationType.Remote:
-            notif.finish(RemoteNotificationResult.NewData);
+            notif.finish(RemoteNotificationResult.NewData); //other types available: RemoteNotificationResult.NewData, RemoteNotificationResult.ResultFailed
+            break;
+          case NotificationType.NotificationResponse:
+            notif.finish();
+            break;
+          case NotificationType.WillPresent:
+            console.log('in the method');
+            notif.finish(WillPresentNotificationResult.All); //other types available: WillPresentNotificationResult.None
             break;
         }
       }
     });
+  }
+
+  componentDidUpdate() {
+    console.log('app did update', this.props.navigation);
+  }
+
+  componentWillUnmount() {
+    // this.notificationListener.remove();
+    // this.refreshUnsubscribe();
+  }
+
+  onPushPermissionRejected = () => {
+    console.log('notification permission rejected');
+    this.props.actionSetPushGranted(false);
+  }
+
+  onPushPermissionGranted = () => {
+    actionSetPushGranted(true);
   }
 
   sendLocalNotification = notif => {

@@ -1,4 +1,6 @@
-import { APP_FCM_TOKEN__SET, APP_PUSH_GRANTED__SET } from './actionTypes';
+import API from '../utils/api';
+
+import { APP_FCM_TOKEN__SET, APP_PUSH_GRANTED__SET, APP_PREVIOUS_FCM_TOKEN__SET } from './actionTypes';
 
 export const actionSetFCMToken = token => {
   return dispatch => {
@@ -6,6 +8,17 @@ export const actionSetFCMToken = token => {
       type: APP_FCM_TOKEN__SET,
       payload: token,
     });
+  };
+};
+
+export const actionSetPreviousFCMToken = (oldToken, newToken) => {
+  return dispatch => {
+    dispatch({
+      type: APP_PREVIOUS_FCM_TOKEN__SET,
+      payload: oldToken,
+    });
+
+    API.updateFCMToken({ oldToken, newToken });
   };
 };
 

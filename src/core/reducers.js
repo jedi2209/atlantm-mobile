@@ -11,11 +11,20 @@ import contacts from '../contacts/reducers';
 import catalog from '../catalog/reducers';
 import indicators from '../indicators/reducers';
 
-import { APP_FCM_TOKEN__SET, APP_PUSH_GRANTED__SET } from './actionTypes';
+import { APP_FCM_TOKEN__SET, APP_PUSH_GRANTED__SET, APP_PREVIOUS_FCM_TOKEN__SET } from './actionTypes';
 
 const fcmToken = (state = null, action) => {
   switch (action.type) {
     case APP_FCM_TOKEN__SET:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const previousFcmToken = (state = null, action) => {
+  switch (action.type) {
+    case APP_PREVIOUS_FCM_TOKEN__SET:
       return action.payload;
     default:
       return state;
@@ -33,6 +42,7 @@ const pushGranted = (state = false, action) => {
 
 const coreReducer = combineReducers({
   fcmToken,
+  previousFcmToken,
   pushGranted,
 });
 
