@@ -11,15 +11,20 @@ import contacts from '../contacts/reducers';
 import catalog from '../catalog/reducers';
 import indicators from '../indicators/reducers';
 
-import { APP_VERSION__SET } from './actionTypes';
-import { REHYDRATE } from 'redux-persist/constants';
-import { get } from 'lodash';
+import { APP_FCM_TOKEN__SET, APP_PUSH_GRANTED__SET } from './actionTypes';
 
-const version = (state = '', action) => {
+const fcmToken = (state = null, action) => {
   switch (action.type) {
-    case REHYDRATE:
-      return get(action, 'payload.core.version', '');
-    case APP_VERSION__SET:
+    case APP_FCM_TOKEN__SET:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const pushGranted = (state = false, action) => {
+  switch (action.type) {
+    case APP_PUSH_GRANTED__SET:
       return action.payload;
     default:
       return state;
@@ -27,7 +32,8 @@ const version = (state = '', action) => {
 };
 
 const coreReducer = combineReducers({
-  version,
+  fcmToken,
+  pushGranted,
 });
 
 const rootReducer = combineReducers({

@@ -1,10 +1,19 @@
-import { APP_VERSION__SET } from './actionTypes';
+import { APP_FCM_TOKEN__SET, APP_PUSH_GRANTED__SET } from './actionTypes';
 
-export const setAppVersion = (version) => {
+export const actionSetFCMToken = token => {
   return dispatch => {
     dispatch({
-      type: APP_VERSION__SET,
-      payload: version,
+      type: APP_FCM_TOKEN__SET,
+      payload: token,
+    });
+  };
+};
+
+export const actionSetPushGranted = isGranted => {
+  return dispatch => {
+    dispatch({
+      type: APP_PUSH_GRANTED__SET,
+      payload: isGranted,
     });
   };
 };

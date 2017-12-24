@@ -11,6 +11,8 @@
     "react-devtools": "react-devtools"
   },
   "dependencies": {
+    "aws-amplify": "^0.1.0",
+    "aws-amplify-react-native": "^0.1.11",
     "babel-eslint": "^7.2.3",
     "lodash": "^4.17.4",
     "moment": "^2.19.0",
