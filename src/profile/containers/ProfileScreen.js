@@ -210,7 +210,7 @@ class ProfileScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <Container>
-          <Content style={styles.content} >
+          <Content style={styles.content} keyboardShouldPersistTaps={Platform.OS === 'android' ? 'always' : 'never'}>
             <List style={styles.list}>
               {
                 !auth.token ?
