@@ -8,7 +8,7 @@ const baseRequestParams = {
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${Platform.OS === 'android' ? 'XXXX' : 'XXXX'}`,
+    'x-api-key': `${Platform.OS === 'android' ? 'XXXX' : 'XXXX'}`,
     'App-Version': DeviceInfo.getVersion(),
   },
 };
