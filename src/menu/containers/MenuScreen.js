@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Container, Text, Grid, Col, Row } from 'native-base';
 
+// redux
+import { connect } from 'react-redux';
+
 // helpers
 import styleConst from '../../core/style-const';
 import { scale, verticalScale } from '../../utils/scale';
@@ -37,17 +40,22 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class MenuScreen extends Component {
+const mapStateToProps = ({ nav }) => {
+  return {
+    nav,
+  };
+};
+
+const mapDispatchToProps = {
+};
+
+class MenuScreen extends Component {
   static navigationOptions = () => ({
     headerTitle: 'Атлант-М',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: null,
   })
-
-  componentDidMount() {
-    console.log('MENU did mount');
-  }
 
   shouldComponentUpdate() { return false; }
 
@@ -61,6 +69,9 @@ export default class MenuScreen extends Component {
   onPressIndicators = () => this.props.navigation.navigate('IndicatorsScreen')
 
   render() {
+    // Для iPad меню, которое находится вне роутера
+    window.atlantmNavigation = this.props.navigation;
+
     console.log('== Menu ==');
 
     return (
@@ -175,3 +186,5 @@ export default class MenuScreen extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(MenuScreen);
