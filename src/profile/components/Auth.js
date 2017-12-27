@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
 export default class Auth extends Component {
   static propTypes = {
     dealers: PropTypes.array,
+    dealerSelected: PropTypes.object,
     loginHandler: PropTypes.func,
     isRequest: PropTypes.bool,
     login: PropTypes.string,
@@ -80,7 +81,7 @@ export default class Auth extends Component {
   onPressRegister = () => this.props.navigation.navigate('RegisterScreen')
 
   onPressLogin = () => {
-    const { login, password, loginHandler, dealers } = this.props;
+    const { login, password, loginHandler, dealers, dealerSelected } = this.props;
 
     Keyboard.dismiss();
 
@@ -92,7 +93,7 @@ export default class Auth extends Component {
       return Alert.alert('Введите пароль');
     }
 
-    loginHandler({ login, password, dealers })
+    loginHandler({ login, password, dealers, dealerSelected })
       .then(action => {
         // if (action.type === LOGIN__SUCCESS) {
         //   setTimeout(() => Alert.alert('Успешная авторизация'), 100);

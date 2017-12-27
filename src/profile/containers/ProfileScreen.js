@@ -217,6 +217,7 @@ class ProfileScreen extends Component {
                   (
                     <Auth
                       dealers={this.getDealersList()}
+                      dealerSelected={dealerSelected}
                       navigation={navigation}
                       loginHandler={actionLogin}
                       isRequest={isLoginRequest}

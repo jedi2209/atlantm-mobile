@@ -12,7 +12,7 @@ import FCM, {
 import { get } from 'lodash';
 
 export default {
-  init({ fcmToken, actionSetFCMToken, navigation }) {
+  init({ fcmToken, actionSetFCMToken }) {
     FCM.requestPermissions()
       .then(this.onPushPermissionGranted)
       .catch(this.onPushPermissionRejected);
@@ -28,29 +28,7 @@ export default {
     FCM.getInitialNotification().then((notif) => {
       console.log('getInitialNotification', notif);
 
-      const target = get(notif, 'target');
-      const dealer = get(notif, 'dealer');
-      const carNumber = get(notif, 'car_number');
-      const actionId = get(notif, 'action_id');
-      const actionDate = get(notif, 'action_date', {});
-      const params = {};
-
-      if (target === 'tva') {
-        params.dealer = dealer;
-        params.carNumber = carNumber;
-      }
-
-      if (target === 'action') {
-        params.id = actionId;
-        try {
-          params.date = JSON.parse(actionDate);
-          console.log('params.date', params.date);
-        } catch (e) {
-          console.log('не получилось распарсить json date для акции');
-        }
-      }
-
-      this.openScreen({ target, params, navigation });
+      this.openScreen(notif);
     });
 
     this.notificationListener = FCM.on(FCMEvent.Notification, async (notif) => {
@@ -63,7 +41,6 @@ export default {
       const carNumber = get(notif, 'car_number');
       const actionId = get(notif, 'action_id');
       const actionDate = get(notif, 'action_date', {});
-      const params = {};
 
       console.log('FCMEvent.Notification', notif);
 
@@ -72,34 +49,21 @@ export default {
       }
 
       if (notif.opened_from_tray) {
-        if (target === 'tva') {
-          params.dealer = dealer;
-          params.carNumber = carNumber;
-        }
-
-        if (target === 'action') {
-          params.id = actionId;
-          try {
-            params.date = JSON.parse(actionDate);
-            console.log('params.date', params.date);
-          } catch (e) {
-            console.log('не получилось распарсить json date для акции');
-          }
-        }
-
-        this.openScreen({ target, params, navigation });
+        this.openScreen(notif);
       }
 
       if (Platform.OS === 'ios') {
         switch (notif._notificationType) {
           case NotificationType.Remote:
+            console.log('type Remote');
             notif.finish(RemoteNotificationResult.NewData);
             break;
           case NotificationType.NotificationResponse:
+            console.log('type NotificationResponse');
             notif.finish();
             break;
           case NotificationType.WillPresent:
-            console.log('in the method');
+            console.log('type WillPresent');
             notif.finish(WillPresentNotificationResult.All);
             break;
         }
@@ -108,12 +72,11 @@ export default {
   },
 
   sendLocalNotification({ title, body, target, carNumber, dealer, actionId, actionDate }) {
-    console.log('local notfication');
     FCM.presentLocalNotification({
       target,
-      'car_number': carNumber,
-      'action_id': actionId,
-      'action_date': actionDate,
+      car_number: carNumber,
+      action_id: actionId,
+      action_date: actionDate,
       dealer,
       title,  // as FCM payload
       body, // as FCM payload (required)
@@ -128,29 +91,40 @@ export default {
 
   subscribeToTopic({ id }) {
     const topic = `actions_${id}`;
-    console.log('subscribe to topic', topic);
     FCM.subscribeToTopic(topic);
   },
 
   unsubscribeFromTopic({ id }) {
     const topic = `actions_${id}`;
-    console.log('unsubscribe from topic', topic);
     FCM.unsubscribeFromTopic(topic);
   },
 
-  openScreen({ target, params, navigation }) {
+  openScreen(notif) {
     let routeName;
+    const target = get(notif, 'target');
 
-    switch (target) {
-      case 'tva':
-        routeName = 'Tva2Screen';
-        break;
-      case 'action':
-        routeName = 'InfoListScreen';
-        break;
-      default:
-        routeName = null;
-        break;
+    const dealer = get(notif, 'dealer');
+    const carNumber = get(notif, 'car_number');
+    const actionId = get(notif, 'action_id');
+    const actionDate = get(notif, 'action_date', {});
+    const params = {};
+
+    if (target === 'tva') {
+      routeName = 'Tva2Screen';
+      params.isPush = true;
+      params.dealerId = dealer;
+      params.carNumber = carNumber;
+    }
+
+    if (target === 'action') {
+      routeName = 'InfoListScreen';
+      params.isPush = true;
+      params.id = actionId;
+      try {
+        params.date = JSON.parse(actionDate);
+      } catch (e) {
+        console.log('не получилось распарсить json date для акции');
+      }
     }
 
     if (!routeName) return;
@@ -162,10 +136,11 @@ export default {
         NavigationActions.navigate({ routeName, params }),
       ],
     });
-    navigation.dispatch(resetAction);
+
+    window.atlantmNavigation.dispatch(resetAction);
 
     if (target === 'action') {
-      setTimeout(() => navigation.navigate('InfoPostScreen', params), 500);
+      setTimeout(() => window.atlantmNavigation.navigate('InfoPostScreen', params), 200);
     }
   },
 };

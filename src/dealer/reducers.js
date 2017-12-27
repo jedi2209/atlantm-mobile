@@ -22,7 +22,7 @@ function selected(state = {}, action) {
     case REHYDRATE:
       return get(action.payload, 'dealer.selected', {});
     case DEALER__SUCCESS:
-      return { ...action.payload };
+      return { ...action.payload.newDealer };
     default:
       return state;
   }
