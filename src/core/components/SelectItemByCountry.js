@@ -8,6 +8,7 @@ import { NavigationActions } from 'react-navigation';
 import Imager from '../components/Imager';
 
 // helpers
+import { get } from 'lodash';
 import PropTypes from 'prop-types';
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
@@ -46,17 +47,25 @@ export default class SelectItemByCountry extends Component {
     itemLayout: PropTypes.string,
     selectedItem: PropTypes.object,
     returnScreen: PropTypes.string,
+    onSelect: PropTypes.func,
   }
 
   onPressDealerItem = () => {
-    const { navigation, returnScreen, selectItem, item, isGoBack } = this.props;
+    const { navigation, returnScreen, selectItem, item, isGoBack, onSelect, selectedItem } = this.props;
     const mainScreen = DeviceInfo.isTablet() ? 'ContactsScreen' : 'MenuScreen';
 
-    selectItem(item)
+    selectItem({ dealerBaseData: item, dealerSelected: selectedItem })
       .then((action) => {
         if (action.type === DEALER__SUCCESS) {
           if (['ProfileScreen', 'RegisterScreen', 'ReviewsScreen'].indexOf(returnScreen) !== -1) {
             return navigation.goBack();
+          }
+
+          if (onSelect) {
+            onSelect({
+              newDealer: get(action, 'payload.newDealer'),
+              prevDealer: get(action, 'payload.prevDealer'),
+            });
           }
 
           const resetAction = NavigationActions.reset({

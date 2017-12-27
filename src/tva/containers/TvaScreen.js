@@ -90,9 +90,9 @@ class TvaScreen extends Component {
     const { navigation } = this.props;
     const params = get(navigation, 'state.params', {});
 
-    // if (params.push) {
-    //   this.onPressButton(params.carNumber);
-    // }
+    if (params.isPush) {
+      this.onPressButton(params);
+    }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -109,8 +109,8 @@ class TvaScreen extends Component {
     return isActiveScreen;
   }
 
-  onPressButton = () => {
-    const {
+  onPressButton = (pushProps) => {
+    let {
       carNumber,
       navigation,
       fcmToken,
@@ -119,7 +119,14 @@ class TvaScreen extends Component {
       actionFetchTva,
     } = this.props;
 
-    if (!carNumber) {
+    let dealerId = dealerSelected.id;
+
+    if (pushProps) {
+      carNumber = pushProps.carNumber;
+      dealerId = pushProps.dealerId;
+    }
+
+    if (!carNumber && !pushProps) {
       return setTimeout(() => {
         Alert.alert(
           'Недостаточно информации',
@@ -130,8 +137,8 @@ class TvaScreen extends Component {
 
     actionFetchTva({
       number: carNumber,
-      dealer: dealerSelected.id,
-      region: dealerSelected.region,
+      dealer: dealerId,
+      region: pushProps ? null : dealerSelected.region,
       fcmToken,
       pushGranted,
     }).then(action => {
@@ -253,7 +260,7 @@ class TvaScreen extends Component {
           <FooterButton
             text="ПРОВЕРИТЬ"
             arrow={true}
-            onPressButton={this.onPressButton}
+            onPressButton={() => this.onPressButton()}
           />
         </Container>
       </StyleProvider>

@@ -182,7 +182,10 @@ export const actionLogin = (props) => {
 
           dispatch({
             type: DEALER__SUCCESS,
-            payload: dealer,
+            payload: {
+              newDealer: dealer,
+              prevDealer: props.dealerSelected,
+            },
           });
         }
       }
