@@ -34,6 +34,8 @@ export default {
     this.notificationListener = FCM.on(FCMEvent.Notification, async (notif) => {
       const title = get(notif, 'fcm.title');
       const body = get(notif, 'fcm.body');
+      const icon = get(notif, 'fcm.icon');
+      const color = get(notif, 'fcm.color');
 
       const target = get(notif, 'target');
 
@@ -45,7 +47,18 @@ export default {
       console.log('FCMEvent.Notification', notif);
 
       if (Platform.OS === 'android' && !notif.local_notification) {
-        this.sendLocalNotification({ title, body, target, carNumber, dealer, actionId, actionDate });
+        this.sendLocalNotification({
+          title,
+          body,
+          icon,
+          color,
+
+          target,
+          carNumber,
+          dealer,
+          actionId,
+          actionDate,
+        });
       }
 
       if (notif.opened_from_tray) {
@@ -71,13 +84,26 @@ export default {
     });
   },
 
-  sendLocalNotification({ title, body, target, carNumber, dealer, actionId, actionDate }) {
+  sendLocalNotification({
+    title,
+    body,
+    icon,
+    color,
+
+    target,
+    carNumber,
+    dealer,
+    actionId,
+    actionDate,
+  }) {
     FCM.presentLocalNotification({
       target,
       car_number: carNumber,
       action_id: actionId,
       action_date: actionDate,
       dealer,
+      icon,
+      color,
       title,  // as FCM payload
       body, // as FCM payload (required)
       sound: 'default',                // as FCM payload
@@ -90,11 +116,13 @@ export default {
   },
 
   subscribeToTopic({ id }) {
+    console.log('subscribeToTopic', id);
     const topic = `actions_${id}`;
     FCM.subscribeToTopic(topic);
   },
 
   unsubscribeFromTopic({ id }) {
+    console.log('unsubscribeFromTopic', id);
     const topic = `actions_${id}`;
     FCM.unsubscribeFromTopic(topic);
   },
