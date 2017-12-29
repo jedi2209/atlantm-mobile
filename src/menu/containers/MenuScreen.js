@@ -57,6 +57,9 @@ export default class MenuScreen extends Component {
   onPressIndicators = () => this.props.navigation.navigate('IndicatorsScreen')
 
   render() {
+    // Для iPad меню, которое находится вне роутера
+    window.atlantmNavigation = this.props.navigation;
+
     console.log('== Menu ==');
 
     return (

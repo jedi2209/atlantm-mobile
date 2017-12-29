@@ -10,6 +10,8 @@ import {
   TVA_SEND_MESSAGE__FAIL,
   TVA_MESSAGE__FILL,
 
+  TVA_PUSH_TRACKING__SET,
+
   TVA_ORDER_ID__SET,
 } from './actionTypes';
 
@@ -84,6 +86,15 @@ export const actionSetActiveTvaOrderId = (orderId) => {
     dispatch({
       type: TVA_ORDER_ID__SET,
       payload: orderId,
+    });
+  };
+};
+
+export const actionSetPushTracking = isPushTracking => {
+  return dispatch => {
+    dispatch({
+      type: TVA_PUSH_TRACKING__SET,
+      payload: isPushTracking,
     });
   };
 };

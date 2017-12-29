@@ -26,11 +26,14 @@ export const selectRegion = region => {
   };
 };
 
-export const selectDealer = dealerBaseData => {
+export const selectDealer = ({ dealerBaseData, dealerSelected }) => {
   return dispatch => {
     dispatch({
       type: DEALER__REQUEST,
-      payload: dealerBaseData,
+      payload: {
+        dealerBaseData,
+        dealerSelected,
+      },
     });
 
     return API.fetchDealer(dealerBaseData.id)
@@ -53,7 +56,10 @@ export const selectDealer = dealerBaseData => {
 
         return dispatch({
           type: DEALER__SUCCESS,
-          payload: dealer,
+          payload: {
+            newDealer: dealer,
+            prevDealer: dealerSelected,
+          },
         });
       })
       .catch(error => {
