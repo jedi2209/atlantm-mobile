@@ -12,7 +12,7 @@ import PushNotifications from '../../core/components/PushNotifications';
 import stylesList from '../../core/components/Lists/style';
 
 // helpers
-import { get } from 'lodash';
+import { get, isFunction } from 'lodash';
 import styleConst from '../../core/style-const';
 
 const isAndroid = Platform.OS === 'android';
@@ -188,7 +188,11 @@ export default class ProfileForm extends PureComponent {
 
   renderListSwitcher = (onSwitch, value) => {
     return (
-      <View style={[stylesList.listItemContainer, styles.actionListItemContainer]}>
+      <View style={[
+        stylesList.listItemContainer,
+        stylesList.listItemContainerFirst,
+        styles.actionListItemContainer,
+      ]}>
         <ListItem style={stylesList.listItem} first last>
           <Body>
             <Label style={stylesList.label}>Уведомления об акциях</Label>
@@ -344,7 +348,11 @@ export default class ProfileForm extends PureComponent {
             ) : null
         }
 
-        {this.renderListSwitcher(this.onSwitchActionSubscribe, pushActionSubscribe)}
+        {
+          isFunction(actionSetPushActionSubscribe) ?
+            this.renderListSwitcher(this.onSwitchActionSubscribe, pushActionSubscribe) :
+            null
+        }
       </View>
     );
   }
