@@ -115,6 +115,7 @@ class TvaScreen extends Component {
       navigation,
       fcmToken,
       pushGranted,
+      pushTracking,
       dealerSelected,
       actionFetchTva,
     } = this.props;
@@ -135,12 +136,14 @@ class TvaScreen extends Component {
       }, 100);
     }
 
+    console.log('pushGranted', pushGranted);
+
     actionFetchTva({
       number: carNumber,
       dealer: dealerId,
       region: pushProps ? null : dealerSelected.region,
       fcmToken,
-      pushGranted,
+      pushTracking,
     }).then(action => {
       if (action.type === TVA__SUCCESS) {
         navigation.navigate('TvaResultsScreen');
