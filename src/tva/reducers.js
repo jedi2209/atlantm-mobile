@@ -10,12 +10,23 @@ import {
   TVA_SEND_MESSAGE__FAIL,
   TVA_MESSAGE__FILL,
 
+  TVA_PUSH_TRACKING__SET,
+
   TVA_ORDER_ID__SET,
 } from './actionTypes';
 
 function message(state = '', action) {
   switch (action.type) {
     case TVA_MESSAGE__FILL:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+function pushTracking(state = false, action) {
+  switch (action.type) {
+    case TVA_PUSH_TRACKING__SET:
       return action.payload;
     default:
       return state;
@@ -72,6 +83,7 @@ function isMessageSending(state = false, action) {
 export default combineReducers({
   results,
   message,
+  pushTracking,
   activeOrderId,
   meta: combineReducers({
     isRequest,

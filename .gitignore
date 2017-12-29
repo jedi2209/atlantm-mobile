@@ -53,3 +53,7 @@ android/app/src/main/assets/index.android.bundle.meta
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+
+#awsmobilejs
+awsmobilejs/.awsmobile/backend-build
+awsmobilejs/\#current-backend-info

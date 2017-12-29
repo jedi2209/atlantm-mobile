@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 // components
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import SelectListByCountry from '../../core/components/SelectListByCountry';
+import PushNotification from '../../core/components/PushNotifications';
 
 // helpers
 import stylesHeader from '../../core/components/Header/style';
@@ -49,6 +50,14 @@ class ChooseDealerScreen extends Component {
     return isActiveScreen;
   }
 
+  onSelectDealer = ({ prevDealer, newDealer }) => {
+    if (prevDealer) {
+      PushNotification.unsubscribeFromTopic({ id: prevDealer.id });
+    }
+
+    PushNotification.subscribeToTopic({ id: newDealer.id });
+  }
+
   render() {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
@@ -83,6 +92,7 @@ class ChooseDealerScreen extends Component {
       selectItem={selectDealer}
       selectedItem={dealerSelected}
       isGoBack={isGoBack}
+      onSelect={this.onSelectDealer}
     />;
   }
 }

@@ -150,6 +150,9 @@ class TvaResultsScreen extends Component {
   }
 
   render() {
+    // Для iPad меню, которое находится вне роутера
+    window.atlantmNavigation = this.props.navigation;
+
     const {
       message,
       results,
@@ -172,7 +175,7 @@ class TvaResultsScreen extends Component {
             <Spinner visible={isMessageSending} color={styleConst.color.blue} />
             <HeaderSubtitle content={textList} isBig={true} />
             {
-              info.map(item => {
+              (info || []).map(item => {
                 return (
                   <TouchableOpacity key={item.id} onPress={this.onPressBack} style={styles.item}>
                     <ListItemHeader

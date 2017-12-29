@@ -6,4 +6,5 @@ target 'atlantm' do
   # use_frameworks!
 
   pod 'GoogleMaps'
+  pod 'FirebaseMessaging'
 end

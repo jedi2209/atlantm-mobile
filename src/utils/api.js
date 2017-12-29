@@ -34,8 +34,8 @@ export default {
     return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
   },
 
-  fetchTva({ dealer, region, number }) {
-    return this.request(`/tva/get/?number=${number}&region=${region}&dealer=${dealer}`, baseRequestParams);
+  fetchTva({ dealer, region, number, fcmToken, pushGranted }) {
+    return this.request(`/tva/get/?number=${number}&region=${region}&dealer=${dealer}&token=${fcmToken}&notify=${pushGranted}`, baseRequestParams);
   },
 
   fetchIndicators() {
@@ -327,6 +327,25 @@ export default {
     __DEV__ && console.log('API register body', body);
 
     return this.request('/lkk/register/', requestParams);
+  },
+
+  updateFCMToken({ oldToken, newToken }) {
+    const body = [
+      `old=${oldToken}`,
+      `new=${newToken}`,
+    ].join('&');
+
+    const requestParams = _.merge(baseRequestParams, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    });
+
+    __DEV__ && console.log('API update FCM token body', body);
+
+    return this.request('/mobile/token/update/', requestParams);
   },
 
   request(path, requestParams) {

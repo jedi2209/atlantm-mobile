@@ -5,10 +5,15 @@ import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import { store } from '../store';
 import { navigationChange } from '../../navigation/actions';
-import { setAppVersion } from '../actions';
+import {
+  actionSetFCMToken,
+  actionSetPushGranted,
+  actionSetPreviousFCMToken,
+} from '../actions';
 
 // helpers
 import { get } from 'lodash';
+import PushNotification from '../components/PushNotifications';
 
 // components
 import Sidebar from '../../menu/containers/Sidebar';
@@ -17,15 +22,19 @@ import DeviceInfo from 'react-native-device-info';
 // routes
 import getRouter from '../router';
 
-const mapStateToProps = ({ core }) => {
+const mapStateToProps = ({ core, dealer }) => {
   return {
-    appVersion: core.version,
+    fcmToken: core.fcmToken,
+    pushActionSubscribe: core.pushActionSubscribe,
+    dealerSelected: dealer.selected,
   };
 };
 
 const mapDispatchToProps = {
-  setAppVersion,
   navigationChange,
+  actionSetFCMToken,
+  actionSetPushGranted,
+  actionSetPreviousFCMToken,
 };
 
 const styles = StyleSheet.create({
@@ -40,12 +49,39 @@ const styles = StyleSheet.create({
 });
 
 class App extends Component {
-  // componentDidMount() {
-  //   if (!this.props.appVersion) {
-  //     getPersistStore().purge();
-  //     this.props.setAppVersion(1);
-  //   }
-  // }
+  componentDidMount() {
+    const { fcmToken, actionSetFCMToken, dealerSelected, pushActionSubscribe } = this.props;
+
+    PushNotification.init({
+      fcmToken,
+      actionSetFCMToken,
+      navigation: window.atlantmNavigation,
+    });
+
+    const id = dealerSelected.id;
+
+    // автоцентр выбран
+    if (id) {
+      pushActionSubscribe ?
+        PushNotification.subscribeToTopic({ id }) :
+        PushNotification.unsubscribeFromTopic({ id });
+    }
+  }
+
+  shouldComponentUpdate() { return false; }
+
+  componentWillUnmount() {
+    PushNotification.notificationListener.remove();
+    PushNotification.refreshTokenListener.remove();
+  }
+
+  onPushPermissionRejected = () => {
+    this.props.actionSetPushGranted(false);
+  }
+
+  onPushPermissionGranted = () => {
+    this.props.actionSetPushGranted(true);
+  }
 
   onNavigationStateChange = (prevState, newState) => {
     this.props.navigationChange({ prevState, newState });
@@ -62,23 +98,23 @@ class App extends Component {
       console.log('ROUTER action', action);
       console.log('ROUTER state', state);
 
-    //   // if (state && action && action.routeName === 'UsedCarCityScreen') {
-    //   //   console.log('state.routes[1].routes', state.routes[1].routes);
-    //   //   state.routes[1].routes = state.routes[1].routes.filter(route => {
-    //   //     console.log('route', route);
-    //   //     // return route.routeName !== 'UsedCarListScreen';
-    //   //     return true;
-    //   //   });
-    //   // }
+      //   // if (state && action && action.routeName === 'UsedCarCityScreen') {
+      //   //   console.log('state.routes[1].routes', state.routes[1].routes);
+      //   //   state.routes[1].routes = state.routes[1].routes.filter(route => {
+      //   //     console.log('route', route);
+      //   //     // return route.routeName !== 'UsedCarListScreen';
+      //   //     return true;
+      //   //   });
+      //   // }
 
-    //   if (state) {
-    //     console.log('before', state);
-    //     let newState = { ...state };
-    //     newState = removeDuplicateRoutes(state);
-    //     console.log('after', newState);
-    //   }
+      //   if (state) {
+      //     console.log('before', state);
+      //     let newState = { ...state };
+      //     newState = removeDuplicateRoutes(state);
+      //     console.log('after', newState);
+      //   }
 
-    //   // this.props.navigationChange(action.routeName ? action.routeName : mainScreen);
+      //   // this.props.navigationChange(action.routeName ? action.routeName : mainScreen);
       return defaultGetStateForAction(action, state);
     };
 
