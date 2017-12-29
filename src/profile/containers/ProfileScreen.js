@@ -16,6 +16,7 @@ import {
   actionLogin,
   actionLogout,
 } from '../actions';
+import { actionSetPushActionSubscribe, actionSetFCMToken, actionSetPushGranted } from '../../core/actions';
 
 // components
 import Auth from '../components/Auth';
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, profile, nav }) => {
+const mapStateToProps = ({ dealer, profile, nav, core }) => {
   return {
     nav,
     listRussia: dealer.listRussia,
@@ -84,6 +85,9 @@ const mapStateToProps = ({ dealer, profile, nav }) => {
 
     bonus: profile.bonus.data,
     discounts: profile.discounts,
+
+    fcmToken: core.fcmToken,
+    pushActionSubscribe: core.pushActionSubscribe,
   };
 };
 
@@ -98,6 +102,10 @@ const mapDispatchToProps = {
   passwordFill,
   actionLogin,
   actionLogout,
+
+  actionSetFCMToken,
+  actionSetPushGranted,
+  actionSetPushActionSubscribe,
 };
 
 class ProfileScreen extends Component {
@@ -132,6 +140,12 @@ class ProfileScreen extends Component {
 
     bonus: PropTypes.object,
     discounts: PropTypes.array,
+
+    fcmToken: PropTypes.string,
+    pushActionSubscribe: PropTypes.bool,
+    actionSetFCMToken: PropTypes.func,
+    actionSetPushGranted: PropTypes.func,
+    actionSetPushActionSubscribe: PropTypes.func,
   }
 
   static defaultProps = {
@@ -203,6 +217,12 @@ class ProfileScreen extends Component {
       isLoginRequest,
       bonus,
       discounts,
+
+      fcmToken,
+      pushActionSubscribe,
+      actionSetFCMToken,
+      actionSetPushGranted,
+      actionSetPushActionSubscribe,
     } = this.props;
 
     console.log('== Profile ==');
@@ -264,6 +284,12 @@ class ProfileScreen extends Component {
                 emailFill={emailFill}
                 carFill={carFill}
                 carNumberFill={carNumberFill}
+                fcmToken={fcmToken}
+                dealerSelected={dealerSelected}
+                pushActionSubscribe={pushActionSubscribe}
+                actionSetFCMToken={actionSetFCMToken}
+                actionSetPushGranted={actionSetPushGranted}
+                actionSetPushActionSubscribe={actionSetPushActionSubscribe}
               />
             </List>
 

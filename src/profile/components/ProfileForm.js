@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
-import { Text, View, StyleSheet, Platform } from 'react-native';
+import { Text, View, StyleSheet, Platform, Alert, Linking } from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import { ListItem, Body, Item, Label, Input } from 'native-base';
+import FCM from 'react-native-fcm';
+import { ListItem, Body, Item, Label, Input, Right, Switch } from 'native-base';
 import ListItemHeader from '../components/ListItemHeader';
+import PushNotifications from '../../core/components/PushNotifications';
 
 // styles
 import stylesList from '../../core/components/Lists/style';
@@ -60,10 +62,15 @@ const styles = StyleSheet.create({
       },
     }),
   },
+  actionListItemContainer: {
+    marginTop: 30,
+  },
 });
 
 export default class ProfileForm extends PureComponent {
   static propTypes = {
+    dealerSelected: PropTypes.object,
+
     auth: PropTypes.object,
     isRegisterForm: PropTypes.bool,
 
@@ -81,6 +88,12 @@ export default class ProfileForm extends PureComponent {
     carVINFill: PropTypes.func,
     carNumberFill: PropTypes.func,
     carSection: PropTypes.bool,
+
+    fcmToken: PropTypes.string,
+    pushActionSubscribe: PropTypes.bool,
+    actionSetFCMToken: PropTypes.func,
+    actionSetPushGranted: PropTypes.func,
+    actionSetPushActionSubscribe: PropTypes.func,
   }
 
   static defaultProps = {
@@ -95,12 +108,12 @@ export default class ProfileForm extends PureComponent {
     isRegisterForm: false,
   }
 
-  onChangeName = (value) => this.props.nameFill(value)
-  onChangePhone = (value) => this.props.phoneFill(value)
-  onChangeEmail = (value) => this.props.emailFill(value)
-  onChangeCar = (value) => this.props.carFill(value)
-  onChangeCarVIN = (value) => this.props.carVINFill(value)
-  onChangeCarNumber = (value) => this.props.carNumberFill(value)
+  onChangeName = value => this.props.nameFill(value)
+  onChangePhone = value => this.props.phoneFill(value)
+  onChangeEmail = value => this.props.emailFill(value)
+  onChangeCar = value => this.props.carFill(value)
+  onChangeCarVIN = value => this.props.carVINFill(value)
+  onChangeCarNumber = value => this.props.carNumberFill(value)
 
   getCarSectionTitle = () => {
     const { auth } = this.props;
@@ -137,7 +150,7 @@ export default class ProfileForm extends PureComponent {
     });
   }
 
-  renderListItem = (label, value, onChangeHandler, inputProps = {}, isLast) => {
+  renderListItem = ({ label, value, onChange, inputProps = {}, isLast }) => {
     const renderInput = () => (
       <Input
         multiline={isAndroid}
@@ -146,7 +159,7 @@ export default class ProfileForm extends PureComponent {
         autoCapitalize="none"
         autoCorrect={false}
         placeholder="Поле для заполнения"
-        onChangeText={onChangeHandler}
+        onChangeText={onChange}
         value={value}
         returnKeyType="done"
         returnKeyLabel="Готово"
@@ -161,9 +174,10 @@ export default class ProfileForm extends PureComponent {
           <Body>
             <Item style={[stylesList.inputItem, styles.inputItem]} fixedLabel>
               <Label style={[stylesList.label, styles.label]}>{label}</Label>
-              {isAndroid ?
-                <View style={styles.inputContainer}>{renderInput()}</View> :
-                renderInput()
+              {
+                isAndroid ?
+                  <View style={styles.inputContainer}>{renderInput()}</View> :
+                  renderInput()
               }
             </Item>
           </Body>
@@ -172,23 +186,118 @@ export default class ProfileForm extends PureComponent {
     );
   }
 
+  renderListSwitcher = (onSwitch, value) => {
+    return (
+      <View style={[stylesList.listItemContainer, styles.actionListItemContainer]}>
+        <ListItem style={stylesList.listItem} first last>
+          <Body>
+            <Label style={stylesList.label}>Уведомления об акциях</Label>
+          </Body>
+          <Right>
+            <Switch onValueChange={onSwitch} value={value} />
+          </Right>
+        </ListItem>
+      </View>
+    );
+  }
+
+  onSwitchActionSubscribe = (isSubscribe) => {
+    const {
+      dealerSelected,
+
+      fcmToken,
+      actionSetFCMToken,
+      actionSetPushGranted,
+      actionSetPushActionSubscribe,
+    } = this.props;
+
+    const id = dealerSelected.id;
+
+    const topicSetSubscribe = () => {
+      actionSetPushActionSubscribe(isSubscribe);
+
+      if (isSubscribe) {
+        PushNotifications.subscribeToTopic({ id });
+      } else {
+        PushNotifications.unsubscribeFromTopic({ id });
+      }
+    };
+
+    FCM.requestPermissions({ badge: true, sound: true, alert: true })
+      .then(() => {
+        if (!fcmToken) {
+          FCM.getFCMToken().then((token) => {
+            actionSetFCMToken(token || null);
+            actionSetPushGranted(true);
+            topicSetSubscribe();
+          });
+        } else {
+          topicSetSubscribe();
+        }
+      })
+      .catch(() => {
+        if (Platform.OS === 'ios') {
+          setTimeout(() => {
+            return Alert.alert(
+              'Уведомления выключены',
+              'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
+              [
+                { text: 'Ок', style: 'cancel' },
+                {
+                  text: 'Настройки',
+                  onPress() {
+                    Linking.openURL('app-settings://notification/com.atlant-m');
+                  },
+                },
+              ],
+            );
+          }, 100);
+        }
+      });
+  }
+
   render() {
-    const { isRegisterForm, auth, name, phone, email, car, carNumber, carSection, carVIN, carVINFill } = this.props;
+    const {
+      car,
+      auth,
+      name,
+      phone,
+      email,
+      carVIN,
+      carNumber,
+      carSection,
+      carVINFill,
+      isRegisterForm,
+      pushActionSubscribe,
+      actionSetPushActionSubscribe,
+    } = this.props;
 
     const isCars = get(auth, 'cars', []).length !== 0;
 
     return (
       <View style={styles.container}>
-        {this.renderListItem('ФИО', name, this.onChangeName, {
-          autoCapitalize: 'words',
+        {this.renderListItem({
+          label: 'ФИО',
+          value: name,
+          onChange: this.onChangeName,
+          inputProps: { autoCapitalize: 'words' },
         })}
-        {this.renderListItem('Телефон', phone, this.onChangePhone, {
-          maxLength: 20,
-          keyboardType: 'phone-pad',
+        {this.renderListItem({
+          label: 'Телефон',
+          value: phone,
+          onChange: this.onChangePhone,
+          inputProps: {
+            maxLength: 20,
+            keyboardType: 'phone-pad',
+          },
         })}
-        {this.renderListItem('Email', email, this.onChangeEmail, {
-          keyboardType: 'email-address',
-        }, true)}
+        {this.renderListItem({
+          label: 'Email',
+          value: email,
+          onChange: this.onChangeEmail,
+          inputProps: { keyboardType: 'email-address' },
+          isLast: true,
+        })}
 
         {
           isRegisterForm ?
@@ -204,14 +313,38 @@ export default class ProfileForm extends PureComponent {
             (
               <View>
                 <ListItemHeader text={this.getCarSectionTitle()} />
-                {carVINFill ? this.renderListItem('VIN', carVIN, this.onChangeCarVIN) : null}
-                {!isCars && !carVINFill ? this.renderListItem('Авто', car, this.onChangeCar) : null}
-                {!isCars ? this.renderListItem('Гос. номер', carNumber, this.onChangeCarNumber, {}, true) : null}
+                {
+                  carVINFill ?
+                    this.renderListItem({
+                      label: 'VIN',
+                      value: carVIN,
+                      onChange: this.onChangeCarVIN,
+                    }) : null
+                }
+                {
+                  !isCars && !carVINFill ?
+                    this.renderListItem({
+                      label: 'Авто',
+                      value: car,
+                      onChange: this.onChangeCar,
+                    }) : null
+                }
+                {
+                  !isCars ?
+                    this.renderListItem({
+                      label: 'Гос. номер',
+                      value: carNumber,
+                      onChange: this.onChangeCarNumber,
+                      isLast: true,
+                    }) : null
+                }
 
                 {isCars ? this.renderCars() : null }
               </View>
             ) : null
         }
+
+        {this.renderListSwitcher(this.onSwitchActionSubscribe, pushActionSubscribe)}
       </View>
     );
   }

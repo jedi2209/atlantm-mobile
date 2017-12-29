@@ -15,9 +15,10 @@ import {
   APP_FCM_TOKEN__SET,
   APP_PUSH_GRANTED__SET,
   APP_PREVIOUS_FCM_TOKEN__SET,
-  APP_PUSH_SCREEN__SET,
-  APP_PUSH_SCREEN__CLEAR,
+  APP_PUSH_ACTION_SUBSCRIBE__SET,
 } from './actionTypes';
+
+import { DEALER__SUCCESS } from '../dealer/actionTypes';
 
 const fcmToken = (state = null, action) => {
   switch (action.type) {
@@ -46,10 +47,22 @@ const pushGranted = (state = false, action) => {
   }
 };
 
+const pushActionSubscribe = (state = true, action) => {
+  switch (action.type) {
+    case APP_PUSH_ACTION_SUBSCRIBE__SET:
+      return action.payload;
+    case DEALER__SUCCESS:
+      return true;
+    default:
+      return state;
+  }
+};
+
 const coreReducer = combineReducers({
   fcmToken,
   previousFcmToken,
   pushGranted,
+  pushActionSubscribe,
 });
 
 const rootReducer = combineReducers({

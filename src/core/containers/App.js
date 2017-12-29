@@ -25,6 +25,7 @@ import getRouter from '../router';
 const mapStateToProps = ({ core, dealer }) => {
   return {
     fcmToken: core.fcmToken,
+    pushActionSubscribe: core.pushActionSubscribe,
     dealerSelected: dealer.selected,
   };
 };
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
 
 class App extends Component {
   componentDidMount() {
-    const { fcmToken, actionSetFCMToken, dealerSelected } = this.props;
+    const { fcmToken, actionSetFCMToken, dealerSelected, pushActionSubscribe } = this.props;
 
     PushNotification.init({
       fcmToken,
@@ -57,10 +58,17 @@ class App extends Component {
       navigation: window.atlantmNavigation,
     });
 
-    if (dealerSelected.id) {
-      PushNotification.subscribeToTopic({ id: dealerSelected.id });
+    const id = dealerSelected.id;
+
+    // автоцентр выбран
+    if (id) {
+      pushActionSubscribe ?
+        PushNotification.subscribeToTopic({ id }) :
+        PushNotification.unsubscribeFromTopic({ id });
     }
   }
+
+  shouldComponentUpdate() { return false; }
 
   componentWillUnmount() {
     PushNotification.notificationListener.remove();

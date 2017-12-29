@@ -185,7 +185,7 @@ class TvaScreen extends Component {
               <Label style={stylesList.label}>Отслеживание</Label>
             </Body>
             <Right>
-              <Switch onValueChange={this.onPressPushTracking} style={styles.switch} value={pushTracking} />
+              <Switch onValueChange={this.onPressPushTracking} value={pushTracking} />
             </Right>
           </ListItem>
         </View>
@@ -213,7 +213,7 @@ class TvaScreen extends Component {
         if (Platform.OS === 'ios') {
           setTimeout(() => {
             return Alert.alert(
-              'Отслеживание невозможно',
+              'Уведомления выключены',
               'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
               [
                 { text: 'Ок', style: 'cancel' },
