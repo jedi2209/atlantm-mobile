@@ -182,9 +182,21 @@ class RegisterScreen extends Component {
       .then(action => {
         if (action.type === REGISTER__SUCCESS) {
           const defaultMessage = `Ваша заявка на регистрацию успешно отправлена специалистам автоцентра ${dealerSelected.name}`;
-          // setTimeout(() => Alert.alert(`Ваша заявка на регистрацию успешно отправлена специалистам автоцентра ${dealerSelected.name}`), 100);
-          setTimeout(() => Alert.alert(get(action, 'payload.data.message', defaultMessage)), 100);
-          navigation.goBack();
+
+          setTimeout(() => {
+            Alert.alert(
+              get(action, 'payload.data.message', defaultMessage),
+              '',
+              [
+                {
+                  text: 'ОК',
+                  onPress() {
+                    navigation.goBack();
+                  },
+                },
+              ],
+            );
+          }, 100);
         }
 
         if (action.type === REGISTER__FAIL) {
