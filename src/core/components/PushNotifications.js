@@ -12,17 +12,23 @@ import FCM, {
 import { get } from 'lodash';
 
 export default {
-  init({ fcmToken, actionSetFCMToken }) {
+  init({
+    fcmToken,
+    actionSetFCMToken,
+    onPushPermissionGranted,
+    onPushPermissionRejected,
+    actionSetPreviousFCMToken,
+  }) {
     FCM.requestPermissions()
-      .then(this.onPushPermissionGranted)
-      .catch(this.onPushPermissionRejected);
+      .then(onPushPermissionGranted)
+      .catch(onPushPermissionRejected);
 
     FCM.getFCMToken().then(token => actionSetFCMToken(token || null));
 
     this.refreshTokenListener = FCM.on(FCMEvent.RefreshToken, (token) => {
       console.log('refresh FCM token', token);
-      this.props.actionSetPreviousFCMToken(fcmToken);
-      this.props.actionSetFCMToken(token);
+      actionSetPreviousFCMToken(fcmToken);
+      actionSetFCMToken(token);
     });
 
     FCM.getInitialNotification().then((notif) => {
@@ -36,6 +42,7 @@ export default {
       const body = get(notif, 'fcm.body');
       const icon = get(notif, 'fcm.icon');
       const color = get(notif, 'fcm.color');
+      const vibrate = get(notif, 'fcm.vibrate');
 
       const target = get(notif, 'target');
 
@@ -52,6 +59,7 @@ export default {
           body,
           icon,
           color,
+          vibrate,
 
           target,
           carNumber,
@@ -89,6 +97,7 @@ export default {
     body,
     icon,
     color,
+    vibrate,
 
     target,
     carNumber,
@@ -112,6 +121,8 @@ export default {
       number: 1,                       // Android only
       lights: true,                    // Android only, LED blinking (default false)
       show_in_foreground: true,        // notification when app is in foreground (local & remote)
+      vibrate: vibrate || 500,
+      wake_screen: true, // Android only
     });
   },
 
