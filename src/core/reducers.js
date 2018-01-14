@@ -47,12 +47,10 @@ const pushGranted = (state = false, action) => {
   }
 };
 
-const pushActionSubscribe = (state = true, action) => {
+const pushActionSubscribe = (state = false, action) => {
   switch (action.type) {
     case APP_PUSH_ACTION_SUBSCRIBE__SET:
       return action.payload;
-    case DEALER__SUCCESS:
-      return true;
     default:
       return state;
   }

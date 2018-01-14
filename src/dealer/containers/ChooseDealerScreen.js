@@ -3,6 +3,7 @@ import { View } from 'react-native';
 
 // redux
 import { connect } from 'react-redux';
+import { actionSetPushActionSubscribe } from '../../core/actions';
 
 // components
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
@@ -15,7 +16,7 @@ import stylesHeader from '../../core/components/Header/style';
 // actions
 import { fetchDealers, selectDealer, selectRegion } from '../actions';
 
-const mapStateToProps = ({ dealer, nav, }) => {
+const mapStateToProps = ({ dealer, nav, core }) => {
   return {
     nav,
     dealerSelected: dealer.selected,
@@ -25,6 +26,7 @@ const mapStateToProps = ({ dealer, nav, }) => {
     listUkraine: dealer.listUkraine,
     isFetchDealersList: dealer.meta.isFetchDealersList,
     isFetchDealer: dealer.meta.isFetchDealer,
+    pushGranted: core.pushGranted,
   };
 };
 
@@ -32,6 +34,7 @@ const mapDispatchToProps = {
   fetchDealers,
   selectDealer,
   selectRegion,
+  actionSetPushActionSubscribe,
 };
 
 class ChooseDealerScreen extends Component {
@@ -51,11 +54,17 @@ class ChooseDealerScreen extends Component {
   }
 
   onSelectDealer = ({ prevDealer, newDealer }) => {
-    if (prevDealer) {
-      PushNotification.unsubscribeFromTopic({ id: prevDealer.id });
-    }
+    const { actionSetPushActionSubscribe, pushGranted } = this.props;
 
-    PushNotification.subscribeToTopic({ id: newDealer.id });
+    if (pushGranted) {
+      actionSetPushActionSubscribe(true);
+
+      if (prevDealer) {
+        PushNotification.unsubscribeFromTopic({ id: prevDealer.id });
+      }
+
+      PushNotification.subscribeToTopic({ id: newDealer.id });
+    }
   }
 
   render() {

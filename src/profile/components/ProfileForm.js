@@ -108,6 +108,10 @@ export default class ProfileForm extends PureComponent {
     isRegisterForm: false,
   }
 
+  componentDidMount() {
+    console.log('== ProfileForm ==');
+  }
+
   onChangeName = value => this.props.nameFill(value)
   onChangePhone = value => this.props.phoneFill(value)
   onChangeEmail = value => this.props.emailFill(value)
@@ -198,11 +202,15 @@ export default class ProfileForm extends PureComponent {
             <Label style={stylesList.label}>Уведомления об акциях</Label>
           </Body>
           <Right>
-            <Switch onValueChange={onSwitch} value={value} />
+            <Switch onValueChange={onSwitch} value={value || false} />
           </Right>
         </ListItem>
       </View>
     );
+  }
+
+  topicSetSubscribe = () => {
+
   }
 
   onSwitchActionSubscribe = (isSubscribe) => {
