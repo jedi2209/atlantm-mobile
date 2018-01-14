@@ -34,8 +34,12 @@ export default {
     return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
   },
 
-  fetchTva({ dealer, region, number, fcmToken, pushGranted }) {
-    return this.request(`/tva/get/?number=${number}&region=${region}&dealer=${dealer}&token=${fcmToken}&notify=${pushGranted}`, baseRequestParams);
+  fetchTva({ dealer, region, number, fcmToken, pushTracking }) {
+    const url = `/tva/get/?number=${number}&region=${region}&dealer=${dealer}&token=${fcmToken}&notify=${pushTracking}`;
+
+    __DEV__ && console.log('API fetchTva url', url);
+
+    return this.request(url, baseRequestParams);
   },
 
   fetchIndicators() {

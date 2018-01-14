@@ -9,6 +9,7 @@ import {
   actionSetFCMToken,
   actionSetPushGranted,
   actionSetPreviousFCMToken,
+  actionSetPushActionSubscribe,
 } from '../actions';
 
 // helpers
@@ -35,6 +36,7 @@ const mapDispatchToProps = {
   actionSetFCMToken,
   actionSetPushGranted,
   actionSetPreviousFCMToken,
+  actionSetPushActionSubscribe,
 };
 
 const styles = StyleSheet.create({
@@ -50,12 +52,20 @@ const styles = StyleSheet.create({
 
 class App extends Component {
   componentDidMount() {
-    const { fcmToken, actionSetFCMToken, dealerSelected, pushActionSubscribe } = this.props;
+    const {
+      fcmToken,
+      actionSetFCMToken,
+      dealerSelected,
+      pushActionSubscribe,
+      actionSetPreviousFCMToken,
+    } = this.props;
 
     PushNotification.init({
       fcmToken,
       actionSetFCMToken,
-      navigation: window.atlantmNavigation,
+      actionSetPreviousFCMToken,
+      onPushPermissionGranted: this.onPushPermissionGranted,
+      onPushPermissionRejected: this.onPushPermissionRejected,
     });
 
     const id = dealerSelected.id;
@@ -75,12 +85,13 @@ class App extends Component {
     PushNotification.refreshTokenListener.remove();
   }
 
-  onPushPermissionRejected = () => {
-    this.props.actionSetPushGranted(false);
-  }
-
   onPushPermissionGranted = () => {
     this.props.actionSetPushGranted(true);
+  }
+  onPushPermissionRejected = () => {
+    const { actionSetPushActionSubscribe, actionSetPushGranted } = this.props;
+    actionSetPushActionSubscribe(false);
+    this.props.actionSetPushGranted(false);
   }
 
   onNavigationStateChange = (prevState, newState) => {
