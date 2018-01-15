@@ -13,6 +13,7 @@ import { connect } from 'react-redux';
 import { fetchInfoList, actionListReset } from '../actions';
 
 // helpers
+import { get } from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
@@ -76,10 +77,11 @@ class InfoListScreen extends Component {
   }
 
   componentDidMount() {
-    const { dealerSelected, list, fetchInfoList, isFetchInfoList, actionListReset } = this.props;
+    const { navigation, dealerSelected, list, fetchInfoList, isFetchInfoList, actionListReset } = this.props;
     const { region, id: dealer } = dealerSelected;
+    const isPush = get(navigation, 'state.params.isPush');
 
-    if (!isFetchInfoList) {
+    if (!isFetchInfoList && !isPush) {
       actionListReset();
       fetchInfoList(region, dealer);
     }
