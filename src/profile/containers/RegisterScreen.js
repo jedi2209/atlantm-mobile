@@ -26,6 +26,7 @@ import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack'
 import { get } from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
+import { ERROR_NETWORK } from '../../core/const';
 import stylesHeader from '../../core/components/Header/style';
 
 const styles = StyleSheet.create({
@@ -200,7 +201,13 @@ class RegisterScreen extends Component {
         }
 
         if (action.type === REGISTER__FAIL) {
-          setTimeout(() => Alert.alert(get(action, 'payload.message', 'Произошла ошибка, попробуйте снова')), 100);
+          let message = get(action, 'payload.message', 'Произошла ошибка, попробуйте снова');
+
+          if (message === 'Network request failed') {
+            message = ERROR_NETWORK;
+          }
+
+          setTimeout(() => Alert.alert(message), 100);
         }
       });
   };

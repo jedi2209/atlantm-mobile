@@ -36,7 +36,7 @@ export const fetchInfoList = (region, dealer) => {
             type: INFO_LIST__FAIL,
             payload: {
               code: error.code,
-              error: error.message,
+              message: error.message,
             },
           });
         }
@@ -50,7 +50,7 @@ export const fetchInfoList = (region, dealer) => {
         return dispatch({
           type: INFO_LIST__FAIL,
           payload: {
-            error: error.message,
+            message: error.message,
           },
         });
       });

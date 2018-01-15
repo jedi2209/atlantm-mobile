@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   View,
+  Alert,
   FlatList,
   StyleSheet,
   ActivityIndicator,
@@ -11,9 +12,11 @@ import { Text, StyleProvider } from 'native-base';
 // redux
 import { connect } from 'react-redux';
 import { fetchInfoList, actionListReset } from '../actions';
+import { INFO_LIST__FAIL } from '../actionTypes';
 
 // helpers
 import { get } from 'lodash';
+import { ERROR_NETWORK } from '../../core/const';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
@@ -83,7 +86,18 @@ class InfoListScreen extends Component {
 
     if (!isFetchInfoList && !isPush) {
       actionListReset();
-      fetchInfoList(region, dealer);
+      fetchInfoList(region, dealer)
+        .then(action => {
+          if (action.type === INFO_LIST__FAIL) {
+            let message = get(action, 'payload.message', 'Произошла ошибка, попробуйте снова');
+
+            if (message === 'Network request failed') {
+              message = ERROR_NETWORK;
+            }
+
+            setTimeout(() => Alert.alert(message), 100);
+          }
+        });
     }
   }
 
@@ -117,6 +131,8 @@ class InfoListScreen extends Component {
   }
 
   renderEmptyComponent = () => {
+    console.log('renderEmptyComponent', this.props.isFetchInfoList);
+
     return this.props.isFetchInfoList ?
       (
           <View style={styles.spinnerContainer} >
@@ -160,7 +176,7 @@ class InfoListScreen extends Component {
           <FlatList
             ListHeaderComponent={this.renderHeaderComponent}
             data={list}
-            extraData={visited}
+            extraData={isFetchInfoList}
             onRefresh={this.onRefresh}
             refreshing={this.state.isRefreshing}
             ListEmptyComponent={this.renderEmptyComponent}
