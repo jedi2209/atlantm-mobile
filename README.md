@@ -25,3 +25,5 @@ https://medium.com/@jidefr/the-most-unknown-redux-performance-trick-986fdfe871fa
 - Разобраться со списками в android, рисовать бордер если элемент `last`
 - Перейти везде на async/await в actions
 - Прокинуть в компонент DealerItemList параметр `isGoBack`
+- Внедрить единую систему обработки ошибок
+- Обработка ошибок ввиду `Network request failed`
