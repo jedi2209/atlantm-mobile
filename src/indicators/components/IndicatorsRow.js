@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { View, StyleSheet, Dimensions, TouchableHighlight, Image } from 'react-native';
 
 // components
-import Imager from '../../core/components/Imager';
 import DeviceInfo from 'react-native-device-info';
 import IndicatorDescription from '../components/IndicatorDescription';
 
@@ -108,7 +107,7 @@ export default class IndicatorRow extends PureComponent {
           underlayColor={styleConst.color.select}
         >
           <View>
-            <Imager
+            <Image
               resizeMode="contain"
               style={indicatorStyle}
               source={{ uri: isActive ? img.white : img.blue }}
