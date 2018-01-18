@@ -85,6 +85,8 @@ export const fetchInfoPost = (infoID) => {
           payload: {
             id: infoID,
             text: _.get(data, '0.text', ''),
+            date: _.get(data, '0.date', ''),
+            img: _.get(data, '0.img', ''),
           },
         });
       })
