@@ -136,8 +136,6 @@ class TvaScreen extends Component {
       }, 100);
     }
 
-    console.log('pushGranted', pushGranted);
-
     actionFetchTva({
       number: carNumber,
       dealer: dealerId,
@@ -146,7 +144,7 @@ class TvaScreen extends Component {
       pushTracking,
     }).then(action => {
       if (action.type === TVA__SUCCESS) {
-        navigation.navigate('TvaResultsScreen');
+        setTimeout(() => navigation.navigate('TvaResultsScreen'), 200);
       }
 
       if (action.type === TVA__FAIL) {

@@ -87,6 +87,20 @@ class TvaResultsScreen extends Component {
     actionSetActiveTvaOrderId(activeTvaOrderId);
   }
 
+  shouldComponentUpdate(nextProps) {
+    const nav = nextProps.nav.newState;
+    let isActiveScreen = false;
+
+    if (nav) {
+      const rootLevel = nav.routes[nav.index];
+      if (rootLevel) {
+        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'TvaResultsScreen';
+      }
+    }
+
+    return isActiveScreen;
+  }
+
   onPressMessageButton = () => {
     NetInfo.isConnected.fetch().then(isConnected => {
       if (!isConnected) {

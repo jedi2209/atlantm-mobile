@@ -25,7 +25,7 @@ import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
 import Imager from '../../core/components/Imager';
 
 // helpers
-import { get, find } from 'lodash';
+import { get } from 'lodash';
 import styleConst from '../../core/style-const';
 import processHtml from '../../utils/process-html';
 import { verticalScale } from '../../utils/scale';
@@ -268,16 +268,13 @@ class InfoPostScreen extends Component {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
-    const { list, navigation, isCallMeRequest } = this.props;
-
-    // nav params
-    const id = navigation.state.params.id;
-    const date = navigation.state.params.date;
+    const { navigation, isCallMeRequest } = this.props;
 
     const post = this.getPost();
     let text = get(post, 'text');
-    const currentPostInList = find(list, { id });
-    const imageUrl = get(currentPostInList, isTablet ? 'img.10000x440' : 'img.10000x300');
+    const img = get(post, 'img');
+    const imageUrl = get(img, isTablet ? '10000x440' : '10000x300');
+    const date = get(post, 'date');
 
     if (text) {
       text = processHtml(text, this.state.webViewWidth);

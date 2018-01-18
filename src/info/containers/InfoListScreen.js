@@ -80,11 +80,11 @@ class InfoListScreen extends Component {
   }
 
   componentDidMount() {
-    const { navigation, dealerSelected, list, fetchInfoList, isFetchInfoList, actionListReset } = this.props;
+    const { navigation, dealerSelected, fetchInfoList, isFetchInfoList, actionListReset } = this.props;
     const { region, id: dealer } = dealerSelected;
-    const isPush = get(navigation, 'state.params.isPush');
+    // const isPush = get(navigation, 'state.params.isPush');
 
-    if (!isFetchInfoList && !isPush) {
+    if (!isFetchInfoList) {
       actionListReset();
       fetchInfoList(region, dealer)
         .then(action => {
