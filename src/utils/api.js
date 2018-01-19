@@ -3,12 +3,14 @@ import _ from 'lodash';
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 
+const isAndroid = Platform.OS === 'android';
+
 const baseRequestParams = {
   method: 'GET',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    'x-api-key': `${Platform.OS === 'android' ? 'M8ttryMRXs6aTqfH4zNFSPUC78eKoVr3bw5cRwDe' : 'kZJt475LBU3B7aL82j43l7IBab165xbiuIqIqcv9'}`,
+    'x-api-key': `${isAndroid ? 'M8ttryMRXs6aTqfH4zNFSPUC78eKoVr3bw5cRwDe' : 'kZJt475LBU3B7aL82j43l7IBab165xbiuIqIqcv9'}`,
     'App-Version': DeviceInfo.getVersion(),
   },
 };
@@ -35,7 +37,7 @@ export default {
   },
 
   fetchTva({ dealer, region, number, fcmToken, pushTracking }) {
-    const url = `/tva/get/?number=${number}&region=${region}&dealer=${dealer}&token=${fcmToken}&notify=${pushTracking}`;
+    const url = `/tva/get/?number=${number}&region=${region}&dealer=${dealer}&token=${fcmToken}&notify=${pushTracking}&platform=${isAndroid ? 1 : 2}`;
 
     __DEV__ && console.log('API fetchTva url', url);
 
