@@ -11,6 +11,8 @@ import FCM, {
 
 import { get } from 'lodash';
 
+const isAndroid = Platform.OS === 'android';
+
 export default {
   init({
     fcmToken,
@@ -53,21 +55,21 @@ export default {
 
       console.log('FCMEvent.Notification', notif);
 
-      if (Platform.OS === 'android' && !notif.local_notification) {
-        this.sendLocalNotification({
-          title,
-          body,
-          icon,
-          color,
-          vibrate,
+      // if (Platform.OS === 'android' && !notif.local_notification) {
+      //   this.sendLocalNotification({
+      //     title,
+      //     body,
+      //     icon,
+      //     color,
+      //     vibrate,
 
-          target,
-          carNumber,
-          dealer,
-          actionId,
-          actionDate,
-        });
-      }
+      //     target,
+      //     carNumber,
+      //     dealer,
+      //     actionId,
+      //     actionDate,
+      //   });
+      // }
 
       if (notif.opened_from_tray) {
         this.openScreen(notif);
@@ -127,14 +129,14 @@ export default {
   },
 
   subscribeToTopic({ id }) {
-    console.log('subscribeToTopic', id);
-    const topic = `actions_${id}`;
+    const topic = `${isAndroid ? 'android' : 'ios'}_actions_${id}`;
+    console.log('subscribeToTopic', topic);
     FCM.subscribeToTopic(topic);
   },
 
   unsubscribeFromTopic({ id }) {
-    console.log('unsubscribeFromTopic', id);
-    const topic = `actions_${id}`;
+    const topic = `${isAndroid ? 'android' : 'ios'}_actions_${id}`;
+    console.log('unsubscribeFromTopic', topic);
     FCM.unsubscribeFromTopic(topic);
   },
 
