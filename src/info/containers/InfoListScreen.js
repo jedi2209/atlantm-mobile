@@ -114,7 +114,16 @@ class InfoListScreen extends Component {
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
-    const isActiveScreen = nav.routes[nav.index].routeName === 'InfoListScreen';
+    let isActiveScreen = false;
+
+    if (nav) {
+      const rootLevel = nav.routes[nav.index];
+      if (rootLevel) {
+        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'InfoListScreen';
+      }
+    }
+
+    console.log('isActiveScreen', isActiveScreen);
 
     return isActiveScreen;
   }

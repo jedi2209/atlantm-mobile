@@ -257,8 +257,7 @@ class RegisterScreen extends Component {
                 city={dealerSelected.city}
                 name={dealerSelected.name}
                 brands={dealerSelected.brands}
-                returnScreen="RegisterScreen"
-                isGoBack={true}
+                goBack={true}
               />
 
               <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ*" />
