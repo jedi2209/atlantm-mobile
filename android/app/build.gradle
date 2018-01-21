@@ -107,6 +107,7 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {
         release {
@@ -149,6 +150,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-image-crop-picker')
     compile project(':react-native-sentry')
     compile(project(':react-native-device-info')){
         exclude group: 'com.google.android.gms', module: 'play-services-gcm'
