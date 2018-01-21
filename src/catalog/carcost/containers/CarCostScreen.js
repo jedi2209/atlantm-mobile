@@ -29,13 +29,28 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, profile, nav }) => {
+const mapStateToProps = ({ dealer, profile, nav, catalog }) => {
+  const carCost = get(catalog, 'carCost', {});
+  const { photos, brand, model, year, engine, mileage, mileageUnit, gearbox, color, carCondition } = carCost;
+
   return {
     nav,
     name: profile.name,
     phone: profile.phone,
     email: profile.email,
     dealerSelected: dealer.selected,
+
+    // car cost
+    photos,
+    brand,
+    model,
+    year,
+    engine,
+    mileage,
+    mileageUnit,
+    gearbox,
+    color,
+    carCondition,
   };
 };
 
