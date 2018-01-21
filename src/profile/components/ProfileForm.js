@@ -18,9 +18,6 @@ import styleConst from '../../core/style-const';
 const isAndroid = Platform.OS === 'android';
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 30,
-  },
   inputItem: {
     paddingRight: 7,
   },
@@ -72,7 +69,7 @@ export default class ProfileForm extends PureComponent {
     dealerSelected: PropTypes.object,
 
     auth: PropTypes.object,
-    isRegisterForm: PropTypes.bool,
+    view: PropTypes.string,
 
     name: PropTypes.string,
     phone: PropTypes.string,
@@ -104,12 +101,8 @@ export default class ProfileForm extends PureComponent {
     car: '',
     carVIN: '',
     carNumber: '',
+    view: 'default',
     carSection: false,
-    isRegisterForm: false,
-  }
-
-  componentDidMount() {
-    console.log('== ProfileForm ==');
   }
 
   onChangeName = value => this.props.nameFill(value)
@@ -209,10 +202,6 @@ export default class ProfileForm extends PureComponent {
     );
   }
 
-  topicSetSubscribe = () => {
-
-  }
-
   onSwitchActionSubscribe = (isSubscribe) => {
     const {
       dealerSelected,
@@ -270,6 +259,7 @@ export default class ProfileForm extends PureComponent {
 
   render() {
     const {
+      view,
       car,
       auth,
       name,
@@ -279,7 +269,6 @@ export default class ProfileForm extends PureComponent {
       carNumber,
       carSection,
       carVINFill,
-      isRegisterForm,
       pushActionSubscribe,
       actionSetPushActionSubscribe,
     } = this.props;
@@ -287,7 +276,7 @@ export default class ProfileForm extends PureComponent {
     const isCars = get(auth, 'cars', []).length !== 0;
 
     return (
-      <View style={styles.container}>
+      <View style={{ marginBottom: view !== 'CarCostScreen' ? 30 : 0 }}>
         {this.renderListItem({
           label: 'ФИО',
           value: name,
@@ -312,7 +301,7 @@ export default class ProfileForm extends PureComponent {
         })}
 
         {
-          isRegisterForm ?
+          view === 'RegisterScreen' ?
             (
               <View style={styles.textContainer}>
                 <Text style={styles.text}>* – обязательно заполните все поля</Text>

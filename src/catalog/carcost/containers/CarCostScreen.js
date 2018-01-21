@@ -9,11 +9,12 @@ import { nameFill, phoneFill, emailFill } from '../../../profile/actions';
 
 // components
 import Spinner from 'react-native-loading-spinner-overlay';
-// import ProfileForm from '../../profile/components/ProfileForm';
+import ProfileForm from '../../../profile/components/ProfileForm';
 import ListItemHeader from '../../../profile/components/ListItemHeader';
 import DealerItemList from '../../../core/components/DealerItemList';
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import CarCostPhotos from '../components/CarCostPhotos';
 
 // helpers
 import { get } from 'lodash';
@@ -147,7 +148,7 @@ class CarCostScreen extends Component {
       dealerSelected,
     } = this.props;
 
-    console.log('== Evaluate Order ==');
+    console.log('== CarCost ==');
 
     return (
       <StyleProvider style={getTheme()}>
@@ -168,14 +169,23 @@ class CarCostScreen extends Component {
 
               <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
 
-              {/* <ProfileForm
+              <ProfileForm
+                view="CarCostScreen"
                 name={name}
                 phone={phone}
                 email={email}
                 nameFill={nameFill}
                 phoneFill={phoneFill}
                 emailFill={emailFill}
-              /> */}
+              />
+
+              <ListItemHeader text="АВТОМОБИЛЬ" />
+
+              <ListItemHeader text="ДОПОЛНИТЕЛЬНО" />
+
+              <ListItemHeader text="ПРИКРЕПИТЬ ФОТОГРАФИИ" />
+
+              <CarCostPhotos />
             </List>
           </Content>
         </Container>

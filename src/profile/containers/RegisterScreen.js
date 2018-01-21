@@ -263,7 +263,7 @@ class RegisterScreen extends Component {
               <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ*" />
 
               <ProfileForm
-                isRegisterForm={true}
+                view="RegisterScreen"
                 carSection={true}
                 name={name}
                 phone={phone}
