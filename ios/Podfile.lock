@@ -30,10 +30,14 @@ PODS:
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
   - Protobuf (3.3.0)
+  - QBImagePickerController (3.4.0)
+  - RSKImageCropper (1.6.3)
 
 DEPENDENCIES:
   - FirebaseMessaging
   - GoogleMaps
+  - QBImagePickerController
+  - RSKImageCropper
 
 SPEC CHECKSUMS:
   FirebaseAnalytics: ad41720e3e67fc63fbe3d2948d3e26932a8de311
@@ -44,7 +48,9 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   nanopb: 22bc080fa3955e2116b6ff3ee6c2cb3c15ab97cb
   Protobuf: d582fecf68201eac3d79ed61369ef45734394b9c
+  QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
+  RSKImageCropper: 356e36fc58c57c371b5d8b23d603936d6a73df6c
 
-PODFILE CHECKSUM: 74fd0dc0e3f187e5dfa42f8cbc5f3ecbae6beac5
+PODFILE CHECKSUM: 2402816a7c0c7e603797b1d3d2e4beee56b17303
 
 COCOAPODS: 1.2.1

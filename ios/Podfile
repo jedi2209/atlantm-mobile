@@ -7,4 +7,8 @@ target 'atlantm' do
 
   pod 'GoogleMaps'
   pod 'FirebaseMessaging'
+
+  # react-native-image-crop-picker
+  pod 'RSKImageCropper'
+  pod 'QBImagePickerController'
 end
