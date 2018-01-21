@@ -266,7 +266,7 @@ class ProfileScreen extends Component {
                 city={dealerSelected.city}
                 name={dealerSelected.name}
                 brands={dealerSelected.brands}
-                returnScreen="ProfileScreen"
+                goBack={true}
               />
 
               <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />

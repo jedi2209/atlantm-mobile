@@ -41,6 +41,7 @@ import NewCarFilterDriveScreen from '../catalog/newcar/containers/NewCarFilterDr
 import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
 import NewCarCityScreen from '../catalog/newcar/containers/NewCarCityScreen';
+import EvaluateOrderScreen from '../catalog/evaluateorder/containers/EvaluateOrderScreen';
 
 // tva
 import TvaScreen from '../tva/containers/TvaScreen';
@@ -72,6 +73,7 @@ const CatalogScreenNavigator = StackNavigator({
   NewCarListScreen: { screen: NewCarListScreen },
   NewCarItemScreen: { screen: NewCarItemScreen },
   NewCarCityScreen: { screen: NewCarCityScreen },
+  EvaluateOrderScreen: { screen: EvaluateOrderScreen },
 });
 
 const removeDuplicateRoutes = (state) => {

@@ -42,6 +42,7 @@ export default class DealerItemList extends Component {
     name: PropTypes.string,
     brands: PropTypes.array,
     returnScreen: PropTypes.string,
+    goBack: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -49,6 +50,7 @@ export default class DealerItemList extends Component {
     name: null,
     brands: [],
     returnScreen: null,
+    goBack: false,
   }
 
   shouldComponentUpdate(nextProps) {
@@ -57,12 +59,12 @@ export default class DealerItemList extends Component {
 
   onPressDealer = () => {
     const {
+      goBack,
       navigation,
       returnScreen,
-      isGoBack,
     } = this.props;
 
-    return navigation.navigate('ChooseDealerScreen', { returnScreen, isGoBack });
+    return navigation.navigate('ChooseDealerScreen', { returnScreen, goBack });
   }
 
   render() {

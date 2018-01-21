@@ -164,7 +164,7 @@ class ReviewsScreen extends Component {
             city={dealerSelected.city}
             name={dealerSelected.name}
             brands={dealerSelected.brands}
-            returnScreen="ReviewsScreen"
+            goBack={true}
           />
 
           <ReviewsList

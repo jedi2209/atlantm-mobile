@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
-import { Button } from 'native-base';
+import { Button, Container, Content } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -18,7 +18,8 @@ import { actionSetDealersByCities } from '../../dealer/actions';
 // components
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
-// helpres
+// helpers
+import { verticalScale } from '../../utils/scale';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import { RUSSIA, BELARUSSIA, UKRAINE } from '../../core/const';
@@ -27,7 +28,7 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     flex: 1,
   },
   button: {
@@ -35,12 +36,13 @@ const styles = StyleSheet.create({
     height: 70,
     marginLeft: styleConst.ui.horizontalGap * 2,
     marginRight: styleConst.ui.horizontalGap * 2,
+    marginBottom: 40,
   },
   imageContainer: {
     position: 'relative',
     alignItems: 'center',
     width,
-    paddingVertical: 10,
+    paddingVertical: verticalScale(20),
   },
   imageDividerContainer: {
     ...StyleSheet.absoluteFillObject,
@@ -66,7 +68,7 @@ const styles = StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
   },
   buttonGroup: {
-    alignItems: 'center',
+    // alignItems: 'flex-end',
   },
 });
 
@@ -153,8 +155,8 @@ class CatalogScreen extends Component {
   }
 
   onPressButtonNewCar = () => this.props.navigation.navigate('NewCarFilterScreen')
-
   onPressButtonUsedCar = () => this.props.navigation.navigate('UsedCarListScreen')
+  onPressButtonEvaluateOrder = () => this.props.navigation.navigate('EvaluateOrderScreen')
 
   render() {
     const {
@@ -165,22 +167,27 @@ class CatalogScreen extends Component {
     console.log('== Catalog ==');
 
     return (
-      <View style={styles.content}>
-        <View style={styles.buttonGroup}>
-            <Button full onPress={this.onPressButtonNewCar} style={[styles.button, styles.buttonTop]}>
-              <Text style={styles.buttonText}>НОВЫЕ АВТОМОБИЛИ</Text>
-            </Button>
-            <View style={styles.imageContainer}>
-              <View style={styles.imageDividerContainer}>
-                <View style={styles.imageDivider} />
+        <Container>
+          <Content style={styles.content}>
+            <View style={styles.buttonGroup}>
+              <View style={styles.imageContainer}>
+                <View style={styles.imageDividerContainer}>
+                  <View style={styles.imageDivider} />
+                </View>
+                <Image resizeMode="contain" source={require('../assets/catalog.png')} style={styles.image} />
               </View>
-              <Image resizeMode="contain" source={require('../assets/catalog.png')} style={styles.image} />
+              <Button full onPress={this.onPressButtonNewCar} style={[styles.button, styles.buttonTop]}>
+                <Text style={styles.buttonText}>НОВЫЕ АВТОМОБИЛИ</Text>
+              </Button>
+              <Button full onPress={this.onPressButtonUsedCar} style={[styles.button, styles.buttonBottom]}>
+                <Text style={styles.buttonText}>АВТОМОБИЛИ С ПРОБЕГОМ</Text>
+              </Button>
+              <Button full onPress={this.onPressButtonEvaluateOrder} style={[styles.button, styles.buttonBottom]}>
+                <Text style={styles.buttonText}>ЗАЯВКА НА ОЦЕНКУ АВТО</Text>
+              </Button>
             </View>
-            <Button full onPress={this.onPressButtonUsedCar} style={[styles.button, styles.buttonBottom]}>
-              <Text style={styles.buttonText}>АВТОМОБИЛИ С ПРОБЕГОМ</Text>
-            </Button>
-          </View>
-      </View>
+          </Content>
+        </Container>
     );
   }
 }

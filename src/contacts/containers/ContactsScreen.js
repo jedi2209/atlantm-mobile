@@ -121,8 +121,7 @@ class ContactsScreen extends Component {
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'ContactsScreen';
 
-    return (this.props.dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-      (this.props.isСallMeRequest !== nextProps.isСallMeRequest);
+    return isActiveScreen;
   }
 
   onPressAbout = () => this.props.navigation.navigate('AboutScreen')
@@ -170,7 +169,7 @@ class ContactsScreen extends Component {
               city={dealerSelected.city}
               name={dealerSelected.name}
               brands={dealerSelected.brands}
-              returnScreen="ContactsScreen"
+              goBack={true}
             />
             <Spinner visible={isСallMeRequest} color={styleConst.color.blue} />
 
