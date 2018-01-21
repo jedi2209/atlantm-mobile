@@ -156,7 +156,7 @@ class CatalogScreen extends Component {
 
   onPressButtonNewCar = () => this.props.navigation.navigate('NewCarFilterScreen')
   onPressButtonUsedCar = () => this.props.navigation.navigate('UsedCarListScreen')
-  onPressButtonEvaluateOrder = () => this.props.navigation.navigate('EvaluateOrderScreen')
+  onPressButtonCarCost = () => this.props.navigation.navigate('CarCostScreen')
 
   render() {
     const {
@@ -182,7 +182,7 @@ class CatalogScreen extends Component {
               <Button full onPress={this.onPressButtonUsedCar} style={[styles.button, styles.buttonBottom]}>
                 <Text style={styles.buttonText}>АВТОМОБИЛИ С ПРОБЕГОМ</Text>
               </Button>
-              <Button full onPress={this.onPressButtonEvaluateOrder} style={[styles.button, styles.buttonBottom]}>
+              <Button full onPress={this.onPressButtonCarCost} style={[styles.button, styles.buttonBottom]}>
                 <Text style={styles.buttonText}>ЗАЯВКА НА ОЦЕНКУ АВТО</Text>
               </Button>
             </View>

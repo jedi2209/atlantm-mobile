@@ -44,7 +44,7 @@ const mapDispatchToProps = {
   emailFill,
 };
 
-class EvaluateOrderScreen extends Component {
+class CarCostScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Заявка на оценку',
     headerStyle: stylesHeader.common,
@@ -125,7 +125,7 @@ class EvaluateOrderScreen extends Component {
     if (nav) {
       const rootLevel = nav.routes[nav.index];
       if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'EvaluateOrderScreen';
+        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'CarCostScreen';
       }
     }
 
@@ -184,4 +184,4 @@ class EvaluateOrderScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EvaluateOrderScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(CarCostScreen);
