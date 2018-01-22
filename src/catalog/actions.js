@@ -48,6 +48,24 @@ import {
   CATALOG_ORDER__FAIL,
 
   CATALOG_ORDER_COMMENT__FILL,
+
+  // comment
+  CAR_COST__REQUEST,
+  CAR_COST__SUCCESS,
+  CAR_COST__FAIL,
+  CAR_COST_PHOTOS__FILL,
+  CAR_COST_BRAND__FILL,
+  CAR_COST_MODEL__FILL,
+  CAR_COST_YEAR__SELECT,
+  CAR_COST_MILEAGE__FILL,
+  CAR_COST_MILEAGE_UNIT__SELECT,
+  CAR_COST_ENGINE_VOLUME__SELECT,
+  CAR_COST_ENGINE_TYPE__SELECT,
+  CAR_COST_GEARBOX__SELECT,
+  CAR_COST_COLOR__FILL,
+  CAR_COST_CAR_CONDITION__SELECT,
+  CAR_COST_COMMENT__FILL,
+  CAR_COST_VIN__FILL,
 } from './actionTypes';
 
 import { EVENT_LOAD_MORE } from '../core/actionTypes';
@@ -510,3 +528,160 @@ export const actionFetchNewCarDetails = carId => {
       });
   };
 };
+
+// carcost
+export const actionFillPhotosCarCost = (photos) => {
+  return dispatch => {
+    return dispatch({
+      type: CAR_COST_PHOTOS__FILL,
+      payload: photos,
+    });
+  };
+};
+
+export const actionFillBrandCarCost = (brand) => {
+  return dispatch => {
+    return dispatch({
+      type: CAR_COST_BRAND__FILL,
+      payload: brand,
+    });
+  };
+};
+
+export const actionFillModelCarCost = (model) => {
+  return dispatch => {
+    return dispatch({
+      type: CAR_COST_MODEL__FILL,
+      payload: model,
+    });
+  };
+};
+
+export const actionFillColorCarCost = (color) => {
+  return dispatch => {
+    return dispatch({
+      type: CAR_COST_COLOR__FILL,
+      payload: color,
+    });
+  };
+};
+
+export const actionSelectYearCarCost = (year) => {
+  return dispatch => {
+    return dispatch({
+      type: CAR_COST_YEAR__SELECT,
+      payload: year,
+    });
+  };
+};
+
+export const actionFillMileageCarCost = (mileage) => {
+  return dispatch => {
+    return dispatch({
+      type: CAR_COST_MILEAGE__FILL,
+      payload: mileage,
+    });
+  };
+};
+
+export const actionSelectMileageUnitCarCost = (mileageUnit) => {
+  return dispatch => {
+    return dispatch({
+      type: CAR_COST_MILEAGE_UNIT__SELECT,
+      payload: mileageUnit,
+    });
+  };
+};
+
+export const actionSelectEngineVolumeCarCost = (engine) => {
+  return dispatch => {
+    return dispatch({
+      type: CAR_COST_ENGINE_VOLUME__SELECT,
+      payload: engine,
+    });
+  };
+};
+
+export const actionSelectEngineTypeCarCost = (engine) => {
+  return dispatch => {
+    return dispatch({
+      type: CAR_COST_ENGINE_TYPE__SELECT,
+      payload: engine,
+    });
+  };
+};
+
+export const actionFillVinCarCost = (engine) => {
+  return dispatch => {
+    return dispatch({
+      type: CAR_COST_VIN__FILL,
+      payload: engine,
+    });
+  };
+};
+
+export const actionSelectGearboxCarCost = (gearbox) => {
+  return dispatch => {
+    return dispatch({
+      type: CAR_COST_GEARBOX__SELECT,
+      payload: gearbox,
+    });
+  };
+};
+
+export const actionSelectCarConditionCarCost = (carCondition) => {
+  return dispatch => {
+    return dispatch({
+      type: CAR_COST_CAR_CONDITION__SELECT,
+      payload: carCondition,
+    });
+  };
+};
+
+export const actionFillCommentCarCost = (comment) => {
+  return dispatch => {
+    return dispatch({
+      type: CAR_COST_COMMENT__FILL,
+      payload: comment,
+    });
+  };
+};
+
+export const actionCarCostOrder = (props) => {
+  return dispatch => {
+    dispatch({
+      type: CAR_COST__REQUEST,
+      payload: { ...props },
+    });
+
+    return API.carCostOrder(props)
+      .then(rnFetchBlobresult => {
+        console.log('res car cost', rnFetchBlobresult);
+
+        const { data } = rnFetchBlobresult;
+        const res = JSON.parse(data);
+        const { status, error } = res;
+
+        if (status !== 'success') {
+          return dispatch({
+            type: CAR_COST__FAIL,
+            payload: {
+              code: error.code,
+              message: error.message,
+            },
+          });
+        }
+
+        return dispatch({ type: CAR_COST__SUCCESS });
+      })
+      .catch(error => {
+        return dispatch({
+          type: CAR_COST__FAIL,
+          payload: {
+            message: error,
+          },
+        });
+      });
+  };
+};
+// END carcost

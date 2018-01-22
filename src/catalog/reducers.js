@@ -54,16 +54,19 @@ import {
   CAR_COST__REQUEST,
   CAR_COST__SUCCESS,
   CAR_COST__FAIL,
-  CAR_COST_PHOTOS__SELECT,
-  CAR_COST_BRAND__SELECT,
-  CAR_COST_MODEL__SELECT,
+  CAR_COST_PHOTOS__FILL,
+  CAR_COST_BRAND__FILL,
+  CAR_COST_MODEL__FILL,
   CAR_COST_YEAR__SELECT,
-  CAR_COST_MILEAGE__SELECT,
+  CAR_COST_MILEAGE__FILL,
   CAR_COST_MILEAGE_UNIT__SELECT,
-  CAR_COST_ENGINE__SELECT,
+  CAR_COST_ENGINE_VOLUME__SELECT,
+  CAR_COST_ENGINE_TYPE__SELECT,
   CAR_COST_GEARBOX__SELECT,
-  CAR_COST_COLOR__SELECT,
+  CAR_COST_COLOR__FILL,
   CAR_COST_CAR_CONDITION__SELECT,
+  CAR_COST_COMMENT__FILL,
+  CAR_COST_VIN__FILL,
 } from './actionTypes';
 
 import { EVENT_LOAD_MORE } from '../core/actionTypes';
@@ -524,7 +527,7 @@ const isCarCostRequest = (state = false, action) => {
 
 const carCostPhotos = (state = {}, action) => {
   switch (action.type) {
-    case CAR_COST_PHOTOS__SELECT:
+    case CAR_COST_PHOTOS__FILL:
       return action.payload;
     default:
       return state;
@@ -533,7 +536,7 @@ const carCostPhotos = (state = {}, action) => {
 
 const carCostBrand = (state = null, action) => {
   switch (action.type) {
-    case CAR_COST_BRAND__SELECT:
+    case CAR_COST_BRAND__FILL:
       return action.payload;
     default:
       return state;
@@ -542,7 +545,7 @@ const carCostBrand = (state = null, action) => {
 
 const carCostModel = (state = null, action) => {
   switch (action.type) {
-    case CAR_COST_MODEL__SELECT:
+    case CAR_COST_MODEL__FILL:
       return action.payload;
     default:
       return state;
@@ -560,7 +563,7 @@ const carCostYear = (state = null, action) => {
 
 const carCostMileage = (state = null, action) => {
   switch (action.type) {
-    case CAR_COST_MILEAGE__SELECT:
+    case CAR_COST_MILEAGE__FILL:
       return action.payload;
     default:
       return state;
@@ -576,9 +579,18 @@ const carCostMileageUnit = (state = 'km', action) => {
   }
 };
 
-const carCostEngine = (state = null, action) => {
+const carCostEngineVolume = (state = null, action) => {
   switch (action.type) {
-    case CAR_COST_ENGINE__SELECT:
+    case CAR_COST_ENGINE_VOLUME__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const carCostEngineType = (state = null, action) => {
+  switch (action.type) {
+    case CAR_COST_ENGINE_TYPE__SELECT:
       return action.payload;
     default:
       return state;
@@ -596,7 +608,7 @@ const carCostGearbox = (state = null, action) => {
 
 const carCostColor = (state = null, action) => {
   switch (action.type) {
-    case CAR_COST_COLOR__SELECT:
+    case CAR_COST_COLOR__FILL:
       return action.payload;
     default:
       return state;
@@ -606,6 +618,26 @@ const carCostColor = (state = null, action) => {
 const carCostCarCondition = (state = null, action) => {
   switch (action.type) {
     case CAR_COST_CAR_CONDITION__SELECT:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const carCostVin = (state = null, action) => {
+  switch (action.type) {
+    case CAR_COST_VIN__FILL:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const carCostComment = (state = '', action) => {
+  switch (action.type) {
+    case CAR_COST__SUCCESS:
+      return '';
+    case CAR_COST_COMMENT__FILL:
       return action.payload;
     default:
       return state;
@@ -669,9 +701,12 @@ export default combineReducers({
     year: carCostYear,
     mileage: carCostMileage,
     mileageUnit: carCostMileageUnit,
-    engine: carCostEngine,
+    engineVolume: carCostEngineVolume,
+    engineType: carCostEngineType,
     gearbox: carCostGearbox,
     color: carCostColor,
+    comment: carCostComment,
+    vin: carCostVin,
     carCondition: carCostCarCondition,
     meta: combineReducers({
       isCarCostRequest,

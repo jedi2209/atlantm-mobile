@@ -42,6 +42,8 @@ const styles = StyleSheet.create({
 
 export default class CarCostPhotos extends Component {
   static propTypes = {
+    photos: PropTypes.object,
+    photosFill: PropTypes.func,
   }
 
   constructor(props) {
@@ -50,20 +52,20 @@ export default class CarCostPhotos extends Component {
     // генерируем хендлеры для actionSheet для каждого фото
     [1, 2, 3, 4, 5, 6].map(photoIndex => {
       this[`handlePhotoPress${photoIndex}`] = i => {
-        this.handlePhotoPress(i, () => {
-          console.log(`upload cool photo ${photoIndex}`);
-        });
+        this.handlePhotoPress(i, props.photos, photoIndex, props.photosFill);
       };
 
       this[`onPressPhoto${photoIndex}`] = () => this[`actionSheet${photoIndex}`].show();
     });
   }
 
-  async handlePhotoPress(i, cb) {
+  async handlePhotoPress(i, photos, photoIndex, cb) {
     const action = {
       1: 'gallery',
       2: 'camera',
     }[i];
+
+    console.log('this.props', this.props);
 
     const settings = {
       compressImageMaxWidth: 1000,
@@ -78,7 +80,9 @@ export default class CarCostPhotos extends Component {
 
         console.log('gallery', photoGallery);
 
-        if (photoGallery) { cb(); }
+        if (photoGallery) {
+          cb({ ...this.props.photos, [photoIndex]: photoGallery });
+        }
 
         break;
       case 'camera':
@@ -86,7 +90,9 @@ export default class CarCostPhotos extends Component {
 
         console.log('camera', photoCamera);
 
-        if (photoCamera) { cb(); }
+        if (photoCamera) {
+          cb({ ...this.props.photos, [photoIndex]: photoGallery });
+        }
 
         break;
       default:
@@ -95,7 +101,7 @@ export default class CarCostPhotos extends Component {
   }
 
   render() {
-    // const { comment } = this.props;
+    const { photos } = this.props;
 
     return (
       <View style={styles.container}>
@@ -116,9 +122,12 @@ export default class CarCostPhotos extends Component {
           <Row>
             {
               [1, 2, 3].map((photoIndex) => {
+                const photo = photos[photoIndex];
+                const source = photo ? { uri: photo.path } : thumbs[photoIndex - 1];
+
                 return <Col key={photoIndex}>
                   <TouchableOpacity style={styles.item} onPress={this[`onPressPhoto${photoIndex}`]}>
-                    <Image style={styles.icon} source={thumbs[photoIndex - 1]} />
+                    <Image style={styles.icon} source={source} />
                   </TouchableOpacity>
                 </Col>;
               })
@@ -127,9 +136,12 @@ export default class CarCostPhotos extends Component {
           <Row>
             {
               [4, 5, 6].map((photoIndex) => {
+                const photo = photos[photoIndex];
+                const source = photo ? { uri: photo.path } : thumbs[photoIndex - 1];
+
                 return <Col key={photoIndex}>
                   <TouchableOpacity style={styles.item} onPress={this[`onPressPhoto${photoIndex}`]}>
-                    <Image style={styles.icon} source={thumbs[photoIndex - 1]} />
+                    <Image style={styles.icon} source={source} />
                   </TouchableOpacity>
                 </Col>;
               })
