@@ -2,17 +2,19 @@ import _ from 'lodash';
 
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 const isAndroid = Platform.OS === 'android';
 
+const headers = {
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
+  'x-api-key': `${isAndroid ? 'XXXX' : 'XXXX'}`,
+  'App-Version': DeviceInfo.getVersion(),
+};
 const baseRequestParams = {
   method: 'GET',
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-    'x-api-key': `${isAndroid ? 'XXXX' : 'XXXX'}`,
-    'App-Version': DeviceInfo.getVersion(),
-  },
+  headers,
 };
 
 export default {
@@ -291,6 +293,88 @@ export default {
     __DEV__ && console.log('API review add body', body);
 
     return this.request('/eko/review/post/', requestParams);
+  },
+
+  carCostOrder({
+    dealerId,
+    name,
+    phone,
+    email,
+    photos,
+    comment,
+    vin,
+    brand,
+    model,
+    year,
+    mileage,
+    mileageUnit,
+    engineVolume,
+    engineType,
+    gearbox,
+    color,
+    CarCondition,
+  }) {
+    // const body = [
+    //   'f_Source=3',
+    //   `f_Dealer=${dealerId}`,
+    //   `f_Name=${name}`,
+    //   `f_Phone=${phone}`,
+    //   `f_Email=${email}`,
+    //   `f_Photo=${photos}`,
+    //   `f_Text=${comment}`,
+    //   `f_VIN=${vin}`,
+    //   `f_Brand=${brand}`,
+    //   `f_Model=${model}`,
+    //   `f_Year=${year}`,
+    //   `f_Mileage=${mileage}`,
+    //   `f_Mileage_unit=${mileageUnit}`,
+    //   `f_Engine=${engineVolume}`,
+    //   `f_EngineType=${engineType}`,
+    //   `f_Gearbox=${gearbox}`,
+    //   `f_Color=${color}`,
+    //   `f_CarCondition=${CarCondition}`,
+    // ].join('&');
+
+    // console.log('body', body);
+
+    // const requestParams = _.merge(baseRequestParams, {
+    //   method: 'post',
+    //   headers: {
+    //     'Content-Type': 'application/x-www-form-urlencoded',
+    //   },
+    // });
+
+    // __DEV__ && console.log('API carcost body', body);
+
+    console.log('photos', photos);
+
+    return RNFetchBlob.fetch(
+      'POST',
+      'https://api.atlantm.com/orders/usedbuy/post/',
+      _.merge(headers, {
+        'Content-Type': 'multipart/form-data',
+      }),
+      [
+        { name: 'f_Dealer', data: '113' },
+        { name: 'f_Name', data: 'Zavarka Team Test' },
+        { name: 'f_Phone', data: '444444' },
+        { name: 'f_Source', data: '3' },
+        // {
+        //   name: 'f_Photo[]',
+        //   type: photos[1].mime,
+        //   filename: photos[1].filename,
+        //   data: RNFetchBlob.wrap(photos[1].path),
+        // },
+        // {
+        //   name: 'f_Photo[]',
+        //   type: photos[2].mime,
+        //   filename: photos[2].filename,
+        //   data: RNFetchBlob.wrap(photos[2].path),
+        // },
+      ],
+    );
+
+    // return this.request('/orders/usedbuy/post/', requestParams);
   },
 
   fetchCars({ token }) {

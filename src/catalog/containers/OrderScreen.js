@@ -233,7 +233,6 @@ class OrderScreen extends Component {
                   style={styles.buttonIcon}
                 />
               </Button>
-
           </Footer>
 
         </Container>

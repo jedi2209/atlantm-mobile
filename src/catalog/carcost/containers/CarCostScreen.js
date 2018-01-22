@@ -1,17 +1,36 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Alert, NetInfo } from 'react-native';
+import { StyleSheet, Alert, NetInfo } from 'react-native';
 import { Container, Content, List, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
 import { nameFill, phoneFill, emailFill } from '../../../profile/actions';
+import {
+  actionFillPhotosCarCost,
+  actionFillBrandCarCost,
+  actionFillModelCarCost,
+  actionFillColorCarCost,
+  actionSelectYearCarCost,
+  actionFillMileageCarCost,
+  actionSelectMileageUnitCarCost,
+  actionSelectEngineVolumeCarCost,
+  actionSelectEngineTypeCarCost,
+  actionSelectGearboxCarCost,
+  actionSelectCarConditionCarCost,
+  actionFillCommentCarCost,
+  actionFillVinCarCost,
+  actionCarCostOrder,
+} from '../../actions';
+import { CAR_COST__SUCCESS, CAR_COST__FAIL } from '../../actionTypes';
 
 // components
 import Spinner from 'react-native-loading-spinner-overlay';
+import CommentOrderForm from '../../components/CommentOrderForm';
 import ProfileForm from '../../../profile/components/ProfileForm';
 import ListItemHeader from '../../../profile/components/ListItemHeader';
 import DealerItemList from '../../../core/components/DealerItemList';
+import ButtonFull from '../../../core/components/ButtonFull';
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import CarCostPhotos from '../components/CarCostPhotos';
@@ -21,17 +40,21 @@ import { get } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
+import { ERROR_NETWORK } from '../../../core/const';
 
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
     paddingBottom: 100,
   },
+  button: {
+    marginTop: 20,
+  },
 });
 
 const mapStateToProps = ({ dealer, profile, nav, catalog }) => {
   const carCost = get(catalog, 'carCost', {});
-  const { photos, brand, model, year, engine, mileage, mileageUnit, gearbox, color, carCondition } = carCost;
+  const { photos, brand, model, year, engine, mileage, mileageUnit, gearbox, color, carCondition, comment, meta } = carCost;
 
   return {
     nav,
@@ -41,6 +64,7 @@ const mapStateToProps = ({ dealer, profile, nav, catalog }) => {
     dealerSelected: dealer.selected,
 
     // car cost
+    comment,
     photos,
     brand,
     model,
@@ -51,6 +75,7 @@ const mapStateToProps = ({ dealer, profile, nav, catalog }) => {
     gearbox,
     color,
     carCondition,
+    isCarCostRequest: meta.isCarCostRequest,
   };
 };
 
@@ -58,6 +83,22 @@ const mapDispatchToProps = {
   nameFill,
   phoneFill,
   emailFill,
+
+  // carcost
+  actionFillPhotosCarCost,
+  actionFillBrandCarCost,
+  actionFillModelCarCost,
+  actionFillColorCarCost,
+  actionSelectYearCarCost,
+  actionFillMileageCarCost,
+  actionSelectMileageUnitCarCost,
+  actionSelectEngineVolumeCarCost,
+  actionSelectEngineTypeCarCost,
+  actionSelectGearboxCarCost,
+  actionSelectCarConditionCarCost,
+  actionFillCommentCarCost,
+  actionFillVinCarCost,
+  actionCarCostOrder,
 };
 
 class CarCostScreen extends Component {
@@ -80,58 +121,72 @@ class CarCostScreen extends Component {
     email: PropTypes.string,
   }
 
-  onPressOrder = () => {
-    // NetInfo.isConnected.fetch().then(isConnected => {
-    //   if (!isConnected) {
-    //     setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
-    //     return;
-    //   }
+  onPressButton = () => {
+    NetInfo.isConnected.fetch().then(isConnected => {
+      if (!isConnected) {
+        return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+      }
 
-    //   const {
-    //     car,
-    //     date,
-    //     name,
-    //     phone,
-    //     email,
-    //     orderService,
-    //     dealerSelected,
-    //     isOrderServiceRequest,
-    //   } = this.props;
+      const {
+        name,
+        phone,
+        email,
+        dealerSelected,
 
-    //   // предотвращаем повторную отправку формы
-    //   if (isOrderServiceRequest) return;
+        actionCarCostOrder,
+        isCarCostRequest,
+        comment,
+        photos,
+        brand,
+        model,
+        year,
+        engine,
+        mileage,
+        mileageUnit,
+        gearbox,
+        color,
+        carCondition,
+      } = this.props;
 
-    //   const dealerID = dealerSelected.id;
+      // предотвращаем повторную отправку формы
+      if (isCarCostRequest) return false;
 
-    //   if (!name || !phone || !car || !date || !date.date) {
-    //     return Alert.alert(
-    //       'Не хватает информации',
-    //       'Для заявки на СТО необходимо заполнить ФИО, номер контактного телефона, название автомобиля и желаемую дату',
-    //     );
-    //   }
+      const dealerID = dealerSelected.id;
 
-    //   const orderDate = yearMonthDay(date.date);
-    //   const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
+      if ((!name || !phone || !email) && Object.keys(photos).length === 0) {
+        return Alert.alert(
+          'Не хватает информации',
+          'Для заявки на СТО необходимо заполнить ФИО, номер контактного телефона и минимум 1 фото автомобиля',
+        );
+      }
 
-    //   orderService({
-    //     car,
-    //     date: orderDate,
-    //     name,
-    //     email,
-    //     phone,
-    //     device,
-    //     dealerID,
-    //   })
-    //     .then(action => {
-    //       if (action.type === SERVICE_ORDER__SUCCESS) {
-    //         setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
-    //       }
+      // const carYear = yearMonthDay(year);
+      // const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
 
-    //       if (action.type === SERVICE_ORDER__FAIL) {
-    //         setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
-    //       }
-    //     });
-    // });
+      actionCarCostOrder({
+        name,
+        email,
+        phone,
+        dealerID,
+        photos,
+        comment,
+      })
+        .then(action => {
+          if (action.type === CAR_COST__SUCCESS) {
+            setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
+          }
+
+          if (action.type === CAR_COST__FAIL) {
+            let message = get(action, 'payload.message', 'Произошла ошибка, попробуйте снова');
+
+            if (message === 'Network request failed') {
+              message = ERROR_NETWORK;
+            }
+
+            setTimeout(() => Alert.alert(message), 100);
+          }
+        });
+    });
   }
 
   shouldComponentUpdate(nextProps) {
@@ -161,6 +216,13 @@ class CarCostScreen extends Component {
       phoneFill,
       navigation,
       dealerSelected,
+
+      // carcost
+      isCarCostRequest,
+      comment,
+      actionFillCommentCarCost,
+      photos,
+      actionFillPhotosCarCost,
     } = this.props;
 
     console.log('== CarCost ==');
@@ -170,7 +232,7 @@ class CarCostScreen extends Component {
         <Container>
           <Content style={styles.content} >
             <List style={styles.list}>
-              {/* <Spinner visible={isOrderServiceRequest} color={styleConst.color.blue} /> */}
+              <Spinner visible={isCarCostRequest} color={styleConst.color.blue} />
 
               <ListItemHeader text="МОЙ АВТОЦЕНТР" />
 
@@ -183,7 +245,6 @@ class CarCostScreen extends Component {
               />
 
               <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
-
               <ProfileForm
                 view="CarCostScreen"
                 name={name}
@@ -197,10 +258,12 @@ class CarCostScreen extends Component {
               <ListItemHeader text="АВТОМОБИЛЬ" />
 
               <ListItemHeader text="ДОПОЛНИТЕЛЬНО" />
+              <CommentOrderForm comment={comment} commentFill={actionFillCommentCarCost} />
 
               <ListItemHeader text="ПРИКРЕПИТЬ ФОТОГРАФИИ" />
+              <CarCostPhotos photos={photos} photosFill={actionFillPhotosCarCost} />
 
-              <CarCostPhotos />
+              <ButtonFull style={styles.button} arrow={true} text="Отправить" onPressButton={this.onPressButton} />
             </List>
           </Content>
         </Container>
