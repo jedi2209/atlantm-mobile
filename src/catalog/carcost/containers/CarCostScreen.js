@@ -33,6 +33,7 @@ import DealerItemList from '../../../core/components/DealerItemList';
 import ButtonFull from '../../../core/components/ButtonFull';
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import CarCostForm from '../components/CarCostForm';
 import CarCostPhotos from '../components/CarCostPhotos';
 
 // helpers
@@ -54,7 +55,22 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ dealer, profile, nav, catalog }) => {
   const carCost = get(catalog, 'carCost', {});
-  const { photos, brand, model, year, engine, mileage, mileageUnit, gearbox, color, carCondition, comment, meta } = carCost;
+  const {
+    comment,
+    photos,
+    vin,
+    brand,
+    model,
+    year,
+    mileage,
+    mileageUnit,
+    engineVolume,
+    engineType,
+    gearbox,
+    color,
+    carCondition,
+    meta,
+  } = carCost;
 
   return {
     nav,
@@ -66,12 +82,14 @@ const mapStateToProps = ({ dealer, profile, nav, catalog }) => {
     // car cost
     comment,
     photos,
+    vin,
     brand,
     model,
     year,
-    engine,
     mileage,
     mileageUnit,
+    engineVolume,
+    engineType,
     gearbox,
     color,
     carCondition,
@@ -135,14 +153,17 @@ class CarCostScreen extends Component {
 
         actionCarCostOrder,
         isCarCostRequest,
+
         comment,
         photos,
+        vin,
         brand,
         model,
         year,
-        engine,
         mileage,
         mileageUnit,
+        engineVolume,
+        engineType,
         gearbox,
         color,
         carCondition,
@@ -218,11 +239,34 @@ class CarCostScreen extends Component {
       dealerSelected,
 
       // carcost
+      actionFillPhotosCarCost,
+      actionFillBrandCarCost,
+      actionFillModelCarCost,
+      actionFillColorCarCost,
+      actionSelectYearCarCost,
+      actionFillMileageCarCost,
+      actionSelectMileageUnitCarCost,
+      actionSelectEngineVolumeCarCost,
+      actionSelectEngineTypeCarCost,
+      actionSelectGearboxCarCost,
+      actionSelectCarConditionCarCost,
+      actionFillCommentCarCost,
+      actionFillVinCarCost,
+
       isCarCostRequest,
       comment,
-      actionFillCommentCarCost,
       photos,
-      actionFillPhotosCarCost,
+      vin,
+      brand,
+      model,
+      year,
+      mileage,
+      mileageUnit,
+      engineVolume,
+      engineType,
+      gearbox,
+      color,
+      carCondition,
     } = this.props;
 
     console.log('== CarCost ==');
@@ -256,6 +300,25 @@ class CarCostScreen extends Component {
               />
 
               <ListItemHeader text="АВТОМОБИЛЬ" />
+              <CarCostForm
+                vin={vin}
+                brand={brand}
+                model={model}
+                year={year}
+                mileage={mileage}
+                mileageUnit={mileageUnit}
+                engineVolume={engineVolume}
+                engineType={engineType}
+                gearbox={gearbox}
+                color={color}
+                carCondition={carCondition}
+
+                vinFill={actionFillVinCarCost}
+                brandFill={actionFillBrandCarCost}
+                modelFill={actionFillModelCarCost}
+                mileageFill={actionFillMileageCarCost}
+                colorFill={actionFillColorCarCost}
+              />
 
               <ListItemHeader text="ДОПОЛНИТЕЛЬНО" />
               <CommentOrderForm comment={comment} commentFill={actionFillCommentCarCost} />
