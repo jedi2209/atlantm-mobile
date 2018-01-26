@@ -9,16 +9,16 @@ import {
   Keyboard,
   StyleSheet,
   Picker,
-  Alert,
-  Platform,
 } from 'react-native';
 
 // helpers
 import PropTypes from 'prop-types';
-import styleConst from '../style-const';
-import numberWithGap from '../../utils/number-with-gap';
+import styleConst from '../../../core/style-const';
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   datePickerMask: {
     flex: 1,
     alignItems: 'flex-end',
@@ -63,43 +63,20 @@ const styles = StyleSheet.create({
   priceContainer: {
     flex: 1,
   },
-  priceLabelContainer: {
-    marginTop: 20,
-
-    ...Platform.select({
-      ios: {
-        alignItems: 'center',
-      },
-      android: {
-        marginLeft: 9,
-      },
-    }),
-  },
-  priceLabelText: {
-    color: styleConst.color.greyText3,
-    fontSize: 17,
-    letterSpacing: styleConst.ui.letterSpacing,
-    fontFamily: styleConst.font.regular,
-  },
 });
 
-export default class PricePicker extends PureComponent {
+export default class YearPicker extends PureComponent {
   static propTypes = {
-    // currency: PropTypes.string,
-    height: PropTypes.number,
     duration: PropTypes.number,
-    onPressModal: PropTypes.func,
+    period: PropTypes.number,
+    height: PropTypes.number,
     onCloseModal: PropTypes.func,
-    min: PropTypes.number,
-    max: PropTypes.number,
-    step: PropTypes.number,
-    currentMinPrice: PropTypes.number,
-    currentMaxPrice: PropTypes.number,
   }
 
   static defaultProps = {
-    height: 259,
+    period: 30,
     duration: 300,
+    height: 259,
     TouchableComponent: TouchableOpacity,
   }
 
@@ -107,8 +84,7 @@ export default class PricePicker extends PureComponent {
     super(props);
 
     this.state = {
-      minPrice: props.currentMinPrice || props.min,
-      maxPrice: props.currentMaxPrice || props.max,
+      year: new Date().getFullYear(),
       modalVisible: false,
       animatedHeight: new Animated.Value(0),
     };
@@ -150,14 +126,8 @@ export default class PricePicker extends PureComponent {
   }
 
   onPressConfirm = () => {
-    const { onCloseModal, min, max } = this.props;
-    let { minPrice, maxPrice } = this.state;
-
-    if (minPrice > maxPrice) {
-      return setTimeout(() => Alert.alert('Цена ОТ должна быть меньше ДО'), 100);
-    }
-
-    this.props.onCloseModal({ minPrice, maxPrice });
+    const { year } = this.state;
+    this.props.onCloseModal(year);
     this.setModalVisible(false);
   }
 
@@ -165,40 +135,23 @@ export default class PricePicker extends PureComponent {
     Keyboard.dismiss();
 
     this.setModalVisible(true);
-
-    this.props.onPressModal();
   }
 
-  onChangeMinPrice = (minPrice) => {
-    this.setState({ minPrice });
-  }
+  onChangeYear = year => this.setState({ year })
 
-  onChangeMaxPrice = (maxPrice) => {
-    this.setState({ maxPrice });
-  }
+  renderYears = () => {
+    const yearNow = new Date().getFullYear();
 
-  renderItems = isReversed => {
-    const { min, max, step } = this.props;
-
-    let data = [];
-    let i = min;
-
-    for (i; i <= max; i += step) {
-      data.push(<Picker.Item key={i} label={`${numberWithGap(i)}`} value={i} />);
-    }
-
-    if (i > max) {
-      data.push(<Picker.Item key={max} label={`${numberWithGap(max)}`} value={max} />);
-    }
-
-    return isReversed ? data.reverse() : data;
+    return new Array(this.props.period).fill(0).map((item, idx) => {
+      const year = yearNow - idx;
+      return <Picker.Item key={idx} label={String(year)} value={year} />;
+    });
   }
 
   render() {
     const {
       style,
       children,
-      currency,
       TouchableComponent,
     } = this.props;
 
@@ -211,25 +164,21 @@ export default class PricePicker extends PureComponent {
           supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
           onRequestClose={() => { this.props.onCloseModal(); }}
         >
-          <View style={{ flex: 1 }}>
+          <View style={styles.container}>
             <TouchableHighlight
               style={styles.datePickerMask}
               activeOpacity={1}
-              underlayColor={'#00000077'}
+              underlayColor="#00000077"
               onPress={this.onPressMask}
             >
               <TouchableHighlight
-                underlayColor={'#fff'}
-                style={{ flex: 1 }}
+                underlayColor="red"
+                style={styles.container}
               >
-                <Animated.View
-                  style={[styles.datePickerCon, { height: this.state.animatedHeight }]}
-                >
+                <Animated.View style={[styles.datePickerCon, { height: this.state.animatedHeight }]}>
                   <View style={styles.topBar}>
                     <View style={styles.btnText}>
-                      <Text style={[styles.btnTextText, styles.btnTextCancel]}>
-                        {`Цена ${currency}`}
-                      </Text>
+                      <Text style={[styles.btnTextText, styles.btnTextCancel]}>Год выпуска</Text>
                     </View>
                     <TouchableHighlight
                       underlayColor="transparent"
@@ -244,19 +193,8 @@ export default class PricePicker extends PureComponent {
 
                   <View style={styles.pickersContainer}>
                     <View style={styles.priceContainer}>
-                      <View style={styles.priceLabelContainer}>
-                        <Text style={styles.priceLabelText}>От</Text>
-                      </View>
-                      <Picker selectedValue={this.state.minPrice} onValueChange={this.onChangeMinPrice}>
-                        {this.renderItems()}
-                      </Picker>
-                    </View>
-                    <View style={styles.priceContainer}>
-                      <View style={styles.priceLabelContainer}>
-                        <Text style={styles.priceLabelText}>До</Text>
-                      </View>
-                      <Picker selectedValue={this.state.maxPrice} onValueChange={this.onChangeMaxPrice}>
-                        {this.renderItems(true)}
+                      <Picker selectedValue={this.state.year} onValueChange={this.onChangeYear}>
+                        {this.renderYears()}
                       </Picker>
                     </View>
                   </View>
@@ -266,10 +204,9 @@ export default class PricePicker extends PureComponent {
           </View>
         </Modal>
 
-        <TouchableComponent underlayColor={styleConst.color.select} style={style} onPress={this.onPress}>
+        <TouchableHighlight underlayColor={styleConst.color.select} style={style} onPress={this.onPress}>
           {children}
-        </TouchableComponent>
-
+        </TouchableHighlight>
       </View>
     );
   }

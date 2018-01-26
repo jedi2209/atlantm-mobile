@@ -18,7 +18,7 @@ import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack'
 
 // helpres
 import { get } from 'lodash';
-import priceSet from '../../utils/price-set';
+import numberWithGap from '../../utils/number-with-gap';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
@@ -185,7 +185,7 @@ class OrderScreen extends Component {
     const car = get(navigation, 'state.params.car');
     const currency = get(navigation, 'state.params.currency');
     const { brand, model, price, complectation } = car;
-    const processedPrice = `${priceSet(price)} ${currency}`;
+    const processedPrice = `${numberWithGap(price)} ${currency}`;
 
     console.log('== Order ==');
 
