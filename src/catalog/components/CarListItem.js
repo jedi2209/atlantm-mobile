@@ -123,7 +123,7 @@ export default class CarListItem extends Component {
                   (
                   <View style={styles.extraItem}>
                     <View style={styles.extraTextContainer}><Text style={styles.extraText}>{car.engine.type}</Text></View>
-                    {engineVolume ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${engineVolume} см3`}</Text></View> : null}
+                    {engineVolume ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${engineVolume} см³`}</Text></View> : null}
                   </View>
                   ) : null
               }

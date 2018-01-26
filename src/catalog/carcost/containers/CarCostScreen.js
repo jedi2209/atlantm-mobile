@@ -37,7 +37,7 @@ import CarCostForm from '../components/CarCostForm';
 import CarCostPhotos from '../components/CarCostPhotos';
 
 // helpers
-import { get } from 'lodash';
+import { get, valuesIn } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
@@ -146,6 +146,8 @@ class CarCostScreen extends Component {
       }
 
       const {
+        navigation,
+
         name,
         phone,
         email,
@@ -165,37 +167,60 @@ class CarCostScreen extends Component {
         engineVolume,
         engineType,
         gearbox,
-        color,
         carCondition,
+        color,
       } = this.props;
 
       // предотвращаем повторную отправку формы
       if (isCarCostRequest) return false;
 
-      const dealerID = dealerSelected.id;
+      const dealerId = dealerSelected.id;
+      const photoForUpload = valuesIn(photos);
 
-      if ((!name || !phone || !email) && Object.keys(photos).length === 0) {
+      console.log('photoForUpload', photoForUpload);
+
+      if (!name || !phone || !email || photoForUpload.length === 0) {
         return Alert.alert(
           'Не хватает информации',
           'Для заявки на СТО необходимо заполнить ФИО, номер контактного телефона и минимум 1 фото автомобиля',
         );
       }
 
-      // const carYear = yearMonthDay(year);
-      // const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
-
       actionCarCostOrder({
+        dealerId,
         name,
-        email,
         phone,
-        dealerID,
-        photos,
+        email,
         comment,
+        vin,
+        brand,
+        model,
+        year,
+        photos: photoForUpload,
         mileage,
+        mileageUnit,
+        engineVolume,
+        engineType,
+        gearbox,
+        carCondition,
+        color,
       })
         .then(action => {
           if (action.type === CAR_COST__SUCCESS) {
-            setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
+            setTimeout(() => {
+              Alert.alert(
+                'Ваша заявка успешно отправлена',
+                '',
+                [
+                  {
+                    text: 'ОК',
+                    onPress() {
+                      navigation.goBack();
+                    },
+                  },
+                ],
+              );
+            }, 100);
           }
 
           if (action.type === CAR_COST__FAIL) {
@@ -317,12 +342,14 @@ class CarCostScreen extends Component {
                 vinFill={actionFillVinCarCost}
                 brandFill={actionFillBrandCarCost}
                 modelFill={actionFillModelCarCost}
+                yearSelect={actionSelectYearCarCost}
                 mileageFill={actionFillMileageCarCost}
                 mileageUnitSelect={actionSelectMileageUnitCarCost}
                 engineVolumeFill={actionFillEngineVolumeCarCost}
                 engineTypeSelect={actionSelectEngineTypeCarCost}
+                gearboxSelect={actionSelectGearboxCarCost}
+                carConditionSelect={actionSelectCarConditionCarCost}
                 colorFill={actionFillColorCarCost}
-                yearSelect={actionSelectYearCarCost}
               />
 
               <ListItemHeader text="ДОПОЛНИТЕЛЬНО" />

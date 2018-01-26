@@ -275,7 +275,7 @@ class NewCarItemScreen extends Component {
                       <Text style={styles.sectionTitle}>Двигатель</Text>
                       <Grid>
                         {this.renderItem('Тип:', get(carDetails, 'engine.type'))}
-                        {this.renderItem('Рабочий объём:', get(carDetails, 'engine.volume.full'), 'см3')}
+                        {this.renderItem('Рабочий объём:', get(carDetails, 'engine.volume.full'), 'см³')}
                         {this.renderItem('Мощность:', get(carDetails, 'power.hp'), 'л.с.')}
                       </Grid>
                     </View>

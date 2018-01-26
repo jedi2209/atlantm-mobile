@@ -18,6 +18,9 @@ import {
   ENGINE_TYPES_HYBRID,
   GEARBOX_AUTO,
   GEARBOX_MECHANIC,
+  CAR_CONDITION_GOOD,
+  CAR_CONDITION_BROKEN,
+  CAR_CONDITION_NOT_GO,
 } from '../const';
 import styleConst from '../../../core/style-const';
 
@@ -47,6 +50,9 @@ const styles = StyleSheet.create({
   label: {
     flex: 2,
   },
+  labelSmall: {
+    fontSize: 16,
+  },
   segment: {
     backgroundColor: 'transparent',
     justifyContent: 'flex-start',
@@ -70,6 +76,10 @@ const styles = StyleSheet.create({
     color: styleConst.color.systemBlue,
     marginRight: 10,
     marginLeft: -25,
+  },
+  itemOneLine: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 
@@ -95,6 +105,20 @@ export default class CarCostForm extends PureComponent {
     if (index !== 0) {
       const engineType = [ENGINE_TYPES_PETROL, ENGINE_TYPES_DIESEL, ENGINE_TYPES_HYBRID][index - 1];
       this.props.engineTypeSelect(engineType);
+    }
+  }
+
+  onPressVariantGearbox = (index) => {
+    if (index !== 0) {
+      const gearbox = [GEARBOX_AUTO, GEARBOX_MECHANIC][index - 1];
+      this.props.gearboxSelect(gearbox);
+    }
+  }
+
+  onPressVariantCarCondition = (index) => {
+    if (index !== 0) {
+      const carCondition = [CAR_CONDITION_GOOD, CAR_CONDITION_BROKEN, CAR_CONDITION_NOT_GO][index - 1];
+      this.props.carConditionSelect(carCondition);
     }
   }
 
@@ -234,6 +258,80 @@ export default class CarCostForm extends PureComponent {
     ];
   }
 
+  renderOptionsGearbox = (value) => {
+    const isActiveAuto = value === GEARBOX_AUTO;
+    const isActiveMechanic = value === GEARBOX_MECHANIC;
+
+    return [
+      'Отмена',
+      <View style={styles.actionSheetItemContainer}>
+        {
+           isActiveAuto ?
+            <Icon name="ios-checkmark" style={styles.actionSheetItemIcon} /> :
+            null
+        }
+        <Text style={[
+          styles.actionSheetItemText,
+          isActiveAuto ? styles.actionSheetItemTextActive : null,
+        ]}>{GEARBOX_AUTO}</Text>
+      </View>,
+      <View style={styles.actionSheetItemContainer}>
+        {
+          isActiveMechanic ?
+            <Icon name="ios-checkmark" style={styles.actionSheetItemIcon} /> :
+            null
+        }
+        <Text style={[
+          styles.actionSheetItemText,
+          isActiveMechanic ? styles.actionSheetItemTextActive : null,
+        ]}>{GEARBOX_MECHANIC}</Text>
+      </View>,
+    ];
+  }
+
+  renderOptionsCarCondition = (value) => {
+    const isActiveGood = value === CAR_CONDITION_GOOD;
+    const isActiveBroken = value === CAR_CONDITION_BROKEN;
+    const isActiveNotGo = value === CAR_CONDITION_NOT_GO;
+
+    return [
+      'Отмена',
+      <View style={styles.actionSheetItemContainer}>
+        {
+           isActiveGood ?
+            <Icon name="ios-checkmark" style={styles.actionSheetItemIcon} /> :
+            null
+        }
+        <Text style={[
+          styles.actionSheetItemText,
+          isActiveGood ? styles.actionSheetItemTextActive : null,
+        ]}>{CAR_CONDITION_GOOD}</Text>
+      </View>,
+      <View style={styles.actionSheetItemContainer}>
+        {
+          isActiveBroken ?
+            <Icon name="ios-checkmark" style={styles.actionSheetItemIcon} /> :
+            null
+        }
+        <Text style={[
+          styles.actionSheetItemText,
+          isActiveBroken ? styles.actionSheetItemTextActive : null,
+        ]}>{CAR_CONDITION_BROKEN}</Text>
+      </View>,
+      <View style={styles.actionSheetItemContainer}>
+        {
+           isActiveNotGo ?
+            <Icon name="ios-checkmark" style={styles.actionSheetItemIcon} /> :
+            null
+        }
+        <Text style={[
+          styles.actionSheetItemText,
+          isActiveNotGo ? styles.actionSheetItemTextActive : null,
+        ]}>{CAR_CONDITION_NOT_GO}</Text>
+      </View>,
+    ];
+  }
+
   renderVariansItem = ({ id, label, value }) => {
     const onPressHandler = () => this[`actionSheet${id}`].show();
     const options = this[`renderOptions${id}`](value);
@@ -249,14 +347,14 @@ export default class CarCostForm extends PureComponent {
         />
 
         <View style={stylesList.listItemContainer}>
-          <ListItem style={stylesList.listItem} onPress={onPressHandler}>
-            <Body style={styles.body} >
-              <Item style={stylesList.inputItem} fixedLabel>
-                <Label style={[stylesList.label, styles.label]}>{label}</Label>
+          <ListItem style={stylesList.listItemPressable} onPress={onPressHandler}>
+            <Body style={styles.body}>
+              <View style={styles.itemOneLine}>
+                <Label style={[stylesList.label, styles.label, styles.labelSmall]}>{label}</Label>
                 <View style={stylesList.listItemValueContainer}>
                   <Text style={stylesList.listItemValue}>{value || 'Выбрать'}</Text>
                 </View>
-              </Item>
+              </View>
             </Body>
             <Right style={styles.right}>
               <Icon name="arrow-forward" style={stylesList.iconArrow} />
@@ -284,6 +382,11 @@ export default class CarCostForm extends PureComponent {
 
     return (
       <View>
+        {this.renderItem({
+          label: 'VIN',
+          value: vin,
+          onChange: this.onChangeVin,
+        })}
         {this.renderItem({
           label: 'Марка',
           value: brand,
@@ -313,19 +416,24 @@ export default class CarCostForm extends PureComponent {
           onChange: this.onChangeMileageUnit,
         })}
         {this.renderItem({
-          label: 'Двигатель (объем)',
+          label: 'Объем ( см³ )',
           value: engineVolume,
           onChange: this.onChangeEngineVolume,
         })}
         {this.renderVariansItem({
           id: 'EngineType', // для actionSheet
-          label: 'Двигатель (тип)',
+          label: 'Тип двигателя',
           value: engineType,
         })}
-        {this.renderItem({
-          label: 'VIN',
-          value: vin,
-          onChange: this.onChangeVin,
+        {this.renderVariansItem({
+          id: 'Gearbox', // для actionSheet
+          label: 'Трансмиссия',
+          value: gearbox,
+        })}
+        {this.renderVariansItem({
+          id: 'CarCondition', // для actionSheet
+          label: 'Состояние',
+          value: carCondition,
         })}
         {this.renderItem({
           label: 'Цвет',
