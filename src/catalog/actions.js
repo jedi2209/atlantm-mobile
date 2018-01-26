@@ -656,23 +656,27 @@ export const actionCarCostOrder = (props) => {
 
     return API.carCostOrder(props)
       .then(rnFetchBlobresult => {
-        console.log('res car cost', rnFetchBlobresult);
-
         const { data } = rnFetchBlobresult;
-        const res = JSON.parse(data);
-        const { status, error } = res;
+        try {
+          const res = JSON.parse(data);
+          const { status, error } = res;
 
-        if (status !== 'success') {
-          return dispatch({
-            type: CAR_COST__FAIL,
-            payload: {
-              code: error.code,
-              message: error.message,
-            },
-          });
+          if (status !== 'success') {
+            return dispatch({
+              type: CAR_COST__FAIL,
+              payload: {
+                code: error.code,
+                message: error.message,
+              },
+            });
+          }
+
+          return dispatch({ type: CAR_COST__SUCCESS });
+        } catch (parseError) {
+          __DEV__ && console.log('carCostOrder parse error', parseError);
+
+          return dispatch({ type: CAR_COST__FAIL });
         }
-
-        return dispatch({ type: CAR_COST__SUCCESS });
       })
       .catch(error => {
         return dispatch({

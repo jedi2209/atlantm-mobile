@@ -276,7 +276,7 @@ export default class ProfileForm extends PureComponent {
     const isCars = get(auth, 'cars', []).length !== 0;
 
     return (
-      <View style={{ marginBottom: view !== 'CarCostScreen' ? 30 : 0 }}>
+      <View>
         {this.renderListItem({
           label: 'ФИО',
           value: name,

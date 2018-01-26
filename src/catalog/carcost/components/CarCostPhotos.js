@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 
 // components
-import { Grid, Row, Col } from 'native-base';
+import { Grid, Row, Col, Icon } from 'native-base';
 import ActionSheet from 'react-native-actionsheet';
 import ImagePicker from 'react-native-image-crop-picker';
 
@@ -28,15 +28,27 @@ const styles = StyleSheet.create({
   item: {
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'relative',
 
   },
-  icon: {
+  photo: {
     borderRadius: 3,
     borderWidth: 1,
     borderColor: styleConst.color.border,
     width: scale(90),
     height: scale(65),
     marginBottom: verticalScale(15),
+  },
+  removeIconContainer: {
+    position: 'absolute',
+    top: -17,
+    right: 0,
+    zIndex: 1,
+    backgroundColor: 'transparent',
+  },
+  removeIcon: {
+    fontSize: 28,
+    color: styleConst.color.red,
   },
 });
 
@@ -52,14 +64,20 @@ export default class CarCostPhotos extends Component {
     // генерируем хендлеры для actionSheet для каждого фото
     [1, 2, 3, 4, 5, 6].map(photoIndex => {
       this[`handlePhotoPress${photoIndex}`] = i => {
-        this.handlePhotoPress(i, props.photos, photoIndex, props.photosFill);
+        this.handlePhotoPress(i, photoIndex, props.photosFill);
       };
 
       this[`onPressPhoto${photoIndex}`] = () => this[`actionSheet${photoIndex}`].show();
+
+      this[`onPressRemovePhoto${photoIndex}`] = () => {
+        let newPhotos = { ...this.props.photos };
+        newPhotos[photoIndex] = undefined;
+        this.props.photosFill(newPhotos);
+      };
     });
   }
 
-  async handlePhotoPress(i, photos, photoIndex, cb) {
+  async handlePhotoPress(i, photoIndex, cb) {
     const action = {
       1: 'gallery',
       2: 'camera',
@@ -100,9 +118,29 @@ export default class CarCostPhotos extends Component {
     }
   }
 
-  render() {
+  renderItem = (photoIndex) => {
     const { photos } = this.props;
+    const photo = photos[photoIndex];
+    const source = photo ? { uri: photo.path } : thumbs[photoIndex - 1];
 
+    return <Col key={photoIndex}>
+      <View style={styles.item}>
+        {
+          photo ?
+            (
+              <TouchableOpacity style={styles.removeIconContainer} onPress={this[`onPressRemovePhoto${photoIndex}`]}>
+                <Icon name="md-close-circle" style={styles.removeIcon} />
+              </TouchableOpacity>
+            ) : null
+        }
+        <TouchableOpacity style={styles.item} onPress={this[`onPressPhoto${photoIndex}`]}>
+          <Image style={styles.photo} source={source} />
+        </TouchableOpacity>
+      </View>
+    </Col>;
+  }
+
+  render() {
     return (
       <View style={styles.container}>
         {
@@ -120,32 +158,10 @@ export default class CarCostPhotos extends Component {
 
         <Grid style={styles.menu} >
           <Row>
-            {
-              [1, 2, 3].map((photoIndex) => {
-                const photo = photos[photoIndex];
-                const source = photo ? { uri: photo.path } : thumbs[photoIndex - 1];
-
-                return <Col key={photoIndex}>
-                  <TouchableOpacity style={styles.item} onPress={this[`onPressPhoto${photoIndex}`]}>
-                    <Image style={styles.icon} source={source} />
-                  </TouchableOpacity>
-                </Col>;
-              })
-            }
+            {[1, 2, 3].map(this.renderItem)}
           </Row>
           <Row>
-            {
-              [4, 5, 6].map((photoIndex) => {
-                const photo = photos[photoIndex];
-                const source = photo ? { uri: photo.path } : thumbs[photoIndex - 1];
-
-                return <Col key={photoIndex}>
-                  <TouchableOpacity style={styles.item} onPress={this[`onPressPhoto${photoIndex}`]}>
-                    <Image style={styles.icon} source={source} />
-                  </TouchableOpacity>
-                </Col>;
-              })
-            }
+            {[4, 5, 6].map(this.renderItem)}
           </Row>
         </Grid>
       </View>

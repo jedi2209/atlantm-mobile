@@ -295,58 +295,39 @@ export default {
     return this.request('/eko/review/post/', requestParams);
   },
 
-  carCostOrder({
-    dealerId,
-    name,
-    phone,
-    email,
-    photos,
-    comment,
-    vin,
-    brand,
-    model,
-    year,
-    mileage,
-    mileageUnit,
-    engineVolume,
-    engineType,
-    gearbox,
-    color,
-    CarCondition,
-  }) {
-    // const body = [
-    //   'f_Source=3',
-    //   `f_Dealer=${dealerId}`,
-    //   `f_Name=${name}`,
-    //   `f_Phone=${phone}`,
-    //   `f_Email=${email}`,
-    //   `f_Photo=${photos}`,
-    //   `f_Text=${comment}`,
-    //   `f_VIN=${vin}`,
-    //   `f_Brand=${brand}`,
-    //   `f_Model=${model}`,
-    //   `f_Year=${year}`,
-    //   `f_Mileage=${mileage}`,
-    //   `f_Mileage_unit=${mileageUnit}`,
-    //   `f_Engine=${engineVolume}`,
-    //   `f_EngineType=${engineType}`,
-    //   `f_Gearbox=${gearbox}`,
-    //   `f_Color=${color}`,
-    //   `f_CarCondition=${CarCondition}`,
-    // ].join('&');
+  carCostOrder(props) {
+    const formBody = [
+      { name: 'f_Source', data: '3' },
+      { name: 'f_Dealer', data: props.dealerId },
+      { name: 'f_Name', data: props.name },
+      { name: 'f_Phone', data: props.phone },
+      { name: 'f_Email', data: props.email },
+      { name: 'f_Text', data: props.comment },
+      { name: 'f_VIN', data: props.vin },
+      { name: 'f_Brand', data: props.brand },
+      { name: 'f_Model', data: props.model },
+      { name: 'f_Year', data: props.year },
+      { name: 'f_Mileage', data: props.mileage },
+      { name: 'f_Mileage_unit', data: props.mileageUnit },
+      { name: 'f_Engine', data: props.engineVolume },
+      { name: 'f_EngineType', data: props.engineType },
+      { name: 'f_Gearbox', data: props.gearbox },
+      { name: 'f_Color', data: props.color },
+      { name: 'f_CarCondition', data: props.carCondition },
+    ];
 
-    // console.log('body', body);
+    const photosBody = props.photos.map(photo => {
+      return {
+        name: 'f_Photo[]',
+        type: photo.mime,
+        filename: photo.filename,
+        data: RNFetchBlob.wrap(photo.path),
+      };
+    });
 
-    // const requestParams = _.merge(baseRequestParams, {
-    //   method: 'post',
-    //   headers: {
-    //     'Content-Type': 'application/x-www-form-urlencoded',
-    //   },
-    // });
+    const body = formBody.concat(photosBody);
 
-    // __DEV__ && console.log('API carcost body', body);
-
-    console.log('photos', photos);
+    __DEV__ && console.log('API carcost body', body);
 
     return RNFetchBlob.fetch(
       'POST',
@@ -354,27 +335,8 @@ export default {
       _.merge(headers, {
         'Content-Type': 'multipart/form-data',
       }),
-      [
-        { name: 'f_Dealer', data: '113' },
-        { name: 'f_Name', data: 'Zavarka Team Test' },
-        { name: 'f_Phone', data: '444444' },
-        { name: 'f_Source', data: '3' },
-        // {
-        //   name: 'f_Photo[]',
-        //   type: photos[1].mime,
-        //   filename: photos[1].filename,
-        //   data: RNFetchBlob.wrap(photos[1].path),
-        // },
-        // {
-        //   name: 'f_Photo[]',
-        //   type: photos[2].mime,
-        //   filename: photos[2].filename,
-        //   data: RNFetchBlob.wrap(photos[2].path),
-        // },
-      ],
+      body,
     );
-
-    // return this.request('/orders/usedbuy/post/', requestParams);
   },
 
   fetchCars({ token }) {
