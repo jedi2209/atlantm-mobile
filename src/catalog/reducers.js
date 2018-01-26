@@ -60,7 +60,7 @@ import {
   CAR_COST_YEAR__SELECT,
   CAR_COST_MILEAGE__FILL,
   CAR_COST_MILEAGE_UNIT__SELECT,
-  CAR_COST_ENGINE_VOLUME__SELECT,
+  CAR_COST_ENGINE_VOLUME__FILL,
   CAR_COST_ENGINE_TYPE__SELECT,
   CAR_COST_GEARBOX__SELECT,
   CAR_COST_COLOR__FILL,
@@ -71,6 +71,8 @@ import {
 
 import { EVENT_LOAD_MORE } from '../core/actionTypes';
 import { DEALER__SUCCESS } from '../dealer/actionTypes';
+
+import { MILEAGE_UNIT_KM } from './carcost/const';
 
 const usedCarItems = (state = [], action) => {
   switch (action.type) {
@@ -554,6 +556,8 @@ const carCostModel = (state = null, action) => {
 
 const carCostYear = (state = null, action) => {
   switch (action.type) {
+    case REHYDRATE:
+      return null;
     case CAR_COST_YEAR__SELECT:
       return action.payload;
     default:
@@ -570,7 +574,7 @@ const carCostMileage = (state = null, action) => {
   }
 };
 
-const carCostMileageUnit = (state = 'km', action) => {
+const carCostMileageUnit = (state = MILEAGE_UNIT_KM, action) => {
   switch (action.type) {
     case CAR_COST_MILEAGE_UNIT__SELECT:
       return action.payload;
@@ -581,7 +585,7 @@ const carCostMileageUnit = (state = 'km', action) => {
 
 const carCostEngineVolume = (state = null, action) => {
   switch (action.type) {
-    case CAR_COST_ENGINE_VOLUME__SELECT:
+    case CAR_COST_ENGINE_VOLUME__FILL:
       return action.payload;
     default:
       return state;

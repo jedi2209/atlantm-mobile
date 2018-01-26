@@ -59,7 +59,7 @@ import {
   CAR_COST_YEAR__SELECT,
   CAR_COST_MILEAGE__FILL,
   CAR_COST_MILEAGE_UNIT__SELECT,
-  CAR_COST_ENGINE_VOLUME__SELECT,
+  CAR_COST_ENGINE_VOLUME__FILL,
   CAR_COST_ENGINE_TYPE__SELECT,
   CAR_COST_GEARBOX__SELECT,
   CAR_COST_COLOR__FILL,
@@ -593,10 +593,10 @@ export const actionSelectMileageUnitCarCost = (mileageUnit) => {
   };
 };
 
-export const actionSelectEngineVolumeCarCost = (engine) => {
+export const actionFillEngineVolumeCarCost = (engine) => {
   return dispatch => {
     return dispatch({
-      type: CAR_COST_ENGINE_VOLUME__SELECT,
+      type: CAR_COST_ENGINE_VOLUME__FILL,
       payload: engine,
     });
   };

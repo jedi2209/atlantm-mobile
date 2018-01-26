@@ -14,7 +14,7 @@ import {
   actionSelectYearCarCost,
   actionFillMileageCarCost,
   actionSelectMileageUnitCarCost,
-  actionSelectEngineVolumeCarCost,
+  actionFillEngineVolumeCarCost,
   actionSelectEngineTypeCarCost,
   actionSelectGearboxCarCost,
   actionSelectCarConditionCarCost,
@@ -110,7 +110,7 @@ const mapDispatchToProps = {
   actionSelectYearCarCost,
   actionFillMileageCarCost,
   actionSelectMileageUnitCarCost,
-  actionSelectEngineVolumeCarCost,
+  actionFillEngineVolumeCarCost,
   actionSelectEngineTypeCarCost,
   actionSelectGearboxCarCost,
   actionSelectCarConditionCarCost,
@@ -191,6 +191,7 @@ class CarCostScreen extends Component {
         dealerID,
         photos,
         comment,
+        mileage,
       })
         .then(action => {
           if (action.type === CAR_COST__SUCCESS) {
@@ -246,7 +247,7 @@ class CarCostScreen extends Component {
       actionSelectYearCarCost,
       actionFillMileageCarCost,
       actionSelectMileageUnitCarCost,
-      actionSelectEngineVolumeCarCost,
+      actionFillEngineVolumeCarCost,
       actionSelectEngineTypeCarCost,
       actionSelectGearboxCarCost,
       actionSelectCarConditionCarCost,
@@ -317,7 +318,11 @@ class CarCostScreen extends Component {
                 brandFill={actionFillBrandCarCost}
                 modelFill={actionFillModelCarCost}
                 mileageFill={actionFillMileageCarCost}
+                mileageUnitSelect={actionSelectMileageUnitCarCost}
+                engineVolumeFill={actionFillEngineVolumeCarCost}
+                engineTypeSelect={actionSelectEngineTypeCarCost}
                 colorFill={actionFillColorCarCost}
+                yearSelect={actionSelectYearCarCost}
               />
 
               <ListItemHeader text="ДОПОЛНИТЕЛЬНО" />

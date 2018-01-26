@@ -1,16 +1,25 @@
 import React, { PureComponent } from 'react';
 import { View, Text, Platform, StyleSheet } from 'react-native';
 
-import PropTypes from 'prop-types';
-
 // components
-import { ListItem, Body, Item, Label, Input } from 'native-base';
+import { ListItem, Body, Item, Label, Input, Right, Icon, Segment, Button } from 'native-base';
+import YearPicker from './YearPicker';
+import ActionSheet from '../../../../node_modules/react-native-actionsheet/lib/ActionSheetCustom';
 
 // styles
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
-import { get } from 'lodash';
+import {
+  MILEAGE_UNIT_KM,
+  MILEAGE_UNIT_MILES,
+  ENGINE_TYPES_PETROL,
+  ENGINE_TYPES_DIESEL,
+  ENGINE_TYPES_HYBRID,
+  GEARBOX_AUTO,
+  GEARBOX_MECHANIC,
+} from '../const';
+import styleConst from '../../../core/style-const';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -31,6 +40,37 @@ const styles = StyleSheet.create({
       },
     }),
   },
+  hiddenListItemContainer: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 1,
+  },
+  label: {
+    flex: 2,
+  },
+  segment: {
+    backgroundColor: 'transparent',
+    justifyContent: 'flex-start',
+    marginLeft: 5,
+  },
+  actionSheetItemContainer: {
+    width: 200,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  actionSheetItemText: {
+    fontSize: 18,
+  },
+  actionSheetItemTextActive: {
+    color: '#007aff',
+  },
+  actionSheetItemIcon: {
+    fontSize: 40,
+    color: styleConst.color.systemBlue,
+    marginRight: 10,
+    marginLeft: -25,
+  },
 });
 
 export default class CarCostForm extends PureComponent {
@@ -40,9 +80,23 @@ export default class CarCostForm extends PureComponent {
 
   onChangeBrand = value => this.props.brandFill(value)
   onChangeModel = value => this.props.modelFill(value)
+  onChangeYear = value => {
+    if (value) {
+      this.props.yearSelect(value);
+    }
+  }
   onChangeMileage = value => this.props.mileageFill(value)
+  onChangeMileageUnit = value => this.props.mileageUnitSelect(value)
+  onChangeEngineVolume = value => this.props.engineVolumeFill(value)
   onChangeVin = value => this.props.vinFill(value)
   onChangeColor = value => this.props.colorFill(value)
+
+  onPressVariantEngineType = (index) => {
+    if (index !== 0) {
+      const engineType = [ENGINE_TYPES_PETROL, ENGINE_TYPES_DIESEL, ENGINE_TYPES_HYBRID][index - 1];
+      this.props.engineTypeSelect(engineType);
+    }
+  }
 
   renderItem = ({ label, value, onChange, inputProps = {}, isLast }) => {
     const renderInput = () => (
@@ -67,7 +121,7 @@ export default class CarCostForm extends PureComponent {
         <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]} >
           <Body>
             <Item style={[stylesList.inputItem, styles.inputItem]} fixedLabel>
-              <Label style={[stylesList.label, styles.label]}>{label}</Label>
+              <Label style={[stylesList.label]}>{label}</Label>
               {
                 isAndroid ?
                   <View style={styles.inputContainer}>{renderInput()}</View> :
@@ -76,6 +130,139 @@ export default class CarCostForm extends PureComponent {
             </Item>
           </Body>
         </ListItem>
+      </View>
+    );
+  }
+
+  renderDateItem = ({ label, value, onChange }) => {
+    return (
+      <YearPicker onCloseModal={onChange}>
+        <View style={stylesList.listItemContainer}>
+          <View style={styles.hiddenListItemContainer} />
+          <ListItem button={false} style={stylesList.listItemPressable}>
+            <Body style={styles.body} >
+              <Item style={stylesList.inputItem} fixedLabel>
+                <Label style={[stylesList.label, styles.label]}>{label}</Label>
+                <View style={stylesList.listItemValueContainer}>
+                  <Text style={stylesList.listItemValue}>{value || 'Выбрать'}</Text>
+                </View>
+              </Item>
+            </Body>
+            <Right style={styles.right}>
+              <Icon name="arrow-forward" style={stylesList.iconArrow} />
+            </Right>
+          </ListItem>
+        </View>
+      </YearPicker>
+    );
+  }
+
+  renderMileageUnitItem = ({ label, value }) => {
+    const isKm = value === MILEAGE_UNIT_KM;
+
+    return (
+      <View style={stylesList.listItemContainer}>
+        <ListItem style={stylesList.listItemPressable}>
+          <Body style={styles.body} >
+            <Item style={stylesList.inputItem} fixedLabel>
+              <Label style={stylesList.label}>{label}</Label>
+              <View style={stylesList.listItemValueContainer}>
+                <Segment style={styles.segment}>
+                  <Button
+                    first
+                    active={isKm}
+                    onPress={() => this.props.mileageUnitSelect(MILEAGE_UNIT_KM)}
+                  >
+                    <Text style={{ color: isKm ? '#fff' : styleConst.color.systemBlue }}>км</Text>
+                  </Button>
+                  <Button
+                    last
+                    active={!isKm}
+                    onPress={() => this.props.mileageUnitSelect(MILEAGE_UNIT_MILES)}
+                  >
+                    <Text style={{ color: !isKm ? '#fff' : styleConst.color.systemBlue }}>мили</Text>
+                  </Button>
+                </Segment>
+              </View>
+            </Item>
+          </Body>
+        </ListItem>
+      </View>
+    );
+  }
+
+  renderOptionsEngineType = (value) => {
+    const isActivePetrol = value === ENGINE_TYPES_PETROL;
+    const isActiveDiesel = value === ENGINE_TYPES_DIESEL;
+    const isActiveHybrid = value === ENGINE_TYPES_HYBRID;
+
+    return [
+      'Отмена',
+      <View style={styles.actionSheetItemContainer}>
+        {
+           isActivePetrol ?
+            <Icon name="ios-checkmark" style={styles.actionSheetItemIcon} /> :
+            null
+        }
+        <Text style={[
+          styles.actionSheetItemText,
+          isActivePetrol ? styles.actionSheetItemTextActive : null,
+        ]}>{ENGINE_TYPES_PETROL}</Text>
+      </View>,
+      <View style={styles.actionSheetItemContainer}>
+        {
+          isActiveDiesel ?
+            <Icon name="ios-checkmark" style={styles.actionSheetItemIcon} /> :
+            null
+        }
+        <Text style={[
+          styles.actionSheetItemText,
+          isActiveDiesel ? styles.actionSheetItemTextActive : null,
+        ]}>{ENGINE_TYPES_DIESEL}</Text>
+      </View>,
+      <View style={styles.actionSheetItemContainer}>
+        {
+           isActiveHybrid ?
+            <Icon name="ios-checkmark" style={styles.actionSheetItemIcon} /> :
+            null
+        }
+        <Text style={[
+          styles.actionSheetItemText,
+          isActiveHybrid ? styles.actionSheetItemTextActive : null,
+        ]}>{ENGINE_TYPES_HYBRID}</Text>
+      </View>,
+    ];
+  }
+
+  renderVariansItem = ({ id, label, value }) => {
+    const onPressHandler = () => this[`actionSheet${id}`].show();
+    const options = this[`renderOptions${id}`](value);
+
+    return (
+      <View>
+        <ActionSheet
+          cancelButtonIndex={0}
+          ref={component => this[`actionSheet${id}`] = component}
+          title={label}
+          options={options}
+          onPress={this[`onPressVariant${id}`]}
+        />
+
+        <View style={stylesList.listItemContainer}>
+          <ListItem style={stylesList.listItem} onPress={onPressHandler}>
+            <Body style={styles.body} >
+              <Item style={stylesList.inputItem} fixedLabel>
+                <Label style={[stylesList.label, styles.label]}>{label}</Label>
+                <View style={stylesList.listItemValueContainer}>
+                  <Text style={stylesList.listItemValue}>{value || 'Выбрать'}</Text>
+                </View>
+              </Item>
+            </Body>
+            <Right style={styles.right}>
+              <Icon name="arrow-forward" style={stylesList.iconArrow} />
+            </Right>
+          </ListItem>
+        </View>
       </View>
     );
   }
@@ -107,6 +294,11 @@ export default class CarCostForm extends PureComponent {
           value: model,
           onChange: this.onChangeModel,
         })}
+        {this.renderDateItem({
+          label: 'Год выпуска',
+          value: year,
+          onChange: this.onChangeYear,
+        })}
         {this.renderItem({
           label: 'Пробег',
           value: mileage,
@@ -114,6 +306,21 @@ export default class CarCostForm extends PureComponent {
           inputProps: {
             keyboardType: 'numeric',
           },
+        })}
+        {this.renderMileageUnitItem({
+          label: 'Пробег (тип)',
+          value: mileageUnit,
+          onChange: this.onChangeMileageUnit,
+        })}
+        {this.renderItem({
+          label: 'Двигатель (объем)',
+          value: engineVolume,
+          onChange: this.onChangeEngineVolume,
+        })}
+        {this.renderVariansItem({
+          id: 'EngineType', // для actionSheet
+          label: 'Двигатель (тип)',
+          value: engineType,
         })}
         {this.renderItem({
           label: 'VIN',

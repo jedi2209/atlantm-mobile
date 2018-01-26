@@ -7,7 +7,7 @@ import Imager from '../../core/components/Imager';
 
 // helpers
 import { get } from 'lodash';
-import priceSet from '../../utils/price-set';
+import numberWithGap from '../../utils/number-with-gap';
 import styleConst from '../../core/style-const';
 
 const styles = StyleSheet.create({
@@ -116,7 +116,7 @@ export default class CarListItem extends Component {
               </Text>
             </View>
 
-            <Text style={styles.price}>{`${priceSet(car.price.app)} ${prices.curr.name}`}</Text>
+            <Text style={styles.price}>{`${numberWithGap(car.price.app)} ${prices.curr.name}`}</Text>
             <View style={styles.extra}>
               {
                 (get(car, 'engine.type') || engineVolume) ?
