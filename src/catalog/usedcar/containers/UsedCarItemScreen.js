@@ -228,7 +228,7 @@ class UserCarItemScreen extends Component {
                                   <Text style={styles.sectionPropText}>Двигатель:</Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{`${carDetails.engine.volume.full} см3`}</Text>
+                                  <Text style={styles.sectionValueText}>{`${carDetails.engine.volume.full} см³`}</Text>
                                 </Col>
                               </Row>
                             ) : null

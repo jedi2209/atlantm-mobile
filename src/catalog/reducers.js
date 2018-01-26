@@ -529,6 +529,8 @@ const isCarCostRequest = (state = false, action) => {
 
 const carCostPhotos = (state = {}, action) => {
   switch (action.type) {
+    case CAR_COST__SUCCESS:
+      return {};
     case CAR_COST_PHOTOS__FILL:
       return action.payload;
     default:
@@ -538,6 +540,8 @@ const carCostPhotos = (state = {}, action) => {
 
 const carCostBrand = (state = null, action) => {
   switch (action.type) {
+    case CAR_COST__SUCCESS:
+      return null;
     case CAR_COST_BRAND__FILL:
       return action.payload;
     default:
@@ -547,6 +551,8 @@ const carCostBrand = (state = null, action) => {
 
 const carCostModel = (state = null, action) => {
   switch (action.type) {
+    case CAR_COST__SUCCESS:
+      return null;
     case CAR_COST_MODEL__FILL:
       return action.payload;
     default:
@@ -556,7 +562,7 @@ const carCostModel = (state = null, action) => {
 
 const carCostYear = (state = null, action) => {
   switch (action.type) {
-    case REHYDRATE:
+    case CAR_COST__SUCCESS:
       return null;
     case CAR_COST_YEAR__SELECT:
       return action.payload;
@@ -567,6 +573,8 @@ const carCostYear = (state = null, action) => {
 
 const carCostMileage = (state = null, action) => {
   switch (action.type) {
+    case CAR_COST__SUCCESS:
+      return null;
     case CAR_COST_MILEAGE__FILL:
       return action.payload;
     default:
@@ -576,6 +584,8 @@ const carCostMileage = (state = null, action) => {
 
 const carCostMileageUnit = (state = MILEAGE_UNIT_KM, action) => {
   switch (action.type) {
+    case CAR_COST__SUCCESS:
+      return MILEAGE_UNIT_KM;
     case CAR_COST_MILEAGE_UNIT__SELECT:
       return action.payload;
     default:
@@ -585,6 +595,8 @@ const carCostMileageUnit = (state = MILEAGE_UNIT_KM, action) => {
 
 const carCostEngineVolume = (state = null, action) => {
   switch (action.type) {
+    case CAR_COST__SUCCESS:
+      return null;
     case CAR_COST_ENGINE_VOLUME__FILL:
       return action.payload;
     default:
@@ -594,6 +606,8 @@ const carCostEngineVolume = (state = null, action) => {
 
 const carCostEngineType = (state = null, action) => {
   switch (action.type) {
+    case CAR_COST__SUCCESS:
+      return null;
     case CAR_COST_ENGINE_TYPE__SELECT:
       return action.payload;
     default:
@@ -603,6 +617,8 @@ const carCostEngineType = (state = null, action) => {
 
 const carCostGearbox = (state = null, action) => {
   switch (action.type) {
+    case CAR_COST__SUCCESS:
+      return null;
     case CAR_COST_GEARBOX__SELECT:
       return action.payload;
     default:
@@ -612,6 +628,8 @@ const carCostGearbox = (state = null, action) => {
 
 const carCostColor = (state = null, action) => {
   switch (action.type) {
+    case CAR_COST__SUCCESS:
+      return null;
     case CAR_COST_COLOR__FILL:
       return action.payload;
     default:
@@ -621,6 +639,8 @@ const carCostColor = (state = null, action) => {
 
 const carCostCarCondition = (state = null, action) => {
   switch (action.type) {
+    case CAR_COST__SUCCESS:
+      return null;
     case CAR_COST_CAR_CONDITION__SELECT:
       return action.payload;
     default:
@@ -630,6 +650,8 @@ const carCostCarCondition = (state = null, action) => {
 
 const carCostVin = (state = null, action) => {
   switch (action.type) {
+    case CAR_COST__SUCCESS:
+      return null;
     case CAR_COST_VIN__FILL:
       return action.payload;
     default:

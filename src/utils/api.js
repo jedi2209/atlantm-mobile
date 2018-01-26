@@ -296,25 +296,25 @@ export default {
   },
 
   carCostOrder(props) {
-    const formBody = [
+    const formBody = _.compact([
       { name: 'f_Source', data: '3' },
-      { name: 'f_Dealer', data: props.dealerId },
-      { name: 'f_Name', data: props.name },
-      { name: 'f_Phone', data: props.phone },
-      { name: 'f_Email', data: props.email },
-      { name: 'f_Text', data: props.comment },
-      { name: 'f_VIN', data: props.vin },
-      { name: 'f_Brand', data: props.brand },
-      { name: 'f_Model', data: props.model },
-      { name: 'f_Year', data: props.year },
-      { name: 'f_Mileage', data: props.mileage },
-      { name: 'f_Mileage_unit', data: props.mileageUnit },
-      { name: 'f_Engine', data: props.engineVolume },
-      { name: 'f_EngineType', data: props.engineType },
-      { name: 'f_Gearbox', data: props.gearbox },
-      { name: 'f_Color', data: props.color },
-      { name: 'f_CarCondition', data: props.carCondition },
-    ];
+      props.dealerId && { name: 'f_Dealer', data: props.dealerId },
+      props.name && { name: 'f_Name', data: props.name },
+      props.phone && { name: 'f_Phone', data: props.phone },
+      props.email && { name: 'f_Email', data: props.email },
+      props.comment && { name: 'f_Text', data: props.comment },
+      props.vin && { name: 'f_VIN', data: props.vin },
+      props.brand && { name: 'f_Brand', data: props.brand },
+      props.model && { name: 'f_Model', data: props.model },
+      props.year && { name: 'f_Year', data: props.year },
+      props.mileage && { name: 'f_Mileage', data: props.mileage },
+      props.mileageUnit && { name: 'f_Mileage_unit', data: props.mileageUnit },
+      props.engineVolume && { name: 'f_Engine', data: props.engineVolume },
+      props.engineType && { name: 'f_EngineType', data: props.engineType },
+      props.gearbox && { name: 'f_Gearbox', data: props.gearbox },
+      props.color && { name: 'f_Color', data: props.color },
+      props.carCondition && { name: 'f_CarCondition', data: props.carCondition },
+    ]);
 
     const photosBody = props.photos.map(photo => {
       return {
