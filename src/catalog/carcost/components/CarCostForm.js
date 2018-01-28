@@ -52,6 +52,11 @@ const styles = StyleSheet.create({
   },
   labelSmall: {
     fontSize: 16,
+    ...Platform.select({
+      android: {
+        fontSize: 15,
+      },
+    }),
   },
   segment: {
     backgroundColor: 'transparent',
@@ -145,7 +150,7 @@ export default class CarCostForm extends PureComponent {
         <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]} >
           <Body>
             <Item style={[stylesList.inputItem, styles.inputItem]} fixedLabel>
-              <Label style={[stylesList.label]}>{label}</Label>
+              <Label style={[stylesList.label, styles.labelSmall]}>{label}</Label>
               {
                 isAndroid ?
                   <View style={styles.inputContainer}>{renderInput()}</View> :
@@ -166,7 +171,7 @@ export default class CarCostForm extends PureComponent {
           <ListItem button={false} style={stylesList.listItemPressable}>
             <Body style={styles.body} >
               <Item style={stylesList.inputItem} fixedLabel>
-                <Label style={[stylesList.label, styles.label]}>{label}</Label>
+                <Label style={[stylesList.label, styles.label, styles.labelSmall]}>{label}</Label>
                 <View style={stylesList.listItemValueContainer}>
                   <Text style={stylesList.listItemValue}>{value || 'Выбрать'}</Text>
                 </View>
@@ -189,7 +194,7 @@ export default class CarCostForm extends PureComponent {
         <ListItem style={stylesList.listItemPressable}>
           <Body style={styles.body} >
             <Item style={stylesList.inputItem} fixedLabel>
-              <Label style={stylesList.label}>{label}</Label>
+              <Label style={[stylesList.label, styles.labelSmall]}>{label}</Label>
               <View style={stylesList.listItemValueContainer}>
                 <Segment style={styles.segment}>
                   <Button
@@ -419,6 +424,9 @@ export default class CarCostForm extends PureComponent {
           label: 'Объем ( см³ )',
           value: engineVolume,
           onChange: this.onChangeEngineVolume,
+          inputProps: {
+            keyboardType: 'numeric',
+          },
         })}
         {this.renderVariansItem({
           id: 'EngineType', // для actionSheet

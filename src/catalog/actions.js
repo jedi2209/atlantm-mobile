@@ -658,6 +658,7 @@ export const actionCarCostOrder = (props) => {
       .then(rnFetchBlobresult => {
         const { data } = rnFetchBlobresult;
         try {
+          __DEV__ && console.log('carCostOrder result', rnFetchBlobresult);
           const res = JSON.parse(data);
           const { status, error } = res;
 

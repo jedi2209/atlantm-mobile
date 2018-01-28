@@ -83,9 +83,8 @@ export default class CarCostPhotos extends Component {
       2: 'camera',
     }[i];
 
-    console.log('this.props', this.props);
-
     const settings = {
+      cropping: false,
       compressImageMaxWidth: 1000,
       compressImageMaxHeight: 1000,
       compressImageQuality: 0.6,
@@ -109,7 +108,7 @@ export default class CarCostPhotos extends Component {
         console.log('camera', photoCamera);
 
         if (photoCamera) {
-          cb({ ...this.props.photos, [photoIndex]: photoGallery });
+          cb({ ...this.props.photos, [photoIndex]: photoCamera });
         }
 
         break;
@@ -121,6 +120,7 @@ export default class CarCostPhotos extends Component {
   renderItem = (photoIndex) => {
     const { photos } = this.props;
     const photo = photos[photoIndex];
+    // Platform.OS === 'ios' && __DEV__ ? file.filename : file.path
     const source = photo ? { uri: photo.path } : thumbs[photoIndex - 1];
 
     return <Col key={photoIndex}>

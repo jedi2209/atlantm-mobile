@@ -298,29 +298,29 @@ export default {
   carCostOrder(props) {
     const formBody = _.compact([
       { name: 'f_Source', data: '3' },
-      props.dealerId && { name: 'f_Dealer', data: props.dealerId },
-      props.name && { name: 'f_Name', data: props.name },
-      props.phone && { name: 'f_Phone', data: props.phone },
-      props.email && { name: 'f_Email', data: props.email },
-      props.comment && { name: 'f_Text', data: props.comment },
-      props.vin && { name: 'f_VIN', data: props.vin },
-      props.brand && { name: 'f_Brand', data: props.brand },
-      props.model && { name: 'f_Model', data: props.model },
-      props.year && { name: 'f_Year', data: props.year },
-      props.mileage && { name: 'f_Mileage', data: props.mileage },
-      props.mileageUnit && { name: 'f_Mileage_unit', data: props.mileageUnit },
-      props.engineVolume && { name: 'f_Engine', data: props.engineVolume },
-      props.engineType && { name: 'f_EngineType', data: props.engineType },
-      props.gearbox && { name: 'f_Gearbox', data: props.gearbox },
-      props.color && { name: 'f_Color', data: props.color },
-      props.carCondition && { name: 'f_CarCondition', data: props.carCondition },
+      props.dealerId && { name: 'f_Dealer', data: String(props.dealerId) },
+      props.name && { name: 'f_Name', data: String(props.name) },
+      props.phone && { name: 'f_Phone', data: String(props.phone) },
+      props.email && { name: 'f_Email', data: String(props.email) },
+      props.comment && { name: 'f_Text', data: String(props.comment) },
+      props.vin && { name: 'f_VIN', data: String(props.vin) },
+      props.brand && { name: 'f_Brand', data: String(props.brand) },
+      props.model && { name: 'f_Model', data: String(props.model) },
+      props.year && { name: 'f_Year', data: String(props.year) },
+      props.mileage && { name: 'f_Mileage', data: String(props.mileage) },
+      props.mileageUnit && { name: 'f_Mileage_unit', data: String(props.mileageUnit) },
+      props.engineVolume && { name: 'f_Engine', data: String(props.engineVolume) },
+      props.engineType && { name: 'f_EngineType', data: String(props.engineType) },
+      props.gearbox && { name: 'f_Gearbox', data: String(props.gearbox) },
+      props.color && { name: 'f_Color', data: String(props.color) },
+      props.carCondition && { name: 'f_CarCondition', data: String(props.carCondition) },
     ]);
 
     const photosBody = props.photos.map(photo => {
       return {
         name: 'f_Photo[]',
         type: photo.mime,
-        filename: photo.filename,
+        filename: photo.path,
         data: RNFetchBlob.wrap(photo.path),
       };
     });
