@@ -403,9 +403,16 @@ export default {
   request(path, requestParams) {
     const url = `https://api.atlantm.com${path}`;
 
+    // Если включен debug режим, добавляем в каждый запрос заголовок `Debug`
+    if (window.atlantmDebug) {
+      requestParams.headers.Debug = 'app';
+    } else {
+      delete requestParams.headers.Debug;
+    }
+
     return fetch(url, requestParams)
       .then(response => {
-        console.log('response', response);
+        __DEV__ && console.log('response', response);
         return response.json();
       });
   },

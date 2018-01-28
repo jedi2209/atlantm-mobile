@@ -23,11 +23,12 @@ import DeviceInfo from 'react-native-device-info';
 // routes
 import getRouter from '../router';
 
-const mapStateToProps = ({ core, dealer }) => {
+const mapStateToProps = ({ core, dealer, profile }) => {
   return {
     fcmToken: core.fcmToken,
     pushActionSubscribe: core.pushActionSubscribe,
     dealerSelected: dealer.selected,
+    auth: profile.auth,
   };
 };
 
@@ -53,12 +54,17 @@ const styles = StyleSheet.create({
 class App extends Component {
   componentDidMount() {
     const {
+      auth,
       fcmToken,
       actionSetFCMToken,
       dealerSelected,
       pushActionSubscribe,
       actionSetPreviousFCMToken,
     } = this.props;
+
+    if (get(auth, 'login') === 'zteam') {
+      window.atlantmDebug = true;
+    }
 
     PushNotification.init({
       fcmToken,
