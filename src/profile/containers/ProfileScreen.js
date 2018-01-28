@@ -167,7 +167,7 @@ class ProfileScreen extends Component {
   }
 
   onPressLogout = () => {
-    const { actionLogout } = this.props;
+    const { auth, actionLogout } = this.props;
 
     return Alert.alert(
       'Подтвердите действие',
@@ -177,8 +177,14 @@ class ProfileScreen extends Component {
         {
           text: 'Выйти',
           onPress() {
-            actionLogout();
-            // setTimeout(() => Alert.alert('Вы вышли из личного кабинета'), 100);
+            console.log('zteam login on exit', get(auth, 'login') === 'zteam');
+            console.log('zteam login on exit value', get(auth, 'login'));
+            if (get(auth, 'login') === 'zteam') {
+              // отключаем debug режим
+              window.atlantmDebug = null;
+            }
+
+            setTimeout(() => actionLogout(), 100);
           },
         },
       ],

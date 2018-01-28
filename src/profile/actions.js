@@ -177,8 +177,10 @@ export const actionLogin = (props) => {
           dealer = dealerResponse.data;
 
           const dealerBaseData = find(props.dealers, { id: dealerId });
-          dealer.id = dealerBaseData.id;
-          dealer.brands = dealerBaseData.brands;
+          dealer.id = dealerId;
+          if (!window.atlantmDebug) {
+            dealer.brands = dealerBaseData.brands;
+          }
 
           dispatch({
             type: DEALER__SUCCESS,
