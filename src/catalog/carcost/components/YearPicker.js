@@ -74,7 +74,7 @@ export default class YearPicker extends PureComponent {
   }
 
   static defaultProps = {
-    period: 30,
+    period: 51,
     duration: 300,
     height: 259,
     TouchableComponent: TouchableOpacity,
