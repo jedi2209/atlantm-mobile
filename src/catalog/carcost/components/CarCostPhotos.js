@@ -71,7 +71,7 @@ export default class CarCostPhotos extends Component {
 
       this[`onPressRemovePhoto${photoIndex}`] = () => {
         let newPhotos = { ...this.props.photos };
-        newPhotos[photoIndex] = undefined;
+        delete newPhotos[photoIndex];
         this.props.photosFill(newPhotos);
       };
     });

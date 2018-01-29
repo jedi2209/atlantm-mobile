@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   label: {
-    flex: 2,
+    flex: 1.75,
+    // backgroundColor: 'red',
   },
   labelSmall: {
     fontSize: 16,
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
   segment: {
     backgroundColor: 'transparent',
     justifyContent: 'flex-start',
-    marginLeft: 5,
+    marginLeft: -5,
   },
   actionSheetItemContainer: {
     width: 200,
@@ -160,29 +161,6 @@ export default class CarCostForm extends PureComponent {
           </Body>
         </ListItem>
       </View>
-    );
-  }
-
-  renderDateItem = ({ label, value, onChange }) => {
-    return (
-      <YearPicker onCloseModal={onChange}>
-        <View style={stylesList.listItemContainer}>
-          <View style={styles.hiddenListItemContainer} />
-          <ListItem button={false} style={stylesList.listItemPressable}>
-            <Body style={styles.body} >
-              <Item style={stylesList.inputItem} fixedLabel>
-                <Label style={[stylesList.label, styles.label, styles.labelSmall]}>{label}</Label>
-                <View style={stylesList.listItemValueContainer}>
-                  <Text style={stylesList.listItemValue}>{value || 'Выбрать'}</Text>
-                </View>
-              </Item>
-            </Body>
-            <Right style={styles.right}>
-              <Icon name="arrow-forward" style={stylesList.iconArrow} />
-            </Right>
-          </ListItem>
-        </View>
-      </YearPicker>
     );
   }
 
@@ -337,7 +315,7 @@ export default class CarCostForm extends PureComponent {
     ];
   }
 
-  renderVariansItem = ({ id, label, value }) => {
+  renderVariansItem = ({ id, label, value, last }) => {
     const onPressHandler = () => this[`actionSheet${id}`].show();
     const options = this[`renderOptions${id}`](value);
 
@@ -352,7 +330,7 @@ export default class CarCostForm extends PureComponent {
         />
 
         <View style={stylesList.listItemContainer}>
-          <ListItem style={stylesList.listItemPressable} onPress={onPressHandler}>
+          <ListItem last={last} style={stylesList.listItemPressable} onPress={onPressHandler}>
             <Body style={styles.body}>
               <View style={styles.itemOneLine}>
                 <Label style={[stylesList.label, styles.label, styles.labelSmall]}>{label}</Label>
@@ -367,6 +345,29 @@ export default class CarCostForm extends PureComponent {
           </ListItem>
         </View>
       </View>
+    );
+  }
+
+  renderDateItem = ({ label, value, onChange }) => {
+    return (
+      <YearPicker onCloseModal={onChange}>
+        <View style={stylesList.listItemContainer}>
+          <View style={styles.hiddenListItemContainer} />
+          <ListItem button={false} style={stylesList.listItemPressable}>
+            <Body style={styles.body} >
+              <View style={styles.itemOneLine}>
+                <Label style={[stylesList.label, styles.label, styles.labelSmall]}>{label}</Label>
+                <View style={stylesList.listItemValueContainer}>
+                  <Text style={stylesList.listItemValue}>{value || 'Выбрать'}</Text>
+                </View>
+              </View>
+            </Body>
+            <Right style={styles.right}>
+              <Icon name="arrow-forward" style={stylesList.iconArrow} />
+            </Right>
+          </ListItem>
+        </View>
+      </YearPicker>
     );
   }
 
@@ -402,10 +403,10 @@ export default class CarCostForm extends PureComponent {
           value: model,
           onChange: this.onChangeModel,
         })}
-        {this.renderDateItem({
-          label: 'Год выпуска',
-          value: year,
-          onChange: this.onChangeYear,
+        {this.renderItem({
+          label: 'Цвет',
+          value: color,
+          onChange: this.onChangeColor,
         })}
         {this.renderItem({
           label: 'Пробег',
@@ -438,15 +439,16 @@ export default class CarCostForm extends PureComponent {
           label: 'Трансмиссия',
           value: gearbox,
         })}
+        {this.renderDateItem({
+          label: 'Год выпуска',
+          value: year,
+          onChange: this.onChangeYear,
+        })}
         {this.renderVariansItem({
           id: 'CarCondition', // для actionSheet
           label: 'Состояние',
           value: carCondition,
-        })}
-        {this.renderItem({
-          label: 'Цвет',
-          value: color,
-          onChange: this.onChangeColor,
+          last: true,
         })}
       </View>
     );
