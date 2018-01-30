@@ -47,8 +47,11 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     zIndex: 1,
   },
+  listItemValueContainer: {
+    flex: 3,
+  },
   label: {
-    flex: 1.75,
+    flex: 2,
     // backgroundColor: 'red',
   },
   labelSmall: {
@@ -61,8 +64,9 @@ const styles = StyleSheet.create({
   },
   segment: {
     backgroundColor: 'transparent',
-    justifyContent: 'flex-start',
-    marginLeft: -5,
+    // justifyContent: 'flex-start',
+    // marginLeft: -5,
+    flex: 3,
   },
   actionSheetItemContainer: {
     width: 200,
@@ -126,76 +130,6 @@ export default class CarCostForm extends PureComponent {
       const carCondition = [CAR_CONDITION_GOOD, CAR_CONDITION_BROKEN, CAR_CONDITION_NOT_GO][index - 1];
       this.props.carConditionSelect(carCondition);
     }
-  }
-
-  renderItem = ({ label, value, onChange, inputProps = {}, isLast }) => {
-    const renderInput = () => (
-      <Input
-        multiline={isAndroid}
-        numberOfLines={1}
-        style={styles.input}
-        autoCapitalize="none"
-        autoCorrect={false}
-        placeholder="Поле для заполнения"
-        onChangeText={onChange}
-        value={value}
-        returnKeyType="done"
-        returnKeyLabel="Готово"
-        underlineColorAndroid="transparent"
-        {...inputProps}
-      />
-    );
-
-    return (
-      <View style={stylesList.listItemContainer}>
-        <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]} >
-          <Body>
-            <Item style={[stylesList.inputItem, styles.inputItem]} fixedLabel>
-              <Label style={[stylesList.label, styles.labelSmall]}>{label}</Label>
-              {
-                isAndroid ?
-                  <View style={styles.inputContainer}>{renderInput()}</View> :
-                  renderInput()
-              }
-            </Item>
-          </Body>
-        </ListItem>
-      </View>
-    );
-  }
-
-  renderMileageUnitItem = ({ label, value }) => {
-    const isKm = value === MILEAGE_UNIT_KM;
-
-    return (
-      <View style={stylesList.listItemContainer}>
-        <ListItem style={stylesList.listItemPressable}>
-          <Body style={styles.body} >
-            <Item style={stylesList.inputItem} fixedLabel>
-              <Label style={[stylesList.label, styles.labelSmall]}>{label}</Label>
-              <View style={stylesList.listItemValueContainer}>
-                <Segment style={styles.segment}>
-                  <Button
-                    first
-                    active={isKm}
-                    onPress={() => this.props.mileageUnitSelect(MILEAGE_UNIT_KM)}
-                  >
-                    <Text style={{ color: isKm ? '#fff' : styleConst.color.systemBlue }}>км</Text>
-                  </Button>
-                  <Button
-                    last
-                    active={!isKm}
-                    onPress={() => this.props.mileageUnitSelect(MILEAGE_UNIT_MILES)}
-                  >
-                    <Text style={{ color: !isKm ? '#fff' : styleConst.color.systemBlue }}>мили</Text>
-                  </Button>
-                </Segment>
-              </View>
-            </Item>
-          </Body>
-        </ListItem>
-      </View>
-    );
   }
 
   renderOptionsEngineType = (value) => {
@@ -371,6 +305,76 @@ export default class CarCostForm extends PureComponent {
     );
   }
 
+  renderItem = ({ label, value, onChange, inputProps = {}, isLast }) => {
+    const renderInput = () => (
+      <Input
+        multiline={isAndroid}
+        numberOfLines={1}
+        style={styles.input}
+        autoCapitalize="none"
+        autoCorrect={false}
+        placeholder="Поле для заполнения"
+        onChangeText={onChange}
+        value={value}
+        returnKeyType="done"
+        returnKeyLabel="Готово"
+        underlineColorAndroid="transparent"
+        {...inputProps}
+      />
+    );
+
+    return (
+      <View style={stylesList.listItemContainer}>
+        <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]} >
+          <Body>
+            <Item style={[stylesList.inputItem, styles.inputItem]} fixedLabel>
+              <Label style={[stylesList.label, styles.labelSmall]}>{label}</Label>
+              {
+                isAndroid ?
+                  <View style={styles.inputContainer}>{renderInput()}</View> :
+                  renderInput()
+              }
+            </Item>
+          </Body>
+        </ListItem>
+      </View>
+    );
+  }
+
+  renderMileageUnitItem = ({ label, value }) => {
+    const isKm = value === MILEAGE_UNIT_KM;
+
+    return (
+      <View style={stylesList.listItemContainer}>
+        <ListItem style={stylesList.listItemPressable}>
+          <Body style={styles.body} >
+            <Item style={stylesList.inputItem} fixedLabel>
+              <Label style={[stylesList.label, styles.labelSmall]}>{label}</Label>
+              <View style={[stylesList.listItemValueContainer, styles.listItemValueContainer]}>
+                <Segment style={styles.segment}>
+                  <Button
+                    first
+                    active={isKm}
+                    onPress={() => this.props.mileageUnitSelect(MILEAGE_UNIT_KM)}
+                  >
+                    <Text style={{ color: isKm ? '#fff' : styleConst.color.systemBlue }}>км</Text>
+                  </Button>
+                  <Button
+                    last
+                    active={!isKm}
+                    onPress={() => this.props.mileageUnitSelect(MILEAGE_UNIT_MILES)}
+                  >
+                    <Text style={{ color: !isKm ? '#fff' : styleConst.color.systemBlue }}>мили</Text>
+                  </Button>
+                </Segment>
+              </View>
+            </Item>
+          </Body>
+        </ListItem>
+      </View>
+    );
+  }
+
   render() {
     const {
       vin,
@@ -422,7 +426,7 @@ export default class CarCostForm extends PureComponent {
           onChange: this.onChangeMileageUnit,
         })}
         {this.renderItem({
-          label: 'Объем ( см³ )',
+          label: 'Объем (см³)',
           value: engineVolume,
           onChange: this.onChangeEngineVolume,
           inputProps: {

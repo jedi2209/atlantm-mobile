@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     }),
   },
   actionListItemContainer: {
-    marginTop: 30,
+    marginVertical: 30,
   },
 });
 
