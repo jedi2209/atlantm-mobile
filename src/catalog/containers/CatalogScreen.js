@@ -16,6 +16,7 @@ import {
 import { actionSetDealersByCities } from '../../dealer/actions';
 
 // components
+import DeviceInfo from 'react-native-device-info';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
 // helpers
@@ -24,11 +25,12 @@ import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import { RUSSIA, BELARUSSIA, UKRAINE } from '../../core/const';
 
+const isTablet = DeviceInfo.isTablet();
 const { width } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
-    // justifyContent: 'center',
     flex: 1,
   },
   button: {
@@ -41,7 +43,6 @@ const styles = StyleSheet.create({
   imageContainer: {
     position: 'relative',
     alignItems: 'center',
-    width,
     paddingVertical: verticalScale(20),
   },
   imageDividerContainer: {
@@ -107,6 +108,16 @@ class CatalogScreen extends Component {
     navigation: PropTypes.object,
   }
 
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+
+    if (!isTablet) {
+      this.state.itemWidth = width;
+    }
+  }
+
   componentWillMount() {
     const {
       dealerSelected,
@@ -158,6 +169,14 @@ class CatalogScreen extends Component {
   onPressButtonUsedCar = () => this.props.navigation.navigate('UsedCarListScreen')
   onPressButtonCarCost = () => this.props.navigation.navigate('CarCostScreen')
 
+  onLayout = (e) => {
+    if (!isTablet) return false;
+
+    const { width: contentWidth } = e.nativeEvent.layout;
+
+    this.setState({ itemWidth: contentWidth });
+  }
+
   render() {
     const {
       dealerSelected,
@@ -169,8 +188,8 @@ class CatalogScreen extends Component {
     return (
         <Container>
           <Content style={styles.content}>
-            <View style={styles.buttonGroup}>
-              <View style={styles.imageContainer}>
+            <View style={styles.buttonGroup} onLayout={this.onLayout}>
+              <View style={[styles.imageContainer, { width: this.state.itemWidth }]}>
                 <View style={styles.imageDividerContainer}>
                   <View style={styles.imageDivider} />
                 </View>
@@ -183,7 +202,7 @@ class CatalogScreen extends Component {
                 <Text style={styles.buttonText}>АВТОМОБИЛИ С ПРОБЕГОМ</Text>
               </Button>
               <Button full onPress={this.onPressButtonCarCost} style={[styles.button, styles.buttonBottom]}>
-                <Text style={styles.buttonText}>ЗАЯВКА НА ОЦЕНКУ АВТО</Text>
+                <Text style={styles.buttonText}>ЗАЯВКА НА ОЦЕНКУ Б/У АВТО</Text>
               </Button>
             </View>
           </Content>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Alert, NetInfo } from 'react-native';
+import { StyleSheet, Alert, NetInfo, Platform } from 'react-native';
 import { Container, Content, List, StyleProvider } from 'native-base';
 
 // redux
@@ -300,7 +300,7 @@ class CarCostScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <Container>
-          <Content style={styles.content} >
+          <Content style={styles.content} enableResetScrollToCoords={false}>
             <List style={styles.list}>
               <Spinner visible={isCarCostRequest} color={styleConst.color.blue} />
 
