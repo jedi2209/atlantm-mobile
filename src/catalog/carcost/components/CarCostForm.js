@@ -43,15 +43,21 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  hiddenListItemContainer: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 1,
-  },
   listItemValueContainer: {
-    flex: 3,
+    flex: 2.5,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // backgroundColor: 'red',
   },
   label: {
-    flex: 2,
+    ...Platform.select({
+      android: {
+        flex: 1.8,
+      },
+      ios: {
+        flex: 2,
+      },
+    }),
   },
   labelSmall: {
     fontSize: 16,
@@ -87,6 +93,10 @@ const styles = StyleSheet.create({
   itemOneLine: {
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  hiddenListItemContainer: {
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 1,
   },
 });
 
@@ -265,7 +275,7 @@ export default class CarCostForm extends PureComponent {
             <Body style={styles.body}>
               <View style={styles.itemOneLine}>
                 <Label style={[stylesList.label, styles.label, styles.labelSmall]}>{label}</Label>
-                <View style={stylesList.listItemValueContainer}>
+                <View style={[stylesList.listItemValueContainer, styles.listItemValueContainer]}>
                   <Text style={stylesList.listItemValue}>{value || 'Выбрать'}</Text>
                 </View>
               </View>
@@ -280,25 +290,51 @@ export default class CarCostForm extends PureComponent {
   }
 
   renderDateItem = ({ label, value, onChange }) => {
-    return (
-      <YearPicker onCloseModal={onChange}>
+    const getList = (insertPicker) => {
+      return (
         <View style={stylesList.listItemContainer}>
-          <View style={styles.hiddenListItemContainer} />
+          {!insertPicker ? <View style={styles.hiddenListItemContainer} /> : null }
           <ListItem button={false} style={stylesList.listItemPressable}>
             <Body style={styles.body} >
               <View style={styles.itemOneLine}>
                 <Label style={[stylesList.label, styles.label, styles.labelSmall]}>{label}</Label>
-                <View style={stylesList.listItemValueContainer}>
-                  <Text style={stylesList.listItemValue}>{value || 'Выбрать'}</Text>
+                <View style={[stylesList.listItemValueContainer, {
+                  ...Platform.select({
+                    android: {
+                      flex: 4.4,
+                      marginRight: -(styleConst.ui.horizontalGapInList),
+                    },
+                  }),
+                }]}>
+                  {
+                    insertPicker ?
+                      <YearPicker onCloseModal={onChange} /> :
+                      <Text style={stylesList.listItemValue}>{value || 'Выбрать'}</Text>
+                  }
                 </View>
               </View>
             </Body>
-            <Right style={styles.right}>
-              <Icon name="arrow-forward" style={stylesList.iconArrow} />
-            </Right>
+            {
+              !insertPicker ?
+                (
+                  <Right style={styles.right}>
+                    <Icon name="arrow-forward" style={stylesList.iconArrow} />
+                  </Right>
+                ) : null
+            }
           </ListItem>
         </View>
-      </YearPicker>
+      )
+    };
+
+    return (
+      Platform.OS === 'ios' ?
+        (
+          <YearPicker onCloseModal={onChange}>
+            {getList()}
+          </YearPicker>
+        ) :
+        getList(true)
     );
   }
 
@@ -325,7 +361,7 @@ export default class CarCostForm extends PureComponent {
         <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]} >
           <Body>
             <Item style={[stylesList.inputItem, styles.inputItem]} fixedLabel>
-              <Label style={[stylesList.label, styles.labelSmall]}>{label}</Label>
+              <Label style={[stylesList.label, styles.labelText, styles.labelSmall]}>{label}</Label>
               {
                 isAndroid ?
                   <View style={styles.inputContainer}>{renderInput()}</View> :

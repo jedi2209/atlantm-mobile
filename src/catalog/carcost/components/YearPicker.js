@@ -9,6 +9,7 @@ import {
   Keyboard,
   StyleSheet,
   Picker,
+  Platform,
 } from 'react-native';
 
 // helpers
@@ -137,7 +138,13 @@ export default class YearPicker extends PureComponent {
     this.setModalVisible(true);
   }
 
-  onChangeYear = year => this.setState({ year })
+  onChangeYear = year => {
+    this.setState({ year });
+
+    if (Platform.OS === 'android') {
+      this.props.onCloseModal(year);
+    }
+  }
 
   renderYears = () => {
     const yearNow = new Date().getFullYear();
@@ -157,56 +164,66 @@ export default class YearPicker extends PureComponent {
 
     return (
       <View>
-        <Modal
-          transparent={true}
-          animationType="none"
-          visible={this.state.modalVisible}
-          supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
-          onRequestClose={() => { this.props.onCloseModal(); }}
-        >
-          <View style={styles.container}>
-            <TouchableHighlight
-              style={styles.datePickerMask}
-              activeOpacity={1}
-              underlayColor="#00000077"
-              onPress={this.onPressMask}
-            >
-              <TouchableHighlight
-                underlayColor="red"
-                style={styles.container}
-              >
-                <Animated.View style={[styles.datePickerCon, { height: this.state.animatedHeight }]}>
-                  <View style={styles.topBar}>
-                    <View style={styles.btnText}>
-                      <Text style={[styles.btnTextText, styles.btnTextCancel]}>Год выпуска</Text>
-                    </View>
+        {
+          Platform.OS === 'ios' ?
+            (
+              <View>
+                <Modal
+                transparent={true}
+                animationType="none"
+                visible={this.state.modalVisible}
+                supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
+                onRequestClose={() => { this.props.onCloseModal(); }}
+                >
+                  <View style={styles.container}>
                     <TouchableHighlight
-                      underlayColor="transparent"
-                      onPress={this.onPressConfirm}
-                      style={[styles.btnText, styles.btnConfirm]}
+                      style={styles.datePickerMask}
+                      activeOpacity={1}
+                      underlayColor="#00000077"
+                      onPress={this.onPressMask}
                     >
-                      <View>
-                        <Text style={[styles.btnTextText]}>Готово</Text>
-                      </View>
+                      <TouchableHighlight
+                        underlayColor="red"
+                        style={styles.container}
+                      >
+                        <Animated.View style={[styles.datePickerCon, { height: this.state.animatedHeight }]}>
+                          <View style={styles.topBar}>
+                            <View style={styles.btnText}>
+                              <Text style={[styles.btnTextText, styles.btnTextCancel]}>Год выпуска</Text>
+                            </View>
+                            <TouchableHighlight
+                              underlayColor="transparent"
+                              onPress={this.onPressConfirm}
+                              style={[styles.btnText, styles.btnConfirm]}
+                            >
+                              <View>
+                                <Text style={[styles.btnTextText]}>Готово</Text>
+                              </View>
+                            </TouchableHighlight>
+                          </View>
+
+                          <View style={styles.pickersContainer}>
+                            <View style={styles.priceContainer}>
+                              <Picker selectedValue={this.state.year} onValueChange={this.onChangeYear}>
+                                {this.renderYears()}
+                              </Picker>
+                            </View>
+                          </View>
+                        </Animated.View>
+                      </TouchableHighlight>
                     </TouchableHighlight>
                   </View>
-
-                  <View style={styles.pickersContainer}>
-                    <View style={styles.priceContainer}>
-                      <Picker selectedValue={this.state.year} onValueChange={this.onChangeYear}>
-                        {this.renderYears()}
-                      </Picker>
-                    </View>
-                  </View>
-                </Animated.View>
-              </TouchableHighlight>
-            </TouchableHighlight>
-          </View>
-        </Modal>
-
-        <TouchableHighlight underlayColor={styleConst.color.select} style={style} onPress={this.onPress}>
-          {children}
-        </TouchableHighlight>
+                </Modal>
+                <TouchableHighlight underlayColor={styleConst.color.select} style={style} onPress={this.onPress}>
+                  {children}
+                </TouchableHighlight>
+              </View>
+            ) : (
+              <Picker selectedValue={this.state.year} onValueChange={this.onChangeYear}>
+                {this.renderYears()}
+              </Picker>
+            )
+        }
       </View>
     );
   }
