@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
   },
   label: {
     flex: 2,
-    // backgroundColor: 'red',
   },
   labelSmall: {
     fontSize: 16,
@@ -64,8 +63,6 @@ const styles = StyleSheet.create({
   },
   segment: {
     backgroundColor: 'transparent',
-    // justifyContent: 'flex-start',
-    // marginLeft: -5,
     flex: 3,
   },
   actionSheetItemContainer: {

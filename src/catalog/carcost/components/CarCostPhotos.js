@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, Dimensions } from 'react-native';
 
 // components
 import { Grid, Row, Col, Icon } from 'native-base';
 import ActionSheet from 'react-native-actionsheet';
+import DeviceInfo from 'react-native-device-info';
 import ImagePicker from 'react-native-image-crop-picker';
 
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../../../core/style-const';
-import { scale, verticalScale } from '../../../utils/scale';
 
 const thumbs = [
   require('../assets/photo_car_1.png'),
@@ -20,24 +20,24 @@ const thumbs = [
   require('../assets/photo_car_6.png'),
 ];
 
+const isTablet = DeviceInfo.isTablet();
+const { width } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   container: {
     marginVertical: 15,
+  },
+  row: {
     justifyContent: 'space-around',
   },
   item: {
-    alignItems: 'center',
-    justifyContent: 'center',
     position: 'relative',
-
   },
   photo: {
+    alignSelf: 'center',
     borderRadius: 3,
     borderWidth: 1,
     borderColor: styleConst.color.border,
-    width: scale(90),
-    height: scale(65),
-    marginBottom: verticalScale(15),
   },
   removeIconContainer: {
     position: 'absolute',
@@ -60,6 +60,12 @@ export default class CarCostPhotos extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {};
+
+    if (!isTablet) {
+      this.state.itemWidth = this.getItemWidth(width);
+    }
 
     // генерируем хендлеры для actionSheet для каждого фото
     [1, 2, 3, 4, 5, 6].map(photoIndex => {
@@ -120,11 +126,11 @@ export default class CarCostPhotos extends Component {
   renderItem = (photoIndex) => {
     const { photos } = this.props;
     const photo = photos[photoIndex];
-    // Platform.OS === 'ios' && __DEV__ ? file.filename : file.path
     const source = photo ? { uri: photo.path } : thumbs[photoIndex - 1];
+    const width = this.state.itemWidth;
 
-    return <Col key={photoIndex}>
-      <View style={styles.item}>
+    return <Col key={photoIndex} style={{ width }}>
+      <View>
         {
           photo ?
             (
@@ -134,15 +140,32 @@ export default class CarCostPhotos extends Component {
             ) : null
         }
         <TouchableOpacity style={styles.item} onPress={this[`onPressPhoto${photoIndex}`]}>
-          <Image style={styles.photo} source={source} />
+          <Image style={[
+            styles.photo,
+            {
+              width,
+              height: this.state.itemWidth / 1.4,
+              marginBottom: 15,
+            },
+          ]} source={source} />
         </TouchableOpacity>
       </View>
     </Col>;
   }
 
+  getItemWidth = contentWidth => ((contentWidth - 50) / 3)
+
+  onLayout = (e) => {
+    if (!isTablet) return false;
+
+    const { width: contentWidth } = e.nativeEvent.layout;
+
+    this.setState({ itemWidth: this.getItemWidth(contentWidth) });
+  }
+
   render() {
     return (
-      <View style={styles.container}>
+      <View style={styles.container} onLayout={this.onLayout}>
         {
           [1, 2, 3, 4, 5, 6].map(photoIndex => {
             return <ActionSheet
@@ -157,10 +180,10 @@ export default class CarCostPhotos extends Component {
         }
 
         <Grid style={styles.menu} >
-          <Row>
+          <Row style={styles.row}>
             {[1, 2, 3].map(this.renderItem)}
           </Row>
-          <Row>
+          <Row style={styles.row}>
             {[4, 5, 6].map(this.renderItem)}
           </Row>
         </Grid>
