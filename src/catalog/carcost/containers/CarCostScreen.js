@@ -121,7 +121,7 @@ const mapDispatchToProps = {
 
 class CarCostScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Заявка на оценку',
+    headerTitle: 'Оценить мой автомобиль',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
@@ -177,12 +177,10 @@ class CarCostScreen extends Component {
       const dealerId = dealerSelected.id;
       const photoForUpload = valuesIn(photos);
 
-      console.log('photoForUpload', photoForUpload);
-
       if (!name || !phone || !email || photoForUpload.length === 0) {
         return Alert.alert(
           'Не хватает информации',
-          'Для заявки на СТО необходимо заполнить ФИО, номер контактного телефона и минимум 1 фото автомобиля',
+          'Необходимо заполнить ФИО, телефон, email и добавить минимум 1 фотографию автомобиля',
         );
       }
 
@@ -300,7 +298,7 @@ class CarCostScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <Container>
-          <Content style={styles.content} enableResetScrollToCoords={false}>
+          <Content style={styles.content} enableResetScrollToCoords={false} keyboardShouldPersistTaps={Platform.OS === 'android' ? 'always' : 'never'}>
             <List style={styles.list}>
               <Spinner visible={isCarCostRequest} color={styleConst.color.blue} />
 
