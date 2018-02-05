@@ -188,6 +188,8 @@ class UserCarListScreen extends Component {
       dealerSelected,
     } = this.props;
 
+    const showPriceFilterIcon = get(items, '0.type') !== 'empty';
+
     console.log('== UsedCarListScreen ==');
 
     return (
@@ -204,6 +206,7 @@ class UserCarListScreen extends Component {
         />
 
         <FooterFilter
+          showPriceFilterIcon={showPriceFilterIcon}
           currency={get(prices, 'curr.name')}
           min={prices.min}
           max={prices.max}

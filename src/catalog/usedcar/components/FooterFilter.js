@@ -43,12 +43,18 @@ export default class FooterFilter extends Component {
   static propTypes = {
     onPressCity: PropTypes.func,
     onPressPrice: PropTypes.func,
+    onClosePrice: PropTypes.func,
     currency: PropTypes.string,
     min: PropTypes.number,
     max: PropTypes.number,
     step: PropTypes.number,
     currentMinPrice: PropTypes.number,
     currentMaxPrice: PropTypes.number,
+    showPriceFilterIcon: PropTypes.bool,
+  }
+
+  static defaultProps = {
+    showPriceFilterIcon: false,
   }
 
   render() {
@@ -57,10 +63,12 @@ export default class FooterFilter extends Component {
       max,
       step,
       currency,
+      onPressCity,
       onPressPrice,
       onClosePrice,
       currentMinPrice,
       currentMaxPrice,
+      showPriceFilterIcon,
     } = this.props;
 
     return (
@@ -68,7 +76,7 @@ export default class FooterFilter extends Component {
           <View style={styles.container}>
             <TouchableOpacity
               style={styles.icon}
-              onPress={this.props.onPressCity}
+              onPress={onPressCity}
             >
               <View style={styles.iconInner}>
                 <Image
@@ -78,24 +86,29 @@ export default class FooterFilter extends Component {
               </View>
             </TouchableOpacity>
 
-            <PricePicker
-              style={styles.icon}
-              min={min}
-              max={max}
-              step={step}
-              currentMinPrice={currentMinPrice}
-              currentMaxPrice={currentMaxPrice}
-              currency={currency}
-              onPressModal={onPressPrice}
-              onCloseModal={onClosePrice}
-            >
-              <View style={styles.iconInner}>
-                <Image
-                  style={styles.image}
-                  source={require('../assets/price.png')}
-                />
-              </View>
-            </PricePicker>
+            {
+              showPriceFilterIcon ?
+              (
+                <PricePicker
+                  style={styles.icon}
+                  min={min}
+                  max={max}
+                  step={step}
+                  currentMinPrice={currentMinPrice}
+                  currentMaxPrice={currentMaxPrice}
+                  currency={currency}
+                  onPressModal={onPressPrice}
+                  onCloseModal={onClosePrice}
+                >
+                  <View style={styles.iconInner}>
+                    <Image
+                      style={styles.image}
+                      source={require('../assets/price.png')}
+                    />
+                  </View>
+                </PricePicker>
+              ) : null
+            }
           </View>
       </Footer>
     );
