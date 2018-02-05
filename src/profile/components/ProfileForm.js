@@ -12,7 +12,7 @@ import PushNotifications from '../../core/components/PushNotifications';
 import stylesList from '../../core/components/Lists/style';
 
 // helpers
-import { isFunction } from 'lodash';
+import { get, isFunction } from 'lodash';
 import styleConst from '../../core/style-const';
 
 const isAndroid = Platform.OS === 'android';
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   inputItem: {
     paddingRight: 7,
   },
-  inputItemCar: {
+  bodyItemCar: {
     flexDirection: 'column',
     alignItems: 'flex-start',
     paddingVertical: 7,
@@ -126,22 +126,26 @@ export default class ProfileForm extends PureComponent {
     return title;
   }
 
+  onPressCar = car => {
+    if (get(car, 'vin')) {
+      this.props.navigation.navigate('CarHistoryScreen', { car });
+    }
+  }
+
   renderCars = () => {
     const { cars } = this.props;
 
     return cars.map((car, idx, carArray) => {
       return (
         <View key={`${car.brand}${idx}`} style={stylesList.listItemContainer}>
-          <ListItem last={(carArray.length - 1) === idx} style={[stylesList.listItem, stylesList.listItemReset]} >
-            <Body>
-              <Item style={[stylesList.inputItem, styles.inputItemCar]} fixedLabel>
-                <Label style={stylesList.label}>
-                  <Text style={styles.carName}>{car.brand} {car.model}</Text>
-                </Label>
-                <View style={styles.carNumberContainer}>
-                    <Text style={styles.carNumber}>{car.number}</Text>
-                  </View>
-              </Item>
+          <ListItem onPress={() => this.onPressCar(car)} last={(carArray.length - 1) === idx} style={[stylesList.listItem, stylesList.listItemReset]} >
+            <Body style={styles.bodyItemCar}>
+              <Label style={stylesList.label}>
+                <Text style={styles.carName}>{car.brand} {car.model}</Text>
+              </Label>
+              <View style={styles.carNumberContainer}>
+                <Text style={styles.carNumber}>{car.number}</Text>
+              </View>
             </Body>
           </ListItem>
         </View>

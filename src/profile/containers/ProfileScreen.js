@@ -321,6 +321,7 @@ class ProfileScreen extends Component {
               <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
 
               <ProfileForm
+                navigation={navigation}
                 auth={auth}
                 carSection={true}
                 name={name}

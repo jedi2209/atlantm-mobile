@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, Platform } from 'react-native';
-import { Container, Content, ListItem, StyleProvider, Icon, Body, Right, Button } from 'native-base';
+import { StyleSheet, View, Text, Alert } from 'react-native';
+import { StyleProvider, Container, Content, ListItem, Body, Right, Icon } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
-import { actionSetBonusLevel1, actionSetBonusLevel2 } from '../../actions';
+import { CAR_HISTORY__FAIL } from '../../actionTypes';
+import {
+  actionFetchCarHistory,
+  actionSetCarHistoryLevel1,
+  actionSetCarHistoryLevel2,
+} from '../../actions';
 
 // components
 import * as Animatable from 'react-native-animatable';
-import Communications from 'react-native-communications';
+import SpinnerView from '../../../core/components/SpinnerView';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // styles
@@ -22,6 +26,7 @@ import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import { MONTH_TEXT } from '../../const';
+import { ERROR_NETWORK } from '../../../core/const';
 
 const styles = StyleSheet.create({
   content: {
@@ -65,75 +70,54 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
     marginBottom: 5,
   },
-  total: {
-    marginHorizontal: styleConst.ui.horizontalGapInList,
-    marginTop: 15,
-    alignItems: 'flex-end',
-  },
-  totalText: {
-    fontSize: 18,
-    color: styleConst.color.greyText,
-    letterSpacing: styleConst.ui.letterSpacing,
-    fontFamily: styleConst.font.regular,
-  },
-  totalValue: {
-    color: '#000',
-  },
-  button: {
-    height: styleConst.ui.footerHeight,
-    backgroundColor: '#fff',
-    borderTopWidth: styleConst.ui.borderWidth,
-    borderTopColor: styleConst.color.border,
-    marginVertical: 30,
-
-    ...Platform.select({
-      ios: {
-        borderBottomWidth: styleConst.ui.borderWidth,
-        borderBottomColor: styleConst.color.border,
-      },
-    }),
-  },
-  buttonText: {
-    fontFamily: styleConst.font.medium,
-    fontSize: 16,
-    letterSpacing: styleConst.ui.letterSpacing,
-    color: styleConst.color.lightBlue,
-    paddingRight: styleConst.ui.horizontalGapInList,
-  },
-  buttonIcon: {
-    fontSize: 30,
-    marginRight: 10,
-    color: styleConst.color.lightBlue,
-    paddingLeft: styleConst.ui.horizontalGapInList,
-  },
 });
 
-const mapStateToProps = ({ dealer, profile, nav }) => {
+const mapStateToProps = ({ nav, profile }) => {
   return {
     nav,
-    bonus: profile.bonus.data,
-    level1hash: profile.bonus.level1Hash,
-    level2hash: profile.bonus.level2Hash,
-    dealerSelected: dealer.selected,
+    auth: profile.auth,
+    carHistory: profile.carHistory.data,
+    level1hash: profile.carHistory.level1Hash,
+    level2hash: profile.carHistory.level2Hash,
+    isFetchCarHistory: profile.carHistory.meta.isFetchCarHistory,
   };
 };
 
 const mapDispatchToProps = {
-  actionSetBonusLevel1,
-  actionSetBonusLevel2,
+  actionFetchCarHistory,
+  actionSetCarHistoryLevel1,
+  actionSetCarHistoryLevel2,
 };
 
-class BonusScreen extends Component {
+class CarHistoryScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Бонусные баллы',
+    headerTitle: 'История обслуживания',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
   })
 
-  static propTypes = {
-    bonus: PropTypes.object,
+  componentDidMount() {
+    const { auth, navigation, actionFetchCarHistory } = this.props;
+    const vin = get(navigation, 'state.params.car.vin');
+    const token = get(auth, 'token.id');
+
+    actionFetchCarHistory({
+      vin,
+      token,
+    })
+      .then(action => {
+        if (action.type === CAR_HISTORY__FAIL) {
+          let message = get(action, 'payload.message', 'Произошла ошибка, попробуйте снова');
+
+          if (message === 'Network request failed') {
+            message = ERROR_NETWORK;
+          }
+
+          setTimeout(() => Alert.alert(message), 100);
+        }
+      });
   }
 
   shouldComponentUpdate(nextProps) {
@@ -143,7 +127,7 @@ class BonusScreen extends Component {
     if (nav) {
       const rootLevel = nav.routes[nav.index];
       if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'BonusScreen';
+        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'CarHistoryScreen';
       }
     }
 
@@ -151,26 +135,33 @@ class BonusScreen extends Component {
   }
 
   onPressLevel1 = hash => {
-    this.props.actionSetBonusLevel1(this.isActiveLevel1(hash) ? null : hash);
+    this.props.actionSetCarHistoryLevel1(this.isActiveLevel1(hash) ? null : hash);
   }
   onPressLevel2 = hash => {
-    this.props.actionSetBonusLevel2(this.isActiveLevel2(hash) ? null : hash);
+    this.props.actionSetCarHistoryLevel2(this.isActiveLevel2(hash) ? null : hash);
   }
 
   isActiveLevel1 = hash => this.props.level1hash === hash;
   isActiveLevel2 = hash => this.props.level2hash === hash;
 
-  renderLevel1 = (bonuses) => {
-    return Object.keys(bonuses).map((bonusYear, idx, yearsArray) => {
-      const bonus = bonuses[bonusYear];
+  renderLevel1 = (carHistory) => {
+    return Object.keys(carHistory).map((carHistoryYear, idx, yearsArray) => {
+      const item = carHistory[carHistoryYear];
       const isLast = (yearsArray.length - 1) === idx;
-      const hash = bonus.hash;
+      const hash = item.hash;
       const isActive = this.isActiveLevel1(hash);
-      const onPressHander = () => this.onPressLevel1(hash);
+      const onPressHandler = () => this.onPressLevel1(hash);
 
       return (
         <View key={hash} style={styles.acc}>
-          {this.renderItemHeader(bonusYear, bonus.total, onPressHander, 'itemLevel1', isActive, isLast, true)}
+          {this.renderItemHeader({
+            label: carHistoryYear,
+            onPressHandler,
+            theme: 'itemLevel1',
+            isActive,
+            isLast,
+            isArrow: true,
+          })}
           {
             isActive ?
               (
@@ -180,7 +171,7 @@ class BonusScreen extends Component {
                   useNativeDriver={true}
                   duration={700}
                 >
-                  {this.renderLevel2(bonus.history)}
+                  {this.renderLevel2(item.history)}
                 </Animatable.View>
               ) : null
           }
@@ -189,17 +180,24 @@ class BonusScreen extends Component {
     });
   }
 
-  renderLevel2 = (bonusesByMonth) => {
-    return Object.keys(bonusesByMonth).map((bonusMonth, idx, monthArray) => {
-      const bonus = bonusesByMonth[bonusMonth];
+  renderLevel2 = (carHistoryItemByMonth) => {
+    return Object.keys(carHistoryItemByMonth).map((month, idx, monthArray) => {
+      const item = carHistoryItemByMonth[month];
       const isLast = (monthArray.length - 1) === idx;
-      const hash = bonus.hash;
+      const hash = item.hash;
       const isActive = this.isActiveLevel2(hash);
-      const onPressHander = () => this.onPressLevel2(hash);
+      const onPressHandler = () => this.onPressLevel2(hash);
 
       return (
         <View key={hash} style={styles.acc}>
-          {this.renderItemHeader(MONTH_TEXT[bonusMonth], bonus.total, onPressHander, 'itemLevel2', isActive, isLast, true)}
+          {this.renderItemHeader({
+            label: MONTH_TEXT[month],
+            onPressHandler,
+            theme: 'itemLevel2',
+            isActive,
+            isLast,
+            isArrow: true,
+          })}
           {
             isActive ?
               (
@@ -208,7 +206,7 @@ class BonusScreen extends Component {
                   useNativeDriver={true}
                   duration={700}
                 >
-                {this.renderLevel3(bonus.history)}
+                {this.renderLevel3(item.history)}
               </Animatable.View>
               ) : null
           }
@@ -217,17 +215,29 @@ class BonusScreen extends Component {
     });
   }
 
-  renderLevel3 = (history) => {
-    return history.map((bonus, idx) => {
-      const isLast = (history.length - 1) === idx;
+  renderLevel3 = (works) => {
+    return works.map((work, idx) => {
+      const isLast = (works.length - 1) === idx;
 
-      return this.renderItemHeader(bonus.name, bonus.summ, null, 'itemLevel3', null, isLast, null, bonus.hash, bonus.date);
+      return this.renderItemHeader({
+        label: get(work, 'document.number'),
+        theme: 'itemLevel3',
+        isLast,
+        key: work.hash,
+        date: work.date,
+      });
     });
   }
 
-  renderItemHeader = (label, total, onPressHandler, theme, isActive, isLast, isArrow, key, date) => {
-    const isLevel1 = theme === 'itemLevel1';
-    const isLevel2 = theme === 'itemLevel2';
+  renderItemHeader = ({
+    key,
+    date,
+    label,
+    theme,
+    isActive,
+    isArrow,
+    onPressHandler,
+  }) => {
     const isLevel3 = theme === 'itemLevel3';
 
     return (
@@ -241,14 +251,13 @@ class BonusScreen extends Component {
           <Body style={isLevel3 ? styles.body : null}>
             <Text style={[stylesList.label, isLevel3 ? styles.label : null]}>{label}</Text>
             {
-              isLevel3 ?
+              date ?
                 (
                   <Text style={styles.date}>{dayMonthYear(date)}</Text>
                 ) : null
             }
           </Body>
           <Right>
-            {total || total === 0 ? <Text style={stylesList.badgeText}>{total}</Text> : null}
             {
               isArrow ?
                 (
@@ -264,30 +273,26 @@ class BonusScreen extends Component {
     );
   }
 
-  onPressBonusInfo = () => {
-    const links = {
-      ru: 'https://www.atlantm.ru/expert/bonus/',
-      ua: 'https://www.atlant-m.ua/expert/bonus/',
-      by: 'https://www.atlant-m.by/expert/bonus/',
-    };
-
-    Communications.web(links[this.props.dealerSelected.region]);
-  }
-
   render() {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
-    console.log('== Bonus Screen ==');
+    const {
+      carHistory,
+      isFetchCarHistory,
+    } = this.props;
 
-    const { bonus } = this.props;
-    console.log('bonus', bonus);
+    console.log('== CarHistory ==');
 
-    if (isEmpty(bonus) || !bonus.items) {
+    if (isFetchCarHistory) {
+      return <SpinnerView />;
+    }
+
+    if (isEmpty(carHistory) || !carHistory.items) {
       return (
         <View style={[styles.emptyContainer, styles.content]}>
           <Text style={styles.emptyText}>
-            Бонусов пока нет
+            Истории пока нет
           </Text>
         </View>
       );
@@ -296,17 +301,8 @@ class BonusScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <Container>
-          <Content style={styles.content} >
-            {Object.keys(get(bonus, 'items'), []).length ? this.renderLevel1(bonus.items) : null}
-
-            <View style={styles.total}>
-              <Text style={styles.totalText}>Всего: <Text style={styles.totalValue}>{get(bonus, 'saldo.value')}</Text> баллов</Text>
-            </View>
-
-            <Button onPress={this.onPressBonusInfo} full style={styles.button}>
-              <Icon name="ios-information-circle-outline" style={styles.buttonIcon} />
-              <Text numberOfLines={1} style={styles.buttonText}>БОНУСНАЯ ПРОГРАММА</Text>
-            </Button>
+          <Content style={styles.content}>
+            {Object.keys(get(carHistory, 'items'), []).length ? this.renderLevel1(carHistory.items) : null}
           </Content>
         </Container>
       </StyleProvider>
@@ -314,4 +310,4 @@ class BonusScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BonusScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(CarHistoryScreen);

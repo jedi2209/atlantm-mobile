@@ -25,6 +25,12 @@ import {
   REGISTER__SUCCESS,
   REGISTER__FAIL,
   REGISTER__REQUEST,
+
+  CAR_HISTORY__REQUEST,
+  CAR_HISTORY__SUCCESS,
+  CAR_HISTORY__FAIL,
+  CAR_HISTORY_LEVEL1__SET,
+  CAR_HISTORY_LEVEL2__SET,
 } from './actionTypes';
 
 function name(state = '', action) {
@@ -251,6 +257,59 @@ function level2Hash(state = null, action) {
   }
 }
 
+// car history
+function isFetchCarHistory(state = false, action) {
+  switch (action.type) {
+    case REHYDRATE:
+    case CAR_HISTORY__SUCCESS:
+    case CAR_HISTORY__FAIL:
+      return false;
+    case CAR_HISTORY__REQUEST:
+      return true;
+    default:
+      return state;
+  }
+}
+
+function carHistoryData(state = {}, action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'profile.carHistory.data', {});
+    case CAR_HISTORY__SUCCESS:
+      return action.payload;
+    case LOGOUT:
+      return {};
+    default:
+      return state;
+  }
+}
+
+function carHistorylevel1Hash(state = null, action) {
+  switch (action.type) {
+    case REHYDRATE:
+    case CAR_HISTORY__SUCCESS:
+    case LOGOUT:
+      return null;
+    case CAR_HISTORY_LEVEL1__SET:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+function carHistorylevel2Hash(state = null, action) {
+  switch (action.type) {
+    case REHYDRATE:
+    case CAR_HISTORY__SUCCESS:
+    case LOGOUT:
+      return null;
+    case CAR_HISTORY_LEVEL2__SET:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   name,
   phone,
@@ -269,6 +328,15 @@ export default combineReducers({
     data: bonusData,
     level1Hash,
     level2Hash,
+  }),
+
+  carHistory: combineReducers({
+    data: carHistoryData,
+    level1Hash: carHistorylevel1Hash,
+    level2Hash: carHistorylevel2Hash,
+    meta: combineReducers({
+      isFetchCarHistory,
+    }),
   }),
 
   meta: combineReducers({
