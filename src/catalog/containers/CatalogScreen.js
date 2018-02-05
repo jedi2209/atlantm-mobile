@@ -96,7 +96,7 @@ const mapDispatchToProps = {
 
 class CatalogScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Каталог авто',
+    headerTitle: 'Каталог автомобилей',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <View />,
@@ -202,7 +202,7 @@ class CatalogScreen extends Component {
                 <Text style={styles.buttonText}>АВТОМОБИЛИ С ПРОБЕГОМ</Text>
               </Button>
               <Button full onPress={this.onPressButtonCarCost} style={[styles.button, styles.buttonBottom]}>
-                <Text style={styles.buttonText}>ЗАЯВКА НА ОЦЕНКУ Б/У АВТО</Text>
+                <Text style={styles.buttonText}>ОЦЕНИТЬ МОЙ АВТОМОБИЛЬ</Text>
               </Button>
             </View>
           </Content>

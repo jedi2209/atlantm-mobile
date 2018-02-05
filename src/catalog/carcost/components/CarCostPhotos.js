@@ -34,21 +34,22 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   photo: {
-    alignSelf: 'center',
     borderRadius: 3,
-    borderWidth: 1,
-    borderColor: styleConst.color.border,
   },
   removeIconContainer: {
-    position: 'absolute',
-    top: -17,
-    right: 0,
+    ...StyleSheet.absoluteFillObject,
     zIndex: 1,
     backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   removeIcon: {
-    fontSize: 28,
-    color: styleConst.color.red,
+    color: '#fff',
+  },
+  photoShadow: {
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 1,
   },
 });
 
@@ -128,6 +129,7 @@ export default class CarCostPhotos extends Component {
     const photo = photos[photoIndex];
     const source = photo ? { uri: photo.path } : thumbs[photoIndex - 1];
     const width = this.state.itemWidth;
+    const size = this.state.itemWidth / 1.4;
 
     return <Col key={photoIndex} style={{ width }}>
       <View>
@@ -135,16 +137,23 @@ export default class CarCostPhotos extends Component {
           photo ?
             (
               <TouchableOpacity style={styles.removeIconContainer} onPress={this[`onPressRemovePhoto${photoIndex}`]}>
-                <Icon name="md-close-circle" style={styles.removeIcon} />
+                <Icon name="md-close-circle" style={[styles.removeIcon, { fontSize: width / 2.5, marginTop: -12 }]} />
               </TouchableOpacity>
             ) : null
         }
-        <TouchableOpacity style={styles.item} onPress={this[`onPressPhoto${photoIndex}`]}>
+        <TouchableOpacity style={[
+          styles.item,
+        ]} onPress={this[`onPressPhoto${photoIndex}`]}>
+          {
+            photo ?
+              <View style={[styles.photoShadow, { height: size }]} /> :
+              null
+          }
           <Image style={[
             styles.photo,
             {
               width,
-              height: this.state.itemWidth / 1.4,
+              height: size,
               marginBottom: 15,
             },
           ]} source={source} />
