@@ -251,7 +251,7 @@ class TvaScreen extends Component {
               city={dealerSelected.city}
               name={dealerSelected.name}
               brands={dealerSelected.brands}
-              returnScreen="Tva2Screen"
+              goBack={true}
             />
 
             <ListItemHeader text="АВТОМОБИЛЬ" />

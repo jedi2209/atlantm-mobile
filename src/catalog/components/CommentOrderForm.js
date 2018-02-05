@@ -21,17 +21,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class CarOrderList extends PureComponent {
+export default class CommentOrderForm extends PureComponent {
   static propTypes = {
     comment: PropTypes.string,
     commentFill: PropTypes.func,
   }
 
-  static defaultProps = {}
-
-  onChangeText = (text) => {
-    this.props.commentFill(text);
-  }
+  onChangeText = text => this.props.commentFill(text)
 
   render() {
     const { comment } = this.props;

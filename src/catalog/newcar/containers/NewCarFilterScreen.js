@@ -129,7 +129,6 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
     needFetchFilterData: catalog.newCar.meta.needFetchFilterData,
     needFetchFilterDataAfterCity: catalog.newCar.meta.needFetchFilterDataAfterCity,
     isFetchingFilterData: catalog.newCar.meta.isFetchingFilterData,
-    isNewCarFilterPriceShow: catalog.newCar.meta.isNewCarFilterPriceShow,
     isFetchingNewCarByFilter: catalog.newCar.meta.isFetchingNewCarByFilter,
   };
 };

@@ -137,18 +137,10 @@ class ServiceScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { dealerSelected, date, name, phone, email, car, isOrderServiceRequest } = this.props;
-
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'ServiceScreen';
 
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-        (name !== nextProps.name) ||
-          (phone !== nextProps.phone) ||
-            (email !== nextProps.email) ||
-              (car !== nextProps.car) ||
-                (date.date !== nextProps.date.date) ||
-                  (isOrderServiceRequest !== nextProps.isOrderServiceRequest);
+    return isActiveScreen;
   }
 
   render() {
@@ -187,7 +179,7 @@ class ServiceScreen extends Component {
                 city={dealerSelected.city}
                 name={dealerSelected.name}
                 brands={dealerSelected.brands}
-                returnScreen="ServiceScreen"
+                goBack={true}
               />
 
               <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />

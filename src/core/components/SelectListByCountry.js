@@ -46,6 +46,7 @@ export default class SelectListByCountry extends PureComponent {
     selectedItem: PropTypes.object,
     itemLayout: PropTypes.string,
     onSelect: PropTypes.func,
+    goBack: PropTypes.bool,
   }
 
   static defaultProps = {}
@@ -84,17 +85,17 @@ export default class SelectListByCountry extends PureComponent {
   )
 
   renderItem = ({ item }) => {
-    const { navigation, selectedItem, selectItem, itemLayout, isGoBack, onSelect } = this.props;
+    const { navigation, selectedItem, selectItem, itemLayout, goBack, onSelect } = this.props;
     const returnScreen = get(navigation, 'state.params.returnScreen');
 
     return <SelectItemByCountry
       item={item}
+      goBack={goBack}
       itemLayout={itemLayout}
       selectItem={selectItem}
       navigation={navigation}
       selectedItem={selectedItem}
       returnScreen={returnScreen}
-      isGoBack={isGoBack}
       onSelect={onSelect}
     />;
   }

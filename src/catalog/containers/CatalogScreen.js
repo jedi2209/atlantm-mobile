@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
-import { Button } from 'native-base';
+import { Button, Container, Content } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -16,18 +16,21 @@ import {
 import { actionSetDealersByCities } from '../../dealer/actions';
 
 // components
+import DeviceInfo from 'react-native-device-info';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
-// helpres
+// helpers
+import { verticalScale } from '../../utils/scale';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import { RUSSIA, BELARUSSIA, UKRAINE } from '../../core/const';
 
+const isTablet = DeviceInfo.isTablet();
 const { width } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
-    justifyContent: 'center',
     flex: 1,
   },
   button: {
@@ -35,12 +38,12 @@ const styles = StyleSheet.create({
     height: 70,
     marginLeft: styleConst.ui.horizontalGap * 2,
     marginRight: styleConst.ui.horizontalGap * 2,
+    marginBottom: 40,
   },
   imageContainer: {
     position: 'relative',
     alignItems: 'center',
-    width,
-    paddingVertical: 10,
+    paddingVertical: verticalScale(20),
   },
   imageDividerContainer: {
     ...StyleSheet.absoluteFillObject,
@@ -66,7 +69,7 @@ const styles = StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
   },
   buttonGroup: {
-    alignItems: 'center',
+    // alignItems: 'flex-end',
   },
 });
 
@@ -93,7 +96,7 @@ const mapDispatchToProps = {
 
 class CatalogScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Каталог авто',
+    headerTitle: 'Каталог автомобилей',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <View />,
@@ -103,6 +106,16 @@ class CatalogScreen extends Component {
   static propTypes = {
     dealerSelected: PropTypes.object,
     navigation: PropTypes.object,
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {};
+
+    if (!isTablet) {
+      this.state.itemWidth = width;
+    }
   }
 
   componentWillMount() {
@@ -153,8 +166,16 @@ class CatalogScreen extends Component {
   }
 
   onPressButtonNewCar = () => this.props.navigation.navigate('NewCarFilterScreen')
-
   onPressButtonUsedCar = () => this.props.navigation.navigate('UsedCarListScreen')
+  onPressButtonCarCost = () => this.props.navigation.navigate('CarCostScreen')
+
+  onLayout = (e) => {
+    if (!isTablet) return false;
+
+    const { width: contentWidth } = e.nativeEvent.layout;
+
+    this.setState({ itemWidth: contentWidth });
+  }
 
   render() {
     const {
@@ -165,22 +186,27 @@ class CatalogScreen extends Component {
     console.log('== Catalog ==');
 
     return (
-      <View style={styles.content}>
-        <View style={styles.buttonGroup}>
-            <Button full onPress={this.onPressButtonNewCar} style={[styles.button, styles.buttonTop]}>
-              <Text style={styles.buttonText}>НОВЫЕ АВТОМОБИЛИ</Text>
-            </Button>
-            <View style={styles.imageContainer}>
-              <View style={styles.imageDividerContainer}>
-                <View style={styles.imageDivider} />
+        <Container>
+          <Content style={styles.content}>
+            <View style={styles.buttonGroup} onLayout={this.onLayout}>
+              <View style={[styles.imageContainer, { width: this.state.itemWidth }]}>
+                <View style={styles.imageDividerContainer}>
+                  <View style={styles.imageDivider} />
+                </View>
+                <Image resizeMode="contain" source={require('../assets/catalog.png')} style={styles.image} />
               </View>
-              <Image resizeMode="contain" source={require('../assets/catalog.png')} style={styles.image} />
+              <Button full onPress={this.onPressButtonNewCar} style={[styles.button, styles.buttonTop]}>
+                <Text style={styles.buttonText}>НОВЫЕ АВТОМОБИЛИ</Text>
+              </Button>
+              <Button full onPress={this.onPressButtonUsedCar} style={[styles.button, styles.buttonBottom]}>
+                <Text style={styles.buttonText}>АВТОМОБИЛИ С ПРОБЕГОМ</Text>
+              </Button>
+              <Button full onPress={this.onPressButtonCarCost} style={[styles.button, styles.buttonBottom]}>
+                <Text style={styles.buttonText}>ОЦЕНИТЬ МОЙ АВТОМОБИЛЬ</Text>
+              </Button>
             </View>
-            <Button full onPress={this.onPressButtonUsedCar} style={[styles.button, styles.buttonBottom]}>
-              <Text style={styles.buttonText}>АВТОМОБИЛИ С ПРОБЕГОМ</Text>
-            </Button>
-          </View>
-      </View>
+          </Content>
+        </Container>
     );
   }
 }
