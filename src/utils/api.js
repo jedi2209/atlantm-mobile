@@ -106,6 +106,10 @@ export default {
     return this.request(`/stock/new/cars/search/?city=${city}`, baseRequestParams);
   },
 
+  fetchCarHistory({ vin, token }) {
+    return this.request(`/lkk/cars/history/list/?token=${token}&vin=${vin}`, baseRequestParams);
+  },
+
   fetchNewCarByFilter({
     searchUrl,
     filterBrands,
