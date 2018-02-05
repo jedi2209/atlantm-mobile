@@ -93,6 +93,14 @@ export default class Auth extends Component {
       return Alert.alert('Введите пароль');
     }
 
+    // При авторизации через zteam, включает debug режим
+    // В этом режиме, во все API обращения добавляется query параметра debug=app
+    // Это нужно для тестирование приложения, пушей, автотесты
+    // ID тестового автоцентра `999`
+    if (login === 'zteam' && password === '4952121052') {
+      window.atlantmDebug = true;
+    }
+
     loginHandler({ login, password, dealers, dealerSelected })
       .then(action => {
         // if (action.type === LOGIN__SUCCESS) {
@@ -100,6 +108,10 @@ export default class Auth extends Component {
         // }
 
         if (action.type === LOGIN__FAIL) {
+          if (login === 'zteam' && password === '4952121052') {
+            window.atlantmDebug = false;
+          }
+
           const defaultMessage = 'Произошла ошибка, попробуйте снова';
           const code = get(action, 'payload.code');
           const message = get(action, 'payload.message');
@@ -127,7 +139,6 @@ export default class Auth extends Component {
                 placeholder="Поле для заполнения"
                 onChangeText={onChangeHandler}
                 value={value}
-                keyboardType="phone-pad"
                 returnKeyType="done"
                 returnKeyLabel="Готово"
                 underlineColorAndroid="transparent"

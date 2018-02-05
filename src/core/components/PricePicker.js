@@ -16,7 +16,7 @@ import {
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../style-const';
-import priceSet from '../../utils/price-set';
+import numberWithGap from '../../utils/number-with-gap';
 
 const styles = StyleSheet.create({
   datePickerMask: {
@@ -184,11 +184,11 @@ export default class PricePicker extends PureComponent {
     let i = min;
 
     for (i; i <= max; i += step) {
-      data.push(<Picker.Item key={i} label={`${priceSet(i)}`} value={i} />);
+      data.push(<Picker.Item key={i} label={`${numberWithGap(i)}`} value={i} />);
     }
 
     if (i > max) {
-      data.push(<Picker.Item key={max} label={`${priceSet(max)}`} value={max} />);
+      data.push(<Picker.Item key={max} label={`${numberWithGap(max)}`} value={max} />);
     }
 
     return isReversed ? data.reverse() : data;

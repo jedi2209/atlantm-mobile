@@ -52,7 +52,7 @@ export default class ButtonFull extends PureComponent {
             ) :
             (
               <View style={styles.buttonContent} >
-                <Text style={styles.buttonText}>{text}</Text>
+                <Text style={styles.buttonText}>{text.toUpperCase()}</Text>
                 {
                   arrow ?
                     (

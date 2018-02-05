@@ -32,7 +32,7 @@ import { get, find } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
-import priceSet from '../../../utils/price-set';
+import numberWithGap from '../../../utils/number-with-gap';
 
 // styles
 import styles from './UsedCarItemScreenStyles';
@@ -202,7 +202,7 @@ class UserCarItemScreen extends Component {
                                   <Text style={styles.sectionPropText}>Пробег:</Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{`${priceSet(carDetails.mileage)} км.`}</Text>
+                                  <Text style={styles.sectionValueText}>{`${numberWithGap(carDetails.mileage)} км.`}</Text>
                                 </Col>
                               </Row>
                             ) : null
@@ -228,7 +228,7 @@ class UserCarItemScreen extends Component {
                                   <Text style={styles.sectionPropText}>Двигатель:</Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{`${carDetails.engine.volume.full} см3`}</Text>
+                                  <Text style={styles.sectionValueText}>{`${carDetails.engine.volume.full} см³`}</Text>
                                 </Col>
                               </Row>
                             ) : null
@@ -356,7 +356,7 @@ class UserCarItemScreen extends Component {
 
           <Footer style={styles.footer}>
             <View style={styles.orderPriceContainer}>
-              <Text style={styles.orderPriceText}>{`${priceSet(carDetails.price.app)} ${prices.curr.name}`}</Text>
+              <Text style={styles.orderPriceText}>{`${numberWithGap(carDetails.price.app)} ${prices.curr.name}`}</Text>
             </View>
             <Button
               onPress={this.onPressOrder}

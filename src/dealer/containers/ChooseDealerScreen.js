@@ -4,6 +4,8 @@ import { View } from 'react-native';
 // redux
 import { connect } from 'react-redux';
 import { actionSetPushActionSubscribe } from '../../core/actions';
+// actions
+import { fetchDealers, selectDealer, selectRegion } from '../actions';
 
 // components
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
@@ -11,10 +13,8 @@ import SelectListByCountry from '../../core/components/SelectListByCountry';
 import PushNotification from '../../core/components/PushNotifications';
 
 // helpers
+import { get } from 'lodash';
 import stylesHeader from '../../core/components/Header/style';
-
-// actions
-import { fetchDealers, selectDealer, selectRegion } from '../actions';
 
 const mapStateToProps = ({ dealer, nav, core }) => {
   return {
@@ -68,6 +68,8 @@ class ChooseDealerScreen extends Component {
   }
 
   render() {
+    console.log('== ChooseDealer ==');
+
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
@@ -83,10 +85,9 @@ class ChooseDealerScreen extends Component {
       selectDealer,
       dealerSelected,
       isFetchDealersList,
-      isGoBack,
     } = this.props;
 
-    console.log('== ChooseDealer ==');
+    const goBack = get(navigation, 'state.params.goBack');
 
     return <SelectListByCountry
       itemLayout="dealer"
@@ -100,7 +101,7 @@ class ChooseDealerScreen extends Component {
       navigation={navigation}
       selectItem={selectDealer}
       selectedItem={dealerSelected}
-      isGoBack={isGoBack}
+      goBack={goBack}
       onSelect={this.onSelectDealer}
     />;
   }

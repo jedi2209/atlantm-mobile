@@ -238,7 +238,7 @@ class RegisterScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <Container>
-          <Content style={styles.content} >
+          <Content style={styles.content} enableResetScrollToCoords={false}>
             <Spinner visible={isRegisterRequest} color={styleConst.color.blue} />
             <List style={styles.list}>
 
@@ -257,14 +257,13 @@ class RegisterScreen extends Component {
                 city={dealerSelected.city}
                 name={dealerSelected.name}
                 brands={dealerSelected.brands}
-                returnScreen="RegisterScreen"
-                isGoBack={true}
+                goBack={true}
               />
 
               <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ*" />
 
               <ProfileForm
-                isRegisterForm={true}
+                view="RegisterScreen"
                 carSection={true}
                 name={name}
                 phone={phone}

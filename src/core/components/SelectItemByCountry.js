@@ -48,10 +48,11 @@ export default class SelectItemByCountry extends Component {
     selectedItem: PropTypes.object,
     returnScreen: PropTypes.string,
     onSelect: PropTypes.func,
+    goBack: PropTypes.bool,
   }
 
   onPressDealerItem = () => {
-    const { navigation, returnScreen, selectItem, item, isGoBack, onSelect, selectedItem } = this.props;
+    const { navigation, returnScreen, selectItem, item, goBack, onSelect, selectedItem } = this.props;
     const mainScreen = DeviceInfo.isTablet() ? 'ContactsScreen' : 'MenuScreen';
 
     selectItem({ dealerBaseData: item, dealerSelected: selectedItem })
@@ -64,7 +65,7 @@ export default class SelectItemByCountry extends Component {
             });
           }
 
-          if (['ProfileScreen', 'RegisterScreen', 'ReviewsScreen'].indexOf(returnScreen) !== -1) {
+          if (goBack) {
             return navigation.goBack();
           }
 
@@ -85,8 +86,7 @@ export default class SelectItemByCountry extends Component {
   }
 
   onPressCityItem = () => {
-    const { navigation, returnScreen, selectItem, item } = this.props;
-    const mainScreen = DeviceInfo.isTablet() ? 'ContactsScreen' : 'MenuScreen';
+    const { navigation, selectItem, item } = this.props;
 
     selectItem(item);
     navigation.goBack();

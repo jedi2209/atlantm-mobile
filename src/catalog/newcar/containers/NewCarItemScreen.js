@@ -32,7 +32,7 @@ import { get, find } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
-import priceSet from '../../../utils/price-set';
+import numberWithGap from '../../../utils/number-with-gap';
 
 // styles
 import styles from '../../usedcar/containers/UsedCarItemScreenStyles';
@@ -275,7 +275,7 @@ class NewCarItemScreen extends Component {
                       <Text style={styles.sectionTitle}>Двигатель</Text>
                       <Grid>
                         {this.renderItem('Тип:', get(carDetails, 'engine.type'))}
-                        {this.renderItem('Рабочий объём:', get(carDetails, 'engine.volume.full'), 'см3')}
+                        {this.renderItem('Рабочий объём:', get(carDetails, 'engine.volume.full'), 'см³')}
                         {this.renderItem('Мощность:', get(carDetails, 'power.hp'), 'л.с.')}
                       </Grid>
                     </View>
@@ -363,7 +363,7 @@ class NewCarItemScreen extends Component {
 
           <Footer style={styles.footer}>
             <View style={styles.orderPriceContainer}>
-              <Text style={styles.orderPriceText}>{`${priceSet(carDetails.price.app)} ${filterData.prices.curr.name}`}</Text>
+              <Text style={styles.orderPriceText}>{`${numberWithGap(carDetails.price.app)} ${filterData.prices.curr.name}`}</Text>
             </View>
             <Button
               onPress={this.onPressOrder}

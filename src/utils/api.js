@@ -2,17 +2,19 @@ import _ from 'lodash';
 
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import RNFetchBlob from 'react-native-fetch-blob';
 
 const isAndroid = Platform.OS === 'android';
 
+const headers = {
+  Accept: 'application/json',
+  'Content-Type': 'application/json',
+  'x-api-key': `${isAndroid ? 'XXXX' : 'XXXX'}`,
+  'App-Version': DeviceInfo.getVersion(),
+};
 const baseRequestParams = {
   method: 'GET',
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-    'x-api-key': `${isAndroid ? 'XXXX' : 'XXXX'}`,
-    'App-Version': DeviceInfo.getVersion(),
-  },
+  headers,
 };
 
 export default {
@@ -293,6 +295,50 @@ export default {
     return this.request('/eko/review/post/', requestParams);
   },
 
+  carCostOrder(props) {
+    const formBody = _.compact([
+      { name: 'f_Source', data: '3' },
+      props.dealerId && { name: 'f_Dealer', data: String(props.dealerId) },
+      props.name && { name: 'f_Name', data: String(props.name) },
+      props.phone && { name: 'f_Phone', data: String(props.phone) },
+      props.email && { name: 'f_Email', data: String(props.email) },
+      props.comment && { name: 'f_Text', data: String(props.comment) },
+      props.vin && { name: 'f_VIN', data: String(props.vin) },
+      props.brand && { name: 'f_Brand', data: String(props.brand) },
+      props.model && { name: 'f_Model', data: String(props.model) },
+      props.year && { name: 'f_Year', data: String(props.year) },
+      props.mileage && { name: 'f_Mileage', data: String(props.mileage) },
+      props.mileageUnit && { name: 'f_Mileage_unit', data: String(props.mileageUnit) },
+      props.engineVolume && { name: 'f_Engine', data: String(props.engineVolume) },
+      props.engineType && { name: 'f_EngineType', data: String(props.engineType) },
+      props.gearbox && { name: 'f_Gearbox', data: String(props.gearbox) },
+      props.color && { name: 'f_Color', data: String(props.color) },
+      props.carCondition && { name: 'f_CarCondition', data: String(props.carCondition) },
+    ]);
+
+    const photosBody = props.photos.map(photo => {
+      return {
+        name: 'f_Photo[]',
+        type: photo.mime,
+        filename: photo.path,
+        data: RNFetchBlob.wrap(photo.path),
+      };
+    });
+
+    const body = formBody.concat(photosBody);
+
+    __DEV__ && console.log('API carcost body', body);
+
+    return RNFetchBlob.fetch(
+      'POST',
+      'https://api.atlantm.com/orders/usedbuy/post/',
+      _.merge(headers, {
+        'Content-Type': 'multipart/form-data',
+      }),
+      body,
+    );
+  },
+
   fetchCars({ token }) {
     return this.request(`/lkk/cars/?token=${token}`, baseRequestParams);
   },
@@ -357,9 +403,16 @@ export default {
   request(path, requestParams) {
     const url = `https://api.atlantm.com${path}`;
 
+    // Если включен debug режим, добавляем в каждый запрос заголовок `Debug`
+    if (window.atlantmDebug) {
+      requestParams.headers.Debug = 'app';
+    } else {
+      delete requestParams.headers.Debug;
+    }
+
     return fetch(url, requestParams)
       .then(response => {
-        console.log('response', response);
+        __DEV__ && console.log('response', response);
         return response.json();
       });
   },
