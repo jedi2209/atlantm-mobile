@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Alert } from 'react-native';
-import { StyleProvider, Container, Content, ListItem, Body, Right, Icon } from 'native-base';
+import { StyleProvider, Container, Content, ListItem, Body, Right, Icon, Row, Col } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -50,11 +50,7 @@ const styles = StyleSheet.create({
   },
   itemLevel3: {
     backgroundColor: styleConst.color.accordeonGrey2,
-    marginBottom: 1,
-  },
-  label: {
-    fontSize: 16,
-    marginTop: 5,
+    marginBottom: 2,
   },
   listItem: {
     height: null,
@@ -62,13 +58,32 @@ const styles = StyleSheet.create({
   body: {
     height: null,
     minHeight: styleConst.ui.listHeight,
+    paddingBottom: 10,
   },
   date: {
     fontSize: 15,
     color: styleConst.color.greyText3,
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
-    marginBottom: 5,
+    marginTop: 5,
+  },
+
+  // section
+  sectionProp: {
+    paddingRight: 5,
+    marginTop: 5,
+  },
+  sectionValue: {
+    marginTop: 5,
+  },
+  sectionPropText: {
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontSize: 17,
+  },
+  sectionValueText: {
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
+    fontSize: 16,
   },
 });
 
@@ -219,25 +234,47 @@ class CarHistoryScreen extends Component {
     return works.map((work, idx) => {
       const isLast = (works.length - 1) === idx;
 
+      console.log('work', work);
+
       return this.renderItemHeader({
-        label: get(work, 'document.number'),
-        theme: 'itemLevel3',
+        work,
         isLast,
         key: work.hash,
-        date: work.date,
+        theme: 'itemLevel3',
       });
     });
   }
 
-  renderItemHeader = ({
-    key,
-    date,
-    label,
-    theme,
-    isActive,
-    isArrow,
-    onPressHandler,
-  }) => {
+  renderLevel3Item = ({ prop, value }) => (
+    <Row style={styles.sectionRow}>
+      <Col style={styles.sectionProp}>
+        <Text style={styles.sectionPropText}>{`${prop}:`}</Text>
+      </Col>
+      <Col style={styles.sectionValue}>
+        <Text style={styles.sectionValueText}>{value}</Text>
+      </Col>
+    </Row>
+  )
+
+  renderLevel3Content = ({ work }) => {
+    const { date, document, master, summ } = work;
+    const works = get(summ, 'works');
+    const parts = get(summ, 'parts');
+    const total = get(summ, 'total');
+
+    return (
+      <Body style={styles.body}>
+        { date ? <Text style={styles.date}>{dayMonthYear(date)}</Text> : null }
+        { document ? this.renderLevel3Item({ prop: document.name, value: `#${document.number}` }) : null}
+        { master ? this.renderLevel3Item({ prop: 'Мастер', value: master }) : null}
+        { works ? this.renderLevel3Item({ prop: 'Ст-ть работ', value: works }) : null}
+        { parts ? this.renderLevel3Item({ prop: 'Ст-ть запчастей', value: parts }) : null}
+        { total ? this.renderLevel3Item({ prop: 'Всего', value: total }) : null}
+      </Body>
+    );
+  }
+
+  renderItemHeader = ({ work, key, label, theme, isActive, isArrow, onPressHandler }) => {
     const isLevel3 = theme === 'itemLevel3';
 
     return (
@@ -248,15 +285,15 @@ class CarHistoryScreen extends Component {
           style={[stylesList.listItem, isLevel3 ? styles.listItem : null]}
           onPress={onPressHandler}
         >
-          <Body style={isLevel3 ? styles.body : null}>
-            <Text style={[stylesList.label, isLevel3 ? styles.label : null]}>{label}</Text>
-            {
-              date ?
-                (
-                  <Text style={styles.date}>{dayMonthYear(date)}</Text>
-                ) : null
-            }
-          </Body>
+          {
+            isLevel3 ?
+              this.renderLevel3Content({ work }) :
+              (
+                <Body>
+                  <Text style={stylesList.label}>{label}</Text>
+                </Body>
+              )
+          }
           <Right>
             {
               isArrow ?
