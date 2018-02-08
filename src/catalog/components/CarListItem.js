@@ -112,11 +112,11 @@ export default class CarListItem extends Component {
           <View style={styles.info}>
             <View style={styles.titleContainer}>
               <Text style={styles.title}>
-                {`${car.brand.name} ${modelName || ''} ${complectation}`}
+                {`${get(car, 'brand.name')} ${modelName || ''} ${complectation}`}
               </Text>
             </View>
 
-            <Text style={styles.price}>{`${numberWithGap(car.price.app)} ${prices.curr.name}`}</Text>
+            <Text style={styles.price}>{`${numberWithGap(get(car, 'price.app'))} ${get(prices, 'curr.name')}`}</Text>
             <View style={styles.extra}>
               {
                 (get(car, 'engine.type') || engineVolume) ?

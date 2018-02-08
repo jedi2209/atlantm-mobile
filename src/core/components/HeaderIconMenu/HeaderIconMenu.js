@@ -51,7 +51,6 @@ export default class HeaderIconMenu extends Component {
       ],
     });
     this.props.navigation.dispatch(resetAction);
-    // this.props.navigation.navigate('MenuScreen');
   };
 
   render() {

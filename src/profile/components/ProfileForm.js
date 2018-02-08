@@ -12,7 +12,7 @@ import PushNotifications from '../../core/components/PushNotifications';
 import stylesList from '../../core/components/Lists/style';
 
 // helpers
-import { get, isFunction } from 'lodash';
+import { isFunction } from 'lodash';
 import styleConst from '../../core/style-const';
 
 const isAndroid = Platform.OS === 'android';
@@ -68,6 +68,7 @@ export default class ProfileForm extends PureComponent {
   static propTypes = {
     dealerSelected: PropTypes.object,
 
+    cars: PropTypes.array,
     auth: PropTypes.object,
     view: PropTypes.string,
 
@@ -101,6 +102,7 @@ export default class ProfileForm extends PureComponent {
     car: '',
     carVIN: '',
     carNumber: '',
+    cars: [],
     view: 'default',
     carSection: false,
   }
@@ -113,11 +115,11 @@ export default class ProfileForm extends PureComponent {
   onChangeCarNumber = value => this.props.carNumberFill(value)
 
   getCarSectionTitle = () => {
-    const { auth } = this.props;
+    const { cars } = this.props;
 
     let title = 'МОЙ АВТОМОБИЛЬ';
 
-    if (auth.cars && auth.cars.length >= 2) {
+    if (cars && cars.length >= 2) {
       title = 'МОИ АВТОМОБИЛИ';
     }
 
@@ -125,9 +127,9 @@ export default class ProfileForm extends PureComponent {
   }
 
   renderCars = () => {
-    const { auth } = this.props;
+    const { cars } = this.props;
 
-    return auth.cars.map((car, idx, carArray) => {
+    return cars.map((car, idx, carArray) => {
       return (
         <View key={`${car.brand}${idx}`} style={stylesList.listItemContainer}>
           <ListItem last={(carArray.length - 1) === idx} style={[stylesList.listItem, stylesList.listItemReset]} >
@@ -261,6 +263,7 @@ export default class ProfileForm extends PureComponent {
     const {
       view,
       car,
+      cars,
       auth,
       name,
       phone,
@@ -273,7 +276,7 @@ export default class ProfileForm extends PureComponent {
       actionSetPushActionSubscribe,
     } = this.props;
 
-    const isCars = get(auth, 'cars', []).length !== 0;
+    const isAuthCars = Array.isArray(cars) && cars.length !== 0;
 
     return (
       <View>
@@ -313,9 +316,9 @@ export default class ProfileForm extends PureComponent {
           carSection ?
             (
               <View>
-                <ListItemHeader text={this.getCarSectionTitle()} />
+                {!auth.token || (auth.token && isAuthCars) ? <ListItemHeader text={this.getCarSectionTitle()} /> : null }
                 {
-                  carVINFill ?
+                  !auth.token && carVINFill ?
                     this.renderListItem({
                       label: 'VIN',
                       value: carVIN,
@@ -323,7 +326,7 @@ export default class ProfileForm extends PureComponent {
                     }) : null
                 }
                 {
-                  !isCars && !carVINFill ?
+                  !auth.token && !carVINFill ?
                     this.renderListItem({
                       label: 'Авто',
                       value: car,
@@ -331,7 +334,7 @@ export default class ProfileForm extends PureComponent {
                     }) : null
                 }
                 {
-                  !isCars ?
+                  !auth.token ?
                     this.renderListItem({
                       label: 'Гос. номер',
                       value: carNumber,
@@ -340,7 +343,7 @@ export default class ProfileForm extends PureComponent {
                     }) : null
                 }
 
-                {isCars ? this.renderCars() : null }
+                {isAuthCars ? this.renderCars() : null }
               </View>
             ) : null
         }

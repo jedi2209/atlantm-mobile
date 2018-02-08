@@ -9,11 +9,14 @@ import {
   PROFILE_CAR_NUMBER__FILL,
   PROFILE_CAR_VIN__FILL,
 
-
   PROFILE_LOGIN__FILL,
   PROFILE_PASSWORD__FILL,
   PROFILE_BONUS_LEVEL1__SET,
   PROFILE_BONUS_LEVEL2__SET,
+
+  PROFILE_DATA__REQUEST,
+  PROFILE_DATA__SUCCESS,
+  PROFILE_DATA__FAIL,
 
   LOGOUT,
   LOGIN__SUCCESS,
@@ -37,7 +40,7 @@ function name(state = '', action) {
   }
 }
 
-function phone(state = {}, action) {
+function phone(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'profile.phone', '');
@@ -50,7 +53,7 @@ function phone(state = {}, action) {
   }
 }
 
-function email(state = {}, action) {
+function email(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'profile.email', '');
@@ -64,14 +67,15 @@ function email(state = {}, action) {
 }
 
 // используется в случае, если пользователь авторизован
-function cars(state = null, action) {
+function cars(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.cars', '');
+      return get(action.payload, 'profile.cars', []);
     case LOGIN__SUCCESS:
+    case PROFILE_DATA__SUCCESS:
       return action.payload.cars;
     case LOGOUT:
-      return null;
+      return [];
     default:
       return state;
   }
@@ -180,11 +184,25 @@ function isRegisterRequest(state = false, action) {
   }
 }
 
+function isFetchProfileData(state = false, action) {
+  switch (action.type) {
+    case REHYDRATE:
+    case PROFILE_DATA__SUCCESS:
+    case PROFILE_DATA__FAIL:
+      return false;
+    case PROFILE_DATA__REQUEST:
+      return true;
+    default:
+      return state;
+  }
+}
+
 function bonusData(state = {}, action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'profile.bonus.data', {});
     case LOGIN__SUCCESS:
+    case PROFILE_DATA__SUCCESS:
       return action.payload.bonus;
     case LOGOUT:
       return {};
@@ -198,6 +216,7 @@ function discounts(state = [], action) {
     case REHYDRATE:
       return get(action.payload, 'profile.discounts', []);
     case LOGIN__SUCCESS:
+    case PROFILE_DATA__SUCCESS:
       return action.payload.discounts;
     case LOGOUT:
       return [];
@@ -253,6 +272,7 @@ export default combineReducers({
   }),
 
   meta: combineReducers({
+    isFetchProfileData,
     isLoginRequest,
     isRegisterRequest,
   }),
