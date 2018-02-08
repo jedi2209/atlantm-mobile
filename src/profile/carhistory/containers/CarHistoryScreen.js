@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Alert } from 'react-native';
-import { StyleProvider, Container, Content, ListItem, Body, Right, Icon, Row, Col } from 'native-base';
+import { StyleProvider, Container, Content, ListItem, Body, Right, Icon, Row, Col, Item, Label } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -25,6 +25,7 @@ import { dayMonthYear } from '../../../utils/date';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
+import numberWithGap from '../../../utils/number-with-gap';
 import { MONTH_TEXT } from '../../const';
 import { ERROR_NETWORK } from '../../../core/const';
 
@@ -84,6 +85,12 @@ const styles = StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
     fontSize: 16,
+  },
+  about: {
+    marginBottom: 5,
+  },
+  iconArrow: {
+    color: styleConst.color.greyText4,
   },
 });
 
@@ -147,6 +154,25 @@ class CarHistoryScreen extends Component {
     }
 
     return isActiveScreen;
+  }
+
+  renderListItem = (label, value, isLast) => {
+    if (!value) return null;
+
+    return (
+      <View style={stylesList.listItemContainer}>
+        <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]}>
+          <Body>
+            <Item style={stylesList.inputItem} fixedLabel>
+              <Label style={stylesList.label}>{label}</Label>
+              <View style={stylesList.listItemValueContainer}>
+                <Text style={stylesList.listItemValue}>{value}</Text>
+              </View>
+            </Item>
+          </Body>
+        </ListItem>
+      </View>
+    );
   }
 
   onPressLevel1 = hash => {
@@ -231,15 +257,24 @@ class CarHistoryScreen extends Component {
   }
 
   renderLevel3 = (works) => {
+    const { auth, navigation } = this.props;
+    const vin = get(navigation, 'state.params.car.vin');
+    const token = get(auth, 'token.id');
+
     return works.map((work, idx) => {
       const isLast = (works.length - 1) === idx;
-
-      console.log('work', work);
+      const onPressHandler = () => navigation.navigate('CarHistoryDetailsScreen', {
+        vin,
+        token,
+        title: `${get(work, 'document.name')} #${get(work, 'document.number')}`,
+      });
 
       return this.renderItemHeader({
         work,
         isLast,
         key: work.hash,
+        onPressHandler,
+        isArrowPress: true,
         theme: 'itemLevel3',
       });
     });
@@ -267,14 +302,14 @@ class CarHistoryScreen extends Component {
         { date ? <Text style={styles.date}>{dayMonthYear(date)}</Text> : null }
         { document ? this.renderLevel3Item({ prop: document.name, value: `#${document.number}` }) : null}
         { master ? this.renderLevel3Item({ prop: 'Мастер', value: master }) : null}
-        { works ? this.renderLevel3Item({ prop: 'Ст-ть работ', value: works }) : null}
-        { parts ? this.renderLevel3Item({ prop: 'Ст-ть запчастей', value: parts }) : null}
-        { total ? this.renderLevel3Item({ prop: 'Всего', value: total }) : null}
+        { works ? this.renderLevel3Item({ prop: 'Ст-ть работ', value: numberWithGap(works) }) : null}
+        { parts ? this.renderLevel3Item({ prop: 'Ст-ть запчастей', value: numberWithGap(parts) }) : null}
+        { total ? this.renderLevel3Item({ prop: 'Всего', value: numberWithGap(total) }) : null}
       </Body>
     );
   }
 
-  renderItemHeader = ({ work, key, label, theme, isActive, isArrow, onPressHandler }) => {
+  renderItemHeader = ({ work, key, label, theme, isActive, isArrow, onPressHandler, isArrowPress }) => {
     const isLevel3 = theme === 'itemLevel3';
 
     return (
@@ -304,6 +339,7 @@ class CarHistoryScreen extends Component {
                   />
                 ) : null
             }
+            { isArrowPress ? <Icon name="arrow-forward" style={[stylesList.iconArrow, styles.iconArrow]} /> : null }
           </Right>
         </ListItem>
       </View>
@@ -315,9 +351,13 @@ class CarHistoryScreen extends Component {
     window.atlantmNavigation = this.props.navigation;
 
     const {
+      navigation,
       carHistory,
       isFetchCarHistory,
     } = this.props;
+
+    const car = get(navigation, 'state.params.car');
+    console.log('car', car);
 
     console.log('== CarHistory ==');
 
@@ -339,6 +379,12 @@ class CarHistoryScreen extends Component {
       <StyleProvider style={getTheme()}>
         <Container>
           <Content style={styles.content}>
+            <View style={styles.about}>
+              {car.brand ? this.renderListItem('Марка', car.brand) : null}
+              {car.model ? this.renderListItem('Модель', car.model) : null}
+              {car.number ? this.renderListItem('Гос. номер', car.number) : null}
+              {car.vin ? this.renderListItem('VIN', car.vin, true) : null}
+            </View>
             {Object.keys(get(carHistory, 'items'), []).length ? this.renderLevel1(carHistory.items) : null}
           </Content>
         </Container>

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 // components
 import FCM from 'react-native-fcm';
-import { ListItem, Body, Item, Label, Input, Right, Switch } from 'native-base';
+import { ListItem, Body, Item, Label, Input, Right, Switch, Icon } from 'native-base';
 import ListItemHeader from '../components/ListItemHeader';
 import PushNotifications from '../../core/components/PushNotifications';
 
@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
   bodyItemCar: {
     flexDirection: 'column',
     alignItems: 'flex-start',
-    paddingVertical: 7,
   },
   carNumber: {
     marginTop: 5,
@@ -138,7 +137,7 @@ export default class ProfileForm extends PureComponent {
     return cars.map((car, idx, carArray) => {
       return (
         <View key={`${car.brand}${idx}`} style={stylesList.listItemContainer}>
-          <ListItem onPress={() => this.onPressCar(car)} last={(carArray.length - 1) === idx} style={[stylesList.listItem, stylesList.listItemReset]} >
+          <ListItem onPress={() => this.onPressCar(car)} last={(carArray.length - 1) === idx} style={[stylesList.listItem]} >
             <Body style={styles.bodyItemCar}>
               <Label style={stylesList.label}>
                 <Text style={styles.carName}>{car.brand} {car.model}</Text>
@@ -147,6 +146,9 @@ export default class ProfileForm extends PureComponent {
                 <Text style={styles.carNumber}>{car.number}</Text>
               </View>
             </Body>
+            <Right>
+              <Icon name="arrow-forward" style={stylesList.iconArrow} />
+            </Right>
           </ListItem>
         </View>
       );
