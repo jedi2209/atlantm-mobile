@@ -68,9 +68,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     letterSpacing: styleConst.ui.letterSpacing,
   },
-  buttonGroup: {
-    // alignItems: 'flex-end',
-  },
 });
 
 const mapStateToProps = ({ dealer, nav }) => {

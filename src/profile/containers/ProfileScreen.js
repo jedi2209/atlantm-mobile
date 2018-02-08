@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, StyleSheet, View, Text, Platform } from 'react-native';
+import { View, Alert, StyleSheet, Keyboard, Text, Platform } from 'react-native';
 import { Container, Content, List, StyleProvider, Button, Icon } from 'native-base';
 
 // redux
@@ -15,6 +15,7 @@ import {
   passwordFill,
   actionLogin,
   actionLogout,
+  actionFetchProfileData,
 } from '../actions';
 import { actionSetPushActionSubscribe, actionSetFCMToken, actionSetPushGranted } from '../../core/actions';
 
@@ -23,8 +24,10 @@ import Auth from '../components/Auth';
 import ProfileForm from '../components/ProfileForm';
 import ListItemHeader from '../components/ListItemHeader';
 import BonusDiscount from '../components/BonusDiscount';
+import SpinnerView from '../../core/components/SpinnerView';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
+import HeaderIconReload from '../../core/components/HeaderIconReload';
 
 // helpers
 import { get } from 'lodash';
@@ -78,7 +81,10 @@ const mapStateToProps = ({ dealer, profile, nav, core }) => {
     car: profile.car,
     carNumber: profile.carNumber,
 
+    isFetchProfileData: profile.meta.isFetchProfileData,
+
     auth: profile.auth,
+    cars: profile.cars,
     login: profile.login,
     password: profile.password,
     isLoginRequest: profile.meta.isLoginRequest,
@@ -98,6 +104,8 @@ const mapDispatchToProps = {
   carFill,
   carNumberFill,
 
+  actionFetchProfileData,
+
   loginFill,
   passwordFill,
   actionLogin,
@@ -109,13 +117,23 @@ const mapDispatchToProps = {
 };
 
 class ProfileScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Личный кабинет',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <View />,
-    headerRight: <HeaderIconMenu navigation={navigation} />,
-  })
+  static navigationOptions = ({ navigation }) => {
+    const { params = {} } = navigation.state;
+
+    return {
+      headerTitle: 'Личный кабинет',
+      headerStyle: stylesHeader.common,
+      headerTitleStyle: stylesHeader.title,
+      headerLeft: params.isAuth ? <HeaderIconReload onPress={() => {
+        Keyboard.dismiss();
+
+        if (params.onReload) {
+          params.onReload();
+        }
+      }} /> : <View />,
+      headerRight: <HeaderIconMenu navigation={navigation} />,
+    };
+  }
 
   static propTypes = {
     dealerSelected: PropTypes.object,
@@ -131,12 +149,15 @@ class ProfileScreen extends Component {
     car: PropTypes.string,
     carNumber: PropTypes.string,
 
+    cars: PropTypes.array,
+
     auth: PropTypes.object,
     loginFill: PropTypes.func,
     passwordFill: PropTypes.func,
     login: PropTypes.string,
     password: PropTypes.string,
     isLoginRequest: PropTypes.bool,
+    isFetchProfileData: PropTypes.bool,
 
     bonus: PropTypes.object,
     discounts: PropTypes.array,
@@ -146,10 +167,20 @@ class ProfileScreen extends Component {
     actionSetFCMToken: PropTypes.func,
     actionSetPushGranted: PropTypes.func,
     actionSetPushActionSubscribe: PropTypes.func,
+    actionFetchCars: PropTypes.func,
   }
 
   static defaultProps = {
     auth: {},
+  }
+
+  componentDidMount () {
+    const { auth } = this.props;
+
+    this.props.navigation.setParams({
+      isAuth: get(auth, 'token.id'),
+      onReload: auth.token ? this.onReload : null,
+    });
   }
 
   shouldComponentUpdate(nextProps) {
@@ -166,6 +197,13 @@ class ProfileScreen extends Component {
     return isActiveScreen;
   }
 
+  onReload = () => {
+    const { auth, actionFetchProfileData } = this.props;
+    const token = get(auth, 'token.id');
+
+    actionFetchProfileData({ token });
+  }
+
   onPressLogout = () => {
     const { auth, actionLogout } = this.props;
 
@@ -177,8 +215,6 @@ class ProfileScreen extends Component {
         {
           text: 'Выйти',
           onPress() {
-            console.log('zteam login on exit', get(auth, 'login') === 'zteam');
-            console.log('zteam login on exit value', get(auth, 'login'));
             if (get(auth, 'login') === 'zteam') {
               // отключаем debug режим
               window.atlantmDebug = null;
@@ -214,6 +250,7 @@ class ProfileScreen extends Component {
       car,
       carNumber,
 
+      cars,
       auth,
       login,
       password,
@@ -229,9 +266,15 @@ class ProfileScreen extends Component {
       actionSetFCMToken,
       actionSetPushGranted,
       actionSetPushActionSubscribe,
+
+      isFetchProfileData,
     } = this.props;
 
     console.log('== Profile ==');
+
+    if (isFetchProfileData) {
+      return <SpinnerView text="Обновляем данные личного кабинета" />;
+    }
 
     return (
       <StyleProvider style={getTheme()}>
@@ -285,6 +328,7 @@ class ProfileScreen extends Component {
                 email={email}
                 car={car}
                 carNumber={carNumber}
+                cars={cars}
                 nameFill={nameFill}
                 phoneFill={phoneFill}
                 emailFill={emailFill}

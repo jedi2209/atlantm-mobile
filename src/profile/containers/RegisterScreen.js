@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderTopWidth: styleConst.ui.borderWidth,
     borderTopColor: styleConst.color.border,
+    marginTop: 20,
     marginBottom: 30,
 
     ...Platform.select({

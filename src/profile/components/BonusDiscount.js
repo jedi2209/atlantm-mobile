@@ -14,7 +14,7 @@ const icons = {
   discount: require('../assets/discount.png'),
 };
 
-export default class Auth extends Component {
+export default class BonusDiscount extends Component {
   static propTypes = {
     bonus: PropTypes.number,
     discounts: PropTypes.number,
@@ -22,8 +22,8 @@ export default class Auth extends Component {
   }
 
   static defaultProps = {
-    bonus: null,
-    discounts: null,
+    bonus: 0,
+    discounts: 0,
   }
 
   onPressBonus = () => this.props.navigation.navigate('BonusScreen')

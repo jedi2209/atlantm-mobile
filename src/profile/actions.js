@@ -14,6 +14,10 @@ import {
   PROFILE_BONUS_LEVEL1__SET,
   PROFILE_BONUS_LEVEL2__SET,
 
+  PROFILE_DATA__REQUEST,
+  PROFILE_DATA__SUCCESS,
+  PROFILE_DATA__FAIL,
+
   LOGOUT,
   LOGIN__SUCCESS,
   LOGIN__FAIL,
@@ -117,6 +121,43 @@ export const actionLogout = () => {
   };
 };
 
+async function getProfileData({ token }) {
+  // 1. Получаем автомобили пользователя
+  let cars = [];
+  const carsResponse = await API.fetchCars({ token });
+  const carsResponseCode = get(carsResponse, 'error.code', 404);
+  if (carsResponseCode === 200 && carsResponse.data) {
+    cars = carsResponse.data;
+  } else {
+    __DEV__ && console.log('error get profile cars', carsResponse);
+  }
+
+  // 2. Получаем бонусы и скидки пользователя
+  let bonus = {};
+  const bonusResponse = await API.fetchBonus({ token });
+  const bonusResponseCode = get(bonusResponse, 'error.code', 404);
+  if (bonusResponseCode === 200 && bonusResponse.data) {
+    bonus = bonusResponse.data;
+  } else {
+    __DEV__ && console.log('error get profile bonus', bonusResponse);
+  }
+
+  let discounts = [];
+  const discountsResponse = await API.fetchDiscounts({ token });
+  const discountsResponseCode = get(discountsResponse, 'error.code', 404);
+  if (discountsResponseCode === 200 && discountsResponse.data) {
+    discounts = discountsResponse.data;
+  } else {
+    __DEV__ && console.log('error get profile discounts', discountsResponse);
+  }
+
+  return {
+    cars,
+    bonus,
+    discounts,
+  };
+}
+
 export const actionLogin = (props) => {
   return async dispatch => {
     dispatch({
@@ -148,25 +189,7 @@ export const actionLogin = (props) => {
 
       const { user, token } = data;
 
-      // 2. С помощью полученного токена, получаем автомобили пользователя
-      let cars = [];
-      const carsResponse = await API.fetchCars({ token: token.id });
-      if (carsResponse.status === 'success') {
-        cars = carsResponse.data;
-      }
-
-      // 3. С помощью полученного токена, получаем бонусы и скидки пользователя
-      let bonus = {};
-      const bonusResponse = await API.fetchBonus({ token: token.id });
-      if (bonusResponse.status === 'success') {
-        bonus = bonusResponse.data;
-      }
-
-      let discounts = [];
-      const discountsResponse = await API.fetchDiscounts({ token: token.id });
-      if (discountsResponse.status === 'success') {
-        discounts = discountsResponse.data;
-      }
+      const { cars, bonus, discounts } = await getProfileData({ token: token.id });
 
       // 4. Обновляем данные автоцентра
       let dealer = {};
@@ -196,11 +219,12 @@ export const actionLogin = (props) => {
         type: LOGIN__SUCCESS,
         payload: {
           token,
+          dealer,
+          ...user,
+
           cars,
           bonus,
-          dealer,
           discounts,
-          ...user,
         },
       });
     } catch (e) {
@@ -239,6 +263,40 @@ export const actionRegister = (props) => {
         type: REGISTER__SUCCESS,
         payload: {
           data,
+        },
+      });
+    } catch (e) {
+      return onError(e);
+    }
+  };
+};
+
+export const actionFetchProfileData = ({ token }) => {
+  return async dispatch => {
+    dispatch({
+      type: PROFILE_DATA__REQUEST,
+      payload: { token },
+    });
+
+    function onError(error) {
+      return dispatch({
+        type: PROFILE_DATA__FAIL,
+        payload: {
+          code: error.code,
+          message: error.message,
+        },
+      });
+    }
+
+    try {
+      const { cars, bonus, discounts } = await getProfileData({ token });
+
+      return dispatch({
+        type: PROFILE_DATA__SUCCESS,
+        payload: {
+          cars,
+          bonus,
+          discounts,
         },
       });
     } catch (e) {

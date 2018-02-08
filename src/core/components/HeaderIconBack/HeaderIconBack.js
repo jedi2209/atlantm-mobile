@@ -6,9 +6,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-// components
-import DeviceInfo from 'react-native-device-info';
-
 // helpers
 import styleConst from '../../style-const';
 
@@ -43,15 +40,7 @@ export default class HeaderIconBack extends Component {
   onPressBack = () => {
     const { returnScreen, navigation } = this.props;
 
-    // console.log('returnScreen', returnScreen);
-
-    // if (DeviceInfo.isTablet()) {
-      returnScreen ?
-        navigation.navigate(returnScreen) :
-        navigation.goBack();
-    // } else {
-    //   navigation.goBack();
-    // }
+    returnScreen ? navigation.navigate(returnScreen) : navigation.goBack();
   }
 
   render() {

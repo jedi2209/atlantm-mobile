@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { Text, View, ActivityIndicator, StyleSheet } from 'react-native';
 
 // helpers
 import styleConst from '../style-const';
@@ -15,11 +15,19 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: verticalScale(60),
   },
+  text: {
+    fontSize: 16,
+    fontFamily: styleConst.font.regular,
+    letterSpacing: styleConst.ui.letterSpacing,
+    alignSelf: 'center',
+    marginTop: verticalScale(30),
+  },
 });
 
-const SpinnerView = () => (
+const SpinnerView = ({ text }) => (
   <View style={styles.spinnerContainer} >
     <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
+    { text ? <Text style={styles.text}>{text}</Text> : null }
   </View>
 );
 
