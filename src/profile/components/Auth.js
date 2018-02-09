@@ -85,12 +85,16 @@ export default class Auth extends Component {
 
     Keyboard.dismiss();
 
+    if (!login && !password) {
+      return Alert.alert('Ошибка заполнения формы', '\r\nНе указан логин и пароль');
+    }
+
     if (!login || login.length < 3) {
-      return Alert.alert('Введите логин');
+      return Alert.alert('Ошибка заполнения формы', '\r\nНе указан логин');
     }
 
     if (!password || password.length < 3) {
-      return Alert.alert('Введите пароль');
+      return Alert.alert('Ошибка заполнения формы', '\r\nНе указан пароль');
     }
 
     // При авторизации через zteam, включает debug режим
