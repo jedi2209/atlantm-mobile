@@ -214,8 +214,6 @@ class NewCarItemScreen extends Component {
       );
     }
 
-    // console.log('carDetails', carDetails);
-
     console.log('== NewCarItemScreen ==');
 
     const { brand, model, complectation } = carDetails;
@@ -259,7 +257,7 @@ class NewCarItemScreen extends Component {
             </Segment>
 
             {
-              tabName === 'base' ?
+              isActiveBaseTab ?
                 (
                   <View style={styles.tabContent}>
                     <View style={styles.section}>

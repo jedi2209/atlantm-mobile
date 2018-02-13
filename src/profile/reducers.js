@@ -31,6 +31,10 @@ import {
   CAR_HISTORY__FAIL,
   CAR_HISTORY_LEVEL1__SET,
   CAR_HISTORY_LEVEL2__SET,
+
+  CAR_HISTORY_DETAILS__REQUEST,
+  CAR_HISTORY_DETAILS__SUCCESS,
+  CAR_HISTORY_DETAILS__FAIL,
 } from './actionTypes';
 
 function name(state = '', action) {
@@ -310,6 +314,32 @@ function carHistorylevel2Hash(state = null, action) {
   }
 }
 
+function isFetchCarHistoryDetails(state = false, action) {
+  switch (action.type) {
+    case REHYDRATE:
+    case CAR_HISTORY_DETAILS__SUCCESS:
+    case CAR_HISTORY_DETAILS__FAIL:
+      return false;
+    case CAR_HISTORY_DETAILS__REQUEST:
+      return true;
+    default:
+      return state;
+  }
+}
+
+function carHistoryDetailsData(state = {}, action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return {};
+    case CAR_HISTORY_DETAILS__SUCCESS:
+      return action.payload;
+    case CAR_HISTORY_DETAILS__REQUEST:
+      return {};
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   name,
   phone,
@@ -331,11 +361,13 @@ export default combineReducers({
   }),
 
   carHistory: combineReducers({
+    details: carHistoryDetailsData,
     data: carHistoryData,
     level1Hash: carHistorylevel1Hash,
     level2Hash: carHistorylevel2Hash,
     meta: combineReducers({
       isFetchCarHistory,
+      isFetchCarHistoryDetails,
     }),
   }),
 

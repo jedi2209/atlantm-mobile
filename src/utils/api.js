@@ -110,6 +110,10 @@ export default {
     return this.request(`/lkk/cars/history/list/?token=${token}&vin=${vin}`, baseRequestParams);
   },
 
+  fetchCarHistoryDetails({ vin, token, workId, workDealer }) {
+    return this.request(`/lkk/cars/history/item/?token=${token}&vin=${vin}&dealer=${workDealer}&id=${workId}`, baseRequestParams);
+  },
+
   fetchNewCarByFilter({
     searchUrl,
     filterBrands,

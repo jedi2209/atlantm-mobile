@@ -13,6 +13,7 @@ import RegisterScreen from '../profile/containers/RegisterScreen';
 import BonusScreen from '../profile/bonus/containers/BonusScreen';
 import DiscountsScreen from '../profile/discounts/containers/DiscountsScreen';
 import CarHistoryScreen from '../profile/carhistory/containers/CarHistoryScreen';
+import CarHistoryDetailsScreen from '../profile/carhistory/containers/CarHistoryDetailsScreen';
 
 // contacts
 import ContactsScreen from '../contacts/containers/ContactsScreen';
@@ -171,6 +172,7 @@ const getRouter = initialRouteName => {
           BonusScreen: { screen: BonusScreen },
           DiscountsScreen: { screen: DiscountsScreen },
           CarHistoryScreen: { screen: CarHistoryScreen },
+          CarHistoryDetailsScreen: { screen: CarHistoryDetailsScreen },
         }),
         navigationOptions: {
           header: null,
