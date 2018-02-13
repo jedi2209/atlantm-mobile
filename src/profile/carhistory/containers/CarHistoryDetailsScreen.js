@@ -1,40 +1,59 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Alert } from 'react-native';
-import { StyleProvider, Container, Content, ListItem, Body, Right, Icon, Row, Col, Item, Label } from 'native-base';
+import {
+  Row,
+  Col,
+  Button,
+  Content,
+  Segment,
+  Container,
+  StyleProvider,
+} from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
 import { CAR_HISTORY_DETAILS__FAIL } from '../../actionTypes';
-import {
-  actionFetchCarHistory,
-  actionSetCarHistoryLevel1,
-  actionSetCarHistoryLevel2,
-} from '../../actions';
+import { actionFetchCarHistoryDetails } from '../../actions';
 
 // components
-import * as Animatable from 'react-native-animatable';
 import SpinnerView from '../../../core/components/SpinnerView';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
-// styles
-import stylesList from '../../../core/components/Lists/style';
-
 // helpers
-import { get, isEmpty } from 'lodash';
-import { dayMonthYear } from '../../../utils/date';
+import { get } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import numberWithGap from '../../../utils/number-with-gap';
-import { MONTH_TEXT } from '../../const';
 import { ERROR_NETWORK } from '../../../core/const';
+
+const TABS = {
+  WORKS: 'works',
+  PARTS: 'parts',
+};
 
 const styles = StyleSheet.create({
   content: {
     backgroundColor: styleConst.color.bg,
   },
-
   // section
+  section: {
+    paddingTop: styleConst.ui.horizontalGap,
+    paddingRight: styleConst.ui.horizontalGap,
+    paddingBottom: styleConst.ui.horizontalGap,
+    marginLeft: styleConst.ui.horizontalGap,
+    borderBottomWidth: styleConst.ui.borderWidth,
+    borderBottomColor: styleConst.color.border,
+  },
+  segment: {
+    marginHorizontal: styleConst.ui.horizontalGap,
+  },
+  sectionTitle: {
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontSize: 18,
+    fontFamily: styleConst.font.regular,
+    marginBottom: 10,
+  },
   sectionProp: {
     paddingRight: 5,
     marginTop: 5,
@@ -51,12 +70,39 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
     fontSize: 16,
   },
+  tabText: {
+    fontFamily: styleConst.font.regular,
+    letterSpacing: styleConst.ui.letterSpacing,
+    color: styleConst.color.greyBlueText,
+  },
+  tabTextActive: {
+    color: '#fff',
+    fontFamily: styleConst.font.regular,
+    letterSpacing: styleConst.ui.letterSpacing,
+  },
+  tabButton: {
+    borderColor: styleConst.color.greyBlue,
+    flex: 1,
+    justifyContent: 'center',
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
+  tabButtonActive: {
+    backgroundColor: styleConst.color.greyBlue,
+    borderColor: styleConst.color.greyBlue,
+    flex: 1,
+    justifyContent: 'center',
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
 });
 
 const mapStateToProps = ({ nav, profile }) => {
   return {
     nav,
-    isFetchCarHistoryDetails: profile.carHistoryDetails.meta.isFetchCarHistoryDetails,
+    auth: profile.auth,
+    details: profile.carHistory.details,
+    isFetchCarHistoryDetails: profile.carHistory.meta.isFetchCarHistoryDetails,
   };
 };
 
@@ -65,6 +111,12 @@ const mapDispatchToProps = {
 };
 
 class CarHistoryDetailsScreen extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { tabName: TABS.WORKS };
+  }
+
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
 
@@ -79,13 +131,15 @@ class CarHistoryDetailsScreen extends Component {
 
   componentDidMount() {
     const { auth, navigation, actionFetchCarHistoryDetails } = this.props;
-    const vin = get(navigation, 'state.params.car.vin');
+    const vin = get(navigation, 'state.params.vin');
     const title = get(navigation, 'state.params.title');
+    const workId = get(navigation, 'state.params.workId');
+    const workDealer = get(navigation, 'state.params.workDealer');
     const token = get(auth, 'token.id');
 
     navigation.setParams({ title });
 
-    actionFetchCarHistoryDetails({ vin, token })
+    actionFetchCarHistoryDetails({ vin, token, workId, workDealer })
       .then(action => {
         if (action.type === CAR_HISTORY_DETAILS__FAIL) {
           let message = get(action, 'payload.message', 'Произошла ошибка, попробуйте снова');
@@ -113,8 +167,102 @@ class CarHistoryDetailsScreen extends Component {
     return isActiveScreen;
   }
 
-  render() {
+  selectWorksTab = () => this.setState({ tabName: TABS.WORKS })
+  selectPartsTab = () => this.setState({ tabName: TABS.PARTS })
 
+  renderTable = ({ name, count, units, summ }, idx) => {
+    return (
+      <View key={`${name}${idx}`} style={styles.section}>
+        {name ? <Text style={styles.sectionTitle}>{name}</Text> : null}
+        {count ? this.renderItem({ prop: 'Количество', value: `${count} ${units}.` }) : null}
+        {get(summ, 'value') ? this.renderItem({ prop: 'Стоимость', value: `${numberWithGap(get(summ, 'value'))} ${get(summ, 'currency')}` }) : null}
+        {get(summ, 'sale') ? this.renderItem({ prop: 'Скидка', value: `${numberWithGap(get(summ, 'sale'))} ${get(summ, 'currency')}` }) : null}
+        {get(summ, 'total') ? this.renderItem({ prop: 'Итого', value: `${numberWithGap(get(summ, 'total'))} ${get(summ, 'currency')}` }) : null}
+      </View>
+    );
+  }
+
+  renderItem = ({ prop, value }) => (
+    <Row style={styles.sectionRow}>
+      <Col style={styles.sectionProp}>
+        <Text style={styles.sectionPropText}>{`${prop}:`}</Text>
+      </Col>
+      <Col style={styles.sectionValue}>
+        <Text style={styles.sectionValueText}>{value}</Text>
+      </Col>
+    </Row>
+  )
+
+  render() {
+    const { tabName } = this.state;
+    const isActiveWorksTab = tabName === TABS.WORKS;
+    const isActivePartsTab = tabName === TABS.PARTS;
+    const { isFetchCarHistoryDetails, details } = this.props;
+
+    console.log('== CarHistoryDetails ==');
+
+    if (isFetchCarHistoryDetails) {
+      return <SpinnerView />;
+    }
+
+    console.log('details', details);
+
+    const works = get(details, 'works');
+    const parts = get(details, 'parts');
+
+    return (
+      <StyleProvider style={getTheme()}>
+        <Container>
+          <Content style={styles.content}>
+            <Segment style={styles.segment}>
+              {
+                works ?
+                (
+                  <Button
+                    first
+                    last={!parts}
+                    active={isActiveWorksTab}
+                    onPress={this.selectWorksTab}
+                    style={isActiveWorksTab ? styles.tabButtonActive : styles.tabButton}
+                  >
+                    <Text style={isActiveWorksTab ? styles.tabTextActive : styles.tabText}>Работы</Text>
+                  </Button>
+                ) : null
+              }
+              {
+                parts ? (
+                  <Button
+                    first={!works}
+                    last
+                    active={isActivePartsTab}
+                    onPress={this.selectPartsTab}
+                    style={isActivePartsTab ? styles.tabButtonActive : styles.tabButton}
+                  >
+                    <Text style={isActivePartsTab ? styles.tabTextActive : styles.tabText}>Материалы</Text>
+                  </Button>
+                ) : null
+              }
+            </Segment>
+
+            {
+              isActiveWorksTab && works ?
+                (
+                  <View style={styles.tabContent}>
+                    {works.map((item, idx) => this.renderTable(item, idx))}
+                  </View>
+                ) : null }
+              {
+                isActivePartsTab && parts ?
+                (
+                  <View style={styles.tabContent}>
+                    {parts.map((item, idx) => this.renderTable(item, idx))}
+                  </View>
+                ) : null
+              }
+          </Content>
+        </Container>
+      </StyleProvider>
+    );
   }
 }
 

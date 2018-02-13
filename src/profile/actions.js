@@ -31,6 +31,10 @@ import {
   CAR_HISTORY__FAIL,
   CAR_HISTORY_LEVEL1__SET,
   CAR_HISTORY_LEVEL2__SET,
+
+  CAR_HISTORY_DETAILS__REQUEST,
+  CAR_HISTORY_DETAILS__SUCCESS,
+  CAR_HISTORY_DETAILS__FAIL,
 } from './actionTypes';
 
 import { DEALER__SUCCESS } from '../dealer/actionTypes';
@@ -377,6 +381,46 @@ export const actionFetchCarHistory = (props) => {
         type: CAR_HISTORY__SUCCESS,
         payload: {
           ...data,
+        },
+      });
+    } catch (e) {
+      return onError(e);
+    }
+  };
+};
+
+export const actionFetchCarHistoryDetails = (props) => {
+  return async dispatch => {
+    function onError(error) {
+      return dispatch({
+        type: CAR_HISTORY_DETAILS__FAIL,
+        payload: {
+          code: error.code,
+          message: error.message,
+        },
+      });
+    }
+
+    dispatch({
+      type: CAR_HISTORY_DETAILS__REQUEST,
+      payload: { ...props },
+    });
+
+    try {
+      const res = await API.fetchCarHistoryDetails(props);
+      const { error, data } = res;
+
+      if (get(error, 'code') !== 200) {
+        __DEV__ && console.log('error fetch car history details', res);
+        return onError(error);
+      }
+
+      const items = get(data, 'items', {});
+
+      return dispatch({
+        type: CAR_HISTORY_DETAILS__SUCCESS,
+        payload: {
+          ...items,
         },
       });
     } catch (e) {

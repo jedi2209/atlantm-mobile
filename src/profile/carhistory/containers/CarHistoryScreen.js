@@ -257,16 +257,18 @@ class CarHistoryScreen extends Component {
   }
 
   renderLevel3 = (works) => {
-    const { auth, navigation } = this.props;
+    const { navigation } = this.props;
     const vin = get(navigation, 'state.params.car.vin');
-    const token = get(auth, 'token.id');
 
     return works.map((work, idx) => {
+      const workId = get(work, 'document.number');
+      const workDealer = get(work, 'dealer.id');
       const isLast = (works.length - 1) === idx;
       const onPressHandler = () => navigation.navigate('CarHistoryDetailsScreen', {
         vin,
-        token,
-        title: `${get(work, 'document.name')} #${get(work, 'document.number')}`,
+        workId,
+        workDealer,
+        title: `${get(work, 'document.name')} #${workId}`,
       });
 
       return this.renderItemHeader({
@@ -296,15 +298,16 @@ class CarHistoryScreen extends Component {
     const works = get(summ, 'works');
     const parts = get(summ, 'parts');
     const total = get(summ, 'total');
+    const currency = get(summ, 'currency');
 
     return (
       <Body style={styles.body}>
         { date ? <Text style={styles.date}>{dayMonthYear(date)}</Text> : null }
         { document ? this.renderLevel3Item({ prop: document.name, value: `#${document.number}` }) : null}
         { master ? this.renderLevel3Item({ prop: 'Мастер', value: master }) : null}
-        { works ? this.renderLevel3Item({ prop: 'Ст-ть работ', value: numberWithGap(works) }) : null}
-        { parts ? this.renderLevel3Item({ prop: 'Ст-ть запчастей', value: numberWithGap(parts) }) : null}
-        { total ? this.renderLevel3Item({ prop: 'Всего', value: numberWithGap(total) }) : null}
+        { works ? this.renderLevel3Item({ prop: 'Ст-ть работ', value: `${numberWithGap(works)} ${currency}` }) : null}
+        { parts ? this.renderLevel3Item({ prop: 'Ст-ть запчастей', value: `${numberWithGap(parts)} ${currency}` }) : null}
+        { total ? this.renderLevel3Item({ prop: 'Всего', value: `${numberWithGap(total)} ${currency}` }) : null}
       </Body>
     );
   }
@@ -357,7 +360,6 @@ class CarHistoryScreen extends Component {
     } = this.props;
 
     const car = get(navigation, 'state.params.car');
-    console.log('car', car);
 
     console.log('== CarHistory ==');
 
