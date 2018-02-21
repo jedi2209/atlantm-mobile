@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Container, Content, Text, List, ListItem, Body, Right, StyleProvider } from 'native-base';
 
 // components
 import Communications from 'react-native-communications';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import HeaderLogo from '../../../core/components/HeaderLogo/HeaderLogo';
 
 // redux
 import { connect } from 'react-redux';
@@ -41,18 +42,7 @@ const mapStateToProps = ({ dealer }) => {
 
 class AboutHoldingScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: (
-      <Image
-        resizeMode="cover"
-        style={{
-          width: 150,
-          height: 36,
-          resizeMode: 'contain',
-          alignSelf: 'center',
-        }}
-        source={require('../assets/company_logo.png')}
-      />
-    ),
+    headerTitle: <HeaderLogo />,
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,

@@ -196,7 +196,7 @@ class Sidebar extends Component {
           <Image
             resizeMode="cover"
             style={styles.logo}
-            source={require('../../contacts/aboutholding/assets/company_logo.png')}
+            source={require('../../core/components/HeaderLogo/assets/company_logo.png')}
           />
         </View>
 
