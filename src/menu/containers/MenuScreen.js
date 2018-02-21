@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Container, Text, Grid, Col, Row } from 'native-base';
 
+// components
+import HeaderLogo from '../../core/components/HeaderLogo/HeaderLogo';
+
 // helpers
 import styleConst from '../../core/style-const';
 import { scale, verticalScale } from '../../utils/scale';
@@ -39,7 +42,7 @@ const styles = StyleSheet.create({
 
 export default class MenuScreen extends Component {
   static navigationOptions = () => ({
-    headerTitle: 'Атлант-М',
+    headerTitle: <HeaderLogo />,
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: null,
