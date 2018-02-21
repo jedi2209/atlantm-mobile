@@ -175,9 +175,9 @@ class ProfileScreen extends Component {
   }
 
   componentDidMount () {
-    const { auth } = this.props;
+    const { auth, navigation } = this.props;
 
-    this.props.navigation.setParams({
+    navigation.setParams({
       isAuth: get(auth, 'token.id'),
       onReload: auth.token ? this.onReload : null,
     });
@@ -321,6 +321,7 @@ class ProfileScreen extends Component {
               <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
 
               <ProfileForm
+                navigation={navigation}
                 auth={auth}
                 carSection={true}
                 name={name}
