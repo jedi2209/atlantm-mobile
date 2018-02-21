@@ -90,6 +90,12 @@ export default StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
     color: '#000',
   },
+  orderPriceDefaultText: {
+    textDecorationLine: 'line-through',
+  },
+  orderPriceSpecialText: {
+    color: styleConst.color.red,
+  },
   footer: {
     height: styleConst.ui.footerHeight,
     backgroundColor: '#fff',

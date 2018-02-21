@@ -123,6 +123,7 @@ export default {
     filterDrive,
     filterEngineType,
     filterPrice,
+    filterPriceSpecial,
   }) {
     let url = searchUrl;
     let isAmp = false;
@@ -173,6 +174,10 @@ export default {
     if (filterPrice) {
       url += `${setParamDivider()}price_from=${filterPrice.minPrice}&price_to=${filterPrice.maxPrice}`;
       if (!isAmp) isAmp = true;
+    }
+
+    if (filterPriceSpecial) {
+      url += `${setParamDivider()}price-special=${Number(filterPriceSpecial)}`;
     }
 
     __DEV__ && console.log('API fetchNewCarByFilter url', url);

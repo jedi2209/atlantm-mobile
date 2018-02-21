@@ -34,10 +34,20 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: styleConst.font.medium,
   },
+  priceContainer: {
+    flexDirection: 'row',
+    marginBottom: 5,
+  },
   price: {
+    flex: 1,
     fontSize: 14,
     fontFamily: styleConst.font.regular,
-    marginBottom: 5,
+  },
+  priceDefault: {
+    textDecorationLine: 'line-through',
+  },
+  priceSpecial: {
+    color: styleConst.color.red,
   },
   info: {
     marginTop: -4,
@@ -85,6 +95,26 @@ export default class CarListItem extends Component {
     return (car.id.api !== nextProps.car.id.api);
   }
 
+  renderPrice = ({ car, prices }) => {
+    const isSale = car.sale === true;
+    const currency = get(prices, 'curr.name');
+    const priceDefault = numberWithGap(get(car, 'price.app'));
+    const priceSpecial = numberWithGap(get(car, 'price.adv'));
+
+    return (
+      <View style={styles.priceContainer}>
+        <Text style={[styles.price, isSale ? styles.priceDefault : '']}>
+          {`${priceDefault} ${currency}`}
+        </Text>
+        {
+          isSale ?
+            <Text style={[styles.price, styles.priceSpecial]}>{`${priceSpecial} ${currency}`}</Text> :
+            null
+        }
+      </View>
+    );
+  }
+
   render() {
     const { car, prices } = this.props;
     const modelName = get(car, 'model.name', '');
@@ -116,7 +146,8 @@ export default class CarListItem extends Component {
               </Text>
             </View>
 
-            <Text style={styles.price}>{`${numberWithGap(get(car, 'price.app'))} ${get(prices, 'curr.name')}`}</Text>
+            {this.renderPrice({ car, prices })}
+
             <View style={styles.extra}>
               {
                 (get(car, 'engine.type') || engineVolume) ?

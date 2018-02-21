@@ -112,7 +112,9 @@ class NewCarItemScreen extends Component {
       car: {
         brand: get(carDetails, 'brand.name'),
         model: carDetails.model,
+        isSale: carDetails.sale === true,
         price: get(carDetails, 'price.app'),
+        priceSpecial: get(carDetails, 'price.adv'),
         complectation: get(carDetails, 'complectation.name'),
       },
       currency: filterData.prices.curr.name,
@@ -195,6 +197,28 @@ class NewCarItemScreen extends Component {
             );
           })
         }
+      </View>
+    );
+  }
+
+  renderPrice = ({ carDetails, filterData }) => {
+    const isSale = carDetails.sale === true;
+    const currency = get(filterData, 'prices.curr.name');
+    const priceDefault = numberWithGap(get(carDetails, 'price.app'));
+    const priceSpecial = numberWithGap(get(carDetails, 'price.adv'));
+
+    return (
+      <View style={styles.orderPriceContainer}>
+        {
+          isSale ?
+            <Text style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
+              {`${priceSpecial} ${currency}`}
+            </Text> :
+            null
+        }
+        <Text style={[styles.orderPriceText, isSale ? styles.orderPriceDefaultText : '']}>
+          {`${priceDefault} ${currency}`}
+        </Text>
       </View>
     );
   }
@@ -360,9 +384,7 @@ class NewCarItemScreen extends Component {
           </Content>
 
           <Footer style={styles.footer}>
-            <View style={styles.orderPriceContainer}>
-              <Text style={styles.orderPriceText}>{`${numberWithGap(carDetails.price.app)} ${filterData.prices.curr.name}`}</Text>
-            </View>
+            {this.renderPrice({ carDetails, filterData })}
             <Button
               onPress={this.onPressOrder}
               full

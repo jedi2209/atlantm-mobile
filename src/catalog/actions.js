@@ -35,6 +35,7 @@ import {
   NEW_CAR_FILTER_PRICE__SELECT,
   NEW_CAR_FILTER_PRICE__SHOW,
   NEW_CAR_FILTER_PRICE__HIDE,
+  NEW_CAR_FILTER_PRICE_SPECIAL__SET,
   NEW_CAR_DETAILS__REQUEST,
   NEW_CAR_DETAILS__SUCCESS,
   NEW_CAR_DETAILS__FAIL,
@@ -423,6 +424,15 @@ export const actionSelectNewCarFilterBrands = (brands) => {
     return dispatch({
       type: NEW_CAR_FILTER_BRANDS__SELECT,
       payload: brands,
+    });
+  };
+};
+
+export const actionSetNewCarFilterPriceSpecial = (priceSpecial) => {
+  return dispatch => {
+    return dispatch({
+      type: NEW_CAR_FILTER_PRICE_SPECIAL__SET,
+      payload: priceSpecial,
     });
   };
 };
