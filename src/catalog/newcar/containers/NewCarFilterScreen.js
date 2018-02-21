@@ -16,6 +16,7 @@ import {
   Right,
   Footer,
   Button,
+  Switch,
   Content,
   ListItem,
   Container,
@@ -30,6 +31,7 @@ import {
   actionShowNewCarFilterPrice,
   actionHideNewCarFilterPrice,
   actionSelectNewCarFilterPrice,
+  actionSetNewCarFilterPriceSpecial,
 } from '../../actions';
 
 // components
@@ -104,6 +106,9 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     zIndex: 1,
   },
+  labelPriceSpecial: {
+    color: styleConst.color.red,
+  },
 });
 
 const mapStateToProps = ({ catalog, dealer, nav }) => {
@@ -123,6 +128,7 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
     filterDrive: catalog.newCar.filterDrive,
     filterEngineType: catalog.newCar.filterEngineType,
     filterPrice: catalog.newCar.filterPrice,
+    filterPriceSpecial: catalog.newCar.filterPriceSpecial,
 
     city: catalog.newCar.city,
     region: catalog.newCar.region,
@@ -139,6 +145,7 @@ const mapDispatchToProps = {
   actionShowNewCarFilterPrice,
   actionHideNewCarFilterPrice,
   actionSelectNewCarFilterPrice,
+  actionSetNewCarFilterPriceSpecial,
 };
 
 class NewCarFilterScreen extends Component {
@@ -171,6 +178,7 @@ class NewCarFilterScreen extends Component {
       filterDrive,
       filterEngineType,
       filterPrice,
+      filterPriceSpecial,
 
       // обновление экрана после выбора фильтров
       city,
@@ -196,6 +204,7 @@ class NewCarFilterScreen extends Component {
         filterDrive,
         filterEngineType,
         filterPrice,
+        filterPriceSpecial,
       });
     }
   }
@@ -255,6 +264,10 @@ class NewCarFilterScreen extends Component {
     }
   }
 
+  onPressFilterPriceSpecial = (isSet) => {
+    this.props.actionSetNewCarFilterPriceSpecial(isSet);
+  }
+
   onPressBody = () => this.props.navigation.navigate('NewCarFilterBodyScreen')
 
   onPressGearbox = () => this.props.navigation.navigate('NewCarFilterGearboxScreen')
@@ -286,6 +299,7 @@ class NewCarFilterScreen extends Component {
       filterDrive,
       filterEngineType,
       filterPrice,
+      filterPriceSpecial,
       filterData,
     } = this.props;
     const filterDataCount = get(filterData, 'total.count');
@@ -300,7 +314,7 @@ class NewCarFilterScreen extends Component {
       filterEngineType,
     ].some(filter => filter.length !== 0);
 
-    if (filterPrice) {
+    if (filterPrice || filterPriceSpecial) {
       isItemsCount = true;
     }
 
@@ -318,6 +332,7 @@ class NewCarFilterScreen extends Component {
       filterDrive,
       filterEngineType,
       filterPrice,
+      filterPriceSpecial,
       filterData,
       navigation,
       dealerSelected,
@@ -486,7 +501,7 @@ class NewCarFilterScreen extends Component {
             </View>
 
             <View style={stylesList.listItemContainer}>
-              <ListItem last style={stylesList.listItemPressable} onPress={this.onPressDrive}>
+              <ListItem style={stylesList.listItemPressable} onPress={this.onPressDrive}>
                 <Body style={styles.body}>
                   <Label style={stylesList.label}>Привод</Label>
                 </Body>
@@ -498,6 +513,17 @@ class NewCarFilterScreen extends Component {
                       </Text>
                   }
                   <Icon name="arrow-forward" style={stylesList.iconArrow} />
+                </Right>
+              </ListItem>
+            </View>
+
+            <View style={stylesList.listItemContainer}>
+              <ListItem style={stylesList.listItem} last>
+                <Body>
+                  <Label style={[stylesList.label, styles.labelPriceSpecial]}>Спец.предложение</Label>
+                </Body>
+                <Right>
+                  <Switch onValueChange={this.onPressFilterPriceSpecial} value={filterPriceSpecial} />
                 </Right>
               </ListItem>
             </View>

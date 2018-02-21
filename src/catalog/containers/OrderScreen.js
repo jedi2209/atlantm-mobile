@@ -184,8 +184,9 @@ class OrderScreen extends Component {
 
     const car = get(navigation, 'state.params.car');
     const currency = get(navigation, 'state.params.currency');
-    const { brand, model, price, complectation } = car;
+    const { brand, model, isSale, price, priceSpecial, complectation } = car;
     const processedPrice = `${numberWithGap(price)} ${currency}`;
+    const processedPriceSpecial = `${numberWithGap(priceSpecial)} ${currency}`;
 
     console.log('== Order ==');
 
@@ -201,7 +202,9 @@ class OrderScreen extends Component {
               <CarOrderList
                 brand={brand}
                 model={model}
+                isSale={isSale}
                 price={processedPrice}
+                priceSpecial={processedPriceSpecial}
                 complectation={complectation}
               />
 

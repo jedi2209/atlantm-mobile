@@ -35,6 +35,7 @@ import {
   NEW_CAR_FILTER_PRICE__SELECT,
   NEW_CAR_FILTER_PRICE__SHOW,
   NEW_CAR_FILTER_PRICE__HIDE,
+  NEW_CAR_FILTER_PRICE_SPECIAL__SET,
 
   NEW_CAR_DETAILS__REQUEST,
   NEW_CAR_DETAILS__SUCCESS,
@@ -393,6 +394,17 @@ const newCarFilterModels = (state = [], action) => {
   }
 };
 
+const newCarFilterPriceSpecial = (state = false, action) => {
+  switch (action.type) {
+    case NEW_CAR_CITY__SELECT:
+      return false;
+    case NEW_CAR_FILTER_PRICE_SPECIAL__SET:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 const newCarFilterBody = (state = [], action) => {
   switch (action.type) {
     case NEW_CAR_CITY__SELECT:
@@ -470,6 +482,7 @@ const needFetchFilterData = (state = false, action) => {
     case NEW_CAR_FILTER_ENGINE_TYPE__SELECT:
     case NEW_CAR_FILTER_DRIVE__SELECT:
     case NEW_CAR_FILTER_PRICE__SELECT:
+    case NEW_CAR_FILTER_PRICE_SPECIAL__SET:
       return true;
     case NEW_CAR_FILTER_DATA__REQUEST:
     case NEW_CAR_BY_FILTER__REQUEST:
@@ -706,6 +719,7 @@ export default combineReducers({
     filterDrive: newCarFilterDrive,
     filterEngineType: newCarFilterEngineType,
     filterPrice: newCarFilterPrice,
+    filterPriceSpecial: newCarFilterPriceSpecial,
     filterData: newCarFilterData,
     items: newCarByFilter,
     city: newCarCity,
