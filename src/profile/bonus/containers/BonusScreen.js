@@ -21,21 +21,7 @@ import { dayMonthYear } from '../../../utils/date';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
-
-const MONTH_TEXT = {
-  1: 'Январь',
-  2: 'Февраль',
-  3: 'Март',
-  4: 'Апрель',
-  5: 'Май',
-  6: 'Июнь',
-  7: 'Июль',
-  8: 'Август',
-  9: 'Сентябрь',
-  10: 'Октябрь',
-  11: 'Ноябрь',
-  12: 'Декабрь',
-};
+import { MONTH_TEXT } from '../../const';
 
 const styles = StyleSheet.create({
   content: {
