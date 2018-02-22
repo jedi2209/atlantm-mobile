@@ -16,7 +16,7 @@ export default class HeaderLogo extends PureComponent {
       <Image
         resizeMode="cover"
         style={styles.logo}
-        source={require('./assets/company_logo.png')}
+        source={require('./assets/company_logo_with_background.png')}
       />
     );
   }
