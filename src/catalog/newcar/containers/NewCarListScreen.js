@@ -41,6 +41,7 @@ const mapStateToProps = ({ dealer, nav, catalog }) => {
     filterDrive: catalog.newCar.filterDrive,
     filterEngineType: catalog.newCar.filterEngineType,
     filterPrice: catalog.newCar.filterPrice,
+    filterPriceSpecial: catalog.newCar.filterPriceSpecial,
   };
 };
 
@@ -65,9 +66,6 @@ class NewCarListScreen extends Component {
 
   componentDidUpdate() {
     const { navigation, items } = this.props;
-
-    console.log('newCarList update');
-    console.log('items.total', items.total);
 
     if (items.total) {
       return setTimeout(() => {
@@ -100,6 +98,7 @@ class NewCarListScreen extends Component {
       filterDrive,
       filterEngineType,
       filterPrice,
+      filterPriceSpecial,
     } = this.props;
 
     const onResult = () => {
@@ -118,6 +117,7 @@ class NewCarListScreen extends Component {
         filterDrive,
         filterEngineType,
         filterPrice,
+        filterPriceSpecial,
       })
       .then(onResult);
     }

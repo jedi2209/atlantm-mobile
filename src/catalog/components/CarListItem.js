@@ -98,8 +98,8 @@ export default class CarListItem extends Component {
   renderPrice = ({ car, prices }) => {
     const isSale = car.sale === true;
     const currency = get(prices, 'curr.name');
-    const priceDefault = numberWithGap(get(car, 'price.app'));
-    const priceSpecial = numberWithGap(get(car, 'price.adv'));
+    const priceDefault = numberWithGap(get(car, 'price.app.standart'));
+    const priceSpecial = numberWithGap(get(car, 'price.app.sale'));
 
     return (
       <View style={styles.priceContainer}>

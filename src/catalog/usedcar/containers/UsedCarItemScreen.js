@@ -112,7 +112,7 @@ class UserCarItemScreen extends Component {
       car: {
         brand: carDetails.brand.name,
         model: carDetails.model,
-        price: carDetails.price.app,
+        price: get(carDetails, 'price.app.standart'),
       },
       currency: prices.curr.name,
       dealerId: carDetails.dealer.id,
@@ -356,7 +356,7 @@ class UserCarItemScreen extends Component {
 
           <Footer style={styles.footer}>
             <View style={styles.orderPriceContainer}>
-              <Text style={styles.orderPriceText}>{`${numberWithGap(carDetails.price.app)} ${prices.curr.name}`}</Text>
+              <Text style={styles.orderPriceText}>{`${numberWithGap(get(carDetails, 'price.app.standart'))} ${prices.curr.name}`}</Text>
             </View>
             <Button
               onPress={this.onPressOrder}

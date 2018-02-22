@@ -113,8 +113,8 @@ class NewCarItemScreen extends Component {
         brand: get(carDetails, 'brand.name'),
         model: carDetails.model,
         isSale: carDetails.sale === true,
-        price: get(carDetails, 'price.app'),
-        priceSpecial: get(carDetails, 'price.adv'),
+        price: get(carDetails, 'price.app.standart'),
+        priceSpecial: get(carDetails, 'price.app.sale'),
         complectation: get(carDetails, 'complectation.name'),
       },
       currency: filterData.prices.curr.name,
@@ -204,8 +204,8 @@ class NewCarItemScreen extends Component {
   renderPrice = ({ carDetails, filterData }) => {
     const isSale = carDetails.sale === true;
     const currency = get(filterData, 'prices.curr.name');
-    const priceDefault = numberWithGap(get(carDetails, 'price.app'));
-    const priceSpecial = numberWithGap(get(carDetails, 'price.adv'));
+    const priceDefault = numberWithGap(get(carDetails, 'price.app.standart'));
+    const priceSpecial = numberWithGap(get(carDetails, 'price.app.sale'));
 
     return (
       <View style={styles.orderPriceContainer}>
