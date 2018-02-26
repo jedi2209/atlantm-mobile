@@ -7,7 +7,7 @@ import rootReducer from './reducers';
 
 const middleware = [
     thunkMiddleware,
-    __DEV__ && logger,
+    // __DEV__ && logger,
 ].filter(Boolean);
 
 export const store = createStore(
