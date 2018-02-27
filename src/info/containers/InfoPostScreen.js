@@ -6,7 +6,7 @@ import {
   Image,
   NetInfo,
   Linking,
-  // Platform,
+  SafeAreaView,
   Dimensions,
   StyleSheet,
   ActivityIndicator,
@@ -44,7 +44,8 @@ const IMAGE_HEIGHT = isTablet ? 220 : 170;
 const buttonIconSize = 28;
 
 const styles = StyleSheet.create({
-  content: {
+  container: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
   },
   spinner: {
@@ -283,9 +284,8 @@ class InfoPostScreen extends Component {
     console.log('== InfoPost ==', imageUrl);
 
     return (
-      <Container>
+      <SafeAreaView style={styles.container}>
         <Content style={styles.content}>
-
         <Spinner visible={isCallMeRequest} color={styleConst.color.blue} />
 
           {
@@ -341,7 +341,7 @@ class InfoPostScreen extends Component {
             </Button>
           </FooterTab>
         </Footer>
-      </Container>
+      </SafeAreaView>
     );
   }
 }

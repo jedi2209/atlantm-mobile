@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Container, Text, Grid, Col, Row } from 'native-base';
 
 // components
@@ -66,7 +66,8 @@ export default class MenuScreen extends Component {
     console.log('== Menu ==');
 
     return (
-      <Container style={styles.container} >
+      <Container style={styles.container}>
+        <SafeAreaView style={{ flex: 1 }}>
         <Grid style={styles.menu} >
           <Row>
             <Col>
@@ -173,6 +174,7 @@ export default class MenuScreen extends Component {
             </Col>
           </Row>
         </Grid>
+        </SafeAreaView>
       </Container>
     );
   }

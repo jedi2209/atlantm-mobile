@@ -4,6 +4,7 @@ import {
   Alert,
   FlatList,
   StyleSheet,
+  SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
 import PropTypes from 'prop-types';
@@ -181,7 +182,7 @@ class InfoListScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
           <FlatList
             ListHeaderComponent={this.renderHeaderComponent}
             data={list}
@@ -193,7 +194,7 @@ class InfoListScreen extends Component {
             renderItem={this.renderItem}
             keyExtractor={item => item.id}
           />
-        </View>
+        </SafeAreaView>
       </StyleProvider>
     );
   }
