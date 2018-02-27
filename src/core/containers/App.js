@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, SafeAreaView } from 'react-native';
 
 // redux
 import { connect } from 'react-redux';
@@ -147,8 +147,9 @@ class App extends Component {
       );
     }
 
-    return <Router onNavigationStateChange={this.onNavigationStateChange}
-    />;
+    return (
+        <Router onNavigationStateChange={this.onNavigationStateChange}/>
+    );
   }
 }
 
