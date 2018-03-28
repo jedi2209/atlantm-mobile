@@ -282,6 +282,7 @@ function carHistoryData(state = {}, action) {
     case CAR_HISTORY__SUCCESS:
       return action.payload;
     case LOGOUT:
+    case CAR_HISTORY__REQUEST:
       return {};
     default:
       return state;
