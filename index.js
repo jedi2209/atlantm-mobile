@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import { AppRegistry } from 'react-native';
-
-// component
-import Wrapper from './src/core/containers/Wrapper';
-
+import React from 'react';
+import { AppRegistry, YellowBox } from 'react-native';
 import { Sentry } from 'react-native-sentry';
 
-Sentry.config("https://XXXX:4df609d533fd4ce3be4fa721e6583c87@sentry.io/219899").install();
+YellowBox.ignoreWarnings([
+  'Remote debugger',
+  'Warning: componentWillMount is deprecated',
+  'Warning: componentWillReceiveProps is deprecated',
+]);
 
-class AtlantmApplication extends Component {
-  render() {
-    return <Wrapper />;
-  }
-}
+import Wrapper from './src/core/containers/Wrapper';
+
+Sentry
+  .config('https://XXXX:4df609d533fd4ce3be4fa721e6583c87@sentry.io/219899')
+  .install();
+
+const AtlantmApplication = () => <Wrapper />;
 
 AppRegistry.registerComponent('atlantm', () => AtlantmApplication);
-
-console.ignoredYellowBox = ['Remote debugger'];
