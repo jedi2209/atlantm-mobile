@@ -205,8 +205,6 @@ class CarHistoryDetailsScreen extends Component {
       return <SpinnerView />;
     }
 
-    console.log('details', details);
-
     const works = get(details, 'works');
     const parts = get(details, 'parts');
 
