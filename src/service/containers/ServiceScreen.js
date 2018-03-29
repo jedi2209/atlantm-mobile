@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Alert, NetInfo } from 'react-native';
-import { Container, Content, List, StyleProvider } from 'native-base';
+import { SafeAreaView, StyleSheet, View, Alert, NetInfo } from 'react-native';
+import { Content, List, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -12,7 +12,7 @@ import { carFill, nameFill, phoneFill, emailFill } from '../../profile/actions';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DeviceInfo from 'react-native-device-info';
 import ServiceForm from '../../service/components/ServiceForm';
-import ServiceButton from '../../service/components/ServiceButton';
+import FooterButton from '../../core/components/FooterButton';
 import ProfileForm from '../../profile/components/ProfileForm';
 import ListItemHeader from '../../profile/components/ListItemHeader';
 import DealerItemList from '../../core/components/DealerItemList';
@@ -26,7 +26,8 @@ import stylesHeader from '../../core/components/Header/style';
 import { SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL } from '../actionTypes';
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
     paddingBottom: 100,
   },
@@ -167,8 +168,8 @@ class ServiceScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content} >
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <List style={styles.list}>
               <Spinner visible={isOrderServiceRequest} color={styleConst.color.blue} />
 
@@ -203,8 +204,12 @@ class ServiceScreen extends Component {
               </View>
             </List>
           </Content>
-          <ServiceButton onPress={this.onPressOrder}/>
-        </Container>
+          <FooterButton
+            text="ОТПРАВИТЬ"
+            arrow={true}
+            onPressButton={this.onPressOrder}
+          />
+        </SafeAreaView>
       </StyleProvider>
     );
   }

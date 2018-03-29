@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Image, View, Alert, NetInfo, StyleSheet, Platform, Linking } from 'react-native';
+import { SafeAreaView, Image, View, Alert, NetInfo, StyleSheet, Platform, Linking } from 'react-native';
 import {
-  Container,
   Content,
   Text,
   StyleProvider,
@@ -34,9 +33,10 @@ import stylesHeader from '../../core/components/Header/style';
 import stylesList from '../../core/components/Lists/style';
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
-  }
+  },
 });
 
 const mapStateToProps = ({ dealer, profile, contacts, nav }) => {
@@ -162,7 +162,7 @@ class ContactsScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
+        <SafeAreaView style={styles.safearea}>
           <Content style={styles.content} >
             <DealerItemList
               navigation={navigation}
@@ -379,7 +379,7 @@ class ContactsScreen extends Component {
             </List>
             <InfoLine text={this.getRateAppInfoText()} />
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

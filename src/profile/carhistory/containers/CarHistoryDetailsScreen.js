@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Alert } from 'react-native';
-import {
-  Row,
-  Col,
-  Button,
-  Content,
-  Segment,
-  Container,
-  StyleProvider,
-} from 'native-base';
+import { SafeAreaView, StyleSheet, View, Text, Alert } from 'react-native';
+import { Row, Col, Button, Content, Segment, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -33,7 +25,8 @@ const TABS = {
 };
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
   },
   // section
@@ -210,8 +203,8 @@ class CarHistoryDetailsScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <Segment style={styles.segment}>
               {
                 works ?
@@ -258,7 +251,7 @@ class CarHistoryDetailsScreen extends Component {
                 ) : null
               }
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

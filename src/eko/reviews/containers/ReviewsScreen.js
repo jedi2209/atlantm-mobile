@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { SafeAreaView, View, StyleSheet } from 'react-native';
 import { StyleProvider } from 'native-base';
 
 // redux
@@ -30,8 +30,8 @@ import { substruct10Years } from '../../../utils/date';
 
 const styles = StyleSheet.create({
   content: {
-    backgroundColor: styleConst.color.bg,
     flex: 1,
+    backgroundColor: styleConst.color.bg,
   },
 });
 
@@ -122,9 +122,6 @@ class ReviewsScreen extends Component {
       actionSelectFilterDatePeriod(REVIEWS_FILTER_DATE_PERIOD__ALL);
     }
 
-    console.log('filterRatingFrom', filterRatingFrom);
-    console.log('filterRatingTo', filterRatingTo);
-
     if (!filterRatingFrom) {
       actionSelectFilterRatingFrom(1);
       actionSelectFilterRatingTo(5);
@@ -158,7 +155,7 @@ class ReviewsScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <View style={styles.content}>
+        <SafeAreaView style={styles.content}>
           <DealerItemList
             navigation={navigation}
             city={dealerSelected.city}
@@ -180,7 +177,7 @@ class ReviewsScreen extends Component {
             onPressDate={this.onPressDate}
             onPressAddReview={this.onPressAddReview}
           />
-        </View>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

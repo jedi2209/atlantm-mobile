@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
+  SafeAreaView,
   ActivityIndicator,
   TouchableHighlight,
 } from 'react-native';
@@ -14,7 +15,6 @@ import {
   Button,
   Content,
   Segment,
-  Container,
   StyleProvider,
 } from 'native-base';
 
@@ -133,20 +133,18 @@ class UserCarItemScreen extends Component {
 
     if (!carDetails || isFetchingCarDetails) {
       return (
-        <View style={styles.spinnerContainer} >
+        <SafeAreaView style={styles.spinnerContainer} >
           <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
-        </View>
+        </SafeAreaView>
       );
     }
-
-    // console.log('car', car);
 
     console.log('== UsedCarItemScreen ==');
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
 
             <View style={styles.gallery}>
               <View style={styles.titleContainer}>
@@ -366,7 +364,7 @@ class UserCarItemScreen extends Component {
               <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
             </Button>
           </Footer>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

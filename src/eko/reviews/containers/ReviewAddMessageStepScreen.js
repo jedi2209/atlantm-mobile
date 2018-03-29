@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Container, Content, StyleProvider } from 'native-base';
+import { SafeAreaView, View, StyleSheet } from 'react-native';
+import { Content, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -21,7 +21,8 @@ import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
   },
 });
@@ -83,8 +84,8 @@ class ReviewAddMessageStepScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <HeaderSubtitle content={dealerSelected.name} isBig={true} />
             <ReviewAddMessageForm
               messagePlus={messagePlus}
@@ -99,7 +100,7 @@ class ReviewAddMessageStepScreen extends Component {
             arrow={true}
             onPressButton={this.onPressButton}
           />
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

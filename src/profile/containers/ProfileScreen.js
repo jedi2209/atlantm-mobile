@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Alert, StyleSheet, Keyboard, Text, Platform } from 'react-native';
-import { Container, Content, List, StyleProvider, Button, Icon } from 'native-base';
+import { SafeAreaView, View, Alert, StyleSheet, Keyboard, Text, Platform } from 'react-native';
+import { Content, List, StyleProvider, Button, Icon } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -36,7 +36,8 @@ import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
   },
   button: {
@@ -278,8 +279,8 @@ class ProfileScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content} enableResetScrollToCoords={false} keyboardShouldPersistTaps={Platform.OS === 'android' ? 'always' : 'never'}>
+        <SafeAreaView style={styles.safearea}>
+          <Content enableResetScrollToCoords={false} keyboardShouldPersistTaps={Platform.OS === 'android' ? 'always' : 'never'}>
             <List style={styles.list}>
               {
                 !auth.token ?
@@ -354,7 +355,7 @@ class ProfileScreen extends Component {
                 ) : null
             }
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

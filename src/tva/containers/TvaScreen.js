@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Alert, StyleSheet, Platform, Linking } from 'react-native';
+import { SafeAreaView, View, Alert, StyleSheet, Platform, Linking } from 'react-native';
 import {
   Body,
   Right,
@@ -10,7 +10,6 @@ import {
   Switch,
   Content,
   ListItem,
-  Container,
   StyleProvider,
 } from 'native-base';
 
@@ -40,7 +39,7 @@ import stylesHeader from '../../core/components/Header/style';
 import { TVA__SUCCESS, TVA__FAIL } from '../actionTypes';
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
     backgroundColor: styleConst.color.bg,
     flex: 1,
     paddingBottom: 100,
@@ -241,8 +240,8 @@ class TvaScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
 
             <Spinner visible={isTvaRequest} color={styleConst.color.blue} />
 
@@ -263,7 +262,7 @@ class TvaScreen extends Component {
             arrow={true}
             onPressButton={() => this.onPressButton()}
           />
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

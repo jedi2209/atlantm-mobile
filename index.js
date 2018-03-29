@@ -6,6 +6,10 @@ YellowBox.ignoreWarnings([
   'Remote debugger',
   'Warning: componentWillMount is deprecated',
   'Warning: componentWillReceiveProps is deprecated',
+  'Module AIRGoogleMapManager requires main queue setup since it overrides',
+  'Module RCTImageLoader requires main queue setup since it overrides',
+  'Module RNFetchBlob requires main queue setup since it overrides',
+  'Module ImageCropPicker requires main queue setup since it overrides',
 ]);
 
 import Wrapper from './src/core/containers/Wrapper';

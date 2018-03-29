@@ -1,21 +1,11 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Image,
-  View,
-} from 'react-native';
-import PropTypes from 'prop-types';
-import {
-  Container,
-  Content,
-  Text,
-} from 'native-base';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
+import { Content, Text } from 'native-base';
 
 import { connect } from 'react-redux';
 
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import styleConst from '../../../core/style-const';
-import { scale } from '../../../utils/scale';
 import stylesHeader from '../../../core/components/Header/style';
 
 const styles = StyleSheet.create({
@@ -45,11 +35,11 @@ class ReferenceScreen extends Component {
 
   render() {
     return (
-      <Container>
+      <SafeAreaView>
         <Content>
           <Text>Контакты справочных служб</Text>
         </Content>
-      </Container>
+      </SafeAreaView>
     );
   }
 }

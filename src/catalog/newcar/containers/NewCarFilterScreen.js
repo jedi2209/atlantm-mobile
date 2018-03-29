@@ -6,6 +6,7 @@ import {
   Image,
   Alert,
   StyleSheet,
+  SafeAreaView,
   ActivityIndicator,
   TouchableHighlight,
 } from 'react-native';
@@ -19,7 +20,6 @@ import {
   Switch,
   Content,
   ListItem,
-  Container,
   StyleProvider,
 } from 'native-base';
 
@@ -55,7 +55,7 @@ import { TEXT_EMPTY_CAR_LIST } from '../../constants';
 
 const FOOTER_HEIGHT = 50;
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
     backgroundColor: styleConst.color.bg,
     flex: 1,
     paddingBottom: 100,
@@ -373,9 +373,8 @@ class NewCarFilterScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
-
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <CityItemList
               navigation={navigation}
               cityName={city.name}
@@ -549,7 +548,7 @@ class NewCarFilterScreen extends Component {
               }
             </Button>
           </Footer>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

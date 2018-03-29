@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Alert, StyleSheet, View, Text, Platform } from 'react-native';
-import { Container, Content, List, StyleProvider, Button, Icon } from 'native-base';
+import { SafeAreaView, Alert, StyleSheet, View, Text, Platform } from 'react-native';
+import { Content, List, StyleProvider, Button, Icon } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -30,7 +30,8 @@ import { ERROR_NETWORK } from '../../core/const';
 import stylesHeader from '../../core/components/Header/style';
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
   },
   textContainer: {
@@ -238,8 +239,8 @@ class RegisterScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content} enableResetScrollToCoords={false}>
+        <SafeAreaView style={styles.safearea}>
+          <Content enableResetScrollToCoords={false}>
             <Spinner visible={isRegisterRequest} color={styleConst.color.blue} />
             <List style={styles.list}>
 
@@ -284,7 +285,7 @@ class RegisterScreen extends Component {
               <Text numberOfLines={1} style={styles.buttonText}>ЗАРЕГИСТРИРОВАТЬСЯ</Text>
             </Button>
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }
