@@ -7,6 +7,9 @@ import { verticalScale } from '../../../utils/scale';
 const iconLeftSize = 28;
 
 export default StyleSheet.create({
+  input: {
+    lineHeight: null, // после обновления 0.54, фикс выравнивания
+  },
   list: {
     marginTop: verticalScale(28),
   },

@@ -138,6 +138,7 @@ export default class Auth extends Component {
             <Item style={stylesList.inputItem} fixedLabel>
               <Label style={stylesList.label}>{label}</Label>
               <Input
+                style={stylesList.input}
                 autoCapitalize="none"
                 autoCorrect={false}
                 placeholder="Поле для заполнения"
