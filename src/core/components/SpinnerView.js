@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Text, View, ActivityIndicator, StyleSheet } from 'react-native';
+import { Text, SafeAreaView, ActivityIndicator, StyleSheet } from 'react-native';
 
 // helpers
 import styleConst from '../style-const';
@@ -25,10 +25,10 @@ const styles = StyleSheet.create({
 });
 
 const SpinnerView = ({ text }) => (
-  <View style={styles.spinnerContainer} >
+  <SafeAreaView style={styles.spinnerContainer} >
     <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
     { text ? <Text style={styles.text}>{text}</Text> : null }
-  </View>
+  </SafeAreaView>
 );
 
 export default SpinnerView;

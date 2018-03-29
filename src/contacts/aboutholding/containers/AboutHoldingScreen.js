@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Container, Content, Text, List, ListItem, Body, Right, StyleProvider } from 'native-base';
+import { SafeAreaView, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Content, Text, List, ListItem, Body, Right, StyleProvider } from 'native-base';
 
 // components
 import Communications from 'react-native-communications';
@@ -19,7 +19,8 @@ import stylesList from '../../../core/components/Lists/style';
 import { RUSSIA, BELARUSSIA, UKRAINE } from '../../../core/const';
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
   },
   textContainer: {
@@ -75,8 +76,8 @@ class AboutHoldingScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <List style={stylesList.list}>
               <View style={[stylesList.listItemContainer, stylesList.listItemContainerFirst]}>
                 {
@@ -114,7 +115,7 @@ class AboutHoldingScreen extends Component {
               </Text>
             </View>
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

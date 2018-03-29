@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Platform, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
-import { Container, Content, Text, List, ListItem, Body, Right, StyleProvider } from 'native-base';
+import { SafeAreaView, View, Platform, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { Content, Text, List, ListItem, Body, Right, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -31,7 +31,8 @@ const IMAGE_WIDTH = isTablet ? null : screenWidth;
 const IMAGE_HEIGHT = isTablet ? 220 : 160;
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
   },
   descriptionContainer: {
@@ -118,13 +119,6 @@ class AboutScreen extends Component {
     this.setState({ webViewWidth });
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   const nav = nextProps.nav.newState;
-  //   const isActiveScreen = nav.routes[nav.index].routeName === 'AboutScreen';
-
-  //   return this.props.dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen;
-  // }
-
   renderPhones = (phones) => {
     if (!phones || !phones.length) return null;
 
@@ -205,7 +199,7 @@ class AboutScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
+        <SafeAreaView style={styles.safearea}>
           <Content style={styles.content}>
             <HeaderSubtitle content={dealerSelected.name} />
             <View ref="imageContainer">
@@ -257,7 +251,7 @@ class AboutScreen extends Component {
                 ) : null
             }
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

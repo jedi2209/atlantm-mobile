@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, View } from 'react-native';
-import { Container, Footer, FooterTab, Button, Text } from 'native-base';
+import { SafeAreaView, StyleSheet, Image, View } from 'react-native';
+import { Footer, FooterTab, Button, Text } from 'native-base';
 
 // helpers
 import styleConst from '../../core/style-const';
@@ -8,7 +8,8 @@ import { scale } from '../../utils/scale';
 
 const buttonIconSize = 18;
 const styles = StyleSheet.create({
-  container: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.blue,
   },
   logoContainer: {
@@ -45,7 +46,7 @@ export default class IntroScreen extends Component {
 
   render() {
     return (
-      <Container style={styles.container} >
+      <SafeAreaView style={styles.safearea} >
         <View style={styles.logoContainer} >
             <Image
               style={styles.logo}
@@ -67,7 +68,7 @@ export default class IntroScreen extends Component {
             </Button>
           </FooterTab>
         </Footer>
-      </Container>
+      </SafeAreaView>
     );
   }
 }

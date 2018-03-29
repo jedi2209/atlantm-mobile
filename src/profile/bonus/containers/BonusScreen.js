@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, Platform } from 'react-native';
-import { Container, Content, ListItem, StyleProvider, Icon, Body, Right, Button } from 'native-base';
+import { SafeAreaView, StyleSheet, View, Text, Platform } from 'react-native';
+import { Content, ListItem, StyleProvider, Icon, Body, Right, Button } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -24,11 +24,9 @@ import stylesHeader from '../../../core/components/Header/style';
 import { MONTH_TEXT } from '../../const';
 
 const styles = StyleSheet.create({
-  content: {
-    backgroundColor: styleConst.color.bg,
-  },
-  emptyContainer: {
+  safearea: {
     flex: 1,
+    backgroundColor: styleConst.color.bg,
   },
   emptyText: {
     textAlign: 'center',
@@ -281,22 +279,21 @@ class BonusScreen extends Component {
     console.log('== Bonus Screen ==');
 
     const { bonus } = this.props;
-    console.log('bonus', bonus);
 
     if (isEmpty(bonus) || !bonus.items) {
       return (
-        <View style={[styles.emptyContainer, styles.content]}>
+        <SafeAreaView style={styles.safearea}>
           <Text style={styles.emptyText}>
             Бонусов пока нет
           </Text>
-        </View>
+        </SafeAreaView>
       );
     }
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content} >
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             {Object.keys(get(bonus, 'items'), []).length ? this.renderLevel1(bonus.items) : null}
 
             <View style={styles.total}>
@@ -308,7 +305,7 @@ class BonusScreen extends Component {
               <Text numberOfLines={1} style={styles.buttonText}>БОНУСНАЯ ПРОГРАММА</Text>
             </Button>
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, findNodeHandle } from 'react-native';
-import { Content, Container, StyleProvider } from 'native-base';
+import { SafeAreaView, View, StyleSheet, findNodeHandle } from 'react-native';
+import { Content, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -19,9 +19,9 @@ import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 
 const styles = StyleSheet.create({
-  content: {
-    backgroundColor: styleConst.color.bg,
+  safearea: {
     flex: 1,
+    backgroundColor: styleConst.color.bg,
   },
 });
 
@@ -102,11 +102,8 @@ class IndicatorsScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content
-            style={styles.content}
-            ref={(scrollView) => { this.scrollView = scrollView; }}
-          >
+        <SafeAreaView style={styles.safearea}>
+          <Content ref={(scrollView) => { this.scrollView = scrollView; }}>
           {
             items.map((indicators, idx) => {
               return (
@@ -121,7 +118,7 @@ class IndicatorsScreen extends Component {
           }
 
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

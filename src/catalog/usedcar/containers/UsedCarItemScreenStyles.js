@@ -3,9 +3,9 @@ import styleConst from '../../../core/style-const';
 import { verticalScale } from '../../../utils/scale';
 
 export default StyleSheet.create({
-  content: {
-    backgroundColor: styleConst.color.bg,
+  safearea: {
     flex: 1,
+    backgroundColor: styleConst.color.bg,
   },
   gallery: {
     position: 'relative',

@@ -19,7 +19,8 @@ import { fetchInfoPost, callMeForInfo } from '../actions';
 // components
 import DeviceInfo from 'react-native-device-info';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Container, Content, Button, Footer, FooterTab } from 'native-base';
+import { Content, Button, Footer, FooterTab } from 'native-base';
+import FooterButton from '../../core/components/FooterButton';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
 import Imager from '../../core/components/Imager';
@@ -44,7 +45,7 @@ const IMAGE_HEIGHT = isTablet ? 220 : 170;
 const buttonIconSize = 28;
 
 const styles = StyleSheet.create({
-  container: {
+  safearea: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
   },
@@ -57,12 +58,15 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginHorizontal: styleConst.ui.horizontalGap,
   },
+  footer: {
+    height: styleConst.ui.footerHeight,
+  },
   button: {
     backgroundColor: '#fff',
     flexDirection: 'row',
+    justifyContent: 'flex-start',
     borderBottomWidth: 1,
     borderBottomColor: styleConst.color.border,
-    justifyContent: 'flex-start',
     paddingLeft: styleConst.ui.horizontalGap,
   },
   buttonText: {
@@ -247,16 +251,6 @@ class InfoPostScreen extends Component {
     return `c ${dayMonth(date.from)} по ${dayMonthYear(date.to)}`;
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   const nav = nextProps.nav.newState;
-  //   const isActiveScreen = nav.routes[nav.index].routeName === 'InfoPostScreen';
-
-  //   return (this.state.imageWidth !== nextState.imageWidth) ||
-  //     (this.state.imageHeight !== nextState.imageHeight) ||
-  //       (this.state.webViewWidth !== nextState.webViewWidth) ||
-  //         (this.props.isСallMeRequest !== nextProps.isСallMeRequest && isActiveScreen);
-  // }
-
   onMessage({ nativeEvent }) {
     const data = nativeEvent.data;
 
@@ -284,9 +278,9 @@ class InfoPostScreen extends Component {
     console.log('== InfoPost ==', imageUrl);
 
     return (
-      <SafeAreaView style={styles.container}>
-        <Content style={styles.content}>
-        <Spinner visible={isCallMeRequest} color={styleConst.color.blue} />
+      <SafeAreaView style={styles.safearea}>
+        <Content>
+          <Spinner visible={isCallMeRequest} color={styleConst.color.blue} />
 
           {
             !text ?
@@ -326,7 +320,7 @@ class InfoPostScreen extends Component {
               )
           }
         </Content>
-        <Footer>
+        <Footer style={styles.footer}>
           <FooterTab>
             <Button
               onPress={this.onPressCallMe}

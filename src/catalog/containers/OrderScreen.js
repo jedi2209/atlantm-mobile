@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Alert, NetInfo, Text, Image } from 'react-native';
-import { Container, Content, List, StyleProvider, Footer, Button } from 'native-base';
+import { SafeAreaView, StyleSheet, View, Alert, NetInfo, Text, Image } from 'react-native';
+import { Content, List, StyleProvider, Footer, Button } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -26,7 +26,8 @@ import { CATALOG_ORDER__SUCCESS, CATALOG_ORDER__FAIL } from '../actionTypes';
 
 const FOOTER_HEIGHT = 50;
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
     paddingBottom: 100,
   },
@@ -192,8 +193,8 @@ class OrderScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content} >
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <List style={styles.list}>
               <Spinner visible={isOrderCarRequest} color={styleConst.color.blue} />
 
@@ -238,7 +239,7 @@ class OrderScreen extends Component {
               </Button>
           </Footer>
 
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

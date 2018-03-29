@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
-import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
+import { SafeAreaView, StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import { Text, Button, Segment, Container, StyleProvider } from 'native-base';
+import { Text, Button, Segment, StyleProvider } from 'native-base';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SelectItemByCountry from './SelectItemByCountry';
 
@@ -15,7 +15,8 @@ import styleConst from '../../core/style-const';
 import { verticalScale } from '../../utils/scale';
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: '#fff',
   },
   tabs: {
@@ -130,7 +131,7 @@ export default class SelectListByCountry extends PureComponent {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
           <Spinner visible={isFetchList} color={styleConst.color.blue} />
           <View style={styles.tabs}>
             <Segment>
@@ -164,9 +165,9 @@ export default class SelectListByCountry extends PureComponent {
             refreshing={this.state.isRefreshing}
             ListEmptyComponent={this.renderEmptyComponent}
             renderItem={this.renderItem}
-            keyExtractor={item => item.id}
+            keyExtractor={item => `${item.id}`}
           />
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, View, StyleSheet } from 'react-native';
+import { SafeAreaView, Alert, View, StyleSheet } from 'react-native';
 
 // redux
 import { connect } from 'react-redux';
@@ -15,7 +15,7 @@ import {
 import stylesList from '../../../core/components/Lists/style';
 
 // components
-import { Label, Container, Content, StyleProvider, Switch, Body, ListItem, Right } from 'native-base';
+import { Label, Content, StyleProvider, Switch, Body, ListItem, Right } from 'native-base';
 import Spinner from 'react-native-loading-spinner-overlay';
 import InfoLine from '../../components/InfoLine';
 import RatingList from '../../components/RatingList';
@@ -30,7 +30,8 @@ import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
   },
   publicAgreeContainer: {
@@ -180,8 +181,8 @@ class ReviewAddRatingStepScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
           <Spinner visible={isReviewAddRequest} color={styleConst.color.blue} />
 
             <RatingList
@@ -198,7 +199,7 @@ class ReviewAddRatingStepScreen extends Component {
             arrow={true}
             onPressButton={this.onPressButton}
           />
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

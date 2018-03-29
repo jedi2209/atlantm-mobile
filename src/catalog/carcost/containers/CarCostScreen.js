@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Alert, NetInfo, Platform } from 'react-native';
-import { Container, Content, List, StyleProvider } from 'native-base';
+import { SafeAreaView, StyleSheet, Alert, NetInfo, Platform } from 'react-native';
+import { Content, List, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -44,9 +44,10 @@ import stylesHeader from '../../../core/components/Header/style';
 import { ERROR_NETWORK } from '../../../core/const';
 
 const styles = StyleSheet.create({
-  content: {
-    backgroundColor: styleConst.color.bg,
+  safearea: {
+    flex: 1,
     paddingBottom: 100,
+    backgroundColor: styleConst.color.bg,
   },
   button: {
     marginTop: 20,
@@ -297,8 +298,8 @@ class CarCostScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content} enableResetScrollToCoords={false} keyboardShouldPersistTaps={Platform.OS === 'android' ? 'always' : 'never'}>
+        <SafeAreaView style={styles.safearea}>
+          <Content enableResetScrollToCoords={false} keyboardShouldPersistTaps={Platform.OS === 'android' ? 'always' : 'never'}>
             <List style={styles.list}>
               <Spinner visible={isCarCostRequest} color={styleConst.color.blue} />
 
@@ -359,7 +360,7 @@ class CarCostScreen extends Component {
               <ButtonFull style={styles.button} arrow={true} text="Отправить" onPressButton={this.onPressButton} />
             </List>
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }
