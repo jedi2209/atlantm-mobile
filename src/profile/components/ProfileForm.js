@@ -43,6 +43,8 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
   },
   input: {
+    lineHeight: null, // после обновления 0.54, фикс выравнивания
+
     ...Platform.select({
       android: {
         width: 2000,
