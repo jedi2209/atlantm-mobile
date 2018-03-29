@@ -11,12 +11,12 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-#import "RNFIRMessaging.h"
 #if __has_include(<React/RNSentry.h>)
 #import <React/RNSentry.h> // This is used for versions of react >= 0.40
 #else
 #import "RNSentry.h" // This is used for versions of react < 0.40
 #endif
+#import "RNFIRMessaging.h"
 #import "SplashScreen.h"
 
 @import GoogleMaps;
@@ -30,17 +30,15 @@
   NSURL *jsCodeLocation;
 
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
-
-  RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
+RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"atlantm"
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
 
-  [FIRApp configure];
-  [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
-  
   [RNSentry installWithRootView:rootView];
 
+  [FIRApp configure];
+  [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
