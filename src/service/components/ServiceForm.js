@@ -46,6 +46,12 @@ const datePickerStyles = {
     marginLeft: 0,
     marginRight: 0,
   },
+  btnCancel: {
+    padding: 10,
+  },
+  btnConfirm: {
+    padding: 10,
+  },
 };
 
 export default class ServiceForm extends PureComponent {
