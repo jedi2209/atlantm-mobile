@@ -11,4 +11,6 @@ target 'atlantm' do
   # react-native-image-crop-picker
   pod 'RSKImageCropper'
   pod 'QBImagePickerController'
+  pod 'SentryReactNative', :path => '../node_modules/react-native-sentry'
+
 end
