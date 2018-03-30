@@ -25,14 +25,17 @@ import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import { SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL } from '../actionTypes';
 
+const $size = 40;
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
-    paddingBottom: 100,
+  },
+  list: {
+    paddingBottom: $size,
   },
   serviceForm: {
-    marginTop: 40,
+    marginTop: $size,
   },
 });
 
