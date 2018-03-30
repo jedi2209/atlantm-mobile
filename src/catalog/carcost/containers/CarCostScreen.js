@@ -46,7 +46,6 @@ import { ERROR_NETWORK } from '../../../core/const';
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    paddingBottom: 100,
     backgroundColor: styleConst.color.bg,
   },
   button: {

@@ -40,9 +40,8 @@ import { TVA__SUCCESS, TVA__FAIL } from '../actionTypes';
 
 const styles = StyleSheet.create({
   safearea: {
-    backgroundColor: styleConst.color.bg,
     flex: 1,
-    paddingBottom: 100,
+    backgroundColor: styleConst.color.bg,
   },
 });
 
