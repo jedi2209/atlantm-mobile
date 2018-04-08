@@ -1,10 +1,12 @@
+import isIphoneX from '../../src/utils/is_iphone_x';
 import variable from "./../variables/platform";
 
 export default (variables = variable) => {
   const platform = variables.platform;
 
   const segmentTheme = {
-    height: 45,
+    height: null,
+
     borderColor: variables.segmentBorderColorMain,
     flexDirection: "row",
     justifyContent: "center",
@@ -13,7 +15,7 @@ export default (variables = variable) => {
       alignSelf: "center",
       borderRadius: 0,
       paddingHorizontal: 20,
-      height: 30,
+      height: null,
       backgroundColor: "transparent",
       borderWidth: 1,
       borderColor: variables.segmentBorderColor,

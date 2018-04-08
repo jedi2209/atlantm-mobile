@@ -11,6 +11,9 @@ import { scale, verticalScale } from '../../utils/scale';
 import stylesHeader from '../../core/components/Header/style';
 
 const styles = StyleSheet.create({
+  safearea: {
+    flex: 1,
+  },
   container: {
     backgroundColor: styleConst.color.bg,
     justifyContent: 'space-around',
@@ -67,7 +70,7 @@ export default class MenuScreen extends Component {
 
     return (
       <Container style={styles.container}>
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={styles.safearea}>
           <Grid style={styles.menu} >
             <Row>
               <Col>

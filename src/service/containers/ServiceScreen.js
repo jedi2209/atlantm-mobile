@@ -208,8 +208,7 @@ class ServiceScreen extends Component {
             </List>
           </Content>
           <FooterButton
-            text="ОТПРАВИТЬ"
-            arrow={true}
+            text="Отправить"
             onPressButton={this.onPressOrder}
           />
         </SafeAreaView>
