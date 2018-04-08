@@ -34,8 +34,7 @@ RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"atlantm"
                                                initialProperties:nil
                                                    launchOptions:launchOptions];
-
-  [RNSentry installWithRootView:rootView];
+[RNSentry installWithRootView:rootView];
 
   [FIRApp configure];
   [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
