@@ -258,8 +258,7 @@ class TvaScreen extends Component {
             {this.renderListItems()}
           </Content>
           <FooterButton
-            text="ПРОВЕРИТЬ"
-            arrow={true}
+            text="Проверить"
             onPressButton={() => this.onPressButton()}
           />
         </SafeAreaView>

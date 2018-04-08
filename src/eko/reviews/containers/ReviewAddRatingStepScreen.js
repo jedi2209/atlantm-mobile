@@ -195,8 +195,7 @@ class ReviewAddRatingStepScreen extends Component {
             <InfoLine gap={true} infoIcon={true} text={TEXT_MESSAGE_CONTROL} />
           </Content>
           <FooterButton
-            text="ОТПРАВИТЬ"
-            arrow={true}
+            text="Отправить"
             onPressButton={this.onPressButton}
           />
         </SafeAreaView>

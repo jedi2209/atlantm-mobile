@@ -23,6 +23,8 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.header,
     borderBottomWidth: styleConst.ui.borderWidth,
     borderBottomColor: styleConst.color.border,
+
+    paddingVertical: verticalScale(10),
   },
   spinner: {
     alignSelf: 'center',

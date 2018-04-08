@@ -44,7 +44,7 @@ export default class ServiceButton extends PureComponent {
           >
             <Text style={styles.buttonText}>ОТПРАВИТЬ</Text>
             <Image
-              source={require('../../core/components/CustomIcon/assets/arrow-right.png')}
+              source={require('../../core/components/CustomIcon/assets/arrow_right_white.png')}
               style={styles.buttonIcon}
             />
           </Button>

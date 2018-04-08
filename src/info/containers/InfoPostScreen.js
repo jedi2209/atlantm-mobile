@@ -3,12 +3,11 @@ import {
   View,
   Text,
   Alert,
-  Image,
   NetInfo,
   Linking,
-  SafeAreaView,
   Dimensions,
   StyleSheet,
+  SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
 
@@ -19,7 +18,7 @@ import { fetchInfoPost, callMeForInfo } from '../actions';
 // components
 import DeviceInfo from 'react-native-device-info';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Content, Button, Footer, FooterTab } from 'native-base';
+import { Content } from 'native-base';
 import FooterButton from '../../core/components/FooterButton';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
@@ -42,8 +41,6 @@ const { width: screenWidth } = Dimensions.get('window');
 const IMAGE_WIDTH = isTablet ? null : screenWidth;
 const IMAGE_HEIGHT = isTablet ? 220 : 170;
 
-const buttonIconSize = 28;
-
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
@@ -57,27 +54,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginVertical: 10,
     marginHorizontal: styleConst.ui.horizontalGap,
-  },
-  footer: {
-    height: styleConst.ui.footerHeight,
-  },
-  button: {
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    borderBottomWidth: 1,
-    borderBottomColor: styleConst.color.border,
-    paddingLeft: styleConst.ui.horizontalGap,
-  },
-  buttonText: {
-    fontSize: 18,
-    fontFamily: styleConst.font.regular,
-    letterSpacing: styleConst.ui.letterSpacing,
-  },
-  buttonIcon: {
-    marginRight: 10,
-    width: buttonIconSize,
-    height: buttonIconSize,
   },
   date: {
     color: styleConst.color.greyText2,
@@ -168,15 +144,9 @@ class InfoPostScreen extends Component {
       return this.onLayoutImageTablet();
     }
 
-    const {
-      width: imageDynamicWidth,
-      height: imageDynamicHeight,
-    } = e.nativeEvent.layout;
+    const { height: imageDynamicHeight } = e.nativeEvent.layout;
 
-    this.setState({
-      imageHeight: imageDynamicHeight,
-      // imageWidth: imageDynamicWidth,
-    });
+    this.setState({ imageHeight: imageDynamicHeight });
   }
 
   onLayoutWebView= (e) => {
@@ -263,7 +233,7 @@ class InfoPostScreen extends Component {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
-    const { navigation, isCallMeRequest } = this.props;
+    const { isCallMeRequest } = this.props;
 
     const post = this.getPost();
     let text = get(post, 'text');
@@ -275,7 +245,7 @@ class InfoPostScreen extends Component {
       text = processHtml(text, this.state.webViewWidth);
     }
 
-    console.log('== InfoPost ==', imageUrl);
+    console.log('== InfoPost ==');
 
     return (
       <SafeAreaView style={styles.safearea}>
@@ -320,21 +290,14 @@ class InfoPostScreen extends Component {
               )
           }
         </Content>
-        <Footer style={styles.footer}>
-          <FooterTab>
-            <Button
-              onPress={this.onPressCallMe}
-              full
-              style={styles.button}
-            >
-              <Image
-                source={require('../../contacts/assets/call_me.png')}
-                style={styles.buttonIcon}
-              />
-              <Text style={styles.buttonText}>Позвоните мне</Text>
-            </Button>
-          </FooterTab>
-        </Footer>
+
+        <FooterButton
+          theme="white"
+          icon="phone"
+          uppercase={false}
+          text="Позвоните мне"
+          onPressButton={this.onPressCallMe}
+        />
       </SafeAreaView>
     );
   }
