@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppRegistry, YellowBox } from 'react-native';
+import { NativeModules, AppRegistry, YellowBox } from 'react-native';
 import { Sentry } from 'react-native-sentry';
 
 YellowBox.ignoreWarnings([
@@ -11,6 +11,11 @@ YellowBox.ignoreWarnings([
   'Module RNFetchBlob requires main queue setup since it overrides',
   'Module ImageCropPicker requires main queue setup since it overrides',
 ]);
+
+// For RN < 0.43
+if (__DEV__) {
+  NativeModules.DevSettings.setIsDebuggingRemotely(true);
+}
 
 import Wrapper from './src/core/containers/Wrapper';
 

@@ -296,7 +296,7 @@ class UserCarItemScreen extends Component {
                             <Grid style={styles.section}>
                               <Col><Text style={styles.sectionTitle}>Где</Text></Col>
                               <Col>
-                                <View style={styles.dealerContainer} >
+                                <View style={styles.dealerContainer}>
                                   <Text style={styles.sectionTitleValue}>{carDetails.dealer.name}</Text>
                                   <Icon name="arrow-forward" style={styles.iconArrow} />
                                 </View>
