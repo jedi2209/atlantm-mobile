@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 // components
-import { Alert, NetInfo } from 'react-native';
+// import { Alert, NetInfo } from 'react-native';
 import { CachedImage, ImageCacheManager } from 'react-native-cached-image';
 
 export default class Imager extends PureComponent {
@@ -28,30 +28,30 @@ export default class Imager extends PureComponent {
     return this.imageCacheManager;
   }
 
-  onError = () => {
-    console.log('== Imager Error, try to reload ==');
-    const { source: { uri } } = this.props;
+  // onError = () => {
+  //   console.log('== Imager Error, try to reload ==');
+  //   const { source: { uri } } = this.props;
 
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (!isConnected) {
-        setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
-        return;
-      }
+  //   NetInfo.isConnected.fetch().then(isConnected => {
+  //     if (!isConnected) {
+  //       setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
+  //       return;
+  //     }
 
-      this.getImageCacheManager().deleteUrl(uri)
-        .then(() => {
-          console.log('delete url from cache');
-          this.getImageCacheManager()
-            .downloadAndCacheUrl(uri)
-            .then(cachedImagePath => {
-              console.log('== Imager reload ==');
-              this.setState({
-                imagePath: cachedImagePath,
-              });
-            });
-        });
-    });
-  }
+  //     this.getImageCacheManager().deleteUrl(uri)
+  //       .then(() => {
+  //         console.log('delete url from cache');
+  //         this.getImageCacheManager()
+  //           .downloadAndCacheUrl(uri)
+  //           .then(cachedImagePath => {
+  //             console.log('== Imager reload ==');
+  //             this.setState({
+  //               imagePath: cachedImagePath,
+  //             });
+  //           });
+  //       });
+  //   });
+  // }
 
   render () {
     console.log('== Imager ==');
@@ -60,7 +60,6 @@ export default class Imager extends PureComponent {
       <CachedImage
         {...this.props}
         source={{ uri: this.state.imagePath }}
-        onError={this.onError}
       >{this.props.children}</CachedImage>
     );
   }

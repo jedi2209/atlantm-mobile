@@ -63,7 +63,7 @@ export default StyleSheet.create({
   sectionTitleValue: {
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.light,
-    fontSize: 18,
+    fontSize: 16,
     color: styleConst.color.greyText4,
   },
   button: {
@@ -145,6 +145,6 @@ export default StyleSheet.create({
   dealerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
 });
