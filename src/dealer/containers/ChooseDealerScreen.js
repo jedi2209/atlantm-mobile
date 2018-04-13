@@ -46,6 +46,7 @@ class ChooseDealerScreen extends Component {
     headerRight: <View />,
   })
 
+  // ВАЖНО! ЯВНО ОТКЛЮЧЕН ИЗ-ЗА ПРОБЛЕМ ПЕРВОЙ ЗАГРУЗКИ НА IOS 11+
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'ChooseDealerScreen';

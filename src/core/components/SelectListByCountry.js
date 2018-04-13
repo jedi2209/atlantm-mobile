@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class SelectListByCountry extends PureComponent {
+export default class SelectListByCountry extends Component {
   static propTypes = {
     navigation: PropTypes.object,
     region: PropTypes.string,
@@ -112,8 +112,6 @@ export default class SelectListByCountry extends PureComponent {
       listUkraine,
       listBelarussia,
     } = this.props;
-
-    console.log('isFetchList', isFetchList);
 
     let list = [];
 
