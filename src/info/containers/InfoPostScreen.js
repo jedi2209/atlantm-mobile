@@ -3,7 +3,6 @@ import {
   View,
   Text,
   Alert,
-  NetInfo,
   Linking,
   Dimensions,
   StyleSheet,
@@ -32,6 +31,8 @@ import { verticalScale } from '../../utils/scale';
 import stylesHeader from '../../core/components/Header/style';
 import { CALL_ME_INFO__SUCCESS, CALL_ME_INFO__FAIL } from '../actionTypes';
 import { dayMonth, dayMonthYear } from '../../utils/date';
+import isInternet from '../../utils/internet';
+import { ERROR_NETWORK } from '../../core/const';
 
 const isTablet = DeviceInfo.isTablet();
 
@@ -162,13 +163,12 @@ class InfoPostScreen extends Component {
     return posts[id];
   }
 
-  onPressCallMe = () => {
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (!isConnected) {
-        setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
-        return;
-      }
+  onPressCallMe = async () => {
+    const isInternetExist = await isInternet();
 
+    if (!isInternetExist) {
+      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    } else {
       const {
         name,
         email,
@@ -214,7 +214,7 @@ class InfoPostScreen extends Component {
             setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
           }
         });
-    });
+    }
   }
 
   processDate(date = {}) {
