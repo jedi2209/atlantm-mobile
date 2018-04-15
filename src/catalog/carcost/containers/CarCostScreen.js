@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, StyleSheet, Alert, NetInfo, Platform } from 'react-native';
+import { SafeAreaView, StyleSheet, Alert, Platform } from 'react-native';
 import { Content, List, StyleProvider } from 'native-base';
 
 // redux
@@ -42,6 +42,7 @@ import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import { ERROR_NETWORK } from '../../../core/const';
+import isInternet from '../../../utils/internet';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -139,12 +140,12 @@ class CarCostScreen extends Component {
     email: PropTypes.string,
   }
 
-  onPressButton = () => {
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (!isConnected) {
-        return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
-      }
+  onPressButton = async () => {
+    const isInternetExist = await isInternet();
 
+    if (!isInternetExist) {
+      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    } else {
       const {
         navigation,
 
@@ -231,7 +232,7 @@ class CarCostScreen extends Component {
             setTimeout(() => Alert.alert(message), 100);
           }
         });
-    });
+      }
   }
 
   shouldComponentUpdate(nextProps) {

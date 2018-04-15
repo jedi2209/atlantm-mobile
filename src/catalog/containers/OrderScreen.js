@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, StyleSheet, View, Alert, NetInfo, Text, Image } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Alert, Text, Image } from 'react-native';
 import { Content, List, StyleProvider, Footer, Button } from 'native-base';
 
 // redux
@@ -16,13 +16,15 @@ import ProfileForm from '../../profile/components/ProfileForm';
 import ListItemHeader from '../../profile/components/ListItemHeader';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
-// helpres
+// helpers
 import { get } from 'lodash';
+import isInternet from '../../utils/internet';
 import numberWithGap from '../../utils/number-with-gap';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import { CATALOG_ORDER__SUCCESS, CATALOG_ORDER__FAIL } from '../actionTypes';
+import { ERROR_NETWORK } from '../../core/const';
 
 const FOOTER_HEIGHT = 50;
 const styles = StyleSheet.create({
@@ -97,13 +99,12 @@ class OrderScreen extends Component {
     this.props.actionCommentOrderCarFill('');
   }
 
-  onPressOrder = () => {
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (!isConnected) {
-        setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
-        return;
-      }
+  onPressOrder = async () => {
+    const isInternetExist = await isInternet();
 
+    if (!isInternetExist) {
+      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    } else {
       const {
         name,
         phone,
@@ -151,7 +152,7 @@ class OrderScreen extends Component {
             setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
           }
         });
-    });
+    }
   }
 
   // shouldComponentUpdate(nextProps) {

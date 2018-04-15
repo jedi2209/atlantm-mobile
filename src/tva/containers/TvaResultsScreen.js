@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, Text, View, Alert, StyleSheet, TouchableOpacity, NetInfo } from 'react-native';
+import { SafeAreaView, Text, View, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import { Body, Label, Item, Content, ListItem, StyleProvider } from 'native-base';
 
 // redux
@@ -26,6 +26,8 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import { TVA_SEND_MESSAGE__SUCCESS, TVA_SEND_MESSAGE__FAIL } from '../actionTypes';
+import isInternet from '../../utils/internet';
+import { ERROR_NETWORK } from '../../core/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -101,13 +103,12 @@ class TvaResultsScreen extends Component {
     return isActiveScreen;
   }
 
-  onPressMessageButton = () => {
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (!isConnected) {
-        setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
-        return;
-      }
+  onPressMessageButton = async () => {
+    const isInternetExist = await isInternet();
 
+    if (!isInternetExist) {
+      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    } else {
       const {
         message,
         dealerSelected,
@@ -139,7 +140,7 @@ class TvaResultsScreen extends Component {
             setTimeout(() => Alert.alert('', 'Произошла ошибка, попробуйте снова'), 100);
           }
         });
-    });
+    }
   }
 
   onPressOrder = (orderId) => this.props.actionSetActiveTvaOrderId(orderId)

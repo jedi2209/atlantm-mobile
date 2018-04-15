@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, Image, View, Alert, NetInfo, StyleSheet, Platform, Linking } from 'react-native';
+import { SafeAreaView, Image, View, Alert, StyleSheet, Platform, Linking } from 'react-native';
 import {
   Content,
   Text,
@@ -31,6 +31,8 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import stylesList from '../../core/components/Lists/style';
+import isInternet from '../../utils/internet';
+import { ERROR_NETWORK } from '../../core/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -61,13 +63,12 @@ class ContactsScreen extends Component {
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 
-  onPressCallMe = () => {
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (!isConnected) {
-        setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
-        return;
-      }
+  onPressCallMe = async () => {
+    const isInternetExist = await isInternet();
 
+    if (!isInternetExist) {
+      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    } else {
       const {
         callMe,
         profile,
@@ -114,7 +115,7 @@ class ContactsScreen extends Component {
             setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
           }
         });
-    });
+    }
   }
 
   shouldComponentUpdate(nextProps) {

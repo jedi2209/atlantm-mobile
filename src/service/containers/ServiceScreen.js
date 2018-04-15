@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, StyleSheet, View, Alert, NetInfo } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Alert } from 'react-native';
 import { Content, List, StyleProvider } from 'native-base';
 
 // redux
@@ -18,11 +18,13 @@ import ListItemHeader from '../../profile/components/ListItemHeader';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
-// helpres
+// helpers
+import isInternet from '../../utils/internet';
 import { yearMonthDay } from '../../utils/date';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
+import { ERROR_NETWORK } from '../../core/const';
 import { SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL } from '../actionTypes';
 
 const $size = 40;
@@ -86,13 +88,12 @@ class ServiceScreen extends Component {
     isOrderServiceRequest: PropTypes.bool,
   }
 
-  onPressOrder = () => {
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (!isConnected) {
-        setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
-        return;
-      }
+  onPressOrder = async () => {
+    const isInternetExist = await isInternet();
 
+    if (!isInternetExist) {
+      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    } else {
       const {
         car,
         date,
@@ -137,7 +138,7 @@ class ServiceScreen extends Component {
             setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
           }
         });
-    });
+    }
   }
 
   shouldComponentUpdate(nextProps) {
