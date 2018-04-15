@@ -2,8 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 // components
+import { Image } from 'react-native';
 // import { Alert, NetInfo } from 'react-native';
-import { CachedImage, ImageCacheManager } from 'react-native-cached-image';
+// import { CachedImage, ImageCacheManager } from 'react-native-cached-image';
 
 export default class Imager extends PureComponent {
   static propTypes = {
@@ -57,10 +58,10 @@ export default class Imager extends PureComponent {
     console.log('== Imager ==');
 
     return (
-      <CachedImage
+      <Image
         {...this.props}
         source={{ uri: this.state.imagePath }}
-      >{this.props.children}</CachedImage>
+      >{this.props.children}</Image>
     );
   }
 }

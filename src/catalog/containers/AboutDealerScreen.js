@@ -5,6 +5,7 @@ import {
   Dimensions,
   StyleSheet,
   SafeAreaView,
+  ImageBackground,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
@@ -273,7 +274,7 @@ class AboutDealerScreen extends Component {
           <Content>
             <HeaderSubtitle content={dealer.name} />
             <View ref="imageContainer">
-              <Imager
+              <ImageBackground
                 onLayout={this.onLayoutImage}
                 style={[
                   styles.image,
@@ -298,7 +299,7 @@ class AboutDealerScreen extends Component {
                     })
                   }
                 </View>
-              </Imager>
+              </ImageBackground>
             </View>
 
             <List style={[styles.list, styles.listHolding]}>
