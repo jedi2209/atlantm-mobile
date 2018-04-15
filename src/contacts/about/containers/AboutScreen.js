@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { SafeAreaView, View, Platform, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
-import { Content, Text, List, ListItem, Body, Right, StyleProvider } from 'native-base';
+import { ImageBackground, View, Platform, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { Container, Content, Text, List, ListItem, Body, Right, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -199,11 +199,11 @@ class AboutScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
+        <Container style={styles.safearea}>
           <Content style={styles.content}>
             <HeaderSubtitle content={dealerSelected.name} />
             <View ref="imageContainer">
-              <Imager
+              <ImageBackground
                 onLayout={this.onLayoutImage}
                 style={[
                   styles.image,
@@ -228,7 +228,7 @@ class AboutScreen extends Component {
                     })
                   }
                 </View>
-              </Imager>
+              </ImageBackground>
             </View>
 
             <List style={[styles.list, styles.listHolding]}>
@@ -251,7 +251,7 @@ class AboutScreen extends Component {
                 ) : null
             }
           </Content>
-        </SafeAreaView>
+        </Container>
       </StyleProvider>
     );
   }

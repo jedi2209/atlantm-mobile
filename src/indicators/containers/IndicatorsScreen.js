@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, StyleSheet, findNodeHandle } from 'react-native';
-import { Content, StyleProvider } from 'native-base';
+import { View, StyleSheet, findNodeHandle } from 'react-native';
+import { Container, Content, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -102,7 +102,7 @@ class IndicatorsScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
+        <Container style={styles.safearea}>
           <Content ref={(scrollView) => { this.scrollView = scrollView; }}>
           {
             items.map((indicators, idx) => {
@@ -118,7 +118,7 @@ class IndicatorsScreen extends Component {
           }
 
           </Content>
-        </SafeAreaView>
+        </Container>
       </StyleProvider>
     );
   }

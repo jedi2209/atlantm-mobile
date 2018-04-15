@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, SafeAreaView } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 // redux
 import { connect } from 'react-redux';
@@ -18,7 +18,7 @@ import declOfNum from '../../../utils/decl-of-num';
 import { EVENT_REFRESH } from '../../../core/actionTypes';
 
 const styles = StyleSheet.create({
-  safearea: {
+  content: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
   },
@@ -143,7 +143,7 @@ class NewCarListScreen extends Component {
     console.log('== NewCarListScreen ==');
 
     return (
-      <SafeAreaView style={styles.safearea}>
+      <View style={styles.content}>
         <CarList
           items={data}
           pages={pages}
@@ -154,7 +154,7 @@ class NewCarListScreen extends Component {
           dealerSelected={dealerSelected}
           isFetchItems={isFetchingNewCarByFilter}
         />
-      </SafeAreaView>
+      </View>
     );
   }
 }

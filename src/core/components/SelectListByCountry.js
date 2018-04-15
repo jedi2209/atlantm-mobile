@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import { Text, Button, Segment, StyleProvider } from 'native-base';
+import { Container, Text, Button, Segment, StyleProvider } from 'native-base';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SelectItemByCountry from './SelectItemByCountry';
 
@@ -131,7 +131,7 @@ export default class SelectListByCountry extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
+        <Container style={styles.safearea}>
           <Spinner visible={isFetchList} color={styleConst.color.blue} />
           <View style={styles.tabs}>
             <Segment>
@@ -167,7 +167,7 @@ export default class SelectListByCountry extends Component {
             renderItem={this.renderItem}
             keyExtractor={item => `${item.id}`}
           />
-        </SafeAreaView>
+        </Container>
       </StyleProvider>
     );
   }

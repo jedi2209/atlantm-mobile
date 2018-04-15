@@ -103,7 +103,7 @@ export default {
   },
 
   fetchNewCarFilterData({ city }) {
-    return this.request(`/stock/new/cars/search/?city=${city}`, baseRequestParams);
+    return this.request(`/stock/new/cars/search/?city=${city}`, { ...baseRequestParams });
   },
 
   fetchCarHistory({ vin, token }) {
@@ -195,7 +195,7 @@ export default {
     } = props;
 
     const body = `f_Dealer=${dealerID}&f_Name=${name}&f_Phone=${phone}&f_Action=${action}&f_Email=${email}&f_Text=&f_URL=&f_Source=3`;
-    const requestParams = _.merge(baseRequestParams, {
+    const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -217,7 +217,7 @@ export default {
     } = props;
 
     const body = `f_Dealer=${dealerID}&f_Model=${car}&f_Name=${name}&f_Phone=${phone}&f_Email=${email}&f_Date=${date}&f_URL=&f_Source=3`;
-    const requestParams = _.merge(baseRequestParams, {
+    const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -240,7 +240,7 @@ export default {
     } = props;
 
     const body = `f_Dealer=${dealerId}&f_Car=${carId}&f_Name=${name}&f_Phone=${phone}&f_Email=${email}&f_Text=${comment}&f_Source=3`;
-    const requestParams = _.merge(baseRequestParams, {
+    const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -258,7 +258,7 @@ export default {
 
   tvaMessageSend({ id, dealer, text }) {
     const body = `id=${id}&dealer=${dealer}&text=${text}`;
-    const requestParams = _.merge(baseRequestParams, {
+    const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -295,7 +295,7 @@ export default {
 
     console.log('body', body);
 
-    const requestParams = _.merge(baseRequestParams, {
+    const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -345,7 +345,7 @@ export default {
     return RNFetchBlob.fetch(
       'POST',
       'https://api.atlantm.com/orders/usedbuy/post/',
-      _.merge(headers, {
+      _.merge({}, headers, {
         'Content-Type': 'multipart/form-data',
       }),
       body,
@@ -381,7 +381,7 @@ export default {
       `f_Number=${carNumber}`,
     ].join('&');
 
-    const requestParams = _.merge(baseRequestParams, {
+    const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -400,7 +400,7 @@ export default {
       `new=${newToken}`,
     ].join('&');
 
-    const requestParams = _.merge(baseRequestParams, {
+    const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

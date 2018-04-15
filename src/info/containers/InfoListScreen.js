@@ -4,11 +4,10 @@ import {
   Alert,
   FlatList,
   StyleSheet,
-  SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import { Text, StyleProvider } from 'native-base';
+import { Container, Text, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -182,7 +181,7 @@ class InfoListScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.container}>
+        <Container style={styles.container}>
           <FlatList
             ListHeaderComponent={this.renderHeaderComponent}
             data={list}
@@ -194,7 +193,7 @@ class InfoListScreen extends Component {
             renderItem={this.renderItem}
             keyExtractor={item => `${item.id}`}
           />
-        </SafeAreaView>
+        </Container>
       </StyleProvider>
     );
   }

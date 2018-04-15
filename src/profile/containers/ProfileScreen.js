@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, View, Alert, StyleSheet, Keyboard, Text, Platform } from 'react-native';
-import { Content, List, StyleProvider, Button, Icon } from 'native-base';
+import { View, Alert, StyleSheet, Keyboard, Text, Platform } from 'react-native';
+import { Container, Content, List, StyleProvider, Button, Icon } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -279,7 +279,7 @@ class ProfileScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
+        <Container style={styles.safearea}>
           <Content enableResetScrollToCoords={false} keyboardShouldPersistTaps={Platform.OS === 'android' ? 'always' : 'never'}>
             <List style={styles.list}>
               {
@@ -355,7 +355,7 @@ class ProfileScreen extends Component {
                 ) : null
             }
           </Content>
-        </SafeAreaView>
+        </Container>
       </StyleProvider>
     );
   }
