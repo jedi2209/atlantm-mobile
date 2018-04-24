@@ -26,6 +26,7 @@
     "react-native-communications": "^2.2.1",
     "react-native-datepicker": "^1.6.0",
     "react-native-device-info": "^0.12.1",
+    "react-native-devsettings-android": "^0.1.5",
     "react-native-fcm": "^11.0.1",
     "react-native-image-crop-picker": "^0.17.0",
     "react-native-loading-spinner-overlay": "^0.5.2",
