@@ -1,17 +1,13 @@
 import styleConst from '../core/style-const';
 
 const processHtml = (text, width, height) => {
-  // const result = text.replace(/<a[^>]*>([^<]*)<\/a>/ig, (i1, i2) => `<p>${i2}</p>`);
-
   return `
     <!DOCTYPE html>
     <html lang="ru">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta http-equiv="X-UA-Compatible" content="ie=edge">
       <title>Акция Atlant-m</title>
-
     </head>
     <body>
     <style>
