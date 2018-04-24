@@ -6,6 +6,7 @@ import {
   Image,
   Alert,
   StyleSheet,
+  SafeAreaView,
   ActivityIndicator,
   TouchableHighlight,
 } from 'react-native';
@@ -19,7 +20,6 @@ import {
   Switch,
   Content,
   ListItem,
-  Container,
   StyleProvider,
 } from 'native-base';
 
@@ -55,14 +55,12 @@ import { TEXT_EMPTY_CAR_LIST } from '../../constants';
 
 const FOOTER_HEIGHT = 50;
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
     backgroundColor: styleConst.color.bg,
     flex: 1,
-    paddingBottom: 100,
   },
-  spinnerContainer: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
+  content: {
+    paddingBottom: 40,
   },
   spinner: {
     alignSelf: 'center',
@@ -344,7 +342,7 @@ class NewCarFilterScreen extends Component {
 
     if (!filterData || isFetchingFilterData) {
       return (
-        <View style={styles.spinnerContainer} >
+        <View style={styles.safearea} >
           <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
         </View>
       );
@@ -359,7 +357,7 @@ class NewCarFilterScreen extends Component {
 
     if (get(filterData, 'total.count') === 0) {
       return (
-        <View style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
           <CityItemList
             navigation={navigation}
             cityName={city.name}
@@ -367,165 +365,166 @@ class NewCarFilterScreen extends Component {
             returnScreen="NewCarFilterScreen"
           />
           <EmptyMessage text={TEXT_EMPTY_CAR_LIST} />
-        </View>
+        </SafeAreaView>
       );
     }
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
+            <View style={styles.content}>
+              <CityItemList
+                navigation={navigation}
+                cityName={city.name}
+                cityData={this.getCityData()}
+                returnScreen="NewCarFilterScreen"
+              />
 
-            <CityItemList
-              navigation={navigation}
-              cityName={city.name}
-              cityData={this.getCityData()}
-              returnScreen="NewCarFilterScreen"
-            />
+              <ListItemHeader text="ПАРАМЕТРЫ ПОИСКА" />
 
-            <ListItemHeader text="ПАРАМЕТРЫ ПОИСКА" />
-
-            <View style={stylesList.listItemContainer}>
-              <ListItem style={stylesList.listItemPressable} onPress={this.onPressBrands}>
-                <Body style={styles.body} >
-                  <Label style={stylesList.label}>Марка</Label>
-                </Body>
-                <Right style={styles.right}>
-                  {
-                    filterBrands.length !== 0 &&
-                      <Text style={stylesList.listItemValue}>
-                        {`Выбрано: ${filterBrands.length}`}
-                      </Text>
-                  }
-                  <Icon name="arrow-forward" style={stylesList.iconArrow} />
-                </Right>
-              </ListItem>
-            </View>
-
-            <View style={stylesList.listItemContainer}>
-              <ListItem style={stylesList.listItemPressable} onPress={this.onPressModels}>
-                <Body style={styles.body} >
-                  <Label style={stylesList.label}>Модель</Label>
-                </Body>
-                <Right style={styles.right}>
-                  {
-                    filterModels.length !== 0 &&
-                      <Text style={stylesList.listItemValue}>
-                        {`Выбрано: ${filterModels.length}`}
-                      </Text>
-                  }
-                  <Icon name="arrow-forward" style={stylesList.iconArrow} />
-                </Right>
-              </ListItem>
-            </View>
-
-            <PricePicker
-              style={styles.icon}
-              min={minPrice}
-              max={maxPrice}
-              step={step}
-              currentMinPrice={filterPrice && filterPrice.minPrice}
-              currentMaxPrice={filterPrice && filterPrice.maxPrice}
-              currency={currency}
-              onPressModal={this.onPressPrice}
-              onCloseModal={this.onClosePrice}
-              TouchableComponent={TouchableHighlight}
-            >
               <View style={stylesList.listItemContainer}>
-                <View style={styles.hiddenListItemContainer} />
-                <ListItem button={false} style={stylesList.listItemPressable}>
+                <ListItem style={stylesList.listItemPressable} onPress={this.onPressBrands}>
                   <Body style={styles.body} >
-                    <Label style={stylesList.label}>Цена</Label>
+                    <Label style={stylesList.label}>Марка</Label>
                   </Body>
                   <Right style={styles.right}>
                     {
-                      <Text style={stylesList.listItemValue}>
-                        {`от ${minPriceByFilter || minPrice} ${currency}`}
-                      </Text>
+                      filterBrands.length !== 0 &&
+                        <Text style={stylesList.listItemValue}>
+                          {`Выбрано: ${filterBrands.length}`}
+                        </Text>
                     }
                     <Icon name="arrow-forward" style={stylesList.iconArrow} />
                   </Right>
                 </ListItem>
               </View>
-            </PricePicker>
 
-            <View style={stylesList.listItemContainer}>
-              <ListItem style={stylesList.listItemPressable} onPress={this.onPressBody}>
-                <Body style={styles.body} >
-                  <Label style={stylesList.label}>Тип кузова</Label>
-                </Body>
-                <Right style={styles.right}>
+              <View style={stylesList.listItemContainer}>
+                <ListItem style={stylesList.listItemPressable} onPress={this.onPressModels}>
+                  <Body style={styles.body} >
+                    <Label style={stylesList.label}>Модель</Label>
+                  </Body>
+                  <Right style={styles.right}>
                     {
-                      filterBody.length !== 0 &&
+                      filterModels.length !== 0 &&
                         <Text style={stylesList.listItemValue}>
-                          {`Выбрано: ${filterBody.length}`}
+                          {`Выбрано: ${filterModels.length}`}
                         </Text>
                     }
-                  <Icon name="arrow-forward" style={stylesList.iconArrow} />
-                </Right>
-              </ListItem>
-            </View>
+                    <Icon name="arrow-forward" style={stylesList.iconArrow} />
+                  </Right>
+                </ListItem>
+              </View>
 
-            <View style={stylesList.listItemContainer}>
-              <ListItem style={stylesList.listItemPressable} onPress={this.onPressGearbox}>
-                <Body style={styles.body} >
-                  <Label style={stylesList.label}>КПП</Label>
-                </Body>
-                <Right style={styles.right}>
-                  {
-                    filterGearbox.length !== 0 &&
-                      <Text style={stylesList.listItemValue}>
-                        {`Выбрано: ${filterGearbox.length}`}
-                      </Text>
-                  }
-                  <Icon name="arrow-forward" style={stylesList.iconArrow} />
-                </Right>
-              </ListItem>
-            </View>
+              <PricePicker
+                style={styles.icon}
+                min={minPrice}
+                max={maxPrice}
+                step={step}
+                currentMinPrice={filterPrice && filterPrice.minPrice}
+                currentMaxPrice={filterPrice && filterPrice.maxPrice}
+                currency={currency}
+                onPressModal={this.onPressPrice}
+                onCloseModal={this.onClosePrice}
+                TouchableComponent={TouchableHighlight}
+              >
+                <View style={stylesList.listItemContainer}>
+                  <View style={styles.hiddenListItemContainer} />
+                  <ListItem button={false} style={stylesList.listItemPressable}>
+                    <Body style={styles.body} >
+                      <Label style={stylesList.label}>Цена</Label>
+                    </Body>
+                    <Right style={styles.right}>
+                      {
+                        <Text style={stylesList.listItemValue}>
+                          {`от ${minPriceByFilter || minPrice} ${currency}`}
+                        </Text>
+                      }
+                      <Icon name="arrow-forward" style={stylesList.iconArrow} />
+                    </Right>
+                  </ListItem>
+                </View>
+              </PricePicker>
 
-            <View style={stylesList.listItemContainer}>
-              <ListItem style={stylesList.listItemPressable} onPress={this.onPressEngineType}>
-                <Body style={styles.body}>
-                  <Label style={stylesList.label}>Тип двигателя</Label>
-                </Body>
-                <Right style={styles.right}>
-                  {
-                    filterEngineType.length !== 0 &&
-                      <Text style={stylesList.listItemValue}>
-                        {`Выбрано: ${filterEngineType.length}`}
-                      </Text>
-                  }
-                  <Icon name="arrow-forward" style={stylesList.iconArrow} />
-                </Right>
-              </ListItem>
-            </View>
+              <View style={stylesList.listItemContainer}>
+                <ListItem style={stylesList.listItemPressable} onPress={this.onPressBody}>
+                  <Body style={styles.body} >
+                    <Label style={stylesList.label}>Тип кузова</Label>
+                  </Body>
+                  <Right style={styles.right}>
+                      {
+                        filterBody.length !== 0 &&
+                          <Text style={stylesList.listItemValue}>
+                            {`Выбрано: ${filterBody.length}`}
+                          </Text>
+                      }
+                    <Icon name="arrow-forward" style={stylesList.iconArrow} />
+                  </Right>
+                </ListItem>
+              </View>
 
-            <View style={stylesList.listItemContainer}>
-              <ListItem style={stylesList.listItemPressable} onPress={this.onPressDrive}>
-                <Body style={styles.body}>
-                  <Label style={stylesList.label}>Привод</Label>
-                </Body>
-                <Right style={styles.right}>
-                  {
-                    filterDrive.length !== 0 &&
-                      <Text style={stylesList.listItemValue}>
-                        {`Выбрано: ${filterDrive.length}`}
-                      </Text>
-                  }
-                  <Icon name="arrow-forward" style={stylesList.iconArrow} />
-                </Right>
-              </ListItem>
-            </View>
+              <View style={stylesList.listItemContainer}>
+                <ListItem style={stylesList.listItemPressable} onPress={this.onPressGearbox}>
+                  <Body style={styles.body} >
+                    <Label style={stylesList.label}>КПП</Label>
+                  </Body>
+                  <Right style={styles.right}>
+                    {
+                      filterGearbox.length !== 0 &&
+                        <Text style={stylesList.listItemValue}>
+                          {`Выбрано: ${filterGearbox.length}`}
+                        </Text>
+                    }
+                    <Icon name="arrow-forward" style={stylesList.iconArrow} />
+                  </Right>
+                </ListItem>
+              </View>
 
-            <View style={stylesList.listItemContainer}>
-              <ListItem style={stylesList.listItem} last>
-                <Body>
-                  <Label style={[stylesList.label, styles.labelPriceSpecial]}>Спец.предложение</Label>
-                </Body>
-                <Right>
-                  <Switch onValueChange={this.onPressFilterPriceSpecial} value={filterPriceSpecial} />
-                </Right>
-              </ListItem>
+              <View style={stylesList.listItemContainer}>
+                <ListItem style={stylesList.listItemPressable} onPress={this.onPressEngineType}>
+                  <Body style={styles.body}>
+                    <Label style={stylesList.label}>Тип двигателя</Label>
+                  </Body>
+                  <Right style={styles.right}>
+                    {
+                      filterEngineType.length !== 0 &&
+                        <Text style={stylesList.listItemValue}>
+                          {`Выбрано: ${filterEngineType.length}`}
+                        </Text>
+                    }
+                    <Icon name="arrow-forward" style={stylesList.iconArrow} />
+                  </Right>
+                </ListItem>
+              </View>
+
+              <View style={stylesList.listItemContainer}>
+                <ListItem style={stylesList.listItemPressable} onPress={this.onPressDrive}>
+                  <Body style={styles.body}>
+                    <Label style={stylesList.label}>Привод</Label>
+                  </Body>
+                  <Right style={styles.right}>
+                    {
+                      filterDrive.length !== 0 &&
+                        <Text style={stylesList.listItemValue}>
+                          {`Выбрано: ${filterDrive.length}`}
+                        </Text>
+                    }
+                    <Icon name="arrow-forward" style={stylesList.iconArrow} />
+                  </Right>
+                </ListItem>
+              </View>
+
+              <View style={stylesList.listItemContainer}>
+                <ListItem style={stylesList.listItem} last>
+                  <Body>
+                    <Label style={[stylesList.label, styles.labelPriceSpecial]}>Спец.предложение</Label>
+                  </Body>
+                  <Right>
+                    <Switch onValueChange={this.onPressFilterPriceSpecial} value={filterPriceSpecial} />
+                  </Right>
+                </ListItem>
+              </View>
             </View>
           </Content>
           <Footer style={styles.footer}>
@@ -541,7 +540,7 @@ class NewCarFilterScreen extends Component {
                         {`НАЙДЕНО ${count}`}
                       </Text>
                       <Image
-                        source={require('../../../core/components/CustomIcon/assets/arrow-right.png')}
+                        source={require('../../../core/components/CustomIcon/assets/arrow_right_white.png')}
                         style={styles.buttonIcon}
                       />
                     </View>
@@ -549,7 +548,7 @@ class NewCarFilterScreen extends Component {
               }
             </Button>
           </Footer>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

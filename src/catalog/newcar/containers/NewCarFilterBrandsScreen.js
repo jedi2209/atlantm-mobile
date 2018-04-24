@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { SafeAreaView, View, StyleSheet } from 'react-native';
 import {
   Body,
   Label,
   Content,
   CheckBox,
   ListItem,
-  Container,
   StyleProvider,
 } from 'native-base';
 
@@ -28,7 +27,7 @@ import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
     backgroundColor: styleConst.color.bg,
     flex: 1,
   },
@@ -99,8 +98,8 @@ class NewCarFilterBrandsScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             {
               brandsKeys.map((brandId, idx) => {
                 const item = brands[brandId];
@@ -124,7 +123,7 @@ class NewCarFilterBrandsScreen extends Component {
               })
             }
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

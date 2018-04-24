@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
+import { SafeAreaView, View, StyleSheet, Alert } from 'react-native';
 
 // redux
 import { connect } from 'react-redux';
 import { actionSelectFilterRatingFrom, actionSelectFilterRatingTo } from '../../actions';
 
 // components
-import { Body, Content, ListItem, Container, StyleProvider } from 'native-base';
+import { Body, Content, ListItem, StyleProvider } from 'native-base';
 import RadioIcon from '../../../core/components/RadioIcon';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import ListItemHeader from '../../../profile/components/ListItemHeader';
@@ -25,9 +25,9 @@ import stylesHeader from '../../../core/components/Header/style';
 const RATING_ARRAY = [1, 2, 3, 4, 5];
 
 const styles = StyleSheet.create({
-  content: {
-    backgroundColor: styleConst.color.bg,
+  safearea: {
     flex: 1,
+    backgroundColor: styleConst.color.bg,
   },
 });
 
@@ -155,14 +155,14 @@ class ReviewsFilterDateScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <ListItemHeader text="РЕЙТИНГ ОТ" />
             {this.renderRatingFrom()}
             <ListItemHeader text="РЕЙТИНГ ДО" />
             {this.renderRatingTo()}
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

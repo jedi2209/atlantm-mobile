@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, View } from 'react-native';
-import { Container, Footer, FooterTab, Button, Text } from 'native-base';
+import { SafeAreaView, StyleSheet, Image, View } from 'react-native';
+
+// components
+import FooterButton from '../../core/components/FooterButton';
 
 // helpers
 import styleConst from '../../core/style-const';
 import { scale } from '../../utils/scale';
 
-const buttonIconSize = 18;
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     backgroundColor: styleConst.color.blue,
   },
   logoContainer: {
@@ -20,22 +22,6 @@ const styles = StyleSheet.create({
     height: scale(200),
     alignSelf: 'center',
   },
-  button: {
-    backgroundColor: styleConst.color.lightBlue,
-    flexDirection: 'row',
-  },
-  buttonText: {
-    color: '#fff',
-    fontFamily: styleConst.font.medium,
-    fontWeight: '500',
-    fontSize: 15,
-    letterSpacing: styleConst.ui.letterSpacing,
-  },
-  buttonIcon: {
-    marginLeft: 5,
-    width: buttonIconSize,
-    resizeMode: 'contain',
-  },
 });
 
 export default class IntroScreen extends Component {
@@ -43,31 +29,22 @@ export default class IntroScreen extends Component {
     header: null,
   })
 
+  onPressButton = () => this.props.navigation.navigate('ChooseDealerScreen')
+
   render() {
     return (
-      <Container style={styles.container} >
+      <SafeAreaView style={styles.container} >
         <View style={styles.logoContainer} >
             <Image
               style={styles.logo}
               source={require('../assets/logo.png')}
             />
           </View>
-        <Footer>
-          <FooterTab>
-            <Button
-              onPress={() => this.props.navigation.navigate('ChooseDealerScreen')}
-              full
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>ВЫБЕРИТЕ СВОЙ АВТОЦЕНТР</Text>
-              <Image
-                source={require('../../core/components/CustomIcon/assets/arrow-right.png')}
-                style={styles.buttonIcon}
-              />
-            </Button>
-          </FooterTab>
-        </Footer>
-      </Container>
+          <FooterButton
+            text="Выберите свой автоцентр"
+            onPressButton={this.onPressButton}
+          />
+      </SafeAreaView>
     );
   }
 }

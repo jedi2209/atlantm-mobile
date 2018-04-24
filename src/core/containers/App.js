@@ -66,13 +66,15 @@ class App extends Component {
       window.atlantmDebug = true;
     }
 
-    PushNotification.init({
-      fcmToken,
-      actionSetFCMToken,
-      actionSetPreviousFCMToken,
-      onPushPermissionGranted: this.onPushPermissionGranted,
-      onPushPermissionRejected: this.onPushPermissionRejected,
-    });
+    setTimeout(() => {
+      PushNotification.init({
+        fcmToken,
+        actionSetFCMToken,
+        actionSetPreviousFCMToken,
+        onPushPermissionGranted: this.onPushPermissionGranted,
+        onPushPermissionRejected: this.onPushPermissionRejected,
+      });
+    }, 1000);
 
     const id = dealerSelected.id;
 
@@ -147,8 +149,9 @@ class App extends Component {
       );
     }
 
-    return <Router onNavigationStateChange={this.onNavigationStateChange}
-    />;
+    return (
+        <Router onNavigationStateChange={this.onNavigationStateChange}/>
+    );
   }
 }
 

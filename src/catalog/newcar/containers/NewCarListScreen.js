@@ -19,8 +19,8 @@ import { EVENT_REFRESH } from '../../../core/actionTypes';
 
 const styles = StyleSheet.create({
   content: {
-    backgroundColor: styleConst.color.bg,
     flex: 1,
+    backgroundColor: styleConst.color.bg,
   },
 });
 

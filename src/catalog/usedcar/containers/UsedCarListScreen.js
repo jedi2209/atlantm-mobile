@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, SafeAreaView } from 'react-native';
 
 // redux
 import { connect } from 'react-redux';
@@ -28,9 +28,9 @@ import declOfNum from '../../../utils/decl-of-num';
 import { EVENT_DEFAULT } from '../../actionTypes';
 
 const styles = StyleSheet.create({
-  content: {
-    backgroundColor: styleConst.color.bg,
+  safearea: {
     flex: 1,
+    backgroundColor: styleConst.color.bg,
   },
 });
 
@@ -193,7 +193,7 @@ class UserCarListScreen extends Component {
     console.log('== UsedCarListScreen ==');
 
     return (
-      <View style={styles.content}>
+      <SafeAreaView style={styles.safearea}>
         <CarList
           items={items}
           pages={pages}
@@ -217,7 +217,7 @@ class UserCarListScreen extends Component {
           onPressPrice={this.onPressPrice}
           onClosePrice={this.onClosePrice}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 }

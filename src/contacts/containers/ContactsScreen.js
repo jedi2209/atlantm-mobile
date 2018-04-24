@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Image, View, Alert, NetInfo, StyleSheet, Platform, Linking } from 'react-native';
+import { SafeAreaView, Image, View, Alert, StyleSheet, Platform, Linking } from 'react-native';
 import {
-  Container,
   Content,
   Text,
   StyleProvider,
@@ -32,11 +31,14 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import stylesList from '../../core/components/Lists/style';
+import isInternet from '../../utils/internet';
+import { ERROR_NETWORK } from '../../core/const';
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
-  }
+  },
 });
 
 const mapStateToProps = ({ dealer, profile, contacts, nav }) => {
@@ -61,13 +63,12 @@ class ContactsScreen extends Component {
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 
-  onPressCallMe = () => {
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (!isConnected) {
-        setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
-        return;
-      }
+  onPressCallMe = async () => {
+    const isInternetExist = await isInternet();
 
+    if (!isInternetExist) {
+      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    } else {
       const {
         callMe,
         profile,
@@ -114,7 +115,7 @@ class ContactsScreen extends Component {
             setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
           }
         });
-    });
+    }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -162,7 +163,7 @@ class ContactsScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
+        <SafeAreaView style={styles.safearea}>
           <Content style={styles.content} >
             <DealerItemList
               navigation={navigation}
@@ -379,7 +380,7 @@ class ContactsScreen extends Component {
             </List>
             <InfoLine text={this.getRateAppInfoText()} />
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

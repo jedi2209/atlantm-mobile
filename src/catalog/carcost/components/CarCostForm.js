@@ -28,6 +28,8 @@ const isAndroid = Platform.OS === 'android';
 
 const styles = StyleSheet.create({
   input: {
+    lineHeight: null, // после обновления 0.54, фикс выравнивания
+
     ...Platform.select({
       android: {
         width: 2000,

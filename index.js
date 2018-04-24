@@ -1,19 +1,28 @@
-import React, { Component } from 'react';
-import { AppRegistry } from 'react-native';
-
-// component
-import Wrapper from './src/core/containers/Wrapper';
-
+import React from 'react';
+import { NativeModules, AppRegistry, YellowBox } from 'react-native';
 import { Sentry } from 'react-native-sentry';
 
-Sentry.config("https://XXXX:4df609d533fd4ce3be4fa721e6583c87@sentry.io/219899").install();
+YellowBox.ignoreWarnings([
+  'Remote debugger',
+  'Warning: componentWillMount is deprecated',
+  'Warning: componentWillReceiveProps is deprecated',
+  'Module AIRGoogleMapManager requires main queue setup since it overrides',
+  'Module RCTImageLoader requires main queue setup since it overrides',
+  'Module RNFetchBlob requires main queue setup since it overrides',
+  'Module ImageCropPicker requires main queue setup since it overrides',
+]);
 
-class AtlantmApplication extends Component {
-  render() {
-    return <Wrapper />;
-  }
+// For RN < 0.43
+if (__DEV__) {
+  NativeModules.DevSettings.setIsDebuggingRemotely(true);
 }
 
-AppRegistry.registerComponent('atlantm', () => AtlantmApplication);
+import Wrapper from './src/core/containers/Wrapper';
 
-console.ignoredYellowBox = ['Remote debugger'];
+Sentry
+  .config('https://XXXX:4df609d533fd4ce3be4fa721e6583c87@sentry.io/219899')
+  .install();
+
+const AtlantmApplication = () => <Wrapper />;
+
+AppRegistry.registerComponent('atlantm', () => AtlantmApplication);

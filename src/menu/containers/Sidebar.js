@@ -1,3 +1,5 @@
+// Только для Ipad
+
 import React, { Component } from 'react';
 import { Text, View, Image, Alert, StyleSheet, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';

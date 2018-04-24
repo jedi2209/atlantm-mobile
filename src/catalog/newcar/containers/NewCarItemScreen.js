@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
+  SafeAreaView,
   ActivityIndicator,
   TouchableHighlight,
 } from 'react-native';
@@ -14,7 +15,6 @@ import {
   Button,
   Content,
   Segment,
-  Container,
   StyleProvider,
 } from 'native-base';
 
@@ -251,8 +251,8 @@ class NewCarItemScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
 
             <View style={styles.gallery}>
               <View style={styles.titleContainer}>
@@ -393,7 +393,7 @@ class NewCarItemScreen extends Component {
               <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
             </Button>
           </Footer>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

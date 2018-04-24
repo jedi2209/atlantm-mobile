@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Alert, NetInfo } from 'react-native';
-import { Container, Content, List, StyleProvider } from 'native-base';
+import { SafeAreaView, StyleSheet, View, Alert } from 'react-native';
+import { Content, List, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -12,26 +12,32 @@ import { carFill, nameFill, phoneFill, emailFill } from '../../profile/actions';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DeviceInfo from 'react-native-device-info';
 import ServiceForm from '../../service/components/ServiceForm';
-import ServiceButton from '../../service/components/ServiceButton';
+import FooterButton from '../../core/components/FooterButton';
 import ProfileForm from '../../profile/components/ProfileForm';
 import ListItemHeader from '../../profile/components/ListItemHeader';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
-// helpres
+// helpers
+import isInternet from '../../utils/internet';
 import { yearMonthDay } from '../../utils/date';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
+import { ERROR_NETWORK } from '../../core/const';
 import { SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL } from '../actionTypes';
 
+const $size = 40;
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
-    paddingBottom: 100,
+  },
+  list: {
+    paddingBottom: $size,
   },
   serviceForm: {
-    marginTop: 40,
+    marginTop: $size,
   },
 });
 
@@ -82,13 +88,12 @@ class ServiceScreen extends Component {
     isOrderServiceRequest: PropTypes.bool,
   }
 
-  onPressOrder = () => {
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (!isConnected) {
-        setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
-        return;
-      }
+  onPressOrder = async () => {
+    const isInternetExist = await isInternet();
 
+    if (!isInternetExist) {
+      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    } else {
       const {
         car,
         date,
@@ -133,7 +138,7 @@ class ServiceScreen extends Component {
             setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
           }
         });
-    });
+    }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -167,8 +172,8 @@ class ServiceScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content} >
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <List style={styles.list}>
               <Spinner visible={isOrderServiceRequest} color={styleConst.color.blue} />
 
@@ -203,8 +208,11 @@ class ServiceScreen extends Component {
               </View>
             </List>
           </Content>
-          <ServiceButton onPress={this.onPressOrder}/>
-        </Container>
+          <FooterButton
+            text="Отправить"
+            onPressButton={this.onPressOrder}
+          />
+        </SafeAreaView>
       </StyleProvider>
     );
   }

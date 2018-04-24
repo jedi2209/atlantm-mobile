@@ -1,8 +1,8 @@
 // Вводный экран ЭКО, сейчас отключен, возможно вернется в скором будущем.
 
 import React, { Component } from 'react';
-import { Image, View, StyleSheet, Platform, Linking } from 'react-native';
-import { Container, Content, Text, StyleProvider, List, ListItem, Left, Body, Right, Icon } from 'native-base';
+import { SafeAreaView, Image, View, StyleSheet, Platform, Linking } from 'react-native';
+import { Content, Text, StyleProvider, List, ListItem, Left, Body, Right, Icon } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -27,7 +27,8 @@ const icons = {
 };
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
   },
 });
@@ -129,8 +130,8 @@ class EkoScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content} >
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <List style={stylesList.list}>
               {this.renderItem({
                 label: 'Отзывы о работе автоцентра',
@@ -139,17 +140,6 @@ class EkoScreen extends Component {
                 isLast: true,
                 onPressHandler: this.onPressReviews,
               })}
-              {/* {this.renderItem({
-                label: 'Потребовать связаться с вами',
-                iconName: 'contactMe',
-                onPressHandler: this.onPressContactMe,
-              })}
-              {this.renderItem({
-                label: 'Написать адвокату клиента',
-                iconName: 'advocate',
-                isLast: true,
-                onPressHandler: this.onPressAdvocate,
-              })} */}
             </List>
 
             <InfoLine infoIcon={true} text={TEXT_MESSAGE_CONTROL} />
@@ -166,7 +156,7 @@ class EkoScreen extends Component {
 
             <InfoLine text={this.getRateAppInfoText()} />
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet } from 'react-native';
 import { Text, StyleProvider, ListItem, Body } from 'native-base';
 
 // redux
@@ -16,9 +16,9 @@ import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: styleConst.color.bg,
+  safearea: {
     flex: 1,
+    backgroundColor: styleConst.color.bg,
   },
   message: {
     textAlign: 'center',
@@ -125,15 +125,15 @@ class DiscountsScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <View style={styles.container}>
+        <SafeAreaView style={styles.safearea}>
           <FlatList
             data={discounts}
             style={styles.list}
             ListEmptyComponent={this.renderEmptyComponent}
             renderItem={this.renderItem}
-            keyExtractor={item => item.hash}
+            keyExtractor={item => `${item.hash}`}
           />
-        </View>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

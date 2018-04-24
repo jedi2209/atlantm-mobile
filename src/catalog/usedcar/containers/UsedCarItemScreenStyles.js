@@ -3,9 +3,9 @@ import styleConst from '../../../core/style-const';
 import { verticalScale } from '../../../utils/scale';
 
 export default StyleSheet.create({
-  content: {
-    backgroundColor: styleConst.color.bg,
+  safearea: {
     flex: 1,
+    backgroundColor: styleConst.color.bg,
   },
   gallery: {
     position: 'relative',
@@ -63,7 +63,7 @@ export default StyleSheet.create({
   sectionTitleValue: {
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.light,
-    fontSize: 18,
+    fontSize: 16,
     color: styleConst.color.greyText4,
   },
   button: {
@@ -145,6 +145,6 @@ export default StyleSheet.create({
   dealerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
 });

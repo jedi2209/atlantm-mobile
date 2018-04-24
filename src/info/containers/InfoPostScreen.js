@@ -3,12 +3,10 @@ import {
   View,
   Text,
   Alert,
-  Image,
-  NetInfo,
   Linking,
-  // Platform,
   Dimensions,
   StyleSheet,
+  SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
 
@@ -19,7 +17,8 @@ import { fetchInfoPost, callMeForInfo } from '../actions';
 // components
 import DeviceInfo from 'react-native-device-info';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Container, Content, Button, Footer, FooterTab } from 'native-base';
+import { Content } from 'native-base';
+import FooterButton from '../../core/components/FooterButton';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
 import Imager from '../../core/components/Imager';
@@ -32,6 +31,8 @@ import { verticalScale } from '../../utils/scale';
 import stylesHeader from '../../core/components/Header/style';
 import { CALL_ME_INFO__SUCCESS, CALL_ME_INFO__FAIL } from '../actionTypes';
 import { dayMonth, dayMonthYear } from '../../utils/date';
+import isInternet from '../../utils/internet';
+import { ERROR_NETWORK } from '../../core/const';
 
 const isTablet = DeviceInfo.isTablet();
 
@@ -41,10 +42,9 @@ const { width: screenWidth } = Dimensions.get('window');
 const IMAGE_WIDTH = isTablet ? null : screenWidth;
 const IMAGE_HEIGHT = isTablet ? 220 : 170;
 
-const buttonIconSize = 28;
-
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
   },
   spinner: {
@@ -55,24 +55,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginVertical: 10,
     marginHorizontal: styleConst.ui.horizontalGap,
-  },
-  button: {
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: styleConst.color.border,
-    justifyContent: 'flex-start',
-    paddingLeft: styleConst.ui.horizontalGap,
-  },
-  buttonText: {
-    fontSize: 18,
-    fontFamily: styleConst.font.regular,
-    letterSpacing: styleConst.ui.letterSpacing,
-  },
-  buttonIcon: {
-    marginRight: 10,
-    width: buttonIconSize,
-    height: buttonIconSize,
   },
   date: {
     color: styleConst.color.greyText2,
@@ -163,15 +145,9 @@ class InfoPostScreen extends Component {
       return this.onLayoutImageTablet();
     }
 
-    const {
-      width: imageDynamicWidth,
-      height: imageDynamicHeight,
-    } = e.nativeEvent.layout;
+    const { height: imageDynamicHeight } = e.nativeEvent.layout;
 
-    this.setState({
-      imageHeight: imageDynamicHeight,
-      // imageWidth: imageDynamicWidth,
-    });
+    this.setState({ imageHeight: imageDynamicHeight });
   }
 
   onLayoutWebView= (e) => {
@@ -187,13 +163,12 @@ class InfoPostScreen extends Component {
     return posts[id];
   }
 
-  onPressCallMe = () => {
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (!isConnected) {
-        setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
-        return;
-      }
+  onPressCallMe = async () => {
+    const isInternetExist = await isInternet();
 
+    if (!isInternetExist) {
+      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    } else {
       const {
         name,
         email,
@@ -239,22 +214,12 @@ class InfoPostScreen extends Component {
             setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
           }
         });
-    });
+    }
   }
 
   processDate(date = {}) {
     return `c ${dayMonth(date.from)} по ${dayMonthYear(date.to)}`;
   }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   const nav = nextProps.nav.newState;
-  //   const isActiveScreen = nav.routes[nav.index].routeName === 'InfoPostScreen';
-
-  //   return (this.state.imageWidth !== nextState.imageWidth) ||
-  //     (this.state.imageHeight !== nextState.imageHeight) ||
-  //       (this.state.webViewWidth !== nextState.webViewWidth) ||
-  //         (this.props.isСallMeRequest !== nextProps.isСallMeRequest && isActiveScreen);
-  // }
 
   onMessage({ nativeEvent }) {
     const data = nativeEvent.data;
@@ -268,7 +233,7 @@ class InfoPostScreen extends Component {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
-    const { navigation, isCallMeRequest } = this.props;
+    const { isCallMeRequest } = this.props;
 
     const post = this.getPost();
     let text = get(post, 'text');
@@ -280,13 +245,12 @@ class InfoPostScreen extends Component {
       text = processHtml(text, this.state.webViewWidth);
     }
 
-    console.log('== InfoPost ==', imageUrl);
+    console.log('== InfoPost ==');
 
     return (
-      <Container>
-        <Content style={styles.content}>
-
-        <Spinner visible={isCallMeRequest} color={styleConst.color.blue} />
+      <SafeAreaView style={styles.safearea}>
+        <Content>
+          <Spinner visible={isCallMeRequest} color={styleConst.color.blue} />
 
           {
             !text ?
@@ -326,22 +290,15 @@ class InfoPostScreen extends Component {
               )
           }
         </Content>
-        <Footer>
-          <FooterTab>
-            <Button
-              onPress={this.onPressCallMe}
-              full
-              style={styles.button}
-            >
-              <Image
-                source={require('../../contacts/assets/call_me.png')}
-                style={styles.buttonIcon}
-              />
-              <Text style={styles.buttonText}>Позвоните мне</Text>
-            </Button>
-          </FooterTab>
-        </Footer>
-      </Container>
+
+        <FooterButton
+          theme="white"
+          icon="phone"
+          uppercase={false}
+          text="Позвоните мне"
+          onPressButton={this.onPressCallMe}
+        />
+      </SafeAreaView>
     );
   }
 }

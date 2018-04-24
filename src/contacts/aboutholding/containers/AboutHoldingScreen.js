@@ -19,7 +19,8 @@ import stylesList from '../../../core/components/Lists/style';
 import { RUSSIA, BELARUSSIA, UKRAINE } from '../../../core/const';
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
   },
   textContainer: {
@@ -75,8 +76,8 @@ class AboutHoldingScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <Container style={styles.safearea}>
+          <Content>
             <List style={stylesList.list}>
               <View style={[stylesList.listItemContainer, stylesList.listItemContainerFirst]}>
                 {
