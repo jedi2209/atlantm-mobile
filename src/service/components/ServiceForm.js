@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
     alignSelf: Platform.OS === 'ios' ? 'stretch' : 'flex-start',
     flex: 2.1,
   },
+
 });
 const datePickerStyles = {
   dateTouchBody: {
@@ -45,6 +46,12 @@ const datePickerStyles = {
     width: 0,
     marginLeft: 0,
     marginRight: 0,
+  },
+  btnCancel: {
+    padding: 10,
+  },
+  btnConfirm: {
+    padding: 10,
   },
 };
 
@@ -80,6 +87,7 @@ export default class ServiceForm extends PureComponent {
               <Item style={stylesList.inputItem} fixedLabel>
                 <Label style={stylesList.label}>Авто</Label>
                 <Input
+                  style={stylesList.input}
                   autoCapitalize="none"
                   autoCorrect={false}
                   placeholder="Поле для заполнения"

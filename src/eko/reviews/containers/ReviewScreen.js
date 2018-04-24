@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Container, Content, StyleProvider } from 'native-base';
+import { SafeAreaView, View, StyleSheet } from 'react-native';
+import { Content, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -20,7 +20,8 @@ import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
   },
   review: {
@@ -101,8 +102,8 @@ class ReviewScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <HeaderSubtitle content={subtitle} isBig={true} />
 
             <View style={styles.review}>
@@ -111,7 +112,7 @@ class ReviewScreen extends Component {
 
             { review.answer ? <ReviewDealerAnswer text={review.answer} /> : null }
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

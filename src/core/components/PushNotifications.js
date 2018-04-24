@@ -22,10 +22,16 @@ export default {
     actionSetPreviousFCMToken,
   }) {
     FCM.requestPermissions()
-      .then(onPushPermissionGranted)
-      .catch(onPushPermissionRejected);
-
-    FCM.getFCMToken().then(token => actionSetFCMToken(token || null));
+      .then(() => {
+        FCM.getFCMToken().then(token => {
+          actionSetFCMToken(token);
+          onPushPermissionGranted();
+        });
+      })
+      .catch(() => {
+        actionSetFCMToken(null);
+        onPushPermissionRejected();
+      });
 
     this.refreshTokenListener = FCM.on(FCMEvent.RefreshToken, (token) => {
       console.log('refresh FCM token', token);

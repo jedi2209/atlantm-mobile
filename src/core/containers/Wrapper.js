@@ -14,9 +14,6 @@ import SplashScreen from 'react-native-splash-screen';
 // components
 import App from './App';
 
-// helpers
-import { isFunction } from 'lodash';
-
 if (!__DEV__) {
   // eslint-disable-line no-undef
   [

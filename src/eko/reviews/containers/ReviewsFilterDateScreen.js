@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Body, Label, Content, ListItem, Container, StyleProvider } from 'native-base';
+import { SafeAreaView, View, StyleSheet } from 'react-native';
+import { Body, Label, Content, ListItem, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -28,9 +28,9 @@ import stylesHeader from '../../../core/components/Header/style';
 import { substructMonth, substructWeek, substructYear, substruct10Years } from '../../../utils/date';
 
 const styles = StyleSheet.create({
-  content: {
-    backgroundColor: styleConst.color.bg,
+  safearea: {
     flex: 1,
+    backgroundColor: styleConst.color.bg,
   },
 });
 
@@ -110,8 +110,8 @@ class ReviewsFilterDateScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             {
               [
                 REVIEWS_FILTER_DATE_PERIOD__ALL,
@@ -143,7 +143,7 @@ class ReviewsFilterDateScreen extends Component {
               })
             }
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

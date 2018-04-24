@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-} from 'react-native';
-import PropTypes from 'prop-types';
-import {
-  Container,
-} from 'native-base';
+import { View, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
 
 // Maps
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
@@ -23,7 +15,8 @@ import stylesHeader from '../../../core/components/Header/style';
 const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  container: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
   },
   mapContainer: {
@@ -81,7 +74,7 @@ class MapScreen extends Component {
     console.log('== MapScreen == ');
 
     return (
-      <Container style={styles.container} >
+      <SafeAreaView style={styles.safearea} >
         <View style={styles.mapContainer}>
           <MapView
             provider={PROVIDER_GOOGLE}
@@ -109,7 +102,7 @@ class MapScreen extends Component {
             />
           </MapView>
         </View>
-      </Container>
+      </SafeAreaView>
     );
   }
 }

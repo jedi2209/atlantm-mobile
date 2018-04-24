@@ -4,17 +4,18 @@ import {
   Platform,
   Dimensions,
   StyleSheet,
+  SafeAreaView,
+  ImageBackground,
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
 import {
-  Container,
-  Content,
   Text,
   List,
-  ListItem,
   Body,
   Right,
+  Content,
+  ListItem,
   StyleProvider,
 } from 'native-base';
 
@@ -48,10 +49,7 @@ const IMAGE_WIDTH = isTablet ? null : screenWidth;
 const IMAGE_HEIGHT = isTablet ? 220 : 160;
 
 const styles = StyleSheet.create({
-  content: {
-    backgroundColor: styleConst.color.bg,
-  },
-  spinnerContainer: {
+  safearea: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
   },
@@ -256,9 +254,9 @@ class AboutDealerScreen extends Component {
 
     if (!dealer || isFetchingDealer) {
       return (
-        <View style={styles.spinnerContainer} >
+        <SafeAreaView style={styles.safearea}>
           <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
-        </View>
+        </SafeAreaView>
       );
     }
 
@@ -272,11 +270,11 @@ class AboutDealerScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <HeaderSubtitle content={dealer.name} />
             <View ref="imageContainer">
-              <Imager
+              <ImageBackground
                 onLayout={this.onLayoutImage}
                 style={[
                   styles.image,
@@ -301,7 +299,7 @@ class AboutDealerScreen extends Component {
                     })
                   }
                 </View>
-              </Imager>
+              </ImageBackground>
             </View>
 
             <List style={[styles.list, styles.listHolding]}>
@@ -356,7 +354,7 @@ class AboutDealerScreen extends Component {
                 ) : null
             }
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

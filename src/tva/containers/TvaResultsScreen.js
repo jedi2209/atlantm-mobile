@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, Alert, StyleSheet, TouchableOpacity, NetInfo } from 'react-native';
-import { Body, Label, Item, Content, ListItem, Container, StyleProvider } from 'native-base';
+import { SafeAreaView, Text, View, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { Body, Label, Item, Content, ListItem, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -26,9 +26,11 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import { TVA_SEND_MESSAGE__SUCCESS, TVA_SEND_MESSAGE__FAIL } from '../actionTypes';
+import isInternet from '../../utils/internet';
+import { ERROR_NETWORK } from '../../core/const';
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
     backgroundColor: styleConst.color.bg,
     flex: 1,
     paddingBottom: 100,
@@ -101,13 +103,12 @@ class TvaResultsScreen extends Component {
     return isActiveScreen;
   }
 
-  onPressMessageButton = () => {
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (!isConnected) {
-        setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
-        return;
-      }
+  onPressMessageButton = async () => {
+    const isInternetExist = await isInternet();
 
+    if (!isInternetExist) {
+      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    } else {
       const {
         message,
         dealerSelected,
@@ -139,7 +140,7 @@ class TvaResultsScreen extends Component {
             setTimeout(() => Alert.alert('', 'Произошла ошибка, попробуйте снова'), 100);
           }
         });
-    });
+    }
   }
 
   onPressOrder = (orderId) => this.props.actionSetActiveTvaOrderId(orderId)
@@ -184,8 +185,8 @@ class TvaResultsScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <Spinner visible={isMessageSending} color={styleConst.color.blue} />
             <HeaderSubtitle content={textList} isBig={true} />
             {
@@ -221,7 +222,7 @@ class TvaResultsScreen extends Component {
             />
 
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

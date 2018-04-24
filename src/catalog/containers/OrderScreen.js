@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Alert, NetInfo, Text, Image } from 'react-native';
-import { Container, Content, List, StyleProvider, Footer, Button } from 'native-base';
+import { SafeAreaView, StyleSheet, View, Alert, Text, Image } from 'react-native';
+import { Content, List, StyleProvider, Footer, Button } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -16,17 +16,20 @@ import ProfileForm from '../../profile/components/ProfileForm';
 import ListItemHeader from '../../profile/components/ListItemHeader';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
-// helpres
+// helpers
 import { get } from 'lodash';
+import isInternet from '../../utils/internet';
 import numberWithGap from '../../utils/number-with-gap';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import { CATALOG_ORDER__SUCCESS, CATALOG_ORDER__FAIL } from '../actionTypes';
+import { ERROR_NETWORK } from '../../core/const';
 
 const FOOTER_HEIGHT = 50;
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
     paddingBottom: 100,
   },
@@ -96,13 +99,12 @@ class OrderScreen extends Component {
     this.props.actionCommentOrderCarFill('');
   }
 
-  onPressOrder = () => {
-    NetInfo.isConnected.fetch().then(isConnected => {
-      if (!isConnected) {
-        setTimeout(() => Alert.alert('Отсутствует интернет соединение'), 100);
-        return;
-      }
+  onPressOrder = async () => {
+    const isInternetExist = await isInternet();
 
+    if (!isInternetExist) {
+      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    } else {
       const {
         name,
         phone,
@@ -150,7 +152,7 @@ class OrderScreen extends Component {
             setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
           }
         });
-    });
+    }
   }
 
   // shouldComponentUpdate(nextProps) {
@@ -192,8 +194,8 @@ class OrderScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content} >
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <List style={styles.list}>
               <Spinner visible={isOrderCarRequest} color={styleConst.color.blue} />
 
@@ -232,13 +234,13 @@ class OrderScreen extends Component {
               <Button onPress={this.onPressOrder} full style={styles.button}>
                 <Text style={styles.buttonText}>ОТПРАВИТЬ</Text>
                 <Image
-                  source={require('../../core/components/CustomIcon/assets/arrow-right.png')}
+                  source={require('../../core/components/CustomIcon/assets/arrow_right_white.png')}
                   style={styles.buttonIcon}
                 />
               </Button>
           </Footer>
 
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

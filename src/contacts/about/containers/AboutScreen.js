@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Platform, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { ImageBackground, View, Platform, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import { Container, Content, Text, List, ListItem, Body, Right, StyleProvider } from 'native-base';
 
 // redux
@@ -31,7 +31,8 @@ const IMAGE_WIDTH = isTablet ? null : screenWidth;
 const IMAGE_HEIGHT = isTablet ? 220 : 160;
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
+    flex: 1,
     backgroundColor: styleConst.color.bg,
   },
   descriptionContainer: {
@@ -118,13 +119,6 @@ class AboutScreen extends Component {
     this.setState({ webViewWidth });
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   const nav = nextProps.nav.newState;
-  //   const isActiveScreen = nav.routes[nav.index].routeName === 'AboutScreen';
-
-  //   return this.props.dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen;
-  // }
-
   renderPhones = (phones) => {
     if (!phones || !phones.length) return null;
 
@@ -205,11 +199,11 @@ class AboutScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
+        <Container style={styles.safearea}>
           <Content style={styles.content}>
             <HeaderSubtitle content={dealerSelected.name} />
             <View ref="imageContainer">
-              <Imager
+              <ImageBackground
                 onLayout={this.onLayoutImage}
                 style={[
                   styles.image,
@@ -234,7 +228,7 @@ class AboutScreen extends Component {
                     })
                   }
                 </View>
-              </Imager>
+              </ImageBackground>
             </View>
 
             <List style={[styles.list, styles.listHolding]}>

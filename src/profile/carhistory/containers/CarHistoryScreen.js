@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Alert } from 'react-native';
-import { StyleProvider, Container, Content, ListItem, Body, Right, Icon, Row, Col, Item, Label } from 'native-base';
+import { SafeAreaView, StyleSheet, View, Text, Alert } from 'react-native';
+import { StyleProvider, Content, ListItem, Body, Right, Icon, Row, Col, Item, Label } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -30,11 +30,9 @@ import { MONTH_TEXT } from '../../const';
 import { ERROR_NETWORK } from '../../../core/const';
 
 const styles = StyleSheet.create({
-  content: {
-    backgroundColor: styleConst.color.bg,
-  },
-  emptyContainer: {
+  safearea: {
     flex: 1,
+    backgroundColor: styleConst.color.bg,
   },
   emptyText: {
     textAlign: 'center',
@@ -369,18 +367,18 @@ class CarHistoryScreen extends Component {
 
     if (isEmpty(carHistory) || !carHistory.items) {
       return (
-        <View style={[styles.emptyContainer, styles.content]}>
+        <SafeAreaView style={styles.safearea}>
           <Text style={styles.emptyText}>
             Истории пока нет
           </Text>
-        </View>
+        </SafeAreaView>
       );
     }
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <View style={styles.about}>
               {car.brand ? this.renderListItem('Марка', car.brand) : null}
               {car.model ? this.renderListItem('Модель', car.model) : null}
@@ -389,7 +387,7 @@ class CarHistoryScreen extends Component {
             </View>
             {Object.keys(get(carHistory, 'items'), []).length ? this.renderLevel1(carHistory.items) : null}
           </Content>
-        </Container>
+        </SafeAreaView>
       </StyleProvider>
     );
   }

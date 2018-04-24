@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Text, Image, Dimensions } from 'react-native';
-import { Button, Container, Content } from 'native-base';
+import { SafeAreaView, StyleSheet, View, Text, Image, Dimensions } from 'react-native';
+import { Button, Content } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -29,7 +29,7 @@ const isTablet = DeviceInfo.isTablet();
 const { width } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
-  content: {
+  safearea: {
     backgroundColor: styleConst.color.bg,
     flex: 1,
   },
@@ -183,8 +183,8 @@ class CatalogScreen extends Component {
     console.log('== Catalog ==');
 
     return (
-        <Container>
-          <Content style={styles.content}>
+        <SafeAreaView style={styles.safearea}>
+          <Content>
             <View style={styles.buttonGroup} onLayout={this.onLayout}>
               <View style={[styles.imageContainer, { width: this.state.itemWidth }]}>
                 <View style={styles.imageDividerContainer}>
@@ -203,7 +203,7 @@ class CatalogScreen extends Component {
               </Button>
             </View>
           </Content>
-        </Container>
+        </SafeAreaView>
     );
   }
 }
