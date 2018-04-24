@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, StyleSheet, View, Alert, Text, Image } from 'react-native';
-import { Content, List, StyleProvider, Footer, Button } from 'native-base';
+import { StyleSheet, View, Alert, Text, Image } from 'react-native';
+import { Container, Content, List, StyleProvider, Footer, Button } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
   safearea: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
-    paddingBottom: 100,
   },
   button: {
     flex: 1,
@@ -53,6 +52,9 @@ const styles = StyleSheet.create({
   },
   footer: {
     height: FOOTER_HEIGHT,
+  },
+  comment: {
+    paddingBottom: 40,
   },
 });
 
@@ -155,21 +157,6 @@ class OrderScreen extends Component {
     }
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   const { dealerSelected, date, name, phone, email, car, isOrderCarRequest } = this.props;
-
-  //   const nav = nextProps.nav.newState;
-  //   const isActiveScreen = nav.routes[nav.index].routeName === 'OrderScreen';
-
-  //   return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-  //       (name !== nextProps.name) ||
-  //         (phone !== nextProps.phone) ||
-  //           (email !== nextProps.email) ||
-  //             (car !== nextProps.car) ||
-  //               (date.date !== nextProps.date.date) ||
-  //                 (isOrderCarRequest !== nextProps.isOrderCarRequest);
-  // }
-
   render() {
     const {
       navigation,
@@ -194,7 +181,7 @@ class OrderScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
+        <Container style={styles.safearea}>
           <Content>
             <List style={styles.list}>
               <Spinner visible={isOrderCarRequest} color={styleConst.color.blue} />
@@ -223,10 +210,12 @@ class OrderScreen extends Component {
 
               <ListItemHeader text="КОММЕНТАРИИ" />
 
-              <CommentOrderForm
-                comment={comment}
-                commentFill={actionCommentOrderCarFill}
-              />
+              <View style={styles.comment}>
+                <CommentOrderForm
+                  comment={comment}
+                  commentFill={actionCommentOrderCarFill}
+                />
+              </View>
             </List>
           </Content>
 
@@ -240,7 +229,7 @@ class OrderScreen extends Component {
               </Button>
           </Footer>
 
-        </SafeAreaView>
+        </Container>
       </StyleProvider>
     );
   }
