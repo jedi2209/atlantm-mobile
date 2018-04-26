@@ -44,6 +44,7 @@
 		36C21038C2F147F4BCF32F56 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0CAA5891A43F4078837141CC /* Octicons.ttf */; };
 		434C2B91C6E04734A17F9144 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 284AA30378FA4394BC7577D3 /* SimpleLineIcons.ttf */; };
 		4E26233F06B84C06BF1A24DF /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A43D6A1E78B04B9280F56695 /* MaterialIcons.ttf */; };
+		4F0C1DFB20923A8300529EE1 /* RNAmplitudeSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C1DFA20923A8300529EE1 /* RNAmplitudeSDK.m */; };
 		4F22D4111F6A922D0038CE71 /* Default-568h.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F22D4101F6A922D0038CE71 /* Default-568h.png */; };
 		4F7D6E851FEED87200644AE2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F7D6E5C1FEED87200644AE2 /* GoogleService-Info.plist */; };
 		4F7D6F0F1FF04FA900644AE2 /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F7D6EF01FF04F7800644AE2 /* libRCTPushNotification.a */; };
@@ -74,7 +75,6 @@
 		866CFD3EE08644C6BEEA1FE2 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D859217EE8A149CCAF50D763 /* EvilIcons.ttf */; };
 		8F01C9DA2AA7413BB2CD77D8 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B74FDA2F87DC4C07811A623E /* libRNDeviceInfo.a */; };
 		95A0D98BB6E04F4C94FE57A1 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 00BB43A814EF4DDBBB98E033 /* EvilIcons.ttf */; };
-		99C4697C1C7236F7DA896AC6 /* libPods-atlantm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB03618E1499272CEE90E365 /* libPods-atlantm.a */; };
 		9B4166172A054DCE864F7E35 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D65855FE71414486B7392188 /* Entypo.ttf */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		B8274290BCB945BDA95F8554 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D0061A06FA3746A8848F5A22 /* rubicon-icon-font.ttf */; };
@@ -84,6 +84,7 @@
 		D666F572C5FC42499DD1D19E /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CFCF10D31954436A94AC9604 /* MaterialCommunityIcons.ttf */; };
 		DACC5DD7A6184E9984837FF5 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DEBC39E45C2C412297E9C0CC /* Entypo.ttf */; };
 		DBA5D390334048CAA1104641 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 010554BF7D094A7D9073F4C0 /* FontAwesome.ttf */; };
+		DC24F0C35CCD8DB690500395 /* libPods-atlantm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D761CE5A17B66ED4A5A6BC96 /* libPods-atlantm.a */; };
 		E0702E44553B43C08243D952 /* libSplashScreen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1508A2C0BFE640BDBE43723C /* libSplashScreen.a */; };
 		E4D22B78540B455F95E47082 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D75B9D737FAB405BAA287466 /* Octicons.ttf */; };
 		E4E3CCD928214E238C92AE83 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4EBFEC8A3424F41A07E7907 /* Zocial.ttf */; };
@@ -253,6 +254,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 3D3CD9181DE5FBD800167DC4;
 			remoteInfo = "jschelpers-tvOS";
+		};
+		4F0C1CFF209236F200529EE1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 146833FF1AC3E56700842450 /* React.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 83CBBA2D1A601D0E00E9B192;
+			remoteInfo = React;
 		};
 		4F22D4A61F6BCD300038CE71 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -488,6 +496,8 @@
 		3EAFA8E5B4DE42F9B7A0B8DA /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		46F30A044F2044EC91E0BE98 /* libRNFetchBlob.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFetchBlob.a; sourceTree = "<group>"; };
 		47A960BEEBBF473DAB5CFEED /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
+		4F0C1DF920923A8300529EE1 /* RNAmplitudeSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNAmplitudeSDK.h; sourceTree = "<group>"; };
+		4F0C1DFA20923A8300529EE1 /* RNAmplitudeSDK.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNAmplitudeSDK.m; sourceTree = "<group>"; };
 		4F22D4101F6A922D0038CE71 /* Default-568h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h.png"; path = "atlantm/Default-568h.png"; sourceTree = "<group>"; };
 		4F7D6E5C1FEED87200644AE2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4F7D6E861FEEDD7700644AE2 /* atlantm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = atlantm.entitlements; path = atlantm/atlantm.entitlements; sourceTree = "<group>"; };
@@ -533,17 +543,17 @@
 		4FD5B02A1F5FF051001048E1 /* RCTConvert+GMSMapViewType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "RCTConvert+GMSMapViewType.m"; sourceTree = "<group>"; };
 		52A8D74470834E349B01D5AA /* libAirMaps.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libAirMaps.a; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
+		6483AB9F133045907610F91B /* Pods-atlantm.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm.release.xcconfig"; path = "Pods/Target Support Files/Pods-atlantm/Pods-atlantm.release.xcconfig"; sourceTree = "<group>"; };
 		65679ABDFC3B4E0B9A1F6EFA /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		745FB077B689416BB73136E7 /* RNFIRMessaging.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFIRMessaging.xcodeproj; path = "../node_modules/react-native-fcm/ios/RNFIRMessaging.xcodeproj"; sourceTree = "<group>"; };
 		766A729A1E374098A1392010 /* imageCropPicker.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = imageCropPicker.xcodeproj; path = "../node_modules/react-native-image-crop-picker/ios/imageCropPicker.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		7A902487E3474C7588C2B415 /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
-		7F69467B2C3B7F5DD67A934C /* Pods-atlantm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm.debug.xcconfig"; path = "Pods/Target Support Files/Pods-atlantm/Pods-atlantm.debug.xcconfig"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
+		8BAABF97D3C3E0FA3AE96B07 /* Pods-atlantm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm.debug.xcconfig"; path = "Pods/Target Support Files/Pods-atlantm/Pods-atlantm.debug.xcconfig"; sourceTree = "<group>"; };
 		8CB58C5F572C49209A6C1EE5 /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFetchBlob.xcodeproj; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; };
 		8FFABF2D66A04E0F89AFE0B1 /* libRNFIRMessaging.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFIRMessaging.a; sourceTree = "<group>"; };
 		A43D6A1E78B04B9280F56695 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
-		AB03618E1499272CEE90E365 /* libPods-atlantm.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atlantm.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		B4EBFEC8A3424F41A07E7907 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		B74FDA2F87DC4C07811A623E /* libRNDeviceInfo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNDeviceInfo.a; sourceTree = "<group>"; };
@@ -553,12 +563,12 @@
 		D0061A06FA3746A8848F5A22 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
 		D65855FE71414486B7392188 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		D75B9D737FAB405BAA287466 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/native-base/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
+		D761CE5A17B66ED4A5A6BC96 /* libPods-atlantm.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atlantm.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D859217EE8A149CCAF50D763 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		DEBC39E45C2C412297E9C0CC /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		E43EEE8A75424499BB7A0283 /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		E9A7C5794E09433F811474A9 /* SplashScreen.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = SplashScreen.xcodeproj; path = "../node_modules/react-native-splash-screen/ios/SplashScreen.xcodeproj"; sourceTree = "<group>"; };
 		F1B5407B90624396B3BF3F2E /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; };
-		F26F7C6CBB3548B39F859360 /* Pods-atlantm.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm.release.xcconfig"; path = "Pods/Target Support Files/Pods-atlantm/Pods-atlantm.release.xcconfig"; sourceTree = "<group>"; };
 		FD5A251E346E47799F619461 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -593,11 +603,11 @@
 				5B3260698F954A9FBD9BA08A /* libRNFetchBlob.a in Frameworks */,
 				E0702E44553B43C08243D952 /* libSplashScreen.a in Frameworks */,
 				1517813FED744DBF89745BDF /* libRNVectorIcons.a in Frameworks */,
-				99C4697C1C7236F7DA896AC6 /* libPods-atlantm.a in Frameworks */,
 				8F01C9DA2AA7413BB2CD77D8 /* libRNDeviceInfo.a in Frameworks */,
 				7FF28B9D9B564096A17F3044 /* libRNFIRMessaging.a in Frameworks */,
 				0E5F67CB89184F358650EABD /* libimageCropPicker.a in Frameworks */,
 				26DC1F90688F40B58CE173AC /* libz.tbd in Frameworks */,
+				DC24F0C35CCD8DB690500395 /* libPods-atlantm.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -688,8 +698,8 @@
 		0A57AC9B7A4607A43AE82901 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				AB03618E1499272CEE90E365 /* libPods-atlantm.a */,
 				E43EEE8A75424499BB7A0283 /* libz.tbd */,
+				D761CE5A17B66ED4A5A6BC96 /* libPods-atlantm.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -751,6 +761,15 @@
 				4FCF151E203F846F000D9EE0 /* libprivatedata-tvOS.a */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		1806FB4836B5D7BEB85A434B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8BAABF97D3C3E0FA3AE96B07 /* Pods-atlantm.debug.xcconfig */,
+				6483AB9F133045907610F91B /* Pods-atlantm.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 		4F22D4A31F6BCD300038CE71 /* Products */ = {
@@ -897,15 +916,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		74D217FA63F8F6B7AF0CE92B /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				7F69467B2C3B7F5DD67A934C /* Pods-atlantm.debug.xcconfig */,
-				F26F7C6CBB3548B39F859360 /* Pods-atlantm.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		78C398B11ACF4ADC00677621 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -984,15 +994,17 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				4F0C1DF920923A8300529EE1 /* RNAmplitudeSDK.h */,
+				4F0C1DFA20923A8300529EE1 /* RNAmplitudeSDK.m */,
 				4FD5B0041F5FF051001048E1 /* AirGoogleMaps */,
 				13B07FAE1A68108700A75B9A /* atlantm */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* atlantmTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				833976645FB34B0EB0493EF4 /* Resources */,
-				74D217FA63F8F6B7AF0CE92B /* Pods */,
 				0A57AC9B7A4607A43AE82901 /* Frameworks */,
 				4F48C10C1FA766610064D913 /* Recovered References */,
+				1806FB4836B5D7BEB85A434B /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -1044,18 +1056,19 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "atlantm" */;
 			buildPhases = (
-				A272DCC7BF98EDBC6A304B6D /* [CP] Check Pods Manifest.lock */,
+				E8A3C8AC81838643C1BFB00D /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				0F66A7934C67C04FD6DAD040 /* [CP] Embed Pods Frameworks */,
-				597B712DE46F845A1A4EE7B4 /* [CP] Copy Pods Resources */,
 				21BC63A713514C619FAF8FD5 /* Upload Debug Symbols to Sentry */,
+				AADE152397205AEBFA88CD30 /* [CP] Embed Pods Frameworks */,
+				B45CA0BEA8F07A9E35BC993C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4F0C1D00209236F200529EE1 /* PBXTargetDependency */,
 			);
 			name = atlantm;
 			productName = "Hello World";
@@ -1662,21 +1675,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# First set the path to sentry.properties\nexport SENTRY_PROPERTIES=sentry.properties\n\n# Setup nvm and set node\n[ -z \"$NVM_DIR\" ] && export NVM_DIR=\"$HOME/.nvm\"\n\nif [[ -s \"$HOME/.nvm/nvm.sh\" ]]; then\n. \"$HOME/.nvm/nvm.sh\"\nelif [[ -x \"$(command -v brew)\" && -s \"$(brew --prefix nvm)/nvm.sh\" ]]; then\n. \"$(brew --prefix nvm)/nvm.sh\"\nfi\n\n# Set up the nodenv node version manager if present\nif [[ -x \"$HOME/.nodenv/bin/nodenv\" ]]; then\neval \"$(\"$HOME/.nodenv/bin/nodenv\" init -)\"\nfi\n\n[ -z \"$NODE_BINARY\" ] && export NODE_BINARY=\"node\"\n\n$NODE_BINARY ../node_modules/@sentry/cli/bin/sentry-cli react-native xcode \\\n../node_modules/react-native/scripts/react-native-xcode.sh\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 		};
-		0F66A7934C67C04FD6DAD040 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-atlantm/Pods-atlantm-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		21BC63A713514C619FAF8FD5 /* Upload Debug Symbols to Sentry */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1705,19 +1703,42 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/sentry-cli-binary/bin/sentry-cli react-native xcode ../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		597B712DE46F845A1A4EE7B4 /* [CP] Copy Pods Resources */ = {
+		AADE152397205AEBFA88CD30 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-atlantm/Pods-atlantm-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B45CA0BEA8F07A9E35BC993C /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-atlantm/Pods-atlantm-resources.sh",
+				"${PODS_ROOT}/Amplitude-iOS/Amplitude/api.amplitude.com.der",
+				"${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoCaLimitedRsaCertificationAuthority.der",
+				"${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoRsaCA.der",
+				"${PODS_ROOT}/Amplitude-iOS/Amplitude/ComodoRsaDomainValidationCA.der",
 				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/QBImagePickerController/QBImagePicker.bundle",
 				"${PODS_ROOT}/RSKImageCropper/RSKImageCropper/RSKImageCropperStrings.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/api.amplitude.com.der",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ComodoCaLimitedRsaCertificationAuthority.der",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ComodoRsaCA.der",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/ComodoRsaDomainValidationCA.der",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RSKImageCropperStrings.bundle",
@@ -1727,7 +1748,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-atlantm/Pods-atlantm-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A272DCC7BF98EDBC6A304B6D /* [CP] Check Pods Manifest.lock */ = {
+		E8A3C8AC81838643C1BFB00D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1774,6 +1795,7 @@
 				4FD5B0371F5FF051001048E1 /* AIRGoogleMapPolygonManager.m in Sources */,
 				4FD5B02C1F5FF051001048E1 /* AIRGMSPolygon.m in Sources */,
 				4FD5B02F1F5FF051001048E1 /* AIRGoogleMapCallout.m in Sources */,
+				4F0C1DFB20923A8300529EE1 /* RNAmplitudeSDK.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 				4FD5B0321F5FF051001048E1 /* AIRGoogleMapCircleManager.m in Sources */,
 				4FD5B0341F5FF051001048E1 /* AIRGoogleMapMarker.m in Sources */,
@@ -1813,6 +1835,11 @@
 			isa = PBXTargetDependency;
 			target = 2D02E47A1E0B4A5D006451C7 /* atlantm-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
+		};
+		4F0C1D00209236F200529EE1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = React;
+			targetProxy = 4F0C1CFF209236F200529EE1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1880,7 +1907,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7F69467B2C3B7F5DD67A934C /* Pods-atlantm.debug.xcconfig */;
+			baseConfigurationReference = 8BAABF97D3C3E0FA3AE96B07 /* Pods-atlantm.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1900,6 +1927,7 @@
 					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 					"$(SRCROOT)/../node_modules/react-native-image-crop-picker/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-amplitude-analytics/ios/**",
 				);
 				INFOPLIST_FILE = atlantm/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -1923,7 +1951,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F26F7C6CBB3548B39F859360 /* Pods-atlantm.release.xcconfig */;
+			baseConfigurationReference = 6483AB9F133045907610F91B /* Pods-atlantm.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -1942,6 +1970,7 @@
 					"$(SRCROOT)/../node_modules/react-native-fcm/ios",
 					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 					"$(SRCROOT)/../node_modules/react-native-image-crop-picker/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-amplitude-analytics/ios/**",
 				);
 				INFOPLIST_FILE = atlantm/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
