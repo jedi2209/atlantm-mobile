@@ -1,4 +1,5 @@
 PODS:
+  - Amplitude-iOS (4.0.4)
   - FirebaseAnalytics (4.0.2):
     - FirebaseCore (~> 4.0)
     - FirebaseInstanceID (~> 2.0)
@@ -34,12 +35,14 @@ PODS:
   - RSKImageCropper (1.6.3)
 
 DEPENDENCIES:
+  - Amplitude-iOS (~> 4.0.4)
   - FirebaseMessaging
   - GoogleMaps
   - QBImagePickerController
   - RSKImageCropper
 
 SPEC CHECKSUMS:
+  Amplitude-iOS: 2ad4d7270c99186236c1272a3a9425463b1ae1a7
   FirebaseAnalytics: ad41720e3e67fc63fbe3d2948d3e26932a8de311
   FirebaseCore: cfc042628ef9f20debe09c0eb683135fcd404cb4
   FirebaseInstanceID: 9fbf536668f4d3f0880e7438456dabd1376e294b
@@ -51,6 +54,6 @@ SPEC CHECKSUMS:
   QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   RSKImageCropper: 356e36fc58c57c371b5d8b23d603936d6a73df6c
 
-PODFILE CHECKSUM: 550e7122fd8f1d5c535779bd580b0975e0463783
+PODFILE CHECKSUM: 7677d993d57907f42ba058911597ce59840cf0d3
 
 COCOAPODS: 1.4.0

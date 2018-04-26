@@ -9,6 +9,9 @@ target 'atlantm' do
   pod 'FirebaseMessaging'
 
   # react-native-image-crop-picker
+
+  pod 'Amplitude-iOS', '~> 4.0.4'
+  # pod 'react-native-amplitude-analytics', :path => '../node_modules/react-native-amplitude-analytics'
   pod 'RSKImageCropper'
   pod 'QBImagePickerController'
 end

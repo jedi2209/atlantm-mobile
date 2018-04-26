@@ -18,6 +18,7 @@
 #endif
 #import "RNFIRMessaging.h"
 #import "SplashScreen.h"
+#import "Amplitude.h"
 
 @import GoogleMaps;
 
