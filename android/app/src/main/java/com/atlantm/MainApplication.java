@@ -3,6 +3,7 @@ package com.atlantm;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.sudoplz.reactnativeamplitudeanalytics.RNAmplitudeSDKPackage;
 import me.jhen.devsettings.DevSettingsPackage;
 import io.sentry.RNSentryPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
@@ -32,10 +33,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new DevSettingsPackage(),
-            new RNSentryPackage(MainApplication.this),
-            new PickerPackage(),
-            new FIRMessagingPackage(),
+          new RNAmplitudeSDKPackage(MainApplication.this),
+          new DevSettingsPackage(),
+          new RNSentryPackage(MainApplication.this),
+          new PickerPackage(),
+          new FIRMessagingPackage(),
           new SplashScreenReactPackage(),
           new RNDeviceInfo(),
           new MapsPackage(),
