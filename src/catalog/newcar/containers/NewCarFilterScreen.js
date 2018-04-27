@@ -46,6 +46,7 @@ import ListItemHeader from '../../../profile/components/ListItemHeader';
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
+import Amplitude from '../../../utils/amplitude-analytics';
 import { get, find } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
@@ -164,6 +165,8 @@ class NewCarFilterScreen extends Component {
     const { actionFetchNewCarFilterData, city } = this.props;
 
     actionFetchNewCarFilterData({ city: city.id });
+
+    Amplitude.logEvent('screen:catalog/newcar');
   }
 
   componentDidUpdate() {

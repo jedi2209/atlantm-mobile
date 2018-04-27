@@ -26,6 +26,7 @@ import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu'
 import InfoLine from '../../eko/components/InfoLine';
 
 // helpers
+import Amplitude from '../../utils/amplitude-analytics';
 import { get } from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
@@ -62,6 +63,10 @@ class ContactsScreen extends Component {
     headerLeft: <View />, // для выравнивания заголовка по центру на обоих платформах
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
+
+  componentDidMount() {
+    Amplitude.logEvent('screen:contacts');
+  }
 
   onPressCallMe = async () => {
     const isInternetExist = await isInternet();
@@ -108,6 +113,8 @@ class ContactsScreen extends Component {
       })
         .then(action => {
           if (action.type === CALL_ME__SUCCESS) {
+            Amplitude.logEvent('order:contacts/callme');
+
             setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
           }
 

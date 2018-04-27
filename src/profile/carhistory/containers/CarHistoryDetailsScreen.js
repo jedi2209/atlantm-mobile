@@ -12,6 +12,7 @@ import SpinnerView from '../../../core/components/SpinnerView';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
+import Amplitude from '../../../utils/amplitude-analytics';
 import { get } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
@@ -123,6 +124,8 @@ class CarHistoryDetailsScreen extends Component {
   }
 
   componentDidMount() {
+    Amplitude.logEvent('screen:lkk/carhistory/details');
+
     const { auth, navigation, actionFetchCarHistoryDetails } = this.props;
     const vin = get(navigation, 'state.params.vin');
     const title = get(navigation, 'state.params.title');

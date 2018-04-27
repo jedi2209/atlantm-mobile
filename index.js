@@ -17,12 +17,6 @@ if (__DEV__) {
   NativeModules.DevSettings.setIsDebuggingRemotely(true);
 }
 
-import RNAmplitute from 'react-native-amplitude-analytics';
-
-const amplitude = new RNAmplitute('2716d7eebc63593e80e4fd172fc8b6f3');
-
-amplitude.logEvent('from react native android');
-
 import Wrapper from './src/core/containers/Wrapper';
 
 Sentry

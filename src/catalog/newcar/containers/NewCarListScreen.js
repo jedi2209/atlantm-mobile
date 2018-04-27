@@ -11,6 +11,7 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import CarList from '../../components/CarList';
 
 // helpers
+import Amplitude from '../../../utils/amplitude-analytics';
 import { get } from 'lodash';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
@@ -62,6 +63,14 @@ class NewCarListScreen extends Component {
       headerLeft: <HeaderIconBack navigation={navigation} />,
       headerRight: <HeaderIconMenu navigation={navigation} />,
     };
+  }
+
+  componentDidMount() {
+    const { search_url } = this.props.filterData;
+
+    Amplitude.logEvent('screen:catalog/newcar/list', {
+      search_url: get(this.props, 'filterData.search_url'),
+    });
   }
 
   componentDidUpdate() {

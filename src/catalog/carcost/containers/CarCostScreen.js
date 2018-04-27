@@ -37,6 +37,7 @@ import CarCostForm from '../components/CarCostForm';
 import CarCostPhotos from '../components/CarCostPhotos';
 
 // helpers
+import Amplitude from '../../../utils/amplitude-analytics';
 import { get, valuesIn } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
@@ -206,6 +207,8 @@ class CarCostScreen extends Component {
       })
         .then(action => {
           if (action.type === CAR_COST__SUCCESS) {
+            Amplitude.logEvent('order:catalog/carcost');
+
             setTimeout(() => {
               Alert.alert(
                 'Ваша заявка успешно отправлена',

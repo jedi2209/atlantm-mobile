@@ -114,8 +114,8 @@ class App extends Component {
 
     const defaultGetStateForAction = Router.router.getStateForAction;
     Router.router.getStateForAction = (action, state) => {
-      console.log('ROUTER action', action);
-      console.log('ROUTER state', state);
+      // console.log('ROUTER action', action);
+      // console.log('ROUTER state', state);
 
       //   // if (state && action && action.routeName === 'UsedCarCityScreen') {
       //   //   console.log('state.routes[1].routes', state.routes[1].routes);

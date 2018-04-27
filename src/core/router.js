@@ -131,8 +131,8 @@ CatalogScreenNavigator.router.getStateForAction = (action, state) => {
   //   console.log('after', newState);
   // }
 
-  console.log('action', action);
-  console.log('state', state);
+  // console.log('action', action);
+  // console.log('state', state);
 
   // this.props.navigationChange(action.routeName ? action.routeName : mainScreen);
   return defaultGetStateForAction(action, state);

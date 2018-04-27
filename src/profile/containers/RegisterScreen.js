@@ -23,6 +23,7 @@ import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
+import Amplitude from '../../utils/amplitude-analytics';
 import { get } from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
@@ -184,6 +185,8 @@ class RegisterScreen extends Component {
     })
       .then(action => {
         if (action.type === REGISTER__SUCCESS) {
+          Amplitude.logEvent('order:lkk/registration');
+
           const defaultMessage = `Ваша заявка на регистрацию успешно отправлена специалистам автоцентра ${dealerSelected.name}`;
 
           setTimeout(() => {
