@@ -20,6 +20,7 @@ import DeviceInfo from 'react-native-device-info';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
 // helpers
+import Amplitude from '../../utils/amplitude-analytics';
 import { verticalScale } from '../../utils/scale';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
@@ -113,6 +114,10 @@ class CatalogScreen extends Component {
     if (!isTablet) {
       this.state.itemWidth = width;
     }
+  }
+
+  componentDidMount() {
+    Amplitude.logEvent('screen:catalog');
   }
 
   componentWillMount() {

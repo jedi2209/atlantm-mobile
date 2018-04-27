@@ -123,8 +123,6 @@ class InfoListScreen extends Component {
       }
     }
 
-    console.log('isActiveScreen', isActiveScreen);
-
     return isActiveScreen;
   }
 
@@ -140,8 +138,6 @@ class InfoListScreen extends Component {
   }
 
   renderEmptyComponent = () => {
-    console.log('renderEmptyComponent', this.props.isFetchInfoList);
-
     return this.props.isFetchInfoList ?
       (
           <View style={styles.spinnerContainer} >

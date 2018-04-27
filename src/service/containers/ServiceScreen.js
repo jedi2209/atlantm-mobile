@@ -19,6 +19,7 @@ import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 
 // helpers
+import Amplitude from '../../utils/amplitude-analytics';
 import isInternet from '../../utils/internet';
 import { yearMonthDay } from '../../utils/date';
 import getTheme from '../../../native-base-theme/components';
@@ -131,6 +132,8 @@ class ServiceScreen extends Component {
       })
         .then(action => {
           if (action.type === SERVICE_ORDER__SUCCESS) {
+            Amplitude.logEvent('order:service');
+
             setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
           }
 

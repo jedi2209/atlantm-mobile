@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { verticalScale } from '../../utils/scale';
 
 // helpers
+import Amplitude from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
 import { dayMonth, dayMonthYear } from '../../utils/date';
 
@@ -34,8 +35,14 @@ export default class InfoListItem extends Component {
 
   onPressInfo = () => {
     const { navigate, info } = this.props;
+    const { id, date, name } = info;
 
-    return navigate('InfoPostScreen', { id: info.id, date: info.date });
+    Amplitude.logEvent('screen:info/post', { name });
+
+    return navigate('InfoPostScreen', {
+      id,
+      date,
+    });
   }
 
   processDate(date = {}) {

@@ -20,6 +20,7 @@ import HeaderSubtitle from '../../core/components/HeaderSubtitle';
 import stylesList from '../../core/components/Lists/style';
 
 // helpers
+import Amplitude from '../../utils/amplitude-analytics';
 import { get } from 'lodash';
 import { dayMonthYearTime } from '../../utils/date';
 import getTheme from '../../../native-base-theme/components';
@@ -130,6 +131,8 @@ class TvaResultsScreen extends Component {
           const { type, payload } = action;
 
           if (type === TVA_SEND_MESSAGE__SUCCESS) {
+            Amplitude.logEvent('order:tva/message');
+
             setTimeout(() => {
               actionTvaMessageFill('');
               Alert.alert(payload.status);

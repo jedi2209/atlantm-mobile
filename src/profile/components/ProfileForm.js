@@ -12,6 +12,7 @@ import PushNotifications from '../../core/components/PushNotifications';
 import stylesList from '../../core/components/Lists/style';
 
 // helpers
+import Amplitude from '../../utils/amplitude-analytics';
 import { get, isFunction } from 'lodash';
 import styleConst from '../../core/style-const';
 
@@ -129,6 +130,8 @@ export default class ProfileForm extends PureComponent {
 
   onPressCar = car => {
     if (get(car, 'vin')) {
+      Amplitude.logEvent('screen:lkk/carhistory');
+
       this.props.navigation.navigate('CarHistoryScreen', { car });
     }
   }

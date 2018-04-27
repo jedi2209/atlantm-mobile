@@ -97,6 +97,8 @@ const injectScript = `
 }());
 `;
 
+let amplitudeGuard = false;
+
 class InfoPostScreen extends Component {
   state = {
     imageWidth: IMAGE_WIDTH,
@@ -233,7 +235,7 @@ class InfoPostScreen extends Component {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
-    const { isCallMeRequest } = this.props;
+    const { isCallMeRequest, navigation } = this.props;
 
     const post = this.getPost();
     let text = get(post, 'text');

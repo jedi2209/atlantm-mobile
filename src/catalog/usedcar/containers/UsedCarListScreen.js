@@ -21,6 +21,7 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import CarList from '../../components/CarList';
 
 // helpers
+import Amplitude from '../../../utils/amplitude-analytics';
 import { get } from 'lodash';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
@@ -80,6 +81,8 @@ class UserCarListScreen extends Component {
     setTimeout(() => {
       this.props.navigation.setParams({ total: this.props.total });
     }, 200);
+
+    Amplitude.logEvent('screen:catalog/usedcar');
   }
 
   componentDidUpdate() {

@@ -17,6 +17,7 @@ import ListItemHeader from '../../profile/components/ListItemHeader';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
+import Amplitude from '../../utils/amplitude-analytics';
 import { get } from 'lodash';
 import isInternet from '../../utils/internet';
 import numberWithGap from '../../utils/number-with-gap';
@@ -97,7 +98,7 @@ class OrderScreen extends Component {
     isOrderCarRequest: PropTypes.bool,
   }
 
-  componentDidMound() {
+  componentDidMount() {
     this.props.actionCommentOrderCarFill('');
   }
 
@@ -144,6 +145,15 @@ class OrderScreen extends Component {
       })
         .then(action => {
           if (action.type === CATALOG_ORDER__SUCCESS) {
+            const car = get(navigation, 'state.params.car');
+            const { brand, model } = car;
+            const path = isNewCar ? 'newcar' : 'usedcar';
+
+            Amplitude.logEvent(`order:catalog/${path}`, {
+              brand_name: brand,
+              model_name: get(model, 'name'),
+            });
+
             setTimeout(() => {
               Alert.alert('Ваша заявка успешно отправлена');
               navigation.goBack();

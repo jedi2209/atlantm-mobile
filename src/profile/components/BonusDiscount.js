@@ -9,6 +9,9 @@ import { ListItem, Body, Left, Right, Icon } from 'native-base';
 // styles
 import stylesList from '../../core/components/Lists/style';
 
+// helpers
+import Amplitude from '../../utils/amplitude-analytics';
+
 const icons = {
   bonus: require('../assets/bonus.png'),
   discount: require('../assets/discount.png'),
@@ -26,8 +29,16 @@ export default class BonusDiscount extends Component {
     discounts: 0,
   }
 
-  onPressBonus = () => this.props.navigation.navigate('BonusScreen')
-  onPressDiscounts = () => this.props.navigation.navigate('DiscountsScreen')
+  onPressBonus = () => {
+    Amplitude.logEvent('screen:lkk/bonus');
+
+    this.props.navigation.navigate('BonusScreen');
+  }
+  onPressDiscounts = () => {
+    Amplitude.logEvent('screen:lkk/discounts');
+
+    this.props.navigation.navigate('DiscountsScreen');
+  }
 
   renderItem = (label, iconName, onPressHandler, badge, isLast) => {
     return (

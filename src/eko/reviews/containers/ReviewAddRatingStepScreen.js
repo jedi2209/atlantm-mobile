@@ -23,6 +23,7 @@ import FooterButton from '../../../core/components/FooterButton';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
+import Amplitude from '../../../utils/amplitude-analytics';
 import { get } from 'lodash';
 import { TEXT_MESSAGE_CONTROL } from '../../constants';
 import getTheme from '../../../../native-base-theme/components';
@@ -130,6 +131,8 @@ class ReviewAddRatingStepScreen extends Component {
       rating: reviewAddRating,
     }).then(action => {
       if (action.type === REVIEW_ADD__SUCCESS) {
+        Amplitude.logEvent('order:eko/review_add');
+
         setTimeout(() => {
           Alert.alert('Ваш отзыв успешно отправлен');
           navigation.navigate('ReviewsScreen');

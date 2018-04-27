@@ -27,6 +27,7 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import PhotoSlider from '../../../core/components/PhotoSlider';
 
 // helpers
+import Amplitude from '../../../utils/amplitude-analytics';
 import PropTypes from 'prop-types';
 import { get, find } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
@@ -140,6 +141,13 @@ class UserCarItemScreen extends Component {
     }
 
     console.log('== UsedCarItemScreen ==');
+
+    Amplitude.logEvent('screen:catalog/usedcar/item', {
+      id_api: get(carDetails, 'id.api'),
+      id_sap: get(carDetails, 'id.sap'),
+      brand_name: get(carDetails, 'brand.name'),
+      model_name: get(carDetails, 'model.name'),
+    });
 
     return (
       <StyleProvider style={getTheme()}>

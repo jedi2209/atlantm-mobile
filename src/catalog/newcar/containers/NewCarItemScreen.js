@@ -27,6 +27,7 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import PhotoSlider from '../../../core/components/PhotoSlider';
 
 // helpers
+import Amplitude from '../../../utils/amplitude-analytics';
 import PropTypes from 'prop-types';
 import { get, find } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
@@ -248,6 +249,13 @@ class NewCarItemScreen extends Component {
     const additional = get(carDetails, 'options.additional', {});
     const additionalKeys = Object.keys(additional);
     const photos = get(carDetails, 'img.10000x300') || get(carDetails, 'foto.10000x300');
+
+    Amplitude.logEvent('screen:catalog/newcar/item', {
+      id_api: get(carDetails, 'id.api'),
+      id_sap: get(carDetails, 'id.sap'),
+      brand_name: brandName,
+      model_name: modelName,
+    });
 
     return (
       <StyleProvider style={getTheme()}>
