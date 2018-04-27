@@ -9,8 +9,8 @@ export default class Amplitude {
   }
 
   static logEvent(name, params) {
-    // if (!__DEV__) {
+    if (!__DEV__) {
       this.getInstance().logEvent(name, params);
-    // }
+    }
   }
 }
