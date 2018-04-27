@@ -131,7 +131,7 @@ class ReviewAddRatingStepScreen extends Component {
       rating: reviewAddRating,
     }).then(action => {
       if (action.type === REVIEW_ADD__SUCCESS) {
-        Amplitude.logEvent('order:eko/review_add');
+        Amplitude.logEvent('order', 'eko/review_add');
 
         setTimeout(() => {
           Alert.alert('Ваш отзыв успешно отправлен');

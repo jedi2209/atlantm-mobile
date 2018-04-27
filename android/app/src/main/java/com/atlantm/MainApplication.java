@@ -3,6 +3,7 @@ package com.atlantm;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
 import com.sudoplz.reactnativeamplitudeanalytics.RNAmplitudeSDKPackage;
 import me.jhen.devsettings.DevSettingsPackage;
 import io.sentry.RNSentryPackage;
@@ -33,6 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+          new GoogleAnalyticsBridgePackage(),
           new RNAmplitudeSDKPackage(MainApplication.this),
           new DevSettingsPackage(),
           new RNSentryPackage(MainApplication.this),

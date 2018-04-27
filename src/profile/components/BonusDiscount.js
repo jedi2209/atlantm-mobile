@@ -30,12 +30,12 @@ export default class BonusDiscount extends Component {
   }
 
   onPressBonus = () => {
-    Amplitude.logEvent('screen:lkk/bonus');
+    Amplitude.logEvent('screen', 'lkk/bonus');
 
     this.props.navigation.navigate('BonusScreen');
   }
   onPressDiscounts = () => {
-    Amplitude.logEvent('screen:lkk/discounts');
+    Amplitude.logEvent('screen', 'lkk/discounts');
 
     this.props.navigation.navigate('DiscountsScreen');
   }

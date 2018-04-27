@@ -250,7 +250,7 @@ class NewCarItemScreen extends Component {
     const additionalKeys = Object.keys(additional);
     const photos = get(carDetails, 'img.10000x300') || get(carDetails, 'foto.10000x300');
 
-    Amplitude.logEvent('screen:catalog/newcar/item', {
+    Amplitude.logEvent('screen', 'catalog/newcar/item', {
       id_api: get(carDetails, 'id.api'),
       id_sap: get(carDetails, 'id.sap'),
       brand_name: brandName,

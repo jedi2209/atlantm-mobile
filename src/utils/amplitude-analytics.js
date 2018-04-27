@@ -1,4 +1,5 @@
 import RNAmplitute from 'react-native-amplitude-analytics';
+import { GoogleAnalyticsTracker } from 'react-native-google-analytics-bridge';
 
 export default class Amplitude {
   static getInstance() {
@@ -8,9 +9,18 @@ export default class Amplitude {
     return this.instance;
   }
 
-  static logEvent(name, params) {
+  static getGATracker() {
+    if (!this.gatracker) {
+      this.gatracker = new GoogleAnalyticsTracker('UA-118347995-1');
+    }
+
+    return this.gatracker;
+  }
+
+  static logEvent(category, action, params) {
     if (!__DEV__) {
-      this.getInstance().logEvent(name, params);
+      this.getInstance().logEvent(`${category}:${action}`, params);
+      this.getGATracker().trackEvent(category, action, params);
     }
   }
 }

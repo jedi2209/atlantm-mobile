@@ -102,8 +102,8 @@ android {
         applicationId "com.atlantm"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 86
-        versionName "4.9.1"
+        versionCode 87
+        versionName "4.10.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -150,6 +150,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-google-analytics-bridge')
     compile 'com.amplitude:android-sdk:2.17.0'
     compile project(':react-native-amplitude-analytics')
     compile project(':react-native-devsettings-android')
@@ -178,6 +179,9 @@ dependencies {
         force = true;
     }
     compile ("com.google.android.gms:play-services-gcm:10.0.1") {
+        force = true;
+    }
+    compile ("com.google.android.gms:play-services-analytics:10.0.1") {
         force = true;
     }
     compile ('com.google.firebase:firebase-core:10.0.1') {

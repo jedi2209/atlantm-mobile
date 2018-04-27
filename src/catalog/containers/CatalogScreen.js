@@ -117,7 +117,7 @@ class CatalogScreen extends Component {
   }
 
   componentDidMount() {
-    Amplitude.logEvent('screen:catalog');
+    Amplitude.logEvent('screen', 'catalog');
   }
 
   componentWillMount() {

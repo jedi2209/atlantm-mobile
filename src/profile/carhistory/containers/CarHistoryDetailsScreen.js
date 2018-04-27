@@ -124,7 +124,7 @@ class CarHistoryDetailsScreen extends Component {
   }
 
   componentDidMount() {
-    Amplitude.logEvent('screen:lkk/carhistory/details');
+    Amplitude.logEvent('screen', 'lkk/carhistory/details');
 
     const { auth, navigation, actionFetchCarHistoryDetails } = this.props;
     const vin = get(navigation, 'state.params.vin');

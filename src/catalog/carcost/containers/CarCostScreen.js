@@ -207,7 +207,7 @@ class CarCostScreen extends Component {
       })
         .then(action => {
           if (action.type === CAR_COST__SUCCESS) {
-            Amplitude.logEvent('order:catalog/carcost');
+            Amplitude.logEvent('order', 'catalog/carcost');
 
             setTimeout(() => {
               Alert.alert(
