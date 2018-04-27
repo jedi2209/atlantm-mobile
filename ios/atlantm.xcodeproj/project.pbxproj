@@ -45,6 +45,10 @@
 		434C2B91C6E04734A17F9144 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 284AA30378FA4394BC7577D3 /* SimpleLineIcons.ttf */; };
 		4E26233F06B84C06BF1A24DF /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A43D6A1E78B04B9280F56695 /* MaterialIcons.ttf */; };
 		4F0C1DFB20923A8300529EE1 /* RNAmplitudeSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F0C1DFA20923A8300529EE1 /* RNAmplitudeSDK.m */; };
+		4F22D2AA2093BA5200ED8751 /* libRCTGoogleAnalyticsBridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F22D2822093BA2F00ED8751 /* libRCTGoogleAnalyticsBridge.a */; };
+		4F22D2AC2093BA7200ED8751 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F22D2AB2093BA7200ED8751 /* CoreData.framework */; };
+		4F22D2AE2093BA7E00ED8751 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F22D2AD2093BA7E00ED8751 /* SystemConfiguration.framework */; };
+		4F22D2B02093BA9100ED8751 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F22D2AF2093BA9100ED8751 /* libsqlite3.0.tbd */; };
 		4F22D4111F6A922D0038CE71 /* Default-568h.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F22D4101F6A922D0038CE71 /* Default-568h.png */; };
 		4F7D6E851FEED87200644AE2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F7D6E5C1FEED87200644AE2 /* GoogleService-Info.plist */; };
 		4F7D6F0F1FF04FA900644AE2 /* libRCTPushNotification.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F7D6EF01FF04F7800644AE2 /* libRCTPushNotification.a */; };
@@ -261,6 +265,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 83CBBA2D1A601D0E00E9B192;
 			remoteInfo = React;
+		};
+		4F22D2812093BA2F00ED8751 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4F22D2752093BA2F00ED8751 /* RCTGoogleAnalyticsBridge.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A79185C61C30694E001236A6;
+			remoteInfo = RCTGoogleAnalyticsBridge;
 		};
 		4F22D4A61F6BCD300038CE71 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -498,6 +509,10 @@
 		47A960BEEBBF473DAB5CFEED /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 		4F0C1DF920923A8300529EE1 /* RNAmplitudeSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNAmplitudeSDK.h; sourceTree = "<group>"; };
 		4F0C1DFA20923A8300529EE1 /* RNAmplitudeSDK.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNAmplitudeSDK.m; sourceTree = "<group>"; };
+		4F22D2752093BA2F00ED8751 /* RCTGoogleAnalyticsBridge.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTGoogleAnalyticsBridge.xcodeproj; path = "../node_modules/react-native-google-analytics-bridge/ios/RCTGoogleAnalyticsBridge/RCTGoogleAnalyticsBridge.xcodeproj"; sourceTree = "<group>"; };
+		4F22D2AB2093BA7200ED8751 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		4F22D2AD2093BA7E00ED8751 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		4F22D2AF2093BA9100ED8751 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		4F22D4101F6A922D0038CE71 /* Default-568h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h.png"; path = "atlantm/Default-568h.png"; sourceTree = "<group>"; };
 		4F7D6E5C1FEED87200644AE2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4F7D6E861FEEDD7700644AE2 /* atlantm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = atlantm.entitlements; path = atlantm/atlantm.entitlements; sourceTree = "<group>"; };
@@ -585,12 +600,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				146834051AC3E58100842450 /* libReact.a in Frameworks */,
+				4F22D2B02093BA9100ED8751 /* libsqlite3.0.tbd in Frameworks */,
+				4F22D2AE2093BA7E00ED8751 /* SystemConfiguration.framework in Frameworks */,
+				4F22D2AC2093BA7200ED8751 /* CoreData.framework in Frameworks */,
+				4F22D2AA2093BA5200ED8751 /* libRCTGoogleAnalyticsBridge.a in Frameworks */,
 				4FC67F43206FBC2D00DCA442 /* libRNSentry.a in Frameworks */,
 				4F7D6F0F1FF04FA900644AE2 /* libRCTPushNotification.a in Frameworks */,
 				075A967C1FFA4786AC7AFFF9 /* libAirMaps.a in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */,
-				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
 				00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */,
 				00C302E81ABCBA2D00DB3ED1 /* libRCTImage.a in Frameworks */,
@@ -698,6 +717,9 @@
 		0A57AC9B7A4607A43AE82901 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4F22D2AF2093BA9100ED8751 /* libsqlite3.0.tbd */,
+				4F22D2AD2093BA7E00ED8751 /* SystemConfiguration.framework */,
+				4F22D2AB2093BA7200ED8751 /* CoreData.framework */,
 				E43EEE8A75424499BB7A0283 /* libz.tbd */,
 				D761CE5A17B66ED4A5A6BC96 /* libPods-atlantm.a */,
 			);
@@ -770,6 +792,14 @@
 				6483AB9F133045907610F91B /* Pods-atlantm.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		4F22D2762093BA2F00ED8751 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4F22D2822093BA2F00ED8751 /* libRCTGoogleAnalyticsBridge.a */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		4F22D4A31F6BCD300038CE71 /* Products */ = {
@@ -928,6 +958,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				4F22D2752093BA2F00ED8751 /* RCTGoogleAnalyticsBridge.xcodeproj */,
 				4FC67F0C206FBC1F00DCA442 /* RNSentry.xcodeproj */,
 				4F7D6EDD1FF04F7800644AE2 /* RCTPushNotification.xcodeproj */,
 				5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */,
@@ -1187,6 +1218,10 @@
 					ProjectRef = 00C302B51ABCB90400DB3ED1 /* RCTGeolocation.xcodeproj */;
 				},
 				{
+					ProductGroup = 4F22D2762093BA2F00ED8751 /* Products */;
+					ProjectRef = 4F22D2752093BA2F00ED8751 /* RCTGoogleAnalyticsBridge.xcodeproj */;
+				},
+				{
 					ProductGroup = 00C302BC1ABCB91800DB3ED1 /* Products */;
 					ProjectRef = 00C302BB1ABCB91800DB3ED1 /* RCTImage.xcodeproj */;
 				},
@@ -1403,6 +1438,13 @@
 			fileType = archive.ar;
 			path = libjschelpers.a;
 			remoteRef = 3DAD3EAE1DF850E9000B6D8A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		4F22D2822093BA2F00ED8751 /* libRCTGoogleAnalyticsBridge.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTGoogleAnalyticsBridge.a;
+			remoteRef = 4F22D2812093BA2F00ED8751 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		4F22D4A71F6BCD300038CE71 /* libAirMaps.a */ = {
@@ -1928,6 +1970,7 @@
 					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 					"$(SRCROOT)/../node_modules/react-native-image-crop-picker/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-amplitude-analytics/ios/**",
+					"$(SRCROOT)/../node_modules/react-native/React/**",
 				);
 				INFOPLIST_FILE = atlantm/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -1971,6 +2014,7 @@
 					"$(SRCROOT)/../node_modules/react-native/Libraries/PushNotificationIOS/**",
 					"$(SRCROOT)/../node_modules/react-native-image-crop-picker/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-amplitude-analytics/ios/**",
+					"$(SRCROOT)/../node_modules/react-native/React/**",
 				);
 				INFOPLIST_FILE = atlantm/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;

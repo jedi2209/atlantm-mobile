@@ -65,7 +65,7 @@ class ContactsScreen extends Component {
   })
 
   componentDidMount() {
-    Amplitude.logEvent('screen:contacts');
+    Amplitude.logEvent('screen', 'contacts');
   }
 
   onPressCallMe = async () => {
@@ -113,7 +113,7 @@ class ContactsScreen extends Component {
       })
         .then(action => {
           if (action.type === CALL_ME__SUCCESS) {
-            Amplitude.logEvent('order:contacts/callme');
+            Amplitude.logEvent('order', 'contacts/callme');
 
             setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
           }

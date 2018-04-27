@@ -131,7 +131,7 @@ class TvaResultsScreen extends Component {
           const { type, payload } = action;
 
           if (type === TVA_SEND_MESSAGE__SUCCESS) {
-            Amplitude.logEvent('order:tva/message');
+            Amplitude.logEvent('order', 'tva/message');
 
             setTimeout(() => {
               actionTvaMessageFill('');

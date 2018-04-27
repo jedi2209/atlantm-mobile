@@ -149,7 +149,7 @@ class OrderScreen extends Component {
             const { brand, model } = car;
             const path = isNewCar ? 'newcar' : 'usedcar';
 
-            Amplitude.logEvent(`order:catalog/${path}`, {
+            Amplitude.logEvent('order', `catalog/${path}`, {
               brand_name: brand,
               model_name: get(model, 'name'),
             });

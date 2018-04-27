@@ -29,6 +29,7 @@
     "react-native-device-info": "^0.12.1",
     "react-native-devsettings-android": "^0.1.5",
     "react-native-fcm": "^11.0.1",
+    "react-native-google-analytics-bridge": "^5.6.3",
     "react-native-image-crop-picker": "^0.17.0",
     "react-native-loading-spinner-overlay": "^0.5.2",
     "react-native-maps": "^0.16.1",

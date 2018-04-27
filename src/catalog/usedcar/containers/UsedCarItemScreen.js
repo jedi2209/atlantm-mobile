@@ -142,7 +142,7 @@ class UserCarItemScreen extends Component {
 
     console.log('== UsedCarItemScreen ==');
 
-    Amplitude.logEvent('screen:catalog/usedcar/item', {
+    Amplitude.logEvent('screen', 'catalog/usedcar/item', {
       id_api: get(carDetails, 'id.api'),
       id_sap: get(carDetails, 'id.sap'),
       brand_name: get(carDetails, 'brand.name'),

@@ -130,7 +130,7 @@ export default class ProfileForm extends PureComponent {
 
   onPressCar = car => {
     if (get(car, 'vin')) {
-      Amplitude.logEvent('screen:lkk/carhistory');
+      Amplitude.logEvent('screen', 'lkk/carhistory');
 
       this.props.navigation.navigate('CarHistoryScreen', { car });
     }

@@ -185,7 +185,7 @@ class RegisterScreen extends Component {
     })
       .then(action => {
         if (action.type === REGISTER__SUCCESS) {
-          Amplitude.logEvent('order:lkk/registration');
+          Amplitude.logEvent('order', 'lkk/registration');
 
           const defaultMessage = `Ваша заявка на регистрацию успешно отправлена специалистам автоцентра ${dealerSelected.name}`;
 

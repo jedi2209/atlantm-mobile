@@ -37,7 +37,7 @@ export default class InfoListItem extends Component {
     const { navigate, info } = this.props;
     const { id, date, name } = info;
 
-    Amplitude.logEvent('screen:info/post', { name });
+    Amplitude.logEvent('screen', 'info/post', { name });
 
     return navigate('InfoPostScreen', {
       id,

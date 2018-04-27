@@ -132,7 +132,7 @@ class ServiceScreen extends Component {
       })
         .then(action => {
           if (action.type === SERVICE_ORDER__SUCCESS) {
-            Amplitude.logEvent('order:service');
+            Amplitude.logEvent('order', 'service');
 
             setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
           }

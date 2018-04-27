@@ -68,7 +68,7 @@ class NewCarListScreen extends Component {
   componentDidMount() {
     const { search_url } = this.props.filterData;
 
-    Amplitude.logEvent('screen:catalog/newcar/list', {
+    Amplitude.logEvent('screen', 'catalog/newcar/list', {
       search_url: get(this.props, 'filterData.search_url'),
     });
   }

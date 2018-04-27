@@ -82,7 +82,7 @@ class UserCarListScreen extends Component {
       this.props.navigation.setParams({ total: this.props.total });
     }, 200);
 
-    Amplitude.logEvent('screen:catalog/usedcar');
+    Amplitude.logEvent('screen', 'catalog/usedcar');
   }
 
   componentDidUpdate() {
