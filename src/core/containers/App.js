@@ -116,24 +116,6 @@ class App extends Component {
     Router.router.getStateForAction = (action, state) => {
       // console.log('ROUTER action', action);
       // console.log('ROUTER state', state);
-
-      //   // if (state && action && action.routeName === 'UsedCarCityScreen') {
-      //   //   console.log('state.routes[1].routes', state.routes[1].routes);
-      //   //   state.routes[1].routes = state.routes[1].routes.filter(route => {
-      //   //     console.log('route', route);
-      //   //     // return route.routeName !== 'UsedCarListScreen';
-      //   //     return true;
-      //   //   });
-      //   // }
-
-      //   if (state) {
-      //     console.log('before', state);
-      //     let newState = { ...state };
-      //     newState = removeDuplicateRoutes(state);
-      //     console.log('after', newState);
-      //   }
-
-      //   // this.props.navigationChange(action.routeName ? action.routeName : mainScreen);
       return defaultGetStateForAction(action, state);
     };
 

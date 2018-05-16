@@ -1,10 +1,10 @@
 import { NAVIGATION__CHANGE } from './actionTypes';
 
-export const navigationChange = (routeName) => {
+export const navigationChange = (navigationState) => {
   return dispatch => {
     return dispatch({
       type: NAVIGATION__CHANGE,
-      payload: routeName,
+      payload: navigationState,
     });
   };
 };
