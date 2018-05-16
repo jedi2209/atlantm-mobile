@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, Text, View, Alert, StyleSheet, TouchableOpacity } from 'react-native';
-import { Body, Label, Item, Content, ListItem, StyleProvider } from 'native-base';
+import { Text, View, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import { Container, Body, Label, Item, Content, ListItem, StyleProvider } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -34,13 +34,15 @@ const styles = StyleSheet.create({
   safearea: {
     backgroundColor: styleConst.color.bg,
     flex: 1,
-    paddingBottom: 100,
   },
   label: {
     flex: 2.5,
   },
   itemTitle: {
     fontSize: 20,
+  },
+  button: {
+    paddingTop: 20,
   },
 });
 
@@ -122,6 +124,14 @@ class TvaResultsScreen extends Component {
       // предотвращаем повторную отправку формы
       if (isMessageSending) return;
 
+      if (!message) {
+        setTimeout(() => {
+          Alert.alert('Введите текст сообщения');
+        }, 100);
+
+        return;
+      }
+
       actionTvaMessageSend({
         text: message,
         id: activeOrderId,
@@ -188,7 +198,7 @@ class TvaResultsScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
+        <Container style={styles.safearea}>
           <Content>
             <Spinner visible={isMessageSending} color={styleConst.color.blue} />
             <HeaderSubtitle content={textList} isBig={true} />
@@ -218,14 +228,16 @@ class TvaResultsScreen extends Component {
               messageFill={actionTvaMessageFill}
             />
 
-            <ButtonFull
-              text="ОТПРАВИТЬ"
-              arrow={true}
-              onPressButton={this.onPressMessageButton}
-            />
+            <View style={styles.button}>
+              <ButtonFull
+                text="ОТПРАВИТЬ"
+                arrow={true}
+                onPressButton={this.onPressMessageButton}
+              />
+            </View>
 
           </Content>
-        </SafeAreaView>
+        </Container>
       </StyleProvider>
     );
   }
