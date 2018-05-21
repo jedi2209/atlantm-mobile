@@ -131,42 +131,42 @@ export default {
 
     if (filterBrands) {
       filterBrands.forEach(id => {
-        url += `${setParamDivider()}brand[]=${id}`;
+        url += `${setParamDivider()}brand[${id}]=${id}`;
         if (!isAmp) isAmp = true;
       });
     }
 
     if (filterModels) {
       filterModels.forEach(item => {
-        url += `${setParamDivider()}model[]=${item.modelId}`;
+        url += `${setParamDivider()}model[${item.modelId}]=${item.modelId}`;
         if (!isAmp) isAmp = true;
       });
     }
 
     if (filterGearbox) {
       filterGearbox.forEach(id => {
-        url += `${setParamDivider()}gearbox[]=${id}`;
+        url += `${setParamDivider()}gearbox[${id}]=${id}`;
         if (!isAmp) isAmp = true;
       });
     }
 
     if (filterBody) {
       filterBody.forEach(id => {
-        url += `${setParamDivider()}body[]=${id}`;
+        url += `${setParamDivider()}body[${id}]=${id}`;
         if (!isAmp) isAmp = true;
       });
     }
 
     if (filterDrive) {
       filterDrive.forEach(id => {
-        url += `${setParamDivider()}drive[]=${id}`;
+        url += `${setParamDivider()}drive[${id}]=${id}`;
         if (!isAmp) isAmp = true;
       });
     }
 
     if (filterEngineType) {
       filterEngineType.forEach(id => {
-        url += `${setParamDivider()}enginetype[]=${id}`;
+        url += `${setParamDivider()}enginetype[${id}]=${id}`;
         if (!isAmp) isAmp = true;
       });
     }
