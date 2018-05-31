@@ -6,7 +6,7 @@ target 'atlantm' do
   # use_frameworks!
 
   pod 'GoogleMaps'
-  pod 'FirebaseMessaging'
+  pod 'Firebase/Messaging'
 
   # react-native-image-crop-picker
 
