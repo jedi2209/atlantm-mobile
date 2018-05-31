@@ -6,6 +6,8 @@ import RNFetchBlob from 'react-native-fetch-blob';
 
 const isAndroid = Platform.OS === 'android';
 
+const host = 'https://api.atlantm.com/v1';
+
 const headers = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
@@ -344,7 +346,7 @@ export default {
 
     return RNFetchBlob.fetch(
       'POST',
-      'https://api.atlantm.com/orders/usedbuy/post/',
+      `${host}/orders/usedbuy/post/`,
       _.merge({}, headers, {
         'Content-Type': 'multipart/form-data',
       }),
@@ -414,7 +416,7 @@ export default {
   },
 
   request(path, requestParams) {
-    const url = `https://api.atlantm.com${path}`;
+    const url = `${host}${path}`;
 
     // Если включен debug режим, добавляем в каждый запрос заголовок `Debug`
     if (window.atlantmDebug) {
