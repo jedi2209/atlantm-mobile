@@ -21,20 +21,20 @@ import { CALL_ME__SUCCESS, CALL_ME__FAIL } from '../actionTypes';
 import DeviceInfo from 'react-native-device-info';
 import Communications from 'react-native-communications';
 import Spinner from 'react-native-loading-spinner-overlay';
-import DealerItemList from '../../core/components/DealerItemList';
-import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-import InfoLine from '../../eko/components/InfoLine';
+import DealerItemList from '@core/components/DealerItemList';
+import HeaderIconMenu from '@core/components/HeaderIconMenu/HeaderIconMenu';
+import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
+import InfoLine from '@eko/components/InfoLine';
 
 // helpers
-import Amplitude from '../../utils/amplitude-analytics';
+import Amplitude from '@utils/amplitude-analytics';
 import { get } from 'lodash';
 import getTheme from '../../../native-base-theme/components';
-import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
-import stylesList from '../../core/components/Lists/style';
-import isInternet from '../../utils/internet';
-import { ERROR_NETWORK } from '../../core/const';
+import styleConst from '@core/style-const';
+import stylesHeader from '@core/components/Header/style';
+import stylesList from '@core/components/Lists/style';
+import isInternet from '@utils/internet';
+import { ERROR_NETWORK } from '@core/const';
 
 const styles = StyleSheet.create({
   safearea: {
