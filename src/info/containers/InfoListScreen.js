@@ -26,6 +26,7 @@ import { verticalScale } from '../../utils/scale';
 import InfoListItem from '../components/InfoListItem';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 const styles = StyleSheet.create({
   container: {
@@ -67,7 +68,7 @@ class InfoListScreen extends Component {
     headerTitle: 'Акции',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
-    headerLeft: <View />,
+    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 
