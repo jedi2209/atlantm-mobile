@@ -72,7 +72,7 @@ class EkoScreen extends Component {
   onPressContactMe = () => this.props.navigation.navigate('ContactMeScreen')
   onPressAdvocate = () => this.props.navigation.navigate('AdvocateScreen')
   onPressRateApp = () => {
-    const APP_STORE_LINK = 'itms://itunes.apple.com/gb/app/atlant-m/id515931794?mt=8';
+    const APP_STORE_LINK = 'itms-apps://itunes.apple.com/app/id515931794?action=write-review';
     const PLAY_STORE_LINK = 'market://details?id=com.atlantm';
 
     if (Platform.OS === 'ios') {
