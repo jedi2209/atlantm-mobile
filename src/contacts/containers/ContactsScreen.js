@@ -88,10 +88,10 @@ class ContactsScreen extends Component {
 
       const { name, phone, email } = profile;
 
-      if (!name || !phone) {
+      if (!phone) {
         return Alert.alert(
           'Недостаточно информации',
-          'Для обратного звонка необходимо заполнить ФИО и номер контактного телефона в профиле',
+          'Для обратного звонка необходимо добавить номер контактного телефона в профиле',
           [
             { text: 'Отмена', style: 'cancel' },
             {
