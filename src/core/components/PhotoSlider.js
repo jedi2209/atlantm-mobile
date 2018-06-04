@@ -1,6 +1,6 @@
 // base
 import React, { Component } from 'react';
-import { View, Image, StyleSheet, ActivityIndicator, Dimensions, Platform } from 'react-native';
+import { View, Image, StyleSheet, ActivityIndicator, Dimensions, Platform, TouchableWithoutFeedback } from 'react-native';
 
 // components
 import Swiper from 'react-native-swiper';
@@ -8,25 +8,20 @@ import { isTablet } from 'react-native-device-info';
 
 // helpers
 import PropTypes from 'prop-types';
-import styleConst from '../style-const';
+import styleConst from '@core/style-const';
 
 const { width } = Dimensions.get('window');
 const height = isTablet() ? 260 : 200;
 const styles = StyleSheet.create({
-  container: {
-    // marginHorizontal: -50,
-  },
   photoSlider: {
-    position: 'relative',
     width,
+    position: 'relative',
   },
   item: {
-    // backgroundColor: 'red',
     flex: 1,
+    height,
     justifyContent: 'center',
     alignItems: 'center',
-    // width,
-    height,
   },
   image: {
     alignSelf: 'center',
@@ -42,7 +37,8 @@ const styles = StyleSheet.create({
 const Slide = props => {
   return (
     <View style={[styles.item, { height: props.height }]}>
-      <Image
+      <TouchableWithoutFeedback onPress={props.onPress}>
+        <Image
           resizeMode="contain"
           style={styles.image}
           onLoad={props.loadHandle.bind(null, props.i)}
@@ -51,7 +47,8 @@ const Slide = props => {
             width: props.width,
             height: props.height,
           }}
-      />
+        />
+      </TouchableWithoutFeedback>
       {
         !props.loaded && <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
       }
@@ -72,6 +69,8 @@ export default class PhotoSlider extends Component {
 
   static propTypes = {
     photos: PropTypes.array,
+    onPressItem: PropTypes.func,
+    onIndexChanged: PropTypes.func,
   }
 
   static defaultProps = {
@@ -88,13 +87,11 @@ export default class PhotoSlider extends Component {
   }
 
   render() {
-    const { photos } = this.props;
-
     // Супер грязный хак, триггерим изменение высота для обновления слайдера
     // по-другому починить не получилось, попробовал много вариантов.
     // p.s. нравится компонент, хотел оставить.
     if (Platform.OS === 'android' && !this.state.isLoaded) {
-    // if (Platform.OS === 'android') {
+      // if (Platform.OS === 'android') {
       setTimeout(() => {
         this.setState({
           isLoaded: true,
@@ -107,22 +104,24 @@ export default class PhotoSlider extends Component {
       <Swiper
         id={1}
         containerStyle={styles.container}
-        dotColor="#fff"
+        dotColor="white"
         showsButtons={false}
         showsPagination={true}
         height={this.state.height}
         rootStyle={styles.photoSlider}
         loadMinimal={false}
+        onIndexChanged={this.props.onIndexChanged}
       >
         {
-          photos.map((photo, idx) => {
+          this.props.photos.map((photo, idx) => {
             return <Slide
+              onPress={this.props.onPressItem}
               height={this.state.height}
               loadHandle={this.loadHandle}
               loaded={!!this.state.loadQueue[idx]}
               url={photo}
               i={idx}
-              key={idx}
+              key={photo}
             />;
           })
         }

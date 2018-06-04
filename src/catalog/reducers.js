@@ -40,6 +40,10 @@ import {
   NEW_CAR_DETAILS__REQUEST,
   NEW_CAR_DETAILS__SUCCESS,
   NEW_CAR_DETAILS__FAIL,
+  NEW_CAR_DETAILS_PHOTO_VIEWER__OPEN,
+  NEW_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
+  NEW_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
+  NEW_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
 
   CATALOG_DEALER__REQUEST,
   CATALOG_DEALER__SUCCESS,
@@ -527,6 +531,40 @@ const newCarDetails = (state = null, action) => {
   }
 };
 
+const newCarPhotoViewerIndex = (state = 0, action) => {
+  switch (action.type) {
+    case NEW_CAR_DETAILS__REQUEST:
+      return 0;
+    case NEW_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const newCarPhotoViewerItems = (state = [], action) => {
+  switch (action.type) {
+    case NEW_CAR_DETAILS__REQUEST:
+      return [];
+    case NEW_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const newCarPhotoViewerVisible = (state = false, action) => {
+  switch (action.type) {
+    case NEW_CAR_DETAILS__REQUEST:
+    case NEW_CAR_DETAILS_PHOTO_VIEWER__CLOSE:
+      return false;
+    case NEW_CAR_DETAILS_PHOTO_VIEWER__OPEN:
+      return true;
+    default:
+      return state;
+  }
+};
+
 // CarCost
 const isCarCostRequest = (state = false, action) => {
   switch (action.type) {
@@ -694,7 +732,9 @@ export default combineReducers({
   }),
 
   usedCar: combineReducers({
-    carDetails: usedCarDetails,
+    carDetails: combineReducers({
+      data: usedCarDetails
+    }),
     city: usedCarCity,
     total: usedCarTotal,
     pages: usedCarPages,
@@ -711,7 +751,12 @@ export default combineReducers({
   }),
 
   newCar: combineReducers({
-    carDetails: newCarDetails,
+    carDetails: combineReducers({
+      data: newCarDetails,
+      photoViewerItems: newCarPhotoViewerItems,
+      photoViewerVisible: newCarPhotoViewerVisible,
+      photoViewerIndex: newCarPhotoViewerIndex,
+    }),
     filterBrands: newCarFilterBrands,
     filterModels: newCarFilterModels,
     filterBody: newCarFilterBody,
