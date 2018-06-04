@@ -11,6 +11,7 @@ import { actionReviewsReset } from '../actions';
 // components
 import InfoLine from '../components/InfoLine';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import getTheme from '../../../native-base-theme/components';
@@ -49,7 +50,7 @@ class EkoScreen extends Component {
     headerTitle: 'Отзывы и предложения',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
-    headerLeft: <View />, // для выравнивания заголовка по центру на обоих платформах
+    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 

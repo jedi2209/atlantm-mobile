@@ -28,6 +28,7 @@ import SpinnerView from '../../core/components/SpinnerView';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconReload from '../../core/components/HeaderIconReload';
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import { get } from 'lodash';
@@ -125,14 +126,14 @@ class ProfileScreen extends Component {
       headerTitle: 'Личный кабинет',
       headerStyle: stylesHeader.common,
       headerTitleStyle: stylesHeader.title,
-      headerLeft: params.isAuth ? <HeaderIconReload onPress={() => {
+      headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
+      headerRight: params.isAuth ? <HeaderIconReload onPress={() => {
         Keyboard.dismiss();
 
         if (params.onReload) {
           params.onReload();
         }
       }} /> : <View />,
-      headerRight: <HeaderIconMenu navigation={navigation} />,
     };
   }
 

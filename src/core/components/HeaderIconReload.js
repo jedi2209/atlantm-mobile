@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         fontSize: size * 1.1,
         width: size,
         height: size,
-        marginLeft: 30,
+        // marginRight: 30,
         marginTop: 0,
       },
     }),

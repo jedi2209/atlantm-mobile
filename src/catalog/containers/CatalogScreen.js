@@ -18,6 +18,7 @@ import { actionSetDealersByCities } from '../../dealer/actions';
 // components
 import DeviceInfo from 'react-native-device-info';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
@@ -97,7 +98,7 @@ class CatalogScreen extends Component {
     headerTitle: 'Каталог автомобилей',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
-    headerLeft: <View />,
+    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 

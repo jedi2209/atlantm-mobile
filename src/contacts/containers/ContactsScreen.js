@@ -23,6 +23,7 @@ import Communications from 'react-native-communications';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import InfoLine from '../../eko/components/InfoLine';
 
 // helpers
@@ -60,7 +61,7 @@ class ContactsScreen extends Component {
     headerTitle: 'Контакты',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
-    headerLeft: <View />, // для выравнивания заголовка по центру на обоих платформах
+    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 
