@@ -90,7 +90,7 @@ class ContactsScreen extends Component {
 
       if (!phone) {
         return Alert.alert(
-          'Недостаточно информации',
+          'Добавьте номер телефона',
           'Для обратного звонка необходимо добавить номер контактного телефона в профиле',
           [
             { text: 'Отмена', style: 'cancel' },
