@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import {
   View,
   Image,
+  Keyboard,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
 
+// components
+import { NavigationActions } from 'react-navigation';
+
 // helpers
+import PropTypes from 'prop-types';
 import styleConst from '../../style-const';
 
 const containerSize = 40;
@@ -32,7 +37,14 @@ const styles = StyleSheet.create({
   },
 });
 
+const MENU_SCREEN_NAME = 'MenuScreen';
+
 export default class HeaderIconBack extends Component {
+  static propTypes = {
+    navigation: PropTypes.object,
+    returnScreen: PropTypes.string,
+  }
+
   shouldComponentUpdate() {
     return false;
   }
@@ -40,7 +52,21 @@ export default class HeaderIconBack extends Component {
   onPressBack = () => {
     const { returnScreen, navigation } = this.props;
 
+    if (returnScreen === MENU_SCREEN_NAME) this.onPressBackHome();
+
     returnScreen ? navigation.navigate(returnScreen) : navigation.goBack();
+  }
+
+  onPressBackHome = () => {
+    Keyboard.dismiss();
+    const resetAction = NavigationActions.reset({
+      index: 0,
+      key: null,
+      actions: [
+        NavigationActions.navigate({ routeName: MENU_SCREEN_NAME }),
+      ],
+    });
+    this.props.navigation.dispatch(resetAction);
   }
 
   render() {

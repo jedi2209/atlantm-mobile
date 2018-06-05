@@ -19,6 +19,7 @@ import ReviewsList from '../components/ReviewsList';
 import ReviewsFilter from '../components/ReviewsFilter';
 import DealerItemList from '../../../core/components/DealerItemList';
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
+import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import { REVIEWS_FILTER_DATE_PERIOD__ALL } from '../../constants';
@@ -66,7 +67,7 @@ class ReviewsScreen extends Component {
     headerTitle: 'Отзывы',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
-    headerLeft: <View />,
+    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 

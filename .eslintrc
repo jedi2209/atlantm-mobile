@@ -1,18 +1,58 @@
 {
   "parser": "babel-eslint",
-  "env": {
-    "browser": true
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
-  "extends": [
-    "airbnb-base",
-    "plugin:react/recommended",
-    "plugin:react-native/all"
-  ],
+  "env": {
+    "react-native/react-native": true
+  },
   "plugins": [
+    "import",
     "react",
     "react-native"
   ],
-  "ecmaFeatures": {
-    "jsx": true
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
+  "rules": {
+    "react-native/no-unused-styles": 2,
+    "react-native/no-inline-styles": 2,
+    "react/no-array-index-key": 2,
+    "react/prop-types": 0,
+    "indent": [
+      "error",
+      2
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "comma-dangle": [
+      "error",
+      "always-multiline"
+    ],
+    "eol-last": [
+      "error",
+      "always"
+    ],
+    "no-trailing-spaces": "error",
+    "quotes": [
+      "error",
+      "single",
+      {
+        "allowTemplateLiterals": true
+      }
+    ],
+    "no-console": 0
+  },
+  "settings": {
+    "import/resolver": {
+      "babel-module": {}
+    }
   }
 }

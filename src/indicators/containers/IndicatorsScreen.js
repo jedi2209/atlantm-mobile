@@ -9,6 +9,7 @@ import { actionSetActiveIndicator, actionFetchIndicators } from '../actions';
 
 // components
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import SpinnerView from '../../core/components/SpinnerView';
 import EmptyMessage from '../../core/components/EmptyMessage';
 import IndicatorsRow from '../components/IndicatorsRow';
@@ -44,7 +45,7 @@ class IndicatorsScreen extends Component {
     headerTitle: 'Индикаторы',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
-    headerLeft: <View />,
+    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 

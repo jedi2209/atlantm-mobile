@@ -17,6 +17,7 @@ import ProfileForm from '../../profile/components/ProfileForm';
 import ListItemHeader from '../../profile/components/ListItemHeader';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
@@ -69,7 +70,7 @@ class ServiceScreen extends Component {
     headerTitle: 'Заявка на СТО',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
-    headerLeft: <View />,
+    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 
