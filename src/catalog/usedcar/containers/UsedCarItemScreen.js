@@ -46,7 +46,7 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
     listRussia: dealer.listRussia,
     listUkraine: dealer.listUkraine,
     listBelarussia: dealer.listBelarussia,
-    carDetails: catalog.usedCar.carDetails,
+    carDetails: catalog.usedCar.carDetails.data,
     isFetchingCarDetails: catalog.usedCar.meta.isFetchingCarDetails,
   };
 };

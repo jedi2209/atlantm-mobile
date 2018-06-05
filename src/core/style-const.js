@@ -20,6 +20,7 @@ export default {
     systemGray: '#c7c7c7',
     green: '#4cd864',
     red: '#ff3c30',
+    darkBg: '#4f5b66',
   },
   font: {
     regular: 'Helvetica Neue',

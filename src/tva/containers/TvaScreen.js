@@ -24,6 +24,7 @@ import FCM from 'react-native-fcm';
 
 import Spinner from 'react-native-loading-spinner-overlay';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import ListItemHeader from '../../profile/components/ListItemHeader';
 import DealerItemList from '../../core/components/DealerItemList';
 import FooterButton from '../../core/components/FooterButton';
@@ -70,7 +71,7 @@ class TvaScreen extends Component {
     headerTitle: 'Табло выдачи авто',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
-    headerLeft: <View />,
+    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
   })
 

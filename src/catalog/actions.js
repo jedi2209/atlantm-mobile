@@ -1,5 +1,7 @@
 import API from '../utils/api';
 
+import { get } from 'lodash';
+
 import {
   USED_CAR_LIST__REQUEST,
   USED_CAR_LIST__SUCCESS,
@@ -39,6 +41,10 @@ import {
   NEW_CAR_DETAILS__REQUEST,
   NEW_CAR_DETAILS__SUCCESS,
   NEW_CAR_DETAILS__FAIL,
+  NEW_CAR_DETAILS_PHOTO_VIEWER__OPEN,
+  NEW_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
+  NEW_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
+  NEW_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
 
   CATALOG_DEALER__REQUEST,
   CATALOG_DEALER__SUCCESS,
@@ -523,6 +529,16 @@ export const actionFetchNewCarDetails = carId => {
 
         const details = { ...response.data };
 
+        // если есть фото нужного размера, записываем их в стор в нужной структуре данных
+        const photoViewerItems = get(details, 'foto.10000x300', []).map(photo => {
+          return { source: { uri: photo } };
+        });
+
+        photoViewerItems.length && dispatch({
+          type: NEW_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
+          payload: photoViewerItems,
+        });
+
         return dispatch({
           type: NEW_CAR_DETAILS__SUCCESS,
           payload: details,
@@ -536,6 +552,31 @@ export const actionFetchNewCarDetails = carId => {
           },
         });
       });
+  };
+};
+
+export const actionOpenPhotoViewer = () => {
+  return dispatch => {
+    return dispatch({
+      type: NEW_CAR_DETAILS_PHOTO_VIEWER__OPEN,
+    });
+  };
+};
+
+export const actionClosePhotoViewer = () => {
+  return dispatch => {
+    return dispatch({
+      type: NEW_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
+    });
+  };
+};
+
+export const actionUpdatePhotoViewerIndex = index => {
+  return dispatch => {
+    return dispatch({
+      type: NEW_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
+      payload: index,
+    });
   };
 };
 
