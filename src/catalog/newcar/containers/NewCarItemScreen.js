@@ -93,12 +93,13 @@ class NewCarItemScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { dealerSelected, carDetails, isFetchingCarDetails, photoViewerVisible, photoViewerItems } = this.props;
+    const { dealerSelected, carDetails, isFetchingCarDetails, photoViewerVisible, photoViewerItems, photoViewerIndex } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'NewCarItemScreen';
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (this.state.tabName !== nextState.tabName) ||
+      (photoViewerIndex !== nextProps.photoViewerIndex) ||
       (photoViewerItems.length !== nextProps.photoViewerItems.length) ||
       (photoViewerVisible !== nextProps.photoViewerVisible) ||
       (isFetchingCarDetails !== nextProps.isFetchingCarDetails) ||

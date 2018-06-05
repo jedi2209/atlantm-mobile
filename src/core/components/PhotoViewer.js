@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Modal, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Modal, Text, TouchableOpacity, Platform } from 'react-native';
 
 // helpers
 import PropTypes from 'prop-types';
@@ -15,9 +15,7 @@ class PhotoViewer extends Component {
     index: PropTypes.number,
     visible: PropTypes.bool,
     counter: PropTypes.bool,
-    // items: PropTypes.arrayOf(PropTypes.shape({
-    //   source: { uri: PropTypes.string },
-    // })),
+    items: PropTypes.array,
     onChange: PropTypes.func,
     onPressClose: PropTypes.func,
   }
@@ -58,21 +56,24 @@ class PhotoViewer extends Component {
         />
         {this.props.counter ? this.galleryCount : null}
         <TouchableOpacity style={styles.close} onPress={this.props.onPressClose}>
-          <Icon name="close" type="MaterialIcons" size={26} color='#fff' />
+          <Icon style={styles.closeIcon} name="close" type="MaterialIcons" />
         </TouchableOpacity>
       </Modal>
     );
   }
 }
 
-const backgroundColor = 'rgba(0,0,0,0.3)';
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 0;
+const positionTop = STATUSBAR_HEIGHT + 15;
+const color = styleConst.color.blue;
+const backgroundColor = 'rgba(255,255,255,0.5)';
 const styles = StyleSheet.create({
   gallery: {
     flex: 1,
     backgroundColor: styleConst.color.darkBg,
   },
   count: {
-    top: 15,
+    top: positionTop,
     right: 15,
     position: 'absolute',
     alignSelf: 'flex-end',
@@ -83,18 +84,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
   },
   countText: {
-    color: 'white',
+    color,
     fontSize: 18,
     fontFamily: styleConst.font.regular,
   },
   close: {
-    top: 15,
+    top: positionTop,
     left: 15,
     position: 'absolute',
     zIndex: 1,
     backgroundColor,
     borderRadius: 50,
-    padding: 5,
+    padding: 8,
+  },
+  closeIcon: {
+    color,
+    fontSize: 22,
   },
   errorContainer: {
     flex: 1,
