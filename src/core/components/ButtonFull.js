@@ -112,6 +112,9 @@ export default class ButtonFull extends PureComponent {
                       />
                     ) : null
                 }
+                {
+                  (icon !== 'phone' && icon !== 'arrow' && React.isValidElement(icon)) ? icon : null
+                }
               </View>
             )
         }

@@ -6,6 +6,7 @@
       "root": ["./src"],
       "alias": {
         "@catalog": "./src/catalog",
+        "@contacts": "./src/contacts",
         "@core": "./src/core",
         "@dealer": "./src/dealer",
         "@eko": "./src/eko",
