@@ -4,6 +4,9 @@ import {
   CALL_ME__REQUEST,
   CALL_ME__SUCCESS,
   CALL_ME__FAIL,
+
+  CONTACTS_MAP_USER_LOCATION__REQUEST,
+  CONTACTS_MAP_USER_LOCATION__DONE,
 } from './actionTypes';
 
 export const callMe = (props) => {
@@ -38,5 +41,21 @@ export const callMe = (props) => {
           },
         });
       });
+  };
+};
+
+export const actionRequestUserLocation = () => {
+  return dispatch => {
+    return dispatch({
+      type: CONTACTS_MAP_USER_LOCATION__REQUEST,
+    });
+  };
+};
+
+export const actionDoneUserLocation = () => {
+  return dispatch => {
+    return dispatch({
+      type: CONTACTS_MAP_USER_LOCATION__DONE,
+    });
   };
 };
