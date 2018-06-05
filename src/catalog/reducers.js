@@ -12,9 +12,14 @@ import {
   USED_CAR_PRICE_RANGE__SELECT,
   USED_CAR_PRICE_FILTER__SHOW,
   USED_CAR_PRICE_FILTER__HIDE,
+
   USED_CAR_DETAILS__REQUEST,
   USED_CAR_DETAILS__SUCCESS,
   USED_CAR_DETAILS__FAIL,
+  USED_CAR_DETAILS_PHOTO_VIEWER__OPEN,
+  USED_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
+  USED_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
+  USED_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
 
   NEW_CAR_CITY__SELECT,
   NEW_CAR_REGION__SELECT,
@@ -276,6 +281,40 @@ const usedCarDetails = (state = null, action) => {
       return null;
     case USED_CAR_DETAILS__SUCCESS:
       return action.payload;
+    default:
+      return state;
+  }
+};
+
+const usedCarPhotoViewerIndex = (state = 0, action) => {
+  switch (action.type) {
+    case USED_CAR_DETAILS__REQUEST:
+      return 0;
+    case USED_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const usedCarPhotoViewerItems = (state = [], action) => {
+  switch (action.type) {
+    case USED_CAR_DETAILS__REQUEST:
+      return [];
+    case USED_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const usedCarPhotoViewerVisible = (state = false, action) => {
+  switch (action.type) {
+    case USED_CAR_DETAILS__REQUEST:
+    case USED_CAR_DETAILS_PHOTO_VIEWER__CLOSE:
+      return false;
+    case USED_CAR_DETAILS_PHOTO_VIEWER__OPEN:
+      return true;
     default:
       return state;
   }
@@ -733,7 +772,10 @@ export default combineReducers({
 
   usedCar: combineReducers({
     carDetails: combineReducers({
-      data: usedCarDetails
+      data: usedCarDetails,
+      photoViewerItems: usedCarPhotoViewerItems,
+      photoViewerVisible: usedCarPhotoViewerVisible,
+      photoViewerIndex: usedCarPhotoViewerIndex,
     }),
     city: usedCarCity,
     total: usedCarTotal,
