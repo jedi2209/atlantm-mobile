@@ -14,9 +14,14 @@ import {
   USED_CAR_REGION__SELECT,
   USED_CAR_PRICE_FILTER__SHOW,
   USED_CAR_PRICE_FILTER__HIDE,
+
   USED_CAR_DETAILS__REQUEST,
   USED_CAR_DETAILS__SUCCESS,
   USED_CAR_DETAILS__FAIL,
+  USED_CAR_DETAILS_PHOTO_VIEWER__OPEN,
+  USED_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
+  USED_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
+  USED_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
 
   NEW_CAR_CITY__SELECT,
   NEW_CAR_REGION__SELECT,
@@ -297,6 +302,16 @@ export const actionFetchUsedCarDetails = carId => {
 
         const details = { ...response.data };
 
+        // если есть фото нужного размера, записываем их в стор в нужной структуре данных
+        const photoViewerItems = get(details, 'img.10000x300', []).map(photo => {
+          return { source: { uri: photo } };
+        });
+
+        photoViewerItems.length && dispatch({
+          type: USED_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
+          payload: photoViewerItems,
+        });
+
         return dispatch({
           type: USED_CAR_DETAILS__SUCCESS,
           payload: details,
@@ -310,6 +325,31 @@ export const actionFetchUsedCarDetails = carId => {
           },
         });
       });
+  };
+};
+
+export const actionOpenUsedCarPhotoViewer = () => {
+  return dispatch => {
+    return dispatch({
+      type: USED_CAR_DETAILS_PHOTO_VIEWER__OPEN,
+    });
+  };
+};
+
+export const actionCloseUsedCarPhotoViewer = () => {
+  return dispatch => {
+    return dispatch({
+      type: USED_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
+    });
+  };
+};
+
+export const actionUpdateUsedCarPhotoViewerIndex = index => {
+  return dispatch => {
+    return dispatch({
+      type: USED_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
+      payload: index,
+    });
   };
 };
 
@@ -555,7 +595,7 @@ export const actionFetchNewCarDetails = carId => {
   };
 };
 
-export const actionOpenPhotoViewer = () => {
+export const actionOpenNewCarPhotoViewer = () => {
   return dispatch => {
     return dispatch({
       type: NEW_CAR_DETAILS_PHOTO_VIEWER__OPEN,
@@ -563,7 +603,7 @@ export const actionOpenPhotoViewer = () => {
   };
 };
 
-export const actionClosePhotoViewer = () => {
+export const actionCloseNewCarPhotoViewer = () => {
   return dispatch => {
     return dispatch({
       type: NEW_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
@@ -571,7 +611,7 @@ export const actionClosePhotoViewer = () => {
   };
 };
 
-export const actionUpdatePhotoViewerIndex = index => {
+export const actionUpdateNewCarPhotoViewerIndex = index => {
   return dispatch => {
     return dispatch({
       type: NEW_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,

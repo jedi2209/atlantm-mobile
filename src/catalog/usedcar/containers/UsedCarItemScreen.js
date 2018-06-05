@@ -20,20 +20,26 @@ import {
 
 // redux
 import { connect } from 'react-redux';
-import { actionFetchUsedCarDetails } from '../../actions';
+import {
+  actionFetchUsedCarDetails,
+  actionOpenUsedCarPhotoViewer,
+  actionCloseUsedCarPhotoViewer,
+  actionUpdateUsedCarPhotoViewerIndex,
+} from '@catalog/actions';
 
 // components
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
-import PhotoSlider from '../../../core/components/PhotoSlider';
+import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
+import PhotoSlider from '@core/components/PhotoSlider';
+import PhotoViewer from '@core/components/PhotoViewer';
 
 // helpers
-import Amplitude from '../../../utils/amplitude-analytics';
-import PropTypes from 'prop-types';
 import { get, find } from 'lodash';
+import PropTypes from 'prop-types';
+import Amplitude from '@utils/amplitude-analytics';
+import styleConst from '@core/style-const';
+import stylesHeader from '@core/components/Header/style';
+import numberWithGap from '@utils/number-with-gap';
 import getTheme from '../../../../native-base-theme/components';
-import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
-import numberWithGap from '../../../utils/number-with-gap';
 
 // styles
 import styles from './UsedCarItemScreenStyles';
@@ -47,12 +53,18 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
     listUkraine: dealer.listUkraine,
     listBelarussia: dealer.listBelarussia,
     carDetails: catalog.usedCar.carDetails.data,
+    photoViewerItems: catalog.usedCar.carDetails.photoViewerItems,
+    photoViewerVisible: catalog.usedCar.carDetails.photoViewerVisible,
+    photoViewerIndex: catalog.usedCar.carDetails.photoViewerIndex,
     isFetchingCarDetails: catalog.usedCar.meta.isFetchingCarDetails,
   };
 };
 
 const mapDispatchToProps = {
   actionFetchUsedCarDetails,
+  actionOpenUsedCarPhotoViewer,
+  actionCloseUsedCarPhotoViewer,
+  actionUpdateUsedCarPhotoViewerIndex,
 };
 
 class UserCarItemScreen extends Component {
@@ -81,15 +93,27 @@ class UserCarItemScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { dealerSelected, carDetails, isFetchingCarDetails } = this.props;
+    const {
+      carDetails,
+      dealerSelected,
+      photoViewerItems,
+      photoViewerIndex,
+      photoViewerVisible,
+      isFetchingCarDetails,
+    } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'UserCarItemScreen';
 
     return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       (this.state.tabName !== nextState.tabName) ||
+      (photoViewerIndex !== nextProps.photoViewerIndex) ||
+      (photoViewerItems.length !== nextProps.photoViewerItems.length) ||
+      (photoViewerVisible !== nextProps.photoViewerVisible) ||
       (isFetchingCarDetails !== nextProps.isFetchingCarDetails) ||
       (get(carDetails, 'id.api') !== get(nextProps, 'carDetails.id.api'));
   }
+
+  logGuard = false
 
   onPressDealer = () => {
     const {
@@ -121,6 +145,12 @@ class UserCarItemScreen extends Component {
     });
   }
 
+  onClosePhoto = () => this.props.actionCloseUsedCarPhotoViewer()
+
+  onPressPhoto = () => this.props.actionOpenUsedCarPhotoViewer()
+
+  onChangePhotoIndex = index => this.props.actionUpdateUsedCarPhotoViewerIndex(index)
+
   selectBaseTab = () => this.setState({ tabName: 'base' })
 
   selectOptionsTab = () => this.setState({ tabName: 'options' })
@@ -130,7 +160,14 @@ class UserCarItemScreen extends Component {
     const isActiveBaseTab = tabName === 'base';
     const isActiveOptionsTab = tabName === 'options';
 
-    const { prices, carDetails, isFetchingCarDetails } = this.props;
+    const {
+      prices,
+      carDetails,
+      photoViewerIndex,
+      photoViewerItems,
+      photoViewerVisible,
+      isFetchingCarDetails,
+    } = this.props;
 
     if (!carDetails || isFetchingCarDetails) {
       return (
@@ -142,12 +179,18 @@ class UserCarItemScreen extends Component {
 
     console.log('== UsedCarItemScreen ==');
 
-    Amplitude.logEvent('screen', 'catalog/usedcar/item', {
-      id_api: get(carDetails, 'id.api'),
-      id_sap: get(carDetails, 'id.sap'),
-      brand_name: get(carDetails, 'brand.name'),
-      model_name: get(carDetails, 'model.name'),
-    });
+    if (!this.logGuard) {
+      Amplitude.logEvent('screen', 'catalog/usedcar/item', {
+        id_api: get(carDetails, 'id.api'),
+        id_sap: get(carDetails, 'id.sap'),
+        brand_name: get(carDetails, 'brand.name'),
+        model_name: get(carDetails, 'model.name'),
+      });
+
+      this.logGuard = true;
+    }
+
+    const photos = get(carDetails, 'img.10000x300');
 
     return (
       <StyleProvider style={getTheme()}>
@@ -158,7 +201,11 @@ class UserCarItemScreen extends Component {
               <View style={styles.titleContainer}>
                 <Text style={styles.title}>{`${carDetails.brand.name} ${get(carDetails, 'model.name')}`}</Text>
               </View>
-              <PhotoSlider photos={carDetails.img['10000x300']} />
+              <PhotoSlider
+                photos={photos}
+                onPressItem={this.onPressPhoto}
+                onIndexChanged={this.onChangePhotoIndex}
+              />
             </View>
 
             <Segment style={styles.segment}>
@@ -372,6 +419,16 @@ class UserCarItemScreen extends Component {
               <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
             </Button>
           </Footer>
+          {
+            photoViewerItems.length ?
+              <PhotoViewer
+                index={photoViewerIndex}
+                visible={photoViewerVisible}
+                items={photoViewerItems}
+                onChange={this.onChangePhotoIndex}
+                onPressClose={this.onClosePhoto}
+              /> : null
+          }
         </SafeAreaView>
       </StyleProvider>
     );

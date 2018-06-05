@@ -22,9 +22,9 @@ import {
 import { connect } from 'react-redux';
 import {
   actionFetchNewCarDetails,
-  actionOpenPhotoViewer,
-  actionClosePhotoViewer,
-  actionUpdatePhotoViewerIndex,
+  actionOpenNewCarPhotoViewer,
+  actionCloseNewCarPhotoViewer,
+  actionUpdateNewCarPhotoViewerIndex,
 } from '@catalog/actions';
 
 // components
@@ -62,9 +62,9 @@ const mapStateToProps = ({ catalog, dealer, nav }) => {
 
 const mapDispatchToProps = {
   actionFetchNewCarDetails,
-  actionOpenPhotoViewer,
-  actionClosePhotoViewer,
-  actionUpdatePhotoViewerIndex,
+  actionOpenNewCarPhotoViewer,
+  actionCloseNewCarPhotoViewer,
+  actionUpdateNewCarPhotoViewerIndex,
 };
 
 class NewCarItemScreen extends Component {
@@ -93,7 +93,14 @@ class NewCarItemScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { dealerSelected, carDetails, isFetchingCarDetails, photoViewerVisible, photoViewerItems, photoViewerIndex } = this.props;
+    const {
+      carDetails,
+      dealerSelected,
+      photoViewerItems,
+      photoViewerIndex,
+      photoViewerVisible,
+      isFetchingCarDetails,
+    } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'NewCarItemScreen';
 
@@ -140,11 +147,11 @@ class NewCarItemScreen extends Component {
     });
   }
 
-  onClosePhoto = () => this.props.actionClosePhotoViewer()
+  onClosePhoto = () => this.props.actionCloseNewCarPhotoViewer()
 
-  onPressPhoto = () => this.props.actionOpenPhotoViewer()
+  onPressPhoto = () => this.props.actionOpenNewCarPhotoViewer()
 
-  onChangePhotoIndex = index => this.props.actionUpdatePhotoViewerIndex(index)
+  onChangePhotoIndex = index => this.props.actionUpdateNewCarPhotoViewerIndex(index)
 
   selectBaseTab = () => this.setState({ tabName: 'base' })
 
@@ -278,12 +285,16 @@ class NewCarItemScreen extends Component {
     const additionalKeys = Object.keys(additional);
     const photos = get(carDetails, 'img.10000x300') || get(carDetails, 'foto.10000x300');
 
-    Amplitude.logEvent('screen', 'catalog/newcar/item', {
-      id_api: get(carDetails, 'id.api'),
-      id_sap: get(carDetails, 'id.sap'),
-      brand_name: brandName,
-      model_name: modelName,
-    });
+    if (!this.logGuard) {
+      Amplitude.logEvent('screen', 'catalog/newcar/item', {
+        id_api: get(carDetails, 'id.api'),
+        id_sap: get(carDetails, 'id.sap'),
+        brand_name: brandName,
+        model_name: modelName,
+      });
+
+      this.logGuard = true;
+    }
 
     return (
       <StyleProvider style={getTheme()}>
