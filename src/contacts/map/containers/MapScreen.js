@@ -225,7 +225,7 @@ class MapScreen extends Component {
           </MapView>
           <FooterButton
             icon={<Icon name="google-maps" style={styles.iconRoute} type="MaterialCommunityIcons" />}
-            text="Проложить маршрут"
+            text="Как найти нас"
             isLoading={isRequestUserLocation}
             onPressButton={this.onPressRoute}
           />
