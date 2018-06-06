@@ -15,7 +15,13 @@ class PhotoViewer extends Component {
     index: PropTypes.number,
     visible: PropTypes.bool,
     counter: PropTypes.bool,
-    items: PropTypes.array,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        source: PropTypes.shape({
+          uri: PropTypes.string,
+        }),
+      })
+    ),
     onChange: PropTypes.func,
     onPressClose: PropTypes.func,
   }
