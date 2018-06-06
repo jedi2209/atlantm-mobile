@@ -55,8 +55,10 @@ export default class ButtonFull extends PureComponent {
     text: PropTypes.string,
     isLoading: PropTypes.bool,
     onPressButton: PropTypes.func,
-
-    icon: PropTypes.string,
+    icon: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.element,
+    ]),
     theme: PropTypes.string,
     uppercase: PropTypes.bool,
   }
