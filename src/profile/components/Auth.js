@@ -7,12 +7,12 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { ListItem, Body, Item, Label, Input, Button } from 'native-base';
 
 // styles
-import stylesList from '../../core/components/Lists/style';
+import stylesList from '@core/components/Lists/style';
 
 // helpers
 import { get } from 'lodash';
-import { LOGIN__SUCCESS, LOGIN__FAIL } from '../actionTypes';
-import styleConst from '../../core/style-const';
+import { LOGIN__FAIL } from '@profile/actionTypes';
+import styleConst from '@core/style-const';
 
 const styles = StyleSheet.create({
   container: {
@@ -107,10 +107,6 @@ export default class Auth extends Component {
 
     loginHandler({ login, password, dealers, dealerSelected })
       .then(action => {
-        // if (action.type === LOGIN__SUCCESS) {
-        //   setTimeout(() => Alert.alert('Успешная авторизация'), 100);
-        // }
-
         if (action.type === LOGIN__FAIL) {
           if (login === 'zteam' && password === '4952121052') {
             window.atlantmDebug = false;
@@ -130,7 +126,7 @@ export default class Auth extends Component {
   onChangeLogin = value => this.props.loginFill(value)
   onChangePassword = value => this.props.passwordFill(value)
 
-  renderListItem = (label, value, onChangeHandler, inputProps = {}, isLast) => {
+  renderListItem = ({ label, value, placeholder = 'Поле для заполнения', onChangeHandler, inputProps = {}, isLast }) => {
     return (
       <View style={stylesList.listItemContainer}>
         <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]} >
@@ -141,7 +137,7 @@ export default class Auth extends Component {
                 style={stylesList.input}
                 autoCapitalize="none"
                 autoCorrect={false}
-                placeholder="Поле для заполнения"
+                placeholder={placeholder}
                 onChangeText={onChangeHandler}
                 value={value}
                 returnKeyType="done"
@@ -168,8 +164,19 @@ export default class Auth extends Component {
           </Text>
         </View>
 
-        {this.renderListItem('Логин', login, this.onChangeLogin)}
-        {this.renderListItem('Пароль', password, this.onChangePassword, { secureTextEntry: true }, true)}
+        {this.renderListItem({
+          label: 'Логин',
+          value: login,
+          placeholder: 'ID Клиента/номер телефона',
+          onChangeHandler: this.onChangeLogin,
+        })}
+        {this.renderListItem({
+          label: 'Пароль',
+          value: password,
+          onChangeHandler: this.onChangePassword,
+          inputProps: { secureTextEntry: true },
+          isLast: true,
+        })}
 
         <View style={styles.footer}>
           <Button onPress={this.onPressRegister} full style={[styles.button, styles.buttonWhite]}>
