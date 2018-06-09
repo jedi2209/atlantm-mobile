@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
+  Alert,
+  Linking,
   Platform,
   StyleSheet,
   Dimensions,
-  PermissionsAndroid,
 } from 'react-native';
 
 // Maps
@@ -14,10 +15,21 @@ import getDirections from 'react-native-google-maps-directions';
 
 // Redux
 import { connect } from 'react-redux';
-import { actionRequestUserLocation, actionDoneUserLocation } from '@contacts/actions';
+import {
+  actionRequestCheckAvailableNaviApps,
+  actionDoneCheckAvailableNaviApps,
+  actionSetAvailableNaviApps,
+} from '@contacts/actions';
+import {
+  CONTACTS_MAP_YNDX_NAVIGATOR,
+  CONTACTS_MAP_YNDX_MAPS,
+  CONTACTS_MAP_GOOGLE_MAPS,
+  CONTACTS_MAP_APPLE_MAPS,
+} from '@contacts/actionTypes';
 
 // components
 import { Icon } from 'native-base';
+import ActionSheet from 'react-native-actionsheet';
 import FooterButton from '@core/components/FooterButton';
 import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
 
@@ -48,21 +60,23 @@ const styles = StyleSheet.create({
   },
   iconRoute: {
     marginLeft: 10,
-    // fontSize: 18,
+    fontSize: 30,
     color: 'white',
   },
 });
 
 const mapStateToProps = ({ dealer, contacts }) => {
   return {
-    isRequestUserLocation: contacts.map.isRequestUserLocation,
     dealerSelected: dealer.selected,
+    availableNaviApps: contacts.map.availableNaviApps,
+    isRequestCheckAvailableNaviApps: contacts.map.isRequestCheckAvailableNaviApps,
   };
 };
 
 const mapDispatchToProps = {
-  actionRequestUserLocation,
-  actionDoneUserLocation,
+  actionRequestCheckAvailableNaviApps,
+  actionDoneCheckAvailableNaviApps,
+  actionSetAvailableNaviApps,
 };
 
 class MapScreen extends Component {
@@ -75,97 +89,140 @@ class MapScreen extends Component {
   })
 
   shouldComponentUpdate(nextProps) {
-    const { isRequestUserLocation, dealerSelected, navigation } = this.props;
+    const { availableNaviApps, isRequestCheckAvailableNaviApps, dealerSelected, navigation } = this.props;
 
-    return isRequestUserLocation !== nextProps.isRequestUserLocation ||
+    return (isRequestCheckAvailableNaviApps !== nextProps.isRequestCheckAvailableNaviApps) ||
+      (availableNaviApps !== nextProps.availableNaviApps) ||
       (dealerSelected.id !== nextProps.dealerSelected.id &&
       navigation.state.routeName === 'MapScreen');
   }
 
   onPressRoute = async () => {
-    let positionRaw = {};
-    let permissionGranted = true; // по умолчанию считаем что разрешение есть
+    const { availableNaviApps, actionSetAvailableNaviApps, dealerSelected } = this.props;
 
-    const latitude = Number(get(this.props.dealerSelected, 'coords.lat'));
-    const longitude = Number(get(this.props.dealerSelected, 'coords.lon'));
+    const latitude = Number(get(dealerSelected, 'coords.lat'));
+    const longitude = Number(get(dealerSelected, 'coords.lon'));
 
     if (isAndroid) {
-      try {
-        permissionGranted = await this.requestLocationPermission();
-      } catch (error) {}
+      return this.openDirections(`geo:${latitude},${longitude}`);
     }
 
-    // если для андроида нет разрешений – не запрашиваем геопозию, чтобы не было креша приложения
-    // @see https://facebook.github.io/react-native/docs/geolocation.html#android
-    if (permissionGranted || !isAndroid) {
-      try {
-        positionRaw = await this.getUserPosition();
-      } catch (error) {}
+    if (availableNaviApps.length === 0) {
+      actionSetAvailableNaviApps(['Отмена']);
     }
 
-    const userLocation = {
-      latitude: get(positionRaw, 'coords.latitude', null),
-      longitude: get(positionRaw, 'coords.longitude', null),
-    };
-    const destinationLocation = {
-      latitude,
-      longitude,
-    };
-
-    this.openDirections(userLocation, destinationLocation);
+    return this.buildActionSheet(latitude, longitude);
   }
 
-  requestLocationPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          'title': 'Запрос геолокации',
-          'message': 'Для построения маршрута',
-        }
-      );
+  buildActionSheet = async (latitude, longitude) => {
+    const {
+      availableNaviApps,
+      actionSetAvailableNaviApps,
+      actionRequestCheckAvailableNaviApps,
+      actionDoneCheckAvailableNaviApps,
+    } = this.props;
 
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
+    if (availableNaviApps.length > 1) {
+      return this.actionSheet.show();
+    }
 
-    } catch (err) {
-      return false;
+    actionRequestCheckAvailableNaviApps();
+
+    const apps = ['Отмена'];
+    const baseParams = { latitude, longitude };
+
+    const checkAppAvailable = name => {
+      return Linking.canOpenURL(this.getNaviLink({
+        ...baseParams,
+        name,
+      })).then(isAppAvailable => {
+        return { name, isAppAvailable };
+      });
+    };
+
+    Promise
+      .all([
+        checkAppAvailable(CONTACTS_MAP_YNDX_NAVIGATOR),
+        checkAppAvailable(CONTACTS_MAP_YNDX_MAPS),
+        checkAppAvailable(CONTACTS_MAP_GOOGLE_MAPS),
+        checkAppAvailable(CONTACTS_MAP_APPLE_MAPS),
+      ])
+      .then(results => {
+        results.forEach(app => {
+          if (app.isAppAvailable) apps.push(app.name);
+        });
+
+        actionSetAvailableNaviApps(apps);
+
+        actionDoneCheckAvailableNaviApps();
+
+        this.actionSheet.show();
+      });
+  }
+
+  getNaviLink = ({ name, latitude, longitude }) => {
+    switch (name) {
+    case CONTACTS_MAP_YNDX_NAVIGATOR:
+      return `yandexnavi://build_route_on_map?lat_to=${latitude}&lon_to=${longitude}`;
+    case CONTACTS_MAP_YNDX_MAPS:
+      return `yandexmaps://maps.yandex.ru/?pt=${longitude},${latitude}&z=12`;
+    case CONTACTS_MAP_GOOGLE_MAPS:
+      return `comgooglemaps://?daddr=${latitude},${longitude}`;
+    default: // CONTACTS_MAP_APPLE_MAPS
+      return `maps://?daddr=${latitude},${longitude}`;
     }
   }
 
-  getUserPosition = () => {
-    const { actionRequestUserLocation, actionDoneUserLocation } = this.props;
+  openDirections = url => {
+    return Linking.openURL(url).catch(err => {
+      __DEV__ && console.log('err', err);
 
-    return new Promise((resolve, reject) => {
-      actionRequestUserLocation();
-
-      navigator.geolocation.getCurrentPosition(
-        function(position) {
-          actionDoneUserLocation();
-
-          return resolve(position);
-        },
-        function(error) {
-          return reject(error);
-        },
-      );
+      setTimeout(() => Alert.alert(
+        'Ошибка', 'Не удалось открыть приложения для навигации, попробуйте снова.'
+      ));
     });
   }
 
-  openDirections = (userLocation, destinationLocation) => {
-    const data = {
-      source: userLocation,
-      destination: destinationLocation,
-      params: [],
-    };
+  onPressRouteVariant = index => {
+    let url;
 
-    getDirections(data);
+    if (index === 0) return false;
+
+    const { availableNaviApps, dealerSelected } = this.props;
+
+    const navApp = availableNaviApps[index];
+    const latitude = Number(get(dealerSelected, 'coords.lat'));
+    const longitude = Number(get(dealerSelected, 'coords.lon'));
+
+    const baseParams = { latitude, longitude };
+
+    switch (navApp) {
+    case CONTACTS_MAP_YNDX_NAVIGATOR:
+      url = this.getNaviLink({ ...baseParams, name: CONTACTS_MAP_YNDX_NAVIGATOR });
+      break;
+    case CONTACTS_MAP_YNDX_MAPS:
+      url = this.getNaviLink({ ...baseParams, name: CONTACTS_MAP_YNDX_MAPS });
+      break;
+    case CONTACTS_MAP_GOOGLE_MAPS:
+      url = this.getNaviLink({ ...baseParams, name: CONTACTS_MAP_GOOGLE_MAPS });
+      break;
+    default:
+      url = this.getNaviLink({ ...baseParams, name: CONTACTS_MAP_APPLE_MAPS });
+      break;
+    }
+
+    return this.openDirections(url);
   }
 
   render() {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
-    const { dealerSelected, isRequestUserLocation } = this.props;
+    const {
+      dealerSelected,
+      availableNaviApps,
+      isRequestCheckAvailableNaviApps,
+    } = this.props;
 
     const LATITUDE = get(this.props.dealerSelected, 'coords.lat');
     const LONGITUDE = get(this.props.dealerSelected, 'coords.lon');
@@ -226,10 +283,17 @@ class MapScreen extends Component {
           <FooterButton
             icon={<Icon name="google-maps" style={styles.iconRoute} type="MaterialCommunityIcons" />}
             text="Как найти нас"
-            isLoading={isRequestUserLocation}
+            isLoading={isRequestCheckAvailableNaviApps}
             onPressButton={this.onPressRoute}
           />
         </View>
+        <ActionSheet
+          cancelButtonIndex={0}
+          ref={component => this.actionSheet = component}
+          title="Выберите приложение для навигации"
+          options={availableNaviApps}
+          onPress={this.onPressRouteVariant}
+        />
       </View>
     );
   }

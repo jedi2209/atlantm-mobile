@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>ru</string>
 	<key>CFBundleDisplayName</key>
@@ -43,8 +45,8 @@
 	<string>Для загрузки фотографий автомобиля</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Для загрузки фотографий автомобиля</string>
-  <key>NSLocationWhenInUseUsageDescription</key>
-  <string>Для прокладывания маршрута</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Для прокладывания маршрута</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>
@@ -95,5 +97,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+  <key>LSApplicationQueriesSchemes</key>
+  <array>
+    <string>yandexnavi</string>
+    <string>yandexmaps</string>
+    <string>comgooglemaps</string>
+    <string>comgooglemaps-x-callback</string>
+    <string>maps</string>
+  </array>
 </dict>
 </plist>

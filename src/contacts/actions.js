@@ -5,8 +5,9 @@ import {
   CALL_ME__SUCCESS,
   CALL_ME__FAIL,
 
-  CONTACTS_MAP_USER_LOCATION__REQUEST,
-  CONTACTS_MAP_USER_LOCATION__DONE,
+  CONTACTS_MAP_AVAILABLE_NAVIAPPS__SET,
+  CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__REQUEST,
+  CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__DONE,
 } from './actionTypes';
 
 export const callMe = (props) => {
@@ -44,18 +45,27 @@ export const callMe = (props) => {
   };
 };
 
-export const actionRequestUserLocation = () => {
+export const actionRequestCheckAvailableNaviApps = () => {
   return dispatch => {
     return dispatch({
-      type: CONTACTS_MAP_USER_LOCATION__REQUEST,
+      type: CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__REQUEST,
     });
   };
 };
 
-export const actionDoneUserLocation = () => {
+export const actionDoneCheckAvailableNaviApps = () => {
   return dispatch => {
     return dispatch({
-      type: CONTACTS_MAP_USER_LOCATION__DONE,
+      type: CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__DONE,
+    });
+  };
+};
+
+export const actionSetAvailableNaviApps = availableNaviApps => {
+  return dispatch => {
+    return dispatch({
+      type: CONTACTS_MAP_AVAILABLE_NAVIAPPS__SET,
+      payload: availableNaviApps,
     });
   };
 };
