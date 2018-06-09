@@ -5,8 +5,9 @@ import {
   CALL_ME__SUCCESS,
   CALL_ME__FAIL,
 
-  CONTACTS_MAP_USER_LOCATION__REQUEST,
-  CONTACTS_MAP_USER_LOCATION__DONE,
+  CONTACTS_MAP_AVAILABLE_NAVIAPPS__SET,
+  CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__REQUEST,
+  CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__DONE,
 } from './actionTypes';
 
 const isСallMeRequest = (state = false, action) => {
@@ -22,12 +23,24 @@ const isСallMeRequest = (state = false, action) => {
   }
 };
 
-const isRequestUserLocation = (state = false, action) => {
+const isRequestCheckAvailableNaviApps = (state = false, action) => {
   switch (action.type) {
-  case CONTACTS_MAP_USER_LOCATION__REQUEST:
+  case CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__REQUEST:
     return true;
-  case CONTACTS_MAP_USER_LOCATION__DONE:
+  case REHYDRATE:
+  case CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__DONE:
     return false;
+  default:
+    return state;
+  }
+};
+
+const availableNaviApps = (state = [], action) => {
+  switch (action.type) {
+  case REHYDRATE:
+    return [];
+  case CONTACTS_MAP_AVAILABLE_NAVIAPPS__SET:
+    return action.payload;
   default:
     return state;
   }
@@ -36,6 +49,7 @@ const isRequestUserLocation = (state = false, action) => {
 export default combineReducers({
   isСallMeRequest,
   map: combineReducers({
-    isRequestUserLocation,
+    availableNaviApps,
+    isRequestCheckAvailableNaviApps,
   }),
 });

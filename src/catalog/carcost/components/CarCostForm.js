@@ -4,6 +4,8 @@ import { View, Text, Platform, StyleSheet } from 'react-native';
 // components
 import { ListItem, Body, Item, Label, Input, Right, Icon, Segment, Button } from 'native-base';
 import YearPicker from './YearPicker';
+
+// TODO: разобраться зачем указывать такой путь к этому компоненту
 import ActionSheet from '../../../../node_modules/react-native-actionsheet/lib/ActionSheetCustom';
 
 // styles
