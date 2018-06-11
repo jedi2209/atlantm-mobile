@@ -1,6 +1,6 @@
-import styleConst from '../core/style-const';
+import styleConst from '@core/style-const';
 
-const processHtml = (text, width, height) => {
+const processHtml = (text, width) => {
   return `
     <!DOCTYPE html>
     <html lang="ru">

@@ -192,7 +192,7 @@ class AboutScreen extends Component {
     const imageUrl = get(dealerSelected, isTablet ? 'img.10000x440' : 'img.10000x300');
 
     if (description) {
-      description = processHtml(description, this.state.webViewWidth, this.state.webViewHeight);
+      description = processHtml(description, this.state.webViewWidth);
     }
 
     console.log('== About ==');

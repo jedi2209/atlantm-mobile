@@ -9,19 +9,18 @@ import { actionSetBonusLevel1, actionSetBonusLevel2 } from '../../actions';
 
 // components
 import * as Animatable from 'react-native-animatable';
-import Communications from 'react-native-communications';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
 
 // styles
-import stylesList from '../../../core/components/Lists/style';
+import stylesList from '@core/components/Lists/style';
 
 // helpers
 import { get, isEmpty } from 'lodash';
-import { dayMonthYear } from '../../../utils/date';
+import { dayMonthYear } from '@utils/date';
 import getTheme from '../../../../native-base-theme/components';
-import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
-import { MONTH_TEXT } from '../../const';
+import styleConst from '@core/style-const';
+import stylesHeader from '@core/components/Header/style';
+import { MONTH_TEXT } from '@profile/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -32,7 +31,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: styleConst.font.regular,
     fontSize: 17,
-    marginTop: 50,
+    marginTop: 30,
   },
   itemLevel1: {
     marginBottom: 1,
@@ -262,14 +261,15 @@ class BonusScreen extends Component {
     );
   }
 
-  onPressBonusInfo = () => {
-    const links = {
-      ru: 'https://www.atlantm.ru/expert/bonus/',
-      ua: 'https://www.atlant-m.ua/expert/bonus/',
-      by: 'https://www.atlant-m.by/expert/bonus/',
-    };
+  onPressBonusInfo = () => this.props.navigation.navigate('BonusInfoScreen')
 
-    Communications.web(links[this.props.dealerSelected.region]);
+  renderBonusButton = () => {
+    return (
+      <Button onPress={this.onPressBonusInfo} full style={styles.button}>
+        <Icon name="ios-information-circle-outline" style={styles.buttonIcon} />
+        <Text numberOfLines={1} style={styles.buttonText}>БОНУСНАЯ ПРОГРАММА</Text>
+      </Button>
+    );
   }
 
   render() {
@@ -286,6 +286,7 @@ class BonusScreen extends Component {
           <Text style={styles.emptyText}>
             Бонусов пока нет
           </Text>
+          {this.renderBonusButton()}
         </SafeAreaView>
       );
     }
@@ -300,10 +301,7 @@ class BonusScreen extends Component {
               <Text style={styles.totalText}>Всего: <Text style={styles.totalValue}>{get(bonus, 'saldo.value')}</Text> баллов</Text>
             </View>
 
-            <Button onPress={this.onPressBonusInfo} full style={styles.button}>
-              <Icon name="ios-information-circle-outline" style={styles.buttonIcon} />
-              <Text numberOfLines={1} style={styles.buttonText}>БОНУСНАЯ ПРОГРАММА</Text>
-            </Button>
+            {this.renderBonusButton()}
           </Content>
         </SafeAreaView>
       </StyleProvider>

@@ -265,7 +265,7 @@ class AboutDealerScreen extends Component {
     const imageUrl = get(dealer, isTablet ? 'img.10000x440' : 'img.10000x300');
 
     if (description) {
-      description = processHtml(description, this.state.webViewWidth, this.state.webViewHeight);
+      description = processHtml(description, this.state.webViewWidth);
     }
 
     return (

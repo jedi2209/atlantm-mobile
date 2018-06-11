@@ -56,6 +56,10 @@ export default {
     return this.request(`/lkk/bonus/list/?token=${token}`, baseRequestParams);
   },
 
+  fetchBonusInfo({ region }) {
+    return this.request(`/info/bonus/get/?region=${region}`, baseRequestParams);
+  },
+
   fetchDiscounts({ token }) {
     return this.request(`/lkk/actions/list/?token=${token}`, baseRequestParams);
   },
