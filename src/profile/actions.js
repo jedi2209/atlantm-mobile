@@ -14,6 +14,10 @@ import {
   PROFILE_BONUS_LEVEL1__SET,
   PROFILE_BONUS_LEVEL2__SET,
 
+  PROFILE_BONUS_INFO__REQUEST,
+  PROFILE_BONUS_INFO__SUCCESS,
+  PROFILE_BONUS_INFO__FAIL,
+
   PROFILE_DATA__REQUEST,
   PROFILE_DATA__SUCCESS,
   PROFILE_DATA__FAIL,
@@ -422,6 +426,48 @@ export const actionFetchCarHistoryDetails = (props) => {
         payload: {
           ...items,
         },
+      });
+    } catch (e) {
+      return onError(e);
+    }
+  };
+};
+
+export const actionFetchBonusInfo = props => {
+  return async dispatch => {
+    function onError(error) {
+      return dispatch({
+        type: PROFILE_BONUS_INFO__FAIL,
+        payload: {
+          code: error.code,
+          message: error.message,
+        },
+      });
+    }
+
+    dispatch({
+      type: PROFILE_BONUS_INFO__REQUEST,
+      payload: { ...props },
+    });
+
+    try {
+      const res = await API.fetchBonusInfo(props);
+      const { status, data } = res;
+
+      // TODO: запросить у API данные по принятой структуре данных
+      // if (get(error, 'code') !== 200) {
+      if (status !== 'success') {
+        __DEV__ && console.log('error fetch car bonus info', res);
+        return onError({
+          code: 404,
+          message: 'Ошибка при получении информации о бонусной программе',
+        });
+      }
+
+      // TODO: присылать данные вместе с body как на других экранах
+      return dispatch({
+        type: PROFILE_BONUS_INFO__SUCCESS,
+        payload: `<body>${data}</body>`,
       });
     } catch (e) {
       return onError(e);

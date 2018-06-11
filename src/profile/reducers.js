@@ -13,6 +13,9 @@ import {
   PROFILE_PASSWORD__FILL,
   PROFILE_BONUS_LEVEL1__SET,
   PROFILE_BONUS_LEVEL2__SET,
+  PROFILE_BONUS_INFO__REQUEST,
+  PROFILE_BONUS_INFO__SUCCESS,
+  PROFILE_BONUS_INFO__FAIL,
 
   PROFILE_DATA__REQUEST,
   PROFILE_DATA__SUCCESS,
@@ -36,6 +39,8 @@ import {
   CAR_HISTORY_DETAILS__SUCCESS,
   CAR_HISTORY_DETAILS__FAIL,
 } from './actionTypes';
+
+import { DEALER__SUCCESS } from '@dealer/actionTypes';
 
 function name(state = '', action) {
   switch (action.type) {
@@ -221,6 +226,33 @@ function bonusData(state = {}, action) {
   }
 }
 
+function bonusInfo(state = '', action) {
+  switch (action.type) {
+  case REHYDRATE:
+    return get(action.payload, 'profile.bonus.info', '');
+  case DEALER__SUCCESS:
+  case PROFILE_BONUS_INFO__REQUEST:
+    return '';
+  case PROFILE_BONUS_INFO__SUCCESS:
+    return action.payload;
+  default:
+    return state;
+  }
+}
+
+function isFetchBonusInfo(state = false, action) {
+  switch (action.type) {
+  case REHYDRATE:
+  case PROFILE_BONUS_INFO__FAIL:
+  case PROFILE_BONUS_INFO__SUCCESS:
+    return false;
+  case PROFILE_BONUS_INFO__REQUEST:
+    return true;
+  default:
+    return state;
+  }
+}
+
 function discounts(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
@@ -359,6 +391,9 @@ export default combineReducers({
     data: bonusData,
     level1Hash,
     level2Hash,
+
+    info: bonusInfo,
+    isFetchBonusInfo,
   }),
 
   carHistory: combineReducers({

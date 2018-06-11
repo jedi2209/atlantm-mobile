@@ -11,6 +11,7 @@ import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
 import ProfileScreen from '../profile/containers/ProfileScreen';
 import RegisterScreen from '../profile/containers/RegisterScreen';
 import BonusScreen from '../profile/bonus/containers/BonusScreen';
+import BonusInfoScreen from '../profile/bonus/containers/BonusInfoScreen';
 import DiscountsScreen from '../profile/discounts/containers/DiscountsScreen';
 import CarHistoryScreen from '../profile/carhistory/containers/CarHistoryScreen';
 import CarHistoryDetailsScreen from '../profile/carhistory/containers/CarHistoryDetailsScreen';
@@ -115,6 +116,7 @@ const getRouter = initialRouteName => {
           ProfileScreen: { screen: ProfileScreen },
           RegisterScreen: { screen: RegisterScreen },
           BonusScreen: { screen: BonusScreen },
+          BonusInfoScreen: { screen: BonusInfoScreen },
           DiscountsScreen: { screen: DiscountsScreen },
           CarHistoryScreen: { screen: CarHistoryScreen },
           CarHistoryDetailsScreen: { screen: CarHistoryDetailsScreen },
