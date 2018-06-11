@@ -6,7 +6,7 @@ export const CONTACTS_MAP_AVAILABLE_NAVIAPPS__SET = 'CONTACTS_MAP_AVAILABLE_NAVI
 export const CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__REQUEST = 'CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__REQUEST';
 export const CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__DONE = 'CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__DONE';
 
-export const CONTACTS_MAP_YNDX_NAVIGATOR = 'Яндекс.Навигатор';
-export const CONTACTS_MAP_YNDX_MAPS = 'Яндекс.Карты';
-export const CONTACTS_MAP_GOOGLE_MAPS = 'Google Maps';
-export const CONTACTS_MAP_APPLE_MAPS = 'Apple Maps';
+export const CONTACTS_MAP_YNDX_NAVIGATOR = 'Яндекс Навигатор';
+export const CONTACTS_MAP_YNDX_MAPS = 'Яндекс Карты';
+export const CONTACTS_MAP_GOOGLE_MAPS = 'Google Карты';
+export const CONTACTS_MAP_APPLE_MAPS = 'Apple Карты';
