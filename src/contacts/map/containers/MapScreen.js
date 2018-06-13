@@ -280,8 +280,8 @@ class MapScreen extends Component {
             />
           </MapView>
           <FooterButton
-            icon={<Icon name="google-maps" style={styles.iconRoute} type="MaterialCommunityIcons" />}
-            text="Как найти нас"
+            icon={<Icon name="navigation" style={styles.iconRoute} type="MaterialCommunityIcons" />}
+            text="Построить маршрут"
             isLoading={isRequestCheckAvailableNaviApps}
             onPressButton={this.onPressRoute}
           />
