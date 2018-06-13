@@ -76,6 +76,13 @@ project.ext.react = [
     entryFile: "index.js"
 ]
 
+project.ext.version = [
+    code:   versionMajor * 10000 + versionMinor * 100 + versionPatch,
+    name:   "${versionMajor}.${versionMinor}.${versionPatch}"
+]
+
+buildDir = "../../../../Downloads/${rootProject.name}/${project.name}/${project.ext.version.name}"
+
 apply from: "../../node_modules/react-native/react.gradle"
 apply from: "../../node_modules/react-native-sentry/sentry.gradle"
 
@@ -92,7 +99,7 @@ def enableSeparateBuildPerCPUArchitecture = false
 /**
  * Run Proguard to shrink the Java bytecode in release builds.
  */
-def enableProguardInReleaseBuilds = false
+def enableProguardInReleaseBuilds = true
 
 android {
     compileSdkVersion 23
@@ -102,8 +109,8 @@ android {
         applicationId "com.atlantm"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 93
-        versionName "4.11.0"
+        versionCode project.ext.version.code
+        versionName project.ext.version.name
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -142,9 +149,12 @@ android {
             def versionCodes = ["armeabi-v7a":1, "x86":2]
             def abi = output.getFilter(OutputFile.ABI)
             if (abi != null) {  // null for the universal-debug, universal-release variants
-                output.versionCodeOverride =
-                        versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
+                output.versionCodeOverride = versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
             }
+            output.outputFile = new File(
+                output.outputFile.parent,
+                output.outputFile.name.replace(".apk", "-${variant.versionName}.apk")
+            )
         }
     }
 }
