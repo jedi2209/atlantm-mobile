@@ -6,6 +6,7 @@
     "android-sumulators": "emulator -list-avds",
     "ios-sumulators": "xcrun simctl list devices",
     "ios": "react-native run-ios --simulator \"iPhone X\"",
+    "android": "react-native run-android",
     "reinstall": "npm run clean && rm -rf node_modules && npm i",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
