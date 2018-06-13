@@ -160,19 +160,21 @@ export default class Auth extends Component {
         <Spinner visible={isRequest} color={styleConst.color.blue} />
         <View style={styles.textContainer}>
           <Text style={styles.text}>
-            Все функции личного кабинета доступны только зарегистрированным пользователям
+            Все функции личного кабинета доступны только зарегистрированным пользователям.{"\n"}{"\n"}
+            Номер телефона вводится в международном формате.
           </Text>
         </View>
 
         {this.renderListItem({
           label: 'Логин',
           value: login,
-          placeholder: 'ID Клиента/номер телефона',
+          placeholder: 'ID / телефон / Email',
           onChangeHandler: this.onChangeLogin,
         })}
         {this.renderListItem({
           label: 'Пароль',
           value: password,
+          placeholder: 'Пароль без пробелов',
           onChangeHandler: this.onChangePassword,
           inputProps: { secureTextEntry: true },
           isLast: true,
