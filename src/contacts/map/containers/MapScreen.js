@@ -11,7 +11,6 @@ import {
 
 // Maps
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-import getDirections from 'react-native-google-maps-directions';
 
 // Redux
 import { connect } from 'react-redux';
