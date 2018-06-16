@@ -213,6 +213,54 @@ class MapScreen extends Component {
     return this.openDirections(url);
   }
 
+  handleRef = ref => {
+    this.map = ref;
+
+    if (!this.map) {
+      return;
+    }
+
+    const {
+      latitude,
+      longitude,
+      latitudeDelta,
+      longitudeDelta,
+    } = this.getPositions();
+
+    requestAnimationFrame(() => {
+      if (!this.map) {
+        return;
+      }
+
+      this.map.animateToRegion(
+        {
+          latitude,
+          longitude,
+          latitudeDelta,
+          longitudeDelta,
+        },
+        1
+      );
+    });
+  }
+
+  getPositions = () => {
+    const { dealerSelected } = this.props;
+
+    const latitude = Number(get(dealerSelected, 'coords.lat'));
+    const longitude = Number(get(dealerSelected, 'coords.lon'));
+    const aspectRatio = width / height;
+    const latitudeDelta = 0.0922;
+    const longitudeDelta = latitudeDelta * aspectRatio;
+
+    return {
+      latitude,
+      longitude,
+      latitudeDelta,
+      longitudeDelta,
+    };
+  }
+
   render() {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
@@ -223,10 +271,14 @@ class MapScreen extends Component {
       isRequestCheckAvailableNaviApps,
     } = this.props;
 
-    const LATITUDE = get(this.props.dealerSelected, 'coords.lat');
-    const LONGITUDE = get(this.props.dealerSelected, 'coords.lon');
+    const {
+      latitude,
+      longitude,
+      latitudeDelta,
+      longitudeDelta,
+    } = this.getPositions();
 
-    if (!LATITUDE || !LONGITUDE) {
+    if (!latitude || !longitude) {
       return (
         <View style={styles.safearea}>
           <Text style={styles.errorText}>Нет данных для отображение карты</Text>
@@ -234,9 +286,6 @@ class MapScreen extends Component {
       );
     }
 
-    const ASPECT_RATIO = width / height;
-    const LATITUDE_DELTA = 0.0922;
-    const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
     const city = dealerSelected.city | '';
     const address = dealerSelected.address | '';
     let description;
@@ -255,13 +304,14 @@ class MapScreen extends Component {
       <View style={styles.safearea}>
         <View style={styles.mapContainer}>
           <MapView
+            ref={this.handleRef}
             provider={PROVIDER_GOOGLE}
             style={styles.map}
             initialRegion={{
-              latitude: +LATITUDE,
-              longitude: +LONGITUDE,
-              latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA,
+              latitude,
+              longitude,
+              latitudeDelta,
+              longitudeDelta,
             }}
             showsScale={true}
             zoomEnabled={true}
@@ -271,8 +321,8 @@ class MapScreen extends Component {
           >
             <MapView.Marker
               coordinate={{
-                latitude: +LATITUDE,
-                longitude: +LONGITUDE,
+                latitude,
+                longitude,
               }}
               pinColor={styleConst.color.blue}
               title={dealerSelected.name}
