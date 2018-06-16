@@ -51,14 +51,14 @@ function isFetchReviews(state = false, action) {
 
 function isFetchDealerRating(state = false, action) {
   switch (action.type) {
-    case REHYDRATE:
-    case REVIEW_DEALER_RATING__SUCCESS:
-    case REVIEW_DEALER_RATING__FAIL:
-      return false;
-    case REVIEW_DEALER_RATING__REQUEST:
-      return true;
-    default:
-      return state;
+  case REHYDRATE:
+  case REVIEW_DEALER_RATING__SUCCESS:
+  case REVIEW_DEALER_RATING__FAIL:
+    return false;
+  case REVIEW_DEALER_RATING__REQUEST:
+    return true;
+  default:
+    return state;
   }
 }
 
@@ -263,13 +263,14 @@ function reviewsVisited(state = [], action) {
 
 function reviewDealerRating(state = null, action) {
   switch (action.type) {
-    case REVIEWS__SUCCESS:
-    case REVIEWS__RESET:
-      return null;
-    case REVIEW_DEALER_RATING__SUCCESS:
-      return action.payload.rating;
-    default:
-      return state;
+  case REHYDRATE:
+  case DEALER__SUCCESS:
+  case REVIEW_DEALER_RATING__REQUEST:
+    return null;
+  case REVIEW_DEALER_RATING__SUCCESS:
+    return action.payload.rating;
+  default:
+    return state;
   }
 }
 
