@@ -7,12 +7,14 @@
     "ios-sumulators": "xcrun simctl list devices",
     "ios": "react-native run-ios --simulator \"iPhone X\"",
     "android": "react-native run-android",
+    "android-build": "cd android && ./gradlew assembleRelease",
     "reinstall": "npm run clean && rm -rf node_modules && npm i",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "react-devtools": "react-devtools",
     "postinstall": "npm run clean && rndebugger-open",
-    "clean": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/haste-* && rm -rf $TMPDIR/metro-* && rm -rf ios/build/ && rm -rf ios/rbtse.xcodeproj/xcuserdata/"
+    "clean": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/haste-* && rm -rf $TMPDIR/metro-* && rm -rf ios/build/ && rm -rf ios/rbtse.xcodeproj/xcuserdata/",
+    "version" : "./ios-ver.sh"
   },
   "dependencies": {
     "lodash": "^4.17.4",
