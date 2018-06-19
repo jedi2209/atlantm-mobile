@@ -1,5 +1,17 @@
 # Приложение Atlant-m
 
+Требуется наличие fastlane для выгрузки в маркеты
+
+Установка fastlane для MacOS через brew: brew cask install fastlane
+
+# Команды для сборки
+
+Выгрузка в TestFlight: npm run ios-build / npm run ios-release
+Выгрузка в Google Play: npm run android-build / npm run android-release
+
+Изменение версии происходит исключительно через npm version [major | minor | patch]
+
+
 ## Решение проблем со сборкой
 
 ### Android
