@@ -1,6 +1,6 @@
 {
   "name": "atlantm",
-  "version": "4.11.2",
+  "version": "5.0.0",
   "private": true,
   "scripts": {
     "android-sumulators": "emulator -list-avds",
