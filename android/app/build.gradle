@@ -73,6 +73,7 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
+    root: "../../",
     entryFile: "index.js"
 ]
 
@@ -81,7 +82,9 @@ project.ext.version = [
     name:   "${versionMajor}.${versionMinor}.${versionPatch}"
 ]
 
-buildDir = "../../../../Downloads/${rootProject.name}/${project.name}/${project.ext.version.name}"
+/**
+buildDir = "${GRADLE_ALL_APK_OUTPUT_PATHS}/${rootProject.name}/${project.name}/${project.ext.version.name}"
+*/
 
 apply from: "../../node_modules/react-native/react.gradle"
 apply from: "../../node_modules/react-native-sentry/sentry.gradle"
