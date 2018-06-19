@@ -1,6 +1,6 @@
 {
   "name": "atlantm",
-  "version": "4.11.1",
+  "version": "4.11.2",
   "private": true,
   "scripts": {
     "android-sumulators": "emulator -list-avds",
@@ -15,7 +15,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "react-devtools": "react-devtools",
     "postinstall": "npm run clean && rndebugger-open",
-    "clean": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/haste-* && rm -rf $TMPDIR/metro-* && rm -rf ios/build/ && rm -rf ios/rbtse.xcodeproj/xcuserdata/" 
+    "clean": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/haste-* && rm -rf $TMPDIR/metro-* && rm -rf ios/build/ && rm -rf ios/rbtse.xcodeproj/xcuserdata/"
   },
   "dependencies": {
     "lodash": "^4.17.4",
