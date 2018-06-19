@@ -53,6 +53,7 @@ android/app/src/main/assets/index.android.bundle.meta
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+ios/atlantm.app.dSYM.zip
 
 #awsmobilejs
 awsmobilejs/.awsmobile/backend-build

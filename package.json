@@ -14,7 +14,7 @@
     "react-devtools": "react-devtools",
     "postinstall": "npm run clean && rndebugger-open",
     "clean": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/haste-* && rm -rf $TMPDIR/metro-* && rm -rf ios/build/ && rm -rf ios/rbtse.xcodeproj/xcuserdata/",
-    "version" : "./ios-ver.sh"
+    "version": "./ios-ver.sh"
   },
   "dependencies": {
     "lodash": "^4.17.4",
