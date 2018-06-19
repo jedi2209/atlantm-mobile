@@ -7,7 +7,7 @@
 # Команды для сборки
 
 Выгрузка в TestFlight: `npm run ios-build` / `npm run ios-release`
-Выгрузка в Google Play: `npm run android-build` / npm run android-release`
+Выгрузка в Google Play: `npm run android-build` / `npm run android-release`
 
 Изменение версии происходит исключительно через `npm version [major | minor | patch]`
 
