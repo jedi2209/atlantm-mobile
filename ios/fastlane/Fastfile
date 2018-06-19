@@ -18,8 +18,12 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
+    ensure_git_status_clean
     increment_build_number(xcodeproj: "atlantm.xcodeproj")
     build_app(workspace: "atlantm.xcworkspace", scheme: "atlantm")
     upload_to_testflight
+    commit_version_bump(xcodeproj: "Example.xcodeproj")
+    add_git_tag
+    push_to_git_remote
   end
 end
