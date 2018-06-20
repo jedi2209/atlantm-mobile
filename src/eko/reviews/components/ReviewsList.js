@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, Platform, View, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet } from 'react-native';
 
 // components
 import Review from './Review';
@@ -8,7 +8,6 @@ import SpinnerView from '../../../core/components/SpinnerView';
 import FlatListFooter from '../../../core/components/FlatListFooter';
 
 // helpers
-import { debounce } from 'lodash';
 import PropTypes from 'prop-types';
 import { EVENT_DEFAULT, EVENT_LOAD_MORE, EVENT_REFRESH } from '../../../core/actionTypes';
 
@@ -125,8 +124,11 @@ export default class ReviewsList extends Component {
     return (
       <View style={styles.container}>
         <FlatList
-          onEndReachedThreshold={15}
-          initialNumToRender={7}
+          windowSize={3}
+          removeClippedSubviews={true}
+          onEndReachedThreshold={10}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
           data={items}
           onRefresh={this.onRefresh}
           refreshing={this.state.isRefreshing}

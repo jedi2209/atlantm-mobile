@@ -64,6 +64,8 @@ export default {
     return this.request(`/lkk/actions/list/?token=${token}`, baseRequestParams);
   },
 
+  // TODO: проверить, продолжает ли падать на пустом ответе
+  // @see https://github.com/facebook/react-native/commit/122b3791ede095345f44666691aa9ce5aa7f725a
   fetchReviews({ dealerId, dateFrom, dateTo, ratingFrom, ratingTo, nextPageUrl }) {
     let url = `/eko/review/get/${dealerId}/?date_from=${dateFrom}`;
 
@@ -431,7 +433,7 @@ export default {
 
     return fetch(url, requestParams)
       .then(response => {
-        __DEV__ && console.log('response', response);
+        // __DEV__ && console.log('response', response);
         return response.json();
       });
   },
