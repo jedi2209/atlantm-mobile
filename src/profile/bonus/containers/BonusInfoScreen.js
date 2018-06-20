@@ -46,13 +46,18 @@ const mapDispatchToProps = {
 };
 
 class BonusInfoScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Бонусная программа',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <View />,
-  })
+  static navigationOptions = ({ navigation }) => {
+    // чтобы в случае перехода с экрана "контакты" правильно работала кнопка "назад"
+    const returnScreen = get(navigation, 'state.params.returnScreen');
+
+    return {
+      headerTitle: 'Бонусная программа',
+      headerStyle: stylesHeader.common,
+      headerTitleStyle: stylesHeader.title,
+      headerLeft: <HeaderIconBack returnScreen={returnScreen} navigation={navigation} />,
+      headerRight: <View />,
+    };
+  }
 
   constructor(props) {
     super(props);

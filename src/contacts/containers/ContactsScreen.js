@@ -154,6 +154,8 @@ class ContactsScreen extends Component {
 
   getPlatformStore = () => Platform.OS === 'ios' ? 'App Store' : 'Google Play'
 
+  onPressBonus = () => this.props.navigation.navigate('BonusInfoScreen', { returnScreen: 'ContactsScreen' })
+
   render() {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
@@ -328,6 +330,33 @@ class ContactsScreen extends Component {
                     />
                   </Right>
                 </ListItem> */}
+              </View>
+            </List>
+
+            <List style={stylesList.list}>
+              <View style={[stylesList.listItemContainer, stylesList.listItemContainerFirst]}>
+                <ListItem
+                  last
+                  icon
+                  style={stylesList.listItem}
+                  onPress={this.onPressBonus}
+                >
+                  <Left>
+                    <Image
+                      style={stylesList.iconLeft}
+                      source={require('../../profile/assets/bonus.png')}
+                    />
+                  </Left>
+                  <Body>
+                    <Text>Бонусная программа</Text>
+                  </Body>
+                  <Right>
+                    <Icon
+                      name="arrow-forward"
+                      style={stylesList.iconArrow}
+                    />
+                  </Right>
+                </ListItem>
               </View>
             </List>
 
