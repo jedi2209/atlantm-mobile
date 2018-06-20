@@ -1,7 +1,5 @@
 apply plugin: "com.android.application"
 
-apply from: 'versioning/app_version.gradle'
-
 import com.android.build.OutputFile
 
 /**
@@ -80,7 +78,8 @@ project.ext.react = [
 ]
 
 project.ext.version = [
-    code:   versionMajor * 10000 + versionMinor * 100 + versionPatch,
+    code:   versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100,
+    incr:   versionBuild + 1,
     name:   "${versionMajor}.${versionMinor}.${versionPatch}"
 ]
 
@@ -114,7 +113,7 @@ android {
         applicationId "com.atlantm"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode project.ext.version.code + getAppVersionCode()
+        versionCode project.ext.version.code + project.ext.version.incr
         versionName project.ext.version.name
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -160,6 +159,7 @@ android {
                 output.outputFile.parent,
                 output.outputFile.name.replace(".apk", "-${variant.versionName}.apk")
             )
+            saveChanges(project.ext.version.incr)
         }
     }
 }
