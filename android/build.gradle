@@ -26,10 +26,32 @@ allprojects {
     }
 }
 
+def getVersionFile() {
+    return file('app/versioning/app_version.properties')
+}
+
+def getVersionProps() {
+    def versionPropsFile = getVersionFile()
+    def versionProps = new Properties()
+    versionProps.load(new FileInputStream(versionPropsFile))
+    return versionProps
+}
+
 def getNpmVersion() {
     def inputFile = new File("../package.json")
     def packageJson = new JsonSlurper().parseText(inputFile.text)
     return packageJson["version"]
+}
+
+def getIncrementBuild() {
+    def versionCode = getVersionProps()['versionCode'].toInteger()
+    return versionCode
+}
+
+private void saveChanges(Integer versionCode) {
+    def versionProps = getVersionProps()
+    versionProps['versionCode'] = versionCode.toString()
+    versionProps.store(getVersionFile().newWriter(), null)
 }
 
 def getNpmVersionArray() { // major [0], minor [1], patch [2]
@@ -43,5 +65,6 @@ subprojects {
         versionMajor = npmVersion[0]
         versionMinor = npmVersion[1]
         versionPatch = npmVersion[2]
+        versionBuild = getIncrementBuild()
     }
 }
