@@ -21,6 +21,13 @@ platform :android do
     gradle(task: "clean assembleRelease")
   end
 
+desc "Submit a new Internal Build to Google Play"
+  lane :internal do
+    gradle(task: "clean assembleRelease")
+
+    upload_to_play_store(track: 'internal')
+  end
+
 desc "Submit a new Alpha Build to Google Play"
   lane :alpha do
     gradle(task: "clean assembleRelease")
