@@ -16,7 +16,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "react-devtools": "react-devtools",
     "postinstall": "npm run clean && rndebugger-open",
-    "clean": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/haste-* && rm -rf $TMPDIR/metro-* && rm -rf ios/build/ && rm -rf ios/rbtse.xcodeproj/xcuserdata/"
+    "clean": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/haste-* && rm -rf $TMPDIR/metro-* && rm -rf ios/build/ && rm -rf ios/rbtse.xcodeproj/xcuserdata/",
+    "version": "./version.sh"
   },
   "dependencies": {
     "lodash": "^4.17.4",
