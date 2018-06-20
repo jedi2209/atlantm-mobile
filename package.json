@@ -10,7 +10,7 @@
     "ios-release": "cd ios && bundle exec fastlane beta",
     "android": "react-native run-android",
     "android-test": "cd android && bundle exec fastlane test && open app/build/outputs/apk",
-    "android-build": "cd android && bundle exec fastlane alpha",
+    "android-build": "cd android && bundle exec fastlane internal",
     "android-release": "cd android && bundle exec fastlane beta",
     "reinstall": "npm run clean && rm -rf node_modules && npm i",
     "start": "node node_modules/react-native/local-cli/cli.js start",
