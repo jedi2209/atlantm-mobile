@@ -18,12 +18,14 @@ default_platform(:android)
 platform :android do
   desc "Runs all the tests"
   lane :test do
-#    gradle(task: "test")
     gradle(task: "clean assembleRelease")
   end
 
 desc "Submit a new Alpha Build to Google Play"
   lane :alpha do
+    android_set_version_code(
+      gradle_file: "app/build.gradle" # optional
+    )
     gradle(task: "clean assembleRelease")
 
     upload_to_play_store(track: 'alpha')
@@ -35,6 +37,9 @@ desc "Submit a new Alpha Build to Google Play"
 
   desc "Submit a new Beta Build to Google Play"
   lane :beta do
+    android_set_version_code(
+      gradle_file: "app/build.gradle" # optional
+    )
     gradle(task: "clean assembleRelease")
     
     upload_to_play_store(track: 'beta')
