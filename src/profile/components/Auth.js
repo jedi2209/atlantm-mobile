@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, View, Text, StyleSheet, Keyboard } from 'react-native';
+import { Alert, View, Text, StyleSheet, Keyboard, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
@@ -13,6 +13,7 @@ import stylesList from '@core/components/Lists/style';
 import { get } from 'lodash';
 import { LOGIN__FAIL } from '@profile/actionTypes';
 import styleConst from '@core/style-const';
+import { LOGIN_LABEL, LOGIN_PLACEHOLDER, PASS_LABEL, PASS_PLACEHOLDER } from '@profile/const';
 
 const styles = StyleSheet.create({
   container: {
@@ -152,6 +153,26 @@ export default class Auth extends Component {
     );
   }
 
+  onPressForgotPass = () => this.props.navigation.navigate('ForgotPassScreen')
+
+  renderForgotPassButton = () => {
+    return (
+      <View style={[
+        stylesList.listItemContainer,
+        stylesList.listItemContainerFirst,
+        styles.actionListItemContainer,
+      ]}>
+        <ListItem style={stylesList.listItem} first last>
+          <Body>
+            <TouchableOpacity onPress={this.onPressForgotPass}>
+              <Text style={[stylesList.listItemValue]}>Забыли пароль?</Text>
+            </TouchableOpacity>
+          </Body>
+        </ListItem>
+      </View>
+    );
+  }
+
   render() {
     const { isRequest, login, password } = this.props;
 
@@ -166,19 +187,20 @@ export default class Auth extends Component {
         </View>
 
         {this.renderListItem({
-          label: 'Логин',
+          label: LOGIN_LABEL,
           value: login,
-          placeholder: 'ID / телефон / Email',
+          placeholder: LOGIN_PLACEHOLDER,
           onChangeHandler: this.onChangeLogin,
         })}
         {this.renderListItem({
-          label: 'Пароль',
+          label: PASS_LABEL,
           value: password,
-          placeholder: 'Пароль без пробелов',
+          placeholder: PASS_PLACEHOLDER,
           onChangeHandler: this.onChangePassword,
           inputProps: { secureTextEntry: true },
           isLast: true,
         })}
+        {this.renderForgotPassButton()}
 
         <View style={styles.footer}>
           <Button onPress={this.onPressRegister} full style={[styles.button, styles.buttonWhite]}>

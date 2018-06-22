@@ -10,6 +10,7 @@ import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
 // profile
 import ProfileScreen from '../profile/containers/ProfileScreen';
 import RegisterScreen from '../profile/containers/RegisterScreen';
+import ForgotPassScreen from '../profile/containers/ForgotPassScreen';
 import BonusScreen from '../profile/bonus/containers/BonusScreen';
 import BonusInfoScreen from '../profile/bonus/containers/BonusInfoScreen';
 import DiscountsScreen from '../profile/discounts/containers/DiscountsScreen';
@@ -97,6 +98,7 @@ const getRouter = initialRouteName => {
           MapScreen: { screen: MapScreen },
           ReferenceScreen: { screen: ReferenceScreen },
           AboutHoldingScreen: { screen: AboutHoldingScreen },
+          BonusInfoScreen: { screen: BonusInfoScreen },
         }),
         navigationOptions: {
           header: null,
@@ -115,6 +117,7 @@ const getRouter = initialRouteName => {
         screen: StackNavigator({
           ProfileScreen: { screen: ProfileScreen },
           RegisterScreen: { screen: RegisterScreen },
+          ForgotPassScreen: { screen: ForgotPassScreen },
           BonusScreen: { screen: BonusScreen },
           BonusInfoScreen: { screen: BonusInfoScreen },
           DiscountsScreen: { screen: DiscountsScreen },
