@@ -402,6 +402,14 @@ export default {
     return this.request('/lkk/register/', requestParams);
   },
 
+  forgotPassRequest({ forgotPassLogin }) {
+    return this.request(`/lkk/auth/restore/?login=${forgotPassLogin}`, baseRequestParams);
+  },
+
+  forgotPassSubmitCode({ forgotPassLogin, forgotPassCode }) {
+    return this.request(`/lkk/auth/restore/?login=${forgotPassLogin}&code=${forgotPassCode}`, baseRequestParams);
+  },
+
   updateFCMToken({ oldToken, newToken }) {
     const body = [
       `old=${oldToken}`,
