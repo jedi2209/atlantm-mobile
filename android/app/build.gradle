@@ -83,6 +83,7 @@ project.ext.version = [
     name:   "${versionMajor}.${versionMinor}.${versionPatch}"
 ]
 
+
 /**
 buildDir = "${GRADLE_ALL_APK_OUTPUT_PATHS}/${rootProject.name}/${project.name}/${project.ext.version.name}"
 */
