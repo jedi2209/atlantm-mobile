@@ -39,6 +39,16 @@ import {
   CAR_HISTORY_DETAILS__REQUEST,
   CAR_HISTORY_DETAILS__SUCCESS,
   CAR_HISTORY_DETAILS__FAIL,
+
+  FORGOT_PASS_LOGIN__FILL,
+  FORGOT_PASS_CODE__FILL,
+  FORGOT_PASS_BY_PHONE__SET,
+  FORGOT_PASS_REQUEST__REQUEST,
+  FORGOT_PASS_REQUEST__SUCCESS,
+  FORGOT_PASS_REQUEST__FAIL,
+  FORGOT_PASS_SUBMIT_CODE__REQUEST,
+  FORGOT_PASS_SUBMIT_CODE__FAIL,
+  FORGOT_PASS_SUBMIT_CODE__SUCCESS,
 } from './actionTypes';
 
 import { DEALER__SUCCESS } from '../dealer/actionTypes';
@@ -470,6 +480,115 @@ export const actionFetchBonusInfo = props => {
         payload: `<body>${data}</body>`,
       });
     } catch (e) {
+      return onError(e);
+    }
+  };
+};
+
+export const actionFillForgotLogin = login => {
+  return dispatch => {
+    dispatch({
+      type: FORGOT_PASS_LOGIN__FILL,
+      payload: login,
+    });
+  };
+};
+
+export const actionFillForgotCode = code => {
+  return dispatch => {
+    dispatch({
+      type: FORGOT_PASS_CODE__FILL,
+      payload: code,
+    });
+  };
+};
+
+export const actionRequestForgotPass = props => {
+  return async dispatch => {
+    function onError(error) {
+      return dispatch({
+        type: FORGOT_PASS_REQUEST__FAIL,
+        payload: {
+          code: error.code,
+          message: error.message,
+        },
+      });
+    }
+
+    dispatch({
+      type: FORGOT_PASS_REQUEST__REQUEST,
+      payload: { ...props },
+    });
+
+    try {
+      const res = await API.forgotPassRequest(props);
+      const { status, error } = res;
+
+      if (status !== 'success') {
+        return onError(error);
+      }
+
+      if (Number(get(error, 'code')) === 119) {
+        dispatch({
+          type: FORGOT_PASS_BY_PHONE__SET,
+          payload: true,
+        });
+      }
+
+      return dispatch({
+        type: FORGOT_PASS_REQUEST__SUCCESS,
+        payload: error,
+      });
+    } catch (e) {
+      return onError(e);
+    }
+  };
+};
+
+export const actionSetForgotPassPhoneMode = isPhoneMode => {
+  return dispatch => {
+    return dispatch({
+      type: FORGOT_PASS_BY_PHONE__SET,
+      payload: isPhoneMode,
+    });
+  };
+};
+
+export const actionSubmitForgotPassCode = props => {
+  return async dispatch => {
+    function onError(error) {
+      return dispatch({
+        type: FORGOT_PASS_SUBMIT_CODE__FAIL,
+        payload: {
+          code: error.code,
+          message: error.message,
+        },
+      });
+    }
+
+    dispatch({
+      type: FORGOT_PASS_SUBMIT_CODE__REQUEST,
+      payload: { ...props },
+    });
+
+    try {
+      const res = await API.forgotPassSubmitCode(props);
+      const { status, error } = res;
+
+      if (status !== 'success') {
+        __DEV__ && console.log('error forgotPassSubmitCode', res);
+        return onError({
+          code: 404,
+          message: 'Ошибка при проверке кода подтверждения',
+        });
+      }
+
+      return dispatch({
+        type: FORGOT_PASS_SUBMIT_CODE__SUCCESS,
+        payload: error,
+      });
+    } catch (e) {
+      console.log('forgot pass forgot', e);
       return onError(e);
     }
   };

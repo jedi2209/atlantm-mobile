@@ -12,3 +12,10 @@ export const MONTH_TEXT = {
   11: 'Ноябрь',
   12: 'Декабрь',
 };
+
+export const LOGIN_LABEL = 'Логин';
+export const LOGIN_PLACEHOLDER = 'ID / телефон / Email';
+export const PASS_LABEL = 'Пароль';
+export const PASS_PLACEHOLDER = 'Пароль без пробелов';
+export const FORGOT_PASS_CODE_LABEL = 'Код';
+export const FORGOT_PASS_CODE_PLACEHOLDER = 'Поле для ввода';
