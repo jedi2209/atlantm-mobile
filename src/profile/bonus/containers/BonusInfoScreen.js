@@ -15,6 +15,7 @@ import WebViewAutoHeight from '@core/components/WebViewAutoHeight';
 import { get } from 'lodash';
 import styleConst from '@core/style-const';
 import processHtml from '@utils/process-html';
+import Amplitude from '@utils/amplitude-analytics';
 import stylesHeader from '@core/components/Header/style';
 import getTheme from '../../../../native-base-theme/components';
 
@@ -47,14 +48,11 @@ const mapDispatchToProps = {
 
 class BonusInfoScreen extends Component {
   static navigationOptions = ({ navigation }) => {
-    // чтобы в случае перехода с экрана "контакты" правильно работала кнопка "назад"
-    const returnScreen = get(navigation, 'state.params.returnScreen');
-
     return {
       headerTitle: 'Бонусная программа',
       headerStyle: stylesHeader.common,
       headerTitleStyle: stylesHeader.title,
-      headerLeft: <HeaderIconBack returnScreen={returnScreen} navigation={navigation} />,
+      headerLeft: <HeaderIconBack navigation={navigation} />,
       headerRight: <View />,
     };
   }
@@ -67,10 +65,15 @@ class BonusInfoScreen extends Component {
   }
 
   componentDidMount() {
-    const { bonusInfo, actionFetchBonusInfo, dealerSelected } = this.props;
+    const { navigation, bonusInfo, actionFetchBonusInfo, dealerSelected } = this.props;
+    const { region } = dealerSelected;
+
+    const refererScreen = get(navigation, 'state.params.refererScreen');
+
+    Amplitude.logEvent('screen', `${refererScreen}/bonus_info`, { region });
 
     if (!bonusInfo) actionFetchBonusInfo({
-      region: dealerSelected.region,
+      region,
     });
   }
 

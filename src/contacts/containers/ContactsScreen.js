@@ -154,7 +154,7 @@ class ContactsScreen extends Component {
 
   getPlatformStore = () => Platform.OS === 'ios' ? 'App Store' : 'Google Play'
 
-  onPressBonus = () => this.props.navigation.navigate('BonusInfoScreen', { returnScreen: 'ContactsScreen' })
+  onPressBonus = () => this.props.navigation.navigate('BonusInfoScreen', { refererScreen: 'contacts' })
 
   render() {
     // Для iPad меню, которое находится вне роутера

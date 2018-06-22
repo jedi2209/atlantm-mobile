@@ -261,7 +261,7 @@ class BonusScreen extends Component {
     );
   }
 
-  onPressBonusInfo = () => this.props.navigation.navigate('BonusInfoScreen')
+  onPressBonusInfo = () => this.props.navigation.navigate('BonusInfoScreen', { refererScreen: 'profile/bonus' })
 
   renderBonusButton = () => {
     return (
