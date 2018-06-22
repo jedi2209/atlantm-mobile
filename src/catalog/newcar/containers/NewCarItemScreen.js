@@ -365,9 +365,9 @@ class NewCarItemScreen extends Component {
                     <View style={styles.section}>
                       <Text style={styles.sectionTitle}>Кузов</Text>
                       <Grid>
-                        {this.renderItem('Длина:', get(carDetails, 'body.high'), 'мм.')}
-                        {this.renderItem('Ширина:', get(carDetails, 'body.width'), 'мм.')}
-                        {this.renderItem('Высота:', get(carDetails, 'body.height'), 'мм.')}
+                        {this.renderItem('Длина:', get(carDetails, 'body.width'), 'мм.')}
+                        {this.renderItem('Ширина:', get(carDetails, 'body.height'), 'мм.')}
+                        {this.renderItem('Высота:', get(carDetails, 'body.high'), 'мм.')}
                         {this.renderItem('Клиренс:', get(carDetails, 'body.clirens'), 'мм.')}
                         {this.renderItem('Объём багажника:', get(carDetails, 'body.trunk.min'), 'л.')}
                         {this.renderItem('Объём топливного бака:', get(carDetails, 'fuel.fuel'), 'л.')}
