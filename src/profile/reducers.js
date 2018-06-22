@@ -38,6 +38,16 @@ import {
   CAR_HISTORY_DETAILS__REQUEST,
   CAR_HISTORY_DETAILS__SUCCESS,
   CAR_HISTORY_DETAILS__FAIL,
+
+  FORGOT_PASS_LOGIN__FILL,
+  FORGOT_PASS_CODE__FILL,
+  FORGOT_PASS_BY_PHONE__SET,
+  FORGOT_PASS_REQUEST__REQUEST,
+  FORGOT_PASS_REQUEST__SUCCESS,
+  FORGOT_PASS_REQUEST__FAIL,
+  FORGOT_PASS_SUBMIT_CODE__REQUEST,
+  FORGOT_PASS_SUBMIT_CODE__FAIL,
+  FORGOT_PASS_SUBMIT_CODE__SUCCESS,
 } from './actionTypes';
 
 import { DEALER__SUCCESS } from '@dealer/actionTypes';
@@ -373,6 +383,65 @@ function carHistoryDetailsData(state = {}, action) {
   }
 }
 
+const forgotPassLogin = (state = '', action) => {
+  switch (action.type) {
+  case REHYDRATE:
+    return get(action, 'payload.profile.forgotPass.login', '');
+  case FORGOT_PASS_LOGIN__FILL:
+    return action.payload;
+  default:
+    return state;
+  }
+};
+
+const forgotPassCode = (state = '', action) => {
+  switch (action.type) {
+  case REHYDRATE:
+    return get(action, 'payload.profile.forgotPass.code', '');
+  case FORGOT_PASS_CODE__FILL:
+    return action.payload;
+  default:
+    return state;
+  }
+};
+
+const isForgotPassByPhone = (state = false, action) => {
+  switch (action.type) {
+  case REHYDRATE:
+    return get(action, 'payload.profile.forgotPass.meta.isForgotPassByPhone', '');
+  case FORGOT_PASS_BY_PHONE__SET:
+    return action.payload;
+  default:
+    return state;
+  }
+};
+
+const isForgotPassRequest = (state = false, action) => {
+  switch (action.type) {
+  case REHYDRATE:
+  case FORGOT_PASS_REQUEST__FAIL:
+  case FORGOT_PASS_REQUEST__SUCCESS:
+    return false;
+  case FORGOT_PASS_REQUEST__REQUEST:
+    return true;
+  default:
+    return state;
+  }
+};
+
+const isForgotPassCodeSubmit = (state = false, action) => {
+  switch (action.type) {
+  case REHYDRATE:
+  case FORGOT_PASS_SUBMIT_CODE__FAIL:
+  case FORGOT_PASS_SUBMIT_CODE__SUCCESS:
+    return false;
+  case FORGOT_PASS_SUBMIT_CODE__REQUEST:
+    return true;
+  default:
+    return state;
+  }
+};
+
 export default combineReducers({
   name,
   phone,
@@ -404,6 +473,17 @@ export default combineReducers({
     meta: combineReducers({
       isFetchCarHistory,
       isFetchCarHistoryDetails,
+    }),
+  }),
+
+  forgotPass: combineReducers({
+    login: forgotPassLogin,
+    code: forgotPassCode,
+
+    meta: combineReducers({
+      isForgotPassByPhone,
+      isForgotPassRequest,
+      isForgotPassCodeSubmit,
     }),
   }),
 

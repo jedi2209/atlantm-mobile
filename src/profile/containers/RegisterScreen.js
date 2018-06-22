@@ -129,15 +129,6 @@ class RegisterScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const {
-      name,
-      phone,
-      email,
-      carVIN,
-      carNumber,
-      dealerSelected,
-      isRegisterRequest,
-    } = this.props;
     const nav = nextProps.nav.newState;
     let isActiveScreen = false;
 
@@ -246,14 +237,13 @@ class RegisterScreen extends Component {
           <Content enableResetScrollToCoords={false}>
             <Spinner visible={isRegisterRequest} color={styleConst.color.blue} />
             <List style={styles.list}>
-
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>
-                Чтобы зарегистрироваться, заполните, пожалуйста, форму ниже.
-                Специалисты автоцентра сообщат вам логин и пароль по СМС и электронной почте.
-                Обращаем ваше внимание на то, что доступ к Личному кабинету могут получить только Клиенты Атлант-М.
-              </Text>
-            </View>
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>
+                  Чтобы зарегистрироваться, заполните, пожалуйста, форму ниже.
+                  Специалисты автоцентра сообщат вам логин и пароль по СМС и электронной почте.
+                  Обращаем ваше внимание на то, что доступ к Личному кабинету могут получить только Клиенты Атлант-М.
+                </Text>
+              </View>
 
               <ListItemHeader text="МОЙ АВТОЦЕНТР" />
 
