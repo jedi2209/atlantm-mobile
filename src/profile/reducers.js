@@ -41,7 +41,7 @@ import {
 
   FORGOT_PASS_LOGIN__FILL,
   FORGOT_PASS_CODE__FILL,
-  FORGOT_PASS_BY_PHONE__SET,
+  FORGOT_PASS_MODE_CODE__SET,
   FORGOT_PASS_REQUEST__REQUEST,
   FORGOT_PASS_REQUEST__SUCCESS,
   FORGOT_PASS_REQUEST__FAIL,
@@ -405,11 +405,11 @@ const forgotPassCode = (state = '', action) => {
   }
 };
 
-const isForgotPassByPhone = (state = false, action) => {
+const forgotPassModeCode = (state = '', action) => {
   switch (action.type) {
   case REHYDRATE:
-    return get(action, 'payload.profile.forgotPass.meta.isForgotPassByPhone', '');
-  case FORGOT_PASS_BY_PHONE__SET:
+    return get(action, 'payload.profile.forgotPass.meta.forgotPassModeCode', '');
+  case FORGOT_PASS_MODE_CODE__SET:
     return action.payload;
   default:
     return state;
@@ -481,7 +481,7 @@ export default combineReducers({
     code: forgotPassCode,
 
     meta: combineReducers({
-      isForgotPassByPhone,
+      forgotPassModeCode,
       isForgotPassRequest,
       isForgotPassCodeSubmit,
     }),
