@@ -149,7 +149,7 @@ class ForgotPassScreen extends Component {
     } = this.props;
 
     if (!forgotPassLogin) {
-      return setTimeout(() => Alert.alert('Заполните логин'), 100);
+      return setTimeout(() => Alert.alert('Введите логин'), 100);
     }
 
     actionRequestForgotPass({ forgotPassLogin })
@@ -203,7 +203,7 @@ class ForgotPassScreen extends Component {
     } = this.props;
 
     if (!forgotPassLogin || !forgotPassCode) {
-      return setTimeout(() => Alert.alert('Заполните код подтверждения'), 100);
+      return setTimeout(() => Alert.alert('Введите код подтверждения'), 100);
     }
 
     const resetPhoneMode = this.resetPhoneMode.bind(this);
@@ -308,7 +308,7 @@ class ForgotPassScreen extends Component {
             <List style={styles.list}>
               <View style={styles.textContainer}>
                 <Text style={styles.text}>
-                  Номер телефона вводится в международном формате.
+                  Введите номер телефона в международном формате, email или ID Клиента
                 </Text>
               </View>
 
@@ -326,7 +326,7 @@ class ForgotPassScreen extends Component {
                   (
                     <View>
                       {this.renderResetButton()}
-                      <ListItemHeader text="Код подтверждения выслан на телефон" />
+                      <ListItemHeader text="Код подтверждения выслан на указанный телефон посредством SMS" />
                       {
                         this.renderListItem({
                           label: FORGOT_PASS_CODE_LABEL,
@@ -343,7 +343,7 @@ class ForgotPassScreen extends Component {
             </List>
           </Content>
           <FooterButton
-            text={isForgotPassByPhone ? 'Подтвердить код' : 'Запросить пароль'}
+            text={isForgotPassByPhone ? 'Подтвердить код' : 'Выслать пароль'}
             // isLoading={isForgotPassRequest}
             onPressButton={isForgotPassByPhone ? this.onPressButtonSubmitCode : this.onPressButtonRequestLogin}
           />
