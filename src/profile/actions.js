@@ -528,7 +528,7 @@ export const actionRequestForgotPass = props => {
         return onError(error);
       }
 
-      if (Number(get(error, 'code')) === 119) {
+      if (Number(get(error, 'code')) === 119 || Number(get(error, 'code')) === 127) {
         dispatch({
           type: FORGOT_PASS_BY_PHONE__SET,
           payload: true,
