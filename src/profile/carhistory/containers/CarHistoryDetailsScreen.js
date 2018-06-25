@@ -173,7 +173,7 @@ class CarHistoryDetailsScreen extends Component {
         {count ? this.renderItem({ prop: 'Количество', value: `${count} ${units}.` }) : null}
         {get(summ, 'value') ? this.renderItem({ prop: 'Стоимость', value: `${numberWithGap(get(summ, 'value'))} ${get(summ, 'currency')}` }) : null}
         {get(summ, 'sale') ? this.renderItem({ prop: 'Скидка', value: `${numberWithGap(get(summ, 'sale'))} ${get(summ, 'currency')}` }) : null}
-        {get(summ, 'total') ? this.renderItem({ prop: 'Итого', value: `${numberWithGap(get(summ, 'total'))} ${get(summ, 'currency')}` }) : null}
+        {get(summ, 'total') ? this.renderItem({ prop: 'Итого с НДС', value: `${numberWithGap(get(summ, 'total'))} ${get(summ, 'currency')}` }) : null}
       </View>
     );
   }
