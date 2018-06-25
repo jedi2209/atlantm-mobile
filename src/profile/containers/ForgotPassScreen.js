@@ -10,7 +10,7 @@ import {
   actionFillForgotLogin,
   actionRequestForgotPass,
   actionSubmitForgotPassCode,
-  actionSetForgotPassPhoneMode,
+  actionSetForgotPassCodeMode,
 } from '@profile/actions';
 import {
   FORGOT_PASS_REQUEST__SUCCESS,
@@ -36,7 +36,7 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '@core/style-const';
 import { ERROR_NETWORK } from '@core/const';
 import stylesHeader from '@core/components/Header/style';
-import { LOGIN_LABEL, LOGIN_PLACEHOLDER, FORGOT_PASS_CODE_LABEL, FORGOT_PASS_CODE_PLACEHOLDER } from '@profile/const';
+import { LOGIN_LABEL, LOGIN_PLACEHOLDER, FORGOT_PASS_CODE_LABEL, FORGOT_PASS_CODE_PHONE_PLACEHOLDER, FORGOT_PASS_CODE_EMAIL_PLACEHOLDER } from '@profile/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -80,7 +80,7 @@ const mapStateToProps = ({ dealer, profile, nav }) => {
     forgotPassLogin: profile.forgotPass.login,
     forgotPassCode: profile.forgotPass.code,
 
-    isForgotPassByPhone: profile.forgotPass.meta.isForgotPassByPhone,
+    forgotPassModeCode: profile.forgotPass.meta.forgotPassModeCode,
     isForgotPassRequest: profile.forgotPass.meta.isForgotPassRequest,
     isForgotPassCodeSubmit: profile.forgotPass.meta.isForgotPassCodeSubmit,
   };
@@ -91,7 +91,7 @@ const mapDispatchToProps = {
   actionFillForgotCode,
   actionRequestForgotPass,
   actionSubmitForgotPassCode,
-  actionSetForgotPassPhoneMode,
+  actionSetForgotPassCodeMode,
 };
 
 class ForgotPassScreen extends Component {
@@ -109,14 +109,14 @@ class ForgotPassScreen extends Component {
 
     forgotPassLogin: PropTypes.string,
     forgotPassCode: PropTypes.string,
-    isForgotPassByPhone: PropTypes.bool,
+    forgotPassModeCode: PropTypes.string,
     isForgotPassRequest: PropTypes.bool,
     isForgotPassCodeSubmit: PropTypes.bool,
     actionFillForgotLogin: PropTypes.func,
     actionFillForgotCode: PropTypes.func,
     actionRequestForgotPass: PropTypes.func,
     actionSubmitForgotPassCode: PropTypes.func,
-    actionSetForgotPassPhoneMode: PropTypes.func,
+    actionSetForgotPassCodeMode: PropTypes.func,
   }
 
   shouldComponentUpdate(nextProps) {
@@ -157,7 +157,8 @@ class ForgotPassScreen extends Component {
         if (action.type === FORGOT_PASS_REQUEST__SUCCESS) {
           Amplitude.logEvent('order', 'profile/forgot_pass_request', { login: forgotPassLogin });
 
-          if (get(action, 'payload.code') !== 119) {
+          // если не нужно вводить код подтверждения, очищаем поля и уходим обратно на экран профиля
+          if (!get(action, 'payload.isCodeMode')) {
             setTimeout(() => {
               Alert.alert(
                 get(action, 'payload.message'),
@@ -196,10 +197,7 @@ class ForgotPassScreen extends Component {
       navigation,
       forgotPassCode,
       forgotPassLogin,
-      actionFillForgotCode,
-      actionFillForgotLogin,
       actionSubmitForgotPassCode,
-      actionSetForgotPassPhoneMode,
     } = this.props;
 
     if (!forgotPassLogin || !forgotPassCode) {
@@ -242,7 +240,7 @@ class ForgotPassScreen extends Component {
       });
   }
 
-  renderListItem = ({ label, value, placeholder, onChangeHandler, disabled }) => {
+  renderListItem = ({ label, value, placeholder, onChangeHandler, disabled, inputProps = {} }) => {
     return (
       <View style={stylesList.listItemContainer}>
         <ListItem last style={[stylesList.listItem, stylesList.listItemReset]} >
@@ -260,6 +258,7 @@ class ForgotPassScreen extends Component {
                 returnKeyType="done"
                 returnKeyLabel="Готово"
                 underlineColorAndroid="transparent"
+                {...inputProps}
               />
             </Item>
           </Body>
@@ -269,11 +268,11 @@ class ForgotPassScreen extends Component {
   }
 
   resetPhoneMode = () => {
-    const { actionFillForgotLogin, actionFillForgotCode, actionSetForgotPassPhoneMode } = this.props;
+    const { actionFillForgotLogin, actionFillForgotCode, actionSetForgotPassCodeMode } = this.props;
 
     actionFillForgotLogin('');
     actionFillForgotCode('');
-    actionSetForgotPassPhoneMode(false);
+    actionSetForgotPassCodeMode('');
   }
 
   onPressResetButton = () => this.resetPhoneMode()
@@ -293,10 +292,12 @@ class ForgotPassScreen extends Component {
     const {
       forgotPassCode,
       forgotPassLogin,
-      isForgotPassByPhone,
+      forgotPassModeCode,
       isForgotPassRequest,
       isForgotPassCodeSubmit,
     } = this.props;
+
+    const isPhoneMode = forgotPassModeCode === 'phone';
 
     console.log('== Forgot Password Screen ==');
 
@@ -319,20 +320,26 @@ class ForgotPassScreen extends Component {
                 value: forgotPassLogin,
                 placeholder: LOGIN_PLACEHOLDER,
                 onChangeHandler: this.onChangeLogin,
-                disabled: isForgotPassByPhone, // блокируем изменение логина после запроса пароля
+                disabled: forgotPassModeCode, // блокируем изменение логина после запроса пароля
               })}
               {
-                isForgotPassByPhone ?
+                forgotPassModeCode ?
                   (
                     <View>
                       {this.renderResetButton()}
-                      <ListItemHeader text="Код подтверждения выслан на указанный телефон посредством SMS" />
+                      <ListItemHeader text={isPhoneMode ?
+                        'Код подтверждения выслан на указанный телефон посредством SMS' :
+                        'Код подтверждения выслан на указанный E-mail для восстановления пароля' }
+                      />
                       {
                         this.renderListItem({
                           label: FORGOT_PASS_CODE_LABEL,
                           value: forgotPassCode,
-                          placeholder: FORGOT_PASS_CODE_PLACEHOLDER,
+                          placeholder: isPhoneMode ? FORGOT_PASS_CODE_PHONE_PLACEHOLDER : FORGOT_PASS_CODE_EMAIL_PLACEHOLDER,
                           onChangeHandler: this.onChangeCode,
+                          inputProps: {
+                            keyboardType: 'numeric',
+                          },
                         })
                       }
                     </View>
@@ -343,9 +350,9 @@ class ForgotPassScreen extends Component {
             </List>
           </Content>
           <FooterButton
-            text={isForgotPassByPhone ? 'Подтвердить код' : 'Выслать пароль'}
+            text={forgotPassModeCode ? 'Подтвердить код' : 'Выслать пароль'}
             // isLoading={isForgotPassRequest}
-            onPressButton={isForgotPassByPhone ? this.onPressButtonSubmitCode : this.onPressButtonRequestLogin}
+            onPressButton={forgotPassModeCode ? this.onPressButtonSubmitCode : this.onPressButtonRequestLogin}
           />
         </SafeAreaView>
       </StyleProvider>
