@@ -139,7 +139,7 @@ class ForgotPassScreen extends Component {
 
   onPressButtonRequestLogin = async() => {
     const isInternetExist = await isInternet();
-    if (!isInternetExist) return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    if (!isInternetExist) return setTimeout(() => Alert.alert('Ошибка!', ERROR_NETWORK), 100);
 
     const {
       navigation,
@@ -149,7 +149,7 @@ class ForgotPassScreen extends Component {
     } = this.props;
 
     if (!forgotPassLogin) {
-      return setTimeout(() => Alert.alert('Введите логин'), 100);
+      return setTimeout(() => Alert.alert('Ошибка!', 'Введите логин'), 100);
     }
 
     actionRequestForgotPass({ forgotPassLogin })
@@ -161,8 +161,8 @@ class ForgotPassScreen extends Component {
           if (!get(action, 'payload.isCodeMode')) {
             setTimeout(() => {
               Alert.alert(
-                get(action, 'payload.message'),
                 '',
+                get(action, 'payload.message'),
                 [
                   {
                     text: 'ОК',
@@ -184,14 +184,14 @@ class ForgotPassScreen extends Component {
             message = ERROR_NETWORK;
           }
 
-          setTimeout(() => Alert.alert(message), 100);
+          setTimeout(() => Alert.alert('Ошибка!', message), 100);
         }
       });
   }
 
   onPressButtonSubmitCode = async() => {
     const isInternetExist = await isInternet();
-    if (!isInternetExist) return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    if (!isInternetExist) return setTimeout(() => Alert.alert('Ошибка!', ERROR_NETWORK), 100);
 
     const {
       navigation,
@@ -201,7 +201,7 @@ class ForgotPassScreen extends Component {
     } = this.props;
 
     if (!forgotPassLogin || !forgotPassCode) {
-      return setTimeout(() => Alert.alert('Введите код подтверждения'), 100);
+      return setTimeout(() => Alert.alert('Ошибка!', 'Введите код подтверждения'), 100);
     }
 
     const resetPhoneMode = this.resetPhoneMode.bind(this);
@@ -213,8 +213,8 @@ class ForgotPassScreen extends Component {
 
           setTimeout(() => {
             Alert.alert(
-              get(action, 'payload.message'),
               '',
+              get(action, 'payload.message'),
               [
                 {
                   text: 'ОК',
@@ -235,7 +235,7 @@ class ForgotPassScreen extends Component {
             message = ERROR_NETWORK;
           }
 
-          setTimeout(() => Alert.alert(message), 100);
+          setTimeout(() => Alert.alert('Ошибка!', message), 100);
         }
       });
   }
