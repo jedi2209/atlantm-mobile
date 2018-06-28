@@ -72,11 +72,11 @@ class PhotoViewer extends Component {
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 0;
 const positionTop = STATUSBAR_HEIGHT + 15;
 const color = styleConst.color.blue;
-const backgroundColor = 'rgba(255,255,255,0.5)';
+const backgroundColor = 'rgba(255,255,255,1)';
 const styles = StyleSheet.create({
   gallery: {
     flex: 1,
-    backgroundColor: styleConst.color.darkBg,
+    backgroundColor: 'black',
   },
   count: {
     top: positionTop,
