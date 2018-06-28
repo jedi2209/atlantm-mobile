@@ -85,7 +85,7 @@ class MapScreen extends Component {
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
-  })
+  });
 
   shouldComponentUpdate(nextProps) {
     const { availableNaviApps, isRequestCheckAvailableNaviApps, dealerSelected, navigation } = this.props;
@@ -103,7 +103,8 @@ class MapScreen extends Component {
     const longitude = Number(get(dealerSelected, 'coords.lon'));
 
     if (isAndroid) {
-      return this.openDirections(`geo:0,0?q=${latitude},${longitude}`);
+      return this.openDirections('geo:0,0?q=' + get(dealerSelected, 'name') + ', ' + get(dealerSelected, 'city.name') + ', ' + get(dealerSelected, 'address'));
+      // return this.openDirections(`geo:0,0?q=${latitude},${longitude}`);
     }
 
     if (availableNaviApps.length === 0) {
@@ -111,7 +112,7 @@ class MapScreen extends Component {
     }
 
     return this.buildActionSheet(latitude, longitude);
-  }
+  };
 
   buildActionSheet = async (latitude, longitude) => {
     const {
@@ -157,7 +158,7 @@ class MapScreen extends Component {
 
         this.actionSheet.show();
       });
-  }
+  };
 
   getNaviLink = ({ name, latitude, longitude }) => {
     switch (name) {
@@ -170,7 +171,7 @@ class MapScreen extends Component {
     default: // CONTACTS_MAP_APPLE_MAPS
       return `maps://?daddr=${latitude},${longitude}`;
     }
-  }
+  };
 
   openDirections = url => {
     return Linking.openURL(url).catch(err => {
@@ -180,7 +181,7 @@ class MapScreen extends Component {
         'Ошибка', 'Не удалось открыть приложения для навигации, попробуйте снова.'
       ));
     });
-  }
+  };
 
   onPressRouteVariant = index => {
     let url;
@@ -211,7 +212,7 @@ class MapScreen extends Component {
     }
 
     return this.openDirections(url);
-  }
+  };
 
   handleRef = ref => {
     this.map = ref;
@@ -242,7 +243,7 @@ class MapScreen extends Component {
         1
       );
     });
-  }
+  };
 
   getPositions = () => {
     const { dealerSelected } = this.props;
@@ -259,7 +260,7 @@ class MapScreen extends Component {
       latitudeDelta,
       longitudeDelta,
     };
-  }
+  };
 
   render() {
     // Для iPad меню, которое находится вне роутера
