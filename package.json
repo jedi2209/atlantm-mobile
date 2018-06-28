@@ -8,7 +8,7 @@
     "ios": "react-native run-ios --simulator \"iPhone X\"",
     "ios-build": "cd ios && bundle exec fastlane beta",
     "ios-release": "cd ios && bundle exec fastlane beta",
-    "android": "react-native run-android",
+    "android": "adb uninstall com.atlantm; react-native run-android",
     "android-test": "cd android && bundle exec fastlane test && open app/build/outputs/apk",
     "android-build": "cd android && bundle exec fastlane internal",
     "android-release": "cd android && bundle exec fastlane beta",
