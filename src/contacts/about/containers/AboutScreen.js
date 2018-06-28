@@ -72,7 +72,7 @@ class AboutScreen extends Component {
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
-  })
+  });
 
   constructor(props) {
     super(props);
@@ -95,7 +95,7 @@ class AboutScreen extends Component {
         });
       }
     });
-  }
+  };
 
   onLayoutImage = (e) => {
     if (isTablet) {
@@ -111,13 +111,13 @@ class AboutScreen extends Component {
       imageHeight: imageDynamicHeight,
       imageWidth: imageDynamicWidth,
     });
-  }
+  };
 
   onLayoutWebView= (e) => {
     const { width: webViewWidth } = e.nativeEvent.layout;
 
     this.setState({ webViewWidth });
-  }
+  };
 
   renderPhones = (phones) => {
     if (!phones || !phones.length) return null;
@@ -126,7 +126,16 @@ class AboutScreen extends Component {
       const onPress = () => Communications.phonecall(phone, true);
       return this.renderItem('Телефон', phone, false, onPress);
     });
-  }
+  };
+
+  renderAddress = (address) => {
+    if (!address || !address.length) return null;
+
+    const onPress = () => {
+      this.props.navigation.navigate('MapScreen');
+    };
+    return this.renderItem('Адрес', address, false, onPress);
+  };
 
   renderEmails = (emails, name) => {
     if (!emails || !emails.length) return null;
@@ -144,7 +153,7 @@ class AboutScreen extends Component {
 
       return this.renderItem('E-mail', emailAddress, false, onPress);
     });
-  }
+  };
 
   renderSites = (sites) => {
     if (!sites || !sites.length) return null;
@@ -155,32 +164,32 @@ class AboutScreen extends Component {
 
       return this.renderItem('Веб-сайт', site, isLast, onPress);
     });
-  }
+  };
 
   renderItem = (label, value, isLast, onPressHandler) => {
     return (
       <View key={value} style={stylesList.listItemContainer}>
         <ListItem icon style={stylesList.listItem} last={isLast}>
-          <Body>
+          <Body style={{flex: 1}}>
             <Text>{label}</Text>
           </Body>
-          <Right>
+          <Right style={{flex: 3}}>
             {
               onPressHandler ?
                 (
                   <TouchableOpacity onPress={onPressHandler}>
-                    <Text style={stylesList.listItemValue}>{value}</Text>
+                    <Text style={stylesList.listItemValue, {textAlign: 'right', alignSelf: 'center', alignItems: 'center'}}>{value}</Text>
                   </TouchableOpacity>
                 ) :
                 (
-                  <Text style={stylesList.listItemValue}>{value}</Text>
+                  <Text style={stylesList.listItemValue, {textAlign: 'right', alignSelf: 'center', alignItems: 'center'}}>{value}</Text>
                 )
             }
           </Right>
         </ListItem>
       </View>
     );
-  }
+  };
 
   render() {
     // Для iPad меню, которое находится вне роутера
@@ -233,7 +242,7 @@ class AboutScreen extends Component {
 
             <List style={[styles.list, styles.listHolding]}>
               {dealerSelected.city ? this.renderItem('Город', dealerSelected.city.name) : null}
-              {dealerSelected.address ? this.renderItem('Адрес', dealerSelected.address) : null}
+              {dealerSelected.address ? this.renderAddress(dealerSelected.address) : null}
               {this.renderPhones(phones)}
               {this.renderEmails(dealerSelected.email, dealerSelected.name)}
               {this.renderSites(dealerSelected.site)}

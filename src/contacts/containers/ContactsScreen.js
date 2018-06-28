@@ -63,7 +63,7 @@ class ContactsScreen extends Component {
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
-  })
+  });
 
   componentDidMount() {
     Amplitude.logEvent('screen', 'contacts');
@@ -124,7 +124,7 @@ class ContactsScreen extends Component {
           }
         });
     }
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
@@ -133,7 +133,7 @@ class ContactsScreen extends Component {
     return isActiveScreen;
   }
 
-  onPressAbout = () => this.props.navigation.navigate('AboutScreen')
+  onPressAbout = () => this.props.navigation.navigate('AboutScreen');
 
   onPressRateApp = () => {
     const APP_STORE_LINK = 'itms-apps://itunes.apple.com/app/idXXXX?action=write-review';
@@ -144,17 +144,17 @@ class ContactsScreen extends Component {
     } else {
       Linking.openURL(PLAY_STORE_LINK).catch(err => console.error('PLAY_STORE_LINK failed', err));
     }
-  }
+  };
 
   getRateAppInfoText = () => {
     return `Если вам понравилось наше приложение, оставьте, пожайлуста, положительный отзыв в ${this.getPlatformStore()}`;
-  }
+  };
 
-  getRateAppLabel = () => `Оставить отзыв в ${this.getPlatformStore()}`
+  getRateAppLabel = () => `Оставить отзыв в ${this.getPlatformStore()}`;
 
-  getPlatformStore = () => Platform.OS === 'ios' ? 'App Store' : 'Google Play'
+  getPlatformStore = () => Platform.OS === 'ios' ? 'App Store' : 'Google Play';
 
-  onPressBonus = () => this.props.navigation.navigate('BonusInfoScreen', { refererScreen: 'contacts' })
+  onPressBonus = () => this.props.navigation.navigate('BonusInfoScreen', { refererScreen: 'contacts' });
 
   render() {
     // Для iPad меню, которое находится вне роутера
