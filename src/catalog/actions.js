@@ -303,7 +303,7 @@ export const actionFetchUsedCarDetails = carId => {
         const details = { ...response.data };
 
         // если есть фото нужного размера, записываем их в стор в нужной структуре данных
-        const photoViewerItems = get(details, 'img.original', []).map(photo => {
+        const photoViewerItems = get(details, 'img.10000x440', []).map(photo => {
           return { source: { uri: photo } };
         });
 
@@ -570,7 +570,7 @@ export const actionFetchNewCarDetails = carId => {
         const details = { ...response.data };
 
         // если есть фото нужного размера, записываем их в стор в нужной структуре данных
-        const photoViewerItems = get(details, 'img.original', []).map(photo => {
+        const photoViewerItems = get(details, 'img.10000x440', []).map(photo => {
           return { source: { uri: photo } };
         });
 
