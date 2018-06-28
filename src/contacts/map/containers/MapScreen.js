@@ -103,7 +103,7 @@ class MapScreen extends Component {
     const longitude = Number(get(dealerSelected, 'coords.lon'));
 
     if (isAndroid) {
-      return this.openDirections(`geo:${latitude},${longitude}`);
+      return this.openDirections(`geo:0,0?q=${latitude},${longitude}`);
     }
 
     if (availableNaviApps.length === 0) {
@@ -281,21 +281,21 @@ class MapScreen extends Component {
     if (!latitude || !longitude) {
       return (
         <View style={styles.safearea}>
-          <Text style={styles.errorText}>Нет данных для отображение карты</Text>
+          <Text style={styles.errorText}>Нет данных для отображения карты</Text>
         </View>
       );
     }
 
-    const city = dealerSelected.city | '';
-    const address = dealerSelected.address | '';
+    const city = get(dealerSelected, 'city.name');
+    const address = get(dealerSelected, 'address');
     let description;
 
     if (city) {
-      description = city;
+      description = 'г.' + city;
     }
 
     if (address) {
-      description = description + ' ' + address;
+      description = description + ', ' + address;
     }
 
     console.log('== MapScreen == ');
@@ -318,6 +318,7 @@ class MapScreen extends Component {
             pitchEnabled={true}
             loadingEnabled={true}
             loadingIndicatorColor={styleConst.color.blue}
+            cacheEnabled={true}
           >
             <MapView.Marker
               coordinate={{
@@ -331,7 +332,7 @@ class MapScreen extends Component {
           </MapView>
           <FooterButton
             icon={<Icon name="navigation" style={styles.iconRoute} type="MaterialCommunityIcons" />}
-            text="Построить маршрут"
+            text="Проложить маршрут"
             isLoading={isRequestCheckAvailableNaviApps}
             onPressButton={this.onPressRoute}
           />
