@@ -128,29 +128,56 @@ export default class Auth extends Component {
   onChangePassword = value => this.props.passwordFill(value)
 
   renderListItem = ({ label, value, placeholder = 'Поле для заполнения', onChangeHandler, inputProps = {}, isLast }) => {
-    return (
-      <View style={stylesList.listItemContainer}>
-        <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]} >
-          <Body>
-            <Item style={stylesList.inputItem} fixedLabel>
-              <Label style={stylesList.label}>{label}</Label>
-              <Input
-                style={stylesList.input}
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholder={placeholder}
-                onChangeText={onChangeHandler}
-                value={value}
-                returnKeyType="done"
-                returnKeyLabel="Готово"
-                underlineColorAndroid="transparent"
-                {...inputProps}
-              />
-            </Item>
-          </Body>
-        </ListItem>
-      </View>
-    );
+
+    if (label === LOGIN_LABEL || label === PASS_LABEL) {
+      return (
+        <View style={stylesList.listItemContainer}>
+          <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]} >
+            <Body>
+              <Item style={stylesList.inputItem} fixedLabel>
+                <Label style={stylesList.label}>{label}</Label>
+                <Input
+                  style={stylesList.input, {textAlign: 'right', alignSelf: 'center', alignItems: 'center', marginRight: 20}}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholder={placeholder}
+                  onChangeText={onChangeHandler}
+                  value={value}
+                  returnKeyType="done"
+                  returnKeyLabel="Готово"
+                  underlineColorAndroid="transparent"
+                  {...inputProps}
+                />
+              </Item>
+            </Body>
+          </ListItem>
+        </View>
+      );
+    } else {
+      return (
+        <View style={stylesList.listItemContainer}>
+          <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]}>
+            <Body>
+              <Item style={stylesList.inputItem} fixedLabel>
+                <Label style={stylesList.label}>{label}</Label>
+                <Input
+                  style={stylesList.input}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholder={placeholder}
+                  onChangeText={onChangeHandler}
+                  value={value}
+                  returnKeyType="done"
+                  returnKeyLabel="Готово"
+                  underlineColorAndroid="transparent"
+                  {...inputProps}
+                />
+              </Item>
+            </Body>
+          </ListItem>
+        </View>
+      );
+    }
   }
 
   onPressForgotPass = () => this.props.navigation.navigate('ForgotPassScreen')
@@ -165,7 +192,7 @@ export default class Auth extends Component {
         <ListItem style={stylesList.listItem} first last>
           <Body>
             <TouchableOpacity onPress={this.onPressForgotPass}>
-              <Text style={[stylesList.listItemValue]}>Забыли пароль?</Text>
+              <Text style={stylesList.listItemValue, {textAlign: 'right'}}>Забыли пароль?</Text>
             </TouchableOpacity>
           </Body>
         </ListItem>
@@ -181,7 +208,7 @@ export default class Auth extends Component {
         <Spinner visible={isRequest} color={styleConst.color.blue} />
         <View style={styles.textContainer}>
           <Text style={styles.text}>
-            Все функции личного кабинета доступны только зарегистрированным пользователям.{"\n"}{"\n"}
+            Все функции личного кабинета доступны только зарегистрированным пользователям.{'\n'}{'\n'}
             Номер телефона вводится в международном формате.
           </Text>
         </View>
