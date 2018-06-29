@@ -80,7 +80,8 @@ project.ext.react = [
 project.ext.version = [
     code:   versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100,
     incr:   versionBuild + 1,
-    name:   "${versionMajor}.${versionMinor}.${versionPatch}"
+    name:   "${versionMajor}.${versionMinor}.${versionPatch}",
+    build:  0
 ]
 
 
@@ -106,6 +107,8 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = true
 
+def project.ext.version.build = project.ext.version.code + project.ext.version.incr
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
@@ -114,7 +117,7 @@ android {
         applicationId "com.atlantm"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode project.ext.version.code + project.ext.version.incr
+        versionCode project.ext.version.build
         versionName project.ext.version.name
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -162,7 +165,7 @@ android {
             )
             if (!variant.buildType.isDebuggable()) {
                 saveChanges(project.ext.version.incr)
-                createReleaseTag(project.ext.version.name)
+                createReleaseTag(project.ext.version.name, project.ext.version.build)
             }
         }
     }
