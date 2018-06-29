@@ -68,6 +68,7 @@ private void createReleaseTag(version) {
     }
     runCommands("git", "status")
     runCommands("git", "tag", tagName)
+    runCommands("git", "commit", "-a -m 'Android version Bump to ${version}'")
     runCommands("git", "push")
 }
 
