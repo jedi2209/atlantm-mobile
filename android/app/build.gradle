@@ -160,7 +160,10 @@ android {
                 output.outputFile.parent,
                 output.outputFile.name.replace(".apk", "-${variant.versionName}.apk")
             )
-            saveChanges(project.ext.version.incr)
+            if (!variant.buildType.isDebuggable()) {
+                saveChanges(project.ext.version.incr)
+                createReleaseTag(project.ext.version.name)
+            }
         }
     }
 }
