@@ -107,7 +107,7 @@ def enableSeparateBuildPerCPUArchitecture = false
  */
 def enableProguardInReleaseBuilds = true
 
-def project.ext.version.build = project.ext.version.code + project.ext.version.incr
+project.ext.version.build = project.ext.version.code + project.ext.version.incr
 
 android {
     compileSdkVersion 23
