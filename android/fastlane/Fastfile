@@ -18,19 +18,19 @@ default_platform(:android)
 platform :android do
   desc "Runs all the tests"
   lane :test do
-    gradle(task: "clean assembleRelease")
+    gradle(task: "clean assemble", build_type: "Release", flags: "-PbuildType=debug")
   end
 
 desc "Submit a new Internal Build to Google Play"
   lane :internal do
-    gradle(task: "clean assembleRelease")
+    gradle(task: "clean assemble", build_type: "Release", flags: "-PbuildType=release")
 
     upload_to_play_store(track: 'internal')
   end
 
 desc "Submit a new Alpha Build to Google Play"
   lane :alpha do
-    gradle(task: "clean assembleRelease")
+    gradle(task: "clean assemble", build_type: "Release", flags: "-PbuildType=release")
 
     upload_to_play_store(track: 'alpha')
     #slack(message: 'Successfully distributed a new alpha build')
@@ -41,7 +41,7 @@ desc "Submit a new Alpha Build to Google Play"
 
   desc "Submit a new Beta Build to Google Play"
   lane :beta do
-    gradle(task: "clean assembleRelease")
+    gradle(task: "clean assemble", build_type: "Release", flags: "-PbuildType=release")
     
     upload_to_play_store(track: 'beta')
     #slack(message: 'Successfully distributed a new beta build')
@@ -52,7 +52,7 @@ desc "Submit a new Alpha Build to Google Play"
 
   desc "Deploy a new version to the Google Play"
   lane :deploy do
-    gradle(task: "clean assembleRelease")
+    gradle(task: "clean assemble", build_type: "Release", flags: "-PbuildType=release")
     upload_to_play_store
   end
 end

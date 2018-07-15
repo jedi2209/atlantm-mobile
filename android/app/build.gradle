@@ -84,6 +84,7 @@ project.ext.version = [
     build:  0
 ]
 
+project.ext.version.build = project.ext.version.code + project.ext.version.incr
 
 /**
 buildDir = "${GRADLE_ALL_APK_OUTPUT_PATHS}/${rootProject.name}/${project.name}/${project.ext.version.name}"
@@ -106,8 +107,6 @@ def enableSeparateBuildPerCPUArchitecture = false
  * Run Proguard to shrink the Java bytecode in release builds.
  */
 def enableProguardInReleaseBuilds = true
-
-project.ext.version.build = project.ext.version.code + project.ext.version.incr
 
 android {
     compileSdkVersion 23
@@ -147,7 +146,18 @@ android {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             signingConfig signingConfigs.release
+	        if (project.hasProperty('buildType')) {
+	            if (buildType != "debug") {
+	                saveChanges(project.ext.version.incr)
+	            }
+	        }
+//	        createReleaseTag(project.ext.version.name, project.ext.version.build)
         }
+	    debug {
+            minifyEnabled enableProguardInReleaseBuilds
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
+	    }
     }
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
@@ -163,10 +173,6 @@ android {
                 output.outputFile.parent,
                 output.outputFile.name.replace(".apk", "-${variant.versionName}.apk")
             )
-            if (!variant.buildType.isDebuggable()) {
-                saveChanges(project.ext.version.incr)
-                createReleaseTag(project.ext.version.name, project.ext.version.build)
-            }
         }
     }
 }
