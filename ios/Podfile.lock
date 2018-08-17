@@ -6,7 +6,7 @@ PODS:
     - Firebase/CoreOnly
     - FirebaseMessaging (= 3.0.0)
   - FirebaseCore (5.0.1):
-    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+    - "GoogleToolboxForMac/NSData+zlib (~> 2.1)"
   - FirebaseInstanceID (3.0.0):
     - FirebaseCore (~> 5.0)
   - FirebaseMessaging (3.0.0):
@@ -22,7 +22,7 @@ PODS:
   - GoogleToolboxForMac/Defines (2.1.4)
   - GoogleToolboxForMac/Logger (2.1.4):
     - GoogleToolboxForMac/Defines (= 2.1.4)
-  - GoogleToolboxForMac/NSData+zlib (2.1.4):
+  - "GoogleToolboxForMac/NSData+zlib (2.1.4)":
     - GoogleToolboxForMac/Defines (= 2.1.4)
   - Protobuf (3.5.0)
   - QBImagePickerController (3.4.0)
@@ -34,6 +34,19 @@ DEPENDENCIES:
   - GoogleMaps
   - QBImagePickerController
   - RSKImageCropper
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Amplitude-iOS
+    - Firebase
+    - FirebaseCore
+    - FirebaseInstanceID
+    - FirebaseMessaging
+    - GoogleMaps
+    - GoogleToolboxForMac
+    - Protobuf
+    - QBImagePickerController
+    - RSKImageCropper
 
 SPEC CHECKSUMS:
   Amplitude-iOS: 2ad4d7270c99186236c1272a3a9425463b1ae1a7
@@ -49,4 +62,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 0a7d018bb6ed29058479e91e6413cd26305e9324
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.3
