@@ -1093,7 +1093,6 @@
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				21BC63A713514C619FAF8FD5 /* Upload Debug Symbols to Sentry */,
-				AADE152397205AEBFA88CD30 /* [CP] Embed Pods Frameworks */,
 				B45CA0BEA8F07A9E35BC993C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
@@ -1744,21 +1743,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/sentry-cli-binary/bin/sentry-cli react-native xcode ../node_modules/react-native/scripts/react-native-xcode.sh";
-		};
-		AADE152397205AEBFA88CD30 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-atlantm/Pods-atlantm-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		B45CA0BEA8F07A9E35BC993C /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
