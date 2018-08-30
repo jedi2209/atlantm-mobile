@@ -58,3 +58,6 @@ ios/atlantm.app.dSYM.zip
 #awsmobilejs
 awsmobilejs/.awsmobile/backend-build
 awsmobilejs/\#current-backend-info
+
+# Bundle artifact
+*.jsbundle

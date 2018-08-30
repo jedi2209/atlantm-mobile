@@ -37,7 +37,7 @@ public class MainApplication extends Application implements ReactApplication {
           new GoogleAnalyticsBridgePackage(),
           new RNAmplitudeSDKPackage(MainApplication.this),
           new DevSettingsPackage(),
-          new RNSentryPackage(MainApplication.this),
+          new RNSentryPackage(),
           new PickerPackage(),
           new FIRMessagingPackage(),
           new SplashScreenReactPackage(),
