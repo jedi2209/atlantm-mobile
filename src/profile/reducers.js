@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
+import { REHYDRATE } from 'redux-persist';
 import { get } from 'lodash';
 import {
   PROFILE_CAR__FILL,
