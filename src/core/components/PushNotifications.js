@@ -20,7 +20,7 @@ export default {
     onPushPermissionGranted,
     onPushPermissionRejected,
     actionSetPreviousFCMToken,
-  }) {
+  }){
     FCM.requestPermissions()
       .then(() => {
         FCM.getFCMToken().then(token => {
@@ -49,6 +49,7 @@ export default {
       const title = get(notif, 'fcm.title');
       const body = get(notif, 'fcm.body');
       const icon = get(notif, 'fcm.icon');
+      const channel = get(notif, 'fcm.channel');
       const color = get(notif, 'fcm.color');
       const vibrate = get(notif, 'fcm.vibrate');
 
@@ -83,18 +84,18 @@ export default {
 
       if (Platform.OS === 'ios') {
         switch (notif._notificationType) {
-          case NotificationType.Remote:
-            console.log('type Remote');
-            notif.finish(RemoteNotificationResult.NewData);
-            break;
-          case NotificationType.NotificationResponse:
-            console.log('type NotificationResponse');
-            notif.finish();
-            break;
-          case NotificationType.WillPresent:
-            console.log('type WillPresent');
-            notif.finish(WillPresentNotificationResult.All);
-            break;
+        case NotificationType.Remote:
+          console.log('type Remote');
+          notif.finish(RemoteNotificationResult.NewData);
+          break;
+        case NotificationType.NotificationResponse:
+          console.log('type NotificationResponse');
+          notif.finish();
+          break;
+        case NotificationType.WillPresent:
+          console.log('type WillPresent');
+          notif.finish(WillPresentNotificationResult.All);
+          break;
         }
       }
     });
@@ -104,6 +105,7 @@ export default {
     title,
     body,
     icon,
+    channel,
     color,
     vibrate,
 
@@ -118,6 +120,7 @@ export default {
       car_number: carNumber,
       action_id: actionId,
       action_date: actionDate,
+      channel: channel,
       dealer,
       icon,
       color,
@@ -131,6 +134,15 @@ export default {
       show_in_foreground: true,        // notification when app is in foreground (local & remote)
       vibrate: vibrate || 500,
       wake_screen: true, // Android only
+    });
+  },
+
+  createNotificationChannel({ id }) {
+    FCM.createNotificationChannel({
+      id: id,
+      name: 'Default',
+      description: 'used for example',
+      priority: 'high',
     });
   },
 
