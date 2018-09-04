@@ -6,13 +6,12 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenLocal()
         maven {
-            url 'https://maven.google.com/'
-            name 'Google'
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url "$rootDir/../node_modules/react-native/android"
         }
-        maven {
-            url "https://jitpack.io"
-        }
+        maven { url "https://jitpack.io" }
     }
     dependencies {
         classpath 'com.google.gms:google-services:4.0.1'
@@ -25,20 +24,15 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenLocal()
         google()
         jcenter()
+        mavenCentral()
+        mavenLocal()
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
         }
-        maven {
-            url 'https://maven.google.com/'
-            name 'Google'
-        }
-        maven {
-            url "https://jitpack.io"
-        }
+        maven { url "https://jitpack.io" }
     }
 }
 
@@ -100,6 +94,16 @@ private String runCommands(String... commands) {
     return result
 }
 
+ext {
+    minSdkVersion       = 16
+    compileSdkVersion   = 27
+    targetSdkVersion    = 27
+    buildToolsVersion   = "27.1.1"
+    supportLibVersion   = "26.1.0"
+    androidMapsUtilsVersion = "0.5+"
+    googlePlayServicesVersion = "11.0.4"
+}
+
 subprojects {
     ext {
         def npmVersion = getNpmVersionArray()
@@ -108,13 +112,20 @@ subprojects {
         versionPatch = npmVersion[2]
         versionBuild = getIncrementBuild()
     }
-}
-
-ext {
-    buildToolsVersion = "26.0.3"
-    minSdkVersion = 16
-    compileSdkVersion = 26
-    targetSdkVersion = 26
-    supportLibVersion = "26.1.0"
-//    googlePlayServicesVersion = "15.0.1"
+  project.configurations.all {
+    resolutionStrategy.eachDependency { details ->
+            if (details.requested.group == 'com.android.support'
+                    && !details.requested.name.contains('multidex') ) {
+                details.useVersion rootProject.ext.buildToolsVersion
+            }
+    }
+  }
+  afterEvaluate {project ->
+     if (project.hasProperty("android")) {
+         android {
+             compileSdkVersion rootProject.ext.compileSdkVersion
+             buildToolsVersion '27.0.3'
+         }
+     }
+  }
 }
