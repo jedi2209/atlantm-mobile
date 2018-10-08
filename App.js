@@ -26,6 +26,8 @@ import DeviceInfo from 'react-native-device-info';
 
 import ImagePicker from 'react-native-image-crop-picker';
 
+import RNFetchBlob from 'rn-fetch-blob'
+
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
   android:
@@ -41,6 +43,8 @@ export default class App extends Component<Props> {
     SplashScreen.hide();
 
     console.log('isTablet()', DeviceInfo.getBrand());
+
+    console.log('RNFetchBlob', RNFetchBlob);
 
     return (
       <StyleProvider style={getTheme()}>

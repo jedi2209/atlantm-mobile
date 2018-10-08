@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import { Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import RNFetchBlob from 'react-native-fetch-blob';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const isAndroid = Platform.OS === 'android';
 
