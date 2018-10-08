@@ -149,6 +149,8 @@ android {
 }
 
 dependencies {
+    implementation "com.amplitude:android-sdk:2.19.1"
+    implementation project(':react-native-amplitude-analytics')
     implementation project(':rn-fetch-blob')
     implementation project(':react-native-image-crop-picker')
     implementation project(':react-native-device-info')

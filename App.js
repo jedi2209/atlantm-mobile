@@ -26,7 +26,9 @@ import DeviceInfo from 'react-native-device-info';
 
 import ImagePicker from 'react-native-image-crop-picker';
 
-import RNFetchBlob from 'rn-fetch-blob'
+import RNFetchBlob from 'rn-fetch-blob';
+
+import RNAmplitude from 'react-native-amplitude-analytics';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -37,8 +39,18 @@ const instructions = Platform.select({
 
 type Props = {};
 export default class App extends Component<Props> {
+  constructor(props) {
+    super(props);
+
+    this.impl = new RNAmplitude('2716d7eebc63593e80e4fd172fc8b6f3');
+  }
+
   render() {
     console.log('test', test());
+
+    // console.log('this.impl', this.impl);
+
+    this.impl.logEvent(`test:${Platform.OS}`);
 
     SplashScreen.hide();
 
