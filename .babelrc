@@ -1,3 +1,25 @@
 {
-  "presets": ["module:metro-react-native-babel-preset"]
+  "presets": ["module:metro-react-native-babel-preset"],
+  "plugins": [
+    ["module-resolver", {
+      "cwd": "babelrc",
+      "root": ["./src"],
+      "alias": {
+        "@catalog": "./src/catalog",
+        "@contacts": "./src/contacts",
+        "@core": "./src/core",
+        "@dealer": "./src/dealer",
+        "@eko": "./src/eko",
+        "@indicators": "./src/indicators",
+        "@info": "./src/info",
+        "@intro": "./src/intro",
+        "@menu": "./src/menu",
+        "@navigation": "./src/navigation",
+        "@profile": "./src/profile",
+        "@services": "./src/services",
+        "@tva": "./src/tva",
+        "@utils": "./src/utils"
+      }
+    }]
+  ]
 }
