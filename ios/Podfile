@@ -38,6 +38,7 @@ target 'atlantm' do
   pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
   pod 'Google-Maps-iOS-Utils' # Remove this line if you don't want to support GoogleMaps on iOS
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
+  pod 'RNImageCropPicker', :path =>  '../node_modules/react-native-image-crop-picker'
 
 end
 
