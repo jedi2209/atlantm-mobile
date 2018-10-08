@@ -1,4 +1,5 @@
 PODS:
+  - Amplitude-iOS (4.3.1)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
   - Folly (2016.10.31.00):
@@ -30,6 +31,9 @@ PODS:
   - QBImagePickerController (3.4.0)
   - React (0.57.2):
     - React/Core (= 0.57.2)
+  - react-native-amplitude-analytics (0.2.3):
+    - Amplitude-iOS (~> 4.3.1)
+    - React
   - react-native-google-maps (0.21.0):
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 2.5.0)
@@ -93,11 +97,13 @@ PODS:
   - yoga (0.57.2.React)
 
 DEPENDENCIES:
+  - Amplitude-iOS (~> 4.3.1)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils
   - GoogleMaps
+  - react-native-amplitude-analytics (from `../node_modules/react-native-amplitude-analytics`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - React/Core (from `../node_modules/react-native`)
@@ -127,6 +133,8 @@ EXTERNAL SOURCES:
     :podspec: ../node_modules/react-native/third-party-podspecs/glog.podspec
   React:
     :path: ../node_modules/react-native
+  react-native-amplitude-analytics:
+    :path: ../node_modules/react-native-amplitude-analytics
   react-native-google-maps:
     :path: ../node_modules/react-native-maps
   react-native-maps:
@@ -141,6 +149,7 @@ EXTERNAL SOURCES:
     :path: ../node_modules/react-native/ReactCommon/yoga/yoga.podspec
 
 SPEC CHECKSUMS:
+  Amplitude-iOS: df355e2be58972041acde9576a2ae97c217bf941
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
   Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
@@ -149,6 +158,7 @@ SPEC CHECKSUMS:
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
   QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
+  react-native-amplitude-analytics: f72b7f6fe8f85ccd66ccb67bbd8595e44609ff41
   react-native-google-maps: 2cfe3b01f8422c7dae51d8764139fd70f888cfce
   react-native-maps: 066c2afcc89e18726377bcc685315f989ca22449
   rn-fetch-blob: 76a8f798dae965bbcd146a2438f2e1d381c91ae3
@@ -157,6 +167,6 @@ SPEC CHECKSUMS:
   RSKImageCropper: 50d5a3e4160f0309b14d75b89d5ae2f496d56e0d
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 89fc662d4b1d18e9ea5e79d52d3dc82a84e20a40
+PODFILE CHECKSUM: a271ed966cd63c2d41a75d6b8c377057af25d494
 
 COCOAPODS: 1.4.0
