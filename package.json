@@ -18,6 +18,7 @@
     "react-native-datepicker": "1.7.2",
     "react-native-image-gallery": "https://github.com/tavriaforever/react-native-image-gallery",
     "react-native-loading-spinner-overlay": "0.5.2",
+    "react-native-maps": "0.21.0",
     "react-native-splash-screen": "3.1.1",
     "react-native-swiper": "1.5.13",
     "react-navigation": "1.5.13",
