@@ -17,6 +17,8 @@ import {Platform, StyleSheet, Text, View} from 'react-native';
 
 import test from '@catalog/test.js';
 
+import SplashScreen from 'react-native-splash-screen';
+
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
   android:
@@ -28,6 +30,8 @@ type Props = {};
 export default class App extends Component<Props> {
   render() {
     console.log('test', test());
+
+    SplashScreen.hide();
 
     return (
       <StyleProvider style={getTheme()}>
