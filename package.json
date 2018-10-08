@@ -8,10 +8,10 @@
     "clean": "rm -rf $TMPDIR/react-*; rm -rf $TMPDIR/haste-*; rm -rf $TMPDIR/metro-*; watchman watch-del-all"
   },
   "dependencies": {
-    "prop-types": "15.6.1",
     "lodash": "4.17.4",
     "moment": "2.22.1",
     "native-base": "2.8.1",
+    "prop-types": "15.6.1",
     "react": "16.5.0",
     "react-native": "0.57.2",
     "react-native-actionsheet": "2.4.2",
@@ -20,6 +20,7 @@
     "react-native-communications": "2.2.1",
     "react-native-datepicker": "1.7.2",
     "react-native-device-info": "0.24.0",
+    "react-native-fcm": "^16.2.3",
     "react-native-image-crop-picker": "^0.21.2",
     "react-native-image-gallery": "https://github.com/tavriaforever/react-native-image-gallery",
     "react-native-loading-spinner-overlay": "0.5.2",
