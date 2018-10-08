@@ -29,7 +29,8 @@
     "redux": "3.7.2",
     "redux-form": "7.3.0",
     "redux-persist": "4.10.2",
-    "redux-thunk": "2.3.0"
+    "redux-thunk": "2.3.0",
+    "rn-fetch-blob": "^0.10.13"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",
