@@ -4471,6 +4471,10 @@ react-native-datepicker@1.7.2:
   dependencies:
     moment "^2.22.0"
 
+react-native-device-info@^0.24.0:
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-0.24.0.tgz#a6c2a8977229e1b94435e30469fa6af21a68f3ea"
+
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-dismiss-keyboard/-/react-native-dismiss-keyboard-1.0.0.tgz#32886242b3f2317e121f3aeb9b0a585e2b879b49"
@@ -4523,7 +4527,7 @@ react-native-loading-spinner-overlay@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-0.5.2.tgz#b7bcd277476d596615fd7feee601789f9bdc7acc"
 
-react-native-maps@^0.21.0:
+react-native-maps@0.21.0:
   version "0.21.0"
   resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.21.0.tgz#005f58e93d7623ad59667e8002101970ddf235c2"
   dependencies:
