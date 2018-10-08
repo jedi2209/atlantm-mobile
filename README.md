@@ -15,6 +15,15 @@
 
 ## Решение проблем со сборкой
 
+### JS Bundle
+
+Если не собирается js
+https://stackoverflow.com/a/52691351/1130538
+
+### iOS
+
+Если у тебя xcode >= 10 нужно переключить сборку в legacy режим
+
 ### Android
 
 1. Приложение падает если одновременно используется react-native-maps и react-native-device-info

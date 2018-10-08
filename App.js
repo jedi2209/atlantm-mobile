@@ -21,6 +21,8 @@ import SplashScreen from 'react-native-splash-screen';
 
 import MapView from 'react-native-maps';
 
+import DeviceInfo from 'react-native-device-info';
+
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
   android:
@@ -34,6 +36,8 @@ export default class App extends Component<Props> {
     console.log('test', test());
 
     SplashScreen.hide();
+
+    console.log('isTablet()', DeviceInfo.getBrand());
 
     return (
       <StyleProvider style={getTheme()}>
