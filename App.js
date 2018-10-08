@@ -9,6 +9,7 @@
 import getTheme from './native-base-theme/components';
 import {
   Icon,
+  Button,
   StyleProvider,
 } from 'native-base';
 
@@ -22,6 +23,8 @@ import SplashScreen from 'react-native-splash-screen';
 import MapView from 'react-native-maps';
 
 import DeviceInfo from 'react-native-device-info';
+
+import ImagePicker from 'react-native-image-crop-picker';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -42,6 +45,17 @@ export default class App extends Component<Props> {
     return (
       <StyleProvider style={getTheme()}>
         <View style={styles.container}>
+          <Button onPress={() => {
+            ImagePicker.openPicker({
+              width: 300,
+              height: 400,
+              cropping: true
+            }).then(image => {
+              console.log(image);
+            });
+          }}>
+            <Text>Click Me!</Text>
+          </Button>
           <Icon ios='ios-menu' android="md-menu" style={{fontSize: 20, color: 'red'}}/>
           <Text style={styles.welcome}>W111elcome to React Native!</Text>
           <Text style={styles.instructions}>To get started, edit App.js</Text>
