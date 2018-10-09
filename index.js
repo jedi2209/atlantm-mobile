@@ -1,7 +1,23 @@
-/** @format */
+import React from 'react';
+import { AppRegistry, YellowBox } from 'react-native';
+// import { Sentry } from 'react-native-sentry';
 
-import {AppRegistry} from 'react-native';
-import App from './App';
-import {name as appName} from './app.json';
+// YellowBox.ignoreWarnings([
+//   'Remote debugger',
+//   'Warning: componentWillMount is deprecated',
+//   'Warning: componentWillReceiveProps is deprecated',
+//   'Module AIRGoogleMapManager requires main queue setup since it overrides',
+//   'Module RCTImageLoader requires main queue setup since it overrides',
+//   'Module RNFetchBlob requires main queue setup since it overrides',
+//   'Module ImageCropPicker requires main queue setup since it overrides',
+// ]);
 
-AppRegistry.registerComponent(appName, () => App);
+import Wrapper from './src/core/containers/Wrapper';
+
+// Sentry
+//   .config('https://XXXX:4df609d533fd4ce3be4fa721e6583c87@sentry.io/219899')
+//   .install();
+
+const AtlantmApplication = () => <Wrapper />;
+
+AppRegistry.registerComponent('atlantm', () => AtlantmApplication);

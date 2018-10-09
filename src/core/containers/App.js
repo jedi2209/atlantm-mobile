@@ -67,7 +67,6 @@ class App extends Component {
     }
 
     setTimeout(() => {
-      PushNotification.createNotificationChannel('fcm_default_channel');
       PushNotification.init({
         fcmToken,
         actionSetFCMToken,

@@ -32,27 +32,25 @@ export default {
             description: 'used for example',
             priority: 'high',
           });
-          // PushNotification.createNotificationChannel('fcm_default_channel');
-          // actionSetFCMToken(token);
-          // onPushPermissionGranted();
+          actionSetFCMToken(token);
+          onPushPermissionGranted();
         });
       })
       .catch(() => {
         console.log('не получили token');
-        // actionSetFCMToken(null);
-        // onPushPermissionRejected();
+        actionSetFCMToken(null);
+        onPushPermissionRejected();
       });
 
     this.refreshTokenListener = FCM.on(FCMEvent.RefreshToken, (token) => {
-      console.log('refresh FCM token', token);
-      // actionSetPreviousFCMToken(fcmToken);
-      // actionSetFCMToken(token);
+      actionSetPreviousFCMToken(fcmToken);
+      actionSetFCMToken(token);
     });
 
     FCM.getInitialNotification().then((notif) => {
       console.log('getInitialNotification', notif);
 
-      // this.openScreen(notif);
+      this.openScreen(notif);
     });
 
     this.notificationListener = FCM.on(FCMEvent.Notification, async (notif) => {
@@ -72,24 +70,24 @@ export default {
 
       console.log('FCMEvent.Notification', notif);
 
-      // if (Platform.OS === 'android' && !notif.local_notification) {
-      //   this.sendLocalNotification({
-      //     title,
-      //     body,
-      //     icon,
-      //     color,
-      //     vibrate,
+      if (Platform.OS === 'android' && !notif.local_notification) {
+        this.sendLocalNotification({
+          title,
+          body,
+          icon,
+          color,
+          vibrate,
 
-      //     target,
-      //     carNumber,
-      //     dealer,
-      //     actionId,
-      //     actionDate,
-      //   });
-      // }
+          target,
+          carNumber,
+          dealer,
+          actionId,
+          actionDate,
+        });
+      }
 
       if (notif.opened_from_tray) {
-        // this.openScreen(notif);
+        this.openScreen(notif);
       }
 
       if (Platform.OS === 'ios') {
