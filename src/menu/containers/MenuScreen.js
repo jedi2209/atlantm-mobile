@@ -11,12 +11,10 @@ import { scale, verticalScale } from '../../utils/scale';
 import stylesHeader from '../../core/components/Header/style';
 
 const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-  },
   container: {
     backgroundColor: styleConst.color.bg,
     justifyContent: 'space-around',
+    flex: 1,
   },
   menu: {
     marginTop: verticalScale(25),
@@ -70,114 +68,112 @@ export default class MenuScreen extends Component {
 
     return (
       <Container style={styles.container}>
-        <Container style={styles.safearea}>
-          <Grid style={styles.menu} >
-            <Row>
-              <Col>
-                <TouchableOpacity
-                  style={styles.item}
-                  onPress={this.onPressContacts}
-                >
-                  <Image
-                    style={styles.icon}
-                    source={require('../assets/contacts.png')}
-                  />
-                  <Text style={styles.text}>Контакты</Text>
-                </TouchableOpacity>
-              </Col>
-              <Col>
-                <TouchableOpacity
-                  style={styles.item}
-                  onPress={this.onPressInfoList}
-                >
-                  <Image
-                    style={styles.icon}
-                    source={require('../assets/info.png')}
-                  />
-                  <Text style={styles.text}>Акции</Text>
-                </TouchableOpacity>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <TouchableOpacity
-                  style={styles.item}
-                  onPress={this.onPressService}
-                >
-                  <Image
-                    style={styles.icon}
-                    source={require('../assets/service.png')}
-                  />
-                  <Text style={styles.text}>Заявка на СТО</Text>
-                </TouchableOpacity>
-              </Col>
-              <Col>
-                <TouchableOpacity
-                  style={styles.item}
-                  onPress={this.onPressTva}
-                >
-                  <Image
-                    style={styles.icon}
-                    source={require('../assets/car_delivery.png')}
-                  />
-                  <Text style={styles.text}>Табло выдачи авто</Text>
-                </TouchableOpacity>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <TouchableOpacity
-                  style={styles.item}
-                  onPress={this.onPressCatalog}
-                >
-                  <Image
-                    style={styles.icon}
-                    source={require('../assets/catalog_auto.png')}
-                  />
-                  <Text style={styles.text}>Каталог автомобилей</Text>
-                </TouchableOpacity>
-              </Col>
-              <Col>
-                <TouchableOpacity
-                  style={styles.item}
-                  onPress={this.onPressIndicators}
-                >
-                  <Image
-                    style={styles.icon}
-                    source={require('../assets/indicators.png')}
-                  />
-                  <Text style={styles.text}>Индикаторы</Text>
-                </TouchableOpacity>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <TouchableOpacity
-                  style={styles.item}
-                  onPress={this.onPressEko}
-                >
-                  <Image
-                    style={styles.icon}
-                    source={require('../assets/reviews.png')}
-                  />
-                  <Text style={styles.text}>Отзывы и предложения</Text>
-                </TouchableOpacity>
-              </Col>
-              <Col>
-                <TouchableOpacity
-                  style={styles.item}
-                  onPress={this.onPressProfile}
-                >
-                  <Image
-                    style={styles.icon}
-                    source={require('../assets/profile.png')}
-                  />
-                  <Text style={styles.text}>Личный кабинет</Text>
-                </TouchableOpacity>
-              </Col>
-            </Row>
-          </Grid>
-        </Container>
+        <Grid style={styles.menu} >
+          <Row>
+            <Col>
+              <TouchableOpacity
+                style={styles.item}
+                onPress={this.onPressContacts}
+              >
+                <Image
+                  style={styles.icon}
+                  source={require('../assets/contacts.png')}
+                />
+                <Text style={styles.text}>Контакты</Text>
+              </TouchableOpacity>
+            </Col>
+            <Col>
+              <TouchableOpacity
+                style={styles.item}
+                onPress={this.onPressInfoList}
+              >
+                <Image
+                  style={styles.icon}
+                  source={require('../assets/info.png')}
+                />
+                <Text style={styles.text}>Акции</Text>
+              </TouchableOpacity>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <TouchableOpacity
+                style={styles.item}
+                onPress={this.onPressService}
+              >
+                <Image
+                  style={styles.icon}
+                  source={require('../assets/service.png')}
+                />
+                <Text style={styles.text}>Заявка на СТО</Text>
+              </TouchableOpacity>
+            </Col>
+            <Col>
+              <TouchableOpacity
+                style={styles.item}
+                onPress={this.onPressTva}
+              >
+                <Image
+                  style={styles.icon}
+                  source={require('../assets/car_delivery.png')}
+                />
+                <Text style={styles.text}>Табло выдачи авто</Text>
+              </TouchableOpacity>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <TouchableOpacity
+                style={styles.item}
+                onPress={this.onPressCatalog}
+              >
+                <Image
+                  style={styles.icon}
+                  source={require('../assets/catalog_auto.png')}
+                />
+                <Text style={styles.text}>Каталог автомобилей</Text>
+              </TouchableOpacity>
+            </Col>
+            <Col>
+              <TouchableOpacity
+                style={styles.item}
+                onPress={this.onPressIndicators}
+              >
+                <Image
+                  style={styles.icon}
+                  source={require('../assets/indicators.png')}
+                />
+                <Text style={styles.text}>Индикаторы</Text>
+              </TouchableOpacity>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <TouchableOpacity
+                style={styles.item}
+                onPress={this.onPressEko}
+              >
+                <Image
+                  style={styles.icon}
+                  source={require('../assets/reviews.png')}
+                />
+                <Text style={styles.text}>Отзывы и предложения</Text>
+              </TouchableOpacity>
+            </Col>
+            <Col>
+              <TouchableOpacity
+                style={styles.item}
+                onPress={this.onPressProfile}
+              >
+                <Image
+                  style={styles.icon}
+                  source={require('../assets/profile.png')}
+                />
+                <Text style={styles.text}>Личный кабинет</Text>
+              </TouchableOpacity>
+            </Col>
+          </Row>
+        </Grid>
       </Container>
     );
   }
