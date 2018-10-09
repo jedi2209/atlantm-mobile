@@ -3,6 +3,7 @@ package com.atlantm;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.sentry.RNSentryPackage;
 import com.evollu.react.fcm.FIRMessagingPackage;
 import com.sudoplz.reactnativeamplitudeanalytics.RNAmplitudeSDKPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
@@ -30,6 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
               new MainReactPackage(),
+              new RNSentryPackage(),
               new FIRMessagingPackage(),
               new RNAmplitudeSDKPackage(MainApplication.this),
               new RNFetchBlobPackage(),
