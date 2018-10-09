@@ -70,6 +70,8 @@ export default class WebViewAutoHeight extends Component {
   constructor(props) {
     super(props);
 
+    console.log('props', props);
+
     this.state = {
       realContentHeight: this.props.minHeight,
     };
@@ -107,6 +109,7 @@ export default class WebViewAutoHeight extends Component {
           style={[style, { height: Math.max(this.state.realContentHeight, minHeight) }]}
           javaScriptEnabled
           onNavigationStateChange={this.handleNavigationChange}
+          originWhitelist={['*']}
         />
       </View>
     );
