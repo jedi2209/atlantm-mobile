@@ -43,6 +43,10 @@ target 'atlantm' do
   pod 'Amplitude-iOS', '~> 4.3.1'
   pod 'react-native-amplitude-analytics', :path => '../node_modules/react-native-amplitude-analytics'
 
+  # pod 'Firebase'
+  # pod 'Firebase/Messaging'
+  pod 'react-native-fcm', :path => '../node_modules/react-native-fcm'
+
 end
 
 post_install do |installer|

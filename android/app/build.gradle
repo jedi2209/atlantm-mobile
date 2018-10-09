@@ -149,12 +149,17 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-fcm')
+//    implementation 'com.google.firebase:firebase-core'
+//    implementation 'com.google.firebase:firebase-messaging'
     implementation "com.amplitude:android-sdk:2.19.1"
     implementation project(':react-native-amplitude-analytics')
     implementation project(':rn-fetch-blob')
     implementation project(':react-native-image-crop-picker')
     implementation project(':react-native-device-info')
+
     implementation project(':react-native-maps')
+
     implementation project(':react-native-splash-screen')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
@@ -167,3 +172,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+apply plugin: 'com.google.gms.google-services'

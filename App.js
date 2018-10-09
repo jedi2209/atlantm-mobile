@@ -30,6 +30,8 @@ import RNFetchBlob from 'rn-fetch-blob';
 
 import RNAmplitude from 'react-native-amplitude-analytics';
 
+import PushNotification from './src/core/components/PushNotifications';
+
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
   android:
@@ -43,6 +45,34 @@ export default class App extends Component<Props> {
     super(props);
 
     this.impl = new RNAmplitude('2716d7eebc63593e80e4fd172fc8b6f3');
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      PushNotification.init({
+        // fcmToken,
+        // actionSetFCMToken,
+        // actionSetPreviousFCMToken,
+        onPushPermissionGranted: this.onPushPermissionGranted,
+        onPushPermissionRejected: this.onPushPermissionRejected,
+      });
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    PushNotification.notificationListener.remove();
+    PushNotification.refreshTokenListener.remove();
+  }
+
+  onPushPermissionGranted = () => {
+    console.log('permission granted');
+    // this.props.actionSetPushGranted(true);
+  }
+  onPushPermissionRejected = () => {
+    console.log('permission rejected');
+    // const { actionSetPushActionSubscribe, actionSetPushGranted } = this.props;
+    // actionSetPushActionSubscribe(false);
+    // this.props.actionSetPushGranted(false);
   }
 
   render() {

@@ -24,25 +24,35 @@ export default {
     FCM.requestPermissions()
       .then(() => {
         FCM.getFCMToken().then(token => {
-          actionSetFCMToken(token);
-          onPushPermissionGranted();
+          console.log('token', token);
+
+          FCM.createNotificationChannel({
+            id: 'fcm_default_channel',
+            name: 'Default',
+            description: 'used for example',
+            priority: 'high',
+          });
+          // PushNotification.createNotificationChannel('fcm_default_channel');
+          // actionSetFCMToken(token);
+          // onPushPermissionGranted();
         });
       })
       .catch(() => {
-        actionSetFCMToken(null);
-        onPushPermissionRejected();
+        console.log('не получили token');
+        // actionSetFCMToken(null);
+        // onPushPermissionRejected();
       });
 
     this.refreshTokenListener = FCM.on(FCMEvent.RefreshToken, (token) => {
       console.log('refresh FCM token', token);
-      actionSetPreviousFCMToken(fcmToken);
-      actionSetFCMToken(token);
+      // actionSetPreviousFCMToken(fcmToken);
+      // actionSetFCMToken(token);
     });
 
     FCM.getInitialNotification().then((notif) => {
       console.log('getInitialNotification', notif);
 
-      this.openScreen(notif);
+      // this.openScreen(notif);
     });
 
     this.notificationListener = FCM.on(FCMEvent.Notification, async (notif) => {
@@ -79,7 +89,7 @@ export default {
       // }
 
       if (notif.opened_from_tray) {
-        this.openScreen(notif);
+        // this.openScreen(notif);
       }
 
       if (Platform.OS === 'ios') {
