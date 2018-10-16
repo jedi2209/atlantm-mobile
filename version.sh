@@ -1,6 +1,6 @@
 #!/usr/bin/env bash -e
 
-PROJECT_DIR="ios/rbtse"
+PROJECT_DIR="ios/atlantm"
 INFOPLIST_FILE="Info.plist"
 INFOPLIST_DIR="${PROJECT_DIR}/${INFOPLIST_FILE}"
 ANDROID_VERSION_FILE="android/app/versioning/app_version.properties"
