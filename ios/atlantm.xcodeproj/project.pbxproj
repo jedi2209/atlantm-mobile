@@ -42,8 +42,8 @@
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		31ADF6ECEDAD45989182AF93 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4B774C897BA74E09BD3754F7 /* EvilIcons.ttf */; };
 		3837C0A7CF844F8A8D4EDD76 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BBCFB27CF0A54BD49FF385E5 /* SimpleLineIcons.ttf */; };
-		4F8601EA216C1A240062BA84 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4F8601C3216C1A240062BA84 /* GoogleService-Info.plist */; };
 		4F8AB082216BE1F2002DCDBA /* Default-568h.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F8AB05B216BE1F2002DCDBA /* Default-568h.png */; };
+		4FBD7EA92187249C00003881 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4FBD7EA82187249C00003881 /* GoogleService-Info.plist */; };
 		5FACBD6AE2524239BDDF2CE1 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF6157278CA4133939F0A4A /* Zocial.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		840C965E6DC740B08BBED450 /* Demo-tvOSTests.xctest in Frameworks */ = {isa = PBXBuildFile; fileRef = ACA484A2F3C744948834F790 /* Demo-tvOSTests.xctest */; };
@@ -370,9 +370,9 @@
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		366B6576C404496F979D1DE8 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		4B774C897BA74E09BD3754F7 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
-		4F8601C3216C1A240062BA84 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../atlantm/ios/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		4F8601EB216C1DC30062BA84 /* atlantm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = atlantm.entitlements; path = atlantm/atlantm.entitlements; sourceTree = "<group>"; };
 		4F8AB05B216BE1F2002DCDBA /* Default-568h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h.png"; sourceTree = "<group>"; };
+		4FBD7EA82187249C00003881 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		6259AFDCCAA54598B88E8AB3 /* Demo-tvOS.app */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.application; path = "Demo-tvOS.app"; sourceTree = "<group>"; };
 		654774F3CADF3F5218A60E65 /* libPods-atlantm.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atlantm.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -539,8 +539,8 @@
 		13B07FAE1A68108700A75B9A /* atlantm */ = {
 			isa = PBXGroup;
 			children = (
+				4FBD7EA82187249C00003881 /* GoogleService-Info.plist */,
 				4F8601EB216C1DC30062BA84 /* atlantm.entitlements */,
-				4F8601C3216C1A240062BA84 /* GoogleService-Info.plist */,
 				4F8AB05B216BE1F2002DCDBA /* Default-568h.png */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -1200,7 +1200,7 @@
 				A059A23A2D10461980EA6437 /* MaterialIcons.ttf in Resources */,
 				FF67D7A93E2D4BE49A0D2578 /* Octicons.ttf in Resources */,
 				BD7F78C028B14A29AFE662BA /* Roboto_medium.ttf in Resources */,
-				4F8601EA216C1A240062BA84 /* GoogleService-Info.plist in Resources */,
+				4FBD7EA92187249C00003881 /* GoogleService-Info.plist in Resources */,
 				AF314133A9844B07825CB707 /* Roboto.ttf in Resources */,
 				1B9915E053974BFB996D407F /* rubicon-icon-font.ttf in Resources */,
 				3837C0A7CF844F8A8D4EDD76 /* SimpleLineIcons.ttf in Resources */,
