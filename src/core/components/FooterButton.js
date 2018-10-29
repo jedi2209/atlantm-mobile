@@ -1,16 +1,14 @@
 import React, { PureComponent } from 'react';
 import { StyleSheet } from 'react-native';
 import { Footer } from 'native-base';
+import isIPhoneX from '@utils/is_iphone_x';
 
 // components
 import ButtonFull from './ButtonFull';
 
-// helpers
-import styleConst from '../style-const';
-
 const styles = StyleSheet.create({
   footer: {
-    height: styleConst.ui.footerHeight,
+    height: isIPhoneX() ? 14 : 50, // хак чтобы в новой версии native-base футер прижимался к низу
   },
 });
 
