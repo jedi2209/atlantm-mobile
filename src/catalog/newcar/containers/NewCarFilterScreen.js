@@ -74,11 +74,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  button: {
+  buttonActive: {
     flex: 1,
     height: FOOTER_HEIGHT,
     flexDirection: 'row',
     backgroundColor: styleConst.color.lightBlue,
+  },
+  buttonInactive: {
+    flex: 1,
+    height: FOOTER_HEIGHT,
+    flexDirection: 'row',
+    backgroundColor: styleConst.color.darkBg
   },
   buttonText: {
     color: '#fff',
@@ -531,7 +537,8 @@ class NewCarFilterScreen extends Component {
             </View>
           </Content>
           <Footer style={styles.footer}>
-            <Button onPress={() => this.onPressFilterButton(count)} full style={styles.button}>
+            <Button onPress={() => this.onPressFilterButton(count)} full disabled={(count ? false : true)} style={(count ? styles.buttonActive : styles.buttonInactive)}>
+
               {
                 isFetchingNewCarByFilter ?
                   (
@@ -539,13 +546,23 @@ class NewCarFilterScreen extends Component {
                   ) :
                   (
                     <View style={styles.buttonContent} >
-                      <Text style={styles.buttonText}>
-                        {`НАЙДЕНО ${count}`}
-                      </Text>
+                        {(count ?
+                            <Text style={styles.buttonText}>
+                                {`НАЙДЕНО ${count}`}
+                            </Text>
+                                :
+                            <Text style={styles.buttonText}>
+                                {`НЕТ АВТО В НАЛИЧИИ`}
+                            </Text>
+                        )}
+                        {(count ?
                       <Image
                         source={require('../../../core/components/CustomIcon/assets/arrow_right_white.png')}
                         style={styles.buttonIcon}
                       />
+                                :
+                      <Image style={styles.buttonIcon} />
+                      )}
                     </View>
                   )
               }
