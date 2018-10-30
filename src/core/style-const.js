@@ -28,6 +28,9 @@ export default {
     light: 'HelveticaNeue-Light',
   },
   ui: {
+    // хак чтобы в новой версии native-base футер прижимался к низу
+    footerHeightIphone: 14,
+    footerHeightAndroid: 50,
     borderWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
     horizontalGap: 11,
     horizontalGapInList: 14,

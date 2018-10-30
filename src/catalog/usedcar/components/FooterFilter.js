@@ -3,17 +3,18 @@ import { TouchableOpacity, View, Image, StyleSheet } from 'react-native';
 
 // components
 import { Footer } from 'native-base';
-import PricePicker from '../../../core/components/PricePicker';
+import PricePicker from '@core/components/PricePicker';
 
 // helpers
 import PropTypes from 'prop-types';
-import styleConst from '../../../core/style-const';
+import isIPhoneX from '@utils/is_iphone_x';
+import styleConst from '@core/style-const';
 
 const size = 26;
 const containerSize = 45;
 const styles = StyleSheet.create({
   footer: {
-    height: 45,
+    height: isIPhoneX() ? 5 : 45,
     backgroundColor: styleConst.color.header,
   },
   container: {
