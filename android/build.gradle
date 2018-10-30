@@ -1,5 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+import groovy.json.JsonSlurper
+
 buildscript {
     ext {
         buildToolsVersion = "27.0.3"
@@ -36,7 +38,72 @@ allprojects {
     }
 }
 
+def getVersionFile() {
+    return file('app/versioning/app_version.properties')
+}
+
+def getVersionProps() {
+    def versionPropsFile = getVersionFile()
+    def versionProps = new Properties()
+    versionProps.load(new FileInputStream(versionPropsFile))
+    return versionProps
+}
+
+def getNpmVersion() {
+    def inputFile = new File("../package.json")
+    def packageJson = new JsonSlurper().parseText(inputFile.text)
+    return packageJson["version"]
+}
+
+def getIncrementBuild() {
+    def versionCode = getVersionProps()['versionCode'].toInteger()
+    return versionCode
+}
+
+private void saveChanges(Integer versionCode) {
+    def versionProps = getVersionProps()
+    versionProps['versionCode'] = versionCode.toString()
+    versionProps.store(getVersionFile().newWriter(), null)
+}
+
+def getNpmVersionArray() { // major [0], minor [1], patch [2]
+    def (major, minor, patch) = getNpmVersion().tokenize('.')
+    return [Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(patch)] as int[]
+}
+
+private void createReleaseTag(version, buildNumber) {
+    def tagName = "release/${version}"
+    try {
+        runCommands("git", "tag", "-d", tagName)
+    } catch (Exception e) {
+        println(e.message)
+    }
+    runCommands("git", "status")
+    runCommands("git", "commit", "-a", "-m", "Android version Bump to ${version} [${buildNumber}]")
+    runCommands("git", "tag", tagName)
+    runCommands("git", "push")
+}
+
+private String runCommands(String... commands) {
+    def process = new ProcessBuilder(commands).redirectErrorStream(true).start()
+    process.waitFor()
+    def result = ''
+    process.inputStream.eachLine { result += it + '\n' }
+    def errorResult = process.exitValue() == 0
+    if (!errorResult) {
+        throw new IllegalStateException(result)
+    }
+    return result
+}
+
 subprojects {
+    ext {
+        def npmVersion = getNpmVersionArray()
+        versionMajor = npmVersion[0]
+        versionMinor = npmVersion[1]
+        versionPatch = npmVersion[2]
+        versionBuild = getIncrementBuild()
+    }
     afterEvaluate {project ->
         if (project.hasProperty("android")) {
             android {
