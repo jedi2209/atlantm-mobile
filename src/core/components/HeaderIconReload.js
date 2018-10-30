@@ -12,8 +12,8 @@ import styleConst from '../style-const';
 const size = 40;
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: styleConst.ui.horizontalGap * 2,
-    paddingRight: styleConst.ui.horizontalGap * 2,
+    // paddingLeft: styleConst.ui.horizontalGap * 2,
+    // paddingRight: styleConst.ui.horizontalGap * 2,
     width: size,
     height: size,
     justifyContent: 'center',
