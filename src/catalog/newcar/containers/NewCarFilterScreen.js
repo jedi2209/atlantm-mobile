@@ -52,7 +52,7 @@ import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import { verticalScale } from '../../../utils/scale';
-import { TEXT_EMPTY_CAR_LIST } from '../../constants';
+import { TEXT_EMPTY_CAR_LIST, BUTTON_EMPTY_CAR_FIND } from '../../constants';
 
 const FOOTER_HEIGHT = 50;
 const styles = StyleSheet.create({
@@ -357,10 +357,10 @@ class NewCarFilterScreen extends Component {
       );
     }
 
-    const minPrice = get(items, 'prices.min') || get(filterData, 'prices.min');
-    const maxPrice = get(items, 'prices.max') || get(filterData, 'prices.max');
     const minPriceByFilter = get(filterPrice, 'minPrice');
     const step = get(items, 'prices.step') || get(filterData, 'prices.step');
+    const minPrice = Math.floor(get(items, 'prices.min') || get(filterData, 'prices.min') / step) * step;
+    const maxPrice = Math.ceil(get(items, 'prices.max') || get(filterData, 'prices.max') / step) * step;
     const currency = get(filterData, 'prices.curr.name');
     const count = this.getCount();
 
@@ -552,7 +552,7 @@ class NewCarFilterScreen extends Component {
                             </Text>
                                 :
                             <Text style={styles.buttonText}>
-                                {`НЕТ АВТО В НАЛИЧИИ`}
+                                {BUTTON_EMPTY_CAR_FIND}
                             </Text>
                         )}
                         {(count ?
