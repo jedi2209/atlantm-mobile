@@ -140,6 +140,7 @@ export default class ProfileForm extends PureComponent {
     const { cars } = this.props;
 
     return cars.map((car, idx, carArray) => {
+      if (car.hidden) { return false; }
       return (
         <View key={`${car.brand}${idx}`} style={stylesList.listItemContainer}>
           <ListItem onPress={() => this.onPressCar(car)} last={(carArray.length - 1) === idx} style={[stylesList.listItem]} >
