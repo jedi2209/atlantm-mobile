@@ -5,8 +5,16 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "iphonex": "react-native run-ios --simulator=\"iPhone X\"",
+    "ios-build": "cd ios && bundle exec fastlane beta",
+    "ios-release": "cd ios && bundle exec fastlane beta",
+    "android": "adb uninstall com.atlantm; react-native run-android",
+    "android-test": "cd android && bundle exec fastlane test && open app/build/outputs/apk",
+    "android-build": "cd android && bundle exec fastlane internal",
+    "android-release": "cd android && bundle exec fastlane beta",
+    "reinstall": "./reinstall.sh",
     "test": "jest",
-    "clean": "rm -rf $TMPDIR/react-*; rm -rf $TMPDIR/haste-*; rm -rf $TMPDIR/metro-*; watchman watch-del-all"
+    "clean": "rm -rf $TMPDIR/react-*; rm -rf $TMPDIR/haste-*; rm -rf $TMPDIR/metro-*; watchman watch-del-all; rm -rf ios/build/; rm -rf android/build/; rm -rf ios/rbtse.xcodeproj/xcuserdata/",
+    "version": "./version.sh"
   },
   "dependencies": {
     "lodash": "4.17.4",
