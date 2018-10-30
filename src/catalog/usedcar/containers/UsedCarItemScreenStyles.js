@@ -1,6 +1,9 @@
 import { StyleSheet } from 'react-native';
-import styleConst from '../../../core/style-const';
-import { verticalScale } from '../../../utils/scale';
+
+// helpers
+import styleConst from '@core/style-const';
+import { verticalScale } from '@utils/scale';
+import isIPhoneX from '@utils/is_iphone_x';
 
 export default StyleSheet.create({
   safearea: {
@@ -97,7 +100,7 @@ export default StyleSheet.create({
     color: styleConst.color.red,
   },
   footer: {
-    height: styleConst.ui.footerHeight,
+    height: isIPhoneX() ? styleConst.ui.footerHeightIphone : styleConst.ui.footerHeightAndroid,
     backgroundColor: '#fff',
   },
   segment: {

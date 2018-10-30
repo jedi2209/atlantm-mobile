@@ -35,23 +35,24 @@ import {
 } from '../../actions';
 
 // components
-import EmptyMessage from '../../../core/components/EmptyMessage';
+import EmptyMessage from '@core/components/EmptyMessage';
 import CityItemList from '../components/CityItemList';
-import PricePicker from '../../../core/components/PricePicker';
-import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
-import ListItemHeader from '../../../profile/components/ListItemHeader';
+import PricePicker from '@core/components/PricePicker';
+import HeaderIconMenu from '@core/components/HeaderIconMenu/HeaderIconMenu';
+import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
+import ListItemHeader from '@profile/components/ListItemHeader';
 
 // styles
-import stylesList from '../../../core/components/Lists/style';
+import stylesList from '@core/components/Lists/style';
 
 // helpers
-import Amplitude from '../../../utils/amplitude-analytics';
+import isIPhoneX from '@utils/is_iphone_x';
+import Amplitude from '@utils/amplitude-analytics';
 import { get, find } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
-import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
-import { verticalScale } from '../../../utils/scale';
+import styleConst from '@core/style-const';
+import stylesHeader from '@core/components/Header/style';
+import { verticalScale } from '@utils/scale';
 import { TEXT_EMPTY_CAR_LIST, BUTTON_EMPTY_CAR_FIND } from '../../constants';
 
 const FOOTER_HEIGHT = 50;
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   footer: {
-    height: FOOTER_HEIGHT,
+    height: isIPhoneX() ? styleConst.ui.footerHeightIphone : styleConst.ui.footerHeightAndroid,
   },
   body: {
     flex: 1.5,
