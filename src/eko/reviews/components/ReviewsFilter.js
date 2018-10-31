@@ -6,13 +6,14 @@ import { Footer } from 'native-base';
 
 // helpers
 import PropTypes from 'prop-types';
-import styleConst from '../../../core/style-const';
+import styleConst from '@core/style-const';
+import isIPhoneX from '@utils/is_iphone_x';
 
 const size = 26;
 const containerSize = 45;
 const styles = StyleSheet.create({
   footer: {
-    height: 45,
+    height: isIPhoneX() ? styleConst.ui.footerHeightIphone : styleConst.ui.footerHeightAndroid,
     backgroundColor: styleConst.color.header,
   },
   container: {
