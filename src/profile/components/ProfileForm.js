@@ -3,7 +3,6 @@ import { Text, View, StyleSheet, Platform, Alert, Linking } from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import FCM from 'react-native-fcm';
 import { ListItem, Body, Item, Label, Input, Right, Switch, Icon } from 'native-base';
 import ListItemHeader from '../components/ListItemHeader';
 import PushNotifications from '../../core/components/PushNotifications';
@@ -219,7 +218,6 @@ export default class ProfileForm extends PureComponent {
   onSwitchActionSubscribe = (isSubscribe) => {
     const {
       dealerSelected,
-
       fcmToken,
       actionSetFCMToken,
       actionSetPushGranted,
@@ -238,37 +236,39 @@ export default class ProfileForm extends PureComponent {
       }
     };
 
-    FCM.requestPermissions({ badge: true, sound: true, alert: true })
-      .then(() => {
-        if (!fcmToken) {
-          FCM.getFCMToken().then((token) => {
-            actionSetFCMToken(token || null);
-            actionSetPushGranted(true);
-            topicSetSubscribe();
-          });
-        } else {
-          topicSetSubscribe();
-        }
-      })
-      .catch(() => {
-        if (Platform.OS === 'ios') {
-          setTimeout(() => {
-            return Alert.alert(
-              'Уведомления выключены',
-              'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
-              [
-                { text: 'Ок', style: 'cancel' },
-                {
-                  text: 'Настройки',
-                  onPress() {
-                    Linking.openURL('app-settings://notification/com.atlant-m');
-                  },
-                },
-              ],
-            );
-          }, 100);
-        }
-      });
+    topicSetSubscribe();
+
+      // firebase.messaging().requestPermission({ badge: true, sound: true, alert: true })
+      // .then(() => {
+      //   if (!fcmToken) {
+      //       firebase.messaging().getToken().then((token) => {
+      //       actionSetFCMToken(token || null);
+      //       actionSetPushGranted(true);
+      //       topicSetSubscribe();
+      //     });
+      //   } else {
+      //     topicSetSubscribe();
+      //   }
+      // })
+      // .catch(() => {
+      //   if (Platform.OS === 'ios') {
+      //     setTimeout(() => {
+      //       return Alert.alert(
+      //         'Уведомления выключены',
+      //         'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
+      //         [
+      //           { text: 'Ок', style: 'cancel' },
+      //           {
+      //             text: 'Настройки',
+      //             onPress() {
+      //               Linking.openURL('app-settings://notification/com.atlant-m');
+      //             },
+      //           },
+      //         ],
+      //       );
+      //     }, 100);
+      //   }
+      // });
   }
 
   render() {
