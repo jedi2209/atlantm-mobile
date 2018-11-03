@@ -166,10 +166,10 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-onesignal')
+//    implementation "com.google.android.gms:play-services-base:15.0.1"
+
     implementation project(':react-native-sentry')
-    implementation project(':react-native-fcm')
-//    implementation 'com.google.firebase:firebase-core'
-//    implementation 'com.google.firebase:firebase-messaging'
     implementation "com.amplitude:android-sdk:2.19.1"
     implementation project(':react-native-amplitude-analytics')
     implementation project(':rn-fetch-blob')
@@ -192,3 +192,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
 }
 
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
