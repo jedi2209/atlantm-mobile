@@ -2,25 +2,6 @@ PODS:
   - Amplitude-iOS (4.3.1)
   - boost-for-react-native (1.63.0)
   - DoubleConversion (1.1.6)
-  - Firebase/CoreOnly (5.11.0):
-    - FirebaseCore (= 5.1.6)
-  - Firebase/Messaging (5.11.0):
-    - Firebase/CoreOnly
-    - FirebaseMessaging (= 3.2.1)
-  - FirebaseAnalyticsInterop (1.1.0)
-  - FirebaseCore (5.1.6):
-    - GoogleUtilities/Logger (~> 5.2)
-  - FirebaseInstanceID (3.3.0):
-    - FirebaseCore (~> 5.1)
-    - GoogleUtilities/Environment (~> 5.3)
-    - GoogleUtilities/UserDefaults (~> 5.3)
-  - FirebaseMessaging (3.2.1):
-    - FirebaseAnalyticsInterop (~> 1.1)
-    - FirebaseCore (~> 5.1)
-    - FirebaseInstanceID (~> 3.0)
-    - GoogleUtilities/Environment (~> 5.2)
-    - GoogleUtilities/Reachability (~> 5.2)
-    - Protobuf (~> 3.1)
   - Folly (2016.10.31.00):
     - boost-for-react-native
     - DoubleConversion
@@ -47,28 +28,21 @@ PODS:
   - GoogleMaps/Base (2.5.0)
   - GoogleMaps/Maps (2.5.0):
     - GoogleMaps/Base
-  - GoogleUtilities/Environment (5.3.4)
-  - GoogleUtilities/Logger (5.3.4):
-    - GoogleUtilities/Environment
-  - GoogleUtilities/Reachability (5.3.4):
-    - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (5.3.4):
-    - GoogleUtilities/Logger
-  - Protobuf (3.6.1)
+  - OneSignal (2.8.8)
   - QBImagePickerController (3.4.0)
   - React (0.57.2):
     - React/Core (= 0.57.2)
   - react-native-amplitude-analytics (0.2.3):
     - Amplitude-iOS (~> 4.3.1)
     - React
-  - react-native-fcm (16.2.3):
-    - Firebase/Messaging
-    - React
   - react-native-google-maps (0.21.0):
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 2.5.0)
     - React
   - react-native-maps (0.21.0):
+    - React
+  - react-native-onesignal (3.2.7):
+    - OneSignal (= 2.8.8)
     - React
   - React/Core (0.57.2):
     - yoga (= 0.57.2.React)
@@ -139,10 +113,11 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - Google-Maps-iOS-Utils
   - GoogleMaps
+  - OneSignal (< 3.0, >= 2.6.2)
   - react-native-amplitude-analytics (from `../node_modules/react-native-amplitude-analytics`)
-  - react-native-fcm (from `../node_modules/react-native-fcm`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
+  - react-native-onesignal (from `../node_modules/react-native-onesignal/react-native-onesignal.podspec`)
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
@@ -166,15 +141,9 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Amplitude-iOS
     - boost-for-react-native
-    - Firebase
-    - FirebaseAnalyticsInterop
-    - FirebaseCore
-    - FirebaseInstanceID
-    - FirebaseMessaging
     - Google-Maps-iOS-Utils
     - GoogleMaps
-    - GoogleUtilities
-    - Protobuf
+    - OneSignal
     - QBImagePickerController
     - RSKImageCropper
     - Sentry
@@ -190,12 +159,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   react-native-amplitude-analytics:
     :path: "../node_modules/react-native-amplitude-analytics"
-  react-native-fcm:
-    :path: "../node_modules/react-native-fcm"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-onesignal:
+    :path: "../node_modules/react-native-onesignal/react-native-onesignal.podspec"
   rn-fetch-blob:
     :path: "../node_modules/rn-fetch-blob"
   RNDeviceInfo:
@@ -211,23 +180,17 @@ SPEC CHECKSUMS:
   Amplitude-iOS: df355e2be58972041acde9576a2ae97c217bf941
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
-  Firebase: b48f9e653da971ecce5b8c749684bc8bb2d26bd3
-  FirebaseAnalyticsInterop: e5f21be9af6548372e2f0815834ff909bff395a2
-  FirebaseCore: d16552f06821489ce1affe2e5e3e5593402ddfe3
-  FirebaseInstanceID: e2fa4cb35ef5558c200f7f0ad8a53e212215f93e
-  FirebaseMessaging: 0f14a264b0d7f867e8eff5d3556bc5d0d4e57888
   Folly: c89ac2d5c6ab169cd7397ef27485c44f35f742c7
   glog: e8acf0ebbf99759d3ff18c86c292a5898282dcde
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
-  GoogleUtilities: abb092d2c12e817fa3e0e7b274987dd72fb86ec3
-  Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
+  OneSignal: 7d2571e9fce1d961b882e1bd9f1f242802e9c8b1
   QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
   react-native-amplitude-analytics: f72b7f6fe8f85ccd66ccb67bbd8595e44609ff41
-  react-native-fcm: 7de3ba1108aba709c3d2b4237594554eb5f6f026
   react-native-google-maps: 2cfe3b01f8422c7dae51d8764139fd70f888cfce
   react-native-maps: 066c2afcc89e18726377bcc685315f989ca22449
+  react-native-onesignal: f4300ef8272ef1d8d81b00f0207335f305bcaadb
   rn-fetch-blob: 76a8f798dae965bbcd146a2438f2e1d381c91ae3
   RNDeviceInfo: 568c5641057313b4912d08a7742ff0b2f753ed5c
   RNImageCropPicker: 32ca4b9fef4e1b7b85ba69494242122948117e06
@@ -236,6 +199,6 @@ SPEC CHECKSUMS:
   SentryReactNative: d476259b21060a59dc637a29a40d60f0aac09cf7
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 347122a9f761aa10b02f2d694c937f590ba246c5
+PODFILE CHECKSUM: b689e91bd64ceab3312f3c34329af41867ac55ee
 
 COCOAPODS: 1.6.0.beta.1
