@@ -59,13 +59,9 @@ class ChooseDealerScreen extends Component {
 
     if (pushGranted) {
       actionSetPushActionSubscribe(true);
-
-      if (prevDealer) {
-        PushNotification.unsubscribeFromTopic({ id: prevDealer.id });
-      }
-
-      PushNotification.subscribeToTopic({ id: newDealer.id });
     }
+
+      PushNotification.addTag('dealer', newDealer.id);
   }
 
   render() {
