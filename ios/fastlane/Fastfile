@@ -16,13 +16,32 @@
 default_platform(:ios)
 
 platform :ios do
+  desc "Prepare the iOS app for dev or build"
+  lane :prepare do
+    produce(
+        app_identifier: "com.atlant-m.OneSignalNotificationServiceExtension",
+        app_name: "atlant-m OneSignalNotificationServiceExtension",
+        skip_itc: true
+    )
+  end
+
   desc "Push a new beta build to TestFlight"
   lane :beta do
     ensure_git_status_clean
     get_certificates           # invokes cert
     get_provisioning_profile   # invokes sigh
     increment_build_number(xcodeproj: "atlantm.xcodeproj")
-    build_app(workspace: "atlantm.xcworkspace", scheme: "atlantm")
+    build_app(
+	workspace: "atlantm.xcworkspace", 
+	scheme: "atlantm", 
+	export_method: "app-store",
+	export_options: {
+     		provisioningProfiles: { 
+        		"com.atlant-m" => "com.atlant-m AppStore",
+        		"com.atlant-m.OneSignalNotificationServiceExtension" => "XC com atlant-m OneSignalNotificationService"
+      		}
+    	}
+    )
     upload_to_testflight(skip_waiting_for_build_processing: true, skip_submission: true)
     commit_version_bump(xcodeproj: "atlantm.xcodeproj")
     add_git_tag
