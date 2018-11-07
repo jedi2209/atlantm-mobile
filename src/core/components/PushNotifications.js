@@ -1,4 +1,4 @@
-import { Platform, PermissionsAndroid } from 'react-native';
+import { Platform, PermissionsAndroid, Alert, Linking } from 'react-native';
 
 import { NavigationActions } from 'react-navigation';
 import OneSignal from 'react-native-onesignal';
@@ -36,6 +36,8 @@ export default {
             }
             console.log('Received permission subscription state: ', response);
         });
+
+        // OneSignal.checkPermissions(permissions => console.log(permissions));
 
         OneSignal.addEventListener('received', this.onReceived);
         OneSignal.addEventListener('opened', this.onOpened);
@@ -108,18 +110,20 @@ export default {
     subscribeToTopic({ id }) {
         const topic = `actions_${id}`;
         console.log('subscribeToTopic', topic);
+        OneSignal.setSubscription(true);
         OneSignal.sendTag("topic", topic);
     },
 
     unsubscribeFromTopic({ id }) {
         const topic = `actions_${id}`;
         console.log('unsubscribeFromTopic', topic);
+        OneSignal.setSubscription(false);
         OneSignal.deleteTag("topic");
     },
 
     checkPermission() {
 
-        async function requestNotificationsPermission() {
+        async function requestNotificationsAndroidPermission() {
             try {
                 const granted = await PermissionsAndroid.request(
                     PermissionsAndroid.PERMISSIONS.NOTIFICATIONS,
@@ -142,7 +146,6 @@ export default {
         // Check push notification and OneSignal subscription statuses
         OneSignal.getPermissionSubscriptionState((status) => {
             if (status.notificationsEnabled === true) {
-                console.log('notificationsEnabled', status.notificationsEnabled);
                 //onPushPermissionGranted();
                 //actionSetPushGranted(true);
                 return true;
@@ -169,7 +172,7 @@ export default {
                         break;
 
                     case 'android':
-                        requestNotificationsPermission();
+                        requestNotificationsAndroidPermission();
                     break;
                 }
             }

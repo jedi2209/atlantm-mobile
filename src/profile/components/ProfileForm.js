@@ -229,6 +229,8 @@ export default class ProfileForm extends PureComponent {
     const topicSetSubscribe = () => {
       actionSetPushActionSubscribe(isSubscribe);
 
+      PushNotifications.checkPermission();
+
       if (isSubscribe) {
         PushNotifications.subscribeToTopic({ id });
       } else {

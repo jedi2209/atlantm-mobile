@@ -20,7 +20,6 @@ import { carNumberFill } from '../../profile/actions';
 import { actionSetFCMToken, actionSetPushGranted } from '../../core/actions';
 
 // components
-import FCM from 'react-native-fcm';
 
 import Spinner from 'react-native-loading-spinner-overlay';
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
@@ -195,41 +194,41 @@ class TvaScreen extends Component {
     );
   }
 
-  onPressPushTracking = (isPushTracking) => {
-    const { fcmToken, actionSetFCMToken, actionSetPushTracking, actionSetPushGranted } = this.props;
-
-    FCM.requestPermissions({ badge: true, sound: true, alert: true })
-      .then(() => {
-        if (!fcmToken) {
-          FCM.getFCMToken().then(token => {
-            actionSetFCMToken(token || null);
-            actionSetPushGranted(true);
-            actionSetPushTracking(isPushTracking);
-          });
-        } else {
-          actionSetPushTracking(isPushTracking);
-        }
-      })
-      .catch(() => {
-        if (Platform.OS === 'ios') {
-          setTimeout(() => {
-            return Alert.alert(
-              'Уведомления выключены',
-              'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
-              [
-                { text: 'Ок', style: 'cancel' },
-                {
-                  text: 'Настройки',
-                  onPress() {
-                    Linking.openURL('app-settings://notification/com.atlant-m');
-                  },
-                },
-              ],
-            );
-          }, 100);
-        }
-      });
-  }
+  // onPressPushTracking = (isPushTracking) => {
+  //   const { fcmToken, actionSetFCMToken, actionSetPushTracking, actionSetPushGranted } = this.props;
+  //
+  //     firebase.messaging().requestPermission({ badge: true, sound: true, alert: true })
+  //     .then(() => {
+  //       if (!fcmToken) {
+  //           firebase.messaging().getToken().then(token => {
+  //           actionSetFCMToken(token || null);
+  //           actionSetPushGranted(true);
+  //           actionSetPushTracking(isPushTracking);
+  //         });
+  //       } else {
+  //         actionSetPushTracking(isPushTracking);
+  //       }
+  //     })
+  //     .catch(() => {
+  //       if (Platform.OS === 'ios') {
+  //         setTimeout(() => {
+  //           return Alert.alert(
+  //             'Уведомления выключены',
+  //             'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
+  //             [
+  //               { text: 'Ок', style: 'cancel' },
+  //               {
+  //                 text: 'Настройки',
+  //                 onPress() {
+  //                   Linking.openURL('app-settings://notification/com.atlant-m');
+  //                 },
+  //               },
+  //             ],
+  //           );
+  //         }, 100);
+  //       }
+  //     });
+  // }
 
   render() {
     // Для iPad меню, которое находится вне роутера
