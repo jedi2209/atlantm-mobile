@@ -52,7 +52,10 @@ export default class HeaderIconBack extends Component {
   onPressBack = () => {
     const { returnScreen, navigation } = this.props;
 
-    if (returnScreen === MENU_SCREEN_NAME) this.onPressBackHome();
+    if (returnScreen === MENU_SCREEN_NAME) {
+      this.onPressBackHome();
+      return false;
+    }
 
     returnScreen ? navigation.navigate(returnScreen) : navigation.goBack();
   }

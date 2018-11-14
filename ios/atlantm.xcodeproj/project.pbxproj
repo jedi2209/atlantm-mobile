@@ -56,6 +56,7 @@
 		A059A23A2D10461980EA6437 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0D59D1467AF648D3BC97CAD4 /* MaterialIcons.ttf */; };
 		A302FFC5D29F4D4C8597AD1E /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9DEF8EC7BD314F7EBD98DFF2 /* Foundation.ttf */; };
 		A3705E44C9884A96A1FB1F4B /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 913463CF44464AC9BAACFC5B /* libz.tbd */; };
+		A8DB5528E13547DC8406F2B2 /* libRNRate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B108CF1261264DC1B29C0A0C /* libRNRate.a */; };
 		AA44330AA07B40D0AC524B4D /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 71134CF65CB7447A8395412E /* Entypo.ttf */; };
 		AB5D7677D812EDC27C7C84DD /* libPods-atlantm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 654774F3CADF3F5218A60E65 /* libPods-atlantm.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
@@ -219,6 +220,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 3A05CE52218D10E70033E7C3;
 			remoteInfo = OneSignalNotificationServiceExtension;
+		};
+		3AC73B8C219CCFCB00EC619A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42C78C57666D4CA3B8E9B2F3 /* RNRate.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNRate;
 		};
 		3DAD3E831DF850E9000B6D8A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -402,6 +410,7 @@
 		3A05CE93218D128E0033E7C3 /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		3A05CE94218D142D0033E7C3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		3A05CE96218D14340033E7C3 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		42C78C57666D4CA3B8E9B2F3 /* RNRate.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNRate.xcodeproj; path = "../node_modules/react-native-rate/ios/RNRate.xcodeproj"; sourceTree = "<group>"; };
 		4B774C897BA74E09BD3754F7 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		4F8601EB216C1DC30062BA84 /* atlantm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = atlantm.entitlements; path = atlantm/atlantm.entitlements; sourceTree = "<group>"; };
 		4F8AB05B216BE1F2002DCDBA /* Default-568h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h.png"; sourceTree = "<group>"; };
@@ -421,6 +430,7 @@
 		ACA484A2F3C744948834F790 /* Demo-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = "Demo-tvOSTests.xctest"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		AEB72ED91DF76272D6FBA569 /* Pods-atlantm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm.debug.xcconfig"; path = "Pods/Target Support Files/Pods-atlantm/Pods-atlantm.debug.xcconfig"; sourceTree = "<group>"; };
+		B108CF1261264DC1B29C0A0C /* libRNRate.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNRate.a; sourceTree = "<group>"; };
 		BBCFB27CF0A54BD49FF385E5 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		D487596235D4478EB3EDBEFB /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/native-base/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		D66D51EC00C842ABD54F3523 /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -462,6 +472,7 @@
 				26F96977CB624CEC98A244DA /* libSplashScreen.a in Frameworks */,
 				AB5D7677D812EDC27C7C84DD /* libPods-atlantm.a in Frameworks */,
 				A3705E44C9884A96A1FB1F4B /* libz.tbd in Frameworks */,
+				A8DB5528E13547DC8406F2B2 /* libRNRate.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -645,6 +656,14 @@
 			path = OneSignalNotificationServiceExtension;
 			sourceTree = "<group>";
 		};
+		3AC73B89219CCFCB00EC619A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3AC73B8D219CCFCB00EC619A /* libRNRate.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		4F8AAF49216BCB6E002DCDBA /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -661,6 +680,7 @@
 				6259AFDCCAA54598B88E8AB3 /* Demo-tvOS.app */,
 				ACA484A2F3C744948834F790 /* Demo-tvOSTests.xctest */,
 				E04191B7E894490B803B5AB4 /* libSplashScreen.a */,
+				B108CF1261264DC1B29C0A0C /* libRNRate.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -720,6 +740,7 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				2A00A97E4AA244BF839AE085 /* SplashScreen.xcodeproj */,
+				42C78C57666D4CA3B8E9B2F3 /* RNRate.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -993,6 +1014,10 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
+					ProductGroup = 3AC73B89219CCFCB00EC619A /* Products */;
+					ProjectRef = 42C78C57666D4CA3B8E9B2F3 /* RNRate.xcodeproj */;
+				},
+				{
 					ProductGroup = 4F8AAF49216BCB6E002DCDBA /* Products */;
 					ProjectRef = 2A00A97E4AA244BF839AE085 /* SplashScreen.xcodeproj */;
 				},
@@ -1140,6 +1165,13 @@
 			fileType = archive.ar;
 			path = "libprivatedata-tvOS.a";
 			remoteRef = 2DF0FFEC2056DD460020B375 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		3AC73B8D219CCFCB00EC619A /* libRNRate.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNRate.a;
+			remoteRef = 3AC73B8C219CCFCB00EC619A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		3DAD3E841DF850E9000B6D8A /* libRCTImage-tvOS.a */ = {
@@ -1510,12 +1542,14 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-image-gallery/Demo/ios/Demo",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
+					"$(SRCROOT)/../node_modules/react-native-rate/ios",
 				);
 				INFOPLIST_FILE = atlantmTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1542,12 +1576,14 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-image-gallery/Demo/ios/Demo",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
+					"$(SRCROOT)/../node_modules/react-native-rate/ios",
 				);
 				INFOPLIST_FILE = atlantmTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1580,6 +1616,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-image-gallery/Demo/ios/Demo",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
+					"$(SRCROOT)/../node_modules/react-native-rate/ios",
 				);
 				INFOPLIST_FILE = atlantm/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1610,6 +1647,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-image-gallery/Demo/ios/Demo",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
+					"$(SRCROOT)/../node_modules/react-native-rate/ios",
 				);
 				INFOPLIST_FILE = atlantm/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1642,11 +1680,13 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-image-gallery/Demo/ios/Demo",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
+					"$(SRCROOT)/../node_modules/react-native-rate/ios",
 				);
 				INFOPLIST_FILE = "atlantm-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1682,11 +1722,13 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-image-gallery/Demo/ios/Demo",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
+					"$(SRCROOT)/../node_modules/react-native-rate/ios",
 				);
 				INFOPLIST_FILE = "atlantm-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1721,11 +1763,13 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-image-gallery/Demo/ios/Demo",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
+					"$(SRCROOT)/../node_modules/react-native-rate/ios",
 				);
 				INFOPLIST_FILE = "atlantm-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1760,11 +1804,13 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-image-gallery/Demo/ios/Demo",
 					"$(SRCROOT)/../node_modules/react-native-splash-screen/ios",
+					"$(SRCROOT)/../node_modules/react-native-rate/ios",
 				);
 				INFOPLIST_FILE = "atlantm-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1825,6 +1871,10 @@
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.atlant-m.OneSignalNotificationServiceExtension";
@@ -1877,6 +1927,10 @@
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.atlant-m.OneSignalNotificationServiceExtension";
 				PRODUCT_NAME = "$(TARGET_NAME)";

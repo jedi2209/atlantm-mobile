@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Container, Text, Grid, Col, Row } from 'native-base';
 
+// redux
+import { connect } from 'react-redux';
+import { actionMenuOpenedCount } from '../../core/actions';
+
 // components
 import HeaderLogo from '../../core/components/HeaderLogo/HeaderLogo';
 
@@ -9,6 +13,7 @@ import HeaderLogo from '../../core/components/HeaderLogo/HeaderLogo';
 import styleConst from '../../core/style-const';
 import { scale, verticalScale } from '../../utils/scale';
 import stylesHeader from '../../core/components/Header/style';
+import RateThisApp from "../../core/components/RateThisApp";
 
 const styles = StyleSheet.create({
   container: {
@@ -41,15 +46,48 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class MenuScreen extends Component {
+const mapStateToProps = ({ core }) => {
+    return {
+        menuOpenedCount: core.menuOpenedCount
+    };
+};
+
+const mapDispatchToProps = {
+    actionMenuOpenedCount,
+};
+
+class MenuScreen extends Component {
   static navigationOptions = () => ({
     headerTitle: <HeaderLogo />,
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: null,
-  })
+  });
 
-  shouldComponentUpdate() { return false; }
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isShowRateApp: false,
+    }
+  }
+
+  UNSAFE_componentWillMount() {
+    this.props.actionMenuOpenedCount();
+  }
+
+  componentDidMount() { }
+
+  shouldComponentUpdate(nextProps, nextState) {
+      console.log('this.props.menuOpenedCount', this.props.menuOpenedCount);
+     if (nextProps.menuOpenedCount > 15 && this.state.isShowRateApp != true) {
+         setTimeout(() => {
+             this.setState({isShowRateApp: true});
+         }, 1000);
+         return true;
+     }
+     return false;
+ }
 
   onPressContacts = () => this.props.navigation.navigate('ContactsScreen')
   onPressInfoList = () => this.props.navigation.navigate('InfoListScreen')
@@ -68,6 +106,7 @@ export default class MenuScreen extends Component {
 
     return (
       <Container style={styles.container}>
+        {this.state.isShowRateApp ? <RateThisApp/> : null}
         <Grid style={styles.menu} >
           <Row>
             <Col>
@@ -178,3 +217,5 @@ export default class MenuScreen extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(MenuScreen);

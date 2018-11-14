@@ -15,6 +15,7 @@ import {
 // helpers
 import { get } from 'lodash';
 import PushNotification from '../components/PushNotifications';
+import RateThisApp from '../components/RateThisApp';
 
 // components
 import Sidebar from '../../menu/containers/Sidebar';

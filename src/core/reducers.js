@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
+import { REHYDRATE } from 'redux-persist';
+import { get } from 'lodash';
 import dealer from '../dealer/reducers';
 import nav from '../navigation/reducers';
 import tva from '../tva/reducers';
@@ -12,10 +14,11 @@ import catalog from '../catalog/reducers';
 import indicators from '../indicators/reducers';
 
 import {
-  APP_FCM_TOKEN__SET,
-  APP_PUSH_GRANTED__SET,
-  APP_PREVIOUS_FCM_TOKEN__SET,
-  APP_PUSH_ACTION_SUBSCRIBE__SET,
+    APP_FCM_TOKEN__SET,
+    APP_PUSH_GRANTED__SET,
+    APP_PREVIOUS_FCM_TOKEN__SET,
+    APP_PUSH_ACTION_SUBSCRIBE__SET,
+    APP_MENU_OPENED_COUNTER,
 } from './actionTypes';
 
 import { DEALER__SUCCESS } from '../dealer/actionTypes';
@@ -56,11 +59,23 @@ const pushActionSubscribe = (state = false, action) => {
   }
 };
 
+const menuOpenedCount = (state = 0, action) => {
+    switch (action.type) {
+        case REHYDRATE:
+            return get(action.payload, 'core.menuOpenedCount', '');
+        case APP_MENU_OPENED_COUNTER:
+            return ++state;
+        default:
+            return state;
+    }
+};
+
 const coreReducer = combineReducers({
   fcmToken,
   previousFcmToken,
   pushGranted,
   pushActionSubscribe,
+  menuOpenedCount,
 });
 
 const rootReducer = combineReducers({
