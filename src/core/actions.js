@@ -5,6 +5,7 @@ import {
   APP_PUSH_GRANTED__SET,
   APP_PREVIOUS_FCM_TOKEN__SET,
   APP_PUSH_ACTION_SUBSCRIBE__SET,
+  APP_MENU_OPENED_COUNTER
 } from './actionTypes';
 
 export const actionSetFCMToken = token => {
@@ -34,6 +35,14 @@ export const actionSetPushGranted = isGranted => {
       payload: isGranted,
     });
   };
+};
+
+export const actionMenuOpenedCount = isGranted => {
+    return dispatch => {
+        dispatch({
+            type: APP_MENU_OPENED_COUNTER
+        });
+    };
 };
 
 export const actionSetPushActionSubscribe = isSubscribe => {

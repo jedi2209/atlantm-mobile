@@ -34,6 +34,7 @@
     "react-native-loading-spinner-overlay": "0.5.2",
     "react-native-maps": "0.21.0",
     "react-native-onesignal": "^3.2.8",
+    "react-native-rate": "^1.1.6",
     "react-native-sentry": "0.39.1",
     "react-native-splash-screen": "3.1.1",
     "react-native-swiper": "1.5.13",
