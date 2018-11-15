@@ -16,12 +16,12 @@ export default class RateThisApp extends React.Component {
             GooglePackageName: "com.atlantm",
             preferredAndroidMarket: AndroidMarket.Google,
             preferInApp: true,
-            openAppStoreIfInAppFails: true,
+            openAppStoreIfInAppFails: false,
         };
         Rate.rate(options, success => {
             if (success) {
                 // this technically only tells us if the user successfully went to the Review Page. Whether they actually did anything, we do not know.
-                this.setState({rated: true})
+                this.setState({rated: true});
             }
         });
     }

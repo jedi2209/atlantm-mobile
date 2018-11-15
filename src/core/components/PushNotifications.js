@@ -97,8 +97,8 @@ export default {
     },
 
     addTag(name, value) {
-        console.log('addTag', name);
-        console.log('addTag', value);
+        console.log('addTag name:', name);
+        console.log('addTag value:', value);
         OneSignal.sendTag(name, value.toString());
     },
 
@@ -107,18 +107,20 @@ export default {
         OneSignal.deleteTag(name);
     },
 
-    subscribeToTopic({ id }) {
-        const topic = `actions_${id}`;
+    subscribeToTopic({ topic, id }) {
         console.log('subscribeToTopic', topic);
+        OneSignal.deleteTag('topic'); // TODO: убрать после выпуска билда
         OneSignal.setSubscription(true);
-        OneSignal.sendTag("topic", topic);
+        OneSignal.deleteTag(topic);
+        OneSignal.sendTag(topic, id);
     },
 
-    unsubscribeFromTopic({ id }) {
-        const topic = `actions_${id}`;
+    unsubscribeFromTopic({ topic }) {
+//        const topic = `${id}`;
         console.log('unsubscribeFromTopic', topic);
         OneSignal.setSubscription(false);
-        OneSignal.deleteTag("topic");
+        OneSignal.deleteTag('topic'); // TODO: убрать после выпуска билда
+        OneSignal.deleteTag(topic);
     },
 
     checkPermission() {

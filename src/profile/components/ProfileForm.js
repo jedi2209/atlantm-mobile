@@ -232,9 +232,9 @@ export default class ProfileForm extends PureComponent {
       PushNotifications.checkPermission();
 
       if (isSubscribe) {
-        PushNotifications.subscribeToTopic({ id });
+        PushNotifications.subscribeToTopic('actions', id);
       } else {
-        PushNotifications.unsubscribeFromTopic({ id });
+        PushNotifications.unsubscribeFromTopic('actions');
       }
     };
 

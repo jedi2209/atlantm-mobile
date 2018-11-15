@@ -82,16 +82,16 @@ class App extends Component {
     // автоцентр выбран
     if (id) {
       pushActionSubscribe ?
-        PushNotification.subscribeToTopic({ id }) :
-        PushNotification.unsubscribeFromTopic({ id });
+        PushNotification.subscribeToTopic('dealer', id) :
+        PushNotification.unsubscribeFromTopic('dealer');
     }
   }
 
   shouldComponentUpdate() { return false; }
 
   componentWillUnmount() {
-    PushNotification.notificationListener.remove();
-    PushNotification.refreshTokenListener.remove();
+    // PushNotification.notificationListener.remove();
+    // PushNotification.refreshTokenListener.remove();
   }
 
   onPushPermissionGranted = () => {
