@@ -74,7 +74,7 @@ export default class Wrapper extends Component {
     storage: AsyncStorage,
     blacklist: ['form', 'nav'],
     keyPrefix: 'atlantm',
-  }, () => this.setState({ rehydrated: true }))
+  }, () => this.setState({ rehydrated: true }));
 
   shouldComponentUpdate(nextProps, nextState) {
     return this.state.rehydrated !== nextState.rehydrated;
