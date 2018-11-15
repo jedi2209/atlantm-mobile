@@ -84,6 +84,7 @@ class MenuScreen extends Component {
          setTimeout(() => {
              this.setState({isShowRateApp: true});
          }, 1000);
+         this.props.actionMenuOpenedCount(0);
          return true;
      }
      return false;
