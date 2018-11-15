@@ -37,10 +37,11 @@ export const actionSetPushGranted = isGranted => {
   };
 };
 
-export const actionMenuOpenedCount = isGranted => {
+export const actionMenuOpenedCount = reset => {
     return dispatch => {
         dispatch({
-            type: APP_MENU_OPENED_COUNTER
+            type: APP_MENU_OPENED_COUNTER,
+            payload: reset,
         });
     };
 };

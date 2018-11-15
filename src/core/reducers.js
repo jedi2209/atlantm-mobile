@@ -64,6 +64,9 @@ const menuOpenedCount = (state = 0, action) => {
         case REHYDRATE:
             return get(action.payload, 'core.menuOpenedCount', '');
         case APP_MENU_OPENED_COUNTER:
+            if (action.payload === 0) {
+                return 0;
+            }
             return ++state;
         default:
             return state;
