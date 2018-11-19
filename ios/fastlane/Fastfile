@@ -42,9 +42,14 @@ platform :ios do
       		}
     	}
     )
-    upload_to_testflight(skip_waiting_for_build_processing: true, skip_submission: true)
-    commit_version_bump(xcodeproj: "atlantm.xcodeproj")
+    upload_to_testflight(
+        skip_waiting_for_build_processing: true,
+        skip_submission: true
+    )
+    commit_version_bump(
+        xcodeproj: "atlantm.xcodeproj"
+    )
     add_git_tag
-    push_to_git_remote
+#    push_to_git_remote
   end
 end
