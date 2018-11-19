@@ -56,7 +56,7 @@ export default class Wrapper extends Component {
     this.defaultHandler = ErrorUtils.getGlobalHandler();
     ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
 
-    this.getPersistStore().purge();
+    // this.getPersistStore().purge();
     this.getPersistStore();
   }
 
