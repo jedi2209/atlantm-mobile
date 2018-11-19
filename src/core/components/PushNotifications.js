@@ -107,15 +107,16 @@ export default {
         OneSignal.deleteTag(name);
     },
 
-    subscribeToTopic({ topic, id }) {
+    subscribeToTopic( topic, id ) {
         console.log('subscribeToTopic', topic);
+        console.log('subscribeToTopicValue', id);
         OneSignal.deleteTag('topic'); // TODO: убрать после выпуска билда
         OneSignal.setSubscription(true);
         OneSignal.deleteTag(topic);
-        OneSignal.sendTag(topic, id);
+        OneSignal.sendTag(topic, id.toString());
     },
 
-    unsubscribeFromTopic({ topic }) {
+    unsubscribeFromTopic( topic ) {
 //        const topic = `${id}`;
         console.log('unsubscribeFromTopic', topic);
         OneSignal.setSubscription(false);

@@ -4,7 +4,7 @@ import { Container, Text, Grid, Col, Row } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
-import { actionMenuOpenedCount } from '../../core/actions';
+import { actionMenuOpenedCount, actionAppRated, actionAppRateAskLater } from '../../core/actions';
 
 // components
 import HeaderLogo from '../../core/components/HeaderLogo/HeaderLogo';
@@ -48,12 +48,16 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ core }) => {
     return {
-        menuOpenedCount: core.menuOpenedCount
+        menuOpenedCount: core.menuOpenedCount,
+        isAppRated: core.isAppRated,
+        AppRateAskLater: core.AppRateAskLater
     };
 };
 
 const mapDispatchToProps = {
     actionMenuOpenedCount,
+    actionAppRated,
+    actionAppRateAskLater
 };
 
 class MenuScreen extends Component {
@@ -64,40 +68,35 @@ class MenuScreen extends Component {
     headerLeft: null,
   });
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isShowRateApp: false,
+  UNSAFE_componentWillMount() {
+    if (this.props.menuOpenedCount < 10) {
+        this.props.actionMenuOpenedCount();
+    }
+    if (this.props.AppRateAskLater) {
+        const right_now = new Date();
+        console.log('this.props.AppRateAskLater.getTime()', this.props.AppRateAskLater.getTime());
+        console.log('right_now.now()', right_now.now());
     }
   }
 
-  UNSAFE_componentWillMount() {
-    this.props.actionMenuOpenedCount();
-  }
+  // componentDidMount() {
+  //     this.props.actionMenuOpenedCount(0);
+  // }
 
-  componentDidMount() { }
-
-  shouldComponentUpdate(nextProps, nextState) {
-      console.log('this.props.menuOpenedCount', this.props.menuOpenedCount);
-     if (nextProps.menuOpenedCount > 15 && this.state.isShowRateApp != true) {
-         setTimeout(() => {
-             this.setState({isShowRateApp: true});
-         }, 1000);
-         this.props.actionMenuOpenedCount(0);
-         return true;
-     }
-     return false;
+  shouldComponentUpdate(nextProps) {
+    return this.props.isAppRated !== nextProps.isAppRated;
  }
 
-  onPressContacts = () => this.props.navigation.navigate('ContactsScreen')
-  onPressInfoList = () => this.props.navigation.navigate('InfoListScreen')
-  onPressProfile = () => this.props.navigation.navigate('Profile2Screen')
-  onPressService = () => this.props.navigation.navigate('ServiceScreen')
-  onPressCatalog = () => this.props.navigation.navigate('Catalog2Screen')
-  onPressTva = () => this.props.navigation.navigate('Tva2Screen')
-  onPressEko = () => this.props.navigation.navigate('Eko2Screen')
-  onPressIndicators = () => this.props.navigation.navigate('IndicatorsScreen')
+  onPressContacts = () => this.props.navigation.navigate('ContactsScreen');
+  onPressInfoList = () => this.props.navigation.navigate('InfoListScreen');
+  onPressProfile = () => this.props.navigation.navigate('Profile2Screen');
+  onPressService = () => this.props.navigation.navigate('ServiceScreen');
+  onPressCatalog = () => this.props.navigation.navigate('Catalog2Screen');
+  onPressTva = () => this.props.navigation.navigate('Tva2Screen');
+  onPressEko = () => this.props.navigation.navigate('Eko2Screen');
+  onPressIndicators = () => this.props.navigation.navigate('IndicatorsScreen');
+  onAppRateSuccess = () => { !this.props.isAppRated && this.props.actionAppRated(); };
+  onAppRateAskLater = () => { !this.props.isAppRated && this.props.actionAppRateAskLater(); };
 
   render() {
     // Для iPad меню, которое находится вне роутера
@@ -107,7 +106,10 @@ class MenuScreen extends Component {
 
     return (
       <Container style={styles.container}>
-        {this.state.isShowRateApp ? <RateThisApp/> : null}
+        {this.props.isAppRated !== true && this.props.menuOpenedCount === 10 ?
+            <RateThisApp onSuccess={this.onAppRateSuccess} onAskLater={this.onAppRateAskLater} /> :
+            null
+        }
         <Grid style={styles.menu} >
           <Row>
             <Col>

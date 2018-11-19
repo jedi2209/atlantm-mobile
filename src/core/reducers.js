@@ -19,6 +19,8 @@ import {
     APP_PREVIOUS_FCM_TOKEN__SET,
     APP_PUSH_ACTION_SUBSCRIBE__SET,
     APP_MENU_OPENED_COUNTER,
+    APP_ACTION_RATED,
+    APP_ACTION_RATE_ASK_LATER
 } from './actionTypes';
 
 import { DEALER__SUCCESS } from '../dealer/actionTypes';
@@ -73,12 +75,38 @@ const menuOpenedCount = (state = 0, action) => {
     }
 };
 
+const isAppRated = (state = false, action) => {
+    switch (action.type) {
+        case REHYDRATE:
+            return get(action.payload, 'core.isAppRated', '');
+        case APP_ACTION_RATED:
+            return true;
+        default:
+            return state;
+    }
+};
+
+const AppRateAskLater = (state = false, action) => {
+    switch (action.type) {
+        case REHYDRATE:
+            return get(action.payload, 'core.AppRateAskLater', '');
+        case APP_ACTION_RATE_ASK_LATER:
+            var currentTime = new Date();
+            currentTime.setDate(currentTime.getDate()+14);
+            return currentTime;
+        default:
+            return false;
+    }
+};
+
 const coreReducer = combineReducers({
   fcmToken,
   previousFcmToken,
   pushGranted,
   pushActionSubscribe,
   menuOpenedCount,
+  isAppRated,
+  AppRateAskLater
 });
 
 const rootReducer = combineReducers({
