@@ -62,6 +62,7 @@ class ChooseDealerScreen extends Component {
     }
 
       PushNotification.addTag('dealer', newDealer.id);
+      PushNotification.addTag('actions', newDealer.id);
   }
 
   render() {

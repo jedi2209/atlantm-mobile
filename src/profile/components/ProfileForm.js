@@ -233,8 +233,10 @@ export default class ProfileForm extends PureComponent {
 
       if (isSubscribe) {
         PushNotifications.subscribeToTopic('actions', id);
+          actionSetPushActionSubscribe(true);
       } else {
         PushNotifications.unsubscribeFromTopic('actions');
+        actionSetPushActionSubscribe(false);
       }
     };
 
