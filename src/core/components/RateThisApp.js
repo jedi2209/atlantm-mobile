@@ -9,7 +9,7 @@ export default class RateThisApp extends React.Component {
             'Нравится Атлант-М?',
             'Расскажите миру об удобстве пользования этим приложением!',
             [
-                // {text: 'Позже', onPress: () => {this.props.onAskLater && this.props.onAskLater()}, style: 'cancel'},
+                {text: 'Позже', onPress: () => {this.props.onAskLater && this.props.onAskLater()}, style: 'cancel'},
                 {text: 'Не напоминать', onPress: () => {this.props.onSuccess && this.props.onSuccess()}, style: 'cancel'},
                 {text: 'Оценить', onPress: () => {
                     let options = {
@@ -21,14 +21,19 @@ export default class RateThisApp extends React.Component {
                     };
 
                     Rate.rate(options, success => {
+                        console.log('Rate success', success);
                         if (success) {
+                            console.log('Rate this.props.onSuccess', this.props.onSuccess);
                             this.props.onSuccess && this.props.onSuccess();
+                        } else {
+                            console.log('Rate this.props.onAskLater', this.props.onAskLater);
+                            this.props.onAskLater && this.props.onAskLater();
                         }
                     });
                 }},
             ],
             { cancelable: false }
-        )
+        );
 
         return null;
     }
