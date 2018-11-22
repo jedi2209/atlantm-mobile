@@ -49,7 +49,7 @@ platform :ios do
     commit_version_bump(
         xcodeproj: "atlantm.xcodeproj"
     )
-    add_git_tag
+#    add_git_tag
 #    push_to_git_remote
   end
 end
