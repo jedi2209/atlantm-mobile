@@ -6,8 +6,7 @@ import {
   APP_PREVIOUS_FCM_TOKEN__SET,
   APP_PUSH_ACTION_SUBSCRIBE__SET,
   APP_MENU_OPENED_COUNTER,
-  APP_ACTION_RATED,
-  APP_ACTION_RATE_ASK_LATER
+  APP_ACTION_RATED
 } from './actionTypes';
 
 export const actionSetFCMToken = token => {
@@ -52,14 +51,6 @@ export const actionAppRated = () => {
     return dispatch => {
         dispatch({
             type: APP_ACTION_RATED
-        });
-    };
-};
-
-export const actionAppRateAskLater = () => {
-    return dispatch => {
-        dispatch({
-            type: APP_ACTION_RATE_ASK_LATER
         });
     };
 };

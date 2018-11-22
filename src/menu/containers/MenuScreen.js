@@ -50,7 +50,8 @@ const mapStateToProps = ({ core }) => {
     return {
         menuOpenedCount: core.menuOpenedCount,
         isAppRated: core.isAppRated,
-        AppRateAskLater: core.AppRateAskLater
+        AppRateAskLater: core.AppRateAskLater,
+        MenuCounterLimit: 2
     };
 };
 
@@ -69,13 +70,9 @@ class MenuScreen extends Component {
   });
 
   UNSAFE_componentWillMount() {
-    if (this.props.menuOpenedCount < 10) {
+    console.log('this.props.menuOpenedCount', this.props.menuOpenedCount);
+    if (this.props.menuOpenedCount < this.props.MenuCounterLimit) {
         this.props.actionMenuOpenedCount();
-    }
-    if (this.props.AppRateAskLater) {
-        const right_now = new Date();
-        console.log('this.props.AppRateAskLater.getTime()', this.props.AppRateAskLater.getTime());
-        console.log('right_now.now()', right_now.now());
     }
   }
 
@@ -96,7 +93,7 @@ class MenuScreen extends Component {
   onPressEko = () => this.props.navigation.navigate('Eko2Screen');
   onPressIndicators = () => this.props.navigation.navigate('IndicatorsScreen');
   onAppRateSuccess = () => { !this.props.isAppRated && this.props.actionAppRated(); };
-  onAppRateAskLater = () => { !this.props.isAppRated && this.props.actionAppRateAskLater(); };
+  onAppRateAskLater = () => { !this.props.isAppRated && this.props.actionMenuOpenedCount(0); };
 
   render() {
     // Для iPad меню, которое находится вне роутера
@@ -106,7 +103,7 @@ class MenuScreen extends Component {
 
     return (
       <Container style={styles.container}>
-        {this.props.isAppRated !== true && this.props.menuOpenedCount === 10 ?
+        {this.props.isAppRated !== true && this.props.menuOpenedCount === this.props.MenuCounterLimit ?
             <RateThisApp onSuccess={this.onAppRateSuccess} onAskLater={this.onAppRateAskLater} /> :
             null
         }
