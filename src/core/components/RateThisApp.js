@@ -17,7 +17,7 @@ export default class RateThisApp extends React.Component {
                         GooglePackageName: "com.atlantm",
                         preferredAndroidMarket: AndroidMarket.Google,
                         preferInApp: true,
-                        openAppStoreIfInAppFails: false,
+                        openAppStoreIfInAppFails: true,
                     };
 
                     Rate.rate(options, success => {
