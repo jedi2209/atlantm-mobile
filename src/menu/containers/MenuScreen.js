@@ -51,7 +51,7 @@ const mapStateToProps = ({ core }) => {
         menuOpenedCount: core.menuOpenedCount,
         isAppRated: core.isAppRated,
         AppRateAskLater: core.AppRateAskLater,
-        MenuCounterLimit: 2
+        MenuCounterLimit: 10 // счётчик открытия меню, после которого показывается предложение об оценке
     };
 };
 
