@@ -112,49 +112,26 @@ export default {
         console.log('subscribeToTopicValue', id);
         OneSignal.deleteTag('topic'); // TODO: убрать после выпуска билда
         OneSignal.setSubscription(true);
-        OneSignal.deleteTag(topic);
+//        OneSignal.deleteTag(topic);
         OneSignal.sendTag(topic, id.toString());
     },
 
     unsubscribeFromTopic( topic ) {
 //        const topic = `${id}`;
         console.log('unsubscribeFromTopic', topic);
-        OneSignal.setSubscription(false);
+//        OneSignal.setSubscription(false);
         OneSignal.deleteTag('topic'); // TODO: убрать после выпуска билда
         OneSignal.deleteTag(topic);
     },
 
     checkPermission() {
-
-        async function requestNotificationsAndroidPermission() {
-            try {
-                const granted = await PermissionsAndroid.request(
-                    PermissionsAndroid.PERMISSIONS.NOTIFICATIONS,
-                    {
-                        'title': 'Cool Push Permission',
-                        'message': 'Cool Push needs access to your push-service ' +
-                        'so you can take awesome pictures.'
-                    }
-                );
-                if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                    console.log("You can use the camera");
-                } else {
-                    console.log("Camera permission denied")
-                }
-            } catch (err) {
-                console.warn(err)
-            }
-        }
-
         // Check push notification and OneSignal subscription statuses
         OneSignal.getPermissionSubscriptionState((status) => {
-            if (status.notificationsEnabled === true) {
-                //onPushPermissionGranted();
-                //actionSetPushGranted(true);
+            if (status.notificationsEnabled === 'true') {
+                actionSetPushGranted(true);
                 return true;
             } else {
-                //actionSetPushGranted(false);
-                //onPushPermissionRejected();
+                actionSetPushGranted(false);
                 switch (Platform.OS) {
                     case 'ios':
                         setTimeout(() => {
@@ -173,11 +150,8 @@ export default {
                             );
                         }, 100);
                         break;
-
-                    case 'android':
-                        requestNotificationsAndroidPermission();
-                    break;
                 }
+                return false;
             }
         });
     },
