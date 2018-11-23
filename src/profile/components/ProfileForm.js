@@ -213,7 +213,7 @@ export default class ProfileForm extends PureComponent {
         </ListItem>
       </View>
     );
-  }
+  };
 
   onSwitchActionSubscribe = (isSubscribe) => {
     const {
@@ -233,7 +233,7 @@ export default class ProfileForm extends PureComponent {
 
       if (isSubscribe) {
         PushNotifications.subscribeToTopic('actions', id);
-          actionSetPushActionSubscribe(true);
+        actionSetPushActionSubscribe(true);
       } else {
         PushNotifications.unsubscribeFromTopic('actions');
         actionSetPushActionSubscribe(false);
