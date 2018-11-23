@@ -6,11 +6,9 @@ export default class RateThisApp extends React.Component {
 
     render() {
         Alert.alert(
-            'Нравится Атлант-М?',
-            'Расскажите миру об удобстве пользования этим приложением!',
+            'Нравится приложение?',
+            'Расскажите миру о вашем опыте и оставьте свой отзыв!',
             [
-                {text: 'Позже', onPress: () => {this.props.onAskLater && this.props.onAskLater()}, style: 'cancel'},
-                {text: 'Не напоминать', onPress: () => {this.props.onSuccess && this.props.onSuccess()}, style: 'cancel'},
                 {text: 'Оценить', onPress: () => {
                     let options = {
                         AppleAppID: "515931794",
@@ -18,6 +16,7 @@ export default class RateThisApp extends React.Component {
                         preferredAndroidMarket: AndroidMarket.Google,
                         preferInApp: true,
                         openAppStoreIfInAppFails: true,
+                        inAppDelay: 2.0,
                     };
 
                     Rate.rate(options, success => {
@@ -31,6 +30,8 @@ export default class RateThisApp extends React.Component {
                         }
                     });
                 }},
+                {text: 'Не сейчас', onPress: () => {this.props.onAskLater && this.props.onAskLater()}, style: 'cancel'},
+                {text: 'Нет, спасибо', onPress: () => {this.props.onSuccess && this.props.onSuccess()}, style: 'cancel'},
             ],
             { cancelable: false }
         );
