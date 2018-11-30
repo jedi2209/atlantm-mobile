@@ -166,6 +166,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-image-crop-picker')
     compile project(':react-native-onesignal')
 //    implementation "com.google.android.gms:play-services-base:15.0.1"
 
@@ -173,7 +174,6 @@ dependencies {
     implementation "com.amplitude:android-sdk:2.19.1"
     implementation project(':react-native-amplitude-analytics')
     implementation project(':rn-fetch-blob')
-    implementation project(':react-native-image-crop-picker')
     implementation project(':react-native-device-info')
 
     implementation project(':react-native-maps')
