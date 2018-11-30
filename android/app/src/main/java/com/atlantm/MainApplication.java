@@ -3,6 +3,7 @@ package com.atlantm;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.sentry.RNSentryPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import io.sentry.RNSentryPackage;
@@ -31,9 +32,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
               new MainReactPackage(),
+              new RNSentryPackage(),
               new PickerPackage(),
               new ReactNativeOneSignalPackage(),
-              new RNSentryPackage(),
               new RNAmplitudeSDKPackage(MainApplication.this),
               new RNFetchBlobPackage(),
               new RNDeviceInfo(),
