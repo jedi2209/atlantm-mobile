@@ -3,11 +3,11 @@ package com.atlantm;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import io.sentry.RNSentryPackage;
 import com.sudoplz.reactnativeamplitudeanalytics.RNAmplitudeSDKPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
-import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.airbnb.android.react.maps.MapsPackage;
@@ -31,11 +31,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
               new MainReactPackage(),
+              new PickerPackage(),
               new ReactNativeOneSignalPackage(),
               new RNSentryPackage(),
               new RNAmplitudeSDKPackage(MainApplication.this),
               new RNFetchBlobPackage(),
-              new PickerPackage(),
               new RNDeviceInfo(),
               new MapsPackage(),
               new SplashScreenReactPackage()
