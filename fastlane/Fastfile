@@ -23,10 +23,10 @@ platform :ios do
     get_certificates           # invokes cert
     get_provisioning_profile   # invokes sigh
     increment_build_number(
-        xcodeproj: "atlantm.xcodeproj"
+        xcodeproj: "ios/atlantm.xcodeproj"
     )
     build_app(
-	workspace: "atlantm.xcworkspace",
+	workspace: "ios/atlantm.xcworkspace",
 	scheme: "atlantm",
 	export_method: "app-store",
 	export_options: {
