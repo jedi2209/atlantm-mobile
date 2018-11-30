@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   icon: {
-    marginTop: 10,
+    marginTop: 4,
     fontSize: size,
     color: styleConst.color.systemBlue,
 
