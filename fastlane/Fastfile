@@ -98,7 +98,6 @@ platform :android do
     )
     add_git_tag(
         grouping: "builds",
-        lane: "android",
         prefix: "v"
     )
 #    push_to_git_remote
