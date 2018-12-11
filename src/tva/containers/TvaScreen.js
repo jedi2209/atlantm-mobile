@@ -17,7 +17,7 @@ import {
 import { connect } from 'react-redux';
 import { actionFetchTva, actionSetPushTracking } from '../actions';
 import { carNumberFill } from '../../profile/actions';
-import { actionSetFCMToken, actionSetPushGranted } from '../../core/actions';
+//import { actionSetPushGranted } from '../../core/actions';
 
 // components
 
@@ -27,6 +27,7 @@ import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack'
 import ListItemHeader from '../../profile/components/ListItemHeader';
 import DealerItemList from '../../core/components/DealerItemList';
 import FooterButton from '../../core/components/FooterButton';
+import PushNotifications from '../../core/components/PushNotifications';
 
 // styles
 import stylesList from '../../core/components/Lists/style';
@@ -52,7 +53,7 @@ const mapStateToProps = ({ dealer, nav, tva, profile, core }) => {
     pushTracking: tva.pushTracking,
     isTvaRequest: tva.meta.isRequest,
     dealerSelected: dealer.selected,
-    fcmToken: core.fcmToken,
+//    fcmToken: core.fcmToken,
     pushGranted: core.pushGranted,
   };
 };
@@ -61,8 +62,8 @@ const mapDispatchToProps = {
   carNumberFill,
   actionFetchTva,
   actionSetPushTracking,
-  actionSetFCMToken,
-  actionSetPushGranted,
+//  actionSetFCMToken,
+//  actionSetPushGranted,
 };
 
 class TvaScreen extends Component {
@@ -111,8 +112,8 @@ class TvaScreen extends Component {
     let {
       carNumber,
       navigation,
-      fcmToken,
-      pushGranted,
+//      fcmToken,
+//      pushGranted,
       pushTracking,
       dealerSelected,
       actionFetchTva,
@@ -138,15 +139,27 @@ class TvaScreen extends Component {
       number: carNumber,
       dealer: dealerId,
       region: pushProps ? null : dealerSelected.region,
-      fcmToken,
+//      fcmToken,
       pushTracking,
     }).then(action => {
+      PushNotifications.addTag('dealer', dealerId);
       if (action.type === TVA__SUCCESS) {
-        setTimeout(() => navigation.navigate('TvaResultsScreen'), 200);
+        setTimeout(() => {
+            if (pushTracking === true) {
+                PushNotifications.subscribeToTopic('tva', carNumber);
+            }
+          navigation.navigate('TvaResultsScreen'), 200
+        });
       }
 
       if (action.type === TVA__FAIL) {
-        setTimeout(() => Alert.alert('', `${action.payload.message}. Возможно вы указали неправильный номер или автоцентр`), 100);
+        setTimeout(() => {
+            if (pushTracking === true) {
+                PushNotifications.unsubscribeFromTopic('tva');
+                this.onPressPushTracking(false);
+            }
+          Alert.alert('', `${action.payload.message}. Возможно вы указали неправильный номер или автоцентр`), 100
+        });
       }
     });
   }
@@ -192,43 +205,20 @@ class TvaScreen extends Component {
 
       </View>
     );
-  }
+  };
 
-  // onPressPushTracking = (isPushTracking) => {
-  //   const { fcmToken, actionSetFCMToken, actionSetPushTracking, actionSetPushGranted } = this.props;
-  //
-  //     firebase.messaging().requestPermission({ badge: true, sound: true, alert: true })
-  //     .then(() => {
-  //       if (!fcmToken) {
-  //           firebase.messaging().getToken().then(token => {
-  //           actionSetFCMToken(token || null);
-  //           actionSetPushGranted(true);
-  //           actionSetPushTracking(isPushTracking);
-  //         });
-  //       } else {
-  //         actionSetPushTracking(isPushTracking);
-  //       }
-  //     })
-  //     .catch(() => {
-  //       if (Platform.OS === 'ios') {
-  //         setTimeout(() => {
-  //           return Alert.alert(
-  //             'Уведомления выключены',
-  //             'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
-  //             [
-  //               { text: 'Ок', style: 'cancel' },
-  //               {
-  //                 text: 'Настройки',
-  //                 onPress() {
-  //                   Linking.openURL('app-settings://notification/com.atlant-m');
-  //                 },
-  //               },
-  //             ],
-  //           );
-  //         }, 100);
-  //       }
-  //     });
-  // }
+  onPressPushTracking = (isPushTracking) => {
+    const { actionSetPushTracking, carNumber } = this.props;
+      if (isPushTracking === true) {
+          PushNotifications.subscribeToTopic('tva', carNumber)
+              .then(isPushTracking => {
+                  actionSetPushTracking(isPushTracking);
+              });
+      } else {
+          PushNotifications.unsubscribeFromTopic('tva');
+          actionSetPushTracking(isPushTracking);
+      }
+  };
 
   render() {
     // Для iPad меню, которое находится вне роутера

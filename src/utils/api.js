@@ -40,8 +40,8 @@ export default {
     return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
   },
 
-  fetchTva({ dealer, region, number, fcmToken, pushTracking }) {
-    const url = `/tva/get/?number=${number}&region=${region}&dealer=${dealer}&token=${fcmToken}&notify=${pushTracking}&platform=${isAndroid ? 1 : 2}`;
+  fetchTva({ dealer, region, number, pushTracking }) {
+    const url = `/tva/get/?number=${number}&region=${region}&dealer=${dealer}&notify=${pushTracking}&platform=${isAndroid ? 1 : 2}`;
 
     __DEV__ && console.log('API fetchTva url', url);
 

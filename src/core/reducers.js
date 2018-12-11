@@ -14,9 +14,9 @@ import catalog from '../catalog/reducers';
 import indicators from '../indicators/reducers';
 
 import {
-    APP_FCM_TOKEN__SET,
-    APP_PUSH_GRANTED__SET,
-    APP_PREVIOUS_FCM_TOKEN__SET,
+//    APP_FCM_TOKEN__SET,
+//    APP_PUSH_GRANTED__SET,
+//    APP_PREVIOUS_FCM_TOKEN__SET,
     APP_PUSH_ACTION_SUBSCRIBE__SET,
     APP_MENU_OPENED_COUNTER,
     APP_ACTION_RATED
@@ -24,34 +24,35 @@ import {
 
 import { DEALER__SUCCESS } from '../dealer/actionTypes';
 
-const fcmToken = (state = null, action) => {
-  switch (action.type) {
-    case APP_FCM_TOKEN__SET:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const previousFcmToken = (state = null, action) => {
-  switch (action.type) {
-    case APP_PREVIOUS_FCM_TOKEN__SET:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const pushGranted = (state = false, action) => {
-  switch (action.type) {
-    case APP_PUSH_GRANTED__SET:
-      return action.payload;
-    default:
-      return state;
-  }
-};
+// const fcmToken = (state = null, action) => {
+//   switch (action.type) {
+//     case APP_FCM_TOKEN__SET:
+//       return action.payload;
+//     default:
+//       return state;
+//   }
+// };
+//
+// const previousFcmToken = (state = null, action) => {
+//   switch (action.type) {
+//     case APP_PREVIOUS_FCM_TOKEN__SET:
+//       return action.payload;
+//     default:
+//       return state;
+//   }
+// };
+//
+// const pushGranted = (state = false, action) => {
+//   switch (action.type) {
+//     case APP_PUSH_GRANTED__SET:
+//       return action.payload;
+//     default:
+//       return state;
+//   }
+// };
 
 const pushActionSubscribe = (state = false, action) => {
+    console.log('pushActionSubscribe', action);
   switch (action.type) {
     case APP_PUSH_ACTION_SUBSCRIBE__SET:
       return action.payload;
@@ -86,9 +87,9 @@ const isAppRated = (state = false, action) => {
 };
 
 const coreReducer = combineReducers({
-  fcmToken,
-  previousFcmToken,
-  pushGranted,
+//  fcmToken,
+//  previousFcmToken,
+//  pushGranted,
   pushActionSubscribe,
   menuOpenedCount,
   isAppRated
