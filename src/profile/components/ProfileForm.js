@@ -88,12 +88,12 @@ export default class ProfileForm extends PureComponent {
     carNumberFill: PropTypes.func,
     carSection: PropTypes.bool,
 
-    fcmToken: PropTypes.string,
+//    fcmToken: PropTypes.string,
     pushActionSubscribe: PropTypes.bool,
-    actionSetFCMToken: PropTypes.func,
-    actionSetPushGranted: PropTypes.func,
+//    actionSetFCMToken: PropTypes.func,
+//    actionSetPushGranted: PropTypes.func,
     actionSetPushActionSubscribe: PropTypes.func,
-  }
+  };
 
   static defaultProps = {
     auth: {},
@@ -106,7 +106,7 @@ export default class ProfileForm extends PureComponent {
     cars: [],
     view: 'default',
     carSection: false,
-  }
+  };
 
   onChangeName = value => this.props.nameFill(value)
   onChangePhone = value => this.props.phoneFill(value)
@@ -125,7 +125,7 @@ export default class ProfileForm extends PureComponent {
     }
 
     return title;
-  }
+  };
 
   onPressCar = car => {
     if (get(car, 'vin')) {
@@ -194,7 +194,7 @@ export default class ProfileForm extends PureComponent {
         </ListItem>
       </View>
     );
-  }
+  };
 
   renderListSwitcher = (onSwitch, value) => {
     return (
@@ -215,65 +215,26 @@ export default class ProfileForm extends PureComponent {
     );
   };
 
-  onSwitchActionSubscribe = (isSubscribe) => {
+  onSwitchActionSubscribe = isSubscribe => {
     const {
       dealerSelected,
-      fcmToken,
-      actionSetFCMToken,
-      actionSetPushGranted,
-      actionSetPushActionSubscribe,
+      actionSetPushActionSubscribe
     } = this.props;
 
     const id = dealerSelected.id;
 
-    const topicSetSubscribe = () => {
-      actionSetPushActionSubscribe(isSubscribe);
+    PushNotifications.subscribeToTopic('dealer', id);
 
-      PushNotifications.checkPermission();
-
-      if (isSubscribe) {
-        PushNotifications.subscribeToTopic('actions', id);
-        actionSetPushActionSubscribe(true);
-      } else {
+    if (isSubscribe) {
+        PushNotifications.subscribeToTopic('actions', id)
+            .then(isPermission => {
+                actionSetPushActionSubscribe(isPermission);
+            });
+    } else {
         PushNotifications.unsubscribeFromTopic('actions');
         actionSetPushActionSubscribe(false);
-      }
-    };
-
-    topicSetSubscribe();
-
-      // firebase.messaging().requestPermission({ badge: true, sound: true, alert: true })
-      // .then(() => {
-      //   if (!fcmToken) {
-      //       firebase.messaging().getToken().then((token) => {
-      //       actionSetFCMToken(token || null);
-      //       actionSetPushGranted(true);
-      //       topicSetSubscribe();
-      //     });
-      //   } else {
-      //     topicSetSubscribe();
-      //   }
-      // })
-      // .catch(() => {
-      //   if (Platform.OS === 'ios') {
-      //     setTimeout(() => {
-      //       return Alert.alert(
-      //         'Уведомления выключены',
-      //         'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
-      //         [
-      //           { text: 'Ок', style: 'cancel' },
-      //           {
-      //             text: 'Настройки',
-      //             onPress() {
-      //               Linking.openURL('app-settings://notification/com.atlant-m');
-      //             },
-      //           },
-      //         ],
-      //       );
-      //     }, 100);
-      //   }
-      // });
-  }
+    }
+  };
 
   render() {
     const {

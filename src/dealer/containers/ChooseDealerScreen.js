@@ -56,11 +56,12 @@ class ChooseDealerScreen extends Component {
   }
 
   onSelectDealer = ({ prevDealer, newDealer }) => {
-    const { actionSetPushActionSubscribe, pushGranted, pushActionSubscribe } = this.props;
+    const { actionSetPushActionSubscribe, pushActionSubscribe } = this.props;
       if (pushActionSubscribe) {
           actionSetPushActionSubscribe(true);
-          PushNotification.addTag('actions', newDealer.id);
+          PushNotification.subscribeToTopic('actions', newDealer.id);
       } else {
+          PushNotification.unsubscribeFromTopic('actions');
           actionSetPushActionSubscribe(false);
       }
 

@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 import { store } from '../store';
 import { navigationChange } from '../../navigation/actions';
 import {
-  actionSetFCMToken,
-  actionSetPushGranted,
-  actionSetPreviousFCMToken,
+//  actionSetFCMToken,
+//  actionSetPushGranted,
+//  actionSetPreviousFCMToken,
   actionSetPushActionSubscribe,
 } from '../actions';
 
@@ -26,7 +26,7 @@ import getRouter from '../router';
 
 const mapStateToProps = ({ core, dealer, profile }) => {
   return {
-    fcmToken: core.fcmToken,
+//    fcmToken: core.fcmToken,
     pushActionSubscribe: core.pushActionSubscribe,
     dealerSelected: dealer.selected,
     auth: profile.auth,
@@ -35,9 +35,9 @@ const mapStateToProps = ({ core, dealer, profile }) => {
 
 const mapDispatchToProps = {
   navigationChange,
-  actionSetFCMToken,
-  actionSetPushGranted,
-  actionSetPreviousFCMToken,
+//  actionSetFCMToken,
+//  actionSetPushGranted,
+//  actionSetPreviousFCMToken,
   actionSetPushActionSubscribe,
 };
 
@@ -56,11 +56,11 @@ class App extends Component {
   componentDidMount() {
     const {
       auth,
-      fcmToken,
-      actionSetFCMToken,
+//      fcmToken,
+//      actionSetFCMToken,
       dealerSelected,
       pushActionSubscribe,
-      actionSetPreviousFCMToken,
+//      actionSetPreviousFCMToken,
     } = this.props;
 
     if (get(auth, 'login') === 'zteam') {
@@ -69,11 +69,11 @@ class App extends Component {
 
     setTimeout(() => {
       PushNotification.init({
-        fcmToken,
-        actionSetFCMToken,
-        actionSetPreviousFCMToken,
-        onPushPermissionGranted: this.onPushPermissionGranted,
-        onPushPermissionRejected: this.onPushPermissionRejected,
+//        fcmToken,
+//        actionSetFCMToken,
+//        actionSetPreviousFCMToken,
+//        onPushPermissionGranted: this.onPushPermissionGranted,
+//        onPushPermissionRejected: this.onPushPermissionRejected,
       });
     }, 1000);
 
@@ -94,14 +94,14 @@ class App extends Component {
     // PushNotification.refreshTokenListener.remove();
   }
 
-  onPushPermissionGranted = () => {
-    this.props.actionSetPushGranted(true);
-  }
-  onPushPermissionRejected = () => {
-    const { actionSetPushActionSubscribe, actionSetPushGranted } = this.props;
-    actionSetPushActionSubscribe(false);
-    this.props.actionSetPushGranted(false);
-  }
+  // onPushPermissionGranted = () => {
+  //   this.props.actionSetPushGranted(true);
+  // }
+  // onPushPermissionRejected = () => {
+  //   const { actionSetPushActionSubscribe, actionSetPushGranted } = this.props;
+  //   actionSetPushActionSubscribe(false);
+  //   this.props.actionSetPushGranted(false);
+  // }
 
   onNavigationStateChange = (prevState, newState) => {
     this.props.navigationChange({ prevState, newState });

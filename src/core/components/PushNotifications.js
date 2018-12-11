@@ -4,38 +4,34 @@ import { NavigationActions } from 'react-navigation';
 import OneSignal from 'react-native-onesignal';
 
 import { get } from 'lodash';
-import {actionSetPushGranted} from "../actions";
+// import { actionSetPushGranted } from "../actions";
 
 const isAndroid = Platform.OS === 'android';
 
 export default {
-    init({
-    fcmToken,
-    actionSetFCMToken,
-    onPushPermissionGranted,
-    onPushPermissionRejected,
-    actionSetPreviousFCMToken,
-  }){
+    init(core) {
         OneSignal.init('2094a3e1-3c9a-479d-90ae-93adfcd15dab', {
             kOSSettingsKeyAutoPrompt: true,
             kOSSettingsKeyInFocusDisplayOption: 2
         });
+
+        console.log('core', core);
 
         OneSignal.setLogLevel(6, 0);
         OneSignal.setSubscription(true);
         OneSignal.enableSound(true);
         OneSignal.enableVibrate(true);
 
-        OneSignal.getPermissionSubscriptionState((response) => {
-            if (response.notificationsEnabled === true) {
-                onPushPermissionGranted();
-                actionSetPushGranted(true);
-            } else {
-                onPushPermissionRejected();
-                actionSetPushGranted(false);
-            }
-            console.log('Received permission subscription state: ', response);
-        });
+        // OneSignal.getPermissionSubscriptionState((response) => {
+        //     if (response.notificationsEnabled === true) {
+        //         onPushPermissionGranted();
+        //         actionSetPushGranted(true);
+        //     } else {
+        //         onPushPermissionRejected();
+        //         actionSetPushGranted(false);
+        //     }
+        //     console.log('Received permission subscription state: ', response);
+        // });
 
         // OneSignal.checkPermissions(permissions => console.log(permissions));
 
@@ -108,51 +104,51 @@ export default {
     },
 
     subscribeToTopic( topic, id ) {
-        console.log('subscribeToTopic', topic);
-        console.log('subscribeToTopicValue', id);
-        OneSignal.deleteTag('topic'); // TODO: убрать после выпуска билда
-        OneSignal.setSubscription(true);
-//        OneSignal.deleteTag(topic);
-        OneSignal.sendTag(topic, id.toString());
+        return this.checkPermission()
+            .then(isPermission => {
+                if (isPermission) {
+                    OneSignal.setSubscription(true);
+                    OneSignal.sendTag(topic, id.toString());
+                }
+                return isPermission;
+            });
     },
 
     unsubscribeFromTopic( topic ) {
-//        const topic = `${id}`;
-        console.log('unsubscribeFromTopic', topic);
-//        OneSignal.setSubscription(false);
         OneSignal.deleteTag('topic'); // TODO: убрать после выпуска билда
         OneSignal.deleteTag(topic);
     },
 
     checkPermission() {
-        // Check push notification and OneSignal subscription statuses
-        OneSignal.getPermissionSubscriptionState((status) => {
-            if (status.notificationsEnabled === 'true') {
-                actionSetPushGranted(true);
-                return true;
-            } else {
-                actionSetPushGranted(false);
-                switch (Platform.OS) {
-                    case 'ios':
-                        setTimeout(() => {
-                            return Alert.alert(
-                                'Уведомления выключены',
-                                'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
-                                [
-                                    {text: 'Ок', style: 'cancel'},
-                                    {
-                                        text: 'Настройки',
-                                        onPress() {
-                                            Linking.openURL('app-settings://notification/com.atlant-m');
+        return new Promise(function(resolve, reject) {
+            // Check push notification and OneSignal subscription statuses
+            OneSignal.getPermissionSubscriptionState((status) => {
+                if (status.notificationsEnabled === true) {
+                    return resolve(true);
+                } else {
+                    switch (Platform.OS) {
+                        case 'ios':
+                            setTimeout(() => {
+                                return Alert.alert(
+                                    'Уведомления выключены',
+                                    'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
+                                    [
+                                        {
+                                            text: 'Разрешить',
+                                            onPress() {
+                                                Linking.openURL('app-settings://notification/com.atlant-m');
+                                            },
+                                            style: 'cancel'
                                         },
-                                    },
-                                ],
-                            );
-                        }, 100);
-                        break;
+                                        {text: 'Позже', style: 'destructive'},
+                                    ],
+                                );
+                            }, 100);
+                            break;
+                    }
+                    return resolve(false);
                 }
-                return false;
-            }
+            });
         });
     },
 }

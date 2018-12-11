@@ -17,7 +17,7 @@ import {
   actionLogout,
   actionFetchProfileData,
 } from '../actions';
-import { actionSetPushActionSubscribe, actionSetFCMToken, actionSetPushGranted } from '../../core/actions';
+import { actionSetPushActionSubscribe } from '../../core/actions';
 
 // components
 import Auth from '../components/Auth';
@@ -93,7 +93,7 @@ const mapStateToProps = ({ dealer, profile, nav, core }) => {
     bonus: profile.bonus.data,
     discounts: profile.discounts,
 
-    fcmToken: core.fcmToken,
+//    fcmToken: core.fcmToken,
     pushActionSubscribe: core.pushActionSubscribe,
   };
 };
@@ -112,8 +112,7 @@ const mapDispatchToProps = {
   actionLogin,
   actionLogout,
 
-  actionSetFCMToken,
-  actionSetPushGranted,
+//  actionSetPushGranted,
   actionSetPushActionSubscribe,
 };
 
@@ -163,10 +162,10 @@ class ProfileScreen extends Component {
     bonus: PropTypes.object,
     discounts: PropTypes.array,
 
-    fcmToken: PropTypes.string,
+//    fcmToken: PropTypes.string,
     pushActionSubscribe: PropTypes.bool,
-    actionSetFCMToken: PropTypes.func,
-    actionSetPushGranted: PropTypes.func,
+//    actionSetFCMToken: PropTypes.func,
+//    actionSetPushGranted: PropTypes.func,
     actionSetPushActionSubscribe: PropTypes.func,
     actionFetchCars: PropTypes.func,
   }
@@ -262,10 +261,10 @@ class ProfileScreen extends Component {
       bonus,
       discounts,
 
-      fcmToken,
+//      fcmToken,
       pushActionSubscribe,
-      actionSetFCMToken,
-      actionSetPushGranted,
+//      actionSetFCMToken,
+//      actionSetPushGranted,
       actionSetPushActionSubscribe,
 
       isFetchProfileData,
@@ -336,11 +335,10 @@ class ProfileScreen extends Component {
                 emailFill={emailFill}
                 carFill={carFill}
                 carNumberFill={carNumberFill}
-                fcmToken={fcmToken}
+//                fcmToken={fcmToken}
                 dealerSelected={dealerSelected}
                 pushActionSubscribe={pushActionSubscribe}
-                actionSetFCMToken={actionSetFCMToken}
-                actionSetPushGranted={actionSetPushGranted}
+//                actionSetPushGranted={actionSetPushGranted}
                 actionSetPushActionSubscribe={actionSetPushActionSubscribe}
               />
             </List>
