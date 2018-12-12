@@ -4,13 +4,13 @@ before_all do
   ensure_git_branch(
     branch: 'update-push'
   )
-  ensure_git_status_clean
   # git_pull
 end
 
 platform :ios do
   desc "Prepare the iOS app for dev or build"
   lane :prepare do
+    ensure_git_status_clean
     produce(
         app_identifier: "com.atlant-m.OneSignalNotificationServiceExtension",
         app_name: "atlant-m OneSignalNotificationServiceExtension",
@@ -69,10 +69,18 @@ platform :android do
         merge_commit_filtering: "exclude_merges", # Optional, lets you filter out merge commits
         tag_match_pattern: "builds/android"
     )
+    gradle(
+        project_dir: "./android/",
+        task: "clean assemble",
+        build_type: "Release",
+        flags: "-PbuildType=release",
+        print_command_output: true
+    )
   end
 
   desc "Submit a new Internal Build to Google Play"
   lane :internal do
+    ensure_git_status_clean
     gradle(
         project_dir: "./android/",
         task: "clean assemble",

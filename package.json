@@ -7,7 +7,7 @@
     "iphonex": "react-native run-ios --simulator=\"iPhone X\"",
     "ios-build": "bundle exec fastlane ios beta",
     "android": "adb uninstall com.atlantm; react-native run-android",
-    "android-test": "bundle exec fastlane android test && open app/build/outputs/apk",
+    "android-test": "bundle exec fastlane android test && adb uninstall com.atlantm; adb install android/app/build/outputs/apk/debug/app-debug.apk; adb shell am start -n com.atlantm/.MainActivity",
     "android-build": "bundle exec fastlane android internal",
     "reinstall": "./reinstall.sh",
     "clean": "rm -rf $TMPDIR/react-*; rm -rf $TMPDIR/haste-*; rm -rf $TMPDIR/metro-*; watchman watch-del-all; rm -rf ios/build/; rm -rf android/build/; rm -rf ios/rbtse.xcodeproj/xcuserdata/",
