@@ -73,7 +73,7 @@ platform :android do
         project_dir: "./android/",
         task: "clean assemble",
         build_type: "Release",
-        flags: "-PbuildType=release",
+        flags: "-PbuildType=debug",
         print_command_output: true
     )
   end
