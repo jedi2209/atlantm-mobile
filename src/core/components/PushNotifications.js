@@ -9,13 +9,11 @@ import { get } from 'lodash';
 const isAndroid = Platform.OS === 'android';
 
 export default {
-    init(core) {
+    init() {
         OneSignal.init('XXXX', {
             kOSSettingsKeyAutoPrompt: true,
             kOSSettingsKeyInFocusDisplayOption: 2
         });
-
-        console.log('core', core);
 
         OneSignal.setLogLevel(6, 0);
         OneSignal.setSubscription(true);
@@ -123,7 +121,7 @@ export default {
         return new Promise(function(resolve, reject) {
             // Check push notification and OneSignal subscription statuses
             OneSignal.getPermissionSubscriptionState((status) => {
-                if (status.notificationsEnabled === true) {
+                if (status.notificationsEnabled) {
                     return resolve(true);
                 } else {
                     switch (Platform.OS) {
