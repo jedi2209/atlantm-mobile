@@ -20,19 +20,6 @@ export default {
         OneSignal.enableSound(true);
         OneSignal.enableVibrate(true);
 
-        // OneSignal.getPermissionSubscriptionState((response) => {
-        //     if (response.notificationsEnabled === true) {
-        //         onPushPermissionGranted();
-        //         actionSetPushGranted(true);
-        //     } else {
-        //         onPushPermissionRejected();
-        //         actionSetPushGranted(false);
-        //     }
-        //     console.log('Received permission subscription state: ', response);
-        // });
-
-        // OneSignal.checkPermissions(permissions => console.log(permissions));
-
         OneSignal.addEventListener('received', this.onReceived);
         OneSignal.addEventListener('opened', this.onOpened);
         OneSignal.addEventListener('ids', this.onIds);
@@ -42,8 +29,12 @@ export default {
         console.log("Notification received: ", notification);
     },
 
-    onOpened(openResult) {
+    onOpened(openResult, listener) {
         let routeName;
+
+        const data_test = get(openResult, 'notification.payload.additionalData', {});
+        console.log('data_test', data_test);
+
         // console.log('Message: ', openResult.notification.payload.body);
         // console.log('Data: ', openResult.notification.payload.additionalData);
         // console.log('isActive: ', openResult.notification.isAppInFocus);
@@ -116,6 +107,14 @@ export default {
         OneSignal.deleteTag('topic'); // TODO: убрать после выпуска билда
         OneSignal.deleteTag(topic);
     },
+
+    setEmail(value) {
+//        OneSignal.setEmail(value);
+    },
+
+    // logoutEmail() {
+    //     OneSignal.logoutEmail();
+    // },
 
     checkPermission() {
         return new Promise(function(resolve, reject) {
