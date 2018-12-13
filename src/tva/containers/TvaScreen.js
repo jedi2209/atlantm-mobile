@@ -146,7 +146,17 @@ class TvaScreen extends Component {
       if (action.type === TVA__SUCCESS) {
         setTimeout(() => {
             if (pushTracking === true) {
-                PushNotifications.subscribeToTopic('tva', carNumber);
+                function replaceStr(str, find, replace) {
+                    for (let i = 0; i < find.length; i++) {
+                        str = str.replace(new RegExp(find[i], 'gi'), replace[i]);
+                    }
+                    return str;
+                }
+
+                const carNumber_find = ['о','О','т','Т','е','Е','а','А','н','Н','к','К','м','М','в','В','с','С','х','Х','р','Р','у','У'];
+                const carNumber_replace = ['o','O','t','T','e','E','a','A','h','H','k','K','m','M','b','B','c','C','x','X','p','P','y','Y'];
+
+                PushNotifications.subscribeToTopic('tva', replaceStr(carNumber, carNumber_find, carNumber_replace));
             }
           navigation.navigate('TvaResultsScreen'), 200
         });
