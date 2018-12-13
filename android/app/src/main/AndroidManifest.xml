@@ -2,6 +2,7 @@
     package="com.atlantm">
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <uses-permission android:name="android.permission.INTERNET" />
@@ -39,6 +40,14 @@
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+
+      <service android:name=".NotificationExtender"
+               android:permission="android.permission.BIND_JOB_SERVICE"
+               android:exported="false">
+          <intent-filter>
+              <action android:name="com.onesignal.NotificationExtenderService"/>
+          </intent-filter>
+      </service>
     </application>
 
 </manifest>

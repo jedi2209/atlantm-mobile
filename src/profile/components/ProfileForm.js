@@ -110,7 +110,10 @@ export default class ProfileForm extends PureComponent {
 
   onChangeName = value => this.props.nameFill(value)
   onChangePhone = value => this.props.phoneFill(value)
-  onChangeEmail = value => this.props.emailFill(value)
+  onChangeEmail = value => {
+    this.props.emailFill(value);
+    PushNotifications.setEmail(value);
+  };
   onChangeCar = value => this.props.carFill(value)
   onChangeCarVIN = value => this.props.carVINFill(value)
   onChangeCarNumber = value => this.props.carNumberFill(value)
@@ -133,7 +136,7 @@ export default class ProfileForm extends PureComponent {
 
       this.props.navigation.navigate('CarHistoryScreen', { car });
     }
-  }
+  };
 
   renderCars = () => {
     const { cars } = this.props;
@@ -158,7 +161,7 @@ export default class ProfileForm extends PureComponent {
         </View>
       );
     });
-  }
+  };
 
   renderListItem = ({ label, value, onChange, inputProps = {}, isLast }) => {
     const renderInput = () => (
