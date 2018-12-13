@@ -52,7 +52,7 @@ def getVersionProps() {
 }
 
 def getNpmVersion() {
-    def inputFile = new File("package.json")
+    def inputFile = new File("$rootDir/../package.json")
     def packageJson = new JsonSlurper().parseText(inputFile.text)
     return packageJson["version"]
 }
@@ -74,7 +74,8 @@ def getNpmVersionArray() { // major [0], minor [1], patch [2]
 }
 
 private String runCommands(String... commands) {
-    def process = new ProcessBuilder(commands).redirectErrorStream(true).start()
+    def process = new ProcessBuilder(commands).redirectErrorStream(true).sta
+    rt()
     process.waitFor()
     def result = ''
     process.inputStream.eachLine { result += it + '\n' }
