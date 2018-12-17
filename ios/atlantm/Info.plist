@@ -21,13 +21,9 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-<<<<<<< HEAD
 	<string>41</string>
-=======
-	<string>0</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
->>>>>>> 8f65e898ef2ae0101938eb0bc192364f0c5c9ba1
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>yandexnavi</string>
