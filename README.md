@@ -12,8 +12,20 @@
 
 Изменение версии происходит исключительно через `npm version [major | minor | patch]`
 
+## Запуск разных версий ios
+
+https://stackoverflow.com/a/37329896
 
 ## Решение проблем со сборкой
+
+### JS Bundle
+
+Если не собирается js
+https://stackoverflow.com/a/52691351/1130538
+
+### iOS
+
+Если у тебя xcode >= 10 нужно переключить сборку в legacy режим
 
 ### Android
 

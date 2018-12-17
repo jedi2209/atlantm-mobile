@@ -73,11 +73,11 @@ export default class Auth extends Component {
     loginFill: PropTypes.func,
     passwordFill: PropTypes.func,
     navigation: PropTypes.object,
-  }
+  };
 
   static defaultProps = {
     isRequest: false,
-  }
+  };
 
   onPressRegister = () => this.props.navigation.navigate('RegisterScreen')
 
@@ -122,7 +122,7 @@ export default class Auth extends Component {
           }, 100);
         }
       });
-  }
+  };
 
   onChangeLogin = value => this.props.loginFill(value)
   onChangePassword = value => this.props.passwordFill(value)
@@ -178,7 +178,7 @@ export default class Auth extends Component {
         </View>
       );
     }
-  }
+  };
 
   onPressForgotPass = () => this.props.navigation.navigate('ForgotPassScreen')
 
@@ -198,7 +198,7 @@ export default class Auth extends Component {
         </ListItem>
       </View>
     );
-  }
+  };
 
   render() {
     const { isRequest, login, password } = this.props;

@@ -4,14 +4,14 @@ import { View, Image, StyleSheet, ActivityIndicator, Dimensions, Platform, Touch
 
 // components
 import Swiper from 'react-native-swiper';
-import { isTablet } from 'react-native-device-info';
+import DeviceInfo from 'react-native-device-info';
 
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '@core/style-const';
 
 const { width } = Dimensions.get('window');
-const height = isTablet() ? 260 : 200;
+const height = DeviceInfo.isTablet() ? 260 : 200;
 const styles = StyleSheet.create({
   photoSlider: {
     width,

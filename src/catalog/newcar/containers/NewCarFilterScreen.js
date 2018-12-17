@@ -35,24 +35,25 @@ import {
 } from '../../actions';
 
 // components
-import EmptyMessage from '../../../core/components/EmptyMessage';
+import EmptyMessage from '@core/components/EmptyMessage';
 import CityItemList from '../components/CityItemList';
-import PricePicker from '../../../core/components/PricePicker';
-import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
-import ListItemHeader from '../../../profile/components/ListItemHeader';
+import PricePicker from '@core/components/PricePicker';
+import HeaderIconMenu from '@core/components/HeaderIconMenu/HeaderIconMenu';
+import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
+import ListItemHeader from '@profile/components/ListItemHeader';
 
 // styles
-import stylesList from '../../../core/components/Lists/style';
+import stylesList from '@core/components/Lists/style';
 
 // helpers
-import Amplitude from '../../../utils/amplitude-analytics';
+import isIPhoneX from '@utils/is_iphone_x';
+import Amplitude from '@utils/amplitude-analytics';
 import { get, find } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
-import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
-import { verticalScale } from '../../../utils/scale';
-import { TEXT_EMPTY_CAR_LIST } from '../../constants';
+import styleConst from '@core/style-const';
+import stylesHeader from '@core/components/Header/style';
+import { verticalScale } from '@utils/scale';
+import { TEXT_EMPTY_CAR_LIST, BUTTON_EMPTY_CAR_FIND } from '../../constants';
 
 const FOOTER_HEIGHT = 50;
 const styles = StyleSheet.create({
@@ -74,11 +75,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  button: {
+  buttonActive: {
     flex: 1,
     height: FOOTER_HEIGHT,
     flexDirection: 'row',
     backgroundColor: styleConst.color.lightBlue,
+  },
+  buttonInactive: {
+    flex: 1,
+    height: FOOTER_HEIGHT,
+    flexDirection: 'row',
+    backgroundColor: styleConst.color.darkBg
   },
   buttonText: {
     color: '#fff',
@@ -93,7 +100,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   footer: {
-    height: FOOTER_HEIGHT,
+    height: isIPhoneX() ? styleConst.ui.footerHeightIphone : styleConst.ui.footerHeightAndroid,
   },
   body: {
     flex: 1.5,
@@ -351,10 +358,10 @@ class NewCarFilterScreen extends Component {
       );
     }
 
-    const minPrice = get(items, 'prices.min') || get(filterData, 'prices.min');
-    const maxPrice = get(items, 'prices.max') || get(filterData, 'prices.max');
     const minPriceByFilter = get(filterPrice, 'minPrice');
     const step = get(items, 'prices.step') || get(filterData, 'prices.step');
+    const minPrice = Math.floor(get(items, 'prices.min') || get(filterData, 'prices.min') / step) * step;
+    const maxPrice = Math.ceil(get(items, 'prices.max') || get(filterData, 'prices.max') / step) * step;
     const currency = get(filterData, 'prices.curr.name');
     const count = this.getCount();
 
@@ -531,7 +538,8 @@ class NewCarFilterScreen extends Component {
             </View>
           </Content>
           <Footer style={styles.footer}>
-            <Button onPress={() => this.onPressFilterButton(count)} full style={styles.button}>
+            <Button onPress={() => this.onPressFilterButton(count)} full disabled={(count ? false : true)} style={(count ? styles.buttonActive : styles.buttonInactive)}>
+
               {
                 isFetchingNewCarByFilter ?
                   (
@@ -539,13 +547,23 @@ class NewCarFilterScreen extends Component {
                   ) :
                   (
                     <View style={styles.buttonContent} >
-                      <Text style={styles.buttonText}>
-                        {`НАЙДЕНО ${count}`}
-                      </Text>
+                        {(count ?
+                            <Text style={styles.buttonText}>
+                                {`НАЙДЕНО ${count}`}
+                            </Text>
+                                :
+                            <Text style={styles.buttonText}>
+                                {BUTTON_EMPTY_CAR_FIND}
+                            </Text>
+                        )}
+                        {(count ?
                       <Image
                         source={require('../../../core/components/CustomIcon/assets/arrow_right_white.png')}
                         style={styles.buttonIcon}
                       />
+                                :
+                      <Image style={styles.buttonIcon} />
+                      )}
                     </View>
                   )
               }

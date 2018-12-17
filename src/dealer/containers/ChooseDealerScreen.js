@@ -27,6 +27,7 @@ const mapStateToProps = ({ dealer, nav, core }) => {
     isFetchDealersList: dealer.meta.isFetchDealersList,
     isFetchDealer: dealer.meta.isFetchDealer,
     pushGranted: core.pushGranted,
+    pushActionSubscribe: core.pushActionSubscribe,
   };
 };
 
@@ -44,7 +45,7 @@ class ChooseDealerScreen extends Component {
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
-  })
+  });
 
   // ВАЖНО! ЯВНО ОТКЛЮЧЕН ИЗ-ЗА ПРОБЛЕМ ПЕРВОЙ ЗАГРУЗКИ НА IOS 11+
   shouldComponentUpdate(nextProps) {
@@ -55,18 +56,17 @@ class ChooseDealerScreen extends Component {
   }
 
   onSelectDealer = ({ prevDealer, newDealer }) => {
-    const { actionSetPushActionSubscribe, pushGranted } = this.props;
-
-    if (pushGranted) {
-      actionSetPushActionSubscribe(true);
-
-      if (prevDealer) {
-        PushNotification.unsubscribeFromTopic({ id: prevDealer.id });
+    const { actionSetPushActionSubscribe, pushActionSubscribe } = this.props;
+      if (pushActionSubscribe) {
+          actionSetPushActionSubscribe(true);
+          PushNotification.subscribeToTopic('actions', newDealer.id);
+      } else {
+          PushNotification.unsubscribeFromTopic('actions');
+          actionSetPushActionSubscribe(false);
       }
 
-      PushNotification.subscribeToTopic({ id: newDealer.id });
-    }
-  }
+      PushNotification.addTag('dealer', newDealer.id);
+  };
 
   render() {
     console.log('== ChooseDealer ==');

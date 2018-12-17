@@ -3,17 +3,15 @@ package com.atlantm;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
-import com.sudoplz.reactnativeamplitudeanalytics.RNAmplitudeSDKPackage;
-import me.jhen.devsettings.DevSettingsPackage;
 import io.sentry.RNSentryPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
-import com.evollu.react.fcm.FIRMessagingPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.airbnb.android.react.maps.MapsPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
+import io.sentry.RNSentryPackage;
+import com.sudoplz.reactnativeamplitudeanalytics.RNAmplitudeSDKPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -33,18 +31,15 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-          new GoogleAnalyticsBridgePackage(),
-          new RNAmplitudeSDKPackage(MainApplication.this),
-          new DevSettingsPackage(),
-          new RNSentryPackage(),
-          new PickerPackage(),
-          new FIRMessagingPackage(),
-          new SplashScreenReactPackage(),
-          new RNDeviceInfo(),
-          new MapsPackage(),
-          new VectorIconsPackage(),
-          new RNFetchBlobPackage()
+              new MainReactPackage(),
+              new ReactNativeOneSignalPackage(),
+              new RNSentryPackage(),
+              new PickerPackage(),
+              new RNAmplitudeSDKPackage(MainApplication.this),
+              new RNFetchBlobPackage(),
+              new RNDeviceInfo(),
+              new MapsPackage(),
+              new SplashScreenReactPackage()
       );
     }
 

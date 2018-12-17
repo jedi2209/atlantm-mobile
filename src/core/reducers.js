@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
+import { REHYDRATE } from 'redux-persist';
+import { get } from 'lodash';
 import dealer from '../dealer/reducers';
 import nav from '../navigation/reducers';
 import tva from '../tva/reducers';
@@ -12,42 +14,45 @@ import catalog from '../catalog/reducers';
 import indicators from '../indicators/reducers';
 
 import {
-  APP_FCM_TOKEN__SET,
-  APP_PUSH_GRANTED__SET,
-  APP_PREVIOUS_FCM_TOKEN__SET,
-  APP_PUSH_ACTION_SUBSCRIBE__SET,
+//    APP_FCM_TOKEN__SET,
+//    APP_PUSH_GRANTED__SET,
+//    APP_PREVIOUS_FCM_TOKEN__SET,
+    APP_PUSH_ACTION_SUBSCRIBE__SET,
+    APP_MENU_OPENED_COUNTER,
+    APP_ACTION_RATED
 } from './actionTypes';
 
 import { DEALER__SUCCESS } from '../dealer/actionTypes';
 
-const fcmToken = (state = null, action) => {
-  switch (action.type) {
-    case APP_FCM_TOKEN__SET:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const previousFcmToken = (state = null, action) => {
-  switch (action.type) {
-    case APP_PREVIOUS_FCM_TOKEN__SET:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const pushGranted = (state = false, action) => {
-  switch (action.type) {
-    case APP_PUSH_GRANTED__SET:
-      return action.payload;
-    default:
-      return state;
-  }
-};
+// const fcmToken = (state = null, action) => {
+//   switch (action.type) {
+//     case APP_FCM_TOKEN__SET:
+//       return action.payload;
+//     default:
+//       return state;
+//   }
+// };
+//
+// const previousFcmToken = (state = null, action) => {
+//   switch (action.type) {
+//     case APP_PREVIOUS_FCM_TOKEN__SET:
+//       return action.payload;
+//     default:
+//       return state;
+//   }
+// };
+//
+// const pushGranted = (state = false, action) => {
+//   switch (action.type) {
+//     case APP_PUSH_GRANTED__SET:
+//       return action.payload;
+//     default:
+//       return state;
+//   }
+// };
 
 const pushActionSubscribe = (state = false, action) => {
+    console.log('pushActionSubscribe', action);
   switch (action.type) {
     case APP_PUSH_ACTION_SUBSCRIBE__SET:
       return action.payload;
@@ -56,11 +61,38 @@ const pushActionSubscribe = (state = false, action) => {
   }
 };
 
+const menuOpenedCount = (state = 0, action) => {
+    switch (action.type) {
+        case REHYDRATE:
+            return get(action.payload, 'core.menuOpenedCount', '');
+        case APP_MENU_OPENED_COUNTER:
+            if (action.payload === 0) {
+                return 0;
+            }
+            return ++state;
+        default:
+            return state;
+    }
+};
+
+const isAppRated = (state = false, action) => {
+    switch (action.type) {
+        case REHYDRATE:
+            return get(action.payload, 'core.isAppRated', '');
+        case APP_ACTION_RATED:
+            return true;
+        default:
+            return state;
+    }
+};
+
 const coreReducer = combineReducers({
-  fcmToken,
-  previousFcmToken,
-  pushGranted,
+//  fcmToken,
+//  previousFcmToken,
+//  pushGranted,
   pushActionSubscribe,
+  menuOpenedCount,
+  isAppRated
 });
 
 const rootReducer = combineReducers({

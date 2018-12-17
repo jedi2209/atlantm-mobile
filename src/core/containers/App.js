@@ -6,15 +6,16 @@ import { connect } from 'react-redux';
 import { store } from '../store';
 import { navigationChange } from '../../navigation/actions';
 import {
-  actionSetFCMToken,
-  actionSetPushGranted,
-  actionSetPreviousFCMToken,
+//  actionSetFCMToken,
+//  actionSetPushGranted,
+//  actionSetPreviousFCMToken,
   actionSetPushActionSubscribe,
 } from '../actions';
 
 // helpers
 import { get } from 'lodash';
 import PushNotification from '../components/PushNotifications';
+// import RateThisApp from '../components/RateThisApp';
 
 // components
 import Sidebar from '../../menu/containers/Sidebar';
@@ -25,7 +26,7 @@ import getRouter from '../router';
 
 const mapStateToProps = ({ core, dealer, profile }) => {
   return {
-    fcmToken: core.fcmToken,
+//    fcmToken: core.fcmToken,
     pushActionSubscribe: core.pushActionSubscribe,
     dealerSelected: dealer.selected,
     auth: profile.auth,
@@ -34,9 +35,9 @@ const mapStateToProps = ({ core, dealer, profile }) => {
 
 const mapDispatchToProps = {
   navigationChange,
-  actionSetFCMToken,
-  actionSetPushGranted,
-  actionSetPreviousFCMToken,
+//  actionSetFCMToken,
+//  actionSetPushGranted,
+//  actionSetPreviousFCMToken,
   actionSetPushActionSubscribe,
 };
 
@@ -55,11 +56,11 @@ class App extends Component {
   componentDidMount() {
     const {
       auth,
-      fcmToken,
-      actionSetFCMToken,
+//      fcmToken,
+//      actionSetFCMToken,
       dealerSelected,
       pushActionSubscribe,
-      actionSetPreviousFCMToken,
+//      actionSetPreviousFCMToken,
     } = this.props;
 
     if (get(auth, 'login') === 'zteam') {
@@ -67,13 +68,12 @@ class App extends Component {
     }
 
     setTimeout(() => {
-      PushNotification.createNotificationChannel('fcm_default_channel');
       PushNotification.init({
-        fcmToken,
-        actionSetFCMToken,
-        actionSetPreviousFCMToken,
-        onPushPermissionGranted: this.onPushPermissionGranted,
-        onPushPermissionRejected: this.onPushPermissionRejected,
+//        fcmToken,
+//        actionSetFCMToken,
+//        actionSetPreviousFCMToken,
+//        onPushPermissionGranted: this.onPushPermissionGranted,
+//        onPushPermissionRejected: this.onPushPermissionRejected,
       });
     }, 1000);
 
@@ -82,26 +82,26 @@ class App extends Component {
     // автоцентр выбран
     if (id) {
       pushActionSubscribe ?
-        PushNotification.subscribeToTopic({ id }) :
-        PushNotification.unsubscribeFromTopic({ id });
+        PushNotification.subscribeToTopic('dealer', id) :
+        PushNotification.unsubscribeFromTopic('dealer');
     }
   }
 
   shouldComponentUpdate() { return false; }
 
   componentWillUnmount() {
-    PushNotification.notificationListener.remove();
-    PushNotification.refreshTokenListener.remove();
+    // PushNotification.notificationListener.remove();
+    // PushNotification.refreshTokenListener.remove();
   }
 
-  onPushPermissionGranted = () => {
-    this.props.actionSetPushGranted(true);
-  }
-  onPushPermissionRejected = () => {
-    const { actionSetPushActionSubscribe, actionSetPushGranted } = this.props;
-    actionSetPushActionSubscribe(false);
-    this.props.actionSetPushGranted(false);
-  }
+  // onPushPermissionGranted = () => {
+  //   this.props.actionSetPushGranted(true);
+  // }
+  // onPushPermissionRejected = () => {
+  //   const { actionSetPushActionSubscribe, actionSetPushGranted } = this.props;
+  //   actionSetPushActionSubscribe(false);
+  //   this.props.actionSetPushGranted(false);
+  // }
 
   onNavigationStateChange = (prevState, newState) => {
     this.props.navigationChange({ prevState, newState });

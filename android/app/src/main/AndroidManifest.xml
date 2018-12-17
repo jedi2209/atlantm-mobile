@@ -1,31 +1,31 @@
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.atlantm"
-    android:versionCode="1"
-    android:versionName="4.0">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.atlantm">
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA"/>
-
-    <!-- Вручную удаляем лишние права -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove" />
 
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
       android:allowBackup="false"
-      tools:replace="android:allowBackup"
       android:theme="@style/AppTheme">
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap/ic_notif"/>
+        <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="fcm_default_channel"/>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDNGG1vTBeJC0MafamfLXY0RXxOFkqjPkE" />
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
@@ -36,37 +36,18 @@
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
+            <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-      <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyDNGG1vTBeJC0MafamfLXY0RXxOFkqjPkE" />
 
-      <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap/ic_notif"/>
-        <receiver android:name="com.evollu.react.fcm.FIRLocalMessagingPublisher"/>
-        <receiver android:enabled="true" android:exported="true"  android:name="com.evollu.react.fcm.FIRSystemBootEventReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
-
-        <!-- Firebase cloud messages -->
-        <service android:name="com.evollu.react.fcm.MessagingService" android:enabled="true" android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
-
-        <service android:name="com.evollu.react.fcm.InstanceIdService" android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
-        <!-- Firebase cloud messages -->
+      <service android:name=".NotificationExtender"
+               android:permission="android.permission.BIND_JOB_SERVICE"
+               android:exported="false">
+          <intent-filter>
+              <action android:name="com.onesignal.NotificationExtenderService"/>
+          </intent-filter>
+      </service>
     </application>
 
 </manifest>

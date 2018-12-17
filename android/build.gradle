@@ -3,20 +3,24 @@
 import groovy.json.JsonSlurper
 
 buildscript {
+    ext {
+        buildToolsVersion = "27.0.3"
+        minSdkVersion = 16
+        compileSdkVersion = 27
+        targetSdkVersion = 27
+        supportLibVersion = "27.1.1"
+        googlePlayServicesVersion = "15.0.1"
+        androidMapsUtilsVersion = "0.5+"
+    }
     repositories {
         google()
         jcenter()
-        mavenLocal()
-        maven {
-            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-            url "$rootDir/../node_modules/react-native/android"
-        }
-        maven { url "https://jitpack.io" }
+        maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
-        classpath 'com.google.gms:google-services:4.0.1'
-        classpath 'com.android.tools.build:gradle:3.1.2'
-
+        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath 'com.google.gms:google-services:4.1.0'
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.10.0, 0.99.99]'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -24,14 +28,14 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenLocal()
         google()
         jcenter()
-        mavenCentral()
-        mavenLocal()
         maven {
             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
             url "$rootDir/../node_modules/react-native/android"
         }
+        maven { url 'https://maven.google.com' }
         maven { url "https://jitpack.io" }
     }
 }
@@ -48,7 +52,7 @@ def getVersionProps() {
 }
 
 def getNpmVersion() {
-    def inputFile = new File("../package.json")
+    def inputFile = new File("$rootDir/../package.json")
     def packageJson = new JsonSlurper().parseText(inputFile.text)
     return packageJson["version"]
 }
@@ -69,21 +73,9 @@ def getNpmVersionArray() { // major [0], minor [1], patch [2]
     return [Integer.parseInt(major), Integer.parseInt(minor), Integer.parseInt(patch)] as int[]
 }
 
-private void createReleaseTag(version, buildNumber) {
-    def tagName = "release/${version}"
-    try {
-        runCommands("git", "tag", "-d", tagName)
-    } catch (Exception e) {
-        println(e.message)
-    }
-    runCommands("git", "status")
-    runCommands("git", "commit", "-a", "-m", "Android version Bump to ${version} [${buildNumber}]")
-    runCommands("git", "tag", tagName)
-    runCommands("git", "push")
-}
-
 private String runCommands(String... commands) {
-    def process = new ProcessBuilder(commands).redirectErrorStream(true).start()
+    def process = new ProcessBuilder(commands).redirectErrorStream(true).sta
+    rt()
     process.waitFor()
     def result = ''
     process.inputStream.eachLine { result += it + '\n' }
@@ -94,16 +86,6 @@ private String runCommands(String... commands) {
     return result
 }
 
-ext {
-    minSdkVersion       = 16
-    compileSdkVersion   = 27
-    targetSdkVersion    = 27
-    buildToolsVersion   = "27.1.1"
-    supportLibVersion   = "26.1.0"
-    androidMapsUtilsVersion = "0.5+"
-    googlePlayServicesVersion = "11.0.4"
-}
-
 subprojects {
     ext {
         def npmVersion = getNpmVersionArray()
@@ -112,20 +94,18 @@ subprojects {
         versionPatch = npmVersion[2]
         versionBuild = getIncrementBuild()
     }
-  project.configurations.all {
-    resolutionStrategy.eachDependency { details ->
-            if (details.requested.group == 'com.android.support'
-                    && !details.requested.name.contains('multidex') ) {
-                details.useVersion rootProject.ext.buildToolsVersion
+    afterEvaluate {project ->
+        if (project.hasProperty("android")) {
+            android {
+                compileSdkVersion rootProject.ext.compileSdkVersion
+                buildToolsVersion rootProject.ext.buildToolsVersion
             }
+        }
     }
-  }
-  afterEvaluate {project ->
-     if (project.hasProperty("android")) {
-         android {
-             compileSdkVersion rootProject.ext.compileSdkVersion
-             buildToolsVersion '27.0.3'
-         }
-     }
-  }
+}
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.4'
+    distributionUrl = distributionUrl.replace("bin", "all")
 }
