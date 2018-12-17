@@ -10,6 +10,8 @@
 	<string>53201529704-o0puu7ivla2fmj9vo93ckmf5hv33d9l2.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
 	<string>com.googleusercontent.apps.53201529704-o0puu7ivla2fmj9vo93ckmf5hv33d9l2</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>53201529704-3vqvfs10fkb4ec26p3cip3s6fi1vtbp1.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyADc1GeEB5qxSYICaljFR6r8kryeiMbfGI</string>
 	<key>GCM_SENDER_ID</key>
@@ -23,18 +25,16 @@
 	<key>STORAGE_BUCKET</key>
 	<string>atlant-m.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_GCM_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:53201529704:ios:528b18f445a9c3fb</string>
-	<key>DATABASE_URL</key>
-	<string>https://atlant-m.firebaseio.com</string>
 </dict>
 </plist>

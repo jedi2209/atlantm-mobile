@@ -3,7 +3,6 @@ import { Text, View, StyleSheet, Platform, Alert, Linking } from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import FCM from 'react-native-fcm';
 import { ListItem, Body, Item, Label, Input, Right, Switch, Icon } from 'native-base';
 import ListItemHeader from '../components/ListItemHeader';
 import PushNotifications from '../../core/components/PushNotifications';
@@ -89,12 +88,12 @@ export default class ProfileForm extends PureComponent {
     carNumberFill: PropTypes.func,
     carSection: PropTypes.bool,
 
-    fcmToken: PropTypes.string,
+//    fcmToken: PropTypes.string,
     pushActionSubscribe: PropTypes.bool,
-    actionSetFCMToken: PropTypes.func,
-    actionSetPushGranted: PropTypes.func,
+//    actionSetFCMToken: PropTypes.func,
+//    actionSetPushGranted: PropTypes.func,
     actionSetPushActionSubscribe: PropTypes.func,
-  }
+  };
 
   static defaultProps = {
     auth: {},
@@ -107,11 +106,14 @@ export default class ProfileForm extends PureComponent {
     cars: [],
     view: 'default',
     carSection: false,
-  }
+  };
 
   onChangeName = value => this.props.nameFill(value)
   onChangePhone = value => this.props.phoneFill(value)
-  onChangeEmail = value => this.props.emailFill(value)
+  onChangeEmail = value => {
+    this.props.emailFill(value);
+    PushNotifications.setEmail(value);
+  };
   onChangeCar = value => this.props.carFill(value)
   onChangeCarVIN = value => this.props.carVINFill(value)
   onChangeCarNumber = value => this.props.carNumberFill(value)
@@ -126,7 +128,7 @@ export default class ProfileForm extends PureComponent {
     }
 
     return title;
-  }
+  };
 
   onPressCar = car => {
     if (get(car, 'vin')) {
@@ -134,12 +136,13 @@ export default class ProfileForm extends PureComponent {
 
       this.props.navigation.navigate('CarHistoryScreen', { car });
     }
-  }
+  };
 
   renderCars = () => {
     const { cars } = this.props;
 
     return cars.map((car, idx, carArray) => {
+      if (car.hidden) { return false; }
       return (
         <View key={`${car.brand}${idx}`} style={stylesList.listItemContainer}>
           <ListItem onPress={() => this.onPressCar(car)} last={(carArray.length - 1) === idx} style={[stylesList.listItem]} >
@@ -158,7 +161,7 @@ export default class ProfileForm extends PureComponent {
         </View>
       );
     });
-  }
+  };
 
   renderListItem = ({ label, value, onChange, inputProps = {}, isLast }) => {
     const renderInput = () => (
@@ -194,7 +197,7 @@ export default class ProfileForm extends PureComponent {
         </ListItem>
       </View>
     );
-  }
+  };
 
   renderListSwitcher = (onSwitch, value) => {
     return (
@@ -213,62 +216,28 @@ export default class ProfileForm extends PureComponent {
         </ListItem>
       </View>
     );
-  }
+  };
 
-  onSwitchActionSubscribe = (isSubscribe) => {
+  onSwitchActionSubscribe = isSubscribe => {
     const {
       dealerSelected,
-
-      fcmToken,
-      actionSetFCMToken,
-      actionSetPushGranted,
-      actionSetPushActionSubscribe,
+      actionSetPushActionSubscribe
     } = this.props;
 
     const id = dealerSelected.id;
 
-    const topicSetSubscribe = () => {
-      actionSetPushActionSubscribe(isSubscribe);
+    PushNotifications.subscribeToTopic('dealer', id);
 
-      if (isSubscribe) {
-        PushNotifications.subscribeToTopic({ id });
-      } else {
-        PushNotifications.unsubscribeFromTopic({ id });
-      }
-    };
-
-    FCM.requestPermissions({ badge: true, sound: true, alert: true })
-      .then(() => {
-        if (!fcmToken) {
-          FCM.getFCMToken().then((token) => {
-            actionSetFCMToken(token || null);
-            actionSetPushGranted(true);
-            topicSetSubscribe();
-          });
-        } else {
-          topicSetSubscribe();
-        }
-      })
-      .catch(() => {
-        if (Platform.OS === 'ios') {
-          setTimeout(() => {
-            return Alert.alert(
-              'Уведомления выключены',
-              'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
-              [
-                { text: 'Ок', style: 'cancel' },
-                {
-                  text: 'Настройки',
-                  onPress() {
-                    Linking.openURL('app-settings://notification/com.atlant-m');
-                  },
-                },
-              ],
-            );
-          }, 100);
-        }
-      });
-  }
+    if (isSubscribe) {
+        PushNotifications.subscribeToTopic('actions', id)
+            .then(isPermission => {
+                actionSetPushActionSubscribe(isPermission);
+            });
+    } else {
+        PushNotifications.unsubscribeFromTopic('actions');
+        actionSetPushActionSubscribe(false);
+    }
+  };
 
   render() {
     const {

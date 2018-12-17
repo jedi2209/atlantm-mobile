@@ -46,6 +46,14 @@ const style = `
         left: 0;
         right: 0;
     }
+    table {
+      font-size: 12px !important;
+    }
+    table,
+    th,
+    td {
+      border: 1px solid rgba(4,88,167,0.4);
+    }
   </style>
   <script>
     ${script}
@@ -69,6 +77,8 @@ export default class WebViewAutoHeight extends Component {
 
   constructor(props) {
     super(props);
+
+    console.log('props', props);
 
     this.state = {
       realContentHeight: this.props.minHeight,
@@ -107,6 +117,7 @@ export default class WebViewAutoHeight extends Component {
           style={[style, { height: Math.max(this.state.realContentHeight, minHeight) }]}
           javaScriptEnabled
           onNavigationStateChange={this.handleNavigationChange}
+          originWhitelist={['*']}
         />
       </View>
     );

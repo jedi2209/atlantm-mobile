@@ -12,8 +12,8 @@ import styleConst from '../style-const';
 const size = 40;
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: styleConst.ui.horizontalGap * 2,
-    paddingRight: styleConst.ui.horizontalGap * 2,
+    // paddingLeft: styleConst.ui.horizontalGap * 2,
+    // paddingRight: styleConst.ui.horizontalGap * 2,
     width: size,
     height: size,
     justifyContent: 'center',
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   icon: {
-    marginTop: 10,
+    marginTop: 4,
     fontSize: size,
     color: styleConst.color.systemBlue,
 

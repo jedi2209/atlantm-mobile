@@ -56,7 +56,7 @@ export default class Wrapper extends Component {
     this.defaultHandler = ErrorUtils.getGlobalHandler();
     ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
 
-    // this.getPersistStore().purge();
+    //this.getPersistStore().purge();
     this.getPersistStore();
   }
 
@@ -74,7 +74,7 @@ export default class Wrapper extends Component {
     storage: AsyncStorage,
     blacklist: ['form', 'nav'],
     keyPrefix: 'atlantm',
-  }, () => this.setState({ rehydrated: true }))
+  }, () => this.setState({ rehydrated: true }));
 
   shouldComponentUpdate(nextProps, nextState) {
     return this.state.rehydrated !== nextState.rehydrated;

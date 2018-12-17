@@ -6,11 +6,12 @@ import { Footer } from 'native-base';
 import ButtonFull from './ButtonFull';
 
 // helpers
-import styleConst from '../style-const';
+import styleConst from '@core/style-const';
+import isIPhoneX from '@utils/is_iphone_x';
 
 const styles = StyleSheet.create({
   footer: {
-    height: styleConst.ui.footerHeight,
+    height: isIPhoneX() ? styleConst.ui.footerHeightIphone : styleConst.ui.footerHeightAndroid,
   },
 });
 

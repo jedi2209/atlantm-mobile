@@ -75,7 +75,7 @@ import com.android.build.OutputFile
 project.ext.react = [
     root: "../../",
     entryFile: "index.js",
-    bundleInRelease        : true,
+    bundleInRelease       : true,
     resourcesDirRelease   : "src/release/res"
 ]
 
@@ -87,10 +87,6 @@ project.ext.version = [
 ]
 
 project.ext.version.build = project.ext.version.code + project.ext.version.incr
-
-/**
-buildDir = "${GRADLE_ALL_APK_OUTPUT_PATHS}/${rootProject.name}/${project.name}/${project.ext.version.name}"
-*/
 
 apply from: "../../node_modules/react-native/react.gradle"
 apply from: "../../node_modules/react-native-sentry/sentry.gradle"
@@ -120,22 +116,20 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode project.ext.version.build
         versionName project.ext.version.name
-
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
         vectorDrawables.useSupportLibrary = true
     }
-    aaptOptions {
-        additionalParameters "--no-version-vectors"
-    }
     signingConfigs {
         release {
-            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
-                storeFile file(MYAPP_RELEASE_STORE_FILE)
-                storePassword MYAPP_RELEASE_STORE_PASSWORD
-                keyAlias MYAPP_RELEASE_KEY_ALIAS
-                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            if (project.hasProperty('buildType')) {
+                if (buildType != "debug") {
+                    storeFile file(ATLANTM_RELEASE_STORE_FILE)
+                    storePassword ATLANTM_RELEASE_STORE_PASSWORD
+                    keyAlias ATLANTM_RELEASE_KEY_ALIAS
+                    keyPassword ATLANTM_RELEASE_KEY_PASSWORD
+                }
             }
         }
     }
@@ -149,21 +143,15 @@ android {
     }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            signingConfig signingConfigs.release
-	        if (project.hasProperty('buildType')) {
-	            if (buildType != "debug") {
-	                saveChanges(project.ext.version.incr)
-	            }
+            if (project.hasProperty('buildType')) {
+                if (buildType != "debug") {
+                    saveChanges(project.ext.version.incr)
+                }
 	        }
-//	        createReleaseTag(project.ext.version.name, project.ext.version.build)
         }
-	    debug {
-            minifyEnabled enableProguardInReleaseBuilds
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            signingConfig signingConfigs.release
-	    }
     }
     // applicationVariants are e.g. debug, release
     applicationVariants.all { variant ->
@@ -175,69 +163,35 @@ android {
             if (abi != null) {  // null for the universal-debug, universal-release variants
                 output.versionCodeOverride = versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
             }
-//            output.outputFile = new File(
-//                output.outputFile.parent,
-//                output.outputFile.name.replace(".apk", "-${variant.versionName}.apk")
-//            )
         }
     }
 }
 
 dependencies {
-    implementation project(':react-native-google-analytics-bridge')
-    implementation project(':react-native-devsettings-android')
-    implementation project(':react-native-sentry')
-    implementation project(':react-native-image-crop-picker')
+    implementation  project(':react-native-sentry')
+    implementation  project(':react-native-image-crop-picker')
+    implementation  project(':react-native-onesignal')
+//    implementation "com.google.android.gms:play-services-base:15.0.1"
+
+    implementation "com.amplitude:android-sdk:2.19.1"
+    implementation project(':react-native-amplitude-analytics')
+    implementation project(':rn-fetch-blob')
     implementation project(':react-native-device-info')
 
-    implementation(project(':react-native-maps')){
-        exclude group: 'com.google.android.gms'
-    }
-    implementation (project(':react-native-fcm')){
-        exclude group: "com.google.firebase"
-    }
-    implementation project(':react-native-vector-icons')
+    implementation project(':react-native-maps')
+
     implementation project(':react-native-splash-screen')
-    implementation project(':react-native-fetch-blob')
     implementation fileTree(dir: "libs", include: ["*.jar"])
-
-//    implementation "com.android.support:support-v4:27.0.2"
-    implementation group: 'com.android.support', name: 'support-core-ui', version: '${rootProject.ext.supportLibVersion}'
-    implementation "com.android.support:support-core-utils:${rootProject.ext.supportLibVersion}"
-    implementation "com.android.support:support-compat:${rootProject.ext.supportLibVersion}"
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
-
     implementation "com.facebook.react:react-native:+"  // From node_modules
-//    implementation "com.google.android.gms:play-services:+"
-
-    implementation ("com.google.android.gms:play-services-base:15.0.1") {
-        force = true;
-    }
-    implementation ("com.google.android.gms:play-services-maps:15.0.1") {
-        force = true;
-    }
-    implementation ("com.google.android.gms:play-services-gcm:15.0.1") {
-        force = true;
-    }
-    implementation ("com.google.android.gms:play-services-analytics:16.0.0") {
-        force = true;
-    }
-    implementation ('com.google.firebase:firebase-core:16.0.0') {
-        force = true;
-    }
-    implementation ('com.google.firebase:firebase-messaging:17.3.0') {
-        force = true;
-    }
-    implementation project(':react-native-amplitude-analytics')
-    implementation 'com.amplitude:android-sdk:2.17.0'
 }
 
 // Run this once to be able to run the application with BUCK
-// puts all implementation dependencies into folder libs for BUCK to use
+// puts all compile dependencies into folder libs for BUCK to use
 task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
 
 apply plugin: 'com.google.gms.google-services'
-com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'

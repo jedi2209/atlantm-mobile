@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, Image, View } from 'react-native';
+import { StyleSheet, Image, View } from 'react-native';
+
+import { SafeAreaView } from 'react-navigation';
 
 // components
 import FooterButton from '../../core/components/FooterButton';
@@ -33,8 +35,8 @@ export default class IntroScreen extends Component {
 
   render() {
     return (
-      <SafeAreaView style={styles.container} >
-        <View style={styles.logoContainer} >
+      <SafeAreaView style={styles.container}>
+          <View style={styles.logoContainer}>
             <Image
               style={styles.logo}
               source={require('../assets/logo.png')}
