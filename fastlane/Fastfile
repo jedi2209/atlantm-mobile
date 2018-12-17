@@ -2,7 +2,7 @@ fastlane_version '2.108.0'
 
 before_all do
   ensure_git_branch(
-    branch: 'update-push'
+    branch: 'master'
   )
   # git_pull
 end
@@ -55,7 +55,7 @@ platform :ios do
         grouping: "builds",
         prefix: "v"
     )
-#    push_to_git_remote
+    push_to_git_remote
   end
 end
 
@@ -107,6 +107,6 @@ platform :android do
         grouping: "builds",
         prefix: "v"
     )
-#    push_to_git_remote
+    push_to_git_remote
   end
 end
