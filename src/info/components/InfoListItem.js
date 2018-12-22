@@ -31,7 +31,7 @@ export default class InfoListItem extends Component {
     navigate: PropTypes.func,
     info: PropTypes.object,
     visited: PropTypes.array,
-  }
+  };
 
   onPressInfo = () => {
     const { navigate, info } = this.props;
@@ -43,7 +43,7 @@ export default class InfoListItem extends Component {
       id,
       date,
     });
-  }
+  };
 
   processDate(date = {}) {
     return `c ${dayMonth(date.from)} по ${dayMonthYear(date.to)}`;
