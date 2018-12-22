@@ -54,6 +54,10 @@ const style = `
     td {
       border: 1px solid rgba(4,88,167,0.4);
     }
+    img {
+      width: auto;
+      max-width: 100%;
+    }
   </style>
   <script>
     ${script}
@@ -73,7 +77,7 @@ export default class WebViewAutoHeight extends Component {
 
   static defaultProps = {
     minHeight: 100,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -94,7 +98,7 @@ export default class WebViewAutoHeight extends Component {
     if (typeof this.props.onNavigationStateChange === 'function') {
       this.props.onNavigationStateChange(navState);
     }
-  }
+  };
 
   render() {
     const { source, style, minHeight, ...otherProps } = this.props;

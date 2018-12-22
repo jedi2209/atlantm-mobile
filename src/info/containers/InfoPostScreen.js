@@ -104,7 +104,7 @@ class InfoPostScreen extends Component {
     imageWidth: IMAGE_WIDTH,
     imageHeight: IMAGE_HEIGHT,
     webViewWidth: screenWidth - styleConst.ui.verticalGap,
-  }
+  };
 
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Об акции',
@@ -112,7 +112,7 @@ class InfoPostScreen extends Component {
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
-  })
+  });
 
   componentDidMount() {
     const {
@@ -140,7 +140,7 @@ class InfoPostScreen extends Component {
         });
       }
     });
-  }
+  };
 
   onLayoutImage = (e) => {
     if (isTablet) {
@@ -150,20 +150,20 @@ class InfoPostScreen extends Component {
     const { height: imageDynamicHeight } = e.nativeEvent.layout;
 
     this.setState({ imageHeight: imageDynamicHeight });
-  }
+  };
 
   onLayoutWebView= (e) => {
     const { width: webViewWidth } = e.nativeEvent.layout;
 
     this.setState({ webViewWidth });
-  }
+  };
 
   getPost = () => {
     const { posts, navigation } = this.props;
     const id = navigation.state.params.id;
 
     return posts[id];
-  }
+  };
 
   onPressCallMe = async () => {
     const isInternetExist = await isInternet();
@@ -217,7 +217,7 @@ class InfoPostScreen extends Component {
           }
         });
     }
-  }
+  };
 
   processDate(date = {}) {
     return `c ${dayMonth(date.from)} по ${dayMonthYear(date.to)}`;
