@@ -85,7 +85,7 @@ export const emailFill = (email) => {
 };
 
 export const carNumberFill = (carNumber) => {
-  const result = carNumber = carNumber.replace(/\s/g, '');
+  const result = carNumber = carNumber.replace(/\s/g, '').replace(/\(/g,'').replace(/\)/g,'');
 
   return dispatch => {
     dispatch({
