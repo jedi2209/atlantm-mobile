@@ -14,6 +14,10 @@ export default {
             kOSSettingsKeyInFocusDisplayOption: 2
         });
 
+        OneSignal.setLogLevel(6, 0);
+        OneSignal.enableSound(true);
+        OneSignal.enableVibrate(true);
+
         OneSignal.getPermissionSubscriptionState(status => {
             if (status.notificationsEnabled) {
                 actionSetPushGranted(true);
@@ -25,18 +29,15 @@ export default {
                     this.unsubscribeFromTopic('actions');
                 }
 
+                OneSignal.setSubscription(true);
+
             } else {
                 actionSetPushGranted(false);
                 actionSetPushActionSubscribe(false);
                 this.unsubscribeFromTopic('actions');
-
+                OneSignal.setSubscription(false);
             }
         });
-
-        OneSignal.setLogLevel(6, 0);
-        OneSignal.setSubscription(true);
-        OneSignal.enableSound(true);
-        OneSignal.enableVibrate(true);
 
         OneSignal.addEventListener('received', this.onReceived);
         OneSignal.addEventListener('opened', this.onOpened);
