@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist';
+import { REHYDRATE } from 'redux-persist/constants';
 import {
   CALL_ME__REQUEST,
   CALL_ME__SUCCESS,
