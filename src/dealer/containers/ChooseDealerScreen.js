@@ -50,22 +50,23 @@ class ChooseDealerScreen extends Component {
   // ВАЖНО! ЯВНО ОТКЛЮЧЕН ИЗ-ЗА ПРОБЛЕМ ПЕРВОЙ ЗАГРУЗКИ НА IOS 11+
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
-    const isActiveScreen = nav.routes[nav.index].routeName === 'ChooseDealerScreen';
 
-    return isActiveScreen;
+    return nav.routes[nav.index].routeName === 'ChooseDealerScreen';
   }
 
   onSelectDealer = ({ prevDealer, newDealer }) => {
     const { actionSetPushActionSubscribe, pushActionSubscribe } = this.props;
-      if (pushActionSubscribe) {
-          actionSetPushActionSubscribe(true);
-          PushNotification.subscribeToTopic('actions', newDealer.id);
-      } else {
-          PushNotification.unsubscribeFromTopic('actions');
-          actionSetPushActionSubscribe(false);
-      }
 
-      PushNotification.addTag('dealer', newDealer.id);
+    // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
+    PushNotification.addTag('dealer', newDealer.id);
+
+    if (pushActionSubscribe) {
+        // actionSetPushActionSubscribe(true);
+        PushNotification.subscribeToTopic('actions', newDealer.id);
+    } else {
+        PushNotification.unsubscribeFromTopic('actions');
+        // actionSetPushActionSubscribe(false);
+    }
   };
 
   render() {

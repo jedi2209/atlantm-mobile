@@ -2,7 +2,7 @@ import API from '../utils/api';
 
 import {
   // APP_FCM_TOKEN__SET,
-  // APP_PUSH_GRANTED__SET,
+  APP_PUSH_GRANTED__SET,
   // APP_PREVIOUS_FCM_TOKEN__SET,
   APP_PUSH_ACTION_SUBSCRIBE__SET,
   APP_MENU_OPENED_COUNTER,
@@ -29,14 +29,14 @@ import {
 //   };
 // };
 
-// export const actionSetPushGranted = isGranted => {
-//   return dispatch => {
-//     dispatch({
-//       type: APP_PUSH_GRANTED__SET,
-//       payload: isGranted,
-//     });
-//   };
-// };
+export const actionSetPushGranted = isGranted => {
+  return dispatch => {
+    dispatch({
+      type: APP_PUSH_GRANTED__SET,
+      payload: isGranted,
+    });
+  };
+};
 
 export const actionMenuOpenedCount = reset => {
     return dispatch => {

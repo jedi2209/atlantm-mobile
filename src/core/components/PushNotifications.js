@@ -4,15 +4,33 @@ import { NavigationActions } from 'react-navigation';
 import OneSignal from 'react-native-onesignal';
 
 import { get } from 'lodash';
-// import { actionSetPushGranted } from "../actions";
 
-const isAndroid = Platform.OS === 'android';
+// const isAndroid = Platform.OS === 'android';
 
 export default {
-    init() {
+    init({ actionSetPushGranted, pushActionSubscribe, dealerId, actionSetPushActionSubscribe }) {
         OneSignal.init('2094a3e1-3c9a-479d-90ae-93adfcd15dab', {
             kOSSettingsKeyAutoPrompt: true,
             kOSSettingsKeyInFocusDisplayOption: 2
+        });
+
+        OneSignal.getPermissionSubscriptionState(status => {
+            if (status.notificationsEnabled) {
+                actionSetPushGranted(true);
+
+                if (pushActionSubscribe) {
+                    actionSetPushActionSubscribe(true);
+                    this.subscribeToTopic('actions', dealerId);
+                } else {
+                    this.unsubscribeFromTopic('actions');
+                }
+
+            } else {
+                actionSetPushGranted(false);
+                actionSetPushActionSubscribe(false);
+                this.unsubscribeFromTopic('actions');
+
+            }
         });
 
         OneSignal.setLogLevel(6, 0);
