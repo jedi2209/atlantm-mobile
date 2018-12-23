@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-import { REHYDRATE } from 'redux-persist';
+import { REHYDRATE } from 'redux-persist/constants';
 import { get } from 'lodash';
 import dealer from '../dealer/reducers';
 import nav from '../navigation/reducers';
@@ -15,7 +15,7 @@ import indicators from '../indicators/reducers';
 
 import {
 //    APP_FCM_TOKEN__SET,
-//    APP_PUSH_GRANTED__SET,
+    APP_PUSH_GRANTED__SET,
 //    APP_PREVIOUS_FCM_TOKEN__SET,
     APP_PUSH_ACTION_SUBSCRIBE__SET,
     APP_MENU_OPENED_COUNTER,
@@ -42,18 +42,20 @@ import { DEALER__SUCCESS } from '../dealer/actionTypes';
 //   }
 // };
 //
-// const pushGranted = (state = false, action) => {
-//   switch (action.type) {
-//     case APP_PUSH_GRANTED__SET:
-//       return action.payload;
-//     default:
-//       return state;
-//   }
-// };
-
-const pushActionSubscribe = (state = false, action) => {
-    console.log('pushActionSubscribe', action);
+const pushGranted = (state = false, action) => {
   switch (action.type) {
+    case APP_PUSH_GRANTED__SET:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const pushActionSubscribe = (state = true, action) => {
+//    console.log('pushActionSubscribe', get(action.payload, 'core.pushActionSubscribe', ''));
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'core.pushActionSubscribe', true);
     case APP_PUSH_ACTION_SUBSCRIBE__SET:
       return action.payload;
     default:
@@ -89,7 +91,7 @@ const isAppRated = (state = false, action) => {
 const coreReducer = combineReducers({
 //  fcmToken,
 //  previousFcmToken,
-//  pushGranted,
+  pushGranted,
   pushActionSubscribe,
   menuOpenedCount,
   isAppRated

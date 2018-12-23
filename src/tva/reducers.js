@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist';
+import { REHYDRATE } from 'redux-persist/constants';
 import {
   TVA__REQUEST,
   TVA__SUCCESS,
