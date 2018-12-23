@@ -149,8 +149,8 @@ class TvaScreen extends Component {
                     return $s.replace(new RegExp("(" + $f.map(function(i){return i.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")}).join("|") + ")", "g"), function(s){ return $r[$f.indexOf(s)]});
                 }
 
-                const carNumber_find = ["о","О","т","Т","е","Е","а","А","н","Н","к","К","м","М","в","В","с","С","х","Х","р","Р","у","У"];
-                const carNumber_replace = ["T","O","T","T","E","E","A","A","H","H","K","K","M","M","B","B","C","C","X","X","P","P","Y","Y"];
+                const carNumber_find = ["о","О","т","Т","е","Е","а","А","н","Н","к","К","м","М","в","В","с","С","х","Х","р","Р","у","У", "-"];
+                const carNumber_replace = ["T","O","T","T","E","E","A","A","H","H","K","K","M","M","B","B","C","C","X","X","P","P","Y","Y", ""];
 
                 console.log('carNumber', carNumber);
 
