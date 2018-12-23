@@ -17,7 +17,7 @@ import {
   actionLogout,
   actionFetchProfileData,
 } from '../actions';
-import { actionSetPushActionSubscribe } from '../../core/actions';
+import { actionSetPushActionSubscribe, actionSetPushGranted } from '../../core/actions';
 
 // components
 import Auth from '../components/Auth';
@@ -113,7 +113,7 @@ const mapDispatchToProps = {
   actionLogin,
   actionLogout,
 
-//  actionSetPushGranted,
+  actionSetPushGranted,
   actionSetPushActionSubscribe,
 };
 
@@ -166,7 +166,7 @@ class ProfileScreen extends Component {
 //    fcmToken: PropTypes.string,
     pushActionSubscribe: PropTypes.bool,
 //    actionSetFCMToken: PropTypes.func,
-//    actionSetPushGranted: PropTypes.func,
+    actionSetPushGranted: PropTypes.func,
     actionSetPushActionSubscribe: PropTypes.func,
     actionFetchCars: PropTypes.func,
   };
@@ -269,7 +269,7 @@ class ProfileScreen extends Component {
 //      fcmToken,
       pushActionSubscribe,
 //      actionSetFCMToken,
-//      actionSetPushGranted,
+      actionSetPushGranted,
       actionSetPushActionSubscribe,
 
       isFetchProfileData,
@@ -343,7 +343,7 @@ class ProfileScreen extends Component {
 //                fcmToken={fcmToken}
                 dealerSelected={dealerSelected}
                 pushActionSubscribe={pushActionSubscribe}
-//                actionSetPushGranted={actionSetPushGranted}
+                actionSetPushGranted={actionSetPushGranted}
                 actionSetPushActionSubscribe={actionSetPushActionSubscribe}
               />
             </List>

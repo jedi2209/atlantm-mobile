@@ -88,10 +88,7 @@ export default class ProfileForm extends PureComponent {
     carNumberFill: PropTypes.func,
     carSection: PropTypes.bool,
 
-//    fcmToken: PropTypes.string,
     pushActionSubscribe: PropTypes.bool,
-//    actionSetFCMToken: PropTypes.func,
-//    actionSetPushGranted: PropTypes.func,
     actionSetPushActionSubscribe: PropTypes.func,
   };
 
@@ -224,12 +221,8 @@ export default class ProfileForm extends PureComponent {
       actionSetPushActionSubscribe
     } = this.props;
 
-    const id = dealerSelected.id;
-
-    PushNotifications.subscribeToTopic('dealer', id);
-
     if (isSubscribe) {
-        PushNotifications.subscribeToTopic('actions', id)
+        PushNotifications.subscribeToTopic('actions', dealerSelected.id)
             .then(isPermission => {
                 actionSetPushActionSubscribe(isPermission);
             });

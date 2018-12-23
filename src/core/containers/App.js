@@ -6,9 +6,7 @@ import { connect } from 'react-redux';
 import { store } from '../store';
 import { navigationChange } from '../../navigation/actions';
 import {
-//  actionSetFCMToken,
-//  actionSetPushGranted,
-//  actionSetPreviousFCMToken,
+  actionSetPushGranted,
   actionSetPushActionSubscribe,
 } from '../actions';
 
@@ -35,9 +33,7 @@ const mapStateToProps = ({ core, dealer, profile }) => {
 
 const mapDispatchToProps = {
   navigationChange,
-//  actionSetFCMToken,
-//  actionSetPushGranted,
-//  actionSetPreviousFCMToken,
+  actionSetPushGranted,
   actionSetPushActionSubscribe,
 };
 
@@ -56,11 +52,10 @@ class App extends Component {
   componentDidMount() {
     const {
       auth,
-//      fcmToken,
-//      actionSetFCMToken,
       dealerSelected,
       pushActionSubscribe,
-//      actionSetPreviousFCMToken,
+      actionSetPushGranted,
+      actionSetPushActionSubscribe,
     } = this.props;
 
     if (get(auth, 'login') === 'zteam') {
@@ -69,22 +64,12 @@ class App extends Component {
 
     setTimeout(() => {
       PushNotification.init({
-//        fcmToken,
-//        actionSetFCMToken,
-//        actionSetPreviousFCMToken,
-//        onPushPermissionGranted: this.onPushPermissionGranted,
-//        onPushPermissionRejected: this.onPushPermissionRejected,
+          actionSetPushGranted,
+          pushActionSubscribe,
+          dealerId: dealerSelected.id,
+          actionSetPushActionSubscribe
       });
     }, 1000);
-
-    const id = dealerSelected.id;
-
-    // автоцентр выбран
-    if (id) {
-      pushActionSubscribe ?
-        PushNotification.subscribeToTopic('dealer', id) :
-        PushNotification.unsubscribeFromTopic('dealer');
-    }
   }
 
   shouldComponentUpdate() { return false; }
@@ -105,7 +90,7 @@ class App extends Component {
 
   onNavigationStateChange = (prevState, newState) => {
     this.props.navigationChange({ prevState, newState });
-  }
+  };
 
   render() {
     const isTablet = DeviceInfo.isTablet();
