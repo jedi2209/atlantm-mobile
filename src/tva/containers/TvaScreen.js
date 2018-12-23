@@ -142,21 +142,21 @@ class TvaScreen extends Component {
 //      fcmToken,
       pushTracking,
     }).then(action => {
-      PushNotifications.addTag('dealer', dealerId);
       if (action.type === TVA__SUCCESS) {
         setTimeout(() => {
             if (pushTracking === true) {
-                function replaceStr(str, find, replace) {
-                    for (let i = 0; i < find.length; i++) {
-                        str = str.replace(new RegExp(find[i], 'gi'), replace[i]);
-                    }
-                    return str;
+                function str_replace($f, $r, $s){
+                    return $s.replace(new RegExp("(" + $f.map(function(i){return i.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")}).join("|") + ")", "g"), function(s){ return $r[$f.indexOf(s)]});
                 }
 
-                const carNumber_find = ['о','О','т','Т','е','Е','а','А','н','Н','к','К','м','М','в','В','с','С','х','Х','р','Р','у','У'];
-                const carNumber_replace = ['o','O','t','T','e','E','a','A','h','H','k','K','m','M','b','B','c','C','x','X','p','P','y','Y'];
+                const carNumber_find = ["о","О","т","Т","е","Е","а","А","н","Н","к","К","м","М","в","В","с","С","х","Х","р","Р","у","У"];
+                const carNumber_replace = ["T","O","T","T","E","E","A","A","H","H","K","K","M","M","B","B","C","C","X","X","P","P","Y","Y"];
 
-                PushNotifications.subscribeToTopic('tva', replaceStr(carNumber, carNumber_find, carNumber_replace));
+                console.log('carNumber', carNumber);
+
+                let carNumberChanged = carNumber.replace(new RegExp("(" + carNumber_find.map(function(i){return i.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")}).join("|") + ")", "g"), function(s){ return carNumber_replace[carNumber_find.indexOf(s)]});;
+
+                PushNotifications.subscribeToTopic('tva', carNumberChanged.toUpperCase());
             }
           navigation.navigate('TvaResultsScreen'), 200
         });
