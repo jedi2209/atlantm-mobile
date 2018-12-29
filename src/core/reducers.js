@@ -32,7 +32,7 @@ const pushGranted = (state = false, action) => {
 };
 
 const pushActionSubscribeState = (state = true, action) => {
-    console.log('pushActionSubscribeFirst', get(action.payload, 'core.pushActionSubscribeState', true));
+    // console.log('pushActionSubscribeFirst', get(action.payload, 'core.pushActionSubscribeState', true));
   switch (action.type) {
     case REHYDRATE:
         // const pushActionSubscribeRehydrate = get(action.payload, 'core.pushActionSubscribe', true);

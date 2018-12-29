@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, NativeModules } from 'react-native';
 
 // redux
 import { connect } from 'react-redux';
@@ -22,6 +22,10 @@ import DeviceInfo from 'react-native-device-info';
 
 // routes
 import getRouter from '../router';
+
+if (__DEV__) {
+    NativeModules.DevSettings.setIsDebuggingRemotely(true)
+}
 
 const mapStateToProps = ({ core, dealer, profile }) => {
   return {
@@ -72,16 +76,12 @@ class App extends Component {
             kOSSettingsKeyInFocusDisplayOption: 2
         });
 
-        OneSignal.setLogLevel(6, 0);
-        OneSignal.enableSound(true);
-        OneSignal.enableVibrate(true);
-
-        OneSignal.getPermissionSubscriptionState(status => {
-            if (status.notificationsEnabled) {
+        OneSignal.promptForPushNotificationsWithUserResponse((status) => {
+            if (status) {
 
                 actionSetPushGranted(true);
 
-                if (Number(menuOpenedCount) < 1) { // при первичном ините всегда подписываем насильно на акции
+                if (Number(menuOpenedCount) <= 1 || menuOpenedCount == '' || !menuOpenedCount) { // при первичном ините всегда подписываем насильно на акции
                     actionSetPushActionSubscribe(true);
                     PushNotification.subscribeToTopic('actions', dealerSelected.id);
                 }
@@ -95,6 +95,10 @@ class App extends Component {
                 OneSignal.setSubscription(false);
             }
         });
+
+        OneSignal.setLogLevel(6, 0);
+        OneSignal.enableSound(true);
+        OneSignal.enableVibrate(true);
 
       PushNotification.init();
     }, 1000);
