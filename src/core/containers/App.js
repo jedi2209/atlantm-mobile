@@ -12,6 +12,7 @@ import {
 
 // helpers
 import { get } from 'lodash';
+import OneSignal from 'react-native-onesignal';
 import PushNotification from '../components/PushNotifications';
 // import RateThisApp from '../components/RateThisApp';
 
@@ -25,9 +26,10 @@ import getRouter from '../router';
 const mapStateToProps = ({ core, dealer, profile }) => {
   return {
 //    fcmToken: core.fcmToken,
-    pushActionSubscribe: core.pushActionSubscribe,
+    pushActionSubscribeState: core.pushActionSubscribeState,
     dealerSelected: dealer.selected,
     auth: profile.auth,
+    menuOpenedCount: core.menuOpenedCount,
   };
 };
 
@@ -53,9 +55,10 @@ class App extends Component {
     const {
       auth,
       dealerSelected,
-      pushActionSubscribe,
+      pushActionSubscribeState,
       actionSetPushGranted,
       actionSetPushActionSubscribe,
+      menuOpenedCount
     } = this.props;
 
     if (get(auth, 'login') === 'zteam') {
@@ -63,12 +66,37 @@ class App extends Component {
     }
 
     setTimeout(() => {
-      PushNotification.init({
-          actionSetPushGranted,
-          pushActionSubscribe,
-          dealerId: dealerSelected.id,
-          actionSetPushActionSubscribe
-      });
+
+        OneSignal.init('2094a3e1-3c9a-479d-90ae-93adfcd15dab', {
+            kOSSettingsKeyAutoPrompt: true,
+            kOSSettingsKeyInFocusDisplayOption: 2
+        });
+
+        OneSignal.setLogLevel(6, 0);
+        OneSignal.enableSound(true);
+        OneSignal.enableVibrate(true);
+
+        OneSignal.getPermissionSubscriptionState(status => {
+            if (status.notificationsEnabled) {
+
+                actionSetPushGranted(true);
+
+                if (Number(menuOpenedCount) < 1) { // при первичном ините всегда подписываем насильно на акции
+                    actionSetPushActionSubscribe(true);
+                    PushNotification.subscribeToTopic('actions', dealerSelected.id);
+                }
+
+                OneSignal.setSubscription(true);
+
+            } else {
+                actionSetPushGranted(false);
+                actionSetPushActionSubscribe(false);
+                PushNotification.unsubscribeFromTopic('actions');
+                OneSignal.setSubscription(false);
+            }
+        });
+
+      PushNotification.init();
     }, 1000);
   }
 

@@ -95,7 +95,7 @@ const mapStateToProps = ({ dealer, profile, nav, core }) => {
     discounts: profile.discounts,
 
 //    fcmToken: core.fcmToken,
-    pushActionSubscribe: core.pushActionSubscribe,
+    pushActionSubscribeState: core.pushActionSubscribeState,
   };
 };
 
@@ -164,7 +164,7 @@ class ProfileScreen extends Component {
     discounts: PropTypes.array,
 
 //    fcmToken: PropTypes.string,
-    pushActionSubscribe: PropTypes.bool,
+    pushActionSubscribeState: PropTypes.bool,
 //    actionSetFCMToken: PropTypes.func,
     actionSetPushGranted: PropTypes.func,
     actionSetPushActionSubscribe: PropTypes.func,
@@ -267,7 +267,7 @@ class ProfileScreen extends Component {
       discounts,
 
 //      fcmToken,
-      pushActionSubscribe,
+      pushActionSubscribeState,
 //      actionSetFCMToken,
       actionSetPushGranted,
       actionSetPushActionSubscribe,
@@ -342,7 +342,7 @@ class ProfileScreen extends Component {
                 carNumberFill={carNumberFill}
 //                fcmToken={fcmToken}
                 dealerSelected={dealerSelected}
-                pushActionSubscribe={pushActionSubscribe}
+                pushActionSubscribeState={pushActionSubscribeState}
                 actionSetPushGranted={actionSetPushGranted}
                 actionSetPushActionSubscribe={actionSetPushActionSubscribe}
               />

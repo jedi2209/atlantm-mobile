@@ -88,7 +88,7 @@ export default class ProfileForm extends PureComponent {
     carNumberFill: PropTypes.func,
     carSection: PropTypes.bool,
 
-    pushActionSubscribe: PropTypes.bool,
+    pushActionSubscribeState: PropTypes.bool,
     actionSetPushActionSubscribe: PropTypes.func,
   };
 
@@ -245,7 +245,7 @@ export default class ProfileForm extends PureComponent {
       carNumber,
       carSection,
       carVINFill,
-      pushActionSubscribe,
+      pushActionSubscribeState,
       actionSetPushActionSubscribe,
     } = this.props;
 
@@ -323,7 +323,7 @@ export default class ProfileForm extends PureComponent {
 
         {
           isFunction(actionSetPushActionSubscribe) ?
-            this.renderListSwitcher(this.onSwitchActionSubscribe, pushActionSubscribe) :
+            this.renderListSwitcher(this.onSwitchActionSubscribe, pushActionSubscribeState) :
             null
         }
       </View>
