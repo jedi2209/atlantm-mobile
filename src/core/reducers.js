@@ -14,9 +14,7 @@ import catalog from '../catalog/reducers';
 import indicators from '../indicators/reducers';
 
 import {
-//    APP_FCM_TOKEN__SET,
     APP_PUSH_GRANTED__SET,
-//    APP_PREVIOUS_FCM_TOKEN__SET,
     APP_PUSH_ACTION_SUBSCRIBE__SET,
     APP_MENU_OPENED_COUNTER,
     APP_ACTION_RATED
@@ -24,24 +22,6 @@ import {
 
 import { DEALER__SUCCESS } from '../dealer/actionTypes';
 
-// const fcmToken = (state = null, action) => {
-//   switch (action.type) {
-//     case APP_FCM_TOKEN__SET:
-//       return action.payload;
-//     default:
-//       return state;
-//   }
-// };
-//
-// const previousFcmToken = (state = null, action) => {
-//   switch (action.type) {
-//     case APP_PREVIOUS_FCM_TOKEN__SET:
-//       return action.payload;
-//     default:
-//       return state;
-//   }
-// };
-//
 const pushGranted = (state = false, action) => {
   switch (action.type) {
     case APP_PUSH_GRANTED__SET:
@@ -51,11 +31,13 @@ const pushGranted = (state = false, action) => {
   }
 };
 
-const pushActionSubscribe = (state = true, action) => {
-//    console.log('pushActionSubscribe', get(action.payload, 'core.pushActionSubscribe', ''));
+const pushActionSubscribeState = (state = true, action) => {
+    console.log('pushActionSubscribeFirst', get(action.payload, 'core.pushActionSubscribeState', true));
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'core.pushActionSubscribe', true);
+        // const pushActionSubscribeRehydrate = get(action.payload, 'core.pushActionSubscribe', true);
+        // return pushActionSubscribeRehydrate ? pushActionSubscribeRehydrate : true;
+        return get(action.payload, 'core.pushActionSubscribeState', true);
     case APP_PUSH_ACTION_SUBSCRIBE__SET:
       return action.payload;
     default:
@@ -92,7 +74,7 @@ const coreReducer = combineReducers({
 //  fcmToken,
 //  previousFcmToken,
   pushGranted,
-  pushActionSubscribe,
+  pushActionSubscribeState,
   menuOpenedCount,
   isAppRated
 });

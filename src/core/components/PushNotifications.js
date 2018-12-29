@@ -8,36 +8,7 @@ import { get } from 'lodash';
 // const isAndroid = Platform.OS === 'android';
 
 export default {
-    init({ actionSetPushGranted, pushActionSubscribe, dealerId, actionSetPushActionSubscribe }) {
-        OneSignal.init('XXXX', {
-            kOSSettingsKeyAutoPrompt: true,
-            kOSSettingsKeyInFocusDisplayOption: 2
-        });
-
-        OneSignal.setLogLevel(6, 0);
-        OneSignal.enableSound(true);
-        OneSignal.enableVibrate(true);
-
-        OneSignal.getPermissionSubscriptionState(status => {
-            if (status.notificationsEnabled) {
-                actionSetPushGranted(true);
-
-                if (pushActionSubscribe) {
-                    actionSetPushActionSubscribe(true);
-                    this.subscribeToTopic('actions', dealerId);
-                } else {
-                    this.unsubscribeFromTopic('actions');
-                }
-
-                OneSignal.setSubscription(true);
-
-            } else {
-                actionSetPushGranted(false);
-                actionSetPushActionSubscribe(false);
-                this.unsubscribeFromTopic('actions');
-                OneSignal.setSubscription(false);
-            }
-        });
+    init() {
 
         OneSignal.addEventListener('received', this.onReceived);
         OneSignal.addEventListener('opened', this.onOpened);

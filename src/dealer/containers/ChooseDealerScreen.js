@@ -27,7 +27,7 @@ const mapStateToProps = ({ dealer, nav, core }) => {
     isFetchDealersList: dealer.meta.isFetchDealersList,
     isFetchDealer: dealer.meta.isFetchDealer,
     pushGranted: core.pushGranted,
-    pushActionSubscribe: core.pushActionSubscribe,
+    pushActionSubscribeState: core.pushActionSubscribeState,
   };
 };
 
@@ -55,12 +55,12 @@ class ChooseDealerScreen extends Component {
   }
 
   onSelectDealer = ({ prevDealer, newDealer }) => {
-    const { actionSetPushActionSubscribe, pushActionSubscribe } = this.props;
+    const { actionSetPushActionSubscribe, pushActionSubscribeState } = this.props;
 
     // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
     PushNotification.addTag('dealer', newDealer.id);
 
-    if (pushActionSubscribe) {
+    if (pushActionSubscribeState) {
         // actionSetPushActionSubscribe(true);
         PushNotification.subscribeToTopic('actions', newDealer.id);
     } else {
