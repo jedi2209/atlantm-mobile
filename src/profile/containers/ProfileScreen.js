@@ -28,7 +28,7 @@ import SpinnerView from '../../core/components/SpinnerView';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconReload from '../../core/components/HeaderIconReload';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-//import PushNotifications from '../../core/components/PushNotifications';
+import PushNotifications from '../../core/components/PushNotifications';
 
 // helpers
 import { get } from 'lodash';
@@ -212,7 +212,7 @@ class ProfileScreen extends Component {
       'Подтверждение выхода',
       'Вы действительно хотите выйти?',
       [
-        { text: 'Нет', style: 'cancel' },
+        { text: 'Нет', style: 'destructive' },
         {
           text: 'Выйти',
           onPress() {
@@ -222,7 +222,7 @@ class ProfileScreen extends Component {
             }
 
             setTimeout(() => {
-              // PushNotifications.logoutEmail();
+              PushNotifications.removeTag('login');
               actionLogout()
                 }, 100
             );
