@@ -13,7 +13,7 @@ import {
 // helpers
 import { get } from 'lodash';
 import OneSignal from 'react-native-onesignal';
-import PushNotification from '../components/PushNotifications';
+import PushNotifications from '../components/PushNotifications';
 // import RateThisApp from '../components/RateThisApp';
 
 // components
@@ -29,8 +29,7 @@ if (__DEV__) {
 
 const mapStateToProps = ({ core, dealer, profile }) => {
   return {
-//    fcmToken: core.fcmToken,
-    pushActionSubscribeState: core.pushActionSubscribeState,
+//     pushActionSubscribeState: core.pushActionSubscribeState,
     dealerSelected: dealer.selected,
     auth: profile.auth,
     menuOpenedCount: core.menuOpenedCount,
@@ -59,7 +58,7 @@ class App extends Component {
     const {
       auth,
       dealerSelected,
-      pushActionSubscribeState,
+      // pushActionSubscribeState,
       actionSetPushGranted,
       actionSetPushActionSubscribe,
       menuOpenedCount
@@ -83,7 +82,7 @@ class App extends Component {
 
                 if (Number(menuOpenedCount) <= 1 || menuOpenedCount == '' || !menuOpenedCount) { // при первичном ините всегда подписываем насильно на акции
                     actionSetPushActionSubscribe(true);
-                    PushNotification.subscribeToTopic('actions', dealerSelected.id);
+                    PushNotifications.subscribeToTopic('actions', dealerSelected.id);
                 }
 
                 OneSignal.setSubscription(true);
@@ -91,7 +90,7 @@ class App extends Component {
             } else {
                 actionSetPushGranted(false);
                 actionSetPushActionSubscribe(false);
-                PushNotification.unsubscribeFromTopic('actions');
+                PushNotifications.unsubscribeFromTopic('actions');
                 OneSignal.setSubscription(false);
             }
         });
@@ -100,7 +99,7 @@ class App extends Component {
         OneSignal.enableSound(true);
         OneSignal.enableVibrate(true);
 
-      PushNotification.init();
+      PushNotifications.init();
     }, 1000);
   }
 

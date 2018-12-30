@@ -10,7 +10,7 @@ import { fetchDealers, selectDealer, selectRegion } from '../actions';
 // components
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import SelectListByCountry from '../../core/components/SelectListByCountry';
-import PushNotification from '../../core/components/PushNotifications';
+import PushNotifications from '../../core/components/PushNotifications';
 
 // helpers
 import { get } from 'lodash';
@@ -55,17 +55,15 @@ class ChooseDealerScreen extends Component {
   }
 
   onSelectDealer = ({ prevDealer, newDealer }) => {
-    const { actionSetPushActionSubscribe, pushActionSubscribeState } = this.props;
-
+    const { pushActionSubscribeState } = this.props;
+      console.log('onSelectDealer => New Dealer', newDealer);
     // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
-    PushNotification.addTag('dealer', newDealer.id);
+    PushNotifications.addTag('dealer', newDealer.id);
 
     if (pushActionSubscribeState) {
-        // actionSetPushActionSubscribe(true);
-        PushNotification.subscribeToTopic('actions', newDealer.id);
+        PushNotifications.subscribeToTopic('actions', newDealer.id);
     } else {
-        PushNotification.unsubscribeFromTopic('actions');
-        // actionSetPushActionSubscribe(false);
+        PushNotifications.unsubscribeFromTopic('actions');
     }
   };
 

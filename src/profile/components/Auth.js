@@ -5,13 +5,14 @@ import PropTypes from 'prop-types';
 // components
 import Spinner from 'react-native-loading-spinner-overlay';
 import { ListItem, Body, Item, Label, Input, Button } from 'native-base';
+import PushNotifications from '@core/components/PushNotifications';
 
 // styles
 import stylesList from '@core/components/Lists/style';
 
 // helpers
 import { get } from 'lodash';
-import { LOGIN__FAIL } from '@profile/actionTypes';
+import { LOGIN__FAIL, LOGIN__SUCCESS } from '@profile/actionTypes';
 import styleConst from '@core/style-const';
 import { LOGIN_LABEL, LOGIN_PLACEHOLDER, PASS_LABEL, PASS_PLACEHOLDER } from '@profile/const';
 
@@ -108,18 +109,23 @@ export default class Auth extends Component {
 
     loginHandler({ login, password, dealers, dealerSelected })
       .then(action => {
-        if (action.type === LOGIN__FAIL) {
-          if (login === 'zteam' && password === '4952121052') {
-            window.atlantmDebug = false;
-          }
+        switch (action.type) {
+            case LOGIN__FAIL:
+                if (login === 'zteam' && password === '4952121052') {
+                    window.atlantmDebug = false;
+                }
 
-          const defaultMessage = 'Произошла ошибка, попробуйте снова';
-          const code = get(action, 'payload.code');
-          const message = get(action, 'payload.message');
+                const defaultMessage = 'Произошла ошибка, попробуйте снова';
+                const code = get(action, 'payload.code');
+                const message = get(action, 'payload.message');
 
-          setTimeout(() => {
-            Alert.alert(!code || code === 500 ? defaultMessage : message);
-          }, 100);
+                setTimeout(() => {
+                    Alert.alert(!code || code === 500 ? defaultMessage : message);
+                }, 100);
+                break;
+            case LOGIN__SUCCESS:
+                PushNotifications.addTag('login', login);
+                break;
         }
       });
   };
@@ -214,10 +220,12 @@ export default class Auth extends Component {
         </View>
 
         {this.renderListItem({
-          label: LOGIN_LABEL,
-          value: login,
-          placeholder: LOGIN_PLACEHOLDER,
-          onChangeHandler: this.onChangeLogin,
+            label: LOGIN_LABEL,
+            value: login,
+            placeholder: LOGIN_PLACEHOLDER,
+            onChangeHandler: this.onChangeLogin,
+            blurOnSubmit: false,
+            ref: "login",
         })}
         {this.renderListItem({
           label: PASS_LABEL,
@@ -226,6 +234,7 @@ export default class Auth extends Component {
           onChangeHandler: this.onChangePassword,
           inputProps: { secureTextEntry: true },
           isLast: true,
+          ref: "pass",
         })}
         {this.renderForgotPassButton()}
 
