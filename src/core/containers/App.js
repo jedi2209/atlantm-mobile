@@ -82,15 +82,20 @@ class App extends Component {
 
                 if (Number(menuOpenedCount) <= 1 || menuOpenedCount == '' || !menuOpenedCount) { // при первичном ините всегда подписываем насильно на акции
                     actionSetPushActionSubscribe(true);
-                    PushNotifications.subscribeToTopic('actions', dealerSelected.id);
-                    PushNotifications.addTag('dealer', dealerSelected.id);
-                } else {
-                    if (pushActionSubscribeState) {
-                        PushNotifications.subscribeToTopic('actions', newDealer.id);
-                    } else {
-                        PushNotifications.unsubscribeFromTopic('actions');
+                    const currentDealer = get(dealerSelected, 'id', false);
+                    if (currentDealer) {
+                        PushNotifications.subscribeToTopic('actions', currentDealer);
+                        PushNotifications.addTag('dealer', currentDealer);
                     }
-                    PushNotifications.addTag('dealer', dealerSelected.id);
+                } else {
+                    if (currentDealer) {
+                        if (pushActionSubscribeState) {
+                            PushNotifications.subscribeToTopic('actions', currentDealer);
+                        } else {
+                            PushNotifications.unsubscribeFromTopic('actions');
+                        }
+                        PushNotifications.addTag('dealer', currentDealer);
+                    }
                 }
 
                 OneSignal.setSubscription(true);
