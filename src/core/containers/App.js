@@ -79,10 +79,10 @@ class App extends Component {
             if (status) {
 
                 actionSetPushGranted(true);
+                const currentDealer = get(dealerSelected, 'id', false);
 
                 if (Number(menuOpenedCount) <= 1 || menuOpenedCount == '' || !menuOpenedCount) { // при первичном ините всегда подписываем насильно на акции
                     actionSetPushActionSubscribe(true);
-                    const currentDealer = get(dealerSelected, 'id', false);
                     if (currentDealer) {
                         PushNotifications.subscribeToTopic('actions', currentDealer);
                         PushNotifications.addTag('dealer', currentDealer);
