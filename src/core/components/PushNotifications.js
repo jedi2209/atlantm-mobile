@@ -94,7 +94,6 @@ export default {
     },
 
     unsubscribeFromTopic( topic ) {
-        OneSignal.deleteTag('topic'); // TODO: убрать после выпуска билда
         OneSignal.deleteTag(topic);
     },
 
