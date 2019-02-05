@@ -112,8 +112,6 @@ class TvaScreen extends Component {
     let {
       carNumber,
       navigation,
-//      fcmToken,
-//      pushGranted,
       pushTracking,
       dealerSelected,
       actionFetchTva,
@@ -124,6 +122,8 @@ class TvaScreen extends Component {
     if (pushProps) {
       carNumber = pushProps.carNumber;
       dealerId = pushProps.dealerId;
+      pushTracking = false;
+      this.onPressPushTracking(false);
     }
 
     if (!carNumber && !pushProps) {
@@ -139,7 +139,6 @@ class TvaScreen extends Component {
       number: carNumber,
       dealer: dealerId,
       region: pushProps ? null : dealerSelected.region,
-//      fcmToken,
       pushTracking,
     }).then(action => {
       if (action.type === TVA__SUCCESS) {
@@ -157,6 +156,8 @@ class TvaScreen extends Component {
                 let carNumberChanged = carNumber.replace(new RegExp("(" + carNumber_find.map(function(i){return i.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&")}).join("|") + ")", "g"), function(s){ return carNumber_replace[carNumber_find.indexOf(s)]});;
 
                 PushNotifications.subscribeToTopic('tva', carNumberChanged.toUpperCase());
+            } else {
+                PushNotifications.unsubscribeFromTopic('tva');
             }
           navigation.navigate('TvaResultsScreen'), 200
         });
