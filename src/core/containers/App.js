@@ -8,6 +8,8 @@ import { navigationChange } from '../../navigation/actions';
 import {
   actionSetPushGranted,
   actionSetPushActionSubscribe,
+  actionMenuOpenedCount,
+  actionStoreUpdated
 } from '../actions';
 
 // helpers
@@ -33,6 +35,7 @@ const mapStateToProps = ({ core, dealer, profile }) => {
     dealerSelected: dealer.selected,
     auth: profile.auth,
     menuOpenedCount: core.menuOpenedCount,
+    isStoreUpdated: core.isStoreUpdated,
   };
 };
 
@@ -40,6 +43,8 @@ const mapDispatchToProps = {
   navigationChange,
   actionSetPushGranted,
   actionSetPushActionSubscribe,
+  actionMenuOpenedCount,
+  actionStoreUpdated
 };
 
 const styles = StyleSheet.create({
@@ -58,14 +63,21 @@ class App extends Component {
     const {
       auth,
       dealerSelected,
-      pushActionSubscribeState,
       actionSetPushGranted,
       actionSetPushActionSubscribe,
-      menuOpenedCount
+      menuOpenedCount,
+      isStoreUpdated
     } = this.props;
 
     if (get(auth, 'login') === 'zteam') {
       window.atlantmDebug = true;
+    }
+
+    const currentDealer = get(dealerSelected, 'id', false);
+
+    if (currentDealer && !isStoreUpdated) { // если мы ещё не очищали стор
+        this.props.actionMenuOpenedCount(0);
+        this.props.actionStoreUpdated('2019-02-01');
     }
 
     setTimeout(() => {
@@ -79,23 +91,9 @@ class App extends Component {
             if (status) {
 
                 actionSetPushGranted(true);
-                const currentDealer = get(dealerSelected, 'id', false);
-
-                if (Number(menuOpenedCount) <= 1 || menuOpenedCount == '' || !menuOpenedCount) { // при первичном ините всегда подписываем насильно на акции
+                if (Number(menuOpenedCount) <= 1 || menuOpenedCount == '' || !menuOpenedCount || !isStoreUpdated) { // при первичном ините всегда подписываем насильно на акции
                     actionSetPushActionSubscribe(true);
-                    if (currentDealer) {
-                        PushNotifications.subscribeToTopic('actions', currentDealer);
-                        PushNotifications.addTag('dealer', currentDealer);
-                    }
-                } else {
-                    if (currentDealer) {
-                        if (pushActionSubscribeState) {
-                            PushNotifications.subscribeToTopic('actions', currentDealer);
-                        } else {
-                            PushNotifications.unsubscribeFromTopic('actions');
-                        }
-                        PushNotifications.addTag('dealer', currentDealer);
-                    }
+                    this.props.actionStoreUpdated('2019-02-01');
                 }
 
                 OneSignal.setSubscription(true);
@@ -113,7 +111,7 @@ class App extends Component {
         OneSignal.enableVibrate(true);
 
       PushNotifications.init();
-    }, 1000);
+    }, 500);
   }
 
   shouldComponentUpdate() { return false; }
