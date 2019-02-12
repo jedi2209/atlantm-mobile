@@ -1,33 +1,12 @@
 import API from '../utils/api';
 
 import {
-  // APP_FCM_TOKEN__SET,
   APP_PUSH_GRANTED__SET,
-  // APP_PREVIOUS_FCM_TOKEN__SET,
   APP_PUSH_ACTION_SUBSCRIBE__SET,
   APP_MENU_OPENED_COUNTER,
-  APP_ACTION_RATED
+  APP_ACTION_RATED,
+  APP_STORE_UPDATED
 } from './actionTypes';
-
-// export const actionSetFCMToken = token => {
-//   return dispatch => {
-//     dispatch({
-//       type: APP_FCM_TOKEN__SET,
-//       payload: token,
-//     });
-//   };
-// };
-//
-// export const actionSetPreviousFCMToken = (oldToken, newToken) => {
-//   return dispatch => {
-//     dispatch({
-//       type: APP_PREVIOUS_FCM_TOKEN__SET,
-//       payload: oldToken,
-//     });
-//
-//     API.updateFCMToken({ oldToken, newToken });
-//   };
-// };
 
 export const actionSetPushGranted = isGranted => {
   return dispatch => {
@@ -51,6 +30,15 @@ export const actionAppRated = () => {
     return dispatch => {
         dispatch({
             type: APP_ACTION_RATED
+        });
+    };
+};
+
+export const actionStoreUpdated = (isUpdated) => {
+    return dispatch => {
+        dispatch({
+            type: APP_STORE_UPDATED,
+            payload: isUpdated,
         });
     };
 };

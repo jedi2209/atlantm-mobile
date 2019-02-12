@@ -17,7 +17,8 @@ import {
     APP_PUSH_GRANTED__SET,
     APP_PUSH_ACTION_SUBSCRIBE__SET,
     APP_MENU_OPENED_COUNTER,
-    APP_ACTION_RATED
+    APP_ACTION_RATED,
+    APP_STORE_UPDATED
 } from './actionTypes';
 
 import { DEALER__SUCCESS } from '../dealer/actionTypes';
@@ -26,20 +27,21 @@ const pushGranted = (state = false, action) => {
   switch (action.type) {
     case APP_PUSH_GRANTED__SET:
       return action.payload;
+    case APP_STORE_UPDATED:
+      return false;
     default:
       return state;
   }
 };
 
 const pushActionSubscribeState = (state = true, action) => {
-    // console.log('pushActionSubscribeFirst', get(action.payload, 'core.pushActionSubscribeState', true));
   switch (action.type) {
     case REHYDRATE:
-        // const pushActionSubscribeRehydrate = get(action.payload, 'core.pushActionSubscribe', true);
-        // return pushActionSubscribeRehydrate ? pushActionSubscribeRehydrate : true;
         return get(action.payload, 'core.pushActionSubscribeState', true);
     case APP_PUSH_ACTION_SUBSCRIBE__SET:
       return action.payload;
+    case APP_STORE_UPDATED:
+      return false;
     default:
       return state;
   }
@@ -54,6 +56,8 @@ const menuOpenedCount = (state = 0, action) => {
                 return 0;
             }
             return ++state;
+        case APP_STORE_UPDATED:
+            return 0;
         default:
             return state;
     }
@@ -70,13 +74,26 @@ const isAppRated = (state = false, action) => {
     }
 };
 
+const isStoreUpdated = (state = false, action) => {
+    switch (action.type) {
+        case REHYDRATE:
+            const coreIsStoreUpdated = get(action.payload, 'core.isStoreUpdated');
+            return coreIsStoreUpdated ? coreIsStoreUpdated : false;
+        case APP_STORE_UPDATED:
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
 const coreReducer = combineReducers({
 //  fcmToken,
 //  previousFcmToken,
   pushGranted,
   pushActionSubscribeState,
   menuOpenedCount,
-  isAppRated
+  isAppRated,
+  isStoreUpdated
 });
 
 const rootReducer = combineReducers({

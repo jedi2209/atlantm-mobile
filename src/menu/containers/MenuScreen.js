@@ -4,7 +4,14 @@ import { Container, Text, Grid, Col, Row } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
-import { actionMenuOpenedCount, actionAppRated, actionAppRateAskLater } from '../../core/actions';
+import {
+  actionMenuOpenedCount,
+  actionAppRated,
+  actionAppRateAskLater,
+  actionSetPushGranted,
+  actionSetPushActionSubscribe,
+  actionStoreUpdated
+} from '../../core/actions';
 
 // components
 import HeaderLogo from '../../core/components/HeaderLogo/HeaderLogo';
@@ -12,8 +19,11 @@ import HeaderLogo from '../../core/components/HeaderLogo/HeaderLogo';
 // helpers
 import styleConst from '../../core/style-const';
 import { scale, verticalScale } from '../../utils/scale';
+import { get } from 'lodash';
 import stylesHeader from '../../core/components/Header/style';
 import RateThisApp from "../../core/components/RateThisApp";
+import OneSignal from 'react-native-onesignal';
+import PushNotifications from '../../core/components/PushNotifications';
 
 const styles = StyleSheet.create({
   container: {
@@ -46,11 +56,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ core }) => {
+const mapStateToProps = ({ core, dealer }) => {
     return {
+        dealerSelected: dealer.selected,
         menuOpenedCount: core.menuOpenedCount,
         isAppRated: core.isAppRated,
         AppRateAskLater: core.AppRateAskLater,
+        isStoreUpdated: core.isStoreUpdated,
         MenuCounterLimit: 10 // счётчик открытия меню, после которого показывается предложение об оценке
     };
 };
@@ -58,7 +70,10 @@ const mapStateToProps = ({ core }) => {
 const mapDispatchToProps = {
     actionMenuOpenedCount,
     actionAppRated,
-    actionAppRateAskLater
+    actionAppRateAskLater,
+    actionSetPushGranted,
+    actionSetPushActionSubscribe,
+    actionStoreUpdated
 };
 
 class MenuScreen extends Component {
@@ -76,9 +91,31 @@ class MenuScreen extends Component {
     }
   }
 
-  // componentDidMount() {
-  //     this.props.actionMenuOpenedCount(0);
-  // }
+  componentDidMount() {
+      const {
+          dealerSelected,
+          menuOpenedCount,
+          isStoreUpdated,
+          actionSetPushActionSubscribe
+      } = this.props;
+
+      const currentDealer = get(dealerSelected, 'id', false);
+
+      setTimeout(() => {
+
+          OneSignal.promptForPushNotificationsWithUserResponse((status) => {
+              if (status) {
+                  if (Number(menuOpenedCount) <= 1 || menuOpenedCount == '' || !menuOpenedCount || isStoreUpdated != '') { // при первичном ините всегда подписываем насильно на акции
+                      if (currentDealer) {
+                          actionSetPushActionSubscribe(true);
+                          PushNotifications.subscribeToTopic('actions', currentDealer);
+                          PushNotifications.addTag('dealer', currentDealer);
+                      }
+                  }
+              }
+          });
+      }, 100);
+  }
 
   shouldComponentUpdate(nextProps) {
     return this.props.isAppRated !== nextProps.isAppRated;
