@@ -105,11 +105,12 @@ class MenuScreen extends Component {
 
           OneSignal.promptForPushNotificationsWithUserResponse((status) => {
               if (status) {
-                  if (Number(menuOpenedCount) <= 1 || menuOpenedCount == '' || !menuOpenedCount || isStoreUpdated != '') { // при первичном ините всегда подписываем насильно на акции
+                  if (Number(menuOpenedCount) <= 1 || menuOpenedCount == '' || !menuOpenedCount || isStoreUpdated != '2019-02-01') { // при первичном ините всегда подписываем насильно на акции
                       if (currentDealer) {
                           actionSetPushActionSubscribe(true);
                           PushNotifications.subscribeToTopic('actions', currentDealer);
                           PushNotifications.addTag('dealer', currentDealer);
+                          this.props.actionStoreUpdated('2019-02-01');
                       }
                   }
               }
