@@ -93,7 +93,6 @@ class App extends Component {
                 actionSetPushGranted(true);
                 if (Number(menuOpenedCount) <= 1 || menuOpenedCount == '' || !menuOpenedCount || !isStoreUpdated) { // при первичном ините всегда подписываем насильно на акции
                     actionSetPushActionSubscribe(true);
-                    this.props.actionStoreUpdated('2019-02-01');
                 }
 
                 OneSignal.setSubscription(true);
