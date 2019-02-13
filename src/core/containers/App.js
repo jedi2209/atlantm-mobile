@@ -65,6 +65,8 @@ class App extends Component {
       dealerSelected,
       actionSetPushGranted,
       actionSetPushActionSubscribe,
+      actionStoreUpdated,
+      actionMenuOpenedCount,
       menuOpenedCount,
       isStoreUpdated
     } = this.props;
@@ -75,9 +77,11 @@ class App extends Component {
 
     const currentDealer = get(dealerSelected, 'id', false);
 
-    if (currentDealer && !isStoreUpdated) { // если мы ещё не очищали стор
-        this.props.actionMenuOpenedCount(0);
-        this.props.actionStoreUpdated('2019-02-01');
+    if (currentDealer && (isStoreUpdated !== undefined && isStoreUpdated !== '2019-02-01')) { // если мы ещё не очищали стор
+        actionMenuOpenedCount(0);
+        actionStoreUpdated('2019-02-01');
+        console.log('APP INIT INSIDE ====== currentDealer', currentDealer);
+        console.log('APP INIT INSIDE ====== isStoreUpdated', isStoreUpdated);
     }
 
     setTimeout(() => {
@@ -87,17 +91,25 @@ class App extends Component {
             kOSSettingsKeyInFocusDisplayOption: 2
         });
 
+        console.log('APP INIT AFTER ====== menuOpenedCount', menuOpenedCount);
+        console.log('APP INIT AFTER ====== isStoreUpdated', isStoreUpdated);
+
         OneSignal.promptForPushNotificationsWithUserResponse((status) => {
             if (status) {
 
                 actionSetPushGranted(true);
-                if (Number(menuOpenedCount) <= 1 || menuOpenedCount == '' || !menuOpenedCount || !isStoreUpdated) { // при первичном ините всегда подписываем насильно на акции
+
+                if (Number(menuOpenedCount) <= 1 || menuOpenedCount === '' || isStoreUpdated === false) { // при первичном ините всегда подписываем насильно на акции
+                    console.log('APP INSIDE ====== menuOpenedCount', menuOpenedCount);
+                    console.log('APP INSIDE ====== isStoreUpdated', isStoreUpdated);
                     actionSetPushActionSubscribe(true);
                 }
 
                 OneSignal.setSubscription(true);
 
             } else {
+                console.log('APP INSIDE FALSE ====== menuOpenedCount', menuOpenedCount);
+                console.log('APP INSIDE FALSE ====== isStoreUpdated', isStoreUpdated);
                 actionSetPushGranted(false);
                 actionSetPushActionSubscribe(false);
                 PushNotifications.unsubscribeFromTopic('actions');

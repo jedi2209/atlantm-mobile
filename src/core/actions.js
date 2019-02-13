@@ -34,7 +34,7 @@ export const actionAppRated = () => {
     };
 };
 
-export const actionStoreUpdated = (isUpdated) => {
+export const actionStoreUpdated = isUpdated => {
     return dispatch => {
         dispatch({
             type: APP_STORE_UPDATED,

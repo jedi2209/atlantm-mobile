@@ -28,7 +28,7 @@ const pushGranted = (state = false, action) => {
     case APP_PUSH_GRANTED__SET:
       return action.payload;
     case APP_STORE_UPDATED:
-      return false;
+      return state;
     default:
       return state;
   }
@@ -41,7 +41,7 @@ const pushActionSubscribeState = (state = true, action) => {
     case APP_PUSH_ACTION_SUBSCRIBE__SET:
       return action.payload;
     case APP_STORE_UPDATED:
-      return false;
+      return state;
     default:
       return state;
   }
@@ -87,8 +87,6 @@ const isStoreUpdated = (state = false, action) => {
 };
 
 const coreReducer = combineReducers({
-//  fcmToken,
-//  previousFcmToken,
   pushGranted,
   pushActionSubscribeState,
   menuOpenedCount,

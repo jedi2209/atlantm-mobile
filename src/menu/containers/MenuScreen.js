@@ -96,22 +96,30 @@ class MenuScreen extends Component {
           dealerSelected,
           menuOpenedCount,
           isStoreUpdated,
+          actionStoreUpdated,
           actionSetPushActionSubscribe
       } = this.props;
 
       const currentDealer = get(dealerSelected, 'id', false);
-
+      console.log('Menu Prev ====== isStoreUpdated', isStoreUpdated);
       setTimeout(() => {
 
           OneSignal.promptForPushNotificationsWithUserResponse((status) => {
               if (status) {
-                  if (Number(menuOpenedCount) <= 1 || menuOpenedCount == '' || !menuOpenedCount || isStoreUpdated != '2019-02-01') { // при первичном ините всегда подписываем насильно на акции
+                  if (isStoreUpdated != '2019-02-01') { // при первичном ините всегда подписываем насильно на акции
+                      console.log('Menu Inside ====== menuOpenedCount', menuOpenedCount);
+                      console.log('Menu Inside ====== isStoreUpdated', isStoreUpdated);
                       if (currentDealer) {
+
+                          console.log('Menu Inside Dealer ====== menuOpenedCount', menuOpenedCount);
+                          console.log('Menu Inside Dealer ====== isStoreUpdated', isStoreUpdated);
+
                           actionSetPushActionSubscribe(true);
                           PushNotifications.subscribeToTopic('actions', currentDealer);
                           PushNotifications.addTag('dealer', currentDealer);
-                          this.props.actionStoreUpdated('2019-02-01');
+                          actionStoreUpdated('2019-02-01');
                       }
+                      console.log('Menu Inside After ====== isStoreUpdated', isStoreUpdated);
                   }
               }
           });
