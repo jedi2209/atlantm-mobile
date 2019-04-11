@@ -119,18 +119,18 @@ export const actionFetchTva = (props) => {
               message: error.message,
             },
           });
-        }
-
+        } else {
         return dispatch({
           type: TVA__SUCCESS,
           payload: data,
         });
+      }
       })
       .catch(error => {
         return dispatch({
           type: TVA__FAIL,
           payload: {
-            error: error.message,
+            message: error.message,
             code: error.code,
           },
         });
