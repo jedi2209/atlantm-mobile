@@ -304,7 +304,7 @@ class ProfileScreen extends Component {
               }
 
               {
-                auth.token ?
+                auth.token && discounts.length  ?
                   <BonusDiscount
                     bonus={get(bonus, 'saldo.value')}
                     discounts={discounts.length}
