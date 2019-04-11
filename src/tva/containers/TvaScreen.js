@@ -169,8 +169,8 @@ class TvaScreen extends Component {
                         } else {
                             PushNotifications.unsubscribeFromTopic('tva');
                         }
-                        navigation.navigate('TvaResultsScreen'), 200
-                    });
+                        navigation.navigate('TvaResultsScreen');
+                    }, 250);
                     break;
                 case TVA__FAIL:
                     setTimeout(() => {
@@ -178,8 +178,8 @@ class TvaScreen extends Component {
                             PushNotifications.unsubscribeFromTopic('tva');
                             this.onPressPushTracking(false);
                         }
-                        Alert.alert('', `${action.payload.message}. Возможно вы указали неправильный номер или автоцентр`), 250
-                    });
+                        Alert.alert('', `${action.payload.message}. Возможно вы указали неправильный номер или автоцентр`);
+                    }, 250);
                     break;
             }
         });
