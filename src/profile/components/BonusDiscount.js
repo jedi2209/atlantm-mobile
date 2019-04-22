@@ -71,7 +71,7 @@ export default class BonusDiscount extends Component {
       <View>
          <ListItemHeader text="БОНУСЫ И СКИДКИ" />
          {this.renderItem('Бонусные баллы', 'bonus', this.onPressBonus, bonus)}
-         {discounts.length ? this.renderItem('Персональные скидки', 'discount', this.onPressDiscounts, discounts, true) : null}
+         {this.renderItem('Персональные скидки', 'discount', this.onPressDiscounts, discounts, true)}
       </View>
     );
   }
