@@ -4,12 +4,12 @@ import groovy.json.JsonSlurper
 
 buildscript {
     ext {
-        buildToolsVersion = "27.0.3"
+        buildToolsVersion = "28.0.3"
         minSdkVersion = 16
-        compileSdkVersion = 27
+        compileSdkVersion = 28
         targetSdkVersion = 27
-        supportLibVersion = "27.1.1"
-        googlePlayServicesVersion = "15.0.1"
+//        supportLibVersion = "+"
+        googlePlayServicesVersion = "16.0.0"
         androidMapsUtilsVersion = "0.5+"
     }
     repositories {
@@ -18,9 +18,9 @@ buildscript {
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.4'
+        classpath 'com.android.tools.build:gradle:3.3.0'
         classpath 'com.google.gms:google-services:4.1.0'
-        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.10.0, 0.99.99]'
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.1, 0.99.99]'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

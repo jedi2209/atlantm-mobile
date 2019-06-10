@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 // storage
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { persistStore } from 'redux-persist';
 
 // redux

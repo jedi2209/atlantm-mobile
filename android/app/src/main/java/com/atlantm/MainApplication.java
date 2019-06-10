@@ -3,19 +3,19 @@ package com.atlantm;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import io.sentry.RNSentryPackage;
-import com.reactnative.ivpusic.imagepicker.PickerPackage;
-import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
-import io.sentry.RNSentryPackage;
-import com.sudoplz.reactnativeamplitudeanalytics.RNAmplitudeSDKPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import org.devio.rn.splashscreen.SplashScreenReactPackage;
-import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.airbnb.android.react.maps.MapsPackage;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
+import com.sudoplz.reactnativeamplitudeanalytics.RNAmplitudeSDKPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import io.sentry.RNSentryPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
               new MainReactPackage(),
+              new AsyncStoragePackage(),
               new ReactNativeOneSignalPackage(),
               new RNSentryPackage(),
               new PickerPackage(),
