@@ -36,7 +36,7 @@ platform :ios do
 	export_options: {
      		provisioningProfiles: {
         		"com.atlant-m" => "com.atlant-m AppStore",
-        		"com.atlant-m.OneSignalNotificationServiceExtension" => "XC com atlant-m OneSignalNotificationService"
+        		"com.atlant-m.OneSignalNotificationServiceExtension" => "XC com atlant-m OneSignalNotificationServiceExtension"
       		}
     	}
     )
