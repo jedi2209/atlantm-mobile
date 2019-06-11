@@ -3,11 +3,11 @@ package com.atlantm;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import me.jhen.devsettings.DevSettingsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.airbnb.android.react.maps.MapsPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
@@ -16,6 +16,7 @@ import com.RNFetchBlob.RNFetchBlobPackage;
 import io.sentry.RNSentryPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import com.airbnb.android.react.maps.MapsPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,16 +32,17 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-              new MainReactPackage(),
-              new AsyncStoragePackage(),
-              new ReactNativeOneSignalPackage(),
-              new RNSentryPackage(),
-              new PickerPackage(),
-              new RNAmplitudeSDKPackage(MainApplication.this),
-              new RNFetchBlobPackage(),
-              new RNDeviceInfo(),
-              new MapsPackage(),
-              new SplashScreenReactPackage()
+            new MainReactPackage(),
+            new DevSettingsPackage(),
+            new MapsPackage(),
+            new AsyncStoragePackage(),
+            new ReactNativeOneSignalPackage(),
+            new RNSentryPackage(),
+            new PickerPackage(),
+            new RNAmplitudeSDKPackage(MainApplication.this),
+            new RNFetchBlobPackage(),
+            new RNDeviceInfo(),
+            new SplashScreenReactPackage()
       );
     }
 

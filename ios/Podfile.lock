@@ -23,10 +23,10 @@ PODS:
     - GoogleMaps
   - Google-Maps-iOS-Utils/QuadTree (2.1.0):
     - GoogleMaps
-  - GoogleMaps (2.5.0):
-    - GoogleMaps/Maps (= 2.5.0)
-  - GoogleMaps/Base (2.5.0)
-  - GoogleMaps/Maps (2.5.0):
+  - GoogleMaps (3.1.0):
+    - GoogleMaps/Maps (= 3.1.0)
+  - GoogleMaps/Base (3.1.0)
+  - GoogleMaps/Maps (3.1.0):
     - GoogleMaps/Base
   - OneSignal (2.9.4)
   - QBImagePickerController (3.4.0)
@@ -35,11 +35,11 @@ PODS:
   - react-native-amplitude-analytics (0.2.3):
     - Amplitude-iOS (~> 4.3.1)
     - React
-  - react-native-google-maps (0.21.0):
+  - react-native-google-maps (0.24.0):
     - Google-Maps-iOS-Utils (= 2.1.0)
-    - GoogleMaps (= 2.5.0)
+    - GoogleMaps (= 3.1.0)
     - React
-  - react-native-maps (0.21.0):
+  - react-native-maps (0.24.0):
     - React
   - react-native-onesignal (3.2.12):
     - OneSignal (= 2.9.4)
@@ -196,13 +196,13 @@ SPEC CHECKSUMS:
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
-  GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
+  GoogleMaps: 5c13302e6fe6bb6e686b267196586b91cd594225
   OneSignal: a41f5a896177275662da07e23d6a809c0e105a89
   QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   React: a86b92f00edbe1873a63e4a212c29b7a7ad5224f
   react-native-amplitude-analytics: 0fa941f79b246dd10fc6e91b985db1c595a7397f
-  react-native-google-maps: 68a831730110823d3dadfea0e133f0f4426cd213
-  react-native-maps: fb06a43ce6884256097eec1dd69d23957b71df88
+  react-native-google-maps: 3e89f89243a11dfb25bb33a2fc39f13b9c0db538
+  react-native-maps: d87d8ed456d4132112fb1d2ee9baf3470c0f211d
   react-native-onesignal: a189670032c4cd1b02985c2d23c41ce63d5a2dbd
   rn-fetch-blob: 766f85cabd2992300dfa1be2bc9e4e258abc6f04
   RNCAsyncStorage: 285698b8a4f219573174d99e863a78b93f389272

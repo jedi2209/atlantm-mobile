@@ -8,8 +8,8 @@ buildscript {
         minSdkVersion = 16
         compileSdkVersion = 28
         targetSdkVersion = 27
-//        supportLibVersion = "+"
-        googlePlayServicesVersion = "16.0.0"
+        supportLibVersion = "28.0.0"
+        googlePlayServicesVersion = "16.1.0"
         androidMapsUtilsVersion = "0.5+"
     }
     repositories {
@@ -18,7 +18,7 @@ buildscript {
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:3.3.1'
         classpath 'com.google.gms:google-services:4.1.0'
         classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.1, 0.99.99]'
         // NOTE: Do not place your application dependencies here; they belong
