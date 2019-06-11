@@ -85,7 +85,6 @@ platform :android do
   desc "Submit a new Internal Build to Google Play"
   lane :internal do
     ensure_git_status_clean
-
     gradle(
         project_dir: "./android/",
         task: "clean assemble",
@@ -93,6 +92,8 @@ platform :android do
         flags: "-PbuildType=release",
         print_command_output: true
     )
+    puts "AABs: #{Actions.lane_context[SharedValues::GRADLE_ALL_AAB_OUTPUT_PATHS]}"
+    puts "AAB: #{Actions.lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]}"
     upload_to_play_store(
         track: 'internal'
     )
