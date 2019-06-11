@@ -13,7 +13,6 @@ import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.sudoplz.reactnativeamplitudeanalytics.RNAmplitudeSDKPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
-import io.sentry.RNSentryPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.airbnb.android.react.maps.MapsPackage;
@@ -37,7 +36,6 @@ public class MainApplication extends Application implements ReactApplication {
             new MapsPackage(),
             new AsyncStoragePackage(),
             new ReactNativeOneSignalPackage(),
-            new RNSentryPackage(),
             new PickerPackage(),
             new RNAmplitudeSDKPackage(MainApplication.this),
             new RNFetchBlobPackage(),

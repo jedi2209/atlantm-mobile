@@ -47,9 +47,10 @@ target 'atlantm' do
     :path => '../node_modules/react-native-onesignal/react-native-onesignal.podspec',
     :inhibit_warnings => true
 
-  pod 'SentryReactNative', :path => '../node_modules/react-native-sentry'
 
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
+  pod 'SentryReactNative', :path => '../node_modules/react-native-sentry'
 
 end
 

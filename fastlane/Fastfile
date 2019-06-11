@@ -1,6 +1,9 @@
 fastlane_version '2.108.0'
 
+fastlane_require 'dotenv'
+
 before_all do
+  Dotenv.overload '.env'
   ensure_git_branch(
     branch: 'master'
   )
@@ -10,6 +13,7 @@ end
 platform :ios do
   desc "Prepare the iOS app for dev or build"
   lane :prepare do
+    puts "SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: #{ENV['SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER']}"
     ensure_git_status_clean
     produce(
         app_identifier: "com.atlant-m.OneSignalNotificationServiceExtension",
