@@ -40,6 +40,11 @@ Runs all the tests
 fastlane android internal
 ```
 Submit a new Internal Build to Google Play
+### android release
+```
+fastlane android release
+```
+Make a new release build
 
 ----
 
