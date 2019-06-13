@@ -85,6 +85,11 @@ platform :android do
   desc "Submit a new Internal Build to Google Play"
   lane :internal do
     ensure_git_status_clean
+    increment_version_code(
+        gradle_file_path: "./android/build.gradle",
+        #ext_constant_name: "test"
+        #app_folder_name:"app"
+    ),
     gradle(
         project_dir: "./android/",
         task: "clean assemble",
