@@ -44,7 +44,7 @@ export default class HeaderIconReload extends Component {
         style={styles.container}
         onPress={this.props.onPress}
       >
-        <Icon name="ios-refresh-outline" style={styles.icon} />
+        <Icon name="ios-refresh" style={styles.icon} />
       </TouchableOpacity>
     );
   }

@@ -52,6 +52,7 @@ import { get, find } from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '@core/style-const';
 import stylesHeader from '@core/components/Header/style';
+import styleFooter from '@core/components/Footer/style';
 import { verticalScale } from '@utils/scale';
 import { TEXT_EMPTY_CAR_LIST, BUTTON_EMPTY_CAR_FIND } from '../../constants';
 
@@ -98,9 +99,6 @@ const styles = StyleSheet.create({
     marginTop: 3,
     marginLeft: 7,
     resizeMode: 'contain',
-  },
-  footer: {
-    height: isIPhoneX() ? styleConst.ui.footerHeightIphone : styleConst.ui.footerHeightAndroid,
   },
   body: {
     flex: 1.5,
@@ -537,7 +535,7 @@ class NewCarFilterScreen extends Component {
               </View>
             </View>
           </Content>
-          <Footer style={styles.footer}>
+          <Footer style={styleFooter.footer}>
             <Button onPress={() => this.onPressFilterButton(count)} full disabled={(count ? false : true)} style={(count ? styles.buttonActive : styles.buttonInactive)}>
 
               {
@@ -558,7 +556,7 @@ class NewCarFilterScreen extends Component {
                         )}
                         {(count ?
                       <Image
-                        source={require('../../../core/components/CustomIcon/assets/arrow_right_white.png')}
+                        source={require('@core/components/CustomIcon/assets/arrow_right_white.png')}
                         style={styles.buttonIcon}
                       />
                                 :

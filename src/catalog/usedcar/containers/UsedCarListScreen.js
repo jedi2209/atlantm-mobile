@@ -31,7 +31,7 @@ import { EVENT_DEFAULT } from '../../actionTypes';
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: styleConst.color.bg,
+    backgroundColor: styleConst.color.header,
   },
 });
 

@@ -22,10 +22,12 @@ import { get } from 'lodash';
 import isInternet from '../../utils/internet';
 import numberWithGap from '../../utils/number-with-gap';
 import getTheme from '../../../native-base-theme/components';
-import styleConst from '../../core/style-const';
+import styleConst from '@core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import { CATALOG_ORDER__SUCCESS, CATALOG_ORDER__FAIL } from '../actionTypes';
 import { ERROR_NETWORK } from '../../core/const';
+import isIPhoneX from '@utils/is_iphone_x';
+import FooterButton from "../../core/components/FooterButton";
 
 const FOOTER_HEIGHT = 50;
 const styles = StyleSheet.create({
@@ -35,7 +37,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    height: FOOTER_HEIGHT,
+    height: isIPhoneX() ? styleConst.ui.footerHeightIphone+20 : styleConst.ui.footerHeightAndroid,
     flexDirection: 'row',
     backgroundColor: styleConst.color.lightBlue,
   },
@@ -52,7 +54,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   footer: {
-    height: FOOTER_HEIGHT,
+    height: isIPhoneX() ? styleConst.ui.footerHeightIphone+40 : styleConst.ui.footerHeightAndroid,
+    backgroundColor: styleConst.color.header,
   },
   comment: {
     paddingBottom: 40,
@@ -229,16 +232,13 @@ class OrderScreen extends Component {
             </List>
           </Content>
 
-          <Footer style={styles.footer}>
-              <Button onPress={this.onPressOrder} full style={styles.button}>
-                <Text style={styles.buttonText}>ОТПРАВИТЬ</Text>
-                <Image
-                  source={require('../../core/components/CustomIcon/assets/arrow_right_white.png')}
-                  style={styles.buttonIcon}
-                />
-              </Button>
-          </Footer>
-
+          <FooterButton
+              theme="blue"
+              icon="arrow"
+              uppercase={true}
+              text="Отправить"
+              onPressButton={this.onPressOrder}
+          />
         </Container>
       </StyleProvider>
     );

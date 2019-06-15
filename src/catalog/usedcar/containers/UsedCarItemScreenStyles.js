@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 // helpers
 import styleConst from '@core/style-const';
 import { verticalScale } from '@utils/scale';
-import isIPhoneX from '@utils/is_iphone_x';
 
 export default StyleSheet.create({
   safearea: {
@@ -85,7 +84,7 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: styleConst.ui.header,
+    backgroundColor: styleConst.color.header,
   },
   orderPriceText: {
     fontFamily: styleConst.font.regular,
@@ -98,10 +97,6 @@ export default StyleSheet.create({
   },
   orderPriceSpecialText: {
     color: styleConst.color.red,
-  },
-  footer: {
-    height: isIPhoneX() ? styleConst.ui.footerHeightIphone : styleConst.ui.footerHeightAndroid,
-    backgroundColor: '#fff',
   },
   segment: {
     marginHorizontal: styleConst.ui.horizontalGap,

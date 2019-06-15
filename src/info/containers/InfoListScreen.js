@@ -20,6 +20,7 @@ import { ERROR_NETWORK } from '../../core/const';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
+import styleFooter from '../../core/components/Footer/style';
 import { verticalScale } from '../../utils/scale';
 
 // components

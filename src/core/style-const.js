@@ -29,6 +29,7 @@ export default {
   },
   ui: {
     // хак чтобы в новой версии native-base футер прижимался к низу
+    footerHeight: 50,
     footerHeightIphone: 14,
     footerHeightAndroid: 50,
     borderWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
@@ -36,7 +37,6 @@ export default {
     horizontalGapInList: 14,
     verticalGap: 22,
     letterSpacing: -0.3,
-    footerHeight: 50,
     listHeight: 44,
     smallTextSize: 15,
   },

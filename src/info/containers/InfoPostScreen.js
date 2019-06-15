@@ -33,6 +33,7 @@ import { CALL_ME_INFO__SUCCESS, CALL_ME_INFO__FAIL } from '../actionTypes';
 import { dayMonth, dayMonthYear } from '../../utils/date';
 import isInternet from '../../utils/internet';
 import { ERROR_NETWORK } from '../../core/const';
+import isIPhoneX from '@utils/is_iphone_x';
 
 const isTablet = DeviceInfo.isTablet();
 
@@ -299,6 +300,7 @@ class InfoPostScreen extends Component {
           uppercase={false}
           text="Позвоните мне"
           onPressButton={this.onPressCallMe}
+          style={{bottom: isIPhoneX() ? styleConst.ui.footerHeightIphone : styleConst.ui.footerHeightAndroid,}}
         />
       </SafeAreaView>
     );
