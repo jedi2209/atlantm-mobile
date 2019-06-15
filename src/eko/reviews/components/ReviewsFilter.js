@@ -7,19 +7,21 @@ import { Footer } from 'native-base';
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '@core/style-const';
-import isIPhoneX from '@utils/is_iphone_x';
+import styleFooter from '@core/components/Footer/style';
 
 const size = 26;
-const containerSize = 45;
+const containerSize = 50;
 const styles = StyleSheet.create({
-  footer: {
-    height: isIPhoneX() ? styleConst.ui.footerHeightIphone : styleConst.ui.footerHeightAndroid,
-    backgroundColor: styleConst.color.header,
-  },
+  // footer: {
+  //   height: isIPhoneX() ? styleConst.ui.footerHeightIphone : styleConst.ui.footerHeightAndroid,
+  //   backgroundColor: styleConst.color.header,
+  // },
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     flex: 1,
+    height: containerSize,
+    backgroundColor: styleConst.color.header,
   },
   icon: {
     paddingHorizontal: styleConst.ui.horizontalGap * 2,
@@ -80,7 +82,7 @@ export default class ReviewsFilter extends Component {
     } = this.props;
 
     return (
-      <Footer style={styles.footer}>
+      <Footer style={styleFooter.footer}>
           <View style={styles.container}>
             { onPressRating ? this.renderIcon('rating', onPressRating) : null}
             { onPressDate ? this.renderIcon('date', onPressDate) : null}

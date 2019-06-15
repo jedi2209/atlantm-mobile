@@ -31,6 +31,10 @@ const styles = StyleSheet.create({
   spinner: {
     position: 'absolute',
     alignSelf: 'center',
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    padding: 10
   },
 });
 
@@ -50,7 +54,7 @@ const Slide = props => {
         />
       </TouchableWithoutFeedback>
       {
-        !props.loaded && <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
+        !props.loaded && <ActivityIndicator size="large" color={styleConst.color.blue} style={styles.spinner} />
       }
     </View>
   );

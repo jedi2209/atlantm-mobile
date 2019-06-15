@@ -38,6 +38,7 @@ import styleConst from '@core/style-const';
 import stylesHeader from '@core/components/Header/style';
 
 const isAndroid = Platform.OS === 'android';
+import isIPhoneX from '@utils/is_iphone_x';
 const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   safearea: {
@@ -334,8 +335,10 @@ class MapScreen extends Component {
           <FooterButton
             icon={<Icon name="navigation" style={styles.iconRoute} type="MaterialCommunityIcons" />}
             text="Проложить маршрут"
+            theme="blue"
             isLoading={isRequestCheckAvailableNaviApps}
             onPressButton={this.onPressRoute}
+            style={{bottom: isIPhoneX() ? styleConst.ui.footerHeightIphone : styleConst.ui.footerHeightAndroid,}}
           />
         </View>
         <ActionSheet

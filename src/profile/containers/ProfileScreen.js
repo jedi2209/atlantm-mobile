@@ -352,7 +352,7 @@ class ProfileScreen extends Component {
               auth.token ?
                 (
                   <Button onPress={this.onPressLogout} full style={styles.button}>
-                    <Icon name="ios-exit-outline" style={styles.buttonIcon} />
+                    <Icon name="ios-exit" style={styles.buttonIcon} />
                     <Text numberOfLines={1} style={styles.buttonText}>ВЫЙТИ ИЗ ЛИЧНОГО КАБИНЕТА</Text>
                   </Button>
                 ) : null

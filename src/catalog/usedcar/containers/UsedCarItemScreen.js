@@ -43,6 +43,7 @@ import getTheme from '../../../../native-base-theme/components';
 
 // styles
 import styles from './UsedCarItemScreenStyles';
+import stylesFooter from '@core/components/Footer/style';
 
 const mapStateToProps = ({ catalog, dealer, nav }) => {
   return {
@@ -406,11 +407,20 @@ class UserCarItemScreen extends Component {
                 )
             }
           </Content>
-
-          <Footer style={styles.footer}>
-            <View style={styles.orderPriceContainer}>
+          {
+            photoViewerItems.length ?
+                <PhotoViewer
+                    index={photoViewerIndex}
+                    visible={photoViewerVisible}
+                    items={photoViewerItems}
+                    onChange={this.onChangePhotoIndex}
+                    onPressClose={this.onClosePhoto}
+                /> : null
+          }
+          <Footer style={stylesFooter.footer}>
+            <Button disabled={true} style={styles.orderPriceContainer}>
               <Text style={styles.orderPriceText}>{`${numberWithGap(get(carDetails, 'price.app.standart'))} ${prices.curr.name}`}</Text>
-            </View>
+            </Button>
             <Button
               onPress={this.onPressOrder}
               full
@@ -419,16 +429,6 @@ class UserCarItemScreen extends Component {
               <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
             </Button>
           </Footer>
-          {
-            photoViewerItems.length ?
-              <PhotoViewer
-                index={photoViewerIndex}
-                visible={photoViewerVisible}
-                items={photoViewerItems}
-                onChange={this.onChangePhotoIndex}
-                onPressClose={this.onClosePhoto}
-              /> : null
-          }
         </SafeAreaView>
       </StyleProvider>
     );

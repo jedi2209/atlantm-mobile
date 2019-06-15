@@ -37,6 +37,7 @@ import styleConst from '@core/style-const';
 import { ERROR_NETWORK } from '@core/const';
 import stylesHeader from '@core/components/Header/style';
 import { LOGIN_LABEL, LOGIN_PLACEHOLDER, FORGOT_PASS_CODE_LABEL, FORGOT_PASS_CODE_PHONE_PLACEHOLDER, FORGOT_PASS_CODE_EMAIL_PLACEHOLDER } from '@profile/const';
+import isIPhoneX from '@utils/is_iphone_x';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -303,7 +304,7 @@ class ForgotPassScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
+        <SafeAreaView style={styles.safearea} forceInset={{ top: 'always' }}>
           <Content enableResetScrollToCoords={false}>
             <Spinner visible={isForgotPassRequest || isForgotPassCodeSubmit} color={styleConst.color.blue} />
             <List style={styles.list}>

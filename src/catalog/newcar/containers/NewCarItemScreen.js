@@ -39,6 +39,7 @@ import PropTypes from 'prop-types';
 import Amplitude from '@utils/amplitude-analytics';
 import styleConst from '@core/style-const';
 import stylesHeader from '@core/components/Header/style';
+import stylesFooter from '@core/components/Footer/style';
 import numberWithGap from '@utils/number-with-gap';
 
 // styles
@@ -237,7 +238,7 @@ class NewCarItemScreen extends Component {
     const priceSpecial = numberWithGap(get(carDetails, 'price.app.sale'));
 
     return (
-      <View style={styles.orderPriceContainer}>
+      <Button disabled={true} style={styles.orderPriceContainer}>
         {
           isSale ?
             <Text style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
@@ -248,7 +249,7 @@ class NewCarItemScreen extends Component {
         <Text style={[styles.orderPriceText, isSale ? styles.orderPriceDefaultText : '']}>
           {`${priceDefault} ${currency}`}
         </Text>
-      </View>
+      </Button>
     );
   }
 
@@ -433,8 +434,17 @@ class NewCarItemScreen extends Component {
                 )
             }
           </Content>
-
-          <Footer style={styles.footer}>
+          {
+            photoViewerItems.length ?
+                <PhotoViewer
+                    index={photoViewerIndex}
+                    visible={photoViewerVisible}
+                    items={photoViewerItems}
+                    onChange={this.onChangePhotoIndex}
+                    onPressClose={this.onClosePhoto}
+                /> : null
+          }
+          <Footer style={stylesFooter.footer}>
             {this.renderPrice({ carDetails, filterData })}
             <Button
               onPress={this.onPressOrder}
@@ -444,16 +454,6 @@ class NewCarItemScreen extends Component {
               <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
             </Button>
           </Footer>
-          {
-            photoViewerItems.length ?
-              <PhotoViewer
-                index={photoViewerIndex}
-                visible={photoViewerVisible}
-                items={photoViewerItems}
-                onChange={this.onChangePhotoIndex}
-                onPressClose={this.onClosePhoto}
-              /> : null
-          }
         </SafeAreaView>
       </StyleProvider>
     );

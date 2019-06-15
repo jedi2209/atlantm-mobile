@@ -4,7 +4,7 @@ import { Button } from 'native-base';
 
 // helpers
 import PropTypes from 'prop-types';
-import styleConst from '../style-const';
+import styleConst from '@core/style-const';
 
 const styles = StyleSheet.create({
   spinnerButton: {

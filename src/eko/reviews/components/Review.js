@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, WebView, StyleSheet } from 'react-native';
 import { Icon, ListItem, Body, Right } from 'native-base';
 
 // components
@@ -9,6 +9,9 @@ import RatingStars from './RatingStars';
 // helpers
 import { dayMonthYear } from '../../../utils/date';
 import styleConst from '../../../core/style-const';
+
+const Entities = require('html-entities').XmlEntities;
+const entities = new Entities();
 
 const styles = StyleSheet.create({
   item: {
@@ -127,6 +130,8 @@ export default class Review extends Component {
     const { inList } = this.props;
     const isPlus = type === 'plus';
 
+    text = entities.decode(text);
+
     return (
       <View style={[styles.review, styles.row, inList ? null : styles.reviewFull]}>
         <Icon
@@ -139,7 +144,7 @@ export default class Review extends Component {
         <Text
           style={styles.reviewText}
           numberOfLines={inList ? 2 : null}>
-            {text}
+          {text}
           </Text>
       </View>
     );
