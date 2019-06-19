@@ -42,7 +42,7 @@ let IndicatorDescription = ({ name, description }) => {
   return (
     <Animatable.View
       style={styles.descriptionContainer}
-      animation="pulse"
+      animation="fadeInLeftBig"
       useNativeDriver={true}
       duration={300}
     >

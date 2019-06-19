@@ -418,13 +418,13 @@ class UserCarItemScreen extends Component {
                 /> : null
           }
           <Footer style={stylesFooter.footer}>
-            <Button disabled={true} style={styles.orderPriceContainer}>
-              <Text style={styles.orderPriceText}>{`${numberWithGap(get(carDetails, 'price.app.standart'))} ${prices.curr.name}`}</Text>
-            </Button>
+            <View style={[stylesFooter.orderPriceContainer, stylesFooter.orderPriceContainerNotSale]}>
+              <Text style={[styles.orderPriceText, styles.orderPriceDefaultText]}>{`${numberWithGap(get(carDetails, 'price.app.standart'))} ${prices.curr.name}`}</Text>
+            </View>
             <Button
               onPress={this.onPressOrder}
               full
-              style={styles.button}
+              style={stylesFooter.button}
             >
               <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
             </Button>

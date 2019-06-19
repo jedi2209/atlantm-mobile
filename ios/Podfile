@@ -52,6 +52,9 @@ target 'atlantm' do
 
   pod 'SentryReactNative', :path => '../node_modules/react-native-sentry'
 
+
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
 end
 
 target 'OneSignalNotificationServiceExtension' do

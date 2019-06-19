@@ -160,7 +160,7 @@ export default class CarListItem extends Component {
               }
               <View style={styles.extraItem}>
                 {year ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${year} г.в.`}</Text></View> : null}
-                {mileage ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`пробег ${mileage}`}</Text></View> : null}
+                {mileage ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`пробег ${numberWithGap(mileage)} км.`}</Text></View> : null}
                 {gearbox ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${gearbox}`}</Text></View> : null}
               </View>
             </View>

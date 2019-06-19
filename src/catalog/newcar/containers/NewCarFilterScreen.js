@@ -56,14 +56,14 @@ import styleFooter from '@core/components/Footer/style';
 import { verticalScale } from '@utils/scale';
 import { TEXT_EMPTY_CAR_LIST, BUTTON_EMPTY_CAR_FIND } from '../../constants';
 
-const FOOTER_HEIGHT = 50;
+//const FOOTER_HEIGHT = 50;
 const styles = StyleSheet.create({
   safearea: {
     backgroundColor: styleConst.color.bg,
     flex: 1,
   },
   content: {
-    paddingBottom: 40,
+    paddingBottom: styleFooter.footer.height,
   },
   spinner: {
     alignSelf: 'center',
@@ -78,13 +78,13 @@ const styles = StyleSheet.create({
   },
   buttonActive: {
     flex: 1,
-    height: FOOTER_HEIGHT,
+    height: styleConst.ui.footerHeight,
     flexDirection: 'row',
     backgroundColor: styleConst.color.lightBlue,
   },
   buttonInactive: {
     flex: 1,
-    height: FOOTER_HEIGHT,
+    height: styleConst.ui.footerHeight,
     flexDirection: 'row',
     backgroundColor: styleConst.color.darkBg
   },
@@ -536,7 +536,11 @@ class NewCarFilterScreen extends Component {
             </View>
           </Content>
           <Footer style={styleFooter.footer}>
-            <Button onPress={() => this.onPressFilterButton(count)} full disabled={(count ? false : true)} style={(count ? styles.buttonActive : styles.buttonInactive)}>
+            <Button
+                onPress={() => this.onPressFilterButton(count)} full
+                disabled={(count ? false : true)}
+                activeOpacity={0.8}
+                style={[(count ? [styles.buttonActive] : [styles.buttonInactive]), styleFooter.button]}>
 
               {
                 isFetchingNewCarByFilter ?

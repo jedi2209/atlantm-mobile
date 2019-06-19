@@ -1,13 +1,17 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
 // helpers
 import styleConst from '@core/style-const';
 import { verticalScale } from '@utils/scale';
 
+const isAndroid = Platform.OS === 'android';
+
 export default StyleSheet.create({
   safearea: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
+    paddingBottom: isAndroid ? styleConst.ui.footerHeightAndroid : styleConst.ui.footerHeightIphone,
+    // paddingEnd: styleConst.footerHeight
   },
   gallery: {
     position: 'relative',
@@ -32,6 +36,9 @@ export default StyleSheet.create({
     marginLeft: styleConst.ui.horizontalGap,
     borderBottomWidth: styleConst.ui.borderWidth,
     borderBottomColor: styleConst.color.border,
+  },
+  tabContent: {
+    marginBottom: styleConst.ui.footerHeight
   },
   descrContainer: {
     padding: styleConst.ui.horizontalGap,
@@ -72,6 +79,7 @@ export default StyleSheet.create({
     backgroundColor: styleConst.color.lightBlue,
     height: styleConst.ui.footerHeight,
     flex: 1,
+    flexDirection: 'row',
   },
   buttonText: {
     color: '#fff',
@@ -79,26 +87,40 @@ export default StyleSheet.create({
     fontSize: 16,
     letterSpacing: styleConst.ui.letterSpacing,
   },
-  orderPriceContainer: {
-    height: styleConst.ui.footerHeight,
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: styleConst.color.header,
-  },
+  // orderPriceContainer: {
+  //   height: styleConst.ui.footerHeight,
+  //   flex: 1,
+  //   // justifyContent: 'center',
+  //   // alignItems: 'center',
+  //   flexDirection: 'row',
+  //   backgroundColor: styleConst.color.header,
+  // },
   orderPriceText: {
     fontFamily: styleConst.font.regular,
-    fontSize: 19,
     letterSpacing: styleConst.ui.letterSpacing,
     color: '#000',
+    // flex: 1,
+    // flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
   },
   orderPriceDefaultText: {
+    fontSize: 19,
+  },
+  orderPriceSmallText: {
+    fontSize: 14,
     textDecorationLine: 'line-through',
+    flex: 1,
+    flexDirection: 'row',
   },
   orderPriceSpecialText: {
     color: styleConst.color.red,
+    fontSize: 19,
+    marginTop: 2,
   },
   segment: {
+    marginTop: isAndroid ? 0 : styleConst.ui.horizontalGap,
     marginHorizontal: styleConst.ui.horizontalGap,
   },
   tabText: {
