@@ -21,6 +21,7 @@ import ProfileForm from '../components/ProfileForm';
 import ListItemHeader from '../components/ListItemHeader';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
+import FooterButton from '../../core/components/FooterButton';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
@@ -34,6 +35,7 @@ const styles = StyleSheet.create({
   safearea: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
+    // paddingBottom: styleConst.ui.footerHeightAndroid,
   },
   textContainer: {
     paddingHorizontal: styleConst.ui.horizontalGapInList,
@@ -234,7 +236,7 @@ class RegisterScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
-          <Content enableResetScrollToCoords={false}>
+          <Content enableResetScrollToCoords={false} style={{marginBottom: styleConst.ui.footerHeightAndroid,}}>
             <Spinner visible={isRegisterRequest} color={styleConst.color.blue} />
             <List style={styles.list}>
               <View style={styles.textContainer}>
@@ -272,12 +274,12 @@ class RegisterScreen extends Component {
                 carNumberFill={carNumberFill}
               />
             </List>
-
-            <Button onPress={this.onPressRegister} full style={styles.button}>
-              <Icon name="ios-car" style={styles.buttonIcon} />
-              <Text numberOfLines={1} style={styles.buttonText}>ЗАРЕГИСТРИРОВАТЬСЯ</Text>
-            </Button>
           </Content>
+          <FooterButton
+              text="Зарегистрироваться"
+              icon="ios-car"
+              onPressButton={this.onPressRegister}
+          />
         </SafeAreaView>
       </StyleProvider>
     );

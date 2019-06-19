@@ -14,7 +14,7 @@ const size = 26;
 const containerSize = 45;
 const styles = StyleSheet.create({
   footer: {
-    height: isIPhoneX() ? 5 : 45,
+    height: isIPhoneX() ? styleConst.footerHeight : styleConst.footerHeightAndroid,
     backgroundColor: styleConst.color.header,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     paddingLeft: '2%',
     paddingRight: '2%',
-    bottom: styleConst.ui.horizontalGap
+    bottom: isIPhoneX() ? styleConst.ui.horizontalGap : 0
   },
   container: {
     flexDirection: 'row',

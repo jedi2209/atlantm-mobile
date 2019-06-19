@@ -82,7 +82,7 @@ export default class ReviewsFilter extends Component {
     } = this.props;
 
     return (
-      <Footer style={styleFooter.footer}>
+      <Footer style={[styleFooter.footerFilters, styleFooter.footer]}>
           <View style={styles.container}>
             { onPressRating ? this.renderIcon('rating', onPressRating) : null}
             { onPressDate ? this.renderIcon('date', onPressDate) : null}

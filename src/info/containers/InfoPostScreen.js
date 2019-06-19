@@ -300,7 +300,6 @@ class InfoPostScreen extends Component {
           uppercase={false}
           text="Позвоните мне"
           onPressButton={this.onPressCallMe}
-          style={{bottom: isIPhoneX() ? styleConst.ui.footerHeightIphone : styleConst.ui.footerHeightAndroid,}}
         />
       </SafeAreaView>
     );

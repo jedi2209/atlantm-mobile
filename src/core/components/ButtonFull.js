@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import { View, Text, ActivityIndicator, Image, StyleSheet } from 'react-native';
-import { Button } from 'native-base';
+import { Button, Icon } from 'native-base';
 
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '@core/style-const';
+import styleFooter from '../../core/components/Footer/style';
 
 const styles = StyleSheet.create({
   spinnerButton: {
@@ -13,12 +14,6 @@ const styles = StyleSheet.create({
   buttonContent: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  button: {
-    flex: 1,
-    height: styleConst.ui.footerHeight,
-    flexDirection: 'row',
-    backgroundColor: styleConst.color.lightBlue,
   },
   buttonWhite: {
     borderBottomWidth: 1,
@@ -61,14 +56,15 @@ export default class ButtonFull extends PureComponent {
     ]),
     theme: PropTypes.string,
     uppercase: PropTypes.bool,
-  }
+  };
 
   static defaultProps = {
     icon: 'arrow',
     theme: 'blue',
     uppercase: true,
     isLoading: false,
-  }
+    buttonColor: styleConst.color.lightBlue,
+  };
 
   render() {
     const {
@@ -83,10 +79,12 @@ export default class ButtonFull extends PureComponent {
     const isWhiteTheme = theme === 'white';
 
     return (
-      <Button onPress={onPressButton} full style={[
-        styles.button,
-        isWhiteTheme ? styles.buttonWhite : null,
-      ]}>
+      <Button
+          onPress={onPressButton}
+          full
+          activeOpacity={0.8}
+          style={[styleFooter.button, isWhiteTheme ? styles.buttonWhite : null,]}
+      >
         {
           isLoading ?
             <ActivityIndicator color={isWhiteTheme ? styleConst.color.lightBlue : '#fff'} style={styles.spinnerButton} /> :
@@ -99,6 +97,15 @@ export default class ButtonFull extends PureComponent {
                       style={styles.buttonIconLeft}
                     /> :
                     null
+                }
+
+                {
+                  icon === 'ios-car' ?
+                      <Icon
+                          name='ios-car'
+                          style={styles.buttonIconLeft}
+                      /> :
+                      null
                 }
 
                 <Text style={[

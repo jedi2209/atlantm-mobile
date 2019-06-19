@@ -338,7 +338,7 @@ class MapScreen extends Component {
             theme="blue"
             isLoading={isRequestCheckAvailableNaviApps}
             onPressButton={this.onPressRoute}
-            style={{bottom: isIPhoneX() ? styleConst.ui.footerHeightIphone : styleConst.ui.footerHeightAndroid,}}
+            style={{bottom: isIPhoneX() ? styleConst.ui.footerHeightIphone : 0,}}
           />
         </View>
         <ActionSheet

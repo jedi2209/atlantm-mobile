@@ -238,7 +238,7 @@ class NewCarItemScreen extends Component {
     const priceSpecial = numberWithGap(get(carDetails, 'price.app.sale'));
 
     return (
-      <Button disabled={true} style={styles.orderPriceContainer}>
+      <View style={[stylesFooter.orderPriceContainer, !isSale ? stylesFooter.orderPriceContainerNotSale : null]}>
         {
           isSale ?
             <Text style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
@@ -246,10 +246,10 @@ class NewCarItemScreen extends Component {
             </Text> :
             null
         }
-        <Text style={[styles.orderPriceText, isSale ? styles.orderPriceDefaultText : '']}>
+        <Text style={[styles.orderPriceText, !isSale ? styles.orderPriceDefaultText : styles.orderPriceSmallText]}>
           {`${priceDefault} ${currency}`}
         </Text>
-      </Button>
+      </View>
     );
   }
 
@@ -300,8 +300,7 @@ class NewCarItemScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
-          <Content>
-
+          <Content style={stylesFooter.content}>
             <View style={styles.gallery}>
               <View style={styles.titleContainer}>
                 <Text style={styles.title}>{`${brandName} ${modelName} ${get(complectation, 'name', '')}`}</Text>
@@ -375,16 +374,18 @@ class NewCarItemScreen extends Component {
                       </Grid>
                     </View>
 
+                    { get(carDetails, 'engine.speedmax') || get(carDetails, 'engine.speed100') || get(carDetails, 'fuel.city') || get(carDetails, 'fuel.both') || get(carDetails, 'fuel.track') ?
                     <View style={styles.section}>
                       <Text style={styles.sectionTitle}>Эксплуатационные характеристики</Text>
                       <Grid>
-                        {this.renderItem('Максимальная скорость:', get(carDetails, 'speed.max'), 'км/ч.')}
-                        {this.renderItem('Разгон с 0 до 100 км/ч:', get(carDetails, 'speed.dispersal'), 'сек.')}
+                        {this.renderItem('Максимальная скорость:', get(carDetails, 'engine.speedmax'), 'км/ч.')}
+                        {this.renderItem('Разгон с 0 до 100 км/ч:', get(carDetails, 'engine.speed100'), 'сек.')}
                         {this.renderItem('Расход топлива (городской цикл):', get(carDetails, 'fuel.city'), 'л.')}
                         {this.renderItem('Расход топлива (загородный цикл):', get(carDetails, 'fuel.track'), 'л.')}
                         {this.renderItem('Расход топлива (смешанный цикл):', get(carDetails, 'fuel.both'), 'л.')}
                       </Grid>
                     </View>
+                        : null }
 
                     {this.renderDealer(get(carDetails, 'dealer.name'))}
                   </View>
@@ -449,7 +450,8 @@ class NewCarItemScreen extends Component {
             <Button
               onPress={this.onPressOrder}
               full
-              style={styles.button}
+              style={stylesFooter.button}
+              activeOpacity={0.8}
             >
               <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
             </Button>

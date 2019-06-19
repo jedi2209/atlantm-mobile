@@ -14,6 +14,7 @@ import stylesList from '@core/components/Lists/style';
 import { get } from 'lodash';
 import { LOGIN__FAIL, LOGIN__SUCCESS } from '@profile/actionTypes';
 import styleConst from '@core/style-const';
+import styleFooter from '@core/components/Footer/style';
 import { LOGIN_LABEL, LOGIN_PLACEHOLDER, PASS_LABEL, PASS_PLACEHOLDER } from '@profile/const';
 
 const styles = StyleSheet.create({
@@ -38,9 +39,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 2,
     paddingBottom: 1,
+    flex: 1,
   },
   button: {
-    height: styleConst.ui.footerHeight,
+    height: styleConst.ui.footerHeight+35,
   },
   buttonBlue: {
     backgroundColor: styleConst.color.lightBlue,
@@ -143,7 +145,7 @@ export default class Auth extends Component {
               <Item style={stylesList.inputItem} fixedLabel>
                 <Label style={stylesList.label}>{label}</Label>
                 <Input
-                  style={stylesList.input, {textAlign: 'right', alignSelf: 'center', alignItems: 'center', marginRight: 20}}
+                  style={[stylesList.input, {textAlign: 'right', alignSelf: 'center', alignItems: 'center', marginRight: 20}]}
                   autoCapitalize="none"
                   autoCorrect={false}
                   placeholder={placeholder}
@@ -198,7 +200,7 @@ export default class Auth extends Component {
         <ListItem style={stylesList.listItem} first last>
           <Body>
             <TouchableOpacity onPress={this.onPressForgotPass}>
-              <Text style={stylesList.listItemValue, {textAlign: 'right'}}>Забыли пароль?</Text>
+              <Text style={[stylesList.listItemValue, {textAlign: 'right'}]}>Забыли пароль?</Text>
             </TouchableOpacity>
           </Body>
         </ListItem>
