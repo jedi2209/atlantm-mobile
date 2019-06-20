@@ -35,14 +35,20 @@ import { get } from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
+import stylesFooter from '../../core/components/Footer/style';
+
+const isAndroid = Platform.OS === 'android';
 
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
+    paddingBottom: isAndroid ? 0 : styleConst.ui.footerHeightIphone,
   },
   button: {
-    height: styleConst.ui.footerHeight,
+    height: isAndroid ? styleConst.ui.footerHeightAndroid : styleConst.ui.footerHeightIphone,
+    flex: 1,
+    flexDirection: 'row',
     backgroundColor: '#fff',
     borderTopWidth: styleConst.ui.borderWidth,
     borderTopColor: styleConst.color.border,
@@ -61,6 +67,8 @@ const styles = StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
     color: styleConst.color.lightBlue,
     paddingRight: styleConst.ui.horizontalGapInList,
+    flex: 1,
+    flexDirection: 'row',
   },
   buttonIcon: {
     fontSize: 30,

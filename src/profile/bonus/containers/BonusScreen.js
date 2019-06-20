@@ -22,6 +22,8 @@ import styleConst from '@core/style-const';
 import stylesHeader from '@core/components/Header/style';
 import { MONTH_TEXT } from '@profile/const';
 
+const isAndroid = Platform.OS === 'android';
+
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
@@ -77,7 +79,9 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   button: {
-    height: styleConst.ui.footerHeight,
+    height: isAndroid ? styleConst.ui.footerHeightAndroid : styleConst.ui.footerHeightIphone,
+    flex: 1,
+    flexDirection: 'row',
     backgroundColor: '#fff',
     borderTopWidth: styleConst.ui.borderWidth,
     borderTopColor: styleConst.color.border,
