@@ -10,7 +10,7 @@
     "react": "react-native start --reset-cache",
     "ios-build": "bundle exec fastlane ios beta",
     "android": "adb uninstall com.atlantm; react-native run-android",
-    "android-test": "bundle exec fastlane android test && adb uninstall com.atlantm; adb install android/app/build/outputs/apk/release/app-release.apk; adb shell am start -n com.atlantm/.MainActivity",
+    "android-test": "bundle exec fastlane android test && adb uninstall com.atlantm; adb install android/app/build/outputs/apk/release/app-universal-release.apk; adb shell am start -n com.atlantm/.MainActivity",
     "android-release": "git checkout ./android/app/versioning/app_version.properties && bundle exec fastlane android release && open ./android/app/build/outputs/apk/release;",
     "android-build": "bundle exec fastlane android internal",
     "reinstall": "./reinstall.sh",

@@ -45,6 +45,7 @@ export default class IntroScreen extends Component {
           <FooterButton
             text="Выберите свой автоцентр"
             onPressButton={this.onPressButton}
+            style={{backgroundColor: styleConst.color.blue}}
           />
       </SafeAreaView>
     );
