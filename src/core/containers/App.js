@@ -13,6 +13,7 @@ import {
 } from '../actions';
 
 // helpers
+import API from '../../utils/api';
 import { get } from 'lodash';
 import OneSignal from 'react-native-onesignal';
 import PushNotifications from '../components/PushNotifications';
@@ -77,6 +78,8 @@ class App extends Component {
 
     const currentDealer = get(dealerSelected, 'id', false);
 
+    API.fetchVersion('5.1.4');
+  
     if (currentDealer && (isStoreUpdated !== undefined && isStoreUpdated !== '2019-02-01')) { // если мы ещё не очищали стор
         actionMenuOpenedCount(0);
         actionStoreUpdated('2019-02-01');

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { Platform } from 'react-native';
+import { Platform, Linking, Alert, BackHandler} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import RNFetchBlob from 'rn-fetch-blob';
 
@@ -38,6 +38,39 @@ export default {
 
   fetchInfoPost(infoID) {
     return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
+  },
+
+  fetchVersion(version) {
+    let requested_version = parseInt(version.replace(/\./gi, ''));
+    let req = this.request(`/mobile/check/version/`, baseRequestParams);
+    return req.then(res => {
+      let real_time_version_api = parseInt(res.version.replace(/\./gi, ''));
+      if (real_time_version_api !== requested_version) {
+        let STORE_LINK;
+        if (Platform.OS === 'ios') {
+          STORE_LINK = 'itms-apps://itunes.apple.com/app/id515931794?action=update';
+        } else {
+          STORE_LINK = 'market://details?id=com.atlantm';
+        }
+        
+        Alert.alert(
+          'Приложение устарело',
+          'Пожалуйста обновите приложение до актуальной версии.',
+          [
+            {
+            text: 'Обновить',
+            onPress: () => {
+              BackHandler.exitApp();
+              Linking.openURL(STORE_LINK);
+            },
+            style: 'default',
+          },
+          ], {
+            cancelable: false
+          },
+        );
+      }
+     });
   },
 
   fetchTva({ dealer, region, number, pushTracking }) {
