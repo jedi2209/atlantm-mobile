@@ -165,7 +165,7 @@ export default class SelectListByCountry extends Component {
             refreshing={this.state.isRefreshing}
             ListEmptyComponent={this.renderEmptyComponent}
             renderItem={this.renderItem}
-            keyExtractor={item => `${item.id}`}
+            keyExtractor={item => `${item.id.toString()}`}
           />
         </Container>
       </StyleProvider>
