@@ -131,7 +131,7 @@ class DiscountsScreen extends Component {
             style={styles.list}
             ListEmptyComponent={this.renderEmptyComponent}
             renderItem={this.renderItem}
-            keyExtractor={item => `${item.hash}`}
+            keyExtractor={item => `${item.hash.toString()}`}
           />
         </SafeAreaView>
       </StyleProvider>

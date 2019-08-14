@@ -191,7 +191,7 @@ class UserCarItemScreen extends Component {
       this.logGuard = true;
     }
 
-    const photos = get(carDetails, 'img.10000x300');
+    const photos = get(carDetails, 'img.original');
 
     return (
       <StyleProvider style={getTheme()}>

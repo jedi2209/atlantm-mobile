@@ -50,10 +50,10 @@ export default class Imager extends PureComponent {
           alignItems: 'center'
       }} />
       <Image {...this.props}
-             source={{ uri: this.state.imagePath }}
+             source={{ uri: this.state.imagePath.toString() }}
              // onLoadStart={() => { console.log('Image on load start'); }}
              // onLoad={() => { this.setState({animatingLoader: false}); console.log('Image on load'); }}
-             onLoadEnd={() => { this.setState({animatingLoader: false}); console.log('Image on load end'); }}>
+             onLoadEnd={() => { this.setState({animatingLoader: false}); console.log('Image ' + this.state.imagePath + ' on load end'); }}>
           {this.props.children}
       </Image>
     </View>

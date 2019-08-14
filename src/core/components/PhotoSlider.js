@@ -16,17 +16,20 @@ const styles = StyleSheet.create({
   photoSlider: {
     width,
     position: 'relative',
+    padding: 0,
   },
   item: {
     flex: 1,
     height,
     justifyContent: 'center',
     alignItems: 'center',
+    padding: 0,
   },
   image: {
     alignSelf: 'center',
     width,
     height,
+    padding: 0,
   },
   spinner: {
     position: 'absolute',
@@ -110,10 +113,11 @@ export default class PhotoSlider extends Component {
         containerStyle={styles.container}
         dotColor="white"
         showsButtons={false}
+        autoplay={false}
         showsPagination={true}
         height={this.state.height}
         rootStyle={styles.photoSlider}
-        loadMinimal={false}
+        loadMinimal={true}
         onIndexChanged={this.props.onIndexChanged}
       >
         {
@@ -123,7 +127,7 @@ export default class PhotoSlider extends Component {
               height={this.state.height}
               loadHandle={this.loadHandle}
               loaded={!!this.state.loadQueue[idx]}
-              url={photo}
+              url={photo+'?d=440x400'}
               i={idx}
               key={photo}
             />;

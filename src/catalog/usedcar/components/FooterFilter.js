@@ -11,7 +11,7 @@ import isIPhoneX from '@utils/is_iphone_x';
 import styleConst from '@core/style-const';
 
 const size = 26;
-const containerSize = 45;
+const containerSize = 35;
 const styles = StyleSheet.create({
   footer: {
     height: isIPhoneX() ? styleConst.footerHeight : styleConst.footerHeightAndroid,
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     paddingLeft: '2%',
     paddingRight: '2%',
-    bottom: isIPhoneX() ? styleConst.ui.horizontalGap : 0
+    bottom: isIPhoneX() ? styleConst.ui.horizontalGap-20 : 0
   },
   container: {
     flexDirection: 'row',

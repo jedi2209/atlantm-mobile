@@ -5,7 +5,8 @@ import { View, StyleSheet, Modal, Text, TouchableOpacity, Platform } from 'react
 import PropTypes from 'prop-types';
 
 // components
-import Gallery from 'react-native-image-gallery';
+// import Gallery from 'react-native-image-gallery';
+import GallerySwiper from "react-native-gallery-swiper";
 import { Icon } from 'native-base';
 
 import styleConst from '@core/style-const';
@@ -53,13 +54,25 @@ class PhotoViewer extends Component {
         visible={this.props.visible}
         onRequestClose={this.props.onPressClose}
       >
-        <Gallery
+        <GallerySwiper
+          images={this.props.items}
+            // Change this to render how many items before it.
+          initialNumToRender={2}
+            // Turning this off will make it feel faster
+            // and prevent the scroller to slow down
+            // on fast swipes.
+          sensitiveScroll={false}
+          onPageSelected={this.props.onChange}
+          style={styles.gallery}
+        />
+
+        {/* <Gallery
           style={styles.gallery}
           images={this.props.items}
           errorComponent={this.renderError}
           onPageSelected={this.props.onChange}
           initialPage={this.props.index}
-        />
+        /> */}
         {this.props.counter ? this.galleryCount : null}
         <TouchableOpacity style={styles.close} onPress={this.props.onPressClose}>
           <Icon style={styles.closeIcon} name="close" type="MaterialIcons" />

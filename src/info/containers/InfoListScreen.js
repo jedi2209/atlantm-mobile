@@ -189,7 +189,7 @@ class InfoListScreen extends Component {
             ListEmptyComponent={this.renderEmptyComponent}
             style={styles.list}
             renderItem={this.renderItem}
-            keyExtractor={item => `${item.id}`}
+            keyExtractor={item => `${item.id.toString()}`}
           />
         </Container>
       </StyleProvider>

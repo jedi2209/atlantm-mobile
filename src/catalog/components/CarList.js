@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     paddingTop: 10,
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
 });
 
@@ -105,7 +105,7 @@ export default class CarList extends Component {
     });
   }
 
-  // getOnEndReached = () => debounce(this.handleLoadMore, 1000)
+  //getOnEndReached = () => debounce(this.handleLoadMore, 1000)
 
   handleLoadMore = () => {
     const {
@@ -140,13 +140,15 @@ export default class CarList extends Component {
       <FlatList
         onEndReachedThreshold={15}
         initialNumToRender={10}
+        maxToRenderPerBatch={10} // Reduce number in each render batch
+        maxToRenderPerBatch={20} // Increase time between renders
         data={items}
         onRefresh={this.onRefresh}
         refreshing={this.state.isRefreshing}
         ListEmptyComponent={this.renderEmptyComponent}
         ListFooterComponent={this.renderFooter}
         renderItem={this.renderItem}
-        keyExtractor={item => `${item.id.api}`}
+        keyExtractor={item => `${item.id.api.toString()}`}
         onEndReached={this.handleLoadMore}
       />
     );

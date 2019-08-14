@@ -136,7 +136,7 @@ export default class CarListItem extends Component {
           <Imager
             resizeMode="contain"
             style={styles.image}
-            source={{ uri: get(car, 'img.10000x300.0') }}
+            source={{ uri: get(car, 'img.thumb.0') + '440x400' }}
           />
 
           <View style={styles.info}>
