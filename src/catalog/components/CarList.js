@@ -92,10 +92,10 @@ export default class CarList extends Component {
   onRefresh = () => {
     const { dataHandler } = this.props;
 
-    this.setState({
-      bounces: false,
-      isRefreshing: true,
-    });
+    // this.setState({
+    //   bounces: false,
+    //   isRefreshing: true,
+    // });
 
     dataHandler(EVENT_REFRESH).then(() => {
       this.setState({
