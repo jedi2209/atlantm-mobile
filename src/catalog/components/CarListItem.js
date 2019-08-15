@@ -116,7 +116,7 @@ export default class CarListItem extends Component {
   }
 
   render() {
-    const { car, prices } = this.props;
+    const { car, prices, itemScreen } = this.props;
     const modelName = get(car, 'model.name', '');
     const complectation = get(car, 'complectation.name', '');
     const engineVolume = get(car, 'engine.volume.full');
@@ -136,7 +136,7 @@ export default class CarListItem extends Component {
           <Imager
             resizeMode="contain"
             style={styles.image}
-            source={{ uri: get(car, 'img.thumb.0') + '440x400' }}
+            source={{ uri: (itemScreen === 'NewCarItemScreen' ? get(car, 'img.10000x440.0') : get(car, 'img.thumb.0') + '440x400') }}
           />
 
           <View style={styles.info}>

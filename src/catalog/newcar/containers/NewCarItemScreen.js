@@ -284,7 +284,7 @@ class NewCarItemScreen extends Component {
     const stockKeys = Object.keys(stock);
     const additional = get(carDetails, 'options.additional', {});
     const additionalKeys = Object.keys(additional);
-    const photos = get(carDetails, 'img.10000x300') || get(carDetails, 'foto.10000x300');
+    const photos = get(carDetails, 'img.10000x440') || get(carDetails, 'img.10000x220');
 
     if (!this.logGuard) {
       Amplitude.logEvent('screen', 'catalog/newcar/item', {
