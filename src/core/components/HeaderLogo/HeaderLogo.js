@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     height: 36,
     resizeMode: 'contain',
     alignSelf: 'center',
+    flex: 1
   },
 });
 
