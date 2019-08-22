@@ -91,13 +91,16 @@ export default class CityItemList extends Component {
                 (
                   <View style={styles.brands}>
                     {cityData.dealers.map(dealer => {
+                      if (dealer.virtual !== false) { // фикс для НЕ вывода виртуальных КО в списке
+                        return true;
+                      }
                       return (
                         <View key={dealer.id} style={styles.brands} >
                           {
                             dealer.brands.map(brand => {
                               const name = brand.name === 'land rover' ? 'landrover' : brand.name;
 
-                              if (existBrands.includes(name)) {
+                              if (existBrands.includes(name) || dealer.virtual !== false) {
                                 return null;
                               } else {
                                 existBrands.push(name);
