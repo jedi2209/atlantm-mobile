@@ -94,7 +94,9 @@ export default class SelectItemByCountry extends Component {
 
   renderDealer = () => {
     const { item, selectedItem } = this.props;
-
+    if (item.virtual !== false) { // фикс для НЕ вывода виртуальных КО в списке
+      return true;
+    }
     return (
       <ListItem onPress={this.onPressDealerItem} style={stylesList.listItem}>
         <Body>
@@ -140,16 +142,19 @@ export default class SelectItemByCountry extends Component {
               (
                 <View style={styles.brands}>
                   {item.dealers.map(dealer => {
+                    if (dealer.virtual !== false) { // фикс для НЕ вывода виртуальных КО в списке
+                      return true;
+                    }
                     return (
                       <View key={dealer.id} style={styles.brands} >
                         {
                           dealer.brands.map(brand => {
                             const name = brand.name === 'land rover' ? 'landrover' : brand.name;
 
-                            if (existBrands.includes(name)) {
+                            if (existBrands.includes(name) || dealer.virtual !== false) {
                               return null;
                             } else {
-                              existBrands.push(name);
+                                existBrands.push(name);
                             }
 
                             return (
