@@ -227,7 +227,7 @@ class InfoPostScreen extends Component {
   onMessage({ nativeEvent }) {
     const data = nativeEvent.data;
 
-    if (data !== undefined && data !== null) {
+    if (typeof data !== undefined && data !== null) {
       Linking.openURL(data);
     }
   }

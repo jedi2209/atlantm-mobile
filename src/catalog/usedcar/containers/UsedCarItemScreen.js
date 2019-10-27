@@ -133,7 +133,6 @@ class UserCarItemScreen extends Component {
 
   onPressOrder = () => {
     const { navigation, prices, carDetails } = this.props;
-
     navigation.navigate('OrderScreen', {
       car: {
         brand: carDetails.brand.name,
@@ -141,7 +140,7 @@ class UserCarItemScreen extends Component {
         price: get(carDetails, 'price.app.standart'),
       },
       currency: prices.curr.name,
-      dealerId: carDetails.dealer.id,
+      dealerId: get(carDetails, 'dealer.id'),
       carId: carDetails.id.api,
     });
   }
