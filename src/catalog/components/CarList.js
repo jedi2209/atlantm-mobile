@@ -138,7 +138,7 @@ export default class CarList extends Component {
 
     return (
       <FlatList
-        onEndReachedThreshold={15}
+        onEndReachedThreshold={0.4}
         initialNumToRender={10}
         maxToRenderPerBatch={10} // Reduce number in each render batch
         maxToRenderPerBatch={20} // Increase time between renders

@@ -41,6 +41,10 @@ export default {
   },
 
   fetchVersion(version) {
+    if (!version) {
+      console.log('version undefined', version);
+      return false;
+    }
     let requested_version = parseInt(version.replace(/\./gi, ''));
     let req = this.request(`/mobile/check/version/`, baseRequestParams);
     return req.then(res => {

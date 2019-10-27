@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppRegistry, YellowBox } from 'react-native';
-import { Sentry } from 'react-native-sentry';
+import * as Sentry from '@sentry/react-native';
 import Wrapper from './src/core/containers/Wrapper';
 
 YellowBox.ignoreWarnings([
@@ -10,9 +10,9 @@ YellowBox.ignoreWarnings([
   'Module RNDeviceInfo requires main queue setup since it overrides',
 ]);
 
-Sentry
-  .config('https://XXXX:4df609d533fd4ce3be4fa721e6583c87@sentry.io/219899')
-  .install();
+Sentry.init({ 
+  dsn: 'https://XXXX@sentry.io/219899', 
+});
 
 const AtlantmApplication = () => <Wrapper />;
 

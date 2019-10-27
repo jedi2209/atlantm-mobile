@@ -35,7 +35,7 @@ export default class CarOrderList extends PureComponent {
 
   renderItem = (label, value, isLast, isSale, isDefault) => {
     if (!value) return null;
-
+    console.log('stylesList', stylesList);
     return (
       <View style={stylesList.listItemContainer}>
         <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]}>
