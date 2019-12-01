@@ -1,10 +1,10 @@
-import RNAmplitude from 'react-native-amplitude-analytics';
+import amplitude from 'amplitude-js';
 // import { GoogleAnalyticsTracker } from 'react-native-google-analytics-bridge';
 
 export default class Amplitude {
   static getInstance() {
     if (!this.instance) {
-      this.instance = new RNAmplitude('XXXX');
+      this.instance = new amplitude('XXXX');
     }
     return this.instance;
   }

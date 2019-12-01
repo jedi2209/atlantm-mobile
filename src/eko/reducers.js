@@ -1,39 +1,31 @@
-import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
+import {combineReducers} from 'redux';
+import {REHYDRATE} from 'redux-persist';
 import {
   REVIEWS__REQUEST,
   REVIEWS__SUCCESS,
   REVIEWS__FAIL,
   REVIEWS__RESET,
-
   REVIEWS_DATE_TO__FILL,
   REVIEWS_DATE_FROM__FILL,
   REVIEWS_DATE_PERIOD__SELECT,
-
   REVIEW__VISIT,
-
   REVIEW_DEALER_RATING__REQUEST,
   REVIEW_DEALER_RATING__SUCCESS,
   REVIEW_DEALER_RATING__FAIL,
-
   REVIEWS_RATING_FROM__SELECT,
   REVIEWS_RATING_TO__SELECT,
-
   REVIEW_ADD_MESSAGE_PLUS__FILL,
   REVIEW_ADD_MESSAGE_MINUS__FILL,
-
   REVIEW_ADD_RATING_VALUE__SELECT,
   REVIEW_ADD_RATING_VARIANT__SELECT,
-
   REVIEW_ADD__REQUEST,
   REVIEW_ADD__SUCCESS,
   REVIEW_ADD__FAIL,
-
   REVIEW_ADD_PUBLIC_AGREE__SELECT,
 } from './actionTypes';
 
-import { EVENT_LOAD_MORE } from '../core/actionTypes';
-import { DEALER__SUCCESS } from '../dealer/actionTypes';
+import {EVENT_LOAD_MORE} from '../core/actionTypes';
+import {DEALER__SUCCESS} from '../dealer/actionTypes';
 
 function isFetchReviews(state = false, action) {
   switch (action.type) {
@@ -51,14 +43,14 @@ function isFetchReviews(state = false, action) {
 
 function isFetchDealerRating(state = false, action) {
   switch (action.type) {
-  case REHYDRATE:
-  case REVIEW_DEALER_RATING__SUCCESS:
-  case REVIEW_DEALER_RATING__FAIL:
-    return false;
-  case REVIEW_DEALER_RATING__REQUEST:
-    return true;
-  default:
-    return state;
+    case REHYDRATE:
+    case REVIEW_DEALER_RATING__SUCCESS:
+    case REVIEW_DEALER_RATING__FAIL:
+      return false;
+    case REVIEW_DEALER_RATING__REQUEST:
+      return true;
+    default:
+      return state;
   }
 }
 
@@ -86,10 +78,7 @@ function reviewsItems(state = [], action) {
       return [];
     case REVIEWS__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {
-        return [
-          ...state,
-          ...action.payload.data,
-        ];
+        return [...state, ...action.payload.data];
       }
       return action.payload.data;
     default:
@@ -246,16 +235,14 @@ function needFetchReviews(state = false, action) {
       return state;
   }
 }
+
 function reviewsVisited(state = [], action) {
   switch (action.type) {
     case REVIEWS__RESET:
     case DEALER__SUCCESS:
       return [];
     case REVIEW__VISIT:
-      return [
-        ...state,
-        action.payload,
-      ];
+      return [...state, action.payload];
     default:
       return state;
   }
@@ -263,14 +250,14 @@ function reviewsVisited(state = [], action) {
 
 function reviewDealerRating(state = null, action) {
   switch (action.type) {
-  case REHYDRATE:
-  case DEALER__SUCCESS:
-  case REVIEW_DEALER_RATING__REQUEST:
-    return null;
-  case REVIEW_DEALER_RATING__SUCCESS:
-    return action.payload.rating;
-  default:
-    return state;
+    case REHYDRATE:
+    case DEALER__SUCCESS:
+    case REVIEW_DEALER_RATING__REQUEST:
+      return null;
+    case REVIEW_DEALER_RATING__SUCCESS:
+      return action.payload.rating;
+    default:
+      return state;
   }
 }
 

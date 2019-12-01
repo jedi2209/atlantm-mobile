@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, WebView, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Icon, ListItem, Body, Right } from 'native-base';
 
 // components

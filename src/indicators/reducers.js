@@ -1,11 +1,10 @@
-import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
-import { get } from 'lodash';
+import {combineReducers} from 'redux';
+import {REHYDRATE} from 'redux-persist';
+import {get} from 'lodash';
 import {
   INDICATORS__REQUEST,
   INDICATORS__SUCCESS,
   INDICATORS__FAIL,
-
   INDICATOR_ACTIVE__SET,
 } from './actionTypes';
 

@@ -1,6 +1,6 @@
-import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
-import { get } from 'lodash';
+import {combineReducers} from 'redux';
+import {REHYDRATE} from 'redux-persist';
+import {get} from 'lodash';
 import {
   PROFILE_CAR__FILL,
   PROFILE_NAME__FILL,
@@ -8,7 +8,6 @@ import {
   PROFILE_EMAIL__FILL,
   PROFILE_CAR_NUMBER__FILL,
   PROFILE_CAR_VIN__FILL,
-
   PROFILE_LOGIN__FILL,
   PROFILE_PASSWORD__FILL,
   PROFILE_BONUS_LEVEL1__SET,
@@ -16,11 +15,9 @@ import {
   PROFILE_BONUS_INFO__REQUEST,
   PROFILE_BONUS_INFO__SUCCESS,
   PROFILE_BONUS_INFO__FAIL,
-
   PROFILE_DATA__REQUEST,
   PROFILE_DATA__SUCCESS,
   PROFILE_DATA__FAIL,
-
   LOGOUT,
   LOGIN__SUCCESS,
   LOGIN__FAIL,
@@ -28,17 +25,14 @@ import {
   REGISTER__SUCCESS,
   REGISTER__FAIL,
   REGISTER__REQUEST,
-
   CAR_HISTORY__REQUEST,
   CAR_HISTORY__SUCCESS,
   CAR_HISTORY__FAIL,
   CAR_HISTORY_LEVEL1__SET,
   CAR_HISTORY_LEVEL2__SET,
-
   CAR_HISTORY_DETAILS__REQUEST,
   CAR_HISTORY_DETAILS__SUCCESS,
   CAR_HISTORY_DETAILS__FAIL,
-
   FORGOT_PASS_LOGIN__FILL,
   FORGOT_PASS_CODE__FILL,
   FORGOT_PASS_MODE_CODE__SET,
@@ -50,7 +44,7 @@ import {
   FORGOT_PASS_SUBMIT_CODE__SUCCESS,
 } from './actionTypes';
 
-import { DEALER__SUCCESS } from '@dealer/actionTypes';
+import {DEALER__SUCCESS} from '@dealer/actionTypes';
 
 function name(state = '', action) {
   switch (action.type) {
@@ -238,28 +232,28 @@ function bonusData(state = {}, action) {
 
 function bonusInfo(state = '', action) {
   switch (action.type) {
-  case REHYDRATE:
-    return get(action.payload, 'profile.bonus.info', '');
-  case DEALER__SUCCESS:
-  case PROFILE_BONUS_INFO__REQUEST:
-    return '';
-  case PROFILE_BONUS_INFO__SUCCESS:
-    return action.payload;
-  default:
-    return state;
+    case REHYDRATE:
+      return get(action.payload, 'profile.bonus.info', '');
+    case DEALER__SUCCESS:
+    case PROFILE_BONUS_INFO__REQUEST:
+      return '';
+    case PROFILE_BONUS_INFO__SUCCESS:
+      return action.payload;
+    default:
+      return state;
   }
 }
 
 function isFetchBonusInfo(state = false, action) {
   switch (action.type) {
-  case REHYDRATE:
-  case PROFILE_BONUS_INFO__FAIL:
-  case PROFILE_BONUS_INFO__SUCCESS:
-    return false;
-  case PROFILE_BONUS_INFO__REQUEST:
-    return true;
-  default:
-    return state;
+    case REHYDRATE:
+    case PROFILE_BONUS_INFO__FAIL:
+    case PROFILE_BONUS_INFO__SUCCESS:
+      return false;
+    case PROFILE_BONUS_INFO__REQUEST:
+      return true;
+    default:
+      return state;
   }
 }
 
@@ -385,60 +379,64 @@ function carHistoryDetailsData(state = {}, action) {
 
 const forgotPassLogin = (state = '', action) => {
   switch (action.type) {
-  case REHYDRATE:
-    return get(action, 'payload.profile.forgotPass.login', '');
-  case FORGOT_PASS_LOGIN__FILL:
-    return action.payload;
-  default:
-    return state;
+    case REHYDRATE:
+      return get(action, 'payload.profile.forgotPass.login', '');
+    case FORGOT_PASS_LOGIN__FILL:
+      return action.payload;
+    default:
+      return state;
   }
 };
 
 const forgotPassCode = (state = '', action) => {
   switch (action.type) {
-  case REHYDRATE:
-    return get(action, 'payload.profile.forgotPass.code', '');
-  case FORGOT_PASS_CODE__FILL:
-    return action.payload;
-  default:
-    return state;
+    case REHYDRATE:
+      return get(action, 'payload.profile.forgotPass.code', '');
+    case FORGOT_PASS_CODE__FILL:
+      return action.payload;
+    default:
+      return state;
   }
 };
 
 const forgotPassModeCode = (state = '', action) => {
   switch (action.type) {
-  case REHYDRATE:
-    return get(action, 'payload.profile.forgotPass.meta.forgotPassModeCode', '');
-  case FORGOT_PASS_MODE_CODE__SET:
-    return action.payload;
-  default:
-    return state;
+    case REHYDRATE:
+      return get(
+        action,
+        'payload.profile.forgotPass.meta.forgotPassModeCode',
+        '',
+      );
+    case FORGOT_PASS_MODE_CODE__SET:
+      return action.payload;
+    default:
+      return state;
   }
 };
 
 const isForgotPassRequest = (state = false, action) => {
   switch (action.type) {
-  case REHYDRATE:
-  case FORGOT_PASS_REQUEST__FAIL:
-  case FORGOT_PASS_REQUEST__SUCCESS:
-    return false;
-  case FORGOT_PASS_REQUEST__REQUEST:
-    return true;
-  default:
-    return state;
+    case REHYDRATE:
+    case FORGOT_PASS_REQUEST__FAIL:
+    case FORGOT_PASS_REQUEST__SUCCESS:
+      return false;
+    case FORGOT_PASS_REQUEST__REQUEST:
+      return true;
+    default:
+      return state;
   }
 };
 
 const isForgotPassCodeSubmit = (state = false, action) => {
   switch (action.type) {
-  case REHYDRATE:
-  case FORGOT_PASS_SUBMIT_CODE__FAIL:
-  case FORGOT_PASS_SUBMIT_CODE__SUCCESS:
-    return false;
-  case FORGOT_PASS_SUBMIT_CODE__REQUEST:
-    return true;
-  default:
-    return state;
+    case REHYDRATE:
+    case FORGOT_PASS_SUBMIT_CODE__FAIL:
+    case FORGOT_PASS_SUBMIT_CODE__SUCCESS:
+      return false;
+    case FORGOT_PASS_SUBMIT_CODE__REQUEST:
+      return true;
+    default:
+      return state;
   }
 };
 

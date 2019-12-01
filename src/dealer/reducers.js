@@ -1,28 +1,25 @@
-import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
-import { get, findIndex } from 'lodash';
+import {combineReducers} from 'redux';
+import {REHYDRATE} from 'redux-persist';
+import {get, findIndex} from 'lodash';
 import {
   DEALERS_REGION__SELECT,
-
   DEALERS_BY_CITIES__SET,
-
   DEALER__REQUEST,
   DEALER__SUCCESS,
   DEALER__FAIL,
-
   DEALERS__REQUEST,
   DEALERS__SUCCESS,
   DEALERS__FAIL,
 } from './actionTypes';
 
-import { RUSSIA, BELARUSSIA, UKRAINE } from '../core/const';
+import {RUSSIA, BELARUSSIA, UKRAINE} from '../core/const';
 
 function selected(state = {}, action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'dealer.selected', {});
     case DEALER__SUCCESS:
-      return { ...action.payload.newDealer };
+      return {...action.payload.newDealer};
     default:
       return state;
   }
@@ -44,9 +41,7 @@ function listRussia(state = [], action) {
     case REHYDRATE:
       return get(action.payload, 'dealer.listRussia', []);
     case DEALERS__SUCCESS:
-      return [
-        ...action.payload[RUSSIA],
-      ];
+      return [...action.payload[RUSSIA]];
     default:
       return state;
   }
@@ -57,9 +52,7 @@ function listBelarussia(state = [], action) {
     case REHYDRATE:
       return get(action.payload, 'dealer.listBelarussia', []);
     case DEALERS__SUCCESS:
-      return [
-        ...action.payload[BELARUSSIA],
-      ];
+      return [...action.payload[BELARUSSIA]];
     default:
       return state;
   }
@@ -70,9 +63,7 @@ function listUkraine(state = [], action) {
     case REHYDRATE:
       return get(action.payload, 'dealer.listUkraine', []);
     case DEALERS__SUCCESS:
-      return [
-        ...action.payload[UKRAINE],
-      ];
+      return [...action.payload[UKRAINE]];
     default:
       return state;
   }
@@ -104,21 +95,24 @@ function isFetchDealer(state = false, action) {
 
 // helper
 const processListsByCities = (action, region) => {
-  const dealersByCities = get(action, `payload.${region}`, []).reduce((result, dealer) => {
-    let cityDataIndex = findIndex(result, { id: dealer.city.id });
+  const dealersByCities = get(action, `payload.${region}`, []).reduce(
+    (result, dealer) => {
+      let cityDataIndex = findIndex(result, {id: dealer.city.id});
 
-    if (cityDataIndex !== -1) {
-      result[cityDataIndex].dealers.push(dealer);
-    } else {
-      result.push({
-        id: dealer.city.id,
-        name: dealer.city.name,
-        dealers: [].concat(dealer),
-      });
-    }
+      if (cityDataIndex !== -1) {
+        result[cityDataIndex].dealers.push(dealer);
+      } else {
+        result.push({
+          id: dealer.city.id,
+          name: dealer.city.name,
+          dealers: [].concat(dealer),
+        });
+      }
 
-    return result;
-  }, []);
+      return result;
+    },
+    [],
+  );
 
   return dealersByCities;
 };

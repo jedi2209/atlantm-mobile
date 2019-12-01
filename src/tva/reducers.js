@@ -1,17 +1,14 @@
-import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
+import {combineReducers} from 'redux';
+import {REHYDRATE} from 'redux-persist';
 import {
   TVA__REQUEST,
   TVA__SUCCESS,
   TVA__FAIL,
-
   TVA_SEND_MESSAGE__REQUEST,
   TVA_SEND_MESSAGE__SUCCESS,
   TVA_SEND_MESSAGE__FAIL,
   TVA_MESSAGE__FILL,
-
   TVA_PUSH_TRACKING__SET,
-
   TVA_ORDER_ID__SET,
 } from './actionTypes';
 

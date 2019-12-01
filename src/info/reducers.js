@@ -1,32 +1,27 @@
-import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
-import { get } from 'lodash';
+import {combineReducers} from 'redux';
+import {REHYDRATE} from 'redux-persist';
+import {get} from 'lodash';
 import {
   INFO_LIST__REQUEST,
   INFO_LIST__SUCCESS,
   INFO_LIST__FAIL,
-
   INFO_POST__REQUEST,
   INFO_POST__SUCCESS,
   INFO_POST__FAIL,
   INFO_LIST__RESET,
-
   CALL_ME_INFO__REQUEST,
   CALL_ME_INFO__SUCCESS,
   CALL_ME_INFO__FAIL,
 } from './actionTypes';
 
-import { DEALER__SUCCESS } from '../dealer/actionTypes';
+import {DEALER__SUCCESS} from '../dealer/actionTypes';
 
 function visited(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action, 'payload.info.visited', []);
     case INFO_POST__SUCCESS:
-      return [
-        ...state,
-        action.payload.id,
-      ];
+      return [...state, action.payload.id];
     case DEALER__SUCCESS:
       return [];
     default:
