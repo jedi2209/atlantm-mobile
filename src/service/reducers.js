@@ -1,10 +1,9 @@
-import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
+import {combineReducers} from 'redux';
+import {REHYDRATE} from 'redux-persist';
 import {
   SERVICE_ORDER__REQUEST,
   SERVICE_ORDER__SUCCESS,
   SERVICE_ORDER__FAIL,
-
   SERVICE_DATE__FILL,
 } from './actionTypes';
 

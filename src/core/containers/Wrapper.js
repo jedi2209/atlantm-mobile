@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 // storage
 import AsyncStorage from '@react-native-community/async-storage';
-import { persistStore } from 'redux-persist';
+import {persistStore} from 'redux-persist';
 
 // redux
-import { Provider } from 'react-redux';
-import { store } from '../store';
+import {Provider} from 'react-redux';
+import {store} from '../store';
 
 // components
 import SplashScreen from 'react-native-splash-screen';
@@ -49,7 +49,9 @@ export default class Wrapper extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { rehydrated: false };
+    this.state = {
+      rehydrated: false,
+    };
   }
 
   componentDidMount() {
@@ -70,11 +72,19 @@ export default class Wrapper extends Component {
     }
   }
 
-  getPersistStore = () => persistStore(store, {
-    storage: AsyncStorage,
-    blacklist: ['form', 'nav'],
-    keyPrefix: 'atlantm',
-  }, () => this.setState({ rehydrated: true }));
+  getPersistStore = () =>
+    persistStore(
+      store,
+      // {
+      //   storage: AsyncStorage,
+      //   blacklist: ['form', 'nav'],
+      //   keyPrefix: 'atlantm',
+      // },
+      null,
+      () => {
+        store.getState();
+      },
+    );
 
   shouldComponentUpdate(nextProps, nextState) {
     return this.state.rehydrated !== nextState.rehydrated;

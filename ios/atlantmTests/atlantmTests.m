@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-#import <React/RCTLog.h>
+#import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
 #define TIMEOUT_SECONDS 600

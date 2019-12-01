@@ -1,5 +1,5 @@
-import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
+import {combineReducers} from 'redux';
+import {REHYDRATE} from 'redux-persist';
 import {
   USED_CAR_LIST__REQUEST,
   USED_CAR_LIST__SUCCESS,
@@ -12,7 +12,6 @@ import {
   USED_CAR_PRICE_RANGE__SELECT,
   USED_CAR_PRICE_FILTER__SHOW,
   USED_CAR_PRICE_FILTER__HIDE,
-
   USED_CAR_DETAILS__REQUEST,
   USED_CAR_DETAILS__SUCCESS,
   USED_CAR_DETAILS__FAIL,
@@ -20,17 +19,14 @@ import {
   USED_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
   USED_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
   USED_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
-
   NEW_CAR_CITY__SELECT,
   NEW_CAR_REGION__SELECT,
-
   NEW_CAR_FILTER_DATA__REQUEST,
   NEW_CAR_FILTER_DATA__SUCCESS,
   NEW_CAR_FILTER_DATA__FAIL,
   NEW_CAR_BY_FILTER__REQUEST,
   NEW_CAR_BY_FILTER__SUCCESS,
   NEW_CAR_BY_FILTER__FAIL,
-
   NEW_CAR_FILTER_BRANDS__SELECT,
   NEW_CAR_FILTER_MODELS__SELECT,
   NEW_CAR_FILTER_BODY__SELECT,
@@ -41,7 +37,6 @@ import {
   NEW_CAR_FILTER_PRICE__SHOW,
   NEW_CAR_FILTER_PRICE__HIDE,
   NEW_CAR_FILTER_PRICE_SPECIAL__SET,
-
   NEW_CAR_DETAILS__REQUEST,
   NEW_CAR_DETAILS__SUCCESS,
   NEW_CAR_DETAILS__FAIL,
@@ -49,15 +44,12 @@ import {
   NEW_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
   NEW_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
   NEW_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
-
   CATALOG_DEALER__REQUEST,
   CATALOG_DEALER__SUCCESS,
   CATALOG_DEALER__FAIL,
-
   CATALOG_ORDER__REQUEST,
   CATALOG_ORDER__SUCCESS,
   CATALOG_ORDER__FAIL,
-
   CATALOG_ORDER_COMMENT__FILL,
 
   // car cost
@@ -79,10 +71,10 @@ import {
   CAR_COST_VIN__FILL,
 } from './actionTypes';
 
-import { EVENT_LOAD_MORE } from '../core/actionTypes';
-import { DEALER__SUCCESS } from '../dealer/actionTypes';
+import {EVENT_LOAD_MORE} from '../core/actionTypes';
+import {DEALER__SUCCESS} from '../dealer/actionTypes';
 
-import { MILEAGE_UNIT_KM } from './carcost/const';
+import {MILEAGE_UNIT_KM} from './carcost/const';
 
 const usedCarItems = (state = [], action) => {
   switch (action.type) {
@@ -92,10 +84,7 @@ const usedCarItems = (state = [], action) => {
       return [];
     case USED_CAR_LIST__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {
-        return [
-          ...state,
-          ...action.payload.data,
-        ];
+        return [...state, ...action.payload.data];
       }
       return action.payload.data;
     default:
@@ -373,12 +362,11 @@ const newCarByFilter = (state = {}, action) => {
       return {};
     case NEW_CAR_BY_FILTER__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {
-        const newState = { ...action.payload };
+        const newState = {
+          ...action.payload,
+        };
 
-        newState.data = [].concat(
-          state.data,
-          newState.data,
-        );
+        newState.data = [].concat(state.data, newState.data);
 
         return newState;
       }

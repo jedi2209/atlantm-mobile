@@ -3,6 +3,9 @@
 echo "NPM run clean";
 npm run clean;
 
+echo "Clean POD cache";
+cd ios; pod cache clean --all; cd ../;
+
 echo "Remove local gradle caches";
 
 rm -rf $HOME/.gradle/caches/;

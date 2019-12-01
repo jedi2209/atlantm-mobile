@@ -1,4 +1,5 @@
-import { WebView, View } from 'react-native';
+import { View } from 'react-native';
+import { WebView } from 'react-native-webview';
 import React, { Component } from 'react';
 
 const BODY_TAG_PATTERN = /\<\/ *body\>/;

@@ -1,20 +1,29 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, NativeModules } from 'react-native';
+import {React, Component} from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  StatusBar,
+  NativeModules,
+} from 'react-native';
+import {enableScreens} from 'react-native-screens';
 
 // redux
-import { connect } from 'react-redux';
-import { store } from '../store';
-import { navigationChange } from '../../navigation/actions';
+import {connect} from 'react-redux';
+import {store} from '../store';
+import {navigationChange} from '../../navigation/actions';
 import {
   actionSetPushGranted,
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
-  actionStoreUpdated
+  actionStoreUpdated,
 } from '../actions';
 
 // helpers
 import API from '../../utils/api';
-import { get } from 'lodash';
+import {get} from 'lodash';
 import OneSignal from 'react-native-onesignal';
 import PushNotifications from '../components/PushNotifications';
 // import RateThisApp from '../components/RateThisApp';
@@ -27,12 +36,14 @@ import DeviceInfo from 'react-native-device-info';
 import getRouter from '../router';
 
 if (__DEV__) {
-    NativeModules.DevSettings.setIsDebuggingRemotely(true)
+  NativeModules.DevSettings.setIsDebuggingRemotely(true);
 }
 
-const mapStateToProps = ({ core, dealer, profile }) => {
+enableScreens();
+
+const mapStateToProps = ({core, dealer, profile}) => {
   return {
-//     pushActionSubscribeState: core.pushActionSubscribeState,
+    //     pushActionSubscribeState: core.pushActionSubscribeState,
     dealerSelected: dealer.selected,
     auth: profile.auth,
     menuOpenedCount: core.menuOpenedCount,
@@ -45,7 +56,7 @@ const mapDispatchToProps = {
   actionSetPushGranted,
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
-  actionStoreUpdated
+  actionStoreUpdated,
 };
 
 const styles = StyleSheet.create({
@@ -69,7 +80,7 @@ class App extends Component {
       actionStoreUpdated,
       actionMenuOpenedCount,
       menuOpenedCount,
-      isStoreUpdated
+      isStoreUpdated,
     } = this.props;
 
     if (get(auth, 'login') === 'zteam') {
@@ -79,56 +90,67 @@ class App extends Component {
     const currentDealer = get(dealerSelected, 'id', false);
 
     API.fetchVersion('5.1.4');
-  
-    if (currentDealer && (isStoreUpdated !== undefined && isStoreUpdated !== '2019-02-01')) { // если мы ещё не очищали стор
-        actionMenuOpenedCount(0);
-        actionStoreUpdated('2019-02-01');
-        console.log('APP INIT INSIDE ====== currentDealer', currentDealer);
-        console.log('APP INIT INSIDE ====== isStoreUpdated', isStoreUpdated);
+
+    if (
+      currentDealer &&
+      (isStoreUpdated !== undefined && isStoreUpdated !== '2019-02-01')
+    ) {
+      // если мы ещё не очищали стор
+      actionMenuOpenedCount(0);
+      actionStoreUpdated('2019-02-01');
+      console.log('APP INIT INSIDE ====== currentDealer', currentDealer);
+      console.log('APP INIT INSIDE ====== isStoreUpdated', isStoreUpdated);
     }
 
     setTimeout(() => {
+      OneSignal.init('2094a3e1-3c9a-479d-90ae-93adfcd15dab', {
+        kOSSettingsKeyAutoPrompt: true,
+        kOSSettingsKeyInFocusDisplayOption: 2,
+      });
 
-        OneSignal.init('2094a3e1-3c9a-479d-90ae-93adfcd15dab', {
-            kOSSettingsKeyAutoPrompt: true,
-            kOSSettingsKeyInFocusDisplayOption: 2
-        });
+      console.log('APP INIT AFTER ====== menuOpenedCount', menuOpenedCount);
+      console.log('APP INIT AFTER ====== isStoreUpdated', isStoreUpdated);
 
-        console.log('APP INIT AFTER ====== menuOpenedCount', menuOpenedCount);
-        console.log('APP INIT AFTER ====== isStoreUpdated', isStoreUpdated);
+      OneSignal.promptForPushNotificationsWithUserResponse(status => {
+        if (status) {
+          actionSetPushGranted(true);
 
-        OneSignal.promptForPushNotificationsWithUserResponse((status) => {
-            if (status) {
+          if (
+            Number(menuOpenedCount) <= 1 ||
+            menuOpenedCount === '' ||
+            isStoreUpdated === false
+          ) {
+            // при первичном ините всегда подписываем насильно на акции
+            console.log('APP INSIDE ====== menuOpenedCount', menuOpenedCount);
+            console.log('APP INSIDE ====== isStoreUpdated', isStoreUpdated);
+            actionSetPushActionSubscribe(true);
+          }
 
-                actionSetPushGranted(true);
+          OneSignal.setSubscription(true);
+        } else {
+          console.log(
+            'APP INSIDE FALSE ====== menuOpenedCount',
+            menuOpenedCount,
+          );
+          console.log('APP INSIDE FALSE ====== isStoreUpdated', isStoreUpdated);
+          actionSetPushGranted(false);
+          actionSetPushActionSubscribe(false);
+          PushNotifications.unsubscribeFromTopic('actions');
+          OneSignal.setSubscription(false);
+        }
+      });
 
-                if (Number(menuOpenedCount) <= 1 || menuOpenedCount === '' || isStoreUpdated === false) { // при первичном ините всегда подписываем насильно на акции
-                    console.log('APP INSIDE ====== menuOpenedCount', menuOpenedCount);
-                    console.log('APP INSIDE ====== isStoreUpdated', isStoreUpdated);
-                    actionSetPushActionSubscribe(true);
-                }
-
-                OneSignal.setSubscription(true);
-
-            } else {
-                console.log('APP INSIDE FALSE ====== menuOpenedCount', menuOpenedCount);
-                console.log('APP INSIDE FALSE ====== isStoreUpdated', isStoreUpdated);
-                actionSetPushGranted(false);
-                actionSetPushActionSubscribe(false);
-                PushNotifications.unsubscribeFromTopic('actions');
-                OneSignal.setSubscription(false);
-            }
-        });
-
-        OneSignal.setLogLevel(6, 0);
-        OneSignal.enableSound(true);
-        OneSignal.enableVibrate(true);
+      OneSignal.setLogLevel(6, 0);
+      OneSignal.enableSound(true);
+      OneSignal.enableVibrate(true);
 
       PushNotifications.init();
     }, 500);
   }
 
-  shouldComponentUpdate() { return false; }
+  shouldComponentUpdate() {
+    return false;
+  }
 
   componentWillUnmount() {
     // PushNotification.notificationListener.remove();
@@ -145,7 +167,10 @@ class App extends Component {
   // }
 
   onNavigationStateChange = (prevState, newState) => {
-    this.props.navigationChange({ prevState, newState });
+    this.props.navigationChange({
+      prevState,
+      newState,
+    });
   };
 
   render() {
@@ -166,17 +191,17 @@ class App extends Component {
         <View style={styles.container}>
           <Sidebar />
           <View style={styles.app}>
-            <Router onNavigationStateChange={this.onNavigationStateChange}
-            />
-          </View>
+            <Router onNavigationStateChange={this.onNavigationStateChange} />{' '}
+          </View>{' '}
         </View>
       );
     }
 
-    return (
-      <Router onNavigationStateChange={this.onNavigationStateChange}/>
-    );
+    return <Router onNavigationStateChange={this.onNavigationStateChange} />;
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(App);
