@@ -52,7 +52,7 @@ export default {
         }
         if (!routeName) return;
 
-        const resetAction = StackActions.reset({
+        const resetAction = NavigationActions.reset({
             index: 0,
             key: null,
             actions: [
