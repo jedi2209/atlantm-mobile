@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 // components
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions, StackActions } from 'react-navigation';
 
 // helpers
 import PropTypes from 'prop-types';
@@ -62,7 +62,7 @@ export default class HeaderIconBack extends Component {
 
   onPressBackHome = () => {
     Keyboard.dismiss();
-    const resetAction = NavigationActions.reset({
+    const resetAction = StackActions.reset({
       index: 0,
       key: null,
       actions: [

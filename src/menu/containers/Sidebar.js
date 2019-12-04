@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 
 // helpers
 import styleConst from '../../core/style-const';
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions, StackActions } from 'react-navigation';
 import {
   MENU_TVA,
   MENU_EKO,
@@ -150,7 +150,7 @@ class Sidebar extends Component {
   onPressItem = (routeName) => {
     if (!this.isMenuAvailable()) return this.showIntroWarning();
 
-    const resetAction = NavigationActions.reset({
+    const resetAction = StackActions.reset({
       index: 0,
       key: null,
       actions: [

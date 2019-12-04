@@ -1,4 +1,4 @@
-import {React, Component} from 'react';
+import React, {Component} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,6 +9,10 @@ import {
   NativeModules,
 } from 'react-native';
 import {enableScreens} from 'react-native-screens';
+
+import {
+  createAppContainer,
+} from 'react-navigation';
 
 // redux
 import {connect} from 'react-redux';
@@ -178,26 +182,35 @@ class App extends Component {
     const mainScreen = isTablet ? 'ContactsScreen' : 'MenuScreen';
     const isDealerSelected = get(store.getState(), 'dealer.selected.id');
     const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
+    console.log('Router >>>>>>>>>>>>>>>>>>>>>>>>>>>>', Router);
+    const AppContainer = createAppContainer(Router);
 
-    const defaultGetStateForAction = Router.router.getStateForAction;
-    Router.router.getStateForAction = (action, state) => {
-      // console.log('ROUTER action', action);
-      // console.log('ROUTER state', state);
-      return defaultGetStateForAction(action, state);
-    };
+    return (
+      <AppContainer onNavigationStateChange={this.onNavigationStateChange} />
+    );
 
-    if (isTablet) {
-      return (
-        <View style={styles.container}>
-          <Sidebar />
-          <View style={styles.app}>
-            <Router onNavigationStateChange={this.onNavigationStateChange} />{' '}
-          </View>{' '}
-        </View>
-      );
-    }
+    // const defaultGetStateForAction = Router.router.getStateForAction;
+    // Router.router.getStateForAction = (action, state) => {
+    //   // console.log('ROUTER action', action);
+    //   // console.log('ROUTER state', state);
+    //   return defaultGetStateForAction(action, state);
+    // };
 
-    return <Router onNavigationStateChange={this.onNavigationStateChange} />;
+    // console.log(Router)
+    // return <Text>hello</Text>
+
+    // if (isTablet) {
+    //   return (
+    //     <View style={styles.container}>
+    //       <Sidebar />
+    //       <View style={styles.app}>
+    //         <Router onNavigationStateChange={this.onNavigationStateChange} />{' '}
+    //       </View>{' '}
+    //     </View>
+    //   );
+    // }
+
+    // return <Router onNavigationStateChange={this.onNavigationStateChange} />;
   }
 }
 

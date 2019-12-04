@@ -1,6 +1,6 @@
 import { Platform, PermissionsAndroid, Alert, Linking } from 'react-native';
 
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions, StackActions } from 'react-navigation';
 import OneSignal from 'react-native-onesignal';
 
 import { get } from 'lodash';
@@ -52,7 +52,7 @@ export default {
         }
         if (!routeName) return;
 
-        const resetAction = NavigationActions.reset({
+        const resetAction = StackActions.reset({
             index: 0,
             key: null,
             actions: [
