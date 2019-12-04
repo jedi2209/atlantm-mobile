@@ -1,0 +1,7 @@
+[defaults]
+url=https://sentry.io/
+org=zavarkateam
+project=atlant-m
+
+[auth]
+token=XXXX
