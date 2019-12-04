@@ -5,7 +5,7 @@ import {
   APP_PUSH_ACTION_SUBSCRIBE__SET,
   APP_MENU_OPENED_COUNTER,
   APP_ACTION_RATED,
-  APP_STORE_UPDATED
+  APP_STORE_UPDATED,
 } from './actionTypes';
 
 export const actionSetPushGranted = isGranted => {
@@ -18,29 +18,29 @@ export const actionSetPushGranted = isGranted => {
 };
 
 export const actionMenuOpenedCount = reset => {
-    return dispatch => {
-        dispatch({
-            type: APP_MENU_OPENED_COUNTER,
-            payload: reset,
-        });
-    };
+  return dispatch => {
+    dispatch({
+      type: APP_MENU_OPENED_COUNTER,
+      payload: reset,
+    });
+  };
 };
 
 export const actionAppRated = () => {
-    return dispatch => {
-        dispatch({
-            type: APP_ACTION_RATED
-        });
-    };
+  return dispatch => {
+    dispatch({
+      type: APP_ACTION_RATED,
+    });
+  };
 };
 
 export const actionStoreUpdated = isUpdated => {
-    return dispatch => {
-        dispatch({
-            type: APP_STORE_UPDATED,
-            payload: isUpdated,
-        });
-    };
+  return dispatch => {
+    dispatch({
+      type: APP_STORE_UPDATED,
+      payload: isUpdated,
+    });
+  };
 };
 
 export const actionSetPushActionSubscribe = isSubscribe => {

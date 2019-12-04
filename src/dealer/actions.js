@@ -27,6 +27,8 @@ export const selectRegion = region => {
 };
 
 export const selectDealer = ({ dealerBaseData, dealerSelected }) => {
+  console.log('ya tyt >>>>>>>>>>>>');
+
   return dispatch => {
     dispatch({
       type: DEALER__REQUEST,
@@ -38,6 +40,7 @@ export const selectDealer = ({ dealerBaseData, dealerSelected }) => {
 
     return API.fetchDealer(dealerBaseData.id)
       .then(response => {
+        console.log(response);
 
         if (response.error) {
           return dispatch({

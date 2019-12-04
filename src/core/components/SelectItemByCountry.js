@@ -4,7 +4,7 @@ import { Text, ListItem, Body, Right, Icon } from 'native-base';
 
 // components
 import DeviceInfo from 'react-native-device-info';
-import { NavigationActions } from 'react-navigation';
+import { NavigationActions, StackActions } from 'react-navigation';
 import Imager from '../components/Imager';
 
 // helpers
@@ -55,6 +55,7 @@ export default class SelectItemByCountry extends Component {
     const { navigation, returnScreen, selectItem, item, goBack, onSelect, selectedItem } = this.props;
     const mainScreen = DeviceInfo.isTablet() ? 'ContactsScreen' : 'MenuScreen';
 
+    console.log('что ты такое?');
     selectItem({ dealerBaseData: item, dealerSelected: selectedItem })
       .then((action) => {
         if (action.type === DEALER__SUCCESS) {
@@ -68,6 +69,9 @@ export default class SelectItemByCountry extends Component {
           if (goBack) {
             return navigation.goBack();
           }
+
+          console.log('returnScreen or mainScreen >>>>>>>', returnScreen, mainScreen);
+          console.log('navigation >>', navigation);
 
           const resetAction = NavigationActions.reset({
             index: 0,

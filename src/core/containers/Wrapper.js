@@ -55,11 +55,11 @@ export default class Wrapper extends Component {
   }
 
   componentDidMount() {
-    this.defaultHandler = ErrorUtils.getGlobalHandler();
-    ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
+    // this.defaultHandler = ErrorUtils.getGlobalHandler();
+    // ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
 
-    //this.getPersistStore().purge();
-    this.getPersistStore();
+    // //this.getPersistStore().purge();
+    // this.getPersistStore();
   }
 
   async wrapGlobalHandler(error, isFatal) {
@@ -75,12 +75,12 @@ export default class Wrapper extends Component {
   getPersistStore = () =>
     persistStore(
       store,
-      // {
-      //   storage: AsyncStorage,
-      //   blacklist: ['form', 'nav'],
-      //   keyPrefix: 'atlantm',
-      // },
-      null,
+      {
+        storage: AsyncStorage,
+        blacklist: ['form', 'nav'],
+        keyPrefix: 'atlantm',
+      },
+      // null,
       () => {
         store.getState();
       },
@@ -91,9 +91,11 @@ export default class Wrapper extends Component {
   }
 
   render() {
-    if (!this.state.rehydrated) {
-      return null;
-    }
+    // return  <App />
+    
+    // if (!this.state.rehydrated) {
+    //   return null;
+    // }
 
     SplashScreen.hide();
 
