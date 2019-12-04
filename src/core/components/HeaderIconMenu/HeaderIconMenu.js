@@ -43,7 +43,7 @@ export default class HeaderIconMenu extends Component {
 
   onPressIcon = () => {
     Keyboard.dismiss();
-    const resetAction = StackActions.reset({
+    const resetAction = NavigationActions.reset({
       index: 0,
       key: null,
       actions: [

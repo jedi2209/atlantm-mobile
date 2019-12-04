@@ -1,4 +1,4 @@
-import {createStackNavigator} from 'react-navigation-stack';
+import { StackNavigator } from 'react-navigation';
 
 // global
 import IntroScreen from '../intro/containers/IntroScreen';
@@ -60,77 +60,76 @@ import ReviewsFilterRatingScreen from '../eko/reviews/containers/ReviewsFilterRa
 import ReviewAddMessageStepScreen from '../eko/reviews/containers/ReviewAddMessageStepScreen';
 import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRatingStepScreen';
 
-const CatalogScreenNavigator = createStackNavigator({
-  CatalogScreen: {screen: CatalogScreen},
-  AboutDealerScreen: {screen: AboutDealerScreen},
-  OrderScreen: {screen: OrderScreen},
-  UsedCarListScreen: {screen: UsedCarListScreen},
-  UsedCarItemScreen: {screen: UsedCarItemScreen},
-  UsedCarCityScreen: {screen: UsedCarCityScreen},
-  NewCarFilterScreen: {screen: NewCarFilterScreen},
-  NewCarFilterBrandsScreen: {screen: NewCarFilterBrandsScreen},
-  NewCarFilterModelsScreen: {screen: NewCarFilterModelsScreen},
-  NewCarFilterBodyScreen: {screen: NewCarFilterBodyScreen},
-  NewCarFilterGearboxScreen: {screen: NewCarFilterGearboxScreen},
-  NewCarFilterEngineTypeScreen: {screen: NewCarFilterEngineTypeScreen},
-  NewCarFilterDriveScreen: {screen: NewCarFilterDriveScreen},
-  NewCarListScreen: {screen: NewCarListScreen},
-  NewCarItemScreen: {screen: NewCarItemScreen},
-  NewCarCityScreen: {screen: NewCarCityScreen},
-  CarCostScreen: {screen: CarCostScreen},
+const CatalogScreenNavigator = StackNavigator({
+  CatalogScreen: { screen: CatalogScreen },
+  AboutDealerScreen: { screen: AboutDealerScreen },
+  OrderScreen: { screen: OrderScreen },
+  UsedCarListScreen: { screen: UsedCarListScreen },
+  UsedCarItemScreen: { screen: UsedCarItemScreen },
+  UsedCarCityScreen: { screen: UsedCarCityScreen },
+  NewCarFilterScreen: { screen: NewCarFilterScreen },
+  NewCarFilterBrandsScreen: { screen: NewCarFilterBrandsScreen },
+  NewCarFilterModelsScreen: { screen: NewCarFilterModelsScreen },
+  NewCarFilterBodyScreen: { screen: NewCarFilterBodyScreen },
+  NewCarFilterGearboxScreen: { screen: NewCarFilterGearboxScreen },
+  NewCarFilterEngineTypeScreen: { screen: NewCarFilterEngineTypeScreen },
+  NewCarFilterDriveScreen: { screen: NewCarFilterDriveScreen },
+  NewCarListScreen: { screen: NewCarListScreen },
+  NewCarItemScreen: { screen: NewCarItemScreen },
+  NewCarCityScreen: { screen: NewCarCityScreen },
+  CarCostScreen: { screen: CarCostScreen },
 });
 
-const defaultGetStateForAction =
-  CatalogScreenNavigator.router.getStateForAction;
+const defaultGetStateForAction = CatalogScreenNavigator.router.getStateForAction;
 CatalogScreenNavigator.router.getStateForAction = (action, state) => {
   return defaultGetStateForAction(action, state);
 };
 
 const getRouter = initialRouteName => {
-  return createStackNavigator(
+  return StackNavigator(
     {
-      IntroScreen: {screen: IntroScreen},
-      MenuScreen: {screen: MenuScreen},
-      ChooseDealerScreen: {screen: ChooseDealerScreen},
+      IntroScreen: { screen: IntroScreen },
+      MenuScreen: { screen: MenuScreen },
+      ChooseDealerScreen: { screen: ChooseDealerScreen },
       ContactsScreen: {
-        screen: createStackNavigator({
-          ContactsScreen: {screen: ContactsScreen},
-          AboutScreen: {screen: AboutScreen},
-          MapScreen: {screen: MapScreen},
-          ReferenceScreen: {screen: ReferenceScreen},
-          AboutHoldingScreen: {screen: AboutHoldingScreen},
-          BonusInfoScreen: {screen: BonusInfoScreen},
+        screen: StackNavigator({
+          ContactsScreen: { screen: ContactsScreen },
+          AboutScreen: { screen: AboutScreen },
+          MapScreen: { screen: MapScreen },
+          ReferenceScreen: { screen: ReferenceScreen },
+          AboutHoldingScreen: { screen: AboutHoldingScreen },
+          BonusInfoScreen: { screen: BonusInfoScreen },
         }),
         navigationOptions: {
           header: null,
         },
       },
       InfoListScreen: {
-        screen: createStackNavigator({
-          InfoListScreen: {screen: InfoListScreen},
-          InfoPostScreen: {screen: InfoPostScreen},
+        screen: StackNavigator({
+          InfoListScreen: { screen: InfoListScreen },
+          InfoPostScreen: { screen: InfoPostScreen },
         }),
         navigationOptions: {
           header: null,
         },
       },
       Profile2Screen: {
-        screen: createStackNavigator({
-          ProfileScreen: {screen: ProfileScreen},
-          RegisterScreen: {screen: RegisterScreen},
-          ForgotPassScreen: {screen: ForgotPassScreen},
-          BonusScreen: {screen: BonusScreen},
-          BonusInfoScreen: {screen: BonusInfoScreen},
-          DiscountsScreen: {screen: DiscountsScreen},
-          CarHistoryScreen: {screen: CarHistoryScreen},
-          CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
+        screen: StackNavigator({
+          ProfileScreen: { screen: ProfileScreen },
+          RegisterScreen: { screen: RegisterScreen },
+          ForgotPassScreen: { screen: ForgotPassScreen },
+          BonusScreen: { screen: BonusScreen },
+          BonusInfoScreen: { screen: BonusInfoScreen },
+          DiscountsScreen: { screen: DiscountsScreen },
+          CarHistoryScreen: { screen: CarHistoryScreen },
+          CarHistoryDetailsScreen: { screen: CarHistoryDetailsScreen },
         }),
         navigationOptions: {
           header: null,
         },
       },
-      ServiceScreen: {screen: ServiceScreen},
-      IndicatorsScreen: {screen: IndicatorsScreen},
+      ServiceScreen: { screen: ServiceScreen },
+      IndicatorsScreen: { screen: IndicatorsScreen },
       Catalog2Screen: {
         screen: CatalogScreenNavigator,
         navigationOptions: {
@@ -138,23 +137,23 @@ const getRouter = initialRouteName => {
         },
       },
       Tva2Screen: {
-        screen: createStackNavigator({
-          TvaScreen: {screen: TvaScreen},
-          TvaResultsScreen: {screen: TvaResultsScreen},
+        screen: StackNavigator({
+          TvaScreen: { screen: TvaScreen },
+          TvaResultsScreen: { screen: TvaResultsScreen },
         }),
         navigationOptions: {
           header: null,
         },
       },
       Eko2Screen: {
-        screen: createStackNavigator({
+        screen: StackNavigator({
           // EkoScreen: { screen: EkoScreen },
-          ReviewsScreen: {screen: ReviewsScreen},
-          ReviewScreen: {screen: ReviewScreen},
-          ReviewsFilterDateScreen: {screen: ReviewsFilterDateScreen},
-          ReviewsFilterRatingScreen: {screen: ReviewsFilterRatingScreen},
-          ReviewAddMessageStepScreen: {screen: ReviewAddMessageStepScreen},
-          ReviewAddRatingStepScreen: {screen: ReviewAddRatingStepScreen},
+          ReviewsScreen: { screen: ReviewsScreen },
+          ReviewScreen: { screen: ReviewScreen },
+          ReviewsFilterDateScreen: { screen: ReviewsFilterDateScreen },
+          ReviewsFilterRatingScreen: { screen: ReviewsFilterRatingScreen },
+          ReviewAddMessageStepScreen: { screen: ReviewAddMessageStepScreen },
+          ReviewAddRatingStepScreen: { screen: ReviewAddRatingStepScreen },
         }),
         navigationOptions: {
           header: null,

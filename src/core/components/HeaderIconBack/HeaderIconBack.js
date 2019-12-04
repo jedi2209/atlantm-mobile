@@ -62,7 +62,7 @@ export default class HeaderIconBack extends Component {
 
   onPressBackHome = () => {
     Keyboard.dismiss();
-    const resetAction = StackActions.reset({
+    const resetAction = NavigationActions.reset({
       index: 0,
       key: null,
       actions: [
