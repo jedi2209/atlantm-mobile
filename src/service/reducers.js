@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import {REHYDRATE} from 'redux-persist';
+import { REHYDRATE } from 'redux-persist/constants';
 import {
   SERVICE_ORDER__REQUEST,
   SERVICE_ORDER__SUCCESS,

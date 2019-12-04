@@ -1,7 +1,7 @@
-import {reducer as formReducer} from 'redux-form';
-import {REHYDRATE, persistCombineReducers} from 'redux-persist';
-import AsyncStorage from '@react-native-community/async-storage';
-import {get} from 'lodash';
+import { combineReducers } from 'redux';
+import { reducer as formReducer } from 'redux-form';
+import { REHYDRATE } from 'redux-persist/constants';
+import { get } from 'lodash';
 import dealer from '../dealer/reducers';
 import nav from '../navigation/reducers';
 import tva from '../tva/reducers';
@@ -22,11 +22,6 @@ import {
 } from './actionTypes';
 
 import {DEALER__SUCCESS} from '../dealer/actionTypes';
-
-const persistConfig = {
-  key: 'primary',
-  storage: AsyncStorage,
-};
 
 const pushGranted = (state = false, action) => {
   switch (action.type) {
@@ -91,7 +86,7 @@ const isStoreUpdated = (state = false, action) => {
   }
 };
 
-const coreReducer = persistCombineReducers(persistConfig, {
+const coreReducer = combineReducers({
   pushGranted,
   pushActionSubscribeState,
   menuOpenedCount,
@@ -99,7 +94,7 @@ const coreReducer = persistCombineReducers(persistConfig, {
   isStoreUpdated,
 });
 
-const rootReducer = persistCombineReducers(persistConfig, {
+const rootReducer = combineReducers({
   nav,
   tva,
   eko,
