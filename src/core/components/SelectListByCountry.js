@@ -17,14 +17,15 @@ import { verticalScale } from '../../utils/scale';
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#F6F6F6',
   },
   tabs: {
-    backgroundColor: styleConst.color.header,
+    width: '100%',
+    backgroundColor: styleConst.new.blueHeader,
     borderBottomWidth: styleConst.ui.borderWidth,
     borderBottomColor: styleConst.color.border,
 
-    paddingVertical: verticalScale(10),
+    paddingVertical: verticalScale(5),
   },
   spinner: {
     alignSelf: 'center',
@@ -126,7 +127,7 @@ export default class SelectListByCountry extends Component {
         list = listUkraine;
         break;
       default:
-        list = listRussia;
+        list = listBelarussia;
     }
 
     return (
@@ -137,16 +138,16 @@ export default class SelectListByCountry extends Component {
             <Segment>
                 <Button
                   first
-                  active={region === RUSSIA}
-                  onPress={this.selectRegionRussia}
-                >
-                  <Text>Россия</Text>
-                </Button>
-                <Button
                   active={region === BELARUSSIA}
                   onPress={this.selectRegionBelarussia}
                 >
                   <Text>Беларусь</Text>
+                </Button>
+                <Button
+                  active={region === RUSSIA}
+                  onPress={this.selectRegionRussia}
+                >
+                  <Text>Россия</Text>
                 </Button>
                 <Button
                   last

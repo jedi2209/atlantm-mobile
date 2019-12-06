@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     width: size,
     height: size,
     resizeMode: 'contain',
+    color: 'red'
   },
 });
 
@@ -43,7 +44,8 @@ export default class HeaderIconBack extends Component {
   static propTypes = {
     navigation: PropTypes.object,
     returnScreen: PropTypes.string,
-  }
+    color: PropTypes.string,
+  };
 
   shouldComponentUpdate() {
     return false;
@@ -58,31 +60,30 @@ export default class HeaderIconBack extends Component {
     }
 
     returnScreen ? navigation.navigate(returnScreen) : navigation.goBack();
-  }
+  };
 
   onPressBackHome = () => {
     Keyboard.dismiss();
     const resetAction = NavigationActions.reset({
       index: 0,
       key: null,
-      actions: [
-        NavigationActions.navigate({ routeName: MENU_SCREEN_NAME }),
-      ],
+      actions: [NavigationActions.navigate({routeName: MENU_SCREEN_NAME})],
     });
     this.props.navigation.dispatch(resetAction);
-  }
+  };
 
   render() {
     return (
-      <TouchableOpacity
-        style={styles.container}
-        onPress={this.onPressBack}
-      >
+      <TouchableOpacity style={styles.container} onPress={this.onPressBack}>
         <View style={styles.inner}>
-          <Image
-            style={styles.icon}
-            source={require('./assets/back.png')}
-          />
+          {this.props.theme === 'white' ? (
+            <Image
+              style={styles.icon}
+              source={require('./assets/back@2x-white.png')}
+            />
+          ) : (
+            <Image style={styles.icon} source={require('./assets/back.png')} />
+          )}
         </View>
       </TouchableOpacity>
     );

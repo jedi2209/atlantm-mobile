@@ -9,21 +9,22 @@ export default (variables = variable) => {
 
     borderColor: variables.segmentBorderColorMain,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-between",
     backgroundColor: variables.segmentBackgroundColor,
     "NativeBase.Button": {
-      alignSelf: "center",
+      alignSelf: "space-between",
       borderRadius: 0,
-      paddingHorizontal: 20,
+      marginHorizontal: 10,
       height: null,
       backgroundColor: "transparent",
-      borderWidth: 1,
-      borderColor: variables.segmentBorderColor,
+      borderBottomWidth: 2,
+      borderBottomColor: variables.segmentBorderColor,
       elevation: 0,
       ".active": {
         backgroundColor: variables.segmentActiveBackgroundColor,
+        borderBottomColor: '#F5A623',
         "NativeBase.Text": {
-          color: variables.segmentActiveTextColor
+          color: variables.segmentActiveTextColor,
         }
       },
       ".first": {
@@ -38,7 +39,8 @@ export default (variables = variable) => {
       },
       "NativeBase.Text": {
         color: variables.segmentTextColor,
-        fontSize: 14
+        fontSize: 12,
+        textAlign: 'center',
       }
     }
   };
