@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { SafeAreaView, StyleSheet, View, Text, Image, Dimensions } from 'react-native';
-import { Button, Content } from 'native-base';
+import { Icon, Button, Content } from 'native-base';
 
 // redux
 import { connect } from 'react-redux';
@@ -94,13 +94,19 @@ const mapDispatchToProps = {
 };
 
 class CatalogScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Каталог автомобилей',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
-    headerRight: <HeaderIconMenu navigation={navigation} />,
-  })
+  static navigationOptions = () => ({
+    tabBarLabel: 'Поиск',
+    tabBarIcon: ({focused}) => (
+      <Icon
+        name="search"
+        type="FontAwesome5"
+        style={{
+          fontSize: 24,
+          color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
+        }}
+      />
+    ),
+  });
 
   static propTypes = {
     dealerSelected: PropTypes.object,
