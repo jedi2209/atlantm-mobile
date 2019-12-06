@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { Container, Text, Grid, Col, Row } from 'native-base';
+import { Icon, Container, Text, Grid, Col, Row } from 'native-base';
+import { TabNavigator } from 'react-navigation';
+
 
 // redux
 import { connect } from 'react-redux';
@@ -24,6 +26,46 @@ import stylesHeader from '../../core/components/Header/style';
 import RateThisApp from "../../core/components/RateThisApp";
 import OneSignal from 'react-native-onesignal';
 import PushNotifications from '../../core/components/PushNotifications';
+import ContactsScreen from '../../contacts/containers/ContactsScreen';
+import CatalogScreen from '../../catalog/containers/CatalogScreen';
+import ProfileScreen from '../../profile/containers/ProfileScreen';
+import ServiceScreen from '../../service/containers/ServiceScreen';
+
+
+const MoreScreen = () => null;
+MoreScreen.navigationOptions = () => ({
+  tabBarLabel: 'Ещё',
+  tabBarIcon: ({focused}) => (
+    <Icon
+      name="bars"
+      type="FontAwesome5"
+      style={{
+        fontSize: 24,
+        color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
+      }}
+    />
+  ),
+})
+
+const EnhancedMenuScreen = TabNavigator({
+  Contacts: {
+    screen: ContactsScreen,
+  },
+  Search: {
+    screen: CatalogScreen,
+  },
+  Profile: {
+    screen: ProfileScreen,
+  },
+  Service: {
+    screen: ServiceScreen,
+  },
+  More: {
+    screen: MoreScreen,
+  },
+});
+
+export default EnhancedMenuScreen
 
 const styles = StyleSheet.create({
   container: {
@@ -78,10 +120,7 @@ const mapDispatchToProps = {
 
 class MenuScreen extends Component {
   static navigationOptions = () => ({
-    headerTitle: <HeaderLogo />,
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: null,
+    header: null,
   });
 
   UNSAFE_componentWillMount() {
@@ -142,6 +181,16 @@ class MenuScreen extends Component {
   onAppRateAskLater = () => { !this.props.isAppRated && this.props.actionMenuOpenedCount(0); };
 
   render() {
+
+
+
+
+
+    return <EnhancedMenuScreen />
+    
+    
+    
+    
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
@@ -264,4 +313,4 @@ class MenuScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuScreen);
+// export default connect(mapStateToProps, mapDispatchToProps)(MenuScreen);

@@ -41,7 +41,9 @@ export default {
     smallTextSize: 15,
   },
   new: {
+    // TODO: reeemmaee to bluee
     blueHeader: '#0F66B2',
+    passive: '#757575',
   },
 };
 

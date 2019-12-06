@@ -126,23 +126,37 @@ const mapDispatchToProps = {
 };
 
 class ProfileScreen extends Component {
-  static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
+  // static navigationOptions = ({ navigation }) => {
+  //   const { params = {} } = navigation.state;
 
-    return {
-      headerTitle: 'Личный кабинет',
-      headerStyle: stylesHeader.common,
-      headerTitleStyle: stylesHeader.title,
-      headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
-      headerRight: params.isAuth ? <HeaderIconReload onPress={() => {
-        Keyboard.dismiss();
+  //   return {
+  //     headerTitle: 'Личный кабинет',
+  //     headerStyle: stylesHeader.common,
+  //     headerTitleStyle: stylesHeader.title,
+  //     headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
+  //     headerRight: params.isAuth ? <HeaderIconReload onPress={() => {
+  //       Keyboard.dismiss();
 
-        if (params.onReload) {
-          params.onReload();
-        }
-      }} /> : <View />,
-    };
-  }
+  //       if (params.onReload) {
+  //         params.onReload();
+  //       }
+  //     }} /> : <View />,
+  //   };
+  // }
+
+  static navigationOptions = () => ({
+    tabBarLabel: 'Кабинет',
+    tabBarIcon: ({focused}) => (
+      <Icon
+        name="user"
+        type="FontAwesome5"
+        style={{
+          fontSize: 24,
+          color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
+        }}
+      />
+    ),
+  });
 
   static propTypes = {
     dealerSelected: PropTypes.object,
