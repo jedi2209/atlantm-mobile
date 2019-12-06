@@ -40,6 +40,9 @@ export default {
     listHeight: 44,
     smallTextSize: 15,
   },
+  new: {
+    blueHeader: '#0F66B2',
+  },
 };
 
 // fonts: https://github.com/react-native-training/react-native-fonts

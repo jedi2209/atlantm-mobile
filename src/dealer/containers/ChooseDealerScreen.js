@@ -1,3 +1,4 @@
+// Начни работать сука нет времени прокрастинировать
 import React, { Component } from 'react';
 import { View } from 'react-native';
 
@@ -40,10 +41,10 @@ const mapDispatchToProps = {
 
 class ChooseDealerScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Мой автоцентр',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
+    headerTitle: 'выбор автоцентра',
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: <HeaderIconBack theme="white" navigation={navigation} />,
     headerRight: <View />,
   });
 
