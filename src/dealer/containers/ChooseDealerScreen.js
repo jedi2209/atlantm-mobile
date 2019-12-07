@@ -1,12 +1,12 @@
 // Начни работать сука нет времени прокрастинировать
-import React, { Component } from 'react';
-import { View } from 'react-native';
+import React, {Component} from 'react';
+import {View} from 'react-native';
 
 // redux
-import { connect } from 'react-redux';
-import { actionSetPushActionSubscribe } from '../../core/actions';
+import {connect} from 'react-redux';
+import {actionSetPushActionSubscribe} from '../../core/actions';
 // actions
-import { fetchDealers, selectDealer, selectRegion } from '../actions';
+import {fetchDealers, selectDealer, selectRegion} from '../actions';
 
 // components
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
@@ -14,10 +14,10 @@ import SelectListByCountry from '../../core/components/SelectListByCountry';
 import PushNotifications from '../../core/components/PushNotifications';
 
 // helpers
-import { get } from 'lodash';
+import {get} from 'lodash';
 import stylesHeader from '../../core/components/Header/style';
 
-const mapStateToProps = ({ dealer, nav, core }) => {
+const mapStateToProps = ({dealer, nav, core}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
@@ -40,7 +40,7 @@ const mapDispatchToProps = {
 };
 
 class ChooseDealerScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: 'выбор автоцентра',
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
@@ -55,16 +55,16 @@ class ChooseDealerScreen extends Component {
     return nav.routes[nav.index].routeName === 'ChooseDealerScreen';
   }
 
-  onSelectDealer = ({ prevDealer, newDealer }) => {
-    const { pushActionSubscribeState } = this.props;
-      console.log('onSelectDealer => New Dealer', newDealer);
+  onSelectDealer = ({prevDealer, newDealer}) => {
+    const {pushActionSubscribeState} = this.props;
+    console.log('onSelectDealer => New Dealer', newDealer);
     // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
     PushNotifications.addTag('dealer', newDealer.id);
 
     if (pushActionSubscribeState) {
-        PushNotifications.subscribeToTopic('actions', newDealer.id);
+      PushNotifications.subscribeToTopic('actions', newDealer.id);
     } else {
-        PushNotifications.unsubscribeFromTopic('actions');
+      PushNotifications.unsubscribeFromTopic('actions');
     }
   };
 
@@ -90,22 +90,27 @@ class ChooseDealerScreen extends Component {
 
     const goBack = get(navigation, 'state.params.goBack');
 
-    return <SelectListByCountry
-      itemLayout="dealer"
-      region={region}
-      dataHandler={fetchDealers}
-      isFetchList={isFetchDealersList || isFetchDealer}
-      listRussia={listRussia}
-      listUkraine={listUkraine}
-      listBelarussia={listBelarussia}
-      selectRegion={selectRegion}
-      navigation={navigation}
-      selectItem={selectDealer}
-      selectedItem={dealerSelected}
-      goBack={goBack}
-      onSelect={this.onSelectDealer}
-    />;
+    return (
+      <SelectListByCountry
+        itemLayout="dealer"
+        region={region}
+        dataHandler={fetchDealers}
+        isFetchList={isFetchDealersList || isFetchDealer}
+        listRussia={listRussia}
+        listUkraine={listUkraine}
+        listBelarussia={listBelarussia}
+        selectRegion={selectRegion}
+        navigation={navigation}
+        selectItem={selectDealer}
+        selectedItem={dealerSelected}
+        goBack={goBack}
+        onSelect={this.onSelectDealer}
+      />
+    );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChooseDealerScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ChooseDealerScreen);

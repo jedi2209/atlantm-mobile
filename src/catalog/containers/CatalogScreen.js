@@ -1,19 +1,25 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, StyleSheet, View, Text, Image, Dimensions } from 'react-native';
-import { Icon, Button, Content } from 'native-base';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  Dimensions,
+} from 'react-native';
+import {Icon, Button, Content} from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {
   actionSelectUsedCarCity,
   actionSelectUsedCarRegion,
   actionSelectUsedCarPriceRange,
-
   actionSelectNewCarCity,
   actionSelectNewCarRegion,
 } from '../actions';
-import { actionSetDealersByCities } from '../../dealer/actions';
+import {actionSetDealersByCities} from '../../dealer/actions';
 
 // components
 import DeviceInfo from 'react-native-device-info';
@@ -22,13 +28,13 @@ import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack'
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
-import { verticalScale } from '../../utils/scale';
+import {verticalScale} from '../../utils/scale';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
-import { RUSSIA, BELARUSSIA, UKRAINE } from '../../core/const';
+import {RUSSIA, BELARUSSIA, UKRAINE} from '../../core/const';
 
 const isTablet = DeviceInfo.isTablet();
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   safearea: {
@@ -72,7 +78,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, nav }) => {
+const mapStateToProps = ({dealer, nav}) => {
   return {
     nav,
     listRussiaByCities: dealer.listRussiaByCities,
@@ -111,7 +117,7 @@ class CatalogScreen extends Component {
   static propTypes = {
     dealerSelected: PropTypes.object,
     navigation: PropTypes.object,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -143,7 +149,7 @@ class CatalogScreen extends Component {
       actionSelectNewCarRegion,
     } = this.props;
 
-    const { city, region } = dealerSelected;
+    const {city, region} = dealerSelected;
 
     actionSelectUsedCarCity(city);
     actionSelectUsedCarRegion(region);
@@ -164,60 +170,76 @@ class CatalogScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { dealerSelected } = this.props;
+    const {dealerSelected} = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'CatalogScreen';
 
     // console.log('Catalog this.props.navigation', this.props.navigation);
     // console.log('Catalog nextProps.navigation', nextProps.navigation);
 
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen);
+    return dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen;
   }
 
-  onPressButtonNewCar = () => this.props.navigation.navigate('NewCarFilterScreen')
-  onPressButtonUsedCar = () => this.props.navigation.navigate('UsedCarListScreen')
-  onPressButtonCarCost = () => this.props.navigation.navigate('CarCostScreen')
+  onPressButtonNewCar = () =>
+    this.props.navigation.navigate('NewCarFilterScreen');
+  onPressButtonUsedCar = () =>
+    this.props.navigation.navigate('UsedCarListScreen');
+  onPressButtonCarCost = () => this.props.navigation.navigate('CarCostScreen');
 
-  onLayout = (e) => {
-    if (!isTablet) return false;
+  onLayout = e => {
+    if (!isTablet) {return false;}
 
-    const { width: contentWidth } = e.nativeEvent.layout;
+    const {width: contentWidth} = e.nativeEvent.layout;
 
-    this.setState({ itemWidth: contentWidth });
-  }
+    this.setState({itemWidth: contentWidth});
+  };
 
   render() {
-    const {
-      dealerSelected,
-      navigation,
-    } = this.props;
+    const {dealerSelected, navigation} = this.props;
 
     console.log('== Catalog ==');
 
     return (
-        <SafeAreaView style={styles.safearea}>
-          <Content>
-            <View style={styles.buttonGroup} onLayout={this.onLayout}>
-              <View style={[styles.imageContainer, { width: this.state.itemWidth }]}>
-                <View style={styles.imageDividerContainer}>
-                  <View style={styles.imageDivider} />
-                </View>
-                <Image resizeMode="contain" source={require('../assets/catalog.png')} style={styles.image} />
+      <SafeAreaView style={styles.safearea}>
+        <Content>
+          <View style={styles.buttonGroup} onLayout={this.onLayout}>
+            <View
+              style={[styles.imageContainer, {width: this.state.itemWidth}]}>
+              <View style={styles.imageDividerContainer}>
+                <View style={styles.imageDivider} />
               </View>
-              <Button full onPress={this.onPressButtonNewCar} style={[styles.button, styles.buttonTop]}>
-                <Text style={styles.buttonText}>НОВЫЕ АВТОМОБИЛИ</Text>
-              </Button>
-              <Button full onPress={this.onPressButtonUsedCar} style={[styles.button, styles.buttonBottom]}>
-                <Text style={styles.buttonText}>АВТОМОБИЛИ С ПРОБЕГОМ</Text>
-              </Button>
-              <Button full onPress={this.onPressButtonCarCost} style={[styles.button, styles.buttonBottom]}>
-                <Text style={styles.buttonText}>ОЦЕНИТЬ МОЙ АВТОМОБИЛЬ</Text>
-              </Button>
+              <Image
+                resizeMode="contain"
+                source={require('../assets/catalog.png')}
+                style={styles.image}
+              />
             </View>
-          </Content>
-        </SafeAreaView>
+            <Button
+              full
+              onPress={this.onPressButtonNewCar}
+              style={[styles.button, styles.buttonTop]}>
+              <Text style={styles.buttonText}>НОВЫЕ АВТОМОБИЛИ</Text>
+            </Button>
+            <Button
+              full
+              onPress={this.onPressButtonUsedCar}
+              style={[styles.button, styles.buttonBottom]}>
+              <Text style={styles.buttonText}>АВТОМОБИЛИ С ПРОБЕГОМ</Text>
+            </Button>
+            <Button
+              full
+              onPress={this.onPressButtonCarCost}
+              style={[styles.button, styles.buttonBottom]}>
+              <Text style={styles.buttonText}>ОЦЕНИТЬ МОЙ АВТОМОБИЛЬ</Text>
+            </Button>
+          </View>
+        </Content>
+      </SafeAreaView>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CatalogScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CatalogScreen);
