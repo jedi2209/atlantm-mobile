@@ -1,47 +1,40 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, StyleSheet, TouchableHighlight } from 'react-native';
+import {Text, View, StyleSheet, TouchableHighlight} from 'react-native';
 
 // components
 import Imager from '../../core/components/Imager';
 
 // helpers
-import { get } from 'lodash';
+import {get} from 'lodash';
 import numberWithGap from '../../utils/number-with-gap';
 import styleConst from '../../core/style-const';
+import {Dimensions} from 'react-native';
+
+const deviceWidth = Dimensions.get('window').width;
+const cardWidth = deviceWidth - 60;
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: styleConst.ui.horizontalGap,
-    paddingRight: styleConst.ui.horizontalGap,
-    paddingBottom: styleConst.ui.horizontalGap,
-    marginLeft: styleConst.ui.horizontalGap,
-    borderBottomWidth: styleConst.ui.borderWidth,
-    borderBottomColor: styleConst.color.systemGray,
+    marginHorizontal: 20,
+    marginVertical: 10,
+    backgroundColor: '#fff',
+    padding: 15,
+    borderRadius: 5,
   },
   card: {
-    flexDirection: 'row',
+    flexDirection: 'column',
   },
   image: {
-    width: 100,
-    height: 70,
-    marginRight: styleConst.ui.horizontalGap,
+    width: cardWidth,
+    height: 200,
   },
   titleContainer: {
     flex: 1,
   },
-  title: {
-    fontSize: 15,
-    fontFamily: styleConst.font.medium,
-  },
   priceContainer: {
     flexDirection: 'row',
     marginBottom: 5,
-  },
-  price: {
-    flex: 1,
-    fontSize: 14,
-    fontFamily: styleConst.font.regular,
   },
   priceDefault: {
     textDecorationLine: 'line-through',
@@ -49,12 +42,10 @@ const styles = StyleSheet.create({
   priceSpecial: {
     color: styleConst.color.red,
   },
-  info: {
-    marginTop: -4,
-    flex: 1,
-    flexWrap: 'wrap',
-  },
   extra: {
+    borderColor: 'red',
+    borderWidth: 1,
+    borderStyle: 'solid',
     flexDirection: 'row',
   },
   extraItem: {
@@ -64,7 +55,25 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
     fontSize: 12,
     color: styleConst.color.greyText3,
-    flexDirection: 'column',
+  },
+  year: {
+    color: '#A8ABBE',
+    fontSize: 12,
+  },
+  title: {
+    color: '#2A2A43',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginVertical: 5,
+  },
+  price: {
+    color: '#2A2A43',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  common: {
+    fontSize: 12,
+    color: '#A8ABBE',
   },
 });
 
@@ -74,28 +83,28 @@ export default class CarListItem extends Component {
     prices: PropTypes.object,
     itemScreen: PropTypes.string,
     navigate: PropTypes.func,
-  }
+  };
 
   static defaultProps = {
     car: null,
     prices: {},
     itemScreen: null,
     navigate: null,
-  }
+  };
 
   onPress = () => {
-    const { navigate, itemScreen, car } = this.props;
+    const {navigate, itemScreen, car} = this.props;
 
-    navigate(itemScreen, { carId: car.id.api });
-  }
+    navigate(itemScreen, {carId: car.id.api});
+  };
 
   shouldComponentUpdate(nextProps) {
-    const { car } = this.props;
+    const {car} = this.props;
 
-    return (car.id.api !== nextProps.car.id.api);
+    return car.id.api !== nextProps.car.id.api;
   }
 
-  renderPrice = ({ car, prices }) => {
+  renderPrice = ({car, prices}) => {
     const isSale = car.sale === true;
     const currency = get(prices, 'curr.name');
     const priceDefault = numberWithGap(get(car, 'price.app.standart'));
@@ -106,17 +115,19 @@ export default class CarListItem extends Component {
         <Text style={[styles.price, isSale ? styles.priceDefault : '']}>
           {`${priceDefault} ${currency}`}
         </Text>
-        {
-          isSale ?
-            <Text style={[styles.price, styles.priceSpecial]}>{`${priceSpecial} ${currency}`}</Text> :
-            null
-        }
+        {isSale ? (
+          <Text
+            style={[
+              styles.price,
+              styles.priceSpecial,
+            ]}>{`${priceSpecial} ${currency}`}</Text>
+        ) : null}
       </View>
     );
-  }
+  };
 
   render() {
-    const { car, prices, itemScreen } = this.props;
+    const {car, prices, itemScreen} = this.props;
     const modelName = get(car, 'model.name', '');
     const complectation = get(car, 'complectation.name', '');
     const engineVolume = get(car, 'engine.volume.full');
@@ -124,45 +135,59 @@ export default class CarListItem extends Component {
     const gearbox = get(car, 'gearbox.name');
     const year = get(car, 'year');
 
-    // console.log('== CarListItem ==');
-
+    console.log('this.props ==========>', this.props);
     return (
       <TouchableHighlight
         onPress={this.onPress}
         style={styles.container}
-        underlayColor={styleConst.color.select}
-      >
+        underlayColor={styleConst.color.select}>
         <View style={styles.card}>
-          <Imager
-            resizeMode="contain"
-            style={styles.image}
-            source={{ uri: (itemScreen === 'NewCarItemScreen' ? get(car, 'img.10000x440.0') : get(car, 'img.thumb.0') + '440x400') }}
-          />
-
-          <View style={styles.info}>
-            <View style={styles.titleContainer}>
-              <Text style={styles.title}>
-                {`${get(car, 'brand.name')} ${modelName || ''} ${complectation}`}
-              </Text>
+          {year ? (
+            <View style={styles.extraTextContainer}>
+              <Text style={styles.year}>{`${year} г.в.`}</Text>
             </View>
-
-            {this.renderPrice({ car, prices })}
-
-            <View style={styles.extra}>
-              {
-                (get(car, 'engine.type') || engineVolume) ?
-                  (
-                  <View style={styles.extraItem}>
-                    <View style={styles.extraTextContainer}><Text style={styles.extraText}>{car.engine.type}</Text></View>
-                    {engineVolume ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${engineVolume} см³`}</Text></View> : null}
-                  </View>
-                  ) : null
-              }
-              <View style={styles.extraItem}>
-                {year ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${year} г.в.`}</Text></View> : null}
-                {mileage ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`пробег ${numberWithGap(mileage)} км.`}</Text></View> : null}
-                {gearbox ? <View style={styles.extraTextContainer}><Text style={styles.extraText}>{`${gearbox}`}</Text></View> : null}
+          ) : null}
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>
+              {`${get(car, 'brand.name')} ${modelName || ''} ${complectation}`}
+            </Text>
+          </View>
+          <Imager
+            resizeMode="cover"
+            style={styles.image}
+            source={{
+              uri: get(car, 'img.10000x440.0')
+            }}
+          />
+          <View style={styles.price}>{this.renderPrice({car, prices})}</View>
+          <View style={{display: 'flex', flexDirection:'row'}}>
+            <View>
+              {engineVolume ? (
+                <View style={styles.extraTextContainer}>
+                  <Text style={styles.common}>{`${engineVolume} см³ `}</Text>
+                </View>
+              ) : null}
+            </View>
+            <View>
+              {get(car, 'engine.type') || engineVolume ? (
+                <View style={styles.extraTextContainer}>
+                  <Text style={styles.common}>{`${car.engine.type} `}</Text>
+                </View>
+              ) : null}
+            </View>
+            {mileage ? (
+              <View style={styles.extraTextContainer}>
+                <Text style={styles.common}>{`пробег ${numberWithGap(
+                  mileage,
+                )} км. `}</Text>
               </View>
+            ) : null}
+            <View>
+              {gearbox ? (
+                <View style={styles.extraTextContainer}>
+                  <Text style={styles.common}>{`${gearbox} `}</Text>
+                </View>
+              ) : null}
             </View>
           </View>
         </View>

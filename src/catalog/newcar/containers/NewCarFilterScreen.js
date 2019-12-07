@@ -291,6 +291,9 @@ class NewCarFilterScreen extends Component {
 
     if (!isFetchingNewCarByFilter) {
       const total = get(items, 'total');
+
+      console.log('total', total);
+      console.log('filterData', this.props.filterData);
       navigation.navigate('NewCarListScreen', { total });
     }
   }
