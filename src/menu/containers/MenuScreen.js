@@ -26,7 +26,7 @@ import RateThisApp from '../../core/components/RateThisApp';
 import OneSignal from 'react-native-onesignal';
 import PushNotifications from '../../core/components/PushNotifications';
 import ContactsScreen from '../../contacts/containers/ContactsScreen';
-import CatalogScreen from '../../catalog/containers/CatalogScreen';
+import NewCarListScreen from '../../catalog/newcar/containers/NewCarListScreen';
 import ProfileScreen from '../../profile/containers/ProfileScreen';
 import ServiceScreen from '../../service/containers/ServiceScreen';
 
@@ -51,7 +51,7 @@ const EnhancedMenuScreen = TabNavigator({
     screen: ContactsScreen,
   },
   Search: {
-    screen: CatalogScreen,
+    screen: NewCarListScreen,
   },
   Profile: {
     screen: ProfileScreen,
