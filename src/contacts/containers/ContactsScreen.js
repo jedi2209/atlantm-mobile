@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {
   Dimensions,
@@ -99,25 +100,7 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
   },
-  buttonPrimaryText: {color: '#2E3A59', fontSize: 16, fontWeight: 'bold'},
-  slide: {
-    borderBottomColor: '#D7D8DA',
-    borderBottomWidth: 1,
-    borderStyle: 'solid',
-    paddingBottom: 20,
-  },
-  image: {
-    borderRadius: 4,
-    resizeMode: 'contain',
-  },
-  title: {
-    fontSize: 20,
-    color: '#000000',
-    letterSpacing: 0.25,
-    textAlign: 'left',
-    lineHeight: 32,
-    fontWeight: 'bold',
-  },
+  buttonPrimaryText: {color: '#2E3A59', fontSize: 16, fontWeight: 'bold'}
 });
 
 const deviceWidth = Dimensions.get('window').width;
@@ -182,31 +165,7 @@ const Card = ({kind, title, subtitle, onPress}) => {
   );
 };
 
-const Offer = props => {
-  console.log('>>>>>>>>>>>>>>> props Offer', props);
-  const {data, height, cardWidth} = props;
-
-  return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        alert('go to stocks');
-      }}
-      style={[styles.slide, {width: cardWidth}]}>
-      <View
-        style={{
-          width: cardWidth,
-        }}>
-        <Image
-          source={{uri: data.item.img.main}}
-          style={[styles.image, {width: cardWidth, height}]}
-        />
-        <Text numberOfLines={3} style={styles.title}>
-          {data.item.name}
-        </Text>
-      </View>
-    </TouchableWithoutFeedback>
-  );
-};
+import {Offer} from '../../core/components/Offer';
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
   console.log('THIUS', info);
@@ -330,8 +289,6 @@ class ContactsScreen extends Component {
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'ContactsScreen';
-
-    console.log('THIS =>', this.props.list.length, nextProps.list.length);
 
     const isListSucsess = Boolean(
       this.props.list.length !== nextProps.list.length,
@@ -459,16 +416,37 @@ class ContactsScreen extends Component {
                   />
                 </View>
               </ScrollView>
-              <View style={{marginTop: 20, backgroundColor: '#F6F6F6', paddingVertical: 20}}>
-                <View style={{ paddingHorizontal: 20, paddingVertical: 20, display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={{fontSize: 14, fontWeight: 'bold'}}>Текущие акции автоцентра</Text>
-                <Text style={{color: '#4848FF', fontSize: 12}}>Все</Text>
+              <View
+                style={{
+                  marginTop: 20,
+                  backgroundColor: '#F6F6F6',
+                  paddingVertical: 20,
+                }}>
+                <View
+                  style={{
+                    paddingHorizontal: 20,
+                    paddingVertical: 20,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                  }}>
+                  <Text style={{fontSize: 14, fontWeight: 'bold'}}>
+                    Текущие акции автоцентра
+                  </Text>
+                  <Text
+                    onPress={() => {
+                      navigation.navigate('InfoListScreen');
+                    }}
+                    style={{color: '#4848FF', fontSize: 12}}>
+                    Все
+                  </Text>
                 </View>
                 <Carousel
                   data={list}
                   renderItem={item => {
                     return (
                       <Offer
+                        navigation={this.props.navigation.navigate}
                         key={`carousel-article-${item.id}`}
                         data={item}
                         width={cardWidth}

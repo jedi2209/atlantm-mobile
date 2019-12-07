@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Text,
@@ -11,35 +11,35 @@ import {
 } from 'react-native';
 
 // redux
-import { connect } from 'react-redux';
-import { fetchInfoPost, callMeForInfo } from '../actions';
+import {connect} from 'react-redux';
+import {fetchInfoPost, callMeForInfo} from '../actions';
 
 // components
 import DeviceInfo from 'react-native-device-info';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Content } from 'native-base';
+import {Content} from 'native-base';
 import FooterButton from '../../core/components/FooterButton';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
 import Imager from '../../core/components/Imager';
 
 // helpers
-import { get } from 'lodash';
+import {get} from 'lodash';
 import styleConst from '../../core/style-const';
 import processHtml from '../../utils/process-html';
-import { verticalScale } from '../../utils/scale';
+import {verticalScale} from '../../utils/scale';
 import stylesHeader from '../../core/components/Header/style';
-import { CALL_ME_INFO__SUCCESS, CALL_ME_INFO__FAIL } from '../actionTypes';
-import { dayMonth, dayMonthYear } from '../../utils/date';
+import {CALL_ME_INFO__SUCCESS, CALL_ME_INFO__FAIL} from '../actionTypes';
+import {dayMonth, dayMonthYear} from '../../utils/date';
 import isInternet from '../../utils/internet';
-import { ERROR_NETWORK } from '../../core/const';
+import {ERROR_NETWORK} from '../../core/const';
 import isIPhoneX from '@utils/is_iphone_x';
 
 const isTablet = DeviceInfo.isTablet();
 
 // image
 let IMAGE_HEIGHT_GUARD = 0;
-const { width: screenWidth } = Dimensions.get('window');
+const {width: screenWidth} = Dimensions.get('window');
 const IMAGE_WIDTH = isTablet ? null : screenWidth;
 const IMAGE_HEIGHT = isTablet ? 220 : 170;
 
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, info, profile }) => {
+const mapStateToProps = ({dealer, info, profile}) => {
   return {
     list: info.list,
     posts: info.posts,
@@ -107,20 +107,16 @@ class InfoPostScreen extends Component {
     webViewWidth: screenWidth - styleConst.ui.verticalGap,
   };
 
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Об акции',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
+  static navigationOptions = ({navigation}) => ({
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: <HeaderIconBack theme="white" navigation={navigation} />,
+    headerTitle: 'oб акции',
     headerRight: <View />,
   });
 
   componentDidMount() {
-    const {
-      posts,
-      navigation,
-      fetchInfoPost,
-    } = this.props;
+    const {posts, navigation, fetchInfoPost} = this.props;
 
     const id = navigation.state.params.id;
     const post = posts[id];
@@ -143,24 +139,24 @@ class InfoPostScreen extends Component {
     });
   };
 
-  onLayoutImage = (e) => {
+  onLayoutImage = e => {
     if (isTablet) {
       return this.onLayoutImageTablet();
     }
 
-    const { height: imageDynamicHeight } = e.nativeEvent.layout;
+    const {height: imageDynamicHeight} = e.nativeEvent.layout;
 
-    this.setState({ imageHeight: imageDynamicHeight });
+    this.setState({imageHeight: imageDynamicHeight});
   };
 
-  onLayoutWebView= (e) => {
-    const { width: webViewWidth } = e.nativeEvent.layout;
+  onLayoutWebView = e => {
+    const {width: webViewWidth} = e.nativeEvent.layout;
 
-    this.setState({ webViewWidth });
+    this.setState({webViewWidth});
   };
 
   getPost = () => {
-    const { posts, navigation } = this.props;
+    const {posts, navigation} = this.props;
     const id = navigation.state.params.id;
 
     return posts[id];
@@ -186,10 +182,12 @@ class InfoPostScreen extends Component {
           'Добавьте номер телефона',
           'Для обратного звонка необходимо добавить номер контактного телефона в профиле',
           [
-            { text: 'Отмена', style: 'cancel' },
+            {text: 'Отмена', style: 'cancel'},
             {
               text: 'Заполнить',
-              onPress() { navigation.navigate('Profile2Screen'); },
+              onPress() {
+                navigation.navigate('Profile2Screen');
+              },
             },
           ],
         );
@@ -207,16 +205,18 @@ class InfoPostScreen extends Component {
         device,
         action,
         dealerID,
-      })
-        .then(action => {
-          if (action.type === CALL_ME_INFO__SUCCESS) {
-            setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
-          }
+      }).then(action => {
+        if (action.type === CALL_ME_INFO__SUCCESS) {
+          setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
+        }
 
-          if (action.type === CALL_ME_INFO__FAIL) {
-            setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
-          }
-        });
+        if (action.type === CALL_ME_INFO__FAIL) {
+          setTimeout(
+            () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
+            100,
+          );
+        }
+      });
     }
   };
 
@@ -224,7 +224,7 @@ class InfoPostScreen extends Component {
     return `c ${dayMonth(date.from)} по ${dayMonthYear(date.to)}`;
   }
 
-  onMessage({ nativeEvent }) {
+  onMessage({nativeEvent}) {
     const data = nativeEvent.data;
 
     if (typeof data !== undefined && data !== null) {
@@ -236,7 +236,7 @@ class InfoPostScreen extends Component {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
-    const { isCallMeRequest, navigation } = this.props;
+    const {isCallMeRequest, navigation} = this.props;
 
     const post = this.getPost();
     let text = get(post, 'text');
@@ -255,43 +255,41 @@ class InfoPostScreen extends Component {
         <Content>
           <Spinner visible={isCallMeRequest} color={styleConst.color.blue} />
 
-          {
-            !text ?
-              <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} /> :
-              (
-                <View>
-                  <View style={styles.imageContainer} ref="imageContainer">
-                    <Imager
-                      resizeMode="contain"
-                      onLayout={this.onLayoutImage}
-                      style={[
-                        styles.image,
-                        {
-                          width: this.state.imageWidth,
-                          height: this.state.imageHeight,
-                        },
-                      ]}
-                      source={{ uri: imageUrl }}
-                    />
-                  </View>
-                  <View
-                    style={styles.textContainer}
-                    onLayout={this.onLayoutWebView}
-                  >
-                  {
-                    date ?
-                      <Text style={styles.date}>{this.processDate(date)}</Text> :
-                      null
-                  }
-                    <WebViewAutoHeight
-                      source={{ html: text }}
-                      injectedJavaScript={injectScript}
-                      onMessage={this.onMessage}
-                    />
-                  </View>
-                </View>
-              )
-          }
+          {!text ? (
+            <ActivityIndicator
+              color={styleConst.color.blue}
+              style={styles.spinner}
+            />
+          ) : (
+            <View>
+              <View style={styles.imageContainer} ref="imageContainer">
+                <Imager
+                  resizeMode="contain"
+                  onLayout={this.onLayoutImage}
+                  style={[
+                    styles.image,
+                    {
+                      width: this.state.imageWidth,
+                      height: this.state.imageHeight,
+                    },
+                  ]}
+                  source={{uri: imageUrl}}
+                />
+              </View>
+              <View
+                style={styles.textContainer}
+                onLayout={this.onLayoutWebView}>
+                {date ? (
+                  <Text style={styles.date}>{this.processDate(date)}</Text>
+                ) : null}
+                <WebViewAutoHeight
+                  source={{html: text}}
+                  injectedJavaScript={injectScript}
+                  onMessage={this.onMessage}
+                />
+              </View>
+            </View>
+          )}
         </Content>
 
         <FooterButton
@@ -306,4 +304,7 @@ class InfoPostScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(InfoPostScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(InfoPostScreen);

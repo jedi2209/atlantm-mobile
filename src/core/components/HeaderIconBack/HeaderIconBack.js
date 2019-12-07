@@ -59,6 +59,7 @@ export default class HeaderIconBack extends Component {
       return false;
     }
 
+    console.log(' >>>>> gosBack', returnScreen);
     returnScreen ? navigation.navigate(returnScreen) : navigation.goBack();
   };
 

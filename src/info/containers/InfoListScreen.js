@@ -1,27 +1,32 @@
-import React, { Component } from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, {Component} from 'react';
 import {
   View,
   Alert,
   FlatList,
   StyleSheet,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import { Container, Text, StyleProvider } from 'native-base';
+import {Container, Text, StyleProvider} from 'native-base';
+import {Offer} from '../../core/components/Offer';
+
+const deviceWidth = Dimensions.get('window').width;
+const cardWidth = deviceWidth - 50;
 
 // redux
-import { connect } from 'react-redux';
-import { fetchInfoList, actionListReset } from '../actions';
-import { INFO_LIST__FAIL } from '../actionTypes';
+import {connect} from 'react-redux';
+import {fetchInfoList, actionListReset} from '../actions';
+import {INFO_LIST__FAIL} from '../actionTypes';
 
 // helpers
-import { get } from 'lodash';
-import { ERROR_NETWORK } from '../../core/const';
+import {get} from 'lodash';
+import {ERROR_NETWORK} from '../../core/const';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
-import styleFooter from '../../core/components/Footer/style';
-import { verticalScale } from '../../utils/scale';
+import {verticalScale} from '../../utils/scale';
 
 // components
 import InfoListItem from '../components/InfoListItem';
@@ -47,7 +52,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, info, nav }) => {
+const mapStateToProps = ({dealer, info, nav}) => {
   return {
     nav,
     list: info.list,
@@ -63,15 +68,21 @@ const mapDispatchToProps = {
 };
 
 class InfoListScreen extends Component {
-  state = { isRefreshing: false }
+  state = {isRefreshing: false};
 
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Акции',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
-    headerRight: <HeaderIconMenu navigation={navigation} />,
-  })
+  static navigationOptions = ({navigation, props}) => ({
+    headerTitle: 'акции',
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: (
+      <HeaderIconBack
+        theme="white"
+        navigation={navigation}
+        returnScreen="MenuScreen"
+      />
+    ),
+    headerRight: <View />,
+  });
 
   static propTypes = {
     dealerSelected: PropTypes.object.isRequired,
@@ -79,40 +90,48 @@ class InfoListScreen extends Component {
     visited: PropTypes.array.isRequired,
     fetchInfoList: PropTypes.func.isRequired,
     isFetchInfoList: PropTypes.bool.isRequired,
-  }
+  };
 
   componentDidMount() {
-    const { navigation, dealerSelected, fetchInfoList, isFetchInfoList, actionListReset } = this.props;
-    const { region, id: dealer } = dealerSelected;
-    // const isPush = get(navigation, 'state.params.isPush');
+    const {
+      navigation,
+      dealerSelected,
+      fetchInfoList,
+      isFetchInfoList,
+      actionListReset,
+    } = this.props;
+    const {region, id: dealer} = dealerSelected;
 
     if (!isFetchInfoList) {
       actionListReset();
-      fetchInfoList(region, dealer)
-        .then(action => {
-          if (action.type === INFO_LIST__FAIL) {
-            let message = get(action, 'payload.message', 'Произошла ошибка, попробуйте снова');
+      fetchInfoList(region, dealer).then(action => {
+        if (action.type === INFO_LIST__FAIL) {
+          let message = get(
+            action,
+            'payload.message',
+            'Произошла ошибка, попробуйте снова',
+          );
 
-            if (message === 'Network request failed') {
-              message = ERROR_NETWORK;
-            }
-
-            setTimeout(() => Alert.alert(message), 100);
+          if (message === 'Network request failed') {
+            message = ERROR_NETWORK;
           }
-        });
+
+          setTimeout(() => Alert.alert(message), 100);
+        }
+      });
     }
   }
 
   onRefresh = () => {
-    const { dealerSelected, list, fetchInfoList } = this.props;
-    const { region, id: dealer } = dealerSelected;
+    const {dealerSelected, list, fetchInfoList} = this.props;
+    const {region, id: dealer} = dealerSelected;
 
-    this.setState({ isRefreshing: true });
+    this.setState({isRefreshing: true});
 
     fetchInfoList(region, dealer).then(() => {
-      this.setState({ isRefreshing: false });
+      this.setState({isRefreshing: false});
     });
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
@@ -121,47 +140,49 @@ class InfoListScreen extends Component {
     if (nav) {
       const rootLevel = nav.routes[nav.index];
       if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'InfoListScreen';
+        isActiveScreen =
+          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
+          'InfoListScreen';
       }
     }
 
     return isActiveScreen;
   }
 
-  renderItem = ({ item }) => {
+  renderItem = data => {
     return (
-      <InfoListItem
-        nav={this.props.nav}
-        info={item}
-        visited={this.props.visited}
-        navigate={this.props.navigation.navigate}
-      />
+      <View
+        style={{
+          width: cardWidth,
+          backgroundColor: '#fff',
+          borderRadius: 5,
+          marginVertical: 10,
+          marginHorizontal: 15,
+        }}>
+        <Offer
+          theme="round"
+          key={`carousel-article-${data.item.id}`}
+          data={data}
+          width={cardWidth}
+          height={150}
+          navigation={this.props.navigation.navigate}
+        />
+      </View>
     );
-  }
+  };
 
   renderEmptyComponent = () => {
-    return this.props.isFetchInfoList ?
-      (
-          <View style={styles.spinnerContainer} >
-            <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
-          </View>
-      ) :
-      (
-          <Text style={styles.message}>В данный момент нет акций</Text>
-      );
-  }
-
-  renderHeaderComponent = () => {
-    return (
-      <DealerItemList
-        navigation={this.props.navigation}
-        city={this.props.dealerSelected.city}
-        name={this.props.dealerSelected.name}
-        brands={this.props.dealerSelected.brands}
-        returnScreen="InfoListScreen"
-      />
+    return this.props.isFetchInfoList ? (
+      <View style={styles.spinnerContainer}>
+        <ActivityIndicator
+          color={styleConst.color.blue}
+          style={styles.spinner}
+        />
+      </View>
+    ) : (
+      <Text style={styles.message}>В данный момент нет акций</Text>
     );
-  }
+  };
 
   render() {
     const {
@@ -181,7 +202,6 @@ class InfoListScreen extends Component {
       <StyleProvider style={getTheme()}>
         <Container style={styles.container}>
           <FlatList
-            ListHeaderComponent={this.renderHeaderComponent}
             data={list}
             extraData={isFetchInfoList}
             onRefresh={this.onRefresh}
@@ -197,4 +217,7 @@ class InfoListScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(InfoListScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(InfoListScreen);
