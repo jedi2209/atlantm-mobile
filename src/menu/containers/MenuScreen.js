@@ -1,18 +1,17 @@
-import React, { Component } from 'react';
-import { StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { Icon, Container, Text, Grid, Col, Row } from 'native-base';
-import { TabNavigator } from 'react-navigation';
-
+import React, {Component} from 'react';
+import {StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {Icon, Container, Text, Grid, Col, Row} from 'native-base';
+import {TabNavigator} from 'react-navigation';
 
 // redux
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {
   actionMenuOpenedCount,
   actionAppRated,
   actionAppRateAskLater,
   actionSetPushGranted,
   actionSetPushActionSubscribe,
-  actionStoreUpdated
+  actionStoreUpdated,
 } from '../../core/actions';
 
 // components
@@ -20,10 +19,10 @@ import HeaderLogo from '../../core/components/HeaderLogo/HeaderLogo';
 
 // helpers
 import styleConst from '../../core/style-const';
-import { scale, verticalScale } from '../../utils/scale';
-import { get } from 'lodash';
+import {scale, verticalScale} from '../../utils/scale';
+import {get} from 'lodash';
 import stylesHeader from '../../core/components/Header/style';
-import RateThisApp from "../../core/components/RateThisApp";
+import RateThisApp from '../../core/components/RateThisApp';
 import OneSignal from 'react-native-onesignal';
 import PushNotifications from '../../core/components/PushNotifications';
 import ContactsScreen from '../../contacts/containers/ContactsScreen';
@@ -31,8 +30,8 @@ import CatalogScreen from '../../catalog/containers/CatalogScreen';
 import ProfileScreen from '../../profile/containers/ProfileScreen';
 import ServiceScreen from '../../service/containers/ServiceScreen';
 
-
 const MoreScreen = () => null;
+
 MoreScreen.navigationOptions = () => ({
   tabBarLabel: 'Ещё',
   tabBarIcon: ({focused}) => (
@@ -45,7 +44,7 @@ MoreScreen.navigationOptions = () => ({
       }}
     />
   ),
-})
+});
 
 const EnhancedMenuScreen = TabNavigator({
   Contacts: {
@@ -65,7 +64,11 @@ const EnhancedMenuScreen = TabNavigator({
   },
 });
 
-export default EnhancedMenuScreen
+EnhancedMenuScreen.navigationOptions = () => ({
+  header: null,
+});
+
+export default EnhancedMenuScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -98,24 +101,24 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ core, dealer }) => {
-    return {
-        dealerSelected: dealer.selected,
-        menuOpenedCount: core.menuOpenedCount,
-        isAppRated: core.isAppRated,
-        AppRateAskLater: core.AppRateAskLater,
-        isStoreUpdated: core.isStoreUpdated,
-        MenuCounterLimit: 10 // счётчик открытия меню, после которого показывается предложение об оценке
-    };
+const mapStateToProps = ({core, dealer}) => {
+  return {
+    dealerSelected: dealer.selected,
+    menuOpenedCount: core.menuOpenedCount,
+    isAppRated: core.isAppRated,
+    AppRateAskLater: core.AppRateAskLater,
+    isStoreUpdated: core.isStoreUpdated,
+    MenuCounterLimit: 10, // счётчик открытия меню, после которого показывается предложение об оценке
+  };
 };
 
 const mapDispatchToProps = {
-    actionMenuOpenedCount,
-    actionAppRated,
-    actionAppRateAskLater,
-    actionSetPushGranted,
-    actionSetPushActionSubscribe,
-    actionStoreUpdated
+  actionMenuOpenedCount,
+  actionAppRated,
+  actionAppRateAskLater,
+  actionSetPushGranted,
+  actionSetPushActionSubscribe,
+  actionStoreUpdated,
 };
 
 class MenuScreen extends Component {
@@ -126,48 +129,56 @@ class MenuScreen extends Component {
   UNSAFE_componentWillMount() {
     console.log('this.props.menuOpenedCount', this.props.menuOpenedCount);
     if (this.props.menuOpenedCount < this.props.MenuCounterLimit) {
-        this.props.actionMenuOpenedCount();
+      this.props.actionMenuOpenedCount();
     }
   }
 
   componentDidMount() {
-      const {
-          dealerSelected,
-          menuOpenedCount,
-          isStoreUpdated,
-          actionStoreUpdated,
-          actionSetPushActionSubscribe
-      } = this.props;
+    const {
+      dealerSelected,
+      menuOpenedCount,
+      isStoreUpdated,
+      actionStoreUpdated,
+      actionSetPushActionSubscribe,
+    } = this.props;
 
-      const currentDealer = get(dealerSelected, 'id', false);
-      console.log('Menu Prev ====== isStoreUpdated', isStoreUpdated);
-      setTimeout(() => {
+    const currentDealer = get(dealerSelected, 'id', false);
+    console.log('Menu Prev ====== isStoreUpdated', isStoreUpdated);
+    setTimeout(() => {
+      OneSignal.promptForPushNotificationsWithUserResponse(status => {
+        if (status) {
+          if (isStoreUpdated != '2019-02-01') {
+            // при первичном ините всегда подписываем насильно на акции
+            console.log('Menu Inside ====== menuOpenedCount', menuOpenedCount);
+            console.log('Menu Inside ====== isStoreUpdated', isStoreUpdated);
+            if (currentDealer) {
+              console.log(
+                'Menu Inside Dealer ====== menuOpenedCount',
+                menuOpenedCount,
+              );
+              console.log(
+                'Menu Inside Dealer ====== isStoreUpdated',
+                isStoreUpdated,
+              );
 
-          OneSignal.promptForPushNotificationsWithUserResponse((status) => {
-              if (status) {
-                  if (isStoreUpdated != '2019-02-01') { // при первичном ините всегда подписываем насильно на акции
-                      console.log('Menu Inside ====== menuOpenedCount', menuOpenedCount);
-                      console.log('Menu Inside ====== isStoreUpdated', isStoreUpdated);
-                      if (currentDealer) {
-
-                          console.log('Menu Inside Dealer ====== menuOpenedCount', menuOpenedCount);
-                          console.log('Menu Inside Dealer ====== isStoreUpdated', isStoreUpdated);
-
-                          actionSetPushActionSubscribe(true);
-                          PushNotifications.subscribeToTopic('actions', currentDealer);
-                          PushNotifications.addTag('dealer', currentDealer);
-                          actionStoreUpdated('2019-02-01');
-                      }
-                      console.log('Menu Inside After ====== isStoreUpdated', isStoreUpdated);
-                  }
-              }
-          });
-      }, 100);
+              actionSetPushActionSubscribe(true);
+              PushNotifications.subscribeToTopic('actions', currentDealer);
+              PushNotifications.addTag('dealer', currentDealer);
+              actionStoreUpdated('2019-02-01');
+            }
+            console.log(
+              'Menu Inside After ====== isStoreUpdated',
+              isStoreUpdated,
+            );
+          }
+        }
+      });
+    }, 100);
   }
 
   shouldComponentUpdate(nextProps) {
     return this.props.isAppRated !== nextProps.isAppRated;
- }
+  }
 
   onPressContacts = () => this.props.navigation.navigate('ContactsScreen');
   onPressInfoList = () => this.props.navigation.navigate('InfoListScreen');
@@ -177,20 +188,16 @@ class MenuScreen extends Component {
   onPressTva = () => this.props.navigation.navigate('Tva2Screen');
   onPressEko = () => this.props.navigation.navigate('Eko2Screen');
   onPressIndicators = () => this.props.navigation.navigate('IndicatorsScreen');
-  onAppRateSuccess = () => { !this.props.isAppRated && this.props.actionAppRated(); };
-  onAppRateAskLater = () => { !this.props.isAppRated && this.props.actionMenuOpenedCount(0); };
+  onAppRateSuccess = () => {
+    !this.props.isAppRated && this.props.actionAppRated();
+  };
+  onAppRateAskLater = () => {
+    !this.props.isAppRated && this.props.actionMenuOpenedCount(0);
+  };
 
   render() {
+    // return <EnhancedMenuScreen />;
 
-
-
-
-
-    return <EnhancedMenuScreen />
-    
-    
-    
-    
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
@@ -198,17 +205,19 @@ class MenuScreen extends Component {
 
     return (
       <Container style={styles.container}>
-        {this.props.isAppRated !== true && this.props.menuOpenedCount === this.props.MenuCounterLimit ?
-            <RateThisApp onSuccess={this.onAppRateSuccess} onAskLater={this.onAppRateAskLater} /> :
-            null
-        }
-        <Grid style={styles.menu} >
+        {this.props.isAppRated !== true &&
+        this.props.menuOpenedCount === this.props.MenuCounterLimit ? (
+          <RateThisApp
+            onSuccess={this.onAppRateSuccess}
+            onAskLater={this.onAppRateAskLater}
+          />
+        ) : null}
+        <Grid style={styles.menu}>
           <Row>
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={this.onPressContacts}
-              >
+                onPress={this.onPressContacts}>
                 <Image
                   style={styles.icon}
                   source={require('../assets/contacts.png')}
@@ -219,8 +228,7 @@ class MenuScreen extends Component {
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={this.onPressInfoList}
-              >
+                onPress={this.onPressInfoList}>
                 <Image
                   style={styles.icon}
                   source={require('../assets/info.png')}
@@ -233,8 +241,7 @@ class MenuScreen extends Component {
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={this.onPressService}
-              >
+                onPress={this.onPressService}>
                 <Image
                   style={styles.icon}
                   source={require('../assets/service.png')}
@@ -243,10 +250,7 @@ class MenuScreen extends Component {
               </TouchableOpacity>
             </Col>
             <Col>
-              <TouchableOpacity
-                style={styles.item}
-                onPress={this.onPressTva}
-              >
+              <TouchableOpacity style={styles.item} onPress={this.onPressTva}>
                 <Image
                   style={styles.icon}
                   source={require('../assets/car_delivery.png')}
@@ -259,8 +263,7 @@ class MenuScreen extends Component {
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={this.onPressCatalog}
-              >
+                onPress={this.onPressCatalog}>
                 <Image
                   style={styles.icon}
                   source={require('../assets/catalog_auto.png')}
@@ -271,8 +274,7 @@ class MenuScreen extends Component {
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={this.onPressIndicators}
-              >
+                onPress={this.onPressIndicators}>
                 <Image
                   style={styles.icon}
                   source={require('../assets/indicators.png')}
@@ -283,10 +285,7 @@ class MenuScreen extends Component {
           </Row>
           <Row>
             <Col>
-              <TouchableOpacity
-                style={styles.item}
-                onPress={this.onPressEko}
-              >
+              <TouchableOpacity style={styles.item} onPress={this.onPressEko}>
                 <Image
                   style={styles.icon}
                   source={require('../assets/reviews.png')}
@@ -297,8 +296,7 @@ class MenuScreen extends Component {
             <Col>
               <TouchableOpacity
                 style={styles.item}
-                onPress={this.onPressProfile}
-              >
+                onPress={this.onPressProfile}>
                 <Image
                   style={styles.icon}
                   source={require('../assets/profile.png')}
