@@ -9,7 +9,7 @@ import {
   Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Container, Text, StyleProvider} from 'native-base';
+import {Container, Text, StyleProvider, Icon} from 'native-base';
 import {Offer} from '../../core/components/Offer';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -70,7 +70,7 @@ const mapDispatchToProps = {
 class InfoListScreen extends Component {
   state = {isRefreshing: false};
 
-  static navigationOptions = ({navigation, props}) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: 'акции',
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
@@ -81,7 +81,18 @@ class InfoListScreen extends Component {
         returnScreen="MenuScreen"
       />
     ),
-    headerRight: <View />,
+    // TODO: Сконфигурировать это в одном месте, возможно в MenuScreen::StackNavigator.
+    tabBarLabel: 'Автоцентр',
+    tabBarIcon: ({focused}) => (
+      <Icon
+        name="building"
+        type="FontAwesome5"
+        style={{
+          fontSize: 24,
+          color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
+        }}
+      />
+    ),
   });
 
   static propTypes = {

@@ -25,6 +25,8 @@ import {
   Right,
   Icon,
   Button,
+  Header,
+  Title,
 } from 'native-base';
 
 // redux
@@ -186,6 +188,7 @@ const mapDispatchToProps = {
 
 class ContactsScreen extends Component {
   static navigationOptions = () => ({
+    header: null,
     tabBarLabel: 'Автоцентр',
     tabBarIcon: ({focused}) => (
       <Icon
@@ -435,7 +438,7 @@ class ContactsScreen extends Component {
                   </Text>
                   <Text
                     onPress={() => {
-                      navigation.navigate('InfoListScreen');
+                      navigation.navigate('InfoList');
                     }}
                     style={{color: '#4848FF', fontSize: 12}}>
                     Все
