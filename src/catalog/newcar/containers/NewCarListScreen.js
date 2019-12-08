@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Image} from 'react-native';
 import {Icon} from 'native-base';
 
 // redux
@@ -76,7 +76,16 @@ class NewCarListScreen extends Component {
         returnScreen="MenuScreen"
       />
     ),
-    headerRight: <View />,
+    headerRight: (
+      <Image
+        style={{
+          width: 20,
+          height: 20,
+          marginRight: 14,
+        }}
+        source={require('./filter.png')}
+      />
+    ),
     tabBarLabel: 'Поиск',
     tabBarIcon: ({focused}) => (
       <Icon

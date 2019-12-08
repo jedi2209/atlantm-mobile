@@ -1,3 +1,4 @@
+
 // base
 import React, { Component } from 'react';
 import { View, Image, StyleSheet, ActivityIndicator, Dimensions, Platform, TouchableWithoutFeedback } from 'react-native';
@@ -46,7 +47,7 @@ const Slide = props => {
     <View style={[styles.item, { height: props.height }]}>
       <TouchableWithoutFeedback onPress={props.onPress}>
         <Image
-          resizeMode="contain"
+          // resizeMode="contain"
           style={styles.image}
           onLoad={props.loadHandle.bind(null, props.i)}
           source={{
@@ -111,6 +112,9 @@ export default class PhotoSlider extends Component {
       <Swiper
         id={1}
         containerStyle={styles.container}
+        paginationStyle={{
+          marginBottom: 16
+        }}
         dotColor="white"
         showsButtons={false}
         autoplay={false}

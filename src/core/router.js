@@ -74,7 +74,7 @@ const CatalogScreenNavigator = StackNavigator({
   NewCarFilterGearboxScreen: { screen: NewCarFilterGearboxScreen },
   NewCarFilterEngineTypeScreen: { screen: NewCarFilterEngineTypeScreen },
   NewCarFilterDriveScreen: { screen: NewCarFilterDriveScreen },
-  NewCarListScreen: { screen: NewCarListScreen },
+  // NewCarListScreen: { screen: NewCarListScreen },
   NewCarItemScreen: { screen: NewCarItemScreen },
   NewCarCityScreen: { screen: NewCarCityScreen },
   CarCostScreen: { screen: CarCostScreen },
@@ -104,15 +104,15 @@ const getRouter = initialRouteName => {
           header: null,
         },
       },
-      InfoListScreen: {
-        screen: StackNavigator({
-          InfoListScreen: { screen: InfoListScreen },
-          InfoPostScreen: { screen: InfoPostScreen },
-        }),
-        navigationOptions: {
-          header: null,
-        },
-      },
+      // InfoListScreen: {
+      //   screen: StackNavigator({
+      //     InfoListScreen: { screen: InfoListScreen },
+      //     InfoPostScreen: { screen: InfoPostScreen },
+      //   }),
+      //   navigationOptions: {
+      //     header: null,
+      //   },
+      // },
       Profile2Screen: {
         screen: StackNavigator({
           ProfileScreen: { screen: ProfileScreen },

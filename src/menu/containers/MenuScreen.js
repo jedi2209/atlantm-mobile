@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Icon, Container, Text, Grid, Col, Row} from 'native-base';
-import {TabNavigator} from 'react-navigation';
+import {TabNavigator, StackNavigator} from 'react-navigation';
 
 // redux
 import {connect} from 'react-redux';
@@ -29,6 +29,8 @@ import ContactsScreen from '../../contacts/containers/ContactsScreen';
 import NewCarListScreen from '../../catalog/newcar/containers/NewCarListScreen';
 import ProfileScreen from '../../profile/containers/ProfileScreen';
 import ServiceScreen from '../../service/containers/ServiceScreen';
+import InfoListScreen from '../../info/containers/InfoListScreen';
+import InfoPostScreen from '../../info/containers/InfoPostScreen';
 
 const MoreScreen = () => null;
 
@@ -48,10 +50,17 @@ MoreScreen.navigationOptions = () => ({
 
 const EnhancedMenuScreen = TabNavigator({
   Contacts: {
-    screen: ContactsScreen,
+    screen: StackNavigator({
+      // TODO: Все роуты назвать *Screen (e.g. HomeScreen, для консистентности)
+      Home: {screen: ContactsScreen},
+      InfoList: {screen: InfoListScreen},
+      InfoPostScreen: {screen: InfoPostScreen},
+    }),
   },
   Search: {
-    screen: NewCarListScreen,
+    screen: StackNavigator({
+      NewCarListScreen: {screen: NewCarListScreen},
+    }),
   },
   Profile: {
     screen: ProfileScreen,
