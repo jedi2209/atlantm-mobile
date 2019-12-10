@@ -135,7 +135,7 @@ export default class CarListItem extends Component {
     const gearbox = get(car, 'gearbox.name');
     const year = get(car, 'year');
 
-    console.log('this.props ==========>', this.props);
+    // console.log('this.props ==========>', this.props);
     return (
       <TouchableHighlight
         onPress={this.onPress}

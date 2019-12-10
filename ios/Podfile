@@ -57,6 +57,10 @@ target 'atlantm' do
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
   
   use_native_modules!
+  pod 'react-native-slider', :path => '../node_modules/@react-native-community/slider'
+
+  pod 'rn-range-slider', :path => '../node_modules/rn-range-slider'
+
 end
 
 target 'OneSignalNotificationServiceExtension' do

@@ -18,6 +18,7 @@ import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import declOfNum from '../../../utils/decl-of-num';
 import {EVENT_REFRESH} from '../../../core/actionTypes';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
   content: {
@@ -77,14 +78,19 @@ class NewCarListScreen extends Component {
       />
     ),
     headerRight: (
-      <Image
-        style={{
-          width: 20,
-          height: 20,
-          marginRight: 14,
-        }}
-        source={require('./filter.png')}
-      />
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('NewCarFilterScreen');
+        }}>
+        <Image
+          style={{
+            width: 20,
+            height: 20,
+            marginRight: 14,
+          }}
+          source={require('./filter.png')}
+        />
+      </TouchableOpacity>
     ),
     tabBarLabel: 'Поиск',
     tabBarIcon: ({focused}) => (
@@ -100,15 +106,18 @@ class NewCarListScreen extends Component {
   });
 
   componentDidMount() {
-    const search_url = '/stock/new/cars/get/city/1/';
+    console.log('=========>', this.props.filterData.search_url);
     this.props.filterData;
 
     Amplitude.logEvent('screen', 'catalog/newcar/list', {
-      search_url: '/stock/new/cars/get/city/1/', //get(this.props, 'filterData.search_url'),
+      search_url:
+        get(this.props, 'filterData.search_url') ||
+        `/stock/new/cars/get/city/${this.props.dealerSelected.city.id}/`,
     });
   }
 
   componentDidUpdate() {
+    console.log('=========>', this.props.filterData.search_url);
     const {navigation, items} = this.props;
 
     if (items.total) {
@@ -158,9 +167,12 @@ class NewCarListScreen extends Component {
       }, 150);
     };
 
+    console.log('filterData.search_url', filterData.search_url);
     if (type === EVENT_REFRESH) {
       return actionFetchNewCarByFilter({
-        searchUrl: '/stock/new/cars/get/city/1/', //filterData.search_url,
+        searchUrl:
+          filterData.search_url ||
+          `/stock/new/cars/get/city/${this.props.dealerSelected.city.id}/`,
         filterBrands,
         filterModels,
         filterBody,
@@ -174,7 +186,9 @@ class NewCarListScreen extends Component {
 
     return actionFetchNewCarByFilter({
       type,
-      searchUrl: '/stock/new/cars/get/city/1/', //filterData.search_url,
+      searchUrl:
+        filterData.search_url ||
+        `/stock/new/cars/get/city/${this.props.dealerSelected.city.id}/`,
       nextPage: get(items, 'pages.next'),
     }).then(onResult);
   };
@@ -190,6 +204,7 @@ class NewCarListScreen extends Component {
     const {data, pages, prices} = items;
 
     console.log('== NewCarListScreen ==');
+    console.log('=========>', this.props.filterData);
 
     return (
       <View style={styles.content}>
