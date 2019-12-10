@@ -170,7 +170,6 @@ const Card = ({kind, title, subtitle, onPress}) => {
 import {Offer} from '../../core/components/Offer';
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
-  console.log('THIUS', info);
   return {
     list: info.list,
     nav,

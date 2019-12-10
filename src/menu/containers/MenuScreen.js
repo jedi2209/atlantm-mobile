@@ -31,8 +31,9 @@ import ProfileScreen from '../../profile/containers/ProfileScreen';
 import ServiceScreen from '../../service/containers/ServiceScreen';
 import InfoListScreen from '../../info/containers/InfoListScreen';
 import InfoPostScreen from '../../info/containers/InfoPostScreen';
+import NewCarFilterScreen from '../../catalog/newcar/containers/NewCarFilterScreen';
 
-const MoreScreen = () => null;
+const MoreScreen = () => <Text>MenuScreen</Text>;
 
 MoreScreen.navigationOptions = () => ({
   tabBarLabel: 'Ещё',
@@ -60,7 +61,18 @@ const EnhancedMenuScreen = TabNavigator({
   Search: {
     screen: StackNavigator({
       NewCarListScreen: {screen: NewCarListScreen},
-    }),
+      NewCarFilterScreen: {
+        screen: NewCarFilterScreen,
+        navigationOptions: {
+          tabBarVisible: false,
+        },
+      },
+    },
+    {
+      mode: 'modal',
+      // headerMode: 'none',
+    }
+    ),
   },
   Profile: {
     screen: ProfileScreen,

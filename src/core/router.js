@@ -61,23 +61,28 @@ import ReviewAddMessageStepScreen from '../eko/reviews/containers/ReviewAddMessa
 import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRatingStepScreen';
 
 const CatalogScreenNavigator = StackNavigator({
-  CatalogScreen: { screen: CatalogScreen },
-  AboutDealerScreen: { screen: AboutDealerScreen },
-  OrderScreen: { screen: OrderScreen },
-  UsedCarListScreen: { screen: UsedCarListScreen },
-  UsedCarItemScreen: { screen: UsedCarItemScreen },
-  UsedCarCityScreen: { screen: UsedCarCityScreen },
-  NewCarFilterScreen: { screen: NewCarFilterScreen },
-  NewCarFilterBrandsScreen: { screen: NewCarFilterBrandsScreen },
-  NewCarFilterModelsScreen: { screen: NewCarFilterModelsScreen },
-  NewCarFilterBodyScreen: { screen: NewCarFilterBodyScreen },
-  NewCarFilterGearboxScreen: { screen: NewCarFilterGearboxScreen },
-  NewCarFilterEngineTypeScreen: { screen: NewCarFilterEngineTypeScreen },
-  NewCarFilterDriveScreen: { screen: NewCarFilterDriveScreen },
-  // NewCarListScreen: { screen: NewCarListScreen },
-  NewCarItemScreen: { screen: NewCarItemScreen },
-  NewCarCityScreen: { screen: NewCarCityScreen },
-  CarCostScreen: { screen: CarCostScreen },
+  // CatalogScreen: { screen: CatalogScreen },
+  // AboutDealerScreen: { screen: AboutDealerScreen },
+  // OrderScreen: { screen: OrderScreen },
+  // UsedCarListScreen: { screen: UsedCarListScreen },
+  // UsedCarItemScreen: { screen: UsedCarItemScreen },
+  // UsedCarCityScreen: { screen: UsedCarCityScreen },
+  
+  // NewCarFilterScreen: { screen: NewCarFilterScreen },
+  
+  // NewCarFilterBrandsScreen: { screen: NewCarFilterBrandsScreen },
+  // NewCarFilterModelsScreen: { screen: NewCarFilterModelsScreen },
+  // NewCarFilterBodyScreen: { screen: NewCarFilterBodyScreen },
+  // NewCarFilterGearboxScreen: { screen: NewCarFilterGearboxScreen },
+  // NewCarFilterEngineTypeScreen: { screen: NewCarFilterEngineTypeScreen },
+  // NewCarFilterDriveScreen: { screen: NewCarFilterDriveScreen },
+  NewCarListScreen: { screen: NewCarListScreen },
+  // NewCarItemScreen: { screen: NewCarItemScreen },
+  // NewCarCityScreen: { screen: NewCarCityScreen },
+  // CarCostScreen: { screen: CarCostScreen },
+}, {
+  // mode: 'modal',
+  // headerMode: 'none',
 });
 
 const defaultGetStateForAction = CatalogScreenNavigator.router.getStateForAction;
@@ -130,12 +135,12 @@ const getRouter = initialRouteName => {
       },
       ServiceScreen: { screen: ServiceScreen },
       IndicatorsScreen: { screen: IndicatorsScreen },
-      Catalog2Screen: {
-        screen: CatalogScreenNavigator,
-        navigationOptions: {
-          header: null,
-        },
-      },
+      // Catalog2Screen: {
+        // screen: CatalogScreenNavigator,
+        // navigationOptions: {
+        //   header: null,
+        // },
+      // },
       Tva2Screen: {
         screen: StackNavigator({
           TvaScreen: { screen: TvaScreen },

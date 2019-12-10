@@ -206,7 +206,6 @@ export const actionFetchDealer = dealerBaseData => {
 
     return API.fetchDealer(dealerBaseData.id)
       .then(response => {
-
         if (response.error) {
           return dispatch({
             type: CATALOG_DEALER__FAIL,
@@ -397,6 +396,7 @@ export const actionFetchNewCarFilterData = props => {
 
     return API.fetchNewCarFilterData(props)
       .then(res => {
+        console.log('>>>reeees', res);
         if (res.error) {
           return dispatch({
             type: NEW_CAR_FILTER_DATA__FAIL,
