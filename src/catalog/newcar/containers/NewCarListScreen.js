@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View, Image} from 'react-native';
+import {TouchableOpacity, StyleSheet, View, Image} from 'react-native';
 import {Icon} from 'native-base';
 
 // redux
@@ -18,7 +18,6 @@ import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import declOfNum from '../../../utils/decl-of-num';
 import {EVENT_REFRESH} from '../../../core/actionTypes';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
   content: {
@@ -28,6 +27,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({dealer, nav, catalog}) => {
+  // console.log('>>> catalog newcarlistscrasdasdasdasdasd', catalog.newCar.filters)
+
   return {
     nav,
     dealerSelected: dealer.selected,
@@ -45,6 +46,8 @@ const mapStateToProps = ({dealer, nav, catalog}) => {
     filterEngineType: catalog.newCar.filterEngineType,
     filterPrice: catalog.newCar.filterPrice,
     filterPriceSpecial: catalog.newCar.filterPriceSpecial,
+
+    filters: catalog.newCar.filters,
   };
 };
 
@@ -92,32 +95,21 @@ class NewCarListScreen extends Component {
         />
       </TouchableOpacity>
     ),
-    tabBarLabel: 'Поиск',
-    tabBarIcon: ({focused}) => (
-      <Icon
-        name="search"
-        type="FontAwesome5"
-        style={{
-          fontSize: 24,
-          color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
-        }}
-      />
-    ),
   });
 
   componentDidMount() {
-    console.log('=========>', this.props.filterData.search_url);
-    this.props.filterData;
+    const {dealerSelected, filterData} = this.props;
+    const defaultSearchUrl = `/stock/new/cars/get/city/${dealerSelected.city.id}/`;
+    const searchUrl = filterData.search_url || defaultSearchUrl;
 
     Amplitude.logEvent('screen', 'catalog/newcar/list', {
-      search_url:
-        get(this.props, 'filterData.search_url') ||
-        `/stock/new/cars/get/city/${this.props.dealerSelected.city.id}/`,
+      search_url: searchUrl,
     });
+    // this.fetchCars();
   }
 
-  componentDidUpdate() {
-    console.log('=========>', this.props.filterData.search_url);
+  componentDidUpdate(nextProps) {
+    // console.log('=========>', this.props.filterData.search_url);
     const {navigation, items} = this.props;
 
     if (items.total) {
@@ -127,7 +119,30 @@ class NewCarListScreen extends Component {
         });
       }, 200);
     }
+
+    // console.log(">>>>> GIVE ME A  DATA", this.props.filters !== nextProps.filters)
+    // if (this.props.filters !== nextProps.filters) {
+    // }
   }
+
+  // fetchCars() {
+  //   this.props.actionFetchNewCarByFilter({
+  //     type: 'EVENT_DEFAULT',
+  //     searchUrl:
+  //       this.props.filterData.search_url ||
+  //       `/stock/new/cars/get/city/${this.props.dealerSelected.city.id}/`,
+  //     // nextPage: get(items, 'pages.next'),
+  //     // filterBrands: [6],
+  //     filterModels: this.props.filters.brandFilters.map(filter => filter.id),
+  //     // filterBody
+  //     // filterGearbox
+  //     // filterDrive
+  //     // filterEngineType
+  //     // filterPrice
+  //     // filterPriceSpecial
+  //   });
+  //     // .then(onResult);
+  // }
 
   shouldComponentUpdate(nextProps) {
     const {dealerSelected, items, isFetchingNewCarByFilter} = this.props;
@@ -139,6 +154,7 @@ class NewCarListScreen extends Component {
       (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       items.length !== nextProps.items.length ||
       isFetchingNewCarByFilter !== nextProps.isFetchingNewCarByFilter
+      // || this.props.filters !== nextProps.filters
     );
   }
 
@@ -167,7 +183,6 @@ class NewCarListScreen extends Component {
       }, 150);
     };
 
-    console.log('filterData.search_url', filterData.search_url);
     if (type === EVENT_REFRESH) {
       return actionFetchNewCarByFilter({
         searchUrl:
@@ -184,12 +199,22 @@ class NewCarListScreen extends Component {
       }).then(onResult);
     }
 
+    // console.log('>>>> FETCH NEW CAR')
+
     return actionFetchNewCarByFilter({
       type,
       searchUrl:
         filterData.search_url ||
         `/stock/new/cars/get/city/${this.props.dealerSelected.city.id}/`,
       nextPage: get(items, 'pages.next'),
+      // filterBrands: [6],
+      // filterModels: this.props.filters.brandFilters.map(filter => filter.id),
+      // filterBody
+      // filterGearbox
+      // filterDrive
+      // filterEngineType
+      // filterPrice
+      // filterPriceSpecial
     }).then(onResult);
   };
 

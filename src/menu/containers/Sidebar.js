@@ -150,7 +150,7 @@ class Sidebar extends Component {
   onPressItem = (routeName) => {
     if (!this.isMenuAvailable()) return this.showIntroWarning();
 
-    const resetAction = NavigationActions.reset({
+    const resetAction = StackActions.reset({
       index: 0,
       key: null,
       actions: [

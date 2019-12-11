@@ -8,6 +8,7 @@ import {
   StatusBar,
   NativeModules,
 } from 'react-native';
+import {createAppContainer} from 'react-navigation';
 import {enableScreens} from 'react-native-screens';
 
 // redux
@@ -179,6 +180,11 @@ class App extends Component {
     const mainScreen = isTablet ? 'ContactsScreen' : 'MenuScreen';
     const isDealerSelected = get(store.getState(), 'dealer.selected.id');
     const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
+    const AppContainer = createAppContainer(Router);
+
+    return (
+      <AppContainer onNavigationStateChange={this.onNavigationStateChange} />
+    );
 
     const defaultGetStateForAction = Router.router.getStateForAction;
     Router.router.getStateForAction = (action, state) => {

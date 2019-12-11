@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Icon, Container, Text, Grid, Col, Row} from 'native-base';
-import {TabNavigator, StackNavigator} from 'react-navigation';
+import {createBottomTabNavigator} from 'react-navigation-tabs';
+import {createStackNavigator} from 'react-navigation-stack';
 
 // redux
 import {connect} from 'react-redux';
@@ -49,30 +50,57 @@ MoreScreen.navigationOptions = () => ({
   ),
 });
 
-const EnhancedMenuScreen = TabNavigator({
+const EnhancedMenuScreen = createBottomTabNavigator({
   Contacts: {
-    screen: StackNavigator({
+    screen: createStackNavigator({
       // TODO: Все роуты назвать *Screen (e.g. HomeScreen, для консистентности)
       Home: {screen: ContactsScreen},
       InfoList: {screen: InfoListScreen},
       InfoPostScreen: {screen: InfoPostScreen},
     }),
+    navigationOptions: {
+      tabBarLabel: 'Автоцентр',
+      tabBarIcon: ({focused}) => (
+        <Icon
+          name="building"
+          type="FontAwesome5"
+          style={{
+            fontSize: 24,
+            color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
+          }}
+        />
+      ),
+    },
   },
   Search: {
-    screen: StackNavigator({
-      NewCarListScreen: {screen: NewCarListScreen},
-      NewCarFilterScreen: {
-        screen: NewCarFilterScreen,
-        navigationOptions: {
-          tabBarVisible: false,
+    screen: createStackNavigator(
+      {
+        NewCarListScreen: {
+          screen: NewCarListScreen,
+        },
+        NewCarFilterScreen: {
+          screen: NewCarFilterScreen,
         },
       },
-    },
-    {
-      mode: 'modal',
-      // headerMode: 'none',
-    }
+      {
+        mode: 'modal',
+      },
     ),
+    navigationOptions: ({navigation}) => {
+      return {
+        tabBarLabel: 'Поиск',
+        tabBarIcon: ({focused}) => (
+          <Icon
+            name="search"
+            type="FontAwesome5"
+            style={{
+              fontSize: 24,
+              color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
+            }}
+          />
+        ),
+      };
+    },
   },
   Profile: {
     screen: ProfileScreen,

@@ -81,18 +81,6 @@ class InfoListScreen extends Component {
         returnScreen="MenuScreen"
       />
     ),
-    // TODO: Сконфигурировать это в одном месте, возможно в MenuScreen::StackNavigator.
-    tabBarLabel: 'Автоцентр',
-    tabBarIcon: ({focused}) => (
-      <Icon
-        name="building"
-        type="FontAwesome5"
-        style={{
-          fontSize: 24,
-          color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
-        }}
-      />
-    ),
   });
 
   static propTypes = {

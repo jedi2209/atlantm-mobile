@@ -69,6 +69,9 @@ import {
   CAR_COST_CAR_CONDITION__SELECT,
   CAR_COST_COMMENT__FILL,
   CAR_COST_VIN__FILL,
+
+  // filtlers
+  ACTION_SAVE_CAR_FILTERS__UPDATE,
 } from './actionTypes';
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
@@ -748,6 +751,22 @@ const carCostComment = (state = '', action) => {
   }
 };
 
+const newCarFilters = (
+  state = {
+    brandFilters: [],
+    bodyFilters: [],
+    priceFilter: {},
+  },
+  action,
+) => {
+  switch (action.type) {
+    case ACTION_SAVE_CAR_FILTERS__UPDATE:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 // End CarCost
 
 export default combineReducers({
@@ -807,6 +826,7 @@ export default combineReducers({
       isFetchingNewCarByFilter,
       isFetchingCarDetails: isFetchingNewCarDetails,
     }),
+    filters: newCarFilters,
   }),
 
   carCost: combineReducers({

@@ -52,7 +52,7 @@ export default {
         }
         if (!routeName) return;
 
-        const resetAction = NavigationActions.reset({
+        const resetAction = StackActions.reset({
             index: 0,
             key: null,
             actions: [
@@ -331,7 +331,7 @@ export default {
 //   //
 //   //   if (!routeName) return;
 //   //
-//   //   const resetAction = NavigationActions.reset({
+//   //   const resetAction = StackActions.reset({
 //   //     index: 0,
 //   //     key: null,
 //   //     actions: [
