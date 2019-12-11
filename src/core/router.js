@@ -1,4 +1,4 @@
-import { StackNavigator } from 'react-navigation';
+import {createStackNavigator} from 'react-navigation-stack';
 
 // global
 import IntroScreen from '../intro/containers/IntroScreen';
@@ -60,7 +60,7 @@ import ReviewsFilterRatingScreen from '../eko/reviews/containers/ReviewsFilterRa
 import ReviewAddMessageStepScreen from '../eko/reviews/containers/ReviewAddMessageStepScreen';
 import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRatingStepScreen';
 
-const CatalogScreenNavigator = StackNavigator({
+const CatalogScreenNavigator = createStackNavigator({
   // CatalogScreen: { screen: CatalogScreen },
   // AboutDealerScreen: { screen: AboutDealerScreen },
   // OrderScreen: { screen: OrderScreen },
@@ -91,13 +91,13 @@ CatalogScreenNavigator.router.getStateForAction = (action, state) => {
 };
 
 const getRouter = initialRouteName => {
-  return StackNavigator(
+  return createStackNavigator(
     {
       IntroScreen: { screen: IntroScreen },
       MenuScreen: { screen: MenuScreen },
       ChooseDealerScreen: { screen: ChooseDealerScreen },
       ContactsScreen: {
-        screen: StackNavigator({
+        screen: createStackNavigator({
           ContactsScreen: { screen: ContactsScreen },
           AboutScreen: { screen: AboutScreen },
           MapScreen: { screen: MapScreen },
@@ -110,7 +110,7 @@ const getRouter = initialRouteName => {
         },
       },
       // InfoListScreen: {
-      //   screen: StackNavigator({
+      //   screen: createStackNavigator({
       //     InfoListScreen: { screen: InfoListScreen },
       //     InfoPostScreen: { screen: InfoPostScreen },
       //   }),
@@ -119,7 +119,7 @@ const getRouter = initialRouteName => {
       //   },
       // },
       Profile2Screen: {
-        screen: StackNavigator({
+        screen: createStackNavigator({
           ProfileScreen: { screen: ProfileScreen },
           RegisterScreen: { screen: RegisterScreen },
           ForgotPassScreen: { screen: ForgotPassScreen },
@@ -142,7 +142,7 @@ const getRouter = initialRouteName => {
         // },
       // },
       Tva2Screen: {
-        screen: StackNavigator({
+        screen: createStackNavigator({
           TvaScreen: { screen: TvaScreen },
           TvaResultsScreen: { screen: TvaResultsScreen },
         }),
@@ -151,7 +151,7 @@ const getRouter = initialRouteName => {
         },
       },
       Eko2Screen: {
-        screen: StackNavigator({
+        screen: createStackNavigator({
           // EkoScreen: { screen: EkoScreen },
           ReviewsScreen: { screen: ReviewsScreen },
           ReviewScreen: { screen: ReviewScreen },

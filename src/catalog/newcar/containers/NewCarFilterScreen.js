@@ -38,6 +38,7 @@ import {
   actionHideNewCarFilterPrice,
   actionSelectNewCarFilterPrice,
   actionSetNewCarFilterPriceSpecial,
+  actionSaveCarFilters,
 } from '../../actions';
 
 // components
@@ -149,9 +150,6 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
     brands.map(({name, id}) => ({id, name})),
   );
   const uniqBrands = uniqBy(flatten(brands), 'id');
-
-  console.log('>>>>>>>>> catalog.newCar.filterData', catalog.newCar.filterData);
-
   const filterBody = catalog.newCar.filterData
     ? Object.keys(catalog.newCar.filterData.data.body).map(body => ({
         id: body,
@@ -165,8 +163,6 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
     step: catalog.newCar.filterData ? catalog.newCar.filterData.prices.step : 1,
     curr: catalog.newCar.filterData && catalog.newCar.filterData.prices.curr,
   };
-
-  console.log('catalog.newCar.filterModels', catalog.newCar.filterModels);
 
   return {
     nav,
@@ -208,6 +204,7 @@ const mapDispatchToProps = {
   actionHideNewCarFilterPrice,
   actionSelectNewCarFilterPrice,
   actionSetNewCarFilterPriceSpecial,
+  actionSaveCarFilters,
 };
 
 class NewCarFilterScreen extends Component {
@@ -233,18 +230,17 @@ class NewCarFilterScreen extends Component {
 
   constructor(props) {
     super(props);
-
+    // console.log(this.props.filters.brands)
+    // TODO: Синхронизировать с данными из redux.
     this.state = {
       brandFilters: this.props.filters.brands.map(brand => ({
         ...brand,
         checked: false,
       })),
-
       bodyFilters: this.props.filterBody.map(body => ({
         ...body,
         checked: false,
       })),
-
       priceFilter: {
         min: 0,
         max: 0,
@@ -370,10 +366,11 @@ class NewCarFilterScreen extends Component {
   // };
 
   onPressFilterButton = () => {
-    const {navigation, isFetchingNewCarByFilter} = this.props;
-    if (!isFetchingNewCarByFilter) {
-      navigation.navigate('NewCarListScreen');
-    }
+    // const {navigation, isFetchingNewCarByFilter} = this.props;
+    // if (!isFetchingNewCarByFilter) {
+      // }
+    this.props.navigation.navigate('NewCarListScreen');
+    this.props.actionSaveCarFilters(this.state);
   };
 
   getCount = () => {
@@ -955,7 +952,6 @@ class NewCarFilterScreen extends Component {
     );
   }
 }
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

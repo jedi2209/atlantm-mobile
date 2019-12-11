@@ -78,6 +78,9 @@ import {
   CAR_COST_CAR_CONDITION__SELECT,
   CAR_COST_COMMENT__FILL,
   CAR_COST_VIN__FILL,
+
+  // filters
+  ACTION_SAVE_CAR_FILTERS__UPDATE,
 } from './actionTypes';
 
 import { EVENT_LOAD_MORE } from '../core/actionTypes';
@@ -781,3 +784,15 @@ export const actionCarCostOrder = (props) => {
   };
 };
 // END carcost
+
+/**
+ * Сохраняет список выбранных фильтров.
+ */
+export const actionSaveCarFilters = filters => {
+  return dispatch => {
+    return dispatch({
+      type: ACTION_SAVE_CAR_FILTERS__UPDATE,
+      payload: filters,
+    });
+  };
+};
