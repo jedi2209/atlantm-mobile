@@ -105,6 +105,9 @@ android {
             keyPassword ATLANTM_RELEASE_KEY_PASSWORD
         }
     }
+    dexOptions {
+        javaMaxHeapSize "3g"
+    }
     buildTypes {
         debug {
             signingConfig signingConfigs.release
