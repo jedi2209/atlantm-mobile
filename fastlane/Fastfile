@@ -4,9 +4,9 @@ fastlane_require 'dotenv'
 
 before_all do
   Dotenv.overload '.env'
-  ensure_git_branch(
-    branch: 'master'
-  )
+  # ensure_git_branch(
+  #   branch: 'master'
+  # )
   # git_pull
 end
 
