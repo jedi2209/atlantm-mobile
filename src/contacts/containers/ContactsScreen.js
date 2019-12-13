@@ -190,136 +190,137 @@ class ContactsScreen extends Component {
     header: null,
   });
 
-  componentDidMount() {
-    Amplitude.logEvent('screen', 'contacts');
+  // componentDidMount() {
+  //   Amplitude.logEvent('screen', 'contacts');
 
-    const {fetchInfoList, actionListReset} = this.props;
-    const {region, id: dealer} = this.props.dealerSelected;
+  //   const {fetchInfoList, actionListReset} = this.props;
+  //   const {region, id: dealer} = this.props.dealerSelected;
 
-    actionListReset();
-    fetchInfoList(region, dealer).then(action => {
-      if (action.type === INFO_LIST__FAIL) {
-        let message = get(
-          action,
-          'payload.message',
-          'Произошла ошибка, попробуйте снова',
-        );
+  //   actionListReset();
+  //   fetchInfoList(region, dealer).then(action => {
+  //     if (action.type === INFO_LIST__FAIL) {
+  //       let message = get(
+  //         action,
+  //         'payload.message',
+  //         'Произошла ошибка, попробуйте снова',
+  //       );
 
-        if (message === 'Network request failed') {
-          message = ERROR_NETWORK;
-        }
+  //       if (message === 'Network request failed') {
+  //         message = ERROR_NETWORK;
+  //       }
 
-        setTimeout(() => Alert.alert(message), 100);
-      }
-    });
-  }
+  //       setTimeout(() => Alert.alert(message), 100);
+  //     }
+  //   });
+  // }
 
-  onPressCallMe = async () => {
-    const isInternetExist = await isInternet();
+  // onPressCallMe = async () => {
+  //   const isInternetExist = await isInternet();
 
-    if (!isInternetExist) {
-      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
-    } else {
-      const {
-        callMe,
-        profile,
-        navigation,
-        dealerSelected,
-        isСallMeRequest,
-      } = this.props;
+  //   if (!isInternetExist) {
+  //     return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+  //   } else {
+  //     const {
+  //       callMe,
+  //       profile,
+  //       navigation,
+  //       dealerSelected,
+  //       isСallMeRequest,
+  //     } = this.props;
 
-      // предотвращаем повторную отправку формы
-      if (isСallMeRequest) {
-        return;
-      }
+  //     // предотвращаем повторную отправку формы
+  //     if (isСallMeRequest) {
+  //       return;
+  //     }
 
-      const {name, phone, email} = profile;
+  //     const {name, phone, email} = profile;
 
-      if (!phone) {
-        return Alert.alert(
-          'Добавьте номер телефона',
-          'Для обратного звонка необходимо добавить номер контактного телефона в профиле',
-          [
-            {text: 'Отмена', style: 'cancel'},
-            {
-              text: 'Заполнить',
-              onPress() {
-                navigation.navigate('Profile2Screen');
-              },
-            },
-          ],
-        );
-      }
+  //     if (!phone) {
+  //       return Alert.alert(
+  //         'Добавьте номер телефона',
+  //         'Для обратного звонка необходимо добавить номер контактного телефона в профиле',
+  //         [
+  //           {text: 'Отмена', style: 'cancel'},
+  //           {
+  //             text: 'Заполнить',
+  //             onPress() {
+  //               navigation.navigate('Profile2Screen');
+  //             },
+  //           },
+  //         ],
+  //       );
+  //     }
 
-      const dealerID = dealerSelected.id;
-      const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
+  //     const dealerID = dealerSelected.id;
+  //     const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
 
-      callMe({
-        name,
-        email,
-        phone,
-        device,
-        dealerID,
-      }).then(action => {
-        if (action.type === CALL_ME__SUCCESS) {
-          Amplitude.logEvent('order', 'contacts/callme');
+  //     callMe({
+  //       name,
+  //       email,
+  //       phone,
+  //       device,
+  //       dealerID,
+  //     }).then(action => {
+  //       if (action.type === CALL_ME__SUCCESS) {
+  //         Amplitude.logEvent('order', 'contacts/callme');
 
-          setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
-        }
+  //         setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
+  //       }
 
-        if (action.type === CALL_ME__FAIL) {
-          setTimeout(
-            () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
-            100,
-          );
-        }
-      });
-    }
-  };
+  //       if (action.type === CALL_ME__FAIL) {
+  //         setTimeout(
+  //           () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
+  //           100,
+  //         );
+  //       }
+  //     });
+  //   }
+  // };
 
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    const isActiveScreen = nav.routes[nav.index].routeName === 'ContactsScreen';
+  // shouldComponentUpdate(nextProps) {
+  //   const nav = nextProps.nav.newState;
+  //   const isActiveScreen = nav.routes[nav.index].routeName === 'ContactsScreen';
 
-    const isListSucsess = Boolean(
-      this.props.list.length !== nextProps.list.length,
-    );
-    return isActiveScreen || isListSucsess;
-  }
+  //   const isListSucsess = Boolean(
+  //     this.props.list.length !== nextProps.list.length,
+  //   );
+  //   return isActiveScreen || isListSucsess;
+  // }
 
-  onPressAbout = () => this.props.navigation.navigate('AboutScreen');
+  // onPressAbout = () => this.props.navigation.navigate('AboutScreen');
 
-  onPressRateApp = () => {
-    const APP_STORE_LINK =
-      'itms-apps://itunes.apple.com/app/idXXXX?action=write-review';
-    const PLAY_STORE_LINK = 'market://details?id=com.atlantm';
+  // onPressRateApp = () => {
+  //   const APP_STORE_LINK =
+  //     'itms-apps://itunes.apple.com/app/idXXXX?action=write-review';
+  //   const PLAY_STORE_LINK = 'market://details?id=com.atlantm';
 
-    if (Platform.OS === 'ios') {
-      Linking.openURL(APP_STORE_LINK).catch(err =>
-        console.error('APP_STORE_LINK failed', err),
-      );
-    } else {
-      Linking.openURL(PLAY_STORE_LINK).catch(err =>
-        console.error('PLAY_STORE_LINK failed', err),
-      );
-    }
-  };
+  //   if (Platform.OS === 'ios') {
+  //     Linking.openURL(APP_STORE_LINK).catch(err =>
+  //       console.error('APP_STORE_LINK failed', err),
+  //     );
+  //   } else {
+  //     Linking.openURL(PLAY_STORE_LINK).catch(err =>
+  //       console.error('PLAY_STORE_LINK failed', err),
+  //     );
+  //   }
+  // };
 
-  getRateAppInfoText = () => {
-    return `Если вам понравилось наше приложение, оставьте, пожайлуста, положительный отзыв в ${this.getPlatformStore()}`;
-  };
+  // getRateAppInfoText = () => {
+  //   return `Если вам понравилось наше приложение, оставьте, пожайлуста, положительный отзыв в ${this.getPlatformStore()}`;
+  // };
 
-  getRateAppLabel = () => `Оставить отзыв в ${this.getPlatformStore()}`;
+  // getRateAppLabel = () => `Оставить отзыв в ${this.getPlatformStore()}`;
 
-  getPlatformStore = () =>
-    Platform.OS === 'ios' ? 'App Store' : 'Google Play';
+  // getPlatformStore = () =>
+  //   Platform.OS === 'ios' ? 'App Store' : 'Google Play';
 
-  onPressBonus = () =>
-    this.props.navigation.navigate('BonusInfoScreen', {
-      refererScreen: 'contacts',
-    });
+  // onPressBonus = () =>
+  //   this.props.navigation.navigate('BonusInfoScreen', {
+  //     refererScreen: 'contacts',
+  //   });
 
   render() {
+    return <View><Text>Hello</Text></View>
     const {dealerSelected, navigation, isСallMeRequest, list} = this.props;
     console.log('list', list);
 
