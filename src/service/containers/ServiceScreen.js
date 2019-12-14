@@ -66,26 +66,13 @@ const mapDispatchToProps = {
 };
 
 class ServiceScreen extends Component {
-  // static navigationOptions = ({ navigation }) => ({
-  //   headerTitle: 'Заявка на СТО',
-  //   headerStyle: stylesHeader.common,
-  //   headerTitleStyle: stylesHeader.title,
-  //   headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
-  //   headerRight: <HeaderIconMenu navigation={navigation} />,
-  // })
-  static navigationOptions = () => ({
-    tabBarLabel: 'Заявка',
-    tabBarIcon: ({focused}) => (
-      <Icon
-        name="comments"
-        type="FontAwesome5"
-        style={{
-          fontSize: 24,
-          color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
-        }}
-      />
-    ),
-  });
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: 'Заявка на СТО',
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
+    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
+    headerRight: <HeaderIconMenu navigation={navigation} />,
+  })
 
   static propTypes = {
     dealerSelected: PropTypes.object,

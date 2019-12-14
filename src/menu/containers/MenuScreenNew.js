@@ -81,7 +81,7 @@ const MoreScreen = props => {
       navigateUrl: 'NewCarListScreen',
       type: 'not_new',
     },
-    {name: 'Сервис', navigateUrl: '', type: 'service'},
+    {name: 'Сервис', navigateUrl: 'ServiceScreen', type: 'service'},
     {name: 'Отзывы', navigateUrl: 'ReviewsScreen', type: 'reviews'},
     {name: 'Индикаторы', navigateUrl: 'IndicatorsScreen', type: 'indicators'},
   ];
