@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Icon} from 'native-base';
+import {Icon, Text} from 'native-base';
+import {View} from 'react-native';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 
@@ -31,6 +32,20 @@ import InfoListScreen from '../../info/containers/InfoListScreen';
 import InfoPostScreen from '../../info/containers/InfoPostScreen';
 import NewCarFilterScreen from '../../catalog/newcar/containers/NewCarFilterScreen';
 import MoreScreen from './MenuScreenNew';
+
+const Application = () => {
+  return (
+    <View
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+      }}>
+      <Text>Comming soon</Text>
+    </View>
+  );
+};
 
 const EnhancedMenuScreen = createBottomTabNavigator({
   Contacts: {
@@ -90,7 +105,24 @@ const EnhancedMenuScreen = createBottomTabNavigator({
     screen: ProfileScreen,
   },
   Service: {
-    screen: ServiceScreen,
+    screen: Application,
+    navigationOptions: ({navigation}) => {
+      return {
+        tabBarLabel: 'Заявка',
+        tabBarIcon: ({focused}) => (
+          <Icon
+            name="comments"
+            type="FontAwesome5"
+            style={{
+              fontSize: 24,
+              color: focused
+                ? styleConst.new.blueHeader
+                : styleConst.new.passive,
+            }}
+          />
+        ),
+      };;
+    },
   },
   More: {
     screen: createStackNavigator({MoreScreen: {screen: MoreScreen}}),

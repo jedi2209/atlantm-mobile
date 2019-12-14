@@ -1,10 +1,30 @@
-import React, { Component } from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { View, Alert, StyleSheet, Keyboard, Text, Platform } from 'react-native';
-import { Container, Content, List, StyleProvider, Button, Icon } from 'native-base';
+import {
+  View,
+  Alert,
+  StyleSheet,
+  Keyboard,
+  Text,
+  Platform,
+  ImageBackground,
+  Image,
+} from 'react-native';
+import {
+  Container,
+  Content,
+  List,
+  StyleProvider,
+  Button,
+  Icon,
+  Form,
+  Item,
+  Input,
+} from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {
   nameFill,
   phoneFill,
@@ -17,7 +37,10 @@ import {
   actionLogout,
   actionFetchProfileData,
 } from '../actions';
-import { actionSetPushActionSubscribe, actionSetPushGranted } from '../../core/actions';
+import {
+  actionSetPushActionSubscribe,
+  actionSetPushGranted,
+} from '../../core/actions';
 
 // components
 import Auth from '../components/Auth';
@@ -31,7 +54,7 @@ import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack'
 import PushNotifications from '../../core/components/PushNotifications';
 
 // helpers
-import { get } from 'lodash';
+import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
@@ -42,11 +65,12 @@ const isAndroid = Platform.OS === 'android';
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: styleConst.color.bg,
     paddingBottom: isAndroid ? 0 : styleConst.ui.footerHeightIphone,
   },
   button: {
-    height: isAndroid ? styleConst.ui.footerHeightAndroid : styleConst.ui.footerHeightIphone,
+    height: isAndroid
+      ? styleConst.ui.footerHeightAndroid
+      : styleConst.ui.footerHeightIphone,
     flex: 1,
     flexDirection: 'row',
     backgroundColor: '#fff',
@@ -78,7 +102,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, profile, nav, core }) => {
+const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
     nav,
     listRussia: dealer.listRussia,
@@ -102,7 +126,7 @@ const mapStateToProps = ({ dealer, profile, nav, core }) => {
     bonus: profile.bonus.data,
     discounts: profile.discounts,
 
-//    fcmToken: core.fcmToken,
+    //    fcmToken: core.fcmToken,
     pushActionSubscribeState: core.pushActionSubscribeState,
   };
 };
@@ -126,24 +150,6 @@ const mapDispatchToProps = {
 };
 
 class ProfileScreen extends Component {
-  // static navigationOptions = ({ navigation }) => {
-  //   const { params = {} } = navigation.state;
-
-  //   return {
-  //     headerTitle: 'Личный кабинет',
-  //     headerStyle: stylesHeader.common,
-  //     headerTitleStyle: stylesHeader.title,
-  //     headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
-  //     headerRight: params.isAuth ? <HeaderIconReload onPress={() => {
-  //       Keyboard.dismiss();
-
-  //       if (params.onReload) {
-  //         params.onReload();
-  //       }
-  //     }} /> : <View />,
-  //   };
-  // }
-
   static navigationOptions = () => ({
     tabBarLabel: 'Кабинет',
     tabBarIcon: ({focused}) => (
@@ -185,9 +191,9 @@ class ProfileScreen extends Component {
     bonus: PropTypes.object,
     discounts: PropTypes.array,
 
-//    fcmToken: PropTypes.string,
+    //    fcmToken: PropTypes.string,
     pushActionSubscribeState: PropTypes.bool,
-//    actionSetFCMToken: PropTypes.func,
+    //    actionSetFCMToken: PropTypes.func,
     actionSetPushGranted: PropTypes.func,
     actionSetPushActionSubscribe: PropTypes.func,
     actionFetchCars: PropTypes.func,
@@ -197,8 +203,8 @@ class ProfileScreen extends Component {
     auth: {},
   };
 
-  componentDidMount () {
-    const { auth, navigation } = this.props;
+  componentDidMount() {
+    const {auth, navigation} = this.props;
 
     navigation.setParams({
       isAuth: get(auth, 'token.id'),
@@ -213,7 +219,9 @@ class ProfileScreen extends Component {
     if (nav) {
       const rootLevel = nav.routes[nav.index];
       if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'ProfileScreen';
+        isActiveScreen =
+          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
+          'ProfileScreen';
       }
     }
 
@@ -221,20 +229,20 @@ class ProfileScreen extends Component {
   }
 
   onReload = () => {
-    const { auth, actionFetchProfileData } = this.props;
+    const {auth, actionFetchProfileData} = this.props;
     const token = get(auth, 'token.id');
 
-    actionFetchProfileData({ token });
+    actionFetchProfileData({token});
   };
 
   onPressLogout = () => {
-    const { auth, actionLogout } = this.props;
+    const {auth, actionLogout} = this.props;
 
     return Alert.alert(
       'Подтверждение выхода',
       'Вы действительно хотите выйти?',
       [
-        { text: 'Нет', style: 'destructive' },
+        {text: 'Нет', style: 'destructive'},
         {
           text: 'Выйти',
           onPress() {
@@ -245,9 +253,8 @@ class ProfileScreen extends Component {
 
             setTimeout(() => {
               PushNotifications.removeTag('login');
-              actionLogout()
-                }, 100
-            );
+              actionLogout();
+            }, 100);
           },
         },
       ],
@@ -255,11 +262,136 @@ class ProfileScreen extends Component {
   };
 
   getDealersList = () => {
-    const { listRussia, listUkraine, listBelarussia } = this.props;
+    const {listRussia, listUkraine, listBelarussia} = this.props;
     return [].concat(listRussia, listUkraine, listBelarussia);
   };
 
   render() {
+    return (
+      <ImageBackground
+        source={require('./bg.jpg')}
+        style={{width: '100%', height: '100%'}}>
+        <View
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginTop: 100,
+            justifyContent: 'center',
+          }}>
+          <Image source={require('./white-logo.png')} />
+        </View>
+
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginTop: 40,
+          }}>
+          <Button
+            iconLeft
+            style={{
+              backgroundColor: '#4286F5',
+              width: '80%',
+              marginVertical: 8,
+              paddingHorizontal: 8,
+              justifyContent: 'flex-start',
+            }}>
+            <Icon name="google" type="FontAwesome5" />
+            <Text style={{color: '#fff', marginLeft: 8}}>
+              Войти через Google
+            </Text>
+          </Button>
+          <Button
+            iconLeft
+            style={{
+              backgroundColor: '#4167B2',
+              width: '80%',
+              marginVertical: 8,
+              paddingHorizontal: 8,
+              justifyContent: 'flex-start',
+            }}>
+            <Icon name="facebook" type="FontAwesome5" />
+            <Text style={{color: '#fff', marginLeft: 8}}>
+              Войти через Facebook
+            </Text>
+          </Button>
+          <Button
+            iconLeft
+            style={{
+              backgroundColor: '#EB722E',
+              width: '80%',
+              marginVertical: 8,
+              paddingHorizontal: 8,
+              justifyContent: 'flex-start',
+            }}>
+            <Icon name="home" />
+            <Text style={{color: '#fff', marginLeft: 8}}>
+              Войти через Одноклассники
+            </Text>
+          </Button>
+          <Button
+            iconLeft
+            style={{
+              backgroundColor: '#4680C2',
+              width: '80%',
+              marginVertical: 8,
+              paddingHorizontal: 8,
+              justifyContent: 'flex-start',
+            }}>
+            <Icon name="vk" type="FontAwesome5" />
+            <Text style={{color: '#fff', marginLeft: 8}}>Войти через VK</Text>
+          </Button>
+        </View>
+        <View
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              marginTop: 10,
+              marginBottom: 20,
+              width: '80%',
+              flexDirection: 'row',
+              justifyContent: 'space-around',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{backgroundColor: '#979797', height: 1, width: '40%'}}
+            />
+            <Text style={{color: '#9097A5', fontSize: 16, lineHeight: 16}}>или</Text>
+            <View
+              style={{backgroundColor: '#979797', height: 1, width: '40%'}}
+            />
+          </View>
+        </View>
+        <View
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Form>
+            <Item regular style={{width: '80%', borderRadius: 6}}>
+              <Input placeholder="Телефон" />
+            </Item>
+          </Form>
+          <Button
+            style={{
+              marginTop: 20,
+              width: '80%',
+              backgroundColor: '#34BD78',
+              justifyContent: 'center',
+            }}>
+            <Text style={{color: '#fff'}}>Получить код</Text>
+          </Button>
+        </View>
+      </ImageBackground>
+    );
+
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
@@ -288,9 +420,9 @@ class ProfileScreen extends Component {
       bonus,
       discounts,
 
-//      fcmToken,
+      //      fcmToken,
       pushActionSubscribeState,
-//      actionSetFCMToken,
+      //      actionSetFCMToken,
       actionSetPushGranted,
       actionSetPushActionSubscribe,
 
@@ -306,34 +438,33 @@ class ProfileScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <Container style={styles.safearea}>
-          <Content enableResetScrollToCoords={false} keyboardShouldPersistTaps={Platform.OS === 'android' ? 'always' : 'never'}>
+          <Content
+            enableResetScrollToCoords={false}
+            keyboardShouldPersistTaps={
+              Platform.OS === 'android' ? 'always' : 'never'
+            }>
             <List style={styles.list}>
-              {
-                !auth.token ?
-                  (
-                    <Auth
-                      dealers={this.getDealersList()}
-                      dealerSelected={dealerSelected}
-                      navigation={navigation}
-                      loginHandler={actionLogin}
-                      isRequest={isLoginRequest}
-                      login={login}
-                      password={password}
-                      loginFill={loginFill}
-                      passwordFill={passwordFill}
-                    />
-                  ) : null
-              }
+              {!auth.token ? (
+                <Auth
+                  dealers={this.getDealersList()}
+                  dealerSelected={dealerSelected}
+                  navigation={navigation}
+                  loginHandler={actionLogin}
+                  isRequest={isLoginRequest}
+                  login={login}
+                  password={password}
+                  loginFill={loginFill}
+                  passwordFill={passwordFill}
+                />
+              ) : null}
 
-              {
-                auth.token ?
-                  <BonusDiscount
-                    bonus={get(bonus, 'saldo.value')}
-                    discounts={discounts.length}
-                    navigation={navigation}
-                  /> :
-                  null
-              }
+              {auth.token ? (
+                <BonusDiscount
+                  bonus={get(bonus, 'saldo.value')}
+                  discounts={discounts.length}
+                  navigation={navigation}
+                />
+              ) : null}
 
               <ListItemHeader text="МОЙ АВТОЦЕНТР" />
 
@@ -362,7 +493,7 @@ class ProfileScreen extends Component {
                 emailFill={emailFill}
                 carFill={carFill}
                 carNumberFill={carNumberFill}
-//                fcmToken={fcmToken}
+                //                fcmToken={fcmToken}
                 dealerSelected={dealerSelected}
                 pushActionSubscribeState={pushActionSubscribeState}
                 actionSetPushGranted={actionSetPushGranted}
@@ -370,15 +501,14 @@ class ProfileScreen extends Component {
               />
             </List>
 
-            {
-              auth.token ?
-                (
-                  <Button onPress={this.onPressLogout} full style={styles.button}>
-                    <Icon name="ios-exit" style={styles.buttonIcon} />
-                    <Text numberOfLines={1} style={styles.buttonText}>ВЫЙТИ ИЗ ЛИЧНОГО КАБИНЕТА</Text>
-                  </Button>
-                ) : null
-            }
+            {auth.token ? (
+              <Button onPress={this.onPressLogout} full style={styles.button}>
+                <Icon name="ios-exit" style={styles.buttonIcon} />
+                <Text numberOfLines={1} style={styles.buttonText}>
+                  ВЫЙТИ ИЗ ЛИЧНОГО КАБИНЕТА
+                </Text>
+              </Button>
+            ) : null}
           </Content>
         </Container>
       </StyleProvider>
@@ -386,4 +516,7 @@ class ProfileScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ProfileScreen);
