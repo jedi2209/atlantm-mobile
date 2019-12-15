@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Text, View, StyleSheet, TouchableHighlight} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 
 // components
 import Imager from '../../core/components/Imager';
@@ -90,12 +90,13 @@ export default class CarListItem extends Component {
     prices: {},
     itemScreen: null,
     navigate: null,
+    currency: 'рубс',
   };
 
   onPress = () => {
-    const {navigate, itemScreen, car} = this.props;
+    const {navigate, itemScreen, car, currency} = this.props;
 
-    navigate(itemScreen, {carId: car.id.api});
+    navigate(itemScreen, {carId: car.id.api, currency});
   };
 
   shouldComponentUpdate(nextProps) {
@@ -135,9 +136,8 @@ export default class CarListItem extends Component {
     const gearbox = get(car, 'gearbox.name');
     const year = get(car, 'year');
 
-    // console.log('this.props ==========>', this.props);
     return (
-      <TouchableHighlight
+      <TouchableOpacity
         onPress={this.onPress}
         style={styles.container}
         underlayColor={styleConst.color.select}>
@@ -191,7 +191,7 @@ export default class CarListItem extends Component {
             </View>
           </View>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 }

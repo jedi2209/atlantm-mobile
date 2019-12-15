@@ -240,10 +240,6 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
       catalog.newCar.meta.needFetchFilterDataAfterCity,
     isFetchingFilterData: catalog.newCar.meta.isFetchingFilterData,
     isFetchingNewCarByFilter: catalog.newCar.meta.isFetchingNewCarByFilter,
-
-    // filters: {
-    //   brands: uniqBrands,
-    // },
   };
 };
 
@@ -282,10 +278,6 @@ class NewCarFilterScreen extends Component {
     super(props);
     this.state = {
       brandFilters: props.filterBrands,
-      // .map(brand => ({
-      //   ...brand,
-      //   checked: false,
-      // })),
       bodyFilters: props.filterBody,
       priceFilter: props.filterPrice,
       modelFilter: props.filterModels,
@@ -311,8 +303,6 @@ class NewCarFilterScreen extends Component {
       filterEngineType,
       filterPrice,
       filterPriceSpecial,
-      // обновление экрана после выбора фильтров
-      city,
       needFetchFilterData,
       actionFetchNewCarByFilter,
       // обновление экрана после выбора города
@@ -327,10 +317,7 @@ class NewCarFilterScreen extends Component {
       });
     }
 
-    console.log('needFetchFilterData', needFetchFilterData);
-
     if (needFetchFilterData) {
-      console.log('needFetchFilterData!!!', filters);
       return actionFetchNewCarByFilter({
         filters,
         searchUrl: filterData.search_url,

@@ -99,7 +99,7 @@ class NewCarItemScreen extends Component {
       <HeaderIconBack
         theme="white"
         navigation={navigation}
-        returnScreen="MenuScreen"
+        returnScreen="NewCarListScreen"
       />
     ),
     headerRight: <View />,
@@ -118,6 +118,7 @@ class NewCarItemScreen extends Component {
 
   componentDidMount() {
     const carId = get(this.props.navigation, 'state.params.carId');
+
     this.props.actionFetchNewCarDetails(carId);
   }
 
@@ -162,6 +163,7 @@ class NewCarItemScreen extends Component {
 
   onPressOrder = () => {
     const {navigation, filterData, carDetails} = this.props;
+    const currency = get(this.props.navigation, 'state.params.currency');
 
     navigation.navigate('OrderScreen', {
       car: {
@@ -172,7 +174,7 @@ class NewCarItemScreen extends Component {
         priceSpecial: get(carDetails, 'price.app.sale'),
         complectation: get(carDetails, 'complectation.name'),
       },
-      currency: filterData.prices.curr.name,
+      currency,
       dealerId: carDetails.dealer.id,
       carId: carDetails.id.api,
       isNewCar: true,
@@ -281,9 +283,9 @@ class NewCarItemScreen extends Component {
     );
   };
 
-  renderPriceFooter = ({carDetails, filterData}) => {
+  renderPriceFooter = ({carDetails, filterData, currency}) => {
     const isSale = carDetails.sale === true;
-    const currency = get(filterData, 'prices.curr.name');
+
     const priceDefault = numberWithGap(get(carDetails, 'price.app.standart'));
     const priceSpecial = numberWithGap(get(carDetails, 'price.app.sale'));
 
@@ -331,6 +333,7 @@ class NewCarItemScreen extends Component {
 
     console.log('== NewCarItemScreen ==');
 
+    const currency = get(this.props.navigation, 'state.params.currency');
     const {brand, model, complectation} = carDetails;
     const brandName = brand.name || '';
     const modelName = model.name || '';
@@ -583,7 +586,11 @@ class NewCarItemScreen extends Component {
             />
           ) : null}
           <Footer style={stylesFooter.footer}>
-            {this.renderPriceFooter({carDetails, filterData})}
+            {this.renderPriceFooter({
+              carDetails,
+              filterData,
+              currency,
+            })}
             <Button
               onPress={this.onPressOrder}
               full

@@ -1,19 +1,29 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { View, FlatList, Platform, StyleSheet, ActivityIndicator } from 'react-native';
+import {
+  View,
+  FlatList,
+  Platform,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 
 // redux
-import { EVENT_LOAD_MORE, EVENT_REFRESH, EVENT_DEFAULT } from '../../core/actionTypes';
+import {
+  EVENT_LOAD_MORE,
+  EVENT_REFRESH,
+  EVENT_DEFAULT,
+} from '../../core/actionTypes';
 
 // components
 import EmptyMessage from '../../core/components/EmptyMessage';
 import CarListItem from './CarListItem';
 
 // helpers
-import { debounce } from 'lodash';
+import {debounce} from 'lodash';
 import styleConst from '../../core/style-const';
-import { verticalScale } from '../../utils/scale';
-import { TEXT_EMPTY_CAR_LIST } from '../constants';
+import {verticalScale} from '../../utils/scale';
+import {TEXT_EMPTY_CAR_LIST} from '../constants';
 
 const styles = StyleSheet.create({
   spinner: {
@@ -34,7 +44,7 @@ export default class CarList extends Component {
     isFetchItems: PropTypes.bool,
     navigation: PropTypes.object,
     prices: PropTypes.object,
-  }
+  };
 
   static defaultProps = {
     pages: {},
@@ -43,7 +53,7 @@ export default class CarList extends Component {
     navigation: {},
     itemScreen: null,
     isFetchItems: false,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -55,7 +65,7 @@ export default class CarList extends Component {
   }
 
   componentDidMount() {
-    const { items, isFetchItems, dataHandler } = this.props;
+    const {items, isFetchItems, dataHandler} = this.props;
 
     if ((!items || items.length === 0) && !isFetchItems) {
       dataHandler(EVENT_DEFAULT);
@@ -63,34 +73,47 @@ export default class CarList extends Component {
   }
 
   renderEmptyComponent = () => {
-//    const { isFetchItems } = this.props;
-      const isFetchItems  = true;
-    return isFetchItems ?
-      <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} /> :
-      <EmptyMessage text={TEXT_EMPTY_CAR_LIST} />;
-  }
+    //    const { isFetchItems } = this.props;
+    const isFetchItems = true;
+    return isFetchItems ? (
+      <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
+    ) : (
+      <EmptyMessage text={TEXT_EMPTY_CAR_LIST} />
+    );
+  };
 
-  renderItem = ({ item }) => {
+  renderItem = ({item}) => {
     if (item.type === 'empty') {
       return <EmptyMessage text={TEXT_EMPTY_CAR_LIST} />;
     }
 
-    const { itemScreen, navigation, prices } = this.props;
-    return <CarListItem car={item} prices={prices} navigate={navigation.navigate} itemScreen={itemScreen} />;
-  }
+    const {itemScreen, navigation, prices} = this.props;
+    console.log(this.props, 'this.props');
+    return (
+      <CarListItem
+        currency={this.props.prices.curr.name} //TODO: что-то может пойти не так ?
+        car={item}
+        prices={prices}
+        navigate={navigation.navigate}
+        itemScreen={itemScreen}
+      />
+    );
+  };
 
   renderFooter = () => {
-    if (!this.state.loadingNextPage) return null;
+    if (!this.state.loadingNextPage) {
+      return null;
+    }
 
     return (
       <View style={styles.footer}>
         <ActivityIndicator animating color={styleConst.color.blue} />
       </View>
     );
-  }
+  };
 
   onRefresh = () => {
-    const { dataHandler } = this.props;
+    const {dataHandler} = this.props;
 
     // this.setState({
     //   bounces: false,
@@ -103,18 +126,16 @@ export default class CarList extends Component {
         isRefreshing: false,
       });
     });
-  }
+  };
 
   //getOnEndReached = () => debounce(this.handleLoadMore, 1000)
 
   handleLoadMore = () => {
-    const {
-      items,
-      pages,
-      dataHandler,
-    } = this.props;
+    const {items, pages, dataHandler} = this.props;
 
-    if (!pages.next || items.length === 0 || this.state.loadingNextPage) return false;
+    if (!pages.next || items.length === 0 || this.state.loadingNextPage) {
+      return false;
+    }
 
     __DEV__ && console.log('handleLoadMore');
 
@@ -129,10 +150,10 @@ export default class CarList extends Component {
         bounces: true,
       });
     });
-  }
+  };
 
   render() {
-    const { items } = this.props;
+    const {items} = this.props;
 
     console.log('== CarList ==');
 
@@ -141,6 +162,7 @@ export default class CarList extends Component {
         onEndReachedThreshold={0.4}
         initialNumToRender={10}
         maxToRenderPerBatch={10} // Reduce number in each render batch
+        // eslint-disable-next-line react/jsx-no-duplicate-props
         maxToRenderPerBatch={20} // Increase time between renders
         data={items}
         onRefresh={this.onRefresh}
