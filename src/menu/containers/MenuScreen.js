@@ -31,6 +31,7 @@ import ServiceScreen from '../../service/containers/ServiceScreen';
 import InfoListScreen from '../../info/containers/InfoListScreen';
 import InfoPostScreen from '../../info/containers/InfoPostScreen';
 import NewCarFilterScreen from '../../catalog/newcar/containers/NewCarFilterScreen';
+import NewCarItemScreen from '../../catalog/newcar/containers/NewCarItemScreen';
 import MoreScreen from './MenuScreenNew';
 
 const Application = () => {
@@ -78,6 +79,9 @@ const EnhancedMenuScreen = createBottomTabNavigator({
         NewCarFilterScreen: {
           screen: NewCarFilterScreen,
         },
+        NewCarItemScreen: {
+          screen: NewCarItemScreen,
+        }
       },
       {
         mode: 'modal',

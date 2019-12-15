@@ -27,8 +27,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({dealer, nav, catalog}) => {
-  // console.log('>>> catalog newcarlistscrasdasdasdasdasd', catalog.newCar.filters)
-
   return {
     nav,
     dealerSelected: dealer.selected,
@@ -56,19 +54,6 @@ const mapDispatchToProps = {
 };
 
 class NewCarListScreen extends Component {
-  // static navigationOptions = ({ navigation }) => {
-  //   const { params = { total: {} } } = navigation.state;
-  //   const count = get(params, 'total.count');
-  //   const titleVariants = ['автомобиль', 'автомобиля', 'автомобилей'];
-
-  //   return {
-  //     headerTitle: count ? `${count} ${declOfNum(count, titleVariants)}` : null,
-  //     headerStyle: stylesHeader.common,
-  //     headerTitleStyle: stylesHeader.title,
-  //     headerLeft: <HeaderIconBack navigation={navigation} />,
-  //     headerRight: <HeaderIconMenu navigation={navigation} />,
-  //   };
-  // }
   static navigationOptions = ({navigation}) => ({
     headerTitle: 'новые автомобили',
     headerStyle: stylesHeader.blueHeader,
@@ -107,11 +92,9 @@ class NewCarListScreen extends Component {
     Amplitude.logEvent('screen', 'catalog/newcar/list', {
       search_url: searchUrl,
     });
-    // this.fetchCars();
   }
 
   componentDidUpdate(nextProps) {
-    // console.log('=========>', this.props.filterData.search_url);
     const {navigation, items} = this.props;
 
     if (items.total) {
@@ -121,30 +104,7 @@ class NewCarListScreen extends Component {
         });
       }, 200);
     }
-
-    // console.log(">>>>> GIVE ME A  DATA", this.props.filters !== nextProps.filters)
-    // if (this.props.filters !== nextProps.filters) {
-    // }
   }
-
-  // fetchCars() {
-  //   this.props.actionFetchNewCarByFilter({
-  //     type: 'EVENT_DEFAULT',
-  //     searchUrl:
-  //       this.props.filterData.search_url ||
-  //       `/stock/new/cars/get/city/${this.props.dealerSelected.city.id}/`,
-  //     // nextPage: get(items, 'pages.next'),
-  //     // filterBrands: [6],
-  //     filterModels: this.props.filters.brandFilters.map(filter => filter.id),
-  //     // filterBody
-  //     // filterGearbox
-  //     // filterDrive
-  //     // filterEngineType
-  //     // filterPrice
-  //     // filterPriceSpecial
-  //   });
-  //     // .then(onResult);
-  // }
 
   shouldComponentUpdate(nextProps) {
     const {dealerSelected, items, isFetchingNewCarByFilter} = this.props;
@@ -152,13 +112,6 @@ class NewCarListScreen extends Component {
     const isActiveScreen =
       nav.routes[nav.index].routeName === 'NewCarListScreen';
 
-    console.log(
-      'bla',
-      (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-        items.length !== nextProps.items.length ||
-        isFetchingNewCarByFilter !== nextProps.isFetchingNewCarByFilter ||
-        this.props.filters !== nextProps.filters,
-    );
     return (
       (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       items.length !== nextProps.items.length ||
@@ -208,22 +161,12 @@ class NewCarListScreen extends Component {
       }).then(onResult);
     }
 
-    // console.log('>>>> FETCH NEW CAR')
-
     return actionFetchNewCarByFilter({
       type,
       searchUrl:
         filterData.search_url ||
         `/stock/new/cars/get/city/${this.props.dealerSelected.city.id}/`,
       nextPage: get(items, 'pages.next'),
-      // filterBrands: [6],
-      // filterModels: this.props.filters.brandFilters.map(filter => filter.id),
-      // filterBody
-      // filterGearbox
-      // filterDrive
-      // filterEngineType
-      // filterPrice
-      // filterPriceSpecial
     }).then(onResult);
   };
 
@@ -236,9 +179,6 @@ class NewCarListScreen extends Component {
     } = this.props;
 
     const {data, pages, prices} = items;
-
-    console.log('== NewCarListScreen ==');
-    console.log('=========>', this.props.filterData);
 
     return (
       <View style={styles.content}>
