@@ -318,6 +318,7 @@ class NewCarFilterScreen extends Component {
       // обновление экрана после выбора города
       needFetchFilterDataAfterCity,
       actionFetchNewCarFilterData,
+      filters,
     } = this.props;
 
     if (needFetchFilterDataAfterCity) {
@@ -329,8 +330,9 @@ class NewCarFilterScreen extends Component {
     console.log('needFetchFilterData', needFetchFilterData);
 
     if (needFetchFilterData) {
-      console.log('needFetchFilterData!!!', needFetchFilterData);
+      console.log('needFetchFilterData!!!', filters);
       return actionFetchNewCarByFilter({
+        filters,
         searchUrl: filterData.search_url,
         filterBrands,
         filterModels,

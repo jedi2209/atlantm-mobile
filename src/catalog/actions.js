@@ -426,6 +426,7 @@ export const actionFetchNewCarFilterData = props => {
 };
 
 export const actionFetchNewCarByFilter = props => {
+  console.log('вот в этом экшене я выполняюсь');
   return dispatch => {
     dispatch({
       type: NEW_CAR_BY_FILTER__REQUEST,
@@ -438,6 +439,7 @@ export const actionFetchNewCarByFilter = props => {
       newProps.searchUrl = props.nextPage;
     }
 
+    console.log('newProps ===========>', newProps);
     return API.fetchNewCarByFilter(newProps)
       .then(response => {
         if (response.error) {
