@@ -508,6 +508,7 @@ const isNewCarFilterPriceShow = (state = false, action) => {
 };
 
 const needFetchFilterData = (state = false, action) => {
+  console.log('needFetchFilterData', 'ya tyt в какомм-то reducers');
   switch (action.type) {
     case NEW_CAR_FILTER_BRANDS__SELECT:
     case NEW_CAR_FILTER_MODELS__SELECT:
@@ -517,6 +518,7 @@ const needFetchFilterData = (state = false, action) => {
     case NEW_CAR_FILTER_DRIVE__SELECT:
     case NEW_CAR_FILTER_PRICE__SELECT:
     case NEW_CAR_FILTER_PRICE_SPECIAL__SET:
+    case ACTION_SAVE_CAR_FILTERS__UPDATE:
       return true;
     case NEW_CAR_FILTER_DATA__REQUEST:
     case NEW_CAR_BY_FILTER__REQUEST:

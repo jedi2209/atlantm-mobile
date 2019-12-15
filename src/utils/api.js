@@ -174,6 +174,8 @@ export default {
     let isAmp = false;
     const setParamDivider = () => isAmp ? '&' : '?';
 
+    console.log('filterBrands', filterBrands);
+
     if (filterBrands) {
       filterBrands.forEach(id => {
         url += `${setParamDivider()}brand[${id}]=${id}`;

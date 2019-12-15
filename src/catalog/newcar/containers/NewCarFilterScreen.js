@@ -145,24 +145,75 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
     dealer.listUkraineByCities,
     dealer.listBelarussiaByCities,
   );
-  const city = dealers.find(({id}) => id === dealer.selected.city.id);
-  const brands = city.dealers.map(({brands}) =>
-    brands.map(({name, id}) => ({id, name})),
-  );
-  const uniqBrands = uniqBy(flatten(brands), 'id');
-  const filterBody = catalog.newCar.filterData
-    ? Object.keys(catalog.newCar.filterData.data.body).map(body => ({
-        id: body,
-        name: catalog.newCar.filterData.data.body[body],
-      }))
-    : [];
 
-  const priceFilter = {
-    min: catalog.newCar.filterData ? catalog.newCar.filterData.prices.min : 0,
-    max: catalog.newCar.filterData ? catalog.newCar.filterData.prices.max : 0,
-    step: catalog.newCar.filterData ? catalog.newCar.filterData.prices.step : 1,
-    curr: catalog.newCar.filterData && catalog.newCar.filterData.prices.curr,
-  };
+  const {
+    brandFilters,
+    bodyFilters,
+    priceFilter,
+    modelFilter,
+  } = catalog.newCar.filters;
+
+  let filterBrands, filterBody, filterPrice, filterModels;
+
+  if (bodyFilters.length > 0) {
+    filterBody = bodyFilters;
+  } else {
+    filterBody = catalog.newCar.filterData
+      ? Object.keys(catalog.newCar.filterData.data.body).map(body => ({
+          id: body,
+          name: catalog.newCar.filterData.data.body[body],
+        }))
+      : [];
+  }
+
+  if (brandFilters.length > 0) {
+    filterBrands = brandFilters;
+  } else {
+    if (catalog.newCar.filterData) {
+      filterBrands = Object.keys(catalog.newCar.filterData.data.brand).map(
+        body => ({
+          id: body,
+          checked: true,
+          name: catalog.newCar.filterData.data.brand[body].name,
+          model: catalog.newCar.filterData.data.brand[body].model,
+        }),
+      );
+    } else {
+      filterBrands = [];
+    }
+  }
+
+  if (modelFilter && modelFilter.length > 0) {
+    filterModels = modelFilter;
+  } else if (filterBrands.length > 0) {
+    filterModels = filterBrands.reduce((acc, brand) => {
+      if (brand.checked) {
+        Object.keys(brand.model).forEach(item => {
+          acc.push({
+            id: item,
+            checked: true,
+            name: brand.model[item],
+          });
+        });
+      }
+      return acc;
+    }, []);
+  } else {
+    filterModels = [];
+  }
+
+  if (Object.keys(priceFilter).length > 0) {
+    filterPrice = priceFilter;
+  } else {
+    filterPrice = {
+      min: catalog.newCar.filterData ? catalog.newCar.filterData.prices.min : 0,
+      max: catalog.newCar.filterData ? catalog.newCar.filterData.prices.max : 0,
+      step: catalog.newCar.filterData
+        ? catalog.newCar.filterData.prices.step
+        : 1,
+      curr: catalog.newCar.filterData && catalog.newCar.filterData.prices.curr,
+    };
+  }
 
   return {
     nav,
@@ -173,14 +224,13 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
 
     items: catalog.newCar.items,
     filterData: catalog.newCar.filterData,
-    filterBrands: catalog.newCar.filterBrands,
-    filterModels: catalog.newCar.filterModels,
+    filterBrands,
+    filterModels,
     filterBody,
     filterGearbox: catalog.newCar.filterGearbox,
     filterDrive: catalog.newCar.filterDrive,
     filterEngineType: catalog.newCar.filterEngineType,
-    // filterPrice: catalog.newCar.filterPrice,
-    priceFilter,
+    filterPrice,
     filterPriceSpecial: catalog.newCar.filterPriceSpecial,
 
     city: catalog.newCar.city,
@@ -191,9 +241,9 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
     isFetchingFilterData: catalog.newCar.meta.isFetchingFilterData,
     isFetchingNewCarByFilter: catalog.newCar.meta.isFetchingNewCarByFilter,
 
-    filters: {
-      brands: uniqBrands,
-    },
+    // filters: {
+    //   brands: uniqBrands,
+    // },
   };
 };
 
@@ -230,23 +280,15 @@ class NewCarFilterScreen extends Component {
 
   constructor(props) {
     super(props);
-    // console.log(this.props.filters.brands)
-    // TODO: Синхронизировать с данными из redux.
     this.state = {
-      brandFilters: this.props.filters.brands.map(brand => ({
-        ...brand,
-        checked: false,
-      })),
-      bodyFilters: this.props.filterBody.map(body => ({
-        ...body,
-        checked: false,
-      })),
-      priceFilter: {
-        min: 0,
-        max: 0,
-        step: 1,
-        curr: {},
-      },
+      brandFilters: props.filterBrands,
+      // .map(brand => ({
+      //   ...brand,
+      //   checked: false,
+      // })),
+      bodyFilters: props.filterBody,
+      priceFilter: props.filterPrice,
+      modelFilter: props.filterModels,
     };
   }
 
@@ -283,7 +325,11 @@ class NewCarFilterScreen extends Component {
         city: this.props.dealerSelected.city.id,
       });
     }
+
+    console.log('needFetchFilterData', needFetchFilterData);
+
     if (needFetchFilterData) {
+      console.log('needFetchFilterData!!!', needFetchFilterData);
       return actionFetchNewCarByFilter({
         searchUrl: filterData.search_url,
         filterBrands,
@@ -299,22 +345,25 @@ class NewCarFilterScreen extends Component {
 
     if (this.props.filterBody !== prevProps.filterBody) {
       this.setState({
-        bodyFilters: this.props.filterBody.map(body => ({
-          ...body,
-          checked: false,
-        })),
+        bodyFilters: this.props.filterBody,
       });
     }
 
-    if (this.props.priceFilter !== prevProps.priceFilter) {
-      console.log('olol', this.props.priceFilter);
+    if (this.props.filterBrands !== prevProps.filterBrands) {
       this.setState({
-        priceFilter: {
-          min: this.props.priceFilter.min,
-          max: this.props.priceFilter.max,
-          curr: this.props.priceFilter.curr,
-          step: this.props.priceFilter.step,
-        },
+        brandFilters: this.props.filterBrands,
+      });
+    }
+
+    if (this.props.filterPrice !== prevProps.filterPrice) {
+      this.setState({
+        priceFilter: this.props.filterPrice,
+      });
+    }
+
+    if (this.props.filterModels !== prevProps.filterModels) {
+      this.setState({
+        modelFilter: this.props.filterModels,
       });
     }
   }
@@ -346,29 +395,7 @@ class NewCarFilterScreen extends Component {
     }
   };
 
-  // onPressPrice = () => this.props.actionShowNewCarFilterPrice();
-
-  // onClosePrice = prices => {
-  //   const {
-  //     actionHideNewCarFilterPrice,
-  //     actionSelectNewCarFilterPrice,
-  //   } = this.props;
-
-  //   actionHideNewCarFilterPrice();
-
-  //   if (prices) {
-  //     actionSelectNewCarFilterPrice(prices);
-  //   }
-  // };
-
-  // onPressFilterPriceSpecial = isSet => {
-  //   this.props.actionSetNewCarFilterPriceSpecial(isSet);
-  // };
-
   onPressFilterButton = () => {
-    // const {navigation, isFetchingNewCarByFilter} = this.props;
-    // if (!isFetchingNewCarByFilter) {
-      // }
     this.props.navigation.navigate('NewCarListScreen');
     this.props.actionSaveCarFilters(this.state);
   };
@@ -427,12 +454,28 @@ class NewCarFilterScreen extends Component {
                       }}>
                       <TouchableOpacity
                         onPress={() => {
+                          const brands = this.state.brandFilters.map(brand =>
+                            brand.id === id
+                              ? {...brand, checked: !brand.checked}
+                              : brand,
+                          );
+
+                          const filterModels = brands.reduce((acc, brand) => {
+                            if (brand.checked) {
+                              Object.keys(brand.model).forEach(item => {
+                                acc.push({
+                                  id: item,
+                                  checked: true,
+                                  name: brand.model[item],
+                                });
+                              });
+                            }
+                            return acc;
+                          }, []);
+
                           this.setState({
-                            brandFilters: this.state.brandFilters.map(brand =>
-                              brand.id === id
-                                ? {...brand, checked: !brand.checked}
-                                : brand,
-                            ),
+                            brandFilters: brands,
+                            modelFilter: filterModels,
                           });
                         }}>
                         <View
@@ -464,27 +507,52 @@ class NewCarFilterScreen extends Component {
             {
               title: 'Модели',
               content: (
-                <Text>coming soon ...</Text>
-                // <View style={{display: 'flex', flexDirection: 'row'}}>
-                //   {/* TODO: Настроить визуал через тему */}
-                //   <CheckBox
-                //     name="vw"
-                //     onPress={() => {
-                //       console.log(this.state.checked, 'ya tyt');
-                //       this.setState({checked: true});
-                //     }}
-                //     checked={this.state.checked}
-                //     style={{
-                //       borderRadius: 0,
-                //       backgroundColor: !this.state.checked ? '#fff' : '#0061ed',
-                //       borderColor: !this.state.checked
-                //         ? '#d0d5dc'
-                //         : 'transparent',
-                //       fontSize: 40,
-                //     }}
-                //   />
-                //   <Text style={{marginLeft: 20}}>VW</Text>
-                // </View>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'wrap',
+                  }}>
+                  {this.state.modelFilter.map(({id, name, checked}) => (
+                    <View
+                      style={{
+                        marginBottom: 30,
+                        minWidth: 100,
+                      }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          this.setState({
+                            modelFilter: this.state.modelFilter.map(model =>
+                              model.id === id
+                                ? {...model, checked: !model.checked}
+                                : model,
+                            ),
+                          });
+                        }}>
+                        <View
+                          key={id}
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                          }}>
+                          {/* TODO: Настроить визуал через тему */}
+                          {/* TODO: Чекбокс вынести в отдельный компонент */}
+                          <CheckBox
+                            name="vw"
+                            checked={checked}
+                            style={{
+                              borderRadius: 0,
+                              backgroundColor: checked ? '#0061ed' : '#fff',
+                              borderColor: checked ? 'transparent' : '#d0d5dc',
+                              fontSize: 40,
+                            }}
+                          />
+                          <Text style={{marginLeft: 20}}>{name}</Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
               ),
             },
             {
@@ -498,7 +566,7 @@ class NewCarFilterScreen extends Component {
                     ]}
                     step={this.state.priceFilter.step}
                     min={0}
-                    max={this.props.priceFilter.max}
+                    max={this.state.priceFilter.max}
                     onValuesChange={e => {
                       this.setState({
                         priceFilter: {
@@ -686,269 +754,6 @@ class NewCarFilterScreen extends Component {
           </Button>
         </View>
       </>
-    );
-
-    const {
-      city,
-      items,
-      filterBrands,
-      filterModels,
-      filterBody,
-      filterGearbox,
-      filterDrive,
-      filterEngineType,
-      filterPrice,
-      filterPriceSpecial,
-      filterData,
-      navigation,
-      dealerSelected,
-      isFetchingFilterData,
-      isFetchingNewCarByFilter,
-    } = this.props;
-
-    console.log('== NewCarFilterScreen ==');
-
-    if (!filterData || isFetchingFilterData) {
-      return (
-        <View style={styles.safearea}>
-          <ActivityIndicator
-            color={styleConst.color.blue}
-            style={styles.spinner}
-          />
-        </View>
-      );
-    }
-
-    const minPriceByFilter = get(filterPrice, 'minPrice');
-    const step = get(items, 'prices.step') || get(filterData, 'prices.step');
-    const minPrice =
-      Math.floor(
-        get(items, 'prices.min') || get(filterData, 'prices.min') / step,
-      ) * step;
-    const maxPrice =
-      Math.ceil(
-        get(items, 'prices.max') || get(filterData, 'prices.max') / step,
-      ) * step;
-    const currency = get(filterData, 'prices.curr.name');
-    const count = this.getCount();
-
-    if (get(filterData, 'total.count') === 0) {
-      return (
-        <SafeAreaView style={styles.safearea}>
-          <CityItemList
-            navigation={navigation}
-            cityName={city.name}
-            cityData={this.getCityData()}
-            returnScreen="NewCarFilterScreen"
-          />
-          <EmptyMessage text={TEXT_EMPTY_CAR_LIST} />
-        </SafeAreaView>
-      );
-    }
-
-    return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <Content>
-            <View style={styles.content}>
-              <CityItemList
-                navigation={navigation}
-                cityName={city.name}
-                cityData={this.getCityData()}
-                returnScreen="NewCarFilterScreen"
-              />
-
-              <ListItemHeader text="ПАРАМЕТРЫ ПОИСКА" />
-
-              <View style={stylesList.listItemContainer}>
-                <ListItem
-                  style={stylesList.listItemPressable}
-                  onPress={this.onPressBrands}>
-                  <Body style={styles.body}>
-                    <Label style={stylesList.label}>Марка</Label>
-                  </Body>
-                  <Right style={styles.right}>
-                    {filterBrands.length !== 0 && (
-                      <Text style={stylesList.listItemValue}>
-                        {`Выбрано: ${filterBrands.length}`}
-                      </Text>
-                    )}
-                    <Icon name="arrow-forward" style={stylesList.iconArrow} />
-                  </Right>
-                </ListItem>
-              </View>
-
-              <View style={stylesList.listItemContainer}>
-                <ListItem
-                  style={stylesList.listItemPressable}
-                  onPress={this.onPressModels}>
-                  <Body style={styles.body}>
-                    <Label style={stylesList.label}>Модель</Label>
-                  </Body>
-                  <Right style={styles.right}>
-                    {filterModels.length !== 0 && (
-                      <Text style={stylesList.listItemValue}>
-                        {`Выбрано: ${filterModels.length}`}
-                      </Text>
-                    )}
-                    <Icon name="arrow-forward" style={stylesList.iconArrow} />
-                  </Right>
-                </ListItem>
-              </View>
-
-              <PricePicker
-                style={styles.icon}
-                min={minPrice}
-                max={maxPrice}
-                step={step}
-                currentMinPrice={filterPrice && filterPrice.minPrice}
-                currentMaxPrice={filterPrice && filterPrice.maxPrice}
-                currency={currency}
-                onPressModal={this.onPressPrice}
-                onCloseModal={this.onClosePrice}
-                TouchableComponent={TouchableHighlight}>
-                <View style={stylesList.listItemContainer}>
-                  <View style={styles.hiddenListItemContainer} />
-                  <ListItem button={false} style={stylesList.listItemPressable}>
-                    <Body style={styles.body}>
-                      <Label style={stylesList.label}>Цена</Label>
-                    </Body>
-                    <Right style={styles.right}>
-                      {
-                        <Text style={stylesList.listItemValue}>
-                          {`от ${minPriceByFilter || minPrice} ${currency}`}
-                        </Text>
-                      }
-                      <Icon name="arrow-forward" style={stylesList.iconArrow} />
-                    </Right>
-                  </ListItem>
-                </View>
-              </PricePicker>
-
-              <View style={stylesList.listItemContainer}>
-                <ListItem
-                  style={stylesList.listItemPressable}
-                  onPress={this.onPressBody}>
-                  <Body style={styles.body}>
-                    <Label style={stylesList.label}>Тип кузова</Label>
-                  </Body>
-                  <Right style={styles.right}>
-                    {filterBody.length !== 0 && (
-                      <Text style={stylesList.listItemValue}>
-                        {`Выбрано: ${filterBody.length}`}
-                      </Text>
-                    )}
-                    <Icon name="arrow-forward" style={stylesList.iconArrow} />
-                  </Right>
-                </ListItem>
-              </View>
-
-              <View style={stylesList.listItemContainer}>
-                <ListItem
-                  style={stylesList.listItemPressable}
-                  onPress={this.onPressGearbox}>
-                  <Body style={styles.body}>
-                    <Label style={stylesList.label}>КПП</Label>
-                  </Body>
-                  <Right style={styles.right}>
-                    {filterGearbox.length !== 0 && (
-                      <Text style={stylesList.listItemValue}>
-                        {`Выбрано: ${filterGearbox.length}`}
-                      </Text>
-                    )}
-                    <Icon name="arrow-forward" style={stylesList.iconArrow} />
-                  </Right>
-                </ListItem>
-              </View>
-
-              <View style={stylesList.listItemContainer}>
-                <ListItem
-                  style={stylesList.listItemPressable}
-                  onPress={this.onPressEngineType}>
-                  <Body style={styles.body}>
-                    <Label style={stylesList.label}>Тип двигателя</Label>
-                  </Body>
-                  <Right style={styles.right}>
-                    {filterEngineType.length !== 0 && (
-                      <Text style={stylesList.listItemValue}>
-                        {`Выбрано: ${filterEngineType.length}`}
-                      </Text>
-                    )}
-                    <Icon name="arrow-forward" style={stylesList.iconArrow} />
-                  </Right>
-                </ListItem>
-              </View>
-
-              <View style={stylesList.listItemContainer}>
-                <ListItem
-                  style={stylesList.listItemPressable}
-                  onPress={this.onPressDrive}>
-                  <Body style={styles.body}>
-                    <Label style={stylesList.label}>Привод</Label>
-                  </Body>
-                  <Right style={styles.right}>
-                    {filterDrive.length !== 0 && (
-                      <Text style={stylesList.listItemValue}>
-                        {`Выбрано: ${filterDrive.length}`}
-                      </Text>
-                    )}
-                    <Icon name="arrow-forward" style={stylesList.iconArrow} />
-                  </Right>
-                </ListItem>
-              </View>
-
-              <View style={stylesList.listItemContainer}>
-                <ListItem style={stylesList.listItem} last>
-                  <Body>
-                    <Label style={[stylesList.label, styles.labelPriceSpecial]}>
-                      Спец.предложение
-                    </Label>
-                  </Body>
-                  <Right>
-                    <Switch
-                      onValueChange={this.onPressFilterPriceSpecial}
-                      value={filterPriceSpecial}
-                    />
-                  </Right>
-                </ListItem>
-              </View>
-            </View>
-          </Content>
-          <Footer style={styleFooter.footer}>
-            <Button
-              onPress={() => this.onPressFilterButton(count)}
-              full
-              disabled={count ? false : true}
-              activeOpacity={0.8}
-              style={[
-                count ? [styles.buttonActive] : [styles.buttonInactive],
-                styleFooter.button,
-              ]}>
-              {isFetchingNewCarByFilter ? (
-                <ActivityIndicator color="#fff" style={styles.spinnerButton} />
-              ) : (
-                <View style={styles.buttonContent}>
-                  {count ? (
-                    <Text style={styles.buttonText}>{`НАЙДЕНО ${count}`}</Text>
-                  ) : (
-                    <Text style={styles.buttonText}>
-                      {BUTTON_EMPTY_CAR_FIND}
-                    </Text>
-                  )}
-                  {count ? (
-                    <Image
-                      source={require('@core/components/CustomIcon/assets/arrow_right_white.png')}
-                      style={styles.buttonIcon}
-                    />
-                  ) : (
-                    <Image style={styles.buttonIcon} />
-                  )}
-                </View>
-              )}
-            </Button>
-          </Footer>
-        </SafeAreaView>
-      </StyleProvider>
     );
   }
 }
