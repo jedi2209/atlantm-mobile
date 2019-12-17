@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
+    height: 110,
     borderRadius: 5,
   },
   listItem: {
@@ -148,10 +149,16 @@ export default class SelectItemByCountry extends Component {
             {item.name ? <Text style={styles.name}>{item.name}</Text> : null}
             {item.city ? (
               <Text style={styles.city}>
-                {item.city.name + ', ул. Шаранговича, д. 22'}
+                {item.city.name + ', ' + item.address}
               </Text>
             ) : null}
-            <Text style={styles.site}>www.volkswagen-minsk.by</Text>
+            <Text style={styles.site}>
+              {
+                item.site
+                  .replace(/^(?:https?:\/\/)?(?:www\.)?/i, '')
+                  .split('/')[0]
+              }
+            </Text>
             <View style={styles.brands}>
               {item.brands.map(brand => {
                 return (
@@ -166,7 +173,12 @@ export default class SelectItemByCountry extends Component {
             </View>
           </View>
           <View style={styles.thumb}>
-            <Image style={styles.image} source={require('./dealer-stub.png')} />
+            <Imager
+              key={`dealer-cover-' + ${item.id}`}
+              style={styles.image}
+              resizeMode="cover"
+              source={{uri: get(item, 'img.10000x440')}}
+            />
           </View>
         </Body>
       </ListItem>

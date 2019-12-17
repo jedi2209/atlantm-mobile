@@ -157,6 +157,14 @@ class InfoListScreen extends Component {
           borderRadius: 5,
           marginVertical: 10,
           marginHorizontal: 15,
+          shadowColor: '#c1c1c1',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.18,
+          shadowRadius: 1,
+          elevation: 1,
         }}>
         <Offer
           theme="round"

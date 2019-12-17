@@ -21,6 +21,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 15,
     borderRadius: 5,
+    shadowColor: '#c1c1c1',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1,
+    elevation: 1,
   },
   card: {
     flexDirection: 'column',

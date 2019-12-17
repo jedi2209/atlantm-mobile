@@ -9,6 +9,8 @@ import {
   StyleSheet,
 } from 'react-native';
 
+import Imager from '../components/Imager';
+
 const styles = StyleSheet.create({
   slide: {
     borderBottomColor: '#D7D8DA',
@@ -34,7 +36,7 @@ const styles = StyleSheet.create({
 export const Offer = props => {
   const {data, height, cardWidth} = props;
 
-  console.log('data', data.item);
+  // console.log('data', data.item);
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -48,7 +50,7 @@ export const Offer = props => {
         style={{
           width: cardWidth,
         }}>
-        <Image
+        <Imager
           source={{uri: data.item.img.main}}
           style={[
             styles.image,

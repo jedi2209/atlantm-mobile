@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
-import { Text, ListItem, Body, Right, Icon } from 'native-base';
+import React, {Component} from 'react';
+import {StyleSheet} from 'react-native';
+import {Text, ListItem, Body, Right, Icon} from 'native-base';
 import PropTypes from 'prop-types';
 
 // components
-import { verticalScale } from '../../utils/scale';
+import {verticalScale} from '../../utils/scale';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
-import { dayMonth, dayMonthYear } from '../../utils/date';
+import {dayMonth, dayMonthYear} from '../../utils/date';
 
 const styles = StyleSheet.create({
   name: {
@@ -34,10 +34,10 @@ export default class InfoListItem extends Component {
   };
 
   onPressInfo = () => {
-    const { navigate, info } = this.props;
-    const { id, date, name } = info;
+    const {navigate, info} = this.props;
+    const {id, date, name} = info;
 
-    Amplitude.logEvent('screen', 'info/post', { name });
+    Amplitude.logEvent('screen', 'info/post', {name});
 
     return navigate('InfoPostScreen', {
       id,
@@ -56,12 +56,12 @@ export default class InfoListItem extends Component {
   }
 
   checkVisited = () => {
-    const { visited, info } = this.props;
+    const {visited, info} = this.props;
     return visited.includes(info.id);
   };
 
   render() {
-    const { info, visited } = this.props;
+    const {info, visited} = this.props;
     const isVisited = this.checkVisited();
 
     console.log('== InfoListItem ==');
@@ -69,29 +69,28 @@ export default class InfoListItem extends Component {
     return (
       <ListItem onPress={this.onPressInfo}>
         <Body>
-          {
-            info.name ?
-              (
-                <Text style={[
-                  styles.name,
-                  { color: isVisited ? styleConst.color.greyText : '#000' },
-                ]}>
-                  {info.name}
-                </Text>
-              ) :
-              null
-          }
-          {
-            info.date ?
-              <Text style={styles.date}>{this.processDate(info.date)}</Text> :
-              null
-          }
+          {info.name ? (
+            <Text
+              style={[
+                styles.name,
+                {color: isVisited ? styleConst.color.greyText : '#000'},
+              ]}>
+              {info.name}
+            </Text>
+          ) : null}
+          {info.date ? (
+            <Text style={styles.date}>{this.processDate(info.date)}</Text>
+          ) : null}
         </Body>
         <Right>
-        <Icon
+          <Icon
             name="arrow-forward"
-            style={{ color: isVisited ? styleConst.color.systemGray : styleConst.color.systemBlue }}
-        />
+            style={{
+              color: isVisited
+                ? styleConst.color.systemGray
+                : styleConst.color.systemBlue,
+            }}
+          />
         </Right>
       </ListItem>
     );

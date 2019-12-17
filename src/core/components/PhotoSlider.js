@@ -12,7 +12,7 @@ import PropTypes from 'prop-types';
 import styleConst from '@core/style-const';
 
 const { width } = Dimensions.get('window');
-const height = DeviceInfo.isTablet() ? 260 : 200;
+const height = DeviceInfo.isTablet() ? 260 : 300;
 const styles = StyleSheet.create({
   photoSlider: {
     width,

@@ -13,6 +13,7 @@ import { NavigationActions, StackActions } from 'react-navigation';
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../../style-const';
+import { Icon } from 'native-base';
 
 const containerSize = 40;
 const size = 20;
@@ -33,7 +34,12 @@ const styles = StyleSheet.create({
   icon: {
     width: size,
     height: size,
-    resizeMode: 'contain', 
+    resizeMode: 'contain',
+  },
+  arrowFont: {
+    fontSize: 22,
+    width: 20,
+    marginTop: 4,
   },
 });
 
@@ -76,14 +82,22 @@ export default class HeaderIconBack extends Component {
     return (
       <TouchableOpacity style={styles.container} onPress={this.onPressBack}>
         <View style={styles.inner}>
-          {this.props.theme === 'white' ? (
+          <Icon
+            // type="MaterialCommunityIcons"
+            name="arrow-back"
+            style={[
+              styles.arrowFont,
+              {color: this.props.theme === 'white' ? '#fff' : '#000'}
+            ]}
+          />
+          {/* {this.props.theme === 'white' ? (
             <Image
               style={styles.icon}
               source={require('./assets/back@2x-white.png')}
             />
           ) : (
             <Image style={styles.icon} source={require('./assets/back.png')} />
-          )}
+          )} */}
         </View>
       </TouchableOpacity>
     );
