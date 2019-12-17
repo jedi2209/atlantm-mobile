@@ -34,6 +34,19 @@ import NewCarFilterScreen from '../../catalog/newcar/containers/NewCarFilterScre
 import NewCarItemScreen from '../../catalog/newcar/containers/NewCarItemScreen';
 import MoreScreen from './MenuScreenNew';
 
+const styles = {
+  shadow: {
+    fontSize: 23,
+    shadowOffset: {
+      width: 0,
+      height: 0.1,
+    },
+    shadowOpacity: 0.9,
+    shadowRadius: 4,
+    shadowColor: '#fff',
+  },
+};
+
 const Application = () => {
   return (
     <View
@@ -62,10 +75,14 @@ const EnhancedMenuScreen = createBottomTabNavigator({
         <Icon
           name="building"
           type="FontAwesome5"
-          style={{
-            fontSize: 24,
-            color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
-          }}
+          style={[
+            styles.shadow,
+            {
+              color: focused
+                ? styleConst.new.blueHeader
+                : styleConst.new.passive,
+            },
+          ]}
         />
       ),
     },
@@ -81,7 +98,7 @@ const EnhancedMenuScreen = createBottomTabNavigator({
         },
         NewCarItemScreen: {
           screen: NewCarItemScreen,
-        }
+        },
       },
       {
         mode: 'modal',
@@ -94,12 +111,14 @@ const EnhancedMenuScreen = createBottomTabNavigator({
           <Icon
             name="search"
             type="FontAwesome5"
-            style={{
-              fontSize: 24,
-              color: focused
-                ? styleConst.new.blueHeader
-                : styleConst.new.passive,
-            }}
+            style={[
+              styles.shadow,
+              {
+                color: focused
+                  ? styleConst.new.blueHeader
+                  : styleConst.new.passive,
+              },
+            ]}
           />
         ),
       };
@@ -117,32 +136,36 @@ const EnhancedMenuScreen = createBottomTabNavigator({
           <Icon
             name="comments"
             type="FontAwesome5"
-            style={{
-              fontSize: 24,
-              color: focused
-                ? styleConst.new.blueHeader
-                : styleConst.new.passive,
-            }}
+            style={[
+              styles.shadow,
+              {
+                color: focused
+                  ? styleConst.new.blueHeader
+                  : styleConst.new.passive,
+              },
+            ]}
           />
         ),
-      };;
+      };
     },
   },
   More: {
     screen: createStackNavigator({MoreScreen: {screen: MoreScreen}}),
     navigationOptions: ({navigation}) => {
       return {
-        tabBarLabel: 'Ещё',
+        tabBarLabel: 'Меню',
         tabBarIcon: ({focused}) => (
           <Icon
             name="bars"
             type="FontAwesome5"
-            style={{
-              fontSize: 24,
-              color: focused
-                ? styleConst.new.blueHeader
-                : styleConst.new.passive,
-            }}
+            style={[
+              styles.shadow,
+              {
+                color: focused
+                  ? styleConst.new.blueHeader
+                  : styleConst.new.passive,
+              },
+            ]}
           />
         ),
       };

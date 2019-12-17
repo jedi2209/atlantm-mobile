@@ -47,6 +47,8 @@ import numberWithGap from '@utils/number-with-gap';
 // styles
 import styles from '@catalog/usedcar/containers/UsedCarItemScreenStyles';
 
+const imgResize = '10000x440';
+
 const mapStateToProps = ({catalog, dealer, nav}) => {
   return {
     nav,
@@ -343,7 +345,16 @@ class NewCarItemScreen extends Component {
     const additional = get(carDetails, 'options.additional', {});
     const additionalKeys = Object.keys(additional);
     const photos =
-      get(carDetails, 'img.10000x440') || get(carDetails, 'img.10000x220');
+      get(carDetails, 'img.original') || get(carDetails, 'img.10000x220');
+
+    let photosThumbs = [];
+    for (var i = 0; i < photos.length; i++) {
+      let path = photos[i].split('/');
+      path[parseInt(path.length - 1, 10)] =
+        imgResize + '/' + path[parseInt(path.length - 1, 10)];
+      photosThumbs.push(path.join('/'));
+    }
+    console.log('photos', photosThumbs);
 
     if (!this.logGuard) {
       Amplitude.logEvent('screen', 'catalog/newcar/item', {
@@ -359,7 +370,7 @@ class NewCarItemScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
-          <Content style={stylesFooter.content}>
+          <Content>
             <View>
               <PhotoSlider
                 photos={photos}
@@ -413,10 +424,13 @@ class NewCarItemScreen extends Component {
                   />
                   <OptionPlate
                     title="КПП"
-                    subtitle={`${get(carDetails, 'gearbox.count')}-ст. ${get(
-                      carDetails,
-                      'gearbox.name',
-                    )}`}
+                    subtitle={`${get(carDetails, 'gearbox.count')}-ст. ${
+                      get(carDetails, 'gearbox.name')
+                        .replace(/^(Механическая)/i, 'МКПП')
+                        .replace(/^(Автоматическая)/i, 'АКПП')
+                        .split('/')[0]
+                    }
+                    `}
                   />
                   <OptionPlate
                     title="Привод"
@@ -432,24 +446,39 @@ class NewCarItemScreen extends Component {
                     paddingHorizontal: 8,
                     paddingVertical: 16,
                     borderRadius: 5,
-                    shadowColor: '#000',
-                    shadowOpacity: 0.5,
+                    shadowColor: '#c1c1c1',
                     shadowOffset: {
                       width: 0,
-                      height: 0,
+                      height: 1,
                     },
+                    shadowOpacity: 0.18,
+                    shadowRadius: 1,
+                    elevation: 1,
                   }}>
+                  <Icon
+                    type="MaterialCommunityIcons"
+                    name="navigation"
+                    style={{
+                      width: 30,
+                    }}
+                  />
                   <Text
                     style={{
                       color: '#a8abbe',
                       fontSize: 12,
                       fontWeight: '600',
                       marginBottom: 4,
+                      marginLeft: 40,
                     }}>
                     Автомобиль расположен по адресу
                   </Text>
                   <Text
-                    style={{color: '#2a2a43', fontSize: 14, fontWeight: '600'}}>
+                    style={{
+                      color: '#2a2a43',
+                      fontSize: 14,
+                      fontWeight: '600',
+                      marginLeft: 40,
+                    }}>
                     {get(carDetails, 'dealer.name')}
                   </Text>
                 </View>
@@ -530,6 +559,7 @@ class NewCarItemScreen extends Component {
                   },
                 ]}
                 expanded={0}
+                animation={true}
                 renderHeader={(item, expanded) => (
                   <View
                     style={{
@@ -547,13 +577,13 @@ class NewCarItemScreen extends Component {
                     {expanded ? (
                       <Icon
                         type="FontAwesome5"
-                        style={{color: '#0061ED', fontWeight: 'lighter'}}
+                        style={{color: '#0061ED', fontWeight: 'normal'}}
                         name="angle-down"
                       />
                     ) : (
                       <Icon
                         type="FontAwesome5"
-                        style={{color: '#131314', fontWeight: 'lighter'}}
+                        style={{color: '#131314', fontWeight: 'normal'}}
                         name="angle-right"
                       />
                     )}

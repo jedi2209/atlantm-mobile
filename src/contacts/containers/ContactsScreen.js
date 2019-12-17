@@ -66,15 +66,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   point: {
-    width: 28,
-    height: 28,
+    // width: 28,
+    // height: 28,
+    fontSize: 22,
+    marginTop: 3,
     marginRight: 10,
-    resizeMode: 'contain',
+    // resizeMode: 'contain',
+    color: '#fff',
   },
   addressText: {color: '#fff', fontSize: 16, lineHeight: 28, paddingRight: 20},
   scrollView: {paddingLeft: 20},
   scrollViewInner: {display: 'flex', flexDirection: 'row'},
-  iconRow: {color: '#2E3A59', fontSize: 16, marginTop: -2},
+  iconRow: {color: '#2E3A59', fontSize: 18, marginTop: 0},
   buttonPrimary: {
     marginTop: 60,
     marginHorizontal: 20,
@@ -83,8 +86,18 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderStyle: 'solid',
     borderWidth: 1,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
   },
-  buttonPrimaryText: {color: '#2E3A59', fontSize: 16, fontWeight: 'bold'},
+  buttonPrimaryText: {
+    color: '#2E3A59',
+    fontSize: 16,
+    fontWeight: 'normal',
+  },
 });
 
 const deviceWidth = Dimensions.get('window').width;
@@ -318,7 +331,7 @@ class ContactsScreen extends Component {
           <ScrollView>
             <Image
               style={styles.imgHero}
-              source={{uri: dealerSelected.img['10000x440']}}
+              source={{uri: get(dealerSelected, 'img.10000x440')}}
             />
             <Button
               full
@@ -338,10 +351,15 @@ class ContactsScreen extends Component {
             <View style={{marginTop: HEADER_MAX_HEIGHT - 160}}>
               <View style={styles.blackBack} />
               <View style={styles.address}>
-                <Image
+                <Icon
+                  style={styles.point}
+                  type="MaterialIcons"
+                  name="navigation"
+                />
+                {/* <Image
                   style={styles.point}
                   source={require('../assets/pin.png')}
-                />
+                /> */}
                 <Text style={styles.addressText}>{`${
                   dealerSelected.city.name
                 }, ${dealerSelected.address}`}</Text>
@@ -353,7 +371,7 @@ class ContactsScreen extends Component {
                 <View style={styles.scrollViewInner}>
                   <Card
                     title="Позвонить"
-                    subtitle="+375 (23) 234-34-53"
+                    subtitle={phones[0]}
                     kind="default"
                     onPress={() => {
                       Communications.phonecall(phones[0], true);
@@ -377,60 +395,66 @@ class ContactsScreen extends Component {
                   />
                   <Card
                     title="Сайт"
-                    subtitle="atlantm.com"
+                    subtitle={
+                      get(dealerSelected, 'site[0]')
+                        .replace(/^(?:https?:\/\/)?(?:www\.)?/i, '')
+                        .split('/')[0]
+                    }
                     kind="success"
                     onPress={() => {
-                      Linking.openURL('https://ya.ru').catch(err =>
+                      Linking.openURL(get(dealerSelected, 'site[0]')).catch(
                         console.error('<YA_RU> failed', err),
                       );
                     }}
                   />
                 </View>
               </ScrollView>
-              <View
-                style={{
-                  marginTop: 20,
-                  backgroundColor: '#F6F6F6',
-                  paddingVertical: 20,
-                }}>
+              {list.length ? (
                 <View
                   style={{
-                    paddingHorizontal: 20,
+                    marginTop: 20,
+                    backgroundColor: '#F6F6F6',
                     paddingVertical: 20,
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
                   }}>
-                  <Text style={{fontSize: 14, fontWeight: 'bold'}}>
-                    Текущие акции автоцентра
-                  </Text>
-                  <Text
-                    onPress={() => {
-                      navigation.navigate('InfoList');
+                  <View
+                    style={{
+                      paddingHorizontal: 20,
+                      paddingVertical: 20,
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Text style={{fontSize: 14, fontWeight: 'bold'}}>
+                      Текущие акции автоцентра
+                    </Text>
+                    <Text
+                      onPress={() => {
+                        navigation.navigate('InfoList');
+                      }}
+                      style={{color: '#4848FF', fontSize: 12}}>
+                      Все
+                    </Text>
+                  </View>
+                  <Carousel
+                    data={list}
+                    renderItem={item => {
+                      return (
+                        <Offer
+                          navigation={this.props.navigation.navigate}
+                          key={`carousel-article-${item.id}`}
+                          data={item}
+                          width={cardWidth}
+                          height={150}
+                        />
+                      );
                     }}
-                    style={{color: '#4848FF', fontSize: 12}}>
-                    Все
-                  </Text>
+                    sliderWidth={deviceWidth}
+                    inactiveSlideScale={0.97}
+                    activeSlideAlignment={'center'}
+                    itemWidth={cardWidth}
+                  />
                 </View>
-                <Carousel
-                  data={list}
-                  renderItem={item => {
-                    return (
-                      <Offer
-                        navigation={this.props.navigation.navigate}
-                        key={`carousel-article-${item.id}`}
-                        data={item}
-                        width={cardWidth}
-                        height={150}
-                      />
-                    );
-                  }}
-                  sliderWidth={deviceWidth}
-                  inactiveSlideScale={0.97}
-                  activeSlideAlignment={'center'}
-                  itemWidth={cardWidth}
-                />
-              </View>
+              ) : null}
             </View>
           </ScrollView>
         </View>
