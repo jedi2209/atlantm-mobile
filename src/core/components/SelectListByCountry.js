@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, FlatList, ActivityIndicator } from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, View, FlatList, ActivityIndicator} from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import { Container, Text, Button, Segment, StyleProvider } from 'native-base';
+import {Container, Text, Button, Segment, StyleProvider} from 'native-base';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SelectItemByCountry from './SelectItemByCountry';
 
 // helpers
-import { RUSSIA, BELARUSSIA, UKRAINE } from '../const';
-import { get } from 'lodash';
+import {RUSSIA, BELARUSSIA, UKRAINE} from '../const';
+import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import { verticalScale } from '../../utils/scale';
+import {verticalScale} from '../../utils/scale';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -51,9 +51,9 @@ export default class SelectListByCountry extends Component {
     itemLayout: PropTypes.string,
     onSelect: PropTypes.func,
     goBack: PropTypes.bool,
-  }
+  };
 
-  static defaultProps = {}
+  static defaultProps = {};
 
   constructor(props) {
     super(props);
@@ -64,7 +64,7 @@ export default class SelectListByCountry extends Component {
   }
 
   componentDidMount() {
-    const { dataHandler, itemLayout } = this.props;
+    const {dataHandler, itemLayout} = this.props;
 
     if (itemLayout === 'dealer') {
       dataHandler();
@@ -72,37 +72,46 @@ export default class SelectListByCountry extends Component {
   }
 
   onRefresh = () => {
-    this.setState({ isRefreshing: true });
+    this.setState({isRefreshing: true});
     this.props.dataHandler().then(() => {
-      this.setState({ isRefreshing: false });
+      this.setState({isRefreshing: false});
     });
-  }
+  };
 
-  selectRegionRussia = () => this.props.selectRegion(RUSSIA)
-  selectRegionUkraine = () => this.props.selectRegion(UKRAINE)
-  selectRegionBelarussia = () => this.props.selectRegion(BELARUSSIA)
+  selectRegionRussia = () => this.props.selectRegion(RUSSIA);
+  selectRegionUkraine = () => this.props.selectRegion(UKRAINE);
+  selectRegionBelarussia = () => this.props.selectRegion(BELARUSSIA);
 
   renderEmptyComponent = () => (
-    <View style={styles.spinnerContainer} >
+    <View style={styles.spinnerContainer}>
       <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
     </View>
-  )
+  );
 
-  renderItem = ({ item }) => {
-    const { navigation, selectedItem, selectItem, itemLayout, goBack, onSelect } = this.props;
+  renderItem = ({item}) => {
+    const {
+      navigation,
+      selectedItem,
+      selectItem,
+      itemLayout,
+      goBack,
+      onSelect,
+    } = this.props;
     const returnScreen = get(navigation, 'state.params.returnScreen');
 
-    return <SelectItemByCountry
-      item={item}
-      goBack={goBack}
-      itemLayout={itemLayout}
-      selectItem={selectItem}
-      navigation={navigation}
-      selectedItem={selectedItem}
-      returnScreen={returnScreen}
-      onSelect={onSelect}
-    />;
-  }
+    return (
+      <SelectItemByCountry
+        item={item}
+        goBack={goBack}
+        itemLayout={itemLayout}
+        selectItem={selectItem}
+        navigation={navigation}
+        selectedItem={selectedItem}
+        returnScreen={returnScreen}
+        onSelect={onSelect}
+      />
+    );
+  };
 
   render() {
     const {
@@ -136,26 +145,23 @@ export default class SelectListByCountry extends Component {
           <Spinner visible={isFetchList} color={styleConst.color.blue} />
           <View style={styles.tabs}>
             <Segment>
-                <Button
-                  first
-                  active={region === BELARUSSIA}
-                  onPress={this.selectRegionBelarussia}
-                >
-                  <Text>Беларусь</Text>
-                </Button>
-                <Button
-                  active={region === RUSSIA}
-                  onPress={this.selectRegionRussia}
-                >
-                  <Text>Россия</Text>
-                </Button>
-                <Button
-                  last
-                  active={region === UKRAINE}
-                  onPress={this.selectRegionUkraine}
-                >
-                  <Text>Украина</Text>
-                </Button>
+              <Button
+                first
+                active={region === BELARUSSIA}
+                onPress={this.selectRegionBelarussia}>
+                <Text>Беларусь</Text>
+              </Button>
+              <Button
+                active={region === RUSSIA}
+                onPress={this.selectRegionRussia}>
+                <Text>Россия</Text>
+              </Button>
+              <Button
+                last
+                active={region === UKRAINE}
+                onPress={this.selectRegionUkraine}>
+                <Text>Украина</Text>
+              </Button>
             </Segment>
           </View>
 
@@ -166,7 +172,7 @@ export default class SelectListByCountry extends Component {
             refreshing={this.state.isRefreshing}
             ListEmptyComponent={this.renderEmptyComponent}
             renderItem={this.renderItem}
-            keyExtractor={item => `${item.id.toString()}`}
+            keyExtractor={item => `${item.key.toString()}`}
           />
         </Container>
       </StyleProvider>

@@ -1,8 +1,8 @@
-import { PixelRatio } from 'react-native';
+import {PixelRatio} from 'react-native';
 
 export default {
   color: {
-    blue: '#0458a7',
+    blue: '#0061ED',
     lightBlue: '#027aff',
     bg: '#f0f3f5',
     accordeonGrey1: '#ededed',
