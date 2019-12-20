@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 
-import {Text, View, Image, StyleSheet} from 'react-native';
+import {Text, View, Image, StyleSheet, TouchableHighlight} from 'react-native';
 import {Icon, List, ListItem, Left, Right, Button, Body} from 'native-base';
 
 import styleConst from '../../core/style-const';
@@ -28,18 +28,19 @@ const MenuItem = props => {
       style={{
         marginLeft: 0,
         borderColor: 'transparent',
-        paddingTop: 0,
-        paddingBottom: 15,
+        paddingTop: 5,
+        paddingBottom: 5,
       }}
       selected={selected}
       onPress={() => navigation.navigate(navigateUrl)}>
       <Left style={{marginLeft: 0, paddingLeft: 0, maxWidth: 75}}>
         <Button
+          underlayColor={styles.buttonPrimaryText.color}
           style={{
             backgroundColor: selected ? '#0061ED' : 'transparent',
             paddingLeft: 17,
             paddingRight: 30,
-            height: 50,
+            height: 65,
             borderTopLeftRadius: 0,
             borderBottomLeftRadius: 0,
             borderTopRightRadius: 80,
@@ -51,18 +52,24 @@ const MenuItem = props => {
             shadowOpacity: selected ? 0.5 : 0,
             shadowRadius: selected ? 4 : 0,
           }}>
-          {type === 'home' && <Image source={require('./HomeCopy.png')} />}
-          {type === 'sales' && <Image source={require('./paperwork.png')} />}
-          {type === 'new' && <Image source={require('./car.png')} />}
-          {type === 'not_new' && (
-            <Image source={require('./good-car-diagnostic.png')} />
+          {type === 'home' && <Image source={require('../assets/Home.svg')} />}
+          {type === 'sales' && (
+            <Image source={require('../assets/NewsFeeds.svg')} />
           )}
-          {type === 'service' && <Image source={require('./wrenching.png')} />}
+          {type === 'new' && (
+            <Image source={require('../assets/Car-new.svg')} />
+          )}
+          {type === 'not_new' && (
+            <Image source={require('../assets/Car-used.svg')} />
+          )}
+          {type === 'service' && (
+            <Image source={require('../assets/Service.svg')} />
+          )}
           {type === 'reviews' && (
-            <Image source={require('./desktop-messaging.png')} />
+            <Image source={require('../assets/Eko.svg')} />
           )}
           {type === 'indicators' && (
-            <Image source={require('./07-Battery.png')} />
+            <Image source={require('../assets/Indicators.svg')} />
           )}
         </Button>
       </Left>
@@ -181,7 +188,10 @@ class LogoTitle extends React.Component {
           alignItems: 'center',
           justifyContent: 'center',
         }}>
-        <Image source={require('./Blue.png')} />
+        <Image
+          resizeMode="contain"
+          source={require('../assets/logo-horizontal.svg')}
+        />
       </View>
     );
   }
