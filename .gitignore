@@ -95,6 +95,7 @@ bin/
 gen/
 out/
 release/
+.png-cache
 
 # Gradle files
 .gradle/
