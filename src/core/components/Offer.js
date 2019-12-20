@@ -57,7 +57,7 @@ export const Offer = props => {
             {
               width: cardWidth,
               height,
-              resizeMode: props.theme === 'round' ? 'cover' : 'contain',
+              resizeMode: 'cover',
             },
           ]}
         />

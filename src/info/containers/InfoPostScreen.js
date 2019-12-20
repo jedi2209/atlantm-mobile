@@ -35,13 +35,11 @@ import isInternet from '../../utils/internet';
 import {ERROR_NETWORK} from '../../core/const';
 import isIPhoneX from '@utils/is_iphone_x';
 
-const isTablet = DeviceInfo.isTablet();
-
 // image
 let IMAGE_HEIGHT_GUARD = 0;
 const {width: screenWidth} = Dimensions.get('window');
-const IMAGE_WIDTH = isTablet ? null : screenWidth;
-const IMAGE_HEIGHT = isTablet ? 220 : 170;
+const IMAGE_WIDTH = screenWidth;
+const IMAGE_HEIGHT = 170;
 
 const styles = StyleSheet.create({
   safearea: {
@@ -140,9 +138,6 @@ class InfoPostScreen extends Component {
   };
 
   onLayoutImage = e => {
-    if (isTablet) {
-      return this.onLayoutImageTablet();
-    }
 
     const {height: imageDynamicHeight} = e.nativeEvent.layout;
 
@@ -241,7 +236,7 @@ class InfoPostScreen extends Component {
     const post = this.getPost();
     let text = get(post, 'text');
     const img = get(post, 'img');
-    const imageUrl = get(img, isTablet ? '10000x440' : '10000x300');
+    const imageUrl = get(img, '10000x440');
     const date = get(post, 'date');
 
     if (text) {
@@ -264,7 +259,7 @@ class InfoPostScreen extends Component {
             <View>
               <View style={styles.imageContainer} ref="imageContainer">
                 <Imager
-                  resizeMode="contain"
+                  resizeMode="cover"
                   onLayout={this.onLayoutImage}
                   style={[
                     styles.image,
