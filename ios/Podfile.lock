@@ -265,6 +265,9 @@ PODS:
     - React
   - react-native-viewpager (3.3.0):
     - React
+  - react-native-vkontakte-login (1.0.0):
+    - React
+    - VK-ios-sdk
   - react-native-webview (7.5.2):
     - React
   - React-RCTActionSheet (0.61.5):
@@ -333,6 +336,7 @@ PODS:
   - Sentry (4.4.3):
     - Sentry/Core (= 4.4.3)
   - Sentry/Core (4.4.3)
+  - VK-ios-sdk (1.5.1)
   - Yoga (1.14.0)
 
 DEPENDENCIES:
@@ -362,6 +366,7 @@ DEPENDENCIES:
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - "react-native-viewpager (from `../node_modules/@react-native-community/viewpager`)"
+  - react-native-vkontakte-login (from `../node_modules/react-native-vkontakte-login`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -385,6 +390,7 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
+  - VK-ios-sdk
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -403,6 +409,7 @@ SPEC REPOS:
     - QBImagePickerController
     - RSKImageCropper
     - Sentry
+    - VK-ios-sdk
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -447,6 +454,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-splash-screen"
   react-native-viewpager:
     :path: "../node_modules/@react-native-community/viewpager"
+  react-native-vkontakte-login:
+    :path: "../node_modules/react-native-vkontakte-login"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-RCTActionSheet:
@@ -528,6 +537,7 @@ SPEC CHECKSUMS:
   react-native-slider: e36b7de75b35323ee802dae723be8ebbab4c4a3d
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-viewpager: 118e65d8c65c56fe48d12a35cdcf1fe7e027a366
+  react-native-vkontakte-login: 8ffc0444a64d86a4927c937feffa61d0e7ceb5e6
   react-native-webview: 7eefdb64f283cae1bebe82ebd8ddeb4b805900c0
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
@@ -552,8 +562,9 @@ SPEC CHECKSUMS:
   RNSentry: 932ac1c8b2f581b1c8be5812f88ff556c99e7fb7
   RSKImageCropper: a446db0e8444a036b34f3c43db01b2373baa4b2a
   Sentry: 14bdd673870e8cf64932b149fad5bbbf39a9b390
+  VK-ios-sdk: 62a10b6571fbcda0657f455fedce7fedf55b4cd0
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: fc849da4432ac47090119a022e589ab6b1c0cf51
+PODFILE CHECKSUM: f90865ec2cecfa67ef23cf5bad5895c29cd36e99
 
 COCOAPODS: 1.7.4
