@@ -35,7 +35,17 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.XXXX-XXXX</string>
+				<string>REVERSED_CLIENT_ID</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>vkXXXX</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>vkXXXX</string>
 			</array>
 		</dict>
 	</array>
@@ -125,5 +135,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+  <key>VK_APP_ID</key>
+  <integer>XXXX</integer>
 </dict>
 </plist>

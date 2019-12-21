@@ -171,7 +171,8 @@ import {
 
 GoogleSignin.configure({
   scopes: ['https://www.googleapis.com/auth/userinfo.email'], // what API you want to access on behalf of the user, default is email and profile
-  webClientId: 'XXXX-XXXX.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+  webClientId:
+    'XXXX-XXXX.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
   offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
   hostedDomain: '', // specifies a hosted domain restriction
   loginHint: '', // [iOS] The user's ID, or email address, to be prefilled in the authentication UI if possible. [See docs here](https://developers.google.com/identity/sign-in/ios/api/interface_g_i_d_sign_in.html#a0a68c7504c31ab0b728432565f6e33fd)
@@ -180,6 +181,8 @@ GoogleSignin.configure({
   iosClientId:
     'XXXX-XXXX.apps.googleusercontent.com', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
 });
+
+import VKLogin from 'react-native-vkontakte-login';
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -373,7 +376,10 @@ class ProfileScreen extends Component {
                 marginTop: 100,
                 justifyContent: 'center',
               }}>
-              <Image source={require('./white-logo.png')} />
+              <Image
+                resizeMode="contain"
+                source={require('../../menu/assets/logo-horizontal.svg')}
+              />
             </View>
 
             <View
@@ -476,6 +482,26 @@ class ProfileScreen extends Component {
                 </Text>
               </Button>
               <Button
+                onPress={async () => {
+                  console.log('ololol');
+
+                  const isLoggedIn = await VKLogin.isLoggedIn();
+
+                  if (isLoggedIn) {
+                    console.log('isLoggedIn', isLoggedIn);
+                  }
+                  try {
+                    const auth = await VKLogin.login([
+                      'friends',
+                      'photos',
+                      'email',
+                    ]);
+                    console.log(auth.access_token, auth);
+                    // await VKLogin.logout();
+                  } catch (error) {
+                    console.error(error);
+                  }
+                }}
                 iconLeft
                 style={{
                   backgroundColor: '#4680C2',
