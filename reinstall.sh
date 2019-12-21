@@ -1,7 +1,7 @@
 #!/usr/bin/env bash -e
 
 echo "NPM run clean";
-npm run clean;
+npm run clean_old;
 
 echo "Clean POD cache";
 cd ios; pod cache clean --all; cd ../;
