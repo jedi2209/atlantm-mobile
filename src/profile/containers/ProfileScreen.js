@@ -483,8 +483,6 @@ class ProfileScreen extends Component {
               </Button>
               <Button
                 onPress={async () => {
-                  console.log('ololol');
-
                   const isLoggedIn = await VKLogin.isLoggedIn();
 
                   if (isLoggedIn) {

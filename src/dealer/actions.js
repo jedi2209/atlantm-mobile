@@ -26,8 +26,8 @@ export const selectRegion = region => {
   };
 };
 
-export const selectDealer = ({ dealerBaseData, dealerSelected }) => {
-  console.log('ya tyt >>>>>>>>>>>>');
+export const selectDealer = ({dealerBaseData, dealerSelected}) => {
+  console.log('ya tyt >>>>>>>>>>>>', dealerBaseData, dealerSelected);
 
   return dispatch => {
     dispatch({

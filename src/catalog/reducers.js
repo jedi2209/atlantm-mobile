@@ -508,7 +508,6 @@ const isNewCarFilterPriceShow = (state = false, action) => {
 };
 
 const needFetchFilterData = (state = false, action) => {
-  console.log('needFetchFilterData', 'ya tyt в какомм-то reducers');
   switch (action.type) {
     case NEW_CAR_FILTER_BRANDS__SELECT:
     case NEW_CAR_FILTER_MODELS__SELECT:
