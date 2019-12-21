@@ -347,16 +347,20 @@ class ProfileScreen extends Component {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log('userInfo', userInfo);
+      console.log('Google auth userInfo', userInfo);
       this.setState({userInfo});
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log('Google auth cancelled', error);
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log('Google auth in process', error);
         // operation (e.g. sign in) is in progress already
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log('Google auth play services', error);
         // play services not available or outdated
       } else {
+        console.log('Google auth error', error);
         // some other error happened
       }
     }
@@ -391,30 +395,26 @@ class ProfileScreen extends Component {
                 marginTop: 40,
               }}>
               <LoginButton
-                publishPermissions={['email']}
+                logInWithPermissions={['public_profile', 'email']}
                 onLoginFinished={(error, result) => {
                   if (error) {
-                    alert('Login failed with error: ' + error.message);
+                    console.log('Facebook login error', error);
                   } else if (result.isCancelled) {
                     alert('Login was cancelled');
                   } else {
-                    alert(
-                      'Login was successful with permissions: ' +
-                        result.grantedPermissions,
-                    );
-                    console.log('result ==================>', result);
+                    console.log('Facebook login success', result);
                   }
                 }}
                 onLogoutFinished={() => alert('User logged out')}
               />
               <GoogleSigninButton
-                style={{width: 192, height: 48}}
+                style={{width: '80%', height: 48}}
                 size={GoogleSigninButton.Size.Wide}
                 color={GoogleSigninButton.Color.Dark}
                 onPress={this._signIn}
                 disabled={this.state.isSigninInProgress}
               />
-              <Button
+              {/*<Button
                 iconLeft
                 style={{
                   backgroundColor: '#4286F5',
@@ -466,7 +466,7 @@ class ProfileScreen extends Component {
                 <Text style={{color: '#fff', marginLeft: 8}}>
                   Войти через Facebook
                 </Text>
-              </Button>
+              </Button> */}
               <Button
                 iconLeft
                 style={{

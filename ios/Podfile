@@ -44,6 +44,7 @@ target 'atlantm' do
   pod 'react-native-google-maps', :path => rn_maps_path
   pod 'GoogleMaps'
   pod 'Google-Maps-iOS-Utils'
+  pod 'GoogleSignIn', '~> 5.0.2'
 
   # # react-native-maps dependencies
   # pod 'react-native-maps', path: rn_maps_path
