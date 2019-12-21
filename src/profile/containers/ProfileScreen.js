@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
@@ -64,6 +65,14 @@ import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import stylesFooter from '../../core/components/Footer/style';
 import SafeAreaView from 'react-native-safe-area-view';
+
+import {
+  LoginButton,
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+  LoginManager,
+} from 'react-native-fbsdk';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -154,31 +163,14 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
 };
 
-const styles2 = StyleSheet.create({
-  container: {
-    flex: 1,
-    // marginTop: 200,
-  },
-  inner: {
-    padding: 24,
-  },
-  header: {
-    fontSize: 36,
-    marginBottom: 200,
-  },
-  input: {
-    height: 40,
-    borderColor: '#000000',
-    borderBottomWidth: 1,
-    marginBottom: 36,
-  },
-  btnContainer: {
-    backgroundColor: 'white',
-    marginTop: 12,
-  },
-});
-
 class ProfileScreen extends Component {
+  constructor(props) {
+    super(props);
+
+    console.log(GraphRequestManager);
+    this.requestManager = new GraphRequestManager();
+  }
+
   static navigationOptions = () => ({
     tabBarLabel: 'Кабинет',
     tabBarIcon: ({focused}) => (
@@ -295,6 +287,36 @@ class ProfileScreen extends Component {
     return [].concat(listRussia, listUkraine, listBelarussia);
   };
 
+  async fetchProfile(token) {
+    return new Promise((resolve, reject) => {
+      const request = new GraphRequest(
+        '/me',
+        {
+          parameters: {
+            fields: {
+              string: 'email,name,first_name,middle_name,last_name', // what you want to get
+            },
+            access_token: {
+              string: token, // put your accessToken here
+            },
+          },
+        },
+        (error, result) => {
+          if (result) {
+            const profile = result;
+            console.log(profile);
+            profile.avatar = `https://graph.facebook.com/${result.id}/picture`;
+            resolve(profile);
+          } else {
+            reject(error);
+          }
+        },
+      );
+
+      this.requestManager.addRequest(request).start();
+    });
+  }
+
   render() {
     return (
       <KeyboardAvoidingView behavior="position">
@@ -320,6 +342,23 @@ class ProfileScreen extends Component {
                 justifyContent: 'center',
                 marginTop: 40,
               }}>
+              <LoginButton
+                publishPermissions={['email']}
+                onLoginFinished={(error, result) => {
+                  if (error) {
+                    alert('Login failed with error: ' + error.message);
+                  } else if (result.isCancelled) {
+                    alert('Login was cancelled');
+                  } else {
+                    alert(
+                      'Login was successful with permissions: ' +
+                        result.grantedPermissions,
+                    );
+                    console.log('result ==================>', result);
+                  }
+                }}
+                onLogoutFinished={() => alert('User logged out')}
+              />
               <Button
                 iconLeft
                 style={{
@@ -335,6 +374,31 @@ class ProfileScreen extends Component {
                 </Text>
               </Button>
               <Button
+                onPress={() => {
+                  LoginManager.logInWithPermissions(['public_profile']).then(
+                    function(result) {
+                      if (result.isCancelled) {
+                        alert('Login was cancelled');
+                      } else {
+                        AccessToken.getCurrentAccessToken()
+                          .then(data => {
+                            console.log(data);
+                            this.fetchProfile(data.accessToken).then(data1 => {
+                              console.log('!!!!!!');
+                              console.log('data1', data1);
+                            });
+                          })
+                          .catch(error => {
+                            console.log('!!!!!!');
+                            console.log(error);
+                          });
+                      }
+                    }.bind(this),
+                    function(error) {
+                      alert('Login failed with error: ' + error);
+                    },
+                  );
+                }}
                 iconLeft
                 style={{
                   backgroundColor: '#4167B2',
