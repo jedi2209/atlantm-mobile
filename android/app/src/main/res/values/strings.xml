@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Atlant-M</string>
+    <string name="facebook_app_id">423573815015675</string>
+    <string name="fb_login_protocol_scheme">fb423573815015675</string>
 </resources>

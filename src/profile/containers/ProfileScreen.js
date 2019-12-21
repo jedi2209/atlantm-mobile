@@ -378,7 +378,7 @@ class ProfileScreen extends Component {
               }}>
               <Image
                 resizeMode="contain"
-                source={require('../../menu/assets/logo-horizontal.svg')}
+                source={require('../../menu/assets/logo-horizontal-white.svg')}
               />
             </View>
 
