@@ -43,6 +43,7 @@
 		AA44330AA07B40D0AC524B4D /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 71134CF65CB7447A8395412E /* Entypo.ttf */; };
 		AF314133A9844B07825CB707 /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 94254DD28F2F425A963F1838 /* Roboto.ttf */; };
 		BD7F78C028B14A29AFE662BA /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2A498D97484848DB9911BF00 /* Roboto_medium.ttf */; };
+		C591D31823AE38C400E2967E /* libReact-RCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C591D31723AE38C400E2967E /* libReact-RCTLinking.a */; };
 		E635394AEF931C5528EC96CD /* libPods-atlantm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB757B970C68F22DA0E1DF1E /* libPods-atlantm.a */; };
 		F258263DBE381100C69DC0EF /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AD3638A244EC22D8D699C26 /* libPods-OneSignalNotificationServiceExtension.a */; };
 		F2DC295CE6F44BD8A92B25CD /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B981648A117444FE8193882F /* FontAwesome5_Regular.ttf */; };
@@ -394,6 +395,7 @@
 		AEB72ED91DF76272D6FBA569 /* Pods-atlantm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm.debug.xcconfig"; path = "Pods/Target Support Files/Pods-atlantm/Pods-atlantm.debug.xcconfig"; sourceTree = "<group>"; };
 		B981648A117444FE8193882F /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		BBCFB27CF0A54BD49FF385E5 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
+		C591D31723AE38C400E2967E /* libReact-RCTLinking.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libReact-RCTLinking.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF83C0050E024B00B5263074 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
 		D487596235D4478EB3EDBEFB /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/native-base/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		DA8246CE0F5108E1E6B67A2D /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
@@ -410,6 +412,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C591D31823AE38C400E2967E /* libReact-RCTLinking.a in Frameworks */,
 				3AA650D12392C69E00CAF751 /* libReact-RCTVibration.a in Frameworks */,
 				3AA650CF2392C69800CAF751 /* libReact-RCTText.a in Frameworks */,
 				3AA650CD2392C69200CAF751 /* libReact-RCTImage.a in Frameworks */,
@@ -540,6 +543,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C591D31723AE38C400E2967E /* libReact-RCTLinking.a */,
 				3AA650D42392CAA800CAF751 /* libReact-Core.a */,
 				3AA650D22392C6C600CAF751 /* libReact-RCTNetwork.a */,
 				3AA650D02392C69E00CAF751 /* libReact-RCTVibration.a */,
@@ -1192,12 +1196,14 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-atlantm/Pods-atlantm-resources.sh",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
 				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/QBImagePickerController/QBImagePicker.bundle",
 				"${PODS_ROOT}/RSKImageCropper/RSKImageCropper/RSKImageCropperStrings.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/QBImagePicker.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/RSKImageCropperStrings.bundle",
@@ -1493,6 +1499,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1539,6 +1546,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
