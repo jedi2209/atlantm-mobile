@@ -43,7 +43,6 @@ import {
 
 // components
 import EmptyMessage from '@core/components/EmptyMessage';
-import CityItemList from '../components/CityItemList';
 import PricePicker from '@core/components/PricePicker';
 import ListItemHeader from '@profile/components/ListItemHeader';
 

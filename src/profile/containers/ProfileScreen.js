@@ -4,12 +4,16 @@ import PropTypes from 'prop-types';
 import {
   View,
   Alert,
+  TextInput,
   StyleSheet,
+  ScrollView,
   Keyboard,
   Text,
   Platform,
   ImageBackground,
   Image,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {
   Container,
@@ -59,6 +63,7 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import stylesFooter from '../../core/components/Footer/style';
+import SafeAreaView from 'react-native-safe-area-view';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -148,6 +153,30 @@ const mapDispatchToProps = {
   actionSetPushGranted,
   actionSetPushActionSubscribe,
 };
+
+const styles2 = StyleSheet.create({
+  container: {
+    flex: 1,
+    // marginTop: 200,
+  },
+  inner: {
+    padding: 24,
+  },
+  header: {
+    fontSize: 36,
+    marginBottom: 200,
+  },
+  input: {
+    height: 40,
+    borderColor: '#000000',
+    borderBottomWidth: 1,
+    marginBottom: 36,
+  },
+  btnContainer: {
+    backgroundColor: 'white',
+    marginTop: 12,
+  },
+});
 
 class ProfileScreen extends Component {
   static navigationOptions = () => ({
@@ -268,128 +297,136 @@ class ProfileScreen extends Component {
 
   render() {
     return (
-      <ImageBackground
-        source={require('./bg.jpg')}
-        style={{width: '100%', height: '100%'}}>
-        <View
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            marginTop: 100,
-            justifyContent: 'center',
-          }}>
-          <Image source={require('./white-logo.png')} />
-        </View>
+      <KeyboardAvoidingView behavior="position">
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ImageBackground
+            source={require('./bg.jpg')}
+            style={{width: '100%', height: '100%'}}>
+            <View
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginTop: 100,
+                justifyContent: 'center',
+              }}>
+              <Image source={require('./white-logo.png')} />
+            </View>
 
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginTop: 40,
-          }}>
-          <Button
-            iconLeft
-            style={{
-              backgroundColor: '#4286F5',
-              width: '80%',
-              marginVertical: 8,
-              paddingHorizontal: 8,
-              justifyContent: 'flex-start',
-            }}>
-            <Icon name="google" type="FontAwesome5" />
-            <Text style={{color: '#fff', marginLeft: 8}}>
-              Войти через Google
-            </Text>
-          </Button>
-          <Button
-            iconLeft
-            style={{
-              backgroundColor: '#4167B2',
-              width: '80%',
-              marginVertical: 8,
-              paddingHorizontal: 8,
-              justifyContent: 'flex-start',
-            }}>
-            <Icon name="facebook" type="FontAwesome5" />
-            <Text style={{color: '#fff', marginLeft: 8}}>
-              Войти через Facebook
-            </Text>
-          </Button>
-          <Button
-            iconLeft
-            style={{
-              backgroundColor: '#EB722E',
-              width: '80%',
-              marginVertical: 8,
-              paddingHorizontal: 8,
-              justifyContent: 'flex-start',
-            }}>
-            <Icon name="home" />
-            <Text style={{color: '#fff', marginLeft: 8}}>
-              Войти через Одноклассники
-            </Text>
-          </Button>
-          <Button
-            iconLeft
-            style={{
-              backgroundColor: '#4680C2',
-              width: '80%',
-              marginVertical: 8,
-              paddingHorizontal: 8,
-              justifyContent: 'flex-start',
-            }}>
-            <Icon name="vk" type="FontAwesome5" />
-            <Text style={{color: '#fff', marginLeft: 8}}>Войти через VK</Text>
-          </Button>
-        </View>
-        <View
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <View
-            style={{
-              marginTop: 10,
-              marginBottom: 20,
-              width: '80%',
-              flexDirection: 'row',
-              justifyContent: 'space-around',
-              alignItems: 'center',
-            }}>
             <View
-              style={{backgroundColor: '#979797', height: 1, width: '40%'}}
-            />
-            <Text style={{color: '#9097A5', fontSize: 16, lineHeight: 16}}>или</Text>
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: 40,
+              }}>
+              <Button
+                iconLeft
+                style={{
+                  backgroundColor: '#4286F5',
+                  width: '80%',
+                  marginVertical: 8,
+                  paddingHorizontal: 8,
+                  justifyContent: 'flex-start',
+                }}>
+                <Icon name="google" type="FontAwesome5" />
+                <Text style={{color: '#fff', marginLeft: 8}}>
+                  Войти через Google
+                </Text>
+              </Button>
+              <Button
+                iconLeft
+                style={{
+                  backgroundColor: '#4167B2',
+                  width: '80%',
+                  marginVertical: 8,
+                  paddingHorizontal: 8,
+                  justifyContent: 'flex-start',
+                }}>
+                <Icon name="facebook" type="FontAwesome5" />
+                <Text style={{color: '#fff', marginLeft: 8}}>
+                  Войти через Facebook
+                </Text>
+              </Button>
+              <Button
+                iconLeft
+                style={{
+                  backgroundColor: '#EB722E',
+                  width: '80%',
+                  marginVertical: 8,
+                  paddingHorizontal: 8,
+                  justifyContent: 'flex-start',
+                }}>
+                <Icon name="home" />
+                <Text style={{color: '#fff', marginLeft: 8}}>
+                  Войти через Одноклассники
+                </Text>
+              </Button>
+              <Button
+                iconLeft
+                style={{
+                  backgroundColor: '#4680C2',
+                  width: '80%',
+                  marginVertical: 8,
+                  paddingHorizontal: 8,
+                  justifyContent: 'flex-start',
+                }}>
+                <Icon name="vk" type="FontAwesome5" />
+                <Text style={{color: '#fff', marginLeft: 8}}>
+                  Войти через VK
+                </Text>
+              </Button>
+            </View>
             <View
-              style={{backgroundColor: '#979797', height: 1, width: '40%'}}
-            />
-          </View>
-        </View>
-        <View
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Form>
-            <Item regular style={{width: '80%', borderRadius: 6}}>
-              <Input placeholder="Телефон" />
-            </Item>
-          </Form>
-          <Button
-            style={{
-              marginTop: 20,
-              width: '80%',
-              backgroundColor: '#34BD78',
-              justifyContent: 'center',
-            }}>
-            <Text style={{color: '#fff'}}>Получить код</Text>
-          </Button>
-        </View>
-      </ImageBackground>
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  marginTop: 10,
+                  marginBottom: 20,
+                  width: '80%',
+                  flexDirection: 'row',
+                  justifyContent: 'space-around',
+                  alignItems: 'center',
+                }}>
+                <View
+                  style={{backgroundColor: '#979797', height: 1, width: '40%'}}
+                />
+                <Text style={{color: '#9097A5', fontSize: 16, lineHeight: 16}}>
+                  или
+                </Text>
+                <View
+                  style={{backgroundColor: '#979797', height: 1, width: '40%'}}
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Form>
+                <Item regular style={{width: '80%', borderRadius: 6}}>
+                  <Input placeholder="Телефон" />
+                </Item>
+              </Form>
+              <Button
+                style={{
+                  marginTop: 20,
+                  width: '80%',
+                  backgroundColor: '#34BD78',
+                  justifyContent: 'center',
+                }}>
+                <Text style={{color: '#fff'}}>Получить код</Text>
+              </Button>
+            </View>
+          </ImageBackground>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     );
 
     // Для iPad меню, которое находится вне роутера
