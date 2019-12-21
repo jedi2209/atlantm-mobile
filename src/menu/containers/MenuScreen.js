@@ -32,6 +32,10 @@ import InfoListScreen from '../../info/containers/InfoListScreen';
 import InfoPostScreen from '../../info/containers/InfoPostScreen';
 import NewCarFilterScreen from '../../catalog/newcar/containers/NewCarFilterScreen';
 import NewCarItemScreen from '../../catalog/newcar/containers/NewCarItemScreen';
+import UsedCarListScreen from '../../catalog/usedcar/containers/UsedCarListScreen';
+import UsedCarFilterScreen from '../../catalog/usedcar/containers/UsedCarFilterScreen';
+import UsedCarItemScreen from '../../catalog/usedcar/containers/UsedCarItemScreen';
+import UsedCarCityScreen from '../../catalog/usedcar/containers/UsedCarCityScreen';
 import MoreScreen from './MenuScreenNew';
 
 const styles = {
@@ -99,6 +103,12 @@ const EnhancedMenuScreen = createBottomTabNavigator({
         NewCarItemScreen: {
           screen: NewCarItemScreen,
         },
+        UsedCarListScreen: {
+          screen: UsedCarListScreen,
+        },
+        UsedCarFilterScreen: {screen: UsedCarFilterScreen},
+        UsedCarItemScreen: {screen: UsedCarItemScreen},
+        UsedCarCityScreen: {screen: UsedCarCityScreen},
       },
       {
         mode: 'modal',

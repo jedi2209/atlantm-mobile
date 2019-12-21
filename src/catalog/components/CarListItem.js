@@ -12,7 +12,7 @@ import styleConst from '../../core/style-const';
 import {Dimensions} from 'react-native';
 
 const deviceWidth = Dimensions.get('window').width;
-const cardWidth = deviceWidth - 60;
+const cardWidth = deviceWidth - 60 + 20;
 
 const styles = StyleSheet.create({
   container: {
@@ -36,6 +36,8 @@ const styles = StyleSheet.create({
   image: {
     width: cardWidth,
     height: 200,
+    marginLeft: -15,
+    marginRight: -15,
   },
   titleContainer: {
     flex: 1,

@@ -19,13 +19,14 @@ import {
   actionSetNeedUpdateUsedCarList,
 } from '../../actions';
 
-const mapStateToProps = ({ catalog, dealer }) => {
+const mapStateToProps = ({catalog, dealer}) => {
   return {
     city: catalog.usedCar.city,
     region: catalog.usedCar.region,
     listRussia: dealer.listRussiaByCities,
     listBelarussia: dealer.listBelarussiaByCities,
     listUkraine: dealer.listUkraineByCities,
+    dealerSelected: dealer.selected,
   };
 };
 
@@ -82,7 +83,7 @@ class UsedCarCityScreen extends Component {
     return <SelectListByCountry
       itemLayout="city"
       region={region}
-      selectedItem={city}
+      selectedItem={{id: this.props.dealerSelected.city.id,}}
       navigation={navigation}
       listRussia={listRussia}
       listUkraine={listUkraine}

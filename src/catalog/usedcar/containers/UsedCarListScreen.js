@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-import { StyleSheet, SafeAreaView } from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import React, {Component} from 'react';
+import {StyleSheet, TouchableOpacity, Image, View} from 'react-native';
 
 // redux
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {
   actionFetchUsedCar,
   actionSetUsedCarCity,
@@ -22,20 +23,24 @@ import CarList from '../../components/CarList';
 
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
-import { get } from 'lodash';
+import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import declOfNum from '../../../utils/decl-of-num';
-import { EVENT_DEFAULT } from '../../actionTypes';
+import {EVENT_DEFAULT} from '../../actionTypes';
 
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
     backgroundColor: styleConst.color.header,
   },
+  content: {
+    flex: 1,
+    backgroundColor: styleConst.color.bg,
+  },
 });
 
-const mapStateToProps = ({ dealer, nav, catalog }) => {
+const mapStateToProps = ({dealer, nav, catalog}) => {
   return {
     nav,
     city: catalog.usedCar.city,
@@ -63,23 +68,50 @@ const mapDispatchToProps = {
 };
 
 class UserCarListScreen extends Component {
-  static navigationOptions = ({ navigation }) => {
-    const { params = { total: {} } } = navigation.state;
-    const count = params.total.count;
-    const titleVariants = ['автомобиль', 'автомобиля', 'автомобилей'];
+  // static navigationOptions = ({navigation}) => {
+  //   const {params = {total: {}}} = navigation.state;
+  //   const count = params.total.count;
+  //   const titleVariants = ['автомобиль', 'автомобиля', 'автомобилей'];
 
-    return {
-      headerTitle: count ? `${count} ${declOfNum(count, titleVariants)}` : null,
-      headerStyle: stylesHeader.common,
-      headerTitleStyle: stylesHeader.title,
-      headerLeft: <HeaderIconBack navigation={navigation} />,
-      headerRight: <HeaderIconMenu navigation={navigation} />,
-    };
-  }
+  //   return {
+  //     headerTitle: count ? `${count} ${declOfNum(count, titleVariants)}` : null,
+  //     headerStyle: stylesHeader.common,
+  //     headerTitleStyle: stylesHeader.title,
+  //     headerLeft: <HeaderIconBack navigation={navigation} />,
+  //     headerRight: <HeaderIconMenu navigation={navigation} />,
+  //   };
+  // };
+  static navigationOptions = ({navigation}) => ({
+    // headerTitle: 'поддержанные автомобили',
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: (
+      <HeaderIconBack
+        theme="white"
+        navigation={navigation}
+        returnScreen="MenuScreen"
+      />
+    ),
+    headerRight: (
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('UsedCarFilterScreen');
+        }}>
+        <Image
+          style={{
+            width: 20,
+            height: 20,
+            marginRight: 14,
+          }}
+          source={require('./filter.png')}
+        />
+      </TouchableOpacity>
+    ),
+  });
 
   componentDidMount() {
     setTimeout(() => {
-      this.props.navigation.setParams({ total: this.props.total });
+      this.props.navigation.setParams({total: this.props.total});
     }, 200);
 
     Amplitude.logEvent('screen', 'catalog/usedcar');
@@ -95,13 +127,12 @@ class UserCarListScreen extends Component {
     } = this.props;
 
     if (needUpdate && !isFetchItems) {
-      this.fetchUsedCar('default')
-        .then(() => {
-          actionSetStopNeedUpdateUsedCarList();
-          setTimeout(() => {
-            this.props.navigation.setParams({ total: this.props.total });
-          }, 200);
-        });
+      this.fetchUsedCar('default').then(() => {
+        actionSetStopNeedUpdateUsedCarList();
+        setTimeout(() => {
+          this.props.navigation.setParams({total: this.props.total});
+        }, 200);
+      });
     }
   }
 
@@ -116,16 +147,27 @@ class UserCarListScreen extends Component {
       isPriceFilterShow,
     } = this.props;
 
-    const nav = nextProps.nav.newState;
-    const isActiveScreen = nav.routes[nav.index].routeName === 'UserCarListScreen';
+    // console.log('>>>>> WEE ARE CHAMPION',nextProps)
 
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-      (items.length !== nextProps.items.length) ||
-      (isFetchItems !== nextProps.isFetchItems) ||
-      (total.count !== nextProps.total.count) ||
-      (isPriceFilterShow !== nextProps.isPriceFilterShow) ||
-      (city.id !== nextProps.city.id) ||
-      (needUpdate !== nextProps.needUpdate);
+    const nav = nextProps.nav.newState;
+    const isActiveScreen =
+      nav.routes[nav.index].routeName === 'UserCarListScreen';
+
+// console.log(this.props.priceRange,  nextProps.priceRange)
+
+    // console.log(needUpdate)
+
+    return (
+      (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
+      items.length !== nextProps.items.length ||
+      isFetchItems !== nextProps.isFetchItems ||
+      total.count !== nextProps.total.count ||
+      isPriceFilterShow !== nextProps.isPriceFilterShow ||
+      // city.id !== nextProps.city.id ||
+      needUpdate !== nextProps.needUpdate ||
+
+      this.props.priceRange !== nextProps.priceRange
+    );
   }
 
   fetchUsedCar = (type, priceRangeFromFilter) => {
@@ -136,32 +178,32 @@ class UserCarListScreen extends Component {
       priceRange,
       navigation,
       actionFetchUsedCar,
+      dealerSelected,
     } = this.props;
 
     return actionFetchUsedCar({
       type,
       priceRange: priceRangeFromFilter || priceRange,
-      city: city.id,
+      city: city ? city.id : dealerSelected.city.id,
       nextPage: pages.next,
-    })
-      .then(() => {
-        return setTimeout(() => {
-          this.props.navigation.setParams({ total: this.props.total });
-        }, 100);
-      });
-  }
+    }).then(() => {
+      return setTimeout(() => {
+        this.props.navigation.setParams({total: this.props.total});
+      }, 100);
+    });
+  };
 
   onPressCity = () => {
-    const { navigation } = this.props;
+    const {navigation} = this.props;
     const returnScreenKey = navigation.state.key;
-    navigation.navigate('UsedCarCityScreen', { returnScreen: returnScreenKey });
-  }
+    navigation.navigate('UsedCarCityScreen', {returnScreen: returnScreenKey});
+  };
 
   onPressPrice = () => {
     this.props.actionShowPriceFilter();
-  }
+  };
 
-  onClosePrice = (priceRange) => {
+  onClosePrice = priceRange => {
     const {
       fetchUsedCar,
       actionHidePriceFilter,
@@ -178,7 +220,7 @@ class UserCarListScreen extends Component {
       actionSelectUsedCarPriceRange(priceRange);
       this.fetchUsedCar(EVENT_DEFAULT, priceRange);
     }
-  }
+  };
 
   render() {
     const {
@@ -196,7 +238,7 @@ class UserCarListScreen extends Component {
     console.log('== UsedCarListScreen ==');
 
     return (
-      <SafeAreaView style={styles.safearea}>
+      <View style={styles.content}>
         <CarList
           items={items}
           pages={pages}
@@ -208,7 +250,7 @@ class UserCarListScreen extends Component {
           navigation={navigation}
         />
 
-        <FooterFilter
+        {/* <FooterFilter
           showPriceFilterIcon={showPriceFilterIcon}
           currency={get(prices, 'curr.name')}
           min={prices.min}
@@ -219,10 +261,13 @@ class UserCarListScreen extends Component {
           onPressCity={this.onPressCity}
           onPressPrice={this.onPressPrice}
           onClosePrice={this.onClosePrice}
-        />
-      </SafeAreaView>
+        /> */}
+      </View>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserCarListScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(UserCarListScreen);

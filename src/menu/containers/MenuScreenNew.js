@@ -130,7 +130,7 @@ const MoreScreen = props => {
     {
       id: 4,
       name: 'Поддержанные авто',
-      navigateUrl: 'NewCarListScreen',
+      navigateUrl: 'UsedCarListScreen',
       type: 'not_new',
     },
     {
