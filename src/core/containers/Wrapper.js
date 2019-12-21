@@ -58,8 +58,8 @@ export default class Wrapper extends Component {
     // this.defaultHandler = ErrorUtils.getGlobalHandler();
     // ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
 
-    // //this.getPersistStore().purge();
-    // this.getPersistStore();
+    //this.getPersistStore().purge();
+    this.getPersistStore();
   }
 
   async wrapGlobalHandler(error, isFatal) {
@@ -80,9 +80,9 @@ export default class Wrapper extends Component {
         blacklist: ['form', 'nav'],
         keyPrefix: 'atlantm',
       },
-      // null,
       () => {
-        store.getState();
+        console.log('store in getPersistStore', store.getState());
+        this.setState({rehydrated: true});
       },
     );
 
@@ -91,11 +91,11 @@ export default class Wrapper extends Component {
   }
 
   render() {
-    // return  <App />
-    
-    // if (!this.state.rehydrated) {
-    //   return null;
-    // }
+    console.log('====== Wrapper');
+    if (!this.state.rehydrated) {
+      console.log('tyt? null');
+      return null;
+    }
 
     SplashScreen.hide();
 

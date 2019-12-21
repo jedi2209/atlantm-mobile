@@ -43,6 +43,8 @@ if (__DEV__) {
 enableScreens();
 
 const mapStateToProps = ({core, dealer, profile}) => {
+  console.log('dealerSelected in mapStateToProps', dealer);
+
   return {
     //     pushActionSubscribeState: core.pushActionSubscribeState,
     dealerSelected: dealer.selected,
@@ -176,15 +178,15 @@ class App extends Component {
   };
 
   render() {
+    console.log('====== App');
     const isTablet = DeviceInfo.isTablet();
     const mainScreen = isTablet ? 'ContactsScreen' : 'MenuScreen';
+    console.log('isDealerSelected store =======>', store.getState());
     const isDealerSelected = get(store.getState(), 'dealer.selected.id');
+
+    console.log('isDealerSelected =======>', isDealerSelected);
     const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
     const AppContainer = createAppContainer(Router);
-
-    return (
-      <AppContainer onNavigationStateChange={this.onNavigationStateChange} />
-    );
 
     const defaultGetStateForAction = Router.router.getStateForAction;
     Router.router.getStateForAction = (action, state) => {
@@ -193,18 +195,9 @@ class App extends Component {
       return defaultGetStateForAction(action, state);
     };
 
-    if (isTablet) {
-      return (
-        <View style={styles.container}>
-          <Sidebar />
-          <View style={styles.app}>
-            <Router onNavigationStateChange={this.onNavigationStateChange} />{' '}
-          </View>{' '}
-        </View>
-      );
-    }
-
-    return <Router onNavigationStateChange={this.onNavigationStateChange} />;
+    return (
+      <AppContainer onNavigationStateChange={this.onNavigationStateChange} />
+    );
   }
 }
 
