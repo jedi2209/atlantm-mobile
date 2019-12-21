@@ -761,6 +761,7 @@
 				ORGANIZATIONNAME = "Atlant-M";
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = YNA37LTZ5W;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -1133,7 +1134,6 @@
 				A059A23A2D10461980EA6437 /* MaterialIcons.ttf in Resources */,
 				FF67D7A93E2D4BE49A0D2578 /* Octicons.ttf in Resources */,
 				BD7F78C028B14A29AFE662BA /* Roboto_medium.ttf in Resources */,
-				4FBD7EA92187249C00003881 /* GoogleService-Info.plist in Resources */,
 				AF314133A9844B07825CB707 /* Roboto.ttf in Resources */,
 				1B9915E053974BFB996D407F /* rubicon-icon-font.ttf in Resources */,
 				3837C0A7CF844F8A8D4EDD76 /* SimpleLineIcons.ttf in Resources */,
@@ -1143,6 +1143,7 @@
 				F2DC295CE6F44BD8A92B25CD /* FontAwesome5_Regular.ttf in Resources */,
 				58158F106412491D85C31462 /* FontAwesome5_Solid.ttf in Resources */,
 				09E38FE732D843AEBFF08B9D /* Fontisto.ttf in Resources */,
+				4FBD7EA92187249C00003881 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1293,7 +1294,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = YNA37LTZ5W;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-image-gallery/Demo/ios/Demo",
