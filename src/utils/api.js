@@ -100,16 +100,16 @@ export default {
     return this.request('/info/indicator/get/', baseRequestParams);
   },
 
-  fetchBonus({token}) {
-    return this.request(`/lkk/bonus/list/?token=${token}`, baseRequestParams);
+  fetchBonus({token, userid}) {
+    return this.request(`/lkk/bonus/list/?userid=${userid}&token=${token}`, baseRequestParams);
   },
 
   fetchBonusInfo({region}) {
     return this.request(`/info/bonus/get/?region=${region}`, baseRequestParams);
   },
 
-  fetchDiscounts({token}) {
-    return this.request(`/lkk/actions/list/?token=${token}`, baseRequestParams);
+  fetchDiscounts({token, userid}) {
+    return this.request(`/lkk/actions/list/?userid=${userid}&token=${token}`, baseRequestParams);
   },
 
   // TODO: проверить, продолжает ли падать на пустом ответе
@@ -183,9 +183,9 @@ export default {
     );
   },
 
-  fetchCarHistoryDetails({vin, token, workId, workDealer}) {
+  fetchCarHistoryDetails({vin, token, userid, workId, workDealer}) {
     return this.request(
-      `/lkk/cars/history/item/?token=${token}&vin=${vin}&dealer=${workDealer}&id=${workId}`,
+      `/lkk/cars/history/item/?userid=${userid}&token=${token}&vin=${vin}&dealer=${workDealer}&id=${workId}`,
       baseRequestParams,
     );
   },
@@ -407,8 +407,9 @@ export default {
     );
   },
 
-  fetchCars({token}) {
-    return this.request(`/lkk/cars/?token=${token}`, baseRequestParams);
+  fetchCars({token, userid}) {
+    console.log('token =================>', token);
+    return this.request(`/lkk/cars/?userid=${userid}&token=${token}`, baseRequestParams);
   },
 
   loginRequest({login, password}) {

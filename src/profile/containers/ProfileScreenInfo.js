@@ -133,12 +133,12 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
     isFetchProfileData: profile.meta.isFetchProfileData,
 
     auth: profile.auth,
-    cars: profile.cars,
+    cars: profile.login.cars,
     login: profile.login,
     password: profile.password,
     isLoginRequest: profile.meta.isLoginRequest,
 
-    bonus: profile.bonus.data,
+    bonus: profile.login.bonus.data,
     discounts: profile.discounts,
     pushActionSubscribeState: core.pushActionSubscribeState,
   };
@@ -220,7 +220,6 @@ class ProfileScreenInfo extends Component {
 
   componentDidMount() {
     const {navigation, login} = this.props;
-
     // TODO:
     // if (!login.id) {
     //   navigation.navigate('ProfileScreen');
@@ -239,7 +238,7 @@ class ProfileScreenInfo extends Component {
             marginHorizontal: 20,
             marginTop: 60,
           }}>
-          {this.props.login.second_name}
+          {`${this.props.login.first_name} ${this.props.login.last_name}`}
         </Text>
         <Button
           full

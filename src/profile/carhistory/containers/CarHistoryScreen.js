@@ -177,12 +177,8 @@ const Tab1 = () => {
   );
 };
 class CarHistoryScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: 'История обслуживания',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <View />,
+  static navigationOptions = () => ({
+    header: null,
   });
 
   componentDidMount() {

@@ -145,10 +145,11 @@ export const actionLogout = () => {
   };
 };
 
-async function getProfileData({token}) {
+async function getProfileData({token, userid}) {
+  console.log('====> token, userid', token, userid);
   // 1. Получаем автомобили пользователя
   let cars = [];
-  const carsResponse = await API.fetchCars({token});
+  const carsResponse = await API.fetchCars({token, userid});
   const carsResponseCode = get(carsResponse, 'error.code', 404);
   if (carsResponseCode === 200 && carsResponse.data) {
     cars = carsResponse.data;
@@ -158,7 +159,7 @@ async function getProfileData({token}) {
 
   // 2. Получаем бонусы и скидки пользователя
   let bonus = {};
-  const bonusResponse = await API.fetchBonus({token});
+  const bonusResponse = await API.fetchBonus({token, userid});
   const bonusResponseCode = get(bonusResponse, 'error.code', 404);
   if (bonusResponseCode === 200 && bonusResponse.data) {
     bonus = bonusResponse.data;
@@ -167,7 +168,7 @@ async function getProfileData({token}) {
   }
 
   let discounts = [];
-  const discountsResponse = await API.fetchDiscounts({token});
+  const discountsResponse = await API.fetchDiscounts({token, userid});
   const discountsResponseCode = get(discountsResponse, 'error.code', 404);
   if (discountsResponseCode === 200 && discountsResponse.data) {
     discounts = discountsResponse.data;
@@ -213,7 +214,7 @@ export const actionLogin = props => {
 
       const {user, token} = data;
 
-      const {cars, bonus, discounts} = await getProfileData({token: token.id});
+      const {cars, bonus, discounts} = await getProfileData({token: token});
 
       // 4. Обновляем данные автоцентра
       let dealer = {};
@@ -295,7 +296,7 @@ export const actionRegister = props => {
   };
 };
 
-export const actionFetchProfileData = ({token}) => {
+export const actionFetchProfileData = ({token, userid}) => {
   return async dispatch => {
     dispatch({
       type: PROFILE_DATA__REQUEST,
@@ -313,7 +314,7 @@ export const actionFetchProfileData = ({token}) => {
     }
 
     try {
-      const {cars, bonus, discounts} = await getProfileData({token});
+      const {cars, bonus, discounts} = await getProfileData({token, userid});
 
       return dispatch({
         type: PROFILE_DATA__SUCCESS,
@@ -618,10 +619,21 @@ export const actionSavePofileWithPhone = props => {
 
 export const actionSavePofile = props => {
   if (props.token) {
-    return dispatch => {
+    return async dispatch => {
+      const {cars, bonus, discounts} = await getProfileData({
+        token: props.token,
+        userid: props.id,
+      });
+
       return dispatch({
         type: SAVE_PROFILE__UPDATE,
-        payload: {...props},
+        payload: {
+          token: props.token,
+          ...props,
+          cars,
+          bonus,
+          discounts,
+        },
       });
     };
   }
@@ -635,7 +647,6 @@ export const actionSavePofile = props => {
     return API.loginWith(props)
       .then(data => {
         try {
-          //const res = JSON.parse(data);
           const {status, error, profile} = data;
 
           if (status !== 'success') {
