@@ -480,6 +480,51 @@ export default {
     return this.request('/mobile/token/update/', requestParams);
   },
 
+  /*
+    @property {Object} profile
+    @propery {'fb'|'vk'|'ok'|'tw'|'im'|'ya'|'gl'} profile.networkName
+  */
+  loginWith(profile) {
+    const {
+      id,
+      email,
+      name,
+      phone,
+      personal_birthday,
+      personal_gender,
+      last_name,
+      first_name,
+    } = profile;
+
+    const body = [
+      'networkName=fb',
+      `socialData[XML_ID]=${id}`,
+      `socialData[EMAIL]=${email}`,
+      `socialData[NAME]=${first_name}`,
+      `socialData[LAST_NAME]=${last_name}`,
+      `socialData[PHONE]=${phone}`,
+      `socialData[PERSONAL_BIRTHDAY]=${personal_birthday}`,
+      `socialData[PERSONAL_GENDER]=${personal_gender}`,
+    ].join('&');
+
+    const requestParams = _.merge({}, baseRequestParams, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    });
+
+    return this.request('/lkk/auth/social/', requestParams)
+      .then(data => {
+        console.log('success', data);
+        return {status: 'success', error: {}, profile};
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
+  },
+
   request(path, requestParams) {
     const url = `${host}${path}`;
 

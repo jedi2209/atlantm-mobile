@@ -26,7 +26,7 @@ import {
   Form,
   Item,
   Input,
-  Label
+  Label,
 } from 'native-base';
 
 // redux
@@ -42,6 +42,7 @@ import {
   actionLogin,
   actionLogout,
   actionFetchProfileData,
+  actionSavePofile,
 } from '../actions';
 import {
   actionSetPushActionSubscribe,
@@ -55,17 +56,12 @@ import ListItemHeader from '../components/ListItemHeader';
 import BonusDiscount from '../components/BonusDiscount';
 import SpinnerView from '../../core/components/SpinnerView';
 import DealerItemList from '../../core/components/DealerItemList';
-import HeaderIconReload from '../../core/components/HeaderIconReload';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import PushNotifications from '../../core/components/PushNotifications';
 
 // helpers
 import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
-import stylesFooter from '../../core/components/Footer/style';
-import SafeAreaView from 'react-native-safe-area-view';
 
 import {
   LoginButton,
@@ -118,6 +114,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
+  console.log('profile.login =============>', profile.login);
+
   return {
     nav,
     listRussia: dealer.listRussia,
@@ -162,6 +160,9 @@ const mapDispatchToProps = {
 
   actionSetPushGranted,
   actionSetPushActionSubscribe,
+
+
+  actionSavePofile,
 };
 
 import {
@@ -184,32 +185,6 @@ GoogleSignin.configure({
 });
 
 import VKLogin from 'react-native-vkontakte-login';
-
-// loginHandler({ login, password, dealers, dealerSelected })
-// .then(action => {
-//   switch (action.type) {
-//       case LOGIN__FAIL:
-//           if (login === 'zteam' && password === '4952121052') {
-//               window.atlantmDebug = false;
-//           }
-
-//           const defaultMessage = 'Произошла ошибка, попробуйте снова';
-//           const code = get(action, 'payload.code');
-//           const message = get(action, 'payload.message');
-
-//           setTimeout(() => {
-//               Alert.alert(!code || code === 500 ? defaultMessage : message);
-//           }, 100);
-//           break;
-//       case LOGIN__SUCCESS:
-//           PushNotifications.addTag('login', login);
-//           break;
-//   }
-// });
-
-// loginHandler={actionLogin}
-
-import {LOGIN__FAIL, LOGIN__SUCCESS} from '@profile/actionTypes';
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -240,36 +215,35 @@ class ProfileScreen extends Component {
   static propTypes = {
     dealerSelected: PropTypes.object,
     navigation: PropTypes.object,
-    nameFill: PropTypes.func,
-    phoneFill: PropTypes.func,
-    emailFill: PropTypes.func,
-    carFill: PropTypes.func,
-    carNumberFill: PropTypes.func,
-    name: PropTypes.string,
-    phone: PropTypes.string,
-    email: PropTypes.string,
-    car: PropTypes.string,
-    carNumber: PropTypes.string,
+    // nameFill: PropTypes.func,
+    // phoneFill: PropTypes.func,
+    // emailFill: PropTypes.func,
+    // carFill: PropTypes.func,
+    // carNumberFill: PropTypes.func,
+    // name: PropTypes.string,
+    // phone: PropTypes.string,
+    // email: PropTypes.string,
+    // car: PropTypes.string,
+    // carNumber: PropTypes.string,
 
-    cars: PropTypes.array,
+    // cars: PropTypes.array,
 
-    auth: PropTypes.object,
-    loginFill: PropTypes.func,
-    passwordFill: PropTypes.func,
-    login: PropTypes.string,
-    password: PropTypes.string,
-    isLoginRequest: PropTypes.bool,
-    isFetchProfileData: PropTypes.bool,
+    // auth: PropTypes.object,
+    // loginFill: PropTypes.func,
+    // passwordFill: PropTypes.func,
+    // login: PropTypes.string,
+    // password: PropTypes.string,
+    // isLoginRequest: PropTypes.bool,
+    // isFetchProfileData: PropTypes.bool,
 
-    bonus: PropTypes.object,
-    discounts: PropTypes.array,
-
+    // bonus: PropTypes.object,
+    // discounts: PropTypes.array,
     //    fcmToken: PropTypes.string,
-    pushActionSubscribeState: PropTypes.bool,
+    // pushActionSubscribeState: PropTypes.bool,
     //    actionSetFCMToken: PropTypes.func,
-    actionSetPushGranted: PropTypes.func,
-    actionSetPushActionSubscribe: PropTypes.func,
-    actionFetchCars: PropTypes.func,
+    // actionSetPushGranted: PropTypes.func,
+    // actionSetPushActionSubscribe: PropTypes.func,
+    // actionFetchCars: PropTypes.func,
   };
 
   static defaultProps = {
@@ -277,30 +251,8 @@ class ProfileScreen extends Component {
   };
 
   _sendDataToApi(profile) {
-    const {login, password, dealers, dealerSelected} = profile;
-    actionLogin({login, password, dealers, dealerSelected})
-      .then(action => {
-        console.log('action22', action);
-        switch (action.type) {
-          case LOGIN__FAIL:
-            if (login === 'zteam' && password === '4952121052') {
-              window.atlantmDebug = false;
-            }
-
-            const defaultMessage = 'Произошла ошибка, попробуйте снова';
-            const code = get(action, 'payload.code');
-            const message = get(action, 'payload.message');
-
-            setTimeout(() => {
-              Alert.alert(!code || code === 500 ? defaultMessage : message);
-            }, 100);
-            break;
-          case LOGIN__SUCCESS:
-            PushNotifications.addTag('login', login);
-            break;
-        }
-      })
-      .catch(err => console.log(err));
+    console.log(profile);
+    this.props.actionSavePofile(profile);
   }
 
   componentDidMount() {

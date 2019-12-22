@@ -42,9 +42,26 @@ import {
   FORGOT_PASS_SUBMIT_CODE__REQUEST,
   FORGOT_PASS_SUBMIT_CODE__FAIL,
   FORGOT_PASS_SUBMIT_CODE__SUCCESS,
+  SAVE_PROFILE__UPDATE,
+  SAVE_PROFILE__REQUEST,
+  SAVE_PROFILE__FAIL,
 } from './actionTypes';
 
 import {DEALER__SUCCESS} from '@dealer/actionTypes';
+
+function login(state = '', action) {
+  console.log('ta tyt v svoem reducers', action.type);
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'profile.login', '');
+    case SAVE_PROFILE__UPDATE:
+      return action.payload;
+    case SAVE_PROFILE__FAIL:
+      return {};
+    default:
+      return state;
+  }
+}
 
 function name(state = '', action) {
   switch (action.type) {
@@ -130,19 +147,6 @@ function carVIN(state = '', action) {
     case PROFILE_CAR_VIN__FILL:
       return action.payload;
     case REGISTER__SUCCESS:
-      return '';
-    default:
-      return state;
-  }
-}
-
-function login(state = '', action) {
-  switch (action.type) {
-    case REHYDRATE:
-      return get(action.payload, 'profile.login', '');
-    case PROFILE_LOGIN__FILL:
-      return action.payload;
-    case LOGIN__SUCCESS:
       return '';
     default:
       return state;
