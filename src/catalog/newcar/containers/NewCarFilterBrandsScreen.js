@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {SafeAreaView, View, StyleSheet} from 'react-native';
 import {
   Body,
   Label,
@@ -10,8 +10,8 @@ import {
 } from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
-import { actionSelectNewCarFilterBrands } from '../../actions';
+import {connect} from 'react-redux';
+import {actionSelectNewCarFilterBrands} from '../../actions';
 
 // components
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
@@ -20,7 +20,7 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
-import { get } from 'lodash';
+import {get} from 'lodash';
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ catalog, nav }) => {
+const mapStateToProps = ({catalog, nav}) => {
   return {
     nav,
     filterBrands: catalog.newCar.filterBrands,
@@ -46,29 +46,25 @@ const mapDispatchToProps = {
 };
 
 class NewCarFilterBrandsScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: 'Марка',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
-  })
+  });
 
   static propTypes = {
     navigation: PropTypes.object,
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
-    // const { nav } = this.props;
-    // console.log('nav', nav);
-    // console.log('nextProps', nextProps);
-
     return this.props.filterBrands.length !== nextProps.filterBrands.length;
   }
 
-  onPressItem = (selectedBrand) => {
+  onPressItem = selectedBrand => {
     requestAnimationFrame(() => {
-      const { filterBrands } = this.props;
+      const {filterBrands} = this.props;
       let newBrands = [];
 
       if (this.isBrandSelected(selectedBrand)) {
@@ -79,17 +75,16 @@ class NewCarFilterBrandsScreen extends Component {
 
       this.props.actionSelectNewCarFilterBrands(newBrands);
     });
-  }
+  };
 
-  isBrandSelected = brandId => this.props.filterBrands.includes(brandId)
+  isBrandSelected = brandId => this.props.filterBrands.includes(brandId);
 
   render() {
-    const {
-      filterData,
-      filterBrands,
-    } = this.props;
+    const {filterData, filterBrands} = this.props;
 
-    if (!filterData) return null;
+    if (!filterData) {
+      return null;
+    }
 
     console.log('== NewCarFilterBrandsScreen ==');
 
@@ -100,28 +95,28 @@ class NewCarFilterBrandsScreen extends Component {
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
           <Content>
-            {
-              brandsKeys.map((brandId, idx) => {
-                const item = brands[brandId];
-                const handler = () => this.onPressItem(brandId);
+            {brandsKeys.map((brandId, idx) => {
+              const item = brands[brandId];
+              const handler = () => this.onPressItem(brandId);
 
-                return (
-                  <View key={brandId} style={stylesList.listItemContainer}>
-                    <ListItem
-                      icon
+              return (
+                <View key={brandId} style={stylesList.listItemContainer}>
+                  <ListItem
+                    icon
+                    onPress={handler}
+                    last={brandsKeys.length - 1 === idx}
+                    style={stylesList.listItemPressable}>
+                    <CheckBox
                       onPress={handler}
-                      last={(brandsKeys.length - 1) === idx}
-                      style={stylesList.listItemPressable}
-                    >
-                      <CheckBox onPress={handler} checked={this.isBrandSelected(brandId)} />
-                      <Body style={stylesList.bodyWithLeftGap} >
-                        <Label style={stylesList.label}>{item.name}</Label>
-                      </Body>
-                    </ListItem>
-                  </View>
-                );
-              })
-            }
+                      checked={this.isBrandSelected(brandId)}
+                    />
+                    <Body style={stylesList.bodyWithLeftGap}>
+                      <Label style={stylesList.label}>{item.name}</Label>
+                    </Body>
+                  </ListItem>
+                </View>
+              );
+            })}
           </Content>
         </SafeAreaView>
       </StyleProvider>
@@ -129,4 +124,7 @@ class NewCarFilterBrandsScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewCarFilterBrandsScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(NewCarFilterBrandsScreen);

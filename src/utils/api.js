@@ -515,11 +515,8 @@ export default {
       body,
     });
 
-    console.log('requestParams =====>', requestParams);
-
     return this.request('/lkk/auth/social/', requestParams)
       .then(data => {
-        console.log('success', data);
         return {status: 'success', error: {}, profile, data};
       })
       .catch(err => {

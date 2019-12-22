@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, StyleSheet, View, Alert } from 'react-native';
-import { Icon, Content, List, StyleProvider } from 'native-base';
+import {SafeAreaView, StyleSheet, View, Alert} from 'react-native';
+import {Content, List, StyleProvider} from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
-import { dateFill, orderService } from '../actions';
-import { carFill, nameFill, phoneFill, emailFill } from '../../profile/actions';
+import {connect} from 'react-redux';
+import {dateFill, orderService} from '../actions';
+import {carFill, nameFill, phoneFill, emailFill} from '../../profile/actions';
 
 // components
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -22,12 +22,12 @@ import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack'
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
 import isInternet from '../../utils/internet';
-import { yearMonthDay } from '../../utils/date';
+import {yearMonthDay} from '../../utils/date';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
-import { ERROR_NETWORK } from '../../core/const';
-import { SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL } from '../actionTypes';
+import {ERROR_NETWORK} from '../../core/const';
+import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
 
 const $size = 40;
 const styles = StyleSheet.create({
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, profile, service, nav }) => {
+const mapStateToProps = ({dealer, profile, service, nav}) => {
   return {
     nav,
     date: service.date,
@@ -66,13 +66,15 @@ const mapDispatchToProps = {
 };
 
 class ServiceScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: 'Заявка на СТО',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
+    headerLeft: (
+      <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />
+    ),
     headerRight: <HeaderIconMenu navigation={navigation} />,
-  })
+  });
 
   static propTypes = {
     dealerSelected: PropTypes.object,
@@ -88,7 +90,7 @@ class ServiceScreen extends Component {
     car: PropTypes.string,
     date: PropTypes.object,
     isOrderServiceRequest: PropTypes.bool,
-  }
+  };
 
   onPressOrder = async () => {
     const isInternetExist = await isInternet();
@@ -108,7 +110,9 @@ class ServiceScreen extends Component {
       } = this.props;
 
       // предотвращаем повторную отправку формы
-      if (isOrderServiceRequest) return;
+      if (isOrderServiceRequest) {
+        return;
+      }
 
       const dealerID = dealerSelected.id;
 
@@ -130,20 +134,22 @@ class ServiceScreen extends Component {
         phone,
         device,
         dealerID,
-      })
-        .then(action => {
-          if (action.type === SERVICE_ORDER__SUCCESS) {
-            Amplitude.logEvent('order', 'service');
+      }).then(action => {
+        if (action.type === SERVICE_ORDER__SUCCESS) {
+          Amplitude.logEvent('order', 'service');
 
-            setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
-          }
+          setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
+        }
 
-          if (action.type === SERVICE_ORDER__FAIL) {
-            setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
-          }
-        });
+        if (action.type === SERVICE_ORDER__FAIL) {
+          setTimeout(
+            () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
+            100,
+          );
+        }
+      });
     }
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
@@ -179,7 +185,10 @@ class ServiceScreen extends Component {
         <SafeAreaView style={styles.safearea}>
           <Content>
             <List style={styles.list}>
-              <Spinner visible={isOrderServiceRequest} color={styleConst.color.blue} />
+              <Spinner
+                visible={isOrderServiceRequest}
+                color={styleConst.color.blue}
+              />
 
               <ListItemHeader text="МОЙ АВТОЦЕНТР" />
 
@@ -212,14 +221,14 @@ class ServiceScreen extends Component {
               </View>
             </List>
           </Content>
-          <FooterButton
-            text="Отправить"
-            onPressButton={this.onPressOrder}
-          />
+          <FooterButton text="Отправить" onPressButton={this.onPressOrder} />
         </SafeAreaView>
       </StyleProvider>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServiceScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ServiceScreen);

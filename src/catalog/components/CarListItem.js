@@ -166,11 +166,11 @@ export default class CarListItem extends Component {
             resizeMode="cover"
             style={styles.image}
             source={{
-              uri: get(car, 'img.10000x440.0')
+              uri: get(car, 'img.10000x440.0'),
             }}
           />
           <View style={styles.price}>{this.renderPrice({car, prices})}</View>
-          <View style={{display: 'flex', flexDirection:'row'}}>
+          <View style={{display: 'flex', flexDirection: 'row'}}>
             <View>
               {engineVolume ? (
                 <View style={styles.extraTextContainer}>

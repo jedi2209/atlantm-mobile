@@ -91,9 +91,7 @@ export default class Wrapper extends Component {
   }
 
   render() {
-    console.log('====== Wrapper');
     if (!this.state.rehydrated) {
-      console.log('tyt? null');
       return null;
     }
 

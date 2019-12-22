@@ -26,7 +26,6 @@ import {
   actionSelectNewCarFilterPrice,
   actionSetNewCarFilterPriceSpecial,
   actionSaveCarFilters,
-
   actionSelectUsedCarPriceRange,
   actionSetNeedUpdateUsedCarList,
 } from '../../actions';
@@ -133,8 +132,6 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
       curr: catalog.usedCar.prices.curr,
     };
   }
-
-  // console.log('>>>>QQQQ', catalog.usedCar.priceRange)
 
   return {
     nav,
@@ -292,7 +289,6 @@ class NewCarFilterScreen extends Component {
   };
 
   render() {
-    console.log('this.props ======>', this.props.filterPrice.currentMin);
     return (
       <>
         <Accordion
@@ -367,12 +363,13 @@ class NewCarFilterScreen extends Component {
               content: (
                 <TouchableOpacity
                   onPress={() => {
-                    console.log('>>>>>>>>>>> olo');
                     this.props.navigation.navigate('UsedCarCityScreen', {
                       returnScreen: 'UsedCarFilterScreen',
                     });
                   }}>
-                  <Text>{this.props.city ? this.props.city.name : 'Выберите город'}</Text>
+                  <Text>
+                    {this.props.city ? this.props.city.name : 'Выберите город'}
+                  </Text>
                 </TouchableOpacity>
               ),
             },

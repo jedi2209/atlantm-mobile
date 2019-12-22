@@ -1,34 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Icon, Text} from 'native-base';
-import {View} from 'react-native';
+import {Icon} from 'native-base';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 
-// redux
-import {connect} from 'react-redux';
-import {
-  actionMenuOpenedCount,
-  actionAppRated,
-  actionAppRateAskLater,
-  actionSetPushGranted,
-  actionSetPushActionSubscribe,
-  actionStoreUpdated,
-} from '../../core/actions';
-
 // helpers
 import styleConst from '../../core/style-const';
-// import {scale, verticalScale} from '../../utils/scale';
-// import {get} from 'lodash';
-// import stylesHeader from '../../core/components/Header/style';
-// import RateThisApp from '../../core/components/RateThisApp';
-// import OneSignal from 'react-native-onesignal';
-// import PushNotifications from '../../core/components/PushNotifications';
 import ContactsScreen from '../../contacts/containers/ContactsScreen';
 import NewCarListScreen from '../../catalog/newcar/containers/NewCarListScreen';
 import ProfileScreen from '../../profile/containers/ProfileScreen';
 import ProfileScreenInfo from '../../profile/containers/ProfileScreenInfo';
-import ServiceScreen from '../../service/containers/ServiceScreen';
 import InfoListScreen from '../../info/containers/InfoListScreen';
 import TOHistore from '../../profile/carhistory/containers/CarHistoryScreen';
 import BonusScreen from '../../profile/bonus/containers/BonusScreen';
@@ -53,20 +34,6 @@ const styles = {
     shadowRadius: 4,
     shadowColor: '#fff',
   },
-};
-
-const Application = () => {
-  return (
-    <View
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-      }}>
-      <Text>Comming soon</Text>
-    </View>
-  );
 };
 
 const EnhancedMenuScreen = createBottomTabNavigator({
@@ -160,28 +127,28 @@ const EnhancedMenuScreen = createBottomTabNavigator({
       ),
     }),
   },
-  Service: {
-    screen: Application,
-    navigationOptions: ({navigation}) => {
-      return {
-        tabBarLabel: 'Заявка',
-        tabBarIcon: ({focused}) => (
-          <Icon
-            name="comments"
-            type="FontAwesome5"
-            style={[
-              styles.shadow,
-              {
-                color: focused
-                  ? styleConst.new.blueHeader
-                  : styleConst.new.passive,
-              },
-            ]}
-          />
-        ),
-      };
-    },
-  },
+  // Service: {
+  //   screen: Application,
+  //   navigationOptions: ({navigation}) => {
+  //     return {
+  //       tabBarLabel: 'Заявка',
+  //       tabBarIcon: ({focused}) => (
+  //         <Icon
+  //           name="comments"
+  //           type="FontAwesome5"
+  //           style={[
+  //             styles.shadow,
+  //             {
+  //               color: focused
+  //                 ? styleConst.new.blueHeader
+  //                 : styleConst.new.passive,
+  //             },
+  //           ]}
+  //         />
+  //       ),
+  //     };
+  //   },
+  // },
   More: {
     screen: createStackNavigator({MoreScreen: {screen: MoreScreen}}),
     navigationOptions: ({navigation}) => {
@@ -211,23 +178,3 @@ EnhancedMenuScreen.navigationOptions = () => ({
 });
 
 export default EnhancedMenuScreen;
-
-const mapStateToProps = ({core, dealer}) => {
-  return {
-    dealerSelected: dealer.selected,
-    menuOpenedCount: core.menuOpenedCount,
-    isAppRated: core.isAppRated,
-    AppRateAskLater: core.AppRateAskLater,
-    isStoreUpdated: core.isStoreUpdated,
-    MenuCounterLimit: 10, // счётчик открытия меню, после которого показывается предложение об оценке
-  };
-};
-
-const mapDispatchToProps = {
-  actionMenuOpenedCount,
-  actionAppRated,
-  actionAppRateAskLater,
-  actionSetPushGranted,
-  actionSetPushActionSubscribe,
-  actionStoreUpdated,
-};

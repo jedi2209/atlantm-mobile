@@ -1,21 +1,17 @@
 import {
   DEALERS_REGION__SELECT,
-
   DEALERS__REQUEST,
   DEALERS__SUCCESS,
   DEALERS__FAIL,
-
   DEALERS_BY_CITIES__SET,
-
   DEALER__REQUEST,
   DEALER__SUCCESS,
   DEALER__FAIL,
-
 } from './actionTypes';
 
 import API from '../utils/api';
 
-import { RUSSIA, BELARUSSIA, UKRAINE } from '../core/const';
+import {RUSSIA, BELARUSSIA, UKRAINE} from '../core/const';
 
 export const selectRegion = region => {
   return dispatch => {
@@ -27,8 +23,6 @@ export const selectRegion = region => {
 };
 
 export const selectDealer = ({dealerBaseData, dealerSelected}) => {
-  console.log('ya tyt >>>>>>>>>>>>', dealerBaseData, dealerSelected);
-
   return dispatch => {
     dispatch({
       type: DEALER__REQUEST,
@@ -40,8 +34,6 @@ export const selectDealer = ({dealerBaseData, dealerSelected}) => {
 
     return API.fetchDealer(dealerBaseData.id)
       .then(response => {
-        console.log(response);
-
         if (response.error) {
           return dispatch({
             type: DEALER__FAIL,
@@ -51,7 +43,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected}) => {
           });
         }
 
-        const dealer = { ...response.data };
+        const dealer = {...response.data};
 
         dealer.id = dealerBaseData.id;
         dealer.region = dealerBaseData.region;
@@ -78,11 +70,11 @@ export const selectDealer = ({dealerBaseData, dealerSelected}) => {
 
 export const fetchDealers = () => {
   return dispatch => {
-    dispatch({ type: DEALERS__REQUEST });
+    dispatch({type: DEALERS__REQUEST});
 
     return API.fetchDealers()
       .then(response => {
-        const { data: dealers, error } = response;
+        const {data: dealers, error} = response;
 
         if (error) {
           return dispatch({
@@ -94,14 +86,17 @@ export const fetchDealers = () => {
           });
         }
 
-        const dealersByRegions = dealers.reduce((result, dealer) => {
-          result[dealer.region].push(dealer);
-          return result;
-        }, {
-          [RUSSIA]: [],
-          [BELARUSSIA]: [],
-          [UKRAINE]: [],
-        });
+        const dealersByRegions = dealers.reduce(
+          (result, dealer) => {
+            result[dealer.region].push(dealer);
+            return result;
+          },
+          {
+            [RUSSIA]: [],
+            [BELARUSSIA]: [],
+            [UKRAINE]: [],
+          },
+        );
 
         return dispatch({
           type: DEALERS__SUCCESS,
@@ -119,7 +114,7 @@ export const fetchDealers = () => {
   };
 };
 
-export const actionSetDealersByCities = (dealersByRegions) => {
+export const actionSetDealersByCities = dealersByRegions => {
   return dispatch => {
     return dispatch({
       type: DEALERS_BY_CITIES__SET,

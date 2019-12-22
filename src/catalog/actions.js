@@ -1,6 +1,6 @@
 import API from '../utils/api';
 
-import { get } from 'lodash';
+import {get} from 'lodash';
 
 import {
   USED_CAR_LIST__REQUEST,
@@ -14,7 +14,6 @@ import {
   USED_CAR_REGION__SELECT,
   USED_CAR_PRICE_FILTER__SHOW,
   USED_CAR_PRICE_FILTER__HIDE,
-
   USED_CAR_DETAILS__REQUEST,
   USED_CAR_DETAILS__SUCCESS,
   USED_CAR_DETAILS__FAIL,
@@ -22,17 +21,14 @@ import {
   USED_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
   USED_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
   USED_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
-
   NEW_CAR_CITY__SELECT,
   NEW_CAR_REGION__SELECT,
-
   NEW_CAR_FILTER_DATA__REQUEST,
   NEW_CAR_FILTER_DATA__SUCCESS,
   NEW_CAR_FILTER_DATA__FAIL,
   NEW_CAR_BY_FILTER__REQUEST,
   NEW_CAR_BY_FILTER__SUCCESS,
   NEW_CAR_BY_FILTER__FAIL,
-
   NEW_CAR_FILTER_BRANDS__SELECT,
   NEW_CAR_FILTER_MODELS__SELECT,
   NEW_CAR_FILTER_BODY__SELECT,
@@ -50,15 +46,12 @@ import {
   NEW_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
   NEW_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
   NEW_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
-
   CATALOG_DEALER__REQUEST,
   CATALOG_DEALER__SUCCESS,
   CATALOG_DEALER__FAIL,
-
   CATALOG_ORDER__REQUEST,
   CATALOG_ORDER__SUCCESS,
   CATALOG_ORDER__FAIL,
-
   CATALOG_ORDER_COMMENT__FILL,
 
   // comment
@@ -83,9 +76,9 @@ import {
   ACTION_SAVE_CAR_FILTERS__UPDATE,
 } from './actionTypes';
 
-import { EVENT_LOAD_MORE } from '../core/actionTypes';
+import {EVENT_LOAD_MORE} from '../core/actionTypes';
 
-export const actionFetchUsedCar = ({ type, city, nextPage, priceRange }) => {
+export const actionFetchUsedCar = ({type, city, nextPage, priceRange}) => {
   return dispatch => {
     dispatch({
       type: USED_CAR_LIST__REQUEST,
@@ -105,7 +98,7 @@ export const actionFetchUsedCar = ({ type, city, nextPage, priceRange }) => {
       nextPageUrl,
     })
       .then(res => {
-        let { data, error, total, pages, prices } = res;
+        let {data, error, total, pages, prices} = res;
 
         if (error) {
           return dispatch({
@@ -118,7 +111,7 @@ export const actionFetchUsedCar = ({ type, city, nextPage, priceRange }) => {
         }
 
         if (data.length === 0) {
-          data.push({ type: 'empty', id: { api: 1 } });
+          data.push({type: 'empty', id: {api: 1}});
 
           // TODO: разобраться, почему перестает работать priceFilter если null
           prices = {};
@@ -146,7 +139,7 @@ export const actionFetchUsedCar = ({ type, city, nextPage, priceRange }) => {
   };
 };
 
-export const actionSelectUsedCarPriceRange = (prices) => {
+export const actionSelectUsedCarPriceRange = prices => {
   return dispatch => {
     dispatch({
       type: USED_CAR_PRICE_RANGE__SELECT,
@@ -155,7 +148,7 @@ export const actionSelectUsedCarPriceRange = (prices) => {
   };
 };
 
-export const actionSelectUsedCarCity = (city) => {
+export const actionSelectUsedCarCity = city => {
   return dispatch => {
     dispatch({
       type: USED_CAR_CITY__SELECT,
@@ -164,7 +157,7 @@ export const actionSelectUsedCarCity = (city) => {
   };
 };
 
-export const actionSelectUsedCarRegion = (region) => {
+export const actionSelectUsedCarRegion = region => {
   return dispatch => {
     return dispatch({
       type: USED_CAR_REGION__SELECT,
@@ -173,7 +166,7 @@ export const actionSelectUsedCarRegion = (region) => {
   };
 };
 
-export const actionResetUsedCarList = (region) => {
+export const actionResetUsedCarList = region => {
   return dispatch => {
     return dispatch({
       type: USED_CAR_LIST__RESET,
@@ -182,7 +175,7 @@ export const actionResetUsedCarList = (region) => {
   };
 };
 
-export const actionShowPriceFilter = (region) => {
+export const actionShowPriceFilter = region => {
   return dispatch => {
     return dispatch({
       type: USED_CAR_PRICE_FILTER__SHOW,
@@ -191,7 +184,7 @@ export const actionShowPriceFilter = (region) => {
   };
 };
 
-export const actionHidePriceFilter = (region) => {
+export const actionHidePriceFilter = region => {
   return dispatch => {
     return dispatch({
       type: USED_CAR_PRICE_FILTER__HIDE,
@@ -218,7 +211,7 @@ export const actionFetchDealer = dealerBaseData => {
           });
         }
 
-        const dealer = { ...response.data };
+        const dealer = {...response.data};
 
         dealer.id = dealerBaseData.id;
         dealer.region = dealerBaseData.region;
@@ -240,7 +233,7 @@ export const actionFetchDealer = dealerBaseData => {
   };
 };
 
-export const actionCommentOrderCarFill = (comment) => {
+export const actionCommentOrderCarFill = comment => {
   return dispatch => {
     return dispatch({
       type: CATALOG_ORDER_COMMENT__FILL,
@@ -249,16 +242,16 @@ export const actionCommentOrderCarFill = (comment) => {
   };
 };
 
-export const actionOrderCar = (props) => {
+export const actionOrderCar = props => {
   return dispatch => {
     dispatch({
       type: CATALOG_ORDER__REQUEST,
-      payload: { ...props },
+      payload: {...props},
     });
 
     return API.orderCar(props)
       .then(res => {
-        const { error, status } = res;
+        const {error, status} = res;
 
         if (status !== 'success') {
           return dispatch({
@@ -270,7 +263,7 @@ export const actionOrderCar = (props) => {
           });
         }
 
-        return dispatch({ type: CATALOG_ORDER__SUCCESS });
+        return dispatch({type: CATALOG_ORDER__SUCCESS});
       })
       .catch(error => {
         return dispatch({
@@ -302,17 +295,18 @@ export const actionFetchUsedCarDetails = carId => {
           });
         }
 
-        const details = { ...response.data };
+        const details = {...response.data};
 
         // если есть фото нужного размера, записываем их в стор в нужной структуре данных
         const photoViewerItems = get(details, 'img.original', []).map(photo => {
-          return { source: { uri: photo+'?d=800x600' } };
+          return {source: {uri: photo + '?d=800x600'}};
         });
 
-        photoViewerItems.length && dispatch({
-          type: USED_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
-          payload: photoViewerItems,
-        });
+        photoViewerItems.length &&
+          dispatch({
+            type: USED_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
+            payload: photoViewerItems,
+          });
 
         return dispatch({
           type: USED_CAR_DETAILS__SUCCESS,
@@ -372,7 +366,7 @@ export const actionSetStopNeedUpdateUsedCarList = () => {
 };
 
 // newcar
-export const actionSelectNewCarCity = (city) => {
+export const actionSelectNewCarCity = city => {
   return dispatch => {
     dispatch({
       type: NEW_CAR_CITY__SELECT,
@@ -381,7 +375,7 @@ export const actionSelectNewCarCity = (city) => {
   };
 };
 
-export const actionSelectNewCarRegion = (region) => {
+export const actionSelectNewCarRegion = region => {
   return dispatch => {
     return dispatch({
       type: NEW_CAR_REGION__SELECT,
@@ -399,7 +393,6 @@ export const actionFetchNewCarFilterData = props => {
 
     return API.fetchNewCarFilterData(props)
       .then(res => {
-        console.log('>>>reeees', res);
         if (res.error) {
           return dispatch({
             type: NEW_CAR_FILTER_DATA__FAIL,
@@ -411,7 +404,7 @@ export const actionFetchNewCarFilterData = props => {
 
         return dispatch({
           type: NEW_CAR_FILTER_DATA__SUCCESS,
-          payload: { ...res },
+          payload: {...res},
         });
       })
       .catch(error => {
@@ -426,20 +419,18 @@ export const actionFetchNewCarFilterData = props => {
 };
 
 export const actionFetchNewCarByFilter = props => {
-  console.log('вот в этом экшене я выполняюсь');
   return dispatch => {
     dispatch({
       type: NEW_CAR_BY_FILTER__REQUEST,
       payload: props,
     });
 
-    const newProps = { ...props };
+    const newProps = {...props};
 
     if (props.type === EVENT_LOAD_MORE) {
       newProps.searchUrl = props.nextPage;
     }
 
-    console.log('newProps ===========>', newProps);
     return API.fetchNewCarByFilter(newProps)
       .then(response => {
         if (response.error) {
@@ -470,7 +461,7 @@ export const actionFetchNewCarByFilter = props => {
   };
 };
 
-export const actionSelectNewCarFilterBrands = (brands) => {
+export const actionSelectNewCarFilterBrands = brands => {
   return dispatch => {
     return dispatch({
       type: NEW_CAR_FILTER_BRANDS__SELECT,
@@ -479,7 +470,7 @@ export const actionSelectNewCarFilterBrands = (brands) => {
   };
 };
 
-export const actionSetNewCarFilterPriceSpecial = (priceSpecial) => {
+export const actionSetNewCarFilterPriceSpecial = priceSpecial => {
   return dispatch => {
     return dispatch({
       type: NEW_CAR_FILTER_PRICE_SPECIAL__SET,
@@ -488,7 +479,7 @@ export const actionSetNewCarFilterPriceSpecial = (priceSpecial) => {
   };
 };
 
-export const actionSelectNewCarFilterModels = (models) => {
+export const actionSelectNewCarFilterModels = models => {
   return dispatch => {
     return dispatch({
       type: NEW_CAR_FILTER_MODELS__SELECT,
@@ -497,7 +488,7 @@ export const actionSelectNewCarFilterModels = (models) => {
   };
 };
 
-export const actionSelectNewCarFilterBody = (body) => {
+export const actionSelectNewCarFilterBody = body => {
   return dispatch => {
     return dispatch({
       type: NEW_CAR_FILTER_BODY__SELECT,
@@ -506,7 +497,7 @@ export const actionSelectNewCarFilterBody = (body) => {
   };
 };
 
-export const actionSelectNewCarFilterGearbox = (gearbox) => {
+export const actionSelectNewCarFilterGearbox = gearbox => {
   return dispatch => {
     dispatch({
       type: NEW_CAR_FILTER_GEARBOX__SELECT,
@@ -515,7 +506,7 @@ export const actionSelectNewCarFilterGearbox = (gearbox) => {
   };
 };
 
-export const actionSelectNewCarFilterDrive = (drive) => {
+export const actionSelectNewCarFilterDrive = drive => {
   return dispatch => {
     dispatch({
       type: NEW_CAR_FILTER_DRIVE__SELECT,
@@ -524,7 +515,7 @@ export const actionSelectNewCarFilterDrive = (drive) => {
   };
 };
 
-export const actionSelectNewCarFilterEngineType = (engineType) => {
+export const actionSelectNewCarFilterEngineType = engineType => {
   return dispatch => {
     dispatch({
       type: NEW_CAR_FILTER_ENGINE_TYPE__SELECT,
@@ -533,7 +524,7 @@ export const actionSelectNewCarFilterEngineType = (engineType) => {
   };
 };
 
-export const actionSelectNewCarFilterPrice = (prices) => {
+export const actionSelectNewCarFilterPrice = prices => {
   return dispatch => {
     dispatch({
       type: NEW_CAR_FILTER_PRICE__SELECT,
@@ -544,13 +535,13 @@ export const actionSelectNewCarFilterPrice = (prices) => {
 
 export const actionShowNewCarFilterPrice = () => {
   return dispatch => {
-    return dispatch({ type: NEW_CAR_FILTER_PRICE__SHOW });
+    return dispatch({type: NEW_CAR_FILTER_PRICE__SHOW});
   };
 };
 
 export const actionHideNewCarFilterPrice = () => {
   return dispatch => {
-    return dispatch({ type: NEW_CAR_FILTER_PRICE__HIDE });
+    return dispatch({type: NEW_CAR_FILTER_PRICE__HIDE});
   };
 };
 
@@ -572,17 +563,20 @@ export const actionFetchNewCarDetails = carId => {
           });
         }
 
-        const details = { ...response.data };
+        const details = {...response.data};
 
         // если есть фото нужного размера, записываем их в стор в нужной структуре данных
-        const photoViewerItems = get(details, 'img.10000x440', []).map(photo => {
-          return { source: { uri: photo } };
-        });
+        const photoViewerItems = get(details, 'img.10000x440', []).map(
+          photo => {
+            return {source: {uri: photo}};
+          },
+        );
 
-        photoViewerItems.length && dispatch({
-          type: NEW_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
-          payload: photoViewerItems,
-        });
+        photoViewerItems.length &&
+          dispatch({
+            type: NEW_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
+            payload: photoViewerItems,
+          });
 
         return dispatch({
           type: NEW_CAR_DETAILS__SUCCESS,
@@ -626,7 +620,7 @@ export const actionUpdateNewCarPhotoViewerIndex = index => {
 };
 
 // carcost
-export const actionFillPhotosCarCost = (photos) => {
+export const actionFillPhotosCarCost = photos => {
   return dispatch => {
     return dispatch({
       type: CAR_COST_PHOTOS__FILL,
@@ -635,7 +629,7 @@ export const actionFillPhotosCarCost = (photos) => {
   };
 };
 
-export const actionFillBrandCarCost = (brand) => {
+export const actionFillBrandCarCost = brand => {
   return dispatch => {
     return dispatch({
       type: CAR_COST_BRAND__FILL,
@@ -644,7 +638,7 @@ export const actionFillBrandCarCost = (brand) => {
   };
 };
 
-export const actionFillModelCarCost = (model) => {
+export const actionFillModelCarCost = model => {
   return dispatch => {
     return dispatch({
       type: CAR_COST_MODEL__FILL,
@@ -653,7 +647,7 @@ export const actionFillModelCarCost = (model) => {
   };
 };
 
-export const actionFillColorCarCost = (color) => {
+export const actionFillColorCarCost = color => {
   return dispatch => {
     return dispatch({
       type: CAR_COST_COLOR__FILL,
@@ -662,7 +656,7 @@ export const actionFillColorCarCost = (color) => {
   };
 };
 
-export const actionSelectYearCarCost = (year) => {
+export const actionSelectYearCarCost = year => {
   return dispatch => {
     return dispatch({
       type: CAR_COST_YEAR__SELECT,
@@ -671,7 +665,7 @@ export const actionSelectYearCarCost = (year) => {
   };
 };
 
-export const actionFillMileageCarCost = (mileage) => {
+export const actionFillMileageCarCost = mileage => {
   return dispatch => {
     return dispatch({
       type: CAR_COST_MILEAGE__FILL,
@@ -680,7 +674,7 @@ export const actionFillMileageCarCost = (mileage) => {
   };
 };
 
-export const actionSelectMileageUnitCarCost = (mileageUnit) => {
+export const actionSelectMileageUnitCarCost = mileageUnit => {
   return dispatch => {
     return dispatch({
       type: CAR_COST_MILEAGE_UNIT__SELECT,
@@ -689,7 +683,7 @@ export const actionSelectMileageUnitCarCost = (mileageUnit) => {
   };
 };
 
-export const actionFillEngineVolumeCarCost = (engine) => {
+export const actionFillEngineVolumeCarCost = engine => {
   return dispatch => {
     return dispatch({
       type: CAR_COST_ENGINE_VOLUME__FILL,
@@ -698,7 +692,7 @@ export const actionFillEngineVolumeCarCost = (engine) => {
   };
 };
 
-export const actionSelectEngineTypeCarCost = (engine) => {
+export const actionSelectEngineTypeCarCost = engine => {
   return dispatch => {
     return dispatch({
       type: CAR_COST_ENGINE_TYPE__SELECT,
@@ -707,7 +701,7 @@ export const actionSelectEngineTypeCarCost = (engine) => {
   };
 };
 
-export const actionFillVinCarCost = (engine) => {
+export const actionFillVinCarCost = engine => {
   return dispatch => {
     return dispatch({
       type: CAR_COST_VIN__FILL,
@@ -716,7 +710,7 @@ export const actionFillVinCarCost = (engine) => {
   };
 };
 
-export const actionSelectGearboxCarCost = (gearbox) => {
+export const actionSelectGearboxCarCost = gearbox => {
   return dispatch => {
     return dispatch({
       type: CAR_COST_GEARBOX__SELECT,
@@ -725,7 +719,7 @@ export const actionSelectGearboxCarCost = (gearbox) => {
   };
 };
 
-export const actionSelectCarConditionCarCost = (carCondition) => {
+export const actionSelectCarConditionCarCost = carCondition => {
   return dispatch => {
     return dispatch({
       type: CAR_COST_CAR_CONDITION__SELECT,
@@ -734,7 +728,7 @@ export const actionSelectCarConditionCarCost = (carCondition) => {
   };
 };
 
-export const actionFillCommentCarCost = (comment) => {
+export const actionFillCommentCarCost = comment => {
   return dispatch => {
     return dispatch({
       type: CAR_COST_COMMENT__FILL,
@@ -743,20 +737,20 @@ export const actionFillCommentCarCost = (comment) => {
   };
 };
 
-export const actionCarCostOrder = (props) => {
+export const actionCarCostOrder = props => {
   return dispatch => {
     dispatch({
       type: CAR_COST__REQUEST,
-      payload: { ...props },
+      payload: {...props},
     });
 
     return API.carCostOrder(props)
       .then(rnFetchBlobresult => {
-        const { data } = rnFetchBlobresult;
+        const {data} = rnFetchBlobresult;
         try {
           __DEV__ && console.log('carCostOrder result', rnFetchBlobresult);
           const res = JSON.parse(data);
-          const { status, error } = res;
+          const {status, error} = res;
 
           if (status !== 'success') {
             return dispatch({
@@ -768,11 +762,11 @@ export const actionCarCostOrder = (props) => {
             });
           }
 
-          return dispatch({ type: CAR_COST__SUCCESS });
+          return dispatch({type: CAR_COST__SUCCESS});
         } catch (parseError) {
           __DEV__ && console.log('carCostOrder parse error', parseError);
 
-          return dispatch({ type: CAR_COST__FAIL });
+          return dispatch({type: CAR_COST__FAIL});
         }
       })
       .catch(error => {

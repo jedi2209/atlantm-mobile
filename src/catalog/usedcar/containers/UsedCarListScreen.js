@@ -138,7 +138,6 @@ class UserCarListScreen extends Component {
 
   shouldComponentUpdate(nextProps) {
     const {
-      city,
       total,
       items,
       needUpdate,
@@ -147,15 +146,9 @@ class UserCarListScreen extends Component {
       isPriceFilterShow,
     } = this.props;
 
-    // console.log('>>>>> WEE ARE CHAMPION',nextProps)
-
     const nav = nextProps.nav.newState;
     const isActiveScreen =
       nav.routes[nav.index].routeName === 'UserCarListScreen';
-
-// console.log(this.props.priceRange,  nextProps.priceRange)
-
-    // console.log(needUpdate)
 
     return (
       (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
@@ -165,7 +158,6 @@ class UserCarListScreen extends Component {
       isPriceFilterShow !== nextProps.isPriceFilterShow ||
       // city.id !== nextProps.city.id ||
       needUpdate !== nextProps.needUpdate ||
-
       this.props.priceRange !== nextProps.priceRange
     );
   }

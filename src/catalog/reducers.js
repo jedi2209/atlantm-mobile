@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
+import {REHYDRATE} from 'redux-persist/constants';
 import {
   USED_CAR_LIST__REQUEST,
   USED_CAR_LIST__SUCCESS,
@@ -361,7 +361,9 @@ const newCarFilterData = (state = null, action) => {
 
 const newCarByFilter = (state = {}, action) => {
   switch (action.type) {
+    case DEALER__SUCCESS:
     case NEW_CAR_CITY__SELECT:
+      console.log('БЛЯБЛЯБЛЯБЛЯ');
       return {};
     case NEW_CAR_BY_FILTER__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {

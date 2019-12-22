@@ -230,8 +230,6 @@ class ProfileScreenInfo extends Component {
   render() {
     const cars = ['1', '2', '3'];
 
-    console.log('this.props.login', this.props.login);
-
     return (
       <View>
         <Text

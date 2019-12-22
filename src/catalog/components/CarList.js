@@ -1,12 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {
-  View,
-  FlatList,
-  Platform,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import {View, FlatList, StyleSheet, ActivityIndicator} from 'react-native';
 
 // redux
 import {
@@ -20,7 +14,6 @@ import EmptyMessage from '../../core/components/EmptyMessage';
 import CarListItem from './CarListItem';
 
 // helpers
-import {debounce} from 'lodash';
 import styleConst from '../../core/style-const';
 import {verticalScale} from '../../utils/scale';
 import {TEXT_EMPTY_CAR_LIST} from '../constants';
@@ -73,7 +66,6 @@ export default class CarList extends Component {
   }
 
   renderEmptyComponent = () => {
-    //    const { isFetchItems } = this.props;
     const isFetchItems = true;
     return isFetchItems ? (
       <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
@@ -88,7 +80,6 @@ export default class CarList extends Component {
     }
 
     const {itemScreen, navigation, prices} = this.props;
-    console.log(this.props, 'this.props');
     return (
       <CarListItem
         currency={this.props.prices.curr.name} //TODO: что-то может пойти не так ?
@@ -115,11 +106,6 @@ export default class CarList extends Component {
   onRefresh = () => {
     const {dataHandler} = this.props;
 
-    // this.setState({
-    //   bounces: false,
-    //   isRefreshing: true,
-    // });
-
     dataHandler(EVENT_REFRESH).then(() => {
       this.setState({
         bounces: true,
@@ -127,8 +113,6 @@ export default class CarList extends Component {
       });
     });
   };
-
-  //getOnEndReached = () => debounce(this.handleLoadMore, 1000)
 
   handleLoadMore = () => {
     const {items, pages, dataHandler} = this.props;

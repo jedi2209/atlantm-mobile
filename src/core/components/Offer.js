@@ -35,8 +35,6 @@ const styles = StyleSheet.create({
 
 export const Offer = props => {
   const {data, height, cardWidth} = props;
-
-  // console.log('data', data.item);
   return (
     <TouchableWithoutFeedback
       onPress={() => {

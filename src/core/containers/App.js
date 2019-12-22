@@ -30,7 +30,6 @@ import PushNotifications from '../components/PushNotifications';
 // import RateThisApp from '../components/RateThisApp';
 
 // components
-import Sidebar from '../../menu/containers/Sidebar';
 import DeviceInfo from 'react-native-device-info';
 
 // routes
@@ -43,8 +42,6 @@ if (__DEV__) {
 enableScreens();
 
 const mapStateToProps = ({core, dealer, profile}) => {
-  console.log('dealerSelected in mapStateToProps', dealer);
-
   return {
     //     pushActionSubscribeState: core.pushActionSubscribeState,
     dealerSelected: dealer.selected,
@@ -101,8 +98,6 @@ class App extends Component {
       // если мы ещё не очищали стор
       actionMenuOpenedCount(0);
       actionStoreUpdated('2019-02-01');
-      console.log('APP INIT INSIDE ====== currentDealer', currentDealer);
-      console.log('APP INIT INSIDE ====== isStoreUpdated', isStoreUpdated);
     }
 
     setTimeout(() => {
@@ -110,9 +105,6 @@ class App extends Component {
         kOSSettingsKeyAutoPrompt: true,
         kOSSettingsKeyInFocusDisplayOption: 2,
       });
-
-      console.log('APP INIT AFTER ====== menuOpenedCount', menuOpenedCount);
-      console.log('APP INIT AFTER ====== isStoreUpdated', isStoreUpdated);
 
       OneSignal.promptForPushNotificationsWithUserResponse(status => {
         if (status) {
@@ -123,19 +115,11 @@ class App extends Component {
             menuOpenedCount === '' ||
             isStoreUpdated === false
           ) {
-            // при первичном ините всегда подписываем насильно на акции
-            console.log('APP INSIDE ====== menuOpenedCount', menuOpenedCount);
-            console.log('APP INSIDE ====== isStoreUpdated', isStoreUpdated);
             actionSetPushActionSubscribe(true);
           }
 
           OneSignal.setSubscription(true);
         } else {
-          console.log(
-            'APP INSIDE FALSE ====== menuOpenedCount',
-            menuOpenedCount,
-          );
-          console.log('APP INSIDE FALSE ====== isStoreUpdated', isStoreUpdated);
           actionSetPushGranted(false);
           actionSetPushActionSubscribe(false);
           PushNotifications.unsubscribeFromTopic('actions');
@@ -178,20 +162,15 @@ class App extends Component {
   };
 
   render() {
-    console.log('====== App');
     const isTablet = DeviceInfo.isTablet();
     const mainScreen = isTablet ? 'ContactsScreen' : 'MenuScreen';
-    console.log('isDealerSelected store =======>', store.getState());
     const isDealerSelected = get(store.getState(), 'dealer.selected.id');
 
-    console.log('isDealerSelected =======>', isDealerSelected);
     const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
     const AppContainer = createAppContainer(Router);
 
     const defaultGetStateForAction = Router.router.getStateForAction;
     Router.router.getStateForAction = (action, state) => {
-      // console.log('ROUTER action', action);
-      // console.log('ROUTER state', state);
       return defaultGetStateForAction(action, state);
     };
 

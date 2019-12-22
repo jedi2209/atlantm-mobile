@@ -1,15 +1,15 @@
-import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, {PureComponent} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import { ListItem, Body, Item, Label } from 'native-base';
+import {ListItem, Body, Item, Label} from 'native-base';
 
 // styles
 import stylesList from '../../core/components/Lists/style';
 
 // helpers
-import { get } from 'lodash';
+import {get} from 'lodash';
 import styleConst from '../../core/style-const';
 
 const styles = StyleSheet.create({
@@ -24,42 +24,59 @@ const styles = StyleSheet.create({
 export default class CarOrderList extends PureComponent {
   static propTypes = {
     brand: PropTypes.string,
-    model: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.object]),
+    model: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+      PropTypes.object,
+    ]),
     isSale: PropTypes.bool,
     price: PropTypes.string,
     priceSpecial: PropTypes.string,
     complectation: PropTypes.string,
-  }
+  };
 
-  static defaultProps = {}
+  static defaultProps = {};
 
   renderItem = (label, value, isLast, isSale, isDefault) => {
-    if (!value) return null;
-    console.log('stylesList', stylesList);
+    if (!value) {
+      return null;
+    }
     return (
       <View style={stylesList.listItemContainer}>
-        <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]}>
+        <ListItem
+          last={isLast}
+          style={[stylesList.listItem, stylesList.listItemReset]}>
           <Body>
             <Item style={stylesList.inputItem} fixedLabel>
-              <Label style={[
-                stylesList.label,
-                isSale ? styles.labelSpecial : '',
-              ]}>{label}</Label>
+              <Label
+                style={[stylesList.label, isSale ? styles.labelSpecial : '']}>
+                {label}
+              </Label>
               <View style={stylesList.listItemValueContainer}>
-                <Text style={[
-                  stylesList.listItemValue,
-                  isDefault ? styles.listItemValueDefault : '',
-                ]}>{value}</Text>
+                <Text
+                  style={[
+                    stylesList.listItemValue,
+                    isDefault ? styles.listItemValueDefault : '',
+                  ]}>
+                  {value}
+                </Text>
               </View>
             </Item>
           </Body>
         </ListItem>
       </View>
     );
-  }
+  };
 
   render() {
-    const { brand, model, isSale, price, priceSpecial, complectation } = this.props;
+    const {
+      brand,
+      model,
+      isSale,
+      price,
+      priceSpecial,
+      complectation,
+    } = this.props;
     const modelName = get(model, 'name') || model;
 
     return (
