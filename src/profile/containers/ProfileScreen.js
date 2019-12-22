@@ -401,16 +401,20 @@ class ProfileScreen extends Component {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log('userInfo', userInfo);
+      console.log('Google auth userInfo', userInfo);
       this.setState({userInfo});
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        console.log('Google auth cancelled', error);
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
+        console.log('Google auth in process', error);
         // operation (e.g. sign in) is in progress already
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        console.log('Google auth play services', error);
         // play services not available or outdated
       } else {
+        console.log('Google auth error', error);
         // some other error happened
       }
     }
@@ -454,7 +458,7 @@ class ProfileScreen extends Component {
                 }}
                 onLoginFinished={(error, result) => {
                   if (error) {
-                    alert('Login failed with error: ' + error.message);
+                    console.log('Facebook login error', error);
                   } else if (result.isCancelled) {
                     alert('Login was cancelled');
                   } else {
@@ -464,7 +468,7 @@ class ProfileScreen extends Component {
                         this._sendDataToApi(data1);
                       });
                     });
-                    console.log('result ==================>', result);
+                    console.log('Facebook login success', result);
                   }
                 }}
                 onLogoutFinished={() => alert('User logged out')}
@@ -495,8 +499,8 @@ class ProfileScreen extends Component {
                 <Text style={{color: '#fff', marginLeft: 8}}>
                   Войти через Google
                 </Text>
-              </Button> */}
-              {/* <Button
+              </Button>
+              <Button
                 onPress={() => {
                   LoginManager.logInWithPermissions(['public_profile']).then(
                     function(result) {
