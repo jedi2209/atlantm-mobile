@@ -57,7 +57,6 @@ class ChooseDealerScreen extends Component {
 
   onSelectDealer = ({prevDealer, newDealer}) => {
     const {pushActionSubscribeState} = this.props;
-    console.log('onSelectDealer => New Dealer', newDealer);
     // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
     PushNotifications.addTag('dealer', newDealer.id);
 

@@ -350,6 +350,7 @@ const isFetchingNewCarByFilter = (state = false, action) => {
 
 const newCarFilterData = (state = null, action) => {
   switch (action.type) {
+    case DEALER__SUCCESS:
     case NEW_CAR_FILTER_DATA__REQUEST:
       return null;
     case NEW_CAR_FILTER_DATA__SUCCESS:
@@ -363,7 +364,6 @@ const newCarByFilter = (state = {}, action) => {
   switch (action.type) {
     case DEALER__SUCCESS:
     case NEW_CAR_CITY__SELECT:
-      console.log('БЛЯБЛЯБЛЯБЛЯ');
       return {};
     case NEW_CAR_BY_FILTER__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {

@@ -83,6 +83,7 @@ class NewCarListScreen extends Component {
     const defaultSearchUrl = `/stock/new/cars/get/city/${
       dealerSelected.city.id
     }/`;
+
     const searchUrl = filterData.search_url || defaultSearchUrl;
 
     Amplitude.logEvent('screen', 'catalog/newcar/list', {

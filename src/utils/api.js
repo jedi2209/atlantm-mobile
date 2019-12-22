@@ -202,10 +202,6 @@ export default {
     let isAmp = false;
     const setParamDivider = () => (isAmp ? '&' : '?');
 
-    console.log('filterBrands ===========>', filterBrands);
-    console.log('filters ==============> тттттууууууут', filterModels);
-    console.log('filterPrice ==========>', filterPrice);
-
     if (filterBrands) {
       filterBrands.forEach(({id, checked}) => {
         if (checked) {
