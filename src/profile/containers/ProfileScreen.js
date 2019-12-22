@@ -220,8 +220,6 @@ class ProfileScreen extends Component {
     const code = this.state.codeValue;
 
     this.props.actionSavePofileWithPhone({phone, code}).then(data => {
-      // SAP: {ID: "62513365", TOKEN: "f7c27e35610137909a092be12fc1e2b1"}
-      console.log(data);
       this.props.actionSavePofile({
         first_name: data.NAME,
         last_name: data.LAST_NAME,
@@ -231,88 +229,25 @@ class ProfileScreen extends Component {
 
       Keyboard.dismiss();
 
-      setTimeout(
-        () => this.props.navigation.navigate('ProfileScreenInfo'),
-        600,
-      );
+      this.props.navigation.navigate('ProfileScreenInfo');
     });
   };
 
   _sendDataToApi(profile) {
-    console.log('ya tyt', this.props);
     this.props.actionSavePofile(profile);
-    // todo?
     this.props.navigation.navigate('ProfileScreenInfo');
   }
 
   componentDidMount() {
-    const {auth, navigation, profile} = this.props;
+    const {login} = this.props;
 
-    console.log('profile', profile);
+    console.log('profile in componentDidMount', this.props);
 
-    if (profile && profile.login) {
-      console.log('ya tyt navigate me');
+    if (login && login.token) {
+      console.log('я залогинен');
+      this.props.navigation.navigate('ProfileScreenInfo');
     }
-
-    navigation.setParams({
-      isAuth: get(auth, 'token.id'),
-      onReload: auth.token ? this.onReload : null,
-    });
   }
-
-  // shouldComponentUpdate(nextProps) {
-  //   const nav = nextProps.nav.newState;
-  //   let isActiveScreen = false;
-
-  //   if (nav) {
-  //     const rootLevel = nav.routes[nav.index];
-  //     if (rootLevel) {
-  //       isActiveScreen =
-  //         get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
-  //         'ProfileScreen';
-  //     }
-  //   }
-
-  //   return isActiveScreen;
-  // }
-
-  onReload = () => {
-    const {auth, actionFetchProfileData} = this.props;
-    const token = get(auth, 'token.id');
-
-    actionFetchProfileData({token});
-  };
-
-  onPressLogout = () => {
-    const {auth, actionLogout} = this.props;
-
-    return Alert.alert(
-      'Подтверждение выхода',
-      'Вы действительно хотите выйти?',
-      [
-        {text: 'Нет', style: 'destructive'},
-        {
-          text: 'Выйти',
-          onPress() {
-            if (get(auth, 'login') === 'zteam') {
-              // отключаем debug режим
-              window.atlantmDebug = null;
-            }
-
-            setTimeout(() => {
-              PushNotifications.removeTag('login');
-              actionLogout();
-            }, 100);
-          },
-        },
-      ],
-    );
-  };
-
-  getDealersList = () => {
-    const {listRussia, listUkraine, listBelarussia} = this.props;
-    return [].concat(listRussia, listUkraine, listBelarussia);
-  };
 
   async fetchProfile(token) {
     return new Promise((resolve, reject) => {
@@ -377,6 +312,7 @@ class ProfileScreen extends Component {
   };
 
   render() {
+    console.log('page login =========> ');
     return (
       <KeyboardAvoidingView behavior="position">
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
