@@ -1,10 +1,28 @@
-import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, View, Text, Alert } from 'react-native';
-import { StyleProvider, Content, ListItem, Body, Right, Icon, Row, Col, Item, Label } from 'native-base';
+import React, {Component} from 'react';
+import {SafeAreaView, StyleSheet, View, Text, Alert} from 'react-native';
+import {
+  StyleProvider,
+  Content,
+  ListItem,
+  Body,
+  Right,
+  Icon,
+  Row,
+  Col,
+  Item,
+  Label,
+  Accordion,
+  Segment,
+  Button,
+  Tabs,
+  Tab,
+  Container,
+} from 'native-base';
 
+const stylesCommon = {};
 // redux
-import { connect } from 'react-redux';
-import { CAR_HISTORY__FAIL } from '../../actionTypes';
+import {connect} from 'react-redux';
+import {CAR_HISTORY__FAIL} from '../../actionTypes';
 import {
   actionFetchCarHistory,
   actionSetCarHistoryLevel1,
@@ -20,14 +38,14 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
-import { get, isEmpty } from 'lodash';
-import { dayMonthYear } from '../../../utils/date';
+import {get, isEmpty} from 'lodash';
+import {dayMonthYear} from '../../../utils/date';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import numberWithGap from '../../../utils/number-with-gap';
-import { MONTH_TEXT } from '../../const';
-import { ERROR_NETWORK } from '../../../core/const';
+import {MONTH_TEXT} from '../../const';
+import {ERROR_NETWORK} from '../../../core/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -92,7 +110,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ nav, profile }) => {
+const mapStateToProps = ({nav, profile}) => {
   return {
     nav,
     auth: profile.auth,
@@ -109,35 +127,89 @@ const mapDispatchToProps = {
   actionSetCarHistoryLevel2,
 };
 
+const Tab2 = () => {
+  return (
+    <View style={{backgroundColor: '#fff'}}>
+      <Text>Установка передних брызговиков</Text>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+        }}>
+        <Col>
+          <View style={styles.dealerContainer}>
+            <Text style={styles.sectionTitleValue}>Кол-во</Text>
+          </View>
+        </Col>
+        <Col>
+          <View style={styles.dealerContainer}>
+            <Text style={styles.sectionTitleValue}>0.4 ч.</Text>
+          </View>
+        </Col>
+      </View>
+    </View>
+  );
+};
+
+const Tab1 = () => {
+  return (
+    <View style={{backgroundColor: '#fff'}}>
+      <Text>Установка чего-то там еще</Text>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'flex-start',
+        }}>
+        <Col>
+          <View style={styles.dealerContainer}>
+            <Text style={styles.sectionTitleValue}>Кол-во</Text>
+          </View>
+        </Col>
+        <Col>
+          <View style={styles.dealerContainer}>
+            <Text style={styles.sectionTitleValue}>0.4 ч.</Text>
+          </View>
+        </Col>
+      </View>
+    </View>
+  );
+};
 class CarHistoryScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: 'История обслуживания',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
-  })
+  });
 
   componentDidMount() {
-    const { auth, navigation, actionFetchCarHistory } = this.props;
+    const {profile, navigation, actionFetchCarHistory} = this.props;
     const vin = get(navigation, 'state.params.car.vin');
-    const token = get(auth, 'token.id');
+    const token = get(profile, 'token.id');
+    const userid = get(profile, 'token.id');
 
     actionFetchCarHistory({
       vin,
       token,
-    })
-      .then(action => {
-        if (action.type === CAR_HISTORY__FAIL) {
-          let message = get(action, 'payload.message', 'Произошла ошибка, попробуйте снова');
+      userid,
+    }).then(action => {
+      if (action.type === CAR_HISTORY__FAIL) {
+        let message = get(
+          action,
+          'payload.message',
+          'Произошла ошибка, попробуйте снова',
+        );
 
-          if (message === 'Network request failed') {
-            message = ERROR_NETWORK;
-          }
-
-          setTimeout(() => Alert.alert(message), 100);
+        if (message === 'Network request failed') {
+          message = ERROR_NETWORK;
         }
-      });
+
+        setTimeout(() => Alert.alert(message), 100);
+      }
+    });
   }
 
   shouldComponentUpdate(nextProps) {
@@ -147,7 +219,9 @@ class CarHistoryScreen extends Component {
     if (nav) {
       const rootLevel = nav.routes[nav.index];
       if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'CarHistoryScreen';
+        isActiveScreen =
+          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
+          'CarHistoryScreen';
       }
     }
 
@@ -155,11 +229,15 @@ class CarHistoryScreen extends Component {
   }
 
   renderListItem = (label, value, isLast) => {
-    if (!value) return null;
+    if (!value) {
+      return null;
+    }
 
     return (
       <View style={stylesList.listItemContainer}>
-        <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]}>
+        <ListItem
+          last={isLast}
+          style={[stylesList.listItem, stylesList.listItemReset]}>
           <Body>
             <Item style={stylesList.inputItem} fixedLabel>
               <Label style={stylesList.label}>{label}</Label>
@@ -171,22 +249,26 @@ class CarHistoryScreen extends Component {
         </ListItem>
       </View>
     );
-  }
+  };
 
   onPressLevel1 = hash => {
-    this.props.actionSetCarHistoryLevel1(this.isActiveLevel1(hash) ? null : hash);
-  }
+    this.props.actionSetCarHistoryLevel1(
+      this.isActiveLevel1(hash) ? null : hash,
+    );
+  };
   onPressLevel2 = hash => {
-    this.props.actionSetCarHistoryLevel2(this.isActiveLevel2(hash) ? null : hash);
-  }
+    this.props.actionSetCarHistoryLevel2(
+      this.isActiveLevel2(hash) ? null : hash,
+    );
+  };
 
   isActiveLevel1 = hash => this.props.level1hash === hash;
   isActiveLevel2 = hash => this.props.level2hash === hash;
 
-  renderLevel1 = (carHistory) => {
+  renderLevel1 = carHistory => {
     return Object.keys(carHistory).map((carHistoryYear, idx, yearsArray) => {
       const item = carHistory[carHistoryYear];
-      const isLast = (yearsArray.length - 1) === idx;
+      const isLast = yearsArray.length - 1 === idx;
       const hash = item.hash;
       const isActive = this.isActiveLevel1(hash);
       const onPressHandler = () => this.onPressLevel1(hash);
@@ -201,28 +283,24 @@ class CarHistoryScreen extends Component {
             isLast,
             isArrow: true,
           })}
-          {
-            isActive ?
-              (
-                <Animatable.View
-                  style={[styles.accContent, styles.accContentLevel1]}
-                  animation="slideInDown"
-                  useNativeDriver={true}
-                  duration={700}
-                >
-                  {this.renderLevel2(item.history)}
-                </Animatable.View>
-              ) : null
-          }
+          {isActive ? (
+            <Animatable.View
+              style={[styles.accContent, styles.accContentLevel1]}
+              animation="slideInDown"
+              useNativeDriver={true}
+              duration={700}>
+              {this.renderLevel2(item.history)}
+            </Animatable.View>
+          ) : null}
         </View>
       );
     });
-  }
+  };
 
-  renderLevel2 = (carHistoryItemByMonth) => {
+  renderLevel2 = carHistoryItemByMonth => {
     return Object.keys(carHistoryItemByMonth).map((month, idx, monthArray) => {
       const item = carHistoryItemByMonth[month];
-      const isLast = (monthArray.length - 1) === idx;
+      const isLast = monthArray.length - 1 === idx;
       const hash = item.hash;
       const isActive = this.isActiveLevel2(hash);
       const onPressHandler = () => this.onPressLevel2(hash);
@@ -237,37 +315,34 @@ class CarHistoryScreen extends Component {
             isLast,
             isArrow: true,
           })}
-          {
-            isActive ?
-              (
-                <Animatable.View
-                  animation="pulse"
-                  useNativeDriver={true}
-                  duration={700}
-                >
-                {this.renderLevel3(item.history)}
-              </Animatable.View>
-              ) : null
-          }
+          {isActive ? (
+            <Animatable.View
+              animation="pulse"
+              useNativeDriver={true}
+              duration={700}>
+              {this.renderLevel3(item.history)}
+            </Animatable.View>
+          ) : null}
         </View>
       );
     });
-  }
+  };
 
-  renderLevel3 = (works) => {
-    const { navigation } = this.props;
+  renderLevel3 = works => {
+    const {navigation} = this.props;
     const vin = get(navigation, 'state.params.car.vin');
 
     return works.map((work, idx) => {
       const workId = get(work, 'document.number');
       const workDealer = get(work, 'dealer.id');
-      const isLast = (works.length - 1) === idx;
-      const onPressHandler = () => navigation.navigate('CarHistoryDetailsScreen', {
-        vin,
-        workId,
-        workDealer,
-        title: `${get(work, 'document.name')} #${workId}`,
-      });
+      const isLast = works.length - 1 === idx;
+      const onPressHandler = () =>
+        navigation.navigate('CarHistoryDetailsScreen', {
+          vin,
+          workId,
+          workDealer,
+          title: `${get(work, 'document.name')} #${workId}`,
+        });
 
       return this.renderItemHeader({
         work,
@@ -278,9 +353,9 @@ class CarHistoryScreen extends Component {
         theme: 'itemLevel3',
       });
     });
-  }
+  };
 
-  renderLevel3Item = ({ prop, value }) => (
+  renderLevel3Item = ({prop, value}) => (
     <Row style={styles.sectionRow}>
       <Col style={styles.sectionProp}>
         <Text style={styles.sectionPropText}>{`${prop}:`}</Text>
@@ -289,10 +364,10 @@ class CarHistoryScreen extends Component {
         <Text style={styles.sectionValueText}>{value}</Text>
       </Col>
     </Row>
-  )
+  );
 
-  renderLevel3Content = ({ work }) => {
-    const { date, document, master, summ } = work;
+  renderLevel3Content = ({work}) => {
+    const {date, document, master, summ} = work;
     const works = get(summ, 'works');
     const parts = get(summ, 'parts');
     const total = get(summ, 'total');
@@ -300,17 +375,46 @@ class CarHistoryScreen extends Component {
 
     return (
       <Body style={styles.body}>
-        { date ? <Text style={styles.date}>{dayMonthYear(date)}</Text> : null }
-        { document ? this.renderLevel3Item({ prop: document.name, value: `#${document.number}` }) : null}
-        { master ? this.renderLevel3Item({ prop: 'Мастер', value: master }) : null}
-        { works ? this.renderLevel3Item({ prop: 'Ст-ть работ', value: `${numberWithGap(works)} ${currency}` }) : null}
-        { parts ? this.renderLevel3Item({ prop: 'Ст-ть запчастей', value: `${numberWithGap(parts)} ${currency}` }) : null}
-        { total ? this.renderLevel3Item({ prop: 'Всего', value: `${numberWithGap(total)} ${currency}` }) : null}
+        {date ? <Text style={styles.date}>{dayMonthYear(date)}</Text> : null}
+        {document
+          ? this.renderLevel3Item({
+              prop: document.name,
+              value: `#${document.number}`,
+            })
+          : null}
+        {master ? this.renderLevel3Item({prop: 'Мастер', value: master}) : null}
+        {works
+          ? this.renderLevel3Item({
+              prop: 'Ст-ть работ',
+              value: `${numberWithGap(works)} ${currency}`,
+            })
+          : null}
+        {parts
+          ? this.renderLevel3Item({
+              prop: 'Ст-ть запчастей',
+              value: `${numberWithGap(parts)} ${currency}`,
+            })
+          : null}
+        {total
+          ? this.renderLevel3Item({
+              prop: 'Всего',
+              value: `${numberWithGap(total)} ${currency}`,
+            })
+          : null}
       </Body>
     );
-  }
+  };
 
-  renderItemHeader = ({ work, key, label, theme, isActive, isArrow, onPressHandler, isArrowPress }) => {
+  renderItemHeader = ({
+    work,
+    key,
+    label,
+    theme,
+    isActive,
+    isArrow,
+    onPressHandler,
+    isArrowPress,
+  }) => {
     const isLevel3 = theme === 'itemLevel3';
 
     return (
@@ -319,43 +423,137 @@ class CarHistoryScreen extends Component {
           icon
           last
           style={[stylesList.listItem, isLevel3 ? styles.listItem : null]}
-          onPress={onPressHandler}
-        >
-          {
-            isLevel3 ?
-              this.renderLevel3Content({ work }) :
-              (
-                <Body>
-                  <Text style={stylesList.label}>{label}</Text>
-                </Body>
-              )
-          }
+          onPress={onPressHandler}>
+          {isLevel3 ? (
+            this.renderLevel3Content({work})
+          ) : (
+            <Body>
+              <Text style={stylesList.label}>{label}</Text>
+            </Body>
+          )}
           <Right>
-            {
-              isArrow ?
-                (
-                  <Icon
-                    name={isActive ? 'ios-arrow-down' : 'ios-arrow-forward'}
-                    style={[stylesList.iconArrow, stylesList.iconArrowWithText]}
-                  />
-                ) : null
-            }
-            { isArrowPress ? <Icon name="arrow-forward" style={[stylesList.iconArrow, styles.iconArrow]} /> : null }
+            {isArrow ? (
+              <Icon
+                name={isActive ? 'ios-arrow-down' : 'ios-arrow-forward'}
+                style={[stylesList.iconArrow, stylesList.iconArrowWithText]}
+              />
+            ) : null}
+            {isArrowPress ? (
+              <Icon
+                name="arrow-forward"
+                style={[stylesList.iconArrow, styles.iconArrow]}
+              />
+            ) : null}
           </Right>
         </ListItem>
       </View>
     );
-  }
+  };
 
   render() {
+    return (
+      <View>
+        <Text
+          style={{
+            fontSize: 35,
+            fontWeight: '600',
+            marginHorizontal: 20,
+            marginTop: 60,
+          }}>
+          История ТО
+        </Text>
+        <View style={{borderTopWidth: 1, borderColor: '#d5d5e0'}}>
+          <Accordion
+            dataArray={[
+              {
+                title: 'Заказ-наряд #78971 на 3 208.45 RUR',
+                content: (
+                  <Container>
+                    <Tabs>
+                    <Tab heading="Tab1">
+                      <Tab1 />
+                    </Tab>
+                    <Tab heading="Tab2">
+                      <Tab2 />
+                    </Tab>
+                  </Tabs>
+                  </Container>
+                  // <View style={stylesCommon.tabs}>
+                  //   <Segment>
+                  //     <Button
+                  //       first
+                  //       active={true}
+                  //       onPress={this.selectRegionBelarussia}>
+                  //       <Text>Рабооты</Text>
+                  //     </Button>
+                  //     <Button active={false} onPress={this.selectRegionRussia}>
+                  //       <Text>Материалы</Text>
+                  //     </Button>
+                  //   </Segment>
+                  //   <Tab1 />
+                  //   <Tab2 />
+                  // </View>
+                ),
+              },
+              {
+                title: 'Заказ-наряд #567971 на 45 000 RUR',
+                content: <Text>wait</Text>,
+              },
+            ]}
+            expanded={0}
+            animation={true}
+            renderHeader={(item, expanded) => (
+              <View
+                style={{
+                  height: 64,
+                  paddingHorizontal: 16,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  backgroundColor: '#fff',
+                  borderBottomWidth: expanded ? 0 : 1,
+                  borderColor: '#d5d5e0',
+                }}>
+                <Text style={{fontSize: 18}}>{item.title}</Text>
+                {expanded ? (
+                  <Icon
+                    type="FontAwesome5"
+                    style={{color: '#0061ED', fontWeight: 'normal'}}
+                    name="angle-down"
+                  />
+                ) : (
+                  <Icon
+                    type="FontAwesome5"
+                    style={{color: '#131314', fontWeight: 'normal'}}
+                    name="angle-right"
+                  />
+                )}
+              </View>
+            )}
+            renderContent={item => {
+              return (
+                <View
+                  style={{
+                    height: 200,
+                    backgroundColor: '#fff',
+                    paddingHorizontal: 16,
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#d5d5e0',
+                  }}>
+                  {item.content}
+                </View>
+              );
+            }}
+          />
+        </View>
+      </View>
+    );
+
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
-    const {
-      navigation,
-      carHistory,
-      isFetchCarHistory,
-    } = this.props;
+    const {navigation, carHistory, isFetchCarHistory} = this.props;
 
     const car = get(navigation, 'state.params.car');
 
@@ -368,9 +566,7 @@ class CarHistoryScreen extends Component {
     if (isEmpty(carHistory) || !carHistory.items) {
       return (
         <SafeAreaView style={styles.safearea}>
-          <Text style={styles.emptyText}>
-            Истории пока нет
-          </Text>
+          <Text style={styles.emptyText}>Истории пока нет</Text>
         </SafeAreaView>
       );
     }
@@ -382,10 +578,14 @@ class CarHistoryScreen extends Component {
             <View style={styles.about}>
               {car.brand ? this.renderListItem('Марка', car.brand) : null}
               {car.model ? this.renderListItem('Модель', car.model) : null}
-              {car.number ? this.renderListItem('Гос. номер', car.number) : null}
+              {car.number
+                ? this.renderListItem('Гос. номер', car.number)
+                : null}
               {car.vin ? this.renderListItem('VIN', car.vin, true) : null}
             </View>
-            {Object.keys(get(carHistory, 'items'), []).length ? this.renderLevel1(carHistory.items) : null}
+            {Object.keys(get(carHistory, 'items'), []).length
+              ? this.renderLevel1(carHistory.items)
+              : null}
           </Content>
         </SafeAreaView>
       </StyleProvider>
@@ -393,4 +593,7 @@ class CarHistoryScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CarHistoryScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CarHistoryScreen);

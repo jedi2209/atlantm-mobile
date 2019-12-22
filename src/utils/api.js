@@ -176,9 +176,9 @@ export default {
     });
   },
 
-  fetchCarHistory({vin, token}) {
+  fetchCarHistory({vin, token, userid}) {
     return this.request(
-      `/lkk/cars/history/list/?token=${token}&vin=${vin}`,
+      `/lkk/cars/history/list/?userid=${userid}&token=${token}&vin=${vin}`,
       baseRequestParams,
     );
   },
@@ -515,10 +515,35 @@ export default {
       body,
     });
 
+    console.log('requestParams =====>', requestParams);
+
     return this.request('/lkk/auth/social/', requestParams)
       .then(data => {
         console.log('success', data);
-        return {status: 'success', error: {}, profile};
+        return {status: 'success', error: {}, profile, data};
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
+  },
+
+  loginWithPhone({phone, code}) {
+    let body = `contact=${phone}`;
+    if (code) {
+      body = body + `&code=${code}`;
+    }
+
+    const requestParams = _.merge({}, baseRequestParams, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    });
+
+    return this.request('/lkk/auth/validate/', requestParams)
+      .then(data => {
+        return {status: 'success', error: {}, data};
       })
       .catch(err => {
         console.log('error', err);

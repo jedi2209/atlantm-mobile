@@ -5,8 +5,9 @@ import Wrapper from './src/core/containers/Wrapper';
 
 YellowBox.ignoreWarnings([
   'Remote debugger',
+  'Warning: componentWillUpdate has been renamed',
   'Warning: componentWillMount is deprecated',
-  'Warning: componentWillReceiveProps is deprecated',
+  'Warning: componentWillReceiveProps',
   'Module RNDeviceInfo requires main queue setup since it overrides',
 ]);
 

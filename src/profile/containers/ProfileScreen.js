@@ -1,7 +1,6 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {
   View,
   Alert,
@@ -43,6 +42,7 @@ import {
   actionLogout,
   actionFetchProfileData,
   actionSavePofile,
+  actionSavePofileWithPhone,
 } from '../actions';
 import {
   actionSetPushActionSubscribe,
@@ -161,8 +161,8 @@ const mapDispatchToProps = {
   actionSetPushGranted,
   actionSetPushActionSubscribe,
 
-
   actionSavePofile,
+  actionSavePofileWithPhone,
 };
 
 import {
@@ -193,70 +193,66 @@ class ProfileScreen extends Component {
     this.state = {
       isSigninInProgress: false,
       userInfo: {},
+      code: false,
+      phone: '',
+      codeValue: '',
+      checkCode: '',
     };
 
     this.requestManager = new GraphRequestManager();
   }
 
   static navigationOptions = () => ({
-    tabBarLabel: 'Кабинет',
-    tabBarIcon: ({focused}) => (
-      <Icon
-        name="user"
-        type="FontAwesome5"
-        style={{
-          fontSize: 24,
-          color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
-        }}
-      />
-    ),
+    header: null,
   });
-
-  static propTypes = {
-    dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
-    // nameFill: PropTypes.func,
-    // phoneFill: PropTypes.func,
-    // emailFill: PropTypes.func,
-    // carFill: PropTypes.func,
-    // carNumberFill: PropTypes.func,
-    // name: PropTypes.string,
-    // phone: PropTypes.string,
-    // email: PropTypes.string,
-    // car: PropTypes.string,
-    // carNumber: PropTypes.string,
-
-    // cars: PropTypes.array,
-
-    // auth: PropTypes.object,
-    // loginFill: PropTypes.func,
-    // passwordFill: PropTypes.func,
-    // login: PropTypes.string,
-    // password: PropTypes.string,
-    // isLoginRequest: PropTypes.bool,
-    // isFetchProfileData: PropTypes.bool,
-
-    // bonus: PropTypes.object,
-    // discounts: PropTypes.array,
-    //    fcmToken: PropTypes.string,
-    // pushActionSubscribeState: PropTypes.bool,
-    //    actionSetFCMToken: PropTypes.func,
-    // actionSetPushGranted: PropTypes.func,
-    // actionSetPushActionSubscribe: PropTypes.func,
-    // actionFetchCars: PropTypes.func,
-  };
 
   static defaultProps = {
     auth: {},
   };
 
+  _verifyCode = () => {
+    const phone = this.state.phone;
+    this.props.actionSavePofileWithPhone({phone}).then(checkCode => {
+      this.setState({code: true, checkCode});
+    });
+  };
+
+  _verifyCodeStepTwo = () => {
+    const phone = this.state.phone;
+    const code = this.state.codeValue;
+
+    this.props.actionSavePofileWithPhone({phone, code}).then(data => {
+      // SAP: {ID: "62513365", TOKEN: "f7c27e35610137909a092be12fc1e2b1"}
+      console.log(data);
+      this.props
+        .actionSavePofile({
+          first_name: data.NAME,
+          last_name: data.LAST_NAME,
+          token: data.SAP.TOKEN,
+          id: data.SAP.ID,
+        });
+
+        Keyboard.dismiss();
+
+        setTimeout(() => this.props.navigation.navigate('ProfileScreenInfo'), 600)
+    });
+  };
+
   _sendDataToApi(profile) {
-    console.log(profile);
+    console.log('ya tyt', this.props);
     this.props.actionSavePofile(profile);
+    // todo?
+    this.props.navigation.navigate('ProfileScreenInfo');
   }
 
   componentDidMount() {
-    const {auth, navigation} = this.props;
+    const {auth, navigation, profile} = this.props;
+
+    console.log('profile', profile);
+
+    if (profile && profile.login) {
+      console.log('ya tyt navigate me');
+    }
 
     navigation.setParams({
       isAuth: get(auth, 'token.id'),
@@ -264,21 +260,21 @@ class ProfileScreen extends Component {
     });
   }
 
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
+  // shouldComponentUpdate(nextProps) {
+  //   const nav = nextProps.nav.newState;
+  //   let isActiveScreen = false;
 
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen =
-          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
-          'ProfileScreen';
-      }
-    }
+  //   if (nav) {
+  //     const rootLevel = nav.routes[nav.index];
+  //     if (rootLevel) {
+  //       isActiveScreen =
+  //         get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
+  //         'ProfileScreen';
+  //     }
+  //   }
 
-    return isActiveScreen;
-  }
+  //   return isActiveScreen;
+  // }
 
   onReload = () => {
     const {auth, actionFetchProfileData} = this.props;
@@ -370,7 +366,15 @@ class ProfileScreen extends Component {
         // some other error happened
       }
     }
-  };
+  }
+
+  onInputCode = text => {
+    this.setState({codeValue: text});
+  }
+
+  onInputPhone = text => {
+      this.setState({phone: text});
+  }
 
   render() {
     return (
@@ -423,7 +427,9 @@ class ProfileScreen extends Component {
                     console.log('Facebook login success', result);
                   }
                 }}
-                onLogoutFinished={() => alert('User logged out')}
+                onLogoutFinished={() => {
+                  this.props.actionLogout();
+                }}
               />
               <GoogleSigninButton
                 style={{
@@ -441,59 +447,6 @@ class ProfileScreen extends Component {
               {/* <Button
                 iconLeft
                 style={{
-                  backgroundColor: '#4286F5',
-                  width: '80%',
-                  marginVertical: 8,
-                  paddingHorizontal: 8,
-                  justifyContent: 'flex-start',
-                }}>
-                <Icon name="google" type="FontAwesome5" />
-                <Text style={{color: '#fff', marginLeft: 8}}>
-                  Войти через Google
-                </Text>
-              </Button>
-              <Button
-                onPress={() => {
-                  LoginManager.logInWithPermissions(['public_profile']).then(
-                    function(result) {
-                      if (result.isCancelled) {
-                        alert('Login was cancelled');
-                      } else {
-                        AccessToken.getCurrentAccessToken()
-                          .then(data => {
-                            this.fetchProfile(data.accessToken).then(data1 => {
-                              // this.setState({userInfo: data1});
-                              console.log(123);
-                              this._sendDataToApi(data1);
-                            });
-                          })
-                          .catch(error => {
-                            console.log('!!!!!!');
-                            console.log(error);
-                          });
-                      }
-                    }.bind(this),
-                    function(error) {
-                      alert('Login failed with error: ' + error);
-                    },
-                  );
-                }}
-                iconLeft
-                style={{
-                  backgroundColor: '#4167B2',
-                  width: '80%',
-                  marginVertical: 8,
-                  paddingHorizontal: 8,
-                  justifyContent: 'flex-start',
-                }}>
-                <Icon name="facebook" type="FontAwesome5" />
-                <Text style={{color: '#fff', marginLeft: 8}}>
-                  Войти через Facebook
-                </Text>
-              </Button> */}
-              <Button
-                iconLeft
-                style={{
                   backgroundColor: '#EB722E',
                   width: '80%',
                   marginVertical: 8,
@@ -504,7 +457,7 @@ class ProfileScreen extends Component {
                 <Text style={{color: '#fff', marginLeft: 8}}>
                   Войти через Одноклассники
                 </Text>
-              </Button>
+              </Button> */}
               <Button
                 onPress={async () => {
                   const isLoggedIn = await VKLogin.isLoggedIn();
@@ -571,173 +524,64 @@ class ProfileScreen extends Component {
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Form>
-                <Item
-                  floatingLabel
-                  bordered
-                  rounded
-                  underline={false}
-                  style={{
-                    width: '80%',
-                    borderRadius: 4,
-                  }}>
-                  <Label
-                    style={{
-                      color: '#ffffff',
-                      textAlign: 'center',
-                    }}>
-                    Номер телефона
-                  </Label>
-                  <Input
-                    autoCompleteType="tel"
-                    dataDetectorTypes="phoneNumber"
-                    keyboardType="phone-pad"
-                    blurOnSubmit={true}
-                    returnKeyType="send"
-                    multiline={false}
-                    style={{
-                      margin: 0,
-                      padding: 0,
-                      color: '#ffffff',
-                    }}
-                  />
-                </Item>
-              </Form>
-              <Button
+              <TextInput
                 style={{
-                  marginTop: 20,
+                  height: 40,
+                  paddingHorizontal: 14,
+                  borderColor: 'gray',
+                  borderWidth: 1,
+                  color: '#fff',
                   width: '80%',
-                  backgroundColor: '#34BD78',
-                  justifyContent: 'center',
-                }}>
-                <Text style={{color: '#fff'}}>Получить код</Text>
-              </Button>
+                  borderRadius: 5,
+                }}
+                placeholder="Телефон"
+                keyboardType="phone-pad"
+                onChangeText={this.onInputPhone}
+              />
+              {!this.state.code && (
+                <Button
+                  onPress={this._verifyCode}
+                  style={{
+                    marginTop: 20,
+                    width: '80%',
+                    backgroundColor: '#34BD78',
+                    justifyContent: 'center',
+                  }}>
+                  <Text style={{color: '#fff'}}>Получить код</Text>
+                </Button>
+              )}
+              {this.state.code && (
+                <>
+                  <TextInput
+                    style={{
+                      height: 40,
+                      paddingHorizontal: 14,
+                      borderColor: 'gray',
+                      borderWidth: 1,
+                      color: '#fff',
+                      width: '80%',
+                      borderRadius: 5,
+                      marginTop: 15,
+                    }}
+                    placeholder="Код"
+                    onChangeText={this.onInputCode}
+                  />
+                  <Button
+                    onPress={this._verifyCodeStepTwo}
+                    style={{
+                      marginTop: 20,
+                      width: '80%',
+                      backgroundColor: '#34BD78',
+                      justifyContent: 'center',
+                    }}>
+                    <Text style={{color: '#fff'}}>Подвердить</Text>
+                  </Button>
+                </>
+              )}
             </View>
           </ImageBackground>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    );
-
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
-
-    const {
-      dealerSelected,
-      navigation,
-      nameFill,
-      phoneFill,
-      emailFill,
-      carFill,
-      carNumberFill,
-      name,
-      phone,
-      email,
-      car,
-      carNumber,
-
-      cars,
-      auth,
-      login,
-      password,
-      loginFill,
-      passwordFill,
-      actionLogin,
-      isLoginRequest,
-      bonus,
-      discounts,
-
-      //      fcmToken,
-      pushActionSubscribeState,
-      //      actionSetFCMToken,
-      actionSetPushGranted,
-      actionSetPushActionSubscribe,
-
-      isFetchProfileData,
-    } = this.props;
-
-    console.log('== Profile ==');
-
-    if (isFetchProfileData) {
-      return <SpinnerView text="Обновляем данные личного кабинета" />;
-    }
-
-    return (
-      <StyleProvider style={getTheme()}>
-        <Container style={styles.safearea}>
-          <Content
-            enableResetScrollToCoords={false}
-            keyboardShouldPersistTaps={
-              Platform.OS === 'android' ? 'always' : 'never'
-            }>
-            <List style={styles.list}>
-              {!auth.token ? (
-                <Auth
-                  dealers={this.getDealersList()}
-                  dealerSelected={dealerSelected}
-                  navigation={navigation}
-                  loginHandler={actionLogin}
-                  isRequest={isLoginRequest}
-                  login={login}
-                  password={password}
-                  loginFill={loginFill}
-                  passwordFill={passwordFill}
-                />
-              ) : null}
-
-              {auth.token ? (
-                <BonusDiscount
-                  bonus={get(bonus, 'saldo.value')}
-                  discounts={discounts.length}
-                  navigation={navigation}
-                />
-              ) : null}
-
-              <ListItemHeader text="МОЙ АВТОЦЕНТР" />
-
-              <DealerItemList
-                navigation={navigation}
-                city={dealerSelected.city}
-                name={dealerSelected.name}
-                brands={dealerSelected.brands}
-                goBack={true}
-              />
-
-              <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
-
-              <ProfileForm
-                navigation={navigation}
-                auth={auth}
-                carSection={true}
-                name={name}
-                phone={phone}
-                email={email}
-                car={car}
-                carNumber={carNumber}
-                cars={cars}
-                nameFill={nameFill}
-                phoneFill={phoneFill}
-                emailFill={emailFill}
-                carFill={carFill}
-                carNumberFill={carNumberFill}
-                //                fcmToken={fcmToken}
-                dealerSelected={dealerSelected}
-                pushActionSubscribeState={pushActionSubscribeState}
-                actionSetPushGranted={actionSetPushGranted}
-                actionSetPushActionSubscribe={actionSetPushActionSubscribe}
-              />
-            </List>
-
-            {auth.token ? (
-              <Button onPress={this.onPressLogout} full style={styles.button}>
-                <Icon name="ios-exit" style={styles.buttonIcon} />
-                <Text numberOfLines={1} style={styles.buttonText}>
-                  ВЫЙТИ ИЗ ЛИЧНОГО КАБИНЕТА
-                </Text>
-              </Button>
-            ) : null}
-          </Content>
-        </Container>
-      </StyleProvider>
     );
   }
 }
