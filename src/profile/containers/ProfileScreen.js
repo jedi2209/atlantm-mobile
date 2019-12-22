@@ -26,6 +26,7 @@ import {
   Form,
   Item,
   Input,
+  Label
 } from 'native-base';
 
 // redux
@@ -184,15 +185,41 @@ GoogleSignin.configure({
 
 import VKLogin from 'react-native-vkontakte-login';
 
+// loginHandler({ login, password, dealers, dealerSelected })
+// .then(action => {
+//   switch (action.type) {
+//       case LOGIN__FAIL:
+//           if (login === 'zteam' && password === '4952121052') {
+//               window.atlantmDebug = false;
+//           }
+
+//           const defaultMessage = 'Произошла ошибка, попробуйте снова';
+//           const code = get(action, 'payload.code');
+//           const message = get(action, 'payload.message');
+
+//           setTimeout(() => {
+//               Alert.alert(!code || code === 500 ? defaultMessage : message);
+//           }, 100);
+//           break;
+//       case LOGIN__SUCCESS:
+//           PushNotifications.addTag('login', login);
+//           break;
+//   }
+// });
+
+// loginHandler={actionLogin}
+
+import {LOGIN__FAIL, LOGIN__SUCCESS} from '@profile/actionTypes';
+
 class ProfileScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isSigninInProgress: false,
+      userInfo: {},
     };
 
-    console.log(GraphRequestManager);
     this.requestManager = new GraphRequestManager();
   }
 
@@ -248,6 +275,33 @@ class ProfileScreen extends Component {
   static defaultProps = {
     auth: {},
   };
+
+  _sendDataToApi(profile) {
+    const {login, password, dealers, dealerSelected} = profile;
+    actionLogin({login, password, dealers, dealerSelected})
+      .then(action => {
+        console.log('action22', action);
+        switch (action.type) {
+          case LOGIN__FAIL:
+            if (login === 'zteam' && password === '4952121052') {
+              window.atlantmDebug = false;
+            }
+
+            const defaultMessage = 'Произошла ошибка, попробуйте снова';
+            const code = get(action, 'payload.code');
+            const message = get(action, 'payload.message');
+
+            setTimeout(() => {
+              Alert.alert(!code || code === 500 ? defaultMessage : message);
+            }, 100);
+            break;
+          case LOGIN__SUCCESS:
+            PushNotifications.addTag('login', login);
+            break;
+        }
+      })
+      .catch(err => console.log(err));
+  }
 
   componentDidMount() {
     const {auth, navigation} = this.props;
@@ -329,7 +383,7 @@ class ProfileScreen extends Component {
         (error, result) => {
           if (result) {
             const profile = result;
-            console.log(profile);
+            console.log('async fetchProfile', profile);
             profile.avatar = `https://graph.facebook.com/${result.id}/picture`;
             resolve(profile);
           } else {
@@ -389,32 +443,46 @@ class ProfileScreen extends Component {
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginTop: 40,
+                marginBottom: 20,
               }}>
               <LoginButton
-                publishPermissions={['email']}
+                readPermissions={['email']}
+                style={{
+                  width: '80%',
+                  height: 44,
+                  borderWidth: 0,
+                }}
                 onLoginFinished={(error, result) => {
                   if (error) {
                     alert('Login failed with error: ' + error.message);
                   } else if (result.isCancelled) {
                     alert('Login was cancelled');
                   } else {
-                    alert(
-                      'Login was successful with permissions: ' +
-                        result.grantedPermissions,
-                    );
+                    AccessToken.getCurrentAccessToken().then(data => {
+                      this.fetchProfile(data.accessToken).then(data1 => {
+                        // this.setState({userInfo: data1});
+                        this._sendDataToApi(data1);
+                      });
+                    });
                     console.log('result ==================>', result);
                   }
                 }}
                 onLogoutFinished={() => alert('User logged out')}
               />
               <GoogleSigninButton
-                style={{width: 192, height: 48}}
+                style={{
+                  width: '82%',
+                  height: 52,
+                  marginVertical: 8,
+                  borderWidth: 0,
+                  marginTop: 12,
+                }}
                 size={GoogleSigninButton.Size.Wide}
-                color={GoogleSigninButton.Color.Dark}
+                color={GoogleSigninButton.Color.Light}
                 onPress={this._signIn}
                 disabled={this.state.isSigninInProgress}
               />
-              <Button
+              {/* <Button
                 iconLeft
                 style={{
                   backgroundColor: '#4286F5',
@@ -427,8 +495,8 @@ class ProfileScreen extends Component {
                 <Text style={{color: '#fff', marginLeft: 8}}>
                   Войти через Google
                 </Text>
-              </Button>
-              <Button
+              </Button> */}
+              {/* <Button
                 onPress={() => {
                   LoginManager.logInWithPermissions(['public_profile']).then(
                     function(result) {
@@ -437,10 +505,10 @@ class ProfileScreen extends Component {
                       } else {
                         AccessToken.getCurrentAccessToken()
                           .then(data => {
-                            console.log(data);
                             this.fetchProfile(data.accessToken).then(data1 => {
-                              console.log('!!!!!!');
-                              console.log('data1', data1);
+                              // this.setState({userInfo: data1});
+                              console.log(123);
+                              this._sendDataToApi(data1);
                             });
                           })
                           .catch(error => {
@@ -466,7 +534,7 @@ class ProfileScreen extends Component {
                 <Text style={{color: '#fff', marginLeft: 8}}>
                   Войти через Facebook
                 </Text>
-              </Button>
+              </Button> */}
               <Button
                 iconLeft
                 style={{
@@ -543,12 +611,40 @@ class ProfileScreen extends Component {
             <View
               style={{
                 display: 'flex',
-                justifyContent: 'center',
+                flexDirection: 'column',
                 alignItems: 'center',
+                justifyContent: 'center',
               }}>
               <Form>
-                <Item regular style={{width: '80%', borderRadius: 6}}>
-                  <Input placeholder="Телефон" />
+                <Item
+                  floatingLabel
+                  bordered
+                  rounded
+                  underline={false}
+                  style={{
+                    width: '80%',
+                    borderRadius: 4,
+                  }}>
+                  <Label
+                    style={{
+                      color: '#ffffff',
+                      textAlign: 'center',
+                    }}>
+                    Номер телефона
+                  </Label>
+                  <Input
+                    autoCompleteType="tel"
+                    dataDetectorTypes="phoneNumber"
+                    keyboardType="phone-pad"
+                    blurOnSubmit={true}
+                    returnKeyType="send"
+                    multiline={false}
+                    style={{
+                      margin: 0,
+                      padding: 0,
+                      color: '#ffffff',
+                    }}
+                  />
                 </Item>
               </Form>
               <Button
