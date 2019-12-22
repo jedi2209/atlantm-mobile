@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, StyleSheet, View, Image} from 'react-native';
+import {TouchableOpacity, StyleSheet, View} from 'react-native';
 import {Icon} from 'native-base';
 
 // redux
@@ -7,7 +7,6 @@ import {connect} from 'react-redux';
 import {actionFetchNewCarByFilter} from '../../actions';
 
 // components
-import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import CarList from '../../components/CarList';
 
@@ -16,13 +15,17 @@ import Amplitude from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
-import declOfNum from '../../../utils/decl-of-num';
 import {EVENT_REFRESH} from '../../../core/actionTypes';
 
 const styles = StyleSheet.create({
   content: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
+  },
+  iconFilter: {
+    color: '#fff',
+    fontSize: 25,
+    marginRight: 20,
   },
 });
 
@@ -55,7 +58,7 @@ const mapDispatchToProps = {
 
 class NewCarListScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: 'новые автомобили',
+    headerTitle: 'Новые автомобили',
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
     headerLeft: (
@@ -70,14 +73,7 @@ class NewCarListScreen extends Component {
         onPress={() => {
           navigation.navigate('NewCarFilterScreen');
         }}>
-        <Image
-          style={{
-            width: 20,
-            height: 20,
-            marginRight: 14,
-          }}
-          source={require('./filter.png')}
-        />
+        <Icon type="Octicons" name="settings" style={styles.iconFilter} />
       </TouchableOpacity>
     ),
   });
@@ -94,8 +90,8 @@ class NewCarListScreen extends Component {
     });
   }
 
-  componentDidUpdate(nextProps) {
-    const {navigation, items} = this.props;
+  componentDidUpdate() {
+    const {items} = this.props;
 
     if (items.total) {
       return setTimeout(() => {
@@ -124,7 +120,6 @@ class NewCarListScreen extends Component {
     const {
       items,
       filterData,
-      navigation,
       actionFetchNewCarByFilter,
 
       filterBrands,

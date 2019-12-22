@@ -1,12 +1,29 @@
 // Вводный экран ЭКО, сейчас отключен, возможно вернется в скором будущем.
 
-import React, { Component } from 'react';
-import { SafeAreaView, Image, View, StyleSheet, Platform, Linking } from 'react-native';
-import { Content, Text, StyleProvider, List, ListItem, Left, Body, Right, Icon } from 'native-base';
+import React, {Component} from 'react';
+import {
+  SafeAreaView,
+  Image,
+  View,
+  StyleSheet,
+  Platform,
+  Linking,
+} from 'react-native';
+import {
+  Content,
+  Text,
+  StyleProvider,
+  List,
+  ListItem,
+  Left,
+  Body,
+  Right,
+  Icon,
+} from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
-import { actionReviewsReset } from '../actions';
+import {connect} from 'react-redux';
+import {actionReviewsReset} from '../actions';
 
 // components
 import InfoLine from '../components/InfoLine';
@@ -18,7 +35,7 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
 import stylesHeader from '../../core/components/Header/style';
-import { TEXT_MESSAGE_CONTROL, TEXT_RATE_APP } from '../constants';
+import {TEXT_MESSAGE_CONTROL, TEXT_RATE_APP} from '../constants';
 
 const icons = {
   advocate: require('../assets/advocate.png'),
@@ -34,7 +51,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ nav, dealer }) => {
+const mapStateToProps = ({nav, dealer}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
@@ -46,65 +63,70 @@ const mapDispatchToProps = {
 };
 
 class EkoScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: 'Отзывы и предложения',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
+    headerLeft: (
+      <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />
+    ),
     headerRight: <HeaderIconMenu navigation={navigation} />,
-  })
+  });
 
   componentDidMount() {
     this.props.actionReviewsReset();
   }
 
   shouldComponentUpdate(nextProps) {
-    const { dealerSelected } = this.props;
+    const {dealerSelected} = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'EkoScreen';
 
-    // console.log('Catalog this.props.navigation', this.props.navigation);
-    // console.log('Catalog nextProps.navigation', nextProps.navigation);
-
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen);
+    return dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen;
   }
 
-  onPressReviews = () => this.props.navigation.navigate('ReviewsScreen')
-  onPressContactMe = () => this.props.navigation.navigate('ContactMeScreen')
-  onPressAdvocate = () => this.props.navigation.navigate('AdvocateScreen')
+  onPressReviews = () => this.props.navigation.navigate('ReviewsScreen');
+  onPressContactMe = () => this.props.navigation.navigate('ContactMeScreen');
+  onPressAdvocate = () => this.props.navigation.navigate('AdvocateScreen');
   onPressRateApp = () => {
-    const APP_STORE_LINK = 'itms-apps://itunes.apple.com/app/id515931794?action=write-review';
+    const APP_STORE_LINK =
+      'itms-apps://itunes.apple.com/app/id515931794?action=write-review';
     const PLAY_STORE_LINK = 'market://details?id=com.atlantm';
 
     if (Platform.OS === 'ios') {
-      Linking.openURL(APP_STORE_LINK).catch(err => console.error('APP_STORE_LINK failed', err));
+      Linking.openURL(APP_STORE_LINK).catch(err =>
+        console.error('APP_STORE_LINK failed', err),
+      );
     } else {
-      Linking.openURL(PLAY_STORE_LINK).catch(err => console.error('PLAY_STORE_LINK failed', err));
+      Linking.openURL(PLAY_STORE_LINK).catch(err =>
+        console.error('PLAY_STORE_LINK failed', err),
+      );
     }
-  }
+  };
 
   getRateAppLabel = () => {
     return `Оставить отзыв в ${this.getPlatformStore()}`;
-  }
+  };
 
   getRateAppInfoText = () => {
     return `${TEXT_RATE_APP} ${this.getPlatformStore()}`;
-  }
+  };
 
-  getPlatformStore = () => Platform.OS === 'ios' ? 'App Store' : 'Google Play'
+  getPlatformStore = () =>
+    Platform.OS === 'ios' ? 'App Store' : 'Google Play';
 
-  renderItem = ({ label, iconName, onPressHandler, isFirst, isLast }) => {
+  renderItem = ({label, iconName, onPressHandler, isFirst, isLast}) => {
     return (
-      <View style={[
-        stylesList.listItemContainer,
-        isFirst ? stylesList.listItemContainerFirst : {},
-      ]}>
+      <View
+        style={[
+          stylesList.listItemContainer,
+          isFirst ? stylesList.listItemContainerFirst : {},
+        ]}>
         <ListItem
           icon
           last={isLast}
           style={stylesList.listItem}
-          onPress={onPressHandler}
-        >
+          onPress={onPressHandler}>
           <Left>
             <Image style={stylesList.iconLeft} source={icons[iconName]} />
           </Left>
@@ -117,15 +139,13 @@ class EkoScreen extends Component {
         </ListItem>
       </View>
     );
-  }
+  };
 
   render() {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
-    const {
-      navigation,
-    } = this.props;
+    const {navigation} = this.props;
 
     console.log('== EkoScreen ==');
 
@@ -163,4 +183,7 @@ class EkoScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EkoScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(EkoScreen);

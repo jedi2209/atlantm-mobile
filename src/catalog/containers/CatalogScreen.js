@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#e2e2e2',
     borderBottomWidth: 1,
     borderBottomColor: '#fff',
-    width,
+    width:width,
     height: 2,
   },
   image: {
@@ -174,9 +174,6 @@ class CatalogScreen extends Component {
     const nav = nextProps.nav.newState;
     const isActiveScreen = nav.routes[nav.index].routeName === 'CatalogScreen';
 
-    // console.log('Catalog this.props.navigation', this.props.navigation);
-    // console.log('Catalog nextProps.navigation', nextProps.navigation);
-
     return dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen;
   }
 
@@ -187,7 +184,9 @@ class CatalogScreen extends Component {
   onPressButtonCarCost = () => this.props.navigation.navigate('CarCostScreen');
 
   onLayout = e => {
-    if (!isTablet) {return false;}
+    if (!isTablet) {
+      return false;
+    }
 
     const {width: contentWidth} = e.nativeEvent.layout;
 

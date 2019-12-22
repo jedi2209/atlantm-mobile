@@ -114,8 +114,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
-  console.log('profile.login =============>', profile.login);
-
   return {
     nav,
     listRussia: dealer.listRussia,
@@ -224,17 +222,19 @@ class ProfileScreen extends Component {
     this.props.actionSavePofileWithPhone({phone, code}).then(data => {
       // SAP: {ID: "62513365", TOKEN: "f7c27e35610137909a092be12fc1e2b1"}
       console.log(data);
-      this.props
-        .actionSavePofile({
-          first_name: data.NAME,
-          last_name: data.LAST_NAME,
-          token: data.SAP.TOKEN,
-          id: data.SAP.ID,
-        });
+      this.props.actionSavePofile({
+        first_name: data.NAME,
+        last_name: data.LAST_NAME,
+        token: data.SAP.TOKEN,
+        id: data.SAP.ID,
+      });
 
-        Keyboard.dismiss();
+      Keyboard.dismiss();
 
-        setTimeout(() => this.props.navigation.navigate('ProfileScreenInfo'), 600)
+      setTimeout(
+        () => this.props.navigation.navigate('ProfileScreenInfo'),
+        600,
+      );
     });
   };
 
@@ -366,15 +366,15 @@ class ProfileScreen extends Component {
         // some other error happened
       }
     }
-  }
+  };
 
   onInputCode = text => {
     this.setState({codeValue: text});
-  }
+  };
 
   onInputPhone = text => {
-      this.setState({phone: text});
-  }
+    this.setState({phone: text});
+  };
 
   render() {
     return (

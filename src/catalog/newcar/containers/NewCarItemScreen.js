@@ -354,8 +354,6 @@ class NewCarItemScreen extends Component {
         imgResize + '/' + path[parseInt(path.length - 1, 10)];
       photosThumbs.push(path.join('/'));
     }
-    console.log('photos', photosThumbs);
-
     if (!this.logGuard) {
       Amplitude.logEvent('screen', 'catalog/newcar/item', {
         id_api: get(carDetails, 'id.api'),
