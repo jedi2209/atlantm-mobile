@@ -27,8 +27,12 @@ import styleConst from '../../core/style-const';
 import ContactsScreen from '../../contacts/containers/ContactsScreen';
 import NewCarListScreen from '../../catalog/newcar/containers/NewCarListScreen';
 import ProfileScreen from '../../profile/containers/ProfileScreen';
+import ProfileScreenInfo from '../../profile/containers/ProfileScreenInfo';
 import ServiceScreen from '../../service/containers/ServiceScreen';
 import InfoListScreen from '../../info/containers/InfoListScreen';
+import TOHistore from '../../profile/carhistory/containers/CarHistoryScreen';
+import BonusScreen from '../../profile/bonus/containers/BonusScreen';
+import BonusScreenInfo from '../../profile/bonus/containers/BonusInfoScreen';
 import InfoPostScreen from '../../info/containers/InfoPostScreen';
 import NewCarFilterScreen from '../../catalog/newcar/containers/NewCarFilterScreen';
 import NewCarItemScreen from '../../catalog/newcar/containers/NewCarItemScreen';
@@ -135,7 +139,26 @@ const EnhancedMenuScreen = createBottomTabNavigator({
     },
   },
   Profile: {
-    screen: ProfileScreen,
+    screen: createStackNavigator({
+      ProfileScreen: {screen: ProfileScreen},
+      ProfileScreenInfo: {screen: ProfileScreenInfo},
+      TOHistore: {screen: TOHistore},
+      BonusScreen: {screen: BonusScreen},
+      BonusScreenInfo: {screen: BonusScreenInfo},
+    }),
+    navigationOptions: () => ({
+      tabBarLabel: 'Кабинет',
+      tabBarIcon: ({focused}) => (
+        <Icon
+          name="user"
+          type="FontAwesome5"
+          style={{
+            fontSize: 24,
+            color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
+          }}
+        />
+      ),
+    }),
   },
   Service: {
     screen: Application,

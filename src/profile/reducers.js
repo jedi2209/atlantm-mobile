@@ -50,7 +50,6 @@ import {
 import {DEALER__SUCCESS} from '@dealer/actionTypes';
 
 function login(state = '', action) {
-  console.log('ta tyt v svoem reducers', action.type);
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'profile.login', '');
@@ -58,10 +57,21 @@ function login(state = '', action) {
       return action.payload;
     case SAVE_PROFILE__FAIL:
       return {};
+    case LOGOUT:
+      return {};
     default:
       return state;
   }
 }
+
+// function loginWithPhone(state = '', action) {
+//   switch (action.type) {
+//     case 'SAVE_PROFILE__REQUEST_WITH_PHONE':
+//       return get(action.payload, 'profile.code', '');
+//     default:
+//       return state;
+//   }
+// }
 
 function name(state = '', action) {
   switch (action.type) {

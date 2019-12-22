@@ -602,15 +602,33 @@ export const actionSubmitForgotPassCode = props => {
   };
 };
 
+export const actionSavePofileWithPhone = props => {
+  return dispatch => {
+    dispatch({
+      type: 'SAVE_PROFILE__REQUEST_WITH_PHONE',
+      payload: props,
+    });
+
+    return API.loginWithPhone(props).then(data => {
+      console.log('API.loginWithPhone ======>', data);
+      if (data.data.data.checkCode) {
+        return data.data.data.checkCode;
+      } else {
+        return data.data.data.user;
+      }
+    });
+  };
+};
+
 export const actionSavePofile = props => {
-  console.log(props);
-  console.log('a это я в своем экшене');
-  // return dispatch => {
-  //   return dispatch({
-  //     type: ACTION_SAVE_PROFILE__UPDATE,
-  //     payload: props,
-  //   });
-  // };
+  if (props.token) {
+    return dispatch => {
+      return dispatch({
+        type: SAVE_PROFILE__UPDATE,
+        payload: {...props},
+      });
+    };
+  }
 
   return dispatch => {
     dispatch({
@@ -625,7 +643,6 @@ export const actionSavePofile = props => {
         try {
           //const res = JSON.parse(data);
           const {status, error, profile} = data;
-          console.log('tyt', status, error);
 
           if (status !== 'success') {
             return dispatch({
