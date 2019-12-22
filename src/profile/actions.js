@@ -49,9 +49,13 @@ import {
   FORGOT_PASS_SUBMIT_CODE__REQUEST,
   FORGOT_PASS_SUBMIT_CODE__FAIL,
   FORGOT_PASS_SUBMIT_CODE__SUCCESS,
+
+  SAVE_PROFILE__UPDATE,
+  SAVE_PROFILE__REQUEST,
+  SAVE_PROFILE__FAIL,
 } from './actionTypes';
 
-import { DEALER__SUCCESS } from '../dealer/actionTypes';
+import {DEALER__SUCCESS} from '../dealer/actionTypes';
 
 export const nameFill = (name) => {
   if (name && name.length <= 3) {
@@ -595,5 +599,58 @@ export const actionSubmitForgotPassCode = props => {
       console.log('forgot pass forgot', e);
       return onError(e);
     }
+  };
+};
+
+export const actionSavePofile = props => {
+  console.log(props);
+  console.log('a это я в своем экшене');
+  // return dispatch => {
+  //   return dispatch({
+  //     type: ACTION_SAVE_PROFILE__UPDATE,
+  //     payload: props,
+  //   });
+  // };
+
+  return dispatch => {
+    dispatch({
+      type: SAVE_PROFILE__REQUEST,
+      payload: props,
+    });
+
+    console.log('in dispatch');
+
+    return API.loginWith(props)
+      .then(data => {
+        try {
+          //const res = JSON.parse(data);
+          const {status, error, profile} = data;
+          console.log('tyt', status, error);
+
+          if (status !== 'success') {
+            return dispatch({
+              type: SAVE_PROFILE__FAIL,
+              payload: {
+                code: error.code,
+                message: error.message,
+              },
+            });
+          }
+
+          return dispatch({type: SAVE_PROFILE__UPDATE, payload: {...profile}});
+        } catch (err) {
+          console.log('xnj-nj gjikj yt nfr !!!', err);
+          return dispatch({type: SAVE_PROFILE__FAIL});
+        }
+      })
+      .catch(error => {
+        console.log('error in api', error);
+        return dispatch({
+          type: SAVE_PROFILE__FAIL,
+          payload: {
+            message: error,
+          },
+        });
+      });
   };
 };
