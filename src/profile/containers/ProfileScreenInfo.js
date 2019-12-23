@@ -1,7 +1,8 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import { orderBy } from 'lodash';
+
 import {
   View,
   Alert,
@@ -118,6 +119,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
+  //TODO: owner true должен быть показан первым
+  const cars = orderBy(profile.login.cars, ['owner'], ['asc']);
+
   return {
     nav,
     listRussia: dealer.listRussia,
@@ -133,12 +137,12 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
     isFetchProfileData: profile.meta.isFetchProfileData,
 
     auth: profile.auth,
-    cars: profile.login.cars,
+    cars,
     login: profile.login,
     password: profile.password,
     isLoginRequest: profile.meta.isLoginRequest,
 
-    bonus: profile.login.bonus.data,
+    bonus: profile.login.bonus,
     discounts: profile.discounts,
     pushActionSubscribeState: core.pushActionSubscribeState,
   };
@@ -164,7 +168,8 @@ const mapDispatchToProps = {
   actionSavePofile,
 };
 
-const CarCard = () => {
+const CarCard = ({data}) => {
+  const {brand, model, number} = data;
   return (
     <View
       style={[
@@ -175,33 +180,35 @@ const CarCard = () => {
           marginBottom: 20,
           borderRadius: 5,
           width: 150,
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           paddingBottom: 40,
+          height: 255,
 
           marginRight: 15,
         },
       ]}>
-      <Text
-        style={{
-          color: '#fff',
-          fontSize: 20,
-          paddingVertical: 10,
-          paddingHorizontal: 20,
-        }}>
-        VW Polo
-      </Text>
-      <Text
-        style={{
-          color: '#fff',
-          fontSize: 20,
-          paddingHorizontal: 20,
-        }}>
-        0001 АМ-3
-      </Text>
-      <Image
-        style={{marginTop: 80, width: '100%'}}
-        source={require('./Bitmap.png')}
-      />
+      <View>
+        <Text
+          style={{
+            color: '#fff',
+            fontSize: 14,
+
+            paddingTop: 20,
+            paddingBottom: 10,
+            paddingHorizontal: 20,
+          }}>
+          {`${brand} ${model}`}
+        </Text>
+        <Text
+          style={{
+            color: '#fff',
+            fontSize: 20,
+            paddingHorizontal: 20,
+          }}>
+          {number}
+        </Text>
+      </View>
+      <Image style={{width: '100%'}} source={require('./Bitmap.png')} />
     </View>
   );
 };
@@ -227,9 +234,9 @@ class ProfileScreenInfo extends Component {
   }
 
   render() {
-    const cars = this.props.login.cars;
-    console.log('cars', cars);
+    const cars = this.props.cars;
 
+    console.log(this.props.bonus)
     return (
       <View>
         <Text
@@ -268,7 +275,7 @@ class ProfileScreenInfo extends Component {
           {cars.map(item => (
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('TOHistore')}>
-              <CarCard />
+              <CarCard data={item} />
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -294,7 +301,7 @@ class ProfileScreenInfo extends Component {
                 marginRight: 24,
               }}>
               <Text style={{color: '#0061ed', fontSize: 26, fontWeight: '600'}}>
-                10024
+                {this.props.bonus.saldo ? this.props.bonus.saldo.value : 0}
               </Text>
             </View>
             <View style={{flex: 1}}>
