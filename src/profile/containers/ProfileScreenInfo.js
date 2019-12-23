@@ -227,7 +227,8 @@ class ProfileScreenInfo extends Component {
   }
 
   render() {
-    const cars = ['1', '2', '3'];
+    const cars = this.props.login.cars;
+    console.log('cars', cars);
 
     return (
       <View>
