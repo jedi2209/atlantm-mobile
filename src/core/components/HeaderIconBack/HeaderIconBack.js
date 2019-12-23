@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Image,
@@ -8,12 +8,12 @@ import {
 } from 'react-native';
 
 // components
-import { NavigationActions, StackActions } from 'react-navigation';
+import {NavigationActions, StackActions} from 'react-navigation';
 
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../../style-const';
-import { Icon } from 'native-base';
+import {Icon} from 'native-base';
 
 const containerSize = 40;
 const size = 20;
@@ -57,14 +57,13 @@ export default class HeaderIconBack extends Component {
   }
 
   onPressBack = () => {
-    const { returnScreen, navigation } = this.props;
+    const {returnScreen, navigation} = this.props;
 
     if (returnScreen === MENU_SCREEN_NAME) {
       this.onPressBackHome();
       return false;
     }
 
-    console.log(' >>>>> gosBack', returnScreen);
     returnScreen ? navigation.navigate(returnScreen) : navigation.goBack();
   };
 
@@ -87,7 +86,7 @@ export default class HeaderIconBack extends Component {
             name="arrow-back"
             style={[
               styles.arrowFont,
-              {color: this.props.theme === 'white' ? '#fff' : '#000'}
+              {color: this.props.theme === 'white' ? '#fff' : '#000'},
             ]}
           />
           {/* {this.props.theme === 'white' ? (

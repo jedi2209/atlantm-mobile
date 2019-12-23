@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {StyleSheet, TouchableOpacity, Image, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Icon} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -37,6 +38,11 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
+  },
+  iconFilter: {
+    color: '#fff',
+    fontSize: 25,
+    marginRight: 20,
   },
 });
 
@@ -82,7 +88,7 @@ class UserCarListScreen extends Component {
   //   };
   // };
   static navigationOptions = ({navigation}) => ({
-    // headerTitle: 'поддержанные автомобили',
+    headerTitle: 'поддержанные автомобили',
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
     headerLeft: (
@@ -97,14 +103,7 @@ class UserCarListScreen extends Component {
         onPress={() => {
           navigation.navigate('UsedCarFilterScreen');
         }}>
-        <Image
-          style={{
-            width: 20,
-            height: 20,
-            marginRight: 14,
-          }}
-          source={require('./filter.png')}
-        />
+        <Icon type="Octicons" name="settings" style={styles.iconFilter} />
       </TouchableOpacity>
     ),
   });
@@ -241,19 +240,6 @@ class UserCarListScreen extends Component {
           isFetchItems={isFetchItems}
           navigation={navigation}
         />
-
-        {/* <FooterFilter
-          showPriceFilterIcon={showPriceFilterIcon}
-          currency={get(prices, 'curr.name')}
-          min={prices.min}
-          max={prices.max}
-          step={prices.step}
-          currentMinPrice={priceRange && priceRange.minPrice}
-          currentMaxPrice={priceRange && priceRange.maxPrice}
-          onPressCity={this.onPressCity}
-          onPressPrice={this.onPressPrice}
-          onClosePrice={this.onClosePrice}
-        /> */}
       </View>
     );
   }

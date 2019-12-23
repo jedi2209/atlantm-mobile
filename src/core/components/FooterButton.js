@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react';
-import { Footer } from 'native-base';
+import React, {PureComponent} from 'react';
+import {Footer} from 'native-base';
 
 // components
 import ButtonFull from './ButtonFull';
@@ -15,7 +15,7 @@ export default class FooterButton extends PureComponent {
     }
     return (
       <Footer style={style_footer}>
-        <ButtonFull {...this.props}/>
+        <ButtonFull {...this.props} />
       </Footer>
     );
   }

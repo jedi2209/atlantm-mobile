@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { ListItem, Body, Right, Icon, StyleProvider, Text } from 'native-base';
+import React, {Component} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {ListItem, Body, Right, Icon, StyleProvider, Text} from 'native-base';
 
 // component
 import Imager from '../../../core/components/Imager';
@@ -51,79 +51,81 @@ export default class CityItemList extends Component {
     cityData: PropTypes.object,
     navigation: PropTypes.object,
     returnScreen: PropTypes.string,
-  }
+  };
 
   static defaultProps = {
     cityName: null,
     cityData: null,
     returnScreen: null,
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
     return this.props.name !== nextProps.name;
   }
 
   onPressDealer = () => {
-    const { navigation, returnScreen } = this.props;
-    return navigation.navigate('NewCarCityScreen', { returnScreen });
-  }
+    const {navigation, returnScreen} = this.props;
+    return navigation.navigate('NewCarCityScreen', {returnScreen});
+  };
 
   render() {
-    const {
-      cityData,
-      cityName,
-    } = this.props;
+    const {cityData, cityName} = this.props;
 
     let existBrands = [];
 
     return (
       <StyleProvider style={getTheme()}>
         <View style={stylesList.listItemContainer}>
-          <ListItem last onPress={this.onPressDealer} style={stylesList.listItem}>
+          <ListItem
+            last
+            onPress={this.onPressDealer}
+            style={stylesList.listItem}>
             <Body>
               <Text style={styles.city}>Город</Text>
               <Text style={styles.name}>{cityName}</Text>
             </Body>
             <Right>
               <View style={styles.brands}>
-              {
-                cityData && cityData.dealers && cityData.dealers.length !== 0 ?
-                (
+                {cityData &&
+                cityData.dealers &&
+                cityData.dealers.length !== 0 ? (
                   <View style={styles.brands}>
                     {cityData.dealers.map(dealer => {
-                      if (dealer.virtual !== false) { // фикс для НЕ вывода виртуальных КО в списке
+                      if (dealer.virtual !== false) {
+                        // фикс для НЕ вывода виртуальных КО в списке
                         return true;
                       }
                       return (
-                        <View key={dealer.id} style={styles.brands} >
-                          {
-                            dealer.brands.map(brand => {
-                              const name = brand.name === 'land rover' ? 'landrover' : brand.name;
+                        <View key={dealer.id} style={styles.brands}>
+                          {dealer.brands.map(brand => {
+                            const name =
+                              brand.name === 'land rover'
+                                ? 'landrover'
+                                : brand.name;
 
-                              if (existBrands.includes(name) || dealer.virtual !== false) {
-                                return null;
-                              } else {
-                                existBrands.push(name);
-                              }
+                            if (
+                              existBrands.includes(name) ||
+                              dealer.virtual !== false
+                            ) {
+                              return null;
+                            } else {
+                              existBrands.push(name);
+                            }
 
-                              return (
-                                <Imager
-                                  resizeMode="contain"
-                                  key={brand.id}
-                                  style={styles.brandLogo}
-                                  source={{ uri: brand.logo }}
-                                />
-                              );
-                            })
-                          }
+                            return (
+                              <Imager
+                                resizeMode="contain"
+                                key={brand.id}
+                                style={styles.brandLogo}
+                                source={{uri: brand.logo}}
+                              />
+                            );
+                          })}
                         </View>
                       );
-                    })
-                  }
+                    })}
                   </View>
-                ) :
-                null
-                }
+                ) : null}
               </View>
               <Icon name="arrow-forward" style={stylesList.iconArrow} />
             </Right>

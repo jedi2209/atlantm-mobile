@@ -22,6 +22,7 @@ import UsedCarFilterScreen from '../../catalog/usedcar/containers/UsedCarFilterS
 import UsedCarItemScreen from '../../catalog/usedcar/containers/UsedCarItemScreen';
 import UsedCarCityScreen from '../../catalog/usedcar/containers/UsedCarCityScreen';
 import MoreScreen from './MenuScreenNew';
+import MapScreen from '../../contacts/map/containers/MapScreen';
 
 const styles = {
   shadow: {
@@ -34,6 +35,58 @@ const styles = {
     shadowRadius: 4,
     shadowColor: '#fff',
   },
+};
+
+const SearchStack = {
+  screen: createStackNavigator(
+    {
+      NewCarListScreen: {
+        screen: NewCarListScreen,
+      },
+      MapScreen: {
+        screen: MapScreen,
+        screenProps: {
+          tabBarVisible: false,
+        },
+      },
+      NewCarFilterScreen: {
+        screen: NewCarFilterScreen,
+      },
+      NewCarItemScreen: {
+        screen: NewCarItemScreen,
+      },
+      UsedCarListScreen: {
+        screen: UsedCarListScreen,
+      },
+      UsedCarFilterScreen: {screen: UsedCarFilterScreen},
+      UsedCarItemScreen: {screen: UsedCarItemScreen},
+      UsedCarCityScreen: {screen: UsedCarCityScreen},
+    },
+    {
+      mode: 'modal',
+    },
+  ),
+};
+
+SearchStack.navigationOptions = ({navigation}) => {
+  const routeName = navigation.state.routes[navigation.state.index].routeName;
+
+  return {
+    // tabBarVisible: !routeName.startsWith('MapScreen'),
+    tabBarLabel: 'Поиск',
+    tabBarIcon: ({focused}) => (
+      <Icon
+        name="search"
+        type="FontAwesome5"
+        style={[
+          styles.shadow,
+          {
+            color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
+          },
+        ]}
+      />
+    ),
+  };
 };
 
 const EnhancedMenuScreen = createBottomTabNavigator({
@@ -62,49 +115,7 @@ const EnhancedMenuScreen = createBottomTabNavigator({
       ),
     },
   },
-  Search: {
-    screen: createStackNavigator(
-      {
-        NewCarListScreen: {
-          screen: NewCarListScreen,
-        },
-        NewCarFilterScreen: {
-          screen: NewCarFilterScreen,
-        },
-        NewCarItemScreen: {
-          screen: NewCarItemScreen,
-        },
-        UsedCarListScreen: {
-          screen: UsedCarListScreen,
-        },
-        UsedCarFilterScreen: {screen: UsedCarFilterScreen},
-        UsedCarItemScreen: {screen: UsedCarItemScreen},
-        UsedCarCityScreen: {screen: UsedCarCityScreen},
-      },
-      {
-        mode: 'modal',
-      },
-    ),
-    navigationOptions: ({navigation}) => {
-      return {
-        tabBarLabel: 'Поиск',
-        tabBarIcon: ({focused}) => (
-          <Icon
-            name="search"
-            type="FontAwesome5"
-            style={[
-              styles.shadow,
-              {
-                color: focused
-                  ? styleConst.new.blueHeader
-                  : styleConst.new.passive,
-              },
-            ]}
-          />
-        ),
-      };
-    },
-  },
+  Search: SearchStack,
   Profile: {
     screen: createStackNavigator({
       ProfileScreen: {screen: ProfileScreen},

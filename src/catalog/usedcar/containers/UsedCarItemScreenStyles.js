@@ -1,8 +1,8 @@
-import { StyleSheet, Platform } from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 
 // helpers
 import styleConst from '@core/style-const';
-import { verticalScale } from '@utils/scale';
+import {verticalScale} from '@utils/scale';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -10,7 +10,9 @@ export default StyleSheet.create({
   safearea: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
-    paddingBottom: isAndroid ? styleConst.ui.footerHeightAndroid : styleConst.ui.footerHeightIphone,
+    paddingBottom: isAndroid
+      ? styleConst.ui.footerHeightAndroid
+      : styleConst.ui.footerHeightIphone
     // paddingEnd: styleConst.footerHeight
   },
   gallery: {
@@ -38,7 +40,7 @@ export default StyleSheet.create({
     borderBottomColor: styleConst.color.border,
   },
   tabContent: {
-    marginBottom: styleConst.ui.footerHeight
+    marginBottom: styleConst.ui.footerHeight,
   },
   descrContainer: {
     padding: styleConst.ui.horizontalGap,
@@ -87,20 +89,10 @@ export default StyleSheet.create({
     fontSize: 16,
     letterSpacing: styleConst.ui.letterSpacing,
   },
-  // orderPriceContainer: {
-  //   height: styleConst.ui.footerHeight,
-  //   flex: 1,
-  //   // justifyContent: 'center',
-  //   // alignItems: 'center',
-  //   flexDirection: 'row',
-  //   backgroundColor: styleConst.color.header,
-  // },
   orderPriceText: {
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
     color: '#000',
-    // flex: 1,
-    // flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
@@ -165,6 +157,35 @@ export default StyleSheet.create({
   dealerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  mapCard: {},
+  mapCardContainer: {
+    marginHorizontal: 15,
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    paddingHorizontal: 6,
+    paddingVertical: 16,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: styleConst.color.border,
+  },
+  mapCardTitle: {
+    color: '#a8abbe',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  mapCardDealer: {
+    color: '#2a2a43',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  mapCardIcon: {
+    fontSize: 40,
+    marginRight: 5,
+    color: styleConst.color.blue,
+  },
+  mapCardTextContainer: {
     justifyContent: 'space-around',
   },
 });

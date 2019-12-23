@@ -1,9 +1,25 @@
-import React, { Component } from 'react';
-import { ImageBackground, View, Platform, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
-import { Container, Content, Text, List, ListItem, Body, Right, StyleProvider } from 'native-base';
+import React, {Component} from 'react';
+import {
+  ImageBackground,
+  View,
+  Platform,
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import {
+  Container,
+  Content,
+  Text,
+  List,
+  ListItem,
+  Body,
+  Right,
+  StyleProvider,
+} from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 // components
 import DeviceInfo from 'react-native-device-info';
@@ -14,7 +30,7 @@ import Imager from '../../../core/components/Imager';
 import HeaderSubtitle from '../../../core/components/HeaderSubtitle';
 
 // helpers
-import { get } from 'lodash';
+import {get} from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
@@ -26,7 +42,7 @@ const isTablet = DeviceInfo.isTablet();
 // image
 let IMAGE_HEIGHT_GUARD = 0;
 
-const { width: screenWidth } = Dimensions.get('window');
+const {width: screenWidth} = Dimensions.get('window');
 const IMAGE_WIDTH = isTablet ? null : screenWidth;
 const IMAGE_HEIGHT = isTablet ? 220 : 160;
 
@@ -59,16 +75,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer }) => {
+const mapStateToProps = ({dealer}) => {
   return {
     dealerSelected: dealer.selected,
   };
 };
 
 class AboutScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: 'Об автоцентре',
-    headerStyle: [stylesHeader.common, { borderBottomWidth: 0 }],
+    headerStyle: [stylesHeader.common, {borderBottomWidth: 0}],
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
@@ -97,7 +113,7 @@ class AboutScreen extends Component {
     });
   };
 
-  onLayoutImage = (e) => {
+  onLayoutImage = e => {
     if (isTablet) {
       return this.onLayoutImageTablet();
     }
@@ -113,14 +129,16 @@ class AboutScreen extends Component {
     });
   };
 
-  onLayoutWebView= (e) => {
-    const { width: webViewWidth } = e.nativeEvent.layout;
+  onLayoutWebView = e => {
+    const {width: webViewWidth} = e.nativeEvent.layout;
 
-    this.setState({ webViewWidth });
+    this.setState({webViewWidth});
   };
 
-  renderPhones = (phones) => {
-    if (!phones || !phones.length) return null;
+  renderPhones = phones => {
+    if (!phones || !phones.length) {
+      return null;
+    }
 
     return phones.map(phone => {
       const onPress = () => Communications.phonecall(phone, true);
@@ -128,8 +146,10 @@ class AboutScreen extends Component {
     });
   };
 
-  renderAddress = (address) => {
-    if (!address || !address.length) return null;
+  renderAddress = address => {
+    if (!address || !address.length) {
+      return null;
+    }
 
     const onPress = () => {
       this.props.navigation.navigate('MapScreen');
@@ -138,7 +158,9 @@ class AboutScreen extends Component {
   };
 
   renderEmails = (emails, name) => {
-    if (!emails || !emails.length) return null;
+    if (!emails || !emails.length) {
+      return null;
+    }
 
     return emails.map(emailAddress => {
       const onPress = () => {
@@ -146,7 +168,9 @@ class AboutScreen extends Component {
           [emailAddress],
           null,
           null,
-          `Из приложения ${Platform.OS === 'android' ? 'Android' : 'iOS'} Атлант-М, мой автоцентр ${name}`,
+          `Из приложения ${
+            Platform.OS === 'android' ? 'Android' : 'iOS'
+          } Атлант-М, мой автоцентр ${name}`,
           null,
         );
       };
@@ -155,8 +179,10 @@ class AboutScreen extends Component {
     });
   };
 
-  renderSites = (sites) => {
-    if (!sites || !sites.length) return null;
+  renderSites = sites => {
+    if (!sites || !sites.length) {
+      return null;
+    }
 
     return sites.map((site, idx) => {
       const onPress = () => Communications.web(site);
@@ -174,17 +200,33 @@ class AboutScreen extends Component {
             <Text>{label}</Text>
           </Body>
           <Right style={{flex: 3}}>
-            {
-              onPressHandler ?
-                (
-                  <TouchableOpacity onPress={onPressHandler}>
-                    <Text style={stylesList.listItemValue, {textAlign: 'right', alignSelf: 'center', alignItems: 'center'}}>{value}</Text>
-                  </TouchableOpacity>
-                ) :
-                (
-                  <Text style={stylesList.listItemValue, {textAlign: 'right', alignSelf: 'center', alignItems: 'center'}}>{value}</Text>
-                )
-            }
+            {onPressHandler ? (
+              <TouchableOpacity onPress={onPressHandler}>
+                <Text
+                  style={
+                    (stylesList.listItemValue,
+                    {
+                      textAlign: 'right',
+                      alignSelf: 'center',
+                      alignItems: 'center',
+                    })
+                  }>
+                  {value}
+                </Text>
+              </TouchableOpacity>
+            ) : (
+              <Text
+                style={
+                  (stylesList.listItemValue,
+                  {
+                    textAlign: 'right',
+                    alignSelf: 'center',
+                    alignItems: 'center',
+                  })
+                }>
+                {value}
+              </Text>
+            )}
           </Right>
         </ListItem>
       </View>
@@ -195,10 +237,13 @@ class AboutScreen extends Component {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
-    const { dealerSelected } = this.props;
+    const {dealerSelected} = this.props;
     const phones = get(dealerSelected, 'phone', []);
     let description = dealerSelected.description;
-    const imageUrl = get(dealerSelected, isTablet ? 'img.10000x440' : 'img.10000x300');
+    const imageUrl = get(
+      dealerSelected,
+      isTablet ? 'img.10000x440' : 'img.10000x300',
+    );
 
     if (description) {
       description = processHtml(description, this.state.webViewWidth);
@@ -221,44 +266,41 @@ class AboutScreen extends Component {
                     height: this.state.imageHeight,
                   },
                 ]}
-                source={{ uri: imageUrl }}
-              >
+                source={{uri: imageUrl}}>
                 <View style={styles.brandsLine}>
-                  {
-                    dealerSelected.brands.map(brand => {
-                      return (
-                        <Imager
-                          resizeMode="contain"
-                          key={brand.id}
-                          style={styles.brand}
-                          source={{ uri: brand.logo }}
-                        />
-                      );
-                    })
-                  }
+                  {dealerSelected.brands.map(brand => {
+                    return (
+                      <Imager
+                        resizeMode="contain"
+                        key={brand.id}
+                        style={styles.brand}
+                        source={{uri: brand.logo}}
+                      />
+                    );
+                  })}
                 </View>
               </ImageBackground>
             </View>
 
             <List style={[styles.list, styles.listHolding]}>
-              {dealerSelected.city ? this.renderItem('Город', dealerSelected.city.name) : null}
-              {dealerSelected.address ? this.renderAddress(dealerSelected.address) : null}
+              {dealerSelected.city
+                ? this.renderItem('Город', dealerSelected.city.name)
+                : null}
+              {dealerSelected.address
+                ? this.renderAddress(dealerSelected.address)
+                : null}
               {this.renderPhones(phones)}
               {this.renderEmails(dealerSelected.email, dealerSelected.name)}
               {this.renderSites(dealerSelected.site)}
             </List>
 
-            {
-              description ?
-                (
-                  <View
-                    style={styles.descriptionContainer}
-                    onLayout={this.onLayoutWebView}
-                  >
-                    <WebViewAutoHeight source={{ html: description }} />
-                  </View>
-                ) : null
-            }
+            {description ? (
+              <View
+                style={styles.descriptionContainer}
+                onLayout={this.onLayoutWebView}>
+                <WebViewAutoHeight source={{html: description}} />
+              </View>
+            ) : null}
           </Content>
         </Container>
       </StyleProvider>
