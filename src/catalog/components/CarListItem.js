@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   priceContainer: {
     flexDirection: 'row',
     marginBottom: 5,
+    marginTop: 10,
   },
   priceDefault: {
     textDecorationLine: 'line-through',
@@ -75,6 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginVertical: 5,
+    marginBottom: 10,
   },
   price: {
     color: '#2A2A43',

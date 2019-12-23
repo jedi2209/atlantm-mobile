@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
   TouchableHighlight,
+  TouchableWithoutFeedback,
   ScrollView,
 } from 'react-native';
 import {
@@ -77,14 +78,17 @@ const OptionPlate = ({title, subtitle}) => (
     style={{
       borderRadius: 10,
       backgroundColor: '#0061ED',
-      padding: 8,
+      paddingHorizontal: 12,
+      // paddingTop: 10,
+      // paddingBottom: 10,
       marginRight: 8,
       height: 52,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
+      justifyContent: 'center',
     }}>
-    <Text style={{color: '#d8d8d8', fontSize: 14, marginBottom: 4}}>
+    <Text style={{color: '#d8d8d8', fontSize: 14, fontWeight: '300'}}>
       {title}
     </Text>
     <Text style={{color: '#fff', fontSize: 14, fontWeight: '600'}}>
@@ -312,6 +316,17 @@ class NewCarItemScreen extends Component {
       </View>
     );
   };
+
+  onPressMap = () => {
+    const {navigation, carDetails} = this.props;
+    navigation.navigate('MapScreen', {
+      name: get(carDetails, 'dealer.name'),
+      city: get(carDetails, 'city.name'),
+      address: get(carDetails, 'dealer.name'),
+      coords: get(carDetails, 'coords'),
+    });
+  };
+
   render() {
     const {
       filterData,
@@ -333,17 +348,14 @@ class NewCarItemScreen extends Component {
       );
     }
 
+    console.log('carDetails :', carDetails);
+
     console.log('== NewCarItemScreen ==');
 
     const currency = get(this.props.navigation, 'state.params.currency');
     const {brand, model, complectation} = carDetails;
     const brandName = brand.name || '';
     const modelName = model.name || '';
-    // TODO: что то по поводу акций?
-    const stock = get(carDetails, 'options.stock', {});
-    const stockKeys = Object.keys(stock);
-    const additional = get(carDetails, 'options.additional', {});
-    const additionalKeys = Object.keys(additional);
     const photos =
       get(carDetails, 'img.original') || get(carDetails, 'img.10000x220');
 
@@ -395,7 +407,7 @@ class NewCarItemScreen extends Component {
                   justifyContent: 'space-between',
                   paddingHorizontal: 16,
                 }}>
-                <View style={{marginBottom: 24}}>
+                <View style={{marginBottom: 10}}>
                   <Text style={{fontSize: 16, fontWeight: '600'}}>
                     {`${brandName} ${modelName} ${get(
                       complectation,
@@ -427,8 +439,7 @@ class NewCarItemScreen extends Component {
                         .replace(/^(Механическая)/i, 'МКПП')
                         .replace(/^(Автоматическая)/i, 'АКПП')
                         .split('/')[0]
-                    }
-                    `}
+                    }`}
                   />
                   <OptionPlate
                     title="Привод"
@@ -437,50 +448,28 @@ class NewCarItemScreen extends Component {
                 </View>
               </ScrollView>
 
-              <View style={{paddingHorizontal: 16}}>
-                <View
-                  style={{
-                    backgroundColor: '#fff',
-                    paddingHorizontal: 8,
-                    paddingVertical: 16,
-                    borderRadius: 5,
-                    shadowColor: '#c1c1c1',
-                    shadowOffset: {
-                      width: 0,
-                      height: 1,
-                    },
-                    shadowOpacity: 0.18,
-                    shadowRadius: 1,
-                    elevation: 1,
-                  }}>
+              <TouchableWithoutFeedback
+                onPress={this.onPressMap}
+                style={styles.mapCard}>
+                <View style={styles.mapCardContainer}>
                   <Icon
                     type="MaterialCommunityIcons"
-                    name="navigation"
-                    style={{
-                      width: 30,
-                    }}
+                    name="map-marker-outline"
+                    style={styles.mapCardIcon}
                   />
-                  <Text
-                    style={{
-                      color: '#a8abbe',
-                      fontSize: 12,
-                      fontWeight: '600',
-                      marginBottom: 4,
-                      marginLeft: 40,
-                    }}>
-                    Автомобиль расположен по адресу
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#2a2a43',
-                      fontSize: 14,
-                      fontWeight: '600',
-                      marginLeft: 40,
-                    }}>
-                    {get(carDetails, 'dealer.name')}
-                  </Text>
+                  <View style={styles.mapCardTextContainer}>
+                    <Text style={styles.mapCardTitle}>
+                      Автомобиль расположен по адресу
+                    </Text>
+                    <Text style={styles.mapCardDealer}>
+                      {`${get(carDetails, 'city.name')}, ${get(
+                        carDetails,
+                        'dealer.name',
+                      )}`}
+                    </Text>
+                  </View>
                 </View>
-              </View>
+              </TouchableWithoutFeedback>
             </View>
 
             <View style={{borderTopWidth: 1, borderColor: '#d5d5e0'}}>
