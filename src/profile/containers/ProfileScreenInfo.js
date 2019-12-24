@@ -236,7 +236,6 @@ class ProfileScreenInfo extends Component {
   render() {
     const cars = this.props.cars;
 
-    console.log(this.props.bonus)
     return (
       <View>
         <Text
@@ -274,7 +273,9 @@ class ProfileScreenInfo extends Component {
           style={styles.scrollView}>
           {cars.map(item => (
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('TOHistore')}>
+              onPress={() =>
+                this.props.navigation.navigate('TOHistore', {car: item})
+              }>
               <CarCard data={item} />
             </TouchableOpacity>
           ))}
