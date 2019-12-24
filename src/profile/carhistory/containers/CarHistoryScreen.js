@@ -1,25 +1,17 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, View, Text, Alert} from 'react-native';
+import {SafeAreaView, StyleSheet, View, Text, ScrollView} from 'react-native';
 import {
   StyleProvider,
-  Content,
   ListItem,
   Body,
   Right,
-  Icon,
   Row,
   Col,
   Item,
   Label,
-  Accordion,
-  Segment,
-  Button,
-  Tabs,
-  Tab,
-  Container,
 } from 'native-base';
 
-const stylesCommon = {};
 // redux
 import {connect} from 'react-redux';
 import {CAR_HISTORY__FAIL} from '../../actionTypes';
@@ -29,10 +21,7 @@ import {
   actionSetCarHistoryLevel2,
 } from '../../actions';
 
-// components
-import * as Animatable from 'react-native-animatable';
 import SpinnerView from '../../../core/components/SpinnerView';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // styles
 import stylesList from '../../../core/components/Lists/style';
@@ -42,7 +31,6 @@ import {get, isEmpty} from 'lodash';
 import {dayMonthYear} from '../../../utils/date';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
 import numberWithGap from '../../../utils/number-with-gap';
 import {MONTH_TEXT} from '../../const';
 import {ERROR_NETWORK} from '../../../core/const';
@@ -50,7 +38,7 @@ import {ERROR_NETWORK} from '../../../core/const';
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: styleConst.color.bg,
+    backgroundColor: '#fff',
   },
   emptyText: {
     textAlign: 'center',
@@ -62,11 +50,11 @@ const styles = StyleSheet.create({
     marginBottom: 1,
   },
   itemLevel2: {
-    backgroundColor: styleConst.color.accordeonGrey1,
+    backgroundColor: '#fff',
     marginBottom: 1,
   },
   itemLevel3: {
-    backgroundColor: styleConst.color.accordeonGrey2,
+    backgroundColor: '#fff',
     marginBottom: 2,
   },
   listItem: {
@@ -78,11 +66,14 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   date: {
-    fontSize: 15,
-    color: styleConst.color.greyText3,
+    color: '#0061ED',
+    fontSize: 18,
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
     marginTop: 5,
+    fontWeight: '400',
+
+    paddingBottom: 10,
   },
 
   // section
@@ -113,6 +104,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({nav, profile}) => {
   return {
     nav,
+    profile: profile.login,
     auth: profile.auth,
     carHistory: profile.carHistory.data,
     level1hash: profile.carHistory.level1Hash,
@@ -127,65 +119,17 @@ const mapDispatchToProps = {
   actionSetCarHistoryLevel2,
 };
 
-const Tab2 = () => {
-  return (
-    <View style={{backgroundColor: '#fff'}}>
-      <Text>Установка передних брызговиков</Text>
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-        }}>
-        <Col>
-          <View style={styles.dealerContainer}>
-            <Text style={styles.sectionTitleValue}>Кол-во</Text>
-          </View>
-        </Col>
-        <Col>
-          <View style={styles.dealerContainer}>
-            <Text style={styles.sectionTitleValue}>0.4 ч.</Text>
-          </View>
-        </Col>
-      </View>
-    </View>
-  );
-};
-
-const Tab1 = () => {
-  return (
-    <View style={{backgroundColor: '#fff'}}>
-      <Text>Установка чего-то там еще</Text>
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-        }}>
-        <Col>
-          <View style={styles.dealerContainer}>
-            <Text style={styles.sectionTitleValue}>Кол-во</Text>
-          </View>
-        </Col>
-        <Col>
-          <View style={styles.dealerContainer}>
-            <Text style={styles.sectionTitleValue}>0.4 ч.</Text>
-          </View>
-        </Col>
-      </View>
-    </View>
-  );
-};
 class CarHistoryScreen extends Component {
   static navigationOptions = () => ({
     header: null,
   });
 
   componentDidMount() {
+    // eslint-disable-next-line no-shadow
     const {profile, navigation, actionFetchCarHistory} = this.props;
     const vin = get(navigation, 'state.params.car.vin');
-    const token = get(profile, 'token.id');
-    const userid = get(profile, 'token.id');
+    const token = get(profile, 'token');
+    const userid = get(profile, 'id');
 
     actionFetchCarHistory({
       vin,
@@ -203,7 +147,10 @@ class CarHistoryScreen extends Component {
           message = ERROR_NETWORK;
         }
 
-        setTimeout(() => Alert.alert(message), 100);
+        // todo: другой способ показывать что ничего не найдено
+        console.log(message);
+      } else {
+        console.log('history =====>', this.props.carHistory);
       }
     });
   }
@@ -266,7 +213,7 @@ class CarHistoryScreen extends Component {
       const item = carHistory[carHistoryYear];
       const isLast = yearsArray.length - 1 === idx;
       const hash = item.hash;
-      const isActive = this.isActiveLevel1(hash);
+      const isActive = true; //this.isActiveLevel1(hash);
       const onPressHandler = () => this.onPressLevel1(hash);
 
       return (
@@ -280,13 +227,13 @@ class CarHistoryScreen extends Component {
             isArrow: true,
           })}
           {isActive ? (
-            <Animatable.View
+            <View
               style={[styles.accContent, styles.accContentLevel1]}
               animation="slideInDown"
               useNativeDriver={true}
               duration={700}>
               {this.renderLevel2(item.history)}
-            </Animatable.View>
+            </View>
           ) : null}
         </View>
       );
@@ -298,7 +245,7 @@ class CarHistoryScreen extends Component {
       const item = carHistoryItemByMonth[month];
       const isLast = monthArray.length - 1 === idx;
       const hash = item.hash;
-      const isActive = this.isActiveLevel2(hash);
+      const isActive = true; //this.isActiveLevel2(hash);
       const onPressHandler = () => this.onPressLevel2(hash);
 
       return (
@@ -312,12 +259,9 @@ class CarHistoryScreen extends Component {
             isArrow: true,
           })}
           {isActive ? (
-            <Animatable.View
-              animation="pulse"
-              useNativeDriver={true}
-              duration={700}>
+            <View animation="pulse" useNativeDriver={true} duration={700}>
               {this.renderLevel3(item.history)}
-            </Animatable.View>
+            </View>
           ) : null}
         </View>
       );
@@ -351,16 +295,23 @@ class CarHistoryScreen extends Component {
     });
   };
 
-  renderLevel3Item = ({prop, value}) => (
-    <Row style={styles.sectionRow}>
-      <Col style={styles.sectionProp}>
-        <Text style={styles.sectionPropText}>{`${prop}:`}</Text>
-      </Col>
-      <Col style={styles.sectionValue}>
-        <Text style={styles.sectionValueText}>{value}</Text>
-      </Col>
-    </Row>
-  );
+  renderLevel3Item = ({prop, value, color}) => {
+    return (
+      <Row style={styles.sectionRow}>
+        <Col style={styles.sectionProp}>
+          <Text style={styles.sectionPropText}>{`${prop}:`}</Text>
+        </Col>
+        <Col style={styles.sectionValue}>
+          <Text
+            style={
+              ([styles.sectionValueText], color ? {color: '#0061ED'} : null)
+            }>
+            {value}
+          </Text>
+        </Col>
+      </Row>
+    );
+  };
 
   renderLevel3Content = ({work}) => {
     const {date, document, master, summ} = work;
@@ -376,6 +327,7 @@ class CarHistoryScreen extends Component {
           ? this.renderLevel3Item({
               prop: document.name,
               value: `#${document.number}`,
+              color: true,
             })
           : null}
         {master ? this.renderLevel3Item({prop: 'Мастер', value: master}) : null}
@@ -401,165 +353,44 @@ class CarHistoryScreen extends Component {
     );
   };
 
-  renderItemHeader = ({
-    work,
-    key,
-    label,
-    theme,
-    isActive,
-    isArrow,
-    onPressHandler,
-    isArrowPress,
-  }) => {
+  renderItemHeader = ({work, key, label, theme, onPressHandler}) => {
     const isLevel3 = theme === 'itemLevel3';
 
     return (
-      <View key={key} style={[stylesList.listItemContainer, styles[theme]]}>
+      <View
+        key={key}
+        style={[
+          stylesList.listItemContainer,
+          styles[theme],
+          {marginHorizontal: 10},
+        ]}>
         <ListItem
           icon
           last
-          style={[stylesList.listItem, isLevel3 ? styles.listItem : null]}
+          style={[
+            stylesList.listItem,
+            isLevel3 ? styles.listItem : {height: 0},
+          ]}
           onPress={onPressHandler}>
-          {isLevel3 ? (
-            this.renderLevel3Content({work})
-          ) : (
-            <Body>
-              <Text style={stylesList.label}>{label}</Text>
-            </Body>
-          )}
-          <Right>
-            {isArrow ? (
-              <Icon
-                name={isActive ? 'ios-arrow-down' : 'ios-arrow-forward'}
-                style={[stylesList.iconArrow, stylesList.iconArrowWithText]}
-              />
-            ) : null}
-            {isArrowPress ? (
-              <Icon
-                name="arrow-forward"
-                style={[stylesList.iconArrow, styles.iconArrow]}
-              />
-            ) : null}
-          </Right>
+          {isLevel3 ? this.renderLevel3Content({work}) : null}
+          <Right />
         </ListItem>
       </View>
     );
   };
 
   render() {
-    return (
-      <View>
-        <Text
-          style={{
-            fontSize: 35,
-            fontWeight: '600',
-            marginHorizontal: 20,
-            marginTop: 60,
-          }}>
-          История ТО
-        </Text>
-        <View style={{borderTopWidth: 1, borderColor: '#d5d5e0'}}>
-          <Accordion
-            dataArray={[
-              {
-                title: 'Заказ-наряд #78971 на 3 208.45 RUR',
-                content: (
-                  <Container>
-                    <Tabs>
-                    <Tab heading="Tab1">
-                      <Tab1 />
-                    </Tab>
-                    <Tab heading="Tab2">
-                      <Tab2 />
-                    </Tab>
-                  </Tabs>
-                  </Container>
-                  // <View style={stylesCommon.tabs}>
-                  //   <Segment>
-                  //     <Button
-                  //       first
-                  //       active={true}
-                  //       onPress={this.selectRegionBelarussia}>
-                  //       <Text>Рабооты</Text>
-                  //     </Button>
-                  //     <Button active={false} onPress={this.selectRegionRussia}>
-                  //       <Text>Материалы</Text>
-                  //     </Button>
-                  //   </Segment>
-                  //   <Tab1 />
-                  //   <Tab2 />
-                  // </View>
-                ),
-              },
-              {
-                title: 'Заказ-наряд #567971 на 45 000 RUR',
-                content: <Text>wait</Text>,
-              },
-            ]}
-            expanded={0}
-            animation={true}
-            renderHeader={(item, expanded) => (
-              <View
-                style={{
-                  height: 64,
-                  paddingHorizontal: 16,
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  backgroundColor: '#fff',
-                  borderBottomWidth: expanded ? 0 : 1,
-                  borderColor: '#d5d5e0',
-                }}>
-                <Text style={{fontSize: 18}}>{item.title}</Text>
-                {expanded ? (
-                  <Icon
-                    type="FontAwesome5"
-                    style={{color: '#0061ED', fontWeight: 'normal'}}
-                    name="angle-down"
-                  />
-                ) : (
-                  <Icon
-                    type="FontAwesome5"
-                    style={{color: '#131314', fontWeight: 'normal'}}
-                    name="angle-right"
-                  />
-                )}
-              </View>
-            )}
-            renderContent={item => {
-              return (
-                <View
-                  style={{
-                    height: 200,
-                    backgroundColor: '#fff',
-                    paddingHorizontal: 16,
-                    borderBottomWidth: 1,
-                    borderBottomColor: '#d5d5e0',
-                  }}>
-                  {item.content}
-                </View>
-              );
-            }}
-          />
-        </View>
-      </View>
-    );
-
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
-
     const {navigation, carHistory, isFetchCarHistory} = this.props;
 
     const car = get(navigation, 'state.params.car');
-
-    console.log('== CarHistory ==');
+    console.log(car);
 
     if (isFetchCarHistory) {
       return <SpinnerView />;
     }
 
     if (isEmpty(carHistory) || !carHistory.items) {
+      console.log('history is emply ?');
       return (
         <SafeAreaView style={styles.safearea}>
           <Text style={styles.emptyText}>Истории пока нет</Text>
@@ -568,23 +399,35 @@ class CarHistoryScreen extends Component {
     }
 
     return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <Content>
-            <View style={styles.about}>
-              {car.brand ? this.renderListItem('Марка', car.brand) : null}
-              {car.model ? this.renderListItem('Модель', car.model) : null}
-              {car.number
-                ? this.renderListItem('Гос. номер', car.number)
+      <ScrollView>
+        <View>
+          <Text
+            style={{
+              fontSize: 35,
+              fontWeight: '600',
+              marginHorizontal: 20,
+              marginTop: 60,
+            }}>
+            История ТО
+          </Text>
+
+          <StyleProvider style={getTheme()}>
+            <View>
+              {/* <View style={styles.about}>
+                {car.brand ? this.renderListItem('Марка', car.brand) : null}
+                {car.model ? this.renderListItem('Модель', car.model) : null}
+                {car.number
+                  ? this.renderListItem('Гос. номер', car.number)
+                  : null}
+                {car.vin ? this.renderListItem('VIN', car.vin, true) : null}
+              </View> */}
+              {Object.keys(get(carHistory, 'items'), []).length
+                ? this.renderLevel1(carHistory.items)
                 : null}
-              {car.vin ? this.renderListItem('VIN', car.vin, true) : null}
             </View>
-            {Object.keys(get(carHistory, 'items'), []).length
-              ? this.renderLevel1(carHistory.items)
-              : null}
-          </Content>
-        </SafeAreaView>
-      </StyleProvider>
+          </StyleProvider>
+        </View>
+      </ScrollView>
     );
   }
 }
