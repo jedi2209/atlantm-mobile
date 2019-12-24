@@ -12,6 +12,7 @@ import ProfileScreen from '../../profile/containers/ProfileScreen';
 import ProfileScreenInfo from '../../profile/containers/ProfileScreenInfo';
 import InfoListScreen from '../../info/containers/InfoListScreen';
 import TOHistore from '../../profile/carhistory/containers/CarHistoryScreen';
+import CarHistoryDetailsScreen from '../../profile/carhistory/containers/CarHistoryDetailsScreen';
 import BonusScreen from '../../profile/bonus/containers/BonusScreen';
 import BonusScreenInfo from '../../profile/bonus/containers/BonusInfoScreen';
 import InfoPostScreen from '../../info/containers/InfoPostScreen';
@@ -121,6 +122,7 @@ const EnhancedMenuScreen = createBottomTabNavigator({
       ProfileScreen: {screen: ProfileScreen},
       ProfileScreenInfo: {screen: ProfileScreenInfo},
       TOHistore: {screen: TOHistore},
+      CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
       BonusScreen: {screen: BonusScreen},
       BonusScreenInfo: {screen: BonusScreenInfo},
     }),
