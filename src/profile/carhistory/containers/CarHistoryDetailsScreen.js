@@ -14,6 +14,7 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
+import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import numberWithGap from '../../../utils/number-with-gap';
 import {ERROR_NETWORK} from '../../../core/const';
