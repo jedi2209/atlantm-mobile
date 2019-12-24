@@ -276,13 +276,14 @@ class CarHistoryScreen extends Component {
       const workId = get(work, 'document.number');
       const workDealer = get(work, 'dealer.id');
       const isLast = works.length - 1 === idx;
-      const onPressHandler = () =>
+      const onPressHandler = () => {
         navigation.navigate('CarHistoryDetailsScreen', {
           vin,
           workId,
           workDealer,
           title: `${get(work, 'document.name')} #${workId}`,
         });
+      };
 
       return this.renderItemHeader({
         work,
@@ -380,10 +381,7 @@ class CarHistoryScreen extends Component {
   };
 
   render() {
-    const {navigation, carHistory, isFetchCarHistory} = this.props;
-
-    const car = get(navigation, 'state.params.car');
-    console.log(car);
+    const {carHistory, isFetchCarHistory} = this.props;
 
     if (isFetchCarHistory) {
       return <SpinnerView />;
@@ -413,14 +411,6 @@ class CarHistoryScreen extends Component {
 
           <StyleProvider style={getTheme()}>
             <View>
-              {/* <View style={styles.about}>
-                {car.brand ? this.renderListItem('Марка', car.brand) : null}
-                {car.model ? this.renderListItem('Модель', car.model) : null}
-                {car.number
-                  ? this.renderListItem('Гос. номер', car.number)
-                  : null}
-                {car.vin ? this.renderListItem('VIN', car.vin, true) : null}
-              </View> */}
               {Object.keys(get(carHistory, 'items'), []).length
                 ? this.renderLevel1(carHistory.items)
                 : null}
