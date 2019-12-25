@@ -3,30 +3,15 @@
 import React, {Component} from 'react';
 import {
   View,
-  Alert,
   TextInput,
-  StyleSheet,
-  ScrollView,
   Keyboard,
   Text,
-  Platform,
   ImageBackground,
   Image,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {
-  Container,
-  Content,
-  List,
-  StyleProvider,
-  Button,
-  Icon,
-  Form,
-  Item,
-  Input,
-  Label,
-} from 'native-base';
+import {Button, Icon} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -44,74 +29,11 @@ import {
   actionSavePofile,
   actionSavePofileWithPhone,
 } from '../actions';
+
 import {
   actionSetPushActionSubscribe,
   actionSetPushGranted,
 } from '../../core/actions';
-
-// components
-import Auth from '../components/Auth';
-import ProfileForm from '../components/ProfileForm';
-import ListItemHeader from '../components/ListItemHeader';
-import BonusDiscount from '../components/BonusDiscount';
-import SpinnerView from '../../core/components/SpinnerView';
-import DealerItemList from '../../core/components/DealerItemList';
-import PushNotifications from '../../core/components/PushNotifications';
-
-// helpers
-import {get} from 'lodash';
-import getTheme from '../../../native-base-theme/components';
-import styleConst from '../../core/style-const';
-
-import {
-  LoginButton,
-  AccessToken,
-  GraphRequest,
-  GraphRequestManager,
-  LoginManager,
-} from 'react-native-fbsdk';
-
-const isAndroid = Platform.OS === 'android';
-
-const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    paddingBottom: isAndroid ? 0 : styleConst.ui.footerHeightIphone,
-  },
-  button: {
-    height: isAndroid
-      ? styleConst.ui.footerHeightAndroid
-      : styleConst.ui.footerHeightIphone,
-    flex: 1,
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-    borderTopWidth: styleConst.ui.borderWidth,
-    borderTopColor: styleConst.color.border,
-    marginBottom: 30,
-
-    ...Platform.select({
-      ios: {
-        borderBottomWidth: styleConst.ui.borderWidth,
-        borderBottomColor: styleConst.color.border,
-      },
-    }),
-  },
-  buttonText: {
-    fontFamily: styleConst.font.medium,
-    fontSize: 16,
-    letterSpacing: styleConst.ui.letterSpacing,
-    color: styleConst.color.lightBlue,
-    paddingRight: styleConst.ui.horizontalGapInList,
-    flex: 1,
-    flexDirection: 'row',
-  },
-  buttonIcon: {
-    fontSize: 30,
-    marginRight: 10,
-    color: styleConst.color.lightBlue,
-    paddingLeft: styleConst.ui.horizontalGapInList,
-  },
-});
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
@@ -137,7 +59,6 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
     bonus: profile.bonus.data,
     discounts: profile.discounts,
 
-    //    fcmToken: core.fcmToken,
     pushActionSubscribeState: core.pushActionSubscribeState,
   };
 };
@@ -162,6 +83,14 @@ const mapDispatchToProps = {
   actionSavePofile,
   actionSavePofileWithPhone,
 };
+
+// imports for auth
+import {
+  LoginButton,
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+} from 'react-native-fbsdk';
 
 import {
   GoogleSignin,
@@ -195,6 +124,7 @@ class ProfileScreen extends Component {
       phone: '',
       codeValue: '',
       checkCode: '',
+      vkLogin: false,
     };
 
     this.requestManager = new GraphRequestManager();
@@ -203,10 +133,6 @@ class ProfileScreen extends Component {
   static navigationOptions = () => ({
     header: null,
   });
-
-  static defaultProps = {
-    auth: {},
-  };
 
   _verifyCode = () => {
     const phone = this.state.phone;
@@ -218,6 +144,14 @@ class ProfileScreen extends Component {
   _verifyCodeStepTwo = () => {
     const phone = this.state.phone;
     const code = this.state.codeValue;
+
+    // тут специально одно равно чтобы сработало приведение типов
+    // eslint-disable-next-line eqeqeq
+    if (code != this.state.checkCode) {
+      alert('Не верный код. Попробуйте снова');
+      console.log(this.state.checkCode, code);
+      return;
+    }
 
     this.props.actionSavePofileWithPhone({phone, code}).then(data => {
       this.props.actionSavePofile({
@@ -234,40 +168,49 @@ class ProfileScreen extends Component {
   };
 
   _sendDataToApi(profile) {
-    this.props.actionSavePofile(profile);
-    this.props.navigation.navigate('ProfileScreenInfo');
+    console.log('profile in _sendDataToApi', profile, profile.networkName);
+    this.props.actionSavePofile({...profile}).then(data => {
+      console.log(data);
+      // тут какая-то фигня
+      setTimeout(() => {
+        this.props.navigation.navigate('ProfileScreenInfo');
+      }, 2000);
+    });
   }
 
-  componentDidMount() {
-    const {login} = this.props;
-
-    console.log('profile in componentDidMount', this.props);
-
-    if (login && login.token) {
-      console.log('я залогинен');
-      this.props.navigation.navigate('ProfileScreenInfo');
+  _loginFacebook = (error, result) => {
+    if (error) {
+      console.log('Facebook login error', error);
+    } else if (result.isCancelled) {
+      console.log('Facebook login was cancelled');
+    } else {
+      AccessToken.getCurrentAccessToken().then(auth => {
+        this.fetchProfileFromFacebook(auth.accessToken).then(data => {
+          this._sendDataToApi({...data, networkName: 'fb'});
+        });
+      });
     }
-  }
+  };
 
-  async fetchProfile(token) {
+  async fetchProfileFromFacebook(token) {
     return new Promise((resolve, reject) => {
       const request = new GraphRequest(
         '/me',
         {
           parameters: {
             fields: {
-              string: 'email,name,first_name,middle_name,last_name', // what you want to get
+              string: 'email,name,first_name,middle_name,last_name',
             },
             access_token: {
-              string: token, // put your accessToken here
+              string: token,
             },
           },
         },
         (error, result) => {
           if (result) {
             const profile = result;
-            console.log('async fetchProfile', profile);
             profile.avatar = `https://graph.facebook.com/${result.id}/picture`;
+
             resolve(profile);
           } else {
             reject(error);
@@ -279,13 +222,20 @@ class ProfileScreen extends Component {
     });
   }
 
-  // Somewhere in your code
-  _signIn = async () => {
+  _signInWithGoogle = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       console.log('Google auth userInfo', userInfo);
-      this.setState({userInfo});
+      const profile = {
+        id: userInfo.user.id,
+        email: userInfo.user.email,
+        first_name: userInfo.user.givenName,
+        last_name: userInfo.user.familyName,
+      };
+
+      this.setState({userInfo: profile});
+      this._sendDataToApi({...profile, networkName: 'gl'});
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         console.log('Google auth cancelled', error);
@@ -303,6 +253,25 @@ class ProfileScreen extends Component {
     }
   };
 
+  _signInWithVK = async () => {
+    const isLoggedIn = await VKLogin.isLoggedIn();
+
+    if (!isLoggedIn) {
+      try {
+        const auth = await VKLogin.login(['friends', 'photos', 'email']);
+        console.log(auth.access_token, auth);
+        this.setState({vkLogin: true});
+        this.setState({userInfo: auth});
+        this._sendDataToApi({...auth, networkName: 'vk'});
+      } catch (error) {
+        console.log('error', error);
+      }
+    } else {
+      await VKLogin.logout();
+      this.setState({vkLogin: false});
+    }
+  };
+
   onInputCode = text => {
     this.setState({codeValue: text});
   };
@@ -312,7 +281,6 @@ class ProfileScreen extends Component {
   };
 
   render() {
-    console.log('page login =========> ');
     return (
       <KeyboardAvoidingView behavior="position">
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -331,7 +299,6 @@ class ProfileScreen extends Component {
                 source={require('../../menu/assets/logo-horizontal-white.svg')}
               />
             </View>
-
             <View
               style={{
                 display: 'flex',
@@ -348,21 +315,7 @@ class ProfileScreen extends Component {
                   height: 44,
                   borderWidth: 0,
                 }}
-                onLoginFinished={(error, result) => {
-                  if (error) {
-                    console.log('Facebook login error', error);
-                  } else if (result.isCancelled) {
-                    alert('Login was cancelled');
-                  } else {
-                    AccessToken.getCurrentAccessToken().then(data => {
-                      this.fetchProfile(data.accessToken).then(data1 => {
-                        // this.setState({userInfo: data1});
-                        this._sendDataToApi(data1);
-                      });
-                    });
-                    console.log('Facebook login success', result);
-                  }
-                }}
+                onLoginFinished={this._loginFacebook}
                 onLogoutFinished={() => {
                   this.props.actionLogout();
                 }}
@@ -377,7 +330,7 @@ class ProfileScreen extends Component {
                 }}
                 size={GoogleSigninButton.Size.Wide}
                 color={GoogleSigninButton.Color.Light}
-                onPress={this._signIn}
+                onPress={this._signInWithGoogle}
                 disabled={this.state.isSigninInProgress}
               />
               {/* <Button
@@ -395,24 +348,7 @@ class ProfileScreen extends Component {
                 </Text>
               </Button> */}
               <Button
-                onPress={async () => {
-                  const isLoggedIn = await VKLogin.isLoggedIn();
-
-                  if (isLoggedIn) {
-                    console.log('isLoggedIn', isLoggedIn);
-                  }
-                  try {
-                    const auth = await VKLogin.login([
-                      'friends',
-                      'photos',
-                      'email',
-                    ]);
-                    console.log(auth.access_token, auth);
-                    // await VKLogin.logout();
-                  } catch (error) {
-                    console.error(error);
-                  }
-                }}
+                onPress={this._signInWithVK}
                 iconLeft
                 style={{
                   backgroundColor: '#4680C2',

@@ -226,15 +226,23 @@ class ProfileScreenInfo extends Component {
   });
 
   componentDidMount() {
-    const {navigation, login} = this.props;
-    // TODO:
-    // if (!login.id) {
-    //   navigation.navigate('ProfileScreen');
-    // }
+    if (!this.props.login.token) {
+      this.props.navigation.navigate('ProfileScreen');
+    }
+  }
+
+  componentDidUpdate(nextProps) {
+    if (nextProps.login.token !== this.props.login.token) {
+      return true;
+    }
   }
 
   render() {
     const cars = this.props.cars;
+
+    if (!this.props.login.token) {
+      return null;
+    }
 
     return (
       <View>
@@ -302,7 +310,9 @@ class ProfileScreenInfo extends Component {
                 marginRight: 24,
               }}>
               <Text style={{color: '#0061ed', fontSize: 26, fontWeight: '600'}}>
-                {this.props.bonus.saldo ? this.props.bonus.saldo.value : 0}
+                {this.props.bonus && this.props.bonus.saldo
+                  ? this.props.bonus.saldo.value
+                  : 0}
               </Text>
             </View>
             <View style={{flex: 1}}>
