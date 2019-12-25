@@ -119,8 +119,8 @@ const EnhancedMenuScreen = createBottomTabNavigator({
   Search: SearchStack,
   Profile: {
     screen: createStackNavigator({
-      ProfileScreen: {screen: ProfileScreen},
       ProfileScreenInfo: {screen: ProfileScreenInfo},
+      ProfileScreen: {screen: ProfileScreen},
       TOHistore: {screen: TOHistore},
       CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
       BonusScreen: {screen: BonusScreen},

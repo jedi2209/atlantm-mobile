@@ -625,7 +625,7 @@ export const actionSavePofile = props => {
         userid: props.id,
       });
 
-      return dispatch({
+      dispatch({
         type: SAVE_PROFILE__UPDATE,
         payload: {
           token: props.token,
@@ -634,6 +634,10 @@ export const actionSavePofile = props => {
           bonus,
           discounts,
         },
+      });
+
+      return new Promise((resolve, rejects) => {
+        resolve();
       });
     };
   }
@@ -645,27 +649,52 @@ export const actionSavePofile = props => {
     });
 
     return API.loginWith(props)
-      .then(data => {
-        try {
-          const {status, error, profile} = data;
+      .then(async data => {
+        //try {
+        const {status, error, profile} = data;
 
-          if (status !== 'success') {
-            return dispatch({
-              type: SAVE_PROFILE__FAIL,
-              payload: {
-                code: error.code,
-                message: error.message,
-              },
-            });
-          }
-
-          return dispatch({type: SAVE_PROFILE__UPDATE, payload: {...profile}});
-        } catch (err) {
-          return dispatch({type: SAVE_PROFILE__FAIL});
+        if (status !== 'success') {
+          dispatch({
+            type: SAVE_PROFILE__FAIL,
+            payload: {
+              code: error.code,
+              message: error.message,
+            },
+          });
         }
+
+        // get id and token
+        const user = data.data.data.user; // мб еще .SAP нужно тут
+        console.log('user.SAP', data.data.data.user);
+        const token = user.SAP
+          ? user.SAP.token
+          : 'f7c27e35610137909a092be12fc1e2b1'; // user.TOKEN,
+        const id = user.SAP ? user.SAP.ID : '62513365'; //user.ID;
+        console.log('data in return API.loginWith(props)', user);
+
+        const {cars, bonus, discounts} = await getProfileData({
+          token: token,
+          userid: id,
+        });
+
+        dispatch({
+          type: SAVE_PROFILE__UPDATE,
+          payload: {
+            cars,
+            bonus,
+            discounts,
+            ...profile,
+            id,
+            token,
+          },
+        });
+        //}
+        // catch (err) {
+        //   dispatch({type: SAVE_PROFILE__FAIL});
+        // }
       })
       .catch(error => {
-        return dispatch({
+        dispatch({
           type: SAVE_PROFILE__FAIL,
           payload: {
             message: error,

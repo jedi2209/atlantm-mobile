@@ -485,23 +485,23 @@ export default {
     const {
       id,
       email,
-      name,
       phone,
       personal_birthday,
       personal_gender,
       last_name,
       first_name,
+      networkName,
     } = profile;
 
     const body = [
-      'networkName=fb',
+      `networkName=${networkName}`,
       `socialData[XML_ID]=${id}`,
       `socialData[EMAIL]=${email}`,
       `socialData[NAME]=${first_name}`,
       `socialData[LAST_NAME]=${last_name}`,
-      `socialData[PHONE]=${phone}`,
-      `socialData[PERSONAL_BIRTHDAY]=${personal_birthday}`,
-      `socialData[PERSONAL_GENDER]=${personal_gender}`,
+      // `socialData[PHONE]=${phone || '""'}`,
+      // `socialData[PERSONAL_BIRTHDAY]=${personal_birthday || '""'}`,
+      // `socialData[PERSONAL_GENDER]=${personal_gender || '""'}`,
     ].join('&');
 
     const requestParams = _.merge({}, baseRequestParams, {
@@ -514,6 +514,7 @@ export default {
 
     return this.request('/lkk/auth/social/', requestParams)
       .then(data => {
+        console.log('>>> login with data api:::', data);
         return {status: 'success', error: {}, profile, data};
       })
       .catch(err => {
@@ -553,6 +554,9 @@ export default {
     } else {
       delete requestParams.headers.Debug;
     }
+
+    console.log('>>> url', url);
+    console.log('>>> requestParams', requestParams);
 
     return fetch(url, requestParams).then(response => {
       // __DEV__ && console.log('response', response);
