@@ -20,6 +20,7 @@ import {
 } from '../../actions';
 
 const mapStateToProps = ({catalog, dealer}) => {
+  console.log('dealer ======>', dealer);
   return {
     city: catalog.usedCar.city,
     region: catalog.usedCar.region,
@@ -77,6 +78,9 @@ class UsedCarCityScreen extends Component {
 
     console.log('== UsedCarCityScreen ==');
 
+    console.log('enter',listRussia,
+      listUkraine,
+      listBelarussia);
     return (
       <SelectListByCountry
         itemLayout="city"

@@ -138,7 +138,6 @@ class InfoPostScreen extends Component {
   };
 
   onLayoutImage = e => {
-
     const {height: imageDynamicHeight} = e.nativeEvent.layout;
 
     this.setState({imageHeight: imageDynamicHeight});
@@ -285,15 +284,14 @@ class InfoPostScreen extends Component {
               </View>
             </View>
           )}
+          <FooterButton
+            theme="white"
+            icon="phone"
+            uppercase={false}
+            text="Позвоните мне"
+            onPressButton={this.onPressCallMe}
+          />
         </Content>
-
-        <FooterButton
-          theme="white"
-          icon="phone"
-          uppercase={false}
-          text="Позвоните мне"
-          onPressButton={this.onPressCallMe}
-        />
       </SafeAreaView>
     );
   }

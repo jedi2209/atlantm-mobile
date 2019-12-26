@@ -403,7 +403,7 @@ class ContactsScreen extends Component {
                     kind="success"
                     onPress={() => {
                       Linking.openURL(get(dealerSelected, 'site[0]')).catch(
-                        console.error('<YA_RU> failed', err),
+                        console.log('<YA_RU> failed'),
                       );
                     }}
                   />

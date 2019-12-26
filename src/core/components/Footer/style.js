@@ -13,39 +13,35 @@ export default StyleSheet.create({
     // justifyContent: 'center',
     // alignItems: 'center',
     // alignSelf: 'center',
-    position: 'absolute',
-    bottom: 0,
+    // position: 'absolute',
+    // bottom: 0,
     // marginBottom: 0,
     backgroundColor: styleConst.color.bg,
   },
   footerFilters: {
-    paddingBottom: isIPhoneX() ? 10 : 0,
+    //paddingBottom: isIPhoneX() ? 10 : 0,
   },
   button: {
-    height: isIPhoneX()
-      ? styleConst.ui.footerHeightIphone
-      : styleConst.ui.footerHeightAndroid,
+    height: styleConst.ui.footerHeightAndroid,
     flex: 1,
     flexDirection: 'row',
     backgroundColor: styleConst.color.lightBlue,
-    bottom: isIPhoneX() ? styleConst.ui.footerHeight : 0,
+    // bottom: isIPhoneX() ? styleConst.ui.footerHeight : 0,
   },
   orderPriceContainer: {
-    height: isIPhoneX()
-      ? styleConst.ui.footerHeightIphone
-      : styleConst.ui.footerHeightAndroid,
+    height: styleConst.ui.footerHeightAndroid,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
     textAlignVertical: 'center',
     backgroundColor: styleConst.color.header,
-    bottom: isIPhoneX() ? styleConst.ui.footerHeight : 0,
+    // bottom: isIPhoneX() ? styleConst.ui.footerHeight : 0,
   },
   orderPriceContainerNotSale: {
     flexDirection: 'row',
   },
   content: {
-    marginBottom: isIPhoneX() ? 20 : 20,
+    marginBottom: 20,
   },
 });

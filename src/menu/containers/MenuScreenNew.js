@@ -1,14 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 
-import {Text, View, Image, StyleSheet, TouchableHighlight} from 'react-native';
+import {Text, View, Image, StyleSheet, ScrollView} from 'react-native';
 import {Icon, List, ListItem, Left, Right, Button, Body} from 'native-base';
 
 import styleConst from '../../core/style-const';
 
 const styles = StyleSheet.create({
   buttonPrimary: {
-    marginTop: 20,
+    marginTop: 10,
     marginHorizontal: 20,
     backgroundColor: '#fff',
     borderColor: '#2E3A59',
@@ -40,7 +40,7 @@ const MenuItem = props => {
             backgroundColor: selected ? '#0061ED' : 'transparent',
             paddingLeft: 17,
             paddingRight: 30,
-            height: 65,
+            height: 55,
             borderTopLeftRadius: 0,
             borderBottomLeftRadius: 0,
             borderTopRightRadius: 80,
@@ -154,8 +154,8 @@ const MoreScreen = props => {
   ];
   return (
     <>
-      <View>
-        <List style={{marginTop: 20}}>
+      <ScrollView>
+        <List style={{marginTop: 10}}>
           {menu.map(item => (
             <MenuItem
               key={`menu-item-${item.id}`}
@@ -174,7 +174,7 @@ const MoreScreen = props => {
             <Text style={styles.buttonPrimaryText}>ЛИЧНЫЙ КАБИНЕТ</Text>
           </Button>
         </View>
-      </View>
+      </ScrollView>
     </>
   );
 };
