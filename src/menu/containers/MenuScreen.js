@@ -2,7 +2,10 @@
 import React from 'react';
 import {Icon} from 'native-base';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
-import {createStackNavigator} from 'react-navigation-stack';
+// import {createStackNavigator} from 'react-navigation-stack';
+// TODO: https://github.com/react-navigation/react-navigation/issues/6458
+// TODO: https://github.com/kmagiera/react-native-screens/issues/220
+import createStackNavigator from 'react-native-screens/createNativeStackNavigator';
 
 // helpers
 import styleConst from '../../core/style-const';
@@ -39,34 +42,23 @@ const styles = {
 };
 
 const SearchStack = {
-  screen: createStackNavigator(
-    {
-      NewCarListScreen: {
-        screen: NewCarListScreen,
-      },
-      MapScreen: {
-        screen: MapScreen,
-        screenProps: {
-          tabBarVisible: false,
-        },
-      },
-      NewCarFilterScreen: {
-        screen: NewCarFilterScreen,
-      },
-      NewCarItemScreen: {
-        screen: NewCarItemScreen,
-      },
-      UsedCarListScreen: {
-        screen: UsedCarListScreen,
-      },
-      UsedCarFilterScreen: {screen: UsedCarFilterScreen},
-      UsedCarItemScreen: {screen: UsedCarItemScreen},
-      UsedCarCityScreen: {screen: UsedCarCityScreen},
+  screen: createStackNavigator({
+    NewCarListScreen: {
+      screen: NewCarListScreen,
     },
-    {
-      mode: 'modal',
+    MapScreen: {
+      screen: MapScreen,
+      screenProps: {
+        tabBarVisible: false,
+      },
     },
-  ),
+    NewCarFilterScreen: {
+      screen: NewCarFilterScreen,
+    },
+    NewCarItemScreen: {
+      screen: NewCarItemScreen,
+    },
+  }),
 };
 
 SearchStack.navigationOptions = ({navigation}) => {
@@ -163,7 +155,15 @@ const EnhancedMenuScreen = createBottomTabNavigator({
   //   },
   // },
   More: {
-    screen: createStackNavigator({MoreScreen: {screen: MoreScreen}}),
+    screen: createStackNavigator({
+      MoreScreen: {screen: MoreScreen},
+      UsedCarListScreen: {
+        screen: UsedCarListScreen,
+      },
+      UsedCarFilterScreen: {screen: UsedCarFilterScreen},
+      UsedCarItemScreen: {screen: UsedCarItemScreen},
+      UsedCarCityScreen: {screen: UsedCarCityScreen},
+    }),
     navigationOptions: ({navigation}) => {
       return {
         tabBarLabel: 'Меню',

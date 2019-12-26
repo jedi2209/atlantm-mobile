@@ -122,21 +122,22 @@ const getRouter = initialRouteName => {
       //     header: null,
       //   },
       // },
-      Profile2Screen: {
-        screen: createStackNavigator({
-          ProfileScreen: {screen: ProfileScreen},
-          RegisterScreen: {screen: RegisterScreen},
-          ForgotPassScreen: {screen: ForgotPassScreen},
-          BonusScreen: {screen: BonusScreen},
-          BonusInfoScreen: {screen: BonusInfoScreen},
-          DiscountsScreen: {screen: DiscountsScreen},
-          CarHistoryScreen: {screen: CarHistoryScreen},
-          CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
-        }),
-        navigationOptions: {
-          header: null,
-        },
-      },
+      // ProfileScreen: {screen: ProfileScreen},
+      // Profile2Screen: {
+      //   screen: createStackNavigator({
+      //     ProfileScreen: {screen: ProfileScreen},
+      //     // RegisterScreen: {screen: RegisterScreen},
+      //     // ForgotPassScreen: {screen: ForgotPassScreen},
+      //     // BonusScreen: {screen: BonusScreen},
+      //     // BonusInfoScreen: {screen: BonusInfoScreen},
+      //     // DiscountsScreen: {screen: DiscountsScreen},
+      //     // CarHistoryScreen: {screen: CarHistoryScreen},
+      //     // CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
+      //   }),
+      //   navigationOptions: {
+      //     header: null,
+      //   },
+      // },
       ServiceScreen: {screen: ServiceScreen},
       IndicatorsScreen: {screen: IndicatorsScreen},
       // Catalog2Screen: {

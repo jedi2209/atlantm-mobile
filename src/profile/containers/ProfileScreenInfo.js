@@ -34,6 +34,7 @@ import {
   actionSetPushGranted,
 } from '../../core/actions';
 
+import {verticalScale} from '../../utils/scale';
 import styleConst from '../../core/style-const';
 
 import {TouchableOpacity} from 'react-native';
@@ -197,14 +198,6 @@ const CarCard = ({data}) => {
   );
 };
 class ProfileScreenInfo extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      userInfo: {},
-    };
-  }
-
   static navigationOptions = () => ({
     header: null,
   });
@@ -216,25 +209,10 @@ class ProfileScreenInfo extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    if (nextProps.login.token !== this.props.login.token) {
-      return true;
-    }
+    return nextProps.login.token !== this.props.login.token;
   }
 
   render() {
-    const cars = this.props.cars;
-
-    if (!this.props.login.token) {
-      return (
-        <View style={styles.spinnerContainer}>
-          <ActivityIndicator
-            color={styleConst.color.blue}
-            style={styles.spinner}
-          />
-        </View>
-      );
-    }
-
     return (
       <ScrollView>
         <Text
@@ -270,7 +248,7 @@ class ProfileScreenInfo extends Component {
           showsHorizontalScrollIndicator={false}
           horizontal
           style={styles.scrollView}>
-          {cars.map(item => (
+          {this.props.cars.map(item => (
             <TouchableOpacity
               onPress={() =>
                 this.props.navigation.navigate('TOHistore', {car: item})

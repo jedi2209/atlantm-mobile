@@ -635,10 +635,6 @@ export const actionSavePofile = props => {
           discounts,
         },
       });
-
-      return new Promise((resolve, rejects) => {
-        resolve();
-      });
     };
   }
 
@@ -667,7 +663,7 @@ export const actionSavePofile = props => {
         const user = data.data.data.user; // мб еще .SAP нужно тут
         console.log('user.SAP', data.data.data.user);
         const token = user.SAP
-          ? user.SAP.token
+          ? user.SAP.TOKEN
           : 'f7c27e35610137909a092be12fc1e2b1'; // user.TOKEN,
         const id = user.SAP ? user.SAP.ID : '62513365'; //user.ID;
         console.log('data in return API.loginWith(props)', user);
