@@ -232,11 +232,11 @@ class ProfileScreenInfo extends Component {
             style={styles.spinner}
           />
         </View>
-      ) ;
+      );
     }
 
     return (
-      <View>
+      <ScrollView>
         <Text
           style={{
             fontSize: 35,
@@ -352,7 +352,7 @@ class ProfileScreenInfo extends Component {
           style={[styles.buttonPrimary, {marginTop: 40}]}>
           <Text style={styles.buttonPrimaryText}>Выйти</Text>
         </Button>
-      </View>
+      </ScrollView>
     );
   }
 }

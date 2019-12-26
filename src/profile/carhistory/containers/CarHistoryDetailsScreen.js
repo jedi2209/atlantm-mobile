@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, View, Text, Alert} from 'react-native';
-import {Row, Col, Button, Content, Segment, StyleProvider} from 'native-base';
+import {SafeAreaView, StyleSheet, View, Text, ScrollView} from 'react-native';
+import {Row, Col, Button, Content, Segment} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -238,55 +238,57 @@ class CarHistoryDetailsScreen extends Component {
 
     return (
       <SafeAreaView style={styles.safearea}>
-        <Content>
-          <Segment style={styles.segment}>
-            {works ? (
-              <Button
-                first
-                last={!parts}
-                active={isActiveWorksTab}
-                onPress={this.selectWorksTab}
-                style={
-                  isActiveWorksTab ? styles.tabButtonActive : styles.tabButton
-                }>
-                <Text
+        <ScrollView>
+          <Content>
+            <Segment style={styles.segment}>
+              {works ? (
+                <Button
+                  first
+                  last={!parts}
+                  active={isActiveWorksTab}
+                  onPress={this.selectWorksTab}
                   style={
-                    isActiveWorksTab ? styles.tabTextActive : styles.tabText
+                    isActiveWorksTab ? styles.tabButtonActive : styles.tabButton
                   }>
-                  Работы
-                </Text>
-              </Button>
-            ) : null}
-            {parts ? (
-              <Button
-                first={!works}
-                last
-                active={isActivePartsTab}
-                onPress={this.selectPartsTab}
-                style={
-                  isActivePartsTab ? styles.tabButtonActive : styles.tabButton
-                }>
-                <Text
+                  <Text
+                    style={
+                      isActiveWorksTab ? styles.tabTextActive : styles.tabText
+                    }>
+                    Работы
+                  </Text>
+                </Button>
+              ) : null}
+              {parts ? (
+                <Button
+                  first={!works}
+                  last
+                  active={isActivePartsTab}
+                  onPress={this.selectPartsTab}
                   style={
-                    isActivePartsTab ? styles.tabTextActive : styles.tabText
+                    isActivePartsTab ? styles.tabButtonActive : styles.tabButton
                   }>
-                  Материалы
-                </Text>
-              </Button>
-            ) : null}
-          </Segment>
+                  <Text
+                    style={
+                      isActivePartsTab ? styles.tabTextActive : styles.tabText
+                    }>
+                    Материалы
+                  </Text>
+                </Button>
+              ) : null}
+            </Segment>
 
-          {isActiveWorksTab && works ? (
-            <View style={styles.tabContent}>
-              {works.map((item, idx) => this.renderTable(item, idx))}
-            </View>
-          ) : null}
-          {isActivePartsTab && parts ? (
-            <View style={styles.tabContent}>
-              {parts.map((item, idx) => this.renderTable(item, idx))}
-            </View>
-          ) : null}
-        </Content>
+            {isActiveWorksTab && works ? (
+              <View style={styles.tabContent}>
+                {works.map((item, idx) => this.renderTable(item, idx))}
+              </View>
+            ) : null}
+            {isActivePartsTab && parts ? (
+              <View style={styles.tabContent}>
+                {parts.map((item, idx) => this.renderTable(item, idx))}
+              </View>
+            ) : null}
+          </Content>
+        </ScrollView>
       </SafeAreaView>
     );
   }
