@@ -106,7 +106,6 @@ export default class SelectListByCountry extends Component {
         itemLayout={itemLayout}
         selectItem={selectItem}
         navigation={navigation}
-        selectedItem={selectedItem}
         returnScreen={returnScreen}
         onSelect={onSelect}
       />
@@ -138,6 +137,10 @@ export default class SelectListByCountry extends Component {
       default:
         list = listBelarussia;
     }
+
+    console.log('list', listRussia,
+    listUkraine,
+    listBelarussia);
 
     return (
       <StyleProvider style={getTheme()}>
@@ -172,7 +175,7 @@ export default class SelectListByCountry extends Component {
             refreshing={this.state.isRefreshing}
             ListEmptyComponent={this.renderEmptyComponent}
             renderItem={this.renderItem}
-            keyExtractor={item => `${item.key.toString()}`}
+            keyExtractor={item => `${item.id.toString()}`}
           />
         </Container>
       </StyleProvider>

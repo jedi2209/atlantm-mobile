@@ -231,11 +231,6 @@ export default class SelectItemByCountry extends Component {
             </View>
           ) : null}
         </Body>
-        <Right>
-          {selectedItem.id === item.id ? (
-            <Icon name="ios-checkmark" style={styles.iconCheck} />
-          ) : null}
-        </Right>
       </ListItem>
     );
   };

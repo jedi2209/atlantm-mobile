@@ -1,34 +1,18 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import { orderBy } from 'lodash';
+import {orderBy} from 'lodash';
 
 import {
   View,
-  Alert,
-  TextInput,
   StyleSheet,
   ScrollView,
-  Keyboard,
   Text,
   Platform,
-  ImageBackground,
   Image,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
+  ActivityIndicator,
 } from 'react-native';
-import {
-  Container,
-  Content,
-  List,
-  StyleProvider,
-  Button,
-  Icon,
-  Form,
-  Item,
-  Input,
-  Label,
-} from 'native-base';
+import {Button, Icon} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -241,7 +225,14 @@ class ProfileScreenInfo extends Component {
     const cars = this.props.cars;
 
     if (!this.props.login.token) {
-      return null;
+      return (
+        <View style={styles.spinnerContainer}>
+          <ActivityIndicator
+            color={styleConst.color.blue}
+            style={styles.spinner}
+          />
+        </View>
+      ) ;
     }
 
     return (
