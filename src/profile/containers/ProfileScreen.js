@@ -10,6 +10,7 @@ import {
   Image,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from 'react-native';
 import {Button, Icon} from 'native-base';
 
@@ -34,6 +35,8 @@ import {
   actionSetPushActionSubscribe,
   actionSetPushGranted,
 } from '../../core/actions';
+
+import {verticalScale} from '../../utils/scale';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
@@ -112,7 +115,8 @@ GoogleSignin.configure({
 });
 
 import VKLogin from 'react-native-vkontakte-login';
-import {ScrollView} from 'react-native-gesture-handler';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import SafeAreaView from 'react-native-safe-area-view';
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -126,6 +130,7 @@ class ProfileScreen extends Component {
       codeValue: '',
       checkCode: '',
       vkLogin: false,
+      loading: false,
     };
 
     this.requestManager = new GraphRequestManager();
@@ -154,29 +159,40 @@ class ProfileScreen extends Component {
       return;
     }
 
-    this.props.actionSavePofileWithPhone({phone, code}).then(data => {
-      this.props.actionSavePofile({
-        first_name: data.NAME,
-        last_name: data.LAST_NAME,
-        token: data.SAP.TOKEN,
-        id: data.SAP.ID,
+    this.setState({loading: true});
+    this.props
+      .actionSavePofileWithPhone({phone, code})
+      .then(data => {
+        Keyboard.dismiss();
+        return this.props.actionSavePofile({
+          first_name: data.NAME,
+          last_name: data.LAST_NAME,
+          token: data.SAP.TOKEN,
+          id: data.SAP.ID,
+        });
+      })
+      .then(() => {
+        this.setState({loading: false});
+        this.props.navigation.navigate('ProfileScreenInfo');
       });
-
-      Keyboard.dismiss();
-
-      this.props.navigation.navigate('ProfileScreenInfo');
-    });
   };
 
   _sendDataToApi(profile) {
-    console.log('profile in _sendDataToApi', profile, profile.networkName);
-    this.props.actionSavePofile({...profile}).then(data => {
-      console.log(data);
-      // тут какая-то фигня
-      setTimeout(() => {
-        this.props.navigation.navigate('ProfileScreenInfo');
-      }, 2000);
-    });
+    // console.log('profile in _sendDataToApi', profile, profile.networkName);
+    this.setState({loading: true});
+    this.props
+      .actionSavePofile(profile)
+      .then(() => {
+        // setTimeout(() => {
+          this.setState({loading: false});
+          // this.props.navigation.navigate('ProfileScreenInfo');
+          this.props.navigation.goBack();
+        // }, 1000);
+      })
+      .catch(() => {
+        this.setState({loading: false});
+        alert('Что-то поошло не так, попробуйте снова');
+      });
   }
 
   _loginFacebook = (error, result) => {
@@ -235,7 +251,6 @@ class ProfileScreen extends Component {
         last_name: userInfo.user.familyName,
       };
 
-      this.setState({userInfo: profile});
       this._sendDataToApi({...profile, networkName: 'gl'});
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -261,15 +276,15 @@ class ProfileScreen extends Component {
       try {
         const auth = await VKLogin.login(['friends', 'photos', 'email']);
         console.log(auth.access_token, auth);
-        this.setState({vkLogin: true});
-        this.setState({userInfo: auth});
+        // this.setState({vkLogin: true});
+        // this.setState({userInfo: auth});
         this._sendDataToApi({...auth, networkName: 'vk'});
       } catch (error) {
         console.log('error', error);
       }
     } else {
       await VKLogin.logout();
-      this.setState({vkLogin: false});
+      // this.setState({vkLogin: false});
     }
   };
 
@@ -282,6 +297,20 @@ class ProfileScreen extends Component {
   };
 
   render() {
+    if (this.state.loading) {
+      return (
+        <View style={{flex: 1}}>
+          <ActivityIndicator
+            color="red"
+            style={{
+              alignSelf: 'center',
+              marginTop: verticalScale(60),
+            }}
+          />
+        </View>
+      );
+    }
+
     return (
       <KeyboardAvoidingView behavior="position">
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -289,6 +318,22 @@ class ProfileScreen extends Component {
             source={require('./bg.jpg')}
             style={{width: '100%', height: '100%'}}>
             <ScrollView>
+              <SafeAreaView>
+                <TouchableOpacity
+                
+                  // onPress={() => this.props.navigation.navigate('Home')}
+
+                  onPress={() => this.props.navigation.goBack()}
+                >
+                  <View
+                    style={{
+                      width: 40,
+                      height: 40,
+                      backgroundColor: '#fc0',
+                    }}
+                  />
+                </TouchableOpacity>
+              </SafeAreaView>
               <View
                 style={{
                   display: 'flex',

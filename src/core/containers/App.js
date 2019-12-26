@@ -175,7 +175,9 @@ class App extends Component {
     };
 
     return (
-      <AppContainer onNavigationStateChange={this.onNavigationStateChange} />
+      <View style={{flex: 1}}>
+        <AppContainer onNavigationStateChange={this.onNavigationStateChange} />
+      </View>
     );
   }
 }
