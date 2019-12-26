@@ -95,6 +95,8 @@ import {
   GraphRequestManager,
 } from 'react-native-fbsdk';
 
+import {LoginManager} from 'react-native-fbsdk';
+
 import {
   GoogleSignin,
   GoogleSigninButton,
@@ -178,16 +180,12 @@ class ProfileScreen extends Component {
   };
 
   _sendDataToApi(profile) {
-    // console.log('profile in _sendDataToApi', profile, profile.networkName);
     this.setState({loading: true});
     this.props
       .actionSavePofile(profile)
       .then(() => {
-        // setTimeout(() => {
-          this.setState({loading: false});
-          // this.props.navigation.navigate('ProfileScreenInfo');
-          this.props.navigation.goBack();
-        // }, 1000);
+        this.setState({loading: false});
+        this.props.navigation.goBack();
       })
       .catch(() => {
         this.setState({loading: false});
@@ -311,6 +309,8 @@ class ProfileScreen extends Component {
       );
     }
 
+    LoginManager.logOut();
+
     return (
       <KeyboardAvoidingView behavior="position">
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -318,22 +318,6 @@ class ProfileScreen extends Component {
             source={require('./bg.jpg')}
             style={{width: '100%', height: '100%'}}>
             <ScrollView>
-              <SafeAreaView>
-                <TouchableOpacity
-                
-                  // onPress={() => this.props.navigation.navigate('Home')}
-
-                  onPress={() => this.props.navigation.goBack()}
-                >
-                  <View
-                    style={{
-                      width: 40,
-                      height: 40,
-                      backgroundColor: '#fc0',
-                    }}
-                  />
-                </TouchableOpacity>
-              </SafeAreaView>
               <View
                 style={{
                   display: 'flex',
