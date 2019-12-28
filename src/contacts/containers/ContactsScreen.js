@@ -374,7 +374,9 @@ class ContactsScreen extends Component {
                     subtitle={phones[0]}
                     kind="default"
                     onPress={() => {
-                      Communications.phonecall(phones[0], true);
+                      Linking.openURL(
+                        'tel:' + phones[0].replace(/[^+\d]+/g, ''),
+                      );
                     }}
                   />
                   <Card
