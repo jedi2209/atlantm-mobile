@@ -385,11 +385,11 @@ class ContactsScreen extends Component {
                     kind="default"
                     onPress={this.onPressCallMe}
                   />
-                  <Card
+                  {/* <Card
                     title="Чат"
                     subtitle="Мы на связи с 9 до 20"
                     kind="primary"
-                  />
+                  /> */}
                   <Card
                     title="Заявка"
                     subtitle="Отправить заявку"
