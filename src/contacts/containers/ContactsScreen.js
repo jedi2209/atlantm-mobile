@@ -10,7 +10,7 @@ import {
   Linking,
   ScrollView,
   TouchableWithoutFeedback,
-
+  TouchableOpacity,
   // Linking,
 } from 'react-native';
 import {Text, StyleProvider, Icon, Button} from 'native-base';
@@ -49,16 +49,16 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     width: null,
-    height: HEADER_MAX_HEIGHT + 70,
+    height: HEADER_MAX_HEIGHT + 10,
     resizeMode: 'cover',
   },
   blackBack: {
-    height: 125,
+    height: 75,
     backgroundColor: '#000',
     opacity: 0.5,
   },
   address: {
-    marginTop: -100,
+    marginTop: -70,
     paddingHorizontal: 20,
     marginBottom: 15,
     paddingTop: 0,
@@ -314,6 +314,16 @@ class ContactsScreen extends Component {
       refererScreen: 'contacts',
     });
 
+  onPressMap = () => {
+    const {navigation, dealerSelected} = this.props;
+    navigation.navigate('MapScreen', {
+      name: get(dealerSelected, 'name'),
+      city: get(dealerSelected, 'city.name'),
+      address: get(dealerSelected, 'dealer.name'),
+      coords: get(dealerSelected, 'coords'),
+    });
+  };
+
   render() {
     const {dealerSelected, navigation, isСallMeRequest, list} = this.props;
 
@@ -348,22 +358,22 @@ class ContactsScreen extends Component {
                 style={styles.iconRow}
               />
             </Button>
-            <View style={{marginTop: HEADER_MAX_HEIGHT - 160}}>
+            <View style={{marginTop: HEADER_MAX_HEIGHT - 170}}>
               <View style={styles.blackBack} />
-              <View style={styles.address}>
+              <TouchableOpacity
+                style={styles.address}
+                onPress={() => {
+                  this.onPressMap();
+                }}>
                 <Icon
                   style={styles.point}
                   type="MaterialIcons"
                   name="navigation"
                 />
-                {/* <Image
-                  style={styles.point}
-                  source={require('../assets/pin.png')}
-                /> */}
                 <Text style={styles.addressText}>{`${
                   dealerSelected.city.name
                 }, ${dealerSelected.address}`}</Text>
-              </View>
+              </TouchableOpacity>
               <ScrollView
                 showsHorizontalScrollIndicator={false}
                 horizontal
@@ -414,9 +424,9 @@ class ContactsScreen extends Component {
               {list.length ? (
                 <View
                   style={{
-                    marginTop: 20,
+                    marginTop: 0,
                     backgroundColor: '#F6F6F6',
-                    paddingVertical: 20,
+                    paddingVertical: 0,
                   }}>
                   <View
                     style={{
