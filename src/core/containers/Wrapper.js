@@ -13,6 +13,9 @@ import SplashScreen from 'react-native-splash-screen';
 
 // components
 import App from './App';
+if (__DEV__) {
+  import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
+}
 
 if (!__DEV__) {
   // eslint-disable-line no-undef
