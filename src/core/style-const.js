@@ -44,6 +44,38 @@ export default {
     // TODO: reeemmaee to bluee
     blueHeader: '#0F66B2',
     passive: '#757575',
+    shadowActive: {
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.8,
+      shadowRadius: 2,
+    },
+    menu: {
+      active: {
+        backgroundColor: '#0061ED',
+        shadowColor: '#000',
+        shadowOffset: {
+          width: 0,
+          height: 2,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 4,
+        elevation: 10,
+      },
+      default: {
+        backgroundColor: 'white',
+        // shadowColor: '#000',
+        // shadowOffset: {
+        //   width: 0,
+        //   height: 0,
+        // },
+        // shadowOpacity: 0,
+        // shadowRadius: 0,
+        elevation: 0,
+      },
+    },
   },
 };
 
