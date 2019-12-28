@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   // Linking,
 } from 'react-native';
+
 import {Text, StyleProvider, Icon, Button} from 'native-base';
 
 // redux
@@ -210,66 +211,7 @@ class ContactsScreen extends Component {
   }
 
   onPressCallMe = async () => {
-    const isInternetExist = await isInternet();
-
-    if (!isInternetExist) {
-      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
-    } else {
-      const {
-        callMe,
-        profile,
-        navigation,
-        dealerSelected,
-        isСallMeRequest,
-      } = this.props;
-
-      // предотвращаем повторную отправку формы
-      if (isСallMeRequest) {
-        return;
-      }
-
-      const {name, phone, email} = profile;
-
-      if (!phone) {
-        return Alert.alert(
-          'Добавьте номер телефона',
-          'Для обратного звонка необходимо добавить номер контактного телефона в профиле',
-          [
-            {text: 'Отмена', style: 'cancel'},
-            {
-              text: 'Заполнить',
-              onPress() {
-                navigation.navigate('Profile2Screen');
-              },
-            },
-          ],
-        );
-      }
-
-      const dealerID = dealerSelected.id;
-      const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
-
-      callMe({
-        name,
-        email,
-        phone,
-        device,
-        dealerID,
-      }).then(action => {
-        if (action.type === CALL_ME__SUCCESS) {
-          Amplitude.logEvent('order', 'contacts/callme');
-
-          setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
-        }
-
-        if (action.type === CALL_ME__FAIL) {
-          setTimeout(
-            () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
-            100,
-          );
-        }
-      });
-    }
+    this.props.navigation.navigate('CallMeBackScreen');
   };
 
   shouldComponentUpdate(nextProps) {

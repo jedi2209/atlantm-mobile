@@ -299,7 +299,7 @@ class ProfileScreen extends Component {
       return (
         <View style={{flex: 1}}>
           <ActivityIndicator
-            color="red"
+            color="#0061ED"
             style={{
               alignSelf: 'center',
               marginTop: verticalScale(60),
