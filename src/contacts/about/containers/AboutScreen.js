@@ -6,6 +6,7 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
+  Linking
 } from 'react-native';
 import {
   Container,
@@ -141,7 +142,9 @@ class AboutScreen extends Component {
     }
 
     return phones.map(phone => {
-      const onPress = () => Communications.phonecall(phone, true);
+      const onPress = () => {
+        Linking.openURL('tel:' + phone.replace(/[^+\d]+/g, ''));
+      };
       return this.renderItem('Телефон', phone, false, onPress);
     });
   };
