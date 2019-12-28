@@ -65,7 +65,7 @@ export default {
         elevation: 10,
       },
       default: {
-        backgroundColor: 'white',
+        backgroundColor: 'transparent',
         // shadowColor: '#000',
         // shadowOffset: {
         //   width: 0,
