@@ -28,6 +28,7 @@ const MenuItem = props => {
       style={{
         marginLeft: 0,
         borderColor: 'transparent',
+        backgroundColor: 'transparent',
         paddingTop: 5,
         paddingBottom: 5,
       }}
@@ -36,22 +37,20 @@ const MenuItem = props => {
       <Left style={{marginLeft: 0, paddingLeft: 0, maxWidth: 75}}>
         <Button
           underlayColor={styles.buttonPrimaryText.color}
-          style={{
-            backgroundColor: selected ? '#0061ED' : 'transparent',
-            paddingLeft: 17,
-            paddingRight: 30,
-            height: 55,
-            borderTopLeftRadius: 0,
-            borderBottomLeftRadius: 0,
-            borderTopRightRadius: 80,
-            borderBottomRightRadius: 80,
-            shadowOffset: {
-              width: 0,
-              height: 1,
+          style={[
+            {
+              paddingLeft: 17,
+              paddingRight: 30,
+              height: 55,
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+              borderTopRightRadius: 80,
+              borderBottomRightRadius: 80,
             },
-            shadowOpacity: selected ? 0.5 : 0,
-            shadowRadius: selected ? 4 : 0,
-          }}>
+            selected && typeof selected !== 'undefined'
+              ? styleConst.new.menu.active
+              : styleConst.new.menu.default,
+          ]}>
           {type === 'home' && <Image source={require('../assets/Home.svg')} />}
           {type === 'sales' && (
             <Image source={require('../assets/NewsFeeds.svg')} />
@@ -78,12 +77,12 @@ const MenuItem = props => {
           style={{
             fontSize: 16,
             color: selected ? '#0061ED' : '#858997',
-            shadowOffset: {
-              width: 0,
-              height: 1,
-            },
-            shadowOpacity: selected ? 0.2 : 0,
-            shadowRadius: selected ? 2 : 0,
+            // shadowOffset: {
+            //   width: 0,
+            //   height: 1,
+            // },
+            // shadowOpacity: selected ? 0.2 : 0,
+            // shadowRadius: selected ? 2 : 0,
           }}>
           {name}
         </Text>
@@ -93,12 +92,12 @@ const MenuItem = props => {
           name="arrow-forward"
           style={{
             marginTop: 3,
-            shadowOffset: {
-              width: 0,
-              height: 1,
-            },
-            shadowOpacity: selected ? 0.2 : 0,
-            shadowRadius: selected ? 2 : 0,
+            // shadowOffset: {
+            //   width: 0,
+            //   height: 1,
+            // },
+            // shadowOpacity: selected ? 0.2 : 0,
+            // shadowRadius: selected ? 2 : 0,
           }}
         />
       </Right>
@@ -120,6 +119,7 @@ const MoreScreen = props => {
       name: 'Акции',
       navigateUrl: 'InfoList',
       type: 'sales',
+      selected: false,
     },
     {
       id: 3,
@@ -187,6 +187,7 @@ class LogoTitle extends React.Component {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          width: '100%',
         }}>
         <Image
           resizeMode="contain"
@@ -207,16 +208,13 @@ MoreScreen.navigationOptions = () => ({
     <Icon
       name="bars"
       type="FontAwesome5"
-      style={{
-        fontSize: 24,
-        color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
-        shadowOffset: {
-          width: 0,
-          height: 1,
+      style={[
+        {
+          fontSize: 24,
+          color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
         },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-      }}
+        focused ? styleConst.new.shadowActive : null,
+      ]}
     />
   ),
 });
