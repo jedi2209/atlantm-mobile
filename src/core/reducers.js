@@ -86,6 +86,18 @@ const isStoreUpdated = (state = false, action) => {
   }
 };
 
+const modal = (state = {application: false}, action) => {
+  switch (action.type) {
+    case 'TOGGLE_MODAL':
+      return {
+        ...state,
+        [action.payload]: !state[action.payload],
+      };
+    default:
+      return state;
+  }
+};
+
 const coreReducer = combineReducers({
   pushGranted,
   pushActionSubscribeState,
@@ -95,6 +107,7 @@ const coreReducer = combineReducers({
 });
 
 const rootReducer = combineReducers({
+  modal,
   nav,
   tva,
   eko,
