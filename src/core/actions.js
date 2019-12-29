@@ -51,3 +51,16 @@ export const actionSetPushActionSubscribe = isSubscribe => {
     });
   };
 };
+
+/**
+ * @param {('application')} type
+ */
+export const actionToggleModal = type => {
+  return dispatch => {
+    dispatch({
+      type: 'TOGGLE_MODAL',
+      payload: type,
+    });
+    return Promise.resolve();
+  };
+};

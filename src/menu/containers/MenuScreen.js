@@ -2,7 +2,7 @@
 import React from 'react';
 import {Icon} from 'native-base';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
-// import {createStackNavigator} from 'react-navigation-stack';
+//import {createStackNavigator} from 'react-navigation-stack';
 // TODO: https://github.com/react-navigation/react-navigation/issues/6458
 // TODO: https://github.com/kmagiera/react-native-screens/issues/220
 import createStackNavigator from 'react-native-screens/createNativeStackNavigator';
@@ -28,6 +28,10 @@ import UsedCarCityScreen from '../../catalog/usedcar/containers/UsedCarCityScree
 import MoreScreen from './MenuScreenNew';
 import MapScreen from '../../contacts/map/containers/MapScreen';
 import CallMeBackScreen from '../../profile/containers/CallMeBackScreen';
+import ApplicationModalScreen from './Application';
+
+import {store} from '../../core/store';
+import {actionToggleModal} from '../../core/actions';
 
 const styles = {
   shadow: {
@@ -133,28 +137,31 @@ const EnhancedMenuScreen = createBottomTabNavigator({
       ),
     }),
   },
-  // Service: {
-  //   screen: Application,
-  //   navigationOptions: ({navigation}) => {
-  //     return {
-  //       tabBarLabel: 'Заявка',
-  //       tabBarIcon: ({focused}) => (
-  //         <Icon
-  //           name="comments"
-  //           type="FontAwesome5"
-  //           style={[
-  //             styles.shadow,
-  //             {
-  //               color: focused
-  //                 ? styleConst.new.blueHeader
-  //                 : styleConst.new.passive,
-  //             },
-  //           ]}
-  //         />
-  //       ),
-  //     };
-  //   },
-  // },
+  Service: {
+    screen: createStackNavigator({
+      ApplicationModalScreen: {screen: ApplicationModalScreen},
+    }),
+    navigationOptions: ({navigation}) => {
+      return {
+        tabBarOnPress: () => store.dispatch(actionToggleModal('application')),
+        tabBarLabel: 'Заявка',
+        tabBarIcon: ({focused}) => (
+          <Icon
+            name="comments"
+            type="FontAwesome5"
+            style={[
+              styles.shadow,
+              {
+                color: focused
+                  ? styleConst.new.blueHeader
+                  : styleConst.new.passive,
+              },
+            ]}
+          />
+        ),
+      };
+    },
+  },
   More: {
     screen: createStackNavigator({
       MoreScreen: {screen: MoreScreen},

@@ -1,4 +1,8 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
+import Modal, {ModalContent} from 'react-native-modals';
+import {TouchableWithoutFeedback} from 'react-native';
+
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,7 +12,7 @@ import {
   StatusBar,
   NativeModules,
 } from 'react-native';
-import {createAppContainer} from 'react-navigation';
+import {createAppContainer, NavigationActions} from 'react-navigation';
 import {enableScreens} from 'react-native-screens';
 
 // redux
@@ -20,6 +24,7 @@ import {
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
   actionStoreUpdated,
+  actionToggleModal,
 } from '../actions';
 
 // helpers
@@ -41,13 +46,14 @@ if (__DEV__) {
 
 enableScreens();
 
-const mapStateToProps = ({core, dealer, profile}) => {
+const mapStateToProps = ({core, dealer, profile, modal}) => {
   return {
     //     pushActionSubscribeState: core.pushActionSubscribeState,
     dealerSelected: dealer.selected,
     auth: profile.auth,
     menuOpenedCount: core.menuOpenedCount,
     isStoreUpdated: core.isStoreUpdated,
+    modal,
   };
 };
 
@@ -57,6 +63,7 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
   actionStoreUpdated,
+  actionToggleModal,
 };
 
 const styles = StyleSheet.create({
@@ -71,6 +78,11 @@ const styles = StyleSheet.create({
 });
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.navigatorRef = React.createRef();
+  }
+
   componentDidMount() {
     const {
       auth,
@@ -135,7 +147,10 @@ class App extends Component {
     }, 500);
   }
 
-  shouldComponentUpdate() {
+  shouldComponentUpdate(prevProps) {
+    if (prevProps.modal !== this.props.modal) {
+      return true;
+    }
     return false;
   }
 
@@ -161,12 +176,21 @@ class App extends Component {
     });
   };
 
+  navigate(routeName) {
+    if (this.navigatorRef.current !== null) {
+      this.navigatorRef.current.dispatch(
+        NavigationActions.navigate({routeName}),
+      );
+    }
+  }
+
   render() {
     const isTablet = DeviceInfo.isTablet();
     const mainScreen = isTablet ? 'ContactsScreen' : 'MenuScreen';
     const isDealerSelected = get(store.getState(), 'dealer.selected.id');
 
     const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
+    console.dir('>>> Router', Router);
     const AppContainer = createAppContainer(Router);
 
     const defaultGetStateForAction = Router.router.getStateForAction;
@@ -176,7 +200,48 @@ class App extends Component {
 
     return (
       <View style={{flex: 1}}>
-        <AppContainer onNavigationStateChange={this.onNavigationStateChange} />
+        <AppContainer
+          ref={this.navigatorRef}
+          onNavigationStateChange={this.onNavigationStateChange}
+        />
+        <View>
+          <Modal
+            visible={this.props.modal.application}
+            onTouchOutside={() => {
+              this.props.actionToggleModal('application');
+            }}>
+            <ModalContent>
+              <Text
+                style={{fontSize: 18, fontWeight: 'bold', paddingVertical: 10}}>
+                Отправить заявку
+              </Text>
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  this.props
+                    .actionToggleModal('application')
+                    .then(() => this.navigate('CallMeBackScreen'));
+                }}>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    marginVertical: 15,
+                    paddingVertical: 10,
+                  }}>
+                  На обратный звонок
+                </Text>
+              </TouchableWithoutFeedback>
+
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  this.props
+                    .actionToggleModal('application')
+                    .then(() => this.navigate('ServiceScreen'));
+                }}>
+                <Text style={{fontSize: 18}}>На СТО</Text>
+              </TouchableWithoutFeedback>
+            </ModalContent>
+          </Modal>
+        </View>
       </View>
     );
   }

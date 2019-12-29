@@ -97,7 +97,6 @@ const MenuItem = props => {
 import {connect} from 'react-redux';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
-  console.log('>>> nav', nav);
   return {
     nav,
     listRussia: dealer.listRussia,
