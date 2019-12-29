@@ -117,8 +117,7 @@ GoogleSignin.configure({
 });
 
 import VKLogin from 'react-native-vkontakte-login';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import SafeAreaView from 'react-native-safe-area-view';
+import {ScrollView} from 'react-native';
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -133,6 +132,7 @@ class ProfileScreen extends Component {
       checkCode: '',
       vkLogin: false,
       loading: false,
+      loadingVerify: false,
     };
 
     this.requestManager = new GraphRequestManager();
@@ -144,8 +144,9 @@ class ProfileScreen extends Component {
 
   _verifyCode = () => {
     const phone = this.state.phone;
+    this.setState({loadingVerify: true});
     this.props.actionSavePofileWithPhone({phone}).then(checkCode => {
-      this.setState({code: true, checkCode});
+      this.setState({code: true, checkCode, loadingVerify: false});
     });
   };
 
@@ -161,7 +162,7 @@ class ProfileScreen extends Component {
       return;
     }
 
-    this.setState({loading: true});
+    this.setState({loading: true, loadingVerify: true});
     this.props
       .actionSavePofileWithPhone({phone, code})
       .then(data => {
@@ -312,7 +313,7 @@ class ProfileScreen extends Component {
     LoginManager.logOut();
 
     return (
-      <KeyboardAvoidingView behavior="position">
+      <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={0}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ImageBackground
             source={require('./bg.jpg')}
@@ -453,13 +454,18 @@ class ProfileScreen extends Component {
                 {!this.state.code && (
                   <Button
                     onPress={this._verifyCode}
+                    disabled={this.state.loadingVerify}
                     style={{
                       marginTop: 20,
                       width: '80%',
                       backgroundColor: '#34BD78',
                       justifyContent: 'center',
                     }}>
-                    <Text style={{color: '#fff'}}>Получить код</Text>
+                    {this.state.loadingVerify ? (
+                      <ActivityIndicator color="#fff" />
+                    ) : (
+                      <Text style={{color: '#fff'}}>Получить код</Text>
+                    )}
                   </Button>
                 )}
                 {this.state.code && (
@@ -479,6 +485,7 @@ class ProfileScreen extends Component {
                       onChangeText={this.onInputCode}
                     />
                     <Button
+                      disabled={this.state.loadingVerify}
                       onPress={this._verifyCodeStepTwo}
                       style={{
                         marginTop: 20,
@@ -486,7 +493,11 @@ class ProfileScreen extends Component {
                         backgroundColor: '#34BD78',
                         justifyContent: 'center',
                       }}>
-                      <Text style={{color: '#fff'}}>Подвердить</Text>
+                      {this.state.loadingVerify ? (
+                        <ActivityIndicator color="#fff" />
+                      ) : (
+                        <Text style={{color: '#fff'}}>Подвердить</Text>
+                      )}
                     </Button>
                   </>
                 )}

@@ -1,12 +1,15 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, StyleSheet, Alert } from 'react-native';
+import React, {Component} from 'react';
+import {SafeAreaView, View, StyleSheet, Alert, Text} from 'react-native';
 
 // redux
-import { connect } from 'react-redux';
-import { actionSelectFilterRatingFrom, actionSelectFilterRatingTo } from '../../actions';
+import {connect} from 'react-redux';
+import {
+  actionSelectFilterRatingFrom,
+  actionSelectFilterRatingTo,
+} from '../../actions';
 
 // components
-import { Body, Content, ListItem, StyleProvider } from 'native-base';
+import {Body, Content, ListItem, StyleProvider} from 'native-base';
 import RadioIcon from '../../../core/components/RadioIcon';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import ListItemHeader from '../../../profile/components/ListItemHeader';
@@ -16,7 +19,10 @@ import RatingStars from '../components/RatingStars';
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
-import { REVIEWS_RATING_TYPE__FROM, REVIEWS_RATING_TYPE__TO } from '../../constants';
+import {
+  REVIEWS_RATING_TYPE__FROM,
+  REVIEWS_RATING_TYPE__TO,
+} from '../../constants';
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
@@ -31,7 +37,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ eko, nav }) => {
+const mapStateToProps = ({eko, nav}) => {
   return {
     nav,
     filterRatingFrom: eko.reviews.filterRatingFrom,
@@ -45,13 +51,19 @@ const mapDispatchToProps = {
 };
 
 class ReviewsFilterDateScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Отзывы c рейтингом',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
+  static navigationOptions = ({navigation}) => ({
+    headerTitle: (
+      <Text style={stylesHeader.blueHeaderTitle}>Отзывы c рейтингом</Text>
+    ),
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: (
+      <View>
+        <HeaderIconBack theme="white" navigation={navigation} />
+      </View>
+    ),
     headerRight: <View />,
-  })
+  });
 
   static propTypes = {
     navigation: PropTypes.object,
@@ -59,13 +71,15 @@ class ReviewsFilterDateScreen extends Component {
     filterRatingTo: PropTypes.number,
     actionSelectFilterRatingFrom: PropTypes.func,
     actionSelectFilterRatingTo: PropTypes.func,
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
-    const { filterRatingFrom, filterRatingTo } = this.props;
+    const {filterRatingFrom, filterRatingTo} = this.props;
 
-    return filterRatingFrom !== nextProps.filterRatingFrom ||
-      filterRatingTo !== nextProps.filterRatingTo;
+    return (
+      filterRatingFrom !== nextProps.filterRatingFrom ||
+      filterRatingTo !== nextProps.filterRatingTo
+    );
   }
 
   onPressItem = (selectedRating, type) => {
@@ -79,7 +93,11 @@ class ReviewsFilterDateScreen extends Component {
     requestAnimationFrame(() => {
       if (type === REVIEWS_RATING_TYPE__FROM) {
         if (selectedRating > filterRatingTo) {
-          return setTimeout(() => Alert.alert('"Рейтинг от" не может быть больше "рейтинга до"'), 100);
+          return setTimeout(
+            () =>
+              Alert.alert('"Рейтинг от" не может быть больше "рейтинга до"'),
+            100,
+          );
         }
 
         if (this.isRatingFromSelected(selectedRating)) {
@@ -91,7 +109,11 @@ class ReviewsFilterDateScreen extends Component {
 
       if (type === REVIEWS_RATING_TYPE__TO) {
         if (selectedRating < filterRatingFrom) {
-          return setTimeout(() => Alert.alert('"Рейтинг до" не может быть меньше "рейтинга от"'), 100);
+          return setTimeout(
+            () =>
+              Alert.alert('"Рейтинг до" не может быть меньше "рейтинга от"'),
+            100,
+          );
         }
 
         if (this.isRatingToSelected(selectedRating)) {
@@ -101,32 +123,34 @@ class ReviewsFilterDateScreen extends Component {
         }
       }
     });
-  }
+  };
 
-  isRatingFromSelected = selectedRatingFrom => this.props.filterRatingFrom === selectedRatingFrom
-  isRatingToSelected = selectedRatingTo => this.props.filterRatingTo === selectedRatingTo
+  isRatingFromSelected = selectedRatingFrom =>
+    this.props.filterRatingFrom === selectedRatingFrom;
+  isRatingToSelected = selectedRatingTo =>
+    this.props.filterRatingTo === selectedRatingTo;
 
   renderRatingFrom = () => {
     return RATING_ARRAY.map((rating, idx) => {
       const handler = () => this.onPressItem(rating, REVIEWS_RATING_TYPE__FROM);
-      const isLast = (RATING_ARRAY.length - 1) === idx;
+      const isLast = RATING_ARRAY.length - 1 === idx;
       const isSelected = this.isRatingFromSelected(rating);
       const key = `rating-from-${rating}`;
 
       return this.renderItem(rating, isSelected, handler, isLast, key);
     });
-  }
+  };
 
   renderRatingTo = () => {
     return RATING_ARRAY.map((rating, idx) => {
       const handler = () => this.onPressItem(rating, REVIEWS_RATING_TYPE__TO);
-      const isLast = (RATING_ARRAY.length - 1) === idx;
+      const isLast = RATING_ARRAY.length - 1 === idx;
       const isSelected = this.isRatingToSelected(rating);
       const key = `rating-to-${rating}`;
 
       return this.renderItem(rating, isSelected, handler, isLast, key);
     });
-  }
+  };
 
   renderItem = (rating, isSelected, onPressHandler, isLast, key) => {
     return (
@@ -135,20 +159,20 @@ class ReviewsFilterDateScreen extends Component {
           last={isLast}
           icon
           style={stylesList.listItemPressable}
-          onPress={onPressHandler}
-        >
+          onPress={onPressHandler}>
           <RadioIcon
             containerStyle={{
               marginTop: 5,
             }}
-            selected={isSelected} />
-          <Body style={stylesList.bodyWithLeftGap} >
+            selected={isSelected}
+          />
+          <Body style={stylesList.bodyWithLeftGap}>
             <RatingStars size="M" theme="blue" rating={rating} itemId={key} />
           </Body>
         </ListItem>
       </View>
     );
-  }
+  };
 
   render() {
     console.log('== ReviewsFilterDateScreen ==');
@@ -168,4 +192,7 @@ class ReviewsFilterDateScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewsFilterDateScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ReviewsFilterDateScreen);

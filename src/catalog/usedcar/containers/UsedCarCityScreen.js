@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -43,7 +43,11 @@ class UsedCarCityScreen extends Component {
     headerTitle: 'Выбор города',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
+    headerLeft: (
+      <View>
+        <HeaderIconBack navigation={navigation} />
+      </View>
+    ),
     headerRight: <View />,
   });
 

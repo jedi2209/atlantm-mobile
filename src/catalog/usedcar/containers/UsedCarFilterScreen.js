@@ -179,12 +179,14 @@ class NewCarFilterScreen extends Component {
     headerTitleStyle: {fontWeight: '200', color: '#000'},
     headerLeft: <View />,
     headerRight: (
-      <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-        <Image
-          style={{width: 18, height: 18, marginRight: 14}}
-          source={require('./close.png')}
-        />
-      </TouchableWithoutFeedback>
+      <View>
+        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+          <Image
+            style={{width: 18, height: 18, marginRight: 14}}
+            source={require('./close.png')}
+          />
+        </TouchableWithoutFeedback>
+      </View>
     ),
   });
 
@@ -320,7 +322,7 @@ class NewCarFilterScreen extends Component {
                       backgroundColor: '#d5d5e0',
                     }}
                     selectedStyle={{
-                      backgroundColor: '#2b65f9',
+                      backgroundColor: '#0F66B2',
                     }}
                     customMarker={() => (
                       <View
@@ -328,8 +330,8 @@ class NewCarFilterScreen extends Component {
                           height: 17,
                           width: 17,
                           borderRadius: 8.5,
-                          backgroundColor: '#2b65f9',
-                          shadowColor: '#2b65f9',
+                          backgroundColor: '#0F66B2',
+                          shadowColor: '#0F66B2',
                           shadowOpacity: 0.5,
                           shadowRadius: 8,
                           shadowOffset: {
@@ -432,7 +434,7 @@ class NewCarFilterScreen extends Component {
             style={{
               paddingVertical: 16,
               paddingHorizontal: 40,
-              shadowColor: '#2b65f9',
+              shadowColor: '#0F66B2',
               shadowOpacity: 0.5,
               shadowRadius: 8,
               shadowOffset: {

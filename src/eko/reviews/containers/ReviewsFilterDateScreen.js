@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
-import { Body, Label, Content, ListItem, StyleProvider } from 'native-base';
+import React, {Component} from 'react';
+import {SafeAreaView, View, StyleSheet} from 'react-native';
+import {Body, Label, Content, ListItem, StyleProvider, Text} from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
-import { actionDateFromFill, actionSelectFilterDatePeriod } from '../../actions';
+import {connect} from 'react-redux';
+import {actionDateFromFill, actionSelectFilterDatePeriod} from '../../actions';
 
 // components
 import RadioIcon from '../../../core/components/RadioIcon';
@@ -25,7 +25,12 @@ import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
-import { substructMonth, substructWeek, substructYear, substruct10Years } from '../../../utils/date';
+import {
+  substructMonth,
+  substructWeek,
+  substructYear,
+  substruct10Years,
+} from '../../../utils/date';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -34,7 +39,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ eko, nav }) => {
+const mapStateToProps = ({eko, nav}) => {
   return {
     nav,
     filterDatePeriod: eko.reviews.filterDatePeriod,
@@ -47,40 +52,43 @@ const mapDispatchToProps = {
 };
 
 class ReviewsFilterDateScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Отзывы за период',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
+  static navigationOptions = ({navigation}) => ({
+    headerTitle: (
+      <Text style={stylesHeader.blueHeaderTitle}>Отзывы за период</Text>
+    ),
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: (
+      <View>
+        <HeaderIconBack theme="white" navigation={navigation} />
+      </View>
+    ),
     headerRight: <View />,
-  })
+  });
 
   static propTypes = {
     navigation: PropTypes.object,
     filterDatePeriod: PropTypes.string,
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
     return this.props.filterDatePeriod !== nextProps.filterDatePeriod;
   }
 
-  onPressItem = (selectedDatePeriod) => {
-    const {
-      actionDateFromFill,
-      actionSelectFilterDatePeriod,
-    } = this.props;
+  onPressItem = selectedDatePeriod => {
+    const {actionDateFromFill, actionSelectFilterDatePeriod} = this.props;
 
     requestAnimationFrame(() => {
-      if (this.isDatePeriodSelected(selectedDatePeriod)) return false;
+      if (this.isDatePeriodSelected(selectedDatePeriod)) {return false;}
 
       actionSelectFilterDatePeriod(selectedDatePeriod);
 
       this.processDate(selectedDatePeriod);
     });
-  }
+  };
 
-  processDate = (datePeriod) => {
-    const { dateFrom, actionDateFromFill } = this.props;
+  processDate = datePeriod => {
+    const {dateFrom, actionDateFromFill} = this.props;
     let newDateFrom = null;
 
     switch (datePeriod) {
@@ -101,9 +109,10 @@ class ReviewsFilterDateScreen extends Component {
     }
 
     actionDateFromFill(newDateFrom);
-  }
+  };
 
-  isDatePeriodSelected = selectedDatePeriod => this.props.filterDatePeriod === selectedDatePeriod
+  isDatePeriodSelected = selectedDatePeriod =>
+    this.props.filterDatePeriod === selectedDatePeriod;
 
   render() {
     console.log('== ReviewsFilterDateScreen ==');
@@ -112,36 +121,34 @@ class ReviewsFilterDateScreen extends Component {
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
           <Content>
-            {
-              [
-                REVIEWS_FILTER_DATE_PERIOD__ALL,
-                REVIEWS_FILTER_DATE_PERIOD__WEEK,
-                REVIEWS_FILTER_DATE_PERIOD__MONTH,
-                REVIEWS_FILTER_DATE_PERIOD__YEAR,
-              ].map((period, idx, arrayPeriod) => {
-                const handler = () => this.onPressItem(period);
+            {[
+              REVIEWS_FILTER_DATE_PERIOD__ALL,
+              REVIEWS_FILTER_DATE_PERIOD__WEEK,
+              REVIEWS_FILTER_DATE_PERIOD__MONTH,
+              REVIEWS_FILTER_DATE_PERIOD__YEAR,
+            ].map((period, idx, arrayPeriod) => {
+              const handler = () => this.onPressItem(period);
 
-                return (
-                  <View key={period} style={stylesList.listItemContainer}>
-                    <ListItem
-                      last={(arrayPeriod.length - 1) === idx}
-                      icon
-                      style={stylesList.listItemPressable}
-                      onPress={handler}
-                    >
-                      <RadioIcon
-                        containerStyle={{
-                          marginTop: 5,
-                        }}
-                        selected={this.isDatePeriodSelected(period)} />
-                      <Body style={stylesList.bodyWithLeftGap} >
-                        <Label style={stylesList.label}>{period}</Label>
-                      </Body>
-                    </ListItem>
-                  </View>
-                );
-              })
-            }
+              return (
+                <View key={period} style={stylesList.listItemContainer}>
+                  <ListItem
+                    last={arrayPeriod.length - 1 === idx}
+                    icon
+                    style={stylesList.listItemPressable}
+                    onPress={handler}>
+                    <RadioIcon
+                      containerStyle={{
+                        marginTop: 5,
+                      }}
+                      selected={this.isDatePeriodSelected(period)}
+                    />
+                    <Body style={stylesList.bodyWithLeftGap}>
+                      <Label style={stylesList.label}>{period}</Label>
+                    </Body>
+                  </ListItem>
+                </View>
+              );
+            })}
           </Content>
         </SafeAreaView>
       </StyleProvider>
@@ -149,4 +156,7 @@ class ReviewsFilterDateScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewsFilterDateScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ReviewsFilterDateScreen);

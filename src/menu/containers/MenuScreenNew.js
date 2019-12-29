@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
   },
   buttonPrimaryText: {color: '#2E3A59', fontSize: 16, fontWeight: 'bold'},
 });
+
 const MenuItem = props => {
   const {id, selected, type, name, navigateUrl} = props.data;
   const {navigation} = props;
@@ -77,12 +78,6 @@ const MenuItem = props => {
           style={{
             fontSize: 16,
             color: selected ? '#0061ED' : '#858997',
-            // shadowOffset: {
-            //   width: 0,
-            //   height: 1,
-            // },
-            // shadowOpacity: selected ? 0.2 : 0,
-            // shadowRadius: selected ? 2 : 0,
           }}>
           {name}
         </Text>
@@ -92,17 +87,42 @@ const MenuItem = props => {
           name="arrow-forward"
           style={{
             marginTop: 3,
-            // shadowOffset: {
-            //   width: 0,
-            //   height: 1,
-            // },
-            // shadowOpacity: selected ? 0.2 : 0,
-            // shadowRadius: selected ? 2 : 0,
           }}
         />
       </Right>
     </ListItem>
   );
+};
+
+import {connect} from 'react-redux';
+
+const mapStateToProps = ({dealer, profile, nav, core}) => {
+  console.log('>>> nav', nav);
+  return {
+    nav,
+    listRussia: dealer.listRussia,
+    listUkraine: dealer.listUkraine,
+    listBelarussia: dealer.listBelarussia,
+    dealerSelected: dealer.selected,
+    name: profile.name,
+    phone: profile.phone,
+    email: profile.email,
+    car: profile.car,
+    carNumber: profile.carNumber,
+
+    isFetchProfileData: profile.meta.isFetchProfileData,
+
+    auth: profile.auth,
+    cars: profile.cars,
+    login: profile.login,
+    password: profile.password,
+    isLoginRequest: profile.meta.isLoginRequest,
+
+    bonus: profile.bonus.data,
+    discounts: profile.discounts,
+
+    pushActionSubscribeState: core.pushActionSubscribeState,
+  };
 };
 
 const MoreScreen = props => {
@@ -152,6 +172,7 @@ const MoreScreen = props => {
       type: 'indicators',
     },
   ];
+
   return (
     <>
       <ScrollView>
@@ -168,7 +189,7 @@ const MoreScreen = props => {
           <Button
             full
             onPress={() => {
-              props.navigation.navigate('ChooseDealerScreen');
+              props.navigation.navigate('ProfileScreenInfo');
             }}
             style={styles.buttonPrimary}>
             <Text style={styles.buttonPrimaryText}>ЛИЧНЫЙ КАБИНЕТ</Text>
@@ -188,9 +209,12 @@ class LogoTitle extends React.Component {
           alignItems: 'center',
           justifyContent: 'center',
           width: '100%',
+          paddingVertical: 10,
+          marginTop: 10,
         }}>
         <Image
           resizeMode="contain"
+          style={{height: 70}}
           source={require('../assets/logo-horizontal.svg')}
         />
       </View>
@@ -219,4 +243,4 @@ MoreScreen.navigationOptions = () => ({
   ),
 });
 
-export default MoreScreen;
+export default connect(mapStateToProps)(MoreScreen);

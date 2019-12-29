@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, findNodeHandle } from 'react-native';
-import { Container, Content, StyleProvider } from 'native-base';
+import {View, StyleSheet, findNodeHandle, Text} from 'react-native';
+import {Container, Content, StyleProvider} from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
-import { actionSetActiveIndicator, actionFetchIndicators } from '../actions';
+import {connect} from 'react-redux';
+import {actionSetActiveIndicator, actionFetchIndicators} from '../actions';
 
 // components
 import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ nav, indicators }) => {
+const mapStateToProps = ({nav, indicators}) => {
   return {
     nav,
     items: indicators.items,
@@ -41,13 +41,21 @@ const mapDispatchToProps = {
 };
 
 class IndicatorsScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Индикаторы',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
-    headerRight: <HeaderIconMenu navigation={navigation} />,
-  })
+  static navigationOptions = ({navigation}) => ({
+    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Индикаторы</Text>,
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: (
+      <View>
+        <HeaderIconBack
+          theme="white"
+          navigation={navigation}
+          returnScreen="MenuScreen"
+        />
+      </View>
+    ),
+    headerRight: <View />,
+  });
 
   static propTypes = {
     navigation: PropTypes.object,
@@ -56,32 +64,35 @@ class IndicatorsScreen extends Component {
     isRequest: PropTypes.bool,
     actionSetActiveIndicator: PropTypes.func,
     actionFetchIndicators: PropTypes.func,
-  }
+  };
 
   componentDidMount() {
-    const { actionFetchIndicators, actionSetActiveIndicator } = this.props;
+    const {actionFetchIndicators, actionSetActiveIndicator} = this.props;
 
     actionSetActiveIndicator({});
     actionFetchIndicators();
   }
 
   shouldComponentUpdate(nextProps) {
-    const { items, activeItem, isRequest } = this.props;
+    const {items, activeItem, isRequest} = this.props;
     const nav = nextProps.nav.newState;
-    const isActiveScreen = nav.routes[nav.index].routeName === 'IndicatorsScreen';
+    const isActiveScreen =
+      nav.routes[nav.index].routeName === 'IndicatorsScreen';
 
-    return (items.length !== nextProps.items.length && isActiveScreen) ||
+    return (
+      (items.length !== nextProps.items.length && isActiveScreen) ||
       (activeItem.id !== nextProps.activeItem.id && isActiveScreen) ||
-      (isRequest !== nextProps.isRequest && isActiveScreen);
+      (isRequest !== nextProps.isRequest && isActiveScreen)
+    );
   }
 
   onPressIndicator = (descriptionRef, indicator) => {
-    const { activeItem, actionSetActiveIndicator } = this.props;
+    const {activeItem, actionSetActiveIndicator} = this.props;
     const newIndicator = indicator.id === activeItem.id ? {} : indicator;
 
     actionSetActiveIndicator(newIndicator);
     this.setScrollPosition(descriptionRef);
-  }
+  };
 
   setScrollPosition(descriptionRef) {
     const target = findNodeHandle(descriptionRef);
@@ -89,7 +100,7 @@ class IndicatorsScreen extends Component {
   }
 
   render() {
-    const { items, activeItem, isRequest } = this.props;
+    const {items, activeItem, isRequest} = this.props;
 
     if (isRequest) {
       return <SpinnerView />;
@@ -104,9 +115,11 @@ class IndicatorsScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <Container style={styles.safearea}>
-          <Content ref={(scrollView) => { this.scrollView = scrollView; }}>
-          {
-            items.map((indicators, idx) => {
+          <Content
+            ref={scrollView => {
+              this.scrollView = scrollView;
+            }}>
+            {items.map((indicators, idx) => {
               return (
                 <IndicatorsRow
                   key={`indicator-row-${idx}`}
@@ -115,9 +128,7 @@ class IndicatorsScreen extends Component {
                   onPressItem={this.onPressIndicator}
                 />
               );
-            })
-          }
-
+            })}
           </Content>
         </Container>
       </StyleProvider>
@@ -125,4 +136,7 @@ class IndicatorsScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(IndicatorsScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(IndicatorsScreen);

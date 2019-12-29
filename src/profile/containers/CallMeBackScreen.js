@@ -35,6 +35,9 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
 };
 const mapDispatchToProps = {callMe};
 
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
+import stylesHeader from '../../core/components/Header/style';
+
 class CallMeBackScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -49,8 +52,19 @@ class CallMeBackScreen extends React.Component {
     };
   }
 
-  static navigationOptions = () => ({
-    header: null,
+  static navigationOptions = ({navigation}) => ({
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: (
+      <View>
+        <HeaderIconBack
+          theme="white"
+          navigation={navigation}
+          returnScreen="MenuScreen"
+        />
+      </View>
+    ),
+    headerRight: <View />,
   });
 
   componentDidUpdate(prevpProps) {
@@ -135,121 +149,150 @@ class CallMeBackScreen extends React.Component {
     return (
       <KeyboardAvoidingView behavior="position">
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ImageBackground
-            source={require('./bg.jpg')}
-            style={{width: '100%', height: '100%'}}>
-            <ScrollView>
+          <ScrollView>
+            <View
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginTop: '20%',
+                justifyContent: 'center',
+                width: '100%',
+              }}>
+              <Text style={{fontSize: 40, fontWeight: 'bold'}}>
+                Обратный звонок
+              </Text>
+            </View>
+            <View
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
               <View
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  marginTop: 100,
+                  marginTop: 10,
+                  marginBottom: 20,
+                  width: '100%',
+                  flexDirection: 'row',
                   justifyContent: 'center',
-                }}>
-                <Image
-                  resizeMode="contain"
-                  source={require('../../menu/assets/logo-horizontal-white.svg')}
-                />
-              </View>
+                  alignItems: 'center',
+                }}
+              />
+            </View>
+            {!this.state.success ? (
               <View
                 style={{
+                  width: '100%',
                   display: 'flex',
-                  justifyContent: 'center',
+                  flexDirection: 'column',
                   alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
                 }}>
-                <View
+                <TextInput
                   style={{
-                    marginTop: 10,
-                    marginBottom: 20,
-                    width: '80%',
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
+                    height: 40,
+                    paddingHorizontal: 14,
+                    borderColor: '#D8D8D8',
+                    borderTopWidth: 0,
+                    borderRightWidth: 0,
+                    borderLeftWidth: 0,
+                    borderBottomWidth: 2,
+                    color: '#222B45',
+                    width: '90%',
+                    borderRadius: 0,
+                    fontSize: 18,
                   }}
+                  value={name}
+                  placeholder="Имя"
+                  onChangeText={this.onInputName}
                 />
-              </View>
-              {!this.state.success ? (
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
+                <>
                   <TextInput
                     style={{
                       height: 40,
                       paddingHorizontal: 14,
-                      borderColor: 'gray',
-                      borderWidth: 1,
-                      color: '#fff',
-                      width: '80%',
-                      borderRadius: 5,
+                      borderColor: '#D8D8D8',
+                      borderTopWidth: 0,
+                      borderRightWidth: 0,
+                      borderLeftWidth: 0,
+                      borderBottomWidth: 2,
+                      color: '#222B45',
+                      width: '90%',
+                      borderRadius: 0,
+                      marginTop: 18,
+                      fontSize: 18,
                     }}
-                    value={name}
-                    placeholder="Имя"
-                    onChangeText={this.onInputName}
+                    value={phone}
+                    placeholder="Телефон"
+                    keyboardType="phone-pad"
+                    onChangeText={this.onInputPhone}
                   />
-                  <>
-                    <TextInput
-                      style={{
-                        height: 40,
-                        paddingHorizontal: 14,
-                        borderColor: 'gray',
-                        borderWidth: 1,
-                        color: '#fff',
-                        width: '80%',
-                        borderRadius: 5,
-                        marginTop: 15,
-                      }}
-                      value={phone}
-                      placeholder="Телефон"
-                      keyboardType="phone-pad"
-                      onChangeText={this.onInputPhone}
-                    />
-                    <Button
-                      onPress={this.onPressCallMe}
-                      disabled={this.state.loading}
-                      style={{
-                        marginTop: 20,
-                        width: '80%',
-                        backgroundColor: '#34BD78',
-                        justifyContent: 'center',
-                      }}>
-                      {this.state.loading ? (
-                        <ActivityIndicator color="#fff" />
-                      ) : (
-                        <Text style={{color: '#fff'}}>Отправить</Text>
-                      )}
-                    </Button>
-                  </>
-                </View>
-              ) : (
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}>
-                  <Text
-                    style={{color: '#fff', fontSize: 22, fontWeight: '600'}}>
-                    Заявка успешно отправлена
-                  </Text>
                   <Button
-                    onPress={() => this.props.navigation.navigate('Home')}
+                    onPress={this.onPressCallMe}
+                    disabled={this.state.loading}
                     style={{
-                      marginTop: 20,
-                      width: '80%',
-                      backgroundColor: '#34BD78',
+                      marginTop: 40,
+                      width: '90%',
+                      // backgroundColor: '#34BD78',
                       justifyContent: 'center',
+                      paddingVertical: 16,
+                      paddingHorizontal: 40,
+                      shadowColor: '#0F66B2',
+                      shadowOpacity: 0.5,
+                      shadowRadius: 8,
+                      shadowOffset: {
+                        width: 0,
+                        height: 2,
+                      },
                     }}>
-                    <Text style={{color: '#fff'}}>Назад</Text>
+                    {this.state.loading ? (
+                      <ActivityIndicator color="#fff" />
+                    ) : (
+                      <Text
+                        style={{
+                          color: '#fff',
+                          textTransform: 'uppercase',
+                          fontWeight: 'bold',
+                        }}>
+                        Отправить
+                      </Text>
+                    )}
                   </Button>
-                </View>
-              )}
-            </ScrollView>
-          </ImageBackground>
+                </>
+              </View>
+            ) : (
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Text style={{fontSize: 22, fontWeight: '600'}}>
+                  Заявка успешно отправлена
+                </Text>
+                <Button
+                  onPress={() => this.props.navigation.navigate('Home')}
+                  style={{
+                    marginTop: 40,
+                    width: '90%',
+                    justifyContent: 'center',
+                    paddingVertical: 16,
+                    paddingHorizontal: 40,
+                    shadowColor: '#0F66B2',
+                    shadowOpacity: 0.5,
+                    shadowRadius: 8,
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
+                    },
+                  }}>
+                  <Text style={{color: '#fff'}}>Назад</Text>
+                </Button>
+              </View>
+            )}
+          </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     );

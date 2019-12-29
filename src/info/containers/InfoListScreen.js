@@ -71,15 +71,17 @@ class InfoListScreen extends Component {
   state = {isRefreshing: false};
 
   static navigationOptions = ({navigation}) => ({
-    headerTitle: 'акции',
+    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Акции</Text>,
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
     headerLeft: (
-      <HeaderIconBack
-        theme="white"
-        navigation={navigation}
-        returnScreen="MenuScreen"
-      />
+      <View>
+        <HeaderIconBack
+          theme="white"
+          navigation={navigation}
+          returnScreen="MenuScreen"
+        />
+      </View>
     ),
   });
 

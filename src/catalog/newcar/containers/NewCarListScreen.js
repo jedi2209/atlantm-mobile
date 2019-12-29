@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, StyleSheet, View} from 'react-native';
+import {TouchableOpacity, StyleSheet, View, Text} from 'react-native';
 import {Icon} from 'native-base';
 
 // redux
@@ -58,23 +58,29 @@ const mapDispatchToProps = {
 
 class NewCarListScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: 'Новые автомобили',
+    headerTitle: (
+      <Text style={stylesHeader.blueHeaderTitle}>Новые автомобили</Text>
+    ),
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
     headerLeft: (
-      <HeaderIconBack
-        theme="white"
-        navigation={navigation}
-        returnScreen="MenuScreen"
-      />
+      <View>
+        <HeaderIconBack
+          theme="white"
+          navigation={navigation}
+          returnScreen="MenuScreen"
+        />
+      </View>
     ),
     headerRight: (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('NewCarFilterScreen');
-        }}>
-        <Icon type="Octicons" name="settings" style={styles.iconFilter} />
-      </TouchableOpacity>
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('NewCarFilterScreen');
+          }}>
+          <Icon type="Octicons" name="settings" style={styles.iconFilter} />
+        </TouchableOpacity>
+      </View>
     ),
   });
 

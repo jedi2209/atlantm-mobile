@@ -11,7 +11,6 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   TouchableOpacity,
-  // Linking,
 } from 'react-native';
 
 import {Text, StyleProvider, Icon, Button} from 'native-base';
@@ -19,21 +18,15 @@ import {Text, StyleProvider, Icon, Button} from 'native-base';
 // redux
 import {connect} from 'react-redux';
 import {callMe} from '../actions';
-import {CALL_ME__SUCCESS, CALL_ME__FAIL} from '../actionTypes';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList, actionListReset} from '../../info/actions';
-
-// components
-import DeviceInfo from 'react-native-device-info';
-import Communications from 'react-native-communications';
 
 // helpers
 import Amplitude from '@utils/amplitude-analytics';
 import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '@core/style-const';
-import isInternet from '@utils/internet';
 import {ERROR_NETWORK} from '@core/const';
 import Carousel from 'react-native-snap-carousel';
 
@@ -67,12 +60,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   point: {
-    // width: 28,
-    // height: 28,
     fontSize: 22,
     marginTop: 3,
     marginRight: 10,
-    // resizeMode: 'contain',
     color: '#fff',
   },
   addressText: {color: '#fff', fontSize: 16, lineHeight: 28, paddingRight: 20},
@@ -267,7 +257,7 @@ class ContactsScreen extends Component {
   };
 
   render() {
-    const {dealerSelected, navigation, isСallMeRequest, list} = this.props;
+    const {dealerSelected, navigation, list} = this.props;
 
     const PHONES = [];
     const phones = get(dealerSelected, 'phone', PHONES);
