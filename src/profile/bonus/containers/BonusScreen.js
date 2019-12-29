@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({dealer, profile, nav}) => {
-  console.log('profile.bonus.data', profile.bonus.data);
   return {
     nav,
     bonus: profile.bonus.data || profile.login.bonus, //.data
@@ -128,10 +127,21 @@ const mapDispatchToProps = {
   actionSetBonusLevel1,
   actionSetBonusLevel2,
 };
-
+import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import stylesHeader from '../../../core/components/Header/style';
 class BonusScreen extends Component {
-  static navigationOptions = () => ({
-    header: null,
+  static navigationOptions = ({navigation}) => ({
+    headerTitle: (
+      <Text style={stylesHeader.blueHeaderTitle}>Бонусные баллы</Text>
+    ),
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: (
+      <View>
+        <HeaderIconBack theme="white" navigation={navigation} />
+      </View>
+    ),
+    headerRight: <View />,
   });
 
   shouldComponentUpdate(nextProps) {
@@ -291,7 +301,18 @@ class BonusScreen extends Component {
 
   renderBonusButton = () => {
     return (
-      <Button onPress={this.onPressBonusInfo} full style={styles.button}>
+      <Button
+        onPress={this.onPressBonusInfo}
+        full
+        style={[
+          styles.button,
+          {
+            borderBottomWidth: 0,
+            borderTopWidth: 0,
+            borderLeftWidth: 0,
+            borderRightWidth: 0,
+          },
+        ]}>
         <Text numberOfLines={1} style={styles.buttonText}>
           Подробнее о бонусной программе
         </Text>
@@ -310,15 +331,15 @@ class BonusScreen extends Component {
     if (isEmpty(bonus) || !bonus.items) {
       return (
         <SafeAreaView style={styles.safearea}>
-          <Text
+          {/* <Text
             style={{
               fontSize: 35,
               fontWeight: '600',
               marginHorizontal: 20,
-              marginTop: 18,
+              // marginTop: 18,
             }}>
             Бонусные баллы
-          </Text>
+          </Text> */}
           <Text style={styles.emptyText}>Бонусов пока нет</Text>
           {this.renderBonusButton()}
         </SafeAreaView>

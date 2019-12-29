@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
-import { StyleProvider } from 'native-base';
+import React, {Component} from 'react';
+import {SafeAreaView, View, StyleSheet, Text} from 'react-native';
+import {StyleProvider} from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {
   actionReviewVisit,
   actionFetchReviews,
@@ -22,12 +22,12 @@ import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMe
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
-import { REVIEWS_FILTER_DATE_PERIOD__ALL } from '../../constants';
-import { get } from 'lodash';
+import {REVIEWS_FILTER_DATE_PERIOD__ALL} from '../../constants';
+import {get} from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
-import { substruct10Years } from '../../../utils/date';
+import {substruct10Years} from '../../../utils/date';
 
 const styles = StyleSheet.create({
   content: {
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, nav, eko }) => {
+const mapStateToProps = ({dealer, nav, eko}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
@@ -63,16 +63,24 @@ const mapDispatchToProps = {
 };
 
 class ReviewsScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Отзывы',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
-    headerRight: <HeaderIconMenu navigation={navigation} />,
-  })
+  static navigationOptions = ({navigation}) => ({
+    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Отзывы</Text>,
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: (
+      <View>
+        <HeaderIconBack
+          theme="white"
+          navigation={navigation}
+          returnScreen="MenuScreen"
+        />
+      </View>
+    ),
+    headerRight: <View />,
+  });
 
   componentDidUpdate() {
-    const { needFetchReviews, isFetchReviews } = this.props;
+    const {needFetchReviews, isFetchReviews} = this.props;
 
     if (needFetchReviews && !isFetchReviews) {
       this.fetchReviews();
@@ -86,7 +94,9 @@ class ReviewsScreen extends Component {
     if (nav) {
       const rootLevel = nav.routes[nav.index];
       if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'ReviewsScreen';
+        isActiveScreen =
+          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
+          'ReviewsScreen';
       }
     }
 
@@ -94,14 +104,14 @@ class ReviewsScreen extends Component {
   }
 
   onPressItem = review => {
-    const { navigation, actionReviewVisit } = this.props;
+    const {navigation, actionReviewVisit} = this.props;
 
-    navigation.navigate('ReviewScreen', { review });
+    navigation.navigate('ReviewScreen', {review});
 
     this.props.actionReviewVisit(review.id);
-  }
+  };
 
-  fetchReviews = (type) => {
+  fetchReviews = type => {
     let {
       pages,
       dateTo,
@@ -137,11 +147,13 @@ class ReviewsScreen extends Component {
       nextPage: pages.next,
       dealerId: dealerSelected.id,
     });
-  }
+  };
 
-  onPressRating = () => this.props.navigation.navigate('ReviewsFilterRatingScreen')
-  onPressDate = () => this.props.navigation.navigate('ReviewsFilterDateScreen')
-  onPressAddReview = () => this.props.navigation.navigate('ReviewAddMessageStepScreen')
+  onPressRating = () =>
+    this.props.navigation.navigate('ReviewsFilterRatingScreen');
+  onPressDate = () => this.props.navigation.navigate('ReviewsFilterDateScreen');
+  onPressAddReview = () =>
+    this.props.navigation.navigate('ReviewAddMessageStepScreen');
 
   render() {
     const {
@@ -184,4 +196,7 @@ class ReviewsScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewsScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ReviewsScreen);

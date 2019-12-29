@@ -103,6 +103,9 @@ const styles = StyleSheet.create({
   scrollViewInner: {display: 'flex', flexDirection: 'column'},
 });
 
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
+import stylesHeader from '../../core/components/Header/style';
+
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   //TODO: owner true должен быть показан первым
   const cars = orderBy(profile.login.cars, ['owner'], ['asc']);
@@ -198,8 +201,19 @@ const CarCard = ({data}) => {
   );
 };
 class ProfileScreenInfo extends Component {
-  static navigationOptions = () => ({
-    header: null,
+  static navigationOptions = ({navigation}) => ({
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: (
+      <View>
+        <HeaderIconBack
+          theme="white"
+          navigation={navigation}
+          returnScreen="Home"
+        />
+      </View>
+    ),
+    headerRight: <View />,
   });
 
   componentDidMount() {
@@ -220,7 +234,7 @@ class ProfileScreenInfo extends Component {
             fontSize: 35,
             fontWeight: '600',
             marginHorizontal: 20,
-            marginTop: 60,
+            // marginTop: 60,
           }}>
           {`${this.props.login.first_name} ${this.props.login.last_name}`}
         </Text>

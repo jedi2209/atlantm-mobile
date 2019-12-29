@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View, Text} from 'react-native';
 import {Icon} from 'native-base';
 
 // redux
@@ -88,23 +88,27 @@ class UserCarListScreen extends Component {
   //   };
   // };
   static navigationOptions = ({navigation}) => ({
-    headerTitle: 'поддержанные автомобили',
+    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Автомобили</Text>,
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
     headerLeft: (
-      <HeaderIconBack
-        theme="white"
-        navigation={navigation}
-        returnScreen="MenuScreen"
-      />
+      <View>
+        <HeaderIconBack
+          theme="white"
+          navigation={navigation}
+          returnScreen="MenuScreen"
+        />
+      </View>
     ),
     headerRight: (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('UsedCarFilterScreen');
-        }}>
-        <Icon type="Octicons" name="settings" style={styles.iconFilter} />
-      </TouchableOpacity>
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('UsedCarFilterScreen');
+          }}>
+          <Icon type="Octicons" name="settings" style={styles.iconFilter} />
+        </TouchableOpacity>
+      </View>
     ),
   });
 

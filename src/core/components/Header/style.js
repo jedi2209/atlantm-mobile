@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import styleConst from '../../style-const';
 
@@ -35,11 +35,14 @@ export default StyleSheet.create({
     ...commonStyles,
     backgroundColor: styleConst.new.blueHeader,
     borderBottomWidth: 0,
+    color: 'red',
   },
-  blueHeaderTitle: Object.assign(
-    {
-      color: '#fff',
-    },
-    commonTitle,
-  ),
-});
+  blueHeaderTitle: {
+    fontSize: 17,
+    fontWeight: '600',
+    alignSelf: 'center',
+    alignItems: 'center',
+    fontFamily: styleConst.font.regular,
+    letterSpacing: styleConst.ui.letterSpacing,
+    color: '#fff',
+  },});

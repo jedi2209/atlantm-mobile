@@ -102,11 +102,13 @@ class NewCarItemScreen extends Component {
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
     headerLeft: (
-      <HeaderIconBack
-        theme="white"
-        navigation={navigation}
-        returnScreen="NewCarListScreen"
-      />
+      <View>
+        <HeaderIconBack
+          theme="white"
+          navigation={navigation}
+          returnScreen="NewCarListScreen"
+        />
+      </View>
     ),
     headerRight: <View />,
   });

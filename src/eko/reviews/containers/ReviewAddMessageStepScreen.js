@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
-import { Content, StyleProvider } from 'native-base';
+import React, {Component} from 'react';
+import {SafeAreaView, View, StyleSheet, Text} from 'react-native';
+import {Content, StyleProvider} from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
-import { actionAddReviewPlusFill, actionAddReviewMinusFill } from '../../actions';
+import {connect} from 'react-redux';
+import {actionAddReviewPlusFill, actionAddReviewMinusFill} from '../../actions';
 
 // components
 import InfoLine from '../../components/InfoLine';
@@ -14,8 +14,8 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import HeaderSubtitle from '../../../core/components/HeaderSubtitle';
 
 // helpers
-import { get } from 'lodash';
-import { TEXT_MESSAGE_CONTROL } from '../../constants';
+import {get} from 'lodash';
+import {TEXT_MESSAGE_CONTROL} from '../../constants';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, eko, nav }) => {
+const mapStateToProps = ({dealer, eko, nav}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
@@ -42,13 +42,17 @@ const mapDispatchToProps = {
 };
 
 class ReviewAddMessageStepScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Новый отзыв',
-    headerStyle: [stylesHeader.common, stylesHeader.resetBorder],
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
+  static navigationOptions = ({navigation}) => ({
+    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Новый отзыв</Text>,
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: (
+      <View>
+        <HeaderIconBack theme="white" navigation={navigation} />
+      </View>
+    ),
     headerRight: <View />,
-  })
+  });
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
@@ -57,18 +61,19 @@ class ReviewAddMessageStepScreen extends Component {
     if (nav) {
       const rootLevel = nav.routes[nav.index];
       if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'ReviewAddMessageStepScreen';
+        isActiveScreen =
+          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
+          'ReviewAddMessageStepScreen';
       }
     }
 
     return isActiveScreen;
   }
 
-  componentDidMount() {
+  componentDidMount() {}
 
-  }
-
-  onPressButton = () => this.props.navigation.navigate('ReviewAddRatingStepScreen')
+  onPressButton = () =>
+    this.props.navigation.navigate('ReviewAddRatingStepScreen');
 
   render() {
     const {
@@ -85,7 +90,7 @@ class ReviewAddMessageStepScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
-          <Content>
+          <Content style={{paddingTop: 10}}>
             <HeaderSubtitle content={dealerSelected.name} isBig={true} />
             <ReviewAddMessageForm
               messagePlus={messagePlus}
@@ -95,14 +100,14 @@ class ReviewAddMessageStepScreen extends Component {
             />
             <InfoLine gap={true} infoIcon={true} text={TEXT_MESSAGE_CONTROL} />
           </Content>
-          <FooterButton
-            text="Продолжить"
-            onPressButton={this.onPressButton}
-          />
+          <FooterButton text="Продолжить" onPressButton={this.onPressButton} />
         </SafeAreaView>
       </StyleProvider>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewAddMessageStepScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ReviewAddMessageStepScreen);

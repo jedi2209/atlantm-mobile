@@ -27,7 +27,7 @@ const TABS = {
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: styleConst.color.bg,
+    backgroundColor: '#fff',
   },
   // section
   section: {
@@ -125,10 +125,16 @@ class CarHistoryDetailsScreen extends Component {
     const {params = {}} = navigation.state;
 
     return {
-      headerTitle: params.title,
+      headerTitle: (
+        <Text style={stylesHeader.blueHeaderTitle}>{params.title}</Text>
+      ),
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: <HeaderIconBack theme="white" navigation={navigation} />,
+      headerLeft: (
+        <View>
+          <HeaderIconBack theme="white" navigation={navigation} />
+        </View>
+      ),
       headerRight: <View />,
     };
   };
@@ -145,8 +151,6 @@ class CarHistoryDetailsScreen extends Component {
     const userid = get(profile, 'id');
 
     navigation.setParams({title});
-
-    console.log('token, userid ==========>', token, userid);
 
     actionFetchCarHistoryDetails({vin, token, userid, workId, workDealer}).then(
       action => {

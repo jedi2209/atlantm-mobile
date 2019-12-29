@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {SafeAreaView, StyleSheet, View, Alert} from 'react-native';
+import {SafeAreaView, StyleSheet, View, Alert, Text} from 'react-native';
 import {Content, List, StyleProvider} from 'native-base';
 
 // redux
@@ -67,13 +67,21 @@ const mapDispatchToProps = {
 
 class ServiceScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: 'Заявка на СТО',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: (
-      <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />
+    headerTitle: (
+      <Text style={stylesHeader.blueHeaderTitle}>Заявка на СТО</Text>
     ),
-    headerRight: <HeaderIconMenu navigation={navigation} />,
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: (
+      <View>
+        <HeaderIconBack
+          theme="white"
+          navigation={navigation}
+          returnScreen="MenuScreen"
+        />
+      </View>
+    ),
+    headerRight: <View />,
   });
 
   static propTypes = {

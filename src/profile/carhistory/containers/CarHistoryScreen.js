@@ -118,10 +118,19 @@ const mapDispatchToProps = {
   actionSetCarHistoryLevel1,
   actionSetCarHistoryLevel2,
 };
-
+import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import stylesHeader from '../../../core/components/Header/style';
 class CarHistoryScreen extends Component {
-  static navigationOptions = () => ({
-    header: null,
+  static navigationOptions = ({navigation}) => ({
+    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>История ТО</Text>,
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: (
+      <View>
+        <HeaderIconBack theme="white" navigation={navigation} />
+      </View>
+    ),
+    headerRight: <View />,
   });
 
   componentDidMount() {
@@ -399,15 +408,15 @@ class CarHistoryScreen extends Component {
     return (
       <ScrollView>
         <View>
-          <Text
+          {/* <Text
             style={{
               fontSize: 35,
               fontWeight: '600',
               marginHorizontal: 20,
-              marginTop: 60,
+              // marginTop: 60,
             }}>
             История ТО
-          </Text>
+          </Text> */}
 
           <StyleProvider style={getTheme()}>
             <View>

@@ -108,8 +108,12 @@ class InfoPostScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: <HeaderIconBack theme="white" navigation={navigation} />,
-    headerTitle: 'oб акции',
+    headerLeft: (
+      <View>
+        <HeaderIconBack theme="white" navigation={navigation} />
+      </View>
+    ),
+    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Об акции</Text>,
     headerRight: <View />,
   });
 
