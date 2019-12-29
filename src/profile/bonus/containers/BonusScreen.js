@@ -132,13 +132,13 @@ import stylesHeader from '../../../core/components/Header/style';
 class BonusScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: (
-      <Text style={stylesHeader.blueHeaderTitle}>Бонусные баллы</Text>
+      <Text style={stylesHeader.whiteHeaderTitle}>Бонусные баллы</Text>
     ),
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerStyle: stylesHeader.whiteHeader,
+    headerTitleStyle: stylesHeader.whiteHeaderTitle,
     headerLeft: (
       <View>
-        <HeaderIconBack theme="white" navigation={navigation} />
+        <HeaderIconBack theme="blue" navigation={navigation} />
       </View>
     ),
     headerRight: <View />,

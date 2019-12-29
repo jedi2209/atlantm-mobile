@@ -126,13 +126,13 @@ class CarHistoryDetailsScreen extends Component {
 
     return {
       headerTitle: (
-        <Text style={stylesHeader.blueHeaderTitle}>{params.title}</Text>
+        <Text style={stylesHeader.whiteHeaderTitle}>{params.title}</Text>
       ),
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
+      headerStyle: stylesHeader.whiteHeader,
+      headerTitleStyle: stylesHeader.whiteHeaderTitle,
       headerLeft: (
         <View>
-          <HeaderIconBack theme="white" navigation={navigation} />
+          <HeaderIconBack theme="blue" navigation={navigation} />
         </View>
       ),
       headerRight: <View />,

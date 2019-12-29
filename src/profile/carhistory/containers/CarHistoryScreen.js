@@ -122,12 +122,12 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import stylesHeader from '../../../core/components/Header/style';
 class CarHistoryScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>История ТО</Text>,
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerTitle: <Text style={stylesHeader.whiteHeaderTitle}>История ТО</Text>,
+    headerStyle: stylesHeader.whiteHeader,
+    headerTitleStyle: stylesHeader.whiteHeaderTitle,
     headerLeft: (
       <View>
-        <HeaderIconBack theme="white" navigation={navigation} />
+        <HeaderIconBack theme="blue" navigation={navigation} />
       </View>
     ),
     headerRight: <View />,

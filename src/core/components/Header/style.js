@@ -45,4 +45,26 @@ export default StyleSheet.create({
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
     color: '#fff',
-  },});
+  },
+  whiteHeader: {
+    ...commonStyles,
+    backgroundColor: '#fff',
+    color: styleConst.new.blueHeader,
+    shadowRadius: 0,
+    shadowOffset: {
+      height: 0,
+    },
+    elevation: 0,
+    borderBottomWidth: 0,
+    shadowColor: 'transparent',
+  },
+  whiteHeaderTitle: {
+    fontSize: 17,
+    fontWeight: '600',
+    alignSelf: 'center',
+    alignItems: 'center',
+    fontFamily: styleConst.font.regular,
+    letterSpacing: styleConst.ui.letterSpacing,
+    color: styleConst.new.blueHeader,
+  },
+});

@@ -202,12 +202,12 @@ const CarCard = ({data}) => {
 };
 class ProfileScreenInfo extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerStyle: stylesHeader.whiteHeader,
+    headerTitleStyle: stylesHeader.whiteHeaderTitle,
     headerLeft: (
       <View>
         <HeaderIconBack
-          theme="white"
+          theme="blue"
           navigation={navigation}
           returnScreen="Home"
         />
@@ -234,7 +234,7 @@ class ProfileScreenInfo extends Component {
             fontSize: 35,
             fontWeight: '600',
             marginHorizontal: 20,
-            // marginTop: 60,
+            marginTop: 10,
           }}>
           {`${this.props.login.first_name} ${this.props.login.last_name}`}
         </Text>

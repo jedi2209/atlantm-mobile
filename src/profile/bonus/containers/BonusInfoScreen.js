@@ -50,11 +50,11 @@ class BonusInfoScreen extends Component {
   static navigationOptions = ({navigation}) => {
     return {
       headerTitle: 'бонусная программа',
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
+      headerStyle: stylesHeader.whiteHeader,
+      headerTitleStyle: stylesHeader.whiteHeaderTitle,
       headerLeft: (
         <HeaderIconBack
-          theme="white"
+          theme="blue"
           navigation={navigation}
           returnScreen="MenuScreen"
         />

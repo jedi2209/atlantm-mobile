@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {
   View,
@@ -86,7 +87,14 @@ export default class HeaderIconBack extends Component {
             name="arrow-back"
             style={[
               styles.arrowFont,
-              {color: this.props.theme === 'white' ? '#fff' : '#000'},
+              {
+                color:
+                  this.props.theme === 'white'
+                    ? '#fff'
+                    : this.props.theme === 'blue'
+                    ? '#0F66B2'
+                    : '#000',
+              },
             ]}
           />
           {/* {this.props.theme === 'white' ? (
