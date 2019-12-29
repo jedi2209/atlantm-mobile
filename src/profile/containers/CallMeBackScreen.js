@@ -156,9 +156,10 @@ class CallMeBackScreen extends React.Component {
                 alignItems: 'center',
                 marginTop: '20%',
                 justifyContent: 'center',
-                width: '100%',
+                width: '90%',
               }}>
-              <Text style={{fontSize: 40, fontWeight: 'bold'}}>
+              <Text
+                style={{fontSize: 30, fontWeight: 'bold', textAlign: 'center'}}>
                 Обратный звонок
               </Text>
             </View>
@@ -269,7 +270,12 @@ class CallMeBackScreen extends React.Component {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                <Text style={{fontSize: 22, fontWeight: '600'}}>
+                <Text
+                  style={{
+                    fontSize: 22,
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                  }}>
                   Заявка успешно отправлена
                 </Text>
                 <Button
