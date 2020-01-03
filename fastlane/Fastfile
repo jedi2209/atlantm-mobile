@@ -16,8 +16,8 @@ platform :ios do
     puts "SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: #{ENV['SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER']}"
     ensure_git_status_clean
     produce(
-        app_identifier: "com.atlant-m.OneSignalNotificationServiceExtension",
-        app_name: "atlant-m OneSignalNotificationServiceExtension",
+        app_identifier: "com.atlantm.app.OneSignalNotificationServiceExtension",
+        app_name: "atlantm OneSignalNotificationServiceExtension",
         skip_itc: true
     )
   end
@@ -30,15 +30,19 @@ platform :ios do
         xcodeproj: "ios/atlantm.xcodeproj"
     )
     build_app(
-	workspace: "ios/atlantm.xcworkspace",
-	scheme: "atlantm",
-	export_method: "app-store",
-	export_options: {
-     		provisioningProfiles: {
-        		"com.atlant-m" => "com.atlant-m AppStore",
-        		"com.atlant-m.OneSignalNotificationServiceExtension" => "XC com atlant-m OneSignalNotificationService"
-      		}
-    	}
+      workspace: "ios/atlantm.xcworkspace",
+      scheme: "atlantm",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "com.atlantm.app" => "com.atlantm.app AppStore",
+          "com.atlantm.app.OneSignalNotificationServiceExtension" => "XC.com.atlantm.app.OneSignalNotificationService"
+        }
+      }
+    )
+    automatic_code_signing(
+      path: "ios/atlantm.xcodeproj",
+      use_automatic_signing: true
     )
     # Generate the changelog based on commit messages since your last tag
     changelog_from_git_commits(
