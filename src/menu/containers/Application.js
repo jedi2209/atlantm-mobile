@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import Modal, {ModalContent} from 'react-native-modals';
 import {View, Text, TouchableWithoutFeedback} from 'react-native';
@@ -19,20 +20,19 @@ class ApplicationModalScreen extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-      console.log(this.props.nav);
     if (prevProps.nav.newState.routes !== this.props.nav.newState.routes) {
-      console.log('ya tyt');
       this.setState({visible: true});
     }
   }
 
   render() {
-      console.log('ya tyt render', this.state.visible);
     return (
       <View>
         <Modal visible={true}>
           <ModalContent>
-            <Text style={{fontSize: 18, fontWeight: 'bold'}}>Отправить заявку</Text>
+            <Text style={{fontSize: 18, fontWeight: 'bold'}}>
+              Отправить заявку
+            </Text>
             <TouchableWithoutFeedback
               onPress={() => {
                 this.setState({visible: false});
