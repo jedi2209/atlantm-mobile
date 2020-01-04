@@ -10,7 +10,7 @@
     "iphonePro": "react-native run-ios --simulator=\"iPhone 11 Pro\"",
     "iphoneProMax": "react-native run-ios --simulator=\"iPhone 11 Pro Max\"",
     "ios-build": "bundle exec fastlane ios beta; rm atlantm.app.dSYM.zip atlantm.ipa;",
-    "android": "cd android && ./gradlew clean; cd ../; adb uninstall com.atlantm; react-native run-android",
+    "android": "cd android && ./gradlew clean; cd ../; open -a iTerm ./android/dev.sh & adb wait-for-device; sleep 10; adb uninstall com.atlantm; react-native run-android",
     "android-local": "bundle exec fastlane android test && adb uninstall com.atlantm; adb install ./android/app/build/outputs/apk/release/app-release.apk; adb shell am start -n com.atlantm/.MainActivity",
     "android-release": "git checkout ./android/app/versioning/app_version.properties && bundle exec fastlane android release && open ./android/app/build/outputs/apk/release;",
     "android-build": "bundle exec fastlane android internal",
