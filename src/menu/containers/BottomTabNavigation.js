@@ -1,8 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Icon} from 'native-base';
+
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
+import {createDrawerNavigator} from 'react-navigation-drawer';
+
 // TODO: https://github.com/react-navigation/react-navigation/issues/6458
 // TODO: https://github.com/kmagiera/react-native-screens/issues/220
 // Используем createNativeStackNavigator только для раздела Profile,
@@ -90,10 +93,9 @@ SearchStack.navigationOptions = ({navigation}) => {
   };
 };
 
-const EnhancedMenuScreen = createBottomTabNavigator({
-  Contacts: {
+const BottomTabNavigation = createBottomTabNavigator({
+  Contact: {
     screen: createStackNavigator({
-      // TODO: Все роуты назвать *Screen (e.g. HomeScreen, для консистентности)
       Home: {screen: ContactsScreen},
       InfoList: {screen: InfoListScreen},
       InfoPostScreen: {screen: InfoPostScreen},
@@ -144,7 +146,7 @@ const EnhancedMenuScreen = createBottomTabNavigator({
     screen: createStackNavigator({
       ApplicationModalScreen: {screen: ApplicationModalScreen},
     }),
-    navigationOptions: ({navigation}) => {
+    navigationOptions: () => {
       return {
         tabBarOnPress: () => store.dispatch(actionToggleModal('application')),
         tabBarLabel: 'Заявка',
@@ -176,7 +178,7 @@ const EnhancedMenuScreen = createBottomTabNavigator({
       UsedCarItemScreen: {screen: UsedCarItemScreen},
       UsedCarCityScreen: {screen: UsedCarCityScreen},
     }),
-    navigationOptions: ({navigation}) => {
+    navigationOptions: () => {
       return {
         tabBarLabel: 'Меню',
         tabBarIcon: ({focused}) => (
@@ -198,8 +200,8 @@ const EnhancedMenuScreen = createBottomTabNavigator({
   },
 });
 
-EnhancedMenuScreen.navigationOptions = () => ({
+BottomTabNavigation.navigationOptions = () => ({
   header: null,
 });
 
-export default EnhancedMenuScreen;
+export default BottomTabNavigation;

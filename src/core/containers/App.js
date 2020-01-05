@@ -38,7 +38,7 @@ import PushNotifications from '../components/PushNotifications';
 import DeviceInfo from 'react-native-device-info';
 
 // routes
-import getRouter from '../router';
+import {getRouter} from '../router';
 
 if (__DEV__) {
   NativeModules.DevSettings.setIsDebuggingRemotely(true);
@@ -186,17 +186,17 @@ class App extends Component {
 
   render() {
     const isTablet = DeviceInfo.isTablet();
-    const mainScreen = isTablet ? 'ContactsScreen' : 'MenuScreen';
+    const mainScreen = isTablet ? 'ContactsScreen' : 'BottomTabNavigation';
     const isDealerSelected = get(store.getState(), 'dealer.selected.id');
 
     const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
-    console.dir('>>> Router', Router);
+    console.dir('>>> Router', Router, mainScreen);
     const AppContainer = createAppContainer(Router);
 
-    const defaultGetStateForAction = Router.router.getStateForAction;
-    Router.router.getStateForAction = (action, state) => {
-      return defaultGetStateForAction(action, state);
-    };
+    // const defaultGetStateForAction = Router.router.getStateForAction;
+    // Router.router.getStateForAction = (action, state) => {
+    //   return defaultGetStateForAction(action, state);
+    // };
 
     return (
       <View style={{flex: 1}}>
