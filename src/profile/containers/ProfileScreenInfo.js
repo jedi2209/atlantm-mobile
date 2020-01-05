@@ -10,7 +10,6 @@ import {
   Text,
   Platform,
   Image,
-  ActivityIndicator,
 } from 'react-native';
 import {Button, Icon} from 'native-base';
 
@@ -272,69 +271,71 @@ class ProfileScreenInfo extends Component {
           ))}
         </ScrollView>
 
-        <View style={{marginHorizontal: 20}}>
-          <View
-            style={{
-              backgroundColor: '#0061ed',
-              borderRadius: 5,
-              padding: 14,
-              display: 'flex',
-              flexDirection: 'row',
-            }}>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('BonusScreen')}>
+          <View style={{marginHorizontal: 20}}>
             <View
               style={{
-                backgroundColor: '#fff',
-                width: 98,
-                height: 98,
-                borderRadius: 49,
+                backgroundColor: '#0061ed',
+                borderRadius: 5,
+                padding: 14,
                 display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginRight: 24,
+                flexDirection: 'row',
               }}>
-              <Text style={{color: '#0061ed', fontSize: 26, fontWeight: '600'}}>
-                {this.props.bonus && this.props.bonus.saldo
-                  ? this.props.bonus.saldo.value
-                  : 0}
-              </Text>
-            </View>
-            <View style={{flex: 1}}>
-              <Text
+              <View
                 style={{
-                  color: '#fff',
-                  fontSize: 18,
-                  marginBottom: 8,
-                  fontWeight: '600',
+                  backgroundColor: '#fff',
+                  width: 98,
+                  height: 98,
+                  borderRadius: 49,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginRight: 24,
                 }}>
-                Бонусные баллы
-              </Text>
-              <Text
-                style={{
-                  color: '#fff',
-                  fontSize: 12,
-                  marginBottom: 16,
-                  fontWeight: '600',
-                }}>
-                История накопления и трат Ваших бонусных баллов
-              </Text>
-              <View style={{display: 'flex', flexDirection: 'row'}}>
-                <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('BonusScreen')}>
-                  <Text
-                    style={{color: '#fff', fontSize: 16, fontWeight: '600'}}>
-                    Посмотреть
-                  </Text>
-                </TouchableOpacity>
-                <Icon
-                  type="FontAwesome5"
-                  name="angle-right"
-                  style={{color: '#fff', fontSize: 20, marginLeft: 8}}
-                />
+                <Text
+                  style={{color: '#0061ed', fontSize: 26, fontWeight: '600'}}>
+                  {this.props.bonus && this.props.bonus.saldo
+                    ? this.props.bonus.saldo.value
+                    : 0}
+                </Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontSize: 18,
+                    marginBottom: 8,
+                    fontWeight: '600',
+                  }}>
+                  Бонусные баллы
+                </Text>
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontSize: 12,
+                    marginBottom: 16,
+                    fontWeight: '600',
+                  }}>
+                  История накопления и трат Ваших бонусных баллов
+                </Text>
+                <View style={{display: 'flex', flexDirection: 'row'}}>
+                  <View>
+                    <Text
+                      style={{color: '#fff', fontSize: 16, fontWeight: '600'}}>
+                      Посмотреть
+                    </Text>
+                  </View>
+                  <Icon
+                    type="FontAwesome5"
+                    name="angle-right"
+                    style={{color: '#fff', fontSize: 20, marginLeft: 8}}
+                  />
+                </View>
               </View>
             </View>
           </View>
-        </View>
-
+        </TouchableOpacity>
         <Button
           full
           onPress={() => {

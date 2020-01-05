@@ -116,7 +116,10 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({dealer, profile, nav}) => {
   return {
     nav,
-    bonus: profile.bonus.data || profile.login.bonus, //.data
+    bonus:
+      Object.keys(profile.bonus.data).length > 0
+        ? profile.bonus.data
+        : profile.login.bonus,
     level1hash: profile.login.bonus.level1Hash,
     level2hash: profile.login.bonus.level2Hash,
     dealerSelected: dealer.selected,
@@ -250,17 +253,7 @@ class BonusScreen extends Component {
     });
   };
 
-  renderItemHeader = (
-    label,
-    total,
-    onPressHandler,
-    theme,
-    isActive,
-    isLast,
-    isArrow,
-    key,
-    date,
-  ) => {
+  renderItemHeader = (label, total, onPressHandler, theme, key, date) => {
     const isLevel3 = theme === 'itemLevel3';
 
     return (
@@ -295,7 +288,7 @@ class BonusScreen extends Component {
   };
 
   onPressBonusInfo = () =>
-    this.props.navigation.navigate('BonusInfoScreen', {
+    this.props.navigation.navigate('BonusScreenInfo', {
       refererScreen: 'profile/bonus',
     });
 
@@ -327,6 +320,7 @@ class BonusScreen extends Component {
     console.log('== Bonus Screen ==');
 
     const {bonus} = this.props;
+    console.log('bonus >>>>>>>>>>', bonus);
 
     if (isEmpty(bonus) || !bonus.items) {
       return (

@@ -3,15 +3,7 @@ import React, {Component} from 'react';
 import Modal, {ModalContent} from 'react-native-modals';
 import {TouchableWithoutFeedback} from 'react-native';
 
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-  NativeModules,
-} from 'react-native';
+import {View, Text, NativeModules} from 'react-native';
 import {createAppContainer, NavigationActions} from 'react-navigation';
 import {enableScreens} from 'react-native-screens';
 
@@ -32,7 +24,6 @@ import API from '../../utils/api';
 import {get} from 'lodash';
 import OneSignal from 'react-native-onesignal';
 import PushNotifications from '../components/PushNotifications';
-// import RateThisApp from '../components/RateThisApp';
 
 // components
 import DeviceInfo from 'react-native-device-info';
@@ -65,17 +56,6 @@ const mapDispatchToProps = {
   actionStoreUpdated,
   actionToggleModal,
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  app: {
-    flex: 2,
-    overflow: 'hidden',
-  },
-});
 
 class App extends Component {
   constructor(props) {
@@ -154,21 +134,6 @@ class App extends Component {
     return false;
   }
 
-  componentWillUnmount() {
-    // PushNotification.notificationListener.remove();
-    // PushNotification.refreshTokenListener.remove();
-  }
-
-  // onPushPermissionGranted = () => {
-  //   this.props.actionSetPushGranted(true);
-  // }
-
-  // onPushPermissionRejected = () => {
-  //   const { actionSetPushActionSubscribe, actionSetPushGranted } = this.props;
-  //   actionSetPushActionSubscribe(false);
-  //   this.props.actionSetPushGranted(false);
-  // }
-
   onNavigationStateChange = (prevState, newState) => {
     this.props.navigationChange({
       prevState,
@@ -190,13 +155,7 @@ class App extends Component {
     const isDealerSelected = get(store.getState(), 'dealer.selected.id');
 
     const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
-    console.dir('>>> Router', Router, mainScreen);
     const AppContainer = createAppContainer(Router);
-
-    // const defaultGetStateForAction = Router.router.getStateForAction;
-    // Router.router.getStateForAction = (action, state) => {
-    //   return defaultGetStateForAction(action, state);
-    // };
 
     return (
       <View style={{flex: 1}}>
