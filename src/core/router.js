@@ -21,7 +21,7 @@ import ReviewAddMessageStepScreen from '../eko/reviews/containers/ReviewAddMessa
 import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRatingStepScreen';
 
 export const getRouter = initialRouteName => {
-  return createDrawerNavigator(
+  return createStackNavigator(
     {
       IntroScreen: {screen: IntroScreen}, // этоо скрин с кнопкой выберите автосервис
       BottomTabNavigation: {screen: BottomTabNavigation}, // это нижнее меню
