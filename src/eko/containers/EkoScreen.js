@@ -68,7 +68,7 @@ class EkoScreen extends Component {
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: (
-      <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />
+      <HeaderIconBack returnScreen="BottomTabNavigation" navigation={navigation} />
     ),
     headerRight: <HeaderIconMenu navigation={navigation} />,
   });

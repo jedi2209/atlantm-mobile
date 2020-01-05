@@ -47,7 +47,7 @@ export default class HeaderIconMenu extends Component {
       index: 0,
       key: null,
       actions: [
-        NavigationActions.navigate({ routeName: 'MenuScreen' }),
+        NavigationActions.navigate({ routeName: 'BottomTabNavigation' }),
       ],
     });
     this.props.navigation.dispatch(resetAction);

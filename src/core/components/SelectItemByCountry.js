@@ -88,7 +88,7 @@ export default class SelectItemByCountry extends Component {
       onSelect,
       selectedItem,
     } = this.props;
-    const mainScreen = DeviceInfo.isTablet() ? 'ContactsScreen' : 'MenuScreen';
+    const mainScreen = DeviceInfo.isTablet() ? 'ContactsScreen' : 'BottomTabNavigation';
 
     selectItem({dealerBaseData: item, dealerSelected: selectedItem}).then(
       action => {

@@ -56,7 +56,7 @@ class BonusInfoScreen extends Component {
         <HeaderIconBack
           theme="blue"
           navigation={navigation}
-          returnScreen="MenuScreen"
+          returnScreen="BottomTabNavigation"
         />
       ),
       headerRight: <View />,
