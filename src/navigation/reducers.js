@@ -13,7 +13,7 @@ const nav = (state = {
     routes: [
       {
         index: 0,
-        routeName: DeviceInfo.isTablet() ? 'ContactsScreen' : 'MenuScreen',
+        routeName: DeviceInfo.isTablet() ? 'ContactsScreen' : 'BottomTabNavigation',
       },
     ],
   },

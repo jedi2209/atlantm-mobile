@@ -79,7 +79,7 @@ class InfoListScreen extends Component {
         <HeaderIconBack
           theme="white"
           navigation={navigation}
-          returnScreen="MenuScreen"
+          returnScreen="BottomTabNavigation"
         />
       </View>
     ),

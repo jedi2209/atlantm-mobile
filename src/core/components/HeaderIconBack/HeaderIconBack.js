@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const MENU_SCREEN_NAME = 'MenuScreen';
+const MENU_SCREEN_NAME = 'BottomTabNavigation';
 
 export default class HeaderIconBack extends Component {
   static propTypes = {
