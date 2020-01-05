@@ -120,7 +120,7 @@ const processListsByCities = (action, region) => {
 const listRussiaByCities = (state = [], action) => {
   switch (action.type) {
     case REHYDRATE:
-      return get(action, 'payload.catalog.listRussia', []);
+      return get(action, 'payload.dealer.listRussiaByCities', []);
     case DEALERS__SUCCESS: // устанавливается при выборе дилера
     case DEALERS_BY_CITIES__SET: // нужно для обновления 4.2.0
       return processListsByCities(action, RUSSIA);
@@ -132,7 +132,7 @@ const listRussiaByCities = (state = [], action) => {
 const listUkraineByCities = (state = [], action) => {
   switch (action.type) {
     case REHYDRATE:
-      return get(action, 'payload.catalog.listUkraine', []);
+      return get(action, 'payload.dealer.listUkraineByCities', []);
     case DEALERS__SUCCESS:
     case DEALERS_BY_CITIES__SET:
       return processListsByCities(action, UKRAINE);
@@ -144,7 +144,7 @@ const listUkraineByCities = (state = [], action) => {
 const listBelarussiaByCities = (state = [], action) => {
   switch (action.type) {
     case REHYDRATE:
-      return get(action, 'payload.catalog.listBelarussia', []);
+      return get(action, 'payload.dealer.listBelarussiaByCities', []);
     case DEALERS__SUCCESS:
     case DEALERS_BY_CITIES__SET:
       return processListsByCities(action, BELARUSSIA);
