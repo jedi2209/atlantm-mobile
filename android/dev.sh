@@ -14,4 +14,4 @@ do
 done
 
 printf "OK, started Android emulator based on $opt \r\n";
-exec $HOME/Library/Android/sdk/emulator/emulator -avd $opt -no-snapshot -wipe-data -logcat *:e -verbose
+exec $HOME/Library/Android/sdk/emulator/emulator -avd $opt -dns-server 8.8.8.8 -no-snapshot -wipe-data -logcat *:e -verbose
