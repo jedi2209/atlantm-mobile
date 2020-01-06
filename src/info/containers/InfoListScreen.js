@@ -13,7 +13,7 @@ import {Container, Text, StyleProvider, Icon} from 'native-base';
 import {Offer} from '../../core/components/Offer';
 
 const deviceWidth = Dimensions.get('window').width;
-const cardWidth = deviceWidth - 50;
+const cardWidth = deviceWidth - 30;
 
 // redux
 import {connect} from 'react-redux';
