@@ -33,7 +33,6 @@ import UsedCarItemScreen from '../../catalog/usedcar/containers/UsedCarItemScree
 import UsedCarCityScreen from '../../catalog/usedcar/containers/UsedCarCityScreen';
 import MoreScreen from './MenuScreenNew';
 import MapScreen from '../../contacts/map/containers/MapScreen';
-import CallMeBackScreen from '../../profile/containers/CallMeBackScreen';
 import ApplicationModalScreen from './Application';
 
 import {store} from '../../core/store';
@@ -170,7 +169,6 @@ const BottomTabNavigation = createBottomTabNavigator({
   More: {
     screen: createStackNavigator({
       MoreScreen: {screen: MoreScreen},
-      CallMeBackScreen: {screen: CallMeBackScreen},
       UsedCarListScreen: {
         screen: UsedCarListScreen,
       },
