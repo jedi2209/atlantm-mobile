@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import React, {Component, createRef} from 'react';
 import {
   View,
   TextInput,
@@ -137,11 +137,34 @@ class ProfileScreen extends Component {
     };
 
     this.requestManager = new GraphRequestManager();
+    this.scrollRef = createRef();
   }
 
   static navigationOptions = () => ({
     header: null,
   });
+
+  componentDidMount() {
+    this.keyboardShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      this.onKeyboardVisibleChange,
+    );
+    this.keyboardHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this.onKeyboardVisibleChange,
+    );
+  }
+
+  componentWillUnmount() {
+    this.keyboardShowListener.remove();
+    this.keyboardHideListener.remove();
+  }
+
+  onKeyboardVisibleChange = () => {
+    requestAnimationFrame(() => {
+      this.scrollRef.current.scrollToEnd();
+    });
+  };
 
   _verifyCode = () => {
     const phone = this.state.phone;
@@ -321,7 +344,7 @@ class ProfileScreen extends Component {
           <ImageBackground
             source={require('./bg.jpg')}
             style={{width: '100%', height: '100%'}}>
-            <ScrollView ref="scrollView">
+            <ScrollView ref={this.scrollRef}>
               <View style={{marginBottom: 20}}>
                 <View
                   style={{
