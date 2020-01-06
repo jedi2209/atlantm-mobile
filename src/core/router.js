@@ -21,11 +21,13 @@ import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRating
 
 import CallMeBackScreen from '../profile/containers/CallMeBackScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
+import UsedCarItemScreen from '../catalog/usedcar/containers/UsedCarItemScreen';
 
 export const getRouter = initialRouteName => {
   return createStackNavigator(
     {
       NewCarItemScreen: {screen: NewCarItemScreen},
+      UsedCarItemScreen: {screen: UsedCarItemScreen},
       IntroScreen: {screen: IntroScreen}, // этоо скрин с кнопкой выберите автосервис
       BottomTabNavigation: {screen: BottomTabNavigation}, // это нижнее меню
       ChooseDealerScreen: {screen: ChooseDealerScreen}, // выбор диллера скрин
