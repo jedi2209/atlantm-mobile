@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import {Button, Icon} from 'native-base';
 
@@ -313,180 +314,152 @@ class ProfileScreen extends Component {
     LoginManager.logOut();
 
     return (
-      <KeyboardAvoidingView behavior="position" keyboardVerticalOffset={0}>
+      <KeyboardAvoidingView
+        behavior={Platform.select({ios: 'position', android: null})}
+        keyboardVerticalOffset={0}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ImageBackground
             source={require('./bg.jpg')}
             style={{width: '100%', height: '100%'}}>
-            <ScrollView>
-              <View
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  marginTop: 100,
-                  justifyContent: 'center',
-                }}>
-                <Image
-                  resizeMode="contain"
-                  source={require('../../menu/assets/logo-horizontal-white.svg')}
-                />
-              </View>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginTop: 40,
-                  marginBottom: 20,
-                }}>
-                <LoginButton
-                  readPermissions={['email']}
+            <ScrollView ref="scrollView">
+              <View style={{marginBottom: 20}}>
+                <View
                   style={{
-                    width: '80%',
-                    height: 44,
-                    borderWidth: 0,
-                  }}
-                  onLoginFinished={this._loginFacebook}
-                  onLogoutFinished={() => {
-                    this.props.actionLogout();
-                  }}
-                />
-                <GoogleSigninButton
+                    display: 'flex',
+                    alignItems: 'center',
+                    marginTop: 100,
+                    justifyContent: 'center',
+                  }}>
+                  <Image
+                    resizeMode="contain"
+                    source={require('../../menu/assets/logo-horizontal-white.svg')}
+                  />
+                </View>
+                <View
                   style={{
-                    width: '82%',
-                    height: 52,
-                    marginVertical: 8,
-                    borderWidth: 0,
-                    marginTop: 12,
-                  }}
-                  size={GoogleSigninButton.Size.Wide}
-                  color={GoogleSigninButton.Color.Light}
-                  onPress={this._signInWithGoogle}
-                  disabled={this.state.isSigninInProgress}
-                />
-                {/* <Button
-                iconLeft
-                style={{
-                  backgroundColor: '#EB722E',
-                  width: '80%',
-                  marginVertical: 8,
-                  paddingHorizontal: 8,
-                  justifyContent: 'flex-start',
-                }}>
-                <Icon name="home" />
-                <Text style={{color: '#fff', marginLeft: 8}}>
-                  Войти через Одноклассники
-                </Text>
-              </Button> */}
-                <Button
-                  onPress={this._signInWithVK}
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginTop: 40,
+                    marginBottom: 20,
+                  }}>
+                  <LoginButton
+                    readPermissions={['email']}
+                    style={{
+                      width: '80%',
+                      height: 44,
+                      borderWidth: 0,
+                    }}
+                    onLoginFinished={this._loginFacebook}
+                    onLogoutFinished={() => {
+                      this.props.actionLogout();
+                    }}
+                  />
+                  <GoogleSigninButton
+                    style={{
+                      width: '82%',
+                      height: 52,
+                      marginVertical: 8,
+                      borderWidth: 0,
+                      marginTop: 12,
+                    }}
+                    size={GoogleSigninButton.Size.Wide}
+                    color={GoogleSigninButton.Color.Light}
+                    onPress={this._signInWithGoogle}
+                    disabled={this.state.isSigninInProgress}
+                  />
+                  {/* <Button
                   iconLeft
                   style={{
-                    backgroundColor: '#4680C2',
+                    backgroundColor: '#EB722E',
                     width: '80%',
                     marginVertical: 8,
                     paddingHorizontal: 8,
                     justifyContent: 'flex-start',
                   }}>
-                  <Icon name="vk" type="FontAwesome5" />
+                  <Icon name="home" />
                   <Text style={{color: '#fff', marginLeft: 8}}>
-                    Войти через VK
+                    Войти через Одноклассники
                   </Text>
-                </Button>
-              </View>
-              <View
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
+                </Button> */}
+                  <Button
+                    onPress={this._signInWithVK}
+                    iconLeft
+                    style={{
+                      backgroundColor: '#4680C2',
+                      width: '80%',
+                      marginVertical: 8,
+                      paddingHorizontal: 8,
+                      justifyContent: 'flex-start',
+                    }}>
+                    <Icon name="vk" type="FontAwesome5" />
+                    <Text style={{color: '#fff', marginLeft: 8}}>
+                      Войти через VK
+                    </Text>
+                  </Button>
+                </View>
                 <View
                   style={{
-                    marginTop: 10,
-                    marginBottom: 20,
-                    width: '80%',
-                    flexDirection: 'row',
-                    justifyContent: 'space-around',
+                    display: 'flex',
+                    justifyContent: 'center',
                     alignItems: 'center',
                   }}>
                   <View
                     style={{
-                      backgroundColor: '#979797',
-                      height: 1,
-                      width: '40%',
-                    }}
-                  />
-                  <Text
-                    style={{color: '#9097A5', fontSize: 16, lineHeight: 16}}>
-                    или
-                  </Text>
-                  <View
-                    style={{
-                      backgroundColor: '#979797',
-                      height: 1,
-                      width: '40%',
-                    }}
-                  />
-                </View>
-              </View>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <TextInput
-                  style={{
-                    height: 40,
-                    paddingHorizontal: 14,
-                    borderColor: 'gray',
-                    borderWidth: 1,
-                    color: '#fff',
-                    width: '80%',
-                    borderRadius: 5,
-                  }}
-                  placeholder="Телефон"
-                  keyboardType="phone-pad"
-                  onChangeText={this.onInputPhone}
-                />
-                {!this.state.code && (
-                  <Button
-                    onPress={this._verifyCode}
-                    disabled={this.state.loadingVerify}
-                    style={{
-                      marginTop: 20,
+                      marginTop: 10,
+                      marginBottom: 20,
                       width: '80%',
-                      backgroundColor: '#34BD78',
-                      justifyContent: 'center',
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                      alignItems: 'center',
                     }}>
-                    {this.state.loadingVerify ? (
-                      <ActivityIndicator color="#fff" />
-                    ) : (
-                      <Text style={{color: '#fff'}}>Получить код</Text>
-                    )}
-                  </Button>
-                )}
-                {this.state.code && (
-                  <>
-                    <TextInput
+                    <View
                       style={{
-                        height: 40,
-                        paddingHorizontal: 14,
-                        borderColor: 'gray',
-                        borderWidth: 1,
-                        color: '#fff',
-                        width: '80%',
-                        borderRadius: 5,
-                        marginTop: 15,
+                        backgroundColor: '#979797',
+                        height: 1,
+                        width: '40%',
                       }}
-                      placeholder="Код"
-                      onChangeText={this.onInputCode}
                     />
+                    <Text
+                      style={{color: '#9097A5', fontSize: 16, lineHeight: 16}}>
+                      или
+                    </Text>
+                    <View
+                      style={{
+                        backgroundColor: '#979797',
+                        height: 1,
+                        width: '40%',
+                      }}
+                    />
+                  </View>
+                </View>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                  <TextInput
+                    style={{
+                      height: 40,
+                      paddingHorizontal: 14,
+                      borderColor: 'gray',
+                      borderWidth: 1,
+                      color: '#fff',
+                      width: '80%',
+                      borderRadius: 5,
+                    }}
+                    placeholderTextColor="gray"
+                    placeholder="Телефон"
+                    keyboardType="phone-pad"
+                    onChangeText={this.onInputPhone}
+                  />
+                  {!this.state.code && (
                     <Button
+                      onPress={this._verifyCode}
                       disabled={this.state.loadingVerify}
-                      onPress={this._verifyCodeStepTwo}
                       style={{
                         marginTop: 20,
                         width: '80%',
@@ -496,11 +469,44 @@ class ProfileScreen extends Component {
                       {this.state.loadingVerify ? (
                         <ActivityIndicator color="#fff" />
                       ) : (
-                        <Text style={{color: '#fff'}}>Подвердить</Text>
+                        <Text style={{color: '#fff'}}>Получить код</Text>
                       )}
                     </Button>
-                  </>
-                )}
+                  )}
+                  {this.state.code && (
+                    <>
+                      <TextInput
+                        style={{
+                          height: 40,
+                          paddingHorizontal: 14,
+                          borderColor: 'gray',
+                          borderWidth: 1,
+                          color: '#fff',
+                          width: '80%',
+                          borderRadius: 5,
+                          marginTop: 15,
+                        }}
+                        placeholder="Код"
+                        onChangeText={this.onInputCode}
+                      />
+                      <Button
+                        disabled={this.state.loadingVerify}
+                        onPress={this._verifyCodeStepTwo}
+                        style={{
+                          marginTop: 20,
+                          width: '80%',
+                          backgroundColor: '#34BD78',
+                          justifyContent: 'center',
+                        }}>
+                        {this.state.loadingVerify ? (
+                          <ActivityIndicator color="#fff" />
+                        ) : (
+                          <Text style={{color: '#fff'}}>Подвердить</Text>
+                        )}
+                      </Button>
+                    </>
+                  )}
+                </View>
               </View>
             </ScrollView>
           </ImageBackground>
