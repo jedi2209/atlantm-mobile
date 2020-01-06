@@ -90,7 +90,6 @@ const mapDispatchToProps = {
 
 // imports for auth
 import {
-  LoginButton,
   AccessToken,
   GraphRequest,
   GraphRequestManager,
@@ -98,11 +97,7 @@ import {
 
 import {LoginManager} from 'react-native-fbsdk';
 
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-  statusCodes,
-} from '@react-native-community/google-signin';
+import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 
 GoogleSignin.configure({
   scopes: ['https://www.googleapis.com/auth/userinfo.email'], // what API you want to access on behalf of the user, default is email and profile
@@ -218,28 +213,15 @@ class ProfileScreen extends Component {
       });
   }
 
-  _loginFacebook = (error, result) => {
-    if (error) {
-      console.log('Facebook login error', error);
-    } else if (result.isCancelled) {
-      console.log('Facebook login was cancelled');
-    } else {
-      AccessToken.getCurrentAccessToken().then(auth => {
-        this.fetchProfileFromFacebook(auth.accessToken).then(data => {
-          this._sendDataToApi({...data, networkName: 'fb'});
-        });
-      });
-    }
-  };
-
   async fetchProfileFromFacebook(token) {
+    console.log('token', token);
     return new Promise((resolve, reject) => {
       const request = new GraphRequest(
         '/me',
         {
           parameters: {
             fields: {
-              string: 'email,name,first_name,middle_name,last_name,screennames',
+              string: 'email,name,first_name,middle_name,last_name',
             },
             access_token: {
               string: token,
@@ -247,10 +229,12 @@ class ProfileScreen extends Component {
           },
         },
         (error, result) => {
+          console.log('result', result);
+          console.log('error', result);
           if (result) {
             const profile = result;
             profile.avatar = `https://graph.facebook.com/${result.id}/picture`;
-            console.log('profile >>>',profile);
+            console.log('profile >>>', profile);
             resolve(profile);
           } else {
             reject(error);
@@ -292,22 +276,51 @@ class ProfileScreen extends Component {
     }
   };
 
+  _signInFB = () => {
+    LoginManager.logInWithPermissions(['email']).then(
+      function(result) {
+        if (result.isCancelled) {
+          console.log('Login cancelled');
+        } else {
+          console.log(
+            'Login success with permissions: ' +
+              result.grantedPermissions.toString(),
+          );
+          console.log('>>> this.getFBToken()', this.getFBToken);
+          this.getFBToken();
+        }
+      }.bind(this),
+      function(error) {
+        console.log('Login fail with error: ' + error);
+      },
+    );
+  };
+
+  getFBToken = () => {
+    console.log('getFBToken!');
+    AccessToken.getCurrentAccessToken().then(auth => {
+      console.log('auth', auth);
+      this.fetchProfileFromFacebook(auth.accessToken).then(data => {
+        this._sendDataToApi({...data, networkName: 'fb'});
+      });
+    });
+  };
+
   _signInWithVK = async () => {
     const isLoggedIn = await VKLogin.isLoggedIn();
+
+    console.log('>>> isLoggedIn', isLoggedIn);
 
     if (!isLoggedIn) {
       try {
         const auth = await VKLogin.login(['friends', 'photos', 'email']);
         console.log(auth.access_token, auth);
-        // this.setState({vkLogin: true});
-        // this.setState({userInfo: auth});
         this._sendDataToApi({...auth, networkName: 'vk'});
       } catch (error) {
         console.log('error', error);
       }
     } else {
       await VKLogin.logout();
-      // this.setState({vkLogin: false});
     }
   };
 
@@ -367,7 +380,7 @@ class ProfileScreen extends Component {
                     marginTop: 40,
                     marginBottom: 20,
                   }}>
-                  <LoginButton
+                  {/* <LoginButton
                     readPermissions={['email']}
                     style={{
                       width: '80%',
@@ -378,34 +391,39 @@ class ProfileScreen extends Component {
                     onLogoutFinished={() => {
                       this.props.actionLogout();
                     }}
-                  />
-                  <GoogleSigninButton
+                  /> */}
+
+                  <Button
+                    onPress={this._signInFB}
+                    iconLeft
                     style={{
-                      width: '82%',
-                      height: 52,
+                      backgroundColor: '#4167B2',
+                      width: '80%',
                       marginVertical: 8,
-                      borderWidth: 0,
-                      marginTop: 12,
-                    }}
-                    size={GoogleSigninButton.Size.Wide}
-                    color={GoogleSigninButton.Color.Light}
+                      paddingHorizontal: 8,
+                      justifyContent: 'flex-start',
+                    }}>
+                    <Icon name="facebook" type="FontAwesome5" />
+                    <Text style={{color: '#fff', marginLeft: 20}}>
+                      Войти через Facebook
+                    </Text>
+                  </Button>
+                  <Button
                     onPress={this._signInWithGoogle}
                     disabled={this.state.isSigninInProgress}
-                  />
-                  {/* <Button
-                  iconLeft
-                  style={{
-                    backgroundColor: '#EB722E',
-                    width: '80%',
-                    marginVertical: 8,
-                    paddingHorizontal: 8,
-                    justifyContent: 'flex-start',
-                  }}>
-                  <Icon name="home" />
-                  <Text style={{color: '#fff', marginLeft: 8}}>
-                    Войти через Одноклассники
-                  </Text>
-                </Button> */}
+                    iconLeft
+                    style={{
+                      backgroundColor: '#4286F5',
+                      width: '80%',
+                      marginVertical: 8,
+                      paddingHorizontal: 8,
+                      justifyContent: 'flex-start',
+                    }}>
+                    <Icon name="google" type="FontAwesome5" />
+                    <Text style={{color: '#fff', marginLeft: 20}}>
+                      Войти через Google
+                    </Text>
+                  </Button>
                   <Button
                     onPress={this._signInWithVK}
                     iconLeft
@@ -417,7 +435,7 @@ class ProfileScreen extends Component {
                       justifyContent: 'flex-start',
                     }}>
                     <Icon name="vk" type="FontAwesome5" />
-                    <Text style={{color: '#fff', marginLeft: 8}}>
+                    <Text style={{color: '#fff', marginLeft: 20}}>
                       Войти через VK
                     </Text>
                   </Button>
