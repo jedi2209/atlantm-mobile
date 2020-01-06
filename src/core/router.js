@@ -20,6 +20,8 @@ import ReviewsFilterRatingScreen from '../eko/reviews/containers/ReviewsFilterRa
 import ReviewAddMessageStepScreen from '../eko/reviews/containers/ReviewAddMessageStepScreen';
 import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRatingStepScreen';
 
+import CallMeBackScreen from '../profile/containers/CallMeBackScreen';
+
 export const getRouter = initialRouteName => {
   return createStackNavigator(
     {
@@ -27,6 +29,7 @@ export const getRouter = initialRouteName => {
       BottomTabNavigation: {screen: BottomTabNavigation}, // это нижнее меню
       ChooseDealerScreen: {screen: ChooseDealerScreen}, // выбор диллера скрин
       ServiceScreen: {screen: ServiceScreen}, // заявка на СТО
+      CallMeBackScreen: {screen: CallMeBackScreen},
       IndicatorsScreen: {screen: IndicatorsScreen}, // индикаторы
       // хз что за экран он используется еще где-то?
       Tva2Screen: {
