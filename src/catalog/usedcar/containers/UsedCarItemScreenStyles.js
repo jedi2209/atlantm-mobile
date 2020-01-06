@@ -64,12 +64,13 @@ export default StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
     fontSize: 15,
-    color: styleConst.color.greyText,
+    color: styleConst.color.greyText5,
   },
   sectionValueText: {
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
     fontSize: 15,
+    color: styleConst.color.greyText6,
   },
   sectionTitleValue: {
     letterSpacing: styleConst.ui.letterSpacing,
@@ -161,6 +162,7 @@ export default StyleSheet.create({
   },
   mapCard: {},
   mapCardContainer: {
+    marginBottom: 14,
     marginHorizontal: 15,
     flexDirection: 'row',
     backgroundColor: '#fff',

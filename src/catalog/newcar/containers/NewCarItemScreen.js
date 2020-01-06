@@ -223,13 +223,13 @@ class NewCarItemScreen extends Component {
   renderItem = (title, value, postfix) => {
     return value ? (
       <Row key={`${title} ${value} ${postfix}`} style={styles.sectionRow}>
-        <Col style={styles.sectionProp}>
+        <View style={[styles.sectionProp, {flex: 1}]}>
           <Text style={styles.sectionPropText}>{title}</Text>
-        </Col>
-        <Col style={styles.sectionValue}>
+        </View>
+        <View style={[styles.sectionValue, {alignItems: 'flex-end'}]}>
           <Text style={styles.sectionValueText}>{`${value} ${postfix ||
             ''}`}</Text>
-        </Col>
+        </View>
       </Row>
     ) : null;
   };
@@ -474,7 +474,11 @@ class NewCarItemScreen extends Component {
               </TouchableWithoutFeedback>
             </View>
 
-            <View style={{borderTopWidth: 1, borderColor: '#d5d5e0'}}>
+            <View
+              style={{
+                borderBottomColor: '#d5d5e0',
+                borderBottomWidth: 1,
+              }}>
               <Accordion
                 dataArray={[
                   {
@@ -559,7 +563,7 @@ class NewCarItemScreen extends Component {
                       justifyContent: 'space-between',
                       alignItems: 'center',
                       backgroundColor: '#fff',
-                      borderBottomWidth: expanded ? 0 : 1,
+                      borderTopWidth: 1,
                       borderColor: '#d5d5e0',
                     }}>
                     <Text style={{fontSize: 18}}>{item.title}</Text>
@@ -585,8 +589,6 @@ class NewCarItemScreen extends Component {
                         height: 200,
                         backgroundColor: '#fff',
                         paddingHorizontal: 16,
-                        borderBottomWidth: 1,
-                        borderBottomColor: '#d5d5e0',
                       }}>
                       {item.content}
                     </View>

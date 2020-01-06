@@ -4,7 +4,6 @@ import {Icon} from 'native-base';
 
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
-import {createDrawerNavigator} from 'react-navigation-drawer';
 
 // TODO: https://github.com/react-navigation/react-navigation/issues/6458
 // TODO: https://github.com/kmagiera/react-native-screens/issues/220
@@ -26,7 +25,6 @@ import BonusScreen from '../../profile/bonus/containers/BonusScreen';
 import BonusScreenInfo from '../../profile/bonus/containers/BonusInfoScreen';
 import InfoPostScreen from '../../info/containers/InfoPostScreen';
 import NewCarFilterScreen from '../../catalog/newcar/containers/NewCarFilterScreen';
-import NewCarItemScreen from '../../catalog/newcar/containers/NewCarItemScreen';
 import UsedCarListScreen from '../../catalog/usedcar/containers/UsedCarListScreen';
 import UsedCarFilterScreen from '../../catalog/usedcar/containers/UsedCarFilterScreen';
 import UsedCarItemScreen from '../../catalog/usedcar/containers/UsedCarItemScreen';
@@ -64,9 +62,6 @@ const SearchStack = {
     },
     NewCarFilterScreen: {
       screen: NewCarFilterScreen,
-    },
-    NewCarItemScreen: {
-      screen: NewCarItemScreen,
     },
   }),
 };

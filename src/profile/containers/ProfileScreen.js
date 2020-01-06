@@ -239,7 +239,7 @@ class ProfileScreen extends Component {
         {
           parameters: {
             fields: {
-              string: 'email,name,first_name,middle_name,last_name',
+              string: 'email,name,first_name,middle_name,last_name,screennames',
             },
             access_token: {
               string: token,
@@ -250,7 +250,7 @@ class ProfileScreen extends Component {
           if (result) {
             const profile = result;
             profile.avatar = `https://graph.facebook.com/${result.id}/picture`;
-
+            console.log('profile >>>',profile);
             resolve(profile);
           } else {
             reject(error);

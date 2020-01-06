@@ -5,9 +5,9 @@ import isIPhoneX from '@utils/is_iphone_x';
 
 export default StyleSheet.create({
   footer: {
-    // height: isIPhoneX()
-    //   ? styleConst.ui.footerHeightIphone
-    //   : styleConst.ui.footerHeightAndroid,
+    height: isIPhoneX()
+      ? styleConst.ui.footerHeightIphone
+      : styleConst.ui.footerHeightAndroid,
     // flexDirection: 'row',
     // flex: 1,
     // justifyContent: 'center',
@@ -17,6 +17,7 @@ export default StyleSheet.create({
     // bottom: 0,
     // marginBottom: 0,
     backgroundColor: styleConst.color.bg,
+    borderTopWidth: 0,
   },
   footerFilters: {
     //paddingBottom: isIPhoneX() ? 10 : 0,
