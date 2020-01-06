@@ -1,5 +1,4 @@
 import {createStackNavigator} from 'react-navigation-stack';
-import {createDrawerNavigator} from 'react-navigation-drawer';
 
 // global
 import IntroScreen from '../intro/containers/IntroScreen';
@@ -21,10 +20,12 @@ import ReviewAddMessageStepScreen from '../eko/reviews/containers/ReviewAddMessa
 import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRatingStepScreen';
 
 import CallMeBackScreen from '../profile/containers/CallMeBackScreen';
+import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
 
 export const getRouter = initialRouteName => {
   return createStackNavigator(
     {
+      NewCarItemScreen: {screen: NewCarItemScreen},
       IntroScreen: {screen: IntroScreen}, // этоо скрин с кнопкой выберите автосервис
       BottomTabNavigation: {screen: BottomTabNavigation}, // это нижнее меню
       ChooseDealerScreen: {screen: ChooseDealerScreen}, // выбор диллера скрин
