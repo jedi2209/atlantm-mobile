@@ -9,22 +9,45 @@ import {TextInput} from '../../core/components/TextInput';
 import {actionSaveProfileByUser} from '../actions';
 
 class ProfileSettingsScreen extends Component {
-  state = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    car: '',
-    carNumber: '',
-  };
+  constructor(props) {
+    super(props);
+    const car = this.props.profile.cars
+      ? this.props.profile.cars.filter(value => {
+          if (value.owner) {
+            return value;
+          }
+        })
+      : [{number: '', brand: '', model: ''}];
+
+    this.state = {
+      firstName: this.props.profile.first_name || '',
+      lastName: this.props.profile.last_name || '',
+      email: this.props.profile.email || '',
+      phone: this.props.profile.phone || '',
+      car: `${car[0].brand} ${car[0].model}`,
+      carNumber: car[0].number,
+    };
+  }
 
   onPressSave = () => {
-    console.log('>>> this.state', this.state);
+    const {id, token, avatar, name} = this.props.profile;
 
-    console.log(this.props.profile);
-    // this.props.actionSaveProfileByUser().then(data => {
-    //   console.log(data);
-    // });
+    this.props
+      .actionSaveProfileByUser({
+        id,
+        token,
+        email: this.state.email,
+        last_name: this.state.lastName,
+        first_name: this.state.firstName,
+        phone: this.state.phone,
+        avatar,
+        name,
+        carNumber: this.state.carNumber,
+        car: this.state.car,
+      })
+      .then(data => {
+        console.log(data);
+      });
   };
 
   onChangeProfileField = fieldName => value => {
@@ -104,6 +127,7 @@ class ProfileSettingsScreen extends Component {
 }
 
 const mapStateToProps = ({profile}) => {
+  console.log('profile >>>>>>>', profile.login);
   return {
     profile: profile.login,
   };

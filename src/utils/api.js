@@ -557,17 +557,17 @@ export default {
   saveProfile(profile) {
     const {id, email, phone, last_name, first_name} = profile;
 
-    const body = [
-      `socialData[EMAIL]=${email}`,
-      `socialData[NAME]=${first_name}`,
-      `socialData[SURNAME]=${last_name}`,
-      `socialData[PHONE]=${phone}`,
-    ].join('&');
+    const body = {
+      email: [{
+        type: 'home',
+        value: email,
+      }]
+    }
 
     const requestParams = _.merge({}, baseRequestParams, {
-      method: 'post',
+      method: 'PATCH',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
       },
       body,
     });
