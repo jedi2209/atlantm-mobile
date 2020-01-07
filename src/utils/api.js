@@ -101,7 +101,10 @@ export default {
   },
 
   fetchBonus({token, userid}) {
-    return this.request(`/lkk/bonus/list/?userid=${userid}&token=${token}`, baseRequestParams);
+    return this.request(
+      `/lkk/bonus/list/?userid=${userid}&token=${token}`,
+      baseRequestParams,
+    );
   },
 
   fetchBonusInfo({region}) {
@@ -109,7 +112,10 @@ export default {
   },
 
   fetchDiscounts({token, userid}) {
-    return this.request(`/lkk/actions/list/?userid=${userid}&token=${token}`, baseRequestParams);
+    return this.request(
+      `/lkk/actions/list/?userid=${userid}&token=${token}`,
+      baseRequestParams,
+    );
   },
 
   // TODO: проверить, продолжает ли падать на пустом ответе
@@ -409,7 +415,10 @@ export default {
 
   fetchCars({token, userid}) {
     console.log('token =================>', token);
-    return this.request(`/lkk/cars/?userid=${userid}&token=${token}`, baseRequestParams);
+    return this.request(
+      `/lkk/cars/?userid=${userid}&token=${token}`,
+      baseRequestParams,
+    );
   },
 
   loginRequest({login, password}) {
@@ -539,6 +548,34 @@ export default {
     return this.request('/lkk/auth/validate/', requestParams)
       .then(data => {
         return {status: 'success', error: {}, data};
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
+  },
+
+  saveProfile(profile) {
+    const {id, email, phone, last_name, first_name} = profile;
+
+    const body = [
+      `socialData[EMAIL]=${email}`,
+      `socialData[NAME]=${first_name}`,
+      `socialData[SURNAME]=${last_name}`,
+      `socialData[PHONE]=${phone}`,
+    ].join('&');
+
+    const requestParams = _.merge({}, baseRequestParams, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body,
+    });
+
+    return this.request(`/lkk/user/${id}/`, requestParams)
+      .then(data => {
+        console.log('>>> save profile data api:::', data);
+        return {status: 'success', error: {}, profile, data};
       })
       .catch(err => {
         console.log('error', err);
