@@ -7,11 +7,10 @@ import {
   View,
   Alert,
   Text,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
-  TextInput,
+  // TextInput,
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
@@ -32,6 +31,9 @@ import ProfileForm from '../../profile/components/ProfileForm';
 import ListItemHeader from '../../profile/components/ListItemHeader';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
+
+import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
+import {TextInput} from '../../core/components/TextInput';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
@@ -54,6 +56,48 @@ const styles = StyleSheet.create({
   },
   serviceForm: {
     marginTop: $size,
+  },
+  // Скопировано из ProfileSettingsScreen.
+  container: {
+    flex: 1,
+    paddingVertical: 20,
+    paddingHorizontal: 14,
+    backgroundColor: '#fff',
+  },
+  header: {
+    marginBottom: 36,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  field: {
+    marginBottom: 18,
+  },
+  group: {
+    marginBottom: 36,
+  },
+  textinput: {
+    height: 40,
+    borderColor: '#d8d8d8',
+    borderBottomWidth: 1,
+    color: '#222b45',
+    fontSize: 18,
+  },
+  button: {
+    justifyContent: 'center',
+    shadowColor: '#0f66b2',
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+  },
+  buttonText: {
+    color: '#fff',
+    textTransform: 'uppercase',
+    fontSize: 16,
   },
 });
 
@@ -84,45 +128,26 @@ const {width: screenWidth} = Dimensions.get('window');
 
 const datePickerStyles = {
   dateTouchBody: {
-    width: screenWidth - 48,
+    width: screenWidth - 28,
     height: 40,
-    // paddingHorizontal: 14,
-    borderColor: '#D8D8D8',
-    borderTopWidth: 0,
-    borderRightWidth: 0,
-    borderLeftWidth: 0,
-    borderBottomWidth: 2,
-    color: '#222B45',
-    borderRadius: 0,
+    borderColor: '#d8d8d8',
+    borderBottomWidth: 1,
+    color: '#222b45',
   },
   dateInput: {
-    paddingLeft: 14,
-    // borderColor: 'red',
     borderWidth: 0,
-    // borderStyle: 'solid',
-    height: 40,
     alignItems: 'flex-start',
   },
   placeholderText: {
-    alignSelf: 'flex-start',
     fontSize: 18,
-    color: '#D8D8D8',
+    color: '#d8d8d8',
   },
   dateText: {
     fontSize: 18,
-    color: '#222B45',
+    color: '#222b45',
   },
   datePicker: {
     borderTopColor: 0,
-  },
-  dateIcon: {
-    width: 0,
-  },
-  btnCancel: {
-    padding: 10,
-  },
-  btnConfirm: {
-    padding: 10,
   },
 };
 
@@ -270,312 +295,123 @@ class ServiceScreen extends Component {
     console.log('== Service ==');
 
     return (
-      <KeyboardAvoidingView behavior="position">
+      <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView>
-            <View
-              style={{
-                // justifyContent: 'center',
-                // alignItems: 'center',
-                display: 'flex',
-                marginTop: 20,
-                marginBottom: 20,
-                width: '80%',
-                paddingHorizontal: 14,
-              }}>
-              <Text style={{fontSize: 30, fontWeight: 'bold'}}>
-                Заявка на СТО
-              </Text>
-            </View>
-            <View
-              style={{
-                marginVertical: 10,
-                borderColor: 'red',
-                borderWidth: 0,
-                borderStyle: 'solid',
-                width: '80%',
-                marginLeft: 5,
-              }}>
-              <DealerItemList
-                navigation={navigation}
-                city={dealerSelected.city}
-                name={dealerSelected.name}
-                brands={dealerSelected.brands}
-                goBack={true}
-              />
-            </View>
-            <View
-              style={{
-                display: 'flex',
-                // justifyContent: 'center',
-                // alignItems: 'center',
-              }}>
-              <View
-                style={{
-                  marginTop: 10,
-                  marginBottom: 20,
-                  width: '100%',
-                  flexDirection: 'row',
-                  // justifyContent: 'center',
-                  // alignItems: 'center',
-                }}
-              />
-            </View>
-            {!this.state.success ? (
-              <View
-                style={{
-                  width: '100%',
-                  paddingLeft: 14,
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}>
-                <DatePicker
-                  style={styles.datePicker}
-                  showIcon={false}
-                  date={date.formatted}
-                  mode="date"
-                  minDate={new Date()}
-                  placeholder="Выберите дату"
-                  format="DD MMMM YYYY"
-                  confirmBtnText="Выбрать"
-                  cancelBtnText="Отмена"
-                  customStyles={datePickerStyles}
-                  onDateChange={this.onChangeDate}
-                />
-                <TextInput
-                  style={{
-                    height: 40,
-                    paddingHorizontal: 14,
-                    borderColor: '#D8D8D8',
-                    borderTopWidth: 0,
-                    borderRightWidth: 0,
-                    borderLeftWidth: 0,
-                    borderBottomWidth: 2,
-                    color: '#222B45',
-                    width: '90%',
-                    borderRadius: 0,
-                    fontSize: 18,
-                    marginTop: 18,
-                  }}
-                  value={name}
-                  placeholder="Имя"
-                  onChangeText={this.onInputName}
-                />
+          <ScrollView contentContainerStyle={{flex: 1}}>
+            <View style={styles.container}>
+              <View style={styles.header}>
+                <Text style={styles.heading}>Заявка на СТО</Text>
+              </View>
+              {this.state.success ? (
+                <View style={{flex: 1, justifyContent: 'center'}}>
+                  <View style={styles.group}>
+                    <Text
+                      style={{
+                        fontSize: 22,
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                      }}>
+                      Заявка успешно отправлена
+                    </Text>
+                  </View>
+                  <View>
+                    <Button
+                      onPress={() =>
+                        this.props.navigation.navigate('BottomTabNavigation')
+                      }
+                      style={styles.button}>
+                      <Text style={styles.buttonText}>Назад</Text>
+                    </Button>
+                  </View>
+                </View>
+              ) : (
                 <>
-                  <TextInput
-                    style={{
-                      height: 40,
-                      paddingHorizontal: 14,
-                      borderColor: '#D8D8D8',
-                      borderTopWidth: 0,
-                      borderRightWidth: 0,
-                      borderLeftWidth: 0,
-                      borderBottomWidth: 2,
-                      color: '#222B45',
-                      width: '90%',
-                      borderRadius: 0,
-                      marginTop: 18,
-                      fontSize: 18,
-                    }}
-                    value={phone}
-                    placeholder="Телефон"
-                    keyboardType="phone-pad"
-                    onChangeText={this.onInputPhone}
-                  />
-                  <TextInput
-                    style={{
-                      height: 40,
-                      paddingHorizontal: 14,
-                      borderColor: '#D8D8D8',
-                      borderTopWidth: 0,
-                      borderRightWidth: 0,
-                      borderLeftWidth: 0,
-                      borderBottomWidth: 2,
-                      color: '#222B45',
-                      width: '90%',
-                      borderRadius: 0,
-                      marginTop: 18,
-                      fontSize: 18,
-                    }}
-                    value={phone}
-                    placeholder="Email"
-                    onChangeText={this.onInputEmail}
-                  />
-                  <TextInput
-                    style={{
-                      height: 40,
-                      paddingHorizontal: 14,
-                      borderColor: '#D8D8D8',
-                      borderTopWidth: 0,
-                      borderRightWidth: 0,
-                      borderLeftWidth: 0,
-                      borderBottomWidth: 2,
-                      color: '#222B45',
-                      width: '90%',
-                      borderRadius: 0,
-                      marginTop: 18,
-                      fontSize: 18,
-                    }}
-                    value={phone}
-                    placeholder="Авто"
-                    onChangeText={this.onInputAuto}
-                  />
-                  <TextInput
-                    style={{
-                      height: 40,
-                      paddingHorizontal: 14,
-                      borderColor: '#D8D8D8',
-                      borderTopWidth: 0,
-                      borderRightWidth: 0,
-                      borderLeftWidth: 0,
-                      borderBottomWidth: 2,
-                      color: '#222B45',
-                      width: '90%',
-                      borderRadius: 0,
-                      marginTop: 18,
-                      fontSize: 18,
-                    }}
-                    value={phone}
-                    placeholder="Гос. номер"
-                    onChangeText={this.onInputNumber}
-                  />
-                  <Button
-                    onPress={this.onPressOrder}
-                    disabled={this.state.loading}
-                    style={{
-                      marginTop: 40,
-                      width: '90%',
-                      // backgroundColor: '#34BD78',
-                      justifyContent: 'center',
-                      paddingVertical: 16,
-                      paddingHorizontal: 40,
-                      shadowColor: '#0F66B2',
-                      shadowOpacity: 0.5,
-                      shadowRadius: 8,
-                      shadowOffset: {
-                        width: 0,
-                        height: 2,
-                      },
-                    }}>
-                    {this.state.loading ? (
-                      <ActivityIndicator color="#fff" />
-                    ) : (
-                      <Text
-                        style={{
-                          color: '#fff',
-                          textTransform: 'uppercase',
-                          fontWeight: 'bold',
-                        }}>
-                        Отправить
-                      </Text>
-                    )}
-                  </Button>
+                  <View
+                    // Визуально выравниваем относительно остальных компонентов.
+                    style={[styles.group, {marginLeft: -14, marginRight: -14}]}>
+                    <DealerItemList
+                      goBack
+                      navigation={navigation}
+                      city={dealerSelected.city}
+                      name={dealerSelected.name}
+                      brands={dealerSelected.brands}
+                    />
+                  </View>
+                  <View style={styles.group}>
+                    <DatePicker
+                      showIcon={false}
+                      mode="date"
+                      minDate={new Date()}
+                      placeholder="Выберите дату"
+                      format="DD MMMM YYYY"
+                      confirmBtnText="Выбрать"
+                      cancelBtnText="Отмена"
+                      customStyles={datePickerStyles}
+                      // date={date.formatted}
+                      // onDateChange={this.onChangeDate}
+                    />
+                  </View>
+                  <View style={styles.group}>
+                    <View style={styles.field}>
+                      <TextInput
+                        style={styles.textinput}
+                        label="Имя"
+                        // value={name}
+                        // onChangeText={this.onInputName}
+                      />
+                    </View>
+                    <View style={styles.field}>
+                      <TextInput
+                        style={styles.textinput}
+                        label="Телефон"
+                        keyboardType="phone-pad"
+                        // value={phone}
+                        // onChangeText={this.onInputPhone}
+                      />
+                    </View>
+                    <View style={styles.field}>
+                      <TextInput
+                        style={styles.textinput}
+                        label="Email"
+                        keyboardType="email-address"
+                        // value={email}
+                        // onChangeText={this.onInputEmail}
+                      />
+                    </View>
+                  </View>
+                  <View style={styles.group}>
+                    <View style={styles.field}>
+                      <TextInput
+                        style={styles.textinput}
+                        label="Авто"
+                        // value={car}
+                        // onChangeText={this.onInputAuto}
+                      />
+                    </View>
+                    <View style={styles.field}>
+                      <TextInput
+                        style={styles.textinput}
+                        label="Гос. номер"
+                        // value={car}
+                        // onChangeText={this.onInputAuto}
+                      />
+                    </View>
+                  </View>
+                  <View style={styles.group}>
+                    <Button onPress={this.onPressSave} style={styles.button}>
+                      {this.state.loading ? (
+                        <ActivityIndicator color="#fff" />
+                      ) : (
+                        <Text style={styles.buttonText}>Отправить</Text>
+                      )}
+                    </Button>
+                  </View>
                 </>
-              </View>
-            ) : (
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Text
-                  style={{
-                    fontSize: 22,
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                  }}>
-                  Заявка успешно отправлена
-                </Text>
-                <Button
-                  onPress={() =>
-                    this.props.navigation.navigate('BottomTabNavigation')
-                  }
-                  style={{
-                    marginTop: 40,
-                    width: '90%',
-                    justifyContent: 'center',
-                    paddingVertical: 16,
-                    paddingHorizontal: 40,
-                    shadowColor: '#0F66B2',
-                    shadowOpacity: 0.5,
-                    shadowRadius: 8,
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                  }}>
-                  <Text style={{color: '#fff'}}>Назад</Text>
-                </Button>
-              </View>
-            )}
+              )}
+            </View>
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    );
-    return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <View
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginTop: '20%',
-              justifyContent: 'center',
-              width: '90%',
-            }}>
-            <Text
-              style={{
-                fontSize: 30,
-                fontWeight: 'bold',
-                textAlign: 'center',
-                color: 'red',
-              }}>
-              Заявка на СТО
-            </Text>
-          </View>
-          <View>
-            <List style={styles.list}>
-              <Spinner
-                visible={isOrderServiceRequest}
-                color={styleConst.color.blue}
-              />
-
-              <ListItemHeader text="МОЙ АВТОЦЕНТР" />
-
-              <DealerItemList
-                navigation={navigation}
-                city={dealerSelected.city}
-                name={dealerSelected.name}
-                brands={dealerSelected.brands}
-                goBack={true}
-              />
-
-              <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
-
-              <ProfileForm
-                name={name}
-                phone={phone}
-                email={email}
-                nameFill={nameFill}
-                phoneFill={phoneFill}
-                emailFill={emailFill}
-              />
-
-              <View style={styles.serviceForm}>
-                <ServiceForm
-                  car={car}
-                  date={date}
-                  carFill={carFill}
-                  dateFill={dateFill}
-                />
-              </View>
-            </List>
-          </View>
-          <FooterButton text="Отправить" onPressButton={this.onPressOrder} />
-        </SafeAreaView>
-      </StyleProvider>
     );
   }
 }
