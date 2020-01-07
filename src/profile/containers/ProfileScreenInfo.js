@@ -340,9 +340,18 @@ class ProfileScreenInfo extends Component {
           full
           onPress={() => {
             this.props.actionLogout();
-            this.props.navigation.navigate('ProfileScreen');
+            this.props.navigation.navigate('ProfileSettingsScreen');
           }}
           style={[styles.buttonPrimary, {marginTop: 40}]}>
+          <Text style={styles.buttonPrimaryText}>Редактировать данные</Text>
+        </Button>
+        <Button
+          full
+          onPress={() => {
+            this.props.actionLogout();
+            this.props.navigation.navigate('ProfileScreen');
+          }}
+          style={styles.buttonPrimary}>
           <Text style={styles.buttonPrimaryText}>Выйти</Text>
         </Button>
       </ScrollView>
