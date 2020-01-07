@@ -6,6 +6,8 @@ import {connect} from 'react-redux';
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
 
+import {actionSaveProfileByUser} from '../actions';
+
 class ProfileSettingsScreen extends Component {
   state = {
     firstName: '',
@@ -18,6 +20,11 @@ class ProfileSettingsScreen extends Component {
 
   onPressSave = () => {
     console.log('>>> this.state', this.state);
+
+    console.log(this.props.profile);
+    // this.props.actionSaveProfileByUser().then(data => {
+    //   console.log(data);
+    // });
   };
 
   onChangeProfileField = fieldName => value => {
@@ -96,11 +103,15 @@ class ProfileSettingsScreen extends Component {
   }
 }
 
-const mapStateToProps = () => {
-  return {};
+const mapStateToProps = ({profile}) => {
+  return {
+    profile: profile.login,
+  };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  actionSaveProfileByUser,
+};
 
 export default connect(
   mapStateToProps,

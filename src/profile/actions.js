@@ -699,3 +699,32 @@ export const actionSavePofile = props => {
       });
   };
 };
+
+export const actionSaveProfileByUser = props => {
+  return dispatch => {
+    dispatch({
+      type: SAVE_PROFILE__REQUEST,
+      payload: props,
+    });
+
+    return API.saveProfile(props)
+      .then(async data => {
+        const profile = data.profile;
+
+        dispatch({
+          type: SAVE_PROFILE__UPDATE,
+          payload: {
+            ...profile,
+          },
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: SAVE_PROFILE__FAIL,
+          payload: {
+            message: error,
+          },
+        });
+      });
+  };
+};
