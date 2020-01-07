@@ -9,7 +9,7 @@ import {
   Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Container, Text, StyleProvider, Icon} from 'native-base';
+import {Container, Text, StyleProvider} from 'native-base';
 import {Offer} from '../../core/components/Offer';
 
 const deviceWidth = Dimensions.get('window').width;

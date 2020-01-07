@@ -279,7 +279,9 @@ class CallMeBackScreen extends React.Component {
                   Заявка успешно отправлена
                 </Text>
                 <Button
-                  onPress={() => this.props.navigation.navigate('Home')}
+                  onPress={() =>
+                    this.props.navigation.navigate('BottomTabNavigation')
+                  }
                   style={{
                     marginTop: 40,
                     width: '90%',
