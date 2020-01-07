@@ -339,7 +339,6 @@ class ProfileScreenInfo extends Component {
         <Button
           full
           onPress={() => {
-            this.props.actionLogout();
             this.props.navigation.navigate('ProfileSettingsScreen');
           }}
           style={[styles.buttonPrimary, {marginTop: 40}]}>

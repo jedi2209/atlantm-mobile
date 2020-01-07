@@ -155,11 +155,29 @@ class ServiceScreen extends Component {
   constructor(props) {
     super(props);
 
-    const {last_name, first_name, phone} = this.props.profile.login;
+    const {
+      last_name,
+      first_name,
+      phone,
+      cars,
+      email,
+    } = this.props.profile.login;
+    const car = cars
+      ? cars.filter(value => {
+          if (value.owner) {
+            return value;
+          }
+        })
+      : [{number: '', brand: '', model: ''}];
 
     this.state = {
-      name: last_name && first_name ? `${first_name} ${last_name}` : '',
+      firstName: first_name || '',
+      lastName: last_name || '',
+      email: email || '',
       phone: phone || '',
+      car: `${car[0].brand} ${car[0].model}`,
+      carNumber: car[0].number,
+      name: last_name && first_name ? `${first_name} ${last_name}` : '',
       loading: false,
       success: false,
     };
@@ -356,7 +374,7 @@ class ServiceScreen extends Component {
                       <TextInput
                         style={styles.textinput}
                         label="Имя"
-                        // value={name}
+                        value={this.state.name}
                         // onChangeText={this.onInputName}
                       />
                     </View>
@@ -365,7 +383,7 @@ class ServiceScreen extends Component {
                         style={styles.textinput}
                         label="Телефон"
                         keyboardType="phone-pad"
-                        // value={phone}
+                        value={this.state.phone}
                         // onChangeText={this.onInputPhone}
                       />
                     </View>
@@ -374,7 +392,7 @@ class ServiceScreen extends Component {
                         style={styles.textinput}
                         label="Email"
                         keyboardType="email-address"
-                        // value={email}
+                        value={this.state.email}
                         // onChangeText={this.onInputEmail}
                       />
                     </View>
@@ -384,7 +402,7 @@ class ServiceScreen extends Component {
                       <TextInput
                         style={styles.textinput}
                         label="Авто"
-                        // value={car}
+                        value={this.state.car}
                         // onChangeText={this.onInputAuto}
                       />
                     </View>
@@ -392,7 +410,7 @@ class ServiceScreen extends Component {
                       <TextInput
                         style={styles.textinput}
                         label="Гос. номер"
-                        // value={car}
+                        value={this.state.carNumber}
                         // onChangeText={this.onInputAuto}
                       />
                     </View>
