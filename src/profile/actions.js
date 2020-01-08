@@ -146,7 +146,6 @@ export const actionLogout = () => {
 };
 
 async function getProfileData({token, userid}) {
-  console.log('====> token, userid', token, userid);
   // 1. Получаем автомобили пользователя
   let cars = [];
   const carsResponse = await API.fetchCars({token, userid});
@@ -646,7 +645,6 @@ export const actionSavePofile = props => {
 
     return API.loginWith(props)
       .then(async data => {
-        //try {
         const {status, error, profile} = data;
 
         if (status !== 'success') {
@@ -659,14 +657,36 @@ export const actionSavePofile = props => {
           });
         }
 
-        // get id and token
-        const user = data.data.data.user; // мб еще .SAP нужно тут
-        console.log('user.SAP', data.data.data.user);
-        const token = user.SAP
-          ? user.SAP.TOKEN
-          : 'f7c27e35610137909a092be12fc1e2b1'; // user.TOKEN,
-        const id = user.SAP ? user.SAP.ID : '62513365'; //user.ID;
-        console.log('data in return API.loginWith(props)', user);
+        // get id and token and info
+        const user = data.data.data.user;
+        const {NAME, LAST_NAME, EMAIL, PHONE, SAP, ID} = user;
+        const userInfo = {
+          first_name: NAME,
+          last_name: LAST_NAME,
+          email: EMAIL,
+          phone: PHONE,
+        };
+
+        const email =
+          userInfo.email.length > 0
+            ? {
+                id: userInfo.email[0].ID,
+                type: userInfo.email[0].VALUE_TYPE,
+                value: userInfo.email[0].VALUE,
+              }
+            : {};
+
+        const phone =
+          userInfo.phone.length > 0
+            ? {
+                id: userInfo.phone[0].ID,
+                type: userInfo.phone[0].VALUE_TYPE,
+                value: userInfo.phone[0].VALUE,
+              }
+            : {};
+
+        const token = SAP ? SAP.TOKEN : ''; // user.TOKEN,
+        const id = SAP ? SAP.ID : ''; //user.ID;
 
         const {cars, bonus, discounts} = await getProfileData({
           token: token,
@@ -679,15 +699,15 @@ export const actionSavePofile = props => {
             cars,
             bonus,
             discounts,
-            ...profile,
+            first_name: userInfo.first_name,
+            last_name: userInfo.last_name,
+            email,
+            phone,
             id,
             token,
+            crm_id: ID,
           },
         });
-        //}
-        // catch (err) {
-        //   dispatch({type: SAVE_PROFILE__FAIL});
-        // }
       })
       .catch(error => {
         dispatch({
@@ -717,6 +737,8 @@ export const actionSaveProfileByUser = props => {
             ...profile,
           },
         });
+
+        return props;
       })
       .catch(error => {
         dispatch({
