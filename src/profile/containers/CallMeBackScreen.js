@@ -46,7 +46,7 @@ class CallMeBackScreen extends React.Component {
 
     this.state = {
       name: last_name && first_name ? `${first_name} ${last_name}` : '',
-      phone: phone || '',
+      phone: phone ? phone.value : '',
       loading: false,
       success: false,
     };

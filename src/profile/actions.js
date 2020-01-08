@@ -617,18 +617,24 @@ export const actionSavePofileWithPhone = props => {
 };
 
 export const actionSavePofile = props => {
-  if (props.token) {
+  if (props.SAP && props.SAP.TOKEN) {
+    const {SAP} = props;
+    const token = SAP ? SAP.TOKEN : ''; // user.TOKEN,
+    const id = SAP ? SAP.ID : ''; //user.ID;
+    const userInfo = profileDataAdapter(props);
+
     return async dispatch => {
       const {cars, bonus, discounts} = await getProfileData({
-        token: props.token,
-        userid: props.id,
+        token: token,
+        userid: id,
       });
 
       dispatch({
         type: SAVE_PROFILE__UPDATE,
         payload: {
-          token: props.token,
-          ...props,
+          id,
+          token,
+          ...userInfo,
           cars,
           bonus,
           discounts,
@@ -636,6 +642,9 @@ export const actionSavePofile = props => {
       });
     };
   }
+
+  console.log('>>>>>> props', props);
+
 
   return dispatch => {
     dispatch({
@@ -645,7 +654,8 @@ export const actionSavePofile = props => {
 
     return API.loginWith(props)
       .then(async data => {
-        const {status, error, profile} = data;
+        console.log('ya tyt');
+        const {status, error} = data;
 
         if (status !== 'success') {
           dispatch({
@@ -657,36 +667,12 @@ export const actionSavePofile = props => {
           });
         }
 
-        // get id and token and info
         const user = data.data.data.user;
-        const {NAME, LAST_NAME, EMAIL, PHONE, SAP, ID} = user;
-        const userInfo = {
-          first_name: NAME,
-          last_name: LAST_NAME,
-          email: EMAIL,
-          phone: PHONE,
-        };
 
-        const email =
-          userInfo.email.length > 0
-            ? {
-                id: userInfo.email[0].ID,
-                type: userInfo.email[0].VALUE_TYPE,
-                value: userInfo.email[0].VALUE,
-              }
-            : {};
-
-        const phone =
-          userInfo.phone.length > 0
-            ? {
-                id: userInfo.phone[0].ID,
-                type: userInfo.phone[0].VALUE_TYPE,
-                value: userInfo.phone[0].VALUE,
-              }
-            : {};
-
+        const {SAP} = user;
         const token = SAP ? SAP.TOKEN : ''; // user.TOKEN,
         const id = SAP ? SAP.ID : ''; //user.ID;
+        const userInfo = profileDataAdapter(user);
 
         const {cars, bonus, discounts} = await getProfileData({
           token: token,
@@ -699,13 +685,9 @@ export const actionSavePofile = props => {
             cars,
             bonus,
             discounts,
-            first_name: userInfo.first_name,
-            last_name: userInfo.last_name,
-            email,
-            phone,
+            ...userInfo,
             id,
             token,
-            crm_id: ID,
           },
         });
       })
@@ -750,3 +732,39 @@ export const actionSaveProfileByUser = props => {
       });
   };
 };
+
+function profileDataAdapter(user) {
+  const {NAME, LAST_NAME, EMAIL, PHONE, ID} = user;
+  const userInfo = {
+    first_name: NAME,
+    last_name: LAST_NAME,
+    email: EMAIL,
+    phone: PHONE,
+  };
+
+  const email =
+    userInfo.email.length > 0
+      ? {
+          id: userInfo.email[0].ID,
+          type: userInfo.email[0].VALUE_TYPE,
+          value: userInfo.email[0].VALUE,
+        }
+      : {};
+
+  const phone =
+    userInfo.phone.length > 0
+      ? {
+          id: userInfo.phone[0].ID,
+          type: userInfo.phone[0].VALUE_TYPE,
+          value: userInfo.phone[0].VALUE,
+        }
+      : {};
+
+  return {
+    first_name: userInfo.first_name,
+    last_name: userInfo.last_name,
+    email,
+    phone,
+    crm_id: ID,
+  };
+}

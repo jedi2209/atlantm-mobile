@@ -186,12 +186,7 @@ class ProfileScreen extends Component {
       .actionSavePofileWithPhone({phone, code})
       .then(data => {
         Keyboard.dismiss();
-        return this.props.actionSavePofile({
-          first_name: data.NAME,
-          last_name: data.LAST_NAME,
-          token: data.SAP.TOKEN,
-          id: data.SAP.ID,
-        });
+        return this.props.actionSavePofile(data);
       })
       .then(() => {
         this.setState({loading: false});
@@ -200,6 +195,7 @@ class ProfileScreen extends Component {
   };
 
   _sendDataToApi(profile) {
+    console.log('>>> profile', profile);
     this.setState({loading: true});
     this.props
       .actionSavePofile(profile)
@@ -214,7 +210,6 @@ class ProfileScreen extends Component {
   }
 
   async fetchProfileFromFacebook(token) {
-    console.log('token', token);
     return new Promise((resolve, reject) => {
       const request = new GraphRequest(
         '/me',

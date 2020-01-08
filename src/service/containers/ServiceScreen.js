@@ -173,8 +173,8 @@ class ServiceScreen extends Component {
     this.state = {
       firstName: first_name || '',
       lastName: last_name || '',
-      email: email || '',
-      phone: phone || '',
+      email: email ? phone.value : '',
+      phone: phone ? phone.value : '',
       car: `${car[0].brand} ${car[0].model}`,
       carNumber: car[0].number,
       name: last_name && first_name ? `${first_name} ${last_name}` : '',
@@ -315,7 +315,7 @@ class ServiceScreen extends Component {
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView contentContainerStyle={{flex: 1}}>
+          <ScrollView>
             <View style={styles.container}>
               <View style={styles.header}>
                 <Text style={styles.heading}>Заявка на СТО</Text>
