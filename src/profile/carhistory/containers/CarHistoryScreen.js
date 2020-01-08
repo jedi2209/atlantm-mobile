@@ -407,7 +407,7 @@ class CarHistoryScreen extends Component {
 
     return (
       <ScrollView>
-        <View>
+        <View style={{backgroundColor: '#fff'}}>
           {/* <Text
             style={{
               fontSize: 35,
