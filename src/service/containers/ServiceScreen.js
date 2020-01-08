@@ -162,22 +162,16 @@ class ServiceScreen extends Component {
       cars,
       email,
     } = this.props.profile.login;
-    const car = cars
-      ? cars.filter(value => {
-          if (value.owner) {
-            return value;
-          }
-        })
-      : [{number: '', brand: '', model: ''}];
+    const defaultCar = {number: '', brand: '', model: ''};
+    const car = cars.find(value => value.owner) || defaultCar;
 
     this.state = {
-      firstName: first_name || '',
-      lastName: last_name || '',
-      email: email ? phone.value : '',
+      date: '',
+      email: email ? email.value : '',
       phone: phone ? phone.value : '',
-      car: `${car[0].brand} ${car[0].model}`,
-      carNumber: car[0].number,
-      name: last_name && first_name ? `${first_name} ${last_name}` : '',
+      car: `${car.brand} ${car.model}`,
+      carNumber: car.number,
+      name: `${first_name} ${last_name}`,
       loading: false,
       success: false,
     };
@@ -214,73 +208,64 @@ class ServiceScreen extends Component {
     isOrderServiceRequest: PropTypes.bool,
   };
 
+  onChangeField = fieldName => value => {
+    this.setState({[fieldName]: value});
+  };
+
   onPressOrder = async () => {
     const isInternetExist = await isInternet();
 
     if (!isInternetExist) {
-      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
-    } else {
-      const {
-        car,
-        date,
-        name,
-        phone,
-        email,
-        orderService,
-        dealerSelected,
-        isOrderServiceRequest,
-      } = this.props;
+      setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+      return;
+    }
 
-      // предотвращаем повторную отправку формы
-      if (isOrderServiceRequest) {
-        return;
-      }
+    // Предотвращаем повторную отправку формы.
+    if (this.props.isOrderServiceRequest) {
+      return;
+    }
 
-      const dealerID = dealerSelected.id;
-
-      console.log(
-        car,
-        date,
-        name,
-        phone,
-        email,
-        orderService,
-        dealerSelected,
-        isOrderServiceRequest,
+    if (
+      !this.state.name.trim() ||
+      !this.state.phone.trim() ||
+      !this.state.car.trim() ||
+      !this.state.date
+    ) {
+      return Alert.alert(
+        'Не хватает информации',
+        'Для заявки на СТО необходимо заполнить ФИО, номер контактного телефона, название автомобиля и желаемую дату',
       );
-      if (!name || !phone || !car || !date || !date.date) {
-        return Alert.alert(
-          'Не хватает информации',
-          'Для заявки на СТО необходимо заполнить ФИО, номер контактного телефона, название автомобиля и желаемую дату',
-        );
-      }
+    }
 
-      const orderDate = yearMonthDay(date.date);
+    try {
       const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
+      const orderDate = yearMonthDay(this.state.date);
+      const dealerID = this.props.dealerSelected.id;
 
-      orderService({
-        car,
+      this.setState({loading: true});
+
+      const action = await this.props.orderService({
+        car: this.state.car,
         date: orderDate,
-        name,
-        email,
-        phone,
+        name: this.state.name,
+        email: this.state.email,
+        phone: this.state.phone,
         device,
         dealerID,
-      }).then(action => {
-        if (action.type === SERVICE_ORDER__SUCCESS) {
-          Amplitude.logEvent('order', 'service');
-
-          setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
-        }
-
-        if (action.type === SERVICE_ORDER__FAIL) {
-          setTimeout(
-            () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
-            100,
-          );
-        }
       });
-    }
+
+      if (action.type === SERVICE_ORDER__SUCCESS) {
+        Amplitude.logEvent('order', 'service');
+        this.setState({success: true, loading: false});
+      }
+
+      if (action.type === SERVICE_ORDER__FAIL) {
+        setTimeout(
+          () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
+          100,
+        );
+      }
+    } catch (error) {}
   };
 
   shouldComponentUpdate(nextProps) {
@@ -293,24 +278,7 @@ class ServiceScreen extends Component {
   render() {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
-
-    const {
-      car,
-      date,
-      name,
-      phone,
-      email,
-      carFill,
-      dateFill,
-      nameFill,
-      emailFill,
-      phoneFill,
-      navigation,
-      dealerSelected,
-      isOrderServiceRequest,
-    } = this.props;
-
-    console.log('== Service ==');
+    const {navigation, dealerSelected} = this.props;
 
     return (
       <KeyboardAvoidingView>
@@ -365,8 +333,10 @@ class ServiceScreen extends Component {
                       confirmBtnText="Выбрать"
                       cancelBtnText="Отмена"
                       customStyles={datePickerStyles}
-                      // date={date.formatted}
-                      // onDateChange={this.onChangeDate}
+                      date={this.state.date}
+                      onDateChange={(_, date) => {
+                        this.onChangeField('date')(date);
+                      }}
                     />
                   </View>
                   <View style={styles.group}>
@@ -375,7 +345,7 @@ class ServiceScreen extends Component {
                         style={styles.textinput}
                         label="Имя"
                         value={this.state.name}
-                        // onChangeText={this.onInputName}
+                        onChangeText={this.onChangeField('name')}
                       />
                     </View>
                     <View style={styles.field}>
@@ -384,7 +354,7 @@ class ServiceScreen extends Component {
                         label="Телефон"
                         keyboardType="phone-pad"
                         value={this.state.phone}
-                        // onChangeText={this.onInputPhone}
+                        onChangeText={this.onChangeField('phone')}
                       />
                     </View>
                     <View style={styles.field}>
@@ -393,7 +363,7 @@ class ServiceScreen extends Component {
                         label="Email"
                         keyboardType="email-address"
                         value={this.state.email}
-                        // onChangeText={this.onInputEmail}
+                        onChangeText={this.onChangeField('email')}
                       />
                     </View>
                   </View>
@@ -403,7 +373,7 @@ class ServiceScreen extends Component {
                         style={styles.textinput}
                         label="Авто"
                         value={this.state.car}
-                        // onChangeText={this.onInputAuto}
+                        onChangeText={this.onChangeField('car')}
                       />
                     </View>
                     <View style={styles.field}>
@@ -411,12 +381,12 @@ class ServiceScreen extends Component {
                         style={styles.textinput}
                         label="Гос. номер"
                         value={this.state.carNumber}
-                        // onChangeText={this.onInputAuto}
+                        onChangeText={this.onChangeField('carNumber')}
                       />
                     </View>
                   </View>
                   <View style={styles.group}>
-                    <Button onPress={this.onPressSave} style={styles.button}>
+                    <Button onPress={this.onPressOrder} style={styles.button}>
                       {this.state.loading ? (
                         <ActivityIndicator color="#fff" />
                       ) : (
