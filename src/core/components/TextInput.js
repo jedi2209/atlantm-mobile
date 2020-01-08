@@ -8,7 +8,7 @@ import {
 
 export const TextInput = ({label, value, ...props}) => {
   const [focused, setFocused] = useState(false);
-  const isActive = focused || Boolean(value);
+  const isActive = focused || Boolean(value.trim());
 
   return (
     <View style={styles.container}>
