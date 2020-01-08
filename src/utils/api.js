@@ -523,7 +523,7 @@ export default {
 
     return this.request('/lkk/auth/social/', requestParams)
       .then(data => {
-        console.log('>>> login with data api:::', data);
+        console.log('>>> login with data api:::', data, profile);
         return {status: 'success', error: {}, profile, data};
       })
       .catch(err => {
@@ -555,26 +555,24 @@ export default {
   },
 
   saveProfile(profile) {
-    const {id, email, phone, last_name, first_name} = profile;
-
-    const body = {
-      email: [{
-        type: 'home',
-        value: email,
-      }]
-    }
+    const {crm_id, first_name, last_name, email, phone} = profile;
 
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body,
+      body: {
+        name: first_name,
+        surname: last_name,
+        email,
+        phone,
+        userID: crm_id,
+      },
     });
 
-    return this.request(`/lkk/user/${id}/`, requestParams)
+    return this.request(`/lkk/user/${crm_id}/`, requestParams)
       .then(data => {
-        console.log('>>> save profile data api:::', data);
         return {status: 'success', error: {}, profile, data};
       })
       .catch(err => {
