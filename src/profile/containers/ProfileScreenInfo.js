@@ -34,8 +34,7 @@ import {
 } from '../../core/actions';
 
 import {verticalScale} from '../../utils/scale';
-import style
- from '../../core/style-const';
+import styleConst from '../../core/style-const';
 
 import {TouchableOpacity} from 'react-native';
 
