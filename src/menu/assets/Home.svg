@@ -1,18 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="23" height="28" viewBox="0 0 23 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <defs>
-        <path d="M36.5,17 C36.5,17 32.6666667,20.7333333 25,28.2 L25,43.5998823 C25,44.373146 25.6056568,45 26.3529412,45 L33.1176471,45 L33.1176471,37.9994117 C33.1176471,37.1690918 33.7014663,36.6 34.4705882,36.6 L38.5294118,36.6 C39.328922,36.6 39.8823529,37.3247803 39.8823529,37.9994117 L39.8823529,45 L46.6470588,45 C47.3943432,45 48,44.373146 48,43.5998823 L48,28.2 C40.3333333,20.7333333 36.5,17 36.5,17 Z" id="path-1"></path>
-    </defs>
-    <g id="Меню" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Menu" transform="translate(-25.000000, -157.000000)">
-            <g transform="translate(0.000000, 140.000000)" id="Home">
-                <g>
-                    <mask id="mask-2" fill="white">
-                        <use xlink:href="#path-1"></use>
-                    </mask>
-                    <use fill="#FFFFFF" xlink:href="#path-1"></use>
-                </g>
-            </g>
+<svg width="25px" height="30px" viewBox="0 0 25 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>path-1</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home" transform="translate(1.000000, 1.000000)" fill-rule="nonzero" stroke="#263238">
+            <path d="M11.5,0 C11.5,0 7.6666667,3.7333333 0,11.2 L0,26.5998823 C0,27.373146 0.6056568,28 1.3529412,28 L8.1176471,28 L8.1176471,20.9994117 C8.1176471,20.1690918 8.7014663,19.6 9.4705882,19.6 L13.5294118,19.6 C14.328922,19.6 14.8823529,20.3247803 14.8823529,20.9994117 L14.8823529,28 L21.6470588,28 C22.3943432,28 23,27.373146 23,26.5998823 L23,11.2 C15.3333333,3.7333333 11.5,0 11.5,0 Z" id="path-1"></path>
         </g>
     </g>
 </svg>
