@@ -131,7 +131,7 @@ const MoreScreen = props => {
       name: 'Автоцентр',
       navigateUrl: 'Home',
       type: 'home',
-      selected: true,
+      selected: false,
     },
     {
       id: 2,
@@ -145,30 +145,35 @@ const MoreScreen = props => {
       name: 'Новые авто',
       navigateUrl: 'NewCarListScreen',
       type: 'new',
+      selected: false,
     },
     {
       id: 4,
       name: 'Поддержанные авто',
       navigateUrl: 'UsedCarListScreen',
       type: 'not_new',
+      selected: false,
     },
     {
       id: 5,
       name: 'Сервис',
       navigateUrl: 'ServiceScreen',
       type: 'service',
+      selected: false,
     },
     {
       id: 6,
       name: 'Отзывы',
       navigateUrl: 'ReviewsScreen',
       type: 'reviews',
+      selected: false,
     },
     {
       id: 7,
       name: 'Индикаторы',
       navigateUrl: 'IndicatorsScreen',
       type: 'indicators',
+      selected: false,
     },
   ];
 
