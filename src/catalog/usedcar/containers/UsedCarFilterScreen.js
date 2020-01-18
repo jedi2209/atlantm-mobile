@@ -344,7 +344,7 @@ class NewCarFilterScreen extends Component {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            marginBottom: 40,
+            marginVertical: 20,
           }}>
           <Button
             onPress={this.onPressFilterButton}
