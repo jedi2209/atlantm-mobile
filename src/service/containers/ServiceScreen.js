@@ -156,14 +156,14 @@ class ServiceScreen extends Component {
     super(props);
 
     const {
-      last_name,
-      first_name,
+      last_name = '',
+      first_name = '',
       phone,
       cars,
       email,
     } = this.props.profile.login;
     const defaultCar = {number: '', brand: '', model: ''};
-    const car = cars.find(value => value.owner) || defaultCar;
+    const car = cars ? cars.find(value => value.owner) : defaultCar;
 
     this.state = {
       date: '',
