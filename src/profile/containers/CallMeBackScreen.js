@@ -12,13 +12,12 @@ import {
   ScrollView,
   Keyboard,
   Text,
-  ImageBackground,
-  Image,
+  Platform,
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   ActivityIndicator,
 } from 'react-native';
-import {StyleProvider, Icon, Button} from 'native-base';
+import {Button} from 'native-base';
 import DeviceInfo from 'react-native-device-info';
 
 import isInternet from '@utils/internet';
@@ -192,7 +191,7 @@ class CallMeBackScreen extends React.Component {
                 }}>
                 <TextInput
                   style={{
-                    height: 40,
+                    height: Platform.OS === 'iOS' ? 40 : 'auto',
                     paddingHorizontal: 14,
                     borderColor: '#D8D8D8',
                     borderTopWidth: 0,
@@ -211,7 +210,7 @@ class CallMeBackScreen extends React.Component {
                 <>
                   <TextInput
                     style={{
-                      height: 40,
+                      height: Platform.OS === 'iOS' ? 40 : 'auto',
                       paddingHorizontal: 14,
                       borderColor: '#D8D8D8',
                       borderTopWidth: 0,

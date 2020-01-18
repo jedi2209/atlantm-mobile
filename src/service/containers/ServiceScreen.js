@@ -13,6 +13,7 @@ import {
   // TextInput,
   ActivityIndicator,
   Dimensions,
+  Platform,
 } from 'react-native';
 import {List, StyleProvider, Button} from 'native-base';
 import DatePicker from 'react-native-datepicker';
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     marginBottom: 36,
   },
   textinput: {
-    height: 40,
+    height: Platform.OS === 'iOS' ? 40 : 'auto',
     borderColor: '#d8d8d8',
     borderBottomWidth: 1,
     color: '#222b45',
@@ -342,6 +343,7 @@ class ServiceScreen extends Component {
                   <View style={styles.group}>
                     <View style={styles.field}>
                       <TextInput
+                        autoCorrect={false}
                         style={styles.textinput}
                         label="Имя"
                         value={this.state.name}
