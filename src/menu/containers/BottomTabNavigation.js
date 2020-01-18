@@ -67,10 +67,7 @@ const SearchStack = {
 };
 
 SearchStack.navigationOptions = ({navigation}) => {
-  const routeName = navigation.state.routes[navigation.state.index].routeName;
-
   return {
-    // tabBarVisible: !routeName.startsWith('MapScreen'),
     tabBarLabel: 'Поиск',
     tabBarIcon: ({focused}) => (
       <Icon

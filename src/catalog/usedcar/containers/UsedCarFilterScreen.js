@@ -99,12 +99,12 @@ class NewCarFilterScreen extends Component {
     headerLeft: <View />,
     headerRight: (
       <View>
-        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             style={{width: 18, height: 18, marginRight: 14}}
             source={require('./close.png')}
           />
-        </TouchableWithoutFeedback>
+        </TouchableOpacity>
       </View>
     ),
   });

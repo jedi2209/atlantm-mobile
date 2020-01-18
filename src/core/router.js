@@ -28,7 +28,7 @@ export const getRouter = initialRouteName => {
     {
       NewCarItemScreen: {screen: NewCarItemScreen},
       UsedCarItemScreen: {screen: UsedCarItemScreen},
-      IntroScreen: {screen: IntroScreen}, // этоо скрин с кнопкой выберите автосервис
+      IntroScreen: {screen: IntroScreen}, // это скрин с кнопкой выберите автосервис
       BottomTabNavigation: {screen: BottomTabNavigation}, // это нижнее меню
       ChooseDealerScreen: {screen: ChooseDealerScreen}, // выбор диллера скрин
       ServiceScreen: {screen: ServiceScreen}, // заявка на СТО
