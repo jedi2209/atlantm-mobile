@@ -1,18 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {
-  View,
-  Text,
-  Image,
-  Alert,
-  StyleSheet,
-  SafeAreaView,
-  ActivityIndicator,
-  TouchableHighlight,
-  TouchableOpacity,
-} from 'react-native';
-import {Icon, Button, Accordion, Picker, Form} from 'native-base';
+import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {Icon, Button, Accordion} from 'native-base';
 
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
@@ -30,82 +20,11 @@ import {
   actionSetNeedUpdateUsedCarList,
 } from '../../actions';
 
-// components
-import EmptyMessage from '@core/components/EmptyMessage';
-import PricePicker from '@core/components/PricePicker';
-import ListItemHeader from '@profile/components/ListItemHeader';
-
-// styles
-import stylesList from '@core/components/Lists/style';
-
 // helpers
 import Amplitude from '@utils/amplitude-analytics';
-import {get, find, flatten, uniqBy} from 'lodash';
-import getTheme from '../../../../native-base-theme/components';
-import styleConst from '@core/style-const';
+import {get, find} from 'lodash';
 import stylesHeader from '@core/components/Header/style';
-import styleFooter from '@core/components/Footer/style';
-import {verticalScale} from '@utils/scale';
-import {TEXT_EMPTY_CAR_LIST, BUTTON_EMPTY_CAR_FIND} from '../../constants';
 import {TouchableWithoutFeedback} from 'react-native';
-
-const styles = StyleSheet.create({
-  safearea: {
-    backgroundColor: styleConst.color.bg,
-    flex: 1,
-  },
-  content: {
-    paddingBottom: styleFooter.footer.height,
-  },
-  spinner: {
-    alignSelf: 'center',
-    marginTop: verticalScale(60),
-  },
-  spinnerButton: {
-    alignSelf: 'center',
-  },
-  buttonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  buttonActive: {
-    flex: 1,
-    height: styleConst.ui.footerHeight,
-    flexDirection: 'row',
-    backgroundColor: styleConst.color.lightBlue,
-  },
-  buttonInactive: {
-    flex: 1,
-    height: styleConst.ui.footerHeight,
-    flexDirection: 'row',
-    backgroundColor: styleConst.color.darkBg,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontFamily: styleConst.font.medium,
-    letterSpacing: styleConst.ui.letterSpacing,
-  },
-  buttonIcon: {
-    width: 18,
-    marginTop: 3,
-    marginLeft: 7,
-    resizeMode: 'contain',
-  },
-  body: {
-    flex: 1.5,
-  },
-  right: {
-    flex: 2,
-  },
-  hiddenListItemContainer: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 1,
-  },
-  labelPriceSpecial: {
-    color: styleConst.color.red,
-  },
-});
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
   const {priceFilter} = catalog.newCar.filters;
@@ -278,105 +197,103 @@ class NewCarFilterScreen extends Component {
   };
 
   getCount = () => {
-    const {items, filterPrice, filterData} = this.props;
+    const {filterData} = this.props;
     const filterDataCount = get(filterData, 'total.count');
-
-    let isItemsCount = false;
-
-    if (filterPrice) {
-      isItemsCount = true;
-    }
 
     return filterDataCount;
   };
 
   render() {
+    const dataForAccordion = [
+      {
+        title: 'Город',
+        content: (
+          <TouchableOpacity
+            onPress={() => {
+              this.props.navigation.navigate('UsedCarCityScreen', {
+                returnScreen: 'UsedCarFilterScreen',
+              });
+            }}>
+            <Text>
+              {this.props.city ? this.props.city.name : 'Выберите город'}
+            </Text>
+          </TouchableOpacity>
+        ),
+      },
+    ];
+
+    if (this.props.filterPrice.$min || this.props.filterPrice.$max) {
+      dataForAccordion.unshift({
+        title: 'Цена',
+        content: (
+          <View>
+            <MultiSlider
+              values={[
+                this.state.priceFilter.currentMin,
+                this.state.priceFilter.currentMax,
+              ]}
+              step={this.props.filterPrice.step}
+              min={this.props.filterPrice.$min}
+              max={this.props.filterPrice.$max}
+              onValuesChange={e => {
+                this.setState({
+                  priceFilter: {
+                    step: this.props.filterPrice.step,
+                    curr: this.props.filterPrice.curr,
+                    currentMin: e[0],
+                    currentMax: e[1],
+                  },
+                });
+              }}
+              trackStyle={{
+                backgroundColor: '#d5d5e0',
+              }}
+              selectedStyle={{
+                backgroundColor: '#0F66B2',
+              }}
+              customMarker={() => (
+                <View
+                  style={{
+                    height: 17,
+                    width: 17,
+                    borderRadius: 8.5,
+                    backgroundColor: '#0F66B2',
+                    shadowColor: '#0F66B2',
+                    shadowOpacity: 0.5,
+                    shadowRadius: 8,
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
+                    },
+                  }}
+                />
+              )}
+            />
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={{color: '#74747A', fontSize: 14}}>{`${
+                this.state.priceFilter.currentMin
+              } ${this.state.priceFilter.curr &&
+                this.state.priceFilter.curr.name}`}</Text>
+              <Text style={{color: '#74747A', fontSize: 14}}>{`${
+                this.state.priceFilter.currentMax
+              } ${this.state.priceFilter.curr &&
+                this.state.priceFilter.curr.name}`}</Text>
+            </View>
+          </View>
+        ),
+      });
+    }
+
     return (
       <>
         <Accordion
-          dataArray={[
-            {
-              title: 'Цена',
-              content: (
-                <View>
-                  <MultiSlider
-                    values={[
-                      this.state.priceFilter.currentMin,
-                      this.state.priceFilter.currentMax,
-                    ]}
-                    step={this.props.filterPrice.step}
-                    min={this.props.filterPrice.$min}
-                    max={this.props.filterPrice.$max}
-                    onValuesChange={e => {
-                      this.setState({
-                        priceFilter: {
-                          // TODO: fix it
-                          step: this.props.filterPrice.step,
-                          curr: this.props.filterPrice.curr,
-                          currentMin: e[0],
-                          currentMax: e[1],
-                        },
-                      });
-                    }}
-                    trackStyle={{
-                      backgroundColor: '#d5d5e0',
-                    }}
-                    selectedStyle={{
-                      backgroundColor: '#0F66B2',
-                    }}
-                    customMarker={() => (
-                      <View
-                        style={{
-                          height: 17,
-                          width: 17,
-                          borderRadius: 8.5,
-                          backgroundColor: '#0F66B2',
-                          shadowColor: '#0F66B2',
-                          shadowOpacity: 0.5,
-                          shadowRadius: 8,
-                          shadowOffset: {
-                            width: 0,
-                            height: 2,
-                          },
-                        }}
-                      />
-                    )}
-                  />
-                  <View
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                    }}>
-                    <Text style={{color: '#74747A', fontSize: 14}}>{`${
-                      this.state.priceFilter.currentMin
-                    } ${this.state.priceFilter.curr &&
-                      this.state.priceFilter.curr.name}`}</Text>
-                    <Text style={{color: '#74747A', fontSize: 14}}>{`${
-                      this.state.priceFilter.currentMax
-                    } ${this.state.priceFilter.curr &&
-                      this.state.priceFilter.curr.name}`}</Text>
-                  </View>
-                </View>
-              ),
-            },
-            {
-              title: 'Город',
-              content: (
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('UsedCarCityScreen', {
-                      returnScreen: 'UsedCarFilterScreen',
-                    });
-                  }}>
-                  <Text>
-                    {this.props.city ? this.props.city.name : 'Выберите город'}
-                  </Text>
-                </TouchableOpacity>
-              ),
-            },
-          ]}
-          expanded={1}
+          dataArray={dataForAccordion}
+          expanded={0}
           renderHeader={(item, expanded) => (
             <View
               style={{
