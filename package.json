@@ -6,7 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "postinstall": "cd ./ios; pod update; pod install; cd ../; npx jetify;",
     "react": "react-native start --reset-cache",
-    "iphone": "react-native run-ios --simulator=\"iPhone 11\"",
+    "iphone": "react-native run-ios --simulator=\"iPhone SE\"",
     "iphonePro": "react-native run-ios --simulator=\"iPhone 11 Pro\"",
     "iphoneProMax": "react-native run-ios --simulator=\"iPhone 11 Pro Max\"",
     "ios-build": "bundle exec fastlane ios beta; rm atlantm.app.dSYM.zip atlantm.ipa;",

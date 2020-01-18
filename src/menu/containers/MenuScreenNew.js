@@ -175,6 +175,13 @@ const MoreScreen = props => {
       type: 'indicators',
       selected: false,
     },
+    {
+      id: 8,
+      name: 'Выдача автомообиля',
+      navigateUrl: 'TvaScreen',
+      type: 'new',
+      selected: false,
+    },
   ];
 
   return (
