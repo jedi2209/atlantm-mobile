@@ -170,6 +170,7 @@ class NewCarItemScreen extends Component {
   };
 
   onPressOrder = () => {
+    console.log('cliced me');
     const {navigation, filterData, carDetails} = this.props;
     const currency = get(this.props.navigation, 'state.params.currency');
 

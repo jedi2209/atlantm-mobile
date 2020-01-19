@@ -1,72 +1,98 @@
-import React, { Component } from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Alert, Text, Image } from 'react-native';
-import { Container, Content, List, StyleProvider, Footer, Button } from 'native-base';
-
+import {
+  StyleSheet,
+  View,
+  Alert,
+  Text,
+  ActivityIndicator,
+  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
+} from 'react-native';
+import {TextInput} from '../../core/components/TextInput';
+import {Button} from 'native-base';
+import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 // redux
-import { connect } from 'react-redux';
-import { actionCommentOrderCarFill, actionOrderCar } from '../actions';
-import { nameFill, phoneFill, emailFill } from '../../profile/actions';
+import {connect} from 'react-redux';
+import {actionCommentOrderCarFill, actionOrderCar} from '../actions';
+import {nameFill, phoneFill, emailFill} from '../../profile/actions';
 
 // components
-import Spinner from 'react-native-loading-spinner-overlay';
-import CarOrderList from '../components/CarOrderList';
 import CommentOrderForm from '../components/CommentOrderForm';
-import ProfileForm from '../../profile/components/ProfileForm';
-import ListItemHeader from '../../profile/components/ListItemHeader';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
-import { get } from 'lodash';
+import {get} from 'lodash';
 import isInternet from '../../utils/internet';
 import numberWithGap from '../../utils/number-with-gap';
-import getTheme from '../../../native-base-theme/components';
 import styleConst from '@core/style-const';
 import stylesHeader from '../../core/components/Header/style';
-import { CATALOG_ORDER__SUCCESS, CATALOG_ORDER__FAIL } from '../actionTypes';
-import { ERROR_NETWORK } from '../../core/const';
-import isIPhoneX from '@utils/is_iphone_x';
-import FooterButton from "../../core/components/FooterButton";
+import {CATALOG_ORDER__SUCCESS, CATALOG_ORDER__FAIL} from '../actionTypes';
+import {ERROR_NETWORK} from '../../core/const';
 
-const FOOTER_HEIGHT = 50;
+const $size = 40;
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
   },
-  button: {
+  list: {
+    paddingBottom: $size,
+  },
+  serviceForm: {
+    marginTop: $size,
+  },
+  // Скопировано из ProfileSettingsScreen.
+  container: {
     flex: 1,
-    height: isIPhoneX() ? styleConst.ui.footerHeightIphone+20 : styleConst.ui.footerHeightAndroid,
-    flexDirection: 'row',
-    backgroundColor: styleConst.color.lightBlue,
+    paddingVertical: 20,
+    paddingHorizontal: 14,
+    backgroundColor: '#fff',
+  },
+  header: {
+    marginBottom: 36,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  field: {
+    marginBottom: 18,
+  },
+  group: {
+    marginBottom: 36,
+  },
+  textinput: {
+    height: Platform.OS === 'ios' ? 40 : 'auto',
+    borderColor: '#d8d8d8',
+    borderBottomWidth: 1,
+    color: '#222b45',
+    fontSize: 18,
+  },
+  button: {
+    justifyContent: 'center',
+    shadowColor: '#0f66b2',
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
-    fontFamily: styleConst.font.medium,
-    letterSpacing: styleConst.ui.letterSpacing,
-  },
-  buttonIcon: {
-    width: 18,
-    marginTop: 3,
-    marginLeft: 7,
-    resizeMode: 'contain',
-  },
-  footer: {
-    height: isIPhoneX() ? styleConst.ui.footerHeightIphone+40 : styleConst.ui.footerHeightAndroid,
-    backgroundColor: styleConst.color.header,
-  },
-  comment: {
-    paddingBottom: 40,
+    textTransform: 'uppercase',
+    fontSize: 16,
   },
 });
 
-const mapStateToProps = ({ catalog, profile }) => {
+const mapStateToProps = ({catalog, profile}) => {
   return {
-    name: profile.name,
-    phone: profile.phone,
-    email: profile.email,
+    profile,
     comment: catalog.orderComment,
     isOrderCarRequest: catalog.meta.isOrderCarRequest,
   };
@@ -77,17 +103,43 @@ const mapDispatchToProps = {
   phoneFill,
   emailFill,
   actionOrderCar,
-  actionCommentOrderCarFill,
 };
 
 class OrderScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Заявка на покупку',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
+  constructor(props) {
+    super(props);
+    const {
+      last_name = '',
+      first_name = '',
+      phone,
+      email,
+    } = this.props.profile.login;
+
+    this.state = {
+      date: '',
+      email: email ? email.value : '',
+      phone: phone ? phone.value : '',
+      name: `${first_name} ${last_name}`,
+      loading: false,
+      success: false,
+      comment: '',
+    };
+  }
+
+  static navigationOptions = ({navigation}) => ({
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: (
+      <View>
+        <HeaderIconBack
+          theme="white"
+          navigation={navigation}
+          returnScreen="BottomTabNavigation"
+        />
+      </View>
+    ),
     headerRight: <View />,
-  })
+  });
 
   static propTypes = {
     navigation: PropTypes.object,
@@ -99,11 +151,7 @@ class OrderScreen extends Component {
     email: PropTypes.string,
     comment: PropTypes.string,
     isOrderCarRequest: PropTypes.bool,
-  }
-
-  componentDidMount() {
-    this.props.actionCommentOrderCarFill('');
-  }
+  };
 
   onPressOrder = async () => {
     const isInternetExist = await isInternet();
@@ -122,13 +170,15 @@ class OrderScreen extends Component {
       } = this.props;
 
       // предотвращаем повторную отправку формы
-      if (isOrderCarRequest) return;
+      if (isOrderCarRequest) {
+        return;
+      }
 
       const dealerId = get(navigation, 'state.params.dealerId');
       const carId = get(navigation, 'state.params.carId');
       const isNewCar = get(navigation, 'state.params.isNewCar');
 
-      if (!name || !phone) {
+      if (!this.state.name || !this.state.phone) {
         return setTimeout(() => {
           Alert.alert(
             'Недостаточно информации',
@@ -137,112 +187,198 @@ class OrderScreen extends Component {
         }, 100);
       }
 
+
+      console.log( 'name >>', this.state.name,
+      'email >>', this.state.email,
+      'phone >>', this.state.phone,
+      'dealerId >>',dealerId,
+      'carId >>', carId,
+      'comment >>', this.state.comment,
+      'isNewCar >>', isNewCar)
+
       actionOrderCar({
-        name,
-        phone,
+        name: this.state.name,
+        email: this.state.email,
+        phone: this.state.phone,
         dealerId,
-        email,
         carId,
-        comment,
+        comment: this.state.comment,
         isNewCar,
-      })
-        .then(action => {
-          if (action.type === CATALOG_ORDER__SUCCESS) {
-            const car = get(navigation, 'state.params.car');
-            const { brand, model } = car;
-            const path = isNewCar ? 'newcar' : 'usedcar';
+      }).then(action => {
+        if (action.type === CATALOG_ORDER__SUCCESS) {
+          const car = get(navigation, 'state.params.car');
+          const {brand, model} = car;
+          const path = isNewCar ? 'newcar' : 'usedcar';
 
-            Amplitude.logEvent('order', `catalog/${path}`, {
-              brand_name: brand,
-              model_name: get(model, 'name'),
-            });
+          Amplitude.logEvent('order', `catalog/${path}`, {
+            brand_name: brand,
+            model_name: get(model, 'name'),
+          });
 
-            setTimeout(() => {
-              Alert.alert('Ваша заявка успешно отправлена');
-              navigation.goBack();
-            }, 100);
-          }
+          setTimeout(() => {
+            this.setState({success: true, loading: false});
+          }, 100);
+        }
 
-          if (action.type === CATALOG_ORDER__FAIL) {
-            setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
-          }
-        });
+        if (action.type === CATALOG_ORDER__FAIL) {
+          setTimeout(
+            () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
+            100,
+          );
+        }
+      });
     }
-  }
+  };
+
+  onChangeField = fieldName => value => {
+    this.setState({[fieldName]: value});
+  };
 
   render() {
-    const {
-      navigation,
-      name,
-      phone,
-      email,
-      comment,
-      nameFill,
-      emailFill,
-      phoneFill,
-      actionCommentOrderCarFill,
-      isOrderCarRequest,
-    } = this.props;
+    const {navigation} = this.props;
 
     const car = get(navigation, 'state.params.car');
     const currency = get(navigation, 'state.params.currency');
-    const { brand, model, isSale, price, priceSpecial, complectation } = car;
+    const {brand, model, price, priceSpecial, complectation} = car;
     const processedPrice = `${numberWithGap(price)} ${currency}`;
     const processedPriceSpecial = `${numberWithGap(priceSpecial)} ${currency}`;
 
-    console.log('== Order ==');
-
     return (
-      <StyleProvider style={getTheme()}>
-        <Container style={styles.safearea}>
-          <Content>
-            <List style={styles.list}>
-              <Spinner visible={isOrderCarRequest} color={styleConst.color.blue} />
-
-              <ListItemHeader text="АВТОМОБИЛЬ" />
-
-              <CarOrderList
-                brand={brand}
-                model={model}
-                isSale={isSale}
-                price={processedPrice}
-                priceSpecial={processedPriceSpecial}
-                complectation={complectation}
-              />
-
-              <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
-
-              <ProfileForm
-                name={name}
-                phone={phone}
-                email={email}
-                nameFill={nameFill}
-                phoneFill={phoneFill}
-                emailFill={emailFill}
-              />
-
-              <ListItemHeader text="КОММЕНТАРИИ" />
-
-              <View style={styles.comment}>
-                <CommentOrderForm
-                  comment={comment}
-                  commentFill={actionCommentOrderCarFill}
-                />
+      <KeyboardAvoidingView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView>
+            <View style={styles.container}>
+              <View style={styles.header}>
+                <Text style={styles.heading}>Заявка на покупку</Text>
               </View>
-            </List>
-          </Content>
-
-          <FooterButton
-              theme="blue"
-              icon="arrow"
-              uppercase={true}
-              text="Отправить"
-              onPressButton={this.onPressOrder}
-          />
-        </Container>
-      </StyleProvider>
+              {this.state.success ? (
+                <View style={{flex: 1, justifyContent: 'center'}}>
+                  <View style={styles.group}>
+                    <Text
+                      style={{
+                        fontSize: 22,
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                      }}>
+                      Заявка успешно отправлена
+                    </Text>
+                  </View>
+                  <View>
+                    <Button
+                      onPress={() =>
+                        this.props.navigation.navigate('BottomTabNavigation')
+                      }
+                      style={styles.button}>
+                      <Text style={styles.buttonText}>Назад</Text>
+                    </Button>
+                  </View>
+                </View>
+              ) : (
+                <>
+                  <View style={styles.group}>
+                    <View style={styles.field}>
+                      <TextInput
+                        editable={false}
+                        style={styles.textinput}
+                        label="Марка"
+                        value={brand}
+                      />
+                    </View>
+                    <View style={styles.field}>
+                      <TextInput
+                        editable={false}
+                        style={styles.textinput}
+                        label="Модель"
+                        value={model.name}
+                      />
+                    </View>
+                    <View style={styles.field}>
+                      <TextInput
+                        editable={false}
+                        style={styles.textinput}
+                        label="Комплект"
+                        value={complectation}
+                      />
+                    </View>
+                    <View style={styles.field}>
+                      <TextInput
+                        editable={false}
+                        style={styles.textinput}
+                        label="Цена"
+                        value={
+                          priceSpecial ? processedPriceSpecial : processedPrice
+                        }
+                      />
+                    </View>
+                  </View>
+                  <View style={styles.group}>
+                    <View style={styles.field}>
+                      <TextInput
+                        autoCorrect={false}
+                        style={styles.textinput}
+                        label="Имя"
+                        value={this.state.name}
+                        onChangeText={this.onChangeField('name')}
+                      />
+                    </View>
+                    <View style={styles.field}>
+                      <TextInput
+                        style={styles.textinput}
+                        label="Телефон"
+                        keyboardType="phone-pad"
+                        value={this.state.phone}
+                        onChangeText={this.onChangeField('phone')}
+                      />
+                    </View>
+                    <View style={styles.field}>
+                      <TextInput
+                        style={styles.textinput}
+                        label="Email"
+                        keyboardType="email-address"
+                        value={this.state.email}
+                        onChangeText={this.onChangeField('email')}
+                      />
+                    </View>
+                  </View>
+                  <View style={styles.group}>
+                    <View style={styles.field}>
+                      <TextInput
+                        multiline={true}
+                        numberOfLines={2}
+                        style={{
+                          height: Platform.OS === 'ios' ? 90 : 'auto',
+                          borderColor: '#d8d8d8',
+                          borderBottomWidth: 1,
+                          color: '#222b45',
+                          fontSize: 18,
+                        }}
+                        label="Комментарии"
+                        keyboardType="email-address"
+                        value={this.state.comment}
+                        onChangeText={this.onChangeField('comment')}
+                      />
+                    </View>
+                  </View>
+                  <View style={styles.group}>
+                    <Button onPress={this.onPressOrder} style={styles.button}>
+                      {this.state.loading ? (
+                        <ActivityIndicator color="#fff" />
+                      ) : (
+                        <Text style={styles.buttonText}>Отправить</Text>
+                      )}
+                    </Button>
+                  </View>
+                </>
+              )}
+            </View>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(OrderScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(OrderScreen);
