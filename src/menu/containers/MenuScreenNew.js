@@ -178,7 +178,7 @@ const MoreScreen = props => {
     {
       id: 8,
       name: 'Выдача автомообиля',
-      navigateUrl: 'TvaScreen',
+      navigateUrl: 'CallMeBackScreen',
       type: 'new',
       selected: false,
     },

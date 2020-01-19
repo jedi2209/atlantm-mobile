@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import Modal, {ModalContent} from 'react-native-modals';
-import {TouchableWithoutFeedback} from 'react-native';
+import Modal from 'react-native-modal';
+import {TouchableOpacity} from 'react-native';
 
 import {View, Text, NativeModules} from 'react-native';
 import {createAppContainer, NavigationActions} from 'react-navigation';
@@ -165,16 +165,23 @@ class App extends Component {
         />
         <View>
           <Modal
-            visible={this.props.modal.application}
-            onTouchOutside={() => {
+            hideModalContentWhileAnimating
+            useNativeDriver
+            isVisible={this.props.modal.application}
+            onBackdropPress={() => {
               this.props.actionToggleModal('application');
             }}>
-            <ModalContent>
+            <View
+              style={{
+                backgroundColor: '#fff',
+                paddingHorizontal: 14,
+                paddingVertical: 24,
+              }}>
               <Text
-                style={{fontSize: 18, fontWeight: 'bold', paddingVertical: 10}}>
+                style={{fontSize: 18, fontWeight: 'bold', marginBottom: 14}}>
                 Отправить заявку
               </Text>
-              <TouchableWithoutFeedback
+              <TouchableOpacity
                 onPress={() => {
                   this.props
                     .actionToggleModal('application')
@@ -183,22 +190,21 @@ class App extends Component {
                 <Text
                   style={{
                     fontSize: 18,
-                    marginVertical: 15,
+                    marginVertical: 14,
                     paddingVertical: 10,
                   }}>
                   На обратный звонок
                 </Text>
-              </TouchableWithoutFeedback>
-
-              <TouchableWithoutFeedback
+              </TouchableOpacity>
+              <TouchableOpacity
                 onPress={() => {
                   this.props
                     .actionToggleModal('application')
                     .then(() => this.navigate('ServiceScreen'));
                 }}>
-                <Text style={{fontSize: 18}}>На СТО</Text>
-              </TouchableWithoutFeedback>
-            </ModalContent>
+                <Text style={{fontSize: 18, paddingVertical: 10}}>На СТО</Text>
+              </TouchableOpacity>
+            </View>
           </Modal>
         </View>
       </View>
