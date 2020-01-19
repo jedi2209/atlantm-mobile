@@ -191,7 +191,7 @@ class CallMeBackScreen extends React.Component {
                 }}>
                 <TextInput
                   style={{
-                    height: Platform.OS === 'iOS' ? 40 : 'auto',
+                    height: Platform.OS === 'ios' ? 40 : 'auto',
                     paddingHorizontal: 14,
                     borderColor: '#D8D8D8',
                     borderTopWidth: 0,
@@ -210,7 +210,7 @@ class CallMeBackScreen extends React.Component {
                 <>
                   <TextInput
                     style={{
-                      height: Platform.OS === 'iOS' ? 40 : 'auto',
+                      height: Platform.OS === 'ios' ? 40 : 'auto',
                       paddingHorizontal: 14,
                       borderColor: '#D8D8D8',
                       borderTopWidth: 0,

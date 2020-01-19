@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     marginBottom: 36,
   },
   textinput: {
-    height: Platform.OS === 'iOS' ? 40 : 'auto',
+    height: Platform.OS === 'ios' ? 40 : 'auto',
     borderColor: '#d8d8d8',
     borderBottomWidth: 1,
     color: '#222b45',
@@ -277,8 +277,6 @@ class ServiceScreen extends Component {
   }
 
   render() {
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
     const {navigation, dealerSelected} = this.props;
 
     return (

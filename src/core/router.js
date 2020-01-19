@@ -23,6 +23,8 @@ import CallMeBackScreen from '../profile/containers/CallMeBackScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
 import UsedCarItemScreen from '../catalog/usedcar/containers/UsedCarItemScreen';
 
+import OrderScreen from '../catalog/containers/OrderScreen';
+
 export const getRouter = initialRouteName => {
   return createStackNavigator(
     {
@@ -58,6 +60,7 @@ export const getRouter = initialRouteName => {
           header: null,
         },
       },
+      OrderScreen: {screen: OrderScreen},
     },
     {
       initialRouteName,

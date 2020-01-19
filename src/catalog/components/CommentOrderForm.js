@@ -7,17 +7,17 @@ import styleConst from '../../core/style-const';
 
 const styles = StyleSheet.create({
   container: {
-    padding: styleConst.ui.horizontalGap,
-    backgroundColor: '#fff',
-    minHeight: 80,
-    borderBottomWidth: styleConst.ui.borderWidth,
-    borderBottomColor: styleConst.color.greyText,
+    // padding: styleConst.ui.horizontalGap,
+    // backgroundColor: '#fff',
+    // minHeight: 80,
+    // borderBottomWidth: styleConst.ui.borderWidth,
+    // borderBottomColor: styleConst.color.greyText,
   },
   textarea: {
-    backgroundColor: '#fff',
-    fontSize: 17,
-    color: styleConst.color.greyText,
-    fontFamily: styleConst.font.light,
+    borderColor: '#d8d8d8',
+    borderBottomWidth: 1,
+    color: '#222b45',
+    fontSize: 18,
   },
 });
 
