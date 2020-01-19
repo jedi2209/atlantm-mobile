@@ -243,7 +243,11 @@ class CallMeBackScreen extends React.Component {
                     </View>
                   </View>
                   <View style={styles.group}>
-                    <Button onPress={this.onPressCallMe} style={styles.button}>
+                    <Button
+                      onPress={
+                        this.state.loading ? undefined : this.onPressCallMe
+                      }
+                      style={styles.button}>
                       {this.state.loading ? (
                         <ActivityIndicator color="#fff" />
                       ) : (

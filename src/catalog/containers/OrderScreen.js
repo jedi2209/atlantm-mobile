@@ -131,11 +131,7 @@ class OrderScreen extends Component {
     headerTitleStyle: stylesHeader.blueHeaderTitle,
     headerLeft: (
       <View>
-        <HeaderIconBack
-          theme="white"
-          navigation={navigation}
-          returnScreen="BottomTabNavigation"
-        />
+        <HeaderIconBack theme="white" navigation={navigation} />
       </View>
     ),
     headerRight: <View />,

@@ -386,7 +386,11 @@ class ServiceScreen extends Component {
                     </View>
                   </View>
                   <View style={styles.group}>
-                    <Button onPress={this.onPressOrder} style={styles.button}>
+                    <Button
+                      onPress={
+                        this.state.loading ? undefined : this.onPressOrder
+                      }
+                      style={styles.button}>
                       {this.state.loading ? (
                         <ActivityIndicator color="#fff" />
                       ) : (

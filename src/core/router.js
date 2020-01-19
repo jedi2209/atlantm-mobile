@@ -36,7 +36,7 @@ export const getRouter = initialRouteName => {
       ServiceScreen: {screen: ServiceScreen}, // заявка на СТО
       CallMeBackScreen: {screen: CallMeBackScreen},
       IndicatorsScreen: {screen: IndicatorsScreen}, // индикаторы
-      // хз что за экран он используется еще где-то?
+      // табло выдачи автомобиля
       TvaScreen: {screen: TvaScreen},
       TvaResultsScreen: {screen: TvaResultsScreen},
       // это вроде отзывы
