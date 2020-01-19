@@ -176,6 +176,7 @@ class App extends Component {
                 backgroundColor: '#fff',
                 paddingHorizontal: 14,
                 paddingVertical: 24,
+                borderRadius: 4,
               }}>
               <Text
                 style={{fontSize: 18, fontWeight: 'bold', marginBottom: 14}}>

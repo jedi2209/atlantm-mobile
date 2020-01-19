@@ -173,12 +173,13 @@ const MoreScreen = props => {
       name: 'Индикаторы',
       navigateUrl: 'IndicatorsScreen',
       type: 'indicators',
-      selected: false,
+      selected: false
+      ,
     },
     {
       id: 8,
       name: 'Выдача автомообиля',
-      navigateUrl: 'CallMeBackScreen',
+      navigateUrl: 'TvaScreen',
       type: 'new',
       selected: false,
     },
