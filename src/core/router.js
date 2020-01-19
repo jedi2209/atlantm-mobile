@@ -37,15 +37,8 @@ export const getRouter = initialRouteName => {
       CallMeBackScreen: {screen: CallMeBackScreen},
       IndicatorsScreen: {screen: IndicatorsScreen}, // индикаторы
       // хз что за экран он используется еще где-то?
-      Tva2Screen: {
-        screen: createStackNavigator({
-          TvaScreen: {screen: TvaScreen},
-          TvaResultsScreen: {screen: TvaResultsScreen},
-        }),
-        navigationOptions: {
-          header: null,
-        },
-      },
+      TvaScreen: {screen: TvaScreen},
+      TvaResultsScreen: {screen: TvaResultsScreen},
       // это вроде отзывы
       Eko2Screen: {
         screen: createStackNavigator({
