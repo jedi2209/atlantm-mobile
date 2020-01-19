@@ -8,17 +8,21 @@ import Amplitude from '@utils/amplitude-analytics';
 import {
   Alert,
   View,
-  TextInput,
+  StyleSheet,
+  // TextInput,
   ScrollView,
   Keyboard,
   Text,
   Platform,
-  KeyboardAvoidingView,
+  // KeyboardAvoidingView,
   TouchableWithoutFeedback,
   ActivityIndicator,
 } from 'react-native';
 import {Button} from 'native-base';
 import DeviceInfo from 'react-native-device-info';
+
+import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
+import {TextInput} from '../../core/components/TextInput';
 
 import isInternet from '@utils/internet';
 import {ERROR_NETWORK} from '@core/const';
@@ -36,6 +40,51 @@ const mapDispatchToProps = {callMe};
 
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import stylesHeader from '../../core/components/Header/style';
+
+const styles = StyleSheet.create({
+  // Скопировано из ProfileSettingsScreen.
+  container: {
+    flex: 1,
+    paddingVertical: 20,
+    paddingHorizontal: 14,
+    backgroundColor: '#fff',
+  },
+  header: {
+    marginBottom: 36,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  field: {
+    marginBottom: 18,
+  },
+  group: {
+    marginBottom: 36,
+  },
+  textinput: {
+    height: Platform.OS === 'ios' ? 40 : 'auto',
+    borderColor: '#d8d8d8',
+    borderBottomWidth: 1,
+    color: '#222b45',
+    fontSize: 18,
+  },
+  button: {
+    justifyContent: 'center',
+    shadowColor: '#0f66b2',
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+  },
+  buttonText: {
+    color: '#fff',
+    textTransform: 'uppercase',
+    fontSize: 16,
+  },
+});
 
 class CallMeBackScreen extends React.Component {
   constructor(props) {
@@ -80,12 +129,8 @@ class CallMeBackScreen extends React.Component {
     }
   }
 
-  onInputName = text => {
-    this.setState({name: text});
-  };
-
-  onInputPhone = text => {
-    this.setState({phone: text});
+  onChangeField = fieldName => value => {
+    this.setState({[fieldName]: value});
   };
 
   onPressCallMe = async () => {
@@ -146,159 +191,69 @@ class CallMeBackScreen extends React.Component {
     const {name, phone} = this.state;
 
     return (
-      <KeyboardAvoidingView behavior="position">
+      <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView>
-            <View
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                marginTop: '20%',
-                justifyContent: 'center',
-                width: '90%',
-              }}>
-              <Text
-                style={{fontSize: 30, fontWeight: 'bold', textAlign: 'center'}}>
-                Обратный звонок
-              </Text>
-            </View>
-            <View
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <View
-                style={{
-                  marginTop: 10,
-                  marginBottom: 20,
-                  width: '100%',
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              />
-            </View>
-            {!this.state.success ? (
-              <View
-                style={{
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textAlign: 'center',
-                }}>
-                <TextInput
-                  style={{
-                    height: Platform.OS === 'ios' ? 40 : 'auto',
-                    paddingHorizontal: 14,
-                    borderColor: '#D8D8D8',
-                    borderTopWidth: 0,
-                    borderRightWidth: 0,
-                    borderLeftWidth: 0,
-                    borderBottomWidth: 2,
-                    color: '#222B45',
-                    width: '90%',
-                    borderRadius: 0,
-                    fontSize: 18,
-                  }}
-                  value={name}
-                  placeholder="Имя"
-                  onChangeText={this.onInputName}
-                />
+            <View style={styles.container}>
+              <View style={styles.header}>
+                <Text style={styles.heading}>Обратный звонок</Text>
+              </View>
+              {this.state.success ? (
+                <View style={{flex: 1, justifyContent: 'center'}}>
+                  <View style={styles.group}>
+                    <Text
+                      style={{
+                        fontSize: 22,
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                      }}>
+                      Заявка успешно отправлена
+                    </Text>
+                  </View>
+                  <View>
+                    <Button
+                      onPress={() =>
+                        this.props.navigation.navigate('BottomTabNavigation')
+                      }
+                      style={styles.button}>
+                      <Text style={styles.buttonText}>Назад</Text>
+                    </Button>
+                  </View>
+                </View>
+              ) : (
                 <>
-                  <TextInput
-                    style={{
-                      height: Platform.OS === 'ios' ? 40 : 'auto',
-                      paddingHorizontal: 14,
-                      borderColor: '#D8D8D8',
-                      borderTopWidth: 0,
-                      borderRightWidth: 0,
-                      borderLeftWidth: 0,
-                      borderBottomWidth: 2,
-                      color: '#222B45',
-                      width: '90%',
-                      borderRadius: 0,
-                      marginTop: 18,
-                      fontSize: 18,
-                    }}
-                    value={phone}
-                    placeholder="Телефон"
-                    keyboardType="phone-pad"
-                    onChangeText={this.onInputPhone}
-                  />
-                  <Button
-                    onPress={this.onPressCallMe}
-                    disabled={this.state.loading}
-                    style={{
-                      marginTop: 40,
-                      width: '90%',
-                      // backgroundColor: '#34BD78',
-                      justifyContent: 'center',
-                      paddingVertical: 16,
-                      paddingHorizontal: 40,
-                      shadowColor: '#0F66B2',
-                      shadowOpacity: 0.5,
-                      shadowRadius: 8,
-                      shadowOffset: {
-                        width: 0,
-                        height: 2,
-                      },
-                    }}>
-                    {this.state.loading ? (
-                      <ActivityIndicator color="#fff" />
-                    ) : (
-                      <Text
-                        style={{
-                          color: '#fff',
-                          textTransform: 'uppercase',
-                          fontWeight: 'bold',
-                        }}>
-                        Отправить
-                      </Text>
-                    )}
-                  </Button>
+                  <View style={styles.group}>
+                    <View style={styles.field}>
+                      <TextInput
+                        autoCorrect={false}
+                        style={styles.textinput}
+                        label="Имя"
+                        value={this.state.name}
+                        onChangeText={this.onChangeField('name')}
+                      />
+                    </View>
+                    <View style={styles.field}>
+                      <TextInput
+                        style={styles.textinput}
+                        label="Телефон"
+                        keyboardType="phone-pad"
+                        value={this.state.phone}
+                        onChangeText={this.onChangeField('phone')}
+                      />
+                    </View>
+                  </View>
+                  <View style={styles.group}>
+                    <Button onPress={this.onPressCallMe} style={styles.button}>
+                      {this.state.loading ? (
+                        <ActivityIndicator color="#fff" />
+                      ) : (
+                        <Text style={styles.buttonText}>Отправить</Text>
+                      )}
+                    </Button>
+                  </View>
                 </>
-              </View>
-            ) : (
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <Text
-                  style={{
-                    fontSize: 22,
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                  }}>
-                  Заявка успешно отправлена
-                </Text>
-                <Button
-                  onPress={() =>
-                    this.props.navigation.navigate('BottomTabNavigation')
-                  }
-                  style={{
-                    marginTop: 40,
-                    width: '90%',
-                    justifyContent: 'center',
-                    paddingVertical: 16,
-                    paddingHorizontal: 40,
-                    shadowColor: '#0F66B2',
-                    shadowOpacity: 0.5,
-                    shadowRadius: 8,
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
-                    },
-                  }}>
-                  <Text style={{color: '#fff'}}>Назад</Text>
-                </Button>
-              </View>
-            )}
+              )}
+            </View>
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
