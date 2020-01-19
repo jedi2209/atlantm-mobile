@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 import {List, StyleProvider, Button} from 'native-base';
 import DatePicker from 'react-native-datepicker';
+import {StackActions, NavigationActions} from 'react-navigation';
 
 // redux
 import {connect} from 'react-redux';
@@ -301,9 +302,17 @@ class ServiceScreen extends Component {
                   </View>
                   <View>
                     <Button
-                      onPress={() =>
-                        this.props.navigation.navigate('BottomTabNavigation')
-                      }
+                      onPress={() => {
+                        const resetAction = StackActions.reset({
+                          index: 0,
+                          actions: [
+                            NavigationActions.navigate({
+                              routeName: 'BottomTabNavigation',
+                            }),
+                          ],
+                        });
+                        this.props.navigation.dispatch(resetAction);
+                      }}
                       style={styles.button}>
                       <Text style={styles.buttonText}>Назад</Text>
                     </Button>
