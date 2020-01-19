@@ -20,6 +20,7 @@ import {
 } from 'react-native';
 import {Button} from 'native-base';
 import DeviceInfo from 'react-native-device-info';
+import {StackActions, NavigationActions} from 'react-navigation';
 
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
@@ -212,9 +213,17 @@ class CallMeBackScreen extends React.Component {
                   </View>
                   <View>
                     <Button
-                      onPress={() =>
-                        this.props.navigation.navigate('BottomTabNavigation')
-                      }
+                      onPress={() => {
+                        const resetAction = StackActions.reset({
+                          index: 0,
+                          actions: [
+                            NavigationActions.navigate({
+                              routeName: 'BottomTabNavigation',
+                            }),
+                          ],
+                        });
+                        this.props.navigation.dispatch(resetAction);
+                      }}
                       style={styles.button}>
                       <Text style={styles.buttonText}>Назад</Text>
                     </Button>

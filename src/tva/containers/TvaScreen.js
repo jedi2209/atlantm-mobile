@@ -137,7 +137,7 @@ class TvaScreen extends Component {
     super(props);
 
     this.state = {
-      carNumber: '9186СХ-7',
+      carNumber: '',
       loading: false,
       success: false,
     };
