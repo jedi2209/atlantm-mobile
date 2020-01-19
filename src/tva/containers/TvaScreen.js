@@ -403,7 +403,11 @@ class TvaScreen extends Component {
                   </View>
                   <View style={styles.group}>
                     <Button
-                      onPress={() => this.onPressButton()}
+                      onPress={
+                        this.state.loading
+                          ? undefined
+                          : () => this.onPressButton()
+                      }
                       style={styles.button}>
                       {this.state.loading ? (
                         <ActivityIndicator color="#fff" />
