@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -16,6 +17,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {
+  Button,
   Body,
   Right,
   Label,
@@ -54,10 +56,59 @@ import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import {TVA__SUCCESS, TVA__FAIL} from '../actionTypes';
 
+const $size = 40;
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
+  },
+  list: {
+    paddingBottom: $size,
+  },
+  serviceForm: {
+    marginTop: $size,
+  },
+  // Скопировано из ProfileSettingsScreen.
+  container: {
+    flex: 1,
+    paddingVertical: 20,
+    paddingHorizontal: 14,
+    backgroundColor: '#fff',
+  },
+  header: {
+    marginBottom: 36,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  field: {
+    marginBottom: 18,
+  },
+  group: {
+    marginBottom: 36,
+  },
+  textinput: {
+    height: Platform.OS === 'ios' ? 40 : 'auto',
+    borderColor: '#d8d8d8',
+    borderBottomWidth: 1,
+    color: '#222b45',
+    fontSize: 18,
+  },
+  button: {
+    justifyContent: 'center',
+    shadowColor: '#0f66b2',
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+  },
+  buttonText: {
+    color: '#fff',
+    textTransform: 'uppercase',
+    fontSize: 16,
   },
 });
 
@@ -82,6 +133,15 @@ const mapDispatchToProps = {
 };
 
 class TvaScreen extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      carNumber: '9186СХ-7',
+      loading: false,
+      success: false,
+    };
+  }
   static navigationOptions = ({navigation}) => ({
     // Табло выдачи авто
     headerStyle: stylesHeader.blueHeader,
@@ -117,31 +177,14 @@ class TvaScreen extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
-
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen =
-          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
-          'TvaScreen';
-      }
-    }
-
-    return isActiveScreen;
-  }
+  onChangeField = fieldName => value => {
+    this.setState({[fieldName]: value});
+  };
 
   onPressButton = pushProps => {
-    let {
-      carNumber,
-      navigation,
-      pushTracking,
-      dealerSelected,
-      actionFetchTva,
-    } = this.props;
-
+    this.setState({loading: true});
+    let {navigation, pushTracking, dealerSelected, actionFetchTva} = this.props;
+    let {carNumber} = this.state;
     let dealerId = dealerSelected.id;
 
     if (pushProps) {
@@ -152,6 +195,7 @@ class TvaScreen extends Component {
     }
 
     if (!carNumber && !pushProps) {
+      this.setState({loading: false});
       return setTimeout(() => {
         Alert.alert(
           'Недостаточно информации',
@@ -166,6 +210,7 @@ class TvaScreen extends Component {
       region: pushProps ? null : dealerSelected.region,
       pushTracking,
     }).then(action => {
+      this.setState({loading: false});
       switch (action.type) {
         case TVA__SUCCESS:
           setTimeout(() => {
@@ -268,53 +313,9 @@ class TvaScreen extends Component {
     });
   };
 
-  onChangeCarNumber = value => this.props.carNumberFill(value);
-
-  renderListItems = () => {
-    const {carNumber, pushTracking} = this.props;
-
-    return (
-      <View>
-        <View style={stylesList.listItemContainer}>
-          <ListItem style={[stylesList.listItem, stylesList.listItemReset]}>
-            <Body>
-              <Item style={stylesList.inputItem} fixedLabel>
-                <Label style={stylesList.label}>Гос. номер</Label>
-                <Input
-                  style={stylesList.input}
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  placeholder="Поле для заполнения"
-                  onChangeText={this.onChangeCarNumber}
-                  value={carNumber}
-                  returnKeyType="done"
-                  returnKeyLabel="Готово"
-                  underlineColorAndroid="transparent"
-                />
-              </Item>
-            </Body>
-          </ListItem>
-        </View>
-
-        <View style={stylesList.listItemContainer}>
-          <ListItem style={stylesList.listItem} last>
-            <Body>
-              <Label style={stylesList.label}>Отслеживание</Label>
-            </Body>
-            <Right>
-              <Switch
-                onValueChange={this.onPressPushTracking}
-                value={pushTracking}
-              />
-            </Right>
-          </ListItem>
-        </View>
-      </View>
-    );
-  };
-
   onPressPushTracking = isPushTracking => {
-    const {actionSetPushTracking, carNumber} = this.props;
+    const {actionSetPushTracking} = this.props;
+    const {carNumber} = this.state;
     if (isPushTracking === true) {
       PushNotifications.subscribeToTopic('tva', carNumber).then(
         isPushTracking => {
@@ -329,6 +330,9 @@ class TvaScreen extends Component {
 
   render() {
     const {navigation, dealerSelected, isTvaRequest} = this.props;
+
+    console.log('>>>> dealerSelected.id', this.props.dealerSelected.id);
+
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -373,59 +377,6 @@ class TvaScreen extends Component {
                     />
                   </View>
                   <View style={styles.group}>
-                    <DatePicker
-                      showIcon={false}
-                      mode="date"
-                      minDate={new Date()}
-                      placeholder="Выберите дату"
-                      format="DD MMMM YYYY"
-                      confirmBtnText="Выбрать"
-                      cancelBtnText="Отмена"
-                      customStyles={datePickerStyles}
-                      date={this.state.date}
-                      onDateChange={(_, date) => {
-                        this.onChangeField('date')(date);
-                      }}
-                    />
-                  </View>
-                  <View style={styles.group}>
-                    <View style={styles.field}>
-                      <TextInput
-                        autoCorrect={false}
-                        style={styles.textinput}
-                        label="Имя"
-                        value={this.state.name}
-                        onChangeText={this.onChangeField('name')}
-                      />
-                    </View>
-                    <View style={styles.field}>
-                      <TextInput
-                        style={styles.textinput}
-                        label="Телефон"
-                        keyboardType="phone-pad"
-                        value={this.state.phone}
-                        onChangeText={this.onChangeField('phone')}
-                      />
-                    </View>
-                    <View style={styles.field}>
-                      <TextInput
-                        style={styles.textinput}
-                        label="Email"
-                        keyboardType="email-address"
-                        value={this.state.email}
-                        onChangeText={this.onChangeField('email')}
-                      />
-                    </View>
-                  </View>
-                  <View style={styles.group}>
-                    <View style={styles.field}>
-                      <TextInput
-                        style={styles.textinput}
-                        label="Авто"
-                        value={this.state.car}
-                        onChangeText={this.onChangeField('car')}
-                      />
-                    </View>
                     <View style={styles.field}>
                       <TextInput
                         style={styles.textinput}
@@ -434,13 +385,30 @@ class TvaScreen extends Component {
                         onChangeText={this.onChangeField('carNumber')}
                       />
                     </View>
+                    <View
+                      style={
+                        (styles.field,
+                        {
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        })
+                      }>
+                      <Label style={stylesList.label}>Отслеживание</Label>
+                      <Switch
+                        onValueChange={this.onPressPushTracking}
+                        value={this.props.pushTracking}
+                      />
+                    </View>
                   </View>
                   <View style={styles.group}>
-                    <Button onPress={this.onPressOrder} style={styles.button}>
+                    <Button
+                      onPress={() => this.onPressButton()}
+                      style={styles.button}>
                       {this.state.loading ? (
                         <ActivityIndicator color="#fff" />
                       ) : (
-                        <Text style={styles.buttonText}>Отправить</Text>
+                        <Text style={styles.buttonText}>Проверить</Text>
                       )}
                     </Button>
                   </View>
