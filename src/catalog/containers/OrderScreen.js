@@ -187,15 +187,6 @@ class OrderScreen extends Component {
         }, 100);
       }
 
-
-      console.log( 'name >>', this.state.name,
-      'email >>', this.state.email,
-      'phone >>', this.state.phone,
-      'dealerId >>',dealerId,
-      'carId >>', carId,
-      'comment >>', this.state.comment,
-      'isNewCar >>', isNewCar)
-
       actionOrderCar({
         name: this.state.name,
         email: this.state.email,

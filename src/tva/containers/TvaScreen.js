@@ -7,6 +7,13 @@ import {
   StyleSheet,
   Platform,
   Linking,
+  Text,
+  TouchableWithoutFeedback,
+  ScrollView,
+  Keyboard,
+  // TextInput,
+  ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import {
   Body,
@@ -26,10 +33,11 @@ import {actionFetchTva, actionSetPushTracking} from '../actions';
 import {carNumberFill} from '../../profile/actions';
 //import { actionSetPushGranted } from '../../core/actions';
 
-// components
+import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
+import {TextInput} from '../../core/components/TextInput';
 
+// components
 import Spinner from 'react-native-loading-spinner-overlay';
-import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import ListItemHeader from '../../profile/components/ListItemHeader';
 import DealerItemList from '../../core/components/DealerItemList';
@@ -75,13 +83,19 @@ const mapDispatchToProps = {
 
 class TvaScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: 'Табло выдачи авто',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
+    // Табло выдачи авто
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
     headerLeft: (
-      <HeaderIconBack returnScreen="BottomTabNavigation" navigation={navigation} />
+      <View>
+        <HeaderIconBack
+          theme="white"
+          navigation={navigation}
+          returnScreen="BottomTabNavigation"
+        />
+      </View>
     ),
-    headerRight: <HeaderIconMenu navigation={navigation} />,
+    headerRight: <View />,
   });
 
   static propTypes = {
@@ -314,12 +328,129 @@ class TvaScreen extends Component {
   };
 
   render() {
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
-
     const {navigation, dealerSelected, isTvaRequest} = this.props;
-
-    console.log('== TvaScreen ==');
+    return (
+      <KeyboardAvoidingView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView>
+            <View style={styles.container}>
+              <View style={styles.header}>
+                <Text style={styles.heading}>Табло выдачи авто</Text>
+              </View>
+              {this.state.success ? (
+                <View style={{flex: 1, justifyContent: 'center'}}>
+                  <View style={styles.group}>
+                    <Text
+                      style={{
+                        fontSize: 22,
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                      }}>
+                      Заявка успешно отправлена
+                    </Text>
+                  </View>
+                  <View>
+                    <Button
+                      onPress={() =>
+                        this.props.navigation.navigate('BottomTabNavigation')
+                      }
+                      style={styles.button}>
+                      <Text style={styles.buttonText}>Назад</Text>
+                    </Button>
+                  </View>
+                </View>
+              ) : (
+                <>
+                  <View
+                    // Визуально выравниваем относительно остальных компонентов.
+                    style={[styles.group, {marginLeft: -14, marginRight: -14}]}>
+                    <DealerItemList
+                      goBack
+                      navigation={navigation}
+                      city={dealerSelected.city}
+                      name={dealerSelected.name}
+                      brands={dealerSelected.brands}
+                    />
+                  </View>
+                  <View style={styles.group}>
+                    <DatePicker
+                      showIcon={false}
+                      mode="date"
+                      minDate={new Date()}
+                      placeholder="Выберите дату"
+                      format="DD MMMM YYYY"
+                      confirmBtnText="Выбрать"
+                      cancelBtnText="Отмена"
+                      customStyles={datePickerStyles}
+                      date={this.state.date}
+                      onDateChange={(_, date) => {
+                        this.onChangeField('date')(date);
+                      }}
+                    />
+                  </View>
+                  <View style={styles.group}>
+                    <View style={styles.field}>
+                      <TextInput
+                        autoCorrect={false}
+                        style={styles.textinput}
+                        label="Имя"
+                        value={this.state.name}
+                        onChangeText={this.onChangeField('name')}
+                      />
+                    </View>
+                    <View style={styles.field}>
+                      <TextInput
+                        style={styles.textinput}
+                        label="Телефон"
+                        keyboardType="phone-pad"
+                        value={this.state.phone}
+                        onChangeText={this.onChangeField('phone')}
+                      />
+                    </View>
+                    <View style={styles.field}>
+                      <TextInput
+                        style={styles.textinput}
+                        label="Email"
+                        keyboardType="email-address"
+                        value={this.state.email}
+                        onChangeText={this.onChangeField('email')}
+                      />
+                    </View>
+                  </View>
+                  <View style={styles.group}>
+                    <View style={styles.field}>
+                      <TextInput
+                        style={styles.textinput}
+                        label="Авто"
+                        value={this.state.car}
+                        onChangeText={this.onChangeField('car')}
+                      />
+                    </View>
+                    <View style={styles.field}>
+                      <TextInput
+                        style={styles.textinput}
+                        label="Гос. номер"
+                        value={this.state.carNumber}
+                        onChangeText={this.onChangeField('carNumber')}
+                      />
+                    </View>
+                  </View>
+                  <View style={styles.group}>
+                    <Button onPress={this.onPressOrder} style={styles.button}>
+                      {this.state.loading ? (
+                        <ActivityIndicator color="#fff" />
+                      ) : (
+                        <Text style={styles.buttonText}>Отправить</Text>
+                      )}
+                    </Button>
+                  </View>
+                </>
+              )}
+            </View>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    );
 
     return (
       <StyleProvider style={getTheme()}>
