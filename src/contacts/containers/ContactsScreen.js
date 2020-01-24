@@ -29,6 +29,8 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '@core/style-const';
 import {ERROR_NETWORK} from '@core/const';
 import Carousel from 'react-native-snap-carousel';
+import {store} from '@core/store';
+import {actionToggleModal} from '@core/actions';
 
 const HEADER_MAX_HEIGHT = 406;
 
@@ -153,7 +155,7 @@ const Card = ({kind, title, subtitle, onPress}) => {
   );
 };
 
-import {Offer} from '../../core/components/Offer';
+import {Offer} from '@core/components/Offer';
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
   return {
@@ -302,9 +304,12 @@ class ContactsScreen extends Component {
                   type="MaterialIcons"
                   name="navigation"
                 />
-                <Text style={styles.addressText}>{`${
-                  dealerSelected.city.name
-                }, ${dealerSelected.address}`}</Text>
+                <Text 
+                  numberOfLines={1}
+                  ellipsizeMode='tail'
+                  style={styles.addressText}>
+                  {`${dealerSelected.city.name}, ${dealerSelected.address}`}
+                </Text>
               </TouchableOpacity>
               <ScrollView
                 showsHorizontalScrollIndicator={false}
@@ -323,7 +328,7 @@ class ContactsScreen extends Component {
                   />
                   <Card
                     title="Заказать звонок"
-                    subtitle="Перезвоним Вам через 6 часов"
+                    subtitle=""
                     kind="default"
                     onPress={this.onPressCallMe}
                   />
@@ -336,6 +341,7 @@ class ContactsScreen extends Component {
                     title="Заявка"
                     subtitle="Отправить заявку"
                     kind="danger"
+                    // onPress={store.dispatch(actionToggleModal('application'))}
                   />
                   <Card
                     title="Сайт"
