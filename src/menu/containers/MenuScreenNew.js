@@ -162,6 +162,13 @@ const MoreScreen = props => {
       selected: false,
     },
     {
+      id: 8,
+      name: 'Табло выдачи авто',
+      navigateUrl: 'TvaScreen',
+      type: 'new',
+      selected: false,
+    },
+    {
       id: 6,
       name: 'Отзывы',
       navigateUrl: 'ReviewsScreen',
@@ -173,14 +180,6 @@ const MoreScreen = props => {
       name: 'Индикаторы',
       navigateUrl: 'IndicatorsScreen',
       type: 'indicators',
-      selected: false
-      ,
-    },
-    {
-      id: 8,
-      name: 'Выдача автомообиля',
-      navigateUrl: 'TvaScreen',
-      type: 'new',
       selected: false,
     },
   ];
