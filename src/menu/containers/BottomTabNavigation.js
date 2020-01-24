@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Icon} from 'native-base';
+import {Alert} from 'react-native';
 
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
@@ -138,9 +139,30 @@ const BottomTabNavigation = createBottomTabNavigator({
     screen: createStackNavigator({
       ApplicationModalScreen: {screen: ApplicationModalScreen},
     }),
-    navigationOptions: () => {
+    navigationOptions: ({navigation}) => {
       return {
-        tabBarOnPress: () => store.dispatch(actionToggleModal('application')),
+        tabBarOnPress: () =>
+          Alert.alert(
+            'Выберите заявку',
+            'Какую заявку Вы хотите отправить?',
+            [
+              {
+                text: 'На обратный звонок',
+                onPress: () => navigation.navigate('CallMeBackScreen'),
+              },
+              {
+                text: 'На СТО',
+                onPress: () => navigation.navigate('ServiceScreen'),
+              },
+              {
+                text: 'Отмена',
+                onPress: () => console.log('OK Pressed'),
+                style: 'cancel',
+              },
+            ],
+            {cancelable: false},
+          ),
+        // store.dispatch(actionToggleModal('application')),
         tabBarLabel: 'Заявка',
         tabBarIcon: ({focused}) => (
           <Icon
