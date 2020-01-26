@@ -142,21 +142,28 @@ class TvaScreen extends Component {
       success: false,
     };
   }
-  static navigationOptions = ({navigation}) => ({
-    // Табло выдачи авто
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: (
-      <View>
-        <HeaderIconBack
-          theme="white"
-          navigation={navigation}
-          returnScreen="BottomTabNavigation"
-        />
-      </View>
-    ),
-    headerRight: <View />,
-  });
+  static navigationOptions = ({navigation}) => {
+    const returnScreen =
+      (navigation.state.params && navigation.state.params.returnScreen) ||
+      'BottomTabNavigation';
+    console.log('returnScreen ========>', returnScreen);
+
+    return {
+      // Табло выдачи авто
+      headerStyle: stylesHeader.blueHeader,
+      headerTitleStyle: stylesHeader.blueHeaderTitle,
+      headerLeft: (
+        <View>
+          <HeaderIconBack
+            theme="white"
+            navigation={navigation}
+            returnScreen={returnScreen}
+          />
+        </View>
+      ),
+      headerRight: <View />,
+    };
+  };
 
   static propTypes = {
     dealerSelected: PropTypes.object,

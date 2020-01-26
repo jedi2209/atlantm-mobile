@@ -8,11 +8,12 @@ import {
   Alert,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native';
 import {Icon, Button, CheckBox, Accordion} from 'native-base';
-
+import {verticalScale} from '../../../utils/scale';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-
+import styleConst from '@core/style-const';
 // redux
 import {connect} from 'react-redux';
 import {
@@ -318,70 +319,81 @@ class NewCarFilterScreen extends Component {
     const filtersContent = [
       {
         title: 'Бренды',
-        content: (
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-            }}>
-            {this.state.brandFilters.map(({id, name, checked}) => (
-              <View
-                style={{
-                  width: '50%',
-                  marginBottom: 30,
-                }}>
-                <TouchableOpacity
-                  onPress={() => {
-                    const brands = this.state.brandFilters.map(brand =>
-                      brand.id === id
-                        ? {...brand, checked: !brand.checked}
-                        : brand,
-                    );
-
-                    const filterModels = brands.reduce((acc, brand) => {
-                      if (brand.checked) {
-                        Object.keys(brand.model).forEach(item => {
-                          acc.push({
-                            id: item,
-                            checked: false,
-                            name: brand.model[item],
-                          });
-                        });
-                      }
-                      return acc;
-                    }, []);
-
-                    this.setState({
-                      brandFilters: brands,
-                      modelFilter: filterModels,
-                    });
+        content:
+          this.state.brandFilters.length === 0 ? (
+            <ActivityIndicator
+              color={styleConst.color.blue}
+              style={{
+                spinner: {
+                  alignSelf: 'center',
+                  marginTop: verticalScale(60),
+                },
+              }}
+            />
+          ) : (
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+              }}>
+              {this.state.brandFilters.map(({id, name, checked}) => (
+                <View
+                  style={{
+                    width: '50%',
+                    marginBottom: 30,
                   }}>
-                  <View
-                    key={id}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
+                  <TouchableOpacity
+                    onPress={() => {
+                      const brands = this.state.brandFilters.map(brand =>
+                        brand.id === id
+                          ? {...brand, checked: !brand.checked}
+                          : brand,
+                      );
+
+                      const filterModels = brands.reduce((acc, brand) => {
+                        if (brand.checked) {
+                          Object.keys(brand.model).forEach(item => {
+                            acc.push({
+                              id: item,
+                              checked: false,
+                              name: brand.model[item],
+                            });
+                          });
+                        }
+                        return acc;
+                      }, []);
+
+                      this.setState({
+                        brandFilters: brands,
+                        modelFilter: filterModels,
+                      });
                     }}>
-                    {/* TODO: Настроить визуал через тему */}
-                    {/* TODO: Чекбокс вынести в отдельный компонент */}
-                    <CheckBox
-                      name="vw"
-                      checked={checked}
+                    <View
+                      key={id}
                       style={{
-                        borderRadius: 0,
-                        backgroundColor: checked ? '#0061ed' : '#fff',
-                        borderColor: checked ? 'transparent' : '#d0d5dc',
-                        fontSize: 40,
-                      }}
-                    />
-                    <Text style={{marginLeft: 20}}>{name}</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
-        ),
+                        display: 'flex',
+                        flexDirection: 'row',
+                      }}>
+                      {/* TODO: Настроить визуал через тему */}
+                      {/* TODO: Чекбокс вынести в отдельный компонент */}
+                      <CheckBox
+                        name="vw"
+                        checked={checked}
+                        style={{
+                          borderRadius: 0,
+                          backgroundColor: checked ? '#0061ed' : '#fff',
+                          borderColor: checked ? 'transparent' : '#d0d5dc',
+                          fontSize: 40,
+                        }}
+                      />
+                      <Text style={{marginLeft: 20}}>{name}</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+          ),
       },
       {
         title: 'Цена',

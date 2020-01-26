@@ -9,7 +9,28 @@ import {TextInput} from '../../core/components/TextInput';
 
 import {actionSaveProfileByUser} from '../actions';
 
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
+import stylesHeader from '../../core/components/Header/style';
+
 class ProfileSettingsScreen extends Component {
+  static navigationOptions = ({navigation}) => ({
+    headerTitle: (
+      <Text style={stylesHeader.whiteHeaderTitle}>Редактирование профиля</Text>
+    ),
+    headerStyle: stylesHeader.whiteHeader,
+    headerTitleStyle: stylesHeader.whiteHeaderTitle,
+    headerLeft: (
+      <View
+        style={{
+          marginLeft: -16,
+          marginTop: 2,
+        }}>
+        <HeaderIconBack theme="blue" navigation={navigation} />
+      </View>
+    ),
+    headerRight: <View />,
+  });
+
   constructor(props) {
     super(props);
     const car = this.props.profile.cars.find(value => value.owner) || {

@@ -140,7 +140,11 @@ class BonusScreen extends Component {
     headerStyle: stylesHeader.whiteHeader,
     headerTitleStyle: stylesHeader.whiteHeaderTitle,
     headerLeft: (
-      <View>
+      <View
+        style={{
+          marginLeft: -16,
+          marginTop: 2,
+        }}>
         <HeaderIconBack theme="blue" navigation={navigation} />
       </View>
     ),
@@ -325,15 +329,6 @@ class BonusScreen extends Component {
     if (isEmpty(bonus) || !bonus.items) {
       return (
         <SafeAreaView style={styles.safearea}>
-          {/* <Text
-            style={{
-              fontSize: 35,
-              fontWeight: '600',
-              marginHorizontal: 20,
-              // marginTop: 18,
-            }}>
-            Бонусные баллы
-          </Text> */}
           <Text style={styles.emptyText}>Бонусов пока нет</Text>
           {this.renderBonusButton()}
         </SafeAreaView>
@@ -343,7 +338,7 @@ class BonusScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
-          <Text
+          {/* <Text
             style={{
               fontSize: 35,
               fontWeight: '600',
@@ -351,7 +346,7 @@ class BonusScreen extends Component {
               marginTop: 18,
             }}>
             Бонусные баллы
-          </Text>
+          </Text> */}
           <Content>
             {Object.keys(get(bonus, 'items'), []).length
               ? this.renderLevel1(bonus.items)

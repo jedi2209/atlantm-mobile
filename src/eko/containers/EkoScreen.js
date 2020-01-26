@@ -63,15 +63,21 @@ const mapDispatchToProps = {
 };
 
 class EkoScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: 'Отзывы и предложения',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: (
-      <HeaderIconBack returnScreen="BottomTabNavigation" navigation={navigation} />
-    ),
-    headerRight: <HeaderIconMenu navigation={navigation} />,
-  });
+  static navigationOptions = ({navigation}) => {
+    const returnScreen =
+      (navigation.state.params && navigation.state.params.returnScreen) ||
+      'BottomTabNavigation';
+
+    return {
+      headerTitle: 'Отзывы и предложения',
+      headerStyle: stylesHeader.common,
+      headerTitleStyle: stylesHeader.title,
+      headerLeft: (
+        <HeaderIconBack returnScreen={returnScreen} navigation={navigation} />
+      ),
+      headerRight: <HeaderIconMenu navigation={navigation} />,
+    };
+  };
 
   componentDidMount() {
     this.props.actionReviewsReset();

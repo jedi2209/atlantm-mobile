@@ -63,21 +63,27 @@ const mapDispatchToProps = {
 };
 
 class ReviewsScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Отзывы</Text>,
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: (
-      <View>
-        <HeaderIconBack
-          theme="white"
-          navigation={navigation}
-          returnScreen="BottomTabNavigation"
-        />
-      </View>
-    ),
-    headerRight: <View />,
-  });
+  static navigationOptions = ({navigation}) => {
+    const returnScreen =
+      (navigation.state.params && navigation.state.params.returnScreen) ||
+      'BottomTabNavigation';
+
+    return {
+      headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Отзывы</Text>,
+      headerStyle: stylesHeader.blueHeader,
+      headerTitleStyle: stylesHeader.blueHeaderTitle,
+      headerLeft: (
+        <View>
+          <HeaderIconBack
+            theme="white"
+            navigation={navigation}
+            returnScreen={returnScreen}
+          />
+        </View>
+      ),
+      headerRight: <View />,
+    };
+  };
 
   componentDidUpdate() {
     const {needFetchReviews, isFetchReviews} = this.props;
