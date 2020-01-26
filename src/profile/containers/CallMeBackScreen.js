@@ -28,6 +28,8 @@ import {TextInput} from '../../core/components/TextInput';
 import isInternet from '@utils/internet';
 import {ERROR_NETWORK} from '@core/const';
 
+import DealerItemList from '../../core/components/DealerItemList';
+
 const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
   return {
     list: info.list,
@@ -197,6 +199,7 @@ class CallMeBackScreen extends React.Component {
 
   render() {
     const {name, phone} = this.state;
+    const {navigation, dealerSelected} = this.props;
 
     return (
       <KeyboardAvoidingView>
@@ -238,6 +241,17 @@ class CallMeBackScreen extends React.Component {
                 </View>
               ) : (
                 <>
+                <View
+                    // Визуально выравниваем относительно остальных компонентов.
+                    style={[styles.group, {marginLeft: -14, marginRight: -14}]}>
+                    <DealerItemList
+                      goBack
+                      navigation={navigation}
+                      city={dealerSelected.city}
+                      name={dealerSelected.name}
+                      brands={dealerSelected.brands}
+                    />
+                  </View>
                   <View style={styles.group}>
                     <View style={styles.field}>
                       <TextInput
