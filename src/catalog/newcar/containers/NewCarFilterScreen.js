@@ -7,25 +7,9 @@ import {
   Image,
   Alert,
   StyleSheet,
-  SafeAreaView,
-  ActivityIndicator,
-  TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
-import {
-  Body,
-  Icon,
-  Label,
-  Right,
-  Footer,
-  Button,
-  Switch,
-  Content,
-  ListItem,
-  StyleProvider,
-  CheckBox,
-  Accordion,
-} from 'native-base';
+import {Icon, Button, CheckBox, Accordion} from 'native-base';
 
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
@@ -41,102 +25,10 @@ import {
   actionSaveCarFilters,
 } from '../../actions';
 
-// components
-import EmptyMessage from '@core/components/EmptyMessage';
-import PricePicker from '@core/components/PricePicker';
-import ListItemHeader from '@profile/components/ListItemHeader';
-
-// styles
-import stylesList from '@core/components/Lists/style';
-
 // helpers
 import Amplitude from '@utils/amplitude-analytics';
-import {get, find, flatten, uniqBy} from 'lodash';
-import getTheme from '../../../../native-base-theme/components';
-import styleConst from '@core/style-const';
+import {get, find} from 'lodash';
 import stylesHeader from '@core/components/Header/style';
-import styleFooter from '@core/components/Footer/style';
-import {verticalScale} from '@utils/scale';
-import {TEXT_EMPTY_CAR_LIST, BUTTON_EMPTY_CAR_FIND} from '../../constants';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-
-const ColorCheckbox = ({checked, color}) => {
-  return (
-    <CheckBox
-      checked
-      style={{
-        width: 46,
-        height: 46,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 23,
-        backgroundColor: '#0061ed',
-        borderColor: 'transparent',
-        fontSize: 40,
-      }}
-    />
-  );
-};
-
-//const FOOTER_HEIGHT = 50;
-const styles = StyleSheet.create({
-  safearea: {
-    backgroundColor: styleConst.color.bg,
-    flex: 1,
-  },
-  content: {
-    paddingBottom: styleFooter.footer.height,
-  },
-  spinner: {
-    alignSelf: 'center',
-    marginTop: verticalScale(60),
-  },
-  spinnerButton: {
-    alignSelf: 'center',
-  },
-  buttonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  buttonActive: {
-    flex: 1,
-    height: styleConst.ui.footerHeight,
-    flexDirection: 'row',
-    backgroundColor: styleConst.color.lightBlue,
-  },
-  buttonInactive: {
-    flex: 1,
-    height: styleConst.ui.footerHeight,
-    flexDirection: 'row',
-    backgroundColor: styleConst.color.darkBg,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontFamily: styleConst.font.medium,
-    letterSpacing: styleConst.ui.letterSpacing,
-  },
-  buttonIcon: {
-    width: 18,
-    marginTop: 3,
-    marginLeft: 7,
-    resizeMode: 'contain',
-  },
-  body: {
-    flex: 1.5,
-  },
-  right: {
-    flex: 2,
-  },
-  hiddenListItemContainer: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 1,
-  },
-  labelPriceSpecial: {
-    color: styleConst.color.red,
-  },
-});
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
   const dealers = [].concat(
@@ -168,11 +60,13 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
   if (brandFilters.length > 0) {
     filterBrands = brandFilters;
   } else {
+    filterBrands = [];
+
     if (catalog.newCar.filterData) {
       filterBrands = Object.keys(catalog.newCar.filterData.data.brand).map(
         body => ({
           id: body,
-          checked: true,
+          checked: false,
           name: catalog.newCar.filterData.data.brand[body].name,
           model: catalog.newCar.filterData.data.brand[body].model,
         }),
@@ -190,7 +84,7 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
         Object.keys(brand.model).forEach(item => {
           acc.push({
             id: item,
-            checked: true,
+            checked: false,
             name: brand.model[item],
           });
         });
@@ -421,257 +315,246 @@ class NewCarFilterScreen extends Component {
   };
 
   render() {
-    return (
-      <>
-        <Accordion
-          dataArray={[
-            {
-              title: 'Бренды',
-              content: (
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
-                  }}>
-                  {this.state.brandFilters.map(({id, name, checked}) => (
-                    <View
-                      style={{
-                        marginBottom: 30,
-                        minWidth: 100,
-                      }}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          const brands = this.state.brandFilters.map(brand =>
-                            brand.id === id
-                              ? {...brand, checked: !brand.checked}
-                              : brand,
-                          );
+    const filtersContent = [
+      {
+        title: 'Бренды',
+        content: (
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+            }}>
+            {this.state.brandFilters.map(({id, name, checked}) => (
+              <View
+                style={{
+                  width: '50%',
+                  marginBottom: 30,
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    const brands = this.state.brandFilters.map(brand =>
+                      brand.id === id
+                        ? {...brand, checked: !brand.checked}
+                        : brand,
+                    );
 
-                          const filterModels = brands.reduce((acc, brand) => {
-                            if (brand.checked) {
-                              Object.keys(brand.model).forEach(item => {
-                                acc.push({
-                                  id: item,
-                                  checked: true,
-                                  name: brand.model[item],
-                                });
-                              });
-                            }
-                            return acc;
-                          }, []);
+                    const filterModels = brands.reduce((acc, brand) => {
+                      if (brand.checked) {
+                        Object.keys(brand.model).forEach(item => {
+                          acc.push({
+                            id: item,
+                            checked: false,
+                            name: brand.model[item],
+                          });
+                        });
+                      }
+                      return acc;
+                    }, []);
 
-                          this.setState({
-                            brandFilters: brands,
-                            modelFilter: filterModels,
-                          });
-                        }}>
-                        <View
-                          key={id}
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                          }}>
-                          {/* TODO: Настроить визуал через тему */}
-                          {/* TODO: Чекбокс вынести в отдельный компонент */}
-                          <CheckBox
-                            name="vw"
-                            checked={checked}
-                            style={{
-                              borderRadius: 0,
-                              backgroundColor: checked ? '#0061ed' : '#fff',
-                              borderColor: checked ? 'transparent' : '#d0d5dc',
-                              fontSize: 40,
-                            }}
-                          />
-                          <Text style={{marginLeft: 20}}>{name}</Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-                </View>
-              ),
-            },
-            {
-              title: 'Модели',
-              content: (
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
+                    this.setState({
+                      brandFilters: brands,
+                      modelFilter: filterModels,
+                    });
                   }}>
-                  {this.state.modelFilter.map(({id, name, checked}) => (
-                    <View
-                      style={{
-                        marginBottom: 30,
-                        minWidth: 100,
-                      }}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          this.setState({
-                            modelFilter: this.state.modelFilter.map(model =>
-                              model.id === id
-                                ? {...model, checked: !model.checked}
-                                : model,
-                            ),
-                          });
-                        }}>
-                        <View
-                          key={id}
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                          }}>
-                          {/* TODO: Настроить визуал через тему */}
-                          {/* TODO: Чекбокс вынести в отдельный компонент */}
-                          <CheckBox
-                            name="vw"
-                            checked={checked}
-                            style={{
-                              borderRadius: 0,
-                              backgroundColor: checked ? '#0061ed' : '#fff',
-                              borderColor: checked ? 'transparent' : '#d0d5dc',
-                              fontSize: 40,
-                            }}
-                          />
-                          <Text style={{marginLeft: 20}}>{name}</Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-                </View>
-              ),
-            },
-            {
-              title: 'Цена',
-              content: (
-                <View>
-                  <MultiSlider
-                    values={[
-                      this.state.priceFilter.min,
-                      this.state.priceFilter.max,
-                    ]}
-                    step={this.state.priceFilter.step}
-                    min={0}
-                    max={this.state.priceFilter.max}
-                    onValuesChange={e => {
-                      this.setState({
-                        priceFilter: {
-                          // TODO: fix it
-                          step: this.state.priceFilter.curr.step,
-                          curr: this.state.priceFilter.curr,
-                          min: e[0],
-                          max: e[1],
-                        },
-                      });
-                    }}
-                    trackStyle={{
-                      backgroundColor: '#d5d5e0',
-                    }}
-                    selectedStyle={{
-                      backgroundColor: '#0F66B2',
-                    }}
-                    customMarker={() => (
-                      <View
-                        style={{
-                          height: 17,
-                          width: 17,
-                          borderRadius: 8.5,
-                          backgroundColor: '#0F66B2',
-                          shadowColor: '#0F66B2',
-                          shadowOpacity: 0.5,
-                          shadowRadius: 8,
-                          shadowOffset: {
-                            width: 0,
-                            height: 2,
-                          },
-                        }}
-                      />
-                    )}
-                  />
                   <View
+                    key={id}
                     style={{
                       display: 'flex',
                       flexDirection: 'row',
-                      justifyContent: 'space-between',
                     }}>
-                    <Text style={{color: '#74747A', fontSize: 14}}>{`${
-                      this.state.priceFilter.min
-                    } ${this.state.priceFilter.curr &&
-                      this.state.priceFilter.curr.name}`}</Text>
-                    <Text style={{color: '#74747A', fontSize: 14}}>{`${
-                      this.state.priceFilter.max
-                    } ${this.state.priceFilter.curr &&
-                      this.state.priceFilter.curr.name}`}</Text>
+                    {/* TODO: Настроить визуал через тему */}
+                    {/* TODO: Чекбокс вынести в отдельный компонент */}
+                    <CheckBox
+                      name="vw"
+                      checked={checked}
+                      style={{
+                        borderRadius: 0,
+                        backgroundColor: checked ? '#0061ed' : '#fff',
+                        borderColor: checked ? 'transparent' : '#d0d5dc',
+                        fontSize: 40,
+                      }}
+                    />
+                    <Text style={{marginLeft: 20}}>{name}</Text>
                   </View>
-                </View>
-              ),
-            },
-            {
-              title: 'Кузов',
-              content: (
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        ),
+      },
+      {
+        title: 'Цена',
+        content: (
+          <View>
+            <MultiSlider
+              values={[this.state.priceFilter.min, this.state.priceFilter.max]}
+              step={this.state.priceFilter.step}
+              min={0}
+              max={this.state.priceFilter.max}
+              onValuesChange={e => {
+                this.setState({
+                  priceFilter: {
+                    // TODO: fix it
+                    step: this.state.priceFilter.curr.step,
+                    curr: this.state.priceFilter.curr,
+                    min: e[0],
+                    max: e[1],
+                  },
+                });
+              }}
+              trackStyle={{
+                backgroundColor: '#d5d5e0',
+              }}
+              selectedStyle={{
+                backgroundColor: '#0F66B2',
+              }}
+              customMarker={() => (
                 <View
                   style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'wrap',
+                    height: 17,
+                    width: 17,
+                    borderRadius: 8.5,
+                    backgroundColor: '#0F66B2',
+                    shadowColor: '#0F66B2',
+                    shadowOpacity: 0.5,
+                    shadowRadius: 8,
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
+                    },
+                  }}
+                />
+              )}
+            />
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={{color: '#74747A', fontSize: 14}}>{`${
+                this.state.priceFilter.min
+              } ${this.state.priceFilter.curr &&
+                this.state.priceFilter.curr.name}`}</Text>
+              <Text style={{color: '#74747A', fontSize: 14}}>{`${
+                this.state.priceFilter.max
+              } ${this.state.priceFilter.curr &&
+                this.state.priceFilter.curr.name}`}</Text>
+            </View>
+          </View>
+        ),
+      },
+      {
+        title: 'Кузов',
+        content: (
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+            }}>
+            {this.state.bodyFilters.map(({id, name, checked}) => (
+              <View
+                style={{
+                  marginBottom: 30,
+                  minWidth: 100,
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({
+                      bodyFilters: this.state.bodyFilters.map(body =>
+                        body.id === id
+                          ? {...body, checked: !body.checked}
+                          : body,
+                      ),
+                    });
                   }}>
-                  {this.state.bodyFilters.map(({id, name, checked}) => (
-                    <View
+                  <View
+                    key={id}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                    }}>
+                    {/* TODO: Настроить визуал через тему */}
+                    {/* TODO: Чекбокс вынести в отдельный компонент */}
+                    <CheckBox
+                      name="vw"
+                      checked={checked}
                       style={{
-                        marginBottom: 30,
-                        minWidth: 100,
-                      }}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          this.setState({
-                            bodyFilters: this.state.bodyFilters.map(body =>
-                              body.id === id
-                                ? {...body, checked: !body.checked}
-                                : body,
-                            ),
-                          });
-                        }}>
-                        <View
-                          key={id}
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                          }}>
-                          {/* TODO: Настроить визуал через тему */}
-                          {/* TODO: Чекбокс вынести в отдельный компонент */}
-                          <CheckBox
-                            name="vw"
-                            checked={checked}
-                            style={{
-                              borderRadius: 0,
-                              backgroundColor: checked ? '#0061ed' : '#fff',
-                              borderColor: checked ? 'transparent' : '#d0d5dc',
-                              fontSize: 40,
-                            }}
-                          />
-                          <Text style={{marginLeft: 20}}>{name}</Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  ))}
-                </View>
-              ),
-            },
-            // {
-            //   title: 'Цвет',
-            //   content: (
-            //     <View style={{display: 'flex', flexDirection: 'row'}}>
-            //       {/* TODO: Настроить визуал через тему */}
-            //       <ColorCheckbox />
-            //       <ColorCheckbox />
-            //       <ColorCheckbox />
-            //       <ColorCheckbox />
-            //     </View>
-            //   ),
-            // },
-          ]}
+                        borderRadius: 0,
+                        backgroundColor: checked ? '#0061ed' : '#fff',
+                        borderColor: checked ? 'transparent' : '#d0d5dc',
+                        fontSize: 40,
+                      }}
+                    />
+                    <Text style={{marginLeft: 20}}>{name}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        ),
+      },
+    ];
+
+    if (this.state.modelFilter.length > 0) {
+      filtersContent.splice(1, 0, {
+        title: 'Модели',
+        content: (
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+            }}>
+            {this.state.modelFilter.map(({id, name, checked}) => (
+              <View
+                style={{
+                  marginBottom: 30,
+                  width: '50%',
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.setState({
+                      modelFilter: this.state.modelFilter.map(model =>
+                        model.id === id
+                          ? {...model, checked: !model.checked}
+                          : model,
+                      ),
+                    });
+                  }}>
+                  <View
+                    key={id}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                    }}>
+                    {/* TODO: Настроить визуал через тему */}
+                    {/* TODO: Чекбокс вынести в отдельный компонент */}
+                    <CheckBox
+                      name="vw"
+                      checked={checked}
+                      style={{
+                        borderRadius: 0,
+                        backgroundColor: checked ? '#0061ed' : '#fff',
+                        borderColor: checked ? 'transparent' : '#d0d5dc',
+                        fontSize: 40,
+                      }}
+                    />
+                    <Text style={{marginLeft: 20}}>{name}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        ),
+      });
+    }
+    return (
+      <>
+        <Accordion
+          dataArray={filtersContent}
           expanded={0}
           renderHeader={(item, expanded) => (
             <View
@@ -749,3 +632,34 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(NewCarFilterScreen);
+
+// const ColorCheckbox = ({checked, color}) => {
+//   return (
+//     <CheckBox
+//       checked
+//       style={{
+//         width: 46,
+//         height: 46,
+//         display: 'flex',
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//         borderRadius: 23,
+//         backgroundColor: '#0061ed',
+//         borderColor: 'transparent',
+//         fontSize: 40,
+//       }}
+//     />
+//   );
+// };
+// {
+//   title: 'Цвет',
+//   content: (
+//     <View style={{display: 'flex', flexDirection: 'row'}}>
+//       {/* TODO: Настроить визуал через тему */}
+//       <ColorCheckbox />
+//       <ColorCheckbox />
+//       <ColorCheckbox />
+//       <ColorCheckbox />
+//     </View>
+//   ),
+// },
