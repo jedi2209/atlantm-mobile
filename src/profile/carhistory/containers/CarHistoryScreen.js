@@ -126,7 +126,11 @@ class CarHistoryScreen extends Component {
     headerStyle: stylesHeader.whiteHeader,
     headerTitleStyle: stylesHeader.whiteHeaderTitle,
     headerLeft: (
-      <View>
+      <View
+        style={{
+          marginLeft: -16,
+          marginTop: 2,
+        }}>
         <HeaderIconBack theme="blue" navigation={navigation} />
       </View>
     ),

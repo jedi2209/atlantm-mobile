@@ -34,7 +34,9 @@ const MenuItem = props => {
         paddingBottom: 5,
       }}
       selected={selected}
-      onPress={() => navigation.navigate(navigateUrl)}>
+      onPress={() =>
+        navigation.navigate(navigateUrl, {returnScreen: 'MoreScreen'})
+      }>
       <Left style={{marginLeft: 0, paddingLeft: 0, maxWidth: 75}}>
         <Button
           underlayColor={styles.buttonPrimaryText.color}
@@ -103,16 +105,9 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
     listUkraine: dealer.listUkraine,
     listBelarussia: dealer.listBelarussia,
     dealerSelected: dealer.selected,
-    name: profile.name,
-    phone: profile.phone,
-    email: profile.email,
-    car: profile.car,
-    carNumber: profile.carNumber,
 
     isFetchProfileData: profile.meta.isFetchProfileData,
 
-    auth: profile.auth,
-    cars: profile.cars,
     login: profile.login,
     password: profile.password,
     isLoginRequest: profile.meta.isLoginRequest,
@@ -200,7 +195,11 @@ const MoreScreen = props => {
           <Button
             full
             onPress={() => {
-              props.navigation.navigate('ProfileScreenInfo');
+              if (props.login.token) {
+                props.navigation.navigate('ProfileScreenInfo');
+              } else {
+                props.navigation.navigate('ProfileScreen');
+              }
             }}
             style={styles.buttonPrimary}>
             <Text style={styles.buttonPrimaryText}>ЛИЧНЫЙ КАБИНЕТ</Text>

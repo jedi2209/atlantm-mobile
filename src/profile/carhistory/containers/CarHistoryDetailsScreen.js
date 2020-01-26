@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {SafeAreaView, StyleSheet, View, Text, ScrollView} from 'react-native';
 import {Row, Col, Button, Content, Segment} from 'native-base';
@@ -131,7 +132,11 @@ class CarHistoryDetailsScreen extends Component {
       headerStyle: stylesHeader.whiteHeader,
       headerTitleStyle: stylesHeader.whiteHeaderTitle,
       headerLeft: (
-        <View>
+        <View
+          style={{
+            marginLeft: -16,
+            marginTop: 2,
+          }}>
           <HeaderIconBack theme="blue" navigation={navigation} />
         </View>
       ),

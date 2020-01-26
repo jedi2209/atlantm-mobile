@@ -87,30 +87,37 @@ class UserCarListScreen extends Component {
   //     headerRight: <HeaderIconMenu navigation={navigation} />,
   //   };
   // };
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Автомобили</Text>,
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: (
-      <View>
-        <HeaderIconBack
-          theme="white"
-          navigation={navigation}
-          returnScreen="BottomTabNavigation"
-        />
-      </View>
-    ),
-    headerRight: (
-      <View>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('UsedCarFilterScreen');
-          }}>
-          <Icon type="Octicons" name="settings" style={styles.iconFilter} />
-        </TouchableOpacity>
-      </View>
-    ),
-  });
+  static navigationOptions = ({navigation}) => {
+    const returnScreen =
+      (navigation.state.params && navigation.state.params.returnScreen) ||
+      'BottomTabNavigation';
+    console.log('returnScreen ========>', returnScreen);
+
+    return {
+      headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Автомобили</Text>,
+      headerStyle: stylesHeader.blueHeader,
+      headerTitleStyle: stylesHeader.blueHeaderTitle,
+      headerLeft: (
+        <View>
+          <HeaderIconBack
+            theme="white"
+            navigation={navigation}
+            returnScreen={returnScreen}
+          />
+        </View>
+      ),
+      headerRight: (
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('UsedCarFilterScreen');
+            }}>
+            <Icon type="Octicons" name="settings" style={styles.iconFilter} />
+          </TouchableOpacity>
+        </View>
+      ),
+    };
+  };
 
   componentDidMount() {
     setTimeout(() => {

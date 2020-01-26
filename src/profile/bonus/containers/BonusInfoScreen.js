@@ -54,11 +54,7 @@ class BonusInfoScreen extends Component {
       headerTitleStyle: stylesHeader.whiteHeaderTitle,
       headerLeft: (
         <View>
-          <HeaderIconBack
-            theme="blue"
-            navigation={navigation}
-            returnScreen="BottomTabNavigation"
-          />
+          <HeaderIconBack theme="blue" navigation={navigation} />
         </View>
       ),
       headerRight: <View />,

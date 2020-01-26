@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
 
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import stylesHeader from '../../core/components/Header/style';
+import {SafeAreaView} from 'react-navigation';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   //TODO: owner true должен быть показан первым
@@ -201,18 +202,7 @@ const CarCard = ({data}) => {
 };
 class ProfileScreenInfo extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerStyle: stylesHeader.whiteHeader,
-    headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerLeft: (
-      <View>
-        <HeaderIconBack
-          theme="blue"
-          navigation={navigation}
-          returnScreen="Home"
-        />
-      </View>
-    ),
-    headerRight: <View />,
+    header: null,
   });
 
   componentDidMount() {
@@ -222,138 +212,146 @@ class ProfileScreenInfo extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    return nextProps.login.token !== this.props.login.token;
+    if (this.props.navigation.isFocused() && !this.props.login.token) {
+      this.props.navigation.navigate('ProfileScreen');
+    }
   }
 
   render() {
     return (
-      <ScrollView>
-        <Text
-          style={{
-            fontSize: 35,
-            fontWeight: '600',
-            marginHorizontal: 20,
-            marginTop: 10,
-          }}>
-          {`${this.props.login.first_name} ${this.props.login.last_name}`}
-        </Text>
-        <Button
-          full
-          onPress={() => {
-            this.props.navigation.navigate('ChooseDealerScreen');
-          }}
-          style={styles.buttonPrimary}>
-          <Text style={styles.buttonPrimaryText}>
-            {this.props.dealerSelected.name}
+      <SafeAreaView>
+        <ScrollView>
+          <Text
+            style={{
+              fontSize: 35,
+              fontWeight: '600',
+              marginHorizontal: 20,
+              marginTop: 10,
+            }}>
+            {`${this.props.login.first_name} ${this.props.login.last_name}`}
           </Text>
-        </Button>
+          <Button
+            full
+            onPress={() => {
+              this.props.navigation.navigate('ChooseDealerScreen');
+            }}
+            style={styles.buttonPrimary}>
+            <Text style={styles.buttonPrimaryText}>
+              {this.props.dealerSelected.name}
+            </Text>
+          </Button>
 
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: '600',
-            marginHorizontal: 20,
-          }}>
-          Мои автомобили
-        </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: '600',
+              marginHorizontal: 20,
+            }}>
+            Мои автомобили
+          </Text>
 
-        <ScrollView
-          showsHorizontalScrollIndicator={false}
-          horizontal
-          style={styles.scrollView}>
-          {this.props.cars.map(item => (
-            <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate('TOHistore', {car: item})
-              }>
-              <CarCard data={item} />
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            style={styles.scrollView}>
+            {this.props.cars.map(item => (
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate('TOHistore', {car: item})
+                }>
+                <CarCard data={item} />
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
 
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('BonusScreen')}>
-          <View style={{marginHorizontal: 20}}>
-            <View
-              style={{
-                backgroundColor: '#0061ed',
-                borderRadius: 5,
-                padding: 14,
-                display: 'flex',
-                flexDirection: 'row',
-              }}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('BonusScreen')}>
+            <View style={{marginHorizontal: 20}}>
               <View
                 style={{
-                  backgroundColor: '#fff',
-                  width: 98,
-                  height: 98,
-                  borderRadius: 49,
+                  backgroundColor: '#0061ed',
+                  borderRadius: 5,
+                  padding: 14,
                   display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginRight: 24,
+                  flexDirection: 'row',
                 }}>
-                <Text
-                  style={{color: '#0061ed', fontSize: 26, fontWeight: '600'}}>
-                  {this.props.bonus && this.props.bonus.saldo
-                    ? this.props.bonus.saldo.value
-                    : 0}
-                </Text>
-              </View>
-              <View style={{flex: 1}}>
-                <Text
+                <View
                   style={{
-                    color: '#fff',
-                    fontSize: 18,
-                    marginBottom: 8,
-                    fontWeight: '600',
+                    backgroundColor: '#fff',
+                    width: 98,
+                    height: 98,
+                    borderRadius: 49,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginRight: 24,
                   }}>
-                  Бонусные баллы
-                </Text>
-                <Text
-                  style={{
-                    color: '#fff',
-                    fontSize: 12,
-                    marginBottom: 16,
-                    fontWeight: '600',
-                  }}>
-                  История накопления и трат Ваших бонусных баллов
-                </Text>
-                <View style={{display: 'flex', flexDirection: 'row'}}>
-                  <View>
-                    <Text
-                      style={{color: '#fff', fontSize: 16, fontWeight: '600'}}>
-                      Посмотреть
-                    </Text>
+                  <Text
+                    style={{color: '#0061ed', fontSize: 26, fontWeight: '600'}}>
+                    {this.props.bonus && this.props.bonus.saldo
+                      ? this.props.bonus.saldo.value
+                      : 0}
+                  </Text>
+                </View>
+                <View style={{flex: 1}}>
+                  <Text
+                    style={{
+                      color: '#fff',
+                      fontSize: 18,
+                      marginBottom: 8,
+                      fontWeight: '600',
+                    }}>
+                    Бонусные баллы
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#fff',
+                      fontSize: 12,
+                      marginBottom: 16,
+                      fontWeight: '600',
+                    }}>
+                    История накопления и трат Ваших бонусных баллов
+                  </Text>
+                  <View style={{display: 'flex', flexDirection: 'row'}}>
+                    <View>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontSize: 16,
+                          fontWeight: '600',
+                        }}>
+                        Посмотреть
+                      </Text>
+                    </View>
+                    <Icon
+                      type="FontAwesome5"
+                      name="angle-right"
+                      style={{color: '#fff', fontSize: 20, marginLeft: 8}}
+                    />
                   </View>
-                  <Icon
-                    type="FontAwesome5"
-                    name="angle-right"
-                    style={{color: '#fff', fontSize: 20, marginLeft: 8}}
-                  />
                 </View>
               </View>
             </View>
-          </View>
-        </TouchableOpacity>
-        <Button
-          full
-          onPress={() => {
-            this.props.navigation.navigate('ProfileSettingsScreen');
-          }}
-          style={[styles.buttonPrimary, {marginTop: 40}]}>
-          <Text style={styles.buttonPrimaryText}>Редактировать данные</Text>
-        </Button>
-        <Button
-          full
-          onPress={() => {
-            this.props.actionLogout();
-            this.props.navigation.navigate('ProfileScreen');
-          }}
-          style={styles.buttonPrimary}>
-          <Text style={styles.buttonPrimaryText}>Выйти</Text>
-        </Button>
-      </ScrollView>
+          </TouchableOpacity>
+          <Button
+            full
+            onPress={() => {
+              this.props.navigation.navigate('ProfileSettingsScreen');
+            }}
+            style={[styles.buttonPrimary, {marginTop: 40}]}>
+            <Text style={styles.buttonPrimaryText}>Редактировать данные</Text>
+          </Button>
+          <Button
+            full
+            onPress={() => {
+              this.props.actionLogout();
+              this.props.navigation.navigate('ProfileScreen');
+            }}
+            style={styles.buttonPrimary}>
+            <Text style={styles.buttonPrimaryText}>Выйти</Text>
+          </Button>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }

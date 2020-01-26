@@ -70,20 +70,27 @@ const mapDispatchToProps = {
 class InfoListScreen extends Component {
   state = {isRefreshing: false};
 
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Акции</Text>,
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: (
-      <View>
-        <HeaderIconBack
-          theme="white"
-          navigation={navigation}
-          returnScreen="BottomTabNavigation"
-        />
-      </View>
-    ),
-  });
+  static navigationOptions = ({navigation}) => {
+    const returnScreen =
+      (navigation.state.params && navigation.state.params.returnScreen) ||
+      'BottomTabNavigation';
+    console.log('returnScreen ========>', returnScreen);
+
+    return {
+      headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Акции</Text>,
+      headerStyle: stylesHeader.blueHeader,
+      headerTitleStyle: stylesHeader.blueHeaderTitle,
+      headerLeft: (
+        <View>
+          <HeaderIconBack
+            theme="white"
+            navigation={navigation}
+            returnScreen={returnScreen}
+          />
+        </View>
+      ),
+    };
+  };
 
   static propTypes = {
     dealerSelected: PropTypes.object.isRequired,

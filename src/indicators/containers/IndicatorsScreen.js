@@ -41,21 +41,28 @@ const mapDispatchToProps = {
 };
 
 class IndicatorsScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Индикаторы</Text>,
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: (
-      <View>
-        <HeaderIconBack
-          theme="white"
-          navigation={navigation}
-          returnScreen="BottomTabNavigation"
-        />
-      </View>
-    ),
-    headerRight: <View />,
-  });
+  static navigationOptions = ({navigation}) => {
+    const returnScreen =
+      (navigation.state.params && navigation.state.params.returnScreen) ||
+      'BottomTabNavigation';
+    console.log('returnScreen ========>', returnScreen);
+
+    return {
+      headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Индикаторы</Text>,
+      headerStyle: stylesHeader.blueHeader,
+      headerTitleStyle: stylesHeader.blueHeaderTitle,
+      headerLeft: (
+        <View>
+          <HeaderIconBack
+            theme="white"
+            navigation={navigation}
+            returnScreen={returnScreen}
+          />
+        </View>
+      ),
+      headerRight: <View />,
+    };
+  };
 
   static propTypes = {
     navigation: PropTypes.object,

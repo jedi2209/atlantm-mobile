@@ -57,32 +57,38 @@ const mapDispatchToProps = {
 };
 
 class NewCarListScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: (
-      <Text style={stylesHeader.blueHeaderTitle}>Новые автомобили</Text>
-    ),
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: (
-      <View>
-        <HeaderIconBack
-          theme="white"
-          navigation={navigation}
-          returnScreen="BottomTabNavigation"
-        />
-      </View>
-    ),
-    headerRight: (
-      <View>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('NewCarFilterScreen');
-          }}>
-          <Icon type="Octicons" name="settings" style={styles.iconFilter} />
-        </TouchableOpacity>
-      </View>
-    ),
-  });
+  static navigationOptions = ({navigation}) => {
+    const returnScreen =
+      (navigation.state.params && navigation.state.params.returnScreen) ||
+      'BottomTabNavigation';
+
+    return {
+      headerTitle: (
+        <Text style={stylesHeader.blueHeaderTitle}>Новые автомобили</Text>
+      ),
+      headerStyle: stylesHeader.blueHeader,
+      headerTitleStyle: stylesHeader.blueHeaderTitle,
+      headerLeft: (
+        <View>
+          <HeaderIconBack
+            theme="white"
+            navigation={navigation}
+            returnScreen={returnScreen}
+          />
+        </View>
+      ),
+      headerRight: (
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('NewCarFilterScreen');
+            }}>
+            <Icon type="Octicons" name="settings" style={styles.iconFilter} />
+          </TouchableOpacity>
+        </View>
+      ),
+    };
+  };
 
   componentDidMount() {
     const {dealerSelected, filterData} = this.props;
