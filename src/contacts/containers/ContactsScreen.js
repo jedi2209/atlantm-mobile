@@ -304,9 +304,9 @@ class ContactsScreen extends Component {
                   type="MaterialIcons"
                   name="navigation"
                 />
-                <Text 
+                <Text
                   numberOfLines={1}
-                  ellipsizeMode='tail'
+                  ellipsizeMode="tail"
                   style={styles.addressText}>
                   {`${dealerSelected.city.name}, ${dealerSelected.address}`}
                 </Text>
@@ -341,7 +341,29 @@ class ContactsScreen extends Component {
                     title="Заявка"
                     subtitle="Отправить заявку"
                     kind="danger"
-                    // onPress={store.dispatch(actionToggleModal('application'))}
+                    onPress={() => {
+                      Alert.alert(
+                        'Выберите заявку',
+                        'Какую заявку Вы хотите отправить?',
+                        [
+                          {
+                            text: 'На обратный звонок',
+                            onPress: () =>
+                              navigation.navigate('CallMeBackScreen'),
+                          },
+                          {
+                            text: 'На СТО',
+                            onPress: () => navigation.navigate('ServiceScreen'),
+                          },
+                          {
+                            text: 'Отмена',
+                            onPress: () => console.log('OK Pressed'),
+                            style: 'cancel',
+                          },
+                        ],
+                        {cancelable: false},
+                      );
+                    }}
                   />
                   <Card
                     title="Сайт"
