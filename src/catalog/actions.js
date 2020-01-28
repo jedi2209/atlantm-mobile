@@ -431,8 +431,14 @@ export const actionFetchNewCarByFilter = props => {
       newProps.searchUrl = props.nextPage;
     }
 
+
+    console.log('>>> newProps', newProps)
+
     return API.fetchNewCarByFilter(newProps)
       .then(response => {
+
+        console.log('>>> response', response)
+        
         if (response.error) {
           return dispatch({
             type: NEW_CAR_BY_FILTER__FAIL,

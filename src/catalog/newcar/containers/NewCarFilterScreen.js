@@ -117,7 +117,7 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
     listUkraineByCities: dealer.listUkraineByCities,
 
     items: catalog.newCar.items,
-    filterData: catalog.newCar.filterData,
+    filterData: catalog.newCar.filterData || {},
     filterBrands,
     filterModels,
     filterBody,
@@ -212,9 +212,12 @@ class NewCarFilterScreen extends Component {
     }
 
     if (needFetchFilterData) {
+      // console.log('HELLO FROM THE DARK SIDE END ANYBODY', filterData)
       return actionFetchNewCarByFilter({
         filters,
-        searchUrl: filterData.search_url,
+        searchUrl:
+          filterData.search_url ||
+          `/stock/new/cars/get/city/${this.props.dealerSelected.city.id}/`,
         filterBrands,
         filterModels,
         filterBody,

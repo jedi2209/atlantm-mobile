@@ -38,14 +38,14 @@ const mapStateToProps = ({dealer, nav, catalog}) => {
     filterData: catalog.newCar.filterData || {},
     isFetchingNewCarByFilter: catalog.newCar.meta.isFetchingNewCarByFilter,
 
-    // для pull-to-refresh
-    filterBrands: catalog.newCar.filterBrands,
-    filterModels: catalog.newCar.filterModels,
-    filterBody: catalog.newCar.filterBody,
+    filterBrands: catalog.newCar.filters.brandFilters,
+    filterModels: catalog.newCar.filters.modelFilter,
+    filterBody: catalog.newCar.filters.bodyFilters,
+    filterPrice: catalog.newCar.filters.priceFilter,
+
     filterGearbox: catalog.newCar.filterGearbox,
     filterDrive: catalog.newCar.filterDrive,
     filterEngineType: catalog.newCar.filterEngineType,
-    filterPrice: catalog.newCar.filterPrice,
     filterPriceSpecial: catalog.newCar.filterPriceSpecial,
 
     filters: catalog.newCar.filters,
@@ -154,6 +154,7 @@ class NewCarListScreen extends Component {
     };
 
     if (type === EVENT_REFRESH) {
+      // console.log('filterData.search_url >>>>>> EVENT_REFRESH', filterData.search_url);
       return actionFetchNewCarByFilter({
         searchUrl:
           filterData.search_url ||
