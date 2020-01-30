@@ -9,6 +9,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import {Icon, Button, CheckBox, Accordion} from 'native-base';
 import {verticalScale} from '../../../utils/scale';
@@ -28,8 +29,11 @@ import {
 
 // helpers
 import Amplitude from '@utils/amplitude-analytics';
+import showPrice from '@utils/price';
 import {get, find} from 'lodash';
 import stylesHeader from '@core/components/Header/style';
+
+const deviceWidth = Dimensions.get('window').width;
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
   const dealers = [].concat(
@@ -342,11 +346,13 @@ class NewCarFilterScreen extends Component {
               }}>
               {this.state.brandFilters.map(({id, name, checked}) => (
                 <View
+                  key={'view-brand-' + id}
                   style={{
                     width: '50%',
                     marginBottom: 30,
                   }}>
                   <TouchableOpacity
+                    key={'touchable-brand-' + id}
                     onPress={() => {
                       const brands = this.state.brandFilters.map(brand =>
                         brand.id === id
@@ -358,7 +364,7 @@ class NewCarFilterScreen extends Component {
                         if (brand.checked) {
                           Object.keys(brand.model).forEach(item => {
                             acc.push({
-                              id: item,
+                              id: 'filter-model-' + item,
                               checked: false,
                               name: brand.model[item],
                             });
@@ -373,7 +379,7 @@ class NewCarFilterScreen extends Component {
                       });
                     }}>
                     <View
-                      key={id}
+                      key={'view2-brand-' + id}
                       style={{
                         display: 'flex',
                         flexDirection: 'row',
@@ -381,13 +387,38 @@ class NewCarFilterScreen extends Component {
                       {/* TODO: Настроить визуал через тему */}
                       {/* TODO: Чекбокс вынести в отдельный компонент */}
                       <CheckBox
-                        name="vw"
+                        name={'checkbox-brand-' + id}
                         checked={checked}
                         style={{
                           borderRadius: 0,
                           backgroundColor: checked ? '#0061ed' : '#fff',
                           borderColor: checked ? 'transparent' : '#d0d5dc',
                           fontSize: 40,
+                        }}
+                        onPress={() => {
+                          const brands = this.state.brandFilters.map(brand =>
+                            brand.id === id
+                              ? {...brand, checked: !brand.checked}
+                              : brand,
+                          );
+
+                          const filterModels = brands.reduce((acc, brand) => {
+                            if (brand.checked) {
+                              Object.keys(brand.model).forEach(item => {
+                                acc.push({
+                                  id: 'filter-model-' + item,
+                                  checked: false,
+                                  name: brand.model[item],
+                                });
+                              });
+                            }
+                            return acc;
+                          }, []);
+
+                          this.setState({
+                            brandFilters: brands,
+                            modelFilter: filterModels,
+                          });
                         }}
                       />
                       <Text style={{marginLeft: 20}}>{name}</Text>
@@ -401,11 +432,15 @@ class NewCarFilterScreen extends Component {
       {
         title: 'Цена',
         content: (
-          <View>
+          <View
+            style={{
+              paddingLeft: '5%',
+            }}>
             <MultiSlider
               values={[this.state.priceFilter.min, this.state.priceFilter.max]}
               step={this.state.priceFilter.step}
               min={0}
+              sliderLength={(deviceWidth / 100) * 80}
               max={this.state.priceFilter.max}
               onValuesChange={e => {
                 this.setState({
@@ -448,14 +483,18 @@ class NewCarFilterScreen extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
-              <Text style={{color: '#74747A', fontSize: 14}}>{`${
-                this.state.priceFilter.min
-              } ${this.state.priceFilter.curr &&
-                this.state.priceFilter.curr.name}`}</Text>
-              <Text style={{color: '#74747A', fontSize: 14}}>{`${
-                this.state.priceFilter.max
-              } ${this.state.priceFilter.curr &&
-                this.state.priceFilter.curr.name}`}</Text>
+              <Text style={{color: '#74747A', fontSize: 14}}>
+                {showPrice(
+                  this.state.priceFilter.min,
+                  this.state.priceFilter.curr,
+                )}
+              </Text>
+              <Text style={{color: '#74747A', fontSize: 14}}>
+                {showPrice(
+                  this.state.priceFilter.max,
+                  this.state.priceFilter.curr,
+                )}
+              </Text>
             </View>
           </View>
         ),
@@ -494,7 +533,7 @@ class NewCarFilterScreen extends Component {
                     {/* TODO: Настроить визуал через тему */}
                     {/* TODO: Чекбокс вынести в отдельный компонент */}
                     <CheckBox
-                      name="vw"
+                      name={id}
                       checked={checked}
                       style={{
                         borderRadius: 0,
@@ -540,7 +579,7 @@ class NewCarFilterScreen extends Component {
                     });
                   }}>
                   <View
-                    key={id}
+                    key={'view-models-' + id}
                     style={{
                       display: 'flex',
                       flexDirection: 'row',
@@ -548,13 +587,22 @@ class NewCarFilterScreen extends Component {
                     {/* TODO: Настроить визуал через тему */}
                     {/* TODO: Чекбокс вынести в отдельный компонент */}
                     <CheckBox
-                      name="vw"
+                      name={'model' + id}
                       checked={checked}
                       style={{
                         borderRadius: 0,
                         backgroundColor: checked ? '#0061ed' : '#fff',
                         borderColor: checked ? 'transparent' : '#d0d5dc',
                         fontSize: 40,
+                      }}
+                      onPress={() => {
+                        this.setState({
+                          modelFilter: this.state.modelFilter.map(model =>
+                            model.id === id
+                              ? {...model, checked: !model.checked}
+                              : model,
+                          ),
+                        });
                       }}
                     />
                     <Text style={{marginLeft: 20}}>{name}</Text>

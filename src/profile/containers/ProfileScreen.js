@@ -2,6 +2,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component, createRef} from 'react';
 import {
+  Alert,
   View,
   TextInput,
   Keyboard,
@@ -176,7 +177,7 @@ class ProfileScreen extends Component {
     // тут специально одно равно чтобы сработало приведение типов
     // eslint-disable-next-line eqeqeq
     if (code != this.state.checkCode) {
-      alert('Не верный код. Попробуйте снова');
+      Alert.alert('Неверный код.', 'Попробуйте снова');
       console.log(this.state.checkCode, code);
       return;
     }
@@ -205,7 +206,7 @@ class ProfileScreen extends Component {
       })
       .catch(() => {
         this.setState({loading: false});
-        alert('Что-то поошло не так, попробуйте снова');
+        Alert.alert('Что-то пошло не так', 'попробуйте снова');
       });
   }
 

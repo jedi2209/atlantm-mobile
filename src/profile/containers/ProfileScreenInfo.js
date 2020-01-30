@@ -170,17 +170,18 @@ const CarCard = ({data}) => {
           width: 150,
           justifyContent: 'space-between',
           paddingBottom: 40,
-          height: 255,
+          height: 155,
 
           marginRight: 15,
         },
       ]}>
       <View>
         <Text
+          ellipsizeMode="tail"
+          numberOfLines={1}
           style={{
             color: '#fff',
             fontSize: 14,
-
             paddingTop: 20,
             paddingBottom: 10,
             paddingHorizontal: 20,
@@ -196,7 +197,17 @@ const CarCard = ({data}) => {
           {number}
         </Text>
       </View>
-      <Image style={{width: '100%'}} source={require('./Bitmap.png')} />
+      <Icon
+        name="car"
+        type="FontAwesome5"
+        style={{
+          fontSize: 54,
+          color: '#0061ed',
+          marginLeft: 12,
+          marginTop: 20,
+        }}
+      />
+      {/* <Image style={{width: '100%'}} source={require('./Bitmap.png')} /> */}
     </View>
   );
 };
@@ -287,9 +298,9 @@ class ProfileScreenInfo extends Component {
                     marginRight: 24,
                   }}>
                   <Text
-                    style={{color: '#0061ed', fontSize: 26, fontWeight: '600'}}>
+                    style={{color: '#0061ed', fontSize: 20, fontWeight: '600'}}>
                     {this.props.bonus && this.props.bonus.saldo
-                      ? this.props.bonus.saldo.value
+                      ? this.props.bonus.saldo.value + '23'
                       : 0}
                   </Text>
                 </View>

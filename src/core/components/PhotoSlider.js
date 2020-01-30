@@ -1,7 +1,14 @@
-
 // base
-import React, { Component } from 'react';
-import { View, Image, StyleSheet, ActivityIndicator, Dimensions, Platform, TouchableWithoutFeedback } from 'react-native';
+import React, {Component} from 'react';
+import {
+  View,
+  Image,
+  StyleSheet,
+  ActivityIndicator,
+  Dimensions,
+  Platform,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
 // components
 import Swiper from 'react-native-swiper';
@@ -11,7 +18,7 @@ import DeviceInfo from 'react-native-device-info';
 import PropTypes from 'prop-types';
 import styleConst from '@core/style-const';
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const height = DeviceInfo.isTablet() ? 260 : 300;
 const styles = StyleSheet.create({
   photoSlider: {
@@ -38,16 +45,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'row',
-    padding: 10
+    padding: 10,
   },
 });
 
 const Slide = props => {
   return (
-    <View style={[styles.item, { height: props.height }]}>
+    <View style={[styles.item, {height: props.height}]}>
       <TouchableWithoutFeedback onPress={props.onPress}>
         <Image
-          // resizeMode="contain"
+          resizeMode="contain"
           style={styles.image}
           onLoad={props.loadHandle.bind(null, props.i)}
           source={{
@@ -57,9 +64,7 @@ const Slide = props => {
           }}
         />
       </TouchableWithoutFeedback>
-      {
-        !props.loaded && <ActivityIndicator size="large" color={styleConst.color.blue} style={styles.spinner} />
-      }
+      {!props.loaded && <ActivityIndicator size="large" color={styleConst.color.blue} style={styles.spinner} />}
     </View>
   );
 };
@@ -79,20 +84,20 @@ export default class PhotoSlider extends Component {
     photos: PropTypes.array,
     onPressItem: PropTypes.func,
     onIndexChanged: PropTypes.func,
-  }
+  };
 
   static defaultProps = {
     photos: [],
-  }
+  };
 
-  loadHandle = (i) => {
+  loadHandle = i => {
     const loadQueue = this.state.loadQueue;
     loadQueue[i] = 1;
     this.setState({
       loadQueue,
       height: height + 1,
     });
-  }
+  };
 
   render() {
     // Супер грязный хак, триггерим изменение высота для обновления слайдера
@@ -113,7 +118,7 @@ export default class PhotoSlider extends Component {
         id={1}
         containerStyle={styles.container}
         paginationStyle={{
-          marginBottom: 16
+          marginBottom: 16,
         }}
         dotColor="white"
         showsButtons={false}
@@ -122,21 +127,20 @@ export default class PhotoSlider extends Component {
         height={this.state.height}
         rootStyle={styles.photoSlider}
         loadMinimal={true}
-        onIndexChanged={this.props.onIndexChanged}
-      >
-        {
-          this.props.photos.map((photo, idx) => {
-            return <Slide
+        onIndexChanged={this.props.onIndexChanged}>
+        {this.props.photos.map((photo, idx) => {
+          return (
+            <Slide
               onPress={this.props.onPressItem}
               height={this.state.height}
               loadHandle={this.loadHandle}
               loaded={!!this.state.loadQueue[idx]}
-              url={photo+'?d=440x400'}
+              url={photo + '?d=440x400'}
               i={idx}
               key={photo}
-            />;
-          })
-        }
+            />
+          );
+        })}
       </Swiper>
     );
   }

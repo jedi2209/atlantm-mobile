@@ -30,8 +30,8 @@ const MenuItem = props => {
         marginLeft: 0,
         borderColor: 'transparent',
         backgroundColor: 'transparent',
-        paddingTop: 5,
-        paddingBottom: 5,
+        paddingTop: 2,
+        paddingBottom: 2,
       }}
       selected={selected}
       onPress={() =>
@@ -182,7 +182,7 @@ const MoreScreen = props => {
   return (
     <>
       <ScrollView>
-        <List style={{marginTop: 10}}>
+        <List style={{marginTop: 0}}>
           {menu.map(item => (
             <MenuItem
               key={`menu-item-${item.id}`}
@@ -191,7 +191,7 @@ const MoreScreen = props => {
             />
           ))}
         </List>
-        <View>
+        {/* <View>
           <Button
             full
             onPress={() => {
@@ -204,7 +204,7 @@ const MoreScreen = props => {
             style={styles.buttonPrimary}>
             <Text style={styles.buttonPrimaryText}>ЛИЧНЫЙ КАБИНЕТ</Text>
           </Button>
-        </View>
+        </View> */}
       </ScrollView>
     </>
   );

@@ -88,7 +88,13 @@ const OptionPlate = ({title, subtitle}) => (
       alignItems: 'center',
       justifyContent: 'center',
     }}>
-    <Text style={{color: '#d8d8d8', fontSize: 14, fontWeight: '300'}}>
+    <Text
+      style={{
+        color: '#d8d8d8',
+        fontSize: 14,
+        fontWeight: '300',
+        paddingBottom: 5,
+      }}>
       {title}
     </Text>
     <Text style={{color: '#fff', fontSize: 14, fontWeight: '600'}}>
@@ -98,9 +104,28 @@ const OptionPlate = ({title, subtitle}) => (
 );
 
 class NewCarItemScreen extends Component {
+  static propTypes = {
+    dealerSelected: PropTypes.object,
+    navigation: PropTypes.object,
+  };
+
+  constructor(props) {
+    super(props);
+    this.state = {tabName: 'base'};
+  }
+
   static navigationOptions = ({navigation}) => ({
     headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerTitle: (
+      <Text style={stylesHeader.blueHeaderTitle}>
+        {console.log('navigation', navigation)}
+        {(navigation.state.params.carDetails ? 
+            navigation.state.params.carDetails.brand.name + ' ' +
+            navigation.state.params.carDetails.model.name + ' ' +
+            navigation.state.params.carDetails.complectation.name
+        : null)}
+      </Text>
+    ),
     headerLeft: (
       <View>
         <HeaderIconBack
@@ -112,17 +137,6 @@ class NewCarItemScreen extends Component {
     ),
     headerRight: <View />,
   });
-
-  static propTypes = {
-    dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {tabName: 'base'};
-  }
 
   componentDidMount() {
     const carId = get(this.props.navigation, 'state.params.carId');
@@ -340,6 +354,10 @@ class NewCarItemScreen extends Component {
       isFetchingCarDetails,
     } = this.props;
 
+    this.props.navigation.setParams({
+      carDetails: carDetails,
+    });
+
     if (!carDetails || isFetchingCarDetails) {
       return (
         <View style={styles.spinnerContainer}>
@@ -350,8 +368,6 @@ class NewCarItemScreen extends Component {
         </View>
       );
     }
-
-    console.log('carDetails :', carDetails);
 
     console.log('== NewCarItemScreen ==');
 
@@ -412,11 +428,12 @@ class NewCarItemScreen extends Component {
                 }}>
                 <View style={{marginBottom: 10}}>
                   <Text style={{fontSize: 16, fontWeight: '600'}}>
-                    {`${brandName} ${modelName} ${get(
-                      complectation,
-                      'name',
-                      '',
-                    )} ${get(carDetails, 'year')}`}
+                    {`${brandName} ${modelName}`}
+                  </Text>
+                  <Text style={{fontSize: 11, fontWeight: '600'}}>
+                    {get(complectation, 'name', '') +
+                      ' ' +
+                      get(carDetails, 'year')}
                   </Text>
                   <Text />
                 </View>
@@ -432,8 +449,16 @@ class NewCarItemScreen extends Component {
                     marginBottom: 24,
                   }}>
                   <OptionPlate
+                    title="Комплектация"
+                    subtitle={get(carDetails, 'complectation.name')}
+                  />
+                  <OptionPlate
                     title="Двигатель"
-                    subtitle={get(carDetails, 'engine.type')}
+                    subtitle={
+                      get(carDetails, 'engine.volume.short') +
+                      ' ' +
+                      get(carDetails, 'engine.type')
+                    }
                   />
                   <OptionPlate
                     title="КПП"
@@ -446,7 +471,14 @@ class NewCarItemScreen extends Component {
                   />
                   <OptionPlate
                     title="Привод"
-                    subtitle={get(carDetails, 'gearbox.wheel')}
+                    subtitle={get(carDetails, 'gearbox.wheel').toLowerCase()}
+                  />
+                  <OptionPlate
+                    title="Цвет"
+                    subtitle={get(
+                      carDetails,
+                      'color.name.simple',
+                    ).toLowerCase()}
                   />
                 </View>
               </ScrollView>

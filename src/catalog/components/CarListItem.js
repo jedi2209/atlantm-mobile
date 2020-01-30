@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {Text, View, StyleSheet, TouchableHighlight} from 'react-native';
 
 // components
 import Imager from '../../core/components/Imager';
@@ -102,7 +102,7 @@ export default class CarListItem extends Component {
     prices: {},
     itemScreen: null,
     navigate: null,
-    currency: 'рубс',
+    currency: 'руб',
   };
 
   onPress = () => {
@@ -149,7 +149,7 @@ export default class CarListItem extends Component {
     const year = get(car, 'year');
 
     return (
-      <TouchableOpacity
+      <TouchableHighlight
         onPress={this.onPress}
         style={styles.container}
         underlayColor={styleConst.color.select}>
@@ -165,7 +165,7 @@ export default class CarListItem extends Component {
             </Text>
           </View>
           <Imager
-            resizeMode="cover"
+            resizeMode="contain"
             style={styles.image}
             source={{
               uri: get(car, 'img.10000x440.0'),
@@ -203,7 +203,7 @@ export default class CarListItem extends Component {
             </View>
           </View>
         </View>
-      </TouchableOpacity>
+      </TouchableHighlight>
     );
   }
 }
