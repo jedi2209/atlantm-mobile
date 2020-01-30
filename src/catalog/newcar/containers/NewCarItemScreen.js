@@ -119,11 +119,13 @@ class NewCarItemScreen extends Component {
     headerTitle: (
       <Text style={stylesHeader.blueHeaderTitle}>
         {console.log('navigation', navigation)}
-        {(navigation.state.params.carDetails ? 
-            navigation.state.params.carDetails.brand.name + ' ' +
-            navigation.state.params.carDetails.model.name + ' ' +
+        {navigation.state.params.carDetails
+          ? navigation.state.params.carDetails.brand.name +
+            ' ' +
+            navigation.state.params.carDetails.model.name +
+            ' ' +
             navigation.state.params.carDetails.complectation.name
-        : null)}
+          : null}
       </Text>
     ),
     headerLeft: (
@@ -281,11 +283,18 @@ class NewCarItemScreen extends Component {
     );
   };
 
-  renderPrice = ({carDetails, filterData = {}}) => {
+  renderPrice = ({carDetails, filterData = {}, currency}) => {
     const isSale = carDetails.sale === true;
+    const price = numberWithGap(get(carDetails, 'price.app.standart'));
 
     return (
-      <View style={{flex: 1, flexDirection: 'column', alignItems: 'flex-end'}}>
+      <View
+        style={{
+          flex: 1,
+          flexDirection: 'column',
+          alignItems: 'flex-end',
+          minWidth: 100,
+        }}>
         <Text
           style={{
             fontSize: 14,
@@ -294,12 +303,13 @@ class NewCarItemScreen extends Component {
             color: isSale ? '#D0021B' : '#000',
             textDecorationLine: isSale ? 'line-through' : 'none',
           }}>
-          {/* TODO: RUB */}
-          {`${numberWithGap(get(carDetails, 'price.app.standart'))} RUB`}
+          {`${price} ${currency.toUpperCase()}`}
         </Text>
         {isSale && (
           <Text style={{fontSize: 14, fontWeight: '600'}}>
-            {numberWithGap(get(carDetails, 'price.app.sale'))}
+            {`${numberWithGap(
+              get(carDetails, 'price.app.sale'),
+            )} ${currency.toUpperCase()}`}
           </Text>
         )}
       </View>
@@ -426,7 +436,7 @@ class NewCarItemScreen extends Component {
                   justifyContent: 'space-between',
                   paddingHorizontal: 16,
                 }}>
-                <View style={{marginBottom: 10}}>
+                <View style={{marginBottom: 10, flexShrink: 1}}>
                   <Text style={{fontSize: 16, fontWeight: '600'}}>
                     {`${brandName} ${modelName}`}
                   </Text>
@@ -435,9 +445,8 @@ class NewCarItemScreen extends Component {
                       ' ' +
                       get(carDetails, 'year')}
                   </Text>
-                  <Text />
                 </View>
-                {this.renderPrice({carDetails, filterData})}
+                {this.renderPrice({carDetails, filterData, currency})}
               </View>
 
               <ScrollView showsHorizontalScrollIndicator={false} horizontal>
