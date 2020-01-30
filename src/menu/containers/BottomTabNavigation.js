@@ -2,6 +2,8 @@
 import React from 'react';
 import {Icon} from 'native-base';
 import {Alert} from 'react-native';
+// import AwesomeAlert from 'react-native-awesome-alerts';
+// TODO: подключить другие алерты
 
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';

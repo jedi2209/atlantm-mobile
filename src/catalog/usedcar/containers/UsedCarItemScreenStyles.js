@@ -55,7 +55,7 @@ export default StyleSheet.create({
     marginBottom: 10,
   },
   sectionRow: {
-    marginBottom: 8,
+    marginBottom: 0,
   },
   sectionProp: {
     paddingRight: 5,
