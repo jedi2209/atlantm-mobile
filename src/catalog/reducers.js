@@ -363,6 +363,7 @@ const newCarFilterData = (state = null, action) => {
 const newCarByFilter = (state = {}, action) => {
   switch (action.type) {
     case DEALER__SUCCESS:
+      return {};
     case NEW_CAR_CITY__SELECT:
       return {};
     case NEW_CAR_BY_FILTER__SUCCESS:
@@ -765,6 +766,12 @@ const newCarFilters = (
   switch (action.type) {
     case ACTION_SAVE_CAR_FILTERS__UPDATE:
       return action.payload;
+    case DEALER__SUCCESS:
+      return {
+        brandFilters: [],
+        bodyFilters: [],
+        priceFilter: {},
+      };
     default:
       return state;
   }

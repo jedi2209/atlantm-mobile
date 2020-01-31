@@ -6,7 +6,6 @@ import {
   Text,
   Image,
   Alert,
-  StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
   Dimensions,
@@ -36,12 +35,6 @@ import stylesHeader from '@core/components/Header/style';
 const deviceWidth = Dimensions.get('window').width;
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
-  const dealers = [].concat(
-    dealer.listRussiaByCities,
-    dealer.listUkraineByCities,
-    dealer.listBelarussiaByCities,
-  );
-
   const {
     brandFilters,
     bodyFilters,
@@ -49,17 +42,18 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
     modelFilter,
   } = catalog.newCar.filters;
 
-  let filterBrands, filterBody, filterPrice, filterModels;
+  let filterBrands, filterBody, filterPrice, filterModels, isNotFilterBrands;
 
   if (bodyFilters.length > 0) {
     filterBody = bodyFilters;
   } else {
-    filterBody = catalog.newCar.filterData
-      ? Object.keys(catalog.newCar.filterData.data.body).map(body => ({
-          id: body,
-          name: catalog.newCar.filterData.data.body[body],
-        }))
-      : [];
+    filterBody =
+      catalog.newCar.filterData && catalog.newCar.filterData.data.body
+        ? Object.keys(catalog.newCar.filterData.data.body).map(body => ({
+            id: body,
+            name: catalog.newCar.filterData.data.body[body],
+          }))
+        : [];
   }
 
   if (brandFilters.length > 0) {
@@ -68,14 +62,18 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
     filterBrands = [];
 
     if (catalog.newCar.filterData) {
-      filterBrands = Object.keys(catalog.newCar.filterData.data.brand).map(
-        body => ({
-          id: body,
-          checked: false,
-          name: catalog.newCar.filterData.data.brand[body].name,
-          model: catalog.newCar.filterData.data.brand[body].model,
-        }),
-      );
+      if (!catalog.newCar.filterData.data.brand) {
+        isNotFilterBrands = true;
+      } else {
+        filterBrands = Object.keys(catalog.newCar.filterData.data.brand).map(
+          body => ({
+            id: body,
+            checked: false,
+            name: catalog.newCar.filterData.data.brand[body].name,
+            model: catalog.newCar.filterData.data.brand[body].model,
+          }),
+        );
+      }
     } else {
       filterBrands = [];
     }
@@ -83,7 +81,7 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
 
   if (modelFilter && modelFilter.length > 0) {
     filterModels = modelFilter;
-  } else if (filterBrands.length > 0) {
+  } else if (filterBrands && filterBrands.length > 0) {
     filterModels = filterBrands.reduce((acc, brand) => {
       if (brand.checked) {
         Object.keys(brand.model).forEach(item => {
@@ -122,6 +120,7 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
 
     items: catalog.newCar.items,
     filterData: catalog.newCar.filterData || {},
+    isNotFilterBrands,
     filterBrands,
     filterModels,
     filterBody,
@@ -216,7 +215,6 @@ class NewCarFilterScreen extends Component {
     }
 
     if (needFetchFilterData) {
-      // console.log('HELLO FROM THE DARK SIDE END ANYBODY', filterData)
       return actionFetchNewCarByFilter({
         filters,
         searchUrl:
@@ -323,111 +321,131 @@ class NewCarFilterScreen extends Component {
   };
 
   render() {
+    console.log('>>> шо this.props.filterBrands', this.props.isNotFilterBrands);
+    if (this.props.isNotFilterBrands) {
+      return (
+        <View
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingTop: 20,
+          }}>
+          <Text style={{fontSize: 18}}>Нет доступных фильтров</Text>
+        </View>
+      );
+    }
+
+    if (this.state.brandFilters.length === 0) {
+      return (
+        <View style={{paddingTop: 20}}>
+          <ActivityIndicator
+            color={styleConst.color.blue}
+            style={{
+              spinner: {
+                alignSelf: 'center',
+                marginTop: verticalScale(60),
+              },
+            }}
+          />
+        </View>
+      );
+    }
+
     const filtersContent = [
       {
         title: 'Бренды',
-        content:
-          this.state.brandFilters.length === 0 ? (
-            <ActivityIndicator
-              color={styleConst.color.blue}
-              style={{
-                spinner: {
-                  alignSelf: 'center',
-                  marginTop: verticalScale(60),
-                },
-              }}
-            />
-          ) : (
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-              }}>
-              {this.state.brandFilters.map(({id, name, checked}) => (
-                <View
-                  key={'view-brand-' + id}
-                  style={{
-                    width: '50%',
-                    marginBottom: 30,
+        content: (
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+            }}>
+            {this.state.brandFilters.map(({id, name, checked}) => (
+              <View
+                key={'view-brand-' + id}
+                style={{
+                  width: '50%',
+                  marginBottom: 30,
+                }}>
+                <TouchableOpacity
+                  key={'touchable-brand-' + id}
+                  onPress={() => {
+                    const brands = this.state.brandFilters.map(brand =>
+                      brand.id === id
+                        ? {...brand, checked: !brand.checked}
+                        : brand,
+                    );
+
+                    const filterModels = brands.reduce((acc, brand) => {
+                      if (brand.checked) {
+                        Object.keys(brand.model).forEach(item => {
+                          acc.push({
+                            id: 'filter-model-' + item,
+                            checked: false,
+                            name: brand.model[item],
+                          });
+                        });
+                      }
+                      return acc;
+                    }, []);
+
+                    this.setState({
+                      brandFilters: brands,
+                      modelFilter: filterModels,
+                    });
                   }}>
-                  <TouchableOpacity
-                    key={'touchable-brand-' + id}
-                    onPress={() => {
-                      const brands = this.state.brandFilters.map(brand =>
-                        brand.id === id
-                          ? {...brand, checked: !brand.checked}
-                          : brand,
-                      );
-
-                      const filterModels = brands.reduce((acc, brand) => {
-                        if (brand.checked) {
-                          Object.keys(brand.model).forEach(item => {
-                            acc.push({
-                              id: 'filter-model-' + item,
-                              checked: false,
-                              name: brand.model[item],
-                            });
-                          });
-                        }
-                        return acc;
-                      }, []);
-
-                      this.setState({
-                        brandFilters: brands,
-                        modelFilter: filterModels,
-                      });
+                  <View
+                    key={'view2-brand-' + id}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
                     }}>
-                    <View
-                      key={'view2-brand-' + id}
+                    {/* TODO: Настроить визуал через тему */}
+                    {/* TODO: Чекбокс вынести в отдельный компонент */}
+                    <CheckBox
+                      name={'checkbox-brand-' + id}
+                      checked={checked}
                       style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                      }}>
-                      {/* TODO: Настроить визуал через тему */}
-                      {/* TODO: Чекбокс вынести в отдельный компонент */}
-                      <CheckBox
-                        name={'checkbox-brand-' + id}
-                        checked={checked}
-                        style={{
-                          borderRadius: 0,
-                          backgroundColor: checked ? '#0061ed' : '#fff',
-                          borderColor: checked ? 'transparent' : '#d0d5dc',
-                          fontSize: 40,
-                        }}
-                        onPress={() => {
-                          const brands = this.state.brandFilters.map(brand =>
-                            brand.id === id
-                              ? {...brand, checked: !brand.checked}
-                              : brand,
-                          );
+                        borderRadius: 0,
+                        backgroundColor: checked ? '#0061ed' : '#fff',
+                        borderColor: checked ? 'transparent' : '#d0d5dc',
+                        fontSize: 40,
+                      }}
+                      onPress={() => {
+                        const brands = this.state.brandFilters.map(brand =>
+                          brand.id === id
+                            ? {...brand, checked: !brand.checked}
+                            : brand,
+                        );
 
-                          const filterModels = brands.reduce((acc, brand) => {
-                            if (brand.checked) {
-                              Object.keys(brand.model).forEach(item => {
-                                acc.push({
-                                  id: 'filter-model-' + item,
-                                  checked: false,
-                                  name: brand.model[item],
-                                });
+                        const filterModels = brands.reduce((acc, brand) => {
+                          if (brand.checked) {
+                            Object.keys(brand.model).forEach(item => {
+                              acc.push({
+                                id: 'filter-model-' + item,
+                                checked: false,
+                                name: brand.model[item],
                               });
-                            }
-                            return acc;
-                          }, []);
+                            });
+                          }
+                          return acc;
+                        }, []);
 
-                          this.setState({
-                            brandFilters: brands,
-                            modelFilter: filterModels,
-                          });
-                        }}
-                      />
-                      <Text style={{marginLeft: 20}}>{name}</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              ))}
-            </View>
-          ),
+                        this.setState({
+                          brandFilters: brands,
+                          modelFilter: filterModels,
+                        });
+                      }}
+                    />
+                    <Text style={{marginLeft: 20}}>{name}</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
+        ),
       },
       {
         title: 'Цена',
@@ -614,6 +632,7 @@ class NewCarFilterScreen extends Component {
         ),
       });
     }
+
     return (
       <>
         <Accordion
