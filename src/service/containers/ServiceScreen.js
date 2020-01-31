@@ -181,9 +181,7 @@ class ServiceScreen extends Component {
 
   static navigationOptions = ({navigation}) => {
     const returnScreen =
-      (navigation.state.params && navigation.state.params.returnScreen) ||
-      'BottomTabNavigation';
-    console.log('returnScreen ========>', returnScreen);
+      navigation.state.params && navigation.state.params.returnScreen;
 
     return {
       headerStyle: stylesHeader.blueHeader,
@@ -302,7 +300,6 @@ class ServiceScreen extends Component {
                       style={{
                         fontSize: 22,
                         fontWeight: 'bold',
-                        textAlign: 'center',
                       }}>
                       Заявка успешно отправлена
                     </Text>
