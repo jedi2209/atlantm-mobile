@@ -7,6 +7,7 @@ import {
   Text,
   ActivityIndicator,
   Alert,
+  StatusBar,
 } from 'react-native';
 import {Button} from 'native-base';
 import {connect} from 'react-redux';
@@ -118,6 +119,7 @@ class ProfileSettingsScreen extends Component {
   render() {
     return (
       <KeyboardAvoidingView>
+        <StatusBar barStyle="dark-content" />
         <ScrollView style={{flex: 1, backgroundColor: '#fff'}}>
           <View style={styles.container}>
             <View style={styles.header}>

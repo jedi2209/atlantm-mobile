@@ -1,5 +1,6 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {SafeAreaView, View, StyleSheet} from 'react-native';
+import {SafeAreaView, View, StyleSheet, StatusBar} from 'react-native';
 import {Body, Label, Content, ListItem, StyleProvider, Text} from 'native-base';
 
 // redux
@@ -115,11 +116,10 @@ class ReviewsFilterDateScreen extends Component {
     this.props.filterDatePeriod === selectedDatePeriod;
 
   render() {
-    console.log('== ReviewsFilterDateScreen ==');
-
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
+          <StatusBar barStyle="light-content" />
           <Content>
             {[
               REVIEWS_FILTER_DATE_PERIOD__ALL,

@@ -1,6 +1,6 @@
 // Начни работать сука нет времени прокрастинировать
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, StatusBar} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -90,21 +90,24 @@ class ChooseDealerScreen extends Component {
     const goBack = get(navigation, 'state.params.goBack');
 
     return (
-      <SelectListByCountry
-        itemLayout="dealer"
-        region={region}
-        dataHandler={fetchDealers}
-        isFetchList={isFetchDealersList || isFetchDealer}
-        listRussia={listRussia}
-        listUkraine={listUkraine}
-        listBelarussia={listBelarussia}
-        selectRegion={selectRegion}
-        navigation={navigation}
-        selectItem={selectDealer}
-        selectedItem={dealerSelected}
-        goBack={goBack}
-        onSelect={this.onSelectDealer}
-      />
+      <>
+        <StatusBar barStyle="light-content" />
+        <SelectListByCountry
+          itemLayout="dealer"
+          region={region}
+          dataHandler={fetchDealers}
+          isFetchList={isFetchDealersList || isFetchDealer}
+          listRussia={listRussia}
+          listUkraine={listUkraine}
+          listBelarussia={listBelarussia}
+          selectRegion={selectRegion}
+          navigation={navigation}
+          selectItem={selectDealer}
+          selectedItem={dealerSelected}
+          goBack={goBack}
+          onSelect={this.onSelectDealer}
+        />
+      </>
     );
   }
 }

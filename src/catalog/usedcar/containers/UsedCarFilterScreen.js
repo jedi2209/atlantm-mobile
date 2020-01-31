@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, Text, Image, TouchableOpacity} from 'react-native';
+import {View, Text, Image, TouchableOpacity, StatusBar} from 'react-native';
 import {Icon, Button, Accordion} from 'native-base';
 
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
@@ -291,6 +291,7 @@ class NewCarFilterScreen extends Component {
 
     return (
       <>
+        <StatusBar barStyle="dark-content" />
         <Accordion
           dataArray={dataForAccordion}
           expanded={0}

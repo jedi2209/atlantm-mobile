@@ -11,6 +11,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   TouchableOpacity,
+  StatusBar,
 } from 'react-native';
 
 import {Text, StyleProvider, Icon, Button} from 'native-base';
@@ -272,6 +273,7 @@ class ContactsScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <View style={styles.safearea}>
+          <StatusBar barStyle="dark-content" />
           <ScrollView>
             <Image
               style={styles.imgHero}

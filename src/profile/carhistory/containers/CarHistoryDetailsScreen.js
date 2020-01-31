@@ -1,6 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, View, Text, ScrollView} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  StatusBar,
+} from 'react-native';
 import {Row, Col, Button, Content, Segment} from 'native-base';
 
 // redux
@@ -247,6 +254,7 @@ class CarHistoryDetailsScreen extends Component {
 
     return (
       <SafeAreaView style={styles.safearea}>
+        <StatusBar barStyle="dark-content" />
         <ScrollView>
           <Content>
             <Segment style={styles.segment}>

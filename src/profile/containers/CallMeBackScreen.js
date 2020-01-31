@@ -16,6 +16,7 @@ import {
   Platform,
   TouchableWithoutFeedback,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import {Button} from 'native-base';
 import DeviceInfo from 'react-native-device-info';
@@ -194,6 +195,7 @@ class CallMeBackScreen extends React.Component {
 
     return (
       <KeyboardAvoidingView>
+        <StatusBar barStyle="light-content" />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView>
             <View style={styles.container}>

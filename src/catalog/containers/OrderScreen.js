@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  StatusBar,
 } from 'react-native';
 import {TextInput} from '../../core/components/TextInput';
 import {Button} from 'native-base';
@@ -223,6 +224,7 @@ class OrderScreen extends Component {
 
     return (
       <KeyboardAvoidingView>
+        <StatusBar barStyle="light-content" />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView>
             <View style={styles.container}>

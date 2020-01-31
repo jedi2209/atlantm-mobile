@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
   TouchableHighlight,
+  StatusBar,
 } from 'react-native';
 import {
   Col,
@@ -205,6 +206,7 @@ class UserCarItemScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
+          <StatusBar barStyle="light-content" />
           <Content>
             <View style={styles.gallery}>
               <PhotoSlider

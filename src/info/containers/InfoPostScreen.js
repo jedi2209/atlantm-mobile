@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {
   View,
   Text,
-  Alert,
+  StatusBar,
   Linking,
   Dimensions,
   StyleSheet,
@@ -14,8 +14,6 @@ import {
 import {connect} from 'react-redux';
 import {fetchInfoPost, callMeForInfo} from '../actions';
 
-// components
-import DeviceInfo from 'react-native-device-info';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {Content} from 'native-base';
 import FooterButton from '../../core/components/FooterButton';
@@ -29,11 +27,7 @@ import styleConst from '../../core/style-const';
 import processHtml from '../../utils/process-html';
 import {verticalScale} from '../../utils/scale';
 import stylesHeader from '../../core/components/Header/style';
-import {CALL_ME_INFO__SUCCESS, CALL_ME_INFO__FAIL} from '../actionTypes';
 import {dayMonth, dayMonthYear} from '../../utils/date';
-import isInternet from '../../utils/internet';
-import {ERROR_NETWORK} from '../../core/const';
-import isIPhoneX from '@utils/is_iphone_x';
 
 // image
 let IMAGE_HEIGHT_GUARD = 0;
@@ -95,8 +89,6 @@ const injectScript = `
   }
 }());
 `;
-
-let amplitudeGuard = false;
 
 class InfoPostScreen extends Component {
   state = {
@@ -180,7 +172,7 @@ class InfoPostScreen extends Component {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
-    const {isCallMeRequest, navigation} = this.props;
+    const {isCallMeRequest} = this.props;
 
     const post = this.getPost();
     let text = get(post, 'text');
@@ -196,6 +188,7 @@ class InfoPostScreen extends Component {
 
     return (
       <SafeAreaView style={styles.safearea}>
+        <StatusBar barStyle="light-content" />
         <Content>
           <Spinner visible={isCallMeRequest} color={styleConst.color.blue} />
 

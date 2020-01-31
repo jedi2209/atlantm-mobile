@@ -8,6 +8,7 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback,
   ScrollView,
+  StatusBar,
 } from 'react-native';
 import {
   Col,
@@ -409,6 +410,7 @@ class NewCarItemScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
+          <StatusBar barStyle="light-content" />
           <Content>
             <View>
               <PhotoSlider

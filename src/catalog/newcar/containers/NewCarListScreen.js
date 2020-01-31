@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, StyleSheet, View, Text} from 'react-native';
+import {
+  TouchableOpacity,
+  StyleSheet,
+  View,
+  Text,
+  StatusBar,
+} from 'react-native';
 import {Icon} from 'native-base';
 
 // redux
@@ -59,8 +65,7 @@ const mapDispatchToProps = {
 class NewCarListScreen extends Component {
   static navigationOptions = ({navigation}) => {
     const returnScreen =
-      (navigation.state.params && navigation.state.params.returnScreen) ||
-      'BottomTabNavigation';
+      navigation.state.params && navigation.state.params.returnScreen;
 
     return {
       headerTitle: (
@@ -190,6 +195,7 @@ class NewCarListScreen extends Component {
 
     return (
       <View style={styles.content}>
+        <StatusBar barStyle="light-content" />
         <CarList
           items={data}
           pages={pages}

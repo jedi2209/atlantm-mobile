@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Dimensions,
+  StatusBar,
 } from 'react-native';
 import {Icon, Button, CheckBox, Accordion} from 'native-base';
 import {verticalScale} from '../../../utils/scale';
@@ -324,7 +325,6 @@ class NewCarFilterScreen extends Component {
     const max = this.props.filterData.prices
       ? this.props.filterData.prices.max
       : 0;
-    console.log('>>> max', max);
 
     if (this.props.isNotFilterBrands) {
       return (
@@ -639,6 +639,7 @@ class NewCarFilterScreen extends Component {
 
     return (
       <>
+        <StatusBar barStyle="dark-content" />
         <Accordion
           dataArray={filtersContent}
           expanded={0}

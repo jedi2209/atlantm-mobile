@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {SafeAreaView, View, StyleSheet, Alert, Text} from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  StyleSheet,
+  Alert,
+  Text,
+  StatusBar,
+} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -180,6 +187,7 @@ class ReviewsFilterDateScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
+          <StatusBar barStyle="light-content" />
           <Content>
             <ListItemHeader text="РЕЙТИНГ ОТ" />
             {this.renderRatingFrom()}

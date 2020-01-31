@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, StyleSheet, findNodeHandle, Text} from 'react-native';
+import {View, StyleSheet, findNodeHandle, Text, StatusBar} from 'react-native';
 import {Container, Content, StyleProvider} from 'native-base';
 
 // redux
@@ -43,9 +43,7 @@ const mapDispatchToProps = {
 class IndicatorsScreen extends Component {
   static navigationOptions = ({navigation}) => {
     const returnScreen =
-      (navigation.state.params && navigation.state.params.returnScreen) ||
-      'BottomTabNavigation';
-    console.log('returnScreen ========>', returnScreen);
+      navigation.state.params && navigation.state.params.returnScreen;
 
     return {
       headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Индикаторы</Text>,
@@ -122,6 +120,7 @@ class IndicatorsScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <Container style={styles.safearea}>
+          <StatusBar barStyle="light-content" />
           <Content
             ref={scrollView => {
               this.scrollView = scrollView;

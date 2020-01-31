@@ -12,17 +12,9 @@ import {
   ScrollView,
   Platform,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
-import {
-  Container,
-  Body,
-  Label,
-  Item,
-  Content,
-  ListItem,
-  StyleProvider,
-  Button,
-} from 'native-base';
+import {Container, Content, StyleProvider, Button} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -267,35 +259,9 @@ class TvaResultsScreen extends Component {
     const titleCarNumber = car.number;
     const textList = [titleCar, titleCarNumber];
 
-    console.log('== TvaResultsScreen ==');
-
-    console.log('>>> info', info);
-
-    // {(info || []).map(item => {
-    //   return (
-    //     <TouchableOpacity
-    //       key={item.id}
-    //       onPress={this.onPressBack}
-    //       style={styles.item}>
-    //       <ListItemHeader
-    //         textStyle={styles.itemTitle}
-    //         radio={true}
-    //         radioSelected={activeOrderId === item.id}
-    //         text={`№ ${item.id}`}
-    //         onPress={() => this.onPressOrder(item.id)}
-    //       />
-    //       {this.renderListItem('Мастер-приёмщик', item.name)}
-    //       {this.renderListItem(
-    //         'Время выдачи',
-    //         this.processDate(item.date),
-    //       )}
-    //       {this.renderListItem('Статус', item.status, true)}
-    //     </TouchableOpacity>
-    //   );
-    // })}
-
     return (
       <KeyboardAvoidingView>
+        <StatusBar barStyle="light-content" />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView>
             <View style={styles.container}>

@@ -1,6 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {StyleSheet, TouchableOpacity, View, Text} from 'react-native';
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+  StatusBar,
+} from 'react-native';
 import {Icon} from 'native-base';
 
 // redux
@@ -89,9 +95,7 @@ class UserCarListScreen extends Component {
   // };
   static navigationOptions = ({navigation}) => {
     const returnScreen =
-      (navigation.state.params && navigation.state.params.returnScreen) ||
-      'BottomTabNavigation';
-    console.log('returnScreen ========>', returnScreen);
+      navigation.state.params && navigation.state.params.returnScreen;
 
     return {
       headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Автомобили</Text>,
@@ -241,6 +245,7 @@ class UserCarListScreen extends Component {
 
     return (
       <View style={styles.content}>
+        <StatusBar barStyle="light-content" />
         <CarList
           items={items}
           pages={pages}
