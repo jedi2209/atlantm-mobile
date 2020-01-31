@@ -35,6 +35,7 @@ import UsedCarCityScreen from '../../catalog/usedcar/containers/UsedCarCityScree
 import MoreScreen from './MenuScreenNew';
 import MapScreen from '../../contacts/map/containers/MapScreen';
 import ApplicationModalScreen from './Application';
+import NewCarItemScreen from '../../catalog/newcar/containers/NewCarItemScreen';
 
 import {store} from '../../core/store';
 import {actionToggleModal} from '../../core/actions';
@@ -68,6 +69,9 @@ const SearchStack = {
       navigationOptions: {
         gesturesEnabled: false,
       },
+    },
+    NewCarItemScreen: {
+      screen: NewCarItemScreen,
     },
   }),
 };

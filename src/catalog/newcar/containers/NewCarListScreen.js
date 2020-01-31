@@ -65,7 +65,10 @@ const mapDispatchToProps = {
 class NewCarListScreen extends Component {
   static navigationOptions = ({navigation}) => {
     const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
+      (navigation.state.params && navigation.state.params.returnScreen) ||
+      'BottomTabNavigation';
+
+      console.log('navigation.state.params >>>>>>', returnScreen)
 
     return {
       headerTitle: (

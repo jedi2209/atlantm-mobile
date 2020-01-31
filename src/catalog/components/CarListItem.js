@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
   },
   priceSpecial: {
-    color: styleConst.color.red,
+    color: '#D0021B',
   },
   extra: {
     borderColor: 'red',

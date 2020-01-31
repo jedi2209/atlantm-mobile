@@ -28,7 +28,6 @@ import OrderScreen from '../catalog/containers/OrderScreen';
 export const getRouter = initialRouteName => {
   return createStackNavigator(
     {
-      NewCarItemScreen: {screen: NewCarItemScreen},
       UsedCarItemScreen: {screen: UsedCarItemScreen},
       IntroScreen: {screen: IntroScreen}, // это скрин с кнопкой выберите автосервис
       BottomTabNavigation: {screen: BottomTabNavigation}, // это нижнее меню

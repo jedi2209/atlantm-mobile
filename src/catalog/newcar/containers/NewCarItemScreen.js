@@ -300,24 +300,28 @@ class NewCarItemScreen extends Component {
           alignItems: 'flex-end',
           minWidth: 100,
         }}>
+        {isSale && (
+          <Text
+            style={{
+              fontSize: 14,
+              fontWeight: '600',
+              color: '#D0021B',
+            }}>
+            {`${numberWithGap(
+              get(carDetails, 'price.app.sale'),
+            )} ${currency.toUpperCase()}`}
+          </Text>
+        )}
         <Text
           style={{
             fontSize: 14,
             fontWeight: '600',
             lineHeight: isSale ? 14 : 20,
-            color: isSale ? '#D0021B' : '#000',
+            color: '#000',
             textDecorationLine: isSale ? 'line-through' : 'none',
           }}>
           {`${price}`}
         </Text>
-        {isSale && (
-          <Text style={{fontSize: 14, fontWeight: '600'}}>
-            {showPrice(
-              get(carDetails, 'price.app.sale'),
-              get(carDetails, 'price.curr.code'),
-            )}
-          </Text>
-        )}
       </View>
     );
   };
