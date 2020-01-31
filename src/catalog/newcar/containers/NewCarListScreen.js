@@ -154,7 +154,6 @@ class NewCarListScreen extends Component {
     };
 
     if (type === EVENT_REFRESH) {
-      // console.log('filterData.search_url >>>>>> EVENT_REFRESH', filterData.search_url);
       return actionFetchNewCarByFilter({
         searchUrl:
           filterData.search_url ||
