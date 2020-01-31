@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'normal',
   },
-  scrollView: {paddingLeft: 20},
+  scrollView: {},
   scrollViewInner: {display: 'flex', flexDirection: 'column'},
 });
 
@@ -265,6 +265,7 @@ class ProfileScreenInfo extends Component {
           <ScrollView
             showsHorizontalScrollIndicator={false}
             horizontal
+            contentContainerStyle={{paddingLeft: 20, paddingRight: 5}}
             style={styles.scrollView}>
             {this.props.cars.map(item => (
               <TouchableOpacity
