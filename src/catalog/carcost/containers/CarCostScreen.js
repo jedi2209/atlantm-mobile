@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, StyleSheet, Alert, Platform } from 'react-native';
-import { Content, List, StyleProvider } from 'native-base';
+import {SafeAreaView, StyleSheet, Alert, Platform} from 'react-native';
+import {Content, List, StyleProvider} from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
-import { nameFill, phoneFill, emailFill } from '../../../profile/actions';
+import {connect} from 'react-redux';
+import {nameFill, phoneFill, emailFill} from '../../../profile/actions';
 import {
   actionFillPhotosCarCost,
   actionFillBrandCarCost,
@@ -22,7 +22,7 @@ import {
   actionFillVinCarCost,
   actionCarCostOrder,
 } from '../../actions';
-import { CAR_COST__SUCCESS, CAR_COST__FAIL } from '../../actionTypes';
+import {CAR_COST__SUCCESS, CAR_COST__FAIL} from '../../actionTypes';
 
 // components
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -38,11 +38,11 @@ import CarCostPhotos from '../components/CarCostPhotos';
 
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
-import { get, valuesIn } from 'lodash';
+import {get, valuesIn} from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
-import { ERROR_NETWORK } from '../../../core/const';
+import {ERROR_NETWORK} from '../../../core/const';
 import isInternet from '../../../utils/internet';
 
 const styles = StyleSheet.create({
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, profile, nav, catalog }) => {
+const mapStateToProps = ({dealer, profile, nav, catalog}) => {
   const carCost = get(catalog, 'carCost', {});
   const {
     comment,
@@ -122,13 +122,13 @@ const mapDispatchToProps = {
 };
 
 class CarCostScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: 'Оценить мой автомобиль',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <HeaderIconMenu navigation={navigation} />,
-  })
+  });
 
   static propTypes = {
     dealerSelected: PropTypes.object,
@@ -139,7 +139,7 @@ class CarCostScreen extends Component {
     name: PropTypes.string,
     phone: PropTypes.string,
     email: PropTypes.string,
-  }
+  };
 
   onPressButton = async () => {
     const isInternetExist = await isInternet();
@@ -174,7 +174,9 @@ class CarCostScreen extends Component {
       } = this.props;
 
       // предотвращаем повторную отправку формы
-      if (isCarCostRequest) return false;
+      if (isCarCostRequest) {
+        return false;
+      }
 
       const dealerId = dealerSelected.id;
       const photoForUpload = valuesIn(photos);
@@ -204,39 +206,38 @@ class CarCostScreen extends Component {
         gearbox,
         carCondition,
         color,
-      })
-        .then(action => {
-          if (action.type === CAR_COST__SUCCESS) {
-            Amplitude.logEvent('order', 'catalog/carcost');
+      }).then(action => {
+        if (action.type === CAR_COST__SUCCESS) {
+          Amplitude.logEvent('order', 'catalog/carcost');
 
-            setTimeout(() => {
-              Alert.alert(
-                'Ваша заявка успешно отправлена',
-                '',
-                [
-                  {
-                    text: 'ОК',
-                    onPress() {
-                      navigation.goBack();
-                    },
-                  },
-                ],
-              );
-            }, 100);
+          setTimeout(() => {
+            Alert.alert('Ваша заявка успешно отправлена', '', [
+              {
+                text: 'ОК',
+                onPress() {
+                  navigation.goBack();
+                },
+              },
+            ]);
+          }, 100);
+        }
+
+        if (action.type === CAR_COST__FAIL) {
+          let message = get(
+            action,
+            'payload.message',
+            'Произошла ошибка, попробуйте снова',
+          );
+
+          if (message === 'Network request failed') {
+            message = ERROR_NETWORK;
           }
 
-          if (action.type === CAR_COST__FAIL) {
-            let message = get(action, 'payload.message', 'Произошла ошибка, попробуйте снова');
-
-            if (message === 'Network request failed') {
-              message = ERROR_NETWORK;
-            }
-
-            setTimeout(() => Alert.alert(message), 100);
-          }
-        });
-      }
-  }
+          setTimeout(() => Alert.alert(message), 100);
+        }
+      });
+    }
+  };
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
@@ -245,7 +246,9 @@ class CarCostScreen extends Component {
     if (nav) {
       const rootLevel = nav.routes[nav.index];
       if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'CarCostScreen';
+        isActiveScreen =
+          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
+          'CarCostScreen';
       }
     }
 
@@ -302,9 +305,16 @@ class CarCostScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
-          <Content enableResetScrollToCoords={false} keyboardShouldPersistTaps={Platform.OS === 'android' ? 'always' : 'never'}>
+          <Content
+            enableResetScrollToCoords={false}
+            keyboardShouldPersistTaps={
+              Platform.OS === 'android' ? 'always' : 'never'
+            }>
             <List style={styles.list}>
-              <Spinner visible={isCarCostRequest} color={styleConst.color.blue} />
+              <Spinner
+                visible={isCarCostRequest}
+                color={styleConst.color.blue}
+              />
 
               <ListItemHeader text="МОЙ АВТОЦЕНТР" />
 
@@ -340,7 +350,6 @@ class CarCostScreen extends Component {
                 gearbox={gearbox}
                 color={color}
                 carCondition={carCondition}
-
                 vinFill={actionFillVinCarCost}
                 brandFill={actionFillBrandCarCost}
                 modelFill={actionFillModelCarCost}
@@ -355,12 +364,23 @@ class CarCostScreen extends Component {
               />
 
               <ListItemHeader text="ДОПОЛНИТЕЛЬНО" />
-              <CommentOrderForm comment={comment} commentFill={actionFillCommentCarCost} />
+              <CommentOrderForm
+                comment={comment}
+                commentFill={actionFillCommentCarCost}
+              />
 
               <ListItemHeader text="ПРИКРЕПИТЬ ФОТОГРАФИИ" />
-              <CarCostPhotos photos={photos} photosFill={actionFillPhotosCarCost} />
+              <CarCostPhotos
+                photos={photos}
+                photosFill={actionFillPhotosCarCost}
+              />
 
-              <ButtonFull style={styles.button} arrow={true} text="Отправить" onPressButton={this.onPressButton} />
+              <ButtonFull
+                style={styles.button}
+                arrow={true}
+                text="Отправить"
+                onPressButton={this.onPressButton}
+              />
             </List>
           </Content>
         </SafeAreaView>
@@ -369,4 +389,7 @@ class CarCostScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CarCostScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CarCostScreen);

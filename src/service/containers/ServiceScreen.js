@@ -2,7 +2,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView,
   StyleSheet,
   View,
   Alert,
@@ -10,12 +9,11 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
-  // TextInput,
   ActivityIndicator,
   Dimensions,
   Platform,
 } from 'react-native';
-import {List, StyleProvider, Button} from 'native-base';
+import {Button} from 'native-base';
 import DatePicker from 'react-native-datepicker';
 import {StackActions, NavigationActions} from 'react-navigation';
 
@@ -24,13 +22,7 @@ import {connect} from 'react-redux';
 import {dateFill, orderService} from '../actions';
 import {carFill, nameFill, phoneFill, emailFill} from '../../profile/actions';
 
-// components
-import Spinner from 'react-native-loading-spinner-overlay';
 import DeviceInfo from 'react-native-device-info';
-import ServiceForm from '../../service/components/ServiceForm';
-import FooterButton from '../../core/components/FooterButton';
-import ProfileForm from '../../profile/components/ProfileForm';
-import ListItemHeader from '../../profile/components/ListItemHeader';
 import DealerItemList from '../../core/components/DealerItemList';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
@@ -41,7 +33,6 @@ import {TextInput} from '../../core/components/TextInput';
 import Amplitude from '../../utils/amplitude-analytics';
 import isInternet from '../../utils/internet';
 import {yearMonthDay} from '../../utils/date';
-import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import {ERROR_NETWORK} from '../../core/const';
