@@ -80,7 +80,7 @@ export default class Wrapper extends Component {
       store,
       {
         storage: AsyncStorage,
-        blacklist: ['form', 'nav', 'modal'],
+        blacklist: ['form', 'nav', 'modal', 'catalog'],
         keyPrefix: 'atlantm',
       },
       () => {
