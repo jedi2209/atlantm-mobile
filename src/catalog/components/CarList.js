@@ -66,7 +66,8 @@ export default class CarList extends Component {
   }
 
   renderEmptyComponent = () => {
-    const isFetchItems = true;
+    const {isFetchItems} = this.props;
+
     return isFetchItems ? (
       <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
     ) : (
