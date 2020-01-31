@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {SafeAreaView, View, StyleSheet, Text} from 'react-native';
+import {SafeAreaView, View, StyleSheet, Text, StatusBar} from 'react-native';
 import {Content, StyleProvider} from 'native-base';
 
 // redux
@@ -90,6 +90,7 @@ class ReviewAddMessageStepScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
+          <StatusBar barStyle="light-content" />
           <Content style={{paddingTop: 10}}>
             <HeaderSubtitle content={dealerSelected.name} isBig={true} />
             <ReviewAddMessageForm

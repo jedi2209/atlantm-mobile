@@ -1,5 +1,11 @@
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, View, Dimensions} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Dimensions,
+  StatusBar,
+} from 'react-native';
 import {Content, StyleProvider} from 'native-base';
 
 // redux
@@ -111,11 +117,6 @@ class BonusInfoScreen extends Component {
   };
 
   render() {
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
-
-    console.log('== BonusInfoScreen ==');
-
     let {bonusInfo, isFetchBonusInfo} = this.props;
 
     if (isFetchBonusInfo) {
@@ -129,6 +130,7 @@ class BonusInfoScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
+          <StatusBar barStyle="dark-content" />
           <Content>
             {bonusInfo ? (
               <View

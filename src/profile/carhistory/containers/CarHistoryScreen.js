@@ -1,6 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, View, Text, ScrollView} from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  StatusBar,
+} from 'react-native';
 import {
   StyleProvider,
   ListItem,
@@ -401,27 +408,18 @@ class CarHistoryScreen extends Component {
     }
 
     if (isEmpty(carHistory) || !carHistory.items) {
-      console.log('history is emply ?');
       return (
         <SafeAreaView style={styles.safearea}>
+          <StatusBar barStyle="dark-content" />
           <Text style={styles.emptyText}>Истории пока нет</Text>
         </SafeAreaView>
       );
     }
 
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor: '#fff'}}>
+        <StatusBar barStyle="dark-content" />
         <View style={{backgroundColor: '#fff'}}>
-          {/* <Text
-            style={{
-              fontSize: 35,
-              fontWeight: '600',
-              marginHorizontal: 20,
-              // marginTop: 60,
-            }}>
-            История ТО
-          </Text> */}
-
           <StyleProvider style={getTheme()}>
             <View>
               {Object.keys(get(carHistory, 'items'), []).length

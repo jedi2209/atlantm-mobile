@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {SafeAreaView, View, StyleSheet, Text} from 'react-native';
+import {SafeAreaView, View, StyleSheet, Text, StatusBar} from 'react-native';
 import {StyleProvider} from 'native-base';
 
 // redux
@@ -170,11 +170,10 @@ class ReviewsScreen extends Component {
       isFetchReviews,
     } = this.props;
 
-    console.log('== ReviewsScreen ==');
-
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.content}>
+          <StatusBar barStyle="light-content" />
           <DealerItemList
             navigation={navigation}
             city={dealerSelected.city}

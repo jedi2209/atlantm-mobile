@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Dimensions,
+  StatusBar,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {Container, Text, StyleProvider} from 'native-base';
@@ -72,9 +73,7 @@ class InfoListScreen extends Component {
 
   static navigationOptions = ({navigation}) => {
     const returnScreen =
-      (navigation.state.params && navigation.state.params.returnScreen) ||
-      'BottomTabNavigation';
-    console.log('returnScreen ========>', returnScreen);
+      navigation.state.params && navigation.state.params.returnScreen;
 
     return {
       headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Акции</Text>,
@@ -217,6 +216,7 @@ class InfoListScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <Container style={styles.container}>
+          <StatusBar barStyle="light-content" />
           <FlatList
             data={list}
             extraData={isFetchInfoList}

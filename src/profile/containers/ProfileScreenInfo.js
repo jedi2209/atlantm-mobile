@@ -9,7 +9,7 @@ import {
   ScrollView,
   Text,
   Platform,
-  Image,
+  StatusBar,
 } from 'react-native';
 import {Button, Icon} from 'native-base';
 
@@ -231,6 +231,7 @@ class ProfileScreenInfo extends Component {
   render() {
     return (
       <SafeAreaView>
+        <StatusBar barStyle="dark-content" />
         <ScrollView>
           <Text
             style={{

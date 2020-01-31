@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
   Dimensions,
   Platform,
+  StatusBar,
 } from 'react-native';
 import {Button} from 'native-base';
 import DatePicker from 'react-native-datepicker';
@@ -278,6 +279,7 @@ class ServiceScreen extends Component {
 
     return (
       <KeyboardAvoidingView>
+        <StatusBar barStyle="light-content" />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView>
             <View style={styles.container}>
