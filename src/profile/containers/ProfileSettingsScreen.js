@@ -118,7 +118,6 @@ class ProfileSettingsScreen extends Component {
                     style={{
                       fontSize: 22,
                       fontWeight: 'bold',
-                      textAlign: 'center',
                     }}>
                     Заявка успешно отправлена
                   </Text>
