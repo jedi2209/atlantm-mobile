@@ -2,48 +2,29 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
-  SafeAreaView,
   View,
   Alert,
   StyleSheet,
   Platform,
-  Linking,
   Text,
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
-  // TextInput,
   ActivityIndicator,
-  Dimensions,
 } from 'react-native';
-import {
-  Button,
-  Body,
-  Right,
-  Label,
-  Item,
-  Input,
-  Switch,
-  Content,
-  ListItem,
-  StyleProvider,
-} from 'native-base';
+import {Button, Label, Switch} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
 import {actionFetchTva, actionSetPushTracking} from '../actions';
 import {carNumberFill} from '../../profile/actions';
-//import { actionSetPushGranted } from '../../core/actions';
 
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
 
 // components
-import Spinner from 'react-native-loading-spinner-overlay';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-import ListItemHeader from '../../profile/components/ListItemHeader';
 import DealerItemList from '../../core/components/DealerItemList';
-import FooterButton from '../../core/components/FooterButton';
 import PushNotifications from '../../core/components/PushNotifications';
 
 // styles
@@ -51,7 +32,6 @@ import stylesList from '../../core/components/Lists/style';
 
 // helpers
 import {get} from 'lodash';
-import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import {TVA__SUCCESS, TVA__FAIL} from '../actionTypes';
@@ -119,7 +99,6 @@ const mapStateToProps = ({dealer, nav, tva, profile, core}) => {
     pushTracking: tva.pushTracking,
     isTvaRequest: tva.meta.isRequest,
     dealerSelected: dealer.selected,
-    //    fcmToken: core.fcmToken,
     pushGranted: core.pushGranted,
   };
 };
@@ -128,8 +107,6 @@ const mapDispatchToProps = {
   carNumberFill,
   actionFetchTva,
   actionSetPushTracking,
-  //  actionSetFCMToken,
-  //  actionSetPushGranted,
 };
 
 class TvaScreen extends Component {
@@ -144,9 +121,7 @@ class TvaScreen extends Component {
   }
   static navigationOptions = ({navigation}) => {
     const returnScreen =
-      (navigation.state.params && navigation.state.params.returnScreen) ||
-      'BottomTabNavigation';
-    console.log('returnScreen ========>', returnScreen);
+      navigation.state.params && navigation.state.params.returnScreen;
 
     return {
       // Табло выдачи авто
@@ -338,8 +313,6 @@ class TvaScreen extends Component {
   render() {
     const {navigation, dealerSelected, isTvaRequest} = this.props;
 
-    console.log('>>>> dealerSelected.id', this.props.dealerSelected.id);
-
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -428,32 +401,6 @@ class TvaScreen extends Component {
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    );
-
-    return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <Content>
-            <Spinner visible={isTvaRequest} color={styleConst.color.blue} />
-
-            <DealerItemList
-              navigation={navigation}
-              city={dealerSelected.city}
-              name={dealerSelected.name}
-              brands={dealerSelected.brands}
-              goBack={true}
-            />
-
-            <ListItemHeader text="АВТОМОБИЛЬ" />
-
-            {this.renderListItems()}
-          </Content>
-          <FooterButton
-            text="Проверить"
-            onPressButton={() => this.onPressButton()}
-          />
-        </SafeAreaView>
-      </StyleProvider>
     );
   }
 }

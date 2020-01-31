@@ -1,6 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {StyleSheet, View, ScrollView, Text} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Text,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import {Button} from 'native-base';
 import {connect} from 'react-redux';
 
@@ -14,9 +21,6 @@ import stylesHeader from '../../core/components/Header/style';
 
 class ProfileSettingsScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: (
-      <Text style={stylesHeader.whiteHeaderTitle}>Редактирование профиля</Text>
-    ),
     headerStyle: stylesHeader.whiteHeader,
     headerTitleStyle: stylesHeader.whiteHeaderTitle,
     headerLeft: (
@@ -53,6 +57,7 @@ class ProfileSettingsScreen extends Component {
   }
 
   onPressSave = () => {
+    this.setState({loading: true});
     const {id, token, avatar, name, email, phone, crm_id} = this.props.profile;
     let emailValue;
     let phonelValue;
@@ -95,7 +100,14 @@ class ProfileSettingsScreen extends Component {
         discounts: this.props.profile.discounts,
       })
       .then(data => {
-        this.setState({success: true});
+        this.setState({success: true, loading: false});
+      })
+      .catch(() => {
+        setTimeout(
+          () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
+          100,
+        );
+        this.setState({loading: false});
       });
   };
 
@@ -106,7 +118,7 @@ class ProfileSettingsScreen extends Component {
   render() {
     return (
       <KeyboardAvoidingView>
-        <ScrollView>
+        <ScrollView style={{flex: 1, backgroundColor: '#fff'}}>
           <View style={styles.container}>
             <View style={styles.header}>
               <Text style={styles.heading}>Изменение данных</Text>
@@ -187,8 +199,16 @@ class ProfileSettingsScreen extends Component {
                   </View>
                 </View>
                 <View style={styles.group}>
-                  <Button onPress={this.onPressSave} style={styles.button}>
-                    <Text style={styles.buttonText}>Сохранить</Text>
+                  <Button
+                    onPress={
+                      this.state.loading ? undefined : () => this.onPressSave()
+                    }
+                    style={styles.button}>
+                    {this.state.loading ? (
+                      <ActivityIndicator color="#fff" />
+                    ) : (
+                      <Text style={styles.buttonText}>Сохранить</Text>
+                    )}
                   </Button>
                 </View>
               </>

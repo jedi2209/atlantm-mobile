@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 // redux
@@ -9,12 +10,10 @@ import {
   Alert,
   View,
   StyleSheet,
-  // TextInput,
   ScrollView,
   Keyboard,
   Text,
   Platform,
-  // KeyboardAvoidingView,
   TouchableWithoutFeedback,
   ActivityIndicator,
 } from 'react-native';
@@ -147,13 +146,7 @@ class CallMeBackScreen extends React.Component {
     if (!isInternetExist) {
       return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
     } else {
-      const {
-        callMe,
-        profile,
-        navigation,
-        dealerSelected,
-        isСallMeRequest,
-      } = this.props;
+      const {callMe, profile, dealerSelected, isСallMeRequest} = this.props;
 
       // предотвращаем повторную отправку формы
       if (isСallMeRequest) {
@@ -172,6 +165,7 @@ class CallMeBackScreen extends React.Component {
       }
 
       this.setState({loading: true});
+
       callMe({
         name,
         email: email || '', // апи не терпит undefined
@@ -196,7 +190,6 @@ class CallMeBackScreen extends React.Component {
   };
 
   render() {
-    const {name, phone} = this.state;
     const {navigation, dealerSelected} = this.props;
 
     return (

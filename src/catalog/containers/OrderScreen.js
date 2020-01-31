@@ -17,11 +17,9 @@ import {Button} from 'native-base';
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 // redux
 import {connect} from 'react-redux';
-import {actionCommentOrderCarFill, actionOrderCar} from '../actions';
+import {actionOrderCar} from '../actions';
 import {nameFill, phoneFill, emailFill} from '../../profile/actions';
 
-// components
-import CommentOrderForm from '../components/CommentOrderForm';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
@@ -150,20 +148,13 @@ class OrderScreen extends Component {
   };
 
   onPressOrder = async () => {
+    this.setState({loading: true});
     const isInternetExist = await isInternet();
 
     if (!isInternetExist) {
       return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
     } else {
-      const {
-        name,
-        phone,
-        email,
-        comment,
-        navigation,
-        actionOrderCar,
-        isOrderCarRequest,
-      } = this.props;
+      const {navigation, actionOrderCar, isOrderCarRequest} = this.props;
 
       // предотвращаем повторную отправку формы
       if (isOrderCarRequest) {
@@ -346,7 +337,11 @@ class OrderScreen extends Component {
                     </View>
                   </View>
                   <View style={styles.group}>
-                    <Button onPress={this.onPressOrder} style={styles.button}>
+                    <Button
+                      onPress={
+                        this.state.loading ? undefined : this.onPressOrder
+                      }
+                      style={styles.button}>
                       {this.state.loading ? (
                         <ActivityIndicator color="#fff" />
                       ) : (
