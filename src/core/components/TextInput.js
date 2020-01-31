@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-export const TextInput = ({label, value, ...props}) => {
+export const TextInput = ({label, value = '', ...props}) => {
   const [focused, setFocused] = useState(false);
   const isActive = focused || Boolean(value.trim());
 

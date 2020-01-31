@@ -89,7 +89,7 @@ class MapScreen extends Component {
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: (
-      <HeaderIconBack returnScreen="NewCarItemScreen" navigation={navigation} />
+      <HeaderIconBack navigation={navigation} />
     ),
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
   });

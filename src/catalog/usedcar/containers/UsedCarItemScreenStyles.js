@@ -108,7 +108,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
   },
   orderPriceSpecialText: {
-    color: styleConst.color.red,
+    color: '#D0021B',
     fontSize: 19,
     marginTop: 2,
   },
