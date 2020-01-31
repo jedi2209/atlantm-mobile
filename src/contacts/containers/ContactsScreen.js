@@ -37,7 +37,7 @@ const HEADER_MAX_HEIGHT = 406;
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: styleConst.color.bg,
+    backgroundColor: '#F6F6F6',
   },
   imgHero: {
     position: 'absolute',
@@ -385,7 +385,6 @@ class ContactsScreen extends Component {
                 <View
                   style={{
                     marginTop: 0,
-                    backgroundColor: '#F6F6F6',
                     paddingVertical: 0,
                   }}>
                   <View

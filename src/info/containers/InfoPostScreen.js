@@ -161,61 +161,7 @@ class InfoPostScreen extends Component {
   };
 
   onPressCallMe = async () => {
-    const isInternetExist = await isInternet();
-
-    if (!isInternetExist) {
-      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
-    } else {
-      const {
-        name,
-        email,
-        phone,
-        navigation,
-        callMeForInfo,
-        dealerSelected,
-      } = this.props;
-
-      if (!phone) {
-        return Alert.alert(
-          'Добавьте номер телефона',
-          'Для обратного звонка необходимо добавить номер контактного телефона в профиле',
-          [
-            {text: 'Отмена', style: 'cancel'},
-            {
-              text: 'Заполнить',
-              onPress() {
-                navigation.navigate('Profile2Screen');
-              },
-            },
-          ],
-        );
-      }
-
-      const post = this.getPost();
-      const action = post.id;
-      const dealerID = dealerSelected.id;
-      const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
-
-      callMeForInfo({
-        name,
-        email,
-        phone,
-        device,
-        action,
-        dealerID,
-      }).then(action => {
-        if (action.type === CALL_ME_INFO__SUCCESS) {
-          setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
-        }
-
-        if (action.type === CALL_ME_INFO__FAIL) {
-          setTimeout(
-            () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
-            100,
-          );
-        }
-      });
-    }
+    this.props.navigation.navigate('CallMeBackScreen');
   };
 
   processDate(date = {}) {
