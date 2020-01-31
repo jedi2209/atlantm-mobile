@@ -4,7 +4,7 @@ export default {
   color: {
     blue: '#0061ED',
     lightBlue: '#027aff',
-    bg: '#f0f3f5',
+    bg: '#F6F6F6',
     accordeonGrey1: '#ededed',
     accordeonGrey2: '#dedfe0',
     greyText: 'rgba(97,110,122,1)',

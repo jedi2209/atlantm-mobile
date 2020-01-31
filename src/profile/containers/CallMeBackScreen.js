@@ -105,9 +105,7 @@ class CallMeBackScreen extends React.Component {
 
   static navigationOptions = ({navigation}) => {
     const returnScreen =
-      (navigation.state.params && navigation.state.params.returnScreen) ||
-      'BottomTabNavigation';
-    console.log('returnScreen ========>', returnScreen);
+      navigation.state.params && navigation.state.params.returnScreen;
 
     return {
       headerStyle: stylesHeader.blueHeader,
@@ -241,7 +239,7 @@ class CallMeBackScreen extends React.Component {
                 </View>
               ) : (
                 <>
-                <View
+                  <View
                     // Визуально выравниваем относительно остальных компонентов.
                     style={[styles.group, {marginLeft: -14, marginRight: -14}]}>
                     <DealerItemList
