@@ -65,6 +65,9 @@ const SearchStack = {
     },
     NewCarFilterScreen: {
       screen: NewCarFilterScreen,
+      navigationOptions: {
+        gesturesEnabled: false,
+      },
     },
   }),
 };
