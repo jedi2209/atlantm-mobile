@@ -73,15 +73,15 @@ class NewCarListScreen extends Component {
       ),
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: (
-        <View>
-          <HeaderIconBack
-            theme="white"
-            navigation={navigation}
-            returnScreen={returnScreen}
-          />
-        </View>
-      ),
+      // headerLeft: (
+      //   <View>
+      //     <HeaderIconBack
+      //       theme="white"
+      //       navigation={navigation}
+      //       returnScreen={returnScreen}
+      //     />
+      //   </View>
+      // ),
       headerRight: (
         <View>
           <TouchableOpacity
