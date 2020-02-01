@@ -45,6 +45,7 @@ import styleConst from '@core/style-const';
 import stylesHeader from '@core/components/Header/style';
 import stylesFooter from '@core/components/Footer/style';
 import numberWithGap from '@utils/number-with-gap';
+import showPrice from '@utils/price';
 
 // styles
 import styles from '@catalog/usedcar/containers/UsedCarItemScreenStyles';
@@ -286,7 +287,10 @@ class NewCarItemScreen extends Component {
 
   renderPrice = ({carDetails, filterData = {}, currency}) => {
     const isSale = carDetails.sale === true;
-    const price = numberWithGap(get(carDetails, 'price.app.standart'));
+    const price = showPrice(
+      get(carDetails, 'price.app.standart'),
+      get(carDetails, 'price.curr.code'),
+    );
 
     return (
       <View
@@ -304,13 +308,14 @@ class NewCarItemScreen extends Component {
             color: isSale ? '#D0021B' : '#000',
             textDecorationLine: isSale ? 'line-through' : 'none',
           }}>
-          {`${price} ${currency.toUpperCase()}`}
+          {`${price}`}
         </Text>
         {isSale && (
           <Text style={{fontSize: 14, fontWeight: '600'}}>
-            {`${numberWithGap(
+            {showPrice(
               get(carDetails, 'price.app.sale'),
-            )} ${currency.toUpperCase()}`}
+              get(carDetails, 'price.curr.code'),
+            )}
           </Text>
         )}
       </View>
@@ -320,8 +325,14 @@ class NewCarItemScreen extends Component {
   renderPriceFooter = ({carDetails, filterData, currency}) => {
     const isSale = carDetails.sale === true;
 
-    const priceDefault = numberWithGap(get(carDetails, 'price.app.standart'));
-    const priceSpecial = numberWithGap(get(carDetails, 'price.app.sale'));
+    const priceDefault = showPrice(
+      get(carDetails, 'price.app.standart'),
+      get(carDetails, 'price.curr.code'),
+    );
+    const priceSpecial = showPrice(
+      get(carDetails, 'price.app.sale'),
+      get(carDetails, 'price.curr.code'),
+    );
 
     return (
       <View
@@ -331,7 +342,7 @@ class NewCarItemScreen extends Component {
         ]}>
         {isSale ? (
           <Text style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
-            {`${priceSpecial} ${currency}`}
+            {`${priceSpecial}`}
           </Text>
         ) : null}
         <Text
@@ -339,7 +350,7 @@ class NewCarItemScreen extends Component {
             styles.orderPriceText,
             !isSale ? styles.orderPriceDefaultText : styles.orderPriceSmallText,
           ]}>
-          {`${priceDefault} ${currency}`}
+          {`${priceDefault}`}
         </Text>
       </View>
     );

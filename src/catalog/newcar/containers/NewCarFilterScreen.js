@@ -32,6 +32,7 @@ import Amplitude from '@utils/amplitude-analytics';
 import showPrice from '@utils/price';
 import {get, find} from 'lodash';
 import stylesHeader from '@core/components/Header/style';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -638,7 +639,7 @@ class NewCarFilterScreen extends Component {
     }
 
     return (
-      <>
+      <ScrollView style={{borderWidth: 0}}>
         <StatusBar barStyle="dark-content" />
         <Accordion
           dataArray={filtersContent}
@@ -711,7 +712,7 @@ class NewCarFilterScreen extends Component {
             <Text style={{color: '#fff', fontSize: 16}}>Применить</Text>
           </Button>
         </View>
-      </>
+      </ScrollView>
     );
   }
 }

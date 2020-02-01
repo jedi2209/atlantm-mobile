@@ -8,6 +8,7 @@ import Imager from '../../core/components/Imager';
 // helpers
 import {get} from 'lodash';
 import numberWithGap from '../../utils/number-with-gap';
+import showPrice from '@utils/price';
 import styleConst from '../../core/style-const';
 import {Dimensions} from 'react-native';
 
@@ -120,20 +121,26 @@ export default class CarListItem extends Component {
   renderPrice = ({car, prices}) => {
     const isSale = car.sale === true;
     const currency = get(prices, 'curr.name');
-    const priceDefault = numberWithGap(get(car, 'price.app.standart'));
-    const priceSpecial = numberWithGap(get(car, 'price.app.sale'));
+    const priceDefault = showPrice(
+      get(car, 'price.app.standart'),
+      get(prices, 'curr.code'),
+    );
+    const priceSpecial = showPrice(
+      get(car, 'price.app.sale'),
+      get(prices, 'curr.code'),
+    );
 
     return (
       <View style={styles.priceContainer}>
         <Text style={[styles.price, isSale ? styles.priceDefault : '']}>
-          {`${priceDefault} ${currency}`}
+          {`${priceDefault}`}
         </Text>
         {isSale ? (
           <Text
             style={[
               styles.price,
               styles.priceSpecial,
-            ]}>{`${priceSpecial} ${currency}`}</Text>
+            ]}>{`${priceSpecial}`}</Text>
         ) : null}
       </View>
     );
