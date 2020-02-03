@@ -38,7 +38,6 @@ export default function(price, country) {
     style: 'currency',
     currencyDisplay: 'symbol',
     currency: currency_code,
-    maximumFractionDigits: 1,
-    maximumSignificantDigits: 1,
+    minimumFractionDigits: 0,
   });
 }
