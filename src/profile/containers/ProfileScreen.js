@@ -488,8 +488,9 @@ class ProfileScreen extends Component {
                       width: '80%',
                       borderRadius: 5,
                     }}
-                    placeholderTextColor="gray"
+                    placeholderTextColor="white"
                     placeholder="Телефон"
+                    autoCompleteType="tel"
                     keyboardType="phone-pad"
                     onChangeText={this.onInputPhone}
                   />
@@ -524,6 +525,8 @@ class ProfileScreen extends Component {
                           marginTop: 15,
                         }}
                         placeholder="Код"
+                        placeholderTextColor="white"
+                        autoCompleteType="off"
                         onChangeText={this.onInputCode}
                       />
                       <Button
