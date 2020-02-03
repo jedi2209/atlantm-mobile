@@ -323,9 +323,7 @@ class NewCarFilterScreen extends Component {
 
   render() {
     const sliderWidth = (deviceWidth / 100) * 80;
-    const max = this.props.filterData.prices
-      ? this.props.filterData.prices.max
-      : 0;
+
     if (this.props.isNotFilterBrands) {
       return (
         <View
@@ -463,7 +461,9 @@ class NewCarFilterScreen extends Component {
               step={this.state.priceFilter.step}
               min={0}
               sliderLength={sliderWidth}
-              max={max}
+              max={
+                this.props.filterData.prices && this.props.filterData.prices.max
+              }
               onValuesChange={e => {
                 this.setState({
                   priceFilter: {
