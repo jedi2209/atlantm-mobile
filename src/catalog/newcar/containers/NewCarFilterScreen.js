@@ -509,13 +509,13 @@ class NewCarFilterScreen extends Component {
               <Text style={{color: '#74747A', fontSize: 14}}>
                 {showPrice(
                   this.state.priceFilter.min,
-                  this.state.priceFilter.curr,
+                  this.state.priceFilter.curr.code,
                 )}
               </Text>
               <Text style={{color: '#74747A', fontSize: 14}}>
                 {showPrice(
                   this.state.priceFilter.max,
-                  this.state.priceFilter.curr,
+                  this.state.priceFilter.curr.code,
                 )}
               </Text>
             </View>

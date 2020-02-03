@@ -107,9 +107,9 @@ export default class CarListItem extends Component {
   };
 
   onPress = () => {
-    const {navigate, itemScreen, car, currency} = this.props;
+    const {navigate, itemScreen, car, currency, prices} = this.props;
 
-    navigate(itemScreen, {carId: car.id.api, currency});
+    navigate(itemScreen, {carId: car.id.api, currency, code: prices.curr.code});
   };
 
   shouldComponentUpdate(nextProps) {
@@ -121,26 +121,26 @@ export default class CarListItem extends Component {
   renderPrice = ({car, prices}) => {
     const isSale = car.sale === true;
     const currency = get(prices, 'curr.name');
-    const priceDefault = showPrice(
-      get(car, 'price.app.standart'),
-      get(prices, 'curr.code'),
-    );
-    const priceSpecial = showPrice(
-      get(car, 'price.app.sale'),
-      get(prices, 'curr.code'),
-    );
+    // const priceDefault = showPrice(
+    //   get(car, 'price.app.standart'),
+    //   get(prices, 'curr.code'),
+    // );
+    // const priceSpecial = showPrice(
+    //   get(car, 'price.app.sale'),
+    //   get(prices, 'curr.code'),
+    // );
 
     return (
       <View style={styles.priceContainer}>
         <Text style={[styles.price, isSale ? styles.priceDefault : '']}>
-          {`${priceDefault}`}
+          {`${numberWithGap(
+            get(car, 'price.app.standart'),
+          )} ${currency.toUpperCase()}`}
         </Text>
         {isSale ? (
-          <Text
-            style={[
-              styles.price,
-              styles.priceSpecial,
-            ]}>{`${priceSpecial}`}</Text>
+          <Text style={[styles.price, styles.priceSpecial]}>{` ${numberWithGap(
+            get(car, 'price.app.sale'),
+          )} ${currency.toUpperCase()}`}</Text>
         ) : null}
       </View>
     );

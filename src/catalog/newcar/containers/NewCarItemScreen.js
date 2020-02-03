@@ -289,7 +289,7 @@ class NewCarItemScreen extends Component {
     const isSale = carDetails.sale === true;
     const price = showPrice(
       get(carDetails, 'price.app.standart'),
-      get(carDetails, 'price.curr.code'),
+      get(this.props.navigation, 'state.params.code'),
     );
 
     return (
@@ -320,7 +320,9 @@ class NewCarItemScreen extends Component {
             color: '#000',
             textDecorationLine: isSale ? 'line-through' : 'none',
           }}>
-          {`${price}`}
+          {`${numberWithGap(
+            get(carDetails, 'price.app.standart'),
+          )} ${currency.toUpperCase()}`}
         </Text>
       </View>
     );
@@ -329,13 +331,9 @@ class NewCarItemScreen extends Component {
   renderPriceFooter = ({carDetails, filterData, currency}) => {
     const isSale = carDetails.sale === true;
 
-    const priceDefault = showPrice(
+    const price = showPrice(
       get(carDetails, 'price.app.standart'),
-      get(carDetails, 'price.curr.code'),
-    );
-    const priceSpecial = showPrice(
-      get(carDetails, 'price.app.sale'),
-      get(carDetails, 'price.curr.code'),
+      get(this.props.navigation, 'state.params.code'),
     );
 
     return (
@@ -346,7 +344,9 @@ class NewCarItemScreen extends Component {
         ]}>
         {isSale ? (
           <Text style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
-            {`${priceSpecial}`}
+            {`${numberWithGap(
+              get(carDetails, 'price.app.sale'),
+            )} ${currency.toUpperCase()}`}
           </Text>
         ) : null}
         <Text
@@ -354,7 +354,9 @@ class NewCarItemScreen extends Component {
             styles.orderPriceText,
             !isSale ? styles.orderPriceDefaultText : styles.orderPriceSmallText,
           ]}>
-          {`${priceDefault}`}
+          {`${numberWithGap(
+            get(carDetails, 'price.app.standart'),
+          )} ${currency.toUpperCase()}`}
         </Text>
       </View>
     );
