@@ -90,7 +90,12 @@ class MapScreen extends Component {
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: (
-      <HeaderIconBack navigation={navigation} />
+      <HeaderIconBack
+        navigation={navigation}
+        returnScreen={
+          navigation.state.params && navigation.state.params.returnScreen
+        }
+      />
     ),
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
   });

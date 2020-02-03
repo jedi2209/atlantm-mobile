@@ -33,7 +33,6 @@ import UsedCarListScreen from '../../catalog/usedcar/containers/UsedCarListScree
 import UsedCarFilterScreen from '../../catalog/usedcar/containers/UsedCarFilterScreen';
 import UsedCarCityScreen from '../../catalog/usedcar/containers/UsedCarCityScreen';
 import MoreScreen from './MenuScreenNew';
-import MapScreen from '../../contacts/map/containers/MapScreen';
 import ApplicationModalScreen from './Application';
 import NewCarItemScreen from '../../catalog/newcar/containers/NewCarItemScreen';
 
@@ -57,12 +56,6 @@ const SearchStack = {
   screen: createStackNavigator({
     NewCarListScreen: {
       screen: NewCarListScreen,
-    },
-    MapScreen: {
-      screen: MapScreen,
-      screenProps: {
-        tabBarVisible: false,
-      },
     },
     NewCarFilterScreen: {
       screen: NewCarFilterScreen,

@@ -252,6 +252,7 @@ class ContactsScreen extends Component {
   onPressMap = () => {
     const {navigation, dealerSelected} = this.props;
     navigation.navigate('MapScreen', {
+      returnScreen: 'Home',
       name: get(dealerSelected, 'name'),
       city: get(dealerSelected, 'city.name'),
       address: get(dealerSelected, 'dealer.name'),
