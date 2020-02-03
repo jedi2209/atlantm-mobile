@@ -316,6 +316,7 @@ class ContactsScreen extends Component {
               <ScrollView
                 showsHorizontalScrollIndicator={false}
                 horizontal
+                contentContainerStyle={{paddingRight: 30}}
                 style={styles.scrollView}>
                 <View style={styles.scrollViewInner}>
                   <Card
