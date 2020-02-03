@@ -29,7 +29,6 @@ import {
 
 // helpers
 import Amplitude from '@utils/amplitude-analytics';
-import showPrice from '@utils/price';
 import {get, find} from 'lodash';
 import stylesHeader from '@core/components/Header/style';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -323,10 +322,10 @@ class NewCarFilterScreen extends Component {
   };
 
   render() {
+    const sliderWidth = (deviceWidth / 100) * 80;
     const max = this.props.filterData.prices
       ? this.props.filterData.prices.max
       : 0;
-
     if (this.props.isNotFilterBrands) {
       return (
         <View
@@ -463,14 +462,12 @@ class NewCarFilterScreen extends Component {
               values={[this.state.priceFilter.min, this.state.priceFilter.max]}
               step={this.state.priceFilter.step}
               min={0}
-              sliderLength={(deviceWidth / 100) * 80}
+              sliderLength={sliderWidth}
               max={max}
               onValuesChange={e => {
                 this.setState({
                   priceFilter: {
-                    // TODO: fix it
-                    step: this.state.priceFilter.curr.step,
-                    curr: this.state.priceFilter.curr,
+                    ...this.state.priceFilter,
                     min: e[0],
                     max: e[1],
                   },
@@ -507,16 +504,14 @@ class NewCarFilterScreen extends Component {
                 justifyContent: 'space-between',
               }}>
               <Text style={{color: '#74747A', fontSize: 14}}>
-                {showPrice(
-                  this.state.priceFilter.min,
-                  this.state.priceFilter.curr.code,
-                )}
+                {`${this.state.priceFilter.min} ${
+                  this.state.priceFilter.curr.name
+                }`}
               </Text>
               <Text style={{color: '#74747A', fontSize: 14}}>
-                {showPrice(
-                  this.state.priceFilter.max,
-                  this.state.priceFilter.curr.code,
-                )}
+                {`${this.state.priceFilter.max} ${
+                  this.state.priceFilter.curr.name
+                }`}
               </Text>
             </View>
           </View>

@@ -121,14 +121,6 @@ export default class CarListItem extends Component {
   renderPrice = ({car, prices}) => {
     const isSale = car.sale === true;
     const currency = get(prices, 'curr.name');
-    // const priceDefault = showPrice(
-    //   get(car, 'price.app.standart'),
-    //   get(prices, 'curr.code'),
-    // );
-    // const priceSpecial = showPrice(
-    //   get(car, 'price.app.sale'),
-    //   get(prices, 'curr.code'),
-    // );
 
     return (
       <View style={styles.priceContainer}>
