@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Dimensions,
   SafeAreaView,
+  StatusBar,
 } from 'react-native';
 
 // Maps
@@ -363,6 +364,7 @@ class MapScreen extends Component {
 
     return (
       <SafeAreaView style={styles.safearea}>
+        <StatusBar barStyle="dark-content" />
         <View style={styles.mapContainer}>
           <MapView
             ref={this.handleRef}
