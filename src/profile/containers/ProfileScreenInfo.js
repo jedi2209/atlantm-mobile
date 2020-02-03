@@ -10,6 +10,7 @@ import {
   Text,
   Platform,
   StatusBar,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {Button, Icon} from 'native-base';
 
@@ -171,8 +172,15 @@ const CarCard = ({data}) => {
           justifyContent: 'space-between',
           paddingBottom: 40,
           height: 155,
-
           marginRight: 15,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.22,
+          shadowRadius: 2.22,
+          elevation: 3,
         },
       ]}>
       <View>
@@ -189,9 +197,11 @@ const CarCard = ({data}) => {
           {`${brand} ${model}`}
         </Text>
         <Text
+          ellipsizeMode="tail"
+          numberOfLines={1}
           style={{
             color: '#fff',
-            fontSize: 20,
+            fontSize: 19,
             paddingHorizontal: 20,
           }}>
           {number}
@@ -268,18 +278,29 @@ class ProfileScreenInfo extends Component {
             contentContainerStyle={{paddingLeft: 20, paddingRight: 5}}
             style={styles.scrollView}>
             {this.props.cars.map(item => (
-              <TouchableOpacity
+              <TouchableWithoutFeedback
                 onPress={() =>
                   this.props.navigation.navigate('TOHistore', {car: item})
                 }>
                 <CarCard data={item} />
-              </TouchableOpacity>
+              </TouchableWithoutFeedback>
             ))}
           </ScrollView>
 
-          <TouchableOpacity
+          <TouchableWithoutFeedback
             onPress={() => this.props.navigation.navigate('BonusScreen')}>
-            <View style={{marginHorizontal: 20}}>
+            <View
+              style={{
+                marginHorizontal: 20,
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: 1,
+                },
+                shadowOpacity: 0.22,
+                shadowRadius: 2.22,
+                elevation: 3,
+              }}>
               <View
                 style={{
                   backgroundColor: '#0061ed',
@@ -302,7 +323,7 @@ class ProfileScreenInfo extends Component {
                   <Text
                     style={{color: '#0061ed', fontSize: 20, fontWeight: '600'}}>
                     {this.props.bonus && this.props.bonus.saldo
-                      ? this.props.bonus.saldo.value + '23'
+                      ? this.props.bonus.saldo.value
                       : 0}
                   </Text>
                 </View>
@@ -345,7 +366,7 @@ class ProfileScreenInfo extends Component {
                 </View>
               </View>
             </View>
-          </TouchableOpacity>
+          </TouchableWithoutFeedback>
           <Button
             full
             onPress={() => {

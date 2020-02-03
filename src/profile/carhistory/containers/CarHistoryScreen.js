@@ -71,6 +71,8 @@ const styles = StyleSheet.create({
     height: null,
     minHeight: styleConst.ui.listHeight,
     paddingBottom: 10,
+    borderBottomColor: '#afafaf',
+    borderBottomWidth: 1,
   },
   date: {
     color: '#0061ED',
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
   },
   sectionPropText: {
     letterSpacing: styleConst.ui.letterSpacing,
-    fontSize: 17,
+    fontSize: 15,
   },
   sectionValueText: {
     letterSpacing: styleConst.ui.letterSpacing,
@@ -342,13 +344,13 @@ class CarHistoryScreen extends Component {
         {master ? this.renderLevel3Item({prop: 'Мастер', value: master}) : null}
         {works
           ? this.renderLevel3Item({
-              prop: 'Ст-ть работ',
+              prop: 'Стоимость работ',
               value: `${numberWithGap(works)} ${currency}`,
             })
           : null}
         {parts
           ? this.renderLevel3Item({
-              prop: 'Ст-ть запчастей',
+              prop: 'Стоимость запчастей',
               value: `${numberWithGap(parts)} ${currency}`,
             })
           : null}
