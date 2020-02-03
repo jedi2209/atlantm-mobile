@@ -176,19 +176,7 @@ class CarHistoryScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
-
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen =
-          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
-          'CarHistoryScreen';
-      }
-    }
-
-    return isActiveScreen;
+    return nextProps.navigation.isFocused();
   }
 
   renderListItem = (label, value, isLast) => {
