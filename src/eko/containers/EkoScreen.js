@@ -86,9 +86,8 @@ class EkoScreen extends Component {
   shouldComponentUpdate(nextProps) {
     const {dealerSelected} = this.props;
     const nav = nextProps.nav.newState;
-    const isActiveScreen = nav.routes[nav.index].routeName === 'EkoScreen';
 
-    return dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen;
+    return dealerSelected.id !== nextProps.dealerSelected.id;
   }
 
   onPressReviews = () => this.props.navigation.navigate('ReviewsScreen');
