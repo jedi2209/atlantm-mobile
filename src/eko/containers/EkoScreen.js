@@ -147,13 +147,6 @@ class EkoScreen extends Component {
   };
 
   render() {
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
-
-    const {navigation} = this.props;
-
-    console.log('== EkoScreen ==');
-
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
