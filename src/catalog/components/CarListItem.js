@@ -171,7 +171,12 @@ export default class CarListItem extends Component {
             }}
           />
           <View style={styles.price}>{this.renderPrice({car, prices})}</View>
-          <View style={{display: 'flex', flexDirection: 'row'}}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+            }}>
             <View>
               {engineVolume ? (
                 <View style={styles.extraTextContainer}>
