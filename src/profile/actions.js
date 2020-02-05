@@ -616,10 +616,10 @@ export const actionSavePofileWithPhone = props => {
 };
 
 export const actionSavePofile = props => {
-  if (props.SAP && props.SAP.TOKEN) {
+  if (props.ID) {
     const {SAP} = props;
     const token = SAP ? SAP.TOKEN : ''; // user.TOKEN,
-    const id = SAP ? SAP.ID : ''; //user.ID;
+    const id = SAP ? SAP.ID : props.ID; //user.ID;
     const userInfo = profileDataAdapter(props);
 
     return async dispatch => {
@@ -666,7 +666,7 @@ export const actionSavePofile = props => {
 
         const {SAP} = user;
         const token = SAP ? SAP.TOKEN : ''; // user.TOKEN,
-        const id = SAP ? SAP.ID : ''; //user.ID;
+        const id = SAP ? SAP.ID : user.ID; //user.ID;
         const userInfo = profileDataAdapter(user);
 
         const {cars, bonus, discounts} = await getProfileData({

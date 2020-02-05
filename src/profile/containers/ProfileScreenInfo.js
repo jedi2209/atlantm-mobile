@@ -34,10 +34,7 @@ import {
   actionSetPushGranted,
 } from '../../core/actions';
 
-import {verticalScale} from '../../utils/scale';
 import styleConst from '../../core/style-const';
-
-import {TouchableOpacity} from 'react-native';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -103,8 +100,6 @@ const styles = StyleSheet.create({
   scrollViewInner: {display: 'flex', flexDirection: 'column'},
 });
 
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-import stylesHeader from '../../core/components/Header/style';
 import {SafeAreaView} from 'react-navigation';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
@@ -227,13 +222,13 @@ class ProfileScreenInfo extends Component {
   });
 
   componentDidMount() {
-    if (!this.props.login.token) {
+    if (!this.props.login.id) {
       this.props.navigation.navigate('ProfileScreen');
     }
   }
 
   componentDidUpdate(nextProps) {
-    if (this.props.navigation.isFocused() && !this.props.login.token) {
+    if (this.props.navigation.isFocused() && !this.props.login.id) {
       this.props.navigation.navigate('ProfileScreen');
     }
   }
@@ -250,7 +245,8 @@ class ProfileScreenInfo extends Component {
               marginHorizontal: 20,
               marginTop: 10,
             }}>
-            {`${this.props.login.first_name} ${this.props.login.last_name}`}
+            {`${this.props.login.first_name || ''} ${this.props.login
+              .last_name || ''}`}
           </Text>
           <Button
             full
@@ -263,14 +259,16 @@ class ProfileScreenInfo extends Component {
             </Text>
           </Button>
 
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: '600',
-              marginHorizontal: 20,
-            }}>
-            Мои автомобили
-          </Text>
+          {this.props.cars.length > 0 && (
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: '600',
+                marginHorizontal: 20,
+              }}>
+              Мои автомобили
+            </Text>
+          )}
 
           <ScrollView
             showsHorizontalScrollIndicator={false}
@@ -289,86 +287,92 @@ class ProfileScreenInfo extends Component {
             ))}
           </ScrollView>
 
-          <TouchableWithoutFeedback
-            onPress={() => this.props.navigation.navigate('BonusScreen')}>
-            <View
-              style={{
-                marginHorizontal: 20,
-                shadowColor: '#000',
-                shadowOffset: {
-                  width: 0,
-                  height: 1,
-                },
-                shadowOpacity: 0.22,
-                shadowRadius: 2.22,
-                elevation: 3,
-              }}>
+          {this.props.bonus && this.props.bonus.saldo && (
+            <TouchableWithoutFeedback
+              onPress={() => this.props.navigation.navigate('BonusScreen')}>
               <View
                 style={{
-                  backgroundColor: '#0061ed',
-                  borderRadius: 5,
-                  padding: 14,
-                  display: 'flex',
-                  flexDirection: 'row',
+                  marginHorizontal: 20,
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 0,
+                    height: 1,
+                  },
+                  shadowOpacity: 0.22,
+                  shadowRadius: 2.22,
+                  elevation: 3,
                 }}>
                 <View
                   style={{
-                    backgroundColor: '#fff',
-                    width: 98,
-                    height: 98,
-                    borderRadius: 49,
+                    backgroundColor: '#0061ed',
+                    borderRadius: 5,
+                    padding: 14,
                     display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginRight: 24,
+                    flexDirection: 'row',
                   }}>
-                  <Text
-                    style={{color: '#0061ed', fontSize: 20, fontWeight: '600'}}>
-                    {this.props.bonus && this.props.bonus.saldo
-                      ? this.props.bonus.saldo.value
-                      : 0}
-                  </Text>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text
+                  <View
                     style={{
-                      color: '#fff',
-                      fontSize: 18,
-                      marginBottom: 8,
-                      fontWeight: '600',
+                      backgroundColor: '#fff',
+                      width: 98,
+                      height: 98,
+                      borderRadius: 49,
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginRight: 24,
                     }}>
-                    Бонусные баллы
-                  </Text>
-                  <Text
-                    style={{
-                      color: '#fff',
-                      fontSize: 12,
-                      marginBottom: 16,
-                      fontWeight: '600',
-                    }}>
-                    История накопления и трат Ваших бонусных баллов
-                  </Text>
-                  <View style={{display: 'flex', flexDirection: 'row'}}>
-                    <View>
-                      <Text
-                        style={{
-                          color: '#fff',
-                          fontSize: 16,
-                          fontWeight: '600',
-                        }}>
-                        Посмотреть
-                      </Text>
+                    <Text
+                      style={{
+                        color: '#0061ed',
+                        fontSize: 20,
+                        fontWeight: '600',
+                      }}>
+                      {this.props.bonus && this.props.bonus.saldo
+                        ? this.props.bonus.saldo.value
+                        : 0}
+                    </Text>
+                  </View>
+                  <View style={{flex: 1}}>
+                    <Text
+                      style={{
+                        color: '#fff',
+                        fontSize: 18,
+                        marginBottom: 8,
+                        fontWeight: '600',
+                      }}>
+                      Бонусные баллы
+                    </Text>
+                    <Text
+                      style={{
+                        color: '#fff',
+                        fontSize: 12,
+                        marginBottom: 16,
+                        fontWeight: '600',
+                      }}>
+                      История накопления и трат Ваших бонусных баллов
+                    </Text>
+                    <View style={{display: 'flex', flexDirection: 'row'}}>
+                      <View>
+                        <Text
+                          style={{
+                            color: '#fff',
+                            fontSize: 16,
+                            fontWeight: '600',
+                          }}>
+                          Посмотреть
+                        </Text>
+                      </View>
+                      <Icon
+                        type="FontAwesome5"
+                        name="angle-right"
+                        style={{color: '#fff', fontSize: 20, marginLeft: 8}}
+                      />
                     </View>
-                    <Icon
-                      type="FontAwesome5"
-                      name="angle-right"
-                      style={{color: '#fff', fontSize: 20, marginLeft: 8}}
-                    />
                   </View>
                 </View>
               </View>
-            </View>
-          </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
+          )}
           <Button
             full
             onPress={() => {
