@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {FlatList, View, StyleSheet} from 'react-native';
 
 // components
 import Review from './Review';
@@ -9,7 +9,7 @@ import FlatListFooter from '@core/components/FlatListFooter';
 
 // helpers
 import PropTypes from 'prop-types';
-import { EVENT_DEFAULT, EVENT_LOAD_MORE, EVENT_REFRESH } from '@core/actionTypes';
+import {EVENT_DEFAULT, EVENT_LOAD_MORE, EVENT_REFRESH} from '@core/actionTypes';
 
 const TEXT_EMPTY = 'Нет отзывов для отображения';
 
@@ -27,14 +27,14 @@ export default class ReviewsList extends Component {
     dataHandler: PropTypes.func,
     isFetchItems: PropTypes.bool,
     onPressItemHandler: PropTypes.func,
-  }
+  };
 
   static defaultProps = {
     pages: {},
     items: null,
     isFetchItems: false,
     onPressItemHandler: null,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -46,7 +46,7 @@ export default class ReviewsList extends Component {
   }
 
   componentDidMount() {
-    const { items, isFetchItems, dataHandler } = this.props;
+    const {items, isFetchItems, dataHandler} = this.props;
 
     if ((!items || items.length === 0) && !isFetchItems) {
       dataHandler(EVENT_DEFAULT);
@@ -54,34 +54,32 @@ export default class ReviewsList extends Component {
   }
 
   renderEmptyComponent = () => {
-    const { isFetchItems } = this.props;
+    const {isFetchItems} = this.props;
 
-    return isFetchItems ?
-      <SpinnerView /> :
-      <EmptyMessage text={TEXT_EMPTY} />;
-  }
+    return isFetchItems ? <SpinnerView /> : <EmptyMessage text={TEXT_EMPTY} />;
+  };
 
-  renderItem = ({ item }) => {
+  renderItem = ({item}) => {
     if (item.type === 'empty') {
       return <EmptyMessage text={TEXT_EMPTY} />;
     }
 
-    const { onPressItemHandler } = this.props;
-    return <Review
-      inList={true}
-      review={item}
-      onPressHandler={onPressItemHandler}
-    />;
-  }
+    const {onPressItemHandler} = this.props;
+    return (
+      <Review inList={true} review={item} onPressHandler={onPressItemHandler} />
+    );
+  };
 
   renderFooter = () => {
-    if (!this.state.loadingNextPage) return null;
+    if (!this.state.loadingNextPage) {
+      return null;
+    }
 
     return <FlatListFooter />;
-  }
+  };
 
   onRefresh = () => {
-    const { dataHandler } = this.props;
+    const {dataHandler} = this.props;
 
     this.setState({
       bounces: false,
@@ -94,14 +92,14 @@ export default class ReviewsList extends Component {
         isRefreshing: false,
       });
     });
-  }
-
-  // getOnEndReached = () => debounce(this.handleLoadMore, 100)
+  };
 
   handleLoadMore = () => {
-    const { items, pages, dataHandler } = this.props;
+    const {items, pages, dataHandler} = this.props;
 
-    if (!pages.next || items.length === 0 || this.state.loadingNextPage) return false;
+    if (!pages.next || items.length === 0 || this.state.loadingNextPage) {
+      return false;
+    }
 
     __DEV__ && console.log('handleLoadMore');
 
@@ -116,10 +114,10 @@ export default class ReviewsList extends Component {
         bounces: true,
       });
     });
-  }
+  };
 
   render() {
-    const { items } = this.props;
+    const {items} = this.props;
 
     return (
       <View style={styles.container}>
@@ -135,7 +133,7 @@ export default class ReviewsList extends Component {
           ListEmptyComponent={this.renderEmptyComponent}
           ListFooterComponent={this.renderFooter}
           renderItem={this.renderItem}
-          keyExtractor={item => `${item.hash.toString()}`}
+          keyExtractor={item => `${item.id}`}
           onEndReached={this.handleLoadMore}
         />
       </View>

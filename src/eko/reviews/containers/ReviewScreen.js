@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
-import { Content, StyleProvider } from 'native-base';
+/* eslint-disable react-native/no-inline-styles */
+import React, {Component} from 'react';
+import {SafeAreaView, View, StyleSheet, Text} from 'react-native';
+import {Content, StyleProvider} from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
-import { actionFetchDealerRating } from '../../actions';
+import {connect} from 'react-redux';
+import {actionFetchDealerRating} from '../../actions';
 
 // components
 import Review from '../components/Review';
@@ -14,7 +15,7 @@ import HeaderSubtitle from '../../../core/components/HeaderSubtitle';
 import SpinnerView from '../../../core/components/SpinnerView';
 
 // helpers
-import { get } from 'lodash';
+import {get} from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, eko, nav }) => {
+const mapStateToProps = ({dealer, eko, nav}) => {
   return {
     nav,
     reviewDealerRating: eko.reviews.reviewDealerRating,
@@ -43,30 +44,26 @@ const mapDispatchToProps = {
 };
 
 class ReviewScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Отзыв',
-    headerStyle: [stylesHeader.common, stylesHeader.resetBorder],
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <View />,
-  })
-
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
-
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'ReviewScreen';
-      }
-    }
-
-    return isActiveScreen;
-  }
+  static navigationOptions = ({navigation}) => {
+    return {
+      headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Отзыв</Text>,
+      headerStyle: stylesHeader.blueHeader,
+      headerTitleStyle: stylesHeader.blueHeaderTitle,
+      headerLeft: (
+        <View>
+          <HeaderIconBack theme="white" navigation={navigation} />
+        </View>
+      ),
+      headerRight: <View />,
+    };
+  };
 
   componentDidMount() {
-    const { dealerSelected, reviewDealerRating, actionFetchDealerRating } = this.props;
+    const {
+      dealerSelected,
+      reviewDealerRating,
+      actionFetchDealerRating,
+    } = this.props;
 
     if (!reviewDealerRating) {
       actionFetchDealerRating({
@@ -87,7 +84,9 @@ class ReviewScreen extends Component {
 
     const review = this.getReview();
 
-    if (!review) return null;
+    if (!review) {
+      return null;
+    }
 
     console.log('== ReviewScreen ==');
 
@@ -104,13 +103,15 @@ class ReviewScreen extends Component {
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
           <Content>
-            <HeaderSubtitle content={subtitle} isBig={true} />
+            <View style={{marginTop: 10}}>
+              <HeaderSubtitle content={subtitle} isBig={true} />
+            </View>
 
             <View style={styles.review}>
               <Review review={review} />
             </View>
 
-            { review.answer ? <ReviewDealerAnswer text={review.answer} /> : null }
+            {review.answer ? <ReviewDealerAnswer text={review.answer} /> : null}
           </Content>
         </SafeAreaView>
       </StyleProvider>
@@ -118,4 +119,7 @@ class ReviewScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ReviewScreen);
