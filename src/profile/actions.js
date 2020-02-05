@@ -606,12 +606,11 @@ export const actionSavePofileWithPhone = props => {
       payload: props,
     });
 
-    return API.loginWithPhone(props).then(data => {
-      if (data.data.data.checkCode) {
-        return data.data.data.checkCode;
-      } else {
-        return data.data.data.user;
+    return API.loginWithPhone(props).then(response => {
+      if (response.data.error) {
+        return response.data.error;
       }
+      return response.data.data;
     });
   };
 };
@@ -643,9 +642,6 @@ export const actionSavePofile = props => {
     };
   }
 
-  console.log('>>>>>> props', props);
-
-
   return dispatch => {
     dispatch({
       type: SAVE_PROFILE__REQUEST,
@@ -654,7 +650,6 @@ export const actionSavePofile = props => {
 
     return API.loginWith(props)
       .then(async data => {
-        console.log('ya tyt');
         const {status, error} = data;
 
         if (status !== 'success') {

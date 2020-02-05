@@ -165,8 +165,26 @@ class ProfileScreen extends Component {
   _verifyCode = () => {
     const phone = this.state.phone;
     this.setState({loadingVerify: true});
-    this.props.actionSavePofileWithPhone({phone}).then(checkCode => {
-      this.setState({code: true, checkCode, loadingVerify: false});
+    this.props.actionSavePofileWithPhone({phone}).then(response => {
+      this.setState({loadingVerify: false});
+
+      if (response.code >= 300) {
+        let message = 'Что-то пошло не так, попробуйте снова';
+
+        if (response.code === 400) {
+          message = 'Телефон не должен быть пустым';
+        }
+
+        if (response.code === 406) {
+          message =
+            'Не опознан мобильный оператор или не правильный формат номера';
+        }
+
+        Alert.alert(message);
+        return;
+      }
+
+      this.setState({code: true, checkCode: response.checkCode});
     });
   };
 
@@ -187,7 +205,7 @@ class ProfileScreen extends Component {
       .actionSavePofileWithPhone({phone, code})
       .then(data => {
         Keyboard.dismiss();
-        return this.props.actionSavePofile(data);
+        return this.props.actionSavePofile(data.user);
       })
       .then(() => {
         this.setState({loading: false});
