@@ -85,28 +85,17 @@ class ReviewsScreen extends Component {
     };
   };
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     const {needFetchReviews, isFetchReviews} = this.props;
+    const isFilterWillUpdate =
+      prevProps.dateTo !== this.props.dateTo ||
+      prevProps.dateFrom !== this.props.dateFrom ||
+      prevProps.filterRatingFrom !== this.props.filterRatingFrom ||
+      prevProps.filterRatingTo !== this.props.filterRatingTo;
 
-    if (needFetchReviews && !isFetchReviews) {
+    if (isFilterWillUpdate && needFetchReviews && !isFetchReviews) {
       this.fetchReviews();
     }
-  }
-
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
-
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen =
-          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
-          'ReviewsScreen';
-      }
-    }
-
-    return isActiveScreen;
   }
 
   onPressItem = review => {
@@ -133,6 +122,7 @@ class ReviewsScreen extends Component {
       actionSelectFilterRatingTo,
     } = this.props;
 
+    console.log('>>> dateFrom', dateFrom);
     if (!dateFrom) {
       dateFrom = substruct10Years();
       actionDateFromFill(dateFrom);
