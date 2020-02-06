@@ -195,7 +195,7 @@ const MoreScreen = props => {
           <Button
             full
             onPress={() => {
-              if (props.login.token) {
+              if (props.login.id) {
                 props.navigation.navigate('ProfileScreenInfo');
               } else {
                 props.navigation.navigate('ProfileScreen');

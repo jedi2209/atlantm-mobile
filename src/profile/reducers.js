@@ -54,7 +54,7 @@ function login(state = '', action) {
     case REHYDRATE:
       return get(action.payload, 'profile.login', '');
     case SAVE_PROFILE__UPDATE:
-      return action.payload;
+      return {...state, ...action.payload};
     case SAVE_PROFILE__FAIL:
       return {};
     case LOGOUT:
@@ -63,15 +63,6 @@ function login(state = '', action) {
       return state;
   }
 }
-
-// function loginWithPhone(state = '', action) {
-//   switch (action.type) {
-//     case 'SAVE_PROFILE__REQUEST_WITH_PHONE':
-//       return get(action.payload, 'profile.code', '');
-//     default:
-//       return state;
-//   }
-// }
 
 function name(state = '', action) {
   switch (action.type) {

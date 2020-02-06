@@ -150,8 +150,8 @@ class CarHistoryScreen extends Component {
     // eslint-disable-next-line no-shadow
     const {profile, navigation, actionFetchCarHistory} = this.props;
     const vin = get(navigation, 'state.params.car.vin');
-    const token = get(profile, 'token');
-    const userid = get(profile, 'id');
+    const token = profile.SAP.TOKEN;
+    const userid = profile.SAP.ID;
 
     actionFetchCarHistory({
       vin,
@@ -168,11 +168,6 @@ class CarHistoryScreen extends Component {
         if (message === 'Network request failed') {
           message = ERROR_NETWORK;
         }
-
-        // todo: другой способ показывать что ничего не найдено
-        console.log(message);
-      } else {
-        console.log('history =====>', this.props.carHistory);
       }
     });
   }

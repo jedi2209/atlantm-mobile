@@ -159,8 +159,8 @@ class CarHistoryDetailsScreen extends Component {
     const title = get(navigation, 'state.params.title');
     const workId = get(navigation, 'state.params.workId');
     const workDealer = get(navigation, 'state.params.workDealer');
-    const token = get(profile, 'token');
-    const userid = get(profile, 'id');
+    const token = profile.SAP.TOKEN;
+    const userid = profile.SAP.ID;
 
     navigation.setParams({title});
 
