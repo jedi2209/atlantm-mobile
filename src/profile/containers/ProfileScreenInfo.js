@@ -299,15 +299,53 @@ class ProfileScreenInfo extends Component {
             />
           ) : (
             <View>
-              {this.props.cars.length > 0 && (
+              {this.props.cars.length > 0 ? (
                 <Text
                   style={{
                     fontSize: 16,
                     fontWeight: '600',
                     marginHorizontal: 20,
+                    marginTop: 10,
                   }}>
                   Мои автомобили
                 </Text>
+              ) : (
+                <View>
+                  <View
+                    style={[
+                      styles.scrollViewInner,
+                      {
+                        display: 'flex',
+                        backgroundColor: '#979797',
+                        marginTop: 10,
+                        marginBottom: 10,
+                        borderRadius: 5,
+                        marginLeft: 20,
+                        marginRight: 20,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: 125,
+                        shadowColor: '#000',
+                        shadowOffset: {
+                          width: 0,
+                          height: 1,
+                        },
+                        shadowOpacity: 0.22,
+                        shadowRadius: 2.22,
+                        elevation: 3,
+                      },
+                    ]}>
+                    <Text
+                      style={{
+                        textAlign: 'center',
+                        color: '#fff',
+                        fontSize: 18,
+                        paddingHorizontal: 20,
+                      }}>
+                      Тут появится информация о ваших автомобилях
+                    </Text>
+                  </View>
+                </View>
               )}
 
               <ScrollView
@@ -327,12 +365,13 @@ class ProfileScreenInfo extends Component {
                 ))}
               </ScrollView>
 
-              {this.props.bonus && this.props.bonus.saldo && (
+              {this.props.bonus && this.props.bonus.saldo ? (
                 <TouchableWithoutFeedback
                   onPress={() => this.props.navigation.navigate('BonusScreen')}>
                   <View
                     style={{
                       marginHorizontal: 20,
+                      marginBottom: 20,
                       shadowColor: '#000',
                       shadowOffset: {
                         width: 0,
@@ -412,13 +451,85 @@ class ProfileScreenInfo extends Component {
                     </View>
                   </View>
                 </TouchableWithoutFeedback>
+              ) : (
+                <TouchableWithoutFeedback
+                  onPress={() =>
+                    this.props.navigation.navigate('BonusScreenInfo')
+                  }>
+                  <View>
+                    <View
+                      style={{
+                        marginHorizontal: 20,
+                        shadowColor: '#000',
+                        shadowOffset: {
+                          width: 0,
+                          height: 1,
+                        },
+                        shadowOpacity: 0.22,
+                        shadowRadius: 2.22,
+                        elevation: 3,
+                      }}>
+                      <View
+                        style={{
+                          backgroundColor: '#0061ed',
+                          borderRadius: 5,
+                          padding: 14,
+                          display: 'flex',
+                          flexDirection: 'row',
+                        }}>
+                        <View style={{flex: 1}}>
+                          <Text
+                            style={{
+                              color: '#fff',
+                              fontSize: 18,
+                              marginBottom: 8,
+                              fontWeight: '600',
+                            }}>
+                            Бонусные баллы
+                          </Text>
+                          <Text
+                            style={{
+                              color: '#fff',
+                              fontSize: 12,
+                              marginBottom: 16,
+                              fontWeight: '600',
+                            }}>
+                            У Вас пока 0 баллов. Посмотреть подробнее о бонусной
+                            программе
+                          </Text>
+                          <View style={{display: 'flex', flexDirection: 'row'}}>
+                            <View>
+                              <Text
+                                style={{
+                                  color: '#fff',
+                                  fontSize: 16,
+                                  fontWeight: '600',
+                                }}>
+                                Посмотреть
+                              </Text>
+                            </View>
+                            <Icon
+                              type="FontAwesome5"
+                              name="angle-right"
+                              style={{
+                                color: '#fff',
+                                fontSize: 20,
+                                marginLeft: 8,
+                              }}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableWithoutFeedback>
               )}
               <Button
                 full
                 onPress={() => {
                   this.props.navigation.navigate('ProfileSettingsScreen');
                 }}
-                style={[styles.buttonPrimary, {marginTop: 40}]}>
+                style={[styles.buttonPrimary]}>
                 <Text style={styles.buttonPrimaryText}>
                   Редактировать данные
                 </Text>

@@ -171,12 +171,16 @@ async function getProfileData({token, userid}) {
   }
 
   let discounts = [];
-  const discountsResponse = await API.fetchDiscounts({token, userid});
-  const discountsResponseCode = get(discountsResponse, 'error.code', 404);
-  if (discountsResponseCode === 200 && discountsResponse.data) {
-    discounts = discountsResponse.data;
-  } else {
-    __DEV__ && console.log('error get profile discounts', discountsResponse);
+  try {
+    const discountsResponse = await API.fetchDiscounts({token, userid});
+    const discountsResponseCode = get(discountsResponse, 'error.code', 404);
+    if (discountsResponseCode === 200 && discountsResponse.data) {
+      discounts = discountsResponse.data;
+    } else {
+      __DEV__ && console.log('error get profile discounts', discountsResponse);
+    }
+  } catch (err) {
+    console.log('error get profile discounts', err);
   }
 
   return {
