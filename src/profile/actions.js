@@ -156,14 +156,18 @@ async function getProfileData({token, userid}) {
     __DEV__ && console.log('error get profile cars', carsResponse);
   }
 
-  // 2. Получаем бонусы и скидки пользователя
   let bonus = {};
-  const bonusResponse = await API.fetchBonus({token, userid});
-  const bonusResponseCode = get(bonusResponse, 'error.code', 404);
-  if (bonusResponseCode === 200 && bonusResponse.data) {
-    bonus = bonusResponse.data;
-  } else {
-    __DEV__ && console.log('error get profile bonus', bonusResponse);
+  try {
+    // 2. Получаем бонусы и скидки пользователя
+    const bonusResponse = await API.fetchBonus({token, userid});
+    const bonusResponseCode = get(bonusResponse, 'error.code', 404);
+    if (bonusResponseCode === 200 && bonusResponse.data) {
+      bonus = bonusResponse.data;
+    } else {
+      __DEV__ && console.log('error get profile bonus', bonusResponse);
+    }
+  } catch (err) {
+    __DEV__ && console.log('error get profile bonus', err);
   }
 
   let discounts = [];
@@ -181,153 +185,6 @@ async function getProfileData({token, userid}) {
     discounts,
   };
 }
-
-export const actionLogin = props => {
-  return async dispatch => {
-    dispatch({
-      type: LOGIN__REQUEST,
-      payload: {...props},
-    });
-
-    function onError(error) {
-      console.log('error', error);
-
-      return dispatch({
-        type: LOGIN__FAIL,
-        payload: {
-          code: error.code,
-          message: error.message,
-        },
-      });
-    }
-
-    try {
-      // 1. Получаем данные пользователя
-      const authResponse = await API.loginRequest(props);
-      const {error, status, data} = authResponse;
-
-      if (status !== 'success') {
-        __DEV__ && console.log('error auth', authResponse);
-        return onError(error);
-      }
-
-      const {user, token} = data;
-
-      const {cars, bonus, discounts} = await getProfileData({token: token});
-
-      // 4. Обновляем данные автоцентра
-      let dealer = {};
-      const dealerId = get(user, 'dealer.id');
-      if (dealerId) {
-        const dealerResponse = await API.fetchDealer(dealerId);
-        if (dealerResponse.status === 'success') {
-          dealer = dealerResponse.data;
-
-          const dealerBaseData = find(props.dealers, {id: dealerId});
-          dealer.id = dealerId;
-          if (!window.atlantmDebug) {
-            dealer.brands = dealerBaseData.brands;
-          }
-
-          dispatch({
-            type: DEALER__SUCCESS,
-            payload: {
-              newDealer: dealer,
-              prevDealer: props.dealerSelected,
-            },
-          });
-        }
-      }
-
-      return dispatch({
-        type: LOGIN__SUCCESS,
-        payload: {
-          token,
-          dealer,
-          ...user,
-
-          cars,
-          bonus,
-          discounts,
-        },
-      });
-    } catch (e) {
-      return onError(e);
-    }
-  };
-};
-
-export const actionRegister = props => {
-  return async dispatch => {
-    dispatch({
-      type: REGISTER__REQUEST,
-      payload: {...props},
-    });
-
-    function onError(error) {
-      return dispatch({
-        type: REGISTER__FAIL,
-        payload: {
-          code: error.code,
-          message: error.message,
-        },
-      });
-    }
-
-    try {
-      const res = await API.registerRequest(props);
-      const {error, status, data} = res;
-
-      if (status !== 'success') {
-        __DEV__ && console.log('error register', res);
-        return onError(error);
-      }
-
-      return dispatch({
-        type: REGISTER__SUCCESS,
-        payload: {
-          data,
-        },
-      });
-    } catch (e) {
-      return onError(e);
-    }
-  };
-};
-
-export const actionFetchProfileData = ({token, userid}) => {
-  return async dispatch => {
-    dispatch({
-      type: PROFILE_DATA__REQUEST,
-      payload: {token},
-    });
-
-    function onError(error) {
-      return dispatch({
-        type: PROFILE_DATA__FAIL,
-        payload: {
-          code: error.code,
-          message: error.message,
-        },
-      });
-    }
-
-    try {
-      const {cars, bonus, discounts} = await getProfileData({token, userid});
-
-      return dispatch({
-        type: PROFILE_DATA__SUCCESS,
-        payload: {
-          cars,
-          bonus,
-          discounts,
-        },
-      });
-    } catch (e) {
-      return onError(e);
-    }
-  };
-};
 
 export const actionSetBonusLevel1 = hash => {
   return dispatch => {
@@ -615,28 +472,38 @@ export const actionSavePofileWithPhone = props => {
   };
 };
 
+export const getProfileSapData = ({id, sap}) => {
+  return async dispatch => {
+    const user = await API.getProfile(id);
+    const userInfo = profileDataAdapter(user);
+
+    const {cars, bonus, discounts} = await getProfileData({
+      token: sap.token,
+      userid: sap.id,
+    });
+
+    dispatch({
+      type: SAVE_PROFILE__UPDATE,
+      payload: {
+        ...userInfo,
+        cars,
+        bonus,
+        discounts,
+      },
+    });
+  };
+};
+
 export const actionSavePofile = props => {
   if (props.ID) {
-    const {SAP} = props;
-    const token = SAP ? SAP.TOKEN : ''; // user.TOKEN,
-    const id = SAP ? SAP.ID : props.ID; //user.ID;
     const userInfo = profileDataAdapter(props);
-
-    return async dispatch => {
-      const {cars, bonus, discounts} = await getProfileData({
-        token: token,
-        userid: id,
-      });
-
+    return dispatch => {
       dispatch({
         type: SAVE_PROFILE__UPDATE,
         payload: {
-          id,
-          token,
+          id: props.ID,
+          SAP: props.SAP,
           ...userInfo,
-          cars,
-          bonus,
-          discounts,
         },
       });
     };
@@ -649,7 +516,7 @@ export const actionSavePofile = props => {
     });
 
     return API.loginWith(props)
-      .then(async data => {
+      .then(data => {
         const {status, error} = data;
 
         if (status !== 'success') {
@@ -663,26 +530,14 @@ export const actionSavePofile = props => {
         }
 
         const user = data.data.data.user;
-
-        const {SAP} = user;
-        const token = SAP ? SAP.TOKEN : ''; // user.TOKEN,
-        const id = SAP ? SAP.ID : user.ID; //user.ID;
         const userInfo = profileDataAdapter(user);
-
-        const {cars, bonus, discounts} = await getProfileData({
-          token: token,
-          userid: id,
-        });
 
         dispatch({
           type: SAVE_PROFILE__UPDATE,
           payload: {
-            cars,
-            bonus,
-            discounts,
             ...userInfo,
-            id,
-            token,
+            id: user.ID,
+            SAP: user.SAP,
           },
         });
       })
@@ -760,6 +615,5 @@ function profileDataAdapter(user) {
     last_name: userInfo.last_name,
     email,
     phone,
-    crm_id: ID,
   };
 }

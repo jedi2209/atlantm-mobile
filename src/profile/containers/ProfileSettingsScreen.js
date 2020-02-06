@@ -59,7 +59,7 @@ class ProfileSettingsScreen extends Component {
 
   onPressSave = () => {
     this.setState({loading: true});
-    const {id, token, avatar, name, email, phone, crm_id} = this.props.profile;
+    const {name, email, phone, id: crm_id} = this.props.profile;
     let emailValue;
     let phonelValue;
 
@@ -86,19 +86,13 @@ class ProfileSettingsScreen extends Component {
     this.props
       .actionSaveProfileByUser({
         crm_id,
-        id,
-        token,
         email: emailValue,
         last_name: this.state.lastName,
         first_name: this.state.firstName,
         phone: phonelValue,
-        avatar,
         name,
         carNumber: this.state.carNumber,
         car: this.state.car,
-        cars: this.props.profile.cars,
-        bonus: this.props.profile.bonus,
-        discounts: this.props.profile.discounts,
       })
       .then(data => {
         this.setState({success: true, loading: false});

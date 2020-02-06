@@ -11,6 +11,7 @@ import {
   Platform,
   StatusBar,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from 'react-native';
 import {Button, Icon} from 'native-base';
 
@@ -27,7 +28,7 @@ import {
   actionLogin,
   actionLogout,
   actionFetchProfileData,
-  actionSavePofile,
+  getProfileSapData,
 } from '../actions';
 import {
   actionSetPushActionSubscribe,
@@ -101,6 +102,7 @@ const styles = StyleSheet.create({
 });
 
 import {SafeAreaView} from 'react-navigation';
+import {verticalScale} from '../../utils/scale';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   //TODO: owner true должен быть показан первым
@@ -148,8 +150,7 @@ const mapDispatchToProps = {
 
   actionSetPushGranted,
   actionSetPushActionSubscribe,
-
-  actionSavePofile,
+  getProfileSapData,
 };
 
 const CarCard = ({data}) => {
@@ -217,6 +218,14 @@ const CarCard = ({data}) => {
   );
 };
 class ProfileScreenInfo extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: false,
+    };
+  }
+
   static navigationOptions = ({navigation}) => ({
     header: null,
   });
@@ -224,6 +233,8 @@ class ProfileScreenInfo extends Component {
   componentDidMount() {
     if (!this.props.login.id) {
       this.props.navigation.navigate('ProfileScreen');
+    } else {
+      this.getUserData();
     }
   }
 
@@ -231,6 +242,24 @@ class ProfileScreenInfo extends Component {
     if (this.props.navigation.isFocused() && !this.props.login.id) {
       this.props.navigation.navigate('ProfileScreen');
     }
+
+    if (this.props.login.id && this.props.login.id !== nextProps.login.id) {
+      this.getUserData();
+    }
+  }
+
+  getUserData() {
+    this.setState({loading: true});
+    const sap = this.props.login.SAP || {};
+
+    this.props
+      .getProfileSapData({
+        id: this.props.login.id,
+        sap: {token: sap.TOKEN, id: sap.ID},
+      })
+      .then(() => {
+        this.setState({loading: false});
+      });
   }
 
   render() {
@@ -259,128 +288,143 @@ class ProfileScreenInfo extends Component {
             </Text>
           </Button>
 
-          {this.props.cars.length > 0 && (
-            <Text
+          {this.state.loading ? (
+            <ActivityIndicator
+              color="#0061ED"
               style={{
-                fontSize: 16,
-                fontWeight: '600',
-                marginHorizontal: 20,
-              }}>
-              Мои автомобили
-            </Text>
-          )}
-
-          <ScrollView
-            showsHorizontalScrollIndicator={false}
-            horizontal
-            contentContainerStyle={{paddingLeft: 20, paddingRight: 5}}
-            style={styles.scrollView}>
-            {this.props.cars.map(item => (
-              <TouchableWithoutFeedback
-                onPress={() =>
-                  this.props.navigation.navigate('TOHistore', {car: item})
-                }>
-                <View>
-                  <CarCard data={item} />
-                </View>
-              </TouchableWithoutFeedback>
-            ))}
-          </ScrollView>
-
-          {this.props.bonus && this.props.bonus.saldo && (
-            <TouchableWithoutFeedback
-              onPress={() => this.props.navigation.navigate('BonusScreen')}>
-              <View
-                style={{
-                  marginHorizontal: 20,
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 0,
-                    height: 1,
-                  },
-                  shadowOpacity: 0.22,
-                  shadowRadius: 2.22,
-                  elevation: 3,
-                }}>
-                <View
+                alignSelf: 'center',
+                marginTop: verticalScale(60),
+                marginBottom: verticalScale(60),
+              }}
+            />
+          ) : (
+            <View>
+              {this.props.cars.length > 0 && (
+                <Text
                   style={{
-                    backgroundColor: '#0061ed',
-                    borderRadius: 5,
-                    padding: 14,
-                    display: 'flex',
-                    flexDirection: 'row',
+                    fontSize: 16,
+                    fontWeight: '600',
+                    marginHorizontal: 20,
                   }}>
+                  Мои автомобили
+                </Text>
+              )}
+
+              <ScrollView
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                contentContainerStyle={{paddingLeft: 20, paddingRight: 5}}
+                style={styles.scrollView}>
+                {this.props.cars.map(item => (
+                  <TouchableWithoutFeedback
+                    onPress={() =>
+                      this.props.navigation.navigate('TOHistore', {car: item})
+                    }>
+                    <View>
+                      <CarCard data={item} />
+                    </View>
+                  </TouchableWithoutFeedback>
+                ))}
+              </ScrollView>
+
+              {this.props.bonus && this.props.bonus.saldo && (
+                <TouchableWithoutFeedback
+                  onPress={() => this.props.navigation.navigate('BonusScreen')}>
                   <View
                     style={{
-                      backgroundColor: '#fff',
-                      width: 98,
-                      height: 98,
-                      borderRadius: 49,
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      marginRight: 24,
+                      marginHorizontal: 20,
+                      shadowColor: '#000',
+                      shadowOffset: {
+                        width: 0,
+                        height: 1,
+                      },
+                      shadowOpacity: 0.22,
+                      shadowRadius: 2.22,
+                      elevation: 3,
                     }}>
-                    <Text
+                    <View
                       style={{
-                        color: '#0061ed',
-                        fontSize: 20,
-                        fontWeight: '600',
+                        backgroundColor: '#0061ed',
+                        borderRadius: 5,
+                        padding: 14,
+                        display: 'flex',
+                        flexDirection: 'row',
                       }}>
-                      {this.props.bonus && this.props.bonus.saldo
-                        ? this.props.bonus.saldo.value
-                        : 0}
-                    </Text>
-                  </View>
-                  <View style={{flex: 1}}>
-                    <Text
-                      style={{
-                        color: '#fff',
-                        fontSize: 18,
-                        marginBottom: 8,
-                        fontWeight: '600',
-                      }}>
-                      Бонусные баллы
-                    </Text>
-                    <Text
-                      style={{
-                        color: '#fff',
-                        fontSize: 12,
-                        marginBottom: 16,
-                        fontWeight: '600',
-                      }}>
-                      История накопления и трат Ваших бонусных баллов
-                    </Text>
-                    <View style={{display: 'flex', flexDirection: 'row'}}>
-                      <View>
+                      <View
+                        style={{
+                          backgroundColor: '#fff',
+                          width: 98,
+                          height: 98,
+                          borderRadius: 49,
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          marginRight: 24,
+                        }}>
+                        <Text
+                          style={{
+                            color: '#0061ed',
+                            fontSize: 20,
+                            fontWeight: '600',
+                          }}>
+                          {this.props.bonus && this.props.bonus.saldo
+                            ? this.props.bonus.saldo.value
+                            : 0}
+                        </Text>
+                      </View>
+                      <View style={{flex: 1}}>
                         <Text
                           style={{
                             color: '#fff',
-                            fontSize: 16,
+                            fontSize: 18,
+                            marginBottom: 8,
                             fontWeight: '600',
                           }}>
-                          Посмотреть
+                          Бонусные баллы
                         </Text>
+                        <Text
+                          style={{
+                            color: '#fff',
+                            fontSize: 12,
+                            marginBottom: 16,
+                            fontWeight: '600',
+                          }}>
+                          История накопления и трат Ваших бонусных баллов
+                        </Text>
+                        <View style={{display: 'flex', flexDirection: 'row'}}>
+                          <View>
+                            <Text
+                              style={{
+                                color: '#fff',
+                                fontSize: 16,
+                                fontWeight: '600',
+                              }}>
+                              Посмотреть
+                            </Text>
+                          </View>
+                          <Icon
+                            type="FontAwesome5"
+                            name="angle-right"
+                            style={{color: '#fff', fontSize: 20, marginLeft: 8}}
+                          />
+                        </View>
                       </View>
-                      <Icon
-                        type="FontAwesome5"
-                        name="angle-right"
-                        style={{color: '#fff', fontSize: 20, marginLeft: 8}}
-                      />
                     </View>
                   </View>
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
+                </TouchableWithoutFeedback>
+              )}
+              <Button
+                full
+                onPress={() => {
+                  this.props.navigation.navigate('ProfileSettingsScreen');
+                }}
+                style={[styles.buttonPrimary, {marginTop: 40}]}>
+                <Text style={styles.buttonPrimaryText}>
+                  Редактировать данные
+                </Text>
+              </Button>
+            </View>
           )}
-          <Button
-            full
-            onPress={() => {
-              this.props.navigation.navigate('ProfileSettingsScreen');
-            }}
-            style={[styles.buttonPrimary, {marginTop: 40}]}>
-            <Text style={styles.buttonPrimaryText}>Редактировать данные</Text>
-          </Button>
           <Button
             full
             onPress={() => {

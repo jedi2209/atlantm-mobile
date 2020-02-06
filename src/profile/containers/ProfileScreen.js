@@ -196,7 +196,6 @@ class ProfileScreen extends Component {
     // eslint-disable-next-line eqeqeq
     if (code != this.state.checkCode) {
       Alert.alert('Неверный код.', 'Попробуйте снова');
-      console.log(this.state.checkCode, code);
       return;
     }
 
@@ -210,11 +209,14 @@ class ProfileScreen extends Component {
       .then(() => {
         this.setState({loading: false});
         this.props.navigation.navigate('ProfileScreenInfo');
+      })
+      .catch(() => {
+        this.setState({loading: false});
+        Alert.alert('Что-то пошло не так', 'попробуйте снова');
       });
   };
 
   _sendDataToApi(profile) {
-    console.log('>>> profile', profile);
     this.setState({loading: true});
     this.props
       .actionSavePofile(profile)
@@ -243,12 +245,9 @@ class ProfileScreen extends Component {
           },
         },
         (error, result) => {
-          console.log('result', result);
-          console.log('error', result);
           if (result) {
             const profile = result;
             profile.avatar = `https://graph.facebook.com/${result.id}/picture`;
-            console.log('profile >>>', profile);
             resolve(profile);
           } else {
             reject(error);
@@ -264,7 +263,7 @@ class ProfileScreen extends Component {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log('Google auth userInfo', userInfo);
+
       const profile = {
         id: userInfo.user.id,
         email: userInfo.user.email,
@@ -300,7 +299,6 @@ class ProfileScreen extends Component {
             'Login success with permissions: ' +
               result.grantedPermissions.toString(),
           );
-          console.log('>>> this.getFBToken()', this.getFBToken);
           this.getFBToken();
         }
       }.bind(this),
@@ -311,9 +309,7 @@ class ProfileScreen extends Component {
   };
 
   getFBToken = () => {
-    console.log('getFBToken!');
     AccessToken.getCurrentAccessToken().then(auth => {
-      console.log('auth', auth);
       this.fetchProfileFromFacebook(auth.accessToken).then(data => {
         this._sendDataToApi({...data, networkName: 'fb'});
       });
@@ -323,12 +319,9 @@ class ProfileScreen extends Component {
   _signInWithVK = async () => {
     const isLoggedIn = await VKLogin.isLoggedIn();
 
-    console.log('>>> isLoggedIn', isLoggedIn);
-
     if (!isLoggedIn) {
       try {
         const auth = await VKLogin.login(['friends', 'photos', 'email']);
-        console.log(auth.access_token, auth);
         this._sendDataToApi({...auth, networkName: 'vk'});
       } catch (error) {
         console.log('error', error);

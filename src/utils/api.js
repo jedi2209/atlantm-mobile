@@ -554,8 +554,19 @@ export default {
       });
   },
 
+  getProfile(id) {
+    return this.request(`/lkk/user/${id}/`, baseRequestParams)
+      .then(data => {
+        console.log('>>> data getProfile', data);
+        return data.data;
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
+  },
+
   saveProfile(profile) {
-    const {crm_id, first_name, last_name, email, phone} = profile;
+    const {id, first_name, last_name, email, phone} = profile;
 
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PATCH',
@@ -567,11 +578,11 @@ export default {
         surname: last_name,
         email,
         phone,
-        userID: crm_id,
+        userID: id,
       },
     });
 
-    return this.request(`/lkk/user/${crm_id}/`, requestParams)
+    return this.request(`/lkk/user/${id}/`, requestParams)
       .then(data => {
         return {status: 'success', error: {}, profile, data};
       })
