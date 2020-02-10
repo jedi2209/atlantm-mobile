@@ -384,7 +384,7 @@ class NewCarFilterScreen extends Component {
                       if (brand.checked) {
                         Object.keys(brand.model).forEach(item => {
                           acc.push({
-                            id: 'filter-model-' + item,
+                            id: item,
                             checked: false,
                             name: brand.model[item],
                           });
@@ -426,7 +426,7 @@ class NewCarFilterScreen extends Component {
                           if (brand.checked) {
                             Object.keys(brand.model).forEach(item => {
                               acc.push({
-                                id: 'filter-model-' + item,
+                                id: item,
                                 checked: false,
                                 name: brand.model[item],
                               });
@@ -543,7 +543,7 @@ class NewCarFilterScreen extends Component {
                     });
                   }}>
                   <View
-                    key={id}
+                    key={'view2-body-' + id}
                     style={{
                       display: 'flex',
                       flexDirection: 'row',
