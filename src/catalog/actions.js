@@ -433,6 +433,7 @@ export const actionFetchNewCarByFilter = props => {
 
     return API.fetchNewCarByFilter(newProps)
       .then(response => {
+        console.log('API fetchNewCarByFilter url responce', response);
         if (response.error) {
           return dispatch({
             type: NEW_CAR_BY_FILTER__FAIL,
