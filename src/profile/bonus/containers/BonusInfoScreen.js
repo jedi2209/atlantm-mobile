@@ -94,22 +94,6 @@ class BonusInfoScreen extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
-
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen =
-          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
-          'BonusInfoScreen';
-      }
-    }
-
-    return isActiveScreen;
-  }
-
   onLayoutWebView = e => {
     const {width: webViewWidth} = e.nativeEvent.layout;
 
@@ -138,7 +122,9 @@ class BonusInfoScreen extends Component {
                 onLayout={this.onLayoutWebView}>
                 <WebViewAutoHeight source={{html: bonusInfo}} />
               </View>
-            ) : null}
+            ) : (
+              <SpinnerView />
+            )}
           </Content>
         </SafeAreaView>
       </StyleProvider>
