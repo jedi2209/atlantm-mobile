@@ -21,6 +21,7 @@ import ContactsScreen from '../../contacts/containers/ContactsScreen';
 import NewCarListScreen from '../../catalog/newcar/containers/NewCarListScreen';
 import ProfileScreen from '../../profile/containers/ProfileScreen';
 import ProfileScreenInfo from '../../profile/containers/ProfileScreenInfo';
+import AuthContnainer from '../../profile/containers/AuthContnainer';
 import ProfileSettingsScreen from '../../profile/containers/ProfileSettingsScreen';
 import InfoListScreen from '../../info/containers/InfoListScreen';
 import TOHistore from '../../profile/carhistory/containers/CarHistoryScreen';
@@ -115,8 +116,9 @@ const BottomTabNavigation = createBottomTabNavigator({
   Search: SearchStack,
   Profile: {
     screen: createNativeStackNavigator({
-      ProfileScreenInfo: {screen: ProfileScreenInfo},
-      ProfileScreen: {screen: ProfileScreen},
+      ProfileScreenInfo: {screen: AuthContnainer},
+      // ProfileScreenInfo: {screen: ProfileScreenInfo},
+      // ProfileScreen: {screen: ProfileScreen},
       ProfileSettingsScreen: {screen: ProfileSettingsScreen},
       TOHistore: {screen: TOHistore},
       CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},

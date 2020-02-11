@@ -232,7 +232,7 @@ class ProfileScreenInfo extends Component {
 
   componentDidMount() {
     if (!this.props.login.id) {
-      this.props.navigation.navigate('ProfileScreen');
+      //this.props.navigation.navigate('ProfileScreen');
     } else {
       this.getUserData();
     }
@@ -240,7 +240,7 @@ class ProfileScreenInfo extends Component {
 
   componentDidUpdate(nextProps) {
     if (this.props.navigation.isFocused() && !this.props.login.id) {
-      this.props.navigation.navigate('ProfileScreen');
+      //this.props.navigation.navigate('ProfileScreen');
     }
 
     if (this.props.login.id && this.props.login.id !== nextProps.login.id) {
@@ -540,7 +540,7 @@ class ProfileScreenInfo extends Component {
             full
             onPress={() => {
               this.props.actionLogout();
-              this.props.navigation.navigate('ProfileScreen');
+              // this.props.navigation.navigate('ProfileScreen');
             }}
             style={styles.buttonPrimary}>
             <Text style={styles.buttonPrimaryText}>Выйти</Text>
