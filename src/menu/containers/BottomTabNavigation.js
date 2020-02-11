@@ -191,7 +191,12 @@ const BottomTabNavigation = createBottomTabNavigator({
       UsedCarListScreen: {
         screen: UsedCarListScreen,
       },
-      UsedCarFilterScreen: {screen: UsedCarFilterScreen},
+      UsedCarFilterScreen: {
+        screen: UsedCarFilterScreen,
+        navigationOptions: {
+          gesturesEnabled: false,
+        },
+      },
       UsedCarCityScreen: {screen: UsedCarCityScreen},
     }),
     navigationOptions: () => {

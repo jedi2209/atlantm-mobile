@@ -11,6 +11,7 @@ import {
   ScrollView,
   Keyboard,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import {Button, Label, Switch} from 'native-base';
 
@@ -315,6 +316,7 @@ class TvaScreen extends Component {
 
     return (
       <KeyboardAvoidingView>
+        <StatusBar barStyle="light-content" />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView>
             <View style={styles.container}>
