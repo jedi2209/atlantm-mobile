@@ -162,6 +162,11 @@ class NewCarFilterScreen extends Component {
         priceFilter: this.props.filterPrice,
       });
     }
+
+    if (this.props.city !== prevProps.city) {
+      console.log('1');
+      actionFetchNewCarFilterData({city: this.props.dealerSelected.city.id});
+    }
   }
 
   getCityData = () => {
@@ -181,12 +186,6 @@ class NewCarFilterScreen extends Component {
     return find(list, {id: dealerSelected.city.id});
   };
 
-  onValueChange(value) {
-    this.setState({
-      selected: value,
-    });
-  }
-
   onPressFilterButton = () => {
     this.props.navigation.navigate('UsedCarListScreen');
     this.props.actionSelectUsedCarPriceRange({
@@ -204,6 +203,11 @@ class NewCarFilterScreen extends Component {
   };
 
   render() {
+    console.log(
+      'this.props.filterPrice.$min || this.props.filterPrice.$max',
+      this.props.filterPrice.$min || this.props.filterPrice.$max,
+    );
+
     const dataForAccordion = [
       {
         title: 'Город',
@@ -226,7 +230,10 @@ class NewCarFilterScreen extends Component {
       dataForAccordion.unshift({
         title: 'Цена',
         content: (
-          <View>
+          <View
+            style={{
+              paddingLeft: '5%',
+            }}>
             <MultiSlider
               values={[
                 this.state.priceFilter.currentMin,
