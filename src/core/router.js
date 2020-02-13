@@ -32,6 +32,7 @@ export const getRouter = initialRouteName => {
       MapScreen: {
         screen: MapScreen,
       },
+      NewCarItemScreen: {screen: NewCarItemScreen},
       UsedCarItemScreen: {screen: UsedCarItemScreen},
       IntroScreen: {screen: IntroScreen}, // это скрин с кнопкой выберите автосервис
       BottomTabNavigation: {screen: BottomTabNavigation}, // это нижнее меню
