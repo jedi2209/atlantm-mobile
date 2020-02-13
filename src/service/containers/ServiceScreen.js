@@ -157,7 +157,8 @@ class ServiceScreen extends Component {
       email,
     } = this.props.profile.login;
     const defaultCar = {number: '', brand: '', model: ''};
-    const car = cars ? cars.find(value => value.owner) : defaultCar;
+    const car =
+      cars && cars.length > 0 ? cars.find(value => value.owner) : defaultCar;
 
     this.state = {
       date: '',
