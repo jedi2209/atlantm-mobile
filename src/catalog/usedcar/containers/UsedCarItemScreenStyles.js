@@ -17,6 +17,7 @@ export default StyleSheet.create({
   },
   gallery: {
     position: 'relative',
+    marginTop: -10,
   },
   titleContainer: {
     paddingBottom: 10,
@@ -39,6 +40,9 @@ export default StyleSheet.create({
     borderBottomWidth: styleConst.ui.borderWidth,
     borderBottomColor: styleConst.color.border,
   },
+  sectionOptions: {
+    paddingBottom: styleConst.ui.horizontalGap,
+  },
   tabContent: {
     marginBottom: styleConst.ui.footerHeight,
   },
@@ -50,7 +54,7 @@ export default StyleSheet.create({
   },
   sectionTitle: {
     letterSpacing: styleConst.ui.letterSpacing,
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: styleConst.font.regular,
     marginBottom: 10,
   },
@@ -163,7 +167,7 @@ export default StyleSheet.create({
   mapCard: {},
   mapCardContainer: {
     marginBottom: 14,
-    marginHorizontal: 15,
+    marginHorizontal: "2%",
     flexDirection: 'row',
     backgroundColor: '#fff',
     paddingHorizontal: 6,
@@ -181,6 +185,7 @@ export default StyleSheet.create({
     color: '#2a2a43',
     fontSize: 14,
     fontWeight: '600',
+    width: "95%",
   },
   mapCardIcon: {
     fontSize: 40,

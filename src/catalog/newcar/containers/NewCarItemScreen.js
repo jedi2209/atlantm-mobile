@@ -259,7 +259,7 @@ class NewCarItemScreen extends Component {
     }
 
     return (
-      <View key={title} style={styles.section}>
+      <View key={title}>
         <Text style={styles.sectionTitle}>{title}</Text>
         {data.map(item => {
           return (
@@ -386,6 +386,11 @@ class NewCarItemScreen extends Component {
       carDetails: carDetails,
     });
 
+    const stock = get(carDetails, 'options.stock', {});
+    const stockKeys = Object.keys(stock);
+    const additional = get(carDetails, 'options.additional', {});
+    const additionalKeys = Object.keys(additional);
+
     if (!carDetails || isFetchingCarDetails) {
       return (
         <View style={styles.spinnerContainer}>
@@ -490,7 +495,11 @@ class NewCarItemScreen extends Component {
                   />
                   <OptionPlate
                     title="КПП"
-                    subtitle={`${get(carDetails, 'gearbox.count')}-ст. ${
+                    subtitle={`${
+                      get(carDetails, 'gearbox.count')
+                        ? get(carDetails, 'gearbox.count') + '-ст.'
+                        : ''
+                    } ${
                       get(carDetails, 'gearbox.name')
                         .replace(/^(Механическая)/i, 'МКПП')
                         .replace(/^(Автоматическая)/i, 'АКПП')
@@ -524,7 +533,10 @@ class NewCarItemScreen extends Component {
                     <Text style={styles.mapCardTitle}>
                       Автомобиль расположен по адресу
                     </Text>
-                    <Text style={styles.mapCardDealer}>
+                    <Text
+                      style={styles.mapCardDealer}
+                      numberOfLines={1}
+                      ellipsizeMode="tail">
                       {`${get(carDetails, 'city.name')}, ${get(
                         carDetails,
                         'dealer.name',
@@ -545,70 +557,179 @@ class NewCarItemScreen extends Component {
                   {
                     title: 'Характеристики',
                     content: (
-                      <Grid>
-                        {this.renderItem(
-                          'Максимальная скорость:',
-                          get(carDetails, 'engine.speedmax'),
-                          'км/ч.',
-                        )}
-                        {this.renderItem(
-                          'Разгон с 0 до 100 км/ч:',
-                          get(carDetails, 'engine.speed100'),
-                          'сек.',
-                        )}
-                        {this.renderItem(
-                          'Расход топлива (городской цикл):',
-                          get(carDetails, 'fuel.city'),
-                          'л.',
-                        )}
-                        {this.renderItem(
-                          'Расход топлива (загородный цикл):',
-                          get(carDetails, 'fuel.track'),
-                          'л.',
-                        )}
-                        {this.renderItem(
-                          'Расход топлива (смешанный цикл):',
-                          get(carDetails, 'fuel.both'),
-                          'л.',
-                        )}
-                      </Grid>
+                      <View>
+                        <View style={styles.sectionOptions}>
+                          <Text style={styles.sectionTitle}>Основные</Text>
+                          <Grid>
+                            {this.renderItem(
+                              'Цвет:',
+                              get(carDetails, 'color.name.official'),
+                            )}
+                            {this.renderItem(
+                              'Тип кузова:',
+                              get(carDetails, 'body.name'),
+                            )}
+                            {this.renderItem(
+                              'Год выпуска:',
+                              get(carDetails, 'year'),
+                              'г.',
+                            )}
+                          </Grid>
+                        </View>
+
+                        <View style={styles.sectionOptions}>
+                          <Text style={styles.sectionTitle}>Двигатель</Text>
+                          <Grid>
+                            {this.renderItem(
+                              'Тип:',
+                              get(carDetails, 'engine.type'),
+                            )}
+                            {this.renderItem(
+                              'Рабочий объём:',
+                              get(carDetails, 'engine.volume.full'),
+                              'см³',
+                            )}
+                            {this.renderItem(
+                              'Мощность:',
+                              get(carDetails, 'power.hp'),
+                              'л.с.',
+                            )}
+                          </Grid>
+                        </View>
+
+                        <View style={styles.sectionOptions}>
+                          <Text style={styles.sectionTitle}>Трансмиссия</Text>
+                          <Grid>
+                            {this.renderItem(
+                              'Тип:',
+                              get(carDetails, 'gearbox.name'),
+                            )}
+                            {this.renderItem(
+                              'Количество передач:',
+                              get(carDetails, 'gearbox.count'),
+                            )}
+                            {this.renderItem(
+                              'Привод:',
+                              get(carDetails, 'gearbox.wheel'),
+                            )}
+                          </Grid>
+                        </View>
+
+                        <View style={styles.sectionOptions}>
+                          <Text style={styles.sectionTitle}>Кузов</Text>
+                          <Grid>
+                            {this.renderItem(
+                              'Длина:',
+                              get(carDetails, 'body.high'),
+                              'мм.',
+                            )}
+                            {this.renderItem(
+                              'Ширина:',
+                              get(carDetails, 'body.width'),
+                              'мм.',
+                            )}
+                            {this.renderItem(
+                              'Высота:',
+                              get(carDetails, 'body.height'),
+                              'мм.',
+                            )}
+                            {this.renderItem(
+                              'Клиренс:',
+                              get(carDetails, 'body.clirens'),
+                              'мм.',
+                            )}
+                            {this.renderItem(
+                              'Объём багажника:',
+                              get(carDetails, 'body.trunk.min'),
+                              'л.',
+                            )}
+                            {this.renderItem(
+                              'Объём топливного бака:',
+                              get(carDetails, 'fuel.fuel'),
+                              'л.',
+                            )}
+                          </Grid>
+                        </View>
+
+                        <View style={styles.sectionOptions}>
+                          <Text style={styles.sectionTitle}>
+                            Эксплуатационные характеристики
+                          </Text>
+                          <Grid>
+                            {this.renderItem(
+                              'Максимальная скорость:',
+                              get(carDetails, 'speed.max'),
+                              'км/ч.',
+                            )}
+                            {this.renderItem(
+                              'Разгон с 0 до 100 км/ч:',
+                              get(carDetails, 'speed.dispersal'),
+                              'сек.',
+                            )}
+                            {this.renderItem(
+                              'Расход топлива (городской цикл):',
+                              get(carDetails, 'fuel.city'),
+                              'л.',
+                            )}
+                            {this.renderItem(
+                              'Расход топлива (загородный цикл):',
+                              get(carDetails, 'fuel.track'),
+                              'л.',
+                            )}
+                            {this.renderItem(
+                              'Расход топлива (смешанный цикл):',
+                              get(carDetails, 'fuel.both'),
+                              'л.',
+                            )}
+                          </Grid>
+                        </View>
+                      </View>
                     ),
                   },
                   {
                     title: 'Комплектация',
                     content: (
-                      <Grid>
-                        {this.renderItem(
-                          'Длина:',
-                          get(carDetails, 'body.width'),
-                          'мм.',
-                        )}
-                        {this.renderItem(
-                          'Ширина:',
-                          get(carDetails, 'body.height'),
-                          'мм.',
-                        )}
-                        {this.renderItem(
-                          'Высота:',
-                          get(carDetails, 'body.high'),
-                          'мм.',
-                        )}
-                        {this.renderItem(
-                          'Клиренс:',
-                          get(carDetails, 'body.clirens'),
-                          'мм.',
-                        )}
-                        {this.renderItem(
-                          'Объём багажника:',
-                          get(carDetails, 'body.trunk.min'),
-                          'л.',
-                        )}
-                        {this.renderItem(
-                          'Объём топливного бака:',
-                          get(carDetails, 'fuel.fuel'),
-                          'л.',
-                        )}
-                      </Grid>
+                    <View style={styles.tabContent}>
+                    {
+                      stockKeys ?
+                        (
+                          <View>
+                            {
+                              stockKeys.map(key => {
+                                const item = stock[key];
+
+                                return this.renderComplectationItem(item.name, item.data);
+                              })
+                            }
+                          </View>
+                        ) : null
+                    }
+
+                    {
+                      additionalKeys ?
+                      (
+                        <View>
+                          {
+                            additionalKeys.map(key => {
+                              const item = additional[key];
+
+                              return this.renderComplectationItem(item.name, item.data);
+                            })
+                          }
+                        </View>
+                      ) : null
+                    }
+
+                    {
+                      carDetails.text ?
+                        (
+                          <View style={styles.descrContainer}>
+                            <Text style={styles.descr}>{carDetails.text}</Text>
+                          </View>
+                        ) :
+                        null
+                    }
+                  </View>
                     ),
                   },
                 ]}
@@ -647,7 +768,7 @@ class NewCarItemScreen extends Component {
                   return (
                     <View
                       style={{
-                        height: 200,
+                        // height: 200,
                         backgroundColor: '#fff',
                         paddingHorizontal: 16,
                       }}>
