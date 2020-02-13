@@ -20,7 +20,6 @@ import {
 } from '../../actions';
 
 const mapStateToProps = ({catalog, dealer}) => {
-  console.log('dealer ======>', dealer);
   return {
     city: catalog.usedCar.city,
     region: catalog.usedCar.region,
