@@ -153,6 +153,8 @@ const usedCarCity = (state = null, action) => {
   switch (action.type) {
     case REHYDRATE:
       return null;
+    case DEALER__SUCCESS:
+      return null;
     case USED_CAR_CITY__SELECT:
       return action.payload;
     default:
