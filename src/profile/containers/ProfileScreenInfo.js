@@ -355,6 +355,7 @@ class ProfileScreenInfo extends Component {
                 style={styles.scrollView}>
                 {this.props.cars.map(item => (
                   <TouchableWithoutFeedback
+                    key={item.vin}
                     onPress={() =>
                       this.props.navigation.navigate('TOHistore', {car: item})
                     }>
