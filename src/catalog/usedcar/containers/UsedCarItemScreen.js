@@ -74,6 +74,16 @@ const mapDispatchToProps = {
 
 class UserCarItemScreen extends Component {
   static navigationOptions = ({navigation}) => ({
+    headerTitle: (
+      <Text style={stylesHeader.blueHeaderTitle}>
+        {console.log('navigation', navigation)}
+        {navigation.state.params.carDetails
+          ? navigation.state.params.carDetails.brand.name +
+            ' ' +
+            navigation.state.params.carDetails.model.name
+          : null}
+      </Text>
+    ),
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
     headerLeft: (
@@ -202,10 +212,6 @@ class UserCarItemScreen extends Component {
   };
 
   render() {
-    const {tabName} = this.state;
-    const isActiveBaseTab = tabName === 'base';
-    const isActiveOptionsTab = tabName === 'options';
-
     const {
       prices,
       carDetails,
@@ -214,6 +220,10 @@ class UserCarItemScreen extends Component {
       photoViewerVisible,
       isFetchingCarDetails,
     } = this.props;
+
+    this.props.navigation.setParams({
+      carDetails: carDetails,
+    });
 
     if (!carDetails || isFetchingCarDetails) {
       return (
