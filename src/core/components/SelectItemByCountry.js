@@ -9,7 +9,7 @@ import Imager from '../components/Imager';
 
 // helpers
 import {get} from 'lodash';
-import PropTypes from 'prop-types';
+import PropTypes, { array } from 'prop-types';
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
 import {DEALER__SUCCESS, DEALER__FAIL} from '../../dealer/actionTypes';
@@ -133,6 +133,19 @@ export default class SelectItemByCountry extends Component {
     navigation.goBack();
   };
 
+  _getSite = sites => {
+    if (typeof sites === 'undefined') {
+      return null;
+    }
+
+    let res = [];
+
+    sites.split('\r\n').forEach(val => {
+      res.push(val.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0]);
+    });
+    return res.join('\r\n');
+  };
+
   renderDealer = () => {
     const {item} = this.props;
     if (item.virtual !== false) {
@@ -152,13 +165,7 @@ export default class SelectItemByCountry extends Component {
                 {item.city.name + ', ' + item.address}
               </Text>
             ) : null}
-            <Text style={styles.site}>
-              {
-                item.site
-                  .replace(/^(?:https?:\/\/)?(?:www\.)?/i, '')
-                  .split('/')[0]
-              }
-            </Text>
+            <Text style={styles.site}>{this._getSite(item.site)}</Text>
             <View style={styles.brands}>
               {item.brands.map(brand => {
                 return (

@@ -528,6 +528,7 @@ class NewCarFilterScreen extends Component {
             }}>
             {this.state.bodyFilters.map(({id, name, checked}) => (
               <View
+                key={'view-body-' + id}
                 style={{
                   marginBottom: 30,
                   minWidth: 100,

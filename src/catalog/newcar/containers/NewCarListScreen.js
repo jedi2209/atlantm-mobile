@@ -16,6 +16,8 @@ import {actionFetchNewCarByFilter} from '../../actions';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import CarList from '../../components/CarList';
 
+import Spinner from 'react-native-loading-spinner-overlay';
+
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
@@ -63,12 +65,19 @@ const mapDispatchToProps = {
 };
 
 class NewCarListScreen extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false,
+    };
+  }
+
   static navigationOptions = ({navigation}) => {
     const returnScreen =
       (navigation.state.params && navigation.state.params.returnScreen) ||
       'BottomTabNavigation';
 
-      console.log('navigation.state.params >>>>>>', returnScreen)
+    console.log('navigation.state.params >>>>>>', returnScreen);
 
     return {
       headerTitle: (
@@ -199,16 +208,20 @@ class NewCarListScreen extends Component {
     return (
       <View style={styles.content}>
         <StatusBar barStyle="light-content" />
-        <CarList
-          items={data}
-          pages={pages}
-          prices={prices}
-          navigation={navigation}
-          itemScreen="NewCarItemScreen"
-          dataHandler={this.fetchNewCar}
-          dealerSelected={dealerSelected}
-          isFetchItems={isFetchingNewCarByFilter}
-        />
+        {this.state.loading ? (
+          <Spinner visible={true} color={styleConst.color.blue} />
+        ) : (
+          <CarList
+            items={data}
+            pages={pages}
+            prices={prices}
+            navigation={navigation}
+            itemScreen="NewCarItemScreen"
+            dataHandler={this.fetchNewCar}
+            dealerSelected={dealerSelected}
+            isFetchItems={isFetchingNewCarByFilter}
+          />
+        )}
       </View>
     );
   }
