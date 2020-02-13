@@ -19,8 +19,6 @@ import createNativeStackNavigator from 'react-native-screens/createNativeStackNa
 import styleConst from '../../core/style-const';
 import ContactsScreen from '../../contacts/containers/ContactsScreen';
 import NewCarListScreen from '../../catalog/newcar/containers/NewCarListScreen';
-import ProfileScreen from '../../profile/containers/ProfileScreen';
-import ProfileScreenInfo from '../../profile/containers/ProfileScreenInfo';
 import AuthContnainer from '../../profile/containers/AuthContnainer';
 import ProfileSettingsScreen from '../../profile/containers/ProfileSettingsScreen';
 import InfoListScreen from '../../info/containers/InfoListScreen';
@@ -35,10 +33,6 @@ import UsedCarFilterScreen from '../../catalog/usedcar/containers/UsedCarFilterS
 import UsedCarCityScreen from '../../catalog/usedcar/containers/UsedCarCityScreen';
 import MoreScreen from './MenuScreenNew';
 import ApplicationModalScreen from './Application';
-import NewCarItemScreen from '../../catalog/newcar/containers/NewCarItemScreen';
-
-import {store} from '../../core/store';
-import {actionToggleModal} from '../../core/actions';
 
 const styles = {
   shadow: {
@@ -63,9 +57,6 @@ const SearchStack = {
       navigationOptions: {
         gesturesEnabled: false,
       },
-    },
-    NewCarItemScreen: {
-      screen: NewCarItemScreen,
     },
   }),
 };
@@ -117,8 +108,6 @@ const BottomTabNavigation = createBottomTabNavigator({
   Profile: {
     screen: createNativeStackNavigator({
       ProfileScreenInfo: {screen: AuthContnainer},
-      // ProfileScreenInfo: {screen: ProfileScreenInfo},
-      // ProfileScreen: {screen: ProfileScreen},
       ProfileSettingsScreen: {screen: ProfileSettingsScreen},
       TOHistore: {screen: TOHistore},
       CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
