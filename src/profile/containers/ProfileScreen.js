@@ -149,6 +149,7 @@ class ProfileScreen extends Component {
       'keyboardDidHide',
       this.onKeyboardVisibleChange,
     );
+    VKLogin.initialize(7255802);
   }
 
   componentWillUnmount() {
@@ -322,7 +323,11 @@ class ProfileScreen extends Component {
     if (!isLoggedIn) {
       try {
         const auth = await VKLogin.login(['friends', 'photos', 'email']);
-        this._sendDataToApi({...auth, networkName: 'vk'});
+        const profile = {
+          id: auth.user_id,
+          email: auth.email,
+        };
+        this._sendDataToApi({...profile, networkName: 'vk'});
       } catch (error) {
         console.log('error', error);
       }
@@ -503,6 +508,7 @@ class ProfileScreen extends Component {
                     placeholder="Телефон"
                     autoCompleteType="tel"
                     keyboardType="phone-pad"
+                    enablesReturnKeyAutomatically={true}
                     onChangeText={this.onInputPhone}
                   />
                   {!this.state.code && (
@@ -535,6 +541,8 @@ class ProfileScreen extends Component {
                           borderRadius: 5,
                           marginTop: 15,
                         }}
+                        keyboardType="number-pad"
+                        enablesReturnKeyAutomatically={true}
                         placeholder="Код"
                         placeholderTextColor="white"
                         autoCompleteType="off"

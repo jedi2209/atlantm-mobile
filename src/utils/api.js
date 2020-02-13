@@ -505,9 +505,11 @@ export default {
     const body = [
       `networkName=${networkName}`,
       `socialData[XML_ID]=${id}`,
-      `socialData[EMAIL]=${email}`,
-      `socialData[NAME]=${first_name}`,
-      `socialData[LAST_NAME]=${last_name}`,
+      `socialData[EMAIL]=${typeof email !== 'undefined' ? email : ''}`,
+      `socialData[NAME]=${typeof first_name !== 'undefined' ? first_name : ''}`,
+      `socialData[LAST_NAME]=${
+        typeof last_name !== 'undefined' ? last_name : ''
+      }`,
       // `socialData[PHONE]=${phone || '""'}`,
       // `socialData[PERSONAL_BIRTHDAY]=${personal_birthday || '""'}`,
       // `socialData[PERSONAL_GENDER]=${personal_gender || '""'}`,
