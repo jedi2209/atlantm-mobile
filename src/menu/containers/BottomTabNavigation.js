@@ -102,6 +102,10 @@ const BottomTabNavigation = createBottomTabNavigator({
           ]}
         />
       ),
+      tabBarOnPress: ({navigation}) => {
+        navigation.popToTop();
+        navigation.navigate(navigation.state.routeName);
+      },
     },
   },
   Search: SearchStack,
@@ -126,6 +130,10 @@ const BottomTabNavigation = createBottomTabNavigator({
           }}
         />
       ),
+      tabBarOnPress: ({navigation}) => {
+        navigation.popToTop();
+        navigation.navigate(navigation.state.routeName);
+      },
     }),
   },
   Service: {
@@ -205,6 +213,10 @@ const BottomTabNavigation = createBottomTabNavigator({
             ]}
           />
         ),
+        tabBarOnPress: ({navigation}) => {
+          navigation.popToTop();
+          navigation.navigate(navigation.state.routeName);
+        },
       };
     },
   },
