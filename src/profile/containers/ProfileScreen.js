@@ -15,6 +15,8 @@ import {
   Platform,
 } from 'react-native';
 import {Button, Icon} from 'native-base';
+import PhoneInput from 'react-native-phone-input';
+import {store} from '@core/store';
 
 // redux
 import {connect} from 'react-redux';
@@ -134,6 +136,13 @@ class ProfileScreen extends Component {
 
     this.requestManager = new GraphRequestManager();
     this.scrollRef = createRef();
+    this.storeData = store.getState();
+
+    // this.onPressFlag = this.onPressFlag.bind(this);
+    // this._onSelectCountry = this._onSelectCountry.bind(this);
+    this.state = {
+      pickerData: null,
+    };
   }
 
   static navigationOptions = () => ({
@@ -149,7 +158,9 @@ class ProfileScreen extends Component {
       'keyboardDidHide',
       this.onKeyboardVisibleChange,
     );
-    VKLogin.initialize(XXXX);
+    this.setState({
+      pickerData: this.phone.getPickerData()
+    });
   }
 
   componentWillUnmount() {
@@ -164,9 +175,22 @@ class ProfileScreen extends Component {
   };
 
   _verifyCode = () => {
-    const phone = this.state.phone;
+    const phoneCountryCode = this.phone.getCountryCode();
+    let phone = this.state.phone;
+    let phoneNew = phone;
+    if (phoneNew.indexOf(phoneCountryCode) === -1) {
+      phoneNew = phoneCountryCode + phone;
+    }
+    if (phoneNew.indexOf(phoneCountryCode) !== -1) {
+      phoneNew = '+' + phone;
+    }
+    if (phoneNew.indexOf('+' + phoneCountryCode) === -1) {
+      phoneNew = '+' + phoneCountryCode + phone;
+    }
+    phoneNew = phoneNew.replace('++', '+');
+    this.setState({phone: phoneNew});
     this.setState({loadingVerify: true});
-    this.props.actionSavePofileWithPhone({phone}).then(response => {
+    this.props.actionSavePofileWithPhone({phoneNew}).then(response => {
       this.setState({loadingVerify: false});
 
       if (response.code >= 300) {
@@ -318,6 +342,7 @@ class ProfileScreen extends Component {
   };
 
   _signInWithVK = async () => {
+    VKLogin.initialize(XXXX);
     const isLoggedIn = await VKLogin.isLoggedIn();
 
     if (!isLoggedIn) {
@@ -344,6 +369,10 @@ class ProfileScreen extends Component {
     this.setState({phone: text});
   };
 
+  // _onSelectCountry() {
+  //   const countryCode = this.phone.getCountryCode();
+  // }
+
   render() {
     if (this.state.loading) {
       return (
@@ -360,7 +389,6 @@ class ProfileScreen extends Component {
     }
 
     LoginManager.logOut();
-
     return (
       <KeyboardAvoidingView
         behavior={Platform.select({ios: 'position', android: null})}
@@ -375,7 +403,7 @@ class ProfileScreen extends Component {
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    marginTop: 100,
+                    marginTop: '10%',
                     justifyContent: 'center',
                   }}>
                   <Image
@@ -494,22 +522,43 @@ class ProfileScreen extends Component {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                  <TextInput
+                  <PhoneInput
                     style={{
+                      width: '80%',
+                      justifyContent: 'center',
+                      flex: 1,
+                    }}
+                    ref={ref => {
+                      this.phone = ref;
+                    }}
+                    initialCountry={
+                      this.storeData.dealer.region
+                        ? this.storeData.dealer.region
+                        : 'by'
+                    }
+                    countriesList={require('../../utils/countries.json')}
+                    autoFormat={true}
+                    textStyle={{
                       height: 40,
                       paddingHorizontal: 14,
                       borderColor: 'gray',
                       borderWidth: 1,
                       color: '#fff',
-                      width: '80%',
+                      width: '100%',
                       borderRadius: 5,
                     }}
-                    placeholderTextColor="white"
-                    placeholder="Телефон"
-                    autoCompleteType="tel"
-                    keyboardType="phone-pad"
-                    enablesReturnKeyAutomatically={true}
-                    onChangeText={this.onInputPhone}
+                    offset={20}
+                    cancelText="Отмена"
+                    confirmText="Выбрать"
+                    onChangePhoneNumber={this.onInputPhone}
+                    // onSelectCountry={this._onSelectCountry}
+                    textProps={{
+                      placeholderTextColor: 'white',
+                      placeholder: 'Телефон',
+                      keyboardType: 'phone-pad',
+                      autoCompleteType: 'tel',
+                      enablesReturnKeyAutomatically: true,
+                    }}
                   />
                   {!this.state.code && (
                     <Button

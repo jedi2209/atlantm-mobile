@@ -534,9 +534,9 @@ export default {
   },
 
   loginWithPhone({phone, code}) {
-    let body = `contact=${phone}`;
+    let body = `contact=${phone ? phone : ''}`;
     if (code) {
-      body = body + `&code=${code}`;
+      body = body + `&code=${code ? code : ''}`;
     }
 
     const requestParams = _.merge({}, baseRequestParams, {
