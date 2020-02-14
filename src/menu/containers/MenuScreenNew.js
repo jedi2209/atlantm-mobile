@@ -144,7 +144,7 @@ const MoreScreen = props => {
     },
     {
       id: 4,
-      name: 'Поддержанные авто',
+      name: 'Подержанные авто',
       navigateUrl: 'UsedCarListScreen',
       type: 'not_new',
       selected: false,
