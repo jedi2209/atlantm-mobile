@@ -10,14 +10,10 @@ export default StyleSheet.create({
   safearea: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
-    paddingBottom: isAndroid
-      ? styleConst.ui.footerHeightAndroid
-      : styleConst.ui.footerHeightIphone
-    // paddingEnd: styleConst.footerHeight
   },
   gallery: {
-    position: 'relative',
-    marginTop: -10,
+    // position: 'relative',
+    marginTop: -40,
   },
   titleContainer: {
     paddingBottom: 10,
@@ -167,7 +163,7 @@ export default StyleSheet.create({
   mapCard: {},
   mapCardContainer: {
     marginBottom: 14,
-    marginHorizontal: "2%",
+    marginHorizontal: '2%',
     flexDirection: 'row',
     backgroundColor: '#fff',
     paddingHorizontal: 6,
@@ -185,7 +181,7 @@ export default StyleSheet.create({
     color: '#2a2a43',
     fontSize: 14,
     fontWeight: '600',
-    width: "95%",
+    width: '95%',
   },
   mapCardIcon: {
     fontSize: 40,
@@ -194,5 +190,6 @@ export default StyleSheet.create({
   },
   mapCardTextContainer: {
     justifyContent: 'space-around',
+    flex: 1,
   },
 });

@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   StatusBar,
+  StyleSheet,
 } from 'react-native';
 import {
   Col,
@@ -43,7 +44,7 @@ import PropTypes from 'prop-types';
 import Amplitude from '@utils/amplitude-analytics';
 import styleConst from '@core/style-const';
 import stylesHeader from '@core/components/Header/style';
-import stylesFooter from '@core/components/Footer/style';
+//import stylesFooter from '@core/components/Footer/style';
 import numberWithGap from '@utils/number-with-gap';
 import showPrice from '@utils/price';
 
@@ -319,10 +320,6 @@ class NewCarItemScreen extends Component {
 
   renderPrice = ({carDetails, filterData = {}, currency}) => {
     const isSale = carDetails.sale === true;
-    const price = showPrice(
-      get(carDetails, 'price.app.standart'),
-      get(this.props.navigation, 'state.params.code'),
-    );
 
     return (
       <View
@@ -362,11 +359,6 @@ class NewCarItemScreen extends Component {
 
   renderPriceFooter = ({carDetails, filterData, currency}) => {
     const isSale = carDetails.sale === true;
-
-    const price = showPrice(
-      get(carDetails, 'price.app.standart'),
-      get(this.props.navigation, 'state.params.code'),
-    );
 
     return (
       <View
@@ -466,7 +458,7 @@ class NewCarItemScreen extends Component {
         <SafeAreaView style={styles.safearea}>
           <StatusBar barStyle="light-content" />
           <Content>
-            <View>
+            <View style={{ marginTop: -40 }}>
               <PhotoSlider
                 photos={photos}
                 onPressItem={this.onPressPhoto}
@@ -477,8 +469,8 @@ class NewCarItemScreen extends Component {
             <View
               style={{
                 position: 'relative',
-                top: -30,
-                marginBottom: -30,
+                top: -60,
+                marginBottom: -60,
                 backgroundColor: '#fff',
                 borderTopLeftRadius: 30,
                 borderTopRightRadius: 30,
@@ -817,3 +809,28 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(NewCarItemScreen);
+
+const stylesFooter = StyleSheet.create({
+  footer: {
+    height: 50,
+    borderTopWidth: 0,
+  },
+  footerFilters: {},
+  button: {
+    width: '50%',
+    height: 50,
+    display: 'flex',
+    flexDirection: 'row',
+    backgroundColor: styleConst.color.lightBlue,
+  },
+  orderPriceContainer: {
+    height: 50,
+    width: '50%',
+    display: 'flex',
+    backgroundColor: styleConst.color.header,
+  },
+  orderPriceContainerNotSale: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+});

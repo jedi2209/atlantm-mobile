@@ -118,7 +118,7 @@ export default class PhotoSlider extends Component {
         id={1}
         containerStyle={styles.container}
         paginationStyle={{
-          marginBottom: 16,
+          marginBottom: 46,
         }}
         dotColor="white"
         showsButtons={false}
