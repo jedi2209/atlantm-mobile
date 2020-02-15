@@ -221,8 +221,6 @@ class NewCarFilterScreen extends Component {
                         value => value.id === id,
                       );
 
-                      console.log('pizda suka blya', item);
-
                       this.props.actionResetUsedCarList();
                       this.props.actionSetNeedUpdateUsedCarList();
                       this.props.actionSelectUsedCarCity(item);
@@ -242,6 +240,7 @@ class NewCarFilterScreen extends Component {
                     </Left>
                     <Right>
                       <Radio
+                        selectedColor="#0F66B2"
                         name={id}
                         selected={id === this.state.selectedCity}
                       />
@@ -313,13 +312,13 @@ class NewCarFilterScreen extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
-              <Text style={{color: '#74747A', fontSize: 14}}>{`${
-                this.state.priceFilter.currentMin || this.props.filterPrice.$min
-              } ${this.state.priceFilter.curr &&
+              <Text style={{color: '#74747A', fontSize: 14}}>{`${this.state
+                .priceFilter.currentMin || this.props.filterPrice.$min} ${this
+                .state.priceFilter.curr &&
                 this.state.priceFilter.curr.name}`}</Text>
-              <Text style={{color: '#74747A', fontSize: 14}}>{`${
-                this.state.priceFilter.currentMax || this.props.filterPrice.$max
-              } ${this.state.priceFilter.curr &&
+              <Text style={{color: '#74747A', fontSize: 14}}>{`${this.state
+                .priceFilter.currentMax || this.props.filterPrice.$max} ${this
+                .state.priceFilter.curr &&
                 this.state.priceFilter.curr.name}`}</Text>
             </View>
           </View>
@@ -350,7 +349,7 @@ class NewCarFilterScreen extends Component {
               {expanded ? (
                 <Icon
                   type="FontAwesome5"
-                  style={{color: '#0061ED', fontWeight: 'lighter'}}
+                  style={{color: '#0F66B2', fontWeight: 'lighter'}}
                   name="angle-down"
                 />
               ) : (
@@ -388,6 +387,7 @@ class NewCarFilterScreen extends Component {
           <Button
             onPress={this.onPressFilterButton}
             style={{
+              backgroundColor: '#0F66B2',
               paddingVertical: 16,
               paddingHorizontal: 40,
               shadowColor: '#0F66B2',

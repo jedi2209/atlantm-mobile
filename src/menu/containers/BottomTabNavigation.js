@@ -52,12 +52,6 @@ const SearchStack = {
     NewCarListScreen: {
       screen: NewCarListScreen,
     },
-    NewCarFilterScreen: {
-      screen: NewCarFilterScreen,
-      navigationOptions: {
-        gesturesEnabled: false,
-      },
-    },
   }),
 };
 
@@ -188,13 +182,6 @@ const BottomTabNavigation = createBottomTabNavigator({
       UsedCarListScreen: {
         screen: UsedCarListScreen,
       },
-      UsedCarFilterScreen: {
-        screen: UsedCarFilterScreen,
-        navigationOptions: {
-          gesturesEnabled: false,
-        },
-      },
-      UsedCarCityScreen: {screen: UsedCarCityScreen},
     }),
     navigationOptions: () => {
       return {

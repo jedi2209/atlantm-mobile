@@ -21,7 +21,9 @@ import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRating
 
 import CallMeBackScreen from '../profile/containers/CallMeBackScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
+import NewCarFilterScreen from '../catalog/newcar/containers/NewCarFilterScreen';
 import UsedCarItemScreen from '../catalog/usedcar/containers/UsedCarItemScreen';
+import UsedCarFilterScreen from '../catalog/usedcar/containers/UsedCarFilterScreen';
 import MapScreen from '../contacts/map/containers/MapScreen';
 
 import OrderScreen from '../catalog/containers/OrderScreen';
@@ -33,7 +35,19 @@ export const getRouter = initialRouteName => {
         screen: MapScreen,
       },
       NewCarItemScreen: {screen: NewCarItemScreen},
+      NewCarFilterScreen: {
+        screen: NewCarFilterScreen,
+        navigationOptions: {
+          gesturesEnabled: false,
+        },
+      },
       UsedCarItemScreen: {screen: UsedCarItemScreen},
+      UsedCarFilterScreen: {
+        screen: UsedCarFilterScreen,
+        navigationOptions: {
+          gesturesEnabled: false,
+        },
+      },
       IntroScreen: {screen: IntroScreen}, // это скрин с кнопкой выберите автосервис
       BottomTabNavigation: {screen: BottomTabNavigation}, // это нижнее меню
       ChooseDealerScreen: {screen: ChooseDealerScreen}, // выбор диллера скрин
