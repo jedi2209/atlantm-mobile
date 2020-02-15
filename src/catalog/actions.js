@@ -786,7 +786,6 @@ export const actionCarCostOrder = props => {
  * Сохраняет список выбранных фильтров.
  */
 export const actionSaveCarFilters = filters => {
-  console.log('тут бываю? filters in actions', filters);
   return dispatch => {
     return dispatch({
       type: ACTION_SAVE_CAR_FILTERS__UPDATE,
