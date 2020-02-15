@@ -657,7 +657,7 @@ class NewCarFilterScreen extends Component {
               {expanded ? (
                 <Icon
                   type="FontAwesome5"
-                  style={{color: '#0061ED', fontWeight: 'lighter'}}
+                  style={{color: '#0F66B2', fontWeight: 'lighter'}}
                   name="angle-down"
                 />
               ) : (
@@ -673,7 +673,6 @@ class NewCarFilterScreen extends Component {
             return (
               <View
                 style={{
-                  // minHeight: 100,
                   backgroundColor: '#fff',
                   paddingHorizontal: 16,
                   borderBottomWidth: 1,
@@ -695,6 +694,7 @@ class NewCarFilterScreen extends Component {
           <Button
             onPress={this.onPressFilterButton}
             style={{
+              backgroundColor: '#0F66B2',
               paddingVertical: 16,
               paddingHorizontal: 40,
               shadowColor: '#0F66B2',
