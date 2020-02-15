@@ -7,6 +7,7 @@ import {
   Text,
   ScrollView,
   StatusBar,
+  Platform,
 } from 'react-native';
 import {
   StyleProvider,
@@ -137,7 +138,7 @@ class CarHistoryScreen extends Component {
     headerLeft: (
       <View
         style={{
-          marginLeft: -16,
+          marginLeft: Platform.OS === 'ios' ? -16 : 0,
           marginTop: 2,
         }}>
         <HeaderIconBack theme="blue" navigation={navigation} />
