@@ -7,6 +7,7 @@ import {
   Text,
   ScrollView,
   StatusBar,
+  Platform,
 } from 'react-native';
 import {Row, Col, Button, Content, Segment} from 'native-base';
 
@@ -141,7 +142,7 @@ class CarHistoryDetailsScreen extends Component {
       headerLeft: (
         <View
           style={{
-            marginLeft: -16,
+            marginLeft: Platform.OS === 'ios' ? -16 : 0,
             marginTop: 2,
           }}>
           <HeaderIconBack theme="blue" navigation={navigation} />
