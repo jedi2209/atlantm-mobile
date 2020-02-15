@@ -368,6 +368,8 @@ const newCarByFilter = (state = {}, action) => {
       return {};
     case NEW_CAR_CITY__SELECT:
       return {};
+    case ACTION_SAVE_CAR_FILTERS__UPDATE:
+      return {};
     case NEW_CAR_BY_FILTER__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {
         const newState = {

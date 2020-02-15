@@ -257,23 +257,6 @@ class NewCarFilterScreen extends Component {
     }
   }
 
-  getCityData = () => {
-    const {
-      dealerSelected,
-      listRussiaByCities,
-      listUkraineByCities,
-      listBelarussiaByCities,
-    } = this.props;
-
-    const list = [].concat(
-      listRussiaByCities,
-      listUkraineByCities,
-      listBelarussiaByCities,
-    );
-
-    return find(list, {id: dealerSelected.city.id});
-  };
-
   onPressModels = () => {
     const {filterBrands} = this.props;
 
