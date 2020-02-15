@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Alert,
   StatusBar,
+  Platform,
 } from 'react-native';
 import {Button} from 'native-base';
 import {connect} from 'react-redux';
@@ -27,7 +28,7 @@ class ProfileSettingsScreen extends Component {
     headerLeft: (
       <View
         style={{
-          marginLeft: -16,
+          marginLeft: Platform.OS === 'ios' ? -16 : 0,
           marginTop: 2,
         }}>
         <HeaderIconBack theme="blue" navigation={navigation} />
@@ -259,6 +260,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   button: {
+    backgroundColor: '#0F66B2',
     justifyContent: 'center',
     shadowColor: '#0f66b2',
     shadowOpacity: 0.5,
