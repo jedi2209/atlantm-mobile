@@ -58,11 +58,7 @@ class BonusInfoScreen extends Component {
       headerTitle: 'бонусная программа',
       headerStyle: stylesHeader.whiteHeader,
       headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerLeft: (
-        <View>
-          <HeaderIconBack theme="blue" navigation={navigation} />
-        </View>
-      ),
+      headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
       headerRight: <View />,
     };
   };
