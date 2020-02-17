@@ -18,90 +18,50 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider';
 // redux
 import {connect} from 'react-redux';
 import {
-  actionFetchNewCarByFilter,
-  actionFetchNewCarFilterData,
-  actionShowNewCarFilterPrice,
-  actionHideNewCarFilterPrice,
-  actionSelectNewCarFilterPrice,
-  actionSetNewCarFilterPriceSpecial,
-  actionSaveCarFilters,
-  actionSelectUsedCarPriceRange,
+  actionFetchUsedCarByFilter,
+  actionSaveCarUsedFilters,
   actionSetNeedUpdateUsedCarList,
   actionResetUsedCarList,
   actionSelectUsedCarCity,
+  actionSelectUsedCarPriceRange,
 } from '../../actions';
 
 // helpers
 import Amplitude from '@utils/amplitude-analytics';
 import stylesHeader from '@core/components/Header/style';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
-  const {priceFilter} = catalog.newCar.filters;
-
-  let filterPrice;
-
-  if (Object.keys(priceFilter).length > 0) {
-    filterPrice = priceFilter;
-  } else {
-    filterPrice = {
-      // currentMin
-      currentMin: catalog.usedCar.priceRange
-        ? catalog.usedCar.priceRange.minPrice
-        : catalog.usedCar.prices.min,
-      // currentMax
-      currentMax: catalog.usedCar.priceRange
-        ? catalog.usedCar.priceRange.maxPrice
-        : catalog.usedCar.prices.max,
-
-      $min: catalog.usedCar.prices.min,
-      $max: catalog.usedCar.prices.max,
-
-      step: catalog.usedCar.prices.step,
-      curr: catalog.usedCar.prices.curr,
-    };
-  }
-
   return {
     nav,
     dealerSelected: dealer.selected,
     listRussiaByCities: dealer.listRussiaByCities,
-    // todo: хз что за фигня разобраться
     listBelarussiaByCities: dealer.listBelarussiaByCities,
     listUkraineByCities: dealer.listUkraineByCities,
 
-    items: catalog.newCar.items,
-    filterData: catalog.newCar.filterData,
-    filterGearbox: catalog.newCar.filterGearbox,
-    filterDrive: catalog.newCar.filterDrive,
-    filterEngineType: catalog.newCar.filterEngineType,
-    filterPrice,
-    filterPriceSpecial: catalog.newCar.filterPriceSpecial,
-
+    items: catalog.usedCar.items,
+    filterPriceByUser: catalog.usedCar.filters,
+    filterPrice: catalog.usedCar.prices,
     city: catalog.usedCar.city,
-    region: catalog.newCar.region,
-    needFetchFilterData: catalog.newCar.meta.needFetchFilterData,
+    region: catalog.usedCar.region,
+    needFetchFilterData: catalog.usedCar.meta.needFetchFilterData,
     needFetchFilterDataAfterCity:
-      catalog.newCar.meta.needFetchFilterDataAfterCity,
-    isFetchingFilterData: catalog.newCar.meta.isFetchingFilterData,
-    isFetchingNewCarByFilter: catalog.newCar.meta.isFetchingNewCarByFilter,
+      catalog.usedCar.meta.needFetchFilterDataAfterCity,
+    isFetchingFilterData: catalog.usedCar.meta.isFetchingFilterData,
   };
 };
 
 const mapDispatchToProps = {
-  actionFetchNewCarFilterData,
-  actionFetchNewCarByFilter,
-  actionShowNewCarFilterPrice,
-  actionHideNewCarFilterPrice,
-  actionSelectNewCarFilterPrice,
-  actionSetNewCarFilterPriceSpecial,
-  actionSaveCarFilters,
+  // actionFetchUsedCarFilterData,
+  actionFetchUsedCarByFilter,
+  actionSaveCarUsedFilters,
   actionSelectUsedCarCity,
   actionResetUsedCarList,
-  actionSelectUsedCarPriceRange,
   actionSetNeedUpdateUsedCarList,
+  actionSelectUsedCarPriceRange,
 };
 
-class NewCarFilterScreen extends Component {
+class UsedCarFilterScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: 'Фильтры',
     headerStyle: stylesHeader.common,
@@ -138,38 +98,23 @@ class NewCarFilterScreen extends Component {
       selectedCity: this.props.city
         ? this.props.city.id
         : this.props.dealerSelected.city.id,
-      priceFilter: props.filterPrice,
+      priceFilter: {...props.filterPrice, ...props.filterPriceByUser},
     };
   }
 
   componentDidMount() {
-    const {actionFetchNewCarFilterData, dealerSelected} = this.props;
+    // const {actionFetchUsedCarFilterData, dealerSelected} = this.props;
 
-    actionFetchNewCarFilterData({city: dealerSelected.city.id});
+    // actionFetchUsedCarFilterData({city: dealerSelected.city.id});
 
-    Amplitude.logEvent('screen', 'catalog/newcar');
+    // Amplitude.logEvent('screen', 'catalog/newcar');
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const {
-      filterData,
-      filterPrice,
-      needFetchFilterData,
-      actionFetchNewCarByFilter,
-      // обновление экрана после выбора города
-      needFetchFilterDataAfterCity,
-      actionFetchNewCarFilterData,
-      filters,
-    } = this.props;
-
-    if (needFetchFilterDataAfterCity) {
-      return actionFetchNewCarFilterData({
-        city: this.props.dealerSelected.city.id,
-      });
-    }
+    const {filterData, filterPrice, needFetchFilterData, filters} = this.props;
 
     if (needFetchFilterData) {
-      return actionFetchNewCarByFilter({
+      return actionFetchUsedCarByFilter({
         filters,
         searchUrl: filterData.search_url,
         filterPrice,
@@ -179,30 +124,53 @@ class NewCarFilterScreen extends Component {
     if (this.props.filterPrice !== prevProps.filterPrice) {
       // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
-        priceFilter: this.props.filterPrice,
+        priceFilter: {
+          ...this.props.filterPrice,
+          ...this.props.filterPriceByUser,
+        },
+      });
+    }
+
+    if (this.props.filterPriceByUser !== prevProps.filterPriceByUser) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        priceFilter: {
+          ...this.props.filterPrice,
+          ...this.props.filterPriceByUser,
+        },
       });
     }
 
     if (this.state.selectedCity !== prevState.selectedCity) {
-      console.log(
-        'actionFetchNewCarFilterData >>>>>>>',
-        this.props.dealerSelected.city.id,
-      );
-      actionFetchNewCarFilterData({city: this.props.dealerSelected.city.id});
+      this.setState({
+        priceFilter: {
+          ...this.props.filterPrice,
+          minPrice: undefined,
+          maxPrice: undefined,
+        },
+      });
+
+      this.props.actionSelectUsedCarPriceRange({
+        minPrice: undefined,
+        maxPrice: undefined,
+      });
     }
   }
 
   onPressFilterButton = () => {
     this.props.navigation.navigate('UsedCarListScreen');
     this.props.actionSelectUsedCarPriceRange({
-      minPrice: this.state.priceFilter.currentMin,
-      maxPrice: this.state.priceFilter.currentMax,
+      minPrice: this.state.priceFilter.minPrice,
+      maxPrice: this.state.priceFilter.maxPrice,
+    });
+    this.props.actionSaveCarUsedFilters({
+      minPrice: this.state.priceFilter.minPrice,
+      maxPrice: this.state.priceFilter.maxPrice,
     });
     this.props.actionSetNeedUpdateUsedCarList();
   };
 
   render() {
-    console.log('render', this.props.filterPrice);
     const dataForAccordion = [
       {
         title: 'Город',
@@ -254,7 +222,7 @@ class NewCarFilterScreen extends Component {
       },
     ];
 
-    if (this.props.filterPrice.$min || this.props.filterPrice.$max) {
+    if (this.props.filterPrice.min || this.props.filterPrice.max) {
       dataForAccordion.push({
         title: 'Цена',
         content: (
@@ -264,21 +232,18 @@ class NewCarFilterScreen extends Component {
             }}>
             <MultiSlider
               values={[
-                this.state.priceFilter.currentMin ||
-                  this.props.filterPrice.$min,
-                this.state.priceFilter.currentMax ||
-                  this.props.filterPrice.$max,
+                this.state.priceFilter.minPrice || this.props.filterPrice.min,
+                this.state.priceFilter.maxPrice || this.props.filterPrice.max,
               ]}
               step={this.props.filterPrice.step}
-              min={this.props.filterPrice.$min}
-              max={this.props.filterPrice.$max}
+              min={this.props.filterPrice.min}
+              max={this.props.filterPrice.max}
               onValuesChange={e => {
                 this.setState({
                   priceFilter: {
-                    step: this.props.filterPrice.step,
-                    curr: this.props.filterPrice.curr,
-                    currentMin: e[0],
-                    currentMax: e[1],
+                    ...this.props.filterPrice,
+                    minPrice: e[0],
+                    maxPrice: e[1],
                   },
                 });
               }}
@@ -313,11 +278,11 @@ class NewCarFilterScreen extends Component {
                 justifyContent: 'space-between',
               }}>
               <Text style={{color: '#74747A', fontSize: 14}}>{`${this.state
-                .priceFilter.currentMin || this.props.filterPrice.$min} ${this
+                .priceFilter.minPrice || this.props.filterPrice.min} ${this
                 .state.priceFilter.curr &&
                 this.state.priceFilter.curr.name}`}</Text>
               <Text style={{color: '#74747A', fontSize: 14}}>{`${this.state
-                .priceFilter.currentMax || this.props.filterPrice.$max} ${this
+                .priceFilter.maxPrice || this.props.filterPrice.max} ${this
                 .state.priceFilter.curr &&
                 this.state.priceFilter.curr.name}`}</Text>
             </View>
@@ -327,7 +292,7 @@ class NewCarFilterScreen extends Component {
     }
 
     return (
-      <>
+      <ScrollView style={{borderWidth: 0}}>
         <StatusBar barStyle="dark-content" />
         <Accordion
           dataArray={dataForAccordion}
@@ -401,11 +366,11 @@ class NewCarFilterScreen extends Component {
             <Text style={{color: '#fff', fontSize: 16}}>Применить</Text>
           </Button>
         </View>
-      </>
+      </ScrollView>
     );
   }
 }
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(NewCarFilterScreen);
+)(UsedCarFilterScreen);

@@ -165,6 +165,7 @@ const usedCarCity = (state = null, action) => {
 const usedCarPriceRange = (state = null, action) => {
   switch (action.type) {
     case REHYDRATE:
+    case DEALER__SUCCESS:
     case USED_CAR_CITY__SELECT:
       return null;
     case USED_CAR_PRICE_RANGE__SELECT:
@@ -781,6 +782,25 @@ const newCarFilters = (
   }
 };
 
+const usedCarFilters = (
+  state = {
+    priceFilter: {},
+  },
+  action,
+) => {
+  switch (action.type) {
+    case 'ACTION_SAVE_CAR_FILTERS_USED__UPDATE':
+      return action.payload;
+    case DEALER__SUCCESS:
+    case USED_CAR_CITY__SELECT:
+      return {
+        priceFilter: {},
+      };
+    default:
+      return state;
+  }
+};
+
 // End CarCost
 
 export default combineReducers({
@@ -811,6 +831,7 @@ export default combineReducers({
       isPriceFilterShow: isUsedCarPriceFilterShow,
       isFetchingCarDetails: isFetchingUsedCarDetails,
     }),
+    filters: usedCarFilters,
   }),
 
   newCar: combineReducers({
