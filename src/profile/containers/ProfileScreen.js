@@ -187,10 +187,10 @@ class ProfileScreen extends Component {
     if (phoneNew.indexOf('+' + phoneCountryCode) === -1) {
       phoneNew = '+' + phoneCountryCode + phone;
     }
-    phoneNew = phoneNew.replace('++', '+');
-    this.setState({phone: phoneNew});
+    phone = phoneNew.replace('++', '+');
+    this.setState({phone: phone});
     this.setState({loadingVerify: true});
-    this.props.actionSavePofileWithPhone({phoneNew}).then(response => {
+    this.props.actionSavePofileWithPhone({phone}).then(response => {
       this.setState({loadingVerify: false});
 
       if (response.code >= 300) {
