@@ -112,13 +112,11 @@ class CallMeBackScreen extends React.Component {
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
       headerLeft: (
-        <View>
-          <HeaderIconBack
-            theme="white"
-            navigation={navigation}
-            returnScreen={returnScreen}
-          />
-        </View>
+        <HeaderIconBack
+          theme="white"
+          navigation={navigation}
+          returnScreen={returnScreen}
+        />
       ),
       headerRight: <View />,
     };

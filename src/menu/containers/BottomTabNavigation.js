@@ -8,13 +8,6 @@ import {Alert} from 'react-native';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
 
-// TODO: https://github.com/react-navigation/react-navigation/issues/6458
-// TODO: https://github.com/kmagiera/react-native-screens/issues/220
-// Используем createNativeStackNavigator только для раздела Profile,
-// т.к. там возникаете визуальный лаг при переходе после логина.
-// Не можем использовать на всех страницах, т.к. перестают работать фильтры.
-import createNativeStackNavigator from 'react-native-screens/createNativeStackNavigator';
-
 // helpers
 import styleConst from '../../core/style-const';
 import ContactsScreen from '../../contacts/containers/ContactsScreen';
@@ -104,7 +97,7 @@ const BottomTabNavigation = createBottomTabNavigator({
   },
   Search: SearchStack,
   Profile: {
-    screen: createNativeStackNavigator({
+    screen: createStackNavigator({
       ProfileScreenInfo: {screen: AuthContnainer},
       ProfileSettingsScreen: {screen: ProfileSettingsScreen},
       TOHistore: {screen: TOHistore},

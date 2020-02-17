@@ -35,8 +35,6 @@ if (__DEV__) {
   NativeModules.DevSettings.setIsDebuggingRemotely(true);
 }
 
-enableScreens();
-
 const mapStateToProps = ({core, dealer, profile, modal}) => {
   return {
     //     pushActionSubscribeState: core.pushActionSubscribeState,

@@ -159,7 +159,7 @@ class ProfileScreen extends Component {
       this.onKeyboardVisibleChange,
     );
     this.setState({
-      pickerData: this.phone.getPickerData()
+      pickerData: this.phone.getPickerData(),
     });
   }
 

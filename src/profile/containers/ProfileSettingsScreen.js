@@ -25,15 +25,7 @@ class ProfileSettingsScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerStyle: stylesHeader.whiteHeader,
     headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerLeft: (
-      <View
-        style={{
-          marginLeft: Platform.OS === 'ios' ? -16 : 0,
-          marginTop: 2,
-        }}>
-        <HeaderIconBack theme="blue" navigation={navigation} />
-      </View>
-    ),
+    headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
     headerRight: <View />,
   });
 
