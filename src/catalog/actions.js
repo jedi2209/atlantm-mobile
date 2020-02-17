@@ -793,3 +793,15 @@ export const actionSaveCarFilters = filters => {
     });
   };
 };
+
+/**
+ * Сохраняет список выбранных фильтров на странице подержанных авто.
+ */
+export const actionSaveCarUsedFilters = filters => {
+  return dispatch => {
+    return dispatch({
+      type: 'ACTION_SAVE_CAR_FILTERS_USED__UPDATE',
+      payload: filters,
+    });
+  };
+};
