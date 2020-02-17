@@ -35,7 +35,7 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
 import stylesHeader from '../../core/components/Header/style';
-import {TEXT_MESSAGE_CONTROL, TEXT_RATE_APP} from '../constants';
+import {TEXT_RATE_APP} from '../constants';
 
 const icons = {
   advocate: require('../assets/advocate.png'),
@@ -160,9 +160,6 @@ class EkoScreen extends Component {
                 onPressHandler: this.onPressReviews,
               })}
             </List>
-
-            <InfoLine infoIcon={true} text={TEXT_MESSAGE_CONTROL} />
-
             <List style={stylesList.list}>
               {this.renderItem({
                 label: this.getRateAppLabel(),

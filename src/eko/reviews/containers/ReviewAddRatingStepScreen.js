@@ -1,9 +1,18 @@
-import React, { Component } from 'react';
-import { SafeAreaView, Alert, View, StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {
+  SafeAreaView,
+  Alert,
+  View,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+  ScrollView,
+} from 'react-native';
 
 // redux
-import { connect } from 'react-redux';
-import { REVIEW_ADD__SUCCESS, REVIEW_ADD__FAIL } from '../../actionTypes';
+import {connect} from 'react-redux';
+import {REVIEW_ADD__SUCCESS, REVIEW_ADD__FAIL} from '../../actionTypes';
 import {
   actionReviewAdd,
   actionSelectAddReviewRating,
@@ -15,7 +24,15 @@ import {
 import stylesList from '../../../core/components/Lists/style';
 
 // components
-import { Label, Content, StyleProvider, Switch, Body, ListItem, Right } from 'native-base';
+import {
+  Label,
+  Content,
+  StyleProvider,
+  Switch,
+  Body,
+  ListItem,
+  Right,
+} from 'native-base';
 import Spinner from 'react-native-loading-spinner-overlay';
 import InfoLine from '../../components/InfoLine';
 import RatingList from '../../components/RatingList';
@@ -24,12 +41,15 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
-import { get } from 'lodash';
-import { TEXT_MESSAGE_CONTROL } from '../../constants';
+import {get} from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 
+import {TextInput} from '../../../core/components/TextInput';
+import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
+
+const $size = 40;
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
@@ -42,14 +62,61 @@ const styles = StyleSheet.create({
   publicAgreeText: {
     fontSize: 16,
   },
+  list: {
+    paddingBottom: $size,
+  },
+  serviceForm: {
+    marginTop: $size,
+  },
+  // Скопировано из ProfileSettingsScreen.
+  container: {
+    flex: 1,
+    paddingVertical: 20,
+    paddingHorizontal: 14,
+    backgroundColor: '#fff',
+  },
+  header: {
+    marginBottom: 36,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  field: {
+    marginBottom: 18,
+  },
+  group: {
+    marginBottom: 36,
+  },
+  textinput: {
+    height: Platform.OS === 'ios' ? 40 : 'auto',
+    borderColor: '#d8d8d8',
+    borderBottomWidth: 1,
+    color: '#222b45',
+    fontSize: 18,
+  },
+  button: {
+    backgroundColor: '#0F66B2',
+    justifyContent: 'center',
+    shadowColor: '#0f66b2',
+    shadowOpacity: 0.5,
+    shadowRadius: 8,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+  },
+  buttonText: {
+    color: '#fff',
+    textTransform: 'uppercase',
+    fontSize: 16,
+  },
 });
 
-const mapStateToProps = ({ dealer, eko, nav, profile }) => {
+const mapStateToProps = ({dealer, eko, nav, profile}) => {
   return {
     nav,
-    name: profile.name,
-    phone: profile.phone,
-    email: profile.email,
+    login: profile.login,
     dealerSelected: dealer.selected,
     publicAgree: eko.reviews.publicAgree,
     messagePlus: eko.reviews.messagePlus,
@@ -68,13 +135,29 @@ const mapDispatchToProps = {
 };
 
 class ReviewAddRatingStepScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Новый отзыв',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
+  constructor(props) {
+    super(props);
+
+    const {last_name = '', first_name = '', phone, email} = this.props.login;
+
+    this.state = {
+      email: email ? email.value : '',
+      phone: phone ? phone.value : '',
+      name: `${first_name} ${last_name}`,
+    };
+  }
+
+  static navigationOptions = ({navigation}) => ({
+    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Новый отзыв</Text>,
+    headerStyle: stylesHeader.blueHeader,
+    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerLeft: (
+      <View>
+        <HeaderIconBack theme="white" navigation={navigation} />
+      </View>
+    ),
     headerRight: <View />,
-  })
+  });
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
@@ -83,12 +166,18 @@ class ReviewAddRatingStepScreen extends Component {
     if (nav) {
       const rootLevel = nav.routes[nav.index];
       if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'ReviewAddRatingStepScreen';
+        isActiveScreen =
+          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
+          'ReviewAddRatingStepScreen';
       }
     }
 
     return isActiveScreen;
   }
+
+  onChangeField = fieldName => value => {
+    this.setState({[fieldName]: value});
+  };
 
   onPressButton = () => {
     const {
@@ -104,27 +193,22 @@ class ReviewAddRatingStepScreen extends Component {
       actionReviewAdd,
     } = this.props;
 
-    if (!name || !phone || !email) {
-      return setTimeout(() => {
-        Alert.alert(
-          'Недостаточно информации',
-          'Для отправки отзыва необходимо заполнить ФИО, номер контактного телефона и email',
-          [
-            { text: 'Отмена', style: 'cancel' },
-            {
-              text: 'Заполнить',
-              onPress() { navigation.navigate('Profile2Screen'); },
-            },
-          ],
-        );
-      }, 100);
+    if (
+      !this.state.name.trim() ||
+      !this.state.phone.trim() ||
+      !this.state.email.trim()
+    ) {
+      return Alert.alert(
+        'Не хватает информации',
+        'Для заявки на СТО необходимо заполнить ФИО, номер контактного телефона, название автомобиля и желаемую дату',
+      );
     }
 
     actionReviewAdd({
       dealerId: dealerSelected.id,
-      name,
-      phone,
-      email,
+      name: this.state.name,
+      phone: this.state.phone,
+      email: this.state.email,
       messagePlus,
       messageMinus,
       publicAgree,
@@ -140,33 +224,43 @@ class ReviewAddRatingStepScreen extends Component {
       }
 
       if (action.type === REVIEW_ADD__FAIL) {
-        setTimeout(() => Alert.alert('', 'Произошла ошибка, попробуйте снова'), 100);
+        setTimeout(
+          () => Alert.alert('', 'Произошла ошибка, попробуйте снова'),
+          100,
+        );
       }
     });
-  }
+  };
 
   renderPublicAgree = () => {
-    const { publicAgree, actionSelectAddReviewPublicAgree } = this.props;
+    const {publicAgree, actionSelectAddReviewPublicAgree} = this.props;
 
     const onPressHandler = () => actionSelectAddReviewPublicAgree(!publicAgree);
 
     return (
-      <View style={[
-        styles.publicAgreeContainer,
-        stylesList.listItemContainer,
-        stylesList.listItemContainerFirst,
-      ]}>
+      <View
+        style={[
+          styles.publicAgreeContainer,
+          stylesList.listItemContainer,
+          stylesList.listItemContainerFirst,
+        ]}>
         <ListItem onPress={onPressHandler} last style={stylesList.listItem}>
           <Body>
-            <Label style={[stylesList.label, styles.publicAgreeText]}>Я разрешаю опубликовать мой отзыв</Label>
+            <Label style={[stylesList.label, styles.publicAgreeText]}>
+              Я разрешаю опубликовать мой отзыв
+            </Label>
           </Body>
           <Right>
-            <Switch onValueChange={onPressHandler} style={styles.switch} value={publicAgree} />
+            <Switch
+              onValueChange={onPressHandler}
+              style={styles.switch}
+              value={publicAgree}
+            />
           </Right>
         </ListItem>
       </View>
     );
-  }
+  };
 
   render() {
     const {
@@ -186,7 +280,10 @@ class ReviewAddRatingStepScreen extends Component {
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
           <Content>
-          <Spinner visible={isReviewAddRequest} color={styleConst.color.blue} />
+            <Spinner
+              visible={isReviewAddRequest}
+              color={styleConst.color.blue}
+            />
 
             <RatingList
               ratingValue={reviewAddRating}
@@ -195,16 +292,51 @@ class ReviewAddRatingStepScreen extends Component {
               selectRatingVariant={actionSelectAddReviewRatingVariant}
             />
             {this.renderPublicAgree()}
-            <InfoLine gap={true} infoIcon={true} text={TEXT_MESSAGE_CONTROL} />
           </Content>
-          <FooterButton
-            text="Отправить"
-            onPressButton={this.onPressButton}
-          />
+
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <>
+              <View style={styles.container}>
+                <View style={styles.group}>
+                  <View style={styles.field}>
+                    <TextInput
+                      autoCorrect={false}
+                      style={styles.textinput}
+                      label="Имя"
+                      value={this.state.name}
+                      onChangeText={this.onChangeField('name')}
+                    />
+                  </View>
+                  <View style={styles.field}>
+                    <TextInput
+                      style={styles.textinput}
+                      label="Телефон"
+                      keyboardType="phone-pad"
+                      value={this.state.phone}
+                      onChangeText={this.onChangeField('phone')}
+                    />
+                  </View>
+                  <View style={styles.field}>
+                    <TextInput
+                      style={styles.textinput}
+                      label="Email"
+                      keyboardType="email-address"
+                      value={this.state.email}
+                      onChangeText={this.onChangeField('email')}
+                    />
+                  </View>
+                </View>
+              </View>
+            </>
+          </TouchableWithoutFeedback>
+          <FooterButton text="Отправить" onPressButton={this.onPressButton} />
         </SafeAreaView>
       </StyleProvider>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewAddRatingStepScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ReviewAddRatingStepScreen);
