@@ -245,11 +245,9 @@ const styles = StyleSheet.create({
     marginBottom: 36,
   },
   textinput: {
-    height: 40,
+    height: Platform.OS === 'ios' ? 40 : 'auto',
     borderColor: '#d8d8d8',
-    borderBottomWidth: 0,
-    padding: 0,
-    margin: 0,
+    borderBottomWidth: 1,
     color: '#222b45',
     fontSize: 18,
   },
