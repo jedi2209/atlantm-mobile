@@ -49,8 +49,7 @@ const styles = StyleSheet.create({
   },
   segment: {
     marginHorizontal: styleConst.ui.horizontalGap,
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 24,
   },
   sectionTitle: {
     letterSpacing: styleConst.ui.letterSpacing,
@@ -83,29 +82,29 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   tabTextActive: {
-    color: '#0061ED',
+    color: styleConst.new.blueHeader,
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
     fontSize: 20,
   },
   tabButton: {
-    borderColor: '#fff',
+    borderColor: 'transparent',
     flex: 1,
     justifyContent: 'center',
     color: '#141414',
     paddingLeft: 0,
     paddingRight: 0,
+    height: 45,
   },
   tabButtonActive: {
     backgroundColor: 'transparent',
-    borderBottomColor: '#0061ED',
-    borderTopColor: 'transparent',
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
+    borderColor: 'transparent',
+    borderBottomColor: styleConst.new.blueHeader,
     flex: 1,
     justifyContent: 'center',
     paddingLeft: 0,
     paddingRight: 0,
+    height: 45,
   },
 });
 
@@ -239,7 +238,7 @@ class CarHistoryDetailsScreen extends Component {
     console.log('== CarHistoryDetails ==');
 
     if (isFetchCarHistoryDetails) {
-      return <SpinnerView />;
+      return <SpinnerView containerStyle={{backgroundColor: '#fff'}} />;
     }
 
     const works = get(details, 'works');
@@ -253,8 +252,6 @@ class CarHistoryDetailsScreen extends Component {
             <Segment style={styles.segment}>
               {works ? (
                 <Button
-                  first
-                  last={!parts}
                   active={isActiveWorksTab}
                   onPress={this.selectWorksTab}
                   style={
@@ -270,8 +267,6 @@ class CarHistoryDetailsScreen extends Component {
               ) : null}
               {parts ? (
                 <Button
-                  first={!works}
-                  last
                   active={isActivePartsTab}
                   onPress={this.selectPartsTab}
                   style={

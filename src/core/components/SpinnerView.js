@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const SpinnerView = ({ text }) => (
-  <SafeAreaView style={styles.spinnerContainer} >
+const SpinnerView = ({ text, containerStyle }) => (
+  <SafeAreaView style={[styles.spinnerContainer, containerStyle]} >
     <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
     { text ? <Text style={styles.text}>{text}</Text> : null }
   </SafeAreaView>

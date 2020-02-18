@@ -51,14 +51,14 @@ const SearchStack = {
 SearchStack.navigationOptions = ({navigation}) => {
   return {
     tabBarLabel: 'Поиск',
-    tabBarIcon: ({focused}) => (
+    tabBarIcon: ({tintColor}) => (
       <Icon
         name="search"
         type="FontAwesome5"
         style={[
           styles.shadow,
           {
-            color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
+            color: tintColor,
           },
         ]}
       />
@@ -66,129 +66,24 @@ SearchStack.navigationOptions = ({navigation}) => {
   };
 };
 
-const BottomTabNavigation = createBottomTabNavigator({
-  Contact: {
-    screen: createStackNavigator({
-      Home: {screen: ContactsScreen},
-      InfoList: {screen: InfoListScreen},
-      InfoPostScreen: {screen: InfoPostScreen},
-    }),
-    navigationOptions: {
-      tabBarLabel: 'Автоцентр',
-      tabBarIcon: ({focused}) => (
-        <Icon
-          name="building"
-          type="FontAwesome5"
-          style={[
-            styles.shadow,
-            {
-              color: focused
-                ? styleConst.new.blueHeader
-                : styleConst.new.passive,
-            },
-          ]}
-        />
-      ),
-      tabBarOnPress: ({navigation}) => {
-        navigation.popToTop();
-        navigation.navigate(navigation.state.routeName);
-      },
-    },
-  },
-  Search: SearchStack,
-  Profile: {
-    screen: createStackNavigator({
-      ProfileScreenInfo: {screen: AuthContnainer},
-      ProfileSettingsScreen: {screen: ProfileSettingsScreen},
-      TOHistore: {screen: TOHistore},
-      CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
-      BonusScreen: {screen: BonusScreen},
-      BonusScreenInfo: {screen: BonusScreenInfo},
-    }),
-    navigationOptions: () => ({
-      tabBarLabel: 'Кабинет',
-      tabBarIcon: ({focused}) => (
-        <Icon
-          name="user"
-          type="FontAwesome5"
-          style={{
-            fontSize: 24,
-            color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
-          }}
-        />
-      ),
-      tabBarOnPress: ({navigation}) => {
-        navigation.popToTop();
-        navigation.navigate(navigation.state.routeName);
-      },
-    }),
-  },
-  Service: {
-    screen: createStackNavigator({
-      ApplicationModalScreen: {screen: ApplicationModalScreen},
-    }),
-    navigationOptions: ({navigation}) => {
-      return {
-        tabBarOnPress: () =>
-          Alert.alert(
-            'Выберите заявку',
-            'Какую заявку Вы хотите отправить?',
-            [
-              {
-                text: 'На обратный звонок',
-                onPress: () => navigation.navigate('CallMeBackScreen'),
-              },
-              {
-                text: 'На СТО',
-                onPress: () => navigation.navigate('ServiceScreen'),
-              },
-              {
-                text: 'Отмена',
-                onPress: () => console.log('OK Pressed'),
-                style: 'cancel',
-              },
-            ],
-            {cancelable: false},
-          ),
-        // store.dispatch(actionToggleModal('application')),
-        tabBarLabel: 'Заявка',
-        tabBarIcon: ({focused}) => (
+const BottomTabNavigation = createBottomTabNavigator(
+  {
+    Contact: {
+      screen: createStackNavigator({
+        Home: {screen: ContactsScreen},
+        InfoList: {screen: InfoListScreen},
+        InfoPostScreen: {screen: InfoPostScreen},
+      }),
+      navigationOptions: {
+        tabBarLabel: 'Автоцентр',
+        tabBarIcon: ({tintColor}) => (
           <Icon
-            name="comments"
+            name="building"
             type="FontAwesome5"
             style={[
               styles.shadow,
               {
-                color: focused
-                  ? styleConst.new.blueHeader
-                  : styleConst.new.passive,
-              },
-            ]}
-          />
-        ),
-      };
-    },
-  },
-  More: {
-    screen: createStackNavigator({
-      MoreScreen: {screen: MoreScreen},
-      UsedCarListScreen: {
-        screen: UsedCarListScreen,
-      },
-    }),
-    navigationOptions: () => {
-      return {
-        tabBarLabel: 'Меню',
-        tabBarIcon: ({focused}) => (
-          <Icon
-            name="bars"
-            type="FontAwesome5"
-            style={[
-              styles.shadow,
-              {
-                color: focused
-                  ? styleConst.new.blueHeader
-                  : styleConst.new.passive,
+                color: tintColor,
               },
             ]}
           />
@@ -197,10 +92,119 @@ const BottomTabNavigation = createBottomTabNavigator({
           navigation.popToTop();
           navigation.navigate(navigation.state.routeName);
         },
-      };
+      },
+    },
+    Search: SearchStack,
+    Profile: {
+      screen: createStackNavigator({
+        ProfileScreenInfo: {screen: AuthContnainer},
+        ProfileSettingsScreen: {screen: ProfileSettingsScreen},
+        TOHistore: {screen: TOHistore},
+        CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
+        BonusScreen: {screen: BonusScreen},
+        BonusScreenInfo: {screen: BonusScreenInfo},
+      }),
+      navigationOptions: () => ({
+        tabBarLabel: 'Кабинет',
+        tabBarIcon: ({tintColor}) => (
+          <Icon
+            name="user"
+            type="FontAwesome5"
+            style={[
+              styles.shadow,
+              {
+                color: tintColor,
+              },
+            ]}
+          />
+        ),
+        tabBarOnPress: ({navigation}) => {
+          navigation.popToTop();
+          navigation.navigate(navigation.state.routeName);
+        },
+      }),
+    },
+    Service: {
+      screen: createStackNavigator({
+        ApplicationModalScreen: {screen: ApplicationModalScreen},
+      }),
+      navigationOptions: ({navigation}) => {
+        return {
+          tabBarOnPress: () =>
+            Alert.alert(
+              'Выберите заявку',
+              'Какую заявку Вы хотите отправить?',
+              [
+                {
+                  text: 'На обратный звонок',
+                  onPress: () => navigation.navigate('CallMeBackScreen'),
+                },
+                {
+                  text: 'На СТО',
+                  onPress: () => navigation.navigate('ServiceScreen'),
+                },
+                {
+                  text: 'Отмена',
+                  onPress: () => console.log('OK Pressed'),
+                  style: 'cancel',
+                },
+              ],
+              {cancelable: false},
+            ),
+          // store.dispatch(actionToggleModal('application')),
+          tabBarLabel: 'Заявка',
+          tabBarIcon: ({tintColor}) => (
+            <Icon
+              name="comments"
+              type="FontAwesome5"
+              style={[
+                styles.shadow,
+                {
+                  color: tintColor,
+                },
+              ]}
+            />
+          ),
+        };
+      },
+    },
+    More: {
+      screen: createStackNavigator({
+        MoreScreen: {screen: MoreScreen},
+        UsedCarListScreen: {
+          screen: UsedCarListScreen,
+        },
+      }),
+      navigationOptions: () => {
+        return {
+          tabBarLabel: 'Меню',
+          tabBarIcon: ({tintColor}) => (
+            <Icon
+              name="bars"
+              type="FontAwesome5"
+              style={[
+                styles.shadow,
+                {
+                  color: tintColor,
+                },
+              ]}
+            />
+          ),
+          tabBarOnPress: ({navigation}) => {
+            navigation.popToTop();
+            navigation.navigate(navigation.state.routeName);
+          },
+        };
+      },
     },
   },
-});
+  {
+    tabBarOptions: {
+      activeTintColor: styleConst.new.blueHeader,
+      inactiveTintColor: styleConst.new.passive,
+    },
+  },
+);
 
 BottomTabNavigation.navigationOptions = () => ({
   header: null,
