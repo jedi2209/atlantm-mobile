@@ -16,7 +16,7 @@ const TEXT_EMPTY = 'Нет отзывов для отображения';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 1,
+    marginTop: 7,
   },
 });
 

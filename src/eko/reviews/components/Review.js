@@ -14,19 +14,45 @@ const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 
 const styles = StyleSheet.create({
-  item: {
+  itemFull: {
     paddingTop: 10,
     paddingBottom: 3,
     minHeight: 150,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.1,
+    shadowRadius: 1.5,
+    elevation: 3,
+    backgroundColor: 'white',
+    marginBottom: 10,
+    marginHorizontal: 7,
+    borderRadius: 5,
+    padding: 10,
+  },
+  itemInList: {
+    paddingTop: 10,
+    paddingBottom: 3,
+    minHeight: 150,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0.1,
+    shadowRadius: 1.5,
+    elevation: 3,
+    backgroundColor: 'white',
+    marginBottom: 10,
+    marginHorizontal: 7,
+    borderRadius: 5,
+    padding: 10,
   },
   name: {
     fontSize: 20,
-    fontFamily: styleConst.font.regular,
+    fontFamily: styleConst.font.light,
     letterSpacing: styleConst.ui.letterSpacing,
   },
   ratingRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 12,
   },
   dash: {
     marginLeft: 2,
@@ -59,7 +85,7 @@ const styles = StyleSheet.create({
     color: styleConst.color.red,
   },
   reviewText: {
-    fontFamily: styleConst.font.regular,
+    fontFamily: styleConst.font.light,
     letterSpacing: styleConst.ui.letterSpacing,
     marginTop: -2,
     fontSize: 16,
@@ -115,7 +141,7 @@ export default class Review extends Component {
     }
 
     return (
-      <View style={[styles.ratingRow, styles.row]}>
+      <View style={[styles.row, styles.ratingRow]}>
         {grade ? <RatingStars rating={grade} itemId={id} /> : null}
         {grade && date ? <Text style={styles.dash}>—</Text> : null}
         {date ? (
@@ -162,7 +188,9 @@ export default class Review extends Component {
     const isVisited = this.checkVisited();
 
     return (
-      <ListItem onPress={inList ? this.onPress : null} style={styles.item}>
+      <ListItem
+        onPress={inList ? this.onPress : null}
+        style={inList ? styles.itemInList : styles.itemFull}>
         <Body>
           {this.renderName(name, isVisited)}
           {this.renderRatingAndDate(grade, date, id)}

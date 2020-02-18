@@ -29,6 +29,11 @@ export default StyleSheet.create({
   },
   listItemContainer: {
     backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.3,
+    shadowRadius: 3.5,
+    elevation: 3,
   },
   listItemContainerFirst: {
     borderTopWidth: styleConst.ui.borderWidth,

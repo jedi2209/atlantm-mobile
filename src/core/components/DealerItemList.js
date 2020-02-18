@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';
-import { ListItem, Body, Right, Icon, StyleProvider, Text } from 'native-base';
+import {ListItem, Body, Right, Icon, StyleProvider, Text} from 'native-base';
 
 // component
 import Imager from '../components/Imager';
@@ -43,7 +43,7 @@ export default class DealerItemList extends Component {
     brands: PropTypes.array,
     returnScreen: PropTypes.string,
     goBack: PropTypes.bool,
-  }
+  };
 
   static defaultProps = {
     city: null,
@@ -51,24 +51,20 @@ export default class DealerItemList extends Component {
     brands: [],
     returnScreen: null,
     goBack: false,
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
     return this.props.name !== nextProps.name;
   }
 
   onPressDealer = () => {
-    const {
-      goBack,
-      navigation,
-      returnScreen,
-    } = this.props;
+    const {goBack, navigation, returnScreen} = this.props;
 
-    return navigation.navigate('ChooseDealerScreen', { returnScreen, goBack });
-  }
+    return navigation.navigate('ChooseDealerScreen', {returnScreen, goBack});
+  };
 
   render() {
-    const { city, name, brands } = this.props;
+    const {city, name, brands} = this.props;
 
     return (
       <StyleProvider style={getTheme()}>
@@ -76,31 +72,27 @@ export default class DealerItemList extends Component {
           <ListItem
             last
             onPress={this.onPressDealer}
-            style={stylesList.listItem}
-          >
+            style={stylesList.listItem}>
             <Body>
-              {city && city.name ? <Text style={styles.city}>{city.name}</Text> : null}
+              {city && city.name ? (
+                <Text style={styles.city}>{city.name}</Text>
+              ) : null}
               {name ? <Text style={styles.name}>{name}</Text> : null}
             </Body>
             <Right>
-              <View style={styles.brands} >
-                {
-                  brands.map(brand => {
-                    return (
-                      <Imager
-                        resizeMode="contain"
-                        key={brand.id}
-                        style={styles.brandLogo}
-                        source={{ uri: brand.logo }}
-                      />
-                    );
-                  })
-                }
+              <View style={styles.brands}>
+                {brands.map(brand => {
+                  return (
+                    <Imager
+                      resizeMode="contain"
+                      key={brand.id}
+                      style={styles.brandLogo}
+                      source={{uri: brand.logo}}
+                    />
+                  );
+                })}
               </View>
-              <Icon
-                name="arrow-forward"
-                style={stylesList.iconArrow}
-              />
+              <Icon name="arrow-forward" style={stylesList.iconArrow} />
             </Right>
           </ListItem>
         </View>

@@ -83,6 +83,7 @@ export default class CarList extends Component {
     const {itemScreen, navigation, prices} = this.props;
     return (
       <CarListItem
+        resizeMode={this.props.resizeMode}
         key={item.hash}
         currency={this.props.prices.curr.name}
         car={item}
