@@ -37,6 +37,15 @@ export default StyleSheet.create({
     borderBottomWidth: 0,
     color: 'red',
   },
+  transparentHeaderTitle: {
+    fontSize: 17,
+    fontWeight: '600',
+    alignSelf: 'center',
+    alignItems: 'center',
+    fontFamily: styleConst.font.regular,
+    letterSpacing: styleConst.ui.letterSpacing,
+    color: styleConst.new.blueHeader,
+  },
   blueHeaderTitle: {
     fontSize: 17,
     fontWeight: '600',
