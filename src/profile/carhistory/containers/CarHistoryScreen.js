@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
     marginTop: 5,
     fontWeight: '400',
-
     paddingBottom: 10,
   },
 
@@ -179,7 +178,7 @@ class CarHistoryScreen extends Component {
         <ListItem
           last={isLast}
           style={[stylesList.listItem, stylesList.listItemReset]}>
-          <Body>
+          <Body style={{width: '100%'}}>
             <Item style={stylesList.inputItem} fixedLabel>
               <Label style={stylesList.label}>{label}</Label>
               <View style={stylesList.listItemValueContainer}>
