@@ -43,7 +43,7 @@ import {get, find} from 'lodash';
 import PropTypes from 'prop-types';
 import Amplitude from '@utils/amplitude-analytics';
 import styleConst from '@core/style-const';
-import stylesHeader from '@core/components/Header/style';
+// import stylesHeader from '@core/components/Header/style';
 //import stylesFooter from '@core/components/Footer/style';
 import numberWithGap from '@utils/number-with-gap';
 import showPrice from '@utils/price';
@@ -118,32 +118,24 @@ class NewCarItemScreen extends Component {
   }
 
   static navigationOptions = ({navigation}) => ({
-    headerStyle: stylesHeader.blueHeader,
-    headerTitle: (
-      <Text
-        style={stylesHeader.blueHeaderTitle}
-        ellipsizeMode="tail"
-        numberOfLines={1}>
-        {console.log('navigation', navigation)}
-        {navigation.state.params.carDetails
-          ? navigation.state.params.carDetails.brand.name +
-            ' ' +
-            navigation.state.params.carDetails.model.name +
-            ' ' +
-            navigation.state.params.carDetails.complectation.name
-          : null}
-      </Text>
-    ),
+    headerTransparent: true,
     headerLeft: (
-      <View>
-        <HeaderIconBack
-          theme="white"
-          navigation={navigation}
-          returnScreen="NewCarListScreen"
-        />
-      </View>
+      <HeaderIconBack
+        theme="white"
+        ContainerStyle={{
+          backgroundColor: 'rgba(0,0,0, 0.2)',
+          paddingHorizontal: 7,
+          paddingVertical: 5,
+          borderRadius: 50,
+          marginLeft: 5,
+        }}
+        IconStyle={{
+          marginLeft: 10,
+        }}
+        navigation={navigation}
+        returnScreen="NewCarListScreen"
+      />
     ),
-    headerRight: <View />,
   });
 
   componentDidMount() {
@@ -192,7 +184,6 @@ class NewCarItemScreen extends Component {
   };
 
   onPressOrder = () => {
-    console.log('cliced me');
     const {navigation, filterData, carDetails} = this.props;
     const currency = get(this.props.navigation, 'state.params.currency');
 
@@ -388,11 +379,15 @@ class NewCarItemScreen extends Component {
 
   onPressMap = () => {
     const {navigation, carDetails} = this.props;
+    let coords = get(carDetails, 'location.coords');
+    if (!coords) {
+      coords = get(carDetails, 'coords');
+    }
     navigation.navigate('MapScreen', {
       name: get(carDetails, 'dealer.name'),
       city: get(carDetails, 'city.name'),
       address: get(carDetails, 'dealer.name'),
-      coords: get(carDetails, 'coords'),
+      coords: coords,
     });
   };
 
@@ -458,7 +453,7 @@ class NewCarItemScreen extends Component {
         <SafeAreaView style={styles.safearea}>
           <StatusBar barStyle="light-content" />
           <Content>
-            <View style={{ marginTop: -40 }}>
+            <View style={{marginTop: -20}}>
               <PhotoSlider
                 photos={photos}
                 onPressItem={this.onPressPhoto}
@@ -469,13 +464,21 @@ class NewCarItemScreen extends Component {
             <View
               style={{
                 position: 'relative',
-                top: -60,
-                marginBottom: -60,
+                top: -20,
+                marginBottom: -20,
                 backgroundColor: '#fff',
                 borderTopLeftRadius: 30,
                 borderTopRightRadius: 30,
                 paddingTop: 20,
                 paddingBottom: 14,
+                shadowColor: '#000',
+                shadowOffset: {
+                  width: 0,
+                  height: -2,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+                elevation: 5,
               }}>
               <View
                 style={{
@@ -575,6 +578,7 @@ class NewCarItemScreen extends Component {
               style={{
                 borderBottomColor: '#d5d5e0',
                 borderBottomWidth: 1,
+                marginBottom: 90,
               }}>
               <Accordion
                 dataArray={[
@@ -776,15 +780,6 @@ class NewCarItemScreen extends Component {
               />
             </View>
           </Content>
-          {photoViewerItems.length ? (
-            <PhotoViewer
-              index={photoViewerIndex}
-              visible={photoViewerVisible}
-              items={photoViewerItems}
-              onChange={this.onChangePhotoIndex}
-              onPressClose={this.onClosePhoto}
-            />
-          ) : null}
           <Footer style={stylesFooter.footer}>
             {this.renderPriceFooter({
               carDetails,
@@ -799,6 +794,15 @@ class NewCarItemScreen extends Component {
               <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
             </Button>
           </Footer>
+          {photoViewerItems.length ? (
+            <PhotoViewer
+              index={photoViewerIndex}
+              visible={photoViewerVisible}
+              items={photoViewerItems}
+              onChange={this.onChangePhotoIndex}
+              onPressClose={this.onClosePhoto}
+            />
+          ) : null}
         </SafeAreaView>
       </StyleProvider>
     );
@@ -814,20 +818,48 @@ const stylesFooter = StyleSheet.create({
   footer: {
     height: 50,
     borderTopWidth: 0,
+    paddingHorizontal: '5%',
+    backgroundColor: 'rgba(0,0,0,0)',
+    marginBottom: 20,
+    position: 'absolute',
+    bottom: 0,
   },
-  footerFilters: {},
   button: {
-    width: '50%',
-    height: 50,
+    width: '55%',
+    height: 48,
     display: 'flex',
     flexDirection: 'row',
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
     backgroundColor: styleConst.color.lightBlue,
+    borderColor: styleConst.color.lightBlue,
+    borderWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 5,
+    elevation: 5,
   },
   orderPriceContainer: {
-    height: 50,
-    width: '50%',
+    height: 48,
+    width: '45%',
     display: 'flex',
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
     backgroundColor: styleConst.color.header,
+    borderColor: styleConst.color.header,
+    borderWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 5,
+    elevation: 5,
   },
   orderPriceContainerNotSale: {
     flexDirection: 'row',

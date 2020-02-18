@@ -44,9 +44,11 @@ export default StyleSheet.create({
   },
   descrContainer: {
     padding: styleConst.ui.horizontalGap,
+    marginBottom: 90,
   },
   descr: {
     lineHeight: 18,
+    fontFamily: styleConst.font.light,
   },
   sectionTitle: {
     letterSpacing: styleConst.ui.letterSpacing,
@@ -174,14 +176,16 @@ export default StyleSheet.create({
   },
   mapCardTitle: {
     color: '#a8abbe',
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: 14,
+    fontWeight: '400',
+    fontFamily: styleConst.font.regular,
   },
   mapCardDealer: {
     color: '#2a2a43',
     fontSize: 14,
-    fontWeight: '600',
+    fontWeight: '400',
     width: '95%',
+    fontFamily: styleConst.font.regular,
   },
   mapCardIcon: {
     fontSize: 40,

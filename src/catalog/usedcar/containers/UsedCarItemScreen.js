@@ -7,6 +7,7 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback,
   StatusBar,
+  StyleSheet,
 } from 'react-native';
 import {
   Col,
@@ -47,7 +48,7 @@ import showPrice from '@utils/price';
 
 // styles
 import styles from './UsedCarItemScreenStyles';
-import stylesFooter from '@core/components/Footer/style';
+// import stylesFooter from '@core/components/Footer/style';
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
   return {
@@ -204,11 +205,15 @@ class UserCarItemScreen extends Component {
 
   onPressMap = () => {
     const {navigation, carDetails} = this.props;
+    let coords = get(carDetails, 'location.coords');
+    if (!coords) {
+      coords = get(carDetails, 'coords');
+    }
     navigation.navigate('MapScreen', {
       name: get(carDetails, 'dealer.name'),
       city: get(carDetails, 'city.name'),
       address: get(carDetails, 'dealer.name'),
-      coords: get(carDetails, 'coords'),
+      coords: coords,
     });
   };
 
@@ -264,12 +269,12 @@ class UserCarItemScreen extends Component {
             <View style={styles.gallery}>
               <PhotoSlider
                 resizeMode="cover"
+                dotColor="#fff"
                 photos={photos}
                 onPressItem={this.onPressPhoto}
                 paginationStyle={{marginBottom: 15}}
                 onIndexChanged={this.onChangePhotoIndex}
               />
-
               <View style={{backgroundColor: '#fff'}}>
                 <View
                   style={{
@@ -281,6 +286,14 @@ class UserCarItemScreen extends Component {
                     borderTopRightRadius: 30,
                     paddingTop: 20,
                     paddingBottom: 14,
+                    shadowColor: '#000',
+                    shadowOffset: {
+                      width: 0,
+                      height: -2,
+                    },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 3.84,
+                    elevation: 5,
                   }}>
                   <View
                     style={{
@@ -330,7 +343,10 @@ class UserCarItemScreen extends Component {
                 ) : null}
 
                 <Accordion
-                  style={{borderBottomColor: '#d5d5e0', borderBottomWidth: 1}}
+                  style={{
+                    borderBottomColor: '#d5d5e0',
+                    borderBottomWidth: 1,
+                  }}
                   dataArray={[
                     {
                       title: 'Характеристики',
@@ -535,7 +551,6 @@ class UserCarItemScreen extends Component {
                     return (
                       <View
                         style={{
-                          // height: 200,
                           backgroundColor: '#fff',
                           paddingHorizontal: 16,
                         }}>
@@ -553,15 +568,6 @@ class UserCarItemScreen extends Component {
               </View>
             </View>
           </Content>
-          {photoViewerItems.length ? (
-            <PhotoViewer
-              index={photoViewerIndex}
-              visible={photoViewerVisible}
-              items={photoViewerItems}
-              onChange={this.onChangePhotoIndex}
-              onPressClose={this.onClosePhoto}
-            />
-          ) : null}
           <Footer style={stylesFooter.footer}>
             <View
               style={[
@@ -583,11 +589,73 @@ class UserCarItemScreen extends Component {
               <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
             </Button>
           </Footer>
+          {photoViewerItems.length ? (
+            <PhotoViewer
+              index={photoViewerIndex}
+              visible={photoViewerVisible}
+              items={photoViewerItems}
+              onChange={this.onChangePhotoIndex}
+              onPressClose={this.onClosePhoto}
+            />
+          ) : null}
         </SafeAreaView>
       </StyleProvider>
     );
   }
 }
+
+const stylesFooter = StyleSheet.create({
+  footer: {
+    height: 50,
+    borderTopWidth: 0,
+    paddingHorizontal: '5%',
+    backgroundColor: 'rgba(0,0,0,0)',
+    marginBottom: 20,
+    position: 'absolute',
+    bottom: 0,
+  },
+  button: {
+    width: '55%',
+    height: 48,
+    display: 'flex',
+    flexDirection: 'row',
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+    backgroundColor: styleConst.color.lightBlue,
+    borderColor: styleConst.color.lightBlue,
+    borderWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  orderPriceContainer: {
+    height: 48,
+    width: '45%',
+    display: 'flex',
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    backgroundColor: styleConst.color.header,
+    borderColor: styleConst.color.header,
+    borderWidth: 1,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.48,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  orderPriceContainerNotSale: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+});
 
 export default connect(
   mapStateToProps,
