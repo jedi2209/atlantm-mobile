@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.18,
     shadowRadius: 1,
-    elevation: 1,
+    elevation: 3,
   },
   card: {
     flexDirection: 'column',
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     opacity: 1,
     height: 50,
-    width: '60%',
+    width: '80%',
     borderTopLeftRadius: 5,
   },
   titleContainer: {
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     color: styleConst.color.greyText3,
   },
   year: {
-    color: '#A8ABBE',
+    color: '#fff',
     fontSize: 12,
     zIndex: 2,
     marginVertical: 5,
@@ -213,7 +213,8 @@ export default class CarListItem extends Component {
             end={{x: 1, y: 0}}
             useAngle
             angle={itemScreen === 'NewCarItemScreen' ? 60 : 170}
-            colors={['rgba(0, 0, 0, 0.7)', 'rgba(0, 0, 0, 0)']}
+            // colors={['rgba(15, 102, 178, 1)', 'rgba(0, 97, 237, 0)']}
+            colors={['rgba(51, 51, 51, 0.75)', 'rgba(51, 51, 51, 0)']}
             style={[
               styles.titleBackground,
               itemScreen === 'NewCarItemScreen' ? {width: '100%'} : null,

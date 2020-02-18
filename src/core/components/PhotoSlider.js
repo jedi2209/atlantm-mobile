@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import styleConst from '@core/style-const';
 
 const {width} = Dimensions.get('window');
-const height = DeviceInfo.isTablet() ? 260 : 300;
+const height = 300;
 const styles = StyleSheet.create({
   photoSlider: {
     width,
@@ -127,11 +127,11 @@ export default class PhotoSlider extends Component {
         containerStyle={styles.container}
         paginationStyle={[
           {
-            marginBottom: 46,
+            marginBottom: 5,
           },
           this.props.paginationStyle,
         ]}
-        dotColor="white"
+        dotColor={this.props.dotColor ? this.props.dotColor : 'rgba(0,0,0,.2)'}
         showsButtons={false}
         autoplay={false}
         showsPagination={true}
