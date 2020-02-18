@@ -292,10 +292,8 @@ class ReviewAddRatingStepScreen extends Component {
               selectRatingVariant={actionSelectAddReviewRatingVariant}
             />
             {this.renderPublicAgree()}
-          </Content>
 
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <View style={styles.container}>
                 <View style={styles.group}>
                   <View style={styles.field}>
@@ -327,8 +325,8 @@ class ReviewAddRatingStepScreen extends Component {
                   </View>
                 </View>
               </View>
-            </>
-          </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>
+          </Content>
           <FooterButton text="Отправить" onPressButton={this.onPressButton} />
         </SafeAreaView>
       </StyleProvider>
