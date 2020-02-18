@@ -40,7 +40,7 @@ import styleConst from '@core/style-const';
 import stylesHeader from '@core/components/Header/style';
 
 const isAndroid = Platform.OS === 'android';
-import isIPhoneX from '@utils/is_iphone_x';
+// import isIPhoneX from '@utils/is_iphone_x';
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   safearea: {
@@ -121,11 +121,11 @@ class MapScreen extends Component {
     const {availableNaviApps, actionSetAvailableNaviApps} = this.props;
 
     const {latitude, longitude} = this.getPositions();
-    const {name, city, adress} = this.getDealerDetails();
+    const {name, city, address, coords} = this.getDealerDetails();
 
     if (isAndroid) {
       return this.openDirections(
-        'geo:0,0?q=' + name + ', ' + city + ', ' + adress,
+        'geo:0,0?q=' + name + ', ' + city + ', ' + address,
       );
     }
 
@@ -143,7 +143,9 @@ class MapScreen extends Component {
     let city;
     let address;
 
-    if (get(navigation, 'state.params.coords')) {
+    let coords = get(navigation, 'state.params.coords');
+
+    if (coords) {
       name = get(navigation, 'state.params.name');
       city = get(navigation, 'state.params.city');
       address = get(navigation, 'state.params.address');
@@ -151,12 +153,14 @@ class MapScreen extends Component {
       name = get(dealerSelected, 'name');
       city = get(dealerSelected, 'city.name');
       address = get(dealerSelected, 'address');
+      coords = get(dealerSelected, 'coords');
     }
 
     return {
       name,
       city,
       address,
+      coords,
     };
   };
 
@@ -245,8 +249,13 @@ class MapScreen extends Component {
     const {availableNaviApps, dealerSelected} = this.props;
 
     const navApp = availableNaviApps[index];
-    const latitude = Number(get(dealerSelected, 'coords.lat'));
-    const longitude = Number(get(dealerSelected, 'coords.lon'));
+
+    const {name, city, address, coords} = this.getDealerDetails();
+
+    console.log('coords', coords);
+
+    const latitude = Number(coords.lat);
+    const longitude = Number(coords.lon);
 
     const baseParams = {latitude, longitude};
 
@@ -330,7 +339,7 @@ class MapScreen extends Component {
 
   render() {
     // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
+    // window.atlantmNavigation = this.props.navigation;
 
     const {
       dealerSelected,

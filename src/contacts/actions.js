@@ -4,22 +4,21 @@ import {
   CALL_ME__REQUEST,
   CALL_ME__SUCCESS,
   CALL_ME__FAIL,
-
   CONTACTS_MAP_AVAILABLE_NAVIAPPS__SET,
   CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__REQUEST,
   CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__DONE,
 } from './actionTypes';
 
-export const callMe = (props) => {
+export const callMe = props => {
   return dispatch => {
     dispatch({
       type: CALL_ME__REQUEST,
-      payload: { ...props },
+      payload: {...props},
     });
 
     return API.callMe(props)
       .then(res => {
-        const { error, status } = res;
+        const {error, status} = res;
 
         if (status !== 'success') {
           return dispatch({
@@ -31,7 +30,7 @@ export const callMe = (props) => {
           });
         }
 
-        return dispatch({ type: CALL_ME__SUCCESS });
+        return dispatch({type: CALL_ME__SUCCESS});
       })
       .catch(error => {
         return dispatch({
