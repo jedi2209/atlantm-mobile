@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   date: {
-    color: '#0061ED',
+    color: styleConst.new.blueHeader,
     fontSize: 18,
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
@@ -303,7 +303,8 @@ class CarHistoryScreen extends Component {
         <Col style={styles.sectionValue}>
           <Text
             style={
-              ([styles.sectionValueText], color ? {color: '#0061ED'} : null)
+              ([styles.sectionValueText],
+              color ? {color: styleConst.new.blueHeader} : null)
             }>
             {value}
           </Text>
@@ -356,13 +357,7 @@ class CarHistoryScreen extends Component {
     const isLevel3 = theme === 'itemLevel3';
 
     return (
-      <View
-        key={key}
-        style={[
-          stylesList.listItemContainer,
-          styles[theme],
-          {marginHorizontal: 10},
-        ]}>
+      <View key={key} style={[stylesList.listItemContainer, styles[theme]]}>
         <ListItem
           icon
           last
@@ -382,7 +377,7 @@ class CarHistoryScreen extends Component {
     const {carHistory, isFetchCarHistory} = this.props;
 
     if (isFetchCarHistory) {
-      return <SpinnerView />;
+      return <SpinnerView containerStyle={{backgroundColor: '#fff'}} />;
     }
 
     if (isEmpty(carHistory) || !carHistory.items) {
@@ -397,7 +392,7 @@ class CarHistoryScreen extends Component {
     return (
       <ScrollView style={{backgroundColor: '#fff'}}>
         <StatusBar barStyle="dark-content" />
-        <View style={{backgroundColor: '#fff'}}>
+        <View>
           <StyleProvider style={getTheme()}>
             <View>
               {Object.keys(get(carHistory, 'items'), []).length

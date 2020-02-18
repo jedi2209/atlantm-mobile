@@ -275,7 +275,7 @@ class ContactsScreen extends Component {
       <StyleProvider style={getTheme()}>
         <View style={styles.safearea}>
           <StatusBar barStyle="dark-content" />
-          <ScrollView>
+          <ScrollView contentContainerStyle={{paddingBottom: 24}}>
             <Image
               style={styles.imgHero}
               source={{uri: get(dealerSelected, 'img.10000x440')}}
@@ -388,13 +388,13 @@ class ContactsScreen extends Component {
               {list.length ? (
                 <View
                   style={{
-                    marginTop: 0,
+                    marginTop: 16,
                     paddingVertical: 0,
                   }}>
                   <View
                     style={{
                       paddingHorizontal: 20,
-                      paddingVertical: 20,
+                      marginBottom: 20,
                       display: 'flex',
                       flexDirection: 'row',
                       justifyContent: 'space-between',
@@ -406,7 +406,11 @@ class ContactsScreen extends Component {
                       onPress={() => {
                         navigation.navigate('InfoList');
                       }}
-                      style={{color: '#4848FF', fontSize: 12}}>
+                      style={{
+                        color: styleConst.new.blueHeader,
+                        fontSize: 14,
+                        paddingLeft: 24,
+                      }}>
                       Все
                     </Text>
                   </View>
