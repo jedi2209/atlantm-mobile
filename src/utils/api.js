@@ -241,7 +241,7 @@ export default {
       });
     }
 
-    if (filterPrice) {
+    if (filterPrice && filterPrice.min && filterPrice.max) {
       url += `${setParamDivider()}price_from=${filterPrice.min}&price_to=${
         filterPrice.max
       }`;
