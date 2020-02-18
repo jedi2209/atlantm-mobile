@@ -566,6 +566,7 @@ class NewCarFilterScreen extends Component {
             }}>
             {this.state.modelFilter.map(({id, name, checked}) => (
               <View
+                key={'model' + id}
                 style={{
                   marginBottom: 30,
                   width: '50%',

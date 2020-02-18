@@ -54,7 +54,7 @@ const Slide = props => {
     <View style={[styles.item, {height: props.height}]}>
       <TouchableWithoutFeedback onPress={props.onPress}>
         <Image
-          resizeMode="contain"
+          resizeMode={props.resizeMode}
           style={styles.image}
           onLoad={props.loadHandle.bind(null, props.i)}
           source={{
@@ -64,7 +64,13 @@ const Slide = props => {
           }}
         />
       </TouchableWithoutFeedback>
-      {!props.loaded && <ActivityIndicator size="large" color={styleConst.color.blue} style={styles.spinner} />}
+      {!props.loaded && (
+        <ActivityIndicator
+          size="large"
+          color={styleConst.color.blue}
+          style={styles.spinner}
+        />
+      )}
     </View>
   );
 };
@@ -82,6 +88,8 @@ export default class PhotoSlider extends Component {
 
   static propTypes = {
     photos: PropTypes.array,
+    resizeMode: PropTypes.string,
+    paginationStyle: PropTypes.number,
     onPressItem: PropTypes.func,
     onIndexChanged: PropTypes.func,
   };
@@ -117,9 +125,12 @@ export default class PhotoSlider extends Component {
       <Swiper
         id={1}
         containerStyle={styles.container}
-        paginationStyle={{
-          marginBottom: 46,
-        }}
+        paginationStyle={[
+          {
+            marginBottom: 46,
+          },
+          this.props.paginationStyle,
+        ]}
         dotColor="white"
         showsButtons={false}
         autoplay={false}
@@ -132,6 +143,9 @@ export default class PhotoSlider extends Component {
           return (
             <Slide
               onPress={this.props.onPressItem}
+              resizeMode={
+                this.props.resizeMode ? this.props.resizeMode : 'contain'
+              }
               height={this.state.height}
               loadHandle={this.loadHandle}
               loaded={!!this.state.loadQueue[idx]}

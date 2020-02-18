@@ -217,6 +217,7 @@ class NewCarListScreen extends Component {
             pages={pages}
             prices={prices}
             navigation={navigation}
+            resizeMode="contain"
             itemScreen="NewCarItemScreen"
             dataHandler={this.fetchNewCar}
             dealerSelected={dealerSelected}

@@ -263,8 +263,10 @@ class UserCarItemScreen extends Component {
           <Content>
             <View style={styles.gallery}>
               <PhotoSlider
+                resizeMode="cover"
                 photos={photos}
                 onPressItem={this.onPressPhoto}
+                paginationStyle={{marginBottom: 15}}
                 onIndexChanged={this.onChangePhotoIndex}
               />
 
@@ -272,8 +274,8 @@ class UserCarItemScreen extends Component {
                 <View
                   style={{
                     position: 'relative',
-                    top: -60,
-                    marginBottom: -60,
+                    top: -27,
+                    marginBottom: -27,
                     backgroundColor: '#fff',
                     borderTopLeftRadius: 30,
                     borderTopRightRadius: 30,

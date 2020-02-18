@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Text, View, StyleSheet, TouchableHighlight} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 // components
 import Imager from '../../core/components/Imager';
@@ -13,14 +14,12 @@ import styleConst from '../../core/style-const';
 import {Dimensions} from 'react-native';
 
 const deviceWidth = Dimensions.get('window').width;
-const cardWidth = deviceWidth - 60 + 20;
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 20,
+    marginHorizontal: '3%',
     marginVertical: 10,
     backgroundColor: '#fff',
-    padding: 15,
     borderRadius: 5,
     shadowColor: '#c1c1c1',
     shadowOffset: {
@@ -33,23 +32,51 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: 'column',
+    paddingBottom: 15,
   },
   image: {
-    width: cardWidth,
-    height: 200,
-    marginLeft: -15,
-    marginRight: -15,
+    height: 220,
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
+  },
+  titleBackgroundold: {
+    flex: 1,
+    position: 'absolute',
+    zIndex: 1,
+    backgroundColor: 'black',
+    opacity: 0.5,
+    height: 50,
+    width: '100%',
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
+  },
+  titleBackground: {
+    flex: 1,
+    zIndex: 1,
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    opacity: 1,
+    height: 50,
+    width: '60%',
+    borderTopLeftRadius: 5,
   },
   titleContainer: {
     flex: 1,
+    zIndex: 2,
+    position: 'absolute',
+    marginVertical: 5,
+    marginHorizontal: 15,
   },
   priceContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
+    marginHorizontal: 15,
     marginBottom: 5,
     marginTop: 10,
   },
   priceDefault: {
     textDecorationLine: 'line-through',
+    fontSize: 12,
+    marginTop: 4,
   },
   priceSpecial: {
     color: '#D0021B',
@@ -71,13 +98,15 @@ const styles = StyleSheet.create({
   year: {
     color: '#A8ABBE',
     fontSize: 12,
+    zIndex: 2,
+    marginVertical: 5,
   },
   title: {
-    color: '#2A2A43',
+    color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
-    marginVertical: 5,
-    marginBottom: 10,
+    zIndex: 2,
+    // marginBottom: 10,
   },
   price: {
     color: '#2A2A43',
@@ -124,58 +153,99 @@ export default class CarListItem extends Component {
 
     return (
       <View style={styles.priceContainer}>
-        <Text style={[styles.price, isSale ? styles.priceDefault : '']}>
-          {`${numberWithGap(
-            get(car, 'price.app.standart'),
-          )} ${currency.toUpperCase()}`}
-        </Text>
         {isSale ? (
-          <Text style={[styles.price, styles.priceSpecial]}>{` ${numberWithGap(
+          <Text style={[styles.price, styles.priceSpecial]}>{`${numberWithGap(
             get(car, 'price.app.sale'),
           )} ${currency.toUpperCase()}`}</Text>
         ) : null}
+        <View style={{flexDirection: 'row'}}>
+          <Text style={[styles.price, isSale ? styles.priceDefault : null]}>
+            {`${numberWithGap(
+              get(car, 'price.app.standart'),
+            )} ${currency.toUpperCase()}`}
+          </Text>
+          {isSale ? (
+            <View
+              style={{
+                marginTop: 2,
+                marginHorizontal: 10,
+                paddingHorizontal: 5,
+                paddingVertical: 2,
+                backgroundColor: 'red',
+                borderRadius: 5,
+                textAlign: 'center',
+                alignContent: 'center',
+                width: 65,
+                height: 15,
+              }}>
+              <Text
+                style={{
+                  color: 'white',
+                  fontSize: 10,
+                  lineHeight: 10,
+                }}>
+                Спец.цена
+              </Text>
+            </View>
+          ) : null}
+        </View>
       </View>
     );
   };
 
   render() {
-    const {car, prices, itemScreen} = this.props;
+    const {car, prices, itemScreen, resizeMode} = this.props;
     const modelName = get(car, 'model.name', '');
     const complectation = get(car, 'complectation.name', '');
     const engineVolume = get(car, 'engine.volume.full');
     const mileage = get(car, 'mileage');
     const gearbox = get(car, 'gearbox.name');
     const year = get(car, 'year');
-
+    console.log('itemScreen', itemScreen);
     return (
       <TouchableHighlight
         onPress={this.onPress}
         style={styles.container}
         underlayColor={styleConst.color.select}>
         <View style={styles.card}>
-          {year ? (
-            <View style={styles.extraTextContainer}>
-              <Text style={styles.year}>{`${year} г.в.`}</Text>
-            </View>
-          ) : null}
+          <LinearGradient
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 0}}
+            useAngle
+            angle={itemScreen === 'NewCarItemScreen' ? 60 : 170}
+            colors={['rgba(0, 0, 0, 0.7)', 'rgba(0, 0, 0, 0)']}
+            style={[
+              styles.titleBackground,
+              itemScreen === 'NewCarItemScreen' ? {width: '100%'} : null,
+            ]}
+          />
+          {/* <View style={styles.titleBackgroundold} /> */}
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>
+            <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
               {`${get(car, 'brand.name')} ${modelName || ''} ${complectation}`}
             </Text>
+            {year ? <Text style={styles.year}>{`${year} г.в.`}</Text> : null}
           </View>
           <Imager
-            resizeMode="contain"
-            style={styles.image}
+            resizeMode={resizeMode ? resizeMode : 'cover'}
+            style={[styles.image]}
             source={{
               uri: get(car, 'img.10000x440.0'),
             }}
           />
-          <View style={styles.price}>{this.renderPrice({car, prices})}</View>
+          <View
+            style={[
+              styles.price,
+              itemScreen === 'NewCarItemScreen' ? {marginTop: -20} : null,
+            ]}>
+            {this.renderPrice({car, prices})}
+          </View>
           <View
             style={{
               display: 'flex',
               flexDirection: 'row',
               flexWrap: 'wrap',
+              marginHorizontal: 15,
             }}>
             <View>
               {engineVolume ? (

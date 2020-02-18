@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { TouchableOpacity, View, Image, StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {TouchableOpacity, View, Image, StyleSheet} from 'react-native';
 
 // components
-import { Footer } from 'native-base';
+import {Footer} from 'native-base';
 
 // helpers
 import PropTypes from 'prop-types';
@@ -22,6 +22,11 @@ const styles = StyleSheet.create({
     flex: 1,
     height: containerSize,
     backgroundColor: styleConst.color.header,
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: -2},
+    shadowOpacity: 0.15,
+    shadowRadius: 2.5,
+    elevation: 3,
   },
   icon: {
     paddingHorizontal: styleConst.ui.horizontalGap * 2,
@@ -52,42 +57,32 @@ export default class ReviewsFilter extends Component {
     onPressDate: PropTypes.func,
     onPressRating: PropTypes.func,
     onPressAddReview: PropTypes.func,
-  }
+  };
 
   static defaultProps = {
     onPressDate: null,
     onPressRating: null,
     onPressAddReview: null,
-  }
+  };
 
   renderIcon = (iconName, onPressHandler) => (
-    <TouchableOpacity
-      style={styles.icon}
-      onPress={onPressHandler}
-    >
+    <TouchableOpacity style={styles.icon} onPress={onPressHandler}>
       <View style={styles.iconInner}>
-        <Image
-          style={styles.image}
-          source={icons[iconName]}
-        />
+        <Image style={styles.image} source={icons[iconName]} />
       </View>
     </TouchableOpacity>
-  )
+  );
 
   render() {
-    const {
-      onPressDate,
-      onPressRating,
-      onPressAddReview,
-    } = this.props;
+    const {onPressDate, onPressRating, onPressAddReview} = this.props;
 
     return (
       <Footer style={[styleFooter.footerFilters, styleFooter.footer]}>
-          <View style={styles.container}>
-            { onPressRating ? this.renderIcon('rating', onPressRating) : null}
-            { onPressDate ? this.renderIcon('date', onPressDate) : null}
-            { onPressAddReview ? this.renderIcon('add', onPressAddReview) : null}
-          </View>
+        <View style={styles.container}>
+          {onPressRating ? this.renderIcon('rating', onPressRating) : null}
+          {onPressDate ? this.renderIcon('date', onPressDate) : null}
+          {onPressAddReview ? this.renderIcon('add', onPressAddReview) : null}
+        </View>
       </Footer>
     );
   }

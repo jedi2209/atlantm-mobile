@@ -26,6 +26,8 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.bg,
   },
   review: {
+    marginLeft: -10,
+    marginTop: 10,
     marginBottom: styleConst.ui.horizontalGap,
   },
 });
