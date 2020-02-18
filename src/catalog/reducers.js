@@ -84,6 +84,7 @@ const usedCarItems = (state = [], action) => {
     case REHYDRATE:
     case DEALER__SUCCESS:
     case USED_CAR_LIST__RESET:
+    case 'ACTION_SAVE_CAR_FILTERS_USED__UPDATE':
       return [];
     case USED_CAR_LIST__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {
