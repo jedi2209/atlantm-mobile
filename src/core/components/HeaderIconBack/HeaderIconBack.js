@@ -80,8 +80,10 @@ export default class HeaderIconBack extends Component {
 
   render() {
     return (
-      <TouchableOpacity style={styles.container} onPress={this.onPressBack}>
-        <View style={styles.inner}>
+      <TouchableOpacity
+        style={[styles.container, this.props.ContainerStyle]}
+        onPress={this.onPressBack}>
+        <View style={[styles.inner]}>
           <Icon
             // type="MaterialCommunityIcons"
             name="arrow-back"
@@ -92,19 +94,12 @@ export default class HeaderIconBack extends Component {
                   this.props.theme === 'white'
                     ? '#fff'
                     : this.props.theme === 'blue'
-                    ? '#0F66B2'
+                    ? styleConst.new.blueHeader
                     : '#000',
               },
+              this.props.IconStyle,
             ]}
           />
-          {/* {this.props.theme === 'white' ? (
-            <Image
-              style={styles.icon}
-              source={require('./assets/back@2x-white.png')}
-            />
-          ) : (
-            <Image style={styles.icon} source={require('./assets/back.png')} />
-          )} */}
         </View>
       </TouchableOpacity>
     );
