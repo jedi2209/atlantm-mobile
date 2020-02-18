@@ -132,17 +132,14 @@ class ProfileScreen extends Component {
       vkLogin: false,
       loading: false,
       loadingVerify: false,
+      pickerData: null,
     };
 
     this.requestManager = new GraphRequestManager();
     this.scrollRef = createRef();
     this.storeData = store.getState();
-
     // this.onPressFlag = this.onPressFlag.bind(this);
     // this._onSelectCountry = this._onSelectCountry.bind(this);
-    this.state = {
-      pickerData: null,
-    };
   }
 
   static navigationOptions = () => ({
@@ -159,7 +156,7 @@ class ProfileScreen extends Component {
       this.onKeyboardVisibleChange,
     );
     this.setState({
-      pickerData: this.phone.getPickerData(),
+      pickerData: this.phoneInput.getPickerData(),
     });
   }
 
@@ -174,8 +171,21 @@ class ProfileScreen extends Component {
     });
   };
 
+  _cancelVerify = () => {
+    this.setState({
+      code: false,
+      loadingVerify: false,
+      checkCode: '',
+    });
+    setTimeout(() => {
+      if (this.phoneInput) {
+        this.phoneInput.focus();
+      }
+    }, 200);
+  };
+
   _verifyCode = () => {
-    const phoneCountryCode = this.phone.getCountryCode();
+    const phoneCountryCode = this.phoneInput.getCountryCode();
     let phone = this.state.phone;
     let phoneNew = phone;
     if (phoneNew.indexOf(phoneCountryCode) === -1) {
@@ -191,7 +201,12 @@ class ProfileScreen extends Component {
     this.setState({phone: phone});
     this.setState({loadingVerify: true});
     this.props.actionSavePofileWithPhone({phone}).then(response => {
-      this.setState({loadingVerify: false});
+      this.setState({
+        code: true,
+        loadingVerify: false,
+        checkCode: response.checkCode,
+      });
+      this.CodeInput.focus();
 
       if (response.code >= 300) {
         let message = 'Что-то пошло не так, попробуйте снова';
@@ -208,8 +223,6 @@ class ProfileScreen extends Component {
         Alert.alert(message);
         return;
       }
-
-      this.setState({code: true, checkCode: response.checkCode});
     });
   };
 
@@ -220,7 +233,15 @@ class ProfileScreen extends Component {
     // тут специально одно равно чтобы сработало приведение типов
     // eslint-disable-next-line eqeqeq
     if (code != this.state.checkCode) {
-      Alert.alert('Неверный код.', 'Попробуйте снова');
+      Alert.alert('Неверный код', 'Попробуйте снова', [
+        {
+          text: 'OK',
+          onPress: () => {
+            this.setState({codeValue: ''});
+            this.CodeInput.clear();
+          },
+        },
+      ]);
       return;
     }
 
@@ -237,7 +258,7 @@ class ProfileScreen extends Component {
       })
       .catch(() => {
         this.setState({loading: false});
-        Alert.alert('Что-то пошло не так', 'попробуйте снова');
+        Alert.alert('Что-то пошло не так...', 'Попробуем ещё раз?');
       });
   };
 
@@ -362,7 +383,12 @@ class ProfileScreen extends Component {
   };
 
   onInputCode = text => {
-    this.setState({codeValue: text});
+    if (text.length === 4) {
+      this.setState({codeValue: text});
+      setTimeout(() => {
+        this._verifyCodeStepTwo();
+      }, 200);
+    }
   };
 
   onInputPhone = text => {
@@ -522,44 +548,118 @@ class ProfileScreen extends Component {
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                  <PhoneInput
+                  <View
                     style={{
+                      flexDirection: 'row',
                       width: '80%',
-                      justifyContent: 'center',
-                      flex: 1,
-                    }}
-                    ref={ref => {
-                      this.phone = ref;
-                    }}
-                    initialCountry={
-                      this.storeData.dealer.region
-                        ? this.storeData.dealer.region
-                        : 'by'
-                    }
-                    countriesList={require('../../utils/countries.json')}
-                    autoFormat={true}
-                    textStyle={{
-                      height: 40,
-                      paddingHorizontal: 14,
-                      borderColor: 'gray',
-                      borderWidth: 1,
-                      color: '#fff',
-                      width: '100%',
-                      borderRadius: 5,
-                    }}
-                    offset={20}
-                    cancelText="Отмена"
-                    confirmText="Выбрать"
-                    onChangePhoneNumber={this.onInputPhone}
-                    // onSelectCountry={this._onSelectCountry}
-                    textProps={{
-                      placeholderTextColor: 'white',
-                      placeholder: 'Телефон',
-                      keyboardType: 'phone-pad',
-                      autoCompleteType: 'tel',
-                      enablesReturnKeyAutomatically: true,
-                    }}
-                  />
+                    }}>
+                    {this.state.code ? (
+                      <Button
+                        disabled={this.state.loadingVerify}
+                        onPress={this._cancelVerify}
+                        style={{
+                          flex: 1,
+                          height: 50,
+                          width: '60%',
+                          backgroundColor: '#afafaf',
+                          justifyContent: 'center',
+                          padding: 10,
+                        }}>
+                        {this.state.loadingVerify ? (
+                          <ActivityIndicator color="#fff" />
+                        ) : (
+                          <Text style={{color: '#fff'}}>Отменить</Text>
+                        )}
+                      </Button>
+                    ) : (
+                      <PhoneInput
+                        style={{
+                          justifyContent: 'center',
+                          flex: 1,
+                        }}
+                        ref={ref => {
+                          this.phoneInput = ref;
+                        }}
+                        initialCountry={
+                          this.storeData.dealer.region
+                            ? this.storeData.dealer.region
+                            : 'by'
+                        }
+                        countriesList={require('../../utils/countries.json')}
+                        autoFormat={true}
+                        textStyle={{
+                          height: 40,
+                          paddingHorizontal: 14,
+                          fontSize: 18,
+                          letterSpacing: 3,
+                          borderColor: 'gray',
+                          borderWidth: 1,
+                          color: '#fff',
+                          width: '100%',
+                          borderRadius: 5,
+                        }}
+                        offset={20}
+                        cancelText="Отмена"
+                        confirmText="Выбрать"
+                        onChangePhoneNumber={this.onInputPhone}
+                        // onSelectCountry={this._onSelectCountry}
+                        textProps={{
+                          placeholderTextColor: '#afafaf',
+                          placeholder: 'ваш телефон',
+                          keyboardType: 'phone-pad',
+                          autoCompleteType: 'tel',
+                          enablesReturnKeyAutomatically: true,
+                          editable: this.state.code ? false : true,
+                        }}
+                      />
+                    )}
+                    {this.state.code ? (
+                      <TextInput
+                        style={{
+                          height: 50,
+                          paddingHorizontal: 14,
+                          paddingVertical: 8,
+                          borderColor: 'gray',
+                          borderWidth: 1,
+                          color: '#fff',
+                          borderRadius: 5,
+                          fontSize: 38,
+                          letterSpacing: 10,
+                          marginLeft: 25,
+                          width: 155,
+                          textAlign: 'center',
+                          // marginTop: 15,
+                        }}
+                        keyboardType="number-pad"
+                        ref={input => {
+                          this.CodeInput = input;
+                        }}
+                        maxLength={4}
+                        enablesReturnKeyAutomatically={true}
+                        placeholder="код"
+                        placeholderTextColor="#afafaf"
+                        autoCompleteType="off"
+                        onChangeText={this.onInputCode}
+                      />
+                    ) : null}
+                  </View>
+                  {this.state.code ? (
+                    <Button
+                      disabled={this.state.loadingVerify}
+                      onPress={this._verifyCodeStepTwo}
+                      style={{
+                        marginTop: 20,
+                        width: '80%',
+                        backgroundColor: '#34BD78',
+                        justifyContent: 'center',
+                      }}>
+                      {this.state.loadingVerify ? (
+                        <ActivityIndicator color="#fff" />
+                      ) : (
+                        <Text style={{color: '#fff'}}>Подвердить</Text>
+                      )}
+                    </Button>
+                  ) : null}
                   {!this.state.code && (
                     <Button
                       onPress={this._verifyCode}
@@ -576,43 +676,6 @@ class ProfileScreen extends Component {
                         <Text style={{color: '#fff'}}>Получить код</Text>
                       )}
                     </Button>
-                  )}
-                  {this.state.code && (
-                    <>
-                      <TextInput
-                        style={{
-                          height: 40,
-                          paddingHorizontal: 14,
-                          borderColor: 'gray',
-                          borderWidth: 1,
-                          color: '#fff',
-                          width: '80%',
-                          borderRadius: 5,
-                          marginTop: 15,
-                        }}
-                        keyboardType="number-pad"
-                        enablesReturnKeyAutomatically={true}
-                        placeholder="Код"
-                        placeholderTextColor="white"
-                        autoCompleteType="off"
-                        onChangeText={this.onInputCode}
-                      />
-                      <Button
-                        disabled={this.state.loadingVerify}
-                        onPress={this._verifyCodeStepTwo}
-                        style={{
-                          marginTop: 20,
-                          width: '80%',
-                          backgroundColor: '#34BD78',
-                          justifyContent: 'center',
-                        }}>
-                        {this.state.loadingVerify ? (
-                          <ActivityIndicator color="#fff" />
-                        ) : (
-                          <Text style={{color: '#fff'}}>Подвердить</Text>
-                        )}
-                      </Button>
-                    </>
                   )}
                 </View>
               </View>
