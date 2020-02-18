@@ -20,11 +20,12 @@ export default StyleSheet.create({
   },
   bodyWithLeftGap: {
     marginLeft: 10,
+    justifyContent: 'space-between',
   },
   inputItem: {
     borderBottomWidth: 0,
     minHeight: styleConst.ui.listHeight,
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
   },
   listItemContainer: {
     backgroundColor: '#fff',

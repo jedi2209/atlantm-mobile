@@ -247,7 +247,9 @@ const styles = StyleSheet.create({
   textinput: {
     height: 40,
     borderColor: '#d8d8d8',
-    borderBottomWidth: 1,
+    borderBottomWidth: 0,
+    padding: 0,
+    margin: 0,
     color: '#222b45',
     fontSize: 18,
   },
