@@ -25,7 +25,7 @@ import UsedCarListScreen from '../../catalog/usedcar/containers/UsedCarListScree
 import UsedCarFilterScreen from '../../catalog/usedcar/containers/UsedCarFilterScreen';
 import UsedCarCityScreen from '../../catalog/usedcar/containers/UsedCarCityScreen';
 import MoreScreen from './MenuScreenNew';
-import ApplicationModalScreen from './Application';
+// import ApplicationModalScreen from './Application';
 
 const styles = {
   shadow: {
@@ -127,7 +127,7 @@ const BottomTabNavigation = createBottomTabNavigator(
     },
     Service: {
       screen: createStackNavigator({
-        ApplicationModalScreen: {screen: ApplicationModalScreen},
+        ApplicationModalScreen: {screen: AuthContnainer},
       }),
       navigationOptions: ({navigation}) => {
         return {
