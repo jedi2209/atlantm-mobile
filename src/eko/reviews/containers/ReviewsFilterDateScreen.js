@@ -132,7 +132,6 @@ class ReviewsFilterDateScreen extends Component {
               return (
                 <View key={period} style={stylesList.listItemContainer}>
                   <ListItem
-                    last={arrayPeriod.length - 1 === idx}
                     icon
                     style={stylesList.listItemPressable}
                     onPress={handler}>

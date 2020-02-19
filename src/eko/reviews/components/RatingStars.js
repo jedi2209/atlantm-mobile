@@ -45,7 +45,7 @@ export default class RatingStars extends PureComponent {
   };
 
   render() {
-    const {rating, itemId, theme, size} = this.props;
+    const {rating, itemId, theme, size, StyleContainer} = this.props;
 
     if (!rating) return null;
 
@@ -53,7 +53,7 @@ export default class RatingStars extends PureComponent {
     const emptyStars = new Array(5 - rating).fill(0);
 
     return (
-      <View style={styles.rating}>
+      <View style={[StyleContainer, styles.rating]}>
         {stars.map((star, idx) => {
           return (
             <Icon

@@ -220,29 +220,24 @@ class InfoPostScreen extends Component {
         <Button
           full
           uppercase={false}
-          title="Позвоните мне"
-          style={{
-            backgroundColor: styleConst.color.lightBlue,
-            borderColor: styleConst.color.lightBlue,
-            color: 'white',
-            height: 50,
-            borderTopWidth: 0,
-            paddingHorizontal: '5%',
-            marginBottom: 20,
-            position: 'absolute',
-            bottom: 0,
-            width: '80%',
-            borderRadius: 5,
-            marginHorizontal: '10%',
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 1,
+          title="позвоните мне"
+          style={[
+            styleConst.shadow.default,
+            {
+              backgroundColor: styleConst.color.lightBlue,
+              borderColor: styleConst.color.lightBlue,
+              color: 'white',
+              height: 50,
+              borderTopWidth: 0,
+              paddingHorizontal: '5%',
+              marginBottom: 20,
+              position: 'absolute',
+              bottom: 0,
+              width: '80%',
+              borderRadius: 5,
+              marginHorizontal: '10%',
             },
-            shadowOpacity: 0.32,
-            shadowRadius: 5.46,
-            elevation: 9,
-          }}
+          ]}
           onPress={this.onPressCallMe}>
           <Text
             style={{
@@ -251,7 +246,7 @@ class InfoPostScreen extends Component {
               fontSize: 16,
               letterSpacing: styleConst.ui.letterSpacing,
             }}>
-            Позвоните мне
+            позвоните мне
           </Text>
         </Button>
       </SafeAreaView>

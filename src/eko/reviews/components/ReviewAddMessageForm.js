@@ -1,14 +1,17 @@
-import React, { PureComponent } from 'react';
-import { Text, StyleSheet, TextInput, View } from 'react-native';
+import React, {PureComponent} from 'react';
+import {Text, StyleSheet, TextInput, View} from 'react-native';
 
 // components
-import { Icon, Body, ListItem } from 'native-base';
+import {Icon, Body, ListItem} from 'native-base';
 
 // styles
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
-import { TEXT_REVIEW_ADD_QUESTION__PLUS, TEXT_REVIEW_ADD_QUESTION__MINUS } from '../../constants';
+import {
+  TEXT_REVIEW_ADD_QUESTION__PLUS,
+  TEXT_REVIEW_ADD_QUESTION__MINUS,
+} from '../../constants';
 import PropTypes from 'prop-types';
 import styleConst from '../../../core/style-const';
 
@@ -53,12 +56,12 @@ export default class ReviewAddMessageForm extends PureComponent {
     messageMinus: PropTypes.string,
     messagePlusFill: PropTypes.func,
     messageMinusFill: PropTypes.func,
-  }
+  };
 
-  static defaultProps = {}
+  static defaultProps = {};
 
-  onChangePlusText = text => this.props.messagePlusFill(text)
-  onChangeMinusText = text => this.props.messageMinusFill(text)
+  onChangePlusText = text => this.props.messagePlusFill(text);
+  onChangeMinusText = text => this.props.messageMinusFill(text);
 
   renderTextarea = (value, onChangeHandler) => (
     <TextInput
@@ -75,18 +78,22 @@ export default class ReviewAddMessageForm extends PureComponent {
       textAlignVertical="top"
       placeholderTextColor={styleConst.color.greyText}
     />
-  )
+  );
 
   renderMessage = (type, value, onChangeHandler, isLast) => {
     const isPlus = type === 'plus';
 
     return (
-      <View style={stylesList.listItemContainer}>
+      <View style={[styleConst.shadow.default, stylesList.listItemContainer]}>
         <ListItem last={isLast} style={[stylesList.listItem, styles.listItem]}>
           <Body>
             <View style={styles.review}>
               <Icon
-                name={isPlus ? 'ios-add-circle-outline' : 'ios-remove-circle-outline'}
+                name={
+                  isPlus
+                    ? 'ios-add-circle-outline'
+                    : 'ios-remove-circle-outline'
+                }
                 style={[
                   styles.reviewIcon,
                   isPlus ? styles.reviewIconPlus : styles.reviewIconMinus,
@@ -94,7 +101,9 @@ export default class ReviewAddMessageForm extends PureComponent {
               />
               <View style={styles.textContainer}>
                 <Text style={styles.question}>
-                  {isPlus ? TEXT_REVIEW_ADD_QUESTION__PLUS : TEXT_REVIEW_ADD_QUESTION__MINUS}
+                  {isPlus
+                    ? TEXT_REVIEW_ADD_QUESTION__PLUS
+                    : TEXT_REVIEW_ADD_QUESTION__MINUS}
                 </Text>
                 {this.renderTextarea(value, onChangeHandler)}
               </View>
@@ -103,7 +112,7 @@ export default class ReviewAddMessageForm extends PureComponent {
         </ListItem>
       </View>
     );
-  }
+  };
 
   render() {
     const {

@@ -4,6 +4,7 @@ export default {
   color: {
     blue: '#0061ED',
     lightBlue: '#027aff',
+    green: '#34BD78',
     bg: '#F6F6F6',
     accordeonGrey1: '#ededed',
     accordeonGrey2: '#dedfe0',
@@ -20,9 +21,31 @@ export default {
     border: '#c7c7c7',
     systemBlue: '#007aff',
     systemGray: '#c7c7c7',
-    green: '#4cd864',
+    // green: '#4cd864',
     red: '#ff3c30',
     darkBg: '#4f5b66',
+  },
+  shadow: {
+    default: {
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 1,
+      },
+      shadowOpacity: 0.32,
+      shadowRadius: 5.46,
+      elevation: 9,
+    },
+    light: {
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: -2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
   },
   font: {
     regular: 'Helvetica Neue',

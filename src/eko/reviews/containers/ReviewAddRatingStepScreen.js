@@ -99,13 +99,6 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: '#0F66B2',
     justifyContent: 'center',
-    shadowColor: '#0f66b2',
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
   },
   buttonText: {
     color: '#fff',

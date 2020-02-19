@@ -394,7 +394,9 @@ class NewCarFilterScreen extends Component {
                       checked={checked}
                       style={{
                         borderRadius: 0,
-                        backgroundColor: checked ? '#0061ed' : '#fff',
+                        backgroundColor: checked
+                          ? styleConst.color.lightBlue
+                          : '#fff',
                         borderColor: checked ? 'transparent' : '#d0d5dc',
                         fontSize: 40,
                       }}
@@ -460,23 +462,19 @@ class NewCarFilterScreen extends Component {
                 backgroundColor: '#d5d5e0',
               }}
               selectedStyle={{
-                backgroundColor: '#0F66B2',
+                backgroundColor: styleConst.color.lightBlue,
               }}
               customMarker={() => (
                 <View
-                  style={{
-                    height: 17,
-                    width: 17,
-                    borderRadius: 8.5,
-                    backgroundColor: '#0F66B2',
-                    shadowColor: '#0F66B2',
-                    shadowOpacity: 0.5,
-                    shadowRadius: 8,
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
+                  style={[
+                    styleConst.shadow.default,
+                    {
+                      height: 17,
+                      width: 17,
+                      borderRadius: 8.5,
+                      backgroundColor: styleConst.color.lightBlue,
                     },
-                  }}
+                  ]}
                 />
               )}
             />
@@ -539,7 +537,9 @@ class NewCarFilterScreen extends Component {
                       checked={checked}
                       style={{
                         borderRadius: 0,
-                        backgroundColor: checked ? '#0061ed' : '#fff',
+                        backgroundColor: checked
+                          ? styleConst.color.lightBlue
+                          : '#fff',
                         borderColor: checked ? 'transparent' : '#d0d5dc',
                         fontSize: 40,
                       }}
@@ -594,7 +594,9 @@ class NewCarFilterScreen extends Component {
                       checked={checked}
                       style={{
                         borderRadius: 0,
-                        backgroundColor: checked ? '#0061ed' : '#fff',
+                        backgroundColor: checked
+                          ? styleConst.color.lightBlue
+                          : '#fff',
                         borderColor: checked ? 'transparent' : '#d0d5dc',
                         fontSize: 40,
                       }}
@@ -641,7 +643,10 @@ class NewCarFilterScreen extends Component {
               {expanded ? (
                 <Icon
                   type="FontAwesome5"
-                  style={{color: '#0F66B2', fontWeight: 'lighter'}}
+                  style={{
+                    color: styleConst.color.lightBlue,
+                    fontWeight: 'lighter',
+                  }}
                   name="angle-down"
                 />
               ) : (
@@ -676,19 +681,18 @@ class NewCarFilterScreen extends Component {
             marginVertical: 20,
           }}>
           <Button
+            full
             onPress={this.onPressFilterButton}
-            style={{
-              backgroundColor: '#0F66B2',
-              paddingVertical: 16,
-              paddingHorizontal: 40,
-              shadowColor: '#0F66B2',
-              shadowOpacity: 0.5,
-              shadowRadius: 8,
-              shadowOffset: {
-                width: 0,
-                height: 2,
+            style={[
+              styleConst.shadow.default,
+              {
+                backgroundColor: styleConst.color.lightBlue,
+                paddingVertical: 16,
+                paddingHorizontal: 40,
+                marginHorizontal: 20,
+                borderRadius: 5,
               },
-            }}>
+            ]}>
             <Text style={{color: '#fff', fontSize: 16}}>Применить</Text>
           </Button>
         </View>

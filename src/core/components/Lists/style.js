@@ -16,6 +16,7 @@ export default StyleSheet.create({
   label: {
     color: '#000',
     fontSize: 18,
+    marginTop: 10,
     fontFamily: styleConst.font.regular,
   },
   bodyWithLeftGap: {
@@ -29,11 +30,7 @@ export default StyleSheet.create({
   },
   listItemContainer: {
     backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.3,
-    shadowRadius: 3.5,
-    elevation: 3,
+    paddingLeft: 10,
   },
   listItemContainerFirst: {
     borderTopWidth: styleConst.ui.borderWidth,

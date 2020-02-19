@@ -77,15 +77,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   button: {
-    backgroundColor: '#0F66B2',
+    backgroundColor: styleConst.color.lightBlue,
     justifyContent: 'center',
-    shadowColor: '#0f66b2',
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
   },
   buttonText: {
     color: '#fff',
@@ -390,7 +383,7 @@ class TvaScreen extends Component {
                           ? undefined
                           : () => this.onPressButton()
                       }
-                      style={styles.button}>
+                      style={[styleConst.shadow.default, styles.button]}>
                       {this.state.loading ? (
                         <ActivityIndicator color="#fff" />
                       ) : (

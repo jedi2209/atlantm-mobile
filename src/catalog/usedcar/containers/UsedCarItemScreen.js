@@ -284,23 +284,18 @@ class UserCarItemScreen extends Component {
               />
               <View style={{backgroundColor: '#fff'}}>
                 <View
-                  style={{
-                    position: 'relative',
-                    top: -27,
-                    marginBottom: -27,
-                    backgroundColor: '#fff',
-                    borderTopLeftRadius: 30,
-                    borderTopRightRadius: 30,
-                    paddingTop: 20,
-                    paddingBottom: 14,
-                    shadowColor: '#000',
-                    shadowOffset: {
-                      width: 0,
-                      height: -3,
+                  style={[
+                    {
+                      position: 'relative',
+                      top: -27,
+                      marginBottom: -27,
+                      backgroundColor: '#fff',
+                      borderTopLeftRadius: 30,
+                      borderTopRightRadius: 30,
+                      paddingTop: 20,
+                      paddingBottom: 14,
                     },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                  }}>
+                  ]}>
                   <View
                     style={{
                       display: 'flex',
@@ -577,6 +572,7 @@ class UserCarItemScreen extends Component {
           <View style={stylesFooter.footer}>
             <View
               style={[
+                styleConst.shadow.default,
                 stylesFooter.orderPriceContainer,
                 stylesFooter.orderPriceContainerNotSale,
               ]}>
@@ -591,7 +587,7 @@ class UserCarItemScreen extends Component {
             <Button
               onPress={this.onPressOrder}
               full
-              style={stylesFooter.button}>
+              style={[styleConst.shadow.default, stylesFooter.button]}>
               <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
             </Button>
           </View>
@@ -631,14 +627,6 @@ const stylesFooter = StyleSheet.create({
     backgroundColor: styleConst.color.lightBlue,
     borderColor: styleConst.color.lightBlue,
     borderWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.32,
-    shadowRadius: 5.46,
-    elevation: 9,
   },
   orderPriceContainer: {
     height: 48,
@@ -648,14 +636,6 @@ const stylesFooter = StyleSheet.create({
     backgroundColor: styleConst.color.header,
     borderColor: styleConst.color.header,
     borderWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.32,
-    shadowRadius: 5.46,
-    elevation: 9,
   },
   orderPriceContainerNotSale: {
     flexDirection: 'row',

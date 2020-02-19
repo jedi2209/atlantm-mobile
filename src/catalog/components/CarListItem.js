@@ -10,7 +10,7 @@ import Imager from '../../core/components/Imager';
 import {get} from 'lodash';
 import numberWithGap from '../../utils/number-with-gap';
 import showPrice from '@utils/price';
-import styleConst from '../../core/style-const';
+import styleConst from '@core/style-const';
 import {Dimensions} from 'react-native';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -21,14 +21,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     backgroundColor: '#fff',
     borderRadius: 5,
-    shadowColor: '#c1c1c1',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.18,
-    shadowRadius: 1,
-    elevation: 3,
   },
   card: {
     flexDirection: 'column',
@@ -208,7 +200,7 @@ export default class CarListItem extends Component {
     return (
       <TouchableHighlight
         onPress={this.onPress}
-        style={styles.container}
+        style={[styleConst.shadow.light, styles.container]}
         underlayColor={styleConst.color.select}>
         <View style={styles.card}>
           <LinearGradient

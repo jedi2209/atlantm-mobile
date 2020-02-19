@@ -140,30 +140,27 @@ class ReviewsFilterDateScreen extends Component {
   renderRatingFrom = () => {
     return RATING_ARRAY.map((rating, idx) => {
       const handler = () => this.onPressItem(rating, REVIEWS_RATING_TYPE__FROM);
-      const isLast = RATING_ARRAY.length - 1 === idx;
       const isSelected = this.isRatingFromSelected(rating);
       const key = `rating-from-${rating}`;
 
-      return this.renderItem(rating, isSelected, handler, isLast, key);
+      return this.renderItem(rating, isSelected, handler, key);
     });
   };
 
   renderRatingTo = () => {
     return RATING_ARRAY.map((rating, idx) => {
       const handler = () => this.onPressItem(rating, REVIEWS_RATING_TYPE__TO);
-      const isLast = RATING_ARRAY.length - 1 === idx;
       const isSelected = this.isRatingToSelected(rating);
       const key = `rating-to-${rating}`;
 
-      return this.renderItem(rating, isSelected, handler, isLast, key);
+      return this.renderItem(rating, isSelected, handler, key);
     });
   };
 
-  renderItem = (rating, isSelected, onPressHandler, isLast, key) => {
+  renderItem = (rating, isSelected, onPressHandler, key) => {
     return (
       <View key={key} style={stylesList.listItemContainer}>
         <ListItem
-          last={isLast}
           icon
           style={stylesList.listItemPressable}
           onPress={onPressHandler}>
@@ -174,7 +171,7 @@ class ReviewsFilterDateScreen extends Component {
             selected={isSelected}
           />
           <Body style={stylesList.bodyWithLeftGap}>
-            <RatingStars size="M" theme="blue" rating={rating} itemId={key} />
+            <RatingStars size="M" theme="blue" StyleContainer={{marginTop: 12}} rating={rating} itemId={key} />
           </Body>
         </ListItem>
       </View>
