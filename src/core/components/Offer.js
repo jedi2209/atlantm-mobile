@@ -19,9 +19,8 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   image: {
-    borderRadius: 5,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
   },
   title: {
     fontSize: 20,
