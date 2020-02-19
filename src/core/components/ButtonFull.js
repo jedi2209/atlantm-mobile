@@ -91,15 +91,6 @@ export default class ButtonFull extends PureComponent {
             (
               <View style={styles.buttonContent}>
                 {
-                  icon === 'phone' ?
-                    <Image
-                      source={require('../../contacts/assets/call_me.png')}
-                      style={styles.buttonIconLeft}
-                    /> :
-                    null
-                }
-
-                {
                   icon === 'ios-car' ?
                       <Icon
                           name='ios-car'
