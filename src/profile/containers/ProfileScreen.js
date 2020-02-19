@@ -244,7 +244,7 @@ class ProfileScreen extends Component {
       ]);
       return;
     }
-
+    this.keyboardHideListener.remove();
     this.setState({loading: true, loadingVerify: true});
     this.props
       .actionSavePofileWithPhone({phone, code})
@@ -623,7 +623,7 @@ class ProfileScreen extends Component {
                           borderWidth: 1,
                           color: '#fff',
                           borderRadius: 5,
-                          fontSize: 38,
+                          fontSize: 30,
                           letterSpacing: 10,
                           marginLeft: 25,
                           width: 155,

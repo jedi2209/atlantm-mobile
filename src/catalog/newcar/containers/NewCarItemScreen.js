@@ -123,8 +123,8 @@ class NewCarItemScreen extends Component {
       <HeaderIconBack
         theme="white"
         ContainerStyle={{
-          backgroundColor: 'rgba(0,0,0, 0.2)',
-          paddingHorizontal: 7,
+          backgroundColor: 'rgba(0,0,0, 0.15)',
+          paddingHorizontal: 5,
           paddingVertical: 5,
           borderRadius: 50,
           marginLeft: 5,
@@ -478,7 +478,6 @@ class NewCarItemScreen extends Component {
                 },
                 shadowOpacity: 0.25,
                 shadowRadius: 3.84,
-                elevation: 5,
               }}>
               <View
                 style={{
@@ -780,7 +779,7 @@ class NewCarItemScreen extends Component {
               />
             </View>
           </Content>
-          <Footer style={stylesFooter.footer}>
+          <View style={stylesFooter.footer}>
             {this.renderPriceFooter({
               carDetails,
               filterData,
@@ -793,7 +792,7 @@ class NewCarItemScreen extends Component {
               activeOpacity={0.8}>
               <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
             </Button>
-          </Footer>
+          </View>
           {photoViewerItems.length ? (
             <PhotoViewer
               index={photoViewerIndex}
@@ -823,12 +822,12 @@ const stylesFooter = StyleSheet.create({
     marginBottom: 20,
     position: 'absolute',
     bottom: 0,
+    flex: 1,
+    flexDirection: 'row',
   },
   button: {
     width: '55%',
     height: 48,
-    display: 'flex',
-    flexDirection: 'row',
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
     backgroundColor: styleConst.color.lightBlue,
@@ -839,16 +838,17 @@ const stylesFooter = StyleSheet.create({
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.48,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
   },
   orderPriceContainer: {
     height: 48,
     width: '45%',
-    display: 'flex',
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 0,
+    borderTopRightRadius: 0,
     backgroundColor: styleConst.color.header,
     borderColor: styleConst.color.header,
     borderWidth: 1,
@@ -857,9 +857,9 @@ const stylesFooter = StyleSheet.create({
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.48,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
   },
   orderPriceContainerNotSale: {
     flexDirection: 'row',

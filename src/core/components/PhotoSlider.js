@@ -89,7 +89,7 @@ export default class PhotoSlider extends Component {
   static propTypes = {
     photos: PropTypes.array,
     resizeMode: PropTypes.string,
-    paginationStyle: PropTypes.number,
+    paginationStyle: PropTypes.object,
     onPressItem: PropTypes.func,
     onIndexChanged: PropTypes.func,
   };
