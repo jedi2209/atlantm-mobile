@@ -29,7 +29,8 @@ import {
 // helpers
 import Amplitude from '@utils/amplitude-analytics';
 import stylesHeader from '@core/components/Header/style';
-import { ScrollView } from 'react-native-gesture-handler';
+import styleConst from '@core/style-const';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
   return {
@@ -104,9 +105,7 @@ class UsedCarFilterScreen extends Component {
 
   componentDidMount() {
     // const {actionFetchUsedCarFilterData, dealerSelected} = this.props;
-
     // actionFetchUsedCarFilterData({city: dealerSelected.city.id});
-
     // Amplitude.logEvent('screen', 'catalog/newcar');
   }
 
@@ -208,7 +207,7 @@ class UsedCarFilterScreen extends Component {
                     </Left>
                     <Right>
                       <Radio
-                        selectedColor="#0F66B2"
+                        selectedColor={styleConst.color.lightBlue}
                         name={id}
                         selected={id === this.state.selectedCity}
                       />
@@ -251,23 +250,19 @@ class UsedCarFilterScreen extends Component {
                 backgroundColor: '#d5d5e0',
               }}
               selectedStyle={{
-                backgroundColor: '#0F66B2',
+                backgroundColor: styleConst.color.lightBlue,
               }}
               customMarker={() => (
                 <View
-                  style={{
-                    height: 17,
-                    width: 17,
-                    borderRadius: 8.5,
-                    backgroundColor: '#0F66B2',
-                    shadowColor: '#0F66B2',
-                    shadowOpacity: 0.5,
-                    shadowRadius: 8,
-                    shadowOffset: {
-                      width: 0,
-                      height: 2,
+                  style={[
+                    styleConst.shadow.default,
+                    {
+                      height: 17,
+                      width: 17,
+                      borderRadius: 8.5,
+                      backgroundColor: styleConst.color.lightBlue,
                     },
-                  }}
+                  ]}
                 />
               )}
             />
@@ -314,7 +309,10 @@ class UsedCarFilterScreen extends Component {
               {expanded ? (
                 <Icon
                   type="FontAwesome5"
-                  style={{color: '#0F66B2', fontWeight: 'lighter'}}
+                  style={{
+                    color: styleConst.color.lightBlue,
+                    fontWeight: 'lighter',
+                  }}
                   name="angle-down"
                 />
               ) : (
@@ -350,19 +348,18 @@ class UsedCarFilterScreen extends Component {
             marginVertical: 20,
           }}>
           <Button
+            full
             onPress={this.onPressFilterButton}
-            style={{
-              backgroundColor: '#0F66B2',
-              paddingVertical: 16,
-              paddingHorizontal: 40,
-              shadowColor: '#0F66B2',
-              shadowOpacity: 0.5,
-              shadowRadius: 8,
-              shadowOffset: {
-                width: 0,
-                height: 2,
+            style={[
+              styleConst.shadow.default,
+              {
+                backgroundColor: styleConst.color.lightBlue,
+                paddingVertical: 16,
+                paddingHorizontal: 40,
+                marginHorizontal: 20,
+                borderRadius: 5,
               },
-            }}>
+            ]}>
             <Text style={{color: '#fff', fontSize: 16}}>Применить</Text>
           </Button>
         </View>

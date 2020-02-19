@@ -22,11 +22,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: containerSize,
     backgroundColor: styleConst.color.header,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: -2},
-    shadowOpacity: 0.15,
-    shadowRadius: 2.5,
-    elevation: 3,
   },
   icon: {
     paddingHorizontal: styleConst.ui.horizontalGap * 2,
@@ -78,7 +73,7 @@ export default class ReviewsFilter extends Component {
 
     return (
       <Footer style={[styleFooter.footerFilters, styleFooter.footer]}>
-        <View style={styles.container}>
+        <View style={[styleConst.shadow.default, styles.container]}>
           {onPressRating ? this.renderIcon('rating', onPressRating) : null}
           {onPressDate ? this.renderIcon('date', onPressDate) : null}
           {onPressAddReview ? this.renderIcon('add', onPressAddReview) : null}

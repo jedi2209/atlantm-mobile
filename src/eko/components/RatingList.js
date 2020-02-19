@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {Text, View, StyleSheet} from 'react-native';
 
 // components
-import { Body, Label, ListItem } from 'native-base';
+import {Body, Label, ListItem} from 'native-base';
 import RadioIcon from '../../core/components/RadioIcon';
 
 // styles
@@ -38,23 +38,20 @@ export default class RatingList extends Component {
     selectRatingVariant: PropTypes.func,
     ratingValue: PropTypes.number,
     ratingVariant: PropTypes.string,
-  }
+  };
 
   componentDidMount() {
-    const { selectRatingValue, selectRatingVariant } = this.props;
+    const {selectRatingValue, selectRatingVariant} = this.props;
 
     selectRatingValue(5);
     selectRatingVariant(REVIEW_ADD_RATING_5);
   }
 
-  onPressItem = (selectedRatingVariant) => {
+  onPressItem = selectedRatingVariant => {
     requestAnimationFrame(() => {
       if (this.isRatingVariantSelected(selectedRatingVariant)) return false;
 
-      const {
-        selectRatingValue,
-        selectRatingVariant,
-      } = this.props;
+      const {selectRatingValue, selectRatingVariant} = this.props;
 
       let rating;
 
@@ -81,51 +78,52 @@ export default class RatingList extends Component {
       selectRatingVariant(selectedRatingVariant);
       selectRatingValue(rating);
     });
-  }
+  };
 
-  isRatingVariantSelected = selectedRatingVariant => this.props.ratingVariant === selectedRatingVariant
+  isRatingVariantSelected = selectedRatingVariant =>
+    this.props.ratingVariant === selectedRatingVariant;
 
   renderItem = (ratingVariant, onPressHandler, isLast) => (
     <View key={ratingVariant} style={stylesList.listItemContainer}>
       <ListItem
-        last={isLast}
         icon
         style={stylesList.listItemPressable}
-        onPress={onPressHandler}
-      >
+        onPress={onPressHandler}>
         <RadioIcon
           containerStyle={{
             marginTop: 5,
+            marginHorizontal: 7,
           }}
-          selected={this.isRatingVariantSelected(ratingVariant)} />
-        <Body style={stylesList.bodyWithLeftGap} >
+          selected={this.isRatingVariantSelected(ratingVariant)}
+        />
+        <Body style={stylesList.bodyWithLeftGap}>
           <Label style={stylesList.label}>{ratingVariant}</Label>
         </Body>
       </ListItem>
     </View>
-  )
+  );
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>Насколько в целом вы удовлетворены нашей работой?</Text>
+          <Text style={styles.title}>
+            Насколько в целом вы удовлетворены нашей работой?
+          </Text>
         </View>
 
-        {
-          [
-            REVIEW_ADD_RATING_5,
-            REVIEW_ADD_RATING_4,
-            REVIEW_ADD_RATING_3,
-            REVIEW_ADD_RATING_2,
-            REVIEW_ADD_RATING_1,
-          ].map((ratingVariant, idx, arrayRatingVariants) => {
-            const handler = () => this.onPressItem(ratingVariant);
-            const isLast = (arrayRatingVariants.length - 1) === idx;
+        {[
+          REVIEW_ADD_RATING_5,
+          REVIEW_ADD_RATING_4,
+          REVIEW_ADD_RATING_3,
+          REVIEW_ADD_RATING_2,
+          REVIEW_ADD_RATING_1,
+        ].map((ratingVariant, idx, arrayRatingVariants) => {
+          const handler = () => this.onPressItem(ratingVariant);
+          const isLast = arrayRatingVariants.length - 1 === idx;
 
-            return this.renderItem(ratingVariant, handler, isLast);
-          })
-        }
+          return this.renderItem(ratingVariant, handler, isLast);
+        })}
       </View>
     );
   }

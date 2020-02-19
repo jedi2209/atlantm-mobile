@@ -81,22 +81,15 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   button: {
-    height: isAndroid
-      ? styleConst.ui.footerHeightAndroid
-      : styleConst.ui.footerHeightIphone,
+    height: styleConst.ui.footerHeightIphone,
     flex: 1,
     flexDirection: 'row',
     backgroundColor: '#fff',
     borderTopWidth: styleConst.ui.borderWidth,
     borderTopColor: styleConst.color.border,
     marginVertical: 30,
-
-    ...Platform.select({
-      ios: {
-        borderBottomWidth: styleConst.ui.borderWidth,
-        borderBottomColor: styleConst.color.border,
-      },
-    }),
+    marginHorizontal: 20,
+    borderRadius: 5,
   },
   buttonText: {
     fontFamily: styleConst.font.medium,
@@ -272,7 +265,10 @@ class BonusScreen extends Component {
               <Text
                 style={[
                   stylesList.badgeText,
-                  {color: total > 0 ? '#417505' : '#D0021B'},
+                  {
+                    color:
+                      total > 0 ? styleConst.color.green : styleConst.color.red,
+                  },
                 ]}>
                 {total}
               </Text>
@@ -294,6 +290,7 @@ class BonusScreen extends Component {
         onPress={this.onPressBonusInfo}
         full
         style={[
+          styleConst.shadow.default,
           styles.button,
           {
             borderBottomWidth: 0,
@@ -330,15 +327,6 @@ class BonusScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
-          {/* <Text
-            style={{
-              fontSize: 35,
-              fontWeight: '600',
-              marginHorizontal: 20,
-              marginTop: 18,
-            }}>
-            Бонусные баллы
-          </Text> */}
           <Content>
             {Object.keys(get(bonus, 'items'), []).length
               ? this.renderLevel1(bonus.items)

@@ -32,11 +32,12 @@ const styles = {
     fontSize: 23,
     shadowOffset: {
       width: 0,
-      height: 0.1,
+      height: 2,
     },
-    shadowOpacity: 0.9,
-    shadowRadius: 4,
+    shadowOpacity: 0.25,
+    shadowRadius: 1.0,
     shadowColor: '#fff',
+    elevation: 1,
   },
 };
 

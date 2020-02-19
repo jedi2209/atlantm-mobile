@@ -77,14 +77,6 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.lightBlue,
     justifyContent: 'center',
     borderRadius: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.32,
-    shadowRadius: 5.46,
-    elevation: 9,
   },
   buttonText: {
     color: '#fff',
@@ -271,7 +263,7 @@ class CallMeBackScreen extends React.Component {
                       onPress={
                         this.state.loading ? undefined : this.onPressCallMe
                       }
-                      style={styles.button}>
+                      style={[styleConst.shadow.default, styles.button]}>
                       {this.state.loading ? (
                         <ActivityIndicator color="#fff" />
                       ) : (

@@ -18,8 +18,6 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 3,
     minHeight: 150,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.1,
     shadowRadius: 1.5,
     elevation: 3,
@@ -33,11 +31,8 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 3,
     minHeight: 150,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.1,
-    shadowRadius: 1.5,
-    elevation: 3,
+    shadowRadius: 1.0,
     backgroundColor: 'white',
     marginBottom: 10,
     marginHorizontal: 7,
@@ -190,7 +185,10 @@ export default class Review extends Component {
     return (
       <ListItem
         onPress={inList ? this.onPress : null}
-        style={inList ? styles.itemInList : styles.itemFull}>
+        style={[
+          styleConst.shadow.default,
+          inList ? styles.itemInList : styles.itemFull,
+        ]}>
         <Body>
           {this.renderName(name, isVisited)}
           {this.renderRatingAndDate(grade, date, id)}

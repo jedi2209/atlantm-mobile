@@ -159,21 +159,16 @@ class InfoListScreen extends Component {
   renderItem = data => {
     return (
       <View
-        style={{
-          width: cardWidth,
-          backgroundColor: '#fff',
-          borderRadius: 5,
-          marginVertical: 10,
-          marginHorizontal: 15,
-          shadowColor: '#c1c1c1',
-          shadowOffset: {
-            width: 0,
-            height: 1,
+        style={[
+          styleConst.shadow.default,
+          {
+            width: cardWidth,
+            backgroundColor: '#fff',
+            borderRadius: 5,
+            marginVertical: 10,
+            marginHorizontal: 15,
           },
-          shadowOpacity: 0.18,
-          shadowRadius: 1,
-          elevation: 1,
-        }}>
+        ]}>
         <Offer
           theme="round"
           key={`carousel-article-${data.item.id}`}

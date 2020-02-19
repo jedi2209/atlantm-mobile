@@ -190,7 +190,7 @@ class ProfileSettingsScreen extends Component {
                 onPress={
                   this.state.loading ? undefined : () => this.onPressSave()
                 }
-                style={styles.button}>
+                style={[styleConst.shadow.default, styles.button]}>
                 {this.state.loading ? (
                   <ActivityIndicator color="#fff" />
                 ) : (
@@ -251,14 +251,6 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.lightBlue,
     borderRadius: 5,
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.32,
-    shadowRadius: 5.46,
-    elevation: 9,
   },
   buttonText: {
     color: '#fff',

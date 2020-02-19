@@ -80,20 +80,10 @@ const styles = StyleSheet.create({
   buttonPrimary: {
     marginVertical: 10,
     marginHorizontal: 20,
-    backgroundColor: '#fff',
-    borderColor: '#2E3A59',
     borderRadius: 5,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
   },
   buttonPrimaryText: {
-    color: '#2E3A59',
+    color: '#fff',
     fontSize: 16,
     fontWeight: 'normal',
   },
@@ -159,8 +149,9 @@ const CarCard = ({data}) => {
     <View
       style={[
         styles.scrollViewInner,
+        styleConst.shadow.default,
         {
-          backgroundColor: '#979797',
+          backgroundColor: '#fafafa',
           marginTop: 10,
           marginBottom: 20,
           borderRadius: 5,
@@ -169,14 +160,6 @@ const CarCard = ({data}) => {
           paddingBottom: 40,
           height: 155,
           marginRight: 15,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 1,
-          },
-          shadowOpacity: 0.22,
-          shadowRadius: 2.22,
-          elevation: 3,
         },
       ]}>
       <View>
@@ -184,7 +167,7 @@ const CarCard = ({data}) => {
           ellipsizeMode="tail"
           numberOfLines={1}
           style={{
-            color: '#fff',
+            color: styleConst.color.greyText,
             fontSize: 14,
             paddingTop: 20,
             paddingBottom: 10,
@@ -196,7 +179,7 @@ const CarCard = ({data}) => {
           ellipsizeMode="tail"
           numberOfLines={1}
           style={{
-            color: '#fff',
+            color: styleConst.color.greyText2,
             fontSize: 19,
             paddingHorizontal: 20,
           }}>
@@ -277,16 +260,18 @@ class ProfileScreenInfo extends Component {
             {`${this.props.login.first_name || ''} ${this.props.login
               .last_name || ''}`}
           </Text>
-          <Button
-            full
-            onPress={() => {
-              this.props.navigation.navigate('ChooseDealerScreen');
-            }}
-            style={styles.buttonPrimary}>
-            <Text style={styles.buttonPrimaryText}>
-              {this.props.dealerSelected.name}
-            </Text>
-          </Button>
+          {!this.state.loading ? (
+            <Button
+              full
+              onPress={() => {
+                this.props.navigation.navigate('ChooseDealerScreen');
+              }}
+              style={[styleConst.shadow.default, styles.buttonPrimary]}>
+              <Text style={styles.buttonPrimaryText}>
+                {this.props.dealerSelected.name}
+              </Text>
+            </Button>
+          ) : null}
 
           {this.state.loading ? (
             <ActivityIndicator
@@ -313,6 +298,7 @@ class ProfileScreenInfo extends Component {
                 <View>
                   <View
                     style={[
+                      styleConst.shadow.default,
                       styles.scrollViewInner,
                       {
                         display: 'flex',
@@ -325,14 +311,6 @@ class ProfileScreenInfo extends Component {
                         justifyContent: 'center',
                         alignItems: 'center',
                         height: 125,
-                        shadowColor: '#000',
-                        shadowOffset: {
-                          width: 0,
-                          height: 1,
-                        },
-                        shadowOpacity: 0.22,
-                        shadowRadius: 2.22,
-                        elevation: 3,
                       },
                     ]}>
                     <Text
@@ -347,41 +325,37 @@ class ProfileScreenInfo extends Component {
                   </View>
                 </View>
               )}
-
-              <ScrollView
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                contentContainerStyle={{paddingLeft: 20, paddingRight: 5}}
-                style={styles.scrollView}>
-                {this.props.cars.map(item => (
-                  <TouchableWithoutFeedback
-                    key={item.vin}
-                    onPress={() =>
-                      this.props.navigation.navigate('TOHistore', {car: item})
-                    }>
-                    <View>
-                      <CarCard data={item} />
-                    </View>
-                  </TouchableWithoutFeedback>
-                ))}
-              </ScrollView>
+              {this.props.cars.length > 0 ? (
+                <ScrollView
+                  showsHorizontalScrollIndicator={false}
+                  horizontal
+                  contentContainerStyle={{paddingLeft: 20, paddingRight: 5}}
+                  style={styles.scrollView}>
+                  {this.props.cars.map(item => (
+                    <TouchableWithoutFeedback
+                      key={item.vin}
+                      onPress={() =>
+                        this.props.navigation.navigate('TOHistore', {car: item})
+                      }>
+                      <View>
+                        <CarCard data={item} />
+                      </View>
+                    </TouchableWithoutFeedback>
+                  ))}
+                </ScrollView>
+              ) : null}
 
               {this.props.bonus && this.props.bonus.saldo ? (
                 <TouchableWithoutFeedback
                   onPress={() => this.props.navigation.navigate('BonusScreen')}>
                   <View
-                    style={{
-                      marginHorizontal: 20,
-                      marginBottom: 20,
-                      shadowColor: '#000',
-                      shadowOffset: {
-                        width: 0,
-                        height: 1,
+                    style={[
+                      styleConst.shadow.default,
+                      {
+                        marginHorizontal: 20,
+                        marginBottom: 20,
                       },
-                      shadowOpacity: 0.22,
-                      shadowRadius: 2.22,
-                      elevation: 3,
-                    }}>
+                    ]}>
                     <View
                       style={{
                         backgroundColor: '#0061ed',
@@ -459,17 +433,12 @@ class ProfileScreenInfo extends Component {
                   }>
                   <View>
                     <View
-                      style={{
-                        marginHorizontal: 20,
-                        shadowColor: '#000',
-                        shadowOffset: {
-                          width: 0,
-                          height: 1,
+                      style={[
+                        styleConst.shadow.default,
+                        {
+                          marginHorizontal: 20,
                         },
-                        shadowOpacity: 0.22,
-                        shadowRadius: 2.22,
-                        elevation: 3,
-                      }}>
+                      ]}>
                       <View
                         style={{
                           backgroundColor: '#0061ed',
@@ -530,22 +499,40 @@ class ProfileScreenInfo extends Component {
                 onPress={() => {
                   this.props.navigation.navigate('ProfileSettingsScreen');
                 }}
-                style={[styles.buttonPrimary]}>
+                style={[
+                  styleConst.shadow.default,
+                  styles.buttonPrimary,
+                  {backgroundColor: styleConst.color.green},
+                ]}>
                 <Text style={styles.buttonPrimaryText}>
                   Редактировать данные
                 </Text>
               </Button>
             </View>
           )}
-          <Button
-            full
-            onPress={() => {
-              this.props.actionLogout();
-              // this.props.navigation.navigate('ProfileScreen');
-            }}
-            style={styles.buttonPrimary}>
-            <Text style={styles.buttonPrimaryText}>Выйти</Text>
-          </Button>
+          {!this.state.loading ? (
+            <View style={{textAlign: 'center', alignItems: 'center'}}>
+              <Button
+                onPress={() => {
+                  this.props.actionLogout();
+                  // this.props.navigation.navigate('ProfileScreen');
+                }}
+                style={{
+                  backgroundColor: '#fff',
+                  paddingHorizontal: 20,
+                }}>
+                <Text
+                  style={[
+                    styles.buttonPrimaryText,
+                    {
+                      color: styleConst.color.lightBlue,
+                    },
+                  ]}>
+                  Выйти
+                </Text>
+              </Button>
+            </View>
+          ) : null}
         </ScrollView>
       </SafeAreaView>
     );

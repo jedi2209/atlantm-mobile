@@ -81,14 +81,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: styleConst.color.lightBlue,
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.32,
-    shadowRadius: 5.46,
-    elevation: 9,
+    borderRadius: 5,
   },
   buttonText: {
     color: '#fff',
@@ -397,7 +390,7 @@ class ServiceScreen extends Component {
               <View style={styles.group}>
                 <Button
                   onPress={this.state.loading ? undefined : this.onPressOrder}
-                  style={styles.button}>
+                  style={[styleConst.shadow.default, styles.button]}>
                   {this.state.loading ? (
                     <ActivityIndicator color="#fff" />
                   ) : (

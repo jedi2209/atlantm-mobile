@@ -9,8 +9,6 @@ const styles = StyleSheet.create({
   container: {
     // marginHorizontal: styleConst.ui.horizontalGapInList,
     paddingBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.1,
     shadowRadius: 1.5,
     elevation: 3,
@@ -48,7 +46,7 @@ export default class ReviewDealerAnswer extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={[styleConst.shadow.default, styles.container]}>
         <Text style={styles.title}>Ответ автоцентра</Text>
         <Text style={styles.text}>{this.props.text}</Text>
       </View>
