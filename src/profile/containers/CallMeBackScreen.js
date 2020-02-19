@@ -24,6 +24,7 @@ import {StackActions, NavigationActions} from 'react-navigation';
 
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
+import styleConst from '../../core/style-const';
 
 import isInternet from '@utils/internet';
 import {ERROR_NETWORK} from '@core/const';
@@ -73,15 +74,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   button: {
-    backgroundColor: '#0F66B2',
+    backgroundColor: styleConst.color.lightBlue,
     justifyContent: 'center',
-    shadowColor: '#0f66b2',
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
+    borderRadius: 5,
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
   },
   buttonText: {
     color: '#fff',

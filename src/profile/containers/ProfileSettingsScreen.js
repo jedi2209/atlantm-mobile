@@ -20,6 +20,7 @@ import {actionSaveProfileByUser} from '../actions';
 
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import stylesHeader from '../../core/components/Header/style';
+import styleConst from '@core/style-const';
 
 class ProfileSettingsScreen extends Component {
   static navigationOptions = ({navigation}) => ({
@@ -89,6 +90,15 @@ class ProfileSettingsScreen extends Component {
       })
       .then(data => {
         this.setState({success: true, loading: false});
+        const _this = this;
+        Alert.alert('Ваши данные успешно сохранены', '', [
+          {
+            text: 'ОК',
+            onPress() {
+              _this.props.navigation.navigate('ProfileScreenInfo');
+            },
+          },
+        ]);
       })
       .catch(() => {
         setTimeout(
@@ -112,96 +122,71 @@ class ProfileSettingsScreen extends Component {
             <View style={styles.header}>
               <Text style={styles.heading}>Изменение данных</Text>
             </View>
-            {this.state.success ? (
-              <View style={{flex: 1, justifyContent: 'center'}}>
-                <View style={styles.group}>
-                  <Text
-                    style={{
-                      fontSize: 22,
-                      fontWeight: 'bold',
-                    }}>
-                    Заявка успешно отправлена
-                  </Text>
-                </View>
-                <View>
-                  <Button
-                    onPress={() =>
-                      this.props.navigation.navigate('ProfileScreenInfo')
-                    }
-                    style={styles.button}>
-                    <Text style={styles.buttonText}>Назад</Text>
-                  </Button>
-                </View>
+            <View style={styles.group}>
+              <View style={styles.field}>
+                <TextInput
+                  style={styles.textinput}
+                  label="Имя"
+                  value={this.state.firstName}
+                  onChangeText={this.onChangeProfileField('firstName')}
+                />
               </View>
-            ) : (
-              <>
-                <View style={styles.group}>
-                  <View style={styles.field}>
-                    <TextInput
-                      style={styles.textinput}
-                      label="Имя"
-                      value={this.state.firstName}
-                      onChangeText={this.onChangeProfileField('firstName')}
-                    />
-                  </View>
-                  <View style={styles.field}>
-                    <TextInput
-                      style={styles.textinput}
-                      label="Фамилия"
-                      value={this.state.lastName}
-                      onChangeText={this.onChangeProfileField('lastName')}
-                    />
-                  </View>
-                  <View style={styles.field}>
-                    <TextInput
-                      style={styles.textinput}
-                      label="Email"
-                      value={this.state.email}
-                      onChangeText={this.onChangeProfileField('email')}
-                    />
-                  </View>
-                  <View style={styles.field}>
-                    <TextInput
-                      style={styles.textinput}
-                      label="Телефон"
-                      value={this.state.phone}
-                      onChangeText={this.onChangeProfileField('phone')}
-                    />
-                  </View>
-                </View>
-                <View style={styles.group}>
-                  <View style={styles.field}>
-                    <TextInput
-                      style={styles.textinput}
-                      label="Авто"
-                      value={this.state.car}
-                      onChangeText={this.onChangeProfileField('car')}
-                    />
-                  </View>
-                  <View style={styles.field}>
-                    <TextInput
-                      style={styles.textinput}
-                      label="Гос. номер"
-                      value={this.state.carNumber}
-                      onChangeText={this.onChangeProfileField('carNumber')}
-                    />
-                  </View>
-                </View>
-                <View style={styles.group}>
-                  <Button
-                    onPress={
-                      this.state.loading ? undefined : () => this.onPressSave()
-                    }
-                    style={styles.button}>
-                    {this.state.loading ? (
-                      <ActivityIndicator color="#fff" />
-                    ) : (
-                      <Text style={styles.buttonText}>Сохранить</Text>
-                    )}
-                  </Button>
-                </View>
-              </>
-            )}
+              <View style={styles.field}>
+                <TextInput
+                  style={styles.textinput}
+                  label="Фамилия"
+                  value={this.state.lastName}
+                  onChangeText={this.onChangeProfileField('lastName')}
+                />
+              </View>
+              <View style={styles.field}>
+                <TextInput
+                  style={styles.textinput}
+                  label="Email"
+                  value={this.state.email}
+                  onChangeText={this.onChangeProfileField('email')}
+                />
+              </View>
+              <View style={styles.field}>
+                <TextInput
+                  style={styles.textinput}
+                  label="Телефон"
+                  value={this.state.phone}
+                  onChangeText={this.onChangeProfileField('phone')}
+                />
+              </View>
+            </View>
+            <View style={styles.group}>
+              <View style={styles.field}>
+                <TextInput
+                  style={styles.textinput}
+                  label="Авто"
+                  value={this.state.car}
+                  onChangeText={this.onChangeProfileField('car')}
+                />
+              </View>
+              <View style={styles.field}>
+                <TextInput
+                  style={styles.textinput}
+                  label="Гос. номер"
+                  value={this.state.carNumber}
+                  onChangeText={this.onChangeProfileField('carNumber')}
+                />
+              </View>
+            </View>
+            <View style={styles.group}>
+              <Button
+                onPress={
+                  this.state.loading ? undefined : () => this.onPressSave()
+                }
+                style={styles.button}>
+                {this.state.loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.buttonText}>Сохранить</Text>
+                )}
+              </Button>
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -252,15 +237,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   button: {
-    backgroundColor: '#0F66B2',
+    backgroundColor: styleConst.color.lightBlue,
+    borderRadius: 5,
     justifyContent: 'center',
-    shadowColor: '#0f66b2',
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
   },
   buttonText: {
     color: '#fff',
