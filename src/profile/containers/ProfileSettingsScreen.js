@@ -32,11 +32,22 @@ class ProfileSettingsScreen extends Component {
 
   constructor(props) {
     super(props);
-    const car = this.props.profile.cars.find(value => value.owner) || {
-      number: '',
-      brand: '',
-      model: '',
-    };
+
+    let car = '';
+
+    if (this.props.profile.car) {
+      car = {
+        number: this.props.profile.carNumber,
+        brand: this.props.profile.car,
+        model: '',
+      };
+    } else {
+      car = this.props.profile.cars.find(value => value.owner) || {
+        number: '',
+        brand: '',
+        model: '',
+      };
+    }
 
     const {first_name, last_name, email, phone} = this.props.profile;
 
