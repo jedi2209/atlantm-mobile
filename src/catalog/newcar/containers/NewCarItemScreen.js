@@ -237,30 +237,32 @@ class NewCarItemScreen extends Component {
   renderTechData = (title, data) => {
     const {carDetails} = this.props;
     const _this = this;
-    let res = data.map((element, i) => {
-      const val = get(carDetails, element.value);
-      return _this.renderItem(
-        element.name + ':',
-        get(carDetails, element.value),
-        element.postfix,
-      );
-    });
-    console.log('res', res);
+    if (typeof data === 'object') {
+      let res = data.map((element, i) => {
+        const val = get(carDetails, element.value);
+        return _this.renderItem(
+          element.name + ':',
+          get(carDetails, element.value),
+          element.postfix,
+        );
+      });
+    }
+    // console.log('res', res);
 
-    return data ? (
-      <View style={styles.sectionOptions}>
-        <Text style={styles.sectionTitle}>{title}</Text>
-        <Grid>
-          {data.map(element => {
-            return _this.renderItem(
-              element.name + ':',
-              get(carDetails, element.value),
-              element.postfix,
-            );
-          })}
-        </Grid>
-      </View>
-    ) : null;
+    // return data ? (
+    //   <View style={styles.sectionOptions}>
+    //     <Text style={styles.sectionTitle}>{title}</Text>
+    //     <Grid>
+    //       {data.map(element => {
+    //         return _this.renderItem(
+    //           element.name + ':',
+    //           get(carDetails, element.value),
+    //           element.postfix,
+    //         );
+    //       })}
+    //     </Grid>
+    //   </View>
+    // ) : null;
   };
 
   renderItem = (title, value, postfix) => {
@@ -312,6 +314,12 @@ class NewCarItemScreen extends Component {
   renderPrice = ({carDetails, filterData = {}, currency}) => {
     const isSale = carDetails.sale === true;
 
+    const CarPrices = {
+      sale: get(carDetails, 'price.app.sale') || 0,
+      standart:
+        get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
+    };
+
     return (
       <View
         style={{
@@ -327,9 +335,7 @@ class NewCarItemScreen extends Component {
               fontWeight: '600',
               color: '#D0021B',
             }}>
-            {`${numberWithGap(
-              get(carDetails, 'price.app.sale'),
-            )} ${currency.toUpperCase()}`}
+            {`${numberWithGap(CarPrices.sale)} ${currency.toUpperCase()}`}
           </Text>
         )}
         <Text
@@ -340,9 +346,7 @@ class NewCarItemScreen extends Component {
             color: '#000',
             textDecorationLine: isSale ? 'line-through' : 'none',
           }}>
-          {`${numberWithGap(
-            get(carDetails, 'price.app.standart'),
-          )} ${currency.toUpperCase()}`}
+          {`${numberWithGap(CarPrices.standart)} ${currency.toUpperCase()}`}
         </Text>
       </View>
     );
@@ -350,6 +354,12 @@ class NewCarItemScreen extends Component {
 
   renderPriceFooter = ({carDetails, filterData, currency}) => {
     const isSale = carDetails.sale === true;
+
+    const CarPrices = {
+      sale: get(carDetails, 'price.app.sale') || 0,
+      standart:
+        get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
+    };
 
     return (
       <View
@@ -359,9 +369,7 @@ class NewCarItemScreen extends Component {
         ]}>
         {isSale ? (
           <Text style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
-            {`${numberWithGap(
-              get(carDetails, 'price.app.sale'),
-            )} ${currency.toUpperCase()}`}
+            {`${numberWithGap(CarPrices.sale)} ${currency.toUpperCase()}`}
           </Text>
         ) : null}
         <Text
@@ -369,9 +377,7 @@ class NewCarItemScreen extends Component {
             styles.orderPriceText,
             !isSale ? styles.orderPriceDefaultText : styles.orderPriceSmallText,
           ]}>
-          {`${numberWithGap(
-            get(carDetails, 'price.app.standart'),
-          )} ${currency.toUpperCase()}`}
+          {`${numberWithGap(CarPrices.standart)} ${currency.toUpperCase()}`}
         </Text>
       </View>
     );
@@ -532,17 +538,21 @@ class NewCarItemScreen extends Component {
                         .split('/')[0]
                     }`}
                   />
-                  <OptionPlate
-                    title="Привод"
-                    subtitle={get(carDetails, 'gearbox.wheel').toLowerCase()}
-                  />
-                  <OptionPlate
-                    title="Цвет"
-                    subtitle={get(
-                      carDetails,
-                      'color.name.simple',
-                    ).toLowerCase()}
-                  />
+                  {get(carDetails, 'gearbox.wheel') ? (
+                    <OptionPlate
+                      title="Привод"
+                      subtitle={get(carDetails, 'gearbox.wheel').toLowerCase()}
+                    />
+                  ) : null}
+                  {get(carDetails, 'color.name.simple') ? (
+                    <OptionPlate
+                      title="Цвет"
+                      subtitle={get(
+                        carDetails,
+                        'color.name.simple',
+                      ).toLowerCase()}
+                    />
+                  ) : null}
                 </View>
               </ScrollView>
 

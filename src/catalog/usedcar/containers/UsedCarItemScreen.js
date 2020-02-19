@@ -178,7 +178,12 @@ class UserCarItemScreen extends Component {
   selectOptionsTab = () => this.setState({tabName: 'options'});
 
   renderPrice = ({carDetails, currency}) => {
-    const price = showPrice(get(carDetails, 'price.app.standart'), 'BYN');
+    const CarPrices = {
+      sale: get(carDetails, 'price.app.sale') || 0,
+      standart:
+        get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
+    };
+    //const price = showPrice(CarPrices.standart, 'BYN');
 
     return (
       <View
@@ -195,9 +200,7 @@ class UserCarItemScreen extends Component {
             lineHeight: 20,
             color: '#000',
           }}>
-          {`${numberWithGap(
-            get(carDetails, 'price.app.standart'),
-          )} ${currency.toUpperCase()}`}
+          {`${numberWithGap(CarPrices.standart)} ${currency.toUpperCase()}`}
         </Text>
       </View>
     );
@@ -260,6 +263,10 @@ class UserCarItemScreen extends Component {
     const brandName = get(carDetails, 'brand.name');
     const modelName = get(carDetails, 'model.name');
     const additional = get(carDetails, 'options.additional.1.data', []);
+
+    const CarPrices = {
+      standart: get(carDetails, 'price.app.standart') || 0,
+    };
 
     return (
       <StyleProvider style={getTheme()}>
@@ -577,7 +584,7 @@ class UserCarItemScreen extends Component {
                 style={[
                   styles.orderPriceText,
                   styles.orderPriceDefaultText,
-                ]}>{`${numberWithGap(get(carDetails, 'price.app.standart'))} ${
+                ]}>{`${numberWithGap(CarPrices.standart)} ${
                 prices.curr.name
               }`}</Text>
             </View>
