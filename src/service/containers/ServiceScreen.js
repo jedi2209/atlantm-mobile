@@ -79,15 +79,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   button: {
-    backgroundColor: '#0F66B2',
+    backgroundColor: styleConst.color.lightBlue,
     justifyContent: 'center',
-    shadowColor: '#0f66b2',
-    shadowOpacity: 0.5,
-    shadowRadius: 8,
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 1,
     },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
   },
   buttonText: {
     color: '#fff',
@@ -257,17 +258,37 @@ class ServiceScreen extends Component {
       this.setState({loading: true});
 
       const action = await this.props.orderService({
-        car: this.state.car,
+        car: this.state.car ? this.state.car.trim() : '',
         date: orderDate,
-        name: this.state.name,
-        email: this.state.email,
-        phone: this.state.phone,
+        name: this.state.name ? this.state.name.trim() : '',
+        email: this.state.email ? this.state.email.trim() : '',
+        phone: this.state.phone ? this.state.phone.trim() : '',
         device,
         dealerID,
       });
 
       if (action.type === SERVICE_ORDER__SUCCESS) {
         Amplitude.logEvent('order', 'service');
+        Alert.alert(
+          'Ваша заявка успешно отправлена',
+          'Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
+          [
+            {
+              text: 'ОК',
+              onPress() {
+                const resetAction = StackActions.reset({
+                  index: 0,
+                  actions: [
+                    NavigationActions.navigate({
+                      routeName: 'BottomTabNavigation',
+                    }),
+                  ],
+                });
+                this.props.navigation.dispatch(resetAction);
+              },
+            },
+          ],
+        );
         this.setState({success: true, loading: false});
       }
 
@@ -299,126 +320,91 @@ class ServiceScreen extends Component {
               <View style={styles.header}>
                 <Text style={styles.heading}>Заявка на СТО</Text>
               </View>
-              {this.state.success ? (
-                <View style={{flex: 1, justifyContent: 'center'}}>
-                  <View style={styles.group}>
-                    <Text
-                      style={{
-                        fontSize: 22,
-                        fontWeight: 'bold',
-                      }}>
-                      Заявка успешно отправлена
-                    </Text>
-                  </View>
-                  <View>
-                    <Button
-                      onPress={() => {
-                        const resetAction = StackActions.reset({
-                          index: 0,
-                          actions: [
-                            NavigationActions.navigate({
-                              routeName: 'BottomTabNavigation',
-                            }),
-                          ],
-                        });
-                        this.props.navigation.dispatch(resetAction);
-                      }}
-                      style={styles.button}>
-                      <Text style={styles.buttonText}>Назад</Text>
-                    </Button>
-                  </View>
+              <View
+                // Визуально выравниваем относительно остальных компонентов.
+                style={[styles.group, {marginLeft: -14, marginRight: -14}]}>
+                <DealerItemList
+                  goBack
+                  navigation={navigation}
+                  city={dealerSelected.city}
+                  name={dealerSelected.name}
+                  brands={dealerSelected.brands}
+                />
+              </View>
+              <View style={styles.group}>
+                <DatePicker
+                  showIcon={false}
+                  mode="date"
+                  minDate={new Date()}
+                  placeholder="Выберите дату"
+                  format="DD MMMM YYYY"
+                  confirmBtnText="Выбрать"
+                  cancelBtnText="Отмена"
+                  customStyles={datePickerStyles}
+                  date={this.state.date}
+                  onDateChange={(_, date) => {
+                    this.onChangeField('date')(date);
+                  }}
+                />
+              </View>
+              <View style={styles.group}>
+                <View style={styles.field}>
+                  <TextInput
+                    autoCorrect={false}
+                    style={styles.textinput}
+                    label="Имя"
+                    value={this.state.name}
+                    onChangeText={this.onChangeField('name')}
+                  />
                 </View>
-              ) : (
-                <>
-                  <View
-                    // Визуально выравниваем относительно остальных компонентов.
-                    style={[styles.group, {marginLeft: -14, marginRight: -14}]}>
-                    <DealerItemList
-                      goBack
-                      navigation={navigation}
-                      city={dealerSelected.city}
-                      name={dealerSelected.name}
-                      brands={dealerSelected.brands}
-                    />
-                  </View>
-                  <View style={styles.group}>
-                    <DatePicker
-                      showIcon={false}
-                      mode="date"
-                      minDate={new Date()}
-                      placeholder="Выберите дату"
-                      format="DD MMMM YYYY"
-                      confirmBtnText="Выбрать"
-                      cancelBtnText="Отмена"
-                      customStyles={datePickerStyles}
-                      date={this.state.date}
-                      onDateChange={(_, date) => {
-                        this.onChangeField('date')(date);
-                      }}
-                    />
-                  </View>
-                  <View style={styles.group}>
-                    <View style={styles.field}>
-                      <TextInput
-                        autoCorrect={false}
-                        style={styles.textinput}
-                        label="Имя"
-                        value={this.state.name}
-                        onChangeText={this.onChangeField('name')}
-                      />
-                    </View>
-                    <View style={styles.field}>
-                      <TextInput
-                        style={styles.textinput}
-                        label="Телефон"
-                        keyboardType="phone-pad"
-                        value={this.state.phone}
-                        onChangeText={this.onChangeField('phone')}
-                      />
-                    </View>
-                    <View style={styles.field}>
-                      <TextInput
-                        style={styles.textinput}
-                        label="Email"
-                        keyboardType="email-address"
-                        value={this.state.email}
-                        onChangeText={this.onChangeField('email')}
-                      />
-                    </View>
-                  </View>
-                  <View style={styles.group}>
-                    <View style={styles.field}>
-                      <TextInput
-                        style={styles.textinput}
-                        label="Авто"
-                        value={this.state.car}
-                        onChangeText={this.onChangeField('car')}
-                      />
-                    </View>
-                    <View style={styles.field}>
-                      <TextInput
-                        style={styles.textinput}
-                        label="Гос. номер"
-                        value={this.state.carNumber}
-                        onChangeText={this.onChangeField('carNumber')}
-                      />
-                    </View>
-                  </View>
-                  <View style={styles.group}>
-                    <Button
-                      onPress={
-                        this.state.loading ? undefined : this.onPressOrder
-                      }
-                      style={styles.button}>
-                      {this.state.loading ? (
-                        <ActivityIndicator color="#fff" />
-                      ) : (
-                        <Text style={styles.buttonText}>Отправить</Text>
-                      )}
-                    </Button>
-                  </View>
-                </>
-              )}
+                <View style={styles.field}>
+                  <TextInput
+                    style={styles.textinput}
+                    label="Телефон"
+                    keyboardType="phone-pad"
+                    value={this.state.phone}
+                    onChangeText={this.onChangeField('phone')}
+                  />
+                </View>
+                <View style={styles.field}>
+                  <TextInput
+                    style={styles.textinput}
+                    label="Email"
+                    keyboardType="email-address"
+                    value={this.state.email}
+                    onChangeText={this.onChangeField('email')}
+                  />
+                </View>
+              </View>
+              <View style={styles.group}>
+                <View style={styles.field}>
+                  <TextInput
+                    style={styles.textinput}
+                    label="Авто"
+                    value={this.state.car}
+                    onChangeText={this.onChangeField('car')}
+                  />
+                </View>
+                <View style={styles.field}>
+                  <TextInput
+                    style={styles.textinput}
+                    label="Гос. номер"
+                    value={this.state.carNumber}
+                    onChangeText={this.onChangeField('carNumber')}
+                  />
+                </View>
+              </View>
+              <View style={styles.group}>
+                <Button
+                  onPress={this.state.loading ? undefined : this.onPressOrder}
+                  style={styles.button}>
+                  {this.state.loading ? (
+                    <ActivityIndicator color="#fff" />
+                  ) : (
+                    <Text style={styles.buttonText}>Отправить</Text>
+                  )}
+                </Button>
+              </View>
             </View>
           </ScrollView>
         </TouchableWithoutFeedback>
