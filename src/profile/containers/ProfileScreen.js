@@ -17,6 +17,8 @@ import {
 import {Button, Icon} from 'native-base';
 import PhoneInput from 'react-native-phone-input';
 import {store} from '@core/store';
+import styleConst from '@core/style-const';
+import LinearGradient from 'react-native-linear-gradient';
 
 // redux
 import {connect} from 'react-redux';
@@ -167,7 +169,7 @@ class ProfileScreen extends Component {
 
   onKeyboardVisibleChange = () => {
     requestAnimationFrame(() => {
-      this.scrollRef.current.scrollToEnd();
+      this.scrollRef.current.scrollToEnd({animated: true});
     });
   };
 
@@ -423,13 +425,26 @@ class ProfileScreen extends Component {
           <ImageBackground
             source={require('./bg.jpg')}
             style={{width: '100%', height: '100%'}}>
-            <ScrollView ref={this.scrollRef}>
+            <ScrollView ref={this.scrollRef} scrollEnabled={false}>
               <View style={{marginBottom: 20}}>
+                <LinearGradient
+                  start={{x: 0, y: 0}}
+                  end={{x: 0, y: 1}}
+                  // useAngle
+                  // angle={180}
+                  // colors={['rgba(15, 102, 178, 1)', 'rgba(0, 97, 237, 0)']}
+                  colors={['rgba(0, 0, 0, 0.60)', 'rgba(51, 51, 51, 0)']}
+                  style={{
+                    height: '80%',
+                    width: '100%',
+                    position: 'absolute',
+                  }}
+                />
                 <View
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    marginTop: '10%',
+                    paddingTop: '10%',
                     justifyContent: 'center',
                   }}>
                   <Image
@@ -445,30 +460,34 @@ class ProfileScreen extends Component {
                     justifyContent: 'center',
                     marginTop: 40,
                     marginBottom: 20,
+                    opacity: this.state.code ? 0 : 1,
                   }}>
                   {/* <LoginButton
-                    readPermissions={['email']}
-                    style={{
-                      width: '80%',
-                      height: 44,
-                      borderWidth: 0,
-                    }}
-                    onLoginFinished={this._loginFacebook}
-                    onLogoutFinished={() => {
-                      this.props.actionLogout();
-                    }}
-                  /> */}
+                        readPermissions={['email']}
+                        style={{
+                          width: '80%',
+                          height: 44,
+                          borderWidth: 0,
+                        }}
+                        onLoginFinished={this._loginFacebook}
+                        onLogoutFinished={() => {
+                          this.props.actionLogout();
+                        }}
+                      /> */}
 
                   <Button
                     onPress={this._signInFB}
                     iconLeft
-                    style={{
-                      backgroundColor: '#4167B2',
-                      width: '80%',
-                      marginVertical: 8,
-                      paddingHorizontal: 8,
-                      justifyContent: 'flex-start',
-                    }}>
+                    style={[
+                      styleConst.shadow.default,
+                      {
+                        backgroundColor: '#4167B2',
+                        width: '80%',
+                        marginVertical: 8,
+                        paddingHorizontal: 8,
+                        justifyContent: 'flex-start',
+                      },
+                    ]}>
                     <Icon name="facebook" type="FontAwesome5" />
                     <Text style={{color: '#fff', marginLeft: 20}}>
                       Войти через Facebook
@@ -478,13 +497,16 @@ class ProfileScreen extends Component {
                     onPress={this._signInWithGoogle}
                     disabled={this.state.isSigninInProgress}
                     iconLeft
-                    style={{
-                      backgroundColor: '#4286F5',
-                      width: '80%',
-                      marginVertical: 8,
-                      paddingHorizontal: 8,
-                      justifyContent: 'flex-start',
-                    }}>
+                    style={[
+                      styleConst.shadow.default,
+                      {
+                        backgroundColor: '#4286F5',
+                        width: '80%',
+                        marginVertical: 8,
+                        paddingHorizontal: 8,
+                        justifyContent: 'flex-start',
+                      },
+                    ]}>
                     <Icon name="google" type="FontAwesome5" />
                     <Text style={{color: '#fff', marginLeft: 20}}>
                       Войти через Google
@@ -493,13 +515,16 @@ class ProfileScreen extends Component {
                   <Button
                     onPress={this._signInWithVK}
                     iconLeft
-                    style={{
-                      backgroundColor: '#4680C2',
-                      width: '80%',
-                      marginVertical: 8,
-                      paddingHorizontal: 8,
-                      justifyContent: 'flex-start',
-                    }}>
+                    style={[
+                      styleConst.shadow.default,
+                      {
+                        backgroundColor: '#4680C2',
+                        width: '80%',
+                        marginVertical: 8,
+                        paddingHorizontal: 8,
+                        justifyContent: 'flex-start',
+                      },
+                    ]}>
                     <Icon name="vk" type="FontAwesome5" />
                     <Text style={{color: '#fff', marginLeft: 20}}>
                       Войти через VK
@@ -511,6 +536,7 @@ class ProfileScreen extends Component {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
+                    opacity: this.state.code ? 0 : 1,
                   }}>
                   <View
                     style={{
@@ -529,7 +555,11 @@ class ProfileScreen extends Component {
                       }}
                     />
                     <Text
-                      style={{color: '#9097A5', fontSize: 16, lineHeight: 16}}>
+                      style={{
+                        color: '#9097A5',
+                        fontSize: 16,
+                        lineHeight: 16,
+                      }}>
                       или
                     </Text>
                     <View
@@ -557,14 +587,17 @@ class ProfileScreen extends Component {
                       <Button
                         disabled={this.state.loadingVerify}
                         onPress={this._cancelVerify}
-                        style={{
-                          flex: 1,
-                          height: 50,
-                          width: '60%',
-                          backgroundColor: '#afafaf',
-                          justifyContent: 'center',
-                          padding: 10,
-                        }}>
+                        style={[
+                          styleConst.shadow.default,
+                          {
+                            flex: 1,
+                            height: 50,
+                            width: '60%',
+                            backgroundColor: '#afafaf',
+                            justifyContent: 'center',
+                            padding: 10,
+                          },
+                        ]}>
                         {this.state.loadingVerify ? (
                           <ActivityIndicator color="#fff" />
                         ) : (
@@ -608,6 +641,9 @@ class ProfileScreen extends Component {
                           placeholder: 'ваш телефон',
                           keyboardType: 'phone-pad',
                           autoCompleteType: 'tel',
+                          selectionColor: '#afafaf',
+                          returnKeyType: 'go',
+                          textContentType: 'telephoneNumber',
                           enablesReturnKeyAutomatically: true,
                           editable: this.state.code ? false : true,
                         }}
@@ -630,13 +666,16 @@ class ProfileScreen extends Component {
                           textAlign: 'center',
                           // marginTop: 15,
                         }}
+                        textContentType="oneTimeCode"
                         keyboardType="number-pad"
                         ref={input => {
                           this.CodeInput = input;
                         }}
                         maxLength={4}
+                        caretHidden={true}
                         enablesReturnKeyAutomatically={true}
                         placeholder="код"
+                        returnKeyType="send"
                         placeholderTextColor="#afafaf"
                         autoCompleteType="off"
                         onChangeText={this.onInputCode}
@@ -647,12 +686,15 @@ class ProfileScreen extends Component {
                     <Button
                       disabled={this.state.loadingVerify}
                       onPress={this._verifyCodeStepTwo}
-                      style={{
-                        marginTop: 20,
-                        width: '80%',
-                        backgroundColor: '#34BD78',
-                        justifyContent: 'center',
-                      }}>
+                      style={[
+                        styleConst.shadow.default,
+                        {
+                          marginTop: 20,
+                          width: '80%',
+                          backgroundColor: '#34BD78',
+                          justifyContent: 'center',
+                        },
+                      ]}>
                       {this.state.loadingVerify ? (
                         <ActivityIndicator color="#fff" />
                       ) : (
@@ -664,12 +706,15 @@ class ProfileScreen extends Component {
                     <Button
                       onPress={this._verifyCode}
                       disabled={this.state.loadingVerify}
-                      style={{
-                        marginTop: 20,
-                        width: '80%',
-                        backgroundColor: '#34BD78',
-                        justifyContent: 'center',
-                      }}>
+                      style={[
+                        styleConst.shadow.default,
+                        {
+                          marginTop: 20,
+                          width: '80%',
+                          backgroundColor: '#34BD78',
+                          justifyContent: 'center',
+                        },
+                      ]}>
                       {this.state.loadingVerify ? (
                         <ActivityIndicator color="#fff" />
                       ) : (
