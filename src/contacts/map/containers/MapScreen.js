@@ -126,9 +126,8 @@ class MapScreen extends Component {
     console.log('coords', coords);
 
     if (isAndroid) {
-      // const link = 'geo:?q=' + name + ', ' + city + ', ' + address;
-      const link = 'geo:?q=' + coords.lat + ',' + coords.lon;
-      console.log('link', link);
+      const link = 'geo:?q=' + city + ', ' + address;
+      // const link = 'geo:?q=' + coords.lat + ',' + coords.lon;
       return this.openDirections(link);
     }
 
