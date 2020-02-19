@@ -123,10 +123,13 @@ class MapScreen extends Component {
     const {latitude, longitude} = this.getPositions();
     const {name, city, address, coords} = this.getDealerDetails();
 
+    console.log('coords', coords);
+
     if (isAndroid) {
-      return this.openDirections(
-        'geo:0,0?q=' + name + ', ' + city + ', ' + address,
-      );
+      // const link = 'geo:?q=' + name + ', ' + city + ', ' + address;
+      const link = 'geo:?q=' + coords.lat + ',' + coords.lon;
+      console.log('link', link);
+      return this.openDirections(link);
     }
 
     if (availableNaviApps.length === 0) {
@@ -251,8 +254,6 @@ class MapScreen extends Component {
     const navApp = availableNaviApps[index];
 
     const {name, city, address, coords} = this.getDealerDetails();
-
-    console.log('coords', coords);
 
     const latitude = Number(coords.lat);
     const longitude = Number(coords.lon);

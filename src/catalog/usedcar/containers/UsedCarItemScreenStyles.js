@@ -44,7 +44,6 @@ export default StyleSheet.create({
   },
   descrContainer: {
     padding: styleConst.ui.horizontalGap,
-    marginBottom: 90,
   },
   descr: {
     lineHeight: 18,

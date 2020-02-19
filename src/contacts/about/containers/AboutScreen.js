@@ -6,7 +6,7 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-  Linking
+  Linking,
 } from 'react-native';
 import {
   Container,
@@ -101,24 +101,7 @@ class AboutScreen extends Component {
     };
   }
 
-  onLayoutImageTablet = () => {
-    this.refs.imageContainer.measure((ox, oy, width, height, px, py) => {
-      if (!IMAGE_HEIGHT_GUARD) {
-        IMAGE_HEIGHT_GUARD = 1;
-
-        this.setState({
-          imageWidth: width,
-          imageHeight: height,
-        });
-      }
-    });
-  };
-
   onLayoutImage = e => {
-    if (isTablet) {
-      return this.onLayoutImageTablet();
-    }
-
     const {
       width: imageDynamicWidth,
       height: imageDynamicHeight,

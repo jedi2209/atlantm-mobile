@@ -265,7 +265,7 @@ class ProfileScreenInfo extends Component {
   render() {
     return (
       <SafeAreaView>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar barStyle="light-content" />
         <ScrollView>
           <Text
             style={{

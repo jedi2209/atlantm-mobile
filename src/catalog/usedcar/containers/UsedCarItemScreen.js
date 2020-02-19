@@ -289,11 +289,10 @@ class UserCarItemScreen extends Component {
                     shadowColor: '#000',
                     shadowOffset: {
                       width: 0,
-                      height: -2,
+                      height: -3,
                     },
                     shadowOpacity: 0.25,
                     shadowRadius: 3.84,
-                    elevation: 5,
                   }}>
                   <View
                     style={{
@@ -313,6 +312,11 @@ class UserCarItemScreen extends Component {
                     {this.renderPrice({carDetails, currency})}
                   </View>
                 </View>
+                {carDetails.text ? (
+                  <View style={styles.descrContainer}>
+                    <Text style={styles.descr}>{carDetails.text}</Text>
+                  </View>
+                ) : null}
 
                 {carDetails.dealer && carDetails.dealer.name ? (
                   <TouchableWithoutFeedback
@@ -346,6 +350,7 @@ class UserCarItemScreen extends Component {
                   style={{
                     borderBottomColor: '#d5d5e0',
                     borderBottomWidth: 1,
+                    marginBottom: 90,
                   }}
                   dataArray={[
                     {
@@ -559,16 +564,10 @@ class UserCarItemScreen extends Component {
                     );
                   }}
                 />
-
-                {carDetails.text ? (
-                  <View style={styles.descrContainer}>
-                    <Text style={styles.descr}>{carDetails.text}</Text>
-                  </View>
-                ) : null}
               </View>
             </View>
           </Content>
-          <Footer style={stylesFooter.footer}>
+          <View style={stylesFooter.footer}>
             <View
               style={[
                 stylesFooter.orderPriceContainer,
@@ -588,7 +587,7 @@ class UserCarItemScreen extends Component {
               style={stylesFooter.button}>
               <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
             </Button>
-          </Footer>
+          </View>
           {photoViewerItems.length ? (
             <PhotoViewer
               index={photoViewerIndex}
@@ -613,11 +612,12 @@ const stylesFooter = StyleSheet.create({
     marginBottom: 20,
     position: 'absolute',
     bottom: 0,
+    flex: 1,
+    flexDirection: 'row',
   },
   button: {
     width: '55%',
     height: 48,
-    display: 'flex',
     flexDirection: 'row',
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
@@ -629,14 +629,13 @@ const stylesFooter = StyleSheet.create({
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.48,
-    shadowRadius: 5,
-    elevation: 3,
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
   },
   orderPriceContainer: {
     height: 48,
     width: '45%',
-    display: 'flex',
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
     backgroundColor: styleConst.color.header,
@@ -647,9 +646,9 @@ const stylesFooter = StyleSheet.create({
       width: 0,
       height: 1,
     },
-    shadowOpacity: 0.48,
-    shadowRadius: 5,
-    elevation: 3,
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
   },
   orderPriceContainerNotSale: {
     flexDirection: 'row',
