@@ -15,8 +15,8 @@ import {connect} from 'react-redux';
 import {fetchInfoPost, callMeForInfo} from '../actions';
 
 import Spinner from 'react-native-loading-spinner-overlay';
-import {Content} from 'native-base';
-import FooterButton from '../../core/components/FooterButton';
+import {Content, Button} from 'native-base';
+// import FooterButton from '../../core/components/FooterButton';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
 import Imager from '../../core/components/Imager';
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginVertical: 10,
     marginHorizontal: styleConst.ui.horizontalGap,
+    marginBottom: 90,
   },
   date: {
     color: styleConst.color.greyText2,
@@ -120,19 +121,6 @@ class InfoPostScreen extends Component {
     }
   }
 
-  onLayoutImageTablet = () => {
-    this.refs.imageContainer.measure((ox, oy, width, height, px, py) => {
-      if (!IMAGE_HEIGHT_GUARD) {
-        IMAGE_HEIGHT_GUARD = 1;
-
-        this.setState({
-          imageWidth: width,
-          imageHeight: height,
-        });
-      }
-    });
-  };
-
   onLayoutImage = e => {
     const {height: imageDynamicHeight} = e.nativeEvent.layout;
 
@@ -152,7 +140,8 @@ class InfoPostScreen extends Component {
     return posts[id];
   };
 
-  onPressCallMe = async () => {
+  onPressCallMe = () => {
+    console.log('this.props', this.props);
     this.props.navigation.navigate('CallMeBackScreen');
   };
 
@@ -227,14 +216,44 @@ class InfoPostScreen extends Component {
               </View>
             </View>
           )}
-          <FooterButton
-            theme="white"
-            icon="phone"
-            uppercase={false}
-            text="Позвоните мне"
-            onPressButton={this.onPressCallMe}
-          />
         </Content>
+        <Button
+          full
+          uppercase={false}
+          title="Позвоните мне"
+          style={{
+            backgroundColor: styleConst.color.lightBlue,
+            borderColor: styleConst.color.lightBlue,
+            color: 'white',
+            height: 50,
+            borderTopWidth: 0,
+            paddingHorizontal: '5%',
+            marginBottom: 20,
+            position: 'absolute',
+            bottom: 0,
+            width: '80%',
+            borderRadius: 5,
+            marginHorizontal: '10%',
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 1,
+            },
+            shadowOpacity: 0.32,
+            shadowRadius: 5.46,
+            elevation: 9,
+          }}
+          onPress={this.onPressCallMe}>
+          <Text
+            style={{
+              color: '#fff',
+              fontFamily: styleConst.font.medium,
+              fontSize: 16,
+              letterSpacing: styleConst.ui.letterSpacing,
+            }}>
+            Позвоните мне
+          </Text>
+        </Button>
       </SafeAreaView>
     );
   }
