@@ -54,13 +54,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginTop: 50,
   },
-  itemLevel1: {
-    marginBottom: 1,
-  },
-  itemLevel2: {
-    backgroundColor: '#fff',
-    marginBottom: 1,
-  },
   itemLevel3: {
     backgroundColor: '#fff',
     marginBottom: 2,
@@ -72,8 +65,6 @@ const styles = StyleSheet.create({
     height: null,
     minHeight: styleConst.ui.listHeight,
     paddingBottom: 10,
-    borderBottomColor: '#afafaf',
-    borderBottomWidth: 1,
   },
   date: {
     color: styleConst.new.blueHeader,
@@ -168,16 +159,14 @@ class CarHistoryScreen extends Component {
     return nextProps.navigation.isFocused();
   }
 
-  renderListItem = (label, value, isLast) => {
+  renderListItem = (label, value) => {
     if (!value) {
       return null;
     }
 
     return (
       <View style={stylesList.listItemContainer}>
-        <ListItem
-          last={isLast}
-          style={[stylesList.listItem, stylesList.listItemReset]}>
+        <ListItem style={[stylesList.listItem, stylesList.listItemReset]}>
           <Body style={{width: '100%'}}>
             <Item style={stylesList.inputItem} fixedLabel>
               <Label style={stylesList.label}>{label}</Label>
@@ -191,77 +180,39 @@ class CarHistoryScreen extends Component {
     );
   };
 
-  onPressLevel1 = hash => {
-    this.props.actionSetCarHistoryLevel1(
-      this.isActiveLevel1(hash) ? null : hash,
-    );
-  };
-  onPressLevel2 = hash => {
-    this.props.actionSetCarHistoryLevel2(
-      this.isActiveLevel2(hash) ? null : hash,
-    );
-  };
+  // onPressLevel1 = hash => {
+  //   this.props.actionSetCarHistoryLevel1(
+  //     this.isActiveLevel1(hash) ? null : hash,
+  //   );
+  // };
+  // onPressLevel2 = hash => {
+  //   this.props.actionSetCarHistoryLevel2(
+  //     this.isActiveLevel2(hash) ? null : hash,
+  //   );
+  // };
 
-  isActiveLevel1 = hash => this.props.level1hash === hash;
-  isActiveLevel2 = hash => this.props.level2hash === hash;
+  // isActiveLevel1 = hash => this.props.level1hash === hash;
+  // isActiveLevel2 = hash => this.props.level2hash === hash;
 
   renderLevel1 = carHistory => {
     return Object.keys(carHistory).map((carHistoryYear, idx, yearsArray) => {
       const item = carHistory[carHistoryYear];
-      const isLast = yearsArray.length - 1 === idx;
       const hash = item.hash;
-      const isActive = true; //this.isActiveLevel1(hash);
-      const onPressHandler = () => this.onPressLevel1(hash);
+      // const isActive = true; //this.isActiveLevel1(hash);
+      // const onPressHandler = () => this.onPressLevel1(hash);
 
-      return (
-        <View key={hash} style={styles.acc}>
-          {this.renderItemHeader({
-            label: carHistoryYear,
-            onPressHandler,
-            theme: 'itemLevel1',
-            isActive,
-            isLast,
-            isArrow: true,
-          })}
-          {isActive ? (
-            <View
-              style={[styles.accContent, styles.accContentLevel1]}
-              animation="slideInDown"
-              useNativeDriver={true}
-              duration={700}>
-              {this.renderLevel2(item.history)}
-            </View>
-          ) : null}
-        </View>
-      );
+      return <View key={hash}>{this.renderLevel2(item.history)}</View>;
     });
   };
 
   renderLevel2 = carHistoryItemByMonth => {
     return Object.keys(carHistoryItemByMonth).map((month, idx, monthArray) => {
       const item = carHistoryItemByMonth[month];
-      const isLast = monthArray.length - 1 === idx;
       const hash = item.hash;
-      const isActive = true; //this.isActiveLevel2(hash);
-      const onPressHandler = () => this.onPressLevel2(hash);
+      // const isActive = true; //this.isActiveLevel2(hash);
+      // const onPressHandler = () => this.onPressLevel2(hash);
 
-      return (
-        <View key={hash} style={styles.acc}>
-          {this.renderItemHeader({
-            label: MONTH_TEXT[month],
-            onPressHandler,
-            theme: 'itemLevel2',
-            isActive,
-            isLast,
-            isArrow: true,
-          })}
-          {isActive ? (
-            <View animation="pulse" useNativeDriver={true} duration={700}>
-              {this.renderLevel3(item.history)}
-            </View>
-          ) : null}
-        </View>
-      );
+      return <View key={hash}>{this.renderLevel3(item.history)}</View>;
     });
   };
 
@@ -272,7 +223,6 @@ class CarHistoryScreen extends Component {
     return works.map((work, idx) => {
       const workId = get(work, 'document.number');
       const workDealer = get(work, 'dealer.id');
-      const isLast = works.length - 1 === idx;
       const onPressHandler = () => {
         navigation.navigate('CarHistoryDetailsScreen', {
           vin,
@@ -284,7 +234,6 @@ class CarHistoryScreen extends Component {
 
       return this.renderItemHeader({
         work,
-        isLast,
         key: work.hash,
         onPressHandler,
         isArrowPress: true,
@@ -295,7 +244,7 @@ class CarHistoryScreen extends Component {
 
   renderLevel3Item = ({prop, value, color}) => {
     return (
-      <Row style={styles.sectionRow}>
+      <Row>
         <Col style={styles.sectionProp}>
           <Text style={styles.sectionPropText}>{`${prop}:`}</Text>
         </Col>
@@ -320,7 +269,7 @@ class CarHistoryScreen extends Component {
     const currency = get(summ, 'currency');
 
     return (
-      <Body style={styles.body}>
+      <Body style={[styles.body]}>
         {date ? <Text style={styles.date}>{dayMonthYear(date)}</Text> : null}
         {document
           ? this.renderLevel3Item({
@@ -356,16 +305,13 @@ class CarHistoryScreen extends Component {
     const isLevel3 = theme === 'itemLevel3';
 
     return (
-      <View key={key} style={[stylesList.listItemContainer, styles[theme]]}>
+      <View key={key} style={{borderBottomWidth: 1}}>
         <ListItem
           icon
           last
-          style={[
-            stylesList.listItem,
-            isLevel3 ? styles.listItem : {height: 0},
-          ]}
+          style={[stylesList.listItem, styles.listItem]}
           onPress={onPressHandler}>
-          {isLevel3 ? this.renderLevel3Content({work}) : null}
+          {this.renderLevel3Content({work})}
           <Right />
         </ListItem>
       </View>
@@ -394,6 +340,7 @@ class CarHistoryScreen extends Component {
         <View>
           <StyleProvider style={getTheme()}>
             <View>
+              {/* ВОТ ТУТ НАЧИНАЕТСЯ ПРОБЛЕМА С ОБРАТНОЙ ВЫБОРКОЙ ЭЛЕМЕНТОВ */}
               {Object.keys(get(carHistory, 'items'), []).length
                 ? this.renderLevel1(carHistory.items)
                 : null}
