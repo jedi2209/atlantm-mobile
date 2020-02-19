@@ -204,7 +204,7 @@ class InfoListScreen extends Component {
     } = this.props;
 
     // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = navigation;
+    // window.atlantmNavigation = navigation;
 
     console.log('== InfoListScreen ==');
 

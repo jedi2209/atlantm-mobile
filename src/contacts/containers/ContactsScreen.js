@@ -399,7 +399,7 @@ class ContactsScreen extends Component {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                     }}>
-                    <Text style={{fontSize: 14, fontWeight: 'bold'}}>
+                    <Text style={{fontSize: 14, fontWeight: '500'}}>
                       Текущие акции автоцентра
                     </Text>
                     <Text
