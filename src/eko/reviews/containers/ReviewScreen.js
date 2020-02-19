@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.bg,
   },
   review: {
-    marginLeft: -10,
+    marginLeft: 0,
     marginTop: 10,
     marginBottom: styleConst.ui.horizontalGap,
   },
