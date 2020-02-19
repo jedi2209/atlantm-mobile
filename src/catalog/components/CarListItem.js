@@ -151,18 +151,21 @@ export default class CarListItem extends Component {
     const isSale = car.sale === true;
     const currency = get(prices, 'curr.name');
 
+    const CarPrices = {
+      sale: get(car, 'price.app.sale') || 0,
+      standart: get(car, 'price.app.standart') || get(car, 'price.app'),
+    };
+
     return (
       <View style={styles.priceContainer}>
         {isSale ? (
           <Text style={[styles.price, styles.priceSpecial]}>{`${numberWithGap(
-            get(car, 'price.app.sale'),
+            CarPrices.sale,
           )} ${currency.toUpperCase()}`}</Text>
         ) : null}
         <View style={{flexDirection: 'row'}}>
           <Text style={[styles.price, isSale ? styles.priceDefault : null]}>
-            {`${numberWithGap(
-              get(car, 'price.app.standart'),
-            )} ${currency.toUpperCase()}`}
+            {`${numberWithGap(CarPrices.standart)} ${currency.toUpperCase()}`}
           </Text>
           {isSale ? (
             <View
