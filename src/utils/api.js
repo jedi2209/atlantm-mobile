@@ -606,9 +606,15 @@ export default {
     console.log('>>> url', url);
     console.log('>>> requestParams', requestParams);
 
-    return fetch(url, requestParams).then(response => {
-      // __DEV__ && console.log('response', response);
+    return this.apiGetData(url, requestParams);
+  },
+
+  async apiGetData(url, requestParams) {
+    try {
+      const response = await fetch(url, requestParams);
       return response.json();
-    });
+    } catch (err) {
+      console.log('apiGetDataError', err);
+    }
   },
 };
