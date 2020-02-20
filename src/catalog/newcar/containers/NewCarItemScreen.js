@@ -647,17 +647,17 @@ class NewCarItemScreen extends Component {
                         {this.renderTechData('Кузов', [
                           {
                             name: 'Длина',
-                            value: 'body.high',
-                            postfix: 'мм.',
-                          },
-                          {
-                            name: 'Ширина',
                             value: 'body.width',
                             postfix: 'мм.',
                           },
                           {
-                            name: 'Высота',
+                            name: 'Ширина',
                             value: 'body.height',
+                            postfix: 'мм.',
+                          },
+                          {
+                            name: 'Высота',
+                            value: 'body.high',
                             postfix: 'мм.',
                           },
                           {
