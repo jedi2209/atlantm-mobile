@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginHorizontal: 20,
     borderRadius: 5,
+    backgroundColor: styleConst.color.lightBlue,
   },
   buttonPrimaryText: {
     color: '#fff',
@@ -88,11 +89,15 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
   },
   scrollView: {},
-  scrollViewInner: {display: 'flex', flexDirection: 'column'},
+  scrollViewInner: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
 });
 
 import {SafeAreaView} from 'react-navigation';
 import {verticalScale} from '../../utils/scale';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   //TODO: owner true должен быть показан первым
@@ -154,12 +159,13 @@ const CarCard = ({data}) => {
           backgroundColor: '#fafafa',
           marginTop: 10,
           marginBottom: 20,
+          marginLeft: 8,
+          marginRight: 8,
           borderRadius: 5,
           width: 150,
           justifyContent: 'space-between',
           paddingBottom: 40,
           height: 155,
-          marginRight: 15,
         },
       ]}>
       <View>
@@ -283,7 +289,7 @@ class ProfileScreenInfo extends Component {
               }}
             />
           ) : (
-            <View>
+            <>
               {this.props.cars.length > 0 ? (
                 <Text
                   style={{
@@ -295,7 +301,7 @@ class ProfileScreenInfo extends Component {
                   Мои автомобили
                 </Text>
               ) : (
-                <View>
+                <>
                   <View
                     style={[
                       styleConst.shadow.default,
@@ -305,9 +311,9 @@ class ProfileScreenInfo extends Component {
                         backgroundColor: '#979797',
                         marginTop: 10,
                         marginBottom: 10,
-                        borderRadius: 5,
                         marginLeft: 20,
                         marginRight: 20,
+                        borderRadius: 5,
                         justifyContent: 'center',
                         alignItems: 'center',
                         height: 125,
@@ -320,16 +326,16 @@ class ProfileScreenInfo extends Component {
                         fontSize: 18,
                         paddingHorizontal: 20,
                       }}>
-                      Тут появится информация о ваших автомобилях
+                      У вас пока ещё нет автомобилей, о которых мы знаем...
                     </Text>
                   </View>
-                </View>
+                </>
               )}
               {this.props.cars.length > 0 ? (
                 <ScrollView
                   showsHorizontalScrollIndicator={false}
                   horizontal
-                  contentContainerStyle={{paddingLeft: 20, paddingRight: 5}}
+                  contentContainerStyle={{paddingLeft: 12, paddingRight: 5}}
                   style={styles.scrollView}>
                   {this.props.cars.map(item => (
                     <TouchableWithoutFeedback
@@ -346,86 +352,84 @@ class ProfileScreenInfo extends Component {
               ) : null}
 
               {this.props.bonus && this.props.bonus.saldo ? (
-                <TouchableWithoutFeedback
+                <TouchableOpacity
+                  style={[
+                    styleConst.shadow.default,
+                    {
+                      marginHorizontal: 20,
+                      marginBottom: 20,
+                    },
+                  ]}
                   onPress={() => this.props.navigation.navigate('BonusScreen')}>
                   <View
-                    style={[
-                      styleConst.shadow.default,
-                      {
-                        marginHorizontal: 20,
-                        marginBottom: 20,
-                      },
-                    ]}>
+                    style={{
+                      backgroundColor: '#0061ed',
+                      borderRadius: 5,
+                      padding: 14,
+                      display: 'flex',
+                      flexDirection: 'row',
+                    }}>
                     <View
                       style={{
-                        backgroundColor: '#0061ed',
-                        borderRadius: 5,
-                        padding: 14,
+                        backgroundColor: '#fff',
+                        width: 98,
+                        height: 98,
+                        borderRadius: 49,
                         display: 'flex',
-                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginRight: 24,
                       }}>
-                      <View
+                      <Text
                         style={{
-                          backgroundColor: '#fff',
-                          width: 98,
-                          height: 98,
-                          borderRadius: 49,
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          marginRight: 24,
+                          color: '#0061ed',
+                          fontSize: 20,
+                          fontWeight: '600',
                         }}>
-                        <Text
-                          style={{
-                            color: '#0061ed',
-                            fontSize: 20,
-                            fontWeight: '600',
-                          }}>
-                          {this.props.bonus && this.props.bonus.saldo
-                            ? this.props.bonus.saldo.value
-                            : 0}
-                        </Text>
-                      </View>
-                      <View style={{flex: 1}}>
-                        <Text
-                          style={{
-                            color: '#fff',
-                            fontSize: 18,
-                            marginBottom: 8,
-                            fontWeight: '600',
-                          }}>
-                          Бонусные баллы
-                        </Text>
-                        <Text
-                          style={{
-                            color: '#fff',
-                            fontSize: 12,
-                            marginBottom: 16,
-                            fontWeight: '600',
-                          }}>
-                          История накопления и трат Ваших бонусных баллов
-                        </Text>
-                        <View style={{display: 'flex', flexDirection: 'row'}}>
-                          <View>
-                            <Text
-                              style={{
-                                color: '#fff',
-                                fontSize: 16,
-                                fontWeight: '600',
-                              }}>
-                              Посмотреть
-                            </Text>
-                          </View>
-                          <Icon
-                            type="FontAwesome5"
-                            name="angle-right"
-                            style={{color: '#fff', fontSize: 20, marginLeft: 8}}
-                          />
+                        {this.props.bonus && this.props.bonus.saldo
+                          ? this.props.bonus.saldo.value
+                          : 0}
+                      </Text>
+                    </View>
+                    <View style={{flex: 1}}>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontSize: 18,
+                          marginBottom: 8,
+                          fontWeight: '600',
+                        }}>
+                        Бонусные баллы
+                      </Text>
+                      <Text
+                        style={{
+                          color: '#fff',
+                          fontSize: 12,
+                          marginBottom: 16,
+                          fontWeight: '600',
+                        }}>
+                        История накопления и трат Ваших бонусных баллов
+                      </Text>
+                      <View style={{display: 'flex', flexDirection: 'row'}}>
+                        <View>
+                          <Text
+                            style={{
+                              color: '#fff',
+                              fontSize: 16,
+                              fontWeight: '600',
+                            }}>
+                            Посмотреть
+                          </Text>
                         </View>
+                        <Icon
+                          type="FontAwesome5"
+                          name="angle-right"
+                          style={{color: '#fff', fontSize: 20, marginLeft: 8}}
+                        />
                       </View>
                     </View>
                   </View>
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
               ) : (
                 <TouchableWithoutFeedback
                   onPress={() =>
@@ -508,11 +512,12 @@ class ProfileScreenInfo extends Component {
                   Редактировать данные
                 </Text>
               </Button>
-            </View>
+            </>
           )}
           {!this.state.loading ? (
             <View style={{textAlign: 'center', alignItems: 'center'}}>
               <Button
+                transparent
                 onPress={() => {
                   this.props.actionLogout();
                   // this.props.navigation.navigate('ProfileScreen');
@@ -520,6 +525,7 @@ class ProfileScreenInfo extends Component {
                 style={{
                   backgroundColor: '#fff',
                   paddingHorizontal: 20,
+                  marginVertical: 5,
                 }}>
                 <Text
                   style={[

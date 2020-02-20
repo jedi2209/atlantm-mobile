@@ -169,7 +169,7 @@ class ProfileScreen extends Component {
 
   onKeyboardVisibleChange = () => {
     requestAnimationFrame(() => {
-      this.scrollRef.current.scrollToEnd({animated: true});
+      this.scrollRef.current.scrollToEnd();
     });
   };
 
@@ -178,12 +178,14 @@ class ProfileScreen extends Component {
       code: false,
       loadingVerify: false,
       checkCode: '',
+      codeValue: '',
+      phone: '',
     });
-    setTimeout(() => {
-      if (this.phoneInput) {
-        this.phoneInput.focus();
-      }
-    }, 200);
+    // setTimeout(() => {
+    //   if (this.phoneInput) {
+    //     this.phoneInput.focus();
+    //   }
+    // }, 200);
   };
 
   _verifyCode = () => {
@@ -203,14 +205,14 @@ class ProfileScreen extends Component {
     this.setState({phone: phone});
     this.setState({loadingVerify: true});
     this.props.actionSavePofileWithPhone({phone}).then(response => {
-      this.setState({
-        code: true,
-        loadingVerify: false,
-        checkCode: response.checkCode,
-      });
-      this.CodeInput.focus();
-
       if (response.code >= 300) {
+        this.setState({
+          code: false,
+          loadingVerify: false,
+          checkCode: '',
+          codeValue: '',
+        });
+
         let message = 'Что-то пошло не так, попробуйте снова';
 
         if (response.code === 400) {
@@ -223,8 +225,15 @@ class ProfileScreen extends Component {
         }
 
         Alert.alert(message);
-        return;
+      } else {
+        this.setState({
+          code: true,
+          loadingVerify: false,
+          checkCode: response.checkCode,
+        });
+        this.CodeInput.focus();
       }
+      return;
     });
   };
 
@@ -461,6 +470,7 @@ class ProfileScreen extends Component {
                     marginTop: 40,
                     marginBottom: 20,
                     opacity: this.state.code ? 0 : 1,
+                    height: this.state.code ? 0 : 'auto',
                   }}>
                   {/* <LoginButton
                         readPermissions={['email']}
@@ -592,10 +602,11 @@ class ProfileScreen extends Component {
                           {
                             flex: 1,
                             height: 50,
-                            width: '60%',
-                            backgroundColor: '#afafaf',
+                            width: '40%',
+                            backgroundColor: 'rgba(101, 101, 101, 0.9)',
                             justifyContent: 'center',
                             padding: 10,
+                            borderRadius: 5,
                           },
                         ]}>
                         {this.state.loadingVerify ? (
@@ -646,6 +657,9 @@ class ProfileScreen extends Component {
                           textContentType: 'telephoneNumber',
                           enablesReturnKeyAutomatically: true,
                           editable: this.state.code ? false : true,
+                          onEndEditing: () => {
+                            this._verifyCode();
+                          }
                         }}
                       />
                     )}
@@ -679,6 +693,11 @@ class ProfileScreen extends Component {
                         placeholderTextColor="#afafaf"
                         autoCompleteType="off"
                         onChangeText={this.onInputCode}
+                        // onEndEditing={() => {
+                        //   if (this.state.checkCode === 4) {
+                        //     this._verifyCodeStepTwo();
+                        //   }
+                        // }}
                       />
                     ) : null}
                   </View>
@@ -693,6 +712,7 @@ class ProfileScreen extends Component {
                           width: '80%',
                           backgroundColor: '#34BD78',
                           justifyContent: 'center',
+                          borderRadius: 5,
                         },
                       ]}>
                       {this.state.loadingVerify ? (
@@ -706,6 +726,9 @@ class ProfileScreen extends Component {
                     <Button
                       onPress={this._verifyCode}
                       disabled={this.state.loadingVerify}
+                      ref={ref => {
+                        this.getCodeButton = ref;
+                      }}
                       style={[
                         styleConst.shadow.default,
                         {
@@ -713,6 +736,7 @@ class ProfileScreen extends Component {
                           width: '80%',
                           backgroundColor: '#34BD78',
                           justifyContent: 'center',
+                          borderRadius: 5,
                         },
                       ]}>
                       {this.state.loadingVerify ? (
