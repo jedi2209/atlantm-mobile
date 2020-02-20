@@ -68,10 +68,10 @@ class ChooseDealerScreen extends Component {
   };
 
   render() {
-    console.log('== ChooseDealer ==');
+    console.log('== ChooseDealer ==', this.props);
 
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
+    // // Для iPad меню, которое находится вне роутера
+    // window.atlantmNavigation = this.props.navigation;
 
     const {
       region,
