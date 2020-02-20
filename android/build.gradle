@@ -13,7 +13,7 @@ buildscript {
         // supportV4Version = '1.0.0'
         // firebaseIidVersion = "19.0.1"
         playServicesVersion = "16.0.0"
-        // googlePlayServicesIidVersion = "17.0.0"
+        googlePlayServicesIidVersion = "17.0.0"
         androidMapsUtilsVersion = "0.5+"
     }
     repositories {
