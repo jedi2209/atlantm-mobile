@@ -45,7 +45,7 @@ import Amplitude from '@utils/amplitude-analytics';
 import styleConst from '@core/style-const';
 // import stylesHeader from '@core/components/Header/style';
 //import stylesFooter from '@core/components/Footer/style';
-import numberWithGap from '@utils/number-with-gap';
+// import numberWithGap from '@utils/number-with-gap';
 import showPrice from '@utils/price';
 
 // styles
@@ -187,16 +187,22 @@ class NewCarItemScreen extends Component {
     const {navigation, filterData, carDetails} = this.props;
     const currency = get(this.props.navigation, 'state.params.currency');
 
+    const CarPrices = {
+      sale: get(carDetails, 'price.app.sale') || 0,
+      standart:
+        get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
+    };
+
     navigation.navigate('OrderScreen', {
       car: {
         brand: get(carDetails, 'brand.name'),
         model: carDetails.model,
         isSale: carDetails.sale === true,
-        price: get(carDetails, 'price.app.standart'),
-        priceSpecial: get(carDetails, 'price.app.sale'),
+        price: CarPrices.standart,
+        priceSpecial: CarPrices.sale,
         complectation: get(carDetails, 'complectation.name'),
       },
-      currency,
+      region: this.props.dealerSelected.region,
       dealerId: carDetails.dealer.id,
       carId: carDetails.id.api,
       isNewCar: true,
@@ -210,9 +216,9 @@ class NewCarItemScreen extends Component {
   onChangePhotoIndex = index =>
     this.props.actionUpdateNewCarPhotoViewerIndex(index);
 
-  selectBaseTab = () => this.setState({tabName: 'base'});
+  // selectBaseTab = () => this.setState({tabName: 'base'});
 
-  selectOptionsTab = () => this.setState({tabName: 'options'});
+  // selectOptionsTab = () => this.setState({tabName: 'options'});
 
   renderDealer = dealerName => {
     return dealerName ? (
@@ -343,18 +349,18 @@ class NewCarItemScreen extends Component {
               fontWeight: '600',
               color: '#D0021B',
             }}>
-            {`${numberWithGap(CarPrices.sale)} ${currency.toUpperCase()}`}
+            {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
           </Text>
         )}
         <Text
           style={{
-            fontSize: 14,
+            fontSize: isSale ? 12 : 14,
             fontWeight: '600',
             lineHeight: isSale ? 14 : 20,
             color: '#000',
             textDecorationLine: isSale ? 'line-through' : 'none',
           }}>
-          {`${numberWithGap(CarPrices.standart)} ${currency.toUpperCase()}`}
+          {showPrice(CarPrices.standart, this.props.dealerSelected.region)}
         </Text>
       </View>
     );
@@ -378,7 +384,7 @@ class NewCarItemScreen extends Component {
         ]}>
         {isSale ? (
           <Text style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
-            {`${numberWithGap(CarPrices.sale)} ${currency.toUpperCase()}`}
+            {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
           </Text>
         ) : null}
         <Text
@@ -386,7 +392,7 @@ class NewCarItemScreen extends Component {
             styles.orderPriceText,
             !isSale ? styles.orderPriceDefaultText : styles.orderPriceSmallText,
           ]}>
-          {`${numberWithGap(CarPrices.standart)} ${currency.toUpperCase()}`}
+          {showPrice(CarPrices.standart, this.props.dealerSelected.region)}
         </Text>
       </View>
     );

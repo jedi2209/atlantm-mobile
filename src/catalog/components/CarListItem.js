@@ -8,6 +8,7 @@ import Imager from '../../core/components/Imager';
 
 // helpers
 import {get} from 'lodash';
+import {connect} from 'react-redux';
 import numberWithGap from '../../utils/number-with-gap';
 import showPrice from '@utils/price';
 import styleConst from '@core/style-const';
@@ -111,7 +112,17 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class CarListItem extends Component {
+const mapStateToProps = ({dealer, nav}) => {
+  return {
+    nav,
+    dealerSelected: dealer.selected,
+    listRussia: dealer.listRussia,
+    listUkraine: dealer.listUkraine,
+    listBelarussia: dealer.listBelarussia,
+  };
+};
+
+class CarListItem extends Component {
   static propTypes = {
     car: PropTypes.object,
     prices: PropTypes.object,
@@ -141,7 +152,6 @@ export default class CarListItem extends Component {
 
   renderPrice = ({car, prices}) => {
     const isSale = car.sale === true;
-    const currency = get(prices, 'curr.name');
 
     const CarPrices = {
       sale: get(car, 'price.app.sale') || 0,
@@ -151,13 +161,13 @@ export default class CarListItem extends Component {
     return (
       <View style={styles.priceContainer}>
         {isSale ? (
-          <Text style={[styles.price, styles.priceSpecial]}>{`${numberWithGap(
-            CarPrices.sale,
-          )} ${currency.toUpperCase()}`}</Text>
+          <Text style={[styles.price, styles.priceSpecial]}>
+            {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
+          </Text>
         ) : null}
         <View style={{flexDirection: 'row'}}>
           <Text style={[styles.price, isSale ? styles.priceDefault : null]}>
-            {`${numberWithGap(CarPrices.standart)} ${currency.toUpperCase()}`}
+            {showPrice(CarPrices.standart, this.props.dealerSelected.region)}
           </Text>
           {isSale ? (
             <View
@@ -277,3 +287,5 @@ export default class CarListItem extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(CarListItem);

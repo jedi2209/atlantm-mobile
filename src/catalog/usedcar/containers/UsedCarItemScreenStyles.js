@@ -100,10 +100,10 @@ export default StyleSheet.create({
     alignSelf: 'center',
   },
   orderPriceDefaultText: {
-    fontSize: 19,
+    fontSize: 18,
   },
   orderPriceSmallText: {
-    fontSize: 14,
+    fontSize: 12,
     textDecorationLine: 'line-through',
     flex: 1,
     flexDirection: 'row',
