@@ -33,7 +33,7 @@ import {dayMonth, dayMonthYear} from '../../utils/date';
 let IMAGE_HEIGHT_GUARD = 0;
 const {width: screenWidth} = Dimensions.get('window');
 const IMAGE_WIDTH = screenWidth;
-const IMAGE_HEIGHT = 170;
+const IMAGE_HEIGHT = 200;
 
 const styles = StyleSheet.create({
   safearea: {
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
   image: {
     width: IMAGE_WIDTH,
     height: IMAGE_HEIGHT,
+    top: 0,
   },
 });
 
@@ -98,17 +99,30 @@ class InfoPostScreen extends Component {
     webViewWidth: screenWidth - styleConst.ui.verticalGap,
   };
 
-  static navigationOptions = ({navigation}) => ({
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: (
-      <View>
-        <HeaderIconBack theme="white" navigation={navigation} />
-      </View>
-    ),
-    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Об акции</Text>,
-    headerRight: <View />,
-  });
+  static navigationOptions = ({navigation}) => {
+    const returnScreen =
+      navigation.state.params && navigation.state.params.returnScreen;
+    return {
+      headerTransparent: true,
+      headerLeft: (
+        <HeaderIconBack
+          theme="white"
+          ContainerStyle={{
+            backgroundColor: 'rgba(0,0,0, 0.8)',
+            paddingHorizontal: 5,
+            paddingVertical: 5,
+            borderRadius: 20,
+            marginLeft: 5,
+          }}
+          IconStyle={{
+            marginLeft: 5,
+          }}
+          navigation={navigation}
+          returnScreen={returnScreen}
+        />
+      ),
+    };
+  };
 
   componentDidMount() {
     const {posts, navigation, fetchInfoPost} = this.props;
@@ -159,7 +173,7 @@ class InfoPostScreen extends Component {
 
   render() {
     // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
+    // window.atlantmNavigation = this.props.navigation;
 
     const {isCallMeRequest} = this.props;
 
