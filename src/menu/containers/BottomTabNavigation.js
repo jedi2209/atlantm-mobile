@@ -201,7 +201,7 @@ const BottomTabNavigation = createBottomTabNavigator(
   },
   {
     tabBarOptions: {
-      activeTintColor: styleConst.new.blueHeader,
+      activeTintColor: styleConst.lightBlue,
       inactiveTintColor: styleConst.new.passive,
     },
   },
