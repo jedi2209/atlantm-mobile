@@ -1,13 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 
-import {
-  TouchableWithoutFeedback,
-  View,
-  Image,
-  Text,
-  StyleSheet,
-} from 'react-native';
+import {TouchableWithoutFeedback, View, Text, StyleSheet} from 'react-native';
 
 import Imager from '../components/Imager';
 
