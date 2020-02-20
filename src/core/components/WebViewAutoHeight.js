@@ -1,6 +1,6 @@
-import { View } from 'react-native';
-import { WebView } from 'react-native-webview';
-import React, { Component } from 'react';
+import {View} from 'react-native';
+import {WebView} from 'react-native-webview';
+import React, {Component} from 'react';
 
 const BODY_TAG_PATTERN = /\<\/ *body\>/;
 
@@ -75,7 +75,6 @@ const codeInject = html => html.replace(BODY_TAG_PATTERN, style + '</body>');
  * Inspired by this SO answer http://stackoverflow.com/a/33012545
  * */
 export default class WebViewAutoHeight extends Component {
-
   static defaultProps = {
     minHeight: 100,
   };
@@ -90,10 +89,10 @@ export default class WebViewAutoHeight extends Component {
     };
   }
 
-  handleNavigationChange = (navState) => {
+  handleNavigationChange = navState => {
     if (navState.title) {
       const realContentHeight = parseInt(navState.title, 10) || 0; // turn NaN to 0
-      this.setState({ realContentHeight });
+      this.setState({realContentHeight});
     }
 
     if (typeof this.props.onNavigationStateChange === 'function') {
@@ -102,7 +101,7 @@ export default class WebViewAutoHeight extends Component {
   };
 
   render() {
-    const { source, style, minHeight, ...otherProps } = this.props;
+    const {source, style, minHeight, ...otherProps} = this.props;
     const html = source.html;
 
     if (!html) {
@@ -117,9 +116,12 @@ export default class WebViewAutoHeight extends Component {
       <View>
         <WebView
           {...otherProps}
-          source={{ html: codeInject(html), baseUrl: '' }}
+          source={{html: codeInject(html), baseUrl: ''}}
           scrollEnabled={false}
-          style={[style, { height: Math.max(this.state.realContentHeight, minHeight) }]}
+          style={[
+            style,
+            {height: Math.max(this.state.realContentHeight, minHeight)},
+          ]}
           javaScriptEnabled
           onNavigationStateChange={this.handleNavigationChange}
           originWhitelist={['*']}
@@ -127,5 +129,4 @@ export default class WebViewAutoHeight extends Component {
       </View>
     );
   }
-
-};
+}
