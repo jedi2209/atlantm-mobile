@@ -470,7 +470,9 @@ class ProfileScreen extends Component {
                     marginTop: 40,
                     marginBottom: 20,
                     opacity: this.state.code ? 0 : 1,
-                    height: this.state.code ? 0 : 'auto',
+                    height: this.state.code
+                      ? Platform.select({ios: 'auto', android: 0})
+                      : 'auto',
                   }}>
                   {/* <LoginButton
                         readPermissions={['email']}
@@ -658,7 +660,9 @@ class ProfileScreen extends Component {
                           enablesReturnKeyAutomatically: true,
                           editable: this.state.code ? false : true,
                           onEndEditing: () => {
-                            this._verifyCode();
+                            if (this.state.phone) {
+                              this._verifyCode();
+                            }
                           }
                         }}
                       />

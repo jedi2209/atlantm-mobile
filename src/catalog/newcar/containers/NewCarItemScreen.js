@@ -238,7 +238,7 @@ class NewCarItemScreen extends Component {
     const {carDetails} = this.props;
     const _this = this;
     if (typeof data === 'object') {
-      let res = data.map((element, i) => {
+      let resRaw = data.map((element, i) => {
         const val = get(carDetails, element.value);
         return _this.renderItem(
           element.name + ':',
@@ -246,23 +246,31 @@ class NewCarItemScreen extends Component {
           element.postfix,
         );
       });
+      let res = resRaw.filter(el => {
+        return el != null;
+      });
+      return res ? (
+        <View style={styles.sectionOptions}>
+          <Text style={styles.sectionTitle}>{title}</Text>
+          <Grid>{res}</Grid>
+        </View>
+      ) : null;
     }
-    // console.log('res', res);
 
-    // return data ? (
-    //   <View style={styles.sectionOptions}>
-    //     <Text style={styles.sectionTitle}>{title}</Text>
-    //     <Grid>
-    //       {data.map(element => {
-    //         return _this.renderItem(
-    //           element.name + ':',
-    //           get(carDetails, element.value),
-    //           element.postfix,
-    //         );
-    //       })}
-    //     </Grid>
-    //   </View>
-    // ) : null;
+    return data ? (
+      <View style={styles.sectionOptions}>
+        <Text style={styles.sectionTitle}>{title}</Text>
+        <Grid>
+          {data.map(element => {
+            return _this.renderItem(
+              element.name + ':',
+              get(carDetails, element.value),
+              element.postfix,
+            );
+          })}
+        </Grid>
+      </View>
+    ) : null;
   };
 
   renderItem = (title, value, postfix) => {
