@@ -25,10 +25,10 @@ function selected(state = {}, action) {
   }
 }
 
-function region(state = RUSSIA, action) {
+function region(state = BELARUSSIA, action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'dealer.region', RUSSIA);
+      return get(action.payload, 'dealer.region', BELARUSSIA);
     case DEALERS_REGION__SELECT:
       return action.payload;
     default:
