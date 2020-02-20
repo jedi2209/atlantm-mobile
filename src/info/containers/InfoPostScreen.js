@@ -108,7 +108,7 @@ class InfoPostScreen extends Component {
         <HeaderIconBack
           theme="white"
           ContainerStyle={{
-            backgroundColor: 'rgba(0,0,0, 0.8)',
+            backgroundColor: 'rgba(0,0,0, 0.6)',
             paddingHorizontal: 5,
             paddingVertical: 5,
             borderRadius: 20,
