@@ -195,7 +195,7 @@ class CarHistoryScreen extends Component {
   // isActiveLevel2 = hash => this.props.level2hash === hash;
 
   renderLevel1 = carHistory => {
-    return Object.keys(carHistory).map((carHistoryYear, idx, yearsArray) => {
+    return Object.keys(carHistory).reverse().map((carHistoryYear, idx, yearsArray) => {
       const item = carHistory[carHistoryYear];
       const hash = item.hash;
       // const isActive = true; //this.isActiveLevel1(hash);
@@ -206,7 +206,7 @@ class CarHistoryScreen extends Component {
   };
 
   renderLevel2 = carHistoryItemByMonth => {
-    return Object.keys(carHistoryItemByMonth).map((month, idx, monthArray) => {
+    return Object.keys(carHistoryItemByMonth).reverse().map((month, idx, monthArray) => {
       const item = carHistoryItemByMonth[month];
       const hash = item.hash;
       // const isActive = true; //this.isActiveLevel2(hash);
