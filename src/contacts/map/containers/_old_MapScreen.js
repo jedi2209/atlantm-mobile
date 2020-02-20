@@ -29,7 +29,7 @@ import {
 } from '@contacts/actionTypes';
 
 // components
-import {Icon, Button} from 'native-base';
+import {Icon} from 'native-base';
 import ActionSheet from 'react-native-actionsheet';
 import FooterButton from '@core/components/FooterButton';
 import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
@@ -86,128 +86,47 @@ const mapDispatchToProps = {
 
 class MapScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTransparent: true,
-    // headerTitle: 'Найти нас',
-    // headerStyle: stylesHeader.common,
-    // headerTitleStyle: stylesHeader.title,
+    headerTitle: 'Найти нас',
+    headerStyle: stylesHeader.common,
+    headerTitleStyle: stylesHeader.title,
     headerLeft: (
       <HeaderIconBack
-        theme="white"
-        ContainerStyle={{
-          backgroundColor: 'rgba(0,0,0, 0.2)',
-          paddingHorizontal: 5,
-          paddingVertical: 5,
-          borderRadius: 20,
-          marginLeft: 5,
-        }}
-        IconStyle={{
-          marginLeft: 5,
-        }}
         navigation={navigation}
         returnScreen={
           navigation.state.params && navigation.state.params.returnScreen
         }
       />
     ),
-    // headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
+    headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
   });
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-      data: {
-        name: '',
-        city: '',
-        address: '',
-        coords: {
-          latitude: 0,
-          longitude: 0,
-          aspectRatio: 0,
-          latitudeDelta: 0,
-          longitudeDelta: 0,
-        },
-      },
-    };
-  }
+  shouldComponentUpdate(nextProps) {
+    const {
+      availableNaviApps,
+      isRequestCheckAvailableNaviApps,
+      dealerSelected,
+      navigation,
+    } = this.props;
 
-  componentDidMount() {
-    const {dealerSelected, navigation} = this.props;
-
-    let latitude, longitude, name, city, address;
-
-    if (get(navigation, 'state.params.coords')) {
-      latitude = Number(navigation.state.params.coords.lat);
-      longitude = Number(navigation.state.params.coords.lon);
-    } else {
-      latitude = Number(get(dealerSelected, 'coords.lat'));
-      longitude = Number(get(dealerSelected, 'coords.lon'));
-    }
-
-    if (get(navigation, 'state.params.name')) {
-      name = navigation.state.params.name;
-    }
-
-    if (get(navigation, 'state.params.city')) {
-      city = navigation.state.params.city;
-    }
-
-    if (get(navigation, 'state.params.address')) {
-      address = navigation.state.params.address;
-    }
-
-    const aspectRatio = width / height;
-    const latitudeDelta = 0.0922;
-    const longitudeDelta = latitudeDelta * aspectRatio;
-
-    this.setState(
-      {
-        data: {
-          name: name,
-          city: city,
-          address: address,
-          coords: {
-            latitude: latitude,
-            longitude: longitude,
-            latitudeDelta: latitudeDelta,
-            longitudeDelta: longitudeDelta,
-          },
-          aspectRatio: aspectRatio,
-        },
-        loading: false,
-      },
-      () => {
-        console.log('this.setState', this.state);
-      },
+    return (
+      isRequestCheckAvailableNaviApps !==
+        nextProps.isRequestCheckAvailableNaviApps ||
+      availableNaviApps !== nextProps.availableNaviApps ||
+      (dealerSelected.id !== nextProps.dealerSelected.id &&
+        navigation.state.routeName === 'MapScreen')
     );
   }
-
-//   shouldComponentUpdate(nextProps) {
-//     const {
-//       availableNaviApps,
-//       isRequestCheckAvailableNaviApps,
-//       dealerSelected,
-//       navigation,
-//     } = this.props;
-
-//     return (
-//       isRequestCheckAvailableNaviApps !==
-//         nextProps.isRequestCheckAvailableNaviApps ||
-//       availableNaviApps !== nextProps.availableNaviApps ||
-//       (dealerSelected.id !== nextProps.dealerSelected.id &&
-//         navigation.state.routeName === 'MapScreen')
-//     );
-//   }
 
   onPressRoute = async () => {
     const {availableNaviApps, actionSetAvailableNaviApps} = this.props;
 
-    // const {latitude, longitude} = this.getPositions();
-    // const {name, city, address, coords} = this.getDealerDetails();
+    const {latitude, longitude} = this.getPositions();
+    const {name, city, address, coords} = this.getDealerDetails();
+
+    console.log('coords', coords);
 
     if (isAndroid) {
-      const link =
-        'geo:?q=' + this.state.data.city + ', ' + this.state.data.address;
+      const link = 'geo:?q=' + city + ', ' + address;
       // const link = 'geo:?q=' + coords.lat + ',' + coords.lon;
       return this.openDirections(link);
     }
@@ -216,39 +135,36 @@ class MapScreen extends Component {
       actionSetAvailableNaviApps(['Отмена']);
     }
 
-    return this.buildActionSheet(
-      this.state.data.coords.latitude,
-      this.state.data.coords.longitude,
-    );
+    return this.buildActionSheet(latitude, longitude);
   };
 
-  //   getDealerDetails = () => {
-  //     const {dealerSelected, navigation} = this.props;
+  getDealerDetails = () => {
+    const {dealerSelected, navigation} = this.props;
 
-  //     let name;
-  //     let city;
-  //     let address;
+    let name;
+    let city;
+    let address;
 
-  //     let coords = get(navigation, 'state.params.coords');
+    let coords = get(navigation, 'state.params.coords');
 
-  //     if (coords) {
-  //       name = get(navigation, 'state.params.name');
-  //       city = get(navigation, 'state.params.city');
-  //       address = get(navigation, 'state.params.address');
-  //     } else {
-  //       name = get(dealerSelected, 'name');
-  //       city = get(dealerSelected, 'city.name');
-  //       address = get(dealerSelected, 'address');
-  //       coords = get(dealerSelected, 'coords');
-  //     }
+    if (coords) {
+      name = get(navigation, 'state.params.name');
+      city = get(navigation, 'state.params.city');
+      address = get(navigation, 'state.params.address');
+    } else {
+      name = get(dealerSelected, 'name');
+      city = get(dealerSelected, 'city.name');
+      address = get(dealerSelected, 'address');
+      coords = get(dealerSelected, 'coords');
+    }
 
-  //     return {
-  //       name,
-  //       city,
-  //       address,
-  //       coords,
-  //     };
-  //   };
+    return {
+      name,
+      city,
+      address,
+      coords,
+    };
+  };
 
   buildActionSheet = async (latitude, longitude) => {
     const {
@@ -332,14 +248,14 @@ class MapScreen extends Component {
       return false;
     }
 
-    const {availableNaviApps} = this.props;
+    const {availableNaviApps, dealerSelected} = this.props;
 
     const navApp = availableNaviApps[index];
 
-    // const {name, city, address, coords} = this.getDealerDetails();
+    const {name, city, address, coords} = this.getDealerDetails();
 
-    const latitude = Number(this.state.data.coords.latitude);
-    const longitude = Number(this.state.data.coords.longitude);
+    const latitude = Number(coords.lat);
+    const longitude = Number(coords.lon);
 
     const baseParams = {latitude, longitude};
 
@@ -371,89 +287,108 @@ class MapScreen extends Component {
       return;
     }
 
-    // const {
-    //   latitude,
-    //   longitude,
-    //   latitudeDelta,
-    //   longitudeDelta,
-    // } = this.getPositions();
+    const {
+      latitude,
+      longitude,
+      latitudeDelta,
+      longitudeDelta,
+    } = this.getPositions();
 
     requestAnimationFrame(() => {
       if (!this.map) {
         return;
       }
 
-      //   const _this = this;
-
-      this.map.animateToRegion(this.state.data.coords, 1);
+      this.map.animateToRegion(
+        {
+          latitude,
+          longitude,
+          latitudeDelta,
+          longitudeDelta,
+        },
+        1,
+      );
     });
   };
 
-  //   getPositions = () => {
-  //     const {dealerSelected, navigation} = this.props;
+  getPositions = () => {
+    const {dealerSelected, navigation} = this.props;
 
-  //     let latitude;
-  //     let longitude;
+    let latitude;
+    let longitude;
 
-  //     if (get(navigation, 'state.params.coords')) {
-  //       latitude = Number(get(navigation, 'state.params.coords.lat'));
-  //       longitude = Number(get(navigation, 'state.params.coords.lon'));
-  //     } else {
-  //       latitude = Number(get(dealerSelected, 'coords.lat'));
-  //       longitude = Number(get(dealerSelected, 'coords.lon'));
-  //     }
-
-  //     const aspectRatio = width / height;
-  //     const latitudeDelta = 0.0922;
-  //     const longitudeDelta = latitudeDelta * aspectRatio;
-
-  //     return {
-  //       latitude,
-  //       longitude,
-  //       latitudeDelta,
-  //       longitudeDelta,
-  //     };
-  //   };
-
-  _getDescription() {
-    let description;
-
-    if (this.state.data.city) {
-      description = 'г.' + this.state.data.city;
+    if (get(navigation, 'state.params.coords')) {
+      latitude = Number(get(navigation, 'state.params.coords.lat'));
+      longitude = Number(get(navigation, 'state.params.coords.lon'));
+    } else {
+      latitude = Number(get(dealerSelected, 'coords.lat'));
+      longitude = Number(get(dealerSelected, 'coords.lon'));
     }
 
-    if (this.state.data.address) {
-      description = description + ', ' + this.state.data.address;
-    }
-    return description;
-  }
+    const aspectRatio = width / height;
+    const latitudeDelta = 0.0922;
+    const longitudeDelta = latitudeDelta * aspectRatio;
+
+    return {
+      latitude,
+      longitude,
+      latitudeDelta,
+      longitudeDelta,
+    };
+  };
 
   render() {
+    // Для iPad меню, которое находится вне роутера
+    // window.atlantmNavigation = this.props.navigation;
+
     const {
       dealerSelected,
       availableNaviApps,
       isRequestCheckAvailableNaviApps,
     } = this.props;
 
+    const {
+      latitude,
+      longitude,
+      latitudeDelta,
+      longitudeDelta,
+    } = this.getPositions();
+
+    if (!latitude || !longitude) {
+      return (
+        <View style={styles.safearea}>
+          <Text style={styles.errorText}>Нет данных для отображения карты</Text>
+        </View>
+      );
+    }
+
+    const city = get(dealerSelected, 'city.name');
+    const address = get(dealerSelected, 'address');
+    let description;
+
+    if (city) {
+      description = 'г.' + city;
+    }
+
+    if (address) {
+      description = description + ', ' + address;
+    }
+
     console.log('== MapScreen == ');
 
-    return this.state.loading ? (
-      <View style={styles.safearea}>
-        <Text style={styles.errorText}>Нет данных для отображения карты</Text>
-      </View>
-    ) : (
+    return (
       <SafeAreaView style={styles.safearea}>
-        <StatusBar barStyle="default" />
+        <StatusBar barStyle="dark-content" />
         <View style={styles.mapContainer}>
           <MapView
             ref={this.handleRef}
             provider={PROVIDER_GOOGLE}
             style={styles.map}
             initialRegion={{
-              latitude: this.state.data.coords.latitude,
-              longitude: this.state.data.coords.longitude,
-              latitudeDelta: this.state.data.coords.latitudeDelta,
-              longitudeDelta: this.state.data.coords.longitudeDelta,
+              latitude,
+              longitude,
+              latitudeDelta,
+              longitudeDelta,
             }}
             showsScale={true}
             zoomEnabled={true}
@@ -463,12 +398,12 @@ class MapScreen extends Component {
             cacheEnabled={true}>
             <MapView.Marker
               coordinate={{
-                latitude: this.state.data.coords.latitude,
-                longitude: this.state.data.coords.longitude,
+                latitude,
+                longitude,
               }}
               pinColor={styleConst.color.blue}
               title={dealerSelected.name}
-              description={this._getDescription()}
+              description={description}
             />
           </MapView>
 
@@ -479,33 +414,19 @@ class MapScreen extends Component {
             options={availableNaviApps}
             onPress={this.onPressRouteVariant}
           />
-          <Button
-            full
-            style={[
-              styleConst.shadow.default,
-              {
-                backgroundColor: styleConst.color.lightBlue,
-                marginHorizontal: '10%',
-                width: '80%',
-                marginBottom: 40,
-                borderRadius: 5,
-              },
-            ]}
-            title="Проложить маршрут"
-            onPress={this.onPressRoute}>
-            <Icon
-              name="navigation"
-              style={styles.iconRoute}
-              type="MaterialCommunityIcons"
-            />
-            <Text
-              style={{
-                color: 'white',
-                fontSize: 16,
-              }}>
-              ПОСТРОИТЬ МАРШРУТ
-            </Text>
-          </Button>
+          <FooterButton
+            icon={
+              <Icon
+                name="navigation"
+                style={styles.iconRoute}
+                type="MaterialCommunityIcons"
+              />
+            }
+            text="Проложить маршрут"
+            theme="blue"
+            isLoading={isRequestCheckAvailableNaviApps}
+            onPressButton={this.onPressRoute}
+          />
         </View>
       </SafeAreaView>
     );

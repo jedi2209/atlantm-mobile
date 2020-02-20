@@ -50,15 +50,15 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   blackBack: {
-    height: 75,
+    height: 65,
     backgroundColor: '#000',
     opacity: 0.5,
   },
   address: {
-    marginTop: -70,
+    marginTop: -50,
     paddingHorizontal: 20,
-    marginBottom: 15,
-    paddingTop: 0,
+    marginBottom: 5,
+    paddingVertical: 5,
     display: 'flex',
     flexDirection: 'row',
   },
@@ -255,7 +255,7 @@ class ContactsScreen extends Component {
       returnScreen: 'Home',
       name: get(dealerSelected, 'name'),
       city: get(dealerSelected, 'city.name'),
-      address: get(dealerSelected, 'dealer.name'),
+      address: get(dealerSelected, 'address'),
       coords: get(dealerSelected, 'coords'),
     });
   };
@@ -274,7 +274,7 @@ class ContactsScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <View style={styles.safearea}>
-          <StatusBar barStyle="dark-content" />
+          <StatusBar barStyle="default" />
           <ScrollView contentContainerStyle={{paddingBottom: 24}}>
             <Image
               style={styles.imgHero}
@@ -295,7 +295,7 @@ class ContactsScreen extends Component {
                 style={styles.iconRow}
               />
             </Button>
-            <View style={{marginTop: HEADER_MAX_HEIGHT - 170}}>
+            <View style={{marginTop: HEADER_MAX_HEIGHT - 160}}>
               <View style={styles.blackBack} />
               <TouchableOpacity
                 style={styles.address}

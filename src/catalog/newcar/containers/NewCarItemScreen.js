@@ -123,14 +123,14 @@ class NewCarItemScreen extends Component {
       <HeaderIconBack
         theme="white"
         ContainerStyle={{
-          backgroundColor: 'rgba(0,0,0, 0.15)',
+          backgroundColor: 'rgba(0,0,0, 0.2)',
           paddingHorizontal: 5,
           paddingVertical: 5,
-          borderRadius: 50,
+          borderRadius: 20,
           marginLeft: 5,
         }}
         IconStyle={{
-          marginLeft: 10,
+          marginLeft: 5,
         }}
         navigation={navigation}
         returnScreen="NewCarListScreen"

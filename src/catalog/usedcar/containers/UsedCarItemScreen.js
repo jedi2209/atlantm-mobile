@@ -48,6 +48,7 @@ import showPrice from '@utils/price';
 
 // styles
 import styles from './UsedCarItemScreenStyles';
+import { add } from 'react-native-reanimated';
 // import stylesFooter from '@core/components/Footer/style';
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
@@ -206,17 +207,28 @@ class UserCarItemScreen extends Component {
     );
   };
 
+  _renderAddress() {
+    const {carDetails} = this.props;
+
+    let address;
+    const location_name = get(carDetails, 'location.address');
+    const city_name = get(carDetails, 'city.name');
+
+    if (location_name) {
+      address = city_name + ', ' + location_name;
+    } else {
+      address = city_name + ', ' + get(carDetails, 'dealer.name');
+    }
+    return `${address}`;
+  }
+
   onPressMap = () => {
     const {navigation, carDetails} = this.props;
-    let coords = get(carDetails, 'location.coords');
-    if (!coords) {
-      coords = get(carDetails, 'coords');
-    }
     navigation.navigate('MapScreen', {
       name: get(carDetails, 'dealer.name'),
       city: get(carDetails, 'city.name'),
-      address: get(carDetails, 'dealer.name'),
-      coords: coords,
+      address: get(carDetails, 'location.address'),
+      coords: get(carDetails, 'location.coords'),
     });
   };
 
@@ -338,10 +350,7 @@ class UserCarItemScreen extends Component {
                           style={styles.mapCardDealer}
                           numberOfLines={1}
                           ellipsizeMode="tail">
-                          {`${get(carDetails, 'city.name')}, ${get(
-                            carDetails,
-                            'dealer.name',
-                          )}`}
+                            {this._renderAddress()}
                         </Text>
                       </View>
                     </View>
