@@ -28,6 +28,7 @@ import Amplitude from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import isInternet from '../../utils/internet';
 import numberWithGap from '../../utils/number-with-gap';
+import showPrice from '@utils/price';
 import styleConst from '@core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import {CATALOG_ORDER__SUCCESS, CATALOG_ORDER__FAIL} from '../actionTypes';
@@ -211,10 +212,10 @@ class OrderScreen extends Component {
     const {navigation} = this.props;
 
     const car = get(navigation, 'state.params.car');
-    const currency = get(navigation, 'state.params.currency');
+    const region = get(navigation, 'state.params.region');
     const {brand, model, price, priceSpecial, complectation} = car;
-    const processedPrice = `${numberWithGap(price)} ${currency}`;
-    const processedPriceSpecial = `${numberWithGap(priceSpecial)} ${currency}`;
+    const processedPrice = showPrice(price, region);
+    const processedPriceSpecial = showPrice(priceSpecial, region);
 
     return (
       <KeyboardAvoidingView>

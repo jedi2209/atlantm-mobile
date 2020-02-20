@@ -1,12 +1,7 @@
-import numberWithGap from '@utils/number-with-gap';
-
 export default function(price, country) {
   if (!country) {
     country = 'BY';
   }
-  // if (!currency) {
-  //   currency = 'BY';
-  // }
 
   let country_code = 'be-BE',
     currency_code = 'BYN';
@@ -33,7 +28,6 @@ export default function(price, country) {
       break;
   }
 
-  // return `${numberWithGap(price)} ${currency_code}`;
   return parseInt(price, 10).toLocaleString(country_code, {
     style: 'currency',
     currencyDisplay: 'symbol',

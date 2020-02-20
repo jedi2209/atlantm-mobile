@@ -48,7 +48,7 @@ import showPrice from '@utils/price';
 
 // styles
 import styles from './UsedCarItemScreenStyles';
-import { add } from 'react-native-reanimated';
+import {add} from 'react-native-reanimated';
 // import stylesFooter from '@core/components/Footer/style';
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
@@ -154,14 +154,14 @@ class UserCarItemScreen extends Component {
   };
 
   onPressOrder = () => {
-    const {navigation, prices, carDetails} = this.props;
+    const {navigation, carDetails} = this.props;
     navigation.navigate('OrderScreen', {
       car: {
         brand: carDetails.brand.name,
         model: carDetails.model,
         price: get(carDetails, 'price.app.standart'),
       },
-      currency: prices.curr.name,
+      region: this.props.dealerSelected.region,
       dealerId: get(carDetails, 'dealer.id'),
       carId: carDetails.id.api,
     });
@@ -184,7 +184,6 @@ class UserCarItemScreen extends Component {
       standart:
         get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
     };
-    //const price = showPrice(CarPrices.standart, 'BYN');
 
     return (
       <View
@@ -201,7 +200,7 @@ class UserCarItemScreen extends Component {
             lineHeight: 20,
             color: '#000',
           }}>
-          {`${numberWithGap(CarPrices.standart)} ${currency.toUpperCase()}`}
+          {showPrice(CarPrices.standart, this.props.dealerSelected.region)}
         </Text>
       </View>
     );
@@ -586,12 +585,12 @@ class UserCarItemScreen extends Component {
                 stylesFooter.orderPriceContainerNotSale,
               ]}>
               <Text
-                style={[
-                  styles.orderPriceText,
-                  styles.orderPriceDefaultText,
-                ]}>{`${numberWithGap(CarPrices.standart)} ${
-                prices.curr.name
-              }`}</Text>
+                style={[styles.orderPriceText, styles.orderPriceDefaultText]}>
+                {showPrice(
+                  CarPrices.standart,
+                  this.props.dealerSelected.region,
+                )}
+              </Text>
             </View>
             <Button
               onPress={this.onPressOrder}
