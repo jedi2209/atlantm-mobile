@@ -23,6 +23,7 @@
 		3A05CE5B218D10E70033E7C3 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 3A05CE53218D10E70033E7C3 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3A05CE95218D142D0033E7C3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A05CE94218D142D0033E7C3 /* UIKit.framework */; };
 		3A05CE97218D14340033E7C3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A05CE96218D14340033E7C3 /* SystemConfiguration.framework */; };
+		3A75DA1D23FF434E00E4D527 /* libVK-ios-sdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A75DA1C23FF434E00E4D527 /* libVK-ios-sdk.a */; };
 		3AA650BF2392C63C00CAF751 /* libReact-RCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AA650BE2392C63C00CAF751 /* libReact-RCTBlob.a */; };
 		3AA650C12392C64A00CAF751 /* libReact-RCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AA650C02392C64A00CAF751 /* libReact-RCTAnimation.a */; };
 		3AA650C32392C66000CAF751 /* libReact-Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AA650C22392C66000CAF751 /* libReact-Core.a */; };
@@ -359,6 +360,8 @@
 		3A05CE93218D128E0033E7C3 /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		3A05CE94218D142D0033E7C3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		3A05CE96218D14340033E7C3 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		3A75DA1A23FF433C00E4D527 /* VKSdkResources.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = VKSdkResources.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A75DA1C23FF434E00E4D527 /* libVK-ios-sdk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libVK-ios-sdk.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A8F3C0821C7AFED008D1261 /* libreact-native-onesignal.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-onesignal.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AA650BE2392C63C00CAF751 /* libReact-RCTBlob.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libReact-RCTBlob.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AA650C02392C64A00CAF751 /* libReact-RCTAnimation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libReact-RCTAnimation.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -425,6 +428,7 @@
 				3AA650BF2392C63C00CAF751 /* libReact-RCTBlob.a in Frameworks */,
 				A3705E44C9884A96A1FB1F4B /* libz.tbd in Frameworks */,
 				E635394AEF931C5528EC96CD /* libPods-atlantm.a in Frameworks */,
+				3A75DA1D23FF434E00E4D527 /* libVK-ios-sdk.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -543,6 +547,8 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3A75DA1C23FF434E00E4D527 /* libVK-ios-sdk.a */,
+				3A75DA1A23FF433C00E4D527 /* VKSdkResources.bundle */,
 				C591D31723AE38C400E2967E /* libReact-RCTLinking.a */,
 				3AA650D42392CAA800CAF751 /* libReact-Core.a */,
 				3AA650D22392C6C600CAF751 /* libReact-RCTNetwork.a */,

@@ -15,6 +15,11 @@
 #import <GoogleMaps/GoogleMaps.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <RNGoogleSignin/RNGoogleSignin.h>
+#if __has_include(<VKSdkFramework/VKSdkFramework.h>)
+#import <VKSdkFramework/VKSdkFramework.h>
+#else
+#import "VKSdk.h"
+#endif
 
 @implementation AppDelegate
 
@@ -57,9 +62,10 @@
                   openURL:url
                   sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
                   annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
-                ] || [RNGoogleSignin application:application openURL:url options:options];
+                ] || [RNGoogleSignin application:application openURL:url options:options]
+                || [VKSdk processOpenURL:url fromApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]];
   // Add any custom logic here.
-  return handled;
+  return handled; 
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
