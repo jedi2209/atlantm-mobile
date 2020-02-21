@@ -375,21 +375,15 @@ class ProfileScreen extends Component {
 
   _signInWithVK = async () => {
     VKLogin.initialize(XXXX);
-    const isLoggedIn = await VKLogin.isLoggedIn();
-
-    if (!isLoggedIn) {
-      try {
-        const auth = await VKLogin.login(['friends', 'photos', 'email']);
-        const profile = {
-          id: auth.user_id,
-          email: auth.email,
-        };
-        this._sendDataToApi({...profile, networkName: 'vk'});
-      } catch (error) {
-        console.log('error', error);
-      }
-    } else {
-      await VKLogin.logout();
+    try {
+      const auth = await VKLogin.login(['friends', 'photos', 'email']);
+      const profile = {
+        id: auth.user_id,
+        email: auth.email,
+      };
+      this._sendDataToApi({...profile, networkName: 'vk'});
+    } catch (error) {
+      console.log('error', error);
     }
   };
 
@@ -663,7 +657,7 @@ class ProfileScreen extends Component {
                             if (this.state.phone) {
                               this._verifyCode();
                             }
-                          }
+                          },
                         }}
                       />
                     )}
