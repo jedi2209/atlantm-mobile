@@ -489,6 +489,7 @@ export const getProfileSapData = ({id, sap}) => {
     dispatch({
       type: SAVE_PROFILE__UPDATE,
       payload: {
+        id,
         ...userInfo,
         cars,
         bonus,
@@ -499,8 +500,6 @@ export const getProfileSapData = ({id, sap}) => {
 };
 
 export const actionSavePofile = props => {
-  console.log('actionSavePofile', props);
-
   if (props.ID) {
     const userInfo = profileDataAdapter(props);
     return dispatch => {
@@ -538,11 +537,6 @@ export const actionSavePofile = props => {
         const user = data.data.data.user;
         const userInfo = profileDataAdapter(user);
 
-        console.log('actionSavePofile', {
-          ...userInfo,
-          id: user.ID,
-          SAP: user.SAP,
-        });
         dispatch({
           type: SAVE_PROFILE__UPDATE,
           payload: {
@@ -573,6 +567,8 @@ export const actionSaveProfileByUser = props => {
     return API.saveProfile(props)
       .then(async data => {
         const profile = data.profile;
+
+        console.log('actionSaveProfileByUser', data);
 
         dispatch({
           type: SAVE_PROFILE__UPDATE,

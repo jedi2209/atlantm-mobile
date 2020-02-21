@@ -559,7 +559,6 @@ export default {
   getProfile(id) {
     return this.request(`/lkk/user/${id}/`, baseRequestParams)
       .then(data => {
-        console.log('>>> data getProfile', data);
         return data.data;
       })
       .catch(err => {
@@ -568,6 +567,7 @@ export default {
   },
 
   saveProfile(profile) {
+    console.log('saveProfile', profile);
     const {id, first_name, last_name, email, phone} = profile;
 
     const requestParams = _.merge({}, baseRequestParams, {
