@@ -153,7 +153,7 @@ async function getProfileData({token, userid}) {
   if (carsResponseCode === 200 && carsResponse.data) {
     cars = carsResponse.data;
   } else {
-    __DEV__ && console.log('error get profile cars', carsResponse);
+    //__DEV__ && console.log('error get profile cars', carsResponse);
   }
 
   let bonus = {};
@@ -164,10 +164,10 @@ async function getProfileData({token, userid}) {
     if (bonusResponseCode === 200 && bonusResponse.data) {
       bonus = bonusResponse.data;
     } else {
-      __DEV__ && console.log('error get profile bonus', bonusResponse);
+      //__DEV__ && console.log('error get profile bonus', bonusResponse);
     }
   } catch (err) {
-    __DEV__ && console.log('error get profile bonus', err);
+    //__DEV__ && console.log('error get profile bonus', err);
   }
 
   let discounts = [];
@@ -177,7 +177,7 @@ async function getProfileData({token, userid}) {
     if (discountsResponseCode === 200 && discountsResponse.data) {
       discounts = discountsResponse.data;
     } else {
-      __DEV__ && console.log('error get profile discounts', discountsResponse);
+      //__DEV__ && console.log('error get profile discounts', discountsResponse);
     }
   } catch (err) {
     console.log('error get profile discounts', err);
@@ -248,7 +248,7 @@ export const actionFetchCarHistory = props => {
       const {error, status, data} = res;
 
       if (status !== 'success') {
-        __DEV__ && console.log('error fetch car history', res);
+        //__DEV__ && console.log('error fetch car history', res);
         return onError(error);
       }
 
@@ -286,7 +286,7 @@ export const actionFetchCarHistoryDetails = props => {
       const {error, data} = res;
 
       if (get(error, 'code') !== 200) {
-        __DEV__ && console.log('error fetch car history details', res);
+        //__DEV__ && console.log('error fetch car history details', res);
         return onError(error);
       }
 
@@ -328,7 +328,7 @@ export const actionFetchBonusInfo = props => {
       // TODO: запросить у API данные по принятой структуре данных
       // if (get(error, 'code') !== 200) {
       if (status !== 'success') {
-        __DEV__ && console.log('error fetch car bonus info', res);
+        //__DEV__ && console.log('error fetch car bonus info', res);
         return onError({
           code: 404,
           message: 'Ошибка при получении информации о бонусной программе',
@@ -442,7 +442,7 @@ export const actionSubmitForgotPassCode = props => {
       const {status, error} = res;
 
       if (status !== 'success') {
-        __DEV__ && console.log('error forgotPassSubmitCode', res);
+        //__DEV__ && console.log('error forgotPassSubmitCode', res);
         return onError({
           code: 404,
           message: 'Ошибка при проверке кода подтверждения',
@@ -499,6 +499,8 @@ export const getProfileSapData = ({id, sap}) => {
 };
 
 export const actionSavePofile = props => {
+  console.log('actionSavePofile', props);
+
   if (props.ID) {
     const userInfo = profileDataAdapter(props);
     return dispatch => {
@@ -536,6 +538,11 @@ export const actionSavePofile = props => {
         const user = data.data.data.user;
         const userInfo = profileDataAdapter(user);
 
+        console.log('actionSavePofile', {
+          ...userInfo,
+          id: user.ID,
+          SAP: user.SAP,
+        });
         dispatch({
           type: SAVE_PROFILE__UPDATE,
           payload: {
@@ -597,7 +604,7 @@ function profileDataAdapter(user) {
   };
 
   const email =
-    userInfo.email.length > 0
+    userInfo.email && userInfo.email.length > 0
       ? {
           id: userInfo.email[0].ID,
           type: userInfo.email[0].VALUE_TYPE,
@@ -606,7 +613,7 @@ function profileDataAdapter(user) {
       : {};
 
   const phone =
-    userInfo.phone.length > 0
+    userInfo.phone && userInfo.phone.length > 0
       ? {
           id: userInfo.phone[0].ID,
           type: userInfo.phone[0].VALUE_TYPE,
