@@ -181,11 +181,6 @@ class ProfileScreen extends Component {
       codeValue: '',
       phone: '',
     });
-    // setTimeout(() => {
-    //   if (this.phoneInput) {
-    //     this.phoneInput.focus();
-    //   }
-    // }, 200);
   };
 
   _verifyCode = () => {
@@ -399,10 +394,6 @@ class ProfileScreen extends Component {
   onInputPhone = text => {
     this.setState({phone: text});
   };
-
-  // _onSelectCountry() {
-  //   const countryCode = this.phone.getCountryCode();
-  // }
 
   render() {
     if (this.state.loading) {
