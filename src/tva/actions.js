@@ -61,7 +61,7 @@ const dumpTvaAnswer = {
 
 export const actionTvaMessageFill = message => {
   if (message && message.length <= 3) {
-    message = message.trim();
+    message = typeof message === 'string' ? message.trim() : message || '';
   }
 
   return dispatch => {
