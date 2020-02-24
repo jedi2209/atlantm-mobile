@@ -5,7 +5,6 @@ import {TouchableOpacity} from 'react-native';
 
 import {View, Text, NativeModules} from 'react-native';
 import {createAppContainer, NavigationActions} from 'react-navigation';
-import {enableScreens} from 'react-native-screens';
 
 // redux
 import {connect} from 'react-redux';
