@@ -30,6 +30,7 @@ import {
 import Amplitude from '@utils/amplitude-analytics';
 import stylesHeader from '@core/components/Header/style';
 import styleConst from '@core/style-const';
+import showPrice from '@utils/price';
 import {ScrollView} from 'react-native-gesture-handler';
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
@@ -69,14 +70,17 @@ class UsedCarFilterScreen extends Component {
     headerTitleStyle: {fontWeight: '200', color: '#000'},
     headerLeft: <View />,
     headerRight: (
-      <View>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image
-            style={{width: 18, height: 18, marginRight: 14}}
-            source={require('./close.png')}
-          />
-        </TouchableOpacity>
-      </View>
+      <Icon
+        type="AntDesign"
+        style={{
+          color: '#000',
+          fontWeight: 'lighter',
+          fontSize: 22,
+          marginRight: 14,
+        }}
+        name="close"
+        onPress={() => navigation.goBack()}
+      />
     ),
   });
 
@@ -176,44 +180,42 @@ class UsedCarFilterScreen extends Component {
         content: (
           <Content>
             {this.state.cityFilters.map(({id, name}) => (
-              <View>
-                <View key={'view2-body-' + id}>
-                  <ListItem
-                    onPress={() => {
-                      this.setState({
-                        selectedCity: id,
-                      });
+              <View key={'view-city-' + id}>
+                <ListItem
+                  onPress={() => {
+                    this.setState({
+                      selectedCity: id,
+                    });
 
-                      const item = this.state.cityFilters.find(
-                        value => value.id === id,
-                      );
+                    const item = this.state.cityFilters.find(
+                      value => value.id === id,
+                    );
 
-                      this.props.actionResetUsedCarList();
-                      this.props.actionSetNeedUpdateUsedCarList();
-                      this.props.actionSelectUsedCarCity(item);
-                    }}
-                    style={{
-                      height: 44,
-                      backgroundColor: '#fff',
-                      borderWidth: 0,
-                      borderBottomWidth: 0,
-                      paddingLeft: 5,
-                      paddingRight: 5,
-                      paddingVertical: 0,
-                      marginLeft: 0,
-                    }}>
-                    <Left>
-                      <Text>{name}</Text>
-                    </Left>
-                    <Right>
-                      <Radio
-                        selectedColor={styleConst.color.lightBlue}
-                        name={id}
-                        selected={id === this.state.selectedCity}
-                      />
-                    </Right>
-                  </ListItem>
-                </View>
+                    this.props.actionResetUsedCarList();
+                    this.props.actionSetNeedUpdateUsedCarList();
+                    this.props.actionSelectUsedCarCity(item);
+                  }}
+                  style={{
+                    height: 44,
+                    backgroundColor: '#fff',
+                    borderWidth: 0,
+                    borderBottomWidth: 0,
+                    paddingLeft: 5,
+                    paddingRight: 5,
+                    paddingVertical: 0,
+                    marginLeft: 0,
+                  }}>
+                  <Left>
+                    <Text style={{fontSize: 16}}>{name}</Text>
+                  </Left>
+                  <Right>
+                    <Radio
+                      selectedColor={styleConst.color.lightBlue}
+                      name={id}
+                      selected={id === this.state.selectedCity}
+                    />
+                  </Right>
+                </ListItem>
               </View>
             ))}
           </Content>
@@ -272,14 +274,18 @@ class UsedCarFilterScreen extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
               }}>
-              <Text style={{color: '#74747A', fontSize: 14}}>{`${this.state
-                .priceFilter.minPrice || this.props.filterPrice.min} ${this
-                .state.priceFilter.curr &&
-                this.state.priceFilter.curr.name}`}</Text>
-              <Text style={{color: '#74747A', fontSize: 14}}>{`${this.state
-                .priceFilter.maxPrice || this.props.filterPrice.max} ${this
-                .state.priceFilter.curr &&
-                this.state.priceFilter.curr.name}`}</Text>
+              <Text style={{color: '#74747A', fontSize: 14}}>
+                {showPrice(
+                  this.state.priceFilter.minPrice || this.props.filterPrice.min,
+                  this.props.dealerSelected.region,
+                )}
+              </Text>
+              <Text style={{color: '#74747A', fontSize: 14}}>
+                {showPrice(
+                  this.state.priceFilter.maxPrice || this.props.filterPrice.max,
+                  this.props.dealerSelected.region,
+                )}
+              </Text>
             </View>
           </View>
         ),

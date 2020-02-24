@@ -159,12 +159,17 @@ class NewCarFilterScreen extends Component {
     headerTitleStyle: {fontWeight: '200', color: '#000'},
     headerLeft: <View />,
     headerRight: (
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Image
-          style={{width: 18, height: 18, marginRight: 14}}
-          source={require('./close.png')}
-        />
-      </TouchableOpacity>
+      <Icon
+        type="AntDesign"
+        style={{
+          color: '#000',
+          fontWeight: 'lighter',
+          fontSize: 22,
+          marginRight: 14,
+        }}
+        name="close"
+        onPress={() => navigation.goBack()}
+      />
     ),
   });
 

@@ -243,9 +243,8 @@ class NewCarItemScreen extends Component {
   renderTechData = (title, data) => {
     const {carDetails} = this.props;
     const _this = this;
-    if (typeof data === 'object') {
-      let resRaw = data.map((element, i) => {
-        const val = get(carDetails, element.value);
+    if (typeof data === 'object' && data.length) {
+      let resRaw = data.map(element => {
         return _this.renderItem(
           element.name + ':',
           get(carDetails, element.value),
@@ -719,7 +718,7 @@ class NewCarItemScreen extends Component {
                     title: 'Комплектация',
                     content: (
                       <View style={styles.tabContent}>
-                        {stockKeys ? (
+                        {stockKeys.length ? (
                           <View>
                             {stockKeys.map(key => {
                               return this.renderComplectationItem(
@@ -730,7 +729,7 @@ class NewCarItemScreen extends Component {
                           </View>
                         ) : null}
 
-                        {additionalKeys ? (
+                        {additionalKeys.length ? (
                           <View>
                             {additionalKeys.map(key => {
                               return this.renderComplectationItem(
