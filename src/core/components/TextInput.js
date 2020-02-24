@@ -8,7 +8,7 @@ import {
 
 export const TextInput = ({label, value = '', ...props}) => {
   const [focused, setFocused] = useState(false);
-  const isActive = focused || Boolean(value.trim());
+  const isActive = focused || Boolean(value);
 
   return (
     <View style={styles.container}>
@@ -17,7 +17,7 @@ export const TextInput = ({label, value = '', ...props}) => {
       </Text>
       <NativeTextInput
         {...props}
-        value={value}
+        value={value.length ? value.trim() : ''}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />
