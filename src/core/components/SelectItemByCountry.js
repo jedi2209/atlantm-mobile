@@ -106,7 +106,6 @@ export default class SelectItemByCountry extends Component {
 
           const resetAction = StackActions.reset({
             index: 0,
-            key: null,
             actions: [
               NavigationActions.navigate({
                 routeName: returnScreen || mainScreen,

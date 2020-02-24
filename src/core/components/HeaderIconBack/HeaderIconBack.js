@@ -72,7 +72,6 @@ export default class HeaderIconBack extends Component {
     Keyboard.dismiss();
     const resetAction = StackActions.reset({
       index: 0,
-      key: null,
       actions: [NavigationActions.navigate({routeName: MENU_SCREEN_NAME})],
     });
     this.props.navigation.dispatch(resetAction);
