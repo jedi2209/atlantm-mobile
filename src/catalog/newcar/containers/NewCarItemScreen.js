@@ -722,11 +722,9 @@ class NewCarItemScreen extends Component {
                         {stockKeys ? (
                           <View>
                             {stockKeys.map(key => {
-                              const item = stock[key];
-
                               return this.renderComplectationItem(
-                                item.name,
-                                item.data,
+                                stock[key].name,
+                                stock[key].data,
                               );
                             })}
                           </View>
@@ -735,11 +733,9 @@ class NewCarItemScreen extends Component {
                         {additionalKeys ? (
                           <View>
                             {additionalKeys.map(key => {
-                              const item = additional[key];
-
                               return this.renderComplectationItem(
-                                item.name,
-                                item.data,
+                                additional[key].name,
+                                additional[key].data,
                               );
                             })}
                           </View>
