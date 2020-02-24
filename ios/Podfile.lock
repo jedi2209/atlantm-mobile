@@ -74,7 +74,6 @@ PODS:
   - GTMSessionFetcher/Full (1.3.1):
     - GTMSessionFetcher/Core (= 1.3.1)
   - OneSignal (2.12.6)
-  - QBImagePickerController (3.4.0)
   - RCTRequired (0.61.5)
   - RCTTypeSafety (0.61.5):
     - FBLazyVector (= 0.61.5)
@@ -270,7 +269,7 @@ PODS:
   - react-native-vkontakte-login (1.0.0):
     - React
     - VK-ios-sdk
-  - react-native-webview (7.6.0):
+  - react-native-webview (8.1.2):
     - React
   - React-RCTActionSheet (0.61.5):
     - React-Core/RCTActionSheetHeaders (= 0.61.5)
@@ -307,21 +306,23 @@ PODS:
     - React-cxxreact (= 0.61.5)
     - React-jsi (= 0.61.5)
     - ReactCommon/jscallinvoker (= 0.61.5)
-  - rn-fetch-blob (0.11.2):
+  - rn-fetch-blob (0.12.0):
     - React-Core
-  - rn-range-slider (1.3.0):
-    - React
   - RNCAsyncStorage (1.4.2):
     - React
   - RNDeviceInfo (5.5.3):
     - React
   - RNGestureHandler (1.6.0):
     - React
-  - RNGoogleSignin (3.0.3):
+  - RNGoogleSignin (3.0.4):
     - GoogleSignIn (~> 5.0.0)
     - React
-  - RNImageCropPicker (0.26.1):
-    - QBImagePickerController
+  - RNImageCropPicker (0.28.0):
+    - React-Core
+    - React-RCTImage
+    - RNImageCropPicker/QBImagePickerController (= 0.28.0)
+    - RSKImageCropper
+  - RNImageCropPicker/QBImagePickerController (0.28.0):
     - React-Core
     - React-RCTImage
     - RSKImageCropper
@@ -329,9 +330,9 @@ PODS:
     - React
   - RNReanimated (1.7.0):
     - React
-  - RNScreens (2.0.0-alpha.12):
+  - RNScreens (2.0.0-beta.10):
     - React
-  - RNSentry (1.3.1):
+  - RNSentry (1.3.2):
     - React
     - Sentry (~> 4.4.0)
   - RSKImageCropper (2.2.3)
@@ -384,7 +385,6 @@ DEPENDENCIES:
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
-  - rn-range-slider (from `../node_modules/rn-range-slider`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -409,7 +409,6 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - OneSignal
-    - QBImagePickerController
     - RSKImageCropper
     - Sentry
     - VK-ios-sdk
@@ -485,8 +484,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   rn-fetch-blob:
     :path: "../node_modules/rn-fetch-blob"
-  rn-range-slider:
-    :path: "../node_modules/rn-range-slider"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
   RNDeviceInfo:
@@ -526,7 +523,6 @@ SPEC CHECKSUMS:
   GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
   GTMSessionFetcher: cea130bbfe5a7edc8d06d3f0d17288c32ffe9925
   OneSignal: a6df91542d1cf133b9dd19d89f2b533d8f2d3163
-  QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   RCTRequired: b153add4da6e7dbc44aebf93f3cf4fcae392ddf1
   RCTTypeSafety: 9aa1b91d7f9310fc6eadc3cf95126ffe818af320
   React: b6a59ef847b2b40bb6e0180a97d0ca716969ac78
@@ -544,7 +540,7 @@ SPEC CHECKSUMS:
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-viewpager: 118e65d8c65c56fe48d12a35cdcf1fe7e027a366
   react-native-vkontakte-login: 8ffc0444a64d86a4927c937feffa61d0e7ceb5e6
-  react-native-webview: 711cef318a554093b09a5b871894011435d87a8d
+  react-native-webview: 055c7110f17c2f19c971f655064ee480638db668
   React-RCTActionSheet: 600b4d10e3aea0913b5a92256d2719c0cdd26d76
   React-RCTAnimation: 791a87558389c80908ed06cc5dfc5e7920dfa360
   React-RCTBlob: d89293cc0236d9cb0933d85e430b0bbe81ad1d72
@@ -555,22 +551,21 @@ SPEC CHECKSUMS:
   React-RCTText: 9ccc88273e9a3aacff5094d2175a605efa854dbe
   React-RCTVibration: a49a1f42bf8f5acf1c3e297097517c6b3af377ad
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
-  rn-fetch-blob: f525a73a78df9ed5d35e67ea65e79d53c15255bc
-  rn-range-slider: 69e44e1ed63195995d5b6a86ac5e09d9ce6dbe38
+  rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNCAsyncStorage: 285698b8a4f219573174d99e863a78b93f389272
   RNDeviceInfo: 67607dfe9cfbed105838144c40187a8392aa404d
   RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
-  RNGoogleSignin: a10b849c165088c737d4465de6c2062f24d06002
-  RNImageCropPicker: e1d8c3381e5b05a1bdcd13ea57a4f1c020a09cef
+  RNGoogleSignin: a00f87261ea13df9a5cea8deafa6927d6f2c3562
+  RNImageCropPicker: cf129d17e042ce3e96fb9ada967c28f21f977c82
   RNRate: d44a8bca6ee08f5d890ecccddaec2810955ffbb3
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
-  RNScreens: 254da4b84f25971cbb30ed3ddc84131f23cac812
-  RNSentry: 6458ba85aa3f8ae291abed4f72abbd7080839c71
+  RNScreens: c596b54c3ab63b0390aa3cb081edd438147d40ae
+  RNSentry: 2ec85f3e314c6a650b1c51b30ff764b6103ed7e2
   RSKImageCropper: a446db0e8444a036b34f3c43db01b2373baa4b2a
   Sentry: 14bdd673870e8cf64932b149fad5bbbf39a9b390
   VK-ios-sdk: 62a10b6571fbcda0657f455fedce7fedf55b4cd0
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
 
-PODFILE CHECKSUM: de7bc656ac011701b364ee2df5f76d4c3021c70a
+PODFILE CHECKSUM: 84efb9c14f32dcab23aae516f019634d7b1dd6b1
 
 COCOAPODS: 1.8.4
