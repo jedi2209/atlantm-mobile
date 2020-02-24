@@ -17,7 +17,9 @@ export const TextInput = ({label, value = '', ...props}) => {
       </Text>
       <NativeTextInput
         {...props}
-        value={value.length ? value.trim() : ''}
+        value={
+          value.length && typeof value === 'string' ? value.trim() : value || ''
+        }
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />

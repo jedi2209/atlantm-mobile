@@ -251,11 +251,23 @@ class ServiceScreen extends Component {
       this.setState({loading: true});
 
       const action = await this.props.orderService({
-        car: this.state.car ? this.state.car.trim() : '',
+        car:
+          this.state.car && typeof this.state.car === 'string'
+            ? this.state.car.trim()
+            : this.state.car || '',
         date: orderDate,
-        name: this.state.name ? this.state.name.trim() : '',
-        email: this.state.email ? this.state.email.trim() : '',
-        phone: this.state.phone ? this.state.phone.trim() : '',
+        name:
+          this.state.name && typeof this.state.name === 'string'
+            ? this.state.name.trim()
+            : this.state.name || '',
+        email:
+          this.state.email && typeof this.state.email === 'string'
+            ? this.state.email.trim()
+            : this.state.email || '',
+        phone:
+          this.state.phone && typeof this.state.phone === 'string'
+            ? this.state.phone.trim()
+            : this.state.phone || '',
         device,
         dealerID,
       });

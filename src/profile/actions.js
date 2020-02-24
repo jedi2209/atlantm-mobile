@@ -52,7 +52,7 @@ import {DEALER__SUCCESS} from '../dealer/actionTypes';
 
 export const nameFill = name => {
   if (name && name.length <= 3) {
-    name = name.trim();
+    name = typeof name === 'string' ? name.trim() : name || '';
   }
 
   return dispatch => {
@@ -67,7 +67,7 @@ export const phoneFill = phone => {
   return dispatch => {
     dispatch({
       type: PROFILE_PHONE__FILL,
-      payload: phone ? phone.trim() : '',
+      payload: typeof phone === 'string' ? phone.trim() : phone || '',
     });
   };
 };
@@ -76,7 +76,7 @@ export const emailFill = email => {
   return dispatch => {
     dispatch({
       type: PROFILE_EMAIL__FILL,
-      payload: email ? email.trim() : '',
+      payload: typeof email === 'string' ? email.trim() : email || '',
     });
   };
 };
@@ -97,7 +97,7 @@ export const carNumberFill = carNumber => {
 
 export const carFill = car => {
   if (car && car.length <= 3) {
-    car = car ? car.trim() : '';
+    car = car && typeof car === 'string' ? car.trim() : car || '';
   }
 
   return dispatch => {
