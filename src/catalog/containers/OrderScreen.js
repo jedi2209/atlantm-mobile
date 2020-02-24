@@ -255,7 +255,7 @@ class OrderScreen extends Component {
                         editable={false}
                         style={styles.textinput}
                         label="Марка"
-                        value={brand.toString()}
+                        value={brand ? brand.toString() : null}
                       />
                     </View>
                     <View style={styles.field}>
@@ -263,7 +263,7 @@ class OrderScreen extends Component {
                         editable={false}
                         style={styles.textinput}
                         label="Модель"
-                        value={model.name.toString()}
+                        value={model ? model.name.toString() : null}
                       />
                     </View>
                     <View style={styles.field}>
@@ -271,7 +271,7 @@ class OrderScreen extends Component {
                         editable={false}
                         style={styles.textinput}
                         label="Комплектация"
-                        value={complectation.toString()}
+                        value={complectation ? complectation.toString() : null}
                       />
                     </View>
                     <View style={styles.field}>
