@@ -97,7 +97,7 @@ export const carNumberFill = carNumber => {
 
 export const carFill = car => {
   if (car && car.length <= 3) {
-    car = car.trim();
+    car = car ? car.trim() : '';
   }
 
   return dispatch => {

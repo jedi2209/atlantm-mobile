@@ -270,7 +270,7 @@ class OrderScreen extends Component {
                       <TextInput
                         editable={false}
                         style={styles.textinput}
-                        label="Комплект"
+                        label="Комплектация"
                         value={complectation}
                       />
                     </View>
