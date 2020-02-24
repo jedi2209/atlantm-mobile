@@ -1,15 +1,22 @@
 // Только для Ipad
 
-import React, { Component } from 'react';
-import { Text, View, Image, Alert, StyleSheet, TouchableOpacity } from 'react-native';
+import React, {Component} from 'react';
+import {
+  Text,
+  View,
+  Image,
+  Alert,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import PropTypes from 'prop-types';
 
 // redux
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 // helpers
 import styleConst from '../../core/style-const';
-import { NavigationActions, StackActions } from 'react-navigation';
+import {NavigationActions, StackActions} from 'react-navigation';
 import {
   MENU_TVA,
   MENU_EKO,
@@ -74,7 +81,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ nav, dealer }) => ({
+const mapStateToProps = ({nav, dealer}) => ({
   nav,
   dealerSelected: dealer.selected,
 });
@@ -94,9 +101,9 @@ const icons = {
 class Sidebar extends Component {
   static propTypes = {
     navigation: PropTypes.object,
-  }
+  };
 
-  static defaultProps = {}
+  static defaultProps = {};
 
   shouldComponentUpdate(nextProps) {
     return this.props.nav !== nextProps.nav;
@@ -127,56 +134,55 @@ class Sidebar extends Component {
     }
   }
 
-  isMenuAvailable = () => this.props.dealerSelected.id
+  isMenuAvailable = () => this.props.dealerSelected.id;
 
-  showIntroWarning = () => Alert.alert('Для начала выберите автоцентр')
+  showIntroWarning = () => Alert.alert('Для начала выберите автоцентр');
 
-  onPressContacts = () => this.onPressItem('ContactsScreen')
+  onPressContacts = () => this.onPressItem('ContactsScreen');
 
-  onPressInfoList = () => this.onPressItem('InfoListScreen')
+  onPressInfoList = () => this.onPressItem('InfoListScreen');
 
-  onPressProfile = () => this.onPressItem('Profile2Screen')
+  onPressProfile = () => this.onPressItem('Profile2Screen');
 
-  onPressService = () => this.onPressItem('ServiceScreen')
+  onPressService = () => this.onPressItem('ServiceScreen');
 
-  onPressCatalog = () => this.onPressItem('Catalog2Screen')
+  onPressCatalog = () => this.onPressItem('Catalog2Screen');
 
-  onPressTva = () => this.onPressItem('Tva2Screen')
+  onPressTva = () => this.onPressItem('Tva2Screen');
 
-  onPressEko = () => this.onPressItem('Eko2Screen')
+  onPressEko = () => this.onPressItem('Eko2Screen');
 
-  onPressIndicators = () => this.onPressItem('IndicatorsScreen')
+  onPressIndicators = () => this.onPressItem('IndicatorsScreen');
 
-  onPressItem = (routeName) => {
+  onPressItem = routeName => {
     if (!this.isMenuAvailable()) return this.showIntroWarning();
 
     const resetAction = StackActions.reset({
       index: 0,
-      key: null,
-      actions: [
-        NavigationActions.navigate({ routeName }),
-      ],
+      actions: [NavigationActions.navigate({routeName})],
     });
     window.atlantmNavigation.dispatch(resetAction);
-  }
+  };
 
   renderMenuItem = (type, text, icon, onPressHandler, isActive) => {
     return (
-      <TouchableOpacity onPress={onPressHandler} style={[styles.item, isActive ? styles.itemActive : {}]}>
-        <Image
-          style={styles.icon}
-          source={icons[icon]}
-        />
+      <TouchableOpacity
+        onPress={onPressHandler}
+        style={[styles.item, isActive ? styles.itemActive : {}]}>
+        <Image style={styles.icon} source={icons[icon]} />
         <View style={styles.textContainer}>
-          <Text style={[styles.text, isActive ? styles.textActive : {}]}>{text}</Text>
+          <Text style={[styles.text, isActive ? styles.textActive : {}]}>
+            {text}
+          </Text>
         </View>
       </TouchableOpacity>
     );
-  }
+  };
 
   render() {
     const nav = this.props.nav.newState;
-    const isChooseDealerScreen = nav.routes[nav.index].routeName === 'ChooseDealerScreen';
+    const isChooseDealerScreen =
+      nav.routes[nav.index].routeName === 'ChooseDealerScreen';
 
     if (!this.props.dealerSelected.id && !isChooseDealerScreen) return null;
 
@@ -202,14 +208,62 @@ class Sidebar extends Component {
           />
         </View>
 
-        {this.renderMenuItem('ready', 'Контакты', 'contacts', this.onPressContacts, isContact)}
-        {this.renderMenuItem('ready', 'Акции', 'info', this.onPressInfoList, isInfo)}
-        {this.renderMenuItem('ready', 'Заявка на СТО', 'service', this.onPressService, isService)}
-        {this.renderMenuItem('ready', 'Табло выдачи авто', 'car_delivery', this.onPressTva, isTva)}
-        {this.renderMenuItem('ready', 'Каталог автомобилей', 'catalog_auto', this.onPressCatalog, isCatalog)}
-        {this.renderMenuItem('ready', 'Индикаторы', 'indicators', this.onPressIndicators, isIndicators)}
-        {this.renderMenuItem('ready', 'Отзывы и предложения', 'reviews', this.onPressEko, isEko)}
-        {this.renderMenuItem('ready', 'Личный кабинет', 'profile', this.onPressProfile, isProfile)}
+        {this.renderMenuItem(
+          'ready',
+          'Контакты',
+          'contacts',
+          this.onPressContacts,
+          isContact,
+        )}
+        {this.renderMenuItem(
+          'ready',
+          'Акции',
+          'info',
+          this.onPressInfoList,
+          isInfo,
+        )}
+        {this.renderMenuItem(
+          'ready',
+          'Заявка на СТО',
+          'service',
+          this.onPressService,
+          isService,
+        )}
+        {this.renderMenuItem(
+          'ready',
+          'Табло выдачи авто',
+          'car_delivery',
+          this.onPressTva,
+          isTva,
+        )}
+        {this.renderMenuItem(
+          'ready',
+          'Каталог автомобилей',
+          'catalog_auto',
+          this.onPressCatalog,
+          isCatalog,
+        )}
+        {this.renderMenuItem(
+          'ready',
+          'Индикаторы',
+          'indicators',
+          this.onPressIndicators,
+          isIndicators,
+        )}
+        {this.renderMenuItem(
+          'ready',
+          'Отзывы и предложения',
+          'reviews',
+          this.onPressEko,
+          isEko,
+        )}
+        {this.renderMenuItem(
+          'ready',
+          'Личный кабинет',
+          'profile',
+          this.onPressProfile,
+          isProfile,
+        )}
       </View>
     );
   }

@@ -128,6 +128,7 @@ class CarListItem extends Component {
     prices: PropTypes.object,
     itemScreen: PropTypes.string,
     navigate: PropTypes.func,
+    key: PropTypes.string,
   };
 
   static defaultProps = {
@@ -136,6 +137,7 @@ class CarListItem extends Component {
     itemScreen: null,
     navigate: null,
     currency: 'руб',
+    key: '',
   };
 
   onPress = () => {
@@ -212,7 +214,7 @@ class CarListItem extends Component {
         onPress={this.onPress}
         style={[styleConst.shadow.light, styles.container]}
         underlayColor={styleConst.color.select}>
-        <View style={styles.card}>
+        <View style={styles.card} key={'carID-' + this.props.key}>
           <LinearGradient
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}

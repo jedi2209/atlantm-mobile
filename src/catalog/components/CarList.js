@@ -84,7 +84,7 @@ export default class CarList extends Component {
     return (
       <CarListItem
         resizeMode={this.props.resizeMode}
-        key={item.hash}
+        key={item.hash ? item.hash : item.id.api}
         currency={this.props.prices.curr.name}
         car={item}
         prices={prices}
