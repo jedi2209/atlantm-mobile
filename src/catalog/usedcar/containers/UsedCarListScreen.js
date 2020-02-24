@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   iconFilter: {
     color: '#fff',
     fontSize: 25,
-    marginRight: 20,
+    marginRight: 15,
   },
 });
 
@@ -116,7 +116,7 @@ class UserCarListScreen extends Component {
             onPress={() => {
               navigation.navigate('UsedCarFilterScreen');
             }}>
-            <Icon type="Octicons" name="settings" style={styles.iconFilter} />
+            <Icon type="FontAwesome" name="filter" style={styles.iconFilter} />
           </TouchableOpacity>
         </View>
       ),

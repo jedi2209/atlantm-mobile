@@ -85,22 +85,14 @@ class NewCarListScreen extends Component {
       ),
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: (
-        <View>
-          {/* <HeaderIconBack
-            theme="white"
-            navigation={navigation}
-            returnScreen={returnScreen}
-          /> */}
-        </View>
-      ),
+      headerLeft: <View />,
       headerRight: (
         <View>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('NewCarFilterScreen');
             }}>
-            <Icon type="Octicons" name="settings" style={styles.iconFilter} />
+            <Icon type="FontAwesome" name="filter" style={styles.iconFilter} />
           </TouchableOpacity>
         </View>
       ),
