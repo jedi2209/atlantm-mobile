@@ -492,7 +492,7 @@ class UserCarItemScreen extends Component {
                         </View>
                       ),
                     },
-                    additional.length && {
+                    additional && {
                       title: 'Комплектация',
                       content: (
                         <View style={styles.tabContent}>
