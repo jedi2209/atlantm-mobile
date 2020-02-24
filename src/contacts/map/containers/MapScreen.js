@@ -259,7 +259,7 @@ class MapScreen extends Component {
         link = `yandexmaps://maps.yandex.ru/?pt=${longitude},${latitude}&z=12`;
         break;
       case CONTACTS_MAP_YNDX_TAXI:
-        link = `https://3.redirect.appmetrica.yandex.com/route?&end-lat=${latitude}&end-lon=${longitude}&ref=comatlantmapp&appmetrica_tracking_id=1178268795219780156'`;
+        link = `https://3.redirect.appmetrica.yandex.com/route?end-lat=${latitude}&end-lon=${longitude}&ref=comatlantmapp&appmetrica_tracking_id=1178268795219780156`;
         break;
       case CONTACTS_MAP_GOOGLE_MAPS:
         link = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&travelmode=driving`;
