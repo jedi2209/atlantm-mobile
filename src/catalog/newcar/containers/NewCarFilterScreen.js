@@ -30,6 +30,7 @@ import {
 // helpers
 import Amplitude from '@utils/amplitude-analytics';
 import {get, find} from 'lodash';
+import showPrice from '@utils/price';
 import stylesHeader from '@core/components/Header/style';
 import {ScrollView} from 'react-native-gesture-handler';
 
@@ -336,7 +337,7 @@ class NewCarFilterScreen extends Component {
         </View>
       );
     }
-
+    console.log('thisFilters', this);
     const filtersContent = [
       {
         title: 'Бренды',
@@ -485,14 +486,16 @@ class NewCarFilterScreen extends Component {
                 justifyContent: 'space-between',
               }}>
               <Text style={{color: '#74747A', fontSize: 14}}>
-                {`${this.state.priceFilter.min} ${
-                  this.state.priceFilter.curr.name
-                }`}
+                {showPrice(
+                  this.state.priceFilter.min,
+                  this.props.dealerSelected.region,
+                )}
               </Text>
               <Text style={{color: '#74747A', fontSize: 14}}>
-                {`${this.state.priceFilter.max} ${
-                  this.state.priceFilter.curr.name
-                }`}
+                {showPrice(
+                  this.state.priceFilter.max,
+                  this.props.dealerSelected.region,
+                )}
               </Text>
             </View>
           </View>
