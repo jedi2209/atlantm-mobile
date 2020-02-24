@@ -573,15 +573,16 @@ export default {
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PATCH',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: {
+      body: JSON.stringify({
         name: first_name,
         surname: last_name,
         email,
         phone,
         userID: id,
-      },
+      }),
     });
 
     return this.request(`/lkk/user/${id}/`, requestParams)

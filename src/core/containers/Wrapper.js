@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Text} from 'react-native';
 
 // storage
 import AsyncStorage from '@react-native-community/async-storage';
@@ -62,6 +63,10 @@ export default class Wrapper extends Component {
     // ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
 
     //this.getPersistStore().purge();
+
+    Text.defaultProps = Text.defaultProps || {};
+    Text.defaultProps.allowFontScaling = false;
+    Text.defaultProps.maxFontSizeMultiplier = 0;
     this.getPersistStore();
   }
 
