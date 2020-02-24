@@ -213,6 +213,17 @@ class UsedCarFilterScreen extends Component {
                       selectedColor={styleConst.color.lightBlue}
                       name={id}
                       selected={id === this.state.selectedCity}
+                      onPress={() => {
+                        this.setState({
+                          selectedCity: id,
+                        });
+                        const item = this.state.cityFilters.find(
+                          value => value.id === id,
+                        );
+                        this.props.actionResetUsedCarList();
+                        this.props.actionSetNeedUpdateUsedCarList();
+                        this.props.actionSelectUsedCarCity(item);
+                      }}
                     />
                   </Right>
                 </ListItem>
