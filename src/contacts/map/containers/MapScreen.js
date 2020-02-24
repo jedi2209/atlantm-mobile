@@ -24,6 +24,8 @@ import {
 import {
   CONTACTS_MAP_YNDX_NAVIGATOR,
   CONTACTS_MAP_YNDX_MAPS,
+  CONTACTS_MAP_YNDX_TAXI,
+  CONTACTS_MAP_UBER_TAXI,
   CONTACTS_MAP_GOOGLE_MAPS,
   CONTACTS_MAP_APPLE_MAPS,
 } from '@contacts/actionTypes';
@@ -182,35 +184,8 @@ class MapScreen extends Component {
     );
   }
 
-//   shouldComponentUpdate(nextProps) {
-//     const {
-//       availableNaviApps,
-//       isRequestCheckAvailableNaviApps,
-//       dealerSelected,
-//       navigation,
-//     } = this.props;
-
-//     return (
-//       isRequestCheckAvailableNaviApps !==
-//         nextProps.isRequestCheckAvailableNaviApps ||
-//       availableNaviApps !== nextProps.availableNaviApps ||
-//       (dealerSelected.id !== nextProps.dealerSelected.id &&
-//         navigation.state.routeName === 'MapScreen')
-//     );
-//   }
-
   onPressRoute = async () => {
     const {availableNaviApps, actionSetAvailableNaviApps} = this.props;
-
-    // const {latitude, longitude} = this.getPositions();
-    // const {name, city, address, coords} = this.getDealerDetails();
-
-    if (isAndroid) {
-      const link =
-        'geo:?q=' + this.state.data.city + ', ' + this.state.data.address;
-      // const link = 'geo:?q=' + coords.lat + ',' + coords.lon;
-      return this.openDirections(link);
-    }
 
     if (availableNaviApps.length === 0) {
       actionSetAvailableNaviApps(['Отмена']);
@@ -221,34 +196,6 @@ class MapScreen extends Component {
       this.state.data.coords.longitude,
     );
   };
-
-  //   getDealerDetails = () => {
-  //     const {dealerSelected, navigation} = this.props;
-
-  //     let name;
-  //     let city;
-  //     let address;
-
-  //     let coords = get(navigation, 'state.params.coords');
-
-  //     if (coords) {
-  //       name = get(navigation, 'state.params.name');
-  //       city = get(navigation, 'state.params.city');
-  //       address = get(navigation, 'state.params.address');
-  //     } else {
-  //       name = get(dealerSelected, 'name');
-  //       city = get(dealerSelected, 'city.name');
-  //       address = get(dealerSelected, 'address');
-  //       coords = get(dealerSelected, 'coords');
-  //     }
-
-  //     return {
-  //       name,
-  //       city,
-  //       address,
-  //       coords,
-  //     };
-  //   };
 
   buildActionSheet = async (latitude, longitude) => {
     const {
@@ -281,6 +228,8 @@ class MapScreen extends Component {
     Promise.all([
       checkAppAvailable(CONTACTS_MAP_YNDX_NAVIGATOR),
       checkAppAvailable(CONTACTS_MAP_YNDX_MAPS),
+      checkAppAvailable(CONTACTS_MAP_YNDX_TAXI),
+      checkAppAvailable(CONTACTS_MAP_UBER_TAXI),
       checkAppAvailable(CONTACTS_MAP_GOOGLE_MAPS),
       checkAppAvailable(CONTACTS_MAP_APPLE_MAPS),
     ]).then(results => {
@@ -299,17 +248,31 @@ class MapScreen extends Component {
   };
 
   getNaviLink = ({name, latitude, longitude}) => {
+    let link = '';
+    const address = encodeURI(this.state.data.address);
+    const address_name = encodeURI(this.state.data.name);
     switch (name) {
       case CONTACTS_MAP_YNDX_NAVIGATOR:
-        return `yandexnavi://build_route_on_map?lat_to=${latitude}&lon_to=${longitude}`;
+        link = `yandexnavi://build_route_on_map?lat_to=${latitude}&lon_to=${longitude}`;
+        break;
       case CONTACTS_MAP_YNDX_MAPS:
-        return `yandexmaps://maps.yandex.ru/?pt=${longitude},${latitude}&z=12`;
+        link = `yandexmaps://maps.yandex.ru/?pt=${longitude},${latitude}&z=12`;
+        break;
+      case CONTACTS_MAP_YNDX_TAXI:
+        link = `https://3.redirect.appmetrica.yandex.com/route?&end-lat=${latitude}&end-lon=${longitude}&ref=comatlantmapp&appmetrica_tracking_id=1178268795219780156'`;
+        break;
       case CONTACTS_MAP_GOOGLE_MAPS:
-        return `comgooglemaps://?daddr=${latitude},${longitude}`;
+        link = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&travelmode=driving`;
+        break;
+      case CONTACTS_MAP_UBER_TAXI:
+        link = `uber://?action=setPickup&dropoff[latitude]=${latitude}&dropoff[longitude]=${longitude}&dropoff[nickname]=${address_name}&[formatted_address]=${address}`;
+        break;
       default:
         // CONTACTS_MAP_APPLE_MAPS
-        return `maps://?daddr=${latitude},${longitude}`;
+        link = `maps://?daddr=${latitude},${longitude}`;
+        break;
     }
+    return link;
   };
 
   openDirections = url => {
@@ -335,9 +298,6 @@ class MapScreen extends Component {
     const {availableNaviApps} = this.props;
 
     const navApp = availableNaviApps[index];
-
-    // const {name, city, address, coords} = this.getDealerDetails();
-
     const latitude = Number(this.state.data.coords.latitude);
     const longitude = Number(this.state.data.coords.longitude);
 
@@ -352,6 +312,12 @@ class MapScreen extends Component {
         break;
       case CONTACTS_MAP_YNDX_MAPS:
         url = this.getNaviLink({...baseParams, name: CONTACTS_MAP_YNDX_MAPS});
+        break;
+      case CONTACTS_MAP_YNDX_TAXI:
+        url = this.getNaviLink({...baseParams, name: CONTACTS_MAP_YNDX_TAXI});
+        break;
+      case CONTACTS_MAP_UBER_TAXI:
+        url = this.getNaviLink({...baseParams, name: CONTACTS_MAP_UBER_TAXI});
         break;
       case CONTACTS_MAP_GOOGLE_MAPS:
         url = this.getNaviLink({...baseParams, name: CONTACTS_MAP_GOOGLE_MAPS});
@@ -371,49 +337,14 @@ class MapScreen extends Component {
       return;
     }
 
-    // const {
-    //   latitude,
-    //   longitude,
-    //   latitudeDelta,
-    //   longitudeDelta,
-    // } = this.getPositions();
-
     requestAnimationFrame(() => {
       if (!this.map) {
         return;
       }
 
-      //   const _this = this;
-
       this.map.animateToRegion(this.state.data.coords, 1);
     });
   };
-
-  //   getPositions = () => {
-  //     const {dealerSelected, navigation} = this.props;
-
-  //     let latitude;
-  //     let longitude;
-
-  //     if (get(navigation, 'state.params.coords')) {
-  //       latitude = Number(get(navigation, 'state.params.coords.lat'));
-  //       longitude = Number(get(navigation, 'state.params.coords.lon'));
-  //     } else {
-  //       latitude = Number(get(dealerSelected, 'coords.lat'));
-  //       longitude = Number(get(dealerSelected, 'coords.lon'));
-  //     }
-
-  //     const aspectRatio = width / height;
-  //     const latitudeDelta = 0.0922;
-  //     const longitudeDelta = latitudeDelta * aspectRatio;
-
-  //     return {
-  //       latitude,
-  //       longitude,
-  //       latitudeDelta,
-  //       longitudeDelta,
-  //     };
-  //   };
 
   _getDescription() {
     let description;
@@ -491,7 +422,7 @@ class MapScreen extends Component {
                 borderRadius: 5,
               },
             ]}
-            title="Проложить маршрут"
+            title="Построить маршрут"
             onPress={this.onPressRoute}>
             <Icon
               name="navigation"
