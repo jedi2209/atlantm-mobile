@@ -235,7 +235,7 @@ class LogoTitle extends React.Component {
 MoreScreen.navigationOptions = () => ({
   headerTitle: () => <LogoTitle />,
   headerStyle: {
-    height: 100,
+    height: 90,
   },
   tabBarLabel: 'Меню',
   tabBarIcon: ({focused}) => (

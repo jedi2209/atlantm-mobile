@@ -511,8 +511,8 @@ class NewCarFilterScreen extends Component {
               <View
                 key={'view-body-' + id}
                 style={{
+                  width: '50%',
                   marginBottom: 30,
-                  minWidth: 100,
                 }}>
                 <TouchableOpacity
                   onPress={() => {
@@ -542,6 +542,15 @@ class NewCarFilterScreen extends Component {
                           : '#fff',
                         borderColor: checked ? 'transparent' : '#d0d5dc',
                         fontSize: 40,
+                      }}
+                      onPress={() => {
+                        this.setState({
+                          bodyFilters: this.state.bodyFilters.map(body =>
+                            body.id === id
+                              ? {...body, checked: !body.checked}
+                              : body,
+                          ),
+                        });
                       }}
                     />
                     <Text style={{marginLeft: 20}}>{name}</Text>
