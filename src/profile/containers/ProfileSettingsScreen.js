@@ -89,6 +89,20 @@ class ProfileSettingsScreen extends Component {
       };
     }
 
+    if (phonelValue && emailValue) {
+      this.setState({loading: false});
+      Alert.alert(
+        'Заполните телефон или Email',
+        'Пожалуйста укажите хотя бы один контакт для возможности связи с Вами',
+        [
+          {
+            text: 'ОК',
+          },
+        ],
+      );
+      return false;
+    }
+
     this.props
       .actionSaveProfileByUser({
         id,
