@@ -510,9 +510,13 @@ export default {
       `socialData[LAST_NAME]=${
         typeof last_name !== 'undefined' ? last_name : ''
       }`,
-      // `socialData[PHONE]=${phone || '""'}`,
-      // `socialData[PERSONAL_BIRTHDAY]=${personal_birthday || '""'}`,
-      // `socialData[PERSONAL_GENDER]=${personal_gender || '""'}`,
+      `socialData[PHONE]=${typeof phone !== 'undefined' ? phone : ''}`,
+      `socialData[PERSONAL_BIRTHDAY]=${
+        typeof personal_birthday !== 'undefined' ? personal_birthday : ''
+      }`,
+      `socialData[PERSONAL_GENDER]=${
+        typeof personal_gender !== 'undefined' ? personal_gender : ''
+      }`,
     ].join('&');
 
     const requestParams = _.merge({}, baseRequestParams, {
