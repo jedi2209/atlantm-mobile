@@ -368,13 +368,39 @@ class ProfileScreen extends Component {
     });
   };
 
+  _GetUserDataVK = async () => {
+    try {
+      const auth = await VKLogin.login([
+        'friends',
+        'photos',
+        'email',
+        'contacts',
+        'phone',
+      ]);
+      const url =
+        'https://api.vk.com/method/account.getProfileInfo?user_id=' +
+        auth.user_id +
+        '&v=5.103&fields=contacts&access_token=' +
+        auth.access_token;
+      const response = await fetch(url);
+      const userData = await response.json();
+      return Object.assign(auth, userData.response);
+    } catch (err) {
+      console.log('apiGetDataError', err);
+    }
+  };
+
   _signInWithVK = async () => {
     VKLogin.initialize(XXXX);
     try {
-      const auth = await VKLogin.login(['friends', 'photos', 'email']);
+      const userData = await this._GetUserDataVK();
       const profile = {
-        id: auth.user_id,
-        email: auth.email,
+        id: userData.user_id,
+        email: userData.email || '',
+        first_name: userData.first_name || '',
+        last_name: userData.last_name || '',
+        personal_birthday: userData.bdate || '',
+        personal_gender: userData.sex === 2 ? 'M' : 'F',
       };
       this._sendDataToApi({...profile, networkName: 'vk'});
     } catch (error) {
