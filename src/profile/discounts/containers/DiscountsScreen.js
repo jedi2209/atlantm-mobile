@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet } from 'react-native';
-import { Text, StyleProvider, ListItem, Body } from 'native-base';
+import React, {Component} from 'react';
+import {SafeAreaView, View, FlatList, StyleSheet} from 'react-native';
+import {Text, StyleProvider, ListItem, Body} from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 // components
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
-import { get } from 'lodash';
+import {get} from 'lodash';
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ profile, nav }) => {
+const mapStateToProps = ({profile, nav}) => {
   return {
     nav,
     discounts: profile.discounts,
@@ -66,19 +66,19 @@ const mapStateToProps = ({ profile, nav }) => {
 };
 
 class DiscountsScreen extends Component {
-  state = { isRefreshing: false }
+  state = {isRefreshing: false};
 
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: 'Скидки',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
-  })
+  });
 
   static propTypes = {
     discounts: PropTypes.array,
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
@@ -87,41 +87,51 @@ class DiscountsScreen extends Component {
     if (nav) {
       const rootLevel = nav.routes[nav.index];
       if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'DiscountsScreen';
+        isActiveScreen =
+          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
+          'DiscountsScreen';
       }
     }
 
     return isActiveScreen;
   }
 
-  renderItem = ({ item: discount, index }) => {
-    const { discounts } = this.props;
+  renderItem = ({item: discount, index}) => {
+    const {discounts} = this.props;
 
     return (
-      <ListItem last={(discounts.length - 1) === index}>
+      <ListItem last={discounts.length - 1 === index}>
         <Body style={styles.body}>
           <View style={styles.header}>
-            { discount.value ? <Text style={styles.percent}>{discount.value}%</Text> : null}
-            { discount.dealer && discount.dealer.name ? <Text style={styles.dealer}>{discount.dealer.name}</Text> : null}
+            {discount.value ? (
+              <Text style={styles.percent}>{discount.value}%</Text>
+            ) : null}
+            {discount.dealer && discount.dealer.name ? (
+              <Text style={styles.dealer}>{discount.dealer.name}</Text>
+            ) : null}
           </View>
-          { discount.name ? <Text style={styles.title}>{discount.name}</Text> : null}
-          { discount.additional ? <Text style={styles.description}>{discount.additional}</Text> : null}
+          {discount.name ? (
+            <Text style={styles.title}>{discount.name}</Text>
+          ) : null}
+          {discount.additional ? (
+            <Text style={styles.description}>{discount.additional}</Text>
+          ) : null}
         </Body>
       </ListItem>
     );
-  }
+  };
 
   renderEmptyComponent = () => {
     return <Text style={styles.message}>Скидок пока нет</Text>;
-  }
+  };
 
   render() {
     // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
+    // window.atlantmNavigation = this.props.navigation;
 
     console.log('== DiscountsScreen ==');
 
-    const { discounts } = this.props;
+    const {discounts} = this.props;
 
     return (
       <StyleProvider style={getTheme()}>

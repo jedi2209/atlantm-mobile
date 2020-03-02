@@ -194,7 +194,6 @@ class ServiceScreen extends Component {
           returnScreen={returnScreen}
         />
       ),
-      headerRight: <View />,
     };
   };
 
@@ -207,8 +206,8 @@ class ServiceScreen extends Component {
     phoneFill: PropTypes.func,
     emailFill: PropTypes.func,
     name: PropTypes.string,
-    phone: PropTypes.string,
-    email: PropTypes.string,
+    // phone: PropTypes.string || PropTypes.object,
+    // email: PropTypes.string || PropTypes.object,
     car: PropTypes.string,
     date: PropTypes.object,
     isOrderServiceRequest: PropTypes.bool,
@@ -232,9 +231,13 @@ class ServiceScreen extends Component {
     }
 
     if (
-      !this.state.name.trim() ||
-      !this.state.phone.trim() ||
-      !this.state.car.trim() ||
+      (!this.state.name &&
+        !this.state.name.length &&
+        !this.state.name.trim()) ||
+      (!this.state.phone &&
+        !this.state.phone.length &&
+        !this.state.phone.trim()) ||
+      (!this.state.car && !this.state.car.length && !this.state.car.trim()) ||
       !this.state.date
     ) {
       return Alert.alert(
@@ -252,20 +255,28 @@ class ServiceScreen extends Component {
 
       const action = await this.props.orderService({
         car:
-          this.state.car && typeof this.state.car === 'string'
+          this.state.car &&
+          this.state.car.length &&
+          typeof this.state.car === 'string'
             ? this.state.car.trim()
             : this.state.car || '',
         date: orderDate,
         name:
-          this.state.name && typeof this.state.name === 'string'
+          this.state.name &&
+          this.state.name.length &&
+          typeof this.state.name === 'string'
             ? this.state.name.trim()
             : this.state.name || '',
         email:
-          this.state.email && typeof this.state.email === 'string'
+          this.state.email &&
+          this.state.email.length &&
+          typeof this.state.email === 'string'
             ? this.state.email.trim()
             : this.state.email || '',
         phone:
-          this.state.phone && typeof this.state.phone === 'string'
+          this.state.phone &&
+          this.state.phone.length &&
+          typeof this.state.phone === 'string'
             ? this.state.phone.trim()
             : this.state.phone || '',
         device,
@@ -273,6 +284,7 @@ class ServiceScreen extends Component {
       });
 
       if (action.type === SERVICE_ORDER__SUCCESS) {
+        const _this = this;
         Amplitude.logEvent('order', 'service');
         Alert.alert(
           'Ваша заявка успешно отправлена',
@@ -289,7 +301,7 @@ class ServiceScreen extends Component {
                     }),
                   ],
                 });
-                this.props.navigation.dispatch(resetAction);
+                _this.props.navigation.dispatch(resetAction);
               },
             },
           ],
@@ -315,6 +327,9 @@ class ServiceScreen extends Component {
 
   render() {
     const {navigation, dealerSelected} = this.props;
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
     return (
       <KeyboardAvoidingView>
@@ -340,7 +355,7 @@ class ServiceScreen extends Component {
                 <DatePicker
                   showIcon={false}
                   mode="date"
-                  minDate={new Date()}
+                  minDate={tomorrow}
                   placeholder="Выберите дату"
                   format="DD MMMM YYYY"
                   confirmBtnText="Выбрать"
@@ -357,8 +372,10 @@ class ServiceScreen extends Component {
                   <TextInput
                     autoCorrect={false}
                     style={styles.textinput}
-                    label="Имя"
-                    value={this.state.name}
+                    label="ФИО"
+                    value={this.state.name || ''}
+                    enablesReturnKeyAutomatically={true}
+                    textContentType={'name'}
                     onChangeText={this.onChangeField('name')}
                   />
                 </View>
@@ -367,7 +384,9 @@ class ServiceScreen extends Component {
                     style={styles.textinput}
                     label="Телефон"
                     keyboardType="phone-pad"
-                    value={this.state.phone}
+                    value={this.state.phone || ''}
+                    enablesReturnKeyAutomatically={true}
+                    textContentType={'telephoneNumber'}
                     onChangeText={this.onChangeField('phone')}
                   />
                 </View>
@@ -376,7 +395,9 @@ class ServiceScreen extends Component {
                     style={styles.textinput}
                     label="Email"
                     keyboardType="email-address"
-                    value={this.state.email}
+                    value={this.state.email || ''}
+                    enablesReturnKeyAutomatically={true}
+                    textContentType={'emailAddress'}
                     onChangeText={this.onChangeField('email')}
                   />
                 </View>
@@ -386,7 +407,7 @@ class ServiceScreen extends Component {
                   <TextInput
                     style={styles.textinput}
                     label="Авто"
-                    value={this.state.car}
+                    value={this.state.car || ''}
                     onChangeText={this.onChangeField('car')}
                   />
                 </View>
@@ -394,7 +415,7 @@ class ServiceScreen extends Component {
                   <TextInput
                     style={styles.textinput}
                     label="Гос. номер"
-                    value={this.state.carNumber}
+                    value={this.state.carNumber || ''}
                     onChangeText={this.onChangeField('carNumber')}
                   />
                 </View>

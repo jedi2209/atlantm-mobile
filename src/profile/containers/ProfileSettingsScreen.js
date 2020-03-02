@@ -89,7 +89,7 @@ class ProfileSettingsScreen extends Component {
       };
     }
 
-    if (phonelValue && emailValue) {
+    if (!phonelValue && !emailValue) {
       this.setState({loading: false});
       Alert.alert(
         'Заполните телефон или Email',

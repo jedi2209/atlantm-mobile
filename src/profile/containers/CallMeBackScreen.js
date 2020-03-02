@@ -113,7 +113,6 @@ class CallMeBackScreen extends React.Component {
           returnScreen={returnScreen}
         />
       ),
-      headerRight: <View />,
     };
   };
 
@@ -162,9 +161,9 @@ class CallMeBackScreen extends React.Component {
       this.setState({loading: true});
 
       callMe({
-        name,
+        name: name || '',
         email: email || '', // апи не терпит undefined
-        phone,
+        phone: phone || '',
         device,
         dealerID,
       }).then(action => {
@@ -243,8 +242,10 @@ class CallMeBackScreen extends React.Component {
                       <TextInput
                         autoCorrect={false}
                         style={styles.textinput}
-                        label="Имя"
+                        label="ФИО"
                         value={this.state.name}
+                        enablesReturnKeyAutomatically={true}
+                        textContentType={'name'}
                         onChangeText={this.onChangeField('name')}
                       />
                     </View>
@@ -253,7 +254,9 @@ class CallMeBackScreen extends React.Component {
                         style={styles.textinput}
                         label="Телефон"
                         keyboardType="phone-pad"
-                        value={this.state.phone}
+                        value={this.state.phone || ''}
+                        enablesReturnKeyAutomatically={true}
+                        textContentType={'telephoneNumber'}
                         onChangeText={this.onChangeField('phone')}
                       />
                     </View>

@@ -150,7 +150,7 @@ const BottomTabNavigation = createBottomTabNavigator(
                   style: 'cancel',
                 },
               ],
-              {cancelable: false},
+              {cancelable: true},
             ),
           // store.dispatch(actionToggleModal('application')),
           tabBarLabel: 'Заявка',

@@ -77,8 +77,7 @@ class App extends Component {
     }
 
     const currentDealer = get(dealerSelected, 'id', false);
-
-    API.fetchVersion('5.1.4');
+    API.fetchVersion(DeviceInfo.getVersion());
 
     if (
       currentDealer &&

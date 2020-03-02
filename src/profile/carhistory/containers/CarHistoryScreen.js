@@ -195,25 +195,29 @@ class CarHistoryScreen extends Component {
   // isActiveLevel2 = hash => this.props.level2hash === hash;
 
   renderLevel1 = carHistory => {
-    return Object.keys(carHistory).reverse().map((carHistoryYear, idx, yearsArray) => {
-      const item = carHistory[carHistoryYear];
-      const hash = item.hash;
-      // const isActive = true; //this.isActiveLevel1(hash);
-      // const onPressHandler = () => this.onPressLevel1(hash);
+    return Object.keys(carHistory)
+      .reverse()
+      .map((carHistoryYear, idx, yearsArray) => {
+        const item = carHistory[carHistoryYear];
+        const hash = item.hash;
+        // const isActive = true; //this.isActiveLevel1(hash);
+        // const onPressHandler = () => this.onPressLevel1(hash);
 
-      return <View key={hash}>{this.renderLevel2(item.history)}</View>;
-    });
+        return <View key={hash}>{this.renderLevel2(item.history)}</View>;
+      });
   };
 
   renderLevel2 = carHistoryItemByMonth => {
-    return Object.keys(carHistoryItemByMonth).reverse().map((month, idx, monthArray) => {
-      const item = carHistoryItemByMonth[month];
-      const hash = item.hash;
-      // const isActive = true; //this.isActiveLevel2(hash);
-      // const onPressHandler = () => this.onPressLevel2(hash);
+    return Object.keys(carHistoryItemByMonth)
+      .reverse()
+      .map((month, idx, monthArray) => {
+        const item = carHistoryItemByMonth[month];
+        const hash = item.hash;
+        // const isActive = true; //this.isActiveLevel2(hash);
+        // const onPressHandler = () => this.onPressLevel2(hash);
 
-      return <View key={hash}>{this.renderLevel3(item.history)}</View>;
-    });
+        return <View key={hash}>{this.renderLevel3(item.history)}</View>;
+      });
   };
 
   renderLevel3 = works => {

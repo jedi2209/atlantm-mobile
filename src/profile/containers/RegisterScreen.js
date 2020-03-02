@@ -1,10 +1,17 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { SafeAreaView, Alert, StyleSheet, View, Text, Platform } from 'react-native';
-import { Content, List, StyleProvider, Button, Icon } from 'native-base';
+import {
+  SafeAreaView,
+  Alert,
+  StyleSheet,
+  View,
+  Text,
+  Platform,
+} from 'react-native';
+import {Content, List, StyleProvider, Button, Icon} from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {
   nameFill,
   phoneFill,
@@ -13,7 +20,7 @@ import {
   carNumberFill,
   actionRegister,
 } from '../actions';
-import { REGISTER__SUCCESS, REGISTER__FAIL } from '../actionTypes';
+import {REGISTER__SUCCESS, REGISTER__FAIL} from '../actionTypes';
 
 // components
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -25,10 +32,10 @@ import FooterButton from '../../core/components/FooterButton';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
-import { get } from 'lodash';
+import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import { ERROR_NETWORK } from '../../core/const';
+import {ERROR_NETWORK} from '../../core/const';
 import stylesHeader from '../../core/components/Header/style';
 
 const styles = StyleSheet.create({
@@ -77,7 +84,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, profile, nav }) => {
+const mapStateToProps = ({dealer, profile, nav}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
@@ -102,13 +109,13 @@ const mapDispatchToProps = {
 };
 
 class RegisterScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: 'Регистрация',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
-  })
+  });
 
   static propTypes = {
     dealerSelected: PropTypes.object,
@@ -128,7 +135,7 @@ class RegisterScreen extends Component {
 
     actionRegister: PropTypes.func,
     isRegisterRequest: PropTypes.bool,
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
@@ -137,7 +144,9 @@ class RegisterScreen extends Component {
     if (nav) {
       const rootLevel = nav.routes[nav.index];
       if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'RegisterScreen';
+        isActiveScreen =
+          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
+          'RegisterScreen';
       }
     }
 
@@ -175,44 +184,45 @@ class RegisterScreen extends Component {
       email,
       carVIN,
       carNumber,
-    })
-      .then(action => {
-        if (action.type === REGISTER__SUCCESS) {
-          Amplitude.logEvent('order', 'lkk/registration');
+    }).then(action => {
+      if (action.type === REGISTER__SUCCESS) {
+        Amplitude.logEvent('order', 'lkk/registration');
 
-          const defaultMessage = `Ваша заявка на регистрацию успешно отправлена специалистам автоцентра ${dealerSelected.name}`;
+        const defaultMessage = `Ваша заявка на регистрацию успешно отправлена специалистам автоцентра ${
+          dealerSelected.name
+        }`;
 
-          setTimeout(() => {
-            Alert.alert(
-              get(action, 'payload.data.message', defaultMessage),
-              '',
-              [
-                {
-                  text: 'ОК',
-                  onPress() {
-                    navigation.goBack();
-                  },
-                },
-              ],
-            );
-          }, 100);
+        setTimeout(() => {
+          Alert.alert(get(action, 'payload.data.message', defaultMessage), '', [
+            {
+              text: 'ОК',
+              onPress() {
+                navigation.goBack();
+              },
+            },
+          ]);
+        }, 100);
+      }
+
+      if (action.type === REGISTER__FAIL) {
+        let message = get(
+          action,
+          'payload.message',
+          'Произошла ошибка, попробуйте снова',
+        );
+
+        if (message === 'Network request failed') {
+          message = ERROR_NETWORK;
         }
 
-        if (action.type === REGISTER__FAIL) {
-          let message = get(action, 'payload.message', 'Произошла ошибка, попробуйте снова');
-
-          if (message === 'Network request failed') {
-            message = ERROR_NETWORK;
-          }
-
-          setTimeout(() => Alert.alert(message), 100);
-        }
-      });
+        setTimeout(() => Alert.alert(message), 100);
+      }
+    });
   };
 
   render() {
     // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
+    // window.atlantmNavigation = this.props.navigation;
 
     const {
       dealerSelected,
@@ -236,14 +246,20 @@ class RegisterScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
-          <Content enableResetScrollToCoords={false} style={{marginBottom: styleConst.ui.footerHeightAndroid,}}>
-            <Spinner visible={isRegisterRequest} color={styleConst.color.blue} />
+          <Content
+            enableResetScrollToCoords={false}
+            style={{marginBottom: styleConst.ui.footerHeightAndroid}}>
+            <Spinner
+              visible={isRegisterRequest}
+              color={styleConst.color.blue}
+            />
             <List style={styles.list}>
               <View style={styles.textContainer}>
                 <Text style={styles.text}>
                   Чтобы зарегистрироваться, заполните, пожалуйста, форму ниже.
-                  Специалисты автоцентра сообщат вам логин и пароль по СМС и электронной почте.
-                  Обращаем ваше внимание на то, что доступ к Личному кабинету могут получить только Клиенты Атлант-М.
+                  Специалисты автоцентра сообщат вам логин и пароль по СМС и
+                  электронной почте. Обращаем ваше внимание на то, что доступ к
+                  Личному кабинету могут получить только Клиенты Атлант-М.
                 </Text>
               </View>
 
@@ -276,9 +292,9 @@ class RegisterScreen extends Component {
             </List>
           </Content>
           <FooterButton
-              text="Зарегистрироваться"
-              icon="ios-car"
-              onPressButton={this.onPressRegister}
+            text="Зарегистрироваться"
+            icon="ios-car"
+            onPressButton={this.onPressRegister}
           />
         </SafeAreaView>
       </StyleProvider>
@@ -286,4 +302,7 @@ class RegisterScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(RegisterScreen);
