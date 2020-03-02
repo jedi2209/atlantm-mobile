@@ -1,5 +1,6 @@
-import {View} from 'react-native';
+import {View, Linking, Dimensions} from 'react-native';
 import {WebView} from 'react-native-webview';
+import HTML from 'react-native-render-html';
 import React, {Component} from 'react';
 
 const BODY_TAG_PATTERN = /\<\/ *body\>/;
@@ -65,7 +66,9 @@ const style = `
   </script>
 `;
 
-const codeInject = html => html.replace(BODY_TAG_PATTERN, style + '</body>');
+//const codeInject = html => html.replace(BODY_TAG_PATTERN, style + '</body>');
+
+const deviceWidth = Dimensions.get('window').width;
 
 /**
  * Wrapped Webview which automatically sets the height according to the
@@ -104,29 +107,55 @@ export default class WebViewAutoHeight extends Component {
     const {source, style, minHeight, ...otherProps} = this.props;
     const html = source.html;
 
-    if (!html) {
-      throw new Error('WebViewAutoHeight supports only source.html');
-    }
+    console.log('html', html);
 
-    if (!BODY_TAG_PATTERN.test(html)) {
-      throw new Error(`Cannot find </body> from: ${html}`);
-    }
+    // if (!html) {
+    //   throw new Error('WebViewAutoHeight supports only source.html');
+    // }
+
+    // if (!BODY_TAG_PATTERN.test(html)) {
+    //   throw new Error(`Cannot find </body> from: ${html}`);
+    // }
+
+    const tagsStyles = {
+      div: {
+        fontSize: 16,
+        lineHeight: 24,
+      },
+      p: {padding: 0, marginBottom: 10, marginHorizontal: 10},
+      img: {width: deviceWidth, maxWidth: deviceWidth},
+    };
+
+    const classesStyles = {
+      div: {marginBottom: 0, padding: 0},
+      divider: {marginRight: 10, width: 10},
+    };
 
     return (
-      <View>
-        <WebView
-          {...otherProps}
-          source={{html: codeInject(html), baseUrl: ''}}
-          scrollEnabled={false}
-          style={[
-            style,
-            {height: Math.max(this.state.realContentHeight, minHeight)},
-          ]}
-          javaScriptEnabled
-          onNavigationStateChange={this.handleNavigationChange}
-          originWhitelist={['*']}
-        />
-      </View>
+      <HTML
+        html={html}
+        tagsStyles={tagsStyles}
+        classesStyles={classesStyles}
+        imagesMaxWidth={deviceWidth}
+        onLinkPress={(evt, href) => {
+          return Linking.openURL(href);
+        }}
+      />
+      // <WebView
+      //   {...otherProps}
+      //   source={{html: codeInject(html)}}
+      //   scrollEnabled={false}
+      //   style={[
+      //     style,
+      //     {height: Math.max(this.state.realContentHeight, minHeight)},
+      //   ]}
+      //   javaScriptEnabled
+      //   onNavigationStateChange={this.handleNavigationChange}
+      //   dataDetectorTypes="all"
+      //   allowsFullscreenVideo={true}
+      //   allowsInlineMediaPlayback={true}
+      //   originWhitelist={['*']}
+      // />
     );
   }
 }

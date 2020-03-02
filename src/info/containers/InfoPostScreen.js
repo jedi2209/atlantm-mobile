@@ -47,13 +47,14 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
     marginVertical: 10,
-    marginHorizontal: styleConst.ui.horizontalGap,
+    marginHorizontal: 0,
     marginBottom: 90,
   },
   date: {
     color: styleConst.color.greyText2,
     fontFamily: styleConst.font.regular,
     fontSize: 14,
+    marginHorizontal: 10,
     letterSpacing: styleConst.ui.letterSpacing,
     marginTop: verticalScale(5),
   },
@@ -155,7 +156,6 @@ class InfoPostScreen extends Component {
   };
 
   onPressCallMe = () => {
-    console.log('this.props', this.props);
     this.props.navigation.navigate('CallMeBackScreen');
   };
 
@@ -183,16 +183,16 @@ class InfoPostScreen extends Component {
     const imageUrl = get(img, '10000x440');
     const date = get(post, 'date');
 
-    if (text) {
-      text = processHtml(text, this.state.webViewWidth);
-    }
+    // if (text) {
+    //   text = processHtml(text, this.state.webViewWidth);
+    // }
 
     console.log('== InfoPost ==');
 
     return (
       <SafeAreaView style={styles.safearea}>
         <StatusBar barStyle="light-content" />
-        <Content>
+        <Content style={{margin: 0, padding: 0,}}>
           <Spinner visible={isCallMeRequest} color={styleConst.color.blue} />
 
           {!text ? (

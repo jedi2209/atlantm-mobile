@@ -319,8 +319,8 @@ class ProfileScreen extends Component {
       const profile = {
         id: userInfo.user.id,
         email: userInfo.user.email,
-        first_name: userInfo.user.givenName,
-        last_name: userInfo.user.familyName,
+        first_name: userInfo.user.givenName || '',
+        last_name: userInfo.user.familyName || '',
       };
 
       this._sendDataToApi({...profile, networkName: 'gl'});

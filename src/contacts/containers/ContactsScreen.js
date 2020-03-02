@@ -365,7 +365,7 @@ class ContactsScreen extends Component {
                             style: 'cancel',
                           },
                         ],
-                        {cancelable: false},
+                        {cancelable: true},
                       );
                     }}
                   />

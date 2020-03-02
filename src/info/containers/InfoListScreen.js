@@ -30,9 +30,8 @@ import stylesHeader from '../../core/components/Header/style';
 import {verticalScale} from '../../utils/scale';
 
 // components
-import InfoListItem from '../components/InfoListItem';
-import DealerItemList from '../../core/components/DealerItemList';
-import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
+// import DealerItemList from '../../core/components/DealerItemList';
+// import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 const styles = StyleSheet.create({
@@ -171,7 +170,7 @@ class InfoListScreen extends Component {
         ]}>
         <Offer
           theme="round"
-          key={`carousel-article-${data.item.id}`}
+          key={`carousel-article-${data.item.hash}`}
           data={data}
           width={cardWidth}
           height={150}

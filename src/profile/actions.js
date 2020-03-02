@@ -618,8 +618,8 @@ function profileDataAdapter(user) {
       : {};
 
   return {
-    first_name: userInfo.first_name,
-    last_name: userInfo.last_name,
+    first_name: userInfo.first_name || '',
+    last_name: userInfo.last_name || '',
     email,
     phone,
   };

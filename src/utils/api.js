@@ -55,12 +55,15 @@ export default {
     let requested_version = parseInt(version.replace(/\./gi, ''));
     let req = this.request('/mobile/check/version/', baseRequestParams);
     return req.then(res => {
+      if (!res.version) {
+        return this.fetchVersion(DeviceInfo.getVersion());
+      }
       let real_time_version_api = parseInt(res.version.replace(/\./gi, ''));
-      if (real_time_version_api !== requested_version) {
+      if (real_time_version_api > requested_version) {
         let STORE_LINK;
         if (Platform.OS === 'ios') {
           STORE_LINK =
-            'itms-apps://itunes.apple.com/app/id515931794?action=update';
+            'itms-apps://itunes.apple.com/app/id1492492166?action=update';
         } else {
           STORE_LINK = 'market://details?id=com.atlantm';
         }
