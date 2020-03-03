@@ -57,6 +57,8 @@
 	<string>Атлант-М</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>tel</string>
