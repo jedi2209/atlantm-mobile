@@ -1,5 +1,11 @@
-import React, { PureComponent } from 'react';
-import { View, StyleSheet, Dimensions, TouchableHighlight, Image } from 'react-native';
+import React, {PureComponent} from 'react';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  TouchableHighlight,
+  Image,
+} from 'react-native';
 
 // components
 import DeviceInfo from 'react-native-device-info';
@@ -9,9 +15,9 @@ import IndicatorDescription from '../components/IndicatorDescription';
 import PropTypes from 'prop-types';
 import styleConst from '../../core/style-const';
 
-const isTablet = DeviceInfo.isTablet();
+// const isTablet = DeviceInfo.isTablet();
 
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const HEIGHT_TRIANGLE = 10;
 
 const styles = StyleSheet.create({
@@ -72,27 +78,27 @@ export default class IndicatorRow extends PureComponent {
 
     this.state = {};
 
-    if (!isTablet) {
-      this.state.itemWidth = this.getItemWidth(width);
-    }
+    // if (!isTablet) {
+    this.state.itemWidth = this.getItemWidth(width);
+    // }
   }
 
-  isActive = (id) => this.props.activeItem.id === id;
+  isActive = id => this.props.activeItem.id === id;
 
   isActiveRow = () => {
-    const { items, activeItem } = this.props;
+    const {items, activeItem} = this.props;
 
     return items.some(item => item.id === activeItem.id);
-  }
+  };
 
-  getItemWidth = contentWidth => ((contentWidth - 22) / 4) - 8
+  getItemWidth = contentWidth => (contentWidth - 22) / 4 - 8;
 
-  renderIndicator = (indicator) => {
-    const { img, id } = indicator;
-    const { onPressItem } = this.props;
+  renderIndicator = indicator => {
+    const {img, id} = indicator;
+    const {onPressItem} = this.props;
     const isActive = this.isActive(id);
     const triangleLeftPos = {
-      left: (this.state.itemWidth / 2) - (HEIGHT_TRIANGLE - 1),
+      left: this.state.itemWidth / 2 - (HEIGHT_TRIANGLE - 1),
     };
     const indicatorStyle = {
       width: this.state.itemWidth,
@@ -104,48 +110,51 @@ export default class IndicatorRow extends PureComponent {
         <TouchableHighlight
           onPress={() => onPressItem(this.descriptionRef, indicator)}
           style={[styles.iconItem, isActive ? styles.iconItemActive : null]}
-          underlayColor={styleConst.color.select}
-        >
+          underlayColor={styleConst.color.select}>
           <View>
             <Image
               resizeMode="contain"
               style={indicatorStyle}
-              source={{ uri: isActive ? img.white : img.blue }}
+              source={{uri: isActive ? img.white : img.blue}}
             />
           </View>
         </TouchableHighlight>
 
-        {
-          isActive ?
-            (
-              <View>
-                <View style={[styles.triangle, styles.triangleWhite, triangleLeftPos]} />
-                <View style={[styles.triangle, styles.triangleBorder, triangleLeftPos]} />
-              </View>
-            ) : null
-        }
+        {isActive ? (
+          <View>
+            <View
+              style={[styles.triangle, styles.triangleWhite, triangleLeftPos]}
+            />
+            <View
+              style={[styles.triangle, styles.triangleBorder, triangleLeftPos]}
+            />
+          </View>
+        ) : null}
       </View>
     );
-  }
+  };
 
-  renderDescription = (indicator) => {
-    const { id, name, description } = indicator;
+  renderDescription = indicator => {
+    const {id, name, description} = indicator;
 
     if (!this.isActive(id)) return null;
 
-    return <IndicatorDescription key={id} name={name} description={description} />;
-  }
+    return (
+      <IndicatorDescription key={id} name={name} description={description} />
+    );
+  };
 
-  onLayout = (e) => {
-    if (!isTablet) return false;
+  onLayout = e => {
+    // if (!isTablet)
+    return false;
 
-    const { width: contentWidth } = e.nativeEvent.layout;
+    // const { width: contentWidth } = e.nativeEvent.layout;
 
-    this.setState({ itemWidth: this.getItemWidth(contentWidth) });
-  }
+    // this.setState({ itemWidth: this.getItemWidth(contentWidth) });
+  };
 
   render() {
-    const { items } = this.props;
+    const {items} = this.props;
 
     return (
       <View style={styles.container} onLayout={this.onLayout}>
@@ -153,12 +162,10 @@ export default class IndicatorRow extends PureComponent {
           {items.map(indicator => this.renderIndicator(indicator))}
         </View>
 
-        <View ref={(ref) => this.descriptionRef = ref}>
-          {
-            this.isActiveRow() ?
-              items.map(indicator => this.renderDescription(indicator)) :
-              null
-          }
+        <View ref={ref => (this.descriptionRef = ref)}>
+          {this.isActiveRow()
+            ? items.map(indicator => this.renderDescription(indicator))
+            : null}
         </View>
       </View>
     );

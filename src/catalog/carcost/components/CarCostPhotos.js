@@ -26,7 +26,7 @@ const thumbs = [
   require('../assets/photo_car_6.png'),
 ];
 
-const isTablet = DeviceInfo.isTablet();
+// const isTablet = DeviceInfo.isTablet();
 const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -70,9 +70,9 @@ export default class CarCostPhotos extends Component {
 
     this.state = {};
 
-    if (!isTablet) {
-      this.state.itemWidth = this.getItemWidth(width);
-    }
+    // if (!isTablet) {
+    this.state.itemWidth = this.getItemWidth(width);
+    // }
 
     // генерируем хендлеры для actionSheet для каждого фото
     [1, 2, 3, 4, 5, 6].map(photoIndex => {
@@ -176,13 +176,13 @@ export default class CarCostPhotos extends Component {
   getItemWidth = contentWidth => (contentWidth - 50) / 3;
 
   onLayout = e => {
-    if (!isTablet) {
-      return false;
-    }
+    // if (!isTablet) {
+    return false;
+    // }
 
-    const {width: contentWidth} = e.nativeEvent.layout;
+    // const {width: contentWidth} = e.nativeEvent.layout;
 
-    this.setState({itemWidth: this.getItemWidth(contentWidth)});
+    // this.setState({itemWidth: this.getItemWidth(contentWidth)});
   };
 
   render() {

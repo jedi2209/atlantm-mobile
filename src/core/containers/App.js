@@ -146,8 +146,8 @@ class App extends Component {
   }
 
   render() {
-    const isTablet = DeviceInfo.isTablet();
-    const mainScreen = isTablet ? 'ContactsScreen' : 'BottomTabNavigation';
+    // const isTablet = DeviceInfo.isTablet();
+    const mainScreen = 'BottomTabNavigation';
     const isDealerSelected = get(store.getState(), 'dealer.selected.id');
 
     const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
