@@ -24,17 +24,21 @@ export default class Imager extends PureComponent {
     this.state.animating = false;
   }
 
-  getImageCacheManager = () => {
-    if (!this.imageCacheManager) {
-      this.imageCacheManager = ImageCacheManager();
-    }
+  // getImageCacheManager = () => {
+  //   if (!this.imageCacheManager) {
+  //     this.imageCacheManager = ImageCacheManager();
+  //   }
 
-    this.setState({animatingLoader: false});
-    return this.imageCacheManager;
-  };
+  //   this.setState({animatingLoader: false});
+  //   return this.imageCacheManager;
+  // };
 
   render() {
     // console.log('== Imager ==');
+
+    if (!this.state.imagePath) {
+      return;
+    }
 
     return (
       <View>

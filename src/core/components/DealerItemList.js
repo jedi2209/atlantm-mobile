@@ -82,14 +82,16 @@ export default class DealerItemList extends Component {
             <Right>
               <View style={styles.brands}>
                 {brands.map(brand => {
-                  return (
-                    <Imager
-                      resizeMode="contain"
-                      key={brand.id}
-                      style={styles.brandLogo}
-                      source={{uri: brand.logo}}
-                    />
-                  );
+                  if (brand.logo) {
+                    return (
+                      <Imager
+                        resizeMode="contain"
+                        key={brand.id}
+                        style={styles.brandLogo}
+                        source={{uri: brand.logo}}
+                      />
+                    );
+                  }
                 })}
               </View>
               <Icon name="arrow-forward" style={stylesList.iconArrow} />

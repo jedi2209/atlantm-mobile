@@ -208,6 +208,7 @@ class CarListItem extends Component {
     const mileage = get(car, 'mileage');
     const gearbox = get(car, 'gearbox.name');
     const year = get(car, 'year');
+    const CarImg = get(car, 'img.10000x440.0');
     console.log('itemScreen', itemScreen);
     return (
       <TouchableHighlight
@@ -234,13 +235,15 @@ class CarListItem extends Component {
             </Text>
             {year ? <Text style={styles.year}>{`${year} г.в.`}</Text> : null}
           </View>
-          <Imager
-            resizeMode={resizeMode ? resizeMode : 'cover'}
-            style={[styles.image]}
-            source={{
-              uri: get(car, 'img.10000x440.0'),
-            }}
-          />
+          {CarImg ? (
+            <Imager
+              resizeMode={resizeMode ? resizeMode : 'cover'}
+              style={[styles.image]}
+              source={{
+                uri: CarImg,
+              }}
+            />
+          ) : null}
           <View
             style={[
               styles.price,
