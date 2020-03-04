@@ -270,14 +270,16 @@ class AboutDealerScreen extends Component {
                 source={{uri: imageUrl}}>
                 <View style={styles.brandsLine}>
                   {dealer.brands.map(brand => {
-                    return (
-                      <Imager
-                        resizeMode="contain"
-                        key={brand.id}
-                        style={styles.brand}
-                        source={{uri: brand.logo}}
-                      />
-                    );
+                    if (brand.logo) {
+                      return (
+                        <Imager
+                          resizeMode="contain"
+                          key={brand.id}
+                          style={styles.brand}
+                          source={{uri: brand.logo}}
+                        />
+                      );
+                    }
                   })}
                 </View>
               </ImageBackground>

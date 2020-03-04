@@ -41,17 +41,19 @@ export const Offer = props => {
         style={{
           width: cardWidth,
         }}>
-        <Imager
-          source={{uri: data.item.img.main}}
-          style={[
-            styles.image,
-            {
-              width: cardWidth,
-              height,
-              resizeMode: 'cover',
-            },
-          ]}
-        />
+        {data.item.img.main ? (
+          <Imager
+            source={{uri: data.item.img.main}}
+            style={[
+              styles.image,
+              {
+                width: cardWidth,
+                height,
+                resizeMode: 'cover',
+              },
+            ]}
+          />
+        ) : null}
         <Text
           numberOfLines={3}
           style={[

@@ -203,18 +203,20 @@ class InfoPostScreen extends Component {
           ) : (
             <View>
               <View style={styles.imageContainer} ref="imageContainer">
-                <Imager
-                  resizeMode="cover"
-                  onLayout={this.onLayoutImage}
-                  style={[
-                    styles.image,
-                    {
-                      width: this.state.imageWidth,
-                      height: this.state.imageHeight,
-                    },
-                  ]}
-                  source={{uri: imageUrl}}
-                />
+                {imageUrl ? (
+                  <Imager
+                    resizeMode="cover"
+                    onLayout={this.onLayoutImage}
+                    style={[
+                      styles.image,
+                      {
+                        width: this.state.imageWidth,
+                        height: this.state.imageHeight,
+                      },
+                    ]}
+                    source={{uri: imageUrl}}
+                  />
+                ) : null}
               </View>
               <View
                 style={styles.textContainer}

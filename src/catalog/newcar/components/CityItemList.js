@@ -111,15 +111,16 @@ export default class CityItemList extends Component {
                             } else {
                               existBrands.push(name);
                             }
-
-                            return (
-                              <Imager
-                                resizeMode="contain"
-                                key={brand.id}
-                                style={styles.brandLogo}
-                                source={{uri: brand.logo}}
-                              />
-                            );
+                            if (brand.logo) {
+                              return (
+                                <Imager
+                                  resizeMode="contain"
+                                  key={brand.id}
+                                  style={styles.brandLogo}
+                                  source={{uri: brand.logo}}
+                                />
+                              );
+                            }
                           })}
                         </View>
                       );

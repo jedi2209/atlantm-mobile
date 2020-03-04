@@ -151,6 +151,7 @@ export default class SelectItemByCountry extends Component {
       // фикс для НЕ вывода виртуальных КО в списке
       return true;
     }
+    const CarImg = get(item, 'img.10000x440');
 
     return (
       <ListItem
@@ -167,25 +168,29 @@ export default class SelectItemByCountry extends Component {
             <Text style={styles.site}>{this._getSite(item.site)}</Text>
             <View style={styles.brands}>
               {item.brands.map(brand => {
-                return (
-                  <Imager
-                    resizeMode="contain"
-                    key={brand.id}
-                    style={styles.brandLogo}
-                    source={{uri: brand.logo}}
-                  />
-                );
+                if (brand.logo) {
+                  return (
+                    <Imager
+                      resizeMode="contain"
+                      key={brand.id}
+                      style={styles.brandLogo}
+                      source={{uri: brand.logo}}
+                    />
+                  );
+                }
               })}
             </View>
           </View>
-          <View style={styles.thumb}>
-            <Imager
-              key={`dealer-cover-' + ${item.id}`}
-              style={styles.image}
-              resizeMode="cover"
-              source={{uri: get(item, 'img.10000x440')}}
-            />
-          </View>
+          {CarImg ? (
+            <View style={styles.thumb}>
+              <Imager
+                key={`dealer-cover-' + ${item.id}`}
+                style={styles.image}
+                resizeMode="cover"
+                source={{uri: CarImg}}
+              />
+            </View>
+          ) : null}
         </Body>
       </ListItem>
     );
@@ -222,14 +227,16 @@ export default class SelectItemByCountry extends Component {
                         existBrands.push(name);
                       }
 
-                      return (
-                        <Imager
-                          resizeMode="contain"
-                          key={brand.id}
-                          style={styles.brandLogo}
-                          source={{uri: brand.logo}}
-                        />
-                      );
+                      if (brand.logo) {
+                        return (
+                          <Imager
+                            resizeMode="contain"
+                            key={brand.id}
+                            style={styles.brandLogo}
+                            source={{uri: brand.logo}}
+                          />
+                        );
+                      }
                     })}
                   </View>
                 );
