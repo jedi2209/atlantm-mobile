@@ -51,7 +51,7 @@ export default class HeaderIconMenu extends Component {
   };
 
   render() {
-    if (DeviceInfo.isTablet()) return null;
+    // if (DeviceInfo.isTablet()) return null;
 
     return (
       <TouchableOpacity style={styles.container} onPress={this.onPressIcon}>
