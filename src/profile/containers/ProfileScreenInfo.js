@@ -124,7 +124,6 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
     isLoginRequest: profile.meta.isLoginRequest,
 
     bonus: profile.login.bonus,
-    discounts: profile.discounts,
     pushActionSubscribeState: core.pushActionSubscribeState,
   };
 };
@@ -223,6 +222,7 @@ class ProfileScreenInfo extends Component {
     if (!this.props.login.id) {
       //this.props.navigation.navigate('ProfileScreen');
     } else {
+      console.log('componentDidMount', this.props.login);
       this.getUserData();
     }
   }
@@ -248,6 +248,9 @@ class ProfileScreenInfo extends Component {
       })
       .then(() => {
         this.setState({loading: false});
+      }).catch(err => {
+        console.log('ERROR если что-то идет не так то разлогиниваем пользователя', err);
+        this.props.actionLogout();
       });
   }
 
