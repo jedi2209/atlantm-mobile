@@ -480,11 +480,17 @@ export const getProfileSapData = ({id, sap}) => {
   return async dispatch => {
     const user = await API.getProfile(id);
     const userInfo = profileDataAdapter(user);
+    let cars = [], bonus = {};
 
-    const {cars, bonus, discounts} = await getProfileData({
-      token: sap.token,
-      userid: sap.id,
+    const userSAP = user.SAP || {};
+
+    const result = await getProfileData({
+      token: userSAP.TOKEN,
+      userid: userSAP.ID,
     });
+
+    result.cars && (cars = result.cars);
+    result.bonus && (bonus = result.bonus);
 
     dispatch({
       type: SAVE_PROFILE__UPDATE,
@@ -493,7 +499,7 @@ export const getProfileSapData = ({id, sap}) => {
         ...userInfo,
         cars,
         bonus,
-        discounts,
+        SAP: (user.SAP && user.SAP.ID) ? user.SAP : {},
       },
     });
   };
