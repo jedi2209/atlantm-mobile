@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
+import {REHYDRATE} from 'redux-persist/constants';
 import {get} from 'lodash';
 import {
   PROFILE_CAR__FILL,
@@ -47,6 +47,8 @@ import {
   SAVE_PROFILE__FAIL,
 } from './actionTypes';
 
+import {APP_STORE_UPDATED} from '../core/actionTypes';
+
 import {DEALER__SUCCESS} from '@dealer/actionTypes';
 
 function login(state = '', action) {
@@ -58,6 +60,7 @@ function login(state = '', action) {
     case SAVE_PROFILE__FAIL:
       return {};
     case LOGOUT:
+    case APP_STORE_UPDATED:
       return {};
     default:
       return state;
@@ -112,6 +115,7 @@ function cars(state = [], action) {
     case PROFILE_DATA__SUCCESS:
       return action.payload.cars;
     case LOGOUT:
+    case APP_STORE_UPDATED:
       return [];
     default:
       return state;
@@ -174,6 +178,7 @@ function auth(state = {}, action) {
     case LOGIN__REQUEST:
     case LOGIN__FAIL:
     case LOGOUT:
+    case APP_STORE_UPDATED:
       return {};
     case LOGIN__SUCCESS:
       return action.payload;
@@ -229,6 +234,7 @@ function bonusData(state = {}, action) {
     case PROFILE_DATA__SUCCESS:
       return action.payload.bonus;
     case LOGOUT:
+    case APP_STORE_UPDATED:
       return {};
     default:
       return state;
@@ -270,6 +276,7 @@ function discounts(state = [], action) {
     case PROFILE_DATA__SUCCESS:
       return action.payload.discounts;
     case LOGOUT:
+    case APP_STORE_UPDATED:
       return [];
     default:
       return state;
@@ -281,6 +288,7 @@ function level1Hash(state = null, action) {
     case REHYDRATE:
     case LOGIN__SUCCESS:
     case LOGOUT:
+    case APP_STORE_UPDATED:
       return null;
     case PROFILE_BONUS_LEVEL1__SET:
       return action.payload;
@@ -294,6 +302,7 @@ function level2Hash(state = null, action) {
     case REHYDRATE:
     case LOGIN__SUCCESS:
     case LOGOUT:
+    case APP_STORE_UPDATED:
       return null;
     case PROFILE_BONUS_LEVEL2__SET:
       return action.payload;
@@ -323,6 +332,7 @@ function carHistoryData(state = {}, action) {
     case CAR_HISTORY__SUCCESS:
       return action.payload;
     case LOGOUT:
+    case APP_STORE_UPDATED:
     case CAR_HISTORY__REQUEST:
       return {};
     default:
@@ -335,6 +345,7 @@ function carHistorylevel1Hash(state = null, action) {
     case REHYDRATE:
     case CAR_HISTORY__SUCCESS:
     case LOGOUT:
+    case APP_STORE_UPDATED:
       return null;
     case CAR_HISTORY_LEVEL1__SET:
       return action.payload;
@@ -348,6 +359,7 @@ function carHistorylevel2Hash(state = null, action) {
     case REHYDRATE:
     case CAR_HISTORY__SUCCESS:
     case LOGOUT:
+    case APP_STORE_UPDATED:
       return null;
     case CAR_HISTORY_LEVEL2__SET:
       return action.payload;
