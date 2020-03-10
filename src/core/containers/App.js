@@ -81,11 +81,11 @@ class App extends Component {
 
     if (
       currentDealer &&
-      (isStoreUpdated !== undefined && isStoreUpdated !== '2019-02-01')
+      (isStoreUpdated !== undefined && isStoreUpdated !== '2020-03-10')
     ) {
       // если мы ещё не очищали стор
       actionMenuOpenedCount(0);
-      actionStoreUpdated('2019-02-01');
+      actionStoreUpdated('2020-03-10');
     }
 
     setTimeout(() => {
