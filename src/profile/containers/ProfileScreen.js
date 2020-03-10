@@ -13,6 +13,7 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
   Platform,
+  StyleSheet,
 } from 'react-native';
 import {Button, Icon} from 'native-base';
 import PhoneInput from 'react-native-phone-input';
@@ -439,7 +440,7 @@ class ProfileScreen extends Component {
     LoginManager.logOut();
     return (
       <KeyboardAvoidingView
-        behavior={Platform.select({ios: 'position', android: null})}
+        // behavior={Platform.select({ios: 'position', android: null})}
         keyboardVerticalOffset={0}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ImageBackground
@@ -475,9 +476,11 @@ class ProfileScreen extends Component {
                 <View
                   style={{
                     display: 'flex',
-                    flexDirection: 'column',
+                    flexDirection: 'row',
                     alignItems: 'center',
-                    justifyContent: 'center',
+                    justifyContent: 'space-between',
+                    width: '80%',
+                    marginHorizontal: '10%',
                     marginTop: 40,
                     marginBottom: 20,
                     opacity: this.state.code ? 0 : 1,
@@ -497,61 +500,53 @@ class ProfileScreen extends Component {
                           this.props.actionLogout();
                         }}
                       /> */}
-
-                  <Button
-                    onPress={this._signInFB}
-                    iconLeft
-                    style={[
-                      styleConst.shadow.default,
-                      {
-                        backgroundColor: '#4167B2',
-                        width: '80%',
-                        marginVertical: 8,
-                        paddingHorizontal: 8,
-                        justifyContent: 'flex-start',
-                      },
-                    ]}>
-                    <Icon name="facebook" type="FontAwesome5" />
-                    <Text style={{color: '#fff', marginLeft: 20}}>
-                      Войти через Facebook
-                    </Text>
-                  </Button>
                   <Button
                     onPress={this._signInWithGoogle}
                     disabled={this.state.isSigninInProgress}
                     iconLeft
                     style={[
                       styleConst.shadow.default,
+                      styles.SocialLoginBt,
                       {
                         backgroundColor: '#4286F5',
-                        width: '80%',
-                        marginVertical: 8,
-                        paddingHorizontal: 8,
-                        justifyContent: 'flex-start',
                       },
                     ]}>
                     <Icon name="google" type="FontAwesome5" />
-                    <Text style={{color: '#fff', marginLeft: 20}}>
+                    {/* <Text style={{color: '#fff', marginLeft: 20}}>
                       Войти через Google
-                    </Text>
+                    </Text> */}
                   </Button>
                   <Button
-                    onPress={this._signInWithVK}
+                    onPress={this._signInFB}
+                    disabled={this.state.isSigninInProgress}
                     iconLeft
                     style={[
                       styleConst.shadow.default,
+                      styles.SocialLoginBt,
+                      {
+                        backgroundColor: '#4167B2',
+                      },
+                    ]}>
+                    <Icon name="facebook" type="FontAwesome5" />
+                    {/* <Text style={{color: '#fff', marginLeft: 20}}>
+                      Войти через Facebook
+                    </Text> */}
+                  </Button>
+                  <Button
+                    onPress={this._signInWithVK}
+                    disabled={this.state.isSigninInProgress}
+                    iconLeft
+                    style={[
+                      styleConst.shadow.default,
+                      styles.SocialLoginBt,
                       {
                         backgroundColor: '#4680C2',
-                        width: '80%',
-                        marginVertical: 8,
-                        paddingHorizontal: 8,
-                        justifyContent: 'flex-start',
                       },
                     ]}>
                     <Icon name="vk" type="FontAwesome5" />
-                    <Text style={{color: '#fff', marginLeft: 20}}>
+                    {/* <Text style={{color: '#fff', marginLeft: 20}}>
                       Войти через VK
-                    </Text>
+                    </Text> */}
                   </Button>
                 </View>
                 <View
@@ -649,9 +644,10 @@ class ProfileScreen extends Component {
                           paddingHorizontal: 14,
                           fontSize: 18,
                           letterSpacing: 3,
-                          borderColor: 'gray',
-                          borderWidth: 1,
+                          borderColor: '#afafaf',
+                          borderWidth: 0.45,
                           color: '#fff',
+                          backgroundColor: 'rgba(0, 0, 0, 0.7)',
                           width: '100%',
                           borderRadius: 5,
                         }}
@@ -770,6 +766,16 @@ class ProfileScreen extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  SocialLoginBt: {
+    width: '25%',
+    height: 50,
+    marginVertical: 8,
+    paddingHorizontal: 8,
+    justifyContent: 'center',
+  },
+});
 
 export default connect(
   mapStateToProps,

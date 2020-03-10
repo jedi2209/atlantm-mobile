@@ -58,7 +58,7 @@ export default {
     footerHeightIphone: 50,
     footerHeightAndroid: 50,
     borderWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
-    horizontalGap: 11,
+    horizontalGap: 10,
     horizontalGapInList: 14,
     verticalGap: 22,
     letterSpacing: -0.3,

@@ -173,7 +173,7 @@ class InfoListScreen extends Component {
           key={`carousel-article-${data.item.hash}`}
           data={data}
           width={cardWidth}
-          height={150}
+          height={200}
           navigation={this.props.navigation.navigate}
         />
       </View>

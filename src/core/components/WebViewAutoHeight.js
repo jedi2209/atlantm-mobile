@@ -1,12 +1,10 @@
+import React, {PureComponent} from 'react';
 import {View, Linking, Dimensions} from 'react-native';
-import {WebView} from 'react-native-webview';
-import HTML from 'react-native-render-html';
-import React, {Component} from 'react';
+import WebView from 'react-native-webview';
+import styleConst from '@core/style-const';
 
 const BODY_TAG_PATTERN = /\<\/ *body\>/;
 
-// Do not add any comments to this! It will break line breaks will removed for
-// some weird reason.
 const script = `
   ;(function() {
   var wrapper = document.createElement("div");
@@ -33,11 +31,13 @@ const script = `
   }());
 `;
 
-const style = `
+const styleCSS = `
   <style>
     body, html, #height-wrapper {
         margin: 0;
         padding: 0;
+        font-size: 16px !important;
+        backgroundColor: ${styleConst.color.bg}
     }
     a, a:visited, a.hover {
         color: #0072e7;
@@ -49,16 +49,36 @@ const style = `
         right: 0;
     }
     table {
-      font-size: 12px !important;
+      font-size: 14px !important;
+      border-spacing: 0;
+      border-left: none;
+      border-right: none;
+      border-bottom: none;
+      border-top: 1px solid;
+      border-color: rgba(4,88,167,0.4);
     }
-    table,
     th,
+    thead,
     td {
-      border: 1px solid rgba(4,88,167,0.4);
+      border-spacing: 0;
+      border-right: 1px solid;
+      border-bottom: none;
+      border-left: none;
+      border-top: none;
+      border-color: rgba(4,88,167,0.4);
+    }
+    td {
+      border-bottom: 1px solid;
+      border-color: rgba(4,88,167,0.4);
+      padding: 0.4em;
     }
     img {
       width: auto;
       max-width: 100%;
+    }
+    p {
+      margin-left: 2%;
+      margin-right: 2%;
     }
   </style>
   <script>
@@ -66,26 +86,15 @@ const style = `
   </script>
 `;
 
-//const codeInject = html => html.replace(BODY_TAG_PATTERN, style + '</body>');
+const codeInject = html => html.replace(BODY_TAG_PATTERN, styleCSS + '</body>');
 
-const deviceWidth = Dimensions.get('window').width;
-
-/**
- * Wrapped Webview which automatically sets the height according to the
- * content. Scrolling is always disabled. Required when the Webview is embedded
- * into a ScrollView with other components.
- *
- * Inspired by this SO answer http://stackoverflow.com/a/33012545
- * */
-export default class WebViewAutoHeight extends Component {
+export default class WebViewAutoHeight extends PureComponent {
   static defaultProps = {
-    minHeight: 100,
+    minHeight: 200,
   };
 
   constructor(props) {
     super(props);
-
-    console.log('props', props);
 
     this.state = {
       realContentHeight: this.props.minHeight,
@@ -107,55 +116,22 @@ export default class WebViewAutoHeight extends Component {
     const {source, style, minHeight, ...otherProps} = this.props;
     const html = source.html;
 
-    console.log('html', html);
-
-    // if (!html) {
-    //   throw new Error('WebViewAutoHeight supports only source.html');
-    // }
-
-    // if (!BODY_TAG_PATTERN.test(html)) {
-    //   throw new Error(`Cannot find </body> from: ${html}`);
-    // }
-
-    const tagsStyles = {
-      div: {
-        fontSize: 16,
-        lineHeight: 24,
-      },
-      p: {padding: 0, marginBottom: 10, marginHorizontal: 10},
-      img: {width: deviceWidth, maxWidth: deviceWidth},
-    };
-
-    const classesStyles = {
-      div: {marginBottom: 0, padding: 0},
-      divider: {marginRight: 10, width: 10},
-    };
-
     return (
-      <HTML
-        html={html}
-        tagsStyles={tagsStyles}
-        classesStyles={classesStyles}
-        imagesMaxWidth={deviceWidth}
-        onLinkPress={(evt, href) => {
-          return Linking.openURL(href);
-        }}
+      <WebView
+        {...otherProps}
+        source={{html: codeInject(html)}}
+        scrollEnabled={false}
+        style={[
+          style,
+          {height: Math.max(this.state.realContentHeight, minHeight)},
+        ]}
+        javaScriptEnabled
+        onNavigationStateChange={this.handleNavigationChange}
+        dataDetectorTypes="all"
+        allowsFullscreenVideo={true}
+        allowsInlineMediaPlayback={true}
+        originWhitelist={['*']}
       />
-      // <WebView
-      //   {...otherProps}
-      //   source={{html: codeInject(html)}}
-      //   scrollEnabled={false}
-      //   style={[
-      //     style,
-      //     {height: Math.max(this.state.realContentHeight, minHeight)},
-      //   ]}
-      //   javaScriptEnabled
-      //   onNavigationStateChange={this.handleNavigationChange}
-      //   dataDetectorTypes="all"
-      //   allowsFullscreenVideo={true}
-      //   allowsInlineMediaPlayback={true}
-      //   originWhitelist={['*']}
-      // />
     );
   }
 }
