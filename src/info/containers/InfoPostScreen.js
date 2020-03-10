@@ -111,9 +111,10 @@ class InfoPostScreen extends Component {
           ContainerStyle={{
             backgroundColor: 'rgba(0,0,0, 0.6)',
             paddingHorizontal: 5,
-            paddingVertical: 5,
+            paddingVertical: 10,
             borderRadius: 20,
             marginLeft: 5,
+            marginTop: 10,
           }}
           IconStyle={{
             marginLeft: 5,
@@ -183,9 +184,9 @@ class InfoPostScreen extends Component {
     const imageUrl = get(img, '10000x440');
     const date = get(post, 'date');
 
-    // if (text) {
-    //   text = processHtml(text, this.state.webViewWidth);
-    // }
+    if (text) {
+      text = processHtml(text, this.state.webViewWidth);
+    }
 
     console.log('== InfoPost ==');
 
@@ -225,6 +226,7 @@ class InfoPostScreen extends Component {
                   <Text style={styles.date}>{this.processDate(date)}</Text>
                 ) : null}
                 <WebViewAutoHeight
+                  key={get(post, 'hash')}
                   source={{html: text}}
                   injectedJavaScript={injectScript}
                   onMessage={this.onMessage}

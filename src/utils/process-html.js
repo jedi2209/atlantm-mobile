@@ -11,21 +11,21 @@ const processHtml = (text, width) => {
     </head>
     <body>
     <style>
-    html, body {
-      width: ${width};
-      max-width: 100%;
-      font-size: 15px;
-      background-color: ${styleConst.color.bg};
-      font-family: 'Helvetica Neue';
-      padding: 0;
-      margin: 0;
-      overflow: 'scroll';
-    }
-    table {
-      font-size: 13px;
-    }
-  </style>
-      ${text}
+      html, body {
+        width: ${width};
+        max-width: 100%;
+        font-size: 16px;
+        background-color: ${styleConst.color.bg};
+        font-family: 'Helvetica Neue';
+        padding: 0;
+        margin: 0;
+        overflow: 'scroll';
+      }
+      table {
+        font-size: 14px;
+      }
+    </style>
+    ${text}
     </body>
     </html>
   `;

@@ -423,7 +423,7 @@ class ContactsScreen extends Component {
                           key={`carousel-article-${item.id}`}
                           data={item}
                           width={cardWidth}
-                          height={150}
+                          height={190}
                         />
                       );
                     }}

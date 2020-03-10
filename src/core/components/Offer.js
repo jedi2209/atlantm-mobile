@@ -48,7 +48,7 @@ export const Offer = props => {
               styles.image,
               {
                 width: cardWidth,
-                height,
+                height: height,
                 resizeMode: 'cover',
               },
             ]}
