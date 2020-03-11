@@ -130,7 +130,7 @@ class App extends Component {
       OneSignal.enableVibrate(true);
 
       PushNotifications.init();
-    }, 500);
+    }, 1500);
   }
 
   shouldComponentUpdate(prevProps) {
