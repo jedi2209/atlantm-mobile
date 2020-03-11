@@ -658,7 +658,7 @@ class ProfileScreen extends Component {
                         // onSelectCountry={this._onSelectCountry}
                         textProps={{
                           placeholderTextColor: '#afafaf',
-                          placeholder: 'ваш телефон',
+                          placeholder: 'введите ваш телефон',
                           keyboardType: 'phone-pad',
                           autoCompleteType: 'tel',
                           selectionColor: '#afafaf',
@@ -729,14 +729,20 @@ class ProfileScreen extends Component {
                       {this.state.loadingVerify ? (
                         <ActivityIndicator color="#fff" />
                       ) : (
-                        <Text style={{color: '#fff'}}>Подвердить</Text>
+                        <Text style={{color: '#fff'}}>Подтвердить</Text>
                       )}
                     </Button>
                   ) : null}
                   {!this.state.code && (
                     <Button
                       onPress={this._verifyCode}
-                      disabled={this.state.loadingVerify}
+                      disabled={
+                        this.state.loadingVerify
+                          ? true
+                          : this.state.phone
+                          ? false
+                          : true
+                      }
                       ref={ref => {
                         this.getCodeButton = ref;
                       }}
@@ -748,6 +754,11 @@ class ProfileScreen extends Component {
                           backgroundColor: '#34BD78',
                           justifyContent: 'center',
                           borderRadius: 5,
+                          opacity: this.state.loadingVerify
+                            ? 0
+                            : this.state.phone
+                            ? 1
+                            : 0,
                         },
                       ]}>
                       {this.state.loadingVerify ? (
