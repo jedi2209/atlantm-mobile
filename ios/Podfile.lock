@@ -314,7 +314,7 @@ PODS:
     - React
   - RNGestureHandler (1.6.0):
     - React
-  - RNGoogleSignin (3.0.4):
+  - RNGoogleSignin (4.0.0):
     - GoogleSignIn (~> 5.0.0)
     - React
   - RNImageCropPicker (0.28.0):
@@ -330,7 +330,7 @@ PODS:
     - React
   - RNReanimated (1.7.0):
     - React
-  - RNScreens (2.2.0):
+  - RNScreens (2.3.0):
     - React
   - RNSentry (1.3.3):
     - React
@@ -555,11 +555,11 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 285698b8a4f219573174d99e863a78b93f389272
   RNDeviceInfo: 67607dfe9cfbed105838144c40187a8392aa404d
   RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
-  RNGoogleSignin: a00f87261ea13df9a5cea8deafa6927d6f2c3562
+  RNGoogleSignin: 068788c1e83e5e05ef0bad090ba67fd8f963a2a3
   RNImageCropPicker: cf129d17e042ce3e96fb9ada967c28f21f977c82
   RNRate: d44a8bca6ee08f5d890ecccddaec2810955ffbb3
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
-  RNScreens: 812b79d384e2bea7eebc4ec981469160d4948fd5
+  RNScreens: 03bf608b92ac0acf323f47d8f5b63a8f829340c8
   RNSentry: 86baf0c87120cd5eb491d073989f8cbc1a2174c6
   RSKImageCropper: a446db0e8444a036b34f3c43db01b2373baa4b2a
   Sentry: 14bdd673870e8cf64932b149fad5bbbf39a9b390
