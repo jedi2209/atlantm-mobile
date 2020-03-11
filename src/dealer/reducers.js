@@ -12,6 +12,8 @@ import {
   DEALERS__FAIL,
 } from './actionTypes';
 
+import {APP_STORE_UPDATED} from '../core/actionTypes';
+
 import {RUSSIA, BELARUSSIA, UKRAINE} from '../core/const';
 
 function selected(state = {}, action) {
@@ -20,6 +22,8 @@ function selected(state = {}, action) {
       return get(action.payload, 'dealer.selected', {});
     case DEALER__SUCCESS:
       return {...action.payload.newDealer};
+    case APP_STORE_UPDATED:
+      return {};
     default:
       return state;
   }

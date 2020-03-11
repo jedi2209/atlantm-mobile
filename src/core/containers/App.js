@@ -1,9 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
+import {View, TouchableOpacity, Text, NativeModules, ActivityIndicator} from 'react-native';
 import Modal from 'react-native-modal';
-import {TouchableOpacity} from 'react-native';
-
-import {View, Text, NativeModules} from 'react-native';
 import {createAppContainer, NavigationActions} from 'react-navigation';
 
 // redux
@@ -23,6 +21,7 @@ import API from '../../utils/api';
 import {get} from 'lodash';
 import OneSignal from 'react-native-onesignal';
 import PushNotifications from '../components/PushNotifications';
+import RNRestart from 'react-native-restart';
 
 // components
 import DeviceInfo from 'react-native-device-info';
@@ -58,6 +57,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.navigatorRef = React.createRef();
+    this.state = {
+      isloading: false,
+    };
   }
 
   componentDidMount() {
@@ -72,6 +74,8 @@ class App extends Component {
       isStoreUpdated,
     } = this.props;
 
+    console.log('this.props', this.props);
+
     if (get(auth, 'login') === 'zteam') {
       window.atlantmDebug = true;
     }
@@ -83,9 +87,15 @@ class App extends Component {
       currentDealer &&
       (isStoreUpdated !== undefined && isStoreUpdated !== '2020-03-10')
     ) {
+      this.setState({
+        isloading: true,
+      });
       // если мы ещё не очищали стор
       actionMenuOpenedCount(0);
       actionStoreUpdated('2020-03-10');
+      setTimeout(() => {
+        RNRestart.Restart();
+      }, 1000);
     }
 
     setTimeout(() => {
@@ -152,6 +162,10 @@ class App extends Component {
 
     const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
     const AppContainer = createAppContainer(Router);
+
+    if (this.state.isloading) {
+      return <ActivityIndicator color="#fff" />;
+    }
 
     return (
       <View style={{flex: 1}}>
