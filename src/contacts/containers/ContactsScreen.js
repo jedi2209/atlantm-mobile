@@ -30,8 +30,6 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '@core/style-const';
 import {ERROR_NETWORK} from '@core/const';
 import Carousel from 'react-native-snap-carousel';
-import {store} from '@core/store';
-import {actionToggleModal} from '@core/actions';
 
 const HEADER_MAX_HEIGHT = 406;
 
@@ -209,7 +207,8 @@ class ContactsScreen extends Component {
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
-    const isActiveScreen = nav.routes[nav.index].routeName === 'ContactsScreen';
+    const isActiveScreen =
+      nav.routes[nav.index].routeName === 'BottomTabNavigation';
 
     const isListSucsess = Boolean(
       this.props.list.length !== nextProps.list.length,
