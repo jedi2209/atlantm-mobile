@@ -774,6 +774,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     paddingHorizontal: 8,
     justifyContent: 'center',
+    borderRadius: 5,
   },
 });
 
