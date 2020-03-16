@@ -105,6 +105,7 @@ class InfoPostScreen extends Component {
   static navigationOptions = ({navigation}) => {
     const returnScreen =
       navigation.state.params && navigation.state.params.returnScreen;
+    console.log('isAndroid', isAndroid);
     return {
       headerTransparent: true,
       headerLeft: (
@@ -112,8 +113,8 @@ class InfoPostScreen extends Component {
           theme="white"
           ContainerStyle={{
             backgroundColor: 'rgba(0,0,0, 0.6)',
-            paddingHorizontal: 5,
-            paddingVertical: 10,
+            paddingHorizontal: isAndroid ? 5 : 0,
+            paddingVertical: isAndroid ? 10 : 5,
             borderRadius: 20,
             marginLeft: 5,
             marginTop: isAndroid ? 5 : 0,
