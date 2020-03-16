@@ -49,7 +49,8 @@ platform :ios do
         pretty: "- %s",# Optional, lets you provide a custom format to apply to each commit when generating the changelog text
         date_format: "short",# Optional, lets you provide an additional date format to dates within the pretty-formatted string
         match_lightweight_tag: false,  # Optional, lets you ignore lightweight (non-annotated) tags when searching for the last tag
-        merge_commit_filtering: "exclude_merges" # Optional, lets you filter out merge commits
+        merge_commit_filtering: "exclude_merges", # Optional, lets you filter out merge commits
+        tag_match_pattern: "builds/iosbeta"
     )
     upload_to_testflight(
         skip_waiting_for_build_processing: true,
@@ -88,12 +89,13 @@ platform :android do
 
   desc "Submit a new Internal Build to Google Play"
   lane :internal do
-    #ensure_git_status_clean
-#     increment_version_code(
-#         gradle_file_path: "./android/build.gradle",
-#         #ext_constant_name: "test"
-#         #app_folder_name:"app"
-#     )
+    changelog_from_git_commits(
+        pretty: "- %s",# Optional, lets you provide a custom format to apply to each commit when generating the changelog text
+        date_format: "short",# Optional, lets you provide an additional date format to dates within the pretty-formatted string
+        match_lightweight_tag: false,  # Optional, lets you ignore lightweight (non-annotated) tags when searching for the last tag
+        merge_commit_filtering: "exclude_merges", # Optional, lets you filter out merge commits
+        tag_match_pattern: "builds/androidinternal"
+    )
     gradle(
         project_dir: "./android/",
         task: "clean assemble",
