@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   StatusBar,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
 import {
   Col,
@@ -74,26 +75,55 @@ const mapDispatchToProps = {
   actionUpdateUsedCarPhotoViewerIndex,
 };
 
+const OptionPlate = ({title, subtitle}) => (
+  <View
+    style={{
+      borderRadius: 10,
+      backgroundColor: '#0061ED',
+      paddingHorizontal: 12,
+      // paddingTop: 10,
+      // paddingBottom: 10,
+      marginRight: 8,
+      height: 52,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+    }}>
+    <Text
+      style={{
+        color: '#d8d8d8',
+        fontSize: 14,
+        fontWeight: '300',
+        paddingBottom: 5,
+      }}>
+      {title}
+    </Text>
+    <Text style={{color: '#fff', fontSize: 14, fontWeight: '600'}}>
+      {subtitle}
+    </Text>
+  </View>
+);
+
 class UserCarItemScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: (
-      <Text style={stylesHeader.blueHeaderTitle}>
-        {console.log('navigation', navigation)}
-        {navigation.state.params.carDetails
-          ? navigation.state.params.carDetails.brand.name +
-            ' ' +
-            navigation.state.params.carDetails.model.name
-          : null}
-      </Text>
-    ),
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerTransparent: true,
     headerLeft: (
-      <View>
-        <HeaderIconBack theme="white" navigation={navigation} />
-      </View>
+      <HeaderIconBack
+        theme="white"
+        ContainerStyle={{
+          backgroundColor: 'rgba(0,0,0, 0.2)',
+          paddingHorizontal: 5,
+          paddingVertical: 5,
+          borderRadius: 20,
+          marginLeft: 5,
+        }}
+        IconStyle={{
+          marginLeft: 5,
+        }}
+        navigation={navigation}
+      />
     ),
-    headerRight: <View />,
   });
 
   static propTypes = {
@@ -279,14 +309,16 @@ class UserCarItemScreen extends Component {
       standart: get(carDetails, 'price.app.standart') || 0,
     };
 
+    console.log('carDetails', carDetails);
+
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
-          <StatusBar barStyle="light-content" />
+          <StatusBar barStyle="default" />
           <Content>
             <View style={styles.gallery}>
               <PhotoSlider
-                resizeMode="cover"
+                resizeMode="contain"
                 dotColor="#fff"
                 photos={photos}
                 onPressItem={this.onPressPhoto}
@@ -298,8 +330,8 @@ class UserCarItemScreen extends Component {
                   style={[
                     {
                       position: 'relative',
-                      top: -27,
-                      marginBottom: -27,
+                      top: -35,
+                      marginBottom: -35,
                       backgroundColor: '#fff',
                       borderTopLeftRadius: 30,
                       borderTopRightRadius: 30,
@@ -331,6 +363,60 @@ class UserCarItemScreen extends Component {
                   </View>
                 ) : null}
 
+                <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+                  <View
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      paddingHorizontal: 16,
+                      marginBottom: 24,
+                    }}>
+                    {get(carDetails, 'engine') ? (
+                      <OptionPlate
+                        title="Двигатель"
+                        subtitle={
+                          get(carDetails, 'engine.volume.short') +
+                          ' ' +
+                          get(carDetails, 'engine.type')
+                        }
+                      />
+                    ) : null}
+                    {get(carDetails, 'gearbox.count') ? (
+                      <OptionPlate
+                        title="КПП"
+                        subtitle={`${
+                          get(carDetails, 'gearbox.count')
+                            ? get(carDetails, 'gearbox.count') + '-ст.'
+                            : ''
+                        } ${
+                          get(carDetails, 'gearbox.name')
+                            .replace(/^(Механическая)/i, 'МКПП')
+                            .replace(/^(Автоматическая)/i, 'АКПП')
+                            .split('/')[0]
+                        }`}
+                      />
+                    ) : null}
+                    {get(carDetails, 'gearbox.wheel') ? (
+                      <OptionPlate
+                        title="Привод"
+                        subtitle={get(
+                          carDetails,
+                          'gearbox.wheel',
+                        ).toLowerCase()}
+                      />
+                    ) : null}
+                    {get(carDetails, 'color.name.simple') ? (
+                      <OptionPlate
+                        title="Цвет"
+                        subtitle={get(
+                          carDetails,
+                          'color.name.simple',
+                        ).toLowerCase()}
+                      />
+                    ) : null}
+                  </View>
+                </ScrollView>
+
                 {carDetails.dealer && carDetails.dealer.name ? (
                   <TouchableWithoutFeedback
                     onPress={this.onPressMap}
@@ -349,7 +435,7 @@ class UserCarItemScreen extends Component {
                           style={styles.mapCardDealer}
                           numberOfLines={1}
                           ellipsizeMode="tail">
-                            {this._renderAddress()}
+                          {this._renderAddress()}
                         </Text>
                       </View>
                     </View>

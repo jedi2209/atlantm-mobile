@@ -23,7 +23,6 @@ import {
 } from '../../actions';
 
 // components
-import FooterFilter from '../components/FooterFilter';
 import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import CarList from '../../components/CarList';
