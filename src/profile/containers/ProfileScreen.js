@@ -658,7 +658,7 @@ class ProfileScreen extends Component {
                         // onSelectCountry={this._onSelectCountry}
                         textProps={{
                           placeholderTextColor: '#afafaf',
-                          placeholder: 'введите ваш телефон',
+                          placeholder: 'ваш телефон',
                           keyboardType: 'phone-pad',
                           autoCompleteType: 'tel',
                           selectionColor: '#afafaf',

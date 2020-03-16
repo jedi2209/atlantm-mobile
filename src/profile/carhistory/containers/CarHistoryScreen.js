@@ -344,7 +344,6 @@ class CarHistoryScreen extends Component {
         <View>
           <StyleProvider style={getTheme()}>
             <View>
-              {/* ВОТ ТУТ НАЧИНАЕТСЯ ПРОБЛЕМА С ОБРАТНОЙ ВЫБОРКОЙ ЭЛЕМЕНТОВ */}
               {Object.keys(get(carHistory, 'items'), []).length
                 ? this.renderLevel1(carHistory.items)
                 : null}
