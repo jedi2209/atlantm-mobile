@@ -163,79 +163,78 @@ class BonusScreen extends Component {
   isActiveLevel2 = hash => this.props.level2hash === hash;
 
   renderLevel1 = bonuses => {
-    return Object.keys(bonuses).map((bonusYear, idx, yearsArray) => {
-      const bonus = bonuses[bonusYear];
-      const isLast = yearsArray.length - 1 === idx;
-      const hash = bonus.hash;
-      const isActive = true; //this.isActiveLevel1(hash);
-      const onPressHander = () => this.onPressLevel1(hash);
+    return Object.keys(bonuses)
+      .reverse()
+      .map((bonusYear, idx, yearsArray) => {
+        const bonus = bonuses[bonusYear];
+        const isLast = yearsArray.length - 1 === idx;
+        const hash = bonus.hash;
+        const isActive = true; //this.isActiveLevel1(hash);
+        const onPressHander = () => this.onPressLevel1(hash);
 
-      return (
-        <View key={hash} style={styles.acc}>
-          {this.renderItemHeader(
-            bonusYear,
-            bonus.total,
-            onPressHander,
-            'itemLevel1',
-            isActive,
-            isLast,
-            true,
-          )}
-          {isActive ? (
-            <View
-              style={[styles.accContent, styles.accContentLevel1]}
-              animation="slideInDown"
-              useNativeDriver={true}
-              duration={700}>
-              {this.renderLevel2(bonus.history)}
-            </View>
-          ) : null}
-        </View>
-      );
-    });
+        return (
+          <View key={hash} style={styles.acc}>
+            {this.renderItemHeader(
+              bonusYear,
+              bonus.total,
+              onPressHander,
+              'itemLevel1',
+              isActive,
+              isLast,
+              true,
+            )}
+            {isActive ? (
+              <View
+                style={[styles.accContent, styles.accContentLevel1]}
+                animation="slideInDown"
+                useNativeDriver={true}
+                duration={700}>
+                {this.renderLevel2(bonus.history)}
+              </View>
+            ) : null}
+          </View>
+        );
+      });
   };
 
   renderLevel2 = bonusesByMonth => {
-    return Object.keys(bonusesByMonth).map((bonusMonth, idx, monthArray) => {
-      const bonus = bonusesByMonth[bonusMonth];
-      const isLast = monthArray.length - 1 === idx;
-      const hash = bonus.hash;
-      const isActive = true; //this.isActiveLevel2(hash);
-      const onPressHander = () => this.onPressLevel2(hash);
+    return Object.keys(bonusesByMonth)
+      .reverse()
+      .map((bonusMonth, idx, monthArray) => {
+        const bonus = bonusesByMonth[bonusMonth];
+        const isLast = monthArray.length - 1 === idx;
+        const hash = bonus.hash;
+        const isActive = true; //this.isActiveLevel2(hash);
+        const onPressHander = () => this.onPressLevel2(hash);
 
-      return (
-        <View key={hash} style={styles.acc}>
-          {this.renderItemHeader(
-            MONTH_TEXT[bonusMonth],
-            bonus.total,
-            onPressHander,
-            'itemLevel2',
-            isActive,
-            isLast,
-            true,
-          )}
-          {isActive ? (
-            <View animation="pulse" useNativeDriver={true} duration={700}>
-              {this.renderLevel3(bonus.history)}
-            </View>
-          ) : null}
-        </View>
-      );
-    });
+        return (
+          <View key={hash} style={styles.acc}>
+            {this.renderItemHeader(
+              MONTH_TEXT[bonusMonth],
+              bonus.total,
+              onPressHander,
+              'itemLevel2',
+              isActive,
+              isLast,
+              true,
+            )}
+            {isActive ? (
+              <View animation="pulse" useNativeDriver={true} duration={700}>
+                {this.renderLevel3(bonus.history)}
+              </View>
+            ) : null}
+          </View>
+        );
+      });
   };
 
   renderLevel3 = history => {
     return history.map((bonus, idx) => {
-      const isLast = history.length - 1 === idx;
-
       return this.renderItemHeader(
         bonus.name,
         bonus.summ,
         null,
         'itemLevel3',
-        null,
-        isLast,
-        null,
         bonus.hash,
         bonus.date,
       );

@@ -248,8 +248,12 @@ class ProfileScreenInfo extends Component {
       })
       .then(() => {
         this.setState({loading: false});
-      }).catch(err => {
-        console.log('ERROR если что-то идет не так то разлогиниваем пользователя', err);
+      })
+      .catch(err => {
+        console.log(
+          'ERROR если что-то идет не так то разлогиниваем пользователя',
+          err,
+        );
         this.props.actionLogout();
       });
   }
@@ -371,7 +375,10 @@ class ProfileScreenInfo extends Component {
                       padding: 14,
                       display: 'flex',
                       flexDirection: 'row',
-                    }}>
+                    }}
+                    onPress={() =>
+                      this.props.navigation.navigate('BonusScreen')
+                    }>
                     <View
                       style={{
                         backgroundColor: '#fff',
@@ -420,7 +427,10 @@ class ProfileScreenInfo extends Component {
                               color: '#fff',
                               fontSize: 16,
                               fontWeight: '600',
-                            }}>
+                            }}
+                            onPress={() =>
+                              this.props.navigation.navigate('BonusScreen')
+                            }>
                             Посмотреть
                           </Text>
                         </View>
