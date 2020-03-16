@@ -1,6 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, NativeModules, ActivityIndicator} from 'react-native';
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  NativeModules,
+  ActivityIndicator,
+} from 'react-native';
 import Modal from 'react-native-modal';
 import {createAppContainer, NavigationActions} from 'react-navigation';
 
@@ -21,7 +27,7 @@ import API from '../../utils/api';
 import {get} from 'lodash';
 import OneSignal from 'react-native-onesignal';
 import PushNotifications from '../components/PushNotifications';
-import RNRestart from 'react-native-restart';
+// import RNRestart from 'react-native-restart';
 
 // components
 import DeviceInfo from 'react-native-device-info';
@@ -94,8 +100,10 @@ class App extends Component {
       actionMenuOpenedCount(0);
       actionStoreUpdated('2020-03-10');
       setTimeout(() => {
-        RNRestart.Restart();
-      }, 1000);
+        this.setState({
+          isloading: false,
+        });
+      }, 500);
     }
 
     setTimeout(() => {
@@ -130,7 +138,7 @@ class App extends Component {
       OneSignal.enableVibrate(true);
 
       PushNotifications.init();
-    }, 1500);
+    }, 700);
   }
 
   shouldComponentUpdate(prevProps) {
