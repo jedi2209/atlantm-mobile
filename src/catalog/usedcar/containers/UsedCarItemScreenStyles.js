@@ -13,7 +13,7 @@ export default StyleSheet.create({
   },
   gallery: {
     // position: 'relative',
-    marginTop: -40,
+    marginTop: 0,
   },
   titleContainer: {
     paddingBottom: 10,
