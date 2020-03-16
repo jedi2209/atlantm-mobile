@@ -8,6 +8,7 @@ import {
   StyleSheet,
   SafeAreaView,
   ActivityIndicator,
+  Platform
 } from 'react-native';
 
 // redux
@@ -34,6 +35,7 @@ let IMAGE_HEIGHT_GUARD = 0;
 const {width: screenWidth} = Dimensions.get('window');
 const IMAGE_WIDTH = screenWidth;
 const IMAGE_HEIGHT = 200;
+const isAndroid = Platform.OS === 'android';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -114,7 +116,7 @@ class InfoPostScreen extends Component {
             paddingVertical: 10,
             borderRadius: 20,
             marginLeft: 5,
-            marginTop: 10,
+            marginTop: isAndroid ? 5 : 0,
           }}
           IconStyle={{
             marginLeft: 5,
