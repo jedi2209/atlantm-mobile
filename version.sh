@@ -10,7 +10,7 @@ ANDROID_VERSION_FILE="android/app/versioning/app_version.properties"
 PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]')
 
 # BUILD_NUMBER=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "${INFOPLIST_DIR}")
-BUILD_NUMBER=0
+BUILD_NUMBER="0"
 
 
 ## Update plist with new values
@@ -24,4 +24,4 @@ BUILD_NUMBER=0
 ## Set Android version to 0
 echo "versionCode=0" > $ANDROID_VERSION_FILE
 
-git add "${INFOPLIST_DIR}"
+git add "${INFOPLIST_DIR}" "${INFOPLIST_ONESIGNAL_DIR}" $ANDROID_VERSION_FILE
