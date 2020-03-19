@@ -133,7 +133,7 @@ export default class ReviewsList extends Component {
           ListEmptyComponent={this.renderEmptyComponent}
           ListFooterComponent={this.renderFooter}
           renderItem={this.renderItem}
-          keyExtractor={item => `${item.id}`}
+          keyExtractor={item => `${item.hash.toString()}`}
           onEndReached={this.handleLoadMore}
         />
       </View>

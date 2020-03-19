@@ -214,9 +214,6 @@ const MoreScreen = props => {
 
 class LogoTitle extends React.Component {
   render() {
-    console.log('getBuildNumber', DeviceInfo.getBuildNumber());
-    console.log('getBundleId', DeviceInfo.getBundleId());
-    console.log('getApplicationName', DeviceInfo.getApplicationName());
     return (
       <View
         style={{
