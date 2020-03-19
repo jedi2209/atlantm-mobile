@@ -1,7 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 
-import {Text, View, Image, StyleSheet, ScrollView} from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import {Icon, List, ListItem, Left, Right, Button, Body} from 'native-base';
 
 import styleConst from '../../core/style-const';
@@ -212,6 +219,8 @@ const MoreScreen = props => {
   );
 };
 
+const isAndroid = Platform.OS === 'android';
+
 class LogoTitle extends React.Component {
   render() {
     return (
@@ -222,19 +231,18 @@ class LogoTitle extends React.Component {
           alignItems: 'center',
           justifyContent: 'center',
           width: '100%',
-          paddingVertical: 3,
-          marginTop: 3,
+          marginTop: 2,
         }}>
         <Image
           resizeMode="contain"
-          style={{maxHeight: 70}}
+          style={{maxHeight: 70, marginBottom: 3}}
           source={require('../assets/logo-horizontal.svg')}
         />
         <Text
           style={{
-            fontSize: 10,
-            bottom: 0,
-            right: 20,
+            fontSize: isAndroid ? 10 : 10,
+            bottom: -10,
+            right: isAndroid ? 10 : 20,
             position: 'absolute',
             fontFamily: styleConst.font.light,
             color: styleConst.new.blueHeader,
@@ -253,7 +261,7 @@ class LogoTitle extends React.Component {
 MoreScreen.navigationOptions = () => ({
   headerTitle: () => <LogoTitle />,
   headerStyle: {
-    height: 90,
+    height: 80,
   },
   tabBarLabel: 'Меню',
   tabBarIcon: ({focused}) => (
