@@ -260,6 +260,10 @@ class ProfileScreen extends Component {
       .then(data => {
         Keyboard.dismiss();
         PushNotifications.addTag('login', data.user.ID);
+        if (data.user.SAP && data.user.SAP.ID) {
+          PushNotifications.addTag('sapID', data.user.SAP.ID);
+          PushNotifications.setExternalUserId(data.user.SAP.ID);
+        }
         return this.props.actionSavePofile(data.user);
       })
       .then(() => {
@@ -528,9 +532,17 @@ class ProfileScreen extends Component {
                       styles.SocialLoginBt,
                       {
                         backgroundColor: '#4167B2',
+                        width: '29%',
+                        height: 60,
+                        marginVertical: 8,
+                        paddingHorizontal: 8,
                       },
                     ]}>
-                    <Icon name="facebook" type="FontAwesome5" />
+                    <Icon
+                      name="facebook"
+                      type="FontAwesome5"
+                      style={{fontSize: 35}}
+                    />
                     {/* <Text style={{color: '#fff', marginLeft: 20}}>
                       Войти через Facebook
                     </Text> */}
