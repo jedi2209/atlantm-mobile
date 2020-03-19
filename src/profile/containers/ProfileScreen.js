@@ -43,6 +43,8 @@ import {
   actionSetPushGranted,
 } from '../../core/actions';
 
+import PushNotifications from '@core/components/PushNotifications';
+
 import {verticalScale} from '../../utils/scale';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
@@ -257,6 +259,7 @@ class ProfileScreen extends Component {
       .actionSavePofileWithPhone({phone, code})
       .then(data => {
         Keyboard.dismiss();
+        PushNotifications.addTag('login', data.user.ID);
         return this.props.actionSavePofile(data.user);
       })
       .then(() => {
