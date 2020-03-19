@@ -111,16 +111,8 @@ class UserCarItemScreen extends Component {
     headerLeft: (
       <HeaderIconBack
         theme="white"
-        ContainerStyle={{
-          backgroundColor: 'rgba(0,0,0, 0.2)',
-          paddingHorizontal: 5,
-          paddingVertical: 5,
-          borderRadius: 20,
-          marginLeft: 5,
-        }}
-        IconStyle={{
-          marginLeft: 5,
-        }}
+        ContainerStyle={styleConst.headerBackButton.ContainerStyle}
+        IconStyle={styleConst.headerBackButton.IconStyle}
         navigation={navigation}
       />
     ),
