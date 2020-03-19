@@ -499,7 +499,7 @@ export const getProfileSapData = ({id, sap}) => {
         ...userInfo,
         cars,
         bonus,
-        SAP: (user.SAP && user.SAP.ID) ? user.SAP : {},
+        SAP: user.SAP && user.SAP.ID ? user.SAP : {},
       },
     });
   };
