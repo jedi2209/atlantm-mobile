@@ -6,6 +6,10 @@ import {Icon, List, ListItem, Left, Right, Button, Body} from 'native-base';
 
 import styleConst from '../../core/style-const';
 
+import {connect} from 'react-redux';
+
+import DeviceInfo from 'react-native-device-info';
+
 const styles = StyleSheet.create({
   buttonPrimary: {
     marginTop: 10,
@@ -95,8 +99,6 @@ const MenuItem = props => {
     </ListItem>
   );
 };
-
-import {connect} from 'react-redux';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
@@ -212,21 +214,40 @@ const MoreScreen = props => {
 
 class LogoTitle extends React.Component {
   render() {
+    console.log('getBuildNumber', DeviceInfo.getBuildNumber());
+    console.log('getBundleId', DeviceInfo.getBundleId());
+    console.log('getApplicationName', DeviceInfo.getApplicationName());
     return (
       <View
         style={{
           display: 'flex',
+          flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
           width: '100%',
-          paddingVertical: 10,
-          marginTop: 10,
+          paddingVertical: 3,
+          marginTop: 3,
         }}>
         <Image
           resizeMode="contain"
-          style={{height: 70}}
+          style={{maxHeight: 70}}
           source={require('../assets/logo-horizontal.svg')}
         />
+        <Text
+          style={{
+            fontSize: 10,
+            bottom: 0,
+            right: 20,
+            position: 'absolute',
+            fontFamily: styleConst.font.light,
+            color: styleConst.new.blueHeader,
+          }}>
+          {'v. ' +
+            DeviceInfo.getVersion() +
+            ' (' +
+            DeviceInfo.getBuildNumber() +
+            ')'}
+        </Text>
       </View>
     );
   }
