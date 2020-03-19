@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   logo: {
-    width: scale(1000),
-    height: scale(1000),
+    width: scale(250),
+    height: scale(250),
     alignSelf: 'center',
     position: 'absolute',
   },
