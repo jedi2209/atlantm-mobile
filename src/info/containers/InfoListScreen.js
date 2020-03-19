@@ -8,31 +8,37 @@ import {
   ActivityIndicator,
   Dimensions,
   StatusBar,
+  Switch,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Container, Text, StyleProvider} from 'native-base';
-import {Offer} from '../../core/components/Offer';
+import {Container, Text, StyleProvider, Icon} from 'native-base';
+import {Offer} from '@core/components/Offer';
 
 const deviceWidth = Dimensions.get('window').width;
-const cardWidth = deviceWidth - 30;
+const cardWidth = deviceWidth - 20;
 
 // redux
 import {connect} from 'react-redux';
 import {fetchInfoList, actionListReset} from '../actions';
+import {
+  actionSetPushGranted,
+  actionSetPushActionSubscribe,
+} from '@core/actions';
 import {INFO_LIST__FAIL} from '../actionTypes';
 
 // helpers
-import {get} from 'lodash';
-import {ERROR_NETWORK} from '../../core/const';
+import {get, isFunction} from 'lodash';
+import {ERROR_NETWORK} from '@core/const';
 import getTheme from '../../../native-base-theme/components';
-import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
+import styleConst from '@core/style-const';
+import stylesHeader from '@core/components/Header/style';
 import {verticalScale} from '../../utils/scale';
 
 // components
 // import DealerItemList from '../../core/components/DealerItemList';
 // import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
+import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
+import PushNotifications from '@core/components/PushNotifications';
 
 const styles = StyleSheet.create({
   container: {
@@ -52,27 +58,43 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({dealer, info, nav}) => {
+const mapStateToProps = ({dealer, info, nav, core}) => {
   return {
     nav,
     list: info.list,
     visited: info.visited,
     dealerSelected: dealer.selected,
     isFetchInfoList: info.meta.isFetchInfoList,
+    pushActionSubscribeState: core.pushActionSubscribeState,
   };
 };
 
 const mapDispatchToProps = {
   fetchInfoList,
   actionListReset,
+  actionSetPushGranted,
+  actionSetPushActionSubscribe,
 };
 
 class InfoListScreen extends Component {
-  state = {isRefreshing: false};
+  constructor(props) {
+    super(props);
+    this.state = {
+      isRefreshing: false,
+    };
+  }
 
   static navigationOptions = ({navigation}) => {
     const returnScreen =
       navigation.state.params && navigation.state.params.returnScreen;
+
+    let pushActionSubscribeState =
+      (navigation.state.params &&
+        navigation.state.params.pushActionSubscribeState) ||
+      false;
+
+    let onSwitchSubscribe =
+      navigation.state.params && navigation.state.params.onSwitchSubscribe;
 
     return {
       headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Акции</Text>,
@@ -87,6 +109,21 @@ class InfoListScreen extends Component {
           />
         </View>
       ),
+      headerRight: (
+        <Icon
+          onPress={onSwitchSubscribe}
+          active={pushActionSubscribeState}
+          style={{
+            color: 'white',
+            marginHorizontal: 10,
+          }}
+          name={
+            pushActionSubscribeState
+              ? 'ios-notifications'
+              : 'ios-notifications-off'
+          }
+        />
+      ),
     };
   };
 
@@ -98,6 +135,31 @@ class InfoListScreen extends Component {
     isFetchInfoList: PropTypes.bool.isRequired,
   };
 
+  onSwitchActionSubscribe = () => {
+    const {
+      dealerSelected,
+      actionSetPushActionSubscribe,
+      pushActionSubscribeState,
+    } = this.props;
+
+    if (pushActionSubscribeState === false) {
+      PushNotifications.subscribeToTopic('actions', dealerSelected.id).then(
+        isPermission => {
+          actionSetPushActionSubscribe(isPermission);
+          this.props.navigation.setParams({
+            pushActionSubscribeState: isPermission,
+          });
+        },
+      );
+    } else {
+      PushNotifications.unsubscribeFromTopic('actions');
+      actionSetPushActionSubscribe(false);
+      this.props.navigation.setParams({
+        pushActionSubscribeState: false,
+      });
+    }
+  };
+
   componentDidMount() {
     const {
       navigation,
@@ -107,6 +169,11 @@ class InfoListScreen extends Component {
       actionListReset,
     } = this.props;
     const {region, id: dealer} = dealerSelected;
+
+    this.props.navigation.setParams({
+      pushActionSubscribeState: this.props.pushActionSubscribeState,
+      onSwitchSubscribe: this.onSwitchActionSubscribe,
+    });
 
     if (!isFetchInfoList) {
       actionListReset();
@@ -165,7 +232,7 @@ class InfoListScreen extends Component {
             backgroundColor: '#fff',
             borderRadius: 5,
             marginVertical: 10,
-            marginHorizontal: 15,
+            marginHorizontal: 10,
           },
         ]}>
         <Offer
