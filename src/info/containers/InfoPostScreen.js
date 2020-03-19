@@ -8,7 +8,6 @@ import {
   StyleSheet,
   SafeAreaView,
   ActivityIndicator,
-  Platform
 } from 'react-native';
 
 // redux
@@ -24,10 +23,10 @@ import Imager from '../../core/components/Imager';
 
 // helpers
 import {get} from 'lodash';
-import styleConst from '../../core/style-const';
+import styleConst from '@core/style-const';
 import processHtml from '../../utils/process-html';
 import {verticalScale} from '../../utils/scale';
-import stylesHeader from '../../core/components/Header/style';
+//import stylesHeader from '../../core/components/Header/style';
 import {dayMonth, dayMonthYear} from '../../utils/date';
 
 // image
@@ -35,7 +34,6 @@ let IMAGE_HEIGHT_GUARD = 0;
 const {width: screenWidth} = Dimensions.get('window');
 const IMAGE_WIDTH = screenWidth;
 const IMAGE_HEIGHT = 200;
-const isAndroid = Platform.OS === 'android';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -105,23 +103,13 @@ class InfoPostScreen extends Component {
   static navigationOptions = ({navigation}) => {
     const returnScreen =
       navigation.state.params && navigation.state.params.returnScreen;
-    console.log('isAndroid', isAndroid);
     return {
       headerTransparent: true,
       headerLeft: (
         <HeaderIconBack
           theme="white"
-          ContainerStyle={{
-            backgroundColor: 'rgba(0,0,0, 0.6)',
-            paddingHorizontal: isAndroid ? 5 : 0,
-            paddingVertical: isAndroid ? 10 : 5,
-            borderRadius: 20,
-            marginLeft: 5,
-            marginTop: isAndroid ? 5 : 0,
-          }}
-          IconStyle={{
-            marginLeft: 5,
-          }}
+          ContainerStyle={styleConst.headerBackButton.ContainerStyle}
+          IconStyle={styleConst.headerBackButton.IconStyle}
           navigation={navigation}
           returnScreen={returnScreen}
         />
