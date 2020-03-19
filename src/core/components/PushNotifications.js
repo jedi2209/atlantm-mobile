@@ -70,6 +70,14 @@ export default {
     }
   },
 
+  setExternalUserId(userID) {
+    OneSignal.setExternalUserId(userID);
+  },
+
+  removeExternalUserId() {
+    OneSignal.removeExternalUserId();
+  },
+
   onIds(device) {
     console.log('Device info: ', device);
   },
