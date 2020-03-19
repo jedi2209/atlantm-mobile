@@ -80,7 +80,7 @@ class App extends Component {
       isStoreUpdated,
     } = this.props;
 
-    console.log('this.props', this.props);
+    console.log('this.props-APP.js', this.props);
 
     if (get(auth, 'login') === 'zteam') {
       window.atlantmDebug = true;
