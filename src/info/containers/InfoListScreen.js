@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   Dimensions,
   StatusBar,
-  Switch,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {Container, Text, StyleProvider, Icon} from 'native-base';
@@ -273,7 +272,7 @@ class InfoListScreen extends Component {
     // window.atlantmNavigation = navigation;
 
     console.log('== InfoListScreen ==');
-
+    console.log('list', list);
     return (
       <StyleProvider style={getTheme()}>
         <Container style={styles.container}>
@@ -286,7 +285,7 @@ class InfoListScreen extends Component {
             ListEmptyComponent={this.renderEmptyComponent}
             style={styles.list}
             renderItem={this.renderItem}
-            keyExtractor={item => `${item.id.toString()}`}
+            keyExtractor={item => `${item.hash.toString()}`}
           />
         </Container>
       </StyleProvider>
