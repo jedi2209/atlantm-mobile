@@ -363,7 +363,6 @@ export const actionSaveProfileByUser = props => {
 
   return dispatch => {
     dispatch({
-      SAP: {TOKEN: "46acc59d42993b218a011081a6c07fe910421470", ID: "62513365"},
       type: SAVE_PROFILE__REQUEST,
       payload: dataToSend,
     });
