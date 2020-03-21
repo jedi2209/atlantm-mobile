@@ -96,13 +96,13 @@ const BottomTabNavigation = createBottomTabNavigator(
     Search: SearchStack,
     Profile: {
       screen: createStackNavigator({
-        ReestablishScreen: {screen: ReestablishScreen},
         ProfileScreenInfo: {screen: AuthContnainer},
         ProfileSettingsScreen: {screen: ProfileSettingsScreen},
         TOHistore: {screen: TOHistore},
         CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
         BonusScreen: {screen: BonusScreen},
         BonusScreenInfo: {screen: BonusScreenInfo},
+        ReestablishScreen: {screen: ReestablishScreen},
       }),
       navigationOptions: () => ({
         tabBarLabel: 'Кабинет',

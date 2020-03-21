@@ -1,31 +1,17 @@
 import API from '../utils/api';
 
-import {get, find} from 'lodash';
+import {get} from 'lodash';
 
 import {
-  PROFILE_CAR__FILL,
-  PROFILE_NAME__FILL,
-  PROFILE_PHONE__FILL,
-  PROFILE_EMAIL__FILL,
-  PROFILE_CAR_NUMBER__FILL,
-  PROFILE_CAR_VIN__FILL,
-  PROFILE_LOGIN__FILL,
-  PROFILE_PASSWORD__FILL,
   PROFILE_BONUS_LEVEL1__SET,
   PROFILE_BONUS_LEVEL2__SET,
   PROFILE_BONUS_INFO__REQUEST,
   PROFILE_BONUS_INFO__SUCCESS,
   PROFILE_BONUS_INFO__FAIL,
-  PROFILE_DATA__REQUEST,
-  PROFILE_DATA__SUCCESS,
-  PROFILE_DATA__FAIL,
   LOGOUT,
   LOGIN__SUCCESS,
   LOGIN__FAIL,
   LOGIN__REQUEST,
-  REGISTER__SUCCESS,
-  REGISTER__FAIL,
-  REGISTER__REQUEST,
   CAR_HISTORY__REQUEST,
   CAR_HISTORY__SUCCESS,
   CAR_HISTORY__FAIL,
@@ -34,111 +20,10 @@ import {
   CAR_HISTORY_DETAILS__REQUEST,
   CAR_HISTORY_DETAILS__SUCCESS,
   CAR_HISTORY_DETAILS__FAIL,
-  FORGOT_PASS_LOGIN__FILL,
-  FORGOT_PASS_CODE__FILL,
-  FORGOT_PASS_MODE_CODE__SET,
-  FORGOT_PASS_REQUEST__REQUEST,
-  FORGOT_PASS_REQUEST__SUCCESS,
-  FORGOT_PASS_REQUEST__FAIL,
-  FORGOT_PASS_SUBMIT_CODE__REQUEST,
-  FORGOT_PASS_SUBMIT_CODE__FAIL,
-  FORGOT_PASS_SUBMIT_CODE__SUCCESS,
   SAVE_PROFILE__UPDATE,
   SAVE_PROFILE__REQUEST,
   SAVE_PROFILE__FAIL,
 } from './actionTypes';
-
-import {DEALER__SUCCESS} from '../dealer/actionTypes';
-import {SourceLocation} from 'acorn';
-
-export const nameFill = name => {
-  if (name && name.length <= 3) {
-    name = typeof name === 'string' ? name.trim() : name || '';
-  }
-
-  return dispatch => {
-    dispatch({
-      type: PROFILE_NAME__FILL,
-      payload: name,
-    });
-  };
-};
-
-export const phoneFill = phone => {
-  return dispatch => {
-    dispatch({
-      type: PROFILE_PHONE__FILL,
-      payload: typeof phone === 'string' ? phone.trim() : phone || '',
-    });
-  };
-};
-
-export const emailFill = email => {
-  return dispatch => {
-    dispatch({
-      type: PROFILE_EMAIL__FILL,
-      payload: typeof email === 'string' ? email.trim() : email || '',
-    });
-  };
-};
-
-export const carNumberFill = carNumber => {
-  const result = (carNumber = carNumber
-    .replace(/\s/g, '')
-    .replace(/\(/g, '')
-    .replace(/\)/g, ''));
-
-  return dispatch => {
-    dispatch({
-      type: PROFILE_CAR_NUMBER__FILL,
-      payload: result,
-    });
-  };
-};
-
-export const carFill = car => {
-  if (car && car.length <= 3) {
-    car = car && typeof car === 'string' ? car.trim() : car || '';
-  }
-
-  return dispatch => {
-    dispatch({
-      type: PROFILE_CAR__FILL,
-      payload: car,
-    });
-  };
-};
-
-export const carVINFill = carVIN => {
-  return dispatch => {
-    dispatch({
-      type: PROFILE_CAR_VIN__FILL,
-      payload: carVIN,
-    });
-  };
-};
-
-export const loginFill = login => {
-  const result = login.replace(/\s/g, '');
-
-  return dispatch => {
-    dispatch({
-      type: PROFILE_LOGIN__FILL,
-      payload: result,
-    });
-  };
-};
-
-export const passwordFill = password => {
-  const result = password.replace(/\s/g, '');
-
-  return dispatch => {
-    dispatch({
-      type: PROFILE_PASSWORD__FILL,
-      payload: result,
-    });
-  };
-};
 
 export const actionLogout = () => {
   return dispatch => {
@@ -347,120 +232,6 @@ export const actionFetchBonusInfo = props => {
   };
 };
 
-export const actionFillForgotLogin = login => {
-  return dispatch => {
-    dispatch({
-      type: FORGOT_PASS_LOGIN__FILL,
-      payload: login,
-    });
-  };
-};
-
-export const actionFillForgotCode = code => {
-  return dispatch => {
-    dispatch({
-      type: FORGOT_PASS_CODE__FILL,
-      payload: code,
-    });
-  };
-};
-
-export const actionRequestForgotPass = props => {
-  return async dispatch => {
-    function onError(error) {
-      return dispatch({
-        type: FORGOT_PASS_REQUEST__FAIL,
-        payload: {
-          code: error.code,
-          message: error.message,
-        },
-      });
-    }
-
-    dispatch({
-      type: FORGOT_PASS_REQUEST__REQUEST,
-      payload: {...props},
-    });
-
-    try {
-      const res = await API.forgotPassRequest(props);
-      const {status, error} = res;
-
-      if (status !== 'success') {
-        return onError(error);
-      }
-
-      const code = Number(get(error, 'code'));
-      const isCodeMode = [119, 127].indexOf(code) !== -1;
-
-      isCodeMode &&
-        dispatch({
-          type: FORGOT_PASS_MODE_CODE__SET,
-          payload: code === 119 ? 'phone' : 'email',
-        });
-
-      return dispatch({
-        type: FORGOT_PASS_REQUEST__SUCCESS,
-        payload: {
-          ...error,
-          isCodeMode,
-        },
-      });
-    } catch (e) {
-      return onError(e);
-    }
-  };
-};
-
-export const actionSetForgotPassCodeMode = mode => {
-  return dispatch => {
-    return dispatch({
-      type: FORGOT_PASS_MODE_CODE__SET,
-      payload: mode,
-    });
-  };
-};
-
-export const actionSubmitForgotPassCode = props => {
-  return async dispatch => {
-    function onError(error) {
-      return dispatch({
-        type: FORGOT_PASS_SUBMIT_CODE__FAIL,
-        payload: {
-          code: error.code,
-          message: error.message,
-        },
-      });
-    }
-
-    dispatch({
-      type: FORGOT_PASS_SUBMIT_CODE__REQUEST,
-      payload: {...props},
-    });
-
-    try {
-      const res = await API.forgotPassSubmitCode(props);
-      const {status, error} = res;
-
-      if (status !== 'success') {
-        //__DEV__ && console.log('error forgotPassSubmitCode', res);
-        return onError({
-          code: 404,
-          message: 'Ошибка при проверке кода подтверждения',
-        });
-      }
-
-      return dispatch({
-        type: FORGOT_PASS_SUBMIT_CODE__SUCCESS,
-        payload: error,
-      });
-    } catch (e) {
-      console.log('forgot pass forgot', e);
-      return onError(e);
-    }
-  };
-};
-
 export const actionSavePofileWithPhone = props => {
   return dispatch => {
     dispatch({
@@ -478,10 +249,8 @@ export const actionSavePofileWithPhone = props => {
 };
 
 export const getProfileSapData = ({id, sap}) => {
-  console.log('getProfileSapData >>>>>>', id, sap);
   return async dispatch => {
     const user = await API.getProfile(id);
-    console.log('user.SAP  >>>>>>>>>', user);
     const userInfo = profileDataAdapter(user);
     let cars = [],
       bonus = {};
@@ -571,14 +340,11 @@ export const actionSaveProfileByUser = props => {
   const {email, phone, id, last_name, first_name, name, carNumber, car} = props;
 
   const dataToSend = {
-    id,
+    userID: id,
     email,
-    last_name,
-    first_name,
+    name: first_name,
+    surname: last_name,
     phone,
-    name,
-    carNumber,
-    car,
   };
 
   if (props.isReestablish) {
@@ -594,22 +360,21 @@ export const actionSaveProfileByUser = props => {
       delete dataToSend[key];
     }
   }
-  console.log('>>>>>>> actionSaveProfileByUser dataToSend', dataToSend);
+
   return dispatch => {
     dispatch({
+      SAP: {TOKEN: "46acc59d42993b218a011081a6c07fe910421470", ID: "62513365"},
       type: SAVE_PROFILE__REQUEST,
       payload: dataToSend,
     });
 
     return API.saveProfile(dataToSend)
       .then(async data => {
-        const profile = data.profile;
-        console.log('>>>>>>> actionSaveProfileByUser data.profile', data);
-
+        console.log('data form saveProfile >>>', data);
         dispatch({
           type: SAVE_PROFILE__UPDATE,
           payload: {
-            ...profile,
+            ...props,
           },
         });
 
@@ -627,7 +392,8 @@ export const actionSaveProfileByUser = props => {
 };
 
 function profileDataAdapter(user) {
-  const {NAME, LAST_NAME, EMAIL, PHONE, ID} = user;
+  const {NAME, LAST_NAME, EMAIL, PHONE} = user;
+
   const userInfo = {
     first_name: NAME,
     last_name: LAST_NAME,
@@ -663,6 +429,7 @@ function profileDataAdapter(user) {
 
 export const actionLogin = props => {
   const id = props.id;
+
   return async dispatch => {
     dispatch({
       type: LOGIN__REQUEST,
@@ -692,8 +459,6 @@ export const actionLogin = props => {
 
       const {user, token} = data;
 
-      console.log('data >>>>>>>>', id);
-
       const payload = {
         id: id,
         SAP: {
@@ -706,35 +471,10 @@ export const actionLogin = props => {
         phone: user.phone,
       };
 
-      console.log('payload >>>>>>>>s', payload);
-
       return dispatch({
         type: LOGIN__SUCCESS,
         payload,
       });
-
-      // token.id -> token
-      // user.login -> login
-
-      // token: userSAP.TOKEN,
-      // userid: userSAP.ID,
-
-      // first_name: user.name.name,
-      // last_name: user.name.surname,
-      // email: user.email,
-      // phone: user.phone,
-
-      // return dispatch({
-      //   type: LOGIN__SUCCESS,
-      //   payload: {
-      //     token,
-      //     ...user,
-
-      //     cars,
-      //     bonus,
-      //     discounts,
-      //   },
-      // });
     } catch (e) {
       return onError(e);
     }

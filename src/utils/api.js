@@ -575,6 +575,7 @@ export default {
   },
 
   saveProfile(profile) {
+    console.log('profile', profile);
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PATCH',
       headers: {
@@ -584,7 +585,7 @@ export default {
       body: JSON.stringify(profile),
     });
 
-    return this.request(`/lkk/user/${profile.id}/`, requestParams)
+    return this.request(`/lkk/user/${profile.userID}/`, requestParams)
       .then(data => {
         return {status: 'success', error: {}, data};
       })

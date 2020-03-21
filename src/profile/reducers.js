@@ -8,7 +8,6 @@ import {
   PROFILE_EMAIL__FILL,
   PROFILE_CAR_NUMBER__FILL,
   PROFILE_CAR_VIN__FILL,
-  PROFILE_LOGIN__FILL,
   PROFILE_PASSWORD__FILL,
   PROFILE_BONUS_LEVEL1__SET,
   PROFILE_BONUS_LEVEL2__SET,
@@ -19,7 +18,6 @@ import {
   PROFILE_DATA__SUCCESS,
   PROFILE_DATA__FAIL,
   LOGOUT,
-  LOGIN__SUCCESS,
   LOGIN__FAIL,
   LOGIN__REQUEST,
   REGISTER__SUCCESS,
@@ -73,8 +71,6 @@ function name(state = '', action) {
       return get(action.payload, 'profile.name', '');
     case PROFILE_NAME__FILL:
       return action.payload;
-    // case LOGIN__SUCCESS:
-    //   return get(action, 'payload.name.full');
     default:
       return state;
   }
@@ -86,8 +82,6 @@ function phone(state = '', action) {
       return get(action.payload, 'profile.phone', '');
     case PROFILE_PHONE__FILL:
       return action.payload;
-    // case LOGIN__SUCCESS:
-    //   return get(action, 'payload.phone');
     default:
       return state;
   }
@@ -99,8 +93,6 @@ function email(state = '', action) {
       return get(action.payload, 'profile.email', '');
     case PROFILE_EMAIL__FILL:
       return action.payload;
-    // case LOGIN__SUCCESS:
-    //   return get(action, 'payload.email');
     default:
       return state;
   }
@@ -111,7 +103,6 @@ function cars(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'profile.cars', []);
-    // case LOGIN__SUCCESS:
     case PROFILE_DATA__SUCCESS:
       return action.payload.cars;
     case LOGOUT:
@@ -164,8 +155,6 @@ function password(state = '', action) {
       return get(action.payload, 'profile.password', '');
     case PROFILE_PASSWORD__FILL:
       return action.payload;
-    // case LOGIN__SUCCESS:
-    //   return '';
     default:
       return state;
   }
@@ -180,8 +169,6 @@ function auth(state = {}, action) {
     case LOGOUT:
     case APP_STORE_UPDATED:
       return {};
-    // case LOGIN__SUCCESS:
-    //   return action.payload;
     default:
       return state;
   }
@@ -190,7 +177,6 @@ function auth(state = {}, action) {
 function isLoginRequest(state = false, action) {
   switch (action.type) {
     case REHYDRATE:
-    // case LOGIN__SUCCESS:
     case LOGIN__FAIL:
       return false;
     case LOGIN__REQUEST:
@@ -230,7 +216,6 @@ function bonusData(state = {}, action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'profile.bonus.data', {});
-    // case LOGIN__SUCCESS:
     case PROFILE_DATA__SUCCESS:
       return action.payload.bonus;
     case LOGOUT:
@@ -272,7 +257,6 @@ function discounts(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'profile.discounts', []);
-    // case LOGIN__SUCCESS:
     case PROFILE_DATA__SUCCESS:
       return action.payload.discounts;
     case LOGOUT:
@@ -286,7 +270,6 @@ function discounts(state = [], action) {
 function level1Hash(state = null, action) {
   switch (action.type) {
     case REHYDRATE:
-    // case LOGIN__SUCCESS:
     case LOGOUT:
     case APP_STORE_UPDATED:
       return null;
@@ -300,7 +283,6 @@ function level1Hash(state = null, action) {
 function level2Hash(state = null, action) {
   switch (action.type) {
     case REHYDRATE:
-    // case LOGIN__SUCCESS:
     case LOGOUT:
     case APP_STORE_UPDATED:
       return null;
