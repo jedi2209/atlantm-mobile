@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
 
 import {SafeAreaView} from 'react-navigation';
 import {verticalScale} from '../../utils/scale';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   //TODO: owner true должен быть показан первым
@@ -528,18 +528,20 @@ class ProfileScreenInfo extends Component {
                   Редактировать данные
                 </Text>
               </Button>
-              <Button
-                full
-                onPress={() => {
-                  this.props.navigation.navigate('ReestablishScreen');
-                }}
-                style={[
-                  styleConst.shadow.default,
-                  styles.buttonPrimary,
-                  {backgroundColor: styleConst.color.green},
-                ]}>
-                <Text style={styles.buttonPrimaryText}>Где мои данные ?</Text>
-              </Button>
+              {!this.props.login.SAP.ID && (
+                <Button
+                  full
+                  onPress={() => {
+                    this.props.navigation.navigate('ReestablishScreen');
+                  }}
+                  style={[
+                    styleConst.shadow.default,
+                    styles.buttonPrimary,
+                    {backgroundColor: styleConst.color.green},
+                  ]}>
+                  <Text style={styles.buttonPrimaryText}>Где мои данные ?</Text>
+                </Button>
+              )}
             </>
           )}
           {!this.state.loading ? (
