@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -59,7 +59,7 @@ const mapDispatchToProps = {
   actionToggleModal,
 };
 
-class App extends Component {
+class App extends PureComponent {
   constructor(props) {
     super(props);
     this.navigatorRef = React.createRef();
@@ -141,13 +141,6 @@ class App extends Component {
     }, 700);
   }
 
-  shouldComponentUpdate(prevProps) {
-    if (prevProps.modal !== this.props.modal) {
-      return true;
-    }
-    return false;
-  }
-
   onNavigationStateChange = (prevState, newState) => {
     this.props.navigationChange({
       prevState,
@@ -164,7 +157,6 @@ class App extends Component {
   }
 
   render() {
-    // const isTablet = DeviceInfo.isTablet();
     const mainScreen = 'BottomTabNavigation';
     const isDealerSelected = get(store.getState(), 'dealer.selected.id');
 
