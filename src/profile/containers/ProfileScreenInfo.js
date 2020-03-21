@@ -525,6 +525,18 @@ class ProfileScreenInfo extends Component {
                   Редактировать данные
                 </Text>
               </Button>
+              <Button
+                full
+                onPress={() => {
+                  this.props.navigation.navigate('ReestablishScreen');
+                }}
+                style={[
+                  styleConst.shadow.default,
+                  styles.buttonPrimary,
+                  {backgroundColor: styleConst.color.green},
+                ]}>
+                <Text style={styles.buttonPrimaryText}>Где мои данные ?</Text>
+              </Button>
             </>
           )}
           {!this.state.loading ? (
