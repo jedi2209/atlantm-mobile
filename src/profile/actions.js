@@ -49,6 +49,7 @@ import {
 } from './actionTypes';
 
 import {DEALER__SUCCESS} from '../dealer/actionTypes';
+import {SourceLocation} from 'acorn';
 
 export const nameFill = name => {
   if (name && name.length <= 3) {
@@ -477,16 +478,19 @@ export const actionSavePofileWithPhone = props => {
 };
 
 export const getProfileSapData = ({id, sap}) => {
+  console.log('getProfileSapData >>>>>>', id, sap);
   return async dispatch => {
     const user = await API.getProfile(id);
+    console.log('user.SAP  >>>>>>>>>', user);
     const userInfo = profileDataAdapter(user);
-    let cars = [], bonus = {};
+    let cars = [],
+      bonus = {};
 
     const userSAP = user.SAP || {};
 
     const result = await getProfileData({
-      token: userSAP.TOKEN,
-      userid: userSAP.ID,
+      token: userSAP.TOKEN || userSAP.token,
+      userid: userSAP.ID || userSAP.id,
     });
 
     result.cars && (cars = result.cars);
@@ -564,17 +568,43 @@ export const actionSavePofile = props => {
 };
 
 export const actionSaveProfileByUser = props => {
+  const {email, phone, id, last_name, first_name, name, carNumber, car} = props;
+
+  const dataToSend = {
+    id,
+    email,
+    last_name,
+    first_name,
+    phone,
+    name,
+    carNumber,
+    car,
+  };
+
+  if (props.isReestablish) {
+    dataToSend.UF_CUSTOMER_NUMBER = props.SAP.ID;
+    dataToSend.UF_CRM_1576136240 = props.SAP.ID;
+
+    delete dataToSend.isReestablish;
+    delete dataToSend.SAP;
+  }
+
+  for (let key in dataToSend) {
+    if (!dataToSend[key]) {
+      delete dataToSend[key];
+    }
+  }
+  console.log('>>>>>>> actionSaveProfileByUser dataToSend', dataToSend);
   return dispatch => {
     dispatch({
       type: SAVE_PROFILE__REQUEST,
-      payload: props,
+      payload: dataToSend,
     });
 
-    return API.saveProfile(props)
+    return API.saveProfile(dataToSend)
       .then(async data => {
         const profile = data.profile;
-
-        console.log('actionSaveProfileByUser', data);
+        console.log('>>>>>>> actionSaveProfileByUser data.profile', data);
 
         dispatch({
           type: SAVE_PROFILE__UPDATE,
@@ -630,3 +660,83 @@ function profileDataAdapter(user) {
     phone,
   };
 }
+
+export const actionLogin = props => {
+  const id = props.id;
+  return async dispatch => {
+    dispatch({
+      type: LOGIN__REQUEST,
+      payload: {...props},
+    });
+
+    function onError(error) {
+      console.log('error', error);
+
+      return dispatch({
+        type: LOGIN__FAIL,
+        payload: {
+          code: error.code,
+          message: error.message,
+        },
+      });
+    }
+
+    try {
+      const authResponse = await API.loginRequest(props);
+      const {error, status, data} = authResponse;
+
+      if (status !== 'success') {
+        __DEV__ && console.log('error auth', authResponse);
+        return onError(error);
+      }
+
+      const {user, token} = data;
+
+      console.log('data >>>>>>>>', id);
+
+      const payload = {
+        id: id,
+        SAP: {
+          TOKEN: token.id,
+          ID: user.login,
+        },
+        first_name: user.name.name,
+        last_name: user.name.surname,
+        email: user.email,
+        phone: user.phone,
+      };
+
+      console.log('payload >>>>>>>>s', payload);
+
+      return dispatch({
+        type: LOGIN__SUCCESS,
+        payload,
+      });
+
+      // token.id -> token
+      // user.login -> login
+
+      // token: userSAP.TOKEN,
+      // userid: userSAP.ID,
+
+      // first_name: user.name.name,
+      // last_name: user.name.surname,
+      // email: user.email,
+      // phone: user.phone,
+
+      // return dispatch({
+      //   type: LOGIN__SUCCESS,
+      //   payload: {
+      //     token,
+      //     ...user,
+
+      //     cars,
+      //     bonus,
+      //     discounts,
+      //   },
+      // });
+    } catch (e) {
+      return onError(e);
+    }
+  };
+};

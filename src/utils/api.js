@@ -575,26 +575,18 @@ export default {
   },
 
   saveProfile(profile) {
-    const {id, first_name, last_name, email, phone} = profile;
-
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PATCH',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        name: first_name,
-        surname: last_name,
-        email,
-        phone,
-        userID: id,
-      }),
+      body: JSON.stringify(profile),
     });
 
-    return this.request(`/lkk/user/${id}/`, requestParams)
+    return this.request(`/lkk/user/${profile.id}/`, requestParams)
       .then(data => {
-        return {status: 'success', error: {}, profile, data};
+        return {status: 'success', error: {}, data};
       })
       .catch(err => {
         console.log('error', err);

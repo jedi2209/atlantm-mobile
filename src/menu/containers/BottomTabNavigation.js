@@ -20,11 +20,9 @@ import CarHistoryDetailsScreen from '../../profile/carhistory/containers/CarHist
 import BonusScreen from '../../profile/bonus/containers/BonusScreen';
 import BonusScreenInfo from '../../profile/bonus/containers/BonusInfoScreen';
 import InfoPostScreen from '../../info/containers/InfoPostScreen';
-import NewCarFilterScreen from '../../catalog/newcar/containers/NewCarFilterScreen';
 import UsedCarListScreen from '../../catalog/usedcar/containers/UsedCarListScreen';
-import UsedCarFilterScreen from '../../catalog/usedcar/containers/UsedCarFilterScreen';
-import UsedCarCityScreen from '../../catalog/usedcar/containers/UsedCarCityScreen';
 import MoreScreen from './MenuScreenNew';
+import ReestablishScreen from '../../profile/containers/ReestablishScreen';
 // import ApplicationModalScreen from './Application';
 
 const styles = {
@@ -98,6 +96,7 @@ const BottomTabNavigation = createBottomTabNavigator(
     Search: SearchStack,
     Profile: {
       screen: createStackNavigator({
+        ReestablishScreen: {screen: ReestablishScreen},
         ProfileScreenInfo: {screen: AuthContnainer},
         ProfileSettingsScreen: {screen: ProfileSettingsScreen},
         TOHistore: {screen: TOHistore},
