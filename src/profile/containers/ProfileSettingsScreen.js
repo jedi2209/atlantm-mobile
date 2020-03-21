@@ -56,7 +56,7 @@ class ProfileSettingsScreen extends Component {
       lastName: last_name || '',
       email: email ? email.value : '',
       phone: phone ? phone.value : '',
-      car: `${car.brand} ${car.model}`,
+      car: car.brand && car.model ? `${car.brand} ${car.model}` : '',
       carNumber: car.number,
       success: false,
     };
@@ -65,7 +65,6 @@ class ProfileSettingsScreen extends Component {
   onPressSave = () => {
     this.setState({loading: true});
     const {name, email, phone, id} = this.props.profile;
-    console.log('onPressSave >>>>>>>>', this.props.profile);
     let emailValue;
     let phonelValue;
 

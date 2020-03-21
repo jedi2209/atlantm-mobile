@@ -1,7 +1,5 @@
-/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-// redux
 import {connect} from 'react-redux';
 
 import {get} from 'lodash';
@@ -37,7 +35,6 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
 
 import {actionLogin, actionSaveProfileByUser} from '../actions';
 
-//actions
 const mapDispatchToProps = {
   actionLogin,
   actionSaveProfileByUser,
@@ -91,29 +88,18 @@ class ReestablishScreen extends React.Component {
     super(props);
 
     this.state = {
-      login: '62513365',
-      password: '26624988',
+      login: '',
+      password: '',
     };
   }
 
   static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
     return {
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: (
-        <HeaderIconBack
-          theme="white"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
+      headerLeft: <HeaderIconBack theme="white" navigation={navigation} />,
     };
   };
-
-  componentDidUpdate(prevpProps) {}
 
   onChangeField = fieldName => value => {
     this.setState({[fieldName]: value});
@@ -121,15 +107,17 @@ class ReestablishScreen extends React.Component {
 
   onPressLogin = () => {
     const {login, password} = this.state;
+    this.setState({loading: true});
+
     if (login.length === 0 || password.length === 0) {
-      Alert.alert('Поле логин и пароль обязательные');
+      Alert.alert('Поле логин и пароль обязательные для заполнения');
+      this.setState({loading: false});
       return;
     }
 
     this.props
       .actionLogin({login, password, id: this.props.profile.login.id})
       .then(action => {
-        console.log('action >>>>>>', action.type);
         switch (action.type) {
           case 'LOGIN__FAIL':
             if (login === 'zteam' && password === '4952121052') {
@@ -142,11 +130,10 @@ class ReestablishScreen extends React.Component {
 
             setTimeout(() => {
               Alert.alert(!code || code === 500 ? defaultMessage : message);
+              this.setState({loading: false});
             }, 100);
             break;
           case 'LOGIN__SUCCESS':
-            console.log('LOGIN__SUCCESS >>>>', action.payload.SAP);
-
             this.props
               .actionSaveProfileByUser({
                 ...this.props.profile.login,
@@ -154,6 +141,7 @@ class ReestablishScreen extends React.Component {
                 isReestablish: true,
               })
               .then(data => {
+                this.setState({loading: false});
                 const _this = this;
                 Alert.alert('Ваши данные успешно сохранены', '', [
                   {
@@ -178,8 +166,6 @@ class ReestablishScreen extends React.Component {
   };
 
   render() {
-    const {navigation, dealerSelected} = this.props;
-
     return (
       <KeyboardAvoidingView>
         <StatusBar barStyle="light-content" />
@@ -228,7 +214,6 @@ class ReestablishScreen extends React.Component {
                         label="Логин"
                         value={this.state.login}
                         enablesReturnKeyAutomatically={true}
-                        textContentType={'login'}
                         onChangeText={this.onChangeField('login')}
                       />
                     </View>

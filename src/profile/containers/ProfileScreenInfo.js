@@ -228,11 +228,14 @@ class ProfileScreenInfo extends Component {
   }
 
   componentDidUpdate(nextProps) {
-    if (this.props.navigation.isFocused() && !this.props.login.id) {
-      //this.props.navigation.navigate('ProfileScreen');
+    if (this.props.login.id && this.props.login.id !== nextProps.login.id) {
+      this.getUserData();
     }
 
-    if (this.props.login.id && this.props.login.id !== nextProps.login.id) {
+    if (
+      this.props.login.SAP &&
+      this.props.login.SAP.ID !== nextProps.login.SAP.ID
+    ) {
       this.getUserData();
     }
   }
