@@ -480,9 +480,6 @@ class ProfileScreen extends Component {
                       },
                     ]}>
                     <Icon name="google" type="FontAwesome5" />
-                    {/* <Text style={{color: '#fff', marginLeft: 20}}>
-                      Войти через Google
-                    </Text> */}
                   </Button>
                   <Button
                     onPress={this._signInFB}

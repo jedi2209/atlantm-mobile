@@ -49,11 +49,20 @@ class ProfileSettingsScreen extends Component {
       };
     }
 
-    const {first_name, last_name, email, phone} = this.props.profile;
+    console.log('this.props.profile', this.props.profile);
+
+    const {
+      first_name,
+      last_name,
+      second_name,
+      email,
+      phone,
+    } = this.props.profile;
 
     this.state = {
-      firstName: first_name || '',
       lastName: last_name || '',
+      firstName: first_name || '',
+      secondName: second_name || '',
       email: email ? email.value : '',
       phone: phone ? phone.value : '',
       car: car.brand && car.model ? `${car.brand} ${car.model}` : '',
@@ -107,6 +116,7 @@ class ProfileSettingsScreen extends Component {
         id,
         email: emailValue,
         last_name: this.state.lastName,
+        second_name: this.state.secondName,
         first_name: this.state.firstName,
         phone: phonelValue,
         name,
@@ -151,6 +161,14 @@ class ProfileSettingsScreen extends Component {
               <View style={styles.field}>
                 <TextInput
                   style={styles.textinput}
+                  label="Фамилия"
+                  value={this.state.lastName}
+                  onChangeText={this.onChangeProfileField('lastName')}
+                />
+              </View>
+              <View style={styles.field}>
+                <TextInput
+                  style={styles.textinput}
                   label="Имя"
                   value={this.state.firstName}
                   onChangeText={this.onChangeProfileField('firstName')}
@@ -159,9 +177,9 @@ class ProfileSettingsScreen extends Component {
               <View style={styles.field}>
                 <TextInput
                   style={styles.textinput}
-                  label="Фамилия"
-                  value={this.state.lastName}
-                  onChangeText={this.onChangeProfileField('lastName')}
+                  label="Отчество"
+                  value={this.state.secondName}
+                  onChangeText={this.onChangeProfileField('secondName')}
                 />
               </View>
               <View style={styles.field}>

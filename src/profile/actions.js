@@ -337,13 +337,24 @@ export const actionSavePofile = props => {
 };
 
 export const actionSaveProfileByUser = props => {
-  const {email, phone, id, last_name, first_name, name, carNumber, car} = props;
+  const {
+    email,
+    phone,
+    id,
+    last_name,
+    first_name,
+    second_name,
+    name,
+    carNumber,
+    car,
+  } = props;
 
   const dataToSend = {
     userID: id,
     email,
-    name: first_name,
-    surname: last_name,
+    NAME: first_name,
+    SECOND_NAME: first_name,
+    LAST_NAME: last_name,
     phone,
   };
 
@@ -366,6 +377,8 @@ export const actionSaveProfileByUser = props => {
       type: SAVE_PROFILE__REQUEST,
       payload: dataToSend,
     });
+
+    console.log('dataToSend', dataToSend);
 
     return API.saveProfile(dataToSend)
       .then(async data => {
@@ -391,10 +404,11 @@ export const actionSaveProfileByUser = props => {
 };
 
 function profileDataAdapter(user) {
-  const {NAME, LAST_NAME, EMAIL, PHONE} = user;
+  const {NAME, SECOND_NAME, LAST_NAME, EMAIL, PHONE} = user;
 
   const userInfo = {
     first_name: NAME,
+    second_name: SECOND_NAME,
     last_name: LAST_NAME,
     email: EMAIL,
     phone: PHONE,
@@ -420,6 +434,7 @@ function profileDataAdapter(user) {
 
   return {
     first_name: userInfo.first_name || '',
+    second_name: userInfo.second_name || '',
     last_name: userInfo.last_name || '',
     email,
     phone,
