@@ -56,7 +56,6 @@ function login(state = '', action) {
     case SAVE_PROFILE__UPDATE:
       return {...state, ...action.payload};
     case SAVE_PROFILE__FAIL:
-      return {};
     case LOGOUT:
     case APP_STORE_UPDATED:
       return {};
@@ -162,11 +161,6 @@ function password(state = '', action) {
 
 function auth(state = {}, action) {
   switch (action.type) {
-    case REHYDRATE:
-      return get(action.payload, 'profile.auth', {});
-    case LOGIN__REQUEST:
-    case LOGIN__FAIL:
-    case LOGOUT:
     case APP_STORE_UPDATED:
       return {};
     default:

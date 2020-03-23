@@ -49,7 +49,6 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
 
     isFetchProfileData: profile.meta.isFetchProfileData,
 
-    auth: profile.auth,
     cars: profile.cars,
     login: profile.login,
     password: profile.password,
