@@ -109,7 +109,6 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
 
     isFetchProfileData: profile.meta.isFetchProfileData,
 
-    auth: profile.auth,
     cars,
     login: profile.login,
     password: profile.password,
@@ -327,11 +326,29 @@ class ProfileScreenInfo extends Component {
                         this.props.navigation.navigate('ReestablishScreen');
                       }}
                       style={[
-                        styleConst.shadow.default,
-                        styles.buttonPrimary,
-                        {backgroundColor: styleConst.color.red},
+                        {
+                          position: 'absolute',
+                          backgroundColor: 'none',
+                          bottom: -10,
+                          right: 5,
+                          paddingHorizontal: 10,
+                          paddingVertical: 5,
+                        },
                       ]}>
-                      <Text style={styles.buttonPrimaryText}>Где мои машины?</Text>
+                      <Text
+                        style={[
+                          styles.buttonPrimaryText,
+                          {
+                            color: '#fff',
+                            fontSize: 14,
+                            fontStyle: 'italic',
+                            textDecorationStyle: 'dotted',
+                            textDecorationColor: '#fff',
+                            textDecorationLine: 'underline',
+                          },
+                        ]}>
+                        Не видите свои авто?
+                      </Text>
                     </Button>
                   </View>
                 </>

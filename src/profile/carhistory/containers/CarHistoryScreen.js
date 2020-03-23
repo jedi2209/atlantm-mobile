@@ -105,7 +105,6 @@ const mapStateToProps = ({nav, profile}) => {
   return {
     nav,
     profile: profile.login,
-    auth: profile.auth,
     carHistory: profile.carHistory.data,
     level1hash: profile.carHistory.level1Hash,
     level2hash: profile.carHistory.level2Hash,

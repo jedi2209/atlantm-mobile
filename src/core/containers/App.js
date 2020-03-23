@@ -43,7 +43,6 @@ const mapStateToProps = ({core, dealer, profile, modal}) => {
   return {
     //     pushActionSubscribeState: core.pushActionSubscribeState,
     dealerSelected: dealer.selected,
-    auth: profile.auth,
     menuOpenedCount: core.menuOpenedCount,
     isStoreUpdated: core.isStoreUpdated,
     modal,

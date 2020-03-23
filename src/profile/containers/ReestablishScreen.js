@@ -14,8 +14,9 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
   StatusBar,
-  Button,
 } from 'react-native';
+
+import {Button, Icon} from 'native-base';
 
 import {StackActions, NavigationActions} from 'react-navigation';
 
@@ -52,14 +53,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   header: {
-    marginBottom: 36,
+    marginBottom: 10,
   },
   heading: {
     fontSize: 30,
     fontWeight: 'bold',
   },
   caption: {
-    marginTop: 20,
+    marginBottom: 20,
     fontSize: 16,
     fontWeight: 'normal',
   },
@@ -106,7 +107,15 @@ class ReestablishScreen extends React.Component {
     return {
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: <HeaderIconBack theme="white" navigation={navigation} />,
+      headerTitle: 'Вход по логину и паролю',
+      headerLeft: (
+        <HeaderIconBack
+          theme="white"
+          // ContainerStyle={styleConst.headerBackButton.ContainerStyle}
+          // IconStyle={styleConst.headerBackButton.IconStyle}
+          navigation={navigation}
+        />
+      ),
     };
   };
 
@@ -178,9 +187,9 @@ class ReestablishScreen extends React.Component {
   };
 
   render() {
-    let statusButton = false;
+    let disableButton = false;
     if (this.state.login.length === 0 || this.state.password.length === 0) {
-      statusButton = true;
+      disableButton = true;
     }
     return (
       <KeyboardAvoidingView>
@@ -189,106 +198,78 @@ class ReestablishScreen extends React.Component {
           <ScrollView>
             <View style={styles.container}>
               <View style={styles.header}>
-                <Text style={styles.heading}>Вход в личный кабинет</Text>
-                <Text style={styles.caption}>
+                <Icon
+                  type="MaterialCommunityIcons"
+                  name="emoticon-cry-outline"
+                  style={{fontSize: 48, position: 'absolute'}}
+                />
+                <Text style={[styles.caption, {marginLeft: 60}]}>
                   Мы очень раздасадованы тем, что Вы не обнаружили свои
-                  автомобили и бонусные баллы в личном кабинете. Пожалуйста,
-                  дайте нам ещё один шанс!{'\n\n'}
+                  автомобили и бонусные баллы в личном кабинете.{'\n'}
+                  Пожалуйста, дайте нам ещё один шанс!
+                </Text>
+                <Text style={[styles.caption]}>
                   Введите ваши данные для доступа к старому личному кабинету.
                   {'\n\n'}
                   Это последний раз когда Вам придётся вспомнить эти магические
                   комбинации цифр и букв для входа в Ваш личный кабинет.
                 </Text>
               </View>
-              {this.state.success ? (
-                <View style={{flex: 1, justifyContent: 'center'}}>
-                  <View style={styles.group}>
-                    <Text
-                      style={{
-                        fontSize: 22,
-                        fontWeight: 'bold',
-                      }}>
-                      Что тут написать ?
-                    </Text>
-                  </View>
-                  <View>
-                    <Button
-                      onPress={() => {
-                        const resetAction = StackActions.reset({
-                          index: 0,
-                          actions: [
-                            NavigationActions.navigate({
-                              routeName: 'BottomTabNavigation',
-                            }),
-                          ],
-                        });
-                        this.props.navigation.dispatch(resetAction);
-                      }}
-                      style={styles.button}>
-                      <Text style={styles.buttonText}>Назад</Text>
-                    </Button>
-                  </View>
+              <View style={styles.group}>
+                <View style={styles.field}>
+                  <TextInput
+                    autoCorrect={false}
+                    autoCompleteType="username"
+                    textContentType="username"
+                    autoCapitalize="none"
+                    style={styles.textinput}
+                    label="Логин"
+                    returnKeyType="next"
+                    onSubmitEditing={() => {
+                      this.fields.passInput.current.focus();
+                    }}
+                    ref={this.fields.loginInput}
+                    blurOnSubmit={false}
+                    value={this.state.login || ''}
+                    enablesReturnKeyAutomatically={true}
+                    onChangeText={this.onChangeField('login')}
+                  />
                 </View>
-              ) : (
-                <>
-                  <View style={styles.group}>
-                    <View style={styles.field}>
-                      <TextInput
-                        autoCorrect={false}
-                        autoCompleteType="username"
-                        textContentType="username"
-                        autoCapitalize="none"
-                        style={styles.textinput}
-                        label="Логин"
-                        returnKeyType="next"
-                        onSubmitEditing={() => {
-                          this.fields.passInput.current.focus();
-                        }}
-                        ref={this.fields.loginInput}
-                        blurOnSubmit={false}
-                        value={this.state.login || ''}
-                        enablesReturnKeyAutomatically={true}
-                        onChangeText={this.onChangeField('login')}
-                      />
-                    </View>
-                    <View style={styles.field}>
-                      <TextInput
-                        style={styles.textinput}
-                        autoCompleteType="password"
-                        textContentType="password"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        label="Пароль"
-                        returnKeyType="send"
-                        value={this.state.password || ''}
-                        ref={this.fields.passInput}
-                        enablesReturnKeyAutomatically={true}
-                        onChangeText={this.onChangeField('password')}
-                        onSubmitEditing={() => {
-                          this.onPressLogin();
-                        }}
-                      />
-                    </View>
-                  </View>
-                  <View style={styles.group}>
-                    <Button
-                      disabled={statusButton}
-                      title="Найдите мои данные"
-                      onPress={
-                        this.state.loading ? undefined : this.onPressLogin
-                      }
-                      style={[styleConst.shadow.default, styles.button]}>
-                      {this.state.loading ? (
-                        <ActivityIndicator color="#fff" />
-                      ) : (
-                        <Text style={styles.buttonText}>
-                          Найдите мои данные
-                        </Text>
-                      )}
-                    </Button>
-                  </View>
-                </>
-              )}
+                <View style={styles.field}>
+                  <TextInput
+                    style={styles.textinput}
+                    autoCompleteType="password"
+                    textContentType="password"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    label="Пароль"
+                    returnKeyType="send"
+                    value={this.state.password || ''}
+                    ref={this.fields.passInput}
+                    enablesReturnKeyAutomatically={true}
+                    onChangeText={this.onChangeField('password')}
+                    onSubmitEditing={() => {
+                      this.onPressLogin();
+                    }}
+                  />
+                </View>
+              </View>
+              {!disableButton ? (
+                <View style={styles.group}>
+                  <Button
+                    disabled={disableButton ? true : false}
+                    active={disableButton ? false : true}
+                    title="Найдите мои данные"
+                    onPress={this.state.loading ? undefined : this.onPressLogin}
+                    style={[styles.button, styleConst.shadow.default]}>
+                    {this.state.loading ? (
+                      <ActivityIndicator color="#fff" />
+                    ) : (
+                      <Text style={styles.buttonText}>Найдите мои данные</Text>
+                    )}
+                  </Button>
+                </View>
+              ) : null}
             </View>
           </ScrollView>
         </TouchableWithoutFeedback>

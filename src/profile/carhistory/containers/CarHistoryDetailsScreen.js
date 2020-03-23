@@ -111,7 +111,6 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({nav, profile}) => {
   return {
     nav,
-    auth: profile.auth,
     profile: profile.login,
     details: profile.carHistory.details,
     isFetchCarHistoryDetails: profile.carHistory.meta.isFetchCarHistoryDetails,
