@@ -22,7 +22,6 @@ import BonusScreenInfo from '../../profile/bonus/containers/BonusInfoScreen';
 import InfoPostScreen from '../../info/containers/InfoPostScreen';
 import UsedCarListScreen from '../../catalog/usedcar/containers/UsedCarListScreen';
 import MoreScreen from './MenuScreenNew';
-import ReestablishScreen from '../../profile/containers/ReestablishScreen';
 // import ApplicationModalScreen from './Application';
 
 const styles = {
@@ -102,7 +101,6 @@ const BottomTabNavigation = createBottomTabNavigator(
         CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
         BonusScreen: {screen: BonusScreen},
         BonusScreenInfo: {screen: BonusScreenInfo},
-        ReestablishScreen: {screen: ReestablishScreen},
       }),
       navigationOptions: () => ({
         tabBarLabel: 'Кабинет',

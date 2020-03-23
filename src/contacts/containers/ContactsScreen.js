@@ -183,6 +183,8 @@ class ContactsScreen extends Component {
     const {fetchInfoList, actionListReset} = this.props;
     const {region, id: dealer} = this.props.dealerSelected;
 
+    console.log('== Contacts ==');
+
     actionListReset();
     fetchInfoList(region, dealer).then(action => {
       if (action.type === INFO_LIST__FAIL) {
@@ -264,8 +266,6 @@ class ContactsScreen extends Component {
 
     const PHONES = [];
     const phones = get(dealerSelected, 'phone', PHONES);
-
-    console.log('== Contacts ==');
 
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;

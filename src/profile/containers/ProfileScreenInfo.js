@@ -338,6 +338,19 @@ class ProfileScreenInfo extends Component {
                       }}>
                       У вас пока ещё нет автомобилей, о которых мы знаем...
                     </Text>
+                    {/* {!this.props.login.SAP.ID && ( */}
+                    <Button
+                      full
+                      onPress={() => {
+                        this.props.navigation.navigate('ReestablishScreen');
+                      }}
+                      style={[
+                        styleConst.shadow.default,
+                        styles.buttonPrimary,
+                        {backgroundColor: styleConst.color.red},
+                      ]}>
+                      <Text style={styles.buttonPrimaryText}>Где мои машины?</Text>
+                    </Button>
                   </View>
                 </>
               )}
@@ -528,20 +541,6 @@ class ProfileScreenInfo extends Component {
                   Редактировать данные
                 </Text>
               </Button>
-              {!this.props.login.SAP.ID && (
-                <Button
-                  full
-                  onPress={() => {
-                    this.props.navigation.navigate('ReestablishScreen');
-                  }}
-                  style={[
-                    styleConst.shadow.default,
-                    styles.buttonPrimary,
-                    {backgroundColor: styleConst.color.green},
-                  ]}>
-                  <Text style={styles.buttonPrimaryText}>Где мои данные ?</Text>
-                </Button>
-              )}
             </>
           )}
           {!this.state.loading ? (
