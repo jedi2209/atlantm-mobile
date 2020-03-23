@@ -127,7 +127,7 @@ class ReestablishScreen extends React.Component {
       .actionLogin({login, password, id: this.props.profile.login.id})
       .then(action => {
         switch (action.type) {
-          case 'LOGIN__FAIL':
+          case 'LOGIN__FAIL_OLD_LKK':
             if (login === 'zteam' && password === '4952121052') {
               window.atlantmDebug = false;
             }
@@ -141,7 +141,7 @@ class ReestablishScreen extends React.Component {
               this.setState({loading: false});
             }, 100);
             break;
-          case 'LOGIN__SUCCESS':
+          case 'LOGIN__SUCCESS_OLD_LKK':
             this.props
               .actionSaveProfileByUser({
                 ...this.props.profile.login,

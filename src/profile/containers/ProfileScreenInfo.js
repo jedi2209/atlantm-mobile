@@ -18,17 +18,9 @@ import {Button, Icon} from 'native-base';
 // redux
 import {connect} from 'react-redux';
 import {
-  nameFill,
-  phoneFill,
-  emailFill,
-  carFill,
-  carNumberFill,
-  loginFill,
-  passwordFill,
-  actionLogin,
-  actionLogout,
   actionFetchProfileData,
   getProfileSapData,
+  actionLogout,
 } from '../actions';
 import {
   actionSetPushActionSubscribe,
@@ -129,17 +121,6 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
 };
 
 const mapDispatchToProps = {
-  nameFill,
-  phoneFill,
-  emailFill,
-  carFill,
-  carNumberFill,
-
-  actionFetchProfileData,
-
-  loginFill,
-  passwordFill,
-  actionLogin,
   actionLogout,
 
   actionSetPushGranted,
@@ -234,7 +215,8 @@ class ProfileScreenInfo extends Component {
 
     if (
       this.props.login.SAP &&
-      this.props.login.SAP.ID !== nextProps.login.SAP.ID
+      this.props.login.SAP.ID !==
+        (nextProps.login.SAP ? nextProps.login.SAP.ID : null)
     ) {
       this.getUserData();
     }
