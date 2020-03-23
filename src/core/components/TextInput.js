@@ -6,24 +6,25 @@ import {
   StyleSheet,
 } from 'react-native';
 
-export const TextInput = ({label, value = '', ...props}) => {
+export const TextInput = React.forwardRef((props, ref) => {
   const [focused, setFocused] = useState(false);
-  const isActive = focused || Boolean(value);
+  const isActive = focused || Boolean(props.value);
 
   return (
     <View style={styles.container}>
       <Text style={[styles.label, isActive && styles.labelActive]}>
-        {label}
+        {props.label}
       </Text>
       <NativeTextInput
         {...props}
-        value={value || ''}
+        ref={ref}
+        value={props.value || ''}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

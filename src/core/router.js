@@ -28,6 +28,8 @@ import MapScreen from '../contacts/map/containers/MapScreen';
 
 import OrderScreen from '../catalog/containers/OrderScreen';
 
+import ReestablishScreen from '../profile/containers/ReestablishScreen';
+
 export const getRouter = initialRouteName => {
   return createStackNavigator(
     {
@@ -48,6 +50,7 @@ export const getRouter = initialRouteName => {
           gesturesEnabled: false,
         },
       },
+      ReestablishScreen: {screen: ReestablishScreen},
       IntroScreen: {screen: IntroScreen}, // это скрин с кнопкой выберите автосервис
       BottomTabNavigation: {screen: BottomTabNavigation}, // это нижнее меню
       ChooseDealerScreen: {screen: ChooseDealerScreen}, // выбор диллера скрин

@@ -14,9 +14,9 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
   StatusBar,
+  Button,
 } from 'react-native';
 
-import {Button} from 'native-base';
 import {StackActions, NavigationActions} from 'react-navigation';
 
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
@@ -58,6 +58,11 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
   },
+  caption: {
+    marginTop: 20,
+    fontSize: 16,
+    fontWeight: 'normal',
+  },
   field: {
     marginBottom: 18,
   },
@@ -87,6 +92,10 @@ class ReestablishScreen extends React.Component {
   constructor(props) {
     super(props);
 
+    this.fields = {
+      passInput: React.createRef(),
+    };
+
     this.state = {
       login: '',
       password: '',
@@ -110,11 +119,10 @@ class ReestablishScreen extends React.Component {
     this.setState({loading: true});
 
     if (login.length === 0 || password.length === 0) {
-      Alert.alert('Поле логин и пароль обязательные для заполнения');
+      Alert.alert('Упс!', 'Поля логин и пароль обязательные для заполнения');
       this.setState({loading: false});
       return;
     }
-
     this.props
       .actionLogin({login, password, id: this.props.profile.login.id})
       .then(action => {
@@ -143,14 +151,18 @@ class ReestablishScreen extends React.Component {
               .then(data => {
                 this.setState({loading: false});
                 const _this = this;
-                Alert.alert('Ваши данные успешно сохранены', '', [
-                  {
-                    text: 'ОК',
-                    onPress() {
-                      _this.props.navigation.navigate('ProfileScreenInfo');
+                Alert.alert(
+                  'Отлично! Всё получилось!',
+                  'Ваши данные успешно обновлены',
+                  [
+                    {
+                      text: 'ОК',
+                      onPress() {
+                        _this.props.navigation.navigate('ProfileScreenInfo');
+                      },
                     },
-                  },
-                ]);
+                  ],
+                );
               })
               .catch(() => {
                 setTimeout(
@@ -166,6 +178,10 @@ class ReestablishScreen extends React.Component {
   };
 
   render() {
+    let statusButton = false;
+    if (this.state.login.length === 0 || this.state.password.length === 0) {
+      statusButton = true;
+    }
     return (
       <KeyboardAvoidingView>
         <StatusBar barStyle="light-content" />
@@ -173,7 +189,16 @@ class ReestablishScreen extends React.Component {
           <ScrollView>
             <View style={styles.container}>
               <View style={styles.header}>
-                <Text style={styles.heading}>Восстановление ЛК</Text>
+                <Text style={styles.heading}>Вход в личный кабинет</Text>
+                <Text style={styles.caption}>
+                  Мы очень раздасадованы тем, что Вы не обнаружили свои
+                  автомобили и бонусные баллы в личном кабинете. Пожалуйста,
+                  дайте нам ещё один шанс!{'\n\n'}
+                  Введите ваши данные для доступа к старому личному кабинету.
+                  {'\n\n'}
+                  Это последний раз когда Вам придётся вспомнить эти магические
+                  комбинации цифр и букв для входа в Ваш личный кабинет.
+                </Text>
               </View>
               {this.state.success ? (
                 <View style={{flex: 1, justifyContent: 'center'}}>
@@ -210,9 +235,18 @@ class ReestablishScreen extends React.Component {
                     <View style={styles.field}>
                       <TextInput
                         autoCorrect={false}
+                        autoCompleteType="username"
+                        textContentType="username"
+                        autoCapitalize="none"
                         style={styles.textinput}
                         label="Логин"
-                        value={this.state.login}
+                        returnKeyType="next"
+                        onSubmitEditing={() => {
+                          this.fields.passInput.current.focus();
+                        }}
+                        ref={this.fields.loginInput}
+                        blurOnSubmit={false}
+                        value={this.state.login || ''}
                         enablesReturnKeyAutomatically={true}
                         onChangeText={this.onChangeField('login')}
                       />
@@ -220,16 +254,26 @@ class ReestablishScreen extends React.Component {
                     <View style={styles.field}>
                       <TextInput
                         style={styles.textinput}
+                        autoCompleteType="password"
+                        textContentType="password"
+                        autoCapitalize="none"
+                        autoCorrect={false}
                         label="Пароль"
+                        returnKeyType="send"
                         value={this.state.password || ''}
+                        ref={this.fields.passInput}
                         enablesReturnKeyAutomatically={true}
-                        textContentType={'password'}
                         onChangeText={this.onChangeField('password')}
+                        onSubmitEditing={() => {
+                          this.onPressLogin();
+                        }}
                       />
                     </View>
                   </View>
                   <View style={styles.group}>
                     <Button
+                      disabled={statusButton}
+                      title="Найдите мои данные"
                       onPress={
                         this.state.loading ? undefined : this.onPressLogin
                       }
@@ -238,7 +282,7 @@ class ReestablishScreen extends React.Component {
                         <ActivityIndicator color="#fff" />
                       ) : (
                         <Text style={styles.buttonText}>
-                          Войти в старый кабинет
+                          Найдите мои данные
                         </Text>
                       )}
                     </Button>
