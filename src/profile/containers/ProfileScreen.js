@@ -23,20 +23,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 // redux
 import {connect} from 'react-redux';
-import {
-  nameFill,
-  phoneFill,
-  emailFill,
-  carFill,
-  carNumberFill,
-  loginFill,
-  passwordFill,
-  actionLogin,
-  actionLogout,
-  actionFetchProfileData,
-  actionSavePofile,
-  actionSavePofileWithPhone,
-} from '../actions';
+import {actionSavePofile, actionSavePofileWithPhone} from '../actions';
 
 import {
   actionSetPushActionSubscribe,
@@ -76,19 +63,6 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
 };
 
 const mapDispatchToProps = {
-  nameFill,
-  phoneFill,
-  emailFill,
-  carFill,
-  carNumberFill,
-
-  actionFetchProfileData,
-
-  loginFill,
-  passwordFill,
-  actionLogin,
-  actionLogout,
-
   actionSetPushGranted,
   actionSetPushActionSubscribe,
 
@@ -495,18 +469,6 @@ class ProfileScreen extends Component {
                       ? Platform.select({ios: 'auto', android: 0})
                       : 'auto',
                   }}>
-                  {/* <LoginButton
-                        readPermissions={['email']}
-                        style={{
-                          width: '80%',
-                          height: 44,
-                          borderWidth: 0,
-                        }}
-                        onLoginFinished={this._loginFacebook}
-                        onLogoutFinished={() => {
-                          this.props.actionLogout();
-                        }}
-                      /> */}
                   <Button
                     onPress={this._signInWithGoogle}
                     disabled={this.state.isSigninInProgress}

@@ -431,7 +431,7 @@ export const actionLogin = props => {
 
   return async dispatch => {
     dispatch({
-      type: LOGIN__REQUEST,
+      type: 'LOGIN__REQUEST_OLD_LKK',
       payload: {...props},
     });
 
@@ -439,7 +439,7 @@ export const actionLogin = props => {
       console.log('error', error);
 
       return dispatch({
-        type: LOGIN__FAIL,
+        type: 'LOGIN__FAIL_OLD_LKK',
         payload: {
           code: error.code,
           message: error.message,
@@ -471,7 +471,7 @@ export const actionLogin = props => {
       };
 
       return dispatch({
-        type: LOGIN__SUCCESS,
+        type: 'LOGIN__SUCCESS_OLD_LKK',
         payload,
       });
     } catch (e) {
