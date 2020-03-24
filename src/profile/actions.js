@@ -25,6 +25,8 @@ import {
   SAVE_PROFILE__FAIL,
 } from './actionTypes';
 
+import PushNotifications from '@core/components/PushNotifications';
+
 export const actionLogout = () => {
   return dispatch => {
     dispatch({type: LOGOUT});
@@ -353,7 +355,7 @@ export const actionSaveProfileByUser = props => {
     userID: id,
     email,
     NAME: first_name,
-    SECOND_NAME: first_name,
+    SECOND_NAME: second_name,
     LAST_NAME: last_name,
     phone,
   };
@@ -364,6 +366,9 @@ export const actionSaveProfileByUser = props => {
 
     delete dataToSend.isReestablish;
     delete dataToSend.SAP;
+
+    PushNotifications.addTag('sapID', props.SAP.ID);
+    PushNotifications.setExternalUserId(props.SAP.ID);
   }
 
   for (let key in dataToSend) {
