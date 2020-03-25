@@ -334,6 +334,7 @@ class ProfileScreenInfo extends Component {
                         {
                           position: 'absolute',
                           backgroundColor: 'none',
+                          elevation: 0,
                           bottom: -10,
                           right: 5,
                           paddingHorizontal: 10,
@@ -350,6 +351,8 @@ class ProfileScreenInfo extends Component {
                             textDecorationStyle: 'dotted',
                             textDecorationColor: '#fff',
                             textDecorationLine: 'underline',
+                            shadowOpacity: 0,
+                            elevation: 0,
                           },
                         ]}>
                         Не видите свои авто?
