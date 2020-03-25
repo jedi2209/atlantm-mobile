@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {Button, Icon} from 'native-base';
+import PushNotifications from '@core/components/PushNotifications';
 
 // redux
 import {connect} from 'react-redux';
@@ -231,6 +232,10 @@ class ProfileScreenInfo extends Component {
         sap: {token: sap.TOKEN, id: sap.ID},
       })
       .then(() => {
+        if (sap.ID && sap.ID.length > 0) {
+          PushNotifications.addTag('sapID', sap.ID);
+          PushNotifications.setExternalUserId(sap.ID);
+        }
         this.setState({loading: false});
       })
       .catch(err => {
