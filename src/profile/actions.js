@@ -23,6 +23,10 @@ import {
   SAVE_PROFILE__UPDATE,
   SAVE_PROFILE__REQUEST,
   SAVE_PROFILE__FAIL,
+  FORGOT_PASS_MODE_CODE__SET,
+  FORGOT_PASS_REQUEST__REQUEST,
+  FORGOT_PASS_REQUEST__SUCCESS,
+  FORGOT_PASS_REQUEST__FAIL,
 } from './actionTypes';
 
 import PushNotifications from '@core/components/PushNotifications';
@@ -77,6 +81,53 @@ async function getProfileData({token, userid}) {
     discounts,
   };
 }
+
+export const actionRequestForgotPass = login => {
+  return async dispatch => {
+    function onError(error) {
+      return dispatch({
+        type: FORGOT_PASS_REQUEST__FAIL,
+        payload: {
+          code: error.code,
+          message: error.message,
+        },
+      });
+    }
+
+    dispatch({
+      type: FORGOT_PASS_REQUEST__REQUEST,
+      payload: login,
+    });
+
+    try {
+      const res = await API.forgotPassRequest(login);
+      const {status, error} = res;
+
+      if (status !== 'success') {
+        return onError(error);
+      }
+
+      const code = Number(get(error, 'code'));
+      const isCodeMode = [119, 127].indexOf(code) !== -1;
+
+      isCodeMode &&
+        dispatch({
+          type: FORGOT_PASS_MODE_CODE__SET,
+          payload: code === 119 ? 'phone' : 'email',
+        });
+
+      return dispatch({
+        type: FORGOT_PASS_REQUEST__SUCCESS,
+        payload: {
+          ...error,
+          isCodeMode,
+        },
+      });
+    } catch (e) {
+      return onError(e);
+    }
+  };
+};
 
 export const actionSetBonusLevel1 = hash => {
   return dispatch => {

@@ -670,7 +670,7 @@ class ProfileScreen extends Component {
                           this.CodeInput = input;
                         }}
                         maxLength={4}
-                        caretHidden={true}
+                        caretHidden={false}
                         enablesReturnKeyAutomatically={true}
                         placeholder="код"
                         returnKeyType="send"
