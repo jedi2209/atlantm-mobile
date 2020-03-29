@@ -459,7 +459,7 @@ export default {
     return this.request('/lkk/register/', requestParams);
   },
 
-  forgotPassRequest({forgotPassLogin}) {
+  forgotPassRequest(forgotPassLogin) {
     return this.request(
       `/lkk/auth/restore/?login=${forgotPassLogin}`,
       baseRequestParams,

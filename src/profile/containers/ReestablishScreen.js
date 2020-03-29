@@ -12,8 +12,10 @@ import {
   Text,
   Platform,
   TouchableWithoutFeedback,
+  TouchableHighlight,
   ActivityIndicator,
   StatusBar,
+  Dimensions,
 } from 'react-native';
 
 import {Button, Icon} from 'native-base';
@@ -34,15 +36,23 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
   };
 };
 
-import {actionLogin, actionSaveProfileByUser} from '../actions';
+import {
+  actionLogin,
+  actionSaveProfileByUser,
+  actionRequestForgotPass,
+} from '../actions';
 
 const mapDispatchToProps = {
   actionLogin,
   actionSaveProfileByUser,
+  actionRequestForgotPass,
 };
 
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import stylesHeader from '../../core/components/Header/style';
+
+const deviceWidth = Dimensions.get('window').width;
+const isAndroid = Platform.OS === 'android';
 
 const styles = StyleSheet.create({
   // Скопировано из ProfileSettingsScreen.
@@ -71,11 +81,12 @@ const styles = StyleSheet.create({
     marginBottom: 36,
   },
   textinput: {
-    height: Platform.OS === 'ios' ? 40 : 'auto',
+    height: !isAndroid ? 40 : 'auto',
     borderColor: '#d8d8d8',
     borderBottomWidth: 1,
     color: '#222b45',
     fontSize: 18,
+    width: deviceWidth - 40,
   },
   button: {
     backgroundColor: styleConst.color.lightBlue,
@@ -123,14 +134,35 @@ class ReestablishScreen extends React.Component {
     this.setState({[fieldName]: value});
   };
 
+  checkLoginPass() {
+    const {login, password} = this.state;
+    if (login.length === 0 || password.length === 0) {
+      Alert.alert('Упс!', 'Поля логин и пароль обязательные для заполнения');
+      this.setState({loading: false});
+      return false;
+    }
+    return true;
+  }
+
+  checkLogin() {
+    const {login} = this.state;
+    if (login.length === 0) {
+      Alert.alert(
+        'Упс!',
+        'Нам нужно знать ваш логин, чтобы восстановить доступ',
+      );
+      this.setState({loading: false});
+      return false;
+    }
+    return true;
+  }
+
   onPressLogin = () => {
     const {login, password} = this.state;
     this.setState({loading: true});
 
-    if (login.length === 0 || password.length === 0) {
-      Alert.alert('Упс!', 'Поля логин и пароль обязательные для заполнения');
-      this.setState({loading: false});
-      return;
+    if (!this.checkLoginPass()) {
+      return false;
     }
     this.props
       .actionLogin({login, password, id: this.props.profile.login.id})
@@ -235,7 +267,14 @@ class ReestablishScreen extends React.Component {
                     onChangeText={this.onChangeField('login')}
                   />
                 </View>
-                <View style={styles.field}>
+                <View
+                  style={[
+                    styles.field,
+                    {
+                      flexDirection: 'row',
+                      flex: 1,
+                    },
+                  ]}>
                   <TextInput
                     style={styles.textinput}
                     autoCompleteType="password"
@@ -252,6 +291,60 @@ class ReestablishScreen extends React.Component {
                       this.onPressLogin();
                     }}
                   />
+                  <Button
+                    transparent
+                    title="Не помню пароль"
+                    onPress={() => {
+                      this.setState({RequestForgotPassloading: true});
+                      if (!this.checkLogin()) {
+                        return false;
+                      }
+                      this.props
+                        .actionRequestForgotPass(this.state.login)
+                        .then(action => {
+                          console.log('action', action);
+                          switch (action.type) {
+                            case 'FORGOT_PASS_REQUEST__SUCCESS':
+                              Alert.alert(
+                                'Всё получилось!',
+                                action.payload.message,
+                              );
+                              break;
+                            default:
+                              Alert.alert(null, action.payload.message);
+                              break;
+                          }
+                          this.setState({RequestForgotPassloading: false});
+                        });
+                    }}
+                    style={{
+                      position: 'absolute',
+                      right: 0,
+                      top: 20,
+                      height: isAndroid ? 45 : 35,
+                      padding: isAndroid ? 25 : 15,
+                      elevation: 0,
+                    }}>
+                    {this.state.RequestForgotPassloading ? (
+                      <ActivityIndicator
+                        color={styleConst.color.lightBlue}
+                        style={{
+                          marginRight: 40,
+                        }}
+                      />
+                    ) : (
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          fontStyle: 'italic',
+                          shadowOpacity: 0,
+                          color: styleConst.color.lightBlue,
+                          elevation: 0,
+                        }}>
+                        не помню пароль
+                      </Text>
+                    )}
+                  </Button>
                 </View>
               </View>
               {!disableButton ? (
