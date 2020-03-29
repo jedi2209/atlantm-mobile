@@ -1,6 +1,6 @@
 {
   "name": "Atlant-M",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "private": true,
   "scripts": {
     "build": "npm run android-build; npm run ios-build;",
