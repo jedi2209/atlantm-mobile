@@ -3,16 +3,6 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-// modules
-#import "RNSplashScreen.h"
-#import <GoogleMaps/GoogleMaps.h>
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <RNGoogleSignin/RNGoogleSignin.h>
-#if __has_include(<VKSdkFramework/VKSdkFramework.h>)
-#import <VKSdkFramework/VKSdkFramework.h>
-#else
-#import "VKSdk.h"
-#endif
 
 #if DEBUG
 #import <FlipperKit/FlipperClient.h>
@@ -33,30 +23,34 @@ static void InitializeFlipper(UIApplication *application) {
 }
 #endif
 
+// modules
+#import "RNSplashScreen.h"
+#import <GoogleMaps/GoogleMaps.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <RNGoogleSignin/RNGoogleSignin.h>
+#if __has_include(<VKSdkFramework/VKSdkFramework.h>)
+#import <VKSdkFramework/VKSdkFramework.h>
+#else
+#import "VKSdk.h"
+#endif
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 #if DEBUG
   InitializeFlipper(application);
-#endif 
-  // You can skip this line if you have the latest version of the SDK installed
-  [[FBSDKApplicationDelegate sharedInstance] application:application
-    didFinishLaunchingWithOptions:launchOptions];
-  // Add any custom logic here.
-  
-  [GMSServices provideAPIKey:@"AIzaSyBIyzUJ1Q3hPk7_VTAWmj5KtSsNZZ08FAw"];
-  
-  [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
-  
-  NSURL *jsCodeLocation;
+#endif
 
-  // jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+  [GMSServices provideAPIKey:@"AIzaSyBIyzUJ1Q3hPk7_VTAWmj5KtSsNZZ08FAw"];
+  [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
+
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
-                                                      moduleName:@"atlantm"
-                                               initialProperties:nil
-                                                   launchOptions:launchOptions];
+                                                   moduleName:@"atlantm"
+                                            initialProperties:nil
+                                            launchOptions:launchOptions];
+
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
