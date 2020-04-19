@@ -56,9 +56,11 @@ export default class Wrapper extends Component {
     this.state = {
       rehydrated: false,
     };
+    console.log('Wrapper ====>', 'constructor');
   }
 
   componentDidMount() {
+    console.log('Wrapper ====>', 'componentDidMount');
     // this.defaultHandler = ErrorUtils.getGlobalHandler();
     // ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
 
@@ -71,6 +73,7 @@ export default class Wrapper extends Component {
   }
 
   async wrapGlobalHandler(error, isFatal) {
+    console.log('Wrapper ====>', 'wrapGlobalHandler', error, isFatal);
     if (isFatal && !__DEV__) {
       this.getPersistStore().purge();
     }
@@ -80,8 +83,9 @@ export default class Wrapper extends Component {
     }
   }
 
-  getPersistStore = () =>
-    persistStore(
+  getPersistStore = () => {
+    console.log('Wrapper ====>', 'getPersistStore');
+    return persistStore(
       store,
       {
         storage: AsyncStorage,
@@ -93,12 +97,15 @@ export default class Wrapper extends Component {
         this.setState({rehydrated: true});
       },
     );
+  };
 
   shouldComponentUpdate(nextProps, nextState) {
+    console.log('Wrapper ====>', 'shouldComponentUpdate');
     return this.state.rehydrated !== nextState.rehydrated;
   }
 
   render() {
+    console.log('Wrapper ====>', 'render');
     if (!this.state.rehydrated) {
       return null;
     }
