@@ -4,6 +4,17 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
+// modules
+#import "RNSplashScreen.h"
+#import <GoogleMaps/GoogleMaps.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <RNGoogleSignin/RNGoogleSignin.h>
+#if __has_include(<VKSdkFramework/VKSdkFramework.h>)
+#import <VKSdkFramework/VKSdkFramework.h>
+#else
+#import "VKSdk.h"
+#endif
+
 #if DEBUG
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -23,33 +34,19 @@ static void InitializeFlipper(UIApplication *application) {
 }
 #endif
 
-// modules
-#import "RNSplashScreen.h"
-#import <GoogleMaps/GoogleMaps.h>
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <RNGoogleSignin/RNGoogleSignin.h>
-#if __has_include(<VKSdkFramework/VKSdkFramework.h>)
-#import <VKSdkFramework/VKSdkFramework.h>
-#else
-#import "VKSdk.h"
-#endif
-
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [GMSServices provideAPIKey:@"AIzaSyBIyzUJ1Q3hPk7_VTAWmj5KtSsNZZ08FAw"];
 #if DEBUG
   InitializeFlipper(application);
 #endif
 
-  [GMSServices provideAPIKey:@"AIzaSyBIyzUJ1Q3hPk7_VTAWmj5KtSsNZZ08FAw"];
-  [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
-
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"atlantm"
-                                            initialProperties:nil
-                                            launchOptions:launchOptions];
+                                            initialProperties:nil];
 
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 
@@ -60,15 +57,6 @@ static void InitializeFlipper(UIApplication *application) {
   [self.window makeKeyAndVisible];
   [RNSplashScreen show];
   return YES;
-}
-
-- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
-{
-#if DEBUG
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
-#else
-  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-#endif
 }
 
 - (BOOL)application:(UIApplication *)application
@@ -88,6 +76,15 @@ static void InitializeFlipper(UIApplication *application) {
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
   [FBSDKAppEvents activateApp];
+}
+
+- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
+{
+#if DEBUG
+  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+#else
+  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+#endif
 }
 
 @end
