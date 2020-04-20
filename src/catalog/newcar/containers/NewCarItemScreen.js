@@ -439,8 +439,17 @@ class NewCarItemScreen extends Component {
     const {brand, model, complectation} = carDetails;
     const brandName = brand.name || '';
     const modelName = model.name || '';
-    const photos =
-      get(carDetails, 'img.original') || get(carDetails, 'img.10000x220');
+    let photos = [];
+    let CarImgReal = false;
+    if (get(carDetails, 'imgReal.thumb.0')) {
+      get(carDetails, 'imgReal.thumb').forEach(element => {
+        photos.push(element + '1000x600');
+      });
+      CarImgReal = true;
+    } else {
+      photos =
+        get(carDetails, 'img.original') || get(carDetails, 'img.10000x220');
+    }
 
     let photosThumbs = [];
     for (var i = 0; i < photos.length; i++) {
@@ -463,11 +472,19 @@ class NewCarItemScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
-          <StatusBar barStyle="light-content" />
+          {CarImgReal ? (
+            <StatusBar hidden />
+          ) : (
+            <StatusBar barStyle="light-content" />
+          )}
           <Content>
-            <View style={{marginTop: -20}}>
+            <View style={{marginTop: CarImgReal ? -31 : -20}}>
               <PhotoSlider
                 photos={photos}
+                paginationStyle={{
+                  marginBottom: CarImgReal ? 35 : 5,
+                }}
+                dotColor={CarImgReal ? '#fff' : null}
                 onPressItem={this.onPressPhoto}
                 onIndexChanged={this.onChangePhotoIndex}
               />
@@ -478,8 +495,8 @@ class NewCarItemScreen extends Component {
                 styleConst.shadow.light,
                 {
                   position: 'relative',
-                  top: -20,
-                  marginBottom: -20,
+                  top: CarImgReal ? -55 : -20,
+                  marginBottom: CarImgReal ? -55 : -20,
                   backgroundColor: '#fff',
                   borderTopLeftRadius: 30,
                   borderTopRightRadius: 30,
@@ -806,6 +823,7 @@ class NewCarItemScreen extends Component {
               index={photoViewerIndex}
               visible={photoViewerVisible}
               items={photoViewerItems}
+              enableScale={true}
               onChange={this.onChangePhotoIndex}
               onPressClose={this.onClosePhoto}
             />

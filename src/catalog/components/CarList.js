@@ -157,7 +157,18 @@ export default class CarList extends Component {
         ListEmptyComponent={this.renderEmptyComponent}
         ListFooterComponent={this.renderFooter}
         renderItem={this.renderItem}
-        keyExtractor={item => `${item.hash.toString()}`}
+        keyExtractor={item => {
+          if (item && item.hash) {
+            return item.hash.toString();
+          } else {
+            return (
+              new Date().getTime().toString() +
+              Math.floor(
+                Math.random() * Math.floor(new Date().getTime()),
+              ).toString()
+            );
+          }
+        }}
         onEndReached={this.handleLoadMore}
       />
     );

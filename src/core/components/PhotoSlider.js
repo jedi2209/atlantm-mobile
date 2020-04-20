@@ -149,7 +149,7 @@ export default class PhotoSlider extends Component {
               height={this.state.height}
               loadHandle={this.loadHandle}
               loaded={!!this.state.loadQueue[idx]}
-              url={photo + '?d=440x400'}
+              url={photo}
               i={idx}
               key={photo}
             />

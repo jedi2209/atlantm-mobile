@@ -1,6 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Text, View, StyleSheet, TouchableHighlight} from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableHighlight,
+  Platform,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 // components
@@ -31,6 +37,13 @@ const styles = StyleSheet.create({
     height: 220,
     borderTopRightRadius: 5,
     borderTopLeftRadius: 5,
+  },
+  imageReal: {
+    height: 300,
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
   },
   titleBackgroundold: {
     flex: 1,
@@ -63,7 +76,6 @@ const styles = StyleSheet.create({
   priceContainer: {
     flexDirection: 'column',
     marginHorizontal: 15,
-    marginBottom: 5,
     marginTop: 10,
   },
   priceDefault: {
@@ -102,13 +114,28 @@ const styles = StyleSheet.create({
     // marginBottom: 10,
   },
   price: {
-    color: '#2A2A43',
     fontSize: 18,
     fontWeight: 'bold',
+    zIndex: 2,
+  },
+  priceBackground: {
+    flex: 1,
+    zIndex: 1,
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    opacity: 1,
+    width: '80%',
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+    bottom: 0,
   },
   common: {
     fontSize: 12,
     color: '#A8ABBE',
+  },
+  commonReal: {
+    fontSize: 12,
+    color: '#FFF',
   },
 });
 
@@ -155,20 +182,37 @@ class CarListItem extends Component {
   renderPrice = ({car, prices}) => {
     const isSale = car.sale === true;
 
+    let CarImgReal = false;
+    if (get(car, 'imgReal.thumb.0')) {
+      CarImgReal = true;
+    }
+
     const CarPrices = {
       sale: get(car, 'price.app.sale') || 0,
       standart: get(car, 'price.app.standart') || get(car, 'price.app'),
     };
 
     return (
-      <View style={styles.priceContainer}>
+      <View style={[styles.priceContainer, {marginBottom: CarImgReal ? 0 : 5}]}>
         {isSale ? (
-          <Text style={[styles.price, styles.priceSpecial]}>
+          <Text
+            style={[
+              styles.price,
+              styles.priceSpecial,
+              {color: CarImgReal ? '#FFFFFF' : '#2A2A43'},
+            ]}>
             {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
           </Text>
         ) : null}
         <View style={{flexDirection: 'row'}}>
-          <Text style={[styles.price, isSale ? styles.priceDefault : null]}>
+          <Text
+            style={[
+              styles.price,
+              isSale ? styles.priceDefault : null,
+              {
+                color: CarImgReal ? '#FFFFFF' : '#2A2A43'
+              },
+            ]}>
             {showPrice(CarPrices.standart, this.props.dealerSelected.region)}
           </Text>
           {isSale ? (
@@ -201,14 +245,24 @@ class CarListItem extends Component {
   };
 
   render() {
-    const {car, prices, itemScreen, resizeMode} = this.props;
+    const {car, prices, itemScreen} = this.props;
+    let {resizeMode} = this.props;
     const modelName = get(car, 'model.name', '');
     const complectation = get(car, 'complectation.name', '');
     const engineVolume = get(car, 'engine.volume.full');
     const mileage = get(car, 'mileage');
     const gearbox = get(car, 'gearbox.name');
     const year = get(car, 'year');
-    const CarImg = get(car, 'img.10000x440.0');
+    const isSale = car.sale === true;
+    let CarImg = '';
+    let CarImgReal = false;
+    if (get(car, 'imgReal.thumb.0')) {
+      CarImg = get(car, 'imgReal.thumb.0') + '1000x600c';
+      CarImgReal = true;
+      resizeMode = 'cover';
+    } else {
+      CarImg = get(car, 'img.10000x440.0');
+    }
     console.log('itemScreen', itemScreen);
     return (
       <TouchableHighlight
@@ -228,7 +282,6 @@ class CarListItem extends Component {
               itemScreen === 'NewCarItemScreen' ? {width: '100%'} : null,
             ]}
           />
-          {/* <View style={styles.titleBackgroundold} /> */}
           <View style={styles.titleContainer}>
             <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
               {`${get(car, 'brand.name')} ${modelName || ''} ${complectation}`}
@@ -238,16 +291,37 @@ class CarListItem extends Component {
           {CarImg ? (
             <Imager
               resizeMode={resizeMode ? resizeMode : 'cover'}
-              style={[styles.image]}
+              style={[CarImgReal ? styles.imageReal : styles.image]}
               source={{
                 uri: CarImg,
               }}
             />
           ) : null}
+          {CarImgReal ? (
+            <LinearGradient
+              start={{x: 1, y: 0}}
+              end={{x: 0, y: 0}}
+              useAngle
+              angle={itemScreen === 'NewCarItemScreen' ? 60 : 170}
+              // colors={['rgba(15, 102, 178, 1)', 'rgba(0, 97, 237, 0)']}
+              colors={['rgba(51, 51, 51, 0.4)', 'rgba(51, 51, 51, 0)']}
+              style={[
+                styles.priceBackground,
+                {height:  isSale ? 80 : 60},
+                itemScreen === 'NewCarItemScreen' ? {width: '100%'} : null,
+              ]}
+            />
+          ) : null}
           <View
             style={[
               styles.price,
-              itemScreen === 'NewCarItemScreen' ? {marginTop: -20} : null,
+              itemScreen === 'NewCarItemScreen'
+                ? {
+                    marginTop:
+                      (Platform.OS !== 'ios' ? -6 : 0) +
+                      (CarImgReal ? (isSale ? -80 : -60) : -20),
+                  }
+                : null,
             ]}>
             {this.renderPrice({car, prices})}
           </View>
@@ -257,32 +331,43 @@ class CarListItem extends Component {
               flexDirection: 'row',
               flexWrap: 'wrap',
               marginHorizontal: 15,
+              zIndex: 2,
             }}>
             <View>
               {engineVolume ? (
                 <View style={styles.extraTextContainer}>
-                  <Text style={styles.common}>{`${engineVolume} см³ `}</Text>
+                  <Text
+                    style={
+                      CarImgReal ? styles.commonReal : styles.common
+                    }>{`${engineVolume} см³ `}</Text>
                 </View>
               ) : null}
             </View>
             <View>
               {get(car, 'engine.type') || engineVolume ? (
                 <View style={styles.extraTextContainer}>
-                  <Text style={styles.common}>{`${car.engine.type} `}</Text>
+                  <Text
+                    style={CarImgReal ? styles.commonReal : styles.common}>{`${
+                    car.engine.type
+                  } `}</Text>
                 </View>
               ) : null}
             </View>
             {mileage ? (
               <View style={styles.extraTextContainer}>
-                <Text style={styles.common}>{`пробег ${numberWithGap(
-                  mileage,
-                )} км. `}</Text>
+                <Text
+                  style={
+                    CarImgReal ? styles.commonReal : styles.common
+                  }>{`пробег ${numberWithGap(mileage)} км. `}</Text>
               </View>
             ) : null}
             <View>
               {gearbox ? (
                 <View style={styles.extraTextContainer}>
-                  <Text style={styles.common}>{`${gearbox} `}</Text>
+                  <Text
+                    style={
+                      CarImgReal ? styles.commonReal : styles.common
+                    }>{`${gearbox} `}</Text>
                 </View>
               ) : null}
             </View>
