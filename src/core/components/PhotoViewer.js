@@ -13,6 +13,7 @@ import PropTypes from 'prop-types';
 
 // components
 // import Gallery from 'react-native-image-gallery';
+import Imager from '@core/components/Imager';
 import GallerySwiper from 'react-native-gallery-swiper';
 import {Icon} from 'native-base';
 
@@ -30,6 +31,7 @@ class PhotoViewer extends Component {
         }),
       }),
     ),
+    enableScale: PropTypes.bool,
     onChange: PropTypes.func,
     onPressClose: PropTypes.func,
   };
@@ -69,7 +71,8 @@ class PhotoViewer extends Component {
           // Turning this off will make it feel faster
           // and prevent the scroller to slow down
           // on fast swipes.
-          sensitiveScroll={false}
+          // sensitiveScroll={false}
+          enableScale={this.props.enableScale ? this.props.enableScale : false}
           onPageSelected={this.props.onChange}
           style={styles.gallery}
         />

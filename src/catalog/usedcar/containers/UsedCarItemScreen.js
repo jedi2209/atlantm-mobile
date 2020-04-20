@@ -292,7 +292,12 @@ class UserCarItemScreen extends Component {
       this.logGuard = true;
     }
 
-    const photos = get(carDetails, 'img.original');
+    let photos = [];
+    if (get(carDetails, 'img.original')) {
+      get(carDetails, 'img.original').forEach(element => {
+        photos.push(element + '?d=440x400');
+      });
+    }
     const brandName = get(carDetails, 'brand.name');
     const modelName = get(carDetails, 'model.name');
     const additional = get(carDetails, 'options.additional.1.data', []);
@@ -306,11 +311,11 @@ class UserCarItemScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
-          <StatusBar barStyle="default" />
+          <StatusBar hidden />
           <Content>
             <View style={styles.gallery}>
               <PhotoSlider
-                resizeMode="contain"
+                resizeMode="cover"
                 dotColor="#fff"
                 photos={photos}
                 onPressItem={this.onPressPhoto}
@@ -682,6 +687,7 @@ class UserCarItemScreen extends Component {
               index={photoViewerIndex}
               visible={photoViewerVisible}
               items={photoViewerItems}
+              enableScale={true}
               onChange={this.onChangePhotoIndex}
               onPressClose={this.onClosePhoto}
             />

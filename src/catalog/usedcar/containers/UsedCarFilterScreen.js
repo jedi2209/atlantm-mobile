@@ -367,17 +367,34 @@ class UsedCarFilterScreen extends Component {
           <Button
             full
             onPress={this.onPressFilterButton}
+            disabled={
+              this.props.items.length && this.props.items[0].type ? true : false
+            }
             style={[
               styleConst.shadow.default,
               {
-                backgroundColor: styleConst.color.lightBlue,
+                backgroundColor:
+                  this.props.items.length && this.props.items[0].type
+                    ? styleConst.color.bg
+                    : styleConst.color.lightBlue,
                 paddingVertical: 16,
                 paddingHorizontal: 40,
                 marginHorizontal: 20,
                 borderRadius: 5,
               },
             ]}>
-            <Text style={{color: '#fff', fontSize: 16}}>Применить</Text>
+            <Text
+              style={{
+                color:
+                  this.props.items.length && this.props.items[0].type
+                    ? styleConst.color.lightBlue
+                    : '#fff',
+                fontSize: 16,
+              }}>
+              {this.props.items.length && this.props.items[0].type
+                ? 'Нет авто в наличии'
+                : 'Применить'}
+            </Text>
           </Button>
         </View>
       </ScrollView>
