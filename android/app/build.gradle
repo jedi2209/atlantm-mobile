@@ -86,7 +86,7 @@ android {
         versionCode project.ext.version.build
         versionName project.ext.version.name
         multiDexEnabled true
-        ndk.abiFilters 'armeabi-v7a', 'x86', 'arm64-v8a', 'x86_64'
+        // ndk.abiFilters 'armeabi-v7a', 'x86', 'arm64-v8a', 'x86_64'
         packagingOptions {
             exclude "lib/armeabi-v7a/libmonochrome.so"
         }
@@ -97,8 +97,8 @@ android {
             println ("split settings for release.")
             reset()
             enable enableSeparateBuildPerCPUArchitecture
-            universalApk true  // If true, also generate a universal APK
-            include 'armeabi-v7a', 'x86', 'arm64-v8a', 'x86_64'
+            universalApk false  // If true, also generate a universal APK
+            include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
         }
     }
     signingConfigs {
