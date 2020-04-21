@@ -19,7 +19,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.atlant-m</string>
+	<string>com.atlantm.app</string>
 	<key>PROJECT_ID</key>
 	<string>atlant-m</string>
 	<key>STORAGE_BUCKET</key>
