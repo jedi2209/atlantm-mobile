@@ -1,4 +1,7 @@
 import {createStackNavigator} from 'react-navigation-stack';
+import Animated, { Easing } from 'react-native-reanimated';
+import StackViewStyleInterpolator from 'react-navigation-stack/src/views/StackView/StackViewStyleInterpolator';
+
 
 // global
 import IntroScreen from '../intro/containers/IntroScreen';
@@ -78,6 +81,14 @@ export const getRouter = initialRouteName => {
     },
     {
       initialRouteName,
+      transitionConfig: () => ({
+        screenInterpolator: sceneProps => {
+          // Disable the transition animation when resetting to the home screen.
+          return sceneProps.scene.route.routeName === 'BottomTabNavigation'
+            ? StackViewStyleInterpolator.forFadeFromBottomAndroid(sceneProps)
+            : StackViewStyleInterpolator.forHorizontal(sceneProps);
+        },
+      }),
     },
   );
 };
