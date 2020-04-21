@@ -40,7 +40,7 @@ platform :ios do
         }
       }
     )
-    automatic_code_signing(
+    update_code_signing_settings(
       path: "ios/atlantm.xcodeproj",
       use_automatic_signing: true
     )
