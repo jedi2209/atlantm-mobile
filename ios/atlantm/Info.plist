@@ -51,10 +51,14 @@
 	</array>
 	<key>CFBundleVersion</key>
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<string>45</string>
 =======
 	<string>44</string>
 >>>>>>> iOS Version bump
+=======
+	<string>45</string>
+>>>>>>> Version Bump iOS
 	<key>FacebookAppID</key>
 	<string>XXXX</string>
 	<key>FacebookDisplayName</key>
