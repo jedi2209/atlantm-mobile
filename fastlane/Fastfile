@@ -133,7 +133,7 @@ platform :android do
       message: 'Version Bump Android'
     )
     add_git_tag(
-      build_number: "#{lane_context[SharedValues::VERSION_NUMBER]}." + properties["versionCode"]
+      build_number: "#{lane_context[SharedValues::VERSION_NUMBER]}." + properties["versionCode"],
       grouping: "builds",
       prefix: "v"
     )
