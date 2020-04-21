@@ -140,27 +140,6 @@ platform :android do
     push_to_git_remote
   end
 
-  error do |lane, exception|
-    notification(
-      title: "Houston, we have a problem...",
-      subtitle: "Google Play beta version #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]}) was NOT successfully upload. =(",
-      message: exception.to_s,
-      app_icon: "https://www.zavarka-team.ru/logo.png",
-      content_image: "./ios/atlantm/Images.xcassets/AppIcon.appiconset/AppStore Icon.png"
-    )
-    slack(
-      message: "Houston, we have a problem...",
-      channel: "#_notify-bot",  # Optional, by default will post to the default channel configured for the POST URL.
-      success: false,        # Optional, defaults to true.
-      slack_url: ENV['SLACK_URL'],
-      payload: {  # Optional, lets you specify any number of your own Slack attachments.
-        "Build Date" => Time.new.to_s,
-        "Output" => exception.error_info.to_s,
-        "icon_emoji" => "ghost"
-      },
-    )
-  end
-
   desc "Make a new release build"
   lane :release do
     gradle(
@@ -173,4 +152,25 @@ platform :android do
     puts "AABs: #{Actions.lane_context[SharedValues::GRADLE_ALL_AAB_OUTPUT_PATHS]}"
     puts "AAB: #{Actions.lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]}"
   end
+end
+
+error do |lane, exception|
+  notification(
+    title: "Houston, we have a problem...",
+    subtitle: "Google Play beta version #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]}) was NOT successfully upload. =(",
+    message: exception.to_s,
+    app_icon: "https://www.zavarka-team.ru/logo.png",
+    content_image: "./ios/atlantm/Images.xcassets/AppIcon.appiconset/AppStore Icon.png"
+  )
+  slack(
+    message: "Houston, we have a problem...",
+    channel: "#_notify-bot",  # Optional, by default will post to the default channel configured for the POST URL.
+    success: false,        # Optional, defaults to true.
+    slack_url: ENV['SLACK_URL'],
+    payload: {  # Optional, lets you specify any number of your own Slack attachments.
+      "Build Date" => Time.new.to_s,
+      "Output" => exception.error_info.to_s,
+      "icon_emoji" => "ghost"
+    },
+  )
 end
