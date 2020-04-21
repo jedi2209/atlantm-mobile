@@ -20,6 +20,7 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* atlantmTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* atlantmTests.m */; };
 		33C4112C7A08440E80BC7061 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F824D6701FD44E6A9E2A32C5 /* Octicons.ttf */; };
+		3A0DCB20244F9D71000BF987 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A0DCB1F244F9D71000BF987 /* File.swift */; };
 		3A17D447244C8EC100CD96DB /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A17D446244C8EC100CD96DB /* NotificationService.m */; };
 		3A17D44B244C8EC100CD96DB /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 3A17D443244C8EC100CD96DB /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3A17D451244C905A00CD96DB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A17D450244C905A00CD96DB /* GoogleService-Info.plist */; };
@@ -108,6 +109,8 @@
 		2DA0F119DC5779D20804C6E0 /* Pods-atlantm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm.debug.xcconfig"; path = "Target Support Files/Pods-atlantm/Pods-atlantm.debug.xcconfig"; sourceTree = "<group>"; };
 		37B76BECE5D8425EB9A3E62A /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = ../assets/fonts/Roboto.ttf; sourceTree = "<group>"; };
 		387D43449E116028EB52FFD4 /* Pods-atlantm-atlantmTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm-atlantmTests.release.xcconfig"; path = "Target Support Files/Pods-atlantm-atlantmTests/Pods-atlantm-atlantmTests.release.xcconfig"; sourceTree = "<group>"; };
+		3A0DCB1E244F9D71000BF987 /* atlantm-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "atlantm-Bridging-Header.h"; sourceTree = "<group>"; };
+		3A0DCB1F244F9D71000BF987 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		3A17D42E244C8D8900CD96DB /* atlantm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = atlantm.entitlements; path = atlantm/atlantm.entitlements; sourceTree = "<group>"; };
 		3A17D443244C8EC100CD96DB /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A17D445244C8EC100CD96DB /* NotificationService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationService.h; sourceTree = "<group>"; };
@@ -215,6 +218,8 @@
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				3A17D450244C905A00CD96DB /* GoogleService-Info.plist */,
+				3A0DCB1F244F9D71000BF987 /* File.swift */,
+				3A0DCB1E244F9D71000BF987 /* atlantm-Bridging-Header.h */,
 			);
 			name = atlantm;
 			sourceTree = "<group>";
@@ -443,7 +448,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = YNA37LTZ5W;
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1130;
 						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
@@ -560,7 +565,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		1CB33FF225E11EE6FA82C5D4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -796,6 +801,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				3A0DCB20244F9D71000BF987 /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -862,6 +868,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2D812D12E841BFE39C4D9B68 /* Pods-atlantm-atlantmTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = YNA37LTZ5W;
@@ -887,6 +894,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 387D43449E116028EB52FFD4 /* Pods-atlantm-atlantmTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
@@ -915,7 +923,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 45;
-				DEAD_CODE_STRIPPING = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = YNA37LTZ5W;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -932,6 +940,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.atlantm.app;
 				PRODUCT_NAME = atlantm;
+				SWIFT_OBJC_BRIDGING_HEADER = "atlantm-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -948,6 +957,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 45;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = YNA37LTZ5W;
 				INFOPLIST_FILE = atlantm/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -959,6 +969,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.atlantm.app;
 				PRODUCT_NAME = atlantm;
+				SWIFT_OBJC_BRIDGING_HEADER = "atlantm-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
