@@ -100,7 +100,7 @@ subprojects {
         versionBuild = getIncrementBuild()
     }
     afterEvaluate {project ->
-        if (project.hasProperty("android")) {
+        if (project.hasProperty("android") || project.plugins.hasPlugin('android-library')) {
             android {
                 compileSdkVersion rootProject.ext.compileSdkVersion
                 buildToolsVersion rootProject.ext.buildToolsVersion
