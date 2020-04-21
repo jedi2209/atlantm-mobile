@@ -20,10 +20,14 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 <<<<<<< HEAD
+<<<<<<< HEAD
 	<string>45</string>
 =======
 	<string>44</string>
 >>>>>>> iOS Version bump
+=======
+	<string>45</string>
+>>>>>>> Version Bump iOS
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionPointIdentifier</key>
