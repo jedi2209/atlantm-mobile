@@ -48,19 +48,19 @@ export default {
       params.carNumber = carNumber;
     }
     if (target === 'action') {
-      routeName = 'InfoListScreen';
+      routeName = 'InfoList';
       params.isPush = true;
       params.id = actionId;
       params.date = actionDate;
     }
     if (!routeName) return;
 
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({routeName, params})],
-    });
+    // const resetAction = StackActions.reset({
+    //   index: 0,
+    //   actions: [NavigationActions.navigate({routeName, params})],
+    // });
 
-    window.atlantmNavigation.dispatch(resetAction);
+    // window.atlantmNavigation.dispatch(resetAction);
 
     if (target === 'action') {
       setTimeout(
