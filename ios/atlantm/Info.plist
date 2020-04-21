@@ -50,7 +50,11 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
+<<<<<<< HEAD
 	<string>45</string>
+=======
+	<string>44</string>
+>>>>>>> iOS Version bump
 	<key>FacebookAppID</key>
 	<string>423573815015675</string>
 	<key>FacebookDisplayName</key>
