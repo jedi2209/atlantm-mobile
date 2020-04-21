@@ -140,6 +140,15 @@ platform :android do
     push_to_git_remote
   end
 
+  error do |lane, exception|
+    notification(
+      subtitle: "Houston, we have a problem...",
+      message: "Google Play beta version #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]}) was NOT successfully upload. =(",
+      app_icon: "https://www.zavarka-team.ru/logo.png",
+      content_image: "./ios/atlantm/Images.xcassets/AppIcon.appiconset/AppStore Icon.png"
+    )
+  end
+
   desc "Make a new release build"
   lane :release do
     gradle(
