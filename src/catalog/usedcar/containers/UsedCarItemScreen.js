@@ -48,7 +48,7 @@ import getTheme from '../../../../native-base-theme/components';
 import showPrice from '@utils/price';
 
 // styles
-import styles from './UsedCarItemScreenStyles';
+import styles from '@catalog/CarStyles';
 import {add} from 'react-native-reanimated';
 // import stylesFooter from '@core/components/Footer/style';
 

@@ -49,7 +49,7 @@ import styleConst from '@core/style-const';
 import showPrice from '@utils/price';
 
 // styles
-import styles from '@catalog/usedcar/containers/UsedCarItemScreenStyles';
+import styles from '@catalog/CarStyles';
 
 const imgResize = '10000x440';
 
@@ -114,12 +114,14 @@ class NewCarItemScreen extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {tabName: 'base'};
+    this.state = {
+      tabName: 'base',
+    };
   }
 
   static navigationOptions = ({navigation}) => ({
     headerTransparent: true,
-    headerLeft: (
+    headerLeft: navigation.state.params.carDetails ? (
       <HeaderIconBack
         theme="white"
         ContainerStyle={styleConst.headerBackButton.ContainerStyle}
@@ -127,7 +129,7 @@ class NewCarItemScreen extends Component {
         navigation={navigation}
         returnScreen="NewCarListScreen"
       />
-    ),
+    ) : null,
   });
 
   componentDidMount() {
@@ -443,12 +445,12 @@ class NewCarItemScreen extends Component {
     let CarImgReal = false;
     if (get(carDetails, 'imgReal.thumb.0')) {
       get(carDetails, 'imgReal.thumb').forEach(element => {
-        photos.push(element + '1000x600');
+        photos.push(element + '1000x1000');
       });
       CarImgReal = true;
     } else {
       photos =
-        get(carDetails, 'img.original') || get(carDetails, 'img.10000x220');
+        get(carDetails, 'img.10000x220') || get(carDetails, 'img.original');
     }
 
     let photosThumbs = [];
@@ -471,339 +473,346 @@ class NewCarItemScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          {CarImgReal ? (
+        <View style={styles.safearea}>
+          <ScrollView>
             <StatusBar hidden />
-          ) : (
-            <StatusBar barStyle="light-content" />
-          )}
-          <Content>
-            <View style={{marginTop: CarImgReal ? -31 : -20}}>
-              <PhotoSlider
-                photos={photos}
-                paginationStyle={{
-                  marginBottom: CarImgReal ? 35 : 5,
-                }}
-                dotColor={CarImgReal ? '#fff' : null}
-                onPressItem={this.onPressPhoto}
-                onIndexChanged={this.onChangePhotoIndex}
-              />
-            </View>
-
-            <View
-              style={[
-                styleConst.shadow.light,
-                {
-                  position: 'relative',
-                  top: CarImgReal ? -55 : -20,
-                  marginBottom: CarImgReal ? -55 : -20,
-                  backgroundColor: '#fff',
-                  borderTopLeftRadius: 30,
-                  borderTopRightRadius: 30,
-                  paddingTop: 20,
-                  paddingBottom: 14,
-                },
-              ]}>
+            <View style={{flex: 1, position: 'relative'}}>
               <View
                 style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  paddingHorizontal: 16,
+                  position: 'absolute',
+                  height: 400,
+                  width: '100%',
+                  marginTop: CarImgReal ? -12 : -12,
                 }}>
-                <View style={{marginBottom: 10, flexShrink: 1}}>
-                  <Text style={{fontSize: 16, fontWeight: '600'}}>
-                    {`${brandName} ${modelName}`}
-                  </Text>
-                  <Text style={{fontSize: 11, fontWeight: '600'}}>
-                    {get(complectation, 'name', '') +
-                      ' ' +
-                      get(carDetails, 'year')}
-                  </Text>
-                </View>
-                {this.renderPrice({carDetails, filterData, currency})}
+                <PhotoSlider
+                  height={370}
+                  photos={photos}
+                  resizeMode={CarImgReal ? 'cover' : null}
+                  paginationStyle={{marginBottom: 35}}
+                  dotColor={CarImgReal ? '#fff' : null}
+                  onPressItem={this.onPressPhoto}
+                  onIndexChanged={this.onChangePhotoIndex}
+                />
               </View>
 
-              <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+              <View
+                style={[
+                  styleConst.shadow.light,
+                  {
+                    position: 'relative',
+                    marginTop: CarImgReal ? 335 : 335,
+                    marginBottom: -20,
+                    backgroundColor: '#fff',
+                    borderTopLeftRadius: 30,
+                    borderTopRightRadius: 30,
+                    paddingTop: 20,
+                    paddingBottom: 14,
+                  },
+                ]}>
                 <View
                   style={{
                     display: 'flex',
                     flexDirection: 'row',
+                    justifyContent: 'space-between',
                     paddingHorizontal: 16,
-                    marginBottom: 24,
                   }}>
-                  <OptionPlate
-                    title="Комплектация"
-                    subtitle={get(carDetails, 'complectation.name')}
-                  />
-                  <OptionPlate
-                    title="Двигатель"
-                    subtitle={
-                      get(carDetails, 'engine.volume.short') +
-                      ' ' +
-                      get(carDetails, 'engine.type')
-                    }
-                  />
-                  <OptionPlate
-                    title="КПП"
-                    subtitle={`${
-                      get(carDetails, 'gearbox.count')
-                        ? get(carDetails, 'gearbox.count') + '-ст.'
-                        : ''
-                    } ${
-                      get(carDetails, 'gearbox.name')
-                        .replace(/^(Механическая)/i, 'МКПП')
-                        .replace(/^(Автоматическая)/i, 'АКПП')
-                        .split('/')[0]
-                    }`}
-                  />
-                  {get(carDetails, 'gearbox.wheel') ? (
-                    <OptionPlate
-                      title="Привод"
-                      subtitle={get(carDetails, 'gearbox.wheel').toLowerCase()}
-                    />
-                  ) : null}
-                  {get(carDetails, 'color.name.simple') ? (
-                    <OptionPlate
-                      title="Цвет"
-                      subtitle={get(
-                        carDetails,
-                        'color.name.simple',
-                      ).toLowerCase()}
-                    />
-                  ) : null}
-                </View>
-              </ScrollView>
-
-              <TouchableWithoutFeedback
-                onPress={this.onPressMap}
-                style={styles.mapCard}>
-                <View style={styles.mapCardContainer}>
-                  <Icon
-                    type="MaterialCommunityIcons"
-                    name="map-marker-outline"
-                    style={styles.mapCardIcon}
-                  />
-                  <View style={styles.mapCardTextContainer}>
-                    <Text style={styles.mapCardTitle}>
-                      Автомобиль расположен по адресу
+                  <View style={{marginBottom: 10, flexShrink: 1}}>
+                    <Text style={{fontSize: 16, fontWeight: '600'}}>
+                      {`${brandName} ${modelName}`}
                     </Text>
-                    <Text
-                      style={styles.mapCardDealer}
-                      numberOfLines={1}
-                      ellipsizeMode="tail">
-                      {`${get(carDetails, 'city.name')}, ${get(
-                        carDetails,
-                        'dealer.name',
-                      )}`}
+                    <Text style={{fontSize: 11, fontWeight: '600'}}>
+                      {get(complectation, 'name', '') +
+                        ' ' +
+                        get(carDetails, 'year')}
                     </Text>
                   </View>
+                  {this.renderPrice({carDetails, filterData, currency})}
                 </View>
-              </TouchableWithoutFeedback>
-            </View>
 
-            <View
-              style={{
-                borderBottomColor: '#d5d5e0',
-                borderBottomWidth: 1,
-                marginBottom: 90,
-              }}>
-              <Accordion
-                dataArray={[
-                  {
-                    title: 'Характеристики',
-                    content: (
-                      <View>
-                        {this.renderTechData('Основные', [
-                          {
-                            name: 'Цвет',
-                            value: 'color.name.official',
-                          },
-                          {
-                            name: 'Тип кузова',
-                            value: 'body.name',
-                          },
-                          {
-                            name: 'Год выпуска',
-                            value: 'year',
-                          },
-                        ])}
-                        {this.renderTechData('Двигатель', [
-                          {
-                            name: 'Тип',
-                            value: 'engine.type',
-                          },
-                          {
-                            name: 'Рабочий объём',
-                            value: 'engine.volume.full',
-                            postfix: 'см³',
-                          },
-                          {
-                            name: 'Мощность',
-                            value: 'power.hp',
-                            postfix: 'л.с.',
-                          },
-                        ])}
-                        {this.renderTechData('Трансмиссия', [
-                          {
-                            name: 'Тип',
-                            value: 'gearbox.name',
-                          },
-                          {
-                            name: 'Количество передач',
-                            value: 'gearbox.count',
-                          },
-                          {
-                            name: 'Привод',
-                            value: 'gearbox.wheel',
-                          },
-                        ])}
-                        {this.renderTechData('Кузов', [
-                          {
-                            name: 'Длина',
-                            value: 'body.width',
-                            postfix: 'мм.',
-                          },
-                          {
-                            name: 'Ширина',
-                            value: 'body.height',
-                            postfix: 'мм.',
-                          },
-                          {
-                            name: 'Высота',
-                            value: 'body.high',
-                            postfix: 'мм.',
-                          },
-                          {
-                            name: 'Клиренс',
-                            value: 'body.clirens',
-                            postfix: 'мм.',
-                          },
-                          {
-                            name: 'Объём багажника',
-                            value: 'body.trunk.min',
-                            postfix: 'л.',
-                          },
-                          {
-                            name: 'Объём топливного бака',
-                            value: 'fuel.fuel',
-                            postfix: 'л.',
-                          },
-                        ])}
-                        {this.renderTechData(
-                          'Эксплуатационные характеристики',
-                          [
-                            {
-                              name: 'Максимальная скорость',
-                              value: 'speed.max',
-                              postfix: 'км/ч.',
-                            },
-                            {
-                              name: 'Разгон с 0 до 100 км/ч',
-                              value: 'speed.dispersal',
-                              postfix: 'сек.',
-                            },
-                            {
-                              name: 'Расход топлива (городской цикл)',
-                              value: 'fuel.city',
-                              postfix: 'л.',
-                            },
-                            {
-                              name: 'Расход топлива (загородный цикл)',
-                              value: 'fuel.track',
-                              postfix: 'л.',
-                            },
-                            {
-                              name: 'Расход топлива (смешанный цикл)',
-                              value: 'fuel.both',
-                              postfix: 'л.',
-                            },
-                          ],
-                        )}
-                      </View>
-                    ),
-                  },
-                  {
-                    title: 'Комплектация',
-                    content: (
-                      <View style={styles.tabContent}>
-                        {stockKeys.length ? (
-                          <View>
-                            {stockKeys.map(key => {
-                              return this.renderComplectationItem(
-                                stock[key].name,
-                                stock[key].data,
-                              );
-                            })}
-                          </View>
-                        ) : null}
-
-                        {additionalKeys.length ? (
-                          <View>
-                            {additionalKeys.map(key => {
-                              return this.renderComplectationItem(
-                                additional[key].name,
-                                additional[key].data,
-                              );
-                            })}
-                          </View>
-                        ) : null}
-
-                        {carDetails.text ? (
-                          <View style={styles.descrContainer}>
-                            <Text style={styles.descr}>{carDetails.text}</Text>
-                          </View>
-                        ) : null}
-                      </View>
-                    ),
-                  },
-                ]}
-                expanded={0}
-                animation={true}
-                renderHeader={(item, expanded) => (
+                <ScrollView showsHorizontalScrollIndicator={false} horizontal>
                   <View
                     style={{
-                      height: 64,
-                      paddingHorizontal: 16,
                       display: 'flex',
                       flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      backgroundColor: '#fff',
-                      borderTopWidth: 1,
-                      borderColor: '#d5d5e0',
+                      paddingHorizontal: 16,
+                      marginBottom: 10,
                     }}>
-                    <Text style={{fontSize: 18}}>{item.title}</Text>
-                    {expanded ? (
-                      <Icon
-                        type="FontAwesome5"
-                        style={{color: '#0061ED', fontWeight: 'normal'}}
-                        name="angle-down"
+                    <OptionPlate
+                      title="Комплектация"
+                      subtitle={get(carDetails, 'complectation.name')}
+                    />
+                    <OptionPlate
+                      title="Двигатель"
+                      subtitle={
+                        get(carDetails, 'engine.volume.short') +
+                        ' ' +
+                        get(carDetails, 'engine.type')
+                      }
+                    />
+                    <OptionPlate
+                      title="КПП"
+                      subtitle={`${
+                        get(carDetails, 'gearbox.count')
+                          ? get(carDetails, 'gearbox.count') + '-ст.'
+                          : ''
+                      } ${
+                        get(carDetails, 'gearbox.name')
+                          .replace(/^(Механическая)/i, 'МКПП')
+                          .replace(/^(Автоматическая)/i, 'АКПП')
+                          .split('/')[0]
+                      }`}
+                    />
+                    {get(carDetails, 'gearbox.wheel') ? (
+                      <OptionPlate
+                        title="Привод"
+                        subtitle={get(carDetails, 'gearbox.wheel').toLowerCase()}
                       />
-                    ) : (
-                      <Icon
-                        type="FontAwesome5"
-                        style={{color: '#131314', fontWeight: 'normal'}}
-                        name="angle-right"
+                    ) : null}
+                    {get(carDetails, 'color.name.simple') ? (
+                      <OptionPlate
+                        title="Цвет"
+                        subtitle={get(
+                          carDetails,
+                          'color.name.simple',
+                        ).toLowerCase()}
                       />
-                    )}
+                    ) : null}
                   </View>
-                )}
-                renderContent={item => {
-                  return (
+                </ScrollView>
+
+                <TouchableWithoutFeedback
+                  onPress={this.onPressMap}
+                  style={styles.mapCard}>
+                  <View style={styles.mapCardContainer}>
+                    <Icon
+                      type="MaterialCommunityIcons"
+                      name="map-marker-outline"
+                      style={styles.mapCardIcon}
+                    />
+                    <View style={styles.mapCardTextContainer}>
+                      <Text style={styles.mapCardTitle}>
+                        Автомобиль расположен по адресу
+                      </Text>
+                      <Text
+                        style={styles.mapCardDealer}
+                        numberOfLines={1}
+                        ellipsizeMode="tail">
+                        {`${get(carDetails, 'city.name')}, ${get(
+                          carDetails,
+                          'dealer.name',
+                        )}`}
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
+
+              <View
+                style={{
+                  borderBottomColor: '#d5d5e0',
+                  borderBottomWidth: 0.75,
+                  marginTop: 10,
+                  marginBottom: 90,
+                }}>
+                <Accordion
+                  dataArray={[
+                    {
+                      title: 'Характеристики',
+                      content: (
+                        <View>
+                          {this.renderTechData('Основные', [
+                            {
+                              name: 'Цвет',
+                              value: 'color.name.official',
+                            },
+                            {
+                              name: 'Тип кузова',
+                              value: 'body.name',
+                            },
+                            {
+                              name: 'Год выпуска',
+                              value: 'year',
+                            },
+                          ])}
+                          {this.renderTechData('Двигатель', [
+                            {
+                              name: 'Тип',
+                              value: 'engine.type',
+                            },
+                            {
+                              name: 'Рабочий объём',
+                              value: 'engine.volume.full',
+                              postfix: 'см³',
+                            },
+                            {
+                              name: 'Мощность',
+                              value: 'power.hp',
+                              postfix: 'л.с.',
+                            },
+                          ])}
+                          {this.renderTechData('Трансмиссия', [
+                            {
+                              name: 'Тип',
+                              value: 'gearbox.name',
+                            },
+                            {
+                              name: 'Количество передач',
+                              value: 'gearbox.count',
+                            },
+                            {
+                              name: 'Привод',
+                              value: 'gearbox.wheel',
+                            },
+                          ])}
+                          {this.renderTechData('Кузов', [
+                            {
+                              name: 'Длина',
+                              value: 'body.width',
+                              postfix: 'мм.',
+                            },
+                            {
+                              name: 'Ширина',
+                              value: 'body.height',
+                              postfix: 'мм.',
+                            },
+                            {
+                              name: 'Высота',
+                              value: 'body.high',
+                              postfix: 'мм.',
+                            },
+                            {
+                              name: 'Клиренс',
+                              value: 'body.clirens',
+                              postfix: 'мм.',
+                            },
+                            {
+                              name: 'Объём багажника',
+                              value: 'body.trunk.min',
+                              postfix: 'л.',
+                            },
+                            {
+                              name: 'Объём топливного бака',
+                              value: 'fuel.fuel',
+                              postfix: 'л.',
+                            },
+                          ])}
+                          {this.renderTechData(
+                            'Эксплуатационные характеристики',
+                            [
+                              {
+                                name: 'Максимальная скорость',
+                                value: 'speed.max',
+                                postfix: 'км/ч.',
+                              },
+                              {
+                                name: 'Разгон с 0 до 100 км/ч',
+                                value: 'speed.dispersal',
+                                postfix: 'сек.',
+                              },
+                              {
+                                name: 'Расход топлива (городской цикл)',
+                                value: 'fuel.city',
+                                postfix: 'л.',
+                              },
+                              {
+                                name: 'Расход топлива (загородный цикл)',
+                                value: 'fuel.track',
+                                postfix: 'л.',
+                              },
+                              {
+                                name: 'Расход топлива (смешанный цикл)',
+                                value: 'fuel.both',
+                                postfix: 'л.',
+                              },
+                            ],
+                          )}
+                        </View>
+                      ),
+                    },
+                    {
+                      title: 'Комплектация',
+                      content: (
+                        <View style={styles.tabContent}>
+                          {stockKeys.length ? (
+                            <View>
+                              {stockKeys.map(key => {
+                                return this.renderComplectationItem(
+                                  stock[key].name,
+                                  stock[key].data,
+                                );
+                              })}
+                            </View>
+                          ) : null}
+
+                          {additionalKeys.length ? (
+                            <View>
+                              {additionalKeys.map(key => {
+                                return this.renderComplectationItem(
+                                  additional[key].name,
+                                  additional[key].data,
+                                );
+                              })}
+                            </View>
+                          ) : null}
+
+                          {carDetails.text ? (
+                            <View style={styles.descrContainer}>
+                              <Text style={styles.descr}>
+                                {carDetails.text}
+                              </Text>
+                            </View>
+                          ) : null}
+                        </View>
+                      ),
+                    },
+                  ]}
+                  expanded={0}
+                  animation={true}
+                  renderHeader={(item, expanded) => (
                     <View
                       style={{
-                        // height: 200,
-                        backgroundColor: '#fff',
+                        height: 64,
                         paddingHorizontal: 16,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        backgroundColor: '#fff',
+                        borderTopWidth: 1,
+                        borderColor: '#d5d5e0',
                       }}>
-                      {item.content}
+                      <Text style={{fontSize: 18}}>{item.title}</Text>
+                      {expanded ? (
+                        <Icon
+                          type="FontAwesome5"
+                          style={{color: '#0061ED', fontWeight: 'normal'}}
+                          name="angle-down"
+                        />
+                      ) : (
+                        <Icon
+                          type="FontAwesome5"
+                          style={{color: '#131314', fontWeight: 'normal'}}
+                          name="angle-right"
+                        />
+                      )}
                     </View>
-                  );
-                }}
-              />
+                  )}
+                  renderContent={item => {
+                    return (
+                      <View
+                        style={{
+                          // height: 200,
+                          backgroundColor: '#fff',
+                          paddingHorizontal: 16,
+                        }}>
+                        {item.content}
+                      </View>
+                    );
+                  }}
+                />
+              </View>
             </View>
-          </Content>
+          </ScrollView>
           <View style={stylesFooter.footer}>
             {this.renderPriceFooter({
               carDetails,
@@ -818,7 +827,7 @@ class NewCarItemScreen extends Component {
               <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
             </Button>
           </View>
-          {photoViewerItems.length ? (
+        {photoViewerItems.length ? (
             <PhotoViewer
               index={photoViewerIndex}
               visible={photoViewerVisible}
@@ -828,7 +837,7 @@ class NewCarItemScreen extends Component {
               onPressClose={this.onClosePhoto}
             />
           ) : null}
-        </SafeAreaView>
+        </View>
       </StyleProvider>
     );
   }
@@ -850,6 +859,7 @@ const stylesFooter = StyleSheet.create({
     bottom: 0,
     flex: 1,
     flexDirection: 'row',
+    zIndex: 10,
   },
   button: {
     width: '55%',
