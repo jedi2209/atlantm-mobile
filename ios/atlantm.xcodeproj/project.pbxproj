@@ -5,43 +5,44 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* atlantmTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* atlantmTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		26C45AB297CC4993AB89C173 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CF830D4CBC0149B18E088D02 /* Fontisto.ttf */; };
 		29C3478BACFC886E67B567C3 /* libPods-atlantm-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CC61DCD49D7F4C76265C5D75 /* libPods-atlantm-tvOS.a */; };
 		2AB0E3A10AC35B6C86CE0E2B /* libPods-atlantm-atlantmTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 584C4AB3ADE2984ECDBB55D6 /* libPods-atlantm-atlantmTests.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* atlantmTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* atlantmTests.m */; };
+		33C4112C7A08440E80BC7061 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F824D6701FD44E6A9E2A32C5 /* Octicons.ttf */; };
 		3A17D447244C8EC100CD96DB /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A17D446244C8EC100CD96DB /* NotificationService.m */; };
 		3A17D44B244C8EC100CD96DB /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 3A17D443244C8EC100CD96DB /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3A17D451244C905A00CD96DB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A17D450244C905A00CD96DB /* GoogleService-Info.plist */; };
-		67EC99C4DA3E45F0263DE6F2 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 075407CD99A5F9DA26B8405B /* libPods-OneSignalNotificationServiceExtension.a */; };
-		9D6A6620B6E938335390C132 /* libPods-atlantm-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB98F827ABD6B14D412FD394 /* libPods-atlantm-tvOSTests.a */; };
-		FFFF019A93ED357AC1370C64 /* libPods-atlantm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2004233CA186B03762A44D52 /* libPods-atlantm.a */; };
-		8DFBAC017F2F49169F3CEDDF /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D458798FF7104F7A9F775F16 /* AntDesign.ttf */; };
 		3C13B0505E3A4E36BCBA59AE /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE14975A0C394B5AAC0AF765 /* Entypo.ttf */; };
-		D8F53156A50C432CBD3ED3A2 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A31AE82CF96C433485098CCC /* EvilIcons.ttf */; };
-		C5D472E08F3C4123B25EA1FE /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0433C2970A004B4C936877C0 /* Feather.ttf */; };
-		C854EAEB81C945F8AD5928CF /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1BFCBBF24A4A4E7591A4E03F /* FontAwesome.ttf */; };
-		89BF21828C8E4F4E89D40C7A /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 943E4BD8C167483FA891EF67 /* FontAwesome5_Brands.ttf */; };
 		4184E20D323E43139F7271E7 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4D012DCA1664585A8863B74 /* FontAwesome5_Regular.ttf */; };
-		9897150F0465476AA50987F4 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B65DF7BAC794427B9B9F5A1 /* FontAwesome5_Solid.ttf */; };
-		26C45AB297CC4993AB89C173 /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CF830D4CBC0149B18E088D02 /* Fontisto.ttf */; };
-		FCB2E5D9E4D24E79842ECA43 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7BDE426B2CB942F095647CC4 /* Foundation.ttf */; };
-		985F1CAE3B75406C8B8B1DEB /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C30A30A9DBDC4A60A61A36B6 /* Ionicons.ttf */; };
-		F1DBF17CC4C24B0286D9BF3A /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 024D1AA6D44E428EBA676F09 /* MaterialCommunityIcons.ttf */; };
-		9242ABF68CB44C6698DF3186 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC8623CA74484C4A8FA647CF /* MaterialIcons.ttf */; };
-		33C4112C7A08440E80BC7061 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F824D6701FD44E6A9E2A32C5 /* Octicons.ttf */; };
-		8F01C73A978F4C7C9DB6C731 /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C103F75602D947D296A83785 /* Roboto_medium.ttf */; };
 		5945052820E14077A2B77613 /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37B76BECE5D8425EB9A3E62A /* Roboto.ttf */; };
+		67EC99C4DA3E45F0263DE6F2 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 075407CD99A5F9DA26B8405B /* libPods-OneSignalNotificationServiceExtension.a */; };
+		89BF21828C8E4F4E89D40C7A /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 943E4BD8C167483FA891EF67 /* FontAwesome5_Brands.ttf */; };
 		8B5F747CD8BD46DABFD2D1E8 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AA3E3B072A6442439EB11FAF /* rubicon-icon-font.ttf */; };
+		8DFBAC017F2F49169F3CEDDF /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D458798FF7104F7A9F775F16 /* AntDesign.ttf */; };
+		8F01C73A978F4C7C9DB6C731 /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C103F75602D947D296A83785 /* Roboto_medium.ttf */; };
+		9242ABF68CB44C6698DF3186 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC8623CA74484C4A8FA647CF /* MaterialIcons.ttf */; };
+		985F1CAE3B75406C8B8B1DEB /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C30A30A9DBDC4A60A61A36B6 /* Ionicons.ttf */; };
+		9897150F0465476AA50987F4 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3B65DF7BAC794427B9B9F5A1 /* FontAwesome5_Solid.ttf */; };
+		9D6A6620B6E938335390C132 /* libPods-atlantm-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB98F827ABD6B14D412FD394 /* libPods-atlantm-tvOSTests.a */; };
 		9F5A0F78E4C44C4DAFED1F4F /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A4B4D7B7D404F7FB80F9757 /* SimpleLineIcons.ttf */; };
+		C5D472E08F3C4123B25EA1FE /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0433C2970A004B4C936877C0 /* Feather.ttf */; };
 		C81CD2111488448A85317CBF /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8747D1AC8A9F42C589AE3ACD /* Zocial.ttf */; };
+		C854EAEB81C945F8AD5928CF /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1BFCBBF24A4A4E7591A4E03F /* FontAwesome.ttf */; };
+		D8F53156A50C432CBD3ED3A2 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A31AE82CF96C433485098CCC /* EvilIcons.ttf */; };
+		F1DBF17CC4C24B0286D9BF3A /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 024D1AA6D44E428EBA676F09 /* MaterialCommunityIcons.ttf */; };
+		FCB2E5D9E4D24E79842ECA43 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7BDE426B2CB942F095647CC4 /* Foundation.ttf */; };
+		FFFF019A93ED357AC1370C64 /* libPods-atlantm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2004233CA186B03762A44D52 /* libPods-atlantm.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,7 +88,10 @@
 		00E356EE1AD99517003FC87E /* atlantmTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = atlantmTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* atlantmTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = atlantmTests.m; sourceTree = "<group>"; };
+		024D1AA6D44E428EBA676F09 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = ../assets/fonts/MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
+		0433C2970A004B4C936877C0 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = ../assets/fonts/Feather.ttf; sourceTree = "<group>"; };
 		075407CD99A5F9DA26B8405B /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A4B4D7B7D404F7FB80F9757 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = ../assets/fonts/SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* atlantm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = atlantm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = atlantm/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = atlantm/AppDelegate.m; sourceTree = "<group>"; };
@@ -95,12 +99,14 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = atlantm/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = atlantm/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = atlantm/main.m; sourceTree = "<group>"; };
+		1BFCBBF24A4A4E7591A4E03F /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = ../assets/fonts/FontAwesome.ttf; sourceTree = "<group>"; };
 		1D32AED489114DBDA65B9B45 /* Pods-atlantm-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm-tvOS.release.xcconfig"; path = "Target Support Files/Pods-atlantm-tvOS/Pods-atlantm-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		2004233CA186B03762A44D52 /* libPods-atlantm.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atlantm.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E47B1E0B4A5D006451C7 /* atlantm-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "atlantm-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* atlantm-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "atlantm-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D812D12E841BFE39C4D9B68 /* Pods-atlantm-atlantmTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm-atlantmTests.debug.xcconfig"; path = "Target Support Files/Pods-atlantm-atlantmTests/Pods-atlantm-atlantmTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2DA0F119DC5779D20804C6E0 /* Pods-atlantm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm.debug.xcconfig"; path = "Target Support Files/Pods-atlantm/Pods-atlantm.debug.xcconfig"; sourceTree = "<group>"; };
+		37B76BECE5D8425EB9A3E62A /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = ../assets/fonts/Roboto.ttf; sourceTree = "<group>"; };
 		387D43449E116028EB52FFD4 /* Pods-atlantm-atlantmTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm-atlantmTests.release.xcconfig"; path = "Target Support Files/Pods-atlantm-atlantmTests/Pods-atlantm-atlantmTests.release.xcconfig"; sourceTree = "<group>"; };
 		3A17D42E244C8D8900CD96DB /* atlantm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = atlantm.entitlements; path = atlantm/atlantm.entitlements; sourceTree = "<group>"; };
 		3A17D443244C8EC100CD96DB /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,36 +115,31 @@
 		3A17D448244C8EC100CD96DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A17D44F244C8F6A00CD96DB /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		3A17D450244C905A00CD96DB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3B65DF7BAC794427B9B9F5A1 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = ../assets/fonts/FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
 		584C4AB3ADE2984ECDBB55D6 /* libPods-atlantm-atlantmTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atlantm-atlantmTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		687B3C12A854BE356D28CFA9 /* Pods-atlantm-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-atlantm-tvOSTests/Pods-atlantm-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		762C87638D46CCFB3A1FFDCA /* Pods-atlantm.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm.release.xcconfig"; path = "Target Support Files/Pods-atlantm/Pods-atlantm.release.xcconfig"; sourceTree = "<group>"; };
+		7BDE426B2CB942F095647CC4 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = ../assets/fonts/Foundation.ttf; sourceTree = "<group>"; };
+		8747D1AC8A9F42C589AE3ACD /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = ../assets/fonts/Zocial.ttf; sourceTree = "<group>"; };
+		943E4BD8C167483FA891EF67 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = ../assets/fonts/FontAwesome5_Brands.ttf; sourceTree = "<group>"; };
 		98CBE34EBED0CA21FEB5AAD0 /* Pods-atlantm-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-atlantm-tvOS/Pods-atlantm-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		A31AE82CF96C433485098CCC /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = ../assets/fonts/EvilIcons.ttf; sourceTree = "<group>"; };
+		AA3E3B072A6442439EB11FAF /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../assets/fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
+		B4D012DCA1664585A8863B74 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = ../assets/fonts/FontAwesome5_Regular.ttf; sourceTree = "<group>"; };
 		BF12107244796FD0C82844C7 /* Pods-atlantm-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-atlantm-tvOSTests/Pods-atlantm-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		C103F75602D947D296A83785 /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = ../assets/fonts/Roboto_medium.ttf; sourceTree = "<group>"; };
+		C30A30A9DBDC4A60A61A36B6 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = ../assets/fonts/Ionicons.ttf; sourceTree = "<group>"; };
 		CC61DCD49D7F4C76265C5D75 /* libPods-atlantm-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atlantm-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC8623CA74484C4A8FA647CF /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = ../assets/fonts/MaterialIcons.ttf; sourceTree = "<group>"; };
+		CF830D4CBC0149B18E088D02 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = ../assets/fonts/Fontisto.ttf; sourceTree = "<group>"; };
+		D458798FF7104F7A9F775F16 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = ../assets/fonts/AntDesign.ttf; sourceTree = "<group>"; };
+		DE14975A0C394B5AAC0AF765 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = ../assets/fonts/Entypo.ttf; sourceTree = "<group>"; };
 		E4B725EB86E8AC564C6C1783 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		EB98F827ABD6B14D412FD394 /* libPods-atlantm-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atlantm-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F0D61D798F26D53F9DF964E7 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
-		D458798FF7104F7A9F775F16 /* AntDesign.ttf */ = {isa = PBXFileReference; name = "AntDesign.ttf"; path = "../assets/fonts/AntDesign.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		DE14975A0C394B5AAC0AF765 /* Entypo.ttf */ = {isa = PBXFileReference; name = "Entypo.ttf"; path = "../assets/fonts/Entypo.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		A31AE82CF96C433485098CCC /* EvilIcons.ttf */ = {isa = PBXFileReference; name = "EvilIcons.ttf"; path = "../assets/fonts/EvilIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		0433C2970A004B4C936877C0 /* Feather.ttf */ = {isa = PBXFileReference; name = "Feather.ttf"; path = "../assets/fonts/Feather.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		1BFCBBF24A4A4E7591A4E03F /* FontAwesome.ttf */ = {isa = PBXFileReference; name = "FontAwesome.ttf"; path = "../assets/fonts/FontAwesome.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		943E4BD8C167483FA891EF67 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; name = "FontAwesome5_Brands.ttf"; path = "../assets/fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		B4D012DCA1664585A8863B74 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; name = "FontAwesome5_Regular.ttf"; path = "../assets/fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		3B65DF7BAC794427B9B9F5A1 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; name = "FontAwesome5_Solid.ttf"; path = "../assets/fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		CF830D4CBC0149B18E088D02 /* Fontisto.ttf */ = {isa = PBXFileReference; name = "Fontisto.ttf"; path = "../assets/fonts/Fontisto.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		7BDE426B2CB942F095647CC4 /* Foundation.ttf */ = {isa = PBXFileReference; name = "Foundation.ttf"; path = "../assets/fonts/Foundation.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		C30A30A9DBDC4A60A61A36B6 /* Ionicons.ttf */ = {isa = PBXFileReference; name = "Ionicons.ttf"; path = "../assets/fonts/Ionicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		024D1AA6D44E428EBA676F09 /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; name = "MaterialCommunityIcons.ttf"; path = "../assets/fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		CC8623CA74484C4A8FA647CF /* MaterialIcons.ttf */ = {isa = PBXFileReference; name = "MaterialIcons.ttf"; path = "../assets/fonts/MaterialIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		F824D6701FD44E6A9E2A32C5 /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../assets/fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		C103F75602D947D296A83785 /* Roboto_medium.ttf */ = {isa = PBXFileReference; name = "Roboto_medium.ttf"; path = "../assets/fonts/Roboto_medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		37B76BECE5D8425EB9A3E62A /* Roboto.ttf */ = {isa = PBXFileReference; name = "Roboto.ttf"; path = "../assets/fonts/Roboto.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		AA3E3B072A6442439EB11FAF /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; name = "rubicon-icon-font.ttf"; path = "../assets/fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		0A4B4D7B7D404F7FB80F9757 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../assets/fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		8747D1AC8A9F42C589AE3ACD /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../assets/fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F824D6701FD44E6A9E2A32C5 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = ../assets/fonts/Octicons.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -297,7 +298,7 @@
 			sourceTree = "<group>";
 		};
 		95C5C4042AFD4411AB65B908 /* Resources */ = {
-			isa = "PBXGroup";
+			isa = PBXGroup;
 			children = (
 				D458798FF7104F7A9F775F16 /* AntDesign.ttf */,
 				DE14975A0C394B5AAC0AF765 /* Entypo.ttf */,
@@ -321,7 +322,6 @@
 			);
 			name = Resources;
 			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
@@ -437,18 +437,23 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = YNA37LTZ5W;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = YNA37LTZ5W;
 						LastSwiftMigration = 1120;
+						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = YNA37LTZ5W;
 						ProvisioningStyle = Automatic;
 					};
 					2D02E48F1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = YNA37LTZ5W;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 2D02E47A1E0B4A5D006451C7;
 					};
@@ -858,6 +863,8 @@
 			baseConfigurationReference = 2D812D12E841BFE39C4D9B68 /* Pods-atlantm-atlantmTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = YNA37LTZ5W;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -881,7 +888,9 @@
 			baseConfigurationReference = 387D43449E116028EB52FFD4 /* Pods-atlantm-atlantmTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = YNA37LTZ5W;
 				INFOPLIST_FILE = atlantmTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -903,7 +912,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = atlantm/atlantm.entitlements;
-				CURRENT_PROJECT_VERSION = 43;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 44;
 				DEVELOPMENT_TEAM = YNA37LTZ5W;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -933,7 +943,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = atlantm/atlantm.entitlements;
-				CURRENT_PROJECT_VERSION = 43;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 44;
 				DEVELOPMENT_TEAM = YNA37LTZ5W;
 				INFOPLIST_FILE = atlantm/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -960,7 +971,9 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = YNA37LTZ5W;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "atlantm-tvOS/Info.plist";
@@ -988,8 +1001,10 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = YNA37LTZ5W;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "atlantm-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1015,7 +1030,9 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_STYLE = Automatic;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = YNA37LTZ5W;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "atlantm-tvOSTests/Info.plist";
@@ -1042,8 +1059,10 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = YNA37LTZ5W;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "atlantm-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1078,6 +1097,7 @@
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 6.0.3;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.atlantm.app.OneSignalNotificationServiceExtension;
@@ -1106,6 +1126,7 @@
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 6.0.3;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.atlantm.app.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
