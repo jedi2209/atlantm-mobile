@@ -9,7 +9,9 @@ const isAndroid = Platform.OS === 'android';
 export default StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: styleConst.color.bg,
+    position: 'relative',
+    // backgroundColor: styleConst.color.bg,
+    // backgroundColor: 'transparent',
   },
   gallery: {
     // position: 'relative',
@@ -163,12 +165,12 @@ export default StyleSheet.create({
   },
   mapCard: {},
   mapCardContainer: {
-    marginBottom: 14,
-    marginHorizontal: '2%',
+    marginBottom: 5,
+    marginHorizontal: '4%',
     flexDirection: 'row',
     backgroundColor: '#fff',
-    paddingHorizontal: 6,
-    paddingVertical: 16,
+    paddingHorizontal: 4,
+    paddingVertical: 10,
     borderWidth: 1,
     borderRadius: 10,
     borderColor: styleConst.color.border,
