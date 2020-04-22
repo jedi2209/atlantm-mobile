@@ -35,10 +35,6 @@ import DeviceInfo from 'react-native-device-info';
 // routes
 import {getRouter} from '../router';
 
-if (__DEV__) {
-  NativeModules.DevSettings.setIsDebuggingRemotely(true);
-}
-
 const mapStateToProps = ({core, dealer, profile, modal}) => {
   return {
     //     pushActionSubscribeState: core.pushActionSubscribeState,
@@ -158,7 +154,6 @@ class App extends PureComponent {
   render() {
     const mainScreen = 'BottomTabNavigation';
     const isDealerSelected = get(store.getState(), 'dealer.selected.id');
-
     const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
     const AppContainer = createAppContainer(Router);
 
