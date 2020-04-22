@@ -19,7 +19,7 @@ import PropTypes from 'prop-types';
 import styleConst from '@core/style-const';
 
 const {width} = Dimensions.get('window');
-const height = 300;
+
 const styles = StyleSheet.create({
   photoSlider: {
     width,
@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
   },
   item: {
     flex: 1,
-    height,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 0,
@@ -36,7 +35,6 @@ const styles = StyleSheet.create({
   image: {
     alignSelf: 'center',
     width,
-    height,
     padding: 0,
   },
   spinner: {
@@ -55,7 +53,7 @@ const Slide = props => {
       <TouchableWithoutFeedback onPress={props.onPress}>
         <Image
           resizeMode={props.resizeMode}
-          style={styles.image}
+          style={[styles.image, {height: props.height}]}
           onLoad={props.loadHandle.bind(null, props.i)}
           source={{
             uri: props.url,
@@ -79,10 +77,12 @@ export default class PhotoSlider extends Component {
   constructor(props) {
     super(props);
 
+    const height = props.height ? props.height : 300;
+
     this.state = {
       loadQueue: new Array(this.props.photos.length).fill(0),
       isLoaded: false,
-      height,
+      height: height,
     };
   }
 
@@ -92,6 +92,7 @@ export default class PhotoSlider extends Component {
     paginationStyle: PropTypes.object,
     onPressItem: PropTypes.func,
     onIndexChanged: PropTypes.func,
+    height: PropTypes.number,
   };
 
   static defaultProps = {
@@ -103,7 +104,7 @@ export default class PhotoSlider extends Component {
     loadQueue[i] = 1;
     this.setState({
       loadQueue,
-      height: height + 1,
+      // height: height + 1,
     });
   };
 
@@ -116,7 +117,7 @@ export default class PhotoSlider extends Component {
       setTimeout(() => {
         this.setState({
           isLoaded: true,
-          height: height + 1,
+          // height: height + 1,
         });
       }, 0);
     }

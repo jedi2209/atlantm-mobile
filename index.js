@@ -17,6 +17,6 @@ Sentry.init({
   dsn: 'https://XXXX@sentry.io/219899',
 });
 
-const AtlantmApplication = () => <Wrapper />;
+// const AtlantmApplication = () => <Wrapper />;
 
-AppRegistry.registerComponent('atlantm', () => AtlantmApplication);
+AppRegistry.registerComponent('atlantm', () => Wrapper);

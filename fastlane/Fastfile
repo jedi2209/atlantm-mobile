@@ -8,6 +8,13 @@ before_all do
   #   branch: 'master'
   # )
   # git_pull
+  get_version_number(
+    xcodeproj: ENV['XCODE_PROJ'],
+    target: ENV['XCODE_TARGET']
+  )
+  get_build_number(
+    xcodeproj: ENV['XCODE_PROJ']
+  )
 end
 
 platform :ios do
@@ -27,10 +34,10 @@ platform :ios do
     get_certificates           # invokes cert
     get_provisioning_profile   # invokes sigh
     increment_build_number(
-        xcodeproj: "ios/atlantm.xcodeproj"
+        xcodeproj: "./ios/atlantm.xcodeproj"
     )
     build_app(
-      workspace: "ios/atlantm.xcworkspace",
+      workspace: "./ios/atlantm.xcworkspace",
       scheme: "atlantm",
       export_method: "app-store",
       export_options: {
@@ -40,8 +47,8 @@ platform :ios do
         }
       }
     )
-    automatic_code_signing(
-      path: "ios/atlantm.xcodeproj",
+    update_code_signing_settings(
+      path: "./ios/atlantm.xcodeproj",
       use_automatic_signing: true
     )
     # Generate the changelog based on commit messages since your last tag
@@ -55,6 +62,12 @@ platform :ios do
     upload_to_testflight(
         skip_waiting_for_build_processing: true,
         skip_submission: true
+    )
+    notification(
+      subtitle: "Upload is finish!",
+      message: "iOS beta AppStore version #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]})",
+      app_icon: "https://www.zavarka-team.ru/logo.png",
+      content_image: "./ios/atlantm/Images.xcassets/AppIcon.appiconset/AppStore Icon.png"
     )
     commit_version_bump(
         message: "Version Bump iOS",    # create a commit with a custom message
@@ -78,13 +91,13 @@ platform :android do
     #     merge_commit_filtering: "exclude_merges", # Optional, lets you filter out merge commits
     #     tag_match_pattern: "builds/android"
     # )
-    gradle(
-        project_dir: "./android/",
-        task: "clean assemble",
-        build_type: "Release",
-        flags: "-PbuildType=debug",
-        print_command_output: true
-    )
+    # gradle(
+    #     project_dir: "./android/",
+    #     task: "clean assemble",
+    #     build_type: "Release",
+    #     flags: "-PbuildType=debug",
+    #     print_command_output: true
+    # )
   end
 
   desc "Submit a new Internal Build to Google Play"
@@ -103,29 +116,32 @@ platform :android do
         flags: "-PbuildType=release",
         print_command_output: true
     )
+    properties = property_file_read(file: ENV['ANDROID_PROPERTY'])
     puts "AABs: #{Actions.lane_context[SharedValues::GRADLE_ALL_AAB_OUTPUT_PATHS]}"
     puts "AAB: #{Actions.lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]}"
     upload_to_play_store(
         track: 'internal'
     )
+    notification(
+      subtitle: "Upload is finish!",
+      message: "Google Play beta version #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]}) is ready!",
+      app_icon: "https://www.zavarka-team.ru/logo.png",
+      content_image: "./ios/atlantm/Images.xcassets/AppIcon.appiconset/AppStore Icon.png"
+    )
     git_commit(
-        path: ['./android/app/versioning/app_version.properties'],
-        message: 'Version Bump Android'
+      path: ['./android/app/versioning/app_version.properties'],
+      message: 'Version Bump Android'
     )
     add_git_tag(
-        grouping: "builds",
-        prefix: "v"
+      build_number: "#{lane_context[SharedValues::VERSION_NUMBER]}." + properties["versionCode"],
+      grouping: "builds",
+      prefix: "v"
     )
     push_to_git_remote
   end
 
   desc "Make a new release build"
   lane :release do
-#     increment_version_code(
-#         gradle_file_path: "./android/build.gradle",
-#         #ext_constant_name: "test"
-#         #app_folder_name:"app"
-#     )
     gradle(
         project_dir: "./android/",
         task: "clean assemble",
@@ -136,4 +152,25 @@ platform :android do
     puts "AABs: #{Actions.lane_context[SharedValues::GRADLE_ALL_AAB_OUTPUT_PATHS]}"
     puts "AAB: #{Actions.lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]}"
   end
+end
+
+error do |lane, exception|
+  notification(
+    title: "Houston, we have a problem...",
+    subtitle: "Google Play beta version #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]}) was NOT successfully upload. =(",
+    message: exception.to_s,
+    app_icon: "https://www.zavarka-team.ru/logo.png",
+    content_image: "./ios/atlantm/Images.xcassets/AppIcon.appiconset/AppStore Icon.png"
+  )
+  slack(
+    message: "Houston, we have a problem...",
+    channel: "#_notify-bot",  # Optional, by default will post to the default channel configured for the POST URL.
+    success: false,        # Optional, defaults to true.
+    slack_url: ENV['SLACK_URL'],
+    payload: {  # Optional, lets you specify any number of your own Slack attachments.
+      "Build Date" => Time.new.to_s,
+      "Output" => exception.error_info.to_s,
+      "icon_emoji" => "ghost"
+    },
+  )
 end
