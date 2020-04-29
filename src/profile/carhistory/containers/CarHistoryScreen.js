@@ -19,6 +19,7 @@ import {
   Item,
   Label,
 } from 'native-base';
+import Amplitude from '../../../utils/amplitude-analytics';
 
 // redux
 import {connect} from 'react-redux';
@@ -329,6 +330,7 @@ class CarHistoryScreen extends Component {
     }
 
     if (isEmpty(carHistory) || !carHistory.items) {
+      Amplitude.logEvent('screen', 'lkk/carhistory');
       return (
         <SafeAreaView style={styles.safearea}>
           <StatusBar barStyle="dark-content" />

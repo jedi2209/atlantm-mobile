@@ -19,6 +19,7 @@ import stylesList from '@core/components/Lists/style';
 // helpers
 import {get, isEmpty} from 'lodash';
 import {dayMonthYear} from '@utils/date';
+import Amplitude from '@utils/amplitude-analytics';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '@core/style-const';
 import {MONTH_TEXT} from '@profile/const';
@@ -306,13 +307,11 @@ class BonusScreen extends Component {
   };
 
   render() {
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
-
     console.log('== Bonus Screen ==');
 
     const {bonus} = this.props;
-    console.log('bonus >>>>>>>>>>', bonus);
+
+    Amplitude.logEvent('screen', 'lkk/bonus');
 
     if (isEmpty(bonus) || !bonus.items) {
       return (
