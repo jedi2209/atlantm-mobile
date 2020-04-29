@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 // components
 import { ListItem, Body, Item, Label, Input, Right, Switch, Icon } from 'native-base';
-import ListItemHeader from '../components/ListItemHeader';
+import ListItemHeader from './ListItemHeader';
 import PushNotifications from '../../core/components/PushNotifications';
 
 // styles

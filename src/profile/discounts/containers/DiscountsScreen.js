@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
+import Amplitude from '@utils/amplitude-analytics';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -126,10 +127,8 @@ class DiscountsScreen extends Component {
   };
 
   render() {
-    // Для iPad меню, которое находится вне роутера
-    // window.atlantmNavigation = this.props.navigation;
-
     console.log('== DiscountsScreen ==');
+    Amplitude.logEvent('screen', 'lkk/discounts');
 
     const {discounts} = this.props;
 

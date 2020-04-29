@@ -193,7 +193,7 @@ class NewCarFilterScreen extends Component {
 
     actionFetchNewCarFilterData({city: dealerSelected.city.id});
 
-    Amplitude.logEvent('screen', 'catalog/newcar');
+    Amplitude.logEvent('screen', 'catalog/newcar/filter');
   }
 
   componentDidUpdate(prevProps) {

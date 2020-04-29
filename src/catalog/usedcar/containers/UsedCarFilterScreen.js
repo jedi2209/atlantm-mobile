@@ -110,7 +110,7 @@ class UsedCarFilterScreen extends Component {
   componentDidMount() {
     // const {actionFetchUsedCarFilterData, dealerSelected} = this.props;
     // actionFetchUsedCarFilterData({city: dealerSelected.city.id});
-    // Amplitude.logEvent('screen', 'catalog/newcar');
+    Amplitude.logEvent('screen', 'catalog/usedcar/filter');
   }
 
   componentDidUpdate(prevProps, prevState) {
