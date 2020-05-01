@@ -334,7 +334,8 @@ class CarListItem extends Component {
               zIndex: 2,
             }}>
             <View>
-              {engineVolume ? (
+              {engineVolume &&
+              (get(car, 'engine.id') && get(car, 'engine.id') !== 4) ? (
                 <View style={styles.extraTextContainer}>
                   <Text
                     style={
@@ -367,7 +368,7 @@ class CarListItem extends Component {
                   <Text
                     style={
                       CarImgReal ? styles.commonReal : styles.common
-                    }>{`${gearbox} `}</Text>
+                    }>{`${gearbox.toLowerCase()} `}</Text>
                 </View>
               ) : null}
             </View>

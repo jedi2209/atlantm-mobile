@@ -541,14 +541,17 @@ class NewCarItemScreen extends Component {
                       title="Комплектация"
                       subtitle={get(carDetails, 'complectation.name')}
                     />
-                    <OptionPlate
-                      title="Двигатель"
-                      subtitle={
-                        get(carDetails, 'engine.volume.short') +
-                        ' ' +
-                        get(carDetails, 'engine.type')
-                      }
-                    />
+                    {get(carDetails, 'engine.id') &&
+                    get(carDetails, 'engine.id') !== 4 ? (
+                      <OptionPlate
+                        title="Двигатель"
+                        subtitle={
+                          get(carDetails, 'engine.volume.short') +
+                          ' ' +
+                          get(carDetails, 'engine.type')
+                        }
+                      />
+                    ) : null}
                     <OptionPlate
                       title="КПП"
                       subtitle={`${
@@ -639,11 +642,19 @@ class NewCarItemScreen extends Component {
                               name: 'Тип',
                               value: 'engine.type',
                             },
-                            {
-                              name: 'Рабочий объём',
-                              value: 'engine.volume.full',
-                              postfix: 'см³',
-                            },
+                            (() => {
+                              if (
+                                get(carDetails, 'engine.id') &&
+                                get(carDetails, 'engine.id') === 4
+                              ) {
+                                return false;
+                              }
+                              return {
+                                name: 'Рабочий объём',
+                                value: 'engine.volume.full',
+                                postfix: 'см³',
+                              };
+                            })(),
                             {
                               name: 'Мощность',
                               value: 'power.hp',
