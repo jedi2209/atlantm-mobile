@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
+import React, {Component} from 'react';
+import {View, Text, Image} from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
 import ListItemHeader from './ListItemHeader';
-import { ListItem, Body, Left, Right, Icon } from 'native-base';
+import {ListItem, Body, Left, Right, Icon} from 'native-base';
 
 // styles
 import stylesList from '../../core/components/Lists/style';
@@ -22,23 +22,23 @@ export default class BonusDiscount extends Component {
     bonus: PropTypes.number,
     discounts: PropTypes.number,
     navigation: PropTypes.object,
-  }
+  };
 
   static defaultProps = {
     bonus: 0,
     discounts: 0,
-  }
+  };
 
   onPressBonus = () => {
     Amplitude.logEvent('screen', 'lkk/bonus');
 
     this.props.navigation.navigate('BonusScreen');
-  }
+  };
   onPressDiscounts = () => {
     Amplitude.logEvent('screen', 'lkk/discounts');
 
     this.props.navigation.navigate('DiscountsScreen');
-  }
+  };
 
   renderItem = (label, iconName, onPressHandler, badge, isLast) => {
     return (
@@ -47,31 +47,39 @@ export default class BonusDiscount extends Component {
           icon
           last={isLast}
           style={stylesList.listItem}
-          onPress={onPressHandler}
-        >
+          onPress={onPressHandler}>
           <Left>
-            <Image style={stylesList.iconLeft} source={icons[iconName]} />
-          </Left>
+            <Image style={stylesList.iconLeft} source={icons[iconName]} />{' '}
+          </Left>{' '}
           <Body>
-            <Text style={stylesList.label}>{label}</Text>
-          </Body>
+            <Text style={stylesList.label}> {label} </Text>{' '}
+          </Body>{' '}
           <Right>
-            <Text style={stylesList.badgeText}>{badge}</Text>
-            <Icon name="arrow-forward" style={[stylesList.iconArrow, stylesList.iconArrowWithText]} />
-          </Right>
-        </ListItem>
+            <Text style={stylesList.badgeText}> {badge} </Text>{' '}
+            <Icon
+              name="arrow-forward"
+              style={[stylesList.iconArrow, stylesList.iconArrowWithText]}
+            />{' '}
+          </Right>{' '}
+        </ListItem>{' '}
       </View>
     );
-  }
+  };
 
   render() {
-    const { bonus, discounts } = this.props;
+    const {bonus, discounts} = this.props;
 
     return (
       <View>
-         <ListItemHeader text="БОНУСЫ И СКИДКИ" />
-         {this.renderItem('Бонусные баллы', 'bonus', this.onPressBonus, bonus)}
-         {this.renderItem('Персональные скидки', 'discount', this.onPressDiscounts, discounts, true)}
+        <ListItemHeader text="БОНУСЫ И СКИДКИ" />{' '}
+        {this.renderItem('Бонусные баллы', 'bonus', this.onPressBonus, bonus)}{' '}
+        {this.renderItem(
+          'Персональные скидки',
+          'discount',
+          this.onPressDiscounts,
+          discounts,
+          true,
+        )}{' '}
       </View>
     );
   }
