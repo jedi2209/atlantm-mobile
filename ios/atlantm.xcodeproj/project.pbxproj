@@ -118,6 +118,7 @@
 		3A17D448244C8EC100CD96DB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3A17D44F244C8F6A00CD96DB /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
 		3A17D450244C905A00CD96DB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3A62EFA7246C07AC00561275 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		3B65DF7BAC794427B9B9F5A1 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = ../assets/fonts/FontAwesome5_Solid.ttf; sourceTree = "<group>"; };
 		584C4AB3ADE2984ECDBB55D6 /* libPods-atlantm-atlantmTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atlantm-atlantmTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		687B3C12A854BE356D28CFA9 /* Pods-atlantm-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-atlantm-tvOSTests/Pods-atlantm-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -476,6 +477,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
@@ -856,6 +858,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				13B07FB21A68108700A75B9A /* Base */,
+				3A62EFA7246C07AC00561275 /* ru */,
 			);
 			name = LaunchScreen.xib;
 			path = atlantm;
