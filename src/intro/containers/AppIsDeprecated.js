@@ -81,7 +81,7 @@ export default class AppIsDeprecated extends Component {
                       shadowRadius: 2.62,
                   }}
                   onPress={() => {
-                      Linking.openURL('itms://apps.apple.com/app/apple-store/idXXXX');
+                      Linking.openURL('itms-apps://apps.apple.com/app/apple-store/idXXXX');
                     }}>
                          <Icon name='ios-appstore' />
                         <Text>Скачать новое приложение</Text>
