@@ -7,39 +7,12 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - Google-Maps-iOS-Utils (2.1.0):
-    - Google-Maps-iOS-Utils/Clustering (= 2.1.0)
-    - Google-Maps-iOS-Utils/Geometry (= 2.1.0)
-    - Google-Maps-iOS-Utils/Heatmap (= 2.1.0)
-    - Google-Maps-iOS-Utils/QuadTree (= 2.1.0)
-    - GoogleMaps
-  - Google-Maps-iOS-Utils/Clustering (2.1.0):
-    - Google-Maps-iOS-Utils/QuadTree
-    - GoogleMaps
-  - Google-Maps-iOS-Utils/Geometry (2.1.0):
-    - GoogleMaps
-  - Google-Maps-iOS-Utils/Heatmap (2.1.0):
-    - Google-Maps-iOS-Utils/QuadTree
-    - GoogleMaps
-  - Google-Maps-iOS-Utils/QuadTree (2.1.0):
-    - GoogleMaps
-  - GoogleMaps (3.1.0):
-    - GoogleMaps/Maps (= 3.1.0)
-  - GoogleMaps/Base (3.1.0)
-  - GoogleMaps/Maps (3.1.0):
-    - GoogleMaps/Base
   - OneSignal (2.9.4)
   - QBImagePickerController (3.4.0)
   - React (0.59.9):
     - React/Core (= 0.59.9)
   - react-native-amplitude-analytics (0.2.3):
     - Amplitude-iOS (~> 4.3.1)
-    - React
-  - react-native-google-maps (0.24.0):
-    - Google-Maps-iOS-Utils (= 2.1.0)
-    - GoogleMaps (= 3.1.0)
-    - React
-  - react-native-maps (0.24.0):
     - React
   - react-native-onesignal (3.2.12):
     - OneSignal (= 2.9.4)
@@ -109,7 +82,7 @@ PODS:
     - QBImagePickerController
     - React/Core
     - RSKImageCropper
-  - RSKImageCropper (2.2.1)
+  - RSKImageCropper (2.2.3)
   - Sentry (4.0.1):
     - Sentry/Core (= 4.0.1)
   - Sentry/Core (4.0.1)
@@ -123,12 +96,8 @@ DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - Google-Maps-iOS-Utils
-  - GoogleMaps
   - OneSignal (< 3.0, >= 2.9.3)
   - react-native-amplitude-analytics (from `../node_modules/react-native-amplitude-analytics`)
-  - react-native-google-maps (from `../node_modules/react-native-maps`)
-  - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-onesignal (from `../node_modules/react-native-onesignal/react-native-onesignal.podspec`)
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
@@ -152,11 +121,9 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - Amplitude-iOS
     - boost-for-react-native
-    - Google-Maps-iOS-Utils
-    - GoogleMaps
     - OneSignal
     - QBImagePickerController
     - RSKImageCropper
@@ -173,10 +140,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   react-native-amplitude-analytics:
     :path: "../node_modules/react-native-amplitude-analytics"
-  react-native-google-maps:
-    :path: "../node_modules/react-native-maps"
-  react-native-maps:
-    :path: "../node_modules/react-native-maps"
   react-native-onesignal:
     :path: "../node_modules/react-native-onesignal/react-native-onesignal.podspec"
   rn-fetch-blob:
@@ -200,25 +163,21 @@ SPEC CHECKSUMS:
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
-  Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
-  GoogleMaps: 5c13302e6fe6bb6e686b267196586b91cd594225
   OneSignal: a41f5a896177275662da07e23d6a809c0e105a89
   QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   React: a86b92f00edbe1873a63e4a212c29b7a7ad5224f
   react-native-amplitude-analytics: 0fa941f79b246dd10fc6e91b985db1c595a7397f
-  react-native-google-maps: 3e89f89243a11dfb25bb33a2fc39f13b9c0db538
-  react-native-maps: d87d8ed456d4132112fb1d2ee9baf3470c0f211d
   react-native-onesignal: a189670032c4cd1b02985c2d23c41ce63d5a2dbd
   rn-fetch-blob: 766f85cabd2992300dfa1be2bc9e4e258abc6f04
   RNCAsyncStorage: 285698b8a4f219573174d99e863a78b93f389272
   RNDeviceInfo: e7c5fcde13d40e161d8a27f6c5dc69c638936002
   RNGestureHandler: 5329a942fce3d41c68b84c2c2276ce06a696d8b0
   RNImageCropPicker: 287fc8b372e49855fd00470393005fca674628f3
-  RSKImageCropper: 98296ad26b41753f796b6898d015509598f13d97
+  RSKImageCropper: a446db0e8444a036b34f3c43db01b2373baa4b2a
   Sentry: a38f7879924c02239e121b19d993d23bdd1684db
   SentryReactNative: be50d4b41737c4d91340e8dd184eda28dffd1fe1
   yoga: 03ff42a6f223fb88deeaed60249020d80c3091ee
 
-PODFILE CHECKSUM: 9a081a91849b3cf081803a5a8d42ef813a69c538
+PODFILE CHECKSUM: b8b0a91368f4898488343257e9927c945a4d4c7d
 
-COCOAPODS: 1.7.1
+COCOAPODS: 1.9.1

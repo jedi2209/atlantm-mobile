@@ -2,6 +2,7 @@ import { StackNavigator } from 'react-navigation';
 
 // global
 import IntroScreen from '../intro/containers/IntroScreen';
+import AppIsDeprecated from '../intro/containers/AppIsDeprecated.js';
 import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
 import MenuScreen from '../menu/containers/MenuScreen';
 import ServiceScreen from '../service/containers/ServiceScreen';
@@ -89,6 +90,7 @@ const getRouter = initialRouteName => {
   return StackNavigator(
     {
       IntroScreen: { screen: IntroScreen },
+      AppIsDeprecated: { screen: AppIsDeprecated },
       MenuScreen: { screen: MenuScreen },
       ChooseDealerScreen: { screen: ChooseDealerScreen },
       ContactsScreen: {

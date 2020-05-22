@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import {
-  View,
-  Text,
   Alert,
   Linking,
   Platform,
@@ -10,7 +8,7 @@ import {
 } from 'react-native';
 
 // Maps
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+// import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 // Redux
 import { connect } from 'react-redux';
@@ -27,10 +25,10 @@ import {
 } from '@contacts/actionTypes';
 
 // components
-import { Icon } from 'native-base';
-import ActionSheet from 'react-native-actionsheet';
-import FooterButton from '@core/components/FooterButton';
-import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
+// import { Icon } from 'native-base';
+// import ActionSheet from 'react-native-actionsheet';
+// import FooterButton from '@core/components/FooterButton';
+// import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
 
 // Helpers
 import { get } from 'lodash';
@@ -305,7 +303,7 @@ class MapScreen extends Component {
     return (
       <View style={styles.safearea}>
         <View style={styles.mapContainer}>
-          <MapView
+          {/* <MapView
             ref={this.handleRef}
             provider={PROVIDER_GOOGLE}
             style={styles.map}
@@ -331,7 +329,7 @@ class MapScreen extends Component {
               title={dealerSelected.name}
               description={description}
             />
-          </MapView>
+          </MapView> */}
           <FooterButton
             icon={<Icon name="navigation" style={styles.iconRoute} type="MaterialCommunityIcons" />}
             text="Проложить маршрут"

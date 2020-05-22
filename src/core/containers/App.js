@@ -150,9 +150,7 @@ class App extends Component {
 
   render() {
     const isTablet = DeviceInfo.isTablet();
-    const mainScreen = isTablet ? 'ContactsScreen' : 'MenuScreen';
-    const isDealerSelected = get(store.getState(), 'dealer.selected.id');
-    const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
+    const Router = getRouter('AppIsDeprecated');
 
     const defaultGetStateForAction = Router.router.getStateForAction;
     Router.router.getStateForAction = (action, state) => {
