@@ -16,7 +16,6 @@ import {
 import API from '../../utils/api';
 import { get } from 'lodash';
 import OneSignal from 'react-native-onesignal';
-import PushNotifications from '../components/PushNotifications';
 // import RateThisApp from '../components/RateThisApp';
 
 // components
@@ -64,8 +63,6 @@ class App extends Component {
     const {
       auth,
       dealerSelected,
-      actionSetPushGranted,
-      actionSetPushActionSubscribe,
       actionStoreUpdated,
       actionMenuOpenedCount,
       menuOpenedCount,
@@ -97,52 +94,13 @@ class App extends Component {
         console.log('APP INIT AFTER ====== menuOpenedCount', menuOpenedCount);
         console.log('APP INIT AFTER ====== isStoreUpdated', isStoreUpdated);
 
-        OneSignal.promptForPushNotificationsWithUserResponse((status) => {
-            if (status) {
-
-                actionSetPushGranted(true);
-
-                if (Number(menuOpenedCount) <= 1 || menuOpenedCount === '' || isStoreUpdated === false) { // при первичном ините всегда подписываем насильно на акции
-                    console.log('APP INSIDE ====== menuOpenedCount', menuOpenedCount);
-                    console.log('APP INSIDE ====== isStoreUpdated', isStoreUpdated);
-                    actionSetPushActionSubscribe(true);
-                }
-
-                OneSignal.setSubscription(true);
-
-            } else {
-                console.log('APP INSIDE FALSE ====== menuOpenedCount', menuOpenedCount);
-                console.log('APP INSIDE FALSE ====== isStoreUpdated', isStoreUpdated);
-                actionSetPushGranted(false);
-                actionSetPushActionSubscribe(false);
-                PushNotifications.unsubscribeFromTopic('actions');
-                OneSignal.setSubscription(false);
-            }
-        });
-
         OneSignal.setLogLevel(6, 0);
         OneSignal.enableSound(true);
         OneSignal.enableVibrate(true);
-
-      PushNotifications.init();
     }, 500);
   }
 
   shouldComponentUpdate() { return false; }
-
-  componentWillUnmount() {
-    // PushNotification.notificationListener.remove();
-    // PushNotification.refreshTokenListener.remove();
-  }
-
-  // onPushPermissionGranted = () => {
-  //   this.props.actionSetPushGranted(true);
-  // }
-  // onPushPermissionRejected = () => {
-  //   const { actionSetPushActionSubscribe, actionSetPushGranted } = this.props;
-  //   actionSetPushActionSubscribe(false);
-  //   this.props.actionSetPushGranted(false);
-  // }
 
   onNavigationStateChange = (prevState, newState) => {
     this.props.navigationChange({ prevState, newState });
@@ -154,8 +112,6 @@ class App extends Component {
 
     const defaultGetStateForAction = Router.router.getStateForAction;
     Router.router.getStateForAction = (action, state) => {
-      // console.log('ROUTER action', action);
-      // console.log('ROUTER state', state);
       return defaultGetStateForAction(action, state);
     };
 
