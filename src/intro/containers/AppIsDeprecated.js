@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, Image, View, Linking } from 'react-native';
 
-import { SafeAreaView } from 'react-navigation';
 import Modal from 'react-native-modal';
 
 // helpers
 import styleConst from '../../core/style-const';
 import { scale } from '../../utils/scale';
 import { Container, Icon, Button, Text } from 'native-base';
-import {TextAnimationFadeIn, TextAnimationZoom, TextAnimationRain, TextAnimationSlideDown, TextAnimationSlideUp, TextAnimationSlideLeft, TextAnimationSlideRight, TextAnimationShake, TextAnimationReverse, TextAnimationDeZoom} from 'react-native-text-effects';
+import { TextAnimationFadeIn } from 'react-native-text-effects';
 
 const styles = StyleSheet.create({
   container: {
@@ -82,7 +81,7 @@ export default class AppIsDeprecated extends Component {
                       shadowRadius: 2.62,
                   }}
                   onPress={() => {
-                      Linking.openURL('itms://itunes.apple.com/app/apple-store/id1492492166');
+                      Linking.openURL('itms://apps.apple.com/app/apple-store/id1492492166');
                     }}>
                          <Icon name='ios-appstore' />
                         <Text>Скачать новое приложение</Text>
