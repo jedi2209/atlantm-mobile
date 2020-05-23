@@ -21,7 +21,6 @@ import API from '../../utils/api';
 import {get} from 'lodash';
 import OneSignal from 'react-native-onesignal';
 import PushNotifications from '../components/PushNotifications';
-// import RNRestart from 'react-native-restart';
 
 // components
 import DeviceInfo from 'react-native-device-info';
