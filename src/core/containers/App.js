@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {PureComponent} from 'react';
 import {View, TouchableOpacity, Text, ActivityIndicator} from 'react-native';
-import Modal from 'react-native-modal';
 import {createAppContainer, NavigationActions} from 'react-navigation';
 
 // redux
@@ -164,51 +163,6 @@ class App extends PureComponent {
           ref={this.navigatorRef}
           onNavigationStateChange={this.onNavigationStateChange}
         />
-        <View>
-          <Modal
-            hideModalContentWhileAnimating
-            useNativeDriver
-            isVisible={this.props.modal.application}
-            onBackdropPress={() => {
-              this.props.actionToggleModal('application');
-            }}>
-            <View
-              style={{
-                backgroundColor: '#fff',
-                paddingHorizontal: 14,
-                paddingVertical: 24,
-                borderRadius: 4,
-              }}>
-              <Text
-                style={{fontSize: 18, fontWeight: 'bold', marginBottom: 14}}>
-                Отправить заявку
-              </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props
-                    .actionToggleModal('application')
-                    .then(() => this.navigate('CallMeBackScreen'));
-                }}>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    marginVertical: 14,
-                    paddingVertical: 10,
-                  }}>
-                  На обратный звонок
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => {
-                  this.props
-                    .actionToggleModal('application')
-                    .then(() => this.navigate('ServiceScreen'));
-                }}>
-                <Text style={{fontSize: 18, paddingVertical: 10}}>На СТО</Text>
-              </TouchableOpacity>
-            </View>
-          </Modal>
-        </View>
       </View>
     );
   }
