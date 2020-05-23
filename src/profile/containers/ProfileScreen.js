@@ -31,6 +31,7 @@ import {
 } from '../../core/actions';
 
 import PushNotifications from '@core/components/PushNotifications';
+import Amplitude from '../../utils/amplitude-analytics';
 
 import {verticalScale} from '../../utils/scale';
 
@@ -136,6 +137,7 @@ class ProfileScreen extends Component {
     this.setState({
       pickerData: this.phoneInput.getPickerData(),
     });
+    Amplitude.logEvent('screen', 'profile/login');
   }
 
   componentWillUnmount() {

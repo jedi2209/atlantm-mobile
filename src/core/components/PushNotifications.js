@@ -17,7 +17,7 @@ export default {
 
   onReceived(notification) {
     console.log('Notification received: ', notification);
-    Amplitude.logEvent('pushNotification:received', {
+    Amplitude.logEvent('action', 'PushNotification/received', {
       id: notification.payload.notificationID,
     });
   },
@@ -25,7 +25,7 @@ export default {
   onOpened(openResult, listener) {
     let routeName;
 
-    Amplitude.logEvent('pushNotification:opened', {
+    Amplitude.logEvent('action', 'PushNotification/opened', {
       id: openResult.notification.payload.notificationID,
     });
 
