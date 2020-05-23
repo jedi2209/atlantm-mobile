@@ -52,14 +52,11 @@ export default {
       console.log('version undefined', version);
       return false;
     }
-    let requested_version = parseInt(version.replace(/\./gi, ''));
+    let requestedVersion = parseInt(version.replace(/\./gi, ''));
     let req = this.request('/mobile/check/version/', baseRequestParams);
     return req.then(res => {
-      if (!res.version) {
-        return this.fetchVersion(DeviceInfo.getVersion());
-      }
-      let real_time_version_api = parseInt(res.version.replace(/\./gi, ''));
-      if (real_time_version_api > requested_version) {
+      let APPVersionFromApi = parseInt(res.version.replace(/\./gi, ''));
+      if (APPVersionFromApi > requestedVersion) {
         let STORE_LINK;
         if (Platform.OS === 'ios') {
           STORE_LINK =
@@ -615,7 +612,7 @@ export default {
       const response = await fetch(url, requestParams);
       return response.json();
     } catch (err) {
-      console.log('apiGetDataError', err);
+      console.log('apiGetDataError URL: ' + url, err);
     }
   },
 };

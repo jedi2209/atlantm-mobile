@@ -69,14 +69,13 @@ class App extends PureComponent {
       isStoreUpdated,
     } = this.props;
 
-    console.log('this.props-APP.js', this.props);
+    // console.log('this.props-APP.js', this.props);
 
     if (get(auth, 'login') === 'zteam') {
       window.atlantmDebug = true;
     }
 
     const currentDealer = get(dealerSelected, 'id', false);
-    API.fetchVersion(DeviceInfo.getVersion());
 
     if (
       currentDealer &&
@@ -127,6 +126,11 @@ class App extends PureComponent {
       OneSignal.enableVibrate(true);
 
       PushNotifications.init();
+
+      const currentVersion = DeviceInfo.getVersion();
+      if (currentVersion) {
+        API.fetchVersion(currentVersion);
+      }
     }, 700);
   }
 
