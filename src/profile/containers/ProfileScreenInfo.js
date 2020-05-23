@@ -28,6 +28,7 @@ import {
   actionSetPushGranted,
 } from '../../core/actions';
 
+import Amplitude from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
 
 const isAndroid = Platform.OS === 'android';
@@ -206,6 +207,7 @@ class ProfileScreenInfo extends Component {
       console.log('componentDidMount', this.props.login);
       this.getUserData();
     }
+    Amplitude.logEvent('screen', 'profile/main');
   }
 
   componentDidUpdate(nextProps) {

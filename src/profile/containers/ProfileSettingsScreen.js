@@ -20,6 +20,7 @@ import {actionSaveProfileByUser} from '../actions';
 
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import stylesHeader from '../../core/components/Header/style';
+import Amplitude from '../../utils/amplitude-analytics';
 import styleConst from '@core/style-const';
 
 class ProfileSettingsScreen extends Component {
@@ -69,6 +70,10 @@ class ProfileSettingsScreen extends Component {
       carNumber: car.number,
       success: false,
     };
+  }
+
+  componentDidMount() {
+    Amplitude.logEvent('screen', 'profile/edit');
   }
 
   onPressSave = () => {
