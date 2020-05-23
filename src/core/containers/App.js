@@ -1,12 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {PureComponent} from 'react';
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  NativeModules,
-  ActivityIndicator,
-} from 'react-native';
+import {View, TouchableOpacity, Text, ActivityIndicator} from 'react-native';
 import Modal from 'react-native-modal';
 import {createAppContainer, NavigationActions} from 'react-navigation';
 

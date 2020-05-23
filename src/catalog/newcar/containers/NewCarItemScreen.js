@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import {
   View,
   Text,
-  SafeAreaView,
   ActivityIndicator,
   TouchableHighlight,
   TouchableWithoutFeedback,
@@ -16,9 +15,7 @@ import {
   Row,
   Icon,
   Grid,
-  Footer,
   Button,
-  Content,
   StyleProvider,
   Accordion,
 } from 'native-base';
@@ -43,9 +40,6 @@ import {get, find} from 'lodash';
 import PropTypes from 'prop-types';
 import Amplitude from '@utils/amplitude-analytics';
 import styleConst from '@core/style-const';
-// import stylesHeader from '@core/components/Header/style';
-//import stylesFooter from '@core/components/Footer/style';
-// import numberWithGap from '@utils/number-with-gap';
 import showPrice from '@utils/price';
 
 // styles
@@ -568,7 +562,10 @@ class NewCarItemScreen extends Component {
                     {get(carDetails, 'gearbox.wheel') ? (
                       <OptionPlate
                         title="Привод"
-                        subtitle={get(carDetails, 'gearbox.wheel').toLowerCase()}
+                        subtitle={get(
+                          carDetails,
+                          'gearbox.wheel',
+                        ).toLowerCase()}
                       />
                     ) : null}
                     {get(carDetails, 'color.name.simple') ? (
@@ -838,7 +835,7 @@ class NewCarItemScreen extends Component {
               <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
             </Button>
           </View>
-        {photoViewerItems.length ? (
+          {photoViewerItems.length ? (
             <PhotoViewer
               index={photoViewerIndex}
               visible={photoViewerVisible}

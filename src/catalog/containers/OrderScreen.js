@@ -27,7 +27,6 @@ import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack'
 import Amplitude from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import isInternet from '../../utils/internet';
-import numberWithGap from '../../utils/number-with-gap';
 import showPrice from '@utils/price';
 import styleConst from '@core/style-const';
 import stylesHeader from '../../core/components/Header/style';

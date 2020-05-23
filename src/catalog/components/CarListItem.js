@@ -18,9 +18,6 @@ import {connect} from 'react-redux';
 import numberWithGap from '../../utils/number-with-gap';
 import showPrice from '@utils/price';
 import styleConst from '@core/style-const';
-import {Dimensions} from 'react-native';
-
-const deviceWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
