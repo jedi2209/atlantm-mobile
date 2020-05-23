@@ -5,7 +5,10 @@ import {createLogger} from 'redux-logger';
 
 import rootReducer from './reducers';
 
-const middleware = [thunkMiddleware, __DEV__ && createLogger({ collapsed: true })].filter(Boolean);
+const middleware = [
+  thunkMiddleware,
+  __DEV__ && createLogger({collapsed: true}),
+].filter(Boolean);
 
 export const store = createStore(
   rootReducer,
