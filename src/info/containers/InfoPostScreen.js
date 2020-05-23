@@ -25,6 +25,7 @@ import Imager from '../../core/components/Imager';
 import {get} from 'lodash';
 import styleConst from '@core/style-const';
 import processHtml from '../../utils/process-html';
+import Amplitude from '../../utils/amplitude-analytics';
 import {verticalScale} from '../../utils/scale';
 //import stylesHeader from '../../core/components/Header/style';
 import {dayMonth, dayMonthYear} from '../../utils/date';
@@ -126,6 +127,9 @@ class InfoPostScreen extends Component {
     if (!post) {
       fetchInfoPost(id);
     }
+    Amplitude.logEvent('screen', 'offer/item', {
+      id: id,
+    });
   }
 
   onLayoutImage = e => {
