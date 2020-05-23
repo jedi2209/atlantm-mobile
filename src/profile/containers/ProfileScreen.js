@@ -404,6 +404,86 @@ class ProfileScreen extends Component {
     this.setState({phone: text});
   };
 
+  renderLoginButtons = region => {
+    let VKenabled = true;
+    let ButtonWidth = '25%';
+    let ButtonHeight = 50;
+    switch (region.toLowerCase()) {
+      case 'ua':
+        VKenabled = false;
+        ButtonWidth = '30%';
+        ButtonHeight = 60;
+        break;
+    }
+    return (
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '80%',
+          marginHorizontal: '10%',
+          marginTop: 40,
+          marginBottom: 20,
+          opacity: this.state.code ? 0 : 1,
+          height: this.state.code
+            ? Platform.select({ios: 'auto', android: 0})
+            : 'auto',
+        }}>
+        <Button
+          onPress={this._signInWithGoogle}
+          disabled={this.state.isSigninInProgress}
+          iconLeft
+          style={[
+            styleConst.shadow.default,
+            styles.SocialLoginBt,
+            {
+              width: ButtonWidth,
+              height: ButtonHeight,
+              backgroundColor: '#4286F5',
+            },
+          ]}>
+          <Icon name="google" type="FontAwesome5" />
+        </Button>
+        <Button
+          onPress={this._signInFB}
+          disabled={this.state.isSigninInProgress}
+          iconLeft
+          style={[
+            styleConst.shadow.default,
+            styles.SocialLoginBt,
+            {
+              backgroundColor: '#4167B2',
+              width: VKenabled ? '29%' : ButtonWidth,
+              height: 60,
+              marginVertical: 8,
+              paddingHorizontal: 8,
+            },
+          ]}>
+          <Icon name="facebook" type="FontAwesome5" style={{fontSize: 35}} />
+        </Button>
+        {VKenabled ? (
+          <Button
+            onPress={this._signInWithVK}
+            disabled={this.state.isSigninInProgress}
+            iconLeft
+            style={[
+              styleConst.shadow.default,
+              styles.SocialLoginBt,
+              {
+                width: ButtonWidth,
+                height: ButtonHeight,
+                backgroundColor: '#4680C2',
+              },
+            ]}>
+            <Icon name="vk" type="FontAwesome5" />
+          </Button>
+        ) : null}
+      </View>
+    );
+  };
+
   render() {
     if (this.state.loading) {
       return (
@@ -433,9 +513,6 @@ class ProfileScreen extends Component {
                 <LinearGradient
                   start={{x: 0, y: 0}}
                   end={{x: 0, y: 1}}
-                  // useAngle
-                  // angle={180}
-                  // colors={['rgba(15, 102, 178, 1)', 'rgba(0, 97, 237, 0)']}
                   colors={['rgba(0, 0, 0, 0.60)', 'rgba(51, 51, 51, 0)']}
                   style={{
                     height: '80%',
@@ -455,75 +532,7 @@ class ProfileScreen extends Component {
                     source={require('../../menu/assets/logo-horizontal-white.svg')}
                   />
                 </View>
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '80%',
-                    marginHorizontal: '10%',
-                    marginTop: 40,
-                    marginBottom: 20,
-                    opacity: this.state.code ? 0 : 1,
-                    height: this.state.code
-                      ? Platform.select({ios: 'auto', android: 0})
-                      : 'auto',
-                  }}>
-                  <Button
-                    onPress={this._signInWithGoogle}
-                    disabled={this.state.isSigninInProgress}
-                    iconLeft
-                    style={[
-                      styleConst.shadow.default,
-                      styles.SocialLoginBt,
-                      {
-                        backgroundColor: '#4286F5',
-                      },
-                    ]}>
-                    <Icon name="google" type="FontAwesome5" />
-                  </Button>
-                  <Button
-                    onPress={this._signInFB}
-                    disabled={this.state.isSigninInProgress}
-                    iconLeft
-                    style={[
-                      styleConst.shadow.default,
-                      styles.SocialLoginBt,
-                      {
-                        backgroundColor: '#4167B2',
-                        width: '29%',
-                        height: 60,
-                        marginVertical: 8,
-                        paddingHorizontal: 8,
-                      },
-                    ]}>
-                    <Icon
-                      name="facebook"
-                      type="FontAwesome5"
-                      style={{fontSize: 35}}
-                    />
-                    {/* <Text style={{color: '#fff', marginLeft: 20}}>
-                      Войти через Facebook
-                    </Text> */}
-                  </Button>
-                  <Button
-                    onPress={this._signInWithVK}
-                    disabled={this.state.isSigninInProgress}
-                    iconLeft
-                    style={[
-                      styleConst.shadow.default,
-                      styles.SocialLoginBt,
-                      {
-                        backgroundColor: '#4680C2',
-                      },
-                    ]}>
-                    <Icon name="vk" type="FontAwesome5" />
-                    {/* <Text style={{color: '#fff', marginLeft: 20}}>
-                      Войти через VK
-                    </Text> */}
-                  </Button>
-                </View>
+                {this.renderLoginButtons(this.props.dealerSelected.region)}
                 <View
                   style={{
                     display: 'flex',
@@ -755,8 +764,6 @@ class ProfileScreen extends Component {
 
 const styles = StyleSheet.create({
   SocialLoginBt: {
-    width: '25%',
-    height: 50,
     marginVertical: 8,
     paddingHorizontal: 8,
     justifyContent: 'center',
