@@ -130,26 +130,25 @@ const BottomTabNavigation = createBottomTabNavigator(
         return {
           tabBarOnPress: () =>
             Alert.alert(
-              'Выберите заявку',
+              'Чем мы можем помочь',
               'Какую заявку Вы хотите отправить?',
               [
                 {
-                  text: 'На обратный звонок',
+                  text: '📞 Перезвоните мне',
                   onPress: () => navigation.navigate('CallMeBackScreen'),
                 },
                 {
-                  text: 'На СТО',
+                  text: '🛠 Запись на сервис',
                   onPress: () => navigation.navigate('ServiceScreen'),
                 },
                 {
                   text: 'Отмена',
                   onPress: () => console.log('OK Pressed'),
-                  style: 'cancel',
+                  style: 'destructive',
                 },
               ],
               {cancelable: true},
             ),
-          // store.dispatch(actionToggleModal('application')),
           tabBarLabel: 'Заявка',
           tabBarIcon: ({tintColor}) => (
             <Icon
