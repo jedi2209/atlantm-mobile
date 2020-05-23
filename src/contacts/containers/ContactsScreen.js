@@ -24,7 +24,7 @@ import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList, actionListReset} from '../../info/actions';
 
 // helpers
-import Amplitude from '@utils/amplitude-analytics';
+import Amplitude from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '@core/style-const';
@@ -217,8 +217,6 @@ class ContactsScreen extends Component {
     );
     return isActiveScreen || isListSucsess;
   }
-
-  onPressAbout = () => this.props.navigation.navigate('AboutScreen');
 
   onPressRateApp = () => {
     const APP_STORE_LINK =
