@@ -2,6 +2,7 @@ import {Platform, PermissionsAndroid, Alert, Linking} from 'react-native';
 
 import {NavigationActions, StackActions} from 'react-navigation';
 import OneSignal from 'react-native-onesignal';
+import Amplitude from '@utils/amplitude-analytics';
 
 import {get} from 'lodash';
 
@@ -16,17 +17,17 @@ export default {
 
   onReceived(notification) {
     console.log('Notification received: ', notification);
+    Amplitude.logEvent('pushNotification:received', {
+      id: notification.payload.notificationID,
+    });
   },
 
   onOpened(openResult, listener) {
     let routeName;
 
-    const data_test = get(
-      openResult,
-      'notification.payload.additionalData',
-      {},
-    );
-    console.log('data_test', data_test);
+    Amplitude.logEvent('pushNotification:opened', {
+      id: openResult.notification.payload.notificationID,
+    });
 
     // console.log('Message: ', openResult.notification.payload.body);
     // console.log('Data: ', openResult.notification.payload.additionalData);
@@ -129,16 +130,16 @@ export default {
                   'Уведомления выключены',
                   'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
                   [
+                    {text: 'Позже', style: 'destructive'},
                     {
                       text: 'Разрешить',
                       onPress() {
                         Linking.openURL(
-                          'app-settings://notification/com.atlant-m',
+                          'app-settings://notification/com.atlantm.app',
                         );
                       },
                       style: 'cancel',
                     },
-                    {text: 'Позже', style: 'destructive'},
                   ],
                 );
               }, 100);
