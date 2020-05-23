@@ -4,7 +4,6 @@ import {
   Text,
   SafeAreaView,
   ActivityIndicator,
-  TouchableHighlight,
   TouchableWithoutFeedback,
   StatusBar,
   StyleSheet,
@@ -15,10 +14,8 @@ import {
   Row,
   Icon,
   Grid,
-  Footer,
   Button,
   Content,
-  Segment,
   StyleProvider,
   Accordion,
 } from 'native-base';
@@ -42,15 +39,12 @@ import {get, find} from 'lodash';
 import PropTypes from 'prop-types';
 import Amplitude from '@utils/amplitude-analytics';
 import styleConst from '@core/style-const';
-import stylesHeader from '@core/components/Header/style';
 import numberWithGap from '@utils/number-with-gap';
 import getTheme from '../../../../native-base-theme/components';
 import showPrice from '@utils/price';
 
 // styles
 import styles from '@catalog/CarStyles';
-import {add} from 'react-native-reanimated';
-// import stylesFooter from '@core/components/Footer/style';
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
   return {

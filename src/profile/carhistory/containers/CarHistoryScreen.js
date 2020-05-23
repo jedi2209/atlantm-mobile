@@ -40,8 +40,7 @@ import {get, isEmpty} from 'lodash';
 import {dayMonthYear} from '../../../utils/date';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import numberWithGap from '../../../utils/number-with-gap';
-import {MONTH_TEXT} from '../../const';
+import showPrice from '../../../utils/price';
 import {ERROR_NETWORK} from '../../../core/const';
 
 const styles = StyleSheet.create({
@@ -180,28 +179,12 @@ class CarHistoryScreen extends Component {
     );
   };
 
-  // onPressLevel1 = hash => {
-  //   this.props.actionSetCarHistoryLevel1(
-  //     this.isActiveLevel1(hash) ? null : hash,
-  //   );
-  // };
-  // onPressLevel2 = hash => {
-  //   this.props.actionSetCarHistoryLevel2(
-  //     this.isActiveLevel2(hash) ? null : hash,
-  //   );
-  // };
-
-  // isActiveLevel1 = hash => this.props.level1hash === hash;
-  // isActiveLevel2 = hash => this.props.level2hash === hash;
-
   renderLevel1 = carHistory => {
     return Object.keys(carHistory)
       .reverse()
       .map((carHistoryYear, idx, yearsArray) => {
         const item = carHistory[carHistoryYear];
         const hash = item.hash;
-        // const isActive = true; //this.isActiveLevel1(hash);
-        // const onPressHandler = () => this.onPressLevel1(hash);
 
         return <View key={hash}>{this.renderLevel2(item.history)}</View>;
       });
@@ -213,8 +196,6 @@ class CarHistoryScreen extends Component {
       .map((month, idx, monthArray) => {
         const item = carHistoryItemByMonth[month];
         const hash = item.hash;
-        // const isActive = true; //this.isActiveLevel2(hash);
-        // const onPressHandler = () => this.onPressLevel2(hash);
 
         return <View key={hash}>{this.renderLevel3(item.history)}</View>;
       });
@@ -286,19 +267,19 @@ class CarHistoryScreen extends Component {
         {works
           ? this.renderLevel3Item({
               prop: 'Стоимость работ',
-              value: `${numberWithGap(works)} ${currency}`,
+              value: showPrice(works, currency),
             })
           : null}
         {parts
           ? this.renderLevel3Item({
               prop: 'Стоимость запчастей',
-              value: `${numberWithGap(parts)} ${currency}`,
+              value: showPrice(parts, currency),
             })
           : null}
         {total
           ? this.renderLevel3Item({
               prop: 'Всего',
-              value: `${numberWithGap(total)} ${currency}`,
+              value: showPrice(total, currency),
             })
           : null}
       </Body>
@@ -306,7 +287,7 @@ class CarHistoryScreen extends Component {
   };
 
   renderItemHeader = ({work, key, label, theme, onPressHandler}) => {
-    const isLevel3 = theme === 'itemLevel3';
+    // const isLevel3 = theme === 'itemLevel3';
 
     return (
       <View key={key} style={{borderBottomWidth: 1}}>

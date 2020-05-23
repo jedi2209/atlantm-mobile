@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import {
   View,
   Text,
@@ -95,13 +95,13 @@ export default class PricePicker extends PureComponent {
     step: PropTypes.number,
     currentMinPrice: PropTypes.number,
     currentMaxPrice: PropTypes.number,
-  }
+  };
 
   static defaultProps = {
     height: 259,
     duration: 300,
     TouchableComponent: TouchableOpacity,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -114,52 +114,56 @@ export default class PricePicker extends PureComponent {
     };
   }
 
-  setModalVisible = (visible) => {
-    const { height, duration } = this.props;
+  setModalVisible = visible => {
+    const {height, duration} = this.props;
 
     // slide animation
     if (visible) {
-      this.setState({ modalVisible: visible });
-      return Animated.timing(
-        this.state.animatedHeight,
-        {
-          duration,
-          toValue: height,
-        },
-      ).start();
+      this.setState({
+        modalVisible: visible,
+      });
+      return Animated.timing(this.state.animatedHeight, {
+        duration,
+        toValue: height,
+      }).start();
     } else {
-      return Animated.timing(
-        this.state.animatedHeight,
-        {
-          duration,
-          toValue: 0,
-        },
-      ).start(() => {
-        this.setState({ modalVisible: false });
+      return Animated.timing(this.state.animatedHeight, {
+        duration,
+        toValue: 0,
+      }).start(() => {
+        this.setState({
+          modalVisible: false,
+        });
       });
     }
-  }
+  };
 
   onPressMask = () => {
     this.onPressCancel();
-  }
+  };
 
   onPressCancel = () => {
     this.setModalVisible(false);
     this.props.onCloseModal();
-  }
+  };
 
   onPressConfirm = () => {
-    const { onCloseModal, min, max } = this.props;
-    let { minPrice, maxPrice } = this.state;
+    const {onCloseModal, min, max} = this.props;
+    let {minPrice, maxPrice} = this.state;
 
     if (minPrice > maxPrice) {
-      return setTimeout(() => Alert.alert('Цена ОТ должна быть меньше ДО'), 100);
+      return setTimeout(
+        () => Alert.alert('Цена ОТ должна быть меньше ДО'),
+        100,
+      );
     }
 
-    this.props.onCloseModal({ minPrice, maxPrice });
+    this.props.onCloseModal({
+      minPrice,
+      maxPrice,
+    });
     this.setModalVisible(false);
-  }
+  };
 
   onPress = () => {
     Keyboard.dismiss();
@@ -167,40 +171,43 @@ export default class PricePicker extends PureComponent {
     this.setModalVisible(true);
 
     this.props.onPressModal();
-  }
+  };
 
-  onChangeMinPrice = (minPrice) => {
-    this.setState({ minPrice });
-  }
+  onChangeMinPrice = minPrice => {
+    this.setState({
+      minPrice,
+    });
+  };
 
-  onChangeMaxPrice = (maxPrice) => {
-    this.setState({ maxPrice });
-  }
+  onChangeMaxPrice = maxPrice => {
+    this.setState({
+      maxPrice,
+    });
+  };
 
   renderItems = isReversed => {
-    const { min, max, step } = this.props;
+    const {min, max, step} = this.props;
 
     let data = [];
     let i = min;
 
     for (i; i <= max; i += step) {
-      data.push(<Picker.Item key={i} label={`${numberWithGap(i)}`} value={i} />);
+      data.push(
+        <Picker.Item key={i} label={`${numberWithGap(i)}`} value={i} />,
+      );
     }
 
     if (i > max) {
-      data.push(<Picker.Item key={max} label={`${numberWithGap(max)}`} value={max} />);
+      data.push(
+        <Picker.Item key={max} label={`${numberWithGap(max)}`} value={max} />,
+      );
     }
 
     return isReversed ? data.reverse() : data;
-  }
+  };
 
   render() {
-    const {
-      style,
-      children,
-      currency,
-      TouchableComponent,
-    } = this.props;
+    const {style, children, currency, TouchableComponent} = this.props;
 
     return (
       <View>
@@ -208,68 +215,90 @@ export default class PricePicker extends PureComponent {
           transparent={true}
           animationType="none"
           visible={this.state.modalVisible}
-          supportedOrientations={['portrait', 'portrait-upside-down', 'landscape', 'landscape-left', 'landscape-right']}
-          onRequestClose={() => { this.props.onCloseModal(); }}
-        >
-          <View style={{ flex: 1 }}>
+          supportedOrientations={[
+            'portrait',
+            'portrait-upside-down',
+            'landscape',
+            'landscape-left',
+            'landscape-right',
+          ]}
+          onRequestClose={() => {
+            this.props.onCloseModal();
+          }}>
+          <View
+            style={{
+              flex: 1,
+            }}>
             <TouchableHighlight
               style={styles.datePickerMask}
               activeOpacity={1}
               underlayColor={'#00000077'}
-              onPress={this.onPressMask}
-            >
+              onPress={this.onPressMask}>
               <TouchableHighlight
                 underlayColor={'#fff'}
-                style={{ flex: 1 }}
-              >
+                style={{
+                  flex: 1,
+                }}>
                 <Animated.View
-                  style={[styles.datePickerCon, { height: this.state.animatedHeight }]}
-                >
+                  style={[
+                    styles.datePickerCon,
+                    {
+                      height: this.state.animatedHeight,
+                    },
+                  ]}>
                   <View style={styles.topBar}>
                     <View style={styles.btnText}>
                       <Text style={[styles.btnTextText, styles.btnTextCancel]}>
-                        {`Цена ${currency}`}
-                      </Text>
-                    </View>
+                        {' '}
+                        {`Цена ${currency}`}{' '}
+                      </Text>{' '}
+                    </View>{' '}
                     <TouchableHighlight
                       underlayColor="transparent"
                       onPress={this.onPressConfirm}
-                      style={[styles.btnText, styles.btnConfirm]}
-                    >
+                      style={[styles.btnText, styles.btnConfirm]}>
                       <View>
-                        <Text style={[styles.btnTextText]}>Готово</Text>
-                      </View>
-                    </TouchableHighlight>
+                        <Text style={[styles.btnTextText]}> Готово </Text>{' '}
+                      </View>{' '}
+                    </TouchableHighlight>{' '}
                   </View>
-
                   <View style={styles.pickersContainer}>
                     <View style={styles.priceContainer}>
                       <View style={styles.priceLabelContainer}>
-                        <Text style={styles.priceLabelText}>От</Text>
-                      </View>
-                      <Picker selectedValue={this.state.minPrice} onValueChange={this.onChangeMinPrice}>
-                        {this.renderItems()}
-                      </Picker>
-                    </View>
+                        <Text style={styles.priceLabelText}> От </Text>{' '}
+                      </View>{' '}
+                      <Picker
+                        selectedValue={this.state.minPrice}
+                        onValueChange={this.onChangeMinPrice}>
+                        {' '}
+                        {this.renderItems()}{' '}
+                      </Picker>{' '}
+                    </View>{' '}
                     <View style={styles.priceContainer}>
                       <View style={styles.priceLabelContainer}>
-                        <Text style={styles.priceLabelText}>До</Text>
-                      </View>
-                      <Picker selectedValue={this.state.maxPrice} onValueChange={this.onChangeMaxPrice}>
-                        {this.renderItems(true)}
-                      </Picker>
-                    </View>
-                  </View>
-                </Animated.View>
-              </TouchableHighlight>
-            </TouchableHighlight>
-          </View>
+                        <Text style={styles.priceLabelText}> До </Text>{' '}
+                      </View>{' '}
+                      <Picker
+                        selectedValue={this.state.maxPrice}
+                        onValueChange={this.onChangeMaxPrice}>
+                        {' '}
+                        {this.renderItems(true)}{' '}
+                      </Picker>{' '}
+                    </View>{' '}
+                  </View>{' '}
+                </Animated.View>{' '}
+              </TouchableHighlight>{' '}
+            </TouchableHighlight>{' '}
+          </View>{' '}
         </Modal>
 
-        <TouchableComponent underlayColor={styleConst.color.select} style={style} onPress={this.onPress}>
-          {children}
+        <TouchableComponent
+          underlayColor={styleConst.color.select}
+          style={style}
+          onPress={this.onPress}>
+          {' '}
+          {children}{' '}
         </TouchableComponent>
-
       </View>
     );
   }

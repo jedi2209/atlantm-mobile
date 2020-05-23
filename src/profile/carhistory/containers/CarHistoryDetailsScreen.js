@@ -7,7 +7,6 @@ import {
   Text,
   ScrollView,
   StatusBar,
-  Platform,
 } from 'react-native';
 import {Row, Col, Button, Content, Segment} from 'native-base';
 
@@ -25,7 +24,7 @@ import Amplitude from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
-import numberWithGap from '../../../utils/number-with-gap';
+import showPrice from '../../../utils/price';
 import {ERROR_NETWORK} from '../../../core/const';
 
 const TABS = {
@@ -189,28 +188,19 @@ class CarHistoryDetailsScreen extends Component {
         {get(summ, 'value')
           ? this.renderItem({
               prop: 'Стоимость',
-              value: `${numberWithGap(get(summ, 'value'))} ${get(
-                summ,
-                'currency',
-              )}`,
+              value: showPrice(get(summ, 'value'), get(summ, 'currency')),
             })
           : null}
         {get(summ, 'sale')
           ? this.renderItem({
               prop: 'Скидка',
-              value: `${numberWithGap(get(summ, 'sale'))} ${get(
-                summ,
-                'currency',
-              )}`,
+              value: showPrice(get(summ, 'sale'), get(summ, 'currency')),
             })
           : null}
         {get(summ, 'total')
           ? this.renderItem({
               prop: 'Итого с НДС',
-              value: `${numberWithGap(get(summ, 'total'))} ${get(
-                summ,
-                'currency',
-              )}`,
+              value: showPrice(get(summ, 'total'), get(summ, 'currency')),
             })
           : null}
       </View>
