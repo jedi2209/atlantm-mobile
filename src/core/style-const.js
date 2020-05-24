@@ -1,4 +1,4 @@
-import {PixelRatio, Platform} from 'react-native';
+import {PixelRatio, Platform, Dimensions} from 'react-native';
 const isAndroid = Platform.OS === 'android';
 
 export default {
@@ -26,6 +26,7 @@ export default {
     red: '#ff3c30',
     darkBg: '#4f5b66',
   },
+  screen: Dimensions.get('window'),
   shadow: {
     default: {
       shadowColor: '#000',
@@ -105,13 +106,6 @@ export default {
       },
       default: {
         backgroundColor: 'transparent',
-        // shadowColor: '#000',
-        // shadowOffset: {
-        //   width: 0,
-        //   height: 0,
-        // },
-        // shadowOpacity: 0,
-        // shadowRadius: 0,
         elevation: 0,
       },
     },
