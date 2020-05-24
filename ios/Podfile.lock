@@ -315,6 +315,9 @@ PODS:
     - React
   - react-native-splash-screen (3.2.0):
     - React
+  - react-native-text-input-mask (2.0.0):
+    - React
+    - RNInputMask
   - react-native-viewpager (4.0.0):
     - React
   - react-native-vkontakte-login (1.0.0):
@@ -401,6 +404,7 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController
+  - RNInputMask (4.1.0)
   - RNRate (1.2.1):
     - React
   - RNReanimated (1.9.0):
@@ -466,6 +470,7 @@ DEPENDENCIES:
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
+  - react-native-text-input-mask (from `../node_modules/react-native-text-input-mask`)
   - "react-native-viewpager (from `../node_modules/@react-native-community/viewpager`)"
   - react-native-vkontakte-login (from `../node_modules/react-native-vkontakte-login`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -486,6 +491,7 @@ DEPENDENCIES:
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-community/google-signin`)"
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
+  - RNInputMask (from `../node_modules/react-native-text-input-mask/ios/InputMask`)
   - RNRate (from `../node_modules/react-native-rate`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -563,6 +569,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/slider"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
+  react-native-text-input-mask:
+    :path: "../node_modules/react-native-text-input-mask"
   react-native-viewpager:
     :path: "../node_modules/@react-native-community/viewpager"
   react-native-vkontakte-login:
@@ -601,6 +609,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/google-signin"
   RNImageCropPicker:
     :path: "../node_modules/react-native-image-crop-picker"
+  RNInputMask:
+    :path: "../node_modules/react-native-text-input-mask/ios/InputMask"
   RNRate:
     :path: "../node_modules/react-native-rate"
   RNReanimated:
@@ -655,6 +665,7 @@ SPEC CHECKSUMS:
   react-native-onesignal: ece470306f7486853454793e954ac00eaa28f2dd
   react-native-slider: b34d943dc60deb96d952ba6b6b249aa8091e86da
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
+  react-native-text-input-mask: b3cb63f0cd73b4b3ea76dd0c614bb7d79e934e39
   react-native-viewpager: 82826c981b1ad277757388317686fad30210ed77
   react-native-vkontakte-login: 8ffc0444a64d86a4927c937feffa61d0e7ceb5e6
   react-native-webview: 0e2881d2e3e72ad52a82445c1a116c43205fd471
@@ -674,6 +685,7 @@ SPEC CHECKSUMS:
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNGoogleSignin: ccf71ee4b6cfd324fd788a41e457e2043838c0d9
   RNImageCropPicker: 38865ab4af1b0b2146ad66061196bc0184946855
+  RNInputMask: 815461ebdf396beb62cf58916c35cf6930adb991
   RNRate: a747cbaa6040d72994861864c988037fe0696548
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
   RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
@@ -684,6 +696,6 @@ SPEC CHECKSUMS:
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 1b3935cea1aa8bffa08443ea38fd03fe0b170706
+PODFILE CHECKSUM: 1c2169c7656c663fb5b1b2c28a09f0472961846a
 
 COCOAPODS: 1.9.1

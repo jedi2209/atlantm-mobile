@@ -62,6 +62,7 @@
     "react-native-splash-screen": "^3.2.0",
     "react-native-swiper": "^1.6.0",
     "react-native-tab-navigator": "^0.3.4",
+    "react-native-text-input-mask": "^2.0.0",
     "react-native-vkontakte-login": "^1.0.0",
     "react-native-webview": "^9.4.0",
     "react-navigation": "^3.12.0-alpha.0",
