@@ -87,6 +87,9 @@ target 'atlantm' do
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
   pod 'react-native-slider', :path => '../node_modules/@react-native-community/slider'
 
+  # use_frameworks!
+  pod 'RNInputMask', :path => '../node_modules/react-native-text-input-mask/ios/InputMask'
+
   target 'atlantmTests' do
     inherit! :complete
     # Pods for testing
