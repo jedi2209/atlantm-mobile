@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/react-in-jsx-scope */
 import React, {Component} from 'react';
@@ -77,6 +78,7 @@ export default class ChooseDateTimeComponent extends Component {
     this.state = {
       time: undefined,
       date: undefined,
+      availablePeriods: [],
     };
   }
 
@@ -93,70 +95,17 @@ export default class ChooseDateTimeComponent extends Component {
       alert(availablePeriods.error.message);
     }
 
-    console.log('availablePeriods ===>', availablePeriods);
+    if (availablePeriods.data == null) {
+      alert('Нет доступных периодов, попробуйте выбрать другой день');
+    }
+
+    this.setState({availablePeriods: availablePeriods.data});
   }
 
   render() {
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
-
-    const stubTime = [
-      {
-        date: '2020-02-10',
-        tech_place: 1,
-        from: '1581357600',
-        to: '1581357600',
-      },
-      {
-        date: '2020-02-10',
-        tech_place: 2,
-        from: '1581314400',
-        to: '1581357600',
-      },
-      {
-        date: '2020-02-10',
-        tech_place: 3,
-        from: '1581314400',
-        to: '1581357600',
-      },
-      {
-        date: '2020-02-10',
-        tech_place: 1,
-        from: '1581314400',
-        to: '1581357600',
-      },
-      {
-        date: '2020-02-10',
-        tech_place: 2,
-        from: '1581314400',
-        to: '1581357600',
-      },
-      {
-        date: '2020-02-10',
-        tech_place: 3,
-        from: '1581314400',
-        to: '1581357600',
-      },
-      {
-        date: '2020-02-10',
-        tech_place: 1,
-        from: '1581314400',
-        to: '1581357600',
-      },
-      {
-        date: '2020-02-10',
-        tech_place: 2,
-        from: '1581314400',
-        to: '1581357600',
-      },
-      {
-        date: '2020-02-10',
-        tech_place: 3,
-        from: '1581314400',
-        to: '1581357600',
-      },
-    ];
 
     return (
       <>
@@ -183,7 +132,7 @@ export default class ChooseDateTimeComponent extends Component {
           <View style={styles.field}>
             <Text style={styles.label}>Выберите время</Text>
             <View style={styles.timeContainer}>
-              {stubTime.map((item) => {
+              {this.state.availablePeriods.map((item) => {
                 const from = time(item.from * 1000);
                 const isActive = item.from === this.state.time;
                 return (

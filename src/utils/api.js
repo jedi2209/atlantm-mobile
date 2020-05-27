@@ -594,7 +594,7 @@ export default {
 
   getServiceInfo({id, dealer, vin}) {
     return this.request(
-      `service/maintenance/intervals/${id}/?dealer=${dealer}&vin=${vin}`,
+      `/service/maintenance/intervals/${id}/?dealer=${dealer}&vin=${vin}`,
       baseRequestParams,
     );
   },
