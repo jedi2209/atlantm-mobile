@@ -82,16 +82,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'normal',
   },
-  scrollView: {},
-  scrollViewInner: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
 });
 
 import {SafeAreaView} from 'react-navigation';
 import {verticalScale} from '../../utils/scale';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {CarCard} from '../components/CarCard';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   //TODO: owner true должен быть показан первым
@@ -129,64 +125,6 @@ const mapDispatchToProps = {
   getProfileSapData,
 };
 
-const CarCard = ({data}) => {
-  const {brand, model, number} = data;
-  return (
-    <View
-      style={[
-        styles.scrollViewInner,
-        styleConst.shadow.default,
-        {
-          backgroundColor: '#fafafa',
-          marginTop: 10,
-          marginBottom: 20,
-          marginLeft: 8,
-          marginRight: 8,
-          borderRadius: 5,
-          width: 150,
-          justifyContent: 'space-between',
-          paddingBottom: 40,
-          height: 155,
-        },
-      ]}>
-      <View>
-        <Text
-          ellipsizeMode="tail"
-          numberOfLines={1}
-          style={{
-            color: styleConst.color.greyText,
-            fontSize: 14,
-            paddingTop: 20,
-            paddingBottom: 10,
-            paddingHorizontal: 20,
-          }}>
-          {`${brand} ${model}`}
-        </Text>
-        <Text
-          ellipsizeMode="tail"
-          numberOfLines={1}
-          style={{
-            color: styleConst.color.greyText2,
-            fontSize: 19,
-            paddingHorizontal: 20,
-          }}>
-          {number}
-        </Text>
-      </View>
-      <Icon
-        name="car"
-        type="FontAwesome5"
-        style={{
-          fontSize: 54,
-          color: '#0061ed',
-          marginLeft: 12,
-          marginTop: 20,
-        }}
-      />
-      {/* <Image style={{width: '100%'}} source={require('./Bitmap.png')} /> */}
-    </View>
-  );
-};
 class ProfileScreenInfo extends Component {
   constructor(props) {
     super(props);
@@ -240,7 +178,7 @@ class ProfileScreenInfo extends Component {
         }
         this.setState({loading: false});
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(
           'ERROR если что-то идет не так то разлогиниваем пользователя',
           err,
@@ -261,8 +199,9 @@ class ProfileScreenInfo extends Component {
               marginHorizontal: 20,
               marginTop: 10,
             }}>
-            {`${this.props.login.first_name || ''} ${this.props.login
-              .last_name || ''}`}
+            {`${this.props.login.first_name || ''} ${
+              this.props.login.last_name || ''
+            }`}
           </Text>
           {!this.state.loading ? (
             <Button
@@ -367,9 +306,8 @@ class ProfileScreenInfo extends Component {
                 <ScrollView
                   showsHorizontalScrollIndicator={false}
                   horizontal
-                  contentContainerStyle={{paddingLeft: 12, paddingRight: 5}}
-                  style={styles.scrollView}>
-                  {this.props.cars.map(item => (
+                  contentContainerStyle={{paddingLeft: 12, paddingRight: 5}}>
+                  {this.props.cars.map((item) => (
                     <TouchableWithoutFeedback
                       key={item.vin}
                       onPress={() =>
@@ -583,7 +521,4 @@ class ProfileScreenInfo extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ProfileScreenInfo);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreenInfo);

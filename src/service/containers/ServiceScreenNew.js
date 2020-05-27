@@ -14,33 +14,26 @@ import {
   Platform,
   StatusBar,
 } from 'react-native';
-import {Button} from 'native-base';
-import DatePicker from 'react-native-datepicker';
-import {StackActions, NavigationActions} from 'react-navigation';
+import {Icon, Picker} from 'native-base';
+import {orderBy} from 'lodash';
+
+import {CarCard} from '../../profile/components/CarCard';
+import DealerItemList from '../../core/components/DealerItemList';
+import ChooseDateTimeComponent from '../components/ChooseDateTimeComponent';
 
 // redux
 import {connect} from 'react-redux';
 import {dateFill, orderService} from '../actions';
 import {carFill, nameFill, phoneFill, emailFill} from '../../profile/actions';
 
-import DeviceInfo from 'react-native-device-info';
-import DealerItemList from '../../core/components/DealerItemList';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-
-import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
-import {TextInput} from '../../core/components/TextInput';
-
-// helpers
-import Amplitude from '../../utils/amplitude-analytics';
-import isInternet from '../../utils/internet';
-import {yearMonthDay} from '../../utils/date';
-import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
-import {ERROR_NETWORK} from '../../core/const';
-import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
+import API from '../../utils/api';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
+  //TODO: owner true должен быть показан первым
+  const cars = orderBy(profile.login.cars, ['owner'], ['asc']);
+
   return {
+    cars,
     nav,
     date: service.date,
     car: profile.car,
@@ -62,49 +55,129 @@ const mapDispatchToProps = {
   orderService,
 };
 
+const styles = StyleSheet.create({
+  group: {
+    marginBottom: 36,
+  },
+});
+
 class ServiceScreen extends Component {
   constructor(props) {
     super(props);
+
+    const car = this.props.cars && this.props.cars.find((value) => value.owner);
+
+    this.state = {
+      car: car,
+      service: '',
+      services: [],
+    };
   }
 
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
+  onValueChange2(value) {
+    this.setState({
+      service: value,
+    });
+  }
 
-    return {
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: (
-        <HeaderIconBack
-          theme="white"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-    };
-  };
+  async _getServices() {
+    console.log('start _getServices');
+    const data = await API.getServiceAvailable({
+      dealer: this.props.dealerSelected.id,
+      vin: this.state.car.vin,
+    });
 
-  static propTypes = {
-    dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
-    carFill: PropTypes.func,
-    dateFill: PropTypes.func,
-    nameFill: PropTypes.func,
-    phoneFill: PropTypes.func,
-    emailFill: PropTypes.func,
-    name: PropTypes.string,
-    car: PropTypes.string,
-    date: PropTypes.object,
-    isOrderServiceRequest: PropTypes.bool,
-  };
+    this.setState({
+        services: data.data
+    })
+  }
+
+  componentDidMount() {
+    if(this.state.car && this.state.car.vin) {
+        this._getServices();
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log(prevState.car.vin !== this.state.car.vin);
+    if (prevState.car.vin !== this.state.car.vin) {
+      this._getServices();
+    }
+  }
 
   render() {
     const {navigation, dealerSelected} = this.props;
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    return <Text>hello</Text>;
+    return (
+      <>
+        <View
+          // Визуально выравниваем относительно остальных компонентов.
+          style={[styles.group, {marginLeft: -14, marginRight: -14}]}>
+          <DealerItemList
+            goBack
+            navigation={navigation}
+            city={dealerSelected.city}
+            name={dealerSelected.name}
+            brands={dealerSelected.brands}
+          />
+        </View>
+        <Text>Выберите автомобиль</Text>
+        {this.props.cars.length > 0 ? (
+          <View style={{height: 200}}>
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              style={{height: 200}}
+              contentContainerStyle={{
+                paddingLeft: 12,
+                paddingRight: 5,
+                backgroundColor: 'red',
+                height: 200,
+              }}>
+              {this.props.cars.map((item) => (
+                <TouchableWithoutFeedback
+                  key={item.vin}
+                  onPress={() => {
+                    this.setState({
+                      car: item,
+                    });
+                  }}>
+                  <View>
+                    <CarCard
+                      data={item}
+                      type="check"
+                      checked={Boolean(this.state.car.vin === item.vin)}
+                    />
+                  </View>
+                </TouchableWithoutFeedback>
+              ))}
+            </ScrollView>
+          </View>
+        ) : null}
+        <Text>Выберите доступную услугу</Text>
+        <Picker
+          mode="dropdown"
+          iosIcon={<Icon name="arrow-down" />}
+          style={{width: undefined}}
+          placeholder="Select your SIM"
+          placeholderStyle={{color: '#bfc6ea'}}
+          placeholderIconColor="#007aff"
+          selectedValue={this.state.service}
+          onValueChange={this.onValueChange2.bind(this)}>
+          {this.state.services.map((item) => {
+            return <Picker.Item label={item.name} value={item.id} />;
+          })}
+        </Picker>
+        {!this.state.service ? (
+          <ChooseDateTimeComponent
+            dealer={dealerSelected}
+            onChange={(data) => {
+              console.log('=====> work', data);
+            }}
+          />
+        ) : null}
+      </>
+    );
   }
 }
 

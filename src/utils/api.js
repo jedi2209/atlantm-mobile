@@ -54,7 +54,7 @@ export default {
     }
     let requestedVersion = parseInt(version.replace(/\./gi, ''));
     let req = this.request('/mobile/check/version/', baseRequestParams);
-    return req.then(res => {
+    return req.then((res) => {
       let APPVersionFromApi = parseInt(res.version.replace(/\./gi, ''));
       if (APPVersionFromApi > requestedVersion) {
         let STORE_LINK;
@@ -154,9 +154,7 @@ export default {
     let url = `/stock/trade-in/cars/get/city/${city}/`;
 
     if (priceRange) {
-      url += `?price_from=${priceRange.minPrice}&price_to=${
-        priceRange.maxPrice
-      }`;
+      url += `?price_from=${priceRange.minPrice}&price_to=${priceRange.maxPrice}`;
     }
 
     return this.request(nextPageUrl || url, baseRequestParams);
@@ -387,7 +385,7 @@ export default {
       },
     ]);
 
-    const photosBody = props.photos.map(photo => {
+    const photosBody = props.photos.map((photo) => {
       return {
         name: 'f_Photo[]',
         type: photo.mime,
@@ -411,7 +409,6 @@ export default {
   },
 
   fetchCars({token, userid}) {
-    console.log('token =================>', token);
     return this.request(
       `/lkk/cars/?userid=${userid}&token=${token}`,
       baseRequestParams,
@@ -525,11 +522,11 @@ export default {
     });
 
     return this.request('/lkk/auth/social/', requestParams)
-      .then(data => {
+      .then((data) => {
         console.log('>>> login with data api:::', data, profile);
         return {status: 'success', error: {}, profile, data};
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   },
@@ -549,21 +546,21 @@ export default {
     });
 
     return this.request('/lkk/auth/validate/', requestParams)
-      .then(data => {
+      .then((data) => {
         return {status: 'success', error: {}, data};
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   },
 
   getProfile(id) {
     return this.request(`/lkk/user/${id}/`, baseRequestParams)
-      .then(data => {
+      .then((data) => {
         console.log('getProfile >>>>>>>>', data);
         return data.data;
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   },
@@ -580,12 +577,34 @@ export default {
     });
 
     return this.request(`/lkk/user/${profile.userID}/`, requestParams)
-      .then(data => {
+      .then((data) => {
         return {status: 'success', error: {}, data};
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
+  },
+
+  getServiceAvailable({dealer, vin}) {
+    return this.request(
+      `/service/maintenance/intervals/?dealer=${dealer}&vin=${vin}`,
+      baseRequestParams,
+    );
+  },
+
+  getServiceInfo({id, dealer, vin}) {
+    return this.request(
+      `service/maintenance/intervals/${id}/?dealer=${dealer}&vin=${vin}`,
+      baseRequestParams,
+    );
+  },
+
+  getPeriodForServiceInfo({dealer, date}) {
+    // Дата в формате [YYYY-MM-DD] или [YYYYMMDD] или [DD.MM.YYYY]
+    return this.request(
+      `/service/order/?dealer=${dealer}&date=${date}`,
+      baseRequestParams,
+    );
   },
 
   request(path, requestParams) {
@@ -598,8 +617,8 @@ export default {
       delete requestParams.headers.Debug;
     }
 
-    // console.log('>>> url', url);
-    // console.log('>>> requestParams', requestParams);
+    console.log('>>> url', url);
+    console.log('>>> requestParams', requestParams);
 
     return this.apiGetData(url, requestParams);
   },
@@ -607,6 +626,7 @@ export default {
   async apiGetData(url, requestParams) {
     try {
       const response = await fetch(url, requestParams);
+      console.log('response', response);
       return response.json();
     } catch (err) {
       console.log('apiGetDataError URL: ' + url, err);
