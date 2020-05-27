@@ -4,6 +4,7 @@ import React from 'react';
 import {View, Text} from 'react-native';
 import styleConst from '../../core/style-const';
 import {Icon, CheckBox} from 'native-base';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 const styles = {
   scrollView: {},
@@ -68,9 +69,14 @@ export const CarCard = ({data, type, checked}) => {
         }}
       />
       {type === 'check' && (
-        <View style={{position: 'absolute', bottom: 15, right: 25}}>
-          <CheckBox checked={checked} />
-        </View>
+        <TouchableWithoutFeedback
+          containerStyle={{position: 'absolute', bottom: 16, right: 16}}>
+          <CheckBox
+            checked={checked}
+            color="#027aff"
+            style={{marginRight: 10}}
+          />
+        </TouchableWithoutFeedback>
       )}
       {/* <Image style={{width: '100%'}} source={require('./Bitmap.png')} /> */}
     </View>

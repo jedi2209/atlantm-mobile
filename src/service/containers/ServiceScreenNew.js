@@ -56,8 +56,35 @@ const mapDispatchToProps = {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingVertical: 20,
+    paddingHorizontal: 14,
+  },
+  carContainer: {
+    marginLeft: -14,
+    marginRight: -14,
+  },
+  carContainerContent: {
+    // Добавляем отрицательный оступ, для контейнера с карточками,
+    // т.к. в карточках отступ снизу больше чем сверху из-за места использования.
+    marginBottom: -10,
+  },
   group: {
     marginBottom: 36,
+  },
+  field: {
+    marginBottom: 18,
+  },
+  label: {
+    fontSize: 14,
+    color: '#000',
+    marginBottom: -2,
+  },
+  picker: {
+    borderColor: '#d8d8d8',
+    borderBottomWidth: 1,
+    height: 40,
   },
 });
 
@@ -109,74 +136,88 @@ class ServiceScreen extends Component {
     const {navigation, dealerSelected} = this.props;
 
     return (
-      <>
-        <View
-          // Визуально выравниваем относительно остальных компонентов.
-          style={[styles.group, {marginLeft: -14, marginRight: -14}]}>
-          <DealerItemList
-            goBack
-            navigation={navigation}
-            city={dealerSelected.city}
-            name={dealerSelected.name}
-            brands={dealerSelected.brands}
-          />
-        </View>
-        <Text>Выберите автомобиль</Text>
-        {this.props.cars.length > 0 ? (
-          <View style={{height: 200}}>
-            <ScrollView
-              showsHorizontalScrollIndicator={false}
-              horizontal
-              style={{height: 200}}
-              contentContainerStyle={{
-                paddingLeft: 12,
-                paddingRight: 5,
-                backgroundColor: 'red',
-                height: 200,
-              }}>
-              {this.props.cars.map((item) => (
-                <TouchableWithoutFeedback
-                  key={item.vin}
-                  onPress={() => {
-                    this.setState({
-                      car: item,
-                    });
-                  }}>
-                  <View>
-                    <CarCard
-                      data={item}
-                      type="check"
-                      checked={Boolean(this.state.car.vin === item.vin)}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-              ))}
-            </ScrollView>
+      <ScrollView>
+        <View style={styles.container}>
+          <StatusBar barStyle="light-content" />
+          <View
+            // Визуально выравниваем относительно остальных компонентов.
+            style={[styles.group, {marginLeft: -24, marginRight: -14}]}>
+            <DealerItemList
+              goBack
+              navigation={navigation}
+              city={dealerSelected.city}
+              name={dealerSelected.name}
+              brands={dealerSelected.brands}
+            />
           </View>
-        ) : null}
-        <Text>Выберите доступную услугу</Text>
-        <Picker
-          mode="dropdown"
-          iosIcon={<Icon name="arrow-down" />}
-          style={{width: undefined}}
-          placeholder="Select your SIM"
-          placeholderStyle={{color: '#bfc6ea'}}
-          placeholderIconColor="#007aff"
-          selectedValue={this.state.service}
-          onValueChange={this.onValueChange2.bind(this)}>
-          {this.state.services.map((item) => {
-            return <Picker.Item label={item.name} value={item.id} />;
-          })}
-        </Picker>
-        {!this.state.service ? (
-          <ChooseDateTimeComponent
-            dealer={dealerSelected}
-            onChange={(data) => {
-              console.log('=====> work', data);
-            }}
-          />
-        ) : null}
-      </>
+
+          <View style={styles.field}>
+            <Text style={styles.label}>Выберите автомобиль</Text>
+            {/* TODO: Разобраться, почему есть вертикальный скролл внутри контейнера. */}
+            {this.props.cars.length && (
+              <ScrollView
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                style={styles.carContainer}
+                contentContainerStyle={styles.carContainerContent}>
+                {this.props.cars.map((item) => (
+                  <TouchableWithoutFeedback
+                    key={item.vin}
+                    onPress={() => this.setState({car: item})}>
+                    <View>
+                      <CarCard
+                        data={item}
+                        type="check"
+                        checked={this.state.car.vin === item.vin}
+                      />
+                    </View>
+                  </TouchableWithoutFeedback>
+                ))}
+              </ScrollView>
+            )}
+          </View>
+
+          <View style={styles.field}>
+            <Text style={styles.label}>Выберите доступную услугу</Text>
+            <Picker
+              mode="dropdown"
+              iosIcon={
+                <Icon
+                  name="arrow-down"
+                  style={{color: '#c7c7c7', marginRight: 0}}
+                />
+              }
+              style={styles.picker}
+              // TODO: Переименовать на русский.
+              placeholder="Select your SIM"
+              placeholderStyle={{
+                color: '#d8d8d8',
+                fontSize: 18,
+                paddingLeft: 0,
+              }}
+              textStyle={{
+                paddingLeft: 0,
+              }}
+              selectedValue={this.state.service}
+              onValueChange={this.onValueChange2.bind(this)}>
+              {this.state.services.map((item) => (
+                <Picker.Item label={item.name} value={item.id} />
+              ))}
+            </Picker>
+          </View>
+
+          <View style={styles.field}>
+            {!this.state.service && (
+              <ChooseDateTimeComponent
+                dealer={dealerSelected}
+                onChange={(data) => {
+                  console.log('=====> work', data);
+                }}
+              />
+            )}
+          </View>
+        </View>
+      </ScrollView>
     );
   }
 }
