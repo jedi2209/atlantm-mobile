@@ -5,6 +5,8 @@ moment.locale('ru');
 
 // moment.js playground https://codepen.io/widmoser/pen/NNOQEx
 
+export const time = (date) => date ? moment(date).format('HH:mm') : null;
+
 export const dayMonth = (ts) => ts ? moment(ts).format('D MMMM') : null;
 
 export const yearMonthDay = (date) => date ? moment(date).format('YYYY-MM-DD') : null;
