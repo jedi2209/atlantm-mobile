@@ -14,7 +14,8 @@ import {
   Platform,
   StatusBar,
 } from 'react-native';
-import {Icon, Picker} from 'native-base';
+import Modal from 'react-native-modal';
+import {Icon, Picker, Button} from 'native-base';
 import {orderBy} from 'lodash';
 
 import {CarCard} from '../../profile/components/CarCard';
@@ -27,6 +28,7 @@ import {dateFill, orderService} from '../actions';
 import {carFill, nameFill, phoneFill, emailFill} from '../../profile/actions';
 
 import API from '../../utils/api';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
   //TODO: owner true должен быть показан первым
@@ -98,6 +100,7 @@ class ServiceScreen extends Component {
       car: car,
       service: '',
       services: [],
+      isModalVisible: false,
     };
   }
 
@@ -105,6 +108,8 @@ class ServiceScreen extends Component {
     this.setState({
       service: value,
     });
+
+    this._getServicesInfo(value);
   }
 
   async _getServices() {
@@ -114,19 +119,35 @@ class ServiceScreen extends Component {
       vin: this.state.car.vin,
     });
 
+    console.log('data.data', data.data);
+
     this.setState({
-        services: data.data
-    })
+      services: data.data,
+    });
+  }
+
+  async _getServicesInfo(id) {
+    console.log('start _getServicesInfo');
+    const data = await API.getServiceInfo({
+      id,
+      dealer: this.props.dealerSelected.id,
+      vin: this.state.car.vin,
+    });
+
+    console.log('data.data', data.data);
+
+    this.setState({
+      serviceInfo: data.data,
+    });
   }
 
   componentDidMount() {
-    if(this.state.car && this.state.car.vin) {
-        this._getServices();
+    if (this.state.car && this.state.car.vin) {
+      this._getServices();
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(prevState.car.vin !== this.state.car.vin);
     if (prevState.car.vin !== this.state.car.vin) {
       this._getServices();
     }
@@ -205,9 +226,18 @@ class ServiceScreen extends Component {
               ))}
             </Picker>
           </View>
-
+          {this.state.serviceInfo && (
+            <TouchableOpacity
+              style={{paddingBottom: 20}}
+              onPress={() => {
+                this.setState({isModalVisible: !this.state.isModalVisible});
+                console.log(this.state.serviceInfo);
+              }}>
+              <Text>Показать данные об услуге</Text>
+            </TouchableOpacity>
+          )}
           <View style={styles.field}>
-            {!this.state.service && (
+            {Boolean(this.state.service) && (
               <ChooseDateTimeComponent
                 dealer={dealerSelected}
                 onChange={(data) => {
@@ -216,6 +246,19 @@ class ServiceScreen extends Component {
               />
             )}
           </View>
+        </View>
+        <View>
+          <Modal isVisible={this.state.isModalVisible}>
+            <View style={{flex: 1, backgroundColor: '#fff', padding: 20}}>
+              <Text>Hello!</Text>
+              <Button
+                onPress={() => {
+                  this.setState({isModalVisible: !this.state.isModalVisible});
+                }}>
+                <Text>Понятно</Text>
+              </Button>
+            </View>
+          </Modal>
         </View>
       </ScrollView>
     );
