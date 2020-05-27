@@ -25,7 +25,6 @@ import {carFill, nameFill, phoneFill, emailFill} from '../../profile/actions';
 
 import DeviceInfo from 'react-native-device-info';
 import DealerItemList from '../../core/components/DealerItemList';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
@@ -35,7 +34,6 @@ import Amplitude from '../../utils/amplitude-analytics';
 import isInternet from '../../utils/internet';
 import {yearMonthDay} from '../../utils/date';
 import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
 import {ERROR_NETWORK} from '../../core/const';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
 
@@ -161,7 +159,7 @@ class ServiceScreen extends Component {
         model: '',
       };
     } else {
-      car = (cars && cars.find(value => value.owner)) || {
+      car = (cars && cars.find((value) => value.owner)) || {
         number: '',
         brand: '',
         model: '',
@@ -180,23 +178,6 @@ class ServiceScreen extends Component {
     };
   }
 
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
-    return {
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: (
-        <HeaderIconBack
-          theme="white"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-    };
-  };
-
   static propTypes = {
     dealerSelected: PropTypes.object,
     navigation: PropTypes.object,
@@ -206,14 +187,12 @@ class ServiceScreen extends Component {
     phoneFill: PropTypes.func,
     emailFill: PropTypes.func,
     name: PropTypes.string,
-    // phone: PropTypes.string || PropTypes.object,
-    // email: PropTypes.string || PropTypes.object,
     car: PropTypes.string,
     date: PropTypes.object,
     isOrderServiceRequest: PropTypes.bool,
   };
 
-  onChangeField = fieldName => value => {
+  onChangeField = (fieldName) => (value) => {
     this.setState({[fieldName]: value});
   };
 
@@ -439,7 +418,4 @@ class ServiceScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ServiceScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ServiceScreen);

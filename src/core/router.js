@@ -8,6 +8,7 @@ import IntroScreen from '../intro/containers/IntroScreen';
 import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
 import BottomTabNavigation from '../menu/containers/BottomTabNavigation';
 import ServiceScreen from '../service/containers/ServiceScreen';
+import ServiceContainer from '../service/containers/ServiceContainer';
 import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
 
 // tva
@@ -33,7 +34,7 @@ import OrderScreen from '../catalog/containers/OrderScreen';
 
 import ReestablishScreen from '../profile/containers/ReestablishScreen';
 
-export const getRouter = initialRouteName => {
+export const getRouter = (initialRouteName) => {
   return createStackNavigator(
     {
       MapScreen: {
@@ -57,7 +58,7 @@ export const getRouter = initialRouteName => {
       IntroScreen: {screen: IntroScreen}, // это скрин с кнопкой выберите автосервис
       BottomTabNavigation: {screen: BottomTabNavigation}, // это нижнее меню
       ChooseDealerScreen: {screen: ChooseDealerScreen}, // выбор диллера скрин
-      ServiceScreen: {screen: ServiceScreen}, // заявка на СТО
+      ServiceScreen: {screen: ServiceContainer}, // заявка на СТО
       CallMeBackScreen: {screen: CallMeBackScreen},
       IndicatorsScreen: {screen: IndicatorsScreen}, // индикаторы
       // табло выдачи автомобиля
@@ -82,7 +83,7 @@ export const getRouter = initialRouteName => {
     {
       initialRouteName,
       transitionConfig: () => ({
-        screenInterpolator: sceneProps => {
+        screenInterpolator: (sceneProps) => {
           // Disable the transition animation when resetting to the home screen.
           return sceneProps.scene.route.routeName === 'BottomTabNavigation'
             ? StackViewStyleInterpolator.forFadeFromBottomAndroid(sceneProps)
