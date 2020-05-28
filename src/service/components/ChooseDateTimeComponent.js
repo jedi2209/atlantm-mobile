@@ -75,11 +75,27 @@ const datePickerStyles = StyleSheet.create({
 export default class ChooseDateTimeComponent extends Component {
   constructor(props) {
     super(props);
+
+    console.log('props.time ====>', props.time);
     this.state = {
-      time: undefined,
-      date: undefined,
+      time: props.time ? props.time / 1000 : undefined,
+      date: props.time || undefined,
       availablePeriods: [],
     };
+  }
+
+  componentDidMount() {
+    if (this.state.date) {
+      this._getTimePeriod(this.state.date);
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.date !== this.props.time && this.props.time === undefined) {
+      this.setState({
+        date: undefined
+      });
+    }
   }
 
   async _getTimePeriod(date) {
@@ -98,6 +114,8 @@ export default class ChooseDateTimeComponent extends Component {
     if (availablePeriods.data == null) {
       alert('Нет доступных периодов, попробуйте выбрать другой день');
     }
+
+    console.log('availablePeriods.data', availablePeriods.data);
 
     this.setState({availablePeriods: availablePeriods.data});
   }
@@ -134,7 +152,8 @@ export default class ChooseDateTimeComponent extends Component {
             <View style={styles.timeContainer}>
               {this.state.availablePeriods.map((item) => {
                 const from = time(item.from * 1000);
-                const isActive = item.from === this.state.time;
+                // eslint-disable-next-line eqeqeq
+                const isActive = item.from == this.state.time;
                 return (
                   <Button
                     style={[
@@ -145,7 +164,7 @@ export default class ChooseDateTimeComponent extends Component {
                       this.setState({time: item.from});
                       this.props.onChange({
                         date: this.state.date,
-                        time: this.state.time,
+                        time: item.from,
                       });
                     }}>
                     <Text
