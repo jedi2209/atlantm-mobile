@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   button: {
-    width: 64,
+    width: 120,
     margin: 10,
     justifyContent: 'center',
     paddingHorizontal: 10,
@@ -93,7 +93,7 @@ export default class ChooseDateTimeComponent extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.date !== this.props.time && this.props.time === undefined) {
       this.setState({
-        date: undefined
+        date: undefined,
       });
     }
   }
@@ -152,6 +152,8 @@ export default class ChooseDateTimeComponent extends Component {
             <View style={styles.timeContainer}>
               {this.state.availablePeriods.map((item) => {
                 const from = time(item.from * 1000);
+                const to = time(item.to * 1000);
+                console.log('time ===>', from, to);
                 // eslint-disable-next-line eqeqeq
                 const isActive = item.from == this.state.time;
                 return (
@@ -172,7 +174,7 @@ export default class ChooseDateTimeComponent extends Component {
                         styles.buttonText,
                         {color: isActive ? '#fff' : '#027aff'},
                       ]}>
-                      {from}
+                      {`${from} - ${to}`}
                     </Text>
                   </Button>
                 );

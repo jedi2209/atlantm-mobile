@@ -127,7 +127,7 @@ class ServiceScreen extends Component {
       step: 1,
       email: email ? email.value : '',
       phone: phone ? phone.value : '',
-      name: `${first_name} ${last_name}`,
+      name: first_name && last_name ? `${first_name} ${last_name}` : '',
       carName: '',
       carNumber: '',
       isHaveCar: Boolean(props.cars.length > 0),
@@ -180,19 +180,15 @@ class ServiceScreen extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // if (
-    //   prevState.car.vin !== undefined &&
-    //   prevState.car.vin !== this.state.car.vin
-    // ) {
-    //   this.setState({
-    //     services: [],
-    //     time: undefined,
-    //     service: undefined,
-    //     serviceInfo: undefined,
-    //     isButtonVisible: false,
-    //   });
-    //   this._getServices();
-    // }
+    if (prevState.car.vin !== this.state.car.vin) {
+      this.setState({
+        services: [],
+        time: undefined,
+        service: undefined,
+        serviceInfo: undefined,
+      });
+      this._getServices();
+    }
   }
 
   saveOrder() {
@@ -200,11 +196,17 @@ class ServiceScreen extends Component {
   }
 
   onChangeField = (fieldName) => (value) => {
+    console.log('onChangeField');
     this.setState({[fieldName]: value});
   };
 
   render() {
     const {navigation, dealerSelected} = this.props;
+
+    const isButtonVisible = Boolean(
+      (this.state.service && this.state.time) ||
+        (this.state.carName && this.state.carNumber && this.state.time),
+    );
 
     return (
       <ScrollView>
@@ -231,7 +233,7 @@ class ServiceScreen extends Component {
                       style={styles.textinput}
                       label="Авто"
                       value={this.state.carName || ''}
-                      onChangeText={this.onChangeField('car')}
+                      onChangeText={this.onChangeField('carName')}
                     />
                   </View>
                   <View style={styles.field}>
@@ -327,7 +329,7 @@ class ServiceScreen extends Component {
                   />
                 )}
               </View>
-              {this.state.isButtonVisible && (
+              {isButtonVisible && (
                 <View>
                   <Button
                     style={styles.button}
@@ -349,7 +351,6 @@ class ServiceScreen extends Component {
                     style={styles.textinput}
                     label="ФИО"
                     value={this.state.name || ''}
-                    enablesReturnKeyAutomatically={true}
                     textContentType={'name'}
                     onChangeText={this.onChangeField('name')}
                   />
@@ -360,7 +361,6 @@ class ServiceScreen extends Component {
                     label="Телефон"
                     keyboardType="phone-pad"
                     value={this.state.phone || ''}
-                    enablesReturnKeyAutomatically={true}
                     textContentType={'telephoneNumber'}
                     onChangeText={this.onChangeField('phone')}
                   />
@@ -371,7 +371,6 @@ class ServiceScreen extends Component {
                     label="Email"
                     keyboardType="email-address"
                     value={this.state.email || ''}
-                    enablesReturnKeyAutomatically={true}
                     textContentType={'emailAddress'}
                     onChangeText={this.onChangeField('email')}
                   />
