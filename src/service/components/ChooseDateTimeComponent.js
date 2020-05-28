@@ -167,6 +167,7 @@ export default class ChooseDateTimeComponent extends Component {
                       this.props.onChange({
                         date: this.state.date,
                         time: item.from,
+                        tech_place: item.tech_place,
                       });
                     }}>
                     <Text

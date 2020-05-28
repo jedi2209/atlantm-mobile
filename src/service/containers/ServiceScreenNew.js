@@ -33,7 +33,6 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
   const cars = orderBy(profile.login.cars, ['owner'], ['desc']);
-  console.log('cars =====>', cars);
 
   return {
     cars,
@@ -145,13 +144,10 @@ class ServiceScreen extends Component {
   }
 
   async _getServices() {
-    console.log('start _getServices');
     const data = await API.getServiceAvailable({
       dealer: this.props.dealerSelected.id,
       vin: this.state.car.vin,
     });
-
-    console.log('data.data', data.data);
 
     this.setState({
       services: data.data,
@@ -159,14 +155,11 @@ class ServiceScreen extends Component {
   }
 
   async _getServicesInfo(id) {
-    console.log('start _getServicesInfo');
     const data = await API.getServiceInfo({
       id,
       dealer: this.props.dealerSelected.id,
       vin: this.state.car.vin,
     });
-
-    console.log('data.data', data.data);
 
     this.setState({
       serviceInfo: data.data,
@@ -193,10 +186,42 @@ class ServiceScreen extends Component {
 
   saveOrder() {
     console.log('this.state ==>', this.state);
+    console.log('this.state.serviceInfo ==>', this.state.serviceInfo);
+
+    if (this.state.isHaveCar) {
+      console.log('dealer', this.props.dealerSelected.id);
+      console.log('time', {
+        from: this.state.time,
+        to: 'this.state.time + this.state.serviceInfo.summary[0].time.total',
+      });
+      console.log('name', this.state.name);
+      console.log('phone', this.state.phone);
+      console.log('email', this.state.email);
+      console.log('tech_place', this.state.tech_place);
+      console.log('vin', this.state.car.vin);
+      console.log('car', {
+        name: `${this.state.car.brand} ${this.state.car.model}`,
+        plate: this.state.car.number,
+      });
+    } else {
+      console.log('dealer', this.props.dealerSelected.id);
+      console.log('time', {
+        from: this.state.time,
+        to: 'this.state.time + this.state.serviceInfo.summary[0].time.total',
+      });
+      console.log('name', this.state.name);
+      console.log('phone', this.state.phone);
+      console.log('email', this.state.email);
+      console.log('tech_place', this.state.tech_place);
+      console.log('vin', this.state.carVin);
+      console.log('car', {
+        name: this.state.carName,
+        plate: this.state.carNumber,
+      });
+    }
   }
 
   onChangeField = (fieldName) => (value) => {
-    console.log('onChangeField');
     this.setState({[fieldName]: value});
   };
 
@@ -242,6 +267,14 @@ class ServiceScreen extends Component {
                       label="Гос. номер"
                       value={this.state.carNumber || ''}
                       onChangeText={this.onChangeField('carNumber')}
+                    />
+                  </View>
+                  <View style={styles.field}>
+                    <TextInput
+                      style={styles.textinput}
+                      label="Vin номер"
+                      value={this.state.carVin || ''}
+                      onChangeText={this.onChangeField('carVin')}
                     />
                   </View>
                 </View>
@@ -312,7 +345,6 @@ class ServiceScreen extends Component {
                   style={{paddingBottom: 20}}
                   onPress={() => {
                     this.setState({isModalVisible: !this.state.isModalVisible});
-                    console.log(this.state.serviceInfo);
                   }}>
                   <Text>Показать данные об услуге</Text>
                 </TouchableOpacity>
@@ -323,8 +355,10 @@ class ServiceScreen extends Component {
                     time={this.state.time}
                     dealer={dealerSelected}
                     onChange={(data) => {
-                      console.log('=====> time', data.time);
-                      this.setState({time: data.time * 1000});
+                      this.setState({
+                        time: data.time * 1000,
+                        tech_place: data.tech_place,
+                      });
                     }}
                   />
                 )}
