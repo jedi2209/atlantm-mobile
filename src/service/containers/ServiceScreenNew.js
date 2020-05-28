@@ -156,6 +156,14 @@ class ServiceScreen extends Component {
       vin: this.state.car.vin,
     });
 
+    console.log('data ======>', data);
+    if (data.status !== 200 && data.status !== 'success') {
+      Alert.alert(
+        'Доступных услуг не найдено. Попробуйте записаться в другой автоцентр',
+      );
+      data.data = [];
+    }
+
     this.setState({
       services: data.data,
     });
@@ -167,6 +175,12 @@ class ServiceScreen extends Component {
       dealer: this.props.dealerSelected.id,
       vin: this.state.car.vin,
     });
+
+    console.log('data.status ====>', data.status, data.status !== 'success');
+    if (data.status !== 'success' && data.status !== 200) {
+      Alert.alert('Не удалось загрузить информацию об услуге');
+      data.data = [];
+    }
 
     this.setState({
       serviceInfo: data.data,
@@ -299,7 +313,7 @@ class ServiceScreen extends Component {
                       horizontal
                       style={styles.carContainer}
                       contentContainerStyle={styles.carContainerContent}>
-                      {this.props.cars.map((item) => (
+                      {(this.props.cars || []).map((item) => (
                         <TouchableWithoutFeedback
                           key={item.vin}
                           onPress={() => this.setState({car: item})}>
@@ -341,7 +355,7 @@ class ServiceScreen extends Component {
                     }}
                     selectedValue={this.state.service}
                     onValueChange={this.onValueChange2.bind(this)}>
-                    {this.state.services.map((item) => (
+                    {(this.state.services || []).map((item) => (
                       <Picker.Item
                         key={item.id}
                         label={item.name}
