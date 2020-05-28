@@ -13,8 +13,8 @@ import {
   Dimensions,
   Platform,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
-import Modal from 'react-native-modal';
 import {Icon, Picker, Button} from 'native-base';
 import {sortBy, orderBy} from 'lodash';
 
@@ -22,6 +22,7 @@ import {CarCard} from '../../profile/components/CarCard';
 import DealerItemList from '../../core/components/DealerItemList';
 import ChooseDateTimeComponent from '../components/ChooseDateTimeComponent';
 import {TextInput} from '../../core/components/TextInput';
+import {ServiceModal} from '../components/ServiceModal';
 
 // redux
 import {connect} from 'react-redux';
@@ -29,7 +30,6 @@ import {dateFill, orderService} from '../actions';
 import {carFill, nameFill, phoneFill, emailFill} from '../../profile/actions';
 
 import API from '../../utils/api';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
   const cars = orderBy(profile.login.cars, ['owner'], ['desc']);
@@ -62,6 +62,13 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 14,
+  },
+  header: {
+    marginBottom: 36,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
   },
   carContainer: {
     marginLeft: -14,
@@ -235,7 +242,11 @@ class ServiceScreen extends Component {
 
     return (
       <ScrollView>
+        <StatusBar barStyle="light-content" />
         <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.heading}>Запись на сервис</Text>
+          </View>
           {this.state.step === 1 && (
             <>
               <StatusBar barStyle="light-content" />
@@ -439,17 +450,11 @@ class ServiceScreen extends Component {
           )}
         </View>
         <View>
-          <Modal isVisible={this.state.isModalVisible}>
-            <View style={{flex: 1, backgroundColor: '#fff', padding: 20}}>
-              <Text>Hello!</Text>
-              <Button
-                onPress={() => {
-                  this.setState({isModalVisible: !this.state.isModalVisible});
-                }}>
-                <Text>Понятно</Text>
-              </Button>
-            </View>
-          </Modal>
+          <ServiceModal
+            visible={this.state.isModalVisible}
+            onClose={() => this.setState({isModalVisible: false})}
+            data={this.state.serviceInfo}
+          />
         </View>
       </ScrollView>
     );
