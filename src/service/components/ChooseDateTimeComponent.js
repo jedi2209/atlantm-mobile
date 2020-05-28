@@ -76,10 +76,9 @@ export default class ChooseDateTimeComponent extends Component {
   constructor(props) {
     super(props);
 
-    console.log('props.time ====>', props.time);
     this.state = {
       time: props.time ? props.time / 1000 : undefined,
-      date: props.time || undefined,
+      date: props.time ? new Date(props.time) : undefined,
       availablePeriods: [],
     };
   }
@@ -150,7 +149,7 @@ export default class ChooseDateTimeComponent extends Component {
           <View style={styles.field}>
             <Text style={styles.label}>Выберите время</Text>
             <View style={styles.timeContainer}>
-              {this.state.availablePeriods.map((item) => {
+              {(this.state.availablePeriods || []).map((item) => {
                 const from = time(item.from * 1000);
                 const to = time(item.to * 1000);
                 console.log('time ===>', from, to);
