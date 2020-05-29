@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   button: {
-    width: 120,
+    width: 130,
     margin: 10,
     justifyContent: 'center',
     paddingHorizontal: 10,
