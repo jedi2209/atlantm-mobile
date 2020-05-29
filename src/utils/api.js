@@ -607,6 +607,20 @@ export default {
     );
   },
 
+  saveOrderToService(data) {
+    const requestParams = _.merge({}, baseRequestParams, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    return this.request('/service/order/', requestParams);
+
+  },
+
   request(path, requestParams) {
     const url = `${host}${path}`;
 

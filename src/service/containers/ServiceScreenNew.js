@@ -8,15 +8,13 @@ import {
   Text,
   TouchableWithoutFeedback,
   ScrollView,
-  Keyboard,
   ActivityIndicator,
-  Dimensions,
   Platform,
   StatusBar,
   TouchableOpacity,
 } from 'react-native';
 import {Icon, Picker, Button} from 'native-base';
-import {sortBy, orderBy} from 'lodash';
+import {orderBy} from 'lodash';
 
 import {CarCard} from '../../profile/components/CarCard';
 import DealerItemList from '../../core/components/DealerItemList';
@@ -205,7 +203,7 @@ class ServiceScreen extends Component {
     }
   }
 
-  saveOrder() {
+  async saveOrder() {
     console.log('this.state ==>', this.state);
     console.log('this.state.serviceInfo ==>', this.state.serviceInfo);
 
@@ -239,6 +237,57 @@ class ServiceScreen extends Component {
         name: this.state.carName,
         plate: this.state.carNumber,
       });
+    }
+
+    let data;
+
+    if (this.state.isHaveCar) {
+      data = {
+        dealer: this.props.dealerSelected.id,
+        time: {
+          from: this.state.time / 1000,
+          to:
+            // eslint-disable-next-line prettier/prettier
+            (this.state.time + this.state.serviceInfo.summary[0].time.total * 1000) / 1000,
+        },
+        name: this.state.name,
+        phone: this.state.phone,
+        email: this.state.email,
+        tech_place: this.state.tech_place,
+        vin: this.state.car.vin,
+        car: {
+          name: `${this.state.car.brand} ${this.state.car.model}`,
+          plate: this.state.car.number,
+        },
+      };
+    } else {
+      data = {
+        dealer: this.props.dealerSelected.id,
+        time: {
+          from: this.state.time / 1000,
+          to:
+            // eslint-disable-next-line prettier/prettier
+            (this.state.time + this.state.serviceInfo.summary[0].time.total * 1000) / 1000,
+        },
+        name: this.state.name,
+        phone: this.state.phone,
+        email: this.state.email,
+        tech_place: this.state.tech_place,
+        vin: this.state.carVin,
+        car: {
+          name: this.state.carName,
+          plate: this.state.carNumber,
+        },
+      };
+    }
+
+    console.log('=>>>>>> data', data);
+    const order = await API.saveOrderToService(data);
+
+    if (order.status === 'error') {
+      Alert.alert('', order.error.message);
+    } else {
+      Alert.alert('', 'Спасибо! Ваша запись оформлена');
     }
   }
 
