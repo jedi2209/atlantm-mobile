@@ -9,6 +9,7 @@ import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
 import BottomTabNavigation from '../menu/containers/BottomTabNavigation';
 import ServiceScreen from '../service/containers/ServiceScreen';
 import ServiceContainer from '../service/containers/ServiceContainer';
+import CarCostScreen from '../catalog/carcost/containers/CarCostScreen';
 import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
 
 // tva
@@ -60,6 +61,7 @@ export const getRouter = (initialRouteName) => {
       ChooseDealerScreen: {screen: ChooseDealerScreen}, // выбор диллера скрин
       ServiceScreen: {screen: ServiceContainer}, // заявка на СТО
       CallMeBackScreen: {screen: CallMeBackScreen},
+      CarCostScreen: {screen: CarCostScreen},
       IndicatorsScreen: {screen: IndicatorsScreen}, // индикаторы
       // табло выдачи автомобиля
       TvaScreen: {screen: TvaScreen},
