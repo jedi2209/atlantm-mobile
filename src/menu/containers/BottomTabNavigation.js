@@ -142,6 +142,10 @@ const BottomTabNavigation = createBottomTabNavigator(
                   onPress: () => navigation.navigate('ServiceScreen'),
                 },
                 {
+                  text: 'Оценить мой автомобиль',
+                  onPress: () => navigation.navigate('CarCostScreen'),
+                },
+                {
                   text: 'Отмена',
                   onPress: () => console.log('OK Pressed'),
                   style: 'destructive',

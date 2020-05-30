@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {SafeAreaView, StyleSheet, Alert, Platform} from 'react-native';
+import {SafeAreaView, StyleSheet, Alert, Platform, View} from 'react-native';
 import {Content, List, StyleProvider} from 'native-base';
+
+import {TextInput} from '../../../core/components/TextInput';
 
 // redux
 import {connect} from 'react-redux';
-import {nameFill, phoneFill, emailFill} from '../../../profile/actions';
 import {
   actionFillPhotosCarCost,
   actionFillBrandCarCost,
@@ -27,7 +28,6 @@ import {CAR_COST__SUCCESS, CAR_COST__FAIL} from '../../actionTypes';
 // components
 import Spinner from 'react-native-loading-spinner-overlay';
 import CommentOrderForm from '../../components/CommentOrderForm';
-import ProfileForm from '../../../profile/components/ProfileForm';
 import ListItemHeader from '../../../profile/components/ListItemHeader';
 import DealerItemList from '../../../core/components/DealerItemList';
 import ButtonFull from '../../../core/components/ButtonFull';
@@ -76,9 +76,7 @@ const mapStateToProps = ({dealer, profile, nav, catalog}) => {
 
   return {
     nav,
-    name: profile.name,
-    phone: profile.phone,
-    email: profile.email,
+    profile,
     dealerSelected: dealer.selected,
 
     // car cost
@@ -100,10 +98,6 @@ const mapStateToProps = ({dealer, profile, nav, catalog}) => {
 };
 
 const mapDispatchToProps = {
-  nameFill,
-  phoneFill,
-  emailFill,
-
   // carcost
   actionFillPhotosCarCost,
   actionFillBrandCarCost,
@@ -127,15 +121,54 @@ class CarCostScreen extends Component {
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <HeaderIconMenu navigation={navigation} />,
   });
+
+  constructor(props) {
+    super(props);
+
+    const {
+      last_name = '',
+      first_name = '',
+      phone,
+      cars,
+      email,
+    } = this.props.profile.login;
+
+    let car = '';
+
+    if (this.props.profile.login.car) {
+      car = {
+        number: this.props.profile.login.carNumber,
+        brand: this.props.profile.login.car,
+        model: '',
+      };
+    } else {
+      car = (cars && cars.find((value) => value.owner)) || {
+        number: '',
+        brand: '',
+        model: '',
+      };
+    }
+
+    this.state = {
+      date: '',
+      email: email ? email.value : '',
+      phone: phone ? phone.value : '',
+      car: `${car.brand} ${car.model}`,
+      carNumber: car.number,
+      name: `${first_name} ${last_name}`,
+      loading: false,
+      success: false,
+    };
+  }
+
+  onChangeField = (fieldName) => (value) => {
+    this.setState({[fieldName]: value});
+  };
 
   static propTypes = {
     dealerSelected: PropTypes.object,
     navigation: PropTypes.object,
-    nameFill: PropTypes.func,
-    phoneFill: PropTypes.func,
-    emailFill: PropTypes.func,
     name: PropTypes.string,
     phone: PropTypes.string,
     email: PropTypes.string,
@@ -206,7 +239,7 @@ class CarCostScreen extends Component {
         gearbox,
         carCondition,
         color,
-      }).then(action => {
+      }).then((action) => {
         if (action.type === CAR_COST__SUCCESS) {
           Amplitude.logEvent('order', 'catalog/carcost');
 
@@ -263,9 +296,6 @@ class CarCostScreen extends Component {
       name,
       phone,
       email,
-      nameFill,
-      emailFill,
-      phoneFill,
       navigation,
       dealerSelected,
 
@@ -327,15 +357,43 @@ class CarCostScreen extends Component {
               />
 
               <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
-              <ProfileForm
-                view="CarCostScreen"
-                name={name}
-                phone={phone}
-                email={email}
-                nameFill={nameFill}
-                phoneFill={phoneFill}
-                emailFill={emailFill}
-              />
+              <View>
+                <View style={styles.group}>
+                  <View style={styles.field}>
+                    <TextInput
+                      autoCorrect={false}
+                      style={styles.textinput}
+                      label="ФИО"
+                      value={this.state.name || ''}
+                      enablesReturnKeyAutomatically={true}
+                      textContentType={'name'}
+                      onChangeText={this.onChangeField('name')}
+                    />
+                  </View>
+                  <View style={styles.field}>
+                    <TextInput
+                      style={styles.textinput}
+                      label="Телефон"
+                      keyboardType="phone-pad"
+                      value={this.state.phone || ''}
+                      enablesReturnKeyAutomatically={true}
+                      textContentType={'telephoneNumber'}
+                      onChangeText={this.onChangeField('phone')}
+                    />
+                  </View>
+                  <View style={styles.field}>
+                    <TextInput
+                      style={styles.textinput}
+                      label="Email"
+                      keyboardType="email-address"
+                      value={this.state.email || ''}
+                      enablesReturnKeyAutomatically={true}
+                      textContentType={'emailAddress'}
+                      onChangeText={this.onChangeField('email')}
+                    />
+                  </View>
+                </View>
+              </View>
 
               <ListItemHeader text="АВТОМОБИЛЬ" />
               <CarCostForm
@@ -389,7 +447,4 @@ class CarCostScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(CarCostScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(CarCostScreen);
