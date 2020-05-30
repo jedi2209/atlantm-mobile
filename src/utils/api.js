@@ -618,7 +618,6 @@ export default {
     });
 
     return this.request('/service/order/', requestParams);
-
   },
 
   request(path, requestParams) {
