@@ -40,6 +40,21 @@ import {
   GraphRequestManager,
 } from 'react-native-fbsdk';
 import {LoginManager} from 'react-native-fbsdk';
+import VKLogin from 'react-native-vkontakte-login';
+import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
+
+GoogleSignin.configure({
+  scopes: ['https://www.googleapis.com/auth/userinfo.email'], // what API you want to access on behalf of the user, default is email and profile
+  webClientId:
+    'XXXX-XXXX.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+  offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+  hostedDomain: '', // specifies a hosted domain restriction
+  loginHint: '', // [iOS] The user's ID, or email address, to be prefilled in the authentication UI if possible. [See docs here](https://developers.google.com/identity/sign-in/ios/api/interface_g_i_d_sign_in.html#a0a68c7504c31ab0b728432565f6e33fd)
+  forceConsentPrompt: true, // [Android] if you want to show the authorization prompt at each login.
+  accountName: '', // [Android] specifies an account name on the device that should be used
+  iosClientId:
+    'XXXX-XXXX.apps.googleusercontent.com', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+});
 
 const isAndroid = Platform.OS === 'android';
 
@@ -198,8 +213,15 @@ class ProfileScreenInfo extends Component {
       });
   }
 
-  _connectGoogle = () => {
+  _connectGoogle = async () => {
     console.log('_connectGoogle');
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+
+      const im = {VALUE: userInfo.user.id, TYPE: 'google'};
+      this.props.connectSicoalMedia({profile: this.props.login, im});
+    } catch (error) {}
   };
 
   async fetchProfileFromFacebook(token) {
@@ -233,14 +255,12 @@ class ProfileScreenInfo extends Component {
 
   getFBToken = () => {
     AccessToken.getCurrentAccessToken().then((auth) => {
-      console.log(auth, 'auth');
-      const im = {value: auth.userID, type: 'facebook'};
+      const im = {VALUE: auth.userID, TYPE: 'facebook'};
       this.props.connectSicoalMedia({profile: this.props.login, im});
     });
   };
 
   _connectFB = () => {
-    console.log('_connectFB');
     LoginManager.logInWithPermissions(['email']).then(
       function (result) {
         if (result.isCancelled) {
@@ -259,8 +279,39 @@ class ProfileScreenInfo extends Component {
     );
   };
 
-  _connectVK = () => {
+  _GetUserDataVK = async () => {
+    try {
+      const auth = await VKLogin.login([
+        'friends',
+        'photos',
+        'email',
+        'contacts',
+        'phone',
+      ]);
+      const url =
+        'https://api.vk.com/method/account.getProfileInfo?user_id=' +
+        auth.user_id +
+        '&v=5.103&fields=contacts&access_token=' +
+        auth.access_token;
+      const response = await fetch(url);
+      const userData = await response.json();
+      return Object.assign(auth, userData.response);
+    } catch (err) {
+      console.log('apiGetDataError', err);
+    }
+  };
+
+  _connectVK = async () => {
     console.log('_connectVK');
+    VKLogin.initialize(XXXX);
+    try {
+      const userData = await this._GetUserDataVK();
+      console.log('userData', userData);
+      const im = {VALUE: userData.user_id, TYPE: 'vk'};
+      this.props.connectSicoalMedia({profile: this.props.login, im});
+    } catch (error) {
+      console.log('error', error);
+    }
   };
 
   renderLoginButtons = (region) => {
@@ -275,14 +326,22 @@ class ProfileScreenInfo extends Component {
         break;
     }
 
+    console.log('this.props.login.IM', this.props.login.IM);
+
     const im = (this.props.login.IM || []).reduce((acc, soc) => {
-      acc[soc.VALUE_TYPE.toLowerCase] = {
+      if (!soc.VALUE_TYPE) {
+        return acc;
+      }
+
+      acc[soc.VALUE_TYPE.toLowerCase()] = {
         id: soc.ID,
         value: soc.VALUE,
       };
 
       return acc;
     }, {});
+
+    console.log('im ==>', im);
 
     return (
       <View
@@ -302,7 +361,7 @@ class ProfileScreenInfo extends Component {
         }}>
         <Button
           onPress={this._connectGoogle}
-          disabled={this.state.isSigninInProgress || im.google}
+          disabled={this.state.isSigninInProgress || Boolean(im.google)}
           iconLeft
           style={[
             styleConst.shadow.default,
@@ -317,7 +376,7 @@ class ProfileScreenInfo extends Component {
         </Button>
         <Button
           onPress={this._connectFB}
-          disabled={this.state.isSigninInProgress || im.facebook}
+          disabled={this.state.isSigninInProgress || Boolean(im.facebook)}
           iconLeft
           style={[
             styleConst.shadow.default,
@@ -335,7 +394,7 @@ class ProfileScreenInfo extends Component {
         {VKenabled ? (
           <Button
             onPress={this._connectVK}
-            disabled={this.state.isSigninInProgress || im.vk}
+            disabled={this.state.isSigninInProgress || Boolean(im.vk)}
             iconLeft
             style={[
               styleConst.shadow.default,

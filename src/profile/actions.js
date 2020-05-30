@@ -409,34 +409,18 @@ export const actionSaveProfileByUser = (props) => {
 };
 
 export const connectSicoalMedia = ({profile, im}) => {
-  const {email, phone, id, last_name, first_name, second_name} = profile;
-
   const dataToSend = {
-    userID: id,
-    EMAIL: [email],
-    NAME: first_name,
-    SECOND_NAME: second_name,
-    LAST_NAME: last_name,
-    PHONE: [phone],
-    IM: [im],
+    ...profile,
   };
 
-  if (profile.isReestablish) {
-    dataToSend.UF_CUSTOMER_NUMBER = profile.SAP.ID;
-    dataToSend.UF_CRM_1576136240 = profile.SAP.ID;
-
-    delete dataToSend.isReestablish;
-    delete dataToSend.SAP;
-
-    PushNotifications.addTag('sapID', profile.SAP.ID);
-    PushNotifications.setExternalUserId(profile.SAP.ID);
+  if (!dataToSend.IM) {
+    dataToSend.IM = [im];
+  } else {
+    dataToSend.IM.push(im);
   }
 
-  for (let key in dataToSend) {
-    if (!dataToSend[key]) {
-      delete dataToSend[key];
-    }
-  }
+  delete dataToSend.cars;
+  delete dataToSend.bonus;
 
   return (dispatch) => {
     dispatch({
@@ -444,19 +428,16 @@ export const connectSicoalMedia = ({profile, im}) => {
       payload: dataToSend,
     });
 
-    //console.log('dataToSend ==>', dataToSend);
-
     return API.saveProfile(dataToSend)
       .then(async (data) => {
-        //console.log('data form saveProfile >>>', data);
         dispatch({
           type: SAVE_PROFILE__UPDATE,
           payload: {
-            ...profile,
+            ...data.data,
           },
         });
 
-        return profile;
+        return data.data;
       })
       .catch((error) => {
         dispatch({
