@@ -576,7 +576,7 @@ export default {
       body: JSON.stringify(profile),
     });
 
-    return this.request(`/lkk/user/${profile.userID}/`, requestParams)
+    return this.request(`/lkk/user/${profile.ID}/`, requestParams)
       .then((data) => {
         return {status: 'success', error: {}, data};
       })
