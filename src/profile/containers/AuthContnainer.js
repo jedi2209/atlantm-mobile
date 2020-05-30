@@ -18,7 +18,7 @@ class AuthContnainer extends Component {
   });
 
   render() {
-    if (this.props.login.id) {
+    if (this.props.login.ID) {
       return <ProfileScreen />;
     }
     return <LoginScreen />;

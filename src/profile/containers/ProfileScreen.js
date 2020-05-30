@@ -177,7 +177,7 @@ class ProfileScreen extends Component {
     phone = phoneNew.replace('++', '+');
     this.setState({phone: phone});
     this.setState({loadingVerify: true});
-    this.props.actionSavePofileWithPhone({phone}).then(response => {
+    this.props.actionSavePofileWithPhone({phone}).then((response) => {
       if (response.code >= 300) {
         this.setState({
           code: false,
@@ -232,7 +232,7 @@ class ProfileScreen extends Component {
     this.setState({loading: true, loadingVerify: true});
     this.props
       .actionSavePofileWithPhone({phone, code})
-      .then(data => {
+      .then((data) => {
         Keyboard.dismiss();
         PushNotifications.addTag('login', data.user.ID);
         if (data.user.SAP && data.user.SAP.ID) {
@@ -326,7 +326,7 @@ class ProfileScreen extends Component {
 
   _signInFB = () => {
     LoginManager.logInWithPermissions(['email']).then(
-      function(result) {
+      function (result) {
         if (result.isCancelled) {
           console.log('Login cancelled');
         } else {
@@ -337,15 +337,15 @@ class ProfileScreen extends Component {
           this.getFBToken();
         }
       }.bind(this),
-      function(error) {
+      function (error) {
         console.log('Login fail with error: ' + error);
       },
     );
   };
 
   getFBToken = () => {
-    AccessToken.getCurrentAccessToken().then(auth => {
-      this.fetchProfileFromFacebook(auth.accessToken).then(data => {
+    AccessToken.getCurrentAccessToken().then((auth) => {
+      this.fetchProfileFromFacebook(auth.accessToken).then((data) => {
         this._sendDataToApi({...data, networkName: 'fb'});
       });
     });
@@ -391,7 +391,7 @@ class ProfileScreen extends Component {
     }
   };
 
-  onInputCode = text => {
+  onInputCode = (text) => {
     if (text.length === 4) {
       this.setState({codeValue: text});
       setTimeout(() => {
@@ -400,11 +400,11 @@ class ProfileScreen extends Component {
     }
   };
 
-  onInputPhone = text => {
+  onInputPhone = (text) => {
     this.setState({phone: text});
   };
 
-  renderLoginButtons = region => {
+  renderLoginButtons = (region) => {
     let VKenabled = true;
     let ButtonWidth = '25%';
     let ButtonHeight = 50;
@@ -613,7 +613,7 @@ class ProfileScreen extends Component {
                           justifyContent: 'center',
                           flex: 1,
                         }}
-                        ref={ref => {
+                        ref={(ref) => {
                           this.phoneInput = ref;
                         }}
                         initialCountry={
@@ -677,7 +677,7 @@ class ProfileScreen extends Component {
                         }}
                         textContentType="oneTimeCode"
                         keyboardType="number-pad"
-                        ref={input => {
+                        ref={(input) => {
                           this.CodeInput = input;
                         }}
                         maxLength={4}
@@ -727,7 +727,7 @@ class ProfileScreen extends Component {
                           ? false
                           : true
                       }
-                      ref={ref => {
+                      ref={(ref) => {
                         this.getCodeButton = ref;
                       }}
                       style={[
@@ -771,7 +771,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ProfileScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);

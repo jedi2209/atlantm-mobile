@@ -28,7 +28,6 @@ import {
 import {
   actionSetPushActionSubscribe,
   actionSetPushGranted,
-  actionSavePofile,
 } from '../../core/actions';
 
 import Amplitude from '../../utils/amplitude-analytics';
@@ -134,7 +133,6 @@ const mapDispatchToProps = {
   actionSetPushGranted,
   actionSetPushActionSubscribe,
   getProfileSapData,
-  actionSavePofile,
   connectSicoalMedia,
 };
 
@@ -152,16 +150,17 @@ class ProfileScreenInfo extends Component {
   });
 
   componentDidMount() {
-    if (!this.props.login.id) {
-    } else {
+    console.log('componentDidMount before', this.props.login);
+    if (this.props.login.ID) {
       console.log('componentDidMount', this.props.login);
       this.getUserData();
     }
+
     Amplitude.logEvent('screen', 'profile/main');
   }
 
   componentDidUpdate(nextProps) {
-    if (this.props.login.id && this.props.login.id !== nextProps.login.id) {
+    if (this.props.login.ID && this.props.login.ID !== nextProps.login.ID) {
       this.getUserData();
     }
 
@@ -176,17 +175,17 @@ class ProfileScreenInfo extends Component {
 
   getUserData() {
     this.setState({loading: true});
-    const sap = this.props.login.SAP || {};
+    const {ID, SAP} = this.props.login;
 
     this.props
       .getProfileSapData({
-        id: this.props.login.id,
-        sap: {token: sap.TOKEN, id: sap.ID},
+        id: ID,
+        sap: SAP,
       })
       .then(() => {
-        if (sap.ID && sap.ID.length > 0) {
-          PushNotifications.addTag('sapID', sap.ID);
-          PushNotifications.setExternalUserId(sap.ID);
+        if (SAP.ID && SAP.ID.length > 0) {
+          PushNotifications.addTag('sapID', SAP.ID);
+          PushNotifications.setExternalUserId(SAP.ID);
         }
         this.setState({loading: false});
       })
@@ -233,12 +232,8 @@ class ProfileScreenInfo extends Component {
   }
 
   getFBToken = () => {
-    AccessToken.getCurrentAccessToken().then(auth => {
+    AccessToken.getCurrentAccessToken().then((auth) => {
       console.log(auth, 'auth');
-      // this.fetchProfileFromFacebook(auth.accessToken).then(data => {
-      //   // this._sendDataToApi({...data, networkName: 'fb'});
-      //   this.props.actionSavePofile()
-      // });
       const im = {value: auth.userID, type: 'facebook'};
       this.props.connectSicoalMedia({profile: this.props.login, im});
     });
@@ -247,7 +242,7 @@ class ProfileScreenInfo extends Component {
   _connectFB = () => {
     console.log('_connectFB');
     LoginManager.logInWithPermissions(['email']).then(
-      function(result) {
+      function (result) {
         if (result.isCancelled) {
           console.log('Login cancelled');
         } else {
@@ -258,7 +253,7 @@ class ProfileScreenInfo extends Component {
           this.getFBToken();
         }
       }.bind(this),
-      function(error) {
+      function (error) {
         console.log('Login fail with error: ' + error);
       },
     );
@@ -370,8 +365,8 @@ class ProfileScreenInfo extends Component {
               marginHorizontal: 20,
               marginTop: 10,
             }}>
-            {`${this.props.login.first_name || ''} ${
-              this.props.login.last_name || ''
+            {`${this.props.login.NAME || ''} ${
+              this.props.login.LAST_NAME || ''
             }`}
           </Text>
           {!this.state.loading ? (
@@ -436,7 +431,6 @@ class ProfileScreenInfo extends Component {
                       }}>
                       У вас пока ещё нет автомобилей, о которых мы знаем...
                     </Text>
-                    {/* {!this.props.login.SAP.ID && ( */}
                     <Button
                       full
                       onPress={() => {
