@@ -12,6 +12,7 @@ import {
   StatusBar,
   TouchableWithoutFeedback,
   ActivityIndicator,
+  TouchableNativeFeedbackBase,
 } from 'react-native';
 import {Button, Icon} from 'native-base';
 import PushNotifications from '@core/components/PushNotifications';
@@ -22,14 +23,24 @@ import {
   actionFetchProfileData,
   getProfileSapData,
   actionLogout,
+  connectSicoalMedia,
 } from '../actions';
 import {
   actionSetPushActionSubscribe,
   actionSetPushGranted,
+  actionSavePofile,
 } from '../../core/actions';
 
 import Amplitude from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
+
+// imports for auth
+import {
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+} from 'react-native-fbsdk';
+import {LoginManager} from 'react-native-fbsdk';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -123,6 +134,8 @@ const mapDispatchToProps = {
   actionSetPushGranted,
   actionSetPushActionSubscribe,
   getProfileSapData,
+  actionSavePofile,
+  connectSicoalMedia,
 };
 
 class ProfileScreenInfo extends Component {
@@ -140,7 +153,6 @@ class ProfileScreenInfo extends Component {
 
   componentDidMount() {
     if (!this.props.login.id) {
-      //this.props.navigation.navigate('ProfileScreen');
     } else {
       console.log('componentDidMount', this.props.login);
       this.getUserData();
@@ -186,6 +198,165 @@ class ProfileScreenInfo extends Component {
         this.props.actionLogout();
       });
   }
+
+  _connectGoogle = () => {
+    console.log('_connectGoogle');
+  };
+
+  async fetchProfileFromFacebook(token) {
+    return new Promise((resolve, reject) => {
+      const request = new GraphRequest(
+        '/me',
+        {
+          parameters: {
+            fields: {
+              string: 'email,name,first_name,middle_name,last_name',
+            },
+            access_token: {
+              string: token,
+            },
+          },
+        },
+        (error, result) => {
+          if (result) {
+            const profile = result;
+            profile.avatar = `https://graph.facebook.com/${result.id}/picture`;
+            resolve(profile);
+          } else {
+            reject(error);
+          }
+        },
+      );
+
+      this.requestManager.addRequest(request).start();
+    });
+  }
+
+  getFBToken = () => {
+    AccessToken.getCurrentAccessToken().then(auth => {
+      console.log(auth, 'auth');
+      // this.fetchProfileFromFacebook(auth.accessToken).then(data => {
+      //   // this._sendDataToApi({...data, networkName: 'fb'});
+      //   this.props.actionSavePofile()
+      // });
+      const im = {value: auth.userID, type: 'facebook'};
+      this.props.connectSicoalMedia({profile: this.props.login, im});
+    });
+  };
+
+  _connectFB = () => {
+    console.log('_connectFB');
+    LoginManager.logInWithPermissions(['email']).then(
+      function(result) {
+        if (result.isCancelled) {
+          console.log('Login cancelled');
+        } else {
+          console.log(
+            'Login success with permissions: ' +
+              result.grantedPermissions.toString(),
+          );
+          this.getFBToken();
+        }
+      }.bind(this),
+      function(error) {
+        console.log('Login fail with error: ' + error);
+      },
+    );
+  };
+
+  _connectVK = () => {
+    console.log('_connectVK');
+  };
+
+  renderLoginButtons = (region) => {
+    let VKenabled = true;
+    let ButtonWidth = '25%';
+    let ButtonHeight = 50;
+    switch (region.toLowerCase()) {
+      case 'ua':
+        VKenabled = false;
+        ButtonWidth = '30%';
+        ButtonHeight = 60;
+        break;
+    }
+
+    const im = (this.props.login.IM || []).reduce((acc, soc) => {
+      acc[soc.VALUE_TYPE.toLowerCase] = {
+        id: soc.ID,
+        value: soc.VALUE,
+      };
+
+      return acc;
+    }, {});
+
+    return (
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '80%',
+          marginHorizontal: '10%',
+          marginTop: 40,
+          marginBottom: 20,
+          opacity: this.state.code ? 0 : 1,
+          height: this.state.code
+            ? Platform.select({ios: 'auto', android: 0})
+            : 'auto',
+        }}>
+        <Button
+          onPress={this._connectGoogle}
+          disabled={this.state.isSigninInProgress || im.google}
+          iconLeft
+          style={[
+            styleConst.shadow.default,
+            styles.SocialLoginBt,
+            {
+              width: ButtonWidth,
+              height: ButtonHeight,
+              backgroundColor: '#4286F5',
+            },
+          ]}>
+          <Icon name="google" type="FontAwesome5" />
+        </Button>
+        <Button
+          onPress={this._connectFB}
+          disabled={this.state.isSigninInProgress || im.facebook}
+          iconLeft
+          style={[
+            styleConst.shadow.default,
+            styles.SocialLoginBt,
+            {
+              backgroundColor: '#4167B2',
+              width: VKenabled ? '29%' : ButtonWidth,
+              height: 60,
+              marginVertical: 8,
+              paddingHorizontal: 8,
+            },
+          ]}>
+          <Icon name="facebook" type="FontAwesome5" style={{fontSize: 35}} />
+        </Button>
+        {VKenabled ? (
+          <Button
+            onPress={this._connectVK}
+            disabled={this.state.isSigninInProgress || im.vk}
+            iconLeft
+            style={[
+              styleConst.shadow.default,
+              styles.SocialLoginBt,
+              {
+                width: ButtonWidth,
+                height: ButtonHeight,
+                backgroundColor: '#4680C2',
+              },
+            ]}>
+            <Icon name="vk" type="FontAwesome5" />
+          </Button>
+        ) : null}
+      </View>
+    );
+  };
 
   render() {
     return (
@@ -488,6 +659,18 @@ class ProfileScreenInfo extends Component {
                   Редактировать данные
                 </Text>
               </Button>
+              <View>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    fontWeight: '600',
+                    marginHorizontal: 20,
+                    marginTop: 10,
+                  }}>
+                  Привязать соц.сети
+                </Text>
+                {this.renderLoginButtons(this.props.dealerSelected.region)}
+              </View>
             </>
           )}
           {!this.state.loading ? (

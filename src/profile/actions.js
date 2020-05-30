@@ -304,6 +304,7 @@ export const actionSavePofileWithPhone = props => {
 export const getProfileSapData = ({id, sap}) => {
   return async dispatch => {
     const user = await API.getProfile(id);
+    console.log('user ==>', user);
     const userInfo = profileDataAdapter(user);
     let cars = [],
       bonus = {};
@@ -326,6 +327,7 @@ export const getProfileSapData = ({id, sap}) => {
         cars,
         bonus,
         SAP: user.SAP && user.SAP.ID ? user.SAP : {},
+        IM: user.IM || [],
       },
     });
   };
@@ -404,11 +406,11 @@ export const actionSaveProfileByUser = props => {
 
   const dataToSend = {
     userID: id,
-    email,
+    EMAIL: [email],
     NAME: first_name,
     SECOND_NAME: second_name,
     LAST_NAME: last_name,
-    phone,
+    PHONE: [phone],
   };
 
   if (props.isReestablish) {
@@ -426,6 +428,7 @@ export const actionSaveProfileByUser = props => {
     if (!dataToSend[key]) {
       delete dataToSend[key];
     }
+
   }
 
   return dispatch => {
@@ -459,7 +462,69 @@ export const actionSaveProfileByUser = props => {
   };
 };
 
+export const connectSicoalMedia = ({profile, im}) => {
+  const {email, phone, id, last_name, first_name, second_name} = profile;
+
+  const dataToSend = {
+    userID: id,
+    EMAIL: [email],
+    NAME: first_name,
+    SECOND_NAME: second_name,
+    LAST_NAME: last_name,
+    PHONE: [phone],
+    IM: [im],
+  };
+
+  if (profile.isReestablish) {
+    dataToSend.UF_CUSTOMER_NUMBER = profile.SAP.ID;
+    dataToSend.UF_CRM_1576136240 = profile.SAP.ID;
+
+    delete dataToSend.isReestablish;
+    delete dataToSend.SAP;
+
+    PushNotifications.addTag('sapID', profile.SAP.ID);
+    PushNotifications.setExternalUserId(profile.SAP.ID);
+  }
+
+  for (let key in dataToSend) {
+    if (!dataToSend[key]) {
+      delete dataToSend[key];
+    }
+  }
+
+  return (dispatch) => {
+    dispatch({
+      type: SAVE_PROFILE__REQUEST,
+      payload: dataToSend,
+    });
+
+    console.log('dataToSend ==>', dataToSend);
+
+    return API.saveProfile(dataToSend)
+      .then(async (data) => {
+        console.log('data form saveProfile >>>', data);
+        dispatch({
+          type: SAVE_PROFILE__UPDATE,
+          payload: {
+            ...profile,
+          },
+        });
+
+        return profile;
+      })
+      .catch((error) => {
+        dispatch({
+          type: SAVE_PROFILE__FAIL,
+          payload: {
+            message: error,
+          },
+        });
+      });
+  };
+};
+
 function profileDataAdapter(user) {
+  console.log('user ======>', user);
   const {NAME, SECOND_NAME, LAST_NAME, EMAIL, PHONE} = user;
 
   const userInfo = {
