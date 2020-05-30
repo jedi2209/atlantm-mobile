@@ -49,7 +49,7 @@ export default {
 
   fetchVersion(version) {
     if (!version) {
-      console.log('version undefined', version);
+      //console.log('version undefined', version);
       return false;
     }
     let requestedVersion = parseInt(version.replace(/\./gi, ''));
@@ -88,7 +88,7 @@ export default {
       isAndroid ? 1 : 2
     }`;
 
-    __DEV__ && console.log('API fetchTva url', url);
+    // __DEV__ && console.log('API fetchTva url', url);
 
     return this.request(url, baseRequestParams);
   },
@@ -141,7 +141,7 @@ export default {
 
     url = nextPageUrl || url;
 
-    __DEV__ && console.log('API fetchReviews url', url);
+    // __DEV__ && console.log('API fetchReviews url', url);
 
     return this.request(url, baseRequestParams);
   },
@@ -245,7 +245,7 @@ export default {
       }
     }
 
-    __DEV__ && console.log('API fetchNewCarByFilter url', url);
+    // __DEV__ && console.log('API fetchNewCarByFilter url', url);
 
     return this.request(url, baseRequestParams);
   },
@@ -294,8 +294,8 @@ export default {
 
     const url = isNewCar ? '/orders/stock/post/' : '/orders/trade-in/post/';
 
-    __DEV__ && console.log('API order car url', url);
-    __DEV__ && console.log('API order car body', body);
+    // __DEV__ && console.log('API order car url', url);
+    // __DEV__ && console.log('API order car body', body);
 
     return this.request(url, requestParams);
   },
@@ -310,7 +310,7 @@ export default {
       body,
     });
 
-    __DEV__ && console.log('API tva message body', body);
+    // __DEV__ && console.log('API tva message body', body);
 
     return this.request('/tva/message/post/', requestParams);
   },
@@ -337,7 +337,7 @@ export default {
       `f_TextMinus=${messageMinus}`,
     ].join('&');
 
-    console.log('body', body);
+    // console.log('body', body);
 
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
@@ -347,7 +347,7 @@ export default {
       body,
     });
 
-    __DEV__ && console.log('API review add body', body);
+    // __DEV__ && console.log('API review add body', body);
 
     return this.request('/eko/review/post/', requestParams);
   },
@@ -396,7 +396,7 @@ export default {
 
     const body = formBody.concat(photosBody);
 
-    __DEV__ && console.log('API carcost body', body);
+    // __DEV__ && console.log('API carcost body', body);
 
     return RNFetchBlob.fetch(
       'POST',
@@ -416,8 +416,8 @@ export default {
   },
 
   loginRequest({login, password}) {
-    __DEV__ &&
-      console.log('API register login: %s, password: %s', login, password);
+    // __DEV__ &&
+    //   console.log('API register login: %s, password: %s', login, password);
 
     return this.request(
       `/lkk/auth/login/?login=${login}&password=${password}`,
@@ -445,7 +445,7 @@ export default {
       body,
     });
 
-    __DEV__ && console.log('API register body', body);
+    // __DEV__ && console.log('API register body', body);
 
     return this.request('/lkk/register/', requestParams);
   },
@@ -475,7 +475,7 @@ export default {
       body,
     });
 
-    __DEV__ && console.log('API update FCM token body', body);
+    // __DEV__ && console.log('API update FCM token body', body);
 
     return this.request('/mobile/token/update/', requestParams);
   },
@@ -523,11 +523,11 @@ export default {
 
     return this.request('/lkk/auth/social/', requestParams)
       .then((data) => {
-        console.log('>>> login with data api:::', data, profile);
+        // console.log('>>> login with data api:::', data, profile);
         return {status: 'success', error: {}, profile, data};
       })
       .catch((err) => {
-        console.log('error', err);
+        // console.log('error', err);
       });
   },
 
@@ -566,7 +566,7 @@ export default {
   },
 
   saveProfile(profile) {
-    console.log('profile', profile);
+    // console.log('profile', profile);
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PATCH',
       headers: {
@@ -630,8 +630,8 @@ export default {
       delete requestParams.headers.Debug;
     }
 
-    console.log('>>> url', url);
-    console.log('>>> requestParams', requestParams);
+    // console.log('>>> url', url);
+    // console.log('>>> requestParams', requestParams);
 
     return this.apiGetData(url, requestParams);
   },
@@ -639,10 +639,10 @@ export default {
   async apiGetData(url, requestParams) {
     try {
       const response = await fetch(url, requestParams);
-      console.log('response', response);
+      // console.log('response', response);
       return response.json();
     } catch (err) {
-      console.log('apiGetDataError URL: ' + url, err);
+      // console.log('apiGetDataError URL: ' + url, err);
     }
   },
 };
