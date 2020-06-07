@@ -408,7 +408,7 @@ export const actionSaveProfileByUser = (props) => {
   };
 };
 
-export const connectSicoalMedia = ({profile, im}) => {
+export const connectSocialMedia = ({profile, im}) => {
   const dataToSend = {
     ...profile,
   };
@@ -423,10 +423,10 @@ export const connectSicoalMedia = ({profile, im}) => {
   delete dataToSend.bonus;
 
   return (dispatch) => {
-    dispatch({
-      type: SAVE_PROFILE__REQUEST,
-      payload: dataToSend,
-    });
+    // dispatch({
+    //   type: SAVE_PROFILE__REQUEST,
+    //   payload: dataToSend,
+    // });
 
     return API.saveProfile(dataToSend)
       .then(async (data) => {

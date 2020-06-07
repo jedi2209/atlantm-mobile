@@ -1,0 +1,313 @@
+/* eslint-disable react-native/no-inline-styles */
+import React, {PureComponent} from 'react';
+
+import {View, Platform, StyleSheet} from 'react-native';
+import {Button, Icon} from 'native-base';
+
+// redux
+import {connect} from 'react-redux';
+import {connectSocialMedia} from '../actions';
+import styleConst from '../../core/style-const';
+
+// imports for auth
+import {
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+} from 'react-native-fbsdk';
+import {LoginManager} from 'react-native-fbsdk';
+import VKLogin from 'react-native-vkontakte-login';
+import {GoogleSignin} from '@react-native-community/google-signin';
+
+GoogleSignin.configure({
+  scopes: ['https://www.googleapis.com/auth/userinfo.email'], // what API you want to access on behalf of the user, default is email and profile
+  webClientId:
+    '53201529704-4fl35lhveh4lvcdj9o3nli0fpk8c942r.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+  offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+  hostedDomain: '', // specifies a hosted domain restriction
+  loginHint: '', // [iOS] The user's ID, or email address, to be prefilled in the authentication UI if possible. [See docs here](https://developers.google.com/identity/sign-in/ios/api/interface_g_i_d_sign_in.html#a0a68c7504c31ab0b728432565f6e33fd)
+  forceConsentPrompt: true, // [Android] if you want to show the authorization prompt at each login.
+  accountName: '', // [Android] specifies an account name on the device that should be used
+  iosClientId:
+    '53201529704-pofi5bbpvo7dtnuu521lo00f3bl6qiq2.apps.googleusercontent.com', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+});
+
+const mapStateToProps = ({dealer, profile, nav, core}) => {
+  return {
+    login: profile.login,
+  };
+};
+const mapDispatchToProps = {
+  connectSocialMedia,
+};
+
+const styles = StyleSheet.create({
+  SocialLoginBt: {
+    padding: 8,
+    justifyContent: 'center',
+    borderRadius: 5,
+  },
+  SocialLoginBtActive: {
+    opacity: 0.7,
+  },
+  CheckCircleIcon: {
+    fontSize: 14,
+    position: 'absolute',
+    bottom: 4,
+    right: 0,
+    color: '#fff',
+  },
+});
+
+class SocialAuth extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      loading: false,
+      isSigninInProgress: false,
+    };
+
+    this.requestManager = new GraphRequestManager();
+  }
+
+  static navigationOptions = ({navigation}) => ({
+    header: null,
+  });
+
+  _connectGoogle = async () => {
+    console.log('_connectGoogle');
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+
+      const im = {VALUE: userInfo.user.id, VALUE_TYPE: 'google'};
+      this.props.connectSocialMedia({profile: this.props.login, im});
+    } catch (error) {}
+  };
+
+  //   async fetchProfileFromFacebook(token) {
+  //     return new Promise((resolve, reject) => {
+  //       const request = new GraphRequest(
+  //         '/me',
+  //         {
+  //           parameters: {
+  //             fields: {
+  //               string: 'email,name,first_name,middle_name,last_name',
+  //             },
+  //             access_token: {
+  //               string: token,
+  //             },
+  //           },
+  //         },
+  //         (error, result) => {
+  //           if (result) {
+  //             const profile = result;
+  //             profile.avatar = `https://graph.facebook.com/${result.id}/picture`;
+  //             resolve(profile);
+  //           } else {
+  //             reject(error);
+  //           }
+  //         },
+  //       );
+
+  //       this.requestManager.addRequest(request).start();
+  //     });
+  //   }
+
+  getFBToken = () => {
+    AccessToken.getCurrentAccessToken().then((auth) => {
+      const im = {VALUE: auth.userID, VALUE_TYPE: 'facebook'};
+      this.props.connectSocialMedia({profile: this.props.login, im});
+      this.setState({isSigninInProgress: false});
+    });
+  };
+
+  _connectFB = () => {
+    this.setState({isSigninInProgress: true});
+    LoginManager.logInWithPermissions(['email']).then(
+      function (result) {
+        if (result.isCancelled) {
+          console.log('Login cancelled');
+          this.setState({isSigninInProgress: false});
+        } else {
+          console.log(
+            'Login success with permissions: ' +
+              result.grantedPermissions.toString(),
+          );
+          this.getFBToken();
+        }
+      }.bind(this),
+      function (error) {
+        console.log('Login fail with error: ' + error);
+        this.setState({isSigninInProgress: false});
+      },
+    );
+  };
+
+  _GetUserDataVK = async () => {
+    try {
+      const auth = await VKLogin.login([
+        'friends',
+        'photos',
+        'email',
+        'contacts',
+        'phone',
+      ]);
+      const url =
+        'https://api.vk.com/method/account.getProfileInfo?user_id=' +
+        auth.user_id +
+        '&v=5.103&fields=contacts&access_token=' +
+        auth.access_token;
+      const response = await fetch(url);
+      const userData = await response.json();
+      return Object.assign(auth, userData.response);
+    } catch (err) {
+      console.log('apiGetDataError', err);
+      this.setState({isSigninInProgress: false});
+    }
+  };
+
+  _connectVK = async () => {
+    console.log('_connectVK');
+    VKLogin.initialize(7255802);
+    try {
+      const userData = await this._GetUserDataVK();
+      console.log('userData', userData);
+      const im = {VALUE: userData.user_id, VALUE_TYPE: 'vk'};
+      this.props.connectSocialMedia({profile: this.props.login, im});
+    } catch (error) {
+      console.log('error', error);
+    }
+    this.setState({isSigninInProgress: false});
+  };
+
+  _renderLoginButtons = (region) => {
+    let VKenabled = true;
+    let ButtonWidth = '25%';
+    let ButtonHeight = 50;
+    switch (region.toLowerCase()) {
+      case 'ua':
+        VKenabled = false;
+        ButtonWidth = '30%';
+        ButtonHeight = 60;
+        break;
+    }
+
+    console.log('this.props.login.IM', this.props.login.IM);
+
+    const im = (this.props.login.IM || []).reduce((acc, soc) => {
+      if (!soc.VALUE_TYPE) {
+        return acc;
+      }
+
+      acc[soc.VALUE_TYPE.toLowerCase()] = {
+        id: soc.ID || null,
+        value: soc.VALUE,
+      };
+
+      return acc;
+    }, {});
+
+    console.log('im ==>', im);
+
+    return (
+      <View
+        style={[
+          {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '100%',
+            opacity: this.state.code ? 0 : 1,
+            height: this.state.code
+              ? Platform.select({ios: 'auto', android: 0})
+              : 'auto',
+          },
+          this.props.style,
+        ]}>
+        <Button
+          onPress={this._connectGoogle}
+          disabled={this.state.isSigninInProgress || Boolean(im.google)}
+          iconLeft
+          style={[
+            styleConst.shadow.default,
+            styles.SocialLoginBt,
+            im.google ? styles.SocialLoginBtActive : null,
+            {
+              width: ButtonWidth,
+              height: ButtonHeight,
+              backgroundColor: '#4286F5',
+            },
+          ]}>
+          <Icon name="google" type="FontAwesome5" />
+          {im.google ? (
+            <Icon
+              name="check-circle"
+              type="FontAwesome5"
+              style={styles.CheckCircleIcon}
+            />
+          ) : null}
+        </Button>
+        <Button
+          onPress={this._connectFB}
+          disabled={this.state.isSigninInProgress || Boolean(im.facebook)}
+          style={[
+            styleConst.shadow.default,
+            styles.SocialLoginBt,
+            im.facebook ? styles.SocialLoginBtActive : null,
+            {
+              backgroundColor: '#4167B2',
+              width: VKenabled ? '29%' : ButtonWidth,
+              height: 60,
+            },
+          ]}>
+          <Icon name="facebook" type="FontAwesome5" style={{fontSize: 35}} />
+          {im.facebook ? (
+            <Icon
+              name="check-circle"
+              type="FontAwesome5"
+              style={styles.CheckCircleIcon}
+            />
+          ) : null}
+        </Button>
+        {VKenabled ? (
+          <Button
+            onPress={this._connectVK}
+            disabled={this.state.isSigninInProgress || Boolean(im.vk)}
+            iconLeft
+            style={[
+              styleConst.shadow.default,
+              styles.SocialLoginBt,
+              im.vk ? styles.SocialLoginBtActive : null,
+              {
+                width: ButtonWidth,
+                height: ButtonHeight,
+                backgroundColor: '#4680C2',
+              },
+            ]}>
+            <Icon name="vk" type="FontAwesome5" />
+            {im.vk ? (
+              <Icon
+                name="check-circle"
+                type="FontAwesome5"
+                style={styles.CheckCircleIcon}
+              />
+            ) : null}
+          </Button>
+        ) : null}
+      </View>
+    );
+  };
+
+  render() {
+    let {region} = this.props;
+    if (!region) {
+      region = 'by';
+    }
+    return this._renderLoginButtons(region);
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SocialAuth);
