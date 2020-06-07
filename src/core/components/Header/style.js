@@ -68,7 +68,7 @@ export default StyleSheet.create({
     shadowColor: 'transparent',
   },
   whiteHeaderTitle: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '600',
     alignSelf: 'center',
     alignItems: 'center',

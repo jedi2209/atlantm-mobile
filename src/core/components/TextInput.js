@@ -33,13 +33,13 @@ const styles = StyleSheet.create({
   label: {
     position: 'absolute',
     left: 0,
-    top: 18,
+    top: 15,
     fontSize: 18,
-    color: '#d8d8d8',
+    color: '#bababa',
   },
   labelActive: {
     top: 0,
     fontSize: 14,
-    color: '#000',
+    color: '#808080',
   },
 });

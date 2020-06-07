@@ -18,7 +18,7 @@ import {Text, StyleProvider, Icon, Button} from 'native-base';
 
 // Form field types
 import {TextInput} from '@core/components/TextInput';
-import DatePicker from 'react-native-datepicker';
+import {DatePickerCustom} from '@core/components/DatePickerCustom';
 import PhoneInput from 'react-native-phone-input';
 import TextInputMask from 'react-native-text-input-mask';
 
@@ -44,27 +44,46 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
 const mapDispatchToProps = {};
 
 const styles = StyleSheet.create({
-  field: {
-    marginBottom: 18,
-  },
   group: {
-    marginBottom: 36,
+    marginBottom: 16,
+  },
+  groupName: {
+    marginBottom: 10,
+    fontSize: 14,
+    color: styleConst.color.greyText,
+  },
+  groupFields: {
+    borderRadius: 4,
+    backgroundColor: 'white',
+  },
+  field: {
+    paddingHorizontal: 15,
+    paddingTop: 5,
+  },
+  divider: {
+    borderColor: '#d8d8d8',
+    borderBottomWidth: 1,
   },
   textinput: {
     height: Platform.OS === 'ios' ? 40 : 'auto',
-    borderColor: '#d8d8d8',
-    borderBottomWidth: 1,
     color: '#222b45',
-    fontSize: 18,
+    fontSize: 16,
+  },
+  button: {
+    backgroundColor: styleConst.color.lightBlue,
+    borderRadius: 5,
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    textTransform: 'uppercase',
+    fontSize: 16,
   },
 });
 
 const datePickerStyles = {
   dateTouchBody: {
     width: styleConst.screen.width,
-    height: 40,
-    borderColor: '#d8d8d8',
-    borderBottomWidth: 1,
     color: '#222b45',
   },
   dateInput: {
@@ -84,7 +103,7 @@ const datePickerStyles = {
   },
 };
 
-const phoneMask = {
+const MaskedPhone = {
   ru: '+7 (9[00]) [000]-[00]-[00]',
   by: '+375 ([00]) [000]-[00]-[00]',
   ua: '+380 ([00]) [000]-[00]-[00]',
@@ -94,37 +113,73 @@ class Form extends Component {
   constructor(props) {
     super(props);
     this.defaultCountryCode = this.props.defaultCountryCode || 'by';
-    this.state = {
-      phoneMask: phoneMask[this.defaultCountryCode],
-    };
+    this.state = {};
     if (props.fields.groups) {
       props.fields.groups.map((group) => {
         group.fields.map((field) => {
-          if (field.value) {
-            this.setState({[field.name]: field.value});
+          if (field.value && typeof field.value !== 'object') {
+            if (field.id) {
+              this.state[field.name] = Object.assign(
+                {},
+                this.state[field.name],
+                {
+                  [field.id]: {
+                    value: field.value,
+                  },
+                },
+              );
+            } else {
+              this.state[field.name] = field.value;
+            }
           }
         });
       });
     } else {
       props.fields.map((field) => {
         if (field.value) {
-          this.setState({[field.name]: field.value});
+          if (field.id) {
+            this.state[field.name][field.id].value = field.value;
+          } else {
+            this.state[field.name] = field.value;
+          }
         }
       });
     }
+    console.log('this.state2222', this.state);
   }
 
-  onChangeField = (fieldName) => (value) => {
-    this.setState({[fieldName]: value});
+  onChangeField = (field) => (valueNew) => {
+    const {name, id} = field;
+    if (field.id) {
+      this.setState((prevState) => {
+        let copyField = Object.assign({}, prevState[name], prevState[name][id]);
+        copyField[id].value = valueNew;
+        prevState[name][id] = copyField[id];
+        return true;
+      });
+    } else {
+      this.setState({[name]: valueNew});
+    }
+    console.log('onChangeField', this.state);
+  };
+
+  FieldsDivider = (key) => {
+    return <View style={styles.divider} key={key} />;
   };
 
   _groupRender = (group, num) => {
     return (
       <View style={styles.group} key={'group' + num}>
-        <Text>{group.name}</Text>
-        {group.fields.map((field, fieldNum) => {
-          return this._fieldsRender[field.type](field, fieldNum);
-        })}
+        <Text style={styles.groupName}>{group.name}</Text>
+        <View style={styles.groupFields}>
+          {group.fields.map((field, fieldNum) => {
+            const returnField = this._fieldsRender[field.type](field, fieldNum);
+            if (fieldNum !== group.fields.length - 1) {
+              return [returnField, this.FieldsDivider('divider' + field.name)];
+            }
+            return returnField;
+          })}
+        </View>
       </View>
     );
   };
@@ -139,16 +194,16 @@ class Form extends Component {
             style={styles.textinput}
             label={label}
             name={name}
-            value={this.state[name] || ''}
+            value={this.state[name] || value || ''}
             enablesReturnKeyAutomatically={true}
-            onChangeText={this.onChangeField(name)}
+            onChangeText={this.onChangeField(data)}
             {...data.props}
           />
         </View>
       );
     },
     email: (data, num) => {
-      const {label, name, value} = data;
+      const {label, name, id, value} = data;
       return (
         <View style={styles.field} key={'field' + num + name}>
           <TextInput
@@ -158,24 +213,25 @@ class Form extends Component {
             style={styles.textinput}
             label={label}
             name={name}
-            value={this.state[name] || ''}
+            value={this.state[name][id].value || value || ''}
             enablesReturnKeyAutomatically={true}
-            onChangeText={this.onChangeField(name)}
+            onChangeText={this.onChangeField(data)}
             {...data.props}
           />
         </View>
       );
     },
     date: (data, num) => {
-      const {label, name, value} = data;
+      const {label, name} = data;
       const today = new Date();
       const tomorrow = new Date(today);
       tomorrow.setDate(tomorrow.getDate() + 1);
       return (
         <View style={styles.field} key={'field' + num + name}>
-          <DatePicker
+          <DatePickerCustom
             showIcon={false}
             mode="date"
+            label={label}
             locale="ru-RU"
             minDate={tomorrow}
             placeholder="Выберите дату"
@@ -185,7 +241,7 @@ class Form extends Component {
             customStyles={datePickerStyles}
             date={this.state[name] || ''}
             onDateChange={(_, date) => {
-              this.onChangeField(name)(date);
+              this.onChangeField(data)(date);
             }}
             {...data.props}
           />
@@ -193,36 +249,54 @@ class Form extends Component {
       );
     },
     phone: (data, num) => {
-      const {label, name, value} = data;
+      const {name, id} = data;
+      let countryCode = this.defaultCountryCode;
+      if (data.country.code) {
+        countryCode = data.country.code.toLowerCase();
+      }
+      if (id) {
+        this.state[name][id].mask = MaskedPhone[countryCode];
+      }
       return (
         <PhoneInput
           style={{
             justifyContent: 'center',
             flex: 1,
-          }}
-          ref={(ref) => {
-            this.phoneInput = ref;
+            paddingHorizontal: 15,
+            paddingVertical: 10,
           }}
           key={'field' + num + name}
-          initialCountry={this.defaultCountryCode}
+          initialCountry={countryCode}
           countriesList={require('@utils/countries.json')}
-          autoFormat={true}
           offset={20}
           cancelText="Отмена"
           confirmText="Выбрать"
-          onChangePhoneNumber={this.onInputPhone}
           onSelectCountry={(countryCode) => {
-            this.setState({
-              phoneMask: phoneMask[countryCode],
-            });
+            if (id) {
+              this.setState((prevState) => {
+                let copyField = Object.assign(
+                  {},
+                  prevState[name],
+                  prevState[name][id],
+                );
+                copyField[id].value = null;
+                copyField[id].mask = MaskedPhone[countryCode];
+                prevState[name][id] = copyField[id];
+                return true;
+              });
+            }
           }}
           textComponent={() => {
+            let value;
+            if (typeof this.state[name][id].value !== 'undefined') {
+              value = this.state[name][id].value;
+            } else {
+              value = data.value;
+            }
             return (
               <TextInputMask
-                refInput={(ref) => {
-                  this.input = ref;
-                }}
                 key={'fieldInternal' + num + name}
+                value={value}
                 placeholderTextColor={'#afafaf'}
                 placeholder={data.label}
                 keyboardType={'phone-pad'}
@@ -232,21 +306,28 @@ class Form extends Component {
                 textContentType={'telephoneNumber'}
                 enablesReturnKeyAutomatically={true}
                 editable={true}
-                onChangeText={(formatted, extracted) => {
-                  //console.log('formatted', formatted); // +1 (123) 456-78-90
-                  //console.log('extracted', extracted); // 1234567890
+                onChangeText={(formatted) => {
+                  if (data.id) {
+                    this.setState((prevState) => {
+                      let copyField = Object.assign(
+                        {},
+                        prevState[name],
+                        prevState[name][id],
+                      ); // creating copy of state variable jasper
+                      copyField[id].value = formatted.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
+                      prevState[name][id] = copyField[id];
+                      return true;
+                    });
+                  }
                 }}
-                mask={this.state.phoneMask}
+                mask={this.state[name][id].mask}
                 style={[
                   {
                     height: 40,
                     paddingHorizontal: 14,
                     fontSize: 18,
                     letterSpacing: 3,
-                    borderColor: '#afafaf',
-                    borderWidth: 0.45,
                     width: '100%',
-                    borderRadius: 5,
                   },
                   {...data.textStyle},
                 ]}
@@ -257,26 +338,54 @@ class Form extends Component {
         />
       );
     },
+    component: (data, num) => {
+      const {name} = data;
+      return (
+        <View
+          style={[
+            styles.field,
+            {
+              paddingBottom: 5,
+            },
+          ]}
+          key={'field' + num + name}>
+          {data.value}
+        </View>
+      );
+    },
   };
 
   render() {
     const res = (
-      <StyleProvider style={getTheme()}>
-        <View style={styles.safearea}>
-          <StatusBar
-            barStyle={this.props.barStyle ? this.props.barStyle : 'default'}
-          />
-          <ScrollView contentContainerStyle={{paddingBottom: 24}}>
-            {this.props.fields.groups
-              ? this.props.fields.groups.map((group, num) => {
-                  return this._groupRender(group, num);
-                })
-              : this.props.fields.map((field, num) => {
-                  return this._fieldsRender[field.type](field, num);
-                })}
-          </ScrollView>
-        </View>
-      </StyleProvider>
+      <View style={styles.safearea}>
+        <StatusBar
+          barStyle={this.props.barStyle ? this.props.barStyle : 'default'}
+        />
+        <ScrollView contentContainerStyle={{paddingBottom: 24}}>
+          {this.props.fields.groups
+            ? this.props.fields.groups.map((group, num) => {
+                return this._groupRender(group, num);
+              })
+            : this.props.fields.map((field, num) => {
+                return this._fieldsRender[field.type](field, num);
+              })}
+          <View style={styles.group}>
+            <Button
+              onPress={() => {
+                if (!this.state.loading) {
+                  this.props.onSubmit(this.state);
+                }
+              }}
+              style={[styleConst.shadow.default, styles.button]}>
+              {this.state.loading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>Сохранить</Text>
+              )}
+            </Button>
+          </View>
+        </ScrollView>
+      </View>
     );
     return res;
   }
