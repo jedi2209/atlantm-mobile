@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
 const deviceWidth = Dimensions.get('window').width;
 const cardWidth = deviceWidth - 50;
 
-const getColoCardByKind = kind => {
+const getColoCardByKind = (kind) => {
   switch (kind) {
     case 'default':
       return ['#07A9B0', '#7ED321'];
@@ -186,7 +186,7 @@ class ContactsScreen extends Component {
     console.log('== Contacts ==');
 
     actionListReset();
-    fetchInfoList(region, dealer).then(action => {
+    fetchInfoList(region, dealer).then((action) => {
       if (action.type === INFO_LIST__FAIL) {
         let message = get(
           action,
@@ -224,11 +224,11 @@ class ContactsScreen extends Component {
     const PLAY_STORE_LINK = 'market://details?id=com.atlantm';
 
     if (Platform.OS === 'ios') {
-      Linking.openURL(APP_STORE_LINK).catch(err =>
+      Linking.openURL(APP_STORE_LINK).catch((err) =>
         console.error('APP_STORE_LINK failed', err),
       );
     } else {
-      Linking.openURL(PLAY_STORE_LINK).catch(err =>
+      Linking.openURL(PLAY_STORE_LINK).catch((err) =>
         console.error('PLAY_STORE_LINK failed', err),
       );
     }
@@ -413,7 +413,7 @@ class ContactsScreen extends Component {
                   </View>
                   <Carousel
                     data={list}
-                    renderItem={item => {
+                    renderItem={(item) => {
                       return (
                         <Offer
                           navigation={this.props.navigation.navigate}
@@ -439,7 +439,4 @@ class ContactsScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ContactsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ContactsScreen);
