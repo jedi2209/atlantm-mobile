@@ -50,6 +50,8 @@ import {APP_STORE_UPDATED} from '../core/actionTypes';
 import {DEALER__SUCCESS} from '@dealer/actionTypes';
 
 function login(state = '', action) {
+  console.log('login => state', {...state});
+  console.log('login => action', action);
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'profile.login', '');
@@ -159,40 +161,6 @@ function password(state = '', action) {
   }
 }
 
-function auth(state = {}, action) {
-  switch (action.type) {
-    case APP_STORE_UPDATED:
-      return {};
-    default:
-      return state;
-  }
-}
-
-function isLoginRequest(state = false, action) {
-  switch (action.type) {
-    case REHYDRATE:
-    case LOGIN__FAIL:
-      return false;
-    case LOGIN__REQUEST:
-      return true;
-    default:
-      return state;
-  }
-}
-
-function isRegisterRequest(state = false, action) {
-  switch (action.type) {
-    case REHYDRATE:
-    case REGISTER__SUCCESS:
-    case REGISTER__FAIL:
-      return false;
-    case REGISTER__REQUEST:
-      return true;
-    default:
-      return state;
-  }
-}
-
 function isFetchProfileData(state = false, action) {
   switch (action.type) {
     case REHYDRATE:
@@ -229,6 +197,9 @@ function bonusInfo(state = '', action) {
       return '';
     case PROFILE_BONUS_INFO__SUCCESS:
       return action.payload;
+    case LOGOUT:
+    case APP_STORE_UPDATED:
+      return '';
     default:
       return state;
   }
@@ -440,7 +411,6 @@ export default combineReducers({
   car,
   carNumber,
 
-  auth,
   login,
   password,
   cars,
@@ -480,7 +450,7 @@ export default combineReducers({
 
   meta: combineReducers({
     isFetchProfileData,
-    isLoginRequest,
-    isRegisterRequest,
+    // isLoginRequest,
+    // isRegisterRequest,
   }),
 });

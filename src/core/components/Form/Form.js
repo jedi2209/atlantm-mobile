@@ -23,6 +23,7 @@ import PhoneInput from 'react-native-phone-input';
 import TextInputMask from 'react-native-text-input-mask';
 
 import getTheme from '../../../../native-base-theme/components';
+import {yearMonthDay} from '../../../utils/date';
 import styleConst from '@core/style-const';
 
 // redux
@@ -117,7 +118,7 @@ class Form extends Component {
     if (props.fields.groups) {
       props.fields.groups.map((group) => {
         group.fields.map((field) => {
-          if (field.value && typeof field.value !== 'object') {
+          if (field.value && field.type !== 'component') {
             if (field.id) {
               this.state[field.name] = Object.assign(
                 {},
@@ -136,7 +137,7 @@ class Form extends Component {
       });
     } else {
       props.fields.map((field) => {
-        if (field.value) {
+        if (field.value && field.type !== 'component') {
           if (field.id) {
             this.state[field.name][field.id].value = field.value;
           } else {
@@ -145,22 +146,19 @@ class Form extends Component {
         }
       });
     }
-    console.log('this.state2222', this.state);
   }
 
   onChangeField = (field) => (valueNew) => {
     const {name, id} = field;
     if (field.id) {
       this.setState((prevState) => {
-        let copyField = Object.assign({}, prevState[name], prevState[name][id]);
+        let copyField = Object.assign({}, prevState[name]);
         copyField[id].value = valueNew;
-        prevState[name][id] = copyField[id];
-        return true;
+        return {[name]: copyField};
       });
     } else {
       this.setState({[name]: valueNew});
     }
-    console.log('onChangeField', this.state);
   };
 
   FieldsDivider = (key) => {
@@ -223,9 +221,6 @@ class Form extends Component {
     },
     date: (data, num) => {
       const {label, name} = data;
-      const today = new Date();
-      const tomorrow = new Date(today);
-      tomorrow.setDate(tomorrow.getDate() + 1);
       return (
         <View style={styles.field} key={'field' + num + name}>
           <DatePickerCustom
@@ -233,7 +228,6 @@ class Form extends Component {
             mode="date"
             label={label}
             locale="ru-RU"
-            minDate={tomorrow}
             placeholder="Выберите дату"
             format="DD MMMM YYYY"
             confirmBtnText="Выбрать"
@@ -241,7 +235,8 @@ class Form extends Component {
             customStyles={datePickerStyles}
             date={this.state[name] || ''}
             onDateChange={(_, date) => {
-              this.onChangeField(data)(date);
+              this.onChangeField(data)(yearMonthDay(date));
+              console.log('state123', this.state);
             }}
             {...data.props}
           />
@@ -254,7 +249,7 @@ class Form extends Component {
       if (data.country.code) {
         countryCode = data.country.code.toLowerCase();
       }
-      if (id) {
+      if (id && !this.state[name][id].mask) {
         this.state[name][id].mask = MaskedPhone[countryCode];
       }
       return (
@@ -265,6 +260,9 @@ class Form extends Component {
             paddingHorizontal: 15,
             paddingVertical: 10,
           }}
+          ref={(ref) => {
+            this['phoneInputRef' + name + id] = ref;
+          }}
           key={'field' + num + name}
           initialCountry={countryCode}
           countriesList={require('@utils/countries.json')}
@@ -274,15 +272,12 @@ class Form extends Component {
           onSelectCountry={(countryCode) => {
             if (id) {
               this.setState((prevState) => {
-                let copyField = Object.assign(
-                  {},
-                  prevState[name],
-                  prevState[name][id],
-                );
-                copyField[id].value = null;
-                copyField[id].mask = MaskedPhone[countryCode];
-                prevState[name][id] = copyField[id];
-                return true;
+                let copyField = Object.assign({}, prevState[name]);
+                copyField[id] = {
+                  value: null,
+                  mask: MaskedPhone[countryCode],
+                };
+                return {[name]: copyField};
               });
             }
           }}
@@ -306,17 +301,16 @@ class Form extends Component {
                 textContentType={'telephoneNumber'}
                 enablesReturnKeyAutomatically={true}
                 editable={true}
-                onChangeText={(formatted) => {
+                onChangeText={(formatted, pureValue) => {
                   if (data.id) {
                     this.setState((prevState) => {
-                      let copyField = Object.assign(
-                        {},
-                        prevState[name],
-                        prevState[name][id],
-                      ); // creating copy of state variable jasper
+                      let copyField = Object.assign({}, prevState[name]); // creating copy of state variable jasper
                       copyField[id].value = formatted.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
-                      prevState[name][id] = copyField[id];
-                      return true;
+                      let maskLength = copyField[id].mask.replace(/[^0]/g, '');
+
+                      if (pureValue.length === maskLength.length) {
+                        return {[name]: copyField};
+                      }
                     });
                   }
                 }}
@@ -325,8 +319,8 @@ class Form extends Component {
                   {
                     height: 40,
                     paddingHorizontal: 14,
-                    fontSize: 18,
-                    letterSpacing: 3,
+                    fontSize: 16,
+                    letterSpacing: 2,
                     width: '100%',
                   },
                   {...data.textStyle},
@@ -373,7 +367,12 @@ class Form extends Component {
             <Button
               onPress={() => {
                 if (!this.state.loading) {
-                  this.props.onSubmit(this.state);
+                  if (!this.props.onSubmit) {
+                    console.log('Undefined onSubmit prop for Form component');
+                    console.log('onSubmit handler', this.state);
+                  } else {
+                    this.props.onSubmit(this.state);
+                  }
                 }
               }}
               style={[styleConst.shadow.default, styles.button]}>

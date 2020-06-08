@@ -12,13 +12,13 @@ import {
 } from 'react-native';
 import {Button} from 'native-base';
 import {connect} from 'react-redux';
-import {dayMonthYear} from '../../utils/date';
+import {dayMonthYear, substractYears, yearMonthDay} from '../../utils/date';
 
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
 import SocialAuth from '../components/SocialAuth';
 
-import {actionSaveProfileByUser} from '../actions';
+import {actionSaveProfile} from '../actions';
 
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import stylesHeader from '../../core/components/Header/style';
@@ -38,20 +38,6 @@ class ProfileSettingsScreen extends Component {
     super(props);
 
     let car = '';
-
-    if (this.props.profile.car) {
-      car = {
-        number: this.props.profile.carNumber,
-        brand: this.props.profile.car,
-        model: '',
-      };
-    } else {
-      car = this.props.profile.cars.find((value) => value.owner) || {
-        number: '',
-        brand: '',
-        model: '',
-      };
-    }
 
     console.log('this.props.profile', this.props.profile);
 
@@ -97,19 +83,17 @@ class ProfileSettingsScreen extends Component {
       phoneData = PHONE;
     }
 
-    if (BIRTHDATE) {
-      birthdate = dayMonthYear(new Date(BIRTHDATE));
+    if (typeof BIRTHDATE === 'string') {
+      birthdate = new Date(BIRTHDATE);
     }
 
     this.state = {
       firstName: NAME || '',
       secondName: SECOND_NAME || '',
       lastName: LAST_NAME || '',
-      birthdate: birthdate || '',
+      birthdate: yearMonthDay(birthdate) || '',
       email: emailData || [],
       phone: phoneData || [],
-      car: car.brand && car.model ? `${car.brand} ${car.model}` : '',
-      carNumber: car.number,
       success: false,
     };
 
@@ -184,6 +168,8 @@ class ProfileSettingsScreen extends Component {
                 value: this.state.birthdate,
                 props: {
                   placeholder: null,
+                  maxDate: new Date(substractYears(18)),
+                  minDate: new Date(substractYears(100)),
                 },
               },
             ],
@@ -200,33 +186,44 @@ class ProfileSettingsScreen extends Component {
 
   onPressSave = (props) => {
     console.log('this.props222', props);
-    return false;
-    this.setState({loading: true});
-    const {name, email, phone, id} = this.props.profile;
-    let emailValue;
-    let phonelValue;
+    //this.setState({loading: true});
+    let emailValue = [];
+    let phoneValue = [];
+    let propsTmp = {};
 
-    if (email && email.value) {
-      email.value = this.state.email;
-      emailValue = email;
+    if (props.EMAIL) {
+      for (let [key, item] of Object.entries(props.EMAIL)) {
+        emailValue.push({
+          ID: key,
+          TYPE_ID: 'EMAIL',
+          VALUE: item.value,
+          VALUE_TYPE: 'HOME',
+        });
+      }
+      propsTmp.EMAIL = emailValue;
     } else {
-      emailValue = {
-        value: this.state.email,
-        type: 'home',
-      };
+      propsTmp.EMAIL = null;
     }
 
-    if (phone && phone.value) {
-      phone.value = this.state.phone;
-      phonelValue = phone;
+    if (props.PHONE) {
+      for (let [key, item] of Object.entries(props.PHONE)) {
+        phoneValue.push({
+          ID: key,
+          TYPE_ID: 'PHONE',
+          VALUE: item.value || null,
+          VALUE_TYPE: 'MOBILE',
+        });
+      }
+      propsTmp.PHONE = phoneValue;
     } else {
-      phonelValue = {
-        value: this.state.phone,
-        type: 'home',
-      };
+      propsTmp.PHONE = null;
     }
 
-    if (!phonelValue && !emailValue) {
+    // if (props.BIRTHDATE) {
+    //   propsTmp.BIRTHDATE = yearMonthDay(props.BIRTHDATE);
+    // }
+
+    if (!phoneValue && !emailValue) {
       this.setState({loading: false});
       Alert.alert(
         'Заполните телефон или Email',
@@ -240,29 +237,25 @@ class ProfileSettingsScreen extends Component {
       return false;
     }
 
+    let profileToSend = Object.assign({}, this.props.profile, props, propsTmp);
+
     this.props
-      .actionSaveProfileByUser({
-        id,
-        email: emailValue,
-        last_name: this.state.lastName,
-        second_name: this.state.secondName,
-        first_name: this.state.firstName,
-        phone: phonelValue,
-        name,
-        carNumber: this.state.carNumber,
-        car: this.state.car,
-      })
+      .actionSaveProfile(profileToSend)
       .then((data) => {
-        this.setState({success: true, loading: false});
+        this.setState({loading: false});
         const _this = this;
-        Alert.alert('Ваши данные успешно сохранены', '', [
-          {
-            text: 'ОК',
-            onPress() {
-              _this.props.navigation.navigate('ProfileScreenInfo');
+        Alert.alert(
+          'Отлично! Всё получилось!',
+          'Ваши данные успешно обновлены',
+          [
+            {
+              text: 'ОК',
+              onPress() {
+                _this.props.navigation.navigate('ProfileScreenInfo');
+              },
             },
-          },
-        ]);
+          ],
+        );
       })
       .catch(() => {
         setTimeout(
@@ -271,6 +264,38 @@ class ProfileSettingsScreen extends Component {
         );
         this.setState({loading: false});
       });
+
+    // this.props
+    //   .actionSaveProfileByUser({
+    //     id,
+    //     email: emailValue,
+    //     last_name: this.state.lastName,
+    //     second_name: this.state.secondName,
+    //     first_name: this.state.firstName,
+    //     phone: phonelValue,
+    //     name,
+    //     carNumber: this.state.carNumber,
+    //     car: this.state.car,
+    //   })
+    //   .then((data) => {
+    //     this.setState({success: true, loading: false});
+    //     const _this = this;
+    //     Alert.alert('Ваши данные успешно сохранены', '', [
+    //       {
+    //         text: 'ОК',
+    //         onPress() {
+    //           _this.props.navigation.navigate('ProfileScreenInfo');
+    //         },
+    //       },
+    //     ]);
+    //   })
+    //   .catch(() => {
+    //     setTimeout(
+    //       () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
+    //       100,
+    //     );
+    //     this.setState({loading: false});
+    //   });
   };
 
   onChangeProfileField = (fieldName) => (value) => {
@@ -303,7 +328,7 @@ const mapStateToProps = ({profile, dealer}) => {
 };
 
 const mapDispatchToProps = {
-  actionSaveProfileByUser,
+  actionSaveProfile,
 };
 
 export default connect(
