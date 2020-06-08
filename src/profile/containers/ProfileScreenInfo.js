@@ -67,7 +67,7 @@ import {CarCard} from '../components/CarCard';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   //TODO: owner true должен быть показан первым
-  const cars = orderBy(profile.login.cars, ['owner'], ['asc']);
+  const cars = orderBy(profile.cars, ['owner'], ['asc']);
 
   return {
     nav,
@@ -78,8 +78,6 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
     name: profile.name,
     phone: profile.phone,
     email: profile.email,
-    car: profile.car,
-    carNumber: profile.carNumber,
 
     isFetchProfileData: profile.meta.isFetchProfileData,
 
@@ -88,7 +86,7 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
     password: profile.password,
     isLoginRequest: profile.meta.isLoginRequest,
 
-    bonus: profile.login.bonus,
+    bonus: profile.bonus,
     pushActionSubscribeState: core.pushActionSubscribeState,
   };
 };
@@ -116,9 +114,9 @@ class ProfileScreenInfo extends Component {
   });
 
   componentDidMount() {
-    console.log('componentDidMount before', this.props.login);
+    console.log('componentDidMount before => this.props', this.props);
     if (this.props.login.ID) {
-      console.log('componentDidMount', this.props.login);
+      console.log('componentDidMount => this.props', this.props);
       this.getUserData();
     }
 
@@ -297,7 +295,7 @@ class ProfileScreenInfo extends Component {
                 </ScrollView>
               ) : null}
 
-              {this.props.bonus && this.props.bonus.saldo ? (
+              {this.props.bonus.data && this.props.bonus.data.saldo ? (
                 <TouchableOpacity
                   style={[
                     styleConst.shadow.default,
@@ -335,8 +333,8 @@ class ProfileScreenInfo extends Component {
                           fontSize: 20,
                           fontWeight: '600',
                         }}>
-                        {this.props.bonus && this.props.bonus.saldo
-                          ? this.props.bonus.saldo.value
+                        {this.props.bonus.data && this.props.bonus.data.saldo
+                          ? this.props.bonus.data.saldo.value
                           : 0}
                       </Text>
                     </View>

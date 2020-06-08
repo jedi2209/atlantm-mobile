@@ -464,22 +464,6 @@ export default {
     );
   },
 
-  updateFCMToken({oldToken, newToken}) {
-    const body = [`old=${oldToken}`, `new=${newToken}`].join('&');
-
-    const requestParams = _.merge({}, baseRequestParams, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body,
-    });
-
-    // __DEV__ && console.log('API update FCM token body', body);
-
-    return this.request('/mobile/token/update/', requestParams);
-  },
-
   /*
     @property {Object} profile
     @propery {'fb'|'vk'|'ok'|'tw'|'im'|'ya'|'gl'} profile.networkName
@@ -522,9 +506,9 @@ export default {
     });
 
     return this.request('/lkk/auth/social/', requestParams)
-      .then((data) => {
-        // console.log('>>> login with data api:::', data, profile);
-        return {status: 'success', error: {}, profile, data};
+      .then((response) => {
+        response.data.profile = profile;
+        return response;
       })
       .catch((err) => {
         // console.log('error', err);
@@ -546,8 +530,8 @@ export default {
     });
 
     return this.request('/lkk/auth/validate/', requestParams)
-      .then((data) => {
-        return {status: 'success', error: {}, data};
+      .then((response) => {
+        return response;
       })
       .catch((err) => {
         console.log('error', err);
@@ -556,9 +540,9 @@ export default {
 
   getProfile(id) {
     return this.request(`/lkk/user/${id}/`, baseRequestParams)
-      .then((data) => {
-        console.log('getProfile >>>>>>>>', data);
-        return data.data;
+      .then((response) => {
+        console.log('getProfile >>>>>>>>', response);
+        return response.data;
       })
       .catch((err) => {
         console.log('error', err);
@@ -577,8 +561,8 @@ export default {
     });
 
     return this.request(`/lkk/user/${profile.ID}/`, requestParams)
-      .then((data) => {
-        return {status: 'success', error: {}, data};
+      .then((response) => {
+        return response;
       })
       .catch((err) => {
         console.log('error', err);

@@ -688,11 +688,6 @@ class ProfileScreen extends Component {
                         placeholderTextColor="#afafaf"
                         autoCompleteType="off"
                         onChangeText={this.onInputCode}
-                        // onEndEditing={() => {
-                        //   if (this.state.checkCode === 4) {
-                        //     this._verifyCodeStepTwo();
-                        //   }
-                        // }}
                       />
                     ) : null}
                   </View>

@@ -110,12 +110,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({dealer, profile, nav}) => {
   return {
     nav,
-    bonus:
-      Object.keys(profile.bonus.data).length > 0
-        ? profile.bonus.data
-        : profile.login.bonus,
-    level1hash: profile.login.bonus.level1Hash,
-    level2hash: profile.login.bonus.level2Hash,
+    bonus: profile.bonus.data,
+    level1hash: profile.bonus.data.level1Hash,
+    level2hash: profile.bonus.data.level2Hash,
     dealerSelected: dealer.selected,
   };
 };
@@ -348,7 +345,4 @@ class BonusScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(BonusScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(BonusScreen);

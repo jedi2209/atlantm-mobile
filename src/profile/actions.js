@@ -23,6 +23,7 @@ import {
   SAVE_PROFILE__UPDATE,
   SAVE_PROFILE__REQUEST,
   SAVE_PROFILE__FAIL,
+  PROFILE_DATA__SUCCESS,
   FORGOT_PASS_MODE_CODE__SET,
   FORGOT_PASS_REQUEST__REQUEST,
   FORGOT_PASS_REQUEST__SUCCESS,
@@ -248,10 +249,10 @@ export const actionSavePofileWithPhone = (props) => {
     });
 
     return API.loginWithPhone(props).then((response) => {
-      if (response.data.error) {
-        return response.data.error;
+      if (response.error) {
+        return response.error;
       }
-      return response.data.data;
+      return response.data;
     });
   };
 };
@@ -259,26 +260,27 @@ export const actionSavePofileWithPhone = (props) => {
 export const getProfileSapData = ({id, sap}) => {
   return async (dispatch) => {
     const user = await API.getProfile(id);
-
-    let cars = [],
-      bonus = {};
-
     const userSAP = user.SAP || {};
+    let result = {};
 
-    const result = await getProfileData({
-      token: userSAP.TOKEN || userSAP.token,
-      userid: userSAP.ID || userSAP.id,
-    });
-
-    result.cars && (cars = result.cars);
-    result.bonus && (bonus = result.bonus);
+    if (userSAP) {
+      result = await getProfileData({
+        token: userSAP.TOKEN || userSAP.token,
+        userid: userSAP.ID || userSAP.id,
+      });
+    }
 
     dispatch({
       type: SAVE_PROFILE__UPDATE,
+      payload: user,
+    });
+
+    dispatch({
+      type: PROFILE_DATA__SUCCESS,
       payload: {
-        ...user,
-        cars,
-        bonus,
+        cars: result.cars || [],
+        bonus: result.bonus || {},
+        discounts: result.discounts || [],
       },
     });
   };
@@ -290,9 +292,7 @@ export const actionSavePofile = (props) => {
     return (dispatch) => {
       dispatch({
         type: SAVE_PROFILE__UPDATE,
-        payload: {
-          ...props,
-        },
+        payload: {...props},
       });
     };
   }
@@ -305,8 +305,8 @@ export const actionSavePofile = (props) => {
     });
 
     return API.loginWith(props)
-      .then((data) => {
-        const {status, error} = data;
+      .then((response) => {
+        const {status, data, error} = response;
 
         if (status !== 'success') {
           dispatch({
@@ -318,8 +318,7 @@ export const actionSavePofile = (props) => {
           });
         }
 
-        const user = data.data.data.user;
-
+        const user = response.data.user;
         dispatch({
           type: SAVE_PROFILE__UPDATE,
           payload: {
@@ -387,12 +386,38 @@ export const actionSaveProfileByUser = (props) => {
 
     return API.saveProfile(dataToSend)
       .then(async (data) => {
-        //console.log('data form saveProfile >>>', data);
         dispatch({
           type: SAVE_PROFILE__UPDATE,
           payload: {
             ...props,
           },
+        });
+
+        return props;
+      })
+      .catch((error) => {
+        dispatch({
+          type: SAVE_PROFILE__FAIL,
+          payload: {
+            message: error,
+          },
+        });
+      });
+  };
+};
+
+export const actionSaveProfile = (props) => {
+  return (dispatch) => {
+    dispatch({
+      type: SAVE_PROFILE__REQUEST,
+      payload: props,
+    });
+
+    return API.saveProfile(props)
+      .then(async (response) => {
+        dispatch({
+          type: SAVE_PROFILE__UPDATE,
+          payload: response.data,
         });
 
         return props;
@@ -423,21 +448,19 @@ export const connectSocialMedia = ({profile, im}) => {
   delete dataToSend.bonus;
 
   return (dispatch) => {
-    // dispatch({
-    //   type: SAVE_PROFILE__REQUEST,
-    //   payload: dataToSend,
-    // });
+    dispatch({
+      type: SAVE_PROFILE__REQUEST,
+      payload: dataToSend,
+    });
 
     return API.saveProfile(dataToSend)
-      .then(async (data) => {
+      .then(async (response) => {
         dispatch({
           type: SAVE_PROFILE__UPDATE,
-          payload: {
-            ...data.data,
-          },
+          payload: response.data,
         });
 
-        return data.data;
+        return response.data;
       })
       .catch((error) => {
         dispatch({
