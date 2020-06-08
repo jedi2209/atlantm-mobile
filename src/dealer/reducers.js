@@ -6,6 +6,7 @@ import {
   DEALERS_BY_CITIES__SET,
   DEALER__REQUEST,
   DEALER__SUCCESS,
+  DEALER__SUCCESS__LOCAL,
   DEALER__FAIL,
   DEALERS__REQUEST,
   DEALERS__SUCCESS,
@@ -24,6 +25,21 @@ function selected(state = {}, action) {
       return {...action.payload.newDealer};
     case APP_STORE_UPDATED:
       return {};
+    default:
+      return state;
+  }
+}
+
+function selectedLocal(state = {}, action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'dealer.selectedLocal', null);
+    case DEALER__SUCCESS__LOCAL:
+      return {...action.payload.newDealer};
+    case APP_STORE_UPDATED:
+      return null;
+    case DEALERS__REQUEST:
+      return null;
     default:
       return state;
   }
@@ -159,6 +175,7 @@ const listBelarussiaByCities = (state = [], action) => {
 
 export default combineReducers({
   selected,
+  selectedLocal,
   region,
   listRussia,
   listUkraine,

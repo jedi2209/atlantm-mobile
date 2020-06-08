@@ -51,9 +51,12 @@ export default class SelectListByCountry extends Component {
     itemLayout: PropTypes.string,
     onSelect: PropTypes.func,
     goBack: PropTypes.bool,
+    isLocal: PropTypes.bool,
   };
 
-  static defaultProps = {};
+  static defaultProps = {
+    isLocal: false,
+  };
 
   constructor(props) {
     super(props);
@@ -95,6 +98,7 @@ export default class SelectListByCountry extends Component {
       selectItem,
       itemLayout,
       goBack,
+      isLocal,
       onSelect,
     } = this.props;
     const returnScreen = get(navigation, 'state.params.returnScreen');
@@ -103,6 +107,7 @@ export default class SelectListByCountry extends Component {
       <SelectItemByCountry
         item={item}
         goBack={goBack}
+        isLocal={isLocal}
         itemLayout={itemLayout}
         selectItem={selectItem}
         navigation={navigation}

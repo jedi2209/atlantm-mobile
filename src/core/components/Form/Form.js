@@ -30,21 +30,6 @@ import styleConst from '@core/style-const';
 // redux
 import {connect} from 'react-redux';
 
-const mapStateToProps = ({dealer, profile, service, nav}) => {
-  return {
-    nav,
-    date: service.date,
-    car: profile.car,
-    name: profile.login ? profile.login.name : '',
-    phone: profile.login ? profile.login.phone : '',
-    email: profile.login ? profile.login.email : '',
-    dealerSelected: dealer.selected,
-    profile,
-  };
-};
-
-const mapDispatchToProps = {};
-
 const styles = StyleSheet.create({
   group: {
     marginBottom: 16,
@@ -210,6 +195,7 @@ class Form extends Component {
   _fieldsRender = {
     input: (data, num, totalFields) => {
       const {label, name, value} = data;
+      console.log('this.state[name]', this.state);
       return (
         <View
           style={[
@@ -431,7 +417,7 @@ class Form extends Component {
         />
       );
     },
-    component: (data, num, totalFields) => {
+    component: (data, num) => {
       const {name} = data;
       return (
         <View
@@ -446,11 +432,12 @@ class Form extends Component {
         </View>
       );
     },
-    dealerSelect: (data, num, totalFields) => {
-      const {name} = data;
+    dealerSelect: (data, num) => {
+      const {name, value} = data;
       return (
         <DealerItemList
           key={'field' + num + name}
+          dealer={value}
           style={[
             styles.field,
             {
@@ -521,4 +508,4 @@ class Form extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Form);
+export default Form;

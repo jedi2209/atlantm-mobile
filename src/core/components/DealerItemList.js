@@ -7,7 +7,6 @@ import {ListItem, Body, Right, Icon, StyleProvider, Text} from 'native-base';
 import Imager from '../components/Imager';
 
 // helpers
-import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
 
@@ -49,6 +48,7 @@ export default class DealerItemList extends Component {
     brands: PropTypes.array,
     returnScreen: PropTypes.string,
     goBack: PropTypes.bool,
+    isLocal: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -56,6 +56,7 @@ export default class DealerItemList extends Component {
     brands: [],
     returnScreen: null,
     goBack: false,
+    isLocal: false,
   };
 
   shouldComponentUpdate(nextProps) {
@@ -63,8 +64,12 @@ export default class DealerItemList extends Component {
   }
 
   onPressDealer = () => {
-    const {goBack, navigation, returnScreen} = this.props;
-    return navigation.navigate('ChooseDealerScreen', {returnScreen, goBack});
+    const {goBack, navigation, returnScreen, isLocal} = this.props;
+    return navigation.navigate('ChooseDealerScreen', {
+      returnScreen,
+      goBack,
+      isLocal,
+    });
   };
 
   render() {

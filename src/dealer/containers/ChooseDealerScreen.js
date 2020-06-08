@@ -55,7 +55,7 @@ class ChooseDealerScreen extends Component {
     return nav.routes[nav.index].routeName === 'ChooseDealerScreen';
   }
 
-  onSelectDealer = ({prevDealer, newDealer}) => {
+  onSelectDealer = ({prevDealer, newDealer, isLocal}) => {
     const {pushActionSubscribeState} = this.props;
     // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
     PushNotifications.addTag('dealer', newDealer.id);
@@ -85,6 +85,7 @@ class ChooseDealerScreen extends Component {
     } = this.props;
 
     const goBack = get(navigation, 'state.params.goBack');
+    const isLocal = get(navigation, 'state.params.isLocal');
     const returnScreen = get(navigation, 'state.params.returnScreen', null);
 
     return (
@@ -104,6 +105,7 @@ class ChooseDealerScreen extends Component {
           returnScreen={returnScreen}
           selectedItem={dealerSelected}
           goBack={goBack}
+          isLocal={isLocal}
           onSelect={this.onSelectDealer}
         />
       </>
