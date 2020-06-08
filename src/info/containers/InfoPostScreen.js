@@ -152,7 +152,9 @@ class InfoPostScreen extends Component {
   };
 
   onPressCallMe = () => {
-    this.props.navigation.navigate('CallMeBackScreen');
+    const {navigation} = this.props;
+    const id = navigation.state.params.id;
+    this.props.navigation.navigate('CallMeBackScreen', {actionID: id});
   };
 
   processDate(date = {}) {
@@ -168,9 +170,6 @@ class InfoPostScreen extends Component {
   }
 
   render() {
-    // Для iPad меню, которое находится вне роутера
-    // window.atlantmNavigation = this.props.navigation;
-
     const {isCallMeRequest} = this.props;
 
     const post = this.getPost();
