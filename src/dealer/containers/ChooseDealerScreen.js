@@ -41,7 +41,7 @@ const mapDispatchToProps = {
 
 class ChooseDealerScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: 'выбор автоцентра',
+    headerTitle: 'Выберите автоцентр',
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
     headerLeft: <HeaderIconBack theme="white" navigation={navigation} />,
@@ -70,9 +70,6 @@ class ChooseDealerScreen extends Component {
   render() {
     console.log('== ChooseDealer ==', this.props);
 
-    // // Для iPad меню, которое находится вне роутера
-    // window.atlantmNavigation = this.props.navigation;
-
     const {
       region,
       listRussia,
@@ -88,6 +85,7 @@ class ChooseDealerScreen extends Component {
     } = this.props;
 
     const goBack = get(navigation, 'state.params.goBack');
+    const returnScreen = get(navigation, 'state.params.returnScreen', null);
 
     return (
       <>
@@ -103,6 +101,7 @@ class ChooseDealerScreen extends Component {
           selectRegion={selectRegion}
           navigation={navigation}
           selectItem={selectDealer}
+          returnScreen={returnScreen}
           selectedItem={dealerSelected}
           goBack={goBack}
           onSelect={this.onSelectDealer}
@@ -112,7 +111,4 @@ class ChooseDealerScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ChooseDealerScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ChooseDealerScreen);

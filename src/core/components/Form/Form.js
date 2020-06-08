@@ -21,6 +21,7 @@ import {TextInput} from '@core/components/TextInput';
 import {DatePickerCustom} from '@core/components/DatePickerCustom';
 import PhoneInput from 'react-native-phone-input';
 import TextInputMask from 'react-native-text-input-mask';
+import DealerItemList from '@core/components/DealerItemList';
 
 import getTheme from '../../../../native-base-theme/components';
 import {yearMonthDay} from '../../../utils/date';
@@ -60,6 +61,14 @@ const styles = StyleSheet.create({
   field: {
     paddingHorizontal: 15,
     paddingTop: 5,
+  },
+  fieldRequiredFalse: {
+    borderRightColor: 'red',
+    borderRightWidth: 1,
+  },
+  fieldRequiredTrue: {
+    borderRightColor: 'green',
+    borderRightWidth: 1,
   },
   divider: {
     borderColor: '#d8d8d8',
@@ -146,8 +155,17 @@ class Form extends Component {
         }
       });
     }
-    console.log('FORM this.state', this.state, props.state);
   }
+
+  static propTypes = {
+    fields: PropTypes.exact({
+      groups: PropTypes.array,
+    }),
+    barStyle: PropTypes.string,
+    defaultCountryCode: PropTypes.string,
+    SubmitButton: PropTypes.object,
+    onSubmit: PropTypes.func.isRequired,
+  };
 
   onChangeField = (field) => (valueNew) => {
     const {name, id} = field;
@@ -160,6 +178,7 @@ class Form extends Component {
     } else {
       this.setState({[name]: valueNew});
     }
+    console.log('FORM onChangeField', this.state, this.props);
   };
 
   FieldsDivider = (key) => {
@@ -167,12 +186,17 @@ class Form extends Component {
   };
 
   _groupRender = (group, num) => {
+    let totalFields = group.fields.length;
     return (
       <View style={styles.group} key={'group' + num}>
         <Text style={styles.groupName}>{group.name}</Text>
         <View style={styles.groupFields}>
-          {group.fields.map((field, fieldNum) => {
-            const returnField = this._fieldsRender[field.type](field, fieldNum);
+          {group.fields.map((field, fieldNum, totalFields) => {
+            const returnField = this._fieldsRender[field.type](
+              field,
+              fieldNum,
+              totalFields,
+            );
             if (fieldNum !== group.fields.length - 1) {
               return [returnField, this.FieldsDivider('divider' + field.name)];
             }
@@ -184,16 +208,29 @@ class Form extends Component {
   };
 
   _fieldsRender = {
-    input: (data, num) => {
+    input: (data, num, totalFields) => {
       const {label, name, value} = data;
       return (
-        <View style={styles.field} key={'field' + num + name}>
+        <View
+          style={[
+            styles.field,
+            data.props.required
+              ? !this.state[name]
+                ? styles.fieldRequiredFalse
+                : styles.fieldRequiredTrue
+              : null,
+            {
+              borderTopRightRadius: num === 0 ? 4 : null,
+              borderBottomRightRadius: totalFields.length === num + 1 ? 4 : null,
+            }
+          ]}
+          key={'field' + num + name}>
           <TextInput
             autoCorrect={false}
             style={styles.textinput}
             label={label}
             name={name}
-            value={this.state[name] || value || ''}
+            value={this.state[name] || ''}
             enablesReturnKeyAutomatically={true}
             onChangeText={this.onChangeField(data)}
             {...data.props}
@@ -201,10 +238,31 @@ class Form extends Component {
         </View>
       );
     },
-    email: (data, num) => {
-      const {label, name, id, value} = data;
+    email: (data, num, totalFields) => {
+      const {label, name, id} = data;
+
+      let value = '';
+
+      if (id) {
+        value = this.state[name][id].value;
+      } else {
+        value = this.state[name];
+      }
       return (
-        <View style={styles.field} key={'field' + num + name}>
+        <View
+          style={[
+            styles.field,
+            data.props.required
+              ? !this.state[name]
+                ? styles.fieldRequiredFalse
+                : styles.fieldRequiredTrue
+              : null,
+            {
+              borderTopRightRadius: num === 0 ? 4 : null,
+              borderBottomRightRadius: totalFields.length === num + 1 ? 4 : null,
+            },
+          ]}
+          key={'field' + num + name}>
           <TextInput
             keyboardType="email-address"
             textContentType={'emailAddress'}
@@ -212,7 +270,7 @@ class Form extends Component {
             style={styles.textinput}
             label={label}
             name={name}
-            value={this.state[name][id].value || value || ''}
+            value={value}
             enablesReturnKeyAutomatically={true}
             onChangeText={this.onChangeField(data)}
             {...data.props}
@@ -220,10 +278,23 @@ class Form extends Component {
         </View>
       );
     },
-    date: (data, num) => {
+    date: (data, num, totalFields) => {
       const {label, name} = data;
       return (
-        <View style={styles.field} key={'field' + num + name}>
+        <View
+          style={[
+            styles.field,
+            data.props.required && !this.state[name]
+              ? !this.state[name]
+                ? styles.fieldRequiredFalse
+                : styles.fieldRequiredTrue
+              : null,
+            {
+              borderTopRightRadius: num === 0 ? 4 : null,
+              borderBottomRightRadius: totalFields.length === num + 1 ? 4 : null,
+            },
+          ]}
+          key={'field' + num + name}>
           <DatePickerCustom
             showIcon={false}
             mode="date"
@@ -243,15 +314,28 @@ class Form extends Component {
         </View>
       );
     },
-    phone: (data, num) => {
-      const {name, id} = data;
+    phone: (data, num, totalFields) => {
+      let {name, id} = data;
       let countryCode = this.defaultCountryCode;
-      if (data.country.code) {
+      if (data.country && data.country.code) {
         countryCode = data.country.code.toLowerCase();
       }
+      let mask;
+
       if (id && !this.state[name][id].mask) {
         this.state[name][id].mask = MaskedPhone[countryCode];
+      } else {
+        if (!this.state['mask_' + name + num]) {
+          this.state['mask_' + name + num] = MaskedPhone[countryCode];
+        }
       }
+
+      if (id && this.state[name][id].mask) {
+        mask = this.state[name][id].mask;
+      } else {
+        mask = this.state['mask_' + name + num];
+      }
+
       return (
         <PhoneInput
           style={{
@@ -261,7 +345,7 @@ class Form extends Component {
             paddingVertical: 10,
           }}
           ref={(ref) => {
-            this['phoneInputRef' + name + id] = ref;
+            this['phoneInputRef' + name + (id || num)] = ref;
           }}
           key={'field' + num + name}
           initialCountry={countryCode}
@@ -279,14 +363,19 @@ class Form extends Component {
                 };
                 return {[name]: copyField};
               });
+            } else {
+              this.setState({
+                [name]: null,
+                ['mask_' + name + num]: MaskedPhone[countryCode],
+              });
             }
           }}
           textComponent={() => {
             let value;
-            if (typeof this.state[name][id].value !== 'undefined') {
+            if (id && typeof this.state[name][id].value !== 'undefined') {
               value = this.state[name][id].value;
             } else {
-              value = data.value;
+              value = this.state[name] || data.value;
             }
             return (
               <TextInputMask
@@ -302,7 +391,7 @@ class Form extends Component {
                 enablesReturnKeyAutomatically={true}
                 editable={true}
                 onChangeText={(formatted, pureValue) => {
-                  if (data.id) {
+                  if (id) {
                     this.setState((prevState) => {
                       let copyField = Object.assign({}, prevState[name]); // creating copy of state variable jasper
                       copyField[id].value = formatted.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
@@ -312,9 +401,19 @@ class Form extends Component {
                         return {[name]: copyField};
                       }
                     });
+                  } else {
+                    let maskLength = this.state['mask_' + name + num].replace(
+                      /[^0]/g,
+                      '',
+                    );
+                    if (pureValue.length === maskLength.length) {
+                      this.setState({
+                        [name]: formatted.replace(/[^\d.+]/g, ''),
+                      });
+                    }
                   }
                 }}
-                mask={this.state[name][id].mask}
+                mask={mask}
                 style={[
                   {
                     height: 40,
@@ -332,7 +431,7 @@ class Form extends Component {
         />
       );
     },
-    component: (data, num) => {
+    component: (data, num, totalFields) => {
       const {name} = data;
       return (
         <View
@@ -345,6 +444,21 @@ class Form extends Component {
           key={'field' + num + name}>
           {data.value}
         </View>
+      );
+    },
+    dealerSelect: (data, num, totalFields) => {
+      const {name} = data;
+      return (
+        <DealerItemList
+          key={'field' + num + name}
+          style={[
+            styles.field,
+            {
+              paddingBottom: 5,
+            },
+          ]}
+          {...data.props}
+        />
       );
     },
   };
@@ -368,7 +482,9 @@ class Form extends Component {
               onPress={() => {
                 if (!this.state.loading) {
                   if (!this.props.onSubmit) {
-                    console.log('Undefined onSubmit prop for Form component');
+                    console.log(
+                      'Undefined required onSubmit prop for Form component',
+                    );
                     console.log('onSubmit handler', this.state);
                   } else {
                     this.setState({loading: true});
@@ -391,7 +507,7 @@ class Form extends Component {
                 <ActivityIndicator color="#fff" />
               ) : (
                 <Text style={styles.buttonText}>
-                  {this.props.SubmitButton.text
+                  {this.props.SubmitButton && this.props.SubmitButton.text
                     ? this.props.SubmitButton.text
                     : 'Отправить'}
                 </Text>

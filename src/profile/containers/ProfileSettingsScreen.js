@@ -108,6 +108,7 @@ class ProfileSettingsScreen extends Component {
                 label: 'Имя',
                 value: this.state.firstName,
                 props: {
+                  required: true,
                   textContentType: 'name',
                 },
               },
@@ -126,6 +127,7 @@ class ProfileSettingsScreen extends Component {
                 label: 'Фамилия',
                 value: this.state.lastName,
                 props: {
+                  required: true,
                   textContentType: 'name',
                 },
               },
@@ -303,6 +305,5 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 14,
-    // backgroundColor: '#fff',
   },
 });
