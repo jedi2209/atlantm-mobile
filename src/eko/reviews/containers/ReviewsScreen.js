@@ -27,7 +27,7 @@ import {get} from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
-import {substruct10Years} from '../../../utils/date';
+import {substractYears} from '../../../utils/date';
 
 const styles = StyleSheet.create({
   content: {
@@ -124,7 +124,7 @@ class ReviewsScreen extends Component {
 
     console.log('>>> dateFrom', dateFrom);
     if (!dateFrom) {
-      dateFrom = substruct10Years();
+      dateFrom = substractYears(10);
       actionDateFromFill(dateFrom);
       actionSelectFilterDatePeriod(REVIEWS_FILTER_DATE_PERIOD__ALL);
     }
