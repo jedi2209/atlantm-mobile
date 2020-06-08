@@ -302,10 +302,6 @@ class ServiceScreen extends Component {
   }
 
   render() {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

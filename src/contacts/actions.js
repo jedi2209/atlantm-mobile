@@ -9,15 +9,15 @@ import {
   CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__DONE,
 } from './actionTypes';
 
-export const callMe = props => {
-  return dispatch => {
+export const callMe = (props) => {
+  return (dispatch) => {
     dispatch({
       type: CALL_ME__REQUEST,
       payload: {...props},
     });
 
     return API.callMe(props)
-      .then(res => {
+      .then((res) => {
         const {error, status} = res;
 
         if (status !== 'success') {
@@ -32,7 +32,7 @@ export const callMe = props => {
 
         return dispatch({type: CALL_ME__SUCCESS});
       })
-      .catch(error => {
+      .catch((error) => {
         return dispatch({
           type: CALL_ME__FAIL,
           payload: {
@@ -45,7 +45,7 @@ export const callMe = props => {
 };
 
 export const actionRequestCheckAvailableNaviApps = () => {
-  return dispatch => {
+  return (dispatch) => {
     return dispatch({
       type: CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__REQUEST,
     });
@@ -53,15 +53,15 @@ export const actionRequestCheckAvailableNaviApps = () => {
 };
 
 export const actionDoneCheckAvailableNaviApps = () => {
-  return dispatch => {
+  return (dispatch) => {
     return dispatch({
       type: CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__DONE,
     });
   };
 };
 
-export const actionSetAvailableNaviApps = availableNaviApps => {
-  return dispatch => {
+export const actionSetAvailableNaviApps = (availableNaviApps) => {
+  return (dispatch) => {
     return dispatch({
       type: CONTACTS_MAP_AVAILABLE_NAVIAPPS__SET,
       payload: availableNaviApps,
