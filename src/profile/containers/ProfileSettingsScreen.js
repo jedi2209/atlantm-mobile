@@ -39,8 +39,6 @@ class ProfileSettingsScreen extends Component {
 
     let car = '';
 
-    console.log('this.props.profile', this.props.profile);
-
     const {
       NAME,
       LAST_NAME,
@@ -95,9 +93,8 @@ class ProfileSettingsScreen extends Component {
       email: emailData || [],
       phone: phoneData || [],
       success: false,
+      loading: false,
     };
-
-    console.log('this.state', this.state);
 
     this.FormConfig = {
       fields: {
@@ -177,7 +174,6 @@ class ProfileSettingsScreen extends Component {
         ],
       },
     };
-    console.log('this.FormConfig', this.FormConfig);
   }
 
   componentDidMount() {
@@ -185,8 +181,7 @@ class ProfileSettingsScreen extends Component {
   }
 
   onPressSave = (props) => {
-    console.log('this.props222', props);
-    //this.setState({loading: true});
+    this.setState({loading: true});
     let emailValue = [];
     let phoneValue = [];
     let propsTmp = {};
@@ -235,10 +230,9 @@ class ProfileSettingsScreen extends Component {
 
     let profileToSend = Object.assign({}, this.props.profile, props, propsTmp);
 
-    this.props
+    return this.props
       .actionSaveProfile(profileToSend)
       .then((data) => {
-        this.setState({loading: false});
         const _this = this;
         Alert.alert(
           'Отлично! Всё получилось!',
@@ -252,6 +246,8 @@ class ProfileSettingsScreen extends Component {
             },
           ],
         );
+        this.setState({loading: false});
+        return data;
       })
       .catch(() => {
         setTimeout(
@@ -259,39 +255,8 @@ class ProfileSettingsScreen extends Component {
           100,
         );
         this.setState({loading: false});
+        return false;
       });
-
-    // this.props
-    //   .actionSaveProfileByUser({
-    //     id,
-    //     email: emailValue,
-    //     last_name: this.state.lastName,
-    //     second_name: this.state.secondName,
-    //     first_name: this.state.firstName,
-    //     phone: phonelValue,
-    //     name,
-    //     carNumber: this.state.carNumber,
-    //     car: this.state.car,
-    //   })
-    //   .then((data) => {
-    //     this.setState({success: true, loading: false});
-    //     const _this = this;
-    //     Alert.alert('Ваши данные успешно сохранены', '', [
-    //       {
-    //         text: 'ОК',
-    //         onPress() {
-    //           _this.props.navigation.navigate('ProfileScreenInfo');
-    //         },
-    //       },
-    //     ]);
-    //   })
-    //   .catch(() => {
-    //     setTimeout(
-    //       () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
-    //       100,
-    //     );
-    //     this.setState({loading: false});
-    //   });
   };
 
   onChangeProfileField = (fieldName) => (value) => {
