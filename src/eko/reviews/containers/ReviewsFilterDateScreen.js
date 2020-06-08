@@ -28,9 +28,8 @@ import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import {
   substructMonth,
-  substructWeek,
-  substructYear,
-  substruct10Years,
+  substractWeek,
+  substractYears,
 } from '../../../utils/date';
 
 const styles = StyleSheet.create({
@@ -94,16 +93,16 @@ class ReviewsFilterDateScreen extends Component {
 
     switch (datePeriod) {
       case REVIEWS_FILTER_DATE_PERIOD__ALL:
-        newDateFrom = substruct10Years();
+        newDateFrom = substractYears(10);
         break;
       case REVIEWS_FILTER_DATE_PERIOD__WEEK:
-        newDateFrom = substructWeek();
+        newDateFrom = substractWeek();
         break;
       case REVIEWS_FILTER_DATE_PERIOD__MONTH:
         newDateFrom = substructMonth();
         break;
       case REVIEWS_FILTER_DATE_PERIOD__YEAR:
-        newDateFrom = substructYear();
+        newDateFrom = substractYears(1);
         break;
       default:
         newDateFrom = dateFrom;
