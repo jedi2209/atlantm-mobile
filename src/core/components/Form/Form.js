@@ -4,17 +4,13 @@ import PropTypes from 'prop-types';
 import {
   StyleSheet,
   View,
-  Alert,
-  TouchableWithoutFeedback,
   ScrollView,
-  Keyboard,
   ActivityIndicator,
-  Dimensions,
   Platform,
   StatusBar,
 } from 'react-native';
 
-import {Text, StyleProvider, Icon, Button} from 'native-base';
+import {Text, Button} from 'native-base';
 
 // Form field types
 import {TextInput} from '@core/components/TextInput';
@@ -23,12 +19,7 @@ import PhoneInput from 'react-native-phone-input';
 import TextInputMask from 'react-native-text-input-mask';
 import DealerItemList from '@core/components/DealerItemList';
 
-import getTheme from '../../../../native-base-theme/components';
-import {yearMonthDay} from '../../../utils/date';
 import styleConst from '@core/style-const';
-
-// redux
-import {connect} from 'react-redux';
 
 const styles = StyleSheet.create({
   group: {
@@ -195,7 +186,6 @@ class Form extends Component {
   _fieldsRender = {
     input: (data, num, totalFields) => {
       const {label, name, value} = data;
-      console.log('this.state[name]', this.state);
       return (
         <View
           style={[

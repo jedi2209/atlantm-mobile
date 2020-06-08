@@ -3,99 +3,124 @@
 import React from 'react';
 // redux
 import {connect} from 'react-redux';
+import {get} from 'lodash';
 import {callMe} from '../../contacts/actions';
+import {localUserDataUpdate} from '../../profile/actions';
 import {CALL_ME__SUCCESS, CALL_ME__FAIL} from '../../contacts/actionTypes';
+import {StackActions, NavigationActions} from 'react-navigation';
 import Amplitude from '@utils/amplitude-analytics';
 import {
   Alert,
   View,
-  StyleSheet,
   ScrollView,
   Keyboard,
-  Text,
-  Platform,
   TouchableWithoutFeedback,
-  ActivityIndicator,
-  StatusBar,
 } from 'react-native';
-import {Button} from 'native-base';
-import DeviceInfo from 'react-native-device-info';
-import {StackActions, NavigationActions} from 'react-navigation';
 
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
-import {TextInput} from '../../core/components/TextInput';
-import styleConst from '../../core/style-const';
+import Form from '../../core/components/Form/Form';
 
 import isInternet from '@utils/internet';
 import {ERROR_NETWORK} from '@core/const';
 
-import DealerItemList from '../../core/components/DealerItemList';
-
-const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
+let mapStateToProps = ({dealer, profile, contacts, service, nav}) => {
   return {
-    list: info.list,
     nav,
-    profile,
     dealerSelected: dealer.selected,
+    firstName: profile.login.NAME
+      ? profile.login.NAME
+      : profile.localUserData.NAME
+      ? profile.localUserData.NAME
+      : '',
+    secondName: profile.login.SECOND_NAME
+      ? profile.login.SECOND_NAME
+      : profile.localUserData.SECOND_NAME
+      ? profile.localUserData.SECOND_NAME
+      : '',
+    phone:
+      profile.login.PHONE && profile.login.PHONE.length
+        ? profile.login.PHONE[0].VALUE
+        : profile.localUserData.PHONE
+        ? profile.localUserData.PHONE
+        : '',
+    profile,
     isСallMeRequest: contacts.isСallMeRequest,
   };
 };
-const mapDispatchToProps = {callMe};
+
+const mapDispatchToProps = {
+  localUserDataUpdate,
+  callMe,
+};
 
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import stylesHeader from '../../core/components/Header/style';
-
-const styles = StyleSheet.create({
-  // Скопировано из ProfileSettingsScreen.
-  container: {
-    flex: 1,
-    paddingVertical: 20,
-    paddingHorizontal: 14,
-    backgroundColor: '#fff',
-  },
-  header: {
-    marginBottom: 36,
-  },
-  heading: {
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  field: {
-    marginBottom: 18,
-  },
-  group: {
-    marginBottom: 36,
-  },
-  textinput: {
-    height: Platform.OS === 'ios' ? 40 : 'auto',
-    borderColor: '#d8d8d8',
-    borderBottomWidth: 1,
-    color: '#222b45',
-    fontSize: 18,
-  },
-  button: {
-    backgroundColor: styleConst.color.lightBlue,
-    justifyContent: 'center',
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    textTransform: 'uppercase',
-    fontSize: 16,
-  },
-});
 
 class CallMeBackScreen extends React.Component {
   constructor(props) {
     super(props);
 
-    const {last_name, first_name, phone} = this.props.profile.login;
-
     this.state = {
-      name: last_name && first_name ? `${first_name} ${last_name}` : '',
-      phone: phone ? phone.value : '',
       loading: false,
       success: false,
+    };
+
+    this.FormConfig = {
+      fields: {
+        groups: [
+          {
+            name: 'Автоцентр',
+            fields: [
+              {
+                name: 'DEALER',
+                type: 'dealerSelect',
+                label: 'Автоцентр',
+                value: this.props.dealerSelected,
+                props: {
+                  goBack: true,
+                  isLocal: false,
+                  navigation: this.props.navigation,
+                  returnScreen: this.props.navigation.state.routeName,
+                },
+              },
+            ],
+          },
+          {
+            name: 'Контактные данные',
+            fields: [
+              {
+                name: 'NAME',
+                type: 'input',
+                label: 'Имя',
+                value: this.props.firstName,
+                props: {
+                  required: true,
+                  textContentType: 'name',
+                },
+              },
+              {
+                name: 'SECOND_NAME',
+                type: 'input',
+                label: 'Отчество',
+                value: this.props.secondName,
+                props: {
+                  textContentType: 'name',
+                },
+              },
+              {
+                name: 'PHONE',
+                type: 'phone',
+                label: 'Телефон',
+                value: this.props.phone,
+                props: {
+                  required: true,
+                  textContentType: 'phone',
+                },
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -104,178 +129,110 @@ class CallMeBackScreen extends React.Component {
       navigation.state.params && navigation.state.params.returnScreen;
 
     return {
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
+      headerStyle: stylesHeader.whiteHeader,
+      headerTitleStyle: stylesHeader.whiteHeaderTitle,
+      headerTitle: 'Перезвоните мне',
       headerLeft: (
         <HeaderIconBack
-          theme="white"
+          theme="blue"
           navigation={navigation}
           returnScreen={returnScreen}
         />
       ),
+      headerRight: <View />,
     };
   };
 
-  componentDidUpdate(prevpProps) {
-    if (prevpProps.profile.login !== this.props.profile.login) {
-      const {last_name, first_name, phone} = this.props.profile.login;
+  // componentDidUpdate(prevpProps) {
+  //   if (prevpProps.profile.login !== this.props.profile.login) {
+  //     const {last_name, first_name, phone} = this.props.profile.login;
 
-      if (last_name && first_name) {
-        this.setState({name: `${first_name} ${last_name}`});
-      }
+  //     if (last_name && first_name) {
+  //       this.setState({name: `${first_name} ${last_name}`});
+  //     }
 
-      if (phone) {
-        this.setState({phone});
-      }
-    }
-  }
+  //     if (phone) {
+  //       this.setState({phone});
+  //     }
+  //   }
+  // }
 
-  onChangeField = fieldName => value => {
-    this.setState({[fieldName]: value});
-  };
-
-  onPressCallMe = async () => {
+  onPressCallMe = async (props) => {
     const isInternetExist = await isInternet();
 
     if (!isInternetExist) {
       return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
-    } else {
-      const {callMe, profile, dealerSelected, isСallMeRequest} = this.props;
+    }
 
-      // предотвращаем повторную отправку формы
-      if (isСallMeRequest) {
-        return;
-      }
+    const name = [props.NAME, props.SECOND_NAME].filter(Boolean).join(' ');
 
-      const {email} = profile.login;
-      const dealerID = dealerSelected.id;
-      const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
-      const name = this.state.name;
-      const phone = this.state.phone;
+    this.setState({loading: true});
 
-      if (name.length === 0 || phone.length === 0) {
-        Alert.alert('Поле Имя и Номер телефона обязательные');
-        return;
-      }
+    const dealerID = props.DEALER.id;
 
-      this.setState({loading: true});
+    const action = await this.props.callMe({
+      dealerID,
+      name: name || '',
+      phone: get(props, 'PHONE', ''),
+    });
 
-      callMe({
-        name: name || '',
-        email: email || '', // апи не терпит undefined
-        phone: phone || '',
-        device,
-        dealerID,
-      }).then(action => {
-        if (action.type === CALL_ME__SUCCESS) {
-          Amplitude.logEvent('order', 'contacts/callme');
-          this.setState({success: true});
-        }
-
-        if (action.type === CALL_ME__FAIL) {
-          this.setState({loading: false});
-          setTimeout(
-            () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
-            100,
-          );
-        }
+    if (action.type === CALL_ME__SUCCESS) {
+      const _this = this;
+      Amplitude.logEvent('order', 'contacts/callme');
+      _this.props.localUserDataUpdate({
+        NAME: props.NAME,
+        SECOND_NAME: props.SECOND_NAME,
+        PHONE: props.PHONE,
       });
+      Alert.alert(
+        'Ваша заявка успешно отправлена!',
+        'Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
+        [
+          {
+            text: 'ОК',
+            onPress() {
+              const resetAction = StackActions.reset({
+                index: 0,
+                actions: [
+                  NavigationActions.navigate({
+                    routeName: 'BottomTabNavigation',
+                  }),
+                ],
+              });
+              _this.props.navigation.dispatch(resetAction);
+            },
+          },
+        ],
+      );
+      this.setState({success: true, loading: false});
+    }
+
+    if (action.type === CALL_ME__FAIL) {
+      this.setState({loading: false});
+      setTimeout(
+        () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
+        100,
+      );
     }
   };
 
   render() {
-    const {navigation, dealerSelected} = this.props;
-
     return (
       <KeyboardAvoidingView>
-        <StatusBar barStyle="light-content" />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView>
-            <View style={styles.container}>
-              <View style={styles.header}>
-                <Text style={styles.heading}>Обратный звонок</Text>
-              </View>
-              {this.state.success ? (
-                <View style={{flex: 1, justifyContent: 'center'}}>
-                  <View style={styles.group}>
-                    <Text
-                      style={{
-                        fontSize: 22,
-                        fontWeight: 'bold',
-                      }}>
-                      Заявка успешно отправлена
-                    </Text>
-                  </View>
-                  <View>
-                    <Button
-                      onPress={() => {
-                        const resetAction = StackActions.reset({
-                          index: 0,
-                          actions: [
-                            NavigationActions.navigate({
-                              routeName: 'BottomTabNavigation',
-                            }),
-                          ],
-                        });
-                        this.props.navigation.dispatch(resetAction);
-                      }}
-                      style={styles.button}>
-                      <Text style={styles.buttonText}>Назад</Text>
-                    </Button>
-                  </View>
-                </View>
-              ) : (
-                <>
-                  <View
-                    // Визуально выравниваем относительно остальных компонентов.
-                    style={[styles.group, {marginLeft: -14, marginRight: -14}]}>
-                    <DealerItemList
-                      goBack
-                      navigation={navigation}
-                      city={dealerSelected.city}
-                      name={dealerSelected.name}
-                      brands={dealerSelected.brands}
-                    />
-                  </View>
-                  <View style={styles.group}>
-                    <View style={styles.field}>
-                      <TextInput
-                        autoCorrect={false}
-                        style={styles.textinput}
-                        label="ФИО"
-                        value={this.state.name}
-                        enablesReturnKeyAutomatically={true}
-                        textContentType={'name'}
-                        onChangeText={this.onChangeField('name')}
-                      />
-                    </View>
-                    <View style={styles.field}>
-                      <TextInput
-                        style={styles.textinput}
-                        label="Телефон"
-                        keyboardType="phone-pad"
-                        value={this.state.phone || ''}
-                        enablesReturnKeyAutomatically={true}
-                        textContentType={'telephoneNumber'}
-                        onChangeText={this.onChangeField('phone')}
-                      />
-                    </View>
-                  </View>
-                  <View style={styles.group}>
-                    <Button
-                      onPress={
-                        this.state.loading ? undefined : this.onPressCallMe
-                      }
-                      style={[styleConst.shadow.default, styles.button]}>
-                      {this.state.loading ? (
-                        <ActivityIndicator color="#fff" />
-                      ) : (
-                        <Text style={styles.buttonText}>Отправить</Text>
-                      )}
-                    </Button>
-                  </View>
-                </>
-              )}
+          <ScrollView style={{flex: 1, backgroundColor: '#eee'}}>
+            <View
+              style={{
+                flex: 1,
+                paddingTop: 20,
+                marginBottom: 160,
+                paddingHorizontal: 14,
+              }}>
+              <Form
+                fields={this.FormConfig.fields}
+                barStyle={'light-content'}
+                onSubmit={this.onPressCallMe}
+              />
             </View>
           </ScrollView>
         </TouchableWithoutFeedback>
@@ -284,7 +241,4 @@ class CallMeBackScreen extends React.Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(CallMeBackScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(CallMeBackScreen);
