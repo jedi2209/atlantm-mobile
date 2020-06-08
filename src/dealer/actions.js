@@ -13,8 +13,8 @@ import API from '../utils/api';
 
 import {RUSSIA, BELARUSSIA, UKRAINE} from '../core/const';
 
-export const selectRegion = region => {
-  return dispatch => {
+export const selectRegion = (region) => {
+  return (dispatch) => {
     return dispatch({
       type: DEALERS_REGION__SELECT,
       payload: region,
@@ -23,7 +23,7 @@ export const selectRegion = region => {
 };
 
 export const selectDealer = ({dealerBaseData, dealerSelected}) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: DEALER__REQUEST,
       payload: {
@@ -33,7 +33,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected}) => {
     });
 
     return API.fetchDealer(dealerBaseData.id)
-      .then(response => {
+      .then((response) => {
         if (response.error) {
           return dispatch({
             type: DEALER__FAIL,
@@ -57,7 +57,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected}) => {
           },
         });
       })
-      .catch(error => {
+      .catch((error) => {
         return dispatch({
           type: DEALER__FAIL,
           payload: {
@@ -69,11 +69,11 @@ export const selectDealer = ({dealerBaseData, dealerSelected}) => {
 };
 
 export const fetchDealers = () => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({type: DEALERS__REQUEST});
 
     return API.fetchDealers()
-      .then(response => {
+      .then((response) => {
         const {data: dealers, error} = response;
 
         if (error) {
@@ -103,7 +103,7 @@ export const fetchDealers = () => {
           payload: dealersByRegions,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         return dispatch({
           type: DEALERS__FAIL,
           payload: {
@@ -114,8 +114,8 @@ export const fetchDealers = () => {
   };
 };
 
-export const actionSetDealersByCities = dealersByRegions => {
-  return dispatch => {
+export const actionSetDealersByCities = (dealersByRegions) => {
+  return (dispatch) => {
     return dispatch({
       type: DEALERS_BY_CITIES__SET,
       payload: dealersByRegions,

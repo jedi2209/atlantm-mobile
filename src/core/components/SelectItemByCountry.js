@@ -9,7 +9,7 @@ import Imager from '../components/Imager';
 
 // helpers
 import {get} from 'lodash';
-import PropTypes, { array } from 'prop-types';
+import PropTypes, {array} from 'prop-types';
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
 import {DEALER__SUCCESS, DEALER__FAIL} from '../../dealer/actionTypes';
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     color: styleConst.color.systemBlue,
   },
   site: {
-    fontSize: 12, // у Саши в макете 7 но это очень мелко мб дело в шрифтах
+    fontSize: 12,
     color: '#A8ABBE',
     paddingVertical: 5,
   },
@@ -91,7 +91,7 @@ export default class SelectItemByCountry extends Component {
     const mainScreen = 'BottomTabNavigation';
 
     selectItem({dealerBaseData: item, dealerSelected: selectedItem}).then(
-      action => {
+      (action) => {
         if (action.type === DEALER__SUCCESS) {
           if (onSelect) {
             onSelect({
@@ -100,7 +100,7 @@ export default class SelectItemByCountry extends Component {
             });
           }
 
-          if (goBack) {
+          if (Boolean(goBack)) {
             return navigation.goBack();
           }
 
@@ -132,14 +132,14 @@ export default class SelectItemByCountry extends Component {
     navigation.goBack();
   };
 
-  _getSite = sites => {
+  _getSite = (sites) => {
     if (typeof sites === 'undefined') {
       return null;
     }
 
     let res = [];
 
-    sites.split('\r\n').forEach(val => {
+    sites.split('\r\n').forEach((val) => {
       res.push(val.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0]);
     });
     return res.join('\r\n');
@@ -167,7 +167,7 @@ export default class SelectItemByCountry extends Component {
             ) : null}
             <Text style={styles.site}>{this._getSite(item.site)}</Text>
             <View style={styles.brands}>
-              {item.brands.map(brand => {
+              {item.brands.map((brand) => {
                 if (brand.logo) {
                   return (
                     <Imager
@@ -207,14 +207,14 @@ export default class SelectItemByCountry extends Component {
           {item.name ? <Text style={styles.city}>{item.name}</Text> : null}
           {item.dealers && item.dealers.length !== 0 ? (
             <View style={styles.brands}>
-              {item.dealers.map(dealer => {
+              {item.dealers.map((dealer) => {
                 if (dealer.virtual !== false) {
                   // фикс для НЕ вывода виртуальных КО в списке
                   return true;
                 }
                 return (
                   <View key={dealer.id} style={styles.brands}>
-                    {dealer.brands.map(brand => {
+                    {dealer.brands.map((brand) => {
                       const name =
                         brand.name === 'land rover' ? 'landrover' : brand.name;
 
