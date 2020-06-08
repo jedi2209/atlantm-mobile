@@ -146,7 +146,7 @@ class Form extends Component {
         }
       });
     }
-    console.log('FORM this.state', this.state);
+    console.log('FORM this.state', this.state, props.state);
   }
 
   onChangeField = (field) => (valueNew) => {
@@ -371,7 +371,18 @@ class Form extends Component {
                     console.log('Undefined onSubmit prop for Form component');
                     console.log('onSubmit handler', this.state);
                   } else {
-                    this.props.onSubmit(this.state);
+                    this.setState({loading: true});
+                    const response = async () => {
+                      return new Promise((resolve, reject) => {
+                        const answer = this.props.onSubmit(this.state);
+                        if (answer) {
+                          resolve(answer);
+                        }
+                      });
+                    };
+                    response().then(() => {
+                      this.setState({loading: false});
+                    });
                   }
                 }
               }}
