@@ -26,3 +26,6 @@ export const substractWeek = () =>
 
 export const substractYears = (yearsCol) =>
   moment().subtract(yearsCol, 'years').format('YYYY-MM-DD');
+
+export const addDays = (daysCol) =>
+  moment().add(daysCol, 'days').format('YYYY-MM-DD');

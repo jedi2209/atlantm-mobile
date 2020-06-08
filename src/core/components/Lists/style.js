@@ -37,7 +37,6 @@ export default StyleSheet.create({
     borderTopColor: styleConst.color.border,
   },
   listItem: {
-    // minHeight: styleConst.ui.listHeight,
     borderWidth: 0,
     borderBottomWidth: 0,
   },
