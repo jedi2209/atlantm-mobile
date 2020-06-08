@@ -138,10 +138,6 @@ export default class SelectListByCountry extends Component {
         list = listBelarussia;
     }
 
-    console.log('list', listRussia,
-    listUkraine,
-    listBelarussia);
-
     return (
       <StyleProvider style={getTheme()}>
         <Container style={styles.safearea}>
@@ -175,7 +171,7 @@ export default class SelectListByCountry extends Component {
             refreshing={this.state.isRefreshing}
             ListEmptyComponent={this.renderEmptyComponent}
             renderItem={this.renderItem}
-            keyExtractor={item => `${item.hash.toString()}`}
+            keyExtractor={(item) => `${item.hash.toString()}`}
           />
         </Container>
       </StyleProvider>

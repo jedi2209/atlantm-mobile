@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 import {
   View,
@@ -12,7 +13,15 @@ export const TextInput = React.forwardRef((props, ref) => {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.label, isActive && styles.labelActive]}>
+      <Text
+        style={[
+          styles.label,
+          isActive && styles.labelActive,
+          {
+            textDecorationLine:
+              props.required && !isActive ? 'underline' : 'none',
+            textDecorationStyle: 'solid',
+      }]}>
         {props.label}
       </Text>
       <NativeTextInput
@@ -35,6 +44,7 @@ const styles = StyleSheet.create({
     left: 0,
     top: 15,
     fontSize: 18,
+    lineHeight: 20,
     color: '#bababa',
   },
   labelActive: {

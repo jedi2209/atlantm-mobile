@@ -11,7 +11,7 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
 
-const styles = StyleSheet.create({
+const stylesDealerItemList = StyleSheet.create({
   brands: {
     flexDirection: 'row',
   },
@@ -20,16 +20,23 @@ const styles = StyleSheet.create({
     height: 20,
     marginRight: 4,
   },
+  dealerCity: {
+    fontFamily: styleConst.font.light,
+    fontSize: 14,
+    letterSpacing: styleConst.ui.letterSpacing,
+    color: styleConst.color.greyText,
+    marginLeft: 0,
+  },
   city: {
     fontFamily: styleConst.font.regular,
     fontSize: 17,
     letterSpacing: styleConst.ui.letterSpacing,
   },
   name: {
-    color: styleConst.color.greyText,
     fontFamily: styleConst.font.light,
     fontSize: 17,
     letterSpacing: styleConst.ui.letterSpacing,
+    marginLeft: 0,
   },
 });
 
@@ -39,7 +46,6 @@ export default class DealerItemList extends Component {
     city: PropTypes.shape({
       name: PropTypes.string,
     }),
-    name: PropTypes.string,
     brands: PropTypes.array,
     returnScreen: PropTypes.string,
     goBack: PropTypes.bool,
@@ -47,58 +53,70 @@ export default class DealerItemList extends Component {
 
   static defaultProps = {
     city: null,
-    name: null,
     brands: [],
     returnScreen: null,
     goBack: false,
   };
 
   shouldComponentUpdate(nextProps) {
-    return this.props.name !== nextProps.name;
+    return this.props.dealer.name !== nextProps.dealer.name;
   }
 
   onPressDealer = () => {
     const {goBack, navigation, returnScreen} = this.props;
-
     return navigation.navigate('ChooseDealerScreen', {returnScreen, goBack});
   };
 
   render() {
-    const {city, name, brands} = this.props;
+    const {city, dealer} = this.props;
 
     return (
-      <StyleProvider style={getTheme()}>
-        <View style={stylesList.listItemContainer}>
-          <ListItem
-            last
-            onPress={this.onPressDealer}
-            style={stylesList.listItem}>
-            <Body>
-              {city && city.name ? (
-                <Text style={styles.city}>{city.name}</Text>
-              ) : null}
-              {name ? <Text style={styles.name}>{name}</Text> : null}
-            </Body>
-            <Right>
-              <View style={styles.brands}>
-                {brands.map(brand => {
-                  if (brand.logo) {
-                    return (
-                      <Imager
-                        resizeMode="contain"
-                        key={brand.id}
-                        style={styles.brandLogo}
-                        source={{uri: brand.logo}}
-                      />
-                    );
-                  }
-                })}
+      <View>
+        <ListItem last onPress={this.onPressDealer} style={stylesList.listItem}>
+          <Body>
+            {city && city.name ? (
+              <Text
+                style={stylesDealerItemList.city}
+                ellipsizeMode={'tail'}
+                numberOfLines={1}>
+                {city && city.name ? city.name : dealer.city.name}
+              </Text>
+            ) : null}
+            {dealer.name ? (
+              <View>
+                <Text
+                  style={stylesDealerItemList.name}
+                  ellipsizeMode={'tail'}
+                  numberOfLines={1}>
+                  {dealer.name}
+                </Text>
+                <Text
+                  style={stylesDealerItemList.dealerCity}
+                  ellipsizeMode={'tail'}
+                  numberOfLines={1}>
+                  {dealer.city.name}
+                </Text>
               </View>
-              <Icon name="arrow-forward" style={stylesList.iconArrow} />
-            </Right>
-          </ListItem>
-        </View>
-      </StyleProvider>
+            ) : null}
+          </Body>
+          <Right>
+            <View style={stylesDealerItemList.brands}>
+              {dealer.brands.map((brand) => {
+                if (brand.logo) {
+                  return (
+                    <Imager
+                      resizeMode="contain"
+                      key={brand.id}
+                      style={stylesDealerItemList.brandLogo}
+                      source={{uri: brand.logo}}
+                    />
+                  );
+                }
+              })}
+            </View>
+          </Right>
+        </ListItem>
+      </View>
     );
   }
 }

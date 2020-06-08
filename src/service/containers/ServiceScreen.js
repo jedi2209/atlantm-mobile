@@ -12,11 +12,11 @@ import {
   ActivityIndicator,
   Dimensions,
   Platform,
-  StatusBar,
 } from 'react-native';
 import {Button} from 'native-base';
 import DatePicker from 'react-native-datepicker';
 import {StackActions, NavigationActions} from 'react-navigation';
+import Form from '../../core/components/Form/Form';
 
 // redux
 import {connect} from 'react-redux';
@@ -24,7 +24,6 @@ import {dateFill, orderService} from '../actions';
 import {carFill, nameFill, phoneFill, emailFill} from '../../profile/actions';
 
 import DeviceInfo from 'react-native-device-info';
-import DealerItemList from '../../core/components/DealerItemList';
 
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
@@ -32,61 +31,10 @@ import {TextInput} from '../../core/components/TextInput';
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
 import isInternet from '../../utils/internet';
-import {yearMonthDay} from '../../utils/date';
+import {addDays} from '../../utils/date';
 import styleConst from '../../core/style-const';
 import {ERROR_NETWORK} from '../../core/const';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
-
-const $size = 40;
-const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
-  },
-  list: {
-    paddingBottom: $size,
-  },
-  serviceForm: {
-    marginTop: $size,
-  },
-  // Скопировано из ProfileSettingsScreen.
-  container: {
-    flex: 1,
-    paddingVertical: 20,
-    paddingHorizontal: 14,
-    backgroundColor: '#fff',
-  },
-  header: {
-    marginBottom: 36,
-  },
-  heading: {
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  field: {
-    marginBottom: 18,
-  },
-  group: {
-    marginBottom: 36,
-  },
-  textinput: {
-    height: Platform.OS === 'ios' ? 40 : 'auto',
-    borderColor: '#d8d8d8',
-    borderBottomWidth: 1,
-    color: '#222b45',
-    fontSize: 18,
-  },
-  button: {
-    backgroundColor: styleConst.color.lightBlue,
-    justifyContent: 'center',
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    textTransform: 'uppercase',
-    fontSize: 16,
-  },
-});
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
   return {
@@ -167,7 +115,7 @@ class ServiceScreen extends Component {
     }
 
     this.state = {
-      date: '',
+      date: new Date(addDays(2)),
       email: email ? email.value : '',
       phone: phone ? phone.value : '',
       car: `${car.brand} ${car.model}`,
@@ -175,6 +123,125 @@ class ServiceScreen extends Component {
       name: `${first_name} ${last_name}`,
       loading: false,
       success: false,
+    };
+
+    console.log('new Date(substractDays(2))', new Date(addDays(2)));
+
+    this.FormConfig = {
+      fields: {
+        groups: [
+          {
+            name: 'Автоцентр',
+            fields: [
+              {
+                name: 'DEALER',
+                type: 'dealerSelect',
+                label: 'Автоцентр',
+                value: this.state.firstName,
+                props: {
+                  goBack: true,
+                  dealer: this.props.dealerSelected,
+                  navigation: this.props.navigation,
+                  returnScreen: this.props.navigation.state.routeName,
+                },
+              },
+              {
+                name: 'DATE',
+                type: 'date',
+                label: 'Выберите удобную для вас дату',
+                value: this.state.date,
+                props: {
+                  placeholder: null,
+                  required: true,
+                  minDate: new Date(addDays(2)),
+                },
+              },
+            ],
+          },
+          {
+            name: 'Контактные данные',
+            fields: [
+              {
+                name: 'NAME',
+                type: 'input',
+                label: 'Имя',
+                value: this.state.firstName,
+                props: {
+                  required: true,
+                  textContentType: 'name',
+                },
+              },
+              {
+                name: 'SECOND_NAME',
+                type: 'input',
+                label: 'Отчество',
+                value: this.state.secondName,
+                props: {
+                  textContentType: 'name',
+                },
+              },
+              {
+                name: 'LAST_NAME',
+                type: 'input',
+                label: 'Фамилия',
+                value: this.state.lastName,
+                props: {
+                  required: true,
+                  textContentType: 'name',
+                },
+              },
+              {
+                name: 'PHONE',
+                type: 'phone',
+                label: 'Телефон',
+                value: this.state.phone,
+                props: {
+                  required: true,
+                  textContentType: 'phone',
+                },
+              },
+              {
+                name: 'EMAIL',
+                type: 'email',
+                label: 'Email',
+                value: this.state.email,
+                props: {
+                  required: true,
+                },
+              },
+            ],
+          },
+          {
+            name: 'Автомобиль',
+            fields: [
+              {
+                name: 'CAR',
+                type: 'input',
+                label: 'Марка и модель автомобиля',
+                value: this.state.carName,
+                props: {
+                  placeholder: null,
+                  required: true,
+                  // maxDate: new Date(substractYears(18)),
+                  // minDate: new Date(substractDays(2)),
+                },
+              },
+              {
+                name: 'NUMBER',
+                type: 'input',
+                label: 'Гос.номер автомобиля',
+                value: this.state.carNumber,
+                props: {
+                  required: true,
+                  placeholder: null,
+                  // maxDate: new Date(substractYears(18)),
+                  // minDate: new Date(substractYears(100)),
+                },
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -227,7 +294,7 @@ class ServiceScreen extends Component {
 
     try {
       const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
-      const orderDate = yearMonthDay(this.state.date);
+      const orderDate = this.state.date;
       const dealerID = this.props.dealerSelected.id;
 
       this.setState({loading: true});
@@ -305,111 +372,27 @@ class ServiceScreen extends Component {
   }
 
   render() {
-    const {navigation, dealerSelected} = this.props;
     const today = new Date();
     const tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
     return (
       <KeyboardAvoidingView>
-        <StatusBar barStyle="light-content" />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView>
-            <View style={styles.container}>
-              <View style={styles.header}>
-                <Text style={styles.heading}>Заявка на СТО</Text>
-              </View>
-              <View
-                // Визуально выравниваем относительно остальных компонентов.
-                style={[styles.group, {marginLeft: -14, marginRight: -14}]}>
-                <DealerItemList
-                  goBack
-                  navigation={navigation}
-                  city={dealerSelected.city}
-                  name={dealerSelected.name}
-                  brands={dealerSelected.brands}
-                />
-              </View>
-              <View style={styles.group}>
-                <DatePicker
-                  showIcon={false}
-                  mode="date"
-                  minDate={tomorrow}
-                  placeholder="Выберите дату"
-                  format="DD MMMM YYYY"
-                  confirmBtnText="Выбрать"
-                  cancelBtnText="Отмена"
-                  customStyles={datePickerStyles}
-                  date={this.state.date}
-                  onDateChange={(_, date) => {
-                    this.onChangeField('date')(date);
-                  }}
-                />
-              </View>
-              <View style={styles.group}>
-                <View style={styles.field}>
-                  <TextInput
-                    autoCorrect={false}
-                    style={styles.textinput}
-                    label="ФИО"
-                    value={this.state.name || ''}
-                    enablesReturnKeyAutomatically={true}
-                    textContentType={'name'}
-                    onChangeText={this.onChangeField('name')}
-                  />
-                </View>
-                <View style={styles.field}>
-                  <TextInput
-                    style={styles.textinput}
-                    label="Телефон"
-                    keyboardType="phone-pad"
-                    value={this.state.phone || ''}
-                    enablesReturnKeyAutomatically={true}
-                    textContentType={'telephoneNumber'}
-                    onChangeText={this.onChangeField('phone')}
-                  />
-                </View>
-                <View style={styles.field}>
-                  <TextInput
-                    style={styles.textinput}
-                    label="Email"
-                    keyboardType="email-address"
-                    value={this.state.email || ''}
-                    enablesReturnKeyAutomatically={true}
-                    textContentType={'emailAddress'}
-                    onChangeText={this.onChangeField('email')}
-                  />
-                </View>
-              </View>
-              <View style={styles.group}>
-                <View style={styles.field}>
-                  <TextInput
-                    style={styles.textinput}
-                    label="Авто"
-                    value={this.state.car || ''}
-                    onChangeText={this.onChangeField('car')}
-                  />
-                </View>
-                <View style={styles.field}>
-                  <TextInput
-                    style={styles.textinput}
-                    label="Гос. номер"
-                    value={this.state.carNumber || ''}
-                    onChangeText={this.onChangeField('carNumber')}
-                  />
-                </View>
-              </View>
-              <View style={styles.group}>
-                <Button
-                  onPress={this.state.loading ? undefined : this.onPressOrder}
-                  style={[styleConst.shadow.default, styles.button]}>
-                  {this.state.loading ? (
-                    <ActivityIndicator color="#fff" />
-                  ) : (
-                    <Text style={styles.buttonText}>Отправить</Text>
-                  )}
-                </Button>
-              </View>
+          <ScrollView style={{flex: 1, backgroundColor: '#eee'}}>
+            <View
+              style={{
+                flex: 1,
+                paddingTop: 20,
+                marginBottom: 160,
+                paddingHorizontal: 14,
+              }}>
+              <Form
+                fields={this.FormConfig.fields}
+                barStyle={'light-content'}
+                defaultCountryCode={'by'}
+                onSubmit={this.onPressOrder}
+              />
             </View>
           </ScrollView>
         </TouchableWithoutFeedback>
