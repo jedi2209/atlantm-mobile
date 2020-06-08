@@ -390,7 +390,11 @@ class Form extends Component {
               {this.state.loading ? (
                 <ActivityIndicator color="#fff" />
               ) : (
-                <Text style={styles.buttonText}>Сохранить</Text>
+                <Text style={styles.buttonText}>
+                  {this.props.SubmitButton.text
+                    ? this.props.SubmitButton.text
+                    : 'Отправить'}
+                </Text>
               )}
             </Button>
           </View>

@@ -272,6 +272,7 @@ class ProfileSettingsScreen extends Component {
               fields={this.FormConfig.fields}
               barStyle={'light-content'}
               defaultCountryCode={'by'}
+              SubmitButton={{text: 'Сохранить'}}
               onSubmit={this.onPressSave}
             />
           </View>
