@@ -7,8 +7,8 @@ import {
   SERVICE_DATE__FILL,
 } from './actionTypes';
 
-export const dateFill = date => {
-  return dispatch => {
+export const dateFill = (date) => {
+  return (dispatch) => {
     dispatch({
       type: SERVICE_DATE__FILL,
       payload: date,
@@ -16,15 +16,15 @@ export const dateFill = date => {
   };
 };
 
-export const orderService = props => {
-  return dispatch => {
+export const orderService = (props) => {
+  return (dispatch) => {
     dispatch({
       type: SERVICE_ORDER__REQUEST,
       payload: {...props},
     });
 
     return API.orderService(props)
-      .then(res => {
+      .then((res) => {
         const {error, status} = res;
 
         if (status !== 'success') {
@@ -39,7 +39,7 @@ export const orderService = props => {
 
         return dispatch({type: SERVICE_ORDER__SUCCESS});
       })
-      .catch(error => {
+      .catch((error) => {
         return dispatch({
           type: SERVICE_ORDER__FAIL,
           payload: {

@@ -253,7 +253,7 @@ export default {
   callMe(props) {
     const {name, phone, email, action, dealerID} = props;
 
-    const body = `f_Dealer=${dealerID}&f_Name=${name}&f_Phone=${phone}&f_Action=${action}&f_Email=${email}&f_Text=&f_URL=&f_Source=3`;
+    const body = `f_Dealer=${dealerID}&f_Name=${name}&f_Phone=${phone}&f_Action=${action}&f_Email=${email}&f_Text=&f_Source=3`;
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
       headers: {
@@ -268,13 +268,24 @@ export default {
   orderService(props) {
     const {car, date, name, email, phone, dealerID} = props;
 
-    const body = `f_Dealer=${dealerID}&f_Model=${car}&f_Name=${name}&f_Phone=${phone}&f_Email=${email}&f_Date=${date}&f_URL=&f_Source=3`;
+    console.log('orderService props', props);
+
+    const body = {
+      f_Dealer: dealerID,
+      f_Model: car,
+      f_Name: name,
+      f_Phone: phone,
+      f_Email: email,
+      f_Date: date,
+      f_Source: 3,
+    };
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-      body,
+      body: JSON.stringify(body),
     });
 
     return this.request('/orders/service/post/', requestParams);

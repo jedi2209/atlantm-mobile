@@ -3,6 +3,7 @@ export const DEALERS_BY_CITIES__SET = 'DEALERS_BY_CITIES__SET';
 
 export const DEALER__REQUEST = 'DEALER__REQUEST';
 export const DEALER__SUCCESS = 'DEALER__SUCCESS';
+export const DEALER__SUCCESS__LOCAL = 'DEALER__SUCCESS__LOCAL';
 export const DEALER__FAIL = 'DEALER__FAIL';
 
 

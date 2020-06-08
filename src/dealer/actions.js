@@ -6,6 +6,7 @@ import {
   DEALERS_BY_CITIES__SET,
   DEALER__REQUEST,
   DEALER__SUCCESS,
+  DEALER__SUCCESS__LOCAL,
   DEALER__FAIL,
 } from './actionTypes';
 
@@ -22,7 +23,7 @@ export const selectRegion = (region) => {
   };
 };
 
-export const selectDealer = ({dealerBaseData, dealerSelected}) => {
+export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
   return (dispatch) => {
     dispatch({
       type: DEALER__REQUEST,
@@ -49,13 +50,25 @@ export const selectDealer = ({dealerBaseData, dealerSelected}) => {
         dealer.region = dealerBaseData.region;
         dealer.brands = dealerBaseData.brands;
 
-        return dispatch({
-          type: DEALER__SUCCESS,
-          payload: {
-            newDealer: dealer,
-            prevDealer: dealerSelected,
-          },
-        });
+        if (!isLocal) {
+          // обновляем дилера глобально
+          return dispatch({
+            type: DEALER__SUCCESS,
+            payload: {
+              newDealer: dealer,
+              prevDealer: dealerSelected,
+            },
+          });
+        } else {
+          // обновляем дилера локально
+          return dispatch({
+            type: DEALER__SUCCESS__LOCAL,
+            payload: {
+              newDealer: dealer,
+              prevDealer: dealerSelected,
+            },
+          });
+        }
       })
       .catch((error) => {
         return dispatch({
@@ -68,11 +81,11 @@ export const selectDealer = ({dealerBaseData, dealerSelected}) => {
   };
 };
 
-export const fetchDealers = () => {
+export const fetchDealers = (isLocal) => {
   return (dispatch) => {
     dispatch({type: DEALERS__REQUEST});
 
-    return API.fetchDealers()
+    return API.fetchDealers(isLocal)
       .then((response) => {
         const {data: dealers, error} = response;
 
@@ -98,10 +111,17 @@ export const fetchDealers = () => {
           },
         );
 
-        return dispatch({
-          type: DEALERS__SUCCESS,
-          payload: dealersByRegions,
-        });
+        if (!isLocal) {
+          return dispatch({
+            type: DEALERS__SUCCESS,
+            payload: dealersByRegions,
+          });
+        } else {
+          return dispatch({
+            type: DEALER__SUCCESS__LOCAL,
+            payload: dealersByRegions,
+          });
+        }
       })
       .catch((error) => {
         return dispatch({

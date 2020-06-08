@@ -1,131 +1,94 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {get} from 'lodash';
 import {
-  StyleSheet,
   View,
   Alert,
-  Text,
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
-  ActivityIndicator,
   Dimensions,
-  Platform,
 } from 'react-native';
-import {Button} from 'native-base';
-import DatePicker from 'react-native-datepicker';
 import {StackActions, NavigationActions} from 'react-navigation';
 import Form from '../../core/components/Form/Form';
 
 // redux
 import {connect} from 'react-redux';
-import {dateFill, orderService} from '../actions';
-import {carFill, nameFill, phoneFill, emailFill} from '../../profile/actions';
-
-import DeviceInfo from 'react-native-device-info';
+import {orderService} from '../actions';
+import {localUserDataUpdate} from '../../profile/actions';
 
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
-import {TextInput} from '../../core/components/TextInput';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
 import isInternet from '../../utils/internet';
-import {addDays} from '../../utils/date';
-import styleConst from '../../core/style-const';
+import {addDays, yearMonthDay} from '../../utils/date';
 import {ERROR_NETWORK} from '../../core/const';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
 
-const mapStateToProps = ({dealer, profile, service, nav}) => {
+let mapStateToProps = ({dealer, profile, service, nav}) => {
   return {
     nav,
-    date: service.date,
-    car: profile.car,
-    name: profile.login ? profile.login.name : '',
-    phone: profile.login ? profile.login.phone : '',
-    email: profile.login ? profile.login.email : '',
     dealerSelected: dealer.selected,
+    date: service.date,
+    firstName: profile.login.NAME
+      ? profile.login.NAME
+      : profile.localUserData.NAME
+      ? profile.localUserData.NAME
+      : '',
+    secondName: profile.login.SECOND_NAME
+      ? profile.login.SECOND_NAME
+      : profile.localUserData.SECOND_NAME
+      ? profile.localUserData.SECOND_NAME
+      : '',
+    lastName:
+      profile.login.LAST_NAME && profile.login.LAST_NAME.length
+        ? profile.login.LAST_NAME
+        : profile.localUserData.LAST_NAME
+        ? profile.localUserData.LAST_NAME
+        : '',
+    phone:
+      profile.login.PHONE && profile.login.PHONE.length
+        ? profile.login.PHONE[0].VALUE
+        : profile.localUserData.PHONE
+        ? profile.localUserData.PHONE
+        : '',
+    email:
+      profile.login.EMAIL && profile.login.EMAIL.length
+        ? profile.login.EMAIL[0].VALUE
+        : profile.localUserData.EMAIL
+        ? profile.localUserData.EMAIL
+        : '',
+    carName: profile.cars.length
+      ? [profile.cars[0].brand, profile.cars[0].model].join(' ')
+      : profile.localUserData.CARNAME
+      ? profile.localUserData.CARNAME
+      : '',
+    carNumber: profile.cars.length
+      ? profile.cars[0].number
+      : profile.localUserData.CARNUMBER
+      ? profile.localUserData.CARNUMBER
+      : '',
     profile,
     isOrderServiceRequest: service.meta.isOrderServiceRequest,
   };
 };
 
 const mapDispatchToProps = {
-  carFill,
-  dateFill,
-  nameFill,
-  phoneFill,
-  emailFill,
+  localUserDataUpdate,
   orderService,
-};
-
-const {width: screenWidth} = Dimensions.get('window');
-
-const datePickerStyles = {
-  dateTouchBody: {
-    width: screenWidth - 28,
-    height: 40,
-    borderColor: '#d8d8d8',
-    borderBottomWidth: 1,
-    color: '#222b45',
-  },
-  dateInput: {
-    borderWidth: 0,
-    alignItems: 'flex-start',
-  },
-  placeholderText: {
-    fontSize: 18,
-    color: '#d8d8d8',
-  },
-  dateText: {
-    fontSize: 18,
-    color: '#222b45',
-  },
-  datePicker: {
-    borderTopColor: 0,
-  },
 };
 
 class ServiceScreen extends Component {
   constructor(props) {
     super(props);
 
-    const {
-      last_name = '',
-      first_name = '',
-      phone,
-      cars,
-      email,
-    } = this.props.profile.login;
-
-    let car = '';
-
-    if (this.props.profile.login.car) {
-      car = {
-        number: this.props.profile.login.carNumber,
-        brand: this.props.profile.login.car,
-        model: '',
-      };
-    } else {
-      car = (cars && cars.find((value) => value.owner)) || {
-        number: '',
-        brand: '',
-        model: '',
-      };
-    }
-
     this.state = {
       date: new Date(addDays(2)),
-      email: email ? email.value : '',
-      phone: phone ? phone.value : '',
-      car: `${car.brand} ${car.model}`,
-      carNumber: car.number,
-      name: `${first_name} ${last_name}`,
       loading: false,
       success: false,
     };
-
-    console.log('new Date(substractDays(2))', new Date(addDays(2)));
 
     this.FormConfig = {
       fields: {
@@ -137,10 +100,10 @@ class ServiceScreen extends Component {
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: 'Автоцентр',
-                value: this.state.firstName,
+                value: this.props.dealerSelected,
                 props: {
                   goBack: true,
-                  dealer: this.props.dealerSelected,
+                  isLocal: false,
                   navigation: this.props.navigation,
                   returnScreen: this.props.navigation.state.routeName,
                 },
@@ -165,7 +128,7 @@ class ServiceScreen extends Component {
                 name: 'NAME',
                 type: 'input',
                 label: 'Имя',
-                value: this.state.firstName,
+                value: this.props.firstName,
                 props: {
                   required: true,
                   textContentType: 'name',
@@ -175,7 +138,7 @@ class ServiceScreen extends Component {
                 name: 'SECOND_NAME',
                 type: 'input',
                 label: 'Отчество',
-                value: this.state.secondName,
+                value: this.props.secondName,
                 props: {
                   textContentType: 'name',
                 },
@@ -184,7 +147,7 @@ class ServiceScreen extends Component {
                 name: 'LAST_NAME',
                 type: 'input',
                 label: 'Фамилия',
-                value: this.state.lastName,
+                value: this.props.lastName,
                 props: {
                   required: true,
                   textContentType: 'name',
@@ -194,7 +157,7 @@ class ServiceScreen extends Component {
                 name: 'PHONE',
                 type: 'phone',
                 label: 'Телефон',
-                value: this.state.phone,
+                value: this.props.phone,
                 props: {
                   required: true,
                   textContentType: 'phone',
@@ -204,7 +167,7 @@ class ServiceScreen extends Component {
                 name: 'EMAIL',
                 type: 'email',
                 label: 'Email',
-                value: this.state.email,
+                value: this.props.email,
                 props: {
                   required: true,
                 },
@@ -215,27 +178,23 @@ class ServiceScreen extends Component {
             name: 'Автомобиль',
             fields: [
               {
-                name: 'CAR',
+                name: 'CARNAME',
                 type: 'input',
                 label: 'Марка и модель автомобиля',
-                value: this.state.carName,
+                value: this.props.carName,
                 props: {
                   placeholder: null,
                   required: true,
-                  // maxDate: new Date(substractYears(18)),
-                  // minDate: new Date(substractDays(2)),
                 },
               },
               {
-                name: 'NUMBER',
+                name: 'CARNUMBER',
                 type: 'input',
                 label: 'Гос.номер автомобиля',
-                value: this.state.carNumber,
+                value: this.props.carNumber,
                 props: {
                   required: true,
                   placeholder: null,
-                  // maxDate: new Date(substractYears(18)),
-                  // minDate: new Date(substractYears(100)),
                 },
               },
             ],
@@ -248,22 +207,11 @@ class ServiceScreen extends Component {
   static propTypes = {
     dealerSelected: PropTypes.object,
     navigation: PropTypes.object,
-    carFill: PropTypes.func,
-    dateFill: PropTypes.func,
-    nameFill: PropTypes.func,
-    phoneFill: PropTypes.func,
-    emailFill: PropTypes.func,
-    name: PropTypes.string,
-    car: PropTypes.string,
-    date: PropTypes.object,
+    localUserDataUpdate: PropTypes.func,
     isOrderServiceRequest: PropTypes.bool,
   };
 
-  onChangeField = (fieldName) => (value) => {
-    this.setState({[fieldName]: value});
-  };
-
-  onPressOrder = async () => {
+  onPressOrder = async (props) => {
     const isInternetExist = await isInternet();
 
     if (!isInternetExist) {
@@ -271,21 +219,16 @@ class ServiceScreen extends Component {
       return;
     }
 
-    // Предотвращаем повторную отправку формы.
-    if (this.props.isOrderServiceRequest) {
-      return;
-    }
+    const name = [props.NAME, props.SECOND_NAME, props.LAST_NAME]
+      .filter(Boolean)
+      .join(' ');
 
-    if (
-      (!this.state.name &&
-        !this.state.name.length &&
-        !this.state.name.trim()) ||
-      (!this.state.phone &&
-        !this.state.phone.length &&
-        !this.state.phone.trim()) ||
-      (!this.state.car && !this.state.car.length && !this.state.car.trim()) ||
-      !this.state.date
-    ) {
+    // // Предотвращаем повторную отправку формы.
+    // if (this.props.isOrderServiceRequest) {
+    //   return;
+    // }
+
+    if (!name || !props.PHONE || !props.CARNAME || !props.DATE) {
       return Alert.alert(
         'Не хватает информации',
         'Для заявки на СТО необходимо заполнить ФИО, номер контактного телефона, название автомобиля и желаемую дату',
@@ -293,45 +236,32 @@ class ServiceScreen extends Component {
     }
 
     try {
-      const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
-      const orderDate = this.state.date;
-      const dealerID = this.props.dealerSelected.id;
+      const dealerID = props.DEALER.id;
+      const orderDate = yearMonthDay(props.DATE);
 
       this.setState({loading: true});
 
       const action = await this.props.orderService({
-        car:
-          this.state.car &&
-          this.state.car.length &&
-          typeof this.state.car === 'string'
-            ? this.state.car.trim()
-            : this.state.car || '',
+        car: get(props, 'CARNAME', ''),
         date: orderDate,
-        name:
-          this.state.name &&
-          this.state.name.length &&
-          typeof this.state.name === 'string'
-            ? this.state.name.trim()
-            : this.state.name || '',
-        email:
-          this.state.email &&
-          this.state.email.length &&
-          typeof this.state.email === 'string'
-            ? this.state.email.trim()
-            : this.state.email || '',
-        phone:
-          this.state.phone &&
-          this.state.phone.length &&
-          typeof this.state.phone === 'string'
-            ? this.state.phone.trim()
-            : this.state.phone || '',
-        device,
+        name: name,
+        email: get(props, 'EMAIL', ''),
+        phone: get(props, 'PHONE', ''),
         dealerID,
       });
 
       if (action.type === SERVICE_ORDER__SUCCESS) {
         const _this = this;
         Amplitude.logEvent('order', 'service');
+        _this.props.localUserDataUpdate({
+          NAME: props.NAME,
+          SECOND_NAME: props.SECOND_NAME,
+          LAST_NAME: props.LAST_NAME,
+          PHONE: props.PHONE,
+          EMAIL: props.EMAIL,
+          CARNAME: props.CARNAME,
+          CARNUMBER: props.CARNUMBER,
+        });
         Alert.alert(
           'Ваша заявка успешно отправлена',
           'Наши менеджеры вскоре свяжутся с Вами. Спасибо!',

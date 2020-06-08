@@ -12,7 +12,11 @@ import {get} from 'lodash';
 import PropTypes, {array} from 'prop-types';
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
-import {DEALER__SUCCESS, DEALER__FAIL} from '../../dealer/actionTypes';
+import {
+  DEALER__SUCCESS,
+  DEALER__SUCCESS__LOCAL,
+  DEALER__FAIL,
+} from '../../dealer/actionTypes';
 
 const styles = StyleSheet.create({
   brands: {
@@ -76,6 +80,7 @@ export default class SelectItemByCountry extends Component {
     returnScreen: PropTypes.string,
     onSelect: PropTypes.func,
     goBack: PropTypes.bool,
+    isLocal: PropTypes.bool,
   };
 
   onPressDealerItem = () => {
@@ -87,42 +92,49 @@ export default class SelectItemByCountry extends Component {
       goBack,
       onSelect,
       selectedItem,
+      isLocal,
     } = this.props;
     const mainScreen = 'BottomTabNavigation';
 
-    selectItem({dealerBaseData: item, dealerSelected: selectedItem}).then(
-      (action) => {
-        if (action.type === DEALER__SUCCESS) {
-          if (onSelect) {
-            onSelect({
-              newDealer: get(action, 'payload.newDealer'),
-              prevDealer: get(action, 'payload.prevDealer'),
-            });
-          }
-
-          if (Boolean(goBack)) {
-            return navigation.goBack();
-          }
-
-          const resetAction = StackActions.reset({
-            index: 0,
-            actions: [
-              NavigationActions.navigate({
-                routeName: returnScreen || mainScreen,
-              }),
-            ],
+    selectItem({
+      dealerBaseData: item,
+      dealerSelected: selectedItem,
+      isLocal,
+    }).then((action) => {
+      if (
+        action.type === DEALER__SUCCESS ||
+        action.type === DEALER__SUCCESS__LOCAL
+      ) {
+        if (onSelect) {
+          onSelect({
+            newDealer: get(action, 'payload.newDealer'),
+            prevDealer: get(action, 'payload.prevDealer'),
+            isLocal: isLocal,
           });
-          navigation.dispatch(resetAction);
         }
 
-        if (action.type === DEALER__FAIL) {
-          Alert.alert(
-            'Ошибка',
-            'Не удалось получить данные по выбранному автоцентру, попробуйте снова',
-          );
+        if (Boolean(goBack)) {
+          return navigation.goBack();
         }
-      },
-    );
+
+        const resetAction = StackActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({
+              routeName: returnScreen || mainScreen,
+            }),
+          ],
+        });
+        navigation.dispatch(resetAction);
+      }
+
+      if (action.type === DEALER__FAIL) {
+        Alert.alert(
+          'Ошибка',
+          'Не удалось получить данные по выбранному автоцентру, попробуйте снова',
+        );
+      }
+    });
   };
 
   onPressCityItem = () => {

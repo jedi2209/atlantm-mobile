@@ -8,6 +8,12 @@ import {
   PROFILE_BONUS_INFO__REQUEST,
   PROFILE_BONUS_INFO__SUCCESS,
   PROFILE_BONUS_INFO__FAIL,
+  PROFILE_NAME__FILL,
+  PROFILE_EMAIL__FILL,
+  PROFILE_PHONE__FILL,
+  PROFILE_CAR__FILL,
+  PROFILE_CAR_VIN__FILL,
+  PROFILE_CAR_NUMBER__FILL,
   LOGOUT,
   LOGIN__SUCCESS,
   LOGIN__FAIL,
@@ -28,6 +34,7 @@ import {
   FORGOT_PASS_REQUEST__REQUEST,
   FORGOT_PASS_REQUEST__SUCCESS,
   FORGOT_PASS_REQUEST__FAIL,
+  UPDATE_LOCAL_USER,
 } from './actionTypes';
 
 import PushNotifications from '@core/components/PushNotifications';
@@ -382,8 +389,6 @@ export const actionSaveProfileByUser = (props) => {
       payload: dataToSend,
     });
 
-    // console.log('dataToSend', dataToSend);
-
     return API.saveProfile(dataToSend)
       .then(async (data) => {
         dispatch({
@@ -406,30 +411,77 @@ export const actionSaveProfileByUser = (props) => {
   };
 };
 
-export const actionSaveProfile = (props) => {
+export const nameFill = (name) => {
+  if (name && name.length <= 3) {
+    name = name.trim();
+  }
+
   return (dispatch) => {
     dispatch({
-      type: SAVE_PROFILE__REQUEST,
-      payload: props,
+      type: PROFILE_NAME__FILL,
+      payload: name,
     });
+  };
+};
 
-    return API.saveProfile(props)
-      .then(async (response) => {
-        dispatch({
-          type: SAVE_PROFILE__UPDATE,
-          payload: response.data,
-        });
+export const phoneFill = (phone) => {
+  return (dispatch) => {
+    dispatch({
+      type: PROFILE_PHONE__FILL,
+      payload: phone ? phone.trim() : '',
+    });
+  };
+};
 
-        return props;
-      })
-      .catch((error) => {
-        dispatch({
-          type: SAVE_PROFILE__FAIL,
-          payload: {
-            message: error,
-          },
-        });
-      });
+export const emailFill = (email) => {
+  return (dispatch) => {
+    dispatch({
+      type: PROFILE_EMAIL__FILL,
+      payload: email ? email.trim() : '',
+    });
+  };
+};
+
+export const localUserDataUpdate = (userObject) => (dispatch) => {
+  dispatch({
+    type: UPDATE_LOCAL_USER,
+    payload: userObject,
+  });
+};
+
+export const carNameFill = (car) => {
+  if (car && car.length <= 3) {
+    car = car.trim();
+  }
+
+  return (dispatch) => {
+    dispatch({
+      type: PROFILE_CAR__FILL,
+      payload: car,
+    });
+  };
+};
+
+export const carVINFill = (carVIN) => {
+  return (dispatch) => {
+    dispatch({
+      type: PROFILE_CAR_VIN__FILL,
+      payload: carVIN,
+    });
+  };
+}
+
+export const carNumberFill = (carNumber) => {
+  const result = (carNumber = carNumber
+    .replace(/\s/g, '')
+    .replace(/\(/g, '')
+    .replace(/\)/g, ''));
+
+  return (dispatch) => {
+    dispatch({
+      type: PROFILE_CAR_NUMBER__FILL,
+      payload: result,
+    });
   };
 };
 
