@@ -146,6 +146,7 @@ class Form extends Component {
         }
       });
     }
+    console.log('FORM this.state', this.state);
   }
 
   onChangeField = (field) => (valueNew) => {
@@ -235,8 +236,7 @@ class Form extends Component {
             customStyles={datePickerStyles}
             date={this.state[name] || ''}
             onDateChange={(_, date) => {
-              this.onChangeField(data)(yearMonthDay(date));
-              console.log('state123', this.state);
+              this.onChangeField(data)(date);
             }}
             {...data.props}
           />

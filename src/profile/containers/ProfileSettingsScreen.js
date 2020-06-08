@@ -91,7 +91,7 @@ class ProfileSettingsScreen extends Component {
       firstName: NAME || '',
       secondName: SECOND_NAME || '',
       lastName: LAST_NAME || '',
-      birthdate: yearMonthDay(birthdate) || '',
+      birthdate: birthdate || '',
       email: emailData || [],
       phone: phoneData || [],
       success: false,
@@ -218,10 +218,6 @@ class ProfileSettingsScreen extends Component {
     } else {
       propsTmp.PHONE = null;
     }
-
-    // if (props.BIRTHDATE) {
-    //   propsTmp.BIRTHDATE = yearMonthDay(props.BIRTHDATE);
-    // }
 
     if (!phoneValue && !emailValue) {
       this.setState({loading: false});
