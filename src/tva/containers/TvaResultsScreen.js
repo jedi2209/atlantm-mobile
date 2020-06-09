@@ -135,17 +135,24 @@ class TvaResultsScreen extends Component {
       success: false,
     };
   }
-  static navigationOptions = ({navigation}) => ({
-    // Табло выдачи авто
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: (
-      <View>
-        <HeaderIconBack theme="white" navigation={navigation} />
-      </View>
-    ),
-    headerRight: <View />,
-  });
+  static navigationOptions = ({navigation}) => {
+    const returnScreen =
+      navigation.state.params && navigation.state.params.returnScreen;
+
+    return {
+      headerStyle: stylesHeader.whiteHeader,
+      headerTitleStyle: stylesHeader.whiteHeaderTitle,
+      headerTitle: 'Информация об авто',
+      headerLeft: (
+        <HeaderIconBack
+          theme="blue"
+          navigation={navigation}
+          returnScreen={returnScreen}
+        />
+      ),
+      headerRight: <View />,
+    };
+  };
 
   static propTypes = {
     dealerSelected: PropTypes.object,
@@ -205,7 +212,7 @@ class TvaResultsScreen extends Component {
         text: message,
         id: activeOrderId,
         dealer: dealerSelected.id,
-      }).then(action => {
+      }).then((action) => {
         this.setState({loading: false});
         const {type, payload} = action;
 
@@ -228,11 +235,11 @@ class TvaResultsScreen extends Component {
     }
   };
 
-  onPressOrder = orderId => this.props.actionSetActiveTvaOrderId(orderId);
+  onPressOrder = (orderId) => this.props.actionSetActiveTvaOrderId(orderId);
 
-  processDate = date => dayMonthYearTime(date);
+  processDate = (date) => dayMonthYearTime(date);
 
-  onChangeField = fieldName => value => {
+  onChangeField = (fieldName) => (value) => {
     this.setState({[fieldName]: value});
   };
 
@@ -288,7 +295,7 @@ class TvaResultsScreen extends Component {
                 </View>
               ) : (
                 <>
-                  {info.map(item => (
+                  {info.map((item) => (
                     <>
                       <View
                         style={[
@@ -372,7 +379,7 @@ class TvaResultsScreen extends Component {
           <Content>
             <Spinner visible={isMessageSending} color={styleConst.color.blue} />
             <HeaderSubtitle content={textList} isBig={true} />
-            {(info || []).map(item => {
+            {(info || []).map((item) => {
               return (
                 <TouchableOpacity
                   key={item.id}

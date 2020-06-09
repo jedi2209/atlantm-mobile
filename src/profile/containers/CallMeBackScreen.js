@@ -23,7 +23,7 @@ import Form from '../../core/components/Form/Form';
 import isInternet from '@utils/internet';
 import {ERROR_NETWORK} from '@core/const';
 
-let mapStateToProps = ({dealer, profile, contacts, service, nav}) => {
+const mapStateToProps = ({dealer, profile, contacts, service, nav}) => {
   return {
     nav,
     dealerSelected: dealer.selected,

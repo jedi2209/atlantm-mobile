@@ -180,7 +180,7 @@ class ServiceScreen extends Component {
               {
                 name: 'CARNAME',
                 type: 'input',
-                label: 'Марка и модель автомобиля',
+                label: 'Марка и модель',
                 value: this.props.carName,
                 props: {
                   placeholder: null,
@@ -190,7 +190,7 @@ class ServiceScreen extends Component {
               {
                 name: 'CARNUMBER',
                 type: 'input',
-                label: 'Гос.номер автомобиля',
+                label: 'Гос.номер',
                 value: this.props.carNumber,
                 props: {
                   required: true,

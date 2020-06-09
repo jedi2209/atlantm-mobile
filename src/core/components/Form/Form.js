@@ -10,7 +10,7 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {Text, Button} from 'native-base';
+import {Text, Button, Switch} from 'native-base';
 
 // Form field types
 import {TextInput} from '@core/components/TextInput';
@@ -197,8 +197,9 @@ class Form extends Component {
               : null,
             {
               borderTopRightRadius: num === 0 ? 4 : null,
-              borderBottomRightRadius: totalFields.length === num + 1 ? 4 : null,
-            }
+              borderBottomRightRadius:
+                totalFields.length === num + 1 ? 4 : null,
+            },
           ]}
           key={'field' + num + name}>
           <TextInput
@@ -235,7 +236,8 @@ class Form extends Component {
               : null,
             {
               borderTopRightRadius: num === 0 ? 4 : null,
-              borderBottomRightRadius: totalFields.length === num + 1 ? 4 : null,
+              borderBottomRightRadius:
+                totalFields.length === num + 1 ? 4 : null,
             },
           ]}
           key={'field' + num + name}>
@@ -267,7 +269,8 @@ class Form extends Component {
               : null,
             {
               borderTopRightRadius: num === 0 ? 4 : null,
-              borderBottomRightRadius: totalFields.length === num + 1 ? 4 : null,
+              borderBottomRightRadius:
+                totalFields.length === num + 1 ? 4 : null,
             },
           ]}
           key={'field' + num + name}>
@@ -436,6 +439,39 @@ class Form extends Component {
           ]}
           {...data.props}
         />
+      );
+    },
+    switch: (data, num, totalFields) => {
+      const {name, value, label} = data;
+      return (
+        <View
+          style={[
+            styles.field,
+            styles.textinput,
+            {
+              marginVertical: 10,
+            },
+          ]}
+          key={'field' + num + name}>
+          <Text
+            style={{
+              marginTop: 5,
+              color: '#808080',
+            }}>
+            {label}
+          </Text>
+          <Switch
+            style={[
+              {
+                right: 15,
+                top: 10,
+                position: 'absolute',
+              },
+            ]}
+            value={value}
+            {...data.props}
+          />
+        </View>
       );
     },
   };

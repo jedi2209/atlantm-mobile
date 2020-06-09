@@ -4,102 +4,45 @@ import PropTypes from 'prop-types';
 import {
   View,
   Alert,
-  StyleSheet,
-  Platform,
-  Text,
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
-  ActivityIndicator,
-  StatusBar,
 } from 'react-native';
-import {Button, Label, Switch} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
 import {actionFetchTva, actionSetPushTracking} from '../actions';
-import {carNumberFill} from '../../profile/actions';
+import {localUserDataUpdate} from '../../profile/actions';
 
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
-import {TextInput} from '../../core/components/TextInput';
 
 // components
+import Form from '../../core/components/Form/Form';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-import DealerItemList from '../../core/components/DealerItemList';
 import PushNotifications from '../../core/components/PushNotifications';
-
-// styles
-import stylesList from '../../core/components/Lists/style';
 
 // helpers
 import {get} from 'lodash';
-import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import {TVA__SUCCESS, TVA__FAIL} from '../actionTypes';
 
-const $size = 40;
-const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
-  },
-  list: {
-    paddingBottom: $size,
-  },
-  serviceForm: {
-    marginTop: $size,
-  },
-  // Скопировано из ProfileSettingsScreen.
-  container: {
-    flex: 1,
-    paddingVertical: 20,
-    paddingHorizontal: 14,
-    backgroundColor: '#fff',
-  },
-  header: {
-    marginBottom: 36,
-  },
-  heading: {
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  field: {
-    marginBottom: 18,
-  },
-  group: {
-    marginBottom: 36,
-  },
-  textinput: {
-    height: Platform.OS === 'ios' ? 40 : 'auto',
-    borderColor: '#d8d8d8',
-    borderBottomWidth: 1,
-    color: '#222b45',
-    fontSize: 18,
-  },
-  button: {
-    backgroundColor: styleConst.color.lightBlue,
-    justifyContent: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    textTransform: 'uppercase',
-    fontSize: 16,
-  },
-});
-
-const mapStateToProps = ({dealer, nav, tva, profile, core}) => {
+const mapStateToProps = ({dealer, profile, tva, nav, core}) => {
   return {
     nav,
-    carNumber: profile.carNumber,
-    pushTracking: tva.pushTracking,
-    isTvaRequest: tva.meta.isRequest,
     dealerSelected: dealer.selected,
+    isTvaRequest: tva.meta.isRequest,
     pushGranted: core.pushGranted,
+    pushTracking: tva.pushTracking,
+    carNumber: profile.cars.length
+      ? profile.cars[0].number
+      : profile.localUserData.CARNUMBER
+      ? profile.localUserData.CARNUMBER
+      : '',
   };
 };
 
 const mapDispatchToProps = {
-  carNumberFill,
+  localUserDataUpdate,
   actionFetchTva,
   actionSetPushTracking,
 };
@@ -109,27 +52,73 @@ class TvaScreen extends Component {
     super(props);
 
     this.state = {
-      carNumber: '',
       loading: false,
       success: false,
     };
+
+    this.FormConfig = {
+      fields: {
+        groups: [
+          {
+            name: 'Автоцентр',
+            fields: [
+              {
+                name: 'DEALER',
+                type: 'dealerSelect',
+                label: 'Автоцентр',
+                value: this.props.dealerSelected,
+                props: {
+                  goBack: true,
+                  isLocal: false,
+                  navigation: this.props.navigation,
+                  returnScreen: this.props.navigation.state.routeName,
+                },
+              },
+            ],
+          },
+          {
+            name: 'Автомобиль',
+            fields: [
+              {
+                name: 'CARNUMBER',
+                type: 'input',
+                label: 'Гос.номер',
+                value: this.props.carNumber,
+                props: {
+                  required: true,
+                  placeholder: null,
+                },
+              },
+              // {
+              //   name: 'PUSHSWITCH',
+              //   type: 'switch',
+              //   label: 'Отслеживать изменения',
+              //   value: this.props.PushTracking,
+              //   props: {
+              //     onValueChange: this.onPressPushTracking,
+              //   },
+              // },
+            ],
+          },
+        ],
+      },
+    };
   }
+
   static navigationOptions = ({navigation}) => {
     const returnScreen =
       navigation.state.params && navigation.state.params.returnScreen;
 
     return {
-      // Табло выдачи авто
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
+      headerStyle: stylesHeader.whiteHeader,
+      headerTitleStyle: stylesHeader.whiteHeaderTitle,
+      headerTitle: 'Табло выдачи авто',
       headerLeft: (
-        <View>
-          <HeaderIconBack
-            theme="white"
-            navigation={navigation}
-            returnScreen={returnScreen}
-          />
-        </View>
+        <HeaderIconBack
+          theme="blue"
+          navigation={navigation}
+          returnScreen={returnScreen}
+        />
       ),
       headerRight: <View />,
     };
@@ -140,8 +129,6 @@ class TvaScreen extends Component {
     navigation: PropTypes.object,
     isTvaRequest: PropTypes.bool,
     actionFetchTva: PropTypes.func,
-    carNumberFill: PropTypes.func,
-    carNumber: PropTypes.string,
     pushTracking: PropTypes.bool,
   };
 
@@ -154,123 +141,113 @@ class TvaScreen extends Component {
     }
   }
 
-  onChangeField = fieldName => value => {
-    this.setState({[fieldName]: value});
-  };
+  onPressButton = async (pushProps) => {
+    console.log('pushProps', pushProps);
 
-  onPressButton = pushProps => {
     this.setState({loading: true});
-    let {navigation, pushTracking, dealerSelected, actionFetchTva} = this.props;
-    let {carNumber} = this.state;
-    let dealerId = dealerSelected.id;
 
-    if (pushProps) {
-      carNumber = pushProps.carNumber;
-      dealerId = pushProps.dealerId;
-      pushTracking = false;
-      this.onPressPushTracking(false);
-    }
+    const dealerId = pushProps.DEALER.id;
+    const carNumber = pushProps.CARNUMBER;
 
-    if (!carNumber && !pushProps) {
-      this.setState({loading: false});
-      return setTimeout(() => {
-        Alert.alert(
-          'Недостаточно информации',
-          'Необходимо заполнить гос. номер автомобиля',
-        );
-      }, 100);
-    }
+    let pushTracking = false;
+    this.onPressPushTracking(false);
 
-    actionFetchTva({
+    const action = await this.props.actionFetchTva({
       number: carNumber,
+      region: pushProps.DEALER.region,
       dealer: dealerId,
-      region: pushProps ? null : dealerSelected.region,
       pushTracking,
-    }).then(action => {
-      this.setState({loading: false});
+    });
+
+    console.log('action', action);
+
+    this.setState({loading: false});
+    if (action) {
       switch (action.type) {
         case TVA__SUCCESS:
-          setTimeout(() => {
-            if (pushTracking === true) {
-              const carNumber_find = [
-                'о',
-                'О',
-                'т',
-                'Т',
-                'е',
-                'Е',
-                'а',
-                'А',
-                'н',
-                'Н',
-                'к',
-                'К',
-                'м',
-                'М',
-                'в',
-                'В',
-                'с',
-                'С',
-                'х',
-                'Х',
-                'р',
-                'Р',
-                'у',
-                'У',
-                '-',
-              ];
-              const carNumber_replace = [
-                'T',
-                'O',
-                'T',
-                'T',
-                'E',
-                'E',
-                'A',
-                'A',
-                'H',
-                'H',
-                'K',
-                'K',
-                'M',
-                'M',
-                'B',
-                'B',
-                'C',
-                'C',
-                'X',
-                'X',
-                'P',
-                'P',
-                'Y',
-                'Y',
-                '',
-              ];
+          const carNumber_find = [
+            'о',
+            'О',
+            'т',
+            'Т',
+            'е',
+            'Е',
+            'а',
+            'А',
+            'н',
+            'Н',
+            'к',
+            'К',
+            'м',
+            'М',
+            'в',
+            'В',
+            'с',
+            'С',
+            'х',
+            'Х',
+            'р',
+            'Р',
+            'у',
+            'У',
+            '-',
+          ];
+          const carNumber_replace = [
+            'T',
+            'O',
+            'T',
+            'T',
+            'E',
+            'E',
+            'A',
+            'A',
+            'H',
+            'H',
+            'K',
+            'K',
+            'M',
+            'M',
+            'B',
+            'B',
+            'C',
+            'C',
+            'X',
+            'X',
+            'P',
+            'P',
+            'Y',
+            'Y',
+            '',
+          ];
 
-              let carNumberChanged = carNumber.replace(
-                new RegExp(
-                  '(' +
-                    carNumber_find
-                      .map(function(i) {
-                        return i.replace(/[.?*+^$[\]\\(){}|-]/g, '\\$&');
-                      })
-                      .join('|') +
-                    ')',
-                  'g',
-                ),
-                function(s) {
-                  return carNumber_replace[carNumber_find.indexOf(s)];
-                },
-              );
-              PushNotifications.subscribeToTopic(
-                'tva',
-                carNumberChanged.toUpperCase(),
-              );
-            } else {
-              PushNotifications.unsubscribeFromTopic('tva');
-            }
-            navigation.navigate('TvaResultsScreen');
-          }, 250);
+          let carNumberChanged = carNumber.replace(
+            new RegExp(
+              '(' +
+                carNumber_find
+                  .map(function (i) {
+                    return i.replace(/[.?*+^$[\]\\(){}|-]/g, '\\$&');
+                  })
+                  .join('|') +
+                ')',
+              'g',
+            ),
+            function (s) {
+              return carNumber_replace[carNumber_find.indexOf(s)];
+            },
+          );
+          this.props.localUserDataUpdate({
+            CARNUMBER: carNumberChanged.toUpperCase(),
+          });
+
+          if (pushTracking === true) {
+            PushNotifications.subscribeToTopic(
+              'tva',
+              carNumberChanged.toUpperCase(),
+            );
+          } else {
+            PushNotifications.unsubscribeFromTopic('tva');
+          }
+          this.props.navigation.navigate('TvaResultsScreen');
           break;
         case TVA__FAIL:
           setTimeout(() => {
@@ -278,27 +255,19 @@ class TvaScreen extends Component {
               PushNotifications.unsubscribeFromTopic('tva');
               this.onPressPushTracking(false);
             }
-            Alert.alert(
-              '',
-              `${
-                action.payload.message
-              }. Возможно вы указали неправильный номер или автоцентр`,
-            );
+            Alert.alert('', `${action.payload.message}`);
           }, 250);
           break;
       }
-    });
+    }
   };
 
-  onPressPushTracking = isPushTracking => {
+  onPressPushTracking = (isPushTracking) => {
     const {actionSetPushTracking} = this.props;
-    const {carNumber} = this.state;
     if (isPushTracking === true) {
-      PushNotifications.subscribeToTopic('tva', carNumber).then(
-        isPushTracking => {
-          actionSetPushTracking(isPushTracking);
-        },
-      );
+      PushNotifications.subscribeToTopic('tva', '').then((isPushTracking) => {
+        actionSetPushTracking(isPushTracking);
+      });
     } else {
       PushNotifications.unsubscribeFromTopic('tva');
       actionSetPushTracking(isPushTracking);
@@ -310,89 +279,21 @@ class TvaScreen extends Component {
 
     return (
       <KeyboardAvoidingView>
-        <StatusBar barStyle="light-content" />
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView>
-            <View style={styles.container}>
-              <View style={styles.header}>
-                <Text style={styles.heading}>Табло выдачи авто</Text>
-              </View>
-              {this.state.success ? (
-                <View style={{flex: 1, justifyContent: 'center'}}>
-                  <View style={styles.group}>
-                    <Text
-                      style={{
-                        fontSize: 22,
-                        fontWeight: 'bold',
-                      }}>
-                      Заявка успешно отправлена
-                    </Text>
-                  </View>
-                  <View>
-                    <Button
-                      onPress={() =>
-                        this.props.navigation.navigate('BottomTabNavigation')
-                      }
-                      style={styles.button}>
-                      <Text style={styles.buttonText}>Назад</Text>
-                    </Button>
-                  </View>
-                </View>
-              ) : (
-                <>
-                  <View
-                    // Визуально выравниваем относительно остальных компонентов.
-                    style={[styles.group, {marginLeft: -14, marginRight: -14}]}>
-                    <DealerItemList
-                      goBack
-                      navigation={navigation}
-                      city={dealerSelected.city}
-                      name={dealerSelected.name}
-                      brands={dealerSelected.brands}
-                    />
-                  </View>
-                  <View style={styles.group}>
-                    <View style={styles.field}>
-                      <TextInput
-                        style={styles.textinput}
-                        label="Гос. номер"
-                        value={this.state.carNumber}
-                        onChangeText={this.onChangeField('carNumber')}
-                      />
-                    </View>
-                    <View
-                      style={
-                        (styles.field,
-                        {
-                          display: 'flex',
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                        })
-                      }>
-                      <Label style={stylesList.label}>Отслеживание</Label>
-                      <Switch
-                        onValueChange={this.onPressPushTracking}
-                        value={this.props.pushTracking}
-                      />
-                    </View>
-                  </View>
-                  <View style={styles.group}>
-                    <Button
-                      onPress={
-                        this.state.loading
-                          ? undefined
-                          : () => this.onPressButton()
-                      }
-                      style={[styleConst.shadow.default, styles.button]}>
-                      {this.state.loading ? (
-                        <ActivityIndicator color="#fff" />
-                      ) : (
-                        <Text style={styles.buttonText}>Проверить</Text>
-                      )}
-                    </Button>
-                  </View>
-                </>
-              )}
+          <ScrollView style={{flex: 1, backgroundColor: '#eee'}}>
+            <View
+              style={{
+                flex: 1,
+                paddingTop: 20,
+                marginBottom: 160,
+                paddingHorizontal: 14,
+              }}>
+              <Form
+                fields={this.FormConfig.fields}
+                barStyle={'light-content'}
+                defaultCountryCode={'by'}
+                onSubmit={this.onPressButton}
+              />
             </View>
           </ScrollView>
         </TouchableWithoutFeedback>
@@ -401,7 +302,4 @@ class TvaScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TvaScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(TvaScreen);

@@ -59,12 +59,12 @@ const dumpTvaAnswer = {
   },
 };
 
-export const actionTvaMessageFill = message => {
+export const actionTvaMessageFill = (message) => {
   if (message && message.length <= 3) {
     message = typeof message === 'string' ? message.trim() : message || '';
   }
 
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: TVA_MESSAGE__FILL,
       payload: message,
@@ -72,8 +72,8 @@ export const actionTvaMessageFill = message => {
   };
 };
 
-export const actionSetActiveTvaOrderId = orderId => {
-  return dispatch => {
+export const actionSetActiveTvaOrderId = (orderId) => {
+  return (dispatch) => {
     dispatch({
       type: TVA_ORDER_ID__SET,
       payload: orderId,
@@ -81,8 +81,8 @@ export const actionSetActiveTvaOrderId = orderId => {
   };
 };
 
-export const actionSetPushTracking = isPushTracking => {
-  return dispatch => {
+export const actionSetPushTracking = (isPushTracking) => {
+  return (dispatch) => {
     dispatch({
       type: TVA_PUSH_TRACKING__SET,
       payload: isPushTracking,
@@ -90,15 +90,15 @@ export const actionSetPushTracking = isPushTracking => {
   };
 };
 
-export const actionFetchTva = props => {
-  return dispatch => {
+export const actionFetchTva = (props) => {
+  return (dispatch) => {
     dispatch({
       type: TVA__REQUEST,
       payload: {...props},
     });
 
     return API.fetchTva(props)
-      .then(res => {
+      .then((res) => {
         const {error, status, data} = res;
         // const { error, status, data } = dumpTvaAnswer;
 
@@ -117,7 +117,7 @@ export const actionFetchTva = props => {
           });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         return dispatch({
           type: TVA__FAIL,
           payload: {
@@ -129,15 +129,15 @@ export const actionFetchTva = props => {
   };
 };
 
-export const actionTvaMessageSend = props => {
-  return dispatch => {
+export const actionTvaMessageSend = (props) => {
+  return (dispatch) => {
     dispatch({
       type: TVA_SEND_MESSAGE__REQUEST,
       payload: {...props},
     });
 
     return API.tvaMessageSend(props)
-      .then(res => {
+      .then((res) => {
         const {error, status, data} = res;
 
         if (status !== 'success') {
@@ -155,7 +155,7 @@ export const actionTvaMessageSend = props => {
           payload: {...data},
         });
       })
-      .catch(error => {
+      .catch((error) => {
         return dispatch({
           type: TVA_SEND_MESSAGE__FAIL,
           payload: {
