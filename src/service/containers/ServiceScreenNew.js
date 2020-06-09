@@ -319,9 +319,7 @@ class ServiceScreen extends Component {
                 <DealerItemList
                   goBack
                   navigation={navigation}
-                  city={dealerSelected.city}
-                  name={dealerSelected.name}
-                  brands={dealerSelected.brands}
+                  dealer={dealerSelected}
                 />
               </View>
 
