@@ -350,9 +350,7 @@ class CarCostScreen extends Component {
 
               <DealerItemList
                 navigation={navigation}
-                city={dealerSelected.city}
-                name={dealerSelected.name}
-                brands={dealerSelected.brands}
+                dealer={dealerSelected}
                 goBack={true}
               />
 

@@ -166,9 +166,7 @@ class ReviewsScreen extends Component {
           <StatusBar barStyle="light-content" />
           <DealerItemList
             navigation={navigation}
-            city={dealerSelected.city}
-            name={dealerSelected.name}
-            brands={dealerSelected.brands}
+            dealer={dealerSelected}
             goBack={true}
           />
 
