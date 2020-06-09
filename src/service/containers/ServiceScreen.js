@@ -199,6 +199,21 @@ class ServiceScreen extends Component {
               },
             ],
           },
+          {
+            name: 'Дополнительно',
+            fields: [
+              {
+                name: 'COMMENT',
+                type: 'textarea',
+                label: 'Комментарий',
+                value: this.props.Text,
+                props: {
+                  placeholder:
+                    'На случай если вам потребуется передать нам больше информации',
+                },
+              },
+            ],
+          },
         ],
       },
     };
@@ -247,6 +262,7 @@ class ServiceScreen extends Component {
         name: name,
         email: get(props, 'EMAIL', ''),
         phone: get(props, 'PHONE', ''),
+        text: get(props, 'COMMENT', ''),
         dealerID,
       });
 

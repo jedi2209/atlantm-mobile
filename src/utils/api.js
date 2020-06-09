@@ -274,7 +274,7 @@ export default {
   },
 
   orderService(props) {
-    const {car, date, name, email, phone, dealerID} = props;
+    const {car, date, name, email, phone, dealerID, text} = props;
 
     const body = {
       f_Dealer: dealerID,
@@ -283,6 +283,7 @@ export default {
       f_Phone: phone,
       f_Email: email,
       f_Date: date,
+      f_Text: text,
       f_Source: 3,
     };
     const requestParams = _.merge({}, baseRequestParams, {
