@@ -55,6 +55,12 @@ const styles = StyleSheet.create({
     color: '#222b45',
     fontSize: 16,
   },
+  textarea: {
+    height: Platform.OS === 'ios' ? 140 : 'auto',
+    color: '#222b45',
+    fontSize: 16,
+    paddingTop: 20,
+  },
   button: {
     backgroundColor: styleConst.color.lightBlue,
     borderRadius: 5,
@@ -205,6 +211,39 @@ class Form extends Component {
           <TextInput
             autoCorrect={false}
             style={styles.textinput}
+            label={label}
+            name={name}
+            value={this.state[name] || ''}
+            enablesReturnKeyAutomatically={true}
+            onChangeText={this.onChangeField(data)}
+            {...data.props}
+          />
+        </View>
+      );
+    },
+    textarea: (data, num, totalFields) => {
+      const {label, name, value} = data;
+      return (
+        <View
+          style={[
+            styles.field,
+            data.props.required
+              ? !this.state[name]
+                ? styles.fieldRequiredFalse
+                : styles.fieldRequiredTrue
+              : null,
+            {
+              borderTopRightRadius: num === 0 ? 4 : null,
+              borderBottomRightRadius:
+                totalFields.length === num + 1 ? 4 : null,
+            },
+          ]}
+          key={'field' + num + name}>
+          <TextInput
+            autoCorrect={false}
+            style={styles.textarea}
+            multiline={true}
+            numberOfLines={4}
             label={label}
             name={name}
             value={this.state[name] || ''}
