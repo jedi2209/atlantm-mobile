@@ -8,7 +8,6 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
-  Dimensions,
 } from 'react-native';
 import {StackActions, NavigationActions} from 'react-navigation';
 import Form from '../../core/components/Form/Form';
@@ -22,6 +21,7 @@ import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
+import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import {addDays, yearMonthDay} from '../../utils/date';
 import {ERROR_NETWORK} from '../../core/const';
@@ -32,44 +32,13 @@ let mapStateToProps = ({dealer, profile, service, nav}) => {
     nav,
     dealerSelected: dealer.selected,
     date: service.date,
-    firstName: profile.login.NAME
-      ? profile.login.NAME
-      : profile.localUserData.NAME
-      ? profile.localUserData.NAME
-      : '',
-    secondName: profile.login.SECOND_NAME
-      ? profile.login.SECOND_NAME
-      : profile.localUserData.SECOND_NAME
-      ? profile.localUserData.SECOND_NAME
-      : '',
-    lastName:
-      profile.login.LAST_NAME && profile.login.LAST_NAME.length
-        ? profile.login.LAST_NAME
-        : profile.localUserData.LAST_NAME
-        ? profile.localUserData.LAST_NAME
-        : '',
-    phone:
-      profile.login.PHONE && profile.login.PHONE.length
-        ? profile.login.PHONE[0].VALUE
-        : profile.localUserData.PHONE
-        ? profile.localUserData.PHONE
-        : '',
-    email:
-      profile.login.EMAIL && profile.login.EMAIL.length
-        ? profile.login.EMAIL[0].VALUE
-        : profile.localUserData.EMAIL
-        ? profile.localUserData.EMAIL
-        : '',
-    carName: profile.cars.length
-      ? [profile.cars[0].brand, profile.cars[0].model].join(' ')
-      : profile.localUserData.CARNAME
-      ? profile.localUserData.CARNAME
-      : '',
-    carNumber: profile.cars.length
-      ? profile.cars[0].number
-      : profile.localUserData.CARNUMBER
-      ? profile.localUserData.CARNUMBER
-      : '',
+    firstName: UserData.get('NAME'),
+    secondName: UserData.get('SECOND_NAME'),
+    lastName: UserData.get('LAST_NAME'),
+    phone: UserData.get('PHONE').VALUE ? UserData.get('PHONE').VALUE : UserData.get('PHONE'),
+    email: UserData.get('EMAIL').VALUE ? UserData.get('EMAIL').VALUE : UserData.get('EMAIL'),
+    carName: UserData.get('CARNAME') ? UserData.get('CARNAME') : [profile.cars[0].brand, profile.cars[0].model].join(' '),
+    carNumber: UserData.get('CARNUMBER') ? UserData.get('CARNUMBER') : profile.cars[0].number,
     profile,
     isOrderServiceRequest: service.meta.isOrderServiceRequest,
   };

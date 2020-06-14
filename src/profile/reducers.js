@@ -103,7 +103,7 @@ function localUserData(state = '', action) {
     case REHYDRATE:
       return get(action.payload, 'profile.offlineData', '');
     case UPDATE_LOCAL_USER:
-      return action.payload;
+      return {...state, ...action.payload};
     default:
       return state;
   }
