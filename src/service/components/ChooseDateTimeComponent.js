@@ -2,10 +2,18 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/react-in-jsx-scope */
 import React, {Component} from 'react';
-import {View, Text, Dimensions, StyleSheet} from 'react-native';
+import PropTypes from 'prop-types';
+import {
+  Animated,
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import {Button} from 'native-base';
-import DatePicker from 'react-native-datepicker';
+import {DatePickerCustom} from '@core/components/DatePickerCustom';
 import {time, yearMonthDay} from '../../utils/date';
+import styleConst from '@core/style-const';
 import API from '../../utils/api';
 
 const styles = StyleSheet.create({
@@ -16,15 +24,15 @@ const styles = StyleSheet.create({
   },
   timeContainer: {
     marginTop: 6,
-    marginLeft: -10,
-    marginRight: -10,
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
   button: {
     width: 130,
-    margin: 10,
+    marginRight: 10,
+    marginTop: 10,
+    marginBottom: 10,
     justifyContent: 'center',
     paddingHorizontal: 10,
     borderColor: '#027aff',
@@ -36,39 +44,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   field: {
-    marginBottom: 18,
+    paddingHorizontal: 15,
+    paddingTop: 5,
+  },
+  fieldRequiredFalse: {
+    borderRightColor: 'red',
+    borderRightWidth: 1,
+  },
+  fieldRequiredTrue: {
+    borderRightColor: 'green',
+    borderRightWidth: 1,
   },
   label: {
     fontSize: 14,
-    color: '#000',
+    color: '#bababa',
     marginBottom: -2,
   },
-});
-
-const {width: screenWidth} = Dimensions.get('window');
-const datePickerStyles = StyleSheet.create({
-  dateTouchBody: {
-    width: screenWidth - 28,
-    height: 40,
-    borderColor: '#d8d8d8',
-    borderBottomWidth: 1,
-    color: '#222b45',
+  labelActive: {
+    color: '#808080',
   },
-  dateInput: {
-    borderWidth: 0,
-    alignItems: 'flex-start',
-  },
-  placeholderText: {
-    fontSize: 18,
-    color: '#d8d8d8',
-  },
-  dateText: {
-    fontSize: 18,
-    color: '#222b45',
-  },
-  // TODO: Для чего эти стили ???
-  datePicker: {
-    borderTopColor: 0,
+  spinner: {
+    marginVertical: 15,
   },
 });
 
@@ -79,13 +75,21 @@ export default class ChooseDateTimeComponent extends Component {
     this.state = {
       time: props.time ? props.time / 1000 : undefined,
       date: props.time ? new Date(props.time) : undefined,
-      availablePeriods: [],
+      availablePeriods: null,
+      availablePeriodsFetch: false,
     };
   }
 
+  static propTypes = {
+    onChange: PropTypes.func,
+    onFinishedSelection: PropTypes.func.isRequired,
+  };
+
+  _animated = {};
+
   componentDidMount() {
     if (this.state.date) {
-      this._getTimePeriod(this.state.date);
+      this._getTime(this.state.date);
     }
   }
 
@@ -97,7 +101,9 @@ export default class ChooseDateTimeComponent extends Component {
     }
   }
 
-  async _getTimePeriod(date) {
+  async _getTime(date) {
+    this.setState({availablePeriodsFetch: true});
+    this._animated.TimeBlock = new Animated.Value(0);
     console.log('date', yearMonthDay(date));
     console.log('dealer', this.props.dealer.id);
 
@@ -108,78 +114,105 @@ export default class ChooseDateTimeComponent extends Component {
 
     if (availablePeriods.status === 'error') {
       alert(availablePeriods.error.message);
+      this.setState({
+        availablePeriodsFetch: false,
+        date: undefined,
+      });
+      return false;
     }
 
     if (availablePeriods.data == null) {
       alert('Нет доступных периодов, попробуйте выбрать другой день');
+      this.setState({
+        availablePeriodsFetch: false,
+        date: undefined,
+      });
+      return false;
     }
 
-    console.log('availablePeriods.data', availablePeriods.data);
-
-    this.setState({availablePeriods: availablePeriods.data});
+    this.setState({
+      availablePeriods: availablePeriods.data,
+      availablePeriodsFetch: false,
+    });
+    Animated.timing(this._animated.TimeBlock, {
+      toValue: 1,
+      duration: 450,
+    }).start();
   }
 
   render() {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
     return (
       <>
-        <View style={styles.field}>
-          <Text style={styles.label}>Выберите дату</Text>
-          <DatePicker
-            showIcon={false}
-            mode="date"
-            minDate={tomorrow}
-            placeholder="Выберите дату"
-            format="DD MMMM YYYY"
-            confirmBtnText="Выбрать"
-            cancelBtnText="Отмена"
-            customStyles={datePickerStyles}
-            date={this.state.date}
-            onDateChange={(_, date) => {
-              this.setState({date});
-              this._getTimePeriod(date);
-            }}
-          />
-        </View>
+        <DatePickerCustom
+          showIcon={false}
+          mode="date"
+          locale="ru-RU"
+          placeholder="Выберите дату"
+          format="DD MMMM YYYY"
+          confirmBtnText="Выбрать"
+          cancelBtnText="Отмена"
+          date={this.state.date}
+          onDateChange={(_, date) => {
+            this.setState({date});
+            this._getTime(date);
+          }}
+          {...this.props}
+        />
 
         {this.state.date && (
-          <View style={styles.field}>
-            <Text style={styles.label}>Выберите время</Text>
-            <View style={styles.timeContainer}>
-              {(this.state.availablePeriods || []).map((item) => {
-                const from = time(item.from * 1000);
-                const to = time(item.to * 1000);
-                console.log('time ===>', from, to);
-                // eslint-disable-next-line eqeqeq
-                const isActive = item.from == this.state.time;
-                return (
-                  <Button
-                    style={[
-                      styles.button,
-                      {backgroundColor: isActive ? '#027aff' : '#fff'},
-                    ]}
-                    onPress={() => {
-                      this.setState({time: item.from});
-                      this.props.onChange({
-                        date: this.state.date,
-                        time: item.from,
-                        tech_place: item.tech_place,
-                      });
-                    }}>
-                    <Text
+          <View key={'fieldTime' + Math.floor(Math.round() * 10000)}>
+            {this.state.availablePeriodsFetch ? (
+              <>
+                <ActivityIndicator
+                  color={styleConst.color.blue}
+                  style={styles.spinner}
+                />
+                <Text
+                  style={{fontSize: 12, color: '#ababab', textAlign: 'center'}}>
+                  ищем свободное время на СТО
+                </Text>
+              </>
+            ) : null}
+            {this.state.availablePeriods ? (
+              <Animated.View
+                style={[
+                  styles.timeContainer,
+                  {opacity: this._animated.TimeBlock},
+                ]}>
+                <Text style={[styles.label, styles.labelActive]}>
+                  Выберите удобное для вас время
+                </Text>
+                {(this.state.availablePeriods || []).map((item) => {
+                  const from = time(item.from * 1000);
+                  const to = time(item.to * 1000);
+                  // eslint-disable-next-line eqeqeq
+                  const isActive = item.from == this.state.time;
+                  return (
+                    <Button
                       style={[
-                        styles.buttonText,
-                        {color: isActive ? '#fff' : '#027aff'},
-                      ]}>
-                      {`${from} - ${to}`}
-                    </Text>
-                  </Button>
-                );
-              })}
-            </View>
+                        styles.button,
+                        {backgroundColor: isActive ? '#027aff' : '#fff'},
+                      ]}
+                      onPress={() => {
+                        this.setState({time: item.from});
+                        this.props.onFinishedSelection({
+                          date: this.state.date,
+                          time: item.from,
+                          tech_place: item.tech_place,
+                        });
+                      }}>
+                      <Text
+                        style={[
+                          styles.buttonText,
+                          {color: isActive ? '#fff' : '#027aff'},
+                        ]}>
+                        {`${from} - ${to}`}
+                      </Text>
+                    </Button>
+                  );
+                })}
+              </Animated.View>
+            ) : null}
           </View>
         )}
       </>
