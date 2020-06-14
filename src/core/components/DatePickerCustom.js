@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import PropTypes from 'prop-types';
 import {View, Text, StyleSheet} from 'react-native';
 
 import DatePicker from 'react-native-datepicker';
@@ -6,6 +7,7 @@ import DatePicker from 'react-native-datepicker';
 export const DatePickerCustom = React.forwardRef((props, ref) => {
   const [focused, setFocused] = useState(false);
   const isActive = focused || Boolean(props.value);
+
 
   return (
     <View style={styles.container}>
@@ -29,6 +31,10 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
     </View>
   );
 });
+
+DatePickerCustom.propTypes = {
+  onChange: PropTypes.func,
+};
 
 const styles = StyleSheet.create({
   container: {
