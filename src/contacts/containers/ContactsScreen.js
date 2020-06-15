@@ -348,18 +348,21 @@ class ContactsScreen extends Component {
                         'Какую заявку Вы хотите отправить?',
                         [
                           {
-                            text: 'На обратный звонок',
-                            onPress: () =>
-                              navigation.navigate('CallMeBackScreen'),
+                            text: '📞 Перезвоните мне',
+                            onPress: () => navigation.navigate('CallMeBackScreen'),
                           },
                           {
-                            text: 'На СТО',
+                            text: '🛠 Запись на сервис',
                             onPress: () => navigation.navigate('ServiceScreen'),
+                          },
+                          {
+                            text: 'Оценить мой автомобиль',
+                            onPress: () => navigation.navigate('CarCostScreen'),
                           },
                           {
                             text: 'Отмена',
                             onPress: () => console.log('OK Pressed'),
-                            style: 'cancel',
+                            style: 'destructive',
                           },
                         ],
                         {cancelable: true},
