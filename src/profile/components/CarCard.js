@@ -23,10 +23,8 @@ export const CarCard = ({data, type, checked}) => {
         styleConst.shadow.default,
         {
           backgroundColor: '#fafafa',
-          marginTop: 10,
-          marginBottom: 20,
-          marginLeft: 8,
-          marginRight: 8,
+          marginLeft: 10,
+          marginRight: 10,
           borderRadius: 5,
           width: 150,
           justifyContent: 'space-between',

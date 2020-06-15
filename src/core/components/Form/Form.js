@@ -15,6 +15,7 @@ import {Text, Button, Switch} from 'native-base';
 // Form field types
 import {TextInput} from '@core/components/TextInput';
 import {DatePickerCustom} from '@core/components/DatePickerCustom';
+import ChooseDateTimeComponent from '../../../service/components/ChooseDateTimeComponent';
 import PhoneInput from 'react-native-phone-input';
 import TextInputMask from 'react-native-text-input-mask';
 import DealerItemList from '@core/components/DealerItemList';
@@ -105,7 +106,9 @@ class Form extends Component {
   constructor(props) {
     super(props);
     this.defaultCountryCode = this.props.defaultCountryCode || 'by';
-    this.state = {};
+    this.state = {
+      parentState: props.parentState,
+    };
     if (props.fields.groups) {
       props.fields.groups.map((group) => {
         group.fields.map((field) => {
@@ -149,6 +152,10 @@ class Form extends Component {
     onSubmit: PropTypes.func.isRequired,
   };
 
+  componentWillReceiveProps({parentState}) {
+    this.setState({...this.state, parentState});
+  }
+
   onChangeField = (field) => (valueNew) => {
     const {name, id} = field;
     if (field.id) {
@@ -160,7 +167,9 @@ class Form extends Component {
     } else {
       this.setState({[name]: valueNew});
     }
-    console.log('FORM onChangeField', this.state, this.props);
+    setTimeout(() => {
+      console.log('FORM onChangeField', this.state, this.props);
+    }, 1000);
   };
 
   FieldsDivider = (key) => {
@@ -169,20 +178,35 @@ class Form extends Component {
 
   _groupRender = (group, num) => {
     let totalFields = group.fields.length;
+    let groupClean = [];
+
+    group.fields.filter((element) => {
+      if (element.type) {
+        return groupClean.push(element);
+      }
+    });
+
     return (
       <View style={styles.group} key={'group' + num}>
         <Text style={styles.groupName}>{group.name}</Text>
         <View style={styles.groupFields}>
-          {group.fields.map((field, fieldNum, totalFields) => {
-            const returnField = this._fieldsRender[field.type](
-              field,
-              fieldNum,
-              totalFields,
-            );
-            if (fieldNum !== group.fields.length - 1) {
-              return [returnField, this.FieldsDivider('divider' + field.name)];
+          {groupClean.map((field, fieldNum, totalFields) => {
+            if (field.type) {
+              const returnField = this._fieldsRender[field.type](
+                field,
+                fieldNum,
+                totalFields,
+              );
+              if (fieldNum !== group.fields.length - 1) {
+                return [
+                  returnField,
+                  this.FieldsDivider('divider' + field.name),
+                ];
+              }
+              return returnField;
+            } else {
+              return null;
             }
-            return returnField;
           })}
         </View>
       </View>
@@ -326,6 +350,36 @@ class Form extends Component {
             date={this.state[name] || ''}
             onDateChange={(_, date) => {
               this.onChangeField(data)(date);
+            }}
+            {...data.props}
+          />
+        </View>
+      );
+    },
+    dateTime: (data, num, totalFields) => {
+      const {label, name, value} = data;
+      return (
+        <View
+          style={[
+            styles.field,
+            data.props.required && !this.state[name]
+              ? !this.state[name]
+                ? styles.fieldRequiredFalse
+                : styles.fieldRequiredTrue
+              : null,
+            {
+              borderTopRightRadius: num === 0 ? 4 : null,
+              borderBottomRightRadius:
+                totalFields.length === num + 1 ? 4 : null,
+            },
+          ]}
+          key={'field' + num + name}>
+          <ChooseDateTimeComponent
+            label={label}
+            customStyles={datePickerStyles}
+            onFinishedSelection={(returnData) => {
+              console.log('returnData', returnData);
+              this.onChangeField(data)(returnData);
             }}
             {...data.props}
           />
@@ -527,7 +581,11 @@ class Form extends Component {
                 return this._groupRender(group, num);
               })
             : this.props.fields.map((field, num) => {
-                return this._fieldsRender[field.type](field, num);
+                if (field.type) {
+                  return this._fieldsRender[field.type](field, num);
+                } else {
+                  return null;
+                }
               })}
           <View style={styles.group}>
             <Button
@@ -537,6 +595,7 @@ class Form extends Component {
                     console.log(
                       'Undefined required onSubmit prop for Form component',
                     );
+                    console.log('this.props', this.props);
                     console.log('onSubmit handler', this.state);
                   } else {
                     this.setState({loading: true});

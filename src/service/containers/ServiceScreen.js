@@ -39,6 +39,7 @@ let mapStateToProps = ({dealer, profile, service, nav}) => {
     email: UserData.get('EMAIL').VALUE ? UserData.get('EMAIL').VALUE : UserData.get('EMAIL'),
     carName: UserData.get('CARNAME') ? UserData.get('CARNAME') : [profile.cars[0].brand, profile.cars[0].model].join(' '),
     carNumber: UserData.get('CARNUMBER') ? UserData.get('CARNUMBER') : profile.cars[0].number,
+    carVIN: UserData.get('CARVIN'),
     profile,
     isOrderServiceRequest: service.meta.isOrderServiceRequest,
   };
