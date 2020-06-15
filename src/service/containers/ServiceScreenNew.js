@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import {Icon, Picker, Button} from 'native-base';
 import {orderBy} from 'lodash';
+import styleConst from '@core/style-const';
 
 import {CarCard} from '../../profile/components/CarCard';
 import ChooseDateTimeComponent from '../components/ChooseDateTimeComponent';
@@ -149,217 +150,6 @@ class ServiceScreen extends Component {
       carNumber: carNumber,
       carVIN: carVIN,
       isHaveCar: Boolean(props.cars.length > 0),
-    };
-
-    this.FormConfig = {
-      fields: {
-        groups: [
-          {
-            name: 'Автоцентр',
-            fields: [
-              {
-                name: 'DEALER',
-                type: 'dealerSelect',
-                label: 'Автоцентр',
-                value: this.props.dealerSelected,
-                props: {
-                  goBack: true,
-                  isLocal: false,
-                  navigation: this.props.navigation,
-                  returnScreen: this.props.navigation.state.routeName,
-                },
-              },
-              {
-                name: 'DATETIME',
-                type: 'dateTime',
-                label: 'Выберите удобную для вас дату',
-                value: this.state.date,
-                props: {
-                  dealer: this.props.dealerSelected,
-                  placeholder: 'не ранее ' + dayMonthYear(addDays(2)),
-                  required: true,
-                  minDate: new Date(addDays(2)),
-                },
-              },
-            ],
-          },
-          {
-            name: 'Автомобиль',
-            fields: [
-              {
-                name: 'CARNAME',
-                type: !this.state.isHaveCar ? 'input' : 'component',
-                label: !this.state.isHaveCar
-                  ? 'Марка и модель'
-                  : 'Выберите автомобиль',
-                value: this.state.isHaveCar ? (
-                  <>
-                  {console.log('CARNAME render')}
-                    <ScrollView
-                      showsHorizontalScrollIndicator={false}
-                      horizontal
-                      style={styles.carContainer}
-                      contentContainerStyle={styles.carContainerContent}>
-                      {(this.props.cars || []).map((item) => (
-                        <TouchableWithoutFeedback
-                          key={item.vin}
-                          onPress={() => {
-                            console.log('onPress this.props', this.props);
-                            this.setState({
-                              servicesFetch: true,
-                              carName: [item.brand, item.model].join(' '),
-                              carNumber: item.number,
-                              carVIN: item.vin,
-                            });
-                            setTimeout(() => {
-                              console.log('onPress this.state', this.state);
-                            }, 500);
-                          }}>
-                          <View>
-                          {this.props.parentState &&
-                    this.props.parentState.servicesFetch ? (
-                      <ActivityIndicator />
-                    ) : null}
-                            <CarCard
-                              key={item.vin}
-                              data={item}
-                              type="check"
-                              checked={this.state.carVIN === item.vin}
-                            />
-                          </View>
-                        </TouchableWithoutFeedback>
-                      ))}
-                    </ScrollView>
-                    {this.state.isHaveCar && this.state.services && (
-                      <View style={styles.field}>
-                        <Text style={styles.label}>
-                          Выберите доступную услугу
-                        </Text>
-                        <Picker
-                          mode="dropdown"
-                          iosIcon={
-                            <Icon
-                              name="arrow-down"
-                              style={{color: '#c7c7c7', marginRight: 0}}
-                            />
-                          }
-                          style={styles.picker}
-                          placeholder="Выберите услугу"
-                          placeholderStyle={{
-                            color: '#d8d8d8',
-                            fontSize: 18,
-                            paddingLeft: 0,
-                          }}
-                          textStyle={{
-                            paddingLeft: 0,
-                          }}
-                          selectedValue={this.state.service}
-                          onValueChange={this.onValueChange2.bind(this)}>
-                          {(this.state.services || []).map((item) => (
-                            <Picker.Item
-                              key={item.id}
-                              label={item.name}
-                              value={item.id}
-                            />
-                          ))}
-                        </Picker>
-                      </View>
-                    )}
-                    {Boolean(this.state.serviceInfo) && (
-                      <TouchableOpacity
-                        style={{paddingBottom: 20}}
-                        onPress={() => {
-                          this.setState({
-                            isModalVisible: !this.state.isModalVisible,
-                          });
-                        }}>
-                        <Text>Показать данные об услуге</Text>
-                      </TouchableOpacity>
-                    )}
-                  </>
-                ) : null,
-                props: {
-                  placeholder: null,
-                  required: true,
-                },
-              },
-              {
-                name: 'CARNUMBER',
-                type: !this.state.isHaveCar ? 'input' : null,
-                label: 'Гос.номер',
-                value: this.props.carNumber,
-                props: {
-                  required: true,
-                  placeholder: null,
-                },
-              },
-              {
-                name: 'CARVIN',
-                type: !this.state.isHaveCar ? 'input' : null,
-                label: 'VIN номер автомобиля',
-                value: this.props.carVIN,
-                props: {
-                  required: true,
-                  placeholder: null,
-                },
-              },
-            ],
-          },
-          {
-            name: 'Контактные данные',
-            fields: [
-              {
-                name: 'NAME',
-                type: 'input',
-                label: 'Имя',
-                value: this.props.firstName,
-                props: {
-                  required: true,
-                  textContentType: 'name',
-                },
-              },
-              {
-                name: 'SECOND_NAME',
-                type: 'input',
-                label: 'Отчество',
-                value: this.props.secondName,
-                props: {
-                  textContentType: 'name',
-                },
-              },
-              {
-                name: 'LAST_NAME',
-                type: 'input',
-                label: 'Фамилия',
-                value: this.props.lastName,
-                props: {
-                  required: true,
-                  textContentType: 'name',
-                },
-              },
-              {
-                name: 'PHONE',
-                type: 'phone',
-                label: 'Телефон',
-                value: this.props.phone,
-                props: {
-                  required: true,
-                  textContentType: 'phone',
-                },
-              },
-              {
-                name: 'EMAIL',
-                type: 'email',
-                label: 'Email',
-                value: this.props.email,
-                props: {
-                  required: true,
-                },
-              },
-            ],
-          },
-        ],
-      },
     };
   }
 
@@ -527,6 +317,223 @@ class ServiceScreen extends Component {
   };
 
   render() {
+    this.FormConfig = {
+      fields: {
+        groups: [
+          {
+            name: 'Автоцентр',
+            fields: [
+              {
+                name: 'DEALER',
+                type: 'dealerSelect',
+                label: 'Автоцентр',
+                value: this.props.dealerSelected,
+                props: {
+                  goBack: true,
+                  isLocal: false,
+                  navigation: this.props.navigation,
+                  returnScreen: this.props.navigation.state.routeName,
+                },
+              },
+              {
+                name: 'DATETIME',
+                type: 'dateTime',
+                label: 'Выберите удобную для вас дату',
+                value: this.state.date,
+                props: {
+                  dealer: this.props.dealerSelected,
+                  placeholder: 'не ранее ' + dayMonthYear(addDays(2)),
+                  required: true,
+                  minDate: new Date(addDays(2)),
+                },
+              },
+            ],
+          },
+          {
+            name: 'Автомобиль',
+            fields: [
+              {
+                name: 'CARNAME',
+                type: !this.state.isHaveCar ? 'input' : 'component',
+                label: !this.state.isHaveCar
+                  ? 'Марка и модель'
+                  : 'Выберите автомобиль',
+                value: this.state.isHaveCar ?
+                  this.state.servicesFetch ? (
+                    <>
+                      <ActivityIndicator
+                        color={styleConst.color.blue}
+                        style={[styles.spinner, {height: 200}]}
+                      />
+                      <Text
+                        style={{
+                          fontSize: 12,
+                          color: '#ababab',
+                          textAlign: 'center',
+                        }}>
+                        выясняем возможные услуги на СТО для выбранного
+                        автомобиля
+                      </Text>
+                    </>
+                  ) : (
+                    <>
+                      <ScrollView
+                        showsHorizontalScrollIndicator={false}
+                        horizontal
+                        style={styles.carContainer}
+                        contentContainerStyle={styles.carContainerContent}>
+                        {(this.props.cars || []).map((item) => (
+                          <TouchableWithoutFeedback
+                            key={item.vin}
+                            onPress={() => {
+                              this.setState({
+                                servicesFetch: true,
+                                carName: [item.brand, item.model].join(' '),
+                                carNumber: item.number,
+                                carVIN: item.vin,
+                              });
+                            }}>
+                            <View>
+                              <CarCard
+                                key={item.vin}
+                                data={item}
+                                type="check"
+                                checked={this.state.carVIN === item.vin}
+                              />
+                            </View>
+                          </TouchableWithoutFeedback>
+                        ))}
+                      </ScrollView>
+                      {this.state.isHaveCar && this.state.services && (
+                        <View style={styles.field}>
+                          <Text style={styles.label}>
+                            Выберите доступную услугу
+                          </Text>
+                          <Picker
+                            mode="dropdown"
+                            iosHeader="Услуга"
+                            headerBackButtonText="Выбрать"
+                            iosIcon={
+                              <Icon
+                                name="arrow-down"
+                                style={{color: '#c7c7c7', marginRight: 0}}
+                              />
+                            }
+                            style={styles.picker}
+                            placeholder="Выберите услугу"
+                            placeholderStyle={{
+                              color: '#d8d8d8',
+                              fontSize: 18,
+                              paddingLeft: 0,
+                            }}
+                            textStyle={{
+                              paddingLeft: 0,
+                            }}
+                            selectedValue={this.state.service}
+                            onValueChange={this.onValueChange2.bind(this)}>
+                            {(this.state.services || []).map((item) => (
+                              <Picker.Item
+                                key={item.id}
+                                label={item.name}
+                                value={item.id}
+                              />
+                            ))}
+                          </Picker>
+                        </View>
+                      )}
+                      {Boolean(this.state.serviceInfo) && (
+                        <TouchableOpacity
+                          style={{paddingBottom: 20}}
+                          onPress={() => {
+                            this.setState({
+                              isModalVisible: !this.state.isModalVisible,
+                            });
+                          }}>
+                          <Text>Показать данные об услуге</Text>
+                        </TouchableOpacity>
+                      )}
+                    </>
+                ) : null,
+              },
+              {
+                name: 'CARNUMBER',
+                type: !this.state.isHaveCar ? 'input' : null,
+                label: 'Гос.номер',
+                value: this.props.carNumber,
+                props: {
+                  required: true,
+                  placeholder: null,
+                },
+              },
+              {
+                name: 'CARVIN',
+                type: !this.state.isHaveCar ? 'input' : null,
+                label: 'VIN номер автомобиля',
+                value: this.props.carVIN,
+                props: {
+                  required: true,
+                  placeholder: null,
+                },
+              },
+            ],
+          },
+          {
+            name: 'Контактные данные',
+            fields: [
+              {
+                name: 'NAME',
+                type: 'input',
+                label: 'Имя',
+                value: this.props.firstName,
+                props: {
+                  required: true,
+                  textContentType: 'name',
+                },
+              },
+              {
+                name: 'SECOND_NAME',
+                type: 'input',
+                label: 'Отчество',
+                value: this.props.secondName,
+                props: {
+                  textContentType: 'name',
+                },
+              },
+              {
+                name: 'LAST_NAME',
+                type: 'input',
+                label: 'Фамилия',
+                value: this.props.lastName,
+                props: {
+                  required: true,
+                  textContentType: 'name',
+                },
+              },
+              {
+                name: 'PHONE',
+                type: 'phone',
+                label: 'Телефон',
+                value: this.props.phone,
+                props: {
+                  required: true,
+                  textContentType: 'phone',
+                },
+              },
+              {
+                name: 'EMAIL',
+                type: 'email',
+                label: 'Email',
+                value: this.props.email,
+                props: {
+                  required: true,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    };
+
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
