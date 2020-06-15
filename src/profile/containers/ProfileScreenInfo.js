@@ -287,7 +287,11 @@ class ProfileScreenInfo extends Component {
                       onPress={() =>
                         this.props.navigation.navigate('TOHistore', {car: item})
                       }>
-                      <View>
+                      <View
+                        style={{
+                          marginTop: 10,
+                          marginBottom: 20,
+                        }}>
                         <CarCard data={item} />
                       </View>
                     </TouchableWithoutFeedback>
