@@ -152,10 +152,6 @@ class Form extends Component {
     onSubmit: PropTypes.func.isRequired,
   };
 
-  componentWillReceiveProps({parentState}) {
-    this.setState({...this.state, parentState});
-  }
-
   onChangeField = (field) => (valueNew) => {
     const {name, id} = field;
     if (field.id) {
