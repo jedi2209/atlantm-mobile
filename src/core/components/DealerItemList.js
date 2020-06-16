@@ -76,7 +76,7 @@ export default class DealerItemList extends Component {
     const {city, dealer} = this.props;
 
     return (
-      <View>
+      <View style={this.props.style || {}}>
         <ListItem last onPress={this.onPressDealer} style={stylesList.listItem}>
           <Body>
             {city && city.name ? (

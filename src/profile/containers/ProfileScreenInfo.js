@@ -16,7 +16,7 @@ import {
 } from 'react-native';
 import {Button, Icon} from 'native-base';
 import PushNotifications from '@core/components/PushNotifications';
-import SocialAuth from '../components/SocialAuth';
+import DealerItemList from '@core/components/DealerItemList';
 
 // redux
 import {connect} from 'react-redux';
@@ -179,16 +179,20 @@ class ProfileScreenInfo extends Component {
             }`}
           </Text>
           {!this.state.loading ? (
-            <Button
-              full
-              onPress={() => {
-                this.props.navigation.navigate('ChooseDealerScreen');
-              }}
-              style={[styleConst.shadow.default, styles.buttonPrimary]}>
-              <Text style={styles.buttonPrimaryText}>
-                {this.props.dealerSelected.name}
-              </Text>
-            </Button>
+            <DealerItemList
+              key={'dealerSelect'}
+              dealer={this.props.dealerSelected}
+              style={[
+                {
+                  paddingHorizontal: 5,
+                  paddingTop: 10,
+                },
+              ]}
+              goBack={true}
+              isLocal={false}
+              navigation={this.props.navigation}
+              returnScreen={this.props.navigation.state.routeName}
+            />
           ) : null}
 
           {this.state.loading ? (
