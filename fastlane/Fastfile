@@ -42,7 +42,7 @@ platform :ios do
       export_method: "app-store",
       export_options: {
         provisioningProfiles: {
-          "com.atlantm.app" => "com.atlantm.app AppStore",
+          "com.atlantm.app" => "com.atlantm.app",
           "com.atlantm.app.OneSignalNotificationServiceExtension" => "com.atlantm.app.OneSignalNotificationServiceExtension"
         }
       }

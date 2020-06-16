@@ -130,7 +130,7 @@ class ReestablishScreen extends React.Component {
     };
   };
 
-  onChangeField = fieldName => value => {
+  onChangeField = (fieldName) => (value) => {
     this.setState({[fieldName]: value});
   };
 
@@ -166,7 +166,7 @@ class ReestablishScreen extends React.Component {
     }
     this.props
       .actionLogin({login, password, id: this.props.profile.login.id})
-      .then(action => {
+      .then((action) => {
         switch (action.type) {
           case 'LOGIN__FAIL_OLD_LKK':
             if (login === 'zteam' && password === '4952121052') {
@@ -189,7 +189,7 @@ class ReestablishScreen extends React.Component {
                 SAP: action.payload.SAP,
                 isReestablish: true,
               })
-              .then(data => {
+              .then((data) => {
                 this.setState({loading: false});
                 const _this = this;
                 Alert.alert(
@@ -301,7 +301,7 @@ class ReestablishScreen extends React.Component {
                       }
                       this.props
                         .actionRequestForgotPass(this.state.login)
-                        .then(action => {
+                        .then((action) => {
                           console.log('action', action);
                           switch (action.type) {
                             case 'FORGOT_PASS_REQUEST__SUCCESS':
@@ -371,7 +371,4 @@ class ReestablishScreen extends React.Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ReestablishScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ReestablishScreen);

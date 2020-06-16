@@ -147,7 +147,7 @@ class ProfileScreenInfo extends Component {
         sap: SAP,
       })
       .then(() => {
-        if (SAP.ID && SAP.ID.length > 0) {
+        if (SAP && SAP.ID && SAP.ID.length > 0) {
           PushNotifications.addTag('sapID', SAP.ID);
           PushNotifications.setExternalUserId(SAP.ID);
         }
@@ -166,7 +166,7 @@ class ProfileScreenInfo extends Component {
     return (
       <SafeAreaView>
         <StatusBar barStyle="light-content" />
-        <ScrollView>
+        <ScrollView style={{minHeight: '100%'}}>
           <Text
             style={{
               fontSize: 35,
@@ -409,6 +409,35 @@ class ProfileScreenInfo extends Component {
                           display: 'flex',
                           flexDirection: 'row',
                         }}>
+                        <View
+                          style={{
+                            backgroundColor: '#fff',
+                            width: 98,
+                            height: 98,
+                            borderRadius: 49,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginRight: 24,
+                          }}>
+                          {this.props.bonus.data &&
+                          this.props.bonus.data.saldo ? (
+                            <Text
+                              style={{
+                                color: '#0061ed',
+                                fontSize: 20,
+                                fontWeight: '600',
+                              }}>
+                              {this.props.bonus.data.saldo.value}
+                            </Text>
+                          ) : (
+                            <Icon
+                              name="frowno"
+                              type="AntDesign"
+                              style={[{fontSize: 76, marginTop: 9}]}
+                            />
+                          )}
+                        </View>
                         <View style={{flex: 1}}>
                           <Text
                             style={{
@@ -426,8 +455,12 @@ class ProfileScreenInfo extends Component {
                               marginBottom: 16,
                               fontWeight: '600',
                             }}>
-                            У Вас пока 0 баллов. Посмотреть подробнее о бонусной
-                            программе
+                            У Вас пока{' '}
+                            <Text style={{fontWeight: 'bold', fontSize: 22}}>
+                              0
+                            </Text>{' '}
+                            баллов.{'\r\n'}Узнайте больше о бонусной программе и
+                            накапливайте баллы быстрее!
                           </Text>
                           <View style={{display: 'flex', flexDirection: 'row'}}>
                             <View>
@@ -437,7 +470,7 @@ class ProfileScreenInfo extends Component {
                                   fontSize: 16,
                                   fontWeight: '600',
                                 }}>
-                                Посмотреть
+                                Хочу больше баллов
                               </Text>
                             </View>
                             <Icon

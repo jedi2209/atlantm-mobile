@@ -411,6 +411,35 @@ export const actionSaveProfileByUser = (props) => {
   };
 };
 
+export const actionSaveProfileToAPI = (props) => {
+  return (dispatch) => {
+    dispatch({
+      type: SAVE_PROFILE__REQUEST,
+      payload: props,
+    });
+
+    return API.saveProfile(props)
+      .then(async (data) => {
+        dispatch({
+          type: SAVE_PROFILE__UPDATE,
+          payload: {
+            ...props,
+          },
+        });
+
+        return props;
+      })
+      .catch((error) => {
+        dispatch({
+          type: SAVE_PROFILE__FAIL,
+          payload: {
+            message: error,
+          },
+        });
+      });
+  };
+};
+
 export const nameFill = (name) => {
   if (name && name.length <= 3) {
     name = name.trim();

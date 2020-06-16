@@ -18,7 +18,7 @@ import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
 import SocialAuth from '../components/SocialAuth';
 
-import {actionSaveProfile} from '../actions';
+import {actionSaveProfileToAPI} from '../actions';
 
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import stylesHeader from '../../core/components/Header/style';
@@ -52,7 +52,7 @@ class ProfileSettingsScreen extends Component {
     let phoneData = [];
     let birthdate = '';
 
-    if (typeof EMAIL === 'object' && EMAIL.length) {
+    if (typeof EMAIL === 'object' && EMAIL && EMAIL.length) {
       EMAIL.map((field, num) => {
         emailData[field.ID] = {
           id: field.ID,
@@ -65,8 +65,7 @@ class ProfileSettingsScreen extends Component {
     } else {
       emailData = EMAIL;
     }
-
-    if (typeof PHONE === 'object' && PHONE.length) {
+    if (typeof PHONE === 'object' && PHONE && PHONE.length) {
       PHONE.map((field, num) => {
         phoneData[field.ID] = {
           id: field.ID,
@@ -95,8 +94,6 @@ class ProfileSettingsScreen extends Component {
       success: false,
       loading: false,
     };
-
-    console.log('[].concat(this.state.email, this.state.phone)', [].concat(this.state.email, this.state.phone));
 
     this.FormConfig = {
       fields: {
@@ -235,7 +232,7 @@ class ProfileSettingsScreen extends Component {
     let profileToSend = Object.assign({}, this.props.profile, props, propsTmp);
 
     return this.props
-      .actionSaveProfile(profileToSend)
+      .actionSaveProfileToAPI(profileToSend)
       .then((data) => {
         const _this = this;
         Alert.alert(
@@ -293,7 +290,7 @@ const mapStateToProps = ({profile, dealer}) => {
 };
 
 const mapDispatchToProps = {
-  actionSaveProfile,
+  actionSaveProfileToAPI,
 };
 
 export default connect(
