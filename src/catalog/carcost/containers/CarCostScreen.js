@@ -278,7 +278,6 @@ class CarCostScreen extends Component {
   }
 
   render() {
-    console.log('this.props.phone', this.props.phone);
     this.FormConfig = {
       fields: {
         groups: [
