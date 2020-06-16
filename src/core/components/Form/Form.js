@@ -24,7 +24,6 @@ import TextInputMask from 'react-native-text-input-mask';
 import DealerItemList from '@core/components/DealerItemList';
 
 import styleConst from '@core/style-const';
-import { truncate } from 'lodash';
 
 const styles = StyleSheet.create({
   group: {
@@ -45,11 +44,18 @@ const styles = StyleSheet.create({
   },
   fieldRequiredFalse: {
     borderRightColor: 'red',
-    borderRightWidth: 1,
+    borderRightWidth: 0.5,
   },
   fieldRequiredTrue: {
     borderRightColor: 'green',
-    borderRightWidth: 1,
+    borderRightWidth: 0.5,
+  },
+  labelRequiredFalse: {
+    color: 'red',
+    textDecorationStyle: 'solid',
+  },
+  labelRequiredTrue: {
+    color: 'green',
   },
   divider: {
     borderColor: '#d8d8d8',
@@ -284,8 +290,6 @@ class Form extends Component {
                 ];
               }
               return returnField;
-            } else {
-              return null;
             }
           })}
         </View>
@@ -306,9 +310,8 @@ class Form extends Component {
                 : styles.fieldRequiredTrue
               : null,
             {
-              borderTopRightRadius: num === 0 ? 4 : null,
-              borderBottomRightRadius:
-                totalFields.length === num + 1 ? 4 : null,
+              borderTopRightRadius: num === 0 ? 4 : 0,
+              borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
             },
           ]}
           key={'field' + num + name}>
@@ -337,9 +340,8 @@ class Form extends Component {
                 : styles.fieldRequiredTrue
               : null,
             {
-              borderTopRightRadius: num === 0 ? 4 : null,
-              borderBottomRightRadius:
-                totalFields.length === num + 1 ? 4 : null,
+              borderTopRightRadius: num === 0 ? 4 : 0,
+              borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
             },
           ]}
           key={'field' + num + name}>
@@ -378,9 +380,8 @@ class Form extends Component {
                 : styles.fieldRequiredTrue
               : null,
             {
-              borderTopRightRadius: num === 0 ? 4 : null,
-              borderBottomRightRadius:
-                totalFields.length === num + 1 ? 4 : null,
+              borderTopRightRadius: num === 0 ? 4 : 0,
+              borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
             },
           ]}
           key={'field' + num + name}>
@@ -411,9 +412,8 @@ class Form extends Component {
                 : styles.fieldRequiredTrue
               : null,
             {
-              borderTopRightRadius: num === 0 ? 4 : null,
-              borderBottomRightRadius:
-                totalFields.length === num + 1 ? 4 : null,
+              borderTopRightRadius: num === 0 ? 4 : 0,
+              borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
             },
           ]}
           key={'field' + num + name}>
@@ -448,9 +448,8 @@ class Form extends Component {
                 : styles.fieldRequiredTrue
               : null,
             {
-              borderTopRightRadius: num === 0 ? 4 : null,
-              borderBottomRightRadius:
-                totalFields.length === num + 1 ? 4 : null,
+              borderTopRightRadius: num === 0 ? 4 : 0,
+              borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
             },
           ]}
           key={'field' + num + name}>
@@ -671,7 +670,6 @@ class Form extends Component {
                       let copyField = Object.assign({}, prevState[name]); // creating copy of state variable jasper
                       copyField[id].value = formatted.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
                       let maskLength = copyField[id].mask.replace(/[^0]/g, '');
-
                       if (pureValue.length === maskLength.length) {
                         return {[name]: copyField};
                       }
@@ -698,6 +696,11 @@ class Form extends Component {
                     width: '100%',
                   },
                   {...data.textStyle},
+                  data.props && data.props.required
+                    ? !this.state[name]
+                      ? styles.labelRequiredFalse
+                      : styles.labelRequiredTrue
+                    : null,
                 ]}
               />
             );
@@ -817,8 +820,6 @@ class Form extends Component {
             : this.props.fields.map((field, num) => {
                 if (field.type) {
                   return this._fieldsRender[field.type](field, num);
-                } else {
-                  return null;
                 }
               })}
           <View style={styles.group}>
