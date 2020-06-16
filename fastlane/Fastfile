@@ -40,12 +40,12 @@ platform :ios do
       workspace: "./ios/atlantm.xcworkspace",
       scheme: "atlantm",
       export_method: "app-store",
-      export_options: {
-        provisioningProfiles: {
-          "com.atlantm.app" => "com.atlantm AppStore",
-          "com.atlantm.app.OneSignalNotificationServiceExtension" => "XC.com.atlantm.app.OneSignalNotificationService"
-        }
-      }
+      # export_options: {
+      #   provisioningProfiles: {
+      #     "com.atlantm.app" => "com.atlantm AppStore",
+      #     "com.atlantm.app.OneSignalNotificationServiceExtension" => "XC.com.atlantm.app.OneSignalNotificationService"
+      #   }
+      # }
     )
     update_code_signing_settings(
       path: "./ios/atlantm.xcodeproj",
