@@ -245,7 +245,12 @@ class NewCarItemScreen extends Component {
       });
       return res ? (
         <View style={styles.sectionOptions}>
-          <Text style={styles.sectionTitle}>{title}</Text>
+          <Text
+            style={styles.sectionTitle}
+            ellipsizeMode="tail"
+            numberOfLines={1}>
+            {title}
+          </Text>
           <Grid>{res}</Grid>
         </View>
       ) : null;
@@ -253,7 +258,12 @@ class NewCarItemScreen extends Component {
 
     return data ? (
       <View style={styles.sectionOptions}>
-        <Text style={styles.sectionTitle}>{title}</Text>
+        <Text
+          style={styles.sectionTitle}
+          ellipsizeMode="tail"
+          numberOfLines={1}>
+          {title}
+        </Text>
         <Grid>
           {data.map((element) => {
             return _this.renderItem(
@@ -271,12 +281,18 @@ class NewCarItemScreen extends Component {
     return value ? (
       <Row key={`${title} ${value} ${postfix}`} style={styles.sectionRow}>
         <View style={[styles.sectionProp, {flex: 1}]}>
-          <Text style={styles.sectionPropText}>{title}</Text>
+          <Text
+            style={styles.sectionPropText}
+            ellipsizeMode="tail"
+            numberOfLines={1}>
+            {title}
+          </Text>
         </View>
         <View style={[styles.sectionValue, {alignItems: 'flex-end'}]}>
-          <Text style={styles.sectionValueText}>{`${value} ${
-            postfix || ''
-          }`}</Text>
+          <Text
+            style={styles.sectionValueText}
+            ellipsizeMode="tail"
+            numberOfLines={1}>{`${value} ${postfix || ''}`}</Text>
         </View>
       </Row>
     ) : null;
@@ -289,21 +305,39 @@ class NewCarItemScreen extends Component {
 
     return (
       <View key={title}>
-        <Text style={styles.sectionTitle}>{title}</Text>
+        <Text
+          style={styles.sectionTitle}
+          ellipsizeMode="tail"
+          numberOfLines={1}>
+          {title}
+        </Text>
         {data.map((item) => {
           return (
             <Grid key={`${item.name} ${item.id}`}>
               {item.name && item.value ? (
                 <Row style={styles.sectionRow}>
                   <Col style={styles.sectionProp}>
-                    <Text style={styles.sectionPropText}>{item.name}</Text>
+                    <Text
+                      style={styles.sectionPropText}
+                      ellipsizeMode="tail"
+                      numberOfLines={1}>
+                      {item.name}
+                    </Text>
                   </Col>
                   <Col style={styles.sectionValue}>
-                    <Text style={styles.sectionValueText}>{item.value}</Text>
+                    <Text
+                      style={styles.sectionValueText}
+                      ellipsizeMode="tail"
+                      numberOfLines={1}>
+                      {item.value}
+                    </Text>
                   </Col>
                 </Row>
               ) : (
-                <Text style={[styles.sectionPropText, styles.sectionRow]}>
+                <Text
+                  style={[styles.sectionPropText, styles.sectionRow]}
+                  ellipsizeMode="tail"
+                  numberOfLines={1}>
                   {item.name}
                 </Text>
               )}

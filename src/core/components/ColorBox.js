@@ -32,9 +32,10 @@ export default class ColorBox extends PureComponent {
 
   render() {
     const {color} = this.props;
-    const backgroundColor = color.picker.codes.hex
-      ? color.picker.codes.hex
-      : 'none';
+    const backgroundColor =
+      color && color.picker && color.picker.codes && color.picker.codes.hex
+        ? color.picker.codes.hex
+        : 'none';
     return (
       <View>
         <ModalView
@@ -50,7 +51,7 @@ export default class ColorBox extends PureComponent {
           <View style={{padding: 10}}>
             {color.name.official ? (
               <Text
-                ellipsizeMode={'clip'}
+                ellipsizeMode="clip"
                 style={{fontSize: 18, marginBottom: 10}}>
                 {color.name.official}
               </Text>

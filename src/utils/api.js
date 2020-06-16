@@ -55,30 +55,32 @@ export default {
     let requestedVersion = parseInt(version.replace(/\./gi, ''));
     let req = this.request('/mobile/check/version/', baseRequestParams);
     return req.then((res) => {
-      let APPVersionFromApi = parseInt(res.version.replace(/\./gi, ''));
-      if (APPVersionFromApi > requestedVersion) {
-        let STORE_LINK;
-        if (Platform.OS === 'ios') {
-          STORE_LINK =
-            'itms-apps://itunes.apple.com/app/id1492492166?action=update';
-        } else {
-          STORE_LINK = 'market://details?id=com.atlantm';
-        }
+      if (res && res.version) {
+        let APPVersionFromApi = parseInt(res.version.replace(/\./gi, ''));
+        if (APPVersionFromApi > requestedVersion) {
+          let STORE_LINK;
+          if (Platform.OS === 'ios') {
+            STORE_LINK =
+              'itms-apps://itunes.apple.com/app/id1492492166?action=update';
+          } else {
+            STORE_LINK = 'market://details?id=com.atlantm';
+          }
 
-        Alert.alert(
-          'Есть свежая версия! 🏎',
-          'Пожалуйста обновите приложение до актуальной версии.',
-          [
-            {text: 'Позже', style: 'destructive'},
-            {
-              text: '✅ Обновить',
-              onPress: () => {
-                BackHandler.exitApp();
-                Linking.openURL(STORE_LINK);
+          Alert.alert(
+            'Есть свежая версия! 🏎',
+            'Пожалуйста обновите приложение до актуальной версии.',
+            [
+              {text: 'Позже', style: 'destructive'},
+              {
+                text: '✅ Обновить',
+                onPress: () => {
+                  BackHandler.exitApp();
+                  Linking.openURL(STORE_LINK);
+                },
               },
-            },
-          ],
-        );
+            ],
+          );
+        }
       }
     });
   },

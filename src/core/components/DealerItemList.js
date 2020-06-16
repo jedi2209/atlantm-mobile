@@ -82,7 +82,7 @@ export default class DealerItemList extends Component {
             {city && city.name ? (
               <Text
                 style={stylesDealerItemList.city}
-                ellipsizeMode={'tail'}
+                ellipsizeMode="tail"
                 numberOfLines={1}>
                 {city && city.name ? city.name : dealer.city.name}
               </Text>
@@ -91,13 +91,13 @@ export default class DealerItemList extends Component {
               <View>
                 <Text
                   style={stylesDealerItemList.name}
-                  ellipsizeMode={'tail'}
+                  ellipsizeMode="tail"
                   numberOfLines={1}>
                   {dealer.name}
                 </Text>
                 <Text
                   style={stylesDealerItemList.dealerCity}
-                  ellipsizeMode={'tail'}
+                  ellipsizeMode="tail"
                   numberOfLines={1}>
                   {dealer.city.name}
                 </Text>
