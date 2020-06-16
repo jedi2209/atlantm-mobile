@@ -42,20 +42,11 @@ import {
 import {CAR_COST__SUCCESS, CAR_COST__FAIL} from '../../actionTypes';
 
 // components
-import Spinner from 'react-native-loading-spinner-overlay';
-import CommentOrderForm from '../../components/CommentOrderForm';
-import ListItemHeader from '../../../profile/components/ListItemHeader';
-import DealerItemList from '../../../core/components/DealerItemList';
-import ButtonFull from '../../../core/components/ButtonFull';
-import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
-import CarCostForm from '../components/CarCostForm';
-import CarCostPhotos from '../components/CarCostPhotos';
 
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
 import {get, valuesIn} from 'lodash';
-import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import {ERROR_NETWORK} from '../../../core/const';
@@ -69,6 +60,22 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({dealer, profile, nav, catalog}) => {
   const carCost = get(catalog, 'carCost', {});
+  let carLocalName = '';
+  let carLocalNumber = '';
+  let carLocalVin = '';
+
+  if (profile.cars && profile.cars[0]) {
+    if (profile.cars[0].brand && profile.cars[0].model) {
+      carLocalName = [profile.cars[0].brand, profile.cars[0].model].join(' ');
+    }
+    if (profile.cars[0].number) {
+      carLocalNumber = profile.cars[0].number || '';
+    }
+
+    if (profile.cars[0].vin) {
+      carLocalVin = profile.cars[0].vin || '';
+    }
+  }
 
   return {
     nav,
@@ -77,15 +84,11 @@ const mapStateToProps = ({dealer, profile, nav, catalog}) => {
     lastName: UserData.get('LAST_NAME'),
     phone: UserData.get('PHONE'),
     email: UserData.get('EMAIL'),
-    carName: UserData.get('CARNAME')
-      ? UserData.get('CARNAME')
-      : [profile.cars[0].brand, profile.cars[0].model].join(' '),
+    carName: UserData.get('CARNAME') ? UserData.get('CARNAME') : carLocalName,
     carNumber: UserData.get('CARNUMBER')
       ? UserData.get('CARNUMBER')
-      : profile.cars[0].number,
-    carVIN: UserData.get('CARVIN')
-      ? UserData.get('CARVIN')
-      : profile.cars[0].vin,
+      : carLocalNumber,
+    carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
     dealerSelected: dealer.selected,
     isCarCostRequest: carCost.meta.isCarCostRequest,
   };

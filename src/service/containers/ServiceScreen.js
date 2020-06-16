@@ -27,7 +27,24 @@ import {addDays, yearMonthDay} from '../../utils/date';
 import {ERROR_NETWORK} from '../../core/const';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
 
-let mapStateToProps = ({dealer, profile, service, nav}) => {
+const mapStateToProps = ({dealer, profile, service, nav}) => {
+  let carLocalName = '';
+  let carLocalNumber = '';
+  let carLocalVin = '';
+
+  if (profile.cars && profile.cars[0]) {
+    if (profile.cars[0].brand && profile.cars[0].model) {
+      carLocalName = [profile.cars[0].brand, profile.cars[0].model].join(' ');
+    }
+    if (profile.cars[0].number) {
+      carLocalNumber = profile.cars[0].number || '';
+    }
+
+    if (profile.cars[0].vin) {
+      carLocalVin = profile.cars[0].vin || '';
+    }
+  }
+
   return {
     nav,
     dealerSelected: dealer.selected,
@@ -35,11 +52,17 @@ let mapStateToProps = ({dealer, profile, service, nav}) => {
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
     lastName: UserData.get('LAST_NAME'),
-    phone: UserData.get('PHONE').VALUE ? UserData.get('PHONE').VALUE : UserData.get('PHONE'),
-    email: UserData.get('EMAIL').VALUE ? UserData.get('EMAIL').VALUE : UserData.get('EMAIL'),
-    carName: UserData.get('CARNAME') ? UserData.get('CARNAME') : [profile.cars[0].brand, profile.cars[0].model].join(' '),
-    carNumber: UserData.get('CARNUMBER') ? UserData.get('CARNUMBER') : profile.cars[0].number,
-    carVIN: UserData.get('CARVIN'),
+    phone: UserData.get('PHONE')
+      ? UserData.get('PHONE')
+      : UserData.get('PHONE'),
+    email: UserData.get('EMAIL')
+      ? UserData.get('EMAIL')
+      : UserData.get('EMAIL'),
+    carName: UserData.get('CARNAME') ? UserData.get('CARNAME') : carLocalName,
+    carNumber: UserData.get('CARNUMBER')
+      ? UserData.get('CARNUMBER')
+      : carLocalNumber,
+    carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
     profile,
     isOrderServiceRequest: service.meta.isOrderServiceRequest,
   };

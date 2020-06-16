@@ -37,6 +37,23 @@ import API from '../../utils/api';
 const mapStateToProps = ({dealer, profile, service, nav}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
 
+  let carLocalName = '';
+  let carLocalNumber = '';
+  let carLocalVin = '';
+
+  if (profile.cars && profile.cars[0]) {
+    if (profile.cars[0].brand && profile.cars[0].model) {
+      carLocalName = [profile.cars[0].brand, profile.cars[0].model].join(' ');
+    }
+    if (profile.cars[0].number) {
+      carLocalNumber = profile.cars[0].number || '';
+    }
+
+    if (profile.cars[0].vin) {
+      carLocalVin = profile.cars[0].vin || '';
+    }
+  }
+
   return {
     cars,
     nav,
@@ -46,13 +63,11 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
     lastName: UserData.get('LAST_NAME'),
     phone: UserData.get('PHONE'),
     email: UserData.get('EMAIL'),
-    carName: UserData.get('CARNAME')
-      ? UserData.get('CARNAME')
-      : [profile.cars[0].brand, profile.cars[0].model].join(' '),
+    carName: UserData.get('CARNAME') ? UserData.get('CARNAME') : carLocalName,
     carNumber: UserData.get('CARNUMBER')
       ? UserData.get('CARNUMBER')
-      : profile.cars[0].number,
-    carVIN: UserData.get('CARVIN'),
+      : carLocalNumber,
+    carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
     dealerSelected: dealer.selected,
     isOrderServiceRequest: service.meta.isOrderServiceRequest,
   };
@@ -199,7 +214,10 @@ class ServiceScreen extends Component {
 
     console.log('data.status ====>', data.status, data.status !== 'success');
     if (data.status !== 'success' && data.status !== 200) {
-      Alert.alert('Не удалось загрузить информацию об услуге');
+      Alert.alert(
+        'Хьюстон, у нас проблемы!',
+        '\r\nНе удалось загрузить информацию об услуге',
+      );
       data.data = [];
     }
 
@@ -308,9 +326,9 @@ class ServiceScreen extends Component {
     const order = await API.saveOrderToService(data);
 
     if (order.status === 'error') {
-      Alert.alert('', order.error.message);
+      Alert.alert('Хьюстон, у нас проблемы!', '\r\n' + order.error.message);
     } else {
-      Alert.alert('', 'Спасибо! Ваша запись оформлена');
+      Alert.alert('Всё получилось!', '\r\nСпасибо! Ваша запись оформлена');
     }
   }
 

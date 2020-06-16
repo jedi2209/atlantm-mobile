@@ -14,6 +14,6 @@ export default class UserData {
         liveData = liveData.VALUE;
       }
     }
-    return liveData ? liveData : localData;
+    return liveData ? liveData : localData ? localData : '';
   }
 }
