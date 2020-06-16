@@ -186,6 +186,7 @@ class ProfileScreen extends Component {
           codeValue: '',
         });
 
+        let header = 'Хьюстон, у нас проблемы...';
         let message = 'Что-то пошло не так, попробуйте снова';
 
         if (response.code === 400) {
@@ -197,7 +198,7 @@ class ProfileScreen extends Component {
             'Не опознан мобильный оператор или не правильный формат номера';
         }
 
-        Alert.alert(message);
+        Alert.alert(header, message);
       } else {
         this.setState({
           code: true,
@@ -261,7 +262,7 @@ class ProfileScreen extends Component {
       })
       .catch(() => {
         this.setState({loading: false});
-        Alert.alert('Что-то пошло не так', 'попробуйте снова');
+        Alert.alert('Что-то пошло не так...', 'попробуйте снова');
       });
   }
 
