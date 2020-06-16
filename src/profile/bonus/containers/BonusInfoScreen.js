@@ -90,7 +90,7 @@ class BonusInfoScreen extends Component {
     }
   }
 
-  onLayoutWebView = e => {
+  onLayoutWebView = (e) => {
     const {width: webViewWidth} = e.nativeEvent.layout;
 
     this.setState({webViewWidth});
@@ -128,7 +128,4 @@ class BonusInfoScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(BonusInfoScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(BonusInfoScreen);
