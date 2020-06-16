@@ -14,6 +14,8 @@ import {
 
 import {Text, Button, Switch} from 'native-base';
 
+import {connect} from 'react-redux';
+
 // Form field types
 import {TextInput} from '@core/components/TextInput';
 import {DatePickerCustom} from '@core/components/DatePickerCustom';
@@ -116,6 +118,14 @@ const datePickerStyles = {
   },
 };
 
+const mapStateToProps = ({dealer, profile, nav}) => {
+  return {
+    nav,
+    dealerSelected: dealer.selected,
+    profile,
+  };
+};
+
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 16,
@@ -143,7 +153,8 @@ const MaskedPhone = {
 class Form extends Component {
   constructor(props) {
     super(props);
-    this.defaultCountryCode = this.props.defaultCountryCode || 'by';
+    console.log('this.props.dealerSelected.region', this.props.dealerSelected.region);
+    this.defaultCountryCode = this.props.defaultCountryCode || this.props.dealerSelected.region || 'by';
     this.state = {
       parentState: props.parentState,
       required: [],
@@ -869,4 +880,4 @@ class Form extends Component {
   }
 }
 
-export default Form;
+export default connect(mapStateToProps, {})(Form);
