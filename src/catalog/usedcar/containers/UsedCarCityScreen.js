@@ -61,7 +61,7 @@ class UsedCarCityScreen extends Component {
     );
   }
 
-  selectItem = item => {
+  selectItem = (item) => {
     this.props.actionResetUsedCarList();
     this.props.actionSetNeedUpdateUsedCarList();
     this.props.actionSelectUsedCarCity(item);
@@ -81,9 +81,7 @@ class UsedCarCityScreen extends Component {
 
     console.log('== UsedCarCityScreen ==');
 
-    console.log('enter',listRussia,
-      listUkraine,
-      listBelarussia);
+    console.log('enter', listRussia, listUkraine, listBelarussia);
     return (
       <SelectListByCountry
         itemLayout="city"
@@ -100,7 +98,4 @@ class UsedCarCityScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(UsedCarCityScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(UsedCarCityScreen);

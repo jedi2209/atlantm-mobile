@@ -90,14 +90,16 @@ export default class CityItemList extends Component {
                 cityData.dealers &&
                 cityData.dealers.length !== 0 ? (
                   <View style={styles.brands}>
-                    {cityData.dealers.map(dealer => {
+                    {cityData.dealers.map((dealer) => {
                       if (dealer.virtual !== false) {
                         // фикс для НЕ вывода виртуальных КО в списке
                         return true;
                       }
                       return (
-                        <View key={dealer.id} style={styles.brands}>
-                          {dealer.brands.map(brand => {
+                        <View
+                          key={'dealerView' + dealer.id}
+                          style={styles.brands}>
+                          {dealer.brands.map((brand) => {
                             const name =
                               brand.name === 'land rover'
                                 ? 'landrover'
@@ -115,7 +117,7 @@ export default class CityItemList extends Component {
                               return (
                                 <Imager
                                   resizeMode="contain"
-                                  key={brand.id}
+                                  key={'brandLogo' + brand.id}
                                   style={styles.brandLogo}
                                   source={{uri: brand.logo}}
                                 />

@@ -184,7 +184,7 @@ export default class SelectItemByCountry extends Component {
                   return (
                     <Imager
                       resizeMode="contain"
-                      key={brand.id}
+                      key={'brandLogo' + brand.id}
                       style={styles.brandLogo}
                       source={{uri: brand.logo}}
                     />
@@ -243,7 +243,7 @@ export default class SelectItemByCountry extends Component {
                         return (
                           <Imager
                             resizeMode="contain"
-                            key={brand.id}
+                            key={'brandLogo' + brand.id}
                             style={styles.brandLogo}
                             source={{uri: brand.logo}}
                           />

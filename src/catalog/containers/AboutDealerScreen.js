@@ -127,7 +127,7 @@ class AboutDealerScreen extends Component {
     actionFetchDealer(dealerBaseData);
   }
 
-  onLayoutImage = e => {
+  onLayoutImage = (e) => {
     const {
       width: imageDynamicWidth,
       height: imageDynamicHeight,
@@ -139,7 +139,7 @@ class AboutDealerScreen extends Component {
     });
   };
 
-  onLayoutWebView = e => {
+  onLayoutWebView = (e) => {
     const {width: webViewWidth} = e.nativeEvent.layout;
 
     this.setState({webViewWidth});
@@ -152,13 +152,13 @@ class AboutDealerScreen extends Component {
   //   return this.props.dealer.id !== nextProps.dealer.id && isActiveScreen;
   // }
 
-  renderPhones = phones => {
+  renderPhones = (phones) => {
     if (!phones || !phones.length) return null;
 
     return (
       <View>
-        {phones.map(phone => (
-          <ListItem key={phone} icon style={styles.listItem}>
+        {phones.map((phone, num) => (
+          <ListItem key={'dealerPhone' + num} icon style={styles.listItem}>
             <Body>
               <Text style={styles.leftText}>Телефон</Text>
             </Body>
@@ -179,9 +179,9 @@ class AboutDealerScreen extends Component {
   renderEmails = (emails, name) => {
     if (!emails || !emails.length) return null;
 
-    return emails.map(emailAddress => (
+    return emails.map((emailAddress, num) => (
       <ListItem
-        key={emailAddress}
+        key={'dealerEmail' + num}
         icon
         style={styles.listItem}
         onPress={() => {
@@ -205,13 +205,13 @@ class AboutDealerScreen extends Component {
     ));
   };
 
-  renderSites = sites => {
+  renderSites = (sites) => {
     if (!sites || !sites.length) return null;
 
     return sites.map((site, idx) => {
       return (
         <ListItem
-          key={site}
+          key={'dealerSite' + idx}
           last={sites.length - 1 === idx}
           icon
           style={styles.listItem}>
@@ -269,12 +269,12 @@ class AboutDealerScreen extends Component {
                 ]}
                 source={{uri: imageUrl}}>
                 <View style={styles.brandsLine}>
-                  {dealer.brands.map(brand => {
+                  {dealer.brands.map((brand) => {
                     if (brand.logo) {
                       return (
                         <Imager
                           resizeMode="contain"
-                          key={brand.id}
+                          key={'dealerBrand' + brand.id}
                           style={styles.brand}
                           source={{uri: brand.logo}}
                         />
@@ -327,7 +327,4 @@ class AboutDealerScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AboutDealerScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(AboutDealerScreen);

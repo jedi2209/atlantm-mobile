@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   buttonPrimaryText: {color: '#2E3A59', fontSize: 16, fontWeight: 'bold'},
 });
 
-const MenuItem = props => {
+const MenuItem = (props) => {
   const {id, selected, type, name, navigateUrl} = props.data;
   const {navigation} = props;
 
@@ -128,7 +128,7 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
   };
 };
 
-const MoreScreen = props => {
+const MoreScreen = (props) => {
   const menu = [
     {
       id: 1,
@@ -192,7 +192,7 @@ const MoreScreen = props => {
     <>
       <ScrollView>
         <List style={{marginTop: 0}}>
-          {menu.map(item => (
+          {menu.map((item) => (
             <MenuItem
               key={`menu-item-${item.id}`}
               data={item}

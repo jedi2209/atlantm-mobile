@@ -187,7 +187,7 @@ class UserCarItemScreen extends Component {
 
   onPressPhoto = () => this.props.actionOpenUsedCarPhotoViewer();
 
-  onChangePhotoIndex = index =>
+  onChangePhotoIndex = (index) =>
     this.props.actionUpdateUsedCarPhotoViewerIndex(index);
 
   selectBaseTab = () => this.setState({tabName: 'base'});
@@ -288,7 +288,7 @@ class UserCarItemScreen extends Component {
 
     let photos = [];
     if (get(carDetails, 'img.original')) {
-      get(carDetails, 'img.original').forEach(element => {
+      get(carDetails, 'img.original').forEach((element) => {
         photos.push(element + '?d=440x400');
       });
     }
@@ -454,9 +454,10 @@ class UserCarItemScreen extends Component {
                                   </Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{`${
-                                    carDetails.year
-                                  } г.`}</Text>
+                                  <Text
+                                    style={
+                                      styles.sectionValueText
+                                    }>{`${carDetails.year} г.`}</Text>
                                 </Col>
                               </Row>
                             ) : null}
@@ -501,9 +502,10 @@ class UserCarItemScreen extends Component {
                                   </Text>
                                 </Col>
                                 <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>{`${
-                                    carDetails.engine.volume.full
-                                  } см³`}</Text>
+                                  <Text
+                                    style={
+                                      styles.sectionValueText
+                                    }>{`${carDetails.engine.volume.full} см³`}</Text>
                                 </Col>
                               </Row>
                             ) : null}
@@ -576,9 +578,9 @@ class UserCarItemScreen extends Component {
                           <Text style={styles.sectionTitle}>
                             {get(carDetails, 'options.additional.1.name')}
                           </Text>
-                          {additional.map(item => {
+                          {additional.map((item, num) => {
                             return (
-                              <Grid key={item.id}>
+                              <Grid key={'OptionsAdditional-' + num}>
                                 {item.name && item.value ? (
                                   <Row style={styles.sectionRow}>
                                     <Col style={styles.sectionProp}>
@@ -639,7 +641,7 @@ class UserCarItemScreen extends Component {
                       )}
                     </View>
                   )}
-                  renderContent={item => {
+                  renderContent={(item) => {
                     return (
                       <View
                         style={{
@@ -729,7 +731,4 @@ const stylesFooter = StyleSheet.create({
   },
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(UserCarItemScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(UserCarItemScreen);

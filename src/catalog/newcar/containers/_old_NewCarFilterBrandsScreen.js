@@ -100,7 +100,7 @@ class NewCarFilterBrandsScreen extends Component {
               const handler = () => this.onPressItem(brandId);
 
               return (
-                <View key={brandId} style={stylesList.listItemContainer}>
+                <View key={'oldBrand' + brandId} style={stylesList.listItemContainer}>
                   <ListItem
                     icon
                     onPress={handler}
