@@ -101,9 +101,7 @@ class NewCarListScreen extends Component {
 
   componentDidMount() {
     const {dealerSelected, filterData} = this.props;
-    const defaultSearchUrl = `/stock/new/cars/get/city/${
-      dealerSelected.city.id
-    }/`;
+    const defaultSearchUrl = `/stock/new/cars/get/city/${dealerSelected.city.id}/`;
 
     const searchUrl = filterData.search_url || defaultSearchUrl;
 
@@ -138,7 +136,7 @@ class NewCarListScreen extends Component {
     );
   }
 
-  fetchNewCar = type => {
+  fetchNewCar = (type) => {
     const {
       items,
       filterData,
@@ -221,7 +219,4 @@ class NewCarListScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(NewCarListScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(NewCarListScreen);

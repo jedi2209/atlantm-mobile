@@ -1,24 +1,20 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {PureComponent} from 'react';
-import {
-  View,
-  Text,
-  Modal,
-  TouchableHighlight,
-  TouchableOpacity,
-  Animated,
-  Keyboard,
-  StyleSheet,
-  Picker,
-  Alert,
-  Platform,
-} from 'react-native';
+import {View, Text, TouchableHighlight, StyleSheet} from 'react-native';
 
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../style-const';
-import numberWithGap from '../../utils/number-with-gap';
+import ModalView from './ModalView';
 
 const styles = StyleSheet.create({
+  boxStyle: {
+    borderColor: '#afafaf',
+    borderWidth: 0.5,
+    borderRadius: 5,
+    width: 30,
+    height: 30,
+  },
 });
 
 export default class ColorBox extends PureComponent {
@@ -26,149 +22,79 @@ export default class ColorBox extends PureComponent {
     color: PropTypes.string,
   };
 
-  static defaultProps = {
-    height: 259,
-    duration: 300,
-  };
-
   constructor(props) {
     super(props);
 
     this.state = {
-      modalVisible: false,
-      animatedHeight: new Animated.Value(0),
+      isModalVisible: false,
     };
   }
 
-  setModalVisible = (visible) => {
-    const {height, duration} = this.props;
-
-    // slide animation
-    if (visible) {
-      this.setState({
-        modalVisible: visible,
-      });
-      return Animated.timing(this.state.animatedHeight, {
-        duration,
-        toValue: height,
-      }).start();
-    } else {
-      return Animated.timing(this.state.animatedHeight, {
-        duration,
-        toValue: 0,
-      }).start(() => {
-        this.setState({
-          modalVisible: false,
-        });
-      });
-    }
-  };
-
-  onPressCancel = () => {
-    this.setModalVisible(false);
-    this.props.onCloseModal();
-  };
-
-  onPress = () => {
-    Keyboard.dismiss();
-
-    this.setModalVisible(true);
-
-    this.props.onPressModal();
-  };
-
   render() {
-    const {style, color} = this.props;
-
+    const {color} = this.props;
+    const backgroundColor = color.picker.codes.hex
+      ? color.picker.codes.hex
+      : 'none';
     return (
       <View>
-        <Modal
-          transparent={true}
-          animationType="none"
-          visible={this.state.modalVisible}
-          supportedOrientations={[
-            'portrait',
-            'portrait-upside-down',
-            'landscape',
-            'landscape-left',
-            'landscape-right',
-          ]}
-          onRequestClose={() => {
-            this.props.onCloseModal();
-          }}>
+        <ModalView
+          isModalVisible={this.state.isModalVisible}
+          animationIn="slideInRight"
+          animationOut="slideOutLeft"
+          onHide={() => {
+            this.setState({
+              isModalVisible: false,
+            });
+          }}
+          selfClosed={true}>
+          <View style={{padding: 10}}>
+            {color.name.official ? (
+              <Text
+                ellipsizeMode={'clip'}
+                style={{fontSize: 18, marginBottom: 10}}>
+                {color.name.official}
+              </Text>
+            ) : null}
+            <View style={{flexDirection: 'row'}}>
+              <View
+                style={[
+                  styleConst.shadow.default,
+                  styles.boxStyle,
+                  {
+                    backgroundColor: backgroundColor,
+                    width: 100,
+                    height: 100,
+                    marginRight: 10,
+                  },
+                ]}
+              />
+              {color.code ? (
+                <Text style={{ontSize: 16}} selectable={true}>
+                  код цвета - {color.code}
+                </Text>
+              ) : null}
+            </View>
+          </View>
+        </ModalView>
+        <TouchableHighlight
+          onPress={() => {
+            this.setState({
+              isModalVisible: true,
+            });
+          }}
+          style={[this.props.containerStyle]}
+          underlayColor={'none'}>
           <View
-            style={{
-              flex: 1,
-            }}>
-            <TouchableHighlight
-              style={styles.datePickerMask}
-              activeOpacity={1}
-              underlayColor={'#00000077'}
-              onPress={this.onPressMask}>
-              <TouchableHighlight
-                underlayColor={'#fff'}
-                style={{
-                  flex: 1,
-                }}>
-                <Animated.View
-                  style={[
-                    styles.datePickerCon,
-                    {
-                      height: this.state.animatedHeight,
-                    },
-                  ]}>
-                  <View style={styles.topBar}>
-                    <View style={styles.btnText}>
-                      <Text
-                        style={[styles.btnTextText, styles.btnTextCancel]}
-                      />{' '}
-                    </View>{' '}
-                    <TouchableHighlight
-                      underlayColor="transparent"
-                      onPress={this.onPressConfirm}
-                      style={[styles.btnText, styles.btnConfirm]}>
-                      <View>
-                        <Text style={[styles.btnTextText]}> Готово </Text>{' '}
-                      </View>{' '}
-                    </TouchableHighlight>{' '}
-                  </View>
-                  <View style={styles.pickersContainer}>
-                    <View style={styles.priceContainer}>
-                      <View style={styles.priceLabelContainer}>
-                        <Text style={styles.priceLabelText}> От </Text>{' '}
-                      </View>{' '}
-                      <Picker
-                        selectedValue={this.state.minPrice}
-                        onValueChange={this.onChangeMinPrice}>
-                        {' '}
-                        {this.renderItems()}{' '}
-                      </Picker>{' '}
-                    </View>{' '}
-                    <View style={styles.priceContainer}>
-                      <View style={styles.priceLabelContainer}>
-                        <Text style={styles.priceLabelText}> До </Text>{' '}
-                      </View>{' '}
-                      <Picker
-                        selectedValue={this.state.maxPrice}
-                        onValueChange={this.onChangeMaxPrice}>
-                        {' '}
-                        {this.renderItems(true)}{' '}
-                      </Picker>{' '}
-                    </View>{' '}
-                  </View>{' '}
-                </Animated.View>{' '}
-              </TouchableHighlight>{' '}
-            </TouchableHighlight>{' '}
-          </View>{' '}
-        </Modal>
-
-        <TouchableComponent
-          underlayColor={styleConst.color.select}
-          style={style}
-          onPress={this.onPress}>
-          {' '}
-          {children}{' '}
-        </TouchableComponent>
+            style={[
+              styleConst.shadow.default,
+              styles.boxStyle,
+              {
+                backgroundColor: backgroundColor,
+              },
+            ]}
+            {...this.props}
+          />
+        </TouchableHighlight>
       </View>
     );
   }

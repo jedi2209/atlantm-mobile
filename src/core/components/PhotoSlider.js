@@ -12,7 +12,6 @@ import {
 
 // components
 import Swiper from 'react-native-swiper';
-import DeviceInfo from 'react-native-device-info';
 
 // helpers
 import PropTypes from 'prop-types';
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Slide = props => {
+const Slide = (props) => {
   return (
     <View style={[styles.item, {height: props.height}]}>
       <TouchableWithoutFeedback onPress={props.onPress}>
@@ -99,7 +98,7 @@ export default class PhotoSlider extends Component {
     photos: [],
   };
 
-  loadHandle = i => {
+  loadHandle = (i) => {
     const loadQueue = this.state.loadQueue;
     loadQueue[i] = 1;
     this.setState({
