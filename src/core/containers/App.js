@@ -74,17 +74,19 @@ class App extends PureComponent {
     }
 
     const currentDealer = get(dealerSelected, 'id', false);
+    const storeVersion = '2020-06-16';
 
     if (
       currentDealer &&
-      (isStoreUpdated !== undefined && isStoreUpdated !== '2020-03-10')
+      typeof isStoreUpdated !== 'undefined' &&
+      isStoreUpdated !== storeVersion
     ) {
       this.setState({
         isloading: true,
       });
       // если мы ещё не очищали стор
       actionMenuOpenedCount(0);
-      actionStoreUpdated('2020-03-10');
+      actionStoreUpdated(storeVersion);
       setTimeout(() => {
         this.setState({
           isloading: false,
@@ -98,7 +100,7 @@ class App extends PureComponent {
         kOSSettingsKeyInFocusDisplayOption: 2,
       });
 
-      OneSignal.promptForPushNotificationsWithUserResponse(status => {
+      OneSignal.promptForPushNotificationsWithUserResponse((status) => {
         if (status) {
           actionSetPushGranted(true);
 
@@ -168,7 +170,4 @@ class App extends PureComponent {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

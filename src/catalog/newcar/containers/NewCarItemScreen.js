@@ -33,6 +33,7 @@ import {
 import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
 import PhotoSlider from '@core/components/PhotoSlider';
 import PhotoViewer from '@core/components/PhotoViewer';
+import ColorBox from '../../../core/components/ColorBox';
 
 // helpers
 import getTheme from '../../../../native-base-theme/components';
@@ -201,14 +202,14 @@ class NewCarItemScreen extends Component {
 
   onPressPhoto = () => this.props.actionOpenNewCarPhotoViewer();
 
-  onChangePhotoIndex = index =>
+  onChangePhotoIndex = (index) =>
     this.props.actionUpdateNewCarPhotoViewerIndex(index);
 
   // selectBaseTab = () => this.setState({tabName: 'base'});
 
   // selectOptionsTab = () => this.setState({tabName: 'options'});
 
-  renderDealer = dealerName => {
+  renderDealer = (dealerName) => {
     return dealerName ? (
       <TouchableHighlight
         onPress={this.onPressDealer}
@@ -232,14 +233,14 @@ class NewCarItemScreen extends Component {
     const {carDetails} = this.props;
     const _this = this;
     if (typeof data === 'object' && data.length) {
-      let resRaw = data.map(element => {
+      let resRaw = data.map((element) => {
         return _this.renderItem(
           element.name + ':',
           get(carDetails, element.value),
           element.postfix,
         );
       });
-      let res = resRaw.filter(el => {
+      let res = resRaw.filter((el) => {
         return el != null;
       });
       return res ? (
@@ -254,7 +255,7 @@ class NewCarItemScreen extends Component {
       <View style={styles.sectionOptions}>
         <Text style={styles.sectionTitle}>{title}</Text>
         <Grid>
-          {data.map(element => {
+          {data.map((element) => {
             return _this.renderItem(
               element.name + ':',
               get(carDetails, element.value),
@@ -273,8 +274,9 @@ class NewCarItemScreen extends Component {
           <Text style={styles.sectionPropText}>{title}</Text>
         </View>
         <View style={[styles.sectionValue, {alignItems: 'flex-end'}]}>
-          <Text style={styles.sectionValueText}>{`${value} ${postfix ||
-            ''}`}</Text>
+          <Text style={styles.sectionValueText}>{`${value} ${
+            postfix || ''
+          }`}</Text>
         </View>
       </Row>
     ) : null;
@@ -288,7 +290,7 @@ class NewCarItemScreen extends Component {
     return (
       <View key={title}>
         <Text style={styles.sectionTitle}>{title}</Text>
-        {data.map(item => {
+        {data.map((item) => {
           return (
             <Grid key={`${item.name} ${item.id}`}>
               {item.name && item.value ? (
@@ -438,7 +440,7 @@ class NewCarItemScreen extends Component {
     let photos = [];
     let CarImgReal = false;
     if (get(carDetails, 'imgReal.thumb.0')) {
-      get(carDetails, 'imgReal.thumb').forEach(element => {
+      get(carDetails, 'imgReal.thumb').forEach((element) => {
         photos.push(element + '1000x1000');
       });
       CarImgReal = true;
@@ -471,6 +473,16 @@ class NewCarItemScreen extends Component {
           <ScrollView>
             <StatusBar hidden />
             <View style={{flex: 1, position: 'relative'}}>
+              <ColorBox
+                containerStyle={{
+                  position: 'absolute',
+                  right: 0,
+                  top: 270,
+                  zIndex: 100,
+                  padding: 20,
+                }}
+                color={get(carDetails, 'color')}
+              />
               <View
                 style={{
                   position: 'absolute',
@@ -743,7 +755,7 @@ class NewCarItemScreen extends Component {
                         <View style={styles.tabContent}>
                           {stockKeys.length ? (
                             <View>
-                              {stockKeys.map(key => {
+                              {stockKeys.map((key) => {
                                 return this.renderComplectationItem(
                                   stock[key].name,
                                   stock[key].data,
@@ -754,7 +766,7 @@ class NewCarItemScreen extends Component {
 
                           {additionalKeys.length ? (
                             <View>
-                              {additionalKeys.map(key => {
+                              {additionalKeys.map((key) => {
                                 return this.renderComplectationItem(
                                   additional[key].name,
                                   additional[key].data,
@@ -805,7 +817,7 @@ class NewCarItemScreen extends Component {
                       )}
                     </View>
                   )}
-                  renderContent={item => {
+                  renderContent={(item) => {
                     return (
                       <View
                         style={{
@@ -851,10 +863,7 @@ class NewCarItemScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(NewCarItemScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(NewCarItemScreen);
 
 const stylesFooter = StyleSheet.create({
   footer: {

@@ -207,7 +207,7 @@ class CarListItem extends Component {
               styles.price,
               isSale ? styles.priceDefault : null,
               {
-                color: CarImgReal ? '#FFFFFF' : '#2A2A43'
+                color: CarImgReal ? '#FFFFFF' : '#2A2A43',
               },
             ]}>
             {showPrice(CarPrices.standart, this.props.dealerSelected.region)}
@@ -304,7 +304,7 @@ class CarListItem extends Component {
               colors={['rgba(51, 51, 51, 0.4)', 'rgba(51, 51, 51, 0)']}
               style={[
                 styles.priceBackground,
-                {height:  isSale ? 80 : 60},
+                {height: isSale ? 80 : 60},
                 itemScreen === 'NewCarItemScreen' ? {width: '100%'} : null,
               ]}
             />
@@ -332,7 +332,8 @@ class CarListItem extends Component {
             }}>
             <View>
               {engineVolume &&
-              (get(car, 'engine.id') && get(car, 'engine.id') !== 4) ? (
+              get(car, 'engine.id') &&
+              get(car, 'engine.id') !== 4 ? (
                 <View style={styles.extraTextContainer}>
                   <Text
                     style={
@@ -345,9 +346,9 @@ class CarListItem extends Component {
               {get(car, 'engine.type') || engineVolume ? (
                 <View style={styles.extraTextContainer}>
                   <Text
-                    style={CarImgReal ? styles.commonReal : styles.common}>{`${
-                    car.engine.type
-                  } `}</Text>
+                    style={
+                      CarImgReal ? styles.commonReal : styles.common
+                    }>{`${car.engine.type} `}</Text>
                 </View>
               ) : null}
             </View>

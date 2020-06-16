@@ -42,7 +42,7 @@ if (!__DEV__) {
     'timeStamp',
     'trace',
     'warn',
-  ].forEach(methodName => {
+  ].forEach((methodName) => {
     console[methodName] = () => {
       /* noop */
     };
@@ -69,6 +69,7 @@ export default class Wrapper extends Component {
     Text.defaultProps = Text.defaultProps || {};
     Text.defaultProps.allowFontScaling = false;
     Text.defaultProps.maxFontSizeMultiplier = 0;
+    Text.defaultProps.selectable = true;
     this.getPersistStore();
   }
 
