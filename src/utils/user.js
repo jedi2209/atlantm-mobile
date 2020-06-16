@@ -10,6 +10,9 @@ export default class UserData {
     }
     if (typeof liveData === 'object') {
       liveData = liveData[0];
+      if (liveData.VALUE) {
+        liveData = liveData.VALUE;
+      }
     }
     return liveData ? liveData : localData;
   }

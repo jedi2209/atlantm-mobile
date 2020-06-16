@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Platform,
   StatusBar,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 import {Text, Button, Switch} from 'native-base';
@@ -16,6 +17,7 @@ import {Text, Button, Switch} from 'native-base';
 import {TextInput} from '@core/components/TextInput';
 import {DatePickerCustom} from '@core/components/DatePickerCustom';
 import ChooseDateTimeComponent from '../../../service/components/ChooseDateTimeComponent';
+import RNPickerSelect, {defaultStyles} from 'react-native-picker-select';
 import PhoneInput from 'react-native-phone-input';
 import TextInputMask from 'react-native-text-input-mask';
 import DealerItemList from '@core/components/DealerItemList';
@@ -55,6 +57,16 @@ const styles = StyleSheet.create({
     height: Platform.OS === 'ios' ? 40 : 'auto',
     color: '#222b45',
     fontSize: 16,
+  },
+  select: {
+    height: Platform.OS === 'ios' ? 61 : 'auto',
+  },
+  selectLabel: {
+    color: '#808080',
+    fontSize: 14,
+    position: 'absolute',
+    paddingHorizontal: 15,
+    paddingTop: 5,
   },
   textarea: {
     height: Platform.OS === 'ios' ? 140 : 'auto',
@@ -96,6 +108,24 @@ const datePickerStyles = {
   },
 };
 
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 6,
+    paddingTop: 24,
+    paddingLeft: 1,
+    color: '#222b45',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 6,
+    paddingTop: 25,
+    color: '#222b45',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+});
+
 const MaskedPhone = {
   ru: '+7 (9[00]) [000]-[00]-[00]',
   by: '+375 ([00]) [000]-[00]-[00]',
@@ -109,6 +139,7 @@ class Form extends Component {
     this.state = {
       parentState: props.parentState,
     };
+    this.inputRefs = [];
     if (props.fields.groups) {
       props.fields.groups.map((group) => {
         group.fields.map((field) => {
@@ -149,6 +180,7 @@ class Form extends Component {
     barStyle: PropTypes.string,
     defaultCountryCode: PropTypes.string,
     SubmitButton: PropTypes.object,
+    parentState: PropTypes.object,
     onSubmit: PropTypes.func.isRequired,
   };
 
@@ -164,11 +196,11 @@ class Form extends Component {
       this.setState({[name]: valueNew});
     }
     setTimeout(() => {
-      console.log('FORM onChangeField', this.state, this.props);
+      console.log('FORM onChangeField', this.state);
     }, 1000);
   };
 
-  FieldsDivider = (key) => {
+  _fieldsDivider = (key) => {
     return <View style={styles.divider} key={key} />;
   };
 
@@ -196,7 +228,7 @@ class Form extends Component {
               if (fieldNum !== group.fields.length - 1) {
                 return [
                   returnField,
-                  this.FieldsDivider('divider' + field.name),
+                  this._fieldsDivider('divider' + field.name),
                 ];
               }
               return returnField;
@@ -288,7 +320,7 @@ class Form extends Component {
         <View
           style={[
             styles.field,
-            data.props.required
+            data.props && data.props.required
               ? !this.state[name]
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
@@ -378,6 +410,97 @@ class Form extends Component {
               this.onChangeField(data)(returnData);
             }}
             {...data.props}
+          />
+        </View>
+      );
+    },
+    year: (data, num, totalFields) => {
+      const {name, label} = data;
+      let items = [];
+
+      const minDate =
+        data.props.minDate.getUTCFullYear() || new Date().getUTCFullYear();
+      const maxDate =
+        data.props.maxDate.getUTCFullYear() || new Date().getUTCFullYear();
+
+      if (minDate && maxDate) {
+        for (var i = minDate; i <= maxDate; i++) {
+          items.push({
+            label: i.toString(),
+            value: i,
+          });
+        }
+      }
+      if (data.props.reverse === true) {
+        items.reverse();
+      }
+      return (
+        <View
+          style={[
+            styles.field,
+            styles.select,
+            {
+              marginVertical: 0,
+            },
+          ]}
+          key={'field' + num + name}>
+          <Text style={styles.selectLabel}>{label}</Text>
+          <RNPickerSelect
+            key={'rnYearPicker' + num + name}
+            doneText="Выбрать"
+            onValueChange={(value) => {
+              this.onChangeField(data)(value);
+            }}
+            InputAccessoryView={() => {
+              return (
+                <View style={defaultStyles.modalViewMiddle}>
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      this.setState(
+                        {
+                          [name]: this.state[name],
+                        },
+                        () => {
+                          this.inputRefs[name].togglePicker(true);
+                        },
+                      );
+                    }}
+                    hitSlop={{top: 4, right: 4, bottom: 4, left: 4}}>
+                    <View testID="needed_for_touchable">
+                      <Text
+                        style={[
+                          defaultStyles.done,
+                          {fontWeight: 'normal', color: 'red'},
+                        ]}>
+                        Отмена
+                      </Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                  <Text>Выберите год</Text>
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      this.inputRefs[name].togglePicker(true);
+                    }}
+                    hitSlop={{top: 4, right: 4, bottom: 4, left: 4}}>
+                    <View testID="needed_for_touchable">
+                      <Text style={defaultStyles.done}>Готово</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                </View>
+              );
+            }}
+            ref={(ref) => {
+              this.inputRefs[name] = ref;
+            }}
+            style={{
+              ...pickerSelectStyles,
+              iconContainer: {
+                top: 10,
+                right: 5,
+              },
+            }}
+            {...data.props}
+            items={items}
           />
         </View>
       );
@@ -528,6 +651,37 @@ class Form extends Component {
           ]}
           {...data.props}
         />
+      );
+    },
+    select: (data, num) => {
+      const {name, label} = data;
+      return (
+        <View
+          style={[
+            styles.field,
+            styles.select,
+            {
+              marginVertical: 0,
+            },
+          ]}
+          key={'field' + num + name}>
+          <Text style={styles.selectLabel}>{label}</Text>
+          <RNPickerSelect
+            key={'rnpicker' + num + name}
+            doneText="Выбрать"
+            onValueChange={(value) => {
+              this.onChangeField(data)(value);
+            }}
+            style={{
+              ...pickerSelectStyles,
+              iconContainer: {
+                top: 10,
+                right: 5,
+              },
+            }}
+            {...data.props}
+          />
+        </View>
       );
     },
     switch: (data, num, totalFields) => {

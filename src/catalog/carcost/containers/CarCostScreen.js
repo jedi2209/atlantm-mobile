@@ -1,9 +1,25 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {SafeAreaView, StyleSheet, Alert, Platform, View} from 'react-native';
-import {Content, List, StyleProvider} from 'native-base';
+import {
+  StyleSheet,
+  View,
+  Alert,
+  Text,
+  TouchableWithoutFeedback,
+  ScrollView,
+  Keyboard,
+  ActivityIndicator,
+  Platform,
+  StatusBar,
+  TouchableOpacity,
+} from 'react-native';
+import {Content, List, StyleProvider, Icon} from 'native-base';
+import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
+import {substractYears} from '../../../utils/date';
+import UserData from '../../../utils/user';
 
 import {TextInput} from '../../../core/components/TextInput';
+import Form from '../../../core/components/Form/Form';
 
 // redux
 import {connect} from 'react-redux';
@@ -46,10 +62,6 @@ import {ERROR_NETWORK} from '../../../core/const';
 import isInternet from '../../../utils/internet';
 
 const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
-  },
   button: {
     marginTop: 20,
   },
@@ -57,43 +69,25 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({dealer, profile, nav, catalog}) => {
   const carCost = get(catalog, 'carCost', {});
-  const {
-    comment,
-    photos,
-    vin,
-    brand,
-    model,
-    year,
-    mileage,
-    mileageUnit,
-    engineVolume,
-    engineType,
-    gearbox,
-    color,
-    carCondition,
-    meta,
-  } = carCost;
 
   return {
     nav,
-    profile,
+    firstName: UserData.get('NAME'),
+    secondName: UserData.get('SECOND_NAME'),
+    lastName: UserData.get('LAST_NAME'),
+    phone: UserData.get('PHONE'),
+    email: UserData.get('EMAIL'),
+    carName: UserData.get('CARNAME')
+      ? UserData.get('CARNAME')
+      : [profile.cars[0].brand, profile.cars[0].model].join(' '),
+    carNumber: UserData.get('CARNUMBER')
+      ? UserData.get('CARNUMBER')
+      : profile.cars[0].number,
+    carVIN: UserData.get('CARVIN')
+      ? UserData.get('CARVIN')
+      : profile.cars[0].vin,
     dealerSelected: dealer.selected,
-
-    // car cost
-    comment,
-    photos,
-    vin,
-    brand,
-    model,
-    year,
-    mileage,
-    mileageUnit,
-    engineVolume,
-    engineType,
-    gearbox,
-    color,
-    carCondition,
-    isCarCostRequest: meta.isCarCostRequest,
+    isCarCostRequest: carCost.meta.isCarCostRequest,
   };
 };
 
@@ -116,55 +110,50 @@ const mapDispatchToProps = {
 };
 
 class CarCostScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: 'Оценить мой автомобиль',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
-  });
+  static navigationOptions = ({navigation}) => {
+    const returnScreen =
+      navigation.state.params && navigation.state.params.returnScreen;
+
+    return {
+      headerStyle: stylesHeader.whiteHeader,
+      headerTitleStyle: stylesHeader.whiteHeaderTitle,
+      headerTitle: 'Оценка моего авто',
+      headerLeft: (
+        <HeaderIconBack
+          theme="blue"
+          navigation={navigation}
+          returnScreen={returnScreen}
+        />
+      ),
+      headerRight: <View />,
+    };
+  };
 
   constructor(props) {
     super(props);
 
     const {
-      last_name = '',
-      first_name = '',
+      lastName,
+      firstName,
       phone,
-      cars,
       email,
-    } = this.props.profile.login;
-
-    let car = '';
-
-    if (this.props.profile.login.car) {
-      car = {
-        number: this.props.profile.login.carNumber,
-        brand: this.props.profile.login.car,
-        model: '',
-      };
-    } else {
-      car = (cars && cars.find((value) => value.owner)) || {
-        number: '',
-        brand: '',
-        model: '',
-      };
-    }
+      carName,
+      carNumber,
+      carVIN,
+    } = props;
 
     this.state = {
-      date: '',
-      email: email ? email.value : '',
-      phone: phone ? phone.value : '',
-      car: `${car.brand} ${car.model}`,
-      carNumber: car.number,
-      name: `${first_name} ${last_name}`,
+      email: email,
+      phone: phone,
+      name: [firstName, lastName].join(' '),
+      carName: carName,
+      carNumber: carNumber,
+      carVIN: carVIN,
+      carYear: null,
       loading: false,
       success: false,
     };
   }
-
-  onChangeField = (fieldName) => (value) => {
-    this.setState({[fieldName]: value});
-  };
 
   static propTypes = {
     dealerSelected: PropTypes.object,
@@ -289,158 +278,287 @@ class CarCostScreen extends Component {
   }
 
   render() {
-    // Для iPad меню, которое находится вне роутера
-    // window.atlantmNavigation = this.props.navigation;
-
-    const {
-      name,
-      phone,
-      email,
-      navigation,
-      dealerSelected,
-
-      // carcost
-      actionFillPhotosCarCost,
-      actionFillBrandCarCost,
-      actionFillModelCarCost,
-      actionFillColorCarCost,
-      actionSelectYearCarCost,
-      actionFillMileageCarCost,
-      actionSelectMileageUnitCarCost,
-      actionFillEngineVolumeCarCost,
-      actionSelectEngineTypeCarCost,
-      actionSelectGearboxCarCost,
-      actionSelectCarConditionCarCost,
-      actionFillCommentCarCost,
-      actionFillVinCarCost,
-
-      isCarCostRequest,
-      comment,
-      photos,
-      vin,
-      brand,
-      model,
-      year,
-      mileage,
-      mileageUnit,
-      engineVolume,
-      engineType,
-      gearbox,
-      color,
-      carCondition,
-    } = this.props;
+    console.log('this.props.phone', this.props.phone);
+    this.FormConfig = {
+      fields: {
+        groups: [
+          {
+            name: 'Автоцентр',
+            fields: [
+              {
+                name: 'DEALER',
+                type: 'dealerSelect',
+                label: 'Автоцентр',
+                value: this.props.dealerSelected,
+                props: {
+                  goBack: true,
+                  isLocal: false,
+                  navigation: this.props.navigation,
+                  returnScreen: this.props.navigation.state.routeName,
+                },
+              },
+            ],
+          },
+          {
+            name: 'Автомобиль',
+            fields: [
+              {
+                name: 'CARNAME',
+                type: 'input',
+                label: 'Марка и модель',
+                value: this.props.carName,
+                props: {
+                  required: true,
+                  placeholder: null,
+                },
+              },
+              {
+                name: 'CARVIN',
+                type: 'input',
+                label: 'VIN номер',
+                value: this.props.carVIN,
+                props: {
+                  required: true,
+                  placeholder: null,
+                },
+              },
+              {
+                name: 'CARYEAR',
+                type: 'year',
+                label: 'Год выпуска',
+                value: this.props.carYear,
+                props: {
+                  required: true,
+                  minDate: new Date(substractYears(100)),
+                  maxDate: new Date(),
+                  reverse: true,
+                  placeholder: {
+                    label: 'Выберите год выпуска...',
+                    value: null,
+                    color: '#9EA0A4',
+                  },
+                  Icon: () => {
+                    return (
+                      <Icon
+                        type="MaterialIcons"
+                        name="date-range"
+                        size={24}
+                        color="gray"
+                      />
+                    );
+                  },
+                },
+              },
+              // {
+              //   name: 'CARCOLOR',
+              //   type: 'input',
+              //   label: 'Цвет',
+              //   value: this.props.carColor,
+              //   props: {
+              //     placeholder: null,
+              //   },
+              // },
+              {
+                name: 'CARMILEAGE',
+                type: 'input',
+                label: 'Пробег [в километрах]',
+                value: this.props.carMileage,
+                props: {
+                  keyboardType: 'number-pad',
+                  placeholder: null,
+                },
+              },
+              {
+                name: 'CARENGINETYPE',
+                type: 'select',
+                label: 'Тип двигателя',
+                value: this.props.carEngineType,
+                props: {
+                  items: [
+                    {
+                      label: 'Бензин',
+                      value: 1,
+                      key: 1,
+                    },
+                    {
+                      label: 'Дизель',
+                      value: 2,
+                      key: 2,
+                    },
+                    {
+                      label: 'Гибрид',
+                      value: 3,
+                      key: 3,
+                    },
+                  ],
+                  placeholder: {
+                    label: 'Укажите тип двигателя...',
+                    value: null,
+                    color: '#9EA0A4',
+                  },
+                  Icon: () => {
+                    return (
+                      <Icon
+                        type="MaterialCommunityIcons"
+                        name="engine"
+                        size={24}
+                        color="gray"
+                      />
+                    );
+                  },
+                },
+              },
+              {
+                name: 'CARGEARBOXTYPE',
+                type: 'select',
+                label: 'Тип КПП',
+                value: this.props.carGearboxType,
+                props: {
+                  items: [
+                    {
+                      label: 'Автоматическая',
+                      value: 1,
+                      key: 1,
+                    },
+                    {
+                      label: 'Механическая',
+                      value: 2,
+                      key: 2,
+                    },
+                  ],
+                  placeholder: {
+                    label: 'Выберите коробку передач...',
+                    value: null,
+                    color: '#9EA0A4',
+                  },
+                  Icon: () => {
+                    return (
+                      <Icon
+                        type="FontAwesome"
+                        name="gears"
+                        size={24}
+                        color="red"
+                      />
+                    );
+                  },
+                },
+              },
+            ],
+          },
+          {
+            name: 'Контактные данные',
+            fields: [
+              {
+                name: 'NAME',
+                type: 'input',
+                label: 'Имя',
+                value: this.props.firstName,
+                props: {
+                  required: true,
+                  textContentType: 'name',
+                },
+              },
+              {
+                name: 'SECOND_NAME',
+                type: 'input',
+                label: 'Отчество',
+                value: this.props.secondName,
+                props: {
+                  textContentType: 'middleName',
+                },
+              },
+              {
+                name: 'LAST_NAME',
+                type: 'input',
+                label: 'Фамилия',
+                value: this.props.lastName,
+                props: {
+                  required: true,
+                  textContentType: 'familyName',
+                },
+              },
+              {
+                name: 'PHONE',
+                type: 'phone',
+                label: 'Телефон',
+                value: this.props.phone,
+                props: {
+                  required: true,
+                  textContentType: 'phone',
+                },
+              },
+              {
+                name: 'EMAIL',
+                type: 'email',
+                label: 'Email',
+                value: this.props.email,
+                props: {
+                  required: true,
+                  textContentType: 'emailAddress',
+                },
+              },
+            ],
+          },
+          // {
+          //   name: 'Фотографии',
+          //   fields: [
+          //     {
+          //       name: 'FOTO',
+          //       type: 'component',
+          //       label: 'Прикрепите фото',
+          //       value: (
+          //         <CarCostPhotos
+          //           photos={photos}
+          //           photosFill={actionFillPhotosCarCost}
+          //         />
+          //       ),
+          //     },
+          //   ],
+          // },
+          {
+            name: 'Дополнительно',
+            fields: [
+              {
+                name: 'COMMENT',
+                type: 'textarea',
+                label: 'Комментарий',
+                value: this.props.Text,
+                props: {
+                  placeholder:
+                    'На случай если вам потребуется передать нам больше информации',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    };
 
     console.log('== CarCost ==');
 
     return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
+      <KeyboardAvoidingView onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback style={{flex: 1, backgroundColor: '#eee'}}>
           <Content
+            style={{
+              flex: 1,
+              paddingTop: 20,
+              paddingHorizontal: 14,
+              backgroundColor: '#eee',
+            }}
             enableResetScrollToCoords={false}
             keyboardShouldPersistTaps={
               Platform.OS === 'android' ? 'always' : 'never'
             }>
-            <List style={styles.list}>
-              <Spinner
-                visible={isCarCostRequest}
-                color={styleConst.color.blue}
-              />
-
-              <ListItemHeader text="МОЙ АВТОЦЕНТР" />
-
-              <DealerItemList
-                navigation={navigation}
-                dealer={dealerSelected}
-                goBack={true}
-              />
-
-              <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
-              <View>
-                <View style={styles.group}>
-                  <View style={styles.field}>
-                    <TextInput
-                      autoCorrect={false}
-                      style={styles.textinput}
-                      label="ФИО"
-                      value={this.state.name || ''}
-                      enablesReturnKeyAutomatically={true}
-                      textContentType={'name'}
-                      onChangeText={this.onChangeField('name')}
-                    />
-                  </View>
-                  <View style={styles.field}>
-                    <TextInput
-                      style={styles.textinput}
-                      label="Телефон"
-                      keyboardType="phone-pad"
-                      value={this.state.phone || ''}
-                      enablesReturnKeyAutomatically={true}
-                      textContentType={'telephoneNumber'}
-                      onChangeText={this.onChangeField('phone')}
-                    />
-                  </View>
-                  <View style={styles.field}>
-                    <TextInput
-                      style={styles.textinput}
-                      label="Email"
-                      keyboardType="email-address"
-                      value={this.state.email || ''}
-                      enablesReturnKeyAutomatically={true}
-                      textContentType={'emailAddress'}
-                      onChangeText={this.onChangeField('email')}
-                    />
-                  </View>
-                </View>
-              </View>
-
-              <ListItemHeader text="АВТОМОБИЛЬ" />
-              <CarCostForm
-                vin={vin}
-                brand={brand}
-                model={model}
-                year={year}
-                mileage={mileage}
-                mileageUnit={mileageUnit}
-                engineVolume={engineVolume}
-                engineType={engineType}
-                gearbox={gearbox}
-                color={color}
-                carCondition={carCondition}
-                vinFill={actionFillVinCarCost}
-                brandFill={actionFillBrandCarCost}
-                modelFill={actionFillModelCarCost}
-                yearSelect={actionSelectYearCarCost}
-                mileageFill={actionFillMileageCarCost}
-                mileageUnitSelect={actionSelectMileageUnitCarCost}
-                engineVolumeFill={actionFillEngineVolumeCarCost}
-                engineTypeSelect={actionSelectEngineTypeCarCost}
-                gearboxSelect={actionSelectGearboxCarCost}
-                carConditionSelect={actionSelectCarConditionCarCost}
-                colorFill={actionFillColorCarCost}
-              />
-
-              <ListItemHeader text="ДОПОЛНИТЕЛЬНО" />
-              <CommentOrderForm
-                comment={comment}
-                commentFill={actionFillCommentCarCost}
-              />
-
-              <ListItemHeader text="ПРИКРЕПИТЬ ФОТОГРАФИИ" />
-              <CarCostPhotos
-                photos={photos}
-                photosFill={actionFillPhotosCarCost}
-              />
-
-              <ButtonFull
-                style={styles.button}
-                arrow={true}
-                text="Отправить"
-                onPressButton={this.onPressButton}
-              />
-            </List>
+            <Form
+              fields={this.FormConfig.fields}
+              barStyle={'light-content'}
+              defaultCountryCode={'by'}
+              onSubmit={this.onPressOrder}
+            />
           </Content>
-        </SafeAreaView>
-      </StyleProvider>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     );
   }
 }

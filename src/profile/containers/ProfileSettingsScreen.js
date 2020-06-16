@@ -96,6 +96,8 @@ class ProfileSettingsScreen extends Component {
       loading: false,
     };
 
+    console.log('[].concat(this.state.email, this.state.phone)', [].concat(this.state.email, this.state.phone));
+
     this.FormConfig = {
       fields: {
         groups: [
@@ -118,7 +120,7 @@ class ProfileSettingsScreen extends Component {
                 label: 'Отчество',
                 value: this.state.secondName,
                 props: {
-                  textContentType: 'name',
+                  textContentType: 'middleName',
                 },
               },
               {
@@ -128,7 +130,7 @@ class ProfileSettingsScreen extends Component {
                 value: this.state.lastName,
                 props: {
                   required: true,
-                  textContentType: 'name',
+                  textContentType: 'familyName',
                 },
               },
             ],
