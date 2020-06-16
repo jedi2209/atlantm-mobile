@@ -19,102 +19,28 @@ import styleConst from '../style-const';
 import numberWithGap from '../../utils/number-with-gap';
 
 const styles = StyleSheet.create({
-  datePickerMask: {
-    flex: 1,
-    alignItems: 'flex-end',
-    flexDirection: 'row',
-    backgroundColor: '#00000077',
-  },
-  datePickerCon: {
-    backgroundColor: '#fff',
-    height: 0,
-    overflow: 'hidden',
-  },
-  btnText: {
-    position: 'absolute',
-    top: 0,
-    height: 42,
-    padding: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  btnTextText: {
-    fontSize: 17,
-    color: styleConst.color.systemBlue,
-    fontFamily: styleConst.font.regular,
-  },
-  btnTextCancel: {
-    color: styleConst.color.greyText,
-  },
-  btnCancel: {
-    left: 0,
-  },
-  btnConfirm: {
-    right: 0,
-  },
-  topBar: {
-    backgroundColor: styleConst.color.header,
-    height: 44,
-  },
-  pickersContainer: {
-    flexDirection: 'row',
-  },
-  priceContainer: {
-    flex: 1,
-  },
-  priceLabelContainer: {
-    marginTop: 20,
-
-    ...Platform.select({
-      ios: {
-        alignItems: 'center',
-      },
-      android: {
-        marginLeft: 9,
-      },
-    }),
-  },
-  priceLabelText: {
-    color: styleConst.color.greyText3,
-    fontSize: 17,
-    letterSpacing: styleConst.ui.letterSpacing,
-    fontFamily: styleConst.font.regular,
-  },
 });
 
-export default class PricePicker extends PureComponent {
+export default class ColorBox extends PureComponent {
   static propTypes = {
-    // currency: PropTypes.string,
-    height: PropTypes.number,
-    duration: PropTypes.number,
-    onPressModal: PropTypes.func,
-    onCloseModal: PropTypes.func,
-    min: PropTypes.number,
-    max: PropTypes.number,
-    step: PropTypes.number,
-    currentMinPrice: PropTypes.number,
-    currentMaxPrice: PropTypes.number,
+    color: PropTypes.string,
   };
 
   static defaultProps = {
     height: 259,
     duration: 300,
-    TouchableComponent: TouchableOpacity,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      minPrice: props.currentMinPrice || props.min,
-      maxPrice: props.currentMaxPrice || props.max,
       modalVisible: false,
       animatedHeight: new Animated.Value(0),
     };
   }
 
-  setModalVisible = visible => {
+  setModalVisible = (visible) => {
     const {height, duration} = this.props;
 
     // slide animation
@@ -138,31 +64,9 @@ export default class PricePicker extends PureComponent {
     }
   };
 
-  onPressMask = () => {
-    this.onPressCancel();
-  };
-
   onPressCancel = () => {
     this.setModalVisible(false);
     this.props.onCloseModal();
-  };
-
-  onPressConfirm = () => {
-    const {onCloseModal, min, max} = this.props;
-    let {minPrice, maxPrice} = this.state;
-
-    if (minPrice > maxPrice) {
-      return setTimeout(
-        () => Alert.alert('Цена ОТ должна быть меньше ДО'),
-        100,
-      );
-    }
-
-    this.props.onCloseModal({
-      minPrice,
-      maxPrice,
-    });
-    this.setModalVisible(false);
   };
 
   onPress = () => {
@@ -173,41 +77,8 @@ export default class PricePicker extends PureComponent {
     this.props.onPressModal();
   };
 
-  onChangeMinPrice = minPrice => {
-    this.setState({
-      minPrice,
-    });
-  };
-
-  onChangeMaxPrice = maxPrice => {
-    this.setState({
-      maxPrice,
-    });
-  };
-
-  renderItems = isReversed => {
-    const {min, max, step} = this.props;
-
-    let data = [];
-    let i = min;
-
-    for (i; i <= max; i += step) {
-      data.push(
-        <Picker.Item key={i} label={`${numberWithGap(i)}`} value={i} />,
-      );
-    }
-
-    if (i > max) {
-      data.push(
-        <Picker.Item key={max} label={`${numberWithGap(max)}`} value={max} />,
-      );
-    }
-
-    return isReversed ? data.reverse() : data;
-  };
-
   render() {
-    const {style, children, currency, TouchableComponent} = this.props;
+    const {style, color} = this.props;
 
     return (
       <View>
@@ -248,10 +119,9 @@ export default class PricePicker extends PureComponent {
                   ]}>
                   <View style={styles.topBar}>
                     <View style={styles.btnText}>
-                      <Text style={[styles.btnTextText, styles.btnTextCancel]}>
-                        {' '}
-                        {`Цена ${currency}`}{' '}
-                      </Text>{' '}
+                      <Text
+                        style={[styles.btnTextText, styles.btnTextCancel]}
+                      />{' '}
                     </View>{' '}
                     <TouchableHighlight
                       underlayColor="transparent"
