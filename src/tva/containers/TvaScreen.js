@@ -291,7 +291,6 @@ class TvaScreen extends Component {
               <Form
                 fields={this.FormConfig.fields}
                 barStyle={'light-content'}
-                defaultCountryCode={'by'}
                 onSubmit={this.onPressButton}
               />
             </View>

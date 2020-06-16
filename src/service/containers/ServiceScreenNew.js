@@ -571,7 +571,7 @@ class ServiceScreen extends Component {
               <Form
                 fields={this.FormConfig.fields}
                 barStyle={'light-content'}
-                defaultCountryCode={'by'}
+                defaultCountryCode={this.props.dealerSelected.region}
                 onSubmit={this.onPressOrder}
                 parentState={this.state}
               />
