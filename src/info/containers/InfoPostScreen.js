@@ -222,7 +222,7 @@ class InfoPostScreen extends Component {
                 <WebViewAutoHeight
                   key={get(post, 'hash')}
                   source={{html: text}}
-                  injectedJavaScript={injectScript}
+                  // injectedJavaScript={injectScript}
                   onMessage={this.onMessage}
                 />
               </View>

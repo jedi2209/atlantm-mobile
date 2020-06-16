@@ -12,21 +12,17 @@ const script = `
   while (document.body.firstChild) {
       wrapper.appendChild(document.body.firstChild);
   }
-
   document.body.appendChild(wrapper);
-
   var i = 0;
   function updateHeight() {
       document.title = wrapper.clientHeight;
       window.location.hash = ++i;
   }
   updateHeight();
-
   window.addEventListener("load", function() {
       updateHeight();
       setTimeout(updateHeight, 1000);
   });
-
   window.addEventListener("resize", updateHeight);
   }());
 `;
@@ -86,7 +82,8 @@ const styleCSS = `
   </script>
 `;
 
-const codeInject = html => html.replace(BODY_TAG_PATTERN, styleCSS + '</body>');
+const codeInject = (html) =>
+  html.replace(BODY_TAG_PATTERN, styleCSS + '</body>');
 
 export default class WebViewAutoHeight extends PureComponent {
   static defaultProps = {
@@ -101,7 +98,7 @@ export default class WebViewAutoHeight extends PureComponent {
     };
   }
 
-  handleNavigationChange = navState => {
+  handleNavigationChange = (navState) => {
     if (navState.title) {
       const realContentHeight = parseInt(navState.title, 10) || 0; // turn NaN to 0
       this.setState({realContentHeight});

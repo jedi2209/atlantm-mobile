@@ -153,8 +153,8 @@ const MaskedPhone = {
 class Form extends Component {
   constructor(props) {
     super(props);
-    console.log('this.props.dealerSelected.region', this.props.dealerSelected.region);
-    this.defaultCountryCode = this.props.defaultCountryCode || this.props.dealerSelected.region || 'by';
+    this.defaultCountryCode =
+      this.props.defaultCountryCode || this.props.dealerSelected.region || 'by';
     this.state = {
       parentState: props.parentState,
       required: [],
@@ -569,9 +569,29 @@ class Form extends Component {
     },
     phone: (data, num, totalFields) => {
       let {name, id} = data;
+      let userPhoneValue;
+      let userPhoneRegion;
       let countryCode = this.defaultCountryCode;
       if (data.country && data.country.code) {
         countryCode = data.country.code.toLowerCase();
+      }
+
+      if (id && typeof this.state[name][id].value !== 'undefined') {
+        userPhoneValue = this.state[name][id].value;
+      } else {
+        userPhoneValue = this.state[name] || data.value;
+      }
+      if (userPhoneValue.indexOf('+375') === 0) {
+        userPhoneRegion = 'by';
+      }
+      if (userPhoneValue.indexOf('+7') === 0) {
+        userPhoneRegion = 'ru';
+      }
+      if (userPhoneValue.indexOf('+380') === 0) {
+        userPhoneRegion = 'ua';
+      }
+      if (userPhoneRegion && userPhoneRegion !== countryCode) {
+        countryCode = userPhoneRegion;
       }
       let mask;
 
@@ -633,6 +653,7 @@ class Form extends Component {
           initialCountry={countryCode}
           countriesList={require('@utils/countries.json')}
           offset={20}
+          autoFormat={true}
           cancelText="Отмена"
           confirmText="Выбрать"
           onSelectCountry={(countryCode) => {
@@ -653,19 +674,13 @@ class Form extends Component {
             }
           }}
           textComponent={() => {
-            let value;
-            if (id && typeof this.state[name][id].value !== 'undefined') {
-              value = this.state[name][id].value;
-            } else {
-              value = this.state[name] || data.value;
-            }
             return (
               <TextInputMask
                 key={'fieldInternal' + name + num}
                 ref={(ref) => {
                   this['phoneInputRefInternal' + name + num] = ref;
                 }}
-                value={value}
+                value={userPhoneValue}
                 placeholderTextColor={'#afafaf'}
                 placeholder={data.label}
                 keyboardType={'phone-pad'}
