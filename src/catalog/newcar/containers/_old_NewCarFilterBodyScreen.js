@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {SafeAreaView, View, StyleSheet} from 'react-native';
 import {
   Body,
   Label,
@@ -10,8 +10,8 @@ import {
 } from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
-import { actionSelectNewCarFilterBody } from '../../actions';
+import {connect} from 'react-redux';
+import {actionSelectNewCarFilterBody} from '../../actions';
 
 // components
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
@@ -20,7 +20,7 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
-import { get } from 'lodash';
+import {get} from 'lodash';
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ catalog, nav }) => {
+const mapStateToProps = ({catalog, nav}) => {
   return {
     nav,
     filterBody: catalog.newCar.filterBody,
@@ -46,17 +46,17 @@ const mapDispatchToProps = {
 };
 
 class NewCarFilterBodyScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: 'Тип кузова',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
-  })
+  });
 
   static propTypes = {
     navigation: PropTypes.object,
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
     return this.props.filterBody.length !== nextProps.filterBody.length;
@@ -64,26 +64,23 @@ class NewCarFilterBodyScreen extends Component {
 
   onPressItem = (selectedBody) => {
     requestAnimationFrame(() => {
-      const { filterBody } = this.props;
+      const {filterBody} = this.props;
       let newBody = [];
 
       if (this.isBodySelected(selectedBody)) {
-        newBody = filterBody.filter(body => body !== selectedBody);
+        newBody = filterBody.filter((body) => body !== selectedBody);
       } else {
         newBody = [].concat(filterBody, selectedBody);
       }
 
       this.props.actionSelectNewCarFilterBody(newBody);
     });
-  }
+  };
 
-  isBodySelected = bodyId => this.props.filterBody.includes(bodyId)
+  isBodySelected = (bodyId) => this.props.filterBody.includes(bodyId);
 
   render() {
-    const {
-      filterData,
-      filterBody,
-    } = this.props;
+    const {filterData, filterBody} = this.props;
 
     if (!filterData) return null;
 
@@ -96,28 +93,28 @@ class NewCarFilterBodyScreen extends Component {
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
           <Content>
-            {
-              bodyKeys.map((bodyId, idx) => {
-                const item = body[bodyId];
-                const handler = () => this.onPressItem(bodyId);
+            {bodyKeys.map((bodyId, idx) => {
+              const item = body[bodyId];
+              const handler = () => this.onPressItem(bodyId);
 
-                return (
-                  <View key={bodyId} style={stylesList.listItemContainer}>
-                    <ListItem
-                      last={(bodyKeys.length - 1) === idx}
-                      icon
-                      style={stylesList.listItemPressable}
+              return (
+                <View key={'oldBody' + bodyId} style={stylesList.listItemContainer}>
+                  <ListItem
+                    last={bodyKeys.length - 1 === idx}
+                    icon
+                    style={stylesList.listItemPressable}
+                    onPress={handler}>
+                    <CheckBox
                       onPress={handler}
-                    >
-                      <CheckBox onPress={handler} checked={this.isBodySelected(bodyId)} />
-                      <Body style={stylesList.bodyWithLeftGap} >
-                        <Label style={stylesList.label}>{item}</Label>
-                      </Body>
-                    </ListItem>
-                  </View>
-                );
-              })
-            }
+                      checked={this.isBodySelected(bodyId)}
+                    />
+                    <Body style={stylesList.bodyWithLeftGap}>
+                      <Label style={stylesList.label}>{item}</Label>
+                    </Body>
+                  </ListItem>
+                </View>
+              );
+            })}
           </Content>
         </SafeAreaView>
       </StyleProvider>
@@ -125,4 +122,7 @@ class NewCarFilterBodyScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewCarFilterBodyScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(NewCarFilterBodyScreen);

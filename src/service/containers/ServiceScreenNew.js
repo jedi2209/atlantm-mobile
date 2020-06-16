@@ -455,7 +455,7 @@ class ServiceScreen extends Component {
                             onValueChange={this.onValueChange2.bind(this)}>
                             {(this.state.services || []).map((item) => (
                               <Picker.Item
-                                key={item.id}
+                                key={'serviceToChoose' + item.id}
                                 label={item.name}
                                 value={item.id}
                               />

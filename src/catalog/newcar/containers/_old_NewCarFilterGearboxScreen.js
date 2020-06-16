@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {SafeAreaView, View, StyleSheet} from 'react-native';
 import {
   Body,
   Label,
@@ -10,8 +10,8 @@ import {
 } from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
-import { actionSelectNewCarFilterGearbox } from '../../actions';
+import {connect} from 'react-redux';
+import {actionSelectNewCarFilterGearbox} from '../../actions';
 
 // components
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
@@ -20,7 +20,7 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
-import { get } from 'lodash';
+import {get} from 'lodash';
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ catalog, nav }) => {
+const mapStateToProps = ({catalog, nav}) => {
   return {
     nav,
     filterGearbox: catalog.newCar.filterGearbox,
@@ -46,17 +46,17 @@ const mapDispatchToProps = {
 };
 
 class NewCarFilterGearboxScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: 'КПП',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
-  })
+  });
 
   static propTypes = {
     navigation: PropTypes.object,
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
     return this.props.filterGearbox.length !== nextProps.filterGearbox.length;
@@ -64,26 +64,26 @@ class NewCarFilterGearboxScreen extends Component {
 
   onPressItem = (selectedGearbox) => {
     requestAnimationFrame(() => {
-      const { filterGearbox } = this.props;
+      const {filterGearbox} = this.props;
       let newGearbox = [];
 
       if (this.isGearboxSelected(selectedGearbox)) {
-        newGearbox = filterGearbox.filter(gearbox => gearbox !== selectedGearbox);
+        newGearbox = filterGearbox.filter(
+          (gearbox) => gearbox !== selectedGearbox,
+        );
       } else {
         newGearbox = [].concat(filterGearbox, selectedGearbox);
       }
 
       this.props.actionSelectNewCarFilterGearbox(newGearbox);
     });
-  }
+  };
 
-  isGearboxSelected = gearboxId => this.props.filterGearbox.includes(gearboxId)
+  isGearboxSelected = (gearboxId) =>
+    this.props.filterGearbox.includes(gearboxId);
 
   render() {
-    const {
-      filterData,
-      filterGearbox,
-    } = this.props;
+    const {filterData, filterGearbox} = this.props;
 
     if (!filterData) return null;
 
@@ -96,28 +96,30 @@ class NewCarFilterGearboxScreen extends Component {
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
           <Content>
-            {
-              gearboxKeys.map((gearboxId, idx) => {
-                const item = gearbox[gearboxId];
-                const handler = () => this.onPressItem(gearboxId);
+            {gearboxKeys.map((gearboxId, idx) => {
+              const item = gearbox[gearboxId];
+              const handler = () => this.onPressItem(gearboxId);
 
-                return (
-                  <View key={gearboxId} style={stylesList.listItemContainer}>
-                    <ListItem
-                      icon
+              return (
+                <View
+                  key={'oldGearbox' + gearboxId}
+                  style={stylesList.listItemContainer}>
+                  <ListItem
+                    icon
+                    onPress={handler}
+                    last={gearboxKeys.length - 1 === idx}
+                    style={stylesList.listItemPressable}>
+                    <CheckBox
                       onPress={handler}
-                      last={(gearboxKeys.length - 1) === idx}
-                      style={stylesList.listItemPressable}
-                    >
-                      <CheckBox onPress={handler} checked={this.isGearboxSelected(gearboxId)} />
-                      <Body style={stylesList.bodyWithLeftGap} >
-                        <Label style={stylesList.label}>{item}</Label>
-                      </Body>
-                    </ListItem>
-                  </View>
-                );
-              })
-            }
+                      checked={this.isGearboxSelected(gearboxId)}
+                    />
+                    <Body style={stylesList.bodyWithLeftGap}>
+                      <Label style={stylesList.label}>{item}</Label>
+                    </Body>
+                  </ListItem>
+                </View>
+              );
+            })}
           </Content>
         </SafeAreaView>
       </StyleProvider>
@@ -125,4 +127,7 @@ class NewCarFilterGearboxScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewCarFilterGearboxScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(NewCarFilterGearboxScreen);

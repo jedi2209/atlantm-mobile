@@ -51,7 +51,7 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
   } else {
     filterBody =
       catalog.newCar.filterData && catalog.newCar.filterData.data.body
-        ? Object.keys(catalog.newCar.filterData.data.body).map(body => ({
+        ? Object.keys(catalog.newCar.filterData.data.body).map((body) => ({
             id: body,
             name: catalog.newCar.filterData.data.body[body],
           }))
@@ -68,7 +68,7 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
         isNotFilterBrands = true;
       } else {
         filterBrands = Object.keys(catalog.newCar.filterData.data.brand).map(
-          body => ({
+          (body) => ({
             id: body,
             checked: false,
             name: catalog.newCar.filterData.data.brand[body].name,
@@ -86,7 +86,7 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
   } else if (filterBrands && filterBrands.length > 0) {
     filterModels = filterBrands.reduce((acc, brand) => {
       if (brand.checked) {
-        Object.keys(brand.model).forEach(item => {
+        Object.keys(brand.model).forEach((item) => {
           acc.push({
             id: item,
             checked: false,
@@ -301,7 +301,7 @@ class NewCarFilterScreen extends Component {
       filterGearbox,
       filterDrive,
       filterEngineType,
-    ].some(filter => filter.length !== 0);
+    ].some((filter) => filter.length !== 0);
 
     if (filterPrice || filterPriceSpecial) {
       isItemsCount = true;
@@ -362,7 +362,7 @@ class NewCarFilterScreen extends Component {
                 <TouchableOpacity
                   key={'touchable-brand-' + id}
                   onPress={() => {
-                    const brands = this.state.brandFilters.map(brand =>
+                    const brands = this.state.brandFilters.map((brand) =>
                       brand.id === id
                         ? {...brand, checked: !brand.checked}
                         : brand,
@@ -370,7 +370,7 @@ class NewCarFilterScreen extends Component {
 
                     const filterModels = brands.reduce((acc, brand) => {
                       if (brand.checked) {
-                        Object.keys(brand.model).forEach(item => {
+                        Object.keys(brand.model).forEach((item) => {
                           acc.push({
                             id: item,
                             checked: false,
@@ -406,7 +406,7 @@ class NewCarFilterScreen extends Component {
                         fontSize: 40,
                       }}
                       onPress={() => {
-                        const brands = this.state.brandFilters.map(brand =>
+                        const brands = this.state.brandFilters.map((brand) =>
                           brand.id === id
                             ? {...brand, checked: !brand.checked}
                             : brand,
@@ -414,7 +414,7 @@ class NewCarFilterScreen extends Component {
 
                         const filterModels = brands.reduce((acc, brand) => {
                           if (brand.checked) {
-                            Object.keys(brand.model).forEach(item => {
+                            Object.keys(brand.model).forEach((item) => {
                               acc.push({
                                 id: item,
                                 checked: false,
@@ -454,7 +454,7 @@ class NewCarFilterScreen extends Component {
               max={
                 this.props.filterData.prices && this.props.filterData.prices.max
               }
-              onValuesChange={e => {
+              onValuesChange={(e) => {
                 this.setState({
                   priceFilter: {
                     ...this.state.priceFilter,
@@ -524,7 +524,7 @@ class NewCarFilterScreen extends Component {
                 <TouchableOpacity
                   onPress={() => {
                     this.setState({
-                      bodyFilters: this.state.bodyFilters.map(body =>
+                      bodyFilters: this.state.bodyFilters.map((body) =>
                         body.id === id
                           ? {...body, checked: !body.checked}
                           : body,
@@ -552,7 +552,7 @@ class NewCarFilterScreen extends Component {
                       }}
                       onPress={() => {
                         this.setState({
-                          bodyFilters: this.state.bodyFilters.map(body =>
+                          bodyFilters: this.state.bodyFilters.map((body) =>
                             body.id === id
                               ? {...body, checked: !body.checked}
                               : body,
@@ -590,7 +590,7 @@ class NewCarFilterScreen extends Component {
                 <TouchableOpacity
                   onPress={() => {
                     this.setState({
-                      modelFilter: this.state.modelFilter.map(model =>
+                      modelFilter: this.state.modelFilter.map((model) =>
                         model.id === id
                           ? {...model, checked: !model.checked}
                           : model,
@@ -618,7 +618,7 @@ class NewCarFilterScreen extends Component {
                       }}
                       onPress={() => {
                         this.setState({
-                          modelFilter: this.state.modelFilter.map(model =>
+                          modelFilter: this.state.modelFilter.map((model) =>
                             model.id === id
                               ? {...model, checked: !model.checked}
                               : model,
@@ -674,7 +674,7 @@ class NewCarFilterScreen extends Component {
               )}
             </View>
           )}
-          renderContent={item => {
+          renderContent={(item) => {
             return (
               <View
                 style={{
@@ -716,10 +716,7 @@ class NewCarFilterScreen extends Component {
     );
   }
 }
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(NewCarFilterScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(NewCarFilterScreen);
 
 // const ColorCheckbox = ({checked, color}) => {
 //   return (

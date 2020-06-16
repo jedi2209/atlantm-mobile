@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {SafeAreaView, View, StyleSheet} from 'react-native';
 import {
   Body,
   Label,
@@ -10,8 +10,8 @@ import {
 } from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
-import { actionSelectNewCarFilterDrive } from '../../actions';
+import {connect} from 'react-redux';
+import {actionSelectNewCarFilterDrive} from '../../actions';
 
 // components
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
@@ -20,7 +20,7 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
-import { get } from 'lodash';
+import {get} from 'lodash';
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ catalog, nav }) => {
+const mapStateToProps = ({catalog, nav}) => {
   return {
     nav,
     filterDrive: catalog.newCar.filterDrive,
@@ -46,17 +46,17 @@ const mapDispatchToProps = {
 };
 
 class NewCarFilterDriveScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: 'Привод',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />,
-  })
+  });
 
   static propTypes = {
     navigation: PropTypes.object,
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
     return this.props.filterDrive.length !== nextProps.filterDrive.length;
@@ -64,26 +64,23 @@ class NewCarFilterDriveScreen extends Component {
 
   onPressItem = (selectedDrive) => {
     requestAnimationFrame(() => {
-      const { filterDrive } = this.props;
+      const {filterDrive} = this.props;
       let newDrive = [];
 
       if (this.isDriveSelected(selectedDrive)) {
-        newDrive = filterDrive.filter(drive => drive !== selectedDrive);
+        newDrive = filterDrive.filter((drive) => drive !== selectedDrive);
       } else {
         newDrive = [].concat(filterDrive, selectedDrive);
       }
 
       this.props.actionSelectNewCarFilterDrive(newDrive);
     });
-  }
+  };
 
-  isDriveSelected = driveId => this.props.filterDrive.includes(driveId)
+  isDriveSelected = (driveId) => this.props.filterDrive.includes(driveId);
 
   render() {
-    const {
-      filterData,
-      filterDrive,
-    } = this.props;
+    const {filterData, filterDrive} = this.props;
 
     if (!filterData) return null;
 
@@ -96,28 +93,28 @@ class NewCarFilterDriveScreen extends Component {
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
           <Content>
-            {
-              driveKeys.map((driveId, idx) => {
-                const item = drive[driveId];
-                const handler = () => this.onPressItem(driveId);
+            {driveKeys.map((driveId, idx) => {
+              const item = drive[driveId];
+              const handler = () => this.onPressItem(driveId);
 
-                return (
-                  <View key={driveId} style={stylesList.listItemContainer}>
-                    <ListItem
-                      last={(driveKeys.length - 1) === idx}
-                      icon
-                      style={stylesList.listItemPressable}
+              return (
+                <View key={'oldDrive' + driveId} style={stylesList.listItemContainer}>
+                  <ListItem
+                    last={driveKeys.length - 1 === idx}
+                    icon
+                    style={stylesList.listItemPressable}
+                    onPress={handler}>
+                    <CheckBox
                       onPress={handler}
-                    >
-                      <CheckBox onPress={handler} checked={this.isDriveSelected(driveId)} />
-                      <Body style={stylesList.bodyWithLeftGap} >
-                        <Label style={stylesList.label}>{item}</Label>
-                      </Body>
-                    </ListItem>
-                  </View>
-                );
-              })
-            }
+                      checked={this.isDriveSelected(driveId)}
+                    />
+                    <Body style={stylesList.bodyWithLeftGap}>
+                      <Label style={stylesList.label}>{item}</Label>
+                    </Body>
+                  </ListItem>
+                </View>
+              );
+            })}
           </Content>
         </SafeAreaView>
       </StyleProvider>
@@ -125,4 +122,7 @@ class NewCarFilterDriveScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewCarFilterDriveScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(NewCarFilterDriveScreen);

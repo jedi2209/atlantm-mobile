@@ -198,17 +198,11 @@ class UserCarListScreen extends Component {
     });
   };
 
-  onPressCity = () => {
-    const {navigation} = this.props;
-    const returnScreenKey = navigation.state.key;
-    navigation.navigate('UsedCarCityScreen', {returnScreen: returnScreenKey});
-  };
-
   onPressPrice = () => {
     this.props.actionShowPriceFilter();
   };
 
-  onClosePrice = priceRange => {
+  onClosePrice = (priceRange) => {
     const {
       fetchUsedCar,
       actionHidePriceFilter,

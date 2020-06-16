@@ -372,51 +372,6 @@ class TvaResultsScreen extends Component {
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     );
-
-    return (
-      <StyleProvider style={getTheme()}>
-        <Container style={styles.safearea}>
-          <Content>
-            <Spinner visible={isMessageSending} color={styleConst.color.blue} />
-            <HeaderSubtitle content={textList} isBig={true} />
-            {(info || []).map((item) => {
-              return (
-                <TouchableOpacity
-                  key={item.id}
-                  onPress={this.onPressBack}
-                  style={styles.item}>
-                  <ListItemHeader
-                    textStyle={styles.itemTitle}
-                    radio={true}
-                    radioSelected={activeOrderId === item.id}
-                    text={`№ ${item.id}`}
-                    onPress={() => this.onPressOrder(item.id)}
-                  />
-                  {this.renderListItem('Мастер-приёмщик', item.name)}
-                  {this.renderListItem(
-                    'Время выдачи',
-                    this.processDate(item.date),
-                  )}
-                  {this.renderListItem('Статус', item.status, true)}
-                </TouchableOpacity>
-              );
-            })}
-
-            <ListItemHeader text="СООБЩЕНИЕ МАСТЕРУ" />
-
-            <MessageForm message={message} messageFill={actionTvaMessageFill} />
-
-            <View style={styles.button}>
-              <ButtonFull
-                text="ОТПРАВИТЬ"
-                arrow={true}
-                onPressButton={this.onPressMessageButton}
-              />
-            </View>
-          </Content>
-        </Container>
-      </StyleProvider>
-    );
   }
 }
 
