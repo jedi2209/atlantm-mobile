@@ -9,6 +9,7 @@ import {
   Platform,
   StatusBar,
   TouchableWithoutFeedback,
+  Alert,
 } from 'react-native';
 
 import {Text, Button, Switch} from 'native-base';
@@ -23,6 +24,7 @@ import TextInputMask from 'react-native-text-input-mask';
 import DealerItemList from '@core/components/DealerItemList';
 
 import styleConst from '@core/style-const';
+import { truncate } from 'lodash';
 
 const styles = StyleSheet.create({
   group: {
@@ -138,8 +140,10 @@ class Form extends Component {
     this.defaultCountryCode = this.props.defaultCountryCode || 'by';
     this.state = {
       parentState: props.parentState,
+      required: [],
     };
     this.inputRefs = [];
+    let requredFields = [];
     if (props.fields.groups) {
       props.fields.groups.map((group) => {
         group.fields.map((field) => {
@@ -158,6 +162,13 @@ class Form extends Component {
               this.state[field.name] = field.value;
             }
           }
+          if (field.props && field.props.required === true) {
+            requredFields.push({
+              name: field.name,
+              type: field.type,
+              label: field.label,
+            });
+          }
         });
       });
     } else {
@@ -169,8 +180,16 @@ class Form extends Component {
             this.state[field.name] = field.value;
           }
         }
+        if (field.props && field.props.required === true) {
+          requredFields.push({
+            name: field.name,
+            type: field.type,
+            label: field.label,
+          });
+        }
       });
     }
+    this.state.required = requredFields;
   }
 
   static propTypes = {
@@ -182,6 +201,39 @@ class Form extends Component {
     SubmitButton: PropTypes.object,
     parentState: PropTypes.object,
     onSubmit: PropTypes.func.isRequired,
+  };
+
+  _validate = () => {
+    if (this.state.required) {
+      let requredLabels = [];
+      this.state.required.map((val, index) => {
+        if (
+          typeof this.state[val.name] === 'undefined' ||
+          this.state[val.name] === ''
+        ) {
+          requredLabels.push(val.label);
+        }
+      });
+      if (requredLabels.length) {
+        if (requredLabels.length > 1) {
+          Alert.alert(
+            'Заполните пожалуйста обязательные поля',
+            '\r\n Поля ' +
+              requredLabels.join(', ') +
+              ' обязательны для заполнения',
+          );
+        } else {
+          Alert.alert(
+            'Заполните пожалуйста обязательное поле',
+            '\r\n Поле ' +
+              requredLabels.join(', ') +
+              ' обязательно для заполнения',
+          );
+        }
+        return false;
+      }
+    }
+    return true;
   };
 
   onChangeField = (field) => (valueNew) => {
@@ -248,7 +300,7 @@ class Form extends Component {
         <View
           style={[
             styles.field,
-            data.props.required
+            data.props && data.props.required
               ? !this.state[name]
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
@@ -279,7 +331,7 @@ class Form extends Component {
         <View
           style={[
             styles.field,
-            data.props.required
+            data.props && data.props.required
               ? !this.state[name]
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
@@ -353,7 +405,7 @@ class Form extends Component {
         <View
           style={[
             styles.field,
-            data.props.required && !this.state[name]
+            data.props && data.props.required && !this.state[name]
               ? !this.state[name]
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
@@ -390,7 +442,7 @@ class Form extends Component {
         <View
           style={[
             styles.field,
-            data.props.required && !this.state[name]
+            data.props && data.props.required && !this.state[name]
               ? !this.state[name]
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
@@ -527,14 +579,43 @@ class Form extends Component {
         mask = this.state['mask_' + name + num];
       }
 
+      let requiredStyle = null;
+
+      if (data.props && data.props.required) {
+        requiredStyle = styles.fieldRequiredFalse;
+        if (id) {
+          if (
+            this.state[name][id] &&
+            typeof this.state[name][id] !== 'undefined' &&
+            this.state[name][id].length
+          ) {
+            requiredStyle = styles.fieldRequiredTrue;
+          } else {
+            requiredStyle = styles.fieldRequiredFalse;
+          }
+        } else {
+          if (
+            this.state[name] &&
+            typeof this.state[name] !== 'undefined' &&
+            this.state[name].length
+          ) {
+            requiredStyle = styles.fieldRequiredTrue;
+          } else {
+            requiredStyle = styles.fieldRequiredFalse;
+          }
+        }
+      }
       return (
         <PhoneInput
-          style={{
+          style={[
+            requiredStyle,
+            {
             justifyContent: 'center',
             flex: 1,
             paddingHorizontal: 15,
             paddingVertical: 10,
-          }}
+            },
+          ]}
           ref={(ref) => {
             this['phoneInputRef' + name + (id || num)] = ref;
           }}
@@ -570,7 +651,10 @@ class Form extends Component {
             }
             return (
               <TextInputMask
-                key={'fieldInternal' + num + name}
+                key={'fieldInternal' + name + num}
+                ref={(ref) => {
+                  this['phoneInputRefInternal' + name + num] = ref;
+                }}
                 value={value}
                 placeholderTextColor={'#afafaf'}
                 placeholder={data.label}
@@ -748,18 +832,20 @@ class Form extends Component {
                     console.log('this.props', this.props);
                     console.log('onSubmit handler', this.state);
                   } else {
-                    this.setState({loading: true});
-                    const response = async () => {
-                      return new Promise((resolve, reject) => {
-                        const answer = this.props.onSubmit(this.state);
-                        if (answer) {
-                          resolve(answer);
-                        }
+                    if (this._validate()) {
+                      this.setState({loading: true});
+                      const response = async () => {
+                        return new Promise((resolve, reject) => {
+                          const answer = this.props.onSubmit(this.state);
+                          if (answer) {
+                            resolve(answer);
+                          }
+                        });
+                      };
+                      response().then(() => {
+                        this.setState({loading: false});
                       });
-                    };
-                    response().then(() => {
-                      this.setState({loading: false});
-                    });
+                    }
                   }
                 }
               }}

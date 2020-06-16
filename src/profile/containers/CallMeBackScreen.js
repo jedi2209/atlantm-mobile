@@ -159,8 +159,14 @@ class CallMeBackScreen extends React.Component {
 
   onPressCallMe = async (props) => {
     const isInternetExist = await isInternet();
+    let actionID = null;
 
-    const actionID = this.props.navigation.state.params.actionID || null;
+    if (
+      this.props.navigation.state.params &&
+      this.props.navigation.state.params.actionID
+    ) {
+      actionID = this.props.navigation.state.params.actionID;
+    }
 
     if (!isInternetExist) {
       return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
