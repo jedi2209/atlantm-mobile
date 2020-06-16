@@ -46,8 +46,12 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
     lastName: UserData.get('LAST_NAME'),
     phone: UserData.get('PHONE'),
     email: UserData.get('EMAIL'),
-    carName: UserData.get('CARNAME') ? UserData.get('CARNAME') : [profile.cars[0].brand, profile.cars[0].model].join(' '),
-    carNumber: UserData.get('CARNUMBER') ? UserData.get('CARNUMBER') : profile.cars[0].number,
+    carName: UserData.get('CARNAME')
+      ? UserData.get('CARNAME')
+      : [profile.cars[0].brand, profile.cars[0].model].join(' '),
+    carNumber: UserData.get('CARNUMBER')
+      ? UserData.get('CARNUMBER')
+      : profile.cars[0].number,
     carVIN: UserData.get('CARVIN'),
     dealerSelected: dealer.selected,
     isOrderServiceRequest: service.meta.isOrderServiceRequest,
@@ -496,7 +500,7 @@ class ServiceScreen extends Component {
                 label: 'Отчество',
                 value: this.props.secondName,
                 props: {
-                  textContentType: 'name',
+                  textContentType: 'middleName',
                 },
               },
               {
@@ -506,7 +510,7 @@ class ServiceScreen extends Component {
                 value: this.props.lastName,
                 props: {
                   required: true,
-                  textContentType: 'name',
+                  textContentType: 'familyName',
                 },
               },
               {
@@ -526,6 +530,7 @@ class ServiceScreen extends Component {
                 value: this.props.email,
                 props: {
                   required: true,
+                  textContentType: 'emailAddress',
                 },
               },
             ],

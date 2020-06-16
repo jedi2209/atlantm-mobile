@@ -38,9 +38,12 @@ const styles = StyleSheet.create({
   },
   item: {
     position: 'relative',
+    marginRight: 10,
   },
   photo: {
     borderRadius: 3,
+    borderWidth: 0.5,
+    borderColor: 'black',
   },
   removeIconContainer: {
     ...StyleSheet.absoluteFillObject,
@@ -75,8 +78,8 @@ export default class CarCostPhotos extends Component {
     // }
 
     // генерируем хендлеры для actionSheet для каждого фото
-    [1, 2, 3, 4, 5, 6].map(photoIndex => {
-      this[`handlePhotoPress${photoIndex}`] = i => {
+    [1, 2, 3, 4, 5, 6].map((photoIndex) => {
+      this[`handlePhotoPress${photoIndex}`] = (i) => {
         this.handlePhotoPress(i, photoIndex, props.photosFill);
       };
 
@@ -127,7 +130,7 @@ export default class CarCostPhotos extends Component {
     }
   }
 
-  renderItem = photoIndex => {
+  renderItem = (photoIndex) => {
     const {photos} = this.props;
     const photo = photos[photoIndex];
     const source = photo ? {uri: photo.path} : thumbs[photoIndex - 1];
@@ -173,28 +176,24 @@ export default class CarCostPhotos extends Component {
     );
   };
 
-  getItemWidth = contentWidth => (contentWidth - 50) / 3;
+  getItemWidth = (contentWidth) => ((contentWidth - 50) / 3) - 10;
 
-  onLayout = e => {
-    // if (!isTablet) {
+  onLayout = (e) => {
     return false;
-    // }
-
-    // const {width: contentWidth} = e.nativeEvent.layout;
-
-    // this.setState({itemWidth: this.getItemWidth(contentWidth)});
   };
 
   render() {
     return (
       <View style={styles.container} onLayout={this.onLayout}>
-        {[1, 2, 3, 4, 5, 6].map(photoIndex => {
+        {[1, 2, 3, 4, 5, 6].map((photoIndex) => {
           return (
             <ActionSheet
               key={photoIndex}
               cancelButtonIndex={0}
-              ref={component => (this[`actionSheet${photoIndex}`] = component)}
-              title="Прикрепить фотографии"
+              ref={(component) =>
+                (this[`actionSheet${photoIndex}`] = component)
+              }
+              title="Выбрать фото"
               options={['Отмена', 'Галерея', 'Камера']}
               onPress={this[`handlePhotoPress${photoIndex}`]}
             />

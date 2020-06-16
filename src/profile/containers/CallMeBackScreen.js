@@ -234,6 +234,9 @@ class CallMeBackScreen extends React.Component {
               <Form
                 fields={this.FormConfig.fields}
                 barStyle={'light-content'}
+                SubmitButton={{
+                  text: 'Жду звонка',
+                }}
                 onSubmit={this.onPressCallMe}
               />
             </View>
