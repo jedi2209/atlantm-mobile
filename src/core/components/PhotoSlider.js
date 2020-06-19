@@ -20,21 +20,27 @@ import styleConst from '@core/style-const';
 const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
+  container: {
+    zIndex: 10,
+  },
   photoSlider: {
     width,
     position: 'relative',
     padding: 0,
+    zIndex: 10,
   },
   item: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 0,
+    zIndex: 10,
   },
   image: {
     alignSelf: 'center',
     width,
     padding: 0,
+    zIndex: 10,
   },
   spinner: {
     position: 'absolute',
