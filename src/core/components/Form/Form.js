@@ -223,11 +223,23 @@ class Form extends Component {
   _validate = () => {
     if (this.state.required) {
       let requredLabels = [];
+      let valid = true;
       this.state.required.map((val, index) => {
-        if (
-          typeof this.state[val.name] === 'undefined' ||
-          this.state[val.name] === ''
-        ) {
+        valid = true;
+        switch (val.type.toLowerCase()) {
+          case 'email':
+            valid = this._validateEmail(this.state[val.name]);
+            break;
+          default:
+            if (
+              typeof this.state[val.name] === 'undefined' ||
+              this.state[val.name] === ''
+            ) {
+              valid = false;
+            }
+            break;
+        }
+        if (!valid) {
           requredLabels.push(val.label);
         }
       });
@@ -251,6 +263,12 @@ class Form extends Component {
       }
     }
     return true;
+  };
+
+  //returns true if valid, false if not valid
+  _validateEmail = (email) => {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Zа-яА-Я\-0-9]+\.)+[a-zA-Zа-яА-Я]{2,}))$/;
+    return re.test(email);
   };
 
   onChangeField = (field) => (valueNew) => {
@@ -386,9 +404,9 @@ class Form extends Component {
           style={[
             styles.field,
             data.props && data.props.required
-              ? !this.state[name]
-                ? styles.fieldRequiredFalse
-                : styles.fieldRequiredTrue
+              ? this.state[name] && this._validateEmail(value)
+                ? styles.fieldRequiredTrue
+                : styles.fieldRequiredFalse
               : null,
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
