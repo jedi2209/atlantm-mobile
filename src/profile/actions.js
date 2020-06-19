@@ -1,6 +1,6 @@
 import API from '../utils/api';
 
-import {get} from 'lodash';
+import {get, orderBy} from 'lodash';
 
 import {
   PROFILE_BONUS_LEVEL1__SET,
@@ -614,7 +614,7 @@ async function getProfileData({token, userid}) {
   const carsResponse = await API.fetchCars({token, userid});
   const carsResponseCode = get(carsResponse, 'error.code', 404);
   if (carsResponseCode === 200 && carsResponse.data) {
-    cars = carsResponse.data;
+    cars = orderBy(carsResponse.data, ['owner'], ['asc']);
   } else {
     //__DEV__ && console.log('error get profile cars', carsResponse);
   }
