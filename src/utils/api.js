@@ -47,14 +47,13 @@ export default {
     return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
   },
 
-  fetchVersion(version) {
+  async fetchVersion(version) {
     if (!version) {
       //console.log('version undefined', version);
       return false;
     }
     let requestedVersion = parseInt(version.replace(/\./gi, ''));
-    let req = this.request('/mobile/check/version/', baseRequestParams);
-    return req.then((res) => {
+    let req = await this.request('/mobile/check/version/', baseRequestParams).then((res) => {
       if (res && res.version) {
         let APPVersionFromApi = parseInt(res.version.replace(/\./gi, ''));
         if (APPVersionFromApi > requestedVersion) {
@@ -83,6 +82,7 @@ export default {
         }
       }
     });
+    return req;
   },
 
   fetchTva({dealer, region, number, pushTracking}) {
