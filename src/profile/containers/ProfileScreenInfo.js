@@ -66,9 +66,6 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {CarCard} from '../components/CarCard';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
-  //TODO: owner true должен быть показан первым
-  const cars = orderBy(profile.cars, ['owner'], ['asc']);
-
   return {
     nav,
     listRussia: dealer.listRussia,
@@ -81,7 +78,7 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
 
     isFetchProfileData: profile.meta.isFetchProfileData,
 
-    cars,
+    cars: profile.cars,
     login: profile.login,
     password: profile.password,
     isLoginRequest: profile.meta.isLoginRequest,

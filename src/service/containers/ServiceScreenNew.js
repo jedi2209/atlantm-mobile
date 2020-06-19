@@ -35,7 +35,7 @@ import {carFill, nameFill, phoneFill, emailFill} from '../../profile/actions';
 import API from '../../utils/api';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
-  const cars = orderBy(profile.cars, ['owner'], ['desc']);
+  const cars = orderBy(profile.cars, ['owner'], ['asc']);
 
   let carLocalName = '';
   let carLocalNumber = '';
@@ -240,7 +240,7 @@ class ServiceScreen extends Component {
         service: undefined,
         serviceInfo: undefined,
       });
-      this._getServices();
+      // this._getServices();
     }
   }
 
@@ -414,6 +414,7 @@ class ServiceScreen extends Component {
                                 carNumber: item.number,
                                 carVIN: item.vin,
                               });
+                              this._getServices();
                             }}>
                             <View>
                               <CarCard
