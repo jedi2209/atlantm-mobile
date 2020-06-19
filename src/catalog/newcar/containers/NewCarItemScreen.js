@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {
   View,
+  TouchableOpacity,
   Text,
   ActivityIndicator,
   TouchableHighlight,
@@ -71,35 +72,64 @@ const mapDispatchToProps = {
   actionUpdateNewCarPhotoViewerIndex,
 };
 
-const OptionPlate = ({title, subtitle}) => (
-  <View
-    style={{
-      borderRadius: 10,
-      backgroundColor: '#0061ED',
-      paddingHorizontal: 12,
-      // paddingTop: 10,
-      // paddingBottom: 10,
-      marginRight: 8,
-      height: 52,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}>
-    <Text
-      style={{
-        color: '#d8d8d8',
-        fontSize: 14,
-        fontWeight: '300',
-        paddingBottom: 5,
-      }}>
-      {title}
-    </Text>
-    <Text style={{color: '#fff', fontSize: 14, fontWeight: '600'}}>
-      {subtitle}
-    </Text>
-  </View>
-);
+const ActiveComponentPlate = ({onPress, children}) => {
+  return onPress ? (
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.6}
+      underlayColor="#DDDDDD">
+      {children}
+    </TouchableOpacity>
+  ) : (
+    <View>{children}</View>
+  );
+};
+
+const OptionPlate = ({
+  onPress,
+  title,
+  subtitle,
+  viewStyle,
+  titleStyle,
+  textStyle,
+}) => {
+  return (
+    <ActiveComponentPlate onPress={onPress}>
+      <View
+        style={[
+          {
+            borderRadius: 10,
+            backgroundColor: '#0061ED',
+            paddingHorizontal: 12,
+            marginRight: 8,
+            height: 52,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+          viewStyle,
+        ]}>
+        <Text
+          style={[
+            {
+              color: '#d8d8d8',
+              fontSize: 14,
+              fontWeight: '300',
+              paddingBottom: 5,
+            },
+            titleStyle,
+          ]}>
+          {title}
+        </Text>
+        <Text
+          style={[{color: '#fff', fontSize: 14, fontWeight: '600'}, textStyle]}>
+          {subtitle}
+        </Text>
+      </View>
+    </ActiveComponentPlate>
+  );
+};
 
 class NewCarItemScreen extends Component {
   static propTypes = {
@@ -204,10 +234,6 @@ class NewCarItemScreen extends Component {
 
   onChangePhotoIndex = (index) =>
     this.props.actionUpdateNewCarPhotoViewerIndex(index);
-
-  // selectBaseTab = () => this.setState({tabName: 'base'});
-
-  // selectOptionsTab = () => this.setState({tabName: 'options'});
 
   renderDealer = (dealerName) => {
     return dealerName ? (
@@ -320,7 +346,7 @@ class NewCarItemScreen extends Component {
                     <Text
                       style={styles.sectionPropText}
                       ellipsizeMode="tail"
-                      numberOfLines={1}>
+                      numberOfLines={2}>
                       {item.name}
                     </Text>
                   </Col>
@@ -507,23 +533,27 @@ class NewCarItemScreen extends Component {
           <ScrollView>
             <StatusBar hidden />
             <View style={{flex: 1, position: 'relative'}}>
-              <ColorBox
-                containerStyle={{
-                  position: 'absolute',
-                  right: 0,
-                  top: 270,
-                  zIndex: 100,
-                  padding: 20,
-                }}
-                color={get(carDetails, 'color')}
-              />
               <View
                 style={{
                   position: 'absolute',
                   height: 400,
                   width: '100%',
+                  zIndex: 100,
                   marginTop: CarImgReal ? -12 : -12,
                 }}>
+                <ColorBox
+                  ref={(input) => {
+                    return (this.ColorBox = input);
+                  }}
+                  containerStyle={{
+                    position: 'absolute',
+                    right: 0,
+                    top: 280,
+                    zIndex: 1000,
+                    padding: 20,
+                  }}
+                  color={get(carDetails, 'color')}
+                />
                 <PhotoSlider
                   height={370}
                   photos={photos}
@@ -616,6 +646,9 @@ class NewCarItemScreen extends Component {
                     ) : null}
                     {get(carDetails, 'color.name.simple') ? (
                       <OptionPlate
+                        onPress={() => {
+                          this.ColorBox.click();
+                        }}
                         title="Цвет"
                         subtitle={get(
                           carDetails,
@@ -667,10 +700,6 @@ class NewCarItemScreen extends Component {
                       content: (
                         <View>
                           {this.renderTechData('Основные', [
-                            {
-                              name: 'Цвет',
-                              value: 'color.name.official',
-                            },
                             {
                               name: 'Тип кузова',
                               value: 'body.name',
@@ -764,17 +793,17 @@ class NewCarItemScreen extends Component {
                                 postfix: 'сек.',
                               },
                               {
-                                name: 'Расход топлива (городской цикл)',
+                                name: 'Расход топлива (город)',
                                 value: 'fuel.city',
                                 postfix: 'л.',
                               },
                               {
-                                name: 'Расход топлива (загородный цикл)',
+                                name: 'Расход топлива (трасса)',
                                 value: 'fuel.track',
                                 postfix: 'л.',
                               },
                               {
-                                name: 'Расход топлива (смешанный цикл)',
+                                name: 'Расход топлива (смешанный)',
                                 value: 'fuel.both',
                                 postfix: 'л.',
                               },

@@ -62,12 +62,16 @@ export default StyleSheet.create({
   },
   sectionProp: {
     paddingRight: 5,
+    width: '60%',
   },
   sectionPropText: {
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
     fontSize: 15,
     color: styleConst.color.greyText5,
+  },
+  sectionValue: {
+    width: '40%',
   },
   sectionValueText: {
     letterSpacing: styleConst.ui.letterSpacing,

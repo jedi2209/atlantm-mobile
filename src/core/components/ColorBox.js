@@ -20,6 +20,8 @@ const styles = StyleSheet.create({
 export default class ColorBox extends PureComponent {
   static propTypes = {
     color: PropTypes.string,
+    touchableStyle: PropTypes.object,
+    containerStyle: PropTypes.object,
   };
 
   constructor(props) {
@@ -30,6 +32,12 @@ export default class ColorBox extends PureComponent {
     };
   }
 
+  click() {
+    this.setState({
+      isModalVisible: true,
+    });
+  }
+
   render() {
     const {color} = this.props;
     const backgroundColor =
@@ -37,7 +45,7 @@ export default class ColorBox extends PureComponent {
         ? color.picker.codes.hex
         : 'none';
     return (
-      <View>
+      <View style={[this.props.containerStyle]}>
         <ModalView
           isModalVisible={this.state.isModalVisible}
           animationIn="slideInRight"
@@ -83,7 +91,7 @@ export default class ColorBox extends PureComponent {
               isModalVisible: true,
             });
           }}
-          style={[this.props.containerStyle]}
+          style={[this.props.touchableStyle]}
           underlayColor={'none'}>
           <View
             style={[
