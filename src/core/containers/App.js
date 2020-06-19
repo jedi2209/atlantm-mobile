@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {PureComponent} from 'react';
-import {View, TouchableOpacity, Text, ActivityIndicator} from 'react-native';
+import {View, ActivityIndicator} from 'react-native';
 import {createAppContainer, NavigationActions} from 'react-navigation';
 
 // redux
@@ -27,9 +27,8 @@ import DeviceInfo from 'react-native-device-info';
 // routes
 import {getRouter} from '../router';
 
-const mapStateToProps = ({core, dealer, profile, modal}) => {
+const mapStateToProps = ({core, dealer, modal}) => {
   return {
-    //     pushActionSubscribeState: core.pushActionSubscribeState,
     dealerSelected: dealer.selected,
     menuOpenedCount: core.menuOpenedCount,
     isStoreUpdated: core.isStoreUpdated,
@@ -79,6 +78,7 @@ class App extends PureComponent {
     if (
       currentDealer &&
       typeof isStoreUpdated !== 'undefined' &&
+      isStoreUpdated !== false &&
       isStoreUpdated !== storeVersion
     ) {
       this.setState({
