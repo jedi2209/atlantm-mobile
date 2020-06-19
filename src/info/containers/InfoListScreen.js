@@ -141,22 +141,31 @@ class InfoListScreen extends Component {
       pushActionSubscribeState,
     } = this.props;
 
+    let text,
+      title = '';
+
     if (pushActionSubscribeState === false) {
       PushNotifications.subscribeToTopic('actions', dealerSelected.id).then(
-        isPermission => {
+        (isPermission) => {
           actionSetPushActionSubscribe(isPermission);
           this.props.navigation.setParams({
             pushActionSubscribeState: isPermission,
           });
         },
       );
+      title = 'Всё получилось!';
+      text =
+        'Вы успешно подписались на получение PUSH-уведомлений!\r\n\r\nОни не будут часто приходить, только лишь при появлении новых интересующих вас акций.';
     } else {
       PushNotifications.unsubscribeFromTopic('actions');
       actionSetPushActionSubscribe(false);
       this.props.navigation.setParams({
         pushActionSubscribeState: false,
       });
+      title = 'Мы грустим =(';
+      text = 'Нам будет вас не хватать...\r\nВозвращайтесь скорее!';
     }
+    Alert.alert(title, text);
   };
 
   componentDidMount() {
@@ -176,7 +185,7 @@ class InfoListScreen extends Component {
 
     if (!isFetchInfoList) {
       actionListReset();
-      fetchInfoList(region, dealer).then(action => {
+      fetchInfoList(region, dealer).then((action) => {
         if (action.type === INFO_LIST__FAIL) {
           let message = get(
             action,
@@ -221,7 +230,7 @@ class InfoListScreen extends Component {
     return isActiveScreen;
   }
 
-  renderItem = data => {
+  renderItem = (data) => {
     return (
       <View
         style={[
@@ -285,7 +294,7 @@ class InfoListScreen extends Component {
             ListEmptyComponent={this.renderEmptyComponent}
             style={styles.list}
             renderItem={this.renderItem}
-            keyExtractor={item => `${item.hash.toString()}`}
+            keyExtractor={(item) => `${item.hash.toString()}`}
           />
         </Container>
       </StyleProvider>
@@ -293,7 +302,4 @@ class InfoListScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(InfoListScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(InfoListScreen);
