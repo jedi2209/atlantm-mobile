@@ -659,39 +659,39 @@ class UserCarItemScreen extends Component {
                 </View>
               </View>
             </View>
-            <View style={stylesFooter.footer}>
-              <View
-                style={[
-                  styleConst.shadow.default,
-                  stylesFooter.orderPriceContainer,
-                  stylesFooter.orderPriceContainerNotSale,
-                ]}>
-                <Text
-                  style={[styles.orderPriceText, styles.orderPriceDefaultText]}>
-                  {showPrice(
-                    CarPrices.standart,
-                    this.props.dealerSelected.region,
-                  )}
-                </Text>
-              </View>
-              <Button
-                onPress={this.onPressOrder}
-                full
-                style={[styleConst.shadow.default, stylesFooter.button]}>
-                <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
-              </Button>
-            </View>
-            {photoViewerItems.length ? (
-              <PhotoViewer
-                index={photoViewerIndex}
-                visible={photoViewerVisible}
-                items={photoViewerItems}
-                enableScale={true}
-                onChange={this.onChangePhotoIndex}
-                onPressClose={this.onClosePhoto}
-              />
-            ) : null}
           </ScrollView>
+          <View style={stylesFooter.footer}>
+            <View
+              style={[
+                styleConst.shadow.default,
+                stylesFooter.orderPriceContainer,
+                stylesFooter.orderPriceContainerNotSale,
+              ]}>
+              <Text
+                style={[styles.orderPriceText, styles.orderPriceDefaultText]}>
+                {showPrice(
+                  CarPrices.standart,
+                  this.props.dealerSelected.region,
+                )}
+              </Text>
+            </View>
+            <Button
+              onPress={this.onPressOrder}
+              full
+              style={[styleConst.shadow.default, stylesFooter.button]}>
+              <Text style={styles.buttonText} selectable={false}>ХОЧУ ЭТО АВТО!</Text>
+            </Button>
+          </View>
+          {photoViewerItems.length ? (
+            <PhotoViewer
+              index={photoViewerIndex}
+              visible={photoViewerVisible}
+              items={photoViewerItems}
+              enableScale={true}
+              onChange={this.onChangePhotoIndex}
+              onPressClose={this.onClosePhoto}
+            />
+          ) : null}
         </View>
       </StyleProvider>
     );

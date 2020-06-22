@@ -1,41 +1,46 @@
-export default function(price, country) {
-  if (!country) {
-    country = 'BY';
-  }
+import {Platform} from 'react-native';
 
-  let country_code = 'be-BE',
+const isAndroid = Platform.OS === 'android';
+
+export default function (price, country = 'BY') {
+  let country_code = 'ru-BE',
     currency_code = 'BYN',
-    currency_show = 'symbol';
+    currency_show = 'symbol',
+    options = {
+      style: 'currency',
+      currencyDisplay: 'code',
+      minimumFractionDigits: 0,
+    };
 
   switch (country.toLowerCase()) {
     case 'ru':
     case 'rub':
     case 'rur':
       country_code = 'ru-RU';
-      currency_code = 'RUB';
-      currency_show = 'symbol';
-      // currency_code = 'руб.';
+      options = {
+        ...options,
+        currencyDisplay: 'symbol',
+        currency: 'RUB',
+      };
       break;
     case 'by':
     case 'byn':
-      country_code = 'be-BE';
-      // currency_code = 'byn';
-      currency_code = 'BYN';
-      currency_show = 'code';
+      options = {
+        ...options,
+        currency: 'BYN',
+      };
+      country_code = 'ru-BE';
+      // isAndroid
       break;
     case 'ua':
     case 'uah':
-      country_code = 'ua-UA';
-      // currency_code = 'грн.';
-      currency_code = 'UAH';
-      currency_show = 'code';
+      country_code = 'ru-UA';
+      options = {
+        ...options,
+        currency: 'UAH',
+      };
       break;
   }
 
-  return parseInt(price, 10).toLocaleString(country_code, {
-    style: 'currency',
-    currencyDisplay: currency_show,
-    currency: currency_code,
-    minimumFractionDigits: 0,
-  });
+  return parseInt(price, 10).toLocaleString(country_code, options);
 }
