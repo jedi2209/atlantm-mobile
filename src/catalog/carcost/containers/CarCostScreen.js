@@ -60,13 +60,17 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({dealer, profile, nav, catalog}) => {
   const carCost = get(catalog, 'carCost', {});
-  let carLocalName = '';
+  let carLocalBrand = '';
+  let carLocalModel = '';
   let carLocalNumber = '';
   let carLocalVin = '';
 
   if (profile.cars && profile.cars[0]) {
-    if (profile.cars[0].brand && profile.cars[0].model) {
-      carLocalName = [profile.cars[0].brand, profile.cars[0].model].join(' ');
+    if (profile.cars[0].brand) {
+      carLocalBrand = profile.cars[0].brand;
+    }
+    if (profile.cars[0].model) {
+      carLocalModel = profile.cars[0].model;
     }
     if (profile.cars[0].number) {
       carLocalNumber = profile.cars[0].number || '';
@@ -84,7 +88,12 @@ const mapStateToProps = ({dealer, profile, nav, catalog}) => {
     lastName: UserData.get('LAST_NAME'),
     phone: UserData.get('PHONE'),
     email: UserData.get('EMAIL'),
-    carName: UserData.get('CARNAME') ? UserData.get('CARNAME') : carLocalName,
+    carBrand: UserData.get('CARBRAND')
+      ? UserData.get('CARBRAND')
+      : carLocalBrand,
+    carModel: UserData.get('CARMODEL')
+      ? UserData.get('CARMODEL')
+      : carLocalModel,
     carNumber: UserData.get('CARNUMBER')
       ? UserData.get('CARNUMBER')
       : carLocalNumber,
@@ -305,14 +314,29 @@ class CarCostScreen extends Component {
             name: 'Автомобиль',
             fields: [
               {
-                name: 'CARNAME',
-                type: 'input',
-                label: 'Марка и модель',
-                value: this.props.carName,
-                props: {
-                  required: true,
-                  placeholder: null,
-                },
+                name: 'Автомобиль',
+                fields: [
+                  {
+                    name: 'CARBRAND',
+                    type: 'input',
+                    label: 'Марка',
+                    value: this.props.carBrand,
+                    props: {
+                      required: true,
+                      placeholder: null,
+                    },
+                  },
+                  {
+                    name: 'CARMODEL',
+                    type: 'input',
+                    label: 'Модель',
+                    value: this.props.carModel,
+                    props: {
+                      required: true,
+                      placeholder: null,
+                    },
+                  },
+                ],
               },
               {
                 name: 'CARVIN',
@@ -339,16 +363,16 @@ class CarCostScreen extends Component {
                     value: null,
                     color: '#9EA0A4',
                   },
-                  Icon: () => {
-                    return (
-                      <Icon
-                        type="MaterialIcons"
-                        name="date-range"
-                        size={24}
-                        color="gray"
-                      />
-                    );
-                  },
+                  // Icon: () => {
+                  //   return (
+                  //     <Icon
+                  //       type="MaterialIcons"
+                  //       name="date-range"
+                  //       size={24}
+                  //       color="gray"
+                  //     />
+                  //   );
+                  // },
                 },
               },
               // {
@@ -398,16 +422,16 @@ class CarCostScreen extends Component {
                     value: null,
                     color: '#9EA0A4',
                   },
-                  Icon: () => {
-                    return (
-                      <Icon
-                        type="MaterialCommunityIcons"
-                        name="engine"
-                        size={24}
-                        color="gray"
-                      />
-                    );
-                  },
+                  // Icon: () => {
+                  //   return (
+                  //     <Icon
+                  //       type="MaterialCommunityIcons"
+                  //       name="engine"
+                  //       size={24}
+                  //       color="gray"
+                  //     />
+                  //   );
+                  // },
                 },
               },
               {
@@ -433,16 +457,16 @@ class CarCostScreen extends Component {
                     value: null,
                     color: '#9EA0A4',
                   },
-                  Icon: () => {
-                    return (
-                      <Icon
-                        type="FontAwesome"
-                        name="gears"
-                        size={24}
-                        color="red"
-                      />
-                    );
-                  },
+                  // Icon: () => {
+                  //   return (
+                  //     <Icon
+                  //       type="FontAwesome"
+                  //       name="gears"
+                  //       size={24}
+                  //       color="red"
+                  //     />
+                  //   );
+                  // },
                 },
               },
             ],
@@ -475,7 +499,6 @@ class CarCostScreen extends Component {
                 label: 'Фамилия',
                 value: this.props.lastName,
                 props: {
-                  required: true,
                   textContentType: 'familyName',
                 },
               },
@@ -486,7 +509,6 @@ class CarCostScreen extends Component {
                 value: this.props.phone,
                 props: {
                   required: true,
-                  textContentType: 'phone',
                 },
               },
               {

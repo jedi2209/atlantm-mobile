@@ -29,15 +29,11 @@ import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
   let carLocalName = '';
-  let carLocalNumber = '';
   let carLocalVin = '';
 
   if (profile.cars && profile.cars[0]) {
     if (profile.cars[0].brand && profile.cars[0].model) {
       carLocalName = [profile.cars[0].brand, profile.cars[0].model].join(' ');
-    }
-    if (profile.cars[0].number) {
-      carLocalNumber = profile.cars[0].number || '';
     }
 
     if (profile.cars[0].vin) {
@@ -58,10 +54,12 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
     email: UserData.get('EMAIL')
       ? UserData.get('EMAIL')
       : UserData.get('EMAIL'),
-    carName: UserData.get('CARNAME') ? UserData.get('CARNAME') : carLocalName,
-    carNumber: UserData.get('CARNUMBER')
-      ? UserData.get('CARNUMBER')
-      : carLocalNumber,
+    carBrand: UserData.get('CARBRAND')
+      ? UserData.get('CARBRAND')
+      : carLocalBrand,
+    carModel: UserData.get('CARMODEL')
+      ? UserData.get('CARMODEL')
+      : carLocalModel,
     carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
     profile,
     isOrderServiceRequest: service.meta.isOrderServiceRequest,
@@ -115,6 +113,31 @@ class ServiceScreen extends Component {
             ],
           },
           {
+            name: 'Автомобиль',
+            fields: [
+              {
+                name: 'CARBRAND',
+                type: 'input',
+                label: 'Марка',
+                value: this.props.carBrand,
+                props: {
+                  required: true,
+                  placeholder: null,
+                },
+              },
+              {
+                name: 'CARMODEL',
+                type: 'input',
+                label: 'Модель',
+                value: this.props.carModel,
+                props: {
+                  required: true,
+                  placeholder: null,
+                },
+              },
+            ],
+          },
+          {
             name: 'Контактные данные',
             fields: [
               {
@@ -133,7 +156,7 @@ class ServiceScreen extends Component {
                 label: 'Отчество',
                 value: this.props.secondName,
                 props: {
-                  textContentType: 'name',
+                  textContentType: 'middleName',
                 },
               },
               {
@@ -142,8 +165,7 @@ class ServiceScreen extends Component {
                 label: 'Фамилия',
                 value: this.props.lastName,
                 props: {
-                  required: true,
-                  textContentType: 'name',
+                  textContentType: 'familyName',
                 },
               },
               {
@@ -153,7 +175,6 @@ class ServiceScreen extends Component {
                 value: this.props.phone,
                 props: {
                   required: true,
-                  textContentType: 'phone',
                 },
               },
               {
@@ -162,32 +183,7 @@ class ServiceScreen extends Component {
                 label: 'Email',
                 value: this.props.email,
                 props: {
-                  required: true,
-                },
-              },
-            ],
-          },
-          {
-            name: 'Автомобиль',
-            fields: [
-              {
-                name: 'CARNAME',
-                type: 'input',
-                label: 'Марка и модель',
-                value: this.props.carName,
-                props: {
-                  placeholder: null,
-                  required: true,
-                },
-              },
-              {
-                name: 'CARNUMBER',
-                type: 'input',
-                label: 'Гос.номер',
-                value: this.props.carNumber,
-                props: {
-                  required: true,
-                  placeholder: null,
+                  required: false,
                 },
               },
             ],
@@ -269,7 +265,6 @@ class ServiceScreen extends Component {
           PHONE: props.PHONE,
           EMAIL: props.EMAIL,
           CARNAME: props.CARNAME,
-          CARNUMBER: props.CARNUMBER,
         });
         Alert.alert(
           'Ваша заявка успешно отправлена',

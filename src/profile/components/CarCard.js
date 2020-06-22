@@ -29,6 +29,8 @@ export const CarCard = ({data, type, checked}) => {
           width: 150,
           justifyContent: 'space-between',
           paddingBottom: 40,
+          marginBottom: 15,
+          marginTop: 15,
           height: 155,
         },
       ]}>
@@ -36,6 +38,7 @@ export const CarCard = ({data, type, checked}) => {
         <Text
           ellipsizeMode="tail"
           numberOfLines={1}
+          selectable={false}
           style={{
             color: styleConst.color.greyText,
             fontSize: 14,
@@ -59,6 +62,7 @@ export const CarCard = ({data, type, checked}) => {
       <Icon
         name="car"
         type="FontAwesome5"
+        selectable={false}
         style={{
           fontSize: 54,
           color: '#0061ed',

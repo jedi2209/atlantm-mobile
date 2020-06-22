@@ -159,7 +159,7 @@ class OrderScreen extends Component {
                 label: 'Отчество',
                 value: this.props.secondName,
                 props: {
-                  textContentType: 'name',
+                  textContentType: 'middleName',
                 },
               },
               {
@@ -168,8 +168,7 @@ class OrderScreen extends Component {
                 label: 'Фамилия',
                 value: this.props.lastName,
                 props: {
-                  required: true,
-                  textContentType: 'name',
+                  textContentType: 'familyName',
                 },
               },
               {
@@ -179,7 +178,6 @@ class OrderScreen extends Component {
                 value: this.props.phone,
                 props: {
                   required: true,
-                  textContentType: 'phone',
                 },
               },
               {
