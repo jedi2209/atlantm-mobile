@@ -344,7 +344,6 @@ class CarCostScreen extends Component {
                 label: 'VIN номер',
                 value: this.props.carVIN,
                 props: {
-                  required: true,
                   placeholder: null,
                 },
               },
