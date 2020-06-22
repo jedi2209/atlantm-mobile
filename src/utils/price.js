@@ -1,11 +1,9 @@
-import {Platform} from 'react-native';
+// import {Platform} from 'react-native';
 
-const isAndroid = Platform.OS === 'android';
+// const isAndroid = Platform.OS === 'android';
 
 export default function (price, country = 'BY') {
   let country_code = 'ru-BE',
-    currency_code = 'BYN',
-    currency_show = 'symbol',
     options = {
       style: 'currency',
       currencyDisplay: 'code',

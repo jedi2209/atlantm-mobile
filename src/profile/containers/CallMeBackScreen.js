@@ -114,7 +114,6 @@ class CallMeBackScreen extends React.Component {
                 value: this.props.phone,
                 props: {
                   required: true,
-                  textContentType: 'phone',
                 },
               },
             ],

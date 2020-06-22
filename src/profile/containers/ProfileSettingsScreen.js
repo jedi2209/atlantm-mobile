@@ -36,9 +36,6 @@ class ProfileSettingsScreen extends Component {
 
   constructor(props) {
     super(props);
-
-    let car = '';
-
     const {
       NAME,
       LAST_NAME,
@@ -85,10 +82,6 @@ class ProfileSettingsScreen extends Component {
     }
 
     this.state = {
-      firstName: NAME || '',
-      secondName: SECOND_NAME || '',
-      lastName: LAST_NAME || '',
-      birthdate: birthdate || '',
       email: emailData || [],
       phone: phoneData || [],
       success: false,
@@ -105,7 +98,7 @@ class ProfileSettingsScreen extends Component {
                 name: 'NAME',
                 type: 'input',
                 label: 'Имя',
-                value: this.state.firstName,
+                value: NAME || '',
                 props: {
                   required: true,
                   textContentType: 'name',
@@ -115,7 +108,7 @@ class ProfileSettingsScreen extends Component {
                 name: 'SECOND_NAME',
                 type: 'input',
                 label: 'Отчество',
-                value: this.state.secondName,
+                value: SECOND_NAME || '',
                 props: {
                   textContentType: 'middleName',
                 },
@@ -124,9 +117,8 @@ class ProfileSettingsScreen extends Component {
                 name: 'LAST_NAME',
                 type: 'input',
                 label: 'Фамилия',
-                value: this.state.lastName,
+                value: LAST_NAME || '',
                 props: {
-                  required: true,
                   textContentType: 'familyName',
                 },
               },
@@ -163,7 +155,7 @@ class ProfileSettingsScreen extends Component {
                 name: 'BIRTHDATE',
                 type: 'date',
                 label: 'Когда у вас день рождения?',
-                value: this.state.birthdate,
+                value: birthdate || '',
                 props: {
                   placeholder: null,
                   maxDate: new Date(substractYears(18)),

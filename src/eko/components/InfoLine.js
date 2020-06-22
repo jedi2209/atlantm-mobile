@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, StyleSheet } from 'react-native';
-import { Icon } from 'native-base';
+import {Text, View, StyleSheet} from 'react-native';
+import {Icon} from 'native-base';
 
 // helpers
 import styleConst from '../../core/style-const';
@@ -41,16 +41,18 @@ export default class InfoLine extends Component {
     text: PropTypes.string.isRequired,
     infoIcon: PropTypes.bool,
     gap: PropTypes.bool,
-  }
+  };
 
   render() {
-    const { gap, text, infoIcon } = this.props;
+    const {gap, text, infoIcon} = this.props;
 
     if (!text) return null;
 
     return (
       <View style={[styles.container, gap ? styles.gap : null]}>
-        {infoIcon ? <Icon name="ios-information-circle-outline" style={styles.icon} /> : null}
+        {infoIcon ? (
+          <Icon name="ios-information-circle-outline" style={styles.icon} />
+        ) : null}
         <View style={styles.textContainer}>
           <Text style={styles.text}>{text}</Text>
         </View>

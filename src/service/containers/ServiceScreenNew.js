@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {
   StyleSheet,
   View,
@@ -11,21 +10,19 @@ import {
   Keyboard,
   ActivityIndicator,
   Platform,
-  StatusBar,
   TouchableOpacity,
 } from 'react-native';
-import {Icon, Picker, Button} from 'native-base';
+import {Icon} from 'native-base';
 import {orderBy} from 'lodash';
 import styleConst from '@core/style-const';
 
 import {CarCard} from '../../profile/components/CarCard';
-import ChooseDateTimeComponent from '../components/ChooseDateTimeComponent';
-import {TextInput} from '../../core/components/TextInput';
 import {ServiceModal} from '../components/ServiceModal';
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
 import {addDays, dayMonthYear} from '../../utils/date';
 import UserData from '../../utils/user';
+import RenderPrice from '../../utils/price';
 
 // redux
 import {connect} from 'react-redux';
@@ -37,16 +34,16 @@ import API from '../../utils/api';
 const mapStateToProps = ({dealer, profile, service, nav}) => {
   const cars = orderBy(profile.cars, ['owner'], ['asc']);
 
-  let carLocalName = '';
-  let carLocalNumber = '';
+  let carLocalBrand = '';
+  let carLocalModel = '';
   let carLocalVin = '';
 
   if (profile.cars && profile.cars[0]) {
-    if (profile.cars[0].brand && profile.cars[0].model) {
-      carLocalName = [profile.cars[0].brand, profile.cars[0].model].join(' ');
+    if (profile.cars[0].brand) {
+      carLocalBrand = profile.cars[0].brand;
     }
-    if (profile.cars[0].number) {
-      carLocalNumber = profile.cars[0].number || '';
+    if (profile.cars[0].model) {
+      carLocalModel = profile.cars[0].model;
     }
 
     if (profile.cars[0].vin) {
@@ -63,10 +60,12 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
     lastName: UserData.get('LAST_NAME'),
     phone: UserData.get('PHONE'),
     email: UserData.get('EMAIL'),
-    carName: UserData.get('CARNAME') ? UserData.get('CARNAME') : carLocalName,
-    carNumber: UserData.get('CARNUMBER')
-      ? UserData.get('CARNUMBER')
-      : carLocalNumber,
+    carBrand: UserData.get('CARBRAND')
+      ? UserData.get('CARBRAND')
+      : carLocalBrand,
+    carModel: UserData.get('CARMODEL')
+      ? UserData.get('CARMODEL')
+      : carLocalModel,
     carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
     dealerSelected: dealer.selected,
     isOrderServiceRequest: service.meta.isOrderServiceRequest,
@@ -151,8 +150,8 @@ class ServiceScreen extends Component {
       firstName,
       phone,
       email,
-      carName,
-      carNumber,
+      carBrand,
+      carModel,
       carVIN,
     } = props;
 
@@ -161,18 +160,52 @@ class ServiceScreen extends Component {
       services: undefined,
       servicesFetch: false,
       serviceInfo: undefined,
+      serviceInfoFetch: false,
       isModalVisible: false,
       email: email,
       phone: phone,
       name: firstName && lastName ? `${firstName} ${lastName}` : '',
-      carName: carName,
-      carNumber: carNumber,
+      carBrand: carBrand,
+      carModel: carModel,
       carVIN: carVIN,
       isHaveCar: Boolean(props.cars.length > 0),
     };
   }
 
-  onValueChange2(value) {
+  noHaveCar = [
+    {
+      name: 'CARBRAND',
+      type: 'input',
+      label: 'Марка',
+      value: this.props.carBrand,
+      props: {
+        required: true,
+        placeholder: null,
+      },
+    },
+    {
+      name: 'CARMODEL',
+      type: 'input',
+      label: 'Модель',
+      value: this.props.carModel,
+      props: {
+        required: true,
+        placeholder: null,
+      },
+    },
+    {
+      name: 'CARVIN',
+      type: 'input',
+      label: 'VIN номер автомобиля',
+      value: this.props.carVIN,
+      props: {
+        required: false,
+        placeholder: null,
+      },
+    },
+  ];
+
+  onServiceChoose(value) {
     this.setState({
       service: value,
     });
@@ -183,6 +216,10 @@ class ServiceScreen extends Component {
   }
 
   async _getServices() {
+    this.setState({
+      servicesFetch: true,
+    });
+
     const data = await API.getServiceAvailable({
       dealer: this.props.dealerSelected.id,
       vin: this.state.carVIN,
@@ -197,15 +234,29 @@ class ServiceScreen extends Component {
           : 'Доступных услуг не найдено. Попробуйте записаться в другой автоцентр',
       );
       data.data = undefined;
+    } else {
+      let services = [];
+      data.data.map((el) => {
+        services.push({
+          label: el.name,
+          value: el.id,
+          key: el.id,
+        });
+      });
+      this.setState({
+        services: services,
+      });
     }
 
     this.setState({
-      services: data.data,
       servicesFetch: false,
     });
   }
 
   async _getServicesInfo(id) {
+    this.setState({
+      serviceInfoFetch: true,
+    });
     const data = await API.getServiceInfo({
       id,
       dealer: this.props.dealerSelected.id,
@@ -223,11 +274,12 @@ class ServiceScreen extends Component {
 
     this.setState({
       serviceInfo: data.data,
+      serviceInfoFetch: false,
     });
   }
 
   componentDidMount() {
-    if (this.state.carName && this.state.carVIN) {
+    if (this.state.carVIN) {
       this._getServices();
     }
   }
@@ -244,98 +296,57 @@ class ServiceScreen extends Component {
     }
   }
 
-  async saveOrder() {
-    console.log('this.state ==>', this.state);
-    console.log('this.state.serviceInfo ==>', this.state.serviceInfo);
+  onPressOrder = async (dataFromForm) => {
+    console.log('onPressOrder dataFromForm', dataFromForm);
+    console.log('onPressOrder this.state', this.state);
 
-    if (this.state.isHaveCar) {
-      console.log('dealer', this.props.dealerSelected.id);
-      console.log('time', {
-        from: this.state.time,
-        to: 'this.state.time + this.state.serviceInfo.summary[0].time.total',
-      });
-      console.log('name', this.state.name);
-      console.log('phone', this.state.phone);
-      console.log('email', this.state.email);
-      console.log('tech_place', this.state.tech_place);
-      console.log('vin', this.state.carVIN);
-      console.log('car', {
-        name: `${this.state.car.brand} ${this.state.car.model}`,
-        plate: this.state.car.number,
-      });
-    } else {
-      console.log('dealer', this.props.dealerSelected.id);
-      console.log('time', {
-        from: this.state.time,
-        to: 'this.state.time + this.state.serviceInfo.summary[0].time.total',
-      });
-      console.log('name', this.state.name);
-      console.log('phone', this.state.phone);
-      console.log('email', this.state.email);
-      console.log('tech_place', this.state.tech_place);
-      console.log('vin', this.state.carVIN);
-      console.log('car', {
-        name: this.state.carName,
-        plate: this.state.carNumber,
-      });
+    if (!dataFromForm.DATETIME.time || !dataFromForm.DATETIME.tech_place) {
+      Alert.alert('Заполните пожалуйста все обязательные поля');
+      return false;
     }
 
     let data;
+    let TimeTotal = 0;
 
-    if (this.state.isHaveCar) {
-      data = {
-        dealer: this.props.dealerSelected.id,
-        time: {
-          from: this.state.time / 1000,
-          to:
-            // eslint-disable-next-line prettier/prettier
-            (this.state.time + this.state.serviceInfo.summary[0].time.total * 1000) / 1000,
-        },
-        name: this.state.name,
-        phone: this.state.phone,
-        email: this.state.email,
-        tech_place: this.state.tech_place,
-        vin: this.state.carVIN,
-        car: {
-          name: `${this.state.car.brand} ${this.state.car.model}`,
-          plate: this.state.car.number,
-        },
-      };
-    } else {
-      data = {
-        dealer: this.props.dealerSelected.id,
-        time: {
-          from: this.state.time / 1000,
-          to:
-            // eslint-disable-next-line prettier/prettier
-            (this.state.time + this.state.serviceInfo.summary[0].time.total * 1000) / 1000,
-        },
-        name: this.state.name,
-        phone: this.state.phone,
-        email: this.state.email,
-        tech_place: this.state.tech_place,
-        vin: this.state.carVIN,
-        car: {
-          name: this.state.carName,
-          plate: this.state.carNumber,
-        },
-      };
+    data = {
+      dealer: this.props.dealerSelected.id,
+      time: {
+        from: parseInt(dataFromForm.DATETIME.time),
+      },
+      name: dataFromForm.NAME,
+      phone: dataFromForm.PHONE,
+      email: dataFromForm.EMAIL || null,
+      tech_place: dataFromForm.DATETIME.tech_place,
+      vin: this.state.carVIN ? this.state.carVIN : dataFromForm.CARVIN || null,
+      car: {
+        brand: this.state.carBrand
+          ? this.state.carBrand
+          : dataFromForm.CARBRAND || null,
+        model: this.state.carModel
+          ? this.state.carModel
+          : dataFromForm.CARMODEL || null,
+      },
+      text: dataFromForm.COMMENT || null,
+    };
+
+    if (
+      this.state.serviceInfo &&
+      this.state.serviceInfo.summary[0].time.total
+    ) {
+      data.time.to =
+        parseInt(dataFromForm.DATETIME.time) +
+        parseInt(this.state.serviceInfo.summary[0].time.total);
     }
 
     console.log('=>>>>>> data', data);
-    const order = await API.saveOrderToService(data);
+    // const order = await API.saveOrderToService(data);
 
-    if (order.status === 'error') {
-      Alert.alert('Хьюстон, у нас проблемы!', '\r\n' + order.error.message);
-    } else {
-      Alert.alert('Всё получилось!', '\r\nСпасибо! Ваша запись оформлена');
-    }
-  }
-
-  onPressOrder = (data) => {
-    console.log('onPressOrder data', data);
-    console.log('onPressOrder this.state', this.state);
-    return false;
+    // if (order.status === 'error') {
+    //   Alert.alert('Хьюстон, у нас проблемы!', '\r\n' + order.error.message);
+    // } else {
+    //   Alert.alert('Всё получилось!', '\r\nСпасибо! Ваша запись оформлена');
+    // }
+    return true;
   };
 
   render() {
@@ -357,48 +368,47 @@ class ServiceScreen extends Component {
                   returnScreen: this.props.navigation.state.routeName,
                 },
               },
-              {
-                name: 'DATETIME',
-                type: 'dateTime',
-                label: 'Выберите удобную для вас дату',
-                value: this.state.date,
-                props: {
-                  dealer: this.props.dealerSelected,
-                  placeholder: 'не ранее ' + dayMonthYear(addDays(2)),
-                  required: true,
-                  minDate: new Date(addDays(2)),
-                },
-              },
+              !this.state.isHaveCar
+                ? {
+                    name: 'DATETIME',
+                    type: 'dateTime',
+                    label: 'Дата сервиса',
+                    value: this.state.date,
+                    props: {
+                      dealer: this.props.dealerSelected,
+                      placeholder: 'не ранее ' + dayMonthYear(addDays(2)),
+                      required: true,
+                      minDate: new Date(addDays(2)),
+                    },
+                  }
+                : {},
             ],
           },
           {
             name: 'Автомобиль',
-            fields: [
-              {
-                name: 'CARNAME',
-                type: !this.state.isHaveCar ? 'input' : 'component',
-                label: !this.state.isHaveCar
-                  ? 'Марка и модель'
-                  : 'Выберите автомобиль',
-                value: this.state.isHaveCar ?
-                  this.state.servicesFetch ? (
-                    <>
-                      <ActivityIndicator
-                        color={styleConst.color.blue}
-                        style={[styles.spinner, {height: 200}]}
-                      />
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          color: '#ababab',
-                          textAlign: 'center',
-                        }}>
-                        выясняем возможные услуги на СТО для выбранного
-                        автомобиля
-                      </Text>
-                    </>
-                  ) : (
-                    <>
+            fields: !this.state.isHaveCar
+              ? this.noHaveCar
+              : [
+                  {
+                    name: 'CARNAME',
+                    type: 'component',
+                    label: 'Выберите автомобиль',
+                    value: this.state.servicesFetch ? (
+                      <>
+                        <ActivityIndicator
+                          color={styleConst.color.blue}
+                          style={[styles.spinner, {height: 245}]}
+                        />
+                        <Text
+                          style={{
+                            fontSize: 12,
+                            color: '#ababab',
+                            textAlign: 'center',
+                          }}>
+                          подключение к СТО для выбора услуг
+                        </Text>
+                      </>
+                    ) : (
                       <ScrollView
                         showsHorizontalScrollIndicator={false}
                         horizontal
@@ -406,12 +416,11 @@ class ServiceScreen extends Component {
                         contentContainerStyle={styles.carContainerContent}>
                         {(this.props.cars || []).map((item) => (
                           <TouchableWithoutFeedback
+                            activeOpacity={0.7}
                             key={item.vin}
                             onPress={() => {
                               this.setState({
-                                servicesFetch: true,
                                 carName: [item.brand, item.model].join(' '),
-                                carNumber: item.number,
                                 carVIN: item.vin,
                               });
                               this._getServices();
@@ -427,78 +436,105 @@ class ServiceScreen extends Component {
                           </TouchableWithoutFeedback>
                         ))}
                       </ScrollView>
-                      {this.state.isHaveCar && this.state.services && (
-                        <View style={styles.field}>
-                          <Text style={styles.label}>
-                            Выберите доступную услугу
-                          </Text>
-                          <Picker
-                            mode="dropdown"
-                            iosHeader="Услуга"
-                            headerBackButtonText="Выбрать"
-                            iosIcon={
-                              <Icon
-                                name="arrow-down"
-                                style={{color: '#c7c7c7', marginRight: 0}}
-                              />
-                            }
-                            style={styles.picker}
-                            placeholder="Выберите услугу"
-                            placeholderStyle={{
-                              color: '#d8d8d8',
-                              fontSize: 18,
-                              paddingLeft: 0,
+                    ),
+                  },
+                  this.state.services
+                    ? {
+                        name: 'SERVICE',
+                        type: 'select',
+                        label: 'Выберите услугу',
+                        value: this.state.service,
+                        props: {
+                          items: this.state.services,
+                          onValueChange: this.onServiceChoose.bind(this),
+                          placeholder: {
+                            label: 'Что будем делать с авто?',
+                            value: null,
+                            color: '#9EA0A4',
+                          },
+                          required: true,
+                        },
+                      }
+                    : {},
+                  Boolean(this.state.serviceInfo || this.state.serviceInfoFetch)
+                    ? {
+                        name: 'serviceInfo',
+                        type: 'component',
+                        value: this.state.serviceInfoFetch ? (
+                          <>
+                            <ActivityIndicator
+                              color={styleConst.color.blue}
+                              style={[styles.spinner, {height: 25}]}
+                            />
+                            <Text
+                              style={{
+                                fontSize: 12,
+                                color: '#ababab',
+                                textAlign: 'center',
+                              }}>
+                              вычисляем предв.стоимость
+                            </Text>
+                          </>
+                        ) : (
+                          <TouchableOpacity
+                            style={{
+                              paddingVertical: 5,
+                              flex: 1,
+                              flexDirection: 'row',
                             }}
-                            textStyle={{
-                              paddingLeft: 0,
-                            }}
-                            selectedValue={this.state.service}
-                            onValueChange={this.onValueChange2.bind(this)}>
-                            {(this.state.services || []).map((item) => (
-                              <Picker.Item
-                                key={'serviceToChoose' + item.id}
-                                label={item.name}
-                                value={item.id}
-                              />
-                            ))}
-                          </Picker>
-                        </View>
-                      )}
-                      {Boolean(this.state.serviceInfo) && (
-                        <TouchableOpacity
-                          style={{paddingBottom: 20}}
-                          onPress={() => {
-                            this.setState({
-                              isModalVisible: !this.state.isModalVisible,
-                            });
-                          }}>
-                          <Text>Показать данные об услуге</Text>
-                        </TouchableOpacity>
-                      )}
-                    </>
-                ) : null,
-              },
-              {
-                name: 'CARNUMBER',
-                type: !this.state.isHaveCar ? 'input' : null,
-                label: 'Гос.номер',
-                value: this.props.carNumber,
-                props: {
-                  required: true,
-                  placeholder: null,
-                },
-              },
-              {
-                name: 'CARVIN',
-                type: !this.state.isHaveCar ? 'input' : null,
-                label: 'VIN номер автомобиля',
-                value: this.props.carVIN,
-                props: {
-                  required: true,
-                  placeholder: null,
-                },
-              },
-            ],
+                            onPress={() => {
+                              this.setState({
+                                isModalVisible: !this.state.isModalVisible,
+                              });
+                            }}>
+                            {this.state.serviceInfo.summary &&
+                            this.state.serviceInfo.summary[0].summ ? (
+                              <>
+                                <Text
+                                  style={{
+                                    marginRight: 10,
+                                    paddingTop: 2,
+                                  }}>
+                                  Предв.стоимость{' '}
+                                  <Text
+                                    style={{fontSize: 18, fontWeight: 'bold'}}>
+                                    {RenderPrice(
+                                      parseFloat(
+                                        this.state.serviceInfo.summary[0].summ
+                                          .required,
+                                      ),
+                                      this.props.dealerSelected.region,
+                                    )}
+                                  </Text>
+                                </Text>
+                                <Icon
+                                  name="ios-information-circle-outline"
+                                  size={20}
+                                  style={{
+                                    color: styleConst.color.blue,
+                                  }}
+                                />
+                              </>
+                            ) : null}
+                          </TouchableOpacity>
+                        ),
+                      }
+                    : {},
+                  this.state.serviceInfo && !this.state.serviceInfoFetch
+                    ? {
+                        name: 'DATETIME',
+                        type: 'dateTime',
+                        label: 'Дата сервиса',
+                        value: '',
+                        props: {
+                          dealer: this.props.dealerSelected,
+                          placeholder: 'не ранее ' + dayMonthYear(addDays(2)),
+                          required: true,
+                          minDate: new Date(addDays(2)),
+                        },
+                      }
+                    : {},
+                ],
           },
           {
             name: 'Контактные данные',
@@ -528,7 +564,6 @@ class ServiceScreen extends Component {
                 label: 'Фамилия',
                 value: this.props.lastName,
                 props: {
-                  required: true,
                   textContentType: 'familyName',
                 },
               },
@@ -539,7 +574,6 @@ class ServiceScreen extends Component {
                 value: this.props.phone,
                 props: {
                   required: true,
-                  textContentType: 'phone',
                 },
               },
               {
@@ -548,8 +582,22 @@ class ServiceScreen extends Component {
                 label: 'Email',
                 value: this.props.email,
                 props: {
-                  required: true,
-                  textContentType: 'emailAddress',
+                  required: false,
+                },
+              },
+            ],
+          },
+          {
+            name: 'Дополнительно',
+            fields: [
+              {
+                name: 'COMMENT',
+                type: 'textarea',
+                label: 'Комментарий',
+                value: this.props.Text,
+                props: {
+                  placeholder:
+                    'На случай если вам потребуется передать нам больше информации',
                 },
               },
             ],
@@ -557,7 +605,6 @@ class ServiceScreen extends Component {
         ],
       },
     };
-
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

@@ -26,6 +26,7 @@ export const ServiceModal = ({visible, onClose, data}) => {
                   onPress={() => setActiveTab('works')}
                   style={modalStyles.tabButton}>
                   <Text
+                    selectable={false}
                     style={[
                       modalStyles.tabButtonText,
                       activeTab === 'works' && modalStyles.tabButtonActiveText,
@@ -37,6 +38,7 @@ export const ServiceModal = ({visible, onClose, data}) => {
                   onPress={() => setActiveTab('parts')}
                   style={modalStyles.tabButton}>
                   <Text
+                    selectable={false}
                     style={[
                       modalStyles.tabButtonText,
                       activeTab === 'parts' && modalStyles.tabButtonActiveText,
@@ -45,13 +47,12 @@ export const ServiceModal = ({visible, onClose, data}) => {
                   </Text>
                 </Button>
               </Segment>
-              {activeTab === 'works' && <ServiceTable data={data.works} />}
-              {activeTab === 'parts' && <ServiceTable data={data.parts} />}
+              <ServiceTable data={data[activeTab]} />
             </View>
           )}
           <View style={modalStyles.wrapper}>
             <Button style={modalStyles.button} onPress={onClose}>
-              <Text style={modalStyles.buttonText}>Назад</Text>
+              <Text style={modalStyles.buttonText}>OK</Text>
             </Button>
           </View>
         </SafeAreaView>
@@ -63,17 +64,30 @@ export const ServiceModal = ({visible, onClose, data}) => {
 const ServiceTable = ({data}) => {
   return (
     <Content>
-      {data.map(({name, quantity, unit, summ, currency}) => (
-        <View style={tableStyles.section}>
-          {name && <Text style={tableStyles.sectionTitle}>{name}</Text>}
-          <ServiceTableItem label="Количество">
-            {quantity} {unit}
-          </ServiceTableItem>
-          <ServiceTableItem label="Стоимость">
-            {showPrice(summ, currency.name)}
-          </ServiceTableItem>
-        </View>
-      ))}
+      {data
+        .filter((el) => {
+          if ((el.name === '' || !el.name) && el.summ === 0) {
+            return false;
+          }
+          return true;
+        })
+        .map(({name, quantity, unit, summ, currency}, cnt) => (
+          <View
+            style={tableStyles.section}
+            key={'ServiceTable' + cnt + quantity + summ}>
+            {name ? <Text style={tableStyles.sectionTitle}>{name}</Text> : null}
+            {quantity && unit ? (
+              <ServiceTableItem label="Количество">
+                {quantity} {unit}
+              </ServiceTableItem>
+            ) : null}
+            {summ && currency.name ? (
+              <ServiceTableItem label="Стоимость">
+                {showPrice(summ, currency.name)}
+              </ServiceTableItem>
+            ) : null}
+          </View>
+        ))}
     </Content>
   );
 };
@@ -81,7 +95,9 @@ const ServiceTable = ({data}) => {
 const ServiceTableItem = ({label, children}) => (
   <Row style={tableStyles.sectionRow}>
     <Col style={tableStyles.sectionProp}>
-      <Text style={tableStyles.sectionPropText}>{label}:</Text>
+      <Text selectable={false} style={tableStyles.sectionPropText}>
+        {label}:
+      </Text>
     </Col>
     <Col style={tableStyles.sectionValue}>
       <Text style={tableStyles.sectionValueText}>{children}</Text>
@@ -102,6 +118,7 @@ const modalStyles = StyleSheet.create({
   },
   wrapper: {
     paddingHorizontal: 14,
+    paddingVertical: 10,
   },
   tabContainer: {
     backgroundColor: 'transparent',
@@ -154,7 +171,7 @@ const tableStyles = StyleSheet.create({
   },
   sectionProp: {
     paddingRight: 5,
-    marginTop: 0,
+    marginTop: 5,
   },
   sectionValue: {
     marginTop: 5,
