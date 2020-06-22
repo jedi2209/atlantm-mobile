@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, {element} from 'prop-types';
 
 import {
   StyleSheet,
@@ -72,14 +72,16 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
   },
   select: {
-    height: Platform.OS === 'ios' ? 61 : 'auto',
+    height: Platform.OS === 'ios' ? 61 : 55,
+    paddingTop: Platform.OS === 'ios' ? 0 : 8,
+    paddingLeft: Platform.OS === 'ios' ? 0 : 7,
   },
   selectLabel: {
     color: '#808080',
     fontSize: 14,
     position: 'absolute',
     paddingHorizontal: 15,
-    paddingTop: 5,
+    paddingTop: 2,
   },
   textarea: {
     height: Platform.OS === 'ios' ? 140 : 'auto',
@@ -168,6 +170,9 @@ class Form extends Component {
     let requredFields = [];
     if (props.fields.groups) {
       props.fields.groups.map((group) => {
+        group.fields = group.fields.filter((field) => {
+          return typeof field === 'object' && field.name && field.type;
+        });
         group.fields.map((field) => {
           if (field.value && field.type !== 'component') {
             if (field.id) {
@@ -235,6 +240,9 @@ class Form extends Component {
           case 'email':
             valid = this._validateEmail(this.state[val.name]);
             break;
+          case 'datetime':
+            valid = this._validateDateTime(this.state[val.name]);
+            break;
           default:
             if (
               typeof this.state[val.name] === 'undefined' ||
@@ -252,14 +260,14 @@ class Form extends Component {
         if (requredLabels.length > 1) {
           Alert.alert(
             'Заполните пожалуйста обязательные поля',
-            '\r\n Поля ' +
-              requredLabels.join(', ') +
-              ' обязательны для заполнения',
+            '\r\nПоля \r\n\r\n-' +
+              requredLabels.join('\r\n-') +
+              '\r\nобязательны для заполнения',
           );
         } else {
           Alert.alert(
             'Заполните пожалуйста обязательное поле',
-            '\r\n Поле ' +
+            '\r\nПоле ' +
               requredLabels.join(', ') +
               ' обязательно для заполнения',
           );
@@ -274,6 +282,10 @@ class Form extends Component {
   _validateEmail = (email) => {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Zа-яА-Я\-0-9]+\.)+[a-zA-Zа-яА-Я]{2,}))$/;
     return re.test(email);
+  };
+
+  _validateDateTime = (dateTime) => {
+    return dateTime.date && dateTime.time;
   };
 
   onChangeField = (field) => (valueNew) => {
@@ -298,20 +310,15 @@ class Form extends Component {
 
   _groupRender = (group, num) => {
     let totalFields = group.fields.length;
-    let groupClean = [];
-
-    group.fields.filter((element) => {
-      if (element.type) {
-        return groupClean.push(element);
-      }
-    });
 
     return (
       <View style={styles.group} key={'group' + num}>
-        <Text style={styles.groupName}>{group.name}</Text>
+        <Text selectable={false} style={styles.groupName}>
+          {group.name}
+        </Text>
         <View style={styles.groupFields}>
-          {groupClean.map((field, fieldNum, totalFields) => {
-            if (field.type) {
+          {group.fields.map((field, fieldNum, totalFields) => {
+            if (typeof field === 'object' && field.type) {
               const returnField = this._fieldsRender[field.type](
                 field,
                 fieldNum,
@@ -477,10 +484,12 @@ class Form extends Component {
           style={[
             styles.field,
             data.props && data.props.required && !this.state[name]
-              ? !this.state[name]
+              ? typeof this.state[name] === 'undefined'
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
-              : null,
+              : !this.state[name].time
+              ? styles.fieldRequiredFalse
+              : styles.fieldRequiredTrue,
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
@@ -528,7 +537,9 @@ class Form extends Component {
             },
           ]}
           key={'field' + num + name}>
-          <Text style={styles.selectLabel}>{label}</Text>
+          <Text style={styles.selectLabel} selectable={false}>
+            {label}
+          </Text>
           <RNPickerSelect
             key={'rnYearPicker' + num + name}
             doneText="Выбрать"
@@ -552,6 +563,7 @@ class Form extends Component {
                     hitSlop={{top: 4, right: 4, bottom: 4, left: 4}}>
                     <View testID="needed_for_touchable">
                       <Text
+                        selectable={false}
                         style={[
                           defaultStyles.done,
                           {fontWeight: 'normal', color: 'red'},
@@ -560,14 +572,16 @@ class Form extends Component {
                       </Text>
                     </View>
                   </TouchableWithoutFeedback>
-                  <Text>Выберите год</Text>
+                  <Text selectable={false}>Выберите год</Text>
                   <TouchableWithoutFeedback
                     onPress={() => {
                       this.inputRefs[name].togglePicker(true);
                     }}
                     hitSlop={{top: 4, right: 4, bottom: 4, left: 4}}>
                     <View testID="needed_for_touchable">
-                      <Text style={defaultStyles.done}>Готово</Text>
+                      <Text selectable={false} style={defaultStyles.done}>
+                        Готово
+                      </Text>
                     </View>
                   </TouchableWithoutFeedback>
                 </View>
@@ -800,7 +814,9 @@ class Form extends Component {
             },
           ]}
           key={'field' + num + name}>
-          <Text style={styles.selectLabel}>{label}</Text>
+          <Text selectable={false} style={styles.selectLabel}>
+            {label}
+          </Text>
           <RNPickerSelect
             key={'rnpicker' + num + name}
             doneText="Выбрать"
@@ -832,6 +848,7 @@ class Form extends Component {
           ]}
           key={'field' + num + name}>
           <Text
+            selectable={false}
             style={{
               marginTop: 5,
               color: '#808080',
@@ -902,7 +919,7 @@ class Form extends Component {
               {this.state.loading ? (
                 <ActivityIndicator color="#fff" />
               ) : (
-                <Text style={styles.buttonText}>
+                <Text selectable={false} style={styles.buttonText}>
                   {this.props.SubmitButton && this.props.SubmitButton.text
                     ? this.props.SubmitButton.text
                     : 'Отправить'}

@@ -102,7 +102,7 @@ export default class ChooseDateTimeComponent extends Component {
   }
 
   async _getTime(date) {
-    this.setState({availablePeriodsFetch: true});
+    this.setState({availablePeriods: null, availablePeriodsFetch: true});
     this._animated.TimeBlock = new Animated.Value(0);
     console.log('date', yearMonthDay(date));
     console.log('dealer', this.props.dealer.id);
@@ -154,6 +154,11 @@ export default class ChooseDateTimeComponent extends Component {
           date={this.state.date}
           onDateChange={(_, date) => {
             this.setState({date});
+            this.props.onFinishedSelection({
+              date: date,
+              time: undefined,
+              tech_place: undefined,
+            });
             this._getTime(date);
           }}
           {...this.props}
@@ -168,6 +173,7 @@ export default class ChooseDateTimeComponent extends Component {
                   style={styles.spinner}
                 />
                 <Text
+                  selectable={false}
                   style={{fontSize: 12, color: '#ababab', textAlign: 'center'}}>
                   ищем свободное время на СТО
                 </Text>
@@ -179,7 +185,9 @@ export default class ChooseDateTimeComponent extends Component {
                   styles.timeContainer,
                   {opacity: this._animated.TimeBlock},
                 ]}>
-                <Text style={[styles.label, styles.labelActive]}>
+                <Text
+                  selectable={false}
+                  style={[styles.label, styles.labelActive]}>
                   Выберите удобное для вас время
                 </Text>
                 {(this.state.availablePeriods || []).map((item) => {
@@ -202,6 +210,7 @@ export default class ChooseDateTimeComponent extends Component {
                         });
                       }}>
                       <Text
+                        selectable={false}
                         style={[
                           styles.buttonText,
                           {color: isActive ? '#fff' : '#027aff'},
