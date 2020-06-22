@@ -21,7 +21,8 @@ export const TextInput = React.forwardRef((props, ref) => {
             textDecorationLine:
               props.required && !isActive ? 'underline' : 'none',
             textDecorationStyle: 'solid',
-      }]}>
+          },
+        ]}>
         {props.label}
       </Text>
       <NativeTextInput
@@ -37,7 +38,7 @@ export const TextInput = React.forwardRef((props, ref) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 16,
+    paddingTop: 0,
   },
   label: {
     position: 'absolute',
