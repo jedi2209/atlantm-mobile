@@ -173,13 +173,15 @@ class UserCarItemScreen extends Component {
     const {navigation, carDetails} = this.props;
     navigation.navigate('OrderScreen', {
       car: {
-        brand: carDetails.brand.name,
-        model: carDetails.model,
-        price: get(carDetails, 'price.app.standart'),
+        brand: get(carDetails, 'brand.name', ''),
+        model: get(carDetails, 'model', ''),
+        complectation: get(carDetails, 'complectation.name'),
+        year: get(carDetails, 'year'),
       },
       region: this.props.dealerSelected.region,
       dealerId: get(carDetails, 'dealer.id'),
       carId: carDetails.id.api,
+      isNewCar: false,
     });
   };
 
@@ -300,395 +302,397 @@ class UserCarItemScreen extends Component {
       standart: get(carDetails, 'price.app.standart') || 0,
     };
 
-    console.log('carDetails', carDetails);
-
     return (
       <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <StatusBar hidden />
-          <Content>
-            <View style={styles.gallery}>
-              <PhotoSlider
-                resizeMode="cover"
-                dotColor="#fff"
-                photos={photos}
-                onPressItem={this.onPressPhoto}
-                paginationStyle={{marginBottom: 15}}
-                onIndexChanged={this.onChangePhotoIndex}
-              />
-              <View style={{backgroundColor: '#fff'}}>
-                <View
-                  style={[
-                    {
-                      position: 'relative',
-                      top: -35,
-                      marginBottom: -35,
-                      backgroundColor: '#fff',
-                      borderTopLeftRadius: 30,
-                      borderTopRightRadius: 30,
-                      paddingTop: 20,
-                      paddingBottom: 14,
-                    },
-                  ]}>
+        <View style={styles.safearea}>
+          <ScrollView>
+            <StatusBar hidden />
+            <View style={{flex: 1, position: 'relative'}}>
+              <View style={[styles.gallery, {marginTop: 0}]}>
+                <PhotoSlider
+                  height={310}
+                  resizeMode="cover"
+                  dotColor="#fff"
+                  photos={photos}
+                  onPressItem={this.onPressPhoto}
+                  paginationStyle={{marginBottom: 15}}
+                  onIndexChanged={this.onChangePhotoIndex}
+                />
+                <View style={{backgroundColor: '#fff', zIndex: 100}}>
                   <View
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      paddingHorizontal: 16,
-                    }}>
-                    <View style={{marginBottom: 10, flexShrink: 1}}>
-                      <Text style={{fontSize: 16, fontWeight: '600'}}>
-                        {`${brandName} ${modelName}`}
-                      </Text>
-                      <Text style={{fontSize: 11, fontWeight: '600'}}>
-                        {get(carDetails, 'year')}
-                      </Text>
-                    </View>
-                    {this.renderPrice({carDetails, currency})}
-                  </View>
-                </View>
-                {carDetails.text ? (
-                  <View style={styles.descrContainer}>
-                    <Text style={styles.descr}>{carDetails.text}</Text>
-                  </View>
-                ) : null}
-
-                <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-                  <View
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      paddingHorizontal: 16,
-                      marginBottom: 24,
-                    }}>
-                    {get(carDetails, 'engine') ? (
-                      <OptionPlate
-                        title="Двигатель"
-                        subtitle={
-                          get(carDetails, 'engine.volume.short') +
-                          ' ' +
-                          get(carDetails, 'engine.type')
-                        }
-                      />
-                    ) : null}
-                    {get(carDetails, 'gearbox.count') ? (
-                      <OptionPlate
-                        title="КПП"
-                        subtitle={`${
-                          get(carDetails, 'gearbox.count')
-                            ? get(carDetails, 'gearbox.count') + '-ст.'
-                            : ''
-                        } ${
-                          get(carDetails, 'gearbox.name')
-                            .replace(/^(Механическая)/i, 'МКПП')
-                            .replace(/^(Автоматическая)/i, 'АКПП')
-                            .split('/')[0]
-                        }`}
-                      />
-                    ) : null}
-                    {get(carDetails, 'gearbox.wheel') ? (
-                      <OptionPlate
-                        title="Привод"
-                        subtitle={get(
-                          carDetails,
-                          'gearbox.wheel',
-                        ).toLowerCase()}
-                      />
-                    ) : null}
-                    {get(carDetails, 'color.name.simple') ? (
-                      <OptionPlate
-                        title="Цвет"
-                        subtitle={get(
-                          carDetails,
-                          'color.name.simple',
-                        ).toLowerCase()}
-                      />
-                    ) : null}
-                  </View>
-                </ScrollView>
-
-                {carDetails.dealer && carDetails.dealer.name ? (
-                  <TouchableWithoutFeedback
-                    onPress={this.onPressMap}
-                    style={styles.mapCard}>
-                    <View style={styles.mapCardContainer}>
-                      <Icon
-                        type="MaterialCommunityIcons"
-                        name="map-marker-outline"
-                        style={styles.mapCardIcon}
-                      />
-                      <View style={styles.mapCardTextContainer}>
-                        <Text style={styles.mapCardTitle}>
-                          Автомобиль расположен по адресу
-                        </Text>
-                        <Text
-                          style={styles.mapCardDealer}
-                          numberOfLines={1}
-                          ellipsizeMode="tail">
-                          {this._renderAddress()}
-                        </Text>
-                      </View>
-                    </View>
-                  </TouchableWithoutFeedback>
-                ) : null}
-
-                <Accordion
-                  style={{
-                    borderBottomColor: '#d5d5e0',
-                    borderBottomWidth: 1,
-                    marginBottom: 90,
-                  }}
-                  dataArray={[
-                    {
-                      title: 'Характеристики',
-                      content: (
-                        <View style={styles.tabContent}>
-                          <Text style={styles.sectionTitle}>Основные</Text>
-                          <Grid>
-                            {carDetails.year ? (
-                              <Row style={styles.sectionRow}>
-                                <Col style={styles.sectionProp}>
-                                  <Text style={styles.sectionPropText}>
-                                    Год выпуска:
-                                  </Text>
-                                </Col>
-                                <Col style={styles.sectionValue}>
-                                  <Text
-                                    style={
-                                      styles.sectionValueText
-                                    }>{`${carDetails.year} г.`}</Text>
-                                </Col>
-                              </Row>
-                            ) : null}
-                            {carDetails.mileage ? (
-                              <Row style={styles.sectionRow}>
-                                <Col style={styles.sectionProp}>
-                                  <Text style={styles.sectionPropText}>
-                                    Пробег:
-                                  </Text>
-                                </Col>
-                                <Col style={styles.sectionValue}>
-                                  <Text
-                                    style={
-                                      styles.sectionValueText
-                                    }>{`${numberWithGap(
-                                    carDetails.mileage,
-                                  )} км.`}</Text>
-                                </Col>
-                              </Row>
-                            ) : null}
-                            {carDetails.engine && carDetails.engine.type ? (
-                              <Row style={styles.sectionRow}>
-                                <Col style={styles.sectionProp}>
-                                  <Text style={styles.sectionPropText}>
-                                    Топливо:
-                                  </Text>
-                                </Col>
-                                <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>
-                                    {carDetails.engine.type}
-                                  </Text>
-                                </Col>
-                              </Row>
-                            ) : null}
-                            {carDetails.engine &&
-                            carDetails.engine.volume &&
-                            carDetails.engine.volume.full ? (
-                              <Row style={styles.sectionRow}>
-                                <Col style={styles.sectionProp}>
-                                  <Text style={styles.sectionPropText}>
-                                    Двигатель:
-                                  </Text>
-                                </Col>
-                                <Col style={styles.sectionValue}>
-                                  <Text
-                                    style={
-                                      styles.sectionValueText
-                                    }>{`${carDetails.engine.volume.full} см³`}</Text>
-                                </Col>
-                              </Row>
-                            ) : null}
-                            {carDetails.gearbox && carDetails.gearbox.name ? (
-                              <Row style={styles.sectionRow}>
-                                <Col style={styles.sectionProp}>
-                                  <Text style={styles.sectionPropText}>
-                                    КПП:
-                                  </Text>
-                                </Col>
-                                <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>
-                                    {carDetails.gearbox.name}
-                                  </Text>
-                                </Col>
-                              </Row>
-                            ) : null}
-                            {carDetails.color &&
-                            carDetails.color.name &&
-                            carDetails.color.name.official ? (
-                              <Row style={styles.sectionRow}>
-                                <Col style={styles.sectionProp}>
-                                  <Text style={styles.sectionPropText}>
-                                    Цвет:
-                                  </Text>
-                                </Col>
-                                <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>
-                                    {carDetails.color.name.official}
-                                  </Text>
-                                </Col>
-                              </Row>
-                            ) : null}
-                            {carDetails.body && carDetails.body.name ? (
-                              <Row style={styles.sectionRow}>
-                                <Col style={styles.sectionProp}>
-                                  <Text style={styles.sectionPropText}>
-                                    Тип кузова:
-                                  </Text>
-                                </Col>
-                                <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>
-                                    {carDetails.body.name}
-                                  </Text>
-                                </Col>
-                              </Row>
-                            ) : null}
-                            {carDetails.interior && carDetails.interior.name ? (
-                              <Row style={styles.sectionRow}>
-                                <Col style={styles.sectionProp}>
-                                  <Text style={styles.sectionPropText}>
-                                    Салон:
-                                  </Text>
-                                </Col>
-                                <Col style={styles.sectionValue}>
-                                  <Text style={styles.sectionValueText}>
-                                    {carDetails.interior.name}
-                                  </Text>
-                                </Col>
-                              </Row>
-                            ) : null}
-                          </Grid>
-                        </View>
-                      ),
-                    },
-                    additional && {
-                      title: 'Комплектация',
-                      content: (
-                        <View style={styles.tabContent}>
-                          <Text style={styles.sectionTitle}>
-                            {get(carDetails, 'options.additional.1.name')}
-                          </Text>
-                          {additional.map((item, num) => {
-                            return (
-                              <Grid key={'OptionsAdditional-' + num}>
-                                {item.name && item.value ? (
-                                  <Row style={styles.sectionRow}>
-                                    <Col style={styles.sectionProp}>
-                                      <Text style={styles.sectionPropText}>
-                                        {item.name}
-                                      </Text>
-                                    </Col>
-                                    <Col style={styles.sectionValue}>
-                                      <Text style={styles.sectionValueText}>
-                                        {item.value}
-                                      </Text>
-                                    </Col>
-                                  </Row>
-                                ) : (
-                                  <Text
-                                    style={[
-                                      styles.sectionPropText,
-                                      styles.sectionRow,
-                                    ]}>
-                                    {item.name}
-                                  </Text>
-                                )}
-                              </Grid>
-                            );
-                          })}
-                        </View>
-                      ),
-                    },
-                  ].filter(Boolean)}
-                  expanded={0}
-                  animation={true}
-                  renderHeader={(item, expanded) => (
+                    style={[
+                      {
+                        position: 'relative',
+                        top: -35,
+                        marginBottom: -35,
+                        backgroundColor: '#fff',
+                        borderTopLeftRadius: 30,
+                        borderTopRightRadius: 30,
+                        paddingTop: 20,
+                        paddingBottom: 14,
+                      },
+                    ]}>
                     <View
                       style={{
-                        height: 64,
-                        paddingHorizontal: 16,
                         display: 'flex',
                         flexDirection: 'row',
                         justifyContent: 'space-between',
-                        alignItems: 'center',
-                        backgroundColor: '#fff',
-                        borderTopWidth: 1,
-                        borderColor: '#d5d5e0',
+                        paddingHorizontal: 16,
                       }}>
-                      <Text style={{fontSize: 18}}>{item.title}</Text>
-                      {expanded ? (
-                        <Icon
-                          type="FontAwesome5"
-                          style={{color: '#0061ED', fontWeight: 'normal'}}
-                          name="angle-down"
-                        />
-                      ) : (
-                        <Icon
-                          type="FontAwesome5"
-                          style={{color: '#131314', fontWeight: 'normal'}}
-                          name="angle-right"
-                        />
-                      )}
+                      <View style={{marginBottom: 10, flexShrink: 1}}>
+                        <Text style={{fontSize: 16, fontWeight: '600'}}>
+                          {`${brandName} ${modelName}`}
+                        </Text>
+                        <Text style={{fontSize: 11, fontWeight: '600'}}>
+                          {get(carDetails, 'year')}
+                        </Text>
+                      </View>
+                      {this.renderPrice({carDetails, currency})}
                     </View>
-                  )}
-                  renderContent={(item) => {
-                    return (
+                  </View>
+                  {carDetails.text ? (
+                    <View style={styles.descrContainer}>
+                      <Text style={styles.descr}>{carDetails.text}</Text>
+                    </View>
+                  ) : null}
+
+                  <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        paddingHorizontal: 16,
+                        marginBottom: 24,
+                      }}>
+                      {get(carDetails, 'engine') ? (
+                        <OptionPlate
+                          title="Двигатель"
+                          subtitle={
+                            get(carDetails, 'engine.volume.short') +
+                            ' ' +
+                            get(carDetails, 'engine.type')
+                          }
+                        />
+                      ) : null}
+                      {get(carDetails, 'gearbox.count') ? (
+                        <OptionPlate
+                          title="КПП"
+                          subtitle={`${
+                            get(carDetails, 'gearbox.count')
+                              ? get(carDetails, 'gearbox.count') + '-ст.'
+                              : ''
+                          } ${
+                            get(carDetails, 'gearbox.name')
+                              .replace(/^(Механическая)/i, 'МКПП')
+                              .replace(/^(Автоматическая)/i, 'АКПП')
+                              .split('/')[0]
+                          }`}
+                        />
+                      ) : null}
+                      {get(carDetails, 'gearbox.wheel') ? (
+                        <OptionPlate
+                          title="Привод"
+                          subtitle={get(
+                            carDetails,
+                            'gearbox.wheel',
+                          ).toLowerCase()}
+                        />
+                      ) : null}
+                      {get(carDetails, 'color.name.simple') ? (
+                        <OptionPlate
+                          title="Цвет"
+                          subtitle={get(
+                            carDetails,
+                            'color.name.simple',
+                          ).toLowerCase()}
+                        />
+                      ) : null}
+                    </View>
+                  </ScrollView>
+
+                  {carDetails.dealer && carDetails.dealer.name ? (
+                    <TouchableWithoutFeedback
+                      onPress={this.onPressMap}
+                      style={styles.mapCard}>
+                      <View style={styles.mapCardContainer}>
+                        <Icon
+                          type="MaterialCommunityIcons"
+                          name="map-marker-outline"
+                          style={styles.mapCardIcon}
+                        />
+                        <View style={styles.mapCardTextContainer}>
+                          <Text style={styles.mapCardTitle}>
+                            Автомобиль расположен по адресу
+                          </Text>
+                          <Text
+                            style={styles.mapCardDealer}
+                            numberOfLines={1}
+                            ellipsizeMode="tail">
+                            {this._renderAddress()}
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableWithoutFeedback>
+                  ) : null}
+
+                  <Accordion
+                    style={{
+                      borderBottomColor: '#d5d5e0',
+                      borderBottomWidth: 1,
+                      marginBottom: 90,
+                    }}
+                    dataArray={[
+                      {
+                        title: 'Характеристики',
+                        content: (
+                          <View style={styles.tabContent}>
+                            <Text style={styles.sectionTitle}>Основные</Text>
+                            <Grid>
+                              {carDetails.year ? (
+                                <Row style={styles.sectionRow}>
+                                  <Col style={styles.sectionProp}>
+                                    <Text style={styles.sectionPropText}>
+                                      Год выпуска:
+                                    </Text>
+                                  </Col>
+                                  <Col style={styles.sectionValue}>
+                                    <Text
+                                      style={
+                                        styles.sectionValueText
+                                      }>{`${carDetails.year} г.`}</Text>
+                                  </Col>
+                                </Row>
+                              ) : null}
+                              {carDetails.mileage ? (
+                                <Row style={styles.sectionRow}>
+                                  <Col style={styles.sectionProp}>
+                                    <Text style={styles.sectionPropText}>
+                                      Пробег:
+                                    </Text>
+                                  </Col>
+                                  <Col style={styles.sectionValue}>
+                                    <Text
+                                      style={
+                                        styles.sectionValueText
+                                      }>{`${numberWithGap(
+                                      carDetails.mileage,
+                                    )} км.`}</Text>
+                                  </Col>
+                                </Row>
+                              ) : null}
+                              {carDetails.engine && carDetails.engine.type ? (
+                                <Row style={styles.sectionRow}>
+                                  <Col style={styles.sectionProp}>
+                                    <Text style={styles.sectionPropText}>
+                                      Топливо:
+                                    </Text>
+                                  </Col>
+                                  <Col style={styles.sectionValue}>
+                                    <Text style={styles.sectionValueText}>
+                                      {carDetails.engine.type}
+                                    </Text>
+                                  </Col>
+                                </Row>
+                              ) : null}
+                              {carDetails.engine &&
+                              carDetails.engine.volume &&
+                              carDetails.engine.volume.full ? (
+                                <Row style={styles.sectionRow}>
+                                  <Col style={styles.sectionProp}>
+                                    <Text style={styles.sectionPropText}>
+                                      Двигатель:
+                                    </Text>
+                                  </Col>
+                                  <Col style={styles.sectionValue}>
+                                    <Text
+                                      style={
+                                        styles.sectionValueText
+                                      }>{`${carDetails.engine.volume.full} см³`}</Text>
+                                  </Col>
+                                </Row>
+                              ) : null}
+                              {carDetails.gearbox && carDetails.gearbox.name ? (
+                                <Row style={styles.sectionRow}>
+                                  <Col style={styles.sectionProp}>
+                                    <Text style={styles.sectionPropText}>
+                                      КПП:
+                                    </Text>
+                                  </Col>
+                                  <Col style={styles.sectionValue}>
+                                    <Text style={styles.sectionValueText}>
+                                      {carDetails.gearbox.name}
+                                    </Text>
+                                  </Col>
+                                </Row>
+                              ) : null}
+                              {carDetails.color &&
+                              carDetails.color.name &&
+                              carDetails.color.name.official ? (
+                                <Row style={styles.sectionRow}>
+                                  <Col style={styles.sectionProp}>
+                                    <Text style={styles.sectionPropText}>
+                                      Цвет:
+                                    </Text>
+                                  </Col>
+                                  <Col style={styles.sectionValue}>
+                                    <Text style={styles.sectionValueText}>
+                                      {carDetails.color.name.official}
+                                    </Text>
+                                  </Col>
+                                </Row>
+                              ) : null}
+                              {carDetails.body && carDetails.body.name ? (
+                                <Row style={styles.sectionRow}>
+                                  <Col style={styles.sectionProp}>
+                                    <Text style={styles.sectionPropText}>
+                                      Тип кузова:
+                                    </Text>
+                                  </Col>
+                                  <Col style={styles.sectionValue}>
+                                    <Text style={styles.sectionValueText}>
+                                      {carDetails.body.name}
+                                    </Text>
+                                  </Col>
+                                </Row>
+                              ) : null}
+                              {carDetails.interior &&
+                              carDetails.interior.name ? (
+                                <Row style={styles.sectionRow}>
+                                  <Col style={styles.sectionProp}>
+                                    <Text style={styles.sectionPropText}>
+                                      Салон:
+                                    </Text>
+                                  </Col>
+                                  <Col style={styles.sectionValue}>
+                                    <Text style={styles.sectionValueText}>
+                                      {carDetails.interior.name}
+                                    </Text>
+                                  </Col>
+                                </Row>
+                              ) : null}
+                            </Grid>
+                          </View>
+                        ),
+                      },
+                      additional && {
+                        title: 'Комплектация',
+                        content: (
+                          <View style={styles.tabContent}>
+                            <Text style={styles.sectionTitle}>
+                              {get(carDetails, 'options.additional.1.name')}
+                            </Text>
+                            {additional.map((item, num) => {
+                              return (
+                                <Grid key={'OptionsAdditional-' + num}>
+                                  {item.name && item.value ? (
+                                    <Row style={styles.sectionRow}>
+                                      <Col style={styles.sectionProp}>
+                                        <Text style={styles.sectionPropText}>
+                                          {item.name}
+                                        </Text>
+                                      </Col>
+                                      <Col style={styles.sectionValue}>
+                                        <Text style={styles.sectionValueText}>
+                                          {item.value}
+                                        </Text>
+                                      </Col>
+                                    </Row>
+                                  ) : (
+                                    <Text
+                                      style={[
+                                        styles.sectionPropText,
+                                        styles.sectionRow,
+                                      ]}>
+                                      {item.name}
+                                    </Text>
+                                  )}
+                                </Grid>
+                              );
+                            })}
+                          </View>
+                        ),
+                      },
+                    ].filter(Boolean)}
+                    expanded={0}
+                    animation={true}
+                    renderHeader={(item, expanded) => (
                       <View
                         style={{
-                          backgroundColor: '#fff',
+                          height: 64,
                           paddingHorizontal: 16,
+                          display: 'flex',
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          backgroundColor: '#fff',
+                          borderTopWidth: 1,
+                          borderColor: '#d5d5e0',
                         }}>
-                        {item.content}
+                        <Text style={{fontSize: 18}}>{item.title}</Text>
+                        {expanded ? (
+                          <Icon
+                            type="FontAwesome5"
+                            style={{color: '#0061ED', fontWeight: 'normal'}}
+                            name="angle-down"
+                          />
+                        ) : (
+                          <Icon
+                            type="FontAwesome5"
+                            style={{color: '#131314', fontWeight: 'normal'}}
+                            name="angle-right"
+                          />
+                        )}
                       </View>
-                    );
-                  }}
-                />
+                    )}
+                    renderContent={(item) => {
+                      return (
+                        <View
+                          style={{
+                            backgroundColor: '#fff',
+                            paddingHorizontal: 16,
+                          }}>
+                          {item.content}
+                        </View>
+                      );
+                    }}
+                  />
+                </View>
               </View>
             </View>
-          </Content>
-          <View style={stylesFooter.footer}>
-            <View
-              style={[
-                styleConst.shadow.default,
-                stylesFooter.orderPriceContainer,
-                stylesFooter.orderPriceContainerNotSale,
-              ]}>
-              <Text
-                style={[styles.orderPriceText, styles.orderPriceDefaultText]}>
-                {showPrice(
-                  CarPrices.standart,
-                  this.props.dealerSelected.region,
-                )}
-              </Text>
+            <View style={stylesFooter.footer}>
+              <View
+                style={[
+                  styleConst.shadow.default,
+                  stylesFooter.orderPriceContainer,
+                  stylesFooter.orderPriceContainerNotSale,
+                ]}>
+                <Text
+                  style={[styles.orderPriceText, styles.orderPriceDefaultText]}>
+                  {showPrice(
+                    CarPrices.standart,
+                    this.props.dealerSelected.region,
+                  )}
+                </Text>
+              </View>
+              <Button
+                onPress={this.onPressOrder}
+                full
+                style={[styleConst.shadow.default, stylesFooter.button]}>
+                <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
+              </Button>
             </View>
-            <Button
-              onPress={this.onPressOrder}
-              full
-              style={[styleConst.shadow.default, stylesFooter.button]}>
-              <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
-            </Button>
-          </View>
-          {photoViewerItems.length ? (
-            <PhotoViewer
-              index={photoViewerIndex}
-              visible={photoViewerVisible}
-              items={photoViewerItems}
-              enableScale={true}
-              onChange={this.onChangePhotoIndex}
-              onPressClose={this.onClosePhoto}
-            />
-          ) : null}
-        </SafeAreaView>
+            {photoViewerItems.length ? (
+              <PhotoViewer
+                index={photoViewerIndex}
+                visible={photoViewerVisible}
+                items={photoViewerItems}
+                enableScale={true}
+                onChange={this.onChangePhotoIndex}
+                onPressClose={this.onClosePhoto}
+              />
+            ) : null}
+          </ScrollView>
+        </View>
       </StyleProvider>
     );
   }

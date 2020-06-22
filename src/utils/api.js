@@ -303,13 +303,23 @@ export default {
   orderCar(props) {
     const {carId, comment, name, email, phone, dealerId, isNewCar} = props;
 
-    const body = `f_Dealer=${dealerId}&f_Car=${carId}&f_Name=${name}&f_Phone=${phone}&f_Email=${email}&f_Text=${comment}&f_Source=3`;
+    const body = {
+      f_Dealer: dealerId,
+      f_Car: carId,
+      f_Name: name,
+      f_Phone: phone,
+      f_Email: email,
+      f_Text: comment,
+      f_Source: 3,
+    };
+
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
       },
-      body,
+      body: JSON.stringify(body),
     });
 
     const url = isNewCar ? '/orders/stock/post/' : '/orders/trade-in/post/';
