@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
   },
   field: {
     paddingHorizontal: 15,
-    paddingTop: 5,
+    paddingTop: 3,
+    paddingBottom: 2,
   },
   fieldRequiredFalse: {
     borderRightColor: 'red',
@@ -664,7 +665,7 @@ class Form extends Component {
               justifyContent: 'center',
               flex: 1,
               paddingHorizontal: 15,
-              paddingVertical: 10,
+              paddingVertical: 5,
             },
           ]}
           ref={(ref) => {
@@ -736,7 +737,7 @@ class Form extends Component {
                 mask={mask}
                 style={[
                   {
-                    height: 40,
+                    height: 45,
                     paddingHorizontal: 14,
                     fontSize: 16,
                     letterSpacing: 2,
