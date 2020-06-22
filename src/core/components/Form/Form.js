@@ -64,9 +64,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   textinput: {
-    height: Platform.OS === 'ios' ? 40 : 'auto',
+    height: Platform.OS === 'ios' ? 55 : 'auto',
     color: '#222b45',
     fontSize: 16,
+    paddingTop: 20,
+    paddingBottom: 0,
   },
   select: {
     height: Platform.OS === 'ios' ? 61 : 'auto',
@@ -82,7 +84,9 @@ const styles = StyleSheet.create({
     height: Platform.OS === 'ios' ? 140 : 'auto',
     color: '#222b45',
     fontSize: 16,
-    paddingTop: 20,
+    paddingTop: 40,
+    paddingBottom: 0,
+    paddingHorizontal: 0,
   },
   button: {
     backgroundColor: styleConst.color.lightBlue,
