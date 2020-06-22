@@ -907,7 +907,7 @@ class NewCarItemScreen extends Component {
               full
               style={[styleConst.shadow.default, stylesFooter.button]}
               activeOpacity={0.8}>
-              <Text style={styles.buttonText}>ХОЧУ ЭТО АВТО!</Text>
+              <Text style={styles.buttonText} selectable={false}>ХОЧУ ЭТО АВТО!</Text>
             </Button>
           </View>
           {photoViewerItems.length ? (
