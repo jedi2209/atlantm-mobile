@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 
 export default class ColorBox extends PureComponent {
   static propTypes = {
-    color: PropTypes.string,
+    color: PropTypes.object,
     touchableStyle: PropTypes.object,
     containerStyle: PropTypes.object,
   };
@@ -78,7 +78,7 @@ export default class ColorBox extends PureComponent {
                 ]}
               />
               {color.code ? (
-                <Text style={{ontSize: 16}} selectable={true}>
+                <Text style={{fontSize: 16}} selectable={true}>
                   код цвета - {color.code}
                 </Text>
               ) : null}

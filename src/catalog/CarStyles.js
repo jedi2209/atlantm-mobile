@@ -14,7 +14,6 @@ export default StyleSheet.create({
     // backgroundColor: 'transparent',
   },
   gallery: {
-    // position: 'relative',
     marginTop: 0,
   },
   titleContainer: {

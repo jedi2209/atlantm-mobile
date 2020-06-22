@@ -203,8 +203,7 @@ class NewCarItemScreen extends Component {
   };
 
   onPressOrder = () => {
-    const {navigation, filterData, carDetails} = this.props;
-    const currency = get(this.props.navigation, 'state.params.currency');
+    const {navigation, carDetails} = this.props;
 
     const CarPrices = {
       sale: get(carDetails, 'price.app.sale') || 0,
@@ -220,6 +219,7 @@ class NewCarItemScreen extends Component {
         price: CarPrices.standart,
         priceSpecial: CarPrices.sale,
         complectation: get(carDetails, 'complectation.name'),
+        year: get(carDetails, 'year'),
       },
       region: this.props.dealerSelected.region,
       dealerId: carDetails.dealer.id,

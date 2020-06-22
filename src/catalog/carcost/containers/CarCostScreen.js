@@ -236,7 +236,7 @@ class CarCostScreen extends Component {
           Amplitude.logEvent('order', 'catalog/carcost');
 
           setTimeout(() => {
-            Alert.alert('Ваша заявка успешно отправлена', '', [
+            Alert.alert('Ваша заявка успешно отправлена!', '', [
               {
                 text: 'ОК',
                 onPress() {

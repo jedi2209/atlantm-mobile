@@ -286,9 +286,9 @@ class Form extends Component {
     } else {
       this.setState({[name]: valueNew});
     }
-    setTimeout(() => {
-      console.log('FORM onChangeField', this.state);
-    }, 1000);
+    // setTimeout(() => {
+    //   console.log('FORM onChangeField', this.state);
+    // }, 1000);
   };
 
   _fieldsDivider = (key) => {
@@ -341,7 +341,7 @@ class Form extends Component {
               ? !this.state[name]
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
-              : null,
+              : styles.fieldRequiredTrue,
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
@@ -490,7 +490,6 @@ class Form extends Component {
             label={label}
             customStyles={datePickerStyles}
             onFinishedSelection={(returnData) => {
-              console.log('returnData', returnData);
               this.onChangeField(data)(returnData);
             }}
             {...data.props}
@@ -662,10 +661,10 @@ class Form extends Component {
           style={[
             requiredStyle,
             {
-            justifyContent: 'center',
-            flex: 1,
-            paddingHorizontal: 15,
-            paddingVertical: 10,
+              justifyContent: 'center',
+              flex: 1,
+              paddingHorizontal: 15,
+              paddingVertical: 10,
             },
           ]}
           ref={(ref) => {
