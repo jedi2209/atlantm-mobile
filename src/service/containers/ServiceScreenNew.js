@@ -199,7 +199,6 @@ class ServiceScreen extends Component {
       label: 'VIN номер автомобиля',
       value: this.props.carVIN,
       props: {
-        required: false,
         placeholder: null,
       },
     },

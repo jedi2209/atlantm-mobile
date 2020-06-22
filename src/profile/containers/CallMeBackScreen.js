@@ -89,12 +89,21 @@ class CallMeBackScreen extends React.Component {
             name: 'Контактные данные',
             fields: [
               {
+                name: 'PHONE',
+                type: 'phone',
+                label: 'Телефон',
+                value: this.props.phone,
+                props: {
+                  required: true,
+                },
+              },
+              {
                 name: 'NAME',
                 type: 'input',
                 label: 'Имя',
                 value: this.props.firstName,
                 props: {
-                  required: true,
+                  required: false,
                   textContentType: 'name',
                 },
               },
@@ -104,16 +113,7 @@ class CallMeBackScreen extends React.Component {
                 label: 'Отчество',
                 value: this.props.secondName,
                 props: {
-                  textContentType: 'name',
-                },
-              },
-              {
-                name: 'PHONE',
-                type: 'phone',
-                label: 'Телефон',
-                value: this.props.phone,
-                props: {
-                  required: true,
+                  textContentType: 'middleName',
                 },
               },
             ],

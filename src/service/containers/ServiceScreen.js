@@ -28,13 +28,16 @@ import {ERROR_NETWORK} from '../../core/const';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
-  let carLocalName = '';
-  let carLocalVin = '';
+  let carLocalVin = '',
+    carLocalBrand = '',
+    carLocalModel = '';
 
   if (profile.cars && profile.cars[0]) {
-    if (profile.cars[0].brand && profile.cars[0].model) {
-      carLocalName = [profile.cars[0].brand, profile.cars[0].model].join(' ');
-    }
+    // if (profile.cars[0].brand && profile.cars[0].model) {
+    //   let carLocalName = [profile.cars[0].brand, profile.cars[0].model].join(
+    //     ' ',
+    //   );
+    // }
 
     if (profile.cars[0].vin) {
       carLocalVin = profile.cars[0].vin || '';

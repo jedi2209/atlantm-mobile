@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
   },
   select: {
     height: Platform.OS === 'ios' ? 61 : 55,
-    paddingTop: Platform.OS === 'ios' ? 0 : 8,
-    paddingLeft: Platform.OS === 'ios' ? 0 : 7,
+    paddingTop: Platform.OS === 'ios' ? 3 : 8,
+    paddingLeft: Platform.OS === 'ios' ? 'auto' : 7,
   },
   selectLabel: {
     color: '#808080',
@@ -645,7 +645,7 @@ class Form extends Component {
         mask = this.state['mask_' + name + num];
       }
 
-      let requiredStyle = null;
+      let requiredStyle = styles.fieldRequiredTrue;
 
       if (data.props && data.props.required) {
         requiredStyle = styles.fieldRequiredFalse;
@@ -680,6 +680,10 @@ class Form extends Component {
               flex: 1,
               paddingHorizontal: 15,
               paddingVertical: 5,
+            },
+            {
+              borderTopRightRadius: num === 0 ? 4 : 0,
+              borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
             },
           ]}
           ref={(ref) => {
@@ -802,7 +806,7 @@ class Form extends Component {
         />
       );
     },
-    select: (data, num) => {
+    select: (data, num, totalFields) => {
       const {name, label} = data;
       return (
         <View
@@ -811,6 +815,10 @@ class Form extends Component {
             styles.select,
             {
               marginVertical: 0,
+            },
+            {
+              borderTopRightRadius: num === 0 ? 4 : 0,
+              borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
             },
           ]}
           key={'field' + num + name}>
