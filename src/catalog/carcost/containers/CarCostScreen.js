@@ -4,41 +4,21 @@ import {
   StyleSheet,
   View,
   Alert,
-  Text,
   TouchableWithoutFeedback,
-  ScrollView,
   Keyboard,
-  ActivityIndicator,
   Platform,
-  StatusBar,
-  TouchableOpacity,
 } from 'react-native';
-import {Content, List, StyleProvider, Icon} from 'native-base';
+import CarCostPhotos from '../components/CarCostPhotos';
+import {Content} from 'native-base';
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import {substractYears} from '../../../utils/date';
 import UserData from '../../../utils/user';
 
-import {TextInput} from '../../../core/components/TextInput';
 import Form from '../../../core/components/Form/Form';
 
 // redux
 import {connect} from 'react-redux';
-import {
-  actionFillPhotosCarCost,
-  actionFillBrandCarCost,
-  actionFillModelCarCost,
-  actionFillColorCarCost,
-  actionSelectYearCarCost,
-  actionFillMileageCarCost,
-  actionSelectMileageUnitCarCost,
-  actionFillEngineVolumeCarCost,
-  actionSelectEngineTypeCarCost,
-  actionSelectGearboxCarCost,
-  actionSelectCarConditionCarCost,
-  actionFillCommentCarCost,
-  actionFillVinCarCost,
-  actionCarCostOrder,
-} from '../../actions';
+import {actionCarCostOrder} from '../../actions';
 import {CAR_COST__SUCCESS, CAR_COST__FAIL} from '../../actionTypes';
 
 // components
@@ -51,12 +31,6 @@ import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import {ERROR_NETWORK} from '../../../core/const';
 import isInternet from '../../../utils/internet';
-
-const styles = StyleSheet.create({
-  button: {
-    marginTop: 20,
-  },
-});
 
 const mapStateToProps = ({dealer, profile, nav, catalog}) => {
   const carCost = get(catalog, 'carCost', {});
@@ -99,25 +73,11 @@ const mapStateToProps = ({dealer, profile, nav, catalog}) => {
       : carLocalNumber,
     carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
     dealerSelected: dealer.selected,
-    isCarCostRequest: carCost.meta.isCarCostRequest,
   };
 };
 
 const mapDispatchToProps = {
   // carcost
-  actionFillPhotosCarCost,
-  actionFillBrandCarCost,
-  actionFillModelCarCost,
-  actionFillColorCarCost,
-  actionSelectYearCarCost,
-  actionFillMileageCarCost,
-  actionSelectMileageUnitCarCost,
-  actionFillEngineVolumeCarCost,
-  actionSelectEngineTypeCarCost,
-  actionSelectGearboxCarCost,
-  actionSelectCarConditionCarCost,
-  actionFillCommentCarCost,
-  actionFillVinCarCost,
   actionCarCostOrder,
 };
 
@@ -162,6 +122,7 @@ class CarCostScreen extends Component {
       carNumber: carNumber,
       carVIN: carVIN,
       carYear: null,
+      photos: [],
       loading: false,
       success: false,
     };
@@ -175,7 +136,7 @@ class CarCostScreen extends Component {
     email: PropTypes.string,
   };
 
-  onPressButton = async () => {
+  onPressOrder = async (dataFromForm) => {
     const isInternetExist = await isInternet();
 
     if (!isInternetExist) {
@@ -184,64 +145,41 @@ class CarCostScreen extends Component {
       const {
         navigation,
 
-        name,
         phone,
         email,
         dealerSelected,
-
-        actionCarCostOrder,
-        isCarCostRequest,
-
-        comment,
-        photos,
-        vin,
-        brand,
-        model,
-        year,
-        mileage,
-        mileageUnit,
-        engineVolume,
-        engineType,
-        gearbox,
-        carCondition,
-        color,
       } = this.props;
 
-      // предотвращаем повторную отправку формы
-      if (isCarCostRequest) {
-        return false;
-      }
+      const photoForUpload = valuesIn(this.state.photos);
 
-      const dealerId = dealerSelected.id;
-      const photoForUpload = valuesIn(photos);
+      // if (!name || !phone || !email || photoForUpload.length === 0) {
+      //   return Alert.alert(
+      //     'Не хватает информации',
+      //     'Необходимо заполнить ФИО, телефон, email и добавить минимум 1 фотографию автомобиля',
+      //   );
+      // }
 
-      if (!name || !phone || !email || photoForUpload.length === 0) {
-        return Alert.alert(
-          'Не хватает информации',
-          'Необходимо заполнить ФИО, телефон, email и добавить минимум 1 фотографию автомобиля',
-        );
-      }
-
-      actionCarCostOrder({
-        dealerId,
-        name,
+      const action = this.props.actionCarCostOrder({
+        dealerId: dealerSelected.id,
+        name: dataFromForm.NAME || '',
+        secondName: dataFromForm.SECOND_NAME || '',
+        lastName: dataFromForm.LAST_NAME || '',
         phone,
         email,
-        comment,
-        vin,
-        brand,
-        model,
-        year,
+        comment: dataFromForm.COMMENT || '',
+        vin: dataFromForm.CARVIN || '',
+        brand: dataFromForm.CARBRAND || '',
+        model: dataFromForm.CARMODEL || '',
+        year: dataFromForm.CARYEAR,
         photos: photoForUpload,
-        mileage,
-        mileageUnit,
-        engineVolume,
-        engineType,
-        gearbox,
-        carCondition,
-        color,
-      }).then((action) => {
-        if (action.type === CAR_COST__SUCCESS) {
+        mileage: dataFromForm.CARMILEAGE || '',
+        mileageUnit: 'км',
+        engineVolume: dataFromForm.CARENGINEVOLUME || '',
+        engineType: dataFromForm.CARENGINETYPE || '',
+        gearbox: dataFromForm.CARGEARBOXTYPE || '',
+      });
+      switch (action.type) {
+        case CAR_COST__SUCCESS:
           Amplitude.logEvent('order', 'catalog/carcost');
 
           setTimeout(() => {
@@ -254,9 +192,8 @@ class CarCostScreen extends Component {
               },
             ]);
           }, 100);
-        }
-
-        if (action.type === CAR_COST__FAIL) {
+          break;
+        case CAR_COST__FAIL:
           let message = get(
             action,
             'payload.message',
@@ -268,26 +205,26 @@ class CarCostScreen extends Component {
           }
 
           setTimeout(() => Alert.alert(message), 100);
-        }
-      });
+          break;
+      }
     }
   };
 
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
+  // shouldComponentUpdate(nextProps) {
+  //   const nav = nextProps.nav.newState;
+  //   let isActiveScreen = false;
 
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen =
-          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
-          'CarCostScreen';
-      }
-    }
+  //   if (nav) {
+  //     const rootLevel = nav.routes[nav.index];
+  //     if (rootLevel) {
+  //       isActiveScreen =
+  //         get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
+  //         'CarCostScreen';
+  //     }
+  //   }
 
-    return isActiveScreen;
-  }
+  //   return isActiveScreen;
+  // }
 
   render() {
     this.FormConfig = {
@@ -314,29 +251,24 @@ class CarCostScreen extends Component {
             name: 'Автомобиль',
             fields: [
               {
-                name: 'Автомобиль',
-                fields: [
-                  {
-                    name: 'CARBRAND',
-                    type: 'input',
-                    label: 'Марка',
-                    value: this.props.carBrand,
-                    props: {
-                      required: true,
-                      placeholder: null,
-                    },
-                  },
-                  {
-                    name: 'CARMODEL',
-                    type: 'input',
-                    label: 'Модель',
-                    value: this.props.carModel,
-                    props: {
-                      required: true,
-                      placeholder: null,
-                    },
-                  },
-                ],
+                name: 'CARBRAND',
+                type: 'input',
+                label: 'Марка',
+                value: this.props.carBrand,
+                props: {
+                  required: true,
+                  placeholder: null,
+                },
+              },
+              {
+                name: 'CARMODEL',
+                type: 'input',
+                label: 'Модель',
+                value: this.props.carModel,
+                props: {
+                  required: true,
+                  placeholder: null,
+                },
               },
               {
                 name: 'CARVIN',
@@ -434,6 +366,16 @@ class CarCostScreen extends Component {
                 },
               },
               {
+                name: 'CARENGINEVOLUME',
+                type: 'input',
+                label: 'Объём двигателя [в куб.см]',
+                value: this.props.carEngineVolume,
+                props: {
+                  keyboardType: 'number-pad',
+                  placeholder: null,
+                },
+              },
+              {
                 name: 'CARGEARBOXTYPE',
                 type: 'select',
                 label: 'Тип КПП',
@@ -516,28 +458,31 @@ class CarCostScreen extends Component {
                 label: 'Email',
                 value: this.props.email,
                 props: {
-                  required: true,
                   textContentType: 'emailAddress',
                 },
               },
             ],
           },
-          // {
-          //   name: 'Фотографии',
-          //   fields: [
-          //     {
-          //       name: 'FOTO',
-          //       type: 'component',
-          //       label: 'Прикрепите фото',
-          //       value: (
-          //         <CarCostPhotos
-          //           photos={photos}
-          //           photosFill={actionFillPhotosCarCost}
-          //         />
-          //       ),
-          //     },
-          //   ],
-          // },
+          {
+            name: 'Фотографии',
+            fields: [
+              {
+                name: 'FOTO',
+                type: 'component',
+                label: 'Прикрепите фото',
+                value: (
+                  <CarCostPhotos
+                    photos={this.state.photos}
+                    photosFill={(photos) => {
+                      this.setState({
+                        photos: photos,
+                      });
+                    }}
+                  />
+                ),
+              },
+            ],
+          },
           {
             name: 'Дополнительно',
             fields: [

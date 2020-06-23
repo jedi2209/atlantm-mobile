@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
   },
   item: {
     position: 'relative',
-    marginRight: 10,
   },
   photo: {
     borderRadius: 3,
@@ -73,9 +72,7 @@ export default class CarCostPhotos extends Component {
 
     this.state = {};
 
-    // if (!isTablet) {
     this.state.itemWidth = this.getItemWidth(width);
-    // }
 
     // генерируем хендлеры для actionSheet для каждого фото
     [1, 2, 3, 4, 5, 6].map((photoIndex) => {
@@ -89,7 +86,7 @@ export default class CarCostPhotos extends Component {
       this[`onPressRemovePhoto${photoIndex}`] = () => {
         let newPhotos = {...this.props.photos};
         delete newPhotos[photoIndex];
-        this.props.photosFill(newPhotos);
+        props.photosFill(newPhotos);
       };
     });
   }
@@ -176,7 +173,11 @@ export default class CarCostPhotos extends Component {
     );
   };
 
-  getItemWidth = (contentWidth) => ((contentWidth - 50) / 3) - 10;
+  getItemWidth = (contentWidth) => (contentWidth - 70) / 3;
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.photos !== nextProps.photos;
+  }
 
   onLayout = (e) => {
     return false;

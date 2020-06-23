@@ -631,6 +631,7 @@ export const actionUpdateNewCarPhotoViewerIndex = (index) => {
 // carcost
 export const actionFillPhotosCarCost = (photos) => {
   return (dispatch) => {
+    console.log('CAR_COST_PHOTOS__FILL', photos, dispatch);
     return dispatch({
       type: CAR_COST_PHOTOS__FILL,
       payload: photos,
@@ -754,10 +755,11 @@ export const actionCarCostOrder = (props) => {
     });
 
     return API.carCostOrder(props)
-      .then((rnFetchBlobresult) => {
-        const {data} = rnFetchBlobresult;
+      .then((data) => {
+        console.log('data', data);
+        // const {data} = data;
         try {
-          __DEV__ && console.log('carCostOrder result', rnFetchBlobresult);
+          __DEV__ && console.log('carCostOrder result', data);
           const res = JSON.parse(data);
           const {status, error} = res;
 
