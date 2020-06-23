@@ -10,6 +10,8 @@ import {
   ScrollView,
   StatusBar,
   StyleSheet,
+  Linking,
+  Platform,
 } from 'react-native';
 import {
   Col,
@@ -49,7 +51,7 @@ import styles from '@catalog/CarStyles';
 
 const imgResize = '10000x440';
 
-const mapStateToProps = ({catalog, dealer, nav}) => {
+const mapStateToProps = ({catalog, dealer, profile, nav}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
@@ -58,6 +60,7 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
     listBelarussia: dealer.listBelarussia,
     filterData: catalog.newCar.filterData,
     carDetails: catalog.newCar.carDetails.data,
+    profile,
     photoViewerItems: catalog.newCar.carDetails.photoViewerItems,
     photoViewerVisible: catalog.newCar.carDetails.photoViewerVisible,
     photoViewerIndex: catalog.newCar.carDetails.photoViewerIndex,
@@ -203,7 +206,7 @@ class NewCarItemScreen extends Component {
   };
 
   onPressOrder = () => {
-    const {navigation, carDetails} = this.props;
+    const {navigation, carDetails, profile} = this.props;
 
     const CarPrices = {
       sale: get(carDetails, 'price.app.sale') || 0,
@@ -211,21 +214,43 @@ class NewCarItemScreen extends Component {
         get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
     };
 
-    navigation.navigate('OrderScreen', {
-      car: {
-        brand: get(carDetails, 'brand.name'),
-        model: carDetails.model,
-        isSale: carDetails.sale === true,
-        price: CarPrices.standart,
-        priceSpecial: CarPrices.sale,
-        complectation: get(carDetails, 'complectation.name'),
-        year: get(carDetails, 'year'),
-      },
-      region: this.props.dealerSelected.region,
-      dealerId: carDetails.dealer.id,
-      carId: carDetails.id.api,
-      isNewCar: true,
-    });
+    const online = get(carDetails, 'online');
+    const onlineLink = get(carDetails, 'onlineLink');
+
+    if (online && onlineLink) {
+      let userLink = '';
+      if (
+        profile &&
+        profile.login &&
+        profile.login.SAP &&
+        profile.login.SAP.id
+      ) {
+        userLink = '&userID=' + profile.login.SAP.id;
+      }
+      Linking.openURL(
+        onlineLink +
+          '&utm_campaign=' +
+          Platform.OS +
+          '&utm_content=button' +
+          userLink,
+      );
+    } else {
+      navigation.navigate('OrderScreen', {
+        car: {
+          brand: get(carDetails, 'brand.name'),
+          model: carDetails.model,
+          isSale: carDetails.sale === true,
+          price: CarPrices.standart,
+          priceSpecial: CarPrices.sale,
+          complectation: get(carDetails, 'complectation.name'),
+          year: get(carDetails, 'year'),
+        },
+        region: this.props.dealerSelected.region,
+        dealerId: carDetails.dealer.id,
+        carId: carDetails.id.api,
+        isNewCar: true,
+      });
+    }
   };
 
   onClosePhoto = () => this.props.actionCloseNewCarPhotoViewer();
@@ -907,7 +932,9 @@ class NewCarItemScreen extends Component {
               full
               style={[styleConst.shadow.default, stylesFooter.button]}
               activeOpacity={0.8}>
-              <Text style={styles.buttonText} selectable={false}>ХОЧУ ЭТО АВТО!</Text>
+              <Text style={styles.buttonText} selectable={false}>
+                ХОЧУ ЭТО АВТО!
+              </Text>
             </Button>
           </View>
           {photoViewerItems.length ? (
