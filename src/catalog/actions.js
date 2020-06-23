@@ -756,12 +756,9 @@ export const actionCarCostOrder = (props) => {
 
     return API.carCostOrder(props)
       .then((data) => {
-        console.log('data', data);
-        // const {data} = data;
         try {
           __DEV__ && console.log('carCostOrder result', data);
-          const res = JSON.parse(data);
-          const {status, error} = res;
+          const {status, error} = data;
 
           if (status !== 'success') {
             return dispatch({

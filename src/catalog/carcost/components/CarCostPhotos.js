@@ -10,12 +10,10 @@ import {
 // components
 import {Grid, Row, Col, Icon} from 'native-base';
 import ActionSheet from 'react-native-actionsheet';
-import DeviceInfo from 'react-native-device-info';
 import ImagePicker from 'react-native-image-crop-picker';
 
 // helpers
 import PropTypes from 'prop-types';
-import styleConst from '../../../core/style-const';
 
 const thumbs = [
   require('../assets/photo_car_1.png'),
@@ -26,7 +24,6 @@ const thumbs = [
   require('../assets/photo_car_6.png'),
 ];
 
-// const isTablet = DeviceInfo.isTablet();
 const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -63,7 +60,7 @@ const styles = StyleSheet.create({
 
 export default class CarCostPhotos extends Component {
   static propTypes = {
-    photos: PropTypes.object,
+    photos: PropTypes.array || PropTypes.object,
     photosFill: PropTypes.func,
   };
 
@@ -143,6 +140,7 @@ export default class CarCostPhotos extends Component {
               onPress={this[`onPressRemovePhoto${photoIndex}`]}>
               <Icon
                 name="md-close-circle"
+                selectable={false}
                 style={[
                   styles.removeIcon,
                   {fontSize: width / 2.5, marginTop: -12},
@@ -151,6 +149,7 @@ export default class CarCostPhotos extends Component {
             </TouchableOpacity>
           ) : null}
           <TouchableOpacity
+            activeOpacity={0.7}
             style={[styles.item]}
             onPress={this[`onPressPhoto${photoIndex}`]}>
             {photo ? (

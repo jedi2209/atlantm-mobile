@@ -159,7 +159,7 @@ class CarCostScreen extends Component {
       //   );
       // }
 
-      const action = this.props.actionCarCostOrder({
+      const action = await this.props.actionCarCostOrder({
         dealerId: dealerSelected.id,
         name: dataFromForm.NAME || '',
         secondName: dataFromForm.SECOND_NAME || '',
@@ -183,14 +183,18 @@ class CarCostScreen extends Component {
           Amplitude.logEvent('order', 'catalog/carcost');
 
           setTimeout(() => {
-            Alert.alert('Ваша заявка успешно отправлена!', '', [
-              {
-                text: 'ОК',
-                onPress() {
-                  navigation.goBack();
+            Alert.alert(
+              'Всё получилось!',
+              'Ваша заявка успешно отправлена. Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
+              [
+                {
+                  text: 'ОК',
+                  onPress() {
+                    navigation.goBack();
+                  },
                 },
-              },
-            ]);
+              ],
+            );
           }, 100);
           break;
         case CAR_COST__FAIL:
@@ -204,7 +208,10 @@ class CarCostScreen extends Component {
             message = ERROR_NETWORK;
           }
 
-          setTimeout(() => Alert.alert(message), 100);
+          setTimeout(
+            () => Alert.alert('Хьюстон, у нас проблемы...', message),
+            100,
+          );
           break;
       }
     }

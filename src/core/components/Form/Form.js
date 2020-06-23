@@ -651,7 +651,7 @@ class Form extends Component {
         mask = this.state['mask_' + name + num];
       }
 
-      let requiredStyle = styles.fieldRequiredTrue;
+      let requiredStyle = {};
 
       if (data.props && data.props.required) {
         requiredStyle = styles.fieldRequiredFalse;
@@ -678,7 +678,7 @@ class Form extends Component {
         }
       }
       return (
-        <PhoneInput
+        <View
           style={[
             requiredStyle,
             {
@@ -686,99 +686,103 @@ class Form extends Component {
               flex: 1,
               paddingHorizontal: 15,
               paddingVertical: 5,
-            },
-            {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
             },
           ]}
-          ref={(ref) => {
-            this['phoneInputRef' + name + (id || num)] = ref;
-          }}
-          key={'field' + num + name}
-          initialCountry={countryCode}
-          countriesList={require('@utils/countries.json')}
-          offset={20}
-          autoFormat={true}
-          cancelText="Отмена"
-          confirmText="Выбрать"
-          onSelectCountry={(countryCode) => {
-            if (id) {
-              this.setState((prevState) => {
-                let copyField = Object.assign({}, prevState[name]);
-                copyField[id] = {
-                  value: null,
-                  mask: MaskedPhone[countryCode],
-                };
-                return {[name]: copyField};
-              });
-            } else {
-              this.setState({
-                [name]: null,
-                ['mask_' + name + num]: MaskedPhone[countryCode],
-              });
-            }
-          }}
-          textComponent={() => {
-            return (
-              <TextInputMask
-                key={'fieldInternal' + name + num}
-                ref={(ref) => {
-                  this['phoneInputRefInternal' + name + num] = ref;
-                }}
-                value={userPhoneValue}
-                placeholderTextColor={'#afafaf'}
-                placeholder={data.label}
-                keyboardType={'phone-pad'}
-                autoCompleteType={'tel'}
-                selectionColor={'#afafaf'}
-                returnKeyType={'go'}
-                textContentType={'telephoneNumber'}
-                enablesReturnKeyAutomatically={true}
-                editable={true}
-                onChangeText={(formatted, pureValue) => {
-                  if (id) {
-                    this.setState((prevState) => {
-                      let copyField = Object.assign({}, prevState[name]); // creating copy of state variable jasper
-                      copyField[id].value = formatted.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
-                      let maskLength = copyField[id].mask.replace(/[^0]/g, '');
-                      if (pureValue.length === maskLength.length) {
-                        return {[name]: copyField};
-                      }
-                    });
-                  } else {
-                    let maskLength = this.state['mask_' + name + num].replace(
-                      /[^0]/g,
-                      '',
-                    );
-                    if (pureValue.length === maskLength.length) {
-                      this.setState({
-                        [name]: formatted.replace(/[^\d.+]/g, ''),
+          key={'view' + num + name}>
+          <PhoneInput
+            ref={(ref) => {
+              this['phoneInputRef' + name + (id || num)] = ref;
+            }}
+            key={'field' + num + name}
+            initialCountry={countryCode}
+            countriesList={require('@utils/countries.json')}
+            offset={20}
+            autoFormat={true}
+            cancelText="Отмена"
+            confirmText="Выбрать"
+            onSelectCountry={(countryCode) => {
+              if (id) {
+                this.setState((prevState) => {
+                  let copyField = Object.assign({}, prevState[name]);
+                  copyField[id] = {
+                    value: null,
+                    mask: MaskedPhone[countryCode],
+                  };
+                  return {[name]: copyField};
+                });
+              } else {
+                this.setState({
+                  [name]: null,
+                  ['mask_' + name + num]: MaskedPhone[countryCode],
+                });
+              }
+            }}
+            textComponent={() => {
+              return (
+                <TextInputMask
+                  key={'fieldInternal' + name + num}
+                  ref={(ref) => {
+                    this['phoneInputRefInternal' + name + num] = ref;
+                  }}
+                  value={userPhoneValue}
+                  placeholderTextColor={'#afafaf'}
+                  placeholder={data.label}
+                  keyboardType={'phone-pad'}
+                  autoCompleteType={'tel'}
+                  selectionColor={'#afafaf'}
+                  returnKeyType={'go'}
+                  textContentType={'telephoneNumber'}
+                  enablesReturnKeyAutomatically={true}
+                  editable={true}
+                  onChangeText={(formatted, pureValue) => {
+                    if (id) {
+                      this.setState((prevState) => {
+                        let copyField = Object.assign({}, prevState[name]); // creating copy of state variable jasper
+                        copyField[id].value = formatted.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
+                        let maskLength = copyField[id].mask.replace(
+                          /[^0]/g,
+                          '',
+                        );
+                        if (pureValue.length === maskLength.length) {
+                          return {[name]: copyField};
+                        }
                       });
+                    } else {
+                      let maskLength = this.state['mask_' + name + num].replace(
+                        /[^0]/g,
+                        '',
+                      );
+                      if (pureValue.length === maskLength.length) {
+                        this.setState({
+                          [name]: formatted.replace(/[^\d.+]/g, ''),
+                        });
+                      }
                     }
-                  }
-                }}
-                mask={mask}
-                style={[
-                  {
-                    height: 45,
-                    paddingHorizontal: 14,
-                    fontSize: 16,
-                    letterSpacing: 2,
-                    width: '100%',
-                  },
-                  {...data.textStyle},
-                  data.props && data.props.required
-                    ? !this.state[name]
-                      ? styles.labelRequiredFalse
-                      : styles.labelRequiredTrue
-                    : null,
-                ]}
-              />
-            );
-          }}
-          {...data.props}
-        />
+                  }}
+                  mask={mask}
+                  style={[
+                    {
+                      height: 45,
+                      paddingHorizontal: 14,
+                      fontSize: 16,
+                      letterSpacing: 2,
+                      width: '100%',
+                    },
+                    {...data.textStyle},
+                    data.props && data.props.required
+                      ? !this.state[name]
+                        ? styles.labelRequiredFalse
+                        : styles.labelRequiredTrue
+                      : null,
+                  ]}
+                />
+              );
+            }}
+            {...data.props}
+          />
+        </View>
       );
     },
     component: (data, num) => {
