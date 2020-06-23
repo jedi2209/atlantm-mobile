@@ -53,7 +53,10 @@ export default {
       return false;
     }
     let requestedVersion = parseInt(version.replace(/\./gi, ''));
-    let req = await this.request('/mobile/check/version/', baseRequestParams).then((res) => {
+    let req = await this.request(
+      '/mobile/check/version/',
+      baseRequestParams,
+    ).then((res) => {
       if (res && res.version) {
         let APPVersionFromApi = parseInt(res.version.replace(/\./gi, ''));
         if (APPVersionFromApi > requestedVersion) {
@@ -383,59 +386,73 @@ export default {
   },
 
   carCostOrder(props) {
+    let formData = new FormData();
+
     const formBody = _.compact([
-      {name: 'f_Source', data: '3'},
-      props.dealerId && {name: 'f_Dealer', data: String(props.dealerId)},
-      props.name && {name: 'f_Name', data: String(props.name)},
-      props.phone && {name: 'f_Phone', data: String(props.phone)},
-      props.email && {name: 'f_Email', data: String(props.email)},
-      props.comment && {name: 'f_Text', data: String(props.comment)},
-      props.vin && {name: 'f_VIN', data: String(props.vin)},
-      props.brand && {name: 'f_Brand', data: String(props.brand)},
-      props.model && {name: 'f_Model', data: String(props.model)},
-      props.year && {name: 'f_Year', data: String(props.year)},
-      props.mileage && {name: 'f_Mileage', data: String(props.mileage)},
+      {name: 'f_Source', value: '3'},
+      props.dealerId && {name: 'f_Dealer', value: String(props.dealerId)},
+      props.name && {name: 'f_FirstName', value: String(props.name)},
+      props.secondName && {
+        name: 'f_SecondName',
+        value: String(props.secondName),
+      },
+      props.lastName && {name: 'f_LastName', value: String(props.lastName)},
+      props.phone && {name: 'f_Phone', value: String(props.phone)},
+      props.email && {name: 'f_Email', value: String(props.email)},
+      props.comment && {name: 'f_Text', value: String(props.comment)},
+      props.vin && {name: 'f_VIN', value: String(props.vin)},
+      props.brand && {name: 'f_Brand', value: String(props.brand)},
+      props.model && {name: 'f_Model', value: String(props.model)},
+      props.year && {name: 'f_Year', value: String(props.year)},
+      props.mileage && {name: 'f_Mileage', value: String(props.mileage)},
       props.mileageUnit && {
         name: 'f_Mileage_unit',
-        data: String(props.mileageUnit),
+        value: String(props.mileageUnit),
       },
       props.engineVolume && {
         name: 'f_Engine',
-        data: String(props.engineVolume),
+        value: String(props.engineVolume),
       },
       props.engineType && {
         name: 'f_EngineType',
-        data: String(props.engineType),
+        value: String(props.engineType),
       },
-      props.gearbox && {name: 'f_Gearbox', data: String(props.gearbox)},
-      props.color && {name: 'f_Color', data: String(props.color)},
-      props.carCondition && {
-        name: 'f_CarCondition',
-        data: String(props.carCondition),
-      },
+      props.gearbox && {name: 'f_Gearbox', value: String(props.gearbox)},
     ]);
 
-    const photosBody = props.photos.map((photo) => {
-      return {
-        name: 'f_Photo[]',
-        type: photo.mime,
-        filename: photo.path,
-        data: RNFetchBlob.wrap(photo.path),
-      };
+    formBody.map((val) => {
+      formData.append(val.name, val.value);
     });
 
-    const body = formBody.concat(photosBody);
+    props.photos.map((photo) => {
+      formData.append('f_Photo[]', {
+        name: photo.filename,
+        type: photo.mime,
+        uri: photo.path,
+      });
+    });
 
-    // __DEV__ && console.log('API carcost body', body);
+//    const body = formBody.concat(formData);
+    const body = formData;
 
-    return RNFetchBlob.fetch(
-      'POST',
-      `${host}/orders/usedbuy/post/`,
-      _.merge({}, headers, {
+    __DEV__ && console.log('API carcost body', body);
+
+    return fetch(`${host}/orders/usedbuy/post/`, {
+      method: 'POST',
+      headers: _.merge({}, headers, {
         'Content-Type': 'multipart/form-data',
       }),
-      body,
-    );
+      body: body,
+    });
+
+    // return RNFetchBlob.fetch(
+    //   'POST',
+    //   `${host}/orders/usedbuy/post/`,
+    //   _.merge({}, headers, {
+    //     'Content-Type': 'multipart/form-data',
+    //   }),
+    //   body,
+    // );
   },
 
   fetchCars({token, userid}) {

@@ -349,7 +349,7 @@ class Form extends Component {
               ? !this.state[name]
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
-              : styles.fieldRequiredTrue,
+              : {},
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
@@ -359,7 +359,7 @@ class Form extends Component {
           <TextInput
             autoCorrect={false}
             style={styles.textinput}
-            label={label}
+            label={label + (data.props && data.props.required ? '*' : '')}
             name={name}
             value={this.state[name] || ''}
             enablesReturnKeyAutomatically={true}
@@ -379,7 +379,7 @@ class Form extends Component {
               ? !this.state[name]
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
-              : null,
+              : {},
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
@@ -391,7 +391,7 @@ class Form extends Component {
             style={styles.textarea}
             multiline={true}
             numberOfLines={4}
-            label={label}
+            label={label + (data.props && data.props.required ? '*' : '')}
             name={name}
             value={this.state[name] || ''}
             enablesReturnKeyAutomatically={true}
@@ -419,7 +419,7 @@ class Form extends Component {
               ? this.state[name] && this._validateEmail(value)
                 ? styles.fieldRequiredTrue
                 : styles.fieldRequiredFalse
-              : null,
+              : {},
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
@@ -431,7 +431,7 @@ class Form extends Component {
             textContentType={'emailAddress'}
             autoCorrect={false}
             style={styles.textinput}
-            label={label}
+            label={label + (data.props && data.props.required ? '*' : '')}
             name={name}
             value={value}
             enablesReturnKeyAutomatically={true}
@@ -451,7 +451,7 @@ class Form extends Component {
               ? !this.state[name]
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
-              : null,
+              : {},
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
@@ -461,7 +461,7 @@ class Form extends Component {
           <DatePickerCustom
             showIcon={false}
             mode="date"
-            label={label}
+            label={label + (data.props && data.props.required ? '*' : '')}
             locale="ru-RU"
             placeholder="Выберите дату"
             format="DD MMMM YYYY"
@@ -489,7 +489,7 @@ class Form extends Component {
                 : styles.fieldRequiredTrue
               : !this.state[name].time
               ? styles.fieldRequiredFalse
-              : styles.fieldRequiredTrue,
+              : {},
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
@@ -497,7 +497,7 @@ class Form extends Component {
           ]}
           key={'field' + num + name}>
           <ChooseDateTimeComponent
-            label={label}
+            label={label + (data.props && data.props.required ? '*' : '')}
             customStyles={datePickerStyles}
             onFinishedSelection={(returnData) => {
               this.onChangeField(data)(returnData);
@@ -532,6 +532,11 @@ class Form extends Component {
           style={[
             styles.field,
             styles.select,
+            data.props && data.props.required
+              ? !this.state[name]
+                ? styles.fieldRequiredFalse
+                : styles.fieldRequiredTrue
+              : {},
             {
               marginVertical: 0,
             },
@@ -539,6 +544,7 @@ class Form extends Component {
           key={'field' + num + name}>
           <Text style={styles.selectLabel} selectable={false}>
             {label}
+            {data.props && data.props.required ? '*' : null}
           </Text>
           <RNPickerSelect
             key={'rnYearPicker' + num + name}
@@ -813,6 +819,11 @@ class Form extends Component {
           style={[
             styles.field,
             styles.select,
+            data.props && data.props.required
+              ? !this.state[name]
+                ? styles.fieldRequiredFalse
+                : styles.fieldRequiredTrue
+              : {},
             {
               marginVertical: 0,
             },
@@ -824,6 +835,7 @@ class Form extends Component {
           key={'field' + num + name}>
           <Text selectable={false} style={styles.selectLabel}>
             {label}
+            {data.props && data.props.required ? '*' : null}
           </Text>
           <RNPickerSelect
             key={'rnpicker' + num + name}
