@@ -2,7 +2,6 @@ import _ from 'lodash';
 
 import {Platform, Linking, Alert, BackHandler} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import RNFetchBlob from 'rn-fetch-blob';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -432,27 +431,23 @@ export default {
       });
     });
 
-//    const body = formBody.concat(formData);
     const body = formData;
 
     __DEV__ && console.log('API carcost body', body);
 
-    return fetch(`${host}/orders/usedbuy/post/`, {
-      method: 'POST',
-      headers: _.merge({}, headers, {
-        'Content-Type': 'multipart/form-data',
-      }),
-      body: body,
-    });
-
-    // return RNFetchBlob.fetch(
-    //   'POST',
-    //   `${host}/orders/usedbuy/post/`,
-    //   _.merge({}, headers, {
-    //     'Content-Type': 'multipart/form-data',
-    //   }),
-    //   body,
-    // );
+    return (async () => {
+      const rawResponse = await fetch(`${host}/orders/usedbuy/post/`, {
+        method: 'POST',
+        headers: _.merge({}, headers, {
+          'Content-Type': 'multipart/form-data',
+        }),
+        body: body,
+      });
+      if (rawResponse) {
+        let txt = await rawResponse.text();
+        return JSON.parse(txt);
+      }
+    })();
   },
 
   fetchCars({token, userid}) {
