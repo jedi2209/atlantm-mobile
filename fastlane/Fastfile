@@ -18,6 +18,19 @@ before_all do
 end
 
 platform :ios do
+  desc "Commit iOS"
+  lane :finish do
+    commit_version_bump(
+      message: "Version Bump iOS",    # create a commit with a custom message
+      xcodeproj: "ios/atlantm.xcodeproj"
+      )
+    add_git_tag(
+      grouping: "builds",
+      prefix: "v"
+    )
+    push_to_git_remote
+  end
+
   desc "Prepare the iOS app for dev or build"
   lane :prepare do
     puts "SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: #{ENV['SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER']}"
