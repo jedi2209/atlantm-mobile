@@ -120,7 +120,7 @@ export default StyleSheet.create({
   },
   segment: {
     marginTop: isAndroid ? 0 : styleConst.ui.horizontalGap,
-    marginHorizontal: styleConst.ui.horizontalGap,
+    marginHorizontal: '2%',
   },
   tabText: {
     fontFamily: styleConst.font.regular,
@@ -168,11 +168,9 @@ export default StyleSheet.create({
   },
   mapCard: {},
   mapCardContainer: {
-    marginBottom: 5,
-    marginHorizontal: '4%',
+    marginHorizontal: '2%',
     flexDirection: 'row',
     backgroundColor: '#fff',
-    paddingHorizontal: 4,
     paddingVertical: 10,
     borderWidth: 1,
     borderRadius: 10,
@@ -199,5 +197,11 @@ export default StyleSheet.create({
   mapCardTextContainer: {
     justifyContent: 'space-around',
     flex: 1,
+  },
+  ShowFullDescriptionButton: {
+    paddingVertical: 7,
+    color: styleConst.color.greyText,
+    fontFamily: styleConst.font.regular,
+    fontStyle: 'italic',
   },
 });

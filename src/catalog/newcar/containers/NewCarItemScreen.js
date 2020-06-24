@@ -976,6 +976,10 @@ const stylesFooter = StyleSheet.create({
     backgroundColor: styleConst.color.lightBlue,
     borderColor: styleConst.color.lightBlue,
     borderWidth: 1,
+    shadowOffset: {
+      width: 5,
+      height: 5,
+    },
   },
   orderPriceContainer: {
     height: 48,
