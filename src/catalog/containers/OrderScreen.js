@@ -106,17 +106,13 @@ const mapDispatchToProps = {
 class OrderScreen extends Component {
   constructor(props) {
     super(props);
-
-    const car = get(this.props.navigation, 'state.params.car');
     const isNewCar = get(this.props.navigation, 'state.params.isNewCar');
-    const region = get(this.props.navigation, 'state.params.region');
-    const {brand, model, complectation, year} = car;
 
     const carName = [
-      brand ? brand.toString() : null,
-      model ? model.name.toString() : null,
-      complectation ? complectation.toString() : null,
-      year ? year.toString() : null,
+      get(this.props.navigation, 'state.params.car.brand'),
+      get(this.props.navigation, 'state.params.car.model'),
+      get(this.props.navigation, 'state.params.car.complectation'),
+      get(this.props.navigation, 'state.params.car.year'),
     ].join(' ');
 
     this.state = {
@@ -188,9 +184,6 @@ class OrderScreen extends Component {
                 type: 'email',
                 label: 'Email',
                 value: this.props.email,
-                props: {
-                  required: true,
-                },
               },
             ],
           },

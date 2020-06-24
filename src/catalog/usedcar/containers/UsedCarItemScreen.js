@@ -123,6 +123,13 @@ class UserCarItemScreen extends Component {
   componentDidMount() {
     const carId = get(this.props.navigation, 'state.params.carId');
     this.props.actionFetchUsedCarDetails(carId);
+
+    Amplitude.logEvent('screen', 'catalog/usedcar/item', {
+      id_api: get(this.props.carDetails, 'id.api'),
+      id_sap: get(this.props.carDetails, 'id.sap'),
+      brand_name: get(this.props.carDetails, 'brand.name'),
+      model_name: get(this.props.carDetails, 'model.name'),
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -295,17 +302,6 @@ class UserCarItemScreen extends Component {
 
     console.log('== UsedCarItemScreen ==');
 
-    if (!this.logGuard) {
-      Amplitude.logEvent('screen', 'catalog/usedcar/item', {
-        id_api: get(carDetails, 'id.api'),
-        id_sap: get(carDetails, 'id.sap'),
-        brand_name: get(carDetails, 'brand.name'),
-        model_name: get(carDetails, 'model.name'),
-      });
-
-      this.logGuard = true;
-    }
-
     let photos = [];
     if (get(carDetails, 'img.original')) {
       get(carDetails, 'img.original').forEach((element) => {
@@ -373,7 +369,7 @@ class UserCarItemScreen extends Component {
                         display: 'flex',
                         flexDirection: 'row',
                         paddingHorizontal: '2%',
-                        marginBottom: 12,
+                        marginBottom: 10,
                       }}>
                       {get(carDetails, 'engine') ? (
                         <OptionPlate
@@ -641,13 +637,13 @@ class UserCarItemScreen extends Component {
                       <View
                         style={{
                           height: 64,
-                          paddingHorizontal: 16,
+                          paddingHorizontal: '2%',
                           display: 'flex',
                           flexDirection: 'row',
                           justifyContent: 'space-between',
                           alignItems: 'center',
                           backgroundColor: '#fff',
-                          borderTopWidth: 1,
+                          borderTopWidth: 0.75,
                           borderColor: '#d5d5e0',
                         }}>
                         <Text style={{fontSize: 18}}>{item.title}</Text>
@@ -671,7 +667,7 @@ class UserCarItemScreen extends Component {
                         <View
                           style={{
                             backgroundColor: '#fff',
-                            paddingHorizontal: 16,
+                            paddingHorizontal: '3%',
                           }}>
                           {item.content}
                         </View>
