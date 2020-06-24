@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
   spinner: {
     alignSelf: 'center',
     marginTop: verticalScale(60),
+    height: 200,
   },
   textContainer: {
     flex: 1,
@@ -87,20 +88,14 @@ const mapDispatchToProps = {
 const injectScript = `
 (function () {
   window.onclick = function(e) {
-    e.preventDefault();
-    window.postMessage(e.target.href);
-    e.stopPropagation()
+    //e.preventDefault();
+    //window.postMessage(e.target.href);
+    //e.stopPropagation()
   }
 }());
 `;
 
 class InfoPostScreen extends Component {
-  state = {
-    imageWidth: IMAGE_WIDTH,
-    imageHeight: IMAGE_HEIGHT,
-    webViewWidth: screenWidth - styleConst.ui.verticalGap,
-  };
-
   static navigationOptions = ({navigation}) => {
     const returnScreen =
       navigation.state.params && navigation.state.params.returnScreen;
@@ -118,6 +113,12 @@ class InfoPostScreen extends Component {
     };
   };
 
+  state = {
+    imageWidth: IMAGE_WIDTH,
+    imageHeight: IMAGE_HEIGHT,
+    webViewWidth: screenWidth - styleConst.ui.verticalGap,
+  };
+
   componentDidMount() {
     const {posts, navigation, fetchInfoPost} = this.props;
 
@@ -132,13 +133,13 @@ class InfoPostScreen extends Component {
     });
   }
 
-  onLayoutImage = e => {
+  onLayoutImage = (e) => {
     const {height: imageDynamicHeight} = e.nativeEvent.layout;
 
     this.setState({imageHeight: imageDynamicHeight});
   };
 
-  onLayoutWebView = e => {
+  onLayoutWebView = (e) => {
     const {width: webViewWidth} = e.nativeEvent.layout;
 
     this.setState({webViewWidth});
@@ -220,9 +221,11 @@ class InfoPostScreen extends Component {
                   <Text style={styles.date}>{this.processDate(date)}</Text>
                 ) : null}
                 <WebViewAutoHeight
+                  style={{
+                    backgroundColor: styleConst.color.bg,
+                  }}
                   key={get(post, 'hash')}
                   source={{html: text}}
-                  // injectedJavaScript={injectScript}
                   onMessage={this.onMessage}
                 />
               </View>
@@ -266,7 +269,4 @@ class InfoPostScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(InfoPostScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(InfoPostScreen);
