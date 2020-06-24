@@ -78,7 +78,7 @@ export default {
     },
     IconStyle: {
       marginLeft: isAndroid ? 5 : 8,
-    }
+    },
   },
   new: {
     // TODO: reeemmaee to bluee

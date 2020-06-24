@@ -580,9 +580,6 @@ class ServiceScreen extends Component {
                 type: 'email',
                 label: 'Email',
                 value: this.props.email,
-                props: {
-                  required: false,
-                },
               },
             ],
           },

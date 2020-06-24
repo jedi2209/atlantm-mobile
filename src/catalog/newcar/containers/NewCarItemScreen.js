@@ -164,6 +164,13 @@ class NewCarItemScreen extends Component {
     const carId = get(this.props.navigation, 'state.params.carId');
 
     this.props.actionFetchNewCarDetails(carId);
+
+    Amplitude.logEvent('screen', 'catalog/newcar/item', {
+      id_api: get(this.props.carDetails, 'id.api'),
+      id_sap: get(this.props.carDetails, 'id.sap'),
+      brand_name: get(this.props.carDetails, 'brand.name'),
+      model_name: get(this.props.carDetails, 'model.name'),
+    });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -214,10 +221,9 @@ class NewCarItemScreen extends Component {
         get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
     };
 
-    const online = get(carDetails, 'online');
     const onlineLink = get(carDetails, 'onlineLink');
 
-    if (online && onlineLink) {
+    if (get(carDetails, 'online') && onlineLink) {
       let userLink = '';
       if (
         profile &&
@@ -238,7 +244,7 @@ class NewCarItemScreen extends Component {
       navigation.navigate('OrderScreen', {
         car: {
           brand: get(carDetails, 'brand.name'),
-          model: carDetails.model,
+          model: get(carDetails, 'model.name'),
           isSale: carDetails.sale === true,
           price: CarPrices.standart,
           priceSpecial: CarPrices.sale,
@@ -355,13 +361,8 @@ class NewCarItemScreen extends Component {
     }
 
     return (
-      <View key={title}>
-        <Text
-          style={styles.sectionTitle}
-          ellipsizeMode="tail"
-          numberOfLines={1}>
-          {title}
-        </Text>
+      <View key={title} style={{marginBottom: 10}}>
+        <Text style={styles.sectionTitle}>{title}</Text>
         {data.map((item) => {
           return (
             <Grid key={`${item.name} ${item.id}`}>
@@ -385,10 +386,7 @@ class NewCarItemScreen extends Component {
                   </Col>
                 </Row>
               ) : (
-                <Text
-                  style={[styles.sectionPropText, styles.sectionRow]}
-                  ellipsizeMode="tail"
-                  numberOfLines={1}>
+                <Text style={[styles.sectionPropText, styles.sectionRow]}>
                   {item.name}
                 </Text>
               )}
@@ -519,9 +517,8 @@ class NewCarItemScreen extends Component {
     console.log('== NewCarItemScreen ==');
 
     const currency = get(this.props.navigation, 'state.params.currency');
-    const {brand, model, complectation} = carDetails;
-    const brandName = brand.name || '';
-    const modelName = model.name || '';
+    const brandName = get(carDetails, 'brand.name');
+    const modelName = get(carDetails, 'model.name');
     let photos = [];
     let CarImgReal = false;
     if (get(carDetails, 'imgReal.thumb.0')) {
@@ -540,16 +537,6 @@ class NewCarItemScreen extends Component {
       path[parseInt(path.length - 1, 10)] =
         imgResize + '/' + path[parseInt(path.length - 1, 10)];
       photosThumbs.push(path.join('/'));
-    }
-    if (!this.logGuard) {
-      Amplitude.logEvent('screen', 'catalog/newcar/item', {
-        id_api: get(carDetails, 'id.api'),
-        id_sap: get(carDetails, 'id.sap'),
-        brand_name: brandName,
-        model_name: modelName,
-      });
-
-      this.logGuard = true;
     }
 
     return (
@@ -596,7 +583,7 @@ class NewCarItemScreen extends Component {
                   {
                     position: 'relative',
                     marginTop: CarImgReal ? 335 : 335,
-                    marginBottom: -20,
+                    marginBottom: -5,
                     backgroundColor: '#fff',
                     borderTopLeftRadius: 30,
                     borderTopRightRadius: 30,
@@ -609,14 +596,14 @@ class NewCarItemScreen extends Component {
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'space-between',
-                    paddingHorizontal: 16,
+                    paddingHorizontal: '2%',
                   }}>
                   <View style={{marginBottom: 10, flexShrink: 1}}>
                     <Text style={{fontSize: 16, fontWeight: '600'}}>
                       {`${brandName} ${modelName}`}
                     </Text>
                     <Text style={{fontSize: 11, fontWeight: '600'}}>
-                      {get(complectation, 'name', '') +
+                      {get(carDetails, 'complectation.name', '') +
                         ' ' +
                         get(carDetails, 'year')}
                     </Text>
@@ -629,7 +616,7 @@ class NewCarItemScreen extends Component {
                     style={{
                       display: 'flex',
                       flexDirection: 'row',
-                      paddingHorizontal: 16,
+                      paddingHorizontal: '2%',
                       marginBottom: 10,
                     }}>
                     <OptionPlate
@@ -711,214 +698,211 @@ class NewCarItemScreen extends Component {
                 </TouchableWithoutFeedback>
               </View>
 
-              <View
+              <Accordion
                 style={{
                   borderBottomColor: '#d5d5e0',
-                  borderBottomWidth: 0.75,
-                  marginTop: 10,
+                  borderBottomWidth: 1,
                   marginBottom: 90,
-                }}>
-                <Accordion
-                  dataArray={[
-                    {
-                      title: 'Характеристики',
-                      content: (
-                        <View>
-                          {this.renderTechData('Основные', [
+                }}
+                dataArray={[
+                  {
+                    title: 'Характеристики',
+                    content: (
+                      <View>
+                        {this.renderTechData('Основные', [
+                          {
+                            name: 'Тип кузова',
+                            value: 'body.name',
+                          },
+                          {
+                            name: 'Год выпуска',
+                            value: 'year',
+                          },
+                        ])}
+                        {this.renderTechData('Двигатель', [
+                          {
+                            name: 'Тип',
+                            value: 'engine.type',
+                          },
+                          (() => {
+                            if (
+                              get(carDetails, 'engine.id') &&
+                              get(carDetails, 'engine.id') === 4
+                            ) {
+                              return false;
+                            }
+                            return {
+                              name: 'Рабочий объём',
+                              value: 'engine.volume.full',
+                              postfix: 'см³',
+                            };
+                          })(),
+                          {
+                            name: 'Мощность',
+                            value: 'power.hp',
+                            postfix: 'л.с.',
+                          },
+                        ])}
+                        {this.renderTechData('Трансмиссия', [
+                          {
+                            name: 'Тип',
+                            value: 'gearbox.name',
+                          },
+                          {
+                            name: 'Количество передач',
+                            value: 'gearbox.count',
+                          },
+                          {
+                            name: 'Привод',
+                            value: 'gearbox.wheel',
+                          },
+                        ])}
+                        {this.renderTechData('Кузов', [
+                          {
+                            name: 'Длина',
+                            value: 'body.width',
+                            postfix: 'мм.',
+                          },
+                          {
+                            name: 'Ширина',
+                            value: 'body.height',
+                            postfix: 'мм.',
+                          },
+                          {
+                            name: 'Высота',
+                            value: 'body.high',
+                            postfix: 'мм.',
+                          },
+                          {
+                            name: 'Клиренс',
+                            value: 'body.clirens',
+                            postfix: 'мм.',
+                          },
+                          {
+                            name: 'Объём багажника',
+                            value: 'body.trunk.min',
+                            postfix: 'л.',
+                          },
+                          {
+                            name: 'Объём топливного бака',
+                            value: 'fuel.fuel',
+                            postfix: 'л.',
+                          },
+                        ])}
+                        {this.renderTechData(
+                          'Эксплуатационные характеристики',
+                          [
                             {
-                              name: 'Тип кузова',
-                              value: 'body.name',
+                              name: 'Максимальная скорость',
+                              value: 'speed.max',
+                              postfix: 'км/ч.',
                             },
                             {
-                              name: 'Год выпуска',
-                              value: 'year',
-                            },
-                          ])}
-                          {this.renderTechData('Двигатель', [
-                            {
-                              name: 'Тип',
-                              value: 'engine.type',
-                            },
-                            (() => {
-                              if (
-                                get(carDetails, 'engine.id') &&
-                                get(carDetails, 'engine.id') === 4
-                              ) {
-                                return false;
-                              }
-                              return {
-                                name: 'Рабочий объём',
-                                value: 'engine.volume.full',
-                                postfix: 'см³',
-                              };
-                            })(),
-                            {
-                              name: 'Мощность',
-                              value: 'power.hp',
-                              postfix: 'л.с.',
-                            },
-                          ])}
-                          {this.renderTechData('Трансмиссия', [
-                            {
-                              name: 'Тип',
-                              value: 'gearbox.name',
+                              name: 'Разгон с 0 до 100 км/ч',
+                              value: 'speed.dispersal',
+                              postfix: 'сек.',
                             },
                             {
-                              name: 'Количество передач',
-                              value: 'gearbox.count',
-                            },
-                            {
-                              name: 'Привод',
-                              value: 'gearbox.wheel',
-                            },
-                          ])}
-                          {this.renderTechData('Кузов', [
-                            {
-                              name: 'Длина',
-                              value: 'body.width',
-                              postfix: 'мм.',
-                            },
-                            {
-                              name: 'Ширина',
-                              value: 'body.height',
-                              postfix: 'мм.',
-                            },
-                            {
-                              name: 'Высота',
-                              value: 'body.high',
-                              postfix: 'мм.',
-                            },
-                            {
-                              name: 'Клиренс',
-                              value: 'body.clirens',
-                              postfix: 'мм.',
-                            },
-                            {
-                              name: 'Объём багажника',
-                              value: 'body.trunk.min',
+                              name: 'Расход топлива (город)',
+                              value: 'fuel.city',
                               postfix: 'л.',
                             },
                             {
-                              name: 'Объём топливного бака',
-                              value: 'fuel.fuel',
+                              name: 'Расход топлива (трасса)',
+                              value: 'fuel.track',
                               postfix: 'л.',
                             },
-                          ])}
-                          {this.renderTechData(
-                            'Эксплуатационные характеристики',
-                            [
-                              {
-                                name: 'Максимальная скорость',
-                                value: 'speed.max',
-                                postfix: 'км/ч.',
-                              },
-                              {
-                                name: 'Разгон с 0 до 100 км/ч',
-                                value: 'speed.dispersal',
-                                postfix: 'сек.',
-                              },
-                              {
-                                name: 'Расход топлива (город)',
-                                value: 'fuel.city',
-                                postfix: 'л.',
-                              },
-                              {
-                                name: 'Расход топлива (трасса)',
-                                value: 'fuel.track',
-                                postfix: 'л.',
-                              },
-                              {
-                                name: 'Расход топлива (смешанный)',
-                                value: 'fuel.both',
-                                postfix: 'л.',
-                              },
-                            ],
-                          )}
-                        </View>
-                      ),
-                    },
-                    {
-                      title: 'Комплектация',
-                      content: (
-                        <View style={styles.tabContent}>
-                          {stockKeys.length ? (
-                            <View>
-                              {stockKeys.map((key) => {
-                                return this.renderComplectationItem(
-                                  stock[key].name,
-                                  stock[key].data,
-                                );
-                              })}
-                            </View>
-                          ) : null}
+                            {
+                              name: 'Расход топлива (смешанный)',
+                              value: 'fuel.both',
+                              postfix: 'л.',
+                            },
+                          ],
+                        )}
+                      </View>
+                    ),
+                  },
+                  {
+                    title: 'Комплектация',
+                    content: (
+                      <View style={styles.tabContent}>
+                        {stockKeys.length ? (
+                          <View>
+                            {stockKeys.map((key) => {
+                              return this.renderComplectationItem(
+                                stock[key].name,
+                                stock[key].data,
+                              );
+                            })}
+                          </View>
+                        ) : null}
 
-                          {additionalKeys.length ? (
-                            <View>
-                              {additionalKeys.map((key) => {
-                                return this.renderComplectationItem(
-                                  additional[key].name,
-                                  additional[key].data,
-                                );
-                              })}
-                            </View>
-                          ) : null}
+                        {additionalKeys.length ? (
+                          <View>
+                            {additionalKeys.map((key) => {
+                              return this.renderComplectationItem(
+                                additional[key].name,
+                                additional[key].data,
+                              );
+                            })}
+                          </View>
+                        ) : null}
 
-                          {carDetails.text ? (
-                            <View style={styles.descrContainer}>
-                              <Text style={styles.descr}>
-                                {carDetails.text}
-                              </Text>
-                            </View>
-                          ) : null}
-                        </View>
-                      ),
-                    },
-                  ]}
-                  expanded={0}
-                  animation={true}
-                  renderHeader={(item, expanded) => (
+                        {carDetails.text ? (
+                          <View style={styles.descrContainer}>
+                            <Text style={styles.descr}>
+                              {carDetails.text}
+                            </Text>
+                          </View>
+                        ) : null}
+                      </View>
+                    ),
+                  },
+                ]}
+                expanded={0}
+                animation={true}
+                renderHeader={(item, expanded) => (
+                  <View
+                    style={{
+                      height: 64,
+                      paddingHorizontal: '2%',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      backgroundColor: '#fff',
+                      borderTopWidth: 0.75,
+                      borderColor: '#d5d5e0',
+                    }}>
+                    <Text style={{fontSize: 18}}>{item.title}</Text>
+                    {expanded ? (
+                      <Icon
+                        type="FontAwesome5"
+                        style={{color: '#0061ED', fontWeight: 'normal'}}
+                        name="angle-down"
+                      />
+                    ) : (
+                      <Icon
+                        type="FontAwesome5"
+                        style={{color: '#131314', fontWeight: 'normal'}}
+                        name="angle-right"
+                      />
+                    )}
+                  </View>
+                )}
+                renderContent={(item) => {
+                  return (
                     <View
                       style={{
-                        height: 64,
-                        paddingHorizontal: 16,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
+                        // height: 200,
                         backgroundColor: '#fff',
-                        borderTopWidth: 1,
-                        borderColor: '#d5d5e0',
+                        paddingHorizontal: '3%',
                       }}>
-                      <Text style={{fontSize: 18}}>{item.title}</Text>
-                      {expanded ? (
-                        <Icon
-                          type="FontAwesome5"
-                          style={{color: '#0061ED', fontWeight: 'normal'}}
-                          name="angle-down"
-                        />
-                      ) : (
-                        <Icon
-                          type="FontAwesome5"
-                          style={{color: '#131314', fontWeight: 'normal'}}
-                          name="angle-right"
-                        />
-                      )}
+                      {item.content}
                     </View>
-                  )}
-                  renderContent={(item) => {
-                    return (
-                      <View
-                        style={{
-                          // height: 200,
-                          backgroundColor: '#fff',
-                          paddingHorizontal: 16,
-                        }}>
-                        {item.content}
-                      </View>
-                    );
-                  }}
-                />
-              </View>
+                  );
+                }}
+              />
             </View>
           </ScrollView>
           <View style={stylesFooter.footer}>

@@ -97,18 +97,12 @@ class UserCarListScreen extends Component {
       navigation.state.params && navigation.state.params.returnScreen;
 
     return {
-      headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Автомобили</Text>,
+      headerTitle: (
+        <Text style={stylesHeader.blueHeaderTitle}>Подержанные автомобили</Text>
+      ),
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: (
-        <View>
-          <HeaderIconBack
-            theme="white"
-            navigation={navigation}
-            returnScreen={returnScreen}
-          />
-        </View>
-      ),
+      headerLeft: <View />,
       headerRight: (
         <View>
           <TouchableOpacity
