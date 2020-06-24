@@ -754,10 +754,18 @@ class Form extends Component {
                         /[^0]/g,
                         '',
                       );
-                      if (pureValue.length === maskLength.length) {
-                        this.setState({
-                          [name]: formatted.replace(/[^\d.+]/g, ''),
-                        });
+                      if (countryCode === 'ua') {
+                        if (pureValue.length + 1 === maskLength.length) {
+                          this.setState({
+                            [name]: formatted.replace(/[^\d.+]/g, ''),
+                          });
+                        }
+                      } else {
+                        if (pureValue.length === maskLength.length) {
+                          this.setState({
+                            [name]: formatted.replace(/[^\d.+]/g, ''),
+                          });
+                        }
                       }
                     }
                   }}
