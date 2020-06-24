@@ -15,7 +15,6 @@ import {
   Icon,
   Grid,
   Button,
-  Content,
   StyleProvider,
   Accordion,
 } from 'native-base';
@@ -33,6 +32,7 @@ import {
 import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
 import PhotoSlider from '@core/components/PhotoSlider';
 import PhotoViewer from '@core/components/PhotoViewer';
+import ReadMore from 'react-native-read-more-text';
 
 // helpers
 import {get, find} from 'lodash';
@@ -49,7 +49,6 @@ import styles from '@catalog/CarStyles';
 const mapStateToProps = ({catalog, dealer, nav}) => {
   return {
     nav,
-    prices: catalog.usedCar.prices,
     dealerSelected: dealer.selected,
     listRussia: dealer.listRussia,
     listUkraine: dealer.listUkraine,
@@ -75,8 +74,6 @@ const OptionPlate = ({title, subtitle}) => (
       borderRadius: 10,
       backgroundColor: '#0061ED',
       paddingHorizontal: 12,
-      // paddingTop: 10,
-      // paddingBottom: 10,
       marginRight: 8,
       height: 52,
       display: 'flex',
@@ -239,6 +236,28 @@ class UserCarItemScreen extends Component {
     return `${address}`;
   }
 
+  _renderTruncatedFooter = (handlePress) => {
+    return (
+      <Text
+        selectable={false}
+        style={styles.ShowFullDescriptionButton}
+        onPress={handlePress}>
+        Показать полное описание...
+      </Text>
+    );
+  };
+
+  _renderRevealedFooter = (handlePress) => {
+    return (
+      <Text
+        selectable={false}
+        style={styles.ShowFullDescriptionButton}
+        onPress={handlePress}>
+        Свернуть
+      </Text>
+    );
+  };
+
   onPressMap = () => {
     const {navigation, carDetails} = this.props;
     navigation.navigate('MapScreen', {
@@ -251,7 +270,6 @@ class UserCarItemScreen extends Component {
 
   render() {
     const {
-      prices,
       carDetails,
       photoViewerIndex,
       photoViewerItems,
@@ -329,7 +347,6 @@ class UserCarItemScreen extends Component {
                         borderTopLeftRadius: 30,
                         borderTopRightRadius: 30,
                         paddingTop: 20,
-                        paddingBottom: 14,
                       },
                     ]}>
                     <View
@@ -350,19 +367,13 @@ class UserCarItemScreen extends Component {
                       {this.renderPrice({carDetails, currency})}
                     </View>
                   </View>
-                  {carDetails.text ? (
-                    <View style={styles.descrContainer}>
-                      <Text style={styles.descr}>{carDetails.text}</Text>
-                    </View>
-                  ) : null}
-
                   <ScrollView showsHorizontalScrollIndicator={false} horizontal>
                     <View
                       style={{
                         display: 'flex',
                         flexDirection: 'row',
-                        paddingHorizontal: 16,
-                        marginBottom: 24,
+                        paddingHorizontal: '2%',
+                        marginBottom: 12,
                       }}>
                       {get(carDetails, 'engine') ? (
                         <OptionPlate
@@ -433,6 +444,17 @@ class UserCarItemScreen extends Component {
                         </View>
                       </View>
                     </TouchableWithoutFeedback>
+                  ) : null}
+                  {carDetails.text ? (
+                    <View style={styles.descrContainer}>
+                      <ReadMore
+                        numberOfLines={4}
+                        renderTruncatedFooter={this._renderTruncatedFooter}
+                        renderRevealedFooter={this._renderRevealedFooter}
+                        onReady={this._handleTextReady}>
+                        <Text style={styles.descr}>{carDetails.text}</Text>
+                      </ReadMore>
+                    </View>
                   ) : null}
 
                   <Accordion
@@ -679,7 +701,9 @@ class UserCarItemScreen extends Component {
               onPress={this.onPressOrder}
               full
               style={[styleConst.shadow.default, stylesFooter.button]}>
-              <Text style={styles.buttonText} selectable={false}>ХОЧУ ЭТО АВТО!</Text>
+              <Text style={styles.buttonText} selectable={false}>
+                ХОЧУ ЭТО АВТО!
+              </Text>
             </Button>
           </View>
           {photoViewerItems.length ? (
@@ -719,6 +743,10 @@ const stylesFooter = StyleSheet.create({
     backgroundColor: styleConst.color.lightBlue,
     borderColor: styleConst.color.lightBlue,
     borderWidth: 1,
+    shadowOffset: {
+      width: 5,
+      height: 5,
+    },
   },
   orderPriceContainer: {
     height: 48,
