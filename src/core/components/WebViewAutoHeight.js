@@ -37,6 +37,13 @@ const styleCSS = `
     }
     a, a:visited, a.hover {
         color: #0072e7;
+        font-size: 18px !important;
+        border: 1px solid #0072e7;
+        padding: 5px 10px;
+        white-space: nowrap;
+        line-height: 36px;
+        border-radius: 5px;
+        text-decoration: none;
     }
     #height-wrapper {
         position: absolute;
@@ -96,38 +103,53 @@ export default class WebViewAutoHeight extends PureComponent {
     this.state = {
       realContentHeight: this.props.minHeight,
     };
+
+    this.html = codeInject(this.props.source.html);
   }
 
   handleNavigationChange = (navState) => {
-    if (navState.title) {
-      const realContentHeight = parseInt(navState.title, 10) || 0; // turn NaN to 0
-      this.setState({realContentHeight});
-    }
-
-    if (typeof this.props.onNavigationStateChange === 'function') {
-      this.props.onNavigationStateChange(navState);
+    if (
+      navState.url &&
+      (navState.url.indexOf('https://') !== -1 ||
+        navState.url.indexOf('http://') !== -1 ||
+        navState.url.indexOf('tel:') !== -1 ||
+        navState.url.indexOf('mailto:') !== -1)
+    ) {
+      this.webview.stopLoading();
+      this.webview.goBack();
+      Linking.openURL(navState.url);
+    } else {
+      if (typeof this.props.onNavigationStateChange === 'function') {
+        this.props.onNavigationStateChange(navState);
+      }
+      if (navState.title) {
+        const realContentHeight = parseInt(navState.title, 10) || 0; // turn NaN to 0
+        this.setState({realContentHeight});
+      }
     }
   };
 
   render() {
-    const {source, style, minHeight, ...otherProps} = this.props;
-    const html = source.html;
+    const {style, minHeight, ...otherProps} = this.props;
 
     return (
       <WebView
         {...otherProps}
-        source={{html: codeInject(html)}}
+        source={{html: this.html}}
         scrollEnabled={false}
         style={[
           style,
           {height: Math.max(this.state.realContentHeight, minHeight)},
         ]}
+        ref={(ref) => {
+          this.webview = ref;
+        }}
         javaScriptEnabled
         onNavigationStateChange={this.handleNavigationChange}
         dataDetectorTypes="all"
         allowsFullscreenVideo={true}
         allowsInlineMediaPlayback={true}
-        originWhitelist={['*']}
+        originWhitelist={['http://', 'https://', 'tel://', 'mailto://']}
       />
     );
   }
