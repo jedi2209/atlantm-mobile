@@ -108,6 +108,7 @@ class OrderScreen extends Component {
     super(props);
 
     const car = get(this.props.navigation, 'state.params.car');
+    const isNewCar = get(this.props.navigation, 'state.params.isNewCar');
     const region = get(this.props.navigation, 'state.params.region');
     const {brand, model, complectation, year} = car;
 
@@ -132,7 +133,9 @@ class OrderScreen extends Component {
               {
                 name: 'CARNAME',
                 type: 'input',
-                label: 'Марка, модель и комплектация',
+                label: isNewCar
+                  ? 'Марка, модель и комплектация'
+                  : 'Марка, модель и год выпуска',
                 value: carName,
                 props: {
                   editable: false,
