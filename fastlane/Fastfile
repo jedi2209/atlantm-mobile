@@ -53,6 +53,7 @@ platform :ios do
       workspace: "./ios/atlantm.xcworkspace",
       scheme: "atlantm",
       export_method: "app-store",
+      skip_codesigning: true,
       export_options: {
         provisioningProfiles: {
           "com.atlantm.app" => "com.atlantm AppStore",
