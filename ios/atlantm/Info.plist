@@ -101,13 +101,13 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Для загрузки фотографий автомобиля</string>
+	<string>Для загрузки фото вашего автомобиля</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Для прокладывания маршрута</string>
+	<string>Для прокладывания маршрута к автоцентру</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Для прокладывания маршрута</string>
+	<string>Для прокладывания маршрута к автоцентру</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Для загрузки фотографий автомобиля</string>
+	<string>Для загрузки фото вашего автомобиля</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

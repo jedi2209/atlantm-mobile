@@ -101,7 +101,7 @@ android {
             pickFirst "lib/x86_64/libc++_shared.so"
             exclude "lib/armeabi-v7a/libmonochrome.so"
         }
-        // vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary = true
     }
     splits {
         abi {

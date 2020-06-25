@@ -96,10 +96,11 @@ export default class CarCostPhotos extends Component {
 
     const settings = {
       cropping: false,
-      compressImageMaxWidth: 1000,
-      compressImageMaxHeight: 1000,
-      compressImageQuality: 0.6,
+      compressImageMaxWidth: 1400,
+      compressImageMaxHeight: 1400,
+      // compressImageQuality: 0.9,
       mediaType: 'photo',
+      forceJpg: true,
     };
 
     switch (action) {
