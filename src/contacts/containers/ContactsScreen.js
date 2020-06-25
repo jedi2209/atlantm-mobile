@@ -271,7 +271,7 @@ class ContactsScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <View style={styles.safearea}>
-          <StatusBar barStyle="default" />
+          <StatusBar hidden />
           <ScrollView contentContainerStyle={{paddingBottom: 24}}>
             <Image
               style={styles.imgHero}

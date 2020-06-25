@@ -104,8 +104,6 @@ export default class ChooseDateTimeComponent extends Component {
   async _getTime(date) {
     this.setState({availablePeriods: null, availablePeriodsFetch: true});
     this._animated.TimeBlock = new Animated.Value(0);
-    console.log('date', yearMonthDay(date));
-    console.log('dealer', this.props.dealer.id);
 
     const availablePeriods = await API.getPeriodForServiceInfo({
       date: yearMonthDay(date),

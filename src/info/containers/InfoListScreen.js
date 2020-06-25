@@ -305,7 +305,7 @@ class InfoListScreen extends Component {
               progressBackgroundColor={styleConst.color.blue}
             />
           }>
-          <StatusBar barStyle="light-content" />
+          <StatusBar hidden />
           {!this.state.isRefreshing ? (
             <FlatList
               data={list}
