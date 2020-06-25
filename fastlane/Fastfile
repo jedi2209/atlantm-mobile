@@ -53,13 +53,13 @@ platform :ios do
       workspace: "./ios/atlantm.xcworkspace",
       scheme: "atlantm",
       export_method: "app-store",
-      skip_codesigning: true,
-      export_options: {
-        provisioningProfiles: {
-          "com.atlantm.app" => "com.atlantm AppStore",
-          "com.atlantm.app.OneSignalNotificationServiceExtension" => "XC.com.atlantm.app.OneSignalNotificationService"
-        }
-      }
+      # skip_codesigning: true,
+      # export_options: {
+      #   provisioningProfiles: {
+      #     "com.atlantm.app" => "com.atlantm AppStore",
+      #     "com.atlantm.app.OneSignalNotificationServiceExtension" => "XC.com.atlantm.app.OneSignalNotificationService"
+      #   }
+      # }
     )
     # update_code_signing_settings(
     #   path: "./ios/atlantm.xcodeproj",
@@ -73,10 +73,10 @@ platform :ios do
         merge_commit_filtering: "exclude_merges", # Optional, lets you filter out merge commits
         tag_match_pattern: "builds/iosbeta"
     )
-    # upload_to_testflight(
-    #     skip_waiting_for_build_processing: true,
-    #     skip_submission: true
-    # )
+    upload_to_testflight(
+        skip_waiting_for_build_processing: true,
+        skip_submission: true
+    )
     notification(
       subtitle: "Build is finish!",
       message: "iOS beta AppStore version #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]})",
