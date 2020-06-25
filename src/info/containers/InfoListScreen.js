@@ -8,10 +8,12 @@ import {
   ActivityIndicator,
   Dimensions,
   StatusBar,
+  RefreshControl,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {Container, Text, StyleProvider, Icon} from 'native-base';
 import {Offer} from '@core/components/Offer';
+import TransitionView from '@core/components/TransitionView';
 
 const deviceWidth = Dimensions.get('window').width;
 const cardWidth = deviceWidth - 20;
@@ -26,7 +28,7 @@ import {
 import {INFO_LIST__FAIL} from '../actionTypes';
 
 // helpers
-import {get, isFunction} from 'lodash';
+import {get} from 'lodash';
 import {ERROR_NETWORK} from '@core/const';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '@core/style-const';
@@ -34,8 +36,6 @@ import stylesHeader from '@core/components/Header/style';
 import {verticalScale} from '../../utils/scale';
 
 // components
-// import DealerItemList from '../../core/components/DealerItemList';
-// import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
 import PushNotifications from '@core/components/PushNotifications';
 
@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
   spinner: {
     alignSelf: 'center',
     marginTop: verticalScale(60),
+    height: 200,
   },
   message: {
     fontFamily: styleConst.font.regular,
@@ -80,6 +81,20 @@ class InfoListScreen extends Component {
     super(props);
     this.state = {
       isRefreshing: false,
+    };
+    this.zoomIn = {
+      1: {
+        opacity: 1,
+        scale: 1,
+      },
+      0.5: {
+        opacity: 0.5,
+        scale: 0.4,
+      },
+      0: {
+        opacity: 0,
+        scale: 0,
+      },
     };
   }
 
@@ -203,18 +218,19 @@ class InfoListScreen extends Component {
     }
   }
 
-  onRefresh = () => {
-    const {dealerSelected, list, fetchInfoList} = this.props;
+  _onRefresh = () => {
+    const {dealerSelected} = this.props;
     const {region, id: dealer} = dealerSelected;
 
     this.setState({isRefreshing: true});
+    console.log('this.props onRefresh', this.props);
 
-    fetchInfoList(region, dealer).then(() => {
+    this.props.fetchInfoList(region, dealer).then(() => {
       this.setState({isRefreshing: false});
     });
   };
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate(nextProps, nextState) {
     const nav = nextProps.nav.newState;
     let isActiveScreen = false;
 
@@ -227,12 +243,16 @@ class InfoListScreen extends Component {
       }
     }
 
+    return true;
     return isActiveScreen;
   }
 
   renderItem = (data) => {
     return (
-      <View
+      <TransitionView
+        animation={this.zoomIn}
+        duration={350}
+        index={data.index}
         style={[
           styleConst.shadow.default,
           {
@@ -251,7 +271,7 @@ class InfoListScreen extends Component {
           height={200}
           navigation={this.props.navigation.navigate}
         />
-      </View>
+      </TransitionView>
     );
   };
 
@@ -269,33 +289,40 @@ class InfoListScreen extends Component {
   };
 
   render() {
-    const {
-      list,
-      visited,
-      navigation,
-      dealerSelected,
-      isFetchInfoList,
-    } = this.props;
-
-    // Для iPad меню, которое находится вне роутера
-    // window.atlantmNavigation = navigation;
+    const {list, isFetchInfoList} = this.props;
 
     console.log('== InfoListScreen ==');
-    console.log('list', list);
     return (
       <StyleProvider style={getTheme()}>
-        <Container style={styles.container}>
+        <Container
+          style={styles.container}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+              tintColor={styleConst.color.blue}
+              title="Обновить список акций"
+              progressBackgroundColor={styleConst.color.blue}
+            />
+          }>
           <StatusBar barStyle="light-content" />
-          <FlatList
-            data={list}
-            extraData={isFetchInfoList}
-            onRefresh={this.onRefresh}
-            refreshing={this.state.isRefreshing}
-            ListEmptyComponent={this.renderEmptyComponent}
-            style={styles.list}
-            renderItem={this.renderItem}
-            keyExtractor={(item) => `${item.hash.toString()}`}
-          />
+          {!this.state.isRefreshing ? (
+            <FlatList
+              data={list}
+              extraData={isFetchInfoList}
+              onRefresh={this._onRefresh}
+              refreshing={this.state.isRefreshing}
+              ListEmptyComponent={this.renderEmptyComponent}
+              style={styles.list}
+              renderItem={this.renderItem}
+              keyExtractor={(item) => `${item.hash.toString()}`}
+            />
+          ) : (
+            <ActivityIndicator
+              color={styleConst.color.blue}
+              style={styles.spinner}
+            />
+          )}
         </Container>
       </StyleProvider>
     );

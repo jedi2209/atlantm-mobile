@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {View, Linking, Dimensions} from 'react-native';
+import {Linking} from 'react-native';
 import WebView from 'react-native-webview';
 import styleConst from '@core/style-const';
 

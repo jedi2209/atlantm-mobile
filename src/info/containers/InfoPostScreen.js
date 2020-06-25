@@ -8,6 +8,7 @@ import {
   StyleSheet,
   SafeAreaView,
   ActivityIndicator,
+  RefreshControl,
 } from 'react-native';
 
 // redux
@@ -27,11 +28,9 @@ import styleConst from '@core/style-const';
 import processHtml from '../../utils/process-html';
 import Amplitude from '../../utils/amplitude-analytics';
 import {verticalScale} from '../../utils/scale';
-//import stylesHeader from '../../core/components/Header/style';
 import {dayMonth, dayMonthYear} from '../../utils/date';
 
 // image
-let IMAGE_HEIGHT_GUARD = 0;
 const {width: screenWidth} = Dimensions.get('window');
 const IMAGE_WIDTH = screenWidth;
 const IMAGE_HEIGHT = 200;
@@ -76,7 +75,6 @@ const mapStateToProps = ({dealer, info, profile}) => {
     email: profile.email,
     dealerSelected: dealer.selected,
     isCallMeRequest: info.meta.isCallMeRequest,
-    isFetchInfoPost: info.meta.isFetchInfoPost,
   };
 };
 
@@ -84,16 +82,6 @@ const mapDispatchToProps = {
   fetchInfoPost,
   callMeForInfo,
 };
-
-const injectScript = `
-(function () {
-  window.onclick = function(e) {
-    //e.preventDefault();
-    //window.postMessage(e.target.href);
-    //e.stopPropagation()
-  }
-}());
-`;
 
 class InfoPostScreen extends Component {
   static navigationOptions = ({navigation}) => {
@@ -117,16 +105,17 @@ class InfoPostScreen extends Component {
     imageWidth: IMAGE_WIDTH,
     imageHeight: IMAGE_HEIGHT,
     webViewWidth: screenWidth - styleConst.ui.verticalGap,
+    refreshing: false,
   };
 
   componentDidMount() {
-    const {posts, navigation, fetchInfoPost} = this.props;
+    const {posts, navigation} = this.props;
 
     const id = navigation.state.params.id;
     const post = posts[id];
 
     if (!post) {
-      fetchInfoPost(id);
+      this.props.fetchInfoPost(id);
     }
     Amplitude.logEvent('screen', 'offer/item', {
       id: id,
@@ -170,9 +159,18 @@ class InfoPostScreen extends Component {
     }
   }
 
+  _onRefresh = () => {
+    console.log('onRefresh this.props', this.props);
+
+    this.setState({refreshing: true});
+
+    this.props.fetchInfoPost(this.props.navigation.state.params.id).then(() => {
+      this.setState({refreshing: false});
+    });
+  };
+
   render() {
     const {isCallMeRequest} = this.props;
-
     const post = this.getPost();
     let text = get(post, 'text');
     const img = get(post, 'img');
@@ -188,10 +186,17 @@ class InfoPostScreen extends Component {
     return (
       <SafeAreaView style={styles.safearea}>
         <StatusBar barStyle="light-content" />
-        <Content style={{margin: 0, padding: 0,}}>
+        <Content
+          style={{margin: 0, padding: 0}}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this._onRefresh}
+            />
+          }>
           <Spinner visible={isCallMeRequest} color={styleConst.color.blue} />
 
-          {!text ? (
+          {!text || this.state.refreshing ? (
             <ActivityIndicator
               color={styleConst.color.blue}
               style={styles.spinner}
