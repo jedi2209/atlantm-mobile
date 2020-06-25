@@ -409,7 +409,7 @@ PODS:
     - React
   - RNReanimated (1.9.0):
     - React
-  - RNScreens (2.8.0):
+  - RNScreens (2.9.0):
     - React
   - RNSentry (1.4.5):
     - React
@@ -688,7 +688,7 @@ SPEC CHECKSUMS:
   RNInputMask: 815461ebdf396beb62cf58916c35cf6930adb991
   RNRate: a747cbaa6040d72994861864c988037fe0696548
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43
-  RNScreens: 62211832af51e0aebcf6e8c36bcf7dd65592f244
+  RNScreens: c526239bbe0e957b988dacc8d75ac94ec9cb19da
   RNSentry: 0a70359ddacbfb9b1cbbb0971e54065b9f70ac57
   Sentry: 74f2ad93a20a5567a1badaedf5b3f60b142ad082
   TOCropViewController: 20a14b6a7a098308bf369e7c8d700dc983a974e6

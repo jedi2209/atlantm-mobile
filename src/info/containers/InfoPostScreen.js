@@ -15,7 +15,6 @@ import {
 import {connect} from 'react-redux';
 import {fetchInfoPost, callMeForInfo} from '../actions';
 
-import Spinner from 'react-native-loading-spinner-overlay';
 import {Content, Button} from 'native-base';
 // import FooterButton from '../../core/components/FooterButton';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
@@ -160,8 +159,6 @@ class InfoPostScreen extends Component {
   }
 
   _onRefresh = () => {
-    console.log('onRefresh this.props', this.props);
-
     this.setState({refreshing: true});
 
     this.props.fetchInfoPost(this.props.navigation.state.params.id).then(() => {
@@ -184,8 +181,8 @@ class InfoPostScreen extends Component {
     console.log('== InfoPost ==');
 
     return (
-      <SafeAreaView style={styles.safearea}>
-        <StatusBar barStyle="light-content" />
+      <View style={styles.safearea}>
+        <StatusBar hidden />
         <Content
           style={{margin: 0, padding: 0}}
           refreshControl={
@@ -194,8 +191,6 @@ class InfoPostScreen extends Component {
               onRefresh={this._onRefresh}
             />
           }>
-          <Spinner visible={isCallMeRequest} color={styleConst.color.blue} />
-
           {!text || this.state.refreshing ? (
             <ActivityIndicator
               color={styleConst.color.blue}
@@ -269,7 +264,7 @@ class InfoPostScreen extends Component {
             позвоните мне
           </Text>
         </Button>
-      </SafeAreaView>
+      </View>
     );
   }
 }

@@ -13,7 +13,6 @@ import {connect} from 'react-redux';
 import {actionFetchNewCarByFilter} from '../../actions';
 
 // components
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import CarList from '../../components/CarList';
 
 import Spinner from 'react-native-loading-spinner-overlay';
