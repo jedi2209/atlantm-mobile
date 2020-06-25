@@ -433,7 +433,7 @@ export default {
 
     const body = formData;
 
-    __DEV__ && console.log('API carcost body', body);
+    __DEV__ && console.log('API carcost body', body, props);
 
     return (async () => {
       const rawResponse = await fetch(`${host}/orders/usedbuy/post/`, {
@@ -445,6 +445,7 @@ export default {
       });
       if (rawResponse) {
         let txt = await rawResponse.text();
+        console.log('rawResponse', txt);
         return JSON.parse(txt);
       }
     })();
