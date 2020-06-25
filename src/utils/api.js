@@ -278,12 +278,28 @@ export default {
   },
 
   orderService(props) {
-    const {car, date, name, email, phone, dealerID, text} = props;
+    const {
+      brand,
+      model,
+      date,
+      firstName,
+      secondName,
+      lastName,
+      vin,
+      email,
+      phone,
+      dealerID,
+      text,
+    } = props;
 
     const body = {
       f_Dealer: dealerID,
-      f_Model: car,
-      f_Name: name,
+      f_Brand: brand,
+      f_Model: model,
+      f_FirstName: firstName,
+      f_SecondName: secondName,
+      f_LastName: lastName,
+      f_VIN: vin,
       f_Phone: phone,
       f_Email: email,
       f_Date: date,
