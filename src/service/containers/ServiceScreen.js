@@ -33,12 +33,6 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
     carLocalModel = '';
 
   if (profile.cars && profile.cars[0]) {
-    // if (profile.cars[0].brand && profile.cars[0].model) {
-    //   let carLocalName = [profile.cars[0].brand, profile.cars[0].model].join(
-    //     ' ',
-    //   );
-    // }
-
     if (profile.cars[0].vin) {
       carLocalVin = profile.cars[0].vin || '';
     }
