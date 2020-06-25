@@ -148,20 +148,14 @@ class CarCostScreen extends Component {
         phone,
         email,
         dealerSelected,
+        actionCarCostOrder,
       } = this.props;
 
       const photoForUpload = valuesIn(this.state.photos);
 
-      // if (!name || !phone || !email || photoForUpload.length === 0) {
-      //   return Alert.alert(
-      //     'Не хватает информации',
-      //     'Необходимо заполнить ФИО, телефон, email и добавить минимум 1 фотографию автомобиля',
-      //   );
-      // }
-
-      const action = await this.props.actionCarCostOrder({
+      const action = await actionCarCostOrder({
         dealerId: dealerSelected.id,
-        name: dataFromForm.NAME || '',
+        firstName: dataFromForm.NAME || '',
         secondName: dataFromForm.SECOND_NAME || '',
         lastName: dataFromForm.LAST_NAME || '',
         phone: dataFromForm.PHONE || '',
@@ -329,6 +323,7 @@ class CarCostScreen extends Component {
                 value: this.props.carMileage,
                 props: {
                   keyboardType: 'number-pad',
+                  required: true,
                   placeholder: null,
                 },
               },

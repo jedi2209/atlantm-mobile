@@ -406,7 +406,7 @@ export default {
     const formBody = _.compact([
       {name: 'f_Source', value: '3'},
       props.dealerId && {name: 'f_Dealer', value: String(props.dealerId)},
-      props.name && {name: 'f_FirstName', value: String(props.name)},
+      props.firstName && {name: 'f_FirstName', value: String(props.firstName)},
       props.secondName && {
         name: 'f_SecondName',
         value: String(props.secondName),
