@@ -137,6 +137,7 @@ export default class ChooseDateTimeComponent extends Component {
     Animated.timing(this._animated.TimeBlock, {
       toValue: 1,
       duration: 450,
+      useNativeDriver: true,
     }).start();
   }
 
