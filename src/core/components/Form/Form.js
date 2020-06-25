@@ -243,6 +243,10 @@ class Form extends Component {
           case 'datetime':
             valid = this._validateDateTime(this.state[val.name]);
             break;
+          case 'date':
+            console.log('this.state[val.name]', this.state[val.name]);
+            valid = this._validateDate(this.state[val.name]);
+            break;
           default:
             if (
               typeof this.state[val.name] === 'undefined' ||
@@ -285,7 +289,17 @@ class Form extends Component {
   };
 
   _validateDateTime = (dateTime) => {
+    if (typeof dateTime === 'undefined') {
+      return false;
+    }
     return dateTime.date && dateTime.time;
+  };
+
+  _validateDate = (date) => {
+    if (typeof date === 'undefined') {
+      return false;
+    }
+    return date.date;
   };
 
   onChangeField = (field) => (valueNew) => {
