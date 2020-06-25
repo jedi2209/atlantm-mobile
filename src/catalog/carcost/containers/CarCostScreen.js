@@ -340,6 +340,11 @@ class CarCostScreen extends Component {
                       key: 1,
                     },
                     {
+                      label: 'Бензин (ГАЗ)',
+                      value: 9,
+                      key: 9,
+                    },
+                    {
                       label: 'Дизель',
                       value: 2,
                       key: 2,
@@ -348,6 +353,11 @@ class CarCostScreen extends Component {
                       label: 'Гибрид',
                       value: 3,
                       key: 3,
+                    },
+                    {
+                      label: 'Электро',
+                      value: 4,
+                      key: 4,
                     },
                   ],
                   placeholder: {
@@ -385,14 +395,29 @@ class CarCostScreen extends Component {
                 props: {
                   items: [
                     {
-                      label: 'Автоматическая',
+                      label: 'Механическая',
                       value: 1,
                       key: 1,
                     },
                     {
-                      label: 'Механическая',
-                      value: 2,
-                      key: 2,
+                      label: 'Автоматическая',
+                      value: 4,
+                      key: 4,
+                    },
+                    {
+                      label: 'Автоматическая -- DSG',
+                      value: 11,
+                      key: 11,
+                    },
+                    {
+                      label: 'Автоматическая -- Робот',
+                      value: 12,
+                      key: 12,
+                    },
+                    {
+                      label: 'Автоматическая -- Вариатор',
+                      value: 13,
+                      key: 13,
                     },
                   ],
                   placeholder: {
