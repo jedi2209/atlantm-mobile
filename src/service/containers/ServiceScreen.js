@@ -23,7 +23,7 @@ import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Amplitude from '../../utils/amplitude-analytics';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
-import {addDays, yearMonthDay} from '../../utils/date';
+import {addDays, dayMonthYear, yearMonthDay} from '../../utils/date';
 import {ERROR_NETWORK} from '../../core/const';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
 
@@ -47,7 +47,6 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
-    date: service.date,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
     lastName: UserData.get('LAST_NAME'),
@@ -77,9 +76,8 @@ const mapDispatchToProps = {
 class ServiceScreen extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      date: new Date(addDays(2)),
+      date: null,
       loading: false,
       success: false,
     };
@@ -108,7 +106,7 @@ class ServiceScreen extends Component {
                 label: 'Выберите удобную для вас дату',
                 value: this.state.date,
                 props: {
-                  placeholder: null,
+                  placeholder: 'не ранее ' + dayMonthYear(addDays(2)),
                   required: true,
                   minDate: new Date(addDays(2)),
                 },
