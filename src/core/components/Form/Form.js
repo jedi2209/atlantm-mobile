@@ -264,16 +264,16 @@ class Form extends Component {
         if (requredLabels.length > 1) {
           Alert.alert(
             'Заполните пожалуйста обязательные поля',
-            '\r\nПоля \r\n\r\n-' +
+            '\r\nПоля \r\n-' +
               requredLabels.join('\r\n-') +
               '\r\nобязательны для заполнения',
           );
         } else {
           Alert.alert(
-            'Заполните пожалуйста обязательное поле',
-            '\r\nПоле ' +
-              requredLabels.join(', ') +
-              ' обязательно для заполнения',
+            'Почти всё!',
+            '\r\nПоле "' +
+              requredLabels.join(' ') +
+              '" обязательно для заполнения',
           );
         }
         return false;
@@ -299,7 +299,7 @@ class Form extends Component {
     if (typeof date === 'undefined') {
       return false;
     }
-    return date.date;
+    return true;
   };
 
   onChangeField = (field) => (valueNew) => {
