@@ -15,6 +15,7 @@ import {
 import {Icon} from 'native-base';
 import {orderBy} from 'lodash';
 import styleConst from '@core/style-const';
+import {StackActions, NavigationActions} from 'react-navigation';
 
 import {CarCard} from '../../profile/components/CarCard';
 import {ServiceModal} from '../components/ServiceModal';
@@ -296,13 +297,7 @@ class ServiceScreen extends Component {
   }
 
   onPressOrder = async (dataFromForm) => {
-    console.log('onPressOrder dataFromForm', dataFromForm);
-    console.log('onPressOrder this.state', this.state);
-
-    if (!dataFromForm.DATETIME.time || !dataFromForm.DATETIME.tech_place) {
-      Alert.alert('Заполните пожалуйста все обязательные поля');
-      return false;
-    }
+    const {navigation} = this.props;
 
     let data;
     let TimeTotal = 0;
@@ -338,14 +333,21 @@ class ServiceScreen extends Component {
     }
 
     console.log('=>>>>>> data', data);
-    // const order = await API.saveOrderToService(data);
+    const order = await API.saveOrderToService(data);
 
-    // if (order.status === 'error') {
-    //   Alert.alert('Хьюстон, у нас проблемы!', '\r\n' + order.error.message);
-    // } else {
-    //   Alert.alert('Всё получилось!', '\r\nСпасибо! Ваша запись оформлена');
-    // }
-    return true;
+    if (order.status === 'error') {
+      Alert.alert('Хьюстон, у нас проблемы!', '\r\n' + order.error.message);
+    } else {
+      Alert.alert('Всё получилось!', '\r\nСпасибо! Ваша запись оформлена', [
+        {
+          text: 'ОК',
+          onPress() {
+            navigation.goBack();
+          },
+        },
+      ]);
+      this.setState({success: true, loading: false});
+    }
   };
 
   render() {

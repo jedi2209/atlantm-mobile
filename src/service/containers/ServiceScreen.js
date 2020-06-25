@@ -215,7 +215,7 @@ class ServiceScreen extends Component {
     isOrderServiceRequest: PropTypes.bool,
   };
 
-  onPressOrder = async (props) => {
+  onPressOrder = async (dataFromForm) => {
     const isInternetExist = await isInternet();
 
     if (!isInternetExist) {
@@ -223,48 +223,48 @@ class ServiceScreen extends Component {
       return;
     }
 
-    const name = [props.NAME, props.SECOND_NAME, props.LAST_NAME]
+    const {navigation, localUserDataUpdate} = this.props;
+
+    const name = [
+      dataFromForm.NAME,
+      dataFromForm.SECOND_NAME,
+      dataFromForm.LAST_NAME,
+    ]
       .filter(Boolean)
       .join(' ');
 
-    // // Предотвращаем повторную отправку формы.
-    // if (this.props.isOrderServiceRequest) {
-    //   return;
-    // }
+    const dealerID = dataFromForm.DEALER.id;
+    const orderDate = yearMonthDay(dataFromForm.DATE);
 
-    if (!name || !props.PHONE || !props.CARNAME || !props.DATE) {
-      return Alert.alert(
-        'Не хватает информации',
-        'Для заявки на СТО необходимо заполнить ФИО, номер контактного телефона, название автомобиля и желаемую дату',
-      );
-    }
-
+    const dataToSend = {
+      car: get(dataFromForm, 'CARNAME', ''),
+      brand: get(dataFromForm, 'CARBRAND', ''),
+      model: get(dataFromForm, 'CARMODEL', ''),
+      date: orderDate,
+      firstName: get(dataFromForm, 'NAME', ''),
+      secondName: get(dataFromForm, 'SECOND_NAME', ''),
+      lastName: get(dataFromForm, 'LAST_NAME', ''),
+      email: get(dataFromForm, 'EMAIL', ''),
+      phone: get(dataFromForm, 'PHONE', ''),
+      text: get(dataFromForm, 'COMMENT', ''),
+      dealerID,
+    };
     try {
-      const dealerID = props.DEALER.id;
-      const orderDate = yearMonthDay(props.DATE);
-
       this.setState({loading: true});
 
-      const action = await this.props.orderService({
-        car: get(props, 'CARNAME', ''),
-        date: orderDate,
-        name: name,
-        email: get(props, 'EMAIL', ''),
-        phone: get(props, 'PHONE', ''),
-        text: get(props, 'COMMENT', ''),
-        dealerID,
-      });
+      const action = await this.props.orderService(dataToSend);
 
       if (action.type === SERVICE_ORDER__SUCCESS) {
-        const _this = this;
         Amplitude.logEvent('order', 'service');
-        _this.props.localUserDataUpdate({
-          NAME: props.NAME,
-          SECOND_NAME: props.SECOND_NAME,
-          LAST_NAME: props.LAST_NAME,
-          PHONE: props.PHONE,
-          EMAIL: props.EMAIL,
-          CARNAME: props.CARNAME,
+        localUserDataUpdate({
+          NAME: dataFromForm.NAME,
+          SECOND_NAME: dataFromForm.SECOND_NAME,
+          LAST_NAME: dataFromForm.LAST_NAME,
+          PHONE: dataFromForm.PHONE,
+          EMAIL: dataFromForm.EMAIL,
+          CARNAME: dataFromForm.CARNAME,
+          CARBRAND: dataFromForm.CARBRAND,
+          CARMODEL: dataFromForm.CARMODEL,
         });
         Alert.alert(
           'Ваша заявка успешно отправлена',
@@ -273,15 +273,7 @@ class ServiceScreen extends Component {
             {
               text: 'ОК',
               onPress() {
-                const resetAction = StackActions.reset({
-                  index: 0,
-                  actions: [
-                    NavigationActions.navigate({
-                      routeName: 'BottomTabNavigation',
-                    }),
-                  ],
-                });
-                _this.props.navigation.dispatch(resetAction);
+                navigation.goBack();
               },
             },
           ],
