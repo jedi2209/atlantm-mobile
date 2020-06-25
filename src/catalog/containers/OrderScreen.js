@@ -110,7 +110,7 @@ class OrderScreen extends Component {
 
     const carName = [
       get(this.props.navigation, 'state.params.car.brand'),
-      get(this.props.navigation, 'state.params.car.model'),
+      get(this.props.navigation, 'state.params.car.model.name'),
       get(this.props.navigation, 'state.params.car.complectation'),
       get(this.props.navigation, 'state.params.car.year'),
     ].join(' ');
@@ -239,11 +239,12 @@ class OrderScreen extends Component {
     const dealerId = get(navigation, 'state.params.dealerId');
     const carId = get(navigation, 'state.params.carId');
     const isNewCar = get(navigation, 'state.params.isNewCar');
-    const name = [data.NAME, data.SECOND_NAME, data.LAST_NAME].join(' ');
     const action = await this.props.actionOrderCar({
-      name: name,
-      email: data.EMAIL,
-      phone: data.PHONE,
+      firstName: get(data, 'NAME'),
+      secondName: get(data, 'SECOND_NAME'),
+      lastName: get(data, 'LAST_NAME'),
+      email: get(data, 'EMAIL'),
+      phone: get(data, 'PHONE'),
       dealerId,
       carId,
       comment: data.COMMENT || '',
