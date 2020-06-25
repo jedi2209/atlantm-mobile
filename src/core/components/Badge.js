@@ -5,8 +5,8 @@ import styleConst from '../style-const';
 
 const styles = StyleSheet.create({
   badgeContainer: {
-    paddingHorizontal: 5,
-    paddingVertical: 3,
+    paddingHorizontal: 8,
+    paddingVertical: 5,
     borderRadius: 5,
     marginRight: 3,
   },

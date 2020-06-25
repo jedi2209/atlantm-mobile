@@ -11,6 +11,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 // components
 import Imager from '../../core/components/Imager';
+import Badge from '../../core/components/Badge';
 
 // helpers
 import {get} from 'lodash';
@@ -25,6 +26,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     backgroundColor: '#fff',
     borderRadius: 5,
+  },
+  ordered: {
+    opacity: 0.6,
   },
   card: {
     flexDirection: 'column',
@@ -170,6 +174,23 @@ class CarListItem extends Component {
     navigate(itemScreen, {carId: car.id.api, currency, code: prices.curr.code});
   };
 
+  onPressOrder = () => {
+    const {navigate, car} = this.props;
+    navigate('OrderScreen', {
+      car: {
+        brand: get(car, 'brand.name', ''),
+        model: get(car, 'model', ''),
+        complectation: get(car, 'complectation.name'),
+        year: get(car, 'year'),
+        ordered: true,
+      },
+      region: this.props.dealerSelected.region,
+      dealerId: get(car, 'dealer.id'),
+      carId: car.id.api,
+      isNewCar: false,
+    });
+  };
+
   shouldComponentUpdate(nextProps) {
     const {car} = this.props;
 
@@ -250,6 +271,8 @@ class CarListItem extends Component {
     const mileage = get(car, 'mileage');
     const gearbox = get(car, 'gearbox.name');
     const year = get(car, 'year');
+    const badge = get(car, 'badge', null);
+    const ordered = get(car, 'ordered', 0);
     const isSale = car.sale === true;
     let CarImg = '';
     let CarImgReal = false;
@@ -260,11 +283,10 @@ class CarListItem extends Component {
     } else {
       CarImg = get(car, 'img.10000x440.0');
     }
-    console.log('itemScreen', itemScreen);
     return (
       <TouchableHighlight
-        onPress={this.onPress}
-        style={[styleConst.shadow.light, styles.container]}
+        onPress={!ordered ? this.onPress : this.onPressOrder}
+        style={[!ordered ? styleConst.shadow.light : null, styles.container]}
         underlayColor={styleConst.color.select}>
         <View style={styles.card} key={'carID-' + this.props.key}>
           <LinearGradient
@@ -279,16 +301,47 @@ class CarListItem extends Component {
               itemScreen === 'NewCarItemScreen' ? {width: '100%'} : null,
             ]}
           />
-          <View style={styles.titleContainer}>
+          <View style={[styles.titleContainer]}>
             <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
               {`${get(car, 'brand.name')} ${modelName || ''} ${complectation}`}
             </Text>
             {year ? <Text style={styles.year}>{`${year} г.в.`}</Text> : null}
           </View>
+          {badge ? (
+            <View
+              key={'badgeContainer' + car.id.api}
+              style={{
+                position: 'absolute',
+                right: 0,
+                width: '100%',
+                top: 3,
+                flexDirection: 'row',
+                flex: 1,
+                zIndex: 10,
+                alignContent: 'stretch',
+                justifyContent: 'flex-end',
+              }}>
+              {badge.map((item, index) => {
+                return (
+                  <Badge
+                    id={car.id.api}
+                    key={'badgeItem' + car.id.api + index}
+                    index={index}
+                    bgColor={item.background}
+                    name={item.name}
+                    textColor={item.textColor}
+                  />
+                );
+              })}
+            </View>
+          ) : null}
           {CarImg ? (
             <Imager
               resizeMode={resizeMode ? resizeMode : 'cover'}
-              style={[CarImgReal ? styles.imageReal : styles.image]}
+              style={[
+                CarImgReal ? styles.imageReal : styles.image,
+                ordered ? styles.ordered : null,
+              ]}
               source={{
                 uri: CarImg,
               }}
@@ -312,6 +365,7 @@ class CarListItem extends Component {
           <View
             style={[
               styles.price,
+              ordered ? styles.ordered : null,
               itemScreen === 'NewCarItemScreen'
                 ? {
                     marginTop:

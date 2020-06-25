@@ -107,13 +107,17 @@ class OrderScreen extends Component {
   constructor(props) {
     super(props);
     const isNewCar = get(this.props.navigation, 'state.params.isNewCar');
+    const orderedCar = get(this.props.navigation, 'state.params.car.ordered');
 
     const carName = [
       get(this.props.navigation, 'state.params.car.brand'),
       get(this.props.navigation, 'state.params.car.model.name'),
       get(this.props.navigation, 'state.params.car.complectation'),
-      get(this.props.navigation, 'state.params.car.year'),
-    ].join(' ');
+      !orderedCar ? get(this.props.navigation, 'state.params.car.year') : null,
+      orderedCar ? 'или аналог' : null,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     this.state = {
       date: '',
@@ -210,7 +214,9 @@ class OrderScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerStyle: stylesHeader.whiteHeader,
     headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerTitle: 'Заявка на авто',
+    headerTitle: !navigation.state.params.car.ordered
+      ? 'Заявка на авто'
+      : 'Заявка на похожее авто',
     headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
     headerRight: <View />,
   });
