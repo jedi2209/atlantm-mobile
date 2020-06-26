@@ -87,8 +87,11 @@ class CarCostScreen extends Component {
       navigation.state.params && navigation.state.params.returnScreen;
 
     return {
-      headerStyle: stylesHeader.whiteHeader,
-      headerTitleStyle: stylesHeader.whiteHeaderTitle,
+      headerStyle: [stylesHeader.headerStyle, stylesHeader.whiteHeader],
+      headerTitleStyle: [
+        stylesHeader.headerTitleStyle,
+        stylesHeader.whiteHeaderTitle,
+      ],
       headerTitle: 'Оценка моего авто',
       headerLeft: (
         <HeaderIconBack
