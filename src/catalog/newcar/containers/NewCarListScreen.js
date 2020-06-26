@@ -197,7 +197,7 @@ class NewCarListScreen extends Component {
 
     return (
       <View style={styles.content}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar hidden />
         {this.state.loading ? (
           <Spinner visible={true} color={styleConst.color.blue} />
         ) : (

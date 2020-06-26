@@ -79,32 +79,19 @@ const mapDispatchToProps = {
 };
 
 class UserCarListScreen extends Component {
-  // static navigationOptions = ({navigation}) => {
-  //   const {params = {total: {}}} = navigation.state;
-  //   const count = params.total.count;
-  //   const titleVariants = ['автомобиль', 'автомобиля', 'автомобилей'];
-
-  //   return {
-  //     headerTitle: count ? `${count} ${declOfNum(count, titleVariants)}` : null,
-  //     headerStyle: stylesHeader.common,
-  //     headerTitleStyle: stylesHeader.title,
-  //     headerLeft: <HeaderIconBack navigation={navigation} />,
-  //     headerRight: <HeaderIconMenu navigation={navigation} />,
-  //   };
-  // };
   static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
     return {
       headerTitle: (
         <Text style={stylesHeader.blueHeaderTitle}>Подержанные автомобили</Text>
       ),
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: <View />,
+      headerStyle: [stylesHeader.headerStyle, stylesHeader.blueHeader],
+      headerTitleStyle: [
+        stylesHeader.headerTitleStyle,
+        stylesHeader.blueHeaderTitle,
+      ],
+      headerLeft: null,
       headerRight: (
-        <View>
+        <View style={stylesHeader.headerRightStyle}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('UsedCarFilterScreen');
@@ -232,7 +219,7 @@ class UserCarListScreen extends Component {
 
     return (
       <View style={styles.content}>
-        <StatusBar barStyle="light-content" />
+        <StatusBar hidden />
         <CarList
           items={items}
           pages={pages}

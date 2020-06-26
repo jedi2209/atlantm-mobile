@@ -31,11 +31,22 @@ export default StyleSheet.create({
   resetBorder: {
     borderBottomWidth: 0,
   },
+  headerStyle: {
+    // height: 20,
+  },
+  headerTitleStyle: {
+    marginTop: 0,
+  },
+  headerLeftStyle: {
+    marginTop: 0,
+  },
+  headerRightStyle: {
+    marginTop: 0,
+  },
   blueHeader: {
     ...commonStyles,
     backgroundColor: styleConst.new.blueHeader,
     borderBottomWidth: 0,
-    color: 'red',
   },
   transparentHeaderTitle: {
     fontSize: 17,
