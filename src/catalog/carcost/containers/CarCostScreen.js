@@ -145,19 +145,12 @@ class CarCostScreen extends Component {
     if (!isInternetExist) {
       return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
     } else {
-      const {
-        navigation,
-
-        phone,
-        email,
-        dealerSelected,
-        actionCarCostOrder,
-      } = this.props;
+      const {navigation} = this.props;
 
       const photoForUpload = valuesIn(this.state.photos);
 
-      const action = await actionCarCostOrder({
-        dealerId: dealerSelected.id,
+      const action = await this.props.actionCarCostOrder({
+        dealerId: this.props.dealerSelected.id,
         firstName: dataFromForm.NAME || '',
         secondName: dataFromForm.SECOND_NAME || '',
         lastName: dataFromForm.LAST_NAME || '',
