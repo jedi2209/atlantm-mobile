@@ -68,7 +68,7 @@ function login(state = '', action) {
 function name(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.offlineData.NAME', '');
+      return get(action.payload, 'profile.localUserData.NAME', '');
     case PROFILE_NAME__FILL:
       return action.payload;
     default:
@@ -79,7 +79,7 @@ function name(state = '', action) {
 function phone(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.offlineData.PHONE', '');
+      return get(action.payload, 'profile.localUserData.PHONE', '');
     case PROFILE_PHONE__FILL:
       return action.payload;
     default:
@@ -90,7 +90,7 @@ function phone(state = '', action) {
 function email(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.offlineData.EMAIL', '');
+      return get(action.payload, 'profile.localUserData.EMAIL', '');
     case PROFILE_EMAIL__FILL:
       return action.payload;
     default:
@@ -101,7 +101,7 @@ function email(state = '', action) {
 function localUserData(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.offlineData', '');
+      return get(action.payload, 'profile.localUserData', '');
     case UPDATE_LOCAL_USER:
       return {...state, ...action.payload};
     default:
@@ -128,7 +128,7 @@ function cars(state = [], action) {
 function car(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.offlineData.CAR', null);
+      return get(action.payload, 'profile.localUserData.CAR', null);
     case PROFILE_CAR__FILL:
       return action.payload;
     default:
@@ -139,7 +139,7 @@ function car(state = '', action) {
 function carNumber(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.offlineData.carNumber', null);
+      return get(action.payload, 'profile.localUserData.carNumber', null);
     case PROFILE_CAR_NUMBER__FILL:
       return action.payload;
     default:
@@ -150,7 +150,7 @@ function carNumber(state = '', action) {
 function carVIN(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.offlineData.carVIN', null);
+      return get(action.payload, 'profile.localUserData.carVIN', null);
     case PROFILE_CAR_VIN__FILL:
       return action.payload;
     case REGISTER__SUCCESS:

@@ -10,13 +10,12 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
-import {StackActions, NavigationActions} from 'react-navigation';
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
 // redux
 import {connect} from 'react-redux';
 import {actionOrderCar} from '../actions';
-import {nameFill, phoneFill, emailFill} from '../../profile/actions';
+import {localUserDataUpdate} from '../../profile/actions';
 
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
@@ -97,10 +96,8 @@ const mapStateToProps = ({dealer, catalog, profile}) => {
 };
 
 const mapDispatchToProps = {
-  nameFill,
-  phoneFill,
-  emailFill,
   actionOrderCar,
+  localUserDataUpdate,
 };
 
 class OrderScreen extends Component {
@@ -223,10 +220,10 @@ class OrderScreen extends Component {
 
   static propTypes = {
     navigation: PropTypes.object,
-    nameFill: PropTypes.func,
-    phoneFill: PropTypes.func,
-    emailFill: PropTypes.func,
-    name: PropTypes.string,
+    localUserDataUpdate: PropTypes.func,
+    firstName: PropTypes.string,
+    secondName: PropTypes.string,
+    lastName: PropTypes.string,
     phone: PropTypes.string,
     email: PropTypes.string,
     comment: PropTypes.string,
@@ -256,34 +253,40 @@ class OrderScreen extends Component {
       comment: data.COMMENT || '',
       isNewCar,
     });
-    switch (action.type) {
-      case CATALOG_ORDER__SUCCESS:
-        const car = get(navigation, 'state.params.car');
-        const {brand, model} = car;
-        const path = isNewCar ? 'newcar' : 'usedcar';
-
-        Amplitude.logEvent('order', `catalog/${path}`, {
-          brand_name: brand,
-          model_name: get(model, 'name'),
-        });
-
-        let _this = this;
-        Alert.alert(
-          'Ваша заявка успешно отправлена!',
-          'Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
-          [
-            {
-              text: 'ОК',
-              onPress() {
-                _this.props.navigation.goBack();
+    if (action && action.type) {
+      switch (action.type) {
+        case CATALOG_ORDER__SUCCESS:
+          const car = get(navigation, 'state.params.car');
+          const {brand, model} = car;
+          const path = isNewCar ? 'newcar' : 'usedcar';
+          Amplitude.logEvent('order', `catalog/${path}`, {
+            brand_name: brand,
+            model_name: get(model, 'name'),
+          });
+          this.props.localUserDataUpdate({
+            NAME: get(data, 'NAME'),
+            SECOND_NAME: get(data, 'SECOND_NAME'),
+            LAST_NAME: get(data, 'LAST_NAME'),
+            PHONE: get(data, 'PHONE'),
+            EMAIL: get(data, 'EMAIL'),
+          });
+          Alert.alert(
+            'Ваша заявка успешно отправлена!',
+            'Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
+            [
+              {
+                text: 'ОК',
+                onPress() {
+                  navigation.goBack();
+                },
               },
-            },
-          ],
-        );
-        break;
-      case CATALOG_ORDER__FAIL:
-        Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова');
-        break;
+            ],
+          );
+          break;
+        case CATALOG_ORDER__FAIL:
+          Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова');
+          break;
+      }
     }
   };
 

@@ -246,38 +246,38 @@ class ServiceScreen extends Component {
 
       const action = await this.props.orderService(dataToSend);
 
-      if (action.type === SERVICE_ORDER__SUCCESS) {
-        Amplitude.logEvent('order', 'service');
-        localUserDataUpdate({
-          NAME: dataFromForm.NAME,
-          SECOND_NAME: dataFromForm.SECOND_NAME,
-          LAST_NAME: dataFromForm.LAST_NAME,
-          PHONE: dataFromForm.PHONE,
-          EMAIL: dataFromForm.EMAIL,
-          CARNAME: dataFromForm.CARNAME,
-          CARBRAND: dataFromForm.CARBRAND,
-          CARMODEL: dataFromForm.CARMODEL,
-        });
-        Alert.alert(
-          'Ваша заявка успешно отправлена',
-          'Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
-          [
-            {
-              text: 'ОК',
-              onPress() {
-                navigation.goBack();
-              },
-            },
-          ],
-        );
-        this.setState({success: true, loading: false});
-      }
-
-      if (action.type === SERVICE_ORDER__FAIL) {
-        setTimeout(
-          () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
-          100,
-        );
+      if (action && action.type) {
+        switch (action.type) {
+          case SERVICE_ORDER__SUCCESS:
+            Amplitude.logEvent('order', 'service');
+            localUserDataUpdate({
+              NAME: dataFromForm.NAME,
+              SECOND_NAME: dataFromForm.SECOND_NAME,
+              LAST_NAME: dataFromForm.LAST_NAME,
+              PHONE: dataFromForm.PHONE,
+              EMAIL: dataFromForm.EMAIL,
+              CARNAME: dataFromForm.CARNAME,
+              CARBRAND: dataFromForm.CARBRAND,
+              CARMODEL: dataFromForm.CARMODEL,
+            });
+            Alert.alert(
+              'Ваша заявка успешно отправлена',
+              'Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
+              [
+                {
+                  text: 'ОК',
+                  onPress() {
+                    navigation.goBack();
+                  },
+                },
+              ],
+            );
+            this.setState({success: true, loading: false});
+            break;
+          case SERVICE_ORDER__FAIL:
+            Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова');
+            break;
+        }
       }
     } catch (error) {}
   };
