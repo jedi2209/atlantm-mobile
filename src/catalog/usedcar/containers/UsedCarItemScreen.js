@@ -33,6 +33,7 @@ import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
 import PhotoSlider from '@core/components/PhotoSlider';
 import PhotoViewer from '@core/components/PhotoViewer';
 import ReadMore from 'react-native-read-more-text';
+import Badge from '@core/components/Badge';
 
 // helpers
 import {get, find} from 'lodash';
@@ -311,6 +312,8 @@ class UserCarItemScreen extends Component {
     const brandName = get(carDetails, 'brand.name');
     const modelName = get(carDetails, 'model.name');
     const additional = get(carDetails, 'options.additional.1.data', []);
+    const badge = get(carDetails, 'badge', null);
+    console.log('carDetails', carDetails);
 
     const CarPrices = {
       standart: get(carDetails, 'price.app.standart') || 0,
@@ -322,6 +325,34 @@ class UserCarItemScreen extends Component {
           <ScrollView>
             <StatusBar hidden />
             <View style={{flex: 1, position: 'relative'}}>
+              {badge ? (
+                <View
+                  key={'badgeContainer' + carDetails.id.api}
+                  style={{
+                    position: 'absolute',
+                    right: 20,
+                    top: 230,
+                    width: '100%',
+                    flexDirection: 'row',
+                    flex: 1,
+                    zIndex: 100,
+                    alignContent: 'stretch',
+                    justifyContent: 'flex-end',
+                  }}>
+                  {badge.map((item, index) => {
+                    return (
+                      <Badge
+                        id={carDetails.id.api}
+                        key={'badgeItem' + carDetails.id.api + index}
+                        index={index}
+                        bgColor={item.background}
+                        name={item.name}
+                        textColor={item.textColor}
+                      />
+                    );
+                  })}
+                </View>
+              ) : null}
               <View style={[styles.gallery, {marginTop: 0}]}>
                 <PhotoSlider
                   height={310}
