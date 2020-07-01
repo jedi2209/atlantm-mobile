@@ -39,10 +39,10 @@ class ServiceContnainer extends Component {
   };
 
   render() {
-    const {dealerSelected} = this.props;
-    if (dealerSelected.region === 'by') {
-      return <ServiceNewScreen />;
-    }
+    // const {dealerSelected} = this.props;
+    // if (dealerSelected.region === 'by') {
+    //   return <ServiceNewScreen />;
+    // }
     return <ServiceScreen />;
   }
 }
