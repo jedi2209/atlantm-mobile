@@ -105,10 +105,15 @@ class OrderScreen extends Component {
     super(props);
     const isNewCar = get(this.props.navigation, 'state.params.isNewCar');
     const orderedCar = get(this.props.navigation, 'state.params.car.ordered');
-
+    let model = '';
+    if (isNewCar) {
+      model = get(this.props.navigation, 'state.params.car.model');
+    } else {
+      model = get(this.props.navigation, 'state.params.car.model.name');
+    }
     const carName = [
       get(this.props.navigation, 'state.params.car.brand'),
-      get(this.props.navigation, 'state.params.car.model.name'),
+      model,
       get(this.props.navigation, 'state.params.car.complectation'),
       !orderedCar ? get(this.props.navigation, 'state.params.car.year') : null,
       orderedCar ? 'или аналог' : null,
