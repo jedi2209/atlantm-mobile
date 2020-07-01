@@ -483,7 +483,6 @@ class UserCarItemScreen extends Component {
                       </ReadMore>
                     </View>
                   ) : null}
-
                   <Accordion
                     style={{
                       borderBottomColor: '#d5d5e0',
@@ -623,44 +622,45 @@ class UserCarItemScreen extends Component {
                           </View>
                         ),
                       },
-                      additional && {
-                        title: 'Комплектация',
-                        content: (
-                          <View style={styles.tabContent}>
-                            <Text style={styles.sectionTitle}>
-                              {get(carDetails, 'options.additional.1.name')}
-                            </Text>
-                            {additional.map((item, num) => {
-                              return (
-                                <Grid key={'OptionsAdditional-' + num}>
-                                  {item.name && item.value ? (
-                                    <Row style={styles.sectionRow}>
-                                      <Col style={styles.sectionProp}>
-                                        <Text style={styles.sectionPropText}>
-                                          {item.name}
-                                        </Text>
-                                      </Col>
-                                      <Col style={styles.sectionValue}>
-                                        <Text style={styles.sectionValueText}>
-                                          {item.value}
-                                        </Text>
-                                      </Col>
-                                    </Row>
-                                  ) : (
-                                    <Text
-                                      style={[
-                                        styles.sectionPropText,
-                                        styles.sectionRow,
-                                      ]}>
-                                      {item.name}
-                                    </Text>
-                                  )}
-                                </Grid>
-                              );
-                            })}
-                          </View>
-                        ),
-                      },
+                      additional &&
+                        additional.length && {
+                          title: 'Комплектация',
+                          content: (
+                            <View style={styles.tabContent}>
+                              <Text style={styles.sectionTitle}>
+                                {get(carDetails, 'options.additional.1.name')}
+                              </Text>
+                              {additional.map((item, num) => {
+                                return (
+                                  <Grid key={'OptionsAdditional-' + num}>
+                                    {item.name && item.value ? (
+                                      <Row style={styles.sectionRow}>
+                                        <Col style={styles.sectionProp}>
+                                          <Text style={styles.sectionPropText}>
+                                            {item.name}
+                                          </Text>
+                                        </Col>
+                                        <Col style={styles.sectionValue}>
+                                          <Text style={styles.sectionValueText}>
+                                            {item.value}
+                                          </Text>
+                                        </Col>
+                                      </Row>
+                                    ) : (
+                                      <Text
+                                        style={[
+                                          styles.sectionPropText,
+                                          styles.sectionRow,
+                                        ]}>
+                                        {item.name}
+                                      </Text>
+                                    )}
+                                  </Grid>
+                                );
+                              })}
+                            </View>
+                          ),
+                        },
                     ].filter(Boolean)}
                     expanded={0}
                     animation={true}
