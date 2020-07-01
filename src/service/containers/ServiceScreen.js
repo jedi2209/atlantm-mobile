@@ -1,8 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {get} from 'lodash';
+import {get, orderBy} from 'lodash';
 import {
+  StyleSheet,
   View,
   Alert,
   TouchableWithoutFeedback,
@@ -11,6 +12,7 @@ import {
 } from 'react-native';
 import {StackActions, NavigationActions} from 'react-navigation';
 import Form from '../../core/components/Form/Form';
+import {CarCard} from '../../profile/components/CarCard';
 
 // redux
 import {connect} from 'react-redux';
@@ -28,6 +30,7 @@ import {ERROR_NETWORK} from '../../core/const';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
+  const cars = orderBy(profile.cars, ['owner'], ['asc']);
   let carLocalVin = '',
     carLocalBrand = '',
     carLocalModel = '';
@@ -36,9 +39,16 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
     if (profile.cars[0].vin) {
       carLocalVin = profile.cars[0].vin || '';
     }
+    if (profile.cars[0].brand) {
+      carLocalBrand = profile.cars[0].brand;
+    }
+    if (profile.cars[0].model) {
+      carLocalModel = profile.cars[0].model;
+    }
   }
 
   return {
+    cars,
     nav,
     dealerSelected: dealer.selected,
     firstName: UserData.get('NAME'),
@@ -67,136 +77,25 @@ const mapDispatchToProps = {
   orderService,
 };
 
+const styles = StyleSheet.create({
+  carContainer: {
+    marginLeft: -16,
+    marginRight: -16,
+  },
+  carContainerContent: {
+    // Добавляем отрицательный оступ, для контейнера с карточками,
+    // т.к. в карточках отступ снизу больше чем сверху из-за места использования.
+    marginVertical: 10,
+  },
+});
+
 class ServiceScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: null,
       loading: false,
       success: false,
-    };
-
-    this.FormConfig = {
-      fields: {
-        groups: [
-          {
-            name: 'Автоцентр',
-            fields: [
-              {
-                name: 'DEALER',
-                type: 'dealerSelect',
-                label: 'Автоцентр',
-                value: this.props.dealerSelected,
-                props: {
-                  goBack: true,
-                  isLocal: false,
-                  navigation: this.props.navigation,
-                  returnScreen: this.props.navigation.state.routeName,
-                },
-              },
-              {
-                name: 'DATE',
-                type: 'date',
-                label: 'Выберите удобную для вас дату',
-                value: this.state.date,
-                props: {
-                  placeholder: 'не ранее ' + dayMonthYear(addDays(2)),
-                  required: true,
-                  minDate: new Date(addDays(2)),
-                },
-              },
-            ],
-          },
-          {
-            name: 'Автомобиль',
-            fields: [
-              {
-                name: 'CARBRAND',
-                type: 'input',
-                label: 'Марка',
-                value: this.props.carBrand,
-                props: {
-                  required: true,
-                  placeholder: null,
-                },
-              },
-              {
-                name: 'CARMODEL',
-                type: 'input',
-                label: 'Модель',
-                value: this.props.carModel,
-                props: {
-                  required: true,
-                  placeholder: null,
-                },
-              },
-            ],
-          },
-          {
-            name: 'Контактные данные',
-            fields: [
-              {
-                name: 'NAME',
-                type: 'input',
-                label: 'Имя',
-                value: this.props.firstName,
-                props: {
-                  required: true,
-                  textContentType: 'name',
-                },
-              },
-              {
-                name: 'SECOND_NAME',
-                type: 'input',
-                label: 'Отчество',
-                value: this.props.secondName,
-                props: {
-                  textContentType: 'middleName',
-                },
-              },
-              {
-                name: 'LAST_NAME',
-                type: 'input',
-                label: 'Фамилия',
-                value: this.props.lastName,
-                props: {
-                  textContentType: 'familyName',
-                },
-              },
-              {
-                name: 'PHONE',
-                type: 'phone',
-                label: 'Телефон',
-                value: this.props.phone,
-                props: {
-                  required: true,
-                },
-              },
-              {
-                name: 'EMAIL',
-                type: 'email',
-                label: 'Email',
-                value: this.props.email,
-              },
-            ],
-          },
-          {
-            name: 'Дополнительно',
-            fields: [
-              {
-                name: 'COMMENT',
-                type: 'textarea',
-                label: 'Комментарий',
-                value: this.props.Text,
-                props: {
-                  placeholder:
-                    'На случай если вам потребуется передать нам больше информации',
-                },
-              },
-            ],
-          },
-        ],
-      },
+      isHaveCar: Boolean(props.cars.length > 0),
     };
   }
 
@@ -208,6 +107,16 @@ class ServiceScreen extends Component {
   };
 
   onPressOrder = async (dataFromForm) => {
+    if (!dataFromForm.CARBRAND && this.state.carBrand) {
+      dataFromForm.CARBRAND = this.state.carBrand;
+    }
+    if (!dataFromForm.CARMODEL && this.state.carModel) {
+      dataFromForm.CARMODEL = this.state.carModel;
+    }
+    if (!dataFromForm.CAR && this.state.carName) {
+      dataFromForm.CAR = this.state.carName;
+    }
+
     const isInternetExist = await isInternet();
 
     if (!isInternetExist) {
@@ -290,6 +199,166 @@ class ServiceScreen extends Component {
   }
 
   render() {
+    this.FormConfig = {
+      fields: {
+        groups: [
+          {
+            name: 'Автоцентр',
+            fields: [
+              {
+                name: 'DEALER',
+                type: 'dealerSelect',
+                label: 'Автоцентр',
+                value: this.props.dealerSelected,
+                props: {
+                  goBack: true,
+                  isLocal: false,
+                  navigation: this.props.navigation,
+                  returnScreen: this.props.navigation.state.routeName,
+                },
+              },
+              {
+                name: 'DATE',
+                type: 'date',
+                label: 'Выберите удобную для вас дату',
+                value: null,
+                props: {
+                  placeholder: 'не ранее ' + dayMonthYear(addDays(2)),
+                  required: true,
+                  minDate: new Date(addDays(2)),
+                },
+              },
+            ],
+          },
+          {
+            name: 'Автомобиль',
+            fields: this.state.isHaveCar
+              ? [
+                  {
+                    name: 'CARNAME',
+                    type: 'component',
+                    label: 'Выберите автомобиль',
+                    value: (
+                      <ScrollView
+                        showsHorizontalScrollIndicator={false}
+                        horizontal
+                        style={styles.carContainer}
+                        contentContainerStyle={styles.carContainerContent}>
+                        {(this.props.cars || []).map((item) => (
+                          <TouchableWithoutFeedback
+                            activeOpacity={0.7}
+                            key={item.vin}
+                            onPress={() => {
+                              this.setState({
+                                carBrand: item.brand,
+                                carModel: item.model,
+                                carName: [item.brand, item.model].join(' '),
+                                carVIN: item.vin,
+                              });
+                            }}>
+                            <View>
+                              <CarCard
+                                key={item.vin}
+                                data={item}
+                                type="check"
+                                checked={this.state.carVIN === item.vin}
+                              />
+                            </View>
+                          </TouchableWithoutFeedback>
+                        ))}
+                      </ScrollView>
+                    ),
+                  },
+                ]
+              : [
+                  {
+                    name: 'CARBRAND',
+                    type: 'input',
+                    label: 'Марка',
+                    value: this.props.carBrand,
+                    props: {
+                      required: true,
+                      placeholder: null,
+                    },
+                  },
+                  {
+                    name: 'CARMODEL',
+                    type: 'input',
+                    label: 'Модель',
+                    value: this.props.carModel,
+                    props: {
+                      required: true,
+                      placeholder: null,
+                    },
+                  },
+                ],
+          },
+          {
+            name: 'Контактные данные',
+            fields: [
+              {
+                name: 'NAME',
+                type: 'input',
+                label: 'Имя',
+                value: this.props.firstName,
+                props: {
+                  required: true,
+                  textContentType: 'name',
+                },
+              },
+              {
+                name: 'SECOND_NAME',
+                type: 'input',
+                label: 'Отчество',
+                value: this.props.secondName,
+                props: {
+                  textContentType: 'middleName',
+                },
+              },
+              {
+                name: 'LAST_NAME',
+                type: 'input',
+                label: 'Фамилия',
+                value: this.props.lastName,
+                props: {
+                  textContentType: 'familyName',
+                },
+              },
+              {
+                name: 'PHONE',
+                type: 'phone',
+                label: 'Телефон',
+                value: this.props.phone,
+                props: {
+                  required: true,
+                },
+              },
+              {
+                name: 'EMAIL',
+                type: 'email',
+                label: 'Email',
+                value: this.props.email,
+              },
+            ],
+          },
+          {
+            name: 'Дополнительно',
+            fields: [
+              {
+                name: 'COMMENT',
+                type: 'textarea',
+                label: 'Комментарий',
+                value: this.props.Text,
+                props: {
+                  placeholder:
+                    'На случай если вам потребуется передать нам больше информации',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    };
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
