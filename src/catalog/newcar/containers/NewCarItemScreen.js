@@ -12,6 +12,7 @@ import {
   StyleSheet,
   Linking,
   Platform,
+  Alert,
 } from 'react-native';
 import {
   Col,
@@ -233,12 +234,50 @@ class NewCarItemScreen extends Component {
       ) {
         userLink = '&userID=' + profile.login.SAP.id;
       }
-      Linking.openURL(
+      const urlLink =
         onlineLink +
-          '&utm_campaign=' +
-          Platform.OS +
-          '&utm_content=button' +
-          userLink,
+        '&utm_campaign=' +
+        Platform.OS +
+        '&utm_content=button' +
+        userLink;
+      Alert.alert(
+        'Вариант покупки авто',
+        'Вы хотите забронировать авто или просто отправить запрос?\r\n\r\n' +
+          'Бронирование позволяет вам гарантированно получить автомобиль, внеся небольшую предоплату.\r\n\r\n' +
+          'Разумеется, эта сумма засчитывается в стоимость авто.',
+        [
+          {
+            text: '📄 Отправить запрос',
+            onPress: () => {
+              navigation.navigate('OrderScreen', {
+                car: {
+                  brand: get(carDetails, 'brand.name'),
+                  model: get(carDetails, 'model.name'),
+                  isSale: carDetails.sale === true,
+                  price: CarPrices.standart,
+                  priceSpecial: CarPrices.sale,
+                  complectation: get(carDetails, 'complectation.name'),
+                  year: get(carDetails, 'year'),
+                },
+                region: this.props.dealerSelected.region,
+                dealerId: carDetails.dealer.id,
+                carId: carDetails.id.api,
+                isNewCar: true,
+              });
+            },
+          },
+          {
+            text: '🧾 Забронировать',
+            onPress: () => {
+              Linking.openURL(urlLink);
+            },
+          },
+          {
+            text: 'Отмена',
+            style: 'destructive',
+          },
+        ],
+        {cancelable: true},
       );
     } else {
       navigation.navigate('OrderScreen', {
@@ -850,9 +889,7 @@ class NewCarItemScreen extends Component {
 
                         {carDetails.text ? (
                           <View style={styles.descrContainer}>
-                            <Text style={styles.descr}>
-                              {carDetails.text}
-                            </Text>
+                            <Text style={styles.descr}>{carDetails.text}</Text>
                           </View>
                         ) : null}
                       </View>
