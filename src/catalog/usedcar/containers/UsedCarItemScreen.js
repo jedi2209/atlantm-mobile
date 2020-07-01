@@ -402,22 +402,31 @@ class UserCarItemScreen extends Component {
                         paddingHorizontal: '2%',
                         marginBottom: 10,
                       }}>
+                      {get(carDetails, 'mileage') ? (
+                        <OptionPlate
+                          title="Пробег"
+                          subtitle={
+                            numberWithGap(get(carDetails, 'mileage')) + ' км.'
+                          }
+                        />
+                      ) : null}
                       {get(carDetails, 'engine') ? (
                         <OptionPlate
                           title="Двигатель"
                           subtitle={
                             get(carDetails, 'engine.volume.short') +
-                            ' ' +
+                            ' см³ ' +
                             get(carDetails, 'engine.type')
                           }
                         />
                       ) : null}
-                      {get(carDetails, 'gearbox.count') ? (
+                      {get(carDetails, 'gearbox.GearboxCount') ? (
                         <OptionPlate
                           title="КПП"
                           subtitle={`${
-                            get(carDetails, 'gearbox.count')
-                              ? get(carDetails, 'gearbox.count') + '-ст.'
+                            get(carDetails, 'gearbox.GearboxCount.Value')
+                              ? get(carDetails, 'gearbox.GearboxCount.Value') +
+                                '-ст.'
                               : ''
                           } ${
                             get(carDetails, 'gearbox.name')

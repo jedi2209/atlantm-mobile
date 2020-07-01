@@ -1,3 +1,4 @@
 export default function (number) {
-  return String(number).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
+  return number.toLocaleString('ru-RU');
+  //return String(number).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
 }
