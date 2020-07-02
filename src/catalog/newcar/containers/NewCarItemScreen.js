@@ -247,7 +247,7 @@ class NewCarItemScreen extends Component {
           'Разумеется, эта сумма засчитывается в стоимость авто.',
         [
           {
-            text: '📄 Отправить запрос',
+            text: 'Отправить запрос',
             onPress: () => {
               navigation.navigate('OrderScreen', {
                 car: {
@@ -267,7 +267,7 @@ class NewCarItemScreen extends Component {
             },
           },
           {
-            text: '🧾 Забронировать',
+            text: 'Забронировать',
             onPress: () => {
               Linking.openURL(urlLink);
             },
@@ -668,7 +668,7 @@ class NewCarItemScreen extends Component {
                         title="Двигатель"
                         subtitle={
                           get(carDetails, 'engine.volume.short') +
-                          ' ' +
+                          ' л. ' +
                           get(carDetails, 'engine.type')
                         }
                       />

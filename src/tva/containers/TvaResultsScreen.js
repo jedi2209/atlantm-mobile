@@ -15,6 +15,7 @@ import {
   StatusBar,
 } from 'react-native';
 import {Container, Content, StyleProvider, Button} from 'native-base';
+import {localUserDataUpdate} from '../../profile/actions';
 
 // redux
 import {connect} from 'react-redux';
@@ -91,7 +92,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   textinput: {
-    height: Platform.OS === 'ios' ? 40 : 'auto',
+    height: Platform.OS === 'ios' ? 50 : 'auto',
+    paddingTop: 20,
     borderColor: '#d8d8d8',
     borderBottomWidth: 1,
     color: '#222b45',
@@ -123,6 +125,7 @@ const mapDispatchToProps = {
   actionTvaMessageFill,
   actionTvaMessageSend,
   actionSetActiveTvaOrderId,
+  localUserDataUpdate,
 };
 
 class TvaResultsScreen extends Component {
@@ -257,6 +260,11 @@ class TvaResultsScreen extends Component {
     const titleCarNumber = car.number;
     const textList = [titleCar, titleCarNumber];
 
+    this.props.localUserDataUpdate({
+      CARBRAND: car.brand,
+      CARMODEL: car.model,
+    });
+
     return (
       <KeyboardAvoidingView>
         <StatusBar barStyle="light-content" />
@@ -265,7 +273,7 @@ class TvaResultsScreen extends Component {
             <View style={styles.container}>
               <View style={styles.header}>
                 <Text style={styles.heading}>
-                  {`${titleCar} ${titleCarNumber}`}
+                  {`${titleCar}\r\n${titleCarNumber}`}
                 </Text>
               </View>
               {this.state.success ? (
@@ -293,7 +301,7 @@ class TvaResultsScreen extends Component {
               ) : (
                 <>
                   {info.map((item) => (
-                    <>
+                    <View key={'ViewTvaResult' + item.id}>
                       <View
                         style={[
                           styles.group,
@@ -327,7 +335,7 @@ class TvaResultsScreen extends Component {
                           />
                         </View>
                       </View>
-                    </>
+                    </View>
                   ))}
                   <View style={styles.group}>
                     <View style={styles.field}>
@@ -337,6 +345,7 @@ class TvaResultsScreen extends Component {
                         style={{
                           height: Platform.OS === 'ios' ? 90 : 'auto',
                           borderColor: '#d8d8d8',
+                          paddingTop: 25,
                           borderBottomWidth: 1,
                           color: '#222b45',
                           fontSize: 18,
