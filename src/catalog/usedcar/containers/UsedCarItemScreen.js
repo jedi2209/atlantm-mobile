@@ -415,7 +415,7 @@ class UserCarItemScreen extends Component {
                           title="Двигатель"
                           subtitle={
                             get(carDetails, 'engine.volume.short') +
-                            ' см³ ' +
+                            ' л. ' +
                             get(carDetails, 'engine.type')
                           }
                         />

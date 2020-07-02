@@ -97,6 +97,15 @@ class ServiceScreen extends Component {
       success: false,
       isHaveCar: Boolean(props.cars.length > 0),
     };
+    if (this.props.cars.length === 1) {
+      this.state.carBrand = this.props.cars[0].brand;
+      this.state.carModel = this.props.cars[0].model;
+      this.state.carName = [
+        this.props.cars[0].brand,
+        this.props.cars[0].model,
+      ].join(' ');
+      this.state.carVIN = this.props.cars[0].vin;
+    }
   }
 
   static propTypes = {
@@ -244,28 +253,30 @@ class ServiceScreen extends Component {
                         horizontal
                         style={styles.carContainer}
                         contentContainerStyle={styles.carContainerContent}>
-                        {(this.props.cars || []).map((item) => (
-                          <TouchableWithoutFeedback
-                            activeOpacity={0.7}
-                            key={item.vin}
-                            onPress={() => {
-                              this.setState({
-                                carBrand: item.brand,
-                                carModel: item.model,
-                                carName: [item.brand, item.model].join(' '),
-                                carVIN: item.vin,
-                              });
-                            }}>
-                            <View>
-                              <CarCard
-                                key={item.vin}
-                                data={item}
-                                type="check"
-                                checked={this.state.carVIN === item.vin}
-                              />
-                            </View>
-                          </TouchableWithoutFeedback>
-                        ))}
+                        {(this.props.cars || []).map((item) => {
+                          return (
+                            <TouchableWithoutFeedback
+                              activeOpacity={0.7}
+                              key={item.vin}
+                              onPress={() => {
+                                this.setState({
+                                  carBrand: item.brand,
+                                  carModel: item.model,
+                                  carName: [item.brand, item.model].join(' '),
+                                  carVIN: item.vin,
+                                });
+                              }}>
+                              <View>
+                                <CarCard
+                                  key={item.vin}
+                                  data={item}
+                                  type="check"
+                                  checked={this.state.carVIN === item.vin}
+                                />
+                              </View>
+                            </TouchableWithoutFeedback>
+                          );
+                        })}
                       </ScrollView>
                     ),
                   },
