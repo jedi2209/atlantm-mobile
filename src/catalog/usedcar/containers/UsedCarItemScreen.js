@@ -420,7 +420,8 @@ class UserCarItemScreen extends Component {
                           }
                         />
                       ) : null}
-                      {get(carDetails, 'gearbox.GearboxCount') ? (
+                      {get(carDetails, 'gearbox.GearboxCount') &&
+                      get(carDetails, 'gearbox.name') ? (
                         <OptionPlate
                           title="КПП"
                           subtitle={`${
