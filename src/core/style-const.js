@@ -18,7 +18,7 @@ export default {
     greyBlue: '#616e7a',
     greyBlueText: '#a8b0b7',
     header: '#f7f7f8',
-    select: '#c8dffa',
+    select: '#fafafa',
     border: '#c7c7c7',
     systemBlue: '#007aff',
     systemGray: '#c7c7c7',

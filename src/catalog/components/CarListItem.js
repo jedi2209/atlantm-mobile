@@ -27,6 +27,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 5,
   },
+  containerSpecial: {
+    // backgroundColor: '#1f1f1f',
+  },
   ordered: {
     opacity: 0.6,
   },
@@ -83,9 +86,10 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
     fontSize: 12,
     marginTop: 4,
+    color: '#afafaf',
   },
   priceSpecial: {
-    color: '#D0021B',
+    color: 'red',
   },
   extra: {
     borderColor: 'red',
@@ -137,6 +141,24 @@ const styles = StyleSheet.create({
   commonReal: {
     fontSize: 12,
     color: '#FFF',
+  },
+  saleContainer: {
+    marginTop: 2,
+    marginHorizontal: 10,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    paddingTop: 3,
+    backgroundColor: 'red',
+    borderRadius: 5,
+    textAlign: 'center',
+    alignContent: 'center',
+    width: 65,
+    height: 15,
+  },
+  priceSpecialText: {
+    color: 'white',
+    fontSize: 10,
+    lineHeight: 10,
   },
 });
 
@@ -197,7 +219,7 @@ class CarListItem extends Component {
     return car.id.api !== nextProps.car.id.api;
   }
 
-  renderPrice = ({car, prices}) => {
+  renderPrice = ({car}) => {
     const isSale = car.sale === true;
 
     let CarImgReal = false;
@@ -213,50 +235,37 @@ class CarListItem extends Component {
     return (
       <View style={[styles.priceContainer, {marginBottom: CarImgReal ? 0 : 5}]}>
         {isSale ? (
-          <Text
-            style={[
-              styles.price,
-              styles.priceSpecial,
-              {color: CarImgReal ? '#FFFFFF' : '#2A2A43'},
-            ]}>
-            {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
-          </Text>
+          <View style={{flex: 1, flexDirection: 'row',}}>
+            <Text
+              style={[
+                styles.price,
+                {color: CarImgReal ? '#FFFFFF' : '#2A2A43'},
+                styles.priceSpecial,
+              ]}>
+              {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
+            </Text>
+            <View style={{marginLeft: 10}}>
+              <Badge
+                id={car.id.api}
+                key={'badgeItemSpecialPrice' + car.id.api}
+                bgColor="red"
+                name="Спец.цена"
+                textColor="white"
+              />
+            </View>
+          </View>
         ) : null}
         <View style={{flexDirection: 'row'}}>
           <Text
             style={[
               styles.price,
-              isSale ? styles.priceDefault : null,
               {
                 color: CarImgReal ? '#FFFFFF' : '#2A2A43',
               },
+              isSale ? styles.priceDefault : null,
             ]}>
             {showPrice(CarPrices.standart, this.props.dealerSelected.region)}
           </Text>
-          {isSale ? (
-            <View
-              style={{
-                marginTop: 2,
-                marginHorizontal: 10,
-                paddingHorizontal: 5,
-                paddingVertical: 2,
-                backgroundColor: 'red',
-                borderRadius: 5,
-                textAlign: 'center',
-                alignContent: 'center',
-                width: 65,
-                height: 15,
-              }}>
-              <Text
-                style={{
-                  color: 'white',
-                  fontSize: 10,
-                  lineHeight: 10,
-                }}>
-                Спец.цена
-              </Text>
-            </View>
-          ) : null}
         </View>
       </View>
     );
@@ -286,7 +295,11 @@ class CarListItem extends Component {
     return (
       <TouchableHighlight
         onPress={!ordered ? this.onPress : this.onPressOrder}
-        style={[!ordered ? styleConst.shadow.light : null, styles.container]}
+        style={[
+          !ordered ? styleConst.shadow.light : null,
+          styles.container,
+          isSale ? styles.containerSpecial : null,
+        ]}
         underlayColor={styleConst.color.select}>
         <View style={styles.card} key={'carID-' + this.props.key}>
           <LinearGradient

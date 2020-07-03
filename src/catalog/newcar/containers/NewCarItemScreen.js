@@ -589,7 +589,7 @@ class NewCarItemScreen extends Component {
                   position: 'absolute',
                   height: 400,
                   width: '100%',
-                  zIndex: 100,
+                  zIndex: 20,
                   marginTop: CarImgReal ? -12 : -12,
                 }}>
                 <ColorBox
@@ -628,6 +628,7 @@ class NewCarItemScreen extends Component {
                     borderTopRightRadius: 30,
                     paddingTop: 20,
                     paddingBottom: 14,
+                    zIndex: 30,
                   },
                 ]}>
                 <View
