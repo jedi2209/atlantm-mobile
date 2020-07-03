@@ -235,7 +235,4 @@ class UserCarListScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(UserCarListScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(UserCarListScreen);
