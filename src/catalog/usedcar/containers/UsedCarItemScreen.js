@@ -414,7 +414,7 @@ class UserCarItemScreen extends Component {
                         <OptionPlate
                           title="Двигатель"
                           subtitle={
-                            get(carDetails, 'engine.volume.short') +
+                            get(carDetails, 'engine.volume.short').toFixed(1) +
                             ' л. ' +
                             get(carDetails, 'engine.type')
                           }
