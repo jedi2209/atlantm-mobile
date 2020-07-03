@@ -79,6 +79,8 @@ class ProfileSettingsScreen extends Component {
 
     if (typeof BIRTHDATE === 'string') {
       birthdate = new Date(BIRTHDATE);
+    } else if (typeof BIRTHDATE === 'object') {
+      birthdate = BIRTHDATE;
     }
 
     this.state = {
@@ -206,6 +208,11 @@ class ProfileSettingsScreen extends Component {
     } else {
       propsTmp.PHONE = null;
     }
+
+    propsTmp.SECOND_NAME = props.SECOND_NAME || '';
+    propsTmp.NAME = props.NAME || '';
+    propsTmp.LAST_NAME = props.LAST_NAME || '';
+    propsTmp.BIRTHDATE = props.BIRTHDATE || '';
 
     if (!phoneValue && !emailValue) {
       this.setState({loading: false});
