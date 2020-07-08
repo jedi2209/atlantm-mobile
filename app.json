@@ -1,4 +1,7 @@
 {
   "name": "atlantm",
-  "displayName": "atlantm"
+  "displayName": "atlantm",
+  "ios" : {
+    "usesAppleSignIn": true
+  }
 }
