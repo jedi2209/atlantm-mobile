@@ -416,11 +416,6 @@ class ProfileScreen extends Component {
 
     // use credentialState response to ensure the user is authenticated
     if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
-      alert('user', appleAuthRequestResponse.user);
-      alert('first_name', appleAuthRequestResponse.fullName.nickname);
-      alert('second_name', appleAuthRequestResponse.fullName.middleName);
-      alert('last_name', appleAuthRequestResponse.fullName.familyName);
-      alert('email', appleAuthRequestResponse.email);
       try {
         const profile = {
           id: appleAuthRequestResponse.user,
@@ -431,7 +426,6 @@ class ProfileScreen extends Component {
         };
         this._sendDataToApi({...profile, networkName: 'ap'});
       } catch (error) {
-        alert('error', error);
         console.log('error', error);
       }
     }
