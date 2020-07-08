@@ -547,6 +547,7 @@ export default {
       personal_birthday,
       personal_gender,
       last_name,
+      second_name,
       first_name,
       networkName,
     } = profile;
@@ -555,6 +556,9 @@ export default {
       `networkName=${networkName}`,
       `socialData[XML_ID]=${id}`,
       `socialData[EMAIL]=${typeof email !== 'undefined' ? email : ''}`,
+      `socialData[SECOND_NAME]=${
+        typeof second_name !== 'undefined' ? second_name : ''
+      }`,
       `socialData[NAME]=${typeof first_name !== 'undefined' ? first_name : ''}`,
       `socialData[LAST_NAME]=${
         typeof last_name !== 'undefined' ? last_name : ''

@@ -20,6 +20,12 @@ import PhoneInput from 'react-native-phone-input';
 import {store} from '@core/store';
 import styleConst from '@core/style-const';
 import LinearGradient from 'react-native-linear-gradient';
+import appleAuth, {
+  AppleButton,
+  AppleAuthRequestOperation,
+  AppleAuthRequestScope,
+  AppleAuthCredentialState,
+} from '@invertase/react-native-apple-authentication';
 
 // redux
 import {connect} from 'react-redux';
@@ -392,6 +398,45 @@ class ProfileScreen extends Component {
     }
   };
 
+  _signInWithApple = async () => {
+    // performs login request
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: AppleAuthRequestOperation.LOGIN,
+      requestedScopes: [
+        AppleAuthRequestScope.EMAIL,
+        AppleAuthRequestScope.FULL_NAME,
+      ],
+    });
+
+    // get current authentication state for user
+    // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+    const credentialState = await appleAuth.getCredentialStateForUser(
+      appleAuthRequestResponse.user,
+    );
+
+    // use credentialState response to ensure the user is authenticated
+    if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
+      alert('user', appleAuthRequestResponse.user);
+      alert('first_name', appleAuthRequestResponse.fullName.nickname);
+      alert('second_name', appleAuthRequestResponse.fullName.middleName);
+      alert('last_name', appleAuthRequestResponse.fullName.familyName);
+      alert('email', appleAuthRequestResponse.email);
+      try {
+        const profile = {
+          id: appleAuthRequestResponse.user,
+          first_name: appleAuthRequestResponse.fullName.nickname || '',
+          second_name: appleAuthRequestResponse.fullName.middleName || '',
+          last_name: appleAuthRequestResponse.fullName.familyName || '',
+          email: appleAuthRequestResponse.email || '',
+        };
+        this._sendDataToApi({...profile, networkName: 'ap'});
+      } catch (error) {
+        alert('error', error);
+        console.log('error', error);
+      }
+    }
+  };
+
   onInputCode = (text) => {
     if (text.length === 4) {
       this.setState({codeValue: text});
@@ -409,6 +454,7 @@ class ProfileScreen extends Component {
     let VKenabled = true;
     let ButtonWidth = '25%';
     let ButtonHeight = 50;
+    const isAndroid = Platform.OS === 'android';
     switch (region.toLowerCase()) {
       case 'ua':
         VKenabled = false;
@@ -419,54 +465,24 @@ class ProfileScreen extends Component {
     return (
       <View
         style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          width: '80%',
-          marginHorizontal: '10%',
-          marginTop: 40,
-          marginBottom: 20,
           opacity: this.state.code ? 0 : 1,
           height: this.state.code
             ? Platform.select({ios: 'auto', android: 0})
             : 'auto',
+          marginTop: 40,
+          marginBottom: 20,
+          width: '80%',
+          marginHorizontal: '10%',
         }}>
-        <Button
-          onPress={this._signInWithGoogle}
-          disabled={this.state.isSigninInProgress}
-          iconLeft
-          style={[
-            styleConst.shadow.default,
-            styles.SocialLoginBt,
-            {
-              width: ButtonWidth,
-              height: ButtonHeight,
-              backgroundColor: '#4286F5',
-            },
-          ]}>
-          <Icon name="google" type="FontAwesome5" />
-        </Button>
-        <Button
-          onPress={this._signInFB}
-          disabled={this.state.isSigninInProgress}
-          iconLeft
-          style={[
-            styleConst.shadow.default,
-            styles.SocialLoginBt,
-            {
-              backgroundColor: '#4167B2',
-              width: VKenabled ? '29%' : ButtonWidth,
-              height: 60,
-              marginVertical: 8,
-              paddingHorizontal: 8,
-            },
-          ]}>
-          <Icon name="facebook" type="FontAwesome5" style={{fontSize: 35}} />
-        </Button>
-        {VKenabled ? (
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}>
           <Button
-            onPress={this._signInWithVK}
+            onPress={this._signInWithGoogle}
             disabled={this.state.isSigninInProgress}
             iconLeft
             style={[
@@ -475,11 +491,60 @@ class ProfileScreen extends Component {
               {
                 width: ButtonWidth,
                 height: ButtonHeight,
-                backgroundColor: '#4680C2',
+                backgroundColor: '#4286F5',
               },
             ]}>
-            <Icon name="vk" type="FontAwesome5" />
+            <Icon name="google" type="FontAwesome5" />
           </Button>
+          <Button
+            onPress={this._signInFB}
+            disabled={this.state.isSigninInProgress}
+            iconLeft
+            style={[
+              styleConst.shadow.default,
+              styles.SocialLoginBt,
+              {
+                backgroundColor: '#4167B2',
+                width: VKenabled ? '29%' : ButtonWidth,
+                height: 60,
+                marginVertical: 8,
+                paddingHorizontal: 8,
+              },
+            ]}>
+            <Icon name="facebook" type="FontAwesome5" style={{fontSize: 35}} />
+          </Button>
+          {VKenabled ? (
+            <Button
+              onPress={this._signInWithVK}
+              disabled={this.state.isSigninInProgress}
+              iconLeft
+              style={[
+                styleConst.shadow.default,
+                styles.SocialLoginBt,
+                {
+                  width: ButtonWidth,
+                  height: ButtonHeight,
+                  backgroundColor: '#4680C2',
+                },
+              ]}>
+              <Icon name="vk" type="FontAwesome5" />
+            </Button>
+          ) : null}
+        </View>
+        {!isAndroid && appleAuth.isSupported ? (
+          <AppleButton
+            buttonStyle={AppleButton.Style.WHITE_OUTLINE}
+            buttonType={AppleButton.Type.SIGN_IN}
+            cornerRadius={5}
+            style={[
+              styles.SocialLoginBt,
+              {
+                justifyContent: 'space-between',
+                height: 45,
+              },
+            ]}
+            onPress={() => this._signInWithApple()}
+          />
         ) : null}
       </View>
     );
