@@ -53,6 +53,7 @@ platform :ios do
       workspace: "./ios/atlantm.xcworkspace",
       scheme: "atlantm",
       export_method: "app-store",
+      export_xcargs: "-allowProvisioningUpdates",
       # skip_codesigning: true,
       # export_options: {
       #   provisioningProfiles: {
