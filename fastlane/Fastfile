@@ -53,7 +53,8 @@ platform :ios do
       workspace: "./ios/atlantm.xcworkspace",
       scheme: "atlantm",
       export_method: "app-store",
-      export_xcargs: "-allowProvisioningUpdates",
+      # export_xcargs: "-allowProvisioningUpdates",
+      export_team_id: CredentialsManager::AppfileConfig.try_fetch_value(:team_id),
       skip_codesigning: true,
       export_options: {
         provisioningProfiles: {
