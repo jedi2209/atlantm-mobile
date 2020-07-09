@@ -424,7 +424,7 @@ class ProfileScreen extends Component {
           last_name: appleAuthRequestResponse.fullName.familyName || '',
           email: appleAuthRequestResponse.email || '',
         };
-        this._sendDataToApi({...profile, networkName: 'ap'});
+        this._sendDataToApi({...profile, networkName: 'apple'});
       } catch (error) {
         console.log('error', error);
       }
