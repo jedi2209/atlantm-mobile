@@ -53,20 +53,20 @@ platform :ios do
       workspace: "./ios/atlantm.xcworkspace",
       scheme: "atlantm",
       export_method: "app-store",
-      # export_xcargs: "-allowProvisioningUpdates",
-      export_team_id: CredentialsManager::AppfileConfig.try_fetch_value(:team_id),
+    #   export_xcargs: "-allowProvisioningUpdates",
+    #   export_team_id: CredentialsManager::AppfileConfig.try_fetch_value(:team_id),
       skip_codesigning: true,
-      export_options: {
-        provisioningProfiles: {
-          "com.atlantm.app" => "com.atlantm.app AppStore",
-          "com.atlantm.app.OneSignalNotificationServiceExtension" => "XC.com.atlantm.app.OneSignalNotificationService"
-        }
-      }
-    )
-    update_code_signing_settings(
-      path: "./ios/atlantm.xcodeproj",
-      use_automatic_signing: true
-    )
+    #   export_options: {
+    #     provisioningProfiles: {
+    #       "com.atlantm.app" => "com.atlantm.app AppStore",
+    #       "com.atlantm.app.OneSignalNotificationServiceExtension" => "XC.com.atlantm.app.OneSignalNotificationService"
+    #     }
+    #   }
+    # )
+    # update_code_signing_settings(
+    #   path: "./ios/atlantm.xcodeproj",
+    #   use_automatic_signing: true
+    # )
     # Generate the changelog based on commit messages since your last tag
     changelog_from_git_commits(
         pretty: "- %s",# Optional, lets you provide a custom format to apply to each commit when generating the changelog text
