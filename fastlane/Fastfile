@@ -62,7 +62,7 @@ platform :ios do
     #       "com.atlantm.app.OneSignalNotificationServiceExtension" => "XC.com.atlantm.app.OneSignalNotificationService"
     #     }
     #   }
-    # )
+    )
     # update_code_signing_settings(
     #   path: "./ios/atlantm.xcodeproj",
     #   use_automatic_signing: true
