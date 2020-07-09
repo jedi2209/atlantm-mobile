@@ -206,19 +206,13 @@ class SocialAuth extends PureComponent {
 
     // use credentialState response to ensure the user is authenticated
     if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
-      console.log('appleAuthRequestResponse', appleAuthRequestResponse);
       try {
-        const profile = {
-          id: appleAuthRequestResponse.user,
-          first_name: appleAuthRequestResponse.fullName.nickname || '',
-          second_name: appleAuthRequestResponse.fullName.middleName || '',
-          last_name: appleAuthRequestResponse.fullName.familyName || '',
-          email: appleAuthRequestResponse.email || '',
-        };
-        this._sendDataToApi({...profile, networkName: 'ap'});
+        const im = {VALUE: appleAuthRequestResponse.user, VALUE_TYPE: 'ap'};
+        this.props.connectSocialMedia({profile: this.props.login, im});
       } catch (error) {
         console.log('error', error);
       }
+      this.setState({isSigninInProgress: false});
     }
   };
 
@@ -345,21 +339,32 @@ class SocialAuth extends PureComponent {
           ) : null}
         </View>
         {!isAndroid && appleAuth.isSupported ? (
-          <AppleButton
-            buttonStyle={AppleButton.Style.WHITE_OUTLINE}
-            buttonType={AppleButton.Type.SIGN_IN}
-            disabled={this.state.isSigninInProgress || Boolean(im.ap)}
-            cornerRadius={5}
-            style={[
-              styles.SocialLoginBt,
-              {
-                justifyContent: 'space-between',
-                height: 45,
-                marginTop: 15,
-              },
-            ]}
-            onPress={() => this._signInWithApple()}
-          />
+          <View>
+            <AppleButton
+              buttonStyle={AppleButton.Style.BLACK}
+              buttonType={AppleButton.Type.SIGN_IN}
+              disabled={this.state.isSigninInProgress || Boolean(im.ap)}
+              cornerRadius={5}
+              style={[
+                styleConst.shadow.default,
+                styles.SocialLoginBt,
+                im.ap ? styles.SocialLoginBtActive : null,
+                {
+                  justifyContent: 'space-between',
+                  height: 45,
+                  marginTop: 15,
+                },
+              ]}
+              onPress={() => this._signInWithApple()}
+            />
+            {im.ap ? (
+              <Icon
+                name="check-circle"
+                type="FontAwesome5"
+                style={[styles.CheckCircleIcon, {right: 5}]}
+              />
+            ) : null}
+          </View>
         ) : null}
       </View>
     );
