@@ -207,7 +207,7 @@ class SocialAuth extends PureComponent {
     // use credentialState response to ensure the user is authenticated
     if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
       try {
-        const im = {VALUE: appleAuthRequestResponse.user, VALUE_TYPE: 'ap'};
+        const im = {VALUE: appleAuthRequestResponse.user, VALUE_TYPE: 'apple'};
         this.props.connectSocialMedia({profile: this.props.login, im});
       } catch (error) {
         console.log('error', error);
@@ -229,8 +229,6 @@ class SocialAuth extends PureComponent {
         break;
     }
 
-    console.log('this.props.login.IM', this.props.login.IM);
-
     const im = (this.props.login.IM || []).reduce((acc, soc) => {
       if (!soc.VALUE_TYPE) {
         return acc;
@@ -243,8 +241,6 @@ class SocialAuth extends PureComponent {
 
       return acc;
     }, {});
-
-    console.log('im ==>', im);
 
     return (
       <View
@@ -343,12 +339,12 @@ class SocialAuth extends PureComponent {
             <AppleButton
               buttonStyle={AppleButton.Style.BLACK}
               buttonType={AppleButton.Type.SIGN_IN}
-              disabled={this.state.isSigninInProgress || Boolean(im.ap)}
+              disabled={this.state.isSigninInProgress || Boolean(im.apple)}
               cornerRadius={5}
               style={[
                 styleConst.shadow.default,
                 styles.SocialLoginBt,
-                im.ap ? styles.SocialLoginBtActive : null,
+                im.apple ? styles.SocialLoginBtActive : null,
                 {
                   justifyContent: 'space-between',
                   height: 45,
@@ -357,7 +353,7 @@ class SocialAuth extends PureComponent {
               ]}
               onPress={() => this._signInWithApple()}
             />
-            {im.ap ? (
+            {im.apple ? (
               <Icon
                 name="check-circle"
                 type="FontAwesome5"
