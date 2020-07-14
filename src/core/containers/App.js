@@ -74,8 +74,6 @@ class App extends Component {
     }
 
     const currentDealer = get(dealerSelected, 'id', false);
-
-    API.fetchVersion('5.1.4');
   
     if (currentDealer && (isStoreUpdated !== undefined && isStoreUpdated !== '2019-02-01')) { // если мы ещё не очищали стор
         actionMenuOpenedCount(0);
@@ -100,32 +98,22 @@ class App extends Component {
     }, 500);
   }
 
-  shouldComponentUpdate() { return false; }
+  // shouldComponentUpdate() { return false; }
 
   onNavigationStateChange = (prevState, newState) => {
     this.props.navigationChange({ prevState, newState });
   };
 
   render() {
-    const isTablet = DeviceInfo.isTablet();
-    const Router = getRouter('AppIsDeprecated');
-
+    const isDealerSelected = get(store.getState(), 'dealer.selected.id');
+    let Router = getRouter(isDealerSelected ? 'MenuScreen' : 'IntroScreen');
+    if (this.props.version === false) {
+      Router = getRouter('AppIsDeprecated');
+    }
     const defaultGetStateForAction = Router.router.getStateForAction;
     Router.router.getStateForAction = (action, state) => {
       return defaultGetStateForAction(action, state);
     };
-
-    if (isTablet) {
-      return (
-        <View style={styles.container}>
-          <Sidebar />
-          <View style={styles.app}>
-            <Router onNavigationStateChange={this.onNavigationStateChange}
-            />
-          </View>
-        </View>
-      );
-    }
 
     return (
       <Router onNavigationStateChange={this.onNavigationStateChange}/>

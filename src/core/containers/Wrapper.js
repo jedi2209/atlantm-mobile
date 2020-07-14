@@ -13,6 +13,7 @@ import SplashScreen from 'react-native-splash-screen';
 
 // components
 import App from './App';
+import API from '../../utils/api';
 
 if (!__DEV__) {
   // eslint-disable-line no-undef
@@ -49,15 +50,7 @@ export default class Wrapper extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { rehydrated: false };
-  }
-
-  componentDidMount() {
-    this.defaultHandler = ErrorUtils.getGlobalHandler();
-    ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
-
-    //this.getPersistStore().purge();
-    this.getPersistStore();
+    this.state = { rehydrated: false, version: null };
   }
 
   async wrapGlobalHandler(error, isFatal) {
@@ -76,20 +69,34 @@ export default class Wrapper extends Component {
     keyPrefix: 'atlantm',
   }, () => this.setState({ rehydrated: true }));
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return this.state.rehydrated !== nextState.rehydrated;
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return this.state.rehydrated !== nextState.rehydrated;
+  // }
+
+  performTimeConsumingTask = async() => {
+    return await API.fetchVersion('5.1.4');
+  }
+
+  async componentDidMount() {
+      this.defaultHandler = ErrorUtils.getGlobalHandler();
+      ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
+  
+      this.getPersistStore();
+      const version = await this.performTimeConsumingTask();
+      if (version !== null) {
+        this.setState({version: version});
+      }
   }
 
   render() {
-    if (!this.state.rehydrated) {
+    if (!this.state.rehydrated && this.state.version === null) {
       return null;
     }
 
     SplashScreen.hide();
-
     return (
       <Provider store={store}>
-        <App />
+        <App version={this.state.version} />
       </Provider>
     );
   }

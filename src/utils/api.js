@@ -40,37 +40,14 @@ export default {
     return this.request(`/info/actions/get/${infoID}/`, baseRequestParams);
   },
 
-  fetchVersion(version) {
+  async fetchVersion(version) {
     let requested_version = parseInt(version.replace(/\./gi, ''));
-    let req = this.request(`/mobile/check/version/`, baseRequestParams);
-    return req.then(res => {
-      let real_time_version_api = parseInt(res.version.replace(/\./gi, ''));
-      if (real_time_version_api !== requested_version) {
-        let STORE_LINK;
-        if (Platform.OS === 'ios') {
-          STORE_LINK = 'itms-apps://itunes.apple.com/app/id515931794?action=update';
-        } else {
-          STORE_LINK = 'market://details?id=com.atlantm';
-        }
-        
-        Alert.alert(
-          'Приложение устарело',
-          'Пожалуйста обновите приложение до актуальной версии.',
-          [
-            {
-            text: 'Обновить',
-            onPress: () => {
-              BackHandler.exitApp();
-              Linking.openURL(STORE_LINK);
-            },
-            style: 'default',
-          },
-          ], {
-            cancelable: false
-          },
-        );
-      }
-     });
+    let req = await this.request(`/mobile/check/version/`, baseRequestParams);
+    let real_time_version_api = 0;
+    if (req.version) {
+      real_time_version_api = parseInt(req.version.replace(/\./gi, ''));
+      return requested_version === real_time_version_api;
+    }
   },
 
   fetchTva({ dealer, region, number, pushTracking }) {
