@@ -74,7 +74,7 @@ export default class Wrapper extends Component {
   // }
 
   performTimeConsumingTask = async() => {
-    return await API.fetchVersion('5.1.4');
+    return await API.fetchVersion('5.1.5');
   }
 
   async componentDidMount() {
