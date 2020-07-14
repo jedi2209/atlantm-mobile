@@ -259,36 +259,6 @@ class ContactsScreen extends Component {
                       </ListItem>
                     ) : null
                 }
-
-                {
-                  get(dealerSelected, 'coords.lat') && get(dealerSelected, 'coords.lon') ?
-                    (
-                      <ListItem
-                        icon
-                        style={stylesList.listItem}
-                        onPress={() => {
-                          navigation.navigate('MapScreen');
-                        }}
-                      >
-                        <Left>
-                          <Image
-                            style={stylesList.iconLeft}
-                            source={require('../assets/map.png')}
-                          />
-                        </Left>
-                        <Body>
-                          <Text>Найти нас</Text>
-                        </Body>
-                        <Right>
-                          <Icon
-                            name="arrow-forward"
-                            style={stylesList.iconArrow}
-                          />
-                        </Right>
-                      </ListItem>
-                    ) : null
-                }
-
                 <ListItem
                   last
                   icon
@@ -305,31 +275,6 @@ class ContactsScreen extends Component {
                     <Text>Позвонить мне</Text>
                   </Body>
                 </ListItem>
-
-                {/* <ListItem
-                  last
-                  icon
-                  style={stylesList.listItem}
-                  onPress={() => {
-                    navigation.navigate('ReferenceScreen');
-                  }}
-                >
-                  <Left>
-                    <Image
-                      style={stylesList.iconLeft}
-                      source={require('../assets/reference.png')}
-                    />
-                  </Left>
-                  <Body>
-                    <Text>Справочная</Text>
-                  </Body>
-                  <Right>
-                    <Icon
-                      name="arrow-forward"
-                      style={stylesList.iconArrow}
-                    />
-                  </Right>
-                </ListItem> */}
               </View>
             </List>
 

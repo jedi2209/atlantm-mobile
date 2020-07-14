@@ -134,7 +134,7 @@ class AboutScreen extends Component {
     const onPress = () => {
       this.props.navigation.navigate('MapScreen');
     };
-    return this.renderItem('Адрес', address, false, onPress);
+    return this.renderItem('Адрес', address, false, false);
   };
 
   renderEmails = (emails, name) => {
