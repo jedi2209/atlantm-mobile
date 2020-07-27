@@ -30,12 +30,27 @@ export default function (price, country = 'BY') {
       country_code = 'ru-BE';
       // isAndroid
       break;
+    case 'byr':
+      options = {
+        ...options,
+        currency: 'BYR',
+      };
+      country_code = 'ru-BE';
+      // isAndroid
+      break;
     case 'ua':
     case 'uah':
       country_code = 'ru-UA';
       options = {
         ...options,
         currency: 'UAH',
+      };
+      break;
+    default:
+      country_code = 'ru-BE';
+      options = {
+        ...options,
+        currency: 'BYN',
       };
       break;
   }
