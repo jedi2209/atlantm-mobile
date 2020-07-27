@@ -139,7 +139,7 @@ class CarHistoryScreen extends Component {
       vin,
       token,
       userid,
-    }).then(action => {
+    }).then((action) => {
       if (action.type === CAR_HISTORY__FAIL) {
         let message = get(
           action,
@@ -179,7 +179,7 @@ class CarHistoryScreen extends Component {
     );
   };
 
-  renderLevel1 = carHistory => {
+  renderLevel1 = (carHistory) => {
     return Object.keys(carHistory)
       .reverse()
       .map((carHistoryYear, idx, yearsArray) => {
@@ -190,7 +190,7 @@ class CarHistoryScreen extends Component {
       });
   };
 
-  renderLevel2 = carHistoryItemByMonth => {
+  renderLevel2 = (carHistoryItemByMonth) => {
     return Object.keys(carHistoryItemByMonth)
       .reverse()
       .map((month, idx, monthArray) => {
@@ -201,7 +201,7 @@ class CarHistoryScreen extends Component {
       });
   };
 
-  renderLevel3 = works => {
+  renderLevel3 = (works) => {
     const {navigation} = this.props;
     const vin = get(navigation, 'state.params.car.vin');
 
@@ -337,7 +337,4 @@ class CarHistoryScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(CarHistoryScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(CarHistoryScreen);
