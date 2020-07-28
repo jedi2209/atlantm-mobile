@@ -2,7 +2,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component, createRef} from 'react';
 import {
-  Alert,
   View,
   TextInput,
   Keyboard,
@@ -15,7 +14,7 @@ import {
   Platform,
   StyleSheet,
 } from 'react-native';
-import {Button, Icon} from 'native-base';
+import {Button, Icon, Toast} from 'native-base';
 import PhoneInput from 'react-native-phone-input';
 import {store} from '@core/store';
 import styleConst from '@core/style-const';
@@ -40,6 +39,8 @@ import PushNotifications from '@core/components/PushNotifications';
 import Amplitude from '../../utils/amplitude-analytics';
 
 import {verticalScale} from '../../utils/scale';
+
+export const isAndroid = Platform.OS === 'android';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
@@ -111,9 +112,9 @@ class ProfileScreen extends Component {
       isSigninInProgress: false,
       userInfo: {},
       code: false,
+      checkCode: '',
       phone: '',
       codeValue: '',
-      checkCode: '',
       vkLogin: false,
       loading: false,
       loadingVerify: false,
@@ -123,13 +124,69 @@ class ProfileScreen extends Component {
     this.requestManager = new GraphRequestManager();
     this.scrollRef = createRef();
     this.storeData = store.getState();
-    // this.onPressFlag = this.onPressFlag.bind(this);
-    // this._onSelectCountry = this._onSelectCountry.bind(this);
   }
+
+  CodeInput = [];
+  otpArray = [];
 
   static navigationOptions = () => ({
     header: null,
   });
+
+  onOtpChange = (index) => {
+    return (value) => {
+      if (isNaN(Number(value))) {
+        // do nothing when a non digit is pressed
+        return;
+      }
+      const otpArrayCopy = this.otpArray.concat();
+      otpArrayCopy[index] = value;
+      this.otpArray = otpArrayCopy;
+      this.onInputCode(this.otpArray.join(''));
+
+      // auto focus to next InputText if value is not blank
+      if (value !== '') {
+        if (index < 3) {
+          this.CodeInput[Number(index + 1)].focus();
+        }
+      } else {
+        if (index > 0) {
+          this.CodeInput[Number(index - 1)].focus();
+        }
+      }
+    };
+  };
+
+  onOtpKeyPress = (index) => {
+    return ({nativeEvent: {key: value}}) => {
+      if (Number(value)) {
+        if (index > 0 && index < 3 && this.otpArray[index] !== '') {
+          this.CodeInput[Number(index + 1)].focus();
+        }
+      }
+      // auto focus to previous InputText if value is blank and existing value is also blank
+      if (
+        value === 'Backspace' &&
+        (this.otpArray[index] === '' ||
+          typeof this.otpArray[index] === 'undefined')
+      ) {
+        if (index > 0) {
+          this.CodeInput[Number(index - 1)].focus();
+        }
+        /**
+         * clear the focused text box as well only on Android because on mweb onOtpChange will be also called
+         * doing this thing for us
+         * todo check this behaviour on ios
+         */
+        if (isAndroid && index > 0) {
+          const otpArrayCopy = this.otpArray.concat();
+          otpArrayCopy[index - 1] = ''; // clear the previous box which will be in focus
+          this.otpArray = otpArrayCopy;
+        }
+        this.onInputCode(this.otpArray.join(''));
+      }
+    };
+  };
 
   componentDidMount() {
     this.keyboardShowListener = Keyboard.addListener(
@@ -204,14 +261,18 @@ class ProfileScreen extends Component {
             'Не опознан мобильный оператор или не правильный формат номера';
         }
 
-        Alert.alert(header, message);
+        Toast.show({
+          text: message,
+          position: 'bottom',
+          type: 'warning',
+        });
       } else {
         this.setState({
           code: true,
           loadingVerify: false,
           checkCode: response.checkCode,
         });
-        this.CodeInput.focus();
+        this.CodeInput[0].focus();
       }
       return;
     });
@@ -224,15 +285,19 @@ class ProfileScreen extends Component {
     // тут специально одно равно чтобы сработало приведение типов
     // eslint-disable-next-line eqeqeq
     if (code != this.state.checkCode) {
-      Alert.alert('Неверный код', 'Попробуйте снова', [
-        {
-          text: 'OK',
-          onPress: () => {
-            this.setState({codeValue: ''});
-            this.CodeInput.clear();
-          },
-        },
-      ]);
+      this.setState({codeValue: ''});
+      this.CodeInput[0].clear();
+      this.CodeInput[1].clear();
+      this.CodeInput[2].clear();
+      this.CodeInput[3].clear();
+      this.CodeInput[0].focus();
+      this.otpArray = [];
+      Toast.show({
+        text: 'Неверный код',
+        buttonText: 'ОК',
+        position: 'bottom',
+        type: 'danger',
+      });
       return;
     }
     this.keyboardHideListener.remove();
@@ -254,7 +319,11 @@ class ProfileScreen extends Component {
       })
       .catch(() => {
         this.setState({loading: false});
-        Alert.alert('Что-то пошло не так...', 'Попробуем ещё раз?');
+        Toast.show({
+          text: 'Что-то пошло не так...',
+          position: 'bottom',
+          type: 'warning',
+        });
       });
   };
 
@@ -268,7 +337,11 @@ class ProfileScreen extends Component {
       })
       .catch(() => {
         this.setState({loading: false});
-        Alert.alert('Что-то пошло не так...', 'попробуйте снова');
+        Toast.show({
+          text: 'Что-то пошло не так...',
+          position: 'bottom',
+          type: 'warning',
+        });
       });
   }
 
@@ -592,7 +665,9 @@ class ProfileScreen extends Component {
                     source={require('../../menu/assets/logo-horizontal-white.svg')}
                   />
                 </View>
-                {this.renderLoginButtons(this.props.dealerSelected.region)}
+                {!this.state.code
+                  ? this.renderLoginButtons(this.props.dealerSelected.region)
+                  : null}
                 <View
                   style={{
                     display: 'flex',
@@ -635,6 +710,7 @@ class ProfileScreen extends Component {
                 </View>
                 <View
                   style={{
+                    marginTop: this.state.code ? '20%' : 0,
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -646,27 +722,42 @@ class ProfileScreen extends Component {
                       width: '80%',
                     }}>
                     {this.state.code ? (
-                      <Button
-                        disabled={this.state.loadingVerify}
-                        onPress={this._cancelVerify}
-                        style={[
-                          styleConst.shadow.default,
-                          {
-                            flex: 1,
-                            height: 50,
-                            width: '40%',
-                            backgroundColor: 'rgba(101, 101, 101, 0.9)',
-                            justifyContent: 'center',
-                            padding: 10,
-                            borderRadius: 5,
-                          },
-                        ]}>
-                        {this.state.loadingVerify ? (
-                          <ActivityIndicator color="#fff" />
-                        ) : (
-                          <Text style={{color: '#fff'}}>Отменить</Text>
-                        )}
-                      </Button>
+                      <>
+                        {[0, 1, 2, 3].map((element, index) => (
+                          <TextInput
+                            style={{
+                              height: 80,
+                              paddingHorizontal: 10,
+                              paddingVertical: 8,
+                              borderColor: 'gray',
+                              borderWidth: 1,
+                              color: '#fff',
+                              backgroundColor: 'rgba(175, 175, 175, 0.7)',
+                              borderRadius: 5,
+                              fontSize: 50,
+                              letterSpacing: 0,
+                              marginLeft: '3%',
+                              width: '22%',
+                              textAlign: 'center',
+                            }}
+                            key={'textCode' + index}
+                            textContentType="oneTimeCode"
+                            keyboardType="number-pad"
+                            ref={(input) => {
+                              this.CodeInput[index] = input;
+                            }}
+                            maxLength={1}
+                            caretHidden={false}
+                            enablesReturnKeyAutomatically={true}
+                            returnKeyType="send"
+                            placeholderTextColor="#afafaf"
+                            autoCompleteType="off"
+                            onKeyPress={this.onOtpKeyPress(index)}
+                            onChangeText={this.onOtpChange(index)}
+                            selected={false}
+                          />
+                        ))}
+                      </>
                     ) : (
                       <PhoneInput
                         style={{
@@ -718,59 +809,51 @@ class ProfileScreen extends Component {
                         }}
                       />
                     )}
-                    {this.state.code ? (
-                      <TextInput
-                        style={{
-                          height: 50,
-                          paddingHorizontal: 14,
-                          paddingVertical: 8,
-                          borderColor: 'gray',
-                          borderWidth: 1,
-                          color: '#fff',
-                          borderRadius: 5,
-                          fontSize: 30,
-                          letterSpacing: 10,
-                          marginLeft: 25,
-                          width: 155,
-                          textAlign: 'center',
-                          // marginTop: 15,
-                        }}
-                        textContentType="oneTimeCode"
-                        keyboardType="number-pad"
-                        ref={(input) => {
-                          this.CodeInput = input;
-                        }}
-                        maxLength={4}
-                        caretHidden={false}
-                        enablesReturnKeyAutomatically={true}
-                        placeholder="код"
-                        returnKeyType="send"
-                        placeholderTextColor="#afafaf"
-                        autoCompleteType="off"
-                        onChangeText={this.onInputCode}
-                      />
-                    ) : null}
                   </View>
                   {this.state.code ? (
-                    <Button
-                      disabled={this.state.loadingVerify}
-                      onPress={this._verifyCodeStepTwo}
-                      style={[
-                        styleConst.shadow.default,
-                        {
-                          marginTop: 20,
-                          width: '80%',
-                          backgroundColor: '#34BD78',
-                          justifyContent: 'center',
-                          borderRadius: 5,
-                        },
-                      ]}>
-                      {this.state.loadingVerify ? (
-                        <ActivityIndicator color="#fff" />
-                      ) : (
-                        <Text style={{color: '#fff'}}>Подтвердить</Text>
-                      )}
-                    </Button>
+                    <>
+                      <Button
+                        disabled={this.state.loadingVerify}
+                        onPress={this._verifyCodeStepTwo}
+                        style={[
+                          styleConst.shadow.default,
+                          {
+                            marginTop: 20,
+                            width: '80%',
+                            backgroundColor: '#34BD78',
+                            justifyContent: 'center',
+                            borderRadius: 5,
+                          },
+                        ]}>
+                        {this.state.loadingVerify ? (
+                          <ActivityIndicator color="#fff" />
+                        ) : (
+                          <Text style={{color: '#fff'}}>Подтвердить</Text>
+                        )}
+                      </Button>
+                      <Button
+                        disabled={this.state.loadingVerify}
+                        onPress={this._cancelVerify}
+                        style={[
+                          styleConst.shadow.default,
+                          {
+                            flex: 1,
+                            height: 25,
+                            width: '30%',
+                            backgroundColor: 'rgba(101, 101, 101, 0.4)',
+                            justifyContent: 'center',
+                            padding: 10,
+                            borderRadius: 5,
+                            marginTop: 20,
+                          },
+                        ]}>
+                        {this.state.loadingVerify ? (
+                          <ActivityIndicator color="#fff" />
+                        ) : (
+                          <Text style={{color: '#fff'}}>отмена</Text>
+                        )}
+                      </Button>
+                    </>
                   ) : null}
                   {!this.state.code && (
                     <Button
