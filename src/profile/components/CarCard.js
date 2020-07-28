@@ -3,7 +3,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import styleConst from '../../core/style-const';
-import {Icon, CheckBox} from 'native-base';
+import {Icon, Button, CheckBox, ActionSheet} from 'native-base';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 const styles = {
@@ -28,10 +28,9 @@ export const CarCard = ({data, type, checked}) => {
           borderRadius: 5,
           width: 150,
           justifyContent: 'space-between',
-          paddingBottom: 40,
+          paddingTop: 10,
           marginBottom: 15,
           marginTop: 15,
-          height: 155,
         },
       ]}>
       <View>
@@ -42,9 +41,8 @@ export const CarCard = ({data, type, checked}) => {
           style={{
             color: styleConst.color.greyText,
             fontSize: 14,
-            paddingTop: 20,
-            paddingBottom: 10,
-            paddingHorizontal: 20,
+            paddingBottom: 5,
+            marginLeft: 5,
           }}>
           {`${brand} ${model}`}
         </Text>
@@ -54,7 +52,7 @@ export const CarCard = ({data, type, checked}) => {
           style={{
             color: styleConst.color.greyText2,
             fontSize: 19,
-            paddingHorizontal: 20,
+            marginLeft: 5,
           }}>
           {number}
         </Text>
@@ -66,8 +64,8 @@ export const CarCard = ({data, type, checked}) => {
         style={{
           fontSize: 54,
           color: '#0061ed',
-          marginLeft: 12,
-          marginTop: 20,
+          marginTop: 10,
+          marginLeft: 5,
         }}
       />
       {type === 'check' && (

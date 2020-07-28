@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {PureComponent} from 'react';
-import {View, ActivityIndicator} from 'react-native';
+import {ActivityIndicator} from 'react-native';
+import {Root} from 'native-base';
 import {createAppContainer, NavigationActions} from 'react-navigation';
 
 // redux
@@ -160,12 +161,12 @@ class App extends PureComponent {
     }
 
     return (
-      <View style={{flex: 1}}>
+      <Root style={{flex: 1}}>
         <AppContainer
           ref={this.navigatorRef}
           onNavigationStateChange={this.onNavigationStateChange}
         />
-      </View>
+      </Root>
     );
   }
 }

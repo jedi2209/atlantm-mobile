@@ -10,7 +10,6 @@ import {
   ScrollView,
   Keyboard,
 } from 'react-native';
-import {StackActions, NavigationActions} from 'react-navigation';
 import Form from '../../core/components/Form/Form';
 import {CarCard} from '../../profile/components/CarCard';
 
@@ -114,6 +113,21 @@ class ServiceScreen extends Component {
     localUserDataUpdate: PropTypes.func,
     isOrderServiceRequest: PropTypes.bool,
   };
+
+  componentWillMount() {
+    const carFromNavigation = get(this.props.navigation, 'state.params.car');
+    if (carFromNavigation && get(carFromNavigation, 'vin')) {
+      this.setState({
+        carBrand: get(carFromNavigation, 'brand'),
+        carModel: get(carFromNavigation, 'model'),
+        carName: [
+          get(carFromNavigation, 'brand'),
+          get(carFromNavigation, 'model'),
+        ].join(' '),
+        carVIN: carFromNavigation.vin,
+      });
+    }
+  }
 
   onPressOrder = async (dataFromForm) => {
     if (!dataFromForm.CARBRAND && this.state.carBrand) {

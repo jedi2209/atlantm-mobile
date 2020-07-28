@@ -26,6 +26,9 @@ import {
   CAR_HISTORY_DETAILS__REQUEST,
   CAR_HISTORY_DETAILS__SUCCESS,
   CAR_HISTORY_DETAILS__FAIL,
+  CAR_HIDE__REQUEST,
+  CAR_HIDE__SUCCESS,
+  CAR_HIDE__FAIL,
   SAVE_PROFILE__UPDATE,
   SAVE_PROFILE__REQUEST,
   SAVE_PROFILE__FAIL,
@@ -160,6 +163,48 @@ export const actionFetchCarHistory = (props) => {
           ...data,
         },
       });
+    } catch (e) {
+      return onError(e);
+    }
+  };
+};
+
+export const actionToggleCar = (car, userSAP) => {
+  return async (dispatch) => {
+    function onError(error) {
+      return dispatch({
+        type: CAR_HIDE__FAIL,
+        payload: {
+          code: error.code,
+          message: error.message,
+        },
+      });
+    }
+
+    dispatch({
+      type: CAR_HIDE__REQUEST,
+      payload: {...car},
+    });
+
+    try {
+      const res = await API.toggleArchieveCar(car, userSAP);
+      const {error, status, data} = res;
+
+      if (status !== 'success') {
+        __DEV__ && console.log('error toggleArchieveCar', res);
+        return onError(error);
+      }
+
+      const userCars = await getUserCars(userSAP.TOKEN, userSAP.ID);
+
+      if (userCars) {
+        return dispatch({
+          type: CAR_HIDE__SUCCESS,
+          payload: {
+            cars: userCars || [],
+          },
+        });
+      }
     } catch (e) {
       return onError(e);
     }
@@ -608,7 +653,7 @@ export const actionLogin = (props) => {
   };
 };
 
-async function getProfileData({token, userid}) {
+async function getUserCars(token, userid) {
   // 1. Получаем автомобили пользователя
   let cars = [];
   const carsResponse = await API.fetchCars({token, userid});
@@ -618,7 +663,11 @@ async function getProfileData({token, userid}) {
   } else {
     //__DEV__ && console.log('error get profile cars', carsResponse);
   }
+  return cars;
+}
 
+async function getProfileData({token, userid}) {
+  const cars = await getUserCars(token, userid);
   let bonus = {};
   try {
     // 2. Получаем бонусы и скидки пользователя

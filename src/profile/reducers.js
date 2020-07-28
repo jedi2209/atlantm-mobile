@@ -17,6 +17,9 @@ import {
   PROFILE_DATA__REQUEST,
   PROFILE_DATA__SUCCESS,
   PROFILE_DATA__FAIL,
+  CAR_HIDE__SUCCESS,
+  CAR_HIDE__REQUEST,
+  CAR_HIDE__FAIL,
   LOGOUT,
   LOGIN__FAIL,
   LOGIN__REQUEST,
@@ -115,6 +118,7 @@ function cars(state = [], action) {
     case REHYDRATE:
       return get(action.payload, 'profile.cars', []);
     case PROFILE_DATA__SUCCESS:
+    case CAR_HIDE__SUCCESS:
       return action.payload.cars;
     case LOGOUT:
     case APP_STORE_UPDATED:
@@ -176,8 +180,10 @@ function isFetchProfileData(state = false, action) {
     case REHYDRATE:
     case PROFILE_DATA__SUCCESS:
     case PROFILE_DATA__FAIL:
+    case CAR_HIDE__FAIL:
       return false;
     case PROFILE_DATA__REQUEST:
+    case CAR_HIDE__REQUEST:
       return true;
     default:
       return state;
