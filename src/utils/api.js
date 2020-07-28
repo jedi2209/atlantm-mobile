@@ -644,6 +644,34 @@ export default {
       });
   },
 
+  async toggleArchieveCar(car, userSAP) {
+    let method = '';
+    if (car.hidden === true) {
+      method = 'DELETE';
+    } else {
+      method = 'PUT';
+    }
+    const requestParams = _.merge({}, baseRequestParams, {
+      method: method,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        vin: car.vin,
+        userid: userSAP.ID,
+        token: userSAP.TOKEN,
+      }),
+    });
+
+    try {
+      const response = await this.request('/lkk/cars/', requestParams);
+      return response;
+    } catch (err) {
+      console.log('error', err);
+    }
+  },
+
   getServiceAvailable({dealer, vin}) {
     return this.request(
       `/service/maintenance/intervals/?dealer=${dealer}&vin=${vin}`,

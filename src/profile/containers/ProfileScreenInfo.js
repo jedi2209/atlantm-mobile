@@ -1,7 +1,6 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {orderBy} from 'lodash';
 
 import {
   View,
@@ -12,15 +11,21 @@ import {
   StatusBar,
   TouchableWithoutFeedback,
   ActivityIndicator,
-  TouchableNativeFeedbackBase,
+  TouchableOpacity,
 } from 'react-native';
-import {Button, Icon} from 'native-base';
+import {Button, Icon, ActionSheet, Toast} from 'native-base';
+import * as Animatable from 'react-native-animatable';
 import PushNotifications from '@core/components/PushNotifications';
 import DealerItemList from '@core/components/DealerItemList';
 
 // redux
 import {connect} from 'react-redux';
-import {getProfileSapData, actionLogout, connectSocialMedia} from '../actions';
+import {
+  getProfileSapData,
+  actionLogout,
+  connectSocialMedia,
+  actionToggleCar,
+} from '../actions';
 import {
   actionSetPushActionSubscribe,
   actionSetPushGranted,
@@ -58,11 +63,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'normal',
   },
+  carChooseText: {
+    textAlign: 'right',
+    textDecorationLine: 'underline',
+    textDecorationStyle: 'dotted',
+    color: styleConst.color.greyText,
+  },
+  carChooseTextSelected: {
+    textDecorationLine: 'none',
+    color: 'black',
+  },
 });
 
 import {SafeAreaView} from 'react-navigation';
 import {verticalScale} from '../../utils/scale';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {CarCard} from '../components/CarCard';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
@@ -95,6 +109,49 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
   getProfileSapData,
   connectSocialMedia,
+  actionToggleCar,
+};
+const CarMenu = {
+  active: {
+    BUTTONS: [
+      {
+        id: 'orderService',
+        text: '🛠 Запись на сервис',
+      },
+      {
+        id: 'orderParts',
+        text: 'Заказать зап.части',
+      },
+      {
+        id: 'TOhistory',
+        text: '📘 История обслуживания',
+      },
+      // {id: 'tva', text: 'Проверить ТВА', icon: 'aperture', iconColor: '#ea943b'},
+      {
+        id: 'hide',
+        text: '📥 Скрыть в архив',
+      },
+      {id: 'cancel', text: 'Отмена'},
+    ],
+    DESTRUCTIVE_INDEX: 3,
+    CANCEL_INDEX: 4,
+  },
+  hidden: {
+    BUTTONS: [
+      {
+        id: 'TOhistory',
+        text: '📘 История обслуживания',
+      },
+      // {id: 'tva', text: 'Проверить ТВА', icon: 'aperture', iconColor: '#ea943b'},
+      {
+        id: 'hide',
+        text: '📤 Сделать текущим',
+      },
+      {id: 'cancel', text: 'Отмена'},
+    ],
+    DESTRUCTIVE_INDEX: 1,
+    CANCEL_INDEX: 2,
+  },
 };
 
 class ProfileScreenInfo extends Component {
@@ -103,6 +160,7 @@ class ProfileScreenInfo extends Component {
 
     this.state = {
       loading: false,
+      cars: 'default',
     };
   }
 
@@ -159,6 +217,203 @@ class ProfileScreenInfo extends Component {
       });
   }
 
+  _renderCars() {
+    let myCars = {
+      default: [],
+      hidden: [],
+      owner: [],
+    };
+    this.props.cars.map((item) => {
+      if (item.hidden) {
+        myCars.hidden.push(item);
+        // } else if (item.owner) {
+        //   myCars.owner.push(item);
+      } else {
+        myCars.default.push(item);
+      }
+    });
+    return (
+      <>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            marginHorizontal: 20,
+            marginTop: 10,
+            alignItems: 'center',
+          }}>
+          <View
+            style={{
+              flex: 0.5,
+            }}>
+            <Text
+              style={{
+                fontSize: 16,
+                fontWeight: '600',
+              }}>
+              Мои автомобили
+            </Text>
+          </View>
+          <View
+            style={{
+              flex: 0.5,
+              flexDirection: 'row',
+            }}>
+            {myCars.default.length > 0 ? (
+              <TouchableOpacity
+                style={{
+                  flex: myCars.hidden.length ? 0.6 : 1,
+                }}
+                onPress={() => {
+                  this.setState({cars: 'default'});
+                }}>
+                <Text
+                  selectable={false}
+                  style={[
+                    styles.carChooseText,
+                    this.state.cars === 'default'
+                      ? styles.carChooseTextSelected
+                      : null,
+                    {
+                      marginRight: 5,
+                    },
+                  ]}>
+                  текущие
+                </Text>
+              </TouchableOpacity>
+            ) : null}
+            {myCars.hidden.length > 0 ? (
+              <TouchableOpacity
+                style={{
+                  flex: myCars.default.length ? 0.4 : 1,
+                }}
+                onPress={() => {
+                  this.setState({cars: 'hidden'});
+                }}>
+                <Text
+                  selectable={false}
+                  style={[
+                    styles.carChooseText,
+                    this.state.cars === 'hidden'
+                      ? styles.carChooseTextSelected
+                      : null,
+                  ]}>
+                  архив
+                </Text>
+              </TouchableOpacity>
+            ) : null}
+          </View>
+        </View>
+        {myCars[this.state.cars].length > 0 ? (
+          this._renderCarsItems(myCars[this.state.cars])
+        ) : (
+          <View
+            style={[
+              styles.scrollViewInner,
+              {
+                flex: 1,
+                paddingLeft: 24,
+                paddingRight: 5,
+                marginVertical: 29.5,
+                textAlign: 'center',
+                alignContent: 'center',
+                width: '100%',
+                alignItems: 'center',
+              },
+            ]}
+            useNativeDriver>
+            <Icon type="MaterialCommunityIcons" name="car-off" fontSize={20} />
+            <Text style={{marginTop: 5, marginLeft: 10, lineHeight: 20}}>
+              У вас нет текущих автомобилей.{'\r\n'}
+            </Text>
+            <Button bordered onPress={() => this.setState({cars: 'hidden'})}>
+              <Text style={{padding: 5}}>Проверим архив?</Text>
+            </Button>
+          </View>
+        )}
+      </>
+    );
+  }
+
+  _renderCarsItems(cars) {
+    return (
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        horizontal
+        contentContainerStyle={{paddingLeft: 12, paddingRight: 5}}>
+        {cars.map((item) => {
+          let CarType = '';
+          if (item.hidden === true) {
+            CarType = 'hidden';
+          } else {
+            CarType = 'active';
+          }
+          return (
+            <TouchableWithoutFeedback
+              key={item.vin}
+              onPress={() => {
+                let carName = [
+                  item.brand,
+                  item.model,
+                  '-- [' + item.number + ']',
+                ].join(' ');
+                ActionSheet.show(
+                  {
+                    options: CarMenu[CarType].BUTTONS,
+                    cancelButtonIndex: CarMenu[CarType].CANCEL_INDEX,
+                    destructiveButtonIndex: CarMenu[CarType].DESTRUCTIVE_INDEX,
+                    title: carName,
+                  },
+                  (buttonIndex) => {
+                    switch (CarMenu[CarType].BUTTONS[buttonIndex].id) {
+                      case 'orderService':
+                        this.props.navigation.navigate('ServiceScreen', {
+                          car: item,
+                        });
+                        break;
+                      case 'orderParts':
+                        break;
+                      case 'TOhistory':
+                        this.props.navigation.navigate('TOHistore', {
+                          car: item,
+                        });
+                        break;
+                      case 'hide':
+                        this.setState({loading: true});
+                        this.props
+                          .actionToggleCar(item, this.props.login.SAP)
+                          .then((res) => {
+                            if (res.type && res.type === 'CAR_HIDE__SUCCESS') {
+                              this.setState({
+                                loading: false,
+                                cars: 'default',
+                              });
+                              Toast.show({
+                                text: 'Статус автомобиля изменён',
+                                type: 'success',
+                                position: 'bottom',
+                              });
+                            }
+                          });
+                        break;
+                    }
+                  },
+                );
+              }}>
+              <View
+                style={{
+                  marginTop: 10,
+                  marginBottom: 20,
+                }}>
+                <CarCard data={item} type="profile" />
+              </View>
+            </TouchableWithoutFeedback>
+          );
+        })}
+      </ScrollView>
+    );
+  }
+
   render() {
     return (
       <SafeAreaView>
@@ -204,15 +459,7 @@ class ProfileScreenInfo extends Component {
           ) : (
             <>
               {this.props.cars.length > 0 ? (
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    marginHorizontal: 20,
-                    marginTop: 10,
-                  }}>
-                  Мои автомобили
-                </Text>
+                this._renderCars()
               ) : (
                 <>
                   <View
@@ -277,28 +524,6 @@ class ProfileScreenInfo extends Component {
                   </View>
                 </>
               )}
-              {this.props.cars.length > 0 ? (
-                <ScrollView
-                  showsHorizontalScrollIndicator={false}
-                  horizontal
-                  contentContainerStyle={{paddingLeft: 12, paddingRight: 5}}>
-                  {this.props.cars.map((item) => (
-                    <TouchableWithoutFeedback
-                      key={item.vin}
-                      onPress={() =>
-                        this.props.navigation.navigate('TOHistore', {car: item})
-                      }>
-                      <View
-                        style={{
-                          marginTop: 10,
-                          marginBottom: 20,
-                        }}>
-                        <CarCard data={item} />
-                      </View>
-                    </TouchableWithoutFeedback>
-                  ))}
-                </ScrollView>
-              ) : null}
 
               {this.props.bonus.data && this.props.bonus.data.saldo ? (
                 <TouchableOpacity
@@ -526,6 +751,7 @@ class ProfileScreenInfo extends Component {
               </Button>
             </View>
           ) : null}
+          {console.log('this', this)}
         </ScrollView>
       </SafeAreaView>
     );
