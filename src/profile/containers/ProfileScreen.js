@@ -295,7 +295,7 @@ class ProfileScreen extends Component {
       Toast.show({
         text: 'Неверный код',
         buttonText: 'ОК',
-        position: 'bottom',
+        position: 'top',
         type: 'danger',
       });
       return;
@@ -321,7 +321,7 @@ class ProfileScreen extends Component {
         this.setState({loading: false});
         Toast.show({
           text: 'Что-то пошло не так...',
-          position: 'bottom',
+          position: 'top',
           type: 'warning',
         });
       });
@@ -499,7 +499,7 @@ class ProfileScreen extends Component {
         };
         this._sendDataToApi({...profile, networkName: 'apple'});
       } catch (error) {
-        console.log('error', error);
+        // console.log('error', error);
       }
     }
   };
@@ -818,7 +818,7 @@ class ProfileScreen extends Component {
                         style={[
                           styleConst.shadow.default,
                           {
-                            marginTop: 20,
+                            marginTop: 10,
                             width: '80%',
                             backgroundColor: '#34BD78',
                             justifyContent: 'center',

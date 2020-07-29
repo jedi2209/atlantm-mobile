@@ -1,13 +1,13 @@
 import {createStackNavigator} from 'react-navigation-stack';
-import Animated, { Easing } from 'react-native-reanimated';
+// import Animated, {Easing} from 'react-native-reanimated';
 import StackViewStyleInterpolator from 'react-navigation-stack/src/views/StackView/StackViewStyleInterpolator';
-
 
 // global
 import IntroScreen from '../intro/containers/IntroScreen';
 import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
 import BottomTabNavigation from '../menu/containers/BottomTabNavigation';
-import ServiceScreen from '../service/containers/ServiceScreen';
+// import ServiceScreen from '../service/containers/ServiceScreen';
+import OrderPartsScreen from '../service/containers/OrderPartsScreen';
 import ServiceContainer from '../service/containers/ServiceContainer';
 import CarCostScreen from '../catalog/carcost/containers/CarCostScreen';
 import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
@@ -60,6 +60,7 @@ export const getRouter = (initialRouteName) => {
       BottomTabNavigation: {screen: BottomTabNavigation}, // это нижнее меню
       ChooseDealerScreen: {screen: ChooseDealerScreen}, // выбор диллера скрин
       ServiceScreen: {screen: ServiceContainer}, // заявка на СТО
+      OrderPartsScreen: {screen: OrderPartsScreen}, // заявка на СТО
       CallMeBackScreen: {screen: CallMeBackScreen},
       CarCostScreen: {screen: CarCostScreen},
       IndicatorsScreen: {screen: IndicatorsScreen}, // индикаторы
