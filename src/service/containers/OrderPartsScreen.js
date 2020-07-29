@@ -25,10 +25,9 @@ import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Amplitude from '../../utils/amplitude-analytics';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
-import {addDays, dayMonthYear, yearMonthDay} from '../../utils/date';
 import stylesHeader from '../../core/components/Header/style';
 import {ERROR_NETWORK} from '../../core/const';
-import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
+import {PARTS_ORDER__SUCCESS, PARTS_ORDER__FAIL} from '../actionTypes';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
@@ -207,7 +206,7 @@ class OrderPartsScreen extends Component {
 
       if (action && action.type) {
         switch (action.type) {
-          case SERVICE_ORDER__SUCCESS:
+          case PARTS_ORDER__SUCCESS:
             Amplitude.logEvent('order', 'parts');
             localUserDataUpdate({
               NAME: dataFromForm.NAME,
@@ -233,7 +232,7 @@ class OrderPartsScreen extends Component {
             );
             this.setState({success: true, loading: false});
             break;
-          case SERVICE_ORDER__FAIL:
+          case PARTS_ORDER__FAIL:
             Toast.show({
               text: 'Произошла ошибка, попробуйте снова',
               position: 'bottom',
@@ -247,7 +246,8 @@ class OrderPartsScreen extends Component {
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
-    const isActiveScreen = nav.routes[nav.index].routeName === 'OrderPartsScreen';
+    const isActiveScreen =
+      nav.routes[nav.index].routeName === 'OrderPartsScreen';
 
     return isActiveScreen;
   }
