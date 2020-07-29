@@ -120,7 +120,7 @@ const CarMenu = {
       },
       {
         id: 'orderParts',
-        text: 'Заказать зап.части',
+        text: '🔩 Заказать зап.части',
       },
       {
         id: 'TOhistory',
@@ -372,6 +372,9 @@ class ProfileScreenInfo extends Component {
                         });
                         break;
                       case 'orderParts':
+                        this.props.navigation.navigate('OrderPartsScreen', {
+                          car: item,
+                        });
                         break;
                       case 'TOhistory':
                         this.props.navigation.navigate('TOHistore', {

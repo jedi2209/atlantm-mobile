@@ -277,6 +277,53 @@ export default {
     return this.request('/orders/callme/post/', requestParams);
   },
 
+  orderParts(props) {
+    const {
+      brand,
+      model,
+      date,
+      firstName,
+      secondName,
+      lastName,
+      vin,
+      email,
+      phone,
+      dealerID,
+      text,
+      part,
+    } = props;
+
+    const body = {
+      f_Dealer: dealerID,
+      f_Brand: brand,
+      f_Model: model,
+      f_FirstName: firstName,
+      f_SecondName: secondName,
+      f_LastName: lastName,
+      f_VIN: vin,
+      f_PartNumber: part,
+      f_Phone: phone,
+      f_Email: email,
+      f_Text: text,
+      f_Source: 3,
+    };
+
+    if (body.f_VIN) {
+      body.f_Text = body.f_Text + '\r\n' + 'VIN: ' + vin;
+    }
+
+    const requestParams = _.merge({}, baseRequestParams, {
+      method: 'post',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    return this.request('/orders/parts/post/', requestParams);
+  },
+
   orderService(props) {
     const {
       brand,

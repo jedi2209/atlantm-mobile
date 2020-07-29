@@ -142,6 +142,10 @@ const BottomTabNavigation = createBottomTabNavigator(
                   onPress: () => navigation.navigate('ServiceScreen'),
                 },
                 {
+                  text: '🔩 Заказать зап.части',
+                  onPress: () => navigation.navigate('OrderPartsScreen'),
+                },
+                {
                   text: 'Оценить мой автомобиль',
                   onPress: () => navigation.navigate('CarCostScreen'),
                 },

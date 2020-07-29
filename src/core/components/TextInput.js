@@ -43,10 +43,14 @@ const styles = StyleSheet.create({
   label: {
     position: 'absolute',
     left: 0,
-    top: 15,
+    paddingTop: 5,
     fontSize: 18,
     lineHeight: 20,
     color: '#bababa',
+    backgroundColor: 'white',
+    zIndex: 10,
+    width: '100%',
+    paddingBottom: 5,
   },
   labelActive: {
     top: 0,
