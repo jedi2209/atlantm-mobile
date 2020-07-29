@@ -308,10 +308,6 @@ export default {
       f_Source: 3,
     };
 
-    if (body.f_VIN) {
-      body.f_Text = body.f_Text + '\r\n' + 'VIN: ' + vin;
-    }
-
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
       headers: {
