@@ -16,9 +16,9 @@ or alternatively using `brew install fastlane`
 
 # Available Actions
 ## iOS
-### ios finish
+### ios localNoCompile
 ```
-fastlane ios finish
+fastlane ios localNoCompile
 ```
 Commit iOS
 ### ios prepare

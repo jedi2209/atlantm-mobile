@@ -4,10 +4,6 @@ fastlane_require 'dotenv'
 
 before_all do
   Dotenv.overload '.env'
-  # ensure_git_branch(
-  #   branch: 'master'
-  # )
-  # git_pull
   get_version_number(
     xcodeproj: ENV['XCODE_PROJ'],
     target: ENV['XCODE_TARGET']
@@ -19,16 +15,25 @@ end
 
 platform :ios do
   desc "Commit iOS"
-  lane :finish do
+  lane :localNoCompile do
+    increment_build_number(
+        xcodeproj: "ios/atlantm.xcodeproj"
+    )
     commit_version_bump(
       message: "Version Bump iOS",    # create a commit with a custom message
       xcodeproj: "ios/atlantm.xcodeproj"
       )
+    changelog_from_git_commits(
+      pretty: "- %s",# Optional, lets you provide a custom format to apply to each commit when generating the changelog text
+      date_format: "short",# Optional, lets you provide an additional date format to dates within the pretty-formatted string
+      match_lightweight_tag: false,  # Optional, lets you ignore lightweight (non-annotated) tags when searching for the last tag
+      merge_commit_filtering: "exclude_merges", # Optional, lets you filter out merge commits
+      tag_match_pattern: "builds/iosbeta"
+    )
     add_git_tag(
       grouping: "builds",
       prefix: "v"
     )
-    push_to_git_remote
   end
 
   desc "Prepare the iOS app for dev or build"
