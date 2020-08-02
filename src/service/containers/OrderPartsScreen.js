@@ -274,7 +274,7 @@ class OrderPartsScreen extends Component {
             ],
           },
           {
-            name: 'Запасная чать',
+            name: 'Запасная часть',
             fields: [
               {
                 name: 'PART',

@@ -12,7 +12,7 @@ import {
   Alert,
 } from 'react-native';
 
-import {Text, Button, Switch} from 'native-base';
+import {Text, Button, Switch, Toast} from 'native-base';
 
 import {connect} from 'react-redux';
 
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     height: Platform.OS === 'ios' ? 55 : 'auto',
     color: '#222b45',
     fontSize: 16,
-    paddingTop: 20,
+    paddingTop: 25,
     paddingBottom: 0,
   },
   select: {
@@ -87,9 +87,10 @@ const styles = StyleSheet.create({
     height: Platform.OS === 'ios' ? 140 : 'auto',
     color: '#222b45',
     fontSize: 16,
-    paddingTop: 40,
+    paddingTop: 25,
     paddingBottom: 0,
     paddingHorizontal: 0,
+    maxHeight: 150,
   },
   button: {
     backgroundColor: styleConst.color.lightBlue,
@@ -167,6 +168,7 @@ class Form extends Component {
       required: [],
     };
     this.inputRefs = [];
+    this.inputRefsNav = [];
     let requredFields = [];
     if (props.fields.groups) {
       props.fields.groups.map((group) => {
@@ -262,19 +264,27 @@ class Form extends Component {
       });
       if (requredLabels.length) {
         if (requredLabels.length > 1) {
+          Toast.show({
+            text: 'message',
+            position: 'bottom',
+            type: 'warning',
+          });
           Alert.alert(
-            'Заполните пожалуйста обязательные поля',
+            '',
             '\r\nПоля \r\n-' +
               requredLabels.join('\r\n-') +
               '\r\nобязательны для заполнения',
           );
         } else {
-          Alert.alert(
-            'Почти всё!',
-            '\r\nПоле "' +
+          console.log(this);
+          Toast.show({
+            text:
+              'Поле "' +
               requredLabels.join(' ') +
               '" обязательно для заполнения',
-          );
+            position: 'bottom',
+            type: 'warning',
+          });
         }
         return false;
       }
@@ -300,6 +310,42 @@ class Form extends Component {
       return false;
     }
     return true;
+  };
+
+  _nextInput = (groupNum, num) => {
+    const curr = this.inputRefsNav.indexOf(`${groupNum}_${num}`);
+    const nextNum = num + 1;
+    const nextGroup = groupNum + 1;
+    if (curr >= 0 && curr < this.inputRefsNav.length - 1) {
+      if (this.inputRefsNav.indexOf(`${groupNum}_${nextNum}`) !== -1) {
+        if (
+          typeof this.inputRefs[`${groupNum}Input${nextNum}`].current.focus !==
+          'undefined'
+        ) {
+            this.inputRefs[`${groupNum}Input${nextNum}`].current.focus();
+        } else {
+          if (
+            typeof this.inputRefs[`${groupNum}Input${nextNum}`].current.input
+              .focus !== 'undefined'
+          ) {
+            this.inputRefs[`${groupNum}Input${nextNum}`].current.input.focus();
+          }
+        }
+      } else {
+        if (this.inputRefsNav.indexOf(`${nextGroup}_0`) !== -1) {
+          this.inputRefs[`${nextGroup}Input0`].current.focus();
+        } else {
+          this.inputRefs[groupNum + 'Input' + num].current.blur();
+        }
+      }
+    }
+  };
+
+  _addToNav = (groupNum, num) => {
+    const index = this.inputRefsNav.indexOf(`${groupNum}` + '_' + `${num}`);
+    if (index === -1) {
+      this.inputRefsNav.push(`${groupNum}` + '_' + `${num}`);
+    }
   };
 
   onChangeField = (field) => (valueNew) => {
@@ -337,6 +383,7 @@ class Form extends Component {
                 field,
                 fieldNum,
                 totalFields,
+                num,
               );
               if (fieldNum !== group.fields.length - 1) {
                 return [
@@ -353,8 +400,10 @@ class Form extends Component {
   };
 
   _fieldsRender = {
-    input: (data, num, totalFields) => {
-      const {label, name, value} = data;
+    input: (data, num, totalFields, groupNum) => {
+      const {label, name, id} = data;
+      this.inputRefs[groupNum + 'Input' + num] = React.createRef();
+      this._addToNav(groupNum, num);
       return (
         <View
           style={[
@@ -375,6 +424,12 @@ class Form extends Component {
             style={styles.textinput}
             label={label + (data.props && data.props.required ? '*' : '')}
             name={name}
+            returnKeyType={'next'}
+            onSubmitEditing={() => {
+              this._nextInput(groupNum, num);
+            }}
+            blurOnSubmit={false}
+            ref={this.inputRefs[groupNum + 'Input' + num]}
             value={this.state[name] || ''}
             enablesReturnKeyAutomatically={true}
             onChangeText={this.onChangeField(data)}
@@ -383,8 +438,10 @@ class Form extends Component {
         </View>
       );
     },
-    textarea: (data, num, totalFields) => {
-      const {label, name, value} = data;
+    textarea: (data, num, totalFields, groupNum) => {
+      const {label, name, id} = data;
+      this.inputRefs[groupNum + 'Input' + num] = React.createRef();
+      this._addToNav(groupNum, num);
       return (
         <View
           style={[
@@ -407,7 +464,11 @@ class Form extends Component {
             numberOfLines={4}
             label={label + (data.props && data.props.required ? '*' : '')}
             name={name}
+            ref={this.inputRefs[groupNum + 'Input' + num]}
             value={this.state[name] || ''}
+            onSubmitEditing={() => {
+              this._nextInput(groupNum, num);
+            }}
             enablesReturnKeyAutomatically={true}
             onChangeText={this.onChangeField(data)}
             {...data.props}
@@ -415,7 +476,7 @@ class Form extends Component {
         </View>
       );
     },
-    email: (data, num, totalFields) => {
+    email: (data, num, totalFields, groupNum) => {
       const {label, name, id} = data;
 
       let value = '';
@@ -425,6 +486,8 @@ class Form extends Component {
       } else {
         value = this.state[name];
       }
+      this.inputRefs[groupNum + 'Input' + num] = React.createRef();
+      this._addToNav(groupNum, num);
       return (
         <View
           style={[
@@ -447,7 +510,11 @@ class Form extends Component {
             style={styles.textinput}
             label={label + (data.props && data.props.required ? '*' : '')}
             name={name}
+            ref={this.inputRefs[groupNum + 'Input' + num]}
             value={value}
+            onSubmitEditing={() => {
+              this._nextInput(groupNum, num);
+            }}
             enablesReturnKeyAutomatically={true}
             onChangeText={this.onChangeField(data)}
             {...data.props}
@@ -455,8 +522,10 @@ class Form extends Component {
         </View>
       );
     },
-    date: (data, num, totalFields) => {
-      const {label, name} = data;
+    date: (data, num, totalFields, groupNum) => {
+      const {label, name, id} = data;
+      this.inputRefs[groupNum + 'Input' + num] = React.createRef();
+      this._addToNav(groupNum, num);
       return (
         <View
           style={[
@@ -475,6 +544,7 @@ class Form extends Component {
           <DatePickerCustom
             showIcon={false}
             mode="date"
+            ref={this.inputRefs[groupNum + 'Input' + num]}
             label={label + (data.props && data.props.required ? '*' : '')}
             locale="ru-RU"
             placeholder="Выберите дату"
@@ -485,14 +555,17 @@ class Form extends Component {
             date={this.state[name] || ''}
             onDateChange={(_, date) => {
               this.onChangeField(data)(date);
+              this._nextInput(groupNum, num);
             }}
             {...data.props}
           />
         </View>
       );
     },
-    dateTime: (data, num, totalFields) => {
-      const {label, name, value} = data;
+    dateTime: (data, num, totalFields, groupNum) => {
+      const {label, name, id} = data;
+      this.inputRefs[groupNum + 'Input' + num] = React.createRef();
+      this._addToNav(groupNum, num);
       return (
         <View
           style={[
@@ -512,17 +585,19 @@ class Form extends Component {
           key={'field' + num + name}>
           <ChooseDateTimeComponent
             label={label + (data.props && data.props.required ? '*' : '')}
+            ref={this.inputRefs[groupNum + 'Input' + num]}
             customStyles={datePickerStyles}
             onFinishedSelection={(returnData) => {
               this.onChangeField(data)(returnData);
+              this._nextInput(groupNum, num);
             }}
             {...data.props}
           />
         </View>
       );
     },
-    year: (data, num, totalFields) => {
-      const {name, label} = data;
+    year: (data, num, totalFields, groupNum) => {
+      const {name, label, id} = data;
       let items = [];
 
       const minDate =
@@ -541,6 +616,8 @@ class Form extends Component {
       if (data.props.reverse === true) {
         items.reverse();
       }
+      this.inputRefs[groupNum + 'Input' + num] = React.createRef();
+      this._addToNav(groupNum, num);
       return (
         <View
           style={[
@@ -565,7 +642,9 @@ class Form extends Component {
             doneText="Выбрать"
             onValueChange={(value) => {
               this.onChangeField(data)(value);
+              this._nextInput(groupNum, num);
             }}
+            ref={this.inputRefs[groupNum + 'Input' + num]}
             InputAccessoryView={() => {
               return (
                 <View style={defaultStyles.modalViewMiddle}>
@@ -576,7 +655,9 @@ class Form extends Component {
                           [name]: this.state[name],
                         },
                         () => {
-                          this.inputRefs[name].togglePicker(true);
+                          this.inputRefs[groupNum + 'Input' + num].togglePicker(
+                            true,
+                          );
                         },
                       );
                     }}
@@ -595,7 +676,9 @@ class Form extends Component {
                   <Text selectable={false}>Выберите год</Text>
                   <TouchableWithoutFeedback
                     onPress={() => {
-                      this.inputRefs[name].togglePicker(true);
+                      this.inputRefs[groupNum + 'Input' + num].togglePicker(
+                        true,
+                      );
                     }}
                     hitSlop={{top: 4, right: 4, bottom: 4, left: 4}}>
                     <View testID="needed_for_touchable">
@@ -606,9 +689,6 @@ class Form extends Component {
                   </TouchableWithoutFeedback>
                 </View>
               );
-            }}
-            ref={(ref) => {
-              this.inputRefs[name] = ref;
             }}
             style={{
               ...pickerSelectStyles,
@@ -623,7 +703,7 @@ class Form extends Component {
         </View>
       );
     },
-    phone: (data, num, totalFields) => {
+    phone: (data, num, totalFields, groupNum) => {
       let {name, id} = data;
       let userPhoneValue;
       let userPhoneRegion;
@@ -631,6 +711,14 @@ class Form extends Component {
       if (data.country && data.country.code) {
         countryCode = data.country.code.toLowerCase();
       }
+
+      if (typeof this.inputRefs.phones === 'undefined') {
+        this.inputRefs.phones = [];
+      }
+
+      this.inputRefs[groupNum + 'InputWrapper' + num] = React.createRef();
+      this.inputRefs[groupNum + 'Input' + num] = React.createRef();
+      this._addToNav(groupNum, num);
 
       if (id && typeof this.state[name][id].value !== 'undefined') {
         userPhoneValue = this.state[name][id].value;
@@ -706,9 +794,7 @@ class Form extends Component {
           ]}
           key={'view' + num + name}>
           <PhoneInput
-            ref={(ref) => {
-              this['phoneInputRef' + name + (id || num)] = ref;
-            }}
+            ref={this.inputRefs[groupNum + 'InputWrapper' + num]}
             key={'field' + num + name}
             initialCountry={countryCode}
             countriesList={require('@utils/countries.json')}
@@ -737,9 +823,7 @@ class Form extends Component {
               return (
                 <TextInputMask
                   key={'fieldInternal' + name + num}
-                  ref={(ref) => {
-                    this['phoneInputRefInternal' + name + num] = ref;
-                  }}
+                  ref={this.inputRefs[groupNum + 'Input' + num]}
                   value={userPhoneValue}
                   placeholderTextColor={'#afafaf'}
                   placeholder={data.label}
@@ -773,12 +857,14 @@ class Form extends Component {
                           this.setState({
                             [name]: formatted.replace(/[^\d.+]/g, ''),
                           });
+                          this._nextInput(groupNum, num);
                         }
                       } else {
                         if (pureValue.length === maskLength.length) {
                           this.setState({
                             [name]: formatted.replace(/[^\d.+]/g, ''),
                           });
+                          this._nextInput(groupNum, num);
                         }
                       }
                     }
@@ -822,7 +908,7 @@ class Form extends Component {
         </View>
       );
     },
-    dealerSelect: (data, num) => {
+    dealerSelect: (data, num, totalFields, groupNum) => {
       const {name, value} = data;
       return (
         <DealerItemList
@@ -838,8 +924,10 @@ class Form extends Component {
         />
       );
     },
-    select: (data, num, totalFields) => {
-      const {name, label} = data;
+    select: (data, num, totalFields, groupNum) => {
+      const {name, label, id} = data;
+      this.inputRefs[groupNum + 'Input' + num] = React.createRef();
+      this._addToNav(groupNum, num);
       return (
         <View
           style={[
@@ -865,9 +953,11 @@ class Form extends Component {
           </Text>
           <RNPickerSelect
             key={'rnpicker' + num + name}
+            ref={this.inputRefs[groupNum + 'Input' + num]}
             doneText="Выбрать"
             onValueChange={(value) => {
               this.onChangeField(data)(value);
+              this._nextInput(groupNum, num);
             }}
             style={{
               ...pickerSelectStyles,
@@ -881,8 +971,10 @@ class Form extends Component {
         </View>
       );
     },
-    switch: (data, num, totalFields) => {
-      const {name, value, label} = data;
+    switch: (data, num, totalFields, groupNum) => {
+      const {name, value, label, id} = data;
+      this.inputRefs[groupNum + 'Input' + num] = React.createRef();
+      this._addToNav(groupNum, num);
       return (
         <View
           style={[
@@ -909,6 +1001,7 @@ class Form extends Component {
                 position: 'absolute',
               },
             ]}
+            ref={this.inputRefs[groupNum + 'Input' + num]}
             value={value}
             {...data.props}
           />
@@ -976,6 +1069,7 @@ class Form extends Component {
         </ScrollView>
       </View>
     );
+    console.log('this.inputRefs', this);
     return res;
   }
 }

@@ -14,6 +14,7 @@ export const TextInput = React.forwardRef((props, ref) => {
   return (
     <View style={styles.container}>
       <Text
+        selectable={false}
         style={[
           styles.label,
           isActive && styles.labelActive,
@@ -44,17 +45,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     paddingTop: 5,
-    fontSize: 18,
+    fontSize: 16,
     lineHeight: 20,
     color: '#bababa',
     backgroundColor: 'white',
     zIndex: 10,
     width: '100%',
-    paddingBottom: 5,
   },
   labelActive: {
     top: 0,
     fontSize: 14,
     color: '#808080',
+    paddingBottom: 5,
+    paddingTop: 0,
   },
 });
