@@ -390,43 +390,37 @@ export const actionSavePofile = (props) => {
 };
 
 export const actionSaveProfileByUser = (props) => {
-  const {
-    email,
-    phone,
-    id,
-    last_name,
-    first_name,
-    second_name,
-    name,
-    carNumber,
-    car,
-  } = props;
-
-  const dataToSend = {
-    userID: id,
-    EMAIL: [email],
-    NAME: first_name,
-    SECOND_NAME: second_name,
-    LAST_NAME: last_name,
-    PHONE: [phone],
-  };
-
-  if (props.isReestablish) {
-    dataToSend.UF_CUSTOMER_NUMBER = props.SAP.ID;
-    dataToSend.UF_CRM_1576136240 = props.SAP.ID;
-
-    delete dataToSend.isReestablish;
-    delete dataToSend.SAP;
-
-    PushNotifications.addTag('sapID', props.SAP.ID);
-    PushNotifications.setExternalUserId(props.SAP.ID);
-  }
-
-  for (let key in dataToSend) {
-    if (!dataToSend[key]) {
-      delete dataToSend[key];
+  const {SAP, isReestablish, user} = props;
+  console.log('actionSaveProfileByUser props', {props}, props, SAP, isReestablish);
+  let dataToSend = props;
+  if (isReestablish) {
+    dataToSend.UF_CUSTOMER_NUMBER = SAP.ID;
+    dataToSend.UF_CRM_1576136240 = SAP.ID;
+    if (user.first_name) {
+      dataToSend.NAME = user.first_name;
     }
+    if (user.last_name) {
+      dataToSend.LAST_NAME = user.last_name;
+    }
+    delete dataToSend.isReestablish;
   }
+
+  if (dataToSend.user) {
+    delete dataToSend.user;
+  }
+
+  if (SAP.ID) {
+    PushNotifications.addTag('sapID', SAP.ID);
+    PushNotifications.setExternalUserId(SAP.ID);
+  }
+
+  // for (let key in dataToSend) {
+  //   if (!dataToSend[key]) {
+  //     delete dataToSend[key];
+  //   }
+  // }
+
+  console.log('actionSaveProfileByUser dataToSend', dataToSend);
 
   return (dispatch) => {
     dispatch({
@@ -632,7 +626,7 @@ export const actionLogin = (props) => {
       const {user, token} = data;
 
       const payload = {
-        id: id,
+        ID: id,
         SAP: {
           TOKEN: token.id,
           ID: user.login,
