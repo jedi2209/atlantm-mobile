@@ -9,7 +9,7 @@ export default class UserData {
       (typeof liveData === 'undefined' || liveData === null) &&
       (typeof localData === 'undefined' || localData === null)
     ) {
-      return false;
+      return null;
     }
     if (typeof localData === 'object') {
       localData = localData[0];

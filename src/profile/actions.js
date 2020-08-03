@@ -391,7 +391,6 @@ export const actionSavePofile = (props) => {
 
 export const actionSaveProfileByUser = (props) => {
   const {SAP, isReestablish, user} = props;
-  console.log('actionSaveProfileByUser props', {props}, props, SAP, isReestablish);
   let dataToSend = props;
   if (isReestablish) {
     dataToSend.UF_CUSTOMER_NUMBER = SAP.ID;
@@ -419,8 +418,6 @@ export const actionSaveProfileByUser = (props) => {
   //     delete dataToSend[key];
   //   }
   // }
-
-  console.log('actionSaveProfileByUser dataToSend', dataToSend);
 
   return (dispatch) => {
     dispatch({
