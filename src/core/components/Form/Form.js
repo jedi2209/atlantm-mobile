@@ -319,7 +319,7 @@ class Form extends Component {
       el.current.focus();
     } else {
       if (typeof el.current.input.focus === 'function') {
-        el.current.focus();
+        el.current.input.focus();
       }
     }
   };
