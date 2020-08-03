@@ -18,7 +18,7 @@ import {
   Dimensions,
 } from 'react-native';
 
-import {Button, Icon} from 'native-base';
+import {Button, Icon, Toast} from 'native-base';
 
 import {StackActions, NavigationActions} from 'react-navigation';
 
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     color: '#222b45',
     fontSize: 18,
     width: deviceWidth - 40,
+    paddingTop: 20,
   },
   button: {
     backgroundColor: styleConst.color.lightBlue,
@@ -137,7 +138,11 @@ class ReestablishScreen extends React.Component {
   checkLoginPass() {
     const {login, password} = this.state;
     if (login.length === 0 || password.length === 0) {
-      Alert.alert('Упс!', 'Поля логин и пароль обязательные для заполнения');
+      Toast.show({
+        text: 'Поля логин и пароль обязательны для заполнения',
+        position: 'top',
+        type: 'warning',
+      });
       this.setState({loading: false});
       return false;
     }
@@ -147,10 +152,11 @@ class ReestablishScreen extends React.Component {
   checkLogin() {
     const {login} = this.state;
     if (login.length === 0) {
-      Alert.alert(
-        'Упс!',
-        'Нам нужно знать ваш логин, чтобы восстановить доступ',
-      );
+      Toast.show({
+        text: 'Нам нужно знать ваш логин, чтобы восстановить доступ',
+        position: 'top',
+        type: 'warning',
+      });
       this.setState({loading: false});
       return false;
     }
@@ -165,7 +171,7 @@ class ReestablishScreen extends React.Component {
       return false;
     }
     this.props
-      .actionLogin({login, password, id: this.props.profile.login.id})
+      .actionLogin({login, password, id: this.props.profile.login.ID})
       .then((action) => {
         switch (action.type) {
           case 'LOGIN__FAIL_OLD_LKK':
@@ -176,42 +182,45 @@ class ReestablishScreen extends React.Component {
             const defaultMessage = 'Произошла ошибка, попробуйте снова';
             const code = get(action, 'payload.code');
             const message = get(action, 'payload.message');
-
-            setTimeout(() => {
-              Alert.alert(!code || code === 500 ? defaultMessage : message);
-              this.setState({loading: false});
-            }, 100);
+            Toast.show({
+              text: !code || code === 500 ? defaultMessage : message,
+              position: 'top',
+              type: 'danger',
+            });
+            this.setState({loading: false});
             break;
           case 'LOGIN__SUCCESS_OLD_LKK':
             this.props
               .actionSaveProfileByUser({
                 ...this.props.profile.login,
                 SAP: action.payload.SAP,
+                user: {
+                  first_name: action.payload.first_name,
+                  last_name: action.payload.last_name,
+                  email: action.payload.email,
+                  phone: action.payload.phone,
+                },
                 isReestablish: true,
               })
               .then((data) => {
                 this.setState({loading: false});
                 const _this = this;
-                Alert.alert(
-                  'Отлично! Всё получилось!',
-                  'Ваши данные успешно обновлены',
-                  [
-                    {
-                      text: 'ОК',
-                      onPress() {
-                        _this.props.navigation.navigate('ProfileScreenInfo');
-                      },
-                    },
-                  ],
-                );
+                Toast.show({
+                  text: 'Отлично! Всё получилось!',
+                  position: 'top',
+                  type: 'success',
+                });
+                setTimeout(() => {
+                  _this.props.navigation.navigate('ProfileScreenInfo');
+                }, 500);
               })
               .catch(() => {
-                setTimeout(
-                  () =>
-                    Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
-                  100,
-                );
                 this.setState({loading: false});
+                Toast.show({
+                  text: 'Произошла ошибка, попробуйте снова',
+                  position: 'top',
+                  type: 'danger',
+                });
               });
             break;
         }
@@ -305,13 +314,20 @@ class ReestablishScreen extends React.Component {
                           console.log('action', action);
                           switch (action.type) {
                             case 'FORGOT_PASS_REQUEST__SUCCESS':
-                              Alert.alert(
-                                'Всё получилось!',
-                                action.payload.message,
-                              );
+                              Toast.show({
+                                text: action.payload.message
+                                  ? action.payload.message
+                                  : 'Всё получилось!',
+                                position: 'top',
+                                type: 'success',
+                              });
                               break;
                             default:
-                              Alert.alert(null, action.payload.message);
+                              Toast.show({
+                                text: action.payload.message,
+                                position: 'top',
+                                type: 'danger',
+                              });
                               break;
                           }
                           this.setState({RequestForgotPassloading: false});

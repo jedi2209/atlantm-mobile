@@ -276,7 +276,6 @@ class Form extends Component {
               '\r\nобязательны для заполнения',
           );
         } else {
-          console.log(this);
           Toast.show({
             text:
               'Поле "' +
