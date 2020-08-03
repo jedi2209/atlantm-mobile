@@ -14,7 +14,7 @@ const styles = {
   },
 };
 
-export const CarCard = ({data, type, checked}) => {
+export const CarCard = ({data, type, checked, onPress}) => {
   const {brand, model, number} = data;
   return (
     <View
@@ -70,8 +70,20 @@ export const CarCard = ({data, type, checked}) => {
       />
       {type === 'check' && (
         <TouchableWithoutFeedback
-          containerStyle={{position: 'absolute', bottom: 16, right: 16}}>
+          containerStyle={{
+            position: 'absolute',
+            bottom: 16,
+            right: 16,
+            zIndex: 10,
+          }}>
           <CheckBox
+            onPress={() => {
+              if (onPress) {
+                return onPress();
+              } else {
+                return null;
+              }
+            }}
             checked={checked}
             color="#027aff"
             style={{marginRight: 10}}

@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
   carContainer: {
     marginLeft: -16,
     marginRight: -16,
+    zIndex: 20,
   },
   carContainerContent: {
     // Добавляем отрицательный оступ, для контейнера с карточками,
@@ -132,6 +133,15 @@ class OrderPartsScreen extends Component {
     navigation: PropTypes.object,
     localUserDataUpdate: PropTypes.func,
     isOrderServiceRequest: PropTypes.bool,
+  };
+
+  _selectCar = (item) => {
+    this.setState({
+      carBrand: item.brand,
+      carModel: item.model,
+      carName: [item.brand, item.model].join(' '),
+      carVIN: item.vin,
+    });
   };
 
   componentWillMount() {
@@ -305,15 +315,13 @@ class OrderPartsScreen extends Component {
                         {(this.props.cars || []).map((item) => {
                           return (
                             <TouchableWithoutFeedback
+                              style={{
+                                zIndex: 15,
+                              }}
                               activeOpacity={0.7}
                               key={item.vin}
                               onPress={() => {
-                                this.setState({
-                                  carBrand: item.brand,
-                                  carModel: item.model,
-                                  carName: [item.brand, item.model].join(' '),
-                                  carVIN: item.vin,
-                                });
+                                this._selectCar(item);
                               }}>
                               <View>
                                 <CarCard
@@ -321,6 +329,9 @@ class OrderPartsScreen extends Component {
                                   data={item}
                                   type="check"
                                   checked={this.state.carVIN === item.vin}
+                                  onPress={() => {
+                                    this._selectCar(item);
+                                  }}
                                 />
                               </View>
                             </TouchableWithoutFeedback>
