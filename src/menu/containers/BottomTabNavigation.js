@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Icon} from 'native-base';
+import {Icon, ActionSheet} from 'native-base';
 import {Alert} from 'react-native';
 // import AwesomeAlert from 'react-native-awesome-alerts';
 // TODO: подключить другие алерты
@@ -44,6 +44,29 @@ const SearchStack = {
       screen: NewCarListScreen,
     },
   }),
+};
+
+const Orders = {
+  BUTTONS: [
+    {
+      id: 'callMeBack',
+      text: '📞 Перезвоните мне',
+    },
+    {
+      id: 'orderService',
+      text: '🛠 Запись на сервис',
+    },
+    {
+      id: 'orderParts',
+      text: '🔩 Заказать зап.части',
+    },
+    {
+      id: 'carCost',
+      text: 'Оценить мой автомобиль',
+    },
+    {id: 'cancel', text: 'Отмена'},
+  ],
+  CANCEL_INDEX: 4,
 };
 
 SearchStack.navigationOptions = ({navigation}) => {
@@ -129,33 +152,28 @@ const BottomTabNavigation = createBottomTabNavigator(
       navigationOptions: ({navigation}) => {
         return {
           tabBarOnPress: () =>
-            Alert.alert(
-              'Чем мы можем помочь',
-              'Какую заявку Вы хотите отправить?',
-              [
-                {
-                  text: '📞 Перезвоните мне',
-                  onPress: () => navigation.navigate('CallMeBackScreen'),
-                },
-                {
-                  text: '🛠 Запись на сервис',
-                  onPress: () => navigation.navigate('ServiceScreen'),
-                },
-                {
-                  text: '🔩 Заказать зап.части',
-                  onPress: () => navigation.navigate('OrderPartsScreen'),
-                },
-                {
-                  text: 'Оценить мой автомобиль',
-                  onPress: () => navigation.navigate('CarCostScreen'),
-                },
-                {
-                  text: 'Отмена',
-                  onPress: () => console.log('OK Pressed'),
-                  style: 'destructive',
-                },
-              ],
-              {cancelable: true},
+            ActionSheet.show(
+              {
+                options: Orders.BUTTONS,
+                cancelButtonIndex: Orders.CANCEL_INDEX,
+                title: 'Заявки',
+              },
+              (buttonIndex) => {
+                switch (Orders.BUTTONS[buttonIndex].id) {
+                  case 'callMeBack':
+                    navigation.navigate('CallMeBackScreen');
+                    break;
+                  case 'orderService':
+                    navigation.navigate('ServiceScreen');
+                    break;
+                  case 'orderParts':
+                    navigation.navigate('OrderPartsScreen');
+                    break;
+                  case 'carCost':
+                    navigation.navigate('CarCostScreen');
+                    break;
+                }
+              },
             ),
           tabBarLabel: 'Заявка',
           tabBarIcon: ({tintColor}) => (

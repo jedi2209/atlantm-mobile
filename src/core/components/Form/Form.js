@@ -724,17 +724,19 @@ class Form extends Component {
       } else {
         userPhoneValue = this.state[name] || data.value;
       }
-      if (userPhoneValue.indexOf('+375') === 0) {
-        userPhoneRegion = 'by';
-      }
-      if (userPhoneValue.indexOf('+7') === 0) {
-        userPhoneRegion = 'ru';
-      }
-      if (userPhoneValue.indexOf('+380') === 0) {
-        userPhoneRegion = 'ua';
-      }
-      if (userPhoneRegion && userPhoneRegion !== countryCode) {
-        countryCode = userPhoneRegion;
+      if (userPhoneValue) {
+        if (userPhoneValue.indexOf('+375') === 0) {
+          userPhoneRegion = 'by';
+        }
+        if (userPhoneValue.indexOf('+7') === 0) {
+          userPhoneRegion = 'ru';
+        }
+        if (userPhoneValue.indexOf('+380') === 0) {
+          userPhoneRegion = 'ua';
+        }
+        if (userPhoneRegion && userPhoneRegion !== countryCode) {
+          countryCode = userPhoneRegion;
+        }
       }
       let mask;
 

@@ -14,7 +14,7 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {Text, StyleProvider, Icon, Button} from 'native-base';
+import {Text, StyleProvider, Icon, Button, ActionSheet} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -170,6 +170,29 @@ const mapDispatchToProps = {
   callMe,
   fetchInfoList,
   actionListReset,
+};
+
+const Orders = {
+  BUTTONS: [
+    {
+      id: 'callMeBack',
+      text: '📞 Перезвоните мне',
+    },
+    {
+      id: 'orderService',
+      text: '🛠 Запись на сервис',
+    },
+    {
+      id: 'orderParts',
+      text: '🔩 Заказать зап.части',
+    },
+    {
+      id: 'carCost',
+      text: 'Оценить мой автомобиль',
+    },
+    {id: 'cancel', text: 'Отмена'},
+  ],
+  CANCEL_INDEX: 4,
 };
 
 class ContactsScreen extends Component {
@@ -343,34 +366,28 @@ class ContactsScreen extends Component {
                     subtitle="Отправить заявку"
                     kind="danger"
                     onPress={() => {
-                      Alert.alert(
-                        'Выберите заявку',
-                        'Какую заявку Вы хотите отправить?',
-                        [
-                          {
-                            text: '📞 Перезвоните мне',
-                            onPress: () => navigation.navigate('CallMeBackScreen'),
-                          },
-                          {
-                            text: '🛠 Запись на сервис',
-                            onPress: () => navigation.navigate('ServiceScreen'),
-                          },
-                          {
-                            text: '🔩 Заказать зап.части',
-                            onPress: () =>
-                              navigation.navigate('OrderPartsScreen'),
-                          },
-                          {
-                            text: 'Оценить мой автомобиль',
-                            onPress: () => navigation.navigate('CarCostScreen'),
-                          },
-                          {
-                            text: 'Отмена',
-                            onPress: () => console.log('OK Pressed'),
-                            style: 'destructive',
-                          },
-                        ],
-                        {cancelable: true},
+                      ActionSheet.show(
+                        {
+                          options: Orders.BUTTONS,
+                          cancelButtonIndex: Orders.CANCEL_INDEX,
+                          title: 'Заявки',
+                        },
+                        (buttonIndex) => {
+                          switch (Orders.BUTTONS[buttonIndex].id) {
+                            case 'callMeBack':
+                              navigation.navigate('CallMeBackScreen');
+                              break;
+                            case 'orderService':
+                              navigation.navigate('ServiceScreen');
+                              break;
+                            case 'orderParts':
+                              navigation.navigate('OrderPartsScreen');
+                              break;
+                            case 'carCost':
+                              navigation.navigate('CarCostScreen');
+                              break;
+                          }
+                        },
                       );
                     }}
                   />
