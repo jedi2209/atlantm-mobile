@@ -114,6 +114,15 @@ class ServiceScreen extends Component {
     isOrderServiceRequest: PropTypes.bool,
   };
 
+  _selectCar = (item) => {
+    this.setState({
+      carBrand: item.brand,
+      carModel: item.model,
+      carName: [item.brand, item.model].join(' '),
+      carVIN: item.vin,
+    });
+  };
+
   componentWillMount() {
     const carFromNavigation = get(this.props.navigation, 'state.params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
@@ -273,12 +282,7 @@ class ServiceScreen extends Component {
                               activeOpacity={0.7}
                               key={item.vin}
                               onPress={() => {
-                                this.setState({
-                                  carBrand: item.brand,
-                                  carModel: item.model,
-                                  carName: [item.brand, item.model].join(' '),
-                                  carVIN: item.vin,
-                                });
+                                this._selectCar(item);
                               }}>
                               <View>
                                 <CarCard
@@ -286,6 +290,9 @@ class ServiceScreen extends Component {
                                   data={item}
                                   type="check"
                                   checked={this.state.carVIN === item.vin}
+                                  onPress={() => {
+                                    this._selectCar(item);
+                                  }}
                                 />
                               </View>
                             </TouchableWithoutFeedback>

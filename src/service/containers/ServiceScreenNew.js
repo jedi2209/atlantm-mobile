@@ -278,6 +278,13 @@ class ServiceScreen extends Component {
     });
   }
 
+  _selectCar = (item) => {
+    this.setState({
+      carName: [item.brand, item.model].join(' '),
+      carVIN: item.vin,
+    });
+  };
+
   componentDidMount() {
     if (this.state.carVIN) {
       this._getServices();
@@ -420,10 +427,7 @@ class ServiceScreen extends Component {
                             activeOpacity={0.7}
                             key={item.vin}
                             onPress={() => {
-                              this.setState({
-                                carName: [item.brand, item.model].join(' '),
-                                carVIN: item.vin,
-                              });
+                              this._selectCar(item);
                               this._getServices();
                             }}>
                             <View>
@@ -432,6 +436,9 @@ class ServiceScreen extends Component {
                                 data={item}
                                 type="check"
                                 checked={this.state.carVIN === item.vin}
+                                onPress={() => {
+                                  this._selectCar(item);
+                                }}
                               />
                             </View>
                           </TouchableWithoutFeedback>
