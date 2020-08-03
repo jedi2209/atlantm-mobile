@@ -311,32 +311,30 @@ class Form extends Component {
     return true;
   };
 
-  _nextInput = (groupNum, num) => {
-    const curr = this.inputRefsNav.indexOf(`${groupNum}_${num}`);
-    const nextNum = num + 1;
-    const nextGroup = groupNum + 1;
-    if (curr >= 0 && curr < this.inputRefsNav.length - 1) {
-      if (this.inputRefsNav.indexOf(`${groupNum}_${nextNum}`) !== -1) {
-        if (
-          typeof this.inputRefs[`${groupNum}Input${nextNum}`].current.focus !==
-          'undefined'
-        ) {
-            this.inputRefs[`${groupNum}Input${nextNum}`].current.focus();
-        } else {
-          if (
-            typeof this.inputRefs[`${groupNum}Input${nextNum}`].current.input
-              .focus !== 'undefined'
-          ) {
-            this.inputRefs[`${groupNum}Input${nextNum}`].current.input.focus();
-          }
-        }
-      } else {
-        if (this.inputRefsNav.indexOf(`${nextGroup}_0`) !== -1) {
-          this.inputRefs[`${nextGroup}Input0`].current.focus();
-        } else {
-          this.inputRefs[groupNum + 'Input' + num].current.blur();
-        }
+  _setActive = (el) => {
+    if (typeof el === 'undefined') {
+      return false;
+    }
+    if (typeof el.current.focus === 'function') {
+      el.current.focus();
+    } else {
+      if (typeof el.current.input.focus === 'function') {
+        el.current.focus();
       }
+    }
+  };
+
+  _nextInput = (groupNum, num) => {
+    const currEl = this.inputRefs[`${groupNum}Input${num}`];
+    const currIndex = this.inputRefsNav.indexOf(groupNum + '_' + num);
+    const nextIndex = currIndex + 1;
+    const nextEl =
+      this.inputRefsNav[nextIndex] && this.inputRefsNav[nextIndex].split('_');
+    if (typeof nextEl === 'object') {
+      const targetElement = this.inputRefs[`${nextEl[0]}Input${nextEl[1]}`];
+      this._setActive(targetElement);
+    } else {
+      this._setActive(currEl);
     }
   };
 
@@ -465,9 +463,6 @@ class Form extends Component {
             name={name}
             ref={this.inputRefs[groupNum + 'Input' + num]}
             value={this.state[name] || ''}
-            onSubmitEditing={() => {
-              this._nextInput(groupNum, num);
-            }}
             enablesReturnKeyAutomatically={true}
             onChangeText={this.onChangeField(data)}
             {...data.props}
@@ -554,7 +549,9 @@ class Form extends Component {
             date={this.state[name] || ''}
             onDateChange={(_, date) => {
               this.onChangeField(data)(date);
-              this._nextInput(groupNum, num);
+              // setTimeout(() => {
+              //   this._nextInput(groupNum, num);
+              // }, 500);
             }}
             {...data.props}
           />
