@@ -28,7 +28,7 @@ import Amplitude from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '@core/style-const';
-import {ERROR_NETWORK} from '@core/const';
+import {ERROR_NETWORK, ORDERS} from '@core/const';
 import Carousel from 'react-native-snap-carousel';
 
 const HEADER_MAX_HEIGHT = 406;
@@ -170,29 +170,6 @@ const mapDispatchToProps = {
   callMe,
   fetchInfoList,
   actionListReset,
-};
-
-const Orders = {
-  BUTTONS: [
-    {
-      id: 'callMeBack',
-      text: '📞 Перезвоните мне',
-    },
-    {
-      id: 'orderService',
-      text: '🛠 Запись на сервис',
-    },
-    {
-      id: 'orderParts',
-      text: '🔩 Заказать зап.части',
-    },
-    {
-      id: 'carCost',
-      text: 'Оценить мой автомобиль',
-    },
-    {id: 'cancel', text: 'Отмена'},
-  ],
-  CANCEL_INDEX: 4,
 };
 
 class ContactsScreen extends Component {
@@ -368,12 +345,14 @@ class ContactsScreen extends Component {
                     onPress={() => {
                       ActionSheet.show(
                         {
-                          options: Orders.BUTTONS,
-                          cancelButtonIndex: Orders.CANCEL_INDEX,
-                          title: 'Заявки',
+                          options: ORDERS[Platform.OS].BUTTONS,
+                          cancelButtonIndex: ORDERS[Platform.OS].CANCEL_INDEX,
+                          title: ORDERS[Platform.OS].TITLE,
+                          destructiveButtonIndex:
+                            ORDERS[Platform.OS].DESTRUCTIVE_INDEX || null,
                         },
                         (buttonIndex) => {
-                          switch (Orders.BUTTONS[buttonIndex].id) {
+                          switch (ORDERS[Platform.OS].BUTTONS[buttonIndex].id) {
                             case 'callMeBack':
                               navigation.navigate('CallMeBackScreen');
                               break;

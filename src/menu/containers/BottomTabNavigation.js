@@ -1,9 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
+import {Platform} from 'react-native';
 import {Icon, ActionSheet} from 'native-base';
-import {Alert} from 'react-native';
-// import AwesomeAlert from 'react-native-awesome-alerts';
-// TODO: подключить другие алерты
+import {ORDERS} from '@core/const';
 
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
@@ -44,29 +43,6 @@ const SearchStack = {
       screen: NewCarListScreen,
     },
   }),
-};
-
-const Orders = {
-  BUTTONS: [
-    {
-      id: 'callMeBack',
-      text: '📞 Перезвоните мне',
-    },
-    {
-      id: 'orderService',
-      text: '🛠 Запись на сервис',
-    },
-    {
-      id: 'orderParts',
-      text: '🔩 Заказать зап.части',
-    },
-    {
-      id: 'carCost',
-      text: 'Оценить мой автомобиль',
-    },
-    {id: 'cancel', text: 'Отмена'},
-  ],
-  CANCEL_INDEX: 4,
 };
 
 SearchStack.navigationOptions = ({navigation}) => {
@@ -154,12 +130,14 @@ const BottomTabNavigation = createBottomTabNavigator(
           tabBarOnPress: () =>
             ActionSheet.show(
               {
-                options: Orders.BUTTONS,
-                cancelButtonIndex: Orders.CANCEL_INDEX,
-                title: 'Заявки',
+                options: ORDERS[Platform.OS].BUTTONS,
+                cancelButtonIndex: ORDERS[Platform.OS].CANCEL_INDEX,
+                title: ORDERS[Platform.OS].TITLE,
+                destructiveButtonIndex:
+                  ORDERS[Platform.OS].DESTRUCTIVE_INDEX || null,
               },
               (buttonIndex) => {
-                switch (Orders.BUTTONS[buttonIndex].id) {
+                switch (ORDERS[Platform.OS].BUTTONS[buttonIndex].id) {
                   case 'callMeBack':
                     navigation.navigate('CallMeBackScreen');
                     break;
