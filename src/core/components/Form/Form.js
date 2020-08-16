@@ -546,7 +546,7 @@ class Form extends Component {
             confirmBtnText="Выбрать"
             cancelBtnText="Отмена"
             customStyles={datePickerStyles}
-            date={this.state[name] || ''}
+            value={this.state[name] || ''}
             onDateChange={(_, date) => {
               this.onChangeField(data)(date);
               // setTimeout(() => {
@@ -1026,6 +1026,7 @@ class Form extends Component {
               })}
           <View style={styles.group}>
             <Button
+              block
               onPress={() => {
                 if (!this.state.loading) {
                   if (!this.props.onSubmit) {

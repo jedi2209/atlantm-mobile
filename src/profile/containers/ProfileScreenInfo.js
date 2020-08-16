@@ -394,7 +394,7 @@ class ProfileScreenInfo extends Component {
                               Toast.show({
                                 text: 'Статус автомобиля изменён',
                                 type: 'success',
-                                position: 'bottom',
+                                position: 'top',
                               });
                             }
                           });
@@ -715,7 +715,7 @@ class ProfileScreenInfo extends Component {
                 </TouchableWithoutFeedback>
               )}
               <Button
-                full
+                block
                 onPress={() => {
                   this.props.navigation.navigate('ProfileSettingsScreen');
                 }}
@@ -734,6 +734,7 @@ class ProfileScreenInfo extends Component {
             <View style={{textAlign: 'center', alignItems: 'center'}}>
               <Button
                 transparent
+                full
                 onPress={() => {
                   this.props.actionLogout();
                 }}

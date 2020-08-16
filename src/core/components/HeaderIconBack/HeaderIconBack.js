@@ -84,7 +84,7 @@ export default class HeaderIconBack extends Component {
         onPress={this.onPressBack}>
         <View style={[styles.inner]}>
           <Icon
-            // type="MaterialCommunityIcons"
+            type="Ionicons"
             name="arrow-back"
             style={[
               styles.arrowFont,

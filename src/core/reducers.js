@@ -1,7 +1,7 @@
-import { combineReducers } from 'redux';
-import { reducer as formReducer } from 'redux-form';
-import { REHYDRATE } from 'redux-persist/constants';
-import { get } from 'lodash';
+import {combineReducers} from 'redux';
+import {reducer as formReducer} from 'redux-form';
+import {REHYDRATE} from 'redux-persist/constants';
+import {get} from 'lodash';
 import dealer from '../dealer/reducers';
 import nav from '../navigation/reducers';
 import tva from '../tva/reducers';
