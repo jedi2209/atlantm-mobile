@@ -69,15 +69,15 @@ export default {
   },
   headerBackButton: {
     ContainerStyle: {
-      backgroundColor: 'rgba(0,0,0, 0.6)',
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
       paddingHorizontal: isAndroid ? 5 : 0,
-      paddingVertical: isAndroid ? 10 : 5,
+      paddingVertical: isAndroid ? 10 : 0,
       borderRadius: 20,
       marginLeft: 5,
       marginTop: isAndroid ? 5 : 0,
     },
     IconStyle: {
-      marginLeft: isAndroid ? 5 : 8,
+      marginLeft: isAndroid ? 5 : 0,
     },
   },
   new: {

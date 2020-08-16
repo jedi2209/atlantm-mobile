@@ -210,7 +210,7 @@ class SocialAuth extends PureComponent {
         const im = {VALUE: appleAuthRequestResponse.user, VALUE_TYPE: 'apple'};
         this.props.connectSocialMedia({profile: this.props.login, im});
       } catch (error) {
-        console.log('error', error);
+        // console.log('error', error);
       }
       this.setState({isSigninInProgress: false});
     }

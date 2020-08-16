@@ -83,6 +83,8 @@ class ProfileSettingsScreen extends Component {
       birthdate = BIRTHDATE;
     }
 
+    console.log('birthdate', birthdate);
+
     this.state = {
       email: emailData || [],
       phone: phoneData || [],
@@ -159,7 +161,6 @@ class ProfileSettingsScreen extends Component {
                 label: 'Когда у вас день рождения?',
                 value: birthdate || '',
                 props: {
-                  placeholder: null,
                   maxDate: new Date(substractYears(18)),
                   minDate: new Date(substractYears(100)),
                 },

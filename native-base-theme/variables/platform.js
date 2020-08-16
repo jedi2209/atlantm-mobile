@@ -30,7 +30,7 @@ export default {
   // CheckBox
   CheckboxRadius: platform === 'ios' ? 13 : 0,
   CheckboxBorderWidth: platform === 'ios' ? 1 : 2,
-  CheckboxPaddingLeft: platform === 'ios' ? 4 : 2,
+  CheckboxPaddingLeft: platform === 'ios' ? 0 : 2,
   CheckboxPaddingBottom: platform === 'ios' ? 0 : 5,
   CheckboxIconSize: platform === 'ios' ? 21 : 14,
   CheckboxIconMarginTop: platform === 'ios' ? undefined : 1,
@@ -163,9 +163,7 @@ export default {
   toolbarDefaultBorder: platform === 'ios' ? '#a7a6ab' : '#3F51B5',
   iosStatusbar: platform === 'ios' ? 'dark-content' : 'light-content',
   get statusBarColor() {
-    return color(this.toolbarDefaultBg)
-      .darken(0.2)
-      .hex();
+    return color(this.toolbarDefaultBg).darken(0.2).hex();
   },
 
   // Icon
@@ -232,9 +230,7 @@ export default {
   radioColor: '#7e7e7e',
 
   get radioSelectedColor() {
-    return color(this.radioColor)
-      .darken(0.2)
-      .hex();
+    return color(this.radioColor).darken(0.2).hex();
   },
 
   // Spinner
@@ -267,9 +263,7 @@ export default {
   contentPadding: 10,
 
   get darkenHeader() {
-    return color(this.tabBgColor)
-      .darken(0.03)
-      .hex();
+    return color(this.tabBgColor).darken(0.03).hex();
   },
 
   dropdownBg: '#000',

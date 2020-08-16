@@ -295,7 +295,7 @@ class ProfileScreen extends Component {
       Toast.show({
         text: 'Неверный код',
         buttonText: 'ОК',
-        position: 'top',
+        position: 'bottom',
         type: 'danger',
       });
       return;
@@ -814,12 +814,14 @@ class ProfileScreen extends Component {
                     <>
                       <Button
                         disabled={this.state.loadingVerify}
+                        block
                         onPress={this._verifyCodeStepTwo}
                         style={[
                           styleConst.shadow.default,
                           {
                             marginTop: 10,
                             width: '80%',
+                            marginHorizontal: '10%',
                             backgroundColor: '#34BD78',
                             justifyContent: 'center',
                             borderRadius: 5,
@@ -840,6 +842,7 @@ class ProfileScreen extends Component {
                             flex: 1,
                             height: 25,
                             width: '30%',
+                            marginHorizontal: '35%',
                             backgroundColor: 'rgba(101, 101, 101, 0.4)',
                             justifyContent: 'center',
                             padding: 10,
@@ -858,6 +861,7 @@ class ProfileScreen extends Component {
                   {!this.state.code && (
                     <Button
                       onPress={this._verifyCode}
+                      full
                       disabled={
                         this.state.loadingVerify
                           ? true
@@ -873,6 +877,7 @@ class ProfileScreen extends Component {
                         {
                           marginTop: 20,
                           width: '80%',
+                          marginHorizontal: '10%',
                           backgroundColor: '#34BD78',
                           justifyContent: 'center',
                           borderRadius: 5,

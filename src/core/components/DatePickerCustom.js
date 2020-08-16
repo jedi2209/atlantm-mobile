@@ -8,7 +8,6 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
   const [focused, setFocused] = useState(false);
   const isActive = focused || Boolean(props.value);
 
-
   return (
     <View style={styles.container}>
       {props.label ? (
