@@ -167,10 +167,10 @@ export default {
   },
 
   // Icon
-  iconFamily: 'Ionicons',
-  iconFontSize: platform === 'ios' ? 30 : 28,
-  iconMargin: 7,
-  iconHeaderSize: platform === 'ios' ? 33 : 24,
+  // iconFamily: 'Ionicons',
+  // iconFontSize: platform === 'ios' ? 30 : 28,
+  // iconMargin: 7,
+  // iconHeaderSize: platform === 'ios' ? 33 : 24,
 
   // InputGroup
   inputFontSize: 17,
