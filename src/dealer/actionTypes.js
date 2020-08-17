@@ -6,7 +6,6 @@ export const DEALER__SUCCESS = 'DEALER__SUCCESS';
 export const DEALER__SUCCESS__LOCAL = 'DEALER__SUCCESS__LOCAL';
 export const DEALER__FAIL = 'DEALER__FAIL';
 
-
 export const DEALERS__REQUEST = 'DEALERS__REQUEST';
 export const DEALERS__SUCCESS = 'DEALERS__SUCCESS';
 export const DEALERS__FAIL = 'DEALERS__FAIL';

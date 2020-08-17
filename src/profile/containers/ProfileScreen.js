@@ -263,7 +263,7 @@ class ProfileScreen extends Component {
 
         Toast.show({
           text: message,
-          position: 'bottom',
+          position: 'top',
           type: 'warning',
         });
       } else {
@@ -295,7 +295,7 @@ class ProfileScreen extends Component {
       Toast.show({
         text: 'Неверный код',
         buttonText: 'ОК',
-        position: 'bottom',
+        position: 'top',
         type: 'danger',
       });
       return;
@@ -339,7 +339,7 @@ class ProfileScreen extends Component {
         this.setState({loading: false});
         Toast.show({
           text: 'Что-то пошло не так...',
-          position: 'bottom',
+          position: 'top',
           type: 'warning',
         });
       });

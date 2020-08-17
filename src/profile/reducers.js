@@ -51,7 +51,7 @@ import {
 
 import {APP_STORE_UPDATED} from '../core/actionTypes';
 
-import {DEALER__SUCCESS} from '@dealer/actionTypes';
+import {DEALER__SUCCESS} from '../dealer/actionTypes';
 
 function login(state = '', action) {
   switch (action.type) {
