@@ -2,7 +2,7 @@
 import React from 'react';
 import {Platform} from 'react-native';
 import {Icon, ActionSheet} from 'native-base';
-import {ORDERS} from '@core/const';
+import {ORDERS} from '../../core/const';
 
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';

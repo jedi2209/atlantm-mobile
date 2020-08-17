@@ -1,8 +1,8 @@
 import {StyleSheet, Platform} from 'react-native';
 
 // helpers
-import styleConst from '@core/style-const';
-import {verticalScale} from '@utils/scale';
+import styleConst from '../core/style-const';
+import {verticalScale} from '../utils/scale';
 
 const isAndroid = Platform.OS === 'android';
 

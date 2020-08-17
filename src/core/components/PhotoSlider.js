@@ -15,7 +15,7 @@ import Swiper from 'react-native-swiper';
 
 // helpers
 import PropTypes from 'prop-types';
-import styleConst from '@core/style-const';
+import styleConst from '../style-const';
 
 const {width} = Dimensions.get('window');
 

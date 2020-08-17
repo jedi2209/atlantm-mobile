@@ -1,4 +1,4 @@
-import styleConst from '@core/style-const';
+import styleConst from '../core/style-const';
 
 const processHtml = (text, width) => {
   return `

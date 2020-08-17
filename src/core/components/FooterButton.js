@@ -5,7 +5,7 @@ import {Footer} from 'native-base';
 import ButtonFull from './ButtonFull';
 
 // helpers
-import styleFooter from '@core/components/Footer/style';
+import styleFooter from './Footer/style';
 
 export default class FooterButton extends PureComponent {
   render() {

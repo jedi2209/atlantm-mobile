@@ -8,7 +8,7 @@ import {callMe} from '../../contacts/actions';
 import {localUserDataUpdate} from '../../profile/actions';
 import {CALL_ME__SUCCESS, CALL_ME__FAIL} from '../../contacts/actionTypes';
 import {StackActions, NavigationActions} from 'react-navigation';
-import Amplitude from '@utils/amplitude-analytics';
+import Amplitude from '../../utils/amplitude-analytics';
 import {
   Alert,
   View,
@@ -20,8 +20,8 @@ import {
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
 
-import isInternet from '@utils/internet';
-import {ERROR_NETWORK} from '@core/const';
+import isInternet from '../../utils/internet';
+import {ERROR_NETWORK} from '../../core/const';
 
 const mapStateToProps = ({dealer, profile, contacts, service, nav}) => {
   return {

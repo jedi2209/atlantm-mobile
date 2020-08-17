@@ -40,7 +40,7 @@ import {
   UPDATE_LOCAL_USER,
 } from './actionTypes';
 
-import PushNotifications from '@core/components/PushNotifications';
+import PushNotifications from '../core/components/PushNotifications';
 
 export const actionSetBonusLevel1 = (hash) => {
   return (dispatch) => {

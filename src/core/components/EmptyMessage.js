@@ -1,9 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 
 // helpers
 import styleConst from '../style-const';
-import { verticalScale } from '../../utils/scale';
+import {verticalScale} from '../../utils/scale';
 
 const styles = StyleSheet.create({
   messageContainer: {
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const emptyMessage = ({ text }) => (
+const emptyMessage = ({text}) => (
   <View style={styles.messageContainer}>
     <Text style={styles.message}>{text}</Text>
   </View>

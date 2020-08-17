@@ -14,7 +14,7 @@ import {
 import {Icon, Button, CheckBox, Accordion} from 'native-base';
 import {verticalScale} from '../../../utils/scale';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import styleConst from '@core/style-const';
+import styleConst from '../../../core/style-const';
 // redux
 import {connect} from 'react-redux';
 import {
@@ -28,10 +28,10 @@ import {
 } from '../../actions';
 
 // helpers
-import Amplitude from '@utils/amplitude-analytics';
+import Amplitude from '../../../utils/amplitude-analytics';
 import {get, find} from 'lodash';
-import showPrice from '@utils/price';
-import stylesHeader from '@core/components/Header/style';
+import showPrice from '../../../utils/price';
+import stylesHeader from '../../../core/components/Header/style';
 import {ScrollView} from 'react-native-gesture-handler';
 
 const deviceWidth = Dimensions.get('window').width;

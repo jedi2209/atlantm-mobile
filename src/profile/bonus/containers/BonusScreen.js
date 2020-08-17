@@ -14,15 +14,15 @@ import {
 import {connect} from 'react-redux';
 import {actionSetBonusLevel1, actionSetBonusLevel2} from '../../actions';
 // styles
-import stylesList from '@core/components/Lists/style';
+import stylesList from '../../../core/components/Lists/style';
 
 // helpers
 import {get, isEmpty} from 'lodash';
-import {dayMonthYear} from '@utils/date';
-import Amplitude from '@utils/amplitude-analytics';
+import {dayMonthYear} from '../../../utils/date';
+import Amplitude from '../../../utils/amplitude-analytics';
 import getTheme from '../../../../native-base-theme/components';
-import styleConst from '@core/style-const';
-import {MONTH_TEXT} from '@profile/const';
+import styleConst from '../../../core/style-const';
+import {MONTH_TEXT} from '../../const';
 
 const isAndroid = Platform.OS === 'android';
 

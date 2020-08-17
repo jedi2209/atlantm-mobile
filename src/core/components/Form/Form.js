@@ -17,15 +17,15 @@ import {Text, Button, Switch, Toast} from 'native-base';
 import {connect} from 'react-redux';
 
 // Form field types
-import {TextInput} from '@core/components/TextInput';
-import {DatePickerCustom} from '@core/components/DatePickerCustom';
+import {TextInput} from '../TextInput';
+import {DatePickerCustom} from '../DatePickerCustom';
 import ChooseDateTimeComponent from '../../../service/components/ChooseDateTimeComponent';
 import RNPickerSelect, {defaultStyles} from 'react-native-picker-select';
 import PhoneInput from 'react-native-phone-input';
 import TextInputMask from 'react-native-text-input-mask';
-import DealerItemList from '@core/components/DealerItemList';
+import DealerItemList from '../DealerItemList';
 
-import styleConst from '@core/style-const';
+import styleConst from '../../style-const';
 
 const styles = StyleSheet.create({
   group: {
@@ -795,7 +795,7 @@ class Form extends Component {
             ref={this.inputRefs[groupNum + 'InputWrapper' + num]}
             key={'field' + num + name}
             initialCountry={countryCode}
-            countriesList={require('@utils/countries.json')}
+            countriesList={require('../../../utils/countries.json')}
             offset={20}
             autoFormat={true}
             cancelText="Отмена"

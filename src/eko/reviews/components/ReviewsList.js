@@ -3,13 +3,17 @@ import {FlatList, View, StyleSheet} from 'react-native';
 
 // components
 import Review from './Review';
-import EmptyMessage from '@core/components/EmptyMessage';
-import SpinnerView from '@core/components/SpinnerView';
-import FlatListFooter from '@core/components/FlatListFooter';
+import EmptyMessage from '../../../core/components/EmptyMessage';
+import SpinnerView from '../../../core/components/SpinnerView';
+import FlatListFooter from '../../../core/components/FlatListFooter';
 
 // helpers
 import PropTypes from 'prop-types';
-import {EVENT_DEFAULT, EVENT_LOAD_MORE, EVENT_REFRESH} from '@core/actionTypes';
+import {
+  EVENT_DEFAULT,
+  EVENT_LOAD_MORE,
+  EVENT_REFRESH,
+} from '../../../core/actionTypes';
 
 const TEXT_EMPTY = 'Нет отзывов для отображения';
 
@@ -133,7 +137,7 @@ export default class ReviewsList extends Component {
           ListEmptyComponent={this.renderEmptyComponent}
           ListFooterComponent={this.renderFooter}
           renderItem={this.renderItem}
-          keyExtractor={item => `${item.hash.toString()}`}
+          keyExtractor={(item) => `${item.hash.toString()}`}
           onEndReached={this.handleLoadMore}
         />
       </View>

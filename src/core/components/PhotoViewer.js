@@ -12,12 +12,10 @@ import {
 import PropTypes from 'prop-types';
 
 // components
-// import Gallery from 'react-native-image-gallery';
-import Imager from '@core/components/Imager';
 import GallerySwiper from 'react-native-gallery-swiper';
 import {Icon} from 'native-base';
 
-import styleConst from '@core/style-const';
+import styleConst from '../style-const';
 
 class PhotoViewer extends Component {
   static propTypes = {
