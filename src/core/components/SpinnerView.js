@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Text, SafeAreaView, ActivityIndicator, StyleSheet } from 'react-native';
+import {Text, SafeAreaView, ActivityIndicator, StyleSheet} from 'react-native';
 
 // helpers
 import styleConst from '../style-const';
-import { verticalScale } from '../../utils/scale';
+import {verticalScale} from '../../utils/scale';
 
 const styles = StyleSheet.create({
   spinnerContainer: {
@@ -24,10 +24,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const SpinnerView = ({ text, containerStyle }) => (
-  <SafeAreaView style={[styles.spinnerContainer, containerStyle]} >
+const SpinnerView = ({text, containerStyle}) => (
+  <SafeAreaView style={[styles.spinnerContainer, containerStyle]}>
     <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
-    { text ? <Text style={styles.text}>{text}</Text> : null }
+    {text ? <Text style={styles.text}>{text}</Text> : null}
   </SafeAreaView>
 );
 

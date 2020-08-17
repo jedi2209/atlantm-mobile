@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import {Icon} from 'native-base';
 import {orderBy} from 'lodash';
-import styleConst from '@core/style-const';
+import styleConst from '../../core/style-const';
 import {StackActions, NavigationActions} from 'react-navigation';
 
 import {CarCard} from '../../profile/components/CarCard';

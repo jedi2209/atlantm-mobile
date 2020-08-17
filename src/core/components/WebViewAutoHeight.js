@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Linking} from 'react-native';
 import WebView from 'react-native-webview';
-import styleConst from '@core/style-const';
+import styleConst from '../style-const';
 
 const BODY_TAG_PATTERN = /\<\/ *body\>/;
 

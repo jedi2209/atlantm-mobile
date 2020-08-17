@@ -17,8 +17,8 @@ import Badge from '../../core/components/Badge';
 import {get} from 'lodash';
 import {connect} from 'react-redux';
 import numberWithGap from '../../utils/number-with-gap';
-import showPrice from '@utils/price';
-import styleConst from '@core/style-const';
+import showPrice from '../../utils/price';
+import styleConst from '../../core/style-const';
 
 const styles = StyleSheet.create({
   container: {

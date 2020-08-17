@@ -1,4 +1,4 @@
-import {store} from '@core/store';
+import {store} from '../core/store';
 import {get} from 'lodash';
 
 const amplitude = require('amplitude-js');

@@ -11,9 +11,9 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {Button} from 'native-base';
-import {DatePickerCustom} from '@core/components/DatePickerCustom';
+import {DatePickerCustom} from '../../core/components/DatePickerCustom';
 import {time, yearMonthDay} from '../../utils/date';
-import styleConst from '@core/style-const';
+import styleConst from '../../core/style-const';
 import API from '../../utils/api';
 
 const styles = StyleSheet.create({

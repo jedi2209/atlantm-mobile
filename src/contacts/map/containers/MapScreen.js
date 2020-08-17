@@ -20,7 +20,7 @@ import {
   actionRequestCheckAvailableNaviApps,
   actionDoneCheckAvailableNaviApps,
   actionSetAvailableNaviApps,
-} from '@contacts/actions';
+} from '../../actions';
 import {
   CONTACTS_MAP_YNDX_NAVIGATOR,
   CONTACTS_MAP_YNDX_MAPS,
@@ -28,21 +28,18 @@ import {
   CONTACTS_MAP_UBER_TAXI,
   CONTACTS_MAP_GOOGLE_MAPS,
   CONTACTS_MAP_APPLE_MAPS,
-} from '@contacts/actionTypes';
+} from '../../actionTypes';
 
 // components
 import {Icon, Button} from 'native-base';
 import ActionSheet from 'react-native-actionsheet';
-import FooterButton from '@core/components/FooterButton';
-import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
+import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // Helpers
 import {get} from 'lodash';
-import styleConst from '@core/style-const';
-import stylesHeader from '@core/components/Header/style';
+import styleConst from '../../../core/style-const';
 
 const isAndroid = Platform.OS === 'android';
-// import isIPhoneX from '@utils/is_iphone_x';
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   safearea: {

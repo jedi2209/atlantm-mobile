@@ -14,9 +14,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Button, Icon, ActionSheet, Toast} from 'native-base';
-import * as Animatable from 'react-native-animatable';
-import PushNotifications from '@core/components/PushNotifications';
-import DealerItemList from '@core/components/DealerItemList';
+import PushNotifications from '../../core/components/PushNotifications';
+import DealerItemList from '../../core/components/DealerItemList';
 
 // redux
 import {connect} from 'react-redux';

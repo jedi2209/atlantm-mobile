@@ -1,18 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  Text,
-  ActivityIndicator,
-  Alert,
-  StatusBar,
-  Platform,
-} from 'react-native';
-import {Button} from 'native-base';
+import {StyleSheet, View, ScrollView, Alert} from 'react-native';
 import {connect} from 'react-redux';
-import {dayMonthYear, substractYears, yearMonthDay} from '../../utils/date';
+import {substractYears} from '../../utils/date';
 
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
@@ -23,7 +13,6 @@ import {actionSaveProfileToAPI} from '../actions';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import stylesHeader from '../../core/components/Header/style';
 import Amplitude from '../../utils/amplitude-analytics';
-import styleConst from '@core/style-const';
 
 class ProfileSettingsScreen extends Component {
   static navigationOptions = ({navigation}) => ({

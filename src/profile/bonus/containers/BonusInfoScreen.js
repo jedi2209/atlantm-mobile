@@ -10,19 +10,19 @@ import {Content, StyleProvider} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
-import {actionFetchBonusInfo} from '@profile/actions';
+import {actionFetchBonusInfo} from '../../actions';
 
 // components
-import SpinnerView from '@core/components/SpinnerView';
-import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
-import WebViewAutoHeight from '@core/components/WebViewAutoHeight';
+import SpinnerView from '../../../core/components/SpinnerView';
+import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import WebViewAutoHeight from '../../../core/components/WebViewAutoHeight';
 
 // helpers
 import {get} from 'lodash';
-import styleConst from '@core/style-const';
-import processHtml from '@utils/process-html';
-import Amplitude from '@utils/amplitude-analytics';
-import stylesHeader from '@core/components/Header/style';
+import styleConst from '../../../core/style-const';
+import processHtml from '../../../utils/process-html';
+import Amplitude from '../../../utils/amplitude-analytics';
+import stylesHeader from '../../../core/components/Header/style';
 import getTheme from '../../../../native-base-theme/components';
 
 const {width: screenWidth} = Dimensions.get('window');

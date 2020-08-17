@@ -16,8 +16,8 @@ import {
 } from 'react-native';
 import {Button, Icon, Toast} from 'native-base';
 import PhoneInput from 'react-native-phone-input';
-import {store} from '@core/store';
-import styleConst from '@core/style-const';
+import {store} from '../../core/store';
+import styleConst from '../../core/style-const';
 import LinearGradient from 'react-native-linear-gradient';
 import appleAuth, {
   AppleButton,
@@ -35,7 +35,7 @@ import {
   actionSetPushGranted,
 } from '../../core/actions';
 
-import PushNotifications from '@core/components/PushNotifications';
+import PushNotifications from '../../core/components/PushNotifications';
 import Amplitude from '../../utils/amplitude-analytics';
 
 import {verticalScale} from '../../utils/scale';

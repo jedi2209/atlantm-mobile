@@ -31,25 +31,25 @@ import {
   actionOpenNewCarPhotoViewer,
   actionCloseNewCarPhotoViewer,
   actionUpdateNewCarPhotoViewerIndex,
-} from '@catalog/actions';
+} from '../../actions';
 
 // components
-import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
-import PhotoSlider from '@core/components/PhotoSlider';
-import PhotoViewer from '@core/components/PhotoViewer';
+import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import PhotoSlider from '../../../core/components/PhotoSlider';
+import PhotoViewer from '../../../core/components/PhotoViewer';
 import ColorBox from '../../../core/components/ColorBox';
 
 // helpers
 import getTheme from '../../../../native-base-theme/components';
 import {get, find} from 'lodash';
 import PropTypes from 'prop-types';
-import UserData from '@utils/user';
-import Amplitude from '@utils/amplitude-analytics';
-import styleConst from '@core/style-const';
-import showPrice from '@utils/price';
+import UserData from '../../../utils/user';
+import Amplitude from '../../../utils/amplitude-analytics';
+import styleConst from '../../../core/style-const';
+import showPrice from '../../../utils/price';
 
 // styles
-import styles from '@catalog/CarStyles';
+import styles from '../../CarStyles';
 
 const imgResize = '10000x440';
 

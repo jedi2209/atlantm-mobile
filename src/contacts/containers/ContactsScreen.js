@@ -27,8 +27,8 @@ import {fetchInfoList, actionListReset} from '../../info/actions';
 import Amplitude from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
-import styleConst from '@core/style-const';
-import {ERROR_NETWORK, ORDERS} from '@core/const';
+import styleConst from '../../core/style-const';
+import {ERROR_NETWORK, ORDERS} from '../../core/const';
 import Carousel from 'react-native-snap-carousel';
 
 const HEADER_MAX_HEIGHT = 406;
@@ -154,7 +154,7 @@ const Card = ({kind, title, subtitle, onPress}) => {
   );
 };
 
-import {Offer} from '@core/components/Offer';
+import {Offer} from '../../core/components/Offer';
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
   return {

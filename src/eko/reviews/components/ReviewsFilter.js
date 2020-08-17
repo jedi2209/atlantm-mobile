@@ -6,8 +6,8 @@ import {Footer} from 'native-base';
 
 // helpers
 import PropTypes from 'prop-types';
-import styleConst from '@core/style-const';
-import styleFooter from '@core/components/Footer/style';
+import styleConst from '../../../core/style-const';
+import styleFooter from '../../../core/components/Footer/style';
 
 const size = 26;
 const containerSize = 50;

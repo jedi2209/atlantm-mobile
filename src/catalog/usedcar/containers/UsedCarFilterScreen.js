@@ -27,10 +27,10 @@ import {
 } from '../../actions';
 
 // helpers
-import Amplitude from '@utils/amplitude-analytics';
-import stylesHeader from '@core/components/Header/style';
-import styleConst from '@core/style-const';
-import showPrice from '@utils/price';
+import Amplitude from '../../../utils/amplitude-analytics';
+import stylesHeader from '../../../core/components/Header/style';
+import styleConst from '../../../core/style-const';
+import showPrice from '../../../utils/price';
 import {ScrollView} from 'react-native-gesture-handler';
 
 const mapStateToProps = ({catalog, dealer, nav}) => {

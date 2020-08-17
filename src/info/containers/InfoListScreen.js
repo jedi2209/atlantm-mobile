@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {Container, Text, StyleProvider, Icon} from 'native-base';
-import {Offer} from '@core/components/Offer';
-import TransitionView from '@core/components/TransitionView';
+import {Offer} from '../../core/components/Offer';
+import TransitionView from '../../core/components/TransitionView';
 
 const deviceWidth = Dimensions.get('window').width;
 const cardWidth = deviceWidth - 20;
@@ -24,20 +24,20 @@ import {fetchInfoList, actionListReset} from '../actions';
 import {
   actionSetPushGranted,
   actionSetPushActionSubscribe,
-} from '@core/actions';
+} from '../../core/actions';
 import {INFO_LIST__FAIL} from '../actionTypes';
 
 // helpers
 import {get} from 'lodash';
-import {ERROR_NETWORK} from '@core/const';
+import {ERROR_NETWORK} from '../../core/const';
 import getTheme from '../../../native-base-theme/components';
-import styleConst from '@core/style-const';
-import stylesHeader from '@core/components/Header/style';
+import styleConst from '../../core/style-const';
+import stylesHeader from '../../core/components/Header/style';
 import {verticalScale} from '../../utils/scale';
 
 // components
-import HeaderIconBack from '@core/components/HeaderIconBack/HeaderIconBack';
-import PushNotifications from '@core/components/PushNotifications';
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
+import PushNotifications from '../../core/components/PushNotifications';
 
 const styles = StyleSheet.create({
   container: {

@@ -24,7 +24,7 @@ import Amplitude from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
-import styleConst from '@core/style-const';
+import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import {CATALOG_ORDER__SUCCESS, CATALOG_ORDER__FAIL} from '../actionTypes';
 import {ERROR_NETWORK} from '../../core/const';

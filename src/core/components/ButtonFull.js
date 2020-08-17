@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react';
-import { View, Text, ActivityIndicator, Image, StyleSheet } from 'react-native';
-import { Button, Icon } from 'native-base';
+import React, {PureComponent} from 'react';
+import {View, Text, ActivityIndicator, Image, StyleSheet} from 'react-native';
+import {Button, Icon} from 'native-base';
 
 // helpers
 import PropTypes from 'prop-types';
-import styleConst from '@core/style-const';
+import styleConst from '../../core/style-const';
 import styleFooter from '../../core/components/Footer/style';
 
 const styles = StyleSheet.create({
@@ -50,10 +50,7 @@ export default class ButtonFull extends PureComponent {
     text: PropTypes.string,
     isLoading: PropTypes.bool,
     onPressButton: PropTypes.func,
-    icon: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.element,
-    ]),
+    icon: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     theme: PropTypes.string,
     uppercase: PropTypes.bool,
   };
@@ -67,57 +64,45 @@ export default class ButtonFull extends PureComponent {
   };
 
   render() {
-    const {
-      text,
-      icon,
-      theme,
-      uppercase,
-      isLoading,
-      onPressButton,
-    } = this.props;
+    const {text, icon, theme, uppercase, isLoading, onPressButton} = this.props;
 
     const isWhiteTheme = theme === 'white';
 
     return (
       <Button
-          onPress={onPressButton}
-          full
-          activeOpacity={0.8}
-          style={[styleFooter.button, isWhiteTheme ? styles.buttonWhite : null,]}
-      >
-        {
-          isLoading ?
-            <ActivityIndicator color={isWhiteTheme ? styleConst.color.lightBlue : '#fff'} style={styles.spinnerButton} /> :
-            (
-              <View style={styles.buttonContent}>
-                {
-                  icon === 'ios-car' ?
-                      <Icon
-                          name='ios-car'
-                          style={styles.buttonIconLeft}
-                      /> :
-                      null
-                }
+        onPress={onPressButton}
+        full
+        activeOpacity={0.8}
+        style={[styleFooter.button, isWhiteTheme ? styles.buttonWhite : null]}>
+        {isLoading ? (
+          <ActivityIndicator
+            color={isWhiteTheme ? styleConst.color.lightBlue : '#fff'}
+            style={styles.spinnerButton}
+          />
+        ) : (
+          <View style={styles.buttonContent}>
+            {icon === 'ios-car' ? (
+              <Icon name="ios-car" style={styles.buttonIconLeft} />
+            ) : null}
 
-                <Text style={[
-                  styles.buttonText,
-                  isWhiteTheme ? styles.buttonTextBlack : null,
-                ]}>{uppercase ? text.toUpperCase() : text}</Text>
-                {
-                  icon === 'arrow' ?
-                    (
-                      <Image
-                        source={require('./CustomIcon/assets/arrow_right_white.png')}
-                        style={styles.buttonIconRight}
-                      />
-                    ) : null
-                }
-                {
-                  (icon !== 'phone' && icon !== 'arrow' && React.isValidElement(icon)) ? icon : null
-                }
-              </View>
-            )
-        }
+            <Text
+              style={[
+                styles.buttonText,
+                isWhiteTheme ? styles.buttonTextBlack : null,
+              ]}>
+              {uppercase ? text.toUpperCase() : text}
+            </Text>
+            {icon === 'arrow' ? (
+              <Image
+                source={require('./CustomIcon/assets/arrow_right_white.png')}
+                style={styles.buttonIconRight}
+              />
+            ) : null}
+            {icon !== 'phone' && icon !== 'arrow' && React.isValidElement(icon)
+              ? icon
+              : null}
+          </View>
+        )}
       </Button>
     );
   }

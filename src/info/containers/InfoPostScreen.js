@@ -23,7 +23,7 @@ import Imager from '../../core/components/Imager';
 
 // helpers
 import {get} from 'lodash';
-import styleConst from '@core/style-const';
+import styleConst from '../../core/style-const';
 import processHtml from '../../utils/process-html';
 import Amplitude from '../../utils/amplitude-analytics';
 import {verticalScale} from '../../utils/scale';

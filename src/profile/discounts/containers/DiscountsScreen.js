@@ -14,7 +14,7 @@ import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
-import Amplitude from '@utils/amplitude-analytics';
+import Amplitude from '../../../utils/amplitude-analytics';
 
 const styles = StyleSheet.create({
   safearea: {
