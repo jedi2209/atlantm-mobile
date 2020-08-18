@@ -104,28 +104,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const datePickerStyles = {
-  dateTouchBody: {
-    width: styleConst.screen.width,
-    color: '#222b45',
-  },
-  dateInput: {
-    borderWidth: 0,
-    alignItems: 'flex-start',
-  },
-  placeholderText: {
-    fontSize: 18,
-    color: '#d8d8d8',
-  },
-  dateText: {
-    fontSize: 18,
-    color: '#222b45',
-  },
-  datePicker: {
-    borderTopColor: 0,
-  },
-};
-
 const mapStateToProps = ({dealer, profile, nav}) => {
   return {
     nav,
@@ -166,6 +144,7 @@ class Form extends Component {
     this.state = {
       parentState: props.parentState,
       required: [],
+      active: {},
     };
     this.inputRefs = [];
     this.inputRefsNav = [];
@@ -536,22 +515,46 @@ class Form extends Component {
           ]}
           key={'field' + num + name}>
           <DatePickerCustom
-            showIcon={false}
             mode="date"
             ref={this.inputRefs[groupNum + 'Input' + num]}
             label={label + (data.props && data.props.required ? '*' : '')}
             locale="ru-RU"
-            placeholder="Выберите дату"
-            format="DD MMMM YYYY"
-            confirmBtnText="Выбрать"
-            cancelBtnText="Отмена"
-            customStyles={datePickerStyles}
-            value={this.state[name] || ''}
-            onDateChange={(_, date) => {
-              this.onChangeField(data)(date);
-              // setTimeout(() => {
-              //   this._nextInput(groupNum, num);
-              // }, 500);
+            confirmBtnText="выбрать"
+            value={this.state[name] || null}
+            isActive={this.state.active[name] || false}
+            onPressButton={() => {
+              this.setState((prevState) => {
+                let copyField = Object.assign({}, prevState.active);
+                copyField[name] = true;
+                return {active: copyField};
+              });
+            }}
+            onHideModal={() => {
+              if (!this.state[name]) {
+                let currentDate = new Date();
+                if (data.props.minimumDate) {
+                  currentDate = data.props.minimumDate;
+                }
+                this.onChangeField(data)(currentDate);
+              }
+              this.setState((prevState) => {
+                let copyField = Object.assign({}, prevState.active);
+                copyField[name] = false;
+                return {active: copyField};
+              });
+            }}
+            onChange={(_, selectedDate) => {
+              const currentDate = selectedDate || this.state[name];
+              if (Platform.OS !== 'ios') {
+                this.setState((prevState) => {
+                  let copyField = Object.assign({}, prevState.active);
+                  copyField[name] = false;
+                  return {active: copyField};
+                });
+              }
+              if (currentDate) {
+                this.onChangeField(data)(currentDate);
+              }
             }}
             {...data.props}
           />

@@ -255,9 +255,10 @@ class ServiceScreen extends Component {
                 label: 'Выберите удобную для вас дату',
                 value: null,
                 props: {
-                  placeholder: 'не ранее ' + dayMonthYear(addDays(2)),
+                  placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
                   required: true,
-                  minDate: new Date(addDays(2)),
+                  minimumDate: new Date(addDays(2)),
+                  maximumDate: new Date(addDays(62)),
                 },
               },
             ],

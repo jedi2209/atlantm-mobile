@@ -1,32 +1,83 @@
-import React, {useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {View, Text, StyleSheet} from 'react-native';
-
-import DatePicker from 'react-native-datepicker';
+import {View, Text, StyleSheet, Platform} from 'react-native';
+import {Button} from 'native-base';
+import {format} from '../../utils/date';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import ModalView from './ModalView';
 
 export const DatePickerCustom = React.forwardRef((props, ref) => {
-  const [focused, setFocused] = useState(false);
-  const isActive = focused || Boolean(props.value);
+  const defaultDate = new Date();
+  const dateHuman = props.value ? format(props.value, 'DD MMMM YYYY') : null;
+
+  const DatePicker = (show) => {
+    switch (Platform.OS) {
+      case 'ios':
+        return (
+          <ModalView
+            isModalVisible={show}
+            animationIn="zoomIn"
+            animationOut="zoomOut"
+            onHide={props.onHideModal}
+            swipeDirection={['up', 'down', 'left', 'right']}
+            // style={{justifyContent: 'flex-end', margin: 0}}
+            confirmBtnText={props.confirmBtnText || 'выбрать'}
+            selfClosed={false}>
+            <DateTimePicker
+              mode="date"
+              locale="ru-RU"
+              {...props}
+              value={props.value ? props.value : defaultDate}
+            />
+          </ModalView>
+        );
+      case 'android':
+        if (!show) {
+          return null;
+        }
+        return (
+          <DateTimePicker
+            mode="date"
+            locale="ru-RU"
+            {...props}
+            value={props.value ? props.value : defaultDate}
+          />
+        );
+    }
+  };
 
   return (
     <View style={styles.container}>
       {props.label ? (
-        <Text style={[styles.label, styles.labelActive]}>{props.label}</Text>
+        <Text
+          style={[
+            styles.label,
+            dateHuman && styles.labelActive,
+            {
+              textDecorationLine:
+                props.required && !dateHuman ? 'underline' : 'none',
+              textDecorationStyle: 'solid',
+            },
+          ]}>
+          {props.label}
+        </Text>
       ) : null}
-      <DatePicker
-        showIcon={false}
-        mode="date"
-        locale="ru-RU"
-        placeholder="Выберите дату"
-        format="DD MMMM YYYY"
-        confirmBtnText="Выбрать"
-        cancelBtnText="Отмена"
-        value={props.value || ''}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+      <Button
+        transparent
+        onPress={props.onPressButton}
         ref={ref}
-        {...props}
-      />
+        style={{width: '100%'}}>
+        <Text
+          selectable={false}
+          style={[styles.text, dateHuman && styles.textSelected]}>
+          {dateHuman
+            ? dateHuman
+            : props.placeholder
+            ? props.placeholder
+            : 'Выберите дату'}
+        </Text>
+      </Button>
+      {DatePicker(props.isActive)}
     </View>
   );
 });
@@ -42,8 +93,27 @@ const styles = StyleSheet.create({
   label: {
     position: 'absolute',
     left: 0,
+    paddingTop: 5,
+    fontSize: 16,
+    lineHeight: 20,
+    color: '#bababa',
+    backgroundColor: 'white',
+    zIndex: 10,
+    width: '100%',
+  },
+  labelActive: {
     top: 0,
     fontSize: 14,
     color: '#808080',
+    paddingBottom: 5,
+    paddingTop: 0,
+  },
+  text: {
+    marginLeft: 4,
+    paddingTop: 5,
+  },
+  textSelected: {
+    fontSize: 16,
+    color: '#222b45',
   },
 });

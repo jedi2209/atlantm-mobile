@@ -9,6 +9,9 @@ export const time = (date) => (date ? moment(date).format('HH:mm') : null);
 
 export const dayMonth = (ts) => (ts ? moment(ts).format('D MMMM') : null);
 
+export const format = (date, format) =>
+  date ? moment(date).format(format ? format : 'YYYY-MM-DD') : null;
+
 export const yearMonthDay = (date) =>
   date ? moment(date).format('YYYY-MM-DD') : null;
 
