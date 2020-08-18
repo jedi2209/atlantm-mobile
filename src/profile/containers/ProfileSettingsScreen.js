@@ -36,7 +36,7 @@ class ProfileSettingsScreen extends Component {
 
     let emailData = [];
     let phoneData = [];
-    let birthdate = '';
+    let birthdate = null;
 
     if (typeof EMAIL === 'object' && EMAIL && EMAIL.length) {
       EMAIL.map((field, num) => {
@@ -66,13 +66,11 @@ class ProfileSettingsScreen extends Component {
       phoneData = PHONE;
     }
 
-    if (typeof BIRTHDATE === 'string') {
+    if (typeof BIRTHDATE === 'string' && BIRTHDATE.length > 0) {
       birthdate = new Date(BIRTHDATE);
     } else if (typeof BIRTHDATE === 'object') {
       birthdate = BIRTHDATE;
     }
-
-    console.log('birthdate', birthdate);
 
     this.state = {
       email: emailData || [],
@@ -148,10 +146,11 @@ class ProfileSettingsScreen extends Component {
                 name: 'BIRTHDATE',
                 type: 'date',
                 label: 'Когда у вас день рождения?',
-                value: birthdate || '',
+                value: birthdate,
                 props: {
-                  maxDate: new Date(substractYears(18)),
-                  minDate: new Date(substractYears(100)),
+                  maximumDate: new Date(substractYears(18)),
+                  minimumDate: new Date(substractYears(100)),
+                  placeholder: 'Мы вас поздравим!',
                 },
               },
             ],
@@ -202,7 +201,7 @@ class ProfileSettingsScreen extends Component {
     propsTmp.SECOND_NAME = props.SECOND_NAME || '';
     propsTmp.NAME = props.NAME || '';
     propsTmp.LAST_NAME = props.LAST_NAME || '';
-    propsTmp.BIRTHDATE = props.BIRTHDATE || '';
+    propsTmp.BIRTHDATE = props.BIRTHDATE || null;
 
     if (!phoneValue && !emailValue) {
       this.setState({loading: false});

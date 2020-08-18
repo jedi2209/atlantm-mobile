@@ -1,5 +1,6 @@
 import React from 'react';
-import {Button, Text, View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
+import {Button} from 'native-base';
 import Modal from 'react-native-modal';
 import styleConst from '../style-const';
 
@@ -7,6 +8,14 @@ const styles = StyleSheet.create({
   modalWindow: {
     backgroundColor: 'white',
     borderRadius: 5,
+  },
+  modalButton: {
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+  },
+  modalButtonText: {
+    color: 'white',
+    textTransform: 'uppercase',
   },
 });
 
@@ -18,12 +27,23 @@ const ModalView = (props) => {
         style={{flex: 1}}
         useNativeDriver={true}
         isVisible={props.isModalVisible}
+        onSwipeComplete={props.onHide}
         onBackButtonPress={props.onHide}
         swipeDirection={['up', 'down']}
         {...props}>
         <View style={[styles.modalWindow, styleConst.shadow.default]}>
-          {props.content ? props.content : null}
-          <Button title="закрыть" onPress={props.onHide} />
+          {props.content ? props.content : props.children}
+          <Button full onPress={props.onHide} style={styles.modalButton}>
+            <Text style={styles.modalButtonText}>
+              {props.confirmBtnText ? props.confirmBtnText : 'закрыть'}
+            </Text>
+          </Button>
+          {props.cancelBtnText && (
+            <Button
+              title={props.cancelBtnText ? props.cancelBtnText : 'отмена'}
+              onPress={props.onHide}
+            />
+          )}
         </View>
       </Modal>
     );
@@ -41,7 +61,7 @@ const ModalView = (props) => {
           onSwipeComplete={props.onHide}
           {...props}>
           <View style={[styles.modalWindow, styleConst.shadow.default]}>
-            {props.children}
+            {props.content ? props.content : props.children}
           </View>
         </Modal>
       </View>

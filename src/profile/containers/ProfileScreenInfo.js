@@ -168,9 +168,7 @@ class ProfileScreenInfo extends Component {
   });
 
   componentDidMount() {
-    console.log('componentDidMount before => this.props', this.props);
     if (this.props.login.ID) {
-      console.log('componentDidMount => this.props', this.props);
       this.getUserData();
     }
 
@@ -754,7 +752,6 @@ class ProfileScreenInfo extends Component {
               </Button>
             </View>
           ) : null}
-          {console.log('this', this)}
         </ScrollView>
       </SafeAreaView>
     );
