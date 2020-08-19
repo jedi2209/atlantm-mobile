@@ -112,7 +112,7 @@ export default {
   // Color
   brandPrimary: platform === 'ios' ? '#007aff' : '#3F51B5',
   brandInfo: '#62B1F6',
-  brandSuccess: '#5cb85c',
+  brandSuccess: '#34BD78',
   brandDanger: '#d9534f',
   brandWarning: '#f0ad4e',
   brandSidebar: '#252932',
@@ -176,7 +176,7 @@ export default {
   // InputGroup
   inputFontSize: 17,
   inputBorderColor: '#D9D5DC',
-  inputSuccessBorderColor: '#2b8339',
+  inputSuccessBorderColor: '#34BD78',
   inputErrorBorderColor: '#ed2f2f',
 
   get inputColor() {
