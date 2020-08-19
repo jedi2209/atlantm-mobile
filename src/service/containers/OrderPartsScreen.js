@@ -171,12 +171,11 @@ class OrderPartsScreen extends Component {
     const isInternetExist = await isInternet();
 
     if (!isInternetExist) {
-      Alert.alert('', ERROR_NETWORK);
-      // Toast.show({
-      //   text: ERROR_NETWORK,
-      //   position: 'top',
-      //   type: 'danger',
-      // });
+      Toast.show({
+        text: ERROR_NETWORK,
+        position: 'top',
+        type: 'danger',
+      });
     }
 
     const {navigation, localUserDataUpdate} = this.props;
@@ -239,12 +238,11 @@ class OrderPartsScreen extends Component {
             this.setState({success: true, loading: false});
             break;
           case PARTS_ORDER__FAIL:
-            Alert.alert('', 'Произошла ошибка, попробуйте снова');
-            // Toast.show({
-            //   text: 'Произошла ошибка, попробуйте снова',
-            //   position: 'top',
-            //   type: 'danger',
-            // });
+            Toast.show({
+              text: 'Произошла ошибка, попробуйте снова',
+              position: 'top',
+              type: 'danger',
+            });
             break;
         }
       }
