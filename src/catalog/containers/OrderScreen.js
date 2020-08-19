@@ -10,6 +10,7 @@ import {
   Keyboard,
   Platform,
 } from 'react-native';
+import {Content} from 'native-base';
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
 // redux
@@ -46,6 +47,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 20,
     paddingHorizontal: 14,
+    backgroundColor: '#eee',
   },
   header: {
     marginBottom: 36,
@@ -297,18 +299,23 @@ class OrderScreen extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={{flex: 1, backgroundColor: '#eee'}}>
-            <View style={styles.container}>
+      <KeyboardAvoidingView onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback
+          style={{flex: 1, backgroundColor: '#eee'}}
+          onPress={Keyboard.dismiss}>
+          <Content
+            style={styles.container}
+            enableResetScrollToCoords={false}
+            keyboardShouldPersistTaps={
+              Platform.OS === 'android' ? 'always' : 'never'
+            }>
               <Form
                 fields={this.FormConfig.fields}
                 barStyle={'light-content'}
                 SubmitButton={{text: 'Отправить'}}
                 onSubmit={this.onPressOrder}
               />
-            </View>
-          </ScrollView>
+          </Content>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     );
