@@ -21,6 +21,7 @@ import {TextInput} from '../TextInput';
 import {DatePickerCustom} from '../DatePickerCustom';
 import ChooseDateTimeComponent from '../../../service/components/ChooseDateTimeComponent';
 import RNPickerSelect, {defaultStyles} from 'react-native-picker-select';
+import {Picker} from '@react-native-community/picker';
 import PhoneInput from 'react-native-phone-input';
 import TextInputMask from 'react-native-text-input-mask';
 import DealerItemList from '../DealerItemList';
@@ -639,56 +640,13 @@ class Form extends Component {
           <RNPickerSelect
             key={'rnYearPicker' + num + name}
             doneText="Выбрать"
-            onValueChange={(value) => {
-              this.onChangeField(data)(value);
+            onDonePress={() => {
               this._nextInput(groupNum, num);
             }}
-            ref={this.inputRefs[groupNum + 'Input' + num]}
-            InputAccessoryView={() => {
-              return (
-                <View style={defaultStyles.modalViewMiddle}>
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      this.setState(
-                        {
-                          [name]: this.state[name],
-                        },
-                        () => {
-                          this.inputRefs[groupNum + 'Input' + num].togglePicker(
-                            true,
-                          );
-                        },
-                      );
-                    }}
-                    hitSlop={{top: 4, right: 4, bottom: 4, left: 4}}>
-                    <View testID="needed_for_touchable">
-                      <Text
-                        selectable={false}
-                        style={[
-                          defaultStyles.done,
-                          {fontWeight: 'normal', color: 'red'},
-                        ]}>
-                        Отмена
-                      </Text>
-                    </View>
-                  </TouchableWithoutFeedback>
-                  <Text selectable={false}>Выберите год</Text>
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      this.inputRefs[groupNum + 'Input' + num].togglePicker(
-                        true,
-                      );
-                    }}
-                    hitSlop={{top: 4, right: 4, bottom: 4, left: 4}}>
-                    <View testID="needed_for_touchable">
-                      <Text selectable={false} style={defaultStyles.done}>
-                        Готово
-                      </Text>
-                    </View>
-                  </TouchableWithoutFeedback>
-                </View>
-              );
+            onValueChange={(value) => {
+              this.onChangeField(data)(value);
             }}
+            ref={this.inputRefs[groupNum + 'Input' + num]}
             style={{
               ...pickerSelectStyles,
               iconContainer: {
@@ -956,9 +914,11 @@ class Form extends Component {
             key={'rnpicker' + num + name}
             ref={this.inputRefs[groupNum + 'Input' + num]}
             doneText="Выбрать"
+            onDonePress={() => {
+              this._nextInput(groupNum, num);
+            }}
             onValueChange={(value) => {
               this.onChangeField(data)(value);
-              this._nextInput(groupNum, num);
             }}
             style={{
               ...pickerSelectStyles,

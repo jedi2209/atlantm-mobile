@@ -53,7 +53,6 @@ class App extends PureComponent {
     this.state = {
       isloading: false,
     };
-    console.disableYellowBox = true;
   }
 
   componentDidMount() {

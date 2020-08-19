@@ -107,6 +107,18 @@ class OrderPartsScreen extends Component {
       ].join(' ');
       this.state.carVIN = this.props.cars[0].vin;
     }
+    const carFromNavigation = get(this.props.navigation, 'state.params.car');
+    if (carFromNavigation && get(carFromNavigation, 'vin')) {
+      this.setState({
+        carBrand: get(carFromNavigation, 'brand'),
+        carModel: get(carFromNavigation, 'model'),
+        carName: [
+          get(carFromNavigation, 'brand'),
+          get(carFromNavigation, 'model'),
+        ].join(' '),
+        carVIN: carFromNavigation.vin,
+      });
+    }
   }
 
   static navigationOptions = ({navigation}) => {
@@ -143,21 +155,6 @@ class OrderPartsScreen extends Component {
       carVIN: item.vin,
     });
   };
-
-  componentWillMount() {
-    const carFromNavigation = get(this.props.navigation, 'state.params.car');
-    if (carFromNavigation && get(carFromNavigation, 'vin')) {
-      this.setState({
-        carBrand: get(carFromNavigation, 'brand'),
-        carModel: get(carFromNavigation, 'model'),
-        carName: [
-          get(carFromNavigation, 'brand'),
-          get(carFromNavigation, 'model'),
-        ].join(' '),
-        carVIN: carFromNavigation.vin,
-      });
-    }
-  }
 
   onPressOrder = async (dataFromForm) => {
     if (!dataFromForm.CARBRAND && this.state.carBrand) {
