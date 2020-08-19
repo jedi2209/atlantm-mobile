@@ -47,7 +47,7 @@ export default class RatingList extends Component {
     selectRatingVariant(REVIEW_ADD_RATING_5);
   }
 
-  onPressItem = selectedRatingVariant => {
+  onPressItem = (selectedRatingVariant) => {
     requestAnimationFrame(() => {
       if (this.isRatingVariantSelected(selectedRatingVariant)) return false;
 
@@ -80,7 +80,7 @@ export default class RatingList extends Component {
     });
   };
 
-  isRatingVariantSelected = selectedRatingVariant =>
+  isRatingVariantSelected = (selectedRatingVariant) =>
     this.props.ratingVariant === selectedRatingVariant;
 
   renderItem = (ratingVariant, onPressHandler, isLast) => (
