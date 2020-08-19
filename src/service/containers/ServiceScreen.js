@@ -115,6 +115,12 @@ class ServiceScreen extends Component {
       ].join(' ');
       this.state.carVIN = carFromNavigation.vin;
     }
+    this.myCars = [];
+    this.props.cars.map((item) => {
+      if (!item.hidden) {
+        this.myCars.push(item);
+      }
+    });
   }
 
   static propTypes = {
@@ -272,7 +278,7 @@ class ServiceScreen extends Component {
                         horizontal
                         style={styles.carContainer}
                         contentContainerStyle={styles.carContainerContent}>
-                        {(this.props.cars || []).map((item) => {
+                        {(this.myCars || []).map((item) => {
                           return (
                             <TouchableWithoutFeedback
                               activeOpacity={0.7}
