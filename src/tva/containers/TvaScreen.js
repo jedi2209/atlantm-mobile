@@ -258,7 +258,7 @@ class TvaScreen extends Component {
             }
             Toast.show({
               text: action.payload.message,
-              position: 'bottom',
+              position: 'top',
               type: 'danger',
               duration: 5000,
             });

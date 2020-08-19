@@ -246,7 +246,7 @@ class Form extends Component {
         if (requredLabels.length > 1) {
           Toast.show({
             text: 'message',
-            position: 'bottom',
+            position: 'top',
             type: 'warning',
           });
           Alert.alert(
@@ -261,7 +261,7 @@ class Form extends Component {
               'Поле "' +
               requredLabels.join(' ') +
               '" обязательно для заполнения',
-            position: 'bottom',
+            position: 'top',
             type: 'warning',
           });
         }
