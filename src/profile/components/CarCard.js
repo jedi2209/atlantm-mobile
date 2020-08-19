@@ -51,6 +51,7 @@ export const CarCard = ({data, type, checked, onPress}) => {
           <Text
             ellipsizeMode="tail"
             numberOfLines={1}
+            selectable={false}
             style={{
               color: styleConst.color.greyText2,
               fontSize: 19,
