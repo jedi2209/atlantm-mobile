@@ -251,17 +251,17 @@ class TvaScreen extends Component {
           this.props.navigation.navigate('TvaResultsScreen');
           break;
         case TVA__FAIL:
+          Toast.show({
+            text: action.payload.message,
+            position: 'bottom',
+            type: 'danger',
+            duration: 3000,
+          });
           setTimeout(() => {
             if (pushTracking === true) {
               PushNotifications.unsubscribeFromTopic('tva');
               this.onPressPushTracking(false);
             }
-            Toast.show({
-              text: action.payload.message,
-              position: 'top',
-              type: 'danger',
-              duration: 3000,
-            });
           }, 250);
           break;
       }

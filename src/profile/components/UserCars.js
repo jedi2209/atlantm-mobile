@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  TouchableWithoutFeedback,
+  Platform,
 } from 'react-native';
 import {store} from '../../core/store';
 import {get} from 'lodash';
@@ -21,7 +23,7 @@ import {
   StyleProvider,
   Toast,
 } from 'native-base';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+// import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {verticalScale} from '../../utils/scale';
 import styleConst from '../../core/style-const';
 
@@ -55,44 +57,111 @@ const styles = StyleSheet.create({
 
 const CarMenu = {
   active: {
-    BUTTONS: [
-      {
-        id: 'orderService',
-        text: '🛠 Запись на сервис',
-      },
-      {
-        id: 'orderParts',
-        text: '🔩 Заказать зап.части',
-      },
-      {
-        id: 'TOhistory',
-        text: '📘 История обслуживания',
-      },
-      // {id: 'tva', text: 'Проверить ТВА', icon: 'aperture', iconColor: '#ea943b'},
-      {
-        id: 'hide',
-        text: '📥 Скрыть в архив',
-      },
-      {id: 'cancel', text: 'Отмена'},
-    ],
-    DESTRUCTIVE_INDEX: 3,
-    CANCEL_INDEX: 4,
+    android: {
+      BUTTONS: [
+        {
+          id: 'orderService',
+          text: 'Запись на сервис',
+          icon: 'construct',
+          iconColor: '#2c8ef4',
+        },
+        {
+          id: 'orderParts',
+          text: 'Заказать зап.части',
+          icon: 'settings',
+          iconColor: '#2c8ef4',
+        },
+        {
+          id: 'TOhistory',
+          text: 'История обслуживания',
+          icon: 'book-outline',
+          iconColor: '#2c8ef4',
+        },
+        {
+          id: 'hide',
+          text: 'Скрыть в архив',
+          icon: 'archive',
+          iconColor: '#2c8ef4',
+        },
+        {
+          id: 'cancel',
+          text: 'Отмена',
+          icon: 'close',
+          iconColor: 'red',
+        },
+      ],
+      DESTRUCTIVE_INDEX: 3,
+      CANCEL_INDEX: 4,
+    },
+    ios: {
+      BUTTONS: [
+        {
+          id: 'orderService',
+          text: '🛠Запись на сервис',
+        },
+        {
+          id: 'orderParts',
+          text: '🔩Заказать зап.части',
+        },
+        {
+          id: 'TOhistory',
+          text: '📘История обслуживания',
+          icon: 'book-outline',
+          iconColor: '#2c8ef4',
+        },
+        {
+          id: 'hide',
+          text: '📥Скрыть в архив',
+        },
+        {
+          id: 'cancel',
+          text: 'Отмена',
+        },
+      ],
+      DESTRUCTIVE_INDEX: 3,
+      CANCEL_INDEX: 4,
+    },
   },
   hidden: {
-    BUTTONS: [
-      {
-        id: 'TOhistory',
-        text: '📘 История обслуживания',
-      },
-      // {id: 'tva', text: 'Проверить ТВА', icon: 'aperture', iconColor: '#ea943b'},
-      {
-        id: 'hide',
-        text: '📤 Сделать текущим',
-      },
-      {id: 'cancel', text: 'Отмена'},
-    ],
-    DESTRUCTIVE_INDEX: 1,
-    CANCEL_INDEX: 2,
+    android: {
+      BUTTONS: [
+        {
+          id: 'TOhistory',
+          text: 'История обслуживания',
+          icon: 'book-outline',
+          iconColor: '#2c8ef4',
+        },
+        {
+          id: 'hide',
+          text: 'Сделать текущим',
+          icon: 'swap-horizontal',
+          iconColor: '#2c8ef4',
+        },
+        {
+          id: 'cancel',
+          text: 'Отмена',
+          icon: 'close',
+          iconColor: 'red',
+        },
+      ],
+      DESTRUCTIVE_INDEX: 1,
+      CANCEL_INDEX: 2,
+    },
+    ios: {
+      BUTTONS: [
+        {
+          id: 'TOhistory',
+          text: '📘 История обслуживания',
+        },
+        {
+          id: 'hide',
+          text: '📤 Сделать текущим',
+        },
+        {id: 'cancel', text: 'Отмена'},
+      ],
+      DESTRUCTIVE_INDEX: 1,
+      CANCEL_INDEX: 2,
+    },
   },
 };
 
@@ -115,7 +184,8 @@ const UserCars = ({navigation, actionToggleCar}) => {
             CarType = 'active';
           }
           return (
-            <TouchableWithoutFeedback
+            <TouchableOpacity
+              activeOpacity={1}
               key={item.vin}
               onPress={() => {
                 let carName = [
@@ -125,13 +195,17 @@ const UserCars = ({navigation, actionToggleCar}) => {
                 ].join(' ');
                 ActionSheet.show(
                   {
-                    options: CarMenu[CarType].BUTTONS,
-                    cancelButtonIndex: CarMenu[CarType].CANCEL_INDEX,
-                    destructiveButtonIndex: CarMenu[CarType].DESTRUCTIVE_INDEX,
+                    options: CarMenu[CarType][Platform.OS].BUTTONS,
+                    cancelButtonIndex:
+                      CarMenu[CarType][Platform.OS].CANCEL_INDEX,
+                    destructiveButtonIndex:
+                      CarMenu[CarType][Platform.OS].DESTRUCTIVE_INDEX,
                     title: carName,
                   },
                   (buttonIndex) => {
-                    switch (CarMenu[CarType].BUTTONS[buttonIndex].id) {
+                    switch (
+                      CarMenu[CarType][Platform.OS].BUTTONS[buttonIndex].id
+                    ) {
                       case 'orderService':
                         navigation.navigate('ServiceScreen', {
                           car: item,
@@ -186,7 +260,7 @@ const UserCars = ({navigation, actionToggleCar}) => {
                 }}>
                 <CarCard data={item} type="profile" />
               </View>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
           );
         })}
       </ScrollView>

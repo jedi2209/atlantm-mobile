@@ -79,18 +79,20 @@ export const CarCard = ({data, type, checked, onPress}) => {
               right: 16,
               zIndex: 10,
             }}>
-            <CheckBox
-              onPress={() => {
-                if (onPress) {
-                  return onPress();
-                } else {
-                  return null;
-                }
-              }}
-              checked={checked}
-              color="#027aff"
-              style={{marginRight: 10}}
-            />
+            <View>
+              <CheckBox
+                onPress={() => {
+                  if (onPress) {
+                    return onPress();
+                  } else {
+                    return null;
+                  }
+                }}
+                checked={checked}
+                color="#027aff"
+                style={{marginRight: 10}}
+              />
+            </View>
           </TouchableWithoutFeedback>
         )}
         {/* <Image style={{width: '100%'}} source={require('./Bitmap.png')} /> */}

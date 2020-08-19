@@ -127,7 +127,7 @@ const BottomTabNavigation = createBottomTabNavigator(
       }),
       navigationOptions: ({navigation}) => {
         return {
-          tabBarOnPress: () =>
+          tabBarOnPress: () => {
             ActionSheet.show(
               {
                 options: ORDERS[Platform.OS].BUTTONS,
@@ -152,7 +152,8 @@ const BottomTabNavigation = createBottomTabNavigator(
                     break;
                 }
               },
-            ),
+            );
+          },
           tabBarLabel: 'Заявка',
           tabBarIcon: ({tintColor}) => (
             <Icon
