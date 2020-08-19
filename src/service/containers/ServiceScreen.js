@@ -96,25 +96,24 @@ class ServiceScreen extends Component {
       success: false,
       isHaveCar: Boolean(props.cars.length > 0),
     };
-    const carFromNavigation = get(this.props.navigation, 'state.params.car');
     if (this.props.cars.length === 1) {
-      this.setState({
-        carBrand: this.props.cars[0].brand,
-        carModel: this.props.cars[0].model,
-        carName: [this.props.cars[0].brand, this.props.cars[0].model].join(' '),
-        carVIN: this.props.cars[0].vin,
-      });
+      this.state.carBrand = this.props.cars[0].brand;
+      this.state.carModel = this.props.cars[0].model;
+      this.state.carName = [
+        this.props.cars[0].brand,
+        this.props.cars[0].model,
+      ].join(' ');
+      this.state.carVIN = this.props.cars[0].vin;
     }
+    const carFromNavigation = get(this.props.navigation, 'state.params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
-      this.setState({
-        carBrand: get(carFromNavigation, 'brand'),
-        carModel: get(carFromNavigation, 'model'),
-        carName: [
-          get(carFromNavigation, 'brand'),
-          get(carFromNavigation, 'model'),
-        ].join(' '),
-        carVIN: carFromNavigation.vin,
-      });
+      this.state.carBrand = get(carFromNavigation, 'brand');
+      this.state.carModel = get(carFromNavigation, 'model');
+      this.state.carName = [
+        get(carFromNavigation, 'brand'),
+        get(carFromNavigation, 'model'),
+      ].join(' ');
+      this.state.carVIN = carFromNavigation.vin;
     }
   }
 

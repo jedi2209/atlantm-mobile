@@ -68,10 +68,10 @@ export default (variables = variable) => {
       padding: 10,
       marginLeft: null
     },
-    'NativeBase.CheckBox': {
-      marginLeft: -10,
-      marginRight: 10,
-    },
+    // 'NativeBase.CheckBox': {
+    //   marginLeft: -10,
+    //   marginRight: 10,
+    // },
     '.first': {
       '.itemHeader': {
         paddingTop: variables.listItemPadding + 3

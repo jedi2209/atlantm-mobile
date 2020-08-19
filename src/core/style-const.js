@@ -75,9 +75,11 @@ export default {
       borderRadius: 20,
       marginLeft: 5,
       marginTop: isAndroid ? 5 : 0,
+      zIndex: 1000,
     },
     IconStyle: {
       marginLeft: isAndroid ? 5 : 0,
+      zIndex: 1000,
     },
   },
   new: {

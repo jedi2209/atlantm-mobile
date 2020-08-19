@@ -109,15 +109,13 @@ class OrderPartsScreen extends Component {
     }
     const carFromNavigation = get(this.props.navigation, 'state.params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
-      this.setState({
-        carBrand: get(carFromNavigation, 'brand'),
-        carModel: get(carFromNavigation, 'model'),
-        carName: [
-          get(carFromNavigation, 'brand'),
-          get(carFromNavigation, 'model'),
-        ].join(' '),
-        carVIN: carFromNavigation.vin,
-      });
+      this.state.carBrand = get(carFromNavigation, 'brand');
+      this.state.carModel = get(carFromNavigation, 'model');
+      this.state.carName = [
+        get(carFromNavigation, 'brand'),
+        get(carFromNavigation, 'model'),
+      ].join(' ');
+      this.state.carVIN = carFromNavigation.vin;
     }
   }
 
@@ -173,11 +171,12 @@ class OrderPartsScreen extends Component {
     const isInternetExist = await isInternet();
 
     if (!isInternetExist) {
-      Toast.show({
-        text: ERROR_NETWORK,
-        position: 'top',
-        type: 'danger',
-      });
+      Alert.alert('', ERROR_NETWORK);
+      // Toast.show({
+      //   text: ERROR_NETWORK,
+      //   position: 'top',
+      //   type: 'danger',
+      // });
     }
 
     const {navigation, localUserDataUpdate} = this.props;
@@ -240,11 +239,12 @@ class OrderPartsScreen extends Component {
             this.setState({success: true, loading: false});
             break;
           case PARTS_ORDER__FAIL:
-            Toast.show({
-              text: 'Произошла ошибка, попробуйте снова',
-              position: 'top',
-              type: 'danger',
-            });
+            Alert.alert('', 'Произошла ошибка, попробуйте снова');
+            // Toast.show({
+            //   text: 'Произошла ошибка, попробуйте снова',
+            //   position: 'top',
+            //   type: 'danger',
+            // });
             break;
         }
       }

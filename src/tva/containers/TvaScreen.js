@@ -256,12 +256,13 @@ class TvaScreen extends Component {
               PushNotifications.unsubscribeFromTopic('tva');
               this.onPressPushTracking(false);
             }
-            Toast.show({
-              text: action.payload.message,
-              position: 'top',
-              type: 'danger',
-              duration: 5000,
-            });
+            Alert.alert('', action.payload.message);
+            // Toast.show({
+            //   text: action.payload.message,
+            //   position: 'top',
+            //   type: 'danger',
+            //   duration: 5000,
+            // });
           }, 250);
           break;
       }
