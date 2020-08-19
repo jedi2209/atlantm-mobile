@@ -107,11 +107,10 @@ export default class Review extends Component {
 
   onPress = () => {
     const {review, onPressHandler} = this.props;
-
     onPressHandler && onPressHandler(review);
   };
 
-  processDate = date => dayMonthYear(date);
+  processDate = (date) => dayMonthYear(date);
 
   checkVisited = () => {
     const {visited, review} = this.props;
@@ -146,9 +145,9 @@ export default class Review extends Component {
     );
   };
 
-  renderPlusReview = text => this.renderReview('plus', text);
+  renderPlusReview = (text) => this.renderReview('plus', text);
 
-  renderMinusReview = text => this.renderReview('minus', text);
+  renderMinusReview = (text) => this.renderReview('minus', text);
 
   renderReview = (type, text) => {
     if (!text) {
@@ -198,8 +197,9 @@ export default class Review extends Component {
         {inList ? (
           <Right>
             <Icon
-              name="arrow-forward"
+              name="chevron-forward"
               style={{
+                fontSize: 27,
                 color: isVisited
                   ? styleConst.color.systemGray
                   : styleConst.color.systemBlue,

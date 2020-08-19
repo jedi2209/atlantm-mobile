@@ -18,12 +18,10 @@ import {
 import ReviewsList from '../components/ReviewsList';
 import ReviewsFilter from '../components/ReviewsFilter';
 import DealerItemList from '../../../core/components/DealerItemList';
-import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import {REVIEWS_FILTER_DATE_PERIOD__ALL} from '../../constants';
-import {get} from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
@@ -69,19 +67,16 @@ class ReviewsScreen extends Component {
       'BottomTabNavigation';
 
     return {
-      headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Отзывы</Text>,
+      headerTitle: 'Отзывы',
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
       headerLeft: (
-        <View>
-          <HeaderIconBack
-            theme="white"
-            navigation={navigation}
-            returnScreen={returnScreen}
-          />
-        </View>
+        <HeaderIconBack
+          theme="white"
+          navigation={navigation}
+          returnScreen={returnScreen}
+        />
       ),
-      headerRight: <View />,
     };
   };
 
@@ -98,22 +93,19 @@ class ReviewsScreen extends Component {
     }
   }
 
-  onPressItem = review => {
+  onPressItem = (review) => {
     const {navigation, actionReviewVisit} = this.props;
-
     navigation.navigate('ReviewScreen', {review});
-
     this.props.actionReviewVisit(review.id);
   };
 
-  fetchReviews = type => {
+  fetchReviews = (type) => {
     let {
       pages,
       dateTo,
       dateFrom,
       filterRatingFrom,
       filterRatingTo,
-      navigation,
       dealerSelected,
       actionFetchReviews,
       actionDateFromFill,
@@ -189,7 +181,4 @@ class ReviewsScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ReviewsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ReviewsScreen);

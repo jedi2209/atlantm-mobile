@@ -7,8 +7,8 @@ import {
   Text,
   TouchableWithoutFeedback,
   Keyboard,
-  ScrollView,
   Platform,
+  ScrollView,
 } from 'react-native';
 
 // redux
@@ -25,30 +25,26 @@ import {
 import stylesList from '../../../core/components/Lists/style';
 
 // components
-import {
-  Label,
-  Content,
-  StyleProvider,
-  Switch,
-  Body,
-  ListItem,
-  Right,
-} from 'native-base';
+import {Label, Switch, Body, ListItem, Right} from 'native-base';
 import Spinner from 'react-native-loading-spinner-overlay';
-import InfoLine from '../../components/InfoLine';
-import RatingList from '../../components/RatingList';
-import FooterButton from '../../../core/components/FooterButton';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
-import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 
-import {TextInput} from '../../../core/components/TextInput';
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
+import Form from '../../../core/components/Form/Form';
+import UserData from '../../../utils/user';
+import {
+  REVIEW_ADD_RATING_5,
+  REVIEW_ADD_RATING_4,
+  REVIEW_ADD_RATING_3,
+  REVIEW_ADD_RATING_2,
+  REVIEW_ADD_RATING_1,
+} from '../../constants';
 
 const $size = 40;
 const styles = StyleSheet.create({
@@ -57,11 +53,15 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.bg,
   },
   publicAgreeContainer: {
-    marginTop: 25,
     marginBottom: 5,
+    borderRadius: 5,
   },
   publicAgreeText: {
-    fontSize: 16,
+    fontSize: 14,
+    paddingVertical: 5,
+  },
+  switch: {
+    marginTop: 2,
   },
   list: {
     paddingBottom: $size,
@@ -113,6 +113,15 @@ const mapStateToProps = ({dealer, eko, nav, profile}) => {
     login: profile.login,
     dealerSelected: dealer.selected,
     publicAgree: eko.reviews.publicAgree,
+    firstName: UserData.get('NAME'),
+    secondName: UserData.get('SECOND_NAME'),
+    lastName: UserData.get('LAST_NAME'),
+    phone: UserData.get('PHONE')
+      ? UserData.get('PHONE')
+      : UserData.get('PHONE'),
+    email: UserData.get('EMAIL')
+      ? UserData.get('EMAIL')
+      : UserData.get('EMAIL'),
     messagePlus: eko.reviews.messagePlus,
     messageMinus: eko.reviews.messageMinus,
     reviewAddRating: eko.reviews.reviewAddRating,
@@ -131,13 +140,104 @@ const mapDispatchToProps = {
 class ReviewAddRatingStepScreen extends Component {
   constructor(props) {
     super(props);
-
-    const {last_name = '', first_name = '', phone, email} = this.props.login;
-
-    this.state = {
-      email: email ? email.value : '',
-      phone: phone ? phone.value : '',
-      name: `${first_name} ${last_name}`,
+    this.FormConfig = {
+      fields: {
+        groups: [
+          {
+            name: 'Общее впечатление',
+            fields: [
+              {
+                name: 'RATING',
+                type: 'select',
+                label: 'Насколько в целом вы удовлетворены?',
+                value: '',
+                props: {
+                  items: [
+                    {
+                      label: REVIEW_ADD_RATING_5,
+                      value: 5,
+                      key: 5,
+                    },
+                    {
+                      label: REVIEW_ADD_RATING_4,
+                      value: 4,
+                      key: 4,
+                    },
+                    {
+                      label: REVIEW_ADD_RATING_3,
+                      value: 3,
+                      key: 3,
+                    },
+                    {
+                      label: REVIEW_ADD_RATING_2,
+                      value: 2,
+                      key: 2,
+                    },
+                    {
+                      label: REVIEW_ADD_RATING_1,
+                      value: 1,
+                      key: 1,
+                    },
+                  ],
+                  placeholder: {
+                    label: 'Поставьте оценку нашей работе...',
+                    value: null,
+                    color: '#9EA0A4',
+                  },
+                },
+              },
+            ],
+          },
+          {
+            name: 'Контактные данные',
+            fields: [
+              {
+                name: 'NAME',
+                type: 'input',
+                label: 'Имя',
+                value: this.props.firstName,
+                props: {
+                  required: true,
+                  textContentType: 'name',
+                },
+              },
+              {
+                name: 'SECOND_NAME',
+                type: 'input',
+                label: 'Отчество',
+                value: this.props.secondName,
+                props: {
+                  textContentType: 'middleName',
+                },
+              },
+              {
+                name: 'LAST_NAME',
+                type: 'input',
+                label: 'Фамилия',
+                value: this.props.lastName,
+                props: {
+                  textContentType: 'familyName',
+                },
+              },
+              {
+                name: 'PHONE',
+                type: 'phone',
+                label: 'Телефон',
+                value: this.props.phone,
+                props: {
+                  required: true,
+                },
+              },
+              {
+                name: 'EMAIL',
+                type: 'email',
+                label: 'Email',
+                value: this.props.email,
+              },
+            ],
+          },
+        ],
+      },
     };
   }
 
@@ -150,7 +250,6 @@ class ReviewAddRatingStepScreen extends Component {
         <HeaderIconBack theme="white" navigation={navigation} />
       </View>
     ),
-    headerRight: <View />,
   });
 
   shouldComponentUpdate(nextProps) {
@@ -169,15 +268,12 @@ class ReviewAddRatingStepScreen extends Component {
     return isActiveScreen;
   }
 
-  onChangeField = fieldName => value => {
+  onChangeField = (fieldName) => (value) => {
     this.setState({[fieldName]: value});
   };
 
-  onPressButton = () => {
+  onPressButton = (dataFromForm) => {
     const {
-      name,
-      phone,
-      email,
       dealerSelected,
       navigation,
       publicAgree,
@@ -187,27 +283,27 @@ class ReviewAddRatingStepScreen extends Component {
       actionReviewAdd,
     } = this.props;
 
-    if (
-      !this.state.name.trim() ||
-      !this.state.phone.trim() ||
-      !this.state.email.trim()
-    ) {
-      return Alert.alert(
-        'Не хватает информации',
-        'Для заявки на СТО необходимо заполнить ФИО, номер контактного телефона, название автомобиля и желаемую дату',
-      );
-    }
+    const name = [
+      dataFromForm.NAME,
+      dataFromForm.SECOND_NAME,
+      dataFromForm.LAST_NAME,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     actionReviewAdd({
       dealerId: dealerSelected.id,
-      name: this.state.name,
-      phone: this.state.phone,
-      email: this.state.email,
+      firstName: get(dataFromForm, 'NAME', ''),
+      secondName: get(dataFromForm, 'SECOND_NAME', ''),
+      lastName: get(dataFromForm, 'LAST_NAME', ''),
+      email: get(dataFromForm, 'EMAIL', ''),
+      phone: get(dataFromForm, 'PHONE', ''),
+      name: name,
       messagePlus,
       messageMinus,
       publicAgree,
-      rating: reviewAddRating,
-    }).then(action => {
+      rating: get(dataFromForm, 'RATING', ''),
+    }).then((action) => {
       if (action.type === REVIEW_ADD__SUCCESS) {
         Amplitude.logEvent('order', 'eko/review_add');
 
@@ -232,13 +328,8 @@ class ReviewAddRatingStepScreen extends Component {
     const onPressHandler = () => actionSelectAddReviewPublicAgree(!publicAgree);
 
     return (
-      <View
-        style={[
-          styles.publicAgreeContainer,
-          stylesList.listItemContainer,
-          stylesList.listItemContainerFirst,
-        ]}>
-        <ListItem onPress={onPressHandler} last style={stylesList.listItem}>
+      <View style={[styles.publicAgreeContainer, stylesList.listItemContainer]}>
+        <ListItem onPress={onPressHandler} style={stylesList.listItem}>
           <Body>
             <Label style={[stylesList.label, styles.publicAgreeText]}>
               Я разрешаю опубликовать мой отзыв
@@ -257,73 +348,35 @@ class ReviewAddRatingStepScreen extends Component {
   };
 
   render() {
-    const {
-      navigation,
-      publicAgree,
-      dealerSelected,
-      reviewAddRating,
-      isReviewAddRequest,
-      reviewAddRatingVariant,
-      actionSelectAddReviewRating,
-      actionSelectAddReviewRatingVariant,
-    } = this.props;
+    const {isReviewAddRequest} = this.props;
 
     console.log('== ReviewAddRatingStepScreen ==');
 
     return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <Content>
-            <Spinner
-              visible={isReviewAddRequest}
-              color={styleConst.color.blue}
-            />
-
-            <RatingList
-              ratingValue={reviewAddRating}
-              ratingVariant={reviewAddRatingVariant}
-              selectRatingValue={actionSelectAddReviewRating}
-              selectRatingVariant={actionSelectAddReviewRatingVariant}
-            />
-            {this.renderPublicAgree()}
-
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-              <View style={styles.container}>
-                <View style={styles.group}>
-                  <View style={styles.field}>
-                    <TextInput
-                      autoCorrect={false}
-                      style={styles.textinput}
-                      label="Имя"
-                      value={this.state.name}
-                      onChangeText={this.onChangeField('name')}
-                    />
-                  </View>
-                  <View style={styles.field}>
-                    <TextInput
-                      style={styles.textinput}
-                      label="Телефон"
-                      keyboardType="phone-pad"
-                      value={this.state.phone}
-                      onChangeText={this.onChangeField('phone')}
-                    />
-                  </View>
-                  <View style={styles.field}>
-                    <TextInput
-                      style={styles.textinput}
-                      label="Email"
-                      keyboardType="email-address"
-                      value={this.state.email}
-                      onChangeText={this.onChangeField('email')}
-                    />
-                  </View>
-                </View>
-              </View>
-            </TouchableWithoutFeedback>
-          </Content>
-          <FooterButton text="Отправить" onPressButton={this.onPressButton} />
-        </SafeAreaView>
-      </StyleProvider>
+      <KeyboardAvoidingView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView style={{flex: 1, backgroundColor: '#eee'}}>
+            <View
+              style={{
+                flex: 1,
+                paddingTop: 20,
+                marginBottom: 160,
+                paddingHorizontal: 14,
+              }}>
+              <Spinner
+                visible={isReviewAddRequest}
+                color={styleConst.color.blue}
+              />
+              {this.renderPublicAgree()}
+              <Form
+                fields={this.FormConfig.fields}
+                barStyle={'light-content'}
+                onSubmit={this.onPressButton}
+              />
+            </View>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     );
   }
 }
