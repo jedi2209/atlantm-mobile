@@ -419,6 +419,9 @@ export default {
   },
 
   reviewAdd({
+    firstName,
+    secondName,
+    lastName,
     name,
     phone,
     email,
@@ -432,6 +435,9 @@ export default {
       'posting=1',
       `f_Dealer=${dealerId}`,
       `f_Name=${name}`,
+      `f_FirstName=${firstName}`,
+      `f_SecondName=${firstName}`,
+      `f_LastName=${firstName}`,
       `f_Phone=${phone}`,
       `f_Email=${email}`,
       `f_Grade=${rating}`,

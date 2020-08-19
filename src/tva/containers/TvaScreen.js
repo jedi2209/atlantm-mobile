@@ -8,6 +8,7 @@ import {
   ScrollView,
   Keyboard,
 } from 'react-native';
+import {Toast} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -255,7 +256,12 @@ class TvaScreen extends Component {
               PushNotifications.unsubscribeFromTopic('tva');
               this.onPressPushTracking(false);
             }
-            Alert.alert('', `${action.payload.message}`);
+            Toast.show({
+              text: action.payload.message,
+              position: 'bottom',
+              type: 'danger',
+              duration: 5000,
+            });
           }, 250);
           break;
       }
