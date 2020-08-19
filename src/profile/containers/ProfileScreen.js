@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   Platform,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import {Button, Icon, Toast} from 'native-base';
 import PhoneInput from 'react-native-phone-input';
@@ -261,11 +262,12 @@ class ProfileScreen extends Component {
             'Не опознан мобильный оператор или не правильный формат номера';
         }
 
-        Toast.show({
-          text: message,
-          position: 'top',
-          type: 'warning',
-        });
+        Alert.alert('', message);
+        // Toast.show({
+        //   text: message,
+        //   position: 'top',
+        //   type: 'warning',
+        // });
       } else {
         this.setState({
           code: true,
@@ -292,12 +294,13 @@ class ProfileScreen extends Component {
       this.CodeInput[3].clear();
       this.CodeInput[0].focus();
       this.otpArray = [];
-      Toast.show({
-        text: 'Неверный код',
-        buttonText: 'ОК',
-        position: 'top',
-        type: 'danger',
-      });
+      Alert.alert('', 'Неверный код');
+      // Toast.show({
+      //   text: 'Неверный код',
+      //   buttonText: 'ОК',
+      //   position: 'top',
+      //   type: 'danger',
+      // });
       return;
     }
     this.keyboardHideListener.remove();
@@ -319,11 +322,12 @@ class ProfileScreen extends Component {
       })
       .catch(() => {
         this.setState({loading: false});
-        Toast.show({
-          text: 'Что-то пошло не так...',
-          position: 'top',
-          type: 'warning',
-        });
+        Alert.alert('', 'Что-то пошло не так...');
+        // Toast.show({
+        //   text: 'Что-то пошло не так...',
+        //   position: 'top',
+        //   type: 'warning',
+        // });
       });
   };
 
@@ -337,11 +341,12 @@ class ProfileScreen extends Component {
       })
       .catch(() => {
         this.setState({loading: false});
-        Toast.show({
-          text: 'Что-то пошло не так...',
-          position: 'top',
-          type: 'warning',
-        });
+        Alert.alert('', 'Что-то пошло не так...');
+        // Toast.show({
+        //   text: 'Что-то пошло не так...',
+        //   position: 'top',
+        //   type: 'warning',
+        // });
       });
   }
 

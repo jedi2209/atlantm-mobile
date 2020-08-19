@@ -12,6 +12,7 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {Button, Icon, ActionSheet, Toast} from 'native-base';
 import PushNotifications from '../../core/components/PushNotifications';
@@ -388,11 +389,12 @@ class ProfileScreenInfo extends Component {
                                 loading: false,
                                 cars: 'default',
                               });
-                              Toast.show({
-                                text: 'Статус автомобиля изменён',
-                                type: 'success',
-                                position: 'top',
-                              });
+                              Alert.alert('', 'Статус автомобиля изменён');
+                              // Toast.show({
+                              //   text: 'Статус автомобиля изменён',
+                              //   type: 'success',
+                              //   position: 'top',
+                              // });
                             }
                           });
                         break;

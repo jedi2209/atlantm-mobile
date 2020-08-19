@@ -84,7 +84,6 @@ class NewCarListScreen extends Component {
       ),
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: <View />,
       headerRight: (
         <View>
           <TouchableOpacity

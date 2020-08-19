@@ -11,7 +11,8 @@ import {
   Dimensions,
   StatusBar,
 } from 'react-native';
-import {Icon, Button, CheckBox, Accordion} from 'native-base';
+import {Icon, Button, CheckBox, Accordion, StyleProvider} from 'native-base';
+import getTheme from '../../../../native-base-theme/components';
 import {verticalScale} from '../../../utils/scale';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import styleConst from '../../../core/style-const';
@@ -637,82 +638,84 @@ class NewCarFilterScreen extends Component {
     }
 
     return (
-      <ScrollView style={{borderWidth: 0}}>
-        <StatusBar barStyle="dark-content" />
-        <Accordion
-          dataArray={filtersContent}
-          expanded={0}
-          renderHeader={(item, expanded) => (
-            <View
-              style={{
-                height: 64,
-                paddingHorizontal: 16,
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                backgroundColor: '#fff',
-                borderBottomWidth: expanded ? 0 : 1,
-                borderColor: '#d5d5e0',
-              }}>
-              <Text style={{fontSize: 18}}>{item.title}</Text>
-              {expanded ? (
-                <Icon
-                  type="FontAwesome5"
-                  style={{
-                    color: styleConst.color.lightBlue,
-                    fontWeight: 'lighter',
-                  }}
-                  name="angle-down"
-                />
-              ) : (
-                <Icon
-                  type="FontAwesome5"
-                  style={{color: '#131314', fontWeight: 'lighter'}}
-                  name="angle-right"
-                />
-              )}
-            </View>
-          )}
-          renderContent={(item) => {
-            return (
+      <StyleProvider style={getTheme()}>
+        <ScrollView style={{borderWidth: 0}}>
+          <StatusBar barStyle="dark-content" />
+          <Accordion
+            dataArray={filtersContent}
+            expanded={0}
+            renderHeader={(item, expanded) => (
               <View
                 style={{
-                  backgroundColor: '#fff',
+                  height: 64,
                   paddingHorizontal: 16,
-                  borderBottomWidth: 1,
-                  borderBottomColor: '#d5d5e0',
-                  paddingVertical: 20,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  backgroundColor: '#fff',
+                  borderBottomWidth: expanded ? 0 : 1,
+                  borderColor: '#d5d5e0',
                 }}>
-                {item.content}
+                <Text style={{fontSize: 18}}>{item.title}</Text>
+                {expanded ? (
+                  <Icon
+                    type="FontAwesome5"
+                    style={{
+                      color: styleConst.color.lightBlue,
+                      fontWeight: 'lighter',
+                    }}
+                    name="angle-down"
+                  />
+                ) : (
+                  <Icon
+                    type="FontAwesome5"
+                    style={{color: '#131314', fontWeight: 'lighter'}}
+                    name="angle-right"
+                  />
+                )}
               </View>
-            );
-          }}
-        />
-        <View
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginVertical: 20,
-          }}>
-          <Button
-            full
-            onPress={this.onPressFilterButton}
-            style={[
-              styleConst.shadow.default,
-              {
-                backgroundColor: styleConst.color.lightBlue,
-                paddingVertical: 16,
-                paddingHorizontal: 40,
-                marginHorizontal: 20,
-                borderRadius: 5,
-              },
-            ]}>
-            <Text style={{color: '#fff', fontSize: 16}}>Применить</Text>
-          </Button>
-        </View>
-      </ScrollView>
+            )}
+            renderContent={(item) => {
+              return (
+                <View
+                  style={{
+                    backgroundColor: '#fff',
+                    paddingHorizontal: 16,
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#d5d5e0',
+                    paddingVertical: 20,
+                  }}>
+                  {item.content}
+                </View>
+              );
+            }}
+          />
+          <View
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginVertical: 20,
+            }}>
+            <Button
+              full
+              onPress={this.onPressFilterButton}
+              style={[
+                styleConst.shadow.default,
+                {
+                  backgroundColor: styleConst.color.lightBlue,
+                  paddingVertical: 16,
+                  paddingHorizontal: 40,
+                  marginHorizontal: 20,
+                  borderRadius: 5,
+                },
+              ]}>
+              <Text style={{color: '#fff', fontSize: 16}}>Применить</Text>
+            </Button>
+          </View>
+        </ScrollView>
+      </StyleProvider>
     );
   }
 }

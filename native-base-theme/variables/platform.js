@@ -38,6 +38,7 @@ export default {
   DefaultFontSize: 17,
   checkboxBgColor: '#039BE5',
   checkboxSize: 20,
+  checkboxDefaultColor: '#fff',
   checkboxTickColor: '#fff',
 
   // Segment

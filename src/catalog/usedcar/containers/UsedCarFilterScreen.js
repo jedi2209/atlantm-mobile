@@ -68,7 +68,6 @@ class UsedCarFilterScreen extends Component {
     headerTitle: 'Фильтры',
     headerStyle: stylesHeader.common,
     headerTitleStyle: {fontWeight: '200', color: '#000'},
-    headerLeft: <View />,
     headerRight: (
       <Icon
         type="AntDesign"
