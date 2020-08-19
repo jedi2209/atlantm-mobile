@@ -261,13 +261,11 @@ class ProfileScreen extends Component {
           message =
             'Не опознан мобильный оператор или не правильный формат номера';
         }
-
-        Alert.alert('', message);
-        // Toast.show({
-        //   text: message,
-        //   position: 'top',
-        //   type: 'warning',
-        // });
+        Toast.show({
+          text: message,
+          position: 'top',
+          type: 'warning',
+        });
       } else {
         this.setState({
           code: true,
@@ -294,13 +292,12 @@ class ProfileScreen extends Component {
       this.CodeInput[3].clear();
       this.CodeInput[0].focus();
       this.otpArray = [];
-      Alert.alert('', 'Неверный код');
-      // Toast.show({
-      //   text: 'Неверный код',
-      //   buttonText: 'ОК',
-      //   position: 'top',
-      //   type: 'danger',
-      // });
+      Toast.show({
+        text: 'Неверный код',
+        buttonText: 'ОК',
+        position: 'top',
+        type: 'danger',
+      });
       return;
     }
     this.keyboardHideListener.remove();
@@ -322,12 +319,11 @@ class ProfileScreen extends Component {
       })
       .catch(() => {
         this.setState({loading: false});
-        Alert.alert('', 'Что-то пошло не так...');
-        // Toast.show({
-        //   text: 'Что-то пошло не так...',
-        //   position: 'top',
-        //   type: 'warning',
-        // });
+        Toast.show({
+          text: 'Что-то пошло не так...',
+          position: 'top',
+          type: 'warning',
+        });
       });
   };
 
@@ -341,12 +337,11 @@ class ProfileScreen extends Component {
       })
       .catch(() => {
         this.setState({loading: false});
-        Alert.alert('', 'Что-то пошло не так...');
-        // Toast.show({
-        //   text: 'Что-то пошло не так...',
-        //   position: 'top',
-        //   type: 'warning',
-        // });
+        Toast.show({
+          text: 'Что-то пошло не так...',
+          position: 'top',
+          type: 'warning',
+        });
       });
   }
 
