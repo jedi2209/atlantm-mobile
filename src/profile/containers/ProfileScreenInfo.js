@@ -528,7 +528,6 @@ class ProfileScreenInfo extends Component {
               {this.props.bonus.data && this.props.bonus.data.saldo ? (
                 <TouchableOpacity
                   style={[
-                    styleConst.shadow.default,
                     {
                       marginHorizontal: 20,
                       marginBottom: 20,
@@ -536,13 +535,16 @@ class ProfileScreenInfo extends Component {
                   ]}
                   onPress={() => this.props.navigation.navigate('BonusScreen')}>
                   <View
-                    style={{
-                      backgroundColor: '#0061ed',
-                      borderRadius: 5,
-                      padding: 14,
-                      display: 'flex',
-                      flexDirection: 'row',
-                    }}
+                    style={[
+                      styleConst.shadow.default,
+                      {
+                        backgroundColor: '#0061ed',
+                        borderRadius: 5,
+                        padding: 14,
+                        display: 'flex',
+                        flexDirection: 'row',
+                      },
+                    ]}
                     onPress={() =>
                       this.props.navigation.navigate('BonusScreen')
                     }>
