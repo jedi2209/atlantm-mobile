@@ -7,15 +7,12 @@ import {
   StyleSheet,
   ScrollView,
   Text,
-  Platform,
-  StatusBar,
   TouchableWithoutFeedback,
   ActivityIndicator,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import UserCars from '../components/UserCars';
-import {Button, Icon, ActionSheet, Toast} from 'native-base';
+import {Button, Icon} from 'native-base';
 import PushNotifications from '../../core/components/PushNotifications';
 import DealerItemList from '../../core/components/DealerItemList';
 
@@ -61,16 +58,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'normal',
-  },
-  carChooseText: {
-    textAlign: 'right',
-    textDecorationLine: 'underline',
-    textDecorationStyle: 'dotted',
-    color: styleConst.color.greyText,
-  },
-  carChooseTextSelected: {
-    textDecorationLine: 'none',
-    color: 'black',
   },
 });
 
@@ -173,8 +160,7 @@ class ProfileScreenInfo extends Component {
   render() {
     return (
       <SafeAreaView>
-        <StatusBar barStyle="light-content" />
-        <ScrollView style={{minHeight: '100%'}}>
+        <ScrollView>
           <Text
             style={{
               fontSize: 35,
@@ -373,96 +359,94 @@ class ProfileScreenInfo extends Component {
                   onPress={() =>
                     this.props.navigation.navigate('BonusScreenInfo')
                   }>
-                  <View>
+                  <View
+                    style={[
+                      styleConst.shadow.default,
+                      {
+                        marginHorizontal: 20,
+                      },
+                    ]}>
                     <View
-                      style={[
-                        styleConst.shadow.default,
-                        {
-                          marginHorizontal: 20,
-                        },
-                      ]}>
+                      style={{
+                        backgroundColor: '#0061ed',
+                        borderRadius: 5,
+                        padding: 14,
+                        display: 'flex',
+                        flexDirection: 'row',
+                      }}>
                       <View
                         style={{
-                          backgroundColor: '#0061ed',
-                          borderRadius: 5,
-                          padding: 14,
+                          backgroundColor: '#fff',
+                          width: 98,
+                          height: 98,
+                          borderRadius: 49,
                           display: 'flex',
-                          flexDirection: 'row',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          marginRight: 24,
                         }}>
-                        <View
+                        {this.props.bonus.data &&
+                        this.props.bonus.data.saldo ? (
+                          <Text
+                            style={{
+                              color: '#0061ed',
+                              fontSize: 20,
+                              fontWeight: '600',
+                            }}>
+                            {this.props.bonus.data.saldo.value}
+                          </Text>
+                        ) : (
+                          <Icon
+                            name="frowno"
+                            type="AntDesign"
+                            style={[{fontSize: 76, marginTop: 9}]}
+                          />
+                        )}
+                      </View>
+                      <View style={{flex: 1}}>
+                        <Text
                           style={{
-                            backgroundColor: '#fff',
-                            width: 98,
-                            height: 98,
-                            borderRadius: 49,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginRight: 24,
+                            color: '#fff',
+                            fontSize: 18,
+                            marginBottom: 8,
+                            fontWeight: '600',
                           }}>
-                          {this.props.bonus.data &&
-                          this.props.bonus.data.saldo ? (
+                          Бонусные баллы
+                        </Text>
+                        <Text
+                          style={{
+                            color: '#fff',
+                            fontSize: 12,
+                            marginBottom: 16,
+                            fontWeight: '600',
+                          }}>
+                          У Вас пока{' '}
+                          <Text style={{fontWeight: 'bold', fontSize: 22}}>
+                            0
+                          </Text>{' '}
+                          баллов.{'\r\n'}Узнайте больше о бонусной программе и
+                          накапливайте баллы быстрее!
+                        </Text>
+                        <View style={{display: 'flex', flexDirection: 'row'}}>
+                          <View>
                             <Text
                               style={{
-                                color: '#0061ed',
-                                fontSize: 20,
+                                color: '#fff',
+                                fontSize: 16,
                                 fontWeight: '600',
                               }}>
-                              {this.props.bonus.data.saldo.value}
+                              Хочу больше баллов
                             </Text>
-                          ) : (
-                            <Icon
-                              name="frowno"
-                              type="AntDesign"
-                              style={[{fontSize: 76, marginTop: 9}]}
-                            />
-                          )}
-                        </View>
-                        <View style={{flex: 1}}>
-                          <Text
-                            style={{
-                              color: '#fff',
-                              fontSize: 18,
-                              marginBottom: 8,
-                              fontWeight: '600',
-                            }}>
-                            Бонусные баллы
-                          </Text>
-                          <Text
-                            style={{
-                              color: '#fff',
-                              fontSize: 12,
-                              marginBottom: 16,
-                              fontWeight: '600',
-                            }}>
-                            У Вас пока{' '}
-                            <Text style={{fontWeight: 'bold', fontSize: 22}}>
-                              0
-                            </Text>{' '}
-                            баллов.{'\r\n'}Узнайте больше о бонусной программе и
-                            накапливайте баллы быстрее!
-                          </Text>
-                          <View style={{display: 'flex', flexDirection: 'row'}}>
-                            <View>
-                              <Text
-                                style={{
-                                  color: '#fff',
-                                  fontSize: 16,
-                                  fontWeight: '600',
-                                }}>
-                                Хочу больше баллов
-                              </Text>
-                            </View>
-                            <Icon
-                              type="FontAwesome5"
-                              name="angle-right"
-                              style={{
-                                color: '#fff',
-                                fontSize: 20,
-                                marginLeft: 8,
-                              }}
-                            />
                           </View>
+                          <Icon
+                            type="FontAwesome5"
+                            name="angle-right"
+                            style={{
+                              color: '#fff',
+                              fontSize: 20,
+                              marginLeft: 8,
+                            }}
+                          />
                         </View>
                       </View>
                     </View>
