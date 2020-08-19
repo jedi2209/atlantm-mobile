@@ -244,11 +244,6 @@ class Form extends Component {
       });
       if (requredLabels.length) {
         if (requredLabels.length > 1) {
-          // Toast.show({
-          //   text: 'message',
-          //   position: 'top',
-          //   type: 'warning',
-          // });
           Alert.alert(
             '',
             '\r\nПоля \r\n-' +
