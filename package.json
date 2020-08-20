@@ -39,7 +39,7 @@
     "lodash": "^4.17.20",
     "metro-react-native-babel-preset": "^0.62.0",
     "moment": "^2.27.0",
-    "native-base": "^2.13.13",
+    "native-base": "2.13.13",
     "prettier": "^2.0.5",
     "prop-types": "^15.7.2",
     "react": "16.13.1",
