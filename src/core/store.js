@@ -10,7 +10,7 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const middleware = [
   thunkMiddleware,
   __DEV__ && createLogger({collapsed: true, diff: true}),
-];
+].filter(Boolean);
 
 export const store = createStore(
   rootReducer,
