@@ -139,6 +139,9 @@ const Card = ({kind, title, subtitle, onPress}) => {
         />
         <View style={{marginTop: 8}}>
           <Text
+            selectable={false}
+            ellipsizeMode="tail"
+            numberOfLines={1}
             style={{
               color: '#fff',
               fontSize: 14,
@@ -147,7 +150,13 @@ const Card = ({kind, title, subtitle, onPress}) => {
             }}>
             {title}
           </Text>
-          <Text style={{color: '#fff', fontSize: 12}}>{subtitle}</Text>
+          <Text
+            style={{color: '#fff', fontSize: 12}}
+            ellipsizeMode="tail"
+            numberOfLines={1}
+            selectable={false}>
+            {subtitle}
+          </Text>
         </View>
       </View>
     </TouchableWithoutFeedback>
@@ -176,6 +185,33 @@ class ContactsScreen extends Component {
   static navigationOptions = () => ({
     header: null,
   });
+
+  constructor(props) {
+    super(props);
+    this.sitesSubtitle = {
+      sites: [],
+      buttons: [],
+    };
+    get(this.props.dealerSelected, 'site').map((val, idx) => {
+      if (val) {
+        const siteName = val
+          .replace(/^(?:https?:\/\/)?(?:www\.)?/i, '')
+          .split('/')[0];
+        this.sitesSubtitle.sites.push(siteName);
+        this.sitesSubtitle.buttons.push({
+          id: 'site' + idx,
+          text: siteName,
+          site: val,
+        });
+      }
+    });
+    if (this.sitesSubtitle.sites.length > 1) {
+      this.sitesSubtitle.buttons.push({
+        id: 'cancel',
+        text: 'Отмена',
+      });
+    }
+  }
 
   componentDidMount() {
     Amplitude.logEvent('screen', 'contacts');
@@ -371,17 +407,58 @@ class ContactsScreen extends Component {
                     }}
                   />
                   <Card
-                    title="Сайт"
+                    title={
+                      'Сайт' +
+                      (this.sitesSubtitle && this.sitesSubtitle.sites.length > 1
+                        ? 'ы'
+                        : '')
+                    }
                     subtitle={
-                      get(dealerSelected, 'site[0]')
-                        .replace(/^(?:https?:\/\/)?(?:www\.)?/i, '')
-                        .split('/')[0]
+                      this.sitesSubtitle && this.sitesSubtitle.sites.length > 1
+                        ? this.sitesSubtitle &&
+                          this.sitesSubtitle.sites.join('\r\n')
+                        : this.sitesSubtitle && this.sitesSubtitle.sites[0]
                     }
                     kind="success"
                     onPress={() => {
-                      Linking.openURL(get(dealerSelected, 'site[0]')).catch(
-                        console.log('<YA_RU> failed'),
-                      );
+                      if (
+                        this.sitesSubtitle &&
+                        this.sitesSubtitle.sites.length > 1
+                      ) {
+                        ActionSheet.show(
+                          {
+                            options: this.sitesSubtitle.buttons,
+                            cancelButtonIndex:
+                              this.sitesSubtitle.buttons.length - 1,
+                            title: 'Сайты автоцентра',
+                          },
+                          (buttonIndex) => {
+                            switch (
+                              this.sitesSubtitle.buttons[buttonIndex].id
+                            ) {
+                              case 'cancel':
+                                break;
+                              default:
+                                Linking.openURL(
+                                  this.sitesSubtitle.buttons[buttonIndex].site,
+                                  console.log(
+                                    'this.sitesSubtitle.buttons[buttonIndex].site failed',
+                                    this.sitesSubtitle.buttons[buttonIndex]
+                                      .site,
+                                  ),
+                                );
+                                break;
+                            }
+                          },
+                        );
+                      } else {
+                        Linking.openURL(get(dealerSelected, 'site[0]')).catch(
+                          console.log(
+                            'get(dealerSelected, "site[0]") failed',
+                            get(dealerSelected, 'site[0]'),
+                          ),
+                        );
+                      }
                     }}
                   />
                 </View>
