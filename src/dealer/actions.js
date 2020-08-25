@@ -8,6 +8,9 @@ import {
   DEALER__SUCCESS,
   DEALER__SUCCESS__LOCAL,
   DEALER__FAIL,
+  BRANDS__REQUEST,
+  BRANDS__SUCCESS,
+  BRANDS__FAIL,
 } from './actionTypes';
 
 import API from '../utils/api';
@@ -126,6 +129,45 @@ export const fetchDealers = (isLocal) => {
       .catch((error) => {
         return dispatch({
           type: DEALERS__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const fetchBrands = () => {
+  return (dispatch) => {
+    dispatch({type: BRANDS__REQUEST});
+
+    return API.fetchBrands()
+      .then((response) => {
+        const {data: brandsSource, error} = response;
+
+        if (error) {
+          return dispatch({
+            type: BRANDS__FAIL,
+            payload: {
+              code: error.code,
+              error: error.message,
+            },
+          });
+        }
+
+        let brands = {};
+        brandsSource.map((val) => {
+          brands[val.id] = val;
+        });
+
+        return dispatch({
+          type: BRANDS__SUCCESS,
+          payload: brands,
+        });
+      })
+      .catch((error) => {
+        return dispatch({
+          type: BRANDS__FAIL,
           payload: {
             error: error.message,
           },

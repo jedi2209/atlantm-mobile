@@ -6,7 +6,12 @@ import {View, StatusBar} from 'react-native';
 import {connect} from 'react-redux';
 import {actionSetPushActionSubscribe} from '../../core/actions';
 // actions
-import {fetchDealers, selectDealer, selectRegion} from '../actions';
+import {
+  fetchDealers,
+  fetchBrands,
+  selectDealer,
+  selectRegion,
+} from '../actions';
 
 // components
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
@@ -23,6 +28,7 @@ const mapStateToProps = ({dealer, nav, core}) => {
     dealerSelected: dealer.selected,
     region: dealer.region,
     listRussia: dealer.listRussia,
+    listBrands: dealer.listBrands,
     listBelarussia: dealer.listBelarussia,
     listUkraine: dealer.listUkraine,
     isFetchDealersList: dealer.meta.isFetchDealersList,
@@ -34,6 +40,7 @@ const mapStateToProps = ({dealer, nav, core}) => {
 
 const mapDispatchToProps = {
   fetchDealers,
+  fetchBrands,
   selectDealer,
   selectRegion,
   actionSetPushActionSubscribe,
@@ -47,6 +54,13 @@ class ChooseDealerScreen extends Component {
     headerLeft: <HeaderIconBack theme="white" navigation={navigation} />,
     headerRight: <View />,
   });
+
+  constructor(props) {
+    super(props);
+    if (props.listBrands && props.listBrands.length === 0) {
+      props.fetchBrands();
+    }
+  }
 
   // ВАЖНО! ЯВНО ОТКЛЮЧЕН ИЗ-ЗА ПРОБЛЕМ ПЕРВОЙ ЗАГРУЗКИ НА IOS 11+
   shouldComponentUpdate(nextProps) {
@@ -78,6 +92,7 @@ class ChooseDealerScreen extends Component {
       isFetchDealer,
       navigation,
       fetchDealers,
+      fetchBrands,
       selectRegion,
       selectDealer,
       dealerSelected,

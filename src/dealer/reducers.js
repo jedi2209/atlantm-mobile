@@ -11,6 +11,9 @@ import {
   DEALERS__REQUEST,
   DEALERS__SUCCESS,
   DEALERS__FAIL,
+  BRANDS__REQUEST,
+  BRANDS__SUCCESS,
+  BRANDS__FAIL,
 } from './actionTypes';
 
 import {APP_STORE_UPDATED} from '../core/actionTypes';
@@ -89,6 +92,17 @@ function listUkraine(state = [], action) {
   }
 }
 
+function listBrands(state = [], action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'dealer.listBrands', []);
+    case BRANDS__SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 function isFetchDealersList(state = false, action) {
   switch (action.type) {
     case DEALERS__REQUEST:
@@ -107,6 +121,18 @@ function isFetchDealer(state = false, action) {
       return true;
     case DEALER__SUCCESS:
     case DEALER__FAIL:
+      return false;
+    default:
+      return state;
+  }
+}
+
+function isFetchBrands(state = false, action) {
+  switch (action.type) {
+    case BRANDS__REQUEST:
+      return true;
+    case BRANDS__SUCCESS:
+    case BRANDS__FAIL:
       return false;
     default:
       return state;
@@ -183,6 +209,7 @@ export default combineReducers({
   listRussiaByCities,
   listUkraineByCities,
   listBelarussiaByCities,
+  listBrands,
   meta: combineReducers({
     isFetchDealersList,
     isFetchDealer,

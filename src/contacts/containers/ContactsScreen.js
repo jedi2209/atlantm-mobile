@@ -153,7 +153,7 @@ const Card = ({kind, title, subtitle, onPress}) => {
           <Text
             style={{color: '#fff', fontSize: 12}}
             ellipsizeMode="tail"
-            numberOfLines={1}
+            numberOfLines={3}
             selectable={false}>
             {subtitle}
           </Text>
@@ -415,9 +415,8 @@ class ContactsScreen extends Component {
                     }
                     subtitle={
                       this.sitesSubtitle && this.sitesSubtitle.sites.length > 1
-                        ? this.sitesSubtitle &&
-                          this.sitesSubtitle.sites.join('\r\n')
-                        : this.sitesSubtitle && this.sitesSubtitle.sites[0]
+                        ? this.sitesSubtitle.sites.join('\r\n')
+                        : this.sitesSubtitle.sites[0]
                     }
                     kind="success"
                     onPress={() => {
