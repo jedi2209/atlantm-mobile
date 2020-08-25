@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   },
   priceSpecial: {
     color: 'red',
+    marginRight: 10,
   },
   extra: {
     borderColor: 'red',
@@ -166,6 +167,7 @@ const mapStateToProps = ({dealer, nav}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
+    brands: dealer.listBrands,
     listRussia: dealer.listRussia,
     listUkraine: dealer.listUkraine,
     listBelarussia: dealer.listBelarussia,
@@ -221,6 +223,16 @@ class CarListItem extends Component {
 
   renderPrice = ({car}) => {
     const isSale = car.sale === true;
+    let badge = [];
+    badge = get(car, 'badge', null);
+    if (isSale) {
+      badge.unshift({
+        background: 'red',
+        name: 'Спец.цена',
+        textColor: 'white',
+        type: 'special-price',
+      });
+    }
 
     let CarImgReal = false;
     if (get(car, 'imgReal.thumb.0')) {
@@ -234,45 +246,66 @@ class CarListItem extends Component {
 
     return (
       <View style={[styles.priceContainer, {marginBottom: CarImgReal ? 0 : 5}]}>
-        {isSale ? (
-          <View style={{flex: 1, flexDirection: 'row',}}>
-            <Text
-              style={[
-                styles.price,
-                {color: CarImgReal ? '#FFFFFF' : '#2A2A43'},
-                styles.priceSpecial,
-              ]}>
-              {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
-            </Text>
-            <View style={{marginLeft: 10}}>
-              <Badge
-                id={car.id.api}
-                key={'badgeItemSpecialPrice' + car.id.api}
-                bgColor="red"
-                name="Спец.цена"
-                textColor="white"
-              />
-            </View>
-          </View>
-        ) : null}
+        <View style={{flex: 1, flexDirection: 'row'}}>
+          {isSale ? (
+            <>
+              <Text
+                style={[
+                  styles.price,
+                  {color: CarImgReal ? '#FFFFFF' : '#2A2A43'},
+                  styles.priceSpecial,
+                ]}>
+                {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
+              </Text>
+              {badge &&
+                badge.map((item, index) => {
+                  return (
+                    <Badge
+                      id={car.id.api}
+                      key={'badgeItem' + car.id.api + index}
+                      index={index}
+                      bgColor={item.background}
+                      name={item.name}
+                      textColor={item.textColor}
+                    />
+                  );
+                })}
+            </>
+          ) : null}
+        </View>
         <View style={{flexDirection: 'row'}}>
           <Text
             style={[
               styles.price,
               {
                 color: CarImgReal ? '#FFFFFF' : '#2A2A43',
+                marginRight: 10,
               },
               isSale ? styles.priceDefault : null,
             ]}>
             {showPrice(CarPrices.standart, this.props.dealerSelected.region)}
           </Text>
+          {!isSale &&
+            badge &&
+            badge.map((item, index) => {
+              return (
+                <Badge
+                  id={car.id.api}
+                  key={'badgeItem' + car.id.api + index}
+                  index={index}
+                  bgColor={item.background}
+                  name={item.name}
+                  textColor={item.textColor}
+                />
+              );
+            })}
         </View>
       </View>
     );
   };
 
   render() {
-    const {car, prices, itemScreen} = this.props;
+    const {car, prices, itemScreen, brands, isNewCar} = this.props;
     let {resizeMode} = this.props;
     const modelName = get(car, 'model.name', '');
     const complectation = get(car, 'complectation.name', '');
@@ -315,39 +348,52 @@ class CarListItem extends Component {
             ]}
           />
           <View style={[styles.titleContainer]}>
-            <Text style={styles.title} ellipsizeMode="tail" numberOfLines={1}>
-              {`${get(car, 'brand.name')} ${modelName || ''} ${complectation}`}
-            </Text>
-            {year ? <Text style={styles.year}>{`${year} г.в.`}</Text> : null}
+            {itemScreen === 'NewCarItemScreen' &&
+            brands[get(car, 'brand.id')] ? (
+              <View style={{flexDirection: 'row'}}>
+                <Imager
+                  style={{
+                    height: 30,
+                    width: 40,
+                    zIndex: 2,
+                    alignContent: 'flex-start',
+                    flex: 1,
+                    marginRight: 7,
+                    marginBottom: 2,
+                  }}
+                  resizeMode={'contain'}
+                  source={{
+                    uri: brands[get(car, 'brand.id')].logo,
+                  }}
+                />
+                <View style={{flexDirection: 'column'}}>
+                  <Text
+                    style={styles.title}
+                    ellipsizeMode="tail"
+                    numberOfLines={1}>
+                    {`${modelName || ''} ${complectation}`}
+                  </Text>
+                  {year ? (
+                    <Text style={styles.year}>{`${year} г.в.`}</Text>
+                  ) : null}
+                </View>
+              </View>
+            ) : (
+              <>
+                <Text
+                  style={styles.title}
+                  ellipsizeMode="tail"
+                  numberOfLines={1}>
+                  {`${get(car, 'brand.name')} ${
+                    modelName || ''
+                  } ${complectation}`}
+                </Text>
+                {year ? (
+                  <Text style={styles.year}>{`${year} г.в.`}</Text>
+                ) : null}
+              </>
+            )}
           </View>
-          {badge ? (
-            <View
-              key={'badgeContainer' + car.id.api}
-              style={{
-                position: 'absolute',
-                right: 0,
-                width: '100%',
-                top: 3,
-                flexDirection: 'row',
-                flex: 1,
-                zIndex: 10,
-                alignContent: 'stretch',
-                justifyContent: 'flex-end',
-              }}>
-              {badge.map((item, index) => {
-                return (
-                  <Badge
-                    id={car.id.api}
-                    key={'badgeItem' + car.id.api + index}
-                    index={index}
-                    bgColor={item.background}
-                    name={item.name}
-                    textColor={item.textColor}
-                  />
-                );
-              })}
-            </View>
-          ) : null}
           {CarImg ? (
             <Imager
               resizeMode={resizeMode ? resizeMode : 'cover'}

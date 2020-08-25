@@ -9,3 +9,7 @@ export const DEALER__FAIL = 'DEALER__FAIL';
 export const DEALERS__REQUEST = 'DEALERS__REQUEST';
 export const DEALERS__SUCCESS = 'DEALERS__SUCCESS';
 export const DEALERS__FAIL = 'DEALERS__FAIL';
+
+export const BRANDS__REQUEST = 'BRANDS__REQUEST';
+export const BRANDS__SUCCESS = 'BRANDS__SUCCESS';
+export const BRANDS__FAIL = 'BRANDS__FAIL';
