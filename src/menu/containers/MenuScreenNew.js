@@ -165,19 +165,26 @@ const MoreScreen = (props) => {
       type: 'indicators',
       selected: false,
     },
+    {
+      id: 6,
+      name: 'Отзывы',
+      navigateUrl: 'ReviewsScreen',
+      type: 'reviews',
+      selected: false,
+    },
   ];
 
   if (props.dealerSelected.divisionTypes) {
-    if (props.dealerSelected.divisionTypes.includes('ZM')) {
-      // новые авто
-      menu.push({
-        id: 6,
-        name: 'Отзывы',
-        navigateUrl: 'ReviewsScreen',
-        type: 'reviews',
-        selected: false,
-      });
-    }
+    // if (props.dealerSelected.divisionTypes.includes('ZM')) {
+    //   // новые авто
+    //   menu.push({
+    //     id: 6,
+    //     name: 'Отзывы',
+    //     navigateUrl: 'ReviewsScreen',
+    //     type: 'reviews',
+    //     selected: false,
+    //   });
+    // }
     if (props.dealerSelected.divisionTypes.includes('ST')) {
       // сервис
       menu.push(
