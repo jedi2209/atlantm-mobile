@@ -179,7 +179,7 @@ export default class SelectItemByCountry extends Component {
             ) : null}
             <Text style={styles.site}>{this._getSite(item.site)}</Text>
             <View style={styles.brands}>
-              {item.brands &&
+              {item.brands.length &&
                 item.brands.map((brand) => {
                   if (brand.logo) {
                     return (
@@ -227,7 +227,7 @@ export default class SelectItemByCountry extends Component {
                 }
                 return (
                   <View key={dealer.id} style={styles.brands}>
-                    {dealer.brands &&
+                    {dealer.brands.length &&
                       dealer.brands.map((brand) => {
                         const name =
                           brand.name === 'land rover'
