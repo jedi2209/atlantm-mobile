@@ -99,31 +99,32 @@ export default class CityItemList extends Component {
                         <View
                           key={'dealerView' + dealer.id}
                           style={styles.brands}>
-                          {dealer.brands.map((brand) => {
-                            const name =
-                              brand.name === 'land rover'
-                                ? 'landrover'
-                                : brand.name;
+                          {dealer.brands &&
+                            dealer.brands.map((brand) => {
+                              const name =
+                                brand.name === 'land rover'
+                                  ? 'landrover'
+                                  : brand.name;
 
-                            if (
-                              existBrands.includes(name) ||
-                              dealer.virtual !== false
-                            ) {
-                              return null;
-                            } else {
-                              existBrands.push(name);
-                            }
-                            if (brand.logo) {
-                              return (
-                                <Imager
-                                  resizeMode="contain"
-                                  key={'brandLogo' + brand.id}
-                                  style={styles.brandLogo}
-                                  source={{uri: brand.logo}}
-                                />
-                              );
-                            }
-                          })}
+                              if (
+                                existBrands.includes(name) ||
+                                dealer.virtual !== false
+                              ) {
+                                return null;
+                              } else {
+                                existBrands.push(name);
+                              }
+                              if (brand.logo) {
+                                return (
+                                  <Imager
+                                    resizeMode="contain"
+                                    key={'brandLogo' + brand.id}
+                                    style={styles.brandLogo}
+                                    source={{uri: brand.logo}}
+                                  />
+                                );
+                              }
+                            })}
                         </View>
                       );
                     })}

@@ -2,7 +2,7 @@
 import React from 'react';
 import {Platform} from 'react-native';
 import {Icon, ActionSheet} from 'native-base';
-import {ORDERS} from '../../core/const';
+import getOrders from '../../utils/orders';
 
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
@@ -22,6 +22,13 @@ import InfoPostScreen from '../../info/containers/InfoPostScreen';
 import UsedCarListScreen from '../../catalog/usedcar/containers/UsedCarListScreen';
 import MoreScreen from './MenuScreenNew';
 // import ApplicationModalScreen from './Application';
+const getOrdersFunc = async () => {
+  const orders = await getOrders();
+  if (orders) {
+    const ORDERS = orders;
+    return ORDERS;
+  }
+};
 
 const styles = {
   shadow: {
@@ -128,31 +135,32 @@ const BottomTabNavigation = createBottomTabNavigator(
       navigationOptions: ({navigation}) => {
         return {
           tabBarOnPress: () => {
-            ActionSheet.show(
-              {
-                options: ORDERS[Platform.OS].BUTTONS,
-                cancelButtonIndex: ORDERS[Platform.OS].CANCEL_INDEX,
-                title: ORDERS[Platform.OS].TITLE,
-                destructiveButtonIndex:
-                  ORDERS[Platform.OS].DESTRUCTIVE_INDEX || null,
-              },
-              (buttonIndex) => {
-                switch (ORDERS[Platform.OS].BUTTONS[buttonIndex].id) {
-                  case 'callMeBack':
-                    navigation.navigate('CallMeBackScreen');
-                    break;
-                  case 'orderService':
-                    navigation.navigate('ServiceScreen');
-                    break;
-                  case 'orderParts':
-                    navigation.navigate('OrderPartsScreen');
-                    break;
-                  case 'carCost':
-                    navigation.navigate('CarCostScreen');
-                    break;
-                }
-              },
-            );
+            getOrdersFunc().then((ORDERS) => {
+              ActionSheet.show(
+                {
+                  options: ORDERS.BUTTONS,
+                  cancelButtonIndex: ORDERS.CANCEL_INDEX,
+                  title: ORDERS.TITLE,
+                  destructiveButtonIndex: ORDERS.DESTRUCTIVE_INDEX || null,
+                },
+                (buttonIndex) => {
+                  switch (ORDERS.BUTTONS[buttonIndex].id) {
+                    case 'callMeBack':
+                      navigation.navigate('CallMeBackScreen');
+                      break;
+                    case 'orderService':
+                      navigation.navigate('ServiceScreen');
+                      break;
+                    case 'orderParts':
+                      navigation.navigate('OrderPartsScreen');
+                      break;
+                    case 'carCost':
+                      navigation.navigate('CarCostScreen');
+                      break;
+                  }
+                },
+              );
+            });
           },
           tabBarLabel: 'Заявка',
           tabBarIcon: ({tintColor}) => (

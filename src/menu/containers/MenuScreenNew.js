@@ -159,27 +159,6 @@ const MoreScreen = (props) => {
       selected: false,
     },
     {
-      id: 5,
-      name: 'Сервис',
-      navigateUrl: 'ServiceScreen',
-      type: 'service',
-      selected: false,
-    },
-    {
-      id: 8,
-      name: 'Табло выдачи авто',
-      navigateUrl: 'TvaScreen',
-      type: 'new',
-      selected: false,
-    },
-    {
-      id: 6,
-      name: 'Отзывы',
-      navigateUrl: 'ReviewsScreen',
-      type: 'reviews',
-      selected: false,
-    },
-    {
       id: 7,
       name: 'Индикаторы',
       navigateUrl: 'IndicatorsScreen',
@@ -187,6 +166,42 @@ const MoreScreen = (props) => {
       selected: false,
     },
   ];
+
+  if (props.dealerSelected.divisionTypes) {
+    if (props.dealerSelected.divisionTypes.includes('ZM')) {
+      // новые авто
+      menu.push({
+        id: 6,
+        name: 'Отзывы',
+        navigateUrl: 'ReviewsScreen',
+        type: 'reviews',
+        selected: false,
+      });
+    }
+    if (props.dealerSelected.divisionTypes.includes('ST')) {
+      // сервис
+      menu.push(
+        {
+          id: 5,
+          name: 'Сервис',
+          navigateUrl: 'ServiceScreen',
+          type: 'service',
+          selected: false,
+        },
+        {
+          id: 8,
+          name: 'Табло выдачи авто',
+          navigateUrl: 'TvaScreen',
+          type: 'new',
+          selected: false,
+        },
+      );
+    }
+  }
+
+  menu.sort((a, b) => {
+    return a.id - b.id;
+  });
 
   return (
     <>
