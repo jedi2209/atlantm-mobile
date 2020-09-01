@@ -53,6 +53,22 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
         dealer.region = dealerBaseData.region;
         dealer.brands = dealerBaseData.brands;
 
+        if (dealer.divisions) {
+          dealer.divisionTypes = [];
+          Object.keys(dealer.divisions).map((val) => {
+            if (dealer.divisions[val].type) {
+              const divisionObj = dealer.divisions[val].type;
+              Object.keys(divisionObj).map((el) => {
+                const divisionType = divisionObj[el];
+                if (typeof dealer.divisionTypes[divisionType] === 'undefined') {
+                  dealer.divisionTypes.push(divisionType);
+                }
+              });
+            }
+            return dealer.divisionTypes;
+          });
+        }
+
         if (!isLocal) {
           // обновляем дилера глобально
           return dispatch({

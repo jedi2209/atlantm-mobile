@@ -118,13 +118,8 @@ class AboutDealerScreen extends Component {
       imageHeight: IMAGE_HEIGHT,
       webViewWidth: screenWidth - styleConst.ui.verticalGap,
     };
-  }
-
-  componentDidMount() {
-    const {navigation, actionFetchDealer} = this.props;
-    const dealerBaseData = get(navigation, 'state.params.dealerBaseData');
-
-    actionFetchDealer(dealerBaseData);
+    props.navigation &&
+      actionFetchDealer(get(props.navigation, 'state.params.dealerBaseData'));
   }
 
   onLayoutImage = (e) => {

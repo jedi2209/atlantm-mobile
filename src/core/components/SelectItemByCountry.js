@@ -159,7 +159,7 @@ export default class SelectItemByCountry extends Component {
 
   renderDealer = () => {
     const {item} = this.props;
-    if (item.virtual !== false) {
+    if (item.virtual !== false && item.id !== 177) {
       // фикс для НЕ вывода виртуальных КО в списке
       return true;
     }
@@ -179,18 +179,19 @@ export default class SelectItemByCountry extends Component {
             ) : null}
             <Text style={styles.site}>{this._getSite(item.site)}</Text>
             <View style={styles.brands}>
-              {item.brands.map((brand) => {
-                if (brand.logo) {
-                  return (
-                    <Imager
-                      resizeMode="contain"
-                      key={'brandLogo' + brand.id}
-                      style={styles.brandLogo}
-                      source={{uri: brand.logo}}
-                    />
-                  );
-                }
-              })}
+              {item.brands &&
+                item.brands.map((brand) => {
+                  if (brand.logo) {
+                    return (
+                      <Imager
+                        resizeMode="contain"
+                        key={'brandLogo' + brand.id}
+                        style={styles.brandLogo}
+                        source={{uri: brand.logo}}
+                      />
+                    );
+                  }
+                })}
             </View>
           </View>
           {CarImg ? (
@@ -220,36 +221,39 @@ export default class SelectItemByCountry extends Component {
           {item.dealers && item.dealers.length !== 0 ? (
             <View style={styles.brands}>
               {item.dealers.map((dealer) => {
-                if (dealer.virtual !== false) {
+                if (dealer.virtual !== false && item.id !== 177) {
                   // фикс для НЕ вывода виртуальных КО в списке
                   return true;
                 }
                 return (
                   <View key={dealer.id} style={styles.brands}>
-                    {dealer.brands.map((brand) => {
-                      const name =
-                        brand.name === 'land rover' ? 'landrover' : brand.name;
+                    {dealer.brands &&
+                      dealer.brands.map((brand) => {
+                        const name =
+                          brand.name === 'land rover'
+                            ? 'landrover'
+                            : brand.name;
 
-                      if (
-                        existBrands.includes(name) ||
-                        dealer.virtual !== false
-                      ) {
-                        return null;
-                      } else {
-                        existBrands.push(name);
-                      }
+                        if (
+                          existBrands.includes(name) ||
+                          dealer.virtual !== false
+                        ) {
+                          return null;
+                        } else {
+                          existBrands.push(name);
+                        }
 
-                      if (brand.logo) {
-                        return (
-                          <Imager
-                            resizeMode="contain"
-                            key={'brandLogo' + brand.id}
-                            style={styles.brandLogo}
-                            source={{uri: brand.logo}}
-                          />
-                        );
-                      }
-                    })}
+                        if (brand.logo) {
+                          return (
+                            <Imager
+                              resizeMode="contain"
+                              key={'brandLogo' + brand.id}
+                              style={styles.brandLogo}
+                              source={{uri: brand.logo}}
+                            />
+                          );
+                        }
+                      })}
                   </View>
                 );
               })}
