@@ -106,18 +106,19 @@ export default class DealerItemList extends Component {
           </Body>
           <Right>
             <View style={stylesDealerItemList.brands}>
-              {dealer.brands.map((brand) => {
-                if (brand.logo) {
-                  return (
-                    <Imager
-                      resizeMode="contain"
-                      key={brand.id}
-                      style={stylesDealerItemList.brandLogo}
-                      source={{uri: brand.logo}}
-                    />
-                  );
-                }
-              })}
+              {dealer.brands &&
+                dealer.brands.map((brand) => {
+                  if (brand.logo) {
+                    return (
+                      <Imager
+                        resizeMode="contain"
+                        key={brand.id}
+                        style={stylesDealerItemList.brandLogo}
+                        source={{uri: brand.logo}}
+                      />
+                    );
+                  }
+                })}
             </View>
           </Right>
         </ListItem>
