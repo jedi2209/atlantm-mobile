@@ -106,7 +106,7 @@ export default class DealerItemList extends Component {
           </Body>
           <Right>
             <View style={stylesDealerItemList.brands}>
-              {dealer.brands &&
+              {dealer.brands.length &&
                 dealer.brands.map((brand) => {
                   if (brand.logo) {
                     return (
