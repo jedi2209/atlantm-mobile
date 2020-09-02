@@ -67,8 +67,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     opacity: 1,
     height: 50,
-    width: '80%',
+    width: '100%',
     borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
   },
   titleContainer: {
     flex: 1,
@@ -136,11 +137,11 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   common: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#A8ABBE',
   },
   commonReal: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#FFF',
   },
   saleContainer: {
@@ -170,6 +171,14 @@ const styles = StyleSheet.create({
     marginRight: 7,
     marginLeft: 3,
     marginBottom: 2,
+  },
+  carTechContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginHorizontal: 15,
+    zIndex: 2,
+    justifyContent: 'space-between',
   },
 });
 
@@ -209,7 +218,8 @@ class CarListItem extends Component {
   };
 
   onPressOrder = () => {
-    const {navigate, car} = this.props;
+    const {navigate, itemScreen, car} = this.props;
+    const isNewCar = itemScreen === 'NewCarItemScreen';
     navigate('OrderScreen', {
       car: {
         brand: get(car, 'brand.name', ''),
@@ -221,7 +231,7 @@ class CarListItem extends Component {
       region: this.props.dealerSelected.region,
       dealerId: get(car, 'dealer.id'),
       carId: car.id.api,
-      isNewCar: false,
+      isNewCar: isNewCar,
     });
   };
 
@@ -233,27 +243,7 @@ class CarListItem extends Component {
 
   renderPrice = ({car}) => {
     const isSale = car.sale === true;
-    // let badgeTmp = [];
-    // let badgeTypes = [];
     const badge = get(car, 'badge', []);
-    // if (badge) {
-    //   badge.map((el) => {
-    //     badgeTypes.push(el.type);
-    //   });
-    //   console.log('badgeTypes', badgeTypes);
-    // }
-    // if (isSale && !badgeTypes.includes('special-price')) {
-    //   badgeTmp.unshift({
-    //     background: 'red',
-    //     name: 'спец.цена',
-    //     textColor: 'white',
-    //     type: 'special-price',
-    //   });
-    // }
-
-    // Array.prototype.push.apply(badgeTmp, badge);
-
-    console.log('badge', badge);
 
     let CarImgReal = false;
     if (get(car, 'imgReal.thumb.0')) {
@@ -326,7 +316,7 @@ class CarListItem extends Component {
   };
 
   render() {
-    const {car, prices, itemScreen, brands, isNewCar} = this.props;
+    const {car, prices, itemScreen, brands} = this.props;
     let {resizeMode} = this.props;
     const modelName = get(car, 'model.name', '');
     const complectation = get(car, 'complectation.name', '');
@@ -335,7 +325,11 @@ class CarListItem extends Component {
     const gearbox = get(car, 'gearbox.name');
     const year = get(car, 'year');
     const ordered = get(car, 'ordered', 0);
+    const idSAP = get(car, 'id.sap', null);
     const isSale = car.sale === true;
+    const isNewCar = itemScreen === 'NewCarItemScreen';
+    const carBrandImage =
+      itemScreen === 'NewCarItemScreen' && brands[get(car, 'brand.id')];
     let CarImg = '';
     let CarImgReal = false;
     if (get(car, 'imgReal.thumb.0')) {
@@ -361,15 +355,11 @@ class CarListItem extends Component {
             useAngle
             angle={itemScreen === 'NewCarItemScreen' ? 60 : 170}
             // colors={['rgba(15, 102, 178, 1)', 'rgba(0, 97, 237, 0)']}
-            colors={['rgba(51, 51, 51, 0.75)', 'rgba(51, 51, 51, 0)']}
-            style={[
-              styles.titleBackground,
-              itemScreen === 'NewCarItemScreen' ? {width: '100%'} : null,
-            ]}
+            colors={['rgba(51, 51, 51, 0.75)', 'rgba(51, 51, 51, 0.25)']}
+            style={styles.titleBackground}
           />
           <View style={[styles.titleContainer]}>
-            {itemScreen === 'NewCarItemScreen' &&
-            brands[get(car, 'brand.id')] ? (
+            {carBrandImage ? (
               <View style={{flexDirection: 'row'}}>
                 <View style={{width: '12%', minWidth: 50,}}>
                   <Imager
@@ -453,54 +443,42 @@ class CarListItem extends Component {
             ]}>
             {this.renderPrice({car, prices})}
           </View>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              marginHorizontal: 15,
-              zIndex: 2,
-            }}>
-            <View>
-              {engineVolume &&
-              get(car, 'engine.id') &&
-              get(car, 'engine.id') !== 4 ? (
-                <View style={styles.extraTextContainer}>
-                  <Text
-                    style={
-                      CarImgReal ? styles.commonReal : styles.common
-                    }>{`${engineVolume} см³ `}</Text>
-                </View>
-              ) : null}
-            </View>
-            <View>
-              {get(car, 'engine.type') || engineVolume ? (
-                <View style={styles.extraTextContainer}>
-                  <Text
-                    style={
-                      CarImgReal ? styles.commonReal : styles.common
-                    }>{`${car.engine.type} `}</Text>
-                </View>
-              ) : null}
-            </View>
-            {mileage ? (
-              <View style={styles.extraTextContainer}>
-                <Text
-                  style={
-                    CarImgReal ? styles.commonReal : styles.common
-                  }>{`пробег ${numberWithGap(mileage)} км. `}</Text>
-              </View>
+          <View style={styles.carTechContainer}>
+            {engineVolume &&
+            get(car, 'engine.id') &&
+            get(car, 'engine.id') !== 4 ? (
+              <Text
+                selectable={false}
+                style={
+                  CarImgReal ? styles.commonReal : styles.common
+                }>{`${engineVolume} см³ `}</Text>
             ) : null}
-            <View>
-              {gearbox ? (
-                <View style={styles.extraTextContainer}>
-                  <Text
-                    style={
-                      CarImgReal ? styles.commonReal : styles.common
-                    }>{`${gearbox.toLowerCase()} `}</Text>
-                </View>
-              ) : null}
-            </View>
+            {get(car, 'engine.type') || engineVolume ? (
+              <Text
+                selectable={false}
+                style={
+                  CarImgReal ? styles.commonReal : styles.common
+                }>{`${car.engine.type} `}</Text>
+            ) : null}
+            {mileage ? (
+              <Text
+                selectable={false}
+                style={
+                  CarImgReal ? styles.commonReal : styles.common
+                }>{`пробег ${numberWithGap(mileage)} км. `}</Text>
+            ) : null}
+            {gearbox ? (
+              <Text
+                selectable={false}
+                style={
+                  CarImgReal ? styles.commonReal : styles.common
+                }>{`${gearbox.toLowerCase()} `}</Text>
+            ) : null}
+            {idSAP && isNewCar ? (
+              <Text style={CarImgReal ? styles.commonReal : styles.common}>
+                {`#${idSAP}`}
+              </Text>
+            ) : null}
           </View>
         </View>
       </TouchableHighlight>

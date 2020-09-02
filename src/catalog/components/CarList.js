@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {View, FlatList, StyleSheet, ActivityIndicator} from 'react-native';
 
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class CarList extends Component {
+export default class CarList extends PureComponent {
   static propTypes = {
     pages: PropTypes.object,
     data: PropTypes.array,
