@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 export default class CarList extends Component {
   static propTypes = {
     pages: PropTypes.object,
-    items: PropTypes.array,
+    data: PropTypes.array,
     itemScreen: PropTypes.string,
     isFetchItems: PropTypes.bool,
     navigation: PropTypes.object,
@@ -42,7 +42,7 @@ export default class CarList extends Component {
   static defaultProps = {
     pages: {},
     prices: {},
-    items: null,
+    data: null,
     navigation: {},
     itemScreen: null,
     isFetchItems: false,
@@ -58,9 +58,9 @@ export default class CarList extends Component {
   }
 
   componentDidMount() {
-    const {items, isFetchItems, dataHandler} = this.props;
+    const {data, isFetchItems, dataHandler} = this.props;
 
-    if ((!items || items.length === 0) && !isFetchItems) {
+    if ((!data || data.length === 0) && !isFetchItems) {
       dataHandler(EVENT_DEFAULT);
     }
   }
@@ -118,9 +118,9 @@ export default class CarList extends Component {
   };
 
   handleLoadMore = () => {
-    const {items, pages, dataHandler} = this.props;
+    const {data, pages, dataHandler} = this.props;
 
-    if (!pages.next || items.length === 0 || this.state.loadingNextPage) {
+    if (!pages.next || data.length === 0 || this.state.loadingNextPage) {
       return false;
     }
 
@@ -140,18 +140,13 @@ export default class CarList extends Component {
   };
 
   render() {
-    const {items} = this.props;
-
     console.log('== CarList ==');
 
     return (
       <FlatList
         onEndReachedThreshold={0.4}
         initialNumToRender={10}
-        maxToRenderPerBatch={10} // Reduce number in each render batch
-        // eslint-disable-next-line react/jsx-no-duplicate-props
         maxToRenderPerBatch={20} // Increase time between renders
-        data={items}
         onRefresh={this.onRefresh}
         refreshing={this.state.isRefreshing}
         ListEmptyComponent={this.renderEmptyComponent}
@@ -170,6 +165,7 @@ export default class CarList extends Component {
           }
         }}
         onEndReached={this.handleLoadMore}
+        {...this.props}
       />
     );
   }

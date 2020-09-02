@@ -221,7 +221,7 @@ class UserCarListScreen extends Component {
       <View style={styles.content}>
         <StatusBar hidden />
         <CarList
-          items={items}
+          data={items}
           pages={pages}
           prices={prices}
           itemScreen="UsedCarItemScreen"
