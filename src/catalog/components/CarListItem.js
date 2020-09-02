@@ -137,12 +137,14 @@ const styles = StyleSheet.create({
     bottom: 0,
   },
   common: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#A8ABBE',
+    marginRight: 7,
   },
   commonReal: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#FFF',
+    marginRight: 7,
   },
   saleContainer: {
     marginTop: 2,
@@ -178,7 +180,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginHorizontal: 15,
     zIndex: 2,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   },
 });
 
@@ -444,6 +446,13 @@ class CarListItem extends Component {
             {this.renderPrice({car, prices})}
           </View>
           <View style={styles.carTechContainer}>
+            {mileage ? (
+              <Text
+                selectable={false}
+                style={
+                  CarImgReal ? styles.commonReal : styles.common
+                }>{`${numberWithGap(mileage)} км.`}</Text>
+            ) : null}
             {engineVolume &&
             get(car, 'engine.id') &&
             get(car, 'engine.id') !== 4 ? (
@@ -451,28 +460,21 @@ class CarListItem extends Component {
                 selectable={false}
                 style={
                   CarImgReal ? styles.commonReal : styles.common
-                }>{`${engineVolume} см³ `}</Text>
+                }>{`${engineVolume} см³`}</Text>
             ) : null}
-            {get(car, 'engine.type') || engineVolume ? (
+            {get(car, 'engine.type') ? (
               <Text
                 selectable={false}
                 style={
                   CarImgReal ? styles.commonReal : styles.common
-                }>{`${car.engine.type} `}</Text>
-            ) : null}
-            {mileage ? (
-              <Text
-                selectable={false}
-                style={
-                  CarImgReal ? styles.commonReal : styles.common
-                }>{`пробег ${numberWithGap(mileage)} км. `}</Text>
+                }>{`${car.engine.type}`}</Text>
             ) : null}
             {gearbox ? (
               <Text
                 selectable={false}
                 style={
                   CarImgReal ? styles.commonReal : styles.common
-                }>{`${gearbox.toLowerCase()} `}</Text>
+                }>{`${gearbox.toLowerCase()}`}</Text>
             ) : null}
             {idSAP && isNewCar ? (
               <Text style={CarImgReal ? styles.commonReal : styles.common}>
