@@ -158,6 +158,9 @@ class NewCarListScreen extends Component {
 
     const onResult = () => {
       return setTimeout(() => {
+        this.setState({
+          isRefreshing: false,
+        });
         this.props.navigation.setParams({
           total: get(this.props.items, 'total'),
         });
@@ -165,7 +168,9 @@ class NewCarListScreen extends Component {
     };
 
     if (type === EVENT_REFRESH) {
-      console.log('EVENT_REFRESH');
+      this.setState({
+        isRefreshing: true,
+      });
       return actionFetchNewCarByFilter({
         searchUrl:
           filterData.search_url ||
@@ -207,7 +212,7 @@ class NewCarListScreen extends Component {
           <Spinner visible={true} color={styleConst.color.blue} />
         ) : (
           <CarList
-            items={data}
+            data={data}
             pages={pages}
             prices={prices}
             navigation={navigation}

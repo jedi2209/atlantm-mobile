@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: 'column',
-    paddingBottom: 15,
+    paddingBottom: 10,
   },
   image: {
     height: 220,
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
     position: 'absolute',
     marginVertical: 5,
-    marginHorizontal: 15,
+    marginHorizontal: '1%',
   },
   priceContainer: {
     flexDirection: 'column',
@@ -161,6 +161,16 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 10,
   },
+  brandLogo: {
+    height: 30,
+    width: 40,
+    zIndex: 2,
+    alignContent: 'flex-start',
+    flex: 1,
+    marginRight: 7,
+    marginLeft: 3,
+    marginBottom: 2,
+  },
 });
 
 const mapStateToProps = ({dealer, nav}) => {
@@ -223,16 +233,27 @@ class CarListItem extends Component {
 
   renderPrice = ({car}) => {
     const isSale = car.sale === true;
-    let badge = [];
-    badge = get(car, 'badge', null);
-    if (isSale) {
-      badge.unshift({
-        background: 'red',
-        name: 'Спец.цена',
-        textColor: 'white',
-        type: 'special-price',
-      });
-    }
+    // let badgeTmp = [];
+    // let badgeTypes = [];
+    const badge = get(car, 'badge', []);
+    // if (badge) {
+    //   badge.map((el) => {
+    //     badgeTypes.push(el.type);
+    //   });
+    //   console.log('badgeTypes', badgeTypes);
+    // }
+    // if (isSale && !badgeTypes.includes('special-price')) {
+    //   badgeTmp.unshift({
+    //     background: 'red',
+    //     name: 'спец.цена',
+    //     textColor: 'white',
+    //     type: 'special-price',
+    //   });
+    // }
+
+    // Array.prototype.push.apply(badgeTmp, badge);
+
+    console.log('badge', badge);
 
     let CarImgReal = false;
     if (get(car, 'imgReal.thumb.0')) {
@@ -313,7 +334,6 @@ class CarListItem extends Component {
     const mileage = get(car, 'mileage');
     const gearbox = get(car, 'gearbox.name');
     const year = get(car, 'year');
-    const badge = get(car, 'badge', null);
     const ordered = get(car, 'ordered', 0);
     const isSale = car.sale === true;
     let CarImg = '';
@@ -351,30 +371,27 @@ class CarListItem extends Component {
             {itemScreen === 'NewCarItemScreen' &&
             brands[get(car, 'brand.id')] ? (
               <View style={{flexDirection: 'row'}}>
-                <Imager
-                  style={{
-                    height: 30,
-                    width: 40,
-                    zIndex: 2,
-                    alignContent: 'flex-start',
-                    flex: 1,
-                    marginRight: 7,
-                    marginBottom: 2,
-                  }}
-                  resizeMode={'contain'}
-                  source={{
-                    uri: brands[get(car, 'brand.id')].logo,
-                  }}
-                />
-                <View style={{flexDirection: 'column'}}>
+                <View style={{width: '12%', minWidth: 50,}}>
+                  <Imager
+                    style={styles.brandLogo}
+                    resizeMode={'contain'}
+                    source={{
+                      uri: brands[get(car, 'brand.id')].logo,
+                    }}
+                  />
+                </View>
+                <View style={{flexDirection: 'column', width: '88%'}}>
                   <Text
                     style={styles.title}
                     ellipsizeMode="tail"
+                    selectable={false}
                     numberOfLines={1}>
                     {`${modelName || ''} ${complectation}`}
                   </Text>
                   {year ? (
-                    <Text style={styles.year}>{`${year} г.в.`}</Text>
+                    <Text
+                      style={styles.year}
+                      selectable={false}>{`${year} г.в.`}</Text>
                   ) : null}
                 </View>
               </View>
@@ -383,6 +400,7 @@ class CarListItem extends Component {
                 <Text
                   style={styles.title}
                   ellipsizeMode="tail"
+                  selectable={false}
                   numberOfLines={1}>
                   {`${get(car, 'brand.name')} ${
                     modelName || ''
