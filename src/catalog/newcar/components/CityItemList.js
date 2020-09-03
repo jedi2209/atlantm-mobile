@@ -99,7 +99,8 @@ export default class CityItemList extends Component {
                         <View
                           key={'dealerView' + dealer.id}
                           style={styles.brands}>
-                          {dealer.brands.length &&
+                          {dealer.brands &&
+                            dealer.brands.length &&
                             dealer.brands.map((brand) => {
                               const name =
                                 brand.name === 'land rover'
