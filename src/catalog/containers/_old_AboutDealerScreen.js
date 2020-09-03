@@ -29,8 +29,8 @@ import DeviceInfo from 'react-native-device-info';
 import Communications from 'react-native-communications';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
-import Imager from '../../core/components/Imager';
 import HeaderSubtitle from '../../core/components/HeaderSubtitle';
+import BrandLogo from '../../core/components/BrandLogo';
 
 // helpers
 import {get} from 'lodash';
@@ -90,9 +90,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({catalog}) => {
+const mapStateToProps = ({catalog, dealer}) => {
   return {
     dealer: catalog.dealer,
+    brands: dealer.listBrands,
     isFetchingDealer: catalog.meta.isFetchingDealer,
   };
 };
@@ -224,7 +225,7 @@ class AboutDealerScreen extends Component {
   };
 
   render() {
-    const {dealer, isFetchingDealer} = this.props;
+    const {dealer, isFetchingDealer, brands} = this.props;
 
     console.log('== About Dealer ==');
 
@@ -267,13 +268,13 @@ class AboutDealerScreen extends Component {
                   {dealer.brands &&
                     dealer.brands.length &&
                     dealer.brands.map((brand) => {
-                      if (brand.logo) {
+                      if (brands[brand.id].logo) {
                         return (
-                          <Imager
-                            resizeMode="contain"
-                            key={'dealerBrand' + brand.id}
+                          <BrandLogo
+                            brand={brand.id}
+                            height={25}
                             style={styles.brand}
-                            source={{uri: brand.logo}}
+                            key={'dealerBrand' + brand.id}
                           />
                         );
                       }
