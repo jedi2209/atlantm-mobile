@@ -52,9 +52,9 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
         dealer.id = dealerBaseData.id;
         dealer.region = dealerBaseData.region;
         dealer.brands = dealerBaseData.brands;
+        dealer.divisionTypes = [];
 
         if (dealer.divisions) {
-          dealer.divisionTypes = [];
           Object.keys(dealer.divisions).map((val) => {
             if (dealer.divisions[val].type) {
               const divisionObj = dealer.divisions[val].type;
@@ -67,6 +67,9 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
             }
             return dealer.divisionTypes;
           });
+          dealer.divisionTypes = dealer.divisionTypes.filter(
+            (v, i, a) => a.indexOf(v) === i,
+          );
         }
 
         if (!isLocal) {

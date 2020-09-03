@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {Platform} from 'react-native';
 import {Icon, ActionSheet} from 'native-base';
 import getOrders from '../../utils/orders';
 
@@ -22,13 +21,6 @@ import InfoPostScreen from '../../info/containers/InfoPostScreen';
 import UsedCarListScreen from '../../catalog/usedcar/containers/UsedCarListScreen';
 import MoreScreen from './MenuScreenNew';
 // import ApplicationModalScreen from './Application';
-const getOrdersFunc = async () => {
-  const orders = await getOrders();
-  if (orders) {
-    const ORDERS = orders;
-    return ORDERS;
-  }
-};
 
 const styles = {
   shadow: {
@@ -135,16 +127,16 @@ const BottomTabNavigation = createBottomTabNavigator(
       navigationOptions: ({navigation}) => {
         return {
           tabBarOnPress: () => {
-            getOrdersFunc().then((ORDERS) => {
+            getOrders().then((data) => {
               ActionSheet.show(
                 {
-                  options: ORDERS.BUTTONS,
-                  cancelButtonIndex: ORDERS.CANCEL_INDEX,
-                  title: ORDERS.TITLE,
-                  destructiveButtonIndex: ORDERS.DESTRUCTIVE_INDEX || null,
+                  options: data.BUTTONS,
+                  cancelButtonIndex: data.CANCEL_INDEX,
+                  title: data.TITLE,
+                  destructiveButtonIndex: data.DESTRUCTIVE_INDEX || null,
                 },
                 (buttonIndex) => {
-                  switch (ORDERS.BUTTONS[buttonIndex].id) {
+                  switch (data.BUTTONS[buttonIndex].id) {
                     case 'callMeBack':
                       navigation.navigate('CallMeBackScreen');
                       break;
