@@ -6,10 +6,12 @@ import {Text, ListItem, Body, Right, Icon, Left} from 'native-base';
 import DeviceInfo from 'react-native-device-info';
 import {NavigationActions, StackActions} from 'react-navigation';
 import Imager from '../components/Imager';
+import BrandLogo from '../../core/components/BrandLogo';
 
 // helpers
 import {get} from 'lodash';
 import PropTypes, {array} from 'prop-types';
+import {connect} from 'react-redux';
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
 import {
@@ -24,13 +26,12 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
   brandLogo: {
-    minWidth: 24,
-    height: 20,
-    marginRight: 4,
+    marginRight: 10,
+    height: 25,
   },
   name: {
     fontFamily: styleConst.font.regular,
-    fontSize: 17,
+    fontSize: 16,
     paddingTop: 5,
     paddingBottom: 10,
   },
@@ -70,7 +71,13 @@ const styles = StyleSheet.create({
   thumb: {flexShrink: 1, flexBasis: '40%', marginLeft: 8},
 });
 
-export default class SelectItemByCountry extends Component {
+const mapStateToProps = ({dealer}) => {
+  return {
+    brands: dealer.listBrands,
+  };
+};
+
+class SelectItemByCountry extends Component {
   static propTypes = {
     item: PropTypes.object,
     navigation: PropTypes.object,
@@ -158,7 +165,7 @@ export default class SelectItemByCountry extends Component {
   };
 
   renderDealer = () => {
-    const {item} = this.props;
+    const {item, brands} = this.props;
     if (item.virtual !== false && item.id !== 177) {
       // фикс для НЕ вывода виртуальных КО в списке
       return true;
@@ -179,15 +186,16 @@ export default class SelectItemByCountry extends Component {
             ) : null}
             <Text style={styles.site}>{this._getSite(item.site)}</Text>
             <View style={styles.brands}>
-              {item.brands.length &&
+              {item.brands &&
+                item.brands.length &&
                 item.brands.map((brand) => {
-                  if (brand.logo) {
+                  if (brands[brand.id].logo) {
                     return (
-                      <Imager
-                        resizeMode="contain"
-                        key={'brandLogo' + brand.id}
+                      <BrandLogo
+                        brand={brand.id}
+                        height={25}
                         style={styles.brandLogo}
-                        source={{uri: brand.logo}}
+                        key={'brandLogo' + brand.id}
                       />
                     );
                   }
@@ -227,7 +235,8 @@ export default class SelectItemByCountry extends Component {
                 }
                 return (
                   <View key={dealer.id} style={styles.brands}>
-                    {dealer.brands.length &&
+                    {dealer.brands &&
+                      dealer.brands.length &&
                       dealer.brands.map((brand) => {
                         const name =
                           brand.name === 'land rover'
@@ -270,3 +279,5 @@ export default class SelectItemByCountry extends Component {
     return itemLayout === 'dealer' ? this.renderDealer() : this.renderCity();
   }
 }
+
+export default connect(mapStateToProps)(SelectItemByCountry);

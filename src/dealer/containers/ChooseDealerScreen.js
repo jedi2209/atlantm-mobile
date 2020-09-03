@@ -110,6 +110,7 @@ class ChooseDealerScreen extends Component {
           itemLayout="dealer"
           region={region}
           dataHandler={fetchDealers}
+          dataBrandsHandler={fetchBrands}
           isFetchList={isFetchDealersList || isFetchDealer}
           listRussia={listRussia}
           listUkraine={listUkraine}

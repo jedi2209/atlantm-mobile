@@ -264,7 +264,8 @@ class AboutDealerScreen extends Component {
                 ]}
                 source={{uri: imageUrl}}>
                 <View style={styles.brandsLine}>
-                  {dealer.brands.length &&
+                  {dealer.brands &&
+                    dealer.brands.length &&
                     dealer.brands.map((brand) => {
                       if (brand.logo) {
                         return (

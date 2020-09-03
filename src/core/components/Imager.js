@@ -2,7 +2,8 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 
 // components
-import {Image, View, ActivityIndicator} from 'react-native';
+import {Image, View, ActivityIndicator, StyleSheet} from 'react-native';
+import {SvgCssUri} from 'react-native-svg';
 
 export default class Imager extends PureComponent {
   static propTypes = {
@@ -34,10 +35,16 @@ export default class Imager extends PureComponent {
   // };
 
   render() {
-    // console.log('== Imager ==');
-
     if (!this.state.imagePath) {
       return;
+    }
+
+    const path = this.state.imagePath;
+
+    const extension = path.split('.').pop();
+
+    if (extension === 'svg') {
+      this.setState({animatingLoader: false});
     }
 
     return (
@@ -54,17 +61,32 @@ export default class Imager extends PureComponent {
             alignItems: 'center',
           }}
         />
-        <Image
-          {...this.props}
-          source={{uri: this.state.imagePath.toString()}}
-          // onLoadStart={() => { console.log('Image on load start'); }}
-          // onLoad={() => { this.setState({animatingLoader: false}); console.log('Image on load'); }}
-          onLoadEnd={() => {
-            this.setState({animatingLoader: false});
-            //  console.log('Image ' + this.state.imagePath + ' on load end');
-          }}>
-          {this.props.children}
-        </Image>
+        {extension === 'svg' ? (
+          <View
+            style={[
+              StyleSheet.absoluteFill,
+              {alignItems: 'center', justifyContent: 'center'},
+              {...this.props.style},
+            ]}>
+            <SvgCssUri
+              width="100%"
+              height="100%"
+              uri={this.state.imagePath.toString()}
+            />
+          </View>
+        ) : (
+          <Image
+            {...this.props}
+            source={{uri: this.state.imagePath.toString()}}
+            // onLoadStart={() => { console.log('Image on load start'); }}
+            // onLoad={() => { this.setState({animatingLoader: false}); console.log('Image on load'); }}
+            onLoadEnd={() => {
+              this.setState({animatingLoader: false});
+              //  console.log('Image ' + this.state.imagePath + ' on load end');
+            }}>
+            {this.props.children}
+          </Image>
+        )}
       </View>
     );
   }

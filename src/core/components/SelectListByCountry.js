@@ -45,6 +45,7 @@ export default class SelectListByCountry extends Component {
     listUkraine: PropTypes.array,
     isFetchList: PropTypes.bool,
     dataHandler: PropTypes.func,
+    dataBrandsHandler: PropTypes.func,
     selectRegion: PropTypes.func,
     selectItem: PropTypes.func,
     selectedItem: PropTypes.object,
@@ -67,16 +68,18 @@ export default class SelectListByCountry extends Component {
   }
 
   componentDidMount() {
-    const {dataHandler, itemLayout} = this.props;
+    const {dataHandler, dataBrandsHandler, itemLayout} = this.props;
 
     if (itemLayout === 'dealer') {
       dataHandler();
+      dataBrandsHandler();
     }
   }
 
   onRefresh = () => {
     this.setState({isRefreshing: true});
     this.props.dataHandler().then(() => {
+      this.props.dataBrandsHandler();
       this.setState({isRefreshing: false});
     });
   };
