@@ -38,7 +38,7 @@ GoogleSignin.configure({
     'XXXX-XXXX.apps.googleusercontent.com', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
 });
 
-const mapStateToProps = ({dealer, profile, nav, core}) => {
+const mapStateToProps = ({profile}) => {
   return {
     login: profile.login,
   };
@@ -49,18 +49,19 @@ const mapDispatchToProps = {
 
 const styles = StyleSheet.create({
   SocialLoginBt: {
-    padding: 8,
     justifyContent: 'center',
     borderRadius: 5,
   },
   SocialLoginBtActive: {
-    opacity: 0.7,
+    opacity: 0.25,
   },
   CheckCircleIcon: {
     fontSize: 14,
     position: 'absolute',
     bottom: 4,
-    right: 0,
+    right: 5,
+    marginRight: 0,
+    marginLeft: 0,
     color: '#fff',
   },
 });
@@ -357,7 +358,7 @@ class SocialAuth extends PureComponent {
               <Icon
                 name="check-circle"
                 type="FontAwesome5"
-                style={[styles.CheckCircleIcon, {right: 5}]}
+                style={styles.CheckCircleIcon}
               />
             ) : null}
           </View>
