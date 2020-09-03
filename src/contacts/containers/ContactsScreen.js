@@ -9,13 +9,13 @@ import {
   Platform,
   Linking,
   ScrollView,
-  TouchableWithoutFeedback,
   TouchableOpacity,
   StatusBar,
 } from 'react-native';
 
 import {Text, StyleProvider, Icon, Button, ActionSheet} from 'native-base';
 import BrandLogo from '../../core/components/BrandLogo';
+import Plate from '../../core/components/Plate';
 
 // redux
 import {connect} from 'react-redux';
@@ -30,7 +30,7 @@ import getOrders from '../../utils/orders';
 import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import {ERROR_NETWORK, ORDERS} from '../../core/const';
+import {ERROR_NETWORK} from '../../core/const';
 import Carousel from 'react-native-snap-carousel';
 
 const HEADER_MAX_HEIGHT = 406;
@@ -102,74 +102,6 @@ const styles = StyleSheet.create({
 const deviceWidth = Dimensions.get('window').width;
 const cardWidth = deviceWidth - 50;
 
-const getColoCardByKind = (kind) => {
-  switch (kind) {
-    case 'default':
-      return ['#07A9B0', '#7ED321'];
-    case 'danger':
-      return ['#990A0A', '#151526'];
-    case 'primary':
-      return ['#0950A1', '#7ED321'];
-    case 'success':
-      return ['#0C705D', '#151526'];
-  }
-};
-
-/**
- * @param {object} props
- * @param {('default' | 'danger' | 'primary' | 'success')} props.kind Тип карточки.
- * @param {string} props.title Заголовок.
- * @param {string} props.subtitle Подзаголовок.
- * @param {function} props.onPress Обработчик по нажатию.
- */
-const Card = ({kind, title, subtitle, onPress}) => {
-  const [bgColor, dotBgColor] = getColoCardByKind(kind);
-
-  return (
-    <TouchableWithoutFeedback onPress={onPress}>
-      <View
-        style={{
-          backgroundColor: bgColor,
-          marginRight: 10,
-          padding: 10,
-          width: 150,
-          height: 98,
-          borderRadius: 5,
-        }}>
-        <View
-          style={{
-            borderRadius: 7.5,
-            backgroundColor: dotBgColor,
-            width: 15,
-            height: 15,
-          }}
-        />
-        <View style={{marginTop: 8}}>
-          <Text
-            selectable={false}
-            ellipsizeMode="tail"
-            numberOfLines={1}
-            style={{
-              color: '#fff',
-              fontSize: 14,
-              fontWeight: '600',
-              marginBottom: 4,
-            }}>
-            {title}
-          </Text>
-          <Text
-            style={{color: '#fff', fontSize: 12}}
-            ellipsizeMode="tail"
-            numberOfLines={3}
-            selectable={false}>
-            {subtitle}
-          </Text>
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
-  );
-};
-
 import {Offer} from '../../core/components/Offer';
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
@@ -187,14 +119,6 @@ const mapDispatchToProps = {
   callMe,
   fetchInfoList,
   actionListReset,
-};
-
-const getOrdersFunc = async () => {
-  const orders = await getOrders();
-  if (orders) {
-    const ORDERS = orders;
-    return ORDERS;
-  }
 };
 
 class ContactsScreen extends Component {
@@ -383,43 +307,41 @@ class ContactsScreen extends Component {
                 contentContainerStyle={{paddingRight: 30}}
                 style={styles.scrollView}>
                 <View style={styles.scrollViewInner}>
-                  <Card
+                  <Plate
                     title="Позвонить"
                     subtitle={phones[0]}
-                    kind="default"
                     onPress={() => {
                       Linking.openURL(
                         'tel:' + phones[0].replace(/[^+\d]+/g, ''),
                       );
                     }}
                   />
-                  <Card
+                  <Plate
                     title="Заказать звонок"
                     subtitle=""
-                    kind="default"
                     onPress={this.onPressCallMe}
                   />
-                  {/* <Card
+                  {/* <Plate
                     title="Чат"
                     subtitle="Мы на связи с 9 до 20"
                     kind="primary"
                   /> */}
-                  <Card
+                  <Plate
                     title="Заявка"
                     subtitle="Отправить заявку"
-                    kind="danger"
+                    type="primary"
                     onPress={() => {
-                      getOrdersFunc().then((ORDERS) => {
+                      getOrders().then((ordersData) => {
                         ActionSheet.show(
                           {
-                            options: ORDERS.BUTTONS,
-                            cancelButtonIndex: ORDERS.CANCEL_INDEX,
-                            title: ORDERS.TITLE,
+                            options: ordersData.BUTTONS,
+                            cancelButtonIndex: ordersData.CANCEL_INDEX,
+                            title: ordersData.TITLE,
                             destructiveButtonIndex:
-                              ORDERS.DESTRUCTIVE_INDEX || null,
+                              ordersData.DESTRUCTIVE_INDEX || null,
                           },
                           (buttonIndex) => {
-                            switch (ORDERS.BUTTONS[buttonIndex].id) {
+                            switch (ordersData.BUTTONS[buttonIndex].id) {
                               case 'callMeBack':
                                 navigation.navigate('CallMeBackScreen');
                                 break;
@@ -438,7 +360,7 @@ class ContactsScreen extends Component {
                       });
                     }}
                   />
-                  <Card
+                  <Plate
                     title={
                       'Сайт' +
                       (this.sitesSubtitle && this.sitesSubtitle.sites.length > 1
@@ -450,7 +372,7 @@ class ContactsScreen extends Component {
                         ? this.sitesSubtitle.sites.join('\r\n')
                         : this.sitesSubtitle.sites[0]
                     }
-                    kind="success"
+                    type="red"
                     onPress={() => {
                       if (
                         this.sitesSubtitle &&
