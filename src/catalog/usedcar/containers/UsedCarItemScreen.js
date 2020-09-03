@@ -159,21 +159,6 @@ class UserCarItemScreen extends Component {
 
   logGuard = false;
 
-  onPressDealer = () => {
-    const {
-      carDetails,
-      navigation,
-      listRussia,
-      listUkraine,
-      listBelarussia,
-    } = this.props;
-
-    const list = [].concat(listRussia, listBelarussia, listUkraine);
-    const dealerBaseData = find(list, {id: carDetails.dealer.id});
-
-    navigation.navigate('AboutDealerScreen', {dealerBaseData});
-  };
-
   onPressOrder = () => {
     const {navigation, carDetails} = this.props;
     navigation.navigate('OrderScreen', {

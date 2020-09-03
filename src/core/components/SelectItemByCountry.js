@@ -1,17 +1,15 @@
 import React, {Component} from 'react';
-import {Alert, View, StyleSheet, Image} from 'react-native';
-import {Text, ListItem, Body, Right, Icon, Left} from 'native-base';
+import {Alert, View, StyleSheet} from 'react-native';
+import {Text, ListItem, Body} from 'native-base';
 
 // components
-import DeviceInfo from 'react-native-device-info';
 import {NavigationActions, StackActions} from 'react-navigation';
 import Imager from '../components/Imager';
 import BrandLogo from '../../core/components/BrandLogo';
 
 // helpers
 import {get} from 'lodash';
-import PropTypes, {array} from 'prop-types';
-import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
 import {
@@ -71,13 +69,7 @@ const styles = StyleSheet.create({
   thumb: {flexShrink: 1, flexBasis: '40%', marginLeft: 8},
 });
 
-const mapStateToProps = ({dealer}) => {
-  return {
-    brands: dealer.listBrands,
-  };
-};
-
-class SelectItemByCountry extends Component {
+export default class SelectItemByCountry extends Component {
   static propTypes = {
     item: PropTypes.object,
     navigation: PropTypes.object,
@@ -165,7 +157,7 @@ class SelectItemByCountry extends Component {
   };
 
   renderDealer = () => {
-    const {item, brands} = this.props;
+    const {item} = this.props;
     if (item.virtual !== false && item.id !== 177) {
       // фикс для НЕ вывода виртуальных КО в списке
       return true;
@@ -189,16 +181,14 @@ class SelectItemByCountry extends Component {
               {item.brands &&
                 item.brands.length &&
                 item.brands.map((brand) => {
-                  if (brands[brand.id].logo) {
-                    return (
-                      <BrandLogo
-                        brand={brand.id}
-                        height={25}
-                        style={styles.brandLogo}
-                        key={'brandLogo' + brand.id}
-                      />
-                    );
-                  }
+                  return (
+                    <BrandLogo
+                      brand={brand.id}
+                      height={25}
+                      style={styles.brandLogo}
+                      key={'brandLogo' + brand.id}
+                    />
+                  );
                 })}
             </View>
           </View>
@@ -279,5 +269,3 @@ class SelectItemByCountry extends Component {
     return itemLayout === 'dealer' ? this.renderDealer() : this.renderCity();
   }
 }
-
-export default connect(mapStateToProps)(SelectItemByCountry);

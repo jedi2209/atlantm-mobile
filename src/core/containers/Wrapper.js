@@ -61,8 +61,8 @@ export default class Wrapper extends Component {
 
   componentDidMount() {
     console.log('Wrapper ====>', 'componentDidMount');
-    // this.defaultHandler = ErrorUtils.getGlobalHandler();
-    // ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
+    this.defaultHandler = ErrorUtils.getGlobalHandler();
+    ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
 
     //this.getPersistStore().purge();
 

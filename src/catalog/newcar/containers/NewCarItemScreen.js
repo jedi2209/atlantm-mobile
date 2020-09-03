@@ -199,21 +199,6 @@ class NewCarItemScreen extends Component {
     );
   }
 
-  onPressDealer = () => {
-    const {
-      carDetails,
-      navigation,
-      listRussia,
-      listUkraine,
-      listBelarussia,
-    } = this.props;
-
-    const list = [].concat(listRussia, listBelarussia, listUkraine);
-    const dealerBaseData = find(list, {id: carDetails.dealer.id});
-
-    navigation.navigate('AboutDealerScreen', {dealerBaseData});
-  };
-
   onPressOrder = () => {
     const {navigation, carDetails, profile} = this.props;
 
@@ -316,25 +301,25 @@ class NewCarItemScreen extends Component {
   onChangePhotoIndex = (index) =>
     this.props.actionUpdateNewCarPhotoViewerIndex(index);
 
-  renderDealer = (dealerName) => {
-    return dealerName ? (
-      <TouchableHighlight
-        onPress={this.onPressDealer}
-        underlayColor={styleConst.color.select}>
-        <Grid style={styles.section}>
-          <Col>
-            <Text style={styles.sectionTitle}>Где</Text>
-          </Col>
-          <Col>
-            <View style={styles.dealerContainer}>
-              <Text style={styles.sectionTitleValue}>{dealerName}</Text>
-              <Icon name="arrow-forward" style={styles.iconArrow} />
-            </View>
-          </Col>
-        </Grid>
-      </TouchableHighlight>
-    ) : null;
-  };
+  // renderDealer = (dealerName) => {
+  //   return dealerName ? (
+  //     <TouchableHighlight
+  //       onPress={this.onPressDealer}
+  //       underlayColor={styleConst.color.select}>
+  //       <Grid style={styles.section}>
+  //         <Col>
+  //           <Text style={styles.sectionTitle}>Где</Text>
+  //         </Col>
+  //         <Col>
+  //           <View style={styles.dealerContainer}>
+  //             <Text style={styles.sectionTitleValue}>{dealerName}</Text>
+  //             <Icon name="arrow-forward" style={styles.iconArrow} />
+  //           </View>
+  //         </Col>
+  //       </Grid>
+  //     </TouchableHighlight>
+  //   ) : null;
+  // };
 
   renderTechData = (title, data) => {
     const {carDetails} = this.props;

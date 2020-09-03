@@ -12,6 +12,7 @@ import LinearGradient from 'react-native-linear-gradient';
 // components
 import Imager from '../../core/components/Imager';
 import Badge from '../../core/components/Badge';
+import BrandLogo from '../../core/components/BrandLogo';
 
 // helpers
 import {get} from 'lodash';
@@ -166,12 +167,9 @@ const styles = StyleSheet.create({
   },
   brandLogo: {
     height: 30,
-    width: 40,
     zIndex: 2,
     alignContent: 'flex-start',
     flex: 1,
-    marginRight: 7,
-    marginLeft: 3,
     marginBottom: 2,
   },
   carTechContainer: {
@@ -188,7 +186,6 @@ const mapStateToProps = ({dealer, nav}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
-    brands: dealer.listBrands,
     listRussia: dealer.listRussia,
     listUkraine: dealer.listUkraine,
     listBelarussia: dealer.listBelarussia,
@@ -318,7 +315,7 @@ class CarListItem extends Component {
   };
 
   render() {
-    const {car, prices, itemScreen, brands} = this.props;
+    const {car, prices, itemScreen} = this.props;
     let {resizeMode} = this.props;
     const modelName = get(car, 'model.name', '');
     const complectation = get(car, 'complectation.name', '');
@@ -330,8 +327,6 @@ class CarListItem extends Component {
     const idSAP = get(car, 'id.sap', null);
     const isSale = car.sale === true;
     const isNewCar = itemScreen === 'NewCarItemScreen';
-    const carBrandImage =
-      itemScreen === 'NewCarItemScreen' && brands[get(car, 'brand.id')];
     let CarImg = '';
     let CarImgReal = false;
     if (get(car, 'imgReal.thumb.0')) {
@@ -361,16 +356,23 @@ class CarListItem extends Component {
             style={styles.titleBackground}
           />
           <View style={[styles.titleContainer]}>
-            {carBrandImage ? (
+            {isNewCar ? (
               <View style={{flexDirection: 'row'}}>
                 <View style={{width: '12%', minWidth: 50,}}>
-                  <Imager
+                  <BrandLogo
+                    brand={get(car, 'brand.id')}
+                    width={45}
+                    type="white"
+                    style={styles.brandLogo}
+                    key={'brandLogo' + get(car, 'brand.id')}
+                  />
+                  {/* <Imager
                     style={styles.brandLogo}
                     resizeMode={'contain'}
                     source={{
                       uri: brands[get(car, 'brand.id')].logo,
                     }}
-                  />
+                  /> */}
                 </View>
                 <View style={{flexDirection: 'column', width: '88%'}}>
                   <Text

@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 
 import {Text, StyleProvider, Icon, Button, ActionSheet} from 'native-base';
+import BrandLogo from '../../core/components/BrandLogo';
 
 // redux
 import {connect} from 'react-redux';
@@ -90,6 +91,11 @@ const styles = StyleSheet.create({
     color: '#2E3A59',
     fontSize: 16,
     fontWeight: 'normal',
+  },
+  brand: {
+    marginRight: 10,
+    marginTop: 3,
+    height: 25,
   },
 });
 
@@ -171,6 +177,7 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
     list: info.list,
     nav,
     profile,
+    brands: dealer.listBrands,
     dealerSelected: dealer.selected,
     isСallMeRequest: contacts.isСallMeRequest,
   };
@@ -305,7 +312,7 @@ class ContactsScreen extends Component {
   };
 
   render() {
-    const {dealerSelected, navigation, list} = this.props;
+    const {dealerSelected, navigation, list, brands} = this.props;
 
     const PHONES = [];
     const phones = get(dealerSelected, 'phone', PHONES);
@@ -328,6 +335,20 @@ class ContactsScreen extends Component {
                 navigation.navigate('ChooseDealerScreen');
               }}
               style={styles.buttonPrimary}>
+              {dealerSelected.brands &&
+                dealerSelected.brands.length &&
+                dealerSelected.brands.map((brand) => {
+                  if (brands[brand.id].logo) {
+                    return (
+                      <BrandLogo
+                        brand={brand.id}
+                        height={25}
+                        style={styles.brand}
+                        key={'ChooseDealerBrand' + brand.id}
+                      />
+                    );
+                  }
+                })}
               <Text style={styles.buttonPrimaryText}>
                 {dealerSelected.name}
               </Text>
