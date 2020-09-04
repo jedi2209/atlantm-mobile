@@ -239,12 +239,12 @@ class ContactsScreen extends Component {
   };
 
   getStatusWorktime = (divisions, checkType) => {
-    if (!divisions) {
+    if (!divisions || !checkType) {
       return false;
     }
     const res = divisions
       .map((division) => {
-        if (division.type[checkType]) {
+        if (division.worktime && division.type[checkType]) {
           const currDate = new Date();
           const currTime = currDate.getTime();
           const worktime = division.worktime[currDate.getDay() - 1];
