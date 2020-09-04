@@ -244,10 +244,15 @@ class ContactsScreen extends Component {
     }
     const res = divisions
       .map((division) => {
-        if (division.worktime && division.type[checkType]) {
-          const currDate = new Date();
+        const currDate = new Date();
+        const today = currDate.getDay() - 1;
+        if (
+          division.worktime &&
+          division.worktime[today] &&
+          division.type[checkType]
+        ) {
           const currTime = currDate.getTime();
-          const worktime = division.worktime[currDate.getDay() - 1];
+          const worktime = division.worktime[today];
           const timeOpen = new Date();
           const timeClose = new Date();
           timeOpen.setHours(worktime.start.hour, worktime.start.min, 0);
