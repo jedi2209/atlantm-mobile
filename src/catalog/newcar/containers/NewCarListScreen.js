@@ -86,12 +86,15 @@ class NewCarListScreen extends Component {
 
     return {
       headerTitle: (
-        <Text style={stylesHeader.blueHeaderTitle}>Новые автомобили</Text>
+        <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
+          Новые автомобили
+        </Text>
       ),
+      headerLeft: <View />,
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
       headerRight: (
-        <View>
+        <View style={stylesHeader.headerRightStyle}>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('NewCarFilterScreen');

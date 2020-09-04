@@ -82,14 +82,13 @@ class UserCarListScreen extends Component {
   static navigationOptions = ({navigation}) => {
     return {
       headerTitle: (
-        <Text style={stylesHeader.blueHeaderTitle}>Подержанные автомобили</Text>
+        <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
+          Подержанные автомобили
+        </Text>
       ),
-      headerStyle: [stylesHeader.headerStyle, stylesHeader.blueHeader],
-      headerTitleStyle: [
-        stylesHeader.headerTitleStyle,
-        stylesHeader.blueHeaderTitle,
-      ],
-      headerLeft: null,
+      headerLeft: <View />,
+      headerStyle: stylesHeader.blueHeader,
+      headerTitleStyle: stylesHeader.blueHeaderTitle,
       headerRight: (
         <View style={stylesHeader.headerRightStyle}>
           <TouchableOpacity

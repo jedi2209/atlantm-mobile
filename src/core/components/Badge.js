@@ -5,10 +5,10 @@ import styleConst from '../style-const';
 
 const styles = StyleSheet.create({
   badgeContainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 3,
     borderRadius: 5,
-    marginRight: 3,
+    marginLeft: 4,
   },
   badgeName: {
     fontFamily: styleConst.font.regular,
