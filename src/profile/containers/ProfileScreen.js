@@ -132,6 +132,7 @@ class ProfileScreen extends Component {
 
   static navigationOptions = () => ({
     header: null,
+    headerTransparent: true,
   });
 
   onOtpChange = (index) => {
@@ -536,8 +537,8 @@ class ProfileScreen extends Component {
           height: this.state.code
             ? Platform.select({ios: 'auto', android: 0})
             : 'auto',
-          marginTop: 40,
-          marginBottom: 20,
+          marginTop: 20,
+          marginBottom: 10,
           width: '80%',
           marginHorizontal: '10%',
         }}>
@@ -561,7 +562,7 @@ class ProfileScreen extends Component {
                 backgroundColor: '#4286F5',
               },
             ]}>
-            <Icon name="google" type="FontAwesome5" />
+            <Icon name="google" type="FontAwesome5" style={{marginLeft: 0}} />
           </Button>
           <Button
             onPress={this._signInFB}
@@ -578,7 +579,11 @@ class ProfileScreen extends Component {
                 paddingHorizontal: 8,
               },
             ]}>
-            <Icon name="facebook" type="FontAwesome5" style={{fontSize: 35}} />
+            <Icon
+              name="facebook"
+              type="FontAwesome5"
+              style={{marginLeft: 0, fontSize: 35}}
+            />
           </Button>
           {VKenabled ? (
             <Button
@@ -594,7 +599,7 @@ class ProfileScreen extends Component {
                   backgroundColor: '#4680C2',
                 },
               ]}>
-              <Icon name="vk" type="FontAwesome5" />
+              <Icon name="vk" type="FontAwesome5" style={{marginLeft: 0}} />
             </Button>
           ) : null}
         </View>
@@ -642,7 +647,7 @@ class ProfileScreen extends Component {
             source={require('./bg.jpg')}
             style={{width: '100%', height: '100%'}}>
             <ScrollView ref={this.scrollRef} scrollEnabled={false}>
-              <View style={{marginBottom: 20}}>
+              <View style={{marginBottom: 10}}>
                 <LinearGradient
                   start={{x: 0, y: 0}}
                   end={{x: 0, y: 1}}
@@ -657,7 +662,7 @@ class ProfileScreen extends Component {
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    paddingTop: '10%',
+                    paddingTop: '5%',
                     justifyContent: 'center',
                   }}>
                   <Image
@@ -677,8 +682,8 @@ class ProfileScreen extends Component {
                   }}>
                   <View
                     style={{
-                      marginTop: 10,
-                      marginBottom: 20,
+                      marginTop: 5,
+                      marginBottom: 10,
                       width: '80%',
                       flexDirection: 'row',
                       justifyContent: 'space-around',
@@ -710,7 +715,7 @@ class ProfileScreen extends Component {
                 </View>
                 <View
                   style={{
-                    marginTop: this.state.code ? '20%' : 0,
+                    marginTop: this.state.code ? '10%' : 0,
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',

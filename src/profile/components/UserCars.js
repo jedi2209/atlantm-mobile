@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/react-in-jsx-scope */
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import {
   View,
@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
-  TouchableWithoutFeedback,
   Platform,
 } from 'react-native';
 import {store} from '../../core/store';
@@ -170,12 +169,26 @@ const UserCars = ({navigation, actionToggleCar}) => {
   const [loading, setLoading] = useState(false);
   const [carsPanel, setActivePanel] = useState('default');
 
+  let carsScrollView = useRef(null);
+
+  useEffect(() => {
+    carsScrollView &&
+      carsScrollView.current &&
+      carsScrollView.current.scrollToEnd({duration: 500});
+    setTimeout(() => {
+      carsScrollView &&
+        carsScrollView.current &&
+        carsScrollView.current.scrollTo({x: 0, y: 0, animated: true});
+    }, 500);
+  }, []);
+
   const _renderCarsItems = ({cars, actionToggleCar}) => {
     return (
       <ScrollView
         showsHorizontalScrollIndicator={false}
         horizontal
-        contentContainerStyle={{paddingLeft: 12, paddingRight: 5}}>
+        contentContainerStyle={{paddingLeft: 12, paddingRight: 5}}
+        ref={carsScrollView}>
         {cars.map((item) => {
           let CarType = '';
           if (item.hidden === true) {

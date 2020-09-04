@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   SocialLoginBtActive: {
-    opacity: 0.25,
+    opacity: 0.7,
+    backgroundColor: '#afafaf',
   },
   CheckCircleIcon: {
     fontSize: 14,
@@ -271,14 +272,14 @@ class SocialAuth extends PureComponent {
             style={[
               styleConst.shadow.default,
               styles.SocialLoginBt,
-              im.google ? styles.SocialLoginBtActive : null,
               {
                 width: ButtonWidth,
                 height: ButtonHeight,
                 backgroundColor: '#4286F5',
               },
+              im.google ? styles.SocialLoginBtActive : null,
             ]}>
-            <Icon name="google" type="FontAwesome5" />
+            <Icon name="google" type="FontAwesome5" style={{marginLeft: 0, color: '#fff'}} />
             {im.google ? (
               <Icon
                 name="check-circle"
@@ -293,14 +294,18 @@ class SocialAuth extends PureComponent {
             style={[
               styleConst.shadow.default,
               styles.SocialLoginBt,
-              im.facebook ? styles.SocialLoginBtActive : null,
               {
                 backgroundColor: '#4167B2',
                 width: VKenabled ? '29%' : ButtonWidth,
                 height: 60,
               },
+              im.facebook ? styles.SocialLoginBtActive : null,
             ]}>
-            <Icon name="facebook" type="FontAwesome5" style={{fontSize: 35}} />
+            <Icon
+              name="facebook"
+              type="FontAwesome5"
+              style={{marginLeft: 0, color: '#fff', fontSize: 35}}
+            />
             {im.facebook ? (
               <Icon
                 name="check-circle"
@@ -317,14 +322,14 @@ class SocialAuth extends PureComponent {
               style={[
                 styleConst.shadow.default,
                 styles.SocialLoginBt,
-                im.vk ? styles.SocialLoginBtActive : null,
                 {
                   width: ButtonWidth,
                   height: ButtonHeight,
                   backgroundColor: '#4680C2',
                 },
+                im.vk ? styles.SocialLoginBtActive : null,
               ]}>
-              <Icon name="vk" type="FontAwesome5" />
+              <Icon name="vk" type="FontAwesome5" style={{marginLeft: 0, color: '#fff'}} />
               {im.vk ? (
                 <Icon
                   name="check-circle"
