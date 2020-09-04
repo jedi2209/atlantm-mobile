@@ -238,12 +238,54 @@ class ContactsScreen extends Component {
     });
   };
 
+  getStatusWorktime = (divisions, checkType) => {
+    if (!divisions) {
+      return false;
+    }
+    const res = divisions
+      .map((division) => {
+        if (division.type[checkType]) {
+          const currDate = new Date();
+          const currTime = currDate.getTime();
+          const worktime = division.worktime[currDate.getDay() - 1];
+          const timeOpen = new Date();
+          const timeClose = new Date();
+          timeOpen.setHours(worktime.start.hour, worktime.start.min, 0);
+          timeClose.setHours(worktime.finish.hour, worktime.finish.min, 0);
+
+          if (currTime > timeOpen.getTime() && currTime < timeClose.getTime()) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      })
+      .filter(function (element) {
+        return element !== undefined;
+      });
+    if (res && res.length && res[0]) {
+      return res[0];
+    } else {
+      const currDate = new Date();
+      const currTime = currDate.getTime();
+      const timeOpen = new Date();
+      const timeClose = new Date();
+      timeOpen.setHours(9, 0, 0);
+      timeClose.setHours(20, 0, 0);
+
+      if (currTime > timeOpen.getTime() && currTime < timeClose.getTime()) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
+
   render() {
     const {dealerSelected, navigation, list, brands} = this.props;
 
     const PHONES = [];
     const phones = get(dealerSelected, 'phone', PHONES);
-
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
@@ -314,6 +356,14 @@ class ContactsScreen extends Component {
                 <View style={styles.scrollViewInner}>
                   <Plate
                     title="Позвонить"
+                    status={
+                      this.getStatusWorktime(
+                        get(dealerSelected, 'divisions', null),
+                        'RC',
+                      )
+                        ? 'enabled'
+                        : 'disabled'
+                    }
                     subtitle={phones[0]}
                     onPress={() => {
                       Linking.openURL(

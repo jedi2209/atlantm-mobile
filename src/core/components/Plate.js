@@ -37,7 +37,7 @@ const types = {
 
 const status = {
   enabled: '#06D6A0',
-  disabled: '#151526',
+  disabled: '#d62828',
 };
 
 const Plate = (props) => {
