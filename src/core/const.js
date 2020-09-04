@@ -16,13 +16,6 @@ export const ORDERS = {
         iconColor: '#2c8ef4',
       },
       {
-        priority: 4,
-        id: 'carCost',
-        text: 'Оценить мой автомобиль',
-        icon: 'pricetag',
-        iconColor: '#2c8ef4',
-      },
-      {
         priority: 5,
         id: 'cancel',
         text: 'Отмена',
@@ -30,7 +23,7 @@ export const ORDERS = {
         iconColor: 'red',
       },
     ],
-    CANCEL_INDEX: 2,
+    CANCEL_INDEX: 1,
     // DESTRUCTIVE_INDEX: 4,
   },
   ios: {
@@ -42,17 +35,12 @@ export const ORDERS = {
         text: '📞 Перезвоните мне',
       },
       {
-        priority: 4,
-        id: 'carCost',
-        text: 'Оценить мой автомобиль',
-      },
-      {
         priority: 5,
         id: 'cancel',
         text: 'Отмена',
       },
     ],
-    CANCEL_INDEX: 2,
+    CANCEL_INDEX: 1,
     // DESTRUCTIVE_INDEX: 4,
   },
 };

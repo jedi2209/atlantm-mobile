@@ -9,11 +9,11 @@ export default async function getOrders() {
   let res = {
     android: {
       BUTTONS: [],
-      CANCEL_INDEX: 2,
+      CANCEL_INDEX: 1,
     },
     ios: {
       BUTTONS: [],
-      CANCEL_INDEX: 2,
+      CANCEL_INDEX: 1,
     },
   };
   const divisions = get(storeState, 'dealer.selected.divisionTypes');
@@ -21,6 +21,7 @@ export default async function getOrders() {
     tmpArr.push(ORDERS[Platform.OS].BUTTONS[el].priority);
   });
   if (divisions) {
+    console.log('divisions', divisions);
     if (divisions.includes('ST') && !tmpArr.includes(2)) {
       res.android.BUTTONS.push({
         priority: 2,
@@ -57,23 +58,23 @@ export default async function getOrders() {
       res.ios.CANCEL_INDEX = res.ios.CANCEL_INDEX + 1;
     }
 
-    // if (divisions.includes('TI') && !tmpArr.includes(4)) {
-    //   res.android.BUTTONS.push({
-    //     priority: 4,
-    //     id: 'carCost',
-    //     text: 'Оценить мой автомобиль',
-    //     icon: 'pricetag',
-    //     iconColor: '#2c8ef4',
-    //   });
-    //   res.ios.BUTTONS.push({
-    //     priority: 4,
-    //     id: 'carCost',
-    //     text: 'Оценить мой автомобиль',
-    //   });
-    //   tmpArr.push(4);
-    //   res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 1;
-    //   res.ios.CANCEL_INDEX = res.ios.CANCEL_INDEX + 1;
-    // }
+    if (divisions.includes('TI') && !tmpArr.includes(4)) {
+      res.android.BUTTONS.push({
+        priority: 4,
+        id: 'carCost',
+        text: 'Оценить мой автомобиль',
+        icon: 'pricetag',
+        iconColor: '#2c8ef4',
+      });
+      res.ios.BUTTONS.push({
+        priority: 4,
+        id: 'carCost',
+        text: 'Оценить мой автомобиль',
+      });
+      tmpArr.push(4);
+      res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 1;
+      res.ios.CANCEL_INDEX = res.ios.CANCEL_INDEX + 1;
+    }
     Array.prototype.push.apply(
       res[Platform.OS].BUTTONS,
       ORDERS[Platform.OS].BUTTONS,
