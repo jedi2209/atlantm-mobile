@@ -88,26 +88,26 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
     fontSize: 12,
     marginTop: 4,
-    color: '#afafaf',
+    color: '#8d99ae',
   },
   priceSpecial: {
-    color: 'red',
+    color: '#e63946',
     marginRight: 10,
   },
-  extra: {
-    borderColor: 'red',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    flexDirection: 'row',
-  },
-  extraItem: {
-    marginRight: 10,
-  },
-  extraText: {
-    fontFamily: styleConst.font.regular,
-    fontSize: 12,
-    color: styleConst.color.greyText3,
-  },
+  // extra: {
+  //   borderColor: '#e63946',
+  //   borderWidth: 1,
+  //   borderStyle: 'solid',
+  //   flexDirection: 'row',
+  // },
+  // extraItem: {
+  //   marginRight: 10,
+  // },
+  // extraText: {
+  //   fontFamily: styleConst.font.regular,
+  //   fontSize: 12,
+  //   color: styleConst.color.greyText3,
+  // },
   year: {
     color: '#fff',
     fontSize: 12,
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   },
   common: {
     fontSize: 13,
-    color: '#A8ABBE',
+    color: '#2b2d42',
     marginRight: 7,
   },
   commonReal: {
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 2,
     paddingTop: 3,
-    backgroundColor: 'red',
+    backgroundColor: '#e63946',
     borderRadius: 5,
     textAlign: 'center',
     alignContent: 'center',

@@ -68,32 +68,35 @@ const styles = StyleSheet.create({
     marginRight: 10,
     color: '#fff',
   },
-  addressText: {color: '#fff', fontSize: 16, lineHeight: 28, paddingRight: 20},
+  addressText: {color: '#fff', fontSize: 16, lineHeight: 28, marginRight: '1%'},
   scrollView: {paddingLeft: 20},
   scrollViewInner: {display: 'flex', flexDirection: 'row'},
-  iconRow: {color: '#2E3A59', fontSize: 18, marginTop: 0},
+  iconRow: {
+    position: 'absolute',
+    right: 0,
+    color: styleConst.color.greyText4,
+    fontSize: 18,
+    marginRight: 0,
+    marginTop: 3,
+  },
   buttonPrimary: {
     marginTop: 60,
-    marginHorizontal: 20,
-    backgroundColor: '#EFEFEF',
-    borderColor: '#2E3A59',
+    marginHorizontal: '2%',
+    backgroundColor: styleConst.color.bg,
+    borderColor: '#afafaf',
     borderRadius: 5,
     borderStyle: 'solid',
     borderWidth: 1,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
+    paddingHorizontal: 10,
   },
   buttonPrimaryText: {
-    color: '#2E3A59',
+    color: styleConst.color.greyText4,
     fontSize: 16,
     fontWeight: 'normal',
   },
   brand: {
-    marginRight: 10,
+    marginLeft: 5,
+    marginRight: 5,
     marginTop: 3,
     height: 25,
   },
@@ -258,7 +261,7 @@ class ContactsScreen extends Component {
               onPress={() => {
                 navigation.navigate('ChooseDealerScreen');
               }}
-              style={styles.buttonPrimary}>
+              style={[styles.buttonPrimary, styleConst.shadow.default]}>
               {dealerSelected.brands &&
                 dealerSelected.brands.length &&
                 dealerSelected.brands.map((brand) => {
@@ -273,14 +276,16 @@ class ContactsScreen extends Component {
                     );
                   }
                 })}
-              <Text style={styles.buttonPrimaryText}>
-                {dealerSelected.name}
-              </Text>
-              <Icon
-                type="FontAwesome5"
-                name="angle-right"
-                style={styles.iconRow}
-              />
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <Text style={styles.buttonPrimaryText}>
+                  {dealerSelected.name}
+                </Text>
+                <Icon
+                  type="FontAwesome5"
+                  name="angle-right"
+                  style={styles.iconRow}
+                />
+              </View>
             </Button>
             <View style={{marginTop: HEADER_MAX_HEIGHT - 160}}>
               <View style={styles.blackBack} />

@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   Text,
   ActivityIndicator,
-  TouchableHighlight,
   TouchableWithoutFeedback,
   ScrollView,
   StatusBar,
@@ -38,10 +37,11 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import PhotoSlider from '../../../core/components/PhotoSlider';
 import PhotoViewer from '../../../core/components/PhotoViewer';
 import ColorBox from '../../../core/components/ColorBox';
+import Badge from '../../../core/components/Badge';
 
 // helpers
 import getTheme from '../../../../native-base-theme/components';
-import {get, find} from 'lodash';
+import {get} from 'lodash';
 import PropTypes from 'prop-types';
 import UserData from '../../../utils/user';
 import Amplitude from '../../../utils/amplitude-analytics';
@@ -147,6 +147,7 @@ class NewCarItemScreen extends Component {
     this.state = {
       tabName: 'base',
     };
+    this.platesScrollView = React.createRef();
   }
 
   static navigationOptions = ({navigation}) => ({
@@ -173,6 +174,17 @@ class NewCarItemScreen extends Component {
       brand_name: get(this.props.carDetails, 'brand.name'),
       model_name: get(this.props.carDetails, 'model.name'),
     });
+
+    if (this.props.carDetails && !this.props.isFetchingCarDetails) {
+      setTimeout(() => {
+        this.platesScrollView &&
+          this.platesScrollView.scrollToEnd({duration: 1000});
+        setTimeout(() => {
+          this.platesScrollView &&
+            this.platesScrollView.scrollTo({x: 0, y: 0, animated: true});
+        }, 500);
+      }, 3000);
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -533,6 +545,8 @@ class NewCarItemScreen extends Component {
       carDetails: carDetails,
     });
 
+    const badge = get(carDetails, 'badge', []);
+
     const stock = get(carDetails, 'options.stock', {});
     const stockKeys = Object.keys(stock);
     const additional = get(carDetails, 'options.additional', {});
@@ -601,6 +615,30 @@ class NewCarItemScreen extends Component {
                   }}
                   color={get(carDetails, 'color')}
                 />
+                {badge ? (
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      position: 'absolute',
+                      left: 5,
+                      top: 290,
+                      zIndex: 1000,
+                    }}>
+                    {badge.map((item, index) => {
+                      return (
+                        <Badge
+                          id={carDetails.id.api}
+                          key={'badgeItem' + carDetails.id.api + index}
+                          index={index}
+                          bgColor={item.background}
+                          name={item.name}
+                          textColor={item.textColor}
+                        />
+                      );
+                    })}
+                  </View>
+                ) : null}
                 <PhotoSlider
                   height={370}
                   photos={photos}
@@ -647,7 +685,13 @@ class NewCarItemScreen extends Component {
                   {this.renderPrice({carDetails, filterData, currency})}
                 </View>
 
-                <ScrollView showsHorizontalScrollIndicator={false} horizontal>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  bounces={true}
+                  ref={(ref) => {
+                    this.platesScrollView = ref;
+                  }}>
                   <View
                     style={{
                       display: 'flex',
