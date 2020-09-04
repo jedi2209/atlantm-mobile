@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ScrollView,
   Platform,
+  Dimensions,
 } from 'react-native';
 import {Icon, List, ListItem, Left, Right, Button, Body} from 'native-base';
 
@@ -30,9 +31,11 @@ const styles = StyleSheet.create({
   buttonPrimaryText: {color: '#2E3A59', fontSize: 16, fontWeight: 'bold'},
 });
 
+const heightScreen = Dimensions.get('window').height;
+
 const MenuItem = (props) => {
-  const {id, selected, type, name, navigateUrl} = props.data;
-  const {navigation} = props;
+  const {id, selected, type, name, icon, navigateUrl} = props.data;
+  const {navigation, rowHeight} = props;
 
   return (
     <ListItem
@@ -55,7 +58,9 @@ const MenuItem = (props) => {
             {
               paddingLeft: 17,
               paddingRight: 30,
-              height: 55,
+              height: rowHeight,
+              paddingTop: 0,
+              paddingBottom: 0,
               borderTopLeftRadius: 0,
               borderBottomLeftRadius: 0,
               borderTopRightRadius: 80,
@@ -65,29 +70,12 @@ const MenuItem = (props) => {
               ? styleConst.new.menu.active
               : styleConst.new.menu.default,
           ]}>
-          {type === 'home' && <Image source={require('../assets/Home.svg')} />}
-          {type === 'sales' && (
-            <Image source={require('../assets/NewsFeeds.svg')} />
-          )}
-          {type === 'new' && (
-            <Image source={require('../assets/Car-new.svg')} />
-          )}
-          {type === 'not_new' && (
-            <Image source={require('../assets/Car-used.svg')} />
-          )}
-          {type === 'service' && (
-            <Image source={require('../assets/Service.svg')} />
-          )}
-          {type === 'reviews' && (
-            <Image source={require('../assets/Eko.svg')} />
-          )}
-          {type === 'indicators' && (
-            <Image source={require('../assets/Indicators.svg')} />
-          )}
+          {icon}
         </Button>
       </Left>
       <Body style={{paddingLeft: 17}}>
         <Text
+          selectable={false}
           style={{
             fontSize: 16,
             color: selected ? '#0061ED' : '#858997',
@@ -95,14 +83,14 @@ const MenuItem = (props) => {
           {name}
         </Text>
       </Body>
-      <Right>
+      {/* <Right>
         <Icon
           name="arrow-forward"
           style={{
             marginTop: 3,
           }}
         />
-      </Right>
+      </Right> */}
     </ListItem>
   );
 };
@@ -135,6 +123,7 @@ const MoreScreen = (props) => {
       name: 'Автоцентр',
       navigateUrl: 'Home',
       type: 'home',
+      icon: <Image source={require('../assets/Home.svg')} />,
       selected: false,
     },
     {
@@ -142,6 +131,7 @@ const MoreScreen = (props) => {
       name: 'Акции',
       navigateUrl: 'InfoList',
       type: 'sales',
+      icon: <Image source={require('../assets/NewsFeeds.svg')} />,
       selected: false,
     },
     {
@@ -149,6 +139,7 @@ const MoreScreen = (props) => {
       name: 'Новые авто',
       navigateUrl: 'NewCarListScreen',
       type: 'new',
+      icon: <Image source={require('../assets/Car-new.svg')} />,
       selected: false,
     },
     {
@@ -156,20 +147,23 @@ const MoreScreen = (props) => {
       name: 'Подержанные авто',
       navigateUrl: 'UsedCarListScreen',
       type: 'not_new',
+      icon: <Image source={require('../assets/Car-used.svg')} />,
       selected: false,
     },
     {
       id: 7,
-      name: 'Индикаторы',
-      navigateUrl: 'IndicatorsScreen',
-      type: 'indicators',
-      selected: false,
-    },
-    {
-      id: 6,
       name: 'Отзывы',
       navigateUrl: 'ReviewsScreen',
       type: 'reviews',
+      icon: <Image source={require('../assets/Eko.svg')} />,
+      selected: false,
+    },
+    {
+      id: 8,
+      name: 'Индикаторы',
+      navigateUrl: 'IndicatorsScreen',
+      type: 'indicators',
+      icon: <Image source={require('../assets/Indicators.svg')} />,
       selected: false,
     },
   ];
@@ -193,13 +187,15 @@ const MoreScreen = (props) => {
           name: 'Сервис',
           navigateUrl: 'ServiceScreen',
           type: 'service',
+          icon: <Image source={require('../assets/Service.svg')} />,
           selected: false,
         },
         {
-          id: 8,
+          id: 6,
           name: 'Табло выдачи авто',
           navigateUrl: 'TvaScreen',
           type: 'new',
+          icon: <Image source={require('../assets/Car-lifter.svg')} />,
           selected: false,
         },
       );
@@ -210,19 +206,21 @@ const MoreScreen = (props) => {
     return a.id - b.id;
   });
 
+  const rowHeight = (heightScreen - 80 - 82 - 4 - 20) / menu.length;
+
   return (
-    <>
-      <ScrollView>
-        <List style={{marginTop: 0}}>
-          {menu.map((item) => (
-            <MenuItem
-              key={`menu-item-${item.id}`}
-              data={item}
-              navigation={props.navigation}
-            />
-          ))}
-        </List>
-        {/* <View>
+    <View>
+      <List style={{marginTop: 0}}>
+        {menu.map((item) => (
+          <MenuItem
+            key={`menu-item-${item.id}`}
+            data={item}
+            navigation={props.navigation}
+            rowHeight={rowHeight}
+          />
+        ))}
+      </List>
+      {/* <View>
           <Button
             full
             onPress={() => {
@@ -236,8 +234,7 @@ const MoreScreen = (props) => {
             <Text style={styles.buttonPrimaryText}>ЛИЧНЫЙ КАБИНЕТ</Text>
           </Button>
         </View> */}
-      </ScrollView>
-    </>
+    </View>
   );
 };
 
