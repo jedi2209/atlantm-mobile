@@ -172,14 +172,16 @@ const UserCars = ({navigation, actionToggleCar}) => {
   let carsScrollView = useRef(null);
 
   useEffect(() => {
-    carsScrollView &&
-      carsScrollView.current &&
-      carsScrollView.current.scrollToEnd({duration: 500});
+    setTimeout(() => {
+      carsScrollView &&
+        carsScrollView.current &&
+        carsScrollView.current.scrollToEnd({duration: 500});
+    }, 2000);
     setTimeout(() => {
       carsScrollView &&
         carsScrollView.current &&
         carsScrollView.current.scrollTo({x: 0, y: 0, animated: true});
-    }, 500);
+    }, 2500);
   }, []);
 
   const _renderCarsItems = ({cars, actionToggleCar}) => {

@@ -174,7 +174,11 @@ class BrandLogo extends PureComponent {
         height = this.props.width / aspectRatio;
       }
     }
-    if (brandsAssets[type] && brandsAssets[type].includes(brand)) {
+    if (
+      brandsAssets[type] &&
+      brandsAssets[type].includes(brand) &&
+      brandsSVG[type][brand]
+    ) {
       return (
         <View style={[{}, {...this.props.style}]}>
           <View

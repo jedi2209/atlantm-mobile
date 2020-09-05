@@ -72,14 +72,14 @@ export default class SelectListByCountry extends Component {
 
     if (itemLayout === 'dealer') {
       dataHandler();
-      dataBrandsHandler();
+      //dataBrandsHandler();
     }
   }
 
   onRefresh = () => {
     this.setState({isRefreshing: true});
     this.props.dataHandler().then(() => {
-      this.props.dataBrandsHandler();
+      //this.props.dataBrandsHandler();
       this.setState({isRefreshing: false});
     });
   };

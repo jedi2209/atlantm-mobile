@@ -20,6 +20,7 @@ import Plate from '../../core/components/Plate';
 // redux
 import {connect} from 'react-redux';
 import {callMe} from '../actions';
+// import {fetchBrands} from '../../dealer/actions';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList, actionListReset} from '../../info/actions';
@@ -122,6 +123,7 @@ const mapDispatchToProps = {
   callMe,
   fetchInfoList,
   actionListReset,
+  // fetchBrands,
 };
 
 class ContactsScreen extends Component {
@@ -131,6 +133,9 @@ class ContactsScreen extends Component {
 
   constructor(props) {
     super(props);
+    // if (props.brands && props.brands.length === 0) {
+    //   props.fetchBrands();
+    // }
     this.sitesSubtitle = {
       sites: [],
       buttons: [],
@@ -249,6 +254,7 @@ class ContactsScreen extends Component {
         if (
           division.worktime &&
           division.worktime[today] &&
+          division.type &&
           division.type[checkType]
         ) {
           const currTime = currDate.getTime();
@@ -312,16 +318,14 @@ class ContactsScreen extends Component {
               {dealerSelected.brands &&
                 dealerSelected.brands.length &&
                 dealerSelected.brands.map((brand) => {
-                  if (brands[brand.id].logo) {
-                    return (
-                      <BrandLogo
-                        brand={brand.id}
-                        height={25}
-                        style={styles.brand}
-                        key={'ChooseDealerBrand' + brand.id}
-                      />
-                    );
-                  }
+                  return (
+                    <BrandLogo
+                      brand={brand.id}
+                      height={25}
+                      style={styles.brand}
+                      key={'ChooseDealerBrand' + brand.id}
+                    />
+                  );
                 })}
               <View style={{flex: 1, flexDirection: 'row'}}>
                 <Text style={styles.buttonPrimaryText}>

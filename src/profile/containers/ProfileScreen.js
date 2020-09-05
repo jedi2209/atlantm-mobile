@@ -662,7 +662,7 @@ class ProfileScreen extends Component {
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    paddingTop: '5%',
+                    paddingTop: '10%',
                     justifyContent: 'center',
                   }}>
                   <Image
@@ -715,7 +715,7 @@ class ProfileScreen extends Component {
                 </View>
                 <View
                   style={{
-                    marginTop: this.state.code ? '10%' : 0,
+                    marginTop: this.state.code ? '5%' : 0,
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',

@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -136,7 +136,7 @@ const OptionPlate = ({
   );
 };
 
-class NewCarItemScreen extends Component {
+class NewCarItemScreen extends PureComponent {
   static propTypes = {
     dealerSelected: PropTypes.object,
     navigation: PropTypes.object,
@@ -178,7 +178,7 @@ class NewCarItemScreen extends Component {
     if (this.props.carDetails && !this.props.isFetchingCarDetails) {
       setTimeout(() => {
         this.platesScrollView &&
-          this.platesScrollView.scrollToEnd({duration: 1000});
+          this.platesScrollView.scrollToEnd({duration: 500});
         setTimeout(() => {
           this.platesScrollView &&
             this.platesScrollView.scrollTo({x: 0, y: 0, animated: true});
