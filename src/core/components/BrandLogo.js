@@ -195,13 +195,15 @@ class BrandLogo extends PureComponent {
         </View>
       );
     } else {
-      return (
-        <Imager
-          resizeMode="contain"
-          source={{uri: brands[brand].logo}}
-          {...this.props}
-        />
-      );
+      if (brands && brands[brand]) {
+        return (
+          <Imager
+            resizeMode="contain"
+            source={{uri: brands[brand].logo}}
+            {...this.props}
+          />
+        );
+      }
     }
   }
 }

@@ -21,7 +21,6 @@ export default async function getOrders() {
     tmpArr.push(ORDERS[Platform.OS].BUTTONS[el].priority);
   });
   if (divisions) {
-    console.log('divisions', divisions);
     if (divisions.includes('ST') && !tmpArr.includes(2)) {
       res.android.BUTTONS.push({
         priority: 2,
