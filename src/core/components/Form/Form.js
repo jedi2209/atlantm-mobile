@@ -869,7 +869,7 @@ class Form extends Component {
           key={'field' + num + name}
           dealer={value}
           style={[
-            styles.field,
+            // styles.field,
             {
               paddingBottom: 5,
             },
