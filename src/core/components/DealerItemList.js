@@ -5,6 +5,7 @@ import {ListItem, Body, Right, Icon, StyleProvider, Text} from 'native-base';
 
 // component
 import Imager from '../components/Imager';
+import BrandLogo from '../components/BrandLogo';
 
 // helpers
 import styleConst from '../../core/style-const';
@@ -111,11 +112,11 @@ export default class DealerItemList extends Component {
                 dealer.brands.map((brand) => {
                   if (brand.logo) {
                     return (
-                      <Imager
-                        resizeMode="contain"
-                        key={brand.id}
+                      <BrandLogo
+                        brand={brand.id}
+                        width={35}
                         style={stylesDealerItemList.brandLogo}
-                        source={{uri: brand.logo}}
+                        key={'brandLogo' + brand.id}
                       />
                     );
                   }
