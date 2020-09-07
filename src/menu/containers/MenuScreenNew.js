@@ -206,7 +206,7 @@ const MoreScreen = (props) => {
     return a.id - b.id;
   });
 
-  const rowHeight = (heightScreen - 80 - 82 - 4 - 20) / menu.length;
+  const rowHeight = (heightScreen - 80 - 82 - 4 - 20) / (menu.length + 1);
 
   return (
     <View>
@@ -259,7 +259,7 @@ class LogoTitle extends React.Component {
         />
         <Text
           style={{
-            fontSize: isAndroid ? 10 : 10,
+            fontSize: 10,
             bottom: -10,
             right: isAndroid ? 10 : 20,
             position: 'absolute',
