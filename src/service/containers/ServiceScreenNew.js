@@ -201,6 +201,7 @@ class ServiceScreen extends Component {
       value: this.props.carVIN,
       props: {
         placeholder: null,
+        required: true,
       },
     },
   ];
@@ -314,7 +315,9 @@ class ServiceScreen extends Component {
       time: {
         from: parseInt(dataFromForm.DATETIME.time),
       },
-      name: dataFromForm.NAME,
+      f_FirstName: dataFromForm.NAME,
+      f_SecondName: dataFromForm.SECOND_NAME,
+      f_LastName: dataFromForm.LAST_NAME,
       phone: dataFromForm.PHONE,
       email: dataFromForm.EMAIL || null,
       tech_place: dataFromForm.DATETIME.tech_place,
@@ -380,13 +383,14 @@ class ServiceScreen extends Component {
                 ? {
                     name: 'DATETIME',
                     type: 'dateTime',
-                    label: 'Дата сервиса',
+                    label: 'Выберите удобную для вас дату',
                     value: this.state.date,
                     props: {
-                      dealer: this.props.dealerSelected,
-                      placeholder: 'не ранее ' + dayMonthYear(addDays(2)),
+                      placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
                       required: true,
-                      minDate: new Date(addDays(2)),
+                      minimumDate: new Date(addDays(2)),
+                      maximumDate: new Date(addDays(62)),
+                      dealer: this.props.dealerSelected,
                     },
                   }
                 : {},
@@ -460,6 +464,7 @@ class ServiceScreen extends Component {
                             value: null,
                             color: '#9EA0A4',
                           },
+                          onDonePress: () => {},
                           required: true,
                         },
                       }
@@ -532,13 +537,14 @@ class ServiceScreen extends Component {
                     ? {
                         name: 'DATETIME',
                         type: 'dateTime',
-                        label: 'Дата сервиса',
-                        value: '',
+                        label: 'Выберите удобную для вас дату',
+                        value: this.state.date,
                         props: {
-                          dealer: this.props.dealerSelected,
-                          placeholder: 'не ранее ' + dayMonthYear(addDays(2)),
+                          placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
                           required: true,
-                          minDate: new Date(addDays(2)),
+                          minimumDate: new Date(addDays(2)),
+                          maximumDate: new Date(addDays(62)),
+                          dealer: this.props.dealerSelected,
                         },
                       }
                     : {},
@@ -589,6 +595,9 @@ class ServiceScreen extends Component {
                 type: 'email',
                 label: 'Email',
                 value: this.props.email,
+                props: {
+                  required: true,
+                },
               },
             ],
           },

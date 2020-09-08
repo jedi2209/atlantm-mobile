@@ -581,10 +581,9 @@ class Form extends Component {
           <ChooseDateTimeComponent
             label={label + (data.props && data.props.required ? '*' : '')}
             ref={this.inputRefs[groupNum + 'Input' + num]}
-            customStyles={datePickerStyles}
+            // customStyles={datePickerStyles}
             onFinishedSelection={(returnData) => {
               this.onChangeField(data)(returnData);
-              this._nextInput(groupNum, num);
             }}
             {...data.props}
           />
@@ -909,11 +908,12 @@ class Form extends Component {
             key={'rnpicker' + num + name}
             ref={this.inputRefs[groupNum + 'Input' + num]}
             doneText="Выбрать"
-            onDonePress={() => {
+            onDonePress={(value) => {
+              this.onChangeField(data)(this.state[name]);
               this._nextInput(groupNum, num);
             }}
             onValueChange={(value) => {
-              this.onChangeField(data)(value);
+              this.setState({[name]: value});
             }}
             style={{
               ...pickerSelectStyles,
