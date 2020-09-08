@@ -1026,7 +1026,7 @@ class Form extends Component {
         </ScrollView>
       </View>
     );
-    console.log('this.inputRefs', this);
+    //console.log('this.inputRefs', this);
     return res;
   }
 }

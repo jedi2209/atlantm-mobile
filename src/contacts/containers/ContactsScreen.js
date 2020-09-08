@@ -293,7 +293,7 @@ class ContactsScreen extends Component {
   };
 
   render() {
-    const {dealerSelected, navigation, list, brands} = this.props;
+    const {dealerSelected, navigation, list} = this.props;
 
     const PHONES = [];
     const phones = get(dealerSelected, 'phone', PHONES);
@@ -375,9 +375,34 @@ class ContactsScreen extends Component {
                     }
                     subtitle={phones[0]}
                     onPress={() => {
-                      Linking.openURL(
-                        'tel:' + phones[0].replace(/[^+\d]+/g, ''),
+                      const isOpened = this.getStatusWorktime(
+                        get(dealerSelected, 'divisions', null),
+                        'RC',
                       );
+                      console.log('isOpened', isOpened);
+                      if (!isOpened) {
+                        Alert.alert(
+                          'Автоцентр закрыт',
+                          '\r\nОставьте заявку на звонок и наши менеджеры перезвонят вам как только автоцентр откроется.\r\n\r\nЖелаете оставить заявку на звонок?',
+                          [
+                            {
+                              text: 'Нет',
+                              style: 'cancel',
+                            },
+                            {
+                              text: 'Да',
+                              onPress: () => {
+                                navigation.navigate('CallMeBackScreen');
+                              },
+                            },
+                          ],
+                          {cancelable: false},
+                        );
+                      } else {
+                        Linking.openURL(
+                          'tel:' + phones[0].replace(/[^+\d]+/g, ''),
+                        );
+                      }
                     }}
                   />
                   <Plate
