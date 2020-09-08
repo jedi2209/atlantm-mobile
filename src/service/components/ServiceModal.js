@@ -51,7 +51,7 @@ export const ServiceModal = ({visible, onClose, data}) => {
             </View>
           )}
           <View style={modalStyles.wrapper}>
-            <Button style={modalStyles.button} onPress={onClose}>
+            <Button full style={modalStyles.button} onPress={onClose}>
               <Text style={modalStyles.buttonText}>OK</Text>
             </Button>
           </View>

@@ -24,24 +24,28 @@ const styles = StyleSheet.create({
   },
   timeContainer: {
     marginTop: 6,
+  },
+  timeBlocksContainer: {
+    marginTop: 10,
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    alignContent: 'space-between',
   },
   button: {
-    width: 130,
-    marginRight: 10,
-    marginTop: 10,
-    marginBottom: 10,
+    width: 60,
+    height: 40,
+    marginRight: '3%',
+    marginVertical: 5,
     justifyContent: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 3,
     borderColor: '#027aff',
     borderRadius: 5,
     borderWidth: 1,
   },
   buttonText: {
     textTransform: 'uppercase',
-    fontSize: 16,
+    fontSize: 14,
   },
   field: {
     paddingHorizontal: 15,
@@ -74,7 +78,7 @@ export default class ChooseDateTimeComponent extends Component {
 
     this.state = {
       time: props.time ? props.time / 1000 : undefined,
-      date: props.time ? new Date(props.time) : undefined,
+      date: props.value ? new Date(props.value) : undefined,
       availablePeriods: null,
       availablePeriodsFetch: false,
     };
@@ -143,26 +147,36 @@ export default class ChooseDateTimeComponent extends Component {
     return (
       <>
         <DatePickerCustom
-          showIcon={false}
           mode="date"
           locale="ru-RU"
-          placeholder="Выберите дату"
-          format="DD MMMM YYYY"
-          confirmBtnText="Выбрать"
-          cancelBtnText="Отмена"
-          date={this.state.date}
-          onDateChange={(_, date) => {
-            this.setState({date});
+          confirmBtnText="выбрать"
+          value={this.state.date || null}
+          isActive={this.state.modal || false}
+          onPressButton={() => {
+            this.setState({modal: true});
+          }}
+          onHideModal={() => {
+            if (!this.state.date || typeof this.state.date === 'undefined') {
+              let currentDate = new Date();
+              if (this.props.minimumDate) {
+                currentDate = this.props.minimumDate;
+              }
+              this.setState({date: currentDate});
+            }
+            this.setState({modal: false}, () => {
+              this._getTime(this.state.date);
+            });
+          }}
+          onChange={(_, date) => {
+            this.setState({date: date});
             this.props.onFinishedSelection({
               date: date,
               time: undefined,
               tech_place: undefined,
             });
-            this._getTime(date);
           }}
           {...this.props}
         />
-
         {this.state.date && (
           <View key={'fieldTime' + Math.floor(Math.round() * 10000)}>
             {this.state.availablePeriodsFetch ? (
@@ -189,36 +203,39 @@ export default class ChooseDateTimeComponent extends Component {
                   style={[styles.label, styles.labelActive]}>
                   Выберите удобное для вас время
                 </Text>
-                {(this.state.availablePeriods || []).map((item) => {
-                  const from = time(item.from * 1000);
-                  const to = time(item.to * 1000);
-                  // eslint-disable-next-line eqeqeq
-                  const isActive = item.from == this.state.time;
-                  return (
-                    <Button
-                      style={[
-                        styles.button,
-                        {backgroundColor: isActive ? '#027aff' : '#fff'},
-                      ]}
-                      onPress={() => {
-                        this.setState({time: item.from});
-                        this.props.onFinishedSelection({
-                          date: this.state.date,
-                          time: item.from,
-                          tech_place: item.tech_place,
-                        });
-                      }}>
-                      <Text
-                        selectable={false}
+                <View style={styles.timeBlocksContainer}>
+                  {(this.state.availablePeriods || []).map((item, idx) => {
+                    const from = time(item.from * 1000);
+                    const to = time(item.to * 1000);
+                    // eslint-disable-next-line eqeqeq
+                    const isActive = item.from == this.state.time;
+                    return (
+                      <Button
+                        key={'timeSelectButton' + idx}
                         style={[
-                          styles.buttonText,
-                          {color: isActive ? '#fff' : '#027aff'},
-                        ]}>
-                        {`${from} - ${to}`}
-                      </Text>
-                    </Button>
-                  );
-                })}
+                          styles.button,
+                          {backgroundColor: isActive ? '#027aff' : '#fff'},
+                        ]}
+                        onPress={() => {
+                          this.setState({time: item.from});
+                          this.props.onFinishedSelection({
+                            date: this.state.date,
+                            time: item.from,
+                            tech_place: item.tech_place,
+                          });
+                        }}>
+                        <Text
+                          selectable={false}
+                          style={[
+                            styles.buttonText,
+                            {color: isActive ? '#fff' : '#027aff'},
+                          ]}>
+                          {`${from}`}
+                        </Text>
+                      </Button>
+                    );
+                  })}
+                </View>
               </Animated.View>
             ) : null}
           </View>

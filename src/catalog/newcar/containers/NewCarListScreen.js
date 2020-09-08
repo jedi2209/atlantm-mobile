@@ -11,7 +11,6 @@ import {Icon} from 'native-base';
 // redux
 import {connect} from 'react-redux';
 import {actionFetchNewCarByFilter} from '../../actions';
-import {fetchBrands} from '../../../dealer/actions';
 
 // components
 import CarList from '../../components/CarList';
@@ -47,7 +46,6 @@ const mapStateToProps = ({dealer, nav, catalog}) => {
     filterData: catalog.newCar.filterData || {},
     isFetchingNewCarByFilter: catalog.newCar.meta.isFetchingNewCarByFilter,
 
-    filterBrands: catalog.newCar.filters.brandFilters,
     filterModels: catalog.newCar.filters.modelFilter,
     filterBody: catalog.newCar.filters.bodyFilters,
     filterPrice: catalog.newCar.filters.priceFilter,
@@ -63,7 +61,6 @@ const mapStateToProps = ({dealer, nav, catalog}) => {
 
 const mapDispatchToProps = {
   actionFetchNewCarByFilter,
-  fetchBrands,
 };
 
 class NewCarListScreen extends Component {
@@ -72,9 +69,6 @@ class NewCarListScreen extends Component {
     this.state = {
       loading: false,
     };
-    if (props.brands && props.brands.length === 0) {
-      props.fetchBrands();
-    }
   }
 
   static navigationOptions = ({navigation}) => {
