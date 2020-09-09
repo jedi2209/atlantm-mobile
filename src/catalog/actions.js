@@ -42,6 +42,9 @@ import {
   NEW_CAR_DETAILS__REQUEST,
   NEW_CAR_DETAILS__SUCCESS,
   NEW_CAR_DETAILS__FAIL,
+  TD_CAR_DETAILS__REQUEST,
+  TD_CAR_DETAILS__SUCCESS,
+  TD_CAR_DETAILS__FAIL,
   NEW_CAR_DETAILS_PHOTO_VIEWER__OPEN,
   NEW_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
   NEW_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
@@ -53,6 +56,9 @@ import {
   CATALOG_ORDER__SUCCESS,
   CATALOG_ORDER__FAIL,
   CATALOG_ORDER_COMMENT__FILL,
+  TESTDRIVE_ORDER__REQUEST,
+  TESTDRIVE_ORDER__SUCCESS,
+  TESTDRIVE_ORDER__FAIL,
 
   // comment
   CAR_COST__REQUEST,
@@ -239,6 +245,42 @@ export const actionCommentOrderCarFill = (comment) => {
       type: CATALOG_ORDER_COMMENT__FILL,
       payload: comment,
     });
+  };
+};
+
+export const actionOrderTestDrive = (props) => {
+  return (dispatch) => {
+    dispatch({
+      type: TESTDRIVE_ORDER__REQUEST,
+      payload: {...props},
+    });
+
+    return API.orderTestDrive(props)
+      .then((res) => {
+        console.log('res', res);
+        const {error, status} = res;
+
+        if (status !== 'success') {
+          return dispatch({
+            type: TESTDRIVE_ORDER__FAIL,
+            payload: {
+              code: error.code,
+              error: error.message,
+            },
+          });
+        }
+
+        return dispatch({type: TESTDRIVE_ORDER__SUCCESS});
+      })
+      .catch((error) => {
+        return dispatch({
+          type: TESTDRIVE_ORDER__FAIL,
+          payload: {
+            error: error.message,
+            code: error.code,
+          },
+        });
+      });
   };
 };
 
@@ -595,6 +637,39 @@ export const actionFetchNewCarDetails = (carId) => {
       .catch((error) => {
         return dispatch({
           type: NEW_CAR_DETAILS__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const actionFetchTestDriveCarDetails = (dealerID, carID) => {
+  return (dispatch) => {
+    dispatch({
+      type: TD_CAR_DETAILS__REQUEST,
+      payload: {dealerID, carID},
+    });
+
+    return API.fetchTDCarDetails(dealerID, carID)
+      .then((response) => {
+        if (response.error) {
+          return dispatch({
+            type: TD_CAR_DETAILS__FAIL,
+            payload: {
+              error: response.error.message,
+            },
+          });
+        }
+        return dispatch({
+          type: TD_CAR_DETAILS__SUCCESS,
+          payload: {...response.data},
+        });
+      })
+      .catch((error) => {
+        return dispatch({
+          type: TD_CAR_DETAILS__FAIL,
           payload: {
             error: error.message,
           },

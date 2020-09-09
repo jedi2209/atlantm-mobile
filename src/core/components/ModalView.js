@@ -53,7 +53,7 @@ const ModalView = (props) => {
       <View onPress={props.onHide}>
         <Modal
           style={{flex: 1}}
-          useNativeDriver={false}
+          useNativeDriver={true}
           isVisible={props.isModalVisible}
           onBackButtonPress={props.onHide}
           onBackdropPress={props.onHide}

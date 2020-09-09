@@ -309,12 +309,12 @@ class OrderScreen extends Component {
             keyboardShouldPersistTaps={
               Platform.OS === 'android' ? 'always' : 'never'
             }>
-              <Form
-                fields={this.FormConfig.fields}
-                barStyle={'light-content'}
-                SubmitButton={{text: 'Отправить'}}
-                onSubmit={this.onPressOrder}
-              />
+            <Form
+              fields={this.FormConfig.fields}
+              barStyle={'light-content'}
+              SubmitButton={{text: 'Отправить'}}
+              onSubmit={this.onPressOrder}
+            />
           </Content>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

@@ -388,6 +388,7 @@ class ServiceScreen extends Component {
                     props: {
                       placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
                       required: true,
+                      type: 'service',
                       minimumDate: new Date(addDays(2)),
                       maximumDate: new Date(addDays(62)),
                       dealer: this.props.dealerSelected,

@@ -32,6 +32,7 @@ import UsedCarFilterScreen from '../catalog/usedcar/containers/UsedCarFilterScre
 import MapScreen from '../contacts/map/containers/MapScreen';
 
 import OrderScreen from '../catalog/containers/OrderScreen';
+import TestDriveScreen from '../catalog/containers/TestDriveScreen';
 
 import ReestablishScreen from '../profile/containers/ReestablishScreen';
 
@@ -82,6 +83,7 @@ export const getRouter = (initialRouteName) => {
         },
       },
       OrderScreen: {screen: OrderScreen},
+      TestDriveScreen: {screen: TestDriveScreen},
     },
     {
       initialRouteName,

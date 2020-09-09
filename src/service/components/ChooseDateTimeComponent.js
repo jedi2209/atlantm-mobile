@@ -9,6 +9,7 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import {Button} from 'native-base';
 import {DatePickerCustom} from '../../core/components/DatePickerCustom';
@@ -24,6 +25,7 @@ const styles = StyleSheet.create({
   },
   timeContainer: {
     marginTop: 6,
+    width: '100%',
   },
   timeBlocksContainer: {
     marginTop: 10,
@@ -81,32 +83,51 @@ export default class ChooseDateTimeComponent extends Component {
       date: props.value ? new Date(props.value) : undefined,
       availablePeriods: null,
       availablePeriodsFetch: false,
+      modal: false,
     };
   }
 
   static propTypes = {
     onChange: PropTypes.func,
     onFinishedSelection: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
   };
 
   _animated = {};
 
   componentDidMount() {
     if (this.state.date) {
-      this._getTime(this.state.date);
+      switch (this.props.type) {
+        case 'service':
+          this._getTimeService(this.state.date);
+          this.messageForSearch = 'ищем свободное время на СТО';
+          break;
+        case 'testDrive':
+          this._getTimeTestDrive(this.state.date);
+          this.messageForSearch = 'ищем свободное время для тест-драйва';
+          break;
+      }
     }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.date !== this.props.time && this.props.time === undefined) {
+    if (
+      prevProps.carID !== this.props.carID ||
+      (prevProps.date !== this.props.time && this.props.time === undefined)
+    ) {
       this.setState({
         date: undefined,
+        time: undefined,
       });
     }
   }
 
-  async _getTime(date) {
-    this.setState({availablePeriods: null, availablePeriodsFetch: true});
+  async _getTimeService(date) {
+    this.setState({
+      modal: false,
+      availablePeriods: null,
+      availablePeriodsFetch: true,
+    });
     this._animated.TimeBlock = new Animated.Value(0);
 
     const availablePeriods = await API.getPeriodForServiceInfo({
@@ -143,42 +164,118 @@ export default class ChooseDateTimeComponent extends Component {
     }).start();
   }
 
+  async _getTimeTestDrive(date) {
+    this.setState({
+      modal: false,
+      availablePeriods: null,
+      availablePeriodsFetch: true,
+    });
+    this._animated.TimeBlock = new Animated.Value(0);
+
+    const availablePeriods = await API.getTimeForTestDrive({
+      date: yearMonthDay(date),
+      dealer: this.props.dealer.id,
+      carID: this.props.carID,
+    });
+
+    if (availablePeriods.status === 'error') {
+      alert(availablePeriods.error.message);
+      this.setState({
+        availablePeriodsFetch: false,
+        date: undefined,
+      });
+      return false;
+    }
+
+    if (availablePeriods.data == null) {
+      alert('Нет доступных периодов, попробуйте выбрать другой день');
+      this.setState({
+        availablePeriodsFetch: false,
+        date: undefined,
+      });
+      return false;
+    }
+
+    this.setState({
+      availablePeriods: availablePeriods.data,
+      availablePeriodsFetch: false,
+    });
+    Animated.timing(this._animated.TimeBlock, {
+      toValue: 1,
+      duration: 450,
+      useNativeDriver: true,
+    }).start();
+  }
+
   render() {
     return (
       <>
         <DatePickerCustom
+          style={{width: '100%'}}
           mode="date"
           locale="ru-RU"
           confirmBtnText="выбрать"
           value={this.state.date || null}
           isActive={this.state.modal || false}
           onPressButton={() => {
-            this.setState({modal: true});
+            if (Platform.OS === 'android') {
+              if (
+                !this.state.modal &&
+                typeof this.state.modal !== 'undefined'
+              ) {
+                this.setState({modal: true});
+              } else {
+                this.setState({modal: false});
+              }
+            } else {
+              this.setState({modal: true});
+            }
           }}
           onHideModal={() => {
+            //только для iOS
             if (!this.state.date || typeof this.state.date === 'undefined') {
               let currentDate = new Date();
               if (this.props.minimumDate) {
                 currentDate = this.props.minimumDate;
               }
-              this.setState({date: currentDate});
+              this.setState({date: currentDate, modal: false});
             }
             this.setState({modal: false}, () => {
-              this._getTime(this.state.date);
+              switch (this.props.type) {
+                case 'service':
+                  this._getTimeService(this.state.date);
+                  break;
+                case 'testDrive':
+                  this._getTimeTestDrive(this.state.date);
+                  break;
+              }
             });
           }}
           onChange={(_, date) => {
-            this.setState({date: date});
+            if (Platform.OS === 'android') {
+              this.setState({date: date, modal: false});
+              switch (this.props.type) {
+                case 'service':
+                  this._getTimeService(date);
+                  break;
+                case 'testDrive':
+                  this._getTimeTestDrive(date);
+                  break;
+              }
+            } else {
+              this.setState({date: date});
+            }
             this.props.onFinishedSelection({
               date: date,
               time: undefined,
-              tech_place: undefined,
             });
           }}
           {...this.props}
         />
         {this.state.date && (
-          <View key={'fieldTime' + Math.floor(Math.round() * 10000)}>
+          <View
+            style={{width: '100%'}}
+            key={'fieldTime' + Math.floor(Math.round() * 10000)}>
             {this.state.availablePeriodsFetch ? (
               <>
                 <ActivityIndicator
@@ -187,8 +284,13 @@ export default class ChooseDateTimeComponent extends Component {
                 />
                 <Text
                   selectable={false}
-                  style={{fontSize: 12, color: '#ababab', textAlign: 'center'}}>
-                  ищем свободное время на СТО
+                  style={{
+                    width: '100%',
+                    fontSize: 12,
+                    color: '#ababab',
+                    textAlign: 'center',
+                  }}>
+                  {this.messageForSearch}
                 </Text>
               </>
             ) : null}
@@ -221,7 +323,6 @@ export default class ChooseDateTimeComponent extends Component {
                           this.props.onFinishedSelection({
                             date: this.state.date,
                             time: item.from,
-                            tech_place: item.tech_place,
                           });
                         }}>
                         <Text

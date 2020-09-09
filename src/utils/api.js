@@ -175,6 +175,28 @@ export default {
     return this.request(`/stock/new/cars/get/car/${carId}/`, baseRequestParams);
   },
 
+  async fetchTDCarDetails(dealer, carID) {
+    if (typeof carID === 'object') {
+      let cars = [];
+      const carsData = carID.map(async (el) => {
+        const data = await this.request(
+          `/stock/new/test-drive/${dealer}/${el}/`,
+          baseRequestParams,
+        );
+        cars.push(data.data);
+        return data;
+      });
+      return await Promise.all(carsData).then((el) => {
+        return {status: 'success', data: cars};
+      });
+    } else {
+      return this.request(
+        `/stock/new/test-drive/${dealer}/${carID}/`,
+        baseRequestParams,
+      );
+    }
+  },
+
   fetchNewCarFilterData({city}) {
     return this.request(`/stock/new/cars/search/?city=${city}`, {
       ...baseRequestParams,
@@ -399,6 +421,49 @@ export default {
 
     // __DEV__ && console.log('API order car url', url);
     // __DEV__ && console.log('API order car body', body);
+
+    return this.request(url, requestParams);
+  },
+
+  orderTestDrive(props) {
+    const {
+      carID,
+      comment,
+      firstName,
+      secondName,
+      lastName,
+      time,
+      phone,
+      dealerID,
+      isNewCar,
+    } = props;
+
+    const body = {
+      dealer: dealerID,
+      car: carID,
+      date: {
+        from: time,
+      },
+      firstName: firstName || '',
+      secondName: secondName || '',
+      lastName: lastName || '',
+      phone: phone || '',
+      text: comment,
+      f_Source: 3,
+    };
+
+    const requestParams = _.merge({}, baseRequestParams, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    const url = isNewCar ? '/order/test-drive/' : null;
+
+    __DEV__ && console.log('API orderTestDrive car body', body);
 
     return this.request(url, requestParams);
   },
@@ -731,6 +796,13 @@ export default {
   getServiceInfo({id, dealer, vin}) {
     return this.request(
       `/service/maintenance/intervals/${id}/?dealer=${dealer}&vin=${vin}`,
+      baseRequestParams,
+    );
+  },
+
+  getTimeForTestDrive({dealer, carID, date}) {
+    return this.request(
+      `/order/test-drive/?dealer=${dealer}&date=${date}&car=${carID}`,
       baseRequestParams,
     );
   },
