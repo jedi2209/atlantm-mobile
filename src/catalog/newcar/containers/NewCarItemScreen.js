@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {PureComponent} from 'react';
+import React, {Component} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -136,7 +136,7 @@ const OptionPlate = ({
   );
 };
 
-class NewCarItemScreen extends PureComponent {
+class NewCarItemScreen extends Component {
   static propTypes = {
     dealerSelected: PropTypes.object,
     navigation: PropTypes.object,
@@ -304,6 +304,33 @@ class NewCarItemScreen extends PureComponent {
         isNewCar: true,
       });
     }
+  };
+
+  onPressTestDrive = () => {
+    const {navigation, carDetails} = this.props;
+
+    const CarPrices = {
+      sale: get(carDetails, 'price.app.sale') || 0,
+      standart:
+        get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
+    };
+
+    return navigation.navigate('TestDriveScreen', {
+      car: {
+        brand: get(carDetails, 'brand.name'),
+        model: get(carDetails, 'model.name'),
+        isSale: carDetails.sale === true,
+        price: CarPrices.standart,
+        priceSpecial: CarPrices.sale,
+        complectation: get(carDetails, 'complectation.name'),
+        year: get(carDetails, 'year'),
+      },
+      region: this.props.dealerSelected.region,
+      dealerId: carDetails.dealer.id,
+      carId: carDetails.id.api,
+      testDriveCars: carDetails.testDriveCars,
+      isNewCar: true,
+    });
   };
 
   onClosePhoto = () => this.props.actionCloseNewCarPhotoViewer();
@@ -497,7 +524,6 @@ class NewCarItemScreen extends PureComponent {
     return (
       <View
         style={[
-          styleConst.shadow.default,
           stylesFooter.orderPriceContainer,
           !isSale ? stylesFooter.orderPriceContainerNotSale : null,
         ]}>
@@ -782,7 +808,7 @@ class NewCarItemScreen extends PureComponent {
                 style={{
                   borderBottomColor: '#d5d5e0',
                   borderBottomWidth: 1,
-                  marginBottom: 90,
+                  marginBottom: 140,
                 }}
                 dataArray={[
                   {
@@ -983,21 +1009,42 @@ class NewCarItemScreen extends PureComponent {
               />
             </View>
           </ScrollView>
-          <View style={stylesFooter.footer}>
+          <View style={[styleConst.shadow.default, stylesFooter.footer]}>
             {this.renderPriceFooter({
               carDetails,
               filterData,
               currency,
             })}
-            <Button
-              onPress={this.onPressOrder}
-              full
-              style={[styleConst.shadow.default, stylesFooter.button]}
-              activeOpacity={0.8}>
-              <Text style={styles.buttonText} selectable={false}>
-                ХОЧУ ЭТО АВТО!
-              </Text>
-            </Button>
+            <View style={[stylesFooter.footerButtons]}>
+              {carDetails.testDriveCars &&
+              carDetails.testDriveCars.length > 0 ? (
+                <Button
+                  onPress={this.onPressTestDrive}
+                  full
+                  style={[stylesFooter.button, stylesFooter.buttonLeft]}
+                  activeOpacity={0.8}>
+                  <Text style={styles.buttonText} selectable={false}>
+                    тест-драйв
+                  </Text>
+                </Button>
+              ) : null}
+              <Button
+                onPress={this.onPressOrder}
+                full
+                style={[
+                  stylesFooter.button,
+                  stylesFooter.buttonRight,
+                  !carDetails.testDriveCars ||
+                  carDetails.testDriveCars.length === 0
+                    ? stylesFooter.buttonOnlyOne
+                    : null,
+                ]}
+                activeOpacity={0.8}>
+                <Text style={styles.buttonText} selectable={false}>
+                  хочу это авто!
+                </Text>
+              </Button>
+            </View>
           </View>
           {photoViewerItems.length ? (
             <PhotoViewer
@@ -1019,37 +1066,48 @@ export default connect(mapStateToProps, mapDispatchToProps)(NewCarItemScreen);
 
 const stylesFooter = StyleSheet.create({
   footer: {
-    height: 50,
+    height: 85,
     borderTopWidth: 0,
-    paddingHorizontal: '5%',
+    marginHorizontal: '5%',
+    width: '90%',
     backgroundColor: 'rgba(0,0,0,0)',
     marginBottom: 20,
     position: 'absolute',
     bottom: 0,
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     zIndex: 10,
   },
+  footerButtons: {
+    flex: 1,
+    flexDirection: 'row',
+  },
   button: {
-    width: '55%',
-    height: 48,
-    borderTopRightRadius: 5,
+    width: '50%',
+    height: 40,
+    borderWidth: 1,
+  },
+  buttonLeft: {
+    borderBottomLeftRadius: 5,
+    backgroundColor: styleConst.color.orange,
+    borderColor: styleConst.color.orange,
+  },
+  buttonRight: {
     borderBottomRightRadius: 5,
     backgroundColor: styleConst.color.lightBlue,
     borderColor: styleConst.color.lightBlue,
-    borderWidth: 1,
-    shadowOffset: {
-      width: 5,
-      height: 5,
-    },
+  },
+  buttonOnlyOne: {
+    width: '100%',
+    borderBottomLeftRadius: 5,
   },
   orderPriceContainer: {
-    height: 48,
-    width: '45%',
+    height: 45,
+    width: '100%',
     borderTopLeftRadius: 5,
-    borderBottomLeftRadius: 5,
+    borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    borderTopRightRadius: 0,
+    borderTopRightRadius: 5,
     backgroundColor: styleConst.color.header,
     borderColor: styleConst.color.header,
     borderWidth: 1,

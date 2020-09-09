@@ -40,6 +40,9 @@ import {
   NEW_CAR_DETAILS__REQUEST,
   NEW_CAR_DETAILS__SUCCESS,
   NEW_CAR_DETAILS__FAIL,
+  TD_CAR_DETAILS__REQUEST,
+  TD_CAR_DETAILS__SUCCESS,
+  TD_CAR_DETAILS__FAIL,
   NEW_CAR_DETAILS_PHOTO_VIEWER__OPEN,
   NEW_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
   NEW_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
@@ -427,7 +430,7 @@ const newCarFilterModels = (state = [], action) => {
     case NEW_CAR_CITY__SELECT:
       return [];
     case NEW_CAR_FILTER_BRANDS__SELECT:
-      return state.filter(item => {
+      return state.filter((item) => {
         return action.payload.includes(item.brandId);
       });
     case NEW_CAR_FILTER_MODELS__SELECT:
@@ -560,11 +563,34 @@ const isFetchingNewCarDetails = (state = false, action) => {
   }
 };
 
+const isFetchingTDCarDetails = (state = false, action) => {
+  switch (action.type) {
+    case TD_CAR_DETAILS__REQUEST:
+      return true;
+    case TD_CAR_DETAILS__SUCCESS:
+    case TD_CAR_DETAILS__FAIL:
+      return false;
+    default:
+      return state;
+  }
+};
+
 const newCarDetails = (state = null, action) => {
   switch (action.type) {
     case NEW_CAR_DETAILS__REQUEST:
       return null;
     case NEW_CAR_DETAILS__SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+const TDCarDetails = (state = [], action) => {
+  switch (action.type) {
+    case TD_CAR_DETAILS__REQUEST:
+      return [];
+    case TD_CAR_DETAILS__SUCCESS:
       return action.payload;
     default:
       return state;
@@ -838,6 +864,7 @@ export default combineReducers({
   newCar: combineReducers({
     carDetails: combineReducers({
       data: newCarDetails,
+      tdcars: TDCarDetails,
       photoViewerItems: newCarPhotoViewerItems,
       photoViewerVisible: newCarPhotoViewerVisible,
       photoViewerIndex: newCarPhotoViewerIndex,
@@ -861,6 +888,7 @@ export default combineReducers({
       isNewCarFilterPriceShow,
       isFetchingNewCarByFilter,
       isFetchingCarDetails: isFetchingNewCarDetails,
+      isFetchingTDCarDetails: isFetchingTDCarDetails,
     }),
     filters: newCarFilters,
   }),

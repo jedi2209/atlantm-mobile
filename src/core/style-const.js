@@ -6,6 +6,7 @@ export default {
     blue: '#0061ED',
     lightBlue: '#027aff',
     green: '#34BD78',
+    orange: '#FFA51D',
     bg: '#F6F6F6',
     accordeonGrey1: '#ededed',
     accordeonGrey2: '#dedfe0',

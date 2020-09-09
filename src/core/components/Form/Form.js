@@ -571,7 +571,7 @@ class Form extends Component {
                 : styles.fieldRequiredTrue
               : !this.state[name].time
               ? styles.fieldRequiredFalse
-              : {},
+              : styles.fieldRequiredTrue,
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
@@ -910,10 +910,15 @@ class Form extends Component {
             doneText="Выбрать"
             onDonePress={(value) => {
               this.onChangeField(data)(this.state[name]);
-              this._nextInput(groupNum, num);
+              if (data.props.focusNextInput) {
+                this._nextInput(groupNum, num);
+              }
             }}
             onValueChange={(value) => {
               this.setState({[name]: value});
+              if (data.props.onChange) {
+                data.props.onChange(value);
+              }
             }}
             style={{
               ...pickerSelectStyles,

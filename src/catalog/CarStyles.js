@@ -95,6 +95,7 @@ export default StyleSheet.create({
     fontFamily: styleConst.font.medium,
     fontSize: 16,
     letterSpacing: styleConst.ui.letterSpacing,
+    textTransform: 'uppercase',
   },
   orderPriceText: {
     fontFamily: styleConst.font.regular,
