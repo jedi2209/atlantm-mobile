@@ -208,7 +208,6 @@ class ServiceScreen extends Component {
       value: this.props.carVIN,
       props: {
         placeholder: null,
-        required: true,
       },
     },
   ];
@@ -605,7 +604,7 @@ class ServiceScreen extends Component {
                 label: 'Email',
                 value: this.props.email,
                 props: {
-                  required: true,
+                  required: false,
                 },
               },
             ],
