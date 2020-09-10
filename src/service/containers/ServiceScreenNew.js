@@ -215,9 +215,10 @@ class ServiceScreen extends Component {
   onServiceChoose(value) {
     this.setState({
       service: value,
+      serviceInfo: undefined,
     });
 
-    if (value) {
+    if (!isNaN(value)) {
       this._getServicesInfo(value);
     }
   }
@@ -540,7 +541,7 @@ class ServiceScreen extends Component {
                         ),
                       }
                     : {},
-                  this.state.serviceInfo && !this.state.serviceInfoFetch
+                  this.state.service && !this.state.serviceInfoFetch
                     ? {
                         name: 'DATETIME',
                         type: 'dateTime',
