@@ -184,7 +184,8 @@ class TestDriveScreen extends PureComponent {
               return tdCarsArr.push({
                 label: [
                   //el.model.name,
-                  el.model.generation.name,
+                //   el.model.generation.name,
+                  el.complectation.name,
                   el.engine.name,
                   el.color.original ? el.color.original.split('-')[1] : null,
                 ].join(' '),
@@ -196,7 +197,8 @@ class TestDriveScreen extends PureComponent {
             tdCarsArr.push({
               label: [
                 //carsAwait.payload.model.name,
-                carsAwait.payload.model.generation.name,
+                // carsAwait.payload.model.generation.name,
+                carsAwait.payload.complectation.name,
                 carsAwait.payload.engine.name,
                 carsAwait.payload.color.original
                   ? carsAwait.payload.color.original.split('-')[1]
