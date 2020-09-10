@@ -43,7 +43,7 @@ class ServiceContnainer extends Component {
     if (dealerSelected.region === 'by') {
       return <ServiceNewScreen />;
     }
-    //return <ServiceScreen />;
+    return <ServiceScreen />;
   }
 }
 
