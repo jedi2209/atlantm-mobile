@@ -11,7 +11,6 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
   const dateHuman = props.value ? format(props.value, 'DD MMMM YYYY') : null;
 
   const DatePicker = (show) => {
-    console.log('show', show, props);
     switch (Platform.OS) {
       case 'ios':
         return (

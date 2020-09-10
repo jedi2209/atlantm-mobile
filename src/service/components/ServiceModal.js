@@ -78,7 +78,9 @@ const ServiceTable = ({data}) => {
             {name ? <Text style={tableStyles.sectionTitle}>{name}</Text> : null}
             {quantity && unit ? (
               <ServiceTableItem label="Количество">
-                {quantity} {unit}
+                {unit === 'сек'
+                  ? quantity / 60 / 60 + ' ч.'
+                  : [quantity, unit].join(' ')}
               </ServiceTableItem>
             ) : null}
             {summ && currency.name ? (

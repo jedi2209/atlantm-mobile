@@ -171,6 +171,13 @@ class ServiceScreen extends Component {
       carVIN: carVIN,
       isHaveCar: Boolean(props.cars.length > 0),
     };
+
+    this.myCars = [];
+    this.props.cars.map((item) => {
+      if (!item.hidden) {
+        this.myCars.push(item);
+      }
+    });
   }
 
   noHaveCar = [
@@ -427,7 +434,7 @@ class ServiceScreen extends Component {
                         horizontal
                         style={styles.carContainer}
                         contentContainerStyle={styles.carContainerContent}>
-                        {(this.props.cars || []).map((item) => (
+                        {(this.myCars || []).map((item) => (
                           <TouchableWithoutFeedback
                             activeOpacity={0.7}
                             key={item.vin}
@@ -459,13 +466,13 @@ class ServiceScreen extends Component {
                         value: this.state.service,
                         props: {
                           items: this.state.services,
-                          onValueChange: this.onServiceChoose.bind(this),
+                          onChange: this.onServiceChoose.bind(this),
                           placeholder: {
                             label: 'Что будем делать с авто?',
                             value: null,
                             color: '#9EA0A4',
                           },
-                          onDonePress: () => {},
+                          focusNextInput: false,
                           required: true,
                         },
                       }
@@ -543,6 +550,7 @@ class ServiceScreen extends Component {
                         props: {
                           placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
                           required: true,
+                          type: 'service',
                           minimumDate: new Date(addDays(2)),
                           maximumDate: new Date(addDays(62)),
                           dealer: this.props.dealerSelected,

@@ -890,7 +890,7 @@ class Form extends Component {
               ? !this.state[name]
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
-              : {},
+              : styles.fieldRequiredTrue,
             {
               marginVertical: 0,
             },
@@ -908,14 +908,13 @@ class Form extends Component {
             key={'rnpicker' + num + name}
             ref={this.inputRefs[groupNum + 'Input' + num]}
             doneText="Выбрать"
-            onDonePress={(value) => {
-              this.onChangeField(data)(this.state[name]);
+            onDonePress={() => {
               if (data.props.focusNextInput) {
                 this._nextInput(groupNum, num);
               }
             }}
             onValueChange={(value) => {
-              this.setState({[name]: value});
+              this.onChangeField(data)(value);
               if (data.props.onChange) {
                 data.props.onChange(value);
               }
