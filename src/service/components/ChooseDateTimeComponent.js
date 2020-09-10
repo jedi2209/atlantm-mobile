@@ -323,6 +323,7 @@ export default class ChooseDateTimeComponent extends Component {
                           this.props.onFinishedSelection({
                             date: this.state.date,
                             time: item.from,
+                            tech_place: item.tech_place,
                           });
                         }}>
                         <Text
