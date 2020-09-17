@@ -19,7 +19,9 @@ const styles = StyleSheet.create({
 const Badge = (props) => {
   return (
     <View style={[styles.badgeContainer, {backgroundColor: props.bgColor}]}>
-      <Text style={[styles.badgeName, {color: props.textColor}]}>
+      <Text
+        selectable={false}
+        style={[styles.badgeName, {color: props.textColor}]}>
         {props.name}
       </Text>
     </View>
