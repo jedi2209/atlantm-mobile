@@ -1021,8 +1021,19 @@ class NewCarItemScreen extends Component {
                 <Button
                   onPress={this.onPressTestDrive}
                   full
+                  iconLeft
                   style={[stylesFooter.button, stylesFooter.buttonLeft]}
                   activeOpacity={0.8}>
+                  <Icon
+                    type="MaterialCommunityIcons"
+                    name="steering"
+                    selectable={false}
+                    style={{
+                      color: '#ffffff',
+                      fontSize: 24,
+                      marginTop: -2,
+                    }}
+                  />
                   <Text style={styles.buttonText} selectable={false}>
                     тест-драйв
                   </Text>

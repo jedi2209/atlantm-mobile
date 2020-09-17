@@ -425,6 +425,133 @@ export default {
     return this.request(url, requestParams);
   },
 
+  orderCreditCar(props) {
+    const {
+      carId,
+      comment,
+      firstName,
+      secondName,
+      lastName,
+      email,
+      phone,
+      dealerId,
+      summ,
+    } = props;
+
+    const body = {
+      f_Dealer: dealerId,
+      f_Car: carId,
+      f_FirstName: firstName,
+      f_SecondName: secondName,
+      f_LastName: lastName,
+      f_Phone: phone,
+      f_Email: email,
+      f_Summ: summ,
+      f_Text: comment,
+      f_Source: 3,
+    };
+
+    const requestParams = _.merge({}, baseRequestParams, {
+      method: 'post',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    const url = '/orders/credit/post/';
+
+    // __DEV__ && console.log('API order car url', url);
+    // __DEV__ && console.log('API order car body', body);
+
+    return this.request(url, requestParams);
+  },
+
+  orderTestDriveUsedCar(props) {
+    const {
+      carId,
+      comment,
+      firstName,
+      secondName,
+      lastName,
+      email,
+      phone,
+      dealerId,
+    } = props;
+
+    const body = {
+      f_Dealer: dealerId,
+      f_Car: carId,
+      f_FirstName: firstName,
+      f_SecondName: secondName,
+      f_LastName: lastName,
+      f_Phone: phone,
+      f_Email: email,
+      f_Text: comment,
+      f_Source: 3,
+    };
+
+    const requestParams = _.merge({}, baseRequestParams, {
+      method: 'post',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    const url = '/orders/testdrive/post/';
+
+    // __DEV__ && console.log('API order car url', url);
+    // __DEV__ && console.log('API order car body', body);
+
+    return this.request(url, requestParams);
+  },
+
+  orderMyPrice(props) {
+    const {
+      carId,
+      comment,
+      firstName,
+      secondName,
+      lastName,
+      email,
+      phone,
+      summ,
+      dealerId,
+    } = props;
+
+    const body = {
+      f_Dealer: dealerId,
+      f_Car: carId,
+      f_FirstName: firstName,
+      f_SecondName: secondName,
+      f_LastName: lastName,
+      f_Phone: phone,
+      f_Email: email,
+      f_Summ: summ,
+      f_Text: comment,
+      f_Source: 3,
+    };
+
+    const requestParams = _.merge({}, baseRequestParams, {
+      method: 'post',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    const url = '/orders/my-price/post/';
+
+    // __DEV__ && console.log('API order car url', url);
+    // __DEV__ && console.log('API order car body', body);
+
+    return this.request(url, requestParams);
+  },
+
   orderTestDrive(props) {
     const {
       carID,
