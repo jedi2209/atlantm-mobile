@@ -56,9 +56,18 @@ import {
   CATALOG_ORDER__SUCCESS,
   CATALOG_ORDER__FAIL,
   CATALOG_ORDER_COMMENT__FILL,
+  TESTDRIVE_USED_ORDER__REQUEST,
+  TESTDRIVE_USED_ORDER__SUCCESS,
+  TESTDRIVE_USED_ORDER__FAIL,
   TESTDRIVE_ORDER__REQUEST,
   TESTDRIVE_ORDER__SUCCESS,
   TESTDRIVE_ORDER__FAIL,
+  CREDIT_ORDER__REQUEST,
+  CREDIT_ORDER__SUCCESS,
+  CREDIT_ORDER__FAIL,
+  MYPRICE_ORDER__REQUEST,
+  MYPRICE_ORDER__SUCCESS,
+  MYPRICE_ORDER__FAIL,
 
   // comment
   CAR_COST__REQUEST,
@@ -311,6 +320,112 @@ export const actionOrderCar = (props) => {
       .catch((error) => {
         return dispatch({
           type: CATALOG_ORDER__FAIL,
+          payload: {
+            error: error.message,
+            code: error.code,
+          },
+        });
+      });
+  };
+};
+
+export const actionOrderCreditCar = (props) => {
+  return (dispatch) => {
+    dispatch({
+      type: CREDIT_ORDER__REQUEST,
+      payload: {...props},
+    });
+
+    return API.orderCreditCar(props)
+      .then((res) => {
+        console.log('res', res);
+        const {error, status} = res;
+
+        if (status !== 'success') {
+          return dispatch({
+            type: CREDIT_ORDER__FAIL,
+            payload: {
+              code: error.code,
+              error: error.message,
+            },
+          });
+        }
+
+        return dispatch({type: CREDIT_ORDER__SUCCESS});
+      })
+      .catch((error) => {
+        return dispatch({
+          type: TESTDRIVE_USED_ORDER__FAIL,
+          payload: {
+            error: error.message,
+            code: error.code,
+          },
+        });
+      });
+  };
+};
+export const actionOrderMyPrice = (props) => {
+  return (dispatch) => {
+    dispatch({
+      type: MYPRICE_ORDER__REQUEST,
+      payload: {...props},
+    });
+
+    return API.orderMyPrice(props)
+      .then((res) => {
+        console.log('res', res);
+        const {error, status} = res;
+
+        if (status !== 'success') {
+          return dispatch({
+            type: MYPRICE_ORDER__FAIL,
+            payload: {
+              code: error.code,
+              error: error.message,
+            },
+          });
+        }
+
+        return dispatch({type: MYPRICE_ORDER__SUCCESS});
+      })
+      .catch((error) => {
+        return dispatch({
+          type: TESTDRIVE_USED_ORDER__FAIL,
+          payload: {
+            error: error.message,
+            code: error.code,
+          },
+        });
+      });
+  };
+};
+export const actionOrderTestDriveUsedCar = (props) => {
+  return (dispatch) => {
+    dispatch({
+      type: TESTDRIVE_USED_ORDER__REQUEST,
+      payload: {...props},
+    });
+
+    return API.orderTestDriveUsedCar(props)
+      .then((res) => {
+        console.log('res', res);
+        const {error, status} = res;
+
+        if (status !== 'success') {
+          return dispatch({
+            type: TESTDRIVE_USED_ORDER__FAIL,
+            payload: {
+              code: error.code,
+              error: error.message,
+            },
+          });
+        }
+
+        return dispatch({type: TESTDRIVE_USED_ORDER__SUCCESS});
+      })
+      .catch((error) => {
+        return dispatch({
+          type: TESTDRIVE_USED_ORDER__FAIL,
           payload: {
             error: error.message,
             code: error.code,

@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   StatusBar,
   StyleSheet,
   ScrollView,
@@ -18,6 +19,7 @@ import {
   StyleProvider,
   Accordion,
 } from 'native-base';
+import LinearGradient from 'react-native-linear-gradient';
 
 // redux
 import {connect} from 'react-redux';
@@ -83,6 +85,7 @@ const OptionPlate = ({title, subtitle}) => (
       justifyContent: 'center',
     }}>
     <Text
+      selectable={false}
       style={{
         color: '#d8d8d8',
         fontSize: 14,
@@ -91,7 +94,9 @@ const OptionPlate = ({title, subtitle}) => (
       }}>
       {title}
     </Text>
-    <Text style={{color: '#fff', fontSize: 14, fontWeight: '600'}}>
+    <Text
+      selectable={false}
+      style={{color: '#fff', fontSize: 14, fontWeight: '600'}}>
       {subtitle}
     </Text>
   </View>
@@ -162,6 +167,54 @@ class UserCarItemScreen extends Component {
   onPressOrder = () => {
     const {navigation, carDetails} = this.props;
     navigation.navigate('OrderScreen', {
+      car: {
+        brand: get(carDetails, 'brand.name', ''),
+        model: get(carDetails, 'model', ''),
+        complectation: get(carDetails, 'complectation.name'),
+        year: get(carDetails, 'year'),
+      },
+      region: this.props.dealerSelected.region,
+      dealerId: get(carDetails, 'dealer.id'),
+      carId: carDetails.id.api,
+      isNewCar: false,
+    });
+  };
+
+  onPressMyPrice = () => {
+    const {navigation, carDetails} = this.props;
+    navigation.navigate('OrderMyPriceScreen', {
+      car: {
+        brand: get(carDetails, 'brand.name', ''),
+        model: get(carDetails, 'model', ''),
+        complectation: get(carDetails, 'complectation.name'),
+        year: get(carDetails, 'year'),
+      },
+      region: this.props.dealerSelected.region,
+      dealerId: get(carDetails, 'dealer.id'),
+      carId: carDetails.id.api,
+      isNewCar: false,
+    });
+  };
+
+  onPressCredit = () => {
+    const {navigation, carDetails} = this.props;
+    navigation.navigate('OrderCreditScreen', {
+      car: {
+        brand: get(carDetails, 'brand.name', ''),
+        model: get(carDetails, 'model', ''),
+        complectation: get(carDetails, 'complectation.name'),
+        year: get(carDetails, 'year'),
+      },
+      region: this.props.dealerSelected.region,
+      dealerId: get(carDetails, 'dealer.id'),
+      carId: carDetails.id.api,
+      isNewCar: false,
+    });
+  };
+
+  onPressTestDrive = () => {
+    const {navigation, carDetails} = this.props;
+    navigation.navigate('OrderTestDriveScreen', {
       car: {
         brand: get(carDetails, 'brand.name', ''),
         model: get(carDetails, 'model', ''),
@@ -478,11 +531,84 @@ class UserCarItemScreen extends Component {
                       </ReadMore>
                     </View>
                   ) : null}
+                  <View style={styles.bodyButtonsContainer}>
+                    <Button
+                      block
+                      iconRight
+                      transparent
+                      activeOpacity={0.5}
+                      onPress={this.onPressCredit}
+                      style={[
+                        {
+                          borderColor: styleConst.color.red,
+                          width: '15%',
+                        },
+                        styles.bodyButton,
+                      ]}>
+                      <Text
+                        selectable={false}
+                        style={[
+                          styles.bodyButtonText,
+                          {
+                            color: styleConst.color.red,
+                            width: '70%',
+                          },
+                        ]}>
+                        рассчитать кредит
+                      </Text>
+                      <Icon
+                        type="Octicons"
+                        name="credit-card"
+                        selectable={false}
+                        style={[
+                          styles.bodyButtonIcon,
+                          {
+                            color: styleConst.color.red,
+                            fontSize: 26,
+                          },
+                        ]}
+                      />
+                    </Button>
+                    <Button
+                      block
+                      iconLeft
+                      transparent
+                      activeOpacity={0.5}
+                      onPress={this.onPressMyPrice}
+                      style={[
+                        {
+                          borderColor: styleConst.color.blue,
+                        },
+                        styles.bodyButton,
+                      ]}>
+                      <Icon
+                        type="Entypo"
+                        name="price-tag"
+                        selectable={false}
+                        style={[
+                          styles.bodyButtonIcon,
+                          {
+                            color: styleConst.color.blue,
+                          },
+                        ]}
+                      />
+                      <Text
+                        selectable={false}
+                        style={[
+                          {
+                            color: styleConst.color.blue,
+                          },
+                          styles.bodyButtonText,
+                        ]}>
+                        предложить{'\r\n'}свою цену
+                      </Text>
+                    </Button>
+                  </View>
                   <Accordion
                     style={{
                       borderBottomColor: '#d5d5e0',
                       borderBottomWidth: 1,
-                      marginBottom: 90,
+                      marginBottom: 140,
                     }}
                     dataArray={[
                       {
@@ -509,7 +635,9 @@ class UserCarItemScreen extends Component {
                               {carDetails.mileage ? (
                                 <Row style={styles.sectionRow}>
                                   <Col style={styles.sectionProp}>
-                                    <Text style={styles.sectionPropText}>
+                                    <Text
+                                      selectable={false}
+                                      style={styles.sectionPropText}>
                                       Пробег:
                                     </Text>
                                   </Col>
@@ -542,7 +670,9 @@ class UserCarItemScreen extends Component {
                               carDetails.engine.volume.full ? (
                                 <Row style={styles.sectionRow}>
                                   <Col style={styles.sectionProp}>
-                                    <Text style={styles.sectionPropText}>
+                                    <Text
+                                      selectable={false}
+                                      style={styles.sectionPropText}>
                                       Двигатель:
                                     </Text>
                                   </Col>
@@ -557,7 +687,9 @@ class UserCarItemScreen extends Component {
                               {carDetails.gearbox && carDetails.gearbox.name ? (
                                 <Row style={styles.sectionRow}>
                                   <Col style={styles.sectionProp}>
-                                    <Text style={styles.sectionPropText}>
+                                    <Text
+                                      selectable={false}
+                                      style={styles.sectionPropText}>
                                       КПП:
                                     </Text>
                                   </Col>
@@ -573,7 +705,9 @@ class UserCarItemScreen extends Component {
                               carDetails.color.name.official ? (
                                 <Row style={styles.sectionRow}>
                                   <Col style={styles.sectionProp}>
-                                    <Text style={styles.sectionPropText}>
+                                    <Text
+                                      selectable={false}
+                                      style={styles.sectionPropText}>
                                       Цвет:
                                     </Text>
                                   </Col>
@@ -587,7 +721,9 @@ class UserCarItemScreen extends Component {
                               {carDetails.body && carDetails.body.name ? (
                                 <Row style={styles.sectionRow}>
                                   <Col style={styles.sectionProp}>
-                                    <Text style={styles.sectionPropText}>
+                                    <Text
+                                      selectable={false}
+                                      style={styles.sectionPropText}>
                                       Тип кузова:
                                     </Text>
                                   </Col>
@@ -602,7 +738,9 @@ class UserCarItemScreen extends Component {
                               carDetails.interior.name ? (
                                 <Row style={styles.sectionRow}>
                                   <Col style={styles.sectionProp}>
-                                    <Text style={styles.sectionPropText}>
+                                    <Text
+                                      selectable={false}
+                                      style={styles.sectionPropText}>
                                       Салон:
                                     </Text>
                                   </Col>
@@ -704,10 +842,9 @@ class UserCarItemScreen extends Component {
               </View>
             </View>
           </ScrollView>
-          <View style={stylesFooter.footer}>
+          <View style={[styleConst.shadow.default, stylesFooter.footer]}>
             <View
               style={[
-                styleConst.shadow.default,
                 stylesFooter.orderPriceContainer,
                 stylesFooter.orderPriceContainerNotSale,
               ]}>
@@ -719,14 +856,37 @@ class UserCarItemScreen extends Component {
                 )}
               </Text>
             </View>
-            <Button
-              onPress={this.onPressOrder}
-              full
-              style={[styleConst.shadow.default, stylesFooter.button]}>
-              <Text style={styles.buttonText} selectable={false}>
-                ХОЧУ ЭТО АВТО!
-              </Text>
-            </Button>
+            <View style={[stylesFooter.footerButtons]}>
+              <Button
+                onPress={this.onPressTestDrive}
+                full
+                iconLeft
+                style={[stylesFooter.button, stylesFooter.buttonLeft]}
+                activeOpacity={0.8}>
+                <Icon
+                  type="MaterialCommunityIcons"
+                  name="steering"
+                  selectable={false}
+                  style={{
+                    color: '#ffffff',
+                    fontSize: 24,
+                    marginTop: -2,
+                  }}
+                />
+                <Text style={styles.buttonText} selectable={false}>
+                  тест-драйв
+                </Text>
+              </Button>
+              <Button
+                onPress={this.onPressOrder}
+                full
+                style={[stylesFooter.button, stylesFooter.buttonRight]}
+                activeOpacity={0.8}>
+                <Text style={styles.buttonText} selectable={false}>
+                  хочу это авто!
+                </Text>
+              </Button>
+            </View>
           </View>
           {photoViewerItems.length ? (
             <PhotoViewer
@@ -746,35 +906,48 @@ class UserCarItemScreen extends Component {
 
 const stylesFooter = StyleSheet.create({
   footer: {
-    height: 50,
+    height: 85,
     borderTopWidth: 0,
-    paddingHorizontal: '5%',
+    marginHorizontal: '5%',
+    width: '90%',
     backgroundColor: 'rgba(0,0,0,0)',
     marginBottom: 20,
     position: 'absolute',
     bottom: 0,
     flex: 1,
+    flexDirection: 'column',
+    zIndex: 10,
+  },
+  footerButtons: {
+    flex: 1,
     flexDirection: 'row',
   },
   button: {
-    width: '55%',
-    height: 48,
-    flexDirection: 'row',
-    borderTopRightRadius: 5,
+    width: '50%',
+    height: 40,
+    borderWidth: 1,
+  },
+  buttonLeft: {
+    borderBottomLeftRadius: 5,
+    backgroundColor: styleConst.color.orange,
+    borderColor: styleConst.color.orange,
+  },
+  buttonRight: {
     borderBottomRightRadius: 5,
     backgroundColor: styleConst.color.lightBlue,
     borderColor: styleConst.color.lightBlue,
-    borderWidth: 1,
-    shadowOffset: {
-      width: 5,
-      height: 5,
-    },
+  },
+  buttonOnlyOne: {
+    width: '100%',
+    borderBottomLeftRadius: 5,
   },
   orderPriceContainer: {
-    height: 48,
-    width: '45%',
+    height: 45,
+    width: '100%',
     borderTopLeftRadius: 5,
-    borderBottomLeftRadius: 5,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderTopRightRadius: 5,
     backgroundColor: styleConst.color.header,
     borderColor: styleConst.color.header,
     borderWidth: 1,

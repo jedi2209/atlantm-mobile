@@ -182,28 +182,14 @@ class TestDriveScreen extends PureComponent {
           if (!carsAwait.payload.model) {
             Object.values(carsAwait.payload).map((el) => {
               return tdCarsArr.push({
-                label: [
-                  //el.model.name,
-                //   el.model.generation.name,
-                  el.complectation.name,
-                  el.engine.name,
-                  el.color.original ? el.color.original.split('-')[1] : null,
-                ].join(' '),
+                label: el.name,
                 value: el.id,
                 key: el.id,
               });
             });
           } else {
             tdCarsArr.push({
-              label: [
-                //carsAwait.payload.model.name,
-                // carsAwait.payload.model.generation.name,
-                carsAwait.payload.complectation.name,
-                carsAwait.payload.engine.name,
-                carsAwait.payload.color.original
-                  ? carsAwait.payload.color.original.split('-')[1]
-                  : null,
-              ].join(' '),
+              label: carsAwait.payload.name,
               value: carsAwait.payload.id,
               key: carsAwait.payload.id,
             });

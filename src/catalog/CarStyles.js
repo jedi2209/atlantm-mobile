@@ -205,4 +205,31 @@ export default StyleSheet.create({
     fontFamily: styleConst.font.regular,
     fontStyle: 'italic',
   },
+  bodyButtonsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    width: '110%',
+    // marginHorizontal: '2%',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  bodyButton: {
+    height: 50,
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 0,
+    width: '45%',
+    marginBottom: 10,
+  },
+  bodyButtonIcon: {
+    fontSize: 28,
+    width: '20%',
+  },
+  bodyButtonText: {
+    fontSize: 15,
+    fontFamily: styleConst.font.light,
+    textAlign: 'center',
+    width: '80%',
+  },
 });
