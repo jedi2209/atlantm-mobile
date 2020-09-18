@@ -89,7 +89,12 @@ export const getRouter = (initialRouteName) => {
       TestDriveScreen: {screen: TestDriveScreen},
       OrderTestDriveScreen: {screen: OrderTestDriveScreen},
       OrderMyPriceScreen: {screen: OrderMyPriceScreen},
-      OrderCreditScreen: {screen: OrderCreditScreen},
+      OrderCreditScreen: {
+        screen: OrderCreditScreen,
+        navigationOptions: {
+          gesturesEnabled: false,
+        },
+      },
     },
     {
       initialRouteName,

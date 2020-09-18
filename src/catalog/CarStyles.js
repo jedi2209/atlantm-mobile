@@ -45,6 +45,7 @@ export default StyleSheet.create({
   },
   descrContainer: {
     padding: styleConst.ui.horizontalGap,
+    marginBottom: 10,
   },
   descr: {
     lineHeight: 18,
@@ -170,6 +171,7 @@ export default StyleSheet.create({
   mapCard: {},
   mapCardContainer: {
     marginHorizontal: '2%',
+    marginBottom: 10,
     flexDirection: 'row',
     backgroundColor: '#fff',
     paddingVertical: 10,
