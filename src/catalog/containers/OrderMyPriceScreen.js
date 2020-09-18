@@ -27,10 +27,7 @@ import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
-import {
-  MYPRICE_ORDER__SUCCESS,
-  MYPRICE_ORDER__FAIL,
-} from '../actionTypes';
+import {MYPRICE_ORDER__SUCCESS, MYPRICE_ORDER__FAIL} from '../actionTypes';
 import {ERROR_NETWORK} from '../../core/const';
 
 const $size = 40;
@@ -153,6 +150,9 @@ class OrderMyPriceScreen extends Component {
                 type: 'input',
                 label: 'Ваша стоимость за автомобиль',
                 value: '',
+                props: {
+                  keyboardType: 'number-pad',
+                },
               },
             ],
           },

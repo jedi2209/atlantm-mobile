@@ -5,14 +5,17 @@ import {
   StyleSheet,
   View,
   Alert,
+  Text,
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
+  Dimensions,
   Platform,
 } from 'react-native';
 import {Content} from 'native-base';
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
 // redux
 import {connect} from 'react-redux';
 import {actionOrderCreditCar} from '../actions';
@@ -23,6 +26,7 @@ import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack'
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
+import showPrice from '../../utils/price';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import styleConst from '../../core/style-const';
@@ -105,30 +109,135 @@ const mapDispatchToProps = {
 class OrderCreditScreen extends Component {
   constructor(props) {
     super(props);
-    const isNewCar = get(this.props.navigation, 'state.params.isNewCar');
-    const orderedCar = get(this.props.navigation, 'state.params.car.ordered');
+    this.isNewCar = get(this.props.navigation, 'state.params.isNewCar');
+    this.orderedCar = get(this.props.navigation, 'state.params.car.ordered');
     let model = '';
-    if (isNewCar) {
+    if (this.isNewCar) {
       model = get(this.props.navigation, 'state.params.car.model');
     } else {
       model = get(this.props.navigation, 'state.params.car.model.name');
     }
-    const carName = [
+    this.carName = [
       get(this.props.navigation, 'state.params.car.brand'),
       model,
       get(this.props.navigation, 'state.params.car.complectation'),
-      !orderedCar ? get(this.props.navigation, 'state.params.car.year') : null,
-      orderedCar ? 'или аналог' : null,
+      !this.orderedCar
+        ? get(this.props.navigation, 'state.params.car.year')
+        : null,
+      this.orderedCar ? 'или аналог' : null,
     ]
       .filter(Boolean)
       .join(' ');
 
+    this.carPrice = Number(
+      get(this.props.navigation, 'state.params.car.price'),
+    );
+    this.region = get(this.props.navigation, 'state.params.region');
+
     this.state = {
       date: '',
       comment: '',
+      summ: this.carPrice,
     };
 
-    this.FormConfig = {
+    const deviceWidth = Dimensions.get('window').width;
+    this.sliderWidth = (deviceWidth / 100) * 80;
+    this.priceStep = Math.ceil(this.carPrice / 1000) * 100;
+
+    this.optionsPrice = [];
+    let i = 0;
+    while (i <= this.carPrice) {
+      this.optionsPrice.push(i);
+      i = i + this.priceStep;
+    }
+    this.optionsPrice.push(this.carPrice);
+  }
+
+  static navigationOptions = ({navigation}) => ({
+    headerStyle: stylesHeader.whiteHeader,
+    headerTitleStyle: stylesHeader.whiteHeaderTitle,
+    headerTitle: 'Заявка на кредит',
+    headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
+    headerRight: <View />,
+  });
+
+  static propTypes = {
+    navigation: PropTypes.object,
+    localUserDataUpdate: PropTypes.func,
+    firstName: PropTypes.string,
+    secondName: PropTypes.string,
+    lastName: PropTypes.string,
+    phone: PropTypes.string,
+    email: PropTypes.string,
+    comment: PropTypes.string,
+  };
+
+  onPressOrder = async (data) => {
+    const isInternetExist = await isInternet();
+
+    if (!isInternetExist) {
+      setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+      return;
+    }
+
+    const {navigation} = this.props;
+
+    const dealerId = get(navigation, 'state.params.dealerId');
+    const carId = get(navigation, 'state.params.carId');
+    const isNewCar = get(navigation, 'state.params.isNewCar');
+    const action = await this.props.actionOrderCreditCar({
+      firstName: get(data, 'NAME'),
+      secondName: get(data, 'SECOND_NAME'),
+      lastName: get(data, 'LAST_NAME'),
+      email: get(data, 'EMAIL'),
+      phone: get(data, 'PHONE'),
+      summ:
+        this.state.summ ||
+        get(data, 'SUMM') ||
+        get(navigation, 'state.params.car.price'),
+      dealerId,
+      carId,
+      comment: data.COMMENT || '',
+    });
+    if (action && action.type) {
+      switch (action.type) {
+        case CREDIT_ORDER__SUCCESS:
+          const car = get(navigation, 'state.params.car');
+          const {brand, model} = car;
+          const path = isNewCar ? 'newcar' : 'usedcar';
+          Amplitude.logEvent('order', `catalog/${path}`, {
+            brand_name: brand,
+            model_name: get(model, 'name'),
+          });
+          this.props.localUserDataUpdate({
+            NAME: get(data, 'NAME'),
+            SECOND_NAME: get(data, 'SECOND_NAME'),
+            LAST_NAME: get(data, 'LAST_NAME'),
+            PHONE: get(data, 'PHONE'),
+            EMAIL: get(data, 'EMAIL'),
+          });
+          Alert.alert(
+            'Ваша заявка успешно отправлена!',
+            'Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
+            [
+              {
+                text: 'ОК',
+                onPress() {
+                  navigation.goBack();
+                },
+              },
+            ],
+          );
+          break;
+        case CREDIT_ORDER__FAIL:
+          Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова');
+          break;
+      }
+    }
+  };
+
+  render() {
+    const FormConfig = {
       fields: {
         groups: [
           {
@@ -137,13 +246,67 @@ class OrderCreditScreen extends Component {
               {
                 name: 'CARNAME',
                 type: 'input',
-                label: isNewCar
+                label: this.isNewCar
                   ? 'Марка, модель и комплектация'
                   : 'Марка, модель и год выпуска',
-                value: carName,
+                value: this.carName,
                 props: {
                   editable: false,
                 },
+              },
+              {
+                name: 'SUMM',
+                type: 'component',
+                label: 'Желаемая сумма кредита',
+                value: (
+                  <View>
+                    <MultiSlider
+                      values={[this.carPrice]}
+                      step={this.priceStep}
+                      min={0}
+                      max={this.carPrice}
+                      sliderLength={this.sliderWidth}
+                      optionsArray={this.optionsPrice}
+                      onValuesChange={(e) => {
+                        this.setState({
+                          summ: e[0],
+                        });
+                      }}
+                      trackStyle={{
+                        backgroundColor: '#d5d5e0',
+                      }}
+                      selectedStyle={{
+                        backgroundColor: styleConst.color.lightBlue,
+                      }}
+                      customMarker={() => (
+                        <View
+                          style={[
+                            styleConst.shadow.default,
+                            {
+                              height: 17,
+                              width: 17,
+                              borderRadius: 8.5,
+                              backgroundColor: styleConst.color.lightBlue,
+                            },
+                          ]}
+                        />
+                      )}
+                    />
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text style={{color: '#74747A', fontSize: 14}}>
+                        {showPrice(0, this.region)}
+                      </Text>
+                      <Text style={{color: '#74747A', fontSize: 14}}>
+                        {showPrice(this.state.summ, this.region)}
+                      </Text>
+                    </View>
+                  </View>
+                ),
               },
             ],
           },
@@ -213,89 +376,6 @@ class OrderCreditScreen extends Component {
         ],
       },
     };
-  }
-
-  static navigationOptions = ({navigation}) => ({
-    headerStyle: stylesHeader.whiteHeader,
-    headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerTitle: 'Заявка на кредит',
-    headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
-    headerRight: <View />,
-  });
-
-  static propTypes = {
-    navigation: PropTypes.object,
-    localUserDataUpdate: PropTypes.func,
-    firstName: PropTypes.string,
-    secondName: PropTypes.string,
-    lastName: PropTypes.string,
-    phone: PropTypes.string,
-    email: PropTypes.string,
-    comment: PropTypes.string,
-  };
-
-  onPressOrder = async (data) => {
-    const isInternetExist = await isInternet();
-
-    if (!isInternetExist) {
-      setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
-      return;
-    }
-
-    const {navigation} = this.props;
-
-    const dealerId = get(navigation, 'state.params.dealerId');
-    const carId = get(navigation, 'state.params.carId');
-    const isNewCar = get(navigation, 'state.params.isNewCar');
-    const action = await this.props.actionOrderCreditCar({
-      firstName: get(data, 'NAME'),
-      secondName: get(data, 'SECOND_NAME'),
-      lastName: get(data, 'LAST_NAME'),
-      email: get(data, 'EMAIL'),
-      phone: get(data, 'PHONE'),
-      summ: get(data, 'SUMM'),
-      dealerId,
-      carId,
-      comment: data.COMMENT || '',
-    });
-    if (action && action.type) {
-      switch (action.type) {
-        case CREDIT_ORDER__SUCCESS:
-          const car = get(navigation, 'state.params.car');
-          const {brand, model} = car;
-          const path = isNewCar ? 'newcar' : 'usedcar';
-          Amplitude.logEvent('order', `catalog/${path}`, {
-            brand_name: brand,
-            model_name: get(model, 'name'),
-          });
-          this.props.localUserDataUpdate({
-            NAME: get(data, 'NAME'),
-            SECOND_NAME: get(data, 'SECOND_NAME'),
-            LAST_NAME: get(data, 'LAST_NAME'),
-            PHONE: get(data, 'PHONE'),
-            EMAIL: get(data, 'EMAIL'),
-          });
-          Alert.alert(
-            'Ваша заявка успешно отправлена!',
-            'Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
-            [
-              {
-                text: 'ОК',
-                onPress() {
-                  navigation.goBack();
-                },
-              },
-            ],
-          );
-          break;
-        case CREDIT_ORDER__FAIL:
-          Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова');
-          break;
-      }
-    }
-  };
-
-  render() {
     return (
       <KeyboardAvoidingView onPress={Keyboard.dismiss}>
         <TouchableWithoutFeedback
@@ -308,7 +388,7 @@ class OrderCreditScreen extends Component {
               Platform.OS === 'android' ? 'always' : 'never'
             }>
             <Form
-              fields={this.FormConfig.fields}
+              fields={FormConfig.fields}
               barStyle={'light-content'}
               SubmitButton={{text: 'Отправить'}}
               onSubmit={this.onPressOrder}
@@ -320,7 +400,4 @@ class OrderCreditScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(OrderCreditScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderCreditScreen);

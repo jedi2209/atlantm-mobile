@@ -204,6 +204,8 @@ class UserCarItemScreen extends Component {
         model: get(carDetails, 'model', ''),
         complectation: get(carDetails, 'complectation.name'),
         year: get(carDetails, 'year'),
+        price:
+          get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
       },
       region: this.props.dealerSelected.region,
       dealerId: get(carDetails, 'dealer.id'),
@@ -531,79 +533,86 @@ class UserCarItemScreen extends Component {
                       </ReadMore>
                     </View>
                   ) : null}
-                  <View style={styles.bodyButtonsContainer}>
-                    <Button
-                      block
-                      iconRight
-                      transparent
-                      activeOpacity={0.5}
-                      onPress={this.onPressCredit}
-                      style={[
-                        {
-                          borderColor: styleConst.color.red,
-                          width: '15%',
-                        },
-                        styles.bodyButton,
-                      ]}>
-                      <Text
-                        selectable={false}
-                        style={[
-                          styles.bodyButtonText,
-                          {
-                            color: styleConst.color.red,
-                            width: '70%',
-                          },
-                        ]}>
-                        рассчитать кредит
-                      </Text>
-                      <Icon
-                        type="Octicons"
-                        name="credit-card"
-                        selectable={false}
-                        style={[
-                          styles.bodyButtonIcon,
-                          {
-                            color: styleConst.color.red,
-                            fontSize: 26,
-                          },
-                        ]}
-                      />
-                    </Button>
-                    <Button
-                      block
-                      iconLeft
-                      transparent
-                      activeOpacity={0.5}
-                      onPress={this.onPressMyPrice}
-                      style={[
-                        {
-                          borderColor: styleConst.color.blue,
-                        },
-                        styles.bodyButton,
-                      ]}>
-                      <Icon
-                        type="Entypo"
-                        name="price-tag"
-                        selectable={false}
-                        style={[
-                          styles.bodyButtonIcon,
-                          {
-                            color: styleConst.color.blue,
-                          },
-                        ]}
-                      />
-                      <Text
-                        selectable={false}
-                        style={[
-                          {
-                            color: styleConst.color.blue,
-                          },
-                          styles.bodyButtonText,
-                        ]}>
-                        предложить{'\r\n'}свою цену
-                      </Text>
-                    </Button>
-                  </View>
+                  {carDetails.creditAvailable ||
+                  carDetails.customPriceAvailable ? (
+                    <View style={styles.bodyButtonsContainer}>
+                      {carDetails.creditAvailable ? (
+                        <Button
+                          block
+                          iconRight
+                          transparent
+                          activeOpacity={0.5}
+                          onPress={this.onPressCredit}
+                          style={[
+                            {
+                              borderColor: styleConst.color.red,
+                              width: '15%',
+                            },
+                            styles.bodyButton,
+                          ]}>
+                          <Text
+                            selectable={false}
+                            style={[
+                              styles.bodyButtonText,
+                              {
+                                color: styleConst.color.red,
+                                width: '70%',
+                              },
+                            ]}>
+                            рассчитать кредит
+                          </Text>
+                          <Icon
+                            type="Octicons"
+                            name="credit-card"
+                            selectable={false}
+                            style={[
+                              styles.bodyButtonIcon,
+                              {
+                                color: styleConst.color.red,
+                                fontSize: 26,
+                              },
+                            ]}
+                          />
+                        </Button>
+                      ) : null}
+                      {carDetails.customPriceAvailable ? (
+                        <Button
+                          block
+                          iconLeft
+                          transparent
+                          activeOpacity={0.5}
+                          onPress={this.onPressMyPrice}
+                          style={[
+                            {
+                              borderColor: styleConst.color.blue,
+                            },
+                            styles.bodyButton,
+                          ]}>
+                          <Icon
+                            type="Entypo"
+                            name="price-tag"
+                            selectable={false}
+                            style={[
+                              styles.bodyButtonIcon,
+                              {
+                                color: styleConst.color.blue,
+                              },
+                            ]}
+                          />
+                          <Text
+                            selectable={false}
+                            style={[
+                              {
+                                color: styleConst.color.blue,
+                              },
+                              styles.bodyButtonText,
+                            ]}>
+                            предложить{'\r\n'}свою цену
+                          </Text>
+                        </Button>
+                      ) : null}
+                    </View>
+                  ) : null}
                   <Accordion
                     style={{
                       borderBottomColor: '#d5d5e0',
