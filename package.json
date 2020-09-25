@@ -24,7 +24,7 @@
     "@invertase/react-native-apple-authentication": "^1.1.2",
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-community/async-storage": "1.12.0",
-    "@react-native-community/datetimepicker": "^2.6.1",
+    "@react-native-community/datetimepicker": "^3.0.2",
     "@react-native-community/google-signin": "^4.0.3",
     "@react-native-community/picker": "^1.6.6",
     "@react-native-community/slider": "^3.0.3",
