@@ -13,24 +13,48 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
   const DatePicker = (show) => {
     switch (Platform.OS) {
       case 'ios':
-        return (
-          <ModalView
-            isModalVisible={show}
-            animationIn="zoomIn"
-            animationOut="zoomOut"
-            onHide={props.onHideModal}
-            swipeDirection={['up', 'down', 'left', 'right']}
-            // style={{justifyContent: 'flex-end', margin: 0}}
-            confirmBtnText={props.confirmBtnText || 'выбрать'}
-            selfClosed={false}>
-            <DateTimePicker
-              mode="date"
-              locale="ru-RU"
-              {...props}
-              value={props.value ? props.value : defaultDate}
-            />
-          </ModalView>
-        );
+        const majorVersionIOS = parseInt(Platform.Version, 10);
+        if (majorVersionIOS < 14) {
+          return (
+            <ModalView
+              isModalVisible={show}
+              animationIn="zoomIn"
+              animationOut="zoomOut"
+              onHide={props.onHideModal}
+              swipeDirection={['up', 'down', 'left', 'right']}
+              // style={{justifyContent: 'flex-end', margin: 0}}
+              confirmBtnText={props.confirmBtnText || 'выбрать'}
+              selfClosed={false}>
+              <DateTimePicker
+                mode="date"
+                display="spinner"
+                locale="ru-RU"
+                {...props}
+                value={props.value ? props.value : defaultDate}
+              />
+            </ModalView>
+          );
+        } else {
+          return (
+            <ModalView
+              isModalVisible={show}
+              animationIn="zoomIn"
+              animationOut="zoomOut"
+              onHide={props.onHideModal}
+              swipeDirection={['up', 'down', 'left', 'right']}
+              // style={{justifyContent: 'flex-end', margin: 0}}
+              confirmBtnText={props.confirmBtnText || 'выбрать'}
+              selfClosed={false}>
+              <DateTimePicker
+                mode="date"
+                display="inline"
+                locale="ru-RU"
+                {...props}
+                value={props.value ? props.value : defaultDate}
+              />
+            </ModalView>
+          );
+        }
       case 'android':
         if (!show) {
           return null;
