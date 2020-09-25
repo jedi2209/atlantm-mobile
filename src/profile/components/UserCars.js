@@ -394,7 +394,7 @@ const UserCars = ({navigation, actionToggleCar}) => {
           useNativeDriver>
           <Icon type="MaterialCommunityIcons" name="car-off" fontSize={20} />
           <Text style={{marginTop: 5, marginLeft: 10, lineHeight: 20}}>
-            У вас нет текущих автомобилей.{'\r\n'}
+            У тебя нет текущих автомобилей.{'\r\n'}
           </Text>
           <Button bordered onPress={() => setActivePanel('hidden')}>
             <Text style={{padding: 5}}>Проверим архив?</Text>

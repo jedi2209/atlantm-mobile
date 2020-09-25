@@ -230,8 +230,8 @@ class OrderPartsScreen extends Component {
               CARMODEL: dataFromForm.CARMODEL,
             });
             Alert.alert(
-              'Ваша заявка успешно отправлена',
-              'Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
+              'Заявка успешно отправлена',
+              'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
               [
                 {
                   text: 'ОК',
@@ -245,7 +245,7 @@ class OrderPartsScreen extends Component {
             break;
           case PARTS_ORDER__FAIL:
             Toast.show({
-              text: 'Произошла ошибка, попробуйте снова',
+              text: 'Произошла ошибка, попробуем снова?',
               position: 'top',
               type: 'danger',
             });
@@ -306,7 +306,7 @@ class OrderPartsScreen extends Component {
                   {
                     name: 'CARNAME',
                     type: 'component',
-                    label: 'Выберите автомобиль',
+                    label: 'Выбери автомобиль',
                     value: (
                       <ScrollView
                         showsHorizontalScrollIndicator={false}
@@ -423,7 +423,7 @@ class OrderPartsScreen extends Component {
                 value: this.props.Text,
                 props: {
                   placeholder:
-                    'На случай если вам потребуется передать нам больше информации',
+                    'На случай если тебе потребуется передать нам больше информации',
                 },
               },
             ],

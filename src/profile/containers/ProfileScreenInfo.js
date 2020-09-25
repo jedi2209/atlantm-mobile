@@ -228,7 +228,7 @@ class ProfileScreenInfo extends Component {
                         fontSize: 18,
                         paddingHorizontal: 20,
                       }}>
-                      У вас пока ещё нет автомобилей, о которых мы знаем...
+                      У тебя пока ещё нет автомобилей, о которых мы знаем...
                     </Text>
                     <Button
                       full
@@ -260,7 +260,7 @@ class ProfileScreenInfo extends Component {
                             elevation: 0,
                           },
                         ]}>
-                        Не видите свои авто?
+                        Не видишь свои авто?
                       </Text>
                     </Button>
                   </View>
@@ -329,7 +329,7 @@ class ProfileScreenInfo extends Component {
                           marginBottom: 16,
                           fontWeight: '600',
                         }}>
-                        История накопления и трат Ваших бонусных баллов
+                        История накопления и трат твоих бонусных баллов
                       </Text>
                       <View style={{display: 'flex', flexDirection: 'row'}}>
                         <View>
@@ -420,12 +420,12 @@ class ProfileScreenInfo extends Component {
                             marginBottom: 16,
                             fontWeight: '600',
                           }}>
-                          У Вас пока{' '}
+                          У тебя пока{' '}
                           <Text style={{fontWeight: 'bold', fontSize: 22}}>
                             0
                           </Text>{' '}
-                          баллов.{'\r\n'}Узнайте больше о бонусной программе и
-                          накапливайте баллы быстрее!
+                          баллов.{'\r\n'}Узнай больше о бонусной программе и
+                          накапливай баллы быстрее!
                         </Text>
                         <View style={{display: 'flex', flexDirection: 'row'}}>
                           <View>

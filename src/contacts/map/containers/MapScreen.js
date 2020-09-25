@@ -279,7 +279,7 @@ class MapScreen extends Component {
       setTimeout(() =>
         Alert.alert(
           'Ошибка',
-          'Не удалось открыть приложения для навигации, попробуйте снова.',
+          'Не удалось открыть приложения для навигации, попробуем снова?.',
         ),
       );
     });
@@ -403,7 +403,7 @@ class MapScreen extends Component {
           <ActionSheet
             cancelButtonIndex={0}
             ref={component => (this.actionSheet = component)}
-            title="Выберите приложение для навигации"
+            title="Выбери приложение для навигации"
             options={availableNaviApps}
             onPress={this.onPressRouteVariant}
           />

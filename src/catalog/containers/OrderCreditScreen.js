@@ -217,8 +217,8 @@ class OrderCreditScreen extends Component {
             EMAIL: get(data, 'EMAIL'),
           });
           Alert.alert(
-            'Ваша заявка успешно отправлена!',
-            'Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
+            'Заявка успешно отправлена!',
+            'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
             [
               {
                 text: 'ОК',
@@ -230,7 +230,7 @@ class OrderCreditScreen extends Component {
           );
           break;
         case CREDIT_ORDER__FAIL:
-          Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова');
+          Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
           break;
       }
     }
@@ -368,7 +368,7 @@ class OrderCreditScreen extends Component {
                 value: this.props.comment,
                 props: {
                   placeholder:
-                    'На случай если вам потребуется передать нам больше информации',
+                    'На случай если тебе потребуется передать нам больше информации',
                 },
               },
             ],

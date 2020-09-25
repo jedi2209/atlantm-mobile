@@ -145,7 +145,7 @@ export default class ChooseDateTimeComponent extends Component {
     }
 
     if (availablePeriods.data == null) {
-      alert('Нет доступных периодов, попробуйте выбрать другой день');
+      alert('Нет доступных периодов, попробуй выбрать другой день');
       this.setState({
         availablePeriodsFetch: false,
         date: undefined,
@@ -188,7 +188,7 @@ export default class ChooseDateTimeComponent extends Component {
     }
 
     if (availablePeriods.data == null) {
-      alert('Нет доступных периодов, попробуйте выбрать другой день');
+      alert('Нет доступных периодов, попробуй выбрать другой день');
       this.setState({
         availablePeriodsFetch: false,
         date: undefined,
@@ -303,7 +303,7 @@ export default class ChooseDateTimeComponent extends Component {
                 <Text
                   selectable={false}
                   style={[styles.label, styles.labelActive]}>
-                  Выберите удобное для вас время
+                  Выбери удобное для тебя время
                 </Text>
                 <View style={styles.timeBlocksContainer}>
                   {(this.state.availablePeriods || []).map((item, idx) => {

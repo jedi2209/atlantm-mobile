@@ -170,7 +170,7 @@ class InfoListScreen extends Component {
       );
       title = 'Всё получилось!';
       text =
-        'Вы успешно подписались на получение PUSH-уведомлений!\r\n\r\nОни не будут часто приходить, только лишь при появлении новых интересующих вас акций.';
+        'Ты успешно подписался на получение PUSH-уведомлений!\r\n\r\nОни не будут часто приходить, только лишь при появлении новых интересных акций.';
     } else {
       PushNotifications.unsubscribeFromTopic('actions');
       actionSetPushActionSubscribe(false);
@@ -178,7 +178,7 @@ class InfoListScreen extends Component {
         pushActionSubscribeState: false,
       });
       title = 'Мы грустим =(';
-      text = 'Нам будет вас не хватать...\r\nВозвращайтесь скорее!';
+      text = 'Нам будет тебя не хватать...\r\nВозвращайся скорее!';
     }
     Alert.alert(title, text);
   };
@@ -205,7 +205,7 @@ class InfoListScreen extends Component {
           let message = get(
             action,
             'payload.message',
-            'Произошла ошибка, попробуйте снова',
+            'Произошла ошибка, попробуем снова?',
           );
 
           if (message === 'Network request failed') {

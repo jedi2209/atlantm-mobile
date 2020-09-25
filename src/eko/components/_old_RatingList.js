@@ -108,7 +108,7 @@ export default class RatingList extends Component {
       <View style={styles.container}>
         <View style={styles.titleContainer}>
           <Text style={styles.title}>
-            Насколько в целом вы удовлетворены нашей работой?
+            Насколько в целом ты удовлетворен нашей работой?
           </Text>
         </View>
 

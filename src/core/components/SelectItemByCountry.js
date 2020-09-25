@@ -130,7 +130,7 @@ export default class SelectItemByCountry extends Component {
       if (action.type === DEALER__FAIL) {
         Alert.alert(
           'Ошибка',
-          'Не удалось получить данные по выбранному автоцентру, попробуйте снова',
+          'Не удалось получить данные по выбранному автоцентру, попробуем снова?',
         );
       }
     });

@@ -175,7 +175,7 @@ class CarCostScreen extends Component {
           setTimeout(() => {
             Alert.alert(
               'Всё получилось!',
-              'Ваша заявка успешно отправлена. Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
+              'Заявка успешно отправлена. Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
               [
                 {
                   text: 'ОК',
@@ -191,7 +191,7 @@ class CarCostScreen extends Component {
           let message = get(
             action,
             'payload.message',
-            'Произошла ошибка, попробуйте снова',
+            'Произошла ошибка, попробуем снова?',
           );
 
           if (message === 'Network request failed') {
@@ -287,7 +287,7 @@ class CarCostScreen extends Component {
                   maxDate: new Date(),
                   reverse: true,
                   placeholder: {
-                    label: 'Выберите год выпуска...',
+                    label: 'Выбери год выпуска...',
                     value: null,
                     color: '#9EA0A4',
                   },
@@ -357,7 +357,7 @@ class CarCostScreen extends Component {
                     },
                   ],
                   placeholder: {
-                    label: 'Укажите тип двигателя...',
+                    label: 'Укажи тип двигателя...',
                     value: null,
                     color: '#9EA0A4',
                   },
@@ -417,7 +417,7 @@ class CarCostScreen extends Component {
                     },
                   ],
                   placeholder: {
-                    label: 'Выберите коробку передач...',
+                    label: 'Выбери коробку передач...',
                     value: null,
                     color: '#9EA0A4',
                   },
@@ -489,7 +489,7 @@ class CarCostScreen extends Component {
               {
                 name: 'FOTO',
                 type: 'component',
-                label: 'Прикрепите фото',
+                label: 'Прикрепи фото',
                 value: (
                   <CarCostPhotos
                     photos={this.state.photos}
@@ -513,7 +513,7 @@ class CarCostScreen extends Component {
                 value: this.props.Text,
                 props: {
                   placeholder:
-                    'На случай если вам потребуется передать нам больше информации',
+                    'На случай если тебе потребуется передать нам больше информации',
                 },
               },
             ],

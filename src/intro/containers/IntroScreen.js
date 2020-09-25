@@ -49,7 +49,7 @@ export default class IntroScreen extends Component {
           />
           <Button
             full
-            title="Выберите свой автоцентр"
+            title="Выбери свой автоцентр"
             onPress={this.onPressButton}
             style={[
               styleConst.shadow.default,
@@ -76,7 +76,7 @@ export default class IntroScreen extends Component {
                 fontFamily: styleConst.font.regular,
                 fontSize: 15
               }}>
-              Выберите свой автоцентр
+              Выбери свой автоцентр
             </Text>
           </Button>
         </View>
