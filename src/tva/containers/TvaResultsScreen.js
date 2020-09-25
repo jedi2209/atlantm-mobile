@@ -205,7 +205,7 @@ class TvaResultsScreen extends Component {
       if (!message) {
         this.setState({loading: false});
         setTimeout(() => {
-          Alert.alert('Введите текст сообщения');
+          Alert.alert('Введи текст сообщения');
         }, 100);
 
         return;
@@ -230,7 +230,7 @@ class TvaResultsScreen extends Component {
 
         if (type === TVA_SEND_MESSAGE__FAIL) {
           setTimeout(
-            () => Alert.alert('', 'Произошла ошибка, попробуйте снова'),
+            () => Alert.alert('', 'Произошла ошибка, попробуем снова?'),
             100,
           );
         }

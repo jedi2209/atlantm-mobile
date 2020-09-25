@@ -48,7 +48,7 @@ const mapDispatchToProps = {
 
 class ChooseDealerScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: 'Выберите автоцентр',
+    headerTitle: 'Выбери автоцентр',
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
     headerLeft: <HeaderIconBack theme="white" navigation={navigation} />,

@@ -60,7 +60,7 @@ export const getRouter = (initialRouteName) => {
         },
       },
       ReestablishScreen: {screen: ReestablishScreen},
-      IntroScreen: {screen: IntroScreen}, // это скрин с кнопкой выберите автосервис
+      IntroScreen: {screen: IntroScreen}, // это скрин с кнопкой Выбери автосервис
       BottomTabNavigation: {screen: BottomTabNavigation}, // это нижнее меню
       ChooseDealerScreen: {screen: ChooseDealerScreen}, // выбор диллера скрин
       ServiceScreen: {screen: ServiceContainer}, // заявка на СТО

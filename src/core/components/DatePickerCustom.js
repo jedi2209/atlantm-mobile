@@ -74,7 +74,7 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
             ? dateHuman
             : props.placeholder
             ? props.placeholder
-            : 'Выберите дату'}
+            : 'Выбери дату'}
         </Text>
       </Button>
       {DatePicker(props.isActive)}

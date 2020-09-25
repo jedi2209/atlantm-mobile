@@ -180,7 +180,7 @@ class ReviewAddRatingStepScreen extends Component {
                     },
                   ],
                   placeholder: {
-                    label: 'Поставьте оценку нашей работе...',
+                    label: 'Поставь оценку нашей работе...',
                     value: null,
                     color: '#9EA0A4',
                   },
@@ -308,14 +308,14 @@ class ReviewAddRatingStepScreen extends Component {
         Amplitude.logEvent('order', 'eko/review_add');
 
         setTimeout(() => {
-          Alert.alert('Ваш отзыв успешно отправлен');
+          Alert.alert('Твой отзыв успешно отправлен!');
           navigation.navigate('ReviewsScreen');
         }, 100);
       }
 
       if (action.type === REVIEW_ADD__FAIL) {
         setTimeout(
-          () => Alert.alert('', 'Произошла ошибка, попробуйте снова'),
+          () => Alert.alert('', 'Произошла ошибка, попробуем снова?'),
           100,
         );
       }

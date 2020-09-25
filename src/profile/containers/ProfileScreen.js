@@ -252,7 +252,7 @@ class ProfileScreen extends Component {
         });
 
         let header = 'Хьюстон, у нас проблемы...';
-        let message = 'Что-то пошло не так, попробуйте снова';
+        let message = 'Что-то пошло не так, попробуем снова?';
 
         if (response.code === 400) {
           message = 'Телефон не должен быть пустым';
@@ -798,7 +798,7 @@ class ProfileScreen extends Component {
                         // onSelectCountry={this._onSelectCountry}
                         textProps={{
                           placeholderTextColor: '#afafaf',
-                          placeholder: 'ваш телефон',
+                          placeholder: 'твой телефон',
                           keyboardType: 'phone-pad',
                           autoCompleteType: 'tel',
                           selectionColor: '#afafaf',

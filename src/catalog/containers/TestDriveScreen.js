@@ -256,8 +256,8 @@ class TestDriveScreen extends PureComponent {
             EMAIL: get(data, 'EMAIL'),
           });
           Alert.alert(
-            'Ваша заявка успешно отправлена!',
-            'Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
+            'Заявка успешно отправлена!',
+            'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
             [
               {
                 text: 'ОК',
@@ -269,7 +269,7 @@ class TestDriveScreen extends PureComponent {
           );
           break;
         case TESTDRIVE_ORDER__FAIL:
-          Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова');
+          Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
           break;
       }
     }
@@ -286,12 +286,12 @@ class TestDriveScreen extends PureComponent {
     let carblock = {
       name: 'CAR',
       type: 'select',
-      label: 'Выберите желаемый автомобиль',
+      label: 'Выбери желаемый автомобиль',
       value: this.state.testDriveCar,
       props: {
         items: this.state.TDCarsList,
         placeholder: {
-          label: 'Выберите автомобиль для тест-драйва',
+          label: 'Выбери автомобиль для тест-драйва',
           value: null,
           color: '#9EA0A4',
         },
@@ -303,7 +303,7 @@ class TestDriveScreen extends PureComponent {
     let datetime = {
       name: 'DATETIME',
       type: 'dateTime',
-      label: 'Выберите удобную для вас дату',
+      label: 'Выбери удобную для тебя дату',
       value: this.state.date || null,
       props: {
         placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
@@ -327,7 +327,7 @@ class TestDriveScreen extends PureComponent {
                 : {
                     name: 'CARLOAD',
                     type: 'component',
-                    label: 'Выберите желаемый автомобиль',
+                    label: 'Выбери желаемый автомобиль',
                     value: (
                       <>
                         <ActivityIndicator
@@ -406,7 +406,7 @@ class TestDriveScreen extends PureComponent {
                 value: this.props.comment,
                 props: {
                   placeholder:
-                    'На случай если вам потребуется передать нам больше информации',
+                    'На случай если тебе потребуется передать нам больше информации',
                 },
               },
             ],

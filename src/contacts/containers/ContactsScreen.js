@@ -175,7 +175,7 @@ class ContactsScreen extends Component {
         let message = get(
           action,
           'payload.message',
-          'Произошла ошибка, попробуйте снова',
+          'Произошла ошибка, попробуем снова?',
         );
 
         if (message === 'Network request failed') {
@@ -219,7 +219,7 @@ class ContactsScreen extends Component {
   };
 
   getRateAppInfoText = () => {
-    return `Если вам понравилось наше приложение, оставьте, пожайлуста, положительный отзыв в ${this.getPlatformStore()}`;
+    return `Если тебе нравится наше приложение, оставь, пожайлуста, положительный отзыв в ${this.getPlatformStore()}`;
   };
 
   getRateAppLabel = () => `Оставить отзыв в ${this.getPlatformStore()}`;
@@ -383,7 +383,7 @@ class ContactsScreen extends Component {
                       if (!isOpened) {
                         Alert.alert(
                           'Автоцентр закрыт',
-                          '\r\nОставьте заявку на звонок и наши менеджеры перезвонят вам как только автоцентр откроется.\r\n\r\nЖелаете оставить заявку на звонок?',
+                          '\r\nОставь заявку на звонок и наши менеджеры перезвонят как только автоцентр откроется.\r\n\r\nОставим заявку на звонок?',
                           [
                             {
                               text: 'Нет',

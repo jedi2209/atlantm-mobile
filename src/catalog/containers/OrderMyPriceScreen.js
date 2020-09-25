@@ -148,7 +148,7 @@ class OrderMyPriceScreen extends Component {
               {
                 name: 'SUMM',
                 type: 'input',
-                label: 'Ваша стоимость за автомобиль',
+                label: 'Твоя стоимость за автомобиль',
                 value: '',
                 props: {
                   keyboardType: 'number-pad',
@@ -214,7 +214,7 @@ class OrderMyPriceScreen extends Component {
                 value: this.props.comment,
                 props: {
                   placeholder:
-                    'На случай если вам потребуется передать нам больше информации',
+                    'На случай если тебе потребуется передать нам больше информации',
                 },
               },
             ],
@@ -285,8 +285,8 @@ class OrderMyPriceScreen extends Component {
             EMAIL: get(data, 'EMAIL'),
           });
           Alert.alert(
-            'Ваша заявка успешно отправлена!',
-            'Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
+            'Заявка успешно отправлена!',
+            'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
             [
               {
                 text: 'ОК',
@@ -298,7 +298,7 @@ class OrderMyPriceScreen extends Component {
           );
           break;
         case MYPRICE_ORDER__FAIL:
-          Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова');
+          Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
           break;
       }
     }

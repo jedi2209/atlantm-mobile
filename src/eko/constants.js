@@ -1,7 +1,7 @@
-export const TEXT_RATE_APP = 'Если вам понравилось наше приложение, оставьте, пожайлуста, положительный отзыв в';
+export const TEXT_RATE_APP = 'Если тебе понравилось наше приложение, оставь, пожайлуста, положительный отзыв в';
 
-export const TEXT_REVIEW_ADD_QUESTION__PLUS = 'Что вам понравилось в работе автоцентра? Кому бы вы хотели выразить благодарность?';
-export const TEXT_REVIEW_ADD_QUESTION__MINUS = 'Чем вы остались недовольны в работе автоцентра?';
+export const TEXT_REVIEW_ADD_QUESTION__PLUS = 'Что тебе понравилось в работе автоцентра? Кому бы ты хотел выразить благодарность?';
+export const TEXT_REVIEW_ADD_QUESTION__MINUS = 'Чем ты остался недоволен в работе автоцентра?';
 
 export const REVIEW_ADD_RATING_5 = 'В высшей степени доволен';
 export const REVIEW_ADD_RATING_4 = 'Очень доволен';

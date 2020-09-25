@@ -239,7 +239,7 @@ class ServiceScreen extends Component {
         'Хьюстон, у нас проблемы!',
         data.error && data.error.message
           ? '\r\n' + data.error.message
-          : 'Доступных услуг не найдено. Попробуйте записаться в другой автоцентр',
+          : 'Доступных услуг не найдено. Попробуй записаться в другой автоцентр',
       );
       data.data = undefined;
     } else {
@@ -355,14 +355,18 @@ class ServiceScreen extends Component {
     if (order.status === 'error') {
       Alert.alert('Хьюстон, у нас проблемы!', '\r\n' + order.error.message);
     } else {
-      Alert.alert('Всё получилось!', '\r\nСпасибо! Ваша запись оформлена', [
-        {
-          text: 'ОК',
-          onPress() {
-            navigation.goBack();
+      Alert.alert(
+        'Всё получилось!',
+        '\r\nСпасибо! Твоя запись оформлена, ждём!',
+        [
+          {
+            text: 'ОК',
+            onPress() {
+              navigation.goBack();
+            },
           },
-        },
-      ]);
+        ],
+      );
       this.setState({success: true, loading: false});
     }
   };
@@ -390,7 +394,7 @@ class ServiceScreen extends Component {
                 ? {
                     name: 'DATETIME',
                     type: 'dateTime',
-                    label: 'Выберите удобную для вас дату',
+                    label: 'Выбери удобную для тебя дату',
                     value: this.state.date,
                     props: {
                       placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
@@ -412,7 +416,7 @@ class ServiceScreen extends Component {
                   {
                     name: 'CARNAME',
                     type: 'component',
-                    label: 'Выберите автомобиль',
+                    label: 'Выбери автомобиль',
                     value: this.state.servicesFetch ? (
                       <>
                         <ActivityIndicator
@@ -462,7 +466,7 @@ class ServiceScreen extends Component {
                     ? {
                         name: 'SERVICE',
                         type: 'select',
-                        label: 'Выберите услугу',
+                        label: 'Выбери услугу',
                         value: this.state.service,
                         props: {
                           items: this.state.services,
@@ -545,7 +549,7 @@ class ServiceScreen extends Component {
                     ? {
                         name: 'DATETIME',
                         type: 'dateTime',
-                        label: 'Выберите удобную для вас дату',
+                        label: 'Выбери удобную для тебя дату',
                         value: this.state.date,
                         props: {
                           placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
@@ -620,7 +624,7 @@ class ServiceScreen extends Component {
                 value: this.props.Text,
                 props: {
                   placeholder:
-                    'На случай если вам потребуется передать нам больше информации',
+                    'На случай если тебе потребуется передать нам больше информации',
                 },
               },
             ],

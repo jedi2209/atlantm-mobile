@@ -120,12 +120,12 @@ class ProfileSettingsScreen extends Component {
             fields: [].concat(this.state.email, this.state.phone),
           },
           {
-            name: 'Ваши соц.сети для быстрого входа',
+            name: 'Твои соц.сети для быстрого входа',
             fields: [
               {
                 name: 'SocialAuth',
                 type: 'component',
-                label: 'Привяжите соц.сети',
+                label: 'Привяжи соц.сети',
                 value: (
                   <SocialAuth
                     region={this.props.dealerSelected.region}
@@ -145,12 +145,12 @@ class ProfileSettingsScreen extends Component {
               {
                 name: 'BIRTHDATE',
                 type: 'date',
-                label: 'Когда у вас день рождения?',
+                label: 'Когда у тебя день рождения?',
                 value: birthdate,
                 props: {
                   maximumDate: new Date(substractYears(18)),
                   minimumDate: new Date(substractYears(100)),
-                  placeholder: 'Мы вас поздравим!',
+                  placeholder: 'Мы обязательно поздравим!',
                 },
               },
             ],
@@ -206,8 +206,8 @@ class ProfileSettingsScreen extends Component {
     if (!phoneValue && !emailValue) {
       this.setState({loading: false});
       Alert.alert(
-        'Заполните телефон или Email',
-        'Пожалуйста укажите хотя бы один контакт для возможности связи с Вами',
+        'Заполни телефон или Email',
+        'Пожалуйста укажи хотя бы один контакт для возможности связи с тобой',
         [
           {
             text: 'ОК',
@@ -225,7 +225,7 @@ class ProfileSettingsScreen extends Component {
         const _this = this;
         Alert.alert(
           'Отлично! Всё получилось!',
-          'Ваши данные успешно обновлены',
+          'Твои данные успешно обновлены',
           [
             {
               text: 'ОК',
@@ -240,7 +240,7 @@ class ProfileSettingsScreen extends Component {
       })
       .catch(() => {
         setTimeout(
-          () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
+          () => Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?'),
           100,
         );
         this.setState({loading: false});

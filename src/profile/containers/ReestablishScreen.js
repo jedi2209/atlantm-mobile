@@ -153,7 +153,7 @@ class ReestablishScreen extends React.Component {
     const {login} = this.state;
     if (login.length === 0) {
       Toast.show({
-        text: 'Нам нужно знать ваш логин, чтобы восстановить доступ',
+        text: 'Нам нужно знать твой логин, чтобы восстановить доступ',
         position: 'top',
         type: 'warning',
       });
@@ -179,7 +179,7 @@ class ReestablishScreen extends React.Component {
               window.atlantmDebug = false;
             }
 
-            const defaultMessage = 'Произошла ошибка, попробуйте снова';
+            const defaultMessage = 'Произошла ошибка, попробуем снова?';
             const code = get(action, 'payload.code');
             const message = get(action, 'payload.message');
             Toast.show({
@@ -217,7 +217,7 @@ class ReestablishScreen extends React.Component {
               .catch(() => {
                 this.setState({loading: false});
                 Toast.show({
-                  text: 'Произошла ошибка, попробуйте снова',
+                  text: 'Произошла ошибка, попробуем снова?',
                   position: 'top',
                   type: 'danger',
                 });
@@ -245,15 +245,15 @@ class ReestablishScreen extends React.Component {
                   style={{fontSize: 48, position: 'absolute'}}
                 />
                 <Text style={[styles.caption, {marginLeft: 60}]}>
-                  Мы очень раздасадованы тем, что Вы не обнаружили свои
+                  Мы очень раздасадованы тем, что ты не обнаружил свои
                   автомобили и бонусные баллы в личном кабинете.{'\n'}
-                  Пожалуйста, дайте нам ещё один шанс!
+                  Пожалуйста, дай нам ещё один шанс!
                 </Text>
                 <Text style={[styles.caption]}>
-                  Введите ваши данные для доступа к старому личному кабинету.
+                  Введи свои данные для доступа к старому личному кабинету.
                   {'\n\n'}
-                  Это последний раз когда Вам придётся вспомнить эти магические
-                  комбинации цифр и букв для входа в Ваш личный кабинет.
+                  Это последний раз когда тебе придётся вспомнить эти магические
+                  комбинации цифр и букв для входа в личный кабинет.
                 </Text>
               </View>
               <View style={styles.group}>

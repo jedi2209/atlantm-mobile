@@ -193,8 +193,8 @@ class CallMeBackScreen extends React.Component {
         PHONE: props.PHONE,
       });
       Alert.alert(
-        'Ваша заявка успешно отправлена!',
-        'Наши менеджеры вскоре свяжутся с Вами. Спасибо!',
+        'Заявка успешно отправлена!',
+        'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
         [
           {
             text: 'ОК',
@@ -218,7 +218,7 @@ class CallMeBackScreen extends React.Component {
     if (action.type === CALL_ME__FAIL) {
       this.setState({loading: false});
       setTimeout(
-        () => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'),
+        () => Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?'),
         100,
       );
     }

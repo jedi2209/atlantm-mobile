@@ -144,7 +144,7 @@ class CarHistoryScreen extends Component {
         let message = get(
           action,
           'payload.message',
-          'Произошла ошибка, попробуйте снова',
+          'Произошла ошибка, попробуем снова?',
         );
 
         if (message === 'Network request failed') {
