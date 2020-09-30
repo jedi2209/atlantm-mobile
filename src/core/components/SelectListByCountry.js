@@ -93,10 +93,6 @@ export default class SelectListByCountry extends Component {
     });
   };
 
-  selectRegionRussia = () => this.props.selectRegion(RUSSIA);
-  selectRegionUkraine = () => this.props.selectRegion(UKRAINE);
-  selectRegionBelarussia = () => this.props.selectRegion(BELARUSSIA);
-
   renderEmptyComponent = () => (
     <View style={styles.spinnerContainer}>
       <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />

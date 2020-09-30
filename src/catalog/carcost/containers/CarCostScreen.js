@@ -73,6 +73,7 @@ const mapStateToProps = ({dealer, profile, nav, catalog}) => {
       : carLocalNumber,
     carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
     dealerSelected: dealer.selected,
+    dealerSelectedLocal: dealer.selectedLocal,
   };
 };
 
@@ -234,10 +235,14 @@ class CarCostScreen extends Component {
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: 'Автоцентр',
-                value: this.props.dealerSelected,
+                value:
+                  this.props.dealerSelectedLocal &&
+                  this.props.dealerSelectedLocal.id
+                    ? this.props.dealerSelectedLocal
+                    : this.props.dealerSelected,
                 props: {
                   goBack: true,
-                  isLocal: false,
+                  isLocal: true,
                   navigation: this.props.navigation,
                   returnScreen: this.props.navigation.state.routeName,
                 },

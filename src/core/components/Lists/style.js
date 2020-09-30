@@ -1,8 +1,8 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 // helpers
 import styleConst from '../../style-const';
-import { verticalScale } from '../../../utils/scale';
+import {verticalScale} from '../../../utils/scale';
 
 const iconLeftSize = 28;
 

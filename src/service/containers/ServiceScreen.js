@@ -50,6 +50,7 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
     cars,
     nav,
     dealerSelected: dealer.selected,
+    dealerSelectedLocal: dealer.selectedLocal,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
     lastName: UserData.get('LAST_NAME'),
@@ -242,10 +243,14 @@ class ServiceScreen extends Component {
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: 'Автоцентр',
-                value: this.props.dealerSelected,
+                value:
+                  this.props.dealerSelectedLocal &&
+                  this.props.dealerSelectedLocal.id
+                    ? this.props.dealerSelectedLocal
+                    : this.props.dealerSelected,
                 props: {
                   goBack: true,
-                  isLocal: false,
+                  isLocal: true,
                   navigation: this.props.navigation,
                   returnScreen: this.props.navigation.state.routeName,
                 },

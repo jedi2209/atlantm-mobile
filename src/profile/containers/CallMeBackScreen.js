@@ -27,6 +27,7 @@ const mapStateToProps = ({dealer, profile, contacts, service, nav}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
+    dealerSelectedLocal: dealer.selectedLocal,
     firstName: profile.login.NAME
       ? profile.login.NAME
       : profile.localUserData.NAME
@@ -75,10 +76,14 @@ class CallMeBackScreen extends React.Component {
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: 'Автоцентр',
-                value: this.props.dealerSelected,
+                value:
+                  this.props.dealerSelectedLocal &&
+                  this.props.dealerSelectedLocal.id
+                    ? this.props.dealerSelectedLocal
+                    : this.props.dealerSelected,
                 props: {
                   goBack: true,
-                  isLocal: false,
+                  isLocal: true,
                   navigation: this.props.navigation,
                   returnScreen: this.props.navigation.state.routeName,
                 },
