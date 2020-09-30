@@ -17,7 +17,11 @@ import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
 // redux
 import {connect} from 'react-redux';
-import {actionOrderTestDrive, actionFetchTestDriveCarDetails} from '../actions';
+import {
+  actionOrderTestDrive,
+  actionOrderTestDriveLead,
+  actionFetchTestDriveCarDetails,
+} from '../actions';
 import {localUserDataUpdate} from '../../profile/actions';
 
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
@@ -34,6 +38,8 @@ import {
   TD_CAR_DETAILS__FAIL,
   TESTDRIVE_ORDER__SUCCESS,
   TESTDRIVE_ORDER__FAIL,
+  TESTDRIVE_LEAD__SUCCESS,
+  TESTDRIVE_LEAD__FAIL,
 } from '../actionTypes';
 import {ERROR_NETWORK} from '../../core/const';
 
@@ -110,6 +116,7 @@ const mapStateToProps = ({dealer, catalog, profile}) => {
 
 const mapDispatchToProps = {
   actionOrderTestDrive,
+  actionOrderTestDriveLead,
   localUserDataUpdate,
   actionFetchTestDriveCarDetails,
 };
@@ -240,7 +247,7 @@ class TestDriveScreen extends PureComponent {
     });
     if (action && action.type) {
       switch (action.type) {
-        case TESTDRIVE_ORDER__SUCCESS:
+        case TESTDRIVE_ORDER__SUCCESS: // отправляем online-запись на ТД
           const car = get(navigation, 'state.params.car');
           const {brand, model} = car;
           const path = isNewCar ? 'newcar' : 'usedcar';
@@ -268,8 +275,53 @@ class TestDriveScreen extends PureComponent {
             ],
           );
           break;
-        case TESTDRIVE_ORDER__FAIL:
-          Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
+        case TESTDRIVE_ORDER__FAIL: // online-запись не сработала, конвертируем в ЛИД
+          const actionLead = await this.props.actionOrderTestDriveLead({
+            firstName: get(data, 'NAME'),
+            secondName: get(data, 'SECOND_NAME'),
+            lastName: get(data, 'LAST_NAME'),
+            email: get(data, 'EMAIL'),
+            phone: get(data, 'PHONE'),
+            dealerID,
+            carID,
+            comment: data.COMMENT || '',
+            isNewCar,
+          });
+          if (actionLead && actionLead.type) {
+            switch (actionLead.type) {
+              case TESTDRIVE_LEAD__SUCCESS:
+                const car = get(navigation, 'state.params.car');
+                const {brand, model} = car;
+                const path = isNewCar ? 'newcar' : 'usedcar';
+                Amplitude.logEvent('order', `testdrive/${path}`, {
+                  brand_name: brand,
+                  model_name: get(model, 'name'),
+                });
+                this.props.localUserDataUpdate({
+                  NAME: get(data, 'NAME'),
+                  SECOND_NAME: get(data, 'SECOND_NAME'),
+                  LAST_NAME: get(data, 'LAST_NAME'),
+                  PHONE: get(data, 'PHONE'),
+                  EMAIL: get(data, 'EMAIL'),
+                });
+                Alert.alert(
+                  'Заявка успешно отправлена!',
+                  'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+                  [
+                    {
+                      text: 'ОК',
+                      onPress() {
+                        navigation.goBack();
+                      },
+                    },
+                  ],
+                );
+                break;
+              case TESTDRIVE_LEAD__FAIL:
+                Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
+                break;
+            }
+          }
           break;
       }
     }

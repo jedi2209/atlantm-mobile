@@ -15,7 +15,7 @@ import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
 // redux
 import {connect} from 'react-redux';
-import {actionOrderTestDriveUsedCar} from '../actions';
+import {actionOrderTestDriveLead} from '../actions';
 import {localUserDataUpdate} from '../../profile/actions';
 
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
@@ -27,10 +27,7 @@ import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
-import {
-  TESTDRIVE_USED_ORDER__SUCCESS,
-  TESTDRIVE_USED_ORDER__FAIL,
-} from '../actionTypes';
+import {TESTDRIVE_LEAD__SUCCESS, TESTDRIVE_LEAD__FAIL} from '../actionTypes';
 import {ERROR_NETWORK} from '../../core/const';
 
 const $size = 40;
@@ -101,7 +98,7 @@ const mapStateToProps = ({dealer, catalog, profile}) => {
 };
 
 const mapDispatchToProps = {
-  actionOrderTestDriveUsedCar,
+  actionOrderTestDriveLead,
   localUserDataUpdate,
 };
 
@@ -218,13 +215,18 @@ class OrderTestDriveScreen extends Component {
     };
   }
 
-  static navigationOptions = ({navigation}) => ({
-    headerStyle: stylesHeader.whiteHeader,
-    headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerTitle: 'Заявка на тест-драйв авто',
-    headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
-    headerRight: <View />,
-  });
+  static navigationOptions = ({navigation}) => {
+    const isNewCar = get(navigation, 'state.params.isNewCar');
+    return {
+      headerStyle: stylesHeader.whiteHeader,
+      headerTitleStyle: stylesHeader.whiteHeaderTitle,
+      headerTitle: isNewCar
+        ? 'Заявка на тест-драйв авто'
+        : 'Заявка на просмотр авто',
+      headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
+      headerRight: <View />,
+    };
+  };
 
   static propTypes = {
     navigation: PropTypes.object,
@@ -247,22 +249,22 @@ class OrderTestDriveScreen extends Component {
 
     const {navigation} = this.props;
 
-    const dealerId = get(navigation, 'state.params.dealerId');
-    const carId = get(navigation, 'state.params.carId');
+    const dealerID = get(navigation, 'state.params.dealerId');
+    const carID = get(navigation, 'state.params.carId');
     const isNewCar = get(navigation, 'state.params.isNewCar');
-    const action = await this.props.actionOrderTestDriveUsedCar({
+    const action = await this.props.actionOrderTestDriveLead({
       firstName: get(data, 'NAME'),
       secondName: get(data, 'SECOND_NAME'),
       lastName: get(data, 'LAST_NAME'),
       email: get(data, 'EMAIL'),
       phone: get(data, 'PHONE'),
-      dealerId,
-      carId,
+      dealerID,
+      carID,
       comment: data.COMMENT || '',
     });
     if (action && action.type) {
       switch (action.type) {
-        case TESTDRIVE_USED_ORDER__SUCCESS:
+        case TESTDRIVE_LEAD__SUCCESS:
           const car = get(navigation, 'state.params.car');
           const {brand, model} = car;
           const path = isNewCar ? 'newcar' : 'usedcar';
@@ -290,7 +292,7 @@ class OrderTestDriveScreen extends Component {
             ],
           );
           break;
-        case TESTDRIVE_USED_ORDER__FAIL:
+        case TESTDRIVE_LEAD__FAIL:
           Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
           break;
       }

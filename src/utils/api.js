@@ -468,21 +468,21 @@ export default {
     return this.request(url, requestParams);
   },
 
-  orderTestDriveUsedCar(props) {
+  orderTestDriveLead(props) {
     const {
-      carId,
+      carID,
       comment,
       firstName,
       secondName,
       lastName,
       email,
       phone,
-      dealerId,
+      dealerID,
     } = props;
 
     const body = {
-      f_Dealer: dealerId,
-      f_Car: carId,
+      f_Dealer: dealerID,
+      f_Car: carID,
       f_FirstName: firstName,
       f_SecondName: secondName,
       f_LastName: lastName,
