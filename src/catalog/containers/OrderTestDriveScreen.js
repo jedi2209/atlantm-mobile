@@ -27,6 +27,7 @@ import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
+import {addDays, dayMonthYear, yearMonthDay} from '../../utils/date';
 import {TESTDRIVE_LEAD__SUCCESS, TESTDRIVE_LEAD__FAIL} from '../actionTypes';
 import {ERROR_NETWORK} from '../../core/const';
 
@@ -145,6 +146,20 @@ class OrderTestDriveScreen extends Component {
                   editable: false,
                 },
               },
+              {
+                name: 'DATE',
+                type: 'date',
+                label: 'Выбери удобную для тебя дату',
+                value: null,
+                props: {
+                  placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
+                  required: true,
+                  type: 'service',
+                  minimumDate: new Date(addDays(2)),
+                  maximumDate: new Date(addDays(62)),
+                  dealer: this.props.dealerSelected,
+                },
+              },
             ],
           },
           {
@@ -252,12 +267,14 @@ class OrderTestDriveScreen extends Component {
     const dealerID = get(navigation, 'state.params.dealerId');
     const carID = get(navigation, 'state.params.carId');
     const isNewCar = get(navigation, 'state.params.isNewCar');
+    const orderDate = yearMonthDay(get(data, 'DATE'));
     const action = await this.props.actionOrderTestDriveLead({
       firstName: get(data, 'NAME'),
       secondName: get(data, 'SECOND_NAME'),
       lastName: get(data, 'LAST_NAME'),
       email: get(data, 'EMAIL'),
       phone: get(data, 'PHONE'),
+      date: orderDate,
       dealerID,
       carID,
       comment: data.COMMENT || '',
