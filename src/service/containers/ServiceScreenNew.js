@@ -15,7 +15,7 @@ import {
 import {Icon} from 'native-base';
 import {get, orderBy} from 'lodash';
 import styleConst from '../../core/style-const';
-import {StackActions, NavigationActions} from 'react-navigation';
+// import {StackActions, NavigationActions} from 'react-navigation';
 
 import {CarCard} from '../../profile/components/CarCard';
 import {ServiceModal} from '../components/ServiceModal';
@@ -72,6 +72,7 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
       : carLocalModel,
     carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
     dealerSelected: dealer.selected,
+    dealerSelectedLocal: dealer.selectedLocal,
     isOrderServiceRequest: service.meta.isOrderServiceRequest,
   };
 };
@@ -437,10 +438,14 @@ class ServiceScreen extends Component {
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: 'Автоцентр',
-                value: this.props.dealerSelected,
+                value:
+                  this.props.dealerSelectedLocal &&
+                  this.props.dealerSelectedLocal.id
+                    ? this.props.dealerSelectedLocal
+                    : this.props.dealerSelected,
                 props: {
                   goBack: true,
-                  isLocal: false,
+                  isLocal: true,
                   navigation: this.props.navigation,
                   returnScreen: this.props.navigation.state.routeName,
                 },

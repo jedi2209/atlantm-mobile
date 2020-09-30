@@ -16,6 +16,16 @@ import {
   BRANDS__FAIL,
 } from './actionTypes';
 
+import {CALL_ME__SUCCESS} from '../contacts/actionTypes';
+import {
+  PARTS_ORDER__SUCCESS,
+  SERVICE_ORDER__SUCCESS,
+} from '../service/actionTypes';
+
+import {TVA__SUCCESS} from '../tva/actionTypes';
+
+import {CAR_COST__SUCCESS} from '../catalog/actionTypes';
+
 import {APP_STORE_UPDATED} from '../core/actionTypes';
 
 import {RUSSIA, BELARUSSIA, UKRAINE} from '../core/const';
@@ -40,8 +50,13 @@ function selectedLocal(state = {}, action) {
     case DEALER__SUCCESS__LOCAL:
       return {...action.payload.newDealer};
     case APP_STORE_UPDATED:
-      return null;
     case DEALERS__REQUEST:
+    case DEALER__SUCCESS:
+    case CALL_ME__SUCCESS:
+    case PARTS_ORDER__SUCCESS:
+    case SERVICE_ORDER__SUCCESS:
+    case TVA__SUCCESS:
+    case CAR_COST__SUCCESS:
       return null;
     default:
       return state;
@@ -120,6 +135,7 @@ function isFetchDealer(state = false, action) {
     case DEALER__REQUEST:
       return true;
     case DEALER__SUCCESS:
+    case DEALER__SUCCESS__LOCAL:
     case DEALER__FAIL:
       return false;
     default:

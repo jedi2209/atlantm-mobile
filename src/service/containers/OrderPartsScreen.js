@@ -275,12 +275,14 @@ class OrderPartsScreen extends Component {
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: 'Автоцентр',
-                value: this.props.dealerSelectedLocal
-                  ? this.props.dealerSelectedLocal
-                  : this.props.dealerSelected,
+                value:
+                  this.props.dealerSelectedLocal &&
+                  this.props.dealerSelectedLocal.id
+                    ? this.props.dealerSelectedLocal
+                    : this.props.dealerSelected,
                 props: {
                   goBack: true,
-                  isLocal: false,
+                  isLocal: true,
                   navigation: this.props.navigation,
                   returnScreen: this.props.navigation.state.routeName,
                 },
