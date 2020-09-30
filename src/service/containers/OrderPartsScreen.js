@@ -52,6 +52,7 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
     cars,
     nav,
     dealerSelected: dealer.selected,
+    dealerSelectedLocal: dealer.selectedLocal,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
     lastName: UserData.get('LAST_NAME'),
@@ -274,7 +275,9 @@ class OrderPartsScreen extends Component {
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: 'Автоцентр',
-                value: this.props.dealerSelected,
+                value: this.props.dealerSelectedLocal
+                  ? this.props.dealerSelectedLocal
+                  : this.props.dealerSelected,
                 props: {
                   goBack: true,
                   isLocal: false,

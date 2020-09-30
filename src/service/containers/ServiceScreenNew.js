@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Icon} from 'native-base';
-import {orderBy} from 'lodash';
+import {get, orderBy} from 'lodash';
 import styleConst from '../../core/style-const';
 import {StackActions, NavigationActions} from 'react-navigation';
 
@@ -21,14 +21,17 @@ import {CarCard} from '../../profile/components/CarCard';
 import {ServiceModal} from '../components/ServiceModal';
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
-import {addDays, dayMonthYear} from '../../utils/date';
+import {addDays, dayMonthYear, format} from '../../utils/date';
 import UserData from '../../utils/user';
 import RenderPrice from '../../utils/price';
 
 // redux
 import {connect} from 'react-redux';
-import {dateFill, orderService} from '../actions';
-import {carFill, nameFill, phoneFill, emailFill} from '../../profile/actions';
+import {orderService} from '../actions';
+import {localUserDataUpdate} from '../../profile/actions';
+import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
+
+import Amplitude from '../../utils/amplitude-analytics';
 
 import API from '../../utils/api';
 
@@ -74,11 +77,6 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
 };
 
 const mapDispatchToProps = {
-  carFill,
-  dateFill,
-  nameFill,
-  phoneFill,
-  emailFill,
   orderService,
 };
 
@@ -178,6 +176,7 @@ class ServiceScreen extends Component {
         this.myCars.push(item);
       }
     });
+    this.orderLead = false;
   }
 
   noHaveCar = [
@@ -224,6 +223,7 @@ class ServiceScreen extends Component {
   }
 
   async _getServices() {
+    // if (!this.orderLead) {
     this.setState({
       servicesFetch: true,
     });
@@ -233,15 +233,19 @@ class ServiceScreen extends Component {
       vin: this.state.carVIN,
     });
 
-    console.log('data ======>', data);
     if (data.status !== 200 && data.status !== 'success') {
-      Alert.alert(
-        'Хьюстон, у нас проблемы!',
-        data.error && data.error.message
-          ? '\r\n' + data.error.message
-          : 'Доступных услуг не найдено. Попробуй записаться в другой автоцентр',
-      );
+      // Alert.alert(
+      //   'Хьюстон, у нас проблемы!',
+      //   data.error && data.error.message
+      //     ? '\r\n' + data.error.message
+      //     : 'Доступных услуг не найдено. Попробуй записаться в другой автоцентр',
+      // );
+      this.orderLead = true;
       data.data = undefined;
+      this.setState({
+        services: undefined,
+        serviceInfo: undefined,
+      });
     } else {
       let services = [];
       data.data.map((el) => {
@@ -259,6 +263,7 @@ class ServiceScreen extends Component {
     this.setState({
       servicesFetch: false,
     });
+    // }
   }
 
   async _getServicesInfo(id) {
@@ -271,12 +276,11 @@ class ServiceScreen extends Component {
       vin: this.state.carVIN,
     });
 
-    console.log('data.status ====>', data.status, data.status !== 'success');
     if (data.status !== 'success' && data.status !== 200) {
-      Alert.alert(
-        'Хьюстон, у нас проблемы!',
-        '\r\nНе удалось загрузить информацию об услуге',
-      );
+      // Alert.alert(
+      //   'Хьюстон, у нас проблемы!',
+      //   '\r\nНе удалось загрузить информацию об услуге',
+      // );
       data.data = [];
     }
 
@@ -350,25 +354,76 @@ class ServiceScreen extends Component {
     }
 
     console.log('=>>>>>> data', data);
-    const order = await API.saveOrderToService(data);
 
-    if (order.status === 'error') {
-      Alert.alert('Хьюстон, у нас проблемы!', '\r\n' + order.error.message);
+    if (this.orderLead) {
+      const dataToSend = {
+        brand: get(data, 'car.brand', ''),
+        model: get(data, 'car.model', ''),
+        vin: get(data, 'vin', ''),
+        date: format(dataFromForm.DATETIME),
+        firstName: get(data, 'f_FirstName', ''),
+        secondName: get(data, 'f_SecondName', ''),
+        lastName: get(data, 'f_LastName', ''),
+        email: get(data, 'email', ''),
+        phone: get(data, 'phone', ''),
+        text: get(data, 'text', ''),
+        dealerID: data.dealer,
+      };
+      const action = await this.props.orderService(dataToSend);
+
+      if (action && action.type) {
+        switch (action.type) {
+          case SERVICE_ORDER__SUCCESS:
+            Amplitude.logEvent('order', 'service');
+            localUserDataUpdate({
+              NAME: dataToSend.firstName,
+              SECOND_NAME: dataToSend.secondName,
+              LAST_NAME: dataToSend.lastName,
+              PHONE: dataToSend.phone,
+              EMAIL: dataToSend.email,
+              CARNAME: [dataToSend.brand, dataToSend.model].join(' '),
+              CARBRAND: dataToSend.brand,
+              CARMODEL: dataToSend.model,
+            });
+            Alert.alert(
+              'Заявка успешно отправлена',
+              'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+              [
+                {
+                  text: 'ОК',
+                  onPress() {
+                    navigation.goBack();
+                  },
+                },
+              ],
+            );
+            break;
+          case SERVICE_ORDER__FAIL:
+            Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
+            break;
+        }
+      }
     } else {
-      Alert.alert(
-        'Всё получилось!',
-        '\r\nСпасибо! Твоя запись оформлена, ждём!',
-        [
-          {
-            text: 'ОК',
-            onPress() {
-              navigation.goBack();
+      const order = await API.saveOrderToService(data);
+      if (order.status === 'error') {
+        Alert.alert('Хьюстон, у нас проблемы!', '\r\n' + order.error.message);
+      } else {
+        Amplitude.logEvent('order', 'OnlineService');
+        Alert.alert(
+          'Всё получилось!',
+          '\r\nСпасибо! Твоя запись оформлена, ждём!',
+          [
+            {
+              text: 'ОК',
+              onPress() {
+                navigation.goBack();
+              },
             },
-          },
-        ],
-      );
-      this.setState({success: true, loading: false});
+          ],
+        );
+      }
     }
+    this.setState({success: true, loading: false});
   };
 
   render() {
@@ -545,10 +600,12 @@ class ServiceScreen extends Component {
                         ),
                       }
                     : {},
-                  this.state.service && !this.state.serviceInfoFetch
+                  (this.state.service || this.orderLead) &&
+                  !this.state.servicesFetch &&
+                  !this.state.serviceInfoFetch
                     ? {
                         name: 'DATETIME',
-                        type: 'dateTime',
+                        type: this.orderLead ? 'date' : 'dateTime',
                         label: 'Выбери удобную для тебя дату',
                         value: this.state.date,
                         props: {
