@@ -3,7 +3,16 @@ import {StyleSheet, View, FlatList, ActivityIndicator} from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import {Container, Text, Button, Segment, StyleProvider} from 'native-base';
+import {
+  Container,
+  Text,
+  Button,
+  Segment,
+  StyleProvider,
+  Header,
+  Tab,
+  Tabs,
+} from 'native-base';
 import Spinner from 'react-native-loading-spinner-overlay';
 import SelectItemByCountry from './SelectItemByCountry';
 
@@ -24,7 +33,6 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.new.blueHeader,
     borderBottomWidth: styleConst.ui.borderWidth,
     borderBottomColor: styleConst.color.border,
-
     paddingVertical: verticalScale(5),
   },
   spinner: {
@@ -33,6 +41,7 @@ const styles = StyleSheet.create({
   },
   list: {
     flex: 1,
+    backgroundColor: '#F6F6F6',
   },
 });
 
@@ -113,6 +122,7 @@ export default class SelectListByCountry extends Component {
         isLocal={isLocal}
         itemLayout={itemLayout}
         selectItem={selectItem}
+        selectedItem={selectedItem}
         navigation={navigation}
         returnScreen={returnScreen}
         onSelect={onSelect}
@@ -130,57 +140,44 @@ export default class SelectListByCountry extends Component {
       listBelarussia,
     } = this.props;
 
-    let list = [];
-
-    switch (region) {
-      case RUSSIA:
-        list = listRussia;
-        break;
-      case BELARUSSIA:
-        list = listBelarussia;
-        break;
-      case UKRAINE:
-        list = listUkraine;
-        break;
-      default:
-        list = listBelarussia;
-    }
-
     return (
       <StyleProvider style={getTheme()}>
         <Container style={styles.safearea}>
-          <Spinner visible={isFetchList} color={styleConst.color.blue} />
-          <View style={styles.tabs}>
-            <Segment>
-              <Button
-                first
-                active={region === BELARUSSIA}
-                onPress={this.selectRegionBelarussia}>
-                <Text>Беларусь</Text>
-              </Button>
-              <Button
-                active={region === RUSSIA}
-                onPress={this.selectRegionRussia}>
-                <Text>Россия</Text>
-              </Button>
-              <Button
-                last
-                active={region === UKRAINE}
-                onPress={this.selectRegionUkraine}>
-                <Text>Украина</Text>
-              </Button>
-            </Segment>
-          </View>
-
-          <FlatList
-            style={styles.list}
-            data={list}
-            onRefresh={itemLayout === 'dealer' && this.onRefresh}
-            refreshing={this.state.isRefreshing}
-            ListEmptyComponent={this.renderEmptyComponent}
-            renderItem={this.renderItem}
-            keyExtractor={(item) => `${item.hash.toString()}`}
-          />
+          <Tabs tabBarUnderlineStyle={{color: styleConst.color.blue}}>
+            <Tab heading="🇧🇾Беларусь">
+              <FlatList
+                style={styles.list}
+                data={listBelarussia}
+                onRefresh={itemLayout === 'dealer' && this.onRefresh}
+                refreshing={this.state.isRefreshing}
+                ListEmptyComponent={this.renderEmptyComponent}
+                renderItem={this.renderItem}
+                keyExtractor={(item) => `${item.hash.toString()}`}
+              />
+            </Tab>
+            <Tab heading="🇷🇺Россия">
+              <FlatList
+                style={styles.list}
+                data={listRussia}
+                onRefresh={itemLayout === 'dealer' && this.onRefresh}
+                refreshing={this.state.isRefreshing}
+                ListEmptyComponent={this.renderEmptyComponent}
+                renderItem={this.renderItem}
+                keyExtractor={(item) => `${item.hash.toString()}`}
+              />
+            </Tab>
+            <Tab heading="🇺🇦Украина">
+              <FlatList
+                style={styles.list}
+                data={listUkraine}
+                onRefresh={itemLayout === 'dealer' && this.onRefresh}
+                refreshing={this.state.isRefreshing}
+                ListEmptyComponent={this.renderEmptyComponent}
+                renderItem={this.renderItem}
+                keyExtractor={(item) => `${item.hash.toString()}`}
+              />
+            </Tab>
+          </Tabs>
         </Container>
       </StyleProvider>
     );

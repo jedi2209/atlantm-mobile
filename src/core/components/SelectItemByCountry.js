@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Alert, View, StyleSheet} from 'react-native';
-import {Text, ListItem, Body} from 'native-base';
+import {Text, ListItem, Body, Thumbnail} from 'native-base';
 
 // components
 import {NavigationActions, StackActions} from 'react-navigation';
@@ -65,8 +65,14 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#fff',
   },
-  bodyView: {flexBasis: '60%'},
-  thumb: {flexShrink: 1, flexBasis: '40%', marginLeft: 8},
+  bodyView: {
+    flexBasis: '60%',
+  },
+  thumb: {
+    flexShrink: 1,
+    flexBasis: '40%',
+    marginLeft: 8,
+  },
 });
 
 export default class SelectItemByCountry extends Component {
@@ -94,7 +100,6 @@ export default class SelectItemByCountry extends Component {
       isLocal,
     } = this.props;
     const mainScreen = 'BottomTabNavigation';
-
     selectItem({
       dealerBaseData: item,
       dealerSelected: selectedItem,
@@ -111,8 +116,7 @@ export default class SelectItemByCountry extends Component {
             isLocal: isLocal,
           });
         }
-
-        if (Boolean(goBack)) {
+        if (Boolean(goBack) || isLocal) {
           return navigation.goBack();
         }
 
@@ -167,7 +171,14 @@ export default class SelectItemByCountry extends Component {
     return (
       <ListItem
         onPress={this.onPressDealerItem}
-        style={[stylesList.listItem, styles.listItem]}>
+        style={[
+          stylesList.listItem,
+          styles.listItem,
+          {
+            paddingTop: 0,
+            paddingBottom: 12,
+          },
+        ]}>
         <Body style={styles.body}>
           <View style={styles.bodyView}>
             {item.name ? <Text style={styles.name}>{item.name}</Text> : null}
