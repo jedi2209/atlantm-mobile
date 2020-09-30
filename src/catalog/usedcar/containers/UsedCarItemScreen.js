@@ -883,7 +883,7 @@ class UserCarItemScreen extends Component {
                   }}
                 />
                 <Text style={styles.buttonText} selectable={false}>
-                  тест-драйв
+                  посмотреть
                 </Text>
               </Button>
               <Button

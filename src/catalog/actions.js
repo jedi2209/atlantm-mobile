@@ -56,9 +56,9 @@ import {
   CATALOG_ORDER__SUCCESS,
   CATALOG_ORDER__FAIL,
   CATALOG_ORDER_COMMENT__FILL,
-  TESTDRIVE_USED_ORDER__REQUEST,
-  TESTDRIVE_USED_ORDER__SUCCESS,
-  TESTDRIVE_USED_ORDER__FAIL,
+  TESTDRIVE_LEAD__REQUEST,
+  TESTDRIVE_LEAD__SUCCESS,
+  TESTDRIVE_LEAD__FAIL,
   TESTDRIVE_ORDER__REQUEST,
   TESTDRIVE_ORDER__SUCCESS,
   TESTDRIVE_ORDER__FAIL,
@@ -355,7 +355,7 @@ export const actionOrderCreditCar = (props) => {
       })
       .catch((error) => {
         return dispatch({
-          type: TESTDRIVE_USED_ORDER__FAIL,
+          type: TESTDRIVE_LEAD__FAIL,
           payload: {
             error: error.message,
             code: error.code,
@@ -390,7 +390,7 @@ export const actionOrderMyPrice = (props) => {
       })
       .catch((error) => {
         return dispatch({
-          type: TESTDRIVE_USED_ORDER__FAIL,
+          type: TESTDRIVE_LEAD__FAIL,
           payload: {
             error: error.message,
             code: error.code,
@@ -399,21 +399,21 @@ export const actionOrderMyPrice = (props) => {
       });
   };
 };
-export const actionOrderTestDriveUsedCar = (props) => {
+export const actionOrderTestDriveLead = (props) => {
   return (dispatch) => {
     dispatch({
-      type: TESTDRIVE_USED_ORDER__REQUEST,
+      type: TESTDRIVE_LEAD__REQUEST,
       payload: {...props},
     });
 
-    return API.orderTestDriveUsedCar(props)
+    return API.orderTestDriveLead(props)
       .then((res) => {
         console.log('res', res);
         const {error, status} = res;
 
         if (status !== 'success') {
           return dispatch({
-            type: TESTDRIVE_USED_ORDER__FAIL,
+            type: TESTDRIVE_LEAD__FAIL,
             payload: {
               code: error.code,
               error: error.message,
@@ -421,11 +421,11 @@ export const actionOrderTestDriveUsedCar = (props) => {
           });
         }
 
-        return dispatch({type: TESTDRIVE_USED_ORDER__SUCCESS});
+        return dispatch({type: TESTDRIVE_LEAD__SUCCESS});
       })
       .catch((error) => {
         return dispatch({
-          type: TESTDRIVE_USED_ORDER__FAIL,
+          type: TESTDRIVE_LEAD__FAIL,
           payload: {
             error: error.message,
             code: error.code,
