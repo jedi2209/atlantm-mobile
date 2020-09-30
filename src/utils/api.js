@@ -478,6 +478,7 @@ export default {
       email,
       phone,
       dealerID,
+      date,
     } = props;
 
     const body = {
@@ -487,6 +488,7 @@ export default {
       f_SecondName: secondName,
       f_LastName: lastName,
       f_Phone: phone,
+      f_Date: date,
       f_Email: email,
       f_Text: comment,
       f_Source: 3,
