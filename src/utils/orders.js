@@ -3,23 +3,72 @@ import {ORDERS} from '../core/const';
 import {get} from 'lodash';
 import {store} from '../core/store';
 
-export default async function getOrders() {
+export default async function getOrders(type = 'default') {
   const storeState = store.getState();
   let tmpArr = [];
   let res = {
     android: {
       BUTTONS: [],
-      CANCEL_INDEX: 1,
+      CANCEL_INDEX: 0,
     },
     ios: {
       BUTTONS: [],
-      CANCEL_INDEX: 1,
+      CANCEL_INDEX: 0,
     },
   };
   const divisions = get(storeState, 'dealer.selected.divisionTypes');
   Object.keys(ORDERS[Platform.OS].BUTTONS).map((el) => {
     tmpArr.push(ORDERS[Platform.OS].BUTTONS[el].priority);
   });
+  if (type === 'car') {
+    res.android.BUTTONS.push(
+      {
+        priority: 5,
+        id: 'TOhistory',
+        text: 'История обслуживания',
+        icon: 'book-outline',
+        iconColor: '#2c8ef4',
+      },
+      {
+        priority: 6,
+        id: 'hide',
+        text: 'Скрыть в архив',
+        icon: 'archive',
+        iconColor: '#2c8ef4',
+      },
+    );
+    res.ios.BUTTONS.push(
+      {
+        priority: 5,
+        id: 'TOhistory',
+        text: '📘История обслуживания',
+      },
+      {
+        priority: 6,
+        id: 'hide',
+        text: '📥Скрыть в архив',
+      },
+    );
+    tmpArr.push(5, 6);
+    res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 2;
+    res.ios.CANCEL_INDEX = res.ios.CANCEL_INDEX + 2;
+  } else {
+    res.android.BUTTONS.push({
+      priority: 1,
+      id: 'callMeBack',
+      text: 'Перезвоните мне',
+      icon: 'call',
+      iconColor: '#2c8ef4',
+    });
+    res.ios.BUTTONS.push({
+      priority: 1,
+      id: 'callMeBack',
+      text: '📞 Перезвоните мне',
+    });
+    tmpArr.push(1);
+    res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 1;
+    res.ios.CANCEL_INDEX = res.ios.CANCEL_INDEX + 1;
+  }
   if (divisions) {
     if (divisions.includes('ST') && !tmpArr.includes(2)) {
       res.android.BUTTONS.push({
