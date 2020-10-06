@@ -130,6 +130,19 @@ class CarCostScreen extends Component {
       loading: false,
       success: false,
     };
+
+    const carFromNavigation = get(this.props.navigation, 'state.params.car');
+    if (carFromNavigation && get(carFromNavigation, 'vin')) {
+      this.state.carVIN = carFromNavigation.vin;
+      this.state.carBrand = get(carFromNavigation, 'brand');
+      this.state.carModel = get(carFromNavigation, 'model');
+      this.state.carNumber = get(carFromNavigation, 'number');
+      this.state.carMileage = get(carFromNavigation, 'mileage');
+      this.state.carName = [
+        get(carFromNavigation, 'brand'),
+        get(carFromNavigation, 'model'),
+      ].join(' ');
+    }
   }
 
   static propTypes = {
@@ -256,7 +269,9 @@ class CarCostScreen extends Component {
                 name: 'CARBRAND',
                 type: 'input',
                 label: 'Марка',
-                value: this.props.carBrand,
+                value: this.state.carBrand
+                  ? this.state.carBrand
+                  : this.props.carBrand,
                 props: {
                   required: true,
                   placeholder: null,
@@ -266,7 +281,9 @@ class CarCostScreen extends Component {
                 name: 'CARMODEL',
                 type: 'input',
                 label: 'Модель',
-                value: this.props.carModel,
+                value: this.state.carModel
+                  ? this.state.carModel
+                  : this.props.carModel,
                 props: {
                   required: true,
                   placeholder: null,
@@ -276,7 +293,9 @@ class CarCostScreen extends Component {
                 name: 'CARVIN',
                 type: 'input',
                 label: 'VIN номер',
-                value: this.props.carVIN,
+                value: this.state.carVIN
+                  ? this.state.carVIN
+                  : this.props.carVIN,
                 props: {
                   placeholder: null,
                 },
@@ -321,7 +340,9 @@ class CarCostScreen extends Component {
                 name: 'CARMILEAGE',
                 type: 'input',
                 label: 'Пробег [в километрах]',
-                value: this.props.carMileage,
+                value: this.state.carMileage
+                  ? this.state.carMileage
+                  : this.props.carMileage,
                 props: {
                   keyboardType: 'number-pad',
                   required: true,
