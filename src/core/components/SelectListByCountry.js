@@ -134,48 +134,120 @@ export default class SelectListByCountry extends Component {
       listRussia,
       listUkraine,
       listBelarussia,
+      listAll,
     } = this.props;
 
-    return (
-      <StyleProvider style={getTheme()}>
-        <Container style={styles.safearea}>
-          <Tabs tabBarUnderlineStyle={{color: styleConst.color.blue}}>
-            <Tab heading="🇧🇾Беларусь">
-              <FlatList
-                style={styles.list}
-                data={listBelarussia}
-                onRefresh={itemLayout === 'dealer' && this.onRefresh}
-                refreshing={this.state.isRefreshing}
-                ListEmptyComponent={this.renderEmptyComponent}
-                renderItem={this.renderItem}
-                keyExtractor={(item) => `${item.hash.toString()}`}
-              />
-            </Tab>
-            <Tab heading="🇷🇺Россия">
-              <FlatList
-                style={styles.list}
-                data={listRussia}
-                onRefresh={itemLayout === 'dealer' && this.onRefresh}
-                refreshing={this.state.isRefreshing}
-                ListEmptyComponent={this.renderEmptyComponent}
-                renderItem={this.renderItem}
-                keyExtractor={(item) => `${item.hash.toString()}`}
-              />
-            </Tab>
-            <Tab heading="🇺🇦Украина">
-              <FlatList
-                style={styles.list}
-                data={listUkraine}
-                onRefresh={itemLayout === 'dealer' && this.onRefresh}
-                refreshing={this.state.isRefreshing}
-                ListEmptyComponent={this.renderEmptyComponent}
-                renderItem={this.renderItem}
-                keyExtractor={(item) => `${item.hash.toString()}`}
-              />
-            </Tab>
-          </Tabs>
-        </Container>
-      </StyleProvider>
-    );
+    let customListBYN = [];
+    let customListRUS = [];
+    let customListUA = [];
+    if (listAll && listAll.length) {
+      listBelarussia.map((el) => {
+        if (listAll.includes(el.id)) {
+          customListBYN.push(el);
+        }
+      });
+      listRussia.map((el) => {
+        if (listAll.includes(el.id)) {
+          customListRUS.push(el);
+        }
+      });
+      listUkraine.map((el) => {
+        if (listAll.includes(el.id)) {
+          customListUA.push(el);
+        }
+      });
+    }
+
+    if (listAll && listAll.length) {
+      return (
+        <StyleProvider style={getTheme()}>
+          <Container style={styles.safearea}>
+            <Tabs tabBarUnderlineStyle={{color: styleConst.color.blue}}>
+              {customListBYN && customListBYN.length ? (
+                <Tab heading="🇧🇾Беларусь">
+                  <FlatList
+                    style={styles.list}
+                    data={customListBYN}
+                    onRefresh={itemLayout === 'dealer' && this.onRefresh}
+                    refreshing={this.state.isRefreshing}
+                    ListEmptyComponent={this.renderEmptyComponent}
+                    renderItem={this.renderItem}
+                    keyExtractor={(item) => `${item.hash.toString()}`}
+                  />
+                </Tab>
+              ) : null}
+              {customListRUS && customListRUS.length ? (
+                <Tab heading="🇷🇺Россия">
+                  <FlatList
+                    style={styles.list}
+                    data={customListRUS}
+                    onRefresh={itemLayout === 'dealer' && this.onRefresh}
+                    refreshing={this.state.isRefreshing}
+                    ListEmptyComponent={this.renderEmptyComponent}
+                    renderItem={this.renderItem}
+                    keyExtractor={(item) => `${item.hash.toString()}`}
+                  />
+                </Tab>
+              ) : null}
+              {customListUA && customListUA.length ? (
+                <Tab heading="🇺🇦Украина">
+                  <FlatList
+                    style={styles.list}
+                    data={customListUA}
+                    onRefresh={itemLayout === 'dealer' && this.onRefresh}
+                    refreshing={this.state.isRefreshing}
+                    ListEmptyComponent={this.renderEmptyComponent}
+                    renderItem={this.renderItem}
+                    keyExtractor={(item) => `${item.hash.toString()}`}
+                  />
+                </Tab>
+              ) : null}
+            </Tabs>
+          </Container>
+        </StyleProvider>
+      );
+    } else {
+      return (
+        <StyleProvider style={getTheme()}>
+          <Container style={styles.safearea}>
+            <Tabs tabBarUnderlineStyle={{color: styleConst.color.blue}}>
+              <Tab heading="🇧🇾Беларусь">
+                <FlatList
+                  style={styles.list}
+                  data={listBelarussia}
+                  onRefresh={itemLayout === 'dealer' && this.onRefresh}
+                  refreshing={this.state.isRefreshing}
+                  ListEmptyComponent={this.renderEmptyComponent}
+                  renderItem={this.renderItem}
+                  keyExtractor={(item) => `${item.hash.toString()}`}
+                />
+              </Tab>
+              <Tab heading="🇷🇺Россия">
+                <FlatList
+                  style={styles.list}
+                  data={listRussia}
+                  onRefresh={itemLayout === 'dealer' && this.onRefresh}
+                  refreshing={this.state.isRefreshing}
+                  ListEmptyComponent={this.renderEmptyComponent}
+                  renderItem={this.renderItem}
+                  keyExtractor={(item) => `${item.hash.toString()}`}
+                />
+              </Tab>
+              <Tab heading="🇺🇦Украина">
+                <FlatList
+                  style={styles.list}
+                  data={listUkraine}
+                  onRefresh={itemLayout === 'dealer' && this.onRefresh}
+                  refreshing={this.state.isRefreshing}
+                  ListEmptyComponent={this.renderEmptyComponent}
+                  renderItem={this.renderItem}
+                  keyExtractor={(item) => `${item.hash.toString()}`}
+                />
+              </Tab>
+            </Tabs>
+          </Container>
+        </StyleProvider>
+      );
+    }
   }
 }
