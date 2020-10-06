@@ -82,7 +82,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({dealer, catalog, profile}) => {
   return {
+    dealerSelectedLocal: dealer.selectedLocal,
     dealerSelected: dealer.selected,
+    listBelarussia: dealer.listBelarussia,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
     lastName: UserData.get('LAST_NAME'),
@@ -123,17 +125,71 @@ class OrderScreen extends Component {
       .filter(Boolean)
       .join(' ');
 
+    const dealer = get(this.props.navigation, 'state.params.car.dealer');
+    let listAll = [];
+    if (dealer && dealer.length > 1) {
+      dealer.map((el) => {
+        listAll.push({
+          label: el.name,
+          value: el.id,
+          key: el.id,
+        });
+      });
+    }
     this.state = {
       date: '',
       comment: '',
     };
 
+    // const region = get(this.props.navigation, 'state.params.region');
+
+    // let dealersList = null;
+    // let dealersSelect = [];
+
+    // if (listAll) {
+    //   switch (region) {
+    //     case 'by':
+    //       dealersList = this.props.listBelarussia;
+    //       break;
+    //     case 'ru':
+    //       dealersList = this.props.listRussia;
+    //       break;
+    //     case 'ua':
+    //       dealersList = this.props.listUkraine;
+    //       break;
+    //   }
+    //   if (dealersList) {
+    //     dealersList.map((el) => {
+    //     });
+    //   }
+    // } else {
+    //   dealersSelect.push({
+    //   });
+    // }
+
     this.FormConfig = {
       fields: {
         groups: [
           {
-            name: 'Автомобиль',
+            name: listAll.length ? 'Автоцентр и автомобиль' : 'Автомобиль',
             fields: [
+              listAll.length
+                ? {
+                    name: 'DEALER',
+                    type: 'select',
+                    label: 'Автоцентр',
+                    value: null,
+                    props: {
+                      items: listAll,
+                      required: true,
+                      placeholder: {
+                        label: 'Выбери удобный для тебя автоцентр',
+                        value: null,
+                        color: '#9EA0A4',
+                      },
+                    },
+                  }
+                : {},
               {
                 name: 'CARNAME',
                 type: 'input',
@@ -236,6 +292,23 @@ class OrderScreen extends Component {
     comment: PropTypes.string,
   };
 
+  shouldComponentUpdate(nextProps) {
+    if (!this.props.dealerSelectedLocal) {
+      return false;
+    } else {
+      if (
+        this.props.dealerSelectedLocal &&
+        this.props.dealerSelectedLocal.id &&
+        nextProps.dealerSelectedLocal
+      ) {
+        return (
+          this.props.dealerSelectedLocal.id !== nextProps.dealerSelectedLocal.id
+        );
+      }
+    }
+    return false;
+  }
+
   onPressOrder = async (data) => {
     const isInternetExist = await isInternet();
 
@@ -245,10 +318,16 @@ class OrderScreen extends Component {
     }
 
     const {navigation} = this.props;
-
-    const dealerId = get(navigation, 'state.params.dealerId');
+    let dealerId = 0;
+    const localDealer = get(data, 'DEALER');
+    if (localDealer) {
+      dealerId = localDealer;
+    } else {
+      dealerId = get(navigation, 'state.params.car.dealer[0].id');
+    }
     const carId = get(navigation, 'state.params.carId');
     const isNewCar = get(navigation, 'state.params.isNewCar');
+
     const action = await this.props.actionOrderCar({
       firstName: get(data, 'NAME'),
       secondName: get(data, 'SECOND_NAME'),
