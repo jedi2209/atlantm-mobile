@@ -40,6 +40,7 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
 
   let carLocalBrand = '';
   let carLocalModel = '';
+  let carLocalNumber = '';
   let carLocalVin = '';
 
   if (profile.cars && profile.cars[0]) {
@@ -49,7 +50,9 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
     if (profile.cars[0].model) {
       carLocalModel = profile.cars[0].model;
     }
-
+    if (profile.cars[0].number) {
+      carLocalNumber = profile.cars[0].number || '';
+    }
     if (profile.cars[0].vin) {
       carLocalVin = profile.cars[0].vin || '';
     }
@@ -70,6 +73,9 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
     carModel: UserData.get('CARMODEL')
       ? UserData.get('CARMODEL')
       : carLocalModel,
+    carNumber: UserData.get('CARNUMBER')
+      ? UserData.get('CARNUMBER')
+      : carLocalNumber,
     carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
     dealerSelected: dealer.selected,
     dealerSelectedLocal: dealer.selectedLocal,
@@ -144,7 +150,6 @@ const styles = StyleSheet.create({
 class ServiceScreen extends Component {
   constructor(props) {
     super(props);
-
     const {
       lastName,
       firstName,
@@ -153,6 +158,7 @@ class ServiceScreen extends Component {
       carBrand,
       carModel,
       carVIN,
+      carNumber,
     } = props;
 
     this.state = {
@@ -168,8 +174,21 @@ class ServiceScreen extends Component {
       carBrand: carBrand,
       carModel: carModel,
       carVIN: carVIN,
+      carNumber: carNumber,
       isHaveCar: Boolean(props.cars.length > 0),
     };
+
+    const carFromNavigation = get(this.props.navigation, 'state.params.car');
+    if (carFromNavigation && get(carFromNavigation, 'vin')) {
+      this.state.carVIN = carFromNavigation.vin;
+      this.state.carBrand = get(carFromNavigation, 'brand');
+      this.state.carModel = get(carFromNavigation, 'model');
+      this.state.carNumber = get(carFromNavigation, 'number');
+      this.state.carName = [
+        get(carFromNavigation, 'brand'),
+        get(carFromNavigation, 'model'),
+      ].join(' ');
+    }
 
     this.myCars = [];
     this.props.cars.map((item) => {
@@ -196,6 +215,16 @@ class ServiceScreen extends Component {
       type: 'input',
       label: 'Модель',
       value: this.props.carModel,
+      props: {
+        required: true,
+        placeholder: null,
+      },
+    },
+    {
+      name: 'CARNUMBER',
+      type: 'input',
+      label: 'Гос. номер автомобиля',
+      value: this.props.carNumber,
       props: {
         required: true,
         placeholder: null,
@@ -295,6 +324,9 @@ class ServiceScreen extends Component {
     this.setState({
       carName: [item.brand, item.model].join(' '),
       carVIN: item.vin,
+      carBrand: item.brand,
+      carModel: item.model,
+      carNumber: item.number,
     });
   };
 
@@ -341,6 +373,9 @@ class ServiceScreen extends Component {
         model: this.state.carModel
           ? this.state.carModel
           : dataFromForm.CARMODEL || null,
+        plate: this.state.carNumber
+          ? this.state.carNumber
+          : dataFromForm.CARNUMBER || null,
       },
       text: dataFromForm.COMMENT || null,
     };
@@ -354,12 +389,11 @@ class ServiceScreen extends Component {
         parseInt(this.state.serviceInfo.summary[0].time.total);
     }
 
-    console.log('=>>>>>> data', data);
-
     if (this.orderLead) {
       const dataToSend = {
         brand: get(data, 'car.brand', ''),
         model: get(data, 'car.model', ''),
+        carNumber: get(data, 'car.plate', ''),
         vin: get(data, 'vin', ''),
         date: format(dataFromForm.DATETIME),
         firstName: get(data, 'f_FirstName', ''),
@@ -385,6 +419,7 @@ class ServiceScreen extends Component {
               CARNAME: [dataToSend.brand, dataToSend.model].join(' '),
               CARBRAND: dataToSend.brand,
               CARMODEL: dataToSend.model,
+              CARNUMBER: dataToSend.carNumber,
             });
             Alert.alert(
               'Заявка успешно отправлена',
