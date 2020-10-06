@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
   Platform,
 } from 'react-native';
-import {Button} from 'native-base';
+import {Button, Toast} from 'native-base';
 import {DatePickerCustom} from '../../core/components/DatePickerCustom';
 import {time, yearMonthDay} from '../../utils/date';
 import styleConst from '../../core/style-const';
@@ -136,7 +136,12 @@ export default class ChooseDateTimeComponent extends Component {
     });
 
     if (availablePeriods.status === 'error') {
-      alert(availablePeriods.error.message);
+      Toast.show({
+        text: availablePeriods.error.message,
+        position: 'bottom',
+        type: 'danger',
+        duration: 3000,
+      });
       this.setState({
         availablePeriodsFetch: false,
         date: undefined,
@@ -144,8 +149,13 @@ export default class ChooseDateTimeComponent extends Component {
       return false;
     }
 
-    if (availablePeriods.data == null) {
-      alert('Нет доступных периодов, попробуй выбрать другой день');
+    if (availablePeriods.data === null) {
+      Toast.show({
+        text: 'Нет доступных периодов, попробуй выбрать другой день',
+        position: 'bottom',
+        type: 'danger',
+        duration: 3000,
+      });
       this.setState({
         availablePeriodsFetch: false,
         date: undefined,

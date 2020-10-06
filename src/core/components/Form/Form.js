@@ -244,19 +244,23 @@ class Form extends Component {
       });
       if (requredLabels.length) {
         if (requredLabels.length > 1) {
-          Alert.alert(
-            '',
-            '\r\nПоля \r\n-' +
-              requredLabels.join('\r\n-') +
-              '\r\nобязательны для заполнения',
-          );
+          Toast.show({
+            text:
+              'Поля\r\n- ' +
+              requredLabels.join('\r\n- ') +
+              '\r\n\r\nобязательны для заполнения',
+            position: 'bottom',
+            duration: 3000,
+            type: 'warning',
+          });
         } else {
           Toast.show({
             text:
               'Поле "' +
               requredLabels.join(' ') +
               '" обязательно для заполнения',
-            position: 'top',
+            position: 'bottom',
+            duration: 3000,
             type: 'warning',
           });
         }
