@@ -102,6 +102,7 @@ class ChooseDealerScreen extends Component {
     const goBack = get(navigation, 'state.params.goBack');
     const isLocal = get(navigation, 'state.params.isLocal');
     const returnScreen = get(navigation, 'state.params.returnScreen', null);
+    const returnState = get(navigation, 'state.params.returnState', null);
     const listAll = get(navigation, 'state.params.listAll', null);
 
     return (
@@ -120,6 +121,7 @@ class ChooseDealerScreen extends Component {
           navigation={navigation}
           selectItem={selectDealer}
           returnScreen={returnScreen}
+          returnState={returnState}
           selectedItem={dealerSelected}
           goBack={goBack}
           isLocal={isLocal}
