@@ -41,6 +41,7 @@ import {dayMonthYear} from '../../../utils/date';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
+import numberWithGap from '../../../utils/number-with-gap';
 import {ERROR_NETWORK} from '../../../core/const';
 
 const styles = StyleSheet.create({
@@ -66,9 +67,23 @@ const styles = StyleSheet.create({
     minHeight: styleConst.ui.listHeight,
     paddingBottom: 10,
   },
+  dateContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   date: {
     color: styleConst.new.blueHeader,
     fontSize: 18,
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
+    marginTop: 5,
+    fontWeight: '400',
+    paddingBottom: 10,
+  },
+  mileage: {
+    color: styleConst.new.blueHeader,
+    fontSize: 14,
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
     marginTop: 5,
@@ -247,7 +262,7 @@ class CarHistoryScreen extends Component {
   };
 
   renderLevel3Content = ({work}) => {
-    const {date, document, master, summ} = work;
+    const {date, document, master, summ, car} = work;
     const works = get(summ, 'works');
     const parts = get(summ, 'parts');
     const total = get(summ, 'total');
@@ -255,7 +270,15 @@ class CarHistoryScreen extends Component {
 
     return (
       <Body style={[styles.body]}>
-        {date ? <Text style={styles.date}>{dayMonthYear(date)}</Text> : null}
+        <View
+          style={styles.dateContainer}>
+          {date ? <Text style={styles.date}>{dayMonthYear(date)}</Text> : null}
+          {car.mileage ? (
+            <Text style={styles.mileage}>
+              пробег {numberWithGap(car.mileage)}
+            </Text>
+          ) : null}
+        </View>
         {document
           ? this.renderLevel3Item({
               prop: document.name,
@@ -306,12 +329,13 @@ class CarHistoryScreen extends Component {
   render() {
     const {carHistory, isFetchCarHistory} = this.props;
 
+    Amplitude.logEvent('screen', 'lkk/carhistory');
+
     if (isFetchCarHistory) {
       return <SpinnerView containerStyle={{backgroundColor: '#fff'}} />;
     }
 
     if (isEmpty(carHistory) || !carHistory.items) {
-      Amplitude.logEvent('screen', 'lkk/carhistory');
       return (
         <SafeAreaView style={styles.safearea}>
           <StatusBar barStyle="dark-content" />
