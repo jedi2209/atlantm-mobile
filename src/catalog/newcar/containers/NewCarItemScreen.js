@@ -300,7 +300,6 @@ class NewCarItemScreen extends Component {
           dealer: get(carDetails, 'dealer'),
         },
         region: this.props.dealerSelected.region,
-        dealerId: get(carDetails, 'dealer[0].id'),
         carId: carDetails.id.api,
         isNewCar: true,
       });
@@ -325,9 +324,9 @@ class NewCarItemScreen extends Component {
         priceSpecial: CarPrices.sale,
         complectation: get(carDetails, 'complectation.name'),
         year: get(carDetails, 'year'),
+        dealer: get(carDetails, 'dealer'),
       },
       region: this.props.dealerSelected.region,
-      dealerId: carDetails.dealer.id,
       carId: carDetails.id.api,
       testDriveCars: carDetails.testDriveCars,
       isNewCar: true,
