@@ -211,13 +211,13 @@ class MapScreen extends Component {
     const apps = ['Отмена'];
     const baseParams = {latitude, longitude};
 
-    const checkAppAvailable = name => {
+    const checkAppAvailable = (name) => {
       return Linking.canOpenURL(
         this.getNaviLink({
           ...baseParams,
           name,
         }),
-      ).then(isAppAvailable => {
+      ).then((isAppAvailable) => {
         return {name, isAppAvailable};
       });
     };
@@ -229,8 +229,8 @@ class MapScreen extends Component {
       checkAppAvailable(CONTACTS_MAP_UBER_TAXI),
       checkAppAvailable(CONTACTS_MAP_GOOGLE_MAPS),
       checkAppAvailable(CONTACTS_MAP_APPLE_MAPS),
-    ]).then(results => {
-      results.forEach(app => {
+    ]).then((results) => {
+      results.forEach((app) => {
         if (app.isAppAvailable) {
           apps.push(app.name);
         }
@@ -272,8 +272,8 @@ class MapScreen extends Component {
     return link;
   };
 
-  openDirections = url => {
-    return Linking.openURL(url).catch(err => {
+  openDirections = (url) => {
+    return Linking.openURL(url).catch((err) => {
       __DEV__ && console.log('err', err);
 
       setTimeout(() =>
@@ -285,7 +285,7 @@ class MapScreen extends Component {
     });
   };
 
-  onPressRouteVariant = index => {
+  onPressRouteVariant = (index) => {
     let url;
 
     if (index === 0) {
@@ -327,7 +327,7 @@ class MapScreen extends Component {
     return this.openDirections(url);
   };
 
-  handleRef = ref => {
+  handleRef = (ref) => {
     this.map = ref;
 
     if (!this.map) {
@@ -396,13 +396,16 @@ class MapScreen extends Component {
               }}
               pinColor={styleConst.color.blue}
               title={dealerSelected.name}
+              ref={(marker) => {
+                this.marker = marker;
+              }}
               description={this._getDescription()}
             />
           </MapView>
 
           <ActionSheet
             cancelButtonIndex={0}
-            ref={component => (this.actionSheet = component)}
+            ref={(component) => (this.actionSheet = component)}
             title="Выбери приложение для навигации"
             options={availableNaviApps}
             onPress={this.onPressRouteVariant}
@@ -440,7 +443,4 @@ class MapScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(MapScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);

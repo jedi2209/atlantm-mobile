@@ -61,13 +61,25 @@ export default class DealerItemList extends Component {
   };
 
   shouldComponentUpdate(nextProps) {
-    return this.props.dealer.name !== nextProps.dealer.name;
+    if (this.props.dealer) {
+      return this.props.dealer.name !== nextProps.dealer.name;
+    } else {
+      return false;
+    }
   }
 
   onPressDealer = () => {
-    const {goBack, navigation, returnScreen, isLocal, listAll} = this.props;
+    const {
+      goBack,
+      navigation,
+      returnScreen,
+      returnState,
+      isLocal,
+      listAll,
+    } = this.props;
     return navigation.navigate('ChooseDealerScreen', {
       returnScreen,
+      returnState,
       goBack,
       isLocal,
       listAll,
@@ -89,41 +101,45 @@ export default class DealerItemList extends Component {
                 {city && city.name ? city.name : dealer.city.name}
               </Text>
             ) : null}
-            {dealer.name ? (
-              <View>
-                <Text
-                  style={stylesDealerItemList.name}
-                  ellipsizeMode="tail"
-                  numberOfLines={1}>
-                  {dealer.name}
-                </Text>
+            <View>
+              <Text
+                style={stylesDealerItemList.name}
+                ellipsizeMode="tail"
+                numberOfLines={1}>
+                {dealer && dealer.name
+                  ? dealer.name
+                  : 'Выбери удобный для тебя автоцентр'}
+              </Text>
+              {dealer && dealer.city ? (
                 <Text
                   style={stylesDealerItemList.dealerCity}
                   ellipsizeMode="tail"
                   numberOfLines={1}>
                   {dealer.city.name}
                 </Text>
-              </View>
-            ) : null}
-          </Body>
-          <Right>
-            <View style={stylesDealerItemList.brands}>
-              {dealer.brands &&
-                dealer.brands.length &&
-                dealer.brands.map((brand) => {
-                  if (brand.logo) {
-                    return (
-                      <BrandLogo
-                        brand={brand.id}
-                        width={35}
-                        style={stylesDealerItemList.brandLogo}
-                        key={'brandLogo' + brand.id}
-                      />
-                    );
-                  }
-                })}
+              ) : null}
             </View>
-          </Right>
+          </Body>
+          {dealer && dealer.brands ? (
+            <Right>
+              <View style={stylesDealerItemList.brands}>
+                {dealer.brands &&
+                  dealer.brands.length &&
+                  dealer.brands.map((brand) => {
+                    if (brand.logo) {
+                      return (
+                        <BrandLogo
+                          brand={brand.id}
+                          width={35}
+                          style={stylesDealerItemList.brandLogo}
+                          key={'brandLogo' + brand.id}
+                        />
+                      );
+                    }
+                  })}
+              </View>
+            </Right>
+          ) : null}
         </ListItem>
       </View>
     );
