@@ -65,11 +65,12 @@ export default class DealerItemList extends Component {
   }
 
   onPressDealer = () => {
-    const {goBack, navigation, returnScreen, isLocal} = this.props;
+    const {goBack, navigation, returnScreen, isLocal, listAll} = this.props;
     return navigation.navigate('ChooseDealerScreen', {
       returnScreen,
       goBack,
       isLocal,
+      listAll,
     });
   };
 

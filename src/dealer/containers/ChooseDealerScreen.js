@@ -102,6 +102,7 @@ class ChooseDealerScreen extends Component {
     const goBack = get(navigation, 'state.params.goBack');
     const isLocal = get(navigation, 'state.params.isLocal');
     const returnScreen = get(navigation, 'state.params.returnScreen', null);
+    const listAll = get(navigation, 'state.params.listAll', null);
 
     return (
       <>
@@ -113,6 +114,7 @@ class ChooseDealerScreen extends Component {
           isFetchList={isFetchDealersList || isFetchDealer}
           listRussia={listRussia}
           listUkraine={listUkraine}
+          listAll={listAll}
           listBelarussia={listBelarussia}
           selectRegion={selectRegion}
           navigation={navigation}
