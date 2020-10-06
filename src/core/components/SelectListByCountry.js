@@ -108,6 +108,7 @@ export default class SelectListByCountry extends Component {
       goBack,
       isLocal,
       onSelect,
+      returnState,
     } = this.props;
     const returnScreen = get(navigation, 'state.params.returnScreen');
 
@@ -121,6 +122,7 @@ export default class SelectListByCountry extends Component {
         selectedItem={selectedItem}
         navigation={navigation}
         returnScreen={returnScreen}
+        returnState={returnState}
         onSelect={onSelect}
       />
     );

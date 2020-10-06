@@ -92,6 +92,7 @@ export default class SelectItemByCountry extends Component {
     const {
       navigation,
       returnScreen,
+      returnState,
       selectItem,
       item,
       goBack,
@@ -116,15 +117,15 @@ export default class SelectItemByCountry extends Component {
             isLocal: isLocal,
           });
         }
-        if (Boolean(goBack) || isLocal) {
+        if (Boolean(goBack)) {
           return navigation.goBack();
         }
-
         const resetAction = StackActions.reset({
           index: 0,
           actions: [
             NavigationActions.navigate({
               routeName: returnScreen || mainScreen,
+              params: returnState,
             }),
           ],
         });
