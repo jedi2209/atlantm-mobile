@@ -266,9 +266,9 @@ class NewCarItemScreen extends Component {
                   priceSpecial: CarPrices.sale,
                   complectation: get(carDetails, 'complectation.name'),
                   year: get(carDetails, 'year'),
+                  dealer: get(carDetails, 'dealer'),
                 },
                 region: this.props.dealerSelected.region,
-                dealerId: carDetails.dealer.id,
                 carId: carDetails.id.api,
                 isNewCar: true,
               });
@@ -297,9 +297,10 @@ class NewCarItemScreen extends Component {
           priceSpecial: CarPrices.sale,
           complectation: get(carDetails, 'complectation.name'),
           year: get(carDetails, 'year'),
+          dealer: get(carDetails, 'dealer'),
         },
         region: this.props.dealerSelected.region,
-        dealerId: carDetails.dealer.id,
+        dealerId: get(carDetails, 'dealer[0].id'),
         carId: carDetails.id.api,
         isNewCar: true,
       });
@@ -776,32 +777,33 @@ class NewCarItemScreen extends Component {
                     ) : null}
                   </View>
                 </ScrollView>
-
-                <TouchableWithoutFeedback
-                  onPress={this.onPressMap}
-                  style={styles.mapCard}>
-                  <View style={styles.mapCardContainer}>
-                    <Icon
-                      type="MaterialCommunityIcons"
-                      name="map-marker-outline"
-                      style={styles.mapCardIcon}
-                    />
-                    <View style={styles.mapCardTextContainer}>
-                      <Text style={styles.mapCardTitle}>
-                        Автомобиль расположен по адресу
-                      </Text>
-                      <Text
-                        style={styles.mapCardDealer}
-                        numberOfLines={1}
-                        ellipsizeMode="tail">
-                        {`${get(carDetails, 'city.name')}, ${get(
-                          carDetails,
-                          'dealer.name',
-                        )}`}
-                      </Text>
+                {get(carDetails, 'location.coords') ? (
+                  <TouchableWithoutFeedback
+                    onPress={this.onPressMap}
+                    style={styles.mapCard}>
+                    <View style={styles.mapCardContainer}>
+                      <Icon
+                        type="MaterialCommunityIcons"
+                        name="map-marker-outline"
+                        style={styles.mapCardIcon}
+                      />
+                      <View style={styles.mapCardTextContainer}>
+                        <Text style={styles.mapCardTitle}>
+                          Автомобиль расположен по адресу
+                        </Text>
+                        <Text
+                          style={styles.mapCardDealer}
+                          numberOfLines={1}
+                          ellipsizeMode="tail">
+                          {`${get(carDetails, 'location.city.name')}, ${get(
+                            carDetails,
+                            'location.name',
+                          )}`}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                </TouchableWithoutFeedback>
+                  </TouchableWithoutFeedback>
+                ) : null}
               </View>
 
               <Accordion
