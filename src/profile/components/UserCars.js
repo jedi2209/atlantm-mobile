@@ -25,6 +25,7 @@ import {
 // import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {verticalScale} from '../../utils/scale';
 import styleConst from '../../core/style-const';
+import getOrders from '../../utils/orders';
 
 import {actionToggleCar} from '../actions';
 
@@ -55,72 +56,6 @@ const styles = StyleSheet.create({
 });
 
 const CarMenu = {
-  active: {
-    android: {
-      BUTTONS: [
-        {
-          id: 'orderService',
-          text: 'Запись на сервис',
-          icon: 'construct',
-          iconColor: '#2c8ef4',
-        },
-        {
-          id: 'orderParts',
-          text: 'Заказать зап.части',
-          icon: 'settings',
-          iconColor: '#2c8ef4',
-        },
-        {
-          id: 'TOhistory',
-          text: 'История обслуживания',
-          icon: 'book-outline',
-          iconColor: '#2c8ef4',
-        },
-        {
-          id: 'hide',
-          text: 'Скрыть в архив',
-          icon: 'archive',
-          iconColor: '#2c8ef4',
-        },
-        {
-          id: 'cancel',
-          text: 'Отмена',
-          icon: 'close',
-          iconColor: 'red',
-        },
-      ],
-      DESTRUCTIVE_INDEX: 3,
-      CANCEL_INDEX: 4,
-    },
-    ios: {
-      BUTTONS: [
-        {
-          id: 'orderService',
-          text: '🛠Запись на сервис',
-        },
-        {
-          id: 'orderParts',
-          text: '🔩Заказать зап.части',
-        },
-        {
-          id: 'TOhistory',
-          text: '📘История обслуживания',
-          icon: 'book-outline',
-          iconColor: '#2c8ef4',
-        },
-        {
-          id: 'hide',
-          text: '📥Скрыть в архив',
-        },
-        {
-          id: 'cancel',
-          text: 'Отмена',
-        },
-      ],
-      DESTRUCTIVE_INDEX: 3,
-      CANCEL_INDEX: 4,
-    },
-  },
   hidden: {
     android: {
       BUTTONS: [
@@ -184,6 +119,69 @@ const UserCars = ({navigation, actionToggleCar}) => {
     }, 2500);
   }, []);
 
+  const _showMenu = (ordersData, item) => {
+    let carName = [item.brand, item.model, '-- [' + item.number + ']'].join(
+      ' ',
+    );
+    return ActionSheet.show(
+      {
+        options: ordersData.BUTTONS,
+        cancelButtonIndex: ordersData.CANCEL_INDEX,
+        destructiveButtonIndex: ordersData.DESTRUCTIVE_INDEX || null,
+        title: carName,
+      },
+      (buttonIndex) => {
+        switch (ordersData.BUTTONS[buttonIndex].id) {
+          case 'orderService':
+            navigation.navigate('ServiceScreen', {
+              car: item,
+            });
+            break;
+          case 'orderParts':
+            navigation.navigate('OrderPartsScreen', {
+              car: item,
+            });
+            break;
+          case 'carCost':
+            navigation.navigate('CarCostScreen', {
+              car: item,
+            });
+            break;
+          case 'TOhistory':
+            navigation.navigate('TOHistore', {
+              car: item,
+            });
+            break;
+          case 'hide':
+            setLoading(true);
+            actionToggleCar(item, get(store.getState(), 'profile.login.SAP'))
+              .then((res) => {
+                console.log('res', res);
+                if (res.type && res.type === 'CAR_HIDE__SUCCESS') {
+                  setActivePanel('default');
+                  setLoading(false);
+                  Toast.show({
+                    text: 'Статус автомобиля изменён',
+                    type: 'success',
+                    position: 'top',
+                  });
+                }
+              })
+              .catch((error) => {
+                console.log('error', error);
+                setLoading(false);
+                Toast.show({
+                  text: error,
+                  type: 'danger',
+                  position: 'top',
+                });
+              });
+            break;
+        }
+      },
+    );
+  };
+
   const _renderCarsItems = ({cars, actionToggleCar}) => {
     return (
       <ScrollView
@@ -203,70 +201,13 @@ const UserCars = ({navigation, actionToggleCar}) => {
               activeOpacity={1}
               key={item.vin}
               onPress={() => {
-                let carName = [
-                  item.brand,
-                  item.model,
-                  '-- [' + item.number + ']',
-                ].join(' ');
-                ActionSheet.show(
-                  {
-                    options: CarMenu[CarType][Platform.OS].BUTTONS,
-                    cancelButtonIndex:
-                      CarMenu[CarType][Platform.OS].CANCEL_INDEX,
-                    destructiveButtonIndex:
-                      CarMenu[CarType][Platform.OS].DESTRUCTIVE_INDEX,
-                    title: carName,
-                  },
-                  (buttonIndex) => {
-                    switch (
-                      CarMenu[CarType][Platform.OS].BUTTONS[buttonIndex].id
-                    ) {
-                      case 'orderService':
-                        navigation.navigate('ServiceScreen', {
-                          car: item,
-                        });
-                        break;
-                      case 'orderParts':
-                        navigation.navigate('OrderPartsScreen', {
-                          car: item,
-                        });
-                        break;
-                      case 'TOhistory':
-                        navigation.navigate('TOHistore', {
-                          car: item,
-                        });
-                        break;
-                      case 'hide':
-                        setLoading(true);
-                        actionToggleCar(
-                          item,
-                          get(store.getState(), 'profile.login.SAP'),
-                        )
-                          .then((res) => {
-                            console.log('res', res);
-                            if (res.type && res.type === 'CAR_HIDE__SUCCESS') {
-                              setActivePanel('default');
-                              setLoading(false);
-                              Toast.show({
-                                text: 'Статус автомобиля изменён',
-                                type: 'success',
-                                position: 'bottom',
-                              });
-                            }
-                          })
-                          .catch((error) => {
-                            console.log('error', error);
-                            setLoading(false);
-                            Toast.show({
-                              text: error,
-                              type: 'danger',
-                              position: 'bottom',
-                            });
-                          });
-                        break;
-                    }
-                  },
-                );
+                if (CarType == 'active') {
+                  getOrders('car').then((ordersData) => {
+                    return _showMenu(ordersData, item);
+                  });
+                } else {
+                  return _showMenu(CarMenu[CarType][Platform.OS], item);
+                }
               }}>
               <View
                 style={{
