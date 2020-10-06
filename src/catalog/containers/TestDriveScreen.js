@@ -136,16 +136,29 @@ class TestDriveScreen extends PureComponent {
       .filter(Boolean)
       .join(' ');
 
+    const dealer = get(this.props.navigation, 'state.params.car.dealer');
+    this.listAll = [];
+    dealer.map((el) => {
+      this.listAll.push({
+        label: el.name,
+        value: el.id,
+        key: el.id,
+      });
+    });
+
     this.state = {
       date: null,
       testDriveCar: '',
       TDCarsList: [],
       comment: '',
+      dealerID: null,
       timeFetch: false,
       carFetch: true,
     };
 
-    this.fetchTDCars();
+    if (this.listAll.length === 1) {
+      this.state.dealerID = this.listAll[0].value;
+    }
   }
 
   static navigationOptions = ({navigation}) => ({
@@ -167,10 +180,13 @@ class TestDriveScreen extends PureComponent {
     comment: PropTypes.string,
   };
 
-  fetchTDCars = async () => {
+  componentDidMount() {
+    this.fetchTDCars(this.state.dealerID);
+  }
+
+  fetchTDCars = async (dealerID) => {
     this.setState({carFetch: true});
     const tdcarsTmp = get(this.props.navigation, 'state.params.testDriveCars');
-    const dealerID = get(this.props.navigation, 'state.params.dealerId');
     let tdCarsApi = [];
 
     tdcarsTmp.map((el) => {
@@ -224,15 +240,16 @@ class TestDriveScreen extends PureComponent {
       return;
     }
 
-    // console.log('onPressOrder', data, this.props, this.state);
-    // return true;
-
     const {navigation} = this.props;
 
     const carID = this.state.testDriveCar;
-    const dealerID = get(navigation, 'state.params.dealerId');
+    const dealerID = get(data, 'DEALER')
+      ? get(data, 'DEALER')
+      : this.state.dealerID;
     const isNewCar = get(navigation, 'state.params.isNewCar');
     const time = get(data, 'DATETIME.time');
+    // console.log('onPressOrder', data, this.props, this.state, dealerID);
+    // return true;
     const action = await this.props.actionOrderTestDrive({
       firstName: get(data, 'NAME'),
       secondName: get(data, 'SECOND_NAME'),
@@ -327,6 +344,24 @@ class TestDriveScreen extends PureComponent {
     }
   };
 
+  onDealerChoose(value) {
+    this.setState(
+      {
+        dealerID: value,
+        date: null,
+        testDriveCar: '',
+        TDCarsList: [],
+        timeFetch: false,
+        carFetch: true,
+      },
+      () => {
+        if (!isNaN(value)) {
+          this.fetchTDCars(value);
+        }
+      },
+    );
+  }
+
   onCarChoose(value) {
     this.setState({
       testDriveCar: value,
@@ -372,31 +407,52 @@ class TestDriveScreen extends PureComponent {
       fields: {
         groups: [
           {
-            name: 'Автомобиль',
+            name:
+              this.listAll.length > 1 ? 'Автоцентр и автомобиль' : 'Автомобиль',
             fields: [
-              this.state.TDCarsList && !this.state.carFetch
-                ? carblock
-                : {
-                    name: 'CARLOAD',
-                    type: 'component',
-                    label: 'Выбери желаемый автомобиль',
-                    value: (
-                      <>
-                        <ActivityIndicator
-                          color={styleConst.color.blue}
-                          style={[styles.spinner, {height: 39}]}
-                        />
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#ababab',
-                            textAlign: 'center',
-                          }}>
-                          ищем свободные автомобили для тест-драйва
-                        </Text>
-                      </>
-                    ),
-                  },
+              this.listAll.length > 1
+                ? {
+                    name: 'DEALER',
+                    type: 'select',
+                    label: 'Автоцентр',
+                    value: null,
+                    props: {
+                      items: this.listAll,
+                      required: true,
+                      onChange: this.onDealerChoose.bind(this),
+                      placeholder: {
+                        label: 'Выбери удобный для тебя автоцентр',
+                        value: null,
+                        color: '#9EA0A4',
+                      },
+                    },
+                  }
+                : {},
+              this.state.dealerID
+                ? this.state.TDCarsList && !this.state.carFetch
+                  ? carblock
+                  : {
+                      name: 'CARLOAD',
+                      type: 'component',
+                      label: 'Выбери желаемый автомобиль',
+                      value: (
+                        <>
+                          <ActivityIndicator
+                            color={styleConst.color.blue}
+                            style={[styles.spinner, {height: 39}]}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 12,
+                              color: '#ababab',
+                              textAlign: 'center',
+                            }}>
+                            ищем свободные автомобили для тест-драйва
+                          </Text>
+                        </>
+                      ),
+                    }
+                : {},
               this.state.testDriveCar ? datetime : {},
             ],
           },
