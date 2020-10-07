@@ -110,7 +110,7 @@ export default {
   cardDefaultBg: '#fff',
 
   // Color
-  brandPrimary: platform === 'ios' ? '#007aff' : '#3F51B5',
+  brandPrimary: platform === 'ios' ? '#007aff' : '#007aff',
   brandInfo: '#62B1F6',
   brandSuccess: '#34BD78',
   brandDanger: '#d9534f',
@@ -136,18 +136,16 @@ export default {
   footerDefaultBg: platform === 'ios' ? '#F8F8F8' : '#4179F7',
 
   // FooterTab
-  tabBarTextColor: platform === 'ios' ? '#6b6b6b' : '#b3c7f9',
+  tabBarTextColor: platform === 'ios' ? '#6b6b6b' : '#0F66B2',
   tabBarTextSize: platform === 'ios' ? 14 : 11,
-  activeTab: platform === 'ios' ? '#007aff' : '#fff',
-  sTabBarActiveTextColor: '#007aff',
-  tabBarActiveTextColor: platform === 'ios' ? '#007aff' : '#fff',
-  tabActiveBgColor: platform === 'ios' ? '#cde1f9' : '#3F51B5',
+  activeTab: platform === 'ios' ? '#007aff' : '#000',
+  tabActiveBgColor: platform === 'ios' ? '#cde1f9' : '#cde1f9',
 
   // Tab
-  tabDefaultBg: platform === 'ios' ? '#F8F8F8' : '#3F51B5',
-  topTabBarTextColor: platform === 'ios' ? '#6b6b6b' : '#b3c7f9',
-  topTabBarActiveTextColor: platform === 'ios' ? '#007aff' : '#fff',
-  topTabActiveBgColor: platform === 'ios' ? '#cde1f9' : undefined,
+  tabDefaultBg: platform === 'ios' ? '#F8F8F8' : '#F8F8F8',
+  topTabBarTextColor: platform === 'ios' ? '#6b6b6b' : '#0F66B2',
+  topTabBarActiveTextColor: platform === 'ios' ? '#007aff' : '#000',
+  topTabActiveBgColor: platform === 'ios' ? '#cde1f9' : '#0F66B2',
   topTabBarBorderColor: platform === 'ios' ? '#a7a6ab' : '#fff',
   topTabBarActiveBorderColor: platform === 'ios' ? '#007aff' : '#fff',
 

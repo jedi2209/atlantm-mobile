@@ -43,6 +43,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F6F6F6',
   },
+  TabsTextStyle: {
+    color: '#000',
+  },
+  TabsActiveTextStyle: {
+    color: styleConst.new.blueHeader,
+  },
+  TabsActiveTabStyle: {},
 });
 
 export default class SelectListByCountry extends Component {
@@ -161,6 +168,7 @@ export default class SelectListByCountry extends Component {
     }
 
     if (listAll && listAll.length) {
+      // кастомный список дилеров
       return (
         <StyleProvider style={getTheme()}>
           <Container style={styles.safearea}>
@@ -169,7 +177,11 @@ export default class SelectListByCountry extends Component {
                 backgroundColor: styleConst.new.blueHeader,
               }}>
               {customListBYN && customListBYN.length ? (
-                <Tab heading="🇧🇾Беларусь">
+                <Tab
+                  heading="🇧🇾 Беларусь"
+                  textStyle={styles.TabsTextStyle}
+                  activeTextStyle={styles.TabsActiveTextStyle}
+                  activeTabStyle={styles.TabsActiveTabStyle}>
                   <FlatList
                     style={styles.list}
                     data={customListBYN}
@@ -182,7 +194,11 @@ export default class SelectListByCountry extends Component {
                 </Tab>
               ) : null}
               {customListRUS && customListRUS.length ? (
-                <Tab heading="🇷🇺Россия">
+                <Tab
+                  heading="🇷🇺 Россия"
+                  textStyle={styles.TabsTextStyle}
+                  activeTextStyle={styles.TabsActiveTextStyle}
+                  activeTabStyle={styles.TabsActiveTabStyle}>
                   <FlatList
                     style={styles.list}
                     data={customListRUS}
@@ -195,7 +211,11 @@ export default class SelectListByCountry extends Component {
                 </Tab>
               ) : null}
               {customListUA && customListUA.length ? (
-                <Tab heading="🇺🇦Украина">
+                <Tab
+                  heading="🇺🇦 Украина"
+                  textStyle={styles.TabsTextStyle}
+                  activeTextStyle={styles.TabsActiveTextStyle}
+                  activeTabStyle={styles.TabsActiveTabStyle}>
                   <FlatList
                     style={styles.list}
                     data={customListUA}
@@ -219,7 +239,11 @@ export default class SelectListByCountry extends Component {
               tabBarUnderlineStyle={{
                 backgroundColor: styleConst.new.blueHeader,
               }}>
-              <Tab heading="🇧🇾Беларусь">
+              <Tab
+                heading="🇧🇾 Беларусь"
+                textStyle={styles.TabsTextStyle}
+                activeTextStyle={styles.TabsActiveTextStyle}
+                activeTabStyle={styles.TabsActiveTabStyle}>
                 <FlatList
                   style={styles.list}
                   data={listBelarussia}
@@ -230,7 +254,11 @@ export default class SelectListByCountry extends Component {
                   keyExtractor={(item) => `${item.hash.toString()}`}
                 />
               </Tab>
-              <Tab heading="🇷🇺Россия">
+              <Tab
+                heading="🇷🇺 Россия"
+                textStyle={styles.TabsTextStyle}
+                activeTextStyle={styles.TabsActiveTextStyle}
+                activeTabStyle={styles.TabsActiveTabStyle}>
                 <FlatList
                   style={styles.list}
                   data={listRussia}
@@ -241,7 +269,11 @@ export default class SelectListByCountry extends Component {
                   keyExtractor={(item) => `${item.hash.toString()}`}
                 />
               </Tab>
-              <Tab heading="🇺🇦Украина">
+              <Tab
+                heading="🇺🇦 Украина"
+                textStyle={styles.TabsTextStyle}
+                activeTextStyle={styles.TabsActiveTextStyle}
+                activeTabStyle={styles.TabsActiveTabStyle}>
                 <FlatList
                   style={styles.list}
                   data={listUkraine}
