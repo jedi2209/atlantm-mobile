@@ -7,6 +7,7 @@ import {
   DEALER__REQUEST,
   DEALER__SUCCESS,
   DEALER__SUCCESS__LOCAL,
+  CLEAR_LOCAL_DEALER,
   DEALER__FAIL,
   BRANDS__REQUEST,
   BRANDS__SUCCESS,
@@ -100,6 +101,14 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
           },
         });
       });
+  };
+};
+
+export const localDealerClear = () => {
+  return (dispatch) => {
+    dispatch({
+      type: CLEAR_LOCAL_DEALER,
+    });
   };
 };
 
