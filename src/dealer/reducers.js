@@ -7,6 +7,7 @@ import {
   DEALER__REQUEST,
   DEALER__SUCCESS,
   DEALER__SUCCESS__LOCAL,
+  CLEAR_LOCAL_DEALER,
   DEALER__FAIL,
   DEALERS__REQUEST,
   DEALERS__SUCCESS,
@@ -56,6 +57,7 @@ function selectedLocal(state = {}, action) {
     case SERVICE_ORDER__SUCCESS:
     case TVA__SUCCESS:
     case CAR_COST__SUCCESS:
+    case CLEAR_LOCAL_DEALER:
       return null;
     default:
       return state;
