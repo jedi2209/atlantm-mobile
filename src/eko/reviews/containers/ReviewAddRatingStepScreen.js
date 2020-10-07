@@ -179,6 +179,7 @@ class ReviewAddRatingStepScreen extends Component {
                       key: 1,
                     },
                   ],
+                  required: true,
                   placeholder: {
                     label: 'Поставь оценку нашей работе...',
                     value: null,
