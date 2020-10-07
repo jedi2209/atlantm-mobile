@@ -917,10 +917,13 @@ class Form extends Component {
               if (data.props.focusNextInput) {
                 this._nextInput(groupNum, num);
               }
+              if (data.props.onChange && Platform.OS === 'ios') {
+                data.props.onChange(this.state[name]);
+              }
             }}
             onValueChange={(value) => {
               this.onChangeField(data)(value);
-              if (data.props.onChange) {
+              if (data.props.onChange && Platform.OS !== 'ios') {
                 data.props.onChange(value);
               }
             }}

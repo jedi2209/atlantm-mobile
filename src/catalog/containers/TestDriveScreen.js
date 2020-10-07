@@ -181,7 +181,9 @@ class TestDriveScreen extends PureComponent {
   };
 
   componentDidMount() {
-    this.fetchTDCars(this.state.dealerID);
+    if (this.state.dealerID) {
+      this.fetchTDCars(this.state.dealerID);
+    }
   }
 
   fetchTDCars = async (dealerID) => {
@@ -415,7 +417,7 @@ class TestDriveScreen extends PureComponent {
                     name: 'DEALER',
                     type: 'select',
                     label: 'Автоцентр',
-                    value: null,
+                    value: this.state.dealerID,
                     props: {
                       items: this.listAll,
                       required: true,

@@ -50,7 +50,6 @@ function selectedLocal(state = {}, action) {
     case DEALER__SUCCESS__LOCAL:
       return {...action.payload.newDealer};
     case APP_STORE_UPDATED:
-    case DEALERS__REQUEST:
     case DEALER__SUCCESS:
     case CALL_ME__SUCCESS:
     case PARTS_ORDER__SUCCESS:

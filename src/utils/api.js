@@ -183,8 +183,11 @@ export default {
           `/stock/new/test-drive/${dealer}/${el}/`,
           baseRequestParams,
         );
-        cars.push(data.data);
-        return data;
+        if (!data.error) {
+          cars.push(data.data);
+          return data;
+        }
+        return false;
       });
       return await Promise.all(carsData).then((el) => {
         return {status: 'success', data: cars};
