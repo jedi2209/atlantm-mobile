@@ -127,7 +127,7 @@ class OrderScreen extends Component {
 
     const dealer = get(this.props.navigation, 'state.params.car.dealer');
     let listAll = [];
-    if (dealer && dealer.length > 1) {
+    if (dealer && dealer.length) {
       dealer.map((el) => {
         listAll.push({
           label: el.name,
@@ -173,7 +173,7 @@ class OrderScreen extends Component {
           {
             name: listAll.length ? 'Автоцентр и автомобиль' : 'Автомобиль',
             fields: [
-              listAll.length
+              listAll.length > 1
                 ? {
                     name: 'DEALER',
                     type: 'select',
@@ -189,7 +189,16 @@ class OrderScreen extends Component {
                       },
                     },
                   }
-                : {},
+                : {
+                    name: 'DEALER',
+                    type: 'input',
+                    label: 'Автоцентр',
+                    value: listAll[0].label,
+                    props: {
+                      editable: false,
+                      placeholder: 'Выбери удобный для тебя автоцентр',
+                    },
+                  },
               {
                 name: 'CARNAME',
                 type: 'input',

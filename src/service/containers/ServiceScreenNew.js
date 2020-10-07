@@ -162,6 +162,7 @@ class ServiceScreen extends Component {
     } = props;
 
     this.state = {
+      dealerSelectedLocal: null,
       service: '',
       services: undefined,
       servicesFetch: false,
@@ -259,7 +260,7 @@ class ServiceScreen extends Component {
     });
 
     const data = await API.getServiceAvailable({
-      dealer: this.props.dealerSelected.id,
+      dealer: this.state.dealerSelectedLocal.id,
       vin: this.state.carVIN,
     });
 
@@ -302,7 +303,7 @@ class ServiceScreen extends Component {
     });
     const data = await API.getServiceInfo({
       id,
-      dealer: this.props.dealerSelected.id,
+      dealer: this.state.dealerSelectedLocal.id,
       vin: this.state.carVIN,
     });
 
@@ -331,21 +332,62 @@ class ServiceScreen extends Component {
   };
 
   componentDidMount() {
-    if (this.state.carVIN) {
-      this._getServices();
+    if (!this.state.dealerSelectedLocal) {
+      this.setState(
+        {
+          dealerSelectedLocal: this.props.dealerSelectedLocal
+            ? this.props.dealerSelectedLocal
+            : this.props.dealerSelected,
+        },
+        () => {
+          if (this.state.carVIN && this.state.dealerSelectedLocal) {
+            this._getServices();
+          }
+        },
+      );
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.carVIN !== this.state.carVIN) {
-      this.setState({
-        services: undefined,
-        time: undefined,
-        service: undefined,
-        serviceInfo: undefined,
-      });
-      // this._getServices();
+      return this.setState(
+        {
+          services: undefined,
+          time: undefined,
+          service: undefined,
+          serviceInfo: undefined,
+          dealerSelectedLocal: this.props.dealerSelectedLocal
+            ? this.props.dealerSelectedLocal
+            : this.props.dealerSelected,
+        },
+        () => {
+          return true;
+        },
+      );
     }
+    if (
+      this.props.dealerSelectedLocal &&
+      prevProps.dealerSelectedLocal &&
+      this.props.dealerSelectedLocal.id !== prevProps.dealerSelectedLocal.id &&
+      this.state.carVIN
+    ) {
+      return this.setState(
+        {
+          services: undefined,
+          time: undefined,
+          service: undefined,
+          serviceInfo: undefined,
+          dealerSelectedLocal: this.props.dealerSelectedLocal
+            ? this.props.dealerSelectedLocal
+            : this.props.dealerSelected,
+        },
+        () => {
+          this._getServices();
+          return true;
+        },
+      );
+    }
+    return false;
   }
 
   onPressOrder = async (dataFromForm) => {
@@ -355,7 +397,7 @@ class ServiceScreen extends Component {
     let TimeTotal = 0;
 
     data = {
-      dealer: this.props.dealerSelected.id,
+      dealer: this.state.dealerSelectedLocal.id,
       time: {
         from: parseInt(dataFromForm.DATETIME.time),
       },
@@ -473,11 +515,7 @@ class ServiceScreen extends Component {
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: 'Автоцентр',
-                value:
-                  this.props.dealerSelectedLocal &&
-                  this.props.dealerSelectedLocal.id
-                    ? this.props.dealerSelectedLocal
-                    : this.props.dealerSelected,
+                value: this.state.dealerSelectedLocal,
                 props: {
                   goBack: true,
                   isLocal: true,
@@ -497,7 +535,7 @@ class ServiceScreen extends Component {
                       type: 'service',
                       minimumDate: new Date(addDays(2)),
                       maximumDate: new Date(addDays(62)),
-                      dealer: this.props.dealerSelected,
+                      dealer: this.state.dealerSelectedLocal,
                     },
                   }
                 : {},
