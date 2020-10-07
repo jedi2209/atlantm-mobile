@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {get} from 'lodash';
 import {callMe} from '../../contacts/actions';
 import {localUserDataUpdate} from '../../profile/actions';
+import {localDealerClear} from '../../dealer/actions';
 import {CALL_ME__SUCCESS, CALL_ME__FAIL} from '../../contacts/actionTypes';
 import {StackActions, NavigationActions} from 'react-navigation';
 import Amplitude from '../../utils/amplitude-analytics';
@@ -51,6 +52,7 @@ const mapStateToProps = ({dealer, profile, contacts, service, nav}) => {
 
 const mapDispatchToProps = {
   localUserDataUpdate,
+  localDealerClear,
   callMe,
 };
 
@@ -64,68 +66,9 @@ class CallMeBackScreen extends React.Component {
     this.state = {
       loading: false,
       success: false,
+      dealerSelectedLocal: this.props.dealerSelected,
     };
-
-    this.FormConfig = {
-      fields: {
-        groups: [
-          {
-            name: 'Автоцентр',
-            fields: [
-              {
-                name: 'DEALER',
-                type: 'dealerSelect',
-                label: 'Автоцентр',
-                value:
-                  this.props.dealerSelectedLocal &&
-                  this.props.dealerSelectedLocal.id
-                    ? this.props.dealerSelectedLocal
-                    : this.props.dealerSelected,
-                props: {
-                  goBack: true,
-                  isLocal: true,
-                  navigation: this.props.navigation,
-                  returnScreen: this.props.navigation.state.routeName,
-                },
-              },
-            ],
-          },
-          {
-            name: 'Контактные данные',
-            fields: [
-              {
-                name: 'PHONE',
-                type: 'phone',
-                label: 'Телефон',
-                value: this.props.phone,
-                props: {
-                  required: true,
-                },
-              },
-              {
-                name: 'NAME',
-                type: 'input',
-                label: 'Имя',
-                value: this.props.firstName,
-                props: {
-                  required: false,
-                  textContentType: 'name',
-                },
-              },
-              {
-                name: 'SECOND_NAME',
-                type: 'input',
-                label: 'Отчество',
-                value: this.props.secondName,
-                props: {
-                  textContentType: 'middleName',
-                },
-              },
-            ],
-          },
-        ],
-      },
-    };
+    this.props.localDealerClear();
   }
 
   static navigationOptions = ({navigation}) => {
@@ -147,19 +90,23 @@ class CallMeBackScreen extends React.Component {
     };
   };
 
-  // componentDidUpdate(prevpProps) {
-  //   if (prevpProps.profile.login !== this.props.profile.login) {
-  //     const {last_name, first_name, phone} = this.props.profile.login;
-
-  //     if (last_name && first_name) {
-  //       this.setState({name: `${first_name} ${last_name}`});
-  //     }
-
-  //     if (phone) {
-  //       this.setState({phone});
-  //     }
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.dealerSelectedLocal &&
+      this.state.dealerSelectedLocal &&
+      this.props.dealerSelectedLocal.id !== this.state.dealerSelectedLocal.id
+    ) {
+      this.setState(
+        {
+          dealerSelectedLocal: this.props.dealerSelectedLocal,
+        },
+        () => {
+          return true;
+        },
+      );
+    }
+    return false;
+  }
 
   onPressCallMe = async (props) => {
     const isInternetExist = await isInternet();
@@ -180,7 +127,7 @@ class CallMeBackScreen extends React.Component {
 
     this.setState({loading: true});
 
-    const dealerID = props.DEALER.id;
+    const dealerID = this.state.dealerSelectedLocal.id;
 
     const action = await this.props.callMe({
       dealerID,
@@ -230,6 +177,62 @@ class CallMeBackScreen extends React.Component {
   };
 
   render() {
+    this.FormConfig = {
+      fields: {
+        groups: [
+          {
+            name: 'Автоцентр',
+            fields: [
+              {
+                name: 'DEALER',
+                type: 'dealerSelect',
+                label: 'Автоцентр',
+                value: this.state.dealerSelectedLocal,
+                props: {
+                  goBack: true,
+                  isLocal: true,
+                  navigation: this.props.navigation,
+                  returnScreen: this.props.navigation.state.routeName,
+                },
+              },
+            ],
+          },
+          {
+            name: 'Контактные данные',
+            fields: [
+              {
+                name: 'PHONE',
+                type: 'phone',
+                label: 'Телефон',
+                value: this.props.phone,
+                props: {
+                  required: true,
+                },
+              },
+              {
+                name: 'NAME',
+                type: 'input',
+                label: 'Имя',
+                value: this.props.firstName,
+                props: {
+                  required: false,
+                  textContentType: 'name',
+                },
+              },
+              {
+                name: 'SECOND_NAME',
+                type: 'input',
+                label: 'Отчество',
+                value: this.props.secondName,
+                props: {
+                  textContentType: 'middleName',
+                },
+              },
+            ],
+          },
+        ],
+      },
+    };
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
