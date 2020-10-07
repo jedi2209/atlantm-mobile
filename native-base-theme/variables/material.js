@@ -135,20 +135,20 @@ export default {
   footerDefaultBg: '#3F51B5',
 
   // FooterTab
-  tabBarTextColor: '#b3c7f9',
-  tabBarTextSize: platform === 'ios' ? 14 : 11,
-  activeTab: '#fff',
-  sTabBarActiveTextColor: '#007aff',
-  tabBarActiveTextColor: '#fff',
-  tabActiveBgColor: undefined,
+  // tabBarTextColor: '#0F66B2',
+  // tabBarTextSize: platform === 'ios' ? 14 : 11,
+  // activeTab: '#fff',
+  // sTabBarActiveTextColor: '#007aff',
+  // tabBarActiveTextColor: '#fff',
+  // tabActiveBgColor: undefined,
 
   // Tab
-  tabDefaultBg: '#3F51B5',
-  topTabBarTextColor: '#b3c7f9',
-  topTabBarActiveTextColor: '#fff',
-  topTabActiveBgColor: undefined,
-  topTabBarBorderColor: '#fff',
-  topTabBarActiveBorderColor: '#fff',
+  // tabDefaultBg: '#3F51B5',
+  // topTabBarTextColor: '#0F66B2',
+  // topTabBarActiveTextColor: '#000',
+  // topTabActiveBgColor: '#0F66B2',
+  // topTabBarBorderColor: '#fff',
+  // topTabBarActiveBorderColor: '#fff',
 
   // Header
   toolbarBtnColor: '#fff',
