@@ -164,7 +164,10 @@ export default class SelectListByCountry extends Component {
       return (
         <StyleProvider style={getTheme()}>
           <Container style={styles.safearea}>
-            <Tabs tabBarUnderlineStyle={{color: styleConst.color.blue}}>
+            <Tabs
+              tabBarUnderlineStyle={{
+                backgroundColor: styleConst.new.blueHeader,
+              }}>
               {customListBYN && customListBYN.length ? (
                 <Tab heading="🇧🇾Беларусь">
                   <FlatList
@@ -212,7 +215,10 @@ export default class SelectListByCountry extends Component {
       return (
         <StyleProvider style={getTheme()}>
           <Container style={styles.safearea}>
-            <Tabs tabBarUnderlineStyle={{color: styleConst.color.blue}}>
+            <Tabs
+              tabBarUnderlineStyle={{
+                backgroundColor: styleConst.new.blueHeader,
+              }}>
               <Tab heading="🇧🇾Беларусь">
                 <FlatList
                   style={styles.list}

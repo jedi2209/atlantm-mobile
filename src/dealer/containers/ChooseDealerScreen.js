@@ -72,12 +72,14 @@ class ChooseDealerScreen extends Component {
   onSelectDealer = ({prevDealer, newDealer, isLocal}) => {
     const {pushActionSubscribeState} = this.props;
     // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
-    PushNotifications.addTag('dealer', newDealer.id);
+    if (!isLocal) {
+      PushNotifications.addTag('dealer', newDealer.id);
 
-    if (pushActionSubscribeState) {
-      PushNotifications.subscribeToTopic('actions', newDealer.id);
-    } else {
-      PushNotifications.unsubscribeFromTopic('actions');
+      if (pushActionSubscribeState) {
+        PushNotifications.subscribeToTopic('actions', newDealer.id);
+      } else {
+        PushNotifications.unsubscribeFromTopic('actions');
+      }
     }
   };
 
