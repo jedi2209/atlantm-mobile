@@ -29,6 +29,7 @@ import RenderPrice from '../../utils/price';
 import {connect} from 'react-redux';
 import {orderService} from '../actions';
 import {localUserDataUpdate} from '../../profile/actions';
+import {localDealerClear} from '../../dealer/actions';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
 
 import Amplitude from '../../utils/amplitude-analytics';
@@ -85,6 +86,7 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
 
 const mapDispatchToProps = {
   orderService,
+  localDealerClear,
 };
 
 const styles = StyleSheet.create({
@@ -162,7 +164,7 @@ class ServiceScreen extends Component {
     } = props;
 
     this.state = {
-      dealerSelectedLocal: null,
+      dealerSelectedLocal: this.props.dealerSelected,
       service: '',
       services: undefined,
       servicesFetch: false,
@@ -198,6 +200,8 @@ class ServiceScreen extends Component {
       }
     });
     this.orderLead = false;
+
+    this.props.localDealerClear();
   }
 
   noHaveCar = [
@@ -333,18 +337,14 @@ class ServiceScreen extends Component {
 
   componentDidMount() {
     if (!this.state.dealerSelectedLocal) {
-      this.setState(
-        {
-          dealerSelectedLocal: this.props.dealerSelectedLocal
-            ? this.props.dealerSelectedLocal
-            : this.props.dealerSelected,
-        },
-        () => {
-          if (this.state.carVIN && this.state.dealerSelectedLocal) {
-            this._getServices();
-          }
-        },
-      );
+      this.setState({
+        dealerSelectedLocal: this.props.dealerSelectedLocal
+          ? this.props.dealerSelectedLocal
+          : this.props.dealerSelected,
+      });
+    }
+    if (this.state.carVIN && this.state.dealerSelectedLocal) {
+      this._getServices();
     }
   }
 
@@ -365,10 +365,11 @@ class ServiceScreen extends Component {
         },
       );
     }
+
     if (
-      this.props.dealerSelectedLocal &&
+      this.state.dealerSelectedLocal &&
       prevProps.dealerSelectedLocal &&
-      this.props.dealerSelectedLocal.id !== prevProps.dealerSelectedLocal.id &&
+      this.state.dealerSelectedLocal.id !== prevProps.dealerSelectedLocal.id &&
       this.state.carVIN
     ) {
       return this.setState(
