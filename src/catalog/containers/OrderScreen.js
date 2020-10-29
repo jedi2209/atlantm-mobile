@@ -127,14 +127,24 @@ class OrderScreen extends Component {
 
     const dealer = get(this.props.navigation, 'state.params.car.dealer');
     let listAll = [];
-    if (dealer && dealer.length) {
-      dealer.map((el) => {
-        listAll.push({
-          label: el.name,
-          value: el.id,
-          key: el.id,
+    if (dealer) {
+      if (dealer.length) {
+        dealer.map((el) => {
+          listAll.push({
+            label: el.name,
+            value: el.id,
+            key: el.id,
+          });
         });
-      });
+      } else {
+        if (typeof dealer == 'object') {
+          listAll.push({
+            label: dealer.name,
+            value: dealer.id,
+            key: dealer.id,
+          });
+        }
+      }
     }
     this.state = {
       date: '',
