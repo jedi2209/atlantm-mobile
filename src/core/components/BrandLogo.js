@@ -205,6 +205,7 @@ class BrandLogo extends PureComponent {
         );
       }
     }
+    return <View />;
   }
 }
 
