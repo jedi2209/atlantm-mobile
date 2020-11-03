@@ -226,7 +226,6 @@ class Form extends Component {
             valid = this._validateDateTime(this.state[val.name]);
             break;
           case 'date':
-            console.log('this.state[val.name]', this.state[val.name]);
             valid = this._validateDate(this.state[val.name]);
             break;
           default:
@@ -918,13 +917,21 @@ class Form extends Component {
                 this._nextInput(groupNum, num);
               }
               if (data.props.onChange && Platform.OS === 'ios') {
+                // console.log('onDonePress', this.state[name]);
                 data.props.onChange(this.state[name]);
               }
             }}
             onValueChange={(value) => {
               this.onChangeField(data)(value);
               if (data.props.onChange && Platform.OS !== 'ios') {
+                // console.log('onValueChange', value);
                 data.props.onChange(value);
+              }
+            }}
+            onClose={() => {
+              if (data.props.onChange && Platform.OS === 'ios') {
+                console.log('onClose', this.state[name]);
+                data.props.onChange(this.state[name]);
               }
             }}
             style={{
