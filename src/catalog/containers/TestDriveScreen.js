@@ -44,7 +44,7 @@ import {
 import {ERROR_NETWORK} from '../../core/const';
 
 // import API from '../../utils/api';
-import {addDays, dayMonthYear} from '../../utils/date';
+import {yearMonthDay, addDays, dayMonthYear} from '../../utils/date';
 
 const $size = 40;
 const styles = StyleSheet.create({
@@ -148,15 +148,20 @@ class TestDriveScreen extends PureComponent {
 
     this.state = {
       date: null,
-      testDriveCar: '',
-      TDCarsList: [],
+      testDriveCar: null,
+      TDCarsList: null,
       comment: '',
       dealerID: null,
       timeFetch: false,
-      carFetch: true,
+      carFetch: false,
     };
 
     if (this.listAll.length === 1) {
+      console.log(
+        'this.listAll.length == 1',
+        this.listAll,
+        this.listAll[0].value,
+      );
       this.state.dealerID = this.listAll[0].value;
     }
   }
@@ -182,8 +187,193 @@ class TestDriveScreen extends PureComponent {
 
   componentDidMount() {
     if (this.state.dealerID) {
+      console.log('componentDidMount', this.state.dealerID);
       this.fetchTDCars(this.state.dealerID);
     }
+  }
+
+  onPressOrder = async (data) => {
+    const isInternetExist = await isInternet();
+
+    if (!isInternetExist) {
+      setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+      return;
+    }
+
+    const {navigation} = this.props;
+
+    const carID = this.state.testDriveCar;
+    const dealerID = get(data, 'DEALER')
+      ? get(data, 'DEALER')
+      : this.state.dealerID;
+    const isNewCar = get(navigation, 'state.params.isNewCar');
+    const time = get(data, 'DATETIME.time');
+    console.log('onPressOrder', data, this.props, this.state, dealerID);
+    return true;
+    if (!this.state.isLead) {
+      const action = await this.props.actionOrderTestDrive({
+        firstName: get(data, 'NAME'),
+        secondName: get(data, 'SECOND_NAME'),
+        lastName: get(data, 'LAST_NAME'),
+        email: get(data, 'EMAIL'),
+        phone: get(data, 'PHONE'),
+        dealerID,
+        carID,
+        time,
+        comment: data.COMMENT || '',
+        isNewCar,
+      });
+      if (action && action.type) {
+        switch (action.type) {
+          case TESTDRIVE_ORDER__SUCCESS: // отправляем online-запись на ТД
+            const car = get(navigation, 'state.params.car');
+            const {brand, model} = car;
+            const path = isNewCar ? 'newcar' : 'usedcar';
+            Amplitude.logEvent('order', `testdrive/${path}`, {
+              brand_name: brand,
+              model_name: get(model, 'name'),
+            });
+            this.props.localUserDataUpdate({
+              NAME: get(data, 'NAME'),
+              SECOND_NAME: get(data, 'SECOND_NAME'),
+              LAST_NAME: get(data, 'LAST_NAME'),
+              PHONE: get(data, 'PHONE'),
+              EMAIL: get(data, 'EMAIL'),
+            });
+            Alert.alert(
+              'Заявка успешно отправлена!',
+              'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+              [
+                {
+                  text: 'ОК',
+                  onPress() {
+                    navigation.goBack();
+                  },
+                },
+              ],
+            );
+            break;
+          case TESTDRIVE_ORDER__FAIL: // online-запись не сработала, конвертируем в ЛИД
+            const actionLead = await this.props.actionOrderTestDriveLead({
+              firstName: get(data, 'NAME'),
+              secondName: get(data, 'SECOND_NAME'),
+              lastName: get(data, 'LAST_NAME'),
+              email: get(data, 'EMAIL'),
+              phone: get(data, 'PHONE'),
+              dealerID,
+              carID,
+              comment: data.COMMENT || '',
+              isNewCar,
+            });
+            if (actionLead && actionLead.type) {
+              switch (actionLead.type) {
+                case TESTDRIVE_LEAD__SUCCESS:
+                  const car = get(navigation, 'state.params.car');
+                  const {brand, model} = car;
+                  const path = isNewCar ? 'newcar' : 'usedcar';
+                  Amplitude.logEvent('order', `testdrive/${path}`, {
+                    brand_name: brand,
+                    model_name: get(model, 'name'),
+                  });
+                  this.props.localUserDataUpdate({
+                    NAME: get(data, 'NAME'),
+                    SECOND_NAME: get(data, 'SECOND_NAME'),
+                    LAST_NAME: get(data, 'LAST_NAME'),
+                    PHONE: get(data, 'PHONE'),
+                    EMAIL: get(data, 'EMAIL'),
+                  });
+                  Alert.alert(
+                    'Заявка успешно отправлена!',
+                    'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+                    [
+                      {
+                        text: 'ОК',
+                        onPress() {
+                          navigation.goBack();
+                        },
+                      },
+                    ],
+                  );
+                  break;
+                case TESTDRIVE_LEAD__FAIL:
+                  Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
+                  break;
+              }
+            }
+            break;
+        }
+      }
+    } else {
+      let date = get(data, 'DATE');
+      if (date) {
+        date = yearMonthDay(date);
+      }
+      const actionLead = await this.props.actionOrderTestDriveLead({
+        firstName: get(data, 'NAME'),
+        secondName: get(data, 'SECOND_NAME'),
+        lastName: get(data, 'LAST_NAME'),
+        email: get(data, 'EMAIL'),
+        phone: get(data, 'PHONE'),
+        date: date,
+        dealerID,
+        carID,
+        comment: data.COMMENT || '',
+        isNewCar,
+      });
+      if (actionLead && actionLead.type) {
+        switch (actionLead.type) {
+          case TESTDRIVE_LEAD__SUCCESS:
+            const car = get(navigation, 'state.params.car');
+            const {brand, model} = car;
+            const path = isNewCar ? 'newcar' : 'usedcar';
+            Amplitude.logEvent('order', `testdrive/${path}`, {
+              brand_name: brand,
+              model_name: get(model, 'name'),
+            });
+            this.props.localUserDataUpdate({
+              NAME: get(data, 'NAME'),
+              SECOND_NAME: get(data, 'SECOND_NAME'),
+              LAST_NAME: get(data, 'LAST_NAME'),
+              PHONE: get(data, 'PHONE'),
+              EMAIL: get(data, 'EMAIL'),
+            });
+            Alert.alert(
+              'Заявка успешно отправлена!',
+              'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+              [
+                {
+                  text: 'ОК',
+                  onPress() {
+                    navigation.goBack();
+                  },
+                },
+              ],
+            );
+            break;
+          case TESTDRIVE_LEAD__FAIL:
+            Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
+            break;
+        }
+      }
+    }
+  };
+
+  onDealerChoose(value) {
+    this.setState(
+      {
+        dealerID: value,
+        date: null,
+        testDriveCar: '',
+        TDCarsList: null,
+        timeFetch: false,
+      },
+      () => {
+        console.log('onDealerChoose', this.state, value);
+        if (!isNaN(value)) {
+          this.fetchTDCars(value);
+        }
+      },
+    );
   }
 
   fetchTDCars = async (dealerID) => {
@@ -222,147 +412,25 @@ class TestDriveScreen extends PureComponent {
           if (tdCarsArr.length > 0) {
             tdCarsArr = orderBy(tdCarsArr, ['label'], ['desc']);
             this.setState({
+              dealerID: dealerID,
               TDCarsList: tdCarsArr,
               carFetch: false,
+              isLead: false,
             });
             if (tdCarsArr.length === 1) {
               this.onCarChoose(tdCarsArr[0]);
             }
+          } else {
+            this.setState({
+              TDCarsList: null,
+              carFetch: false,
+              isLead: true,
+            });
           }
           return tdCarsArr;
       }
     }
   };
-
-  onPressOrder = async (data) => {
-    const isInternetExist = await isInternet();
-
-    if (!isInternetExist) {
-      setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
-      return;
-    }
-
-    const {navigation} = this.props;
-
-    const carID = this.state.testDriveCar;
-    const dealerID = get(data, 'DEALER')
-      ? get(data, 'DEALER')
-      : this.state.dealerID;
-    const isNewCar = get(navigation, 'state.params.isNewCar');
-    const time = get(data, 'DATETIME.time');
-    // console.log('onPressOrder', data, this.props, this.state, dealerID);
-    // return true;
-    const action = await this.props.actionOrderTestDrive({
-      firstName: get(data, 'NAME'),
-      secondName: get(data, 'SECOND_NAME'),
-      lastName: get(data, 'LAST_NAME'),
-      email: get(data, 'EMAIL'),
-      phone: get(data, 'PHONE'),
-      dealerID,
-      carID,
-      time,
-      comment: data.COMMENT || '',
-      isNewCar,
-    });
-    if (action && action.type) {
-      switch (action.type) {
-        case TESTDRIVE_ORDER__SUCCESS: // отправляем online-запись на ТД
-          const car = get(navigation, 'state.params.car');
-          const {brand, model} = car;
-          const path = isNewCar ? 'newcar' : 'usedcar';
-          Amplitude.logEvent('order', `testdrive/${path}`, {
-            brand_name: brand,
-            model_name: get(model, 'name'),
-          });
-          this.props.localUserDataUpdate({
-            NAME: get(data, 'NAME'),
-            SECOND_NAME: get(data, 'SECOND_NAME'),
-            LAST_NAME: get(data, 'LAST_NAME'),
-            PHONE: get(data, 'PHONE'),
-            EMAIL: get(data, 'EMAIL'),
-          });
-          Alert.alert(
-            'Заявка успешно отправлена!',
-            'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
-            [
-              {
-                text: 'ОК',
-                onPress() {
-                  navigation.goBack();
-                },
-              },
-            ],
-          );
-          break;
-        case TESTDRIVE_ORDER__FAIL: // online-запись не сработала, конвертируем в ЛИД
-          const actionLead = await this.props.actionOrderTestDriveLead({
-            firstName: get(data, 'NAME'),
-            secondName: get(data, 'SECOND_NAME'),
-            lastName: get(data, 'LAST_NAME'),
-            email: get(data, 'EMAIL'),
-            phone: get(data, 'PHONE'),
-            dealerID,
-            carID,
-            comment: data.COMMENT || '',
-            isNewCar,
-          });
-          if (actionLead && actionLead.type) {
-            switch (actionLead.type) {
-              case TESTDRIVE_LEAD__SUCCESS:
-                const car = get(navigation, 'state.params.car');
-                const {brand, model} = car;
-                const path = isNewCar ? 'newcar' : 'usedcar';
-                Amplitude.logEvent('order', `testdrive/${path}`, {
-                  brand_name: brand,
-                  model_name: get(model, 'name'),
-                });
-                this.props.localUserDataUpdate({
-                  NAME: get(data, 'NAME'),
-                  SECOND_NAME: get(data, 'SECOND_NAME'),
-                  LAST_NAME: get(data, 'LAST_NAME'),
-                  PHONE: get(data, 'PHONE'),
-                  EMAIL: get(data, 'EMAIL'),
-                });
-                Alert.alert(
-                  'Заявка успешно отправлена!',
-                  'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
-                  [
-                    {
-                      text: 'ОК',
-                      onPress() {
-                        navigation.goBack();
-                      },
-                    },
-                  ],
-                );
-                break;
-              case TESTDRIVE_LEAD__FAIL:
-                Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
-                break;
-            }
-          }
-          break;
-      }
-    }
-  };
-
-  onDealerChoose(value) {
-    this.setState(
-      {
-        dealerID: value,
-        date: null,
-        testDriveCar: '',
-        TDCarsList: [],
-        timeFetch: false,
-        carFetch: true,
-      },
-      () => {
-        if (!isNaN(value)) {
-          this.fetchTDCars(value);
-        }
-      },
-    );
-  }
 
   onCarChoose(value) {
     this.setState({
@@ -400,10 +468,26 @@ class TestDriveScreen extends PureComponent {
         type: 'testDrive',
         minimumDate: new Date(addDays(2)),
         maximumDate: new Date(addDays(62)),
-        dealer: this.props.dealerSelected,
+        dealer: {
+          id: this.state.dealerID,
+        },
         carID: this.state.testDriveCar,
       },
     };
+    let date = {
+      name: 'DATE',
+      type: 'date',
+      label: 'Выбери удобную для тебя дату',
+      value: this.state.date || null,
+      props: {
+        placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
+        required: true,
+        minimumDate: new Date(addDays(2)),
+        maximumDate: new Date(addDays(62)),
+      },
+    };
+
+    console.log('this.state', this.state);
 
     this.FormConfig = {
       fields: {
@@ -431,8 +515,19 @@ class TestDriveScreen extends PureComponent {
                   }
                 : {},
               this.state.dealerID
-                ? this.state.TDCarsList && !this.state.carFetch
-                  ? carblock
+                ? !this.state.carFetch
+                  ? this.state.TDCarsList && this.state.TDCarsList.length
+                    ? carblock
+                    : {
+                        name: 'CARLOAD',
+                        type: 'input',
+                        label: 'Автомобиль для тест-драйва',
+                        value: this.carName,
+                        props: {
+                          required: false,
+                          editable: false,
+                        },
+                      }
                   : {
                       name: 'CARLOAD',
                       type: 'component',
@@ -455,7 +550,14 @@ class TestDriveScreen extends PureComponent {
                       ),
                     }
                 : {},
-              this.state.testDriveCar ? datetime : {},
+              !this.state.isLead
+                ? this.state.dealerID &&
+                  this.state.TDCarsList &&
+                  this.state.TDCarsList.length &&
+                  this.state.testDriveCar
+                  ? datetime
+                  : {}
+                : date,
             ],
           },
           {

@@ -657,35 +657,35 @@ async function getUserCars(token, userid) {
   return cars;
 }
 
+async function getUserBonus(token, userid) {
+  let bonus = {};
+  const bonusResponse = await API.fetchBonus({token, userid});
+  const bonusResponseCode = get(bonusResponse, 'error.code', 404);
+  if (bonusResponseCode === 200 && bonusResponse.data) {
+    bonus = bonusResponse.data;
+  } else {
+    //__DEV__ && console.log('error get profile bonus', bonusResponse);
+  }
+  return bonus;
+}
+
+async function getUserDiscounts(token, userid) {
+  let discounts = [];
+  const discountsResponse = await API.fetchDiscounts({token, userid});
+  const discountsResponseCode = get(discountsResponse, 'error.code', 404);
+  if (discountsResponseCode === 200 && discountsResponse.data) {
+    discounts = discountsResponse.data;
+  } else {
+    //__DEV__ && console.log('error get profile discounts', discountsResponse);
+  }
+  return discounts;
+}
+
 async function getProfileData({token, userid}) {
   const cars = await getUserCars(token, userid);
-  let bonus = {};
-  try {
-    // 2. Получаем бонусы и скидки пользователя
-    const bonusResponse = await API.fetchBonus({token, userid});
-    const bonusResponseCode = get(bonusResponse, 'error.code', 404);
-    if (bonusResponseCode === 200 && bonusResponse.data) {
-      bonus = bonusResponse.data;
-    } else {
-      //__DEV__ && console.log('error get profile bonus', bonusResponse);
-    }
-  } catch (err) {
-    //__DEV__ && console.log('error get profile bonus', err);
-  }
-
-  let discounts = [];
-  try {
-    const discountsResponse = await API.fetchDiscounts({token, userid});
-    const discountsResponseCode = get(discountsResponse, 'error.code', 404);
-    if (discountsResponseCode === 200 && discountsResponse.data) {
-      discounts = discountsResponse.data;
-    } else {
-      //__DEV__ && console.log('error get profile discounts', discountsResponse);
-    }
-  } catch (err) {
-    //console.log('error get profile discounts', err);
-  }
-
+  const bonus = await getUserBonus(token, userid);
+  const discounts = await getUserDiscounts(token, userid);
+  // console.log('cars bonus discounts', cars, bonus, discounts);
   return {
     cars,
     bonus,
