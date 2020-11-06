@@ -247,6 +247,18 @@ class ContactsScreen extends Component {
     if (!divisions || !checkType) {
       return false;
     }
+    const locales = {
+      by: 'Europe/Minsk',
+      ru: 'Europe/Moscow',
+      ua: 'Europe/Kiev',
+    };
+    let currentDealerLocale = 'by';
+    if (
+      this.props.dealerSelected.region &&
+      locales[this.props.dealerSelected.region]
+    ) {
+      currentDealerLocale = locales[this.props.dealerSelected.region];
+    }
     const res = divisions
       .map((division) => {
         const currDate = new Date();
@@ -278,6 +290,7 @@ class ContactsScreen extends Component {
       return res[0];
     } else {
       const currDate = new Date();
+      const currTimezone = currDate.getTimezoneOffset();
       const currTime = currDate.getTime();
       const timeOpen = new Date();
       const timeClose = new Date();
