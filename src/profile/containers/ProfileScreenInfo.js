@@ -308,7 +308,9 @@ class ProfileScreenInfo extends Component {
                           fontWeight: '600',
                         }}>
                         {this.props.bonus.data && this.props.bonus.data.saldo
-                          ? this.props.bonus.data.saldo.value
+                          ? parseInt(
+                              this.props.bonus.data.saldo.value,
+                            ).toLocaleString('ru-RU')
                           : 0}
                       </Text>
                     </View>

@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {SafeAreaView, StyleSheet, View, Text, Platform} from 'react-native';
 import {
+  Icon,
   Content,
   ListItem,
   StyleProvider,
@@ -150,17 +151,17 @@ class BonusScreen extends Component {
     return isActiveScreen;
   }
 
-  onPressLevel1 = hash => {
+  onPressLevel1 = (hash) => {
     this.props.actionSetBonusLevel1(this.isActiveLevel1(hash) ? null : hash);
   };
-  onPressLevel2 = hash => {
+  onPressLevel2 = (hash) => {
     this.props.actionSetBonusLevel2(this.isActiveLevel2(hash) ? null : hash);
   };
 
-  isActiveLevel1 = hash => this.props.level1hash === hash;
-  isActiveLevel2 = hash => this.props.level2hash === hash;
+  isActiveLevel1 = (hash) => this.props.level1hash === hash;
+  isActiveLevel2 = (hash) => this.props.level2hash === hash;
 
-  renderLevel1 = bonuses => {
+  renderLevel1 = (bonuses) => {
     return Object.keys(bonuses)
       .reverse()
       .map((bonusYear, idx, yearsArray) => {
@@ -195,7 +196,7 @@ class BonusScreen extends Component {
       });
   };
 
-  renderLevel2 = bonusesByMonth => {
+  renderLevel2 = (bonusesByMonth) => {
     return Object.keys(bonusesByMonth)
       .reverse()
       .map((bonusMonth, idx, monthArray) => {
@@ -226,7 +227,7 @@ class BonusScreen extends Component {
       });
   };
 
-  renderLevel3 = history => {
+  renderLevel3 = (history) => {
     return history.map((bonus, idx) => {
       return this.renderItemHeader(
         bonus.name,
@@ -267,7 +268,7 @@ class BonusScreen extends Component {
                       total > 0 ? styleConst.color.green : styleConst.color.red,
                   },
                 ]}>
-                {total}
+                {parseFloat(total).toLocaleString('ru-RU')}
               </Text>
             ) : null}
           </Right>
@@ -286,6 +287,7 @@ class BonusScreen extends Component {
       <Button
         onPress={this.onPressBonusInfo}
         full
+        iconLeft
         style={[
           styleConst.shadow.default,
           styles.button,
@@ -296,6 +298,7 @@ class BonusScreen extends Component {
             borderRightWidth: 0,
           },
         ]}>
+        <Icon name="price-ribbon" type="Entypo" style={styles.buttonIcon} />
         <Text numberOfLines={1} style={styles.buttonText}>
           Подробнее о бонусной программе
         </Text>
@@ -331,7 +334,9 @@ class BonusScreen extends Component {
               <Text style={styles.totalText}>
                 Всего:{' '}
                 <Text style={styles.totalValue}>
-                  {get(bonus, 'saldo.value')}
+                  {parseFloat(get(bonus, 'saldo.value', 0)).toLocaleString(
+                    'ru-RU',
+                  )}
                 </Text>{' '}
                 баллов
               </Text>
