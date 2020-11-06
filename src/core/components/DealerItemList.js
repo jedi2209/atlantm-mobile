@@ -61,8 +61,12 @@ export default class DealerItemList extends Component {
   };
 
   shouldComponentUpdate(nextProps) {
-    if (this.props.dealer) {
-      return this.props.dealer.name !== nextProps.dealer.name;
+    if (this.props.dealer && nextProps.dealer) {
+      if (this.props.dealer.name && nextProps.dealer.name) {
+        return this.props.dealer.name !== nextProps.dealer.name;
+      } else {
+        return false;
+      }
     } else {
       return false;
     }
