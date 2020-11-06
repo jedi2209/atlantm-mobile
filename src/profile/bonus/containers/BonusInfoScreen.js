@@ -55,7 +55,7 @@ const mapDispatchToProps = {
 class BonusInfoScreen extends Component {
   static navigationOptions = ({navigation}) => {
     return {
-      headerTitle: 'бонусная программа',
+      headerTitle: 'Бонусная программа',
       headerStyle: stylesHeader.whiteHeader,
       headerTitleStyle: stylesHeader.whiteHeaderTitle,
       headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,

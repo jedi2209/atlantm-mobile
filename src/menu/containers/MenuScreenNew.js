@@ -28,6 +28,30 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
   },
+  button: {
+    height: styleConst.ui.footerHeightIphone,
+    // flex: 1,
+    // flexDirection: 'row',
+    backgroundColor: '#fff',
+    borderTopWidth: styleConst.ui.borderWidth,
+    borderTopColor: styleConst.color.border,
+    marginVertical: 0,
+    marginHorizontal: 20,
+    borderRadius: 5,
+  },
+  buttonText: {
+    fontFamily: styleConst.font.medium,
+    fontSize: 16,
+    letterSpacing: styleConst.ui.letterSpacing,
+    color: styleConst.color.lightBlue,
+    paddingRight: styleConst.ui.horizontalGapInList,
+  },
+  buttonIcon: {
+    fontSize: 30,
+    marginRight: 10,
+    color: styleConst.color.lightBlue,
+    paddingLeft: styleConst.ui.horizontalGapInList,
+  },
   buttonPrimaryText: {color: '#2E3A59', fontSize: 16, fontWeight: 'bold'},
 });
 
@@ -206,7 +230,7 @@ const MoreScreen = (props) => {
     return a.id - b.id;
   });
 
-  const rowHeight = (heightScreen - 80 - 82 - 4 - 20) / (menu.length + 1);
+  const rowHeight = (heightScreen - 80 - 82 - 4 - 80) / (menu.length + 1);
 
   return (
     <View>
@@ -220,6 +244,29 @@ const MoreScreen = (props) => {
           />
         ))}
       </List>
+      <Button
+        onPress={() => {
+          props.navigation.navigate('BonusScreenInfo', {
+            refererScreen: 'profile/bonus',
+          });
+        }}
+        full
+        iconLeft
+        style={[
+          styleConst.shadow.default,
+          styles.button,
+          {
+            borderBottomWidth: 0,
+            borderTopWidth: 0,
+            borderLeftWidth: 0,
+            borderRightWidth: 0,
+          },
+        ]}>
+        <Icon name="price-ribbon" type="Entypo" style={styles.buttonIcon} />
+        <Text numberOfLines={1} style={styles.buttonText}>
+          Бонусная программа Атлант-М
+        </Text>
+      </Button>
       {/* <View>
           <Button
             full
