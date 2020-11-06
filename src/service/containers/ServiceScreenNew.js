@@ -164,7 +164,9 @@ class ServiceScreen extends Component {
     } = props;
 
     this.state = {
-      dealerSelectedLocal: this.props.dealerSelected,
+      dealerSelectedLocal: this.props.dealerSelectedLocal
+        ? this.props.dealerSelectedLocal
+        : this.props.dealerSelected,
       service: '',
       services: undefined,
       servicesFetch: false,
@@ -178,7 +180,7 @@ class ServiceScreen extends Component {
       carModel: carModel,
       carVIN: carVIN,
       carNumber: carNumber,
-      isHaveCar: Boolean(props.cars.length > 0),
+      // isHaveCar: Boolean(props.cars.length > 0),
     };
 
     const carFromNavigation = get(this.props.navigation, 'state.params.car');
@@ -262,7 +264,10 @@ class ServiceScreen extends Component {
     this.setState({
       servicesFetch: true,
     });
-
+    console.log(
+      '_getServices this.state.dealerSelectedLocal',
+      this.state.dealerSelectedLocal,
+    );
     const data = await API.getServiceAvailable({
       dealer: this.state.dealerSelectedLocal.id,
       vin: this.state.carVIN,
@@ -280,6 +285,7 @@ class ServiceScreen extends Component {
       this.setState({
         services: undefined,
         serviceInfo: undefined,
+        servicesFetch: false,
       });
     } else {
       let services = [];
@@ -292,12 +298,9 @@ class ServiceScreen extends Component {
       });
       this.setState({
         services: services,
+        servicesFetch: false,
       });
     }
-
-    this.setState({
-      servicesFetch: false,
-    });
     // }
   }
 
@@ -325,33 +328,46 @@ class ServiceScreen extends Component {
     });
   }
 
-  _selectCar = (item) => {
-    this.setState({
-      carName: [item.brand, item.model].join(' '),
-      carVIN: item.vin,
-      carBrand: item.brand,
-      carModel: item.model,
-      carNumber: item.number,
-    });
+  _selectCar = (item, callback) => {
+    this.setState(
+      {
+        carName: [item.brand, item.model].join(' '),
+        carVIN: item.vin ? item.vin : null,
+        carBrand: item.brand ? item.brand : null,
+        carModel: item.model ? item.model : null,
+        carNumber: item.number ? item.number : null,
+        services: undefined,
+        serviceInfo: undefined,
+      },
+      callback ? callback : () => {},
+    );
   };
 
   componentDidMount() {
-    if (!this.state.dealerSelectedLocal) {
-      this.setState({
-        dealerSelectedLocal: this.props.dealerSelectedLocal
-          ? this.props.dealerSelectedLocal
-          : this.props.dealerSelected,
-      });
-    }
-    if (this.state.carVIN && this.state.dealerSelectedLocal) {
+    // if (!this.state.dealerSelectedLocal) {
+    //   console.log('componentDidMount !this.state.dealerSelectedLocal', this.state.dealerSelectedLocal);
+    //   this.setState({
+    //     dealerSelectedLocal: this.props.dealerSelectedLocal
+    //       ? this.props.dealerSelectedLocal
+    //       : this.props.dealerSelected,
+    //   });
+    // }
+
+    if (
+      this.state.carVIN &&
+      this.state.dealerSelectedLocal &&
+      this.state.dealerSelectedLocal.id
+    ) {
       this._getServices();
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.carVIN !== this.state.carVIN) {
+      this.orderLead = false;
       return this.setState(
         {
+          date: new Date(addDays(2)),
           services: undefined,
           time: undefined,
           service: undefined,
@@ -365,28 +381,30 @@ class ServiceScreen extends Component {
         },
       );
     }
-
-    if (
-      this.state.dealerSelectedLocal &&
-      prevProps.dealerSelectedLocal &&
-      this.state.dealerSelectedLocal.id !== prevProps.dealerSelectedLocal.id &&
-      this.state.carVIN
-    ) {
-      return this.setState(
-        {
-          services: undefined,
-          time: undefined,
-          service: undefined,
-          serviceInfo: undefined,
-          dealerSelectedLocal: this.props.dealerSelectedLocal
-            ? this.props.dealerSelectedLocal
-            : this.props.dealerSelected,
-        },
-        () => {
-          this._getServices();
-          return true;
-        },
-      );
+    if (prevProps) {
+      if (
+        this.state.dealerSelectedLocal &&
+        prevProps.dealerSelectedLocal &&
+        this.state.dealerSelectedLocal.id !== prevProps.dealerSelectedLocal.id
+      ) {
+        this.orderLead = false;
+        return this.setState(
+          {
+            date: new Date(addDays(2)),
+            services: undefined,
+            time: undefined,
+            service: undefined,
+            serviceInfo: undefined,
+            dealerSelectedLocal: this.props.dealerSelectedLocal,
+          },
+          () => {
+            if (this.state.carVIN) {
+              this._getServices();
+            }
+            return true;
+          },
+        );
+      }
     }
     return false;
   }
@@ -431,14 +449,15 @@ class ServiceScreen extends Component {
         parseInt(dataFromForm.DATETIME.time) +
         parseInt(this.state.serviceInfo.summary[0].time.total);
     }
-
+    console.log('onPressOrder', data);
+    return true;
     if (this.orderLead) {
       const dataToSend = {
         brand: get(data, 'car.brand', ''),
         model: get(data, 'car.model', ''),
         carNumber: get(data, 'car.plate', ''),
         vin: get(data, 'vin', ''),
-        date: format(dataFromForm.DATETIME),
+        date: format(dataFromForm.DATE),
         firstName: get(data, 'f_FirstName', ''),
         secondName: get(data, 'f_SecondName', ''),
         lastName: get(data, 'f_LastName', ''),
@@ -524,7 +543,7 @@ class ServiceScreen extends Component {
                   returnScreen: this.props.navigation.state.routeName,
                 },
               },
-              !this.state.isHaveCar
+              !this.myCars || this.myCars.length === 0
                 ? {
                     name: 'DATETIME',
                     type: 'dateTime',
@@ -544,160 +563,184 @@ class ServiceScreen extends Component {
           },
           {
             name: 'Автомобиль',
-            fields: !this.state.isHaveCar
-              ? this.noHaveCar
-              : [
-                  {
-                    name: 'CARNAME',
-                    type: 'component',
-                    label: 'Выбери автомобиль',
-                    value: this.state.servicesFetch ? (
-                      <>
-                        <ActivityIndicator
-                          color={styleConst.color.blue}
-                          style={[styles.spinner, {height: 245}]}
-                        />
-                        <Text
-                          style={{
-                            fontSize: 12,
-                            color: '#ababab',
-                            textAlign: 'center',
-                          }}>
-                          подключение к СТО для выбора услуг
-                        </Text>
-                      </>
-                    ) : (
-                      <ScrollView
-                        showsHorizontalScrollIndicator={false}
-                        horizontal
-                        style={styles.carContainer}
-                        contentContainerStyle={styles.carContainerContent}>
-                        {(this.myCars || []).map((item) => (
-                          <TouchableWithoutFeedback
-                            activeOpacity={0.7}
-                            key={item.vin}
-                            onPress={() => {
-                              this._selectCar(item);
-                              this._getServices();
-                            }}>
-                            <View>
-                              <CarCard
-                                key={item.vin}
-                                data={item}
-                                type="check"
-                                checked={this.state.carVIN === item.vin}
-                                onPress={() => {
-                                  this._selectCar(item);
-                                }}
-                              />
-                            </View>
-                          </TouchableWithoutFeedback>
-                        ))}
-                      </ScrollView>
-                    ),
-                  },
-                  this.state.services
-                    ? {
-                        name: 'SERVICE',
-                        type: 'select',
-                        label: 'Выбери услугу',
-                        value: this.state.service,
-                        props: {
-                          items: this.state.services,
-                          onChange: this.onServiceChoose.bind(this),
-                          placeholder: {
-                            label: 'Что будем делать с авто?',
-                            value: null,
-                            color: '#9EA0A4',
-                          },
-                          focusNextInput: false,
-                          required: true,
-                        },
-                      }
-                    : {},
-                  Boolean(this.state.serviceInfo || this.state.serviceInfoFetch)
-                    ? {
-                        name: 'serviceInfo',
-                        type: 'component',
-                        value: this.state.serviceInfoFetch ? (
-                          <>
-                            <ActivityIndicator
-                              color={styleConst.color.blue}
-                              style={[styles.spinner, {height: 25}]}
-                            />
-                            <Text
-                              style={{
-                                fontSize: 12,
-                                color: '#ababab',
-                                textAlign: 'center',
-                              }}>
-                              вычисляем предв.стоимость
-                            </Text>
-                          </>
-                        ) : (
-                          <TouchableOpacity
+            fields:
+              !this.myCars || this.myCars.length === 0
+                ? this.noHaveCar
+                : [
+                    {
+                      name: 'CARNAME',
+                      type: 'component',
+                      label: 'Выбери автомобиль',
+                      value: this.state.servicesFetch ? (
+                        <>
+                          <ActivityIndicator
+                            color={styleConst.color.blue}
+                            style={[styles.spinner, {height: 245}]}
+                          />
+                          <Text
                             style={{
-                              paddingVertical: 5,
-                              flex: 1,
-                              flexDirection: 'row',
-                            }}
-                            onPress={() => {
-                              this.setState({
-                                isModalVisible: !this.state.isModalVisible,
-                              });
+                              fontSize: 12,
+                              color: '#ababab',
+                              textAlign: 'center',
                             }}>
-                            {this.state.serviceInfo.summary &&
-                            this.state.serviceInfo.summary[0].summ ? (
-                              <>
-                                <Text
-                                  style={{
-                                    marginRight: 10,
-                                    paddingTop: 2,
-                                  }}>
-                                  Предв.стоимость{' '}
-                                  <Text
-                                    style={{fontSize: 18, fontWeight: 'bold'}}>
-                                    {RenderPrice(
-                                      parseFloat(
-                                        this.state.serviceInfo.summary[0].summ
-                                          .required,
-                                      ),
-                                      this.props.dealerSelected.region,
-                                    )}
-                                  </Text>
-                                </Text>
-                                <Icon
-                                  name="ios-information-circle-outline"
-                                  size={20}
-                                  style={{
-                                    color: styleConst.color.blue,
+                            подключение к СТО для выбора услуг
+                          </Text>
+                        </>
+                      ) : (
+                        <ScrollView
+                          showsHorizontalScrollIndicator={false}
+                          horizontal
+                          style={styles.carContainer}
+                          contentContainerStyle={styles.carContainerContent}>
+                          {(this.myCars || []).map((item) => (
+                            <TouchableWithoutFeedback
+                              activeOpacity={0.7}
+                              key={item.vin}
+                              onPress={() => {
+                                this._selectCar(item, () => {
+                                  this._getServices();
+                                });
+                              }}>
+                              <View>
+                                <CarCard
+                                  key={item.vin}
+                                  data={item}
+                                  type="check"
+                                  checked={this.state.carVIN === item.vin}
+                                  onPress={() => {
+                                    this._selectCar(item);
                                   }}
                                 />
-                              </>
-                            ) : null}
-                          </TouchableOpacity>
-                        ),
-                      }
-                    : {},
-                  (this.state.service || this.orderLead) &&
-                  !this.state.servicesFetch &&
-                  !this.state.serviceInfoFetch
-                    ? {
-                        name: 'DATETIME',
-                        type: this.orderLead ? 'date' : 'dateTime',
-                        label: 'Выбери удобную для тебя дату',
-                        value: this.state.date,
-                        props: {
-                          placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
-                          required: true,
-                          type: 'service',
-                          minimumDate: new Date(addDays(2)),
-                          maximumDate: new Date(addDays(62)),
-                          dealer: this.props.dealerSelected,
-                        },
-                      }
-                    : {},
-                ],
+                              </View>
+                            </TouchableWithoutFeedback>
+                          ))}
+                        </ScrollView>
+                      ),
+                    },
+                    this.state.services
+                      ? {
+                          name: 'SERVICE',
+                          type: 'select',
+                          label: 'Выбери услугу',
+                          value: this.state.service,
+                          props: {
+                            items: this.state.services,
+                            onChange: this.onServiceChoose.bind(this),
+                            placeholder: {
+                              label: 'Что будем делать с авто?',
+                              value: null,
+                              color: '#9EA0A4',
+                            },
+                            focusNextInput: false,
+                            required: true,
+                          },
+                        }
+                      : {},
+                    Boolean(
+                      this.state.serviceInfo || this.state.serviceInfoFetch,
+                    )
+                      ? {
+                          name: 'serviceInfo',
+                          type: 'component',
+                          value: this.state.serviceInfoFetch ? (
+                            <>
+                              <ActivityIndicator
+                                color={styleConst.color.blue}
+                                style={[styles.spinner, {height: 25}]}
+                              />
+                              <Text
+                                style={{
+                                  fontSize: 12,
+                                  color: '#ababab',
+                                  textAlign: 'center',
+                                }}>
+                                вычисляем предв.стоимость
+                              </Text>
+                            </>
+                          ) : (
+                            <TouchableOpacity
+                              style={{
+                                paddingVertical: 5,
+                                flex: 1,
+                                flexDirection: 'row',
+                              }}
+                              onPress={() => {
+                                this.setState({
+                                  isModalVisible: !this.state.isModalVisible,
+                                });
+                              }}>
+                              {this.state.serviceInfo.summary &&
+                              this.state.serviceInfo.summary[0].summ ? (
+                                <>
+                                  <Text
+                                    style={{
+                                      marginRight: 10,
+                                      paddingTop: 2,
+                                    }}>
+                                    Предв.стоимость{' '}
+                                    <Text
+                                      style={{
+                                        fontSize: 18,
+                                        fontWeight: 'bold',
+                                      }}>
+                                      {RenderPrice(
+                                        parseFloat(
+                                          this.state.serviceInfo.summary[0].summ
+                                            .required,
+                                        ),
+                                        this.props.dealerSelected.region,
+                                      )}
+                                    </Text>
+                                  </Text>
+                                  <Icon
+                                    name="ios-information-circle-outline"
+                                    size={20}
+                                    style={{
+                                      color: styleConst.color.blue,
+                                    }}
+                                  />
+                                </>
+                              ) : null}
+                            </TouchableOpacity>
+                          ),
+                        }
+                      : {},
+                    (this.state.service || this.orderLead) &&
+                    !this.state.servicesFetch &&
+                    !this.state.serviceInfoFetch
+                      ? this.orderLead
+                        ? {
+                            name: 'DATE',
+                            type: 'date',
+                            label: 'Выбери удобную для тебя дату',
+                            value: this.state.date,
+                            props: {
+                              placeholder:
+                                'начиная с ' + dayMonthYear(addDays(2)),
+                              required: true,
+                              type: 'service',
+                              minimumDate: new Date(addDays(2)),
+                              maximumDate: new Date(addDays(62)),
+                              dealer: this.props.dealerSelected,
+                            },
+                          }
+                        : {
+                            name: 'DATETIME',
+                            type: 'dateTime',
+                            label: 'Выбери удобную для тебя дату',
+                            value: this.state.date,
+                            props: {
+                              placeholder:
+                                'начиная с ' + dayMonthYear(addDays(2)),
+                              required: true,
+                              type: 'service',
+                              minimumDate: new Date(addDays(2)),
+                              maximumDate: new Date(addDays(62)),
+                              dealer: this.props.dealerSelected,
+                            },
+                          }
+                      : {},
+                  ],
           },
           {
             name: 'Контактные данные',
