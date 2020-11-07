@@ -247,7 +247,8 @@ const MoreScreen = (props) => {
       <Button
         onPress={() => {
           props.navigation.navigate('BonusScreenInfo', {
-            refererScreen: 'profile/bonus',
+            refererScreen: 'MoreScreen',
+            returnScreen: 'MoreScreen',
           });
         }}
         full
