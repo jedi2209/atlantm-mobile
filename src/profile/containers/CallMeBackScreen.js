@@ -189,7 +189,7 @@ class CallMeBackScreen extends React.Component {
                 label: 'Автоцентр',
                 value: this.state.dealerSelectedLocal,
                 props: {
-                  goBack: true,
+                  goBack: false,
                   isLocal: true,
                   navigation: this.props.navigation,
                   returnScreen: this.props.navigation.state.routeName,

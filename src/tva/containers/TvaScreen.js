@@ -74,7 +74,7 @@ class TvaScreen extends Component {
                     ? this.props.dealerSelectedLocal
                     : this.props.dealerSelected,
                 props: {
-                  goBack: true,
+                  goBack: false,
                   isLocal: true,
                   navigation: this.props.navigation,
                   returnScreen: this.props.navigation.state.routeName,
@@ -148,8 +148,6 @@ class TvaScreen extends Component {
   }
 
   onPressButton = async (pushProps) => {
-    console.log('pushProps', pushProps);
-
     this.setState({loading: true});
 
     const dealerId = pushProps.DEALER.id;
@@ -165,7 +163,7 @@ class TvaScreen extends Component {
       pushTracking,
     });
 
-    console.log('action', action);
+    // console.log('action', action);
 
     this.setState({loading: false});
     if (action) {

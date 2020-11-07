@@ -264,10 +264,10 @@ class ServiceScreen extends Component {
     this.setState({
       servicesFetch: true,
     });
-    console.log(
-      '_getServices this.state.dealerSelectedLocal',
-      this.state.dealerSelectedLocal,
-    );
+    // console.log(
+    //   '_getServices this.state.dealerSelectedLocal',
+    //   this.state.dealerSelectedLocal,
+    // );
     const data = await API.getServiceAvailable({
       dealer: this.state.dealerSelectedLocal.id,
       vin: this.state.carVIN,
@@ -390,7 +390,7 @@ class ServiceScreen extends Component {
         this.orderLead = false;
         return this.setState(
           {
-            date: new Date(addDays(2)),
+            date: undefined,
             services: undefined,
             time: undefined,
             service: undefined,
@@ -412,13 +412,12 @@ class ServiceScreen extends Component {
   onPressOrder = async (dataFromForm) => {
     const {navigation} = this.props;
 
-    let data;
-    let TimeTotal = 0;
-
-    data = {
+    let data = {
       dealer: this.state.dealerSelectedLocal.id,
       time: {
-        from: parseInt(dataFromForm.DATETIME.time),
+        from: dataFromForm.DATETIME.time
+          ? parseInt(dataFromForm.DATETIME.time)
+          : null,
       },
       f_FirstName: dataFromForm.NAME,
       f_SecondName: dataFromForm.SECOND_NAME,
@@ -449,8 +448,8 @@ class ServiceScreen extends Component {
         parseInt(dataFromForm.DATETIME.time) +
         parseInt(this.state.serviceInfo.summary[0].time.total);
     }
-    console.log('onPressOrder', data);
-    return true;
+    // console.log('onPressOrder', data);
+    // return true;
     if (this.orderLead) {
       const dataToSend = {
         brand: get(data, 'car.brand', ''),
@@ -537,7 +536,7 @@ class ServiceScreen extends Component {
                 label: 'Автоцентр',
                 value: this.state.dealerSelectedLocal,
                 props: {
-                  goBack: true,
+                  goBack: false,
                   isLocal: true,
                   navigation: this.props.navigation,
                   returnScreen: this.props.navigation.state.routeName,
@@ -716,7 +715,7 @@ class ServiceScreen extends Component {
                             value: this.state.date,
                             props: {
                               placeholder:
-                                'начиная с ' + dayMonthYear(addDays(2)),
+                                '1начиная с ' + dayMonthYear(addDays(2)),
                               required: true,
                               type: 'service',
                               minimumDate: new Date(addDays(2)),
@@ -731,7 +730,7 @@ class ServiceScreen extends Component {
                             value: this.state.date,
                             props: {
                               placeholder:
-                                'начиная с ' + dayMonthYear(addDays(2)),
+                                '2начиная с ' + dayMonthYear(addDays(2)),
                               required: true,
                               type: 'service',
                               minimumDate: new Date(addDays(2)),

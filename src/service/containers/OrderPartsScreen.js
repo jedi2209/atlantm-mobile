@@ -281,7 +281,7 @@ class OrderPartsScreen extends Component {
                     ? this.props.dealerSelectedLocal
                     : this.props.dealerSelected,
                 props: {
-                  goBack: true,
+                  goBack: false,
                   isLocal: true,
                   navigation: this.props.navigation,
                   returnScreen: this.props.navigation.state.routeName,
