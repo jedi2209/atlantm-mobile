@@ -226,9 +226,9 @@ class CarListItem extends Component {
         complectation: get(car, 'complectation.name'),
         year: get(car, 'year'),
         ordered: true,
+        dealer: get(car, 'dealer'),
       },
       region: this.props.dealerSelected.region,
-      dealerId: get(car, 'dealer.id'),
       carId: car.id.api,
       isNewCar: isNewCar,
     });
