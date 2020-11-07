@@ -279,7 +279,11 @@ class Form extends Component {
     if (typeof dateTime === 'undefined') {
       return false;
     }
-    return dateTime.date && dateTime.time;
+    if (!dateTime.noTimeAlways) {
+      return dateTime.date && dateTime.time;
+    } else {
+      return typeof dateTime.date !== 'undefined';
+    }
   };
 
   _validateDate = (date) => {
@@ -572,7 +576,7 @@ class Form extends Component {
               ? typeof this.state[name] === 'undefined'
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
-              : !this.state[name].time
+              : !this.state[name].time && !this.state[name].noTimeAlways
               ? styles.fieldRequiredFalse
               : styles.fieldRequiredTrue,
             {
@@ -930,7 +934,7 @@ class Form extends Component {
             }}
             onClose={() => {
               if (data.props.onChange && Platform.OS === 'ios') {
-                console.log('onClose', this.state[name]);
+                // console.log('onClose', this.state[name]);
                 data.props.onChange(this.state[name]);
               }
             }}

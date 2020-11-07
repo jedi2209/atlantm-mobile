@@ -84,6 +84,7 @@ export default class ChooseDateTimeComponent extends Component {
       availablePeriods: null,
       availablePeriodsFetch: false,
       modal: false,
+      noTimeAlways: false,
     };
   }
 
@@ -125,6 +126,7 @@ export default class ChooseDateTimeComponent extends Component {
   async _getTimeService(date) {
     this.setState({
       modal: false,
+      noTimeAlways: false,
       availablePeriods: null,
       availablePeriodsFetch: true,
     });
@@ -136,17 +138,24 @@ export default class ChooseDateTimeComponent extends Component {
     });
 
     if (availablePeriods.status === 'error') {
-      Toast.show({
-        text: availablePeriods.error.message,
-        position: 'bottom',
-        type: 'danger',
-        duration: 3000,
-      });
+      if (availablePeriods.error.code !== 521) {
+        Toast.show({
+          text: availablePeriods.error.message,
+          position: 'bottom',
+          type: 'danger',
+          duration: 3000,
+        });
+      }
       this.setState({
         availablePeriodsFetch: false,
-        date: undefined,
+        availablePeriods: false,
       });
-      return false;
+      this.props.onFinishedSelection({
+        date: date,
+        noTimeAlways: true,
+        time: undefined,
+      });
+      return true;
     }
 
     if (availablePeriods.data === null) {
@@ -248,7 +257,7 @@ export default class ChooseDateTimeComponent extends Component {
               if (this.props.minimumDate) {
                 currentDate = this.props.minimumDate;
               }
-              this.setState({date: currentDate, modal: false});
+              this.setState({date: currentDate});
             }
             this.setState({modal: false}, () => {
               switch (this.props.type) {
@@ -277,7 +286,10 @@ export default class ChooseDateTimeComponent extends Component {
             }
             this.props.onFinishedSelection({
               date: date,
-              time: undefined,
+              noTimeAlways: this.state.noTimeAlways
+                ? this.state.noTimeAlways
+                : false,
+              time: this.state.time ? this.state.time : undefined,
             });
           }}
           {...this.props}
