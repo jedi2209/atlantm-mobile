@@ -203,7 +203,7 @@ class OrderScreen extends Component {
                     name: 'DEALER',
                     type: 'input',
                     label: 'Автоцентр',
-                    value: listAll[0].label,
+                    value: listAll[0] && listAll[0].label ? listAll[0].label : null,
                     props: {
                       editable: false,
                       placeholder: 'Выбери удобный для тебя автоцентр',
