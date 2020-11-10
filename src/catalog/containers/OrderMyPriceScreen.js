@@ -152,6 +152,7 @@ class OrderMyPriceScreen extends Component {
                 value: '',
                 props: {
                   keyboardType: 'number-pad',
+                  required: true,
                 },
               },
             ],
