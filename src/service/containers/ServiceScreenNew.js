@@ -292,7 +292,7 @@ class ServiceScreen extends Component {
       data.data.map((el) => {
         services.push({
           label: el.name,
-          value: el.id,
+          value: el.name,
           key: el.id,
         });
       });
@@ -372,8 +372,8 @@ class ServiceScreen extends Component {
           time: undefined,
           service: undefined,
           serviceInfo: undefined,
-          dealerSelectedLocal: this.props.dealerSelectedLocal
-            ? this.props.dealerSelectedLocal
+          dealerSelectedLocal: this.state.dealerSelectedLocal
+            ? this.state.dealerSelectedLocal
             : this.props.dealerSelected,
         },
         () => {
@@ -425,6 +425,7 @@ class ServiceScreen extends Component {
       phone: dataFromForm.PHONE,
       email: dataFromForm.EMAIL || null,
       tech_place: dataFromForm.DATETIME.tech_place,
+      service: dataFromForm.SERVICE || null,
       vin: this.state.carVIN ? this.state.carVIN : dataFromForm.CARVIN || null,
       car: {
         brand: this.state.carBrand
@@ -448,7 +449,7 @@ class ServiceScreen extends Component {
         parseInt(dataFromForm.DATETIME.time) +
         parseInt(this.state.serviceInfo.summary[0].time.total);
     }
-    // console.log('onPressOrder', data);
+    // console.log('onPressOrder', dataFromForm);
     // return true;
     if (this.orderLead) {
       const dataToSend = {
@@ -457,6 +458,7 @@ class ServiceScreen extends Component {
         carNumber: get(data, 'car.plate', ''),
         vin: get(data, 'vin', ''),
         date: format(dataFromForm.DATE),
+        service: get(data, 'serviceName', ''),
         firstName: get(data, 'f_FirstName', ''),
         secondName: get(data, 'f_SecondName', ''),
         lastName: get(data, 'f_LastName', ''),
@@ -715,7 +717,7 @@ class ServiceScreen extends Component {
                             value: this.state.date,
                             props: {
                               placeholder:
-                                '1начиная с ' + dayMonthYear(addDays(2)),
+                                'начиная с ' + dayMonthYear(addDays(2)),
                               required: true,
                               type: 'service',
                               minimumDate: new Date(addDays(2)),
@@ -730,7 +732,7 @@ class ServiceScreen extends Component {
                             value: this.state.date,
                             props: {
                               placeholder:
-                                '2начиная с ' + dayMonthYear(addDays(2)),
+                                'начиная с ' + dayMonthYear(addDays(2)),
                               required: true,
                               type: 'service',
                               minimumDate: new Date(addDays(2)),
