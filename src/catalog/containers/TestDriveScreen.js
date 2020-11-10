@@ -148,12 +148,13 @@ class TestDriveScreen extends PureComponent {
 
     this.state = {
       date: null,
-      testDriveCar: null,
+      testDriveCar: get(this.props.navigation, 'state.params.carId'),
       TDCarsList: null,
       comment: '',
       dealerID: null,
       timeFetch: false,
       carFetch: false,
+      isLead: true,
     };
 
     if (this.listAll.length === 1) {
@@ -208,8 +209,8 @@ class TestDriveScreen extends PureComponent {
       : this.state.dealerID;
     const isNewCar = get(navigation, 'state.params.isNewCar');
     const time = get(data, 'DATETIME.time');
-    console.log('onPressOrder', data, this.props, this.state, dealerID);
-    return true;
+    // console.log('onPressOrder', this.state, carID, dealerID);
+    // return true;
     if (!this.state.isLead) {
       const action = await this.props.actionOrderTestDrive({
         firstName: get(data, 'NAME'),
@@ -363,12 +364,14 @@ class TestDriveScreen extends PureComponent {
       {
         dealerID: value,
         date: null,
-        testDriveCar: '',
+        // testDriveCar: '',
         TDCarsList: null,
         timeFetch: false,
+        isLead: true,
       },
       () => {
-        console.log('onDealerChoose', this.state, value);
+        return true;
+        // console.log('onDealerChoose', this.state, value);
         if (!isNaN(value)) {
           this.fetchTDCars(value);
         }
@@ -487,8 +490,6 @@ class TestDriveScreen extends PureComponent {
       },
     };
 
-    console.log('this.state', this.state);
-
     this.FormConfig = {
       fields: {
         groups: [
@@ -514,7 +515,7 @@ class TestDriveScreen extends PureComponent {
                     },
                   }
                 : {},
-              this.state.dealerID
+              this.state.dealerID || true
                 ? !this.state.carFetch
                   ? this.state.TDCarsList && this.state.TDCarsList.length
                     ? carblock
