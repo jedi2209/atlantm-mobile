@@ -412,6 +412,10 @@ class ServiceScreen extends Component {
   onPressOrder = async (dataFromForm) => {
     const {navigation} = this.props;
 
+    if (get(dataFromForm, 'DATETIME.noTimeAlways', false)) {
+      this.orderLead = true;
+    }
+
     let data = {
       dealer: this.state.dealerSelectedLocal.id,
       time: {
@@ -449,8 +453,6 @@ class ServiceScreen extends Component {
         parseInt(dataFromForm.DATETIME.time) +
         parseInt(this.state.serviceInfo.summary[0].time.total);
     }
-    // console.log('onPressOrder', dataFromForm);
-    // return true;
     if (this.orderLead) {
       const dataToSend = {
         brand: get(data, 'car.brand', ''),
@@ -538,7 +540,7 @@ class ServiceScreen extends Component {
                 label: 'Автоцентр',
                 value: this.state.dealerSelectedLocal,
                 props: {
-                  goBack: false,
+                  goBack: true,
                   isLocal: true,
                   navigation: this.props.navigation,
                   returnScreen: this.props.navigation.state.routeName,
