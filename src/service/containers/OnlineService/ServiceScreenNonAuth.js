@@ -4,26 +4,18 @@ import {
   StyleSheet,
   View,
   Alert,
-  Text,
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
-  ActivityIndicator,
   Platform,
-  TouchableOpacity,
 } from 'react-native';
-import {Icon, Toast} from 'native-base';
 import {get, orderBy} from 'lodash';
-import styleConst from '../../../core/style-const';
-// import {StackActions, NavigationActions} from 'react-navigation';
 
-import {CarCard} from '../../../profile/components/CarCard';
 import {ServiceModal} from '../../components/ServiceModal';
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import Form from '../../../core/components/Form/Form';
 import {addDays, dayMonthYear, format} from '../../../utils/date';
 import UserData from '../../../utils/user';
-import RenderPrice from '../../../utils/price';
 
 // redux
 import {connect} from 'react-redux';
@@ -37,38 +29,12 @@ import Amplitude from '../../../utils/amplitude-analytics';
 import API from '../../../utils/api';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
-  const cars = orderBy(profile.cars, ['owner'], ['asc']);
-
   let carLocalBrand = '';
   let carLocalModel = '';
   let carLocalNumber = '';
   let carLocalVin = '';
 
-  if (profile.cars && typeof profile.cars === 'object') {
-    let Cars = [];
-    profile.cars.map((item) => {
-      if (!item.hidden) {
-        Cars.push(item);
-      }
-    });
-    if (Cars && Cars[0]) {
-      if (Cars[0].brand) {
-        carLocalBrand = Cars[0].brand;
-      }
-      if (Cars[0].model) {
-        carLocalModel = Cars[0].model;
-      }
-      if (Cars[0].number) {
-        carLocalNumber = Cars[0].number || '';
-      }
-      if (Cars[0].vin) {
-        carLocalVin = Cars[0].vin || '';
-      }
-    }
-  }
-
   return {
-    cars,
     nav,
     date: service.date,
     firstName: UserData.get('NAME'),
@@ -87,8 +53,6 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
       : carLocalNumber,
     carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
     dealerSelected: dealer.selected,
-    // dealerSelectedLocal: dealer.selectedLocal,
-    isOrderServiceRequest: service.meta.isOrderServiceRequest,
   };
 };
 
@@ -96,66 +60,6 @@ const mapDispatchToProps = {
   orderService,
   localDealerClear,
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingVertical: 20,
-    paddingHorizontal: 14,
-  },
-  header: {
-    marginBottom: 36,
-  },
-  heading: {
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  carContainer: {
-    marginLeft: -16,
-    marginRight: -16,
-  },
-  carContainerContent: {
-    // Добавляем отрицательный оступ, для контейнера с карточками,
-    // т.к. в карточках отступ снизу больше чем сверху из-за места использования.
-    marginVertical: 10,
-  },
-  group: {
-    marginBottom: 36,
-  },
-  field: {
-    marginBottom: 18,
-  },
-  textinput: {
-    height: Platform.OS === 'ios' ? 40 : 'auto',
-    borderColor: '#d8d8d8',
-    borderBottomWidth: 1,
-    color: '#222b45',
-    fontSize: 18,
-  },
-  label: {
-    fontSize: 14,
-    color: '#000',
-    marginBottom: -2,
-  },
-  picker: {
-    borderColor: '#d8d8d8',
-    borderBottomWidth: 1,
-    height: 40,
-  },
-  button: {
-    margin: 10,
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-    borderColor: '#027aff',
-    borderRadius: 5,
-    borderWidth: 1,
-  },
-  buttonText: {
-    textTransform: 'uppercase',
-    fontSize: 16,
-    color: '#fff',
-  },
-});
 
 class ServiceScreenNonAuth extends Component {
   constructor(props) {
@@ -172,10 +76,6 @@ class ServiceScreenNonAuth extends Component {
     } = props;
 
     this.state = {
-      //   dealerSelectedLocal: this.props.dealerSelectedLocal
-      //     ? this.props.dealerSelectedLocal
-      //     : this.props.dealerSelected,
-      // date: new Date(addDays(2)),
       isModalVisible: false,
       email: email,
       phone: phone,
@@ -197,23 +97,10 @@ class ServiceScreenNonAuth extends Component {
         get(carFromNavigation, 'model'),
       ].join(' ');
     }
-
-    this.myCars = [];
-    this.props.cars.map((item) => {
-      if (!item.hidden) {
-        this.myCars.push(item);
-      }
-    });
     this.orderLead = false;
 
     this.props.localDealerClear();
   }
-
-  _onDateChange = (value) => {
-    this.setState({
-      date: value && value.date ? value.date : value,
-    });
-  };
 
   onPressOrder = async (dataFromForm) => {
     const {navigation} = this.props;
