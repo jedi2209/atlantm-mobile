@@ -6,19 +6,23 @@ import stylesHeader from '../../core/components/Header/style';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 import Service from './ServiceScreen';
-import ServiceNew from './ServiceScreenNew';
+import ServiceNew from './OnlineService/ServiceScreenNew';
+import ServiceNewNonAuth from './OnlineService/ServiceScreenNonAuth';
 import {connect} from 'react-redux';
+import {get} from 'lodash';
 
-const ServiceScreen = withNavigation(Service);
-const ServiceNewScreen = withNavigation(ServiceNew);
+const ServiceOldScreen = withNavigation(Service);
+const ServiceScreen = withNavigation(ServiceNew);
+const ServiceScreenNonAuth = withNavigation(ServiceNewNonAuth);
 
-const mapStateToProps = ({dealer, navigation}) => {
+const mapStateToProps = ({dealer, profile, navigation}) => {
   return {
     dealerSelected: dealer.selected,
+    loginID: get(profile, 'login.ID', false),
   };
 };
 
-class ServiceContnainer extends Component {
+class ServiceContainer extends Component {
   static navigationOptions = ({navigation}) => {
     const returnScreen =
       navigation.state.params && navigation.state.params.returnScreen;
@@ -39,12 +43,16 @@ class ServiceContnainer extends Component {
   };
 
   render() {
-    const {dealerSelected} = this.props;
+    const {dealerSelected, loginID} = this.props;
     if (dealerSelected.region === 'by') {
-      return <ServiceNewScreen />;
+      if (loginID) {
+        return <ServiceScreen />;
+      } else {
+        return <ServiceScreenNonAuth />;
+      }
     }
-    return <ServiceScreen />;
+    return <ServiceOldScreen />;
   }
 }
 
-export default connect(mapStateToProps)(ServiceContnainer);
+export default connect(mapStateToProps)(ServiceContainer);
