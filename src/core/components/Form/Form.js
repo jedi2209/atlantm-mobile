@@ -150,6 +150,7 @@ class Form extends Component {
     this.inputRefs = [];
     this.inputRefsNav = [];
     let requredFields = [];
+    this.allFields = [];
     if (props.fields.groups) {
       props.fields.groups.map((group) => {
         group.fields = group.fields.filter((field) => {
@@ -171,6 +172,11 @@ class Form extends Component {
               this.state[field.name] = field.value;
             }
           }
+          this.allFields.push({
+            name: field.name,
+            type: field.type,
+            label: field.label,
+          });
           if (field.props && field.props.required === true) {
             requredFields.push({
               name: field.name,
@@ -189,6 +195,11 @@ class Form extends Component {
             this.state[field.name] = field.value;
           }
         }
+        this.allFields.push({
+          name: field.name,
+          type: field.type,
+          label: field.label,
+        });
         if (field.props && field.props.required === true) {
           requredFields.push({
             name: field.name,
@@ -213,9 +224,10 @@ class Form extends Component {
   };
 
   _validate = () => {
+    let requredLabels = [];
+    let valid = true;
     if (this.state.required) {
-      let requredLabels = [];
-      let valid = true;
+      // проверка обязательных полей
       this.state.required.map((val, index) => {
         valid = true;
         switch (val.type.toLowerCase()) {
@@ -231,7 +243,8 @@ class Form extends Component {
           default:
             if (
               typeof this.state[val.name] === 'undefined' ||
-              this.state[val.name] === ''
+              this.state[val.name] === '' ||
+              this.state[val.name] === null
             ) {
               valid = false;
             }
@@ -241,30 +254,62 @@ class Form extends Component {
           requredLabels.push(val.label);
         }
       });
-      if (requredLabels.length) {
-        if (requredLabels.length > 1) {
-          Toast.show({
-            text:
-              'Поля\r\n- ' +
-              requredLabels.join('\r\n- ') +
-              '\r\n\r\nобязательны для заполнения',
-            position: 'bottom',
-            duration: 3000,
-            type: 'warning',
-          });
-        } else {
-          Toast.show({
-            text:
-              'Поле "' +
-              requredLabels.join(' ') +
-              '" обязательно для заполнения',
-            position: 'bottom',
-            duration: 3000,
-            type: 'warning',
-          });
+    }
+    this.allFields.map((val, index) => {
+      valid = true;
+      if (
+        this.state[val.name] &&
+        this.state[val.name] !== null &&
+        typeof this.state[val.name] !== 'undefined'
+      ) {
+        // проверка любых полей, если они заполнены
+        switch (val.type.toLowerCase()) {
+          case 'email':
+            valid = this._validateEmail(this.state[val.name]);
+            break;
+          case 'datetime':
+            valid = this._validateDateTime(this.state[val.name]);
+            break;
+          case 'date':
+            valid = this._validateDate(this.state[val.name]);
+            break;
+          default:
+            if (
+              typeof this.state[val.name] === 'undefined' ||
+              this.state[val.name] === '' ||
+              this.state[val.name] === null
+            ) {
+              valid = false;
+            }
+            break;
         }
-        return false;
+        if (!valid) {
+          requredLabels.push(val.label);
+        }
       }
+    });
+
+    if (requredLabels.length) {
+      if (requredLabels.length > 1) {
+        Toast.show({
+          text:
+            'Поля\r\n- ' +
+            requredLabels.join('\r\n- ') +
+            '\r\n\r\nобязательны для заполнения',
+          position: 'bottom',
+          duration: 3000,
+          type: 'warning',
+        });
+      } else {
+        Toast.show({
+          text:
+            'Поле "' + requredLabels.join(' ') + '" обязательно для заполнения',
+          position: 'bottom',
+          duration: 3000,
+          type: 'warning',
+        });
+      }
+      return false;
     }
     return true;
   };
@@ -276,7 +321,7 @@ class Form extends Component {
   };
 
   _validateDateTime = (dateTime) => {
-    if (typeof dateTime === 'undefined') {
+    if (typeof dateTime === 'undefined' || !dateTime) {
       return false;
     }
     if (!dateTime.noTimeAlways) {
@@ -287,7 +332,7 @@ class Form extends Component {
   };
 
   _validateDate = (date) => {
-    if (typeof date === 'undefined') {
+    if (typeof date === 'undefined' || !date) {
       return false;
     }
     return true;
@@ -332,6 +377,9 @@ class Form extends Component {
     if (field.id) {
       this.setState((prevState) => {
         let copyField = Object.assign({}, prevState[name]);
+        if (typeof valueNew === 'undefined') {
+          valueNew = null;
+        }
         copyField[id].value = valueNew;
         return {[name]: copyField};
       });
@@ -568,15 +616,24 @@ class Form extends Component {
       const {label, name, id} = data;
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
+      // if (
+      //   this.state[name] !== data.value &&
+      //   (data.value === null || typeof data.value === 'undefined')
+      // ) {
+      //   // console.log('dateTime Form', data.value, this.state[name]);
+      //   this.onChangeField(data)(data.value);
+      // }
       return (
         <View
           style={[
             styles.field,
             data.props && data.props.required && !this.state[name]
-              ? typeof this.state[name] === 'undefined'
+              ? typeof this.state[name] === 'undefined' ||
+                this.state[name] === null
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
-              : !this.state[name].time && !this.state[name].noTimeAlways
+              : this.state[name] === null ||
+                (!this.state[name].time && !this.state[name].noTimeAlways)
               ? styles.fieldRequiredFalse
               : styles.fieldRequiredTrue,
             {
@@ -591,6 +648,9 @@ class Form extends Component {
             // customStyles={datePickerStyles}
             onFinishedSelection={(returnData) => {
               this.onChangeField(data)(returnData);
+              if (data.props.onChange) {
+                data.props.onChange(returnData);
+              }
             }}
             {...data.props}
           />
