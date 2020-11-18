@@ -114,7 +114,10 @@ export default class ChooseDateTimeComponent extends Component {
   componentDidUpdate(prevProps) {
     if (
       prevProps.carID !== this.props.carID ||
-      (prevProps.date !== this.props.time && this.props.time === undefined)
+      (prevProps.date !== this.props.time && this.props.time === undefined) ||
+      (prevProps.dealer &&
+        this.props.dealer &&
+        prevProps.dealer.id !== this.props.dealer.id)
     ) {
       this.setState({
         date: undefined,
