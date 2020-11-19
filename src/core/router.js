@@ -9,6 +9,7 @@ import BottomTabNavigation from '../menu/containers/BottomTabNavigation';
 // import ServiceScreen from '../service/containers/ServiceScreen';
 import OrderPartsScreen from '../service/containers/OrderPartsScreen';
 import ServiceContainer from '../service/containers/ServiceContainer';
+import ServiceScreenNewStep2 from '../service/containers/OnlineService/ServiceScreenNewStep2';
 import CarCostScreen from '../catalog/carcost/containers/CarCostScreen';
 import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
 
@@ -64,7 +65,8 @@ export const getRouter = (initialRouteName) => {
       BottomTabNavigation: {screen: BottomTabNavigation}, // это нижнее меню
       ChooseDealerScreen: {screen: ChooseDealerScreen}, // выбор диллера скрин
       ServiceScreen: {screen: ServiceContainer}, // заявка на СТО
-      OrderPartsScreen: {screen: OrderPartsScreen}, // заявка на СТО
+      ServiceScreenStep2: {screen: ServiceScreenNewStep2}, // заявка на СТО - выбор даты
+      OrderPartsScreen: {screen: OrderPartsScreen}, // заявка на зап.части
       CallMeBackScreen: {screen: CallMeBackScreen},
       CarCostScreen: {screen: CarCostScreen},
       IndicatorsScreen: {screen: IndicatorsScreen}, // индикаторы
