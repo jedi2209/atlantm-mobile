@@ -6,13 +6,13 @@ import stylesHeader from '../../core/components/Header/style';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 import Service from './ServiceScreen';
-import ServiceNew from './OnlineService/ServiceScreenNew';
+import ServiceNew from './OnlineService/ServiceScreenNewStep1';
 import ServiceNewNonAuth from './OnlineService/ServiceScreenNonAuth';
 import {connect} from 'react-redux';
 import {get} from 'lodash';
 
 const ServiceOldScreen = withNavigation(Service);
-const ServiceScreen = withNavigation(ServiceNew);
+const ServiceScreenStep1 = withNavigation(ServiceNew);
 const ServiceScreenNonAuth = withNavigation(ServiceNewNonAuth);
 
 const mapStateToProps = ({dealer, profile, navigation}) => {
@@ -46,7 +46,7 @@ class ServiceContainer extends Component {
     const {dealerSelected, loginID} = this.props;
     if (dealerSelected.region === 'by') {
       if (loginID) {
-        return <ServiceScreen />;
+        return <ServiceScreenStep1 />;
       } else {
         return <ServiceScreenNonAuth />;
       }

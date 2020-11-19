@@ -127,7 +127,7 @@ class ServiceScreenNonAuth extends Component {
       phone: dataFromForm.PHONE,
       email: dataFromForm.EMAIL || null,
       tech_place: (dateFromForm && dateFromForm.tech_place) || null,
-      service: dataFromForm.SERVICE || null,
+      serviceName: dataFromForm.SERVICE || null,
       vin: dataFromForm.CARVIN || null,
       car: {
         brand: dataFromForm.CARBRAND || null,
