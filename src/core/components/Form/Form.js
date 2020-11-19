@@ -138,6 +138,14 @@ const MaskedPhone = {
 };
 
 class Form extends Component {
+  static defaultProps = {
+    SubmitButton: {
+      text: 'Отправить',
+      props: {},
+    },
+    barStyle: 'light-content',
+  };
+
   constructor(props) {
     super(props);
     this.defaultCountryCode =
@@ -1094,14 +1102,17 @@ class Form extends Component {
                   }
                 }
               }}
-              style={[styleConst.shadow.default, styles.button]}>
+              style={[
+                styleConst.shadow.default,
+                styles.button,
+                this.props.SubmitButton && this.props.SubmitButton.style,
+              ]}
+              {...this.props.SubmitButton.props}>
               {this.state.loading ? (
                 <ActivityIndicator color="#fff" />
               ) : (
                 <Text selectable={false} style={styles.buttonText}>
-                  {this.props.SubmitButton && this.props.SubmitButton.text
-                    ? this.props.SubmitButton.text
-                    : 'Отправить'}
+                  {this.props.SubmitButton.text}
                 </Text>
               )}
             </Button>
