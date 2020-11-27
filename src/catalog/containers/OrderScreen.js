@@ -200,10 +200,11 @@ class OrderScreen extends Component {
                     },
                   }
                 : {
-                    name: 'DEALER',
+                    name: 'DEALERNAME',
                     type: 'input',
                     label: 'Автоцентр',
-                    value: listAll[0] && listAll[0].label ? listAll[0].label : null,
+                    value:
+                      listAll[0] && listAll[0].label ? listAll[0].label : null,
                     props: {
                       editable: false,
                       placeholder: 'Выбери удобный для тебя автоцентр',
@@ -338,11 +339,14 @@ class OrderScreen extends Component {
 
     const {navigation} = this.props;
     let dealerId = 0;
-    const localDealer = get(data, 'DEALER');
+    const localDealer = get(data, 'DEALER', null);
     if (localDealer) {
       dealerId = localDealer;
     } else {
-      dealerId = get(navigation, 'state.params.car.dealer[0].id');
+      dealerId = get(navigation, 'state.params.car.dealer[0].id', null);
+      if (!dealerId) {
+        dealerId = get(navigation, 'state.params.car.dealer.id', null);
+      }
     }
     const carId = get(navigation, 'state.params.carId');
     const isNewCar = get(navigation, 'state.params.isNewCar');
