@@ -91,7 +91,7 @@ class ServiceScreen extends Component {
       phone: dataFromForm.PHONE || null,
       email: dataFromForm.EMAIL || null,
       tech_place: (dateFromForm && dateFromForm.tech_place) || null,
-      serviceName: (this.service && this.service.label) || null,
+      service: (this.service && this.service.label) || null,
       vin: this.car.carVIN || null,
       car: {
         brand: this.car.carBrand || null,
@@ -115,7 +115,7 @@ class ServiceScreen extends Component {
         carNumber: get(data, 'car.plate', ''),
         vin: get(data, 'vin', ''),
         date: format(dateFromForm),
-        service: get(data, 'serviceName', ''),
+        service: get(data, 'service', ''),
         firstName: get(data, 'f_FirstName', ''),
         secondName: get(data, 'f_SecondName', ''),
         lastName: get(data, 'f_LastName', ''),
