@@ -135,6 +135,7 @@ const modalStyles = StyleSheet.create({
   },
   tabButtonText: {
     fontSize: 18,
+    color: styleConst.color.greyText,
   },
   tabButtonActiveText: {
     color: styleConst.color.lightBlue,
