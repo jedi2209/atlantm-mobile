@@ -11,6 +11,9 @@ import {Toast} from 'native-base';
 import {get} from 'lodash';
 // import {StackActions, NavigationActions} from 'react-navigation';
 
+import stylesHeader from '../../../core/components/Header/style';
+import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import Form from '../../../core/components/Form/Form';
 import {addDays, dayMonthYear, format} from '../../../utils/date';
@@ -43,6 +46,25 @@ const mapDispatchToProps = {
 };
 
 class ServiceScreen extends Component {
+  static navigationOptions = ({navigation}) => {
+    const returnScreen =
+      navigation.state.params && navigation.state.params.returnScreen;
+
+    return {
+      headerStyle: stylesHeader.whiteHeader,
+      headerTitleStyle: stylesHeader.whiteHeaderTitle,
+      headerTitle: 'Запись на сервис',
+      headerLeft: (
+        <HeaderIconBack
+          theme="blue"
+          navigation={navigation}
+          returnScreen={returnScreen}
+        />
+      ),
+      headerRight: <View />,
+    };
+  };
+
   constructor(props) {
     super(props);
 
