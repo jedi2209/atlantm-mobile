@@ -40,10 +40,11 @@ const styles = StyleSheet.create({
   },
   itemLevel1: {
     marginBottom: 1,
+    backgroundColor: styleConst.color.accordeonGrey2,
   },
   itemLevel2: {
-    backgroundColor: '#fff',
     marginBottom: 1,
+    backgroundColor: styleConst.color.accordeonGrey1,
   },
   itemLevel3: {
     backgroundColor: '#fff',
@@ -66,7 +67,13 @@ const styles = StyleSheet.create({
     color: styleConst.color.greyText3,
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
-    marginBottom: 5,
+    marginVertical: 2,
+  },
+  dealer: {
+    fontSize: 12,
+    color: styleConst.color.greyText5,
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
   },
   total: {
     marginHorizontal: styleConst.ui.horizontalGapInList,
@@ -191,7 +198,8 @@ class BonusScreen extends Component {
               'itemLevel1',
               isActive,
               isLast,
-              true,
+              false,
+              false,
             )}
             {isActive ? (
               <View
@@ -227,7 +235,8 @@ class BonusScreen extends Component {
               'itemLevel2',
               isActive,
               isLast,
-              true,
+              false,
+              false,
             )}
             {isActive ? (
               <View animation="pulse" useNativeDriver={true} duration={700}>
@@ -249,11 +258,21 @@ class BonusScreen extends Component {
         'itemLevel3',
         bonus.hash,
         bonus.date,
+        bonus.dealer,
       );
     });
   };
 
-  renderItemHeader = (label, total, curr, onPressHandler, theme, key, date) => {
+  renderItemHeader = (
+    label,
+    total,
+    curr,
+    onPressHandler,
+    theme,
+    key,
+    date,
+    dealer,
+  ) => {
     const isLevel3 = theme === 'itemLevel3';
 
     return (
@@ -268,7 +287,10 @@ class BonusScreen extends Component {
               {label}
             </Text>
             {isLevel3 ? (
-              <Text style={[styles.date]}>{dayMonthYear(date)}</Text>
+              <>
+                <Text style={[styles.dealer]}>{dealer.name}</Text>
+                <Text style={[styles.date]}>{dayMonthYear(date)}</Text>
+              </>
             ) : null}
           </Body>
           <Right>
