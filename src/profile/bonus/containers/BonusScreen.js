@@ -127,13 +127,23 @@ import stylesHeader from '../../../core/components/Header/style';
 class BonusScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: (
-      <Text style={stylesHeader.whiteHeaderTitle}>Бонусные баллы</Text>
+      <Text style={stylesHeader.whiteHeaderTitle}>Бонусный счет</Text>
     ),
     headerStyle: stylesHeader.whiteHeader,
     headerTitleStyle: stylesHeader.whiteHeaderTitle,
     headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
     headerRight: <View />,
   });
+
+  // constructor(props) {
+  //   super(props);
+
+  //   if (props.dealerSelected && props.dealerSelected.region === 'by') {
+  //     this.bonusCurr = 'BYN';
+  //   } else {
+  //     this.bonusCurr = 'бонусов';
+  //   }
+  // }
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
@@ -176,6 +186,7 @@ class BonusScreen extends Component {
             {this.renderItemHeader(
               bonusYear,
               bonus.total,
+              bonus.curr,
               onPressHander,
               'itemLevel1',
               isActive,
@@ -211,6 +222,7 @@ class BonusScreen extends Component {
             {this.renderItemHeader(
               MONTH_TEXT[bonusMonth],
               bonus.total,
+              bonus.curr,
               onPressHander,
               'itemLevel2',
               isActive,
@@ -232,6 +244,7 @@ class BonusScreen extends Component {
       return this.renderItemHeader(
         bonus.name,
         bonus.summ,
+        bonus.curr,
         null,
         'itemLevel3',
         bonus.hash,
@@ -240,7 +253,7 @@ class BonusScreen extends Component {
     });
   };
 
-  renderItemHeader = (label, total, onPressHandler, theme, key, date) => {
+  renderItemHeader = (label, total, curr, onPressHandler, theme, key, date) => {
     const isLevel3 = theme === 'itemLevel3';
 
     return (
@@ -260,16 +273,28 @@ class BonusScreen extends Component {
           </Body>
           <Right>
             {isLevel3 && (total || total === 0) ? (
-              <Text
-                style={[
-                  stylesList.badgeText,
-                  {
-                    color:
-                      total > 0 ? styleConst.color.green : styleConst.color.red,
-                  },
-                ]}>
-                {parseFloat(total).toLocaleString('ru-RU')}
-              </Text>
+              <>
+                <Text
+                  style={[
+                    stylesList.badgeText,
+                    {
+                      color:
+                        total > 0
+                          ? styleConst.color.green
+                          : styleConst.color.red,
+                    },
+                  ]}>
+                  {parseFloat(total).toLocaleString('ru-RU')}
+                </Text>
+                {/* <Text
+                  style={{
+                    marginLeft: 2,
+                    color: styleConst.color.greyText,
+                    fontSize: 12,
+                  }}>
+                  {curr}
+                </Text> */}
+              </>
             ) : null}
           </Right>
         </ListItem>
@@ -339,10 +364,9 @@ class BonusScreen extends Component {
                     'ru-RU',
                   )}
                 </Text>{' '}
-                баллов
+                {get(bonus, 'saldo.curr', 'бонусов')}
               </Text>
             </View>
-
             {this.renderBonusButton()}
           </Content>
         </SafeAreaView>
