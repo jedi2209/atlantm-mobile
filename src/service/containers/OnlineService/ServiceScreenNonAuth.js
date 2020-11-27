@@ -1,15 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {
-  StyleSheet,
   View,
   Alert,
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
-  Platform,
 } from 'react-native';
-import {get, orderBy} from 'lodash';
+import {get} from 'lodash';
 
 import {ServiceModal} from '../../components/ServiceModal';
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
@@ -104,7 +102,6 @@ class ServiceScreenNonAuth extends Component {
 
   onPressOrder = async (dataFromForm) => {
     const {navigation} = this.props;
-    console.log('onPressOrder', this.state, dataFromForm);
 
     let dateFromForm = get(dataFromForm, 'DATETIME', null);
 
@@ -144,7 +141,7 @@ class ServiceScreenNonAuth extends Component {
         model: get(data, 'car.model', ''),
         carNumber: get(data, 'car.plate', ''),
         vin: get(data, 'vin', ''),
-        date: format(dataFromForm.DATE),
+        date: format(dateFromForm.date),
         service: get(data, 'serviceName', ''),
         firstName: get(data, 'f_FirstName', ''),
         secondName: get(data, 'f_SecondName', ''),
