@@ -383,55 +383,62 @@ class TestDriveScreen extends PureComponent {
     this.setState({carFetch: true});
     const tdcarsTmp = get(this.props.navigation, 'state.params.testDriveCars');
     let tdCarsApi = [];
+    if (typeof tdcarsTmp !== 'undefined') {
+      tdcarsTmp.map((el) => {
+        tdCarsApi.push(el.id);
+      });
 
-    tdcarsTmp.map((el) => {
-      tdCarsApi.push(el.id);
-    });
+      const carsAwait = await this.props.actionFetchTestDriveCarDetails(
+        dealerID,
+        tdCarsApi,
+      );
 
-    const carsAwait = await this.props.actionFetchTestDriveCarDetails(
-      dealerID,
-      tdCarsApi,
-    );
-
-    if (carsAwait && carsAwait.type) {
-      switch (carsAwait.type) {
-        case TD_CAR_DETAILS__SUCCESS:
-          let tdCarsArr = [];
-          if (!carsAwait.payload.model) {
-            Object.values(carsAwait.payload).map((el) => {
-              return tdCarsArr.push({
-                label: el.name,
-                value: el.id,
-                key: el.id,
+      if (carsAwait && carsAwait.type) {
+        switch (carsAwait.type) {
+          case TD_CAR_DETAILS__SUCCESS:
+            let tdCarsArr = [];
+            if (!carsAwait.payload.model) {
+              Object.values(carsAwait.payload).map((el) => {
+                return tdCarsArr.push({
+                  label: el.name,
+                  value: el.id,
+                  key: el.id,
+                });
               });
-            });
-          } else {
-            tdCarsArr.push({
-              label: carsAwait.payload.name,
-              value: carsAwait.payload.id,
-              key: carsAwait.payload.id,
-            });
-          }
-          if (tdCarsArr.length > 0) {
-            tdCarsArr = orderBy(tdCarsArr, ['label'], ['desc']);
-            this.setState({
-              dealerID: dealerID,
-              TDCarsList: tdCarsArr,
-              carFetch: false,
-              isLead: false,
-            });
-            if (tdCarsArr.length === 1) {
-              this.onCarChoose(tdCarsArr[0]);
+            } else {
+              tdCarsArr.push({
+                label: carsAwait.payload.name,
+                value: carsAwait.payload.id,
+                key: carsAwait.payload.id,
+              });
             }
-          } else {
-            this.setState({
-              TDCarsList: null,
-              carFetch: false,
-              isLead: true,
-            });
-          }
-          return tdCarsArr;
+            if (tdCarsArr.length > 0) {
+              tdCarsArr = orderBy(tdCarsArr, ['label'], ['desc']);
+              this.setState({
+                dealerID: dealerID,
+                TDCarsList: tdCarsArr,
+                carFetch: false,
+                isLead: false,
+              });
+              if (tdCarsArr.length === 1) {
+                this.onCarChoose(tdCarsArr[0]);
+              }
+            } else {
+              this.setState({
+                TDCarsList: null,
+                carFetch: false,
+                isLead: true,
+              });
+            }
+            return tdCarsArr;
+        }
       }
+    } else {
+      this.setState({
+        TDCarsList: null,
+        carFetch: false,
+        isLead: true,
+      });
     }
   };
 

@@ -1017,39 +1017,39 @@ class NewCarItemScreen extends Component {
               currency,
             })}
             <View style={[stylesFooter.footerButtons]}>
-              {carDetails.testDriveCars &&
-              carDetails.testDriveCars.length > 0 ? (
-                <Button
-                  onPress={this.onPressTestDrive}
-                  full
-                  iconLeft
-                  style={[stylesFooter.button, stylesFooter.buttonLeft]}
-                  activeOpacity={0.8}>
-                  <Icon
-                    type="MaterialCommunityIcons"
-                    name="steering"
-                    selectable={false}
-                    style={{
-                      color: '#ffffff',
-                      fontSize: 24,
-                      marginTop: -2,
-                    }}
-                  />
-                  <Text style={styles.buttonText} selectable={false}>
-                    тест-драйв
-                  </Text>
-                </Button>
-              ) : null}
+              {/* {carDetails.testDriveCars &&
+              carDetails.testDriveCars.length > 0 ? ( */}
+              <Button
+                onPress={this.onPressTestDrive}
+                full
+                iconLeft
+                style={[stylesFooter.button, stylesFooter.buttonLeft]}
+                activeOpacity={0.8}>
+                <Icon
+                  type="MaterialCommunityIcons"
+                  name="steering"
+                  selectable={false}
+                  style={{
+                    color: '#ffffff',
+                    fontSize: 24,
+                    marginTop: -2,
+                  }}
+                />
+                <Text style={styles.buttonText} selectable={false}>
+                  тест-драйв
+                </Text>
+              </Button>
+              {/* ) : null} */}
               <Button
                 onPress={this.onPressOrder}
                 full
                 style={[
                   stylesFooter.button,
                   stylesFooter.buttonRight,
-                  !carDetails.testDriveCars ||
-                  carDetails.testDriveCars.length === 0
-                    ? stylesFooter.buttonOnlyOne
-                    : null,
+                  // !carDetails.testDriveCars ||
+                  // carDetails.testDriveCars.length === 0
+                  //   ? stylesFooter.buttonOnlyOne
+                  //   : null,
                 ]}
                 activeOpacity={0.8}>
                 <Text style={styles.buttonText} selectable={false}>
