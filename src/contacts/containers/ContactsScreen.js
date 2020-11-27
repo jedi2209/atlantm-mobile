@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     color: styleConst.color.greyText4,
     fontSize: 18,
     marginRight: 0,
-    marginTop: 3,
+    marginTop: 0,
   },
   buttonPrimary: {
     marginTop: 60,
