@@ -246,7 +246,7 @@ class ReestablishScreen extends React.Component {
                 />
                 <Text style={[styles.caption, {marginLeft: 60}]}>
                   Мы очень раздасадованы тем, что ты не обнаружил свои
-                  автомобили и бонусные баллы в личном кабинете.{'\n'}
+                  автомобили и бонусный счет в личном кабинете.{'\n'}
                   Пожалуйста, дай нам ещё один шанс!
                 </Text>
                 <Text style={[styles.caption]}>

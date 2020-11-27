@@ -313,6 +313,17 @@ class ProfileScreenInfo extends Component {
                             ).toLocaleString('ru-RU')
                           : 0}
                       </Text>
+                      <Text
+                        style={{
+                          color: styleConst.color.greyText,
+                          fontSize: 12,
+                          fontWeight: '600',
+                        }}>
+                        {this.props.bonus.data &&
+                        this.props.bonus.data.saldo.curr
+                          ? this.props.bonus.data.saldo.curr
+                          : null}
+                      </Text>
                     </View>
                     <View style={{flex: 1}}>
                       <Text
@@ -322,7 +333,7 @@ class ProfileScreenInfo extends Component {
                           marginBottom: 8,
                           fontWeight: '600',
                         }}>
-                        Бонусные баллы
+                        Бонусный счёт
                       </Text>
                       <Text
                         style={{
@@ -331,7 +342,7 @@ class ProfileScreenInfo extends Component {
                           marginBottom: 16,
                           fontWeight: '600',
                         }}>
-                        История накопления и трат твоих бонусных баллов
+                        История накопления и трат твоих бонусов
                       </Text>
                       <View style={{display: 'flex', flexDirection: 'row'}}>
                         <View>
@@ -413,7 +424,7 @@ class ProfileScreenInfo extends Component {
                             marginBottom: 8,
                             fontWeight: '600',
                           }}>
-                          Бонусные баллы
+                          Бонусный счёт
                         </Text>
                         <Text
                           style={{
