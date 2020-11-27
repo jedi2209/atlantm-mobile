@@ -27,10 +27,12 @@ class ServiceContainer extends Component {
     const returnScreen =
       navigation.state.params && navigation.state.params.returnScreen;
 
+    let headerTitle = 'Запись на сервис';
+
     return {
       headerStyle: stylesHeader.whiteHeader,
       headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: 'Запись на сервис',
+      headerTitle: headerTitle,
       headerLeft: (
         <HeaderIconBack
           theme="blue"
