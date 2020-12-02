@@ -101,11 +101,12 @@ export default {
     return this.request('/info/indicator/get/', baseRequestParams);
   },
 
-  fetchBonus({token, userid}) {
-    return this.request(
-      `/lkk/bonus/list/?userid=${userid}&token=${token}`,
-      baseRequestParams,
-    );
+  fetchBonus({token, userid, curr}) {
+    let url = `/lkk/bonus/list/?userid=${userid}&token=${token}`;
+    if (curr) {
+      url += `&curr=${curr}`;
+    }
+    return this.request(url, baseRequestParams);
   },
 
   fetchBonusInfo({region}) {

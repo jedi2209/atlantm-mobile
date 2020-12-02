@@ -309,7 +309,7 @@ export const actionSavePofileWithPhone = (props) => {
   };
 };
 
-export const getProfileSapData = ({id, sap}) => {
+export const getProfileSapData = ({id, sap, curr}) => {
   return async (dispatch) => {
     const user = await API.getProfile(id);
     const userSAP = user.SAP || {};
@@ -319,6 +319,7 @@ export const getProfileSapData = ({id, sap}) => {
       result = await getProfileData({
         token: userSAP.TOKEN || userSAP.token,
         userid: userSAP.ID || userSAP.id,
+        curr: curr || null,
       });
     }
 
@@ -657,9 +658,9 @@ async function getUserCars(token, userid) {
   return cars;
 }
 
-async function getUserBonus(token, userid) {
+async function getUserBonus(token, userid, curr) {
   let bonus = {};
-  const bonusResponse = await API.fetchBonus({token, userid});
+  const bonusResponse = await API.fetchBonus({token, userid, curr});
   const bonusResponseCode = get(bonusResponse, 'error.code', 404);
   if (bonusResponseCode === 200 && bonusResponse.data) {
     bonus = bonusResponse.data;
@@ -681,9 +682,9 @@ async function getUserDiscounts(token, userid) {
   return discounts;
 }
 
-async function getProfileData({token, userid}) {
+async function getProfileData({token, userid, curr}) {
   const cars = await getUserCars(token, userid);
-  const bonus = await getUserBonus(token, userid);
+  const bonus = await getUserBonus(token, userid, curr);
   const discounts = await getUserDiscounts(token, userid);
   // console.log('cars bonus discounts', cars, bonus, discounts);
   return {
