@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
 
 import {SafeAreaView} from 'react-navigation';
 import {verticalScale} from '../../utils/scale';
+import {get} from 'lodash';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
@@ -135,11 +136,19 @@ class ProfileScreenInfo extends Component {
   getUserData() {
     this.setState({loading: true});
     const {ID, SAP} = this.props.login;
+    const userRegion = get(this.props, 'dealerSelected.region', null);
+
+    let curr = null;
+
+    if (userRegion === 'by') {
+      curr = 'BYN';
+    }
 
     this.props
       .getProfileSapData({
         id: ID,
         sap: SAP,
+        curr: curr,
       })
       .then(() => {
         if (SAP && SAP.ID && SAP.ID.length > 0) {
