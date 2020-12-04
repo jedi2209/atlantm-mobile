@@ -333,6 +333,17 @@ class ProfileScreenInfo extends Component {
                           ? this.props.bonus.data.saldo.curr
                           : null}
                       </Text>
+                      {this.props.dealerSelected.region === 'by' ? (
+                        <Text
+                          style={{
+                            color: styleConst.color.greyText,
+                            fontSize: 9,
+                            fontWeight: '600',
+                            marginTop: 5,
+                          }}>
+                          1 балл = 1 BYN
+                        </Text>
+                      ) : null}
                     </View>
                     <View style={{flex: 1}}>
                       <Text
