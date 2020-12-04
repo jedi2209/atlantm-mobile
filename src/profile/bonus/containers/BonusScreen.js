@@ -134,7 +134,7 @@ import stylesHeader from '../../../core/components/Header/style';
 class BonusScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: (
-      <Text style={stylesHeader.whiteHeaderTitle}>Бонусный счет</Text>
+      <Text style={stylesHeader.whiteHeaderTitle}>Бонусный счёт</Text>
     ),
     headerStyle: stylesHeader.whiteHeader,
     headerTitleStyle: stylesHeader.whiteHeaderTitle,
@@ -370,6 +370,15 @@ class BonusScreen extends Component {
       );
     }
 
+    let saldoValue = get(bonus, 'saldo.convert.value', null);
+    if (!saldoValue) {
+      saldoValue = get(bonus, 'saldo.value', 0);
+    }
+
+    let saldoCurr = get(bonus, 'saldo.convert.curr', null);
+    if (!saldoCurr) {
+      saldoCurr = get(bonus, 'saldo.curr', 'бонусов');
+    }
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
@@ -382,11 +391,9 @@ class BonusScreen extends Component {
               <Text style={styles.totalText}>
                 Всего:{' '}
                 <Text style={styles.totalValue}>
-                  {parseFloat(get(bonus, 'saldo.value', 0)).toLocaleString(
-                    'ru-RU',
-                  )}
+                  {parseFloat(saldoValue, 'ru-RU')}
                 </Text>{' '}
-                {get(bonus, 'saldo.curr', 'бонусов')}
+                {saldoCurr}
               </Text>
             </View>
             {this.renderBonusButton()}
