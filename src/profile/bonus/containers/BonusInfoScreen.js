@@ -85,7 +85,10 @@ class BonusInfoScreen extends Component {
     } = this.props;
     const {region} = dealerSelected;
 
-    const refererScreen = get(navigation, 'state.params.refererScreen');
+    let refererScreen = get(navigation, 'state.params.refererScreen', null);
+    if (!refererScreen) {
+      refererScreen = get(navigation, 'state.params.returnScreen', null);
+    }
 
     Amplitude.logEvent('screen', `${refererScreen}/bonus_info`, {region});
 

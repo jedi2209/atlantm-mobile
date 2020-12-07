@@ -167,6 +167,15 @@ class ProfileScreenInfo extends Component {
   }
 
   render() {
+    let saldoValue = get(this.props.bonus, 'data.saldo.convert.value', null);
+    if (!saldoValue) {
+      saldoValue = get(this.props.bonus, 'data.saldo.value', 0);
+    }
+
+    let saldoCurr = get(this.props.bonus, 'data.saldo.convert.curr', null);
+    if (!saldoCurr) {
+      saldoCurr = get(this.props.bonus, 'data.saldo.curr', 'бонусов');
+    }
     return (
       <SafeAreaView>
         <ScrollView>
@@ -275,138 +284,32 @@ class ProfileScreenInfo extends Component {
                   </View>
                 </>
               )}
-
-              {this.props.bonus.data && this.props.bonus.data.saldo ? (
-                <TouchableOpacity
-                  style={[
-                    {
-                      marginHorizontal: 20,
-                      marginBottom: 20,
-                    },
-                  ]}
-                  onPress={() => this.props.navigation.navigate('BonusScreen')}>
-                  <View
+              {this.props.bonus ? (
+                this.props.bonus.data && this.props.bonus.data.saldo ? (
+                  <TouchableOpacity
                     style={[
-                      styleConst.shadow.default,
                       {
-                        backgroundColor: '#0061ed',
-                        borderRadius: 5,
-                        padding: 14,
-                        display: 'flex',
-                        flexDirection: 'row',
+                        marginHorizontal: 20,
+                        marginBottom: 20,
                       },
                     ]}
                     onPress={() =>
                       this.props.navigation.navigate('BonusScreen')
                     }>
                     <View
-                      style={{
-                        backgroundColor: '#fff',
-                        width: 98,
-                        height: 98,
-                        borderRadius: 49,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginRight: 24,
-                      }}>
-                      <Text
-                        style={{
-                          color: '#0061ed',
-                          fontSize: 20,
-                          fontWeight: '600',
-                        }}>
-                        {this.props.bonus.data && this.props.bonus.data.saldo
-                          ? parseInt(
-                              this.props.bonus.data.saldo.value,
-                            ).toLocaleString('ru-RU')
-                          : 0}
-                      </Text>
-                      <Text
-                        style={{
-                          color: styleConst.color.greyText,
-                          fontSize: 12,
-                          fontWeight: '600',
-                        }}>
-                        {this.props.bonus.data &&
-                        this.props.bonus.data.saldo.curr
-                          ? this.props.bonus.data.saldo.curr
-                          : null}
-                      </Text>
-                      {this.props.dealerSelected.region === 'by' ? (
-                        <Text
-                          style={{
-                            color: styleConst.color.greyText,
-                            fontSize: 9,
-                            fontWeight: '600',
-                            marginTop: 5,
-                          }}>
-                          1 балл = 1 BYN
-                        </Text>
-                      ) : null}
-                    </View>
-                    <View style={{flex: 1}}>
-                      <Text
-                        style={{
-                          color: '#fff',
-                          fontSize: 18,
-                          marginBottom: 8,
-                          fontWeight: '600',
-                        }}>
-                        Бонусный счёт
-                      </Text>
-                      <Text
-                        style={{
-                          color: '#fff',
-                          fontSize: 12,
-                          marginBottom: 16,
-                          fontWeight: '600',
-                        }}>
-                        История накопления и трат твоих бонусов
-                      </Text>
-                      <View style={{display: 'flex', flexDirection: 'row'}}>
-                        <View>
-                          <Text
-                            style={{
-                              color: '#fff',
-                              fontSize: 16,
-                              fontWeight: '600',
-                            }}
-                            onPress={() =>
-                              this.props.navigation.navigate('BonusScreen')
-                            }>
-                            Посмотреть
-                          </Text>
-                        </View>
-                        <Icon
-                          type="FontAwesome5"
-                          name="angle-right"
-                          style={{color: '#fff', fontSize: 20, marginLeft: 8}}
-                        />
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              ) : (
-                <TouchableWithoutFeedback
-                  onPress={() =>
-                    this.props.navigation.navigate('BonusScreenInfo')
-                  }>
-                  <View
-                    style={[
-                      styleConst.shadow.default,
-                      {
-                        marginHorizontal: 20,
-                      },
-                    ]}>
-                    <View
-                      style={{
-                        backgroundColor: '#0061ed',
-                        borderRadius: 5,
-                        padding: 14,
-                        display: 'flex',
-                        flexDirection: 'row',
-                      }}>
+                      style={[
+                        styleConst.shadow.default,
+                        {
+                          backgroundColor: '#0061ed',
+                          borderRadius: 5,
+                          padding: 14,
+                          display: 'flex',
+                          flexDirection: 'row',
+                        },
+                      ]}
+                      onPress={() =>
+                        this.props.navigation.navigate('BonusScreen')
+                      }>
                       <View
                         style={{
                           backgroundColor: '#fff',
@@ -418,23 +321,33 @@ class ProfileScreenInfo extends Component {
                           alignItems: 'center',
                           marginRight: 24,
                         }}>
-                        {this.props.bonus.data &&
-                        this.props.bonus.data.saldo ? (
+                        <Text
+                          style={{
+                            color: '#0061ed',
+                            fontSize: 20,
+                            fontWeight: '600',
+                          }}>
+                          {saldoValue ? parseFloat(saldoValue, 'ru-RU') : 0}
+                        </Text>
+                        <Text
+                          style={{
+                            color: styleConst.color.greyText,
+                            fontSize: 12,
+                            fontWeight: '600',
+                          }}>
+                          {saldoValue && saldoCurr ? saldoCurr : null}
+                        </Text>
+                        {/* {this.props.dealerSelected.region === 'by' ? (
                           <Text
                             style={{
-                              color: '#0061ed',
-                              fontSize: 20,
+                              color: styleConst.color.greyText,
+                              fontSize: 9,
                               fontWeight: '600',
+                              marginTop: 5,
                             }}>
-                            {this.props.bonus.data.saldo.value}
+                            1 бонус = 1 BYN
                           </Text>
-                        ) : (
-                          <Icon
-                            name="frowno"
-                            type="AntDesign"
-                            style={[{fontSize: 76, marginTop: 9}]}
-                          />
-                        )}
+                        ) : null} */}
                       </View>
                       <View style={{flex: 1}}>
                         <Text
@@ -453,12 +366,7 @@ class ProfileScreenInfo extends Component {
                             marginBottom: 16,
                             fontWeight: '600',
                           }}>
-                          У тебя пока{' '}
-                          <Text style={{fontWeight: 'bold', fontSize: 22}}>
-                            0
-                          </Text>{' '}
-                          баллов.{'\r\n'}Узнай больше о бонусной программе и
-                          накапливай баллы быстрее!
+                          История накопления и трат твоих бонусов
                         </Text>
                         <View style={{display: 'flex', flexDirection: 'row'}}>
                           <View>
@@ -467,25 +375,124 @@ class ProfileScreenInfo extends Component {
                                 color: '#fff',
                                 fontSize: 16,
                                 fontWeight: '600',
-                              }}>
-                              Хочу больше баллов
+                              }}
+                              onPress={() =>
+                                this.props.navigation.navigate('BonusScreen')
+                              }>
+                              Посмотреть
                             </Text>
                           </View>
                           <Icon
                             type="FontAwesome5"
                             name="angle-right"
-                            style={{
-                              color: '#fff',
-                              fontSize: 20,
-                              marginLeft: 8,
-                            }}
+                            style={{color: '#fff', fontSize: 20, marginLeft: 8}}
                           />
                         </View>
                       </View>
                     </View>
-                  </View>
-                </TouchableWithoutFeedback>
-              )}
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableWithoutFeedback
+                    onPress={() =>
+                      this.props.navigation.navigate('BonusScreenInfo', {
+                        returnScreen: 'ProfileScreenInfo',
+                      })
+                    }>
+                    <View
+                      style={[
+                        styleConst.shadow.default,
+                        {
+                          marginHorizontal: 20,
+                        },
+                      ]}>
+                      <View
+                        style={{
+                          backgroundColor: '#0061ed',
+                          borderRadius: 5,
+                          padding: 14,
+                          display: 'flex',
+                          flexDirection: 'row',
+                        }}>
+                        <View
+                          style={{
+                            backgroundColor: '#fff',
+                            width: 98,
+                            height: 98,
+                            borderRadius: 49,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginRight: 24,
+                          }}>
+                          {this.props.bonus.data &&
+                          this.props.bonus.data.saldo ? (
+                            <Text
+                              style={{
+                                color: '#0061ed',
+                                fontSize: 20,
+                                fontWeight: '600',
+                              }}>
+                              {this.props.bonus.data.saldo.value}
+                            </Text>
+                          ) : (
+                            <Icon
+                              name="frowno"
+                              type="AntDesign"
+                              style={[{fontSize: 76, marginTop: 9}]}
+                            />
+                          )}
+                        </View>
+                        <View style={{flex: 1}}>
+                          <Text
+                            style={{
+                              color: '#fff',
+                              fontSize: 18,
+                              marginBottom: 8,
+                              fontWeight: '600',
+                            }}>
+                            Бонусный счёт
+                          </Text>
+                          <Text
+                            style={{
+                              color: '#fff',
+                              fontSize: 12,
+                              marginBottom: 16,
+                              fontWeight: '600',
+                            }}>
+                            У тебя пока{' '}
+                            <Text style={{fontWeight: 'bold', fontSize: 22}}>
+                              0
+                            </Text>{' '}
+                            баллов.{'\r\n'}Узнай больше о бонусной программе и
+                            накапливай баллы быстрее!
+                          </Text>
+                          <View style={{display: 'flex', flexDirection: 'row'}}>
+                            <View>
+                              <Text
+                                style={{
+                                  color: '#fff',
+                                  fontSize: 16,
+                                  fontWeight: '600',
+                                }}>
+                                Хочу больше баллов
+                              </Text>
+                            </View>
+                            <Icon
+                              type="FontAwesome5"
+                              name="angle-right"
+                              style={{
+                                color: '#fff',
+                                fontSize: 20,
+                                marginLeft: 8,
+                              }}
+                            />
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableWithoutFeedback>
+                )
+              ) : null}
               <Button
                 block
                 onPress={() => {
