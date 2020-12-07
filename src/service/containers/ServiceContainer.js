@@ -16,9 +16,11 @@ const ServiceScreenStep1 = withNavigation(ServiceNew);
 const ServiceScreenNonAuth = withNavigation(ServiceNewNonAuth);
 
 const mapStateToProps = ({dealer, profile, navigation}) => {
+  console.log('profile', profile);
   return {
     dealerSelected: dealer.selected,
     loginID: get(profile, 'login.ID', false),
+    cars: get(profile, 'cars', false),
   };
 };
 
@@ -45,9 +47,9 @@ class ServiceContainer extends Component {
   };
 
   render() {
-    const {dealerSelected, loginID} = this.props;
+    const {dealerSelected, loginID, cars} = this.props;
     if (dealerSelected.region === 'by') {
-      if (loginID) {
+      if (loginID && cars && cars.length > 0) {
         return <ServiceScreenStep1 />;
       } else {
         return <ServiceScreenNonAuth />;
