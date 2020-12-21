@@ -398,19 +398,19 @@ PODS:
     - React-Core
   - RNDateTimePicker (3.0.8):
     - React-Core
-  - RNDeviceInfo (5.6.5):
-    - React
+  - RNDeviceInfo (7.3.1):
+    - React-Core
   - RNGestureHandler (1.9.0):
     - React-Core
   - RNGoogleSignin (5.0.0):
     - GoogleSignIn (~> 5.0.0)
     - React-Core
-  - RNImageCropPicker (0.32.2):
+  - RNImageCropPicker (0.35.2):
     - React-Core
     - React-RCTImage
-    - RNImageCropPicker/QBImagePickerController (= 0.32.2)
+    - RNImageCropPicker/QBImagePickerController (= 0.35.2)
     - TOCropViewController
-  - RNImageCropPicker/QBImagePickerController (0.32.2):
+  - RNImageCropPicker/QBImagePickerController (0.35.2):
     - React-Core
     - React-RCTImage
     - TOCropViewController
@@ -716,10 +716,10 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: bc2f81cc1df90c267ce9ed30bb2dbc93b945a8ee
   RNCPicker: 344840b0db891c9645622a8783ebb1369c90c17b
   RNDateTimePicker: aab869a517ecf3095910be81093e3d9b27cd82ed
-  RNDeviceInfo: e841619c3dac5495a095c5455473579ff04908d4
+  RNDeviceInfo: 57bb2806fb7bd982a1434e9f0b4e6a6ab1f6702e
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
-  RNImageCropPicker: f0557a908758c4a3f83978894ec7227651529b45
+  RNImageCropPicker: 9e0bf18cf4184a846fed55747c8e622208b39947
   RNInputMask: 815461ebdf396beb62cf58916c35cf6930adb991
   RNRate: 2b31dad120cd1b78e33c6034808561c386a3dddf
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
