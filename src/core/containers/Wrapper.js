@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Text} from 'react-native';
 
 // storage
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistStore} from 'redux-persist';
 
 // redux
