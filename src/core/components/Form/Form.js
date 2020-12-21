@@ -21,7 +21,7 @@ import {TextInput} from '../TextInput';
 import {DatePickerCustom} from '../DatePickerCustom';
 import ChooseDateTimeComponent from '../../../service/components/ChooseDateTimeComponent';
 import RNPickerSelect, {defaultStyles} from 'react-native-picker-select';
-import {Picker} from '@react-native-picker/picker';
+// import {Picker} from '@react-native-picker/picker';
 import PhoneInput from 'react-native-phone-input';
 import TextInputMask from 'react-native-text-input-mask';
 import DealerItemList from '../DealerItemList';
