@@ -321,7 +321,7 @@ PODS:
   - react-native-text-input-mask (2.0.0):
     - React
     - RNInputMask
-  - react-native-viewpager (4.2.1):
+  - react-native-viewpager (4.2.2):
     - React-Core
   - react-native-vkontakte-login (1.0.1):
     - React
@@ -394,7 +394,7 @@ PODS:
     - React
   - RNCAsyncStorage (1.13.2):
     - React
-  - RNCPicker (1.9.7):
+  - RNCPicker (1.9.8):
     - React-Core
   - RNDateTimePicker (3.0.8):
     - React-Core
@@ -694,13 +694,13 @@ SPEC CHECKSUMS:
   react-native-fbsdk: 8e92c7a334fd8d9c2b5d8b8fcd7ae2c314161099
   react-native-google-maps: 0a989abda71059db2caa98b9dacca7a8f38a47d0
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
-  react-native-onesignal: dd08d2ba301e1cb7ad4773a53d8e49d4e43ba6fd
-  react-native-slider: b733e17fdd31186707146debf1f04b5d94aa1a93
+  react-native-onesignal: f92b6fae16388422f1b5d73b2c31e7000f481ae8
+  react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
-  react-native-text-input-mask: b3cb63f0cd73b4b3ea76dd0c614bb7d79e934e39
-  react-native-viewpager: 9c0fcf8c6f094a76803435bdc3b5290bfe675c05
-  react-native-vkontakte-login: 73e0f27047f078d531dcb3fdb11ea0f7effde288
-  react-native-webview: 67b9024de02e7c0af9400283b0e3ca6eec55dc26
+  react-native-text-input-mask: 07227297075f9653315f43b0424d596423a01736
+  react-native-viewpager: ea945e2881ce9a4a8bcdc84de4ec65ff23c90f6e
+  react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
+  react-native-webview: 6edf4d6f71b9161fc3e96083726a538ee395304d
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
   React-RCTBlob: a97d378b527740cc667e03ebfa183a75231ab0f0
@@ -713,15 +713,15 @@ SPEC CHECKSUMS:
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNAppleAuthentication: 473b2c076f1a48a537610580a168c1fb6d0a90c6
-  RNCAsyncStorage: bc2f81cc1df90c267ce9ed30bb2dbc93b945a8ee
-  RNCPicker: 344840b0db891c9645622a8783ebb1369c90c17b
-  RNDateTimePicker: aab869a517ecf3095910be81093e3d9b27cd82ed
-  RNDeviceInfo: 57bb2806fb7bd982a1434e9f0b4e6a6ab1f6702e
+  RNCAsyncStorage: 05bae7ecfab1cbd5441993f1ca098f7c3b3f8d0e
+  RNCPicker: cdeab10edac8f14ed6839fdf922a789f80c72ec1
+  RNDateTimePicker: 8eba76de1afd556bc00c874f4d0c0616e30e32f1
+  RNDeviceInfo: 6ecb1d1c87d20e4c62354be0348de23362824dcd
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNImageCropPicker: 9e0bf18cf4184a846fed55747c8e622208b39947
   RNInputMask: 815461ebdf396beb62cf58916c35cf6930adb991
-  RNRate: 2b31dad120cd1b78e33c6034808561c386a3dddf
+  RNRate: 15b861025a7821730761fce7f44561ce7e0b2de0
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: 45c457af3d2ee9e08fc01e70da87e653d46b1198
   RNSentry: 51972e3fe50e2fb38ae459af8c87d61f63f364db
