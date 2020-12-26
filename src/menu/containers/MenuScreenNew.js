@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontFamily: styleConst.font.medium,
-    fontSize: 16,
+    fontSize: 15,
     letterSpacing: styleConst.ui.letterSpacing,
     color: styleConst.color.lightBlue,
     paddingRight: styleConst.ui.horizontalGapInList,
