@@ -18,6 +18,9 @@ import {connect} from 'react-redux';
 
 import DeviceInfo from 'react-native-device-info';
 
+import strings from '../../core/lang/const';
+import LangSwitcher from '../../core/components/LangSwitcher';
+
 const styles = StyleSheet.create({
   buttonPrimary: {
     marginTop: 10,
@@ -144,7 +147,7 @@ const MoreScreen = (props) => {
   const menu = [
     {
       id: 1,
-      name: 'Автоцентр',
+      name: strings.menu.autocenter,
       navigateUrl: 'Home',
       type: 'home',
       icon: <Image source={require('../assets/Home.svg')} />,
@@ -152,7 +155,7 @@ const MoreScreen = (props) => {
     },
     {
       id: 2,
-      name: 'Акции',
+      name: strings.menu.actions,
       navigateUrl: 'InfoList',
       type: 'sales',
       icon: <Image source={require('../assets/NewsFeeds.svg')} />,
@@ -160,7 +163,7 @@ const MoreScreen = (props) => {
     },
     {
       id: 3,
-      name: 'Новые авто',
+      name: strings.menu.newcars,
       navigateUrl: 'NewCarListScreen',
       type: 'new',
       icon: <Image source={require('../assets/Car-new.svg')} />,
@@ -168,7 +171,7 @@ const MoreScreen = (props) => {
     },
     {
       id: 4,
-      name: 'Подержанные авто',
+      name: strings.menu.usedcars,
       navigateUrl: 'UsedCarListScreen',
       type: 'not_new',
       icon: <Image source={require('../assets/Car-used.svg')} />,
@@ -176,7 +179,7 @@ const MoreScreen = (props) => {
     },
     {
       id: 7,
-      name: 'Отзывы',
+      name: strings.menu.reviews,
       navigateUrl: 'ReviewsScreen',
       type: 'reviews',
       icon: <Image source={require('../assets/Eko.svg')} />,
@@ -184,7 +187,7 @@ const MoreScreen = (props) => {
     },
     {
       id: 8,
-      name: 'Индикаторы',
+      name: strings.menu.indicators,
       navigateUrl: 'IndicatorsScreen',
       type: 'indicators',
       icon: <Image source={require('../assets/Indicators.svg')} />,
@@ -208,7 +211,7 @@ const MoreScreen = (props) => {
       menu.push(
         {
           id: 5,
-          name: 'Сервис',
+          name: strings.menu.service,
           navigateUrl: 'ServiceScreen',
           type: 'service',
           icon: <Image source={require('../assets/Service.svg')} />,
@@ -216,7 +219,7 @@ const MoreScreen = (props) => {
         },
         {
           id: 6,
-          name: 'Табло выдачи авто',
+          name: strings.menu.tva,
           navigateUrl: 'TvaScreen',
           type: 'new',
           icon: <Image source={require('../assets/Car-lifter.svg')} />,
@@ -231,9 +234,25 @@ const MoreScreen = (props) => {
   });
 
   const rowHeight = (heightScreen - 80 - 82 - 4 - 80) / (menu.length + 1);
+  const languagesItems = [
+    {
+      label: '🇷🇺 Русский',
+      value: 'ru',
+      key: 1,
+    },
+    {
+      label: '🇺🇦 Украинский',
+      value: 'ua',
+      key: 2,
+    },
+  ];
 
   return (
     <View>
+      <LangSwitcher
+        items={languagesItems}
+        placeholder={{label: 'Сменить язык', value: 'ua', color: '#9EA0A4'}}
+      />
       <List style={{marginTop: 0}}>
         {menu.map((item) => (
           <MenuItem
