@@ -12,6 +12,7 @@ import service from '../service/reducers';
 import contacts from '../contacts/reducers';
 import catalog from '../catalog/reducers';
 import indicators from '../indicators/reducers';
+import language from './lang/reducers';
 
 import {
   APP_PUSH_GRANTED__SET,
@@ -104,6 +105,7 @@ const coreReducer = combineReducers({
   menuOpenedCount,
   isAppRated,
   isStoreUpdated,
+  language,
 });
 
 const rootReducer = combineReducers({
