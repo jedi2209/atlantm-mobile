@@ -332,18 +332,22 @@ class ProfileScreenInfo extends Component {
                         <Text
                           style={{
                             color: styleConst.color.greyText,
-                            fontSize: 12,
+                            fontSize: 11,
                             fontWeight: '600',
                           }}>
-                          {saldoValue && saldoCurr ? saldoCurr : null}
+                          {this.props.dealerSelected.region !== 'by'
+                            ? saldoValue && saldoCurr
+                              ? saldoCurr
+                              : null
+                            : '1 бонус = 1 BYN'}
                         </Text>
                         {/* {this.props.dealerSelected.region === 'by' ? (
                           <Text
                             style={{
                               color: styleConst.color.greyText,
-                              fontSize: 9,
+                              fontSize: 11,
                               fontWeight: '600',
-                              marginTop: 5,
+                              marginTop: -10,
                             }}>
                             1 бонус = 1 BYN
                           </Text>
