@@ -374,10 +374,12 @@ class BonusScreen extends Component {
     if (!saldoValue) {
       saldoValue = get(bonus, 'saldo.value', 0);
     }
-
-    let saldoCurr = get(bonus, 'saldo.convert.curr', null);
-    if (!saldoCurr) {
-      saldoCurr = get(bonus, 'saldo.curr', 'бонусов');
+    let saldoCurr = null;
+    if (this.props.dealerSelected.region !== 'by') {
+      saldoCurr = get(bonus, 'saldo.convert.curr', null);
+      if (!saldoCurr) {
+        saldoCurr = get(bonus, 'saldo.curr', 'бонусов');
+      }
     }
     return (
       <StyleProvider style={getTheme()}>
