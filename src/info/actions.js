@@ -13,6 +13,8 @@ import {
   CALL_ME_INFO__FAIL,
 } from './actionTypes';
 
+import {ERROR_NETWORK} from '../core/const';
+
 import API from '../utils/api';
 
 export const fetchInfoList = (region, dealer) => {
@@ -27,22 +29,30 @@ export const fetchInfoList = (region, dealer) => {
 
     return API.fetchInfoList(region, dealer)
       .then((res) => {
-        const {data, error} = res;
-
-        if (error) {
+        if (!res) {
           return dispatch({
             type: INFO_LIST__FAIL,
             payload: {
-              code: error.code,
-              message: error.message,
+              message: ERROR_NETWORK,
+            },
+          });
+        }
+        if (res && res.error) {
+          return dispatch({
+            type: INFO_LIST__FAIL,
+            payload: {
+              code: res.error.code,
+              message: res.error.message,
             },
           });
         }
 
-        return dispatch({
-          type: INFO_LIST__SUCCESS,
-          payload: data || [],
-        });
+        if (res && res.data) {
+          return dispatch({
+            type: INFO_LIST__SUCCESS,
+            payload: res.data || [],
+          });
+        }
       })
       .catch((error) => {
         return dispatch({

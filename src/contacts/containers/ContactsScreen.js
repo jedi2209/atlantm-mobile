@@ -13,7 +13,14 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {Text, StyleProvider, Icon, Button, ActionSheet} from 'native-base';
+import {
+  Text,
+  StyleProvider,
+  Icon,
+  Button,
+  ActionSheet,
+  Toast,
+} from 'native-base';
 import BrandLogo from '../../core/components/BrandLogo';
 import Plate from '../../core/components/Plate';
 
@@ -171,6 +178,7 @@ class ContactsScreen extends Component {
 
     actionListReset();
     fetchInfoList(region, dealer).then((action) => {
+      console.log('action', action);
       if (action.type === INFO_LIST__FAIL) {
         let message = get(
           action,
@@ -182,7 +190,16 @@ class ContactsScreen extends Component {
           message = ERROR_NETWORK;
         }
 
-        setTimeout(() => Alert.alert(message), 100);
+        setTimeout(
+          () =>
+            Toast.show({
+              text: message,
+              type: 'warning',
+              position: 'bottom',
+              duration: 1000,
+            }),
+          100,
+        );
       }
     });
   }
