@@ -68,6 +68,8 @@ const styles = StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
     fontSize: 14,
     color: '#141414',
+    lineHeight: 18,
+    marginTop: 6,
   },
   sectionValueText: {
     letterSpacing: styleConst.ui.letterSpacing,
@@ -155,7 +157,7 @@ class CarHistoryDetailsScreen extends Component {
     navigation.setParams({title});
 
     actionFetchCarHistoryDetails({vin, token, userid, workId, workDealer}).then(
-      action => {
+      (action) => {
         if (action.type === CAR_HISTORY_DETAILS__FAIL) {
           let message = get(
             action,
@@ -188,19 +190,19 @@ class CarHistoryDetailsScreen extends Component {
         {get(summ, 'value')
           ? this.renderItem({
               prop: 'Стоимость',
-              value: showPrice(get(summ, 'value'), get(summ, 'currency')),
+              value: showPrice(get(summ, 'value'), get(summ, 'currency'), true),
             })
           : null}
         {get(summ, 'sale')
           ? this.renderItem({
               prop: 'Скидка',
-              value: showPrice(get(summ, 'sale'), get(summ, 'currency')),
+              value: showPrice(get(summ, 'sale'), get(summ, 'currency'), true),
             })
           : null}
         {get(summ, 'total')
           ? this.renderItem({
               prop: 'Итого с НДС',
-              value: showPrice(get(summ, 'total'), get(summ, 'currency')),
+              value: showPrice(get(summ, 'total'), get(summ, 'currency'), true),
             })
           : null}
       </View>

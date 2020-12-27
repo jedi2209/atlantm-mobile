@@ -2,7 +2,7 @@
 
 // const isAndroid = Platform.OS === 'android';
 
-export default function (price, country = 'BY') {
+export default function (price, country = 'BY', float = false) {
   let country_code = 'ru-BE',
     options = {
       style: 'currency',
@@ -54,6 +54,9 @@ export default function (price, country = 'BY') {
       };
       break;
   }
-
-  return parseInt(price, 10).toLocaleString(country_code, options);
+  if (float) {
+    return parseFloat(price, 10).toLocaleString(country_code, options);
+  } else {
+    return parseInt(price, 10).toLocaleString(country_code, options);
+  }
 }

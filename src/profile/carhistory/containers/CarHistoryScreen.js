@@ -136,7 +136,11 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import stylesHeader from '../../../core/components/Header/style';
 class CarHistoryScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: <Text style={stylesHeader.whiteHeaderTitle}>История ТО</Text>,
+    headerTitle: (
+      <Text style={stylesHeader.whiteHeaderTitle}>
+        История ТО и обслуживания
+      </Text>
+    ),
     headerStyle: stylesHeader.whiteHeader,
     headerTitleStyle: stylesHeader.whiteHeaderTitle,
     headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
@@ -270,8 +274,7 @@ class CarHistoryScreen extends Component {
 
     return (
       <Body style={[styles.body]}>
-        <View
-          style={styles.dateContainer}>
+        <View style={styles.dateContainer}>
           {date ? <Text style={styles.date}>{dayMonthYear(date)}</Text> : null}
           {car.mileage ? (
             <Text style={styles.mileage}>
@@ -290,19 +293,19 @@ class CarHistoryScreen extends Component {
         {works
           ? this.renderLevel3Item({
               prop: 'Стоимость работ',
-              value: showPrice(works, currency),
+              value: showPrice(works, currency, true),
             })
           : null}
         {parts
           ? this.renderLevel3Item({
               prop: 'Стоимость запчастей',
-              value: showPrice(parts, currency),
+              value: showPrice(parts, currency, true),
             })
           : null}
         {total
           ? this.renderLevel3Item({
               prop: 'Всего',
-              value: showPrice(total, currency),
+              value: showPrice(total, currency, true),
             })
           : null}
       </Body>
