@@ -26,8 +26,8 @@ import {connect} from 'react-redux';
 import {CAR_HISTORY__FAIL} from '../../actionTypes';
 import {
   actionFetchCarHistory,
-  actionSetCarHistoryLevel1,
-  actionSetCarHistoryLevel2,
+  // actionSetCarHistoryLevel1,
+  // actionSetCarHistoryLevel2,
 } from '../../actions';
 
 import SpinnerView from '../../../core/components/SpinnerView';
@@ -129,8 +129,8 @@ const mapStateToProps = ({nav, profile}) => {
 
 const mapDispatchToProps = {
   actionFetchCarHistory,
-  actionSetCarHistoryLevel1,
-  actionSetCarHistoryLevel2,
+  // actionSetCarHistoryLevel1,
+  // actionSetCarHistoryLevel2,
 };
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import stylesHeader from '../../../core/components/Header/style';
