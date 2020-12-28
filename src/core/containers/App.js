@@ -16,6 +16,8 @@ import {
   actionToggleModal,
 } from '../actions';
 
+import strings from '../lang/const';
+
 // helpers
 import API from '../../utils/api';
 import {get} from 'lodash';
@@ -34,6 +36,7 @@ const mapStateToProps = ({core, dealer, modal}) => {
     menuOpenedCount: core.menuOpenedCount,
     isStoreUpdated: core.isStoreUpdated,
     modal,
+    currentLanguage: core.language.selected,
   };
 };
 
@@ -75,6 +78,9 @@ class App extends PureComponent {
 
     const currentDealer = get(dealerSelected, 'id', false);
     const storeVersion = '2020-06-16';
+
+    const currentLanguage = get(this.props, 'currentLanguage', 'ru');
+    strings.setLanguage(currentLanguage);
 
     if (
       currentDealer &&

@@ -1,25 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
-import {
-  Text,
-  View,
-  Image,
-  StyleSheet,
-  ScrollView,
-  Platform,
-  Dimensions,
-} from 'react-native';
+import {Text, View, Image, StyleSheet, Dimensions} from 'react-native';
 import {Icon, List, ListItem, Left, Right, Button, Body} from 'native-base';
 
 import styleConst from '../../core/style-const';
 
 import {connect} from 'react-redux';
 
-import DeviceInfo from 'react-native-device-info';
-
 import strings from '../../core/lang/const';
-import LangSwitcher from '../../core/components/LangSwitcher';
+import LogoTitle from '../../core/components/LogoTitle';
 
 const styles = StyleSheet.create({
   buttonPrimary: {
@@ -140,6 +130,8 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
     discounts: profile.discounts,
 
     pushActionSubscribeState: core.pushActionSubscribeState,
+
+    currentLang: core.language.selected,
   };
 };
 
@@ -234,25 +226,15 @@ const MoreScreen = (props) => {
   });
 
   const rowHeight = (heightScreen - 80 - 82 - 4 - 80) / (menu.length + 1);
-  const languagesItems = [
-    {
-      label: '🇷🇺 Русский',
-      value: 'ru',
-      key: 1,
-    },
-    {
-      label: '🇺🇦 Украинский',
-      value: 'ua',
-      key: 2,
-    },
-  ];
+
+  const [lang, setLang] = useState(props.currentLang);
+
+  useEffect(() => {
+    setLang(lang);
+  }, [lang]);
 
   return (
     <View>
-      <LangSwitcher
-        items={languagesItems}
-        placeholder={{label: 'Сменить язык', value: 'ua', color: '#9EA0A4'}}
-      />
       <List style={{marginTop: 0}}>
         {menu.map((item) => (
           <MenuItem
@@ -304,45 +286,6 @@ const MoreScreen = (props) => {
     </View>
   );
 };
-
-const isAndroid = Platform.OS === 'android';
-
-class LogoTitle extends React.Component {
-  render() {
-    return (
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: '100%',
-          marginTop: 2,
-        }}>
-        <Image
-          resizeMode="contain"
-          style={{maxHeight: 70, marginBottom: 3}}
-          source={require('../assets/logo-horizontal.svg')}
-        />
-        <Text
-          style={{
-            fontSize: 10,
-            bottom: -10,
-            right: isAndroid ? 10 : 20,
-            position: 'absolute',
-            fontFamily: styleConst.font.light,
-            color: styleConst.new.blueHeader,
-          }}>
-          {'v. ' +
-            DeviceInfo.getVersion() +
-            ' (' +
-            DeviceInfo.getBuildNumber() +
-            ')'}
-        </Text>
-      </View>
-    );
-  }
-}
 
 MoreScreen.navigationOptions = () => ({
   headerTitle: () => <LogoTitle />,
