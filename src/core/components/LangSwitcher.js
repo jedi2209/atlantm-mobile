@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import {View, Platform, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import styleConst from '../style-const';
 import RNPickerSelect, {defaultStyles} from 'react-native-picker-select';
 import {actionSetGlobalLanguage} from '../../core/lang/actions';
+import strings from '../../core/lang/const';
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -45,53 +46,33 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-const LangSwitcher = (props, actionSetGlobalLanguage) => {
+const LangSwitcher = (props) => {
+  const _onValueChange = (value) => {
+    props.actionSetGlobalLanguage(value);
+    if (Platform.OS === 'ios') {
+      strings.setLanguage(value);
+    }
+  };
+
+  const _onDonePress = (val) => {
+    strings.setLanguage('ua');
+    if (Platform.OS === 'ios') {
+      console.log('onDonePress', val);
+    }
+  };
+
+  const _onClose = (value) => {
+    console.log('_onClose', value);
+  };
+
   return (
     <View style={[styles.badgeContainer, {backgroundColor: props.bgColor}]}>
-      {console.log('actionSetGlobalLanguage', actionSetGlobalLanguage)}
       <RNPickerSelect
         key={'rnpickerLang'}
         doneText="Выбрать"
-        onDonePress={() => {
-          if (props.onChange && Platform.OS === 'ios') {
-            // console.log('onDonePress', this.state[name]);
-            // props.onChange(this.state[name]);
-          }
-        }}
-        onValueChange={(value) => {
-          console.log('actionSetGlobalLanguage value', value);
-          actionSetGlobalLanguage(value)
-            .then((res) => {
-              console.log('res', res);
-              if (res.type && res.type === 'CAR_HIDE__SUCCESS') {
-                setActivePanel('default');
-                setLoading(false);
-                Toast.show({
-                  text: 'Статус автомобиля изменён',
-                  type: 'success',
-                  position: 'top',
-                });
-              }
-            })
-            .catch((error) => {
-              console.log('error', error);
-              // Toast.show({
-              //   text: error,
-              //   type: 'danger',
-              //   position: 'top',
-              // });
-            });
-          if (props.onChange && Platform.OS !== 'ios') {
-            // console.log('onValueChange', value);
-            // props.onChange(value);
-          }
-        }}
-        onClose={() => {
-          if (props.onChange && Platform.OS === 'ios') {
-            // console.log('onClose', this.state[name]);
-            // props.onChange(this.state[name]);
-          }
-        }}
+        onDonePress={() => _onDonePress}
+        onValueChange={(value) => _onValueChange(value)}
+        onClose={() => _onClose}
         style={{
           ...pickerSelectStyles,
           iconContainer: {
@@ -114,7 +95,12 @@ LangSwitcher.propTypes = {
 LangSwitcher.defaultProps = {
   textColor: 'black',
   bgColor: 'red',
-  name: 'ЧЧХХЫЫ ЫВ',
+  name: 'Язык',
+  placeholder: {
+    label: 'выбрать язык',
+    value: '',
+    color: styleConst.color.bg,
+  },
 };
 
 export default connect(null, mapDispatchToProps)(LangSwitcher);

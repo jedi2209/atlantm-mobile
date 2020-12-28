@@ -2,11 +2,11 @@ export default {
   menu: {
     autocenter: 'XXX',
     actions: 'ZZZ',
-    newcars: 'Новые авто',
-    usedcars: 'Подержанные авто',
-    reviews: 'Отзывы',
-    indicators: 'Индикаторы',
-    service: 'Сервис',
+    newcars: 'ЧЧЧНовые авто',
+    usedcars: 'ФФФПодержанные авто',
+    reviews: 'ЫЫФОтзывы',
+    indicators: 'ЙЦЙЦИндикаторы',
+    service: 'ФЫФЫСервис',
     tva: 'Табло выдачи авто',
   },
 };
