@@ -16,7 +16,7 @@ import CarListItem from './CarListItem';
 // helpers
 import styleConst from '../../core/style-const';
 import {verticalScale} from '../../utils/scale';
-import {TEXT_EMPTY_CAR_LIST} from '../constants';
+import strings from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   spinner: {
@@ -71,13 +71,13 @@ export default class CarList extends PureComponent {
     return isFetchItems ? (
       <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
     ) : (
-      <EmptyMessage text={TEXT_EMPTY_CAR_LIST} />
+      <EmptyMessage text={strings.CarList.emptyMessage} />
     );
   };
 
   renderItem = ({item}) => {
     if (item.type === 'empty') {
-      return <EmptyMessage text={TEXT_EMPTY_CAR_LIST} />;
+      return <EmptyMessage text={strings.CarList.emptyMessage} />;
     }
 
     const {itemScreen, navigation, prices} = this.props;

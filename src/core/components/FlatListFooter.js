@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import React, {Component} from 'react';
+import {View, ActivityIndicator, StyleSheet} from 'react-native';
 
 // helpers
 import styleConst from '../style-const';

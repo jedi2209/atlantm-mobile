@@ -3,6 +3,7 @@ import {View, StyleSheet, Text} from 'react-native';
 import {Button} from 'native-base';
 import Modal from 'react-native-modal';
 import styleConst from '../style-const';
+import strings from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   modalWindow: {
@@ -35,12 +36,18 @@ const ModalView = (props) => {
           {props.content ? props.content : props.children}
           <Button full onPress={props.onHide} style={styles.modalButton}>
             <Text style={styles.modalButtonText}>
-              {props.confirmBtnText ? props.confirmBtnText : 'закрыть'}
+              {props.confirmBtnText
+                ? props.confirmBtnText
+                : strings.ModalView.close}
             </Text>
           </Button>
           {props.cancelBtnText && (
             <Button
-              title={props.cancelBtnText ? props.cancelBtnText : 'отмена'}
+              title={
+                props.cancelBtnText
+                  ? props.cancelBtnText
+                  : strings.ModalView.cancel
+              }
               onPress={props.onHide}
             />
           )}

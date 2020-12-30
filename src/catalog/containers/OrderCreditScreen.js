@@ -6,7 +6,6 @@ import {
   View,
   Alert,
   Text,
-  ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
   Dimensions,
@@ -33,6 +32,8 @@ import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import {CREDIT_ORDER__SUCCESS, CREDIT_ORDER__FAIL} from '../actionTypes';
 import {ERROR_NETWORK} from '../../core/const';
+
+import strings from '../../core/lang/const';
 
 const $size = 40;
 const styles = StyleSheet.create({
@@ -156,7 +157,7 @@ class OrderCreditScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerStyle: stylesHeader.whiteHeader,
     headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerTitle: 'Заявка на кредит',
+    headerTitle: strings.OrderCreditScreen.title,
     headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
     headerRight: <View />,
   });
@@ -217,8 +218,8 @@ class OrderCreditScreen extends Component {
             EMAIL: get(data, 'EMAIL'),
           });
           Alert.alert(
-            'Заявка успешно отправлена!',
-            'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+            strings.Notifications.success.title,
+            strings.Notifications.success.textOrder,
             [
               {
                 text: 'ОК',
@@ -230,7 +231,10 @@ class OrderCreditScreen extends Component {
           );
           break;
         case CREDIT_ORDER__FAIL:
-          Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
+          Alert.alert(
+            strings.Notifications.error.title,
+            strings.Notifications.error.text,
+          );
           break;
       }
     }
@@ -241,14 +245,14 @@ class OrderCreditScreen extends Component {
       fields: {
         groups: [
           {
-            name: 'Автомобиль',
+            name: strings.Form.group.car,
             fields: [
               {
                 name: 'CARNAME',
                 type: 'input',
                 label: this.isNewCar
-                  ? 'Марка, модель и комплектация'
-                  : 'Марка, модель и год выпуска',
+                  ? strings.Form.field.carNameComplectation
+                  : strings.Form.field.carNameYear,
                 value: this.carName,
                 props: {
                   editable: false,
@@ -257,7 +261,7 @@ class OrderCreditScreen extends Component {
               {
                 name: 'SUMM',
                 type: 'component',
-                label: 'Желаемая сумма кредита',
+                label: strings.Form.field.creditSumm,
                 value: (
                   <View>
                     <MultiSlider
@@ -311,12 +315,12 @@ class OrderCreditScreen extends Component {
             ],
           },
           {
-            name: 'Контактные данные',
+            name: strings.Form.group.contacts,
             fields: [
               {
                 name: 'NAME',
                 type: 'input',
-                label: 'Имя',
+                label: strings.Form.field.label.name,
                 value: this.props.firstName,
                 props: {
                   required: true,
@@ -326,7 +330,7 @@ class OrderCreditScreen extends Component {
               {
                 name: 'SECOND_NAME',
                 type: 'input',
-                label: 'Отчество',
+                label: strings.Form.field.label.secondName,
                 value: this.props.secondName,
                 props: {
                   textContentType: 'middleName',
@@ -335,7 +339,7 @@ class OrderCreditScreen extends Component {
               {
                 name: 'LAST_NAME',
                 type: 'input',
-                label: 'Фамилия',
+                label: strings.Form.field.label.lastName,
                 value: this.props.lastName,
                 props: {
                   textContentType: 'familyName',
@@ -344,7 +348,7 @@ class OrderCreditScreen extends Component {
               {
                 name: 'PHONE',
                 type: 'phone',
-                label: 'Телефон',
+                label: strings.Form.field.label.phone,
                 value: this.props.phone,
                 props: {
                   required: true,
@@ -353,22 +357,21 @@ class OrderCreditScreen extends Component {
               {
                 name: 'EMAIL',
                 type: 'email',
-                label: 'Email',
+                label: strings.Form.field.label.email,
                 value: this.props.email,
               },
             ],
           },
           {
-            name: 'Дополнительно',
+            name: strings.Form.group.additional,
             fields: [
               {
                 name: 'COMMENT',
                 type: 'textarea',
-                label: 'Комментарий',
+                label: strings.Form.field.label.comment,
                 value: this.props.comment,
                 props: {
-                  placeholder:
-                    'На случай если тебе потребуется передать нам больше информации',
+                  placeholder: strings.Form.field.placeholder.comment,
                 },
               },
             ],

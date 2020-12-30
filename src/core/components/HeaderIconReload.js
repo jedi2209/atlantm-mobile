@@ -1,10 +1,6 @@
-import React, { Component } from 'react';
-import {
-  Platform,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
-import { Icon } from 'native-base';
+import React, {Component} from 'react';
+import {Platform, StyleSheet, TouchableOpacity} from 'react-native';
+import {Icon} from 'native-base';
 
 // helpers
 import styleConst from '../style-const';
@@ -40,10 +36,7 @@ const styles = StyleSheet.create({
 export default class HeaderIconReload extends Component {
   render() {
     return (
-      <TouchableOpacity
-        style={styles.container}
-        onPress={this.props.onPress}
-      >
+      <TouchableOpacity style={styles.container} onPress={this.props.onPress}>
         <Icon name="ios-refresh" style={styles.icon} />
       </TouchableOpacity>
     );

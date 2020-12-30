@@ -32,6 +32,8 @@ import stylesHeader from '../../../core/components/Header/style';
 import {ERROR_NETWORK} from '../../../core/const';
 import isInternet from '../../../utils/internet';
 
+import strings from '../../../core/lang/const';
+
 const mapStateToProps = ({dealer, profile, nav, catalog}) => {
   const carCost = get(catalog, 'carCost', {});
   let carLocalBrand = '';
@@ -93,7 +95,7 @@ class CarCostScreen extends Component {
         stylesHeader.headerTitleStyle,
         stylesHeader.whiteHeaderTitle,
       ],
-      headerTitle: 'Оценка моего авто',
+      headerTitle: strings.CarCostScreen.title,
       headerLeft: (
         <HeaderIconBack
           theme="blue"
@@ -188,8 +190,8 @@ class CarCostScreen extends Component {
 
           setTimeout(() => {
             Alert.alert(
-              'Всё получилось!',
-              'Заявка успешно отправлена. Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+              strings.Notifications.success.title,
+              strings.Notifications.success.textOrder,
               [
                 {
                   text: 'ОК',
@@ -205,7 +207,7 @@ class CarCostScreen extends Component {
           let message = get(
             action,
             'payload.message',
-            'Произошла ошибка, попробуем снова?',
+            strings.Notifications.error.text,
           );
 
           if (message === 'Network request failed') {
@@ -213,7 +215,7 @@ class CarCostScreen extends Component {
           }
 
           setTimeout(
-            () => Alert.alert('Хьюстон, у нас проблемы...', message),
+            () => Alert.alert(strings.Notifications.error.title, message),
             100,
           );
           break;
@@ -242,12 +244,12 @@ class CarCostScreen extends Component {
       fields: {
         groups: [
           {
-            name: 'Автоцентр',
+            name: strings.Form.group.dealer,
             fields: [
               {
                 name: 'DEALER',
                 type: 'dealerSelect',
-                label: 'Автоцентр',
+                label: strings.Form.field.label.dealer,
                 value:
                   this.props.dealerSelectedLocal &&
                   this.props.dealerSelectedLocal.id
@@ -263,12 +265,12 @@ class CarCostScreen extends Component {
             ],
           },
           {
-            name: 'Автомобиль',
+            name: strings.Form.group.car,
             fields: [
               {
                 name: 'CARBRAND',
                 type: 'input',
-                label: 'Марка',
+                label: strings.Form.field.label.carBrand,
                 value: this.state.carBrand
                   ? this.state.carBrand
                   : this.props.carBrand,
@@ -280,7 +282,7 @@ class CarCostScreen extends Component {
               {
                 name: 'CARMODEL',
                 type: 'input',
-                label: 'Модель',
+                label: strings.Form.field.label.carModel,
                 value: this.state.carModel
                   ? this.state.carModel
                   : this.props.carModel,
@@ -292,7 +294,7 @@ class CarCostScreen extends Component {
               {
                 name: 'CARVIN',
                 type: 'input',
-                label: 'VIN номер',
+                label: strings.Form.field.label.carVIN,
                 value: this.state.carVIN
                   ? this.state.carVIN
                   : this.props.carVIN,
@@ -303,7 +305,7 @@ class CarCostScreen extends Component {
               {
                 name: 'CARYEAR',
                 type: 'year',
-                label: 'Год выпуска',
+                label: strings.Form.field.label.carYear,
                 value: this.props.carYear,
                 props: {
                   required: true,
@@ -311,7 +313,7 @@ class CarCostScreen extends Component {
                   maxDate: new Date(),
                   reverse: true,
                   placeholder: {
-                    label: 'Выбери год выпуска...',
+                    label: strings.Form.field.placeholder.carYear,
                     value: null,
                     color: '#9EA0A4',
                   },
@@ -339,7 +341,7 @@ class CarCostScreen extends Component {
               {
                 name: 'CARMILEAGE',
                 type: 'input',
-                label: 'Пробег [в километрах]',
+                label: strings.Form.field.label.carMileage,
                 value: this.state.carMileage
                   ? this.state.carMileage
                   : this.props.carMileage,
@@ -352,38 +354,38 @@ class CarCostScreen extends Component {
               {
                 name: 'CARENGINETYPE',
                 type: 'select',
-                label: 'Тип двигателя',
+                label: strings.Form.field.label.engineType,
                 value: this.props.carEngineType,
                 props: {
                   items: [
                     {
-                      label: 'Бензин',
+                      label: strings.Form.field.value.engineType.gasoline,
                       value: 1,
                       key: 1,
                     },
                     {
-                      label: 'Бензин (ГАЗ)',
+                      label: strings.Form.field.value.engineType.gasolineGas,
                       value: 9,
                       key: 9,
                     },
                     {
-                      label: 'Дизель',
+                      label: strings.Form.field.value.engineType.diesel,
                       value: 2,
                       key: 2,
                     },
                     {
-                      label: 'Гибрид',
+                      label: strings.Form.field.value.engineType.hybrid,
                       value: 3,
                       key: 3,
                     },
                     {
-                      label: 'Электро',
+                      label: strings.Form.field.value.engineType.electro,
                       value: 4,
                       key: 4,
                     },
                   ],
                   placeholder: {
-                    label: 'Укажи тип двигателя...',
+                    label: strings.Form.field.placeholder.engineType,
                     value: null,
                     color: '#9EA0A4',
                   },
@@ -402,7 +404,7 @@ class CarCostScreen extends Component {
               {
                 name: 'CARENGINEVOLUME',
                 type: 'input',
-                label: 'Объём двигателя [в куб.см]',
+                label: strings.Form.field.label.engineVolume,
                 value: this.props.carEngineVolume,
                 props: {
                   keyboardType: 'number-pad',
@@ -412,38 +414,38 @@ class CarCostScreen extends Component {
               {
                 name: 'CARGEARBOXTYPE',
                 type: 'select',
-                label: 'Тип КПП',
+                label: strings.Form.field.label.gearbox,
                 value: this.props.carGearboxType,
                 props: {
                   items: [
                     {
-                      label: 'Механическая',
+                      label: strings.Form.field.value.gearbox.mechanical,
                       value: 1,
                       key: 1,
                     },
                     {
-                      label: 'Автоматическая',
+                      label: strings.Form.field.value.gearbox.automatic,
                       value: 4,
                       key: 4,
                     },
                     {
-                      label: 'Автоматическая -- DSG',
+                      label: strings.Form.field.value.gearbox.dsg,
                       value: 11,
                       key: 11,
                     },
                     {
-                      label: 'Автоматическая -- Робот',
+                      label: strings.Form.field.value.gearbox.robot,
                       value: 12,
                       key: 12,
                     },
                     {
-                      label: 'Автоматическая -- Вариатор',
+                      label: strings.Form.field.value.gearbox.variator,
                       value: 13,
                       key: 13,
                     },
                   ],
                   placeholder: {
-                    label: 'Выбери коробку передач...',
+                    label: strings.Form.field.placeholder.gearbox,
                     value: null,
                     color: '#9EA0A4',
                   },
@@ -462,12 +464,12 @@ class CarCostScreen extends Component {
             ],
           },
           {
-            name: 'Контактные данные',
+            name: strings.Form.group.contacts,
             fields: [
               {
                 name: 'NAME',
                 type: 'input',
-                label: 'Имя',
+                label: strings.Form.field.label.name,
                 value: this.props.firstName,
                 props: {
                   required: true,
@@ -477,7 +479,7 @@ class CarCostScreen extends Component {
               {
                 name: 'SECOND_NAME',
                 type: 'input',
-                label: 'Отчество',
+                label: strings.Form.field.label.secondName,
                 value: this.props.secondName,
                 props: {
                   textContentType: 'middleName',
@@ -486,7 +488,7 @@ class CarCostScreen extends Component {
               {
                 name: 'LAST_NAME',
                 type: 'input',
-                label: 'Фамилия',
+                label: strings.Form.field.label.lastName,
                 value: this.props.lastName,
                 props: {
                   textContentType: 'familyName',
@@ -495,7 +497,7 @@ class CarCostScreen extends Component {
               {
                 name: 'PHONE',
                 type: 'phone',
-                label: 'Телефон',
+                label: strings.Form.field.label.phone,
                 value: this.props.phone,
                 props: {
                   required: true,
@@ -504,18 +506,18 @@ class CarCostScreen extends Component {
               {
                 name: 'EMAIL',
                 type: 'email',
-                label: 'Email',
+                label: strings.Form.field.label.email,
                 value: this.props.email,
               },
             ],
           },
           {
-            name: 'Фотографии',
+            name: strings.Form.group.foto,
             fields: [
               {
                 name: 'FOTO',
                 type: 'component',
-                label: 'Прикрепи фото',
+                label: strings.Form.field.label.foto,
                 value: (
                   <CarCostPhotos
                     photos={this.state.photos}
@@ -530,16 +532,15 @@ class CarCostScreen extends Component {
             ],
           },
           {
-            name: 'Дополнительно',
+            name: strings.Form.group.additional,
             fields: [
               {
                 name: 'COMMENT',
                 type: 'textarea',
-                label: 'Комментарий',
+                label: strings.Form.field.label.comment,
                 value: this.props.Text,
                 props: {
-                  placeholder:
-                    'На случай если тебе потребуется передать нам больше информации',
+                  placeholder: strings.Form.field.placeholder.comment,
                 },
               },
             ],

@@ -16,6 +16,7 @@ import GallerySwiper from 'react-native-gallery-swiper';
 import {Icon} from 'native-base';
 
 import styleConst from '../style-const';
+import strings from '../../core/lang/const';
 
 class PhotoViewer extends Component {
   static propTypes = {
@@ -41,7 +42,7 @@ class PhotoViewer extends Component {
   renderError() {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Не удалось загрузить фото</Text>
+        <Text style={styles.errorText}>{strings.PhotoViewer.errorLoad}</Text>
       </View>
     );
   }

@@ -1,9 +1,10 @@
-import React, { PureComponent } from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
+import React, {PureComponent} from 'react';
+import {StyleSheet, TextInput, View} from 'react-native';
 import PropTypes from 'prop-types';
 
 // helpers
 import styleConst from '../../core/style-const';
+import strings from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   container: {
@@ -25,16 +26,16 @@ export default class MessageForm extends PureComponent {
   static propTypes = {
     message: PropTypes.string,
     messageFill: PropTypes.func,
-  }
+  };
 
-  static defaultProps = {}
+  static defaultProps = {};
 
   onChangeText = (text) => {
     this.props.messageFill(text);
-  }
+  };
 
   render() {
-    const { message } = this.props;
+    const {message} = this.props;
 
     return (
       <View style={styles.container}>
@@ -44,8 +45,8 @@ export default class MessageForm extends PureComponent {
           numberOfLines={2}
           value={message}
           returnKeyType="done"
-          returnKeyLabel="Готово"
-          placeholder="Поле для заполнения"
+          returnKeyLabel={strings.MessageForm.done}
+          placeholder={strings.MessageForm.placeholder}
           onChangeText={this.onChangeText}
           underlineColorAndroid="transparent"
           blurOnSubmit={true}

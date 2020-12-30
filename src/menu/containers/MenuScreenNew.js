@@ -7,9 +7,15 @@ import {Icon, List, ListItem, Left, Right, Button, Body} from 'native-base';
 import styleConst from '../../core/style-const';
 
 import {connect} from 'react-redux';
+import {
+  actionMenuOpenedCount,
+  actionAppRated,
+  actionAppRateAskLater,
+} from '../../core/actions';
 
 import strings from '../../core/lang/const';
 import LogoTitle from '../../core/components/LogoTitle';
+import RateThisApp from '../../core/components/RateThisApp';
 
 const styles = StyleSheet.create({
   buttonPrimary: {
@@ -112,6 +118,12 @@ const MenuItem = (props) => {
   );
 };
 
+const mapDispatchToProps = {
+  actionMenuOpenedCount,
+  actionAppRated,
+  actionAppRateAskLater,
+};
+
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
     nav,
@@ -132,6 +144,10 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
     pushActionSubscribeState: core.pushActionSubscribeState,
 
     currentLang: core.language.selected,
+
+    menuOpenedCount: core.menuOpenedCount,
+    isAppRated: core.isAppRated,
+    AppRateAskLater: core.AppRateAskLater,
   };
 };
 
@@ -139,7 +155,7 @@ const MoreScreen = (props) => {
   const menu = [
     {
       id: 1,
-      name: strings.menu.autocenter,
+      name: strings.Menu.main.autocenter,
       navigateUrl: 'Home',
       type: 'home',
       icon: <Image source={require('../assets/Home.svg')} />,
@@ -147,7 +163,7 @@ const MoreScreen = (props) => {
     },
     {
       id: 2,
-      name: strings.menu.actions,
+      name: strings.Menu.main.actions,
       navigateUrl: 'InfoList',
       type: 'sales',
       icon: <Image source={require('../assets/NewsFeeds.svg')} />,
@@ -155,7 +171,7 @@ const MoreScreen = (props) => {
     },
     {
       id: 3,
-      name: strings.menu.newcars,
+      name: strings.Menu.main.newcars,
       navigateUrl: 'NewCarListScreen',
       type: 'new',
       icon: <Image source={require('../assets/Car-new.svg')} />,
@@ -163,7 +179,7 @@ const MoreScreen = (props) => {
     },
     {
       id: 4,
-      name: strings.menu.usedcars,
+      name: strings.Menu.main.usedcars,
       navigateUrl: 'UsedCarListScreen',
       type: 'not_new',
       icon: <Image source={require('../assets/Car-used.svg')} />,
@@ -171,7 +187,7 @@ const MoreScreen = (props) => {
     },
     {
       id: 7,
-      name: strings.menu.reviews,
+      name: strings.Menu.main.reviews,
       navigateUrl: 'ReviewsScreen',
       type: 'reviews',
       icon: <Image source={require('../assets/Eko.svg')} />,
@@ -179,7 +195,7 @@ const MoreScreen = (props) => {
     },
     {
       id: 8,
-      name: strings.menu.indicators,
+      name: strings.Menu.main.indicators,
       navigateUrl: 'IndicatorsScreen',
       type: 'indicators',
       icon: <Image source={require('../assets/Indicators.svg')} />,
@@ -203,7 +219,7 @@ const MoreScreen = (props) => {
       menu.push(
         {
           id: 5,
-          name: strings.menu.service,
+          name: strings.Menu.main.service,
           navigateUrl: 'ServiceScreen',
           type: 'service',
           icon: <Image source={require('../assets/Service.svg')} />,
@@ -211,7 +227,7 @@ const MoreScreen = (props) => {
         },
         {
           id: 6,
-          name: strings.menu.tva,
+          name: strings.Menu.main.tva,
           navigateUrl: 'TvaScreen',
           type: 'new',
           icon: <Image source={require('../assets/Car-lifter.svg')} />,
@@ -230,11 +246,37 @@ const MoreScreen = (props) => {
   const [lang, setLang] = useState(props.currentLang);
 
   useEffect(() => {
+    // Anything in here is fired on component mount.
     setLang(lang);
-  }, [lang]);
+    // if (props.menuOpenedCount < 10) {
+    //   props.actionMenuOpenedCount();
+    // }
+    // if (props.AppRateAskLater) {
+    //   const right_now = new Date();
+    //   console.log('props.AppRateAskLater.getTime()', props.AppRateAskLater.getTime());
+    //   console.log('right_now.now()', right_now.now());
+    // }
+    return () => {
+      // Anything in here is fired on component unmount.
+    };
+  }, [lang, props]);
+
+  const _onAppRateSuccess = () => {
+    !props.isAppRated && props.actionAppRated();
+  };
+  const _onAppRateAskLater = () => {
+    !props.isAppRated && props.actionAppRateAskLater();
+  };
 
   return (
     <View>
+      {props.isAppRated !== true &&
+      (props.menuOpenedCount === 10 || props.menuOpenedCount === 30) ? (
+        <RateThisApp
+          onSuccess={_onAppRateSuccess}
+          onAskLater={_onAppRateAskLater}
+        />
+      ) : null}
       <List style={{marginTop: 0}}>
         {menu.map((item) => (
           <MenuItem
@@ -308,4 +350,4 @@ MoreScreen.navigationOptions = () => ({
   ),
 });
 
-export default connect(mapStateToProps)(MoreScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(MoreScreen);

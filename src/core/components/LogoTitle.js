@@ -8,9 +8,10 @@ import LangSwitcher from './LangSwitcher';
 
 import DeviceInfo from 'react-native-device-info';
 
-const mapStateToProps = ({core}) => {
+const mapStateToProps = ({dealer, core}) => {
   return {
     currentLang: core.language.selected || 'ru',
+    dealerSelected: dealer.selected,
   };
 };
 
@@ -67,17 +68,18 @@ class LogoTitle extends PureComponent {
           style={styles.Image}
           source={require('../../menu/assets/logo-horizontal.svg')}
         />
-        <LangSwitcher
-          items={languagesItems}
-          placeholder={{
-            label: 'язык',
-            value: this.props.currentLang === 'ua' ? 2 : 1,
-            color: styleConst.color.bg,
-          }}
-          value={this.props.currentLang}
-          bgColor={styleConst.color.bg}
-          style={styles.LangSwitcher}
-        />
+        {this.props.dealerSelected.region === 'ua' ? ( // выбор языка есть только для РУ региона
+          <LangSwitcher
+            items={languagesItems}
+            placeholder={{
+              label: 'язык',
+              value: this.props.currentLang === 'ua' ? 2 : 1,
+              color: styleConst.color.bg,
+            }}
+            value={this.props.currentLang}
+            style={styles.LangSwitcher}
+          />
+        ) : null}
         <Text style={styles.Text}>
           {'v. ' +
             DeviceInfo.getVersion() +

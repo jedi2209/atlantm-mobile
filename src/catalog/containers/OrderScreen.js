@@ -5,7 +5,6 @@ import {
   StyleSheet,
   View,
   Alert,
-  ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
@@ -29,6 +28,8 @@ import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import {CATALOG_ORDER__SUCCESS, CATALOG_ORDER__FAIL} from '../actionTypes';
 import {ERROR_NETWORK} from '../../core/const';
+
+import strings from '../../core/lang/const';
 
 const $size = 40;
 const styles = StyleSheet.create({
@@ -181,19 +182,21 @@ class OrderScreen extends Component {
       fields: {
         groups: [
           {
-            name: listAll.length ? 'Автоцентр и автомобиль' : 'Автомобиль',
+            name: listAll.length
+              ? strings.Form.group.dealerCar
+              : strings.Form.group.car,
             fields: [
               listAll.length > 1
                 ? {
                     name: 'DEALER',
                     type: 'select',
-                    label: 'Автоцентр',
+                    label: strings.Form.field.label.dealer,
                     value: null,
                     props: {
                       items: listAll,
                       required: true,
                       placeholder: {
-                        label: 'Выбери удобный для тебя автоцентр',
+                        label: strings.Form.field.placeholder.dealer,
                         value: null,
                         color: '#9EA0A4',
                       },
@@ -202,20 +205,20 @@ class OrderScreen extends Component {
                 : {
                     name: 'DEALERNAME',
                     type: 'input',
-                    label: 'Автоцентр',
+                    label: strings.Form.field.label.dealer,
                     value:
                       listAll[0] && listAll[0].label ? listAll[0].label : null,
                     props: {
                       editable: false,
-                      placeholder: 'Выбери удобный для тебя автоцентр',
+                      placeholder: strings.Form.field.placeholder.dealer,
                     },
                   },
               {
                 name: 'CARNAME',
                 type: 'input',
                 label: isNewCar
-                  ? 'Марка, модель и комплектация'
-                  : 'Марка, модель и год выпуска',
+                  ? strings.Form.field.label.carNameComplectation
+                  : strings.Form.field.label.carNameYear,
                 value: carName,
                 props: {
                   editable: false,
@@ -224,12 +227,12 @@ class OrderScreen extends Component {
             ],
           },
           {
-            name: 'Контактные данные',
+            name: strings.Form.group.contacts,
             fields: [
               {
                 name: 'NAME',
                 type: 'input',
-                label: 'Имя',
+                label: strings.Form.field.label.name,
                 value: this.props.firstName,
                 props: {
                   required: true,
@@ -239,7 +242,7 @@ class OrderScreen extends Component {
               {
                 name: 'SECOND_NAME',
                 type: 'input',
-                label: 'Отчество',
+                label: strings.Form.field.label.secondName,
                 value: this.props.secondName,
                 props: {
                   textContentType: 'middleName',
@@ -248,7 +251,7 @@ class OrderScreen extends Component {
               {
                 name: 'LAST_NAME',
                 type: 'input',
-                label: 'Фамилия',
+                label: strings.Form.field.label.lastName,
                 value: this.props.lastName,
                 props: {
                   textContentType: 'familyName',
@@ -257,7 +260,7 @@ class OrderScreen extends Component {
               {
                 name: 'PHONE',
                 type: 'phone',
-                label: 'Телефон',
+                label: strings.Form.field.label.phone,
                 value: this.props.phone,
                 props: {
                   required: true,
@@ -266,22 +269,21 @@ class OrderScreen extends Component {
               {
                 name: 'EMAIL',
                 type: 'email',
-                label: 'Email',
+                label: strings.Form.field.label.email,
                 value: this.props.email,
               },
             ],
           },
           {
-            name: 'Дополнительно',
+            name: strings.Form.group.additional,
             fields: [
               {
                 name: 'COMMENT',
                 type: 'textarea',
-                label: 'Комментарий',
+                label: strings.Form.field.label.comment,
                 value: this.props.comment,
                 props: {
-                  placeholder:
-                    'На случай если тебе потребуется передать нам больше информации',
+                  placeholder: strings.Form.field.placeholder.comment,
                 },
               },
             ],
@@ -295,8 +297,8 @@ class OrderScreen extends Component {
     headerStyle: stylesHeader.whiteHeader,
     headerTitleStyle: stylesHeader.whiteHeaderTitle,
     headerTitle: !navigation.state.params.car.ordered
-      ? 'Заявка на авто'
-      : 'Заявка на похожее авто',
+      ? strings.OrderScreen.title
+      : strings.OrderScreen.titleSimiliar,
     headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
     headerRight: <View />,
   });
@@ -380,8 +382,8 @@ class OrderScreen extends Component {
             EMAIL: get(data, 'EMAIL'),
           });
           Alert.alert(
-            'Заявка успешно отправлена!',
-            'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+            strings.Notifications.success.title,
+            strings.Notifications.success.textOrder,
             [
               {
                 text: 'ОК',
@@ -393,7 +395,10 @@ class OrderScreen extends Component {
           );
           break;
         case CATALOG_ORDER__FAIL:
-          Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
+          Alert.alert(
+            strings.Notifications.error.title,
+            strings.Notifications.error.text,
+          );
           break;
       }
     }
