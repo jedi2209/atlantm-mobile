@@ -43,6 +43,7 @@ import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
 import numberWithGap from '../../../utils/number-with-gap';
 import {ERROR_NETWORK} from '../../../core/const';
+import strings from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -108,6 +109,11 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
     fontSize: 16,
   },
+  sectionValueReduceText: {
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
+    fontSize: 14,
+  },
   about: {
     marginBottom: 5,
   },
@@ -138,7 +144,7 @@ class CarHistoryScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: (
       <Text style={stylesHeader.whiteHeaderTitle}>
-        История ТО и обслуживания
+        {strings.CarHistoryScreen.title}
       </Text>
     ),
     headerStyle: stylesHeader.whiteHeader,
@@ -163,7 +169,7 @@ class CarHistoryScreen extends Component {
         let message = get(
           action,
           'payload.message',
-          'Произошла ошибка, попробуем снова?',
+          strings.Notifications.error.text,
         );
 
         if (message === 'Network request failed') {
@@ -246,7 +252,7 @@ class CarHistoryScreen extends Component {
     });
   };
 
-  renderLevel3Item = ({prop, value, color}) => {
+  renderLevel3Item = ({prop, value, sale, color}) => {
     return (
       <Row>
         <Col style={styles.sectionProp}>
@@ -271,6 +277,7 @@ class CarHistoryScreen extends Component {
     const parts = get(summ, 'parts');
     const total = get(summ, 'total');
     const currency = get(summ, 'currency');
+    // const sale = parseFloat(get(summ, 'sale.works') + get(summ, 'sale.parts'));
 
     return (
       <Body style={[styles.body]}>
@@ -289,25 +296,36 @@ class CarHistoryScreen extends Component {
               color: true,
             })
           : null}
-        {master ? this.renderLevel3Item({prop: 'Мастер', value: master}) : null}
-        {works
+        {master
           ? this.renderLevel3Item({
-              prop: 'Стоимость работ',
+              prop: strings.CarHistoryScreen.master,
+              value: master,
+            })
+          : null}
+        {/* {works
+          ? this.renderLevel3Item({
+              prop: strings.CarHistoryScreen.price.work,
               value: showPrice(works, currency, true),
             })
           : null}
         {parts
           ? this.renderLevel3Item({
-              prop: 'Стоимость запчастей',
+              prop: strings.CarHistoryScreen.price.materials,
               value: showPrice(parts, currency, true),
             })
-          : null}
+          : null} */}
         {total
           ? this.renderLevel3Item({
-              prop: 'Всего',
+              prop: strings.CarHistoryScreen.price.total,
               value: showPrice(total, currency, true),
             })
           : null}
+        {/* {sale
+          ? this.renderLevel3Item({
+              prop: strings.CarHistoryScreen.sale,
+              value: showPrice(sale, currency, true),
+            })
+          : null} */}
       </Body>
     );
   };
@@ -342,7 +360,9 @@ class CarHistoryScreen extends Component {
       return (
         <SafeAreaView style={styles.safearea}>
           <StatusBar barStyle="dark-content" />
-          <Text style={styles.emptyText}>Истории пока нет</Text>
+          <Text style={styles.emptyText}>
+            {strings.CarHistoryScreen.empty.text}
+          </Text>
         </SafeAreaView>
       );
     }
