@@ -5,7 +5,6 @@ import {
   StyleSheet,
   View,
   Alert,
-  ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
@@ -30,6 +29,8 @@ import stylesHeader from '../../core/components/Header/style';
 import {addDays, dayMonthYear, yearMonthDay} from '../../utils/date';
 import {TESTDRIVE_LEAD__SUCCESS, TESTDRIVE_LEAD__FAIL} from '../actionTypes';
 import {ERROR_NETWORK} from '../../core/const';
+
+import strings from '../../core/lang/const';
 
 const $size = 40;
 const styles = StyleSheet.create({
@@ -133,14 +134,14 @@ class OrderTestDriveScreen extends Component {
       fields: {
         groups: [
           {
-            name: 'Автомобиль',
+            name: strings.Form.group.car,
             fields: [
               {
                 name: 'CARNAME',
                 type: 'input',
                 label: isNewCar
-                  ? 'Марка, модель и комплектация'
-                  : 'Марка, модель и год выпуска',
+                  ? strings.Form.field.carNameComplectation
+                  : strings.Form.field.carNameYear,
                 value: carName,
                 props: {
                   editable: false,
@@ -149,10 +150,12 @@ class OrderTestDriveScreen extends Component {
               {
                 name: 'DATE',
                 type: 'date',
-                label: 'Выбери удобную для тебя дату',
+                label: strings.Form.field.label.date,
                 value: null,
                 props: {
-                  placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
+                  placeholder:
+                    strings.Form.field.placeholder.date +
+                    dayMonthYear(addDays(2)),
                   required: true,
                   type: 'service',
                   minimumDate: new Date(addDays(2)),
@@ -163,12 +166,12 @@ class OrderTestDriveScreen extends Component {
             ],
           },
           {
-            name: 'Контактные данные',
+            name: strings.Form.group.contacts,
             fields: [
               {
                 name: 'NAME',
                 type: 'input',
-                label: 'Имя',
+                label: strings.Form.field.label.name,
                 value: this.props.firstName,
                 props: {
                   required: true,
@@ -178,7 +181,7 @@ class OrderTestDriveScreen extends Component {
               {
                 name: 'SECOND_NAME',
                 type: 'input',
-                label: 'Отчество',
+                label: strings.Form.field.label.secondName,
                 value: this.props.secondName,
                 props: {
                   textContentType: 'middleName',
@@ -187,7 +190,7 @@ class OrderTestDriveScreen extends Component {
               {
                 name: 'LAST_NAME',
                 type: 'input',
-                label: 'Фамилия',
+                label: strings.Form.field.label.lastName,
                 value: this.props.lastName,
                 props: {
                   textContentType: 'familyName',
@@ -196,7 +199,7 @@ class OrderTestDriveScreen extends Component {
               {
                 name: 'PHONE',
                 type: 'phone',
-                label: 'Телефон',
+                label: strings.Form.field.label.phone,
                 value: this.props.phone,
                 props: {
                   required: true,
@@ -205,22 +208,21 @@ class OrderTestDriveScreen extends Component {
               {
                 name: 'EMAIL',
                 type: 'email',
-                label: 'Email',
+                label: strings.Form.field.label.email,
                 value: this.props.email,
               },
             ],
           },
           {
-            name: 'Дополнительно',
+            name: strings.Form.group.additional,
             fields: [
               {
                 name: 'COMMENT',
                 type: 'textarea',
-                label: 'Комментарий',
+                label: strings.Form.field.label.comment,
                 value: this.props.comment,
                 props: {
-                  placeholder:
-                    'На случай если тебе потребуется передать нам больше информации',
+                  placeholder: strings.Form.field.placeholder.comment,
                 },
               },
             ],
@@ -236,8 +238,8 @@ class OrderTestDriveScreen extends Component {
       headerStyle: stylesHeader.whiteHeader,
       headerTitleStyle: stylesHeader.whiteHeaderTitle,
       headerTitle: isNewCar
-        ? 'Заявка на тест-драйв авто'
-        : 'Заявка на просмотр авто',
+        ? strings.OrderTestDriveScreen.titleTestDrive
+        : strings.OrderTestDriveScreen.titleView,
       headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
       headerRight: <View />,
     };
@@ -297,8 +299,8 @@ class OrderTestDriveScreen extends Component {
             EMAIL: get(data, 'EMAIL'),
           });
           Alert.alert(
-            'Заявка успешно отправлена!',
-            'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+            strings.Notifications.success.title,
+            strings.Notifications.success.textOrder,
             [
               {
                 text: 'ОК',
@@ -310,7 +312,10 @@ class OrderTestDriveScreen extends Component {
           );
           break;
         case TESTDRIVE_LEAD__FAIL:
-          Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
+          Alert.alert(
+            strings.Notifications.error.title,
+            strings.Notifications.error.text,
+          );
           break;
       }
     }

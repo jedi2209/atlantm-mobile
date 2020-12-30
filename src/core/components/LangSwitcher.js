@@ -69,7 +69,7 @@ const LangSwitcher = (props) => {
     <View style={[styles.badgeContainer, {backgroundColor: props.bgColor}]}>
       <RNPickerSelect
         key={'rnpickerLang'}
-        doneText="Выбрать"
+        doneText={strings.Picker.choose}
         onDonePress={() => _onDonePress}
         onValueChange={(value) => _onValueChange(value)}
         onClose={() => _onClose}
@@ -94,10 +94,10 @@ LangSwitcher.propTypes = {
 
 LangSwitcher.defaultProps = {
   textColor: 'black',
-  bgColor: 'red',
-  name: 'Язык',
+  bgColor: styleConst.color.bg,
+  name: strings.LangSwitcher.lang,
   placeholder: {
-    label: 'выбрать язык',
+    label: strings.LangSwitcher.chooseLang,
     value: '',
     color: styleConst.color.bg,
   },

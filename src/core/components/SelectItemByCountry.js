@@ -18,6 +18,8 @@ import {
   DEALER__FAIL,
 } from '../../dealer/actionTypes';
 
+import strings from '../../core/lang/const';
+
 const styles = StyleSheet.create({
   brands: {
     flexDirection: 'row',
@@ -134,8 +136,8 @@ export default class SelectItemByCountry extends Component {
 
       if (action.type === DEALER__FAIL) {
         Alert.alert(
-          'Ошибка',
-          'Не удалось получить данные по выбранному автоцентру, попробуем снова?',
+          strings.SelectItemByCountry.error.title,
+          strings.SelectItemByCountry.error.text,
         );
       }
     });

@@ -20,6 +20,8 @@ import BonusScreenInfo from '../../profile/bonus/containers/BonusInfoScreen';
 import InfoPostScreen from '../../info/containers/InfoPostScreen';
 import UsedCarListScreen from '../../catalog/usedcar/containers/UsedCarListScreen';
 import MoreScreen from './MenuScreenNew';
+
+import strings from '../../core/lang/const';
 // import ApplicationModalScreen from './Application';
 
 const styles = {
@@ -46,7 +48,7 @@ const SearchStack = {
 
 SearchStack.navigationOptions = ({navigation}) => {
   return {
-    tabBarLabel: 'Поиск',
+    tabBarLabel: strings.Menu.bottom.search,
     tabBarIcon: ({tintColor}) => (
       <Icon
         name="search"
@@ -71,7 +73,7 @@ const BottomTabNavigation = createBottomTabNavigator(
         InfoPostScreen: {screen: InfoPostScreen},
       }),
       navigationOptions: {
-        tabBarLabel: 'Автоцентр',
+        tabBarLabel: strings.Menu.bottom.dealer,
         tabBarIcon: ({tintColor}) => (
           <Icon
             name="building"
@@ -100,7 +102,7 @@ const BottomTabNavigation = createBottomTabNavigator(
         BonusScreen: {screen: BonusScreen},
       }),
       navigationOptions: () => ({
-        tabBarLabel: 'Кабинет',
+        tabBarLabel: strings.Menu.bottom.lkk,
         tabBarIcon: ({tintColor}) => (
           <Icon
             name="user"
@@ -153,7 +155,7 @@ const BottomTabNavigation = createBottomTabNavigator(
               );
             });
           },
-          tabBarLabel: 'Заявка',
+          tabBarLabel: strings.Menu.bottom.order,
           tabBarIcon: ({tintColor}) => (
             <Icon
               name="comments"
@@ -179,7 +181,7 @@ const BottomTabNavigation = createBottomTabNavigator(
       }),
       navigationOptions: () => {
         return {
-          tabBarLabel: 'Меню',
+          tabBarLabel: strings.Menu.bottom.menu,
           tabBarIcon: ({tintColor}) => (
             <Icon
               name="bars"

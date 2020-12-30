@@ -6,6 +6,7 @@ import {View, Text, TouchableHighlight, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import styleConst from '../style-const';
 import ModalView from './ModalView';
+import strings from '../lang/const';
 
 const styles = StyleSheet.create({
   boxStyle: {
@@ -79,7 +80,7 @@ export default class ColorBox extends PureComponent {
               />
               {color.code ? (
                 <Text style={{fontSize: 16}} selectable={true}>
-                  код цвета - {color.code}
+                  {strings.ColorBox.code} - {color.code}
                 </Text>
               ) : null}
             </View>

@@ -5,6 +5,7 @@ import {Button} from 'native-base';
 import {format} from '../../utils/date';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ModalView from './ModalView';
+import strings from '../lang/const';
 
 export const DatePickerCustom = React.forwardRef((props, ref) => {
   const defaultDate = new Date();
@@ -23,7 +24,9 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
               onHide={props.onHideModal}
               swipeDirection={['up', 'down', 'left', 'right']}
               // style={{justifyContent: 'flex-end', margin: 0}}
-              confirmBtnText={props.confirmBtnText || 'выбрать'}
+              confirmBtnText={
+                props.confirmBtnText || strings.DatePickerCustom.choose
+              }
               selfClosed={false}>
               <DateTimePicker
                 mode="date"
@@ -43,7 +46,9 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
               onHide={props.onHideModal}
               swipeDirection={['up', 'down', 'left', 'right']}
               // style={{justifyContent: 'flex-end', margin: 0}}
-              confirmBtnText={props.confirmBtnText || 'выбрать'}
+              confirmBtnText={
+                props.confirmBtnText || strings.DatePickerCustom.choose
+              }
               selfClosed={false}>
               <DateTimePicker
                 mode="date"
@@ -98,7 +103,7 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
             ? dateHuman
             : props.placeholder
             ? props.placeholder
-            : 'Выбери дату'}
+            : strings.DatePickerCustom.chooseDate}
         </Text>
       </Button>
       {DatePicker(props.isActive)}

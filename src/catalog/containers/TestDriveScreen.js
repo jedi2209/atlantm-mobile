@@ -5,7 +5,6 @@ import {
   StyleSheet,
   View,
   Alert,
-  ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
@@ -45,6 +44,8 @@ import {ERROR_NETWORK} from '../../core/const';
 
 // import API from '../../utils/api';
 import {yearMonthDay, addDays, dayMonthYear} from '../../utils/date';
+
+import strings from '../../core/lang/const';
 
 const $size = 40;
 const styles = StyleSheet.create({
@@ -170,7 +171,7 @@ class TestDriveScreen extends PureComponent {
   static navigationOptions = ({navigation}) => ({
     headerStyle: stylesHeader.whiteHeader,
     headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerTitle: 'Заявка на тест-драйв',
+    headerTitle: strings.TestDriveScreen.title,
     headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
     headerRight: <View />,
   });
@@ -242,8 +243,8 @@ class TestDriveScreen extends PureComponent {
               EMAIL: get(data, 'EMAIL'),
             });
             Alert.alert(
-              'Заявка успешно отправлена!',
-              'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+              strings.Notifications.success.title,
+              strings.Notifications.success.textOrder,
               [
                 {
                   text: 'ОК',
@@ -284,8 +285,8 @@ class TestDriveScreen extends PureComponent {
                     EMAIL: get(data, 'EMAIL'),
                   });
                   Alert.alert(
-                    'Заявка успешно отправлена!',
-                    'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+                    strings.Notifications.success.title,
+                    strings.Notifications.success.textOrder,
                     [
                       {
                         text: 'ОК',
@@ -297,7 +298,10 @@ class TestDriveScreen extends PureComponent {
                   );
                   break;
                 case TESTDRIVE_LEAD__FAIL:
-                  Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
+                  Alert.alert(
+                    strings.Notifications.error.title,
+                    strings.Notifications.error.text,
+                  );
                   break;
               }
             }
@@ -339,8 +343,8 @@ class TestDriveScreen extends PureComponent {
               EMAIL: get(data, 'EMAIL'),
             });
             Alert.alert(
-              'Заявка успешно отправлена!',
-              'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+              strings.Notifications.success.title,
+              strings.Notifications.success.textOrder,
               [
                 {
                   text: 'ОК',
@@ -352,7 +356,10 @@ class TestDriveScreen extends PureComponent {
             );
             break;
           case TESTDRIVE_LEAD__FAIL:
-            Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
+            Alert.alert(
+              strings.Notifications.error.title,
+              strings.Notifications.error.text,
+            );
             break;
         }
       }
@@ -372,9 +379,9 @@ class TestDriveScreen extends PureComponent {
       () => {
         return true;
         // console.log('onDealerChoose', this.state, value);
-        if (!isNaN(value)) {
-          this.fetchTDCars(value);
-        }
+        // if (!isNaN(value)) {
+        //   this.fetchTDCars(value);
+        // }
       },
     );
   }
@@ -453,12 +460,12 @@ class TestDriveScreen extends PureComponent {
     let carblock = {
       name: 'CAR',
       type: 'select',
-      label: 'Выбери желаемый автомобиль',
+      label: strings.Form.field.car,
       value: this.state.testDriveCar,
       props: {
         items: this.state.TDCarsList,
         placeholder: {
-          label: 'Выбери автомобиль для тест-драйва',
+          label: strings.Form.field.placeholder.carTestDrive,
           value: null,
           color: '#9EA0A4',
         },
@@ -470,10 +477,11 @@ class TestDriveScreen extends PureComponent {
     let datetime = {
       name: 'DATETIME',
       type: 'dateTime',
-      label: 'Выбери удобную для тебя дату',
+      label: strings.Form.field.label.date,
       value: this.state.date || null,
       props: {
-        placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
+        placeholder:
+          strings.Form.field.placeholder.date + dayMonthYear(addDays(2)),
         required: true,
         type: 'testDrive',
         minimumDate: new Date(addDays(2)),
@@ -487,10 +495,11 @@ class TestDriveScreen extends PureComponent {
     let date = {
       name: 'DATE',
       type: 'date',
-      label: 'Выбери удобную для тебя дату',
+      label: strings.Form.field.label.date,
       value: this.state.date || null,
       props: {
-        placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
+        placeholder:
+          strings.Form.field.placeholder.date + dayMonthYear(addDays(2)),
         required: true,
         minimumDate: new Date(addDays(2)),
         maximumDate: new Date(addDays(62)),
@@ -502,20 +511,22 @@ class TestDriveScreen extends PureComponent {
         groups: [
           {
             name:
-              this.listAll.length > 1 ? 'Автоцентр и автомобиль' : 'Автомобиль',
+              this.listAll.length > 1
+                ? strings.Form.group.dealerCar
+                : strings.Form.group.car,
             fields: [
               this.listAll.length > 1
                 ? {
                     name: 'DEALER',
                     type: 'select',
-                    label: 'Автоцентр',
+                    label: strings.Form.field.label.dealer,
                     value: this.state.dealerID,
                     props: {
                       items: this.listAll,
                       required: true,
                       onChange: this.onDealerChoose.bind(this),
                       placeholder: {
-                        label: 'Выбери удобный для тебя автоцентр',
+                        label: strings.Form.field.placeholder.dealer,
                         value: null,
                         color: '#9EA0A4',
                       },
@@ -529,7 +540,7 @@ class TestDriveScreen extends PureComponent {
                     : {
                         name: 'CARLOAD',
                         type: 'input',
-                        label: 'Автомобиль для тест-драйва',
+                        label: strings.Form.field.label.carTestDrive,
                         value: this.carName,
                         props: {
                           required: false,
@@ -539,7 +550,7 @@ class TestDriveScreen extends PureComponent {
                   : {
                       name: 'CARLOAD',
                       type: 'component',
-                      label: 'Выбери желаемый автомобиль',
+                      label: strings.Form.field.label.car,
                       value: (
                         <>
                           <ActivityIndicator
@@ -552,7 +563,7 @@ class TestDriveScreen extends PureComponent {
                               color: '#ababab',
                               textAlign: 'center',
                             }}>
-                            ищем свободные автомобили для тест-драйва
+                            {strings.Form.status.carTestDriveSearch}
                           </Text>
                         </>
                       ),
@@ -569,12 +580,12 @@ class TestDriveScreen extends PureComponent {
             ],
           },
           {
-            name: 'Контактные данные',
+            name: strings.Form.group.contacts,
             fields: [
               {
                 name: 'NAME',
                 type: 'input',
-                label: 'Имя',
+                label: strings.Form.field.label.name,
                 value: this.props.firstName,
                 props: {
                   required: true,
@@ -584,7 +595,7 @@ class TestDriveScreen extends PureComponent {
               {
                 name: 'SECOND_NAME',
                 type: 'input',
-                label: 'Отчество',
+                label: strings.Form.field.label.secondName,
                 value: this.props.secondName,
                 props: {
                   textContentType: 'middleName',
@@ -593,7 +604,7 @@ class TestDriveScreen extends PureComponent {
               {
                 name: 'LAST_NAME',
                 type: 'input',
-                label: 'Фамилия',
+                label: strings.Form.field.label.lastName,
                 value: this.props.lastName,
                 props: {
                   textContentType: 'familyName',
@@ -602,7 +613,7 @@ class TestDriveScreen extends PureComponent {
               {
                 name: 'PHONE',
                 type: 'phone',
-                label: 'Телефон',
+                label: strings.Form.field.label.phone,
                 value: this.props.phone,
                 props: {
                   required: true,
@@ -611,22 +622,21 @@ class TestDriveScreen extends PureComponent {
               {
                 name: 'EMAIL',
                 type: 'email',
-                label: 'Email',
+                label: strings.Form.field.label.email,
                 value: this.props.email,
               },
             ],
           },
           {
-            name: 'Дополнительно',
+            name: strings.Form.group.additional,
             fields: [
               {
                 name: 'COMMENT',
                 type: 'textarea',
-                label: 'Комментарий',
+                label: strings.Form.field.label.comment,
                 value: this.props.comment,
                 props: {
-                  placeholder:
-                    'На случай если тебе потребуется передать нам больше информации',
+                  placeholder: strings.Form.field.placeholder.comment,
                 },
               },
             ],

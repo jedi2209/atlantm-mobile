@@ -95,7 +95,7 @@ export default {
   },
 
   subscribeToTopic(topic, id) {
-    return this.checkPermission().then(isPermission => {
+    return this.checkPermission().then((isPermission) => {
       if (isPermission) {
         OneSignal.setSubscription(true);
         OneSignal.sendTag(topic, id.toString());
@@ -117,9 +117,9 @@ export default {
   // },
 
   checkPermission() {
-    return new Promise(function(resolve, reject) {
+    return new Promise((resolve, reject) => {
       // Check push notification and OneSignal subscription statuses
-      OneSignal.getPermissionSubscriptionState(status => {
+      OneSignal.getPermissionSubscriptionState((status) => {
         if (status.notificationsEnabled) {
           return resolve(true);
         } else {

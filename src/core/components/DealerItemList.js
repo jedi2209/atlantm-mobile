@@ -4,12 +4,13 @@ import PropTypes from 'prop-types';
 import {ListItem, Body, Right, Icon, StyleProvider, Text} from 'native-base';
 
 // component
-import Imager from '../components/Imager';
+// import Imager from '../components/Imager';
 import BrandLogo from '../components/BrandLogo';
 
 // helpers
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
+import strings from '../lang/const';
 
 const stylesDealerItemList = StyleSheet.create({
   brands: {
@@ -112,7 +113,7 @@ export default class DealerItemList extends Component {
                 numberOfLines={1}>
                 {dealer && dealer.name
                   ? dealer.name
-                  : 'Выбери удобный для тебя автоцентр'}
+                  : strings.DealerItemList.chooseDealer}
               </Text>
               {dealer && dealer.city ? (
                 <Text
