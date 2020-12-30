@@ -101,6 +101,30 @@ export default {
   TestDriveScreen: {
     title: 'Заявка на тест-драйв',
   },
+  CarHistoryScreen: {
+    title: 'История ТО и обслуживания',
+    master: 'Мастер',
+    sale: 'Скидка',
+    price: {
+      work: 'Стоимость работ',
+      materials: 'Стоимость запчастей',
+      total: 'Всего',
+    },
+    empty: {
+      text: 'Истории пока нет',
+    },
+  },
+  CarHistoryDetailsScreen: {
+    count: 'Количество',
+    price: 'Стоимость',
+    sale: 'Скидка',
+    materials: 'Материалы',
+    works: 'Работы',
+    tax: 'НДС',
+    total: {
+      nds: 'Итого с НДС',
+    },
+  },
   Form: {
     group: {
       dealer: 'Автоцентр',

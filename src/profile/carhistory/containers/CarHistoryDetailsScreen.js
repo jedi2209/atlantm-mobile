@@ -26,6 +26,7 @@ import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import showPrice from '../../../utils/price';
 import {ERROR_NETWORK} from '../../../core/const';
+import strings from '../../../core/lang/const';
 
 const TABS = {
   WORKS: 'works',
@@ -57,6 +58,10 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
     marginBottom: 15,
   },
+  sectionHelperRow: {
+    margin: 0,
+    padding: 0,
+  },
   sectionProp: {
     paddingRight: 5,
     marginTop: 0,
@@ -64,9 +69,15 @@ const styles = StyleSheet.create({
   sectionValue: {
     marginTop: 5,
   },
+  sectionHelper: {
+    margin: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingLeft: 5,
+  },
   sectionPropText: {
     letterSpacing: styleConst.ui.letterSpacing,
-    fontSize: 14,
+    fontSize: 13,
     color: '#141414',
     lineHeight: 18,
     marginTop: 6,
@@ -74,7 +85,13 @@ const styles = StyleSheet.create({
   sectionValueText: {
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
-    fontSize: 16,
+    fontSize: 14,
+  },
+  sectionHelperText: {
+    // letterSpacing: styleConst.ui.letterSpacing,
+    // fontFamily: styleConst.font.regular,
+    lineHeight: 17,
+    fontSize: 20,
   },
   tabText: {
     fontFamily: styleConst.font.regular,
@@ -162,7 +179,7 @@ class CarHistoryDetailsScreen extends Component {
           let message = get(
             action,
             'payload.message',
-            'Произошла ошибка, попробуем снова?',
+            strings.Notifications.error.text,
           );
 
           if (message === 'Network request failed') {
@@ -185,23 +202,38 @@ class CarHistoryDetailsScreen extends Component {
       <View key={`${name}${idx}`} style={styles.section}>
         {name ? <Text style={styles.sectionTitle}>{name}</Text> : null}
         {count
-          ? this.renderItem({prop: 'Количество', value: `${count} ${units}.`})
+          ? this.renderItem({
+              prop: strings.CarHistoryDetailsScreen.count,
+              value: `${count} ${units}.`,
+            })
           : null}
         {get(summ, 'value')
           ? this.renderItem({
-              prop: 'Стоимость',
+              prop: strings.CarHistoryDetailsScreen.price,
               value: showPrice(get(summ, 'value'), get(summ, 'currency'), true),
             })
           : null}
+        {/* {get(summ, 'sale')
+          ? this.renderHelper('-', styleConst.color.red)
+          : null} */}
         {get(summ, 'sale')
           ? this.renderItem({
-              prop: 'Скидка',
+              prop: strings.CarHistoryDetailsScreen.sale,
               value: showPrice(get(summ, 'sale'), get(summ, 'currency'), true),
+            })
+          : null}
+        {/* {get(summ, 'tax')
+          ? this.renderHelper('+', styleConst.color.green)
+          : null} */}
+        {get(summ, 'tax')
+          ? this.renderItem({
+              prop: strings.CarHistoryDetailsScreen.tax,
+              value: showPrice(get(summ, 'tax'), get(summ, 'currency'), true),
             })
           : null}
         {get(summ, 'total')
           ? this.renderItem({
-              prop: 'Итого с НДС',
+              prop: strings.CarHistoryDetailsScreen.total.nds,
               value: showPrice(get(summ, 'total'), get(summ, 'currency'), true),
             })
           : null}
@@ -216,6 +248,17 @@ class CarHistoryDetailsScreen extends Component {
       </Col>
       <Col style={styles.sectionValue}>
         <Text style={styles.sectionValueText}>{value}</Text>
+      </Col>
+    </Row>
+  );
+
+  renderHelper = (value, color) => (
+    <Row style={styles.sectionHelperRow}>
+      <Col style={styles.sectionProp} />
+      <Col style={styles.sectionHelper}>
+        <Text style={[styles.sectionHelperText, color ? {color: color} : {}]}>
+          {value}
+        </Text>
       </Col>
     </Row>
   );
@@ -235,6 +278,8 @@ class CarHistoryDetailsScreen extends Component {
     const works = get(details, 'works');
     const parts = get(details, 'parts');
 
+    console.log('works, parts', works, parts);
+
     return (
       <SafeAreaView style={styles.safearea}>
         <StatusBar barStyle="dark-content" />
@@ -252,7 +297,7 @@ class CarHistoryDetailsScreen extends Component {
                     style={
                       isActiveWorksTab ? styles.tabTextActive : styles.tabText
                     }>
-                    Работы
+                    {strings.CarHistoryDetailsScreen.works}
                   </Text>
                 </Button>
               ) : null}
@@ -267,7 +312,7 @@ class CarHistoryDetailsScreen extends Component {
                     style={
                       isActivePartsTab ? styles.tabTextActive : styles.tabText
                     }>
-                    Материалы
+                    {strings.CarHistoryDetailsScreen.materials}
                   </Text>
                 </Button>
               ) : null}
