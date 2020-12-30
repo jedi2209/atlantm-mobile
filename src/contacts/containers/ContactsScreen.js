@@ -204,10 +204,6 @@ class ContactsScreen extends Component {
     });
   }
 
-  onPressCallMe = async () => {
-    this.props.navigation.navigate('CallMeBackScreen');
-  };
-
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
     const isActiveScreen =
@@ -219,35 +215,9 @@ class ContactsScreen extends Component {
     return isActiveScreen || isListSucsess;
   }
 
-  onPressRateApp = () => {
-    const APP_STORE_LINK =
-      'itms-apps://itunes.apple.com/app/id515931794?action=write-review';
-    const PLAY_STORE_LINK = 'market://details?id=com.atlantm';
-
-    if (Platform.OS === 'ios') {
-      Linking.openURL(APP_STORE_LINK).catch((err) =>
-        console.error('APP_STORE_LINK failed', err),
-      );
-    } else {
-      Linking.openURL(PLAY_STORE_LINK).catch((err) =>
-        console.error('PLAY_STORE_LINK failed', err),
-      );
-    }
+  onPressCallMe = async () => {
+    this.props.navigation.navigate('CallMeBackScreen');
   };
-
-  getRateAppInfoText = () => {
-    return `Если тебе нравится наше приложение, оставь, пожайлуста, положительный отзыв в ${this.getPlatformStore()}`;
-  };
-
-  getRateAppLabel = () => `Оставить отзыв в ${this.getPlatformStore()}`;
-
-  getPlatformStore = () =>
-    Platform.OS === 'ios' ? 'App Store' : 'Google Play';
-
-  onPressBonus = () =>
-    this.props.navigation.navigate('BonusInfoScreen', {
-      refererScreen: 'contacts',
-    });
 
   onPressMap = () => {
     const {navigation, dealerSelected} = this.props;

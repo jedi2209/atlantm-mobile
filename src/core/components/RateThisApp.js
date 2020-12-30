@@ -1,16 +1,9 @@
-import React, {Component} from 'react';
-import {
-  Platform,
-  View,
-  Button,
-  Modal,
-  Text,
-  TouchableHighlight,
-  Alert,
-} from 'react-native';
+import React, {PureComponent} from 'react';
+import {Platform, Alert} from 'react-native';
 import Rate, {AndroidMarket} from 'react-native-rate';
+import strings from '../../core/lang/const';
 
-export default class RateThisApp extends React.Component {
+export default class RateThisApp extends PureComponent {
   render() {
     let alert_buttons;
     alert_buttons = [];
@@ -19,24 +12,24 @@ export default class RateThisApp extends React.Component {
       case 'android': // такое задротство из-за разного положения кнопок на iOS / Android. Нужно, чтобы кнопки были одинаково расположены
         alert_buttons = [
           {
-            text: 'Нет, спасибо',
+            text: strings.RateThisApp.no,
             onPress: () => {
               this.props.onSuccess && this.props.onSuccess();
             },
             style: 'cancel',
           },
           {
-            text: 'Не сейчас',
+            text: strings.RateThisApp.later,
             onPress: () => {
               this.props.onAskLater && this.props.onAskLater();
             },
             style: 'cancel',
           },
           {
-            text: 'Оценить',
+            text: strings.RateThisApp.rate,
             onPress: () => {
               let options = {
-                AppleAppID: '515931794',
+                AppleAppID: '1492492166',
                 GooglePackageName: 'com.atlantm',
                 preferredAndroidMarket: AndroidMarket.Google,
                 preferInApp: true,
@@ -67,10 +60,10 @@ export default class RateThisApp extends React.Component {
       case 'ios':
         alert_buttons = [
           {
-            text: 'Оценить',
+            text: strings.RateThisApp.rate,
             onPress: () => {
               let options = {
-                AppleAppID: '515931794',
+                AppleAppID: '1492492166',
                 GooglePackageName: 'com.atlantm',
                 preferredAndroidMarket: AndroidMarket.Google,
                 preferInApp: true,
@@ -97,14 +90,14 @@ export default class RateThisApp extends React.Component {
             },
           },
           {
-            text: 'Не сейчас',
+            text: strings.RateThisApp.later,
             onPress: () => {
               this.props.onAskLater && this.props.onAskLater();
             },
             style: 'cancel',
           },
           {
-            text: 'Нет, спасибо',
+            text: strings.RateThisApp.no,
             onPress: () => {
               this.props.onSuccess && this.props.onSuccess();
             },
@@ -114,8 +107,8 @@ export default class RateThisApp extends React.Component {
     }
 
     Alert.alert(
-      'Нравится приложение?',
-      'Расскажи миру о своём опыте и оставь свой отзыв!',
+      strings.RateThisApp.title,
+      strings.RateThisApp.text,
       alert_buttons,
       {cancelable: false},
     );
