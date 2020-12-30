@@ -113,7 +113,7 @@ class App extends PureComponent {
 
           if (
             Number(menuOpenedCount) <= 1 ||
-            menuOpenedCount === '' ||
+            menuOpenedCount === 0 ||
             isStoreUpdated === false
           ) {
             actionSetPushActionSubscribe(true);

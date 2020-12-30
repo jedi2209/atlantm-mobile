@@ -51,7 +51,7 @@ const pushActionSubscribeState = (state = true, action) => {
 const menuOpenedCount = (state = 0, action) => {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'core.menuOpenedCount', '');
+      return get(action.payload, 'core.menuOpenedCount', 0);
     case APP_MENU_OPENED_COUNTER:
       if (action.payload === 0) {
         return 0;
@@ -67,7 +67,7 @@ const menuOpenedCount = (state = 0, action) => {
 const isAppRated = (state = false, action) => {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'core.isAppRated', '');
+      return get(action.payload, 'core.isAppRated', false);
     case APP_ACTION_RATED:
       return true;
     default:
