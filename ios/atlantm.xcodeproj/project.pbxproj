@@ -19,12 +19,7 @@
 		3A17D44B244C8EC100CD96DB /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 3A17D443244C8EC100CD96DB /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		3A17D451244C905A00CD96DB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A17D450244C905A00CD96DB /* GoogleService-Info.plist */; };
 		3AB5B07F24EA79D900D3281D /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 3AB5B07E24EA79D900D3281D /* fonts */; };
-		414863EBA3EEE9B70E37CA67 /* libPods-atlantm-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0337F866BBF58F82CD535A55 /* libPods-atlantm-tvOS.a */; };
-		67EC99C4DA3E45F0263DE6F2 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 075407CD99A5F9DA26B8405B /* libPods-OneSignalNotificationServiceExtension.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		855F92B290D1BAEF9A08E291 /* libPods-atlantm-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FCEF1E5B805FC5A281786439 /* libPods-atlantm-tvOSTests.a */; };
-		C4FF6908C625E3FF0B0D5ABF /* libPods-atlantm-atlantmTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F540A4D172F1F53B4CEAC37 /* libPods-atlantm-atlantmTests.a */; };
-		FEA69ADB84A303ACA129C954 /* libPods-atlantm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 808D9A00AB0D707A05E9C4FC /* libPods-atlantm.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,12 +61,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* atlantmTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = atlantmTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* atlantmTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = atlantmTests.m; sourceTree = "<group>"; };
-		0337F866BBF58F82CD535A55 /* libPods-atlantm-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atlantm-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		075407CD99A5F9DA26B8405B /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07F961A680F5B00A75B9A /* atlantm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = atlantm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = atlantm/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = atlantm/AppDelegate.m; sourceTree = "<group>"; };
@@ -94,18 +86,14 @@
 		3AB5B07E24EA79D900D3281D /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fonts; path = ../assets/fonts; sourceTree = "<group>"; };
 		63C52600466C5C59690F4977 /* Pods-atlantm.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm.debug.xcconfig"; path = "Target Support Files/Pods-atlantm/Pods-atlantm.debug.xcconfig"; sourceTree = "<group>"; };
 		803E696069C4431D7428B474 /* Pods-atlantm-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm-tvOS.release.xcconfig"; path = "Target Support Files/Pods-atlantm-tvOS/Pods-atlantm-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		808D9A00AB0D707A05E9C4FC /* libPods-atlantm.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atlantm.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = atlantm/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8F540A4D172F1F53B4CEAC37 /* libPods-atlantm-atlantmTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atlantm-atlantmTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9471CB48B91478B1035D80D7 /* Pods-atlantm-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-atlantm-tvOSTests/Pods-atlantm-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A32A329B1E6531BAB205894C /* Pods-atlantm-atlantmTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm-atlantmTests.debug.xcconfig"; path = "Target Support Files/Pods-atlantm-atlantmTests/Pods-atlantm-atlantmTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D7942F91B151ACBE7A401D57 /* Pods-atlantm-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-atlantm-tvOS/Pods-atlantm-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		E4B725EB86E8AC564C6C1783 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		EF52E05E4D06F498444E6621 /* Pods-atlantm-atlantmTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm-atlantmTests.release.xcconfig"; path = "Target Support Files/Pods-atlantm-atlantmTests/Pods-atlantm-atlantmTests.release.xcconfig"; sourceTree = "<group>"; };
 		F0D61D798F26D53F9DF964E7 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
-		FCEF1E5B805FC5A281786439 /* libPods-atlantm-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atlantm-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,7 +101,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4FF6908C625E3FF0B0D5ABF /* libPods-atlantm-atlantmTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,7 +108,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FEA69ADB84A303ACA129C954 /* libPods-atlantm.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -129,7 +115,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				414863EBA3EEE9B70E37CA67 /* libPods-atlantm-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,7 +122,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				855F92B290D1BAEF9A08E291 /* libPods-atlantm-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,7 +129,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				67EC99C4DA3E45F0263DE6F2 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,7 +156,6 @@
 			isa = PBXGroup;
 			children = (
 				3A17D42E244C8D8900CD96DB /* atlantm.entitlements */,
-				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -191,12 +173,6 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				808D9A00AB0D707A05E9C4FC /* libPods-atlantm.a */,
-				8F540A4D172F1F53B4CEAC37 /* libPods-atlantm-atlantmTests.a */,
-				0337F866BBF58F82CD535A55 /* libPods-atlantm-tvOS.a */,
-				FCEF1E5B805FC5A281786439 /* libPods-atlantm-tvOSTests.a */,
-				075407CD99A5F9DA26B8405B /* libPods-OneSignalNotificationServiceExtension.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -879,7 +855,7 @@
 				CODE_SIGN_ENTITLEMENTS = atlantm/atlantm.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 107;
+				CURRENT_PROJECT_VERSION = 108;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = XXXX;
 				ENABLE_BITCODE = NO;
@@ -909,7 +885,7 @@
 				CODE_SIGN_ENTITLEMENTS = atlantm/atlantm.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 107;
+				CURRENT_PROJECT_VERSION = 108;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = XXXX;
 				INFOPLIST_FILE = atlantm/Info.plist;
@@ -1058,7 +1034,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 107;
+				CURRENT_PROJECT_VERSION = 108;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = XXXX;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -1088,7 +1064,7 @@
 				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 107;
+				CURRENT_PROJECT_VERSION = 108;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = XXXX;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
