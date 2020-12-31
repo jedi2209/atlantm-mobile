@@ -53,7 +53,7 @@
     "react-native-fbsdk": "3.0.0",
     "react-native-gallery-swiper": "^1.26.0",
     "react-native-gesture-handler": "^1.6.1",
-    "react-native-image-crop-picker": "0.35.2",
+    "react-native-image-crop-picker": "^0.35.2",
     "react-native-image-gallery": "^2.1.5",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-loading-spinner-overlay": "^2.0.0",
@@ -105,5 +105,8 @@
     "patch-package": "^6.2.2",
     "react-test-renderer": "^17.0.1",
     "reactotron-react-native": "^5.0.0"
+  },
+  "resolutions": {
+    "graceful-fs": "4.2.4"
   }
 }
