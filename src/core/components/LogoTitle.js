@@ -28,6 +28,8 @@ const languagesItems = [
   },
 ];
 
+const isAndroid = Platform.OS === 'android';
+
 const styles = StyleSheet.create({
   Container: {
     display: 'flex',
@@ -40,6 +42,8 @@ const styles = StyleSheet.create({
   Image: {
     maxHeight: 70,
     marginBottom: 3,
+    position: 'relative',
+    width: '60%',
   },
   Text: {
     fontSize: 10,
@@ -49,15 +53,17 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.light,
     color: styleConst.new.blueHeader,
   },
+  LangSwitcherContainer: {
+    marginHorizontal: '2%',
+    padding: 0,
+    width: '30%',
+  },
   LangSwitcher: {
     fontSize: 14,
-    marginLeft: 20,
     fontFamily: styleConst.font.light,
     color: styleConst.new.blueHeader,
   },
 });
-
-const isAndroid = Platform.OS === 'android';
 
 class LogoTitle extends PureComponent {
   render() {
@@ -69,16 +75,18 @@ class LogoTitle extends PureComponent {
           source={require('../../menu/assets/logo-horizontal.svg')}
         />
         {this.props.dealerSelected.region === 'ua' ? ( // выбор языка есть только для РУ региона
-          <LangSwitcher
-            items={languagesItems}
-            placeholder={{
-              label: 'язык',
-              value: this.props.currentLang === 'ua' ? 2 : 1,
-              color: styleConst.color.bg,
-            }}
-            value={this.props.currentLang}
-            style={styles.LangSwitcher}
-          />
+          <View style={styles.LangSwitcherContainer}>
+            <LangSwitcher
+              items={languagesItems}
+              placeholder={{
+                label: 'язык',
+                value: this.props.currentLang === 'ua' ? 2 : 1,
+                color: styleConst.color.bg,
+              }}
+              value={this.props.currentLang}
+              style={styles.LangSwitcher}
+            />
+          </View>
         ) : null}
         <Text style={styles.Text}>
           {'v. ' +
