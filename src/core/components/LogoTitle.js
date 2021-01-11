@@ -10,7 +10,7 @@ import DeviceInfo from 'react-native-device-info';
 
 const mapStateToProps = ({dealer, core}) => {
   return {
-    currentLang: core.language.selected || 'ru',
+    currentLang: core.language.selected || 'ua',
     dealerSelected: dealer.selected,
   };
 };
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     maxHeight: 70,
     marginBottom: 3,
     position: 'relative',
-    width: '60%',
+    width: isAndroid ? '80%' : '85%',
   },
   Text: {
     fontSize: 10,
@@ -54,9 +54,8 @@ const styles = StyleSheet.create({
     color: styleConst.new.blueHeader,
   },
   LangSwitcherContainer: {
-    marginHorizontal: '2%',
-    padding: 0,
-    width: '30%',
+    width: isAndroid ? '20%' : '15%',
+    minWidth: 95,
   },
   LangSwitcher: {
     fontSize: 14,
@@ -78,11 +77,7 @@ class LogoTitle extends PureComponent {
           <View style={styles.LangSwitcherContainer}>
             <LangSwitcher
               items={languagesItems}
-              placeholder={{
-                label: 'язык',
-                value: this.props.currentLang === 'ua' ? 2 : 1,
-                color: styleConst.color.bg,
-              }}
+              placeholder={{}}
               value={this.props.currentLang}
               style={styles.LangSwitcher}
             />

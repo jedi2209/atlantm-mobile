@@ -14,6 +14,9 @@ import {
   BRANDS__FAIL,
 } from './actionTypes';
 
+import {actionSetGlobalLanguage} from '../core/lang/actions';
+import strings from '../core/lang/const';
+
 import API from '../utils/api';
 
 import {RUSSIA, BELARUSSIA, UKRAINE} from '../core/const';
@@ -75,6 +78,8 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
 
         if (!isLocal) {
           // обновляем дилера глобально
+          actionSetGlobalLanguage(dealer.region);
+          strings.setLanguage(dealer.region);
           return dispatch({
             type: DEALER__SUCCESS,
             payload: {

@@ -8,6 +8,7 @@ export default {
     green: '#34BD78',
     orange: '#FFA51D',
     bg: '#F6F6F6',
+    white: '#fff',
     accordeonGrey1: '#ededed',
     accordeonGrey2: '#dedfe0',
     greyText: 'rgba(97,110,122,1)',

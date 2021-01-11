@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React from 'react';
 import {connect} from 'react-redux';
 import {View, Platform, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
@@ -28,6 +28,8 @@ const styles = StyleSheet.create({
   },
 });
 
+const isAndroid = Platform.OS === 'android';
+
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 16,
@@ -41,15 +43,34 @@ const pickerSelectStyles = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 6,
     paddingTop: 25,
-    color: '#222b45',
     paddingRight: 0, // to ensure the text is never behind the icon
+  },
+  headlessAndroidContainer: {
+    color: styleConst.color.white,
+    opacity: 1,
+  },
+  iconContainer: {
+    top: 10,
+    right: 5,
+  },
+  modalViewTop: {
+    width: 30,
+  },
+  viewContainer: {
+    width: 40,
+  },
+  inputAndroidContainer: {
+    width: 20,
   },
 });
 
 const LangSwitcher = (props) => {
   const _onValueChange = (value) => {
+    if (value !== 'ru' && value !== 'ua') {
+      value = 'ru';
+    }
     props.actionSetGlobalLanguage(value);
-    if (Platform.OS === 'ios') {
+    if (!isAndroid) {
       strings.setLanguage(value);
     } else {
       setTimeout(() => {
@@ -60,7 +81,7 @@ const LangSwitcher = (props) => {
 
   const _onDonePress = (val) => {
     strings.setLanguage('ua');
-    if (Platform.OS === 'ios') {
+    if (!isAndroid) {
       console.log('onDonePress', val);
     }
   };
@@ -75,14 +96,13 @@ const LangSwitcher = (props) => {
         key={'rnpickerLang'}
         doneText={strings.Picker.choose}
         onDonePress={() => _onDonePress}
+        useNativeAndroidPickerStyle={false}
         onValueChange={(value) => _onValueChange(value)}
         onClose={() => _onClose}
-        style={{
-          ...pickerSelectStyles,
-          iconContainer: {
-            top: 10,
-            right: 5,
-          },
+        style={{...pickerSelectStyles}}
+        textInputProps={{
+          padding: 10,
+          color: styleConst.color.white,
         }}
         {...props}
       />
@@ -98,13 +118,9 @@ LangSwitcher.propTypes = {
 
 LangSwitcher.defaultProps = {
   textColor: 'black',
-  bgColor: styleConst.color.bg,
+  bgColor: styleConst.color.white,
   name: strings.LangSwitcher.lang,
-  placeholder: {
-    label: strings.LangSwitcher.chooseLang,
-    value: '',
-    color: styleConst.color.bg,
-  },
+  placeholder: {},
 };
 
 export default connect(null, mapDispatchToProps)(LangSwitcher);

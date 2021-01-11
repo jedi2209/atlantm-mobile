@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {Alert, View, StyleSheet} from 'react-native';
-import {Text, ListItem, Body, Thumbnail} from 'native-base';
+import {Text, ListItem, Body} from 'native-base';
 
 // components
 import {NavigationActions, StackActions} from 'react-navigation';
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class SelectItemByCountry extends Component {
+export default class SelectItemByCountry extends PureComponent {
   static propTypes = {
     item: PropTypes.object,
     navigation: PropTypes.object,
@@ -108,14 +108,16 @@ export default class SelectItemByCountry extends Component {
       dealerSelected: selectedItem,
       isLocal,
     }).then((action) => {
+      const newDealer = get(action, 'payload.newDealer');
+      const prevDealer = get(action, 'payload.prevDealer');
       if (
         action.type === DEALER__SUCCESS ||
         action.type === DEALER__SUCCESS__LOCAL
       ) {
         if (onSelect) {
           onSelect({
-            newDealer: get(action, 'payload.newDealer'),
-            prevDealer: get(action, 'payload.prevDealer'),
+            newDealer: newDealer,
+            prevDealer: prevDealer,
             isLocal: isLocal,
           });
         }
