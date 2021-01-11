@@ -2,7 +2,7 @@
 import React, {useState, useEffect} from 'react';
 
 import {Text, View, Image, StyleSheet, Dimensions} from 'react-native';
-import {Icon, List, ListItem, Left, Right, Button, Body} from 'native-base';
+import {Icon, List, ListItem, Left, Button, Body} from 'native-base';
 
 import styleConst from '../../core/style-const';
 

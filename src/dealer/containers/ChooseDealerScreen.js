@@ -1,5 +1,4 @@
-// Начни работать сука нет времени прокрастинировать
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {View, StatusBar} from 'react-native';
 
 // redux
@@ -46,7 +45,7 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
 };
 
-class ChooseDealerScreen extends Component {
+class ChooseDealerScreen extends PureComponent {
   static navigationOptions = ({navigation}) => ({
     headerTitle: 'Выбери автоцентр',
     headerStyle: stylesHeader.blueHeader,
@@ -63,18 +62,17 @@ class ChooseDealerScreen extends Component {
   }
 
   // ВАЖНО! ЯВНО ОТКЛЮЧЕН ИЗ-ЗА ПРОБЛЕМ ПЕРВОЙ ЗАГРУЗКИ НА IOS 11+
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
+  // shouldComponentUpdate(nextProps) {
+  //   const nav = nextProps.nav.newState;
 
-    return nav.routes[nav.index].routeName === 'ChooseDealerScreen';
-  }
+  //   return nav.routes[nav.index].routeName === 'ChooseDealerScreen';
+  // }
 
   onSelectDealer = ({prevDealer, newDealer, isLocal}) => {
     const {pushActionSubscribeState} = this.props;
     // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
     if (!isLocal) {
       PushNotifications.addTag('dealer', newDealer.id);
-
       if (pushActionSubscribeState) {
         PushNotifications.subscribeToTopic('actions', newDealer.id);
       } else {
@@ -101,8 +99,8 @@ class ChooseDealerScreen extends Component {
       isFetchDealersList,
     } = this.props;
 
-    const goBack = get(navigation, 'state.params.goBack');
-    const isLocal = get(navigation, 'state.params.isLocal');
+    const goBack = get(navigation, 'state.params.goBack', false);
+    const isLocal = get(navigation, 'state.params.isLocal', false);
     const returnScreen = get(navigation, 'state.params.returnScreen', null);
     const returnState = get(navigation, 'state.params.returnState', null);
     const listAll = get(navigation, 'state.params.listAll', null);

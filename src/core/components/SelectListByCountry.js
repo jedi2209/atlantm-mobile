@@ -3,21 +3,10 @@ import {StyleSheet, View, FlatList, ActivityIndicator} from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import {
-  Container,
-  Text,
-  Button,
-  Segment,
-  StyleProvider,
-  Header,
-  Tab,
-  Tabs,
-} from 'native-base';
-import Spinner from 'react-native-loading-spinner-overlay';
+import {Container, StyleProvider, Tab, Tabs} from 'native-base';
 import SelectItemByCountry from './SelectItemByCountry';
 
 // helpers
-import {RUSSIA, BELARUSSIA, UKRAINE} from '../const';
 import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';

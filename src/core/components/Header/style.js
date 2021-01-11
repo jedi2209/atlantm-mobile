@@ -9,8 +9,6 @@ const commonStyles = {
   shadowOpacity: null,
   shadowOffset: null,
   shadowColor: null,
-  left: 0,
-  right: 0,
 };
 
 const commonTitle = {
