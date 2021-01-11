@@ -3,7 +3,8 @@ import {connect} from 'react-redux';
 import {View, Platform, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import styleConst from '../style-const';
-import RNPickerSelect, {defaultStyles} from 'react-native-picker-select';
+import RNPickerSelect from 'react-native-picker-select';
+import RNRestart from 'react-native-restart';
 import {actionSetGlobalLanguage} from '../../core/lang/actions';
 import strings from '../../core/lang/const';
 
@@ -17,10 +18,9 @@ const mapDispatchToProps = (dispatch) => {
 
 const styles = StyleSheet.create({
   badgeContainer: {
-    paddingHorizontal: 5,
-    paddingVertical: 3,
     borderRadius: 5,
-    marginLeft: 4,
+    width: '90%',
+    display: 'flex',
   },
   badgeName: {
     fontFamily: styleConst.font.regular,
@@ -42,7 +42,7 @@ const pickerSelectStyles = StyleSheet.create({
     paddingVertical: 6,
     paddingTop: 25,
     color: '#222b45',
-    paddingRight: 30, // to ensure the text is never behind the icon
+    paddingRight: 0, // to ensure the text is never behind the icon
   },
 });
 
@@ -51,6 +51,10 @@ const LangSwitcher = (props) => {
     props.actionSetGlobalLanguage(value);
     if (Platform.OS === 'ios') {
       strings.setLanguage(value);
+    } else {
+      setTimeout(() => {
+        RNRestart.Restart();
+      }, 500);
     }
   };
 
