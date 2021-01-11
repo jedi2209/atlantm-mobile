@@ -314,6 +314,8 @@ PODS:
   - react-native-onesignal (3.9.3):
     - OneSignal (= 2.16.1)
     - React (< 1.0.0, >= 0.13.0)
+  - react-native-restart (0.0.20):
+    - React-Core
   - react-native-slider (3.0.3):
     - React
   - react-native-splash-screen (3.2.0):
@@ -396,11 +398,11 @@ PODS:
     - React
   - RNCAsyncStorage (1.13.2):
     - React
-  - RNCPicker (1.9.8):
+  - RNCPicker (1.9.10):
     - React-Core
-  - RNDateTimePicker (3.0.8):
+  - RNDateTimePicker (3.0.9):
     - React-Core
-  - RNDeviceInfo (7.3.1):
+  - RNDeviceInfo (7.4.0):
     - React-Core
   - RNGestureHandler (1.9.0):
     - React-Core
@@ -485,6 +487,7 @@ DEPENDENCIES:
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
+  - react-native-restart (from `../node_modules/react-native-restart`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-text-input-mask (from `../node_modules/react-native-text-input-mask`)
@@ -589,6 +592,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-maps"
   react-native-onesignal:
     :path: "../node_modules/react-native-onesignal"
+  react-native-restart:
+    :path: "../node_modules/react-native-restart"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   react-native-splash-screen:
@@ -700,6 +705,7 @@ SPEC CHECKSUMS:
   react-native-google-maps: 0a989abda71059db2caa98b9dacca7a8f38a47d0
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-onesignal: f92b6fae16388422f1b5d73b2c31e7000f481ae8
+  react-native-restart: a01029aadfe8e71f9e8205fdb17da2f0a4472d50
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-text-input-mask: 07227297075f9653315f43b0424d596423a01736
@@ -720,9 +726,9 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNAppleAuthentication: 473b2c076f1a48a537610580a168c1fb6d0a90c6
   RNCAsyncStorage: 05bae7ecfab1cbd5441993f1ca098f7c3b3f8d0e
-  RNCPicker: cdeab10edac8f14ed6839fdf922a789f80c72ec1
-  RNDateTimePicker: 8eba76de1afd556bc00c874f4d0c0616e30e32f1
-  RNDeviceInfo: 6ecb1d1c87d20e4c62354be0348de23362824dcd
+  RNCPicker: 77183d9b1cd80ae55505322f8ad09ba0036e29ba
+  RNDateTimePicker: 8a51a2216c307769e69ef827293d59549ab1ca23
+  RNDeviceInfo: 9538a884f862fe4aa0d7cead9f34e292d41ba8f6
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNImageCropPicker: 9e0bf18cf4184a846fed55747c8e622208b39947
