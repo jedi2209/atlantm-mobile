@@ -7,6 +7,7 @@ import Modal from 'react-native-modal';
 import showPrice from '../../utils/price';
 import styleConst from '../../core/style-const';
 import isIPhoneX from '../../utils/is_iphone_x';
+import strings from '../../core/lang/const';
 
 export const ServiceModal = ({visible, onClose, data}) => {
   const [activeTab, setActiveTab] = useState('works');
@@ -31,7 +32,7 @@ export const ServiceModal = ({visible, onClose, data}) => {
                       modalStyles.tabButtonText,
                       activeTab === 'works' && modalStyles.tabButtonActiveText,
                     ]}>
-                    Работы
+                    {strings.CarHistoryDetailsScreen.works}
                   </Text>
                 </Button>
                 <Button
@@ -43,7 +44,7 @@ export const ServiceModal = ({visible, onClose, data}) => {
                       modalStyles.tabButtonText,
                       activeTab === 'parts' && modalStyles.tabButtonActiveText,
                     ]}>
-                    Материалы
+                    {strings.CarHistoryDetailsScreen.materials}
                   </Text>
                 </Button>
               </Segment>
@@ -77,14 +78,14 @@ const ServiceTable = ({data}) => {
             key={'ServiceTable' + cnt + quantity + summ}>
             {name ? <Text style={tableStyles.sectionTitle}>{name}</Text> : null}
             {quantity && unit ? (
-              <ServiceTableItem label="Количество">
+              <ServiceTableItem label={strings.CarHistoryDetailsScreen.count}>
                 {unit === 'сек'
                   ? quantity / 60 / 60 + ' ч.'
                   : [quantity, unit].join(' ')}
               </ServiceTableItem>
             ) : null}
             {summ && currency.name ? (
-              <ServiceTableItem label="Стоимость">
+              <ServiceTableItem label={strings.CarHistoryDetailsScreen.price}>
                 {showPrice(summ, currency.name)}
               </ServiceTableItem>
             ) : null}

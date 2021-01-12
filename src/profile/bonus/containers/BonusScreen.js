@@ -23,7 +23,7 @@ import {dayMonthYear} from '../../../utils/date';
 import Amplitude from '../../../utils/amplitude-analytics';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import {MONTH_TEXT} from '../../const';
+import strings from '../../../core/lang/const';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -134,7 +134,9 @@ import stylesHeader from '../../../core/components/Header/style';
 class BonusScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: (
-      <Text style={stylesHeader.whiteHeaderTitle}>Бонусный счёт</Text>
+      <Text style={stylesHeader.whiteHeaderTitle}>
+        {strings.ProfileScreenInfo.bonus.title}
+      </Text>
     ),
     headerStyle: stylesHeader.whiteHeader,
     headerTitleStyle: stylesHeader.whiteHeaderTitle,
@@ -228,7 +230,7 @@ class BonusScreen extends Component {
         return (
           <View key={hash} style={styles.acc}>
             {this.renderItemHeader(
-              MONTH_TEXT[bonusMonth],
+              strings.DatePickerCustom.month[bonusMonth],
               bonus.total,
               bonus.curr,
               onPressHander,
@@ -348,7 +350,7 @@ class BonusScreen extends Component {
         ]}>
         <Icon name="price-ribbon" type="Entypo" style={styles.buttonIcon} />
         <Text numberOfLines={1} style={styles.buttonText}>
-          Подробнее о бонусной программе
+          {strings.ProfileScreenInfo.bonus.moreInfo}
         </Text>
       </Button>
     );
@@ -364,7 +366,9 @@ class BonusScreen extends Component {
     if (isEmpty(bonus) || !bonus.items) {
       return (
         <SafeAreaView style={styles.safearea}>
-          <Text style={styles.emptyText}>Бонусов пока нет</Text>
+          <Text style={styles.emptyText}>
+            {strings.ProfileScreenInfo.bonus.empty.text}
+          </Text>
           {this.renderBonusButton()}
         </SafeAreaView>
       );
@@ -391,7 +395,7 @@ class BonusScreen extends Component {
 
             <View style={styles.total}>
               <Text style={styles.totalText}>
-                Всего:{' '}
+                {strings.ProfileScreenInfo.bonus.total}:{' '}
                 <Text style={styles.totalValue}>
                   {parseFloat(saldoValue, 'ru-RU')}
                 </Text>{' '}

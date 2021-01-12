@@ -1,20 +1,35 @@
 import React, {Component} from 'react';
 import {StyleSheet, Image, View, Text} from 'react-native';
-import {Button, Icon} from 'native-base';
+import {Button} from 'native-base';
 
 import {SafeAreaView} from 'react-navigation';
-
-// components
-import FooterButton from '../../core/components/FooterButton';
 
 // helpers
 import styleConst from '../../core/style-const';
 import {scale} from '../../utils/scale';
+import strings from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: styleConst.color.blue,
+  },
+  button: {
+    backgroundColor: '#fff',
+    bottom: '10%',
+    width: '80%',
+    marginHorizontal: '10%',
+    borderRadius: 5,
+    position: 'absolute',
+  },
+  buttonText: {
+    color: styleConst.color.lightBlue,
+    fontFamily: styleConst.font.regular,
+    fontSize: 15,
+  },
+  image: {
+    marginRight: 20,
+    tintColor: styleConst.color.lightBlue,
   },
   logoContainer: {
     justifyContent: 'center',
@@ -49,35 +64,15 @@ export default class IntroScreen extends Component {
           />
           <Button
             full
-            title="Выбери свой автоцентр"
+            title={strings.IntroScreen.button}
             onPress={this.onPressButton}
-            style={[
-              styleConst.shadow.default,
-              {
-                backgroundColor: '#fff',
-                bottom: '10%',
-                width: '80%',
-                marginHorizontal: '10%',
-                borderRadius: 5,
-                position: 'absolute',
-              },
-            ]}>
+            style={[styleConst.shadow.default, styles.button]}>
             <Image
-              style={{
-                marginRight: 20,
-                tintColor: styleConst.color.lightBlue,
-              }}
+              style={styles.image}
               resizeMode="contain"
               source={require('../../menu/assets/Home.svg')}
             />
-            <Text
-              style={{
-                color: styleConst.color.lightBlue,
-                fontFamily: styleConst.font.regular,
-                fontSize: 15
-              }}>
-              Выбери свой автоцентр
-            </Text>
+            <Text style={styles.buttonText}>{strings.IntroScreen.button}</Text>
           </Button>
         </View>
       </SafeAreaView>

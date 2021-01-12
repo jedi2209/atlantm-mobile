@@ -13,12 +13,13 @@ import {actionSaveProfileToAPI} from '../actions';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import stylesHeader from '../../core/components/Header/style';
 import Amplitude from '../../utils/amplitude-analytics';
+import strings from '../../core/lang/const';
 
 class ProfileSettingsScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerStyle: stylesHeader.whiteHeader,
     headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerTitle: 'Редактирование профиля',
+    headerTitle: strings.ProfileSettingsScreen.title,
     headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
     headerRight: <View />,
   });
@@ -44,7 +45,7 @@ class ProfileSettingsScreen extends Component {
           id: field.ID,
           name: 'EMAIL',
           type: 'email',
-          label: 'E-mail',
+          label: strings.Form.field.label.email,
           value: field.VALUE,
         };
       });
@@ -57,7 +58,7 @@ class ProfileSettingsScreen extends Component {
           id: field.ID,
           name: 'PHONE',
           type: 'phone',
-          label: 'Телефон',
+          label: strings.Form.field.label.phone,
           value: field.VALUE,
           country: field.COUNTRY,
         };
@@ -83,12 +84,12 @@ class ProfileSettingsScreen extends Component {
       fields: {
         groups: [
           {
-            name: 'Основное',
+            name: strings.Form.group.main,
             fields: [
               {
                 name: 'NAME',
                 type: 'input',
-                label: 'Имя',
+                label: strings.Form.field.label.name,
                 value: NAME || '',
                 props: {
                   required: true,
@@ -98,7 +99,7 @@ class ProfileSettingsScreen extends Component {
               {
                 name: 'SECOND_NAME',
                 type: 'input',
-                label: 'Отчество',
+                label: strings.Form.field.label.secondName,
                 value: SECOND_NAME || '',
                 props: {
                   textContentType: 'middleName',
@@ -107,7 +108,7 @@ class ProfileSettingsScreen extends Component {
               {
                 name: 'LAST_NAME',
                 type: 'input',
-                label: 'Фамилия',
+                label: strings.Form.field.label.lastName,
                 value: LAST_NAME || '',
                 props: {
                   textContentType: 'familyName',
@@ -116,16 +117,16 @@ class ProfileSettingsScreen extends Component {
             ],
           },
           {
-            name: 'Контактные данные',
+            name: strings.Form.group.contacts,
             fields: [].concat(this.state.email, this.state.phone),
           },
           {
-            name: 'Твои соц.сети для быстрого входа',
+            name: strings.Form.group.social,
             fields: [
               {
                 name: 'SocialAuth',
                 type: 'component',
-                label: 'Привяжи соц.сети',
+                label: strings.Form.field.label.social,
                 value: (
                   <SocialAuth
                     region={this.props.dealerSelected.region}
@@ -140,17 +141,17 @@ class ProfileSettingsScreen extends Component {
             ],
           },
           {
-            name: 'Дополнительно',
+            name: strings.Form.group.additional,
             fields: [
               {
                 name: 'BIRTHDATE',
                 type: 'date',
-                label: 'Когда у тебя день рождения?',
+                label: strings.Form.field.label.birthday,
                 value: birthdate,
                 props: {
                   maximumDate: new Date(substractYears(18)),
                   minimumDate: new Date(substractYears(100)),
-                  placeholder: 'Мы обязательно поздравим!',
+                  placeholder: strings.Form.field.placeholder.birthday,
                 },
               },
             ],
@@ -206,8 +207,8 @@ class ProfileSettingsScreen extends Component {
     if (!phoneValue && !emailValue) {
       this.setState({loading: false});
       Alert.alert(
-        'Заполни телефон или Email',
-        'Пожалуйста укажи хотя бы один контакт для возможности связи с тобой',
+        strings.ProfileSettingsScreen.Notifications.error.emailPhone.title,
+        strings.ProfileSettingsScreen.Notifications.error.emailPhone.text,
         [
           {
             text: 'ОК',
@@ -224,8 +225,8 @@ class ProfileSettingsScreen extends Component {
       .then((data) => {
         const _this = this;
         Alert.alert(
-          'Отлично! Всё получилось!',
-          'Твои данные успешно обновлены',
+          strings.Notifications.success.title,
+          strings.Notifications.success.textProfileUpdate,
           [
             {
               text: 'ОК',
@@ -240,7 +241,11 @@ class ProfileSettingsScreen extends Component {
       })
       .catch(() => {
         setTimeout(
-          () => Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?'),
+          () =>
+            Alert.alert(
+              strings.Notifications.error.title,
+              strings.Notifications.error.text,
+            ),
           100,
         );
         this.setState({loading: false});
@@ -260,7 +265,7 @@ class ProfileSettingsScreen extends Component {
             <Form
               fields={this.FormConfig.fields}
               barStyle={'light-content'}
-              SubmitButton={{text: 'Сохранить'}}
+              SubmitButton={{text: strings.ProfileSettingsScreen.save}}
               onSubmit={this.onPressSave}
             />
           </View>

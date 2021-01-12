@@ -308,7 +308,7 @@ const MoreScreen = (props) => {
         ]}>
         <Icon name="price-ribbon" type="Entypo" style={styles.buttonIcon} />
         <Text numberOfLines={1} style={styles.buttonText}>
-          Бонусная программа Атлант-М
+          {strings.Menu.main.bonus}
         </Text>
       </Button>
       {/* <View>
@@ -334,7 +334,7 @@ MoreScreen.navigationOptions = () => ({
   headerStyle: {
     height: 80,
   },
-  tabBarLabel: 'Меню',
+  tabBarLabel: strings.Menu.bottom.menu,
   tabBarIcon: ({focused}) => (
     <Icon
       name="bars"

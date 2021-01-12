@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   ActivityIndicator,
   TouchableWithoutFeedback,
-  TouchableOpacity,
   StatusBar,
   StyleSheet,
   ScrollView,
@@ -19,7 +18,6 @@ import {
   StyleProvider,
   Accordion,
 } from 'native-base';
-import LinearGradient from 'react-native-linear-gradient';
 
 // redux
 import {connect} from 'react-redux';
@@ -38,13 +36,14 @@ import ReadMore from 'react-native-read-more-text';
 import Badge from '../../../core/components/Badge';
 
 // helpers
-import {get, find} from 'lodash';
+import {get} from 'lodash';
 import PropTypes from 'prop-types';
 import Amplitude from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
 import numberWithGap from '../../../utils/number-with-gap';
 import getTheme from '../../../../native-base-theme/components';
 import showPrice from '../../../utils/price';
+import strings from '../../../core/lang/const';
 
 // styles
 import styles from '../../CarStyles';
@@ -290,7 +289,7 @@ class UserCarItemScreen extends Component {
         selectable={false}
         style={styles.ShowFullDescriptionButton}
         onPress={handlePress}>
-        Показать полное описание...
+        {strings.UserCarItemScreen.showFull}
       </Text>
     );
   };
@@ -301,7 +300,7 @@ class UserCarItemScreen extends Component {
         selectable={false}
         style={styles.ShowFullDescriptionButton}
         onPress={handlePress}>
-        Свернуть
+        {strings.UserCarItemScreen.showLess}
       </Text>
     );
   };
@@ -452,7 +451,7 @@ class UserCarItemScreen extends Component {
                       ) : null}
                       {get(carDetails, 'engine') ? (
                         <OptionPlate
-                          title="Двигатель"
+                          title={strings.UserCarItemScreen.plates.mileage}
                           subtitle={
                             get(carDetails, 'engine.volume.short').toFixed(1) +
                             ' л. ' +
@@ -463,7 +462,7 @@ class UserCarItemScreen extends Component {
                       {get(carDetails, 'gearbox.GearboxCount') &&
                       get(carDetails, 'gearbox.name') ? (
                         <OptionPlate
-                          title="КПП"
+                          title={strings.NewCarItemScreen.plates.gearbox.name}
                           subtitle={`${
                             get(carDetails, 'gearbox.GearboxCount.Value')
                               ? get(carDetails, 'gearbox.GearboxCount.Value') +
@@ -479,7 +478,7 @@ class UserCarItemScreen extends Component {
                       ) : null}
                       {get(carDetails, 'gearbox.wheel') ? (
                         <OptionPlate
-                          title="Привод"
+                          title={strings.NewCarItemScreen.plates.wheel}
                           subtitle={get(
                             carDetails,
                             'gearbox.wheel',
@@ -488,7 +487,7 @@ class UserCarItemScreen extends Component {
                       ) : null}
                       {get(carDetails, 'color.name.simple') ? (
                         <OptionPlate
-                          title="Цвет"
+                          title={strings.NewCarItemScreen.plates.color}
                           subtitle={get(
                             carDetails,
                             'color.name.simple',
@@ -510,7 +509,7 @@ class UserCarItemScreen extends Component {
                         />
                         <View style={styles.mapCardTextContainer}>
                           <Text style={styles.mapCardTitle}>
-                            Автомобиль расположен по адресу
+                            {strings.NewCarItemScreen.carLocation}
                           </Text>
                           <Text
                             style={styles.mapCardDealer}
@@ -559,7 +558,7 @@ class UserCarItemScreen extends Component {
                                 width: '70%',
                               },
                             ]}>
-                            рассчитать кредит
+                            {strings.UserCarItemScreen.creditCalculate}
                           </Text>
                           <Icon
                             type="Octicons"
@@ -607,7 +606,7 @@ class UserCarItemScreen extends Component {
                               },
                               styles.bodyButtonText,
                             ]}>
-                            предложить{'\r\n'}свою цену
+                            {strings.UserCarItemScreen.myPrice}
                           </Text>
                         </Button>
                       ) : null}
@@ -621,16 +620,18 @@ class UserCarItemScreen extends Component {
                     }}
                     dataArray={[
                       {
-                        title: 'Характеристики',
+                        title: strings.NewCarItemScreen.tech.title,
                         content: (
                           <View style={styles.tabContent}>
-                            <Text style={styles.sectionTitle}>Основные</Text>
+                            <Text style={styles.sectionTitle}>
+                              {strings.NewCarItemScreen.tech.base}
+                            </Text>
                             <Grid>
                               {carDetails.year ? (
                                 <Row style={styles.sectionRow}>
                                   <Col style={styles.sectionProp}>
                                     <Text style={styles.sectionPropText}>
-                                      Год выпуска:
+                                      {strings.NewCarItemScreen.tech.year}:
                                     </Text>
                                   </Col>
                                   <Col style={styles.sectionValue}>
@@ -664,7 +665,11 @@ class UserCarItemScreen extends Component {
                                 <Row style={styles.sectionRow}>
                                   <Col style={styles.sectionProp}>
                                     <Text style={styles.sectionPropText}>
-                                      Топливо:
+                                      {
+                                        strings.NewCarItemScreen.tech.engine
+                                          .fuel
+                                      }
+                                      :
                                     </Text>
                                   </Col>
                                   <Col style={styles.sectionValue}>
@@ -682,7 +687,11 @@ class UserCarItemScreen extends Component {
                                     <Text
                                       selectable={false}
                                       style={styles.sectionPropText}>
-                                      Двигатель:
+                                      {
+                                        strings.NewCarItemScreen.tech.engine
+                                          .title
+                                      }
+                                      :
                                     </Text>
                                   </Col>
                                   <Col style={styles.sectionValue}>
@@ -699,7 +708,11 @@ class UserCarItemScreen extends Component {
                                     <Text
                                       selectable={false}
                                       style={styles.sectionPropText}>
-                                      КПП:
+                                      {
+                                        strings.NewCarItemScreen.plates.gearbox
+                                          .name
+                                      }
+                                      :
                                     </Text>
                                   </Col>
                                   <Col style={styles.sectionValue}>
@@ -717,7 +730,7 @@ class UserCarItemScreen extends Component {
                                     <Text
                                       selectable={false}
                                       style={styles.sectionPropText}>
-                                      Цвет:
+                                      {strings.NewCarItemScreen.plates.color}:
                                     </Text>
                                   </Col>
                                   <Col style={styles.sectionValue}>
@@ -733,7 +746,7 @@ class UserCarItemScreen extends Component {
                                     <Text
                                       selectable={false}
                                       style={styles.sectionPropText}>
-                                      Тип кузова:
+                                      {strings.NewCarItemScreen.tech.body.type}:
                                     </Text>
                                   </Col>
                                   <Col style={styles.sectionValue}>
@@ -750,7 +763,11 @@ class UserCarItemScreen extends Component {
                                     <Text
                                       selectable={false}
                                       style={styles.sectionPropText}>
-                                      Салон:
+                                      {
+                                        strings.NewCarItemScreen.tech.interior
+                                          .title
+                                      }
+                                      :
                                     </Text>
                                   </Col>
                                   <Col style={styles.sectionValue}>
@@ -766,7 +783,7 @@ class UserCarItemScreen extends Component {
                       },
                       additional &&
                         additional.length && {
-                          title: 'Комплектация',
+                          title: strings.NewCarItemScreen.plates.complectation,
                           content: (
                             <View style={styles.tabContent}>
                               <Text style={styles.sectionTitle}>
@@ -883,7 +900,7 @@ class UserCarItemScreen extends Component {
                   }}
                 />
                 <Text style={styles.buttonText} selectable={false}>
-                  посмотреть
+                  {strings.NewCarItemScreen.show}
                 </Text>
               </Button>
               <Button
@@ -892,7 +909,7 @@ class UserCarItemScreen extends Component {
                 style={[stylesFooter.button, stylesFooter.buttonRight]}
                 activeOpacity={0.8}>
                 <Text style={styles.buttonText} selectable={false}>
-                  хочу это авто!
+                  {strings.NewCarItemScreen.wannaCar}
                 </Text>
               </Button>
             </View>

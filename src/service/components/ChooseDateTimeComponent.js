@@ -16,6 +16,7 @@ import {DatePickerCustom} from '../../core/components/DatePickerCustom';
 import {time, yearMonthDay} from '../../utils/date';
 import styleConst from '../../core/style-const';
 import API from '../../utils/api';
+import strings from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   scrollView: {},
@@ -101,11 +102,13 @@ export default class ChooseDateTimeComponent extends Component {
       switch (this.props.type) {
         case 'service':
           this._getTimeService(this.state.date);
-          this.messageForSearch = 'ищем свободное время на СТО';
+          this.messageForSearch =
+            strings.ChooseDateTimeComponent.loading.timeService;
           break;
         case 'testDrive':
           this._getTimeTestDrive(this.state.date);
-          this.messageForSearch = 'ищем свободное время для тест-драйва';
+          this.messageForSearch =
+            strings.ChooseDateTimeComponent.loading.timeTestDrive;
           break;
       }
     }
@@ -163,7 +166,7 @@ export default class ChooseDateTimeComponent extends Component {
 
     if (availablePeriods.data === null) {
       Toast.show({
-        text: 'Нет доступных периодов, попробуй выбрать другой день',
+        text: strings.ChooseDateTimeComponent.Notifications.error.period,
         position: 'bottom',
         type: 'danger',
         duration: 3000,
@@ -210,7 +213,7 @@ export default class ChooseDateTimeComponent extends Component {
     }
 
     if (availablePeriods.data == null) {
-      alert('Нет доступных периодов, попробуй выбрать другой день');
+      alert(strings.ChooseDateTimeComponent.Notifications.error.period);
       this.setState({
         availablePeriodsFetch: false,
         date: undefined,
@@ -236,7 +239,7 @@ export default class ChooseDateTimeComponent extends Component {
           style={{width: '100%'}}
           mode="date"
           locale="ru-RU"
-          confirmBtnText="выбрать"
+          confirmBtnText={strings.Picker.choose}
           value={this.state.date || null}
           isActive={this.state.modal || false}
           onPressButton={() => {
@@ -328,7 +331,7 @@ export default class ChooseDateTimeComponent extends Component {
                 <Text
                   selectable={false}
                   style={[styles.label, styles.labelActive]}>
-                  Выбери удобное для тебя время
+                  {strings.ChooseDateTimeComponent.chooseTime}
                 </Text>
                 <View style={styles.timeBlocksContainer}>
                   {(this.state.availablePeriods || []).map((item, idx) => {

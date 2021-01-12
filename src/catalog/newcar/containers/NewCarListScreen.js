@@ -23,6 +23,7 @@ import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import {EVENT_REFRESH} from '../../../core/actionTypes';
+import strings from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   content: {
@@ -81,7 +82,7 @@ class NewCarListScreen extends Component {
     return {
       headerTitle: (
         <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
-          Новые автомобили
+          {strings.NewCarListScreen.title}
         </Text>
       ),
       headerLeft: <View />,

@@ -34,6 +34,7 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import {verticalScale} from '../../utils/scale';
+import strings from '../../core/lang/const';
 
 // components
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
@@ -111,7 +112,11 @@ class InfoListScreen extends Component {
       navigation.state.params && navigation.state.params.onSwitchSubscribe;
 
     return {
-      headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Акции</Text>,
+      headerTitle: (
+        <Text style={stylesHeader.blueHeaderTitle}>
+          {strings.InfoListScreen.title}
+        </Text>
+      ),
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
       headerLeft: (
@@ -168,17 +173,16 @@ class InfoListScreen extends Component {
           });
         },
       );
-      title = 'Всё получилось!';
-      text =
-        'Ты успешно подписался на получение PUSH-уведомлений!\r\n\r\nОни не будут часто приходить, только лишь при появлении новых интересных акций.';
+      title = strings.Notifications.success.title;
+      text = strings.Notifications.success.textPush;
     } else {
       PushNotifications.unsubscribeFromTopic('actions');
       actionSetPushActionSubscribe(false);
       this.props.navigation.setParams({
         pushActionSubscribeState: false,
       });
-      title = 'Мы грустим =(';
-      text = 'Нам будет тебя не хватать...\r\nВозвращайся скорее!';
+      title = strings.Notifications.success.titleSad;
+      text = strings.Notifications.success.textPushSad;
     }
     Alert.alert(title, text);
   };
@@ -205,7 +209,7 @@ class InfoListScreen extends Component {
           let message = get(
             action,
             'payload.message',
-            'Произошла ошибка, попробуем снова?',
+            strings.Notifications.error.text,
           );
 
           if (message === 'Network request failed') {
@@ -244,7 +248,7 @@ class InfoListScreen extends Component {
     }
 
     return true;
-    return isActiveScreen;
+    // return isActiveScreen;
   }
 
   renderItem = (data) => {
@@ -284,7 +288,7 @@ class InfoListScreen extends Component {
         />
       </View>
     ) : (
-      <Text style={styles.message}>В данный момент нет акций</Text>
+      <Text style={styles.message}>{strings.InfoListScreen.empty.text}</Text>
     );
   };
 
@@ -301,7 +305,7 @@ class InfoListScreen extends Component {
               refreshing={this.state.refreshing}
               onRefresh={this._onRefresh}
               tintColor={styleConst.color.blue}
-              title="Обновить список акций"
+              title={strings.InfoListScreen.refresh}
               progressBackgroundColor={styleConst.color.blue}
             />
           }>

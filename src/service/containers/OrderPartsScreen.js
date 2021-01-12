@@ -29,6 +29,7 @@ import stylesHeader from '../../core/components/Header/style';
 import {ERROR_NETWORK} from '../../core/const';
 import {PARTS_ORDER__SUCCESS, PARTS_ORDER__FAIL} from '../actionTypes';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
+import strings from '../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
   const cars = orderBy(profile.cars, ['owner'], ['asc']);
@@ -133,7 +134,7 @@ class OrderPartsScreen extends Component {
     return {
       headerStyle: stylesHeader.whiteHeader,
       headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: 'Заказ зап.частей',
+      headerTitle: strings.OrderPartsScreen.title,
       headerLeft: (
         <HeaderIconBack
           theme="blue"
@@ -231,8 +232,8 @@ class OrderPartsScreen extends Component {
               CARMODEL: dataFromForm.CARMODEL,
             });
             Alert.alert(
-              'Заявка успешно отправлена',
-              'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+              strings.Notifications.success.title,
+              strings.Notifications.success.text,
               [
                 {
                   text: 'ОК',
@@ -246,7 +247,7 @@ class OrderPartsScreen extends Component {
             break;
           case PARTS_ORDER__FAIL:
             Toast.show({
-              text: 'Произошла ошибка, попробуем снова?',
+              text: strings.Notifications.error.title,
               position: 'bottom',
               type: 'danger',
             });
@@ -269,12 +270,12 @@ class OrderPartsScreen extends Component {
       fields: {
         groups: [
           {
-            name: 'Автоцентр',
+            name: strings.Form.group.dealer,
             fields: [
               {
                 name: 'DEALER',
                 type: 'dealerSelect',
-                label: 'Автоцентр',
+                label: strings.Form.field.label.dealer,
                 value:
                   this.props.dealerSelectedLocal &&
                   this.props.dealerSelectedLocal.id
@@ -290,28 +291,27 @@ class OrderPartsScreen extends Component {
             ],
           },
           {
-            name: 'Запасная часть',
+            name: strings.Form.group.part,
             fields: [
               {
                 name: 'PART',
                 type: 'textarea',
-                label: 'Что будем заказывать?',
+                label: strings.Form.field.label.part,
                 value: this.props.Part,
                 props: {
-                  placeholder:
-                    'Номер, название или перечень необходимых зап.частей',
+                  placeholder: strings.Form.field.placeholder.part,
                 },
               },
             ],
           },
           {
-            name: 'Автомобиль',
+            name: strings.Form.group.car,
             fields: this.state.isHaveCar
               ? [
                   {
                     name: 'CARNAME',
                     type: 'component',
-                    label: 'Выбери автомобиль',
+                    label: strings.Form.field.label.car2,
                     value: (
                       <ScrollView
                         showsHorizontalScrollIndicator={false}
@@ -351,7 +351,7 @@ class OrderPartsScreen extends Component {
                   {
                     name: 'CARBRAND',
                     type: 'input',
-                    label: 'Марка',
+                    label: strings.Form.field.label.carBrand,
                     value: this.props.carBrand,
                     props: {
                       required: true,
@@ -361,7 +361,7 @@ class OrderPartsScreen extends Component {
                   {
                     name: 'CARMODEL',
                     type: 'input',
-                    label: 'Модель',
+                    label: strings.Form.field.label.carModel,
                     value: this.props.carModel,
                     props: {
                       required: true,
@@ -371,12 +371,12 @@ class OrderPartsScreen extends Component {
                 ],
           },
           {
-            name: 'Контактные данные',
+            name: strings.Form.group.contacts,
             fields: [
               {
                 name: 'NAME',
                 type: 'input',
-                label: 'Имя',
+                label: strings.Form.field.label.name,
                 value: this.props.firstName,
                 props: {
                   required: true,
@@ -386,7 +386,7 @@ class OrderPartsScreen extends Component {
               {
                 name: 'SECOND_NAME',
                 type: 'input',
-                label: 'Отчество',
+                label: strings.Form.field.label.secondName,
                 value: this.props.secondName,
                 props: {
                   textContentType: 'middleName',
@@ -395,7 +395,7 @@ class OrderPartsScreen extends Component {
               {
                 name: 'LAST_NAME',
                 type: 'input',
-                label: 'Фамилия',
+                label: strings.Form.field.label.lastName,
                 value: this.props.lastName,
                 props: {
                   textContentType: 'familyName',
@@ -404,7 +404,7 @@ class OrderPartsScreen extends Component {
               {
                 name: 'PHONE',
                 type: 'phone',
-                label: 'Телефон',
+                label: strings.Form.field.label.phone,
                 value: this.props.phone,
                 props: {
                   required: true,
@@ -413,22 +413,21 @@ class OrderPartsScreen extends Component {
               {
                 name: 'EMAIL',
                 type: 'email',
-                label: 'Email',
+                label: strings.Form.field.label.email,
                 value: this.props.email,
               },
             ],
           },
           {
-            name: 'Дополнительно',
+            name: strings.Form.group.additional,
             fields: [
               {
                 name: 'COMMENT',
                 type: 'textarea',
-                label: 'Комментарий',
+                label: strings.Form.field.label.comment,
                 value: this.props.Text,
                 props: {
-                  placeholder:
-                    'На случай если тебе потребуется передать нам больше информации',
+                  placeholder: strings.Form.field.placeholder.comment,
                 },
               },
             ],

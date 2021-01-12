@@ -21,6 +21,7 @@ import {orderService} from '../../actions';
 import {localUserDataUpdate} from '../../../profile/actions';
 import {localDealerClear} from '../../../dealer/actions';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../../actionTypes';
+import strings from '../../../core/lang/const';
 
 import Amplitude from '../../../utils/amplitude-analytics';
 
@@ -169,8 +170,8 @@ class ServiceScreenNonAuth extends Component {
               CARNUMBER: dataToSend.carNumber,
             });
             Alert.alert(
-              'Заявка успешно отправлена',
-              'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+              strings.Notifications.success.title,
+              strings.Notifications.success.text,
               [
                 {
                   text: 'ОК',
@@ -182,7 +183,10 @@ class ServiceScreenNonAuth extends Component {
             );
             break;
           case SERVICE_ORDER__FAIL:
-            Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
+            Alert.alert(
+              strings.Notifications.error.title,
+              strings.Notifications.error.text,
+            );
             break;
         }
       }
@@ -190,12 +194,15 @@ class ServiceScreenNonAuth extends Component {
       // отправляем полноценную онлайн-запись
       const order = await API.saveOrderToService(data);
       if (order.status === 'error') {
-        Alert.alert('Хьюстон, у нас проблемы!', '\r\n' + order.error.message);
+        Alert.alert(
+          strings.Notifications.error.title,
+          '\r\n' + order.error.message,
+        );
       } else {
         Amplitude.logEvent('order', 'OnlineService');
         Alert.alert(
-          'Всё получилось!',
-          '\r\nСпасибо! Твоя запись оформлена, ждём!',
+          strings.Notifications.success.title,
+          '\r\n' + strings.Notifications.success.textOnline,
           [
             {
               text: 'ОК',
@@ -214,12 +221,12 @@ class ServiceScreenNonAuth extends Component {
     fields: {
       groups: [
         {
-          name: 'Автоцентр',
+          name: strings.Form.group.dealer,
           fields: [
             {
               name: 'DEALER',
               type: 'dealerSelect',
-              label: 'Автоцентр',
+              label: strings.Form.field.label.dealer,
               value: this.props.dealerSelected,
               props: {
                 goBack: false,
@@ -230,10 +237,13 @@ class ServiceScreenNonAuth extends Component {
             {
               name: 'DATETIME',
               type: 'dateTime',
-              label: 'Выбери удобную для тебя дату',
+              label: strings.Form.field.label.date,
               value: null,
               props: {
-                placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
+                placeholder:
+                  strings.Form.field.placeholder.date +
+                  ' ' +
+                  dayMonthYear(addDays(2)),
                 required: true,
                 type: 'service',
                 minimumDate: new Date(addDays(2)),
@@ -244,12 +254,12 @@ class ServiceScreenNonAuth extends Component {
           ],
         },
         {
-          name: 'Автомобиль',
+          name: strings.Form.group.car,
           fields: [
             {
               name: 'CARBRAND',
               type: 'input',
-              label: 'Марка',
+              label: strings.Form.field.label.brand,
               value: this.props.carBrand,
               props: {
                 required: true,
@@ -259,7 +269,7 @@ class ServiceScreenNonAuth extends Component {
             {
               name: 'CARMODEL',
               type: 'input',
-              label: 'Модель',
+              label: strings.Form.field.label.model,
               value: this.props.carModel,
               props: {
                 required: true,
@@ -269,7 +279,7 @@ class ServiceScreenNonAuth extends Component {
             {
               name: 'CARNUMBER',
               type: 'input',
-              label: 'Гос. номер автомобиля',
+              label: strings.Form.field.label.carNumber,
               value: this.props.carNumber,
               props: {
                 required: true,
@@ -279,7 +289,7 @@ class ServiceScreenNonAuth extends Component {
             {
               name: 'CARVIN',
               type: 'input',
-              label: 'VIN номер автомобиля',
+              label: strings.Form.field.label.carVIN,
               value: this.props.carVIN,
               props: {
                 placeholder: null,
@@ -288,12 +298,12 @@ class ServiceScreenNonAuth extends Component {
           ],
         },
         {
-          name: 'Контактные данные',
+          name: strings.Form.group.contacts,
           fields: [
             {
               name: 'NAME',
               type: 'input',
-              label: 'Имя',
+              label: strings.Form.field.label.name,
               value: this.props.firstName,
               props: {
                 required: true,
@@ -303,7 +313,7 @@ class ServiceScreenNonAuth extends Component {
             {
               name: 'SECOND_NAME',
               type: 'input',
-              label: 'Отчество',
+              label: strings.Form.field.label.secondName,
               value: this.props.secondName,
               props: {
                 textContentType: 'middleName',
@@ -312,7 +322,7 @@ class ServiceScreenNonAuth extends Component {
             {
               name: 'LAST_NAME',
               type: 'input',
-              label: 'Фамилия',
+              label: strings.Form.field.label.lastName,
               value: this.props.lastName,
               props: {
                 textContentType: 'familyName',
@@ -321,7 +331,7 @@ class ServiceScreenNonAuth extends Component {
             {
               name: 'PHONE',
               type: 'phone',
-              label: 'Телефон',
+              label: strings.Form.field.label.phone,
               value: this.props.phone,
               props: {
                 required: true,
@@ -330,7 +340,7 @@ class ServiceScreenNonAuth extends Component {
             {
               name: 'EMAIL',
               type: 'email',
-              label: 'Email',
+              label: strings.Form.field.label.email,
               value: this.props.email,
               props: {
                 required: false,
@@ -339,16 +349,15 @@ class ServiceScreenNonAuth extends Component {
           ],
         },
         {
-          name: 'Дополнительно',
+          name: strings.Form.group.additional,
           fields: [
             {
               name: 'COMMENT',
               type: 'textarea',
-              label: 'Комментарий',
+              label: strings.Form.field.label.comment,
               value: this.props.Text,
               props: {
-                placeholder:
-                  'На случай если тебе потребуется передать нам больше информации',
+                placeholder: strings.Form.field.placeholder.comment,
               },
             },
           ],

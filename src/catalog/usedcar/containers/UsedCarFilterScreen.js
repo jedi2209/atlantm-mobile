@@ -187,7 +187,7 @@ class UsedCarFilterScreen extends Component {
                     });
 
                     const item = this.state.cityFilters.find(
-                      value => value.id === id,
+                      (value) => value.id === id,
                     );
 
                     this.props.actionResetUsedCarList();
@@ -217,7 +217,7 @@ class UsedCarFilterScreen extends Component {
                           selectedCity: id,
                         });
                         const item = this.state.cityFilters.find(
-                          value => value.id === id,
+                          (value) => value.id === id,
                         );
                         this.props.actionResetUsedCarList();
                         this.props.actionSetNeedUpdateUsedCarList();
@@ -249,7 +249,7 @@ class UsedCarFilterScreen extends Component {
               step={this.props.filterPrice.step}
               min={this.props.filterPrice.min}
               max={this.props.filterPrice.max}
-              onValuesChange={e => {
+              onValuesChange={(e) => {
                 this.setState({
                   priceFilter: {
                     ...this.props.filterPrice,
@@ -340,7 +340,7 @@ class UsedCarFilterScreen extends Component {
               )}
             </View>
           )}
-          renderContent={item => {
+          renderContent={(item) => {
             return (
               <View
                 style={{

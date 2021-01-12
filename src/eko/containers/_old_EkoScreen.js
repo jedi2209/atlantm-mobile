@@ -36,6 +36,7 @@ import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
 import stylesHeader from '../../core/components/Header/style';
 import {TEXT_RATE_APP} from '../constants';
+import strings from '../../core/lang/const';
 
 const icons = {
   advocate: require('../assets/advocate.png'),
@@ -69,7 +70,7 @@ class EkoScreen extends Component {
       'BottomTabNavigation';
 
     return {
-      headerTitle: 'Отзывы и предложения',
+      headerTitle: strings.EkoScreen.title,
       headerStyle: stylesHeader.common,
       headerTitleStyle: stylesHeader.title,
       headerLeft: (
@@ -99,11 +100,11 @@ class EkoScreen extends Component {
     const PLAY_STORE_LINK = 'market://details?id=com.atlantm';
 
     if (Platform.OS === 'ios') {
-      Linking.openURL(APP_STORE_LINK).catch(err =>
+      Linking.openURL(APP_STORE_LINK).catch((err) =>
         console.error('APP_STORE_LINK failed', err),
       );
     } else {
-      Linking.openURL(PLAY_STORE_LINK).catch(err =>
+      Linking.openURL(PLAY_STORE_LINK).catch((err) =>
         console.error('PLAY_STORE_LINK failed', err),
       );
     }
@@ -153,7 +154,7 @@ class EkoScreen extends Component {
           <Content>
             <List style={stylesList.list}>
               {this.renderItem({
-                label: 'Отзывы о работе автоцентра',
+                label: strings.EkoScreen.dealerReviews,
                 iconName: 'reviews',
                 isFirst: true,
                 isLast: true,
@@ -178,7 +179,4 @@ class EkoScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(EkoScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(EkoScreen);

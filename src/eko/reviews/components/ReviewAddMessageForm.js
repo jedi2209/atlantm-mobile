@@ -8,12 +8,9 @@ import {Icon, Body, ListItem} from 'native-base';
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
-import {
-  TEXT_REVIEW_ADD_QUESTION__PLUS,
-  TEXT_REVIEW_ADD_QUESTION__MINUS,
-} from '../../constants';
 import PropTypes from 'prop-types';
 import styleConst from '../../../core/style-const';
+import strings from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   listItem: {
@@ -60,8 +57,8 @@ export default class ReviewAddMessageForm extends PureComponent {
 
   static defaultProps = {};
 
-  onChangePlusText = text => this.props.messagePlusFill(text);
-  onChangeMinusText = text => this.props.messageMinusFill(text);
+  onChangePlusText = (text) => this.props.messagePlusFill(text);
+  onChangeMinusText = (text) => this.props.messageMinusFill(text);
 
   renderTextarea = (value, onChangeHandler) => (
     <TextInput
@@ -70,8 +67,8 @@ export default class ReviewAddMessageForm extends PureComponent {
       numberOfLines={4}
       value={value}
       returnKeyType="done"
-      returnKeyLabel="Готово"
-      placeholder="Поле для заполнения"
+      returnKeyLabel={strings.MessageForm.done}
+      placeholder={strings.MessageForm.placeholder}
       onChangeText={onChangeHandler}
       underlineColorAndroid="transparent"
       blurOnSubmit={true}
@@ -102,8 +99,8 @@ export default class ReviewAddMessageForm extends PureComponent {
               <View style={styles.textContainer}>
                 <Text style={styles.question}>
                   {isPlus
-                    ? TEXT_REVIEW_ADD_QUESTION__PLUS
-                    : TEXT_REVIEW_ADD_QUESTION__MINUS}
+                    ? strings.ReviewAddMessageForm.label.plus
+                    : strings.ReviewAddMessageForm.label.minus}
                 </Text>
                 {this.renderTextarea(value, onChangeHandler)}
               </View>

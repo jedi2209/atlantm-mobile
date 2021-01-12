@@ -24,6 +24,7 @@ import {connect} from 'react-redux';
 import {orderService} from '../../actions';
 import {localUserDataUpdate} from '../../../profile/actions';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../../actionTypes';
+import strings from '../../../core/lang/const';
 
 import Amplitude from '../../../utils/amplitude-analytics';
 
@@ -53,7 +54,7 @@ class ServiceScreen extends Component {
     return {
       headerStyle: stylesHeader.whiteHeader,
       headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: 'Запись на сервис',
+      headerTitle: strings.ServiceScreen.title,
       headerLeft: (
         <HeaderIconBack
           theme="blue"
@@ -91,7 +92,7 @@ class ServiceScreen extends Component {
 
     if (!dateFromForm) {
       Toast.show({
-        text: 'Необходимо выбрать дату для продолжения',
+        text: strings.ServiceScreen.Notifications.error.chooseDate,
         position: 'bottom',
         duration: 3000,
         type: 'warning',
@@ -164,8 +165,8 @@ class ServiceScreen extends Component {
               CARNUMBER: dataToSend.carNumber,
             });
             Alert.alert(
-              'Заявка успешно отправлена',
-              'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+              strings.Notifications.success.title,
+              strings.Notifications.success.text,
               [
                 {
                   text: 'ОК',
@@ -177,19 +178,25 @@ class ServiceScreen extends Component {
             );
             break;
           case SERVICE_ORDER__FAIL:
-            Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
+            Alert.alert(
+              strings.Notifications.error.title,
+              strings.Notifications.error.text,
+            );
             break;
         }
       }
     } else {
       const order = await API.saveOrderToService(data);
       if (order.status === 'error') {
-        Alert.alert('Хьюстон, у нас проблемы!', '\r\n' + order.error.message);
+        Alert.alert(
+          strings.Notifications.error.title,
+          '\r\n' + order.error.message,
+        );
       } else {
         Amplitude.logEvent('order', 'OnlineService');
         Alert.alert(
-          'Всё получилось!',
-          '\r\nСпасибо! Твоя запись оформлена, ждём!',
+          strings.Notifications.success.title,
+          '\r\n' + strings.Notifications.success.textOnline,
           [
             {
               text: 'ОК',
@@ -209,15 +216,18 @@ class ServiceScreen extends Component {
       fields: {
         groups: [
           {
-            name: 'Дата',
+            name: strings.Form.group.date,
             fields: [
               {
                 name: 'DATE',
                 type: this.orderLead ? 'date' : 'dateTime',
-                label: 'Выбери удобную для тебя дату',
+                label: strings.Form.field.label.date,
                 value: null,
                 props: {
-                  placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
+                  placeholder:
+                    strings.Form.field.placeholder.date +
+                    ' ' +
+                    dayMonthYear(addDays(2)),
                   required: true,
                   type: 'service',
                   minimumDate: new Date(addDays(2)),
@@ -228,12 +238,12 @@ class ServiceScreen extends Component {
             ],
           },
           {
-            name: 'Контактные данные',
+            name: strings.Form.group.contacts,
             fields: [
               {
                 name: 'NAME',
                 type: 'input',
-                label: 'Имя',
+                label: strings.Form.field.label.name,
                 value: this.props.firstName,
                 props: {
                   required: true,
@@ -243,7 +253,7 @@ class ServiceScreen extends Component {
               {
                 name: 'SECOND_NAME',
                 type: 'input',
-                label: 'Отчество',
+                label: strings.Form.field.label.secondName,
                 value: this.props.secondName,
                 props: {
                   textContentType: 'middleName',
@@ -252,7 +262,7 @@ class ServiceScreen extends Component {
               {
                 name: 'LAST_NAME',
                 type: 'input',
-                label: 'Фамилия',
+                label: strings.Form.field.label.lastName,
                 value: this.props.lastName,
                 props: {
                   textContentType: 'familyName',
@@ -261,7 +271,7 @@ class ServiceScreen extends Component {
               {
                 name: 'PHONE',
                 type: 'phone',
-                label: 'Телефон',
+                label: strings.Form.field.label.phone,
                 value: this.props.phone,
                 props: {
                   required: true,
@@ -270,7 +280,7 @@ class ServiceScreen extends Component {
               {
                 name: 'EMAIL',
                 type: 'email',
-                label: 'Email',
+                label: strings.Form.field.label.email,
                 value: this.props.email,
                 props: {
                   required: false,
@@ -279,16 +289,15 @@ class ServiceScreen extends Component {
             ],
           },
           {
-            name: 'Дополнительно',
+            name: strings.Form.group.additional,
             fields: [
               {
                 name: 'COMMENT',
                 type: 'textarea',
-                label: 'Комментарий',
+                label: strings.Form.field.label.comment,
                 value: this.props.Text,
                 props: {
-                  placeholder:
-                    'На случай если тебе потребуется передать нам больше информации',
+                  placeholder: strings.Form.field.placeholder.comment,
                 },
               },
             ],
@@ -312,7 +321,7 @@ class ServiceScreen extends Component {
                 defaultCountryCode={this.props.dealerSelected.region}
                 onSubmit={this.onPressOrder}
                 SubmitButton={{
-                  text: 'Записаться!',
+                  text: strings.ServiceScreen.button,
                 }}
                 parentState={this.state}
               />

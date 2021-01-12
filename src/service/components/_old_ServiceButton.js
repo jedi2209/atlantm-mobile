@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
-import { Text, StyleSheet, Image } from 'react-native';
+import React, {PureComponent} from 'react';
+import {Text, StyleSheet, Image} from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import { Button, Footer, FooterTab } from 'native-base';
+import {Button, Footer, FooterTab} from 'native-base';
 
 // helpers
 import styleConst from '../../core/style-const';
@@ -29,19 +29,15 @@ const styles = StyleSheet.create({
 export default class ServiceButton extends PureComponent {
   static propTypes = {
     onPress: PropTypes.func,
-  }
+  };
 
-  static defaultProps = {}
+  static defaultProps = {};
 
   render() {
     return (
       <Footer>
         <FooterTab>
-          <Button
-            onPress={this.props.onPress}
-            full
-            style={styles.button}
-          >
+          <Button onPress={this.props.onPress} full style={styles.button}>
             <Text style={styles.buttonText}>ОТПРАВИТЬ</Text>
             <Image
               source={require('../../core/components/CustomIcon/assets/arrow_right_white.png')}

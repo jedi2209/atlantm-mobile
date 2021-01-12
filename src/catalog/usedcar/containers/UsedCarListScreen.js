@@ -23,8 +23,6 @@ import {
 } from '../../actions';
 
 // components
-import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import CarList from '../../components/CarList';
 
 // helpers
@@ -32,8 +30,8 @@ import Amplitude from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
-import declOfNum from '../../../utils/decl-of-num';
 import {EVENT_DEFAULT} from '../../actionTypes';
+import strings from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -83,7 +81,7 @@ class UserCarListScreen extends Component {
     return {
       headerTitle: (
         <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
-          Подержанные автомобили
+          {strings.UserCarListScreen.title}
         </Text>
       ),
       headerLeft: <View />,
@@ -207,12 +205,9 @@ class UserCarListScreen extends Component {
       pages,
       prices,
       navigation,
-      priceRange,
       isFetchItems,
       dealerSelected,
     } = this.props;
-
-    const showPriceFilterIcon = get(items, '0.type') !== 'empty';
 
     console.log('== UsedCarListScreen ==');
 

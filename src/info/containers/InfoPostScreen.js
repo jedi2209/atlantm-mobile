@@ -6,7 +6,6 @@ import {
   Linking,
   Dimensions,
   StyleSheet,
-  SafeAreaView,
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
@@ -28,6 +27,7 @@ import processHtml from '../../utils/process-html';
 import Amplitude from '../../utils/amplitude-analytics';
 import {verticalScale} from '../../utils/scale';
 import {dayMonth, dayMonthYear} from '../../utils/date';
+import strings from '../../core/lang/const';
 
 // image
 const {width: screenWidth} = Dimensions.get('window');
@@ -43,6 +43,26 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: verticalScale(60),
     height: 200,
+  },
+  button: {
+    backgroundColor: styleConst.color.lightBlue,
+    borderColor: styleConst.color.lightBlue,
+    color: 'white',
+    height: 50,
+    borderTopWidth: 0,
+    paddingHorizontal: '5%',
+    marginBottom: 20,
+    position: 'absolute',
+    bottom: 0,
+    width: '80%',
+    borderRadius: 5,
+    marginHorizontal: '10%',
+  },
+  buttonText: {
+    color: '#fff',
+    fontFamily: styleConst.font.medium,
+    fontSize: 16,
+    letterSpacing: styleConst.ui.letterSpacing,
   },
   textContainer: {
     flex: 1,
@@ -73,7 +93,6 @@ const mapStateToProps = ({dealer, info, profile}) => {
     phone: profile.phone,
     email: profile.email,
     dealerSelected: dealer.selected,
-    isCallMeRequest: info.meta.isCallMeRequest,
   };
 };
 
@@ -147,7 +166,9 @@ class InfoPostScreen extends Component {
   };
 
   processDate(date = {}) {
-    return `c ${dayMonth(date.from)} по ${dayMonthYear(date.to)}`;
+    return `${strings.InfoPostScreen.filter.from} ${dayMonth(date.from)} ${
+      strings.InfoPostScreen.filter.to
+    } ${dayMonthYear(date.to)}`;
   }
 
   onMessage({nativeEvent}) {
@@ -167,7 +188,6 @@ class InfoPostScreen extends Component {
   };
 
   render() {
-    const {isCallMeRequest} = this.props;
     const post = this.getPost();
     let text = get(post, 'text');
     const img = get(post, 'img');
@@ -235,33 +255,11 @@ class InfoPostScreen extends Component {
         <Button
           full
           uppercase={false}
-          title="позвоните мне"
-          style={[
-            styleConst.shadow.default,
-            {
-              backgroundColor: styleConst.color.lightBlue,
-              borderColor: styleConst.color.lightBlue,
-              color: 'white',
-              height: 50,
-              borderTopWidth: 0,
-              paddingHorizontal: '5%',
-              marginBottom: 20,
-              position: 'absolute',
-              bottom: 0,
-              width: '80%',
-              borderRadius: 5,
-              marginHorizontal: '10%',
-            },
-          ]}
+          title={strings.InfoPostScreen.button.callMe}
+          style={[styleConst.shadow.default, styles.button]}
           onPress={this.onPressCallMe}>
-          <Text
-            style={{
-              color: '#fff',
-              fontFamily: styleConst.font.medium,
-              fontSize: 16,
-              letterSpacing: styleConst.ui.letterSpacing,
-            }}>
-            позвоните мне
+          <Text style={styles.buttonText}>
+            {strings.InfoPostScreen.button.callMe}
           </Text>
         </Button>
       </View>
