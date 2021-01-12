@@ -19,6 +19,7 @@ import {get} from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
+import strings from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -48,7 +49,11 @@ const mapDispatchToProps = {
 class ReviewScreen extends Component {
   static navigationOptions = ({navigation}) => {
     return {
-      headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Отзыв</Text>,
+      headerTitle: (
+        <Text style={stylesHeader.blueHeaderTitle}>
+          {strings.ReviewScreen.title}
+        </Text>
+      ),
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
       headerLeft: (
@@ -98,7 +103,7 @@ class ReviewScreen extends Component {
 
     const subtitle = [
       dealerSelected.name,
-      `Рейтинг ${reviewDealerRating} из 10`,
+      `${strings.ReviewScreen.rating} ${reviewDealerRating} из 10`,
     ];
 
     return (
@@ -121,7 +126,4 @@ class ReviewScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ReviewScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ReviewScreen);

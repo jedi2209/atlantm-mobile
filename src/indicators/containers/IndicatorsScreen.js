@@ -8,7 +8,6 @@ import {connect} from 'react-redux';
 import {actionSetActiveIndicator, actionFetchIndicators} from '../actions';
 
 // components
-import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import SpinnerView from '../../core/components/SpinnerView';
 import EmptyMessage from '../../core/components/EmptyMessage';
@@ -18,6 +17,7 @@ import IndicatorsRow from '../components/IndicatorsRow';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
+import strings from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -46,7 +46,11 @@ class IndicatorsScreen extends Component {
       navigation.state.params && navigation.state.params.returnScreen;
 
     return {
-      headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Индикаторы</Text>,
+      headerTitle: (
+        <Text style={stylesHeader.blueHeaderTitle}>
+          {strings.IndicatorsScreen.title}
+        </Text>
+      ),
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
       headerLeft: (
@@ -112,7 +116,7 @@ class IndicatorsScreen extends Component {
     }
 
     if (items.length === 0) {
-      return <EmptyMessage text="Нет индикаторов для отображения" />;
+      return <EmptyMessage text={strings.IndicatorsScreen.empty.text} />;
     }
 
     console.log('== IndicatorsScreen ==');
@@ -122,7 +126,7 @@ class IndicatorsScreen extends Component {
         <Container style={styles.safearea}>
           <StatusBar barStyle="light-content" />
           <Content
-            ref={scrollView => {
+            ref={(scrollView) => {
               this.scrollView = scrollView;
             }}>
             {items.map((indicators, idx) => {
@@ -142,7 +146,4 @@ class IndicatorsScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(IndicatorsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(IndicatorsScreen);

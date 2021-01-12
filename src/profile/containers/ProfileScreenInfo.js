@@ -31,6 +31,7 @@ import {
 
 import Amplitude from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
+import strings from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   buttonText: {
@@ -246,7 +247,7 @@ class ProfileScreenInfo extends Component {
                         fontSize: 18,
                         paddingHorizontal: 20,
                       }}>
-                      У тебя пока ещё нет автомобилей, о которых мы знаем...
+                      {strings.ProfileScreenInfo.empty.cars}
                     </Text>
                     <Button
                       full
@@ -278,7 +279,7 @@ class ProfileScreenInfo extends Component {
                             elevation: 0,
                           },
                         ]}>
-                        Не видишь свои авто?
+                        {strings.ProfileScreenInfo.empty.whereMyCars}
                       </Text>
                     </Button>
                   </View>
@@ -361,7 +362,7 @@ class ProfileScreenInfo extends Component {
                             marginBottom: 8,
                             fontWeight: '600',
                           }}>
-                          Бонусный счёт
+                          {strings.ProfileScreenInfo.bonus.title}
                         </Text>
                         <Text
                           style={{
@@ -370,7 +371,7 @@ class ProfileScreenInfo extends Component {
                             marginBottom: 16,
                             fontWeight: '600',
                           }}>
-                          История накопления и трат твоих бонусов
+                          {strings.ProfileScreenInfo.bonus.text}
                         </Text>
                         <View style={{display: 'flex', flexDirection: 'row'}}>
                           <View>
@@ -383,7 +384,7 @@ class ProfileScreenInfo extends Component {
                               onPress={() =>
                                 this.props.navigation.navigate('BonusScreen')
                               }>
-                              Посмотреть
+                              {strings.ProfileScreenInfo.bonus.show}
                             </Text>
                           </View>
                           <Icon
@@ -454,7 +455,7 @@ class ProfileScreenInfo extends Component {
                               marginBottom: 8,
                               fontWeight: '600',
                             }}>
-                            Бонусный счёт
+                            {strings.ProfileScreenInfo.bonus.title}
                           </Text>
                           <Text
                             style={{
@@ -463,12 +464,13 @@ class ProfileScreenInfo extends Component {
                               marginBottom: 16,
                               fontWeight: '600',
                             }}>
-                            У тебя пока{' '}
+                            {strings.ProfileScreenInfo.bonus.current.text}{' '}
                             <Text style={{fontWeight: 'bold', fontSize: 22}}>
                               0
                             </Text>{' '}
-                            баллов.{'\r\n'}Узнай больше о бонусной программе и
-                            накапливай баллы быстрее!
+                            {strings.ProfileScreenInfo.bonus.current.tex2}.
+                            {'\r\n'}
+                            {strings.ProfileScreenInfo.bonus.current.text3}
                           </Text>
                           <View style={{display: 'flex', flexDirection: 'row'}}>
                             <View>
@@ -478,7 +480,10 @@ class ProfileScreenInfo extends Component {
                                   fontSize: 16,
                                   fontWeight: '600',
                                 }}>
-                                Хочу больше баллов
+                                {
+                                  strings.ProfileScreenInfo.bonus.current
+                                    .giveMeMore
+                                }
                               </Text>
                             </View>
                             <Icon
@@ -508,7 +513,7 @@ class ProfileScreenInfo extends Component {
                   {backgroundColor: styleConst.color.green},
                 ]}>
                 <Text style={styles.buttonPrimaryText}>
-                  Редактировать данные
+                  {strings.ProfileScreenInfo.editData}
                 </Text>
               </Button>
             </>
@@ -533,7 +538,7 @@ class ProfileScreenInfo extends Component {
                       color: styleConst.color.lightBlue,
                     },
                   ]}>
-                  Выйти
+                  {strings.ProfileScreenInfo.exit}
                 </Text>
               </Button>
             </View>

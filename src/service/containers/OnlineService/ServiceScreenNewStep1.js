@@ -27,6 +27,7 @@ import RenderPrice from '../../../utils/price';
 // redux
 import {connect} from 'react-redux';
 import {localDealerClear} from '../../../dealer/actions';
+import strings from '../../../core/lang/const';
 
 import API from '../../../utils/api';
 
@@ -200,26 +201,15 @@ class ServiceScreenStep1 extends Component {
   }
 
   async _getServices() {
-    // if (!this.orderLead) {
     this.setState({
       servicesFetch: true,
     });
-    // console.log(
-    //   '_getServices this.state.dealerSelectedLocal',
-    //   this.state.dealerSelectedLocal,
-    // );
     const data = await API.getServiceAvailable({
       dealer: this.props.dealerSelected.id,
       vin: this.state.carVIN,
     });
 
     if (data.status !== 200 && data.status !== 'success') {
-      // Alert.alert(
-      //   'Хьюстон, у нас проблемы!',
-      //   data.error && data.error.message
-      //     ? '\r\n' + data.error.message
-      //     : 'Доступных услуг не найдено. Попробуй записаться в другой автоцентр',
-      // );
       this.orderLead = true;
       data.data = undefined;
       this.setState({
@@ -246,7 +236,6 @@ class ServiceScreenStep1 extends Component {
       });
       console.log('_getServices', this.state);
     }
-    // }
   }
 
   async _getServicesInfo(id) {
@@ -260,10 +249,6 @@ class ServiceScreenStep1 extends Component {
     });
 
     if (data.status !== 'success' && data.status !== 200) {
-      // Alert.alert(
-      //   'Хьюстон, у нас проблемы!',
-      //   '\r\nНе удалось загрузить информацию об услуге',
-      // );
       data.data = [];
     }
 
@@ -331,7 +316,7 @@ class ServiceScreenStep1 extends Component {
 
     if (this.state.services && !this.state.service) {
       Toast.show({
-        text: 'Необходимо выбрать желаемую услугу для продолжения',
+        text: strings.ServiceScreenStep1.Notifications.error.chooseService,
         position: 'bottom',
         duration: 3000,
         type: 'warning',
@@ -375,12 +360,12 @@ class ServiceScreenStep1 extends Component {
       fields: {
         groups: [
           {
-            name: 'Автоцентр',
+            name: strings.Form.group.dealer,
             fields: [
               {
                 name: 'DEALER',
                 type: 'dealerSelect',
-                label: 'Автоцентр',
+                label: strings.Form.field.label.dealer,
                 value: this.props.dealerSelected,
                 props: {
                   goBack: false,
@@ -391,12 +376,12 @@ class ServiceScreenStep1 extends Component {
             ],
           },
           {
-            name: 'Автомобиль',
+            name: strings.Form.group.car,
             fields: [
               {
                 name: 'CARNAME',
                 type: 'component',
-                label: 'Выбери автомобиль',
+                label: strings.Form.field.label.car2,
                 value: this.state.servicesFetch ? (
                   <>
                     <ActivityIndicator
@@ -409,7 +394,10 @@ class ServiceScreenStep1 extends Component {
                         color: '#ababab',
                         textAlign: 'center',
                       }}>
-                      подключение к СТО для выбора услуг
+                      {
+                        strings.ServiceScreenStep1.Notifications.loading
+                          .dealerConnect
+                      }
                     </Text>
                   </>
                 ) : (
@@ -449,7 +437,7 @@ class ServiceScreenStep1 extends Component {
                 ? {
                     name: 'SERVICE',
                     type: 'select',
-                    label: 'Выбери услугу',
+                    label: strings.Form.field.label.service,
                     value: this.state.service,
                     props: {
                       items: this.state.services,
@@ -457,7 +445,7 @@ class ServiceScreenStep1 extends Component {
                       required: true,
                       onChange: this.onServiceChoose.bind(this),
                       placeholder: {
-                        label: 'Что будем делать с авто?',
+                        label: strings.Form.field.placeholder.service,
                         value: null,
                         color: '#9EA0A4',
                       },
@@ -480,7 +468,10 @@ class ServiceScreenStep1 extends Component {
                             color: '#ababab',
                             textAlign: 'center',
                           }}>
-                          вычисляем предв.стоимость
+                          {
+                            strings.ServiceScreenStep1.Notifications.loading
+                              .calculatePrice
+                          }
                         </Text>
                       </>
                     ) : (
@@ -503,7 +494,7 @@ class ServiceScreenStep1 extends Component {
                                 marginRight: 10,
                                 paddingTop: 2,
                               }}>
-                              Предв.стоимость{' '}
+                              {strings.ServiceScreenStep1.price}{' '}
                               <Text
                                 style={{
                                   fontSize: 18,
@@ -552,7 +543,7 @@ class ServiceScreenStep1 extends Component {
                 defaultCountryCode={this.props.dealerSelected.region}
                 onSubmit={this.onPressOrder}
                 SubmitButton={{
-                  text: 'Выбрать дату',
+                  text: strings.DatePickerCustom.chooseDateButton,
                   style: {
                     backgroundColor: styleConst.color.darkBg,
                   },

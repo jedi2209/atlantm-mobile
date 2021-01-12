@@ -7,7 +7,6 @@ import {connect} from 'react-redux';
 import {actionAddReviewPlusFill, actionAddReviewMinusFill} from '../../actions';
 
 // components
-import InfoLine from '../../components/InfoLine';
 import ReviewAddMessageForm from '../components/ReviewAddMessageForm';
 import FooterButton from '../../../core/components/FooterButton';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
@@ -18,6 +17,7 @@ import {get} from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
+import strings from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -42,7 +42,11 @@ const mapDispatchToProps = {
 
 class ReviewAddMessageStepScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Новый отзыв</Text>,
+    headerTitle: (
+      <Text style={stylesHeader.blueHeaderTitle}>
+        {strings.ReviewAddMessageStepScreen.title}
+      </Text>
+    ),
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
     headerLeft: (
@@ -99,7 +103,10 @@ class ReviewAddMessageStepScreen extends Component {
               messageMinusFill={actionAddReviewMinusFill}
             />
           </Content>
-          <FooterButton text="Продолжить" onPressButton={this.onPressButton} />
+          <FooterButton
+            text={strings.MessageForm.continue}
+            onPressButton={this.onPressButton}
+          />
         </SafeAreaView>
       </StyleProvider>
     );

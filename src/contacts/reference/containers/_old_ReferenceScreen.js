@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
-import { Content, Text } from 'native-base';
+import React, {Component} from 'react';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
+import {Content, Text} from 'native-base';
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import styleConst from '../../../core/style-const';
@@ -15,23 +15,19 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = () => {
-  return {
-
-  };
+  return {};
 };
 
-const mapDispatchToProps = {
-
-};
+const mapDispatchToProps = {};
 
 class ReferenceScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: 'Справочная',
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
-  })
+  });
 
   render() {
     return (

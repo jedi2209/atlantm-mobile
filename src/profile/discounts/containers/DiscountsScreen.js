@@ -15,6 +15,7 @@ import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import Amplitude from '../../../utils/amplitude-analytics';
+import strings from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -70,7 +71,7 @@ class DiscountsScreen extends Component {
   state = {isRefreshing: false};
 
   static navigationOptions = ({navigation}) => ({
-    headerTitle: 'Скидки',
+    headerTitle: strings.DiscountsScreen.title,
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
@@ -123,7 +124,9 @@ class DiscountsScreen extends Component {
   };
 
   renderEmptyComponent = () => {
-    return <Text style={styles.message}>Скидок пока нет</Text>;
+    return (
+      <Text style={styles.message}>{strings.DiscountsScreen.empty.text}</Text>
+    );
   };
 
   render() {
@@ -140,7 +143,7 @@ class DiscountsScreen extends Component {
             style={styles.list}
             ListEmptyComponent={this.renderEmptyComponent}
             renderItem={this.renderItem}
-            keyExtractor={item => `${item.hash.toString()}`}
+            keyExtractor={(item) => `${item.hash.toString()}`}
           />
         </SafeAreaView>
       </StyleProvider>

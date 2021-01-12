@@ -2,6 +2,7 @@ import {Platform} from 'react-native';
 import {ORDERS} from '../core/const';
 import {get} from 'lodash';
 import {store} from '../core/store';
+import strings from '../core/lang/const';
 
 export default async function getOrders(type = 'default') {
   const storeState = store.getState();
@@ -25,14 +26,14 @@ export default async function getOrders(type = 'default') {
       {
         priority: 5,
         id: 'TOhistory',
-        text: 'История обслуживания',
+        text: strings.UserCars.menu.history,
         icon: 'book-outline',
         iconColor: '#2c8ef4',
       },
       {
         priority: 6,
         id: 'hide',
-        text: 'Скрыть в архив',
+        text: strings.UserCars.menu.addToArchive,
         icon: 'archive',
         iconColor: '#2c8ef4',
       },
@@ -41,12 +42,12 @@ export default async function getOrders(type = 'default') {
       {
         priority: 5,
         id: 'TOhistory',
-        text: '📘История обслуживания',
+        text: '📘' + strings.UserCars.menu.history,
       },
       {
         priority: 6,
         id: 'hide',
-        text: '📥Скрыть в архив',
+        text: '📥' + strings.UserCars.menu.addToArchive,
       },
     );
     tmpArr.push(5, 6);
@@ -56,14 +57,14 @@ export default async function getOrders(type = 'default') {
     res.android.BUTTONS.push({
       priority: 1,
       id: 'callMeBack',
-      text: 'Перезвоните мне',
+      text: strings.CallMeBackScreen.title,
       icon: 'call',
       iconColor: '#2c8ef4',
     });
     res.ios.BUTTONS.push({
       priority: 1,
       id: 'callMeBack',
-      text: '📞 Перезвоните мне',
+      text: '📞 ' + strings.CallMeBackScreen.title,
     });
     tmpArr.push(1);
     res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 1;
@@ -74,14 +75,14 @@ export default async function getOrders(type = 'default') {
       res.android.BUTTONS.push({
         priority: 2,
         id: 'orderService',
-        text: 'Запись на сервис',
+        text: strings.ServiceScreen.title,
         icon: 'construct',
         iconColor: '#2c8ef4',
       });
       res.ios.BUTTONS.push({
         priority: 2,
         id: 'orderService',
-        text: '🛠 Запись на сервис',
+        text: '🛠 ' + strings.ServiceScreen.title,
       });
       tmpArr.push(2);
       res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 1;
@@ -92,14 +93,14 @@ export default async function getOrders(type = 'default') {
       res.android.BUTTONS.push({
         priority: 3,
         id: 'orderParts',
-        text: 'Заказать зап.части',
+        text: strings.OrderPartsScreen.title2,
         icon: 'settings',
         iconColor: '#2c8ef4',
       });
       res.ios.BUTTONS.push({
         priority: 3,
         id: 'orderParts',
-        text: '🔩 Заказать зап.части',
+        text: '🔩 ' + strings.OrderPartsScreen.title2,
       });
       tmpArr.push(3);
       res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 1;
@@ -110,14 +111,14 @@ export default async function getOrders(type = 'default') {
       res.android.BUTTONS.push({
         priority: 4,
         id: 'carCost',
-        text: 'Оценить мой автомобиль',
+        text: strings.CarCostScreen.action,
         icon: 'pricetag',
         iconColor: '#2c8ef4',
       });
       res.ios.BUTTONS.push({
         priority: 4,
         id: 'carCost',
-        text: 'Оценить мой автомобиль',
+        text: strings.CarCostScreen.action,
       });
       tmpArr.push(4);
       res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 1;

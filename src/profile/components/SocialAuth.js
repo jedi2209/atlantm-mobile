@@ -10,11 +10,7 @@ import {connectSocialMedia} from '../actions';
 import styleConst from '../../core/style-const';
 
 // imports for auth
-import {
-  AccessToken,
-  GraphRequest,
-  GraphRequestManager,
-} from 'react-native-fbsdk';
+import {AccessToken, GraphRequestManager} from 'react-native-fbsdk';
 import {LoginManager} from 'react-native-fbsdk';
 import VKLogin from 'react-native-vkontakte-login';
 import {GoogleSignin} from '@react-native-community/google-signin';
@@ -279,7 +275,11 @@ class SocialAuth extends PureComponent {
               },
               im.google ? styles.SocialLoginBtActive : null,
             ]}>
-            <Icon name="google" type="FontAwesome5" style={{marginLeft: 0, color: '#fff'}} />
+            <Icon
+              name="google"
+              type="FontAwesome5"
+              style={{marginLeft: 0, color: '#fff'}}
+            />
             {im.google ? (
               <Icon
                 name="check-circle"
@@ -329,7 +329,11 @@ class SocialAuth extends PureComponent {
                 },
                 im.vk ? styles.SocialLoginBtActive : null,
               ]}>
-              <Icon name="vk" type="FontAwesome5" style={{marginLeft: 0, color: '#fff'}} />
+              <Icon
+                name="vk"
+                type="FontAwesome5"
+                style={{marginLeft: 0, color: '#fff'}}
+              />
               {im.vk ? (
                 <Icon
                   name="check-circle"

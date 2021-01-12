@@ -20,6 +20,7 @@ import PushNotifications from '../../core/components/PushNotifications';
 // helpers
 import {get} from 'lodash';
 import stylesHeader from '../../core/components/Header/style';
+import strings from '../../core/lang/const';
 
 const mapStateToProps = ({dealer, nav, core}) => {
   return {
@@ -47,7 +48,7 @@ const mapDispatchToProps = {
 
 class ChooseDealerScreen extends PureComponent {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: 'Выбери автоцентр',
+    headerTitle: strings.ChooseDealerScreen.title,
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
     headerLeft: <HeaderIconBack theme="white" navigation={navigation} />,

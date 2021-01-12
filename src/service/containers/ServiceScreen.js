@@ -27,6 +27,7 @@ import isInternet from '../../utils/internet';
 import {addDays, dayMonthYear, yearMonthDay} from '../../utils/date';
 import {ERROR_NETWORK} from '../../core/const';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
+import strings from '../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
   const cars = orderBy(profile.cars, ['owner'], ['asc']);
@@ -204,8 +205,8 @@ class ServiceScreen extends Component {
               CARMODEL: dataFromForm.CARMODEL,
             });
             Alert.alert(
-              'Заявка успешно отправлена',
-              'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+              strings.Notifications.success.title,
+              strings.Notifications.success.text,
               [
                 {
                   text: 'ОК',
@@ -218,7 +219,10 @@ class ServiceScreen extends Component {
             this.setState({success: true, loading: false});
             break;
           case SERVICE_ORDER__FAIL:
-            Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?');
+            Alert.alert(
+              strings.Notifications.error.title,
+              strings.Notifications.error.text,
+            );
             break;
         }
       }
@@ -237,12 +241,12 @@ class ServiceScreen extends Component {
       fields: {
         groups: [
           {
-            name: 'Автоцентр',
+            name: strings.Form.group.dealer,
             fields: [
               {
                 name: 'DEALER',
                 type: 'dealerSelect',
-                label: 'Автоцентр',
+                label: strings.Form.field.label.dealer,
                 value: this.props.dealerSelected,
                 props: {
                   goBack: false,
@@ -253,10 +257,13 @@ class ServiceScreen extends Component {
               {
                 name: 'DATE',
                 type: 'date',
-                label: 'Выбери удобную для тебя дату',
+                label: strings.Form.field.label.date,
                 value: null,
                 props: {
-                  placeholder: 'начиная с ' + dayMonthYear(addDays(2)),
+                  placeholder:
+                    strings.Form.field.placeholder.date +
+                    ' ' +
+                    dayMonthYear(addDays(2)),
                   required: true,
                   minimumDate: new Date(addDays(2)),
                   maximumDate: new Date(addDays(62)),
@@ -265,13 +272,13 @@ class ServiceScreen extends Component {
             ],
           },
           {
-            name: 'Автомобиль',
+            name: strings.Form.group.car,
             fields: this.state.isHaveCar
               ? [
                   {
                     name: 'CARNAME',
                     type: 'component',
-                    label: 'Выбери автомобиль',
+                    label: strings.Form.field.label.car2,
                     value: (
                       <ScrollView
                         showsHorizontalScrollIndicator={false}
@@ -308,7 +315,7 @@ class ServiceScreen extends Component {
                   {
                     name: 'CARBRAND',
                     type: 'input',
-                    label: 'Марка',
+                    label: strings.Form.field.label.carBrand,
                     value: this.props.carBrand,
                     props: {
                       required: true,
@@ -318,7 +325,7 @@ class ServiceScreen extends Component {
                   {
                     name: 'CARMODEL',
                     type: 'input',
-                    label: 'Модель',
+                    label: strings.Form.field.label.carModel,
                     value: this.props.carModel,
                     props: {
                       required: true,
@@ -328,12 +335,12 @@ class ServiceScreen extends Component {
                 ],
           },
           {
-            name: 'Контактные данные',
+            name: strings.Form.group.contacts,
             fields: [
               {
                 name: 'NAME',
                 type: 'input',
-                label: 'Имя',
+                label: strings.Form.field.label.name,
                 value: this.props.firstName,
                 props: {
                   required: true,
@@ -343,7 +350,7 @@ class ServiceScreen extends Component {
               {
                 name: 'SECOND_NAME',
                 type: 'input',
-                label: 'Отчество',
+                label: strings.Form.field.label.secondName,
                 value: this.props.secondName,
                 props: {
                   textContentType: 'middleName',
@@ -352,7 +359,7 @@ class ServiceScreen extends Component {
               {
                 name: 'LAST_NAME',
                 type: 'input',
-                label: 'Фамилия',
+                label: strings.Form.field.label.lastName,
                 value: this.props.lastName,
                 props: {
                   textContentType: 'familyName',
@@ -361,7 +368,7 @@ class ServiceScreen extends Component {
               {
                 name: 'PHONE',
                 type: 'phone',
-                label: 'Телефон',
+                label: strings.Form.field.label.phone,
                 value: this.props.phone,
                 props: {
                   required: true,
@@ -370,22 +377,21 @@ class ServiceScreen extends Component {
               {
                 name: 'EMAIL',
                 type: 'email',
-                label: 'Email',
+                label: strings.Form.field.label.email,
                 value: this.props.email,
               },
             ],
           },
           {
-            name: 'Дополнительно',
+            name: strings.Form.group.additional,
             fields: [
               {
                 name: 'COMMENT',
                 type: 'textarea',
-                label: 'Комментарий',
+                label: strings.Form.field.label.comment,
                 value: this.props.Text,
                 props: {
-                  placeholder:
-                    'На случай если тебе потребуется передать нам больше информации',
+                  placeholder: strings.Form.field.placeholder.comment,
                 },
               },
             ],

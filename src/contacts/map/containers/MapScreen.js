@@ -21,14 +21,6 @@ import {
   actionDoneCheckAvailableNaviApps,
   actionSetAvailableNaviApps,
 } from '../../actions';
-import {
-  CONTACTS_MAP_YNDX_NAVIGATOR,
-  CONTACTS_MAP_YNDX_MAPS,
-  CONTACTS_MAP_YNDX_TAXI,
-  CONTACTS_MAP_UBER_TAXI,
-  CONTACTS_MAP_GOOGLE_MAPS,
-  CONTACTS_MAP_APPLE_MAPS,
-} from '../../actionTypes';
 
 // components
 import {Icon, Button} from 'native-base';
@@ -38,10 +30,21 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 // Helpers
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
+import strings from '../../../core/lang/const';
 
 const isAndroid = Platform.OS === 'android';
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
+  headerStyle: {
+    backgroundColor: 'rgba(0,0,0, 0.2)',
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    borderRadius: 20,
+    marginLeft: 5,
+  },
+  headerIconStyle: {
+    marginLeft: 5,
+  },
   safearea: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
@@ -61,6 +64,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     alignSelf: 'center',
   },
+  button: {
+    backgroundColor: styleConst.color.lightBlue,
+    marginHorizontal: '10%',
+    width: '80%',
+    marginBottom: 40,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+  },
   iconRoute: {
     marginLeft: 10,
     fontSize: 30,
@@ -72,8 +86,6 @@ const mapStateToProps = ({dealer, contacts}) => {
   return {
     dealerSelected: dealer.selected,
     availableNaviApps: contacts.map.availableNaviApps,
-    isRequestCheckAvailableNaviApps:
-      contacts.map.isRequestCheckAvailableNaviApps,
   };
 };
 
@@ -86,22 +98,11 @@ const mapDispatchToProps = {
 class MapScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerTransparent: true,
-    // headerTitle: 'Найти нас',
-    // headerStyle: stylesHeader.common,
-    // headerTitleStyle: stylesHeader.title,
     headerLeft: (
       <HeaderIconBack
         theme="white"
-        ContainerStyle={{
-          backgroundColor: 'rgba(0,0,0, 0.2)',
-          paddingHorizontal: 5,
-          paddingVertical: 5,
-          borderRadius: 20,
-          marginLeft: 5,
-        }}
-        IconStyle={{
-          marginLeft: 5,
-        }}
+        ContainerStyle={styles.headerStyle}
+        IconStyle={styles.headerIconStyle}
         navigation={navigation}
         returnScreen={
           navigation.state.params && navigation.state.params.returnScreen
@@ -159,33 +160,28 @@ class MapScreen extends Component {
     const latitudeDelta = 0.0922;
     const longitudeDelta = latitudeDelta * aspectRatio;
 
-    this.setState(
-      {
-        data: {
-          name: name,
-          city: city,
-          address: address,
-          coords: {
-            latitude: latitude,
-            longitude: longitude,
-            latitudeDelta: latitudeDelta,
-            longitudeDelta: longitudeDelta,
-          },
-          aspectRatio: aspectRatio,
+    this.setState({
+      data: {
+        name: name,
+        city: city,
+        address: address,
+        coords: {
+          latitude: latitude,
+          longitude: longitude,
+          latitudeDelta: latitudeDelta,
+          longitudeDelta: longitudeDelta,
         },
-        loading: false,
+        aspectRatio: aspectRatio,
       },
-      () => {
-        console.log('this.setState', this.state);
-      },
-    );
+      loading: false,
+    });
   }
 
   onPressRoute = async () => {
     const {availableNaviApps, actionSetAvailableNaviApps} = this.props;
 
     if (availableNaviApps.length === 0) {
-      actionSetAvailableNaviApps(['Отмена']);
+      actionSetAvailableNaviApps([strings.ModalView.cancel]);
     }
 
     return this.buildActionSheet(
@@ -208,7 +204,7 @@ class MapScreen extends Component {
 
     actionRequestCheckAvailableNaviApps();
 
-    const apps = ['Отмена'];
+    const apps = [strings.ModalView.cancel];
     const baseParams = {latitude, longitude};
 
     const checkAppAvailable = (name) => {
@@ -223,12 +219,12 @@ class MapScreen extends Component {
     };
 
     Promise.all([
-      checkAppAvailable(CONTACTS_MAP_YNDX_NAVIGATOR),
-      checkAppAvailable(CONTACTS_MAP_YNDX_MAPS),
-      checkAppAvailable(CONTACTS_MAP_YNDX_TAXI),
-      checkAppAvailable(CONTACTS_MAP_UBER_TAXI),
-      checkAppAvailable(CONTACTS_MAP_GOOGLE_MAPS),
-      checkAppAvailable(CONTACTS_MAP_APPLE_MAPS),
+      checkAppAvailable(strings.MapScreen.apps.yaNavi),
+      checkAppAvailable(strings.MapScreen.apps.yaMaps),
+      checkAppAvailable(strings.MapScreen.apps.yaTaxi),
+      checkAppAvailable(strings.MapScreen.apps.uber),
+      checkAppAvailable(strings.MapScreen.apps.googleMaps),
+      checkAppAvailable(strings.MapScreen.apps.appleMaps),
     ]).then((results) => {
       results.forEach((app) => {
         if (app.isAppAvailable) {
@@ -249,23 +245,23 @@ class MapScreen extends Component {
     const address = encodeURI(this.state.data.address);
     const address_name = encodeURI(this.state.data.name);
     switch (name) {
-      case CONTACTS_MAP_YNDX_NAVIGATOR:
+      case strings.MapScreen.apps.yaNavi:
         link = `yandexnavi://build_route_on_map?lat_to=${latitude}&lon_to=${longitude}`;
         break;
-      case CONTACTS_MAP_YNDX_MAPS:
+      case strings.MapScreen.apps.yaMaps:
         link = `yandexmaps://maps.yandex.ru/?pt=${longitude},${latitude}&z=12`;
         break;
-      case CONTACTS_MAP_YNDX_TAXI:
+      case strings.MapScreen.apps.yaTaxi:
         link = `https://3.redirect.appmetrica.yandex.com/route?end-lat=${latitude}&end-lon=${longitude}&ref=comatlantmapp&appmetrica_tracking_id=1178268795219780156`;
         break;
-      case CONTACTS_MAP_GOOGLE_MAPS:
+      case strings.MapScreen.apps.googleMaps:
         link = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&travelmode=driving`;
         break;
-      case CONTACTS_MAP_UBER_TAXI:
+      case strings.MapScreen.apps.uber:
         link = `uber://?action=setPickup&dropoff[latitude]=${latitude}&dropoff[longitude]=${longitude}&dropoff[nickname]=${address_name}&[formatted_address]=${address}`;
         break;
       default:
-        // CONTACTS_MAP_APPLE_MAPS
+        // strings.MapScreen.apps.appleMaps
         link = `maps://?daddr=${latitude},${longitude}`;
         break;
     }
@@ -278,8 +274,8 @@ class MapScreen extends Component {
 
       setTimeout(() =>
         Alert.alert(
-          'Ошибка',
-          'Не удалось открыть приложения для навигации, попробуем снова?.',
+          strings.MapScreen.error.title,
+          strings.MapScreen.error.text,
         ),
       );
     });
@@ -301,26 +297,41 @@ class MapScreen extends Component {
     const baseParams = {latitude, longitude};
 
     switch (navApp) {
-      case CONTACTS_MAP_YNDX_NAVIGATOR:
+      case strings.MapScreen.apps.yaNavi:
         url = this.getNaviLink({
           ...baseParams,
-          name: CONTACTS_MAP_YNDX_NAVIGATOR,
+          name: strings.MapScreen.apps.yaNavi,
         });
         break;
-      case CONTACTS_MAP_YNDX_MAPS:
-        url = this.getNaviLink({...baseParams, name: CONTACTS_MAP_YNDX_MAPS});
+      case strings.MapScreen.apps.yaMaps:
+        url = this.getNaviLink({
+          ...baseParams,
+          name: strings.MapScreen.apps.yaMaps,
+        });
         break;
-      case CONTACTS_MAP_YNDX_TAXI:
-        url = this.getNaviLink({...baseParams, name: CONTACTS_MAP_YNDX_TAXI});
+      case strings.MapScreen.apps.yaTaxi:
+        url = this.getNaviLink({
+          ...baseParams,
+          name: strings.MapScreen.apps.yaTaxi,
+        });
         break;
-      case CONTACTS_MAP_UBER_TAXI:
-        url = this.getNaviLink({...baseParams, name: CONTACTS_MAP_UBER_TAXI});
+      case strings.MapScreen.apps.uber:
+        url = this.getNaviLink({
+          ...baseParams,
+          name: strings.MapScreen.apps.uber,
+        });
         break;
-      case CONTACTS_MAP_GOOGLE_MAPS:
-        url = this.getNaviLink({...baseParams, name: CONTACTS_MAP_GOOGLE_MAPS});
+      case strings.MapScreen.apps.googleMaps:
+        url = this.getNaviLink({
+          ...baseParams,
+          name: strings.MapScreen.apps.googleMaps,
+        });
         break;
       default:
-        url = this.getNaviLink({...baseParams, name: CONTACTS_MAP_APPLE_MAPS});
+        url = this.getNaviLink({
+          ...baseParams,
+          name: strings.MapScreen.apps.appleMaps,
+        });
         break;
     }
 
@@ -357,17 +368,13 @@ class MapScreen extends Component {
   }
 
   render() {
-    const {
-      dealerSelected,
-      availableNaviApps,
-      isRequestCheckAvailableNaviApps,
-    } = this.props;
+    const {dealerSelected, availableNaviApps} = this.props;
 
     console.log('== MapScreen == ');
 
     return this.state.loading ? (
       <View style={styles.safearea}>
-        <Text style={styles.errorText}>Нет данных для отображения карты</Text>
+        <Text style={styles.errorText}>{strings.MapScreen.empty.text}</Text>
       </View>
     ) : (
       <SafeAreaView style={styles.safearea}>
@@ -406,35 +413,22 @@ class MapScreen extends Component {
           <ActionSheet
             cancelButtonIndex={0}
             ref={(component) => (this.actionSheet = component)}
-            title="Выбери приложение для навигации"
+            title={strings.MapScreen.chooseApp}
             options={availableNaviApps}
             onPress={this.onPressRouteVariant}
           />
           <Button
             full
-            style={[
-              styleConst.shadow.default,
-              {
-                backgroundColor: styleConst.color.lightBlue,
-                marginHorizontal: '10%',
-                width: '80%',
-                marginBottom: 40,
-                borderRadius: 5,
-              },
-            ]}
-            title="Построить маршрут"
+            style={[styleConst.shadow.default, styles.button]}
+            title={strings.MapScreen.makeRoute}
             onPress={this.onPressRoute}>
             <Icon
               name="navigation"
               style={styles.iconRoute}
               type="MaterialCommunityIcons"
             />
-            <Text
-              style={{
-                color: 'white',
-                fontSize: 16,
-              }}>
-              ПОСТРОИТЬ МАРШРУТ
+            <Text style={styles.buttonText}>
+              {strings.MapScreen.makeRoute.toUpperCase()}
             </Text>
           </Button>
         </View>

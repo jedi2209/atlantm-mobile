@@ -3,7 +3,7 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import styleConst from '../../core/style-const';
-import {Icon, Button, CheckBox, ActionSheet, StyleProvider} from 'native-base';
+import {Icon, CheckBox, StyleProvider} from 'native-base';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import getTheme from '../../../native-base-theme/components';
 

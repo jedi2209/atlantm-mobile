@@ -7,7 +7,6 @@ import {
   Text,
   ScrollView,
   StatusBar,
-  Platform,
 } from 'react-native';
 import {
   StyleProvider,

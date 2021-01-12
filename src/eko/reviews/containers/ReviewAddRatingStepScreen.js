@@ -45,6 +45,7 @@ import {
   REVIEW_ADD_RATING_2,
   REVIEW_ADD_RATING_1,
 } from '../../constants';
+import strings from '../../../core/lang/const';
 
 const $size = 40;
 const styles = StyleSheet.create({
@@ -144,12 +145,12 @@ class ReviewAddRatingStepScreen extends Component {
       fields: {
         groups: [
           {
-            name: 'Общее впечатление',
+            name: strings.ReviewAddRatingStepScreen.mainReview,
             fields: [
               {
                 name: 'RATING',
                 type: 'select',
-                label: 'Насколько в целом вы удовлетворены?',
+                label: strings.ReviewAddRatingStepScreen.mainReview2,
                 value: '',
                 props: {
                   items: [
@@ -181,7 +182,7 @@ class ReviewAddRatingStepScreen extends Component {
                   ],
                   required: true,
                   placeholder: {
-                    label: 'Поставь оценку нашей работе...',
+                    label: strings.ReviewAddRatingStepScreen.addReview,
                     value: null,
                     color: '#9EA0A4',
                   },
@@ -190,12 +191,12 @@ class ReviewAddRatingStepScreen extends Component {
             ],
           },
           {
-            name: 'Контактные данные',
+            name: strings.Form.group.contacts,
             fields: [
               {
                 name: 'NAME',
                 type: 'input',
-                label: 'Имя',
+                label: strings.Form.field.label.name,
                 value: this.props.firstName,
                 props: {
                   required: true,
@@ -205,7 +206,7 @@ class ReviewAddRatingStepScreen extends Component {
               {
                 name: 'SECOND_NAME',
                 type: 'input',
-                label: 'Отчество',
+                label: strings.Form.field.label.secondName,
                 value: this.props.secondName,
                 props: {
                   textContentType: 'middleName',
@@ -214,7 +215,7 @@ class ReviewAddRatingStepScreen extends Component {
               {
                 name: 'LAST_NAME',
                 type: 'input',
-                label: 'Фамилия',
+                label: strings.Form.field.label.lastName,
                 value: this.props.lastName,
                 props: {
                   textContentType: 'familyName',
@@ -223,7 +224,7 @@ class ReviewAddRatingStepScreen extends Component {
               {
                 name: 'PHONE',
                 type: 'phone',
-                label: 'Телефон',
+                label: strings.Form.field.label.phone,
                 value: this.props.phone,
                 props: {
                   required: true,
@@ -232,7 +233,7 @@ class ReviewAddRatingStepScreen extends Component {
               {
                 name: 'EMAIL',
                 type: 'email',
-                label: 'Email',
+                label: strings.Form.field.label.email,
                 value: this.props.email,
               },
             ],
@@ -243,7 +244,11 @@ class ReviewAddRatingStepScreen extends Component {
   }
 
   static navigationOptions = ({navigation}) => ({
-    headerTitle: <Text style={stylesHeader.blueHeaderTitle}>Новый отзыв</Text>,
+    headerTitle: (
+      <Text style={stylesHeader.blueHeaderTitle}>
+        {strings.ReviewAddRatingStepScreen.title}
+      </Text>
+    ),
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
     headerLeft: (
@@ -309,14 +314,20 @@ class ReviewAddRatingStepScreen extends Component {
         Amplitude.logEvent('order', 'eko/review_add');
 
         setTimeout(() => {
-          Alert.alert('Твой отзыв успешно отправлен!');
+          Alert.alert(
+            strings.ReviewAddRatingStepScreen.Notifications.success.text,
+          );
           navigation.navigate('ReviewsScreen');
         }, 100);
       }
 
       if (action.type === REVIEW_ADD__FAIL) {
         setTimeout(
-          () => Alert.alert('', 'Произошла ошибка, попробуем снова?'),
+          () =>
+            Alert.alert(
+              strings.Notifications.error.title,
+              strings.Notifications.error.text,
+            ),
           100,
         );
       }

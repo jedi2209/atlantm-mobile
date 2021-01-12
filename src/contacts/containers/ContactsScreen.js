@@ -40,6 +40,7 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import {ERROR_NETWORK} from '../../core/const';
 import Carousel from 'react-native-snap-carousel';
+import strings from '../../core/lang/const';
 
 const HEADER_MAX_HEIGHT = 406;
 
@@ -163,7 +164,7 @@ class ContactsScreen extends Component {
     if (this.sitesSubtitle.sites.length > 1) {
       this.sitesSubtitle.buttons.push({
         id: 'cancel',
-        text: 'Отмена',
+        text: strings.ModalView.cancel,
       });
     }
   }
@@ -183,7 +184,7 @@ class ContactsScreen extends Component {
         let message = get(
           action,
           'payload.message',
-          'Произошла ошибка, попробуем снова?',
+          strings.Notifications.error.text,
         );
 
         if (message === 'Network request failed') {
@@ -364,7 +365,7 @@ class ContactsScreen extends Component {
                 style={styles.scrollView}>
                 <View style={styles.scrollViewInner}>
                   <Plate
-                    title="Позвонить"
+                    title={strings.ContactsScreen.call}
                     status={
                       this.getStatusWorktime(
                         get(dealerSelected, 'divisions', null),
@@ -382,15 +383,15 @@ class ContactsScreen extends Component {
                       console.log('isOpened', isOpened);
                       if (!isOpened) {
                         Alert.alert(
-                          'Автоцентр закрыт',
-                          '\r\nОставь заявку на звонок и наши менеджеры перезвонят как только автоцентр откроется.\r\n\r\nОставим заявку на звонок?',
+                          strings.ContactsScreen.closedDealer.title,
+                          strings.ContactsScreen.closedDealer.text,
                           [
                             {
-                              text: 'Нет',
+                              text: strings.ContactsScreen.closedDealer.no,
                               style: 'cancel',
                             },
                             {
-                              text: 'Да',
+                              text: strings.ContactsScreen.closedDealer.yes,
                               onPress: () => {
                                 navigation.navigate('CallMeBackScreen');
                               },
@@ -406,7 +407,7 @@ class ContactsScreen extends Component {
                     }}
                   />
                   <Plate
-                    title="Заказать звонок"
+                    title={strings.ContactsScreen.callOrder}
                     subtitle=""
                     onPress={this.onPressCallMe}
                   />
@@ -416,8 +417,8 @@ class ContactsScreen extends Component {
                     kind="primary"
                   /> */}
                   <Plate
-                    title="Заявка"
-                    subtitle="Отправить заявку"
+                    title={strings.ContactsScreen.order}
+                    subtitle={strings.ContactsScreen.sendOrder}
                     type="primary"
                     onPress={() => {
                       getOrders().then((ordersData) => {
@@ -451,10 +452,9 @@ class ContactsScreen extends Component {
                   />
                   <Plate
                     title={
-                      'Сайт' +
-                      (this.sitesSubtitle && this.sitesSubtitle.sites.length > 1
-                        ? 'ы'
-                        : '')
+                      this.sitesSubtitle && this.sitesSubtitle.sites.length > 1
+                        ? strings.ContactsScreen.sites
+                        : strings.ContactsScreen.site
                     }
                     subtitle={
                       this.sitesSubtitle && this.sitesSubtitle.sites.length > 1
@@ -472,7 +472,7 @@ class ContactsScreen extends Component {
                             options: this.sitesSubtitle.buttons,
                             cancelButtonIndex:
                               this.sitesSubtitle.buttons.length - 1,
-                            title: 'Сайты автоцентра',
+                            title: strings.ContactsScreen.dealerSites,
                           },
                           (buttonIndex) => {
                             switch (
@@ -520,7 +520,7 @@ class ContactsScreen extends Component {
                       justifyContent: 'space-between',
                     }}>
                     <Text style={{fontSize: 14, fontWeight: '500'}}>
-                      Текущие акции автоцентра
+                      {strings.ContactsScreen.currentActions}
                     </Text>
                     <Text
                       onPress={() => {

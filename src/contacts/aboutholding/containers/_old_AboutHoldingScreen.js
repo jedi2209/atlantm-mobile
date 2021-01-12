@@ -1,6 +1,15 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { Container, Content, Text, List, ListItem, Body, Right, StyleProvider } from 'native-base';
+import React, {Component} from 'react';
+import {StyleSheet, View, TouchableOpacity} from 'react-native';
+import {
+  Container,
+  Content,
+  Text,
+  List,
+  ListItem,
+  Body,
+  Right,
+  StyleProvider,
+} from 'native-base';
 
 // components
 import Communications from 'react-native-communications';
@@ -8,7 +17,7 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import HeaderLogo from '../../../core/components/HeaderLogo/HeaderLogo';
 
 // redux
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 // helpers
 import getTheme from '../../../../native-base-theme/components';
@@ -16,7 +25,7 @@ import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import stylesList from '../../../core/components/Lists/style';
 
-import { RUSSIA, BELARUSSIA, UKRAINE } from '../../../core/const';
+import {RUSSIA, BELARUSSIA, UKRAINE} from '../../../core/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -35,20 +44,20 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer }) => {
+const mapStateToProps = ({dealer}) => {
   return {
     dealerSelected: dealer.selected,
   };
 };
 
 class AboutHoldingScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({navigation}) => ({
     headerTitle: <HeaderLogo />,
     headerStyle: stylesHeader.common,
     headerTitleStyle: stylesHeader.title,
     headerLeft: <HeaderIconBack navigation={navigation} />,
     headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
-  })
+  });
 
   getSite = () => {
     return {
@@ -56,20 +65,22 @@ class AboutHoldingScreen extends Component {
       [BELARUSSIA]: 'https://www.atlant-m.by/',
       [UKRAINE]: 'https://www.atlant-m.ua/',
     }[this.props.dealerSelected.region];
-  }
+  };
 
-  onPressWebsite = () => Communications.web(this.getSite())
+  onPressWebsite = () => Communications.web(this.getSite());
 
-  shouldComponentUpdate() {
-    return this.props.selectedDealer.id !== nextProps.selectedDealer.id &&
-      this.props.navigation.state.routeName === 'AboutHoldingScreen';
+  shouldComponentUpdate(nextProps) {
+    return (
+      this.props.selectedDealer.id !== nextProps.selectedDealer.id &&
+      this.props.navigation.state.routeName === 'AboutHoldingScreen'
+    );
   }
 
   render() {
     // Для iPad меню, которое находится вне роутера
     window.atlantmNavigation = this.props.navigation;
 
-    const { dealerSelected } = this.props;
+    const {dealerSelected} = this.props;
     const site = this.getSite();
 
     console.log('== AboutHolding ==');
@@ -79,7 +90,11 @@ class AboutHoldingScreen extends Component {
         <Container style={styles.safearea}>
           <Content>
             <List style={stylesList.list}>
-              <View style={[stylesList.listItemContainer, stylesList.listItemContainerFirst]}>
+              <View
+                style={[
+                  stylesList.listItemContainer,
+                  stylesList.listItemContainerFirst,
+                ]}>
                 {
                   <ListItem last icon style={stylesList.listItem}>
                     <Body>
@@ -97,8 +112,7 @@ class AboutHoldingScreen extends Component {
 
             <View style={styles.textContainer}>
               <Text style={styles.text}>
-              {
-                `В 2017 году Международный автомобильный холдинг «Атлант-М» отмечает 26 лет со дня основания компании.
+                {`В 2017 году Международный автомобильный холдинг «Атлант-М» отмечает 26 лет со дня основания компании.
 
 «Атлант-М» - крупное объединение компаний в СНГ (России, Украине и Республике Беларусь), специализирующееся на продаже, гарантийном и сервисном обслуживании автомобилей, а также на поставках запасных частей.
 
@@ -110,8 +124,7 @@ class AboutHoldingScreen extends Component {
 
 В Республике Беларусь «Атлант-М» контролирует 23,6% рынка (по данным Белорусской автомобильной ассоциации).
 
-За 26 лет работы на автомобильном рынке в холдинге «Атлант-М» накоплен уникальный опыт построения сбытовых сетей и эффективного управления предприятиями. За эти годы более 430 000 клиентов воспользовались услугами компании по приобретению и обслуживанию автомобилей и запасных частей, дополнительному оборудованию и финансовому сервису.`
-              }
+За 26 лет работы на автомобильном рынке в холдинге «Атлант-М» накоплен уникальный опыт построения сбытовых сетей и эффективного управления предприятиями. За эти годы более 430 000 клиентов воспользовались услугами компании по приобретению и обслуживанию автомобилей и запасных частей, дополнительному оборудованию и финансовому сервису.`}
               </Text>
             </View>
           </Content>

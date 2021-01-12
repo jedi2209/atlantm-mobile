@@ -1,6 +1,5 @@
 import {combineReducers} from 'redux';
 import {REHYDRATE} from 'redux-persist/constants';
-import {get} from 'lodash';
 import {
   INDICATORS__REQUEST,
   INDICATORS__SUCCESS,

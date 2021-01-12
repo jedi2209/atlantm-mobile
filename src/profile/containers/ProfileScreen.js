@@ -13,7 +13,6 @@ import {
   ActivityIndicator,
   Platform,
   StyleSheet,
-  Alert,
 } from 'react-native';
 import {Button, Icon, Toast} from 'native-base';
 import PhoneInput from 'react-native-phone-input';
@@ -38,6 +37,8 @@ import {
 
 import PushNotifications from '../../core/components/PushNotifications';
 import Amplitude from '../../utils/amplitude-analytics';
+
+import strings from '../../core/lang/const';
 
 import {verticalScale} from '../../utils/scale';
 
@@ -251,16 +252,14 @@ class ProfileScreen extends Component {
           codeValue: '',
         });
 
-        let header = 'Хьюстон, у нас проблемы...';
-        let message = 'Что-то пошло не так, попробуем снова?';
+        let message = strings.Notifications.error.text;
 
         if (response.code === 400) {
-          message = 'Телефон не должен быть пустым';
+          message = strings.ProfileScreen.Notifications.error.phone;
         }
 
         if (response.code === 406) {
-          message =
-            'Не опознан мобильный оператор или не правильный формат номера';
+          message = strings.ProfileScreen.Notifications.error.phoneProvider;
         }
         Toast.show({
           text: message,
@@ -294,7 +293,7 @@ class ProfileScreen extends Component {
       this.CodeInput[0].focus();
       this.otpArray = [];
       Toast.show({
-        text: 'Неверный код',
+        text: strings.ProfileScreen.Notifications.error.wrongCode,
         buttonText: 'ОК',
         position: 'top',
         type: 'danger',
@@ -321,7 +320,7 @@ class ProfileScreen extends Component {
       .catch(() => {
         this.setState({loading: false});
         Toast.show({
-          text: 'Что-то пошло не так...',
+          text: strings.Notifications.error.text,
           position: 'top',
           type: 'warning',
         });
@@ -339,7 +338,7 @@ class ProfileScreen extends Component {
       .catch(() => {
         this.setState({loading: false});
         Toast.show({
-          text: 'Что-то пошло не так...',
+          text: strings.Notifications.error.text,
           position: 'top',
           type: 'warning',
         });
@@ -792,13 +791,13 @@ class ProfileScreen extends Component {
                           borderRadius: 5,
                         }}
                         offset={20}
-                        cancelText="Отмена"
-                        confirmText="Выбрать"
+                        cancelText={strings.ModalView.cancel}
+                        confirmText={strings.Picker.choose}
                         onChangePhoneNumber={this.onInputPhone}
                         // onSelectCountry={this._onSelectCountry}
                         textProps={{
                           placeholderTextColor: '#afafaf',
-                          placeholder: 'твой телефон',
+                          placeholder: strings.Form.field.label.phone,
                           keyboardType: 'phone-pad',
                           autoCompleteType: 'tel',
                           selectionColor: '#afafaf',
@@ -835,7 +834,9 @@ class ProfileScreen extends Component {
                         {this.state.loadingVerify ? (
                           <ActivityIndicator color="#fff" />
                         ) : (
-                          <Text style={{color: '#fff'}}>Подтвердить</Text>
+                          <Text style={{color: '#fff'}}>
+                            {strings.ProfileScreen.approve}
+                          </Text>
                         )}
                       </Button>
                       <Button
@@ -858,7 +859,9 @@ class ProfileScreen extends Component {
                         {this.state.loadingVerify ? (
                           <ActivityIndicator color="#fff" />
                         ) : (
-                          <Text style={{color: '#fff'}}>отмена</Text>
+                          <Text style={{color: '#fff'}}>
+                            {strings.ModalView.cancel}
+                          </Text>
                         )}
                       </Button>
                     </>
@@ -896,7 +899,9 @@ class ProfileScreen extends Component {
                       {this.state.loadingVerify ? (
                         <ActivityIndicator color="#fff" />
                       ) : (
-                        <Text style={{color: '#fff'}}>Получить код</Text>
+                        <Text style={{color: '#fff'}}>
+                          {strings.ProfileScreen.getCode}
+                        </Text>
                       )}
                     </Button>
                   )}

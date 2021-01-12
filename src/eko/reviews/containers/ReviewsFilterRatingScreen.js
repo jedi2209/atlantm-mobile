@@ -34,6 +34,7 @@ import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
+import strings from '../../../core/lang/const';
 
 const RATING_ARRAY = [1, 2, 3, 4, 5];
 
@@ -57,10 +58,12 @@ const mapDispatchToProps = {
   actionSelectFilterRatingTo,
 };
 
-class ReviewsFilterDateScreen extends Component {
+class ReviewsFilterRatingScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: (
-      <Text style={stylesHeader.blueHeaderTitle}>Отзывы c рейтингом</Text>
+      <Text style={stylesHeader.blueHeaderTitle}>
+        {strings.ReviewsFilterRatingScreen.title}
+      </Text>
     ),
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
@@ -102,7 +105,9 @@ class ReviewsFilterDateScreen extends Component {
         if (selectedRating > filterRatingTo) {
           return setTimeout(
             () =>
-              Alert.alert('"Рейтинг от" не может быть больше "рейтинга до"'),
+              Alert.alert(
+                strings.ReviewsFilterRatingScreen.Notifications.rating,
+              ),
             100,
           );
         }
@@ -118,7 +123,9 @@ class ReviewsFilterDateScreen extends Component {
         if (selectedRating < filterRatingFrom) {
           return setTimeout(
             () =>
-              Alert.alert('"Рейтинг до" не может быть меньше "рейтинга от"'),
+              Alert.alert(
+                strings.ReviewsFilterRatingScreen.Notifications.rating2,
+              ),
             100,
           );
         }
@@ -132,9 +139,9 @@ class ReviewsFilterDateScreen extends Component {
     });
   };
 
-  isRatingFromSelected = selectedRatingFrom =>
+  isRatingFromSelected = (selectedRatingFrom) =>
     this.props.filterRatingFrom === selectedRatingFrom;
-  isRatingToSelected = selectedRatingTo =>
+  isRatingToSelected = (selectedRatingTo) =>
     this.props.filterRatingTo === selectedRatingTo;
 
   renderRatingFrom = () => {
@@ -164,14 +171,15 @@ class ReviewsFilterDateScreen extends Component {
           icon
           style={stylesList.listItemPressable}
           onPress={onPressHandler}>
-          <RadioIcon
-            containerStyle={{
-              marginTop: 5,
-            }}
-            selected={isSelected}
-          />
+          <RadioIcon containerStyle={{marginTop: 5}} selected={isSelected} />
           <Body style={stylesList.bodyWithLeftGap}>
-            <RatingStars size="M" theme="blue" StyleContainer={{marginTop: 12}} rating={rating} itemId={key} />
+            <RatingStars
+              size="M"
+              theme="blue"
+              StyleContainer={{marginTop: 12}}
+              rating={rating}
+              itemId={key}
+            />
           </Body>
         </ListItem>
       </View>
@@ -186,9 +194,13 @@ class ReviewsFilterDateScreen extends Component {
         <SafeAreaView style={styles.safearea}>
           <StatusBar barStyle="light-content" />
           <Content>
-            <ListItemHeader text="РЕЙТИНГ ОТ" />
+            <ListItemHeader
+              text={strings.ReviewsFilterRatingScreen.rating.from.toUpperCase()}
+            />
             {this.renderRatingFrom()}
-            <ListItemHeader text="РЕЙТИНГ ДО" />
+            <ListItemHeader
+              text={strings.ReviewsFilterRatingScreen.rating.to.toUpperCase()}
+            />
             {this.renderRatingTo()}
           </Content>
         </SafeAreaView>
@@ -200,4 +212,4 @@ class ReviewsFilterDateScreen extends Component {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ReviewsFilterDateScreen);
+)(ReviewsFilterRatingScreen);

@@ -47,6 +47,7 @@ import UserData from '../../../utils/user';
 import Amplitude from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
+import strings from '../../../core/lang/const';
 
 // styles
 import styles from '../../CarStyles';
@@ -249,13 +250,11 @@ class NewCarItemScreen extends Component {
         '&utm_content=button' +
         userLink;
       Alert.alert(
-        'Вариант покупки авто',
-        'Хочешь забронировать авто или просто отправить запрос?\r\n\r\n' +
-          'Бронирование позволит тебе гарантированно получить автомобиль, внеся небольшую предоплату.\r\n\r\n' +
-          'Разумеется, эта сумма засчитывается в стоимость авто.',
+        strings.NewCarItemScreen.Notifications.buyType.title,
+        strings.NewCarItemScreen.Notifications.buyType.text,
         [
           {
-            text: 'Отправить запрос',
+            text: strings.NewCarItemScreen.sendQuery,
             onPress: () => {
               navigation.navigate('OrderScreen', {
                 car: {
@@ -275,13 +274,13 @@ class NewCarItemScreen extends Component {
             },
           },
           {
-            text: 'Забронировать',
+            text: strings.NewCarItemScreen.makeOrder,
             onPress: () => {
               Linking.openURL(urlLink);
             },
           },
           {
-            text: 'Отмена',
+            text: strings.ModalView.cancel,
             style: 'destructive',
           },
         ],
@@ -726,13 +725,13 @@ class NewCarItemScreen extends Component {
                       marginBottom: 10,
                     }}>
                     <OptionPlate
-                      title="Комплектация"
+                      title={strings.NewCarItemScreen.plates.complectation}
                       subtitle={get(carDetails, 'complectation.name')}
                     />
                     {get(carDetails, 'engine.id') &&
                     get(carDetails, 'engine.id') !== 4 ? (
                       <OptionPlate
-                        title="Двигатель"
+                        title={strings.NewCarItemScreen.plates.engine}
                         subtitle={
                           get(carDetails, 'engine.volume.short').toFixed(1) +
                           ' л. ' +
@@ -741,7 +740,7 @@ class NewCarItemScreen extends Component {
                       />
                     ) : null}
                     <OptionPlate
-                      title="КПП"
+                      title={strings.NewCarItemScreen.plates.gearbox.name}
                       subtitle={`${
                         get(carDetails, 'gearbox.count')
                           ? get(carDetails, 'gearbox.count') + '-ст.'
@@ -755,7 +754,7 @@ class NewCarItemScreen extends Component {
                     />
                     {get(carDetails, 'gearbox.wheel') ? (
                       <OptionPlate
-                        title="Привод"
+                        title={strings.NewCarItemScreen.plates.wheel}
                         subtitle={get(
                           carDetails,
                           'gearbox.wheel',
@@ -767,7 +766,7 @@ class NewCarItemScreen extends Component {
                         onPress={() => {
                           this.ColorBox.click();
                         }}
-                        title="Цвет"
+                        title={strings.NewCarItemScreen.plates.color}
                         subtitle={get(
                           carDetails,
                           'color.name.simple',
@@ -788,7 +787,7 @@ class NewCarItemScreen extends Component {
                       />
                       <View style={styles.mapCardTextContainer}>
                         <Text style={styles.mapCardTitle}>
-                          Автомобиль расположен по адресу
+                          {strings.NewCarItemScreen.carLocation}
                         </Text>
                         <Text
                           style={styles.mapCardDealer}
@@ -813,116 +812,140 @@ class NewCarItemScreen extends Component {
                 }}
                 dataArray={[
                   {
-                    title: 'Характеристики',
+                    title: strings.NewCarItemScreen.tech.title,
                     content: (
                       <View>
-                        {this.renderTechData('Основные', [
-                          {
-                            name: 'Тип кузова',
-                            value: 'body.name',
-                          },
-                          {
-                            name: 'Год выпуска',
-                            value: 'year',
-                          },
-                        ])}
-                        {this.renderTechData('Двигатель', [
-                          {
-                            name: 'Тип',
-                            value: 'engine.type',
-                          },
-                          (() => {
-                            if (
-                              get(carDetails, 'engine.id') &&
-                              get(carDetails, 'engine.id') === 4
-                            ) {
-                              return false;
-                            }
-                            return {
-                              name: 'Рабочий объём',
-                              value: 'engine.volume.full',
-                              postfix: 'см³',
-                            };
-                          })(),
-                          {
-                            name: 'Мощность',
-                            value: 'power.hp',
-                            postfix: 'л.с.',
-                          },
-                        ])}
-                        {this.renderTechData('Трансмиссия', [
-                          {
-                            name: 'Тип',
-                            value: 'gearbox.name',
-                          },
-                          {
-                            name: 'Количество передач',
-                            value: 'gearbox.count',
-                          },
-                          {
-                            name: 'Привод',
-                            value: 'gearbox.wheel',
-                          },
-                        ])}
-                        {this.renderTechData('Кузов', [
-                          {
-                            name: 'Длина',
-                            value: 'body.width',
-                            postfix: 'мм.',
-                          },
-                          {
-                            name: 'Ширина',
-                            value: 'body.height',
-                            postfix: 'мм.',
-                          },
-                          {
-                            name: 'Высота',
-                            value: 'body.high',
-                            postfix: 'мм.',
-                          },
-                          {
-                            name: 'Клиренс',
-                            value: 'body.clirens',
-                            postfix: 'мм.',
-                          },
-                          {
-                            name: 'Объём багажника',
-                            value: 'body.trunk.min',
-                            postfix: 'л.',
-                          },
-                          {
-                            name: 'Объём топливного бака',
-                            value: 'fuel.fuel',
-                            postfix: 'л.',
-                          },
-                        ])}
                         {this.renderTechData(
-                          'Эксплуатационные характеристики',
+                          strings.NewCarItemScreen.tech.base,
                           [
                             {
-                              name: 'Максимальная скорость',
+                              name: strings.NewCarItemScreen.tech.body.type,
+                              value: 'body.name',
+                            },
+                            {
+                              name: strings.NewCarItemScreen.tech.year,
+                              value: 'year',
+                            },
+                          ],
+                        )}
+                        {this.renderTechData(
+                          strings.NewCarItemScreen.tech.engine.title,
+                          [
+                            {
+                              name: strings.NewCarItemScreen.tech.engine.type,
+                              value: 'engine.type',
+                            },
+                            (() => {
+                              if (
+                                get(carDetails, 'engine.id') &&
+                                get(carDetails, 'engine.id') === 4
+                              ) {
+                                return false;
+                              }
+                              return {
+                                name:
+                                  strings.NewCarItemScreen.tech.engine.volume,
+                                value: 'engine.volume.full',
+                                postfix: 'см³',
+                              };
+                            })(),
+                            {
+                              name:
+                                strings.NewCarItemScreen.tech.engine.power.hp,
+                              value: 'power.hp',
+                              postfix: strings.NewCarItemScreen.shortUnits.hp,
+                            },
+                          ],
+                        )}
+                        {this.renderTechData(
+                          strings.NewCarItemScreen.tech.gearbox.title,
+                          [
+                            {
+                              name: strings.NewCarItemScreen.tech.gearbox.type,
+                              value: 'gearbox.name',
+                            },
+                            {
+                              name: strings.NewCarItemScreen.tech.gearbox.count,
+                              value: 'gearbox.count',
+                            },
+                            {
+                              name: strings.NewCarItemScreen.tech.gearbox.wheel,
+                              value: 'gearbox.wheel',
+                            },
+                          ],
+                        )}
+                        {this.renderTechData(
+                          strings.NewCarItemScreen.tech.body.title,
+                          [
+                            {
+                              name: strings.NewCarItemScreen.tech.body.width,
+                              value: 'body.width',
+                              postfix:
+                                strings.NewCarItemScreen.shortUnits.milimetrs,
+                            },
+                            {
+                              name: strings.NewCarItemScreen.tech.body.height,
+                              value: 'body.height',
+                              postfix:
+                                strings.NewCarItemScreen.shortUnits.milimetrs,
+                            },
+                            {
+                              name: strings.NewCarItemScreen.tech.body.high,
+                              value: 'body.high',
+                              postfix:
+                                strings.NewCarItemScreen.shortUnits.milimetrs,
+                            },
+                            {
+                              name: strings.NewCarItemScreen.tech.body.clirens,
+                              value: 'body.clirens',
+                              postfix:
+                                strings.NewCarItemScreen.shortUnits.milimetrs,
+                            },
+                            {
+                              name: strings.NewCarItemScreen.tech.body.trunk,
+                              value: 'body.trunk.min',
+                              postfix:
+                                strings.NewCarItemScreen.shortUnits.litres,
+                            },
+                            {
+                              name: strings.NewCarItemScreen.tech.body.fuel,
+                              value: 'fuel.fuel',
+                              postfix:
+                                strings.NewCarItemScreen.shortUnits.litres,
+                            },
+                          ],
+                        )}
+                        {this.renderTechData(
+                          strings.NewCarItemScreen.techData.title,
+                          [
+                            {
+                              name: strings.NewCarItemScreen.techData.maxSpeed,
                               value: 'speed.max',
                               postfix: 'км/ч.',
                             },
                             {
-                              name: 'Разгон с 0 до 100 км/ч',
+                              name: strings.NewCarItemScreen.techData.dispersal,
                               value: 'speed.dispersal',
                               postfix: 'сек.',
                             },
                             {
-                              name: 'Расход топлива (город)',
+                              name: strings.NewCarItemScreen.techData.fuel.city,
                               value: 'fuel.city',
-                              postfix: 'л.',
+                              postfix:
+                                strings.NewCarItemScreen.shortUnits.litres,
                             },
                             {
-                              name: 'Расход топлива (трасса)',
+                              name:
+                                strings.NewCarItemScreen.techData.fuel.track,
                               value: 'fuel.track',
-                              postfix: 'л.',
+                              postfix:
+                                strings.NewCarItemScreen.shortUnits.litres,
                             },
                             {
-                              name: 'Расход топлива (смешанный)',
+                              name: strings.NewCarItemScreen.techData.fuel.both,
                               value: 'fuel.both',
-                              postfix: 'л.',
+                              postfix:
+                                strings.NewCarItemScreen.shortUnits.litres,
                             },
                           ],
                         )}
@@ -930,7 +953,7 @@ class NewCarItemScreen extends Component {
                     ),
                   },
                   {
-                    title: 'Комплектация',
+                    title: strings.NewCarItemScreen.complectation.title,
                     content: (
                       <View style={styles.tabContent}>
                         {stockKeys.length ? (
@@ -1036,7 +1059,7 @@ class NewCarItemScreen extends Component {
                   }}
                 />
                 <Text style={styles.buttonText} selectable={false}>
-                  тест-драйв
+                  {strings.NewCarItemScreen.testDrive}
                 </Text>
               </Button>
               {/* ) : null} */}
@@ -1053,7 +1076,7 @@ class NewCarItemScreen extends Component {
                 ]}
                 activeOpacity={0.8}>
                 <Text style={styles.buttonText} selectable={false}>
-                  хочу это авто!
+                  {strings.NewCarItemScreen.wannaCar}
                 </Text>
               </Button>
             </View>

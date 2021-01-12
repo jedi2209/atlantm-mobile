@@ -14,18 +14,12 @@ import {
 import {store} from '../../core/store';
 import {get} from 'lodash';
 import {CarCard} from './CarCard';
-import {
-  Icon,
-  Button,
-  CheckBox,
-  ActionSheet,
-  StyleProvider,
-  Toast,
-} from 'native-base';
+import {Icon, Button, ActionSheet, Toast} from 'native-base';
 // import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {verticalScale} from '../../utils/scale';
 import styleConst from '../../core/style-const';
 import getOrders from '../../utils/orders';
+import strings from '../../core/lang/const';
 
 import {actionToggleCar} from '../actions';
 
@@ -61,19 +55,19 @@ const CarMenu = {
       BUTTONS: [
         {
           id: 'TOhistory',
-          text: 'История обслуживания',
+          text: strings.UserCars.menu.history,
           icon: 'book-outline',
           iconColor: '#2c8ef4',
         },
         {
           id: 'hide',
-          text: 'Сделать текущим',
+          text: strings.UserCars.menu.makeCurrent,
           icon: 'swap-horizontal',
           iconColor: '#2c8ef4',
         },
         {
           id: 'cancel',
-          text: 'Отмена',
+          text: strings.ModalView.cancel,
           icon: 'close',
           iconColor: 'red',
         },
@@ -85,13 +79,13 @@ const CarMenu = {
       BUTTONS: [
         {
           id: 'TOhistory',
-          text: '📘 История обслуживания',
+          text: '📘 ' + strings.UserCars.menu.history,
         },
         {
           id: 'hide',
-          text: '📤 Сделать текущим',
+          text: '📤 ' + strings.UserCars.menu.makeCurrent,
         },
-        {id: 'cancel', text: 'Отмена'},
+        {id: 'cancel', text: strings.ModalView.cancel},
       ],
       DESTRUCTIVE_INDEX: 1,
       CANCEL_INDEX: 2,
@@ -161,7 +155,7 @@ const UserCars = ({navigation, actionToggleCar}) => {
                   setActivePanel('default');
                   setLoading(false);
                   Toast.show({
-                    text: 'Статус автомобиля изменён',
+                    text: strings.UserCars.Notifications.success.statusUpdate,
                     type: 'success',
                     position: 'top',
                   });
@@ -201,7 +195,7 @@ const UserCars = ({navigation, actionToggleCar}) => {
               activeOpacity={1}
               key={item.vin}
               onPress={() => {
-                if (CarType == 'active') {
+                if (CarType === 'active') {
                   getOrders('car').then((ordersData) => {
                     return _showMenu(ordersData, item);
                   });
@@ -254,7 +248,7 @@ const UserCars = ({navigation, actionToggleCar}) => {
               fontSize: 16,
               fontWeight: '600',
             }}>
-            Мои автомобили
+            {strings.UserCars.title}
           </Text>
         </View>
         <View
@@ -279,7 +273,7 @@ const UserCars = ({navigation, actionToggleCar}) => {
                     marginRight: 5,
                   },
                 ]}>
-                текущие
+                {strings.UserCars.current}
               </Text>
             </TouchableOpacity>
           ) : null}
@@ -297,7 +291,7 @@ const UserCars = ({navigation, actionToggleCar}) => {
                   styles.carChooseText,
                   carsPanel === 'hidden' ? styles.carChooseTextSelected : null,
                 ]}>
-                архив
+                {strings.UserCars.archive}
               </Text>
             </TouchableOpacity>
           ) : null}
@@ -335,10 +329,10 @@ const UserCars = ({navigation, actionToggleCar}) => {
           useNativeDriver>
           <Icon type="MaterialCommunityIcons" name="car-off" fontSize={20} />
           <Text style={{marginTop: 5, marginLeft: 10, lineHeight: 20}}>
-            У тебя нет текущих автомобилей.{'\r\n'}
+            {strings.UserCars.empty.text + '\r\n'}
           </Text>
           <Button bordered onPress={() => setActivePanel('hidden')}>
-            <Text style={{padding: 5}}>Проверим архив?</Text>
+            <Text style={{padding: 5}}>{strings.UserCars.archiveCheck}</Text>
           </Button>
         </View>
       )}

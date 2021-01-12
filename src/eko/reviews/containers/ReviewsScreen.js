@@ -21,11 +21,11 @@ import DealerItemList from '../../../core/components/DealerItemList';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
-import {REVIEWS_FILTER_DATE_PERIOD__ALL} from '../../constants';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import stylesHeader from '../../../core/components/Header/style';
 import {substractYears} from '../../../utils/date';
+import strings from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   content: {
@@ -67,7 +67,7 @@ class ReviewsScreen extends Component {
       'BottomTabNavigation';
 
     return {
-      headerTitle: 'Отзывы',
+      headerTitle: strings.ReviewsScreen.title,
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
       headerLeft: (
@@ -118,7 +118,7 @@ class ReviewsScreen extends Component {
     if (!dateFrom) {
       dateFrom = substractYears(10);
       actionDateFromFill(dateFrom);
-      actionSelectFilterDatePeriod(REVIEWS_FILTER_DATE_PERIOD__ALL);
+      actionSelectFilterDatePeriod(strings.ReviewsFilterDateScreen.periods.all);
     }
 
     if (!filterRatingFrom) {

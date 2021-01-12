@@ -6,7 +6,6 @@ import {
   View,
   Alert,
   StyleSheet,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
@@ -14,7 +13,7 @@ import {
   ActivityIndicator,
   StatusBar,
 } from 'react-native';
-import {Container, Content, StyleProvider, Button} from 'native-base';
+import {Button} from 'native-base';
 import {localUserDataUpdate} from '../../profile/actions';
 
 // redux
@@ -29,21 +28,12 @@ import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
 
 // components
-import Spinner from 'react-native-loading-spinner-overlay';
-import ButtonFull from '../../core/components/ButtonFull';
-import MessageForm from '../../core/components/MessageForm';
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-import ListItemHeader from '../../profile/components/ListItemHeader';
-import HeaderSubtitle from '../../core/components/HeaderSubtitle';
-
-// styles
-import stylesList from '../../core/components/Lists/style';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import {dayMonthYearTime} from '../../utils/date';
-import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 import {
@@ -52,6 +42,7 @@ import {
 } from '../actionTypes';
 import isInternet from '../../utils/internet';
 import {ERROR_NETWORK} from '../../core/const';
+import strings from '../../core/lang/const';
 
 const $size = 40;
 const styles = StyleSheet.create({
@@ -145,7 +136,7 @@ class TvaResultsScreen extends Component {
     return {
       headerStyle: stylesHeader.whiteHeader,
       headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: 'Информация об авто',
+      headerTitle: strings.TvaResultsScreen.title,
       headerLeft: (
         <HeaderIconBack
           theme="blue"
@@ -230,7 +221,11 @@ class TvaResultsScreen extends Component {
 
         if (type === TVA_SEND_MESSAGE__FAIL) {
           setTimeout(
-            () => Alert.alert('', 'Произошла ошибка, попробуем снова?'),
+            () =>
+              Alert.alert(
+                strings.Notifications.error.title,
+                strings.Notifications.error.text,
+              ),
             100,
           );
         }
@@ -285,7 +280,10 @@ class TvaResultsScreen extends Component {
                         fontWeight: 'bold',
                         textAlign: 'center',
                       }}>
-                      Сообщение успешно отправлено
+                      {
+                        strings.TvaResultsScreen.Notifications.success
+                          .messageSent
+                      }
                     </Text>
                   </View>
                   <View>
@@ -294,7 +292,9 @@ class TvaResultsScreen extends Component {
                         this.props.navigation.navigate('BottomTabNavigation')
                       }
                       style={[styleConst.shadow.default, styles.button]}>
-                      <Text style={styles.buttonText}>Назад</Text>
+                      <Text style={styles.buttonText}>
+                        {strings.Navigation.back}
+                      </Text>
                     </Button>
                   </View>
                 </View>
@@ -314,7 +314,7 @@ class TvaResultsScreen extends Component {
                           <TextInput
                             editable={false}
                             style={styles.textinput}
-                            label="Мастер-приёмщик"
+                            label={strings.TvaResultsScreen.serviceMan}
                             value={item.name}
                           />
                         </View>
@@ -322,7 +322,7 @@ class TvaResultsScreen extends Component {
                           <TextInput
                             editable={false}
                             style={styles.textinput}
-                            label="Время выдачи"
+                            label={strings.TvaResultsScreen.time}
                             value={this.processDate(item.date)}
                           />
                         </View>
@@ -330,7 +330,7 @@ class TvaResultsScreen extends Component {
                           <TextInput
                             editable={false}
                             style={styles.textinput}
-                            label="Статус"
+                            label={strings.TvaResultsScreen.status}
                             value={item.status}
                           />
                         </View>
@@ -350,7 +350,7 @@ class TvaResultsScreen extends Component {
                           color: '#222b45',
                           fontSize: 18,
                         }}
-                        label="Сообщение мастеру"
+                        label={strings.TvaResultsScreen.messageToServiceMan}
                         value={this.state.comment}
                         onChangeText={this.onChangeField('comment')}
                       />
@@ -367,7 +367,9 @@ class TvaResultsScreen extends Component {
                       {this.state.loading ? (
                         <ActivityIndicator color="#fff" />
                       ) : (
-                        <Text style={styles.buttonText}>Отправить</Text>
+                        <Text style={styles.buttonText}>
+                          {strings.TvaResultsScreen.send}
+                        </Text>
                       )}
                     </Button>
                   </View>
@@ -381,8 +383,4 @@ class TvaResultsScreen extends Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-
-  mapDispatchToProps,
-)(TvaResultsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(TvaResultsScreen);

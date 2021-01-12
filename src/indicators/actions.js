@@ -4,12 +4,11 @@ import {
   INDICATORS__REQUEST,
   INDICATORS__SUCCESS,
   INDICATORS__FAIL,
-
   INDICATOR_ACTIVE__SET,
 } from './actionTypes';
 
 export const actionSetActiveIndicator = (item) => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: INDICATOR_ACTIVE__SET,
       payload: item,
@@ -18,12 +17,12 @@ export const actionSetActiveIndicator = (item) => {
 };
 
 export const actionFetchIndicators = () => {
-  return dispatch => {
-    dispatch({ type: INDICATORS__REQUEST });
+  return (dispatch) => {
+    dispatch({type: INDICATORS__REQUEST});
 
     return API.fetchIndicators()
-      .then(res => {
-        const { error, status, data } = res;
+      .then((res) => {
+        const {error, status, data} = res;
 
         if (status !== 'success') {
           return dispatch({
@@ -45,7 +44,7 @@ export const actionFetchIndicators = () => {
             return [];
           }
 
-          if (idx === (data.length - 1)) {
+          if (idx === data.length - 1) {
             newData.push(prev);
           }
 
@@ -57,7 +56,7 @@ export const actionFetchIndicators = () => {
           payload: newData,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         return dispatch({
           type: INDICATORS__FAIL,
           payload: {

@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 
 import {get} from 'lodash';
 import {
-  Alert,
   View,
   StyleSheet,
   ScrollView,
@@ -12,15 +11,12 @@ import {
   Text,
   Platform,
   TouchableWithoutFeedback,
-  TouchableHighlight,
   ActivityIndicator,
   StatusBar,
   Dimensions,
 } from 'react-native';
 
 import {Button, Icon, Toast} from 'native-base';
-
-import {StackActions, NavigationActions} from 'react-navigation';
 
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
@@ -50,6 +46,7 @@ const mapDispatchToProps = {
 
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import stylesHeader from '../../core/components/Header/style';
+import strings from '../../core/lang/const';
 
 const deviceWidth = Dimensions.get('window').width;
 const isAndroid = Platform.OS === 'android';
@@ -119,7 +116,7 @@ class ReestablishScreen extends React.Component {
     return {
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerTitle: 'Вход по логину и паролю',
+      headerTitle: strings.ReestablishScreen.title,
       headerLeft: (
         <HeaderIconBack
           theme="white"
@@ -139,7 +136,7 @@ class ReestablishScreen extends React.Component {
     const {login, password} = this.state;
     if (login.length === 0 || password.length === 0) {
       Toast.show({
-        text: 'Поля логин и пароль обязательны для заполнения',
+        text: strings.ReestablishScreen.fieldsRequired,
         position: 'top',
         type: 'warning',
       });
@@ -153,7 +150,7 @@ class ReestablishScreen extends React.Component {
     const {login} = this.state;
     if (login.length === 0) {
       Toast.show({
-        text: 'Нам нужно знать твой логин, чтобы восстановить доступ',
+        text: strings.ReestablishScreen.loginRequired,
         position: 'top',
         type: 'warning',
       });
@@ -179,7 +176,7 @@ class ReestablishScreen extends React.Component {
               window.atlantmDebug = false;
             }
 
-            const defaultMessage = 'Произошла ошибка, попробуем снова?';
+            const defaultMessage = strings.Notifications.error.text;
             const code = get(action, 'payload.code');
             const message = get(action, 'payload.message');
             Toast.show({
@@ -206,7 +203,7 @@ class ReestablishScreen extends React.Component {
                 this.setState({loading: false});
                 const _this = this;
                 Toast.show({
-                  text: 'Отлично! Всё получилось!',
+                  text: strings.Notifications.success.title,
                   position: 'top',
                   type: 'success',
                 });
@@ -217,7 +214,7 @@ class ReestablishScreen extends React.Component {
               .catch(() => {
                 this.setState({loading: false});
                 Toast.show({
-                  text: 'Произошла ошибка, попробуем снова?',
+                  text: strings.Notifications.error.text,
                   position: 'top',
                   type: 'danger',
                 });
@@ -245,15 +242,12 @@ class ReestablishScreen extends React.Component {
                   style={{fontSize: 48, position: 'absolute'}}
                 />
                 <Text style={[styles.caption, {marginLeft: 60}]}>
-                  Мы очень раздасадованы тем, что ты не обнаружил свои
-                  автомобили и бонусный счет в личном кабинете.{'\n'}
-                  Пожалуйста, дай нам ещё один шанс!
+                  {strings.ReestablishScreen.notFound.text} {'\n'}
+                  {strings.ReestablishScreen.notFound.text2}
                 </Text>
                 <Text style={[styles.caption]}>
-                  Введи свои данные для доступа к старому личному кабинету.
-                  {'\n\n'}
-                  Это последний раз когда тебе придётся вспомнить эти магические
-                  комбинации цифр и букв для входа в личный кабинет.
+                  {strings.ReestablishScreen.notFound.caption} {'\n\n'}
+                  {strings.ReestablishScreen.notFound.caption2}
                 </Text>
               </View>
               <View style={styles.group}>
@@ -264,7 +258,7 @@ class ReestablishScreen extends React.Component {
                     textContentType="username"
                     autoCapitalize="none"
                     style={styles.textinput}
-                    label="Логин"
+                    label={strings.Form.field.label.login}
                     returnKeyType="next"
                     onSubmitEditing={() => {
                       this.fields.passInput.current.focus();
@@ -290,7 +284,7 @@ class ReestablishScreen extends React.Component {
                     textContentType="password"
                     autoCapitalize="none"
                     autoCorrect={false}
-                    label="Пароль"
+                    label={strings.Form.field.label.pass}
                     returnKeyType="send"
                     value={this.state.password || ''}
                     ref={this.fields.passInput}
@@ -302,7 +296,7 @@ class ReestablishScreen extends React.Component {
                   />
                   <Button
                     transparent
-                    title="Не помню пароль"
+                    title={strings.ReestablishScreen.forgotPass}
                     onPress={() => {
                       this.setState({RequestForgotPassloading: true});
                       if (!this.checkLogin()) {
@@ -317,7 +311,7 @@ class ReestablishScreen extends React.Component {
                               Toast.show({
                                 text: action.payload.message
                                   ? action.payload.message
-                                  : 'Всё получилось!',
+                                  : strings.Notifications.success.title,
                                 position: 'top',
                                 type: 'success',
                               });
@@ -357,7 +351,7 @@ class ReestablishScreen extends React.Component {
                           color: styleConst.color.lightBlue,
                           elevation: 0,
                         }}>
-                        не помню пароль
+                        {strings.ReestablishScreen.forgotPass.toLowerCase()}
                       </Text>
                     )}
                   </Button>
@@ -368,13 +362,15 @@ class ReestablishScreen extends React.Component {
                   <Button
                     disabled={disableButton ? true : false}
                     active={disableButton ? false : true}
-                    title="Найдите мои данные"
+                    title={strings.ReestablishScreen.findMyData}
                     onPress={this.state.loading ? undefined : this.onPressLogin}
                     style={[styles.button, styleConst.shadow.default]}>
                     {this.state.loading ? (
                       <ActivityIndicator color="#fff" />
                     ) : (
-                      <Text style={styles.buttonText}>Найдите мои данные</Text>
+                      <Text style={styles.buttonText}>
+                        {strings.ReestablishScreen.findMyData}
+                      </Text>
                     )}
                   </Button>
                 </View>

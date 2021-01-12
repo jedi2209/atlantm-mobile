@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
   View,
-  Alert,
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
@@ -26,6 +25,7 @@ import PushNotifications from '../../core/components/PushNotifications';
 import {get} from 'lodash';
 import stylesHeader from '../../core/components/Header/style';
 import {TVA__SUCCESS, TVA__FAIL} from '../actionTypes';
+import strings from '../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, tva, nav, core}) => {
   return {
@@ -62,12 +62,12 @@ class TvaScreen extends Component {
       fields: {
         groups: [
           {
-            name: 'Автоцентр',
+            name: strings.Form.group.dealer,
             fields: [
               {
                 name: 'DEALER',
                 type: 'dealerSelect',
-                label: 'Автоцентр',
+                label: strings.Form.field.label.dealer,
                 value:
                   this.props.dealerSelectedLocal &&
                   this.props.dealerSelectedLocal.id
@@ -83,12 +83,12 @@ class TvaScreen extends Component {
             ],
           },
           {
-            name: 'Автомобиль',
+            name: strings.Form.group.car,
             fields: [
               {
                 name: 'CARNUMBER',
                 type: 'input',
-                label: 'Гос.номер',
+                label: strings.Form.field.label.carNumber,
                 value: this.props.carNumber,
                 props: {
                   required: true,
@@ -118,7 +118,7 @@ class TvaScreen extends Component {
     return {
       headerStyle: stylesHeader.whiteHeader,
       headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: 'Табло выдачи авто',
+      headerTitle: strings.TvaScreen.title,
       headerLeft: (
         <HeaderIconBack
           theme="blue"
@@ -284,8 +284,6 @@ class TvaScreen extends Component {
   };
 
   render() {
-    const {navigation, dealerSelected, isTvaRequest} = this.props;
-
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

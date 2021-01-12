@@ -10,6 +10,7 @@ import ServiceNew from './OnlineService/ServiceScreenNewStep1';
 import ServiceNewNonAuth from './OnlineService/ServiceScreenNonAuth';
 import {connect} from 'react-redux';
 import {get} from 'lodash';
+import strings from '../../core/lang/const';
 
 const ServiceOldScreen = withNavigation(Service);
 const ServiceScreenStep1 = withNavigation(ServiceNew);
@@ -29,7 +30,7 @@ class ServiceContainer extends Component {
     const returnScreen =
       navigation.state.params && navigation.state.params.returnScreen;
 
-    let headerTitle = 'Запись на сервис';
+    let headerTitle = strings.ServiceScreen.title;
 
     return {
       headerStyle: stylesHeader.whiteHeader,

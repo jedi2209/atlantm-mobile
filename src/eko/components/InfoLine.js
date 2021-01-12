@@ -46,7 +46,9 @@ export default class InfoLine extends Component {
   render() {
     const {gap, text, infoIcon} = this.props;
 
-    if (!text) return null;
+    if (!text) {
+      return null;
+    }
 
     return (
       <View style={[styles.container, gap ? styles.gap : null]}>

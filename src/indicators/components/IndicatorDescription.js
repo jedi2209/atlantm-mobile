@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import {Text, StyleSheet} from 'react-native';
 
 // components
 import * as Animatable from 'react-native-animatable';
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
 });
 
-let IndicatorDescription = ({ name, description }) => {
+let IndicatorDescription = ({name, description}) => {
   // избавляюсь в android от символов-артефактов
   const cleanDescription = description.trim();
 
@@ -44,8 +44,7 @@ let IndicatorDescription = ({ name, description }) => {
       style={styles.descriptionContainer}
       animation="fadeInLeftBig"
       useNativeDriver={true}
-      duration={300}
-    >
+      duration={300}>
       <Text style={styles.descriptionTitle}>{name}</Text>
       <Text style={styles.descriptionText}>{cleanDescription}</Text>
     </Animatable.View>

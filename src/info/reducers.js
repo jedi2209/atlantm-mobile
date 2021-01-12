@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
+import {REHYDRATE} from 'redux-persist/constants';
 import {get} from 'lodash';
 import {
   INFO_LIST__REQUEST,

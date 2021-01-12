@@ -47,7 +47,9 @@ export default class RatingStars extends PureComponent {
   render() {
     const {rating, itemId, theme, size, StyleContainer} = this.props;
 
-    if (!rating) return null;
+    if (!rating) {
+      return null;
+    }
 
     const stars = new Array(rating).fill(0);
     const emptyStars = new Array(5 - rating).fill(0);

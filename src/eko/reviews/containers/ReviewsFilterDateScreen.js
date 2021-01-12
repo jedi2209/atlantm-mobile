@@ -15,13 +15,6 @@ import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBa
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
-import {
-  REVIEWS_FILTER_DATE_PERIOD__ALL,
-  REVIEWS_FILTER_DATE_PERIOD__WEEK,
-  REVIEWS_FILTER_DATE_PERIOD__MONTH,
-  REVIEWS_FILTER_DATE_PERIOD__YEAR,
-} from '../../constants';
-
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
@@ -31,6 +24,7 @@ import {
   substractWeek,
   substractYears,
 } from '../../../utils/date';
+import strings from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -54,7 +48,9 @@ const mapDispatchToProps = {
 class ReviewsFilterDateScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerTitle: (
-      <Text style={stylesHeader.blueHeaderTitle}>Отзывы за период</Text>
+      <Text style={stylesHeader.blueHeaderTitle}>
+        {strings.ReviewsFilterDateScreen.title}
+      </Text>
     ),
     headerStyle: stylesHeader.blueHeader,
     headerTitleStyle: stylesHeader.blueHeaderTitle,
@@ -75,11 +71,13 @@ class ReviewsFilterDateScreen extends Component {
     return this.props.filterDatePeriod !== nextProps.filterDatePeriod;
   }
 
-  onPressItem = selectedDatePeriod => {
-    const {actionDateFromFill, actionSelectFilterDatePeriod} = this.props;
+  onPressItem = (selectedDatePeriod) => {
+    const {actionSelectFilterDatePeriod} = this.props;
 
     requestAnimationFrame(() => {
-      if (this.isDatePeriodSelected(selectedDatePeriod)) {return false;}
+      if (this.isDatePeriodSelected(selectedDatePeriod)) {
+        return false;
+      }
 
       actionSelectFilterDatePeriod(selectedDatePeriod);
 
@@ -87,21 +85,21 @@ class ReviewsFilterDateScreen extends Component {
     });
   };
 
-  processDate = datePeriod => {
+  processDate = (datePeriod) => {
     const {dateFrom, actionDateFromFill} = this.props;
     let newDateFrom = null;
 
     switch (datePeriod) {
-      case REVIEWS_FILTER_DATE_PERIOD__ALL:
+      case strings.ReviewsFilterDateScreen.periods.all:
         newDateFrom = substractYears(10);
         break;
-      case REVIEWS_FILTER_DATE_PERIOD__WEEK:
+      case strings.ReviewsFilterDateScreen.periods.week:
         newDateFrom = substractWeek();
         break;
-      case REVIEWS_FILTER_DATE_PERIOD__MONTH:
+      case strings.ReviewsFilterDateScreen.periods.month:
         newDateFrom = substructMonth();
         break;
-      case REVIEWS_FILTER_DATE_PERIOD__YEAR:
+      case strings.ReviewsFilterDateScreen.periods.year:
         newDateFrom = substractYears(1);
         break;
       default:
@@ -111,7 +109,7 @@ class ReviewsFilterDateScreen extends Component {
     actionDateFromFill(newDateFrom);
   };
 
-  isDatePeriodSelected = selectedDatePeriod =>
+  isDatePeriodSelected = (selectedDatePeriod) =>
     this.props.filterDatePeriod === selectedDatePeriod;
 
   render() {
@@ -121,10 +119,10 @@ class ReviewsFilterDateScreen extends Component {
           <StatusBar barStyle="light-content" />
           <Content>
             {[
-              REVIEWS_FILTER_DATE_PERIOD__ALL,
-              REVIEWS_FILTER_DATE_PERIOD__WEEK,
-              REVIEWS_FILTER_DATE_PERIOD__MONTH,
-              REVIEWS_FILTER_DATE_PERIOD__YEAR,
+              strings.ReviewsFilterDateScreen.periods.all,
+              strings.ReviewsFilterDateScreen.periods.week,
+              strings.ReviewsFilterDateScreen.periods.month,
+              strings.ReviewsFilterDateScreen.periods.year,
             ].map((period, idx, arrayPeriod) => {
               const handler = () => this.onPressItem(period);
 

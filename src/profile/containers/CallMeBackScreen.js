@@ -23,8 +23,9 @@ import Form from '../../core/components/Form/Form';
 
 import isInternet from '../../utils/internet';
 import {ERROR_NETWORK} from '../../core/const';
+import strings from '../../core/lang/const';
 
-const mapStateToProps = ({dealer, profile, contacts, service, nav}) => {
+const mapStateToProps = ({dealer, profile, contacts, nav}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
@@ -78,7 +79,7 @@ class CallMeBackScreen extends React.Component {
     return {
       headerStyle: stylesHeader.whiteHeader,
       headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: 'Перезвоните мне',
+      headerTitle: strings.CallMeBackScreen.title,
       headerLeft: (
         <HeaderIconBack
           theme="blue"
@@ -145,8 +146,8 @@ class CallMeBackScreen extends React.Component {
         PHONE: props.PHONE,
       });
       Alert.alert(
-        'Заявка успешно отправлена!',
-        'Наши менеджеры вскоре свяжутся с тобой. Спасибо!',
+        strings.Notifications.success.title,
+        strings.Notifications.success.textOrder,
         [
           {
             text: 'ОК',
@@ -170,7 +171,11 @@ class CallMeBackScreen extends React.Component {
     if (action.type === CALL_ME__FAIL) {
       this.setState({loading: false});
       setTimeout(
-        () => Alert.alert('Ошибка', 'Произошла ошибка, попробуем снова?'),
+        () =>
+          Alert.alert(
+            strings.Notifications.error.title,
+            strings.Notifications.error.text,
+          ),
         100,
       );
     }
@@ -181,12 +186,12 @@ class CallMeBackScreen extends React.Component {
       fields: {
         groups: [
           {
-            name: 'Автоцентр',
+            name: strings.Form.group.dealer,
             fields: [
               {
                 name: 'DEALER',
                 type: 'dealerSelect',
-                label: 'Автоцентр',
+                label: strings.Form.group.dealer,
                 value: this.state.dealerSelectedLocal,
                 props: {
                   goBack: false,
@@ -198,12 +203,12 @@ class CallMeBackScreen extends React.Component {
             ],
           },
           {
-            name: 'Контактные данные',
+            name: strings.Form.group.contacts,
             fields: [
               {
                 name: 'PHONE',
                 type: 'phone',
-                label: 'Телефон',
+                label: strings.Form.field.label.phone,
                 value: this.props.phone,
                 props: {
                   required: true,
@@ -212,7 +217,7 @@ class CallMeBackScreen extends React.Component {
               {
                 name: 'NAME',
                 type: 'input',
-                label: 'Имя',
+                label: strings.Form.field.label.name,
                 value: this.props.firstName,
                 props: {
                   required: false,
@@ -222,7 +227,7 @@ class CallMeBackScreen extends React.Component {
               {
                 name: 'SECOND_NAME',
                 type: 'input',
-                label: 'Отчество',
+                label: strings.Form.field.label.secondName,
                 value: this.props.secondName,
                 props: {
                   textContentType: 'middleName',
@@ -248,7 +253,7 @@ class CallMeBackScreen extends React.Component {
                 fields={this.FormConfig.fields}
                 barStyle={'light-content'}
                 SubmitButton={{
-                  text: 'Жду звонка',
+                  text: strings.CallMeBackScreen.button,
                 }}
                 onSubmit={this.onPressCallMe}
               />

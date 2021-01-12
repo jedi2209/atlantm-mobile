@@ -24,6 +24,7 @@ import processHtml from '../../../utils/process-html';
 import Amplitude from '../../../utils/amplitude-analytics';
 import stylesHeader from '../../../core/components/Header/style';
 import getTheme from '../../../../native-base-theme/components';
+import strings from '../../../core/lang/const';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -55,7 +56,7 @@ const mapDispatchToProps = {
 class BonusInfoScreen extends Component {
   static navigationOptions = ({navigation}) => {
     return {
-      headerTitle: 'Бонусная программа',
+      headerTitle: strings.BonusInfoScreen.title,
       headerStyle: stylesHeader.whiteHeader,
       headerTitleStyle: stylesHeader.whiteHeaderTitle,
       headerLeft: (

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import {
   View,
   Text,
-  Image,
   Alert,
   TouchableOpacity,
   ActivityIndicator,
@@ -30,7 +29,7 @@ import {
 
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
-import {get, find} from 'lodash';
+import {get} from 'lodash';
 import showPrice from '../../../utils/price';
 import stylesHeader from '../../../core/components/Header/style';
 import {ScrollView} from 'react-native-gesture-handler';
