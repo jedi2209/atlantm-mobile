@@ -307,7 +307,7 @@ class UsedCarFilterScreen extends Component {
         <StatusBar barStyle="dark-content" />
         <Accordion
           dataArray={dataForAccordion}
-          expanded={0}
+          expanded={[0]}
           renderHeader={(item, expanded) => (
             <View
               style={{

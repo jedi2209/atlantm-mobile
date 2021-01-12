@@ -821,7 +821,7 @@ class UserCarItemScreen extends Component {
                           ),
                         },
                     ].filter(Boolean)}
-                    expanded={0}
+                    expanded={[0]}
                     animation={true}
                     renderHeader={(item, expanded) => (
                       <View

@@ -47,6 +47,7 @@ import UserData from '../../../utils/user';
 import Amplitude from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
+import md5 from '../../../utils/md5';
 import strings from '../../../core/lang/const';
 
 // styles
@@ -361,10 +362,9 @@ class NewCarItemScreen extends Component {
 
   renderTechData = (title, data) => {
     const {carDetails} = this.props;
-    const _this = this;
     if (typeof data === 'object' && data.length) {
       let resRaw = data.map((element) => {
-        return _this.renderItem(
+        return this.renderItem(
           element.name + ':',
           get(carDetails, element.value),
           element.postfix,
@@ -396,7 +396,7 @@ class NewCarItemScreen extends Component {
         </Text>
         <Grid>
           {data.map((element) => {
-            return _this.renderItem(
+            return this.renderItem(
               element.name + ':',
               get(carDetails, element.value),
               element.postfix,
@@ -408,8 +408,9 @@ class NewCarItemScreen extends Component {
   };
 
   renderItem = (title, value, postfix) => {
+    const key = md5(title + value + postfix);
     return value ? (
-      <Row key={`${title} ${value} ${postfix}`} style={styles.sectionRow}>
+      <Row key={key} style={styles.sectionRow}>
         <View style={[styles.sectionProp, {flex: 1}]}>
           <Text
             style={styles.sectionPropText}
@@ -422,7 +423,9 @@ class NewCarItemScreen extends Component {
           <Text
             style={styles.sectionValueText}
             ellipsizeMode="tail"
-            numberOfLines={1}>{`${value} ${postfix || ''}`}</Text>
+            numberOfLines={1}>
+            {value} {postfix || null}
+          </Text>
         </View>
       </Row>
     ) : null;
@@ -437,8 +440,9 @@ class NewCarItemScreen extends Component {
       <View key={title} style={{marginBottom: 10}}>
         <Text style={styles.sectionTitle}>{title}</Text>
         {data.map((item) => {
+          const key = md5(item.name + item.id);
           return (
-            <Grid key={`${item.name} ${item.id}`}>
+            <Grid key={key}>
               {item.name && item.value ? (
                 <Row style={styles.sectionRow}>
                   <Col style={styles.sectionProp}>
@@ -615,424 +619,408 @@ class NewCarItemScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <View style={styles.safearea}>
-          <ScrollView>
-            <StatusBar hidden />
-            <View style={{flex: 1, position: 'relative'}}>
+        <ScrollView style={styles.safearea}>
+          <StatusBar hidden />
+          <View style={{flex: 1, position: 'relative'}}>
+            <View
+              style={{
+                position: 'absolute',
+                height: 400,
+                width: '100%',
+                zIndex: 20,
+                marginTop: CarImgReal ? -12 : -12,
+              }}>
+              <ColorBox
+                ref={(input) => {
+                  return (this.ColorBox = input);
+                }}
+                containerStyle={{
+                  position: 'absolute',
+                  right: 0,
+                  top: 280,
+                  zIndex: 1000,
+                  padding: 20,
+                }}
+                color={get(carDetails, 'color')}
+              />
+              {badge ? (
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    position: 'absolute',
+                    left: 5,
+                    top: 290,
+                    zIndex: 1000,
+                  }}>
+                  {badge.map((item, index) => {
+                    return (
+                      <Badge
+                        id={carDetails.id.api}
+                        key={'badgeItem' + carDetails.id.api + index}
+                        index={index}
+                        bgColor={item.background}
+                        name={item.name}
+                        textColor={item.textColor}
+                      />
+                    );
+                  })}
+                </View>
+              ) : null}
+              <PhotoSlider
+                height={370}
+                photos={photos}
+                resizeMode={CarImgReal ? 'cover' : null}
+                paginationStyle={{marginBottom: 35}}
+                dotColor={CarImgReal ? '#fff' : null}
+                onPressItem={this.onPressPhoto}
+                onIndexChanged={this.onChangePhotoIndex}
+              />
+            </View>
+
+            <View
+              style={[
+                styleConst.shadow.light,
+                {
+                  position: 'relative',
+                  marginTop: CarImgReal ? 335 : 335,
+                  marginBottom: -5,
+                  backgroundColor: '#fff',
+                  borderTopLeftRadius: 30,
+                  borderTopRightRadius: 30,
+                  paddingTop: 20,
+                  paddingBottom: 14,
+                  zIndex: 30,
+                },
+              ]}>
               <View
                 style={{
-                  position: 'absolute',
-                  height: 400,
-                  width: '100%',
-                  zIndex: 20,
-                  marginTop: CarImgReal ? -12 : -12,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: '2%',
                 }}>
-                <ColorBox
-                  ref={(input) => {
-                    return (this.ColorBox = input);
-                  }}
-                  containerStyle={{
-                    position: 'absolute',
-                    right: 0,
-                    top: 280,
-                    zIndex: 1000,
-                    padding: 20,
-                  }}
-                  color={get(carDetails, 'color')}
-                />
-                {badge ? (
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      position: 'absolute',
-                      left: 5,
-                      top: 290,
-                      zIndex: 1000,
-                    }}>
-                    {badge.map((item, index) => {
-                      return (
-                        <Badge
-                          id={carDetails.id.api}
-                          key={'badgeItem' + carDetails.id.api + index}
-                          index={index}
-                          bgColor={item.background}
-                          name={item.name}
-                          textColor={item.textColor}
-                        />
-                      );
-                    })}
-                  </View>
-                ) : null}
-                <PhotoSlider
-                  height={370}
-                  photos={photos}
-                  resizeMode={CarImgReal ? 'cover' : null}
-                  paginationStyle={{marginBottom: 35}}
-                  dotColor={CarImgReal ? '#fff' : null}
-                  onPressItem={this.onPressPhoto}
-                  onIndexChanged={this.onChangePhotoIndex}
-                />
+                <View style={{marginBottom: 10, flexShrink: 1}}>
+                  <Text style={{fontSize: 16, fontWeight: '600'}}>
+                    {`${brandName} ${modelName}`}
+                  </Text>
+                  <Text style={{fontSize: 11, fontWeight: '600'}}>
+                    {get(carDetails, 'complectation.name', '') +
+                      ' ' +
+                      get(carDetails, 'year')}
+                  </Text>
+                </View>
+                {this.renderPrice({carDetails, filterData, currency})}
               </View>
 
-              <View
-                style={[
-                  styleConst.shadow.light,
-                  {
-                    position: 'relative',
-                    marginTop: CarImgReal ? 335 : 335,
-                    marginBottom: -5,
-                    backgroundColor: '#fff',
-                    borderTopLeftRadius: 30,
-                    borderTopRightRadius: 30,
-                    paddingTop: 20,
-                    paddingBottom: 14,
-                    zIndex: 30,
-                  },
-                ]}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                bounces={true}
+                ref={(ref) => {
+                  this.platesScrollView = ref;
+                }}>
                 <View
                   style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    justifyContent: 'space-between',
                     paddingHorizontal: '2%',
+                    marginBottom: 10,
                   }}>
-                  <View style={{marginBottom: 10, flexShrink: 1}}>
-                    <Text style={{fontSize: 16, fontWeight: '600'}}>
-                      {`${brandName} ${modelName}`}
-                    </Text>
-                    <Text style={{fontSize: 11, fontWeight: '600'}}>
-                      {get(carDetails, 'complectation.name', '') +
-                        ' ' +
-                        get(carDetails, 'year')}
-                    </Text>
-                  </View>
-                  {this.renderPrice({carDetails, filterData, currency})}
+                  <OptionPlate
+                    title={strings.NewCarItemScreen.plates.complectation}
+                    subtitle={get(carDetails, 'complectation.name')}
+                  />
+                  {get(carDetails, 'engine.id') &&
+                  get(carDetails, 'engine.id') !== 4 ? (
+                    <OptionPlate
+                      title={strings.NewCarItemScreen.plates.engine}
+                      subtitle={
+                        get(carDetails, 'engine.volume.short').toFixed(1) +
+                        ' л. ' +
+                        get(carDetails, 'engine.type')
+                      }
+                    />
+                  ) : null}
+                  <OptionPlate
+                    title={strings.NewCarItemScreen.plates.gearbox.name}
+                    subtitle={`${
+                      get(carDetails, 'gearbox.count')
+                        ? get(carDetails, 'gearbox.count') + '-ст.'
+                        : ''
+                    } ${
+                      get(carDetails, 'gearbox.name')
+                        .replace(/^(Механическая)/i, 'МКПП')
+                        .replace(/^(Автоматическая)/i, 'АКПП')
+                        .split('/')[0]
+                    }`}
+                  />
+                  {get(carDetails, 'gearbox.wheel') ? (
+                    <OptionPlate
+                      title={strings.NewCarItemScreen.plates.wheel}
+                      subtitle={get(carDetails, 'gearbox.wheel').toLowerCase()}
+                    />
+                  ) : null}
+                  {get(carDetails, 'color.name.simple') ? (
+                    <OptionPlate
+                      onPress={() => {
+                        this.ColorBox.click();
+                      }}
+                      title={strings.NewCarItemScreen.plates.color}
+                      subtitle={get(
+                        carDetails,
+                        'color.name.simple',
+                      ).toLowerCase()}
+                    />
+                  ) : null}
                 </View>
-
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  bounces={true}
-                  ref={(ref) => {
-                    this.platesScrollView = ref;
-                  }}>
-                  <View
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      paddingHorizontal: '2%',
-                      marginBottom: 10,
-                    }}>
-                    <OptionPlate
-                      title={strings.NewCarItemScreen.plates.complectation}
-                      subtitle={get(carDetails, 'complectation.name')}
+              </ScrollView>
+              {get(carDetails, 'location.coords') ? (
+                <TouchableWithoutFeedback
+                  onPress={this.onPressMap}
+                  style={styles.mapCard}>
+                  <View style={styles.mapCardContainer}>
+                    <Icon
+                      type="MaterialCommunityIcons"
+                      name="map-marker-outline"
+                      style={styles.mapCardIcon}
                     />
-                    {get(carDetails, 'engine.id') &&
-                    get(carDetails, 'engine.id') !== 4 ? (
-                      <OptionPlate
-                        title={strings.NewCarItemScreen.plates.engine}
-                        subtitle={
-                          get(carDetails, 'engine.volume.short').toFixed(1) +
-                          ' л. ' +
-                          get(carDetails, 'engine.type')
-                        }
-                      />
-                    ) : null}
-                    <OptionPlate
-                      title={strings.NewCarItemScreen.plates.gearbox.name}
-                      subtitle={`${
-                        get(carDetails, 'gearbox.count')
-                          ? get(carDetails, 'gearbox.count') + '-ст.'
-                          : ''
-                      } ${
-                        get(carDetails, 'gearbox.name')
-                          .replace(/^(Механическая)/i, 'МКПП')
-                          .replace(/^(Автоматическая)/i, 'АКПП')
-                          .split('/')[0]
-                      }`}
-                    />
-                    {get(carDetails, 'gearbox.wheel') ? (
-                      <OptionPlate
-                        title={strings.NewCarItemScreen.plates.wheel}
-                        subtitle={get(
+                    <View style={styles.mapCardTextContainer}>
+                      <Text style={styles.mapCardTitle}>
+                        {strings.NewCarItemScreen.carLocation}
+                      </Text>
+                      <Text
+                        style={styles.mapCardDealer}
+                        numberOfLines={1}
+                        ellipsizeMode="tail">
+                        {`${get(carDetails, 'location.city.name')}, ${get(
                           carDetails,
-                          'gearbox.wheel',
-                        ).toLowerCase()}
-                      />
-                    ) : null}
-                    {get(carDetails, 'color.name.simple') ? (
-                      <OptionPlate
-                        onPress={() => {
-                          this.ColorBox.click();
-                        }}
-                        title={strings.NewCarItemScreen.plates.color}
-                        subtitle={get(
-                          carDetails,
-                          'color.name.simple',
-                        ).toLowerCase()}
-                      />
-                    ) : null}
-                  </View>
-                </ScrollView>
-                {get(carDetails, 'location.coords') ? (
-                  <TouchableWithoutFeedback
-                    onPress={this.onPressMap}
-                    style={styles.mapCard}>
-                    <View style={styles.mapCardContainer}>
-                      <Icon
-                        type="MaterialCommunityIcons"
-                        name="map-marker-outline"
-                        style={styles.mapCardIcon}
-                      />
-                      <View style={styles.mapCardTextContainer}>
-                        <Text style={styles.mapCardTitle}>
-                          {strings.NewCarItemScreen.carLocation}
-                        </Text>
-                        <Text
-                          style={styles.mapCardDealer}
-                          numberOfLines={1}
-                          ellipsizeMode="tail">
-                          {`${get(carDetails, 'location.city.name')}, ${get(
-                            carDetails,
-                            'location.name',
-                          )}`}
-                        </Text>
-                      </View>
+                          'location.name',
+                        )}`}
+                      </Text>
                     </View>
-                  </TouchableWithoutFeedback>
-                ) : null}
-              </View>
-
-              <Accordion
-                style={{
-                  borderBottomColor: '#d5d5e0',
-                  borderBottomWidth: 1,
-                  marginBottom: 140,
-                }}
-                dataArray={[
-                  {
-                    title: strings.NewCarItemScreen.tech.title,
-                    content: (
-                      <View>
-                        {this.renderTechData(
-                          strings.NewCarItemScreen.tech.base,
-                          [
-                            {
-                              name: strings.NewCarItemScreen.tech.body.type,
-                              value: 'body.name',
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.year,
-                              value: 'year',
-                            },
-                          ],
-                        )}
-                        {this.renderTechData(
-                          strings.NewCarItemScreen.tech.engine.title,
-                          [
-                            {
-                              name: strings.NewCarItemScreen.tech.engine.type,
-                              value: 'engine.type',
-                            },
-                            (() => {
-                              if (
-                                get(carDetails, 'engine.id') &&
-                                get(carDetails, 'engine.id') === 4
-                              ) {
-                                return false;
-                              }
-                              return {
-                                name:
-                                  strings.NewCarItemScreen.tech.engine.volume,
-                                value: 'engine.volume.full',
-                                postfix: 'см³',
-                              };
-                            })(),
-                            {
-                              name:
-                                strings.NewCarItemScreen.tech.engine.power.hp,
-                              value: 'power.hp',
-                              postfix: strings.NewCarItemScreen.shortUnits.hp,
-                            },
-                          ],
-                        )}
-                        {this.renderTechData(
-                          strings.NewCarItemScreen.tech.gearbox.title,
-                          [
-                            {
-                              name: strings.NewCarItemScreen.tech.gearbox.type,
-                              value: 'gearbox.name',
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.gearbox.count,
-                              value: 'gearbox.count',
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.gearbox.wheel,
-                              value: 'gearbox.wheel',
-                            },
-                          ],
-                        )}
-                        {this.renderTechData(
-                          strings.NewCarItemScreen.tech.body.title,
-                          [
-                            {
-                              name: strings.NewCarItemScreen.tech.body.width,
-                              value: 'body.width',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.milimetrs,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.body.height,
-                              value: 'body.height',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.milimetrs,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.body.high,
-                              value: 'body.high',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.milimetrs,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.body.clirens,
-                              value: 'body.clirens',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.milimetrs,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.body.trunk,
-                              value: 'body.trunk.min',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.litres,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.body.fuel,
-                              value: 'fuel.fuel',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.litres,
-                            },
-                          ],
-                        )}
-                        {this.renderTechData(
-                          strings.NewCarItemScreen.techData.title,
-                          [
-                            {
-                              name: strings.NewCarItemScreen.techData.maxSpeed,
-                              value: 'speed.max',
-                              postfix: 'км/ч.',
-                            },
-                            {
-                              name: strings.NewCarItemScreen.techData.dispersal,
-                              value: 'speed.dispersal',
-                              postfix: 'сек.',
-                            },
-                            {
-                              name: strings.NewCarItemScreen.techData.fuel.city,
-                              value: 'fuel.city',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.litres,
-                            },
-                            {
-                              name:
-                                strings.NewCarItemScreen.techData.fuel.track,
-                              value: 'fuel.track',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.litres,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.techData.fuel.both,
-                              value: 'fuel.both',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.litres,
-                            },
-                          ],
-                        )}
-                      </View>
-                    ),
-                  },
-                  {
-                    title: strings.NewCarItemScreen.complectation.title,
-                    content: (
-                      <View style={styles.tabContent}>
-                        {stockKeys.length ? (
-                          <View>
-                            {stockKeys.map((key) => {
-                              return this.renderComplectationItem(
-                                stock[key].name,
-                                stock[key].data,
-                              );
-                            })}
-                          </View>
-                        ) : null}
-
-                        {additionalKeys.length ? (
-                          <View>
-                            {additionalKeys.map((key) => {
-                              return this.renderComplectationItem(
-                                additional[key].name,
-                                additional[key].data,
-                              );
-                            })}
-                          </View>
-                        ) : null}
-
-                        {carDetails.text ? (
-                          <View style={styles.descrContainer}>
-                            <Text style={styles.descr}>{carDetails.text}</Text>
-                          </View>
-                        ) : null}
-                      </View>
-                    ),
-                  },
-                ]}
-                expanded={0}
-                animation={true}
-                renderHeader={(item, expanded) => (
-                  <View
-                    style={{
-                      height: 64,
-                      paddingHorizontal: '2%',
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      backgroundColor: '#fff',
-                      borderTopWidth: 0.75,
-                      borderColor: '#d5d5e0',
-                    }}>
-                    <Text style={{fontSize: 18}}>{item.title}</Text>
-                    {expanded ? (
-                      <Icon
-                        type="FontAwesome5"
-                        style={{color: '#0061ED', fontWeight: 'normal'}}
-                        name="angle-down"
-                      />
-                    ) : (
-                      <Icon
-                        type="FontAwesome5"
-                        style={{color: '#131314', fontWeight: 'normal'}}
-                        name="angle-right"
-                      />
-                    )}
                   </View>
-                )}
-                renderContent={(item) => {
-                  return (
-                    <View
-                      style={{
-                        // height: 200,
-                        backgroundColor: '#fff',
-                        paddingHorizontal: '3%',
-                      }}>
-                      {item.content}
-                    </View>
-                  );
-                }}
-              />
+                </TouchableWithoutFeedback>
+              ) : null}
             </View>
-          </ScrollView>
+
+            <Accordion
+              style={{
+                borderBottomColor: '#d5d5e0',
+                borderBottomWidth: 1,
+                marginBottom: 140,
+              }}
+              dataArray={[
+                {
+                  title: strings.NewCarItemScreen.tech.title,
+                  content: (
+                    <View>
+                      {this.renderTechData(strings.NewCarItemScreen.tech.base, [
+                        {
+                          name: strings.NewCarItemScreen.tech.body.type,
+                          value: 'body.name',
+                        },
+                        {
+                          name: strings.NewCarItemScreen.tech.year,
+                          value: 'year',
+                        },
+                      ])}
+                      {this.renderTechData(
+                        strings.NewCarItemScreen.tech.engine.title,
+                        [
+                          {
+                            name: strings.NewCarItemScreen.tech.engine.type,
+                            value: 'engine.type',
+                          },
+                          (() => {
+                            if (
+                              get(carDetails, 'engine.id') &&
+                              get(carDetails, 'engine.id') === 4
+                            ) {
+                              return false;
+                            }
+                            return {
+                              name: strings.NewCarItemScreen.tech.engine.volume,
+                              value: 'engine.volume.full',
+                              postfix: 'см³',
+                            };
+                          })(),
+                          {
+                            name: strings.NewCarItemScreen.tech.engine.power.hp,
+                            value: 'power.hp',
+                            postfix: strings.NewCarItemScreen.shortUnits.hp,
+                          },
+                        ],
+                      )}
+                      {this.renderTechData(
+                        strings.NewCarItemScreen.tech.gearbox.title,
+                        [
+                          {
+                            name: strings.NewCarItemScreen.tech.gearbox.type,
+                            value: 'gearbox.name',
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.gearbox.count,
+                            value: 'gearbox.count',
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.gearbox.wheel,
+                            value: 'gearbox.wheel',
+                          },
+                        ],
+                      )}
+                      {this.renderTechData(
+                        strings.NewCarItemScreen.tech.body.title,
+                        [
+                          {
+                            name: strings.NewCarItemScreen.tech.body.width,
+                            value: 'body.width',
+                            postfix:
+                              strings.NewCarItemScreen.shortUnits.milimetrs,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.body.height,
+                            value: 'body.height',
+                            postfix:
+                              strings.NewCarItemScreen.shortUnits.milimetrs,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.body.high,
+                            value: 'body.high',
+                            postfix:
+                              strings.NewCarItemScreen.shortUnits.milimetrs,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.body.clirens,
+                            value: 'body.clirens',
+                            postfix:
+                              strings.NewCarItemScreen.shortUnits.milimetrs,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.body.trunk,
+                            value: 'body.trunk.min',
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.body.fuel,
+                            value: 'fuel.fuel',
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
+                          },
+                        ],
+                      )}
+                      {this.renderTechData(
+                        strings.NewCarItemScreen.techData.title,
+                        [
+                          {
+                            name: strings.NewCarItemScreen.techData.maxSpeed,
+                            value: 'speed.max',
+                            postfix: 'км/ч.',
+                          },
+                          {
+                            name: strings.NewCarItemScreen.techData.dispersal,
+                            value: 'speed.dispersal',
+                            postfix: 'сек.',
+                          },
+                          {
+                            name: strings.NewCarItemScreen.techData.fuel.city,
+                            value: 'fuel.city',
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.techData.fuel.track,
+                            value: 'fuel.track',
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.techData.fuel.both,
+                            value: 'fuel.both',
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
+                          },
+                        ],
+                      )}
+                    </View>
+                  ),
+                },
+                {
+                  title: strings.NewCarItemScreen.complectation.title,
+                  content: (
+                    <View style={styles.tabContent}>
+                      {stockKeys.length ? (
+                        <View>
+                          {stockKeys.map((key) => {
+                            return this.renderComplectationItem(
+                              stock[key].name,
+                              stock[key].data,
+                            );
+                          })}
+                        </View>
+                      ) : null}
+
+                      {additionalKeys.length ? (
+                        <View>
+                          {additionalKeys.map((key) => {
+                            return this.renderComplectationItem(
+                              additional[key].name,
+                              additional[key].data,
+                            );
+                          })}
+                        </View>
+                      ) : null}
+
+                      {carDetails.text ? (
+                        <View style={styles.descrContainer}>
+                          <Text style={styles.descr}>{carDetails.text}</Text>
+                        </View>
+                      ) : null}
+                    </View>
+                  ),
+                },
+              ]}
+              expanded={[0]}
+              animation={true}
+              renderHeader={(item, expanded) => (
+                <View
+                  style={{
+                    height: 64,
+                    paddingHorizontal: '2%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    backgroundColor: '#fff',
+                    borderTopWidth: 0.75,
+                    borderColor: '#d5d5e0',
+                  }}>
+                  <Text style={{fontSize: 18}}>{item.title}</Text>
+                  {expanded ? (
+                    <Icon
+                      type="FontAwesome5"
+                      style={{color: '#0061ED', fontWeight: 'normal'}}
+                      name="angle-down"
+                    />
+                  ) : (
+                    <Icon
+                      type="FontAwesome5"
+                      style={{color: '#131314', fontWeight: 'normal'}}
+                      name="angle-right"
+                    />
+                  )}
+                </View>
+              )}
+              renderContent={(item) => {
+                return (
+                  <View
+                    style={{
+                      // height: 200,
+                      backgroundColor: '#fff',
+                      paddingHorizontal: '3%',
+                    }}>
+                    {item.content}
+                  </View>
+                );
+              }}
+            />
+          </View>
           <View style={[styleConst.shadow.default, stylesFooter.footer]}>
             {this.renderPriceFooter({
               carDetails,
@@ -1091,7 +1079,7 @@ class NewCarItemScreen extends Component {
               onPressClose={this.onClosePhoto}
             />
           ) : null}
-        </View>
+        </ScrollView>
       </StyleProvider>
     );
   }
