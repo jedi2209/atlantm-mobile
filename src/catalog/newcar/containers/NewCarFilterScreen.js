@@ -642,7 +642,7 @@ class NewCarFilterScreen extends Component {
           <StatusBar barStyle="dark-content" />
           <Accordion
             dataArray={filtersContent}
-            expanded={0}
+            expanded={[0]}
             renderHeader={(item, expanded) => (
               <View
                 style={{
