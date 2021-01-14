@@ -8,8 +8,6 @@ import {
   ActivityIndicator,
   Platform,
   StatusBar,
-  TouchableWithoutFeedback,
-  Alert,
 } from 'react-native';
 
 import {Text, Button, Switch, Toast} from 'native-base';
@@ -27,6 +25,8 @@ import TextInputMask from 'react-native-text-input-mask';
 import DealerItemList from '../DealerItemList';
 
 import styleConst from '../../style-const';
+
+import strings from '../../lang/const';
 
 const styles = StyleSheet.create({
   group: {
@@ -140,7 +140,7 @@ const MaskedPhone = {
 class Form extends Component {
   static defaultProps = {
     SubmitButton: {
-      text: 'Отправить',
+      text: strings.Form.button.send,
       props: {},
     },
     barStyle: 'light-content',
@@ -301,9 +301,11 @@ class Form extends Component {
       if (requredLabels.length > 1) {
         Toast.show({
           text:
-            'Поля\r\n- ' +
+            strings.Form.status.fieldsRequired1 +
+            '\r\n- ' +
             requredLabels.join('\r\n- ') +
-            '\r\n\r\nобязательны для заполнения',
+            '\r\n\r\n' +
+            strings.Form.status.fieldsRequired2,
           position: 'bottom',
           duration: 3000,
           type: 'warning',
@@ -311,7 +313,11 @@ class Form extends Component {
       } else {
         Toast.show({
           text:
-            'Поле "' + requredLabels.join(' ') + '" обязательно для заполнения',
+            strings.Form.status.fieldRequired1 +
+            ' "' +
+            requredLabels.join(' ') +
+            '" ' +
+            strings.Form.status.fieldRequired2,
           position: 'bottom',
           duration: 3000,
           type: 'warning',
@@ -578,7 +584,7 @@ class Form extends Component {
             ref={this.inputRefs[groupNum + 'Input' + num]}
             label={label + (data.props && data.props.required ? '*' : '')}
             locale="ru-RU"
-            confirmBtnText="выбрать"
+            confirmBtnText={strings.Base.cancel.toLowerCase()}
             value={this.state[name] || null}
             isActive={this.state.active[name] || false}
             onPressButton={() => {
@@ -708,7 +714,7 @@ class Form extends Component {
           </Text>
           <RNPickerSelect
             key={'rnYearPicker' + num + name}
-            doneText="Выбрать"
+            doneText={strings.Base.cancel}
             onDonePress={() => {
               this._nextInput(groupNum, num);
             }}
@@ -828,8 +834,8 @@ class Form extends Component {
             countriesList={require('../../../utils/countries.json')}
             offset={20}
             autoFormat={true}
-            cancelText="Отмена"
-            confirmText="Выбрать"
+            cancelText={strings.Base.cancel}
+            confirmText={strings.Base.choose}
             onSelectCountry={(countryCode) => {
               if (id) {
                 this.setState((prevState) => {
@@ -983,7 +989,7 @@ class Form extends Component {
           <RNPickerSelect
             key={'rnpicker' + num + name}
             ref={this.inputRefs[groupNum + 'Input' + num]}
-            doneText="Выбрать"
+            doneText={strings.Base.cancel}
             onDonePress={() => {
               if (data.props.focusNextInput) {
                 this._nextInput(groupNum, num);

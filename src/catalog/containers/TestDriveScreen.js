@@ -658,7 +658,7 @@ class TestDriveScreen extends PureComponent {
             <Form
               fields={this.FormConfig.fields}
               barStyle={'light-content'}
-              SubmitButton={{text: 'Отправить'}}
+              SubmitButton={{text: strings.Form.button.send}}
               onSubmit={this.onPressOrder}
             />
           </Content>

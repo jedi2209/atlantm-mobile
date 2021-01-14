@@ -4,7 +4,7 @@ import {View, Platform, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import styleConst from '../style-const';
 import RNPickerSelect from 'react-native-picker-select';
-import RNRestart from 'react-native-restart';
+// import RNRestart from 'react-native-restart';
 import {actionSetGlobalLanguage} from '../../core/lang/actions';
 import strings from '../../core/lang/const';
 
@@ -27,8 +27,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 });
-
-const isAndroid = Platform.OS === 'android';
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
@@ -70,21 +68,17 @@ const LangSwitcher = (props) => {
       value = 'ru';
     }
     props.actionSetGlobalLanguage(value);
-    if (!isAndroid) {
-      strings.setLanguage(value);
-    } else {
-      setTimeout(() => {
-        RNRestart.Restart();
-      }, 500);
-    }
+    strings.setLanguage(value);
+    // if (!isAndroid) {
+    //   strings.setLanguage(value);
+    // } else {
+    //   setTimeout(() => {
+    //     RNRestart.Restart();
+    //   }, 500);
+    // }
   };
 
-  const _onDonePress = (val) => {
-    strings.setLanguage('ua');
-    if (!isAndroid) {
-      console.log('onDonePress', val);
-    }
-  };
+  const _onDonePress = () => {};
 
   const _onClose = (value) => {
     console.log('_onClose', value);
@@ -95,7 +89,7 @@ const LangSwitcher = (props) => {
       <RNPickerSelect
         key={'rnpickerLang'}
         doneText={strings.Picker.choose}
-        onDonePress={() => _onDonePress}
+        onDonePress={() => _onDonePress()}
         useNativeAndroidPickerStyle={false}
         onValueChange={(value) => _onValueChange(value)}
         onClose={() => _onClose}

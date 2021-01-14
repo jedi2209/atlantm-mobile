@@ -6,6 +6,9 @@ import styleConst from '../style-const';
 import strings from '../../core/lang/const';
 
 const styles = StyleSheet.create({
+  modalView: {
+    flex: 1,
+  },
   modalWindow: {
     backgroundColor: 'white',
     borderRadius: 5,
@@ -25,7 +28,7 @@ const ModalView = (props) => {
     // модалка с кнопкой закрытия
     return (
       <Modal
-        style={{flex: 1}}
+        style={styles.modalView}
         useNativeDriver={true}
         isVisible={props.isModalVisible}
         onSwipeComplete={props.onHide}
@@ -46,7 +49,7 @@ const ModalView = (props) => {
               title={
                 props.cancelBtnText
                   ? props.cancelBtnText
-                  : strings.ModalView.cancel
+                  : strings.Base.cancel.toLowerCase()
               }
               onPress={props.onHide}
             />
@@ -59,7 +62,7 @@ const ModalView = (props) => {
     return (
       <View onPress={props.onHide}>
         <Modal
-          style={{flex: 1}}
+          style={styles.modalView}
           useNativeDriver={true}
           isVisible={props.isModalVisible}
           onBackButtonPress={props.onHide}

@@ -70,6 +70,8 @@ function region(state = BELARUSSIA, action) {
       return get(action.payload, 'dealer.region', BELARUSSIA);
     case DEALERS_REGION__SELECT:
       return action.payload;
+    case DEALER__SUCCESS:
+      return action.payload.newDealer.region;
     default:
       return state;
   }

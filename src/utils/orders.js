@@ -1,11 +1,10 @@
 import {Platform} from 'react-native';
-import {ORDERS} from '../core/const';
 import {get} from 'lodash';
 import {store} from '../core/store';
 import strings from '../core/lang/const';
 
 export default async function getOrders(type = 'default') {
-  const storeState = store.getState();
+  let storeState = store.getState();
   let tmpArr = [];
   let res = {
     android: {
@@ -15,6 +14,34 @@ export default async function getOrders(type = 'default') {
     ios: {
       BUTTONS: [],
       CANCEL_INDEX: 0,
+    },
+  };
+  let ORDERS = {
+    android: {
+      TITLE: 'Заявки',
+      BUTTONS: [
+        {
+          priority: 15,
+          id: 'cancel',
+          text: strings.Base.cancel,
+          icon: 'close',
+          iconColor: 'red',
+        },
+      ],
+      CANCEL_INDEX: 0,
+      // DESTRUCTIVE_INDEX: 4,
+    },
+    ios: {
+      TITLE: 'Заявки',
+      BUTTONS: [
+        {
+          priority: 15,
+          id: 'cancel',
+          text: strings.Base.cancel,
+        },
+      ],
+      CANCEL_INDEX: 0,
+      // DESTRUCTIVE_INDEX: 4,
     },
   };
   const divisions = get(storeState, 'dealer.selected.divisionTypes');
@@ -75,14 +102,14 @@ export default async function getOrders(type = 'default') {
       res.android.BUTTONS.push({
         priority: 2,
         id: 'orderService',
-        text: strings.ServiceScreen.title,
+        text: strings.UserCars.menu.service,
         icon: 'construct',
         iconColor: '#2c8ef4',
       });
       res.ios.BUTTONS.push({
         priority: 2,
         id: 'orderService',
-        text: '🛠 ' + strings.ServiceScreen.title,
+        text: '🛠 ' + strings.UserCars.menu.service,
       });
       tmpArr.push(2);
       res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 1;

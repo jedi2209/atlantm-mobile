@@ -7,6 +7,7 @@ import {Button, Footer, FooterTab} from 'native-base';
 
 // helpers
 import styleConst from '../../core/style-const';
+import strings from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   button: {
@@ -38,7 +39,7 @@ export default class ServiceButton extends PureComponent {
       <Footer>
         <FooterTab>
           <Button onPress={this.props.onPress} full style={styles.button}>
-            <Text style={styles.buttonText}>ОТПРАВИТЬ</Text>
+            <Text style={styles.buttonText}>{strings.Form.button.send}</Text>
             <Image
               source={require('../../core/components/CustomIcon/assets/arrow_right_white.png')}
               style={styles.buttonIcon}

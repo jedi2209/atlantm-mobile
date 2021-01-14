@@ -4,6 +4,7 @@ import {View, Text, StyleSheet} from 'react-native';
 
 // helpers
 import styleConst from '../../../core/style-const';
+import strings from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,7 +48,9 @@ export default class ReviewDealerAnswer extends Component {
   render() {
     return (
       <View style={[styleConst.shadow.default, styles.container]}>
-        <Text style={styles.title}>Ответ автоцентра</Text>
+        <Text style={styles.title}>
+          {strings.ReviewDealerAnswer.dealerAnswer}
+        </Text>
         <Text style={styles.text}>{this.props.text}</Text>
       </View>
     );

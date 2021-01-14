@@ -86,7 +86,6 @@ export default {
   },
   ModalView: {
     close: 'закрити',
-    cancel: 'скасувати',
   },
   PhotoViewer: {
     errorLoad: 'Не вдалося завантажити фото',
@@ -101,6 +100,7 @@ export default {
   CarCostScreen: {
     title: 'Оцінка мого авто',
     action: 'Оцінити мій автомобіль',
+    chooseFoto: 'Вибрати фото',
   },
   Notifications: {
     success: {
@@ -234,6 +234,7 @@ export default {
       litres: 'л.',
       milimetrs: 'мм.',
       hp: 'к.с.',
+      year: 'р.в',
     },
     complectation: {
       title: 'Комплектація',
@@ -314,6 +315,7 @@ export default {
     mainReview: 'Загальне враження',
     mainReview2: 'Наскільки в цілому ти задоволений?',
     addReview: 'Постав оцінку нашій роботі...',
+    approve: 'Я дозволяю публікувати мій відгук',
     Notifications: {
       success: {
         text: 'Твій відгук успішно відправлений!',
@@ -326,6 +328,9 @@ export default {
   ReviewScreen: {
     title: 'Відгук',
     rating: 'Рейтинг',
+  },
+  ReviewDealerAnswer: {
+    dealerAnswer: 'Відповідь автоцентру',
   },
   ReviewsFilterDateScreen: {
     title: 'Відгуки за період',
@@ -421,6 +426,8 @@ export default {
         text2: 'балів', // 0
         text3: 'Дізнайся більше про бонусну програму і накопичуй бали швидше!',
         giveMeMore: 'Хочу більше балів',
+        bonuses: 'бонусів', // 0
+        bonus: 'бонус', // 1
       },
       total: 'Всього',
       empty: {
@@ -455,9 +462,10 @@ export default {
       text: 'У тебе немає поточних автомобілів.',
     },
     menu: {
+      service: 'Записатися на сервіс',
       history: 'Історія обслуговування',
       makeCurrent: 'Зробити поточним',
-      addToArchive: 'Приховати в архів',
+      addToArchive: 'Відправити в архів',
     },
     Notifications: {
       success: {
@@ -507,7 +515,6 @@ export default {
         messageSent: 'Повідомлення успішно відправлено',
       },
     },
-    send: 'Відправити',
   },
   Form: {
     group: {
@@ -587,6 +594,57 @@ export default {
     },
     status: {
       carTestDriveSearch: 'шукаємо вільні автомобілі для тест-драйву',
+      fieldsRequired1: 'Поля',
+      fieldsRequired2: "є обов'язковими для заповнення",
+      fieldRequired1: 'Поле',
+      fieldRequired2: "є обов'язковим для заповнення",
+    },
+    button: {
+      send: 'Відправити',
+    },
+  },
+  Base: {
+    or: 'чи',
+    all: 'Всі',
+    cancel: 'Скасувати',
+    choose: 'Вибрати',
+  },
+  CarParams: {
+    engine: {
+      1: 'Бензин',
+      2: 'Дизель',
+      3: 'Гібрид',
+      4: 'Електро',
+      9: 'Бензиновый, Газ',
+      12: 'Газ',
+    },
+    gearbox: {
+      1: 'Механічна',
+      4: 'Автоматична',
+      11: 'DSG',
+      12: 'Робот',
+      13: 'Варіатор',
+    },
+    body: {
+      1: 'Хетчбэк',
+      2: 'Седан',
+      3: 'Универсал',
+      4: 'Купе',
+      5: 'Кабриолет',
+      6: 'Минивэн',
+      7: 'Фургон',
+      8: 'Пикап',
+      9: 'Внедорожник',
+      10: 'Кроссовер',
+      11: 'Микроавтобус',
+      12: 'Лифтбэк',
+      13: 'Шасси',
+      14: 'Автобус',
+    },
+    wheels: {
+      1: 'Полный',
+      3: 'Задний',
+      4: 'Передний',
     },
   },
 };

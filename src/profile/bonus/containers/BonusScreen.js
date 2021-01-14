@@ -382,7 +382,11 @@ class BonusScreen extends Component {
     if (this.props.dealerSelected.region !== 'by') {
       saldoCurr = get(bonus, 'saldo.convert.curr', null);
       if (!saldoCurr) {
-        saldoCurr = get(bonus, 'saldo.curr', 'бонусов');
+        saldoCurr = get(
+          bonus,
+          'saldo.curr',
+          strings.ProfileScreenInfo.bonus.current.bonuses,
+        );
       }
     }
     return (

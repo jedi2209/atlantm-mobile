@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {
-  SafeAreaView,
   Alert,
   View,
   StyleSheet,
@@ -344,7 +343,7 @@ class ReviewAddRatingStepScreen extends Component {
         <ListItem onPress={onPressHandler} style={stylesList.listItem}>
           <Body>
             <Label style={[stylesList.label, styles.publicAgreeText]}>
-              Я разрешаю опубликовать мой отзыв
+              {strings.ReviewAddRatingStepScreen.approve}
             </Label>
           </Body>
           <Right>

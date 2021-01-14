@@ -20,6 +20,7 @@ import {connect} from 'react-redux';
 import numberWithGap from '../../utils/number-with-gap';
 import showPrice from '../../utils/price';
 import styleConst from '../../core/style-const';
+import strings from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   container: {
@@ -321,7 +322,19 @@ class CarListItem extends Component {
     const complectation = get(car, 'complectation.name', '');
     const engineVolume = get(car, 'engine.volume.full');
     const mileage = get(car, 'mileage');
-    const gearbox = get(car, 'gearbox.name');
+
+    const gearboxId = get(car, 'gearbox.id');
+    let gearboxName = get(car, 'gearbox.name');
+    if (gearboxId) {
+      gearboxName = strings.CarParams.gearbox[gearboxId];
+    }
+
+    const engineId = get(car, 'engine.id');
+    let engineName = get(car, 'engine.type');
+    if (engineId) {
+      engineName = strings.CarParams.engine[engineId];
+    }
+
     const year = get(car, 'year');
     const ordered = get(car, 'ordered', 0);
     const idSAP = get(car, 'id.sap', null);
@@ -358,7 +371,7 @@ class CarListItem extends Component {
           <View style={[styles.titleContainer]}>
             {isNewCar ? (
               <View style={{flexDirection: 'row'}}>
-                <View style={{width: '12%', minWidth: 50,}}>
+                <View style={{width: '12%', minWidth: 50}}>
                   <BrandLogo
                     brand={get(car, 'brand.id')}
                     width={45}
@@ -383,9 +396,9 @@ class CarListItem extends Component {
                     {`${modelName || ''} ${complectation}`}
                   </Text>
                   {year ? (
-                    <Text
-                      style={styles.year}
-                      selectable={false}>{`${year} г.в.`}</Text>
+                    <Text style={styles.year} selectable={false}>
+                      {year + ' ' + strings.NewCarItemScreen.shortUnits.year}{' '}
+                    </Text>
                   ) : null}
                 </View>
               </View>
@@ -401,7 +414,9 @@ class CarListItem extends Component {
                   } ${complectation}`}
                 </Text>
                 {year ? (
-                  <Text style={styles.year}>{`${year} г.в.`}</Text>
+                  <Text style={styles.year}>
+                    {year + ' ' + strings.NewCarItemScreen.shortUnits.year}
+                  </Text>
                 ) : null}
               </>
             )}
@@ -469,14 +484,14 @@ class CarListItem extends Component {
                 selectable={false}
                 style={
                   CarImgReal ? styles.commonReal : styles.common
-                }>{`${car.engine.type}`}</Text>
+                }>{`${engineName.toLowerCase()}`}</Text>
             ) : null}
-            {gearbox ? (
+            {gearboxName ? (
               <Text
                 selectable={false}
                 style={
                   CarImgReal ? styles.commonReal : styles.common
-                }>{`${gearbox.toLowerCase()}`}</Text>
+                }>{`${gearboxName.toLowerCase()}`}</Text>
             ) : null}
             {idSAP && isNewCar ? (
               <Text style={CarImgReal ? styles.commonReal : styles.common}>

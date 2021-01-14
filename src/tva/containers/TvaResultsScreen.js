@@ -368,7 +368,7 @@ class TvaResultsScreen extends Component {
                         <ActivityIndicator color="#fff" />
                       ) : (
                         <Text style={styles.buttonText}>
-                          {strings.TvaResultsScreen.send}
+                          {strings.Form.button.send}
                         </Text>
                       )}
                     </Button>

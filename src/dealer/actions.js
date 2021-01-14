@@ -14,12 +14,17 @@ import {
   BRANDS__FAIL,
 } from './actionTypes';
 
-import {actionSetGlobalLanguage} from '../core/lang/actions';
+import {APP_LANG_SET} from '../core/lang/actionTypes';
+
 import strings from '../core/lang/const';
 
 import API from '../utils/api';
 
 import {RUSSIA, BELARUSSIA, UKRAINE} from '../core/const';
+
+import moment from 'moment';
+import 'moment/locale/ru';
+import 'moment/locale/uk';
 
 export const selectRegion = (region) => {
   return (dispatch) => {
@@ -76,10 +81,27 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
           );
         }
 
+        if (dealer && dealer.region) {
+          dispatch({
+            type: APP_LANG_SET,
+            payload: dealer.region,
+          });
+          strings.setLanguage(dealer.region);
+          switch (dealer.region) {
+            case 'ua':
+              moment.locale('uk');
+              break;
+            case 'ru':
+              moment.locale('ru');
+              break;
+            default:
+              moment.locale('ru');
+              break;
+          }
+        }
+
         if (!isLocal) {
           // обновляем дилера глобально
-          actionSetGlobalLanguage(dealer.region);
-          strings.setLanguage(dealer.region);
           return dispatch({
             type: DEALER__SUCCESS,
             payload: {
