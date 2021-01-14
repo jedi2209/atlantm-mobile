@@ -164,7 +164,7 @@ class ContactsScreen extends Component {
     if (this.sitesSubtitle.sites.length > 1) {
       this.sitesSubtitle.buttons.push({
         id: 'cancel',
-        text: strings.ModalView.cancel,
+        text: strings.Base.cancel.toLowerCase(),
       });
     }
   }
@@ -531,7 +531,7 @@ class ContactsScreen extends Component {
                         fontSize: 14,
                         paddingLeft: 24,
                       }}>
-                      Все
+                      {strings.Base.all}
                     </Text>
                   </View>
                   <Carousel

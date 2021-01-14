@@ -181,7 +181,7 @@ class MapScreen extends Component {
     const {availableNaviApps, actionSetAvailableNaviApps} = this.props;
 
     if (availableNaviApps.length === 0) {
-      actionSetAvailableNaviApps([strings.ModalView.cancel]);
+      actionSetAvailableNaviApps([strings.Base.cancel.toLowerCase()]);
     }
 
     return this.buildActionSheet(
@@ -204,7 +204,7 @@ class MapScreen extends Component {
 
     actionRequestCheckAvailableNaviApps();
 
-    const apps = [strings.ModalView.cancel];
+    const apps = [strings.Base.cancel.toLowerCase()];
     const baseParams = {latitude, longitude};
 
     const checkAppAvailable = (name) => {

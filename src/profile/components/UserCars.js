@@ -67,7 +67,7 @@ const CarMenu = {
         },
         {
           id: 'cancel',
-          text: strings.ModalView.cancel,
+          text: strings.Base.cancel.toLowerCase(),
           icon: 'close',
           iconColor: 'red',
         },
@@ -85,7 +85,7 @@ const CarMenu = {
           id: 'hide',
           text: '📤 ' + strings.UserCars.menu.makeCurrent,
         },
-        {id: 'cancel', text: strings.ModalView.cancel},
+        {id: 'cancel', text: strings.Base.cancel.toLowerCase()},
       ],
       DESTRUCTIVE_INDEX: 1,
       CANCEL_INDEX: 2,

@@ -4,12 +4,12 @@ import {View, StatusBar} from 'react-native';
 // redux
 import {connect} from 'react-redux';
 import {actionSetPushActionSubscribe} from '../../core/actions';
+import {actionSetGlobalLanguage} from '../../core/lang/actions';
 // actions
 import {
   fetchDealers,
   fetchBrands,
   selectDealer,
-  selectRegion,
 } from '../actions';
 
 // components
@@ -42,8 +42,8 @@ const mapDispatchToProps = {
   fetchDealers,
   fetchBrands,
   selectDealer,
-  selectRegion,
   actionSetPushActionSubscribe,
+  actionSetGlobalLanguage,
 };
 
 class ChooseDealerScreen extends PureComponent {
@@ -72,6 +72,12 @@ class ChooseDealerScreen extends PureComponent {
   onSelectDealer = ({prevDealer, newDealer, isLocal}) => {
     const {pushActionSubscribeState} = this.props;
     // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
+
+    if (newDealer && newDealer.region) {
+      this.props.actionSetGlobalLanguage(newDealer.region);
+      strings.setLanguage(newDealer.region);
+    }
+
     if (!isLocal) {
       PushNotifications.addTag('dealer', newDealer.id);
       if (pushActionSubscribeState) {
@@ -94,7 +100,6 @@ class ChooseDealerScreen extends PureComponent {
       navigation,
       fetchDealers,
       fetchBrands,
-      selectRegion,
       selectDealer,
       dealerSelected,
       isFetchDealersList,
@@ -118,7 +123,6 @@ class ChooseDealerScreen extends PureComponent {
           listUkraine={listUkraine}
           listAll={listAll}
           listBelarussia={listBelarussia}
-          selectRegion={selectRegion}
           navigation={navigation}
           selectItem={selectDealer}
           returnScreen={returnScreen}

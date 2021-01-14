@@ -175,7 +175,11 @@ class ProfileScreenInfo extends Component {
 
     let saldoCurr = get(this.props.bonus, 'data.saldo.convert.curr', null);
     if (!saldoCurr) {
-      saldoCurr = get(this.props.bonus, 'data.saldo.curr', 'бонусов');
+      saldoCurr = get(
+        this.props.bonus,
+        'data.saldo.curr',
+        strings.ProfileScreenInfo.bonus.current.bonuses,
+      );
     }
     return (
       <SafeAreaView>
@@ -340,7 +344,9 @@ class ProfileScreenInfo extends Component {
                             ? saldoValue && saldoCurr
                               ? saldoCurr
                               : null
-                            : '1 бонус = 1 BYN'}
+                            : '1 ' +
+                              strings.ProfileScreenInfo.bonus.current.bonus +
+                              ' = 1 BYN'}
                         </Text>
                         {/* {this.props.dealerSelected.region === 'by' ? (
                           <Text
@@ -350,7 +356,7 @@ class ProfileScreenInfo extends Component {
                               fontWeight: '600',
                               marginTop: -10,
                             }}>
-                            1 бонус = 1 BYN
+                            ${'1 ' + strings.ProfileScreenInfo.bonus.current.bonus + ' = 1 BYN'}
                           </Text>
                         ) : null} */}
                       </View>

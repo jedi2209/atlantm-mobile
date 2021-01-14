@@ -87,7 +87,6 @@ export default {
   },
   ModalView: {
     close: 'закрыть',
-    cancel: 'отмена',
   },
   PhotoViewer: {
     errorLoad: 'Не удалось загрузить фото',
@@ -102,6 +101,7 @@ export default {
   CarCostScreen: {
     title: 'Оценка моего авто',
     action: 'Оценить мой автомобиль',
+    chooseFoto: 'Выбрать фото',
   },
   Notifications: {
     success: {
@@ -235,6 +235,7 @@ export default {
       litres: 'л.',
       milimetrs: 'мм.',
       hp: 'л.с.',
+      year: 'г.в.',
     },
     complectation: {
       title: 'Комплектация',
@@ -315,6 +316,7 @@ export default {
     mainReview: 'Общее впечатление',
     mainReview2: 'Насколько в целом вы удовлетворены?',
     addReview: 'Поставь оценку нашей работе...',
+    approve: 'Я разрешаю опубликовать мой отзыв',
     Notifications: {
       success: {
         text: 'Твой отзыв успешно отправлен!',
@@ -327,6 +329,9 @@ export default {
   ReviewScreen: {
     title: 'Отзыв',
     rating: 'Рейтинг',
+  },
+  ReviewDealerAnswer: {
+    dealerAnswer: 'Ответ автоцентра',
   },
   ReviewsFilterDateScreen: {
     title: 'Отзывы за период',
@@ -422,6 +427,8 @@ export default {
         text2: 'баллов', // 0
         text3: 'Узнай больше о бонусной программе и накапливай баллы быстрее!',
         giveMeMore: 'Хочу больше баллов',
+        bonuses: 'бонусов', // 0
+        bonus: 'бонус', // 1
       },
       total: 'Всего',
       empty: {
@@ -456,6 +463,7 @@ export default {
       text: 'У тебя нет текущих автомобилей.',
     },
     menu: {
+      service: 'Записаться на сервис',
       history: 'История обслуживания',
       makeCurrent: 'Сделать текущим',
       addToArchive: 'Скрыть в архив',
@@ -508,7 +516,6 @@ export default {
         messageSent: 'Сообщение успешно отправлено',
       },
     },
-    send: 'Отправить',
   },
   Form: {
     group: {
@@ -589,6 +596,57 @@ export default {
     },
     status: {
       carTestDriveSearch: 'ищем свободные автомобили для тест-драйва',
+      fieldsRequired1: 'Поля',
+      fieldsRequired2: 'обязательны для заполнения',
+      fieldRequired1: 'Поле',
+      fieldRequired2: 'обязательно для заполнения',
+    },
+    button: {
+      send: 'Отправить',
+    },
+  },
+  Base: {
+    or: 'или',
+    all: 'Все',
+    cancel: 'Отмена',
+    choose: 'Выбрать',
+  },
+  CarParams: {
+    engine: {
+      1: 'Бензин',
+      2: 'Дизель',
+      3: 'Гибрид',
+      4: 'Электро',
+      9: 'Бензиновый, Газ',
+      12: 'Газ',
+    },
+    gearbox: {
+      1: 'Механическая',
+      4: 'Автоматическая',
+      11: 'DSG',
+      12: 'Робот',
+      13: 'Вариатор',
+    },
+    body: {
+      1: 'Хетчбэк',
+      2: 'Седан',
+      3: 'Универсал',
+      4: 'Купе',
+      5: 'Кабриолет',
+      6: 'Минивэн',
+      7: 'Фургон',
+      8: 'Пикап',
+      9: 'Внедорожник',
+      10: 'Кроссовер',
+      11: 'Микроавтобус',
+      12: 'Лифтбэк',
+      13: 'Шасси',
+      14: 'Автобус',
+    },
+    wheels: {
+      1: 'Полный',
+      3: 'Задний',
+      4: 'Передний',
     },
   },
 };

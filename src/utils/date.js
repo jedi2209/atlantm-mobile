@@ -1,7 +1,21 @@
 import moment from 'moment';
 import 'moment/locale/ru';
+import 'moment/locale/uk';
+import strings from '../core/lang/const';
 
-moment.locale('ru');
+const currLang = strings.getLanguage();
+
+switch (currLang) {
+  case 'ua':
+    moment.locale('uk');
+    break;
+  case 'ru':
+    moment.locale('ru');
+    break;
+  default:
+    moment.locale('ru');
+    break;
+}
 
 // moment.js playground https://codepen.io/widmoser/pen/NNOQEx
 

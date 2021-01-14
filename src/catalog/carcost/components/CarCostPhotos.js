@@ -15,6 +15,8 @@ import ImagePicker from 'react-native-image-crop-picker';
 // helpers
 import PropTypes from 'prop-types';
 
+import strings from '../../../core/lang/const';
+
 const thumbs = [
   require('../assets/photo_car_1.png'),
   require('../assets/photo_car_2.png'),
@@ -194,8 +196,8 @@ export default class CarCostPhotos extends Component {
               ref={(component) =>
                 (this[`actionSheet${photoIndex}`] = component)
               }
-              title="Выбрать фото"
-              options={['Отмена', 'Галерея', 'Камера']}
+              title={strings.CarCostScreen.chooseFoto}
+              options={[strings.Base.cancel, 'Галерея', 'Камера']}
               onPress={this[`handlePhotoPress${photoIndex}`]}
             />
           );

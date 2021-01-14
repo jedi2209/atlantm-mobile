@@ -105,6 +105,7 @@ GoogleSignin.configure({
 
 import VKLogin from 'react-native-vkontakte-login';
 import {ScrollView} from 'react-native';
+import {string} from 'prop-types';
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -126,6 +127,7 @@ class ProfileScreen extends Component {
     this.requestManager = new GraphRequestManager();
     this.scrollRef = createRef();
     this.storeData = store.getState();
+    console.log('this.storeData', this.storeData);
   }
 
   CodeInput = [];
@@ -701,7 +703,7 @@ class ProfileScreen extends Component {
                         fontSize: 16,
                         lineHeight: 16,
                       }}>
-                      или
+                      {strings.Base.or}
                     </Text>
                     <View
                       style={{
@@ -772,26 +774,15 @@ class ProfileScreen extends Component {
                           this.phoneInput = ref;
                         }}
                         initialCountry={
-                          this.storeData.dealer.region
-                            ? this.storeData.dealer.region
+                          this.storeData.dealer.selected.region
+                            ? this.storeData.dealer.selected.region
                             : 'by'
                         }
                         countriesList={require('../../utils/countries.json')}
                         autoFormat={true}
-                        textStyle={{
-                          height: 40,
-                          paddingHorizontal: 14,
-                          fontSize: 18,
-                          letterSpacing: 3,
-                          borderColor: '#afafaf',
-                          borderWidth: 0.45,
-                          color: '#fff',
-                          backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                          width: '100%',
-                          borderRadius: 5,
-                        }}
+                        textStyle={styles.PhoneInput}
                         offset={20}
-                        cancelText={strings.ModalView.cancel}
+                        cancelText={strings.Base.cancel.toLowerCase()}
                         confirmText={strings.Picker.choose}
                         onChangePhoneNumber={this.onInputPhone}
                         // onSelectCountry={this._onSelectCountry}
@@ -822,14 +813,7 @@ class ProfileScreen extends Component {
                         onPress={this._verifyCodeStepTwo}
                         style={[
                           styleConst.shadow.default,
-                          {
-                            marginTop: 10,
-                            width: '80%',
-                            marginHorizontal: '10%',
-                            backgroundColor: '#34BD78',
-                            justifyContent: 'center',
-                            borderRadius: 5,
-                          },
+                          styles.ApproveButton,
                         ]}>
                         {this.state.loadingVerify ? (
                           <ActivityIndicator color="#fff" />
@@ -844,23 +828,13 @@ class ProfileScreen extends Component {
                         onPress={this._cancelVerify}
                         style={[
                           styleConst.shadow.default,
-                          {
-                            flex: 1,
-                            height: 25,
-                            width: '30%',
-                            marginHorizontal: '35%',
-                            backgroundColor: 'rgba(101, 101, 101, 0.4)',
-                            justifyContent: 'center',
-                            padding: 10,
-                            borderRadius: 5,
-                            marginTop: 20,
-                          },
+                          styles.CancelButton,
                         ]}>
                         {this.state.loadingVerify ? (
                           <ActivityIndicator color="#fff" />
                         ) : (
                           <Text style={{color: '#fff'}}>
-                            {strings.ModalView.cancel}
+                            {strings.Base.cancel.toLowerCase()}
                           </Text>
                         )}
                       </Button>
@@ -919,6 +893,37 @@ const styles = StyleSheet.create({
   SocialLoginBt: {
     marginVertical: 8,
     paddingHorizontal: 8,
+    justifyContent: 'center',
+    borderRadius: 5,
+  },
+  PhoneInput: {
+    height: 40,
+    paddingHorizontal: 14,
+    fontSize: 18,
+    letterSpacing: 3,
+    borderColor: '#afafaf',
+    borderWidth: 0.45,
+    color: '#fff',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    width: '100%',
+    borderRadius: 5,
+  },
+  CancelButton: {
+    flex: 1,
+    height: 30,
+    width: '30%',
+    marginHorizontal: '35%',
+    backgroundColor: 'rgba(101, 101, 101, 0.4)',
+    justifyContent: 'center',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  ApproveButton: {
+    marginTop: 10,
+    width: '80%',
+    marginHorizontal: '10%',
+    backgroundColor: '#34BD78',
     justifyContent: 'center',
     borderRadius: 5,
   },

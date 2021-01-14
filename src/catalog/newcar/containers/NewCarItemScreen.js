@@ -281,7 +281,7 @@ class NewCarItemScreen extends Component {
             },
           },
           {
-            text: strings.ModalView.cancel,
+            text: strings.Base.cancel.toLowerCase(),
             style: 'destructive',
           },
         ],
