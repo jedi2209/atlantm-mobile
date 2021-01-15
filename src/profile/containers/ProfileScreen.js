@@ -19,11 +19,21 @@ import PhoneInput from 'react-native-phone-input';
 import {store} from '../../core/store';
 import styleConst from '../../core/style-const';
 import LinearGradient from 'react-native-linear-gradient';
-import appleAuth, {
+
+// imports for auth
+import {
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+} from 'react-native-fbsdk';
+import {LoginManager} from 'react-native-fbsdk';
+
+import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
+
+import VKLogin from 'react-native-vkontakte-login';
+import {
+  appleAuth,
   AppleButton,
-  AppleAuthRequestOperation,
-  AppleAuthRequestScope,
-  AppleAuthCredentialState,
 } from '@invertase/react-native-apple-authentication';
 
 // redux
@@ -41,6 +51,8 @@ import Amplitude from '../../utils/amplitude-analytics';
 import strings from '../../core/lang/const';
 
 import {verticalScale} from '../../utils/scale';
+import {ScrollView} from 'react-native';
+import {string} from 'prop-types';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -79,17 +91,6 @@ const mapDispatchToProps = {
   actionSavePofileWithPhone,
 };
 
-// imports for auth
-import {
-  AccessToken,
-  GraphRequest,
-  GraphRequestManager,
-} from 'react-native-fbsdk';
-
-import {LoginManager} from 'react-native-fbsdk';
-
-import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
-
 GoogleSignin.configure({
   scopes: ['https://www.googleapis.com/auth/userinfo.email'], // what API you want to access on behalf of the user, default is email and profile
   webClientId:
@@ -102,10 +103,6 @@ GoogleSignin.configure({
   iosClientId:
     'XXXX-XXXX.apps.googleusercontent.com', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
 });
-
-import VKLogin from 'react-native-vkontakte-login';
-import {ScrollView} from 'react-native';
-import {string} from 'prop-types';
 
 class ProfileScreen extends Component {
   constructor(props) {
@@ -127,7 +124,6 @@ class ProfileScreen extends Component {
     this.requestManager = new GraphRequestManager();
     this.scrollRef = createRef();
     this.storeData = store.getState();
-    console.log('this.storeData', this.storeData);
   }
 
   CodeInput = [];
@@ -476,11 +472,8 @@ class ProfileScreen extends Component {
   _signInWithApple = async () => {
     // performs login request
     const appleAuthRequestResponse = await appleAuth.performRequest({
-      requestedOperation: AppleAuthRequestOperation.LOGIN,
-      requestedScopes: [
-        AppleAuthRequestScope.EMAIL,
-        AppleAuthRequestScope.FULL_NAME,
-      ],
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
     });
 
     // get current authentication state for user
@@ -490,7 +483,7 @@ class ProfileScreen extends Component {
     );
 
     // use credentialState response to ensure the user is authenticated
-    if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
+    if (credentialState === appleAuth.State.AUTHORIZED) {
       try {
         const profile = {
           id: appleAuthRequestResponse.user,
@@ -785,7 +778,6 @@ class ProfileScreen extends Component {
                         cancelText={strings.Base.cancel.toLowerCase()}
                         confirmText={strings.Picker.choose}
                         onChangePhoneNumber={this.onInputPhone}
-                        // onSelectCountry={this._onSelectCountry}
                         textProps={{
                           placeholderTextColor: '#afafaf',
                           placeholder: strings.Form.field.label.phone,

@@ -121,7 +121,7 @@ PODS:
   - GTMSessionFetcher/Core (1.5.0)
   - GTMSessionFetcher/Full (1.5.0):
     - GTMSessionFetcher/Core (= 1.5.0)
-  - OneSignal (2.16.1)
+  - OneSignal (3.1.0)
   - OpenSSL-Universal (1.0.2.20):
     - OpenSSL-Universal/Static (= 1.0.2.20)
   - OpenSSL-Universal/Static (1.0.2.20)
@@ -311,8 +311,8 @@ PODS:
     - React
   - react-native-maps (0.27.1):
     - React
-  - react-native-onesignal (3.9.3):
-    - OneSignal (= 2.16.1)
+  - react-native-onesignal (4.0.3):
+    - OneSignal (= 3.1.0)
     - React (< 1.0.0, >= 0.13.0)
   - react-native-restart (0.0.20):
     - React-Core
@@ -328,8 +328,8 @@ PODS:
   - react-native-vkontakte-login (1.0.1):
     - React
     - VK-ios-sdk
-  - react-native-webview (10.7.0):
-    - React
+  - react-native-webview (11.0.3):
+    - React-Core
   - React-RCTActionSheet (0.63.4):
     - React-Core/RCTActionSheetHeaders (= 0.63.4)
   - React-RCTAnimation (0.63.4):
@@ -394,15 +394,15 @@ PODS:
     - React
   - rn-fetch-blob (0.12.0):
     - React-Core
-  - RNAppleAuthentication (1.1.2):
-    - React
+  - RNAppleAuthentication (2.1.0):
+    - React-Core
   - RNCAsyncStorage (1.13.2):
     - React
   - RNCPicker (1.9.10):
     - React-Core
   - RNDateTimePicker (3.0.9):
     - React-Core
-  - RNDeviceInfo (7.4.0):
+  - RNDeviceInfo (8.0.0):
     - React-Core
   - RNGestureHandler (1.9.0):
     - React-Core
@@ -470,7 +470,7 @@ DEPENDENCIES:
   - Google-Maps-iOS-Utils
   - GoogleMaps
   - GoogleSignIn (~> 5.0.2)
-  - OneSignal (< 3.0, >= 2.9.3)
+  - OneSignal (< 4.0, >= 3.0)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - React (from `../node_modules/react-native/`)
@@ -689,7 +689,7 @@ SPEC CHECKSUMS:
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
   GTMAppAuth: 197a8dabfea5d665224aa00d17f164fc2248dab9
   GTMSessionFetcher: b3503b20a988c4e20cc189aa798fd18220133f52
-  OneSignal: 5f6514ec2b931306eb067acb124afbb2e49970af
+  OneSignal: a5853b3c7f7bce791353a15db019b5ccd5b8585b
   OpenSSL-Universal: ff34003318d5e1163e9529b08470708e389ffcdd
   RCTRequired: 082f10cd3f905d6c124597fd1c14f6f2655ff65e
   RCTTypeSafety: 8c9c544ecbf20337d069e4ae7fd9a377aadf504b
@@ -704,14 +704,14 @@ SPEC CHECKSUMS:
   react-native-fbsdk: 8e92c7a334fd8d9c2b5d8b8fcd7ae2c314161099
   react-native-google-maps: 0a989abda71059db2caa98b9dacca7a8f38a47d0
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
-  react-native-onesignal: f92b6fae16388422f1b5d73b2c31e7000f481ae8
+  react-native-onesignal: a69eeb12486e7739ed8f180e6ddd915be77721ba
   react-native-restart: a01029aadfe8e71f9e8205fdb17da2f0a4472d50
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-text-input-mask: 07227297075f9653315f43b0424d596423a01736
   react-native-viewpager: ea945e2881ce9a4a8bcdc84de4ec65ff23c90f6e
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
-  react-native-webview: 6edf4d6f71b9161fc3e96083726a538ee395304d
+  react-native-webview: 21fdfbdd5a2268195ca013174f8f656f3509de50
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
   React-RCTBlob: a97d378b527740cc667e03ebfa183a75231ab0f0
@@ -724,11 +724,11 @@ SPEC CHECKSUMS:
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   ReactNativeLocalization: dbb269b27d8a84bb22b9c2cdec38ba780b51dd72
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
-  RNAppleAuthentication: 473b2c076f1a48a537610580a168c1fb6d0a90c6
+  RNAppleAuthentication: 46cbc67739bae83ca229497f9b0038f3f5431443
   RNCAsyncStorage: 05bae7ecfab1cbd5441993f1ca098f7c3b3f8d0e
   RNCPicker: 77183d9b1cd80ae55505322f8ad09ba0036e29ba
   RNDateTimePicker: 8a51a2216c307769e69ef827293d59549ab1ca23
-  RNDeviceInfo: 9538a884f862fe4aa0d7cead9f34e292d41ba8f6
+  RNDeviceInfo: 87d2d175c760f6bcf58acd036f887e8b2392802c
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNImageCropPicker: 9e0bf18cf4184a846fed55747c8e622208b39947
@@ -745,6 +745,6 @@ SPEC CHECKSUMS:
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: f50c47dc50bff03766a5374b3b3436e0adcfff40
+PODFILE CHECKSUM: 5424bdbfa9d5cd26e5a07b96aa9ba416cf445aab
 
 COCOAPODS: 1.10.0

@@ -14,11 +14,9 @@ import {AccessToken, GraphRequestManager} from 'react-native-fbsdk';
 import {LoginManager} from 'react-native-fbsdk';
 import VKLogin from 'react-native-vkontakte-login';
 import {GoogleSignin} from '@react-native-community/google-signin';
-import appleAuth, {
+import {
+  appleAuth,
   AppleButton,
-  AppleAuthRequestOperation,
-  AppleAuthRequestScope,
-  AppleAuthCredentialState,
 } from '@invertase/react-native-apple-authentication';
 
 GoogleSignin.configure({
@@ -189,11 +187,8 @@ class SocialAuth extends PureComponent {
   _signInWithApple = async () => {
     // performs login request
     const appleAuthRequestResponse = await appleAuth.performRequest({
-      requestedOperation: AppleAuthRequestOperation.LOGIN,
-      requestedScopes: [
-        AppleAuthRequestScope.EMAIL,
-        AppleAuthRequestScope.FULL_NAME,
-      ],
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
     });
 
     // get current authentication state for user
@@ -203,7 +198,7 @@ class SocialAuth extends PureComponent {
     );
 
     // use credentialState response to ensure the user is authenticated
-    if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
+    if (credentialState === appleAuth.State.AUTHORIZED) {
       try {
         const im = {VALUE: appleAuthRequestResponse.user, VALUE_TYPE: 'apple'};
         this.props.connectSocialMedia({profile: this.props.login, im});
