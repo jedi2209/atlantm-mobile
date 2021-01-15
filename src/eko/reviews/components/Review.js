@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {View, Text, StyleSheet} from 'react-native';
 import {Icon, ListItem, Body, Right} from 'native-base';
+import {decode} from 'html-entities';
 
 // components
 import RatingStars from './RatingStars';
@@ -9,9 +10,6 @@ import RatingStars from './RatingStars';
 // helpers
 import {dayMonthYear} from '../../../utils/date';
 import styleConst from '../../../core/style-const';
-
-const Entities = require('html-entities').XmlEntities;
-const entities = new Entities();
 
 const styles = StyleSheet.create({
   itemFull: {
@@ -157,7 +155,7 @@ export default class Review extends Component {
     const {inList} = this.props;
     const isPlus = type === 'plus';
 
-    text = entities.decode(text);
+    text = decode(text, {level: 'xml'});
 
     return (
       <View

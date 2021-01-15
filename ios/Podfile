@@ -38,7 +38,7 @@ target 'atlantm' do
 end
 
 target 'OneSignalNotificationServiceExtension' do
-  pod 'OneSignal', '>= 2.9.3', '< 3.0'
+  pod 'OneSignal', '>= 3.0', '< 4.0'
 end
 
 target 'atlantm-tvOS' do
