@@ -6,11 +6,7 @@ import {connect} from 'react-redux';
 import {actionSetPushActionSubscribe} from '../../core/actions';
 import {actionSetGlobalLanguage} from '../../core/lang/actions';
 // actions
-import {
-  fetchDealers,
-  fetchBrands,
-  selectDealer,
-} from '../actions';
+import {fetchDealers, fetchBrands, fetchCities, selectDealer} from '../actions';
 
 // components
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
