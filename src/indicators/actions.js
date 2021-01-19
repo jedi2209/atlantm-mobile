@@ -16,11 +16,11 @@ export const actionSetActiveIndicator = (item) => {
   };
 };
 
-export const actionFetchIndicators = () => {
+export const actionFetchIndicators = (region) => {
   return (dispatch) => {
     dispatch({type: INDICATORS__REQUEST});
 
-    return API.fetchIndicators()
+    return API.fetchIndicators(region)
       .then((res) => {
         const {error, status, data} = res;
 
