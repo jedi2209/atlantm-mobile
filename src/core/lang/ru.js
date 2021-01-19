@@ -180,6 +180,7 @@ export default {
     show: 'посмотреть',
     plates: {
       complectation: 'Комплектация',
+      mileage: 'Пробег',
       engine: 'Двигатель',
       gearbox: {
         name: 'КПП',
@@ -239,6 +240,8 @@ export default {
     },
     complectation: {
       title: 'Комплектация',
+      main: 'Заводская комплектация',
+      additional: 'Дополнительные опции',
     },
     testDrive: 'тест-драйв',
     wannaCar: 'хочу это авто!',
@@ -252,9 +255,6 @@ export default {
   UserCarItemScreen: {
     showFull: 'Показать полное описание...',
     showLess: 'Свернуть',
-    plates: {
-      mileage: 'Пробег',
-    },
     creditCalculate: 'рассчитать кредит',
     myPrice: 'предложить\r\nсвою цену',
   },

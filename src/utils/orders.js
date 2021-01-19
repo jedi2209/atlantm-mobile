@@ -23,7 +23,7 @@ export default async function getOrders(type = 'default') {
         {
           priority: 15,
           id: 'cancel',
-          text: strings.Base.cancel,
+          text: strings.Base.cancel.toLowerCase(),
           icon: 'close',
           iconColor: 'red',
         },
@@ -37,7 +37,7 @@ export default async function getOrders(type = 'default') {
         {
           priority: 15,
           id: 'cancel',
-          text: strings.Base.cancel,
+          text: strings.Base.cancel.toLowerCase(),
         },
       ],
       CANCEL_INDEX: 0,
