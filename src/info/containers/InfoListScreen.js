@@ -171,10 +171,13 @@ class InfoListScreen extends Component {
           this.props.navigation.setParams({
             pushActionSubscribeState: isPermission,
           });
+          if (isPermission) {
+            title = strings.Notifications.success.title;
+            text = strings.Notifications.success.textPush;
+            Alert.alert(title, text);
+          }
         },
       );
-      title = strings.Notifications.success.title;
-      text = strings.Notifications.success.textPush;
     } else {
       PushNotifications.unsubscribeFromTopic('actions');
       actionSetPushActionSubscribe(false);
@@ -183,8 +186,8 @@ class InfoListScreen extends Component {
       });
       title = strings.Notifications.success.titleSad;
       text = strings.Notifications.success.textPushSad;
+      Alert.alert(title, text);
     }
-    Alert.alert(title, text);
   };
 
   componentDidMount() {
