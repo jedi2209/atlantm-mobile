@@ -15,6 +15,9 @@ import {
   BRANDS__REQUEST,
   BRANDS__SUCCESS,
   BRANDS__FAIL,
+  CITIES__REQUEST,
+  CITIES__SUCCESS,
+  CITIES__FAIL,
 } from './actionTypes';
 
 import {CALL_ME__SUCCESS} from '../contacts/actionTypes';
@@ -115,6 +118,17 @@ function listBrands(state = [], action) {
     case REHYDRATE:
       return get(action.payload, 'dealer.listBrands', []);
     case BRANDS__SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+function listCities(state = {}, action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'dealer.listCities', {});
+    case CITIES__SUCCESS:
       return action.payload;
     default:
       return state;
@@ -228,6 +242,7 @@ export default combineReducers({
   listRussiaByCities,
   listUkraineByCities,
   listBelarussiaByCities,
+  listCities,
   listBrands,
   meta: combineReducers({
     isFetchDealersList,

@@ -12,6 +12,7 @@ import {
   BRANDS__REQUEST,
   BRANDS__SUCCESS,
   BRANDS__FAIL,
+  CITIES__SUCCESS,
 } from './actionTypes';
 
 import {APP_LANG_SET} from '../core/lang/actionTypes';
@@ -169,7 +170,19 @@ export const fetchDealers = (isLocal) => {
           },
         );
 
+        const cities = dealers.reduce((result, dealer) => {
+          result[dealer.city.id] = {
+            region: dealer.region,
+            name: dealer.city.name,
+          };
+          return result;
+        }, {});
+
         if (!isLocal) {
+          dispatch({
+            type: CITIES__SUCCESS,
+            payload: cities,
+          });
           return dispatch({
             type: DEALERS__SUCCESS,
             payload: dealersByRegions,

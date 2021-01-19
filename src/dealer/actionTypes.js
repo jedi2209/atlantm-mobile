@@ -14,3 +14,7 @@ export const DEALERS__FAIL = 'DEALERS__FAIL';
 export const BRANDS__REQUEST = 'BRANDS__REQUEST';
 export const BRANDS__SUCCESS = 'BRANDS__SUCCESS';
 export const BRANDS__FAIL = 'BRANDS__FAIL';
+
+export const CITIES__REQUEST = 'CITIES__REQUEST';
+export const CITIES__SUCCESS = 'CITIES__SUCCESS';
+export const CITIES__FAIL = 'CITIES__FAIL';
