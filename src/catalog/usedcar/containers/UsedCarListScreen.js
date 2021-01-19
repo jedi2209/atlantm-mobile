@@ -171,32 +171,9 @@ class UserCarListScreen extends Component {
       nextPage: pages.next,
     }).then(() => {
       return setTimeout(() => {
-        this.props.navigation.setParams({total: this.props.total});
+        navigation.setParams({total: total});
       }, 100);
     });
-  };
-
-  onPressPrice = () => {
-    this.props.actionShowPriceFilter();
-  };
-
-  onClosePrice = (priceRange) => {
-    const {
-      fetchUsedCar,
-      actionHidePriceFilter,
-      actionResetUsedCarList,
-      actionSelectUsedCarPriceRange,
-      actionSetNeedUpdateUsedCarList,
-    } = this.props;
-
-    actionHidePriceFilter();
-
-    if (priceRange) {
-      actionResetUsedCarList();
-      actionSetNeedUpdateUsedCarList();
-      actionSelectUsedCarPriceRange(priceRange);
-      this.fetchUsedCar(EVENT_DEFAULT, priceRange);
-    }
   };
 
   render() {

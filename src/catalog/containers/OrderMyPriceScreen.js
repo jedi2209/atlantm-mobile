@@ -140,8 +140,8 @@ class OrderMyPriceScreen extends Component {
                 name: 'CARNAME',
                 type: 'input',
                 label: isNewCar
-                  ? strings.Form.field.carNameComplectation
-                  : strings.Form.field.carNameYear,
+                  ? strings.Form.field.label.carNameComplectation
+                  : strings.Form.field.label.carNameYear,
                 value: carName,
                 props: {
                   editable: false,
@@ -150,7 +150,7 @@ class OrderMyPriceScreen extends Component {
               {
                 name: 'SUMM',
                 type: 'input',
-                label: strings.Form.field.carYourPrice,
+                label: strings.Form.field.label.carYourPrice,
                 value: '',
                 props: {
                   keyboardType: 'number-pad',
@@ -229,7 +229,7 @@ class OrderMyPriceScreen extends Component {
   static navigationOptions = ({navigation}) => ({
     headerStyle: stylesHeader.whiteHeader,
     headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerTitle: strings.Form.OrderMyPriceScreen.title,
+    headerTitle: strings.OrderMyPriceScreen.title,
     headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
     headerRight: <View />,
   });

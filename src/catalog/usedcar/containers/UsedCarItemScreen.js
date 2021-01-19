@@ -52,9 +52,7 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
-    listRussia: dealer.listRussia,
-    listUkraine: dealer.listUkraine,
-    listBelarussia: dealer.listBelarussia,
+    listCities: dealer.listCities,
     carDetails: catalog.usedCar.carDetails.data,
     photoViewerItems: catalog.usedCar.carDetails.photoViewerItems,
     photoViewerVisible: catalog.usedCar.carDetails.photoViewerVisible,
@@ -269,11 +267,16 @@ class UserCarItemScreen extends Component {
   };
 
   _renderAddress() {
-    const {carDetails} = this.props;
+    const {carDetails, listCities} = this.props;
 
     let address;
     const location_name = get(carDetails, 'location.address');
-    const city_name = get(carDetails, 'city.name');
+    const cityID = get(carDetails, 'location.city.id');
+    let city_name = get(carDetails, 'location.city.name');
+    if (cityID) {
+      console.log('listCities', listCities, listCities[cityID]);
+      city_name = listCities[cityID].name;
+    }
 
     if (location_name) {
       address = city_name + ', ' + location_name;
@@ -309,7 +312,7 @@ class UserCarItemScreen extends Component {
     const {navigation, carDetails} = this.props;
     navigation.navigate('MapScreen', {
       name: get(carDetails, 'dealer.name'),
-      city: get(carDetails, 'city.name'),
+      city: get(carDetails, 'location.city.name'),
       address: get(carDetails, 'location.address'),
       coords: get(carDetails, 'location.coords'),
     });
@@ -357,6 +360,30 @@ class UserCarItemScreen extends Component {
     const CarPrices = {
       standart: get(carDetails, 'price.app.standart') || 0,
     };
+
+    const gearboxId = get(carDetails, 'gearbox.id');
+    let gearboxName = get(carDetails, 'gearbox.name');
+    if (gearboxId) {
+      gearboxName = strings.CarParams.gearbox[gearboxId];
+    }
+
+    const engineId = get(carDetails, 'engine.id');
+    let engineName = get(carDetails, 'engine.type');
+    if (engineId) {
+      engineName = strings.CarParams.engine[engineId];
+    }
+
+    const bodyId = get(carDetails, 'body.id');
+    let bodyName = get(carDetails, 'body.name');
+    if (bodyId) {
+      bodyName = strings.CarParams.body[bodyId];
+    }
+
+    const wheelId = get(carDetails, 'gearbox.wheel.id');
+    let wheelName = get(carDetails, 'gearbox.wheel.name');
+    if (wheelId) {
+      wheelName = strings.CarParams.wheels[wheelId];
+    }
 
     return (
       <StyleProvider style={getTheme()}>
@@ -443,19 +470,19 @@ class UserCarItemScreen extends Component {
                       }}>
                       {get(carDetails, 'mileage') ? (
                         <OptionPlate
-                          title="Пробег"
+                          title={strings.NewCarItemScreen.plates.mileage}
                           subtitle={
                             numberWithGap(get(carDetails, 'mileage')) + ' км.'
                           }
                         />
                       ) : null}
-                      {get(carDetails, 'engine') ? (
+                      {engineName ? (
                         <OptionPlate
-                          title={strings.UserCarItemScreen.plates.mileage}
+                          title={strings.NewCarItemScreen.plates.engine}
                           subtitle={
                             get(carDetails, 'engine.volume.short').toFixed(1) +
                             ' л. ' +
-                            get(carDetails, 'engine.type')
+                            engineName
                           }
                         />
                       ) : null}
@@ -476,13 +503,10 @@ class UserCarItemScreen extends Component {
                           }`}
                         />
                       ) : null}
-                      {get(carDetails, 'gearbox.wheel') ? (
+                      {wheelName ? (
                         <OptionPlate
                           title={strings.NewCarItemScreen.plates.wheel}
-                          subtitle={get(
-                            carDetails,
-                            'gearbox.wheel',
-                          ).toLowerCase()}
+                          subtitle={wheelName.toLowerCase()}
                         />
                       ) : null}
                       {get(carDetails, 'color.name.simple') ? (
@@ -648,7 +672,7 @@ class UserCarItemScreen extends Component {
                                     <Text
                                       selectable={false}
                                       style={styles.sectionPropText}>
-                                      Пробег:
+                                      {strings.NewCarItemScreen.plates.mileage}:
                                     </Text>
                                   </Col>
                                   <Col style={styles.sectionValue}>
@@ -717,7 +741,7 @@ class UserCarItemScreen extends Component {
                                   </Col>
                                   <Col style={styles.sectionValue}>
                                     <Text style={styles.sectionValueText}>
-                                      {carDetails.gearbox.name}
+                                      {gearboxName}
                                     </Text>
                                   </Col>
                                 </Row>
@@ -751,7 +775,7 @@ class UserCarItemScreen extends Component {
                                   </Col>
                                   <Col style={styles.sectionValue}>
                                     <Text style={styles.sectionValueText}>
-                                      {carDetails.body.name}
+                                      {bodyName}
                                     </Text>
                                   </Col>
                                 </Row>

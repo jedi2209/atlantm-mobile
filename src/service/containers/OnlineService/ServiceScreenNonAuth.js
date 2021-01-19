@@ -383,6 +383,7 @@ class ServiceScreenNonAuth extends Component {
                 barStyle={'light-content'}
                 defaultCountryCode={this.props.dealerSelected.region}
                 onSubmit={this.onPressOrder}
+                SubmitButton={{text: strings.Form.button.send}}
                 parentState={this.state}
               />
             </View>

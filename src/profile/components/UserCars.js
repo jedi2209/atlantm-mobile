@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const CarMenu = {
+let CarMenu = {
   hidden: {
     android: {
       BUTTONS: [
@@ -114,9 +114,10 @@ const UserCars = ({navigation, actionToggleCar}) => {
   }, []);
 
   const _showMenu = (ordersData, item) => {
-    let carName = [item.brand, item.model, '-- [' + item.number + ']'].join(
-      ' ',
-    );
+    let carName = [item.brand, item.model].join(' ');
+    if (item.number) {
+      carName += ['-- [' + item.number + ']'].join(' ');
+    }
     return ActionSheet.show(
       {
         options: ordersData.BUTTONS,

@@ -41,7 +41,7 @@ import Badge from '../../../core/components/Badge';
 
 // helpers
 import getTheme from '../../../../native-base-theme/components';
-import {get} from 'lodash';
+import {get, indexOf} from 'lodash';
 import PropTypes from 'prop-types';
 import UserData from '../../../utils/user';
 import Amplitude from '../../../utils/amplitude-analytics';
@@ -364,11 +364,13 @@ class NewCarItemScreen extends Component {
     const {carDetails} = this.props;
     if (typeof data === 'object' && data.length) {
       let resRaw = data.map((element) => {
-        return this.renderItem(
-          element.name + ':',
-          get(carDetails, element.value),
-          element.postfix,
-        );
+        let name = '';
+        if (element.alternate) {
+          name = element.alternate;
+        } else {
+          name = get(carDetails, element.value, null);
+        }
+        return this.renderItem(element.name + ':', name, element.postfix);
       });
       let res = resRaw.filter((el) => {
         return el != null;
@@ -386,25 +388,25 @@ class NewCarItemScreen extends Component {
       ) : null;
     }
 
-    return data ? (
-      <View style={styles.sectionOptions}>
-        <Text
-          style={styles.sectionTitle}
-          ellipsizeMode="tail"
-          numberOfLines={1}>
-          {title}
-        </Text>
-        <Grid>
-          {data.map((element) => {
-            return this.renderItem(
-              element.name + ':',
-              get(carDetails, element.value),
-              element.postfix,
-            );
-          })}
-        </Grid>
-      </View>
-    ) : null;
+    // return data ? (
+    //   <View style={styles.sectionOptions}>
+    //     <Text
+    //       style={styles.sectionTitle}
+    //       ellipsizeMode="tail"
+    //       numberOfLines={1}>
+    //       {title}
+    //     </Text>
+    //     <Grid>
+    //       {data.map((element) => {
+    //         return this.renderItem(
+    //           element.name + ':',
+    //           get(carDetails, element.value, element.value),
+    //           element.postfix,
+    //         );
+    //       })}
+    //     </Grid>
+    //   </View>
+    // ) : null;
   };
 
   renderItem = (title, value, postfix) => {
@@ -434,6 +436,15 @@ class NewCarItemScreen extends Component {
   renderComplectationItem = (title, data) => {
     if (data.length === 0) {
       return null;
+    }
+
+    switch (title.toLowerCase()) {
+      case 'заводская комплектация':
+        title = strings.NewCarItemScreen.complectation.main;
+        break;
+      case 'дополнительные опции':
+        title = strings.NewCarItemScreen.complectation.additional;
+        break;
     }
 
     return (
@@ -597,6 +608,31 @@ class NewCarItemScreen extends Component {
     const currency = get(this.props.navigation, 'state.params.currency');
     const brandName = get(carDetails, 'brand.name');
     const modelName = get(carDetails, 'model.name');
+
+    const gearboxId = get(carDetails, 'gearbox.id');
+    let gearboxName = get(carDetails, 'gearbox.name');
+    if (gearboxId) {
+      gearboxName = strings.CarParams.gearbox[gearboxId];
+    }
+
+    const engineId = get(carDetails, 'engine.id');
+    let engineName = get(carDetails, 'engine.type');
+    if (engineId) {
+      engineName = strings.CarParams.engine[engineId];
+    }
+
+    const bodyId = get(carDetails, 'body.id');
+    let bodyName = get(carDetails, 'body.name');
+    if (bodyId) {
+      bodyName = strings.CarParams.body[bodyId];
+    }
+
+    const wheelId = get(carDetails, 'gearbox.wheel.id');
+    let wheelName = get(carDetails, 'gearbox.wheel.name');
+    if (wheelId) {
+      wheelName = strings.CarParams.wheels[wheelId];
+    }
+
     let photos = [];
     let CarImgReal = false;
     if (get(carDetails, 'imgReal.thumb.0')) {
@@ -755,10 +791,10 @@ class NewCarItemScreen extends Component {
                         .split('/')[0]
                     }`}
                   />
-                  {get(carDetails, 'gearbox.wheel') ? (
+                  {wheelName ? (
                     <OptionPlate
                       title={strings.NewCarItemScreen.plates.wheel}
-                      subtitle={get(carDetails, 'gearbox.wheel').toLowerCase()}
+                      subtitle={wheelName.toLowerCase()}
                     />
                   ) : null}
                   {get(carDetails, 'color.name.simple') ? (
@@ -819,6 +855,7 @@ class NewCarItemScreen extends Component {
                         {
                           name: strings.NewCarItemScreen.tech.body.type,
                           value: 'body.name',
+                          alternate: bodyName,
                         },
                         {
                           name: strings.NewCarItemScreen.tech.year,
@@ -831,6 +868,7 @@ class NewCarItemScreen extends Component {
                           {
                             name: strings.NewCarItemScreen.tech.engine.type,
                             value: 'engine.type',
+                            alternate: engineName,
                           },
                           (() => {
                             if (
@@ -858,6 +896,7 @@ class NewCarItemScreen extends Component {
                           {
                             name: strings.NewCarItemScreen.tech.gearbox.type,
                             value: 'gearbox.name',
+                            alternate: gearboxName,
                           },
                           {
                             name: strings.NewCarItemScreen.tech.gearbox.count,
@@ -865,7 +904,8 @@ class NewCarItemScreen extends Component {
                           },
                           {
                             name: strings.NewCarItemScreen.tech.gearbox.wheel,
-                            value: 'gearbox.wheel',
+                            value: 'gearbox.wheel.name',
+                            alternate: wheelName,
                           },
                         ],
                       )}

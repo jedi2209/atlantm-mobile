@@ -251,8 +251,8 @@ class OrderCreditScreen extends Component {
                 name: 'CARNAME',
                 type: 'input',
                 label: this.isNewCar
-                  ? strings.Form.field.carNameComplectation
-                  : strings.Form.field.carNameYear,
+                  ? strings.Form.field.label.carNameComplectation
+                  : strings.Form.field.label.carNameYear,
                 value: this.carName,
                 props: {
                   editable: false,

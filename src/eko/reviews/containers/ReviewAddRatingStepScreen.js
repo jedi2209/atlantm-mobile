@@ -382,6 +382,7 @@ class ReviewAddRatingStepScreen extends Component {
               <Form
                 fields={this.FormConfig.fields}
                 barStyle={'light-content'}
+                SubmitButton={{text: strings.Form.button.send}}
                 onSubmit={this.onPressButton}
               />
             </View>

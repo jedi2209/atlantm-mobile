@@ -7,7 +7,7 @@ const processHtml = (text, width) => {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Акция Atlant-m</title>
+      <title>Atlant-M</title>
     </head>
     <body>
     <style>

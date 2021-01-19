@@ -201,7 +201,7 @@ export default class SelectListByCountry extends Component {
               ) : null}
               {customListUA && customListUA.length ? (
                 <Tab
-                  heading="🇺🇦 Украина"
+                  heading="🇺🇦 Україна"
                   textStyle={styles.TabsTextStyle}
                   activeTextStyle={styles.TabsActiveTextStyle}
                   activeTabStyle={styles.TabsActiveTabStyle}>
@@ -259,7 +259,7 @@ export default class SelectListByCountry extends Component {
                 />
               </Tab>
               <Tab
-                heading="🇺🇦 Украина"
+                heading="🇺🇦 Україна"
                 textStyle={styles.TabsTextStyle}
                 activeTextStyle={styles.TabsActiveTextStyle}
                 activeTabStyle={styles.TabsActiveTabStyle}>
