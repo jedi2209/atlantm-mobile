@@ -26,12 +26,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({nav, indicators}) => {
+const mapStateToProps = ({nav, indicators, core}) => {
   return {
     nav,
     items: indicators.items,
     activeItem: indicators.activeItem,
     isRequest: indicators.meta.isRequest,
+    region: core.language.selected,
   };
 };
 
@@ -76,10 +77,14 @@ class IndicatorsScreen extends Component {
   };
 
   componentDidMount() {
-    const {actionFetchIndicators, actionSetActiveIndicator} = this.props;
+    const {
+      actionFetchIndicators,
+      actionSetActiveIndicator,
+      region,
+    } = this.props;
 
     actionSetActiveIndicator({});
-    actionFetchIndicators();
+    actionFetchIndicators(region);
   }
 
   shouldComponentUpdate(nextProps) {

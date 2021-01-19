@@ -97,8 +97,11 @@ export default {
     return this.request(url, baseRequestParams);
   },
 
-  fetchIndicators() {
-    return this.request('/info/indicator/get/', baseRequestParams);
+  fetchIndicators(region) {
+    return this.request(
+      `/info/indicator/get/?region=${region}`,
+      baseRequestParams,
+    );
   },
 
   fetchBonus({token, userid, curr}) {
