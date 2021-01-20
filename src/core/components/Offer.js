@@ -43,6 +43,7 @@ export const Offer = (props) => {
         }}>
         {data.item.img.main ? (
           <Imager
+            key={'id' + data.item.img.main}
             source={{uri: data.item.img.main}}
             style={[
               styles.image,

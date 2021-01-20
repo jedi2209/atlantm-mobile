@@ -4,9 +4,9 @@ import {View, StatusBar} from 'react-native';
 // redux
 import {connect} from 'react-redux';
 import {actionSetPushActionSubscribe} from '../../core/actions';
-import {actionSetGlobalLanguage} from '../../core/lang/actions';
+// import {actionSetGlobalLanguage} from '../../core/lang/actions';
 // actions
-import {fetchDealers, fetchBrands, fetchCities, selectDealer} from '../actions';
+import {fetchDealers, fetchBrands, selectDealer} from '../actions';
 
 // components
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
@@ -39,7 +39,6 @@ const mapDispatchToProps = {
   fetchBrands,
   selectDealer,
   actionSetPushActionSubscribe,
-  actionSetGlobalLanguage,
 };
 
 class ChooseDealerScreen extends PureComponent {
@@ -69,10 +68,10 @@ class ChooseDealerScreen extends PureComponent {
     const {pushActionSubscribeState} = this.props;
     // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
 
-    if (newDealer && newDealer.region) {
-      this.props.actionSetGlobalLanguage(newDealer.region);
-      strings.setLanguage(newDealer.region);
-    }
+    // if (newDealer && newDealer.region) {
+    //   this.props.actionSetGlobalLanguage(newDealer.region);
+    //   strings.setLanguage(newDealer.region);
+    // }
 
     if (!isLocal) {
       PushNotifications.addTag('dealer', newDealer.id);
