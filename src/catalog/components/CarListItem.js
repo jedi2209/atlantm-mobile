@@ -336,7 +336,13 @@ class CarListItem extends Component {
     }
 
     const year = get(car, 'year');
-    const ordered = get(car, 'ordered', 0);
+    let ordered = null;
+    switch (get(car, 'ordered', 1)) {
+      case 2:
+      case 3:
+        ordered = true;
+        break;
+    }
     const idSAP = get(car, 'id.sap', null);
     const isSale = car.sale === true;
     const isNewCar = itemScreen === 'NewCarItemScreen';
