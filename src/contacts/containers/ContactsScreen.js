@@ -6,7 +6,7 @@ import {
   View,
   Alert,
   StyleSheet,
-  Platform,
+  ActivityIndicator,
   Linking,
   ScrollView,
   TouchableOpacity,
@@ -35,6 +35,7 @@ import {fetchInfoList, actionListReset} from '../../info/actions';
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
 import getOrders from '../../utils/orders';
+import {verticalScale} from '../../utils/scale';
 import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
@@ -109,6 +110,16 @@ const styles = StyleSheet.create({
     marginTop: 3,
     height: 25,
   },
+  spinnerContainer: {
+    flex: 1,
+    marginTop: 16,
+    paddingVertical: 0,
+    backgroundColor: styleConst.color.bg,
+  },
+  spinner: {
+    alignSelf: 'center',
+    marginTop: verticalScale(60),
+  },
 });
 
 const deviceWidth = Dimensions.get('window').width;
@@ -119,6 +130,7 @@ import {Offer} from '../../core/components/Offer';
 const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
   return {
     list: info.list,
+    isFetchInfoList: info.meta.isFetchInfoList,
     nav,
     profile,
     brands: dealer.listBrands,
@@ -131,7 +143,6 @@ const mapDispatchToProps = {
   callMe,
   fetchInfoList,
   actionListReset,
-  // fetchBrands,
 };
 
 class ContactsScreen extends Component {
@@ -141,9 +152,6 @@ class ContactsScreen extends Component {
 
   constructor(props) {
     super(props);
-    // if (props.brands && props.brands.length === 0) {
-    //   props.fetchBrands();
-    // }
     this.sitesSubtitle = {
       sites: [],
       buttons: [],
@@ -172,14 +180,12 @@ class ContactsScreen extends Component {
   componentDidMount() {
     Amplitude.logEvent('screen', 'contacts');
 
-    const {fetchInfoList, actionListReset} = this.props;
-    const {region, id: dealer} = this.props.dealerSelected;
+    const {fetchInfoList, actionListReset, isFetchInfoList} = this.props;
+    const {region, id: dealerID} = this.props.dealerSelected;
 
     console.log('== Contacts ==');
-
     actionListReset();
-    fetchInfoList(region, dealer).then((action) => {
-      console.log('action', action);
+    fetchInfoList(region, dealerID).then((action) => {
       if (action.type === INFO_LIST__FAIL) {
         let message = get(
           action,
@@ -209,7 +215,6 @@ class ContactsScreen extends Component {
     const nav = nextProps.nav.newState;
     const isActiveScreen =
       nav.routes[nav.index].routeName === 'BottomTabNavigation';
-
     const isListSucsess = Boolean(
       this.props.list.length !== nextProps.list.length,
     );
@@ -294,12 +299,10 @@ class ContactsScreen extends Component {
   };
 
   render() {
-    const {dealerSelected, navigation, list} = this.props;
+    const {dealerSelected, navigation, list, isFetchInfoList} = this.props;
 
     const PHONES = [];
     const phones = get(dealerSelected, 'phone', PHONES);
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
 
     return (
       <StyleProvider style={getTheme()}>
@@ -380,7 +383,6 @@ class ContactsScreen extends Component {
                         get(dealerSelected, 'divisions', null),
                         'RC',
                       );
-                      console.log('isOpened', isOpened);
                       if (!isOpened) {
                         Alert.alert(
                           strings.ContactsScreen.closedDealer.title,
@@ -483,11 +485,6 @@ class ContactsScreen extends Component {
                               default:
                                 Linking.openURL(
                                   this.sitesSubtitle.buttons[buttonIndex].site,
-                                  console.log(
-                                    'this.sitesSubtitle.buttons[buttonIndex].site failed',
-                                    this.sitesSubtitle.buttons[buttonIndex]
-                                      .site,
-                                  ),
                                 );
                                 break;
                             }
@@ -505,7 +502,7 @@ class ContactsScreen extends Component {
                   />
                 </View>
               </ScrollView>
-              {list.length ? (
+              {!isFetchInfoList && list.length ? (
                 <View
                   style={{
                     marginTop: 16,
@@ -540,7 +537,7 @@ class ContactsScreen extends Component {
                       return (
                         <Offer
                           navigation={this.props.navigation.navigate}
-                          key={`carousel-article-${item.id}`}
+                          key={`carousel-article-${item.hash}`}
                           data={item}
                           width={cardWidth}
                           height={190}
@@ -553,7 +550,14 @@ class ContactsScreen extends Component {
                     itemWidth={cardWidth}
                   />
                 </View>
-              ) : null}
+              ) : (
+                <View style={styles.spinnerContainer}>
+                  <ActivityIndicator
+                    color={styleConst.color.blue}
+                    style={styles.spinner}
+                  />
+                </View>
+              )}
             </View>
           </ScrollView>
         </View>

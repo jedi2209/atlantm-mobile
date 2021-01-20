@@ -102,20 +102,21 @@ export default class SelectItemByCountry extends PureComponent {
       selectedItem,
       isLocal,
     } = this.props;
-    const mainScreen = 'BottomTabNavigation';
+    const mainScreen = 'ContactsScreen';
     selectItem({
       dealerBaseData: item,
       dealerSelected: selectedItem,
       isLocal,
-    }).then((action) => {
+    }).then(async (action) => {
       const newDealer = get(action, 'payload.newDealer');
       const prevDealer = get(action, 'payload.prevDealer');
       if (
-        action.type === DEALER__SUCCESS ||
-        action.type === DEALER__SUCCESS__LOCAL
+        action &&
+        (action.type === DEALER__SUCCESS ||
+          action.type === DEALER__SUCCESS__LOCAL)
       ) {
         if (onSelect) {
-          onSelect({
+          await onSelect({
             newDealer: newDealer,
             prevDealer: prevDealer,
             isLocal: isLocal,
@@ -124,19 +125,19 @@ export default class SelectItemByCountry extends PureComponent {
         if (Boolean(goBack)) {
           return navigation.goBack();
         }
-        const resetAction = StackActions.reset({
-          index: 0,
-          actions: [
-            NavigationActions.navigate({
-              routeName: returnScreen || mainScreen,
-              params: returnState,
-            }),
-          ],
-        });
-        navigation.dispatch(resetAction);
+        // const resetAction = StackActions.reset({
+        //   index: 0,
+        //   actions: [
+        //     NavigationActions.navigate({
+        //       routeName: returnScreen || mainScreen,
+        //       params: returnState,
+        //     }),
+        //   ],
+        // });
+        // navigation.dispatch(resetAction);
       }
 
-      if (action.type === DEALER__FAIL) {
+      if (action && action.type === DEALER__FAIL) {
         Alert.alert(
           strings.SelectItemByCountry.error.title,
           strings.SelectItemByCountry.error.text,

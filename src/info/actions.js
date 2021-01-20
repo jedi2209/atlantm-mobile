@@ -146,6 +146,7 @@ export const callMeForInfo = (props) => {
 
 export const actionListReset = () => {
   return (dispatch) => {
-    dispatch({type: INFO_LIST__RESET});
+    return dispatch({type: INFO_LIST__RESET});
+    // return Promise.resolve();
   };
 };

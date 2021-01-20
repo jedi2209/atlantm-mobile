@@ -17,6 +17,8 @@ import {
 
 import {APP_LANG_SET} from '../core/lang/actionTypes';
 
+import {INFO_LIST__RESET} from '../info/actionTypes';
+
 import strings from '../core/lang/const';
 
 import API from '../utils/api';
@@ -37,7 +39,7 @@ export const selectRegion = (region) => {
 };
 
 export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch({
       type: DEALER__REQUEST,
       payload: {
@@ -46,7 +48,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
       },
     });
 
-    return API.fetchDealer(dealerBaseData.id)
+    return await API.fetchDealer(dealerBaseData.id)
       .then((response) => {
         if (response.error) {
           return dispatch({
@@ -83,10 +85,6 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
         }
 
         if (dealer && dealer.region) {
-          dispatch({
-            type: APP_LANG_SET,
-            payload: dealer.region,
-          });
           strings.setLanguage(dealer.region);
           switch (dealer.region) {
             case 'ua':
@@ -99,11 +97,19 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
               moment.locale('ru');
               break;
           }
+          dispatch({
+            type: APP_LANG_SET,
+            payload: dealer.region,
+          });
         }
+
+        // dispatch({
+        //   type: INFO_LIST__RESET,
+        // });
 
         if (!isLocal) {
           // обновляем дилера глобально
-          return dispatch({
+          dispatch({
             type: DEALER__SUCCESS,
             payload: {
               newDealer: dealer,
@@ -112,7 +118,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
           });
         } else {
           // обновляем дилера локально
-          return dispatch({
+          dispatch({
             type: DEALER__SUCCESS__LOCAL,
             payload: {
               newDealer: dealer,
@@ -120,8 +126,10 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
             },
           });
         }
+        return Promise.resolve();
       })
       .catch((error) => {
+        console.log('catch error', error);
         return dispatch({
           type: DEALER__FAIL,
           payload: {
