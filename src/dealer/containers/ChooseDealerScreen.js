@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import {actionSetPushActionSubscribe} from '../../core/actions';
 // import {actionSetGlobalLanguage} from '../../core/lang/actions';
 // actions
-import {fetchDealers, fetchBrands, selectDealer} from '../actions';
+import {fetchDealers, fetchBrands} from '../actions';
 
 // components
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
@@ -37,7 +37,6 @@ const mapStateToProps = ({dealer, nav, core}) => {
 const mapDispatchToProps = {
   fetchDealers,
   fetchBrands,
-  selectDealer,
   actionSetPushActionSubscribe,
 };
 
@@ -68,18 +67,10 @@ class ChooseDealerScreen extends PureComponent {
     const {pushActionSubscribeState} = this.props;
     // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
 
-    // if (newDealer && newDealer.region) {
-    //   this.props.actionSetGlobalLanguage(newDealer.region);
-    //   strings.setLanguage(newDealer.region);
-    // }
-
-    if (!isLocal) {
-      PushNotifications.addTag('dealer', newDealer.id);
-      if (pushActionSubscribeState) {
-        PushNotifications.subscribeToTopic('actions', newDealer.id);
-      } else {
-        PushNotifications.unsubscribeFromTopic('actions');
-      }
+    if (pushActionSubscribeState) {
+      PushNotifications.subscribeToTopic('actions', newDealer.id);
+    } else {
+      PushNotifications.unsubscribeFromTopic('actions');
     }
   };
 
@@ -95,7 +86,6 @@ class ChooseDealerScreen extends PureComponent {
       navigation,
       fetchDealers,
       fetchBrands,
-      selectDealer,
       dealerSelected,
       isFetchDealersList,
     } = this.props;
@@ -118,8 +108,7 @@ class ChooseDealerScreen extends PureComponent {
           listUkraine={listUkraine}
           listAll={listAll}
           listBelarussia={listBelarussia}
-          navigation={navigation}
-          selectItem={selectDealer}
+          // navigation={navigation}
           returnScreen={returnScreen}
           returnState={returnState}
           selectedItem={dealerSelected}

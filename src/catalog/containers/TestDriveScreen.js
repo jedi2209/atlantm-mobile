@@ -159,11 +159,6 @@ class TestDriveScreen extends PureComponent {
     };
 
     if (this.listAll.length === 1) {
-      console.log(
-        'this.listAll.length == 1',
-        this.listAll,
-        this.listAll[0].value,
-      );
       this.state.dealerID = this.listAll[0].value;
     }
   }

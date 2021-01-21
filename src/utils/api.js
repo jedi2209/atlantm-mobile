@@ -983,10 +983,9 @@ export default {
   async apiGetData(url, requestParams) {
     try {
       const response = await fetch(url, requestParams);
-      // console.log('response', response);
       return response.json();
     } catch (err) {
-      // console.log('apiGetDataError URL: ' + url, err);
+      console.log('apiGetDataError URL: ' + url, err);
     }
   },
 };

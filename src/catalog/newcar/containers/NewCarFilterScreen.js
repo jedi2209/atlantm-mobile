@@ -34,6 +34,8 @@ import showPrice from '../../../utils/price';
 import stylesHeader from '../../../core/components/Header/style';
 import {ScrollView} from 'react-native-gesture-handler';
 
+import strings from '../../../core/lang/const';
+
 const deviceWidth = Dimensions.get('window').width;
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
@@ -440,7 +442,7 @@ class NewCarFilterScreen extends Component {
         ),
       },
       {
-        title: 'Цена',
+        title: strings.NewCarFilterScreen.price,
         content: (
           <View
             style={{
@@ -506,7 +508,7 @@ class NewCarFilterScreen extends Component {
         ),
       },
       {
-        title: 'Кузов',
+        title: strings.NewCarItemScreen.tech.body.title,
         content: (
           <View
             style={{
@@ -560,7 +562,9 @@ class NewCarFilterScreen extends Component {
                         });
                       }}
                     />
-                    <Text style={{marginLeft: 20}}>{name}</Text>
+                    <Text style={{marginLeft: 20}}>
+                      {strings.CarParams.body[id]}
+                    </Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -710,7 +714,9 @@ class NewCarFilterScreen extends Component {
                   borderRadius: 5,
                 },
               ]}>
-              <Text style={{color: '#fff', fontSize: 16}}>Применить</Text>
+              <Text style={{color: '#fff', fontSize: 16}}>
+                {strings.UsedCarFilterScreen.apply}
+              </Text>
             </Button>
           </View>
         </ScrollView>

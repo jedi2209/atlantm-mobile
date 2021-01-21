@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 
 export default class SelectListByCountry extends Component {
   static propTypes = {
-    navigation: PropTypes.object,
+    // navigation: PropTypes.object,
     region: PropTypes.string,
     listRussia: PropTypes.array,
     listBelarussia: PropTypes.array,
@@ -99,7 +99,6 @@ export default class SelectListByCountry extends Component {
     const {
       navigation,
       selectedItem,
-      selectItem,
       itemLayout,
       goBack,
       isLocal,
@@ -114,9 +113,8 @@ export default class SelectListByCountry extends Component {
         goBack={goBack}
         isLocal={isLocal}
         itemLayout={itemLayout}
-        selectItem={selectItem}
         selectedItem={selectedItem}
-        navigation={navigation}
+        // navigation={navigation}
         returnScreen={returnScreen}
         returnState={returnState}
         onSelect={onSelect}

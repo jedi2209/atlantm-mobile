@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Icon, ActionSheet} from 'native-base';
-import getOrders from '../../utils/orders';
+import orderFunctions from '../../utils/orders';
 
 import {createBottomTabNavigator} from 'react-navigation-tabs';
 import {createStackNavigator} from 'react-navigation-stack';
@@ -128,7 +128,7 @@ const BottomTabNavigation = createBottomTabNavigator(
       navigationOptions: ({navigation}) => {
         return {
           tabBarOnPress: () => {
-            getOrders().then((data) => {
+            orderFunctions.getOrders().then((data) => {
               ActionSheet.show(
                 {
                   options: data.BUTTONS,

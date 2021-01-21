@@ -149,6 +149,7 @@ export default class WebViewAutoHeight extends PureComponent {
         dataDetectorTypes="all"
         allowsFullscreenVideo={true}
         allowsInlineMediaPlayback={true}
+        incognito={true}
         originWhitelist={['http://', 'https://', 'tel://', 'mailto://']}
       />
     );

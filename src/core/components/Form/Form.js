@@ -109,6 +109,7 @@ const mapStateToProps = ({dealer, profile, nav}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
+    region: dealer.region,
     profile,
   };
 };
@@ -142,6 +143,7 @@ class Form extends Component {
     SubmitButton: {
       text: strings.Form.button.send,
       props: {},
+      region: 'ru',
     },
     barStyle: 'light-content',
   };
@@ -218,6 +220,17 @@ class Form extends Component {
       });
     }
     this.state.required = requredFields;
+    this.locale = 'ru-RU';
+    if (this.props.region) {
+      switch (this.props.region) {
+        case 'ru':
+          this.locale = 'ru-RU';
+          break;
+        case 'ua':
+          this.locale = 'uk-Uk';
+          break;
+      }
+    }
   }
 
   static propTypes = {
@@ -583,8 +596,8 @@ class Form extends Component {
             mode="date"
             ref={this.inputRefs[groupNum + 'Input' + num]}
             label={label + (data.props && data.props.required ? '*' : '')}
-            locale="ru-RU"
-            confirmBtnText={strings.Base.cancel.toLowerCase()}
+            locale={this.locale}
+            confirmBtnText={strings.Base.choose.toLowerCase()}
             value={this.state[name] || null}
             isActive={this.state.active[name] || false}
             onPressButton={() => {
