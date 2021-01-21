@@ -284,7 +284,9 @@ class CarHistoryScreen extends Component {
           {date ? <Text style={styles.date}>{dayMonthYear(date)}</Text> : null}
           {car.mileage ? (
             <Text style={styles.mileage}>
-              пробег {numberWithGap(car.mileage)}
+              {strings.NewCarItemScreen.plates.mileage.toLowerCase() +
+                ' ' +
+                numberWithGap(car.mileage)}
             </Text>
           ) : null}
         </View>

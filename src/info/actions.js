@@ -47,7 +47,7 @@ export const fetchInfoList = (region, dealer) => {
           });
         }
 
-        if (res && res.data) {
+        if (res) {
           return dispatch({
             type: INFO_LIST__SUCCESS,
             payload: res.data || [],
@@ -147,6 +147,5 @@ export const callMeForInfo = (props) => {
 export const actionListReset = () => {
   return (dispatch) => {
     return dispatch({type: INFO_LIST__RESET});
-    // return Promise.resolve();
   };
 };

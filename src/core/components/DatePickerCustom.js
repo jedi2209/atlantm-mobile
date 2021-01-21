@@ -23,7 +23,6 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
               animationOut="zoomOut"
               onHide={props.onHideModal}
               swipeDirection={['up', 'down', 'left', 'right']}
-              // style={{justifyContent: 'flex-end', margin: 0}}
               confirmBtnText={
                 props.confirmBtnText || strings.DatePickerCustom.choose
               }
@@ -45,7 +44,6 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
               animationOut="zoomOut"
               onHide={props.onHideModal}
               swipeDirection={['up', 'down', 'left', 'right']}
-              // style={{justifyContent: 'flex-end', margin: 0}}
               confirmBtnText={
                 props.confirmBtnText || strings.DatePickerCustom.choose
               }

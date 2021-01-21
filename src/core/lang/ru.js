@@ -123,6 +123,9 @@ export default {
   },
   CarList: {
     emptyMessage: 'Нет автомобилей для отображения',
+    badges: {
+      specialPrice: 'спец.цена',
+    },
   },
   OrderCreditScreen: {
     title: 'Заявка на кредит',
@@ -249,6 +252,9 @@ export default {
   NewCarListScreen: {
     title: 'Новые автомобили',
   },
+  NewCarFilterScreen: {
+    price: 'Цена',
+  },
   UserCarListScreen: {
     title: 'Подержанные автомобили',
   },
@@ -257,6 +263,9 @@ export default {
     showLess: 'Свернуть',
     creditCalculate: 'рассчитать кредит',
     myPrice: 'предложить\r\nсвою цену',
+  },
+  UsedCarFilterScreen: {
+    city: 'Город',
   },
   ContactsScreen: {
     closedDealer: {
@@ -648,5 +657,25 @@ export default {
       3: 'Задний',
       4: 'Передний',
     },
+  },
+  Colors: {
+    28: 'Бежевый',
+    13: 'Белый',
+    101: 'Бордовый',
+    1028: 'Бронзовый',
+    174: 'Голубой',
+    37: 'Желтый',
+    121: 'Зеленый',
+    355: 'Золотистый',
+    289: 'Коричневый',
+    55: 'Красный',
+    31: 'Оранжевый',
+    327: 'Розовый',
+    1181: 'Салатовый',
+    144: 'Серебристый',
+    4: 'Серый',
+    216: 'Синий',
+    268: 'Фиолетовый',
+    5: 'Черный',
   },
 };

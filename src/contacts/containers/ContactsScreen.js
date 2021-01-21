@@ -34,7 +34,7 @@ import {fetchInfoList, actionListReset} from '../../info/actions';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
-import getOrders from '../../utils/orders';
+import orderFunctions from '../../utils/orders';
 import {verticalScale} from '../../utils/scale';
 import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
@@ -156,6 +156,7 @@ class ContactsScreen extends Component {
       sites: [],
       buttons: [],
     };
+    this.mainScrollView = React.createRef();
     get(this.props.dealerSelected, 'site').map((val, idx) => {
       if (val) {
         const siteName = val
@@ -184,9 +185,8 @@ class ContactsScreen extends Component {
     const {region, id: dealerID} = this.props.dealerSelected;
 
     console.log('== Contacts ==');
-    actionListReset();
     fetchInfoList(region, dealerID).then((action) => {
-      if (action.type === INFO_LIST__FAIL) {
+      if (action && action.type && action.type === INFO_LIST__FAIL) {
         let message = get(
           action,
           'payload.message',
@@ -218,7 +218,18 @@ class ContactsScreen extends Component {
     const isListSucsess = Boolean(
       this.props.list.length !== nextProps.list.length,
     );
-    return isActiveScreen || isListSucsess;
+    const dealerChanged = Boolean(
+      this.props.dealerSelected.id !== nextProps.dealerSelected.id,
+    );
+    if (this.props.navigation.isFocused()) {
+      this.mainScrollView.scrollTo({x: 0, y: 1, animated: true});
+    }
+    return (
+      isActiveScreen ||
+      isListSucsess ||
+      dealerChanged ||
+      this.props.navigation.isFocused()
+    );
   }
 
   onPressCallMe = async () => {
@@ -308,7 +319,13 @@ class ContactsScreen extends Component {
       <StyleProvider style={getTheme()}>
         <View style={styles.safearea}>
           <StatusBar hidden />
-          <ScrollView contentContainerStyle={{paddingBottom: 24}}>
+          <ScrollView
+            contentContainerStyle={{paddingBottom: 24}}
+            ref={(ref) => {
+              this.mainScrollView = ref;
+            }}
+            showsHorizontalScrollIndicator={false}
+            bounces={false}>
             <Image
               style={styles.imgHero}
               source={{uri: get(dealerSelected, 'img.10000x440')}}
@@ -423,7 +440,7 @@ class ContactsScreen extends Component {
                     subtitle={strings.ContactsScreen.sendOrder}
                     type="primary"
                     onPress={() => {
-                      getOrders().then((ordersData) => {
+                      orderFunctions.getOrders().then((ordersData) => {
                         ActionSheet.show(
                           {
                             options: ordersData.BUTTONS,
@@ -502,54 +519,56 @@ class ContactsScreen extends Component {
                   />
                 </View>
               </ScrollView>
-              {!isFetchInfoList && list.length ? (
-                <View
-                  style={{
-                    marginTop: 16,
-                    paddingVertical: 0,
-                  }}>
+              {!isFetchInfoList ? (
+                list.length ? (
                   <View
                     style={{
-                      paddingHorizontal: 20,
-                      marginBottom: 20,
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
+                      marginTop: 16,
+                      paddingVertical: 0,
                     }}>
-                    <Text style={{fontSize: 14, fontWeight: '500'}}>
-                      {strings.ContactsScreen.currentActions}
-                    </Text>
-                    <Text
-                      onPress={() => {
-                        navigation.navigate('InfoList');
-                      }}
+                    <View
                       style={{
-                        color: styleConst.new.blueHeader,
-                        fontSize: 14,
-                        paddingLeft: 24,
+                        paddingHorizontal: 20,
+                        marginBottom: 20,
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
                       }}>
-                      {strings.Base.all}
-                    </Text>
+                      <Text style={{fontSize: 14, fontWeight: '500'}}>
+                        {strings.ContactsScreen.currentActions}
+                      </Text>
+                      <Text
+                        onPress={() => {
+                          navigation.navigate('InfoList');
+                        }}
+                        style={{
+                          color: styleConst.new.blueHeader,
+                          fontSize: 14,
+                          paddingLeft: 24,
+                        }}>
+                        {strings.Base.all}
+                      </Text>
+                    </View>
+                    <Carousel
+                      data={list}
+                      renderItem={(item) => {
+                        return (
+                          <Offer
+                            navigation={this.props.navigation.navigate}
+                            key={`carousel-article-${item.hash}`}
+                            data={item}
+                            width={cardWidth}
+                            height={190}
+                          />
+                        );
+                      }}
+                      sliderWidth={deviceWidth}
+                      inactiveSlideScale={0.97}
+                      activeSlideAlignment={'center'}
+                      itemWidth={cardWidth}
+                    />
                   </View>
-                  <Carousel
-                    data={list}
-                    renderItem={(item) => {
-                      return (
-                        <Offer
-                          navigation={this.props.navigation.navigate}
-                          key={`carousel-article-${item.hash}`}
-                          data={item}
-                          width={cardWidth}
-                          height={190}
-                        />
-                      );
-                    }}
-                    sliderWidth={deviceWidth}
-                    inactiveSlideScale={0.97}
-                    activeSlideAlignment={'center'}
-                    itemWidth={cardWidth}
-                  />
-                </View>
+                ) : null
               ) : (
                 <View style={styles.spinnerContainer}>
                   <ActivityIndicator

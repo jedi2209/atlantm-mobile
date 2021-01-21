@@ -380,14 +380,18 @@ class BonusScreen extends Component {
     }
     let saldoCurr = null;
     if (this.props.dealerSelected.region !== 'by') {
-      saldoCurr = get(bonus, 'saldo.convert.curr', null);
-      if (!saldoCurr) {
-        saldoCurr = get(
-          bonus,
-          'saldo.curr',
-          strings.ProfileScreenInfo.bonus.current.bonuses,
-        );
-      }
+      saldoCurr = get(
+        bonus,
+        'saldo.convert.curr',
+        strings.ProfileScreenInfo.bonus.current.bonuses,
+      );
+      // if (!saldoCurr) {
+      //   saldoCurr = get(
+      //     bonus,
+      //     'saldo.curr',
+      //     strings.ProfileScreenInfo.bonus.current.bonuses,
+      //   );
+      // }
     }
     return (
       <StyleProvider style={getTheme()}>

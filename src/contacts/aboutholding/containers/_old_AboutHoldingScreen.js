@@ -77,9 +77,6 @@ class AboutHoldingScreen extends Component {
   }
 
   render() {
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
-
     const {dealerSelected} = this.props;
     const site = this.getSite();
 

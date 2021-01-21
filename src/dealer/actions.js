@@ -16,9 +16,8 @@ import {
 } from './actionTypes';
 
 import {APP_LANG_SET} from '../core/lang/actionTypes';
-
-import {INFO_LIST__RESET} from '../info/actionTypes';
-
+import PushNotifications from '../core/components/PushNotifications';
+import {fetchInfoList} from '../info/actions/';
 import strings from '../core/lang/const';
 
 import API from '../utils/api';
@@ -39,7 +38,7 @@ export const selectRegion = (region) => {
 };
 
 export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
-  return async (dispatch) => {
+  return (dispatch) => {
     dispatch({
       type: DEALER__REQUEST,
       payload: {
@@ -48,7 +47,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
       },
     });
 
-    return await API.fetchDealer(dealerBaseData.id)
+    return API.fetchDealer(dealerBaseData.id)
       .then((response) => {
         if (response.error) {
           return dispatch({
@@ -101,15 +100,14 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
             type: APP_LANG_SET,
             payload: dealer.region,
           });
+          dispatch(fetchInfoList(dealer.region, dealer.id));
         }
 
-        // dispatch({
-        //   type: INFO_LIST__RESET,
-        // });
+        PushNotifications.addTag('dealer', dealer.id);
 
         if (!isLocal) {
           // обновляем дилера глобально
-          dispatch({
+          return dispatch({
             type: DEALER__SUCCESS,
             payload: {
               newDealer: dealer,
@@ -118,7 +116,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
           });
         } else {
           // обновляем дилера локально
-          dispatch({
+          return dispatch({
             type: DEALER__SUCCESS__LOCAL,
             payload: {
               newDealer: dealer,
@@ -126,7 +124,6 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
             },
           });
         }
-        return Promise.resolve();
       })
       .catch((error) => {
         console.log('catch error', error);

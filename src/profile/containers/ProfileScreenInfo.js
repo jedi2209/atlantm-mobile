@@ -173,14 +173,18 @@ class ProfileScreenInfo extends Component {
       saldoValue = get(this.props.bonus, 'data.saldo.value', 0);
     }
 
-    let saldoCurr = get(this.props.bonus, 'data.saldo.convert.curr', null);
-    if (!saldoCurr) {
-      saldoCurr = get(
-        this.props.bonus,
-        'data.saldo.curr',
-        strings.ProfileScreenInfo.bonus.current.bonuses,
-      );
-    }
+    let saldoCurr = get(
+      this.props.bonus,
+      'data.saldo.convert.curr',
+      strings.ProfileScreenInfo.bonus.current.bonuses,
+    );
+    // if (!saldoCurr) {
+    //   saldoCurr = get(
+    //     this.props.bonus,
+    //     'data.saldo.curr',
+    //     strings.ProfileScreenInfo.bonus.current.bonuses,
+    //   );
+    // }
     return (
       <SafeAreaView>
         <ScrollView>
@@ -205,8 +209,6 @@ class ProfileScreenInfo extends Component {
                   paddingTop: 10,
                 },
               ]}
-              goBack={true}
-              isLocal={false}
               navigation={this.props.navigation}
               returnScreen={this.props.navigation.state.routeName}
             />

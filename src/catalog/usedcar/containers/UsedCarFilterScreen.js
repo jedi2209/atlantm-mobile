@@ -33,6 +33,8 @@ import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
 import {ScrollView} from 'react-native-gesture-handler';
 
+import strings from '../../../core/lang/const';
+
 const mapStateToProps = ({catalog, dealer, nav}) => {
   return {
     nav,
@@ -175,7 +177,7 @@ class UsedCarFilterScreen extends Component {
   render() {
     const dataForAccordion = [
       {
-        title: 'Город',
+        title: strings.UsedCarFilterScreen.city,
         content: (
           <Content>
             {this.state.cityFilters.map(({id, name}) => (
@@ -232,10 +234,12 @@ class UsedCarFilterScreen extends Component {
         ),
       },
     ];
-
-    if (this.props.filterPrice.min || this.props.filterPrice.max) {
+    if (
+      (this.props.filterPrice.min || this.props.filterPrice.max) &&
+      this.props.filterPrice.min !== this.props.filterPrice.max
+    ) {
       dataForAccordion.push({
-        title: 'Цена',
+        title: strings.NewCarFilterScreen.price,
         content: (
           <View
             style={{
@@ -391,8 +395,8 @@ class UsedCarFilterScreen extends Component {
                 fontSize: 16,
               }}>
               {this.props.items.length && this.props.items[0].type
-                ? 'Нет авто в наличии'
-                : 'Применить'}
+                ? strings.CarList.emptyMessage
+                : strings.UsedCarFilterScreen.apply}
             </Text>
           </Button>
         </View>

@@ -18,7 +18,7 @@ import {Icon, Button, ActionSheet, Toast} from 'native-base';
 // import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {verticalScale} from '../../utils/scale';
 import styleConst from '../../core/style-const';
-import getOrders from '../../utils/orders';
+import orderFunctions from '../../utils/orders';
 import strings from '../../core/lang/const';
 
 import {actionToggleCar} from '../actions';
@@ -49,51 +49,7 @@ const styles = StyleSheet.create({
   },
 });
 
-let CarMenu = {
-  hidden: {
-    android: {
-      BUTTONS: [
-        {
-          id: 'TOhistory',
-          text: strings.UserCars.menu.history,
-          icon: 'book-outline',
-          iconColor: '#2c8ef4',
-        },
-        {
-          id: 'hide',
-          text: strings.UserCars.menu.makeCurrent,
-          icon: 'swap-horizontal',
-          iconColor: '#2c8ef4',
-        },
-        {
-          id: 'cancel',
-          text: strings.Base.cancel.toLowerCase(),
-          icon: 'close',
-          iconColor: 'red',
-        },
-      ],
-      DESTRUCTIVE_INDEX: 1,
-      CANCEL_INDEX: 2,
-    },
-    ios: {
-      BUTTONS: [
-        {
-          id: 'TOhistory',
-          text: '📘 ' + strings.UserCars.menu.history,
-        },
-        {
-          id: 'hide',
-          text: '📤 ' + strings.UserCars.menu.makeCurrent,
-        },
-        {id: 'cancel', text: strings.Base.cancel.toLowerCase()},
-      ],
-      DESTRUCTIVE_INDEX: 1,
-      CANCEL_INDEX: 2,
-    },
-  },
-};
-
-const UserCars = ({navigation, actionToggleCar}) => {
+let UserCars = ({navigation, actionToggleCar}) => {
   const cars = get(store.getState(), 'profile.cars');
   const [loading, setLoading] = useState(false);
   const [carsPanel, setActivePanel] = useState('default');
@@ -151,7 +107,6 @@ const UserCars = ({navigation, actionToggleCar}) => {
             setLoading(true);
             actionToggleCar(item, get(store.getState(), 'profile.login.SAP'))
               .then((res) => {
-                console.log('res', res);
                 if (res.type && res.type === 'CAR_HIDE__SUCCESS') {
                   setActivePanel('default');
                   setLoading(false);
@@ -163,7 +118,6 @@ const UserCars = ({navigation, actionToggleCar}) => {
                 }
               })
               .catch((error) => {
-                console.log('error', error);
                 setLoading(false);
                 Toast.show({
                   text: error,
@@ -197,11 +151,13 @@ const UserCars = ({navigation, actionToggleCar}) => {
               key={item.vin}
               onPress={() => {
                 if (CarType === 'active') {
-                  getOrders('car').then((ordersData) => {
+                  orderFunctions.getOrders('car').then((ordersData) => {
                     return _showMenu(ordersData, item);
                   });
                 } else {
-                  return _showMenu(CarMenu[CarType][Platform.OS], item);
+                  orderFunctions.getCarMenu().then((data) => {
+                    return _showMenu(data[CarType][Platform.OS], item);
+                  });
                 }
               }}>
               <View

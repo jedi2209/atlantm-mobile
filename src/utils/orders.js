@@ -3,7 +3,7 @@ import {get} from 'lodash';
 import {store} from '../core/store';
 import strings from '../core/lang/const';
 
-export default async function getOrders(type = 'default') {
+async function getOrders(type = 'default') {
   let storeState = store.getState();
   let tmpArr = [];
   let res = {
@@ -161,3 +161,55 @@ export default async function getOrders(type = 'default') {
   }
   return res[Platform.OS];
 }
+
+async function getCarMenu() {
+  const CarMenu = {
+    hidden: {
+      android: {
+        BUTTONS: [
+          {
+            id: 'TOhistory',
+            text: strings.UserCars.menu.history,
+            icon: 'book-outline',
+            iconColor: '#2c8ef4',
+          },
+          {
+            id: 'hide',
+            text: strings.UserCars.menu.makeCurrent,
+            icon: 'swap-horizontal',
+            iconColor: '#2c8ef4',
+          },
+          {
+            id: 'cancel',
+            text: strings.Base.cancel.toLowerCase(),
+            icon: 'close',
+            iconColor: 'red',
+          },
+        ],
+        DESTRUCTIVE_INDEX: 1,
+        CANCEL_INDEX: 2,
+      },
+      ios: {
+        BUTTONS: [
+          {
+            id: 'TOhistory',
+            text: '📘 ' + strings.UserCars.menu.history,
+          },
+          {
+            id: 'hide',
+            text: '📤 ' + strings.UserCars.menu.makeCurrent,
+          },
+          {id: 'cancel', text: strings.Base.cancel.toLowerCase()},
+        ],
+        DESTRUCTIVE_INDEX: 1,
+        CANCEL_INDEX: 2,
+      },
+    },
+  };
+  return CarMenu;
+}
+
+export default {
+  getOrders,
+  getCarMenu,
+};

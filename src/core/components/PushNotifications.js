@@ -3,7 +3,7 @@ import {Platform, PermissionsAndroid, Alert, Linking} from 'react-native';
 import {NavigationActions, StackActions} from 'react-navigation';
 import OneSignal from 'react-native-onesignal';
 import Amplitude from '../../utils/amplitude-analytics';
-
+import NavigationService from '../containers/NavigationService';
 import {get} from 'lodash';
 
 // const isAndroid = Platform.OS === 'android';
@@ -56,18 +56,12 @@ export default {
     }
     if (!routeName) return;
 
-    // const resetAction = StackActions.reset({
-    //   index: 0,
-    //   actions: [NavigationActions.navigate({routeName, params})],
-    // });
-
-    // window.atlantmNavigation.dispatch(resetAction);
-
-    if (target === 'action') {
-      setTimeout(
-        () => window.atlantmNavigation.navigate('InfoPostScreen', params),
-        200,
-      );
+    switch (target) {
+      case 'action':
+        NavigationService.navigate('InfoPostScreen', params);
+        break;
+      default:
+        break;
     }
   },
 

@@ -270,6 +270,9 @@ class CarListItem extends Component {
               </Text>
               {badge &&
                 badge.map((item, index) => {
+                  if (item.name.toLowerCase() === 'спец.цена') {
+                    item.name = strings.CarList.badges.specialPrice;
+                  }
                   return (
                     <Badge
                       id={car.id.api}

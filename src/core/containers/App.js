@@ -3,6 +3,7 @@ import React, {PureComponent} from 'react';
 import {ActivityIndicator} from 'react-native';
 import {Root} from 'native-base';
 import {createAppContainer, NavigationActions} from 'react-navigation';
+import NavigationService from './NavigationService';
 
 // redux
 import {connect} from 'react-redux';
@@ -23,6 +24,7 @@ import API from '../../utils/api';
 import {get} from 'lodash';
 import OneSignal from 'react-native-onesignal';
 import PushNotifications from '../components/PushNotifications';
+import styleConst from '../../core/style-const';
 
 // components
 import DeviceInfo from 'react-native-device-info';
@@ -52,10 +54,18 @@ const mapDispatchToProps = {
 class App extends PureComponent {
   constructor(props) {
     super(props);
-    this.navigatorRef = React.createRef();
     this.state = {
       isloading: false,
     };
+
+    this.mainScreen = 'BottomTabNavigation';
+    this.storeVersion = '2020-06-16';
+
+    const isDealerSelected = get(store.getState(), 'dealer.selected.id');
+    const Router = getRouter(
+      isDealerSelected ? this.mainScreen : 'IntroScreen',
+    );
+    this.AppContainer = createAppContainer(Router);
   }
 
   componentDidMount() {
@@ -70,14 +80,11 @@ class App extends PureComponent {
       isStoreUpdated,
     } = this.props;
 
-    // console.log('this.props-APP.js', this.props);
-
     if (get(auth, 'login') === 'zteam') {
       window.atlantmDebug = true;
     }
 
     const currentDealer = get(dealerSelected, 'id', false);
-    const storeVersion = '2020-06-16';
 
     const currentLanguage = get(this.props, 'currentLanguage', 'ru');
     strings.setLanguage(currentLanguage);
@@ -86,14 +93,14 @@ class App extends PureComponent {
       currentDealer &&
       typeof isStoreUpdated !== 'undefined' &&
       isStoreUpdated !== false &&
-      isStoreUpdated !== storeVersion
+      isStoreUpdated !== this.storeVersion
     ) {
       this.setState({
         isloading: true,
       });
       // если мы ещё не очищали стор
       actionMenuOpenedCount(0);
-      actionStoreUpdated(storeVersion);
+      actionStoreUpdated(this.storeVersion);
       setTimeout(() => {
         this.setState({
           isloading: false,
@@ -101,44 +108,42 @@ class App extends PureComponent {
       }, 500);
     }
 
-    setTimeout(() => {
-      OneSignal.init('XXXX', {
-        kOSSettingsKeyAutoPrompt: true,
-        kOSSettingsKeyInFocusDisplayOption: 2,
-      });
+    const currentVersion = DeviceInfo.getVersion();
+    if (currentVersion) {
+      API.fetchVersion(currentVersion);
+    }
 
-      OneSignal.promptForPushNotificationsWithUserResponse((status) => {
-        if (status) {
-          actionSetPushGranted(true);
+    OneSignal.init('XXXX', {
+      kOSSettingsKeyAutoPrompt: true,
+      kOSSettingsKeyInFocusDisplayOption: 2,
+    });
 
-          if (
-            Number(menuOpenedCount) <= 1 ||
-            menuOpenedCount === 0 ||
-            isStoreUpdated === false
-          ) {
-            actionSetPushActionSubscribe(true);
-          }
+    OneSignal.promptForPushNotificationsWithUserResponse((status) => {
+      if (status) {
+        actionSetPushGranted(true);
 
-          OneSignal.setSubscription(true);
-        } else {
-          actionSetPushGranted(false);
-          actionSetPushActionSubscribe(false);
-          PushNotifications.unsubscribeFromTopic('actions');
-          OneSignal.setSubscription(false);
+        if (
+          Number(menuOpenedCount) <= 1 ||
+          menuOpenedCount === 0 ||
+          isStoreUpdated === false
+        ) {
+          actionSetPushActionSubscribe(true);
         }
-      });
 
-      OneSignal.setLogLevel(6, 0);
-      OneSignal.enableSound(true);
-      OneSignal.enableVibrate(true);
-
-      PushNotifications.init();
-
-      const currentVersion = DeviceInfo.getVersion();
-      if (currentVersion) {
-        API.fetchVersion(currentVersion);
+        OneSignal.setSubscription(true);
+      } else {
+        actionSetPushGranted(false);
+        actionSetPushActionSubscribe(false);
+        PushNotifications.unsubscribeFromTopic('actions');
+        OneSignal.setSubscription(false);
       }
-    }, 700);
+    });
+
+    OneSignal.setLogLevel(6, 0);
+    OneSignal.enableSound(true);
+    OneSignal.enableVibrate(true);
+
+    PushNotifications.init();
   }
 
   onNavigationStateChange = (prevState, newState) => {
@@ -157,19 +162,15 @@ class App extends PureComponent {
   }
 
   render() {
-    const mainScreen = 'BottomTabNavigation';
-    const isDealerSelected = get(store.getState(), 'dealer.selected.id');
-    const Router = getRouter(isDealerSelected ? mainScreen : 'IntroScreen');
-    const AppContainer = createAppContainer(Router);
-
     if (this.state.isloading) {
-      return <ActivityIndicator color="#fff" />;
+      return <ActivityIndicator color={styleConst.color.blue} />;
     }
-
     return (
       <Root style={{flex: 1}}>
-        <AppContainer
-          ref={this.navigatorRef}
+        <this.AppContainer
+          ref={(navigatorRef) => {
+            NavigationService.setTopLevelNavigator(navigatorRef);
+          }}
           onNavigationStateChange={this.onNavigationStateChange}
         />
       </Root>

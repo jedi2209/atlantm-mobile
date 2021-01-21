@@ -87,22 +87,30 @@ class UserCarListScreen extends Component {
       headerLeft: <View />,
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerRight: (
-        <View style={stylesHeader.headerRightStyle}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('UsedCarFilterScreen');
-            }}>
-            <Icon type="FontAwesome" name="filter" style={styles.iconFilter} />
-          </TouchableOpacity>
-        </View>
-      ),
+      headerRight:
+        navigation.state.params.itemsLength > 5 ? (
+          <View style={stylesHeader.headerRightStyle}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('UsedCarFilterScreen');
+              }}>
+              <Icon
+                type="FontAwesome"
+                name="filter"
+                style={styles.iconFilter}
+              />
+            </TouchableOpacity>
+          </View>
+        ) : null,
     };
   };
 
   componentDidMount() {
     setTimeout(() => {
-      this.props.navigation.setParams({total: this.props.total});
+      this.props.navigation.setParams({
+        total: this.props.total,
+        itemsLength: this.props.items && this.props.items.length,
+      });
     }, 200);
 
     Amplitude.logEvent('screen', 'catalog/usedcar/list');
@@ -121,7 +129,10 @@ class UserCarListScreen extends Component {
       this.fetchUsedCar('default').then(() => {
         actionSetStopNeedUpdateUsedCarList();
         setTimeout(() => {
-          this.props.navigation.setParams({total: this.props.total});
+          this.props.navigation.setParams({
+            total: this.props.total,
+            itemsLength: this.props.items && this.props.items.length,
+          });
         }, 200);
       });
     }
@@ -171,7 +182,10 @@ class UserCarListScreen extends Component {
       nextPage: pages.next,
     }).then(() => {
       return setTimeout(() => {
-        navigation.setParams({total: total});
+        navigation.setParams({
+          total: total,
+          itemsLength: this.props.items && this.props.items.length,
+        });
       }, 100);
     });
   };

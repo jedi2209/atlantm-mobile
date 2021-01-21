@@ -92,12 +92,7 @@ class BonusInfoScreen extends Component {
     }
 
     Amplitude.logEvent('screen', `${refererScreen}/bonus_info`, {region});
-
-    if (!bonusInfo) {
-      actionFetchBonusInfo({
-        region,
-      });
-    }
+    actionFetchBonusInfo({region});
   }
 
   onLayoutWebView = (e) => {
@@ -114,7 +109,9 @@ class BonusInfoScreen extends Component {
     }
 
     if (bonusInfo) {
-      bonusInfo = processHtml(bonusInfo, this.state.webViewWidth);
+      //console.log('bonusInfo', bonusInfo);
+      //bonusInfo = processHtml(bonusInfo, this.state.webViewWidth);
+      //console.log('bonusInfo22', bonusInfo);
     }
 
     return (

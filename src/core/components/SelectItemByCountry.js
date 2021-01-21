@@ -1,9 +1,10 @@
 import React, {PureComponent} from 'react';
 import {Alert, View, StyleSheet} from 'react-native';
 import {Text, ListItem, Body} from 'native-base';
+import {connect} from 'react-redux';
 
 // components
-import {NavigationActions, StackActions} from 'react-navigation';
+import NavigationService from '../containers/NavigationService';
 import Imager from '../components/Imager';
 import BrandLogo from '../../core/components/BrandLogo';
 
@@ -17,6 +18,8 @@ import {
   DEALER__SUCCESS__LOCAL,
   DEALER__FAIL,
 } from '../../dealer/actionTypes';
+
+import {selectDealer} from '../../dealer/actions';
 
 import strings from '../../core/lang/const';
 
@@ -77,10 +80,20 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class SelectItemByCountry extends PureComponent {
+const mapStateToProps = ({core}) => {
+  return {
+    pushActionSubscribeState: core.pushActionSubscribeState,
+  };
+};
+
+const mapDispatchToProps = {
+  selectDealer,
+};
+
+class SelectItemByCountry extends PureComponent {
   static propTypes = {
     item: PropTypes.object,
-    navigation: PropTypes.object,
+    // navigation: PropTypes.object,
     selectItem: PropTypes.func,
     itemLayout: PropTypes.string,
     selectedItem: PropTypes.object,
@@ -95,19 +108,19 @@ export default class SelectItemByCountry extends PureComponent {
       navigation,
       returnScreen,
       returnState,
-      selectItem,
       item,
       goBack,
       onSelect,
       selectedItem,
+      selectDealer,
       isLocal,
     } = this.props;
     const mainScreen = 'ContactsScreen';
-    selectItem({
+    selectDealer({
       dealerBaseData: item,
       dealerSelected: selectedItem,
       isLocal,
-    }).then(async (action) => {
+    }).then((action) => {
       const newDealer = get(action, 'payload.newDealer');
       const prevDealer = get(action, 'payload.prevDealer');
       if (
@@ -116,25 +129,16 @@ export default class SelectItemByCountry extends PureComponent {
           action.type === DEALER__SUCCESS__LOCAL)
       ) {
         if (onSelect) {
-          await onSelect({
+          onSelect({
             newDealer: newDealer,
             prevDealer: prevDealer,
             isLocal: isLocal,
           });
         }
         if (Boolean(goBack)) {
-          return navigation.goBack();
+          return NavigationService.goBack();
         }
-        // const resetAction = StackActions.reset({
-        //   index: 0,
-        //   actions: [
-        //     NavigationActions.navigate({
-        //       routeName: returnScreen || mainScreen,
-        //       params: returnState,
-        //     }),
-        //   ],
-        // });
-        // navigation.dispatch(resetAction);
+        NavigationService.reset(returnScreen, returnState);
       }
 
       if (action && action.type === DEALER__FAIL) {
@@ -286,3 +290,7 @@ export default class SelectItemByCountry extends PureComponent {
     return itemLayout === 'dealer' ? this.renderDealer() : this.renderCity();
   }
 }
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SelectItemByCountry);
