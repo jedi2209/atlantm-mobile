@@ -85,14 +85,17 @@ const styles = StyleSheet.create({
   textinput: {
     height: Platform.OS === 'ios' ? 50 : 'auto',
     paddingTop: 20,
-    borderColor: '#d8d8d8',
-    borderBottomWidth: 1,
+    // borderColor: '#d8d8d8',
+    // borderBottomWidth: 1,
+    backgroundColor: '#fff',
     color: '#222b45',
     fontSize: 18,
   },
   button: {
     backgroundColor: styleConst.color.lightBlue,
     justifyContent: 'center',
+    padding: 15,
+    borderRadius: 5,
   },
   buttonText: {
     color: '#fff',
@@ -306,7 +309,7 @@ class TvaResultsScreen extends Component {
                         style={[
                           styles.group,
                           activeOrderId === item.id && {
-                            backgroundColor: '#eef0f3',
+                            backgroundColor: '#fff',
                           },
                         ]}>
                         <Text style={styles.groupLabel}>№ {item.id}</Text>
@@ -358,6 +361,7 @@ class TvaResultsScreen extends Component {
                   </View>
                   <View style={styles.group}>
                     <Button
+                      full
                       onPress={
                         this.state.loading
                           ? undefined
