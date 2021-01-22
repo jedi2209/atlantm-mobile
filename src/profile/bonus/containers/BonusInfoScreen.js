@@ -20,7 +20,6 @@ import WebViewAutoHeight from '../../../core/components/WebViewAutoHeight';
 // helpers
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import processHtml from '../../../utils/process-html';
 import Amplitude from '../../../utils/amplitude-analytics';
 import stylesHeader from '../../../core/components/Header/style';
 import getTheme from '../../../../native-base-theme/components';
@@ -36,7 +35,6 @@ const styles = StyleSheet.create({
   webviewContainer: {
     flex: 1,
     paddingBottom: styleConst.ui.verticalGap - 5,
-    paddingHorizontal: styleConst.ui.horizontalGap + 5,
   },
 });
 

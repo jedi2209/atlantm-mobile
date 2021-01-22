@@ -655,9 +655,11 @@ class NewCarItemScreen extends Component {
 
     let colorName = strings.Colors[Number(get(carDetails, 'color.picker.id'))];
     if (!colorName) {
-      colorName = get(carDetails, 'color.name.simple');
+      colorName = get(carDetails, 'color.name.simple', null);
     }
-    colorName = colorName.toLowerCase();
+    if (colorName) {
+      colorName = colorName.toLowerCase();
+    }
 
     return (
       <StyleProvider style={getTheme()}>
@@ -673,20 +675,22 @@ class NewCarItemScreen extends Component {
                   zIndex: 20,
                   marginTop: CarImgReal ? -12 : -12,
                 }}>
-                <ColorBox
-                  ref={(input) => {
-                    return (this.ColorBox = input);
-                  }}
-                  containerStyle={{
-                    position: 'absolute',
-                    right: 0,
-                    top: 280,
-                    zIndex: 1000,
-                    padding: 20,
-                  }}
-                  color={get(carDetails, 'color')}
-                />
-                {badge ? (
+                {get(carDetails, 'color.picker.codes.hex', null) ? (
+                  <ColorBox
+                    ref={(input) => {
+                      return (this.ColorBox = input);
+                    }}
+                    containerStyle={{
+                      position: 'absolute',
+                      right: 0,
+                      top: 280,
+                      zIndex: 1000,
+                      padding: 20,
+                    }}
+                    color={get(carDetails, 'color')}
+                  />
+                ) : null}
+                {badge && badge.length ? (
                   <View
                     style={{
                       flex: 1,
@@ -697,6 +701,9 @@ class NewCarItemScreen extends Component {
                       zIndex: 1000,
                     }}>
                     {badge.map((item, index) => {
+                      if (item.name.toLowerCase() === 'спец.цена') {
+                        item.name = strings.CarList.badges.specialPrice;
+                      }
                       return (
                         <Badge
                           id={carDetails.id.api}

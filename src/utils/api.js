@@ -149,8 +149,6 @@ export default {
 
     url = nextPageUrl || url;
 
-    // __DEV__ && console.log('API fetchReviews url', url);
-
     return this.request(url, baseRequestParams);
   },
 

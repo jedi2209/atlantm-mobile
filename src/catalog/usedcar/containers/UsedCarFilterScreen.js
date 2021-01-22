@@ -67,7 +67,7 @@ const mapDispatchToProps = {
 
 class UsedCarFilterScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: 'Фильтры',
+    headerTitle: strings.NewCarFilterScreen.title,
     headerStyle: stylesHeader.common,
     headerTitleStyle: {fontWeight: '200', color: '#000'},
     headerRight: (

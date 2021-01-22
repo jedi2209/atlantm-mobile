@@ -25,6 +25,8 @@ import {
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
 
+import strings from '../core/lang/const';
+
 export const actionSelectAddReviewPublicAgree = (isAgree) => {
   return (dispatch) => {
     dispatch({
@@ -142,17 +144,20 @@ export const actionFetchReviews = (props) => {
     return API.fetchReviews({...props, nextPageUrl})
       .then((res) => {
         if (res.error) {
+          let message = res.error.message;
+          if (res.error.code === 204) {
+            message = strings.EkoScreen.empty.text;
+          }
           return dispatch({
             type: REVIEWS__FAIL,
             payload: {
               code: res.error.code,
-              error: res.error.message,
+              error: message,
             },
           });
         }
 
         const result = {...res};
-
         // в случае если отзывов нет, в data приходит пустой массив
         if (result.data.length === 0) {
           result.data.push({type: 'empty', id: Number(new Date())});
@@ -169,6 +174,9 @@ export const actionFetchReviews = (props) => {
         });
       })
       .catch((error) => {
+        if (error.code === 204) {
+          error.message = strings.EkoScreen.empty.text;
+        }
         return dispatch({
           type: REVIEWS__FAIL,
           payload: {

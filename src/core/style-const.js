@@ -86,7 +86,7 @@ export default {
   },
   new: {
     // TODO: reeemmaee to bluee
-    blueHeader: '#0F66B2',
+    blueHeader: '#027aff',
     passive: '#757575',
     shadowActive: {
       shadowOffset: {

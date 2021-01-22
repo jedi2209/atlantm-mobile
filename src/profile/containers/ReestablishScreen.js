@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 
 import {get} from 'lodash';
 import {
+  Animated,
   View,
   StyleSheet,
   ScrollView,
@@ -22,6 +23,16 @@ import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
 import styleConst from '../../core/style-const';
 
+import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
+import stylesHeader from '../../core/components/Header/style';
+import strings from '../../core/lang/const';
+
+import {
+  actionLogin,
+  actionSaveProfileByUser,
+  actionRequestForgotPass,
+} from '../actions';
+
 const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
   return {
     list: info.list,
@@ -32,21 +43,11 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
   };
 };
 
-import {
-  actionLogin,
-  actionSaveProfileByUser,
-  actionRequestForgotPass,
-} from '../actions';
-
 const mapDispatchToProps = {
   actionLogin,
   actionSaveProfileByUser,
   actionRequestForgotPass,
 };
-
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-import stylesHeader from '../../core/components/Header/style';
-import strings from '../../core/lang/const';
 
 const deviceWidth = Dimensions.get('window').width;
 const isAndroid = Platform.OS === 'android';
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     marginBottom: 36,
   },
   textinput: {
-    height: !isAndroid ? 40 : 'auto',
+    height: !isAndroid ? 60 : 'auto',
     borderColor: '#d8d8d8',
     borderBottomWidth: 1,
     color: '#222b45',
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.lightBlue,
     justifyContent: 'center',
     borderRadius: 5,
+    padding: 15,
   },
   buttonText: {
     color: '#fff',
@@ -110,6 +112,13 @@ class ReestablishScreen extends React.Component {
       login: '',
       password: '',
     };
+
+    this._animated = {
+      SubmitButton: new Animated.Value(0),
+      duration: 150,
+    };
+
+    this.disableButton = false;
   }
 
   static navigationOptions = ({navigation}) => {
@@ -137,7 +146,7 @@ class ReestablishScreen extends React.Component {
     if (login.length === 0 || password.length === 0) {
       Toast.show({
         text: strings.ReestablishScreen.fieldsRequired,
-        position: 'top',
+        position: 'bottom',
         type: 'warning',
       });
       this.setState({loading: false});
@@ -151,7 +160,7 @@ class ReestablishScreen extends React.Component {
     if (login.length === 0) {
       Toast.show({
         text: strings.ReestablishScreen.loginRequired,
-        position: 'top',
+        position: 'bottom',
         type: 'warning',
       });
       this.setState({loading: false});
@@ -181,7 +190,7 @@ class ReestablishScreen extends React.Component {
             const message = get(action, 'payload.message');
             Toast.show({
               text: !code || code === 500 ? defaultMessage : message,
-              position: 'top',
+              position: 'bottom',
               type: 'danger',
             });
             this.setState({loading: false});
@@ -204,7 +213,7 @@ class ReestablishScreen extends React.Component {
                 const _this = this;
                 Toast.show({
                   text: strings.Notifications.success.title,
-                  position: 'top',
+                  position: 'bottom',
                   type: 'success',
                 });
                 setTimeout(() => {
@@ -215,7 +224,7 @@ class ReestablishScreen extends React.Component {
                 this.setState({loading: false});
                 Toast.show({
                   text: strings.Notifications.error.text,
-                  position: 'top',
+                  position: 'bottom',
                   type: 'danger',
                 });
               });
@@ -225,9 +234,22 @@ class ReestablishScreen extends React.Component {
   };
 
   render() {
-    let disableButton = false;
     if (this.state.login.length === 0 || this.state.password.length === 0) {
-      disableButton = true;
+      Animated.timing(this._animated.SubmitButton, {
+        toValue: 0,
+        duration: this._animated.duration,
+        useNativeDriver: true,
+      }).start(() => {
+        this.disableButton = true;
+      });
+    } else {
+      Animated.timing(this._animated.SubmitButton, {
+        toValue: 1,
+        duration: this._animated.duration,
+        useNativeDriver: true,
+      }).start(() => {
+        this.disableButton = false;
+      });
     }
     return (
       <KeyboardAvoidingView>
@@ -305,21 +327,20 @@ class ReestablishScreen extends React.Component {
                       this.props
                         .actionRequestForgotPass(this.state.login)
                         .then((action) => {
-                          console.log('action', action);
                           switch (action.type) {
                             case 'FORGOT_PASS_REQUEST__SUCCESS':
                               Toast.show({
                                 text: action.payload.message
                                   ? action.payload.message
                                   : strings.Notifications.success.title,
-                                position: 'top',
+                                position: 'bottom',
                                 type: 'success',
                               });
                               break;
                             default:
                               Toast.show({
                                 text: action.payload.message,
-                                position: 'top',
+                                position: 'bottom',
                                 type: 'danger',
                               });
                               break;
@@ -357,11 +378,18 @@ class ReestablishScreen extends React.Component {
                   </Button>
                 </View>
               </View>
-              {!disableButton ? (
-                <View style={styles.group}>
+              {!this.disableButton ? (
+                <Animated.View
+                  style={[
+                    styles.group,
+                    {
+                      opacity: this._animated.SubmitButton,
+                    },
+                  ]}>
                   <Button
-                    disabled={disableButton ? true : false}
-                    active={disableButton ? false : true}
+                    full
+                    disabled={this.disableButton ? true : false}
+                    active={this.disableButton ? false : true}
                     title={strings.ReestablishScreen.findMyData}
                     onPress={this.state.loading ? undefined : this.onPressLogin}
                     style={[styles.button, styleConst.shadow.default]}>
@@ -373,7 +401,7 @@ class ReestablishScreen extends React.Component {
                       </Text>
                     )}
                   </Button>
-                </View>
+                </Animated.View>
               ) : null}
             </View>
           </ScrollView>
