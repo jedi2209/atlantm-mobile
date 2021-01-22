@@ -87,21 +87,16 @@ class UserCarListScreen extends Component {
       headerLeft: <View />,
       headerStyle: stylesHeader.blueHeader,
       headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerRight:
-        navigation.state.params.itemsLength > 5 ? (
-          <View style={stylesHeader.headerRightStyle}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('UsedCarFilterScreen');
-              }}>
-              <Icon
-                type="FontAwesome"
-                name="filter"
-                style={styles.iconFilter}
-              />
-            </TouchableOpacity>
-          </View>
-        ) : null,
+      headerRight: (
+        <View style={stylesHeader.headerRightStyle}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('UsedCarFilterScreen');
+            }}>
+            <Icon type="FontAwesome" name="filter" style={styles.iconFilter} />
+          </TouchableOpacity>
+        </View>
+      ),
     };
   };
 

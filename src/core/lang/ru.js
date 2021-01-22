@@ -254,6 +254,9 @@ export default {
   },
   NewCarFilterScreen: {
     price: 'Цена',
+    title: 'Фильтры',
+    brands: 'Бренды',
+    models: 'Модели',
   },
   UserCarListScreen: {
     title: 'Подержанные автомобили',
@@ -266,6 +269,7 @@ export default {
   },
   UsedCarFilterScreen: {
     city: 'Город',
+    apply: 'Применить',
   },
   ContactsScreen: {
     closedDealer: {
@@ -309,6 +313,9 @@ export default {
   EkoScreen: {
     title: 'Отзывы и предложения',
     dealerReviews: 'Отзывы о работе автоцентра',
+    empty: {
+      text: 'Нет отзывов для отображения',
+    },
   },
   ReviewAddMessageStepScreen: {
     title: 'Новый отзыв',
@@ -513,6 +520,7 @@ export default {
   },
   TvaScreen: {
     title: 'Табло выдачи авто',
+    carNotFound: 'Автомобиль с гос.номером ### не найден',
   },
   TvaResultsScreen: {
     title: 'Информация об авто',

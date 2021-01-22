@@ -1,3 +1,4 @@
+import strings from '../core/lang/const';
 import API from '../utils/api';
 
 import {
@@ -103,6 +104,10 @@ export const actionFetchTva = (props) => {
         // const { error, status, data } = dumpTvaAnswer;
 
         if (status !== 'success') {
+          if (error.code === 404) {
+            error.message = strings.TvaScreen.carNotFound;
+            error.message = error.message.replace('###', error.carNumber);
+          }
           return dispatch({
             type: TVA__FAIL,
             payload: {

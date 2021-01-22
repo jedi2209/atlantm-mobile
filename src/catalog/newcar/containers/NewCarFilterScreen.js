@@ -25,6 +25,7 @@ import {
   actionSelectNewCarFilterPrice,
   actionSetNewCarFilterPriceSpecial,
   actionSaveCarFilters,
+  // actionSelectNewCarFilterModels,
 } from '../../actions';
 
 // helpers
@@ -156,7 +157,7 @@ const mapDispatchToProps = {
 
 class NewCarFilterScreen extends Component {
   static navigationOptions = ({navigation}) => ({
-    headerTitle: 'Фильтры',
+    headerTitle: strings.NewCarFilterScreen.title,
     headerStyle: stylesHeader.common,
     headerTitleStyle: {fontWeight: '200', color: '#000'},
     headerLeft: <View />,
@@ -265,15 +266,15 @@ class NewCarFilterScreen extends Component {
     }
   }
 
-  onPressModels = () => {
-    const {filterBrands} = this.props;
-
-    if (filterBrands.length === 0) {
-      setTimeout(() => Alert.alert('Вы не выбрали ни одной марки'), 100);
-    } else {
-      this.props.actionSelectNewCarFilterModels();
-    }
-  };
+  // onPressModels = () => {
+  //   const {filterBrands} = this.props;
+  //   console.log('this.props', this.props);
+  //   if (filterBrands.length === 0) {
+  //     setTimeout(() => Alert.alert('Вы не выбрали ни одной марки'), 100);
+  //   } else {
+  //     this.props.actionSelectNewCarFilterModels();
+  //   }
+  // };
 
   onPressFilterButton = () => {
     this.props.navigation.navigate('NewCarListScreen');
@@ -346,7 +347,7 @@ class NewCarFilterScreen extends Component {
     }
     const filtersContent = [
       {
-        title: 'Бренды',
+        title: strings.NewCarFilterScreen.brands,
         content: (
           <View
             style={{
@@ -576,7 +577,7 @@ class NewCarFilterScreen extends Component {
 
     if (this.state.modelFilter.length > 0) {
       filtersContent.splice(1, 0, {
-        title: 'Модели',
+        title: strings.NewCarFilterScreen.models,
         content: (
           <View
             style={{

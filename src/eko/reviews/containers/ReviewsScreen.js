@@ -114,7 +114,6 @@ class ReviewsScreen extends Component {
       actionSelectFilterRatingTo,
     } = this.props;
 
-    console.log('>>> dateFrom', dateFrom);
     if (!dateFrom) {
       dateFrom = substractYears(10);
       actionDateFromFill(dateFrom);

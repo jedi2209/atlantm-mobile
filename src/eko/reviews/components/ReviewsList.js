@@ -15,7 +15,7 @@ import {
   EVENT_REFRESH,
 } from '../../../core/actionTypes';
 
-const TEXT_EMPTY = 'Нет отзывов для отображения';
+import strings from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   container: {
@@ -60,12 +60,16 @@ export default class ReviewsList extends Component {
   renderEmptyComponent = () => {
     const {isFetchItems} = this.props;
 
-    return isFetchItems ? <SpinnerView /> : <EmptyMessage text={TEXT_EMPTY} />;
+    return isFetchItems ? (
+      <SpinnerView />
+    ) : (
+      <EmptyMessage text={strings.EkoScreen.empty.text} />
+    );
   };
 
   renderItem = ({item}) => {
     if (item.type === 'empty') {
-      return <EmptyMessage text={TEXT_EMPTY} />;
+      return <EmptyMessage text={strings.EkoScreen.empty.text} />;
     }
 
     const {onPressItemHandler} = this.props;

@@ -253,6 +253,9 @@ export default {
   },
   NewCarFilterScreen: {
     price: 'Ціна',
+    title: 'Фільтри',
+    brands: 'Бренди',
+    models: 'Моделі',
   },
   UserCarListScreen: {
     title: 'Автомобілі з пробігом',
@@ -309,6 +312,9 @@ export default {
   EkoScreen: {
     title: 'Відгуки та пропозиції',
     dealerReviews: 'Відгуки про автоцентр',
+    empty: {
+      text: 'Немає відгуків для відображення',
+    },
   },
   ReviewAddMessageStepScreen: {
     title: 'Новий відгук',
@@ -513,6 +519,7 @@ export default {
   },
   TvaScreen: {
     title: 'Табло видачі авто',
+    carNotFound: 'Автомобіль з держ. номером ### не знайдено',
   },
   TvaResultsScreen: {
     title: 'Інформація про авто',

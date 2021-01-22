@@ -376,13 +376,21 @@ class UserCarItemScreen extends Component {
     const bodyId = get(carDetails, 'body.id');
     let bodyName = get(carDetails, 'body.name');
     if (bodyId) {
-      bodyName = strings.CarParams.body[bodyId];
+      bodyName = strings.CarParams.body[Number(bodyId)];
     }
 
     const wheelId = get(carDetails, 'gearbox.wheel.id');
     let wheelName = get(carDetails, 'gearbox.wheel.name');
     if (wheelId) {
       wheelName = strings.CarParams.wheels[wheelId];
+    }
+
+    let colorName = strings.Colors[Number(get(carDetails, 'color.id'))];
+    if (!colorName) {
+      colorName = get(carDetails, 'color.name.simple', null);
+    }
+    if (colorName) {
+      colorName = colorName.toLowerCase();
     }
 
     return (
@@ -512,10 +520,7 @@ class UserCarItemScreen extends Component {
                       {get(carDetails, 'color.name.simple') ? (
                         <OptionPlate
                           title={strings.NewCarItemScreen.plates.color}
-                          subtitle={get(
-                            carDetails,
-                            'color.name.simple',
-                          ).toLowerCase()}
+                          subtitle={colorName}
                         />
                       ) : null}
                     </View>
