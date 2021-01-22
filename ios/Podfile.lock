@@ -328,7 +328,7 @@ PODS:
   - react-native-vkontakte-login (1.0.1):
     - React
     - VK-ios-sdk
-  - react-native-webview (11.0.3):
+  - react-native-webview (11.2.0):
     - React-Core
   - React-RCTActionSheet (0.63.4):
     - React-Core/RCTActionSheetHeaders (= 0.63.4)
@@ -402,7 +402,7 @@ PODS:
     - React-Core
   - RNDateTimePicker (3.0.9):
     - React-Core
-  - RNDeviceInfo (8.0.0):
+  - RNDeviceInfo (8.0.1):
     - React-Core
   - RNGestureHandler (1.9.0):
     - React-Core
@@ -430,8 +430,8 @@ PODS:
     - Sentry (= 6.0.9)
   - RNSVG (12.1.0):
     - React
-  - RNVectorIcons (7.1.0):
-    - React
+  - RNVectorIcons (8.0.0):
+    - React-Core
   - Sentry (6.0.9):
     - Sentry/Core (= 6.0.9)
   - Sentry/Core (6.0.9)
@@ -711,7 +711,7 @@ SPEC CHECKSUMS:
   react-native-text-input-mask: 07227297075f9653315f43b0424d596423a01736
   react-native-viewpager: ea945e2881ce9a4a8bcdc84de4ec65ff23c90f6e
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
-  react-native-webview: 21fdfbdd5a2268195ca013174f8f656f3509de50
+  react-native-webview: 944b6b607b3e362437dfdaf3ba979e47f4e1c939
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
   React-RCTBlob: a97d378b527740cc667e03ebfa183a75231ab0f0
@@ -728,7 +728,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: da95b83e241a7f5efe3da1a949b3ec3175380be0
   RNCPicker: 77183d9b1cd80ae55505322f8ad09ba0036e29ba
   RNDateTimePicker: 8a51a2216c307769e69ef827293d59549ab1ca23
-  RNDeviceInfo: 87d2d175c760f6bcf58acd036f887e8b2392802c
+  RNDeviceInfo: 921a809eaf9de79645a24de1c6ca90db6cb91786
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNImageCropPicker: 9e0bf18cf4184a846fed55747c8e622208b39947
@@ -738,7 +738,7 @@ SPEC CHECKSUMS:
   RNScreens: 45c457af3d2ee9e08fc01e70da87e653d46b1198
   RNSentry: 51972e3fe50e2fb38ae459af8c87d61f63f364db
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
-  RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
+  RNVectorIcons: f67a1abce2ec73e62fe4606e8110e95a832bc859
   Sentry: 388c9dc093b2fd3a264466a5c5b21e25959610a9
   TOCropViewController: da59f531f8ac8a94ef6d6c0fc34009350f9e8bfe
   VK-ios-sdk: 104a8bc259199fb1fc621c1c93d7a9a6befb4ca0
