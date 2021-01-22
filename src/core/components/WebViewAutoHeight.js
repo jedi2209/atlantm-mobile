@@ -3,7 +3,8 @@ import {Linking} from 'react-native';
 import WebView from 'react-native-webview';
 import styleConst from '../style-const';
 
-const BODY_TAG_PATTERN = /\<\/ *body\>/;
+const BODY_OPEN_TAG_PATTERN = /\<body\>/;
+const BODY_CLOSE_TAG_PATTERN = /\<\/ *body\>/;
 
 const script = `
   ;(function() {
@@ -31,8 +32,9 @@ const styleCSS = `
   <style>
     body, html, #height-wrapper {
         margin: 0;
-        padding: 0;
+        padding: 15;
         font-size: 16px !important;
+        font-family: Geneva, Arial, Helvetica, sans-serif,
         backgroundColor: ${styleConst.color.bg}
     }
     a, a:visited, a.hover {
@@ -84,13 +86,14 @@ const styleCSS = `
       margin-right: 2%;
     }
   </style>
-  <script>
-    ${script}
-  </script>
 `;
 
-const codeInject = (html) =>
-  html.replace(BODY_TAG_PATTERN, styleCSS + '</body>');
+const codeInject = (html) => {
+  html = html.replace(BODY_OPEN_TAG_PATTERN, '');
+  html = html.replace(BODY_CLOSE_TAG_PATTERN, '');
+  html = `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">${styleCSS}</head><body>${html}<script>${script}</script></body></html>`;
+  return html;
+};
 
 export default class WebViewAutoHeight extends PureComponent {
   static defaultProps = {
@@ -149,7 +152,7 @@ export default class WebViewAutoHeight extends PureComponent {
         dataDetectorTypes="all"
         allowsFullscreenVideo={true}
         allowsInlineMediaPlayback={true}
-        incognito={true}
+        // incognito={true}
         originWhitelist={['http://', 'https://', 'tel://', 'mailto://']}
       />
     );
