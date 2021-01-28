@@ -111,6 +111,9 @@ class InfoListScreen extends Component {
     let onSwitchSubscribe =
       navigation.state.params && navigation.state.params.onSwitchSubscribe;
 
+    let pushStatusLoaded =
+      navigation.state.params && navigation.state.params.pushStatusLoaded;
+
     return {
       headerTitle: (
         <Text style={stylesHeader.blueHeaderTitle}>
@@ -128,21 +131,23 @@ class InfoListScreen extends Component {
           />
         </View>
       ),
-      headerRight: (
-        <Icon
-          onPress={onSwitchSubscribe}
-          active={pushActionSubscribeState}
-          style={{
-            color: 'white',
-            marginHorizontal: 10,
-          }}
-          name={
-            pushActionSubscribeState
-              ? 'ios-notifications'
-              : 'ios-notifications-off'
-          }
-        />
-      ),
+      headerRight: () => {
+        return pushStatusLoaded ? (
+          <Icon
+            onPress={onSwitchSubscribe}
+            active={pushActionSubscribeState}
+            style={{
+              color: 'white',
+              marginHorizontal: 10,
+            }}
+            name={
+              pushActionSubscribeState
+                ? 'ios-notifications'
+                : 'ios-notifications-off'
+            }
+          />
+        ) : null;
+      },
     };
   };
 
@@ -170,6 +175,7 @@ class InfoListScreen extends Component {
           actionSetPushActionSubscribe(isPermission);
           this.props.navigation.setParams({
             pushActionSubscribeState: isPermission,
+            pushStatusLoaded: true,
           });
           if (isPermission) {
             title = strings.Notifications.success.title;
@@ -183,6 +189,7 @@ class InfoListScreen extends Component {
       actionSetPushActionSubscribe(false);
       this.props.navigation.setParams({
         pushActionSubscribeState: false,
+        pushStatusLoaded: true,
       });
       title = strings.Notifications.success.titleSad;
       text = strings.Notifications.success.textPushSad;
@@ -203,6 +210,7 @@ class InfoListScreen extends Component {
     this.props.navigation.setParams({
       pushActionSubscribeState: this.props.pushActionSubscribeState,
       onSwitchSubscribe: this.onSwitchActionSubscribe,
+      pushStatusLoaded: true,
     });
 
     if (!isFetchInfoList) {
@@ -230,7 +238,6 @@ class InfoListScreen extends Component {
     const {region, id: dealer} = dealerSelected;
 
     this.setState({isRefreshing: true});
-    console.log('this.props onRefresh', this.props);
 
     this.props.fetchInfoList(region, dealer).then(() => {
       this.setState({isRefreshing: false});

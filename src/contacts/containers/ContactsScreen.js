@@ -43,7 +43,7 @@ import {ERROR_NETWORK} from '../../core/const';
 import Carousel from 'react-native-snap-carousel';
 import strings from '../../core/lang/const';
 
-const HEADER_MAX_HEIGHT = 406;
+const HEADER_MAX_HEIGHT = 416;
 
 const styles = StyleSheet.create({
   safearea: {
@@ -56,21 +56,24 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     width: null,
-    height: HEADER_MAX_HEIGHT + 10,
+    height: HEADER_MAX_HEIGHT,
     resizeMode: 'cover',
+    zIndex: 0,
   },
   blackBack: {
     height: 65,
     backgroundColor: '#000',
     opacity: 0.5,
+    zIndex: 2,
   },
   address: {
-    marginTop: -50,
+    marginTop: -55,
     paddingHorizontal: 20,
     marginBottom: 5,
     paddingVertical: 5,
     display: 'flex',
     flexDirection: 'row',
+    zIndex: 3,
   },
   point: {
     fontSize: 22,
@@ -79,7 +82,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   addressText: {color: '#fff', fontSize: 16, lineHeight: 28, marginRight: '1%'},
-  scrollView: {paddingLeft: 20},
+  scrollView: {paddingLeft: 20, zIndex: 3},
   scrollViewInner: {display: 'flex', flexDirection: 'row'},
   iconRow: {
     position: 'absolute',
@@ -98,6 +101,9 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     paddingHorizontal: 10,
+    position: 'absolute',
+    zIndex: 100,
+    width: '96%',
   },
   buttonPrimaryText: {
     color: styleConst.color.greyText4,
@@ -319,6 +325,35 @@ class ContactsScreen extends Component {
       <StyleProvider style={getTheme()}>
         <View style={styles.safearea}>
           <StatusBar hidden />
+          <Button
+            full
+            onPress={() => {
+              navigation.navigate('ChooseDealerScreen');
+            }}
+            style={[styles.buttonPrimary, styleConst.shadow.default]}>
+            {dealerSelected.brands &&
+              dealerSelected.brands.length &&
+              dealerSelected.brands.map((brand) => {
+                return (
+                  <BrandLogo
+                    brand={brand.id}
+                    height={25}
+                    style={styles.brand}
+                    key={'ChooseDealerBrand' + brand.id}
+                  />
+                );
+              })}
+            <View style={{flex: 1, flexDirection: 'row'}}>
+              <Text style={styles.buttonPrimaryText}>
+                {dealerSelected.name}
+              </Text>
+              <Icon
+                type="FontAwesome5"
+                name="angle-right"
+                style={styles.iconRow}
+              />
+            </View>
+          </Button>
           <ScrollView
             contentContainerStyle={{paddingBottom: 24}}
             ref={(ref) => {
@@ -330,36 +365,7 @@ class ContactsScreen extends Component {
               style={styles.imgHero}
               source={{uri: get(dealerSelected, 'img.10000x440')}}
             />
-            <Button
-              full
-              onPress={() => {
-                navigation.navigate('ChooseDealerScreen');
-              }}
-              style={[styles.buttonPrimary, styleConst.shadow.default]}>
-              {dealerSelected.brands &&
-                dealerSelected.brands.length &&
-                dealerSelected.brands.map((brand) => {
-                  return (
-                    <BrandLogo
-                      brand={brand.id}
-                      height={25}
-                      style={styles.brand}
-                      key={'ChooseDealerBrand' + brand.id}
-                    />
-                  );
-                })}
-              <View style={{flex: 1, flexDirection: 'row'}}>
-                <Text style={styles.buttonPrimaryText}>
-                  {dealerSelected.name}
-                </Text>
-                <Icon
-                  type="FontAwesome5"
-                  name="angle-right"
-                  style={styles.iconRow}
-                />
-              </View>
-            </Button>
-            <View style={{marginTop: HEADER_MAX_HEIGHT - 160}}>
+            <View style={{marginTop: HEADER_MAX_HEIGHT - 65}}>
               <View style={styles.blackBack} />
               <TouchableOpacity
                 style={styles.address}

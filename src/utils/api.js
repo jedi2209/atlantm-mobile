@@ -2,10 +2,10 @@ import _ from 'lodash';
 
 import {Platform, Linking, Alert, BackHandler} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import {STORE_LINK, API_MAIN_URL} from '../core/const';
+import strings from '../core/lang/const';
 
 const isAndroid = Platform.OS === 'android';
-
-const host = 'https://api.atlantm.com/v1';
 
 const headers = {
   Accept: 'application/json',
@@ -59,24 +59,20 @@ export default {
       if (res && res.version) {
         let APPVersionFromApi = parseInt(res.version.replace(/\./gi, ''));
         if (APPVersionFromApi > requestedVersion) {
-          let STORE_LINK;
-          if (Platform.OS === 'ios') {
-            STORE_LINK =
-              'itms-apps://itunes.apple.com/app/idXXXX?action=update';
-          } else {
-            STORE_LINK = 'market://details?id=com.atlantm';
-          }
-
           Alert.alert(
-            'Есть свежая версия! 🏎',
-            'Пожалуйста, обнови приложение до актуальной версии.',
+            strings.Notifications.UpdatePopup.title,
+            strings.Notifications.UpdatePopup.text,
             [
-              {text: 'Позже', style: 'destructive'},
               {
-                text: '✅ Обновить',
+                text: strings.Notifications.UpdatePopup.later,
+                style: 'destructive',
+              },
+              {
+                text: `✅ ${strings.Notifications.UpdatePopup.update}`,
+                style: 'default',
                 onPress: () => {
                   BackHandler.exitApp();
-                  Linking.openURL(STORE_LINK);
+                  Linking.openURL(STORE_LINK[Platform.OS]);
                 },
               },
             ],
@@ -712,7 +708,7 @@ export default {
     __DEV__ && console.log('API carcost body', body, props);
 
     return (async () => {
-      const rawResponse = await fetch(`${host}/orders/usedbuy/post/`, {
+      const rawResponse = await fetch(`${API_MAIN_URL}/orders/usedbuy/post/`, {
         method: 'POST',
         headers: _.merge({}, headers, {
           'Content-Type': 'multipart/form-data',
@@ -963,7 +959,7 @@ export default {
   },
 
   request(path, requestParams) {
-    const url = `${host}${path}`;
+    const url = `${API_MAIN_URL}${path}`;
 
     // Если включен debug режим, добавляем в каждый запрос заголовок `Debug`
     if (window.atlantmDebug) {
