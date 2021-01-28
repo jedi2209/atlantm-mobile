@@ -12,6 +12,7 @@ import ServiceContainer from '../service/containers/ServiceContainer';
 import ServiceScreenNewStep2 from '../service/containers/OnlineService/ServiceScreenNewStep2';
 import CarCostScreen from '../catalog/carcost/containers/CarCostScreen';
 import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
+import SettingsScreen from '../settings/containers/SettingsScreen';
 
 // tva
 import TvaScreen from '../tva/containers/TvaScreen';
@@ -97,6 +98,7 @@ export const getRouter = (initialRouteName) => {
           gesturesEnabled: false,
         },
       },
+      SettingsScreen: {screen: SettingsScreen},
     },
     {
       initialRouteName,
