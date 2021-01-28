@@ -69,13 +69,6 @@ const LangSwitcher = (props) => {
     }
     props.actionSetGlobalLanguage(value);
     strings.setLanguage(value);
-    // if (!isAndroid) {
-    //   strings.setLanguage(value);
-    // } else {
-    //   setTimeout(() => {
-    //     RNRestart.Restart();
-    //   }, 500);
-    // }
   };
 
   const _onDonePress = () => {};
@@ -85,7 +78,12 @@ const LangSwitcher = (props) => {
   };
 
   return (
-    <View style={[styles.badgeContainer, {backgroundColor: props.bgColor}]}>
+    <View
+      style={[
+        styles.badgeContainer,
+        props.styleContainer ? props.styleContainer : {},
+        {backgroundColor: props.bgColor},
+      ]}>
       <RNPickerSelect
         key={'rnpickerLang'}
         doneText={strings.Picker.choose}

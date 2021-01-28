@@ -1,7 +1,8 @@
-import React, {PureComponent} from 'react';
+import {PureComponent} from 'react';
 import {Platform, Alert} from 'react-native';
 import Rate, {AndroidMarket} from 'react-native-rate';
 import strings from '../../core/lang/const';
+import {AppleAppID, GooglePackageName} from '../../core/const';
 
 export default class RateThisApp extends PureComponent {
   render() {
@@ -29,27 +30,15 @@ export default class RateThisApp extends PureComponent {
             text: strings.RateThisApp.rate,
             onPress: () => {
               let options = {
-                AppleAppID: '1492492166',
-                GooglePackageName: 'com.atlantm',
+                GooglePackageName: GooglePackageName,
                 preferredAndroidMarket: AndroidMarket.Google,
                 preferInApp: true,
-                openAppStoreIfInAppFails: true,
-                inAppDelay: 2.0,
               };
 
               Rate.rate(options, (success) => {
-                console.log('Rate success', success);
                 if (success) {
-                  console.log(
-                    'Rate this.props.onSuccess',
-                    this.props.onSuccess,
-                  );
                   this.props.onSuccess && this.props.onSuccess();
                 } else {
-                  console.log(
-                    'Rate this.props.onAskLater',
-                    this.props.onAskLater,
-                  );
                   this.props.onAskLater && this.props.onAskLater();
                 }
               });
@@ -63,31 +52,20 @@ export default class RateThisApp extends PureComponent {
             text: strings.RateThisApp.rate,
             onPress: () => {
               let options = {
-                AppleAppID: '1492492166',
-                GooglePackageName: 'com.atlantm',
-                preferredAndroidMarket: AndroidMarket.Google,
+                AppleAppID: AppleAppID,
                 preferInApp: true,
-                openAppStoreIfInAppFails: true,
-                inAppDelay: 2.0,
+                inAppDelay: 1.0,
               };
 
               Rate.rate(options, (success) => {
-                console.log('Rate success', success);
                 if (success) {
-                  console.log(
-                    'Rate this.props.onSuccess',
-                    this.props.onSuccess,
-                  );
                   this.props.onSuccess && this.props.onSuccess();
                 } else {
-                  console.log(
-                    'Rate this.props.onAskLater',
-                    this.props.onAskLater,
-                  );
                   this.props.onAskLater && this.props.onAskLater();
                 }
               });
             },
+            style: 'default',
           },
           {
             text: strings.RateThisApp.later,
@@ -101,7 +79,7 @@ export default class RateThisApp extends PureComponent {
             onPress: () => {
               this.props.onSuccess && this.props.onSuccess();
             },
-            style: 'cancel',
+            style: 'destructive',
           },
         ];
     }

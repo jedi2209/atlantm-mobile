@@ -8,4 +8,7 @@ module.exports = {
     }),
     assetPlugins: ['react-native-svg-asset-plugin'],
   },
+  resolver: {
+    useWatchman: true,
+  },
 };
