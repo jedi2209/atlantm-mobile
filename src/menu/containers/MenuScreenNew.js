@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 
 import {Text, View, Image, StyleSheet, Dimensions} from 'react-native';
 import {Icon, List, ListItem, Left, Button, Body} from 'native-base';
@@ -7,15 +7,9 @@ import {Icon, List, ListItem, Left, Button, Body} from 'native-base';
 import styleConst from '../../core/style-const';
 
 import {connect} from 'react-redux';
-import {
-  actionMenuOpenedCount,
-  actionAppRated,
-  actionAppRateAskLater,
-} from '../../core/actions';
 
 import strings from '../../core/lang/const';
 import LogoTitle from '../../core/components/LogoTitle';
-import RateThisApp from '../../core/components/RateThisApp';
 
 const styles = StyleSheet.create({
   buttonPrimary: {
@@ -118,13 +112,7 @@ const MenuItem = (props) => {
   );
 };
 
-const mapDispatchToProps = {
-  actionMenuOpenedCount,
-  actionAppRated,
-  actionAppRateAskLater,
-};
-
-const mapStateToProps = ({dealer, profile, nav, core}) => {
+const mapStateToProps = ({dealer, profile, nav}) => {
   return {
     nav,
     listRussia: dealer.listRussia,
@@ -140,14 +128,6 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
 
     bonus: profile.bonus.data,
     discounts: profile.discounts,
-
-    pushActionSubscribeState: core.pushActionSubscribeState,
-
-    currentLang: core.language.selected,
-
-    menuOpenedCount: core.menuOpenedCount,
-    isAppRated: core.isAppRated,
-    AppRateAskLater: core.AppRateAskLater,
   };
 };
 
@@ -201,6 +181,14 @@ const MoreScreen = (props) => {
       icon: <Image source={require('../assets/Indicators.svg')} />,
       selected: false,
     },
+    {
+      id: 9,
+      name: strings.Menu.main.settings,
+      navigateUrl: 'SettingsScreen',
+      type: 'settings',
+      icon: <Image source={require('../assets/Settings.svg')} />,
+      selected: false,
+    },
   ];
 
   if (props.dealerSelected.divisionTypes) {
@@ -243,40 +231,8 @@ const MoreScreen = (props) => {
 
   const rowHeight = (heightScreen - 80 - 82 - 4 - 80) / (menu.length + 1);
 
-  const [lang, setLang] = useState(props.currentLang);
-
-  useEffect(() => {
-    // Anything in here is fired on component mount.
-    setLang(lang);
-    // if (props.menuOpenedCount < 10) {
-    //   props.actionMenuOpenedCount();
-    // }
-    // if (props.AppRateAskLater) {
-    //   const right_now = new Date();
-    //   console.log('props.AppRateAskLater.getTime()', props.AppRateAskLater.getTime());
-    //   console.log('right_now.now()', right_now.now());
-    // }
-    return () => {
-      // Anything in here is fired on component unmount.
-    };
-  }, [lang, props]);
-
-  const _onAppRateSuccess = () => {
-    !props.isAppRated && props.actionAppRated();
-  };
-  const _onAppRateAskLater = () => {
-    !props.isAppRated && props.actionAppRateAskLater();
-  };
-
   return (
     <View>
-      {props.isAppRated !== true &&
-      (props.menuOpenedCount === 10 || props.menuOpenedCount === 30) ? (
-        <RateThisApp
-          onSuccess={_onAppRateSuccess}
-          onAskLater={_onAppRateAskLater}
-        />
-      ) : null}
       <List style={{marginTop: 0}}>
         {menu.map((item) => (
           <MenuItem
@@ -350,4 +306,4 @@ MoreScreen.navigationOptions = () => ({
   ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MoreScreen);
+export default connect(mapStateToProps, null)(MoreScreen);
