@@ -34,11 +34,11 @@ export const actionAppRated = () => {
   };
 };
 
-export const actionStoreUpdated = (isUpdated) => {
+export const actionStoreUpdated = (LastUpdateDate) => {
   return (dispatch) => {
-    dispatch({
+    return dispatch({
       type: APP_STORE_UPDATED,
-      payload: isUpdated,
+      payload: LastUpdateDate,
     });
   };
 };
