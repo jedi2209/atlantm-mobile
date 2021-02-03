@@ -61,6 +61,7 @@
 	<string>Атлант-М</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>itms-apps</string>
 		<string>tel</string>
 		<string>telprompt</string>
 		<string>mailto</string>
