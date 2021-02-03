@@ -409,12 +409,12 @@ PODS:
   - RNGoogleSignin (5.0.0):
     - GoogleSignIn (~> 5.0.0)
     - React-Core
-  - RNImageCropPicker (0.35.2):
+  - RNImageCropPicker (0.35.3):
     - React-Core
     - React-RCTImage
-    - RNImageCropPicker/QBImagePickerController (= 0.35.2)
+    - RNImageCropPicker/QBImagePickerController (= 0.35.3)
     - TOCropViewController
-  - RNImageCropPicker/QBImagePickerController (0.35.2):
+  - RNImageCropPicker/QBImagePickerController (0.35.3):
     - React-Core
     - React-RCTImage
     - TOCropViewController
@@ -423,19 +423,19 @@ PODS:
     - React
   - RNReanimated (1.13.2):
     - React-Core
-  - RNScreens (2.16.1):
+  - RNScreens (2.17.1):
     - React-Core
-  - RNSentry (2.1.1):
+  - RNSentry (2.2.0):
     - React-Core
-    - Sentry (= 6.0.9)
+    - Sentry (= 6.1.4)
   - RNSVG (12.1.0):
     - React
   - RNVectorIcons (8.0.0):
     - React-Core
-  - Sentry (6.0.9):
-    - Sentry/Core (= 6.0.9)
-  - Sentry/Core (6.0.9)
-  - TOCropViewController (2.5.5)
+  - Sentry (6.1.4):
+    - Sentry/Core (= 6.1.4)
+  - Sentry/Core (6.1.4)
+  - TOCropViewController (2.6.0)
   - VK-ios-sdk (1.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -731,16 +731,16 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 921a809eaf9de79645a24de1c6ca90db6cb91786
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
-  RNImageCropPicker: 9e0bf18cf4184a846fed55747c8e622208b39947
+  RNImageCropPicker: 08ba3a2e2f4f8833d606f01906c371e382c4dea9
   RNInputMask: 815461ebdf396beb62cf58916c35cf6930adb991
   RNRate: 15b861025a7821730761fce7f44561ce7e0b2de0
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
-  RNScreens: 45c457af3d2ee9e08fc01e70da87e653d46b1198
-  RNSentry: 6b46b6fc1d715a378fbaa5d7d43bc9ce99b500e5
+  RNScreens: b6c9607e6fe47c1b6e2f1910d2acd46dd7ecea3a
+  RNSentry: 6aeba1adc242fd22a6826acae92f430697b47a9c
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: f67a1abce2ec73e62fe4606e8110e95a832bc859
-  Sentry: 388c9dc093b2fd3a264466a5c5b21e25959610a9
-  TOCropViewController: da59f531f8ac8a94ef6d6c0fc34009350f9e8bfe
+  Sentry: 9d055e2de30a77685e86b219acf02e59b82091fc
+  TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   VK-ios-sdk: 104a8bc259199fb1fc621c1c93d7a9a6befb4ca0
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
