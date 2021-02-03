@@ -1,6 +1,6 @@
 {
   "name": "Atlant-M",
-  "version": "6.4.2",
+  "version": "6.5.0",
   "private": true,
   "scripts": {
     "build": "bundle exec fastlane ios localNoCompile; npm run android-build;",
