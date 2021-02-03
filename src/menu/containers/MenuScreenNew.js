@@ -1,8 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {Text, View, Image, StyleSheet, Dimensions} from 'react-native';
 import {Icon, List, ListItem, Left, Button, Body} from 'native-base';
+
+import {actionMenuOpenedCount} from '../../core/actions';
 
 import styleConst from '../../core/style-const';
 
@@ -112,23 +114,19 @@ const MenuItem = (props) => {
   );
 };
 
-const mapStateToProps = ({dealer, profile, nav}) => {
+const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
     nav,
-    listRussia: dealer.listRussia,
-    listUkraine: dealer.listUkraine,
-    listBelarussia: dealer.listBelarussia,
     dealerSelected: dealer.selected,
 
-    isFetchProfileData: profile.meta.isFetchProfileData,
-
     login: profile.login,
-    password: profile.password,
-    isLoginRequest: profile.meta.isLoginRequest,
 
-    bonus: profile.bonus.data,
-    discounts: profile.discounts,
+    menuOpenedCount: core.menuOpenedCount,
   };
+};
+
+const mapDispatchToProps = {
+  actionMenuOpenedCount,
 };
 
 const MoreScreen = (props) => {
@@ -231,6 +229,15 @@ const MoreScreen = (props) => {
 
   const rowHeight = (heightScreen - 80 - 82 - 4 - 80) / (menu.length + 1);
 
+  const [count] = useState(props.menuOpenedCount);
+  const nextCount = count + 1;
+
+  useEffect(() => {
+    if (count !== nextCount) {
+      props.actionMenuOpenedCount();
+    }
+  }, [count]);
+
   return (
     <View>
       <List style={{marginTop: 0}}>
@@ -306,4 +313,4 @@ MoreScreen.navigationOptions = () => ({
   ),
 });
 
-export default connect(mapStateToProps, null)(MoreScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(MoreScreen);

@@ -23,6 +23,7 @@ import {
 } from 'native-base';
 import BrandLogo from '../../core/components/BrandLogo';
 import Plate from '../../core/components/Plate';
+import RateThisApp from '../../core/components/RateThisApp';
 
 // redux
 import {connect} from 'react-redux';
@@ -31,6 +32,11 @@ import {callMe} from '../actions';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList, actionListReset} from '../../info/actions';
+import {
+  actionAppRated,
+  actionAppRateAskLater,
+  actionMenuOpenedCount,
+} from '../../core/actions';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
@@ -133,7 +139,7 @@ const cardWidth = deviceWidth - 50;
 
 import {Offer} from '../../core/components/Offer';
 
-const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
+const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
     list: info.list,
     isFetchInfoList: info.meta.isFetchInfoList,
@@ -142,6 +148,9 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info}) => {
     brands: dealer.listBrands,
     dealerSelected: dealer.selected,
     isСallMeRequest: contacts.isСallMeRequest,
+
+    isAppRated: core.isAppRated,
+    menuOpenedCount: core.menuOpenedCount,
   };
 };
 
@@ -149,6 +158,9 @@ const mapDispatchToProps = {
   callMe,
   fetchInfoList,
   actionListReset,
+  actionMenuOpenedCount,
+  actionAppRated,
+  actionAppRateAskLater,
 };
 
 class ContactsScreen extends Component {
@@ -158,6 +170,9 @@ class ContactsScreen extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      showRatePopup: false,
+    };
     this.sitesSubtitle = {
       sites: [],
       buttons: [],
@@ -187,8 +202,21 @@ class ContactsScreen extends Component {
   componentDidMount() {
     Amplitude.logEvent('screen', 'contacts');
 
-    const {fetchInfoList, actionListReset, isFetchInfoList} = this.props;
+    const {fetchInfoList, isAppRated, menuOpenedCount} = this.props;
     const {region, id: dealerID} = this.props.dealerSelected;
+
+    if (!isAppRated && menuOpenedCount >= 10) {
+      setTimeout(() => {
+        this.setState(
+          {
+            showRatePopup: true,
+          },
+          () => {
+            this.props.actionMenuOpenedCount(0);
+          },
+        );
+      }, 1000);
+    }
 
     console.log('== Contacts ==');
     fetchInfoList(region, dealerID).then((action) => {
@@ -313,6 +341,20 @@ class ContactsScreen extends Component {
         return false;
       }
     }
+  };
+
+  _onAppRateSuccess = () => {
+    this.setState({
+      showRatePopup: false,
+    });
+    !this.props.isAppRated && this.props.actionAppRated();
+  };
+
+  _onAppRateAskLater = () => {
+    this.setState({
+      showRatePopup: false,
+    });
+    !this.props.isAppRated && this.props.actionAppRateAskLater();
   };
 
   render() {
@@ -585,6 +627,12 @@ class ContactsScreen extends Component {
               )}
             </View>
           </ScrollView>
+          {this.state.showRatePopup ? (
+            <RateThisApp
+              onSuccess={this._onAppRateSuccess}
+              onAskLater={this._onAppRateAskLater}
+            />
+          ) : null}
         </View>
       </StyleProvider>
     );
