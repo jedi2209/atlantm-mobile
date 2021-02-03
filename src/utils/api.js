@@ -48,7 +48,6 @@ export default {
 
   async fetchVersion(version) {
     if (!version) {
-      //console.log('version undefined', version);
       return false;
     }
     let requestedVersion = parseInt(version.replace(/\./gi, ''));
