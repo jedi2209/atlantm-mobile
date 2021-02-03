@@ -78,8 +78,7 @@ const isAppRated = (state = false, action) => {
 const isStoreUpdated = (state = false, action) => {
   switch (action.type) {
     case REHYDRATE:
-      const coreIsStoreUpdated = get(action.payload, 'core.isStoreUpdated');
-      return coreIsStoreUpdated ? coreIsStoreUpdated : false;
+      return get(action.payload, 'core.isStoreUpdated', false);
     case APP_STORE_UPDATED:
       return action.payload;
     default:
