@@ -32,11 +32,7 @@ import {callMe} from '../actions';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList, actionListReset} from '../../info/actions';
-import {
-  actionAppRated,
-  actionAppRateAskLater,
-  actionMenuOpenedCount,
-} from '../../core/actions';
+import {actionAppRated, actionMenuOpenedCount} from '../../core/actions';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
@@ -160,7 +156,6 @@ const mapDispatchToProps = {
   actionListReset,
   actionMenuOpenedCount,
   actionAppRated,
-  actionAppRateAskLater,
 };
 
 class ContactsScreen extends Component {
@@ -354,7 +349,6 @@ class ContactsScreen extends Component {
     this.setState({
       showRatePopup: false,
     });
-    !this.props.isAppRated && this.props.actionAppRateAskLater();
   };
 
   render() {

@@ -23,11 +23,7 @@ import DeviceInfo from 'react-native-device-info';
 
 // redux
 import {connect} from 'react-redux';
-import {
-  actionSetPushActionSubscribe,
-  actionAppRated,
-  actionAppRateAskLater,
-} from '../../core/actions';
+import {actionSetPushActionSubscribe, actionAppRated} from '../../core/actions';
 
 // components
 import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
@@ -41,7 +37,7 @@ import Amplitude from '../../utils/amplitude-analytics';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
-import {APP_EMAIL} from '../../core/const';
+import {APP_EMAIL, STORE_LINK} from '../../core/const';
 import strings from '../../core/lang/const';
 
 const styles = StyleSheet.create({
@@ -60,7 +56,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: styleConst.font.light,
     color: styleConst.new.blueHeader,
-    marginTop: 20,
   },
   block: {
     borderRadius: 10,
@@ -144,7 +139,6 @@ const mapStateToProps = ({dealer, info, nav, core}) => {
 const mapDispatchToProps = {
   actionSetPushActionSubscribe,
   actionAppRated,
-  actionAppRateAskLater,
 };
 
 const languagesItems = [
@@ -208,14 +202,13 @@ class SettingsScreen extends PureComponent {
     this.setState({
       showRatePopup: false,
     });
-    !this.props.isAppRated && this.actionAppRated();
+    !this.props.isAppRated && this.props.actionAppRated();
   };
 
   _onAppRateAskLater = () => {
     this.setState({
       showRatePopup: false,
     });
-    !this.props.isAppRated && this.actionAppRateAskLater();
   };
 
   static navigationOptions = ({navigation}) => {
@@ -293,20 +286,20 @@ class SettingsScreen extends PureComponent {
   render() {
     return (
       <StyleProvider style={getTheme()}>
-        <Container style={styles.container}>
-          <StatusBar hidden />
-          <Text
-            style={{
-              color: '#222B45',
-              fontSize: 48,
-              fontWeight: 'bold',
-              fontFamily: styleConst.font.medium,
-              marginHorizontal: 10,
-              marginBottom: 5,
-            }}>
-            {strings.Menu.main.settings}
-          </Text>
-          <ScrollView style={styles.container}>
+        <ScrollView style={styles.container}>
+          <Container style={styles.container}>
+            <StatusBar hidden />
+            <Text
+              style={{
+                color: '#222B45',
+                fontSize: 48,
+                fontWeight: 'bold',
+                fontFamily: styleConst.font.medium,
+                marginHorizontal: 10,
+                marginBottom: 5,
+              }}>
+              {strings.Menu.main.settings}
+            </Text>
             {this.props.dealerSelected.region === 'ua' ? (
               <TransitionView
                 animation={this.zoomIn}
@@ -449,23 +442,39 @@ class SettingsScreen extends PureComponent {
               animation={this.opacityIn}
               duration={350}
               index={5}
-              style={[styles.VersionContainer, {width: cardWidth}]}>
-              <Text selectable={false} style={styles.TextVersionInfo}>
-                {'v. ' +
-                  DeviceInfo.getVersion() +
-                  ' (' +
-                  DeviceInfo.getBuildNumber() +
-                  ')'}
-              </Text>
+              style={[
+                styles.VersionContainer,
+                {width: cardWidth, marginHorizontal: 10, marginTop: 20},
+              ]}>
+              <Button
+                transparent
+                full
+                onPress={() => {
+                  return Linking.openURL(STORE_LINK[Platform.OS]);
+                }}
+                style={{
+                  borderColor: styleConst.color.accordeonGrey1,
+                  borderWidth: 1,
+                  borderRadius: 10,
+                  marginBottom: 20,
+                }}>
+                <Text selectable={false} style={styles.TextVersionInfo}>
+                  {'ver. ' +
+                    DeviceInfo.getVersion() +
+                    ' (' +
+                    DeviceInfo.getBuildNumber() +
+                    ')'}
+                </Text>
+              </Button>
             </TransitionView>
-          </ScrollView>
-          {this.state.showRatePopup ? (
-            <RateThisApp
-              onSuccess={this._onAppRateSuccess}
-              onAskLater={this._onAppRateAskLater}
-            />
-          ) : null}
-        </Container>
+            {this.state.showRatePopup ? (
+              <RateThisApp
+                onSuccess={this._onAppRateSuccess}
+                onAskLater={this._onAppRateAskLater}
+              />
+            ) : null}
+          </Container>
+        </ScrollView>
       </StyleProvider>
     );
   }
