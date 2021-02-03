@@ -13,3 +13,5 @@ export const STORE_LINK = {
 };
 
 export const API_MAIN_URL = 'https://api.atlantm.com/v1';
+
+export const APP_EMAIL = 'atlant-m.corp@atlantm.com';

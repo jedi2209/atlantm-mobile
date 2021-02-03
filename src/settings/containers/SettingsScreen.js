@@ -9,6 +9,7 @@ import {
   StatusBar,
   Platform,
   Dimensions,
+  Linking,
 } from 'react-native';
 import {
   Container,
@@ -40,6 +41,7 @@ import Amplitude from '../../utils/amplitude-analytics';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
+import {APP_EMAIL} from '../../core/const';
 import strings from '../../core/lang/const';
 
 const styles = StyleSheet.create({
@@ -74,6 +76,10 @@ const styles = StyleSheet.create({
   },
   blockFeedback: {
     backgroundColor: styleConst.color.orange,
+    height: 100,
+  },
+  blockContactUs: {
+    backgroundColor: styleConst.color.green,
     height: 100,
   },
   langHeading: {
@@ -409,9 +415,40 @@ class SettingsScreen extends PureComponent {
               </Button>
             </TransitionView>
             <TransitionView
+              animation={this.zoomIn}
+              duration={250}
+              index={4}
+              style={[
+                styleConst.shadow.default,
+                styles.block,
+                styles.blockContactUs,
+                {width: cardWidth},
+              ]}>
+              <Button
+                transparent
+                full
+                style={styles.buttonRate}
+                onPress={() => {
+                  return Linking.openURL('mailto:' + APP_EMAIL);
+                }}>
+                <Text
+                  selectable={false}
+                  style={[styles.langHeading, {fontSize: 19, lineHeight: 22}]}>
+                  {strings.SettingsScreen.mailtoUs}
+                </Text>
+                <Icon
+                  name={'mail-outline'}
+                  style={{
+                    color: 'white',
+                    fontSize: 55,
+                  }}
+                />
+              </Button>
+            </TransitionView>
+            <TransitionView
               animation={this.opacityIn}
               duration={350}
-              index={4}
+              index={5}
               style={[styles.VersionContainer, {width: cardWidth}]}>
               <Text selectable={false} style={styles.TextVersionInfo}>
                 {'v. ' +
