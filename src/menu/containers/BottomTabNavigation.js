@@ -13,7 +13,7 @@ import NewCarListScreen from '../../catalog/newcar/containers/NewCarListScreen';
 import AuthContnainer from '../../profile/containers/AuthContnainer';
 import ProfileSettingsScreen from '../../profile/containers/ProfileSettingsScreen';
 import InfoListScreen from '../../info/containers/InfoListScreen';
-import TOHistore from '../../profile/carhistory/containers/CarHistoryScreen';
+import TOHistory from '../../profile/carhistory/containers/CarHistoryScreen';
 import CarHistoryDetailsScreen from '../../profile/carhistory/containers/CarHistoryDetailsScreen';
 import BonusScreen from '../../profile/bonus/containers/BonusScreen';
 import BonusScreenInfo from '../../profile/bonus/containers/BonusInfoScreen';
@@ -94,13 +94,18 @@ const BottomTabNavigation = createBottomTabNavigator(
     },
     Search: SearchStack,
     Profile: {
-      screen: createStackNavigator({
-        ProfileScreenInfo: {screen: AuthContnainer},
-        ProfileSettingsScreen: {screen: ProfileSettingsScreen},
-        TOHistore: {screen: TOHistore},
-        CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
-        BonusScreen: {screen: BonusScreen},
-      }),
+      screen: createStackNavigator(
+        {
+          ProfileScreenInfo: {screen: AuthContnainer},
+          ProfileSettingsScreen: {screen: ProfileSettingsScreen},
+          TOHistory: {screen: TOHistory},
+          CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
+          BonusScreen: {screen: BonusScreen},
+        },
+        {
+          mode: 'modal',
+        },
+      ),
       navigationOptions: () => ({
         tabBarLabel: strings.Menu.bottom.lkk,
         tabBarIcon: ({tintColor}) => (
