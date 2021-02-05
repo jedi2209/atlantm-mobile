@@ -143,12 +143,12 @@ const mapDispatchToProps = {
 
 const languagesItems = [
   {
-    label: '🇷🇺 русский язык',
+    label: '🇷🇺 Русский',
     value: 'ru',
     key: 1,
   },
   {
-    label: '🇺🇦 українська мова',
+    label: '🇺🇦 Українська',
     value: 'ua',
     key: 2,
   },
@@ -339,9 +339,7 @@ class SettingsScreen extends PureComponent {
               <View style={{flexDirection: 'row'}}>
                 <View style={{width: '80%'}}>
                   <Text selectable={false} style={styles.pushHeading}>
-                    {strings.SettingsScreen.pushTitle +
-                      '\r\n' +
-                      this.props.dealerSelected.name}
+                    {strings.SettingsScreen.pushTitle}
                   </Text>
                 </View>
                 <View
@@ -366,7 +364,10 @@ class SettingsScreen extends PureComponent {
               </View>
               <View style={{marginTop: 10}}>
                 <Text selectable={false} style={styles.pushText}>
-                  {strings.SettingsScreen.pushText}
+                  {strings.SettingsScreen.pushText +
+                    ' ' +
+                    this.props.dealerSelected.name +
+                    strings.SettingsScreen.pushText2}
                 </Text>
               </View>
             </TransitionView>
@@ -385,6 +386,7 @@ class SettingsScreen extends PureComponent {
                 full
                 style={styles.buttonRate}
                 onPress={() => {
+                  Amplitude.logEvent('screen', 'ratePopup', 'settings');
                   return this.setState({
                     showRatePopup: true,
                   });

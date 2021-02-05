@@ -200,17 +200,22 @@ class ContactsScreen extends Component {
     const {fetchInfoList, isAppRated, menuOpenedCount} = this.props;
     const {region, id: dealerID} = this.props.dealerSelected;
 
-    if (!isAppRated && menuOpenedCount >= 10) {
-      setTimeout(() => {
-        this.setState(
-          {
-            showRatePopup: true,
-          },
-          () => {
-            this.props.actionMenuOpenedCount(0);
-          },
-        );
-      }, 1000);
+    if (!isAppRated) {
+      if (menuOpenedCount >= 10) {
+        setTimeout(() => {
+          Amplitude.logEvent('screen', 'ratePopup', 'contacts');
+          this.setState(
+            {
+              showRatePopup: true,
+            },
+            () => {
+              this.props.actionMenuOpenedCount(0);
+            },
+          );
+        }, 1000);
+      } else {
+        this.props.actionMenuOpenedCount();
+      }
     }
 
     console.log('== Contacts ==');

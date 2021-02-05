@@ -230,13 +230,6 @@ const MoreScreen = (props) => {
   const rowHeight = (heightScreen - 80 - 82 - 4 - 80) / (menu.length + 1);
 
   const [count] = useState(props.menuOpenedCount);
-  const nextCount = count + 1;
-
-  useEffect(() => {
-    if (count !== nextCount) {
-      props.actionMenuOpenedCount();
-    }
-  }, [count]);
 
   return (
     <View>
