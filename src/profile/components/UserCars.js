@@ -99,7 +99,7 @@ let UserCars = ({navigation, actionToggleCar}) => {
             });
             break;
           case 'TOhistory':
-            navigation.navigate('TOHistore', {
+            navigation.navigate('TOHistory', {
               car: item,
             });
             break;

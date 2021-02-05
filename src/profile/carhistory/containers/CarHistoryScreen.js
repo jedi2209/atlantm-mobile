@@ -79,7 +79,16 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
     marginTop: 5,
     fontWeight: '400',
-    paddingBottom: 10,
+    paddingBottom: 0,
+  },
+  dealer: {
+    color: styleConst.color.greyBlueText,
+    fontSize: 14,
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
+    marginTop: 5,
+    fontWeight: '400',
+    paddingBottom: 5,
   },
   mileage: {
     color: styleConst.new.blueHeader,
@@ -276,6 +285,7 @@ class CarHistoryScreen extends Component {
     const parts = get(summ, 'parts');
     const total = get(summ, 'total');
     const currency = get(summ, 'currency');
+    const dealerName = get(work, 'dealer.name', null);
     // const sale = parseFloat(get(summ, 'sale.works') + get(summ, 'sale.parts'));
 
     return (
@@ -289,6 +299,9 @@ class CarHistoryScreen extends Component {
                 numberWithGap(car.mileage)}
             </Text>
           ) : null}
+        </View>
+        <View>
+          {dealerName ? <Text style={styles.dealer}>{dealerName}</Text> : null}
         </View>
         {document
           ? this.renderLevel3Item({
@@ -332,8 +345,6 @@ class CarHistoryScreen extends Component {
   };
 
   renderItemHeader = ({work, key, label, theme, onPressHandler}) => {
-    // const isLevel3 = theme === 'itemLevel3';
-
     return (
       <View key={key} style={{borderBottomWidth: 1}}>
         <ListItem
