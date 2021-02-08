@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
 import {SafeAreaView} from 'react-navigation';
 import {verticalScale} from '../../utils/scale';
 import {get} from 'lodash';
+import {yearMonthDay} from '../../utils/date';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
@@ -192,7 +193,7 @@ class ProfileScreenInfo extends Component {
       });
   }
 
-  render() {
+  renderBonus = (region) => {
     let saldoValue = get(this.props.bonus, 'data.saldo.convert.value', null);
     if (!saldoValue) {
       saldoValue = get(this.props.bonus, 'data.saldo.value', 0);
@@ -203,13 +204,50 @@ class ProfileScreenInfo extends Component {
       'data.saldo.convert.curr',
       strings.ProfileScreenInfo.bonus.current.bonuses,
     );
-    // if (!saldoCurr) {
-    //   saldoCurr = get(
-    //     this.props.bonus,
-    //     'data.saldo.curr',
-    //     strings.ProfileScreenInfo.bonus.current.bonuses,
-    //   );
-    // }
+
+    const date = new Date();
+    const formattedDate = yearMonthDay(date).replace(/[^\d]/g, '');
+
+    switch (region) {
+      case 'by':
+        return {
+          saldoValue: saldoValue,
+          saldoCurr: saldoCurr,
+          saldoText: `1 ${strings.ProfileScreenInfo.bonus.current.bonus} = 1 BYN`,
+        };
+      case 'ru':
+        if (formattedDate >= '20210301') {
+          return {
+            saldoValue: saldoValue,
+            saldoCurr: saldoCurr,
+            saldoText: `1 ${strings.ProfileScreenInfo.bonus.current.bonus} = 1 RUR`,
+          };
+        } else {
+          return {
+            saldoValue: saldoValue,
+            saldoCurr: saldoCurr,
+            saldoText: saldoCurr,
+          };
+        }
+      case 'ua':
+        if (formattedDate >= '20210301') {
+          return {
+            saldoValue: saldoValue,
+            saldoCurr: saldoCurr,
+            saldoText: `1 ${strings.ProfileScreenInfo.bonus.current.bonus} = 1 UAH`,
+          };
+        } else {
+          return {
+            saldoValue: saldoValue,
+            saldoCurr: saldoCurr,
+            saldoText: saldoCurr,
+          };
+        }
+    }
+  };
+
+  render() {
+    const bonus = this.renderBonus(this.props.dealerSelected.region);
     return (
       <SafeAreaView>
         <ScrollView>
@@ -360,7 +398,9 @@ class ProfileScreenInfo extends Component {
                               fontSize: 20,
                               fontWeight: '600',
                             }}>
-                            {saldoValue ? parseFloat(saldoValue, 'ru-RU') : 0}
+                            {bonus.saldoValue
+                              ? parseFloat(bonus.saldoValue, 'ru-RU')
+                              : 0}
                           </Text>
                           <Text
                             style={{
@@ -368,25 +408,8 @@ class ProfileScreenInfo extends Component {
                               fontSize: 11,
                               fontWeight: '600',
                             }}>
-                            {this.props.dealerSelected.region !== 'by'
-                              ? saldoValue && saldoCurr
-                                ? saldoCurr
-                                : null
-                              : '1 ' +
-                                strings.ProfileScreenInfo.bonus.current.bonus +
-                                ' = 1 BYN'}
+                            {bonus.saldoText}
                           </Text>
-                          {/* {this.props.dealerSelected.region === 'by' ? (
-                          <Text
-                            style={{
-                              color: styleConst.color.greyText,
-                              fontSize: 11,
-                              fontWeight: '600',
-                              marginTop: -10,
-                            }}>
-                            ${'1 ' + strings.ProfileScreenInfo.bonus.current.bonus + ' = 1 BYN'}
-                          </Text>
-                        ) : null} */}
                         </View>
                         <View style={{flex: 1}}>
                           <Text
@@ -530,7 +553,7 @@ class ProfileScreenInfo extends Component {
                             <Text style={{fontWeight: 'bold', fontSize: 22}}>
                               0
                             </Text>{' '}
-                            {strings.ProfileScreenInfo.bonus.current.tex2}.
+                            {strings.ProfileScreenInfo.bonus.current.text2}.
                             {'\r\n'}
                             {strings.ProfileScreenInfo.bonus.current.text3}
                           </Text>
