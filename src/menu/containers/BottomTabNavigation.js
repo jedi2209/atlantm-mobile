@@ -101,6 +101,7 @@ const BottomTabNavigation = createBottomTabNavigator(
           TOHistory: {screen: TOHistory},
           CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
           BonusScreen: {screen: BonusScreen},
+          BonusScreenInfo: {screen: BonusScreenInfo},
         },
         {
           mode: 'modal',
@@ -179,7 +180,6 @@ const BottomTabNavigation = createBottomTabNavigator(
     More: {
       screen: createStackNavigator({
         MoreScreen: {screen: MoreScreen},
-        BonusScreenInfo: {screen: BonusScreenInfo},
         UsedCarListScreen: {
           screen: UsedCarListScreen,
         },
