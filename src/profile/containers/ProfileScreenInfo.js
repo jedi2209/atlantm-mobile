@@ -60,6 +60,31 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'normal',
   },
+  BonusInfoButton: {
+    height: 25,
+    backgroundColor: '#fff',
+    marginVertical: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    marginHorizontal: 20,
+    borderBottomWidth: 0,
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+  },
+  BonusInfoButtonText: {
+    fontFamily: styleConst.font.medium,
+    fontSize: 15,
+    letterSpacing: styleConst.ui.letterSpacing,
+    color: styleConst.color.lightBlue,
+    paddingRight: styleConst.ui.horizontalGapInList,
+  },
+  BonusInfoButtonIcon: {
+    fontSize: 20,
+    marginRight: 10,
+    color: styleConst.color.lightBlue,
+    paddingLeft: styleConst.ui.horizontalGapInList,
+  },
 });
 
 import {SafeAreaView} from 'react-navigation';
@@ -293,64 +318,65 @@ class ProfileScreenInfo extends Component {
               )}
               {this.props.bonus ? (
                 this.props.bonus.data && this.props.bonus.data.saldo ? (
-                  <TouchableOpacity
-                    style={[
-                      {
-                        marginHorizontal: 20,
-                        marginBottom: 20,
-                      },
-                    ]}
-                    onPress={() =>
-                      this.props.navigation.navigate('BonusScreen')
-                    }>
-                    <View
+                  <>
+                    <TouchableOpacity
                       style={[
-                        styleConst.shadow.default,
                         {
-                          backgroundColor: '#0061ed',
-                          borderRadius: 5,
-                          padding: 14,
-                          display: 'flex',
-                          flexDirection: 'row',
+                          marginHorizontal: 20,
+                          marginBottom: 8,
                         },
                       ]}
                       onPress={() =>
                         this.props.navigation.navigate('BonusScreen')
                       }>
                       <View
-                        style={{
-                          backgroundColor: '#fff',
-                          width: 98,
-                          height: 98,
-                          borderRadius: 49,
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          marginRight: 24,
-                        }}>
-                        <Text
+                        style={[
+                          styleConst.shadow.default,
+                          {
+                            backgroundColor: '#0061ed',
+                            borderRadius: 5,
+                            padding: 14,
+                            display: 'flex',
+                            flexDirection: 'row',
+                          },
+                        ]}
+                        onPress={() =>
+                          this.props.navigation.navigate('BonusScreen')
+                        }>
+                        <View
                           style={{
-                            color: '#0061ed',
-                            fontSize: 20,
-                            fontWeight: '600',
+                            backgroundColor: '#fff',
+                            width: 98,
+                            height: 98,
+                            borderRadius: 49,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            marginRight: 24,
                           }}>
-                          {saldoValue ? parseFloat(saldoValue, 'ru-RU') : 0}
-                        </Text>
-                        <Text
-                          style={{
-                            color: styleConst.color.greyText,
-                            fontSize: 11,
-                            fontWeight: '600',
-                          }}>
-                          {this.props.dealerSelected.region !== 'by'
-                            ? saldoValue && saldoCurr
-                              ? saldoCurr
-                              : null
-                            : '1 ' +
-                              strings.ProfileScreenInfo.bonus.current.bonus +
-                              ' = 1 BYN'}
-                        </Text>
-                        {/* {this.props.dealerSelected.region === 'by' ? (
+                          <Text
+                            style={{
+                              color: '#0061ed',
+                              fontSize: 20,
+                              fontWeight: '600',
+                            }}>
+                            {saldoValue ? parseFloat(saldoValue, 'ru-RU') : 0}
+                          </Text>
+                          <Text
+                            style={{
+                              color: styleConst.color.greyText,
+                              fontSize: 11,
+                              fontWeight: '600',
+                            }}>
+                            {this.props.dealerSelected.region !== 'by'
+                              ? saldoValue && saldoCurr
+                                ? saldoCurr
+                                : null
+                              : '1 ' +
+                                strings.ProfileScreenInfo.bonus.current.bonus +
+                                ' = 1 BYN'}
+                          </Text>
+                          {/* {this.props.dealerSelected.region === 'by' ? (
                           <Text
                             style={{
                               color: styleConst.color.greyText,
@@ -361,53 +387,80 @@ class ProfileScreenInfo extends Component {
                             ${'1 ' + strings.ProfileScreenInfo.bonus.current.bonus + ' = 1 BYN'}
                           </Text>
                         ) : null} */}
-                      </View>
-                      <View style={{flex: 1}}>
-                        <Text
-                          style={{
-                            color: '#fff',
-                            fontSize: 18,
-                            marginBottom: 8,
-                            fontWeight: '600',
-                          }}>
-                          {strings.ProfileScreenInfo.bonus.title}
-                        </Text>
-                        <Text
-                          style={{
-                            color: '#fff',
-                            fontSize: 12,
-                            marginBottom: 16,
-                            fontWeight: '600',
-                          }}>
-                          {strings.ProfileScreenInfo.bonus.text}
-                        </Text>
-                        <View style={{display: 'flex', flexDirection: 'row'}}>
-                          <View>
-                            <Text
+                        </View>
+                        <View style={{flex: 1}}>
+                          <Text
+                            style={{
+                              color: '#fff',
+                              fontSize: 18,
+                              marginBottom: 8,
+                              fontWeight: '600',
+                            }}>
+                            {strings.ProfileScreenInfo.bonus.title}
+                          </Text>
+                          <Text
+                            style={{
+                              color: '#fff',
+                              fontSize: 12,
+                              marginBottom: 16,
+                              fontWeight: '600',
+                            }}>
+                            {strings.ProfileScreenInfo.bonus.text}
+                          </Text>
+                          <View style={{display: 'flex', flexDirection: 'row'}}>
+                            <View>
+                              <Text
+                                style={{
+                                  color: '#fff',
+                                  fontSize: 16,
+                                  fontWeight: '600',
+                                }}
+                                onPress={() =>
+                                  this.props.navigation.navigate('BonusScreen')
+                                }>
+                                {strings.ProfileScreenInfo.bonus.show}
+                              </Text>
+                            </View>
+                            <Icon
+                              type="FontAwesome5"
+                              name="angle-right"
                               style={{
                                 color: '#fff',
-                                fontSize: 16,
-                                fontWeight: '600',
+                                fontSize: 20,
+                                marginLeft: 8,
                               }}
-                              onPress={() =>
-                                this.props.navigation.navigate('BonusScreen')
-                              }>
-                              {strings.ProfileScreenInfo.bonus.show}
-                            </Text>
+                            />
                           </View>
-                          <Icon
-                            type="FontAwesome5"
-                            name="angle-right"
-                            style={{color: '#fff', fontSize: 20, marginLeft: 8}}
-                          />
                         </View>
                       </View>
-                    </View>
-                  </TouchableOpacity>
+                    </TouchableOpacity>
+                    <Button
+                      onPress={() => {
+                        this.props.navigation.navigate('BonusScreenInfo', {
+                          refererScreen: 'ProfileScreenInfo',
+                          returnScreen: 'ProfileScreenInfo',
+                        });
+                      }}
+                      full
+                      iconLeft
+                      style={styles.BonusInfoButton}>
+                      <Icon
+                        name="info"
+                        type="SimpleLineIcons"
+                        style={styles.BonusInfoButtonIcon}
+                      />
+                      <Text
+                        numberOfLines={1}
+                        style={styles.BonusInfoButtonText}>
+                        {strings.Menu.main.bonus}
+                      </Text>
+                    </Button>
+                  </>
                 ) : (
                   <TouchableWithoutFeedback
                     onPress={() =>
                       this.props.navigation.navigate('BonusScreenInfo', {
+                        refererScreen: 'ProfileScreenInfo',
                         returnScreen: 'ProfileScreenInfo',
                       })
                     }>
@@ -518,7 +571,7 @@ class ProfileScreenInfo extends Component {
                 style={[
                   styleConst.shadow.default,
                   styles.buttonPrimary,
-                  {backgroundColor: styleConst.color.green},
+                  {backgroundColor: styleConst.color.green, marginTop: 20},
                 ]}>
                 <Text style={styles.buttonPrimaryText}>
                   {strings.ProfileScreenInfo.editData}

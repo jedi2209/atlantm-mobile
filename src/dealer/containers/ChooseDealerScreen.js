@@ -86,6 +86,7 @@ class ChooseDealerScreen extends PureComponent {
       navigation,
       fetchDealers,
       fetchBrands,
+      selectRegion,
       dealerSelected,
       isFetchDealersList,
     } = this.props;
@@ -109,6 +110,7 @@ class ChooseDealerScreen extends PureComponent {
           listAll={listAll}
           listBelarussia={listBelarussia}
           // navigation={navigation}
+          selectRegion={selectRegion}
           returnScreen={returnScreen}
           returnState={returnState}
           selectedItem={dealerSelected}
