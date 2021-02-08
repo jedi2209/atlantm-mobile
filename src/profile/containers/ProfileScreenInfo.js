@@ -442,6 +442,7 @@ class ProfileScreenInfo extends Component {
                         });
                       }}
                       full
+                      transparent
                       iconLeft
                       style={styles.BonusInfoButton}>
                       <Icon
