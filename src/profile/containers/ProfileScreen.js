@@ -831,8 +831,7 @@ class ProfileScreen extends Component {
                         )}
                       </Button>
                     </>
-                  ) : null}
-                  {!this.state.code && (
+                  ) : (
                     <Button
                       onPress={this._verifyCode}
                       full
@@ -869,6 +868,30 @@ class ProfileScreen extends Component {
                           {strings.ProfileScreen.getCode}
                         </Text>
                       )}
+                    </Button>
+                  )}
+                  {!this.state.code && (
+                    <Button
+                      onPress={() => {
+                        this.props.navigation.navigate('BonusScreenInfo', {
+                          refererScreen: 'ProfileScreenInfo',
+                          returnScreen: 'ProfileScreenInfo',
+                        });
+                      }}
+                      full
+                      transparent
+                      iconLeft
+                      style={styles.BonusInfoButton}>
+                      <Icon
+                        name="info"
+                        type="SimpleLineIcons"
+                        style={styles.BonusInfoButtonIcon}
+                      />
+                      <Text
+                        numberOfLines={1}
+                        style={styles.BonusInfoButtonText}>
+                        {strings.Menu.main.bonus}
+                      </Text>
                     </Button>
                   )}
                 </View>
@@ -918,6 +941,33 @@ const styles = StyleSheet.create({
     backgroundColor: '#34BD78',
     justifyContent: 'center',
     borderRadius: 5,
+  },
+  BonusInfoButton: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    backgroundColor: styleConst.color.darkBg,
+    opacity: 0.9,
+    borderRadius: 5,
+    width: '80%',
+    marginVertical: 10,
+    marginHorizontal: '10%',
+    borderBottomWidth: 0,
+    borderTopWidth: 0,
+    borderLeftWidth: 0,
+    borderRightWidth: 0,
+  },
+  BonusInfoButtonText: {
+    fontFamily: styleConst.font.medium,
+    fontSize: 15,
+    letterSpacing: styleConst.ui.letterSpacing,
+    color: styleConst.color.white,
+    paddingRight: styleConst.ui.horizontalGapInList,
+  },
+  BonusInfoButtonIcon: {
+    fontSize: 20,
+    marginRight: 10,
+    color: styleConst.color.white,
+    paddingLeft: styleConst.ui.horizontalGapInList,
   },
 });
 
