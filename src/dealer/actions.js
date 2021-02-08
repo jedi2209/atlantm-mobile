@@ -183,11 +183,12 @@ export const fetchDealers = (isLocal) => {
           return result;
         }, {});
 
+        dispatch({
+          type: CITIES__SUCCESS,
+          payload: cities,
+        });
+
         if (!isLocal) {
-          dispatch({
-            type: CITIES__SUCCESS,
-            payload: cities,
-          });
           return dispatch({
             type: DEALERS__SUCCESS,
             payload: dealersByRegions,
