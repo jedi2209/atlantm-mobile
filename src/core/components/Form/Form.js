@@ -234,9 +234,7 @@ class Form extends Component {
   }
 
   static propTypes = {
-    fields: PropTypes.exact({
-      groups: PropTypes.array,
-    }),
+    fields: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     barStyle: PropTypes.string,
     defaultCountryCode: PropTypes.string,
     SubmitButton: PropTypes.object,
@@ -761,6 +759,14 @@ class Form extends Component {
         this.inputRefs.phones = [];
       }
 
+      if (typeof data.props.focusNextInput === 'undefined') {
+        data.props.focusNextInput = true;
+      }
+
+      if (!groupNum) {
+        groupNum = 1;
+      }
+
       this.inputRefs[groupNum + 'InputWrapper' + num] = React.createRef();
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
@@ -904,14 +910,18 @@ class Form extends Component {
                           this.setState({
                             [name]: formatted.replace(/[^\d.+]/g, ''),
                           });
-                          this._nextInput(groupNum, num);
+                          if (data.props.focusNextInput) {
+                            this._nextInput(groupNum, num);
+                          }
                         }
                       } else {
                         if (pureValue.length === maskLength.length) {
                           this.setState({
                             [name]: formatted.replace(/[^\d.+]/g, ''),
                           });
-                          this._nextInput(groupNum, num);
+                          if (data.props.focusNextInput) {
+                            this._nextInput(groupNum, num);
+                          }
                         }
                       }
                     }
@@ -1083,18 +1093,30 @@ class Form extends Component {
           barStyle={this.props.barStyle ? this.props.barStyle : 'default'}
         />
         <ScrollView contentContainerStyle={{paddingBottom: 24}}>
-          {this.props.fields.groups
-            ? this.props.fields.groups.map((group, num) => {
-                return this._groupRender(group, num);
-              })
-            : this.props.fields.map((field, num) => {
-                if (field.type) {
-                  return this._fieldsRender[field.type](field, num);
-                }
-              })}
+          {this.props.fields.groups ? (
+            this.props.fields.groups.map((group, num) => {
+              return this._groupRender(group, num);
+            })
+          ) : (
+            <View style={styles.group} key={'group0'}>
+              <View style={styles.groupFields}>
+                {this.props.fields.map((field, num) => {
+                  if (field.type) {
+                    return this._fieldsRender[field.type](
+                      field,
+                      num,
+                      this.props.fields,
+                    );
+                  }
+                })}
+              </View>
+            </View>
+          )}
           <View style={styles.group}>
             <Button
               block
+              {...(this.props.SubmitButton.iconLeft ? 'iconLeft' : null)}
+              {...(this.props.SubmitButton.iconRight ? 'iconRight' : null)}
               onPress={() => {
                 if (!this.state.loading) {
                   if (!this.props.onSubmit) {
@@ -1130,16 +1152,19 @@ class Form extends Component {
               {this.state.loading ? (
                 <ActivityIndicator color="#fff" />
               ) : (
-                <Text selectable={false} style={styles.buttonText}>
-                  {this.props.SubmitButton.text}
-                </Text>
+                <>
+                  {this.props.SubmitButton.iconLeft && this.props.SubmitButton.iconLeft}
+                  <Text selectable={false} style={styles.buttonText}>
+                    {this.props.SubmitButton.text}
+                  </Text>
+                  {this.props.SubmitButton.iconRight && this.props.SubmitButton.iconRight}
+                </>
               )}
             </Button>
           </View>
         </ScrollView>
       </View>
     );
-    //console.log('this.inputRefs', this);
     return res;
   }
 }
