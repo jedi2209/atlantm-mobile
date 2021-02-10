@@ -396,7 +396,7 @@ PODS:
     - React-Core
   - RNAppleAuthentication (2.1.0):
     - React-Core
-  - RNCAsyncStorage (1.13.3):
+  - RNCAsyncStorage (1.13.4):
     - React-Core
   - RNCPicker (1.9.10):
     - React-Core
@@ -404,7 +404,7 @@ PODS:
     - React-Core
   - RNDeviceInfo (8.0.1):
     - React-Core
-  - RNGestureHandler (1.9.0):
+  - RNGestureHandler (1.10.0):
     - React-Core
   - RNGoogleSignin (5.0.0):
     - GoogleSignIn (~> 5.0.0)
@@ -725,11 +725,11 @@ SPEC CHECKSUMS:
   ReactNativeLocalization: dbb269b27d8a84bb22b9c2cdec38ba780b51dd72
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNAppleAuthentication: 46cbc67739bae83ca229497f9b0038f3f5431443
-  RNCAsyncStorage: da95b83e241a7f5efe3da1a949b3ec3175380be0
+  RNCAsyncStorage: 44539979e1f234262d64d3ce86ec21cceb1b2c5e
   RNCPicker: 77183d9b1cd80ae55505322f8ad09ba0036e29ba
   RNDateTimePicker: 8a51a2216c307769e69ef827293d59549ab1ca23
   RNDeviceInfo: 921a809eaf9de79645a24de1c6ca90db6cb91786
-  RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
+  RNGestureHandler: 03f587ba19a7e2d9fe48fb9aa6e33ace5fd07dd5
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNImageCropPicker: 08ba3a2e2f4f8833d606f01906c371e382c4dea9
   RNInputMask: 815461ebdf396beb62cf58916c35cf6930adb991
