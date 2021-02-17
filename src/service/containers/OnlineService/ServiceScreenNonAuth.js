@@ -259,7 +259,7 @@ class ServiceScreenNonAuth extends Component {
             {
               name: 'CARBRAND',
               type: 'input',
-              label: strings.Form.field.label.brand,
+              label: strings.Form.field.label.carBrand,
               value: this.props.carBrand,
               props: {
                 required: true,
@@ -269,7 +269,7 @@ class ServiceScreenNonAuth extends Component {
             {
               name: 'CARMODEL',
               type: 'input',
-              label: strings.Form.field.label.model,
+              label: strings.Form.field.label.carModel,
               value: this.props.carModel,
               props: {
                 required: true,
