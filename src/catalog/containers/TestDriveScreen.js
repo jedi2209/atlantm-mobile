@@ -139,13 +139,21 @@ class TestDriveScreen extends PureComponent {
 
     const dealer = get(this.props.navigation, 'state.params.car.dealer');
     this.listAll = [];
-    dealer.map((el) => {
-      this.listAll.push({
-        label: el.name,
-        value: el.id,
-        key: el.id,
+    if (dealer && dealer.length > 1) {
+      dealer.map((el) => {
+        this.listAll.push({
+          label: el.name,
+          value: el.id,
+          key: el.id,
+        });
       });
-    });
+    } else {
+      this.listAll.push({
+        label: dealer.name,
+        value: dealer.id,
+        key: dealer.id,
+      });
+    }
 
     this.state = {
       date: null,
@@ -183,10 +191,9 @@ class TestDriveScreen extends PureComponent {
   };
 
   componentDidMount() {
-    if (this.state.dealerID) {
-      console.log('componentDidMount', this.state.dealerID);
-      this.fetchTDCars(this.state.dealerID);
-    }
+    // if (this.state.dealerID) {
+    //   this.fetchTDCars(this.state.dealerID);
+    // }
   }
 
   onPressOrder = async (data) => {
@@ -205,9 +212,10 @@ class TestDriveScreen extends PureComponent {
       : this.state.dealerID;
     const isNewCar = get(navigation, 'state.params.isNewCar');
     const time = get(data, 'DATETIME.time');
-    // console.log('onPressOrder', this.state, carID, dealerID);
+    // console.log('onPressOrder', this.state, carID, dealerID, data);
     // return true;
     if (!this.state.isLead) {
+      // делаем online-запись
       const action = await this.props.actionOrderTestDrive({
         firstName: get(data, 'NAME'),
         secondName: get(data, 'SECOND_NAME'),
@@ -304,6 +312,7 @@ class TestDriveScreen extends PureComponent {
         }
       }
     } else {
+      // делаем просто ЛИД
       let date = get(data, 'DATE');
       if (date) {
         date = yearMonthDay(date);

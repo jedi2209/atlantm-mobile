@@ -34,7 +34,7 @@ import UsedCarFilterScreen from '../catalog/usedcar/containers/UsedCarFilterScre
 import MapScreen from '../contacts/map/containers/MapScreen';
 
 import OrderScreen from '../catalog/containers/OrderScreen';
-import OrderTestDriveScreen from '../catalog/containers/OrderTestDriveScreen';
+// import OrderTestDriveScreen from '../catalog/containers/OrderTestDriveScreen';
 import TestDriveScreen from '../catalog/containers/TestDriveScreen';
 import OrderMyPriceScreen from '../catalog/containers/OrderMyPriceScreen';
 import OrderCreditScreen from '../catalog/containers/OrderCreditScreen';
@@ -90,7 +90,7 @@ export const getRouter = (initialRouteName) => {
       },
       OrderScreen: {screen: OrderScreen},
       TestDriveScreen: {screen: TestDriveScreen},
-      OrderTestDriveScreen: {screen: OrderTestDriveScreen},
+      // OrderTestDriveScreen: {screen: OrderTestDriveScreen},
       OrderMyPriceScreen: {screen: OrderMyPriceScreen},
       OrderCreditScreen: {
         screen: OrderCreditScreen,

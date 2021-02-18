@@ -144,10 +144,10 @@ export default {
     title: 'Заявка на авто',
     titleSimiliar: 'Заявка на похожее авто',
   },
-  OrderTestDriveScreen: {
-    titleTestDrive: 'Заявка на тест-драйв авто',
-    titleView: 'Заявка на просмотр авто',
-  },
+  // OrderTestDriveScreen: {
+  //   titleTestDrive: 'Заявка на тест-драйв авто',
+  //   titleView: 'Заявка на просмотр авто',
+  // },
   TestDriveScreen: {
     title: 'Заявка на тест-драйв',
   },
@@ -549,6 +549,12 @@ export default {
     rateAppTitle: 'Оставь отзыв о приложении',
     mailtoUs: 'Вопрос или пожелание?\r\nНапиши нам!',
   },
+  PhoneChangeScreen: {
+    title: 'Осталось\r\nчуть-чуть',
+    comment:
+      'Нам нужно знать твой телефон, чтобы найти все твои данные в наших корпоративных системах.\r\n\r\nМы никогда не будем отправлять SMS и другую рекламу без твоего одобрения.',
+    enterCode: 'Код',
+  },
   Form: {
     group: {
       main: 'Основное',
@@ -635,6 +641,7 @@ export default {
     },
     button: {
       send: 'Отправить',
+      receiveCode: 'Получить код',
     },
   },
   Base: {
