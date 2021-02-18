@@ -213,15 +213,15 @@ class UserCarItemScreen extends Component {
 
   onPressTestDrive = () => {
     const {navigation, carDetails} = this.props;
-    navigation.navigate('OrderTestDriveScreen', {
+    navigation.navigate('TestDriveScreen', {
       car: {
         brand: get(carDetails, 'brand.name', ''),
         model: get(carDetails, 'model', ''),
         complectation: get(carDetails, 'complectation.name'),
         year: get(carDetails, 'year'),
+        dealer: get(carDetails, 'dealer'),
       },
       region: this.props.dealerSelected.region,
-      dealerId: get(carDetails, 'dealer.id'),
       carId: carDetails.id.api,
       isNewCar: false,
     });
