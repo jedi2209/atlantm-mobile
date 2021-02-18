@@ -11,14 +11,14 @@
       "name": "Россия",
       "iso2": "ru",
       "dialCode": "7",
-      "priority": 0,
+      "priority": 1,
       "areaCodes": null
     },
     {
       "name": "Україна",
       "iso2": "ua",
       "dialCode": "380",
-      "priority": 0,
+      "priority": 2,
       "areaCodes": null
     }
   ]
