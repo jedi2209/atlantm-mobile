@@ -19,7 +19,6 @@ import {TextInput} from '../TextInput';
 import {DatePickerCustom} from '../DatePickerCustom';
 import ChooseDateTimeComponent from '../../../service/components/ChooseDateTimeComponent';
 import RNPickerSelect, {defaultStyles} from 'react-native-picker-select';
-// import {Picker} from '@react-native-picker/picker';
 import PhoneInput from 'react-native-phone-input';
 import TextInputMask from 'react-native-text-input-mask';
 import DealerItemList from '../DealerItemList';
@@ -411,9 +410,6 @@ class Form extends Component {
     } else {
       this.setState({[name]: valueNew});
     }
-    // setTimeout(() => {
-    //   console.log('FORM onChangeField', this.state);
-    // }, 1000);
   };
 
   _fieldsDivider = (key) => {
@@ -725,7 +721,7 @@ class Form extends Component {
           </Text>
           <RNPickerSelect
             key={'rnYearPicker' + num + name}
-            doneText={strings.Base.cancel}
+            doneText={strings.Base.choose}
             onDonePress={() => {
               this._nextInput(groupNum, num);
             }}
@@ -850,7 +846,7 @@ class Form extends Component {
             ref={this.inputRefs[groupNum + 'InputWrapper' + num]}
             key={'field' + num + name}
             initialCountry={countryCode}
-            countriesList={require('../../../utils/countries.json')}
+            countriesList={require('../../../core/const.countries.json')}
             offset={20}
             autoFormat={true}
             cancelText={strings.Base.cancel}
@@ -873,10 +869,17 @@ class Form extends Component {
               }
             }}
             textComponent={() => {
-              return (
+              const PhoneTextInputComponent = React.forwardRef((props, ref) => (
                 <TextInputMask
-                  key={'fieldInternal' + name + num}
+                  className="PhoneTextInputComponent"
+                  ref={ref}
+                  {...props}
+                />
+              ));
+              return (
+                <PhoneTextInputComponent
                   ref={this.inputRefs[groupNum + 'Input' + num]}
+                  key={'fieldInternal' + name + num}
                   value={userPhoneValue}
                   placeholderTextColor={'#afafaf'}
                   placeholder={data.label}
@@ -1012,7 +1015,7 @@ class Form extends Component {
           <RNPickerSelect
             key={'rnpicker' + num + name}
             ref={this.inputRefs[groupNum + 'Input' + num]}
-            doneText={strings.Base.cancel}
+            doneText={strings.Base.choose}
             onDonePress={() => {
               if (data.props.focusNextInput) {
                 this._nextInput(groupNum, num);
@@ -1106,6 +1109,7 @@ class Form extends Component {
                       field,
                       num,
                       this.props.fields,
+                      1,
                     );
                   }
                 })}
@@ -1153,11 +1157,13 @@ class Form extends Component {
                 <ActivityIndicator color="#fff" />
               ) : (
                 <>
-                  {this.props.SubmitButton.iconLeft && this.props.SubmitButton.iconLeft}
+                  {this.props.SubmitButton.iconLeft &&
+                    this.props.SubmitButton.iconLeft}
                   <Text selectable={false} style={styles.buttonText}>
                     {this.props.SubmitButton.text}
                   </Text>
-                  {this.props.SubmitButton.iconRight && this.props.SubmitButton.iconRight}
+                  {this.props.SubmitButton.iconRight &&
+                    this.props.SubmitButton.iconRight}
                 </>
               )}
             </Button>
