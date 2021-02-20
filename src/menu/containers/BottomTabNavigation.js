@@ -12,6 +12,7 @@ import ContactsScreen from '../../contacts/containers/ContactsScreen';
 import NewCarListScreen from '../../catalog/newcar/containers/NewCarListScreen';
 import AuthContnainer from '../../profile/containers/AuthContnainer';
 import ProfileSettingsScreen from '../../profile/containers/ProfileSettingsScreen';
+import PhoneChangeScreen from '../../profile/containers/PhoneChangeScreen';
 import InfoListScreen from '../../info/containers/InfoListScreen';
 import TOHistory from '../../profile/carhistory/containers/CarHistoryScreen';
 import CarHistoryDetailsScreen from '../../profile/carhistory/containers/CarHistoryDetailsScreen';
@@ -97,6 +98,7 @@ const BottomTabNavigation = createBottomTabNavigator(
       screen: createStackNavigator(
         {
           ProfileScreenInfo: {screen: AuthContnainer},
+          PhoneChangeScreen: {screen: PhoneChangeScreen},
           ProfileSettingsScreen: {screen: ProfileSettingsScreen},
           TOHistory: {screen: TOHistory},
           CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
