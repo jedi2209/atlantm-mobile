@@ -293,7 +293,7 @@ export const actionFetchBonusInfo = (props) => {
   };
 };
 
-export const actionSavePofileWithPhone = (props) => {
+export const actionGetPhoneCode = (props) => {
   return (dispatch) => {
     dispatch({
       type: 'SAVE_PROFILE__REQUEST_WITH_PHONE',
@@ -359,10 +359,10 @@ export const actionSavePofile = (props) => {
 
     return API.loginWith(props)
       .then((response) => {
-        const {status, data, error} = response;
+        const {status, error} = response;
 
-        if (status !== 'success') {
-          dispatch({
+        if (status && status !== 'success') {
+          return dispatch({
             type: SAVE_PROFILE__FAIL,
             payload: {
               code: error.code,
@@ -372,7 +372,7 @@ export const actionSavePofile = (props) => {
         }
 
         const user = response.data.user;
-        dispatch({
+        return dispatch({
           type: SAVE_PROFILE__UPDATE,
           payload: {
             ...user,
@@ -380,7 +380,7 @@ export const actionSavePofile = (props) => {
         });
       })
       .catch((error) => {
-        dispatch({
+        return dispatch({
           type: SAVE_PROFILE__FAIL,
           payload: {
             message: error,
@@ -426,7 +426,7 @@ export const actionSaveProfileByUser = (props) => {
       payload: dataToSend,
     });
 
-    return API.saveProfile(dataToSend)
+    return API.updateProfile(dataToSend)
       .then(async (data) => {
         dispatch({
           type: SAVE_PROFILE__UPDATE,
@@ -455,7 +455,7 @@ export const actionSaveProfileToAPI = (props) => {
       payload: props,
     });
 
-    return API.saveProfile(props)
+    return API.updateProfile(props)
       .then(async (data) => {
         dispatch({
           type: SAVE_PROFILE__UPDATE,
@@ -571,7 +571,7 @@ export const connectSocialMedia = ({profile, im}) => {
       payload: dataToSend,
     });
 
-    return API.saveProfile(dataToSend)
+    return API.updateProfile(dataToSend)
       .then(async (response) => {
         dispatch({
           type: SAVE_PROFILE__UPDATE,

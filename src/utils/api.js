@@ -93,6 +93,9 @@ export default {
   },
 
   fetchIndicators(region) {
+    if (!region) {
+      return false;
+    }
     return this.request(
       `/info/indicator/get/?region=${region}`,
       baseRequestParams,
@@ -100,6 +103,9 @@ export default {
   },
 
   fetchBonus({token, userid, curr}) {
+    if (!userid || !token) {
+      return false;
+    }
     let url = `/lkk/bonus/list/?userid=${userid}&token=${token}`;
     if (curr) {
       url += `&curr=${curr}`;
@@ -108,10 +114,16 @@ export default {
   },
 
   fetchBonusInfo({region}) {
+    if (!region) {
+      return false;
+    }
     return this.request(`/info/bonus/get/?region=${region}`, baseRequestParams);
   },
 
   fetchDiscounts({token, userid}) {
+    if (!token || !userid) {
+      return false;
+    }
     return this.request(
       `/lkk/actions/list/?userid=${userid}&token=${token}`,
       baseRequestParams,
@@ -204,6 +216,9 @@ export default {
   },
 
   fetchCarHistory({vin, token, userid}) {
+    if (!vin || !userid || !token) {
+      return false;
+    }
     return this.request(
       `/lkk/cars/history/list/?userid=${userid}&token=${token}&vin=${vin}`,
       baseRequestParams,
@@ -723,6 +738,9 @@ export default {
   },
 
   fetchCars({token, userid}) {
+    if (!token || !userid) {
+      return false;
+    }
     return this.request(
       `/lkk/cars/?userid=${userid}&token=${token}`,
       baseRequestParams,
@@ -732,7 +750,9 @@ export default {
   loginRequest({login, password}) {
     // __DEV__ &&
     //   console.log('API register login: %s, password: %s', login, password);
-
+    if (!login || !password) {
+      return false;
+    }
     return this.request(
       `/lkk/auth/login/?login=${login}&password=${password}`,
       baseRequestParams,
@@ -793,6 +813,7 @@ export default {
       second_name,
       first_name,
       networkName,
+      update,
     } = profile;
 
     const body = [
@@ -813,6 +834,7 @@ export default {
       `socialData[PERSONAL_GENDER]=${
         typeof personal_gender !== 'undefined' ? personal_gender : ''
       }`,
+      `update=${typeof update !== 'undefined' ? update : ''}`,
     ].join('&');
 
     const requestParams = _.merge({}, baseRequestParams, {
@@ -825,11 +847,13 @@ export default {
 
     return this.request('/lkk/auth/social/', requestParams)
       .then((response) => {
-        response.data.profile = profile;
+        if (response.data && response.data.profile) {
+          response.data.profile = profile;
+        }
         return response;
       })
       .catch((err) => {
-        // console.log('error', err);
+        console.log('loginWith(profile) error', err);
       });
   },
 
@@ -867,7 +891,7 @@ export default {
       });
   },
 
-  saveProfile(profile) {
+  updateProfile(profile) {
     // console.log('profile', profile);
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PATCH',
@@ -877,6 +901,19 @@ export default {
       },
       body: JSON.stringify(profile),
     });
+
+    if (
+      !profile.ID ||
+      typeof profile.ID === undefined ||
+      profile.ID === '' ||
+      profile.ID === null
+    ) {
+      console.log(
+        'updateProfile error',
+        'required param profile.ID has been not found',
+      );
+      return false;
+    }
 
     return this.request(`/lkk/user/${profile.ID}/`, requestParams)
       .then((response) => {
@@ -888,6 +925,9 @@ export default {
   },
 
   async toggleArchieveCar(car, userSAP) {
+    if (!car || !userSAP) {
+      return false;
+    }
     let method = '';
     if (car.hidden === true) {
       method = 'DELETE';
@@ -966,17 +1006,22 @@ export default {
     } else {
       delete requestParams.headers.Debug;
     }
-
-    // console.log('>>> url', url);
-    // console.log('>>> requestParams', requestParams);
-
     return this.apiGetData(url, requestParams);
   },
 
   async apiGetData(url, requestParams) {
     try {
       const response = await fetch(url, requestParams);
-      return response.json();
+      const res = await response.json();
+      if (res) {
+        console.log(
+          '>>> apiGetData url, requestParams ==> res \r\n',
+          url + '\r\n',
+          requestParams,
+          res,
+        );
+      }
+      return res;
     } catch (err) {
       console.log('apiGetDataError URL: ' + url, err);
     }

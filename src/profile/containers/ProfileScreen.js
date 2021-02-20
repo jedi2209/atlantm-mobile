@@ -21,16 +21,12 @@ import styleConst from '../../core/style-const';
 import LinearGradient from 'react-native-linear-gradient';
 
 // imports for auth
-import {
-  AccessToken,
-  GraphRequest,
-  GraphRequestManager,
-} from 'react-native-fbsdk';
 import {LoginManager} from 'react-native-fbsdk';
+import Facebook from '../auth/Facebook';
+import Google from '../auth/Google';
+import VK from '../auth/VK';
+import Apple from '../auth/Apple';
 
-import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
-
-import VKLogin from 'react-native-vkontakte-login';
 import {
   appleAuth,
   AppleButton,
@@ -38,7 +34,7 @@ import {
 
 // redux
 import {connect} from 'react-redux';
-import {actionSavePofile, actionSavePofileWithPhone} from '../actions';
+import {actionSavePofile, actionGetPhoneCode} from '../actions';
 
 import {
   actionSetPushActionSubscribe,
@@ -88,22 +84,8 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
 
   actionSavePofile,
-  actionSavePofileWithPhone,
+  actionGetPhoneCode,
 };
-
-GoogleSignin.configure({
-  scopes: ['https://www.googleapis.com/auth/userinfo.email'], // what API you want to access on behalf of the user, default is email and profile
-  webClientId:
-    '53201529704-4fl35lhveh4lvcdj9o3nli0fpk8c942r.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
-  offlineAccess: false, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-  hostedDomain: '', // specifies a hosted domain restriction
-  loginHint: '', // [iOS] The user's ID, or email address, to be prefilled in the authentication UI if possible. [See docs here](https://developers.google.com/identity/sign-in/ios/api/interface_g_i_d_sign_in.html#a0a68c7504c31ab0b728432565f6e33fd)
-  forceConsentPrompt: true, // [Android] if you want to show the authorization prompt at each login.
-  accountName: '', // [Android] specifies an account name on the device that should be used
-  iosClientId:
-    '53201529704-pofi5bbpvo7dtnuu521lo00f3bl6qiq2.apps.googleusercontent.com', // [iOS] optional, if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
-});
-
 class ProfileScreen extends Component {
   constructor(props) {
     super(props);
@@ -121,7 +103,6 @@ class ProfileScreen extends Component {
       pickerData: null,
     };
 
-    this.requestManager = new GraphRequestManager();
     this.scrollRef = createRef();
     this.storeData = store.getState();
   }
@@ -134,7 +115,33 @@ class ProfileScreen extends Component {
     headerTransparent: true,
   });
 
-  onOtpChange = (index) => {
+  componentDidMount() {
+    this.keyboardShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      this.onKeyboardVisibleChange,
+    );
+    this.keyboardHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this.onKeyboardVisibleChange,
+    );
+    this.setState({
+      pickerData: this.phoneInput.getPickerData(),
+    });
+    Amplitude.logEvent('screen', 'profile/login');
+  }
+
+  componentWillUnmount() {
+    this.keyboardShowListener.remove();
+    this.keyboardHideListener.remove();
+  }
+
+  onKeyboardVisibleChange = () => {
+    requestAnimationFrame(() => {
+      this.scrollRef.current.scrollToEnd();
+    });
+  };
+
+  _onOtpChange = (index) => {
     return (value) => {
       if (isNaN(Number(value))) {
         // do nothing when a non digit is pressed
@@ -158,7 +165,7 @@ class ProfileScreen extends Component {
     };
   };
 
-  onOtpKeyPress = (index) => {
+  _onOtpKeyPress = (index) => {
     return ({nativeEvent: {key: value}}) => {
       if (Number(value)) {
         if (index > 0 && index < 3 && this.otpArray[index] !== '') {
@@ -189,32 +196,6 @@ class ProfileScreen extends Component {
     };
   };
 
-  componentDidMount() {
-    this.keyboardShowListener = Keyboard.addListener(
-      'keyboardDidShow',
-      this.onKeyboardVisibleChange,
-    );
-    this.keyboardHideListener = Keyboard.addListener(
-      'keyboardDidHide',
-      this.onKeyboardVisibleChange,
-    );
-    this.setState({
-      pickerData: this.phoneInput.getPickerData(),
-    });
-    Amplitude.logEvent('screen', 'profile/login');
-  }
-
-  componentWillUnmount() {
-    this.keyboardShowListener.remove();
-    this.keyboardHideListener.remove();
-  }
-
-  onKeyboardVisibleChange = () => {
-    requestAnimationFrame(() => {
-      this.scrollRef.current.scrollToEnd();
-    });
-  };
-
   _cancelVerify = () => {
     this.setState({
       code: false,
@@ -241,7 +222,7 @@ class ProfileScreen extends Component {
     phone = phoneNew.replace('++', '+');
     this.setState({phone: phone});
     this.setState({loadingVerify: true});
-    this.props.actionSavePofileWithPhone({phone}).then((response) => {
+    this.props.actionGetPhoneCode({phone}).then((response) => {
       if (response.code >= 300) {
         this.setState({
           code: false,
@@ -301,7 +282,7 @@ class ProfileScreen extends Component {
     this.keyboardHideListener.remove();
     this.setState({loading: true, loadingVerify: true});
     this.props
-      .actionSavePofileWithPhone({phone, code})
+      .actionGetPhoneCode({phone, code})
       .then((data) => {
         Keyboard.dismiss();
         PushNotifications.addTag('login', data.user.ID);
@@ -343,159 +324,16 @@ class ProfileScreen extends Component {
       });
   }
 
-  async fetchProfileFromFacebook(token) {
-    return new Promise((resolve, reject) => {
-      const request = new GraphRequest(
-        '/me',
-        {
-          parameters: {
-            fields: {
-              string: 'email,name,first_name,middle_name,last_name',
-            },
-            access_token: {
-              string: token,
-            },
-          },
-        },
-        (error, result) => {
-          if (result) {
-            const profile = result;
-            profile.avatar = `https://graph.facebook.com/${result.id}/picture`;
-            resolve(profile);
-          } else {
-            reject(error);
-          }
-        },
-      );
-
-      this.requestManager.addRequest(request).start();
-    });
-  }
-
-  _signInWithGoogle = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-
-      const profile = {
-        id: userInfo.user.id,
-        email: userInfo.user.email,
-        first_name: userInfo.user.givenName || '',
-        last_name: userInfo.user.familyName || '',
-      };
-
-      this._sendDataToApi({...profile, networkName: 'gl'});
-    } catch (error) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log('Google auth cancelled', error);
-        // user cancelled the login flow
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log('Google auth in process', error);
-        // operation (e.g. sign in) is in progress already
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        console.log('Google auth play services', error);
-        // play services not available or outdated
-      } else {
-        console.log('Google auth error', error);
-        // some other error happened
-      }
-    }
-  };
-
-  _signInFB = () => {
-    LoginManager.logInWithPermissions(['email']).then(
-      function (result) {
-        if (result.isCancelled) {
-          console.log('Login cancelled');
-        } else {
-          console.log(
-            'Login success with permissions: ' +
-              result.grantedPermissions.toString(),
-          );
-          this.getFBToken();
-        }
-      }.bind(this),
-      function (error) {
-        console.log('Login fail with error: ' + error);
-      },
-    );
-  };
-
-  getFBToken = () => {
-    AccessToken.getCurrentAccessToken().then((auth) => {
-      this.fetchProfileFromFacebook(auth.accessToken).then((data) => {
-        this._sendDataToApi({...data, networkName: 'fb'});
+  _checkPhone = (data) => {
+    if (data.phone) {
+      this._sendDataToApi(data);
+    } else {
+      this.props.navigation.navigate('PhoneChangeScreen', {
+        refererScreen: 'ProfileScreenInfo',
+        returnScreen: 'ProfileScreenInfo',
+        userSocialProfile: data,
+        type: 'auth',
       });
-    });
-  };
-
-  _GetUserDataVK = async () => {
-    try {
-      const auth = await VKLogin.login([
-        'friends',
-        'photos',
-        'email',
-        'contacts',
-        'phone',
-      ]);
-      const url =
-        'https://api.vk.com/method/account.getProfileInfo?user_id=' +
-        auth.user_id +
-        '&v=5.103&fields=contacts&access_token=' +
-        auth.access_token;
-      const response = await fetch(url);
-      const userData = await response.json();
-      return Object.assign(auth, userData.response);
-    } catch (err) {
-      console.log('apiGetDataError', err);
-    }
-  };
-
-  _signInWithVK = async () => {
-    VKLogin.initialize(7255802);
-    try {
-      const userData = await this._GetUserDataVK();
-      const profile = {
-        id: userData.user_id,
-        email: userData.email || '',
-        first_name: userData.first_name || '',
-        last_name: userData.last_name || '',
-        personal_birthday: userData.bdate || '',
-        personal_gender: userData.sex === 2 ? 'M' : 'F',
-      };
-      this._sendDataToApi({...profile, networkName: 'vk'});
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  _signInWithApple = async () => {
-    // performs login request
-    const appleAuthRequestResponse = await appleAuth.performRequest({
-      requestedOperation: appleAuth.Operation.LOGIN,
-      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-    });
-
-    // get current authentication state for user
-    // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-    const credentialState = await appleAuth.getCredentialStateForUser(
-      appleAuthRequestResponse.user,
-    );
-
-    // use credentialState response to ensure the user is authenticated
-    if (credentialState === appleAuth.State.AUTHORIZED) {
-      try {
-        const profile = {
-          id: appleAuthRequestResponse.user,
-          first_name: appleAuthRequestResponse.fullName.nickname || '',
-          second_name: appleAuthRequestResponse.fullName.middleName || '',
-          last_name: appleAuthRequestResponse.fullName.familyName || '',
-          email: appleAuthRequestResponse.email || '',
-        };
-        this._sendDataToApi({...profile, networkName: 'apple'});
-      } catch (error) {
-        // console.log('error', error);
-      }
     }
   };
 
@@ -544,7 +382,9 @@ class ProfileScreen extends Component {
             justifyContent: 'space-between',
           }}>
           <Button
-            onPress={this._signInWithGoogle}
+            onPress={() => {
+              return Google.signIn(this._checkPhone);
+            }}
             disabled={this.state.isSigninInProgress}
             iconLeft
             style={[
@@ -559,7 +399,9 @@ class ProfileScreen extends Component {
             <Icon name="google" type="FontAwesome5" style={{marginLeft: 0}} />
           </Button>
           <Button
-            onPress={this._signInFB}
+            onPress={() => {
+              return Facebook.signIn(this._checkPhone);
+            }}
             disabled={this.state.isSigninInProgress}
             iconLeft
             style={[
@@ -581,7 +423,9 @@ class ProfileScreen extends Component {
           </Button>
           {VKenabled ? (
             <Button
-              onPress={this._signInWithVK}
+              onPress={() => {
+                return VK.signIn(this._checkPhone);
+              }}
               disabled={this.state.isSigninInProgress}
               iconLeft
               style={[
@@ -609,7 +453,9 @@ class ProfileScreen extends Component {
                 height: 45,
               },
             ]}
-            onPress={() => this._signInWithApple()}
+            onPress={() => {
+              return Apple.signIn(this._checkPhone);
+            }}
           />
         ) : null}
       </View>
@@ -633,9 +479,7 @@ class ProfileScreen extends Component {
 
     LoginManager.logOut();
     return (
-      <KeyboardAvoidingView
-        // behavior={Platform.select({ios: 'position', android: null})}
-        keyboardVerticalOffset={0}>
+      <KeyboardAvoidingView keyboardVerticalOffset={0}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ImageBackground
             source={require('./bg.jpg')}
@@ -751,8 +595,8 @@ class ProfileScreen extends Component {
                             returnKeyType="send"
                             placeholderTextColor="#afafaf"
                             autoCompleteType="off"
-                            onKeyPress={this.onOtpKeyPress(index)}
-                            onChangeText={this.onOtpChange(index)}
+                            onKeyPress={this._onOtpKeyPress(index)}
+                            onChangeText={this._onOtpChange(index)}
                             selected={false}
                           />
                         ))}
@@ -771,7 +615,7 @@ class ProfileScreen extends Component {
                             ? this.storeData.dealer.selected.region
                             : 'by'
                         }
-                        countriesList={require('../../utils/countries.json')}
+                        countriesList={require('../../core/const.countries.json')}
                         autoFormat={true}
                         textStyle={styles.PhoneInput}
                         offset={20}
