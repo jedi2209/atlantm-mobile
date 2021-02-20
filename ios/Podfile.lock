@@ -321,7 +321,7 @@ PODS:
   - react-native-text-input-mask (2.0.1):
     - React
     - RNInputMask
-  - react-native-viewpager (4.2.2):
+  - react-native-viewpager (4.2.3):
     - React-Core
   - react-native-vkontakte-login (1.0.1):
     - React
@@ -396,7 +396,7 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.13.4):
     - React-Core
-  - RNCPicker (1.9.10):
+  - RNCPicker (1.9.11):
     - React-Core
   - RNDateTimePicker (3.0.9):
     - React-Core
@@ -423,7 +423,7 @@ PODS:
     - React-Core
   - RNScreens (2.17.1):
     - React-Core
-  - RNSentry (2.2.0):
+  - RNSentry (2.2.1):
     - React-Core
     - Sentry (= 6.1.4)
   - RNSVG (12.1.0):
@@ -707,7 +707,7 @@ SPEC CHECKSUMS:
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-text-input-mask: cffd00848940e7670cf233a99e7be782257935ed
-  react-native-viewpager: ea945e2881ce9a4a8bcdc84de4ec65ff23c90f6e
+  react-native-viewpager: 936c67cba6e9ca19793d04321427a44cb8e43395
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
   react-native-webview: 6520e3e7b4933de76b95ef542c8d7115cf45b68e
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
@@ -724,7 +724,7 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNAppleAuthentication: 46cbc67739bae83ca229497f9b0038f3f5431443
   RNCAsyncStorage: 44539979e1f234262d64d3ce86ec21cceb1b2c5e
-  RNCPicker: 77183d9b1cd80ae55505322f8ad09ba0036e29ba
+  RNCPicker: 6780c753e9e674065db90d9c965920516402579d
   RNDateTimePicker: 8a51a2216c307769e69ef827293d59549ab1ca23
   RNDeviceInfo: 921a809eaf9de79645a24de1c6ca90db6cb91786
   RNGestureHandler: 5e58135436aacc1c5d29b75547d3d2b9430d052c
@@ -734,7 +734,7 @@ SPEC CHECKSUMS:
   RNRate: 15b861025a7821730761fce7f44561ce7e0b2de0
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: b6c9607e6fe47c1b6e2f1910d2acd46dd7ecea3a
-  RNSentry: 6aeba1adc242fd22a6826acae92f430697b47a9c
+  RNSentry: 7104cdfc1072ccb86015d9c8f210d81ae76806c1
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: f67a1abce2ec73e62fe4606e8110e95a832bc859
   Sentry: 9d055e2de30a77685e86b219acf02e59b82091fc

@@ -1,0 +1,27 @@
+diff --git a/node_modules/react-native-phone-input/dist/CountryPicker.js b/node_modules/react-native-phone-input/dist/CountryPicker.js
+index d829c1c..fd8a08f 100644
+--- a/node_modules/react-native-phone-input/dist/CountryPicker.js
++++ b/node_modules/react-native-phone-input/dist/CountryPicker.js
+@@ -61,14 +61,14 @@ class CountryPicker extends react_1.Component {
+             selectedCountry: this.props.selectedCountry || country_1.default.getAll()[0],
+         };
+     }
+-    componentDidUpdate() {
+-        const { selectedCountry } = this.props;
+-        if (selectedCountry && selectedCountry !== this.state.selectedCountry) {
+-            this.setState({
+-                selectedCountry: this.props.selectedCountry,
+-            });
+-        }
+-    }
++    // componentDidUpdate() {
++    //     const { selectedCountry } = this.props;
++    //     if (selectedCountry && selectedCountry !== this.state.selectedCountry) {
++    //         this.setState({
++    //             selectedCountry: this.props.selectedCountry,
++    //         });
++    //     }
++    // }
+     selectCountry(selectedCountry) {
+         this.setState({
+             selectedCountry,
