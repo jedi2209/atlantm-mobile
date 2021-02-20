@@ -18,7 +18,7 @@ import {connect} from 'react-redux';
 import {TextInput} from '../TextInput';
 import {DatePickerCustom} from '../DatePickerCustom';
 import ChooseDateTimeComponent from '../../../service/components/ChooseDateTimeComponent';
-import RNPickerSelect, {defaultStyles} from 'react-native-picker-select';
+import RNPickerSelect from 'react-native-picker-select';
 import PhoneInput from 'react-native-phone-input';
 import TextInputMask from 'react-native-text-input-mask';
 import DealerItemList from '../DealerItemList';
@@ -179,6 +179,9 @@ class Form extends Component {
               );
             } else {
               this.state[field.name] = field.value;
+              if (field.value && field.type !== 'phone') {
+                this.state[field.name + '_Picker'] = null;
+              }
             }
           }
           this.allFields.push({
@@ -755,7 +758,10 @@ class Form extends Component {
         this.inputRefs.phones = [];
       }
 
-      if (typeof data.props.focusNextInput === 'undefined') {
+      if (!data.props || typeof data.props.focusNextInput === 'undefined') {
+        if (!data.props) {
+          data.props = {};
+        }
         data.props.focusNextInput = true;
       }
 
