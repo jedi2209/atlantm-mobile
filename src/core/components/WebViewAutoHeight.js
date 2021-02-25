@@ -34,7 +34,7 @@ const styleCSS = `
         margin: 0;
         padding: 15;
         font-size: 16px !important;
-        font-family: Geneva, Arial, Helvetica, sans-serif,
+        font-family: "HelveticaNeue-Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
         backgroundColor: ${styleConst.color.bg}
     }
     a, a:visited, a.hover {
