@@ -29,7 +29,15 @@ const styles = StyleSheet.create({
 const heightScreen = Dimensions.get('window').height;
 
 const MenuItem = (props) => {
-  const {id, selected, type, name, icon, navigateUrl} = props.data;
+  const {
+    id,
+    selected,
+    type,
+    name,
+    icon,
+    navigateUrl,
+    returnScreen,
+  } = props.data;
   const {navigation, rowHeight} = props;
 
   return (
@@ -44,7 +52,9 @@ const MenuItem = (props) => {
       }}
       selected={selected}
       onPress={() =>
-        navigation.navigate(navigateUrl, {returnScreen: 'MoreScreen'})
+        navigation.navigate(navigateUrl, {
+          returnScreen: returnScreen ? returnScreen : 'MoreScreen',
+        })
       }>
       <Left style={{marginLeft: 0, paddingLeft: 0, maxWidth: 75}}>
         <Button
@@ -162,6 +172,7 @@ const MoreScreen = (props) => {
       type: 'settings',
       icon: <Image source={require('../assets/Settings.svg')} />,
       selected: false,
+      returnScreen: 'BottomTabNavigation',
     },
   ];
 

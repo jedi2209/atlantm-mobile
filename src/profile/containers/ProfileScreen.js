@@ -19,6 +19,7 @@ import PhoneInput from 'react-native-phone-input';
 import {store} from '../../core/store';
 import styleConst from '../../core/style-const';
 import LinearGradient from 'react-native-linear-gradient';
+import Form from '../../core/components/Form/Form';
 
 // imports for auth
 import {LoginManager} from 'react-native-fbsdk';
@@ -49,6 +50,8 @@ import strings from '../../core/lang/const';
 import {verticalScale} from '../../utils/scale';
 import {ScrollView} from 'react-native';
 import {string} from 'prop-types';
+import PhoneDetect from '../../utils/phoneDetect';
+import UserData from '../../utils/user';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -60,7 +63,9 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
     listBelarussia: dealer.listBelarussia,
     dealerSelected: dealer.selected,
     name: profile.name,
-    phone: profile.phone,
+    phone: UserData.get('PHONE')
+      ? UserData.get('PHONE')
+      : UserData.get('PHONE'),
     email: profile.email,
     car: profile.car,
     carNumber: profile.carNumber,
@@ -100,11 +105,42 @@ class ProfileScreen extends Component {
       vkLogin: false,
       loading: false,
       loadingVerify: false,
-      pickerData: null,
+      // pickerData: null,
     };
 
     this.scrollRef = createRef();
     this.storeData = store.getState();
+
+    this.FormConfig = {
+      fields: [
+        {
+          name: 'PHONE',
+          type: 'phone',
+          label: strings.Form.field.label.phone,
+          value: this.props.phone,
+          props: {
+            required: true,
+            focusNextInput: false,
+            textProps: {
+              placeholderTextColor: '#afafaf',
+              placeholder: strings.Form.field.label.phone,
+              keyboardType: 'phone-pad',
+              autoCompleteType: 'tel',
+              selectionColor: '#afafaf',
+              returnKeyType: 'go',
+              textContentType: 'telephoneNumber',
+              enablesReturnKeyAutomatically: true,
+              editable: this.state.code ? false : true,
+              onEndEditing: () => {
+                if (this.state.phone) {
+                  this._verifyCode();
+                }
+              },
+            },
+          },
+        },
+      ],
+    };
   }
 
   CodeInput = [];
@@ -124,9 +160,9 @@ class ProfileScreen extends Component {
       'keyboardDidHide',
       this.onKeyboardVisibleChange,
     );
-    this.setState({
-      pickerData: this.phoneInput.getPickerData(),
-    });
+    // this.setState({
+    //   pickerData: this.phoneInput.getPickerData(),
+    // });
     Amplitude.logEvent('screen', 'profile/login');
   }
 
@@ -206,20 +242,8 @@ class ProfileScreen extends Component {
     });
   };
 
-  _verifyCode = () => {
-    const phoneCountryCode = this.phoneInput.getCountryCode();
-    let phone = this.state.phone;
-    let phoneNew = phone;
-    if (phoneNew.indexOf(phoneCountryCode) === -1) {
-      phoneNew = phoneCountryCode + phone;
-    }
-    if (phoneNew.indexOf(phoneCountryCode) !== -1) {
-      phoneNew = '+' + phone;
-    }
-    if (phoneNew.indexOf('+' + phoneCountryCode) === -1) {
-      phoneNew = '+' + phoneCountryCode + phone;
-    }
-    phone = phoneNew.replace('++', '+');
+  _verifyCode = (data) => {
+    let phone = data.PHONE;
     this.setState({phone: phone});
     this.setState({loadingVerify: true});
     this.props.actionGetPhoneCode({phone}).then((response) => {
@@ -308,31 +332,68 @@ class ProfileScreen extends Component {
 
   _sendDataToApi(profile) {
     this.setState({loading: true});
-    this.props
-      .actionSavePofile(profile)
-      .then(() => {
-        this.setState({loading: false});
-        this.props.navigation.goBack();
-      })
-      .catch(() => {
-        this.setState({loading: false});
-        Toast.show({
-          text: strings.Notifications.error.text,
-          position: 'top',
-          type: 'warning',
-        });
-      });
+    return this.props.actionSavePofile(profile);
   }
 
-  _checkPhone = (data) => {
-    if (data.phone) {
-      this._sendDataToApi(data);
+  _checkPhone = async (data) => {
+    data.update = 0;
+    const res = await this._sendDataToApi(data);
+    if (res) {
+      switch (res.type) {
+        case 'SAVE_PROFILE__UPDATE':
+          if (res.payload && res.payload.ID && res.payload.PHONE) {
+            // нашли юзверя в CRM и у него есть телефон
+            this.setState({loading: false});
+            this.props.navigation.goBack();
+          }
+          break;
+        case 'SAVE_PROFILE__NOPHONE':
+          this.setState({loading: false});
+          this.props.navigation.navigate('PhoneChangeScreen', {
+            refererScreen: 'ProfileScreenInfo',
+            returnScreen: 'ProfileScreenInfo',
+            userSocialProfile: data,
+            type: 'auth',
+          });
+          break;
+        case 'SAVE_PROFILE__FAIL':
+          if (res.payload.code) {
+            switch (res.payload.code) {
+              case 100: // Пользователь не зарегистрирован
+                delete data.update; // теперь будем регать пользователя по серьёзке
+                this.setState({loading: false});
+                this.props.navigation.navigate('PhoneChangeScreen', {
+                  refererScreen: 'ProfileScreenInfo',
+                  returnScreen: 'ProfileScreenInfo',
+                  userSocialProfile: data,
+                  type: 'auth',
+                });
+                break;
+              default:
+                this.setState({loading: false});
+                Toast.show({
+                  text: strings.Notifications.error.text,
+                  position: 'top',
+                  type: 'warning',
+                });
+                break;
+            }
+          } else {
+            this.setState({loading: false});
+            Toast.show({
+              text: strings.Notifications.error.text,
+              position: 'top',
+              type: 'warning',
+            });
+          }
+          break;
+      }
     } else {
-      this.props.navigation.navigate('PhoneChangeScreen', {
-        refererScreen: 'ProfileScreenInfo',
-        returnScreen: 'ProfileScreenInfo',
-        userSocialProfile: data,
-        type: 'auth',
+      this.setState({loading: false});
+      Toast.show({
+        text: strings.Notifications.error.text,
+        position: 'top',
+        type: 'warning',
       });
     }
   };
@@ -347,6 +408,12 @@ class ProfileScreen extends Component {
   };
 
   onInputPhone = (text) => {
+    const country = PhoneDetect.country(text);
+    if (country && country.code) {
+      this.phoneInput.state.iso2 = country.code;
+    } else {
+      this.phoneInput.state.iso2 = null;
+    }
     this.setState({phone: text});
   };
 
@@ -590,7 +657,7 @@ class ProfileScreen extends Component {
                               this.CodeInput[index] = input;
                             }}
                             maxLength={1}
-                            caretHidden={false}
+                            caretHidden={true}
                             enablesReturnKeyAutomatically={true}
                             returnKeyType="send"
                             placeholderTextColor="#afafaf"
@@ -602,7 +669,21 @@ class ProfileScreen extends Component {
                         ))}
                       </>
                     ) : (
-                      <PhoneInput
+                      <View
+                        style={{
+                          flex: 1,
+                          paddingTop: 20,
+                          justifyContent: 'center',
+                        }}>
+                        <Form
+                          fields={this.FormConfig.fields}
+                          SubmitButton={{
+                            text: strings.Form.button.receiveCode,
+                          }}
+                          onSubmit={this._verifyCode}
+                        />
+                      </View>
+                      /* <PhoneInput
                         style={{
                           justifyContent: 'center',
                           flex: 1,
@@ -638,7 +719,7 @@ class ProfileScreen extends Component {
                             }
                           },
                         }}
-                      />
+                      /> */
                     )}
                   </View>
                   {this.state.code ? (

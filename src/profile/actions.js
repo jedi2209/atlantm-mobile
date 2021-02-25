@@ -30,6 +30,7 @@ import {
   CAR_HIDE__SUCCESS,
   CAR_HIDE__FAIL,
   SAVE_PROFILE__UPDATE,
+  SAVE_PROFILE__NOPHONE,
   SAVE_PROFILE__REQUEST,
   SAVE_PROFILE__FAIL,
   PROFILE_DATA__SUCCESS,
@@ -341,6 +342,7 @@ export const getProfileSapData = ({id, sap, curr}) => {
 
 export const actionSavePofile = (props) => {
   // этот блок для авторизации через телефон
+  console.log('actionSavePofile props', props);
   if (props.ID) {
     return (dispatch) => {
       dispatch({
@@ -372,8 +374,17 @@ export const actionSavePofile = (props) => {
         }
 
         const user = response.data.user;
+        let type = SAVE_PROFILE__UPDATE;
+        if (
+          typeof props.update !== undefined &&
+          props.update === 0 &&
+          user &&
+          !user.PHONE
+        ) {
+          type = SAVE_PROFILE__NOPHONE;
+        }
         return dispatch({
-          type: SAVE_PROFILE__UPDATE,
+          type: type,
           payload: {
             ...user,
           },

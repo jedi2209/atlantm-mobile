@@ -23,6 +23,8 @@ import PhoneInput from 'react-native-phone-input';
 import TextInputMask from 'react-native-text-input-mask';
 import DealerItemList from '../DealerItemList';
 
+import PhoneDetect from '../../../utils/phoneDetect';
+
 import styleConst from '../../style-const';
 
 import strings from '../../lang/const';
@@ -155,6 +157,7 @@ class Form extends Component {
       parentState: props.parentState,
       required: [],
       active: {},
+      showSubmitButton: true,
     };
     this.inputRefs = [];
     this.inputRefsNav = [];
@@ -199,6 +202,9 @@ class Form extends Component {
         });
       });
     } else {
+      if (props.fields.length === 1) {
+        this.state.showSubmitButton = false;
+      }
       props.fields.map((field) => {
         if (field.value && field.type !== 'component') {
           if (field.id) {
@@ -408,10 +414,16 @@ class Form extends Component {
           valueNew = null;
         }
         copyField[id].value = valueNew;
-        return {[name]: copyField};
+        return {
+          [name]: copyField,
+          showSubmitButton: true,
+        };
       });
     } else {
-      this.setState({[name]: valueNew});
+      this.setState({
+        [name]: valueNew,
+        showSubmitButton: true,
+      });
     }
   };
 
@@ -779,15 +791,7 @@ class Form extends Component {
         userPhoneValue = this.state[name] || data.value;
       }
       if (userPhoneValue) {
-        if (userPhoneValue.indexOf('+375') === 0) {
-          userPhoneRegion = 'by';
-        }
-        if (userPhoneValue.indexOf('+7') === 0) {
-          userPhoneRegion = 'ru';
-        }
-        if (userPhoneValue.indexOf('+380') === 0) {
-          userPhoneRegion = 'ua';
-        }
+        userPhoneRegion = PhoneDetect.getCountryCodeByMask(userPhoneValue);
         if (userPhoneRegion && userPhoneRegion !== countryCode) {
           countryCode = userPhoneRegion;
         }
@@ -896,7 +900,9 @@ class Form extends Component {
                   textContentType={'telephoneNumber'}
                   enablesReturnKeyAutomatically={true}
                   editable={true}
+                  onEndEditing={() => {}}
                   onChangeText={(formatted, pureValue) => {
+                    countryCode = PhoneDetect.getCountryCodeByMask(formatted);
                     if (id) {
                       this.setState((prevState) => {
                         let copyField = Object.assign({}, prevState[name]); // creating copy of state variable jasper
@@ -906,32 +912,41 @@ class Form extends Component {
                           '',
                         );
                         if (pureValue.length === maskLength.length) {
-                          return {[name]: copyField};
+                          return {
+                            [name]: copyField,
+                            showSubmitButton: true,
+                          };
                         }
                       });
                     } else {
                       let maskLength = this.state['mask_' + name + num].replace(
-                        /[^0]/g,
+                        /([^0])/g,
                         '',
                       );
-                      if (countryCode === 'ua') {
-                        if (pureValue.length + 1 === maskLength.length) {
-                          this.setState({
-                            [name]: formatted.replace(/[^\d.+]/g, ''),
-                          });
-                          if (data.props.focusNextInput) {
-                            this._nextInput(groupNum, num);
+                      switch (countryCode) {
+                        case 'ua':
+                          if (pureValue.length + 1 === maskLength.length) {
+                            this.setState({
+                              [name]: formatted.replace(/[^\d.+]/g, ''),
+                              showSubmitButton: true,
+                            });
+                            if (data.props.focusNextInput) {
+                              this._nextInput(groupNum, num);
+                            }
                           }
-                        }
-                      } else {
-                        if (pureValue.length === maskLength.length) {
-                          this.setState({
-                            [name]: formatted.replace(/[^\d.+]/g, ''),
-                          });
-                          if (data.props.focusNextInput) {
-                            this._nextInput(groupNum, num);
+                          break;
+                        case 'ru':
+                        case 'by':
+                          if (pureValue.length === maskLength.length) {
+                            this.setState({
+                              [name]: formatted.replace(/[^\d.+]/g, ''),
+                              showSubmitButton: true,
+                            });
+                            if (data.props.focusNextInput) {
+                              this._nextInput(groupNum, num);
+                            }
                           }
-                        }
+                          break;
                       }
                     }
                   }}
@@ -1123,56 +1138,58 @@ class Form extends Component {
             </View>
           )}
           <View style={styles.group}>
-            <Button
-              block
-              {...(this.props.SubmitButton.iconLeft ? 'iconLeft' : null)}
-              {...(this.props.SubmitButton.iconRight ? 'iconRight' : null)}
-              onPress={() => {
-                if (!this.state.loading) {
-                  if (!this.props.onSubmit) {
-                    console.log(
-                      'Undefined required onSubmit prop for Form component',
-                    );
-                    console.log('this.props', this.props);
-                    console.log('onSubmit handler', this.state);
-                  } else {
-                    if (this._validate()) {
-                      this.setState({loading: true});
-                      const response = async () => {
-                        return new Promise((resolve, reject) => {
-                          const answer = this.props.onSubmit(this.state);
-                          if (answer) {
-                            resolve(answer);
-                          }
+            {this.state.showSubmitButton ? (
+              <Button
+                block
+                {...(this.props.SubmitButton.iconLeft ? 'iconLeft' : null)}
+                {...(this.props.SubmitButton.iconRight ? 'iconRight' : null)}
+                onPress={() => {
+                  if (!this.state.loading) {
+                    if (!this.props.onSubmit) {
+                      console.log(
+                        'Undefined required onSubmit prop for Form component',
+                      );
+                      console.log('this.props', this.props);
+                      console.log('onSubmit handler', this.state);
+                    } else {
+                      if (this._validate()) {
+                        this.setState({loading: true});
+                        const response = async () => {
+                          return new Promise((resolve, reject) => {
+                            const answer = this.props.onSubmit(this.state);
+                            if (answer) {
+                              resolve(answer);
+                            }
+                          });
+                        };
+                        response().then(() => {
+                          this.setState({loading: false});
                         });
-                      };
-                      response().then(() => {
-                        this.setState({loading: false});
-                      });
+                      }
                     }
                   }
-                }
-              }}
-              style={[
-                styleConst.shadow.default,
-                styles.button,
-                this.props.SubmitButton && this.props.SubmitButton.style,
-              ]}
-              {...this.props.SubmitButton.props}>
-              {this.state.loading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <>
-                  {this.props.SubmitButton.iconLeft &&
-                    this.props.SubmitButton.iconLeft}
-                  <Text selectable={false} style={styles.buttonText}>
-                    {this.props.SubmitButton.text}
-                  </Text>
-                  {this.props.SubmitButton.iconRight &&
-                    this.props.SubmitButton.iconRight}
-                </>
-              )}
-            </Button>
+                }}
+                style={[
+                  styleConst.shadow.default,
+                  styles.button,
+                  this.props.SubmitButton && this.props.SubmitButton.style,
+                ]}
+                {...this.props.SubmitButton.props}>
+                {this.state.loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <>
+                    {this.props.SubmitButton.iconLeft &&
+                      this.props.SubmitButton.iconLeft}
+                    <Text selectable={false} style={styles.buttonText}>
+                      {this.props.SubmitButton.text}
+                    </Text>
+                    {this.props.SubmitButton.iconRight &&
+                      this.props.SubmitButton.iconRight}
+                  </>
+                )}
+              </Button>
+            ) : null}
           </View>
         </ScrollView>
       </View>
