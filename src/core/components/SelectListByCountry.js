@@ -3,7 +3,7 @@ import {StyleSheet, View, FlatList, ActivityIndicator} from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import {Container, StyleProvider, Tab, Tabs} from 'native-base';
+import {Container, StyleProvider, Tab, Tabs, DefaultTabBar} from 'native-base';
 import SelectItemByCountry from './SelectItemByCountry';
 
 // helpers
@@ -40,6 +40,11 @@ const styles = StyleSheet.create({
   },
   TabsActiveTabStyle: {},
 });
+
+const renderTabBar = (props) => {
+  props.tabStyle = Object.create(props.tabStyle);
+  return <DefaultTabBar {...props} />;
+};
 
 export default class SelectListByCountry extends Component {
   static propTypes = {
@@ -160,6 +165,7 @@ export default class SelectListByCountry extends Component {
         <StyleProvider style={getTheme()}>
           <Container style={styles.safearea}>
             <Tabs
+              renderTabBar={renderTabBar}
               tabBarUnderlineStyle={{
                 backgroundColor: styleConst.new.blueHeader,
               }}>
@@ -223,6 +229,7 @@ export default class SelectListByCountry extends Component {
         <StyleProvider style={getTheme()}>
           <Container style={styles.safearea}>
             <Tabs
+              renderTabBar={renderTabBar}
               tabBarUnderlineStyle={{
                 backgroundColor: styleConst.new.blueHeader,
               }}>
