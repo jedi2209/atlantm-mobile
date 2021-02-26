@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes, {element} from 'prop-types';
 
 import {
+  Animated,
   StyleSheet,
   View,
   ScrollView,
@@ -29,6 +30,35 @@ import styleConst from '../../style-const';
 
 import strings from '../../lang/const';
 
+const platformStyle = {
+  ios: {
+    textinput: {
+      height: 48,
+    },
+    select: {
+      height: 50,
+      paddingTop: 3,
+      paddingLeft: 15,
+    },
+    textarea: {
+      height: 140,
+    },
+  },
+  android: {
+    textinput: {
+      height: 'auto',
+    },
+    select: {
+      height: 55,
+      paddingTop: 8,
+      paddingLeft: 23,
+    },
+    textarea: {
+      height: 'auto',
+    },
+  },
+};
+
 const styles = StyleSheet.create({
   group: {
     marginBottom: 16,
@@ -43,9 +73,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   field: {
-    paddingHorizontal: 15,
-    paddingTop: 3,
-    paddingBottom: 2,
+    paddingRight: 15,
+    paddingTop: 2,
+    paddingBottom: 1,
   },
   fieldRequiredFalse: {
     borderRightColor: 'red',
@@ -67,16 +97,25 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   textinput: {
-    height: Platform.OS === 'ios' ? 55 : 'auto',
+    height: platformStyle[Platform.OS].textinput.height,
     color: '#222b45',
     fontSize: 16,
-    paddingTop: 25,
+    paddingTop: 15,
+    paddingLeft: 15,
     paddingBottom: 0,
   },
+  component: {
+    paddingBottom: 5,
+    paddingLeft: 15,
+  },
+  dealerSelect: {
+    paddingBottom: 5,
+  },
   select: {
-    height: Platform.OS === 'ios' ? 61 : 55,
-    paddingTop: Platform.OS === 'ios' ? 3 : 8,
-    paddingLeft: Platform.OS === 'ios' ? 'auto' : 7,
+    marginVertical: 0,
+    height: platformStyle[Platform.OS].select.height,
+    paddingTop: platformStyle[Platform.OS].select.paddingTop,
+    paddingLeft: platformStyle[Platform.OS].select.paddingLeft,
   },
   selectLabel: {
     color: '#808080',
@@ -86,23 +125,50 @@ const styles = StyleSheet.create({
     paddingTop: 2,
   },
   textarea: {
-    height: Platform.OS === 'ios' ? 140 : 'auto',
+    height: platformStyle[Platform.OS].textarea.height,
     color: '#222b45',
     fontSize: 16,
     paddingTop: 25,
+    paddingLeft: 15,
     paddingBottom: 0,
     paddingHorizontal: 0,
     maxHeight: 150,
+  },
+  switchWrapper: {
+    marginVertical: 10,
+  },
+  switchText: {
+    marginTop: 5,
+    color: '#808080',
+  },
+  switch: {
+    right: 15,
+    top: 10,
+    position: 'absolute',
   },
   button: {
     backgroundColor: styleConst.color.lightBlue,
     borderRadius: 5,
     justifyContent: 'center',
+    height: 55,
   },
   buttonText: {
     color: '#fff',
     textTransform: 'uppercase',
     fontSize: 16,
+  },
+  PhoneInputWrapper: {
+    justifyContent: 'center',
+    flex: 1,
+    paddingHorizontal: 15,
+    paddingVertical: 3,
+  },
+  PhoneTextInputComponent: {
+    height: 45,
+    paddingHorizontal: 14,
+    fontSize: 16,
+    letterSpacing: 2,
+    width: '100%',
   },
 });
 
@@ -157,12 +223,17 @@ class Form extends Component {
       parentState: props.parentState,
       required: [],
       active: {},
-      showSubmitButton: true,
     };
     this.inputRefs = [];
     this.inputRefsNav = [];
     let requredFields = [];
     this.allFields = [];
+
+    this.state.showSubmitButton = true;
+    this._animated = {
+      SubmitButton: new Animated.Value(1),
+      duration: 250,
+    };
     if (props.fields.groups) {
       props.fields.groups.map((group) => {
         group.fields = group.fields.filter((field) => {
@@ -284,6 +355,7 @@ class Form extends Component {
     }
     this.allFields.map((val, index) => {
       valid = true;
+      console.log('this.state' + val.name, this.state[val.name]);
       if (
         this.state[val.name] &&
         this.state[val.name] !== null &&
@@ -350,7 +422,19 @@ class Form extends Component {
   //returns true if valid, false if not valid
   _validateEmail = (email) => {
     var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Zа-яА-Я\-0-9]+\.)+[a-zA-Zа-яА-Я]{2,}))$/;
-    return re.test(email);
+    switch (typeof email) {
+      case 'object':
+        for (const [key, data] of Object.entries(email)) {
+          if (data && data.value) {
+            return re.test(data.value);
+          } else {
+            return false;
+          }
+        }
+        break;
+      case 'string':
+        return re.test(email);
+    }
   };
 
   _validateDateTime = (dateTime) => {
@@ -462,6 +546,26 @@ class Form extends Component {
     );
   };
 
+  _showHideSubmitButton(show) {
+    if (show) {
+      Animated.timing(this._animated.SubmitButton, {
+        toValue: 1,
+        duration: this._animated.duration,
+        useNativeDriver: true,
+      }).start(() => {
+        this.showSubmitButton = true;
+      });
+    } else {
+      Animated.timing(this._animated.SubmitButton, {
+        toValue: 0,
+        duration: this._animated.duration,
+        useNativeDriver: true,
+      }).start(() => {
+        this.showSubmitButton = false;
+      });
+    }
+  }
+
   _fieldsRender = {
     input: (data, num, totalFields, groupNum) => {
       const {label, name, id} = data;
@@ -476,6 +580,7 @@ class Form extends Component {
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
               : {},
+            // eslint-disable-next-line react-native/no-inline-styles
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
@@ -514,6 +619,7 @@ class Form extends Component {
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
               : {},
+            // eslint-disable-next-line react-native/no-inline-styles
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
@@ -557,6 +663,7 @@ class Form extends Component {
                 ? styles.fieldRequiredTrue
                 : styles.fieldRequiredFalse
               : {},
+            // eslint-disable-next-line react-native/no-inline-styles
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
@@ -595,6 +702,7 @@ class Form extends Component {
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
               : {},
+            // eslint-disable-next-line react-native/no-inline-styles
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
@@ -602,10 +710,10 @@ class Form extends Component {
           ]}
           key={'field' + num + name}>
           <DatePickerCustom
-            mode="date"
             ref={this.inputRefs[groupNum + 'Input' + num]}
             label={label + (data.props && data.props.required ? '*' : '')}
             locale={this.locale}
+            styleContainer={{paddingLeft: 15}}
             confirmBtnText={strings.Base.choose.toLowerCase()}
             value={this.state[name] || null}
             isActive={this.state.active[name] || false}
@@ -652,13 +760,6 @@ class Form extends Component {
       const {label, name, id} = data;
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
-      // if (
-      //   this.state[name] !== data.value &&
-      //   (data.value === null || typeof data.value === 'undefined')
-      // ) {
-      //   // console.log('dateTime Form', data.value, this.state[name]);
-      //   this.onChangeField(data)(data.value);
-      // }
       return (
         <View
           style={[
@@ -672,6 +773,7 @@ class Form extends Component {
                 (!this.state[name].time && !this.state[name].noTimeAlways)
               ? styles.fieldRequiredFalse
               : styles.fieldRequiredTrue,
+            // eslint-disable-next-line react-native/no-inline-styles
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
@@ -681,7 +783,6 @@ class Form extends Component {
           <ChooseDateTimeComponent
             label={label + (data.props && data.props.required ? '*' : '')}
             ref={this.inputRefs[groupNum + 'Input' + num]}
-            // customStyles={datePickerStyles}
             onFinishedSelection={(returnData) => {
               this.onChangeField(data)(returnData);
               if (data.props.onChange) {
@@ -725,9 +826,6 @@ class Form extends Component {
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
               : {},
-            {
-              marginVertical: 0,
-            },
           ]}
           key={'field' + num + name}>
           <Text style={styles.selectLabel} selectable={false}>
@@ -801,15 +899,15 @@ class Form extends Component {
       if (id && !this.state[name][id].mask) {
         this.state[name][id].mask = MaskedPhone[countryCode];
       } else {
-        if (!this.state['mask_' + name + num]) {
-          this.state['mask_' + name + num] = MaskedPhone[countryCode];
+        if (!this.state['mask_' + name]) {
+          this.state['mask_' + name] = MaskedPhone[countryCode];
         }
       }
 
       if (id && this.state[name][id].mask) {
         mask = this.state[name][id].mask;
       } else {
-        mask = this.state['mask_' + name + num];
+        mask = this.state['mask_' + name];
       }
 
       let requiredStyle = {};
@@ -842,11 +940,9 @@ class Form extends Component {
         <View
           style={[
             requiredStyle,
+            styles.PhoneInputWrapper,
+            // eslint-disable-next-line react-native/no-inline-styles
             {
-              justifyContent: 'center',
-              flex: 1,
-              paddingHorizontal: 15,
-              paddingVertical: 5,
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
             },
@@ -861,20 +957,20 @@ class Form extends Component {
             autoFormat={true}
             cancelText={strings.Base.cancel}
             confirmText={strings.Base.choose}
-            onSelectCountry={(countryCode) => {
+            onSelectCountry={(iso2) => {
               if (id) {
                 this.setState((prevState) => {
                   let copyField = Object.assign({}, prevState[name]);
                   copyField[id] = {
                     value: null,
-                    mask: MaskedPhone[countryCode],
+                    mask: MaskedPhone[iso2],
                   };
                   return {[name]: copyField};
                 });
               } else {
                 this.setState({
                   [name]: null,
-                  ['mask_' + name + num]: MaskedPhone[countryCode],
+                  ['mask_' + name]: MaskedPhone[iso2],
                 });
               }
             }}
@@ -900,7 +996,13 @@ class Form extends Component {
                   textContentType={'telephoneNumber'}
                   enablesReturnKeyAutomatically={true}
                   editable={true}
-                  onEndEditing={() => {}}
+                  onEndEditing={() => {
+                    // console.log(
+                    //   'onEndEditing',
+                    //   this.state,
+                    //   this.state['mask_' + name],
+                    // );
+                  }}
                   onChangeText={(formatted, pureValue) => {
                     countryCode = PhoneDetect.getCountryCodeByMask(formatted);
                     if (id) {
@@ -916,34 +1018,66 @@ class Form extends Component {
                             [name]: copyField,
                             showSubmitButton: true,
                           };
+                        } else {
+                          if (this.state.showSubmitButton) {
+                            return {
+                              showSubmitButton: false,
+                            };
+                          }
                         }
                       });
                     } else {
-                      let maskLength = this.state['mask_' + name + num].replace(
+                      let maskLength = this.state['mask_' + name].replace(
                         /([^0])/g,
                         '',
                       );
                       switch (countryCode) {
                         case 'ua':
                           if (pureValue.length + 1 === maskLength.length) {
-                            this.setState({
-                              [name]: formatted.replace(/[^\d.+]/g, ''),
-                              showSubmitButton: true,
-                            });
-                            if (data.props.focusNextInput) {
-                              this._nextInput(groupNum, num);
+                            this.setState(
+                              {
+                                [name]: formatted.replace(/[^\d.+]/g, ''),
+                                showSubmitButton: true,
+                              },
+                              () => {
+                                this._showHideSubmitButton(true);
+                                if (data.props.focusNextInput) {
+                                  this._nextInput(groupNum, num);
+                                }
+                              },
+                            );
+                          } else {
+                            if (
+                              this.state.showSubmitButton &&
+                              data.props &&
+                              data.props.required
+                            ) {
+                              this._showHideSubmitButton(false);
                             }
                           }
                           break;
                         case 'ru':
                         case 'by':
                           if (pureValue.length === maskLength.length) {
-                            this.setState({
-                              [name]: formatted.replace(/[^\d.+]/g, ''),
-                              showSubmitButton: true,
-                            });
-                            if (data.props.focusNextInput) {
-                              this._nextInput(groupNum, num);
+                            this.setState(
+                              {
+                                [name]: formatted.replace(/[^\d.+]/g, ''),
+                                showSubmitButton: true,
+                              },
+                              () => {
+                                this._showHideSubmitButton(true);
+                                if (data.props.focusNextInput) {
+                                  this._nextInput(groupNum, num);
+                                }
+                              },
+                            );
+                          } else {
+                            if (
+                              this.state.showSubmitButton &&
+                              data.props &&
+                              data.props.required
+                            ) {
+                              this._showHideSubmitButton(false);
                             }
                           }
                           break;
@@ -952,13 +1086,7 @@ class Form extends Component {
                   }}
                   mask={mask}
                   style={[
-                    {
-                      height: 45,
-                      paddingHorizontal: 14,
-                      fontSize: 16,
-                      letterSpacing: 2,
-                      width: '100%',
-                    },
+                    styles.PhoneTextInputComponent,
                     {...data.textStyle},
                     data.props && data.props.required
                       ? !this.state[name]
@@ -978,12 +1106,7 @@ class Form extends Component {
       const {name} = data;
       return (
         <View
-          style={[
-            styles.field,
-            {
-              paddingBottom: 5,
-            },
-          ]}
+          style={[styles.field, styles.component]}
           key={'field' + num + name}>
           {data.value}
         </View>
@@ -996,12 +1119,7 @@ class Form extends Component {
           key={'field' + num + name}
           dealer={value}
           isLocal={true}
-          style={[
-            // styles.field,
-            {
-              paddingBottom: 5,
-            },
-          ]}
+          style={[styles.dealerSelect]}
           {...data.props}
         />
       );
@@ -1020,9 +1138,7 @@ class Form extends Component {
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
               : styles.fieldRequiredTrue,
-            {
-              marginVertical: 0,
-            },
+            // eslint-disable-next-line react-native/no-inline-styles
             {
               borderTopRightRadius: num === 0 ? 4 : 0,
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
@@ -1042,20 +1158,17 @@ class Form extends Component {
                 this._nextInput(groupNum, num);
               }
               if (data.props.onChange && Platform.OS === 'ios') {
-                // console.log('onDonePress', this.state[name]);
                 data.props.onChange(this.state[name]);
               }
             }}
             onValueChange={(value) => {
               this.onChangeField(data)(value);
               if (data.props.onChange && Platform.OS !== 'ios') {
-                // console.log('onValueChange', value);
                 data.props.onChange(value);
               }
             }}
             onClose={() => {
               if (data.props.onChange && Platform.OS === 'ios') {
-                // console.log('onClose', this.state[name]);
                 data.props.onChange(this.state[name]);
               }
             }}
@@ -1077,30 +1190,13 @@ class Form extends Component {
       this._addToNav(groupNum, num);
       return (
         <View
-          style={[
-            styles.field,
-            styles.textinput,
-            {
-              marginVertical: 10,
-            },
-          ]}
+          style={[styles.field, styles.textinput, styles.switchWrapper]}
           key={'field' + num + name}>
-          <Text
-            selectable={false}
-            style={{
-              marginTop: 5,
-              color: '#808080',
-            }}>
+          <Text selectable={false} style={styles.switchText}>
             {label}
           </Text>
           <Switch
-            style={[
-              {
-                right: 15,
-                top: 10,
-                position: 'absolute',
-              },
-            ]}
+            style={[styles.switch]}
             ref={this.inputRefs[groupNum + 'Input' + num]}
             value={value}
             {...data.props}
@@ -1137,8 +1233,14 @@ class Form extends Component {
               </View>
             </View>
           )}
-          <View style={styles.group}>
-            {this.state.showSubmitButton ? (
+          {this.state.showSubmitButton ? (
+            <Animated.View
+              style={[
+                styles.group,
+                {
+                  opacity: this._animated.SubmitButton,
+                },
+              ]}>
               <Button
                 block
                 {...(this.props.SubmitButton.iconLeft ? 'iconLeft' : null)}
@@ -1174,23 +1276,27 @@ class Form extends Component {
                   styles.button,
                   this.props.SubmitButton && this.props.SubmitButton.style,
                 ]}
+                disabled={this.state.showSubmitButton ? false : true}
+                active={this.state.showSubmitButton ? true : false}
                 {...this.props.SubmitButton.props}>
                 {this.state.loading ? (
                   <ActivityIndicator color="#fff" />
                 ) : (
                   <>
-                    {this.props.SubmitButton.iconLeft &&
-                      this.props.SubmitButton.iconLeft}
+                    {this.props.SubmitButton.iconLeft
+                      ? this.props.SubmitButton.iconLeft
+                      : null}
                     <Text selectable={false} style={styles.buttonText}>
                       {this.props.SubmitButton.text}
                     </Text>
-                    {this.props.SubmitButton.iconRight &&
-                      this.props.SubmitButton.iconRight}
+                    {this.props.SubmitButton.iconRight
+                      ? this.props.SubmitButton.iconRight
+                      : null}
                   </>
                 )}
               </Button>
-            ) : null}
-          </View>
+            </Animated.View>
+          ) : null}
         </ScrollView>
       </View>
     );

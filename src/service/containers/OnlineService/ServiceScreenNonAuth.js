@@ -293,6 +293,7 @@ class ServiceScreenNonAuth extends Component {
               value: this.props.carVIN,
               props: {
                 placeholder: null,
+                autoCapitalize: 'characters',
               },
             },
           ],

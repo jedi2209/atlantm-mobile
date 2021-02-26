@@ -300,6 +300,7 @@ class CarCostScreen extends Component {
                   : this.props.carVIN,
                 props: {
                   placeholder: null,
+                  autoCapitalize: 'characters',
                 },
               },
               {

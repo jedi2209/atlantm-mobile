@@ -23,12 +23,10 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
               animationOut="zoomOut"
               onHide={props.onHideModal}
               swipeDirection={['up', 'down', 'left', 'right']}
-              confirmBtnText={
-                props.confirmBtnText || strings.DatePickerCustom.choose
-              }
+              confirmBtnText={props.confirmBtnText}
               selfClosed={false}>
               <DateTimePicker
-                mode="date"
+                mode={props.mode}
                 display="spinner"
                 locale="ru-RU"
                 {...props}
@@ -44,12 +42,10 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
               animationOut="zoomOut"
               onHide={props.onHideModal}
               swipeDirection={['up', 'down', 'left', 'right']}
-              confirmBtnText={
-                props.confirmBtnText || strings.DatePickerCustom.choose
-              }
+              confirmBtnText={props.confirmBtnText}
               selfClosed={false}>
               <DateTimePicker
-                mode="date"
+                mode={props.mode}
                 display="inline"
                 locale="ru-RU"
                 {...props}
@@ -64,7 +60,7 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
         }
         return (
           <DateTimePicker
-            mode="date"
+            mode={props.mode}
             locale="ru-RU"
             {...props}
             value={props.value ? props.value : defaultDate}
@@ -74,12 +70,19 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        props.styleContainer ? props.styleContainer : {},
+      ]}>
       {props.label ? (
         <Text
+          onPress={props.onPressButton}
           style={[
             styles.label,
+            props.styleLabel ? props.styleLabel : {},
             dateHuman && styles.labelActive,
+            // eslint-disable-next-line react-native/no-inline-styles
             {
               textDecorationLine:
                 props.required && !dateHuman ? 'underline' : 'none',
@@ -93,7 +96,7 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
         transparent
         onPress={props.onPressButton}
         ref={ref}
-        style={{width: '100%'}}>
+        style={styles.button}>
         <Text
           selectable={false}
           style={[styles.text, dateHuman && styles.textSelected]}>
@@ -110,7 +113,20 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
 });
 
 DatePickerCustom.propTypes = {
+  mode: PropTypes.oneOf(['date', 'time', 'datetime', 'countdown']),
+  styleContainer: PropTypes.object,
+  confirmBtnText: PropTypes.string,
+  placeholder: PropTypes.string,
+  value: PropTypes.object || PropTypes.string,
+  isActive: PropTypes.bool,
   onChange: PropTypes.func,
+  onPressButton: PropTypes.func.isRequired,
+  onHideModal: PropTypes.func.isRequired,
+};
+
+DatePickerCustom.defaultProps = {
+  mode: 'date',
+  confirmBtnText: strings.DatePickerCustom.choose,
 };
 
 const styles = StyleSheet.create({
@@ -121,8 +137,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     paddingTop: 5,
-    fontSize: 16,
-    lineHeight: 20,
+    paddingLeft: 15,
+    fontSize: 15,
+    lineHeight: 18,
     color: '#bababa',
     backgroundColor: 'white',
     zIndex: 10,
@@ -130,17 +147,22 @@ const styles = StyleSheet.create({
   },
   labelActive: {
     top: 0,
-    fontSize: 14,
+    fontSize: 12,
     color: '#808080',
-    paddingBottom: 5,
+    paddingBottom: 3,
     paddingTop: 0,
   },
   text: {
-    marginLeft: 4,
-    paddingTop: 5,
+    paddingTop: 0,
   },
   textSelected: {
     fontSize: 16,
     color: '#222b45',
+  },
+  button: {
+    width: '100%',
+    paddingTop: 0,
+    paddingBottom: 0,
+    height: 40,
   },
 });

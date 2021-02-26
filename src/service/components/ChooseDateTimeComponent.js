@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
   },
   timeBlocksContainer: {
     marginTop: 10,
+    paddingLeft: 15,
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -66,6 +67,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#bababa',
     marginBottom: -2,
+    paddingLeft: 15,
   },
   labelActive: {
     color: '#808080',
@@ -237,8 +239,8 @@ export default class ChooseDateTimeComponent extends Component {
       <>
         <DatePickerCustom
           style={{width: '100%'}}
-          mode="date"
-          locale="ru-RU"
+          locale={"ru-RU"}
+          styleContainer={{paddingLeft: 15}}
           confirmBtnText={strings.Picker.choose}
           value={this.state.date || null}
           isActive={this.state.modal || false}

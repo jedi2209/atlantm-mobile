@@ -15,12 +15,17 @@ export const TextInput = React.forwardRef((props, ref) => {
     <View style={styles.container}>
       <Text
         selectable={false}
+        onPress={() => {
+          if (ref && ref.current) {
+            ref.current.focus();
+          }
+        }}
         style={[
           styles.label,
           isActive && styles.labelActive,
           {
-            textDecorationLine:
-              props.required && !isActive ? 'underline' : 'none',
+            // textDecorationLine:
+            //   props.required && !isActive ? 'underline' : 'none',
             textDecorationStyle: 'solid',
           },
         ]}>
@@ -44,9 +49,10 @@ const styles = StyleSheet.create({
   label: {
     position: 'absolute',
     left: 0,
-    paddingTop: 5,
-    fontSize: 16,
-    lineHeight: 20,
+    paddingTop: 3,
+    paddingLeft: 15,
+    fontSize: 15,
+    lineHeight: 18,
     color: '#bababa',
     backgroundColor: 'white',
     zIndex: 10,
@@ -54,9 +60,9 @@ const styles = StyleSheet.create({
   },
   labelActive: {
     top: 0,
-    fontSize: 14,
+    fontSize: 12,
     color: '#808080',
-    paddingBottom: 5,
+    paddingBottom: 3,
     paddingTop: 0,
   },
 });
