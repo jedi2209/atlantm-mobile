@@ -121,6 +121,7 @@ class ProfileScreen extends Component {
           props: {
             required: true,
             focusNextInput: false,
+            offset: 5,
             textProps: {
               placeholderTextColor: '#afafaf',
               placeholder: strings.Form.field.label.phone,
@@ -131,11 +132,6 @@ class ProfileScreen extends Component {
               textContentType: 'telephoneNumber',
               enablesReturnKeyAutomatically: true,
               editable: this.state.code ? false : true,
-              onEndEditing: () => {
-                if (this.state.phone) {
-                  this._verifyCode();
-                }
-              },
             },
           },
         },
@@ -160,9 +156,6 @@ class ProfileScreen extends Component {
       'keyboardDidHide',
       this.onKeyboardVisibleChange,
     );
-    // this.setState({
-    //   pickerData: this.phoneInput.getPickerData(),
-    // });
     Amplitude.logEvent('screen', 'profile/login');
   }
 
@@ -172,9 +165,11 @@ class ProfileScreen extends Component {
   }
 
   onKeyboardVisibleChange = () => {
-    requestAnimationFrame(() => {
-      this.scrollRef.current.scrollToEnd();
-    });
+    if (this.scrollRef && this.scrollRef.current) {
+      requestAnimationFrame(() => {
+        this.scrollRef.current.scrollToEnd();
+      });
+    }
   };
 
   _onOtpChange = (index) => {
@@ -400,21 +395,10 @@ class ProfileScreen extends Component {
 
   onInputCode = (text) => {
     if (text.length === 4) {
-      this.setState({codeValue: text});
-      setTimeout(() => {
+      this.setState({codeValue: text}, () => {
         this._verifyCodeStepTwo();
-      }, 200);
+      });
     }
-  };
-
-  onInputPhone = (text) => {
-    const country = PhoneDetect.country(text);
-    if (country && country.code) {
-      this.phoneInput.state.iso2 = country.code;
-    } else {
-      this.phoneInput.state.iso2 = null;
-    }
-    this.setState({phone: text});
   };
 
   renderLoginButtons = (region) => {
@@ -547,7 +531,7 @@ class ProfileScreen extends Component {
     LoginManager.logOut();
     return (
       <KeyboardAvoidingView keyboardVerticalOffset={0}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback>
           <ImageBackground
             source={require('./bg.jpg')}
             style={{width: '100%', height: '100%'}}>
@@ -557,19 +541,9 @@ class ProfileScreen extends Component {
                   start={{x: 0, y: 0}}
                   end={{x: 0, y: 1}}
                   colors={['rgba(0, 0, 0, 0.60)', 'rgba(51, 51, 51, 0)']}
-                  style={{
-                    height: '80%',
-                    width: '100%',
-                    position: 'absolute',
-                  }}
+                  style={styles.LinearGradient}
                 />
-                <View
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    paddingTop: '10%',
-                    justifyContent: 'center',
-                  }}>
+                <View style={styles.ImageWrapper}>
                   <Image
                     resizeMode="contain"
                     source={require('../../menu/assets/logo-horizontal-white.svg')}
@@ -635,21 +609,7 @@ class ProfileScreen extends Component {
                       <>
                         {[0, 1, 2, 3].map((element, index) => (
                           <TextInput
-                            style={{
-                              height: 80,
-                              paddingHorizontal: 10,
-                              paddingVertical: 8,
-                              borderColor: 'gray',
-                              borderWidth: 1,
-                              color: '#fff',
-                              backgroundColor: 'rgba(175, 175, 175, 0.7)',
-                              borderRadius: 5,
-                              fontSize: 50,
-                              letterSpacing: 0,
-                              marginLeft: '3%',
-                              width: '22%',
-                              textAlign: 'center',
-                            }}
+                            style={styles.TextInputCode}
                             key={'textCode' + index}
                             textContentType="oneTimeCode"
                             keyboardType="number-pad"
@@ -669,12 +629,7 @@ class ProfileScreen extends Component {
                         ))}
                       </>
                     ) : (
-                      <View
-                        style={{
-                          flex: 1,
-                          paddingTop: 20,
-                          justifyContent: 'center',
-                        }}>
+                      <View style={styles.PhoneWrapper}>
                         <Form
                           fields={this.FormConfig.fields}
                           SubmitButton={{
@@ -683,43 +638,6 @@ class ProfileScreen extends Component {
                           onSubmit={this._verifyCode}
                         />
                       </View>
-                      /* <PhoneInput
-                        style={{
-                          justifyContent: 'center',
-                          flex: 1,
-                        }}
-                        ref={(ref) => {
-                          this.phoneInput = ref;
-                        }}
-                        initialCountry={
-                          this.storeData.dealer.selected.region
-                            ? this.storeData.dealer.selected.region
-                            : 'by'
-                        }
-                        countriesList={require('../../core/const.countries.json')}
-                        autoFormat={true}
-                        textStyle={styles.PhoneInput}
-                        offset={20}
-                        cancelText={strings.Base.cancel.toLowerCase()}
-                        confirmText={strings.Picker.choose}
-                        onChangePhoneNumber={this.onInputPhone}
-                        textProps={{
-                          placeholderTextColor: '#afafaf',
-                          placeholder: strings.Form.field.label.phone,
-                          keyboardType: 'phone-pad',
-                          autoCompleteType: 'tel',
-                          selectionColor: '#afafaf',
-                          returnKeyType: 'go',
-                          textContentType: 'telephoneNumber',
-                          enablesReturnKeyAutomatically: true,
-                          editable: this.state.code ? false : true,
-                          onEndEditing: () => {
-                            if (this.state.phone) {
-                              this._verifyCode();
-                            }
-                          },
-                        }}
-                      /> */
                     )}
                   </View>
                   {this.state.code ? (
@@ -830,23 +748,42 @@ class ProfileScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  LinearGradient: {
+    height: '80%',
+    width: '100%',
+    position: 'absolute',
+  },
+  ImageWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    paddingTop: '10%',
+    justifyContent: 'center',
+  },
   SocialLoginBt: {
     marginVertical: 8,
     paddingHorizontal: 8,
     justifyContent: 'center',
     borderRadius: 5,
   },
-  PhoneInput: {
-    height: 40,
-    paddingHorizontal: 14,
-    fontSize: 18,
-    letterSpacing: 3,
-    borderColor: '#afafaf',
-    borderWidth: 0.45,
+  PhoneWrapper: {
+    flex: 1,
+    paddingTop: 20,
+    justifyContent: 'center',
+  },
+  TextInputCode: {
+    height: 80,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderColor: 'gray',
+    borderWidth: 1,
     color: '#fff',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    width: '100%',
+    backgroundColor: 'rgba(175, 175, 175, 0.7)',
     borderRadius: 5,
+    fontSize: 50,
+    letterSpacing: 0,
+    marginLeft: '3%',
+    width: '22%',
+    textAlign: 'center',
   },
   CancelButton: {
     flex: 1,

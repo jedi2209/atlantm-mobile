@@ -48,7 +48,6 @@ import {
   actionSetPushGranted,
 } from '../../core/actions';
 
-import PushNotifications from '../../core/components/PushNotifications';
 import Amplitude from '../../utils/amplitude-analytics';
 
 import strings from '../../core/lang/const';
@@ -132,6 +131,10 @@ class PhoneChangeScreen extends PureComponent {
 
   CodeInput = [];
   otpArray = [];
+
+  componentDidMount() {
+    Amplitude.logEvent('screen', 'profile/PhoneViaAuth');
+  }
 
   static navigationOptions = ({navigation}) => {
     const returnScreen =
