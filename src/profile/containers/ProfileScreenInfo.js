@@ -216,33 +216,17 @@ class ProfileScreenInfo extends Component {
           saldoText: `1 ${strings.ProfileScreenInfo.bonus.current.bonus} = 1 BYN`,
         };
       case 'ru':
-        if (formattedDate >= '20210301') {
-          return {
-            saldoValue: saldoValue,
-            saldoCurr: saldoCurr,
-            saldoText: `1 ${strings.ProfileScreenInfo.bonus.current.bonus} = 1 RUR`,
-          };
-        } else {
-          return {
-            saldoValue: saldoValue,
-            saldoCurr: saldoCurr,
-            saldoText: saldoCurr,
-          };
-        }
+        return {
+          saldoValue: saldoValue,
+          saldoCurr: saldoCurr,
+          saldoText: `1 ${strings.ProfileScreenInfo.bonus.current.bonus} = 1 RUR`,
+        };
       case 'ua':
-        if (formattedDate >= '20210301') {
-          return {
-            saldoValue: saldoValue,
-            saldoCurr: saldoCurr,
-            saldoText: `1 ${strings.ProfileScreenInfo.bonus.current.bonus} = 1 UAH`,
-          };
-        } else {
-          return {
-            saldoValue: saldoValue,
-            saldoCurr: saldoCurr,
-            saldoText: saldoCurr,
-          };
-        }
+        return {
+          saldoValue: saldoValue,
+          saldoCurr: saldoCurr,
+          saldoText: `1 ${strings.ProfileScreenInfo.bonus.current.bonus} = 1 UAH`,
+        };
     }
   };
 
