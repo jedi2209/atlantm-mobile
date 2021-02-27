@@ -5,7 +5,7 @@ export default {
       autocenter: 'Автоцентр',
       actions: 'Акции',
       newcars: 'Новые авто',
-      usedcars: 'Подержанные авто',
+      usedcars: 'Авто с пробегом',
       reviews: 'Отзывы',
       indicators: 'Индикаторы',
       settings: 'Настройки',
@@ -266,7 +266,7 @@ export default {
     models: 'Модели',
   },
   UserCarListScreen: {
-    title: 'Подержанные автомобили',
+    title: 'Авто с пробегом',
   },
   UserCarItemScreen: {
     showFull: 'Показать полное описание...',
