@@ -32,6 +32,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: styleConst.color.bg,
   },
+  spinner: {
+    flex: 1,
+  },
   webviewContainer: {
     flex: 1,
     paddingBottom: styleConst.ui.verticalGap - 5,
@@ -103,13 +106,7 @@ class BonusInfoScreen extends Component {
     let {bonusInfo, isFetchBonusInfo} = this.props;
 
     if (isFetchBonusInfo) {
-      return <SpinnerView />;
-    }
-
-    if (bonusInfo) {
-      //console.log('bonusInfo', bonusInfo);
-      //bonusInfo = processHtml(bonusInfo, this.state.webViewWidth);
-      //console.log('bonusInfo22', bonusInfo);
+      return <SpinnerView style={styles.spinner} />;
     }
 
     return (
