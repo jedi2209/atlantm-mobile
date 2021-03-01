@@ -16,6 +16,7 @@
     "android-release": "git checkout ./android/app/versioning/app_version.properties && bundle exec fastlane android release && open ./android/app/build/outputs/apk/release;",
     "android-build": "bundle exec fastlane android internal",
     "reinstall": "./reinstall.sh",
+    "sonar": "open -a iTerm ./sonarqube/docker-start.sh; node ./sonarqube/init.js",
     "cleanTmp": "rm -rf $TMPDIR/react-*; rm -rf $TMPDIR/haste-*; rm -rf $TMPDIR/metro-*; watchman watch-del-all; rm -rf ios/build/ android/app/build/ android/build/ ios/rbtse.xcodeproj/xcuserdata/",
     "clean": "npx react-native-clean-project",
     "version": "./version.sh"
@@ -107,7 +108,9 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "patch-package": "^6.2.2",
     "react-test-renderer": "^17.0.1",
-    "reactotron-react-native": "^5.0.0"
+    "reactotron-react-native": "^5.0.0",
+    "request": "^2.88.2",
+    "sonarqube-scanner": "^2.8.0"
   },
   "resolutions": {
     "graceful-fs": "^4.2.6"
