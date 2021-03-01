@@ -20,8 +20,6 @@ target 'atlantm' do
   # use_frameworks!
   pod 'RNInputMask', :path => '../node_modules/react-native-text-input-mask/ios/InputMask'
 
-  pod 'react-native-restart', :path => '../node_modules/react-native-restart'
-
   target 'atlantmTests' do
     inherit! :complete
     # Pods for testing
