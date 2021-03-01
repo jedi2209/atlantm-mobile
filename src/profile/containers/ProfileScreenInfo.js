@@ -167,8 +167,16 @@ class ProfileScreenInfo extends Component {
 
     let curr = null;
 
-    if (userRegion === 'by') {
-      curr = 'BYN';
+    switch (userRegion.toLowerCase()) {
+      case 'by':
+        curr = 'BYN';
+        break;
+      case 'ru':
+        curr = 'RUB';
+        break;
+      case 'ua':
+        curr = 'UAH';
+        break;
     }
 
     this.props
