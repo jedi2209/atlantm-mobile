@@ -144,16 +144,6 @@ class BonusScreen extends Component {
     headerRight: <View />,
   });
 
-  // constructor(props) {
-  //   super(props);
-
-  //   if (props.dealerSelected && props.dealerSelected.region === 'by') {
-  //     this.bonusCurr = 'BYN';
-  //   } else {
-  //     this.bonusCurr = 'бонусов';
-  //   }
-  // }
-
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
     let isActiveScreen = false;
@@ -378,21 +368,6 @@ class BonusScreen extends Component {
     if (!saldoValue) {
       saldoValue = get(bonus, 'saldo.value', 0);
     }
-    let saldoCurr = null;
-    if (this.props.dealerSelected.region !== 'by') {
-      saldoCurr = get(
-        bonus,
-        'saldo.convert.curr',
-        strings.ProfileScreenInfo.bonus.current.bonuses,
-      );
-      // if (!saldoCurr) {
-      //   saldoCurr = get(
-      //     bonus,
-      //     'saldo.curr',
-      //     strings.ProfileScreenInfo.bonus.current.bonuses,
-      //   );
-      // }
-    }
     return (
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.safearea}>
@@ -407,7 +382,6 @@ class BonusScreen extends Component {
                 <Text style={styles.totalValue}>
                   {parseFloat(saldoValue, 'ru-RU')}
                 </Text>{' '}
-                {saldoCurr}
               </Text>
             </View>
             {this.renderBonusButton()}
