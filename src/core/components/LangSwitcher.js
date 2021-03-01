@@ -4,7 +4,6 @@ import {View, Platform, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import styleConst from '../style-const';
 import RNPickerSelect from 'react-native-picker-select';
-// import RNRestart from 'react-native-restart';
 import {actionSetGlobalLanguage} from '../../core/lang/actions';
 import strings from '../../core/lang/const';
 
