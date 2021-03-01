@@ -319,7 +319,7 @@ PODS:
   - react-native-text-input-mask (2.0.1):
     - React
     - RNInputMask
-  - react-native-viewpager (4.2.3):
+  - react-native-viewpager (5.0.9):
     - React-Core
   - react-native-vkontakte-login (1.0.1):
     - React
@@ -701,7 +701,7 @@ SPEC CHECKSUMS:
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-text-input-mask: cffd00848940e7670cf233a99e7be782257935ed
-  react-native-viewpager: 936c67cba6e9ca19793d04321427a44cb8e43395
+  react-native-viewpager: f16840077422b6e2c0a4a94a8cce4ed02a677528
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
   react-native-webview: 6520e3e7b4933de76b95ef542c8d7115cf45b68e
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
