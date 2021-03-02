@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {withNavigation} from 'react-navigation';
+import {useNavigation} from '@react-navigation/native';
 import {View} from 'react-native';
 
 import stylesHeader from '../../core/components/Header/style';
@@ -12,12 +12,7 @@ import {connect} from 'react-redux';
 import {get} from 'lodash';
 import strings from '../../core/lang/const';
 
-const ServiceOldScreen = withNavigation(Service);
-const ServiceScreenStep1 = withNavigation(ServiceNew);
-const ServiceScreenNonAuth = withNavigation(ServiceNewNonAuth);
-
-const mapStateToProps = ({dealer, profile, navigation}) => {
-  console.log('profile', profile);
+const mapStateToProps = ({dealer, profile}) => {
   return {
     dealerSelected: dealer.selected,
     loginID: get(profile, 'login.ID', false),
@@ -25,39 +20,39 @@ const mapStateToProps = ({dealer, profile, navigation}) => {
   };
 };
 
-class ServiceContainer extends Component {
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
+const ServiceContainer = (props) => {
+  // static navigationOptions = ({navigation}) => {
+  //   const returnScreen =
+  //     navigation.state.params && navigation.state.params.returnScreen;
 
-    let headerTitle = strings.ServiceScreen.title;
+  //   let headerTitle = strings.ServiceScreen.title;
 
-    return {
-      headerStyle: stylesHeader.whiteHeader,
-      headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: headerTitle,
-      headerLeft: (
-        <HeaderIconBack
-          theme="blue"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-      headerRight: <View />,
-    };
-  };
+  //   return {
+  //     headerStyle: stylesHeader.whiteHeader,
+  //     headerTitleStyle: stylesHeader.whiteHeaderTitle,
+  //     headerTitle: headerTitle,
+  //     headerLeft: (
+  //       <HeaderIconBack
+  //         theme="blue"
+  //         navigation={navigation}
+  //         returnScreen={returnScreen}
+  //       />
+  //     ),
+  //     headerRight: <View />,
+  //   };
+  // };
 
-  render() {
-    const {dealerSelected, loginID, cars} = this.props;
-    if (dealerSelected.region === 'by') {
-      if (loginID && cars && cars.length > 0) {
-        return <ServiceScreenStep1 />;
-      } else {
-        return <ServiceScreenNonAuth />;
-      }
+  const navigation = useNavigation();
+
+  const {dealerSelected, loginID, cars} = this.props;
+  if (dealerSelected.region === 'by') {
+    if (loginID && cars && cars.length > 0) {
+      return <ServiceNew navigation={navigation} />;
+    } else {
+      return <ServiceNewNonAuth navigation={navigation} />;
     }
-    return <ServiceOldScreen />;
   }
-}
+  return <Service />;
+};
 
 export default connect(mapStateToProps)(ServiceContainer);

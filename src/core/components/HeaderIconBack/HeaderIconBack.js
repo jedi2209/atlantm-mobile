@@ -1,15 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {
-  View,
-  Image,
-  Keyboard,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {View, Keyboard, StyleSheet, TouchableOpacity} from 'react-native';
 
 // components
-import {NavigationActions, StackActions} from 'react-navigation';
+import NavigationService from '../../containers/NavigationService';
 
 // helpers
 import PropTypes from 'prop-types';
@@ -58,23 +52,21 @@ export default class HeaderIconBack extends Component {
   }
 
   onPressBack = () => {
-    const {returnScreen, navigation} = this.props;
+    const {returnScreen} = this.props;
 
     if (returnScreen === MENU_SCREEN_NAME) {
       this.onPressBackHome();
       return false;
     }
 
-    returnScreen ? navigation.navigate(returnScreen) : navigation.goBack();
+    returnScreen
+      ? NavigationService.navigate(returnScreen)
+      : NavigationService.goBack();
   };
 
   onPressBackHome = () => {
     Keyboard.dismiss();
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({routeName: MENU_SCREEN_NAME})],
-    });
-    this.props.navigation.dispatch(resetAction);
+    NavigationService.reset();
   };
 
   render() {

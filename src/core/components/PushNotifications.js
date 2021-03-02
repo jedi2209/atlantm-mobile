@@ -1,6 +1,5 @@
 import {Platform, PermissionsAndroid, Alert, Linking} from 'react-native';
 
-import {NavigationActions, StackActions} from 'react-navigation';
 import OneSignal from 'react-native-onesignal';
 import Amplitude from '../../utils/amplitude-analytics';
 import NavigationService from '../containers/NavigationService';

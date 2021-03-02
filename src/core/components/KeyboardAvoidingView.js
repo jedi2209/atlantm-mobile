@@ -3,7 +3,7 @@ import {
   KeyboardAvoidingView as KeyboardAvoidingNativeView,
   Platform,
 } from 'react-native';
-import {Header} from 'react-navigation-stack';
+import {Header} from '@react-navigation/stack';
 
 const offset = Header.HEIGHT + 28;
 

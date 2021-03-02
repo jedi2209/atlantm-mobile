@@ -8,7 +8,7 @@ import {callMe} from '../../contacts/actions';
 import {localUserDataUpdate} from '../../profile/actions';
 import {localDealerClear} from '../../dealer/actions';
 import {CALL_ME__SUCCESS, CALL_ME__FAIL} from '../../contacts/actionTypes';
-import {StackActions, NavigationActions} from 'react-navigation';
+import NavigationService from '../../containers/NavigationService';
 import Amplitude from '../../utils/amplitude-analytics';
 import {
   Alert,
@@ -152,15 +152,7 @@ class CallMeBackScreen extends React.Component {
           {
             text: 'ОК',
             onPress() {
-              const resetAction = StackActions.reset({
-                index: 0,
-                actions: [
-                  NavigationActions.navigate({
-                    routeName: 'BottomTabNavigation',
-                  }),
-                ],
-              });
-              _this.props.navigation.dispatch(resetAction);
+              NavigationService.reset();
             },
           },
         ],
