@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {Toast} from 'native-base';
 import {get} from 'lodash';
-// import {StackActions, NavigationActions} from 'react-navigation';
 
 import stylesHeader from '../../../core/components/Header/style';
 import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';

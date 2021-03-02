@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, SafeAreaView} from 'react-native';
 import {Content, Row, Col, Segment, Button} from 'native-base';
-import {Header} from 'react-navigation-stack';
+import {Header} from '@react-navigation/stack';
 import Modal from 'react-native-modal';
 
 import showPrice from '../../utils/price';

@@ -9,8 +9,7 @@ import {
 
 // helpers
 import styleConst from '../../style-const';
-import DeviceInfo from 'react-native-device-info';
-import {NavigationActions, StackActions} from 'react-navigation';
+import NavigationService from '../../containers/NavigationService';
 
 const containerSize = 40;
 const size = 23;
@@ -43,11 +42,7 @@ export default class HeaderIconMenu extends Component {
 
   onPressIcon = () => {
     Keyboard.dismiss();
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({routeName: 'BottomTabNavigation'})],
-    });
-    this.props.navigation.dispatch(resetAction);
+    NavigationService.reset();
   };
 
   render() {

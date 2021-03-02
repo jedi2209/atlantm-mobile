@@ -4,7 +4,7 @@ import {View, StatusBar} from 'react-native';
 // redux
 import {connect} from 'react-redux';
 import {actionSetPushActionSubscribe} from '../../core/actions';
-// import {actionSetGlobalLanguage} from '../../core/lang/actions';
+
 // actions
 import {fetchDealers, fetchBrands} from '../actions';
 
@@ -56,13 +56,6 @@ class ChooseDealerScreen extends PureComponent {
     }
   }
 
-  // ВАЖНО! ЯВНО ОТКЛЮЧЕН ИЗ-ЗА ПРОБЛЕМ ПЕРВОЙ ЗАГРУЗКИ НА IOS 11+
-  // shouldComponentUpdate(nextProps) {
-  //   const nav = nextProps.nav.newState;
-
-  //   return nav.routes[nav.index].routeName === 'ChooseDealerScreen';
-  // }
-
   onSelectDealer = ({prevDealer, newDealer, isLocal}) => {
     const {pushActionSubscribeState} = this.props;
     // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
@@ -109,7 +102,6 @@ class ChooseDealerScreen extends PureComponent {
           listUkraine={listUkraine}
           listAll={listAll}
           listBelarussia={listBelarussia}
-          // navigation={navigation}
           selectRegion={selectRegion}
           returnScreen={returnScreen}
           returnState={returnState}

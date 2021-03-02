@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {StyleSheet, Image, View, Text} from 'react-native';
 import {Button} from 'native-base';
 
-import {SafeAreaView} from 'react-navigation';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 // helpers
 import styleConst from '../../core/style-const';

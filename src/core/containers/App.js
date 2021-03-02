@@ -2,13 +2,14 @@
 import React, {PureComponent} from 'react';
 import {ActivityIndicator} from 'react-native';
 import {Root} from 'native-base';
-import {createAppContainer, NavigationActions} from 'react-navigation';
+import {createStackNavigator} from '@react-navigation/stack';
+import {NavigationContainer} from '@react-navigation/native';
 import NavigationService from './NavigationService';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 // redux
 import {connect} from 'react-redux';
 import {store} from '../store';
-import {navigationChange} from '../../navigation/actions';
 import {
   actionSetPushGranted,
   actionSetPushActionSubscribe,
@@ -31,8 +32,12 @@ import styleConst from '../../core/style-const';
 // components
 import DeviceInfo from 'react-native-device-info';
 
+import IntroScreen from '../../intro/containers/IntroScreen';
+import ChooseDealerScreen from '../../dealer/containers/ChooseDealerScreen';
+import {BottomTabNavigation} from '../../menu/containers/BottomTabNavigation';
+
 // routes
-import {getRouter} from '../router';
+// import {getRouter} from '../router';
 
 const mapStateToProps = ({core, dealer, modal}) => {
   return {
@@ -44,7 +49,6 @@ const mapStateToProps = ({core, dealer, modal}) => {
 };
 
 const mapDispatchToProps = {
-  navigationChange,
   actionSetPushGranted,
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
@@ -52,12 +56,16 @@ const mapDispatchToProps = {
   actionToggleModal,
 };
 
+const Stack = createStackNavigator();
+
 class App extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       isloading: true,
     };
+
+    this.navigatorRef = React.createRef();
 
     this.mainScreen = 'BottomTabNavigation';
     this.storeVersion = '2021-02-02';
@@ -111,8 +119,6 @@ class App extends PureComponent {
       if (typeof res === 'undefined' || !res) {
         res = 'IntroScreen';
       }
-      const Router = getRouter(res);
-      this.AppContainer = createAppContainer(Router);
       this.setState({
         isloading: false,
       });
@@ -158,42 +164,46 @@ class App extends PureComponent {
     PushNotifications.init();
   }
 
-  onNavigationStateChange = (prevState, newState) => {
-    this.props.navigationChange({
-      prevState,
-      newState,
-    });
-  };
-
-  navigate(routeName) {
-    if (this.navigatorRef.current !== null) {
-      this.navigatorRef.current.dispatch(
-        NavigationActions.navigate({routeName}),
-      );
-    }
-  }
-
   render() {
-    if (this.state.isloading || !this.AppContainer) {
+    if (this.state.isloading || !NavigationContainer) {
       return (
-        <Root style={{flex: 1}}>
+        <SafeAreaProvider style={{flex: 1}}>
           <ActivityIndicator
             style={{width: '100%', height: '100%'}}
             color={styleConst.color.blue}
             size="large"
           />
-        </Root>
+        </SafeAreaProvider>
       );
     }
     return (
-      <Root style={{flex: 1}}>
-        <this.AppContainer
-          ref={(navigatorRef) => {
-            NavigationService.setTopLevelNavigator(navigatorRef);
-          }}
-          onNavigationStateChange={this.onNavigationStateChange}
-        />
-      </Root>
+      <SafeAreaProvider style={{flex: 1}}>
+        <Root>
+          <NavigationContainer
+            ref={(navigatorRef) => {
+              NavigationService.setTopLevelNavigator(navigatorRef);
+            }}
+            onStateChange={NavigationService.onNavigationStateChange}>
+            <Stack.Navigator initialRouteName="BottomTabNavigation">
+              <Stack.Screen
+                name="BottomTabNavigation"
+                component={BottomTabNavigation}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="IntroScreen"
+                component={IntroScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="ChooseDealerScreen"
+                component={ChooseDealerScreen}
+                options={{headerShown: false}}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </Root>
+      </SafeAreaProvider>
     );
   }
 }

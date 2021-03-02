@@ -1,4 +1,5 @@
-import {NavigationActions, StackActions} from 'react-navigation';
+import {CommonActions, StackActions} from '@react-navigation/native';
+import {navigationChange} from '../../navigation/actions';
 
 let _navigator;
 const mainScreen = 'BottomTabNavigation';
@@ -10,22 +11,29 @@ function setTopLevelNavigator(navigatorRef) {
 
 function navigate(routeName, params) {
   _navigator.dispatch(
-    NavigationActions.navigate({
+    CommonActions.navigate({
       routeName,
       params,
     }),
   );
 }
 
+function onNavigationStateChange(prevState, newState) {
+  navigationChange({
+    prevState,
+    newState,
+  });
+}
+
 function goBack() {
-  _navigator.dispatch(NavigationActions.back());
+  _navigator.dispatch(CommonActions.back());
 }
 
 function reset(returnScreen, returnState) {
   const resetAction = StackActions.reset({
     index: 0,
     actions: [
-      NavigationActions.navigate({
+      CommonActions.navigate({
         routeName: returnScreen || mainScreen,
         params: returnState,
       }),
@@ -39,6 +47,7 @@ function reset(returnScreen, returnState) {
 export default {
   navigate,
   setTopLevelNavigator,
+  onNavigationStateChange,
   goBack,
   reset,
 };

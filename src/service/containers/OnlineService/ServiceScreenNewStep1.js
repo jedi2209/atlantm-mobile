@@ -15,7 +15,6 @@ import {
 import {Icon, Toast} from 'native-base';
 import {get, orderBy} from 'lodash';
 import styleConst from '../../../core/style-const';
-// import {StackActions, NavigationActions} from 'react-navigation';
 
 import {CarCard} from '../../../profile/components/CarCard';
 import {ServiceModal} from '../../components/ServiceModal';
