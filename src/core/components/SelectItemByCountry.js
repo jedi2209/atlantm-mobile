@@ -4,7 +4,7 @@ import {Text, ListItem, Body} from 'native-base';
 import {connect} from 'react-redux';
 
 // components
-import NavigationService from '../containers/NavigationService';
+import NavigationService from '../../navigation/NavigationService';
 import Imager from '../components/Imager';
 import BrandLogo from '../../core/components/BrandLogo';
 

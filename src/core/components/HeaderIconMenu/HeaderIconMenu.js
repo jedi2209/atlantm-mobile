@@ -9,7 +9,7 @@ import {
 
 // helpers
 import styleConst from '../../style-const';
-import NavigationService from '../../containers/NavigationService';
+import NavigationService from '../../../navigation/NavigationService';
 
 const containerSize = 40;
 const size = 23;

@@ -77,7 +77,7 @@ class TvaScreen extends Component {
                   goBack: false,
                   isLocal: true,
                   navigation: this.props.navigation,
-                  returnScreen: this.props.navigation.state.routeName,
+                  // returnScreen: this.props.navigation.state.routeName,
                 },
               },
             ],

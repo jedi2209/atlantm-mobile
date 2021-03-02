@@ -1,9 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {View, Keyboard, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Keyboard,
+  StyleSheet,
+  TouchableOpacity,
+  ViewPropTypes,
+} from 'react-native';
 
 // components
-import NavigationService from '../../containers/NavigationService';
+import * as NavigationService from '../../../navigation/NavigationService';
 
 // helpers
 import PropTypes from 'prop-types';
@@ -40,22 +46,12 @@ const styles = StyleSheet.create({
 
 const MENU_SCREEN_NAME = 'BottomTabNavigation';
 
-export default class HeaderIconBack extends Component {
-  static propTypes = {
-    navigation: PropTypes.object,
-    returnScreen: PropTypes.string,
-    color: PropTypes.string,
-  };
-
-  shouldComponentUpdate() {
-    return false;
-  }
-
-  onPressBack = () => {
-    const {returnScreen} = this.props;
+const HeaderBackButton = (props) => {
+  const onPressBack = () => {
+    const {returnScreen} = props;
 
     if (returnScreen === MENU_SCREEN_NAME) {
-      this.onPressBackHome();
+      _onPressBackHome();
       return false;
     }
 
@@ -64,35 +60,47 @@ export default class HeaderIconBack extends Component {
       : NavigationService.goBack();
   };
 
-  onPressBackHome = () => {
+  const _onPressBackHome = () => {
     Keyboard.dismiss();
     NavigationService.reset();
   };
 
-  render() {
-    return (
-      <TouchableOpacity
-        style={[styles.container, this.props.ContainerStyle]}
-        onPress={this.onPressBack}>
-        <View style={[styles.inner]}>
-          <Icon
-            type={this.props.type ? this.props.type : 'Ionicons'}
-            name={this.props.icon ? this.props.icon : 'arrow-back'}
-            style={[
-              styles.arrowFont,
-              {
-                color:
-                  this.props.theme === 'white'
-                    ? '#fff'
-                    : this.props.theme === 'blue'
-                    ? styleConst.new.blueHeader
-                    : '#000',
-              },
-              this.props.IconStyle,
-            ]}
-          />
-        </View>
-      </TouchableOpacity>
-    );
-  }
-}
+  return (
+    <TouchableOpacity
+      style={[styles.container, props.ContainerStyle]}
+      onPress={onPressBack}>
+      <View style={[styles.inner]}>
+        <Icon
+          type={props.type}
+          name={props.icon}
+          style={[
+            styles.arrowFont,
+            {
+              color:
+                props.theme === 'white'
+                  ? '#fff'
+                  : props.theme === 'blue'
+                  ? styleConst.new.blueHeader
+                  : '#000',
+            },
+            props.IconStyle,
+          ]}
+        />
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+HeaderBackButton.propTypes = {
+  returnScreen: PropTypes.string,
+  color: PropTypes.string,
+  IconStyle: ViewPropTypes.style,
+};
+
+HeaderBackButton.defaultProps = {
+  ContainerStyle: {},
+  type: 'Ionicons',
+  icon: 'arrow-back',
+};
+
+export default HeaderBackButton;

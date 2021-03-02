@@ -1,9 +1,5 @@
-import DeviceInfo from 'react-native-device-info';
-
-import {NAVIGATION__CHANGE} from './actionTypes';
-
-const nav = (
-  state = {
+const nav = (state, action) => {
+  const stateUpd = {
     prevState: {
       index: 0,
       routes: [],
@@ -17,14 +13,12 @@ const nav = (
         },
       ],
     },
-  },
-  action,
-) => {
+  };
   switch (action.type) {
-    case NAVIGATION__CHANGE:
+    case 'NAVIGATION__CHANGE':
       return action.payload;
     default:
-      return state;
+      return state ? state : stateUpd;
   }
 };
 

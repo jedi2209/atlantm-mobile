@@ -8,7 +8,7 @@ import {callMe} from '../../contacts/actions';
 import {localUserDataUpdate} from '../../profile/actions';
 import {localDealerClear} from '../../dealer/actions';
 import {CALL_ME__SUCCESS, CALL_ME__FAIL} from '../../contacts/actionTypes';
-import NavigationService from '../../containers/NavigationService';
+import NavigationService from '../../navigation/NavigationService';
 import Amplitude from '../../utils/amplitude-analytics';
 import {
   Alert,

@@ -1,17 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 
 import {Text, View, Image, StyleSheet, Dimensions} from 'react-native';
-import {Icon, List, ListItem, Left, Button, Body} from 'native-base';
+import {List, ListItem, Left, Button, Body} from 'native-base';
 
 import {actionMenuOpenedCount} from '../../core/actions';
-
-import styleConst from '../../core/style-const';
-
 import {connect} from 'react-redux';
 
+import styleConst from '../../core/style-const';
 import strings from '../../core/lang/const';
-import LogoTitle from '../../core/components/LogoTitle';
 
 const styles = StyleSheet.create({
   buttonPrimary: {
@@ -23,10 +20,57 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
   },
-  buttonPrimaryText: {color: '#2E3A59', fontSize: 16, fontWeight: 'bold'},
+  ListItem: {
+    marginLeft: 0,
+    borderColor: 'transparent',
+    backgroundColor: 'transparent',
+    paddingTop: 2,
+    paddingBottom: 2,
+  },
+  Left: {
+    marginLeft: 0,
+    paddingLeft: 0,
+    maxWidth: 75,
+  },
+  Body: {
+    paddingLeft: 17,
+  },
+  bodyText: {
+    fontSize: 16,
+  },
+  menuButton: {
+    paddingLeft: 17,
+    paddingRight: 30,
+    paddingTop: 0,
+    paddingBottom: 0,
+    borderTopLeftRadius: 0,
+    borderBottomLeftRadius: 0,
+    borderTopRightRadius: 80,
+    borderBottomRightRadius: 80,
+  },
+  buttonPrimaryText: {
+    color: '#2E3A59',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
 const heightScreen = Dimensions.get('window').height;
+
+const mapStateToProps = ({dealer, profile, nav, core}) => {
+  return {
+    nav,
+    dealerSelected: dealer.selected,
+
+    login: profile.login,
+
+    menuOpenedCount: core.menuOpenedCount,
+  };
+};
+
+const mapDispatchToProps = {
+  actionMenuOpenedCount,
+};
 
 const MenuItem = (props) => {
   const {
@@ -43,33 +87,20 @@ const MenuItem = (props) => {
   return (
     <ListItem
       key={`menu-list-item-${id}`}
-      style={{
-        marginLeft: 0,
-        borderColor: 'transparent',
-        backgroundColor: 'transparent',
-        paddingTop: 2,
-        paddingBottom: 2,
-      }}
+      style={styles.ListItem}
       selected={selected}
       onPress={() =>
         navigation.navigate(navigateUrl, {
           returnScreen: returnScreen ? returnScreen : 'MoreScreen',
         })
       }>
-      <Left style={{marginLeft: 0, paddingLeft: 0, maxWidth: 75}}>
+      <Left style={styles.Left}>
         <Button
           underlayColor={styles.buttonPrimaryText.color}
           style={[
+            styles.menuButton,
             {
-              paddingLeft: 17,
-              paddingRight: 30,
               height: rowHeight,
-              paddingTop: 0,
-              paddingBottom: 0,
-              borderTopLeftRadius: 0,
-              borderBottomLeftRadius: 0,
-              borderTopRightRadius: 80,
-              borderBottomRightRadius: 80,
             },
             selected && typeof selected !== 'undefined'
               ? styleConst.new.menu.active
@@ -78,41 +109,20 @@ const MenuItem = (props) => {
           {icon}
         </Button>
       </Left>
-      <Body style={{paddingLeft: 17}}>
+      <Body style={styles.Body}>
         <Text
           selectable={false}
-          style={{
-            fontSize: 16,
-            color: selected ? '#0061ED' : '#858997',
-          }}>
+          style={[
+            styles.bodyText,
+            {
+              color: selected ? '#0061ED' : '#858997',
+            },
+          ]}>
           {name}
         </Text>
       </Body>
-      {/* <Right>
-        <Icon
-          name="arrow-forward"
-          style={{
-            marginTop: 3,
-          }}
-        />
-      </Right> */}
     </ListItem>
   );
-};
-
-const mapStateToProps = ({dealer, profile, nav, core}) => {
-  return {
-    nav,
-    dealerSelected: dealer.selected,
-
-    login: profile.login,
-
-    menuOpenedCount: core.menuOpenedCount,
-  };
-};
-
-const mapDispatchToProps = {
-  actionMenuOpenedCount,
 };
 
 const MoreScreen = (props) => {
@@ -247,26 +257,5 @@ const MoreScreen = (props) => {
     </View>
   );
 };
-
-MoreScreen.navigationOptions = () => ({
-  headerTitle: () => <LogoTitle />,
-  headerStyle: {
-    height: 80,
-  },
-  tabBarLabel: strings.Menu.bottom.menu,
-  tabBarIcon: ({focused}) => (
-    <Icon
-      name="bars"
-      type="FontAwesome5"
-      style={[
-        {
-          fontSize: 24,
-          color: focused ? styleConst.new.blueHeader : styleConst.new.passive,
-        },
-        focused ? styleConst.new.shadowActive : null,
-      ]}
-    />
-  ),
-});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MoreScreen);

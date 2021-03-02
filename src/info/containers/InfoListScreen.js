@@ -32,12 +32,10 @@ import {get} from 'lodash';
 import {ERROR_NETWORK} from '../../core/const';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
 import {verticalScale} from '../../utils/scale';
 import strings from '../../core/lang/const';
 
 // components
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import PushNotifications from '../../core/components/PushNotifications';
 
 const styles = StyleSheet.create({
@@ -115,22 +113,6 @@ class InfoListScreen extends Component {
       navigation.state.params && navigation.state.params.pushStatusLoaded;
 
     return {
-      headerTitle: (
-        <Text style={stylesHeader.blueHeaderTitle}>
-          {strings.InfoListScreen.title}
-        </Text>
-      ),
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: (
-        <View>
-          <HeaderIconBack
-            theme="white"
-            navigation={navigation}
-            returnScreen={returnScreen}
-          />
-        </View>
-      ),
       headerRight: () => {
         return pushStatusLoaded ? (
           <Icon
