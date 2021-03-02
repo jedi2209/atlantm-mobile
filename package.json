@@ -89,6 +89,8 @@
     "react-native-vkontakte-login": "^1.0.0",
     "react-native-webview": "^11.2.0",
     "react-redux": "7.2.2",
+    "reanimated-bottom-sheet": "^1.0.0-alpha.22",
+    "reanimated-bottom-sheet-navigator": "osdnk/reanimated-bottom-sheet-navigator",
     "redux": "4.0.5",
     "redux-form": "8.3.7",
     "redux-persist": "4.10.2",
