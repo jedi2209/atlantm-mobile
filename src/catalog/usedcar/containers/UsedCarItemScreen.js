@@ -29,7 +29,6 @@ import {
 } from '../../actions';
 
 // components
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import PhotoSlider from '../../../core/components/PhotoSlider';
 import PhotoViewer from '../../../core/components/PhotoViewer';
 import ReadMore from 'react-native-read-more-text';
@@ -99,22 +98,9 @@ const OptionPlate = ({title, subtitle}) => (
   </View>
 );
 
-class UserCarItemScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTransparent: true,
-    headerLeft: (
-      <HeaderIconBack
-        theme="white"
-        ContainerStyle={styleConst.headerBackButton.ContainerStyle}
-        IconStyle={styleConst.headerBackButton.IconStyle}
-        navigation={navigation}
-      />
-    ),
-  });
-
+class UsedCarItemScreen extends Component {
   static propTypes = {
     dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
   };
 
   constructor(props) {
@@ -146,7 +132,7 @@ class UserCarItemScreen extends Component {
     } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen =
-      nav.routes[nav.index].routeName === 'UserCarItemScreen';
+      nav.routes[nav.index].routeName === 'UsedCarItemScreen';
 
     return (
       (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
@@ -292,7 +278,7 @@ class UserCarItemScreen extends Component {
         selectable={false}
         style={styles.ShowFullDescriptionButton}
         onPress={handlePress}>
-        {strings.UserCarItemScreen.showFull}
+        {strings.UsedCarItemScreen.showFull}
       </Text>
     );
   };
@@ -303,7 +289,7 @@ class UserCarItemScreen extends Component {
         selectable={false}
         style={styles.ShowFullDescriptionButton}
         onPress={handlePress}>
-        {strings.UserCarItemScreen.showLess}
+        {strings.UsedCarItemScreen.showLess}
       </Text>
     );
   };
@@ -587,7 +573,7 @@ class UserCarItemScreen extends Component {
                                 width: '70%',
                               },
                             ]}>
-                            {strings.UserCarItemScreen.creditCalculate}
+                            {strings.UsedCarItemScreen.creditCalculate}
                           </Text>
                           <Icon
                             type="Octicons"
@@ -635,7 +621,7 @@ class UserCarItemScreen extends Component {
                               },
                               styles.bodyButtonText,
                             ]}>
-                            {strings.UserCarItemScreen.myPrice}
+                            {strings.UsedCarItemScreen.myPrice}
                           </Text>
                         </Button>
                       ) : null}
@@ -1013,4 +999,4 @@ const stylesFooter = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserCarItemScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(UsedCarItemScreen);

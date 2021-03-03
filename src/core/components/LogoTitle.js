@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    marginTop: 2,
+    marginTop: 10,
   },
   Image: {
     maxHeight: 70,

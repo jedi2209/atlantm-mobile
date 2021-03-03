@@ -10,20 +10,10 @@ import SocialAuth from '../components/SocialAuth';
 
 import {actionSaveProfileToAPI} from '../actions';
 
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-import stylesHeader from '../../core/components/Header/style';
 import Amplitude from '../../utils/amplitude-analytics';
 import strings from '../../core/lang/const';
 
 class ProfileSettingsScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerStyle: stylesHeader.whiteHeader,
-    headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerTitle: strings.ProfileSettingsScreen.title,
-    headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
-    headerRight: <View />,
-  });
-
   constructor(props) {
     super(props);
     const {
@@ -231,7 +221,7 @@ class ProfileSettingsScreen extends Component {
             {
               text: 'ОК',
               onPress() {
-                _this.props.navigation.navigate('ProfileScreenInfo');
+                _this.props.navigation.navigate('LoginScreen');
               },
             },
           ],

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {SafeAreaView, View, StyleSheet, Text, StatusBar} from 'react-native';
+import {SafeAreaView, StyleSheet, StatusBar} from 'react-native';
 import {StyleProvider} from 'native-base';
 
 // redux
@@ -18,12 +18,10 @@ import {
 import ReviewsList from '../components/ReviewsList';
 import ReviewsFilter from '../components/ReviewsFilter';
 import DealerItemList from '../../../core/components/DealerItemList';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
 import {substractYears} from '../../../utils/date';
 import strings from '../../../core/lang/const';
 
@@ -61,25 +59,6 @@ const mapDispatchToProps = {
 };
 
 class ReviewsScreen extends Component {
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      (navigation.state.params && navigation.state.params.returnScreen) ||
-      'BottomTabNavigation';
-
-    return {
-      headerTitle: strings.ReviewsScreen.title,
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: (
-        <HeaderIconBack
-          theme="white"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-    };
-  };
-
   componentDidUpdate(prevProps) {
     const {needFetchReviews, isFetchReviews} = this.props;
     const isFilterWillUpdate =
@@ -155,11 +134,7 @@ class ReviewsScreen extends Component {
       <StyleProvider style={getTheme()}>
         <SafeAreaView style={styles.content}>
           <StatusBar barStyle="light-content" />
-          <DealerItemList
-            navigation={navigation}
-            dealer={dealerSelected}
-            goBack={true}
-          />
+          <DealerItemList dealer={dealerSelected} goBack={true} />
 
           <ReviewsList
             items={reviews}

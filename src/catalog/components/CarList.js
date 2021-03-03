@@ -35,7 +35,6 @@ export default class CarList extends PureComponent {
     data: PropTypes.array,
     itemScreen: PropTypes.string,
     isFetchItems: PropTypes.bool,
-    navigation: PropTypes.object,
     prices: PropTypes.object,
   };
 

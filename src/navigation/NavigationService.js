@@ -15,24 +15,18 @@ const navigate = (name, params) => {
   _navigator.current?.navigate(name, params);
 };
 
-// const onNavigationStateChange = (newState) => {
-//   navigationChange({
-//     newState,
-//   });
-// };
-
 const goBack = () => {
   _navigator.current?.dispatch(CommonActions.goBack());
 };
 
 const reset = (returnScreen, returnState) => {
-  const resetAction = StackActions.reset({
+  const resetAction = CommonActions.reset({
     index: 0,
-    actions: [
-      CommonActions.navigate({
-        routeName: returnScreen || mainScreen,
+    routes: [
+      {
+        name: returnScreen || mainScreen,
         params: returnState,
-      }),
+      },
     ],
   });
   _navigator.current?.dispatch(resetAction);

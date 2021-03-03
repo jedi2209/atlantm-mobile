@@ -8,7 +8,7 @@ import {callMe} from '../../contacts/actions';
 import {localUserDataUpdate} from '../../profile/actions';
 import {localDealerClear} from '../../dealer/actions';
 import {CALL_ME__SUCCESS, CALL_ME__FAIL} from '../../contacts/actionTypes';
-import NavigationService from '../../navigation/NavigationService';
+import * as NavigationService from '../../navigation/NavigationService';
 import Amplitude from '../../utils/amplitude-analytics';
 import {
   Alert,
@@ -56,10 +56,6 @@ const mapDispatchToProps = {
   localDealerClear,
   callMe,
 };
-
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-import stylesHeader from '../../core/components/Header/style';
-
 class CallMeBackScreen extends React.Component {
   constructor(props) {
     super(props);
@@ -71,25 +67,6 @@ class CallMeBackScreen extends React.Component {
     };
     this.props.localDealerClear();
   }
-
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
-    return {
-      headerStyle: stylesHeader.whiteHeader,
-      headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: strings.CallMeBackScreen.title,
-      headerLeft: (
-        <HeaderIconBack
-          theme="blue"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-      headerRight: <View />,
-    };
-  };
 
   componentDidUpdate(prevProps) {
     if (
@@ -114,10 +91,10 @@ class CallMeBackScreen extends React.Component {
     let actionID = null;
 
     if (
-      this.props.navigation.state.params &&
-      this.props.navigation.state.params.actionID
+      this.props.navigation.state?.params &&
+      this.props.navigation.state?.params.actionID
     ) {
-      actionID = this.props.navigation.state.params.actionID;
+      actionID = this.props.navigation.state?.params.actionID;
     }
 
     if (!isInternetExist) {
@@ -188,8 +165,7 @@ class CallMeBackScreen extends React.Component {
                 props: {
                   goBack: false,
                   isLocal: true,
-                  navigation: this.props.navigation,
-                  returnScreen: this.props.navigation.state.routeName,
+                  returnScreen: this.props.navigation.state?.routeName,
                 },
               },
             ],

@@ -22,9 +22,6 @@ import {Button, Icon, Toast} from 'native-base';
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
 import styleConst from '../../core/style-const';
-
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-import stylesHeader from '../../core/components/Header/style';
 import strings from '../../core/lang/const';
 
 import {
@@ -121,22 +118,6 @@ class ReestablishScreen extends React.Component {
     this.disableButton = false;
   }
 
-  static navigationOptions = ({navigation}) => {
-    return {
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerTitle: strings.ReestablishScreen.title,
-      headerLeft: (
-        <HeaderIconBack
-          theme="white"
-          // ContainerStyle={styleConst.headerBackButton.ContainerStyle}
-          // IconStyle={styleConst.headerBackButton.IconStyle}
-          navigation={navigation}
-        />
-      ),
-    };
-  };
-
   onChangeField = (fieldName) => (value) => {
     this.setState({[fieldName]: value});
   };
@@ -217,7 +198,7 @@ class ReestablishScreen extends React.Component {
                   type: 'success',
                 });
                 setTimeout(() => {
-                  _this.props.navigation.navigate('ProfileScreenInfo');
+                  _this.props.navigation.navigate('LoginScreen');
                 }, 500);
               })
               .catch(() => {

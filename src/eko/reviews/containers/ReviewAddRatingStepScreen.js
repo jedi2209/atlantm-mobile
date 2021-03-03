@@ -26,13 +26,11 @@ import stylesList from '../../../core/components/Lists/style';
 // components
 import {Label, Switch, Body, ListItem, Right} from 'native-base';
 import Spinner from 'react-native-loading-spinner-overlay';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
 
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import Form from '../../../core/components/Form/Form';
@@ -241,21 +239,6 @@ class ReviewAddRatingStepScreen extends Component {
       },
     };
   }
-
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: (
-      <Text style={stylesHeader.blueHeaderTitle}>
-        {strings.ReviewAddRatingStepScreen.title}
-      </Text>
-    ),
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: (
-      <View>
-        <HeaderIconBack theme="white" navigation={navigation} />
-      </View>
-    ),
-  });
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;

@@ -231,7 +231,6 @@ class ServiceScreenNonAuth extends Component {
               props: {
                 goBack: false,
                 isLocal: false,
-                navigation: this.props.navigation,
               },
             },
             {

@@ -127,7 +127,6 @@ class ServiceScreen extends Component {
 
   static propTypes = {
     dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
     localUserDataUpdate: PropTypes.func,
     isOrderServiceRequest: PropTypes.bool,
   };
@@ -251,7 +250,6 @@ class ServiceScreen extends Component {
                 props: {
                   goBack: false,
                   isLocal: false,
-                  navigation: this.props.navigation,
                 },
               },
               {

@@ -94,13 +94,14 @@ const HeaderBackButton = (props) => {
 HeaderBackButton.propTypes = {
   returnScreen: PropTypes.string,
   color: PropTypes.string,
-  IconStyle: ViewPropTypes.style,
+  IconStyle: PropTypes.object,
 };
 
 HeaderBackButton.defaultProps = {
   ContainerStyle: {},
   type: 'Ionicons',
   icon: 'arrow-back',
+  theme: 'blue',
 };
 
 export default HeaderBackButton;

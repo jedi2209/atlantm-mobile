@@ -2,7 +2,7 @@ import {Platform, PermissionsAndroid, Alert, Linking} from 'react-native';
 
 import OneSignal from 'react-native-onesignal';
 import Amplitude from '../../utils/amplitude-analytics';
-import NavigationService from '../../navigation/NavigationService';
+import * as NavigationService from '../../navigation/NavigationService';
 import {get} from 'lodash';
 
 // const isAndroid = Platform.OS === 'android';

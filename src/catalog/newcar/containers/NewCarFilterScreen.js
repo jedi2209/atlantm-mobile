@@ -32,7 +32,6 @@ import {
 import Amplitude from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import showPrice from '../../../utils/price';
-import stylesHeader from '../../../core/components/Header/style';
 import {ScrollView} from 'react-native-gesture-handler';
 
 import strings from '../../../core/lang/const';
@@ -156,29 +155,8 @@ const mapDispatchToProps = {
 };
 
 class NewCarFilterScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: strings.NewCarFilterScreen.title,
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: {fontWeight: '200', color: '#000'},
-    headerLeft: <View />,
-    headerRight: (
-      <Icon
-        type="AntDesign"
-        style={{
-          color: '#000',
-          fontWeight: 'lighter',
-          fontSize: 22,
-          marginRight: 14,
-        }}
-        name="close"
-        onPress={() => navigation.goBack()}
-      />
-    ),
-  });
-
   static propTypes = {
     dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
   };
 
   constructor(props) {

@@ -9,6 +9,7 @@ import {
   Dimensions,
   SafeAreaView,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 
 // Maps
@@ -25,26 +26,16 @@ import {
 // components
 import {Icon, Button} from 'native-base';
 import ActionSheet from 'react-native-actionsheet';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // Helpers
 import {get} from 'lodash';
+import {verticalScale} from '../../../utils/scale';
 import styleConst from '../../../core/style-const';
 import strings from '../../../core/lang/const';
 
 const isAndroid = Platform.OS === 'android';
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
-  headerStyle: {
-    backgroundColor: 'rgba(0,0,0, 0.2)',
-    paddingHorizontal: 5,
-    paddingVertical: 5,
-    borderRadius: 20,
-    marginLeft: 5,
-  },
-  headerIconStyle: {
-    marginLeft: 5,
-  },
   safearea: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
@@ -80,6 +71,10 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: 'white',
   },
+  spinner: {
+    alignSelf: 'center',
+    marginTop: verticalScale(260),
+  },
 });
 
 const mapStateToProps = ({dealer, contacts}) => {
@@ -96,22 +91,6 @@ const mapDispatchToProps = {
 };
 
 class MapScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTransparent: true,
-    headerLeft: (
-      <HeaderIconBack
-        theme="white"
-        ContainerStyle={styles.headerStyle}
-        IconStyle={styles.headerIconStyle}
-        navigation={navigation}
-        returnScreen={
-          navigation.state.params && navigation.state.params.returnScreen
-        }
-      />
-    ),
-    // headerRight: <View />, // для выравнивания заголовка по центру на обоих платформах
-  });
-
   constructor(props) {
     super(props);
     this.state = {
@@ -373,9 +352,14 @@ class MapScreen extends Component {
     console.log('== MapScreen == ');
 
     return this.state.loading ? (
-      <View style={styles.safearea}>
-        <Text style={styles.errorText}>{strings.MapScreen.empty.text}</Text>
-      </View>
+      // <View style={styles.safearea}>
+      //   <Text style={styles.errorText}>{strings.MapScreen.empty.text}</Text>
+      // </View>
+      <ActivityIndicator
+        size="large"
+        color={styleConst.color.blue}
+        style={styles.spinner}
+      />
     ) : (
       <SafeAreaView style={styles.safearea}>
         <StatusBar barStyle="default" />

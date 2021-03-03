@@ -3,7 +3,6 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {
   StyleSheet,
-  View,
   Alert,
   TouchableWithoutFeedback,
   Keyboard,
@@ -23,15 +22,12 @@ import {
 } from '../actions';
 import {localUserDataUpdate} from '../../profile/actions';
 
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
 import {get, orderBy} from 'lodash';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
 import {
   TD_CAR_DETAILS__SUCCESS,
   TD_CAR_DETAILS__FAIL,
@@ -171,16 +167,7 @@ class TestDriveScreen extends PureComponent {
     }
   }
 
-  static navigationOptions = ({navigation}) => ({
-    headerStyle: stylesHeader.whiteHeader,
-    headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerTitle: strings.TestDriveScreen.title,
-    headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
-    headerRight: <View />,
-  });
-
   static propTypes = {
-    navigation: PropTypes.object,
     localUserDataUpdate: PropTypes.func,
     firstName: PropTypes.string,
     secondName: PropTypes.string,

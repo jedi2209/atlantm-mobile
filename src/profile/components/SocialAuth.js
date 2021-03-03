@@ -73,10 +73,6 @@ class SocialAuth extends PureComponent {
     this.requestManager = new GraphRequestManager();
   }
 
-  static navigationOptions = ({navigation}) => ({
-    header: null,
-  });
-
   _connectGoogle = async () => {
     console.log('_connectGoogle');
     try {
@@ -87,35 +83,6 @@ class SocialAuth extends PureComponent {
       this.props.connectSocialMedia({profile: this.props.login, im});
     } catch (error) {}
   };
-
-  //   async fetchProfileFromFacebook(token) {
-  //     return new Promise((resolve, reject) => {
-  //       const request = new GraphRequest(
-  //         '/me',
-  //         {
-  //           parameters: {
-  //             fields: {
-  //               string: 'email,name,first_name,middle_name,last_name',
-  //             },
-  //             access_token: {
-  //               string: token,
-  //             },
-  //           },
-  //         },
-  //         (error, result) => {
-  //           if (result) {
-  //             const profile = result;
-  //             profile.avatar = `https://graph.facebook.com/${result.id}/picture`;
-  //             resolve(profile);
-  //           } else {
-  //             reject(error);
-  //           }
-  //         },
-  //       );
-
-  //       this.requestManager.addRequest(request).start();
-  //     });
-  //   }
 
   getFBToken = () => {
     AccessToken.getCurrentAccessToken().then((auth) => {
@@ -210,15 +177,18 @@ class SocialAuth extends PureComponent {
   };
 
   _renderLoginButtons = (region) => {
+    const isAndroid = Platform.OS === 'android';
     let VKenabled = true;
     let ButtonWidth = '25%';
     let ButtonHeight = 50;
-    const isAndroid = Platform.OS === 'android';
+
     switch (region.toLowerCase()) {
       case 'ua':
         VKenabled = false;
         ButtonWidth = '30%';
         ButtonHeight = 60;
+        break;
+      default:
         break;
     }
 

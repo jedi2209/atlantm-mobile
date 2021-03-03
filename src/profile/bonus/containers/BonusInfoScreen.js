@@ -14,16 +14,13 @@ import {actionFetchBonusInfo} from '../../actions';
 
 // components
 import SpinnerView from '../../../core/components/SpinnerView';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../../core/components/WebViewAutoHeight';
 
 // helpers
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 import Amplitude from '../../../utils/amplitude-analytics';
-import stylesHeader from '../../../core/components/Header/style';
 import getTheme from '../../../../native-base-theme/components';
-import strings from '../../../core/lang/const';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -55,22 +52,6 @@ const mapDispatchToProps = {
 };
 
 class BonusInfoScreen extends Component {
-  static navigationOptions = ({navigation}) => {
-    return {
-      headerTitle: strings.BonusInfoScreen.title,
-      headerStyle: stylesHeader.whiteHeader,
-      headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerLeft: (
-        <HeaderIconBack
-          returnScreen={navigation.state.params.returnScreen}
-          theme="blue"
-          navigation={navigation}
-        />
-      ),
-      headerRight: <View />,
-    };
-  };
-
   constructor(props) {
     super(props);
     this.state = {

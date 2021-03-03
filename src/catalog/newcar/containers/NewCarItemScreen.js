@@ -141,7 +141,6 @@ const OptionPlate = ({
 class NewCarItemScreen extends Component {
   static propTypes = {
     dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
   };
 
   constructor(props) {

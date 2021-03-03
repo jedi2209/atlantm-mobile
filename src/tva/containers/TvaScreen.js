@@ -18,12 +18,10 @@ import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 
 // components
 import Form from '../../core/components/Form/Form';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import PushNotifications from '../../core/components/PushNotifications';
 
 // helpers
 import {get} from 'lodash';
-import stylesHeader from '../../core/components/Header/style';
 import {TVA__SUCCESS, TVA__FAIL} from '../actionTypes';
 import strings from '../../core/lang/const';
 
@@ -50,6 +48,13 @@ const mapDispatchToProps = {
 };
 
 class TvaScreen extends Component {
+  static propTypes = {
+    dealerSelected: PropTypes.object,
+    isTvaRequest: PropTypes.bool,
+    actionFetchTva: PropTypes.func,
+    pushTracking: PropTypes.bool,
+  };
+
   constructor(props) {
     super(props);
 
@@ -76,8 +81,7 @@ class TvaScreen extends Component {
                 props: {
                   goBack: false,
                   isLocal: true,
-                  navigation: this.props.navigation,
-                  // returnScreen: this.props.navigation.state.routeName,
+                  returnScreen: this.props.navigation.state?.routeName,
                 },
               },
             ],
@@ -110,33 +114,6 @@ class TvaScreen extends Component {
       },
     };
   }
-
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
-    return {
-      headerStyle: stylesHeader.whiteHeader,
-      headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: strings.TvaScreen.title,
-      headerLeft: (
-        <HeaderIconBack
-          theme="blue"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-      headerRight: <View />,
-    };
-  };
-
-  static propTypes = {
-    dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
-    isTvaRequest: PropTypes.bool,
-    actionFetchTva: PropTypes.func,
-    pushTracking: PropTypes.bool,
-  };
 
   componentDidMount() {
     const {navigation} = this.props;

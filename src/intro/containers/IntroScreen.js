@@ -46,9 +46,6 @@ const styles = StyleSheet.create({
 });
 
 export default class IntroScreen extends Component {
-  static navigationOptions = () => ({
-    header: null,
-  });
 
   onPressButton = () => this.props.navigation.navigate('ChooseDealerScreen');
 

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {View, ActivityIndicator, StyleSheet} from 'react-native';
 
 // helpers
@@ -11,12 +11,12 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class FlatListFooter extends Component {
-  render() {
-    return (
-      <View style={styles.footer}>
-        <ActivityIndicator animating color={styleConst.color.blue} />
-      </View>
-    );
-  }
-}
+const FlatListFooter = () => {
+  return (
+    <View style={styles.footer}>
+      <ActivityIndicator animating color={styleConst.color.blue} />
+    </View>
+  );
+};
+
+export default FlatListFooter;
