@@ -12,7 +12,7 @@ const HEIGHT_TRIANGLE = 10;
 const styles = StyleSheet.create({
   descriptionContainer: {
     zIndex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.bg,
     marginTop: HEIGHT_TRIANGLE,
     paddingVertical: styleConst.ui.horizontalGap,
     paddingHorizontal: styleConst.ui.verticalGap,

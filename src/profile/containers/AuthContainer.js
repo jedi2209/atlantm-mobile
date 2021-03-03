@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-import LoginScreen from './ProfileScreen';
+import LoginScreen from './LoginScreen';
 import ProfileScreen from './ProfileScreenInfo';
 import {connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
@@ -9,7 +9,7 @@ const mapStateToProps = ({profile}) => {
   return profile;
 };
 
-const AuthContnainer = (props) => {
+const AuthContainer = (props) => {
   const navigation = useNavigation();
 
   if (props.login.ID) {
@@ -19,4 +19,4 @@ const AuthContnainer = (props) => {
   return <LoginScreen navigation={navigation} />;
 };
 
-export default connect(mapStateToProps)(AuthContnainer);
+export default connect(mapStateToProps)(AuthContainer);

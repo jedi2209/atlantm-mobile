@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {SafeAreaView, View, StyleSheet, StatusBar} from 'react-native';
-import {Body, Label, Content, ListItem, StyleProvider, Text} from 'native-base';
+import {Body, Label, Content, ListItem, StyleProvider} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -9,7 +9,6 @@ import {actionDateFromFill, actionSelectFilterDatePeriod} from '../../actions';
 
 // components
 import RadioIcon from '../../../core/components/RadioIcon';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // styles
 import stylesList from '../../../core/components/Lists/style';
@@ -18,7 +17,6 @@ import stylesList from '../../../core/components/Lists/style';
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
 import {
   substructMonth,
   substractWeek,
@@ -46,24 +44,7 @@ const mapDispatchToProps = {
 };
 
 class ReviewsFilterDateScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: (
-      <Text style={stylesHeader.blueHeaderTitle}>
-        {strings.ReviewsFilterDateScreen.title}
-      </Text>
-    ),
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: (
-      <View>
-        <HeaderIconBack theme="white" navigation={navigation} />
-      </View>
-    ),
-    headerRight: <View />,
-  });
-
   static propTypes = {
-    navigation: PropTypes.object,
     filterDatePeriod: PropTypes.string,
   };
 

@@ -91,7 +91,7 @@ const mapDispatchToProps = {
   actionSavePofile,
   actionGetPhoneCode,
 };
-class ProfileScreen extends Component {
+class LoginScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -141,11 +141,6 @@ class ProfileScreen extends Component {
 
   CodeInput = [];
   otpArray = [];
-
-  static navigationOptions = () => ({
-    header: null,
-    headerTransparent: true,
-  });
 
   componentDidMount() {
     this.keyboardShowListener = Keyboard.addListener(
@@ -313,7 +308,7 @@ class ProfileScreen extends Component {
       })
       .then(() => {
         this.setState({loading: false});
-        this.props.navigation.navigate('ProfileScreenInfo');
+        this.props.navigation.navigate('LoginScreen');
       })
       .catch(() => {
         this.setState({loading: false});
@@ -345,8 +340,8 @@ class ProfileScreen extends Component {
         case 'SAVE_PROFILE__NOPHONE':
           this.setState({loading: false});
           this.props.navigation.navigate('PhoneChangeScreen', {
-            refererScreen: 'ProfileScreenInfo',
-            returnScreen: 'ProfileScreenInfo',
+            refererScreen: 'LoginScreen',
+            returnScreen: 'LoginScreen',
             userSocialProfile: data,
             type: 'auth',
           });
@@ -358,8 +353,8 @@ class ProfileScreen extends Component {
                 delete data.update; // теперь будем регать пользователя по серьёзке
                 this.setState({loading: false});
                 this.props.navigation.navigate('PhoneChangeScreen', {
-                  refererScreen: 'ProfileScreenInfo',
-                  returnScreen: 'ProfileScreenInfo',
+                  refererScreen: 'LoginScreen',
+                  returnScreen: 'LoginScreen',
                   userSocialProfile: data,
                   type: 'auth',
                 });
@@ -717,8 +712,8 @@ class ProfileScreen extends Component {
                     <Button
                       onPress={() => {
                         this.props.navigation.navigate('BonusScreenInfo', {
-                          refererScreen: 'ProfileScreenInfo',
-                          returnScreen: 'ProfileScreenInfo',
+                          refererScreen: 'LoginScreen',
+                          returnScreen: 'LoginScreen',
                         });
                       }}
                       full
@@ -833,4 +828,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

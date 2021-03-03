@@ -2,6 +2,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import React, {useState, useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 import {
   View,
   Text,
@@ -49,7 +50,8 @@ const styles = StyleSheet.create({
   },
 });
 
-let UserCars = ({navigation, actionToggleCar}) => {
+let UserCars = ({actionToggleCar}) => {
+  const navigation = useNavigation();
   const cars = get(store.getState(), 'profile.cars');
   const [loading, setLoading] = useState(false);
   const [carsPanel, setActivePanel] = useState('default');
@@ -69,7 +71,7 @@ let UserCars = ({navigation, actionToggleCar}) => {
     }, 2500);
   }, []);
 
-  const _showMenu = (ordersData, item) => {
+  const _showMenu = (ordersData, item, navigation) => {
     let carName = [item.brand, item.model].join(' ');
     if (item.number) {
       carName += ['-- [' + item.number + ']'].join(' ');
@@ -131,7 +133,7 @@ let UserCars = ({navigation, actionToggleCar}) => {
     );
   };
 
-  const _renderCarsItems = ({cars, actionToggleCar}) => {
+  const _renderCarsItems = ({cars, navigation}) => {
     return (
       <ScrollView
         showsHorizontalScrollIndicator={false}
@@ -152,11 +154,15 @@ let UserCars = ({navigation, actionToggleCar}) => {
               onPress={() => {
                 if (CarType === 'active') {
                   orderFunctions.getOrders('car').then((ordersData) => {
-                    return _showMenu(ordersData, item);
+                    return _showMenu(ordersData, item, navigation);
                   });
                 } else {
                   orderFunctions.getCarMenu().then((data) => {
-                    return _showMenu(data[CarType][Platform.OS], item);
+                    return _showMenu(
+                      data[CarType][Platform.OS],
+                      item,
+                      navigation,
+                    );
                   });
                 }
               }}>
@@ -266,7 +272,7 @@ let UserCars = ({navigation, actionToggleCar}) => {
       ) : myCars[carsPanel].length > 0 ? (
         _renderCarsItems({
           cars: myCars[carsPanel],
-          actionToggleCar: actionToggleCar,
+          navigation: navigation,
         })
       ) : (
         <View

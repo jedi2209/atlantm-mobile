@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {SafeAreaView, View, StyleSheet, Text, StatusBar} from 'react-native';
+import {SafeAreaView, StyleSheet, StatusBar} from 'react-native';
 import {Content, StyleProvider} from 'native-base';
 
 // redux
@@ -9,14 +9,12 @@ import {actionAddReviewPlusFill, actionAddReviewMinusFill} from '../../actions';
 // components
 import ReviewAddMessageForm from '../components/ReviewAddMessageForm';
 import FooterButton from '../../../core/components/FooterButton';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import HeaderSubtitle from '../../../core/components/HeaderSubtitle';
 
 // helpers
 import {get} from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
 import strings from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
@@ -41,22 +39,6 @@ const mapDispatchToProps = {
 };
 
 class ReviewAddMessageStepScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: (
-      <Text style={stylesHeader.blueHeaderTitle}>
-        {strings.ReviewAddMessageStepScreen.title}
-      </Text>
-    ),
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: (
-      <View>
-        <HeaderIconBack theme="white" navigation={navigation} />
-      </View>
-    ),
-    headerRight: <View />,
-  });
-
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
     let isActiveScreen = false;

@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   iconItem: {
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.bg,
     alignItems: 'center',
     justifyContent: 'center',
   },

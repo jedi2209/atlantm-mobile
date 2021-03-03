@@ -264,10 +264,10 @@ export default {
     brands: 'Бренди',
     models: 'Моделі',
   },
-  UserCarListScreen: {
+  UsedCarListScreen: {
     title: 'Автомобілі з пробігом',
   },
-  UserCarItemScreen: {
+  UsedCarItemScreen: {
     showFull: 'Показати повний опис...',
     showLess: 'Згорнути',
     creditCalculate: 'розрахувати кредит',

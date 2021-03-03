@@ -25,10 +25,8 @@ import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Amplitude from '../../utils/amplitude-analytics';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
-import stylesHeader from '../../core/components/Header/style';
 import {ERROR_NETWORK} from '../../core/const';
 import {PARTS_ORDER__SUCCESS, PARTS_ORDER__FAIL} from '../actionTypes';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import strings from '../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
@@ -127,28 +125,8 @@ class OrderPartsScreen extends Component {
     });
   }
 
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
-    return {
-      headerStyle: stylesHeader.whiteHeader,
-      headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: strings.OrderPartsScreen.title,
-      headerLeft: (
-        <HeaderIconBack
-          theme="blue"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-      headerRight: <View />,
-    };
-  };
-
   static propTypes = {
     dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
     localUserDataUpdate: PropTypes.func,
     isOrderServiceRequest: PropTypes.bool,
   };
@@ -284,8 +262,7 @@ class OrderPartsScreen extends Component {
                 props: {
                   goBack: false,
                   isLocal: true,
-                  navigation: this.props.navigation,
-                  returnScreen: this.props.navigation.state.routeName,
+                  returnScreen: this.props.navigation.state?.routeName,
                 },
               },
             ],

@@ -1,6 +1,8 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 
 import styleConst from '../../style-const';
+
+const isAndroid = Platform.OS === 'android';
 
 const commonStyles = {
   borderBottomWidth: 0.5,
@@ -28,6 +30,8 @@ export default StyleSheet.create({
   },
   resetBorder: {
     borderBottomWidth: 0,
+    shadowOpacity: 0,
+    shadowColor: 'transparent',
   },
   headerStyle: {
     // height: 20,
@@ -56,8 +60,8 @@ export default StyleSheet.create({
     color: styleConst.new.blueHeader,
   },
   blueHeaderTitle: {
-    fontSize: 17,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '300',
     alignSelf: 'center',
     alignItems: 'center',
     fontFamily: styleConst.font.regular,
@@ -78,11 +82,24 @@ export default StyleSheet.create({
   },
   whiteHeaderTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '300',
     alignSelf: 'center',
     alignItems: 'center',
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
     color: styleConst.new.blueHeader,
+  },
+  headerBackButtonContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    paddingHorizontal: isAndroid ? 5 : 0,
+    paddingVertical: isAndroid ? 10 : 0,
+    borderRadius: 20,
+    marginLeft: 5,
+    marginTop: isAndroid ? 5 : 0,
+    zIndex: 1000,
+  },
+  headerBackButtonIcon: {
+    marginLeft: isAndroid ? 5 : 0,
+    zIndex: 1000,
   },
 });

@@ -21,14 +21,9 @@ import {connect} from 'react-redux';
 import {actionCarCostOrder} from '../../actions';
 import {CAR_COST__SUCCESS, CAR_COST__FAIL} from '../../actionTypes';
 
-// components
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
-
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
 import {get, valuesIn} from 'lodash';
-import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
 import {ERROR_NETWORK} from '../../../core/const';
 import isInternet from '../../../utils/internet';
 
@@ -85,28 +80,6 @@ const mapDispatchToProps = {
 };
 
 class CarCostScreen extends Component {
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
-    return {
-      headerStyle: [stylesHeader.headerStyle, stylesHeader.whiteHeader],
-      headerTitleStyle: [
-        stylesHeader.headerTitleStyle,
-        stylesHeader.whiteHeaderTitle,
-      ],
-      headerTitle: strings.CarCostScreen.title,
-      headerLeft: (
-        <HeaderIconBack
-          theme="blue"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-      headerRight: <View />,
-    };
-  };
-
   constructor(props) {
     super(props);
 
@@ -149,7 +122,6 @@ class CarCostScreen extends Component {
 
   static propTypes = {
     dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
     name: PropTypes.string,
     phone: PropTypes.string,
     email: PropTypes.string,
@@ -223,23 +195,8 @@ class CarCostScreen extends Component {
     }
   };
 
-  // shouldComponentUpdate(nextProps) {
-  //   const nav = nextProps.nav.newState;
-  //   let isActiveScreen = false;
-
-  //   if (nav) {
-  //     const rootLevel = nav.routes[nav.index];
-  //     if (rootLevel) {
-  //       isActiveScreen =
-  //         get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
-  //         'CarCostScreen';
-  //     }
-  //   }
-
-  //   return isActiveScreen;
-  // }
-
   render() {
+    console.log('this.props', this.props);
     this.FormConfig = {
       fields: {
         groups: [
@@ -258,8 +215,7 @@ class CarCostScreen extends Component {
                 props: {
                   goBack: false,
                   isLocal: true,
-                  navigation: this.props.navigation,
-                  returnScreen: this.props.navigation.state.routeName,
+                  returnScreen: this.props.navigation.state?.routeName,
                 },
               },
             ],

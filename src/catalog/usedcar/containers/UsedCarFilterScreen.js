@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, Text, Image, TouchableOpacity, StatusBar} from 'react-native';
+import {View, Text, StatusBar} from 'react-native';
 import {
   Icon,
   Button,
@@ -28,7 +28,6 @@ import {
 
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
-import stylesHeader from '../../../core/components/Header/style';
 import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -66,28 +65,8 @@ const mapDispatchToProps = {
 };
 
 class UsedCarFilterScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: strings.NewCarFilterScreen.title,
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: {fontWeight: '200', color: '#000'},
-    headerRight: (
-      <Icon
-        type="AntDesign"
-        style={{
-          color: '#000',
-          fontWeight: 'lighter',
-          fontSize: 22,
-          marginRight: 14,
-        }}
-        name="close"
-        onPress={() => navigation.goBack()}
-      />
-    ),
-  });
-
   static propTypes = {
     dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
   };
 
   constructor(props) {

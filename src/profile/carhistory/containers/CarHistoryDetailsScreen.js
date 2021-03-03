@@ -17,13 +17,11 @@ import {actionFetchCarHistoryDetails} from '../../actions';
 
 // components
 import SpinnerView from '../../../core/components/SpinnerView';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
 import showPrice from '../../../utils/price';
 import {ERROR_NETWORK} from '../../../core/const';
 import strings from '../../../core/lang/const';
@@ -150,13 +148,7 @@ class CarHistoryDetailsScreen extends Component {
     const {params = {}} = navigation.state;
 
     return {
-      headerTitle: (
-        <Text style={stylesHeader.whiteHeaderTitle}>{params.title}</Text>
-      ),
-      headerStyle: stylesHeader.whiteHeader,
-      headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
-      headerRight: <View />,
+      headerTitle: <Text>{params.title}</Text>,
     };
   };
 

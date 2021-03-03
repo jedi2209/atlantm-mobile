@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
   StyleSheet,
-  View,
   Alert,
   TouchableWithoutFeedback,
   Keyboard,
@@ -17,15 +16,12 @@ import {connect} from 'react-redux';
 import {actionOrderCar} from '../actions';
 import {localUserDataUpdate} from '../../profile/actions';
 
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
 import {CATALOG_ORDER__SUCCESS, CATALOG_ORDER__FAIL} from '../actionTypes';
 import {ERROR_NETWORK} from '../../core/const';
 
@@ -294,17 +290,12 @@ class OrderScreen extends Component {
   }
 
   static navigationOptions = ({navigation}) => ({
-    headerStyle: stylesHeader.whiteHeader,
-    headerTitleStyle: stylesHeader.whiteHeaderTitle,
     headerTitle: !navigation.state.params.car.ordered
       ? strings.OrderScreen.title
       : strings.OrderScreen.titleSimiliar,
-    headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
-    headerRight: <View />,
   });
 
   static propTypes = {
-    navigation: PropTypes.object,
     localUserDataUpdate: PropTypes.func,
     firstName: PropTypes.string,
     secondName: PropTypes.string,

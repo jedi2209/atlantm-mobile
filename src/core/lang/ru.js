@@ -265,10 +265,10 @@ export default {
     brands: 'Бренды',
     models: 'Модели',
   },
-  UserCarListScreen: {
+  UsedCarListScreen: {
     title: 'Авто с пробегом',
   },
-  UserCarItemScreen: {
+  UsedCarItemScreen: {
     showFull: 'Показать полное описание...',
     showLess: 'Свернуть',
     creditCalculate: 'рассчитать кредит',

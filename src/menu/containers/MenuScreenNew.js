@@ -224,7 +224,7 @@ const MoreScreen = (props) => {
     return a.id - b.id;
   });
 
-  const rowHeight = (heightScreen - 80 - 82 - 4 - 80) / menu.length;
+  const rowHeight = (heightScreen - 246) / menu.length;
 
   const [count] = useState(props.menuOpenedCount);
 
@@ -245,7 +245,7 @@ const MoreScreen = (props) => {
             full
             onPress={() => {
               if (props.login.id) {
-                props.navigation.navigate('ProfileScreenInfo');
+                props.navigation.navigate('LoginScreen');
               } else {
                 props.navigation.navigate('ProfileScreen');
               }

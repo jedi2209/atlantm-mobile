@@ -159,10 +159,6 @@ const mapDispatchToProps = {
 };
 
 class ContactsScreen extends Component {
-  static navigationOptions = () => ({
-    header: null,
-  });
-
   constructor(props) {
     super(props);
     this.state = {
@@ -173,7 +169,7 @@ class ContactsScreen extends Component {
       buttons: [],
     };
     this.mainScrollView = React.createRef();
-    get(this.props.dealerSelected, 'site').map((val, idx) => {
+    get(this.props.dealerSelected, 'site', []).map((val, idx) => {
       if (val) {
         const siteName = val
           .replace(/^(?:https?:\/\/)?(?:www\.)?/i, '')
@@ -422,7 +418,10 @@ class ContactsScreen extends Component {
                   numberOfLines={1}
                   ellipsizeMode="tail"
                   style={styles.addressText}>
-                  {`${dealerSelected.city.name}, ${dealerSelected.address}`}
+                  {dealerSelected.city.name ? dealerSelected.city.name : null}
+                  {dealerSelected.address
+                    ? ', ' + dealerSelected.address
+                    : null}
                 </Text>
               </TouchableOpacity>
               <ScrollView

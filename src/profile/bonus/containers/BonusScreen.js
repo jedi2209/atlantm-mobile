@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, View, Text, Platform} from 'react-native';
+import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
 import {
   Icon,
   Content,
@@ -24,8 +24,6 @@ import Amplitude from '../../../utils/amplitude-analytics';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import strings from '../../../core/lang/const';
-
-const isAndroid = Platform.OS === 'android';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -129,21 +127,7 @@ const mapDispatchToProps = {
   actionSetBonusLevel1,
   actionSetBonusLevel2,
 };
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
-import stylesHeader from '../../../core/components/Header/style';
 class BonusScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: (
-      <Text style={stylesHeader.whiteHeaderTitle}>
-        {strings.ProfileScreenInfo.bonus.title}
-      </Text>
-    ),
-    headerStyle: stylesHeader.whiteHeader,
-    headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
-    headerRight: <View />,
-  });
-
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
     let isActiveScreen = false;

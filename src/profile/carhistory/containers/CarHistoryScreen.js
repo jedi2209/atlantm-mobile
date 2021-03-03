@@ -146,21 +146,7 @@ const mapDispatchToProps = {
   // actionSetCarHistoryLevel1,
   // actionSetCarHistoryLevel2,
 };
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
-import stylesHeader from '../../../core/components/Header/style';
 class CarHistoryScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: (
-      <Text style={stylesHeader.whiteHeaderTitle}>
-        {strings.CarHistoryScreen.title}
-      </Text>
-    ),
-    headerStyle: stylesHeader.whiteHeader,
-    headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
-    headerRight: <View />,
-  });
-
   componentDidMount() {
     // eslint-disable-next-line no-shadow
     const {profile, navigation, actionFetchCarHistory} = this.props;

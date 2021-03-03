@@ -20,8 +20,6 @@ import {connect} from 'react-redux';
 import {actionOrderCreditCar} from '../actions';
 import {localUserDataUpdate} from '../../profile/actions';
 
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
@@ -29,7 +27,6 @@ import showPrice from '../../utils/price';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
 import {CREDIT_ORDER__SUCCESS, CREDIT_ORDER__FAIL} from '../actionTypes';
 import {ERROR_NETWORK} from '../../core/const';
 
@@ -154,16 +151,7 @@ class OrderCreditScreen extends Component {
     this.optionsPrice.push(this.carPrice);
   }
 
-  static navigationOptions = ({navigation}) => ({
-    headerStyle: stylesHeader.whiteHeader,
-    headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerTitle: strings.OrderCreditScreen.title,
-    headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
-    headerRight: <View />,
-  });
-
   static propTypes = {
-    navigation: PropTypes.object,
     localUserDataUpdate: PropTypes.func,
     firstName: PropTypes.string,
     secondName: PropTypes.string,

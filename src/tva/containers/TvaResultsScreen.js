@@ -27,15 +27,11 @@ import {
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
 
-// components
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import {dayMonthYearTime} from '../../utils/date';
 import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
 import {
   TVA_SEND_MESSAGE__SUCCESS,
   TVA_SEND_MESSAGE__FAIL,
@@ -123,6 +119,17 @@ const mapDispatchToProps = {
 };
 
 class TvaResultsScreen extends Component {
+  static propTypes = {
+    dealerSelected: PropTypes.object,
+    isMessageSending: PropTypes.bool,
+    actionTvaMessageFill: PropTypes.func,
+    actionTvaMessageSend: PropTypes.func,
+    actionSetActiveTvaOrderId: PropTypes.func,
+    message: PropTypes.string,
+    results: PropTypes.object,
+    activeOrderId: PropTypes.string,
+  };
+
   constructor(props) {
     super(props);
 
@@ -132,36 +139,6 @@ class TvaResultsScreen extends Component {
       success: false,
     };
   }
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
-    return {
-      headerStyle: stylesHeader.whiteHeader,
-      headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: strings.TvaResultsScreen.title,
-      headerLeft: (
-        <HeaderIconBack
-          theme="blue"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-      headerRight: <View />,
-    };
-  };
-
-  static propTypes = {
-    dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
-    isMessageSending: PropTypes.bool,
-    actionTvaMessageFill: PropTypes.func,
-    actionTvaMessageSend: PropTypes.func,
-    actionSetActiveTvaOrderId: PropTypes.func,
-    message: PropTypes.string,
-    results: PropTypes.object,
-    activeOrderId: PropTypes.string,
-  };
 
   componentDidMount() {
     const {

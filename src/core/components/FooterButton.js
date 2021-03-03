@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import {Footer} from 'native-base';
 
 // components
@@ -7,16 +7,12 @@ import ButtonFull from './ButtonFull';
 // helpers
 import styleFooter from './Footer/style';
 
-export default class FooterButton extends PureComponent {
-  render() {
-    let style_footer = styleFooter.footer;
-    if (this.props.style) {
-      style_footer = {...styleFooter.footer, ...this.props.style};
-    }
-    return (
-      <Footer style={style_footer}>
-        <ButtonFull {...this.props} />
-      </Footer>
-    );
-  }
-}
+const FooterButton = ({style, text, onPressButton}) => {
+  return (
+    <Footer style={[styleFooter.footer, style]}>
+      <ButtonFull text={text} onPressButton={onPressButton} />
+    </Footer>
+  );
+};
+
+export default FooterButton;

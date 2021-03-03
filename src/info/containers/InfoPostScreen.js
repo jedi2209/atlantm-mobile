@@ -15,8 +15,6 @@ import {connect} from 'react-redux';
 import {fetchInfoPost, callMeForInfo} from '../actions';
 
 import {Content, Button} from 'native-base';
-// import FooterButton from '../../core/components/FooterButton';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
 import Imager from '../../core/components/Imager';
 
@@ -102,23 +100,6 @@ const mapDispatchToProps = {
 };
 
 class InfoPostScreen extends Component {
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-    return {
-      headerTransparent: true,
-      headerLeft: (
-        <HeaderIconBack
-          theme="white"
-          ContainerStyle={styleConst.headerBackButton.ContainerStyle}
-          IconStyle={styleConst.headerBackButton.IconStyle}
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-    };
-  };
-
   state = {
     imageWidth: IMAGE_WIDTH,
     imageHeight: IMAGE_HEIGHT,
@@ -182,9 +163,11 @@ class InfoPostScreen extends Component {
   _onRefresh = () => {
     this.setState({refreshing: true});
 
-    this.props.fetchInfoPost(this.props.navigation.state.params.id).then(() => {
-      this.setState({refreshing: false});
-    });
+    this.props
+      .fetchInfoPost(this.props.navigation.state?.params.id)
+      .then(() => {
+        this.setState({refreshing: false});
+      });
   };
 
   render() {
