@@ -106,7 +106,7 @@ class CarCostScreen extends Component {
       success: false,
     };
 
-    const carFromNavigation = get(this.props.navigation, 'state.params.car');
+    const carFromNavigation = get(this.props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
       this.state.carVIN = carFromNavigation.vin;
       this.state.carBrand = get(carFromNavigation, 'brand');
@@ -133,8 +133,6 @@ class CarCostScreen extends Component {
     if (!isInternetExist) {
       return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
     } else {
-      const {navigation} = this.props;
-
       const photoForUpload = valuesIn(this.state.photos);
 
       const action = await this.props.actionCarCostOrder({
@@ -168,7 +166,7 @@ class CarCostScreen extends Component {
                 {
                   text: 'ОК',
                   onPress() {
-                    navigation.goBack();
+                    this.props.navigation.goBack();
                   },
                 },
               ],

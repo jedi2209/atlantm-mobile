@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   arrowFont: {
     fontSize: 22,
     width: 20,
-    marginTop: 4,
+    // marginTop: 4,
   },
 });
 
@@ -65,6 +65,11 @@ const HeaderBackButton = (props) => {
     NavigationService.reset();
   };
 
+  const fontColor = {
+    white: styleConst.new.mainbg,
+    blue: styleConst.new.blueHeader,
+  };
+
   return (
     <TouchableOpacity
       style={[styles.container, props.ContainerStyle]}
@@ -76,12 +81,7 @@ const HeaderBackButton = (props) => {
           style={[
             styles.arrowFont,
             {
-              color:
-                props.theme === 'white'
-                  ? '#fff'
-                  : props.theme === 'blue'
-                  ? styleConst.new.blueHeader
-                  : '#000',
+              color: fontColor[props.theme],
             },
             props.IconStyle,
           ]}

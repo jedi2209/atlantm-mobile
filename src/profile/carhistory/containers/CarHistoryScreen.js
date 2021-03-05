@@ -47,7 +47,7 @@ import strings from '../../../core/lang/const';
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
   },
   emptyText: {
     textAlign: 'center',
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   itemLevel3: {
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     marginBottom: 2,
   },
   listItem: {
@@ -150,7 +150,7 @@ class CarHistoryScreen extends Component {
   componentDidMount() {
     // eslint-disable-next-line no-shadow
     const {profile, navigation, actionFetchCarHistory} = this.props;
-    const vin = get(navigation, 'state.params.car.vin');
+    const vin = get(this.props.route, 'params.car.vin');
     const token = profile.SAP.TOKEN;
     const userid = profile.SAP.ID;
 
@@ -221,8 +221,8 @@ class CarHistoryScreen extends Component {
   };
 
   renderLevel3 = (works) => {
-    const {navigation} = this.props;
-    const vin = get(navigation, 'state.params.car.vin');
+    const {navigation, route} = this.props;
+    const vin = get(route, 'params.car.vin');
 
     return works.map((work, idx) => {
       const workId = get(work, 'document.number');
@@ -351,7 +351,11 @@ class CarHistoryScreen extends Component {
     Amplitude.logEvent('screen', 'lkk/carhistory');
 
     if (isFetchCarHistory) {
-      return <SpinnerView containerStyle={{backgroundColor: '#fff'}} />;
+      return (
+        <SpinnerView
+          containerStyle={{backgroundColor: styleConst.color.white}}
+        />
+      );
     }
 
     if (isEmpty(carHistory) || !carHistory.items) {
@@ -366,7 +370,7 @@ class CarHistoryScreen extends Component {
     }
 
     return (
-      <ScrollView style={{backgroundColor: '#fff'}}>
+      <ScrollView style={{backgroundColor: styleConst.color.white}}>
         <StatusBar barStyle="dark-content" />
         <View>
           <StyleProvider style={getTheme()}>

@@ -15,6 +15,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 // helpers
 import PropTypes from 'prop-types';
 
+import styleConst from '../../../core/style-const';
 import strings from '../../../core/lang/const';
 
 const thumbs = [
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   removeIcon: {
-    color: '#fff',
+    color: styleConst.color.white,
   },
   photoShadow: {
     backgroundColor: 'rgba(0, 0, 0, 0.3)',

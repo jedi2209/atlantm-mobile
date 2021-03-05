@@ -71,6 +71,7 @@ export default {
   new: {
     // TODO: reeemmaee to bluee
     blueHeader: '#027aff',
+    mainbg: '#F8F8F8',
     passive: '#757575',
     shadowActive: {
       shadowOffset: {
@@ -96,6 +97,16 @@ export default {
         backgroundColor: 'transparent',
         elevation: 0,
       },
+    },
+  },
+  text: {
+    bigHead: {
+      color: '#222B45',
+      fontSize: 48,
+      fontWeight: 'bold',
+      fontFamily: 'HelveticaNeue-Medium',
+      marginHorizontal: 10,
+      marginBottom: 5,
     },
   },
 };

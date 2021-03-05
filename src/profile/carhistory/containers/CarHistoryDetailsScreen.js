@@ -34,7 +34,7 @@ const TABS = {
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
   },
   // section
   section: {
@@ -156,10 +156,10 @@ class CarHistoryDetailsScreen extends Component {
     Amplitude.logEvent('screen', 'lkk/carhistory/details');
 
     const {profile, navigation, actionFetchCarHistoryDetails} = this.props;
-    const vin = get(navigation, 'state.params.vin');
-    const title = get(navigation, 'state.params.title');
-    const workId = get(navigation, 'state.params.workId');
-    const workDealer = get(navigation, 'state.params.workDealer');
+    const vin = get(this.props.route, 'params.vin');
+    const title = get(this.props.route, 'params.title');
+    const workId = get(this.props.route, 'params.workId');
+    const workDealer = get(this.props.route, 'params.workDealer');
     const token = profile.SAP.TOKEN;
     const userid = profile.SAP.ID;
 
@@ -264,7 +264,11 @@ class CarHistoryDetailsScreen extends Component {
     console.log('== CarHistoryDetails ==');
 
     if (isFetchCarHistoryDetails) {
-      return <SpinnerView containerStyle={{backgroundColor: '#fff'}} />;
+      return (
+        <SpinnerView
+          containerStyle={{backgroundColor: styleConst.color.white}}
+        />
+      );
     }
 
     const works = get(details, 'works');

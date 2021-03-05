@@ -28,7 +28,7 @@ import strings from '../../../core/lang/const';
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
   },
   emptyText: {
     textAlign: 'center',
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.accordeonGrey1,
   },
   itemLevel3: {
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     marginBottom: 1,
   },
   label: {
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     height: styleConst.ui.footerHeightIphone,
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     borderTopWidth: styleConst.ui.borderWidth,
     borderTopColor: styleConst.color.border,
     marginVertical: 30,

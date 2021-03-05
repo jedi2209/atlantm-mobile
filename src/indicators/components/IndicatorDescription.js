@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
 });
 
-let IndicatorDescription = ({name, description}) => {
+const IndicatorDescription = ({name, description}) => {
   // избавляюсь в android от символов-артефактов
   const cleanDescription = description.trim();
 

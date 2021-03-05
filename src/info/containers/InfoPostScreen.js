@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     marginHorizontal: '10%',
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     fontFamily: styleConst.font.medium,
     fontSize: 16,
     letterSpacing: styleConst.ui.letterSpacing,
@@ -141,8 +141,7 @@ class InfoPostScreen extends Component {
   };
 
   onPressCallMe = () => {
-    const {navigation} = this.props;
-    const id = navigation.state.params.id;
+    const id = this.props.route.params.id;
     this.props.navigation.navigate('CallMeBackScreen', {actionID: id});
   };
 

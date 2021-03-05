@@ -59,7 +59,7 @@ class ReviewScreen extends Component {
     }
   }
 
-  getReview = () => get(this.props.navigation, 'state.params.review');
+  getReview = () => get(this.props.route, 'params.review');
 
   render() {
     const {

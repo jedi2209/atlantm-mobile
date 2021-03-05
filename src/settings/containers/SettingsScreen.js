@@ -41,8 +41,7 @@ import strings from '../../core/lang/const';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 20,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.new.mainbg,
   },
   VersionContainer: {
     width: '100%',
@@ -262,15 +261,7 @@ class SettingsScreen extends PureComponent {
         <ScrollView style={styles.container}>
           <Container style={styles.container}>
             <StatusBar hidden />
-            <Text
-              style={{
-                color: '#222B45',
-                fontSize: 48,
-                fontWeight: 'bold',
-                fontFamily: styleConst.font.medium,
-                marginHorizontal: 10,
-                marginBottom: 5,
-              }}>
+            <Text style={styleConst.text.bigHead}>
               {strings.Menu.main.settings}
             </Text>
             {this.props.dealerSelected.region === 'ua' ? (

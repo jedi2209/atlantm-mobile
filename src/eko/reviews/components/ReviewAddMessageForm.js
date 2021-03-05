@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   textarea: {
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     fontSize: 16,
     color: styleConst.color.greyText3,
     fontFamily: styleConst.font.light,

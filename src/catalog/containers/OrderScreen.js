@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     textTransform: 'uppercase',
     fontSize: 16,
   },
@@ -104,25 +104,25 @@ const mapDispatchToProps = {
 class OrderScreen extends Component {
   constructor(props) {
     super(props);
-    const isNewCar = get(this.props.navigation, 'state.params.isNewCar');
-    const orderedCar = get(this.props.navigation, 'state.params.car.ordered');
+    const isNewCar = get(this.props.route, 'params.isNewCar');
+    const orderedCar = get(this.props.route, 'params.car.ordered');
     let model = '';
     if (isNewCar) {
-      model = get(this.props.navigation, 'state.params.car.model');
+      model = get(this.props.route, 'params.car.model');
     } else {
-      model = get(this.props.navigation, 'state.params.car.model.name');
+      model = get(this.props.route, 'params.car.model.name');
     }
     const carName = [
-      get(this.props.navigation, 'state.params.car.brand'),
+      get(this.props.route, 'params.car.brand'),
       model,
-      get(this.props.navigation, 'state.params.car.complectation'),
-      !orderedCar ? get(this.props.navigation, 'state.params.car.year') : null,
+      get(this.props.route, 'params.car.complectation'),
+      !orderedCar ? get(this.props.route, 'params.car.year') : null,
       orderedCar ? 'или аналог' : null,
     ]
       .filter(Boolean)
       .join(' ');
 
-    const dealer = get(this.props.navigation, 'state.params.car.dealer');
+    const dealer = get(this.props.route, 'params.car.dealer');
     let listAll = [];
     if (dealer) {
       if (dealer.length) {
@@ -148,7 +148,7 @@ class OrderScreen extends Component {
       comment: '',
     };
 
-    // const region = get(this.props.navigation, 'state.params.region');
+    // const region = get(this.props.route, 'params.region');
 
     // let dealersList = null;
     // let dealersSelect = [];
@@ -330,19 +330,18 @@ class OrderScreen extends Component {
       return;
     }
 
-    const {navigation} = this.props;
     let dealerId = 0;
     const localDealer = get(data, 'DEALER', null);
     if (localDealer) {
       dealerId = localDealer;
     } else {
-      dealerId = get(navigation, 'state.params.car.dealer[0].id', null);
+      dealerId = get(this.props.route, 'params.car.dealer[0].id', null);
       if (!dealerId) {
-        dealerId = get(navigation, 'state.params.car.dealer.id', null);
+        dealerId = get(this.props.route, 'params.car.dealer.id', null);
       }
     }
-    const carId = get(navigation, 'state.params.carId');
-    const isNewCar = get(navigation, 'state.params.isNewCar');
+    const carId = get(this.props.route, 'params.carId');
+    const isNewCar = get(this.props.route, 'params.isNewCar');
 
     const action = await this.props.actionOrderCar({
       firstName: get(data, 'NAME'),
@@ -358,7 +357,7 @@ class OrderScreen extends Component {
     if (action && action.type) {
       switch (action.type) {
         case CATALOG_ORDER__SUCCESS:
-          const car = get(navigation, 'state.params.car');
+          const car = get(this.props.route, 'params.car');
           const {brand, model} = car;
           const path = isNewCar ? 'newcar' : 'usedcar';
           Amplitude.logEvent('order', `catalog/${path}`, {
@@ -379,7 +378,7 @@ class OrderScreen extends Component {
               {
                 text: 'ОК',
                 onPress() {
-                  navigation.goBack();
+                  this.props.navigation.goBack();
                 },
               },
             ],

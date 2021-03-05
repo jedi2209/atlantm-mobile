@@ -20,7 +20,7 @@ import strings from '../../core/lang/const';
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: styleConst.color.white,
+    backgroundColor: styleConst.new.mainbg,
   },
 });
 
@@ -88,7 +88,7 @@ class IndicatorsScreen extends Component {
     if (isRequest) {
       return (
         <SpinnerView
-          containerStyle={{backgroundColor: styleConst.color.white}}
+          containerStyle={{backgroundColor: styleConst.new.mainbg}}
         />
       );
     }
@@ -106,15 +106,7 @@ class IndicatorsScreen extends Component {
             ref={(scrollView) => {
               this.scrollView = scrollView;
             }}>
-            <Text
-              style={{
-                color: '#222B45',
-                fontSize: 48,
-                fontWeight: 'bold',
-                fontFamily: styleConst.font.medium,
-                marginHorizontal: 10,
-                marginBottom: 5,
-              }}>
+            <Text style={styleConst.text.bigHead}>
               {strings.Menu.main.indicators}
             </Text>
             {items.map((indicators, idx) => {

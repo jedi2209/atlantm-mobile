@@ -2,6 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 // import {enableScreens} from 'react-native-screens';
 // import {createNativeStackNavigator} from 'react-native-screens/native-stack';
+import {TransitionPresets} from '@react-navigation/stack';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import {Icon} from 'native-base';
 
@@ -22,8 +23,6 @@ import UsedCarFilterScreen from '../catalog/usedcar/containers/UsedCarFilterScre
 import TvaScreen from '../tva/containers/TvaScreen';
 import TvaResultsScreen from '../tva/containers/TvaResultsScreen';
 
-import HeaderIconBack from '../core/components/HeaderIconBack/HeaderIconBack';
-
 import {BottomTabNavigation} from '../menu/containers/BottomTabNavigation';
 
 // routes
@@ -32,7 +31,7 @@ import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
 
 // orders
 import ServiceContainer from '../service/containers/ServiceContainer';
-import ServiceScreenNewStep2 from '../service/containers/OnlineService/ServiceScreenNewStep2';
+import ServiceScreenStep2 from '../service/containers/OnlineService/ServiceScreenStep2';
 import OrderScreen from '../catalog/containers/OrderScreen';
 import TestDriveScreen from '../catalog/containers/TestDriveScreen';
 import OrderMyPriceScreen from '../catalog/containers/OrderMyPriceScreen';
@@ -48,6 +47,7 @@ import SettingsScreen from '../settings/containers/SettingsScreen';
 
 import strings from '../core/lang/const';
 import stylesHeader from '../core/components/Header/style';
+import styleConst from '../core/style-const';
 import {
   ClassicHeaderWhite,
   ClassicHeaderBlue,
@@ -80,11 +80,14 @@ export const Base = ({navigation, route}) => (
     <StackBase.Screen
       name="ChooseDealerScreen"
       component={ChooseDealerScreen}
-      options={ClassicHeaderBlue(
-        strings.ChooseDealerScreen.title,
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ModalTransition,
+        headerTitle: strings.ChooseDealerScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
     <StackBase.Screen
       name="MapScreen"
@@ -111,12 +114,31 @@ export const Base = ({navigation, route}) => (
     <StackBase.Screen
       name="TvaScreen"
       component={TVA}
-      options={{headerShown: false}}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.TvaScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
     {/* Заявки */}
     <StackOrders.Screen
       name="ServiceScreen"
       component={ServiceContainer}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.ServiceScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
+    />
+    <StackOrders.Screen
+      name="ServiceScreenStep2"
+      component={ServiceScreenStep2}
       options={ClassicHeaderWhite(
         strings.ServiceScreen.title,
         navigation,
@@ -130,72 +152,88 @@ export const Base = ({navigation, route}) => (
       options={{headerShown: false}}
     />
     <StackOrders.Screen
-      name="ServiceScreenNewStep2"
-      component={ServiceScreenNewStep2}
-      options={ClassicHeaderWhite(
-        strings.ServiceScreen.title,
-        navigation,
-        route,
-      )}
-    />
-    <StackOrders.Screen
       name="OrderScreen"
       component={OrderScreen}
-      options={ClassicHeaderWhite(strings.OrderScreen.title, navigation, route)}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.OrderScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
     <StackOrders.Screen
       name="TestDriveScreen"
       component={TestDriveScreen}
-      options={ClassicHeaderWhite(
-        strings.TestDriveScreen.title,
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.TestDriveScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
     <StackOrders.Screen
       name="OrderMyPriceScreen"
       component={OrderMyPriceScreen}
-      options={ClassicHeaderWhite(
-        strings.OrderMyPriceScreen.title,
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.OrderMyPriceScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
     <StackOrders.Screen
       name="OrderCreditScreen"
       component={OrderCreditScreen}
-      options={ClassicHeaderWhite(
-        strings.OrderCreditScreen.title,
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.OrderCreditScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
     <StackOrders.Screen
       name="OrderPartsScreen"
       component={OrderPartsScreen}
-      options={ClassicHeaderWhite(
-        strings.OrderPartsScreen.title,
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.OrderPartsScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
     <StackOrders.Screen
       name="CarCostScreen"
       component={CarCostScreen}
-      options={ClassicHeaderWhite(
-        strings.CarCostScreen.title,
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.CarCostScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
     <StackOrders.Screen
       name="CallMeBackScreen"
       component={CallMeBackScreen}
-      options={ClassicHeaderWhite(
-        strings.CallMeBackScreen.title,
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.CallMeBackScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
   </StackBase.Navigator>
 );
@@ -322,7 +360,7 @@ export const TVA = ({navigation, route}) => (
     <StackTVA.Screen
       name="TvaScreen"
       component={TvaScreen}
-      options={ClassicHeaderWhite(strings.TvaScreen.title, navigation, route)}
+      options={{headerShown: false}}
     />
     <StackTVA.Screen
       name="TvaResultsScreen"
@@ -338,7 +376,7 @@ export const TVA = ({navigation, route}) => (
 
 const styles = StyleSheet.create({
   UsedCarListIconFilter: {
-    color: '#fff',
+    color: styleConst.color.white,
     fontSize: 25,
     marginRight: 15,
   },

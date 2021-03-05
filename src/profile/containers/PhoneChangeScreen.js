@@ -432,7 +432,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderColor: 'gray',
     borderWidth: 1,
-    color: '#fff',
+    color: styleConst.color.white,
     backgroundColor: 'rgba(175, 175, 175, 0.7)',
     borderRadius: 5,
     fontSize: 80,

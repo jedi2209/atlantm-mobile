@@ -7,9 +7,9 @@ import orderFunctions from '../../utils/orders';
 // import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
+import {TransitionPresets} from '@react-navigation/stack';
 
 import LogoTitle from '../../core/components/LogoTitle';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 
 // screens
 import ContactsScreen from '../../contacts/containers/ContactsScreen';
@@ -42,6 +42,8 @@ import {
   ClassicHeaderWhite,
   ClassicHeaderBlue,
   BigCloseButton,
+  TransparentBack,
+  isTabBarVisible,
 } from '../../navigation/const';
 
 const styles = {
@@ -53,7 +55,7 @@ const styles = {
     },
     shadowOpacity: 0.25,
     shadowRadius: 1.0,
-    shadowColor: '#fff',
+    shadowColor: styleConst.color.white,
     elevation: 1,
   },
 };
@@ -125,7 +127,7 @@ const SearchStackView = ({navigation, route}) => (
                 type="FontAwesome"
                 name="filter"
                 style={{
-                  color: '#fff',
+                  color: styleConst.color.white,
                   fontSize: 25,
                   marginRight: 20,
                 }}
@@ -135,34 +137,30 @@ const SearchStackView = ({navigation, route}) => (
         ),
       }}
     />
-    <SearchStack.Screen name="NewCarItemScreen" component={NewCarItemScreen} />
+    <SearchStack.Screen
+      name="NewCarItemScreen"
+      component={NewCarItemScreen}
+      options={TransparentBack(navigation, route, {
+        ...TransitionPresets.DefaultTransition,
+        headerTitle: '',
+        tabBarVisible: isTabBarVisible(navigation, route),
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
+    />
     <SearchStack.Screen
       name="NewCarFilterScreen"
       component={NewCarFilterScreen}
-      options={{
-        headerTitle: strings.NewCarFilterScreen.title,
-        headerStyle: stylesHeader.common,
-        headerTitleStyle: {
-          fontWeight: '300',
-          color: '#000',
-        },
-        headerLeft: null,
-        headerRight: () => (
-          <Icon
-            type="AntDesign"
-            style={{
-              color: '#000',
-              fontWeight: 'lighter',
-              fontSize: 22,
-              marginRight: 14,
-            }}
-            name="close"
-            onPress={() => {
-              return navigation.popToTop();
-            }}
-          />
-        ),
-      }}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.CallMeBackScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
   </SearchStack.Navigator>
 );

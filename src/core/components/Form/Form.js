@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     height: 55,
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     textTransform: 'uppercase',
     fontSize: 16,
   },
@@ -1280,7 +1280,7 @@ class Form extends Component {
                 active={this.state.showSubmitButton ? true : false}
                 {...this.props.SubmitButton.props}>
                 {this.state.loading ? (
-                  <ActivityIndicator color="#fff" />
+                  <ActivityIndicator color={styleConst.color.white} />
                 ) : (
                   <>
                     {this.props.SubmitButton.iconLeft

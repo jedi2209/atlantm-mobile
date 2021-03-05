@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   buttonPrimary: {
     marginTop: 10,
     marginHorizontal: 20,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     borderColor: '#2E3A59',
     borderRadius: 5,
     borderStyle: 'solid',

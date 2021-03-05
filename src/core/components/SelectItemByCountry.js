@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
   },
   bodyView: {
     flexBasis: '60%',

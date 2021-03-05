@@ -66,11 +66,11 @@ export default StyleSheet.create({
     alignItems: 'center',
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
-    color: '#fff',
+    color: styleConst.color.white,
   },
   whiteHeader: {
     ...commonStyles,
-    backgroundColor: '#fff',
+    // backgroundColor: styleConst.color.white,
     color: styleConst.new.blueHeader,
     shadowRadius: 0,
     shadowOffset: {

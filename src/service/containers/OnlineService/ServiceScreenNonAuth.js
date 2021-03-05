@@ -85,7 +85,7 @@ class ServiceScreenNonAuth extends Component {
       carNumber: carNumber,
     };
 
-    const carFromNavigation = get(this.props.navigation, 'state.params.car');
+    const carFromNavigation = get(this.props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
       this.state.carVIN = carFromNavigation.vin;
       this.state.carBrand = get(carFromNavigation, 'brand');

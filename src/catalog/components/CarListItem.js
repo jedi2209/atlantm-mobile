@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   container: {
     marginHorizontal: '3%',
     marginVertical: 10,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     borderRadius: 5,
   },
   containerSpecial: {
@@ -110,13 +110,13 @@ const styles = StyleSheet.create({
   //   color: styleConst.color.greyText3,
   // },
   year: {
-    color: '#fff',
+    color: styleConst.color.white,
     fontSize: 12,
     zIndex: 2,
     marginVertical: 5,
   },
   title: {
-    color: '#fff',
+    color: styleConst.color.white,
     fontSize: 16,
     fontWeight: 'bold',
     zIndex: 2,
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   },
   commonReal: {
     fontSize: 13,
-    color: '#FFF',
+    color: styleConst.color.white,
     marginRight: 7,
   },
   saleContainer: {
@@ -263,7 +263,7 @@ class CarListItem extends Component {
               <Text
                 style={[
                   styles.price,
-                  {color: CarImgReal ? '#FFFFFF' : '#2A2A43'},
+                  {color: CarImgReal ? styleConst.color.white : '#2A2A43'},
                   styles.priceSpecial,
                 ]}>
                 {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
@@ -292,7 +292,7 @@ class CarListItem extends Component {
             style={[
               styles.price,
               {
-                color: CarImgReal ? '#FFFFFF' : '#2A2A43',
+                color: CarImgReal ? styleConst.color.white : '#2A2A43',
                 marginRight: 10,
               },
               isSale ? styles.priceDefault : null,

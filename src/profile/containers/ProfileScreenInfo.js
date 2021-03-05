@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.lightBlue,
   },
   buttonPrimaryText: {
-    color: '#fff',
+    color: styleConst.color.white,
     fontSize: 16,
     fontWeight: 'normal',
   },
@@ -299,7 +299,7 @@ class ProfileScreenInfo extends Component {
                     <Text
                       style={{
                         textAlign: 'center',
-                        color: '#fff',
+                        color: styleConst.color.white,
                         fontSize: 18,
                         paddingHorizontal: 20,
                       }}>
@@ -325,11 +325,11 @@ class ProfileScreenInfo extends Component {
                         style={[
                           styles.buttonPrimaryText,
                           {
-                            color: '#fff',
+                            color: styleConst.color.white,
                             fontSize: 14,
                             fontStyle: 'italic',
                             textDecorationStyle: 'dotted',
-                            textDecorationColor: '#fff',
+                            textDecorationColor: styleConst.color.white,
                             textDecorationLine: 'underline',
                             shadowOpacity: 0,
                             elevation: 0,
@@ -370,7 +370,7 @@ class ProfileScreenInfo extends Component {
                         }>
                         <View
                           style={{
-                            backgroundColor: '#fff',
+                            backgroundColor: styleConst.color.white,
                             width: 98,
                             height: 98,
                             borderRadius: 49,
@@ -401,7 +401,7 @@ class ProfileScreenInfo extends Component {
                         <View style={{flex: 1}}>
                           <Text
                             style={{
-                              color: '#fff',
+                              color: styleConst.color.white,
                               fontSize: 18,
                               marginBottom: 8,
                               fontWeight: '600',
@@ -410,7 +410,7 @@ class ProfileScreenInfo extends Component {
                           </Text>
                           <Text
                             style={{
-                              color: '#fff',
+                              color: styleConst.color.white,
                               fontSize: 12,
                               marginBottom: 16,
                               fontWeight: '600',
@@ -421,7 +421,7 @@ class ProfileScreenInfo extends Component {
                             <View>
                               <Text
                                 style={{
-                                  color: '#fff',
+                                  color: styleConst.color.white,
                                   fontSize: 16,
                                   fontWeight: '600',
                                 }}
@@ -435,7 +435,7 @@ class ProfileScreenInfo extends Component {
                               type="FontAwesome5"
                               name="angle-right"
                               style={{
-                                color: '#fff',
+                                color: styleConst.color.white,
                                 fontSize: 20,
                                 marginLeft: 8,
                               }}
@@ -492,7 +492,7 @@ class ProfileScreenInfo extends Component {
                         }}>
                         <View
                           style={{
-                            backgroundColor: '#fff',
+                            backgroundColor: styleConst.color.white,
                             width: 98,
                             height: 98,
                             borderRadius: 49,
@@ -522,7 +522,7 @@ class ProfileScreenInfo extends Component {
                         <View style={{flex: 1}}>
                           <Text
                             style={{
-                              color: '#fff',
+                              color: styleConst.color.white,
                               fontSize: 18,
                               marginBottom: 8,
                               fontWeight: '600',
@@ -531,7 +531,7 @@ class ProfileScreenInfo extends Component {
                           </Text>
                           <Text
                             style={{
-                              color: '#fff',
+                              color: styleConst.color.white,
                               fontSize: 12,
                               marginBottom: 16,
                               fontWeight: '600',
@@ -548,7 +548,7 @@ class ProfileScreenInfo extends Component {
                             <View>
                               <Text
                                 style={{
-                                  color: '#fff',
+                                  color: styleConst.color.white,
                                   fontSize: 16,
                                   fontWeight: '600',
                                 }}>
@@ -562,7 +562,7 @@ class ProfileScreenInfo extends Component {
                               type="FontAwesome5"
                               name="angle-right"
                               style={{
-                                color: '#fff',
+                                color: styleConst.color.white,
                                 fontSize: 20,
                                 marginLeft: 8,
                               }}

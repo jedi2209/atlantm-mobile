@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   buttonText: {
     textTransform: 'uppercase',
     fontSize: 16,
-    color: '#fff',
+    color: styleConst.color.white,
   },
 });
 
@@ -160,7 +160,7 @@ class ServiceScreenStep1 extends Component {
       carNumber: carNumber,
     };
 
-    const carFromNavigation = get(this.props.navigation, 'state.params.car');
+    const carFromNavigation = get(this.props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
       this.state.carVIN = carFromNavigation.vin;
       this.state.carBrand = get(carFromNavigation, 'brand');

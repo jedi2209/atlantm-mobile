@@ -107,7 +107,7 @@ class ServiceScreen extends Component {
       ].join(' ');
       this.state.carVIN = this.props.cars[0].vin;
     }
-    const carFromNavigation = get(this.props.navigation, 'state.params.car');
+    const carFromNavigation = get(this.props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
       this.state.carBrand = get(carFromNavigation, 'brand');
       this.state.carModel = get(carFromNavigation, 'model');
