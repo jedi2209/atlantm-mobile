@@ -382,7 +382,7 @@ class NewCarFilterScreen extends Component {
                         borderRadius: 0,
                         backgroundColor: checked
                           ? styleConst.color.lightBlue
-                          : '#fff',
+                          : styleConst.color.white,
                         borderColor: checked ? 'transparent' : '#d0d5dc',
                         fontSize: 40,
                       }}
@@ -527,7 +527,7 @@ class NewCarFilterScreen extends Component {
                         borderRadius: 0,
                         backgroundColor: checked
                           ? styleConst.color.lightBlue
-                          : '#fff',
+                          : styleConst.color.white,
                         borderColor: checked ? 'transparent' : '#d0d5dc',
                         fontSize: 40,
                       }}
@@ -595,7 +595,7 @@ class NewCarFilterScreen extends Component {
                         borderRadius: 0,
                         backgroundColor: checked
                           ? styleConst.color.lightBlue
-                          : '#fff',
+                          : styleConst.color.white,
                         borderColor: checked ? 'transparent' : '#d0d5dc',
                         fontSize: 40,
                       }}
@@ -635,7 +635,7 @@ class NewCarFilterScreen extends Component {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  backgroundColor: '#fff',
+                  backgroundColor: styleConst.color.white,
                   borderBottomWidth: expanded ? 0 : 1,
                   borderColor: '#d5d5e0',
                 }}>
@@ -662,7 +662,7 @@ class NewCarFilterScreen extends Component {
               return (
                 <View
                   style={{
-                    backgroundColor: '#fff',
+                    backgroundColor: styleConst.color.white,
                     paddingHorizontal: 16,
                     borderBottomWidth: 1,
                     borderBottomColor: '#d5d5e0',
@@ -693,7 +693,7 @@ class NewCarFilterScreen extends Component {
                   borderRadius: 5,
                 },
               ]}>
-              <Text style={{color: '#fff', fontSize: 16}}>
+              <Text style={{color: styleConst.color.white, fontSize: 16}}>
                 {strings.UsedCarFilterScreen.apply}
               </Text>
             </Button>

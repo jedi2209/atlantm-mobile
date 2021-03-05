@@ -22,6 +22,7 @@ import {
   StyleProvider,
   Accordion,
 } from 'native-base';
+import * as NavigationService from '../../../navigation/NavigationService';
 
 // redux
 import {connect} from 'react-redux';
@@ -33,7 +34,6 @@ import {
 } from '../../actions';
 
 // components
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import PhotoSlider from '../../../core/components/PhotoSlider';
 import PhotoViewer from '../../../core/components/PhotoViewer';
 import ColorBox from '../../../core/components/ColorBox';
@@ -130,7 +130,10 @@ const OptionPlate = ({
           {title}
         </Text>
         <Text
-          style={[{color: '#fff', fontSize: 14, fontWeight: '600'}, textStyle]}>
+          style={[
+            {color: styleConst.color.white, fontSize: 14, fontWeight: '600'},
+            textStyle,
+          ]}>
           {subtitle}
         </Text>
       </View>
@@ -151,29 +154,37 @@ class NewCarItemScreen extends Component {
     this.platesScrollView = React.createRef();
   }
 
-  static navigationOptions = ({navigation}) => ({
-    headerTransparent: true,
-    headerLeft: navigation.state.params.carDetails ? (
-      <HeaderIconBack
-        theme="white"
-        ContainerStyle={styleConst.headerBackButton.ContainerStyle}
-        IconStyle={styleConst.headerBackButton.IconStyle}
-        navigation={navigation}
-        returnScreen="NewCarListScreen"
-      />
-    ) : null,
-  });
-
   componentDidMount() {
-    const carId = get(this.props.navigation, 'state.params.carId');
+    const carId = get(this.props.route, 'params.carId');
 
-    this.props.actionFetchNewCarDetails(carId);
+    this.props.actionFetchNewCarDetails(carId).then((res) => {
+      if (res && res.type && res.payload) {
+        switch (res.type) {
+          case 'NEW_CAR_DETAILS__SUCCESS':
+            const carDetails = res.payload;
+            // const carName = [
+            //   get(carDetails, 'brand.name'),
+            //   get(carDetails, 'model.name'),
+            //   get(carDetails, 'model.year'),
+            //   get(carDetails, 'complectation.name'),
+            // ];
 
-    Amplitude.logEvent('screen', 'catalog/newcar/item', {
-      id_api: get(this.props.carDetails, 'id.api'),
-      id_sap: get(this.props.carDetails, 'id.sap'),
-      brand_name: get(this.props.carDetails, 'brand.name'),
-      model_name: get(this.props.carDetails, 'model.name'),
+            // this.props.navigation.setOptions({
+            //   headerTitle: carName.join(' '),
+            // });
+            NavigationService.dispatch(carDetails);
+
+            Amplitude.logEvent('screen', 'catalog/newcar/item', {
+              id_api: get(carDetails, 'id.api'),
+              id_sap: get(carDetails, 'id.sap'),
+              brand_name: get(carDetails, 'brand.name'),
+              model_name: get(carDetails, 'model.name'),
+            });
+            break;
+          default:
+            break;
+        }
+      }
     });
 
     if (this.props.carDetails && !this.props.isFetchingCarDetails) {
@@ -211,6 +222,22 @@ class NewCarItemScreen extends Component {
       get(carDetails, 'id.api') !== get(nextProps, 'carDetails.id.api')
     );
   }
+
+  onScroll = (event) => {
+    const {navigation, route} = this.props;
+    const currentOffset = event.nativeEvent.contentOffset.y;
+    const dif = currentOffset - (this.offset || 0);
+
+    if (dif < 0) {
+      navigation.setParams({showTabBar: true}) ||
+        NavigationService.dispatch({showTabBar: true});
+    } else {
+      navigation.setParams({showTabBar: false}) ||
+        NavigationService.dispatch({showTabBar: false});
+    }
+    console.log('route', route);
+    this.offset = currentOffset;
+  };
 
   onPressOrder = () => {
     const {navigation, carDetails, profile} = this.props;
@@ -578,11 +605,8 @@ class NewCarItemScreen extends Component {
       photoViewerItems,
       photoViewerVisible,
       isFetchingCarDetails,
+      route,
     } = this.props;
-
-    this.props.navigation.setParams({
-      carDetails: carDetails,
-    });
 
     const badge = get(carDetails, 'badge', []);
 
@@ -603,8 +627,8 @@ class NewCarItemScreen extends Component {
     }
 
     console.log('== NewCarItemScreen ==');
-
-    const currency = get(this.props.navigation, 'state.params.currency');
+    console.log('this.props.route', route);
+    const currency = get(route, 'params.currency');
     const brandName = get(carDetails, 'brand.name');
     const modelName = get(carDetails, 'model.name');
 
@@ -663,7 +687,11 @@ class NewCarItemScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <View style={styles.safearea}>
-          <ScrollView style={styles.safearea}>
+          <ScrollView
+            style={styles.safearea}
+            // scrollEventThrottle={0}
+            // onScroll={(e) => this.onScroll(e)}
+          >
             <StatusBar hidden />
             <View style={{flex: 1, position: 'relative'}}>
               <View
@@ -721,9 +749,9 @@ class NewCarItemScreen extends Component {
                   photos={photos}
                   resizeMode={CarImgReal ? 'cover' : null}
                   paginationStyle={{marginBottom: 35}}
-                  dotColor={CarImgReal ? '#fff' : null}
-                  onPressItem={this.onPressPhoto}
-                  onIndexChanged={this.onChangePhotoIndex}
+                  dotColor={CarImgReal ? styleConst.color.white : null}
+                  onPressItem={() => this.onPressPhoto}
+                  onIndexChanged={() => this.onChangePhotoIndex}
                 />
               </View>
 
@@ -734,7 +762,7 @@ class NewCarItemScreen extends Component {
                     position: 'relative',
                     marginTop: CarImgReal ? 335 : 335,
                     marginBottom: -5,
-                    backgroundColor: '#fff',
+                    backgroundColor: styleConst.color.white,
                     borderTopLeftRadius: 30,
                     borderTopRightRadius: 30,
                     paddingTop: 20,
@@ -1048,7 +1076,7 @@ class NewCarItemScreen extends Component {
                       flexDirection: 'row',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      backgroundColor: '#fff',
+                      backgroundColor: styleConst.color.white,
                       borderTopWidth: 0.75,
                       borderColor: '#d5d5e0',
                     }}>
@@ -1073,7 +1101,7 @@ class NewCarItemScreen extends Component {
                     <View
                       style={{
                         // height: 200,
-                        backgroundColor: '#fff',
+                        backgroundColor: styleConst.color.white,
                         paddingHorizontal: '3%',
                       }}>
                       {item.content}
@@ -1103,7 +1131,7 @@ class NewCarItemScreen extends Component {
                   name="steering"
                   selectable={false}
                   style={{
-                    color: '#ffffff',
+                    color: styleConst.color.white,
                     fontSize: 24,
                     marginTop: -2,
                   }}

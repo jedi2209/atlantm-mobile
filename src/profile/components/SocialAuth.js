@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     right: 5,
     marginRight: 0,
     marginLeft: 0,
-    color: '#fff',
+    color: styleConst.color.white,
   },
 });
 
@@ -243,7 +243,7 @@ class SocialAuth extends PureComponent {
             <Icon
               name="google"
               type="FontAwesome5"
-              style={{marginLeft: 0, color: '#fff'}}
+              style={{marginLeft: 0, color: styleConst.color.white}}
             />
             {im.google ? (
               <Icon
@@ -269,7 +269,11 @@ class SocialAuth extends PureComponent {
             <Icon
               name="facebook"
               type="FontAwesome5"
-              style={{marginLeft: 0, color: '#fff', fontSize: 35}}
+              style={{
+                marginLeft: 0,
+                color: styleConst.color.white,
+                fontSize: 35,
+              }}
             />
             {im.facebook ? (
               <Icon
@@ -297,7 +301,7 @@ class SocialAuth extends PureComponent {
               <Icon
                 name="vk"
                 type="FontAwesome5"
-                style={{marginLeft: 0, color: '#fff'}}
+                style={{marginLeft: 0, color: styleConst.color.white}}
               />
               {im.vk ? (
                 <Icon

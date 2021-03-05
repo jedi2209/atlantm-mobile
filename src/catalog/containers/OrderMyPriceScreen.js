@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     textTransform: 'uppercase',
     fontSize: 16,
   },
@@ -102,19 +102,19 @@ const mapDispatchToProps = {
 class OrderMyPriceScreen extends Component {
   constructor(props) {
     super(props);
-    const isNewCar = get(this.props.navigation, 'state.params.isNewCar');
-    const orderedCar = get(this.props.navigation, 'state.params.car.ordered');
+    const isNewCar = get(this.props.route, 'params.isNewCar');
+    const orderedCar = get(this.props.route, 'params.car.ordered');
     let model = '';
     if (isNewCar) {
-      model = get(this.props.navigation, 'state.params.car.model');
+      model = get(this.props.route, 'params.car.model');
     } else {
-      model = get(this.props.navigation, 'state.params.car.model.name');
+      model = get(this.props.route, 'params.car.model.name');
     }
     const carName = [
-      get(this.props.navigation, 'state.params.car.brand'),
+      get(this.props.route, 'params.car.brand'),
       model,
-      get(this.props.navigation, 'state.params.car.complectation'),
-      !orderedCar ? get(this.props.navigation, 'state.params.car.year') : null,
+      get(this.props.route, 'params.car.complectation'),
+      !orderedCar ? get(this.props.route, 'params.car.year') : null,
       orderedCar ? 'или аналог' : null,
     ]
       .filter(Boolean)
@@ -239,11 +239,9 @@ class OrderMyPriceScreen extends Component {
       return;
     }
 
-    const {navigation} = this.props;
-
-    const dealerId = get(navigation, 'state.params.dealerId');
-    const carId = get(navigation, 'state.params.carId');
-    const isNewCar = get(navigation, 'state.params.isNewCar');
+    const dealerId = get(this.props.route, 'params.dealerId');
+    const carId = get(this.props.route, 'params.carId');
+    const isNewCar = get(this.props.route, 'params.isNewCar');
     const action = await this.props.actionOrderMyPrice({
       firstName: get(data, 'NAME'),
       secondName: get(data, 'SECOND_NAME'),
@@ -258,7 +256,7 @@ class OrderMyPriceScreen extends Component {
     if (action && action.type) {
       switch (action.type) {
         case MYPRICE_ORDER__SUCCESS:
-          const car = get(navigation, 'state.params.car');
+          const car = get(this.props.route, 'params.car');
           const {brand, model} = car;
           const path = isNewCar ? 'newcar' : 'usedcar';
           Amplitude.logEvent('order', `catalog/${path}`, {
@@ -279,7 +277,7 @@ class OrderMyPriceScreen extends Component {
               {
                 text: 'ОК',
                 onPress() {
-                  navigation.goBack();
+                  this.props.navigation.goBack();
                 },
               },
             ],

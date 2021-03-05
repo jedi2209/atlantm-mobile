@@ -115,7 +115,7 @@ const modalStyles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
@@ -151,7 +151,7 @@ const modalStyles = StyleSheet.create({
     borderRadius: 5,
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     textTransform: 'uppercase',
     fontSize: 16,
   },

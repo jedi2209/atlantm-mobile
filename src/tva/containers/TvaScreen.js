@@ -116,8 +116,8 @@ class TvaScreen extends Component {
   }
 
   componentDidMount() {
-    const {navigation} = this.props;
-    const params = get(navigation, 'state.params', {});
+    const {navigation, route} = this.props;
+    const params = get(route, 'params', {});
 
     if (params.isPush) {
       this.onPressButton(params);

@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 14,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
   },
   header: {
     marginBottom: 10,
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     textTransform: 'uppercase',
     fontSize: 16,
   },
@@ -375,7 +375,7 @@ class ReestablishScreen extends React.Component {
                     onPress={this.state.loading ? undefined : this.onPressLogin}
                     style={[styles.button, styleConst.shadow.default]}>
                     {this.state.loading ? (
-                      <ActivityIndicator color="#fff" />
+                      <ActivityIndicator color={styleConst.color.white} />
                     ) : (
                       <Text style={styles.buttonText}>
                         {strings.ReestablishScreen.findMyData}

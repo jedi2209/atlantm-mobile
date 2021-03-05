@@ -1,9 +1,10 @@
 import React from 'react';
 import stylesHeader from '../core/components/Header/style';
 import HeaderIconBack from '../core/components/HeaderIconBack/HeaderIconBack';
+import styleConst from '../core/style-const';
 
 const ArrowBack = (navigation, route, AdditionalProps) => {
-  console.log('ArrowBack route', route);
+  console.log('ArrowBack route', navigation, route);
   return (
     <HeaderIconBack
       returnScreen={route?.params?.returnScreen}
@@ -12,7 +13,7 @@ const ArrowBack = (navigation, route, AdditionalProps) => {
   );
 };
 
-const ClassicHeaderWhite = (title, navigation, route) => {
+const ClassicHeaderWhite = (title, navigation, route, options) => {
   return {
     headerTitle: title ? title : null,
     headerStyle: [
@@ -27,10 +28,11 @@ const ClassicHeaderWhite = (title, navigation, route) => {
     headerLeft: () => {
       return ArrowBack(navigation, route);
     },
+    ...options,
   };
 };
 
-const ClassicHeaderBlue = (title, navigation, route) => {
+const ClassicHeaderBlue = (title, navigation, route, options) => {
   return {
     headerTitle: title ? title : null,
     headerStyle: [stylesHeader.common, stylesHeader.blueHeader],
@@ -38,10 +40,11 @@ const ClassicHeaderBlue = (title, navigation, route) => {
     headerLeft: () => {
       return ArrowBack(navigation, route, {theme: 'white'});
     },
+    ...options,
   };
 };
 
-const TransparentBack = (navigation, route) => {
+const TransparentBack = (navigation, route, options) => {
   return {
     headerTitle: null,
     headerTitleStyle: stylesHeader.transparentHeaderTitle,
@@ -53,15 +56,16 @@ const TransparentBack = (navigation, route) => {
         IconStyle: stylesHeader.headerBackButtonIcon,
       });
     },
+    ...options,
   };
 };
 
-const BigCloseButton = (navigation, route) => {
+const BigCloseButton = (navigation, route, options) => {
   return {
     headerStyle: [
       stylesHeader.resetBorder,
       {
-        backgroundColor: '#fff',
+        backgroundColor: styleConst.new.mainbg,
       },
     ],
     headerTitle: null,
@@ -76,7 +80,24 @@ const BigCloseButton = (navigation, route) => {
         },
       });
     },
+    ...options,
   };
+};
+
+const isTabBarVisible = (navigation, route) => {
+  console.log('route', route);
+  if (
+    !route ||
+    !route.state?.routes[route.index] ||
+    !route.state?.routes[route.index].params
+  ) {
+    return true;
+  }
+  let tabBarVisible = route.state?.routes[route.index].params
+    ? route.state?.routes[route.index].params.showTabBar
+    : true;
+
+  return tabBarVisible;
 };
 
 export {
@@ -85,4 +106,5 @@ export {
   ClassicHeaderWhite,
   TransparentBack,
   BigCloseButton,
+  isTabBarVisible,
 };

@@ -73,7 +73,7 @@ const _renderItem = (props) => {
     returnState,
     item,
   } = props;
-  const returnScreen = get(navigation, 'state.params.returnScreen');
+  const returnScreen = get(this.props.route, 'params.returnScreen');
 
   return (
     <SelectItemByCountry

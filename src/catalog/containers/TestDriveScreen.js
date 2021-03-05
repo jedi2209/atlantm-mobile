@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     textTransform: 'uppercase',
     fontSize: 16,
   },
@@ -121,19 +121,19 @@ const mapDispatchToProps = {
 class TestDriveScreen extends PureComponent {
   constructor(props) {
     super(props);
-    const orderedCar = get(this.props.navigation, 'state.params.car.ordered');
+    const orderedCar = get(this.props.route, 'params.car.ordered');
     let model = '';
     this.carName = [
-      get(this.props.navigation, 'state.params.car.brand'),
+      get(this.props.route, 'params.car.brand'),
       model,
-      get(this.props.navigation, 'state.params.car.complectation'),
-      !orderedCar ? get(this.props.navigation, 'state.params.car.year') : null,
+      get(this.props.route, 'params.car.complectation'),
+      !orderedCar ? get(this.props.route, 'params.car.year') : null,
       orderedCar ? 'или аналог' : null,
     ]
       .filter(Boolean)
       .join(' ');
 
-    const dealer = get(this.props.navigation, 'state.params.car.dealer');
+    const dealer = get(this.props.route, 'params.car.dealer');
     this.listAll = [];
     if (dealer && dealer.length > 1) {
       dealer.map((el) => {
@@ -153,7 +153,7 @@ class TestDriveScreen extends PureComponent {
 
     this.state = {
       date: null,
-      testDriveCar: get(this.props.navigation, 'state.params.carId'),
+      testDriveCar: get(this.props.route, 'params.carId'),
       TDCarsList: null,
       comment: '',
       dealerID: null,
@@ -191,13 +191,11 @@ class TestDriveScreen extends PureComponent {
       return;
     }
 
-    const {navigation} = this.props;
-
     const carID = this.state.testDriveCar;
     const dealerID = get(data, 'DEALER')
       ? get(data, 'DEALER')
       : this.state.dealerID;
-    const isNewCar = get(navigation, 'state.params.isNewCar');
+    const isNewCar = get(this.props.route, 'params.isNewCar');
     const time = get(data, 'DATETIME.time');
     // console.log('onPressOrder', this.state, carID, dealerID, data);
     // return true;
@@ -218,7 +216,7 @@ class TestDriveScreen extends PureComponent {
       if (action && action.type) {
         switch (action.type) {
           case TESTDRIVE_ORDER__SUCCESS: // отправляем online-запись на ТД
-            const car = get(navigation, 'state.params.car');
+            const car = get(this.props.route, 'params.car');
             const {brand, model} = car;
             const path = isNewCar ? 'newcar' : 'usedcar';
             Amplitude.logEvent('order', `testdrive/${path}`, {
@@ -239,7 +237,7 @@ class TestDriveScreen extends PureComponent {
                 {
                   text: 'ОК',
                   onPress() {
-                    navigation.goBack();
+                    this.props.navigation.goBack();
                   },
                 },
               ],
@@ -260,7 +258,7 @@ class TestDriveScreen extends PureComponent {
             if (actionLead && actionLead.type) {
               switch (actionLead.type) {
                 case TESTDRIVE_LEAD__SUCCESS:
-                  const car = get(navigation, 'state.params.car');
+                  const car = get(this.props.route, 'params.car');
                   const {brand, model} = car;
                   const path = isNewCar ? 'newcar' : 'usedcar';
                   Amplitude.logEvent('order', `testdrive/${path}`, {
@@ -281,7 +279,7 @@ class TestDriveScreen extends PureComponent {
                       {
                         text: 'ОК',
                         onPress() {
-                          navigation.goBack();
+                          this.props.navigation.goBack();
                         },
                       },
                     ],
@@ -319,7 +317,7 @@ class TestDriveScreen extends PureComponent {
       if (actionLead && actionLead.type) {
         switch (actionLead.type) {
           case TESTDRIVE_LEAD__SUCCESS:
-            const car = get(navigation, 'state.params.car');
+            const car = get(this.props.route, 'params.car');
             const {brand, model} = car;
             const path = isNewCar ? 'newcar' : 'usedcar';
             Amplitude.logEvent('order', `testdrive/${path}`, {
@@ -340,7 +338,7 @@ class TestDriveScreen extends PureComponent {
                 {
                   text: 'ОК',
                   onPress() {
-                    navigation.goBack();
+                    this.props.navigation.goBack();
                   },
                 },
               ],
@@ -379,7 +377,7 @@ class TestDriveScreen extends PureComponent {
 
   fetchTDCars = async (dealerID) => {
     this.setState({carFetch: true});
-    const tdcarsTmp = get(this.props.navigation, 'state.params.testDriveCars');
+    const tdcarsTmp = get(this.props.route, 'params.testDriveCars');
     let tdCarsApi = [];
     if (typeof tdcarsTmp !== 'undefined') {
       tdcarsTmp.map((el) => {

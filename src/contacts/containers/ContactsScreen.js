@@ -81,9 +81,14 @@ const styles = StyleSheet.create({
     fontSize: 22,
     marginTop: 3,
     marginRight: 10,
-    color: '#fff',
+    color: styleConst.color.white,
   },
-  addressText: {color: '#fff', fontSize: 16, lineHeight: 28, marginRight: '1%'},
+  addressText: {
+    color: styleConst.color.white,
+    fontSize: 16,
+    lineHeight: 28,
+    marginRight: '1%',
+  },
   scrollView: {paddingLeft: 20, zIndex: 3},
   scrollViewInner: {display: 'flex', flexDirection: 'row'},
   iconRow: {

@@ -646,9 +646,9 @@ class LoginScreen extends Component {
                           styles.ApproveButton,
                         ]}>
                         {this.state.loadingVerify ? (
-                          <ActivityIndicator color="#fff" />
+                          <ActivityIndicator color={styleConst.color.white} />
                         ) : (
-                          <Text style={{color: '#fff'}}>
+                          <Text style={{color: styleConst.color.white}}>
                             {strings.ProfileScreen.approve}
                           </Text>
                         )}
@@ -661,9 +661,9 @@ class LoginScreen extends Component {
                           styles.CancelButton,
                         ]}>
                         {this.state.loadingVerify ? (
-                          <ActivityIndicator color="#fff" />
+                          <ActivityIndicator color={styleConst.color.white} />
                         ) : (
-                          <Text style={{color: '#fff'}}>
+                          <Text style={{color: styleConst.color.white}}>
                             {strings.Base.cancel.toLowerCase()}
                           </Text>
                         )}
@@ -700,9 +700,9 @@ class LoginScreen extends Component {
                         },
                       ]}>
                       {this.state.loadingVerify ? (
-                        <ActivityIndicator color="#fff" />
+                        <ActivityIndicator color={styleConst.color.white} />
                       ) : (
-                        <Text style={{color: '#fff'}}>
+                        <Text style={{color: styleConst.color.white}}>
                           {strings.ProfileScreen.getCode}
                         </Text>
                       )}
@@ -771,7 +771,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderColor: 'gray',
     borderWidth: 1,
-    color: '#fff',
+    color: styleConst.color.white,
     backgroundColor: 'rgba(175, 175, 175, 0.7)',
     borderRadius: 5,
     fontSize: 50,

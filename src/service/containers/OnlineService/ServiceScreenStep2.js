@@ -42,19 +42,19 @@ const mapDispatchToProps = {
   orderService,
 };
 
-class ServiceScreen extends Component {
+class ServiceScreenStep2 extends Component {
   constructor(props) {
     super(props);
 
-    this.orderLead = get(this.props.navigation, 'state.params.orderLead');
-    this.service = get(this.props.navigation, 'state.params.service');
-    this.serviceInfo = get(this.props.navigation, 'state.params.serviceInfo');
-    this.dealer = get(this.props.navigation, 'state.params.dealer');
+    this.orderLead = get(this.props.route, 'params.orderLead');
+    this.service = get(this.props.route, 'params.service');
+    this.serviceInfo = get(this.props.route, 'params.serviceInfo');
+    this.dealer = get(this.props.route, 'params.dealer');
     this.car = {
-      carBrand: get(this.props.navigation, 'state.params.car.brand'),
-      carModel: get(this.props.navigation, 'state.params.car.model'),
-      carVIN: get(this.props.navigation, 'state.params.car.vin'),
-      carNumber: get(this.props.navigation, 'state.params.car.plate'),
+      carBrand: get(this.props.route, 'params.car.brand'),
+      carModel: get(this.props.route, 'params.car.model'),
+      carVIN: get(this.props.route, 'params.car.vin'),
+      carNumber: get(this.props.route, 'params.car.plate'),
     };
   }
 
@@ -310,4 +310,4 @@ class ServiceScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServiceScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ServiceScreenStep2);

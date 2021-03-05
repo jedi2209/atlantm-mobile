@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.blue,
   },
   button: {
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     bottom: '10%',
     width: '80%',
     marginHorizontal: '10%',

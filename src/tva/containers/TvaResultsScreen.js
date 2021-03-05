@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 14,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
   },
   header: {
     marginBottom: 36,
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     // borderColor: '#d8d8d8',
     // borderBottomWidth: 1,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     color: '#222b45',
     fontSize: 18,
   },
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     textTransform: 'uppercase',
     fontSize: 16,
   },
@@ -286,7 +286,7 @@ class TvaResultsScreen extends Component {
                         style={[
                           styles.group,
                           activeOrderId === item.id && {
-                            backgroundColor: '#fff',
+                            backgroundColor: styleConst.color.white,
                           },
                         ]}>
                         <Text style={styles.groupLabel}>№ {item.id}</Text>
@@ -346,7 +346,7 @@ class TvaResultsScreen extends Component {
                       }
                       style={[styleConst.shadow.default, styles.button]}>
                       {this.state.loading ? (
-                        <ActivityIndicator color="#fff" />
+                        <ActivityIndicator color={styleConst.color.white} />
                       ) : (
                         <Text style={styles.buttonText}>
                           {strings.Form.button.send}

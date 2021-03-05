@@ -10,8 +10,6 @@ export default StyleSheet.create({
   safearea: {
     flex: 1,
     position: 'relative',
-    // backgroundColor: styleConst.color.bg,
-    // backgroundColor: 'transparent',
   },
   gallery: {
     marginTop: 0,
@@ -92,7 +90,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     fontFamily: styleConst.font.medium,
     fontSize: 16,
     letterSpacing: styleConst.ui.letterSpacing,
@@ -130,7 +128,7 @@ export default StyleSheet.create({
     color: styleConst.color.greyBlueText,
   },
   tabTextActive: {
-    color: '#fff',
+    color: styleConst.color.white,
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
   },
@@ -173,7 +171,7 @@ export default StyleSheet.create({
     marginHorizontal: '2%',
     marginBottom: 10,
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     paddingVertical: 10,
     borderWidth: 1,
     borderRadius: 10,

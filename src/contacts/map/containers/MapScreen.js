@@ -111,28 +111,28 @@ class MapScreen extends Component {
   }
 
   componentDidMount() {
-    const {dealerSelected, navigation} = this.props;
+    const {dealerSelected, navigation, route} = this.props;
 
     let latitude, longitude, name, city, address;
 
-    if (get(navigation, 'state.params.coords')) {
-      latitude = Number(navigation.state.params.coords.lat);
-      longitude = Number(navigation.state.params.coords.lon);
+    if (get(route, 'params.coords')) {
+      latitude = Number(route.params.coords.lat);
+      longitude = Number(route.params.coords.lon);
     } else {
       latitude = Number(get(dealerSelected, 'coords.lat'));
       longitude = Number(get(dealerSelected, 'coords.lon'));
     }
 
-    if (get(navigation, 'state.params.name')) {
-      name = navigation.state.params.name;
+    if (get(route, 'params.name')) {
+      name = route.params.name;
     }
 
-    if (get(navigation, 'state.params.city')) {
-      city = navigation.state.params.city;
+    if (get(route, 'params.city')) {
+      city = route.params.city;
     }
 
-    if (get(navigation, 'state.params.address')) {
-      address = navigation.state.params.address;
+    if (get(route, 'params.address')) {
+      address = route.params.address;
     }
 
     const aspectRatio = width / height;

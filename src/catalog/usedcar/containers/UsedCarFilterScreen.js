@@ -177,7 +177,7 @@ class UsedCarFilterScreen extends Component {
                   }}
                   style={{
                     height: 44,
-                    backgroundColor: '#fff',
+                    backgroundColor: styleConst.color.white,
                     borderWidth: 0,
                     borderBottomWidth: 0,
                     paddingLeft: 5,
@@ -300,7 +300,7 @@ class UsedCarFilterScreen extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                backgroundColor: '#fff',
+                backgroundColor: styleConst.color.white,
                 borderBottomWidth: expanded ? 0 : 1,
                 borderColor: '#d5d5e0',
               }}>
@@ -328,7 +328,7 @@ class UsedCarFilterScreen extends Component {
               <View
                 style={{
                   // minHeight: 100,
-                  backgroundColor: '#fff',
+                  backgroundColor: styleConst.color.white,
                   paddingHorizontal: 16,
                   borderBottomWidth: 1,
                   borderBottomColor: '#d5d5e0',
@@ -370,7 +370,7 @@ class UsedCarFilterScreen extends Component {
                 color:
                   this.props.items.length && this.props.items[0].type
                     ? styleConst.color.lightBlue
-                    : '#fff',
+                    : styleConst.color.white,
                 fontSize: 16,
               }}>
               {this.props.items.length && this.props.items[0].type

@@ -20,10 +20,10 @@ const styles = StyleSheet.create({
     borderBottomColor: styleConst.color.border,
     paddingLeft: styleConst.ui.horizontalGap,
     justifyContent: 'flex-start',
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     fontSize: 18,
     fontFamily: styleConst.font.medium,
     letterSpacing: styleConst.ui.letterSpacing,
@@ -76,7 +76,9 @@ export default class ButtonFull extends PureComponent {
         style={[styleFooter.button, isWhiteTheme ? styles.buttonWhite : null]}>
         {isLoading ? (
           <ActivityIndicator
-            color={isWhiteTheme ? styleConst.color.lightBlue : '#fff'}
+            color={
+              isWhiteTheme ? styleConst.color.lightBlue : styleConst.color.white
+            }
             style={styles.spinnerButton}
           />
         ) : (

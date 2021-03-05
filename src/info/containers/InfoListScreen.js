@@ -253,7 +253,7 @@ class InfoListScreen extends Component {
           styleConst.shadow.default,
           {
             width: cardWidth,
-            backgroundColor: '#fff',
+            backgroundColor: styleConst.color.white,
             borderRadius: 5,
             marginVertical: 10,
             marginHorizontal: 10,

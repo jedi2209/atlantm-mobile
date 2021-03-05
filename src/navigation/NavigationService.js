@@ -15,6 +15,10 @@ const navigate = (name, params) => {
   _navigator.current?.navigate(name, params);
 };
 
+const dispatch = (params) => {
+  _navigator.current?.dispatch(CommonActions.setParams(params));
+};
+
 const goBack = () => {
   _navigator.current?.dispatch(CommonActions.goBack());
 };
@@ -37,6 +41,7 @@ const reset = (returnScreen, returnState) => {
 export {
   navigationRef,
   navigate,
+  dispatch,
   setTopLevelNavigator,
   // onNavigationStateChange,
   goBack,
