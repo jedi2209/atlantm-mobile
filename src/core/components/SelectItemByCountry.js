@@ -104,7 +104,7 @@ const _onPressDealerItem = (props) => {
     isLocal,
   } = props;
   // console.log('_onPressDealerItem props', props);
-  const mainScreen = 'ContactsScreen';
+  const mainScreen = 'Home';
   selectDealer({
     dealerBaseData: item,
     dealerSelected: selectedItem,

@@ -21,13 +21,11 @@ import NewCarFilterScreen from '../../catalog/newcar/containers/NewCarFilterScre
 import AuthContainer from '../../profile/containers/AuthContainer';
 import ProfileSettingsScreen from '../../profile/containers/ProfileSettingsScreen';
 import PhoneChangeScreen from '../../profile/containers/PhoneChangeScreen';
-import InfoListScreen from '../../info/containers/InfoListScreen';
 import TOHistory from '../../profile/carhistory/containers/CarHistoryScreen';
 import CarHistoryDetailsScreen from '../../profile/carhistory/containers/CarHistoryDetailsScreen';
 import BonusScreen from '../../profile/bonus/containers/BonusScreen';
 import BonusScreenInfo from '../../profile/bonus/containers/BonusInfoScreen';
 import DiscountsScreen from '../../profile/discounts/containers/DiscountsScreen';
-import InfoPostScreen from '../../info/containers/InfoPostScreen';
 import ReestablishScreen from '../../profile/containers/ReestablishScreen';
 
 import MoreScreen from './MenuScreenNew';
@@ -61,48 +59,9 @@ const styles = {
 };
 
 const Tab = createBottomTabNavigator();
-const ContactStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const SearchStack = createStackNavigator();
 const MoreStack = createStackNavigator();
-
-const ContactStackView = (navigation, route) => (
-  <ContactStack.Navigator initialRouteName="Home">
-    <ContactStack.Screen
-      name="Home"
-      component={ContactsScreen}
-      options={{
-        headerTransparent: true,
-        headerTitle: null,
-      }}
-    />
-    <ContactStack.Screen
-      name="InfoList"
-      component={InfoListScreen}
-      options={{
-        headerStyle: stylesHeader.blueHeader,
-        headerTitleStyle: stylesHeader.blueHeaderTitle,
-        headerLeft: () => {
-          return <ArrowBack theme="white" />;
-        },
-        headerTitle: (
-          <Text style={stylesHeader.blueHeaderTitle}>
-            {strings.InfoListScreen.title}
-          </Text>
-        ),
-      }}
-    />
-    <ContactStack.Screen
-      name="InfoPostScreen"
-      component={InfoPostScreen}
-      options={ClassicHeaderBlue(
-        strings.ChooseDealerScreen.title,
-        navigation,
-        route,
-      )}
-    />
-  </ContactStack.Navigator>
-);
 
 const SearchStackView = ({navigation, route}) => (
   <SearchStack.Navigator initialRouteName="NewCarListScreen">
@@ -136,31 +95,6 @@ const SearchStackView = ({navigation, route}) => (
           </View>
         ),
       }}
-    />
-    <SearchStack.Screen
-      name="NewCarItemScreen"
-      component={NewCarItemScreen}
-      options={TransparentBack(navigation, route, {
-        ...TransitionPresets.DefaultTransition,
-        headerTitle: '',
-        tabBarVisible: isTabBarVisible(navigation, route),
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    <SearchStack.Screen
-      name="NewCarFilterScreen"
-      component={NewCarFilterScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.CallMeBackScreen.title,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
     />
   </SearchStack.Navigator>
 );
@@ -304,15 +238,17 @@ export const BottomTabNavigation = ({navigation, route}) => {
       // labeled={true}
       // activeColor={styleConst.color.lightBlue}
       // inactiveColor={styleConst.new.passive}
-      initialRouteName="Contact"
+      initialRouteName="Home"
       tabBarOptions={{
         activeTintColor: styleConst.color.lightBlue,
         inactiveTintColor: styleConst.new.passive,
       }}>
       <Tab.Screen
-        name="Contact"
-        component={ContactStackView}
+        name="Home"
+        component={ContactsScreen}
         options={{
+          headerTransparent: true,
+          headerTitle: null,
           tabBarLabel: strings.Menu.bottom.dealer,
           tabBarIcon: ({color}) => (
             <Icon

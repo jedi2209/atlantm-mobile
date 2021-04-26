@@ -108,9 +108,9 @@ class InfoPostScreen extends Component {
   };
 
   componentDidMount() {
-    const {posts, navigation} = this.props;
+    const {posts, route} = this.props;
 
-    const id = navigation.state.params.id;
+    const id = route.params.id;
     const post = posts[id];
 
     if (!post) {
@@ -134,15 +134,16 @@ class InfoPostScreen extends Component {
   };
 
   getPost = () => {
-    const {posts, navigation} = this.props;
-    const id = navigation.state.params.id;
+    const {posts, route} = this.props;
+    const id = route.params.id;
 
     return posts[id];
   };
 
   onPressCallMe = () => {
-    const id = this.props.route.params.id;
-    this.props.navigation.navigate('CallMeBackScreen', {actionID: id});
+    const {navigation, route} = this.props;
+    const id = route.params.id;
+    navigation.navigate('CallMeBackScreen', {actionID: id});
   };
 
   processDate(date = {}) {
@@ -160,13 +161,12 @@ class InfoPostScreen extends Component {
   }
 
   _onRefresh = () => {
-    this.setState({refreshing: true});
+    const {route} = this.props;
 
-    this.props
-      .fetchInfoPost(this.props.navigation.state?.params.id)
-      .then(() => {
-        this.setState({refreshing: false});
-      });
+    this.setState({refreshing: true});
+    this.props.fetchInfoPost(route.params.id).then(() => {
+      this.setState({refreshing: false});
+    });
   };
 
   render() {

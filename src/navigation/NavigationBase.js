@@ -14,10 +14,17 @@ import ReviewsFilterRatingScreen from '../eko/reviews/containers/ReviewsFilterRa
 import ReviewAddMessageStepScreen from '../eko/reviews/containers/ReviewAddMessageStepScreen';
 import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRatingStepScreen';
 
+import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
+import NewCarFilterScreen from '../catalog/newcar/containers/NewCarFilterScreen';
+
 // Used Cars Catalog
 import UsedCarListScreen from '../catalog/usedcar/containers/UsedCarListScreen';
 import UsedCarItemScreen from '../catalog/usedcar/containers/UsedCarItemScreen';
 import UsedCarFilterScreen from '../catalog/usedcar/containers/UsedCarFilterScreen';
+
+import ContactsScreen from '../contacts/containers/ContactsScreen';
+import InfoListScreen from '../info/containers/InfoListScreen';
+import InfoPostScreen from '../info/containers/InfoPostScreen';
 
 // TVA
 import TvaScreen from '../tva/containers/TvaScreen';
@@ -53,6 +60,7 @@ import {
   ClassicHeaderBlue,
   BigCloseButton,
   TransparentBack,
+  isTabBarVisible,
 } from './const';
 
 // enableScreens();
@@ -64,6 +72,7 @@ const StackTVA = createStackNavigator();
 
 const StackBase = createStackNavigator();
 const StackOrders = createStackNavigator();
+const StackContacts = createStackNavigator();
 
 export const Base = ({navigation, route}) => (
   <StackBase.Navigator initialRouteName="BottomTabNavigation">
@@ -88,6 +97,25 @@ export const Base = ({navigation, route}) => (
           {color: '#222B45'},
         ],
       })}
+    />
+    <StackBase.Screen
+      name="ContactsScreen"
+      component={Contacts}
+      options={{headerShown: false}}
+    />
+    <StackBase.Screen
+      name="InfoList"
+      component={InfoListScreen}
+      options={ClassicHeaderWhite(
+        strings.InfoListScreen.title,
+        navigation,
+        route,
+      )}
+    />
+    <StackBase.Screen
+      name="InfoPostScreen"
+      component={InfoPostScreen}
+      options={ClassicHeaderBlue(null, navigation, route)}
     />
     <StackBase.Screen
       name="MapScreen"
@@ -117,6 +145,40 @@ export const Base = ({navigation, route}) => (
       options={BigCloseButton(navigation, route, {
         ...TransitionPresets.ScaleFromCenterAndroid,
         headerTitle: strings.TvaScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
+    />
+    <StackBase.Screen
+      name="NewCarItemScreen"
+      component={NewCarItemScreen}
+      options={TransparentBack(
+        navigation,
+        route,
+        {
+          ...TransitionPresets.ModalTransition,
+          headerTitle: '',
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        },
+        {
+          icon: 'close',
+          IconStyle: {
+            fontSize: 24,
+          },
+        },
+      )}
+    />
+    <StackBase.Screen
+      name="NewCarFilterScreen"
+      component={NewCarFilterScreen}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.NewCarFilterScreen.title,
         headerTitleStyle: [
           stylesHeader.transparentHeaderTitle,
           {color: '#222B45'},
@@ -236,6 +298,12 @@ export const Base = ({navigation, route}) => (
       })}
     />
   </StackBase.Navigator>
+);
+
+export const Contacts = ({navigation, route}) => (
+  <StackContacts.Navigator initialRouteName="ContactsScreen">
+    <StackContacts.Screen name="ContactsScreen" component={ContactsScreen} />
+  </StackContacts.Navigator>
 );
 
 export const EKO = ({navigation, route}) => (

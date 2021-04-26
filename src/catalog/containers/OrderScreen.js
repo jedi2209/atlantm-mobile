@@ -104,25 +104,25 @@ const mapDispatchToProps = {
 class OrderScreen extends Component {
   constructor(props) {
     super(props);
-    const isNewCar = get(this.props.route, 'params.isNewCar');
-    const orderedCar = get(this.props.route, 'params.car.ordered');
+    const isNewCar = get(props.route, 'params.isNewCar');
+    const orderedCar = get(props.route, 'params.car.ordered');
     let model = '';
     if (isNewCar) {
-      model = get(this.props.route, 'params.car.model');
+      model = get(props.route, 'params.car.model');
     } else {
-      model = get(this.props.route, 'params.car.model.name');
+      model = get(props.route, 'params.car.model.name');
     }
     const carName = [
-      get(this.props.route, 'params.car.brand'),
+      get(props.route, 'params.car.brand'),
       model,
-      get(this.props.route, 'params.car.complectation'),
-      !orderedCar ? get(this.props.route, 'params.car.year') : null,
+      get(props.route, 'params.car.complectation'),
+      !orderedCar ? get(props.route, 'params.car.year') : null,
       orderedCar ? 'или аналог' : null,
     ]
       .filter(Boolean)
       .join(' ');
 
-    const dealer = get(this.props.route, 'params.car.dealer');
+    const dealer = get(props.route, 'params.car.dealer');
     let listAll = [];
     if (dealer) {
       if (dealer.length) {
