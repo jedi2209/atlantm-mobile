@@ -91,9 +91,9 @@ export default StyleSheet.create({
   },
   headerBackButtonContainer: {
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    paddingHorizontal: isAndroid ? 5 : 0,
+    paddingHorizontal: isAndroid ? 5 : 5,
     paddingVertical: isAndroid ? 10 : 0,
-    borderRadius: 20,
+    borderRadius: 15,
     marginLeft: 5,
     marginTop: isAndroid ? 5 : 0,
     zIndex: 1000,

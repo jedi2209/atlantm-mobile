@@ -605,7 +605,6 @@ class ContactsScreen extends Component {
                       renderItem={(item) => {
                         return (
                           <Offer
-                            navigation={this.props.navigation.navigate}
                             key={`carousel-article-${item.hash}`}
                             data={item}
                             width={cardWidth}

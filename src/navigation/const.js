@@ -44,7 +44,7 @@ const ClassicHeaderBlue = (title, navigation, route, options) => {
   };
 };
 
-const TransparentBack = (navigation, route, options) => {
+const TransparentBack = (navigation, route, options, buttonOptions) => {
   return {
     headerTitle: null,
     headerTitleStyle: stylesHeader.transparentHeaderTitle,
@@ -54,6 +54,7 @@ const TransparentBack = (navigation, route, options) => {
         theme: 'white',
         ContainerStyle: stylesHeader.headerBackButtonContainer,
         IconStyle: stylesHeader.headerBackButtonIcon,
+        ...buttonOptions,
       });
     },
     ...options,

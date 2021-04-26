@@ -107,26 +107,26 @@ const mapDispatchToProps = {
 class OrderCreditScreen extends Component {
   constructor(props) {
     super(props);
-    this.isNewCar = get(this.props.route, 'params.isNewCar');
-    this.orderedCar = get(this.props.route, 'params.car.ordered');
+    this.isNewCar = get(props.route, 'params.isNewCar');
+    this.orderedCar = get(props.route, 'params.car.ordered');
     let model = '';
     if (this.isNewCar) {
-      model = get(this.props.route, 'params.car.model');
+      model = get(props.route, 'params.car.model');
     } else {
-      model = get(this.props.route, 'params.car.model.name');
+      model = get(props.route, 'params.car.model.name');
     }
     this.carName = [
-      get(this.props.route, 'params.car.brand'),
+      get(props.route, 'params.car.brand'),
       model,
-      get(this.props.route, 'params.car.complectation'),
-      !this.orderedCar ? get(this.props.route, 'params.car.year') : null,
+      get(props.route, 'params.car.complectation'),
+      !this.orderedCar ? get(props.route, 'params.car.year') : null,
       this.orderedCar ? 'или аналог' : null,
     ]
       .filter(Boolean)
       .join(' ');
 
-    this.carPrice = Number(get(this.props.route, 'params.car.price'));
-    this.region = get(this.props.route, 'params.region');
+    this.carPrice = Number(get(props.route, 'params.car.price'));
+    this.region = get(props.route, 'params.region');
 
     this.state = {
       date: '',

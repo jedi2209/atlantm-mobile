@@ -106,7 +106,7 @@ class CarCostScreen extends Component {
       success: false,
     };
 
-    const carFromNavigation = get(this.props.route, 'params.car');
+    const carFromNavigation = get(props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
       this.state.carVIN = carFromNavigation.vin;
       this.state.carBrand = get(carFromNavigation, 'brand');

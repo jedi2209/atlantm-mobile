@@ -61,11 +61,11 @@ const ChooseDealerScreen = (props) => {
     isFetchDealersList,
   } = props;
 
-  const goBack = get(this.props.route, 'params.goBack', false);
-  const isLocal = get(this.props.route, 'params.isLocal', false);
-  const returnScreen = get(this.props.route, 'params.returnScreen', null);
-  const returnState = get(this.props.route, 'params.returnState', null);
-  const listAll = get(this.props.route, 'params.listAll', null);
+  const goBack = get(props.route, 'params.goBack', false);
+  const isLocal = get(props.route, 'params.isLocal', false);
+  const returnScreen = get(props.route, 'params.returnScreen', null);
+  const returnState = get(props.route, 'params.returnState', null);
+  const listAll = get(props.route, 'params.listAll', null);
 
   if (props.listBrands && props.listBrands.length === 0) {
     props.fetchBrands();

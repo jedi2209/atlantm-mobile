@@ -1,12 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
-import {
-  View,
-  Keyboard,
-  StyleSheet,
-  TouchableOpacity,
-  ViewPropTypes,
-} from 'react-native';
+import React from 'react';
+import {View, Keyboard, StyleSheet, TouchableOpacity} from 'react-native';
 
 // components
 import * as NavigationService from '../../../navigation/NavigationService';
@@ -17,11 +11,9 @@ import styleConst from '../../style-const';
 import {Icon} from 'native-base';
 
 const containerSize = 40;
-const size = 20;
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: styleConst.ui.horizontalGap * 2,
-    paddingRight: styleConst.ui.horizontalGap * 2,
+    // paddingHorizontal: containerSize / 2,
     width: containerSize,
     height: containerSize,
     justifyContent: 'center',
@@ -33,13 +25,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    width: size,
-    height: size,
+    width: containerSize / 2,
+    height: containerSize / 2,
     resizeMode: 'contain',
   },
   arrowFont: {
     fontSize: 22,
-    width: 20,
+    // width: 22,
     // marginTop: 4,
   },
 });
