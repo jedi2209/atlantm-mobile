@@ -16,7 +16,11 @@ import Form from '../../core/components/Form/Form';
 
 // redux
 import {connect} from 'react-redux';
-import {actionSavePofile, actionGetPhoneCode} from '../actions';
+import {
+  actionSavePofile,
+  actionSaveProfileToAPI,
+  actionGetPhoneCode,
+} from '../actions';
 
 import {
   actionSetPushActionSubscribe,
@@ -66,6 +70,7 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
 
   actionSavePofile,
+  actionSaveProfileToAPI,
   actionGetPhoneCode,
 };
 
@@ -231,10 +236,9 @@ class PhoneChangeScreen extends PureComponent {
     }
     this.setState({loading: true, loadingVerify: true});
 
-    let profile = this.props.navigation.state?.params.userSocialProfile;
+    let profile = this.props.route.params.userSocialProfile;
     profile.phone = phone;
-
-    const typeUpdate = this.props.navigation.state?.params.type;
+    const typeUpdate = this.props.route.params.type;
 
     switch (typeUpdate) {
       case 'auth': // авторизация
@@ -272,6 +276,28 @@ class PhoneChangeScreen extends PureComponent {
                   type: 'warning',
                 });
               }
+              break;
+            case 'SAVE_PROFILE__NOPHONE': // пользователя нашли, но без телефона
+              delete profile.update;
+              const crmID = actionCheckUser.payload?.ID;
+              await this.props
+                .actionGetPhoneCode({
+                  phone,
+                  code,
+                  crmID,
+                })
+                .then((response) => {
+                  if (response.code === 200) {
+                    this.setState({loading: false});
+                    this.props.navigation.navigate('LoginScreen');
+                  } else {
+                    Toast.show({
+                      text: strings.Notifications.error.text,
+                      position: 'bottom',
+                      type: 'warning',
+                    });
+                  }
+                });
               break;
             case 'SAVE_PROFILE__UPDATE': // пользователя нашли
               this.setState({loading: false});

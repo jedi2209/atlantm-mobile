@@ -334,7 +334,7 @@ class LoginScreen extends Component {
           if (res.payload && res.payload.ID && res.payload.PHONE) {
             // нашли юзверя в CRM и у него есть телефон
             this.setState({loading: false});
-            this.props.navigation.goBack();
+            this.props.navigation.navigate('LoginScreen');
           }
           break;
         case 'SAVE_PROFILE__NOPHONE':

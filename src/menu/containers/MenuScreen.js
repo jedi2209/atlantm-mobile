@@ -73,27 +73,19 @@ const mapDispatchToProps = {
 };
 
 const MenuItem = (props) => {
-  const {
-    id,
-    selected,
-    type,
-    name,
-    icon,
-    navigateUrl,
-    returnScreen,
-  } = props.data;
+  const {id, selected, type, name, icon, navigate} = props.data;
   const {navigation, rowHeight} = props;
+
+  const params = {
+    ...navigate?.params,
+  };
 
   return (
     <ListItem
       key={`menu-list-item-${id}`}
       style={styles.ListItem}
       selected={selected}
-      onPress={() =>
-        navigation.navigate(navigateUrl, {
-          returnScreen: returnScreen ? returnScreen : 'MoreScreen',
-        })
-      }>
+      onPress={() => navigation.navigate(navigate?.url, params)}>
       <Left style={styles.Left}>
         <Button
           underlayColor={styles.buttonPrimaryText.color}
@@ -125,12 +117,14 @@ const MenuItem = (props) => {
   );
 };
 
-const MoreScreen = (props) => {
+const MenuScreen = (props) => {
   const menu = [
     {
       id: 1,
       name: strings.Menu.main.autocenter,
-      navigateUrl: 'Home',
+      navigate: {
+        url: 'Home',
+      },
       type: 'home',
       icon: <Image source={require('../assets/Home.svg')} />,
       selected: false,
@@ -138,7 +132,9 @@ const MoreScreen = (props) => {
     {
       id: 2,
       name: strings.Menu.main.actions,
-      navigateUrl: 'InfoList',
+      navigate: {
+        url: 'InfoList',
+      },
       type: 'sales',
       icon: <Image source={require('../assets/NewsFeeds.svg')} />,
       selected: false,
@@ -146,7 +142,9 @@ const MoreScreen = (props) => {
     {
       id: 3,
       name: strings.Menu.main.newcars,
-      navigateUrl: 'NewCarListScreen',
+      navigate: {
+        url: 'NewCarsListScreen',
+      },
       type: 'new',
       icon: <Image source={require('../assets/Car-new.svg')} />,
       selected: false,
@@ -154,7 +152,9 @@ const MoreScreen = (props) => {
     {
       id: 4,
       name: strings.Menu.main.usedcars,
-      navigateUrl: 'UsedCarListScreen',
+      navigate: {
+        url: 'UsedCarListScreen',
+      },
       type: 'not_new',
       icon: <Image source={require('../assets/Car-used.svg')} />,
       selected: false,
@@ -162,7 +162,9 @@ const MoreScreen = (props) => {
     {
       id: 7,
       name: strings.Menu.main.reviews,
-      navigateUrl: 'ReviewsScreen',
+      navigate: {
+        url: 'ReviewsScreen',
+      },
       type: 'reviews',
       icon: <Image source={require('../assets/Eko.svg')} />,
       selected: false,
@@ -170,7 +172,9 @@ const MoreScreen = (props) => {
     {
       id: 8,
       name: strings.Menu.main.indicators,
-      navigateUrl: 'IndicatorsScreen',
+      navigate: {
+        url: 'IndicatorsScreen',
+      },
       type: 'indicators',
       icon: <Image source={require('../assets/Indicators.svg')} />,
       selected: false,
@@ -178,11 +182,12 @@ const MoreScreen = (props) => {
     {
       id: 9,
       name: strings.Menu.main.settings,
-      navigateUrl: 'SettingsScreen',
+      navigate: {
+        url: 'SettingsScreen',
+      },
       type: 'settings',
       icon: <Image source={require('../assets/Settings.svg')} />,
       selected: false,
-      returnScreen: 'BottomTabNavigation',
     },
   ];
 
@@ -203,7 +208,9 @@ const MoreScreen = (props) => {
         {
           id: 5,
           name: strings.Menu.main.service,
-          navigateUrl: 'ServiceScreen',
+          navigate: {
+            url: 'ServiceScreen',
+          },
           type: 'service',
           icon: <Image source={require('../assets/Service.svg')} />,
           selected: false,
@@ -211,7 +218,9 @@ const MoreScreen = (props) => {
         {
           id: 6,
           name: strings.Menu.main.tva,
-          navigateUrl: 'TvaScreen',
+          navigate: {
+            url: 'TvaScreen',
+          },
           type: 'new',
           icon: <Image source={require('../assets/Car-lifter.svg')} />,
           selected: false,
@@ -258,4 +267,4 @@ const MoreScreen = (props) => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MoreScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(MenuScreen);

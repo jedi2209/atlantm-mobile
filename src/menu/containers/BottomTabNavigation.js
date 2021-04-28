@@ -1,22 +1,16 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
 import {Icon, ActionSheet} from 'native-base';
 import orderFunctions from '../../utils/orders';
 
 // import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createStackNavigator} from '@react-navigation/stack';
-import {TransitionPresets} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 
 import LogoTitle from '../../core/components/LogoTitle';
 
 // screens
 import ContactsScreen from '../../contacts/containers/ContactsScreen';
-
-import NewCarListScreen from '../../catalog/newcar/containers/NewCarListScreen';
-import NewCarItemScreen from '../../catalog/newcar/containers/NewCarItemScreen';
-import NewCarFilterScreen from '../../catalog/newcar/containers/NewCarFilterScreen';
 
 import AuthContainer from '../../profile/containers/AuthContainer';
 import ProfileSettingsScreen from '../../profile/containers/ProfileSettingsScreen';
@@ -28,7 +22,7 @@ import BonusScreenInfo from '../../profile/bonus/containers/BonusInfoScreen';
 import DiscountsScreen from '../../profile/discounts/containers/DiscountsScreen';
 import ReestablishScreen from '../../profile/containers/ReestablishScreen';
 
-import MoreScreen from './MenuScreenNew';
+import MenuScreen from './MenuScreen';
 
 // helpers
 import strings from '../../core/lang/const';
@@ -36,11 +30,9 @@ import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 
 import {
-  ArrowBack,
   ClassicHeaderWhite,
   ClassicHeaderBlue,
   BigCloseButton,
-  TransparentBack,
   isTabBarVisible,
 } from '../../navigation/const';
 
@@ -60,44 +52,7 @@ const styles = {
 
 const Tab = createBottomTabNavigator();
 const ProfileStack = createStackNavigator();
-const SearchStack = createStackNavigator();
-const MoreStack = createStackNavigator();
-
-const SearchStackView = ({navigation, route}) => (
-  <SearchStack.Navigator initialRouteName="NewCarListScreen">
-    <SearchStack.Screen
-      name="NewCarListScreen"
-      component={NewCarListScreen}
-      options={{
-        headerTitle: (
-          <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
-            {strings.NewCarListScreen.title}
-          </Text>
-        ),
-        headerStyle: stylesHeader.blueHeader,
-        headerTitleStyle: stylesHeader.blueHeaderTitle,
-        headerRight: () => (
-          <View style={stylesHeader.headerRightStyle}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('NewCarFilterScreen');
-              }}>
-              <Icon
-                type="FontAwesome"
-                name="filter"
-                style={{
-                  color: styleConst.color.white,
-                  fontSize: 25,
-                  marginRight: 20,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        ),
-      }}
-    />
-  </SearchStack.Navigator>
-);
+const MenuStack = createStackNavigator();
 
 const ProfileStackView = ({navigation, route}) => (
   <ProfileStack.Navigator
@@ -113,11 +68,14 @@ const ProfileStackView = ({navigation, route}) => (
     <ProfileStack.Screen
       name="PhoneChangeScreen"
       component={PhoneChangeScreen}
-      options={BigCloseButton(
-        strings.ProfileSettingsScreen.title,
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ModalTransition,
+        headerTitle: strings.ProfileSettingsScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
     <ProfileStack.Screen
       name="ProfileSettingsScreen"
@@ -181,11 +139,11 @@ const ProfileStackView = ({navigation, route}) => (
   </ProfileStack.Navigator>
 );
 
-const MoreStackView = ({navigation, route}) => (
-  <MoreStack.Navigator>
-    <MoreStack.Screen
-      name="MoreScreen"
-      component={MoreScreen}
+const MenuStackView = ({navigation, route}) => (
+  <MenuStack.Navigator>
+    <MenuStack.Screen
+      name="MenuScreen"
+      component={MenuScreen}
       options={{
         headerTitle: () => <LogoTitle />,
         headerStyle: {
@@ -194,7 +152,7 @@ const MoreStackView = ({navigation, route}) => (
         },
       }}
     />
-  </MoreStack.Navigator>
+  </MenuStack.Navigator>
 );
 
 const OrdersSheetStackView = () => {
@@ -267,7 +225,13 @@ export const BottomTabNavigation = ({navigation, route}) => {
 
       <Tab.Screen
         name="Search"
-        component={SearchStackView}
+        component={OrdersSheetStackView}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate('NewCarsListScreen');
+          },
+        }}
         options={{
           tabBarLabel: strings.Menu.bottom.search,
           tabBarIcon: ({color}) => (
@@ -332,8 +296,8 @@ export const BottomTabNavigation = ({navigation, route}) => {
       />
 
       <Tab.Screen
-        name="More"
-        component={MoreStackView}
+        name="Menu"
+        component={MenuStackView}
         options={{
           tabBarLabel: strings.Menu.bottom.menu,
           tabBarIcon: ({color}) => (

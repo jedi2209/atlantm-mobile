@@ -1,18 +1,23 @@
-import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, StatusBar} from 'react-native';
+import React, {PureComponent} from 'react';
+import {
+  ScrollView,
+  SafeAreaView,
+  StyleSheet,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {Content, StyleProvider} from 'native-base';
+import Form from '../../../core/components/Form/Form';
+import DealerCard from '../../../core/components/DealerCard';
 
 // redux
 import {connect} from 'react-redux';
 import {actionAddReviewPlusFill, actionAddReviewMinusFill} from '../../actions';
 
 // components
-import ReviewAddMessageForm from '../components/ReviewAddMessageForm';
-import FooterButton from '../../../core/components/FooterButton';
-import HeaderSubtitle from '../../../core/components/HeaderSubtitle';
+import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 
 // helpers
-import {get} from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import strings from '../../../core/lang/const';
@@ -20,7 +25,7 @@ import strings from '../../../core/lang/const';
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: styleConst.color.bg,
+    backgroundColor: '#eee',
   },
 });
 
@@ -38,59 +43,78 @@ const mapDispatchToProps = {
   actionAddReviewMinusFill,
 };
 
-class ReviewAddMessageStepScreen extends Component {
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
-
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen =
-          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
-          'ReviewAddMessageStepScreen';
-      }
-    }
-
-    return isActiveScreen;
+class ReviewAddMessageStepScreen extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.FormConfig = {
+      fields: {
+        groups: [
+          {
+            name: strings.ReviewAddMessageForm.label.plus,
+            fields: [
+              {
+                name: 'COMMENT_PLUS',
+                type: 'textarea',
+                label: '',
+                value: this.props.Text,
+                props: {
+                  placeholder: strings.ReviewAddMessageForm.placeholder.plus,
+                },
+              },
+            ],
+          },
+          {
+            name: strings.ReviewAddMessageForm.label.minus,
+            fields: [
+              {
+                name: 'COMMENT_MINUS',
+                type: 'textarea',
+                label: '',
+                value: this.props.Text,
+                props: {
+                  placeholder: strings.ReviewAddMessageForm.placeholder.minus,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    };
   }
 
-  componentDidMount() {}
-
-  onPressButton = () =>
-    this.props.navigation.navigate('ReviewAddRatingStepScreen');
+  onPressOrder = async ({COMMENT_MINUS, COMMENT_PLUS}) => {
+    this.props.navigation.navigate('ReviewAddRatingStepScreen', {
+      COMMENT_PLUS,
+      COMMENT_MINUS,
+    });
+  };
 
   render() {
-    const {
-      messagePlus,
-      messageMinus,
-      actionAddReviewPlusFill,
-      actionAddReviewMinusFill,
-      navigation,
-      dealerSelected,
-    } = this.props;
+    const {dealerSelected} = this.props;
 
     console.log('== ReviewAddMessageStepScreen ==');
 
     return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <StatusBar barStyle="light-content" />
-          <Content style={{paddingTop: 10}}>
-            <HeaderSubtitle content={dealerSelected.name} isBig={true} />
-            <ReviewAddMessageForm
-              messagePlus={messagePlus}
-              messageMinus={messageMinus}
-              messagePlusFill={actionAddReviewPlusFill}
-              messageMinusFill={actionAddReviewMinusFill}
-            />
-          </Content>
-          <FooterButton
-            text={strings.MessageForm.continue}
-            onPressButton={this.onPressButton}
-          />
-        </SafeAreaView>
-      </StyleProvider>
+      <KeyboardAvoidingView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView style={{flex: 1}}>
+            <DealerCard key={'DealerBlock'} item={dealerSelected} />
+            <Content
+              style={{
+                flex: 1,
+                paddingHorizontal: 14,
+                paddingTop: 20,
+              }}>
+              <Form
+                fields={this.FormConfig.fields}
+                barStyle={'light-content'}
+                SubmitButton={{text: strings.MessageForm.continue}}
+                onSubmit={this.onPressOrder}
+              />
+            </Content>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     );
   }
 }

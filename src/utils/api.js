@@ -857,10 +857,13 @@ export default {
       });
   },
 
-  loginWithPhone({phone, code}) {
+  loginWithPhone({phone, code, crmID}) {
     let body = `contact=${phone ? phone : ''}`;
     if (code) {
       body = body + `&code=${code ? code : ''}`;
+    }
+    if (crmID) {
+      body = body + `&crm_id=${crmID ? crmID : ''}`;
     }
 
     const requestParams = _.merge({}, baseRequestParams, {
