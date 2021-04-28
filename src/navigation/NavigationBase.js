@@ -1,9 +1,6 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-// import {enableScreens} from 'react-native-screens';
-// import {createNativeStackNavigator} from 'react-native-screens/native-stack';
-import {TransitionPresets} from '@react-navigation/stack';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {Icon} from 'native-base';
 
 // EKO
@@ -14,6 +11,7 @@ import ReviewsFilterRatingScreen from '../eko/reviews/containers/ReviewsFilterRa
 import ReviewAddMessageStepScreen from '../eko/reviews/containers/ReviewAddMessageStepScreen';
 import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRatingStepScreen';
 
+import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
 import NewCarFilterScreen from '../catalog/newcar/containers/NewCarFilterScreen';
 
@@ -56,6 +54,7 @@ import strings from '../core/lang/const';
 import stylesHeader from '../core/components/Header/style';
 import styleConst from '../core/style-const';
 import {
+  ArrowBack,
   ClassicHeaderWhite,
   ClassicHeaderBlue,
   BigCloseButton,
@@ -67,6 +66,7 @@ import {
 
 const StackEKO = createStackNavigator();
 const StackEKOAddReview = createStackNavigator();
+const SearchStack = createStackNavigator();
 const StackCatalogUsed = createStackNavigator();
 const StackTVA = createStackNavigator();
 
@@ -115,45 +115,6 @@ export const Base = ({navigation, route}) => (
     <StackBase.Screen
       name="InfoPostScreen"
       component={InfoPostScreen}
-      options={ClassicHeaderBlue(null, navigation, route)}
-    />
-    <StackBase.Screen
-      name="MapScreen"
-      component={MapScreen}
-      options={TransparentBack(navigation, route)}
-    />
-    <StackBase.Screen
-      name="IndicatorsScreen"
-      component={IndicatorsScreen}
-      options={BigCloseButton(navigation, route)}
-    />
-    <StackBase.Screen
-      name="SettingsScreen"
-      component={SettingsScreen}
-      options={BigCloseButton(navigation, route)}
-    />
-    {/* ЭКО */}
-    <StackBase.Screen
-      name="ReviewsScreen"
-      component={EKO}
-      options={{headerShown: false}}
-    />
-    {/* ТВА */}
-    <StackBase.Screen
-      name="TvaScreen"
-      component={TVA}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.TvaScreen.title,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    <StackBase.Screen
-      name="NewCarItemScreen"
-      component={NewCarItemScreen}
       options={TransparentBack(
         navigation,
         route,
@@ -174,16 +135,63 @@ export const Base = ({navigation, route}) => (
       )}
     />
     <StackBase.Screen
-      name="NewCarFilterScreen"
-      component={NewCarFilterScreen}
+      name="MapScreen"
+      component={MapScreen}
+      options={TransparentBack(navigation, route)}
+    />
+    <StackBase.Screen
+      name="IndicatorsScreen"
+      component={IndicatorsScreen}
+      options={BigCloseButton(navigation, route)}
+    />
+    <StackBase.Screen
+      name="SettingsScreen"
+      component={SettingsScreen}
+      options={BigCloseButton(navigation, route, {
+        headerLeft: () => {
+          return ArrowBack(
+            navigation,
+            {
+              params: {
+                returnScreen: 'BottomTabNavigation',
+              },
+            },
+            {
+              icon: 'md-close',
+              IconStyle: {
+                fontSize: 42,
+                width: 40,
+                color: '#222B45',
+              },
+            },
+          );
+        },
+      })}
+    />
+    {/* ЭКО */}
+    <StackBase.Screen
+      name="ReviewsScreen"
+      component={EKO}
+      options={{headerShown: false}}
+    />
+    {/* ТВА */}
+    <StackBase.Screen
+      name="TvaScreen"
+      component={TVA}
       options={BigCloseButton(navigation, route, {
         ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.NewCarFilterScreen.title,
+        headerTitle: strings.TvaScreen.title,
         headerTitleStyle: [
           stylesHeader.transparentHeaderTitle,
           {color: '#222B45'},
         ],
       })}
+    />
+    {/* НОВЫЕ АВТО */}
+    <StackBase.Screen
+      name="NewCarsListScreen"
+      component={NewCars}
+      options={{headerShown: false}}
     />
     {/* Заявки */}
     <StackOrders.Screen
@@ -344,7 +352,7 @@ export const EKO = ({navigation, route}) => (
       name="ReviewAddMessageStepScreen"
       component={ReviewAddMessageStepScreen}
       options={ClassicHeaderBlue(
-        strings.ReviewAddMessageStepScreen.title,
+        strings.ReviewAddMessageStepScreen.title + '\t[1 / 2]',
         navigation,
         route,
       )}
@@ -353,12 +361,85 @@ export const EKO = ({navigation, route}) => (
       name="ReviewAddRatingStepScreen"
       component={ReviewAddRatingStepScreen}
       options={ClassicHeaderBlue(
-        strings.ReviewAddRatingStepScreen.title,
+        strings.ReviewAddRatingStepScreen.title + '\t[2 / 2]',
         navigation,
         route,
       )}
     />
   </StackEKO.Navigator>
+);
+
+export const NewCars = ({navigation, route}) => (
+  <SearchStack.Navigator initialRouteName="NewCarListScreen">
+    <SearchStack.Screen
+      name="NewCarListScreen"
+      component={NewCarListScreen}
+      options={{
+        headerTitle: (
+          <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
+            {strings.NewCarListScreen.title}
+          </Text>
+        ),
+        headerStyle: stylesHeader.blueHeader,
+        headerTitleStyle: stylesHeader.blueHeaderTitle,
+        headerLeft: () => {
+          return ArrowBack(navigation, route, {theme: 'white'});
+        },
+        headerRight: () => (
+          <View style={stylesHeader.headerRightStyle}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('NewCarFilterScreen');
+              }}>
+              <Icon
+                type="FontAwesome"
+                name="filter"
+                style={{
+                  color: styleConst.color.white,
+                  fontSize: 25,
+                  marginRight: 20,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        ),
+      }}
+    />
+    <SearchStack.Screen
+      name="NewCarItemScreen"
+      component={NewCarItemScreen}
+      options={TransparentBack(
+        navigation,
+        route,
+        {
+          ...TransitionPresets.ModalTransition,
+          headerTitle: '',
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        },
+        {
+          icon: 'close',
+          IconStyle: {
+            fontSize: 24,
+          },
+        },
+      )}
+    />
+    <SearchStack.Screen
+      name="NewCarFilterScreen"
+      component={NewCarFilterScreen}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.NewCarFilterScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
+    />
+  </SearchStack.Navigator>
 );
 
 export const UsedCars = ({navigation, route}) => (
@@ -374,6 +455,9 @@ export const UsedCars = ({navigation, route}) => (
         ),
         headerStyle: stylesHeader.blueHeader,
         headerTitleStyle: stylesHeader.blueHeaderTitle,
+        headerLeft: () => {
+          return ArrowBack(navigation, route, {theme: 'white'});
+        },
         headerRight: () => (
           <View style={stylesHeader.headerRightStyle}>
             <TouchableOpacity
@@ -398,24 +482,14 @@ export const UsedCars = ({navigation, route}) => (
     <StackCatalogUsed.Screen
       name="UsedCarFilterScreen"
       component={UsedCarFilterScreen}
-      options={{
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
         headerTitle: strings.NewCarFilterScreen.title,
-        headerStyle: stylesHeader.common,
-        headerTitleStyle: {fontWeight: '200', color: '#000'},
-        headerRight: () => (
-          <Icon
-            type="AntDesign"
-            style={{
-              color: '#000',
-              fontWeight: 'lighter',
-              fontSize: 22,
-              marginRight: 14,
-            }}
-            name="close"
-            onPress={() => navigation.goBack()}
-          />
-        ),
-      }}
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
   </StackCatalogUsed.Navigator>
 );

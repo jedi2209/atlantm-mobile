@@ -1,13 +1,12 @@
 import React from 'react';
-import {Alert, View, StyleSheet} from 'react-native';
-import {Text, ListItem, Body} from 'native-base';
+import {Alert, StyleSheet} from 'react-native';
+import {ListItem} from 'native-base';
 import {connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 
 // components
 import * as NavigationService from '../../navigation/NavigationService';
-import Imager from '../components/Imager';
-import BrandLogo from '../../core/components/BrandLogo';
+import DealerCard from './DealerCard';
 
 // helpers
 import {get} from 'lodash';
@@ -25,59 +24,11 @@ import {selectDealer} from '../../dealer/actions';
 import strings from '../../core/lang/const';
 
 const styles = StyleSheet.create({
-  brands: {
-    flexDirection: 'row',
-    marginTop: 3,
-  },
-  brandLogo: {
-    marginRight: 10,
-    height: 25,
-  },
-  name: {
-    fontFamily: styleConst.font.regular,
-    fontSize: 16,
-    paddingTop: 5,
-    paddingBottom: 10,
-  },
-  city: {
-    color: styleConst.color.greyText,
-    fontFamily: styleConst.font.light,
-    fontSize: 14,
-  },
-  iconCheck: {
-    fontSize: 30,
-    color: styleConst.color.systemBlue,
-  },
-  site: {
-    fontSize: 12,
-    color: '#A8ABBE',
-    paddingVertical: 5,
-  },
-  image: {
-    width: '100%',
-    height: 110,
-    borderRadius: 5,
-  },
   listItem: {
     backgroundColor: '#F6F6F6',
     marginLeft: 0,
     paddingRight: 0,
     borderBottomWidth: 0,
-  },
-  body: {
-    display: 'flex',
-    alignItems: 'center',
-    flexDirection: 'row',
-    padding: 16,
-    backgroundColor: styleConst.color.white,
-  },
-  bodyView: {
-    flexBasis: '60%',
-  },
-  thumb: {
-    flexShrink: 1,
-    flexBasis: '40%',
-    marginLeft: 8,
   },
 });
 
@@ -150,26 +101,12 @@ const _onPressDealerItem = (props) => {
 //   navigation.goBack();
 // };
 
-const _getSite = (sites) => {
-  if (typeof sites === 'undefined') {
-    return null;
-  }
-
-  let res = [];
-
-  sites.split('\r\n').forEach((val) => {
-    res.push(val.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0]);
-  });
-  return res.join('\r\n');
-};
-
 const _renderDealer = (props) => {
   const {item} = props;
   if (item.virtual !== false && item.id !== 177) {
     // фикс для НЕ вывода виртуальных КО в списке
     return true;
   }
-  const CarImg = get(item, 'img.10000x440');
 
   return (
     <ListItem
@@ -184,41 +121,7 @@ const _renderDealer = (props) => {
           paddingBottom: 12,
         },
       ]}>
-      <Body style={styles.body}>
-        <View style={styles.bodyView}>
-          {item.name ? <Text style={styles.name}>{item.name}</Text> : null}
-          {item.city ? (
-            <Text style={styles.city}>
-              {item.city.name + ', ' + item.address}
-            </Text>
-          ) : null}
-          <Text style={styles.site}>{_getSite(item.site)}</Text>
-          <View style={styles.brands}>
-            {item.brands &&
-              item.brands.length &&
-              item.brands.map((brand) => {
-                return (
-                  <BrandLogo
-                    brand={brand.id}
-                    height={25}
-                    style={styles.brandLogo}
-                    key={'brandLogo' + brand.id}
-                  />
-                );
-              })}
-          </View>
-        </View>
-        {CarImg ? (
-          <View style={styles.thumb}>
-            <Imager
-              key={`dealer-cover-' + ${item.id}`}
-              style={styles.image}
-              resizeMode="cover"
-              source={{uri: CarImg}}
-            />
-          </View>
-        ) : null}
-      </Body>
+      <DealerCard item={item} />
     </ListItem>
   );
 };

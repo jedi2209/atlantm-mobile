@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+import {StyleProvider} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -20,6 +21,7 @@ import Imager from '../../core/components/Imager';
 
 // helpers
 import {get} from 'lodash';
+import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import processHtml from '../../utils/process-html';
 import Amplitude from '../../utils/amplitude-analytics';
@@ -30,17 +32,16 @@ import strings from '../../core/lang/const';
 // image
 const {width: screenWidth} = Dimensions.get('window');
 const IMAGE_WIDTH = screenWidth;
-const IMAGE_HEIGHT = 200;
+const IMAGE_HEIGHT = 300;
 
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: styleConst.color.bg,
   },
   spinner: {
     alignSelf: 'center',
     marginTop: verticalScale(60),
-    height: 200,
+    height: 300,
   },
   button: {
     backgroundColor: styleConst.color.lightBlue,
@@ -183,68 +184,69 @@ class InfoPostScreen extends Component {
     console.log('== InfoPost ==');
 
     return (
-      <View style={styles.safearea}>
-        <StatusBar hidden />
-        <Content
-          style={{margin: 0, padding: 0}}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this._onRefresh}
-            />
-          }>
-          {!text || this.state.refreshing ? (
-            <ActivityIndicator
-              color={styleConst.color.blue}
-              style={styles.spinner}
-            />
-          ) : (
-            <View>
-              <View style={styles.imageContainer} ref="imageContainer">
-                {imageUrl ? (
-                  <Imager
-                    resizeMode="cover"
-                    onLayout={this.onLayoutImage}
-                    style={[
-                      styles.image,
-                      {
-                        width: this.state.imageWidth,
-                        height: this.state.imageHeight,
-                      },
-                    ]}
-                    source={{uri: imageUrl}}
+      <StyleProvider style={getTheme()}>
+        <View style={styles.safearea}>
+          <Content
+            style={{margin: 0, marginTop: -50, padding: 0}}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh}
+              />
+            }>
+            {!text || this.state.refreshing ? (
+              <ActivityIndicator
+                color={styleConst.color.blue}
+                style={styles.spinner}
+              />
+            ) : (
+              <View>
+                <View style={styles.imageContainer} ref="imageContainer">
+                  {imageUrl ? (
+                    <Imager
+                      resizeMode="cover"
+                      onLayout={this.onLayoutImage}
+                      style={[
+                        styles.image,
+                        {
+                          width: this.state.imageWidth,
+                          height: this.state.imageHeight,
+                        },
+                      ]}
+                      source={{uri: imageUrl}}
+                    />
+                  ) : null}
+                </View>
+                <View
+                  style={styles.textContainer}
+                  onLayout={this.onLayoutWebView}>
+                  {date ? (
+                    <Text style={styles.date}>{this.processDate(date)}</Text>
+                  ) : null}
+                  <WebViewAutoHeight
+                    style={{
+                      backgroundColor: styleConst.color.bg,
+                    }}
+                    key={get(post, 'hash')}
+                    source={{html: text}}
+                    onMessage={this.onMessage}
                   />
-                ) : null}
+                </View>
               </View>
-              <View
-                style={styles.textContainer}
-                onLayout={this.onLayoutWebView}>
-                {date ? (
-                  <Text style={styles.date}>{this.processDate(date)}</Text>
-                ) : null}
-                <WebViewAutoHeight
-                  style={{
-                    backgroundColor: styleConst.color.bg,
-                  }}
-                  key={get(post, 'hash')}
-                  source={{html: text}}
-                  onMessage={this.onMessage}
-                />
-              </View>
-            </View>
-          )}
-        </Content>
-        <Button
-          full
-          uppercase={false}
-          title={strings.InfoPostScreen.button.callMe}
-          style={[styleConst.shadow.default, styles.button]}
-          onPress={this.onPressCallMe}>
-          <Text style={styles.buttonText}>
-            {strings.InfoPostScreen.button.callMe}
-          </Text>
-        </Button>
-      </View>
+            )}
+          </Content>
+          <Button
+            full
+            uppercase={false}
+            title={strings.InfoPostScreen.button.callMe}
+            style={[styleConst.shadow.default, styles.button]}
+            onPress={this.onPressCallMe}>
+            <Text style={styles.buttonText}>
+              {strings.InfoPostScreen.button.callMe}
+            </Text>
+          </Button>
+        </View>
+      </StyleProvider>
     );
   }
 }

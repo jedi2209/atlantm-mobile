@@ -3,7 +3,6 @@ import {
   Alert,
   View,
   StyleSheet,
-  Text,
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
@@ -120,8 +119,6 @@ const mapStateToProps = ({dealer, eko, nav, profile}) => {
     email: UserData.get('EMAIL')
       ? UserData.get('EMAIL')
       : UserData.get('EMAIL'),
-    messagePlus: eko.reviews.messagePlus,
-    messageMinus: eko.reviews.messageMinus,
     reviewAddRating: eko.reviews.reviewAddRating,
     reviewAddRatingVariant: eko.reviews.reviewAddRatingVariant,
     isReviewAddRequest: eko.reviews.meta.isReviewAddRequest,
@@ -138,6 +135,7 @@ const mapDispatchToProps = {
 class ReviewAddRatingStepScreen extends Component {
   constructor(props) {
     super(props);
+    this.reviewData = props.route?.params;
     this.FormConfig = {
       fields: {
         groups: [
@@ -232,6 +230,9 @@ class ReviewAddRatingStepScreen extends Component {
                 type: 'email',
                 label: strings.Form.field.label.email,
                 value: this.props.email,
+                props: {
+                  required: true,
+                },
               },
             ],
           },
@@ -265,11 +266,11 @@ class ReviewAddRatingStepScreen extends Component {
       dealerSelected,
       navigation,
       publicAgree,
-      messagePlus,
-      messageMinus,
       reviewAddRating,
       actionReviewAdd,
     } = this.props;
+
+    const {COMMENT_PLUS, COMMENT_MINUS} = this.reviewData;
 
     const name = [
       dataFromForm.NAME,
@@ -287,8 +288,8 @@ class ReviewAddRatingStepScreen extends Component {
       email: get(dataFromForm, 'EMAIL', ''),
       phone: get(dataFromForm, 'PHONE', ''),
       name: name,
-      messagePlus,
-      messageMinus,
+      messagePlus: COMMENT_PLUS,
+      messageMinus: COMMENT_MINUS,
       publicAgree,
       rating: get(dataFromForm, 'RATING', ''),
     }).then((action) => {

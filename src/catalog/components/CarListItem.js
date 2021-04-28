@@ -13,6 +13,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Imager from '../../core/components/Imager';
 import Badge from '../../core/components/Badge';
 import BrandLogo from '../../core/components/BrandLogo';
+import PhotoSlider from '../../core/components/PhotoSlider';
 
 // helpers
 import {get} from 'lodash';
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
   titleBackgroundold: {
     flex: 1,
     position: 'absolute',
-    zIndex: 1,
+    zIndex: 15,
     backgroundColor: 'black',
     opacity: 0.5,
     height: 50,
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
   },
   titleBackground: {
     flex: 1,
-    zIndex: 1,
+    zIndex: 15,
     position: 'absolute',
     backgroundColor: 'transparent',
     opacity: 1,
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 1,
-    zIndex: 2,
+    zIndex: 20,
     position: 'absolute',
     marginVertical: 5,
     marginHorizontal: '1%',
@@ -318,9 +319,68 @@ class CarListItem extends Component {
     );
   };
 
+  renderImage = () => {
+    const {car, ordered, itemScreen, resizeMode} = this.props;
+    let CarImgs = get(car, 'img.thumb.0');
+    let CarImgsReal = get(car, 'imgReal.thumb.0');
+    const isNewCar = itemScreen === 'NewCarItemScreen';
+    const isSale = car.sale === true;
+
+    if (typeof CarImgs === 'string' || typeof CarImgsReal === 'string') {
+      let path = CarImgsReal ? CarImgsReal : CarImgs;
+      return (
+        <>
+          <Imager
+            resizeMode={resizeMode ? resizeMode : 'cover'}
+            style={[
+              CarImgsReal ? styles.imageReal : styles.image,
+              ordered ? styles.ordered : null,
+            ]}
+            source={{
+              uri: path,
+            }}
+          />
+          {CarImgsReal ? (
+            <LinearGradient
+              start={{x: 1, y: 0}}
+              end={{x: 0, y: 0}}
+              useAngle
+              angle={itemScreen === 'NewCarItemScreen' ? 60 : 170}
+              // colors={['rgba(15, 102, 178, 1)', 'rgba(0, 97, 237, 0)']}
+              colors={['rgba(51, 51, 51, .4)', 'rgba(51, 51, 51, 0)']}
+              style={[
+                styles.priceBackground,
+                {height: isSale ? 80 : 60},
+                itemScreen === 'NewCarItemScreen' ? {width: '100%'} : null,
+              ]}
+            />
+          ) : null}
+        </>
+      );
+    } else {
+      let photos = [];
+      if (get(car, 'img.thumb')) {
+        get(car, 'img.thumb').forEach((element) => {
+          photos.push(element + '1000x440');
+        });
+      }
+      console.log('photos', photos);
+      return (
+        <PhotoSlider
+          height={CarImgsReal ? 300 : 220}
+          resizeMode={resizeMode ? resizeMode : 'cover'}
+          dotColor={styleConst.color.white}
+          photos={photos}
+          onPressItem={this.onPressPhoto}
+          paginationStyle={{marginBottom: 0}}
+          onIndexChanged={this.onChangePhotoIndex}
+        />
+      );
+    }
+  };
+
   render() {
     const {car, prices, itemScreen} = this.props;
-    let {resizeMode} = this.props;
     const modelName = get(car, 'model.name', '');
     const complectation = get(car, 'complectation.name', '');
     const engineVolume = get(car, 'engine.volume.full');
@@ -349,14 +409,9 @@ class CarListItem extends Component {
     const idSAP = get(car, 'id.sap', null);
     const isSale = car.sale === true;
     const isNewCar = itemScreen === 'NewCarItemScreen';
-    let CarImg = '';
     let CarImgReal = false;
-    if (get(car, 'imgReal.thumb.0')) {
-      CarImg = get(car, 'imgReal.thumb.0') + '1000x600c';
+    if (get(car, 'imgReal.thumb')) {
       CarImgReal = true;
-      resizeMode = 'cover';
-    } else {
-      CarImg = get(car, 'img.10000x440.0');
     }
     return (
       <TouchableHighlight
@@ -430,33 +485,7 @@ class CarListItem extends Component {
               </>
             )}
           </View>
-          {CarImg ? (
-            <Imager
-              resizeMode={resizeMode ? resizeMode : 'cover'}
-              style={[
-                CarImgReal ? styles.imageReal : styles.image,
-                ordered ? styles.ordered : null,
-              ]}
-              source={{
-                uri: CarImg,
-              }}
-            />
-          ) : null}
-          {CarImgReal ? (
-            <LinearGradient
-              start={{x: 1, y: 0}}
-              end={{x: 0, y: 0}}
-              useAngle
-              angle={itemScreen === 'NewCarItemScreen' ? 60 : 170}
-              // colors={['rgba(15, 102, 178, 1)', 'rgba(0, 97, 237, 0)']}
-              colors={['rgba(51, 51, 51, 0.4)', 'rgba(51, 51, 51, 0)']}
-              style={[
-                styles.priceBackground,
-                {height: isSale ? 80 : 60},
-                itemScreen === 'NewCarItemScreen' ? {width: '100%'} : null,
-              ]}
-            />
-          ) : null}
+          {this.renderImage()}
           <View
             style={[
               styles.price,

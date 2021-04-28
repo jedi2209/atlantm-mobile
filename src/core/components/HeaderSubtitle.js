@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   },
   bigText: {
     fontFamily: styleConst.font.regular,
-    marginBottom: 3,
+    marginVertical: 10,
   },
 });
 
@@ -47,7 +47,7 @@ export default class HeaderSubtitle extends Component {
   );
 
   render() {
-    const {content, isBig} = this.props;
+    const {content} = this.props;
 
     return (
       <View style={styles.container}>
