@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
-  StyleSheet,
-  View,
   Alert,
   TouchableWithoutFeedback,
   Keyboard,
@@ -11,7 +9,12 @@ import {
 import CarCostPhotos from '../components/CarCostPhotos';
 import {Content} from 'native-base';
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
-import {substractYears} from '../../../utils/date';
+import {
+  addDays,
+  dayMonthYear,
+  yearMonthDay,
+  substractYears,
+} from '../../../utils/date';
 import UserData from '../../../utils/user';
 
 import Form from '../../../core/components/Form/Form';
@@ -137,6 +140,7 @@ class CarCostScreen extends Component {
 
       const action = await this.props.actionCarCostOrder({
         dealerId: this.props.dealerSelected.id,
+        date: yearMonthDay(dataFromForm.DATE) || '',
         firstName: dataFromForm.NAME || '',
         secondName: dataFromForm.SECOND_NAME || '',
         lastName: dataFromForm.LAST_NAME || '',
@@ -214,6 +218,21 @@ class CarCostScreen extends Component {
                   goBack: false,
                   isLocal: true,
                   returnScreen: this.props.navigation.state?.routeName,
+                },
+              },
+              {
+                name: 'DATE',
+                type: 'date',
+                label: strings.Form.field.label.date,
+                value: null,
+                props: {
+                  placeholder:
+                    strings.Form.field.placeholder.date +
+                    ' ' +
+                    dayMonthYear(addDays(2)),
+                  required: true,
+                  minimumDate: new Date(addDays(2)),
+                  maximumDate: new Date(addDays(62)),
                 },
               },
             ],
