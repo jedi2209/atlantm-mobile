@@ -35,11 +35,12 @@ export default {
     return this.request('/brands/info/get/', baseRequestParams);
   },
 
-  fetchInfoList(region = 0, dealer = 0) {
-    return this.request(
-      `/info/actions/get/?region=${region}&dealer=${dealer}`,
-      baseRequestParams,
-    );
+  fetchInfoList(region = 0, dealer = 0, type = null) {
+    let url = `/info/actions/get/?region=${region}&dealer=${dealer}`;
+    if (type) {
+      url = url + `&type=${type}`;
+    }
+    return this.request(url, baseRequestParams);
   },
 
   fetchInfoPost(infoID) {

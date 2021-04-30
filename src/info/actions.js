@@ -17,17 +17,18 @@ import {ERROR_NETWORK} from '../core/const';
 
 import API from '../utils/api';
 
-export const fetchInfoList = (region, dealer) => {
+export const fetchInfoList = (region, dealer, type) => {
   return (dispatch) => {
     dispatch({
       type: INFO_LIST__REQUEST,
       payload: {
         region,
         dealer,
+        type,
       },
     });
 
-    return API.fetchInfoList(region, dealer)
+    return API.fetchInfoList(region, dealer, type)
       .then((res) => {
         if (!res) {
           return dispatch({
@@ -50,7 +51,7 @@ export const fetchInfoList = (region, dealer) => {
         if (res) {
           return dispatch({
             type: INFO_LIST__SUCCESS,
-            payload: res.data || [],
+            payload: {data: res.data || [], filters: res.filters || []},
           });
         }
       })
@@ -95,6 +96,7 @@ export const fetchInfoPost = (infoID) => {
             text: _.get(data, '0.text', ''),
             date: _.get(data, '0.date', ''),
             img: _.get(data, '0.img', ''),
+            type: _.get(data, '0.type', ''),
           },
         });
       })
