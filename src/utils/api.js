@@ -802,7 +802,7 @@ export default {
     @property {Object} profile
     @propery {'fb'|'vk'|'ok'|'tw'|'im'|'ya'|'gl'} profile.networkName
   */
-  loginWith(profile) {
+  async loginWith(profile) {
     const {
       id,
       email,
@@ -845,7 +845,7 @@ export default {
       body,
     });
 
-    return this.request('/lkk/auth/social/', requestParams)
+    return await this.request('/lkk/auth/social/', requestParams)
       .then((response) => {
         if (response.data && response.data.profile) {
           response.data.profile = profile;
@@ -857,7 +857,7 @@ export default {
       });
   },
 
-  loginWithPhone({phone, code, crmID}) {
+  async loginWithPhone({phone, code, crmID}) {
     let body = `contact=${phone ? phone : ''}`;
     if (code) {
       body = body + `&code=${code ? code : ''}`;
@@ -874,7 +874,7 @@ export default {
       body,
     });
 
-    return this.request('/lkk/auth/validate/', requestParams)
+    return await this.request('/lkk/auth/validate/', requestParams)
       .then((response) => {
         return response;
       })
@@ -883,8 +883,8 @@ export default {
       });
   },
 
-  getProfile(id) {
-    return this.request(`/lkk/user/${id}/`, baseRequestParams)
+  async getProfile(id) {
+    return await this.request(`/lkk/user/${id}/`, baseRequestParams)
       .then((response) => {
         console.log('getProfile >>>>>>>>', response);
         return response.data;
@@ -894,7 +894,7 @@ export default {
       });
   },
 
-  updateProfile(profile) {
+  async updateProfile(profile) {
     // console.log('profile', profile);
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PATCH',
@@ -918,7 +918,7 @@ export default {
       return false;
     }
 
-    return this.request(`/lkk/user/${profile.ID}/`, requestParams)
+    return await this.request(`/lkk/user/${profile.ID}/`, requestParams)
       .then((response) => {
         return response;
       })
@@ -1000,7 +1000,7 @@ export default {
     return this.request('/service/order/', requestParams);
   },
 
-  request(path, requestParams) {
+  async request(path, requestParams) {
     const url = `${API_MAIN_URL}${path}`;
 
     // Если включен debug режим, добавляем в каждый запрос заголовок `Debug`
@@ -1009,7 +1009,7 @@ export default {
     } else {
       delete requestParams.headers.Debug;
     }
-    return this.apiGetData(url, requestParams);
+    return await this.apiGetData(url, requestParams);
   },
 
   async apiGetData(url, requestParams) {

@@ -355,7 +355,7 @@ class Form extends Component {
     }
     this.allFields.map((val, index) => {
       valid = true;
-      console.log('this.state' + val.name, this.state[val.name]);
+      // console.log('this.state' + val.name, this.state[val.name]);
       if (
         this.state[val.name] &&
         this.state[val.name] !== null &&
@@ -1245,7 +1245,7 @@ class Form extends Component {
                 block
                 {...(this.props.SubmitButton.iconLeft ? 'iconLeft' : null)}
                 {...(this.props.SubmitButton.iconRight ? 'iconRight' : null)}
-                onPress={() => {
+                onPress={async () => {
                   if (!this.state.loading) {
                     if (!this.props.onSubmit) {
                       console.log(
@@ -1253,21 +1253,24 @@ class Form extends Component {
                       );
                       console.log('this.props', this.props);
                       console.log('onSubmit handler', this.state);
-                    } else {
-                      if (this._validate()) {
-                        this.setState({loading: true});
-                        const response = async () => {
-                          return new Promise((resolve, reject) => {
-                            const answer = this.props.onSubmit(this.state);
-                            if (answer) {
-                              resolve(answer);
-                            }
-                          });
-                        };
-                        response().then(() => {
+                      return false;
+                    }
+                    if (this._validate()) {
+                      this.setState({loading: true});
+                      var promise = new Promise((resolve, reject) => {
+                        return this.props.onSubmit(this.state).then((data) => {
+                          resolve(data);
+                        });
+                      });
+                      promise
+                        .then((data) => {
+                          this.setState({loading: false});
+                          return data;
+                        })
+                        .catch((error) => {
+                          console.error(error);
                           this.setState({loading: false});
                         });
-                      }
                     }
                   }
                 }}
