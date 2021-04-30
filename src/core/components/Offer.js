@@ -4,6 +4,7 @@ import React from 'react';
 import {TouchableWithoutFeedback, View, Text, StyleSheet} from 'react-native';
 import * as NavigationService from '../../navigation/NavigationService';
 
+import Badge from '../../core/components/Badge';
 import Imager from '../components/Imager';
 
 const styles = StyleSheet.create({
@@ -31,6 +32,7 @@ export const Offer = ({data, height, cardWidth, theme}) => {
   const params = {
     id: data.item.id,
     date: data.item.date,
+    type: data.item?.type,
   };
   return (
     <TouchableWithoutFeedback
@@ -66,6 +68,23 @@ export const Offer = ({data, height, cardWidth, theme}) => {
           ]}>
           {data.item.name}
         </Text>
+        {data.item.type?.badge ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 3,
+              paddingHorizontal: theme === 'round' ? 9 : 0,
+            }}>
+            <Badge
+              id={params.id}
+              key={'badgeItem' + params.id}
+              index={0}
+              bgColor={data.item.type?.badge?.[0]}
+              name={data.item.type.name}
+              textColor={data.item.type?.badge?.[1]}
+            />
+          </View>
+        ) : null}
         {theme === 'round' && (
           <Text
             style={[

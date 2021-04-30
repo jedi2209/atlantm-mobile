@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {
   View,
   Text,
-  StatusBar,
   Linking,
   Dimensions,
   StyleSheet,
@@ -18,6 +17,7 @@ import {fetchInfoPost, callMeForInfo} from '../actions';
 import {Content, Button} from 'native-base';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
 import Imager from '../../core/components/Imager';
+import Badge from '../../core/components/Badge';
 
 // helpers
 import {get} from 'lodash';
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({dealer, info, profile}) => {
   return {
-    list: info.list,
+    list: info.list?.data,
     posts: info.posts,
     name: profile.name,
     phone: profile.phone,
@@ -176,6 +176,7 @@ class InfoPostScreen extends Component {
     const img = get(post, 'img');
     const imageUrl = get(img, '10000x440');
     const date = get(post, 'date');
+    const type = get(post, 'type');
 
     if (text) {
       text = processHtml(text, this.state.webViewWidth);
@@ -222,6 +223,23 @@ class InfoPostScreen extends Component {
                   onLayout={this.onLayoutWebView}>
                   {date ? (
                     <Text style={styles.date}>{this.processDate(date)}</Text>
+                  ) : null}
+                  {type && type.badge ? (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        marginTop: 3,
+                        paddingHorizontal: 9,
+                      }}>
+                      <Badge
+                        id={type.id}
+                        key={'badgeItem' + type.id}
+                        index={0}
+                        bgColor={type?.badge?.[0]}
+                        name={type.name}
+                        textColor={type?.badge?.[1]}
+                      />
+                    </View>
                   ) : null}
                   <WebViewAutoHeight
                     style={{

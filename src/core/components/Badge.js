@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {TouchableHighlight, View, Text, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import styleConst from '../style-const';
 
@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     paddingVertical: 3,
     borderRadius: 5,
-    marginLeft: 4,
+    marginRight: 4,
   },
   badgeName: {
     fontFamily: styleConst.font.regular,
@@ -17,11 +17,32 @@ const styles = StyleSheet.create({
 });
 
 const Badge = (props) => {
-  return (
-    <View style={[styles.badgeContainer, {backgroundColor: props.bgColor}]}>
+  return props?.onPress ? (
+    <TouchableHighlight
+      activeOpacity={0.6}
+      underlayColor="#DDDDDD"
+      onPressOut={props.onPress}
+      style={[
+        styles.badgeContainer,
+        {backgroundColor: props.bgColor},
+        props.badgeContainerStyle,
+      ]}>
       <Text
         selectable={false}
-        style={[styles.badgeName, {color: props.textColor}]}>
+        style={[styles.badgeName, {color: props.textColor}, props.textStyle]}>
+        {props.name}
+      </Text>
+    </TouchableHighlight>
+  ) : (
+    <View
+      style={[
+        styles.badgeContainer,
+        {backgroundColor: props.bgColor},
+        props.badgeContainerStyle,
+      ]}>
+      <Text
+        selectable={false}
+        style={[styles.badgeName, {color: props.textColor}, props.textStyle]}>
         {props.name}
       </Text>
     </View>

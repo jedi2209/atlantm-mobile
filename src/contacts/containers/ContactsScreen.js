@@ -33,6 +33,7 @@ import {callMe} from '../actions';
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList, actionListReset} from '../../info/actions';
 import {actionAppRated, actionMenuOpenedCount} from '../../core/actions';
+import {Offer} from '../../core/components/Offer';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
@@ -135,10 +136,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const deviceWidth = Dimensions.get('window').width;
+const deviceWidth = Number(Dimensions.get('window').width) || 350;
 const cardWidth = deviceWidth - 50;
-
-import {Offer} from '../../core/components/Offer';
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
@@ -571,7 +570,7 @@ class ContactsScreen extends Component {
                 </View>
               </ScrollView>
               {!isFetchInfoList ? (
-                list.length ? (
+                list && list.length ? (
                   <View
                     style={{
                       marginTop: 16,
@@ -613,9 +612,9 @@ class ContactsScreen extends Component {
                         );
                       }}
                       sliderWidth={deviceWidth}
+                      itemWidth={cardWidth}
                       inactiveSlideScale={0.97}
                       activeSlideAlignment={'center'}
-                      itemWidth={cardWidth}
                     />
                   </View>
                 ) : null
