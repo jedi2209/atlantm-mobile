@@ -627,7 +627,7 @@ export default {
     return this.request('/tva/message/post/', requestParams);
   },
 
-  reviewAdd({
+  async reviewAdd({
     firstName,
     secondName,
     lastName,
@@ -667,7 +667,7 @@ export default {
 
     // __DEV__ && console.log('API review add body', body);
 
-    return this.request('/eko/review/post/', requestParams);
+    return await this.request('/eko/review/post/', requestParams);
   },
 
   carCostOrder(props) {

@@ -267,7 +267,6 @@ class ReviewAddRatingStepScreen extends Component {
       navigation,
       publicAgree,
       reviewAddRating,
-      actionReviewAdd,
     } = this.props;
 
     const {COMMENT_PLUS, COMMENT_MINUS} = this.reviewData;
@@ -280,41 +279,43 @@ class ReviewAddRatingStepScreen extends Component {
       .filter(Boolean)
       .join(' ');
 
-    actionReviewAdd({
-      dealerId: dealerSelected.id,
-      firstName: get(dataFromForm, 'NAME', ''),
-      secondName: get(dataFromForm, 'SECOND_NAME', ''),
-      lastName: get(dataFromForm, 'LAST_NAME', ''),
-      email: get(dataFromForm, 'EMAIL', ''),
-      phone: get(dataFromForm, 'PHONE', ''),
-      name: name,
-      messagePlus: COMMENT_PLUS,
-      messageMinus: COMMENT_MINUS,
-      publicAgree,
-      rating: get(dataFromForm, 'RATING', ''),
-    }).then((action) => {
-      if (action.type === REVIEW_ADD__SUCCESS) {
-        Amplitude.logEvent('order', 'eko/review_add');
+    return this.props
+      .actionReviewAdd({
+        dealerId: dealerSelected.id,
+        firstName: get(dataFromForm, 'NAME', ''),
+        secondName: get(dataFromForm, 'SECOND_NAME', ''),
+        lastName: get(dataFromForm, 'LAST_NAME', ''),
+        email: get(dataFromForm, 'EMAIL', ''),
+        phone: get(dataFromForm, 'PHONE', ''),
+        name: name,
+        messagePlus: COMMENT_PLUS,
+        messageMinus: COMMENT_MINUS,
+        publicAgree,
+        rating: get(dataFromForm, 'RATING', ''),
+      })
+      .then((action) => {
+        if (action.type === REVIEW_ADD__SUCCESS) {
+          Amplitude.logEvent('order', 'eko/review_add');
 
-        setTimeout(() => {
-          Alert.alert(
-            strings.ReviewAddRatingStepScreen.Notifications.success.text,
-          );
-          navigation.navigate('ReviewsScreen');
-        }, 100);
-      }
-
-      if (action.type === REVIEW_ADD__FAIL) {
-        setTimeout(
-          () =>
+          setTimeout(() => {
             Alert.alert(
-              strings.Notifications.error.title,
-              strings.Notifications.error.text,
-            ),
-          100,
-        );
-      }
-    });
+              strings.ReviewAddRatingStepScreen.Notifications.success.text,
+            );
+            navigation.navigate('ReviewsScreen');
+          }, 100);
+        }
+
+        if (action.type === REVIEW_ADD__FAIL) {
+          setTimeout(
+            () =>
+              Alert.alert(
+                strings.Notifications.error.title,
+                strings.Notifications.error.text,
+              ),
+            100,
+          );
+        }
+      });
   };
 
   renderPublicAgree = () => {
