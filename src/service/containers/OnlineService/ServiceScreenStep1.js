@@ -192,7 +192,7 @@ class ServiceScreenStep1 extends Component {
         time: undefined,
       },
       () => {
-        if (!isNaN(value) && value !== null) {
+        if (value !== null) {
           this._getServicesInfo(value);
         }
       },
@@ -209,7 +209,6 @@ class ServiceScreenStep1 extends Component {
     });
 
     if (data.status !== 200 && data.status !== 'success') {
-      this.orderLead = true;
       data.data = undefined;
       this.setState({
         services: undefined,
@@ -233,7 +232,7 @@ class ServiceScreenStep1 extends Component {
         date: undefined,
         time: undefined,
       });
-      console.log('_getServices', this.state);
+      console.log('_getServices', data, this.state);
     }
   }
 
@@ -255,6 +254,7 @@ class ServiceScreenStep1 extends Component {
       serviceInfo: data.data,
       serviceInfoFetch: false,
     });
+    console.log('_getServicesInfo', data, this.state);
   }
 
   _selectCar = (item, callback) => {
@@ -350,7 +350,7 @@ class ServiceScreenStep1 extends Component {
 
     navigation.navigate('ServiceScreenStep2', data);
 
-    console.log('onPressOrder', this.orderLead, data, dataFromForm);
+    // console.log('onPressOrder', this.orderLead, data, dataFromForm);
     return true;
   };
 
