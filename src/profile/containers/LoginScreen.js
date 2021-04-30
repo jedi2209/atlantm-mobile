@@ -236,14 +236,9 @@ class LoginScreen extends Component {
     let phone = data.PHONE;
     this.setState({phone: phone});
     this.setState({loadingVerify: true});
-    this.props.actionGetPhoneCode({phone}).then((response) => {
+    return this.props.actionGetPhoneCode({phone}).then((response) => {
       if (response.code >= 300) {
-        this.setState({
-          code: false,
-          loadingVerify: false,
-          checkCode: '',
-          codeValue: '',
-        });
+        this._cancelVerify();
 
         let message = strings.Notifications.error.text;
 
@@ -259,6 +254,7 @@ class LoginScreen extends Component {
           position: 'top',
           type: 'warning',
         });
+        return false;
       } else {
         this.setState({
           code: true,
@@ -266,8 +262,8 @@ class LoginScreen extends Component {
           checkCode: response.checkCode,
         });
         this.CodeInput[0].focus();
+        return true;
       }
-      return;
     });
   };
 
