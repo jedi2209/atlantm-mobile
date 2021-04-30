@@ -9,7 +9,9 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
+  Text,
 } from 'react-native';
+import {Icon, Button} from 'native-base';
 import Form from '../../core/components/Form/Form';
 import {CarCard} from '../../profile/components/CarCard';
 
@@ -270,36 +272,81 @@ class ServiceScreen extends Component {
                     name: 'CARNAME',
                     type: 'component',
                     label: strings.Form.field.label.car2,
-                    value: (
-                      <ScrollView
-                        showsHorizontalScrollIndicator={false}
-                        horizontal
-                        style={styles.carContainer}
-                        contentContainerStyle={styles.carContainerContent}>
-                        {(this.myCars || []).map((item) => {
-                          return (
-                            <TouchableWithoutFeedback
-                              activeOpacity={0.7}
-                              key={item.vin}
-                              onPress={() => {
-                                this._selectCar(item);
-                              }}>
-                              <View>
-                                <CarCard
-                                  key={item.vin}
-                                  data={item}
-                                  type="check"
-                                  checked={this.state.carVIN === item.vin}
-                                  onPress={() => {
-                                    this._selectCar(item);
-                                  }}
-                                />
-                              </View>
-                            </TouchableWithoutFeedback>
-                          );
-                        })}
-                      </ScrollView>
-                    ),
+                    value:
+                      this.myCars && this.myCars.length ? (
+                        <ScrollView
+                          showsHorizontalScrollIndicator={false}
+                          horizontal
+                          style={styles.carContainer}
+                          contentContainerStyle={styles.carContainerContent}>
+                          {(this.myCars || []).map((item) => {
+                            return (
+                              <TouchableWithoutFeedback
+                                activeOpacity={0.7}
+                                key={item.vin}
+                                onPress={() => {
+                                  this._selectCar(item);
+                                }}>
+                                <View>
+                                  <CarCard
+                                    key={item.vin}
+                                    data={item}
+                                    type="check"
+                                    checked={this.state.carVIN === item.vin}
+                                    onPress={() => {
+                                      this._selectCar(item);
+                                    }}
+                                  />
+                                </View>
+                              </TouchableWithoutFeedback>
+                            );
+                          })}
+                        </ScrollView>
+                      ) : (
+                        <View
+                          style={[
+                            styles.scrollViewInner,
+                            {
+                              flex: 1,
+                              paddingLeft: 24,
+                              paddingRight: 5,
+                              marginVertical: 29.5,
+                              textAlign: 'center',
+                              alignContent: 'center',
+                              width: '100%',
+                              alignItems: 'center',
+                            },
+                          ]}
+                          useNativeDriver>
+                          <Icon
+                            type="MaterialCommunityIcons"
+                            name="car-off"
+                            fontSize={20}
+                          />
+                          <Text
+                            style={{
+                              marginTop: 5,
+                              marginLeft: 10,
+                              lineHeight: 20,
+                            }}>
+                            {strings.UserCars.empty.text + '\r\n'}
+                          </Text>
+                          <Button
+                            full
+                            bordered
+                            style={{borderRadius: 5}}
+                            onPress={() => {
+                              this.props.navigation.navigate('About', {
+                                screen: 'LoginScreen',
+                                activePanel: 'hidden',
+                              });
+                            }}>
+                            <Text style={{padding: 5}}>
+                              {strings.UserCars.archiveCheck}
+                            </Text>
+                          </Button>
+                        </View>
+                      ),
                   },
                 ]
               : [

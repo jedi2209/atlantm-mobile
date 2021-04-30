@@ -50,11 +50,11 @@ const styles = StyleSheet.create({
   },
 });
 
-let UserCars = ({actionToggleCar}) => {
+let UserCars = ({actionToggleCar, activePanel}) => {
   const navigation = useNavigation();
   const cars = get(store.getState(), 'profile.cars');
   const [loading, setLoading] = useState(false);
-  const [carsPanel, setActivePanel] = useState('default');
+  const [carsPanel, setActivePanel] = useState(activePanel);
 
   let carsScrollView = useRef(null);
 
@@ -280,8 +280,7 @@ let UserCars = ({actionToggleCar}) => {
             styles.scrollViewInner,
             {
               flex: 1,
-              paddingLeft: 24,
-              paddingRight: 5,
+              paddingHorizontal: 24,
               marginVertical: 29.5,
               textAlign: 'center',
               alignContent: 'center',
@@ -294,7 +293,11 @@ let UserCars = ({actionToggleCar}) => {
           <Text style={{marginTop: 5, marginLeft: 10, lineHeight: 20}}>
             {strings.UserCars.empty.text + '\r\n'}
           </Text>
-          <Button bordered onPress={() => setActivePanel('hidden')}>
+          <Button
+            full
+            bordered
+            style={{borderRadius: 5}}
+            onPress={() => setActivePanel('hidden')}>
             <Text style={{padding: 5}}>{strings.UserCars.archiveCheck}</Text>
           </Button>
         </View>
@@ -302,4 +305,9 @@ let UserCars = ({actionToggleCar}) => {
     </>
   );
 };
+
+UserCars.defaultProps = {
+  activePanel: 'default',
+};
+
 export default connect(null, mapDispatchToProps)(UserCars);

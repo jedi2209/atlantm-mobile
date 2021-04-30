@@ -276,7 +276,9 @@ class ProfileScreenInfo extends Component {
           ) : (
             <>
               {this.props.cars.length > 0 ? (
-                <UserCars />
+                <UserCars
+                  activePanel={this.props.navigation.params?.activePanel}
+                />
               ) : (
                 <>
                   <View

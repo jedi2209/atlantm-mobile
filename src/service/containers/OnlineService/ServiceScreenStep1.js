@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import {
   StyleSheet,
   View,
-  Alert,
   Text,
   TouchableWithoutFeedback,
   ScrollView,
@@ -12,7 +11,7 @@ import {
   Platform,
   TouchableOpacity,
 } from 'react-native';
-import {Icon, Toast} from 'native-base';
+import {Icon, Button, Toast} from 'native-base';
 import {get, orderBy} from 'lodash';
 import styleConst from '../../../core/style-const';
 
@@ -398,7 +397,7 @@ class ServiceScreenStep1 extends Component {
                       }
                     </Text>
                   </>
-                ) : (
+                ) : this.myCars && this.myCars.length ? (
                   <ScrollView
                     showsHorizontalScrollIndicator={false}
                     horizontal
@@ -429,6 +428,46 @@ class ServiceScreenStep1 extends Component {
                       </TouchableWithoutFeedback>
                     ))}
                   </ScrollView>
+                ) : (
+                  <View
+                    style={[
+                      styles.scrollViewInner,
+                      {
+                        flex: 1,
+                        paddingLeft: 24,
+                        paddingRight: 5,
+                        marginVertical: 29.5,
+                        textAlign: 'center',
+                        alignContent: 'center',
+                        width: '100%',
+                        alignItems: 'center',
+                      },
+                    ]}
+                    useNativeDriver>
+                    <Icon
+                      type="MaterialCommunityIcons"
+                      name="car-off"
+                      fontSize={20}
+                    />
+                    <Text
+                      style={{marginTop: 5, marginLeft: 10, lineHeight: 20}}>
+                      {strings.UserCars.empty.text + '\r\n'}
+                    </Text>
+                    <Button
+                      full
+                      bordered
+                      style={{borderRadius: 5}}
+                      onPress={() => {
+                        this.props.navigation.navigate('About', {
+                          screen: 'LoginScreen',
+                          activePanel: 'hidden',
+                        });
+                      }}>
+                      <Text style={{padding: 5}}>
+                        {strings.UserCars.archiveCheck}
+                      </Text>
+                    </Button>
+                  </View>
                 ),
               },
               this.state.services
