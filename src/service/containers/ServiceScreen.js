@@ -228,13 +228,6 @@ class ServiceScreen extends Component {
     } catch (error) {}
   };
 
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    const isActiveScreen = nav.routes[nav.index].routeName === 'ServiceScreen';
-
-    return isActiveScreen;
-  }
-
   render() {
     this.FormConfig = {
       fields: {
