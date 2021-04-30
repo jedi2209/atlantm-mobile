@@ -87,9 +87,7 @@ let UserCars = ({actionToggleCar}) => {
         switch (ordersData.BUTTONS[buttonIndex].id) {
           case 'orderService':
             navigation.navigate('ServiceScreen', {
-              params: {
-                car: item,
-              },
+              car: item,
             });
             break;
           case 'orderParts':

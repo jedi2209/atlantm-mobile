@@ -235,14 +235,6 @@ class OrderPartsScreen extends Component {
     } catch (error) {}
   };
 
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    const isActiveScreen =
-      nav.routes[nav.index].routeName === 'OrderPartsScreen';
-
-    return isActiveScreen;
-  }
-
   render() {
     this.FormConfig = {
       fields: {
