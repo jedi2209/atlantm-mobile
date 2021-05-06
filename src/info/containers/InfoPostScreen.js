@@ -177,6 +177,8 @@ class InfoPostScreen extends Component {
     const imageUrl = get(img, '10000x440');
     const date = get(post, 'date');
     const type = get(post, 'type');
+    const resizeMode =
+      new Boolean(get(post, 'imgCropAvailable')) === true ? 'cover' : 'contain';
 
     if (text) {
       text = processHtml(text, this.state.webViewWidth);
@@ -205,7 +207,7 @@ class InfoPostScreen extends Component {
                 <View style={styles.imageContainer} ref="imageContainer">
                   {imageUrl ? (
                     <Imager
-                      resizeMode="cover"
+                      resizeMode={resizeMode}
                       onLayout={this.onLayoutImage}
                       style={[
                         styles.image,
