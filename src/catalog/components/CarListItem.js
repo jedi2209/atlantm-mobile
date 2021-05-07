@@ -319,8 +319,8 @@ class CarListItem extends Component {
     );
   };
 
-  renderImage = () => {
-    const {car, ordered, itemScreen, resizeMode} = this.props;
+  renderImage = ({ordered}) => {
+    const {car, itemScreen, resizeMode} = this.props;
     let CarImgs = get(car, 'img.thumb.0');
     let CarImgsReal = get(car, 'imgReal.thumb.0');
     const isNewCar = itemScreen === 'NewCarItemScreen';
@@ -369,6 +369,10 @@ class CarListItem extends Component {
         <PhotoSlider
           height={CarImgsReal ? 300 : 220}
           resizeMode={resizeMode ? resizeMode : 'cover'}
+          style={[
+            CarImgsReal ? styles.imageReal : styles.image,
+            car?.ordered ? styles.ordered : null,
+          ]}
           dotColor={styleConst.color.white}
           photos={photos}
           onPressItem={this.onPressPhoto}
@@ -485,7 +489,7 @@ class CarListItem extends Component {
               </>
             )}
           </View>
-          {this.renderImage()}
+          {this.renderImage({ordered})}
           <View
             style={[
               styles.price,

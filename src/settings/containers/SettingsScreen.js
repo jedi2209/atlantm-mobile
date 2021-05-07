@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   TextVersionInfo: {
     fontSize: 12,
     fontFamily: styleConst.font.light,
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
   },
   block: {
     borderRadius: 10,
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   LangSwitcher: {
     fontSize: 14,
     fontFamily: styleConst.font.light,
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
     width: '100%',
   },
   textInputProps: {

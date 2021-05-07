@@ -592,7 +592,7 @@ class ContactsScreen extends Component {
                           navigation.navigate('InfoList');
                         }}
                         style={{
-                          color: styleConst.new.blueHeader,
+                          color: styleConst.color.lightBlue,
                           fontSize: 14,
                           paddingLeft: 24,
                         }}>

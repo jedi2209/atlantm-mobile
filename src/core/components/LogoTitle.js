@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   LangSwitcher: {
     fontSize: 14,
     fontFamily: styleConst.font.light,
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
   },
 });
 

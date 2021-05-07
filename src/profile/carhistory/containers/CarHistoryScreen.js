@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   date: {
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
     fontSize: 18,
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   mileage: {
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
     fontSize: 14,
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
@@ -256,7 +256,7 @@ class CarHistoryScreen extends Component {
           <Text
             style={
               ([styles.sectionValueText],
-              color ? {color: styleConst.new.blueHeader} : null)
+              color ? {color: styleConst.color.lightBlue} : null)
             }>
             {value}
           </Text>

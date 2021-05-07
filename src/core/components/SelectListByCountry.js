@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
   },
   tabs: {
     width: '100%',
-    backgroundColor: styleConst.new.blueHeader,
+    backgroundColor: styleConst.color.lightBlue,
     borderBottomWidth: styleConst.ui.borderWidth,
     borderBottomColor: styleConst.color.border,
     paddingVertical: verticalScale(5),
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   TabsActiveTextStyle: {
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
   },
   TabsActiveTabStyle: {},
 });
@@ -140,7 +140,7 @@ const SelectListByCountry = (props) => {
           <Tabs
             renderTabBar={renderTabBar}
             tabBarUnderlineStyle={{
-              backgroundColor: styleConst.new.blueHeader,
+              backgroundColor: styleConst.color.lightBlue,
             }}>
             {customListBYN && customListBYN.length ? (
               <Tab
@@ -222,7 +222,7 @@ const SelectListByCountry = (props) => {
           <Tabs
             renderTabBar={renderTabBar}
             tabBarUnderlineStyle={{
-              backgroundColor: styleConst.new.blueHeader,
+              backgroundColor: styleConst.color.lightBlue,
             }}>
             <Tab
               heading="🇧🇾 Беларусь"

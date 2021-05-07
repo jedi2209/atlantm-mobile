@@ -289,12 +289,6 @@ class OrderScreen extends Component {
     };
   }
 
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: !navigation.state.params.car.ordered
-      ? strings.OrderScreen.title
-      : strings.OrderScreen.titleSimiliar,
-  });
-
   static propTypes = {
     localUserDataUpdate: PropTypes.func,
     firstName: PropTypes.string,
