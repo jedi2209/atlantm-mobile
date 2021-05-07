@@ -216,7 +216,7 @@ class OrderPartsScreen extends Component {
               [
                 {
                   text: 'ОК',
-                  onPress() {
+                  onPress: () => {
                     navigation.goBack();
                   },
                 },

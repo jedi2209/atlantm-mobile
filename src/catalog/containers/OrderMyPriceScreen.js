@@ -233,6 +233,7 @@ class OrderMyPriceScreen extends Component {
 
   onPressOrder = async (data) => {
     const isInternetExist = await isInternet();
+    const nav = this.props.navigation;
 
     if (!isInternetExist) {
       setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
@@ -276,8 +277,8 @@ class OrderMyPriceScreen extends Component {
             [
               {
                 text: 'ОК',
-                onPress() {
-                  this.props.navigation.goBack();
+                onPress: () => {
+                  nav.goBack();
                 },
               },
             ],

@@ -147,7 +147,7 @@ class ServiceScreenStep2 extends Component {
               [
                 {
                   text: 'ОК',
-                  onPress() {
+                  onPress: () => {
                     navigation.goBack();
                   },
                 },
@@ -177,7 +177,7 @@ class ServiceScreenStep2 extends Component {
           [
             {
               text: 'ОК',
-              onPress() {
+              onPress: () => {
                 navigation.goBack();
               },
             },

@@ -318,6 +318,7 @@ class OrderScreen extends Component {
 
   onPressOrder = async (data) => {
     const isInternetExist = await isInternet();
+    const nav = this.props.navigation;
 
     if (!isInternetExist) {
       setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
@@ -348,6 +349,7 @@ class OrderScreen extends Component {
       comment: data.COMMENT || '',
       isNewCar,
     });
+
     if (action && action.type) {
       switch (action.type) {
         case CATALOG_ORDER__SUCCESS:
@@ -371,8 +373,8 @@ class OrderScreen extends Component {
             [
               {
                 text: 'ОК',
-                onPress() {
-                  this.props.navigation.goBack();
+                onPress: () => {
+                  nav.goBack();
                 },
               },
             ],

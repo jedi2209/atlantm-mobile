@@ -175,7 +175,7 @@ class ServiceScreenNonAuth extends Component {
               [
                 {
                   text: 'ОК',
-                  onPress() {
+                  onPress: () => {
                     navigation.goBack();
                   },
                 },
@@ -206,7 +206,7 @@ class ServiceScreenNonAuth extends Component {
           [
             {
               text: 'ОК',
-              onPress() {
+              onPress: () => {
                 navigation.goBack();
               },
             },

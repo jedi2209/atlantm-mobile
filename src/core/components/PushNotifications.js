@@ -126,7 +126,7 @@ export default {
                     {text: 'Позже', style: 'destructive'},
                     {
                       text: 'Разрешить',
-                      onPress() {
+                      onPress: () => {
                         Linking.openURL(
                           'app-settings://notification/com.atlantm.app',
                         );

@@ -128,7 +128,7 @@ class CallMeBackScreen extends React.Component {
         [
           {
             text: 'ОК',
-            onPress() {
+            onPress: () => {
               NavigationService.reset();
             },
           },

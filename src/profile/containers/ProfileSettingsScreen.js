@@ -156,6 +156,7 @@ class ProfileSettingsScreen extends Component {
   }
 
   onPressSave = (props) => {
+    const nav = this.props.navigation;
     this.setState({loading: true});
     let emailValue = [];
     let phoneValue = [];
@@ -213,15 +214,14 @@ class ProfileSettingsScreen extends Component {
     return this.props
       .actionSaveProfileToAPI(profileToSend)
       .then((data) => {
-        const _this = this;
         Alert.alert(
           strings.Notifications.success.title,
           strings.Notifications.success.textProfileUpdate,
           [
             {
               text: 'ОК',
-              onPress() {
-                _this.props.navigation.navigate('LoginScreen');
+              onPress: () => {
+                nav.navigate('LoginScreen');
               },
             },
           ],
