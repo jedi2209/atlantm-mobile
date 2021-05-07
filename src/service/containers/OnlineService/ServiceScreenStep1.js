@@ -191,8 +191,11 @@ class ServiceScreenStep1 extends Component {
         time: undefined,
       },
       () => {
-        if (value !== null) {
+        if (value !== null && value !== 'other') {
+          // если выбраны какие-то работы кроме "другое"
           this._getServicesInfo(value);
+        } else {
+          this.orderLead = true;
         }
       },
     );
@@ -231,7 +234,6 @@ class ServiceScreenStep1 extends Component {
         date: undefined,
         time: undefined,
       });
-      console.log('_getServices', data, this.state);
     }
   }
 
@@ -253,7 +255,6 @@ class ServiceScreenStep1 extends Component {
       serviceInfo: data.data,
       serviceInfoFetch: false,
     });
-    console.log('_getServicesInfo', data, this.state);
   }
 
   _selectCar = (item, callback) => {
@@ -348,8 +349,6 @@ class ServiceScreenStep1 extends Component {
     };
 
     navigation.navigate('ServiceScreenStep2', data);
-
-    // console.log('onPressOrder', this.orderLead, data, dataFromForm);
     return true;
   };
 
