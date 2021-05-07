@@ -15,7 +15,6 @@ import {
   StyleSheet,
 } from 'react-native';
 import {Button, Icon, Toast} from 'native-base';
-import PhoneInput from 'react-native-phone-input';
 import {store} from '../../core/store';
 import styleConst from '../../core/style-const';
 import LinearGradient from 'react-native-linear-gradient';
@@ -49,8 +48,6 @@ import {strings} from '../../core/lang/const';
 
 import {verticalScale} from '../../utils/scale';
 import {ScrollView} from 'react-native';
-import {string} from 'prop-types';
-import PhoneDetect from '../../utils/phoneDetect';
 import UserData from '../../utils/user';
 
 export const isAndroid = Platform.OS === 'android';

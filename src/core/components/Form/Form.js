@@ -455,6 +455,82 @@ class Form extends Component {
     return true;
   };
 
+  _validatePhone = ({formatted, pureValue, id, name, data, groupNum, num}) => {
+    const countryCode = PhoneDetect.getCountryCodeByMask(formatted);
+    if (id) {
+      this.setState((prevState) => {
+        let copyField = Object.assign({}, prevState[name]); // creating copy of state variable jasper
+        copyField[id].value = formatted.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
+        let maskLength = copyField[id].mask.replace(/[^0]/g, '');
+        if (pureValue.length === maskLength.length) {
+          return {
+            [name]: copyField,
+            showSubmitButton: true,
+          };
+        } else {
+          if (this.state.showSubmitButton) {
+            return {
+              showSubmitButton: false,
+            };
+          }
+        }
+      });
+    } else {
+      let maskLength = this.state['mask_' + name].replace(/([^0])/g, '');
+      switch (countryCode) {
+        case 'ua':
+          if (pureValue.length + 1 === maskLength.length) {
+            this.setState(
+              {
+                [name]: formatted.replace(/[^\d.+]/g, ''),
+                showSubmitButton: true,
+              },
+              () => {
+                this._showHideSubmitButton(true);
+                if (data.props.focusNextInput) {
+                  this._nextInput(groupNum, num);
+                }
+              },
+            );
+          } else {
+            if (
+              this.state.showSubmitButton &&
+              data.props &&
+              data.props.required
+            ) {
+              this._showHideSubmitButton(false);
+            }
+          }
+          break;
+        case 'ru':
+        case 'by':
+          if (pureValue.length === maskLength.length) {
+            this.setState(
+              {
+                [name]: formatted.replace(/[^\d.+]/g, ''),
+                showSubmitButton: true,
+              },
+              () => {
+                this._showHideSubmitButton(true);
+                if (data.props.focusNextInput) {
+                  this._nextInput(groupNum, num);
+                }
+              },
+            );
+          } else {
+            if (
+              this.state.showSubmitButton &&
+              data.props &&
+              data.props.required
+            ) {
+              this._showHideSubmitButton(false);
+            }
+          }
+          break;
+      }
+    }
+  };
+
   _setActive = (el) => {
     if (typeof el === 'undefined') {
       return false;
@@ -936,6 +1012,29 @@ class Form extends Component {
           }
         }
       }
+
+      if (userPhoneValue && this.state.showSubmitButton === false) {
+        // this._validatePhone({
+        //   formatted: userPhoneValue,
+        //   pureValue: userPhoneValue,
+        //   id,
+        //   name,
+        //   data,
+        //   groupNum,
+        //   num,
+        // });
+        this.setState(
+          {
+            showSubmitButton: true,
+          },
+          () => {
+            this._showHideSubmitButton(true);
+            if (data.props.focusNextInput) {
+              this._nextInput(groupNum, num);
+            }
+          },
+        );
+      }
       return (
         <View
           style={[
@@ -1004,85 +1103,15 @@ class Form extends Component {
                     // );
                   }}
                   onChangeText={(formatted, pureValue) => {
-                    countryCode = PhoneDetect.getCountryCodeByMask(formatted);
-                    if (id) {
-                      this.setState((prevState) => {
-                        let copyField = Object.assign({}, prevState[name]); // creating copy of state variable jasper
-                        copyField[id].value = formatted.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
-                        let maskLength = copyField[id].mask.replace(
-                          /[^0]/g,
-                          '',
-                        );
-                        if (pureValue.length === maskLength.length) {
-                          return {
-                            [name]: copyField,
-                            showSubmitButton: true,
-                          };
-                        } else {
-                          if (this.state.showSubmitButton) {
-                            return {
-                              showSubmitButton: false,
-                            };
-                          }
-                        }
-                      });
-                    } else {
-                      let maskLength = this.state['mask_' + name].replace(
-                        /([^0])/g,
-                        '',
-                      );
-                      switch (countryCode) {
-                        case 'ua':
-                          if (pureValue.length + 1 === maskLength.length) {
-                            this.setState(
-                              {
-                                [name]: formatted.replace(/[^\d.+]/g, ''),
-                                showSubmitButton: true,
-                              },
-                              () => {
-                                this._showHideSubmitButton(true);
-                                if (data.props.focusNextInput) {
-                                  this._nextInput(groupNum, num);
-                                }
-                              },
-                            );
-                          } else {
-                            if (
-                              this.state.showSubmitButton &&
-                              data.props &&
-                              data.props.required
-                            ) {
-                              this._showHideSubmitButton(false);
-                            }
-                          }
-                          break;
-                        case 'ru':
-                        case 'by':
-                          if (pureValue.length === maskLength.length) {
-                            this.setState(
-                              {
-                                [name]: formatted.replace(/[^\d.+]/g, ''),
-                                showSubmitButton: true,
-                              },
-                              () => {
-                                this._showHideSubmitButton(true);
-                                if (data.props.focusNextInput) {
-                                  this._nextInput(groupNum, num);
-                                }
-                              },
-                            );
-                          } else {
-                            if (
-                              this.state.showSubmitButton &&
-                              data.props &&
-                              data.props.required
-                            ) {
-                              this._showHideSubmitButton(false);
-                            }
-                          }
-                          break;
-                      }
-                    }
+                    return this._validatePhone({
+                      formatted,
+                      pureValue,
+                      id,
+                      name,
+                      data,
+                      groupNum,
+                      num,
+                    });
                   }}
                   mask={mask}
                   style={[
