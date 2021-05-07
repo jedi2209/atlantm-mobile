@@ -59,7 +59,7 @@ const HeaderBackButton = (props) => {
 
   const fontColor = {
     white: styleConst.new.mainbg,
-    blue: styleConst.new.blueHeader,
+    blue: styleConst.color.lightBlue,
   };
 
   return (

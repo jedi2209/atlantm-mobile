@@ -47,7 +47,7 @@ export default StyleSheet.create({
   },
   blueHeader: {
     ...commonStyles,
-    backgroundColor: styleConst.new.blueHeader,
+    backgroundColor: styleConst.color.lightBlue,
     borderBottomWidth: 0,
   },
   transparentHeaderTitle: {
@@ -57,7 +57,6 @@ export default StyleSheet.create({
     alignItems: 'center',
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
-    color: styleConst.new.blueHeader,
   },
   blueHeaderTitle: {
     fontSize: 16,
@@ -71,7 +70,7 @@ export default StyleSheet.create({
   whiteHeader: {
     ...commonStyles,
     // backgroundColor: styleConst.color.white,
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
     shadowRadius: 0,
     shadowOffset: {
       height: 0,
@@ -87,7 +86,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
   },
   headerBackButtonContainer: {
     backgroundColor: 'rgba(0, 0, 0, 0.6)',

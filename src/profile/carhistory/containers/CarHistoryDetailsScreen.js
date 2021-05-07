@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   tabTextActive: {
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
     fontSize: 20,
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   tabButtonActive: {
     backgroundColor: 'transparent',
     borderColor: 'transparent',
-    borderBottomColor: styleConst.new.blueHeader,
+    borderBottomColor: styleConst.color.lightBlue,
     flex: 1,
     justifyContent: 'center',
     paddingLeft: 0,
