@@ -25,7 +25,7 @@ import {
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
 
-import strings from '../core/lang/const';
+import {strings} from '../core/lang/const';
 
 export const actionSelectAddReviewPublicAgree = (isAgree) => {
   return (dispatch) => {

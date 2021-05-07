@@ -21,7 +21,7 @@ import {connect} from 'react-redux';
 import numberWithGap from '../../utils/number-with-gap';
 import showPrice from '../../utils/price';
 import styleConst from '../../core/style-const';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   container: {

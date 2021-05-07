@@ -23,7 +23,7 @@ import PushNotifications from '../../core/components/PushNotifications';
 // helpers
 import {get} from 'lodash';
 import {TVA__SUCCESS, TVA__FAIL} from '../actionTypes';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, tva, nav, core}) => {
   return {

@@ -21,7 +21,7 @@ import {
 
 import {selectDealer} from '../../dealer/actions';
 
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   listItem: {

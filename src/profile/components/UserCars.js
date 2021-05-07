@@ -20,7 +20,7 @@ import {Icon, Button, ActionSheet, Toast} from 'native-base';
 import {verticalScale} from '../../utils/scale';
 import styleConst from '../../core/style-const';
 import orderFunctions from '../../utils/orders';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 import {actionToggleCar} from '../actions';
 

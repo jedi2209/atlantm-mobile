@@ -42,7 +42,7 @@ import styleConst from '../../../core/style-const';
 import numberWithGap from '../../../utils/number-with-gap';
 import getTheme from '../../../../native-base-theme/components';
 import showPrice from '../../../utils/price';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 // styles
 import styles from '../../CarStyles';

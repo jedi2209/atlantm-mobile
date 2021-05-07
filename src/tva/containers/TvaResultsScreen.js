@@ -38,7 +38,7 @@ import {
 } from '../actionTypes';
 import isInternet from '../../utils/internet';
 import {ERROR_NETWORK} from '../../core/const';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const $size = 40;
 const styles = StyleSheet.create({

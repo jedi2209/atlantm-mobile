@@ -16,7 +16,7 @@ import {DatePickerCustom} from '../../core/components/DatePickerCustom';
 import {time, yearMonthDay} from '../../utils/date';
 import styleConst from '../../core/style-const';
 import API from '../../utils/api';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   scrollView: {},

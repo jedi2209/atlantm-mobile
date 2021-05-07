@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import styleConst from '../style-const';
 import RNPickerSelect from 'react-native-picker-select';
 import {actionSetGlobalLanguage} from '../../core/lang/actions';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const mapDispatchToProps = (dispatch) => {
   return {

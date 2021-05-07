@@ -7,7 +7,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 // helpers
 import styleConst from '../../core/style-const';
 import {scale} from '../../utils/scale';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   container: {

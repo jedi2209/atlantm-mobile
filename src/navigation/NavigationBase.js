@@ -50,7 +50,7 @@ import MapScreen from '../contacts/map/containers/MapScreen';
 import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
 import SettingsScreen from '../settings/containers/SettingsScreen';
 
-import strings from '../core/lang/const';
+import {strings} from '../core/lang/const';
 import stylesHeader from '../core/components/Header/style';
 import styleConst from '../core/style-const';
 import {

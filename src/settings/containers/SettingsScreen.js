@@ -36,7 +36,7 @@ import Amplitude from '../../utils/amplitude-analytics';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import {APP_EMAIL, STORE_LINK} from '../../core/const';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   container: {

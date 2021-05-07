@@ -3,7 +3,7 @@ import {View, StyleSheet, Text} from 'react-native';
 import {Button} from 'native-base';
 import Modal from 'react-native-modal';
 import styleConst from '../style-const';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   modalView: {

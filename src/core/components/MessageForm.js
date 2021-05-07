@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 // helpers
 import styleConst from '../../core/style-const';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   container: {

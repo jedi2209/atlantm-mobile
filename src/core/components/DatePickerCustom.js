@@ -5,7 +5,7 @@ import {Button} from 'native-base';
 import {format} from '../../utils/date';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ModalView from './ModalView';
-import strings from '../lang/const';
+import {strings} from '../lang/const';
 
 export const DatePickerCustom = React.forwardRef((props, ref) => {
   const defaultDate = new Date();

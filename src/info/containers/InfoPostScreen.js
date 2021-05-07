@@ -27,7 +27,7 @@ import processHtml from '../../utils/process-html';
 import Amplitude from '../../utils/amplitude-analytics';
 import {verticalScale} from '../../utils/scale';
 import {dayMonth, dayMonthYear} from '../../utils/date';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 // image
 const {width: screenWidth} = Dimensions.get('window');
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({dealer, info, profile}) => {
+const mapStateToProps = ({dealer, info, profile, core}) => {
   return {
     list: info.list?.data,
     posts: info.posts,
@@ -92,6 +92,7 @@ const mapStateToProps = ({dealer, info, profile}) => {
     phone: profile.phone,
     email: profile.email,
     dealerSelected: dealer.selected,
+    currLang: core.language.selected,
   };
 };
 
@@ -171,6 +172,7 @@ class InfoPostScreen extends Component {
   };
 
   render() {
+    const {currLang} = this.props;
     const post = this.getPost();
     let text = get(post, 'text');
     const img = get(post, 'img');
@@ -237,9 +239,9 @@ class InfoPostScreen extends Component {
                         id={type.id}
                         key={'badgeItem' + type.id}
                         index={0}
-                        bgColor={type?.badge?.[0]}
-                        name={type.name}
-                        textColor={type?.badge?.[1]}
+                        bgColor={type?.badge?.background}
+                        name={type?.name[currLang]}
+                        textColor={type?.badge?.color}
                       />
                     </View>
                   ) : null}

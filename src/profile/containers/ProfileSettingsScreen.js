@@ -11,7 +11,7 @@ import SocialAuth from '../components/SocialAuth';
 import {actionSaveProfileToAPI} from '../actions';
 
 import Amplitude from '../../utils/amplitude-analytics';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 class ProfileSettingsScreen extends Component {
   constructor(props) {

@@ -15,7 +15,7 @@ import {
   EVENT_REFRESH,
 } from '../../../core/actionTypes';
 
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   container: {

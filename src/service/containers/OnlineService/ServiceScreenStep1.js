@@ -25,7 +25,7 @@ import RenderPrice from '../../../utils/price';
 // redux
 import {connect} from 'react-redux';
 import {localDealerClear} from '../../../dealer/actions';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 import API from '../../../utils/api';
 

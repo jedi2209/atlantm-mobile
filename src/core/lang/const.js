@@ -7,4 +7,4 @@ const strings = new LocalizedStrings({
   ua: ua,
 });
 
-export default strings;
+export {strings};

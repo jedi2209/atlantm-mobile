@@ -41,7 +41,7 @@ import {ERROR_NETWORK} from '../../core/const';
 // import API from '../../utils/api';
 import {yearMonthDay, addDays, dayMonthYear} from '../../utils/date';
 
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const $size = 40;
 const styles = StyleSheet.create({

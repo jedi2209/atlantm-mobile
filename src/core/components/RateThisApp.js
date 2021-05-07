@@ -1,7 +1,7 @@
 import {PureComponent} from 'react';
 import {Platform, Alert} from 'react-native';
 import Rate, {AndroidMarket} from 'react-native-rate';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 import {AppleAppID, GooglePackageName} from '../../core/const';
 
 export default class RateThisApp extends PureComponent {
