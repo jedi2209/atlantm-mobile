@@ -185,6 +185,7 @@ class TestDriveScreen extends PureComponent {
 
   onPressOrder = async (data) => {
     const isInternetExist = await isInternet();
+    const nav = this.props.navigation;
 
     if (!isInternetExist) {
       setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
@@ -236,8 +237,8 @@ class TestDriveScreen extends PureComponent {
               [
                 {
                   text: 'ОК',
-                  onPress() {
-                    this.props.navigation.goBack();
+                  onPress: () => {
+                    nav.goBack();
                   },
                 },
               ],
@@ -278,8 +279,8 @@ class TestDriveScreen extends PureComponent {
                     [
                       {
                         text: 'ОК',
-                        onPress() {
-                          this.props.navigation.goBack();
+                        onPress: () => {
+                          nav.goBack();
                         },
                       },
                     ],
@@ -337,8 +338,8 @@ class TestDriveScreen extends PureComponent {
               [
                 {
                   text: 'ОК',
-                  onPress() {
-                    this.props.navigation.goBack();
+                  onPress: () => {
+                    nav.goBack();
                   },
                 },
               ],

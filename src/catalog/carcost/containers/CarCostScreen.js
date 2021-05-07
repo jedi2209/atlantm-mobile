@@ -132,6 +132,7 @@ class CarCostScreen extends Component {
 
   onPressOrder = async (dataFromForm) => {
     const isInternetExist = await isInternet();
+    const nav = this.props.navigation;
 
     if (!isInternetExist) {
       return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
@@ -169,8 +170,8 @@ class CarCostScreen extends Component {
               [
                 {
                   text: 'ОК',
-                  onPress() {
-                    this.props.navigation.goBack();
+                  onPress: () => {
+                    nav.goBack();
                   },
                 },
               ],
