@@ -29,7 +29,7 @@ import {
 
 import Amplitude from '../../utils/amplitude-analytics';
 
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 import {verticalScale} from '../../utils/scale';
 import UserData from '../../utils/user';

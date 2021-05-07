@@ -22,7 +22,7 @@ import {Button, Icon, Toast} from 'native-base';
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
 import styleConst from '../../core/style-const';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 import {
   actionLogin,

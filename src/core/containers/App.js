@@ -19,7 +19,7 @@ import {
 
 import {APP_STORE_UPDATED} from '../../core/actionTypes';
 
-import strings from '../lang/const';
+import {strings} from '../lang/const';
 
 // helpers
 import API from '../../utils/api';

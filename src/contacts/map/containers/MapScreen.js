@@ -31,7 +31,7 @@ import ActionSheet from 'react-native-actionsheet';
 import {get} from 'lodash';
 import {verticalScale} from '../../../utils/scale';
 import styleConst from '../../../core/style-const';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const isAndroid = Platform.OS === 'android';
 const {width, height} = Dimensions.get('window');

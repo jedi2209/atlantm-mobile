@@ -1,11 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 
+import {useSelector} from 'react-redux';
 import {TouchableWithoutFeedback, View, Text, StyleSheet} from 'react-native';
 import * as NavigationService from '../../navigation/NavigationService';
 
 import Badge from '../../core/components/Badge';
 import Imager from '../components/Imager';
+
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   slide: {
@@ -29,6 +32,7 @@ const styles = StyleSheet.create({
 });
 
 export const Offer = ({data, height, cardWidth, theme}) => {
+  const currLang = useSelector((state) => state.core.language.selected);
   const params = {
     id: data.item.id,
     date: data.item.date,
@@ -79,9 +83,9 @@ export const Offer = ({data, height, cardWidth, theme}) => {
               id={params.id}
               key={'badgeItem' + params.id}
               index={0}
-              bgColor={data.item.type?.badge?.[0]}
-              name={data.item.type.name}
-              textColor={data.item.type?.badge?.[1]}
+              bgColor={params.type.badge?.background}
+              name={params.type.name[currLang]}
+              textColor={params.type.badge?.color}
             />
           </View>
         ) : null}

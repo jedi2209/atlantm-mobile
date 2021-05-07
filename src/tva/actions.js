@@ -1,4 +1,4 @@
-import strings from '../core/lang/const';
+import {strings} from '../core/lang/const';
 import API from '../utils/api';
 
 import {

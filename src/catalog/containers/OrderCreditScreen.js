@@ -30,7 +30,7 @@ import styleConst from '../../core/style-const';
 import {CREDIT_ORDER__SUCCESS, CREDIT_ORDER__FAIL} from '../actionTypes';
 import {ERROR_NETWORK} from '../../core/const';
 
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const $size = 40;
 const styles = StyleSheet.create({

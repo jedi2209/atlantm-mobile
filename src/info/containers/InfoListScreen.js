@@ -33,7 +33,7 @@ import {ERROR_NETWORK} from '../../core/const';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import {verticalScale} from '../../utils/scale';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 // components
 import PushNotifications from '../../core/components/PushNotifications';
@@ -67,6 +67,7 @@ const mapStateToProps = ({dealer, info, nav, core}) => {
     dealerSelected: dealer.selected,
     isFetchInfoList: info.meta.isFetchInfoList,
     pushActionSubscribeState: core.pushActionSubscribeState,
+    currLang: core.language.selected,
   };
 };
 
@@ -299,6 +300,7 @@ class InfoListScreen extends Component {
       actionListReset,
       isFetchInfoList,
       dealerSelected,
+      currLang,
     } = this.props;
 
     const {region, id: dealer} = dealerSelected;
@@ -332,9 +334,9 @@ class InfoListScreen extends Component {
                         id={el.id}
                         key={'badgeItem' + el.id + i}
                         index={i}
-                        bgColor={el.badge?.[0]}
-                        name={el.name}
-                        textColor={el.badge?.[1]}
+                        bgColor={el.badge?.background}
+                        name={el.name[currLang]}
+                        textColor={el.badge?.color}
                         badgeContainerStyle={{marginRight: 20, padding: 10}}
                         textStyle={{fontSize: 14}}
                         onPress={() => {

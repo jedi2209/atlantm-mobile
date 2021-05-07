@@ -32,7 +32,7 @@ import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
 import {ScrollView} from 'react-native-gesture-handler';
 
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
   return {

@@ -23,7 +23,7 @@ import DealerItemList from '../../../core/components/DealerItemList';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import {substractYears} from '../../../utils/date';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   content: {

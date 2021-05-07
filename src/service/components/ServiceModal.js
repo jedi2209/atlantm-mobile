@@ -7,7 +7,7 @@ import Modal from 'react-native-modal';
 import showPrice from '../../utils/price';
 import styleConst from '../../core/style-const';
 import isIPhoneX from '../../utils/is_iphone_x';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 export const ServiceModal = ({visible, onClose, data}) => {
   const headerHeight = useHeaderHeight();

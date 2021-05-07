@@ -42,7 +42,7 @@ import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
 import numberWithGap from '../../../utils/number-with-gap';
 import {ERROR_NETWORK} from '../../../core/const';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {

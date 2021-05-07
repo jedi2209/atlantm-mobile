@@ -25,7 +25,7 @@ import ReestablishScreen from '../../profile/containers/ReestablishScreen';
 import MenuScreen from './MenuScreen';
 
 // helpers
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 

@@ -44,7 +44,7 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import {ERROR_NETWORK} from '../../core/const';
 import Carousel from 'react-native-snap-carousel';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const HEADER_MAX_HEIGHT = 416;
 

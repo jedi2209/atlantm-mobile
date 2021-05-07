@@ -28,7 +28,7 @@ import PhoneDetect from '../../../utils/phoneDetect';
 
 import styleConst from '../../style-const';
 
-import strings from '../../lang/const';
+import {strings} from '../../lang/const';
 
 const platformStyle = {
   ios: {

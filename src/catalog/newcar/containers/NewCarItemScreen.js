@@ -48,7 +48,7 @@ import Amplitude from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
 import md5 from '../../../utils/md5';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 // styles
 import styles from '../../CarStyles';

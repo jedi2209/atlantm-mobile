@@ -17,7 +17,7 @@ import SpinnerView from '../../../core/components/SpinnerView';
 import {get} from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {

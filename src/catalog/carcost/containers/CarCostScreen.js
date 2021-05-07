@@ -30,7 +30,7 @@ import {get, valuesIn} from 'lodash';
 import {ERROR_NETWORK} from '../../../core/const';
 import isInternet from '../../../utils/internet';
 
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, nav, catalog}) => {
   const carCost = get(catalog, 'carCost', {});

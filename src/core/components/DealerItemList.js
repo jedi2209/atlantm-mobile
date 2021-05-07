@@ -11,7 +11,7 @@ import BrandLogo from '../components/BrandLogo';
 // helpers
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
-import strings from '../lang/const';
+import {strings} from '../lang/const';
 
 const stylesDealerItemList = StyleSheet.create({
   brands: {

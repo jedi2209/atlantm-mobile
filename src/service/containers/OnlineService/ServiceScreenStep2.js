@@ -20,7 +20,7 @@ import {connect} from 'react-redux';
 import {orderService} from '../../actions';
 import {localUserDataUpdate} from '../../../profile/actions';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../../actionTypes';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 import Amplitude from '../../../utils/amplitude-analytics';
 

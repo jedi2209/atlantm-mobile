@@ -8,7 +8,7 @@ import {actionMenuOpenedCount} from '../../core/actions';
 import {connect} from 'react-redux';
 
 import styleConst from '../../core/style-const';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   buttonPrimary: {

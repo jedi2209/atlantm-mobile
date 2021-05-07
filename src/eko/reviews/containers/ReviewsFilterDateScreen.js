@@ -22,7 +22,7 @@ import {
   substractWeek,
   substractYears,
 } from '../../../utils/date';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {

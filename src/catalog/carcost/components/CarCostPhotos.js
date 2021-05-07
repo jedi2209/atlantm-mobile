@@ -16,7 +16,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import PropTypes from 'prop-types';
 
 import styleConst from '../../../core/style-const';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const thumbs = [
   require('../assets/photo_car_1.png'),

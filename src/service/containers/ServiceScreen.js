@@ -29,7 +29,7 @@ import isInternet from '../../utils/internet';
 import {addDays, dayMonthYear, yearMonthDay} from '../../utils/date';
 import {ERROR_NETWORK} from '../../core/const';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
   const cars = orderBy(profile.cars, ['owner'], ['asc']);

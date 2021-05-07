@@ -25,7 +25,7 @@ import {
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const RATING_ARRAY = [1, 2, 3, 4, 5];
 

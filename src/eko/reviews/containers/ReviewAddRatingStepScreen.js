@@ -41,7 +41,7 @@ import {
   REVIEW_ADD_RATING_2,
   REVIEW_ADD_RATING_1,
 } from '../../constants';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const $size = 40;
 const styles = StyleSheet.create({
