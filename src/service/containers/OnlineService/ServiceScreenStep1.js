@@ -157,6 +157,7 @@ class ServiceScreenStep1 extends Component {
       carModel: carModel,
       carVIN: carVIN,
       carNumber: carNumber,
+      orderLead: false,
     };
 
     const carFromNavigation = get(this.props.route, 'params.car');
@@ -177,7 +178,6 @@ class ServiceScreenStep1 extends Component {
         this.myCars.push(item);
       }
     });
-    this.orderLead = false;
 
     this.props.localDealerClear();
   }
@@ -195,7 +195,9 @@ class ServiceScreenStep1 extends Component {
           // если выбраны какие-то работы кроме "другое"
           this._getServicesInfo(value);
         } else {
-          this.orderLead = true;
+          this.setState({
+            orderLead: true,
+          });
         }
       },
     );
@@ -213,6 +215,7 @@ class ServiceScreenStep1 extends Component {
     if (data.status !== 200 && data.status !== 'success') {
       data.data = undefined;
       this.setState({
+        orderLead: true,
         services: undefined,
         serviceInfo: undefined,
         servicesFetch: false,
@@ -276,9 +279,9 @@ class ServiceScreenStep1 extends Component {
   };
 
   _onCarChange = () => {
-    this.orderLead = false;
     this.setState(
       {
+        orderLead: false,
         date: undefined,
         time: undefined,
         services: undefined,
@@ -331,7 +334,7 @@ class ServiceScreenStep1 extends Component {
       dealer: this.props.dealerSelected,
       service: service || null,
       serviceInfo: this.state.serviceInfo || null,
-      orderLead: this.orderLead,
+      orderLead: this.state.orderLead,
       car: {
         brand: this.state.carBrand
           ? this.state.carBrand
