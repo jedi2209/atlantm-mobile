@@ -220,9 +220,9 @@ class ServiceScreenStep1 extends Component {
       let services = [];
       data.data.map((el) => {
         services.push({
-          label: el.name,
-          value: el.id,
-          key: el.id,
+          label: el.name.toString(),
+          value: el.id.toString(),
+          key: el.id.toString(),
         });
       });
       this.setState({
