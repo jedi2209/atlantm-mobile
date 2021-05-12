@@ -254,6 +254,8 @@ class ServiceScreenStep1 extends Component {
       data.data = [];
     }
 
+    console.log('data.data', data.data);
+
     this.setState({
       serviceInfo: data.data,
       serviceInfoFetch: false,

@@ -11,7 +11,12 @@ import {strings} from '../../core/lang/const';
 
 export const ServiceModal = ({visible, onClose, data}) => {
   const headerHeight = useHeaderHeight();
-  const [activeTab, setActiveTab] = useState('works');
+  let defaultTab = 'works';
+  if (data && !data['works']) {
+    defaultTab = 'parts';
+    data['works'] = [];
+  }
+  const [activeTab, setActiveTab] = useState(defaultTab);
 
   const modalStyles = StyleSheet.create({
     host: {
@@ -73,30 +78,36 @@ export const ServiceModal = ({visible, onClose, data}) => {
           {data && (
             <View style={modalStyles.content}>
               <Segment style={modalStyles.tabContainer}>
-                <Button
-                  onPress={() => setActiveTab('works')}
-                  style={modalStyles.tabButton}>
-                  <Text
-                    selectable={false}
-                    style={[
-                      modalStyles.tabButtonText,
-                      activeTab === 'works' && modalStyles.tabButtonActiveText,
-                    ]}>
-                    {strings.CarHistoryDetailsScreen.works}
-                  </Text>
-                </Button>
-                <Button
-                  onPress={() => setActiveTab('parts')}
-                  style={modalStyles.tabButton}>
-                  <Text
-                    selectable={false}
-                    style={[
-                      modalStyles.tabButtonText,
-                      activeTab === 'parts' && modalStyles.tabButtonActiveText,
-                    ]}>
-                    {strings.CarHistoryDetailsScreen.materials}
-                  </Text>
-                </Button>
+                {data['works'] && data['works'].length ? (
+                  <Button
+                    onPress={() => setActiveTab('works')}
+                    style={modalStyles.tabButton}>
+                    <Text
+                      selectable={false}
+                      style={[
+                        modalStyles.tabButtonText,
+                        activeTab === 'works' &&
+                          modalStyles.tabButtonActiveText,
+                      ]}>
+                      {strings.CarHistoryDetailsScreen.works}
+                    </Text>
+                  </Button>
+                ) : null}
+                {data['parts'] && data['parts'].length ? (
+                  <Button
+                    onPress={() => setActiveTab('parts')}
+                    style={modalStyles.tabButton}>
+                    <Text
+                      selectable={false}
+                      style={[
+                        modalStyles.tabButtonText,
+                        activeTab === 'parts' &&
+                          modalStyles.tabButtonActiveText,
+                      ]}>
+                      {strings.CarHistoryDetailsScreen.materials}
+                    </Text>
+                  </Button>
+                ) : null}
               </Segment>
               <ServiceTable data={data[activeTab]} />
             </View>
