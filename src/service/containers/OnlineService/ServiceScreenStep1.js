@@ -254,8 +254,6 @@ class ServiceScreenStep1 extends Component {
       data.data = [];
     }
 
-    console.log('data.data', data.data);
-
     this.setState({
       serviceInfo: data.data,
       serviceInfoFetch: false,
@@ -592,13 +590,15 @@ class ServiceScreenStep1 extends Component {
                 parentState={this.state}
               />
             </View>
-            <View>
-              <ServiceModal
-                visible={this.state.isModalVisible}
-                onClose={() => this.setState({isModalVisible: false})}
-                data={this.state.serviceInfo}
-              />
-            </View>
+            {this.state.serviceInfo ? (
+              <View>
+                <ServiceModal
+                  visible={this.state.isModalVisible}
+                  onClose={() => this.setState({isModalVisible: false})}
+                  data={this.state.serviceInfo}
+                />
+              </View>
+            ) : null}
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
