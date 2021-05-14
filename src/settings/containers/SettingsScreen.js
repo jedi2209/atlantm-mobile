@@ -26,7 +26,6 @@ import {connect} from 'react-redux';
 import {actionSetPushActionSubscribe, actionAppRated} from '../../core/actions';
 
 // components
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import PushNotifications from '../../core/components/PushNotifications';
 import LangSwitcher from '../../core/components/LangSwitcher';
 import RateThisApp from '../../core/components/RateThisApp';
@@ -36,15 +35,13 @@ import TransitionView from '../../core/components/TransitionView';
 import Amplitude from '../../utils/amplitude-analytics';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
 import {APP_EMAIL, STORE_LINK} from '../../core/const';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 20,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.new.mainbg,
   },
   VersionContainer: {
     width: '100%',
@@ -55,7 +52,7 @@ const styles = StyleSheet.create({
   TextVersionInfo: {
     fontSize: 12,
     fontFamily: styleConst.font.light,
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
   },
   block: {
     borderRadius: 10,
@@ -102,7 +99,7 @@ const styles = StyleSheet.create({
   LangSwitcher: {
     fontSize: 14,
     fontFamily: styleConst.font.light,
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
     width: '100%',
   },
   textInputProps: {
@@ -158,6 +155,17 @@ const deviceWidth = Dimensions.get('window').width;
 const cardWidth = deviceWidth - 20;
 
 class SettingsScreen extends PureComponent {
+  static propTypes = {
+    dealerSelected: PropTypes.object,
+    isMessageSending: PropTypes.bool,
+    actionTvaMessageFill: PropTypes.func,
+    actionTvaMessageSend: PropTypes.func,
+    actionSetActiveTvaOrderId: PropTypes.func,
+    message: PropTypes.string,
+    results: PropTypes.object,
+    activeOrderId: PropTypes.string,
+  };
+
   constructor(props) {
     super(props);
 
@@ -211,42 +219,6 @@ class SettingsScreen extends PureComponent {
     });
   };
 
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
-    return {
-      headerStyle: stylesHeader.resetBorder,
-      headerTitleStyle: stylesHeader.transparentHeaderTitle,
-      headerLeft: (
-        <HeaderIconBack
-          // theme="blue"
-          // type=""
-          icon="md-close"
-          IconStyle={{
-            fontSize: 42,
-            width: 40,
-          }}
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-      headerRight: <View />,
-    };
-  };
-
-  static propTypes = {
-    dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
-    isMessageSending: PropTypes.bool,
-    actionTvaMessageFill: PropTypes.func,
-    actionTvaMessageSend: PropTypes.func,
-    actionSetActiveTvaOrderId: PropTypes.func,
-    message: PropTypes.string,
-    results: PropTypes.object,
-    activeOrderId: PropTypes.string,
-  };
-
   onSwitchActionSubscribe = () => {
     const {
       dealerSelected,
@@ -289,15 +261,7 @@ class SettingsScreen extends PureComponent {
         <ScrollView style={styles.container}>
           <Container style={styles.container}>
             <StatusBar hidden />
-            <Text
-              style={{
-                color: '#222B45',
-                fontSize: 48,
-                fontWeight: 'bold',
-                fontFamily: styleConst.font.medium,
-                marginHorizontal: 10,
-                marginBottom: 5,
-              }}>
+            <Text style={styleConst.text.bigHead}>
               {strings.Menu.main.settings}
             </Text>
             {this.props.dealerSelected.region === 'ua' ? (

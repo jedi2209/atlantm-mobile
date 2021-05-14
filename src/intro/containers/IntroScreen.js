@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import {StyleSheet, Image, View, Text} from 'react-native';
 import {Button} from 'native-base';
 
-import {SafeAreaView} from 'react-navigation';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 // helpers
 import styleConst from '../../core/style-const';
 import {scale} from '../../utils/scale';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   container: {
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.blue,
   },
   button: {
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     bottom: '10%',
     width: '80%',
     marginHorizontal: '10%',
@@ -46,9 +46,6 @@ const styles = StyleSheet.create({
 });
 
 export default class IntroScreen extends Component {
-  static navigationOptions = () => ({
-    header: null,
-  });
 
   onPressButton = () => this.props.navigation.navigate('ChooseDealerScreen');
 

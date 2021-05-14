@@ -7,12 +7,12 @@ import {
   StyleSheet,
   ActivityIndicator,
   Dimensions,
-  StatusBar,
   RefreshControl,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {Container, Text, StyleProvider, Icon} from 'native-base';
 import {Offer} from '../../core/components/Offer';
+import Badge from '../../core/components/Badge';
 import TransitionView from '../../core/components/TransitionView';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -32,18 +32,17 @@ import {get} from 'lodash';
 import {ERROR_NETWORK} from '../../core/const';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
 import {verticalScale} from '../../utils/scale';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 // components
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import PushNotifications from '../../core/components/PushNotifications';
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: styleConst.color.bg,
     flex: 1,
+    paddingBottom: 20,
   },
   spinner: {
     alignSelf: 'center',
@@ -63,10 +62,12 @@ const mapStateToProps = ({dealer, info, nav, core}) => {
   return {
     nav,
     list: info.list,
+    filters: info.filters,
     visited: info.visited,
     dealerSelected: dealer.selected,
     isFetchInfoList: info.meta.isFetchInfoList,
     pushActionSubscribeState: core.pushActionSubscribeState,
+    currLang: core.language.selected,
   };
 };
 
@@ -78,10 +79,15 @@ const mapDispatchToProps = {
 };
 
 class InfoListScreen extends Component {
+  static defaultProps = {
+    type: null,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       isRefreshing: false,
+      type: null,
     };
     this.zoomIn = {
       1: {
@@ -115,22 +121,6 @@ class InfoListScreen extends Component {
       navigation.state.params && navigation.state.params.pushStatusLoaded;
 
     return {
-      headerTitle: (
-        <Text style={stylesHeader.blueHeaderTitle}>
-          {strings.InfoListScreen.title}
-        </Text>
-      ),
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: (
-        <View>
-          <HeaderIconBack
-            theme="white"
-            navigation={navigation}
-            returnScreen={returnScreen}
-          />
-        </View>
-      ),
       headerRight: () => {
         return pushStatusLoaded ? (
           <Icon
@@ -207,7 +197,7 @@ class InfoListScreen extends Component {
     } = this.props;
     const {region, id: dealer} = dealerSelected;
 
-    this.props.navigation.setParams({
+    navigation.setParams({
       pushActionSubscribeState: this.props.pushActionSubscribeState,
       onSwitchSubscribe: this.onSwitchActionSubscribe,
       pushStatusLoaded: true,
@@ -215,7 +205,7 @@ class InfoListScreen extends Component {
 
     if (!isFetchInfoList) {
       actionListReset();
-      fetchInfoList(region, dealer).then((action) => {
+      fetchInfoList(region, dealer, this.state.type).then((action) => {
         if (action.type === INFO_LIST__FAIL) {
           let message = get(
             action,
@@ -239,27 +229,27 @@ class InfoListScreen extends Component {
 
     this.setState({isRefreshing: true});
 
-    this.props.fetchInfoList(region, dealer).then(() => {
+    this.props.fetchInfoList(region, dealer, this.state.type).then(() => {
       this.setState({isRefreshing: false});
     });
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   const nav = nextProps.nav.newState;
+  //   let isActiveScreen = false;
 
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen =
-          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
-          'InfoListScreen';
-      }
-    }
+  //   if (nav) {
+  //     const rootLevel = nav.routes[nav.index];
+  //     if (rootLevel) {
+  //       isActiveScreen =
+  //         get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
+  //         'InfoListScreen';
+  //     }
+  //   }
 
-    return true;
-    // return isActiveScreen;
-  }
+  //   return true;
+  //   // return isActiveScreen;
+  // }
 
   renderItem = (data) => {
     return (
@@ -271,7 +261,7 @@ class InfoListScreen extends Component {
           styleConst.shadow.default,
           {
             width: cardWidth,
-            backgroundColor: '#fff',
+            backgroundColor: styleConst.color.white,
             borderRadius: 5,
             marginVertical: 10,
             marginHorizontal: 10,
@@ -303,7 +293,17 @@ class InfoListScreen extends Component {
   };
 
   render() {
-    const {list, isFetchInfoList} = this.props;
+    const {
+      list,
+      filters,
+      fetchInfoList,
+      actionListReset,
+      isFetchInfoList,
+      dealerSelected,
+      currLang,
+    } = this.props;
+
+    const {region, id: dealer} = dealerSelected;
 
     console.log('== InfoListScreen ==');
     return (
@@ -319,18 +319,74 @@ class InfoListScreen extends Component {
               progressBackgroundColor={styleConst.color.blue}
             />
           }>
-          <StatusBar hidden />
           {!this.state.isRefreshing ? (
-            <FlatList
-              data={list}
-              extraData={isFetchInfoList}
-              onRefresh={this._onRefresh}
-              refreshing={this.state.isRefreshing}
-              ListEmptyComponent={this.renderEmptyComponent}
-              style={styles.list}
-              renderItem={this.renderItem}
-              keyExtractor={(item) => `${item.hash.toString()}`}
-            />
+            <>
+              {filters ? (
+                <View
+                  style={{
+                    marginVertical: 10,
+                    marginHorizontal: 10,
+                    flexDirection: 'row',
+                  }}>
+                  {filters.map((el, i) => {
+                    return (
+                      <Badge
+                        id={el.id}
+                        key={'badgeItem' + el.id + i}
+                        index={i}
+                        bgColor={el.badge?.background}
+                        name={el.name[currLang]}
+                        textColor={el.badge?.color}
+                        badgeContainerStyle={{marginRight: 20, padding: 10}}
+                        textStyle={{fontSize: 14}}
+                        onPress={() => {
+                          this.setState(
+                            {
+                              type: el.id,
+                            },
+                            () => {
+                              console.log(this.state);
+                              if (!isFetchInfoList) {
+                                actionListReset();
+                                fetchInfoList(
+                                  region,
+                                  dealer,
+                                  this.state.type,
+                                ).then((action) => {
+                                  if (action.type === INFO_LIST__FAIL) {
+                                    let message = get(
+                                      action,
+                                      'payload.message',
+                                      strings.Notifications.error.text,
+                                    );
+
+                                    if (message === 'Network request failed') {
+                                      message = ERROR_NETWORK;
+                                    }
+
+                                    setTimeout(() => Alert.alert(message), 100);
+                                  }
+                                });
+                              }
+                            },
+                          );
+                        }}
+                      />
+                    );
+                  })}
+                </View>
+              ) : null}
+              <FlatList
+                data={list}
+                extraData={isFetchInfoList}
+                onRefresh={this._onRefresh}
+                refreshing={this.state.isRefreshing}
+                ListEmptyComponent={this.renderEmptyComponent}
+                style={styles.list}
+                renderItem={this.renderItem}
+                keyExtractor={(item) => `${item.hash.toString()}`}
+              />
+            </>
           ) : (
             <ActivityIndicator
               color={styleConst.color.blue}

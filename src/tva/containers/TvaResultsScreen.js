@@ -27,22 +27,18 @@ import {
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
 
-// components
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import {dayMonthYearTime} from '../../utils/date';
 import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
 import {
   TVA_SEND_MESSAGE__SUCCESS,
   TVA_SEND_MESSAGE__FAIL,
 } from '../actionTypes';
 import isInternet from '../../utils/internet';
 import {ERROR_NETWORK} from '../../core/const';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const $size = 40;
 const styles = StyleSheet.create({
@@ -61,7 +57,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 14,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
   },
   header: {
     marginBottom: 36,
@@ -87,7 +83,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     // borderColor: '#d8d8d8',
     // borderBottomWidth: 1,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     color: '#222b45',
     fontSize: 18,
   },
@@ -98,7 +94,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     textTransform: 'uppercase',
     fontSize: 16,
   },
@@ -123,6 +119,17 @@ const mapDispatchToProps = {
 };
 
 class TvaResultsScreen extends Component {
+  static propTypes = {
+    dealerSelected: PropTypes.object,
+    isMessageSending: PropTypes.bool,
+    actionTvaMessageFill: PropTypes.func,
+    actionTvaMessageSend: PropTypes.func,
+    actionSetActiveTvaOrderId: PropTypes.func,
+    message: PropTypes.string,
+    results: PropTypes.object,
+    activeOrderId: PropTypes.string,
+  };
+
   constructor(props) {
     super(props);
 
@@ -132,36 +139,6 @@ class TvaResultsScreen extends Component {
       success: false,
     };
   }
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
-    return {
-      headerStyle: stylesHeader.whiteHeader,
-      headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: strings.TvaResultsScreen.title,
-      headerLeft: (
-        <HeaderIconBack
-          theme="blue"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-      headerRight: <View />,
-    };
-  };
-
-  static propTypes = {
-    dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
-    isMessageSending: PropTypes.bool,
-    actionTvaMessageFill: PropTypes.func,
-    actionTvaMessageSend: PropTypes.func,
-    actionSetActiveTvaOrderId: PropTypes.func,
-    message: PropTypes.string,
-    results: PropTypes.object,
-    activeOrderId: PropTypes.string,
-  };
 
   componentDidMount() {
     const {
@@ -309,7 +286,7 @@ class TvaResultsScreen extends Component {
                         style={[
                           styles.group,
                           activeOrderId === item.id && {
-                            backgroundColor: '#fff',
+                            backgroundColor: styleConst.color.white,
                           },
                         ]}>
                         <Text style={styles.groupLabel}>№ {item.id}</Text>
@@ -369,7 +346,7 @@ class TvaResultsScreen extends Component {
                       }
                       style={[styleConst.shadow.default, styles.button]}>
                       {this.state.loading ? (
-                        <ActivityIndicator color="#fff" />
+                        <ActivityIndicator color={styleConst.color.white} />
                       ) : (
                         <Text style={styles.buttonText}>
                           {strings.Form.button.send}

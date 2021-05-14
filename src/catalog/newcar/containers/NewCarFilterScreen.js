@@ -32,10 +32,9 @@ import {
 import Amplitude from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import showPrice from '../../../utils/price';
-import stylesHeader from '../../../core/components/Header/style';
 import {ScrollView} from 'react-native-gesture-handler';
 
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -156,29 +155,8 @@ const mapDispatchToProps = {
 };
 
 class NewCarFilterScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: strings.NewCarFilterScreen.title,
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: {fontWeight: '200', color: '#000'},
-    headerLeft: <View />,
-    headerRight: (
-      <Icon
-        type="AntDesign"
-        style={{
-          color: '#000',
-          fontWeight: 'lighter',
-          fontSize: 22,
-          marginRight: 14,
-        }}
-        name="close"
-        onPress={() => navigation.goBack()}
-      />
-    ),
-  });
-
   static propTypes = {
     dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
   };
 
   constructor(props) {
@@ -404,7 +382,7 @@ class NewCarFilterScreen extends Component {
                         borderRadius: 0,
                         backgroundColor: checked
                           ? styleConst.color.lightBlue
-                          : '#fff',
+                          : styleConst.color.white,
                         borderColor: checked ? 'transparent' : '#d0d5dc',
                         fontSize: 40,
                       }}
@@ -549,7 +527,7 @@ class NewCarFilterScreen extends Component {
                         borderRadius: 0,
                         backgroundColor: checked
                           ? styleConst.color.lightBlue
-                          : '#fff',
+                          : styleConst.color.white,
                         borderColor: checked ? 'transparent' : '#d0d5dc',
                         fontSize: 40,
                       }}
@@ -617,7 +595,7 @@ class NewCarFilterScreen extends Component {
                         borderRadius: 0,
                         backgroundColor: checked
                           ? styleConst.color.lightBlue
-                          : '#fff',
+                          : styleConst.color.white,
                         borderColor: checked ? 'transparent' : '#d0d5dc',
                         fontSize: 40,
                       }}
@@ -657,7 +635,7 @@ class NewCarFilterScreen extends Component {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  backgroundColor: '#fff',
+                  backgroundColor: styleConst.color.white,
                   borderBottomWidth: expanded ? 0 : 1,
                   borderColor: '#d5d5e0',
                 }}>
@@ -684,7 +662,7 @@ class NewCarFilterScreen extends Component {
               return (
                 <View
                   style={{
-                    backgroundColor: '#fff',
+                    backgroundColor: styleConst.color.white,
                     paddingHorizontal: 16,
                     borderBottomWidth: 1,
                     borderBottomColor: '#d5d5e0',
@@ -715,7 +693,7 @@ class NewCarFilterScreen extends Component {
                   borderRadius: 5,
                 },
               ]}>
-              <Text style={{color: '#fff', fontSize: 16}}>
+              <Text style={{color: styleConst.color.white, fontSize: 16}}>
                 {strings.UsedCarFilterScreen.apply}
               </Text>
             </Button>

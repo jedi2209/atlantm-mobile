@@ -16,7 +16,7 @@ import {DatePickerCustom} from '../../core/components/DatePickerCustom';
 import {time, yearMonthDay} from '../../utils/date';
 import styleConst from '../../core/style-const';
 import API from '../../utils/api';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   scrollView: {},
@@ -346,7 +346,11 @@ export default class ChooseDateTimeComponent extends Component {
                         key={'timeSelectButton' + idx}
                         style={[
                           styles.button,
-                          {backgroundColor: isActive ? '#027aff' : '#fff'},
+                          {
+                            backgroundColor: isActive
+                              ? '#027aff'
+                              : styleConst.color.white,
+                          },
                         ]}
                         onPress={() => {
                           this.setState({time: item.from});
@@ -360,7 +364,11 @@ export default class ChooseDateTimeComponent extends Component {
                           selectable={false}
                           style={[
                             styles.buttonText,
-                            {color: isActive ? '#fff' : '#027aff'},
+                            {
+                              color: isActive
+                                ? styleConst.color.white
+                                : '#027aff',
+                            },
                           ]}>
                           {`${from}`}
                         </Text>

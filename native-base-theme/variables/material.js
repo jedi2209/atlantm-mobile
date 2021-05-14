@@ -1,4 +1,5 @@
 import color from 'color';
+import styleConst from '../../src/core/style-const';
 
 import {Platform, Dimensions, PixelRatio} from 'react-native';
 
@@ -238,7 +239,7 @@ export default {
   inverseSpinnerColor: '#1A191B',
 
   // Tabs
-  tabBgColor: '#F8F8F8',
+  tabBgColor: styleConst.new.mainbg,
   tabFontSize: 15,
   tabTextColor: '#222222',
 

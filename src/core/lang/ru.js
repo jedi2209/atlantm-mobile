@@ -265,10 +265,10 @@ export default {
     brands: 'Бренды',
     models: 'Модели',
   },
-  UserCarListScreen: {
+  UsedCarListScreen: {
     title: 'Авто с пробегом',
   },
-  UserCarItemScreen: {
+  UsedCarItemScreen: {
     showFull: 'Показать полное описание...',
     showLess: 'Свернуть',
     creditCalculate: 'рассчитать кредит',
@@ -329,6 +329,10 @@ export default {
   },
   ReviewAddMessageForm: {
     label: {
+      plus: 'Что тебе понравилось в работе автоцентра?',
+      minus: 'Чем ты остался недоволен в работе автоцентра?',
+    },
+    placeholder: {
       plus:
         'Что тебе понравилось в работе автоцентра? Кому бы ты хотел выразить благодарность?',
       minus: 'Чем ты остался недоволен в работе автоцентра?',

@@ -12,7 +12,7 @@ const HEIGHT_TRIANGLE = 10;
 const styles = StyleSheet.create({
   descriptionContainer: {
     zIndex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.bg,
     marginTop: HEIGHT_TRIANGLE,
     paddingVertical: styleConst.ui.horizontalGap,
     paddingHorizontal: styleConst.ui.verticalGap,
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
 });
 
-let IndicatorDescription = ({name, description}) => {
+const IndicatorDescription = ({name, description}) => {
   // избавляюсь в android от символов-артефактов
   const cleanDescription = description.trim();
 

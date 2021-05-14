@@ -133,7 +133,7 @@ export default {
 
   // Footer
   footerHeight: 55,
-  footerDefaultBg: platform === 'ios' ? '#F8F8F8' : '#4179F7',
+  footerDefaultBg: platform === 'ios' ? styleConst.new.mainbg : '#4179F7',
 
   // FooterTab
   tabBarTextColor: platform === 'ios' ? '#6b6b6b' : '#0F66B2',
@@ -142,7 +142,7 @@ export default {
   tabActiveBgColor: platform === 'ios' ? '#cde1f9' : '#cde1f9',
 
   // Tab
-  tabDefaultBg: platform === 'ios' ? '#F8F8F8' : '#F8F8F8',
+  tabDefaultBg: styleConst.new.mainbg,
   topTabBarTextColor: platform === 'ios' ? '#6b6b6b' : '#0F66B2',
   topTabBarActiveTextColor: platform === 'ios' ? '#007aff' : '#000',
   topTabActiveBgColor: platform === 'ios' ? '#cde1f9' : '#0F66B2',
@@ -151,7 +151,7 @@ export default {
 
   // Header
   toolbarBtnColor: platform === 'ios' ? '#007aff' : '#fff',
-  toolbarDefaultBg: platform === 'ios' ? '#F8F8F8' : '#3F51B5',
+  toolbarDefaultBg: platform === 'ios' ? styleConst.new.mainbg : '#3F51B5',
   toolbarHeight: platform === 'ios' ? 64 : 56,
   toolbarIconSize: platform === 'ios' ? 20 : 22,
   toolbarSearchIconSize: platform === 'ios' ? 20 : 23,
@@ -237,7 +237,7 @@ export default {
   inverseSpinnerColor: '#1A191B',
 
   // Tabs
-  tabBgColor: '#F8F8F8',
+  tabBgColor: styleConst.new.mainbg,
   tabFontSize: 15,
   tabTextColor: '#222222',
 

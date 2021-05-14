@@ -1,23 +1,13 @@
-import React, {Component} from 'react';
-import {withNavigation} from 'react-navigation';
-import {View} from 'react-native';
-
-import stylesHeader from '../../core/components/Header/style';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
+import React from 'react';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 import Service from './ServiceScreen';
-import ServiceNew from './OnlineService/ServiceScreenNewStep1';
+import ServiceScreenStep1 from './OnlineService/ServiceScreenStep1';
 import ServiceNewNonAuth from './OnlineService/ServiceScreenNonAuth';
 import {connect} from 'react-redux';
 import {get} from 'lodash';
-import strings from '../../core/lang/const';
 
-const ServiceOldScreen = withNavigation(Service);
-const ServiceScreenStep1 = withNavigation(ServiceNew);
-const ServiceScreenNonAuth = withNavigation(ServiceNewNonAuth);
-
-const mapStateToProps = ({dealer, profile, navigation}) => {
-  console.log('profile', profile);
+const mapStateToProps = ({dealer, profile}) => {
   return {
     dealerSelected: dealer.selected,
     loginID: get(profile, 'login.ID', false),
@@ -25,39 +15,18 @@ const mapStateToProps = ({dealer, profile, navigation}) => {
   };
 };
 
-class ServiceContainer extends Component {
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
-    let headerTitle = strings.ServiceScreen.title;
-
-    return {
-      headerStyle: stylesHeader.whiteHeader,
-      headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: headerTitle,
-      headerLeft: (
-        <HeaderIconBack
-          theme="blue"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-      headerRight: <View />,
-    };
-  };
-
-  render() {
-    const {dealerSelected, loginID, cars} = this.props;
-    if (dealerSelected.region === 'by') {
-      if (loginID && cars && cars.length > 0) {
-        return <ServiceScreenStep1 />;
-      } else {
-        return <ServiceScreenNonAuth />;
-      }
+const ServiceContainer = (props) => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const {dealerSelected, loginID, cars} = props;
+  if (dealerSelected.region === 'by') {
+    if (loginID && cars && cars.length > 0) {
+      return <ServiceScreenStep1 navigation={navigation} route={route} />;
+    } else {
+      return <ServiceNewNonAuth navigation={navigation} route={route} />;
     }
-    return <ServiceOldScreen />;
   }
-}
+  return <Service navigation={navigation} route={route} />;
+};
 
 export default connect(mapStateToProps)(ServiceContainer);

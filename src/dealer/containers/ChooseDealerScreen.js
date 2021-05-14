@@ -1,22 +1,18 @@
-import React, {PureComponent} from 'react';
-import {View, StatusBar} from 'react-native';
+import React from 'react';
 
 // redux
 import {connect} from 'react-redux';
 import {actionSetPushActionSubscribe} from '../../core/actions';
-// import {actionSetGlobalLanguage} from '../../core/lang/actions';
+
 // actions
 import {fetchDealers, fetchBrands} from '../actions';
 
 // components
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import SelectListByCountry from '../../core/components/SelectListByCountry';
 import PushNotifications from '../../core/components/PushNotifications';
 
 // helpers
 import {get} from 'lodash';
-import stylesHeader from '../../core/components/Header/style';
-import strings from '../../core/lang/const';
 
 const mapStateToProps = ({dealer, nav, core}) => {
   return {
@@ -40,87 +36,63 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
 };
 
-class ChooseDealerScreen extends PureComponent {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: strings.ChooseDealerScreen.title,
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: <HeaderIconBack theme="white" navigation={navigation} />,
-    headerRight: <View />,
-  });
+const _onSelectDealer = (props) => {
+  const {pushActionSubscribeState, prevDealer, newDealer, isLocal} = props;
+  // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
 
-  constructor(props) {
-    super(props);
-    if (props.listBrands && props.listBrands.length === 0) {
-      props.fetchBrands();
-    }
+  if (pushActionSubscribeState) {
+    PushNotifications.subscribeToTopic('actions', newDealer.id);
+  } else {
+    PushNotifications.unsubscribeFromTopic('actions');
+  }
+};
+
+const ChooseDealerScreen = (props) => {
+  const {
+    region,
+    listRussia,
+    listUkraine,
+    listBelarussia,
+    isFetchDealer,
+    navigation,
+    fetchDealers,
+    fetchBrands,
+    dealerSelected,
+    isFetchDealersList,
+  } = props;
+
+  const goBack = get(props.route, 'params.goBack', false);
+  const isLocal = get(props.route, 'params.isLocal', false);
+  const returnScreen = get(props.route, 'params.returnScreen', null);
+  const returnState = get(props.route, 'params.returnState', null);
+  const listAll = get(props.route, 'params.listAll', null);
+
+  if (props.listBrands && props.listBrands.length === 0) {
+    props.fetchBrands();
   }
 
-  // ВАЖНО! ЯВНО ОТКЛЮЧЕН ИЗ-ЗА ПРОБЛЕМ ПЕРВОЙ ЗАГРУЗКИ НА IOS 11+
-  // shouldComponentUpdate(nextProps) {
-  //   const nav = nextProps.nav.newState;
+  console.log('== ChooseDealer ==', props);
 
-  //   return nav.routes[nav.index].routeName === 'ChooseDealerScreen';
-  // }
-
-  onSelectDealer = ({prevDealer, newDealer, isLocal}) => {
-    const {pushActionSubscribeState} = this.props;
-    // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
-
-    if (pushActionSubscribeState) {
-      PushNotifications.subscribeToTopic('actions', newDealer.id);
-    } else {
-      PushNotifications.unsubscribeFromTopic('actions');
-    }
-  };
-
-  render() {
-    console.log('== ChooseDealer ==', this.props);
-
-    const {
-      region,
-      listRussia,
-      listUkraine,
-      listBelarussia,
-      isFetchDealer,
-      navigation,
-      fetchDealers,
-      fetchBrands,
-      selectRegion,
-      dealerSelected,
-      isFetchDealersList,
-    } = this.props;
-
-    const goBack = get(navigation, 'state.params.goBack', false);
-    const isLocal = get(navigation, 'state.params.isLocal', false);
-    const returnScreen = get(navigation, 'state.params.returnScreen', null);
-    const returnState = get(navigation, 'state.params.returnState', null);
-    const listAll = get(navigation, 'state.params.listAll', null);
-
-    return (
-      <>
-        <StatusBar barStyle="light-content" />
-        <SelectListByCountry
-          itemLayout="dealer"
-          region={region}
-          dataHandler={fetchDealers}
-          isFetchList={isFetchDealersList || isFetchDealer}
-          listRussia={listRussia}
-          listUkraine={listUkraine}
-          listAll={listAll}
-          listBelarussia={listBelarussia}
-          // navigation={navigation}
-          selectRegion={selectRegion}
-          returnScreen={returnScreen}
-          returnState={returnState}
-          selectedItem={dealerSelected}
-          goBack={goBack}
-          isLocal={isLocal}
-          onSelect={this.onSelectDealer}
-        />
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <SelectListByCountry
+        itemLayout="dealer"
+        region={region}
+        dataHandler={fetchDealers}
+        isFetchList={isFetchDealersList || isFetchDealer}
+        listRussia={listRussia}
+        listUkraine={listUkraine}
+        listAll={listAll}
+        listBelarussia={listBelarussia}
+        returnScreen={returnScreen}
+        returnState={returnState}
+        selectedItem={dealerSelected}
+        goBack={goBack}
+        isLocal={isLocal}
+        onSelect={_onSelectDealer}
+      />
+    </>
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChooseDealerScreen);

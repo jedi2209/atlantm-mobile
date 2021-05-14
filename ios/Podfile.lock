@@ -312,6 +312,8 @@ PODS:
   - react-native-onesignal (3.9.3):
     - OneSignal (= 2.16.1)
     - React (< 1.0.0, >= 0.13.0)
+  - react-native-safe-area-context (3.1.9):
+    - React-Core
   - react-native-slider (3.0.3):
     - React
   - react-native-splash-screen (3.2.0):
@@ -319,7 +321,7 @@ PODS:
   - react-native-text-input-mask (2.0.1):
     - React
     - RNInputMask
-  - react-native-viewpager (4.2.3):
+  - react-native-viewpager (5.0.9):
     - React-Core
   - react-native-vkontakte-login (1.0.1):
     - React
@@ -392,15 +394,17 @@ PODS:
     - React-Core
   - RNAppleAuthentication (2.1.0):
     - React-Core
-  - RNCAsyncStorage (1.13.4):
+  - RNCAsyncStorage (1.14.1):
     - React-Core
+  - RNCMaskedView (0.1.10):
+    - React
   - RNCPicker (1.9.11):
     - React-Core
   - RNDateTimePicker (3.0.9):
     - React-Core
-  - RNDeviceInfo (8.0.1):
+  - RNDeviceInfo (8.0.2):
     - React-Core
-  - RNGestureHandler (1.10.1):
+  - RNGestureHandler (1.10.3):
     - React-Core
   - RNGoogleSignin (5.0.0):
     - GoogleSignIn (~> 5.0.0)
@@ -419,14 +423,14 @@ PODS:
     - React
   - RNReanimated (1.13.2):
     - React-Core
-  - RNScreens (2.17.1):
+  - RNScreens (2.18.0):
     - React-Core
-  - RNSentry (2.2.1):
+  - RNSentry (2.2.2):
     - React-Core
     - Sentry (= 6.1.4)
   - RNSVG (12.1.0):
     - React
-  - RNVectorIcons (8.0.0):
+  - RNVectorIcons (8.1.0):
     - React-Core
   - Sentry (6.1.4):
     - Sentry/Core (= 6.1.4)
@@ -483,6 +487,7 @@ DEPENDENCIES:
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
+  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-text-input-mask (from `../node_modules/react-native-text-input-mask`)
@@ -503,6 +508,7 @@ DEPENDENCIES:
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
@@ -587,6 +593,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-maps"
   react-native-onesignal:
     :path: "../node_modules/react-native-onesignal"
+  react-native-safe-area-context:
+    :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   react-native-splash-screen:
@@ -627,6 +635,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@invertase/react-native-apple-authentication"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCMaskedView:
+    :path: "../node_modules/@react-native-community/masked-view"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
   RNDateTimePicker:
@@ -698,10 +708,11 @@ SPEC CHECKSUMS:
   react-native-google-maps: 0a989abda71059db2caa98b9dacca7a8f38a47d0
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c
   react-native-onesignal: f92b6fae16388422f1b5d73b2c31e7000f481ae8
+  react-native-safe-area-context: b6e0e284002381d2ff29fa4fff42b4d8282e3c94
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-text-input-mask: cffd00848940e7670cf233a99e7be782257935ed
-  react-native-viewpager: 936c67cba6e9ca19793d04321427a44cb8e43395
+  react-native-viewpager: f16840077422b6e2c0a4a94a8cce4ed02a677528
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
   react-native-webview: 6520e3e7b4933de76b95ef542c8d7115cf45b68e
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
@@ -717,20 +728,21 @@ SPEC CHECKSUMS:
   ReactNativeLocalization: dbb269b27d8a84bb22b9c2cdec38ba780b51dd72
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNAppleAuthentication: 46cbc67739bae83ca229497f9b0038f3f5431443
-  RNCAsyncStorage: 44539979e1f234262d64d3ce86ec21cceb1b2c5e
+  RNCAsyncStorage: fe58eec522885718d6b297b7b658bf87d7ca557b
+  RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNCPicker: 6780c753e9e674065db90d9c965920516402579d
   RNDateTimePicker: 8a51a2216c307769e69ef827293d59549ab1ca23
-  RNDeviceInfo: 921a809eaf9de79645a24de1c6ca90db6cb91786
-  RNGestureHandler: 5e58135436aacc1c5d29b75547d3d2b9430d052c
+  RNDeviceInfo: a9601119924a67d2479d3facf04cec7b658f44ed
+  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNImageCropPicker: e641bf83ac47324994cac139bde74635ec52c17c
   RNInputMask: 815461ebdf396beb62cf58916c35cf6930adb991
   RNRate: 15b861025a7821730761fce7f44561ce7e0b2de0
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
-  RNScreens: b6c9607e6fe47c1b6e2f1910d2acd46dd7ecea3a
-  RNSentry: 7104cdfc1072ccb86015d9c8f210d81ae76806c1
+  RNScreens: f0d7a2a440a8ba9f4574ca1ddb3368f473891be4
+  RNSentry: 490708be01d0871588b33435d144369551ab038d
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
-  RNVectorIcons: f67a1abce2ec73e62fe4606e8110e95a832bc859
+  RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   Sentry: 9d055e2de30a77685e86b219acf02e59b82091fc
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   VK-ios-sdk: 5bcf00a2014a7323f98db9328b603d4f96635caa

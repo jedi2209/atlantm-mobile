@@ -4,18 +4,18 @@ import PropTypes from 'prop-types';
 
 // helpers
 import styleConst from '../../core/style-const';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   container: {
     padding: styleConst.ui.horizontalGap,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     minHeight: 80,
     borderBottomWidth: styleConst.ui.borderWidth,
     borderBottomColor: styleConst.color.greyText,
   },
   textarea: {
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     fontSize: 17,
     color: styleConst.color.greyText,
     fontFamily: styleConst.font.light,

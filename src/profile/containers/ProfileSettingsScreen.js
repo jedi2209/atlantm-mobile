@@ -10,20 +10,10 @@ import SocialAuth from '../components/SocialAuth';
 
 import {actionSaveProfileToAPI} from '../actions';
 
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-import stylesHeader from '../../core/components/Header/style';
 import Amplitude from '../../utils/amplitude-analytics';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 class ProfileSettingsScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerStyle: stylesHeader.whiteHeader,
-    headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerTitle: strings.ProfileSettingsScreen.title,
-    headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
-    headerRight: <View />,
-  });
-
   constructor(props) {
     super(props);
     const {
@@ -166,6 +156,7 @@ class ProfileSettingsScreen extends Component {
   }
 
   onPressSave = (props) => {
+    const nav = this.props.navigation;
     this.setState({loading: true});
     let emailValue = [];
     let phoneValue = [];
@@ -223,15 +214,14 @@ class ProfileSettingsScreen extends Component {
     return this.props
       .actionSaveProfileToAPI(profileToSend)
       .then((data) => {
-        const _this = this;
         Alert.alert(
           strings.Notifications.success.title,
           strings.Notifications.success.textProfileUpdate,
           [
             {
               text: 'ОК',
-              onPress() {
-                _this.props.navigation.navigate('ProfileScreenInfo');
+              onPress: () => {
+                nav.navigate('LoginScreen');
               },
             },
           ],

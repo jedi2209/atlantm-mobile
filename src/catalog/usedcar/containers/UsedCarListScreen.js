@@ -1,13 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-import {Icon} from 'native-base';
+import {StyleSheet, View, StatusBar} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -27,11 +20,7 @@ import CarList from '../../components/CarList';
 
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
-import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
-import {EVENT_DEFAULT} from '../../actionTypes';
-import strings from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -41,11 +30,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
-  },
-  iconFilter: {
-    color: '#fff',
-    fontSize: 25,
-    marginRight: 15,
   },
 });
 
@@ -76,30 +60,7 @@ const mapDispatchToProps = {
   actionSetStopNeedUpdateUsedCarList,
 };
 
-class UserCarListScreen extends Component {
-  static navigationOptions = ({navigation}) => {
-    return {
-      headerTitle: (
-        <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
-          {strings.UserCarListScreen.title}
-        </Text>
-      ),
-      headerLeft: <View />,
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerRight: (
-        <View style={stylesHeader.headerRightStyle}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('UsedCarFilterScreen');
-            }}>
-            <Icon type="FontAwesome" name="filter" style={styles.iconFilter} />
-          </TouchableOpacity>
-        </View>
-      ),
-    };
-  };
-
+class UsedCarListScreen extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.props.navigation.setParams({
@@ -145,7 +106,7 @@ class UserCarListScreen extends Component {
 
     const nav = nextProps.nav.newState;
     const isActiveScreen =
-      nav.routes[nav.index].routeName === 'UserCarListScreen';
+      nav.routes[nav.index].routeName === 'UsedCarListScreen';
 
     return (
       (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
@@ -215,4 +176,4 @@ class UserCarListScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserCarListScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(UsedCarListScreen);

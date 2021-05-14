@@ -9,7 +9,9 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
+  Text,
 } from 'react-native';
+import {Icon, Button} from 'native-base';
 import Form from '../../core/components/Form/Form';
 import {CarCard} from '../../profile/components/CarCard';
 
@@ -27,7 +29,7 @@ import isInternet from '../../utils/internet';
 import {addDays, dayMonthYear, yearMonthDay} from '../../utils/date';
 import {ERROR_NETWORK} from '../../core/const';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
   const cars = orderBy(profile.cars, ['owner'], ['asc']);
@@ -107,7 +109,7 @@ class ServiceScreen extends Component {
       ].join(' ');
       this.state.carVIN = this.props.cars[0].vin;
     }
-    const carFromNavigation = get(this.props.navigation, 'state.params.car');
+    const carFromNavigation = get(this.props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
       this.state.carBrand = get(carFromNavigation, 'brand');
       this.state.carModel = get(carFromNavigation, 'model');
@@ -127,7 +129,6 @@ class ServiceScreen extends Component {
 
   static propTypes = {
     dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
     localUserDataUpdate: PropTypes.func,
     isOrderServiceRequest: PropTypes.bool,
   };
@@ -210,7 +211,7 @@ class ServiceScreen extends Component {
               [
                 {
                   text: 'ОК',
-                  onPress() {
+                  onPress: () => {
                     navigation.goBack();
                   },
                 },
@@ -229,13 +230,6 @@ class ServiceScreen extends Component {
     } catch (error) {}
   };
 
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    const isActiveScreen = nav.routes[nav.index].routeName === 'ServiceScreen';
-
-    return isActiveScreen;
-  }
-
   render() {
     this.FormConfig = {
       fields: {
@@ -251,7 +245,6 @@ class ServiceScreen extends Component {
                 props: {
                   goBack: false,
                   isLocal: false,
-                  navigation: this.props.navigation,
                 },
               },
               {
@@ -279,36 +272,81 @@ class ServiceScreen extends Component {
                     name: 'CARNAME',
                     type: 'component',
                     label: strings.Form.field.label.car2,
-                    value: (
-                      <ScrollView
-                        showsHorizontalScrollIndicator={false}
-                        horizontal
-                        style={styles.carContainer}
-                        contentContainerStyle={styles.carContainerContent}>
-                        {(this.myCars || []).map((item) => {
-                          return (
-                            <TouchableWithoutFeedback
-                              activeOpacity={0.7}
-                              key={item.vin}
-                              onPress={() => {
-                                this._selectCar(item);
-                              }}>
-                              <View>
-                                <CarCard
-                                  key={item.vin}
-                                  data={item}
-                                  type="check"
-                                  checked={this.state.carVIN === item.vin}
-                                  onPress={() => {
-                                    this._selectCar(item);
-                                  }}
-                                />
-                              </View>
-                            </TouchableWithoutFeedback>
-                          );
-                        })}
-                      </ScrollView>
-                    ),
+                    value:
+                      this.myCars && this.myCars.length ? (
+                        <ScrollView
+                          showsHorizontalScrollIndicator={false}
+                          horizontal
+                          style={styles.carContainer}
+                          contentContainerStyle={styles.carContainerContent}>
+                          {(this.myCars || []).map((item) => {
+                            return (
+                              <TouchableWithoutFeedback
+                                activeOpacity={0.7}
+                                key={item.vin}
+                                onPress={() => {
+                                  this._selectCar(item);
+                                }}>
+                                <View>
+                                  <CarCard
+                                    key={item.vin}
+                                    data={item}
+                                    type="check"
+                                    checked={this.state.carVIN === item.vin}
+                                    onPress={() => {
+                                      this._selectCar(item);
+                                    }}
+                                  />
+                                </View>
+                              </TouchableWithoutFeedback>
+                            );
+                          })}
+                        </ScrollView>
+                      ) : (
+                        <View
+                          style={[
+                            styles.scrollViewInner,
+                            {
+                              flex: 1,
+                              paddingLeft: 24,
+                              paddingRight: 5,
+                              marginVertical: 29.5,
+                              textAlign: 'center',
+                              alignContent: 'center',
+                              width: '100%',
+                              alignItems: 'center',
+                            },
+                          ]}
+                          useNativeDriver>
+                          <Icon
+                            type="MaterialCommunityIcons"
+                            name="car-off"
+                            fontSize={20}
+                          />
+                          <Text
+                            style={{
+                              marginTop: 5,
+                              marginLeft: 10,
+                              lineHeight: 20,
+                            }}>
+                            {strings.UserCars.empty.text + '\r\n'}
+                          </Text>
+                          <Button
+                            full
+                            bordered
+                            style={{borderRadius: 5}}
+                            onPress={() => {
+                              this.props.navigation.navigate('About', {
+                                screen: 'LoginScreen',
+                                activePanel: 'hidden',
+                              });
+                            }}>
+                            <Text style={{padding: 5}}>
+                              {strings.UserCars.archiveCheck}
+                            </Text>
+                          </Button>
+                        </View>
+                      ),
                   },
                 ]
               : [

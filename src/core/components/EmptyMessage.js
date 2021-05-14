@@ -20,9 +20,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const emptyMessage = ({text}) => (
-  <View style={styles.messageContainer}>
-    <Text style={styles.message}>{text}</Text>
+const emptyMessage = ({text, style, styleText}) => (
+  <View style={[styles.messageContainer, style]}>
+    <Text style={[styles.message, styleText]}>{text}</Text>
   </View>
 );
 

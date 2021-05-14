@@ -1,9 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 
+import {useSelector} from 'react-redux';
 import {TouchableWithoutFeedback, View, Text, StyleSheet} from 'react-native';
+import * as NavigationService from '../../navigation/NavigationService';
 
+import Badge from '../../core/components/Badge';
 import Imager from '../components/Imager';
+
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   slide: {
@@ -26,15 +31,17 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Offer = (props) => {
-  const {data, height, cardWidth} = props;
+export const Offer = ({data, height, cardWidth, theme}) => {
+  const currLang = useSelector((state) => state.core.language.selected);
+  const params = {
+    id: data.item.id,
+    date: data.item.date,
+    type: data.item?.type,
+  };
   return (
     <TouchableWithoutFeedback
       onPress={() => {
-        props.navigation('InfoPostScreen', {
-          id: data.item.id,
-          date: data.item.date,
-        });
+        NavigationService.navigate('InfoPostScreen', params);
       }}
       style={[styles.slide, {width: cardWidth}]}>
       <View
@@ -60,12 +67,29 @@ export const Offer = (props) => {
           style={[
             styles.title,
             {
-              paddingHorizontal: props.theme === 'round' ? 10 : 0,
+              paddingHorizontal: theme === 'round' ? 10 : 0,
             },
           ]}>
           {data.item.name}
         </Text>
-        {props.theme === 'round' && (
+        {data.item.type?.badge ? (
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 3,
+              paddingHorizontal: theme === 'round' ? 9 : 0,
+            }}>
+            <Badge
+              id={params.id}
+              key={'badgeItem' + params.id}
+              index={0}
+              bgColor={params.type.badge?.background}
+              name={params.type.name[currLang]}
+              textColor={params.type.badge?.color}
+            />
+          </View>
+        ) : null}
+        {theme === 'round' && (
           <Text
             style={[
               styles.title,

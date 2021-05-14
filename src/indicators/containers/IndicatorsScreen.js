@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, StyleSheet, findNodeHandle, Text, StatusBar} from 'react-native';
+import {StyleSheet, findNodeHandle, Text} from 'react-native';
 import {Container, Content, StyleProvider} from 'native-base';
 
 // redux
@@ -8,7 +8,6 @@ import {connect} from 'react-redux';
 import {actionSetActiveIndicator, actionFetchIndicators} from '../actions';
 
 // components
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import SpinnerView from '../../core/components/SpinnerView';
 import EmptyMessage from '../../core/components/EmptyMessage';
 import IndicatorsRow from '../components/IndicatorsRow';
@@ -16,13 +15,12 @@ import IndicatorsRow from '../components/IndicatorsRow';
 // helpers
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: styleConst.color.bg,
+    backgroundColor: styleConst.new.mainbg,
   },
 });
 
@@ -42,33 +40,7 @@ const mapDispatchToProps = {
 };
 
 class IndicatorsScreen extends Component {
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
-    return {
-      headerTitle: (
-        <Text style={stylesHeader.blueHeaderTitle}>
-          {strings.IndicatorsScreen.title}
-        </Text>
-      ),
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: (
-        <View>
-          <HeaderIconBack
-            theme="white"
-            navigation={navigation}
-            returnScreen={returnScreen}
-          />
-        </View>
-      ),
-      headerRight: <View />,
-    };
-  };
-
   static propTypes = {
-    navigation: PropTypes.object,
     items: PropTypes.array,
     activeItem: PropTypes.object,
     isRequest: PropTypes.bool,
@@ -89,14 +61,11 @@ class IndicatorsScreen extends Component {
 
   shouldComponentUpdate(nextProps) {
     const {items, activeItem, isRequest} = this.props;
-    const nav = nextProps.nav.newState;
-    const isActiveScreen =
-      nav.routes[nav.index].routeName === 'IndicatorsScreen';
 
     return (
-      (items.length !== nextProps.items.length && isActiveScreen) ||
-      (activeItem.id !== nextProps.activeItem.id && isActiveScreen) ||
-      (isRequest !== nextProps.isRequest && isActiveScreen)
+      items.length !== nextProps.items.length ||
+      activeItem.id !== nextProps.activeItem.id ||
+      isRequest !== nextProps.isRequest
     );
   }
 
@@ -117,7 +86,11 @@ class IndicatorsScreen extends Component {
     const {items, activeItem, isRequest} = this.props;
 
     if (isRequest) {
-      return <SpinnerView />;
+      return (
+        <SpinnerView
+          containerStyle={{backgroundColor: styleConst.new.mainbg}}
+        />
+      );
     }
 
     if (items.length === 0) {
@@ -129,11 +102,13 @@ class IndicatorsScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <Container style={styles.safearea}>
-          <StatusBar barStyle="light-content" />
           <Content
             ref={(scrollView) => {
               this.scrollView = scrollView;
             }}>
+            <Text style={styleConst.text.bigHead}>
+              {strings.Menu.main.indicators}
+            </Text>
             {items.map((indicators, idx) => {
               return (
                 <IndicatorsRow

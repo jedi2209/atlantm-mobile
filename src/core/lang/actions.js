@@ -1,5 +1,5 @@
 import {APP_LANG_SET} from './actionTypes';
-import strings from './const';
+import {strings} from './const';
 import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';

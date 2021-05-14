@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 // components
 import {Image, View, ActivityIndicator, StyleSheet} from 'react-native';
 import {SvgCssUri} from 'react-native-svg';
+import styleConst from '../style-const';
+import {verticalScale} from '../../utils/scale';
 
 export default class Imager extends PureComponent {
   static propTypes = {
@@ -42,6 +44,7 @@ export default class Imager extends PureComponent {
       <View>
         <ActivityIndicator
           animating={this.state.animatingLoader}
+          color={styleConst.color.blue}
           style={{
             position: 'absolute',
             left: 0,
@@ -50,6 +53,7 @@ export default class Imager extends PureComponent {
             bottom: 0,
             justifyContent: 'center',
             alignItems: 'center',
+            marginTop: verticalScale(60),
           }}
         />
         {extension === 'svg' ? (

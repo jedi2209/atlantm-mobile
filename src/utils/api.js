@@ -3,7 +3,7 @@ import _ from 'lodash';
 import {Platform, Linking, Alert, BackHandler} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {STORE_LINK, API_MAIN_URL} from '../core/const';
-import strings from '../core/lang/const';
+import {strings} from '../core/lang/const';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -35,11 +35,12 @@ export default {
     return this.request('/brands/info/get/', baseRequestParams);
   },
 
-  fetchInfoList(region = 0, dealer = 0) {
-    return this.request(
-      `/info/actions/get/?region=${region}&dealer=${dealer}`,
-      baseRequestParams,
-    );
+  fetchInfoList(region = 0, dealer = 0, type = null) {
+    let url = `/info/actions/get/?region=${region}&dealer=${dealer}`;
+    if (type) {
+      url = url + `&type=${type}`;
+    }
+    return this.request(url, baseRequestParams);
   },
 
   fetchInfoPost(infoID) {
@@ -627,7 +628,7 @@ export default {
     return this.request('/tva/message/post/', requestParams);
   },
 
-  reviewAdd({
+  async reviewAdd({
     firstName,
     secondName,
     lastName,
@@ -645,8 +646,8 @@ export default {
       `f_Dealer=${dealerId}`,
       `f_Name=${name}`,
       `f_FirstName=${firstName}`,
-      `f_SecondName=${firstName}`,
-      `f_LastName=${firstName}`,
+      `f_SecondName=${secondName}`,
+      `f_LastName=${lastName}`,
       `f_Phone=${phone}`,
       `f_Email=${email}`,
       `f_Grade=${rating}`,
@@ -667,7 +668,7 @@ export default {
 
     // __DEV__ && console.log('API review add body', body);
 
-    return this.request('/eko/review/post/', requestParams);
+    return await this.request('/eko/review/post/', requestParams);
   },
 
   carCostOrder(props) {
@@ -676,6 +677,7 @@ export default {
     const formBody = _.compact([
       {name: 'f_Source', value: '3'},
       props.dealerId && {name: 'f_Dealer', value: String(props.dealerId)},
+      props.date && {name: 'f_Date', value: String(props.date)},
       props.firstName && {name: 'f_FirstName', value: String(props.firstName)},
       props.secondName && {
         name: 'f_SecondName',
@@ -802,7 +804,7 @@ export default {
     @property {Object} profile
     @propery {'fb'|'vk'|'ok'|'tw'|'im'|'ya'|'gl'} profile.networkName
   */
-  loginWith(profile) {
+  async loginWith(profile) {
     const {
       id,
       email,
@@ -845,7 +847,7 @@ export default {
       body,
     });
 
-    return this.request('/lkk/auth/social/', requestParams)
+    return await this.request('/lkk/auth/social/', requestParams)
       .then((response) => {
         if (response.data && response.data.profile) {
           response.data.profile = profile;
@@ -857,10 +859,13 @@ export default {
       });
   },
 
-  loginWithPhone({phone, code}) {
+  async loginWithPhone({phone, code, crmID}) {
     let body = `contact=${phone ? phone : ''}`;
     if (code) {
       body = body + `&code=${code ? code : ''}`;
+    }
+    if (crmID) {
+      body = body + `&crm_id=${crmID ? crmID : ''}`;
     }
 
     const requestParams = _.merge({}, baseRequestParams, {
@@ -871,7 +876,7 @@ export default {
       body,
     });
 
-    return this.request('/lkk/auth/validate/', requestParams)
+    return await this.request('/lkk/auth/validate/', requestParams)
       .then((response) => {
         return response;
       })
@@ -880,8 +885,8 @@ export default {
       });
   },
 
-  getProfile(id) {
-    return this.request(`/lkk/user/${id}/`, baseRequestParams)
+  async getProfile(id) {
+    return await this.request(`/lkk/user/${id}/`, baseRequestParams)
       .then((response) => {
         console.log('getProfile >>>>>>>>', response);
         return response.data;
@@ -891,7 +896,7 @@ export default {
       });
   },
 
-  updateProfile(profile) {
+  async updateProfile(profile) {
     // console.log('profile', profile);
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PATCH',
@@ -915,7 +920,7 @@ export default {
       return false;
     }
 
-    return this.request(`/lkk/user/${profile.ID}/`, requestParams)
+    return await this.request(`/lkk/user/${profile.ID}/`, requestParams)
       .then((response) => {
         return response;
       })
@@ -997,7 +1002,7 @@ export default {
     return this.request('/service/order/', requestParams);
   },
 
-  request(path, requestParams) {
+  async request(path, requestParams) {
     const url = `${API_MAIN_URL}${path}`;
 
     // Если включен debug режим, добавляем в каждый запрос заголовок `Debug`
@@ -1006,7 +1011,7 @@ export default {
     } else {
       delete requestParams.headers.Debug;
     }
-    return this.apiGetData(url, requestParams);
+    return await this.apiGetData(url, requestParams);
   },
 
   async apiGetData(url, requestParams) {

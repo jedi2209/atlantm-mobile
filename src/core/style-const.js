@@ -1,5 +1,4 @@
 import {PixelRatio, Platform, Dimensions} from 'react-native';
-const isAndroid = Platform.OS === 'android';
 
 export default {
   color: {
@@ -69,24 +68,10 @@ export default {
     listHeight: 44,
     smallTextSize: 15,
   },
-  headerBackButton: {
-    ContainerStyle: {
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
-      paddingHorizontal: isAndroid ? 5 : 0,
-      paddingVertical: isAndroid ? 10 : 0,
-      borderRadius: 20,
-      marginLeft: 5,
-      marginTop: isAndroid ? 5 : 0,
-      zIndex: 1000,
-    },
-    IconStyle: {
-      marginLeft: isAndroid ? 5 : 0,
-      zIndex: 1000,
-    },
-  },
   new: {
     // TODO: reeemmaee to bluee
     blueHeader: '#027aff',
+    mainbg: '#F8F8F8',
     passive: '#757575',
     shadowActive: {
       shadowOffset: {
@@ -112,6 +97,16 @@ export default {
         backgroundColor: 'transparent',
         elevation: 0,
       },
+    },
+  },
+  text: {
+    bigHead: {
+      color: '#222B45',
+      fontSize: 48,
+      fontWeight: 'bold',
+      fontFamily: 'HelveticaNeue-Medium',
+      marginHorizontal: 10,
+      marginBottom: 5,
     },
   },
 };

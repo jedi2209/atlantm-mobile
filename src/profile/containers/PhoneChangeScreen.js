@@ -1,47 +1,26 @@
-/* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
-import React, {PureComponent, createRef} from 'react';
+import React, {PureComponent} from 'react';
 import {
   View,
   TextInput,
   Keyboard,
   Text,
-  ImageBackground,
-  Image,
   TouchableWithoutFeedback,
   ActivityIndicator,
   Platform,
   StyleSheet,
 } from 'react-native';
-import {Button, Icon, Toast, Content} from 'native-base';
-import PhoneInput from 'react-native-phone-input';
-import {store} from '../../core/store';
+import {Icon, Toast} from 'native-base';
 import styleConst from '../../core/style-const';
-import LinearGradient from 'react-native-linear-gradient';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-import stylesHeader from '../../core/components/Header/style';
 import Form from '../../core/components/Form/Form';
-import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
-
-// imports for auth
-import {
-  AccessToken,
-  GraphRequest,
-  GraphRequestManager,
-} from 'react-native-fbsdk';
-import {LoginManager} from 'react-native-fbsdk';
-
-import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
-
-import VKLogin from 'react-native-vkontakte-login';
-import {
-  appleAuth,
-  AppleButton,
-} from '@invertase/react-native-apple-authentication';
 
 // redux
 import {connect} from 'react-redux';
-import {actionSavePofile, actionGetPhoneCode} from '../actions';
+import {
+  actionSavePofile,
+  actionSaveProfileToAPI,
+  actionGetPhoneCode,
+} from '../actions';
 
 import {
   actionSetPushActionSubscribe,
@@ -50,11 +29,9 @@ import {
 
 import Amplitude from '../../utils/amplitude-analytics';
 
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 import {verticalScale} from '../../utils/scale';
-import {ScrollView} from 'react-native';
-import {string} from 'prop-types';
 import UserData from '../../utils/user';
 
 export const isAndroid = Platform.OS === 'android';
@@ -93,6 +70,7 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
 
   actionSavePofile,
+  actionSaveProfileToAPI,
   actionGetPhoneCode,
 };
 
@@ -135,29 +113,6 @@ class PhoneChangeScreen extends PureComponent {
   componentDidMount() {
     Amplitude.logEvent('screen', 'profile/PhoneViaAuth');
   }
-
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
-    return {
-      headerStyle: [stylesHeader.resetBorder, {backgroundColor: '#eee'}],
-      headerTitleStyle: stylesHeader.transparentHeaderTitle,
-      headerLeft: (
-        <HeaderIconBack
-          icon="md-close"
-          IconStyle={{
-            fontSize: 42,
-            width: 40,
-            color: '#222B45',
-          }}
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-      headerRight: <View />,
-    };
-  };
 
   _onOtpChange = (index) => {
     return (value) => {
@@ -281,10 +236,9 @@ class PhoneChangeScreen extends PureComponent {
     }
     this.setState({loading: true, loadingVerify: true});
 
-    let profile = this.props.navigation.state.params.userSocialProfile;
+    let profile = this.props.route.params.userSocialProfile;
     profile.phone = phone;
-
-    const typeUpdate = this.props.navigation.state.params.type;
+    const typeUpdate = this.props.route.params.type;
 
     switch (typeUpdate) {
       case 'auth': // авторизация
@@ -304,7 +258,7 @@ class PhoneChangeScreen extends PureComponent {
                     if (actionAddUser) {
                       if (actionAddUser.payload.ID) {
                         this.setState({loading: false});
-                        this.props.navigation.navigate('ProfileScreenInfo');
+                        this.props.navigation.navigate('LoginScreen');
                       } else {
                         Toast.show({
                           text: strings.Notifications.error.text,
@@ -323,9 +277,31 @@ class PhoneChangeScreen extends PureComponent {
                 });
               }
               break;
+            case 'SAVE_PROFILE__NOPHONE': // пользователя нашли, но без телефона
+              delete profile.update;
+              const crmID = actionCheckUser.payload?.ID;
+              await this.props
+                .actionGetPhoneCode({
+                  phone,
+                  code,
+                  crmID,
+                })
+                .then((response) => {
+                  if (response.code === 200) {
+                    this.setState({loading: false});
+                    this.props.navigation.navigate('LoginScreen');
+                  } else {
+                    Toast.show({
+                      text: strings.Notifications.error.text,
+                      position: 'bottom',
+                      type: 'warning',
+                    });
+                  }
+                });
+              break;
             case 'SAVE_PROFILE__UPDATE': // пользователя нашли
               this.setState({loading: false});
-              this.props.navigation.navigate('ProfileScreenInfo');
+              this.props.navigation.navigate('LoginScreen');
               break;
           }
         }
@@ -482,7 +458,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderColor: 'gray',
     borderWidth: 1,
-    color: '#fff',
+    color: styleConst.color.white,
     backgroundColor: 'rgba(175, 175, 175, 0.7)',
     borderRadius: 5,
     fontSize: 80,

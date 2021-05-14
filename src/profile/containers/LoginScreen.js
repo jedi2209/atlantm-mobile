@@ -15,7 +15,6 @@ import {
   StyleSheet,
 } from 'react-native';
 import {Button, Icon, Toast} from 'native-base';
-import PhoneInput from 'react-native-phone-input';
 import {store} from '../../core/store';
 import styleConst from '../../core/style-const';
 import LinearGradient from 'react-native-linear-gradient';
@@ -45,12 +44,10 @@ import {
 import PushNotifications from '../../core/components/PushNotifications';
 import Amplitude from '../../utils/amplitude-analytics';
 
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 import {verticalScale} from '../../utils/scale';
 import {ScrollView} from 'react-native';
-import {string} from 'prop-types';
-import PhoneDetect from '../../utils/phoneDetect';
 import UserData from '../../utils/user';
 
 export const isAndroid = Platform.OS === 'android';
@@ -91,7 +88,7 @@ const mapDispatchToProps = {
   actionSavePofile,
   actionGetPhoneCode,
 };
-class ProfileScreen extends Component {
+class LoginScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -141,11 +138,6 @@ class ProfileScreen extends Component {
 
   CodeInput = [];
   otpArray = [];
-
-  static navigationOptions = () => ({
-    header: null,
-    headerTransparent: true,
-  });
 
   componentDidMount() {
     this.keyboardShowListener = Keyboard.addListener(
@@ -241,14 +233,9 @@ class ProfileScreen extends Component {
     let phone = data.PHONE;
     this.setState({phone: phone});
     this.setState({loadingVerify: true});
-    this.props.actionGetPhoneCode({phone}).then((response) => {
+    return this.props.actionGetPhoneCode({phone}).then((response) => {
       if (response.code >= 300) {
-        this.setState({
-          code: false,
-          loadingVerify: false,
-          checkCode: '',
-          codeValue: '',
-        });
+        this._cancelVerify();
 
         let message = strings.Notifications.error.text;
 
@@ -264,6 +251,7 @@ class ProfileScreen extends Component {
           position: 'top',
           type: 'warning',
         });
+        return false;
       } else {
         this.setState({
           code: true,
@@ -271,8 +259,8 @@ class ProfileScreen extends Component {
           checkCode: response.checkCode,
         });
         this.CodeInput[0].focus();
+        return true;
       }
-      return;
     });
   };
 
@@ -313,7 +301,7 @@ class ProfileScreen extends Component {
       })
       .then(() => {
         this.setState({loading: false});
-        this.props.navigation.navigate('ProfileScreenInfo');
+        this.props.navigation.navigate('LoginScreen');
       })
       .catch(() => {
         this.setState({loading: false});
@@ -339,14 +327,14 @@ class ProfileScreen extends Component {
           if (res.payload && res.payload.ID && res.payload.PHONE) {
             // нашли юзверя в CRM и у него есть телефон
             this.setState({loading: false});
-            this.props.navigation.goBack();
+            this.props.navigation.navigate('LoginScreen');
           }
           break;
         case 'SAVE_PROFILE__NOPHONE':
           this.setState({loading: false});
           this.props.navigation.navigate('PhoneChangeScreen', {
-            refererScreen: 'ProfileScreenInfo',
-            returnScreen: 'ProfileScreenInfo',
+            refererScreen: 'LoginScreen',
+            returnScreen: 'LoginScreen',
             userSocialProfile: data,
             type: 'auth',
           });
@@ -358,8 +346,8 @@ class ProfileScreen extends Component {
                 delete data.update; // теперь будем регать пользователя по серьёзке
                 this.setState({loading: false});
                 this.props.navigation.navigate('PhoneChangeScreen', {
-                  refererScreen: 'ProfileScreenInfo',
-                  returnScreen: 'ProfileScreenInfo',
+                  refererScreen: 'LoginScreen',
+                  returnScreen: 'LoginScreen',
                   userSocialProfile: data,
                   type: 'auth',
                 });
@@ -651,9 +639,9 @@ class ProfileScreen extends Component {
                           styles.ApproveButton,
                         ]}>
                         {this.state.loadingVerify ? (
-                          <ActivityIndicator color="#fff" />
+                          <ActivityIndicator color={styleConst.color.white} />
                         ) : (
-                          <Text style={{color: '#fff'}}>
+                          <Text style={{color: styleConst.color.white}}>
                             {strings.ProfileScreen.approve}
                           </Text>
                         )}
@@ -666,9 +654,9 @@ class ProfileScreen extends Component {
                           styles.CancelButton,
                         ]}>
                         {this.state.loadingVerify ? (
-                          <ActivityIndicator color="#fff" />
+                          <ActivityIndicator color={styleConst.color.white} />
                         ) : (
-                          <Text style={{color: '#fff'}}>
+                          <Text style={{color: styleConst.color.white}}>
                             {strings.Base.cancel.toLowerCase()}
                           </Text>
                         )}
@@ -705,9 +693,9 @@ class ProfileScreen extends Component {
                         },
                       ]}>
                       {this.state.loadingVerify ? (
-                        <ActivityIndicator color="#fff" />
+                        <ActivityIndicator color={styleConst.color.white} />
                       ) : (
-                        <Text style={{color: '#fff'}}>
+                        <Text style={{color: styleConst.color.white}}>
                           {strings.ProfileScreen.getCode}
                         </Text>
                       )}
@@ -717,8 +705,8 @@ class ProfileScreen extends Component {
                     <Button
                       onPress={() => {
                         this.props.navigation.navigate('BonusScreenInfo', {
-                          refererScreen: 'ProfileScreenInfo',
-                          returnScreen: 'ProfileScreenInfo',
+                          refererScreen: 'LoginScreen',
+                          returnScreen: 'LoginScreen',
                         });
                       }}
                       full
@@ -776,7 +764,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderColor: 'gray',
     borderWidth: 1,
-    color: '#fff',
+    color: styleConst.color.white,
     backgroundColor: 'rgba(175, 175, 175, 0.7)',
     borderRadius: 5,
     fontSize: 50,
@@ -833,4 +821,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

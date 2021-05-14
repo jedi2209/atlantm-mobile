@@ -1,9 +1,8 @@
 import {Platform, PermissionsAndroid, Alert, Linking} from 'react-native';
 
-import {NavigationActions, StackActions} from 'react-navigation';
 import OneSignal from 'react-native-onesignal';
 import Amplitude from '../../utils/amplitude-analytics';
-import NavigationService from '../containers/NavigationService';
+import * as NavigationService from '../../navigation/NavigationService';
 import {get} from 'lodash';
 
 // const isAndroid = Platform.OS === 'android';
@@ -127,7 +126,7 @@ export default {
                     {text: 'Позже', style: 'destructive'},
                     {
                       text: 'Разрешить',
-                      onPress() {
+                      onPress: () => {
                         Linking.openURL(
                           'app-settings://notification/com.atlantm.app',
                         );

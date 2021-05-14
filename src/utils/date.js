@@ -1,7 +1,7 @@
 import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
-import strings from '../core/lang/const';
+import {strings} from '../core/lang/const';
 
 const currLang = strings.getLanguage();
 

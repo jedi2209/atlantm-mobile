@@ -29,7 +29,6 @@ import {
 } from '../../actions';
 
 // components
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import PhotoSlider from '../../../core/components/PhotoSlider';
 import PhotoViewer from '../../../core/components/PhotoViewer';
 import ReadMore from 'react-native-read-more-text';
@@ -43,7 +42,7 @@ import styleConst from '../../../core/style-const';
 import numberWithGap from '../../../utils/number-with-gap';
 import getTheme from '../../../../native-base-theme/components';
 import showPrice from '../../../utils/price';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 // styles
 import styles from '../../CarStyles';
@@ -93,28 +92,15 @@ const OptionPlate = ({title, subtitle}) => (
     </Text>
     <Text
       selectable={false}
-      style={{color: '#fff', fontSize: 14, fontWeight: '600'}}>
+      style={{color: styleConst.color.white, fontSize: 14, fontWeight: '600'}}>
       {subtitle}
     </Text>
   </View>
 );
 
-class UserCarItemScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTransparent: true,
-    headerLeft: (
-      <HeaderIconBack
-        theme="white"
-        ContainerStyle={styleConst.headerBackButton.ContainerStyle}
-        IconStyle={styleConst.headerBackButton.IconStyle}
-        navigation={navigation}
-      />
-    ),
-  });
-
+class UsedCarItemScreen extends Component {
   static propTypes = {
     dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
   };
 
   constructor(props) {
@@ -124,7 +110,7 @@ class UserCarItemScreen extends Component {
   }
 
   componentDidMount() {
-    const carId = get(this.props.navigation, 'state.params.carId');
+    const carId = get(this.props.route, 'params.carId');
     this.props.actionFetchUsedCarDetails(carId);
 
     Amplitude.logEvent('screen', 'catalog/usedcar/item', {
@@ -146,7 +132,7 @@ class UserCarItemScreen extends Component {
     } = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen =
-      nav.routes[nav.index].routeName === 'UserCarItemScreen';
+      nav.routes[nav.index].routeName === 'UsedCarItemScreen';
 
     return (
       (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
@@ -292,7 +278,7 @@ class UserCarItemScreen extends Component {
         selectable={false}
         style={styles.ShowFullDescriptionButton}
         onPress={handlePress}>
-        {strings.UserCarItemScreen.showFull}
+        {strings.UsedCarItemScreen.showFull}
       </Text>
     );
   };
@@ -303,7 +289,7 @@ class UserCarItemScreen extends Component {
         selectable={false}
         style={styles.ShowFullDescriptionButton}
         onPress={handlePress}>
-        {strings.UserCarItemScreen.showLess}
+        {strings.UsedCarItemScreen.showLess}
       </Text>
     );
   };
@@ -327,7 +313,7 @@ class UserCarItemScreen extends Component {
       isFetchingCarDetails,
     } = this.props;
 
-    const currency = get(this.props.navigation, 'state.params.currency');
+    const currency = get(this.props.route, 'params.currency');
     this.props.navigation.setParams({
       carDetails: carDetails,
     });
@@ -431,20 +417,24 @@ class UserCarItemScreen extends Component {
                 <PhotoSlider
                   height={310}
                   resizeMode="cover"
-                  dotColor="#fff"
+                  dotColor={styleConst.color.white}
                   photos={photos}
                   onPressItem={this.onPressPhoto}
                   paginationStyle={{marginBottom: 15}}
                   onIndexChanged={this.onChangePhotoIndex}
                 />
-                <View style={{backgroundColor: '#fff', zIndex: 100}}>
+                <View
+                  style={{
+                    backgroundColor: styleConst.color.white,
+                    zIndex: 100,
+                  }}>
                   <View
                     style={[
                       {
                         position: 'relative',
                         top: -35,
                         marginBottom: -35,
-                        backgroundColor: '#fff',
+                        backgroundColor: styleConst.color.white,
                         borderTopLeftRadius: 30,
                         borderTopRightRadius: 30,
                         paddingTop: 20,
@@ -587,7 +577,7 @@ class UserCarItemScreen extends Component {
                                 width: '70%',
                               },
                             ]}>
-                            {strings.UserCarItemScreen.creditCalculate}
+                            {strings.UsedCarItemScreen.creditCalculate}
                           </Text>
                           <Icon
                             type="Octicons"
@@ -635,7 +625,7 @@ class UserCarItemScreen extends Component {
                               },
                               styles.bodyButtonText,
                             ]}>
-                            {strings.UserCarItemScreen.myPrice}
+                            {strings.UsedCarItemScreen.myPrice}
                           </Text>
                         </Button>
                       ) : null}
@@ -861,7 +851,7 @@ class UserCarItemScreen extends Component {
                           flexDirection: 'row',
                           justifyContent: 'space-between',
                           alignItems: 'center',
-                          backgroundColor: '#fff',
+                          backgroundColor: styleConst.color.white,
                           borderTopWidth: 0.75,
                           borderColor: '#d5d5e0',
                         }}>
@@ -885,7 +875,7 @@ class UserCarItemScreen extends Component {
                       return (
                         <View
                           style={{
-                            backgroundColor: '#fff',
+                            backgroundColor: styleConst.color.white,
                             paddingHorizontal: '3%',
                           }}>
                           {item.content}
@@ -923,7 +913,7 @@ class UserCarItemScreen extends Component {
                   name="steering"
                   selectable={false}
                   style={{
-                    color: '#ffffff',
+                    color: styleConst.color.white,
                     fontSize: 24,
                     marginTop: -2,
                   }}
@@ -1013,4 +1003,4 @@ const stylesFooter = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserCarItemScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(UsedCarItemScreen);

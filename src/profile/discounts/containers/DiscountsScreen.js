@@ -5,17 +5,13 @@ import {Text, StyleProvider, ListItem, Body} from 'native-base';
 // redux
 import {connect} from 'react-redux';
 
-// components
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
-
 // helpers
 import {get} from 'lodash';
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
 import Amplitude from '../../../utils/amplitude-analytics';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -69,14 +65,6 @@ const mapStateToProps = ({profile, nav}) => {
 
 class DiscountsScreen extends Component {
   state = {isRefreshing: false};
-
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: strings.DiscountsScreen.title,
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <View />,
-  });
 
   static propTypes = {
     discounts: PropTypes.array,
