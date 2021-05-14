@@ -9,10 +9,6 @@ import {
 } from 'react-native';
 import {Toast} from 'native-base';
 import {get} from 'lodash';
-// import {StackActions, NavigationActions} from 'react-navigation';
-
-import stylesHeader from '../../../core/components/Header/style';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import Form from '../../../core/components/Form/Form';
@@ -24,7 +20,7 @@ import {connect} from 'react-redux';
 import {orderService} from '../../actions';
 import {localUserDataUpdate} from '../../../profile/actions';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../../actionTypes';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 import Amplitude from '../../../utils/amplitude-analytics';
 
@@ -46,38 +42,21 @@ const mapDispatchToProps = {
   orderService,
 };
 
-class ServiceScreen extends Component {
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
-    return {
-      headerStyle: stylesHeader.whiteHeader,
-      headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: strings.ServiceScreen.title,
-      headerLeft: (
-        <HeaderIconBack
-          theme="blue"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-      headerRight: <View />,
-    };
-  };
-
+class ServiceScreenStep2 extends Component {
   constructor(props) {
     super(props);
 
-    this.orderLead = get(this.props.navigation, 'state.params.orderLead');
-    this.service = get(this.props.navigation, 'state.params.service');
-    this.serviceInfo = get(this.props.navigation, 'state.params.serviceInfo');
-    this.dealer = get(this.props.navigation, 'state.params.dealer');
+    this.state = {
+      orderLead: get(this.props.route, 'params.orderLead'),
+    };
+    this.service = get(this.props.route, 'params.service');
+    this.serviceInfo = get(this.props.route, 'params.serviceInfo');
+    this.dealer = get(this.props.route, 'params.dealer');
     this.car = {
-      carBrand: get(this.props.navigation, 'state.params.car.brand'),
-      carModel: get(this.props.navigation, 'state.params.car.model'),
-      carVIN: get(this.props.navigation, 'state.params.car.vin'),
-      carNumber: get(this.props.navigation, 'state.params.car.plate'),
+      carBrand: get(this.props.route, 'params.car.brand'),
+      carModel: get(this.props.route, 'params.car.model'),
+      carVIN: get(this.props.route, 'params.car.vin'),
+      carNumber: get(this.props.route, 'params.car.plate'),
     };
   }
 
@@ -87,7 +66,9 @@ class ServiceScreen extends Component {
     let dateFromForm = get(dataFromForm, 'DATE', null);
 
     if (get(dateFromForm, 'noTimeAlways', false)) {
-      this.orderLead = true;
+      this.setState({
+        orderLead: true,
+      });
     }
 
     if (!dateFromForm) {
@@ -131,7 +112,7 @@ class ServiceScreen extends Component {
     }
     // console.log('onPressOrder', this.orderLead, data, format(dateFromForm));
     // return true;
-    if (this.orderLead) {
+    if (this.state.orderLead) {
       const dataToSend = {
         brand: get(data, 'car.brand', ''),
         model: get(data, 'car.model', ''),
@@ -170,7 +151,7 @@ class ServiceScreen extends Component {
               [
                 {
                   text: 'ОК',
-                  onPress() {
+                  onPress: () => {
                     navigation.goBack();
                   },
                 },
@@ -200,7 +181,7 @@ class ServiceScreen extends Component {
           [
             {
               text: 'ОК',
-              onPress() {
+              onPress: () => {
                 navigation.goBack();
               },
             },
@@ -220,7 +201,7 @@ class ServiceScreen extends Component {
             fields: [
               {
                 name: 'DATE',
-                type: this.orderLead ? 'date' : 'dateTime',
+                type: this.state.orderLead ? 'date' : 'dateTime',
                 label: strings.Form.field.label.date,
                 value: null,
                 props: {
@@ -333,4 +314,4 @@ class ServiceScreen extends Component {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServiceScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ServiceScreenStep2);

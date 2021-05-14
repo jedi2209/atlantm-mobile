@@ -1,29 +1,40 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import * as React from 'react';
 import {Icon, ActionSheet} from 'native-base';
 import orderFunctions from '../../utils/orders';
 
-import {createBottomTabNavigator} from 'react-navigation-tabs';
-import {createStackNavigator} from 'react-navigation-stack';
+// import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 
-// helpers
-import styleConst from '../../core/style-const';
+import LogoTitle from '../../core/components/LogoTitle';
+
+// screens
 import ContactsScreen from '../../contacts/containers/ContactsScreen';
-import NewCarListScreen from '../../catalog/newcar/containers/NewCarListScreen';
-import AuthContnainer from '../../profile/containers/AuthContnainer';
+
+import AuthContainer from '../../profile/containers/AuthContainer';
 import ProfileSettingsScreen from '../../profile/containers/ProfileSettingsScreen';
 import PhoneChangeScreen from '../../profile/containers/PhoneChangeScreen';
-import InfoListScreen from '../../info/containers/InfoListScreen';
 import TOHistory from '../../profile/carhistory/containers/CarHistoryScreen';
 import CarHistoryDetailsScreen from '../../profile/carhistory/containers/CarHistoryDetailsScreen';
 import BonusScreen from '../../profile/bonus/containers/BonusScreen';
 import BonusScreenInfo from '../../profile/bonus/containers/BonusInfoScreen';
-import InfoPostScreen from '../../info/containers/InfoPostScreen';
-import UsedCarListScreen from '../../catalog/usedcar/containers/UsedCarListScreen';
-import MoreScreen from './MenuScreenNew';
+import DiscountsScreen from '../../profile/discounts/containers/DiscountsScreen';
+import ReestablishScreen from '../../profile/containers/ReestablishScreen';
 
-import strings from '../../core/lang/const';
-// import ApplicationModalScreen from './Application';
+import MenuScreen from './MenuScreen';
+
+// helpers
+import {strings} from '../../core/lang/const';
+import styleConst from '../../core/style-const';
+import stylesHeader from '../../core/components/Header/style';
+
+import {
+  ClassicHeaderWhite,
+  ClassicHeaderBlue,
+  BigCloseButton,
+  isTabBarVisible,
+} from '../../navigation/const';
 
 const styles = {
   shadow: {
@@ -34,191 +45,275 @@ const styles = {
     },
     shadowOpacity: 0.25,
     shadowRadius: 1.0,
-    shadowColor: '#fff',
+    shadowColor: styleConst.color.white,
     elevation: 1,
   },
 };
 
-const SearchStack = {
-  screen: createStackNavigator({
-    NewCarListScreen: {
-      screen: NewCarListScreen,
-    },
-  }),
-};
+const Tab = createBottomTabNavigator();
+const ProfileStack = createStackNavigator();
+const MenuStack = createStackNavigator();
 
-SearchStack.navigationOptions = ({navigation}) => {
-  return {
-    tabBarLabel: strings.Menu.bottom.search,
-    tabBarIcon: ({tintColor}) => (
-      <Icon
-        name="search"
-        type="FontAwesome5"
-        style={[
-          styles.shadow,
-          {
-            color: tintColor,
-          },
-        ]}
-      />
-    ),
-  };
-};
+const ProfileStackView = ({navigation, route}) => (
+  <ProfileStack.Navigator
+    initialRouteName="LoginScreen"
+    mode="modal"
+    headerShown={false}
+    headerTransparent={true}>
+    <ProfileStack.Screen
+      name="LoginScreen"
+      component={AuthContainer}
+      options={{headerShown: false, headerTransparent: true}}
+    />
+    <ProfileStack.Screen
+      name="PhoneChangeScreen"
+      component={PhoneChangeScreen}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ModalTransition,
+        headerTitle: strings.ProfileSettingsScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
+    />
+    <ProfileStack.Screen
+      name="ProfileSettingsScreen"
+      component={ProfileSettingsScreen}
+      options={ClassicHeaderWhite(
+        strings.ProfileSettingsScreen.title,
+        navigation,
+        route,
+      )}
+    />
+    <ProfileStack.Screen
+      name="ReestablishScreen"
+      component={ReestablishScreen}
+      options={ClassicHeaderBlue(
+        strings.ReestablishScreen.title,
+        navigation,
+        route,
+      )}
+    />
+    <ProfileStack.Screen
+      name="TOHistory"
+      component={TOHistory}
+      options={ClassicHeaderWhite(
+        strings.CarHistoryScreen.title,
+        navigation,
+        route,
+      )}
+    />
+    <ProfileStack.Screen
+      name="CarHistoryDetailsScreen"
+      component={CarHistoryDetailsScreen}
+      options={ClassicHeaderWhite('', navigation, route)}
+    />
+    <ProfileStack.Screen
+      name="BonusScreen"
+      component={BonusScreen}
+      options={ClassicHeaderWhite(
+        strings.ProfileScreenInfo.bonus.title,
+        navigation,
+        route,
+      )}
+    />
+    <ProfileStack.Screen
+      name="DiscountsScreen"
+      component={DiscountsScreen}
+      options={ClassicHeaderWhite(
+        strings.DiscountsScreen.title,
+        navigation,
+        route,
+      )}
+    />
+    <ProfileStack.Screen
+      name="BonusScreenInfo"
+      component={BonusScreenInfo}
+      options={ClassicHeaderWhite(
+        strings.BonusInfoScreen.title,
+        navigation,
+        route,
+      )}
+    />
+  </ProfileStack.Navigator>
+);
 
-const BottomTabNavigation = createBottomTabNavigator(
-  {
-    Contact: {
-      screen: createStackNavigator({
-        Home: {screen: ContactsScreen},
-        InfoList: {screen: InfoListScreen},
-        InfoPostScreen: {screen: InfoPostScreen},
-      }),
-      navigationOptions: {
-        tabBarLabel: strings.Menu.bottom.dealer,
-        tabBarIcon: ({tintColor}) => (
-          <Icon
-            name="building"
-            type="FontAwesome5"
-            style={[
-              styles.shadow,
-              {
-                color: tintColor,
-              },
-            ]}
-          />
-        ),
-        tabBarOnPress: ({navigation}) => {
-          navigation.popToTop();
-          navigation.navigate(navigation.state.routeName);
+const MenuStackView = ({navigation, route}) => (
+  <MenuStack.Navigator>
+    <MenuStack.Screen
+      name="MenuScreen"
+      component={MenuScreen}
+      options={{
+        headerTitle: () => <LogoTitle />,
+        headerStyle: {
+          height: 120,
+          backgroundColor: 'transparent',
         },
+      }}
+    />
+  </MenuStack.Navigator>
+);
+
+const OrdersSheetStackView = () => {
+  return <></>;
+};
+
+const _showOrdersMenu = (navigation) => {
+  orderFunctions.getOrders().then((data) => {
+    ActionSheet.show(
+      {
+        options: data.BUTTONS,
+        cancelButtonIndex: data.CANCEL_INDEX,
+        title: data.TITLE,
+        destructiveButtonIndex: data.DESTRUCTIVE_INDEX || null,
       },
-    },
-    Search: SearchStack,
-    Profile: {
-      screen: createStackNavigator(
-        {
-          ProfileScreenInfo: {screen: AuthContnainer},
-          PhoneChangeScreen: {screen: PhoneChangeScreen},
-          ProfileSettingsScreen: {screen: ProfileSettingsScreen},
-          TOHistory: {screen: TOHistory},
-          CarHistoryDetailsScreen: {screen: CarHistoryDetailsScreen},
-          BonusScreen: {screen: BonusScreen},
-          BonusScreenInfo: {screen: BonusScreenInfo},
-        },
-        {
-          mode: 'modal',
-        },
-      ),
-      navigationOptions: () => ({
-        tabBarLabel: strings.Menu.bottom.lkk,
-        tabBarIcon: ({tintColor}) => (
-          <Icon
-            name="user"
-            type="FontAwesome5"
-            style={[
-              styles.shadow,
-              {
-                color: tintColor,
-              },
-            ]}
-          />
-        ),
-        tabBarOnPress: ({navigation}) => {
-          navigation.popToTop();
-          navigation.navigate(navigation.state.routeName);
-        },
-      }),
-    },
-    Service: {
-      screen: createStackNavigator({
-        ApplicationModalScreen: {screen: AuthContnainer},
-      }),
-      navigationOptions: ({navigation}) => {
-        return {
-          tabBarOnPress: () => {
-            orderFunctions.getOrders().then((data) => {
-              ActionSheet.show(
+      (buttonIndex) => {
+        switch (data.BUTTONS[buttonIndex].id) {
+          case 'callMeBack':
+            navigation.navigate('CallMeBackScreen');
+            break;
+          case 'orderService':
+            navigation.navigate('ServiceScreen');
+            break;
+          case 'orderParts':
+            navigation.navigate('OrderPartsScreen');
+            break;
+          case 'carCost':
+            navigation.navigate('CarCostScreen');
+            break;
+        }
+      },
+    );
+  });
+};
+
+export const BottomTabNavigation = ({navigation, route}) => {
+  return (
+    <Tab.Navigator
+      // barStyle={{backgroundColor: styleConst.color.accordeonGrey1}}
+      // shifting={false}
+      // labeled={true}
+      // activeColor={styleConst.color.lightBlue}
+      // inactiveColor={styleConst.new.passive}
+      initialRouteName="Home"
+      tabBarOptions={{
+        activeTintColor: styleConst.color.lightBlue,
+        inactiveTintColor: styleConst.new.passive,
+      }}>
+      <Tab.Screen
+        name="Home"
+        component={ContactsScreen}
+        options={{
+          headerTransparent: true,
+          headerTitle: null,
+          tabBarLabel: strings.Menu.bottom.dealer,
+          tabBarIcon: ({color}) => (
+            <Icon
+              name="building"
+              type="FontAwesome5"
+              style={[
+                styles.shadow,
                 {
-                  options: data.BUTTONS,
-                  cancelButtonIndex: data.CANCEL_INDEX,
-                  title: data.TITLE,
-                  destructiveButtonIndex: data.DESTRUCTIVE_INDEX || null,
+                  color,
                 },
-                (buttonIndex) => {
-                  switch (data.BUTTONS[buttonIndex].id) {
-                    case 'callMeBack':
-                      navigation.navigate('CallMeBackScreen');
-                      break;
-                    case 'orderService':
-                      navigation.navigate('ServiceScreen');
-                      break;
-                    case 'orderParts':
-                      navigation.navigate('OrderPartsScreen');
-                      break;
-                    case 'carCost':
-                      navigation.navigate('CarCostScreen');
-                      break;
-                  }
-                },
-              );
-            });
+              ]}
+            />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Search"
+        component={OrdersSheetStackView}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate('NewCarsListScreen');
           },
+        }}
+        options={{
+          tabBarLabel: strings.Menu.bottom.search,
+          tabBarIcon: ({color}) => (
+            <Icon
+              name="search"
+              type="FontAwesome5"
+              style={[
+                styles.shadow,
+                {
+                  color,
+                },
+              ]}
+            />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="About"
+        component={ProfileStackView}
+        options={{
+          tabBarLabel: strings.Menu.bottom.lkk,
+          tabBarIcon: ({color}) => (
+            <Icon
+              name="user"
+              type="FontAwesome5"
+              style={[
+                styles.shadow,
+                {
+                  color,
+                },
+              ]}
+            />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Orders"
+        component={OrdersSheetStackView}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            _showOrdersMenu(navigation);
+          },
+        }}
+        options={{
           tabBarLabel: strings.Menu.bottom.order,
-          tabBarIcon: ({tintColor}) => (
+          tabBarIcon: ({color}) => (
             <Icon
               name="comments"
               type="FontAwesome5"
               style={[
                 styles.shadow,
                 {
-                  color: tintColor,
+                  color,
                 },
               ]}
             />
           ),
-        };
-      },
-    },
-    More: {
-      screen: createStackNavigator({
-        MoreScreen: {screen: MoreScreen},
-        UsedCarListScreen: {
-          screen: UsedCarListScreen,
-        },
-      }),
-      navigationOptions: () => {
-        return {
+        }}
+      />
+
+      <Tab.Screen
+        name="Menu"
+        component={MenuStackView}
+        options={{
           tabBarLabel: strings.Menu.bottom.menu,
-          tabBarIcon: ({tintColor}) => (
+          tabBarIcon: ({color}) => (
             <Icon
               name="bars"
               type="FontAwesome5"
               style={[
                 styles.shadow,
                 {
-                  color: tintColor,
+                  color,
                 },
               ]}
             />
           ),
-          tabBarOnPress: ({navigation}) => {
-            navigation.popToTop();
-            navigation.navigate(navigation.state.routeName);
-          },
-        };
-      },
-    },
-  },
-  {
-    tabBarOptions: {
-      activeTintColor: styleConst.lightBlue,
-      inactiveTintColor: styleConst.new.passive,
-    },
-  },
-);
-
-BottomTabNavigation.navigationOptions = () => ({
-  header: null,
-});
-
-export default BottomTabNavigation;
+        }}
+      />
+    </Tab.Navigator>
+  );
+};

@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  View,
-  StyleSheet,
-  Alert,
-  Text,
-  StatusBar,
-} from 'react-native';
+import {SafeAreaView, View, StyleSheet, Alert, StatusBar} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -18,7 +11,6 @@ import {
 // components
 import {Body, Content, ListItem, StyleProvider} from 'native-base';
 import RadioIcon from '../../../core/components/RadioIcon';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import ListItemHeader from '../../../profile/components/ListItemHeader';
 import RatingStars from '../components/RatingStars';
 
@@ -33,8 +25,7 @@ import {
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const RATING_ARRAY = [1, 2, 3, 4, 5];
 
@@ -59,24 +50,7 @@ const mapDispatchToProps = {
 };
 
 class ReviewsFilterRatingScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: (
-      <Text style={stylesHeader.blueHeaderTitle}>
-        {strings.ReviewsFilterRatingScreen.title}
-      </Text>
-    ),
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: (
-      <View>
-        <HeaderIconBack theme="white" navigation={navigation} />
-      </View>
-    ),
-    headerRight: <View />,
-  });
-
   static propTypes = {
-    navigation: PropTypes.object,
     filterRatingFrom: PropTypes.number,
     filterRatingTo: PropTypes.number,
     actionSelectFilterRatingFrom: PropTypes.func,

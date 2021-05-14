@@ -9,8 +9,9 @@ import {
   ScrollView,
   Alert,
   Keyboard,
+  Text,
 } from 'react-native';
-import {Toast} from 'native-base';
+import {Icon, Button, Toast} from 'native-base';
 import Form from '../../core/components/Form/Form';
 import {CarCard} from '../../profile/components/CarCard';
 
@@ -25,11 +26,9 @@ import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Amplitude from '../../utils/amplitude-analytics';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
-import stylesHeader from '../../core/components/Header/style';
 import {ERROR_NETWORK} from '../../core/const';
 import {PARTS_ORDER__SUCCESS, PARTS_ORDER__FAIL} from '../actionTypes';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
   const cars = orderBy(profile.cars, ['owner'], ['asc']);
@@ -109,7 +108,7 @@ class OrderPartsScreen extends Component {
       ].join(' ');
       this.state.carVIN = this.props.cars[0].vin;
     }
-    const carFromNavigation = get(this.props.navigation, 'state.params.car');
+    const carFromNavigation = get(this.props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
       this.state.carBrand = get(carFromNavigation, 'brand');
       this.state.carModel = get(carFromNavigation, 'model');
@@ -127,28 +126,8 @@ class OrderPartsScreen extends Component {
     });
   }
 
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
-    return {
-      headerStyle: stylesHeader.whiteHeader,
-      headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerTitle: strings.OrderPartsScreen.title,
-      headerLeft: (
-        <HeaderIconBack
-          theme="blue"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-      headerRight: <View />,
-    };
-  };
-
   static propTypes = {
     dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
     localUserDataUpdate: PropTypes.func,
     isOrderServiceRequest: PropTypes.bool,
   };
@@ -237,7 +216,7 @@ class OrderPartsScreen extends Component {
               [
                 {
                   text: 'ОК',
-                  onPress() {
+                  onPress: () => {
                     navigation.goBack();
                   },
                 },
@@ -256,14 +235,6 @@ class OrderPartsScreen extends Component {
       }
     } catch (error) {}
   };
-
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    const isActiveScreen =
-      nav.routes[nav.index].routeName === 'OrderPartsScreen';
-
-    return isActiveScreen;
-  }
 
   render() {
     this.FormConfig = {
@@ -284,8 +255,7 @@ class OrderPartsScreen extends Component {
                 props: {
                   goBack: false,
                   isLocal: true,
-                  navigation: this.props.navigation,
-                  returnScreen: this.props.navigation.state.routeName,
+                  returnScreen: this.props.navigation.state?.routeName,
                 },
               },
             ],
@@ -312,39 +282,84 @@ class OrderPartsScreen extends Component {
                     name: 'CARNAME',
                     type: 'component',
                     label: strings.Form.field.label.car2,
-                    value: (
-                      <ScrollView
-                        showsHorizontalScrollIndicator={false}
-                        horizontal
-                        style={styles.carContainer}
-                        contentContainerStyle={styles.carContainerContent}>
-                        {(this.myCars || []).map((item) => {
-                          return (
-                            <TouchableWithoutFeedback
-                              style={{
-                                zIndex: 15,
-                              }}
-                              activeOpacity={0.7}
-                              key={item.vin}
-                              onPress={() => {
-                                this._selectCar(item);
-                              }}>
-                              <View>
-                                <CarCard
-                                  key={item.vin}
-                                  data={item}
-                                  type="check"
-                                  checked={this.state.carVIN === item.vin}
-                                  onPress={() => {
-                                    this._selectCar(item);
-                                  }}
-                                />
-                              </View>
-                            </TouchableWithoutFeedback>
-                          );
-                        })}
-                      </ScrollView>
-                    ),
+                    value:
+                      this.myCars && this.myCars.length ? (
+                        <ScrollView
+                          showsHorizontalScrollIndicator={false}
+                          horizontal
+                          style={styles.carContainer}
+                          contentContainerStyle={styles.carContainerContent}>
+                          {(this.myCars || []).map((item) => {
+                            return (
+                              <TouchableWithoutFeedback
+                                style={{
+                                  zIndex: 15,
+                                }}
+                                activeOpacity={0.7}
+                                key={item.vin}
+                                onPress={() => {
+                                  this._selectCar(item);
+                                }}>
+                                <View>
+                                  <CarCard
+                                    key={item.vin}
+                                    data={item}
+                                    type="check"
+                                    checked={this.state.carVIN === item.vin}
+                                    onPress={() => {
+                                      this._selectCar(item);
+                                    }}
+                                  />
+                                </View>
+                              </TouchableWithoutFeedback>
+                            );
+                          })}
+                        </ScrollView>
+                      ) : (
+                        <View
+                          style={[
+                            styles.scrollViewInner,
+                            {
+                              flex: 1,
+                              paddingLeft: 24,
+                              paddingRight: 5,
+                              marginVertical: 29.5,
+                              textAlign: 'center',
+                              alignContent: 'center',
+                              width: '100%',
+                              alignItems: 'center',
+                            },
+                          ]}
+                          useNativeDriver>
+                          <Icon
+                            type="MaterialCommunityIcons"
+                            name="car-off"
+                            fontSize={20}
+                          />
+                          <Text
+                            style={{
+                              marginTop: 5,
+                              marginLeft: 10,
+                              lineHeight: 20,
+                            }}>
+                            {strings.UserCars.empty.text + '\r\n'}
+                          </Text>
+                          <Button
+                            full
+                            bordered
+                            style={{borderRadius: 5}}
+                            onPress={() => {
+                              this.props.navigation.navigate('About', {
+                                screen: 'LoginScreen',
+                                activePanel: 'hidden',
+                              });
+                            }}>
+                            <Text style={{padding: 5}}>
+                              {strings.UserCars.archiveCheck}
+                            </Text>
+                          </Button>
+                        </View>
+                      ),
                   },
                 ]
               : [

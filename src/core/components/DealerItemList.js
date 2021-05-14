@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';
-import {ListItem, Body, Right, Icon, StyleProvider, Text} from 'native-base';
+import {ListItem, Body, Right, Text} from 'native-base';
+import {useNavigation} from '@react-navigation/native';
 
 // component
 // import Imager from '../components/Imager';
@@ -10,7 +11,7 @@ import BrandLogo from '../components/BrandLogo';
 // helpers
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
-import strings from '../lang/const';
+import {strings} from '../lang/const';
 
 const stylesDealerItemList = StyleSheet.create({
   brands: {
@@ -41,112 +42,130 @@ const stylesDealerItemList = StyleSheet.create({
   },
 });
 
-export default class DealerItemList extends Component {
-  static propTypes = {
-    navigation: PropTypes.object.isRequired,
-    city: PropTypes.shape({
-      name: PropTypes.string,
-    }),
-    brands: PropTypes.array,
-    returnScreen: PropTypes.string,
-    goBack: PropTypes.bool,
-    isLocal: PropTypes.bool,
-  };
+const _onPressDealer = (props) => {
+  const {
+    city,
+    dealer,
+    style,
+    isLocal,
+    goBack,
+    returnScreen,
+    listAll,
+    returnState,
+    navigation,
+  } = props;
 
-  static defaultProps = {
-    city: null,
-    brands: [],
-    returnScreen: null,
-    goBack: false,
-    isLocal: false,
-  };
+  return navigation.navigate('ChooseDealerScreen', {
+    returnScreen,
+    returnState,
+    goBack,
+    isLocal,
+    listAll,
+  });
+};
 
-  shouldComponentUpdate(nextProps) {
-    if (this.props.dealer && nextProps.dealer) {
-      if (this.props.dealer.name && nextProps.dealer.name) {
-        return this.props.dealer.name !== nextProps.dealer.name;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
+const DealerItemList = (props) => {
+  const {
+    city,
+    dealer,
+    style,
+    isLocal,
+    goBack,
+    returnScreen,
+    listAll,
+    returnState,
+  } = props;
+  const navigation = useNavigation();
 
-  onPressDealer = () => {
-    const {
-      goBack,
-      navigation,
-      returnScreen,
-      returnState,
-      isLocal,
-      listAll,
-    } = this.props;
-    return navigation.navigate('ChooseDealerScreen', {
-      returnScreen,
-      returnState,
-      goBack,
-      isLocal,
-      listAll,
-    });
-  };
-
-  render() {
-    const {city, dealer} = this.props;
-
-    return (
-      <View style={this.props.style || {}}>
-        <ListItem last onPress={this.onPressDealer} style={stylesList.listItem}>
-          <Body>
-            {city && city.name ? (
+  return (
+    <View style={style || {}}>
+      <ListItem
+        last
+        onPress={() => {
+          return _onPressDealer({props, navigation});
+        }}
+        style={stylesList.listItem}>
+        <Body>
+          {city && city.name ? (
+            <Text
+              style={stylesDealerItemList.city}
+              ellipsizeMode="tail"
+              numberOfLines={1}>
+              {city && city.name ? city.name : dealer.city.name}
+            </Text>
+          ) : null}
+          <View>
+            <Text
+              style={stylesDealerItemList.name}
+              ellipsizeMode="tail"
+              numberOfLines={1}>
+              {dealer && dealer.name
+                ? dealer.name
+                : strings.DealerItemList.chooseDealer}
+            </Text>
+            {dealer && dealer.city ? (
               <Text
-                style={stylesDealerItemList.city}
+                style={stylesDealerItemList.dealerCity}
                 ellipsizeMode="tail"
                 numberOfLines={1}>
-                {city && city.name ? city.name : dealer.city.name}
+                {dealer.city.name}
               </Text>
             ) : null}
-            <View>
-              <Text
-                style={stylesDealerItemList.name}
-                ellipsizeMode="tail"
-                numberOfLines={1}>
-                {dealer && dealer.name
-                  ? dealer.name
-                  : strings.DealerItemList.chooseDealer}
-              </Text>
-              {dealer && dealer.city ? (
-                <Text
-                  style={stylesDealerItemList.dealerCity}
-                  ellipsizeMode="tail"
-                  numberOfLines={1}>
-                  {dealer.city.name}
-                </Text>
-              ) : null}
+          </View>
+        </Body>
+        {dealer && dealer.brands ? (
+          <Right>
+            <View style={stylesDealerItemList.brands}>
+              {dealer.brands &&
+                dealer.brands.length &&
+                dealer.brands.map((brand) => {
+                  if (brand.logo) {
+                    return (
+                      <BrandLogo
+                        brand={brand.id}
+                        width={35}
+                        style={stylesDealerItemList.brandLogo}
+                        key={'brandLogo' + brand.id}
+                      />
+                    );
+                  }
+                })}
             </View>
-          </Body>
-          {dealer && dealer.brands ? (
-            <Right>
-              <View style={stylesDealerItemList.brands}>
-                {dealer.brands &&
-                  dealer.brands.length &&
-                  dealer.brands.map((brand) => {
-                    if (brand.logo) {
-                      return (
-                        <BrandLogo
-                          brand={brand.id}
-                          width={35}
-                          style={stylesDealerItemList.brandLogo}
-                          key={'brandLogo' + brand.id}
-                        />
-                      );
-                    }
-                  })}
-              </View>
-            </Right>
-          ) : null}
-        </ListItem>
-      </View>
-    );
-  }
-}
+          </Right>
+        ) : null}
+      </ListItem>
+    </View>
+  );
+};
+
+// shouldComponentUpdate(nextProps) {
+//   if (this.props.dealer && nextProps.dealer) {
+//     if (this.props.dealer.name && nextProps.dealer.name) {
+//       return this.props.dealer.name !== nextProps.dealer.name;
+//     } else {
+//       return false;
+//     }
+//   } else {
+//     return false;
+//   }
+// }
+
+DealerItemList.propTypes = {
+  city: PropTypes.shape({
+    name: PropTypes.string,
+  }),
+  brands: PropTypes.array,
+  returnScreen: PropTypes.string,
+  goBack: PropTypes.bool,
+  isLocal: PropTypes.bool,
+};
+
+DealerItemList.defaultProps = {
+  city: null,
+  brands: [],
+  returnScreen: null,
+  goBack: false,
+  isLocal: false,
+};
+
+export default DealerItemList;

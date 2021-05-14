@@ -18,7 +18,7 @@ import {
 import {APP_LANG_SET} from '../core/lang/actionTypes';
 import PushNotifications from '../core/components/PushNotifications';
 import {fetchInfoList} from '../info/actions/';
-import strings from '../core/lang/const';
+import {strings} from '../core/lang/const';
 
 import API from '../utils/api';
 

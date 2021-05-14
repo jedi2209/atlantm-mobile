@@ -2,13 +2,13 @@
 import React, {PureComponent} from 'react';
 import {ActivityIndicator} from 'react-native';
 import {Root} from 'native-base';
-import {createAppContainer, NavigationActions} from 'react-navigation';
-import NavigationService from './NavigationService';
+import {NavigationContainer} from '@react-navigation/native';
+import * as NavigationService from '../../navigation/NavigationService';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 // redux
 import {connect} from 'react-redux';
 import {store} from '../store';
-import {navigationChange} from '../../navigation/actions';
 import {
   actionSetPushGranted,
   actionSetPushActionSubscribe,
@@ -19,7 +19,7 @@ import {
 
 import {APP_STORE_UPDATED} from '../../core/actionTypes';
 
-import strings from '../lang/const';
+import {strings} from '../lang/const';
 
 // helpers
 import API from '../../utils/api';
@@ -30,9 +30,7 @@ import styleConst from '../../core/style-const';
 
 // components
 import DeviceInfo from 'react-native-device-info';
-
-// routes
-import {getRouter} from '../router';
+import * as Nav from '../../navigation/NavigationBase';
 
 const mapStateToProps = ({core, dealer, modal}) => {
   return {
@@ -44,7 +42,6 @@ const mapStateToProps = ({core, dealer, modal}) => {
 };
 
 const mapDispatchToProps = {
-  navigationChange,
   actionSetPushGranted,
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
@@ -107,12 +104,12 @@ class App extends PureComponent {
       isStoreUpdated,
     } = this.props;
 
+    NavigationService.setTopLevelNavigator(NavigationService.navigationRef);
+
     this._awaitStoreToUpdate().then((res) => {
       if (typeof res === 'undefined' || !res) {
         res = 'IntroScreen';
       }
-      const Router = getRouter(res);
-      this.AppContainer = createAppContainer(Router);
       this.setState({
         isloading: false,
       });
@@ -158,42 +155,26 @@ class App extends PureComponent {
     PushNotifications.init();
   }
 
-  onNavigationStateChange = (prevState, newState) => {
-    this.props.navigationChange({
-      prevState,
-      newState,
-    });
-  };
-
-  navigate(routeName) {
-    if (this.navigatorRef.current !== null) {
-      this.navigatorRef.current.dispatch(
-        NavigationActions.navigate({routeName}),
-      );
-    }
-  }
-
   render() {
-    if (this.state.isloading || !this.AppContainer) {
+    if (this.state.isloading || !NavigationContainer) {
       return (
-        <Root style={{flex: 1}}>
+        <SafeAreaProvider>
           <ActivityIndicator
             style={{width: '100%', height: '100%'}}
             color={styleConst.color.blue}
             size="large"
           />
-        </Root>
+        </SafeAreaProvider>
       );
     }
     return (
-      <Root style={{flex: 1}}>
-        <this.AppContainer
-          ref={(navigatorRef) => {
-            NavigationService.setTopLevelNavigator(navigatorRef);
-          }}
-          onNavigationStateChange={this.onNavigationStateChange}
-        />
-      </Root>
+      <SafeAreaProvider>
+        <Root>
+          <NavigationContainer ref={NavigationService.navigationRef}>
+            <Nav.Base />
+          </NavigationContainer>
+        </Root>
+      </SafeAreaProvider>
     );
   }
 }

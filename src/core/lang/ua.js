@@ -264,10 +264,10 @@ export default {
     brands: 'Бренди',
     models: 'Моделі',
   },
-  UserCarListScreen: {
+  UsedCarListScreen: {
     title: 'Автомобілі з пробігом',
   },
-  UserCarItemScreen: {
+  UsedCarItemScreen: {
     showFull: 'Показати повний опис...',
     showLess: 'Згорнути',
     creditCalculate: 'розрахувати кредит',
@@ -328,6 +328,10 @@ export default {
   },
   ReviewAddMessageForm: {
     label: {
+      plus: 'Що тобі сподобалося в роботі автоцентру?',
+      minus: 'Чим ти залишився незадоволений в роботі автоцентру?',
+    },
+    placeholder: {
       plus:
         'Що тобі сподобалося в роботі автоцентру? Кому б ти хотів висловити подяку?',
       minus: 'Чим ти залишився незадоволений в роботі автоцентру?',

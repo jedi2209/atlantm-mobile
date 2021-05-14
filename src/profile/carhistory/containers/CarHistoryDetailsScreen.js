@@ -17,16 +17,14 @@ import {actionFetchCarHistoryDetails} from '../../actions';
 
 // components
 import SpinnerView from '../../../core/components/SpinnerView';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
 import showPrice from '../../../utils/price';
 import {ERROR_NETWORK} from '../../../core/const';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const TABS = {
   WORKS: 'works',
@@ -36,7 +34,7 @@ const TABS = {
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
   },
   // section
   section: {
@@ -100,7 +98,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   tabTextActive: {
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
     fontSize: 20,
@@ -117,7 +115,7 @@ const styles = StyleSheet.create({
   tabButtonActive: {
     backgroundColor: 'transparent',
     borderColor: 'transparent',
-    borderBottomColor: styleConst.new.blueHeader,
+    borderBottomColor: styleConst.color.lightBlue,
     flex: 1,
     justifyContent: 'center',
     paddingLeft: 0,
@@ -150,13 +148,7 @@ class CarHistoryDetailsScreen extends Component {
     const {params = {}} = navigation.state;
 
     return {
-      headerTitle: (
-        <Text style={stylesHeader.whiteHeaderTitle}>{params.title}</Text>
-      ),
-      headerStyle: stylesHeader.whiteHeader,
-      headerTitleStyle: stylesHeader.whiteHeaderTitle,
-      headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
-      headerRight: <View />,
+      headerTitle: <Text>{params.title}</Text>,
     };
   };
 
@@ -164,10 +156,10 @@ class CarHistoryDetailsScreen extends Component {
     Amplitude.logEvent('screen', 'lkk/carhistory/details');
 
     const {profile, navigation, actionFetchCarHistoryDetails} = this.props;
-    const vin = get(navigation, 'state.params.vin');
-    const title = get(navigation, 'state.params.title');
-    const workId = get(navigation, 'state.params.workId');
-    const workDealer = get(navigation, 'state.params.workDealer');
+    const vin = get(this.props.route, 'params.vin');
+    const title = get(this.props.route, 'params.title');
+    const workId = get(this.props.route, 'params.workId');
+    const workDealer = get(this.props.route, 'params.workDealer');
     const token = profile.SAP.TOKEN;
     const userid = profile.SAP.ID;
 
@@ -272,7 +264,11 @@ class CarHistoryDetailsScreen extends Component {
     console.log('== CarHistoryDetails ==');
 
     if (isFetchCarHistoryDetails) {
-      return <SpinnerView containerStyle={{backgroundColor: '#fff'}} />;
+      return (
+        <SpinnerView
+          containerStyle={{backgroundColor: styleConst.color.white}}
+        />
+      );
     }
 
     const works = get(details, 'works');

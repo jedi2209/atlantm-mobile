@@ -29,7 +29,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   listItemContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     paddingLeft: 10,
   },
   listItemContainerFirst: {

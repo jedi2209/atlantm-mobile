@@ -2,47 +2,46 @@ import React, {Component} from 'react';
 import {
   View,
   Text,
-  StatusBar,
   Linking,
   Dimensions,
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+import {StyleProvider} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
 import {fetchInfoPost, callMeForInfo} from '../actions';
 
 import {Content, Button} from 'native-base';
-// import FooterButton from '../../core/components/FooterButton';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
 import Imager from '../../core/components/Imager';
+import Badge from '../../core/components/Badge';
 
 // helpers
 import {get} from 'lodash';
+import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import processHtml from '../../utils/process-html';
 import Amplitude from '../../utils/amplitude-analytics';
 import {verticalScale} from '../../utils/scale';
 import {dayMonth, dayMonthYear} from '../../utils/date';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 // image
 const {width: screenWidth} = Dimensions.get('window');
 const IMAGE_WIDTH = screenWidth;
-const IMAGE_HEIGHT = 200;
+const IMAGE_HEIGHT = 300;
 
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: styleConst.color.bg,
   },
   spinner: {
     alignSelf: 'center',
     marginTop: verticalScale(60),
-    height: 200,
+    height: 300,
   },
   button: {
     backgroundColor: styleConst.color.lightBlue,
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
     marginHorizontal: '10%',
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     fontFamily: styleConst.font.medium,
     fontSize: 16,
     letterSpacing: styleConst.ui.letterSpacing,
@@ -85,14 +84,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({dealer, info, profile}) => {
+const mapStateToProps = ({dealer, info, profile, core}) => {
   return {
-    list: info.list,
+    list: info.list?.data,
     posts: info.posts,
     name: profile.name,
     phone: profile.phone,
     email: profile.email,
     dealerSelected: dealer.selected,
+    currLang: core.language.selected,
   };
 };
 
@@ -102,23 +102,6 @@ const mapDispatchToProps = {
 };
 
 class InfoPostScreen extends Component {
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-    return {
-      headerTransparent: true,
-      headerLeft: (
-        <HeaderIconBack
-          theme="white"
-          ContainerStyle={styleConst.headerBackButton.ContainerStyle}
-          IconStyle={styleConst.headerBackButton.IconStyle}
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-    };
-  };
-
   state = {
     imageWidth: IMAGE_WIDTH,
     imageHeight: IMAGE_HEIGHT,
@@ -127,9 +110,9 @@ class InfoPostScreen extends Component {
   };
 
   componentDidMount() {
-    const {posts, navigation} = this.props;
+    const {posts, route} = this.props;
 
-    const id = navigation.state.params.id;
+    const id = route.params.id;
     const post = posts[id];
 
     if (!post) {
@@ -153,16 +136,16 @@ class InfoPostScreen extends Component {
   };
 
   getPost = () => {
-    const {posts, navigation} = this.props;
-    const id = navigation.state.params.id;
+    const {posts, route} = this.props;
+    const id = route.params.id;
 
     return posts[id];
   };
 
   onPressCallMe = () => {
-    const {navigation} = this.props;
-    const id = navigation.state.params.id;
-    this.props.navigation.navigate('CallMeBackScreen', {actionID: id});
+    const {navigation, route} = this.props;
+    const id = route.params.id;
+    navigation.navigate('CallMeBackScreen', {actionID: id});
   };
 
   processDate(date = {}) {
@@ -180,19 +163,24 @@ class InfoPostScreen extends Component {
   }
 
   _onRefresh = () => {
-    this.setState({refreshing: true});
+    const {route} = this.props;
 
-    this.props.fetchInfoPost(this.props.navigation.state.params.id).then(() => {
+    this.setState({refreshing: true});
+    this.props.fetchInfoPost(route.params.id).then(() => {
       this.setState({refreshing: false});
     });
   };
 
   render() {
+    const {currLang} = this.props;
     const post = this.getPost();
     let text = get(post, 'text');
     const img = get(post, 'img');
     const imageUrl = get(img, '10000x440');
     const date = get(post, 'date');
+    const type = get(post, 'type');
+    const resizeMode =
+      new Boolean(get(post, 'imgCropAvailable')) === true ? 'cover' : 'contain';
 
     if (text) {
       text = processHtml(text, this.state.webViewWidth);
@@ -201,68 +189,86 @@ class InfoPostScreen extends Component {
     console.log('== InfoPost ==');
 
     return (
-      <View style={styles.safearea}>
-        <StatusBar hidden />
-        <Content
-          style={{margin: 0, padding: 0}}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this._onRefresh}
-            />
-          }>
-          {!text || this.state.refreshing ? (
-            <ActivityIndicator
-              color={styleConst.color.blue}
-              style={styles.spinner}
-            />
-          ) : (
-            <View>
-              <View style={styles.imageContainer} ref="imageContainer">
-                {imageUrl ? (
-                  <Imager
-                    resizeMode="cover"
-                    onLayout={this.onLayoutImage}
-                    style={[
-                      styles.image,
-                      {
-                        width: this.state.imageWidth,
-                        height: this.state.imageHeight,
-                      },
-                    ]}
-                    source={{uri: imageUrl}}
+      <StyleProvider style={getTheme()}>
+        <View style={styles.safearea}>
+          <Content
+            style={{margin: 0, marginTop: -50, padding: 0}}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh}
+              />
+            }>
+            {!text || this.state.refreshing ? (
+              <ActivityIndicator
+                color={styleConst.color.blue}
+                style={styles.spinner}
+              />
+            ) : (
+              <View>
+                <View style={styles.imageContainer} ref="imageContainer">
+                  {imageUrl ? (
+                    <Imager
+                      resizeMode={resizeMode}
+                      onLayout={this.onLayoutImage}
+                      style={[
+                        styles.image,
+                        {
+                          width: this.state.imageWidth,
+                          height: this.state.imageHeight,
+                        },
+                      ]}
+                      source={{uri: imageUrl}}
+                    />
+                  ) : null}
+                </View>
+                <View
+                  style={styles.textContainer}
+                  onLayout={this.onLayoutWebView}>
+                  {date ? (
+                    <Text style={styles.date}>{this.processDate(date)}</Text>
+                  ) : null}
+                  {type && type.badge ? (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        marginTop: 3,
+                        paddingHorizontal: 9,
+                      }}>
+                      <Badge
+                        id={type.id}
+                        key={'badgeItem' + type.id}
+                        index={0}
+                        bgColor={type?.badge?.background}
+                        name={type?.name[currLang]}
+                        textColor={type?.badge?.color}
+                      />
+                    </View>
+                  ) : null}
+                  <WebViewAutoHeight
+                    style={{
+                      backgroundColor: styleConst.color.bg,
+                    }}
+                    key={get(post, 'hash')}
+                    source={{html: text}}
+                    onMessage={this.onMessage}
                   />
-                ) : null}
+                </View>
               </View>
-              <View
-                style={styles.textContainer}
-                onLayout={this.onLayoutWebView}>
-                {date ? (
-                  <Text style={styles.date}>{this.processDate(date)}</Text>
-                ) : null}
-                <WebViewAutoHeight
-                  style={{
-                    backgroundColor: styleConst.color.bg,
-                  }}
-                  key={get(post, 'hash')}
-                  source={{html: text}}
-                  onMessage={this.onMessage}
-                />
-              </View>
-            </View>
-          )}
-        </Content>
-        <Button
-          full
-          uppercase={false}
-          title={strings.InfoPostScreen.button.callMe}
-          style={[styleConst.shadow.default, styles.button]}
-          onPress={this.onPressCallMe}>
-          <Text style={styles.buttonText}>
-            {strings.InfoPostScreen.button.callMe}
-          </Text>
-        </Button>
-      </View>
+            )}
+          </Content>
+          <Button
+            full
+            uppercase={false}
+            title={strings.InfoPostScreen.button.callMe}
+            style={[styleConst.shadow.default, styles.button]}
+            onPress={this.onPressCallMe}>
+            <Text style={styles.buttonText}>
+              {strings.InfoPostScreen.button.callMe}
+            </Text>
+          </Button>
+        </View>
+      </StyleProvider>
     );
   }
 }

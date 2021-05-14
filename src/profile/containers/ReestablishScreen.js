@@ -22,10 +22,7 @@ import {Button, Icon, Toast} from 'native-base';
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
 import styleConst from '../../core/style-const';
-
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-import stylesHeader from '../../core/components/Header/style';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 import {
   actionLogin,
@@ -58,7 +55,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 14,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
   },
   header: {
     marginBottom: 10,
@@ -94,7 +91,7 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     textTransform: 'uppercase',
     fontSize: 16,
   },
@@ -120,22 +117,6 @@ class ReestablishScreen extends React.Component {
 
     this.disableButton = false;
   }
-
-  static navigationOptions = ({navigation}) => {
-    return {
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerTitle: strings.ReestablishScreen.title,
-      headerLeft: (
-        <HeaderIconBack
-          theme="white"
-          // ContainerStyle={styleConst.headerBackButton.ContainerStyle}
-          // IconStyle={styleConst.headerBackButton.IconStyle}
-          navigation={navigation}
-        />
-      ),
-    };
-  };
 
   onChangeField = (fieldName) => (value) => {
     this.setState({[fieldName]: value});
@@ -217,7 +198,7 @@ class ReestablishScreen extends React.Component {
                   type: 'success',
                 });
                 setTimeout(() => {
-                  _this.props.navigation.navigate('ProfileScreenInfo');
+                  _this.props.navigation.navigate('LoginScreen');
                 }, 500);
               })
               .catch(() => {
@@ -394,7 +375,7 @@ class ReestablishScreen extends React.Component {
                     onPress={this.state.loading ? undefined : this.onPressLogin}
                     style={[styles.button, styleConst.shadow.default]}>
                     {this.state.loading ? (
-                      <ActivityIndicator color="#fff" />
+                      <ActivityIndicator color={styleConst.color.white} />
                     ) : (
                       <Text style={styles.buttonText}>
                         {strings.ReestablishScreen.findMyData}

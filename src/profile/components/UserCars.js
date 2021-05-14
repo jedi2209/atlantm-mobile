@@ -2,6 +2,7 @@
 /* eslint-disable react/react-in-jsx-scope */
 import React, {useState, useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 import {
   View,
   Text,
@@ -19,7 +20,7 @@ import {Icon, Button, ActionSheet, Toast} from 'native-base';
 import {verticalScale} from '../../utils/scale';
 import styleConst from '../../core/style-const';
 import orderFunctions from '../../utils/orders';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 import {actionToggleCar} from '../actions';
 
@@ -49,10 +50,11 @@ const styles = StyleSheet.create({
   },
 });
 
-let UserCars = ({navigation, actionToggleCar}) => {
+let UserCars = ({actionToggleCar, activePanel}) => {
+  const navigation = useNavigation();
   const cars = get(store.getState(), 'profile.cars');
   const [loading, setLoading] = useState(false);
-  const [carsPanel, setActivePanel] = useState('default');
+  const [carsPanel, setActivePanel] = useState(activePanel);
 
   let carsScrollView = useRef(null);
 
@@ -69,7 +71,7 @@ let UserCars = ({navigation, actionToggleCar}) => {
     }, 2500);
   }, []);
 
-  const _showMenu = (ordersData, item) => {
+  const _showMenu = (ordersData, item, navigation) => {
     let carName = [item.brand, item.model].join(' ');
     if (item.number) {
       carName += ['-- [' + item.number + ']'].join(' ');
@@ -131,7 +133,7 @@ let UserCars = ({navigation, actionToggleCar}) => {
     );
   };
 
-  const _renderCarsItems = ({cars, actionToggleCar}) => {
+  const _renderCarsItems = ({cars, navigation}) => {
     return (
       <ScrollView
         showsHorizontalScrollIndicator={false}
@@ -152,11 +154,15 @@ let UserCars = ({navigation, actionToggleCar}) => {
               onPress={() => {
                 if (CarType === 'active') {
                   orderFunctions.getOrders('car').then((ordersData) => {
-                    return _showMenu(ordersData, item);
+                    return _showMenu(ordersData, item, navigation);
                   });
                 } else {
                   orderFunctions.getCarMenu().then((data) => {
-                    return _showMenu(data[CarType][Platform.OS], item);
+                    return _showMenu(
+                      data[CarType][Platform.OS],
+                      item,
+                      navigation,
+                    );
                   });
                 }
               }}>
@@ -266,7 +272,7 @@ let UserCars = ({navigation, actionToggleCar}) => {
       ) : myCars[carsPanel].length > 0 ? (
         _renderCarsItems({
           cars: myCars[carsPanel],
-          actionToggleCar: actionToggleCar,
+          navigation: navigation,
         })
       ) : (
         <View
@@ -274,8 +280,7 @@ let UserCars = ({navigation, actionToggleCar}) => {
             styles.scrollViewInner,
             {
               flex: 1,
-              paddingLeft: 24,
-              paddingRight: 5,
+              paddingHorizontal: 24,
               marginVertical: 29.5,
               textAlign: 'center',
               alignContent: 'center',
@@ -288,7 +293,11 @@ let UserCars = ({navigation, actionToggleCar}) => {
           <Text style={{marginTop: 5, marginLeft: 10, lineHeight: 20}}>
             {strings.UserCars.empty.text + '\r\n'}
           </Text>
-          <Button bordered onPress={() => setActivePanel('hidden')}>
+          <Button
+            full
+            bordered
+            style={{borderRadius: 5}}
+            onPress={() => setActivePanel('hidden')}>
             <Text style={{padding: 5}}>{strings.UserCars.archiveCheck}</Text>
           </Button>
         </View>
@@ -296,4 +305,9 @@ let UserCars = ({navigation, actionToggleCar}) => {
     </>
   );
 };
+
+UserCars.defaultProps = {
+  activePanel: 'default',
+};
+
 export default connect(null, mapDispatchToProps)(UserCars);

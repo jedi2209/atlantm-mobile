@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
-import {
-  TouchableOpacity,
-  StyleSheet,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-import {Icon} from 'native-base';
+import {StyleSheet, View, StatusBar} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -21,19 +14,12 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Amplitude from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
 import {EVENT_REFRESH} from '../../../core/actionTypes';
-import strings from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   content: {
     flex: 1,
     backgroundColor: styleConst.color.bg,
-  },
-  iconFilter: {
-    color: '#fff',
-    fontSize: 25,
-    marginRight: 20,
   },
 });
 
@@ -71,35 +57,6 @@ class NewCarListScreen extends Component {
       loading: false,
     };
   }
-
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      (navigation.state.params && navigation.state.params.returnScreen) ||
-      'BottomTabNavigation';
-
-    console.log('navigation.state.params >>>>>>', returnScreen);
-
-    return {
-      headerTitle: (
-        <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
-          {strings.NewCarListScreen.title}
-        </Text>
-      ),
-      headerLeft: <View />,
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerRight: (
-        <View style={stylesHeader.headerRightStyle}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('NewCarFilterScreen');
-            }}>
-            <Icon type="FontAwesome" name="filter" style={styles.iconFilter} />
-          </TouchableOpacity>
-        </View>
-      ),
-    };
-  };
 
   componentDidMount() {
     const {dealerSelected, filterData} = this.props;

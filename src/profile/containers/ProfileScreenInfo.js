@@ -9,8 +9,10 @@ import {
   Text,
   TouchableWithoutFeedback,
   ActivityIndicator,
+  SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
+// import { SafeAreaView } from 'react-native-safe-area-context';
 import UserCars from '../components/UserCars';
 import {Button, Icon} from 'native-base';
 import PushNotifications from '../../core/components/PushNotifications';
@@ -31,7 +33,7 @@ import {
 
 import Amplitude from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
   buttonText: {
@@ -56,13 +58,12 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.lightBlue,
   },
   buttonPrimaryText: {
-    color: '#fff',
+    color: styleConst.color.white,
     fontSize: 16,
     fontWeight: 'normal',
   },
   BonusInfoButton: {
     height: 25,
-    backgroundColor: '#fff',
     marginVertical: 0,
     paddingTop: 0,
     paddingBottom: 0,
@@ -87,7 +88,6 @@ const styles = StyleSheet.create({
   },
 });
 
-import {SafeAreaView} from 'react-navigation';
 import {verticalScale} from '../../utils/scale';
 import {get} from 'lodash';
 import {yearMonthDay} from '../../utils/date';
@@ -133,10 +133,6 @@ class ProfileScreenInfo extends Component {
       cars: 'default',
     };
   }
-
-  static navigationOptions = ({navigation}) => ({
-    header: null,
-  });
 
   componentDidMount() {
     if (this.props.login.ID) {
@@ -241,7 +237,7 @@ class ProfileScreenInfo extends Component {
   render() {
     const bonus = this.renderBonus(this.props.dealerSelected.region);
     return (
-      <SafeAreaView>
+      <SafeAreaView style={{flex: 1}}>
         <ScrollView>
           <Text
             style={{
@@ -264,8 +260,7 @@ class ProfileScreenInfo extends Component {
                   paddingTop: 10,
                 },
               ]}
-              navigation={this.props.navigation}
-              returnScreen={this.props.navigation.state.routeName}
+              returnScreen={this.props.navigation.state?.routeName}
             />
           ) : null}
 
@@ -281,7 +276,9 @@ class ProfileScreenInfo extends Component {
           ) : (
             <>
               {this.props.cars.length > 0 ? (
-                <UserCars navigation={this.props.navigation} />
+                <UserCars
+                  activePanel={this.props.navigation.params?.activePanel}
+                />
               ) : (
                 <>
                   <View
@@ -304,7 +301,7 @@ class ProfileScreenInfo extends Component {
                     <Text
                       style={{
                         textAlign: 'center',
-                        color: '#fff',
+                        color: styleConst.color.white,
                         fontSize: 18,
                         paddingHorizontal: 20,
                       }}>
@@ -330,11 +327,11 @@ class ProfileScreenInfo extends Component {
                         style={[
                           styles.buttonPrimaryText,
                           {
-                            color: '#fff',
+                            color: styleConst.color.white,
                             fontSize: 14,
                             fontStyle: 'italic',
                             textDecorationStyle: 'dotted',
-                            textDecorationColor: '#fff',
+                            textDecorationColor: styleConst.color.white,
                             textDecorationLine: 'underline',
                             shadowOpacity: 0,
                             elevation: 0,
@@ -375,7 +372,7 @@ class ProfileScreenInfo extends Component {
                         }>
                         <View
                           style={{
-                            backgroundColor: '#fff',
+                            backgroundColor: styleConst.color.white,
                             width: 98,
                             height: 98,
                             borderRadius: 49,
@@ -406,7 +403,7 @@ class ProfileScreenInfo extends Component {
                         <View style={{flex: 1}}>
                           <Text
                             style={{
-                              color: '#fff',
+                              color: styleConst.color.white,
                               fontSize: 18,
                               marginBottom: 8,
                               fontWeight: '600',
@@ -415,7 +412,7 @@ class ProfileScreenInfo extends Component {
                           </Text>
                           <Text
                             style={{
-                              color: '#fff',
+                              color: styleConst.color.white,
                               fontSize: 12,
                               marginBottom: 16,
                               fontWeight: '600',
@@ -426,7 +423,7 @@ class ProfileScreenInfo extends Component {
                             <View>
                               <Text
                                 style={{
-                                  color: '#fff',
+                                  color: styleConst.color.white,
                                   fontSize: 16,
                                   fontWeight: '600',
                                 }}
@@ -440,7 +437,7 @@ class ProfileScreenInfo extends Component {
                               type="FontAwesome5"
                               name="angle-right"
                               style={{
-                                color: '#fff',
+                                color: styleConst.color.white,
                                 fontSize: 20,
                                 marginLeft: 8,
                               }}
@@ -452,8 +449,8 @@ class ProfileScreenInfo extends Component {
                     <Button
                       onPress={() => {
                         this.props.navigation.navigate('BonusScreenInfo', {
-                          refererScreen: 'ProfileScreenInfo',
-                          returnScreen: 'ProfileScreenInfo',
+                          refererScreen: 'LoginScreen',
+                          returnScreen: 'LoginScreen',
                         });
                       }}
                       full
@@ -476,8 +473,8 @@ class ProfileScreenInfo extends Component {
                   <TouchableWithoutFeedback
                     onPress={() =>
                       this.props.navigation.navigate('BonusScreenInfo', {
-                        refererScreen: 'ProfileScreenInfo',
-                        returnScreen: 'ProfileScreenInfo',
+                        refererScreen: 'LoginScreen',
+                        returnScreen: 'LoginScreen',
                       })
                     }>
                     <View
@@ -497,7 +494,7 @@ class ProfileScreenInfo extends Component {
                         }}>
                         <View
                           style={{
-                            backgroundColor: '#fff',
+                            backgroundColor: styleConst.color.white,
                             width: 98,
                             height: 98,
                             borderRadius: 49,
@@ -527,7 +524,7 @@ class ProfileScreenInfo extends Component {
                         <View style={{flex: 1}}>
                           <Text
                             style={{
-                              color: '#fff',
+                              color: styleConst.color.white,
                               fontSize: 18,
                               marginBottom: 8,
                               fontWeight: '600',
@@ -536,7 +533,7 @@ class ProfileScreenInfo extends Component {
                           </Text>
                           <Text
                             style={{
-                              color: '#fff',
+                              color: styleConst.color.white,
                               fontSize: 12,
                               marginBottom: 16,
                               fontWeight: '600',
@@ -553,7 +550,7 @@ class ProfileScreenInfo extends Component {
                             <View>
                               <Text
                                 style={{
-                                  color: '#fff',
+                                  color: styleConst.color.white,
                                   fontSize: 16,
                                   fontWeight: '600',
                                 }}>
@@ -567,7 +564,7 @@ class ProfileScreenInfo extends Component {
                               type="FontAwesome5"
                               name="angle-right"
                               style={{
-                                color: '#fff',
+                                color: styleConst.color.white,
                                 fontSize: 20,
                                 marginLeft: 8,
                               }}
@@ -604,7 +601,6 @@ class ProfileScreenInfo extends Component {
                   this.props.actionLogout();
                 }}
                 style={{
-                  backgroundColor: '#fff',
                   paddingHorizontal: 20,
                   marginVertical: 5,
                 }}>

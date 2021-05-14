@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {SafeAreaView, View, StyleSheet, Text} from 'react-native';
+import {SafeAreaView, View, StyleSheet} from 'react-native';
 import {Content, StyleProvider} from 'native-base';
 
 // redux
@@ -10,7 +10,6 @@ import {actionFetchDealerRating} from '../../actions';
 // components
 import Review from '../components/Review';
 import ReviewDealerAnswer from '../components/ReviewDealerAnswer';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import HeaderSubtitle from '../../../core/components/HeaderSubtitle';
 import SpinnerView from '../../../core/components/SpinnerView';
 
@@ -18,8 +17,7 @@ import SpinnerView from '../../../core/components/SpinnerView';
 import {get} from 'lodash';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {
@@ -47,24 +45,6 @@ const mapDispatchToProps = {
 };
 
 class ReviewScreen extends Component {
-  static navigationOptions = ({navigation}) => {
-    return {
-      headerTitle: (
-        <Text style={stylesHeader.blueHeaderTitle}>
-          {strings.ReviewScreen.title}
-        </Text>
-      ),
-      headerStyle: stylesHeader.blueHeader,
-      headerTitleStyle: stylesHeader.blueHeaderTitle,
-      headerLeft: (
-        <View>
-          <HeaderIconBack theme="white" navigation={navigation} />
-        </View>
-      ),
-      headerRight: <View />,
-    };
-  };
-
   componentDidMount() {
     const {
       dealerSelected,
@@ -79,7 +59,7 @@ class ReviewScreen extends Component {
     }
   }
 
-  getReview = () => get(this.props.navigation, 'state.params.review');
+  getReview = () => get(this.props.route, 'params.review');
 
   render() {
     const {

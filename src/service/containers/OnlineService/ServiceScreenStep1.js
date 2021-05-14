@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import {
   StyleSheet,
   View,
-  Alert,
   Text,
   TouchableWithoutFeedback,
   ScrollView,
@@ -12,10 +11,9 @@ import {
   Platform,
   TouchableOpacity,
 } from 'react-native';
-import {Icon, Toast} from 'native-base';
+import {Icon, Button, Toast} from 'native-base';
 import {get, orderBy} from 'lodash';
 import styleConst from '../../../core/style-const';
-// import {StackActions, NavigationActions} from 'react-navigation';
 
 import {CarCard} from '../../../profile/components/CarCard';
 import {ServiceModal} from '../../components/ServiceModal';
@@ -27,7 +25,7 @@ import RenderPrice from '../../../utils/price';
 // redux
 import {connect} from 'react-redux';
 import {localDealerClear} from '../../../dealer/actions';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 import API from '../../../utils/api';
 
@@ -139,7 +137,7 @@ const styles = StyleSheet.create({
   buttonText: {
     textTransform: 'uppercase',
     fontSize: 16,
-    color: '#fff',
+    color: styleConst.color.white,
   },
 });
 
@@ -159,9 +157,10 @@ class ServiceScreenStep1 extends Component {
       carModel: carModel,
       carVIN: carVIN,
       carNumber: carNumber,
+      orderLead: false,
     };
 
-    const carFromNavigation = get(this.props.navigation, 'state.params.car');
+    const carFromNavigation = get(this.props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
       this.state.carVIN = carFromNavigation.vin;
       this.state.carBrand = get(carFromNavigation, 'brand');
@@ -179,7 +178,6 @@ class ServiceScreenStep1 extends Component {
         this.myCars.push(item);
       }
     });
-    this.orderLead = false;
 
     this.props.localDealerClear();
   }
@@ -193,8 +191,13 @@ class ServiceScreenStep1 extends Component {
         time: undefined,
       },
       () => {
-        if (!isNaN(value) && value !== null) {
+        if (value !== null && value !== 'other') {
+          // если выбраны какие-то работы кроме "другое"
           this._getServicesInfo(value);
+        } else {
+          this.setState({
+            orderLead: true,
+          });
         }
       },
     );
@@ -210,9 +213,9 @@ class ServiceScreenStep1 extends Component {
     });
 
     if (data.status !== 200 && data.status !== 'success') {
-      this.orderLead = true;
       data.data = undefined;
       this.setState({
+        orderLead: true,
         services: undefined,
         serviceInfo: undefined,
         servicesFetch: false,
@@ -223,9 +226,9 @@ class ServiceScreenStep1 extends Component {
       let services = [];
       data.data.map((el) => {
         services.push({
-          label: el.name,
-          value: el.id,
-          key: el.id,
+          label: el.name.toString(),
+          value: el.id.toString(),
+          key: el.id.toString(),
         });
       });
       this.setState({
@@ -234,7 +237,6 @@ class ServiceScreenStep1 extends Component {
         date: undefined,
         time: undefined,
       });
-      console.log('_getServices', this.state);
     }
   }
 
@@ -277,9 +279,9 @@ class ServiceScreenStep1 extends Component {
   };
 
   _onCarChange = () => {
-    this.orderLead = false;
     this.setState(
       {
+        orderLead: false,
         date: undefined,
         time: undefined,
         services: undefined,
@@ -332,7 +334,7 @@ class ServiceScreenStep1 extends Component {
       dealer: this.props.dealerSelected,
       service: service || null,
       serviceInfo: this.state.serviceInfo || null,
-      orderLead: this.orderLead,
+      orderLead: this.state.orderLead,
       car: {
         brand: this.state.carBrand
           ? this.state.carBrand
@@ -350,8 +352,6 @@ class ServiceScreenStep1 extends Component {
     };
 
     navigation.navigate('ServiceScreenStep2', data);
-
-    console.log('onPressOrder', this.orderLead, data, dataFromForm);
     return true;
   };
 
@@ -370,7 +370,6 @@ class ServiceScreenStep1 extends Component {
                 props: {
                   goBack: false,
                   isLocal: false,
-                  navigation: this.props.navigation,
                 },
               },
             ],
@@ -400,7 +399,7 @@ class ServiceScreenStep1 extends Component {
                       }
                     </Text>
                   </>
-                ) : (
+                ) : this.myCars && this.myCars.length ? (
                   <ScrollView
                     showsHorizontalScrollIndicator={false}
                     horizontal
@@ -431,6 +430,46 @@ class ServiceScreenStep1 extends Component {
                       </TouchableWithoutFeedback>
                     ))}
                   </ScrollView>
+                ) : (
+                  <View
+                    style={[
+                      styles.scrollViewInner,
+                      {
+                        flex: 1,
+                        paddingLeft: 24,
+                        paddingRight: 5,
+                        marginVertical: 29.5,
+                        textAlign: 'center',
+                        alignContent: 'center',
+                        width: '100%',
+                        alignItems: 'center',
+                      },
+                    ]}
+                    useNativeDriver>
+                    <Icon
+                      type="MaterialCommunityIcons"
+                      name="car-off"
+                      fontSize={20}
+                    />
+                    <Text
+                      style={{marginTop: 5, marginLeft: 10, lineHeight: 20}}>
+                      {strings.UserCars.empty.text + '\r\n'}
+                    </Text>
+                    <Button
+                      full
+                      bordered
+                      style={{borderRadius: 5}}
+                      onPress={() => {
+                        this.props.navigation.navigate('About', {
+                          screen: 'LoginScreen',
+                          activePanel: 'hidden',
+                        });
+                      }}>
+                      <Text style={{padding: 5}}>
+                        {strings.UserCars.archiveCheck}
+                      </Text>
+                    </Button>
+                  </View>
                 ),
               },
               this.state.services
@@ -551,13 +590,15 @@ class ServiceScreenStep1 extends Component {
                 parentState={this.state}
               />
             </View>
-            <View>
-              <ServiceModal
-                visible={this.state.isModalVisible}
-                onClose={() => this.setState({isModalVisible: false})}
-                data={this.state.serviceInfo}
-              />
-            </View>
+            {this.state.serviceInfo ? (
+              <View>
+                <ServiceModal
+                  visible={this.state.isModalVisible}
+                  onClose={() => this.setState({isModalVisible: false})}
+                  data={this.state.serviceInfo}
+                />
+              </View>
+            ) : null}
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

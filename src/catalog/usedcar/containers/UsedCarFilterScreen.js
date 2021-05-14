@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, Text, Image, TouchableOpacity, StatusBar} from 'react-native';
+import {View, Text, StatusBar} from 'react-native';
 import {
   Icon,
   Button,
@@ -28,12 +28,11 @@ import {
 
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
-import stylesHeader from '../../../core/components/Header/style';
 import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
 import {ScrollView} from 'react-native-gesture-handler';
 
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
   return {
@@ -66,28 +65,8 @@ const mapDispatchToProps = {
 };
 
 class UsedCarFilterScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: strings.NewCarFilterScreen.title,
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: {fontWeight: '200', color: '#000'},
-    headerRight: (
-      <Icon
-        type="AntDesign"
-        style={{
-          color: '#000',
-          fontWeight: 'lighter',
-          fontSize: 22,
-          marginRight: 14,
-        }}
-        name="close"
-        onPress={() => navigation.goBack()}
-      />
-    ),
-  });
-
   static propTypes = {
     dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
   };
 
   constructor(props) {
@@ -198,7 +177,7 @@ class UsedCarFilterScreen extends Component {
                   }}
                   style={{
                     height: 44,
-                    backgroundColor: '#fff',
+                    backgroundColor: styleConst.color.white,
                     borderWidth: 0,
                     borderBottomWidth: 0,
                     paddingLeft: 5,
@@ -321,7 +300,7 @@ class UsedCarFilterScreen extends Component {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                backgroundColor: '#fff',
+                backgroundColor: styleConst.color.white,
                 borderBottomWidth: expanded ? 0 : 1,
                 borderColor: '#d5d5e0',
               }}>
@@ -349,7 +328,7 @@ class UsedCarFilterScreen extends Component {
               <View
                 style={{
                   // minHeight: 100,
-                  backgroundColor: '#fff',
+                  backgroundColor: styleConst.color.white,
                   paddingHorizontal: 16,
                   borderBottomWidth: 1,
                   borderBottomColor: '#d5d5e0',
@@ -391,7 +370,7 @@ class UsedCarFilterScreen extends Component {
                 color:
                   this.props.items.length && this.props.items[0].type
                     ? styleConst.color.lightBlue
-                    : '#fff',
+                    : styleConst.color.white,
                 fontSize: 16,
               }}>
               {this.props.items.length && this.props.items[0].type

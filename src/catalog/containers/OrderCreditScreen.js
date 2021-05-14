@@ -20,8 +20,6 @@ import {connect} from 'react-redux';
 import {actionOrderCreditCar} from '../actions';
 import {localUserDataUpdate} from '../../profile/actions';
 
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
@@ -29,11 +27,10 @@ import showPrice from '../../utils/price';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
 import {CREDIT_ORDER__SUCCESS, CREDIT_ORDER__FAIL} from '../actionTypes';
 import {ERROR_NETWORK} from '../../core/const';
 
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const $size = 40;
 const styles = StyleSheet.create({
@@ -79,7 +76,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     textTransform: 'uppercase',
     fontSize: 16,
   },
@@ -110,30 +107,26 @@ const mapDispatchToProps = {
 class OrderCreditScreen extends Component {
   constructor(props) {
     super(props);
-    this.isNewCar = get(this.props.navigation, 'state.params.isNewCar');
-    this.orderedCar = get(this.props.navigation, 'state.params.car.ordered');
+    this.isNewCar = get(props.route, 'params.isNewCar');
+    this.orderedCar = get(props.route, 'params.car.ordered');
     let model = '';
     if (this.isNewCar) {
-      model = get(this.props.navigation, 'state.params.car.model');
+      model = get(props.route, 'params.car.model');
     } else {
-      model = get(this.props.navigation, 'state.params.car.model.name');
+      model = get(props.route, 'params.car.model.name');
     }
     this.carName = [
-      get(this.props.navigation, 'state.params.car.brand'),
+      get(props.route, 'params.car.brand'),
       model,
-      get(this.props.navigation, 'state.params.car.complectation'),
-      !this.orderedCar
-        ? get(this.props.navigation, 'state.params.car.year')
-        : null,
+      get(props.route, 'params.car.complectation'),
+      !this.orderedCar ? get(props.route, 'params.car.year') : null,
       this.orderedCar ? 'или аналог' : null,
     ]
       .filter(Boolean)
       .join(' ');
 
-    this.carPrice = Number(
-      get(this.props.navigation, 'state.params.car.price'),
-    );
-    this.region = get(this.props.navigation, 'state.params.region');
+    this.carPrice = Number(get(props.route, 'params.car.price'));
+    this.region = get(props.route, 'params.region');
 
     this.state = {
       date: '',
@@ -154,16 +147,7 @@ class OrderCreditScreen extends Component {
     this.optionsPrice.push(this.carPrice);
   }
 
-  static navigationOptions = ({navigation}) => ({
-    headerStyle: stylesHeader.whiteHeader,
-    headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerTitle: strings.OrderCreditScreen.title,
-    headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
-    headerRight: <View />,
-  });
-
   static propTypes = {
-    navigation: PropTypes.object,
     localUserDataUpdate: PropTypes.func,
     firstName: PropTypes.string,
     secondName: PropTypes.string,
@@ -175,17 +159,16 @@ class OrderCreditScreen extends Component {
 
   onPressOrder = async (data) => {
     const isInternetExist = await isInternet();
+    const nav = this.props.navigation;
 
     if (!isInternetExist) {
       setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
       return;
     }
 
-    const {navigation} = this.props;
-
-    const dealerId = get(navigation, 'state.params.dealerId');
-    const carId = get(navigation, 'state.params.carId');
-    const isNewCar = get(navigation, 'state.params.isNewCar');
+    const dealerId = get(this.props.route, 'params.dealerId');
+    const carId = get(this.props.route, 'params.carId');
+    const isNewCar = get(this.props.route, 'params.isNewCar');
     const action = await this.props.actionOrderCreditCar({
       firstName: get(data, 'NAME'),
       secondName: get(data, 'SECOND_NAME'),
@@ -195,7 +178,7 @@ class OrderCreditScreen extends Component {
       summ:
         this.state.summ ||
         get(data, 'SUMM') ||
-        get(navigation, 'state.params.car.price'),
+        get(this.props.route, 'params.car.price'),
       dealerId,
       carId,
       comment: data.COMMENT || '',
@@ -203,7 +186,7 @@ class OrderCreditScreen extends Component {
     if (action && action.type) {
       switch (action.type) {
         case CREDIT_ORDER__SUCCESS:
-          const car = get(navigation, 'state.params.car');
+          const car = get(this.props.route, 'params.car');
           const {brand, model} = car;
           const path = isNewCar ? 'newcar' : 'usedcar';
           Amplitude.logEvent('order', `catalog/${path}`, {
@@ -223,8 +206,8 @@ class OrderCreditScreen extends Component {
             [
               {
                 text: 'ОК',
-                onPress() {
-                  navigation.goBack();
+                onPress: () => {
+                  nav.goBack();
                 },
               },
             ],

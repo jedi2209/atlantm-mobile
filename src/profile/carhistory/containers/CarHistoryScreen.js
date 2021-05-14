@@ -42,12 +42,12 @@ import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
 import numberWithGap from '../../../utils/number-with-gap';
 import {ERROR_NETWORK} from '../../../core/const';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
   },
   emptyText: {
     textAlign: 'center',
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   itemLevel3: {
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
     marginBottom: 2,
   },
   listItem: {
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   date: {
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
     fontSize: 18,
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   mileage: {
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
     fontSize: 14,
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
@@ -146,25 +146,11 @@ const mapDispatchToProps = {
   // actionSetCarHistoryLevel1,
   // actionSetCarHistoryLevel2,
 };
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
-import stylesHeader from '../../../core/components/Header/style';
 class CarHistoryScreen extends Component {
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: (
-      <Text style={stylesHeader.whiteHeaderTitle}>
-        {strings.CarHistoryScreen.title}
-      </Text>
-    ),
-    headerStyle: stylesHeader.whiteHeader,
-    headerTitleStyle: stylesHeader.whiteHeaderTitle,
-    headerLeft: <HeaderIconBack theme="blue" navigation={navigation} />,
-    headerRight: <View />,
-  });
-
   componentDidMount() {
     // eslint-disable-next-line no-shadow
     const {profile, navigation, actionFetchCarHistory} = this.props;
-    const vin = get(navigation, 'state.params.car.vin');
+    const vin = get(this.props.route, 'params.car.vin');
     const token = profile.SAP.TOKEN;
     const userid = profile.SAP.ID;
 
@@ -235,8 +221,8 @@ class CarHistoryScreen extends Component {
   };
 
   renderLevel3 = (works) => {
-    const {navigation} = this.props;
-    const vin = get(navigation, 'state.params.car.vin');
+    const {navigation, route} = this.props;
+    const vin = get(route, 'params.car.vin');
 
     return works.map((work, idx) => {
       const workId = get(work, 'document.number');
@@ -270,7 +256,7 @@ class CarHistoryScreen extends Component {
           <Text
             style={
               ([styles.sectionValueText],
-              color ? {color: styleConst.new.blueHeader} : null)
+              color ? {color: styleConst.color.lightBlue} : null)
             }>
             {value}
           </Text>
@@ -365,7 +351,11 @@ class CarHistoryScreen extends Component {
     Amplitude.logEvent('screen', 'lkk/carhistory');
 
     if (isFetchCarHistory) {
-      return <SpinnerView containerStyle={{backgroundColor: '#fff'}} />;
+      return (
+        <SpinnerView
+          containerStyle={{backgroundColor: styleConst.color.white}}
+        />
+      );
     }
 
     if (isEmpty(carHistory) || !carHistory.items) {
@@ -380,7 +370,7 @@ class CarHistoryScreen extends Component {
     }
 
     return (
-      <ScrollView style={{backgroundColor: '#fff'}}>
+      <ScrollView style={{backgroundColor: styleConst.color.white}}>
         <StatusBar barStyle="dark-content" />
         <View>
           <StyleProvider style={getTheme()}>

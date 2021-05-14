@@ -1,16 +1,71 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, SafeAreaView} from 'react-native';
 import {Content, Row, Col, Segment, Button} from 'native-base';
-import {Header} from 'react-navigation-stack';
+import {useHeaderHeight} from '@react-navigation/stack';
 import Modal from 'react-native-modal';
 
 import showPrice from '../../utils/price';
 import styleConst from '../../core/style-const';
 import isIPhoneX from '../../utils/is_iphone_x';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 export const ServiceModal = ({visible, onClose, data}) => {
-  const [activeTab, setActiveTab] = useState('works');
+  const headerHeight = useHeaderHeight();
+  let defaultTab = 'works';
+  if (data && (!data['works'] || !data['works'].length)) {
+    defaultTab = 'parts';
+    data['works'] = [];
+  }
+  const [activeTab, setActiveTab] = useState(defaultTab);
+
+  const modalStyles = StyleSheet.create({
+    host: {
+      margin: 0,
+      marginTop: headerHeight + (isIPhoneX() ? 32 : 0),
+    },
+    container: {
+      flex: 1,
+      backgroundColor: styleConst.color.white,
+      borderTopLeftRadius: 10,
+      borderTopRightRadius: 10,
+    },
+    wrapper: {
+      paddingHorizontal: 14,
+      paddingVertical: 10,
+    },
+    tabContainer: {
+      backgroundColor: 'transparent',
+      borderBottomWidth: 1,
+      borderBottomColor: '#d8d8d8',
+    },
+    tabButton: {
+      borderColor: 'transparent',
+      width: '50%',
+      justifyContent: 'center',
+      height: 46,
+    },
+    tabButtonText: {
+      fontSize: 18,
+      color: styleConst.color.greyText,
+    },
+    tabButtonActiveText: {
+      color: styleConst.color.lightBlue,
+    },
+    content: {
+      flex: 1,
+      marginBottom: 16,
+    },
+    button: {
+      backgroundColor: styleConst.color.lightBlue,
+      justifyContent: 'center',
+      borderRadius: 5,
+    },
+    buttonText: {
+      color: styleConst.color.white,
+      textTransform: 'uppercase',
+      fontSize: 16,
+    },
+  });
 
   return (
     <Modal
@@ -23,30 +78,36 @@ export const ServiceModal = ({visible, onClose, data}) => {
           {data && (
             <View style={modalStyles.content}>
               <Segment style={modalStyles.tabContainer}>
-                <Button
-                  onPress={() => setActiveTab('works')}
-                  style={modalStyles.tabButton}>
-                  <Text
-                    selectable={false}
-                    style={[
-                      modalStyles.tabButtonText,
-                      activeTab === 'works' && modalStyles.tabButtonActiveText,
-                    ]}>
-                    {strings.CarHistoryDetailsScreen.works}
-                  </Text>
-                </Button>
-                <Button
-                  onPress={() => setActiveTab('parts')}
-                  style={modalStyles.tabButton}>
-                  <Text
-                    selectable={false}
-                    style={[
-                      modalStyles.tabButtonText,
-                      activeTab === 'parts' && modalStyles.tabButtonActiveText,
-                    ]}>
-                    {strings.CarHistoryDetailsScreen.materials}
-                  </Text>
-                </Button>
+                {data['works'] && data['works'].length ? (
+                  <Button
+                    onPress={() => setActiveTab('works')}
+                    style={modalStyles.tabButton}>
+                    <Text
+                      selectable={false}
+                      style={[
+                        modalStyles.tabButtonText,
+                        activeTab === 'works' &&
+                          modalStyles.tabButtonActiveText,
+                      ]}>
+                      {strings.CarHistoryDetailsScreen.works}
+                    </Text>
+                  </Button>
+                ) : null}
+                {data['parts'] && data['parts'].length ? (
+                  <Button
+                    onPress={() => setActiveTab('parts')}
+                    style={modalStyles.tabButton}>
+                    <Text
+                      selectable={false}
+                      style={[
+                        modalStyles.tabButtonText,
+                        activeTab === 'parts' &&
+                          modalStyles.tabButtonActiveText,
+                      ]}>
+                      {strings.CarHistoryDetailsScreen.materials}
+                    </Text>
+                  </Button>
+                ) : null}
               </Segment>
               <ServiceTable data={data[activeTab]} />
             </View>
@@ -107,55 +168,6 @@ const ServiceTableItem = ({label, children}) => (
     </Col>
   </Row>
 );
-
-const modalStyles = StyleSheet.create({
-  host: {
-    margin: 0,
-    marginTop: Header.HEIGHT + (isIPhoneX() ? 32 : 0),
-  },
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-  },
-  wrapper: {
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-  },
-  tabContainer: {
-    backgroundColor: 'transparent',
-    borderBottomWidth: 1,
-    borderBottomColor: '#d8d8d8',
-  },
-  tabButton: {
-    borderColor: 'transparent',
-    width: '50%',
-    justifyContent: 'center',
-    height: 46,
-  },
-  tabButtonText: {
-    fontSize: 18,
-    color: styleConst.color.greyText,
-  },
-  tabButtonActiveText: {
-    color: styleConst.color.lightBlue,
-  },
-  content: {
-    flex: 1,
-    marginBottom: 16,
-  },
-  button: {
-    backgroundColor: styleConst.color.lightBlue,
-    justifyContent: 'center',
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    textTransform: 'uppercase',
-    fontSize: 16,
-  },
-});
 
 const tableStyles = StyleSheet.create({
   section: {

@@ -70,7 +70,21 @@ function list(state = [], action) {
     case REHYDRATE:
       return get(action.payload, 'info.list', []);
     case INFO_LIST__SUCCESS:
-      return action.payload;
+      return action.payload?.data;
+    case DEALER__SUCCESS:
+    case INFO_LIST__RESET:
+      return [];
+    default:
+      return state;
+  }
+}
+
+function filters(state = [], action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'info.filters', []);
+    case INFO_LIST__SUCCESS:
+      return action.payload?.filters;
     case DEALER__SUCCESS:
     case INFO_LIST__RESET:
       return [];
@@ -97,6 +111,7 @@ export default combineReducers({
   visited,
   list,
   posts,
+  filters,
   meta: combineReducers({
     isFetchInfoList,
     isFetchInfoPost,

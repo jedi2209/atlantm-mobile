@@ -17,13 +17,13 @@ const styles = StyleSheet.create({
     height: 15,
   },
   plateTitle: {
-    color: '#fff',
+    color: styleConst.color.white,
     fontSize: 14,
     fontWeight: '600',
     marginBottom: 4,
   },
   plateSubTitle: {
-    color: '#fff',
+    color: styleConst.color.white,
     fontSize: 12,
   },
 });

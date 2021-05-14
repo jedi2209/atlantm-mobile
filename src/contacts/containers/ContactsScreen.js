@@ -33,6 +33,7 @@ import {callMe} from '../actions';
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList, actionListReset} from '../../info/actions';
 import {actionAppRated, actionMenuOpenedCount} from '../../core/actions';
+import {Offer} from '../../core/components/Offer';
 
 // helpers
 import Amplitude from '../../utils/amplitude-analytics';
@@ -43,7 +44,7 @@ import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import {ERROR_NETWORK} from '../../core/const';
 import Carousel from 'react-native-snap-carousel';
-import strings from '../../core/lang/const';
+import {strings} from '../../core/lang/const';
 
 const HEADER_MAX_HEIGHT = 416;
 
@@ -81,9 +82,14 @@ const styles = StyleSheet.create({
     fontSize: 22,
     marginTop: 3,
     marginRight: 10,
-    color: '#fff',
+    color: styleConst.color.white,
   },
-  addressText: {color: '#fff', fontSize: 16, lineHeight: 28, marginRight: '1%'},
+  addressText: {
+    color: styleConst.color.white,
+    fontSize: 16,
+    lineHeight: 28,
+    marginRight: '1%',
+  },
   scrollView: {paddingLeft: 20, zIndex: 3},
   scrollViewInner: {display: 'flex', flexDirection: 'row'},
   iconRow: {
@@ -130,10 +136,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const deviceWidth = Dimensions.get('window').width;
+const deviceWidth = Number(Dimensions.get('window').width) || 350;
 const cardWidth = deviceWidth - 50;
-
-import {Offer} from '../../core/components/Offer';
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
@@ -159,10 +163,6 @@ const mapDispatchToProps = {
 };
 
 class ContactsScreen extends Component {
-  static navigationOptions = () => ({
-    header: null,
-  });
-
   constructor(props) {
     super(props);
     this.state = {
@@ -173,7 +173,7 @@ class ContactsScreen extends Component {
       buttons: [],
     };
     this.mainScrollView = React.createRef();
-    get(this.props.dealerSelected, 'site').map((val, idx) => {
+    get(this.props.dealerSelected, 'site', []).map((val, idx) => {
       if (val) {
         const siteName = val
           .replace(/^(?:https?:\/\/)?(?:www\.)?/i, '')
@@ -422,7 +422,10 @@ class ContactsScreen extends Component {
                   numberOfLines={1}
                   ellipsizeMode="tail"
                   style={styles.addressText}>
-                  {`${dealerSelected.city.name}, ${dealerSelected.address}`}
+                  {dealerSelected.city.name ? dealerSelected.city.name : null}
+                  {dealerSelected.address
+                    ? ', ' + dealerSelected.address
+                    : null}
                 </Text>
               </TouchableOpacity>
               <ScrollView
@@ -567,7 +570,7 @@ class ContactsScreen extends Component {
                 </View>
               </ScrollView>
               {!isFetchInfoList ? (
-                list.length ? (
+                list && list.length ? (
                   <View
                     style={{
                       marginTop: 16,
@@ -589,7 +592,7 @@ class ContactsScreen extends Component {
                           navigation.navigate('InfoList');
                         }}
                         style={{
-                          color: styleConst.new.blueHeader,
+                          color: styleConst.color.lightBlue,
                           fontSize: 14,
                           paddingLeft: 24,
                         }}>
@@ -601,7 +604,6 @@ class ContactsScreen extends Component {
                       renderItem={(item) => {
                         return (
                           <Offer
-                            navigation={this.props.navigation.navigate}
                             key={`carousel-article-${item.hash}`}
                             data={item}
                             width={cardWidth}
@@ -610,9 +612,9 @@ class ContactsScreen extends Component {
                         );
                       }}
                       sliderWidth={deviceWidth}
+                      itemWidth={cardWidth}
                       inactiveSlideScale={0.97}
                       activeSlideAlignment={'center'}
-                      itemWidth={cardWidth}
                     />
                   </View>
                 ) : null

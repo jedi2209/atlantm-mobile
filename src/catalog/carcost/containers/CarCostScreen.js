@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
-  StyleSheet,
-  View,
   Alert,
   TouchableWithoutFeedback,
   Keyboard,
@@ -11,7 +9,12 @@ import {
 import CarCostPhotos from '../components/CarCostPhotos';
 import {Content} from 'native-base';
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
-import {substractYears} from '../../../utils/date';
+import {
+  addDays,
+  dayMonthYear,
+  yearMonthDay,
+  substractYears,
+} from '../../../utils/date';
 import UserData from '../../../utils/user';
 
 import Form from '../../../core/components/Form/Form';
@@ -21,18 +24,13 @@ import {connect} from 'react-redux';
 import {actionCarCostOrder} from '../../actions';
 import {CAR_COST__SUCCESS, CAR_COST__FAIL} from '../../actionTypes';
 
-// components
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
-
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
 import {get, valuesIn} from 'lodash';
-import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
 import {ERROR_NETWORK} from '../../../core/const';
 import isInternet from '../../../utils/internet';
 
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, nav, catalog}) => {
   const carCost = get(catalog, 'carCost', {});
@@ -85,28 +83,6 @@ const mapDispatchToProps = {
 };
 
 class CarCostScreen extends Component {
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
-
-    return {
-      headerStyle: [stylesHeader.headerStyle, stylesHeader.whiteHeader],
-      headerTitleStyle: [
-        stylesHeader.headerTitleStyle,
-        stylesHeader.whiteHeaderTitle,
-      ],
-      headerTitle: strings.CarCostScreen.title,
-      headerLeft: (
-        <HeaderIconBack
-          theme="blue"
-          navigation={navigation}
-          returnScreen={returnScreen}
-        />
-      ),
-      headerRight: <View />,
-    };
-  };
-
   constructor(props) {
     super(props);
 
@@ -133,7 +109,7 @@ class CarCostScreen extends Component {
       success: false,
     };
 
-    const carFromNavigation = get(this.props.navigation, 'state.params.car');
+    const carFromNavigation = get(props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
       this.state.carVIN = carFromNavigation.vin;
       this.state.carBrand = get(carFromNavigation, 'brand');
@@ -149,7 +125,6 @@ class CarCostScreen extends Component {
 
   static propTypes = {
     dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
     name: PropTypes.string,
     phone: PropTypes.string,
     email: PropTypes.string,
@@ -157,16 +132,16 @@ class CarCostScreen extends Component {
 
   onPressOrder = async (dataFromForm) => {
     const isInternetExist = await isInternet();
+    const nav = this.props.navigation;
 
     if (!isInternetExist) {
       return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
     } else {
-      const {navigation} = this.props;
-
       const photoForUpload = valuesIn(this.state.photos);
 
       const action = await this.props.actionCarCostOrder({
         dealerId: this.props.dealerSelected.id,
+        date: yearMonthDay(dataFromForm.DATE) || '',
         firstName: dataFromForm.NAME || '',
         secondName: dataFromForm.SECOND_NAME || '',
         lastName: dataFromForm.LAST_NAME || '',
@@ -195,8 +170,8 @@ class CarCostScreen extends Component {
               [
                 {
                   text: 'ОК',
-                  onPress() {
-                    navigation.goBack();
+                  onPress: () => {
+                    nav.goBack();
                   },
                 },
               ],
@@ -223,23 +198,8 @@ class CarCostScreen extends Component {
     }
   };
 
-  // shouldComponentUpdate(nextProps) {
-  //   const nav = nextProps.nav.newState;
-  //   let isActiveScreen = false;
-
-  //   if (nav) {
-  //     const rootLevel = nav.routes[nav.index];
-  //     if (rootLevel) {
-  //       isActiveScreen =
-  //         get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
-  //         'CarCostScreen';
-  //     }
-  //   }
-
-  //   return isActiveScreen;
-  // }
-
   render() {
+    console.log('this.props', this.props);
     this.FormConfig = {
       fields: {
         groups: [
@@ -258,8 +218,22 @@ class CarCostScreen extends Component {
                 props: {
                   goBack: false,
                   isLocal: true,
-                  navigation: this.props.navigation,
-                  returnScreen: this.props.navigation.state.routeName,
+                  returnScreen: this.props.navigation.state?.routeName,
+                },
+              },
+              {
+                name: 'DATE',
+                type: 'date',
+                label: strings.Form.field.label.date,
+                value: null,
+                props: {
+                  placeholder:
+                    strings.Form.field.placeholder.date +
+                    ' ' +
+                    dayMonthYear(addDays(2)),
+                  required: true,
+                  minimumDate: new Date(addDays(2)),
+                  maximumDate: new Date(addDays(62)),
                 },
               },
             ],

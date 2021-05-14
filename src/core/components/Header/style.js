@@ -1,6 +1,8 @@
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 
 import styleConst from '../../style-const';
+
+const isAndroid = Platform.OS === 'android';
 
 const commonStyles = {
   borderBottomWidth: 0.5,
@@ -28,6 +30,8 @@ export default StyleSheet.create({
   },
   resetBorder: {
     borderBottomWidth: 0,
+    shadowOpacity: 0,
+    shadowColor: 'transparent',
   },
   headerStyle: {
     // height: 20,
@@ -43,7 +47,7 @@ export default StyleSheet.create({
   },
   blueHeader: {
     ...commonStyles,
-    backgroundColor: styleConst.new.blueHeader,
+    backgroundColor: styleConst.color.lightBlue,
     borderBottomWidth: 0,
   },
   transparentHeaderTitle: {
@@ -53,21 +57,20 @@ export default StyleSheet.create({
     alignItems: 'center',
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
-    color: styleConst.new.blueHeader,
   },
   blueHeaderTitle: {
-    fontSize: 17,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '300',
     alignSelf: 'center',
     alignItems: 'center',
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
-    color: '#fff',
+    color: styleConst.color.white,
   },
   whiteHeader: {
     ...commonStyles,
-    backgroundColor: '#fff',
-    color: styleConst.new.blueHeader,
+    // backgroundColor: styleConst.color.white,
+    color: styleConst.color.lightBlue,
     shadowRadius: 0,
     shadowOffset: {
       height: 0,
@@ -78,11 +81,24 @@ export default StyleSheet.create({
   },
   whiteHeaderTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '300',
     alignSelf: 'center',
     alignItems: 'center',
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
-    color: styleConst.new.blueHeader,
+    color: styleConst.color.lightBlue,
+  },
+  headerBackButtonContainer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    paddingHorizontal: isAndroid ? 5 : 5,
+    paddingVertical: isAndroid ? 10 : 0,
+    borderRadius: 15,
+    marginLeft: 5,
+    marginTop: isAndroid ? 5 : 0,
+    zIndex: 1000,
+  },
+  headerBackButtonIcon: {
+    marginLeft: isAndroid ? 5 : 0,
+    zIndex: 1000,
   },
 });

@@ -3,7 +3,6 @@ import {
   Alert,
   View,
   StyleSheet,
-  Text,
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
@@ -26,13 +25,11 @@ import stylesList from '../../../core/components/Lists/style';
 // components
 import {Label, Switch, Body, ListItem, Right} from 'native-base';
 import Spinner from 'react-native-loading-spinner-overlay';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
 import Amplitude from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
 
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import Form from '../../../core/components/Form/Form';
@@ -44,7 +41,7 @@ import {
   REVIEW_ADD_RATING_2,
   REVIEW_ADD_RATING_1,
 } from '../../constants';
-import strings from '../../../core/lang/const';
+import {strings} from '../../../core/lang/const';
 
 const $size = 40;
 const styles = StyleSheet.create({
@@ -74,7 +71,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 14,
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
   },
   header: {
     marginBottom: 36,
@@ -101,7 +98,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonText: {
-    color: '#fff',
+    color: styleConst.color.white,
     textTransform: 'uppercase',
     fontSize: 16,
   },
@@ -122,8 +119,6 @@ const mapStateToProps = ({dealer, eko, nav, profile}) => {
     email: UserData.get('EMAIL')
       ? UserData.get('EMAIL')
       : UserData.get('EMAIL'),
-    messagePlus: eko.reviews.messagePlus,
-    messageMinus: eko.reviews.messageMinus,
     reviewAddRating: eko.reviews.reviewAddRating,
     reviewAddRatingVariant: eko.reviews.reviewAddRatingVariant,
     isReviewAddRequest: eko.reviews.meta.isReviewAddRequest,
@@ -140,6 +135,7 @@ const mapDispatchToProps = {
 class ReviewAddRatingStepScreen extends Component {
   constructor(props) {
     super(props);
+    this.reviewData = props.route?.params;
     this.FormConfig = {
       fields: {
         groups: [
@@ -234,6 +230,9 @@ class ReviewAddRatingStepScreen extends Component {
                 type: 'email',
                 label: strings.Form.field.label.email,
                 value: this.props.email,
+                props: {
+                  required: true,
+                },
               },
             ],
           },
@@ -241,21 +240,6 @@ class ReviewAddRatingStepScreen extends Component {
       },
     };
   }
-
-  static navigationOptions = ({navigation}) => ({
-    headerTitle: (
-      <Text style={stylesHeader.blueHeaderTitle}>
-        {strings.ReviewAddRatingStepScreen.title}
-      </Text>
-    ),
-    headerStyle: stylesHeader.blueHeader,
-    headerTitleStyle: stylesHeader.blueHeaderTitle,
-    headerLeft: (
-      <View>
-        <HeaderIconBack theme="white" navigation={navigation} />
-      </View>
-    ),
-  });
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;
@@ -282,11 +266,10 @@ class ReviewAddRatingStepScreen extends Component {
       dealerSelected,
       navigation,
       publicAgree,
-      messagePlus,
-      messageMinus,
       reviewAddRating,
-      actionReviewAdd,
     } = this.props;
+
+    const {COMMENT_PLUS, COMMENT_MINUS} = this.reviewData;
 
     const name = [
       dataFromForm.NAME,
@@ -296,41 +279,43 @@ class ReviewAddRatingStepScreen extends Component {
       .filter(Boolean)
       .join(' ');
 
-    actionReviewAdd({
-      dealerId: dealerSelected.id,
-      firstName: get(dataFromForm, 'NAME', ''),
-      secondName: get(dataFromForm, 'SECOND_NAME', ''),
-      lastName: get(dataFromForm, 'LAST_NAME', ''),
-      email: get(dataFromForm, 'EMAIL', ''),
-      phone: get(dataFromForm, 'PHONE', ''),
-      name: name,
-      messagePlus,
-      messageMinus,
-      publicAgree,
-      rating: get(dataFromForm, 'RATING', ''),
-    }).then((action) => {
-      if (action.type === REVIEW_ADD__SUCCESS) {
-        Amplitude.logEvent('order', 'eko/review_add');
+    return this.props
+      .actionReviewAdd({
+        dealerId: dealerSelected.id,
+        firstName: get(dataFromForm, 'NAME', ''),
+        secondName: get(dataFromForm, 'SECOND_NAME', ''),
+        lastName: get(dataFromForm, 'LAST_NAME', ''),
+        email: get(dataFromForm, 'EMAIL', ''),
+        phone: get(dataFromForm, 'PHONE', ''),
+        name: name,
+        messagePlus: COMMENT_PLUS,
+        messageMinus: COMMENT_MINUS,
+        publicAgree,
+        rating: get(dataFromForm, 'RATING', ''),
+      })
+      .then((action) => {
+        if (action.type === REVIEW_ADD__SUCCESS) {
+          Amplitude.logEvent('order', 'eko/review_add');
 
-        setTimeout(() => {
-          Alert.alert(
-            strings.ReviewAddRatingStepScreen.Notifications.success.text,
-          );
-          navigation.navigate('ReviewsScreen');
-        }, 100);
-      }
-
-      if (action.type === REVIEW_ADD__FAIL) {
-        setTimeout(
-          () =>
+          setTimeout(() => {
             Alert.alert(
-              strings.Notifications.error.title,
-              strings.Notifications.error.text,
-            ),
-          100,
-        );
-      }
-    });
+              strings.ReviewAddRatingStepScreen.Notifications.success.text,
+            );
+            navigation.navigate('ReviewsScreen');
+          }, 100);
+        }
+
+        if (action.type === REVIEW_ADD__FAIL) {
+          setTimeout(
+            () =>
+              Alert.alert(
+                strings.Notifications.error.title,
+                strings.Notifications.error.text,
+              ),
+            100,
+          );
+        }
+      });
   };
 
   renderPublicAgree = () => {
