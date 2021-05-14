@@ -12,7 +12,7 @@ import {strings} from '../../core/lang/const';
 export const ServiceModal = ({visible, onClose, data}) => {
   const headerHeight = useHeaderHeight();
   let defaultTab = 'works';
-  if (data && !data['works']) {
+  if (data && (!data['works'] || !data['works'].length)) {
     defaultTab = 'parts';
     data['works'] = [];
   }
