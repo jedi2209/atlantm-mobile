@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text} from 'react-native';
+import {Text, Appearance} from 'react-native';
 
 // storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,6 +14,9 @@ import SplashScreen from 'react-native-splash-screen';
 
 // components
 import App from './App';
+
+const colorScheme = Appearance.getColorScheme();
+
 if (__DEV__) {
   import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
 }
@@ -115,7 +118,7 @@ export default class Wrapper extends Component {
 
     return (
       <Provider store={store}>
-        <App />
+        <App colorScheme={colorScheme} />
       </Provider>
     );
   }

@@ -14,7 +14,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import ViewPager from '@react-native-community/viewpager';
+import ViewPager from 'react-native-pager-view';
 
 const {width, height} = Dimensions.get('window');
 
