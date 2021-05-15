@@ -3,7 +3,7 @@ module.exports = {
     getTransformOptions: async () => ({
       transform: {
         experimentalImportSupport: false,
-        inlineRequires: false,
+        inlineRequires: true,
       },
     }),
     assetPlugins: ['react-native-svg-asset-plugin'],
