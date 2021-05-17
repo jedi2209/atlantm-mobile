@@ -24,7 +24,7 @@ import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import processHtml from '../../utils/process-html';
-import Amplitude from '../../utils/amplitude-analytics';
+import Analytics from '../../utils/amplitude-analytics';
 import {verticalScale} from '../../utils/scale';
 import {dayMonth, dayMonthYear} from '../../utils/date';
 import {strings} from '../../core/lang/const';
@@ -118,7 +118,7 @@ class InfoPostScreen extends Component {
     if (!post) {
       this.props.fetchInfoPost(id);
     }
-    Amplitude.logEvent('screen', 'offer/item', {
+    Analytics.logEvent('screen', 'offer/item', {
       id: id,
     });
   }

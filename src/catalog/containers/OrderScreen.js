@@ -17,7 +17,7 @@ import {actionOrderCar} from '../actions';
 import {localUserDataUpdate} from '../../profile/actions';
 
 // helpers
-import Amplitude from '../../utils/amplitude-analytics';
+import Analytics from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
@@ -356,7 +356,7 @@ class OrderScreen extends Component {
           const car = get(this.props.route, 'params.car');
           const {brand, model} = car;
           const path = isNewCar ? 'newcar' : 'usedcar';
-          Amplitude.logEvent('order', `catalog/${path}`, {
+          Analytics.logEvent('order', `catalog/${path}`, {
             brand_name: brand,
             model_name: get(model, 'name'),
           });

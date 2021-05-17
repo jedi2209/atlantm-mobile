@@ -11,7 +11,7 @@ import CarList from '../../components/CarList';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 // helpers
-import Amplitude from '../../../utils/amplitude-analytics';
+import Analytics from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 import {EVENT_REFRESH} from '../../../core/actionTypes';
@@ -64,7 +64,7 @@ class NewCarListScreen extends Component {
 
     const searchUrl = filterData.search_url || defaultSearchUrl;
 
-    Amplitude.logEvent('screen', 'catalog/newcar/list', {
+    Analytics.logEvent('screen', 'catalog/newcar/list', {
       search_url: searchUrl,
     });
   }

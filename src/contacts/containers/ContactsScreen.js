@@ -36,7 +36,7 @@ import {actionAppRated, actionMenuOpenedCount} from '../../core/actions';
 import {Offer} from '../../core/components/Offer';
 
 // helpers
-import Amplitude from '../../utils/amplitude-analytics';
+import Analytics from '../../utils/amplitude-analytics';
 import orderFunctions from '../../utils/orders';
 import {verticalScale} from '../../utils/scale';
 import {get} from 'lodash';
@@ -195,7 +195,7 @@ class ContactsScreen extends Component {
   }
 
   componentDidMount() {
-    Amplitude.logEvent('screen', 'contacts');
+    Analytics.logEvent('screen', 'contacts');
 
     const {fetchInfoList, isAppRated, menuOpenedCount} = this.props;
     const {region, id: dealerID} = this.props.dealerSelected;
@@ -203,7 +203,7 @@ class ContactsScreen extends Component {
     if (!isAppRated) {
       if (menuOpenedCount >= 10) {
         setTimeout(() => {
-          Amplitude.logEvent('screen', 'ratePopup', 'contacts');
+          Analytics.logEvent('screen', 'ratePopup', 'contacts');
           this.setState(
             {
               showRatePopup: true,

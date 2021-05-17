@@ -1,7 +1,7 @@
 import {Platform, PermissionsAndroid, Alert, Linking} from 'react-native';
 
 import OneSignal from 'react-native-onesignal';
-import Amplitude from '../../utils/amplitude-analytics';
+import Analytics from '../../utils/amplitude-analytics';
 import * as NavigationService from '../../navigation/NavigationService';
 import {get} from 'lodash';
 
@@ -16,7 +16,7 @@ export default {
 
   onReceived(notification) {
     console.log('Notification received: ', notification);
-    Amplitude.logEvent('action', 'PushNotification/received', {
+    Analytics.logEvent('action', 'PushNotification/received', {
       id: notification.payload.notificationID,
     });
   },
@@ -24,7 +24,7 @@ export default {
   onOpened(openResult, listener) {
     let routeName;
 
-    Amplitude.logEvent('action', 'PushNotification/opened', {
+    Analytics.logEvent('action', 'PushNotification/opened', {
       id: openResult.notification.payload.notificationID,
     });
 

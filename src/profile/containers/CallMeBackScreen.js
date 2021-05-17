@@ -9,7 +9,7 @@ import {localUserDataUpdate} from '../../profile/actions';
 import {localDealerClear} from '../../dealer/actions';
 import {CALL_ME__SUCCESS, CALL_ME__FAIL} from '../../contacts/actionTypes';
 import * as NavigationService from '../../navigation/NavigationService';
-import Amplitude from '../../utils/amplitude-analytics';
+import Analytics from '../../utils/amplitude-analytics';
 import {
   Alert,
   View,
@@ -116,7 +116,7 @@ class CallMeBackScreen extends React.Component {
 
     if (action.type === CALL_ME__SUCCESS) {
       const _this = this;
-      Amplitude.logEvent('order', 'contacts/callme');
+      Analytics.logEvent('order', 'contacts/callme');
       _this.props.localUserDataUpdate({
         NAME: props.NAME,
         SECOND_NAME: props.SECOND_NAME,

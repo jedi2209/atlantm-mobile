@@ -27,7 +27,7 @@ import {Label, Switch, Body, ListItem, Right} from 'native-base';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 // helpers
-import Amplitude from '../../../utils/amplitude-analytics';
+import Analytics from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 
@@ -295,7 +295,7 @@ class ReviewAddRatingStepScreen extends Component {
       })
       .then((action) => {
         if (action.type === REVIEW_ADD__SUCCESS) {
-          Amplitude.logEvent('order', 'eko/review_add');
+          Analytics.logEvent('order', 'eko/review_add');
 
           setTimeout(() => {
             Alert.alert(

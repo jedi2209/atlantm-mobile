@@ -18,7 +18,7 @@ import {
   Item,
   Label,
 } from 'native-base';
-import Amplitude from '../../../utils/amplitude-analytics';
+import Analytics from '../../../utils/amplitude-analytics';
 
 // redux
 import {connect} from 'react-redux';
@@ -348,7 +348,7 @@ class CarHistoryScreen extends Component {
   render() {
     const {carHistory, isFetchCarHistory} = this.props;
 
-    Amplitude.logEvent('screen', 'lkk/carhistory');
+    Analytics.logEvent('screen', 'lkk/carhistory');
 
     if (isFetchCarHistory) {
       return (

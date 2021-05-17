@@ -27,7 +27,7 @@ import {
   actionSetPushGranted,
 } from '../../core/actions';
 
-import Amplitude from '../../utils/amplitude-analytics';
+import Analytics from '../../utils/amplitude-analytics';
 
 import {strings} from '../../core/lang/const';
 
@@ -111,7 +111,7 @@ class PhoneChangeScreen extends PureComponent {
   otpArray = [];
 
   componentDidMount() {
-    Amplitude.logEvent('screen', 'profile/PhoneViaAuth');
+    Analytics.logEvent('screen', 'profile/PhoneViaAuth');
   }
 
   _onOtpChange = (index) => {

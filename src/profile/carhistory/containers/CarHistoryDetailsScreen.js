@@ -19,7 +19,7 @@ import {actionFetchCarHistoryDetails} from '../../actions';
 import SpinnerView from '../../../core/components/SpinnerView';
 
 // helpers
-import Amplitude from '../../../utils/amplitude-analytics';
+import Analytics from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
@@ -153,7 +153,7 @@ class CarHistoryDetailsScreen extends Component {
   };
 
   componentDidMount() {
-    Amplitude.logEvent('screen', 'lkk/carhistory/details');
+    Analytics.logEvent('screen', 'lkk/carhistory/details');
 
     const {profile, navigation, actionFetchCarHistoryDetails} = this.props;
     const vin = get(this.props.route, 'params.vin');

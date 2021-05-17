@@ -23,7 +23,7 @@ import {
 import {localUserDataUpdate} from '../../profile/actions';
 
 // helpers
-import Amplitude from '../../utils/amplitude-analytics';
+import Analytics from '../../utils/amplitude-analytics';
 import {get, orderBy} from 'lodash';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
@@ -220,7 +220,7 @@ class TestDriveScreen extends PureComponent {
             const car = get(this.props.route, 'params.car');
             const {brand, model} = car;
             const path = isNewCar ? 'newcar' : 'usedcar';
-            Amplitude.logEvent('order', `testdrive/${path}`, {
+            Analytics.logEvent('order', `testdrive/${path}`, {
               brand_name: brand,
               model_name: get(model, 'name'),
             });
@@ -262,7 +262,7 @@ class TestDriveScreen extends PureComponent {
                   const car = get(this.props.route, 'params.car');
                   const {brand, model} = car;
                   const path = isNewCar ? 'newcar' : 'usedcar';
-                  Amplitude.logEvent('order', `testdrive/${path}`, {
+                  Analytics.logEvent('order', `testdrive/${path}`, {
                     brand_name: brand,
                     model_name: get(model, 'name'),
                   });
@@ -321,7 +321,7 @@ class TestDriveScreen extends PureComponent {
             const car = get(this.props.route, 'params.car');
             const {brand, model} = car;
             const path = isNewCar ? 'newcar' : 'usedcar';
-            Amplitude.logEvent('order', `testdrive/${path}`, {
+            Analytics.logEvent('order', `testdrive/${path}`, {
               brand_name: brand,
               model_name: get(model, 'name'),
             });

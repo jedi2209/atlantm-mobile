@@ -25,7 +25,7 @@ import {actionCarCostOrder} from '../../actions';
 import {CAR_COST__SUCCESS, CAR_COST__FAIL} from '../../actionTypes';
 
 // helpers
-import Amplitude from '../../../utils/amplitude-analytics';
+import Analytics from '../../../utils/amplitude-analytics';
 import {get, valuesIn} from 'lodash';
 import {ERROR_NETWORK} from '../../../core/const';
 import isInternet from '../../../utils/internet';
@@ -161,7 +161,7 @@ class CarCostScreen extends Component {
       });
       switch (action.type) {
         case CAR_COST__SUCCESS:
-          Amplitude.logEvent('order', 'catalog/carcost');
+          Analytics.logEvent('order', 'catalog/carcost');
 
           setTimeout(() => {
             Alert.alert(

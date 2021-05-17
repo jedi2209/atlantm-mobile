@@ -23,7 +23,7 @@ import {localUserDataUpdate} from '../../profile/actions';
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 
 // helpers
-import Amplitude from '../../utils/amplitude-analytics';
+import Analytics from '../../utils/amplitude-analytics';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import {addDays, dayMonthYear, yearMonthDay} from '../../utils/date';
@@ -194,7 +194,7 @@ class ServiceScreen extends Component {
       if (action && action.type) {
         switch (action.type) {
           case SERVICE_ORDER__SUCCESS:
-            Amplitude.logEvent('order', 'service');
+            Analytics.logEvent('order', 'service');
             localUserDataUpdate({
               NAME: dataFromForm.NAME,
               SECOND_NAME: dataFromForm.SECOND_NAME,

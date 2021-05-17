@@ -32,7 +32,7 @@ import RateThisApp from '../../core/components/RateThisApp';
 import TransitionView from '../../core/components/TransitionView';
 
 // helpers
-import Amplitude from '../../utils/amplitude-analytics';
+import Analytics from '../../utils/amplitude-analytics';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import {APP_EMAIL, STORE_LINK} from '../../core/const';
@@ -203,7 +203,7 @@ class SettingsScreen extends PureComponent {
   }
 
   componentDidMount() {
-    Amplitude.logEvent('screen', 'settings');
+    Analytics.logEvent('screen', 'settings');
   }
 
   _onAppRateSuccess = () => {
@@ -350,7 +350,7 @@ class SettingsScreen extends PureComponent {
                 full
                 style={styles.buttonRate}
                 onPress={() => {
-                  Amplitude.logEvent('screen', 'ratePopup', 'settings');
+                  Analytics.logEvent('screen', 'ratePopup', 'settings');
                   return this.setState({
                     showRatePopup: true,
                   });

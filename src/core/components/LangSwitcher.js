@@ -7,9 +7,9 @@ import RNPickerSelect from 'react-native-picker-select';
 import {actionSetGlobalLanguage} from '../../core/lang/actions';
 import {strings} from '../../core/lang/const';
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    actionSetGlobalLanguage: (value) => {
+    actionSetGlobalLanguage: value => {
       return dispatch(actionSetGlobalLanguage(value));
     },
   };
