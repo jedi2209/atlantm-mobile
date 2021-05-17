@@ -7,7 +7,7 @@ target 'atlantm' do
   config = use_native_modules!
   use_react_native!(
     :path => config[:reactNativePath],
-    :hermes_enabled => false
+    :hermes_enabled => true
   )
   rn_maps_path = '../node_modules/react-native-maps'
 
@@ -21,7 +21,7 @@ target 'atlantm' do
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   # use_frameworks!
-  pod 'RNInputMask', :path => '../node_modules/react-native-text-input-mask/ios/InputMask'
+  pod 'React-RCTText', :path => '../node_modules/react-native/Libraries/Text', :modular_headers => true
 
   target 'atlantmTests' do
     inherit! :complete
