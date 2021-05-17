@@ -10,7 +10,7 @@ import {get} from 'lodash';
 import PropTypes from 'prop-types';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import Amplitude from '../../../utils/amplitude-analytics';
+import Analytics from '../../../utils/amplitude-analytics';
 import {strings} from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
@@ -119,7 +119,7 @@ class DiscountsScreen extends Component {
 
   render() {
     console.log('== DiscountsScreen ==');
-    Amplitude.logEvent('screen', 'lkk/discounts');
+    Analytics.logEvent('screen', 'lkk/discounts');
 
     const {discounts} = this.props;
 

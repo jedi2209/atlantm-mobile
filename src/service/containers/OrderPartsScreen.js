@@ -23,7 +23,7 @@ import {localUserDataUpdate} from '../../profile/actions';
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 
 // helpers
-import Amplitude from '../../utils/amplitude-analytics';
+import Analytics from '../../utils/amplitude-analytics';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import {ERROR_NETWORK} from '../../core/const';
@@ -199,7 +199,7 @@ class OrderPartsScreen extends Component {
       if (action && action.type) {
         switch (action.type) {
           case PARTS_ORDER__SUCCESS:
-            Amplitude.logEvent('order', 'parts');
+            Analytics.logEvent('order', 'parts');
             localUserDataUpdate({
               NAME: dataFromForm.NAME,
               SECOND_NAME: dataFromForm.SECOND_NAME,

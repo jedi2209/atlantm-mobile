@@ -20,7 +20,7 @@ import stylesList from '../../../core/components/Lists/style';
 // helpers
 import {get, isEmpty} from 'lodash';
 import {dayMonthYear} from '../../../utils/date';
-import Amplitude from '../../../utils/amplitude-analytics';
+import Analytics from '../../../utils/amplitude-analytics';
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
@@ -335,7 +335,7 @@ class BonusScreen extends Component {
 
     const {bonus} = this.props;
 
-    Amplitude.logEvent('screen', 'lkk/bonus');
+    Analytics.logEvent('screen', 'lkk/bonus');
 
     if (isEmpty(bonus) || !bonus.items) {
       return (

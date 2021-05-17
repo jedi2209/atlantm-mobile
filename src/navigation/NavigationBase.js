@@ -62,8 +62,6 @@ import {
   isTabBarVisible,
 } from './const';
 
-// enableScreens();
-
 const StackEKO = createStackNavigator();
 const StackEKOAddReview = createStackNavigator();
 const SearchStack = createStackNavigator();

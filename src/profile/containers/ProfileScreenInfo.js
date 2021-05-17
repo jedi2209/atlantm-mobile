@@ -31,7 +31,7 @@ import {
   actionSetPushGranted,
 } from '../../core/actions';
 
-import Amplitude from '../../utils/amplitude-analytics';
+import Analytics from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
 
@@ -139,7 +139,7 @@ class ProfileScreenInfo extends Component {
       this.getUserData();
     }
 
-    Amplitude.logEvent('screen', 'profile/main');
+    Analytics.logEvent('screen', 'profile/main');
   }
 
   componentDidUpdate(nextProps) {

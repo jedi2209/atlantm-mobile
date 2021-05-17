@@ -23,7 +23,7 @@ import {localDealerClear} from '../../../dealer/actions';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../../actionTypes';
 import {strings} from '../../../core/lang/const';
 
-import Amplitude from '../../../utils/amplitude-analytics';
+import Analytics from '../../../utils/amplitude-analytics';
 
 import API from '../../../utils/api';
 
@@ -159,7 +159,7 @@ class ServiceScreenNonAuth extends Component {
       if (action && action.type) {
         switch (action.type) {
           case SERVICE_ORDER__SUCCESS:
-            Amplitude.logEvent('order', 'service');
+            Analytics.logEvent('order', 'service');
             localUserDataUpdate({
               NAME: dataToSend.firstName,
               SECOND_NAME: dataToSend.secondName,
@@ -201,7 +201,7 @@ class ServiceScreenNonAuth extends Component {
           '\r\n' + order.error.message,
         );
       } else {
-        Amplitude.logEvent('order', 'OnlineService');
+        Analytics.logEvent('order', 'OnlineService');
         Alert.alert(
           strings.Notifications.success.title,
           '\r\n' + strings.Notifications.success.textOnline,

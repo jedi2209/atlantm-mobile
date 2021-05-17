@@ -37,7 +37,7 @@ import Badge from '../../../core/components/Badge';
 // helpers
 import {get} from 'lodash';
 import PropTypes from 'prop-types';
-import Amplitude from '../../../utils/amplitude-analytics';
+import Analytics from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
 import numberWithGap from '../../../utils/number-with-gap';
 import getTheme from '../../../../native-base-theme/components';
@@ -113,7 +113,7 @@ class UsedCarItemScreen extends Component {
     const carId = get(this.props.route, 'params.carId');
     this.props.actionFetchUsedCarDetails(carId);
 
-    Amplitude.logEvent('screen', 'catalog/usedcar/item', {
+    Analytics.logEvent('screen', 'catalog/usedcar/item', {
       id_api: get(this.props.carDetails, 'id.api'),
       id_sap: get(this.props.carDetails, 'id.sap'),
       brand_name: get(this.props.carDetails, 'brand.name'),

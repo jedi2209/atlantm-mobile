@@ -19,7 +19,7 @@ import {
 import CarList from '../../components/CarList';
 
 // helpers
-import Amplitude from '../../../utils/amplitude-analytics';
+import Analytics from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
 
 const styles = StyleSheet.create({
@@ -69,7 +69,7 @@ class UsedCarListScreen extends Component {
       });
     }, 200);
 
-    Amplitude.logEvent('screen', 'catalog/usedcar/list');
+    Analytics.logEvent('screen', 'catalog/usedcar/list');
   }
 
   componentDidUpdate() {

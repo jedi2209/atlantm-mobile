@@ -27,7 +27,7 @@ import {
 } from '../../actions';
 
 // helpers
-import Amplitude from '../../../utils/amplitude-analytics';
+import Analytics from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -90,7 +90,7 @@ class UsedCarFilterScreen extends Component {
   componentDidMount() {
     // const {actionFetchUsedCarFilterData, dealerSelected} = this.props;
     // actionFetchUsedCarFilterData({city: dealerSelected.city.id});
-    Amplitude.logEvent('screen', 'catalog/usedcar/filter');
+    Analytics.logEvent('screen', 'catalog/usedcar/filter');
   }
 
   componentDidUpdate(prevProps, prevState) {

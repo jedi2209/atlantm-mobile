@@ -42,7 +42,7 @@ import {
 } from '../../core/actions';
 
 import PushNotifications from '../../core/components/PushNotifications';
-import Amplitude from '../../utils/amplitude-analytics';
+import Analytics from '../../utils/amplitude-analytics';
 
 import {strings} from '../../core/lang/const';
 
@@ -148,7 +148,7 @@ class LoginScreen extends Component {
       'keyboardDidHide',
       this.onKeyboardVisibleChange,
     );
-    Amplitude.logEvent('screen', 'profile/login');
+    Analytics.logEvent('screen', 'profile/login');
   }
 
   componentWillUnmount() {

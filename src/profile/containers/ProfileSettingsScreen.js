@@ -10,7 +10,7 @@ import SocialAuth from '../components/SocialAuth';
 
 import {actionSaveProfileToAPI} from '../actions';
 
-import Amplitude from '../../utils/amplitude-analytics';
+import Analytics from '../../utils/amplitude-analytics';
 import {strings} from '../../core/lang/const';
 
 class ProfileSettingsScreen extends Component {
@@ -152,7 +152,7 @@ class ProfileSettingsScreen extends Component {
   }
 
   componentDidMount() {
-    Amplitude.logEvent('screen', 'profile/edit');
+    Analytics.logEvent('screen', 'profile/edit');
   }
 
   onPressSave = (props) => {

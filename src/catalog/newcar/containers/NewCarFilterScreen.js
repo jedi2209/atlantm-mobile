@@ -29,7 +29,7 @@ import {
 } from '../../actions';
 
 // helpers
-import Amplitude from '../../../utils/amplitude-analytics';
+import Analytics from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import showPrice from '../../../utils/price';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -174,7 +174,7 @@ class NewCarFilterScreen extends Component {
 
     actionFetchNewCarFilterData({city: dealerSelected.city.id});
 
-    Amplitude.logEvent('screen', 'catalog/newcar/filter');
+    Analytics.logEvent('screen', 'catalog/newcar/filter');
   }
 
   componentDidUpdate(prevProps) {

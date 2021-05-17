@@ -28,7 +28,7 @@ import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
 
 // helpers
-import Amplitude from '../../utils/amplitude-analytics';
+import Analytics from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import {dayMonthYearTime} from '../../utils/date';
 import styleConst from '../../core/style-const';
@@ -191,7 +191,7 @@ class TvaResultsScreen extends Component {
         const {type, payload} = action;
 
         if (type === TVA_SEND_MESSAGE__SUCCESS) {
-          Amplitude.logEvent('order', 'tva/message');
+          Analytics.logEvent('order', 'tva/message');
 
           setTimeout(() => {
             actionTvaMessageFill('');

@@ -19,7 +19,7 @@ import WebViewAutoHeight from '../../../core/components/WebViewAutoHeight';
 // helpers
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import Amplitude from '../../../utils/amplitude-analytics';
+import Analytics from '../../../utils/amplitude-analytics';
 import getTheme from '../../../../native-base-theme/components';
 
 const {width: screenWidth} = Dimensions.get('window');
@@ -73,7 +73,7 @@ class BonusInfoScreen extends Component {
       refererScreen = get(this.props.route, 'params.returnScreen', null);
     }
 
-    Amplitude.logEvent('screen', `${refererScreen}/bonus_info`, {region});
+    Analytics.logEvent('screen', `${refererScreen}/bonus_info`, {region});
     actionFetchBonusInfo({region});
   }
 

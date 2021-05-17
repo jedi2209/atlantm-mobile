@@ -44,7 +44,7 @@ import getTheme from '../../../../native-base-theme/components';
 import {get, indexOf} from 'lodash';
 import PropTypes from 'prop-types';
 import UserData from '../../../utils/user';
-import Amplitude from '../../../utils/amplitude-analytics';
+import Analytics from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
 import md5 from '../../../utils/md5';
@@ -174,7 +174,7 @@ class NewCarItemScreen extends Component {
             // });
             NavigationService.dispatch(carDetails);
 
-            Amplitude.logEvent('screen', 'catalog/newcar/item', {
+            Analytics.logEvent('screen', 'catalog/newcar/item', {
               id_api: get(carDetails, 'id.api'),
               id_sap: get(carDetails, 'id.sap'),
               brand_name: get(carDetails, 'brand.name'),
