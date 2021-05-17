@@ -18,7 +18,7 @@ import {ERROR_NETWORK} from '../core/const';
 import API from '../utils/api';
 
 export const fetchInfoList = (region, dealer, type) => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: INFO_LIST__REQUEST,
       payload: {
@@ -29,7 +29,7 @@ export const fetchInfoList = (region, dealer, type) => {
     });
 
     return API.fetchInfoList(region, dealer, type)
-      .then((res) => {
+      .then(res => {
         if (!res) {
           return dispatch({
             type: INFO_LIST__FAIL,
@@ -55,7 +55,7 @@ export const fetchInfoList = (region, dealer, type) => {
           });
         }
       })
-      .catch((error) => {
+      .catch(error => {
         return dispatch({
           type: INFO_LIST__FAIL,
           payload: {
@@ -66,8 +66,8 @@ export const fetchInfoList = (region, dealer, type) => {
   };
 };
 
-export const fetchInfoPost = (infoID) => {
-  return (dispatch) => {
+export const fetchInfoPost = infoID => {
+  return dispatch => {
     dispatch({
       type: INFO_POST__REQUEST,
       payload: {
@@ -76,7 +76,7 @@ export const fetchInfoPost = (infoID) => {
     });
 
     return API.fetchInfoPost(infoID)
-      .then((res) => {
+      .then(res => {
         const {data, error} = res;
 
         if (error) {
@@ -97,10 +97,11 @@ export const fetchInfoPost = (infoID) => {
             date: _.get(data, '0.date', ''),
             img: _.get(data, '0.img', ''),
             type: _.get(data, '0.type', ''),
+            imgCropAvailable: _.get(data, '0.imgCropAvailable', ''),
           },
         });
       })
-      .catch((error) => {
+      .catch(error => {
         return dispatch({
           type: INFO_POST__FAIL,
           payload: {
@@ -111,15 +112,15 @@ export const fetchInfoPost = (infoID) => {
   };
 };
 
-export const callMeForInfo = (props) => {
-  return (dispatch) => {
+export const callMeForInfo = props => {
+  return dispatch => {
     dispatch({
       type: CALL_ME_INFO__REQUEST,
       payload: {...props},
     });
 
     return API.callMe(props)
-      .then((res) => {
+      .then(res => {
         const {error, status} = res;
 
         if (status !== 'success') {
@@ -134,7 +135,7 @@ export const callMeForInfo = (props) => {
 
         return dispatch({type: CALL_ME_INFO__SUCCESS});
       })
-      .catch((error) => {
+      .catch(error => {
         return dispatch({
           type: CALL_ME_INFO__FAIL,
           payload: {
@@ -147,7 +148,7 @@ export const callMeForInfo = (props) => {
 };
 
 export const actionListReset = () => {
-  return (dispatch) => {
+  return dispatch => {
     return dispatch({type: INFO_LIST__RESET});
   };
 };

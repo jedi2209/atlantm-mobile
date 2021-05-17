@@ -123,13 +123,13 @@ class InfoPostScreen extends Component {
     });
   }
 
-  onLayoutImage = (e) => {
+  onLayoutImage = e => {
     const {height: imageDynamicHeight} = e.nativeEvent.layout;
 
     this.setState({imageHeight: imageDynamicHeight});
   };
 
-  onLayoutWebView = (e) => {
+  onLayoutWebView = e => {
     const {width: webViewWidth} = e.nativeEvent.layout;
 
     this.setState({webViewWidth});
@@ -179,8 +179,10 @@ class InfoPostScreen extends Component {
     const imageUrl = get(img, '10000x440');
     const date = get(post, 'date');
     const type = get(post, 'type');
-    const resizeMode =
-      new Boolean(get(post, 'imgCropAvailable')) === true ? 'cover' : 'contain';
+    let resizeMode = null;
+    if (post) {
+      resizeMode = get(post, 'imgCropAvailable') === true ? 'cover' : 'contain';
+    }
 
     if (text) {
       text = processHtml(text, this.state.webViewWidth);
@@ -207,7 +209,7 @@ class InfoPostScreen extends Component {
             ) : (
               <View>
                 <View style={styles.imageContainer} ref="imageContainer">
-                  {imageUrl ? (
+                  {imageUrl && resizeMode ? (
                     <Imager
                       resizeMode={resizeMode}
                       onLayout={this.onLayoutImage}
