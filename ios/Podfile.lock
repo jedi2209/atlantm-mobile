@@ -438,9 +438,9 @@ PODS:
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
-  - RNCPicker (1.16.0):
+  - RNCPicker (1.9.11):
     - React-Core
-  - RNDateTimePicker (3.4.7):
+  - RNDateTimePicker (3.0.9):
     - React-Core
   - RNDeviceInfo (8.1.3):
     - React-Core
@@ -814,8 +814,8 @@ SPEC CHECKSUMS:
   RNAppleAuthentication: e95bcfbd044013667f35c5ca20ae17d39500c009
   RNCAsyncStorage: f47a7e8f927f7c9da947491fc55752eb9ce17f2d
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
-  RNCPicker: 918e98b54a141791e99614b1c320ef2e58300490
-  RNDateTimePicker: 8dcfab802edece406f4f4780130974a0e04213b4
+  RNCPicker: 6780c753e9e674065db90d9c965920516402579d
+  RNDateTimePicker: 8a51a2216c307769e69ef827293d59549ab1ca23
   RNDeviceInfo: 8d3a29207835f972bce883723882980143270d55
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
@@ -832,6 +832,6 @@ SPEC CHECKSUMS:
   Yoga: a7de31c64fe738607e7a3803e3f591a4b1df7393
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 05b504485e7fcec6365a1aa7347fba26e92a7bf4
+PODFILE CHECKSUM: b50be25af1fcf378a7610a9989eaf253df38c3a7
 
 COCOAPODS: 1.10.1
