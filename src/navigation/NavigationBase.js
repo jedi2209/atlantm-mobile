@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {Icon} from 'native-base';
 
@@ -72,8 +73,15 @@ const StackBase = createStackNavigator();
 const StackOrders = createStackNavigator();
 const StackContacts = createStackNavigator();
 
-export const Base = ({navigation, route}) => (
-  <StackBase.Navigator initialRouteName="BottomTabNavigation">
+export const Base = ({navigation, route}) => {
+  const dealerSelected = useSelector((state) => state.dealer.selected);
+  let initialRouteName = 'BottomTabNavigation';
+
+  if (!dealerSelected || !dealerSelected.id) {
+    initialRouteName = 'IntroScreen';
+  }
+  return (
+  <StackBase.Navigator initialRouteName={initialRouteName}>
     <StackBase.Screen
       name="BottomTabNavigation"
       component={BottomTabNavigation}
@@ -304,7 +312,8 @@ export const Base = ({navigation, route}) => (
       })}
     />
   </StackBase.Navigator>
-);
+  );
+};
 
 export const Contacts = ({navigation, route}) => (
   <StackContacts.Navigator initialRouteName="ContactsScreen">
