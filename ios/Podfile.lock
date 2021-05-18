@@ -338,6 +338,8 @@ PODS:
   - react-native-fbsdk/Share (3.0.0):
     - FBSDKShareKit (~> 8.1)
     - React
+  - react-native-flipper (0.90.2):
+    - React-Core
   - react-native-google-maps (0.28.0):
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 3.5.0)
@@ -554,6 +556,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
+  - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
@@ -663,6 +666,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-fbsdk:
     :path: "../node_modules/react-native-fbsdk"
+  react-native-flipper:
+    :path: "../node_modules/react-native-flipper"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-maps:
@@ -787,6 +792,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 124e8f99992490d0d13e0649d950d3e1aae06fe9
   React-jsinspector: 500a59626037be5b3b3d89c5151bc3baa9abf1a9
   react-native-fbsdk: 8e92c7a334fd8d9c2b5d8b8fcd7ae2c314161099
+  react-native-flipper: 452e2fcd89eed2333ecc2a1b543b12684d33c033
   react-native-google-maps: 46dea4aa4acb7300beff508f64d9f8c84e9fb106
   react-native-maps: 2d405b4e8cee0282e4c02bac434d81450dfea877
   react-native-onesignal: f92b6fae16388422f1b5d73b2c31e7000f481ae8

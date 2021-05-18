@@ -8,7 +8,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 // redux
 import {connect} from 'react-redux';
-import {store} from '../store';
+import store from '../store';
 import {
   actionSetPushGranted,
   actionSetPushActionSubscribe,

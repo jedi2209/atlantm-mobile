@@ -15,7 +15,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import {Button, Icon, Toast} from 'native-base';
-import {store} from '../../core/store';
+import store from '../../core/store';
 import styleConst from '../../core/style-const';
 import LinearGradient from 'react-native-linear-gradient';
 import Form from '../../core/components/Form/Form';
