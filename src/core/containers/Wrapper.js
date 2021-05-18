@@ -7,7 +7,7 @@ import {persistStore} from 'redux-persist';
 
 // redux
 import {Provider} from 'react-redux';
-import {store} from '../store';
+import store from '../store';
 
 // components
 import SplashScreen from 'react-native-splash-screen';
@@ -17,34 +17,30 @@ import App from './App';
 
 const colorScheme = Appearance.getColorScheme();
 
-if (__DEV__) {
-  import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
-}
-
 if (!__DEV__) {
-  // eslint-disable-line no-undef
-  [
-    'assert',
-    'clear',
-    'count',
-    'debug',
-    'dir',
-    'dirxml',
-    'error',
-    'exception',
-    'group',
-    'groupCollapsed',
-    'groupEnd',
-    'info',
-    'log',
-    'profile',
-    'profileEnd',
-    'table',
-    'time',
-    'timeEnd',
-    'timeStamp',
-    'trace',
-    'warn',
+ // eslint-disable-line no-undef
+ [
+  'assert',
+  'clear',
+  'count',
+  'debug',
+  'dir',
+  'dirxml',
+  'error',
+  'exception',
+  'group',
+  'groupCollapsed',
+  'groupEnd',
+  'info',
+  'log',
+  'profile',
+  'profileEnd',
+  'table',
+  'time',
+  'timeEnd',
+  'timeStamp',
+  'trace',
+  'warn',
   ].forEach((methodName) => {
     console[methodName] = () => {
       /* noop */
