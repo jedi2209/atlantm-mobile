@@ -177,10 +177,6 @@ class CarHistoryDetailsScreen extends Component {
           if (message === 'Network request failed') {
             message = ERROR_NETWORK;
           }
-
-          console.log(message);
-        } else {
-          console.log('ya recive some data', this.props.details);
         }
       },
     );
