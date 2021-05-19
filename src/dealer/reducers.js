@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import {REHYDRATE} from 'redux-persist/constants';
+import {REHYDRATE} from 'redux-persist/es/constants';
 import {get, findIndex} from 'lodash';
 import {
   DEALERS_REGION__SELECT,

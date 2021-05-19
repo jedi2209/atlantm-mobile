@@ -364,7 +364,7 @@ PODS:
   - react-native-vkontakte-login (1.0.1):
     - React
     - VK-ios-sdk
-  - react-native-webview (11.4.4):
+  - react-native-webview (11.4.5):
     - React-Core
   - React-perflogger (0.64.1)
   - React-RCTActionSheet (0.64.1):
@@ -802,7 +802,7 @@ SPEC CHECKSUMS:
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-text-input-mask: 36a546b378fadd2efe1b7484a859d34bc2c80395
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
-  react-native-webview: cc2a1fd8149a2654d1408793daa62baadfc0bd96
+  react-native-webview: 6d1d368c38edcc0a074bcc51a94ec8de700c241e
   React-perflogger: aad6d4b4a267936b3667260d1f649b6f6069a675
   React-RCTActionSheet: fc376be462c9c8d6ad82c0905442fd77f82a9d2a
   React-RCTAnimation: ba0a1c3a2738be224a08092fa7f1b444ab77d309

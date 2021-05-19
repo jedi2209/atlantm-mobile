@@ -1,19 +1,19 @@
-import React, {Component} from 'react';
-import {Text, Appearance} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, Appearance, ActivityIndicator} from 'react-native';
 
-// storage
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {persistStore} from 'redux-persist';
 
 // redux
 import {Provider} from 'react-redux';
-import store from '../store';
+import {PersistGate} from 'redux-persist/es/integration/react'
+import {store, persistStore} from '../store';
 
 // components
 import SplashScreen from 'react-native-splash-screen';
 
 // components
 import App from './App';
+
+import styleConst from '../style-const';
 
 const colorScheme = Appearance.getColorScheme();
 
@@ -48,74 +48,48 @@ if (!__DEV__) {
   });
 }
 
-export default class Wrapper extends Component {
-  constructor(props) {
-    super(props);
+const _defaultHandler = ErrorUtils.getGlobalHandler();
 
-    this.state = {
-      rehydrated: false,
-    };
-    console.log('Wrapper ====>', 'constructor');
+const _wrapGlobalHandler = async (error, isFatal) => {
+  console.log('Wrapper ====>', 'wrapGlobalHandler', error, isFatal);
+  if (isFatal && !__DEV__) {
+    persistStore.purge();
   }
+  _defaultHandler(error, isFatal);
+}
 
-  componentDidMount() {
-    console.log('Wrapper ====>', 'componentDidMount');
-    this.defaultHandler = ErrorUtils.getGlobalHandler();
-    ErrorUtils.setGlobalHandler(this.wrapGlobalHandler.bind(this));
+const _onBeforeLift = () => {
+  console.log('_onBeforeLift');
+  SplashScreen.hide();
+}
 
-    //this.getPersistStore().purge();
+const Loader = () => (
+  <View style={{flex:1, flexDirection:'row', alignItems:'center', justifyContent:'center', backgroundColor: styleConst.color.blue}}>
+    <ActivityIndicator animating size={'large'} style={[styleConst.spinner]} color={styleConst.color.white} />
+  </View>
+);
+
+const Wrapper = () => {
+  const [rehydrated, setRehydrated] = useState(false);
+
+  // Аналогично componentDidMount и componentDidUpdate:
+  useEffect(() => {
+    console.log('Wrapper ====>', 'componentDidMount useEffect');    
+    ErrorUtils.setGlobalHandler(_wrapGlobalHandler.bind(this));
 
     Text.defaultProps = Text.defaultProps || {};
     Text.defaultProps.allowFontScaling = false;
     Text.defaultProps.maxFontSizeMultiplier = 0;
     Text.defaultProps.selectable = true;
-    this.getPersistStore();
-  }
+  });
 
-  async wrapGlobalHandler(error, isFatal) {
-    console.log('Wrapper ====>', 'wrapGlobalHandler', error, isFatal);
-    if (isFatal && !__DEV__) {
-      this.getPersistStore().purge();
-    }
-
-    if (this.defaultHandler) {
-      this.defaultHandler(error, isFatal);
-    }
-  }
-
-  getPersistStore = () => {
-    console.log('Wrapper ====>', 'getPersistStore');
-    return persistStore(
-      store,
-      {
-        storage: AsyncStorage,
-        blacklist: ['form', 'nav', 'modal', 'catalog'],
-        keyPrefix: 'atlantm',
-      },
-      () => {
-        console.log('store in getPersistStore', store.getState());
-        this.setState({rehydrated: true});
-      },
-    );
-  };
-
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log('Wrapper ====>', 'shouldComponentUpdate');
-    return this.state.rehydrated !== nextState.rehydrated;
-  }
-
-  render() {
-    console.log('Wrapper ====>', 'render');
-    if (!this.state.rehydrated) {
-      return null;
-    }
-
-    SplashScreen.hide();
-
-    return (
-      <Provider store={store}>
+  return (
+    <Provider store={store}>
+      <PersistGate onBeforeLift={_onBeforeLift} loading={<Loader />} persistor={persistStore}>
         <App colorScheme={colorScheme} />
-      </Provider>
-    );
-  }
+      </PersistGate>
+    </Provider>
+  );
 }
+
+export default Wrapper;

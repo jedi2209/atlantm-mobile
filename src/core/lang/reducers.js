@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import {APP_LANG_SET} from './actionTypes';
-import {REHYDRATE} from 'redux-persist/constants';
+import {REHYDRATE} from 'redux-persist/es/constants';
 import {get} from 'lodash';
 
 function language(state = {}, action) {

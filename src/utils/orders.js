@@ -1,6 +1,6 @@
 import {Platform} from 'react-native';
 import {get} from 'lodash';
-import store from '../core/store';
+import {store} from '../core/store';
 import {strings} from '../core/lang/const';
 
 async function getOrders(type = 'default') {

@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import {reducer as formReducer} from 'redux-form';
-import {REHYDRATE} from 'redux-persist/constants';
+import {REHYDRATE} from 'redux-persist/es/constants';
 import {get} from 'lodash';
 import dealer from '../dealer/reducers';
 import nav from '../navigation/reducers';
