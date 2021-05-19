@@ -191,7 +191,16 @@ let UserCars = ({actionToggleCar, activePanel}) => {
     } else {
       myCars.default.push(item);
     }
+    if (item.owner) {
+      myCars.owner.push(item);
+    }
   });
+  if (myCars.hidden.length) {
+    myCars.hidden.sort((a, b) => b.owner - a.owner);
+  }
+  if (myCars.default.length) {
+    myCars.default.sort((a, b) => b.owner - a.owner);
+  }
   return (
     <>
       <View
