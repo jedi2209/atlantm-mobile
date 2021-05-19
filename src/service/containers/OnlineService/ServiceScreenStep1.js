@@ -20,7 +20,7 @@ import {ServiceModal} from '../../components/ServiceModal';
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import Form from '../../../core/components/Form/Form';
 import UserData from '../../../utils/user';
-import RenderPrice from '../../../utils/price';
+import showPrice from '../../../utils/price';
 
 // redux
 import {connect} from 'react-redux';
@@ -539,7 +539,7 @@ class ServiceScreenStep1 extends Component {
                                   fontSize: 18,
                                   fontWeight: 'bold',
                                 }}>
-                                {RenderPrice(
+                                {showPrice(
                                   parseFloat(
                                     this.state.serviceInfo.summary[0].summ
                                       .required,
