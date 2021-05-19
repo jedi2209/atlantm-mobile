@@ -310,7 +310,7 @@ export default class ChooseDateTimeComponent extends Component {
               <>
                 <ActivityIndicator
                   color={styleConst.color.blue}
-                  style={styles.spinner}
+                  style={styleConst.spinner}
                 />
                 <Text
                   selectable={false}

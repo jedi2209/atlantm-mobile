@@ -151,10 +151,6 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: styleConst.color.bg,
   },
-  spinner: {
-    alignSelf: 'center',
-    marginTop: verticalScale(60),
-  },
   iconArrow: {
     fontSize: 20,
     color: styleConst.color.greyBlueText,

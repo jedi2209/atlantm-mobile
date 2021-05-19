@@ -545,7 +545,7 @@ class TestDriveScreen extends PureComponent {
                         <>
                           <ActivityIndicator
                             color={styleConst.color.blue}
-                            style={[styles.spinner, {height: 39}]}
+                            style={[styleConst.spinner, {height: 39}]}
                           />
                           <Text
                             style={{

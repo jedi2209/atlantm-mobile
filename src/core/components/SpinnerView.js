@@ -11,10 +11,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: styleConst.color.bg,
   },
-  spinner: {
-    alignSelf: 'center',
-    marginTop: verticalScale(60),
-  },
   text: {
     fontSize: 16,
     fontFamily: styleConst.font.regular,
@@ -26,7 +22,7 @@ const styles = StyleSheet.create({
 
 const SpinnerView = ({text, containerStyle}) => (
   <SafeAreaView style={[styles.spinnerContainer, containerStyle]}>
-    <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
+    <ActivityIndicator color={styleConst.color.blue} style={styleConst.spinner} />
     {text ? <Text style={styles.text}>{text}</Text> : null}
   </SafeAreaView>
 );

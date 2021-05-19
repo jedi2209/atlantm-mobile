@@ -385,7 +385,7 @@ class ServiceScreenStep1 extends Component {
                   <>
                     <ActivityIndicator
                       color={styleConst.color.blue}
-                      style={[styles.spinner, {height: 245}]}
+                      style={[styleConst.spinner, {height: 245}]}
                     />
                     <Text
                       style={{
@@ -499,7 +499,7 @@ class ServiceScreenStep1 extends Component {
                       <>
                         <ActivityIndicator
                           color={styleConst.color.blue}
-                          style={[styles.spinner, {height: 25}]}
+                          style={[styleConst.spinner, {height: 25}]}
                         />
                         <Text
                           style={{

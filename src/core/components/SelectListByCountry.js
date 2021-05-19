@@ -25,10 +25,6 @@ const styles = StyleSheet.create({
     borderBottomColor: styleConst.color.border,
     paddingVertical: verticalScale(5),
   },
-  spinner: {
-    alignSelf: 'center',
-    marginTop: verticalScale(60),
-  },
   list: {
     flex: 1,
     backgroundColor: '#F6F6F6',
@@ -58,7 +54,7 @@ const _onRefresh = (props) => {
 
 const _EmptyComponent = () => (
   <View style={styles.spinnerContainer}>
-    <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
+    <ActivityIndicator color={styleConst.color.blue} style={styleConst.spinner} />
   </View>
 );
 
