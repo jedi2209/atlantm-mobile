@@ -1,6 +1,6 @@
-import 'react-native-gesture-handler';
 import React from 'react';
-import {AppRegistry, LogBox} from 'react-native';
+import 'react-native-gesture-handler';
+import {AppRegistry} from 'react-native';
 import * as Sentry from '@sentry/react-native';
 import Wrapper from './src/core/containers/Wrapper';
 

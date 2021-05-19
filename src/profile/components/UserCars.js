@@ -12,7 +12,7 @@ import {
   ActivityIndicator,
   Platform,
 } from 'react-native';
-import store from '../../core/store';
+import {store} from '../../core/store';
 import {get} from 'lodash';
 import {CarCard} from './CarCard';
 import {Icon, Button, ActionSheet, Toast} from 'native-base';

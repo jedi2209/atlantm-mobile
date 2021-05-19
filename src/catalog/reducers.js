@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import {REHYDRATE} from 'redux-persist/constants';
+import {REHYDRATE} from 'redux-persist/es/constants';
 import {
   USED_CAR_LIST__REQUEST,
   USED_CAR_LIST__SUCCESS,
