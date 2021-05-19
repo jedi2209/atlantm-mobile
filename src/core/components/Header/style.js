@@ -34,7 +34,7 @@ export default StyleSheet.create({
     shadowColor: 'transparent',
   },
   headerStyle: {
-    // height: 20,
+    // height: 70,
   },
   headerTitleStyle: {
     marginTop: 0,

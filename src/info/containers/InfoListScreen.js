@@ -324,7 +324,7 @@ class InfoListScreen extends Component {
               {filters ? (
                 <View
                   style={{
-                    marginVertical: 10,
+                    marginBottom: 5,
                     marginHorizontal: 10,
                     flexDirection: 'row',
                   }}>
