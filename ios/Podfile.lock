@@ -349,7 +349,7 @@ PODS:
   - react-native-onesignal (3.9.3):
     - OneSignal (= 2.16.1)
     - React (< 1.0.0, >= 0.13.0)
-  - react-native-pager-view (5.1.8):
+  - react-native-pager-view (5.1.9):
     - React-Core
   - react-native-safe-area-context (3.2.0):
     - React-Core
@@ -796,7 +796,7 @@ SPEC CHECKSUMS:
   react-native-google-maps: 46dea4aa4acb7300beff508f64d9f8c84e9fb106
   react-native-maps: 2d405b4e8cee0282e4c02bac434d81450dfea877
   react-native-onesignal: f92b6fae16388422f1b5d73b2c31e7000f481ae8
-  react-native-pager-view: a0b86051cb34c1868601ba65a8133e3b7a2830b5
+  react-native-pager-view: 14653de580178af7e65aa7e3fa08b4f243c86d4d
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865

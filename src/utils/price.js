@@ -1,8 +1,6 @@
-// import {Platform} from 'react-native';
+import {default as currencyJS} from 'currency.js';
 
-// const isAndroid = Platform.OS === 'android';
-
-export default function (price, country = 'BY', float = false) {
+const showPriceOLD = (price, country = 'BY', float = false) => {
   let country_code = 'ru-BE',
     options = {
       style: 'currency',
@@ -60,3 +58,45 @@ export default function (price, country = 'BY', float = false) {
     return parseInt(price, 10).toLocaleString(country_code, options);
   }
 }
+
+const showPrice = (price, country = 'BY', float = false) => {
+  let result;
+  let options = {
+    precision: 0,
+    decimal: ' ',
+    separator: ' ',
+  };
+  if (float) {
+    price = parseFloat(price, 10);
+    options = {
+      precision: 2,
+      decimal: '.',
+    };
+  } else {
+    price = parseInt(price, 10);
+  }
+
+  const RUB = value => currencyJS(value, Object.assign({symbol: '₽', pattern: `#!`}, options));
+  const BYN = value => currencyJS(value, Object.assign({symbol: 'BYN', pattern: `# !`}, options));
+  const UAH = value => currencyJS(value, Object.assign({symbol: '₴', pattern: `#!`}, options));
+
+  switch (country.toLowerCase()) {
+    case 'ru':
+    case 'rub':
+    case 'rur':
+      result = RUB(price).format();
+      break;
+    case 'ua':
+    case 'uah':
+      result = UAH(price).format();
+      break;
+    case 'by':
+    case 'byn':
+    default:
+      result = BYN(price).format();
+      break;
+  }
+  return result;
+}
+
+export default showPrice;
