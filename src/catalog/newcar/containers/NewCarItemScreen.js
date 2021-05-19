@@ -620,7 +620,7 @@ class NewCarItemScreen extends Component {
         <View style={styles.spinnerContainer}>
           <ActivityIndicator
             color={styleConst.color.blue}
-            style={styles.spinner}
+            style={styleConst.spinner}
           />
         </View>
       );

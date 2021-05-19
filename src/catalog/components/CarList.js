@@ -19,10 +19,6 @@ import {verticalScale} from '../../utils/scale';
 import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
-  spinner: {
-    alignSelf: 'center',
-    marginTop: verticalScale(60),
-  },
   footer: {
     paddingTop: 10,
     paddingBottom: 10,
@@ -68,7 +64,7 @@ export default class CarList extends PureComponent {
     const {isFetchItems} = this.props;
 
     return isFetchItems ? (
-      <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
+      <ActivityIndicator color={styleConst.color.blue} style={styleConst.spinner} />
     ) : (
       <EmptyMessage text={strings.CarList.emptyMessage} />
     );

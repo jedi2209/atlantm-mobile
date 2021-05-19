@@ -1,4 +1,5 @@
-import {PixelRatio, Platform, Dimensions} from 'react-native';
+import {PixelRatio, Dimensions} from 'react-native';
+import {verticalScale} from '../utils/scale';
 
 export default {
   color: {
@@ -28,6 +29,10 @@ export default {
     darkBg: '#4f5b66',
   },
   screen: Dimensions.get('window'),
+  spinner: {
+    alignSelf: 'center',
+    marginTop: verticalScale(60),
+  },
   shadow: {
     default: {
       shadowColor: '#000',

@@ -130,10 +130,6 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     backgroundColor: styleConst.color.bg,
   },
-  spinner: {
-    alignSelf: 'center',
-    marginTop: verticalScale(60),
-  },
 });
 
 const deviceWidth = Number(Dimensions.get('window').width) || 350;
@@ -622,7 +618,7 @@ class ContactsScreen extends Component {
                 <View style={styles.spinnerContainer}>
                   <ActivityIndicator
                     color={styleConst.color.blue}
-                    style={styles.spinner}
+                    style={styleConst.spinner}
                   />
                 </View>
               )}

@@ -72,7 +72,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   spinner: {
-    alignSelf: 'center',
     marginTop: verticalScale(260),
   },
 });
@@ -358,7 +357,7 @@ class MapScreen extends Component {
       <ActivityIndicator
         size="large"
         color={styleConst.color.blue}
-        style={styles.spinner}
+        style={[styleConst.spinner, styles.spinner]}
       />
     ) : (
       <SafeAreaView style={styles.safearea}>

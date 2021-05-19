@@ -323,7 +323,7 @@ class UsedCarItemScreen extends Component {
         <SafeAreaView style={styles.spinnerContainer}>
           <ActivityIndicator
             color={styleConst.color.blue}
-            style={styles.spinner}
+            style={styleConst.spinner}
           />
         </SafeAreaView>
       );

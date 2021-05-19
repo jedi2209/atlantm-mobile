@@ -10,10 +10,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: styleConst.color.bg,
   },
-  spinner: {
-    alignSelf: 'center',
-    marginTop: verticalScale(60),
-  },
   text: {
     fontSize: 16,
     fontFamily: styleConst.font.regular,
@@ -33,7 +29,7 @@ const RefreshSpinner = (props) => {
         color={styleConst.color.blue}
         refreshing={isRequest}
         onRefresh={onRefresh}
-        style={styles.spinner}
+        style={styleConst.spinner}
         title={text}
       />
     //   {text ? <Text style={styles.text}>{text}</Text> : null}
