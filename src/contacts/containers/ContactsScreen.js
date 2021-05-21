@@ -38,7 +38,6 @@ import {Offer} from '../../core/components/Offer';
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
 import orderFunctions from '../../utils/orders';
-import {verticalScale} from '../../utils/scale';
 import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
@@ -624,12 +623,11 @@ class ContactsScreen extends Component {
               )}
             </View>
           </ScrollView>
-          {this.state.showRatePopup ? (
-            <RateThisApp
-              onSuccess={this._onAppRateSuccess}
-              onAskLater={this._onAppRateAskLater}
-            />
-          ) : null}
+          <RateThisApp
+            onSuccess={this._onAppRateSuccess}
+            onAskLater={this._onAppRateAskLater}
+            show={this.state.showRatePopup}
+          />
         </View>
       </StyleProvider>
     );
