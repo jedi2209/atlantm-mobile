@@ -1,0 +1,94 @@
+diff --git a/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManager.java b/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManager.java
+index aa19044..8b8f7ae 100644
+--- a/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManager.java
++++ b/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebViewManager.java
+@@ -1152,6 +1152,42 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
+     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+     @Override
+     public void onPermissionRequest(final PermissionRequest request) {
++      
++      grantedPermissions = new ArrayList<>();
++
++      ArrayList<String> requestedAndroidPermissions = new ArrayList<>();
++      for (String requestedResource : request.getResources()) {
++        String androidPermission = null;
++
++        if (requestedResource.equals(PermissionRequest.RESOURCE_AUDIO_CAPTURE)) {
++          androidPermission = Manifest.permission.RECORD_AUDIO;
++        } else if (requestedResource.equals(PermissionRequest.RESOURCE_VIDEO_CAPTURE)) {
++          androidPermission = Manifest.permission.CAMERA;
++        }
++        // TODO: RESOURCE_MIDI_SYSEX, RESOURCE_PROTECTED_MEDIA_ID.
++
++        if (androidPermission != null) {
++          if (ContextCompat.checkSelfPermission(mReactContext, androidPermission) == PackageManager.PERMISSION_GRANTED) {
++            grantedPermissions.add(requestedResource);
++          } else {
++            requestedAndroidPermissions.add(androidPermission);
++          }
++        }
++      }
++
++      // If all the permissions are already granted, send the response to the WebView synchronously
++      if (requestedAndroidPermissions.isEmpty()) {
++        request.grant(grantedPermissions.toArray(new String[0]));
++        grantedPermissions = null;
++        return;
++      }
++
++      // Otherwise, ask to Android System for native permissions asynchronously
++
++      this.permissionRequest = request;
++
++      requestPermissions(requestedAndroidPermissions);
++
+       String[] requestedResources = request.getResources();
+       ArrayList<String> permissions = new ArrayList<>();
+       ArrayList<String> grantedPermissions = new ArrayList<String>();
+@@ -1209,46 +1245,6 @@ public class RNCWebViewManager extends SimpleViewManager<WebView> {
+           event));
+     }
+ 
+-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+-    @Override
+-    public void onPermissionRequest(final PermissionRequest request) {
+-
+-      grantedPermissions = new ArrayList<>();
+-
+-      ArrayList<String> requestedAndroidPermissions = new ArrayList<>();
+-      for (String requestedResource : request.getResources()) {
+-        String androidPermission = null;
+-
+-        if (requestedResource.equals(PermissionRequest.RESOURCE_AUDIO_CAPTURE)) {
+-          androidPermission = Manifest.permission.RECORD_AUDIO;
+-        } else if (requestedResource.equals(PermissionRequest.RESOURCE_VIDEO_CAPTURE)) {
+-          androidPermission = Manifest.permission.CAMERA;
+-        }
+-        // TODO: RESOURCE_MIDI_SYSEX, RESOURCE_PROTECTED_MEDIA_ID.
+-
+-        if (androidPermission != null) {
+-          if (ContextCompat.checkSelfPermission(mReactContext, androidPermission) == PackageManager.PERMISSION_GRANTED) {
+-            grantedPermissions.add(requestedResource);
+-          } else {
+-            requestedAndroidPermissions.add(androidPermission);
+-          }
+-        }
+-      }
+-
+-      // If all the permissions are already granted, send the response to the WebView synchronously
+-      if (requestedAndroidPermissions.isEmpty()) {
+-        request.grant(grantedPermissions.toArray(new String[0]));
+-        grantedPermissions = null;
+-        return;
+-      }
+-
+-      // Otherwise, ask to Android System for native permissions asynchronously
+-
+-      this.permissionRequest = request;
+-
+-      requestPermissions(requestedAndroidPermissions);
+-    }
+-
+ 
+     @Override
+     public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {

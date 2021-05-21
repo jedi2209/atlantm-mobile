@@ -89,7 +89,7 @@
     "react-native-text-input-mask": "^3.1.4",
     "react-native-vector-icons": "^8.0.0",
     "react-native-vkontakte-login": "^1.0.0",
-    "react-native-webview": "^11.6.0",
+    "react-native-webview": "^11.6.1",
     "react-redux": "7.2.4",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",
     "reanimated-bottom-sheet-navigator": "osdnk/reanimated-bottom-sheet-navigator",
