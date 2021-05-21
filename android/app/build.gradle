@@ -17,7 +17,7 @@ project.ext.react = [
     root: "../../",
     bundleInRelease       : true,
     resourcesDirRelease   : "./src/release/res",
-    enableHermes: false,  // clean and rebuild if changing
+    enableHermes: true,  // clean and rebuild if changing
 ]
 
 project.ext.version = [
@@ -76,9 +76,10 @@ def useIntlJsc = true
  * on project.ext.react, JavaScript will not be compiled to Hermes Bytecode
  * and the benefits of using Hermes will therefore be sharply reduced.
  */
-def enableHermes = project.ext.react.get("enableHermes", false);
+def enableHermes = project.ext.react.get("enableHermes", true);
 
 android {
+    ndkVersion rootProject.ext.ndkVersion
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
@@ -122,7 +123,6 @@ android {
         }
     }
     dexOptions {
-        incremental true
         javaMaxHeapSize "4g"
     }
     buildTypes {
