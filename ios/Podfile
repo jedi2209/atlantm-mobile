@@ -40,12 +40,3 @@ end
 target 'OneSignalNotificationServiceExtension' do
   pod 'OneSignal', '>= 2.9.3', '< 3.0'
 end
-
-target 'atlantm-tvOS' do
-  # Pods for atlantm-tvOS
-
-  target 'atlantm-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-end
