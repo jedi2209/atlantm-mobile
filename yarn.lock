@@ -8484,7 +8484,7 @@ react-native-vkontakte-login@^1.0.0:
   resolved "https://registry.yarnpkg.com/react-native-vkontakte-login/-/react-native-vkontakte-login-1.0.1.tgz#0436fc235543d8f7c01c4a6570f1882df00b4e06"
   integrity sha512-xZHuFBD97WodPk6b1fhDhV9TpNzVb0eO/uqpW9IUn7Y4Q/yPC4kvX/xpJrBGWS3NejX5HYniUdyZySA2bGyUBQ==
 
-react-native-webview@^11.6.0:
+react-native-webview@^11.6.1:
   version "11.6.1"
   resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.6.1.tgz#e2a3a025761d78547579fc0426dbb993efd9e85a"
   integrity sha512-F7DvrBpVvSsOzdB5WW4MNofV/T7POpCq4MrIMK8AnGzGgWTfLi5Jhff3T18owXH74TKQcjEnfQKBPTXDGM06ow==

@@ -5,14 +5,14 @@ import groovy.json.JsonSlurper
 buildscript {
     ext {
         buildToolsVersion = "29.0.3"
-        minSdkVersion = 21
-        compileSdkVersion = 29
-        targetSdkVersion = 29
+        minSdkVersion = 26
+        compileSdkVersion = 30
+        targetSdkVersion = 30
         supportLibVersion = "29.0.0"
         // mediaCompatVersion = '1.0.1'
         // supportV4Version = '1.0.0'
         // firebaseIidVersion = "19.0.1"
-        playServicesVersion = "17.2.1"
+        playServicesVersion = "17.0.0"
         googlePlayServicesIidVersion = "17.0.0"
         androidMapsUtilsVersion = "0.5+"
         ndkVersion = "20.1.5948944"
