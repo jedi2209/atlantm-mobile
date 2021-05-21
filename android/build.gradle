@@ -12,7 +12,7 @@ buildscript {
         // mediaCompatVersion = '1.0.1'
         // supportV4Version = '1.0.0'
         // firebaseIidVersion = "19.0.1"
-        playServicesVersion = "16.0.0"
+        playServicesVersion = "17.2.1"
         googlePlayServicesIidVersion = "17.0.0"
         androidMapsUtilsVersion = "0.5+"
         ndkVersion = "20.1.5948944"
