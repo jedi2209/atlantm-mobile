@@ -183,7 +183,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
 
     implementation "com.google.android.gms:play-services-base:${rootProject.ext.playServicesVersion}"
-    implementation "com.google.android.gms:play-services-maps:${rootProject.ext.playServicesVersion}"
+    implementation "com.google.android.gms:play-services-maps:${rootProject.ext.googlePlayServicesIidVersion}"
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";
