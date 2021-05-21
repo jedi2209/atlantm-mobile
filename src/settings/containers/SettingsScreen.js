@@ -261,7 +261,7 @@ class SettingsScreen extends PureComponent {
         <ScrollView style={styles.container}>
           <Container style={styles.container}>
             <StatusBar hidden />
-            <Text style={styleConst.text.bigHead}>
+            <Text selectable={false} style={styleConst.text.bigHead}>
               {strings.Menu.main.settings}
             </Text>
             {this.props.dealerSelected.region === 'ua' ? (
@@ -349,6 +349,7 @@ class SettingsScreen extends PureComponent {
                 transparent
                 full
                 style={styles.buttonRate}
+                selectable={false}
                 onPress={() => {
                   Analytics.logEvent('screen', 'ratePopup', 'settings');
                   return this.setState({
@@ -370,6 +371,7 @@ class SettingsScreen extends PureComponent {
                     color: 'white',
                     fontSize: 55,
                   }}
+                  selectable={false}
                 />
               </Button>
             </TransitionView>
@@ -387,6 +389,7 @@ class SettingsScreen extends PureComponent {
                 transparent
                 full
                 style={styles.buttonRate}
+                selectable={false}
                 onPress={() => {
                   return Linking.openURL('mailto:' + APP_EMAIL);
                 }}>
@@ -397,6 +400,7 @@ class SettingsScreen extends PureComponent {
                 </Text>
                 <Icon
                   name={'mail-outline'}
+                  selectable={false}
                   style={{
                     color: 'white',
                     fontSize: 55,
@@ -433,13 +437,12 @@ class SettingsScreen extends PureComponent {
                 </Text>
               </Button>
             </TransitionView>
-            {this.state.showRatePopup ? (
-              <RateThisApp
-                onSuccess={this._onAppRateSuccess}
-                onAskLater={this._onAppRateAskLater}
-              />
-            ) : null}
           </Container>
+          <RateThisApp
+            onSuccess={this._onAppRateSuccess}
+            onAskLater={this._onAppRateAskLater}
+            show={this.state.showRatePopup}
+          />
         </ScrollView>
       </StyleProvider>
     );
