@@ -28,11 +28,11 @@ import {actionSetPushActionSubscribe, actionAppRated} from '../../core/actions';
 // components
 import PushNotifications from '../../core/components/PushNotifications';
 import LangSwitcher from '../../core/components/LangSwitcher';
-import RateThisApp from '../../core/components/RateThisApp';
 import TransitionView from '../../core/components/TransitionView';
 
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
+import rateInApp from '../../utils/rate-in-app';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import {APP_EMAIL, STORE_LINK} from '../../core/const';
@@ -128,7 +128,6 @@ const mapStateToProps = ({dealer, info, nav, core}) => {
     isFetchInfoList: info.meta.isFetchInfoList,
     pushActionSubscribeState: core.pushActionSubscribeState,
     currentLang: core.language.selected || 'ua',
-    isAppRated: core.isAppRated,
     AppRateAskLater: core.AppRateAskLater,
   };
 };
@@ -205,19 +204,6 @@ class SettingsScreen extends PureComponent {
   componentDidMount() {
     Analytics.logEvent('screen', 'settings');
   }
-
-  _onAppRateSuccess = () => {
-    this.setState({
-      showRatePopup: false,
-    });
-    !this.props.isAppRated && this.props.actionAppRated();
-  };
-
-  _onAppRateAskLater = () => {
-    this.setState({
-      showRatePopup: false,
-    });
-  };
 
   onSwitchActionSubscribe = () => {
     const {
@@ -352,9 +338,8 @@ class SettingsScreen extends PureComponent {
                 selectable={false}
                 onPress={() => {
                   Analytics.logEvent('screen', 'ratePopup', 'settings');
-                  return this.setState({
-                    showRatePopup: true,
-                  });
+                  rateInApp('settings');
+                  this.props.actionAppRated();
                 }}>
                 <Text
                   selectable={false}
@@ -438,11 +423,6 @@ class SettingsScreen extends PureComponent {
               </Button>
             </TransitionView>
           </Container>
-          <RateThisApp
-            onSuccess={this._onAppRateSuccess}
-            onAskLater={this._onAppRateAskLater}
-            show={this.state.showRatePopup}
-          />
         </ScrollView>
       </StyleProvider>
     );

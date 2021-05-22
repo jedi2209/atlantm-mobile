@@ -344,6 +344,8 @@ PODS:
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 3.5.0)
     - React-Core
+  - react-native-in-app-review (3.1.1):
+    - React
   - react-native-maps (0.28.0):
     - React-Core
   - react-native-onesignal (3.9.3):
@@ -558,6 +560,7 @@ DEPENDENCIES:
   - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
+  - react-native-in-app-review (from `../node_modules/react-native-in-app-review`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - react-native-onesignal (from `../node_modules/react-native-onesignal`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
@@ -670,6 +673,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-flipper"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
+  react-native-in-app-review:
+    :path: "../node_modules/react-native-in-app-review"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
   react-native-onesignal:
@@ -794,6 +799,7 @@ SPEC CHECKSUMS:
   react-native-fbsdk: 8e92c7a334fd8d9c2b5d8b8fcd7ae2c314161099
   react-native-flipper: 96aace195560b590e876826bcffd88602e666c47
   react-native-google-maps: 46dea4aa4acb7300beff508f64d9f8c84e9fb106
+  react-native-in-app-review: 1519011cfb31817aa8bf7814e2290311fd26ed99
   react-native-maps: 2d405b4e8cee0282e4c02bac434d81450dfea877
   react-native-onesignal: f92b6fae16388422f1b5d73b2c31e7000f481ae8
   react-native-pager-view: 14653de580178af7e65aa7e3fa08b4f243c86d4d

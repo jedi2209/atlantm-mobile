@@ -23,7 +23,6 @@ import {
 } from 'native-base';
 import BrandLogo from '../../core/components/BrandLogo';
 import Plate from '../../core/components/Plate';
-import RateThisApp from '../../core/components/RateThisApp';
 
 // redux
 import {connect} from 'react-redux';
@@ -32,7 +31,7 @@ import {callMe} from '../actions';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList, actionListReset} from '../../info/actions';
-import {actionAppRated, actionMenuOpenedCount} from '../../core/actions';
+import {actionMenuOpenedCount, actionAppRated} from '../../core/actions';
 import {Offer} from '../../core/components/Offer';
 
 // helpers
@@ -154,15 +153,11 @@ const mapDispatchToProps = {
   fetchInfoList,
   actionListReset,
   actionMenuOpenedCount,
-  actionAppRated,
 };
 
 class ContactsScreen extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      showRatePopup: false,
-    };
     this.sitesSubtitle = {
       sites: [],
       buttons: [],
@@ -198,15 +193,9 @@ class ContactsScreen extends Component {
     if (!isAppRated) {
       if (menuOpenedCount >= 10) {
         setTimeout(() => {
-          Analytics.logEvent('screen', 'ratePopup', 'contacts');
-          this.setState(
-            {
-              showRatePopup: true,
-            },
-            () => {
-              this.props.actionMenuOpenedCount(0);
-            },
-          );
+          rateInApp('contacts');
+          this.props.actionMenuOpenedCount(0);
+          actionAppRated();
         }, 1000);
       } else {
         this.props.actionMenuOpenedCount();
@@ -336,19 +325,6 @@ class ContactsScreen extends Component {
         return false;
       }
     }
-  };
-
-  _onAppRateSuccess = () => {
-    this.setState({
-      showRatePopup: false,
-    });
-    !this.props.isAppRated && this.props.actionAppRated();
-  };
-
-  _onAppRateAskLater = () => {
-    this.setState({
-      showRatePopup: false,
-    });
   };
 
   render() {
@@ -623,11 +599,6 @@ class ContactsScreen extends Component {
               )}
             </View>
           </ScrollView>
-          <RateThisApp
-            onSuccess={this._onAppRateSuccess}
-            onAskLater={this._onAppRateAskLater}
-            show={this.state.showRatePopup}
-          />
         </View>
       </StyleProvider>
     );
