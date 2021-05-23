@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Linking,
+  Platform,
   ScrollView,
   TouchableOpacity,
   StatusBar,
@@ -23,6 +24,7 @@ import {
 } from 'native-base';
 import BrandLogo from '../../core/components/BrandLogo';
 import Plate from '../../core/components/Plate';
+import InAppReview from 'react-native-in-app-review';
 
 // redux
 import {connect} from 'react-redux';
@@ -40,7 +42,7 @@ import orderFunctions from '../../utils/orders';
 import {get} from 'lodash';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
-import {ERROR_NETWORK} from '../../core/const';
+import {STORE_LINK, ERROR_NETWORK} from '../../core/const';
 import Carousel from 'react-native-snap-carousel';
 import {strings} from '../../core/lang/const';
 
@@ -193,9 +195,43 @@ class ContactsScreen extends Component {
     if (!isAppRated) {
       if (menuOpenedCount >= 10) {
         setTimeout(() => {
-          rateInApp('contacts');
+          Analytics.logEvent('screen', 'ratePopup', {source: 'contacts'});
+          if (!InAppReview.isAvailable()) {
+            Linking.openURL(STORE_LINK[Platform.OS]);
+          }
+          InAppReview.RequestInAppReview()
+          .then((hasFlowFinishedSuccessfully) => {
+            // when return true in android it means user finished or close review flow
+            // when return true in ios it means review flow lanuched to user.
+        
+            // 1- you have option to do something ex: (navigate Home page) (in android).
+            // 2- you have option to do something,
+            // ex: (save date today to lanuch InAppReview after 15 days) (in android and ios).
+        
+            // 3- another option:
+            if (hasFlowFinishedSuccessfully) {
+                actionAppRated();
+                // do something for ios
+                // do something for android
+            }
+        
+            // for android:
+            // The flow has finished. The API does not indicate whether the user
+            // reviewed or not, or even whether the review dialog was shown. Thus, no
+            // matter the result, we continue our app flow.
+        
+            // for ios
+            // the flow lanuched successfully, The API does not indicate whether the user
+            // reviewed or not, or he/she closed flow yet as android, Thus, no
+            // matter the result, we continue our app flow.
+          })
+          .catch((error) => {
+            //we continue our app flow.
+            // we have some error could happen while lanuching InAppReview,
+            // Check table for errors and code number that can return in catch.
+            console.log('InAppReview.RequestInAppReview ERROR', error);
+          });
           this.props.actionMenuOpenedCount(0);
-          actionAppRated();
         }, 1000);
       } else {
         this.props.actionMenuOpenedCount();
