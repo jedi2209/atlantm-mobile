@@ -7,12 +7,16 @@ export default class Analytics {
     if (__DEV__) {
       return true;
     }
+    if (typeof params === 'string') {
+      params = {params};
+    }
+    const ampInstance = Amplitude.getInstance();
     const SAPID = get(store.getState(), 'profile.login.SAP.ID');
     const UserID = get(store.getState(), 'profile.login.id');
-    Amplitude.getInstance().init('2716d7eebc63593e80e4fd172fc8b6f3');
+    ampInstance.init('2716d7eebc63593e80e4fd172fc8b6f3');
     if (SAPID || UserID) {
-      Amplitude.getInstance().setUserId(SAPID ? SAPID : UserID);
+      ampInstance.setUserId(SAPID ? SAPID : UserID);
     }
-    Amplitude.getInstance().logEvent(`${category}:${action}`, params);
+    ampInstance.logEvent(`${category}:${action}`, params);
   }
 }
