@@ -1,5 +1,5 @@
 import React from 'react';
-import {Platform, Alert} from 'react-native';
+import {Platform, Alert, Linking} from 'react-native';
 import {strings} from '../../core/lang/const';
 // import {GooglePackageName} from '../../core/const';
 // import Rate, {AndroidMarket} from 'react-native-rate';
