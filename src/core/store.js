@@ -33,7 +33,7 @@ if (__DEV__) {
 } else {
   store = createStore(
     persistedReducer,
-    composeEnhancer(applyMiddleware(...middleware))
+    applyMiddleware(...middleware)
   );
 }
 
