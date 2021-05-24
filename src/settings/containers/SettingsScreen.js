@@ -20,7 +20,6 @@ import {
   Button,
 } from 'native-base';
 import DeviceInfo from 'react-native-device-info';
-import InAppReview from 'react-native-in-app-review';
 
 // redux
 import {connect} from 'react-redux';
