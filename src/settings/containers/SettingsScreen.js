@@ -351,9 +351,7 @@ class SettingsScreen extends PureComponent {
                 selectable={false}
                 onPress={() => {
                   Analytics.logEvent('screen', 'ratePopup', {source: 'settings'});
-                  return this.setState({
-                    showRatePopup: true,
-                  });
+                  return Linking.openURL(STORE_LINK[Platform.OS]);
                 }}>
                 <Text
                   selectable={false}
@@ -437,11 +435,6 @@ class SettingsScreen extends PureComponent {
               </Button>
             </TransitionView>
           </Container>
-          <RateThisApp
-            onSuccess={this._onAppRateSuccess}
-            onAskLater={this._onAppRateAskLater}
-            show={this.state.showRatePopup}
-          />
         </ScrollView>
       </StyleProvider>
     );
