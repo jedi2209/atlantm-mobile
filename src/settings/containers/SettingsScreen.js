@@ -206,16 +206,7 @@ class SettingsScreen extends PureComponent {
   }
 
   _onAppRateSuccess = () => {
-    this.setState({
-      showRatePopup: false,
-    });
     !this.props.isAppRated && this.props.actionAppRated();
-  };
-
-  _onAppRateAskLater = () => {
-    this.setState({
-      showRatePopup: false,
-    });
   };
 
   onSwitchActionSubscribe = () => {
@@ -351,7 +342,8 @@ class SettingsScreen extends PureComponent {
                 selectable={false}
                 onPress={() => {
                   Analytics.logEvent('screen', 'ratePopup', {source: 'settings'});
-                  return Linking.openURL(STORE_LINK[Platform.OS]);
+                  return RateThisApp({onSuccess: this._onAppRateSuccess});
+                  //return Linking.openURL(STORE_LINK[Platform.OS]);
                 }}>
                 <Text
                   selectable={false}

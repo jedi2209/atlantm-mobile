@@ -200,9 +200,7 @@ class ContactsScreen extends Component {
         setTimeout(() => {
           Analytics.logEvent('screen', 'ratePopup', {source: 'contacts'});
           this.props.actionMenuOpenedCount(0);
-          return this.setState({
-            showRatePopup: true,
-          });
+          return RateThisApp({onSuccess: this._onAppRateSuccess});
         }, 1000);
       } else {
         this.props.actionMenuOpenedCount();
@@ -335,16 +333,7 @@ class ContactsScreen extends Component {
   };
 
   _onAppRateSuccess = () => {
-    this.setState({
-      showRatePopup: false,
-    });
     !this.props.isAppRated && this.props.actionAppRated();
-  };
-
-  _onAppRateAskLater = () => {
-    this.setState({
-      showRatePopup: false,
-    });
   };
 
   render() {
@@ -619,11 +608,6 @@ class ContactsScreen extends Component {
               )}
             </View>
           </ScrollView>
-          <RateThisApp
-            onSuccess={this._onAppRateSuccess}
-            onAskLater={this._onAppRateAskLater}
-            show={this.state.showRatePopup}
-          />
         </View>
       </StyleProvider>
     );

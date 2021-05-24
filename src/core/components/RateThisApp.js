@@ -1,11 +1,11 @@
-import React from 'react';
 import {Platform, Alert, Linking} from 'react-native';
-import {strings} from '../../core/lang/const';
+import {strings} from '../lang/const';
+import {STORE_LINK} from '../const';
 // import {GooglePackageName} from '../../core/const';
 // import Rate, {AndroidMarket} from 'react-native-rate';
 // import InAppReview from 'react-native-in-app-review';
 
-const RateThisApp = ({onSuccess, onAskLater, show}) => {
+const RateThisApp = ({onSuccess}) => {
   let alert_buttons = { // такое задротство из-за разного положения кнопок на iOS / Android. Нужно, чтобы кнопки были одинаково расположены
     android: [
       {
@@ -17,9 +17,6 @@ const RateThisApp = ({onSuccess, onAskLater, show}) => {
       },
       {
         text: strings.RateThisApp.later,
-        onPress: () => {
-          onAskLater && onAskLater();
-        },
         style: 'cancel',
       },
       {
@@ -77,9 +74,6 @@ const RateThisApp = ({onSuccess, onAskLater, show}) => {
       },
       {
         text: strings.RateThisApp.later,
-        onPress: () => {
-          return onAskLater && onAskLater();
-        },
         style: 'cancel',
       },
       {
@@ -92,7 +86,6 @@ const RateThisApp = ({onSuccess, onAskLater, show}) => {
     ],
   };
 
-  if (show) {
     Alert.alert(
       strings.RateThisApp.title,
       strings.RateThisApp.text,
@@ -101,8 +94,6 @@ const RateThisApp = ({onSuccess, onAskLater, show}) => {
         cancelable: false
       },
     );
-  }
-  return (<></>);
 }
 
 export default RateThisApp;
