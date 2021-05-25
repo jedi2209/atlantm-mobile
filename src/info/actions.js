@@ -95,6 +95,7 @@ export const fetchInfoPost = infoID => {
             id: infoID,
             text: _.get(data, '0.text', ''),
             date: _.get(data, '0.date', ''),
+            dealers: _.get(data, '0.dealers', ''),
             img: _.get(data, '0.img', ''),
             type: _.get(data, '0.type', ''),
             imgCropAvailable: _.get(data, '0.imgCropAvailable', ''),

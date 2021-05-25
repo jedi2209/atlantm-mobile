@@ -18,9 +18,10 @@ const mapStateToProps = ({dealer, profile}) => {
 const ServiceContainer = (props) => {
   const navigation = useNavigation();
   const route = useRoute();
+  const actionID = get(route, 'params.actionID', null);
   const {dealerSelected, loginID, cars} = props;
   if (dealerSelected.region === 'by') {
-    if (loginID && cars && cars.length > 0) {
+    if (!actionID && loginID && cars && cars.length > 0) {
       return <ServiceScreenStep1 navigation={navigation} route={route} />;
     } else {
       return <ServiceNewNonAuth navigation={navigation} route={route} />;

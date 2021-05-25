@@ -102,9 +102,10 @@ class ServiceScreenNonAuth extends Component {
   }
 
   onPressOrder = async (dataFromForm) => {
-    const {navigation} = this.props;
+    const {navigation, route} = this.props;
 
     let dateFromForm = get(dataFromForm, 'DATETIME', null);
+    const actionID = get(route, 'params.actionID', null);
 
     if (get(dateFromForm, 'noTimeAlways', false)) {
       // хак для Лексуса
@@ -153,6 +154,7 @@ class ServiceScreenNonAuth extends Component {
         phone: get(data, 'phone', ''),
         text: get(data, 'text', ''),
         dealerID: data.dealer,
+        actionID,
       };
       const action = await this.props.orderService(dataToSend);
 
