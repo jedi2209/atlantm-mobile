@@ -8,13 +8,12 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
-import {StyleProvider} from 'native-base';
+import {StyleProvider, Content, Button} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
 import {fetchInfoPost, callMeForInfo} from '../actions';
 
-import {Content, Button} from 'native-base';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
 import Imager from '../../core/components/Imager';
 import Badge from '../../core/components/Badge';
@@ -91,6 +90,11 @@ const mapStateToProps = ({dealer, info, profile, core}) => {
     name: profile.name,
     phone: profile.phone,
     email: profile.email,
+    dealersList: {
+      'ru': dealer.listRussia,
+      'by': dealer.listBelarussia,
+      'ua': dealer.listUkraine,
+    },
     dealerSelected: dealer.selected,
     currLang: core.language.selected,
   };
@@ -142,11 +146,75 @@ class InfoPostScreen extends Component {
     return posts[id];
   };
 
-  onPressCallMe = () => {
+  _onPressCallMe = () => {
     const {navigation, route} = this.props;
     const id = route.params.id;
     navigation.navigate('CallMeBackScreen', {actionID: id});
   };
+
+  _onPressOrder = ({dealers}) => {
+    const {navigation, route, dealersList, dealerSelected} = this.props;
+    const id = route.params.id;
+    let customDealersList = [];
+    dealersList[dealerSelected.region].forEach(element => {
+      if (dealers.includes(element.id)) {
+        customDealersList.push({
+          id: element.id,
+          name: element.name,
+        });
+      }
+    });
+    navigation.navigate('OrderScreen', {
+      car: {
+        dealer: customDealersList,
+      },
+      actionID: id,
+      region: this.props.dealerSelected.region,
+      isNewCar: true,
+    });
+  };
+
+  _onPressParts = ({dealers}) => {
+    const {navigation, route, dealersList, dealerSelected} = this.props;
+    const id = route.params.id;
+    let customDealersList = [];
+    dealersList[dealerSelected.region].forEach(element => {
+      if (dealers.includes(element.id)) {
+        customDealersList.push({
+          id: element.id,
+          name: element.name,
+        });
+      }
+    });
+    navigation.navigate('OrderPartsScreen', {
+      car: {
+        dealer: customDealersList,
+      },
+      actionID: id,
+      region: this.props.dealerSelected.region,
+    });
+  }
+
+  _onPressService = ({dealers}) => {
+    const {navigation, route, dealersList, dealerSelected} = this.props;
+    const id = route.params.id;
+    let customDealersList = [];
+    dealersList[dealerSelected.region].forEach(element => {
+      if (dealers.includes(element.id)) {
+        customDealersList.push({
+          id: element.id,
+          name: element.name,
+        });
+      }
+    });
+    navigation.navigate('ServiceScreen', {
+      car: {
+        dealer: customDealersList,
+      },
+      actionID: id,
+      region: this.props.dealerSelected.region,
+    });
+  }
 
   processDate(date = {}) {
     return `${strings.InfoPostScreen.filter.from} ${dayMonth(date.from)} ${
@@ -171,6 +239,59 @@ class InfoPostScreen extends Component {
     });
   };
 
+  _renderOrderButton = ({type, dealers}) => {
+    if (!type) {
+      return false;
+    }
+    switch (type.id) {
+      case 1: // buy
+        return (<Button
+          full
+          uppercase={false}
+          title={strings.InfoPostScreen.button.callMe}
+          style={[styleConst.shadow.default, styles.button]}
+          // onPress={() => {this._onPressOrder({dealers})}}>
+          onPress={() => {this._onPressParts({dealers})}}>
+          <Text style={styles.buttonText} selectable={false}>
+            {strings.InfoPostScreen.button.callMe}
+          </Text>
+        </Button>);
+      case 2: // service
+        return (<Button
+          full
+          uppercase={false}
+          title={strings.InfoPostScreen.button.callMe}
+          style={[styleConst.shadow.default, styles.button, {backgroundColor: styleConst.color.orange}]}
+          onPress={() => {this._onPressService({dealers})}}>
+          <Text style={styles.buttonText} selectable={false}>
+            {strings.InfoPostScreen.button.callMe}
+          </Text>
+        </Button>);
+      case 3: // parts
+        return (<Button
+          full
+          uppercase={false}
+          title={strings.InfoPostScreen.button.callMe}
+          style={[styleConst.shadow.default, styles.button, {backgroundColor: styleConst.color.green}]}
+          onPress={() => {this._onPressParts({dealers})}}>
+          <Text style={styles.buttonText}>
+            {strings.InfoPostScreen.button.callMe}
+          </Text>
+        </Button>);
+      default: // service
+        return (<Button
+          full
+          uppercase={false}
+          title={strings.InfoPostScreen.button.callMe}
+          style={[styleConst.shadow.default, styles.button, {backgroundColor: styleConst.color.orange}]}
+          onPress={() => {this._onPressCallMe()}}>
+          <Text style={styles.buttonText} selectable={false}>
+            {strings.InfoPostScreen.button.callMe}
+          </Text>
+        </Button>);
+    }
+  }
+
   render() {
     const {currLang} = this.props;
     const post = this.getPost();
@@ -179,6 +300,7 @@ class InfoPostScreen extends Component {
     const imageUrl = get(img, '10000x440');
     const date = get(post, 'date');
     const type = get(post, 'type');
+    const dealers = get(post, 'dealers');
     let resizeMode = null;
     if (post) {
       resizeMode = get(post, 'imgCropAvailable') === true ? 'cover' : 'contain';
@@ -259,16 +381,7 @@ class InfoPostScreen extends Component {
               </View>
             )}
           </Content>
-          <Button
-            full
-            uppercase={false}
-            title={strings.InfoPostScreen.button.callMe}
-            style={[styleConst.shadow.default, styles.button]}
-            onPress={this.onPressCallMe}>
-            <Text style={styles.buttonText}>
-              {strings.InfoPostScreen.button.callMe}
-            </Text>
-          </Button>
+          {this._renderOrderButton({type, dealers})}
         </View>
       </StyleProvider>
     );

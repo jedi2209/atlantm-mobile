@@ -124,6 +124,28 @@ class OrderPartsScreen extends Component {
         this.myCars.push(item);
       }
     });
+
+    const dealer = get(props.route, 'params.car.dealer');
+    let listDealers = [];
+    if (dealer) {
+      if (dealer.length) {
+        dealer.map((el) => {
+          listDealers.push({
+            label: el.name,
+            value: el.id,
+            key: el.id,
+          });
+        });
+      } else {
+        if (typeof dealer == 'object') {
+          listDealers.push({
+            label: dealer.name,
+            value: dealer.id,
+            key: dealer.id,
+          });
+        }
+      }
+    }
   }
 
   static propTypes = {
@@ -176,6 +198,7 @@ class OrderPartsScreen extends Component {
       .join(' ');
 
     const dealerID = dataFromForm.DEALER.id;
+    const actionID = get(this.props.route, 'params.actionID');
 
     const dataToSend = {
       car: get(dataFromForm, 'CARNAME', ''),
@@ -190,6 +213,7 @@ class OrderPartsScreen extends Component {
       text: get(dataFromForm, 'COMMENT', ''),
       part: get(dataFromForm, 'PART', ''),
       dealerID,
+      actionID,
     };
     try {
       this.setState({loading: true});

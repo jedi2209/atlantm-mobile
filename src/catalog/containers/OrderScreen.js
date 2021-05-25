@@ -112,22 +112,27 @@ class OrderScreen extends Component {
     } else {
       model = get(props.route, 'params.car.model.name');
     }
-    const carName = [
-      get(props.route, 'params.car.brand'),
-      model,
-      get(props.route, 'params.car.complectation'),
-      !orderedCar ? get(props.route, 'params.car.year') : null,
-      orderedCar ? 'или аналог' : null,
-    ]
-      .filter(Boolean)
-      .join(' ');
+
+    let carName = null;
+
+    if (get(props.route, 'params.car')) {
+      carName = [
+        get(props.route, 'params.car.brand'),
+        model,
+        get(props.route, 'params.car.complectation'),
+        !orderedCar ? get(props.route, 'params.car.year') : null,
+        orderedCar ? 'или аналог' : null,
+      ]
+        .filter(Boolean)
+        .join(' '); 
+    }
 
     const dealer = get(props.route, 'params.car.dealer');
-    let listAll = [];
+    let listDealers = [];
     if (dealer) {
       if (dealer.length) {
         dealer.map((el) => {
-          listAll.push({
+          listDealers.push({
             label: el.name,
             value: el.id,
             key: el.id,
@@ -135,7 +140,7 @@ class OrderScreen extends Component {
         });
       } else {
         if (typeof dealer == 'object') {
-          listAll.push({
+          listDealers.push({
             label: dealer.name,
             value: dealer.id,
             key: dealer.id,
@@ -178,18 +183,18 @@ class OrderScreen extends Component {
       fields: {
         groups: [
           {
-            name: listAll.length
+            name: listDealers.length
               ? strings.Form.group.dealerCar
               : strings.Form.group.car,
             fields: [
-              listAll.length > 1
+              listDealers.length > 1
                 ? {
                     name: 'DEALER',
                     type: 'select',
                     label: strings.Form.field.label.dealer,
                     value: null,
                     props: {
-                      items: listAll,
+                      items: listDealers,
                       required: true,
                       placeholder: {
                         label: strings.Form.field.placeholder.dealer,
@@ -203,13 +208,13 @@ class OrderScreen extends Component {
                     type: 'input',
                     label: strings.Form.field.label.dealer,
                     value:
-                      listAll[0] && listAll[0].label ? listAll[0].label : null,
+                    listDealers[0] && listDealers[0].label ? listDealers[0].label : null,
                     props: {
                       editable: false,
                       placeholder: strings.Form.field.placeholder.dealer,
                     },
                   },
-              {
+              carName ? {
                 name: 'CARNAME',
                 type: 'input',
                 label: isNewCar
@@ -219,7 +224,7 @@ class OrderScreen extends Component {
                 props: {
                   editable: false,
                 },
-              },
+              } : {},
             ],
           },
           {
