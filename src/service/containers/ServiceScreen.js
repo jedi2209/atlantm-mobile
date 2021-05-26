@@ -32,7 +32,7 @@ import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
-  const cars = orderBy(profile.cars, ['owner'], ['asc']);
+  const cars = orderBy(profile.cars, ['owner'], ['desc']);
   let carLocalVin = '',
     carLocalBrand = '',
     carLocalModel = '';
@@ -160,7 +160,7 @@ class ServiceScreen extends Component {
       return;
     }
 
-    const {navigation, localUserDataUpdate} = this.props;
+    const {navigation, route, localUserDataUpdate} = this.props;
 
     const name = [
       dataFromForm.NAME,
@@ -172,6 +172,7 @@ class ServiceScreen extends Component {
 
     const dealerID = dataFromForm.DEALER.id;
     const orderDate = yearMonthDay(dataFromForm.DATE);
+    const actionID = get(route, 'params.actionID', null);
 
     const dataToSend = {
       car: get(dataFromForm, 'CARNAME', ''),
@@ -185,6 +186,7 @@ class ServiceScreen extends Component {
       phone: get(dataFromForm, 'PHONE', ''),
       text: get(dataFromForm, 'COMMENT', ''),
       dealerID,
+      actionID,
     };
     try {
       this.setState({loading: true});

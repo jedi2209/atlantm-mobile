@@ -269,8 +269,6 @@ class ReviewAddRatingStepScreen extends Component {
       reviewAddRating,
     } = this.props;
 
-    const {COMMENT_PLUS, COMMENT_MINUS} = this.reviewData;
-
     const name = [
       dataFromForm.NAME,
       dataFromForm.SECOND_NAME,
@@ -288,8 +286,8 @@ class ReviewAddRatingStepScreen extends Component {
         email: get(dataFromForm, 'EMAIL', ''),
         phone: get(dataFromForm, 'PHONE', ''),
         name: name,
-        messagePlus: COMMENT_PLUS,
-        messageMinus: COMMENT_MINUS,
+        messagePlus: get(this.reviewData, 'COMMENT_PLUS', null),
+        messageMinus: get(this.reviewData, 'COMMENT_MINUS', null),
         publicAgree,
         rating: get(dataFromForm, 'RATING', ''),
       })

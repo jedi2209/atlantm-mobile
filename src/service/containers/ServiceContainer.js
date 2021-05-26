@@ -20,8 +20,8 @@ const ServiceContainer = (props) => {
   const route = useRoute();
   const actionID = get(route, 'params.actionID', null);
   const {dealerSelected, loginID, cars} = props;
-  if (dealerSelected.region === 'by') {
-    if (!actionID && loginID && cars && cars.length > 0) {
+  if (!actionID && dealerSelected.region === 'by') {
+    if (loginID && cars && cars.length > 0) {
       return <ServiceScreenStep1 navigation={navigation} route={route} />;
     } else {
       return <ServiceNewNonAuth navigation={navigation} route={route} />;
