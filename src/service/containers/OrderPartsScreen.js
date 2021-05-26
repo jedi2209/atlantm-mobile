@@ -31,7 +31,7 @@ import {PARTS_ORDER__SUCCESS, PARTS_ORDER__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, service, nav}) => {
-  const cars = orderBy(profile.cars, ['owner'], ['asc']);
+  const cars = orderBy(profile.cars, ['owner'], ['desc']);
   let carLocalVin = '',
     carLocalBrand = '',
     carLocalModel = '';

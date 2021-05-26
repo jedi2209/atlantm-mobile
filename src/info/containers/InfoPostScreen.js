@@ -42,25 +42,31 @@ const styles = StyleSheet.create({
     marginTop: verticalScale(60),
     height: 300,
   },
-  button: {
-    backgroundColor: styleConst.color.lightBlue,
-    borderColor: styleConst.color.lightBlue,
-    color: 'white',
-    height: 50,
-    borderTopWidth: 0,
-    paddingHorizontal: '5%',
+  buttonWrapper: {
     marginBottom: 20,
     position: 'absolute',
-    bottom: 0,
-    width: '80%',
-    borderRadius: 5,
-    marginHorizontal: '10%',
+    bottom: 10,
+    height: 50,
+    width: '100%',
+    paddingHorizontal: '2%',
+    flex: 1,
+    flexDirection: 'row',
+  },
+  button: {
+    backgroundColor: styleConst.color.lightBlue,
+    color: 'white',
+    borderTopWidth: 0,
+    width: '47%',
+    borderRadius: 0,
+    alignContent: 'center',
+    justifyContent: 'center',
   },
   buttonText: {
     color: styleConst.color.white,
     fontFamily: styleConst.font.medium,
     fontSize: 16,
     letterSpacing: styleConst.ui.letterSpacing,
+    textTransform: 'uppercase',
   },
   textContainer: {
     flex: 1,
@@ -246,47 +252,32 @@ class InfoPostScreen extends Component {
     switch (type.id) {
       case 1: // buy
         return (<Button
-          full
           uppercase={false}
-          title={strings.InfoPostScreen.button.callMe}
-          style={[styleConst.shadow.default, styles.button]}
-          // onPress={() => {this._onPressOrder({dealers})}}>
-          onPress={() => {this._onPressParts({dealers})}}>
-          <Text style={styles.buttonText} selectable={false}>
-            {strings.InfoPostScreen.button.callMe}
+          title={strings.NewCarItemScreen.sendQuery}
+          style={[styles.button, styleConst.button.footer.buttonLeft, {backgroundColor: styleConst.color.white, width: '53%'}]}
+          onPress={() => {this._onPressOrder({dealers})}}>
+          <Text style={[styles.buttonText, {color: styleConst.color.greyText}]} selectable={false}>
+            {strings.NewCarItemScreen.sendQuery}
           </Text>
         </Button>);
       case 2: // service
         return (<Button
-          full
           uppercase={false}
-          title={strings.InfoPostScreen.button.callMe}
-          style={[styleConst.shadow.default, styles.button, {backgroundColor: styleConst.color.orange}]}
+          title={strings.NewCarItemScreen.sendQuery}
+          style={[styles.button, styleConst.button.footer.buttonLeft, {backgroundColor: styleConst.color.orange, width: '53%'}]}
           onPress={() => {this._onPressService({dealers})}}>
           <Text style={styles.buttonText} selectable={false}>
-            {strings.InfoPostScreen.button.callMe}
+            {strings.NewCarItemScreen.sendQuery}
           </Text>
         </Button>);
       case 3: // parts
         return (<Button
-          full
           uppercase={false}
-          title={strings.InfoPostScreen.button.callMe}
-          style={[styleConst.shadow.default, styles.button, {backgroundColor: styleConst.color.green}]}
+          title={strings.NewCarItemScreen.sendQuery}
+          style={[styles.button, styleConst.button.footer.buttonLeft, {backgroundColor: styleConst.color.green, width: '53%'}]}
           onPress={() => {this._onPressParts({dealers})}}>
           <Text style={styles.buttonText}>
-            {strings.InfoPostScreen.button.callMe}
-          </Text>
-        </Button>);
-      default: // service
-        return (<Button
-          full
-          uppercase={false}
-          title={strings.InfoPostScreen.button.callMe}
-          style={[styleConst.shadow.default, styles.button, {backgroundColor: styleConst.color.orange}]}
-          onPress={() => {this._onPressCallMe()}}>
-          <Text style={styles.buttonText} selectable={false}>
-            {strings.InfoPostScreen.button.callMe}
+            {strings.NewCarItemScreen.sendQuery}
           </Text>
         </Button>);
     }
@@ -381,7 +372,18 @@ class InfoPostScreen extends Component {
               </View>
             )}
           </Content>
+          <View style={[styleConst.shadow.default, styles.buttonWrapper]}>
           {this._renderOrderButton({type, dealers})}
+          <Button
+          uppercase={false}
+          title={strings.InfoPostScreen.button.callMe}
+          style={[styles.button, styleConst.button.footer.buttonRight, {backgroundColor: styleConst.color.lightBlue}]}
+          onPress={() => {this._onPressCallMe()}}>
+          <Text style={styles.buttonText} selectable={false}>
+            {strings.InfoPostScreen.button.callMe}
+          </Text>
+        </Button>
+        </View>
         </View>
       </StyleProvider>
     );

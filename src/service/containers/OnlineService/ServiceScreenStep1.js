@@ -30,7 +30,7 @@ import {strings} from '../../../core/lang/const';
 import API from '../../../utils/api';
 
 const mapStateToProps = ({dealer, profile, nav}) => {
-  const cars = orderBy(profile.cars, ['owner'], ['asc']);
+  const cars = orderBy(profile.cars, ['owner'], ['desc']);
 
   let carLocalBrand = '';
   let carLocalModel = '';

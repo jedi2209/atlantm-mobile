@@ -662,7 +662,7 @@ async function getUserCars(token, userid) {
   const carsResponse = await API.fetchCars({token, userid});
   const carsResponseCode = get(carsResponse, 'error.code', 404);
   if (carsResponseCode === 200 && carsResponse.data) {
-    cars = orderBy(carsResponse.data, ['owner'], ['asc']);
+    cars = orderBy(carsResponse.data, ['owner'], ['desc']);
   } else {
     //__DEV__ && console.log('error get profile cars', carsResponse);
   }

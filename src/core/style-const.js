@@ -114,6 +114,40 @@ export default {
       marginBottom: 5,
     },
   },
+  button: {
+    footer: {
+      wrapper: {
+        height: 85,
+        borderTopWidth: 0,
+        marginHorizontal: '5%',
+        width: '90%',
+        backgroundColor: 'rgba(0,0,0,0)',
+        marginBottom: 20,
+        position: 'absolute',
+        bottom: 0,
+        flex: 1,
+        flexDirection: 'column',
+        zIndex: 10,
+      },
+      footerButtons: {
+        flex: 1,
+        flexDirection: 'row',
+      },
+      button: {
+        width: '50%',
+        height: 40,
+        borderWidth: 1,
+      },
+      buttonLeft: {
+        borderBottomLeftRadius: 5,
+        borderTopLeftRadius: 5,
+      },
+      buttonRight: {
+        borderBottomRightRadius: 5,
+        borderTopRightRadius: 5,
+      },
+    }
+  }
 };
 
 // fonts: https://github.com/react-native-training/react-native-fonts

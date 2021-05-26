@@ -91,10 +91,10 @@ class CallMeBackScreen extends React.Component {
     let actionID = null;
 
     if (
-      this.props.navigation.state?.params &&
-      this.props.navigation.state?.params.actionID
+      this.props.route?.params &&
+      this.props.route.params?.actionID
     ) {
-      actionID = this.props.navigation.state?.params.actionID;
+      actionID = this.props.route?.params?.actionID;
     }
 
     if (!isInternetExist) {
