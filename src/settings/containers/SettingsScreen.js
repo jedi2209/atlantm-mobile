@@ -39,10 +39,6 @@ import {APP_EMAIL, STORE_LINK} from '../../core/const';
 import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: styleConst.new.mainbg,
-  },
   VersionContainer: {
     width: '100%',
     alignItems: 'center',
@@ -173,32 +169,6 @@ class SettingsScreen extends PureComponent {
       pushActionSubscribeState: this.props.pushActionSubscribeState,
       showRatePopup: false,
     };
-
-    this.zoomIn = {
-      1: {
-        opacity: 1,
-        scale: 1,
-      },
-      0.5: {
-        opacity: 0.5,
-        scale: 0.4,
-      },
-      0: {
-        opacity: 0,
-        scale: 0,
-      },
-    };
-    this.opacityIn = {
-      1: {
-        opacity: 1,
-      },
-      0.5: {
-        opacity: 0.5,
-      },
-      0: {
-        opacity: 0,
-      },
-    };
   }
 
   componentDidMount() {
@@ -248,15 +218,14 @@ class SettingsScreen extends PureComponent {
   render() {
     return (
       <StyleProvider style={getTheme()}>
-        <ScrollView style={styles.container}>
-          <Container style={styles.container}>
-            <StatusBar hidden />
+        <ScrollView style={styleConst.safearea.default}>
+          <Container style={styleConst.safearea.default}>
             <Text selectable={false} style={styleConst.text.bigHead}>
               {strings.Menu.main.settings}
             </Text>
             {this.props.dealerSelected.region === 'ua' ? (
               <TransitionView
-                animation={this.zoomIn}
+                animation={styleConst.animation.zoomIn}
                 duration={250}
                 index={1}
                 style={[
@@ -281,7 +250,7 @@ class SettingsScreen extends PureComponent {
               </TransitionView>
             ) : null}
             <TransitionView
-              animation={this.zoomIn}
+              animation={styleConst.animation.zoomIn}
               duration={250}
               index={2}
               style={[
@@ -326,7 +295,7 @@ class SettingsScreen extends PureComponent {
               </View>
             </TransitionView>
             <TransitionView
-              animation={this.zoomIn}
+              animation={styleConst.animation.zoomIn}
               duration={250}
               index={3}
               style={[
@@ -365,7 +334,7 @@ class SettingsScreen extends PureComponent {
               </Button>
             </TransitionView>
             <TransitionView
-              animation={this.zoomIn}
+              animation={styleConst.animation.zoomIn}
               duration={250}
               index={4}
               style={[
@@ -398,7 +367,7 @@ class SettingsScreen extends PureComponent {
               </Button>
             </TransitionView>
             <TransitionView
-              animation={this.opacityIn}
+              animation={styleConst.animation.opacityIn}
               duration={350}
               index={5}
               style={[
