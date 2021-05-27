@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
+import TransitionView from '../../core/components/TransitionView';
 import {StyleProvider, Content, Button} from 'native-base';
 
 // redux
@@ -34,9 +35,6 @@ const IMAGE_WIDTH = screenWidth;
 const IMAGE_HEIGHT = 300;
 
 const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-  },
   spinner: {
     alignSelf: 'center',
     marginTop: verticalScale(60),
@@ -112,12 +110,17 @@ const mapDispatchToProps = {
 };
 
 class InfoPostScreen extends Component {
-  state = {
-    imageWidth: IMAGE_WIDTH,
-    imageHeight: IMAGE_HEIGHT,
-    webViewWidth: screenWidth - styleConst.ui.verticalGap,
-    refreshing: false,
-  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      imageWidth: IMAGE_WIDTH,
+      imageHeight: IMAGE_HEIGHT,
+      webViewWidth: screenWidth - styleConst.ui.verticalGap,
+      refreshing: false,
+    };
+  }
 
   componentDidMount() {
     const {posts, route} = this.props;
@@ -305,7 +308,7 @@ class InfoPostScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <View style={styles.safearea}>
+        <View style={styleConst.safearea.default}>
           <Content
             style={{margin: 0, marginTop: -50, padding: 0}}
             refreshControl={
@@ -372,7 +375,13 @@ class InfoPostScreen extends Component {
               </View>
             )}
           </Content>
-          <View style={[styleConst.shadow.default, styles.buttonWrapper]}>
+          {type ? (
+          <TransitionView
+            animation={styleConst.animation.zoomIn}
+            duration={350}
+            index={1}
+            delay={3000}
+            style={[styleConst.shadow.default, styles.buttonWrapper]}>
           {this._renderOrderButton({type, dealers})}
           <Button
           uppercase={false}
@@ -383,7 +392,8 @@ class InfoPostScreen extends Component {
             {strings.InfoPostScreen.button.callMe}
           </Text>
         </Button>
-        </View>
+        </TransitionView>
+        ) : null}
         </View>
       </StyleProvider>
     );
