@@ -94,6 +94,12 @@ const styles = StyleSheet.create({
 });
 
 class ServiceScreen extends Component {
+  static propTypes = {
+    dealerSelected: PropTypes.object,
+    localUserDataUpdate: PropTypes.func,
+    isOrderServiceRequest: PropTypes.bool,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -108,8 +114,6 @@ class ServiceScreen extends Component {
         this.myCars.push(item);
       }
     });
-
-    console.log('this.myCars', this.myCars);
 
     if (this.myCars.length === 1) {
       this.state.carBrand = this.myCars[0]?.brand;
@@ -132,12 +136,6 @@ class ServiceScreen extends Component {
       this.state.carVIN = carFromNavigation.vin;
     }
   }
-
-  static propTypes = {
-    dealerSelected: PropTypes.object,
-    localUserDataUpdate: PropTypes.func,
-    isOrderServiceRequest: PropTypes.bool,
-  };
 
   _selectCar = (item) => {
     this.setState({
