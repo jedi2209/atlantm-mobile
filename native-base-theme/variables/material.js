@@ -239,7 +239,7 @@ export default {
   inverseSpinnerColor: '#1A191B',
 
   // Tabs
-  tabBgColor: styleConst.new.mainbg,
+  tabBgColor: styleConst.color.bg,
   tabFontSize: 15,
   tabTextColor: '#222222',
 

@@ -23,10 +23,6 @@ import Analytics from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
 
 const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.header,
-  },
   content: {
     flex: 1,
     backgroundColor: styleConst.color.bg,

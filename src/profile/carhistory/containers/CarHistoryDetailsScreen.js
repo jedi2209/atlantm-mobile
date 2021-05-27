@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     paddingBottom: styleConst.ui.horizontalGap,
     marginLeft: styleConst.ui.horizontalGap,
     borderBottomWidth: styleConst.ui.borderWidth,
-    borderBottomColor: styleConst.color.border,
+    borderBottomColor: styleConst.color.systemGray,
   },
   segment: {
     marginHorizontal: styleConst.ui.horizontalGap,

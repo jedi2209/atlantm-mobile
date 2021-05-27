@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
   buttonWhite: {
     borderBottomWidth: 1,
-    borderBottomColor: styleConst.color.border,
+    borderBottomColor: styleConst.color.systemGray,
     paddingLeft: styleConst.ui.horizontalGap,
     justifyContent: 'flex-start',
     backgroundColor: styleConst.color.white,

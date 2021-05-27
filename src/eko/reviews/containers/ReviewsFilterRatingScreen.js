@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {SafeAreaView, View, StyleSheet, Alert, StatusBar} from 'react-native';
+import {SafeAreaView, View, Alert, StatusBar} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -28,13 +28,6 @@ import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
 
 const RATING_ARRAY = [1, 2, 3, 4, 5];
-
-const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
-  },
-});
 
 const mapStateToProps = ({eko, nav}) => {
   return {
@@ -165,7 +158,7 @@ class ReviewsFilterRatingScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
+        <SafeAreaView style={styleConst.safearea.default}>
           <StatusBar barStyle="light-content" />
           <Content>
             <ListItemHeader

@@ -7,17 +7,13 @@ import {verticalScale} from '../utils/scale';
 const isAndroid = Platform.OS === 'android';
 
 export default StyleSheet.create({
-  safearea: {
-    flex: 1,
-    position: 'relative',
-  },
   gallery: {
     marginTop: 0,
   },
   titleContainer: {
     paddingBottom: 10,
     alignItems: 'center',
-    backgroundColor: styleConst.color.header,
+    backgroundColor: styleConst.color.bg,
   },
   title: {
     paddingTop: styleConst.ui.horizontalGap,
@@ -33,7 +29,7 @@ export default StyleSheet.create({
     paddingBottom: styleConst.ui.horizontalGap,
     marginLeft: styleConst.ui.horizontalGap,
     borderBottomWidth: styleConst.ui.borderWidth,
-    borderBottomColor: styleConst.color.border,
+    borderBottomColor: styleConst.color.systemGray,
   },
   sectionOptions: {
     paddingBottom: styleConst.ui.horizontalGap,
@@ -171,7 +167,7 @@ export default StyleSheet.create({
     paddingVertical: 10,
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: styleConst.color.border,
+    borderColor: styleConst.color.systemGray,
   },
   mapCardTitle: {
     color: '#a8abbe',

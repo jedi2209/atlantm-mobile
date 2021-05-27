@@ -14,15 +14,11 @@ import styleConst from '../../core/style-const';
 import {verticalScale} from '../../utils/scale';
 
 const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: '#F6F6F6',
-  },
   tabs: {
     width: '100%',
     backgroundColor: styleConst.color.lightBlue,
     borderBottomWidth: styleConst.ui.borderWidth,
-    borderBottomColor: styleConst.color.border,
+    borderBottomColor: styleConst.color.systemGray,
     paddingVertical: verticalScale(5),
   },
   list: {
@@ -132,7 +128,7 @@ const SelectListByCountry = (props) => {
     // кастомный список дилеров
     return (
       <StyleProvider style={getTheme()}>
-        <Container style={styles.safearea}>
+        <Container style={styleConst.safearea.default}>
           <Tabs
             renderTabBar={renderTabBar}
             tabBarUnderlineStyle={{

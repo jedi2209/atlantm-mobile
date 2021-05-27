@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {StyleSheet, findNodeHandle, Text} from 'react-native';
+import {findNodeHandle, Text} from 'react-native';
 import {Container, Content, StyleProvider} from 'native-base';
 
 // redux
@@ -16,13 +16,6 @@ import IndicatorsRow from '../components/IndicatorsRow';
 import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
-
-const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.new.mainbg,
-  },
-});
 
 const mapStateToProps = ({nav, indicators, core}) => {
   return {
@@ -88,7 +81,7 @@ class IndicatorsScreen extends Component {
     if (isRequest) {
       return (
         <SpinnerView
-          containerStyle={{backgroundColor: styleConst.new.mainbg}}
+          containerStyle={{backgroundColor: styleConst.color.bg}}
         />
       );
     }
@@ -101,7 +94,7 @@ class IndicatorsScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <Container style={styles.safearea}>
+        <Container style={styleConst.safearea.default}>
           <Content
             ref={(scrollView) => {
               this.scrollView = scrollView;

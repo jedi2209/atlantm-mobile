@@ -67,7 +67,7 @@ const BigCloseButton = (navigation, route, options) => {
     headerStyle: [
       stylesHeader.resetBorder,
       {
-        backgroundColor: styleConst.new.mainbg,
+        backgroundColor: styleConst.color.bg,
       },
     ],
     headerTitle: null,

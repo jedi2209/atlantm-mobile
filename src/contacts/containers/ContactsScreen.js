@@ -48,10 +48,6 @@ import {strings} from '../../core/lang/const';
 const HEADER_MAX_HEIGHT = 416;
 
 const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: '#F6F6F6',
-  },
   imgHero: {
     position: 'absolute',
     top: 0,
@@ -344,7 +340,7 @@ class ContactsScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <View style={styles.safearea}>
+        <View style={styleConst.safearea.default}>
           <StatusBar hidden />
           <Button
             full

@@ -45,10 +45,6 @@ import {strings} from '../../../core/lang/const';
 
 const $size = 40;
 const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
-  },
   publicAgreeContainer: {
     marginBottom: 5,
     borderRadius: 5,

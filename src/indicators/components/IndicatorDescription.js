@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     marginTop: HEIGHT_TRIANGLE,
     paddingVertical: styleConst.ui.horizontalGap,
     paddingHorizontal: styleConst.ui.verticalGap,
-    borderColor: styleConst.color.border,
+    borderColor: styleConst.color.systemGray,
     borderTopWidth: 1,
     borderBottomWidth: 1,
   },

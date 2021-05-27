@@ -6,7 +6,7 @@ const isAndroid = Platform.OS === 'android';
 
 const commonStyles = {
   borderBottomWidth: 0.5,
-  borderBottomColor: styleConst.color.border,
+  borderBottomColor: styleConst.color.systemGray,
   shadowRadius: null,
   shadowOpacity: null,
   shadowOffset: null,
@@ -26,7 +26,7 @@ export default StyleSheet.create({
   title: commonTitle,
   common: {
     ...commonStyles,
-    backgroundColor: styleConst.color.header,
+    backgroundColor: styleConst.color.bg,
   },
   resetBorder: {
     borderBottomWidth: 0,
