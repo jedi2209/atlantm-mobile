@@ -100,15 +100,12 @@ class OrderPartsScreen extends Component {
       success: false,
       isHaveCar: Boolean(props.cars.length > 0),
     };
-    if (this.props.cars.length === 1) {
-      this.state.carBrand = this.props.cars[0].brand;
-      this.state.carModel = this.props.cars[0].model;
-      this.state.carName = [
-        this.props.cars[0].brand,
-        this.props.cars[0].model,
-      ].join(' ');
-      this.state.carVIN = this.props.cars[0].vin;
-    }
+    this.myCars = [];
+    this.props.cars.map((item) => {
+      if (!item.hidden) {
+        this.myCars.push(item);
+      }
+    });
     const carFromNavigation = get(this.props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
       this.state.carBrand = get(carFromNavigation, 'brand');
@@ -119,12 +116,16 @@ class OrderPartsScreen extends Component {
       ].join(' ');
       this.state.carVIN = carFromNavigation.vin;
     }
-    this.myCars = [];
-    this.props.cars.map((item) => {
-      if (!item.hidden) {
-        this.myCars.push(item);
-      }
-    });
+
+    if (this.myCars.length === 1) {
+      this.state.carBrand = this.myCars[0]?.brand;
+      this.state.carModel = this.myCars[0]?.model;
+      this.state.carName = [
+        this.myCars[0]?.brand,
+        this.myCars[0]?.model,
+      ].join(' ');
+      this.state.carVIN = this.myCars[0]?.vin;
+    }
 
     const dealer = get(props.route, 'params.car.dealer');
     let listDealers = [];
