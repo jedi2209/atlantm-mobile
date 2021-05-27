@@ -34,7 +34,7 @@ export default StyleSheet.create({
   },
   listItemContainerFirst: {
     borderTopWidth: styleConst.ui.borderWidth,
-    borderTopColor: styleConst.color.border,
+    borderTopColor: styleConst.color.systemGray,
   },
   listItem: {
     borderWidth: 0,

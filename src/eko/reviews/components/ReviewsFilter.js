@@ -12,16 +12,12 @@ import styleFooter from '../../../core/components/Footer/style';
 const size = 26;
 const containerSize = 50;
 const styles = StyleSheet.create({
-  // footer: {
-  //   height: isIPhoneX() ? styleConst.ui.footerHeightIphone : styleConst.ui.footerHeightAndroid,
-  //   backgroundColor: styleConst.color.header,
-  // },
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     flex: 1,
     height: containerSize,
-    backgroundColor: styleConst.color.header,
+    backgroundColor: styleConst.color.bg,
   },
   icon: {
     paddingHorizontal: styleConst.ui.horizontalGap * 2,

@@ -7,7 +7,6 @@ export default StyleSheet.create({
     height: 50,
     backgroundColor: styleConst.color.bg,
     borderTopWidth: 0,
-    // backgroundColor: 'red',
   },
   footerFilters: {},
   button: {
@@ -22,7 +21,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     textAlignVertical: 'center',
-    backgroundColor: styleConst.color.header,
+    backgroundColor: styleConst.color.bg,
   },
   orderPriceContainerNotSale: {
     flexDirection: 'row',

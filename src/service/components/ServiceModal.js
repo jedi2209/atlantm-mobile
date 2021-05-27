@@ -176,7 +176,7 @@ const tableStyles = StyleSheet.create({
     paddingBottom: styleConst.ui.horizontalGap,
     marginLeft: styleConst.ui.horizontalGap,
     borderBottomWidth: styleConst.ui.borderWidth,
-    borderBottomColor: styleConst.color.border,
+    borderBottomColor: styleConst.color.systemGray,
   },
   sectionTitle: {
     letterSpacing: styleConst.ui.letterSpacing,

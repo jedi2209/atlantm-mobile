@@ -1221,8 +1221,8 @@ const stylesFooter = StyleSheet.create({
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     borderTopRightRadius: 5,
-    backgroundColor: styleConst.color.header,
-    borderColor: styleConst.color.header,
+    backgroundColor: styleConst.color.bg,
+    borderColor: styleConst.color.bg,
     borderWidth: 1,
   },
   orderPriceContainerNotSale: {

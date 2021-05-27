@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   iconItem: {
-    backgroundColor: styleConst.color.bg,
+    backgroundColor: styleConst.color.white,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   triangleBorder: {
     zIndex: 1,
     bottom: -(HEIGHT_TRIANGLE),
-    borderBottomColor: styleConst.color.border,
+    borderBottomColor: styleConst.color.systemGray,
   },
 });
 
@@ -109,7 +109,7 @@ export default class IndicatorRow extends PureComponent {
         <TouchableHighlight
           onPress={() => onPressItem(this.descriptionRef, indicator)}
           style={[styles.iconItem, isActive ? styles.iconItemActive : null]}
-          underlayColor={styleConst.color.white}>
+          underlayColor={styleConst.color.accordeonGrey2}>
           <View>
             <Image
               resizeMode="contain"

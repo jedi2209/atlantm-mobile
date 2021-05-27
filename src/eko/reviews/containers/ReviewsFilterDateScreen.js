@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {SafeAreaView, View, StyleSheet, StatusBar} from 'react-native';
+import {SafeAreaView, View, StatusBar} from 'react-native';
 import {Body, Label, Content, ListItem, StyleProvider} from 'native-base';
 
 // redux
@@ -23,13 +23,6 @@ import {
   substractYears,
 } from '../../../utils/date';
 import {strings} from '../../../core/lang/const';
-
-const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
-  },
-});
 
 const mapStateToProps = ({eko, nav}) => {
   return {
@@ -96,7 +89,7 @@ class ReviewsFilterDateScreen extends Component {
   render() {
     return (
       <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
+        <SafeAreaView style={styleConst.safearea.default}>
           <StatusBar barStyle="light-content" />
           <Content>
             {[

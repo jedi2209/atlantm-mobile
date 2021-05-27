@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: styleConst.color.white,
     borderTopWidth: styleConst.ui.borderWidth,
-    borderTopColor: styleConst.color.border,
+    borderTopColor: styleConst.color.systemGray,
     marginVertical: 30,
     marginHorizontal: 20,
     borderRadius: 5,

@@ -36,13 +36,6 @@ import {strings} from '../../../core/lang/const';
 const isAndroid = Platform.OS === 'android';
 const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
-    paddingBottom: isAndroid
-      ? styleConst.ui.footerHeightAndroid
-      : styleConst.ui.footerHeightIphone,
-  },
   mapContainer: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'flex-end',
@@ -360,7 +353,7 @@ class MapScreen extends Component {
         style={[styleConst.spinner, styles.spinner]}
       />
     ) : (
-      <SafeAreaView style={styles.safearea}>
+      <SafeAreaView style={[styleConst.safearea.default, {paddingBottom: isAndroid ? styleConst.ui.footerHeightAndroid : styleConst.ui.footerHeightIphone}]}>
         <StatusBar barStyle="default" />
         <View style={styles.mapContainer}>
           <MapView

@@ -1,12 +1,10 @@
 import React, {PureComponent} from 'react';
 import {
   ScrollView,
-  SafeAreaView,
-  StyleSheet,
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {Content, StyleProvider} from 'native-base';
+import {Content} from 'native-base';
 import Form from '../../../core/components/Form/Form';
 import DealerCard from '../../../core/components/DealerCard';
 
@@ -21,13 +19,6 @@ import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingVie
 import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
-
-const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: '#eee',
-  },
-});
 
 const mapStateToProps = ({dealer, eko, nav}) => {
   return {

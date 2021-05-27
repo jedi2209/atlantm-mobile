@@ -7,14 +7,14 @@ import {verticalScale} from '../../utils/scale';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: styleConst.color.header,
+    backgroundColor: styleConst.color.bg,
     paddingBottom: verticalScale(5),
 
     ...Platform.select({
       ios: {
         marginBottom: 0.3,
         borderBottomWidth: styleConst.ui.borderWidth,
-        borderBottomColor: styleConst.color.border,
+        borderBottomColor: styleConst.color.systemGray,
       },
       android: {
         marginTop: 15,

@@ -7,7 +7,7 @@ export default {
     lightBlue: '#027aff',
     green: '#34BD78',
     orange: '#FFA51D',
-    bg: '#F6F6F6',
+    bg: '#F8F8F8',
     white: '#fff',
     accordeonGrey1: '#ededed',
     accordeonGrey2: '#dedfe0',
@@ -19,9 +19,7 @@ export default {
     greyText6: '#757575',
     greyBlue: '#616e7a',
     greyBlueText: '#a8b0b7',
-    header: '#f7f7f8',
     select: '#fafafa',
-    border: '#c7c7c7',
     systemBlue: '#007aff',
     systemGray: '#c7c7c7',
     // green: '#4cd864',
@@ -76,7 +74,6 @@ export default {
   new: {
     // TODO: reeemmaee to bluee
     blueHeader: '#027aff',
-    mainbg: '#F8F8F8',
     passive: '#757575',
     shadowActive: {
       shadowOffset: {
@@ -147,6 +144,40 @@ export default {
         borderTopRightRadius: 5,
       },
     }
+  },
+  animation: {
+    zoomIn: {
+      1: {
+        opacity: 1,
+        scale: 1,
+      },
+      0.5: {
+        opacity: 0.5,
+        scale: 0.4,
+      },
+      0: {
+        opacity: 0,
+        scale: 0,
+      },
+    },
+    opacityIn: {
+      1: {
+        opacity: 1,
+      },
+      0.5: {
+        opacity: 0.5,
+      },
+      0: {
+        opacity: 0,
+      },
+    },
+  },
+  safearea: {
+    default: {
+      flex: 1,
+      position: 'relative',
+      backgroundColor: '#F8F8F8',
+    },
   }
 };
 

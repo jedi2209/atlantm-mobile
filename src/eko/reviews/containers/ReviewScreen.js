@@ -20,10 +20,6 @@ import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
-  },
   review: {
     marginLeft: 0,
     marginTop: 10,
@@ -88,7 +84,7 @@ class ReviewScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
+        <SafeAreaView style={styleConst.safearea.default}>
           <Content>
             <View style={{marginTop: 10}}>
               <HeaderSubtitle content={subtitle} isBig={true} />

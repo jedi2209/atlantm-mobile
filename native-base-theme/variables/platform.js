@@ -133,7 +133,7 @@ export default {
 
   // Footer
   footerHeight: 55,
-  footerDefaultBg: platform === 'ios' ? styleConst.new.mainbg : '#4179F7',
+  footerDefaultBg: platform === 'ios' ? styleConst.color.bg : '#4179F7',
 
   // FooterTab
   tabBarTextColor: platform === 'ios' ? '#6b6b6b' : '#0F66B2',
@@ -142,7 +142,7 @@ export default {
   tabActiveBgColor: platform === 'ios' ? '#cde1f9' : '#cde1f9',
 
   // Tab
-  tabDefaultBg: styleConst.new.mainbg,
+  tabDefaultBg: styleConst.color.bg,
   topTabBarTextColor: platform === 'ios' ? '#6b6b6b' : '#0F66B2',
   topTabBarActiveTextColor: platform === 'ios' ? '#007aff' : '#000',
   topTabActiveBgColor: platform === 'ios' ? '#cde1f9' : '#0F66B2',
@@ -151,7 +151,7 @@ export default {
 
   // Header
   toolbarBtnColor: platform === 'ios' ? '#007aff' : '#fff',
-  toolbarDefaultBg: platform === 'ios' ? styleConst.new.mainbg : '#3F51B5',
+  toolbarDefaultBg: platform === 'ios' ? styleConst.color.bg : '#3F51B5',
   toolbarHeight: platform === 'ios' ? 64 : 56,
   toolbarIconSize: platform === 'ios' ? 20 : 22,
   toolbarSearchIconSize: platform === 'ios' ? 20 : 23,
@@ -201,7 +201,7 @@ export default {
   lineHeight: platform === 'ios' ? 20 : 24,
 
   // List
-  listBorderColor: styleConst.color.border,
+  listBorderColor: styleConst.color.systemGray,
   listDividerBg: '#f4f4f4',
   listItemHeight: 45,
   listBtnUnderlayColor: styleConst.color.select,
@@ -237,7 +237,7 @@ export default {
   inverseSpinnerColor: '#1A191B',
 
   // Tabs
-  tabBgColor: styleConst.new.mainbg,
+  tabBgColor: styleConst.color.bg,
   tabFontSize: 15,
   tabTextColor: '#222222',
 
