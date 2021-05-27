@@ -9,6 +9,7 @@ import Form from '../../core/components/Form/Form';
 import SocialAuth from '../components/SocialAuth';
 
 import {actionSaveProfileToAPI} from '../actions';
+import styleConst from '../../core/style-const';
 
 import Analytics from '../../utils/amplitude-analytics';
 import {strings} from '../../core/lang/const';
@@ -250,7 +251,7 @@ class ProfileSettingsScreen extends Component {
   render() {
     return (
       <KeyboardAvoidingView>
-        <ScrollView style={{flex: 1, backgroundColor: '#eee'}}>
+        <ScrollView style={styleConst.form.scrollView}>
           <View style={styles.container}>
             <Form
               fields={this.FormConfig.fields}

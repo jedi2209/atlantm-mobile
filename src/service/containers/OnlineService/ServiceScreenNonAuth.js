@@ -21,6 +21,7 @@ import {orderService} from '../../actions';
 import {localUserDataUpdate} from '../../../profile/actions';
 import {localDealerClear} from '../../../dealer/actions';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../../actionTypes';
+import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
 
 import Analytics from '../../../utils/amplitude-analytics';
@@ -373,7 +374,7 @@ class ServiceScreenNonAuth extends Component {
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={{flex: 1, backgroundColor: '#eee'}}>
+          <ScrollView style={styleConst.form.scrollView}>
             <View
               style={{
                 flex: 1,

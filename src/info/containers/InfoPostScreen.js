@@ -58,12 +58,13 @@ const styles = StyleSheet.create({
     borderRadius: 0,
     alignContent: 'center',
     justifyContent: 'center',
+    paddingLeft: 0,
+    paddingRight: 0,
   },
   buttonText: {
     color: styleConst.color.white,
     fontFamily: styleConst.font.medium,
-    fontSize: 16,
-    letterSpacing: styleConst.ui.letterSpacing,
+    fontSize: 14,
     textTransform: 'uppercase',
   },
   textContainer: {

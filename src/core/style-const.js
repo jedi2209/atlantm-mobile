@@ -53,6 +53,12 @@ export default {
       elevation: 5,
     },
   },
+  form: {
+    scrollView: {
+      flex: 1,
+      backgroundColor: '#eee'
+    },
+  },
   font: {
     regular: 'Helvetica Neue',
     medium: 'HelveticaNeue-Medium',
