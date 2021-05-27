@@ -28,6 +28,7 @@ import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import {addDays, dayMonthYear, yearMonthDay} from '../../utils/date';
 import {ERROR_NETWORK} from '../../core/const';
+import styleConst from '../../core/style-const';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
 
@@ -100,15 +101,26 @@ class ServiceScreen extends Component {
       success: false,
       isHaveCar: Boolean(props.cars.length > 0),
     };
-    if (this.props.cars.length === 1) {
-      this.state.carBrand = this.props.cars[0].brand;
-      this.state.carModel = this.props.cars[0].model;
+
+    this.myCars = [];
+    this.props.cars.map((item) => {
+      if (!item.hidden) {
+        this.myCars.push(item);
+      }
+    });
+
+    console.log('this.myCars', this.myCars);
+
+    if (this.myCars.length === 1) {
+      this.state.carBrand = this.myCars[0]?.brand;
+      this.state.carModel = this.myCars[0]?.model;
       this.state.carName = [
-        this.props.cars[0].brand,
-        this.props.cars[0].model,
+        this.myCars[0]?.brand,
+        this.myCars[0]?.model,
       ].join(' ');
-      this.state.carVIN = this.props.cars[0].vin;
+      this.state.carVIN = this.myCars[0]?.vin;
     }
+
     const carFromNavigation = get(this.props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
       this.state.carBrand = get(carFromNavigation, 'brand');
@@ -119,12 +131,6 @@ class ServiceScreen extends Component {
       ].join(' ');
       this.state.carVIN = carFromNavigation.vin;
     }
-    this.myCars = [];
-    this.props.cars.map((item) => {
-      if (!item.hidden) {
-        this.myCars.push(item);
-      }
-    });
   }
 
   static propTypes = {
@@ -442,7 +448,7 @@ class ServiceScreen extends Component {
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={{flex: 1, backgroundColor: '#eee'}}>
+          <ScrollView style={styleConst.form.scrollView}>
             <View
               style={{
                 flex: 1,

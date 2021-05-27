@@ -569,7 +569,7 @@ class ServiceScreenStep1 extends Component {
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={{flex: 1, backgroundColor: '#eee'}}>
+          <ScrollView style={styleConst.form.scrollView}>
             <View
               style={{
                 flex: 1,

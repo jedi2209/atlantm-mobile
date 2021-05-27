@@ -27,6 +27,7 @@ import Analytics from '../../utils/amplitude-analytics';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import {ERROR_NETWORK} from '../../core/const';
+import styleConst from '../../core/style-const';
 import {PARTS_ORDER__SUCCESS, PARTS_ORDER__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
 
@@ -477,7 +478,7 @@ class OrderPartsScreen extends Component {
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={{flex: 1, backgroundColor: '#eee'}}>
+          <ScrollView style={styleConst.form.scrollView}>
             <View
               style={{
                 flex: 1,

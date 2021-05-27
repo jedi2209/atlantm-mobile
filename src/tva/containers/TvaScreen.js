@@ -23,6 +23,7 @@ import PushNotifications from '../../core/components/PushNotifications';
 // helpers
 import {get} from 'lodash';
 import {TVA__SUCCESS, TVA__FAIL} from '../actionTypes';
+import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, tva, nav, core}) => {
@@ -264,7 +265,7 @@ class TvaScreen extends Component {
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={{flex: 1, backgroundColor: '#eee'}}>
+          <ScrollView style={styleConst.form.scrollView}>
             <View
               style={{
                 flex: 1,

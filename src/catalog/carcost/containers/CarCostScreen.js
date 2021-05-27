@@ -28,6 +28,7 @@ import {CAR_COST__SUCCESS, CAR_COST__FAIL} from '../../actionTypes';
 import Analytics from '../../../utils/amplitude-analytics';
 import {get, valuesIn} from 'lodash';
 import {ERROR_NETWORK} from '../../../core/const';
+import styleConst from '../../../core/style-const';
 import isInternet from '../../../utils/internet';
 
 import {strings} from '../../../core/lang/const';
@@ -528,7 +529,7 @@ class CarCostScreen extends Component {
 
     return (
       <KeyboardAvoidingView onPress={Keyboard.dismiss}>
-        <TouchableWithoutFeedback style={{flex: 1, backgroundColor: '#eee'}}>
+        <TouchableWithoutFeedback style={styleConst.form.scrollView}>
           <Content
             style={{
               flex: 1,

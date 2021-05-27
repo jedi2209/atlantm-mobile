@@ -633,7 +633,7 @@ class TestDriveScreen extends PureComponent {
     return (
       <KeyboardAvoidingView onPress={Keyboard.dismiss}>
         <TouchableWithoutFeedback
-          style={{flex: 1, backgroundColor: '#eee'}}
+          style={styleConst.form.scrollView}
           onPress={Keyboard.dismiss}>
           <Content
             style={styles.container}

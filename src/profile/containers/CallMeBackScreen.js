@@ -24,6 +24,7 @@ import Form from '../../core/components/Form/Form';
 import isInternet from '../../utils/internet';
 import {ERROR_NETWORK} from '../../core/const';
 import {strings} from '../../core/lang/const';
+import styleConst from '../../core/style-const';
 
 const mapStateToProps = ({dealer, profile, contacts, nav}) => {
   return {
@@ -209,7 +210,7 @@ class CallMeBackScreen extends React.Component {
     return (
       <KeyboardAvoidingView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={{flex: 1, backgroundColor: '#eee'}}>
+          <ScrollView style={styleConst.form.scrollView}>
             <View
               style={{
                 flex: 1,
