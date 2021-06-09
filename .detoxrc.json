@@ -7,6 +7,11 @@
       "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/atlantm.app",
       "build": "xcodebuild -workspace ios/atlantm.xcworkspace -scheme atlantm -configuration Release -sdk iphonesimulator -derivedDataPath ios/build"
     },
+    "ios.debug": {
+      "type": "ios.app",
+      "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/atlantm.app",
+      "build": "xcodebuild -workspace ios/atlantm.xcworkspace -scheme atlantm -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build"
+    },
     "android": {
       "type": "android.apk",
       "binaryPath": "SPECIFY_PATH_TO_YOUR_APP_BINARY"
@@ -48,16 +53,13 @@
         "type": "android.emulator",
         "name": "Pixel_2_API_28"
     },
-    "ios.sim.debug": {
-        "device": "simulator",
-        "binaryPath": "ios/build/Build/Products/Debug-iphoneos/atlantm.app",
-        "build": "xcodebuild -project ios/atlantm.xcodeproj -scheme atlantm -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
-        "type": "ios.simulator",
-        "name": "iPhone 8"
-    },
     "ios.sim.release": {
         "device": "simulator",
         "app": "ios.release"
-    }
+    },
+    "ios.sim.debug": {
+      "device": "simulator",
+      "app": "ios.debug"
+  }
   }
 }

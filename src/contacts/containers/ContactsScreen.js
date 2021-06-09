@@ -386,6 +386,7 @@ class ContactsScreen extends Component {
               <View style={styles.blackBack} />
               <TouchableOpacity
                 style={styles.address}
+                testID='ContactsScreen.PressMap'
                 onPress={() => {
                   this.onPressMap();
                 }}>
@@ -551,7 +552,8 @@ class ContactsScreen extends Component {
                     style={{
                       marginTop: 16,
                       paddingVertical: 0,
-                    }}>
+                    }}
+                    testID='ContactsScreen.currentActionsHeading'>
                     <View
                       style={{
                         paddingHorizontal: 20,
