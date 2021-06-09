@@ -1,0 +1,63 @@
+{
+  "testRunner": "jest",
+  "runnerConfig": "e2e/config.json",
+  "apps": {
+    "ios.release": {
+      "type": "ios.app",
+      "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/atlantm.app",
+      "build": "xcodebuild -workspace ios/atlantm.xcworkspace -scheme atlantm -configuration Release -sdk iphonesimulator -derivedDataPath ios/build"
+    },
+    "android": {
+      "type": "android.apk",
+      "binaryPath": "SPECIFY_PATH_TO_YOUR_APP_BINARY"
+    }
+  },
+  "devices": {
+    "simulator": {
+      "type": "ios.simulator",
+      "device": {
+        "type": "iPhone 11 Pro Max"
+      }
+    },
+    "emulator": {
+      "type": "android.emulator",
+      "device": {
+        "avdName": "Pixel_3a_API_30_x86"
+      }
+    }
+  },
+  "configurations": {
+    "ios": {
+        "device": "simulator",
+        "app": "ios"
+    },
+    "android": {
+        "device": "emulator",
+        "app": "android"
+    },
+    "ios.detox": {
+        "binaryPath": "path/to/.app",
+        "build": "xcodebuild -workspace ios/atlantm.xcworkspace -scheme atlantm -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+        "type": "ios.simulator",
+        "name": "iPhone 8"
+    },
+    "android.detox": {
+        "device": "emulator",
+        "binaryPath": "./android/app/build/outputs/apk/release/app-arm64-v8a-release.apk",
+        "build": "cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+        "type": "android.emulator",
+        "name": "Pixel_2_API_28"
+    },
+    "ios.sim.debug": {
+        "device": "simulator",
+        "binaryPath": "ios/build/Build/Products/Debug-iphoneos/atlantm.app",
+        "build": "xcodebuild -project ios/atlantm.xcodeproj -scheme atlantm -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+        "type": "ios.simulator",
+        "name": "iPhone 8"
+    },
+    "ios.sim.release": {
+        "device": "simulator",
+        "app": "ios.release"
+    }
+  }
+}
