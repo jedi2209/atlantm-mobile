@@ -23,7 +23,14 @@
     "cleanTmp": "rm -rf $TMPDIR/react-*; rm -rf $TMPDIR/haste-*; rm -rf $TMPDIR/metro-*; watchman watch-del-all; rm -rf ios/build/ android/app/build/ android/build/ ios/atlantm.xcodeproj/xcuserdata/",
     "clean": "react-native clean-project",
     "test": "jest",
-    "version": "./version.sh"
+    "version": "./version.sh",
+    "detox-server": "detox run-server",
+    "e2e:ios": "detox test -c ios.sim.release",
+    "e2e:ios-ci": "yarn run e2e:ios -- --workers 4 --retries 1 --jest-report-specs -l verbose",
+    "e2e:android": "detox test -c android.emu.release",
+    "e2e:android-ci-genycloud": "detox test -c android.genycloud.release --workers 5 --retries 1 --jest-report-specs --loglevel verbose",
+    "e2e:android-ci-google": "detox test -c android.emu.release --workers 3 --retries 1 --jest-report-specs --loglevel verbose --headless",
+    "e2e:android-debug": "detox test -c android.emu.debug"
   },
   "dependencies": {
     "@amplitude/react-native": "^2.2.0",
