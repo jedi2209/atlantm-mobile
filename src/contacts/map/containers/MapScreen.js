@@ -355,7 +355,7 @@ class MapScreen extends Component {
     ) : (
       <SafeAreaView style={[styleConst.safearea.default, {paddingBottom: isAndroid ? styleConst.ui.footerHeightAndroid : styleConst.ui.footerHeightIphone}]}>
         <StatusBar barStyle="default" />
-        <View style={styles.mapContainer}>
+        <View style={styles.mapContainer} testID='MapScreen.MapView'>
           <MapView
             ref={this.handleRef}
             provider={PROVIDER_GOOGLE}
@@ -395,6 +395,7 @@ class MapScreen extends Component {
           />
           <Button
             full
+            testID='MapScreen.makeRouteButton'
             style={[styleConst.shadow.default, styles.button]}
             title={strings.MapScreen.makeRoute}
             onPress={this.onPressRoute}>

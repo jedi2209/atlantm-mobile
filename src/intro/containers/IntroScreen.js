@@ -56,12 +56,14 @@ export default class IntroScreen extends Component {
           {/* <Image style={styles.logo} source={require('../assets/logo.png')} /> */}
           <Image
             style={styles.logo}
+            testID="IntroChooseDealerScreenLogo"
             resizeMode="contain"
             source={require('../../menu/assets/logo-horizontal-white.svg')}
           />
           <Button
             full
             title={strings.IntroScreen.button}
+            testID='IntroChooseDealerButton'
             onPress={this.onPressButton}
             style={[styleConst.shadow.default, styles.button]}>
             <Image

@@ -80,7 +80,7 @@ const DealerCard = (props) => {
   const CarImg = get(item, 'img.10000x440');
   const sites = get(item, 'site');
   return (
-    <Body style={styles.body}>
+    <Body style={styles.body} testID={`DealerCard_${item.id}`}>
       <View style={styles.bodyView}>
         {item.name ? <Text style={styles.name}>{item.name}</Text> : null}
         {item.city ? (
