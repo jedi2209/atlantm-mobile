@@ -1,6 +1,6 @@
 export const initApp = (dealer = 129, fisrtInit = false) => {
     return describe('Init APP', () => {
-        it('Choose Dealer Button Exists', async () => {
+        it('Choose Dealer Button Exist', async () => {
             await expect(element(by.id("IntroChooseDealerButton"))).toBeVisible();
             await element(by.id("IntroChooseDealerButton")).tap();
         });
@@ -29,4 +29,10 @@ export const initApp = (dealer = 129, fisrtInit = false) => {
     });
 }
 
-export default {initApp};
+export const launchApp = (params) => {
+    return device.launchApp({
+        permissions: {
+            notifications: 'YES'
+        }
+    });
+}

@@ -40,6 +40,7 @@ export const Offer = ({data, height, cardWidth, theme}) => {
   };
   return (
     <TouchableWithoutFeedback
+      testID='OfferItemWrapper'
       onPress={() => {
         NavigationService.navigate('InfoPostScreen', params);
       }}

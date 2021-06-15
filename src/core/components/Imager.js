@@ -14,6 +14,10 @@ export default class Imager extends PureComponent {
     }).isRequired,
   };
 
+  static defaultProps = {
+    testID: 'Imager.Wrapper',
+  };
+
   constructor(props) {
     super(props);
 
@@ -41,7 +45,7 @@ export default class Imager extends PureComponent {
     }
 
     return (
-      <View>
+      <View testID={this.props.testID}>
         <ActivityIndicator
           animating={this.state.animatingLoader}
           color={styleConst.color.blue}

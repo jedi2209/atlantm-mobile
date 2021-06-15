@@ -396,6 +396,7 @@ class OrderScreen extends Component {
       <KeyboardAvoidingView onPress={Keyboard.dismiss}>
         <TouchableWithoutFeedback
           style={styleConst.form.scrollView}
+          testID='OrderScreen.Wrapper'
           onPress={Keyboard.dismiss}>
           <Content
             style={styles.container}
@@ -404,6 +405,7 @@ class OrderScreen extends Component {
               Platform.OS === 'android' ? 'always' : 'never'
             }>
             <Form
+              testID='OrderScreen.Form'
               fields={this.FormConfig.fields}
               barStyle={'light-content'}
               SubmitButton={{text: strings.Form.button.send}}

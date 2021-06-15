@@ -81,6 +81,7 @@ export default class CarList extends PureComponent {
         resizeMode={this.props.resizeMode}
         key={item.hash ? item.hash : item.id.api}
         currency={this.props.prices.curr.name}
+        testID='CarListItem.Wrapper'
         car={item}
         prices={prices}
         navigate={navigation.navigate}
@@ -140,6 +141,7 @@ export default class CarList extends PureComponent {
     return (
       <FlatList
         onEndReachedThreshold={0.4}
+        testID='CarList.Wrapper'
         initialNumToRender={10}
         maxToRenderPerBatch={20} // Increase time between renders
         onRefresh={this.onRefresh}

@@ -212,6 +212,7 @@ class Form extends Component {
       props: {},
       region: 'ru',
     },
+    testID: 'Form',
     barStyle: 'light-content',
   };
 
@@ -662,8 +663,10 @@ class Form extends Component {
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
             },
           ]}
+          testID={'Form.TextInputWrapper.' + name}
           key={'field' + num + name}>
           <TextInput
+            testID={'Form.TextInput.' + name}
             autoCorrect={false}
             style={styles.textinput}
             label={label + (data.props && data.props.required ? '*' : '')}
@@ -701,9 +704,11 @@ class Form extends Component {
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
             },
           ]}
+          testID={'Form.TextAreaWrapper.' + name}
           key={'field' + num + name}>
           <TextInput
             autoCorrect={false}
+            testID={'Form.TextArea.' + name}
             style={styles.textarea}
             multiline={true}
             numberOfLines={4}
@@ -745,11 +750,13 @@ class Form extends Component {
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
             },
           ]}
+          testID={'Form.EmailWrapper.' + name}
           key={'field' + num + name}>
           <TextInput
             keyboardType="email-address"
             textContentType={'emailAddress'}
             autoCorrect={false}
+            testID={'Form.Email.' + name}
             style={styles.textinput}
             label={label + (data.props && data.props.required ? '*' : '')}
             name={name}
@@ -1049,6 +1056,7 @@ class Form extends Component {
           key={'view' + num + name}>
           <PhoneInput
             ref={this.inputRefs[groupNum + 'InputWrapper' + num]}
+            testID={'Form.PhoneWrapper.' + name}
             key={'field' + num + name}
             initialCountry={countryCode}
             countriesList={require('../../../core/const.countries.json')}
@@ -1084,6 +1092,7 @@ class Form extends Component {
               return (
                 <PhoneTextInputComponent
                   ref={this.inputRefs[groupNum + 'Input' + num]}
+                  testID={'Form.Phone.' + name}
                   key={'fieldInternal' + name + num}
                   value={userPhoneValue}
                   placeholderTextColor={'#afafaf'}
@@ -1135,6 +1144,7 @@ class Form extends Component {
       const {name} = data;
       return (
         <View
+          testID={'Form.ComponentWrapper.' + name}
           style={[styles.field, styles.component]}
           key={'field' + num + name}>
           {data.value}
@@ -1173,6 +1183,7 @@ class Form extends Component {
               borderBottomRightRadius: totalFields.length === num + 1 ? 4 : 0,
             },
           ]}
+          testID={'Form.SelectWrapper.' + name}
           key={'field' + num + name}>
           <Text selectable={false} style={styles.selectLabel}>
             {label}
@@ -1181,6 +1192,8 @@ class Form extends Component {
           <RNPickerSelect
             key={'rnpicker' + num + name}
             ref={this.inputRefs[groupNum + 'Input' + num]}
+            touchableWrapperProps={{testID: 'Form.SelectInput.' + name}}
+            pickerProps={{testID: 'Form.PickerInput.' + name}}
             doneText={strings.Base.choose}
             onDonePress={() => {
               if (data.props.focusNextInput) {
@@ -1237,7 +1250,7 @@ class Form extends Component {
 
   render() {
     const res = (
-      <View style={styles.safearea}>
+      <View style={styles.safearea} testID={this.props.testID}>
         <StatusBar
           barStyle={this.props.barStyle ? this.props.barStyle : 'default'}
         />
@@ -1310,6 +1323,10 @@ class Form extends Component {
                 ]}
                 disabled={this.state.showSubmitButton ? false : true}
                 active={this.state.showSubmitButton ? true : false}
+                testID='Form.ButtonSubmit'
+                accessibilityValue={{
+                  text: this.state.showSubmitButton ? 'false' : 'true'
+                }}
                 {...this.props.SubmitButton.props}>
                 {this.state.loading ? (
                   <ActivityIndicator color={styleConst.color.white} />

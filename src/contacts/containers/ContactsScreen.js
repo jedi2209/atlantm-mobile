@@ -453,6 +453,7 @@ class ContactsScreen extends Component {
                     }}
                   />
                   <Plate
+                    testID='ContactsScreen.ButtonCallMe'
                     title={strings.ContactsScreen.callOrder}
                     subtitle=""
                     onPress={this.onPressCallMe}
@@ -466,6 +467,7 @@ class ContactsScreen extends Component {
                     title={strings.ContactsScreen.order}
                     subtitle={strings.ContactsScreen.sendOrder}
                     type="primary"
+                    testID='ContactsScreen.ButtonOrders'
                     onPress={() => {
                       orderFunctions.getOrders().then((ordersData) => {
                         ActionSheet.show(
@@ -507,6 +509,7 @@ class ContactsScreen extends Component {
                         ? this.sitesSubtitle.sites.join('\r\n')
                         : this.sitesSubtitle.sites[0]
                     }
+                    testID='ContactsScreen.ButtonSites'
                     type="red"
                     onPress={() => {
                       if (
