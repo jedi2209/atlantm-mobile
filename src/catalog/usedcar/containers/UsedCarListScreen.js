@@ -155,7 +155,7 @@ class UsedCarListScreen extends Component {
     console.log('== UsedCarListScreen ==');
 
     return (
-      <View style={styles.content}>
+      <View style={styles.content} testID="UserCarListSreen.Wrapper">
         <StatusBar hidden />
         <CarList
           data={items}

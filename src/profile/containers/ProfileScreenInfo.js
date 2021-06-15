@@ -237,7 +237,7 @@ class ProfileScreenInfo extends Component {
   render() {
     const bonus = this.renderBonus(this.props.dealerSelected.region);
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1}} testID="ProfileScreen.Wrapper">
         <ScrollView>
           <Text
             style={{

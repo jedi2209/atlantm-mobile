@@ -340,7 +340,7 @@ class ContactsScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <View style={styleConst.safearea.default}>
+        <View style={styleConst.safearea.default} testID='ContactsScreen.Wrapper'>
           <StatusBar hidden />
           <Button
             full

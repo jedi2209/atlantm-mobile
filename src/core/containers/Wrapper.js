@@ -12,6 +12,7 @@ import SplashScreen from 'react-native-splash-screen';
 
 // components
 import App from './App';
+import { LogBox } from 'react-native';
 
 import styleConst from '../style-const';
 
@@ -46,6 +47,8 @@ if (!__DEV__) {
       /* noop */
     };
   });
+} else {
+  LogBox.ignoreAllLogs();
 }
 
 const _defaultHandler = ErrorUtils.getGlobalHandler();

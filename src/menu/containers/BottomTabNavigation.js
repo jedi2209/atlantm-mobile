@@ -208,6 +208,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
           headerTransparent: true,
           headerTitle: null,
           tabBarLabel: strings.Menu.bottom.dealer,
+          tabBarTestID: 'BottomMenu.Home',
           tabBarIcon: ({color}) => (
             <Icon
               name="building"
@@ -234,6 +235,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
         }}
         options={{
           tabBarLabel: strings.Menu.bottom.search,
+          tabBarTestID: 'BottomMenu.NewCars',
           tabBarIcon: ({color}) => (
             <Icon
               name="search"
@@ -254,6 +256,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
         component={ProfileStackView}
         options={{
           tabBarLabel: strings.Menu.bottom.lkk,
+          tabBarTestID: 'BottomMenu.Profile',
           tabBarIcon: ({color}) => (
             <Icon
               name="user"
@@ -280,6 +283,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
         }}
         options={{
           tabBarLabel: strings.Menu.bottom.order,
+          tabBarTestID: 'BottomMenu.Orders',
           tabBarIcon: ({color}) => (
             <Icon
               name="comments"
@@ -300,6 +304,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
         component={MenuStackView}
         options={{
           tabBarLabel: strings.Menu.bottom.menu,
+          tabBarTestID: 'BottomMenu.Menu',
           tabBarIcon: ({color}) => (
             <Icon
               name="bars"
