@@ -161,7 +161,7 @@ class NewCarListScreen extends Component {
     const {data, pages, prices} = items;
 
     return (
-      <View style={styles.content}>
+      <View style={styles.content} testID="NewCarsListSreen.Wrapper">
         <StatusBar hidden />
         {this.state.loading ? (
           <Spinner visible={true} color={styleConst.color.blue} />

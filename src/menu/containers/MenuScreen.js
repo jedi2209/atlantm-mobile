@@ -238,7 +238,7 @@ const MenuScreen = (props) => {
   const [count] = useState(props.menuOpenedCount);
 
   return (
-    <View>
+    <View testID="MenuScreen.Wrapper">
       <List style={{marginTop: 0}}>
         {menu.map((item) => (
           <MenuItem

@@ -65,6 +65,7 @@ const HeaderBackButton = (props) => {
   return (
     <TouchableOpacity
       style={[styles.container, props.ContainerStyle]}
+      testID='HeaderIconBack.Button'
       onPress={onPressBack}>
       <View style={[styles.inner]}>
         <Icon

@@ -519,7 +519,7 @@ class LoginScreen extends Component {
     LoginManager.logOut();
     return (
       <KeyboardAvoidingView keyboardVerticalOffset={0}>
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback testID="LoginScreen.Wrapper">
           <ImageBackground
             source={require('./bg.jpg')}
             style={{width: '100%', height: '100%'}}>
