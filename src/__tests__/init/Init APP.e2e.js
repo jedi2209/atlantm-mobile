@@ -1,6 +1,6 @@
 import {initApp} from './init.app.spec';
 
-describe('App should correct Start', () => {
+describe('APP init', () => {
 	beforeAll(async () => {
 		await device.launchApp({
 			permissions: {

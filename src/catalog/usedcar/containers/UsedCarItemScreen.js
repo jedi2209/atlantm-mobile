@@ -903,6 +903,7 @@ class UsedCarItemScreen extends Component {
             </View>
             <View style={[stylesFooter.footerButtons]}>
               <Button
+                testID='UsedCarItemScreen.Button.TestDrive'
                 onPress={this.onPressTestDrive}
                 full
                 iconLeft
@@ -923,6 +924,7 @@ class UsedCarItemScreen extends Component {
                 </Text>
               </Button>
               <Button
+                testID='UsedCarItemScreen.Button.Order'
                 onPress={this.onPressOrder}
                 full
                 style={[stylesFooter.button, stylesFooter.buttonRight]}

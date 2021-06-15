@@ -159,6 +159,7 @@ class BrandLogo extends PureComponent {
       black: [6, 7, 9, 10, 12, 13, 14, 19, 20],
       white: [6, 7, 9, 10, 12, 13, 14, 19, 20],
     },
+    testID: 'BrandLogo.Wrapper'
   };
 
   render() {
@@ -180,7 +181,7 @@ class BrandLogo extends PureComponent {
       brandsSVG[type][brand]
     ) {
       return (
-        <View style={[{}, {...this.props.style}]}>
+        <View style={[{}, {...this.props.style}]} testID={this.props.testID}>
           <View
             style={[
               styles.containerSVG,

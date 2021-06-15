@@ -634,6 +634,7 @@ class TestDriveScreen extends PureComponent {
       <KeyboardAvoidingView onPress={Keyboard.dismiss}>
         <TouchableWithoutFeedback
           style={styleConst.form.scrollView}
+          testID='TestDriveScreen.Wrapper'
           onPress={Keyboard.dismiss}>
           <Content
             style={styles.container}

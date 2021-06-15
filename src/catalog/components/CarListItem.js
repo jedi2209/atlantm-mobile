@@ -420,6 +420,9 @@ class CarListItem extends Component {
     return (
       <TouchableHighlight
         onPress={!ordered ? this.onPress : this.onPressOrder}
+        testID={this.props.testID + '-' + this.props.key}
+        accessibilityLabel={this.props.testID}
+        accessibilityRole='button'
         style={[
           !ordered ? styleConst.shadow.light : null,
           styles.container,

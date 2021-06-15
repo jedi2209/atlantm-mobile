@@ -1,18 +1,14 @@
-import {initApp} from '../init/init.app.spec';
+import {initApp, launchApp} from '../init/init.app.spec';
 import ru from '../../core/lang/ru';
 
-describe('Map should correct loading', () => {
+describe('Map Screen', () => {
 	beforeAll(async () => {
-		await device.launchApp({
-			permissions: {
-				notifications: 'YES'
-			}
-		});
+		await launchApp();
 	});
 
-	describe('Map Test', () => {
-		initApp();
+	initApp();
 
+	describe('Map Test', () => {
 		it('Map should open', async () => {
             await element(by.id('ContactsScreen.PressMap')).tap();
 			await expect(element(by.id('MapScreen.MapView'))).toBeVisible();

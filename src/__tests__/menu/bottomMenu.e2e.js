@@ -1,18 +1,14 @@
-import {initApp} from '../init/init.app.spec';
+import {initApp, launchApp} from '../init/init.app.spec';
 import ru from '../../core/lang/ru';
 
-describe('Bottom Menu should work', () => {
+describe('Bottom Menu', () => {
 	beforeAll(async () => {
-		await device.launchApp({
-			permissions: {
-				notifications: 'YES'
-			}
-		});
+		await launchApp();
 	});
 
-	describe('Bottom Menu Test', () => {
-		initApp();
+	initApp();
 
+	describe('Bottom Menu Test', () => {
         it('Bottom NewCars tab should open', async () => {
             await element(by.id('BottomMenu.NewCars')).tap();
 			await expect(element(by.id('NewCarsListSreen.Wrapper'))).toExist();
