@@ -143,7 +143,10 @@ const MenuScreen = (props) => {
       id: 3,
       name: strings.Menu.main.newcars,
       navigate: {
-        url: 'NewCarsListScreen',
+        url: 'CarsStock',
+        params: {
+          screen: 'NewCarListScreen'
+        }
       },
       type: 'new',
       icon: <Image source={require('../assets/Car-new.svg')} />,
@@ -153,7 +156,10 @@ const MenuScreen = (props) => {
       id: 4,
       name: strings.Menu.main.usedcars,
       navigate: {
-        url: 'UsedCarListScreen',
+        url: 'CarsStock',
+        params: {
+          screen: 'UsedCarListScreen'
+        }
       },
       type: 'not_new',
       icon: <Image source={require('../assets/Car-used.svg')} />,
