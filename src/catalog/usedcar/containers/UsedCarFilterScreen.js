@@ -218,7 +218,7 @@ class UsedCarFilterScreen extends Component {
       this.props.filterPrice.min !== this.props.filterPrice.max
     ) {
       dataForAccordion.push({
-        title: strings.NewCarFilterScreen.price,
+        title: strings.CarsFilterScreen.price,
         content: (
           <View
             style={{

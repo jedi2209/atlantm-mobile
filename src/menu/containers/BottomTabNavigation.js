@@ -155,7 +155,7 @@ const MenuStackView = ({navigation, route}) => (
   </MenuStack.Navigator>
 );
 
-const OrdersSheetStackView = () => {
+const CleanStackView = () => {
   return <></>;
 };
 
@@ -226,11 +226,11 @@ export const BottomTabNavigation = ({navigation, route}) => {
 
       <Tab.Screen
         name="Search"
-        component={OrdersSheetStackView}
+        component={CleanStackView}
         listeners={{
           tabPress: (e) => {
             e.preventDefault();
-            navigation.navigate('NewCarsListScreen');
+            navigation.navigate('CarsStock');
           },
         }}
         options={{
@@ -274,7 +274,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
 
       <Tab.Screen
         name="Orders"
-        component={OrdersSheetStackView}
+        component={CleanStackView}
         listeners={{
           tabPress: (e) => {
             e.preventDefault();

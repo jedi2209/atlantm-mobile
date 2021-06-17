@@ -325,7 +325,7 @@ class NewCarFilterScreen extends Component {
     }
     const filtersContent = [
       {
-        title: strings.NewCarFilterScreen.brands,
+        title: strings.CarsFilterScreen.brands,
         content: (
           <View
             style={{
@@ -421,7 +421,7 @@ class NewCarFilterScreen extends Component {
         ),
       },
       {
-        title: strings.NewCarFilterScreen.price,
+        title: strings.CarsFilterScreen.price,
         content: (
           <View
             style={{
@@ -555,7 +555,7 @@ class NewCarFilterScreen extends Component {
 
     if (this.state.modelFilter.length > 0) {
       filtersContent.splice(1, 0, {
-        title: strings.NewCarFilterScreen.models,
+        title: strings.CarsFilterScreen.models,
         content: (
           <View
             style={{

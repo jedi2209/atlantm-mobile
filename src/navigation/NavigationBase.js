@@ -16,6 +16,10 @@ import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
 import NewCarFilterScreen from '../catalog/newcar/containers/NewCarFilterScreen';
 
+// Filters
+import CarsFilterScreen from '../catalog/containers/filters/CarsFilterScreen';
+import BrandModelsFilterScreen from '../catalog/containers/filters/BrandModelsFilterScreen';
+
 // Used Cars Catalog
 import UsedCarListScreen from '../catalog/usedcar/containers/UsedCarListScreen';
 import UsedCarItemScreen from '../catalog/usedcar/containers/UsedCarItemScreen';
@@ -195,8 +199,8 @@ export const Base = ({navigation, route}) => {
     />
     {/* НОВЫЕ АВТО */}
     <StackBase.Screen
-      name="NewCarsListScreen"
-      component={NewCars}
+      name="CarsStock"
+      component={CarsStock}
       options={{headerShown: false}}
     />
     {/* Заявки */}
@@ -222,11 +226,6 @@ export const Base = ({navigation, route}) => {
       )}
     />
     {/* Подержаные автомобили */}
-    <StackBase.Screen
-      name="UsedCarListScreen"
-      component={UsedCars}
-      options={{headerShown: false}}
-    />
     <StackOrders.Screen
       name="OrderScreen"
       component={OrderScreen}
@@ -376,8 +375,29 @@ export const EKO = ({navigation, route}) => (
   </StackEKO.Navigator>
 );
 
-export const NewCars = ({navigation, route}) => (
-  <SearchStack.Navigator initialRouteName="NewCarListScreen">
+export const CarsStock = ({navigation, route}) => (
+  <SearchStack.Navigator initialRouteName="CarsFilterScreen">
+    <SearchStack.Screen
+      name="CarsFilterScreen"
+      component={CarsFilterScreen}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.CarsFilterScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
+    />
+    <SearchStack.Screen
+      name="BrandModelsFilterScreen"
+      component={BrandModelsFilterScreen}
+      options={ClassicHeaderWhite(
+        strings.CarsFilterScreen.chooseBrandModel,
+        navigation,
+        route,
+      )}
+    />
     <SearchStack.Screen
       name="NewCarListScreen"
       component={NewCarListScreen}
@@ -392,24 +412,24 @@ export const NewCars = ({navigation, route}) => (
         headerLeft: () => {
           return ArrowBack(navigation, route, {theme: 'white'});
         },
-        headerRight: () => (
-          <View style={stylesHeader.headerRightStyle}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('NewCarFilterScreen');
-              }}>
-              <Icon
-                type="FontAwesome"
-                name="filter"
-                style={{
-                  color: styleConst.color.white,
-                  fontSize: 25,
-                  marginRight: 20,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        ),
+        // headerRight: () => (
+        //   <View style={stylesHeader.headerRightStyle}>
+        //     <TouchableOpacity
+        //       onPress={() => {
+        //         navigation.navigate('NewCarFilterScreen');
+        //       }}>
+        //       <Icon
+        //         type="FontAwesome"
+        //         name="filter"
+        //         style={{
+        //           color: styleConst.color.white,
+        //           fontSize: 25,
+        //           marginRight: 20,
+        //         }}
+        //       />
+        //     </TouchableOpacity>
+        //   </View>
+        // ),
       }}
     />
     <SearchStack.Screen
@@ -439,12 +459,18 @@ export const NewCars = ({navigation, route}) => (
       component={NewCarFilterScreen}
       options={BigCloseButton(navigation, route, {
         ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.NewCarFilterScreen.title,
+        headerTitle: strings.CarsFilterScreen.title,
         headerTitleStyle: [
           stylesHeader.transparentHeaderTitle,
           {color: '#222B45'},
         ],
       })}
+    />
+
+    <StackBase.Screen
+      name="UsedCarListScreen"
+      component={UsedCars}
+      options={{headerShown: false}}
     />
   </SearchStack.Navigator>
 );
@@ -491,7 +517,7 @@ export const UsedCars = ({navigation, route}) => (
       component={UsedCarFilterScreen}
       options={BigCloseButton(navigation, route, {
         ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.NewCarFilterScreen.title,
+        headerTitle: strings.CarsFilterScreen.title,
         headerTitleStyle: [
           stylesHeader.transparentHeaderTitle,
           {color: '#222B45'},

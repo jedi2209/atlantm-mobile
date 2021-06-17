@@ -258,15 +258,18 @@ export default {
   },
   NewCarListScreen: {
     title: 'Новые автомобили',
+    titleShort: 'Новые',
   },
-  NewCarFilterScreen: {
+  CarsFilterScreen: {
+    title: 'Параметры',
+    chooseBrandModel: 'Выберите марки и модель',
     price: 'Цена',
-    title: 'Фильтры',
     brands: 'Бренды',
     models: 'Модели',
   },
   UsedCarListScreen: {
     title: 'Авто с пробегом',
+    titleShort: 'С пробегом',
   },
   UsedCarItemScreen: {
     showFull: 'Показать полное описание...',
