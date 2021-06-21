@@ -25,7 +25,7 @@ import {
 
 // components
 import {Icon, Button} from 'native-base';
-import ActionSheet from 'react-native-actionsheet';
+import ActionSheet from '@alessiocancian/react-native-actionsheet';
 
 // Helpers
 import {get} from 'lodash';

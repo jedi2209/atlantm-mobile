@@ -34,6 +34,7 @@
     "e2e:android-debug": "detox test -c android.emu.debug"
   },
   "dependencies": {
+    "@alessiocancian/react-native-actionsheet": "^2.4.11",
     "@amplitude/react-native": "^2.2.0",
     "@invertase/react-native-apple-authentication": "^2.1.0",
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
@@ -62,7 +63,6 @@
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-native": "0.64.2",
-    "react-native-actionsheet": "^2.4.2",
     "react-native-animatable": "^1.3.3",
     "react-native-awesome-alerts": "^1.3.4",
     "react-native-clean-project": "^3.6.1",

@@ -9,7 +9,7 @@ import {
 
 // components
 import {Grid, Row, Col, Icon} from 'native-base';
-import ActionSheet from 'react-native-actionsheet';
+import ActionSheet from '@alessiocancian/react-native-actionsheet';
 import ImagePicker from 'react-native-image-crop-picker';
 
 // helpers
