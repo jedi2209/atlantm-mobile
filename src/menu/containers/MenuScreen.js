@@ -145,7 +145,10 @@ const MenuScreen = (props) => {
       navigate: {
         url: 'CarsStock',
         params: {
-          screen: 'NewCarListScreen'
+          screen: 'CarsFilterScreen',
+          params: {
+            stockTypeDefault: 'New',
+          }
         }
       },
       type: 'new',
@@ -158,7 +161,10 @@ const MenuScreen = (props) => {
       navigate: {
         url: 'CarsStock',
         params: {
-          screen: 'UsedCarListScreen'
+          screen: 'CarsFilterScreen',
+          params: {
+            stockTypeDefault: 'Used',
+          }
         }
       },
       type: 'not_new',
