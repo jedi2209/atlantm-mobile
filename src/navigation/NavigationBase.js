@@ -412,24 +412,24 @@ export const CarsStock = ({navigation, route}) => (
         headerLeft: () => {
           return ArrowBack(navigation, route, {theme: 'white'});
         },
-        // headerRight: () => (
-        //   <View style={stylesHeader.headerRightStyle}>
-        //     <TouchableOpacity
-        //       onPress={() => {
-        //         navigation.navigate('NewCarFilterScreen');
-        //       }}>
-        //       <Icon
-        //         type="FontAwesome"
-        //         name="filter"
-        //         style={{
-        //           color: styleConst.color.white,
-        //           fontSize: 25,
-        //           marginRight: 20,
-        //         }}
-        //       />
-        //     </TouchableOpacity>
-        //   </View>
-        // ),
+        headerRight: () => (
+          <View style={stylesHeader.headerRightStyle}>
+            <TouchableOpacity
+              onPress={() => {
+                // navigation.navigate('NewCarFilterScreen');
+              }}>
+              <Icon
+                type="MaterialCommunityIcons"
+                name="sort"
+                style={{
+                  color: styleConst.color.white,
+                  fontSize: 25,
+                  marginRight: 20,
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        ),
       }}
     />
     <SearchStack.Screen
