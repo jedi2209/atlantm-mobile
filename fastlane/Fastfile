@@ -38,7 +38,8 @@ platform :ios do
 
   desc "Prepare the iOS app for dev or build"
   lane :prepare do
-    puts "SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: #{ENV['SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER']}"
+    # puts "SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: #{ENV['SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER']}"
+    puts "FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: #{ENV['FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD']}"
     ensure_git_status_clean
     produce(
         app_identifier: "com.atlantm.app.OneSignalNotificationServiceExtension",
@@ -57,16 +58,15 @@ platform :ios do
     build_app(
       workspace: "./ios/atlantm.xcworkspace",
       scheme: "atlantm",
-      export_method: "app-store"
-    #   export_xcargs: "-allowProvisioningUpdates",
-    #   export_team_id: CredentialsManager::AppfileConfig.try_fetch_value(:team_id),
-    #   skip_codesigning: true,
-    #   export_options: {
-    #     provisioningProfiles: {
-    #       "com.atlantm.app" => "com.atlantm.app AppStore",
-    #       "com.atlantm.app.OneSignalNotificationServiceExtension" => "XC.com.atlantm.app.OneSignalNotificationService"
-    #     }
-    #   }
+      export_method: "app-store",
+      include_bitcode: true,
+      export_xcargs: "-allowProvisioningUpdates",
+      export_options: {
+        provisioningProfiles: {
+          "com.atlantm.app" => "com.atlantm.app AppStore",
+          "com.atlantm.app.OneSignalNotificationServiceExtension" => "com.atlantm.app.OneSignalNotificationService"
+        }
+      }
     )
     # update_code_signing_settings(
     #   path: "./ios/atlantm.xcodeproj",
