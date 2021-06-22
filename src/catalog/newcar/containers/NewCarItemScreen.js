@@ -629,7 +629,6 @@ class NewCarItemScreen extends Component {
     }
 
     console.log('== NewCarItemScreen ==');
-    console.log('this.props.route', route);
     const currency = get(route, 'params.currency');
     const brandName = get(carDetails, 'brand.name');
     const modelName = get(carDetails, 'model.name');
@@ -659,24 +658,18 @@ class NewCarItemScreen extends Component {
     }
 
     let photos = [];
-    let CarImgReal = false;
-    if (get(carDetails, 'imgReal.thumb.0')) {
+    let isCarImgReal = false;
+    if (get(carDetails, 'imgReal.thumb.0')) { // 105
+      isCarImgReal = true;
       get(carDetails, 'imgReal.thumb').forEach((element) => {
         photos.push(element + '1000x1000');
       });
-      CarImgReal = true;
     } else {
-      photos =
-        get(carDetails, 'img.10000x220') || get(carDetails, 'img.original');
+      get(carDetails, 'img.thumb').forEach((element) => {
+        photos.push(element + '1000x440');
+      });
     }
 
-    let photosThumbs = [];
-    for (var i = 0; i < photos.length; i++) {
-      let path = photos[i].split('/');
-      path[parseInt(path.length - 1, 10)] =
-        imgResize + '/' + path[parseInt(path.length - 1, 10)];
-      photosThumbs.push(path.join('/'));
-    }
 
     let colorName = strings.Colors[Number(get(carDetails, 'color.picker.id'))];
     if (!colorName) {
@@ -702,7 +695,7 @@ class NewCarItemScreen extends Component {
                   height: 400,
                   width: '100%',
                   zIndex: 20,
-                  marginTop: CarImgReal ? -12 : -12,
+                  marginTop: isCarImgReal ? -12 : -12,
                 }}>
                 {get(carDetails, 'color.picker.codes.hex', null) ? (
                   <ColorBox
@@ -750,9 +743,9 @@ class NewCarItemScreen extends Component {
                 <PhotoSlider
                   height={370}
                   photos={photos}
-                  resizeMode={CarImgReal ? 'cover' : null}
+                  resizeMode={isCarImgReal ? 'cover' : null}
                   paginationStyle={{marginBottom: 35}}
-                  dotColor={CarImgReal ? styleConst.color.white : null}
+                  dotColor={isCarImgReal ? styleConst.color.white : null}
                   onPressItem={() => this.onPressPhoto}
                   onIndexChanged={() => this.onChangePhotoIndex}
                 />
@@ -763,7 +756,7 @@ class NewCarItemScreen extends Component {
                   styleConst.shadow.light,
                   {
                     position: 'relative',
-                    marginTop: CarImgReal ? 335 : 335,
+                    marginTop: isCarImgReal ? 335 : 335,
                     marginBottom: -5,
                     backgroundColor: styleConst.color.white,
                     borderTopLeftRadius: 30,
