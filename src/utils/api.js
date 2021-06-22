@@ -240,8 +240,12 @@ export default {
     filterModels,
     filterBody,
     filterPrice,
+    sortBy,
+    sortDirection,
+    isNextPage,
   }) {
     let url = searchUrl;
+    let urlParams = [];
     let isAmp = false;
     const setParamDivider = () => (isAmp ? '&' : '?');
 
@@ -249,6 +253,7 @@ export default {
       filterBrands.forEach(({id, checked}) => {
         if (checked) {
           url += `${setParamDivider()}brand[${id}]=${id}`;
+          urlParams.push(`brand[${id}]=${id}`);
           if (!isAmp) {
             isAmp = true;
           }
@@ -260,6 +265,7 @@ export default {
       filterModels.forEach(({id, checked}) => {
         if (checked) {
           url += `${setParamDivider()}model[${id}]=${id}`;
+          urlParams.push(`model[${id}]=${id}`);
           if (!isAmp) {
             isAmp = true;
           }
@@ -271,6 +277,7 @@ export default {
       filterBody.forEach(({id, checked}) => {
         if (checked) {
           url += `${setParamDivider()}body[${id}]=${id}`;
+          urlParams.push(`body[${id}]=${id}`);
           if (!isAmp) {
             isAmp = true;
           }
@@ -279,15 +286,26 @@ export default {
     }
 
     if (filterPrice && filterPrice.min && filterPrice.max) {
-      url += `${setParamDivider()}price_from=${filterPrice.min}&price_to=${
-        filterPrice.max
-      }`;
+      url += `${setParamDivider()}price_from=${filterPrice.min}&price_to=${filterPrice.max}`;
+      urlParams.push(`price_from=${filterPrice.min}&price_to=${filterPrice.max}`);
       if (!isAmp) {
         isAmp = true;
       }
     }
 
-    // __DEV__ && console.log('API fetchNewCarByFilter url', url);
+    if (sortBy) {
+      urlParams.push(`sortBy=${sortBy}`);
+    }
+
+    if (sortDirection) {
+      urlParams.push(`sortDirection=${sortDirection}`);
+    }
+
+    if (!isNextPage) {
+      url = url + '?' + urlParams.join('&');
+    }
+
+    __DEV__ && console.log('API fetchNewCarByFilter url', url);
 
     return this.request(url, baseRequestParams);
   },

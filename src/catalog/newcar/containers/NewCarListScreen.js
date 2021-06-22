@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useReducer} from 'react';
 import {StyleSheet, View, StatusBar} from 'react-native';
 
 // redux
@@ -14,7 +14,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Analytics from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import {EVENT_REFRESH} from '../../../core/actionTypes';
+import {EVENT_REFRESH, EVENT_DEFAULT} from '../../../core/actionTypes';
 
 const styles = StyleSheet.create({
   content: {
@@ -23,9 +23,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({dealer, nav, catalog}) => {
+const mapStateToProps = ({dealer, catalog}) => {
   return {
-    nav,
     dealerSelected: dealer.selected,
     brands: dealer.listBrands,
     city: catalog.newCar.city,
@@ -46,8 +45,25 @@ const mapStateToProps = ({dealer, nav, catalog}) => {
   };
 };
 
+const initialSort = {sortBy: 'price', sortDirection: 'asc'};
+
+const reducer = (state, action) => {
+  console.log('state, action', state, action);
+  switch (action.type) {
+    case 'sortBy':
+      return {sortBy: action.value, sortDirection: state.sortDirection};
+    case 'sortDirection':
+      return {sortBy: state.sortBy, sortDirection: action.value};
+    case 'all':
+      return action.value;
+  }
+};
+
 const NewCarListScreen = ({items, navigation, route, filterData, actionFetchNewCarByFilter, dealerSelected, isFetchingNewCarByFilter}) => {
   const [loading, setLoading] = useState(false);
+  const [sorting, setSorting] = useReducer(reducer, initialSort);
+
+  const {data, pages, prices} = items;
 
   const _fetchNewCars = (type) => {
     if (type === EVENT_REFRESH) {
@@ -60,29 +76,36 @@ const NewCarListScreen = ({items, navigation, route, filterData, actionFetchNewC
         filterData.search_url ||
         `/stock/new/cars/get/city/${dealerSelected.city.id}/`,
       nextPage: get(items, 'pages.next', null),
-      sortBy: route?.params?.sortBy || null,
-      sortDirection: route?.params?.sortDirection || null,
+      sortBy: route?.params?.sortBy ? route.params.sortBy : sorting.sortBy,
+      sortDirection: route?.params?.sortDirection ? route.params.sortDirection : sorting.sortDirection,
     }).then((res) => {
     return setTimeout(() => {
       setLoading(false);
       navigation.setParams({
-        total: get(items, 'total'),
+        total: get(items, 'total', get(res, 'payload.total')),
       });
     }, 150);
     });
   };
 
-  const {data, pages, prices} = items;
-
   // Аналогично componentDidMount и componentDidUpdate:
   useEffect(() => {
+    if (typeof route.params?.sortDirection !== 'undefined') {
+      if (route.params?.sortDirection != sorting.sortDirection || route.params?.sortBy != sorting.sortBy) {
+        setSorting({type: 'all', value: {sortDirection: route.params.sortDirection, sortBy: route.params.sortBy}});
+        setTimeout(() => {
+          _fetchNewCars(EVENT_REFRESH);
+        }, 100);
+      }
+    }
+
     const defaultSearchUrl = `/stock/new/cars/get/city/${dealerSelected.city.id}/`;
 
     const searchUrl = filterData.search_url || defaultSearchUrl;
     Analytics.logEvent('screen', 'catalog/newcar/list', {
       search_url: searchUrl,
     });
-  });
+  }, [route?.params?.sortBy, route?.params?.sortDirection]);
   return (
     <View style={styles.content} testID="NewCarsListSreen.Wrapper">
       <StatusBar hidden />
