@@ -589,6 +589,7 @@ export const actionFetchNewCarByFilter = (props) => {
 
     if (props.type === EVENT_LOAD_MORE) {
       newProps.searchUrl = props.nextPage;
+      newProps.isNextPage = true;
     }
 
     return API.fetchNewCarByFilter(newProps)

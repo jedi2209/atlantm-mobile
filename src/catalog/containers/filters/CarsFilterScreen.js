@@ -124,11 +124,11 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const CarsFilterScreen = ({navigation, dealerSelected}) => {
+const CarsFilterScreen = ({navigation, route, dealerSelected, stockTypeDefault}) => {
   const [loading, setLoading] = useState(false);
   const [stockLoading, setStockLoading] = useState(false);
   const [totalCars, setTotalCars] = useState(null);
-  const [stockType, setStockType] = useState('New');
+  const [stockType, setStockType] = useState(route?.params?.stockTypeDefault ? route.params.stockTypeDefault : stockTypeDefault);
 
   const _showHideSubmitButton = (show) => {
     if (show) {
@@ -251,7 +251,7 @@ const CarsFilterScreen = ({navigation, dealerSelected}) => {
 }
 
 CarsFilterScreen.defaultProps = {
-
+  stockTypeDefault: 'New',
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CarsFilterScreen);

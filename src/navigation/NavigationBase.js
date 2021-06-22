@@ -2,7 +2,9 @@ import React from 'react';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import {Icon} from 'native-base';
+import {Icon, ActionSheet} from 'native-base';
+import {EVENT_REFRESH} from '../core/actionTypes';
+// import ActionSheet from '@alessiocancian/react-native-actionsheet';
 
 // EKO
 import ReviewsScreen from '../eko/reviews/containers/ReviewsScreen';
@@ -66,6 +68,7 @@ import {
   TransparentBack,
   isTabBarVisible,
 } from './const';
+import nav from './reducers';
 
 const StackEKO = createStackNavigator();
 const StackEKOAddReview = createStackNavigator();
@@ -401,12 +404,13 @@ export const CarsStock = ({navigation, route}) => (
     <SearchStack.Screen
       name="NewCarListScreen"
       component={NewCarListScreen}
-      options={{
-        headerTitle: (
-          <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
-            {strings.NewCarListScreen.title}
-          </Text>
-        ),
+      options={({ route }) => ({ 
+        headerTitle: () => {
+          return (
+            <Text style={stylesHeader.blueHeaderTitle} selectable={false}> 
+              {route?.params?.total?.count ? route?.params.total.count + ' авто' : null}
+            </Text>
+        )},
         headerStyle: stylesHeader.blueHeader,
         headerTitleStyle: stylesHeader.blueHeaderTitle,
         headerLeft: () => {
@@ -416,7 +420,79 @@ export const CarsStock = ({navigation, route}) => (
           <View style={stylesHeader.headerRightStyle}>
             <TouchableOpacity
               onPress={() => {
-                // navigation.navigate('NewCarFilterScreen');
+                ActionSheet.show(
+                  {
+                    options: [
+                      {
+                        priority: 1,
+                        id: 'priceAsc',
+                        text: 'Сначала самые дешёвые',
+                      },
+                      {
+                        priority: 2,
+                        id: 'priceDesc',
+                        text: 'Сначала самые дорогие',
+                      },
+                      {
+                        priority: 3,
+                        id: 'createdDesc',
+                        text: 'Сначала новые',
+                      },
+                      {
+                        priority: 4,
+                        id: 'createdAsc',
+                        text: 'Сначала старые',
+                      },
+                      {
+                        priority: 5,
+                        id: 'cancel',
+                        text: 'Отмена',
+                      },
+                    ],
+                    cancelButtonIndex: 4,
+                    title: 'Сортировка',
+                  },
+                  (buttonIndex) => {
+                    switch(buttonIndex) {
+                      case 0:
+                        navigation.navigate('CarsStock', {
+                          screen: 'NewCarListScreen',
+                          params: {
+                            sortBy: 'price',
+                            sortDirection: 'asc'
+                          }
+                        });
+                        break;
+                      case 1:
+                        navigation.navigate('CarsStock', {
+                          screen: 'NewCarListScreen',
+                          params: {
+                            sortBy: 'price',
+                            sortDirection: 'desc'
+                          }
+                        });
+                        break;
+                      case 2:
+                        navigation.navigate('CarsStock', {
+                          screen: 'NewCarListScreen',
+                          params: {
+                            sortBy: 'created',
+                            sortDirection: 'desc'
+                          }
+                        });
+                        break;
+                      case 3:
+                        navigation.navigate('CarsStock', {
+                          screen: 'NewCarListScreen',
+                          params: {
+                            sortBy: 'created',
+                            sortDirection: 'asc'
+                          }
+                        });
+                        break;
+                    }
+                  },
+                );
               }}>
               <Icon
                 type="MaterialCommunityIcons"
@@ -430,7 +506,7 @@ export const CarsStock = ({navigation, route}) => (
             </TouchableOpacity>
           </View>
         ),
-      }}
+      })}
     />
     <SearchStack.Screen
       name="NewCarItemScreen"
