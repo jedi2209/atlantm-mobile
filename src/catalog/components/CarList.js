@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {View, FlatList, StyleSheet, ActivityIndicator} from 'react-native';
 
@@ -15,7 +15,6 @@ import CarListItem from './CarListItem';
 
 // helpers
 import styleConst from '../../core/style-const';
-import {verticalScale} from '../../utils/scale';
 import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
@@ -25,44 +24,21 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class CarList extends PureComponent {
-  static propTypes = {
-    pages: PropTypes.object,
-    data: PropTypes.array,
-    itemScreen: PropTypes.string,
-    isFetchItems: PropTypes.bool,
-    prices: PropTypes.object,
-  };
+export default CarList = (props) => {
+  const {data, pages, isFetchItems, dataHandler, itemScreen, prices, resizeMode} = props;
+  const [isRefreshing, setRefreshing] = useState(false);
+  const [loadingNextPage, setLoadingNextPage] = useState(false);
 
-  static defaultProps = {
-    pages: {},
-    prices: {},
-    data: null,
-    navigation: {},
-    itemScreen: null,
-    isFetchItems: false,
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      bounces: true,
-      isRefreshing: false,
-      loadingNextPage: false,
-    };
-  }
-
-  componentDidMount() {
-    const {data, isFetchItems, dataHandler} = this.props;
+  // Аналогично componentDidMount и componentDidUpdate:
+  useEffect(() => {
+    console.log('== CarList ==');
 
     if ((!data || data.length === 0) && !isFetchItems) {
       dataHandler(EVENT_DEFAULT);
     }
-  }
+  }, [data]);
 
-  renderEmptyComponent = () => {
-    const {isFetchItems} = this.props;
-
+  _renderEmptyComponent = () => {
     return isFetchItems ? (
       <ActivityIndicator color={styleConst.color.blue} style={styleConst.spinner} />
     ) : (
@@ -70,28 +46,26 @@ export default class CarList extends PureComponent {
     );
   };
 
-  renderItem = ({item}) => {
+  _renderItem = ({item}) => {
     if (item.type === 'empty') {
       return <EmptyMessage text={strings.CarList.emptyMessage} />;
     }
-
-    const {itemScreen, navigation, prices} = this.props;
     return (
       <CarListItem
-        resizeMode={this.props.resizeMode}
+        resizeMode={resizeMode}
         key={item.hash ? item.hash : item.id.api}
-        currency={this.props.prices.curr.name}
+        currency={prices.curr.name}
         testID='CarListItem.Wrapper'
         car={item}
         prices={prices}
-        navigate={navigation.navigate}
         itemScreen={itemScreen}
+        {...props}
       />
     );
   };
 
-  renderFooter = () => {
-    if (!this.state.loadingNextPage) {
+  _renderFooter = () => {
+    if (!loadingNextPage) {
       return null;
     }
 
@@ -102,68 +76,67 @@ export default class CarList extends PureComponent {
     );
   };
 
-  onRefresh = () => {
-    const {dataHandler} = this.props;
-
+  _onRefresh = () => {
     dataHandler(EVENT_REFRESH).then(() => {
-      this.setState({
-        bounces: true,
-        isRefreshing: false,
-      });
+      setRefreshing(false);
     });
   };
 
   handleLoadMore = () => {
-    const {data, pages, dataHandler} = this.props;
-
-    if (!pages.next || data.length === 0 || this.state.loadingNextPage) {
+    if (!pages.next || data.length === 0 || loadingNextPage) {
       return false;
     }
 
     __DEV__ && console.log('handleLoadMore');
-
-    this.setState({
-      loadingNextPage: true,
-      bounces: false,
-    });
+    setLoadingNextPage(true);
 
     return dataHandler(EVENT_LOAD_MORE).then(() => {
-      this.setState({
-        loadingNextPage: false,
-        bounces: true,
-      });
+      setLoadingNextPage(false);
     });
   };
 
-  render() {
-    console.log('== CarList ==');
+  return (
+    <FlatList
+      onEndReachedThreshold={0.4}
+      testID='CarList.Wrapper'
+      initialNumToRender={10}
+      maxToRenderPerBatch={20} // Increase time between renders
+      onRefresh={_onRefresh}
+      refreshing={isRefreshing}
+      ListEmptyComponent={_renderEmptyComponent}
+      ListFooterComponent={_renderFooter}
+      renderItem={_renderItem}
+      keyExtractor={(item) => {
+        if (item && item.hash) {
+          return item.hash.toString();
+        } else {
+          return (
+            new Date().getTime().toString() +
+            Math.floor(
+              Math.random() * Math.floor(new Date().getTime()),
+            ).toString()
+          );
+        }
+      }}
+      onEndReached={handleLoadMore}
+      {...props}
+    />
+  );
 
-    return (
-      <FlatList
-        onEndReachedThreshold={0.4}
-        testID='CarList.Wrapper'
-        initialNumToRender={10}
-        maxToRenderPerBatch={20} // Increase time between renders
-        onRefresh={this.onRefresh}
-        refreshing={this.state.isRefreshing}
-        ListEmptyComponent={this.renderEmptyComponent}
-        ListFooterComponent={this.renderFooter}
-        renderItem={this.renderItem}
-        keyExtractor={(item) => {
-          if (item && item.hash) {
-            return item.hash.toString();
-          } else {
-            return (
-              new Date().getTime().toString() +
-              Math.floor(
-                Math.random() * Math.floor(new Date().getTime()),
-              ).toString()
-            );
-          }
-        }}
-        onEndReached={this.handleLoadMore}
-        {...this.props}
-      />
-    );
-  }
-}
+};
+
+CarList.propTypes = {
+  pages: PropTypes.object,
+  data: PropTypes.array,
+  itemScreen: PropTypes.string,
+  isFetchItems: PropTypes.bool,
+  prices: PropTypes.object,
+};
+
+CarList.defaultProps = {
+  pages: {},
+  prices: {},
+  data: null,
+  itemScreen: null,
+  isFetchItems: false,
+};

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, StatusBar} from 'react-native';
 
 // redux
@@ -46,141 +46,66 @@ const mapStateToProps = ({dealer, nav, catalog}) => {
   };
 };
 
-const mapDispatchToProps = {
-  actionFetchNewCarByFilter,
-};
+const NewCarListScreen = ({items, navigation, route, filterData, actionFetchNewCarByFilter, dealerSelected, isFetchingNewCarByFilter}) => {
+  const [loading, setLoading] = useState(false);
 
-class NewCarListScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: false,
-    };
-  }
+  const _fetchNewCars = (type) => {
+    if (type === EVENT_REFRESH) {
+      setLoading(true);
+    }
+    
+    return actionFetchNewCarByFilter({
+      type: type ? type : null,
+      searchUrl:
+        filterData.search_url ||
+        `/stock/new/cars/get/city/${dealerSelected.city.id}/`,
+      nextPage: get(items, 'pages.next', null),
+      sortBy: route?.params?.sortBy || null,
+      sortDirection: route?.params?.sortDirection || null,
+    }).then((res) => {
+    return setTimeout(() => {
+      setLoading(false);
+      navigation.setParams({
+        total: get(items, 'total'),
+      });
+    }, 150);
+    });
+  };
 
-  componentDidMount() {
-    const {dealerSelected, filterData} = this.props;
+  const {data, pages, prices} = items;
+
+  // Аналогично componentDidMount и componentDidUpdate:
+  useEffect(() => {
     const defaultSearchUrl = `/stock/new/cars/get/city/${dealerSelected.city.id}/`;
 
     const searchUrl = filterData.search_url || defaultSearchUrl;
-
     Analytics.logEvent('screen', 'catalog/newcar/list', {
       search_url: searchUrl,
     });
-  }
-
-  componentDidUpdate() {
-    const {items} = this.props;
-
-    if (items.total) {
-      return setTimeout(() => {
-        this.props.navigation.setParams({
-          total: get(this.props.items, 'total'),
-        });
-      }, 200);
-    }
-  }
-
-  shouldComponentUpdate(nextProps) {
-    const {dealerSelected, items, isFetchingNewCarByFilter} = this.props;
-    const nav = nextProps.nav.newState;
-    const isActiveScreen =
-      nav.routes[nav.index].routeName === 'NewCarListScreen';
-
-    return (
-      (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-      items.length !== nextProps.items.length ||
-      isFetchingNewCarByFilter !== nextProps.isFetchingNewCarByFilter ||
-      this.props.filters !== nextProps.filters
-    );
-  }
-
-  fetchNewCar = (type) => {
-    const {
-      items,
-      filterData,
-      actionFetchNewCarByFilter,
-
-      filterBrands,
-      filterModels,
-      filterBody,
-      filterGearbox,
-      filterDrive,
-      filterEngineType,
-      filterPrice,
-      filterPriceSpecial,
-    } = this.props;
-
-    const onResult = () => {
-      return setTimeout(() => {
-        this.setState({
-          isRefreshing: false,
-        });
-        this.props.navigation.setParams({
-          total: get(this.props.items, 'total'),
-        });
-      }, 150);
-    };
-
-    if (type === EVENT_REFRESH) {
-      this.setState({
-        isRefreshing: true,
-      });
-      return actionFetchNewCarByFilter({
-        searchUrl:
-          filterData.search_url ||
-          `/stock/new/cars/get/city/${this.props.dealerSelected.city.id}/`,
-        filterBrands,
-        filterModels,
-        filterBody,
-        filterGearbox,
-        filterDrive,
-        filterEngineType,
-        filterPrice,
-        filterPriceSpecial,
-      }).then(onResult);
-    }
-
-    return actionFetchNewCarByFilter({
-      type,
-      searchUrl:
-        filterData.search_url ||
-        `/stock/new/cars/get/city/${this.props.dealerSelected.city.id}/`,
-      nextPage: get(items, 'pages.next'),
-    }).then(onResult);
-  };
-
-  render() {
-    const {
-      items,
-      navigation,
-      dealerSelected,
-      isFetchingNewCarByFilter,
-    } = this.props;
-
-    const {data, pages, prices} = items;
-
-    return (
-      <View style={styles.content} testID="NewCarsListSreen.Wrapper">
-        <StatusBar hidden />
-        {this.state.loading ? (
-          <Spinner visible={true} color={styleConst.color.blue} />
-        ) : (
-          <CarList
-            data={data}
-            pages={pages}
-            prices={prices}
-            navigation={navigation}
-            resizeMode="contain"
-            itemScreen="NewCarItemScreen"
-            dataHandler={this.fetchNewCar}
-            dealerSelected={dealerSelected}
-            isFetchItems={isFetchingNewCarByFilter}
-          />
-        )}
-      </View>
-    );
-  }
+  });
+  return (
+    <View style={styles.content} testID="NewCarsListSreen.Wrapper">
+      <StatusBar hidden />
+      {loading ? (
+        <Spinner visible={true} color={styleConst.color.blue} />
+      ) : (
+        <CarList
+          data={data}
+          pages={pages}
+          prices={prices}
+          resizeMode="contain"
+          itemScreen="NewCarItemScreen"
+          dataHandler={_fetchNewCars}
+          dealerSelected={dealerSelected}
+          isFetchItems={isFetchingNewCarByFilter}
+        />
+      )}
+    </View>
+  );
 }
+
+const mapDispatchToProps = {
+  actionFetchNewCarByFilter,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewCarListScreen);
