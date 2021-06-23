@@ -426,22 +426,17 @@ export const CarsStock = ({navigation, route}) => (
                       {
                         priority: 1,
                         id: 'priceAsc',
-                        text: 'Сначала самые дешёвые',
+                        text: 'Возрастанию цены',
                       },
                       {
                         priority: 2,
                         id: 'priceDesc',
-                        text: 'Сначала самые дорогие',
+                        text: 'Убыванию цены',
                       },
                       {
                         priority: 3,
                         id: 'createdDesc',
-                        text: 'Сначала новые',
-                      },
-                      {
-                        priority: 4,
-                        id: 'createdAsc',
-                        text: 'Сначала старые',
+                        text: 'Дате размещения',
                       },
                       {
                         priority: 5,
@@ -450,7 +445,7 @@ export const CarsStock = ({navigation, route}) => (
                       },
                     ],
                     cancelButtonIndex: 4,
-                    title: 'Сортировка',
+                    title: 'Сортировать по',
                   },
                   (buttonIndex) => {
                     switch(buttonIndex) {
@@ -556,12 +551,13 @@ export const UsedCars = ({navigation, route}) => (
     <StackCatalogUsed.Screen
       name="UsedCarListScreen"
       component={UsedCarListScreen}
-      options={{
-        headerTitle: (
-          <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
-            {strings.UsedCarListScreen.title}
-          </Text>
-        ),
+      options={({ route }) => ({ 
+        headerTitle: () => {
+          return (
+            <Text style={stylesHeader.blueHeaderTitle} selectable={false}> 
+              {route?.params?.total?.count ? route?.params.total.count + ' авто' : null}
+            </Text>
+        )},
         headerStyle: stylesHeader.blueHeader,
         headerTitleStyle: stylesHeader.blueHeaderTitle,
         headerLeft: () => {
@@ -571,17 +567,121 @@ export const UsedCars = ({navigation, route}) => (
           <View style={stylesHeader.headerRightStyle}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('UsedCarFilterScreen');
+                ActionSheet.show(
+                  {
+                    options: [
+                      {
+                        priority: 1,
+                        id: 'priceAsc',
+                        text: 'Возрастанию цены',
+                      },
+                      {
+                        priority: 2,
+                        id: 'priceDesc',
+                        text: 'Убыванию цены',
+                      },
+                      {
+                        priority: 3,
+                        id: 'createdDesc',
+                        text: 'Дате размещения',
+                      },
+                      {
+                        priority: 4,
+                        id: 'yearDesc',
+                        text: 'Году: новее',
+                      },
+                      {
+                        priority: 5,
+                        id: 'yearAsc',
+                        text: 'Году: старше',
+                      },
+                      {
+                        priority: 6,
+                        id: 'mileageAsc',
+                        text: 'Пробегу',
+                      },
+                      {
+                        priority: 7,
+                        id: 'cancel',
+                        text: 'Отмена',
+                      },
+                    ],
+                    cancelButtonIndex: 6,
+                    title: 'Сортировать по',
+                  },
+                  (buttonIndex) => {
+                    switch(buttonIndex) {
+                      case 0:
+                        navigation.navigate('UsedCarListScreen', {
+                          screen: 'UsedCarListScreen',
+                          params: {
+                            sortBy: 'price',
+                            sortDirection: 'asc'
+                          }
+                        });
+                        break;
+                      case 1:
+                        navigation.navigate('UsedCarListScreen', {
+                          screen: 'UsedCarListScreen',
+                          params: {
+                            sortBy: 'price',
+                            sortDirection: 'desc'
+                          }
+                        });
+                        break;
+                      case 2:
+                        navigation.navigate('UsedCarListScreen', {
+                          screen: 'UsedCarListScreen',
+                          params: {
+                            sortBy: 'created',
+                            sortDirection: 'desc'
+                          }
+                        });
+                        break;
+                      case 3:
+                        navigation.navigate('UsedCarListScreen', {
+                          screen: 'UsedCarListScreen',
+                          params: {
+                            sortBy: 'year',
+                            sortDirection: 'desc'
+                          }
+                        });
+                        break;
+                      case 4:
+                        navigation.navigate('UsedCarListScreen', {
+                          screen: 'UsedCarListScreen',
+                          params: {
+                            sortBy: 'year',
+                            sortDirection: 'asc'
+                          }
+                        });
+                        break;
+                      case 5:
+                        navigation.navigate('UsedCarListScreen', {
+                          screen: 'UsedCarListScreen',
+                          params: {
+                            sortBy: 'mileage',
+                            sortDirection: 'asc'
+                          }
+                        });
+                        break;
+                    }
+                  },
+                );
               }}>
               <Icon
-                type="FontAwesome"
-                name="filter"
-                style={styles.UsedCarListIconFilter}
+                type="MaterialCommunityIcons"
+                name="sort"
+                style={{
+                  color: styleConst.color.white,
+                  fontSize: 25,
+                  marginRight: 20,
+                }}
               />
             </TouchableOpacity>
           </View>
         ),
-      }}
+      })}
     />
     <StackCatalogUsed.Screen
       name="UsedCarItemScreen"

@@ -7,14 +7,13 @@ import {actionFetchNewCarByFilter} from '../../actions';
 
 // components
 import CarList from '../../components/CarList';
-
 import Spinner from 'react-native-loading-spinner-overlay';
 
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import {EVENT_REFRESH, EVENT_DEFAULT} from '../../../core/actionTypes';
+import {EVENT_REFRESH} from '../../../core/actionTypes';
 
 const styles = StyleSheet.create({
   content: {
@@ -46,8 +45,7 @@ const mapStateToProps = ({dealer, catalog}) => {
 };
 
 const initialSort = {sortBy: 'price', sortDirection: 'asc'};
-
-const reducer = (state, action) => {
+const sortReducer = (state, action) => {
   console.log('state, action', state, action);
   switch (action.type) {
     case 'sortBy':
@@ -61,7 +59,7 @@ const reducer = (state, action) => {
 
 const NewCarListScreen = ({items, navigation, route, filterData, actionFetchNewCarByFilter, dealerSelected, isFetchingNewCarByFilter}) => {
   const [loading, setLoading] = useState(false);
-  const [sorting, setSorting] = useReducer(reducer, initialSort);
+  const [sorting, setSorting] = useReducer(sortReducer, initialSort);
 
   const {data, pages, prices} = items;
 
