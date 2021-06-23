@@ -93,27 +93,25 @@ import {
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
 
-export const actionFetchUsedCar = ({type, city, nextPage, priceRange}) => {
+export const actionFetchUsedCar = (props) => {
   return (dispatch) => {
     dispatch({
       type: USED_CAR_LIST__REQUEST,
-      payload: {
-        type,
-        city,
-        nextPage,
-        priceRange,
-      },
+      payload: props,
     });
 
-    const nextPageUrl = type === EVENT_LOAD_MORE ? nextPage : null;
+    const newProps = {...props};
 
-    return API.fetchUsedCar({
-      city,
-      priceRange,
-      nextPageUrl,
-    })
+    if (props.type === EVENT_LOAD_MORE) {
+      newProps.nextPageUrl = props.nextPage;
+      newProps.isNextPage = true;
+    }
+
+    return API.fetchUsedCar(newProps)
       .then((res) => {
         let {data, error, total, pages, prices} = res;
+
+        let type = props.type;
 
         if (error) {
           return dispatch({

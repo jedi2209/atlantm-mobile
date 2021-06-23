@@ -164,14 +164,34 @@ export default {
     return this.request(`/eko/rating/get/${dealerId}/`, baseRequestParams);
   },
 
-  fetchUsedCar({city, nextPageUrl, priceRange}) {
+  fetchUsedCar({city, nextPageUrl, priceRange, sortBy, sortDirection, isNextPage}) {
+    if (nextPageUrl) {
+      return this.request(nextPageUrl, baseRequestParams);
+    }
+
     let url = `/stock/trade-in/cars/get/city/${city}/`;
+    let urlParams = [];
 
     if (priceRange) {
       url += `?price_from=${priceRange.minPrice}&price_to=${priceRange.maxPrice}`;
+      urlParams.push(`price_from=${priceRange.minPrice}&price_to=${priceRange.maxPrice}`);
     }
 
-    return this.request(nextPageUrl || url, baseRequestParams);
+    if (sortBy) {
+      urlParams.push(`sortBy=${sortBy}`);
+    }
+
+    if (sortDirection) {
+      urlParams.push(`sortDirection=${sortDirection}`);
+    }
+
+    if (!isNextPage) {
+      url = url + '?' + urlParams.join('&');
+    }
+
+    __DEV__ && console.log('API fetchUsedCar url', url);
+
+    return this.request(url, baseRequestParams);
   },
 
   fetchUsedCarDetails(carId) {
@@ -244,6 +264,9 @@ export default {
     sortDirection,
     isNextPage,
   }) {
+    if (isNextPage) {
+      return this.request(searchUrl, baseRequestParams);
+    }
     let url = searchUrl;
     let urlParams = [];
     let isAmp = false;
@@ -301,9 +324,7 @@ export default {
       urlParams.push(`sortDirection=${sortDirection}`);
     }
 
-    if (!isNextPage) {
-      url = url + '?' + urlParams.join('&');
-    }
+    url = url + '?' + urlParams.join('&');
 
     __DEV__ && console.log('API fetchNewCarByFilter url', url);
 
