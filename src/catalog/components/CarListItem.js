@@ -258,8 +258,8 @@ const CarListItem = ({car, prices, itemScreen, resizeMode, dealerSelected, curre
     }
 
     const CarPrices = {
-      sale: get(car, 'price.app.sale') || 0,
-      standart: get(car, 'price.app.standart') || get(car, 'price.app'),
+      sale: get(car, 'price.app.sale', 0),
+      standart: get(car, 'price.app.standart', get(car, 'price.app')),
     };
 
     return (

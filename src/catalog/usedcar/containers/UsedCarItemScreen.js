@@ -226,29 +226,42 @@ class UsedCarItemScreen extends Component {
 
   renderPrice = ({carDetails, currency}) => {
     const CarPrices = {
-      sale: get(carDetails, 'price.app.sale') || 0,
+      sale: get(carDetails, 'price.app.sale', 0),
       standart:
-        get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
+        get(carDetails, 'price.app.standart', get(carDetails, 'price.app')),
     };
+    const isSale = carDetails.sale === true;
 
     return (
       <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          alignItems: 'flex-end',
-          minWidth: 100,
-        }}>
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        minWidth: 100,
+      }}>
+      {isSale && (
         <Text
           style={{
             fontSize: 14,
             fontWeight: '600',
-            lineHeight: 20,
-            color: '#000',
+            color: '#D0021B',
           }}>
-          {showPrice(CarPrices.standart, this.props.dealerSelected.region)}
+          {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
         </Text>
-      </View>
+      )}
+      <Text
+        style={{
+          lineHeight: 20,
+          fontSize: isSale ? 12 : 14,
+          fontWeight: '600',
+          lineHeight: isSale ? 14 : 20,
+          color: '#000',
+          textDecorationLine: isSale ? 'line-through' : 'none',
+        }}>
+        {showPrice(CarPrices.standart, this.props.dealerSelected.region)}
+      </Text>
+    </View>
     );
   };
 
@@ -341,10 +354,12 @@ class UsedCarItemScreen extends Component {
     const modelName = get(carDetails, 'model.name');
     const additional = get(carDetails, 'options.additional.1.data', []);
     const badge = get(carDetails, 'badge', null);
-    console.log('carDetails', carDetails);
+    const isSale = carDetails.sale === true;
 
     const CarPrices = {
-      standart: get(carDetails, 'price.app.standart') || 0,
+      sale: get(carDetails, 'price.app.sale', 0),
+      standart:
+        get(carDetails, 'price.app.standart', get(carDetails, 'price.app')),
     };
 
     const gearboxId = get(carDetails, 'gearbox.id');
@@ -888,19 +903,42 @@ class UsedCarItemScreen extends Component {
             </View>
           </ScrollView>
           <View style={[styleConst.shadow.default, stylesFooter.footer]}>
-            <View
-              style={[
-                stylesFooter.orderPriceContainer,
-                stylesFooter.orderPriceContainerNotSale,
-              ]}>
-              <Text
-                style={[styles.orderPriceText, styles.orderPriceDefaultText]}>
-                {showPrice(
-                  CarPrices.standart,
-                  this.props.dealerSelected.region,
-                )}
-              </Text>
-            </View>
+            {isSale ? (
+              <View
+                style={[
+                  stylesFooter.orderPriceContainer,
+                  stylesFooter.orderPriceContainerSale,
+                ]}>
+                <Text
+                  style={[
+                    styles.orderPriceText,
+                    styles.orderPriceSpecialText,
+                  ]}>
+                  {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
+                </Text>
+                <Text
+                  style={[styles.orderPriceText, styles.orderPriceDefaultText, styles.orderPriceSmallText]}>
+                  {showPrice(
+                    CarPrices.standart,
+                    this.props.dealerSelected.region,
+                  )}
+                </Text>
+              </View>
+            ) : (
+              <View
+                style={[
+                  stylesFooter.orderPriceContainer,
+                  stylesFooter.orderPriceContainerNotSale,
+                ]}>
+                <Text
+                  style={[styles.orderPriceText, styles.orderPriceDefaultText]}>
+                  {showPrice(
+                    CarPrices.standart,
+                    this.props.dealerSelected.region,
+                  )}
+                </Text>
+              </View>
+            )}
             <View style={[stylesFooter.footerButtons]}>
               <Button
                 testID='UsedCarItemScreen.Button.TestDrive'
@@ -1002,6 +1040,13 @@ const stylesFooter = StyleSheet.create({
   orderPriceContainerNotSale: {
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  orderPriceContainerSale: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: 100,
   },
 });
 
