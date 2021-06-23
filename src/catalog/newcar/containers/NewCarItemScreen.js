@@ -517,9 +517,9 @@ class NewCarItemScreen extends Component {
     const isSale = carDetails.sale === true;
 
     const CarPrices = {
-      sale: get(carDetails, 'price.app.sale') || 0,
+      sale: get(carDetails, 'price.app.sale', 0),
       standart:
-        get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
+        get(carDetails, 'price.app.standart', get(carDetails, 'price.app')),
     };
 
     return (
