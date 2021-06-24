@@ -55,7 +55,7 @@ export default {
     let req = await this.request(
       '/mobile/check/version/',
       baseRequestParams,
-    ).then((res) => {
+    ).then(res => {
       if (res && res.version) {
         let APPVersionFromApi = parseInt(res.version.replace(/\./gi, ''));
         if (APPVersionFromApi > requestedVersion) {
@@ -164,7 +164,14 @@ export default {
     return this.request(`/eko/rating/get/${dealerId}/`, baseRequestParams);
   },
 
-  fetchUsedCar({city, nextPageUrl, priceRange, sortBy, sortDirection, isNextPage}) {
+  fetchUsedCar({
+    city,
+    nextPageUrl,
+    priceRange,
+    sortBy,
+    sortDirection,
+    isNextPage,
+  }) {
     if (nextPageUrl) {
       return this.request(nextPageUrl, baseRequestParams);
     }
@@ -174,7 +181,9 @@ export default {
 
     if (priceRange) {
       url += `?price_from=${priceRange.minPrice}&price_to=${priceRange.maxPrice}`;
-      urlParams.push(`price_from=${priceRange.minPrice}&price_to=${priceRange.maxPrice}`);
+      urlParams.push(
+        `price_from=${priceRange.minPrice}&price_to=${priceRange.maxPrice}`,
+      );
     }
 
     if (sortBy) {
@@ -208,7 +217,7 @@ export default {
   async fetchTDCarDetails(dealer, carID) {
     if (typeof carID === 'object') {
       let cars = [];
-      const carsData = carID.map(async (el) => {
+      const carsData = carID.map(async el => {
         const data = await this.request(
           `/stock/new/test-drive/${dealer}/${el}/`,
           baseRequestParams,
@@ -219,7 +228,7 @@ export default {
         }
         return false;
       });
-      return await Promise.all(carsData).then((el) => {
+      return await Promise.all(carsData).then(el => {
         return {status: 'success', data: cars};
       });
     } else {
@@ -309,8 +318,12 @@ export default {
     }
 
     if (filterPrice && filterPrice.min && filterPrice.max) {
-      url += `${setParamDivider()}price_from=${filterPrice.min}&price_to=${filterPrice.max}`;
-      urlParams.push(`price_from=${filterPrice.min}&price_to=${filterPrice.max}`);
+      url += `${setParamDivider()}price_from=${filterPrice.min}&price_to=${
+        filterPrice.max
+      }`;
+      urlParams.push(
+        `price_from=${filterPrice.min}&price_to=${filterPrice.max}`,
+      );
       if (!isAmp) {
         isAmp = true;
       }
@@ -453,7 +466,7 @@ export default {
       phone,
       dealerId,
       isNewCar,
-      actionID
+      actionID,
     } = props;
 
     const body = {
@@ -753,11 +766,11 @@ export default {
       props.gearbox && {name: 'f_Gearbox', value: String(props.gearbox)},
     ]);
 
-    formBody.map((val) => {
+    formBody.map(val => {
       formData.append(val.name, val.value);
     });
 
-    props.photos.map((photo) => {
+    props.photos.map(photo => {
       formData.append('f_Photo[]', {
         name: photo.filename,
         type: photo.mime,
@@ -894,13 +907,13 @@ export default {
     });
 
     return await this.request('/lkk/auth/social/', requestParams)
-      .then((response) => {
+      .then(response => {
         if (response.data && response.data.profile) {
           response.data.profile = profile;
         }
         return response;
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('loginWith(profile) error', err);
       });
   },
@@ -923,21 +936,21 @@ export default {
     });
 
     return await this.request('/lkk/auth/validate/', requestParams)
-      .then((response) => {
+      .then(response => {
         return response;
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('error', err);
       });
   },
 
   async getProfile(id) {
     return await this.request(`/lkk/user/${id}/`, baseRequestParams)
-      .then((response) => {
+      .then(response => {
         console.log('getProfile >>>>>>>>', response);
         return response.data;
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('error', err);
       });
   },
@@ -967,10 +980,10 @@ export default {
     }
 
     return await this.request(`/lkk/user/${profile.ID}/`, requestParams)
-      .then((response) => {
+      .then(response => {
         return response;
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('error', err);
       });
   },

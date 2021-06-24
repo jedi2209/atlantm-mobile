@@ -54,10 +54,22 @@ const sortReducer = (state, action) => {
   }
 };
 
-const UsedCarListScreen = ({city, total, pages, prices, priceRange, isFetchItems, navigation, route, actionFetchUsedCar, dealerSelected, items}) => {
+const UsedCarListScreen = ({
+  city,
+  total,
+  pages,
+  prices,
+  priceRange,
+  isFetchItems,
+  navigation,
+  route,
+  actionFetchUsedCar,
+  dealerSelected,
+  items,
+}) => {
   const [loading, setLoading] = useState(false);
   const [sorting, setSorting] = useReducer(sortReducer, initialSort);
-  
+
   const _fetchUsedCar = (type, priceRangeFromFilter) => {
     if (type === EVENT_REFRESH) {
       setLoading(true);
@@ -69,8 +81,10 @@ const UsedCarListScreen = ({city, total, pages, prices, priceRange, isFetchItems
       nextPage: pages?.next || null,
       // nextPage: get(items, 'pages.next', null),
       sortBy: route?.params?.sortBy ? route.params.sortBy : sorting.sortBy,
-      sortDirection: route?.params?.sortDirection ? route.params.sortDirection : sorting.sortDirection,
-    }).then((res) => {
+      sortDirection: route?.params?.sortDirection
+        ? route.params.sortDirection
+        : sorting.sortDirection,
+    }).then(res => {
       setLoading(false);
       return setTimeout(() => {
         navigation.setParams({
@@ -81,19 +95,28 @@ const UsedCarListScreen = ({city, total, pages, prices, priceRange, isFetchItems
     });
   };
 
-useEffect(() => {
-  console.log('== UsedCarListScreen ==');
-  Analytics.logEvent('screen', 'catalog/usedcar/list');
-console.log('route.params', route?.params);
-  if (typeof route.params?.sortDirection !== 'undefined') {
-    if (route.params?.sortDirection != sorting.sortDirection || route.params?.sortBy != sorting.sortBy) {
-      setSorting({type: 'all', value: {sortDirection: route.params.sortDirection, sortBy: route.params.sortBy}});
-      setTimeout(() => {
-        _fetchUsedCar(EVENT_REFRESH);
-      }, 100);
+  useEffect(() => {
+    console.log('== UsedCarListScreen ==');
+    Analytics.logEvent('screen', 'catalog/usedcar/list');
+    console.log('route.params', route?.params);
+    if (typeof route.params?.sortDirection !== 'undefined') {
+      if (
+        route.params?.sortDirection != sorting.sortDirection ||
+        route.params?.sortBy != sorting.sortBy
+      ) {
+        setSorting({
+          type: 'all',
+          value: {
+            sortDirection: route.params.sortDirection,
+            sortBy: route.params.sortBy,
+          },
+        });
+        setTimeout(() => {
+          _fetchUsedCar(EVENT_REFRESH);
+        }, 100);
+      }
     }
-  }
-});
+  });
   // componentDidMount() {
   //   setTimeout(() => {
   //     this.props.navigation.setParams({
@@ -169,6 +192,6 @@ console.log('route.params', route?.params);
       )}
     </View>
   );
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsedCarListScreen);

@@ -11,7 +11,7 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
   const defaultDate = new Date();
   const dateHuman = props.value ? format(props.value, 'DD MMMM YYYY') : null;
 
-  const DatePicker = (show) => {
+  const DatePicker = show => {
     switch (Platform.OS) {
       case 'ios':
         const majorVersionIOS = parseInt(Platform.Version, 10);

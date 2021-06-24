@@ -10,7 +10,19 @@ import {
   StatusBar,
   StyleSheet,
 } from 'react-native';
-import { Container, Row, Button, Icon, Segment, Content, Text, Card, CardItem, Right, StyleProvider} from 'native-base';
+import {
+  Container,
+  Row,
+  Button,
+  Icon,
+  Segment,
+  Content,
+  Text,
+  Card,
+  CardItem,
+  Right,
+  StyleProvider,
+} from 'native-base';
 import getTheme from '../../../../native-base-theme/components';
 import {verticalScale} from '../../../utils/scale';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
@@ -116,7 +128,7 @@ const mapStateToProps = ({catalog, dealer}) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     // actionFetchCars: (stockType) => {
     //   return dispatch(actionFetchCars(stockType));
@@ -124,13 +136,22 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const CarsFilterScreen = ({navigation, route, dealerSelected, stockTypeDefault}) => {
+const CarsFilterScreen = ({
+  navigation,
+  route,
+  dealerSelected,
+  stockTypeDefault,
+}) => {
   const [loading, setLoading] = useState(false);
   const [stockLoading, setStockLoading] = useState(false);
   const [totalCars, setTotalCars] = useState(null);
-  const [stockType, setStockType] = useState(route?.params?.stockTypeDefault ? route.params.stockTypeDefault : stockTypeDefault);
+  const [stockType, setStockType] = useState(
+    route?.params?.stockTypeDefault
+      ? route.params.stockTypeDefault
+      : stockTypeDefault,
+  );
 
-  const _showHideSubmitButton = (show) => {
+  const _showHideSubmitButton = show => {
     if (show) {
       Animated.timing(_animated.SubmitButton, {
         toValue: 1,
@@ -150,15 +171,15 @@ const CarsFilterScreen = ({navigation, route, dealerSelected, stockTypeDefault})
         setStockLoading(true);
       });
     }
-  }
+  };
 
-  const _fetchCarsAPI = (stockType) => {
+  const _fetchCarsAPI = stockType => {
     _showHideSubmitButton(false);
-    switch(stockType) {
+    switch (stockType) {
       case 'New':
         API.fetchNewCarFilterData({
           city: dealerSelected.city.id,
-        }).then((res) => {
+        }).then(res => {
           setTotalCars(res.total.count);
           _showHideSubmitButton(true);
         });
@@ -166,22 +187,22 @@ const CarsFilterScreen = ({navigation, route, dealerSelected, stockTypeDefault})
       case 'Used':
         API.fetchUsedCar({
           city: dealerSelected.city.id,
-        }).then((res) => {
+        }).then(res => {
           setTotalCars(res.total.count);
           _showHideSubmitButton(true);
         });
         break;
     }
-  }
+  };
 
-  const updateStock = (stockType) => {
+  const updateStock = stockType => {
     setTotalCars(null);
     setStockLoading(true);
     setStockType(stockType);
-  }
+  };
 
   const _onSubmitButtonPress = () => {
-    switch(stockType) {
+    switch (stockType) {
       case 'New':
         navigation.navigate('NewCarListScreen');
         break;
@@ -189,7 +210,7 @@ const CarsFilterScreen = ({navigation, route, dealerSelected, stockTypeDefault})
         navigation.navigate('UsedCarListScreen');
         break;
     }
-  }
+  };
 
   useEffect(() => {
     _fetchCarsAPI(stockType);
@@ -198,24 +219,33 @@ const CarsFilterScreen = ({navigation, route, dealerSelected, stockTypeDefault})
   return (
     <Container style={styles.container}>
       <Segment style={[styles.row, styles.segmentWrapper]}>
-        <Button 
+        <Button
           first
           style={[styles.segmentTab, styles.segmentTabTwo]}
-          onPress={() => {updateStock('New')}}
+          onPress={() => {
+            updateStock('New');
+          }}
           active={stockType === 'New' ? true : false}>
-          <Text style={styles.segmentButtonText}>{strings.NewCarListScreen.titleShort}</Text>
+          <Text style={styles.segmentButtonText}>
+            {strings.NewCarListScreen.titleShort}
+          </Text>
         </Button>
         <Button
           last
           style={[styles.segmentTab, styles.segmentTabTwo]}
-          onPress={() => {updateStock('Used')}}
+          onPress={() => {
+            updateStock('Used');
+          }}
           active={stockType === 'Used' ? true : false}>
-          <Text style={styles.segmentButtonText}>{strings.UsedCarListScreen.titleShort}</Text>
+          <Text style={styles.segmentButtonText}>
+            {strings.UsedCarListScreen.titleShort}
+          </Text>
         </Button>
       </Segment>
       <Content>
         <Card noShadow style={[styles.row]}>
-          <CardItem button 
+          <CardItem
+            button
             onPress={() => {
               navigation.navigate('BrandModelsFilterScreen');
             }}
@@ -231,24 +261,30 @@ const CarsFilterScreen = ({navigation, route, dealerSelected, stockTypeDefault})
         <ActivityIndicator
           color={styleConst.color.blue}
           style={[styles.resultButton, styleConst.spinner]}
-          size='small'
-      />
-      ) : totalCars && !loading ? (
-        <Animated.View style={{
-          opacity: _animated.SubmitButton,
-        }}>
+          size="small"
+        />
+      ) : !loading ? (
+        <Animated.View
+          style={{
+            opacity: _animated.SubmitButton,
+          }}>
           <Button
             block
             style={[styles.resultButton]}
-            onPress={() => {_onSubmitButtonPress();}}
-            >
-            <Text style={styles.resultButtonText}>Показать {totalCars} авто</Text>
+            disabled={!totalCars ? true : false}
+            active={totalCars ? true : false}
+            onPress={() => {
+              _onSubmitButtonPress();
+            }}>
+            <Text style={styles.resultButtonText}>
+              {totalCars ? `Показать ${totalCars} авто` : `Нет предложений`}
+            </Text>
           </Button>
         </Animated.View>
-        ) : null}
+      ) : null}
     </Container>
   );
-}
+};
 
 CarsFilterScreen.defaultProps = {
   stockTypeDefault: 'New',

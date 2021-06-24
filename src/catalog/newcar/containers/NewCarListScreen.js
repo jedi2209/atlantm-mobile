@@ -57,17 +57,25 @@ const sortReducer = (state, action) => {
   }
 };
 
-const NewCarListScreen = ({items, navigation, route, filterData, actionFetchNewCarByFilter, dealerSelected, isFetchingNewCarByFilter}) => {
+const NewCarListScreen = ({
+  items,
+  navigation,
+  route,
+  filterData,
+  actionFetchNewCarByFilter,
+  dealerSelected,
+  isFetchingNewCarByFilter,
+}) => {
   const [loading, setLoading] = useState(false);
   const [sorting, setSorting] = useReducer(sortReducer, initialSort);
 
   const {data, pages, prices} = items;
 
-  const _fetchNewCars = (type) => {
+  const _fetchNewCars = type => {
     if (type === EVENT_REFRESH) {
       setLoading(true);
     }
-    
+
     return actionFetchNewCarByFilter({
       type: type ? type : null,
       searchUrl:
@@ -75,22 +83,33 @@ const NewCarListScreen = ({items, navigation, route, filterData, actionFetchNewC
         `/stock/new/cars/get/city/${dealerSelected.city.id}/`,
       nextPage: get(items, 'pages.next', null),
       sortBy: route?.params?.sortBy ? route.params.sortBy : sorting.sortBy,
-      sortDirection: route?.params?.sortDirection ? route.params.sortDirection : sorting.sortDirection,
-    }).then((res) => {
-    return setTimeout(() => {
-      setLoading(false);
-      navigation.setParams({
-        total: get(items, 'total', get(res, 'payload.total')),
-      });
-    }, 150);
+      sortDirection: route?.params?.sortDirection
+        ? route.params.sortDirection
+        : sorting.sortDirection,
+    }).then(res => {
+      return setTimeout(() => {
+        setLoading(false);
+        navigation.setParams({
+          total: get(items, 'total', get(res, 'payload.total')),
+        });
+      }, 150);
     });
   };
 
   // Аналогично componentDidMount и componentDidUpdate:
   useEffect(() => {
     if (typeof route.params?.sortDirection !== 'undefined') {
-      if (route.params?.sortDirection != sorting.sortDirection || route.params?.sortBy != sorting.sortBy) {
-        setSorting({type: 'all', value: {sortDirection: route.params.sortDirection, sortBy: route.params.sortBy}});
+      if (
+        route.params?.sortDirection != sorting.sortDirection ||
+        route.params?.sortBy != sorting.sortBy
+      ) {
+        setSorting({
+          type: 'all',
+          value: {
+            sortDirection: route.params.sortDirection,
+            sortBy: route.params.sortBy,
+          },
+        });
         setTimeout(() => {
           _fetchNewCars(EVENT_REFRESH);
         }, 100);
@@ -123,7 +142,7 @@ const NewCarListScreen = ({items, navigation, route, filterData, actionFetchNewC
       )}
     </View>
   );
-}
+};
 
 const mapDispatchToProps = {
   actionFetchNewCarByFilter,
