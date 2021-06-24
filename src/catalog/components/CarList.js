@@ -24,8 +24,16 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CarList = (props) => {
-  const {data, pages, isFetchItems, dataHandler, itemScreen, prices, resizeMode} = props;
+const CarList = props => {
+  const {
+    data,
+    pages,
+    isFetchItems,
+    dataHandler,
+    itemScreen,
+    prices,
+    resizeMode,
+  } = props;
   const [isRefreshing, setRefreshing] = useState(false);
   const [loadingNextPage, setLoadingNextPage] = useState(false);
 
@@ -38,15 +46,18 @@ export default CarList = (props) => {
     }
   }, [data]);
 
-  _renderEmptyComponent = () => {
+  const _renderEmptyComponent = () => {
     return isFetchItems ? (
-      <ActivityIndicator color={styleConst.color.blue} style={styleConst.spinner} />
+      <ActivityIndicator
+        color={styleConst.color.blue}
+        style={styleConst.spinner}
+      />
     ) : (
       <EmptyMessage text={strings.CarList.emptyMessage} />
     );
   };
 
-  _renderItem = ({item}) => {
+  const _renderItem = ({item}) => {
     if (item.type === 'empty') {
       return <EmptyMessage text={strings.CarList.emptyMessage} />;
     }
@@ -64,7 +75,7 @@ export default CarList = (props) => {
     );
   };
 
-  _renderFooter = () => {
+  const _renderFooter = () => {
     if (!loadingNextPage) {
       return null;
     }
@@ -76,13 +87,13 @@ export default CarList = (props) => {
     );
   };
 
-  _onRefresh = () => {
+  const _onRefresh = () => {
     dataHandler(EVENT_REFRESH).then(() => {
       setRefreshing(false);
     });
   };
 
-  handleLoadMore = () => {
+  const handleLoadMore = () => {
     if (!pages.next || data.length === 0 || loadingNextPage) {
       return false;
     }
@@ -106,7 +117,7 @@ export default CarList = (props) => {
       ListEmptyComponent={_renderEmptyComponent}
       ListFooterComponent={_renderFooter}
       renderItem={_renderItem}
-      keyExtractor={(item) => {
+      keyExtractor={item => {
         if (item && item.hash) {
           return item.hash.toString();
         } else {
@@ -122,7 +133,6 @@ export default CarList = (props) => {
       {...props}
     />
   );
-
 };
 
 CarList.propTypes = {
@@ -140,3 +150,5 @@ CarList.defaultProps = {
   itemScreen: null,
   isFetchItems: false,
 };
+
+export default CarList;
