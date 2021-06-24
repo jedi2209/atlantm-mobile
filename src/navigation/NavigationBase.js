@@ -81,239 +81,239 @@ const StackOrders = createStackNavigator();
 const StackContacts = createStackNavigator();
 
 export const Base = ({navigation, route}) => {
-  const dealerSelected = useSelector((state) => state.dealer.selected);
+  const dealerSelected = useSelector(state => state.dealer.selected);
   let initialRouteName = 'BottomTabNavigation';
 
   if (!dealerSelected || !dealerSelected.id) {
     initialRouteName = 'IntroScreen';
   }
   return (
-  <StackBase.Navigator initialRouteName={initialRouteName}>
-    <StackBase.Screen
-      name="BottomTabNavigation"
-      component={BottomTabNavigation}
-      options={{headerShown: false}}
-    />
-    <StackBase.Screen
-      name="IntroScreen"
-      component={IntroScreen}
-      options={{headerShown: false}}
-    />
-    <StackBase.Screen
-      name="ChooseDealerScreen"
-      component={ChooseDealerScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ModalTransition,
-        headerTitle: strings.ChooseDealerScreen.title,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    <StackBase.Screen
-      name="ContactsScreen"
-      component={Contacts}
-      options={{headerShown: false}}
-    />
-    <StackBase.Screen
-      name="InfoList"
-      component={InfoListScreen}
-      options={ClassicHeaderWhite(
-        strings.InfoListScreen.title,
-        navigation,
-        route,
-      )}
-    />
-    <StackBase.Screen
-      name="InfoPostScreen"
-      component={InfoPostScreen}
-      options={TransparentBack(
-        navigation,
-        route,
-        {
+    <StackBase.Navigator initialRouteName={initialRouteName}>
+      <StackBase.Screen
+        name="BottomTabNavigation"
+        component={BottomTabNavigation}
+        options={{headerShown: false}}
+      />
+      <StackBase.Screen
+        name="IntroScreen"
+        component={IntroScreen}
+        options={{headerShown: false}}
+      />
+      <StackBase.Screen
+        name="ChooseDealerScreen"
+        component={ChooseDealerScreen}
+        options={BigCloseButton(navigation, route, {
           ...TransitionPresets.ModalTransition,
-          headerTitle: '',
+          headerTitle: strings.ChooseDealerScreen.title,
           headerTitleStyle: [
             stylesHeader.transparentHeaderTitle,
             {color: '#222B45'},
           ],
-        },
-        {
-          icon: 'close',
-          IconStyle: {
-            fontSize: 24,
+        })}
+      />
+      <StackBase.Screen
+        name="ContactsScreen"
+        component={Contacts}
+        options={{headerShown: false}}
+      />
+      <StackBase.Screen
+        name="InfoList"
+        component={InfoListScreen}
+        options={ClassicHeaderWhite(
+          strings.InfoListScreen.title,
+          navigation,
+          route,
+        )}
+      />
+      <StackBase.Screen
+        name="InfoPostScreen"
+        component={InfoPostScreen}
+        options={TransparentBack(
+          navigation,
+          route,
+          {
+            ...TransitionPresets.ModalTransition,
+            headerTitle: '',
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
           },
-        },
-      )}
-    />
-    <StackBase.Screen
-      name="MapScreen"
-      component={MapScreen}
-      options={TransparentBack(navigation, route)}
-    />
-    <StackBase.Screen
-      name="IndicatorsScreen"
-      component={IndicatorsScreen}
-      options={BigCloseButton(navigation, route)}
-    />
-    <StackBase.Screen
-      name="SettingsScreen"
-      component={SettingsScreen}
-      options={BigCloseButton(navigation, route, {
-        headerLeft: () => {
-          return ArrowBack(
-            navigation,
-            {
-              params: {
-                returnScreen: 'BottomTabNavigation',
-              },
+          {
+            icon: 'close',
+            IconStyle: {
+              fontSize: 24,
             },
-            {
-              icon: 'md-close',
-              IconStyle: {
-                fontSize: 42,
-                width: 40,
-                color: '#222B45',
+          },
+        )}
+      />
+      <StackBase.Screen
+        name="MapScreen"
+        component={MapScreen}
+        options={TransparentBack(navigation, route)}
+      />
+      <StackBase.Screen
+        name="IndicatorsScreen"
+        component={IndicatorsScreen}
+        options={BigCloseButton(navigation, route)}
+      />
+      <StackBase.Screen
+        name="SettingsScreen"
+        component={SettingsScreen}
+        options={BigCloseButton(navigation, route, {
+          headerLeft: () => {
+            return ArrowBack(
+              navigation,
+              {
+                params: {
+                  returnScreen: 'BottomTabNavigation',
+                },
               },
-            },
-          );
-        },
-      })}
-    />
-    {/* ЭКО */}
-    <StackBase.Screen
-      name="ReviewsScreen"
-      component={EKO}
-      options={{headerShown: false}}
-    />
-    {/* ТВА */}
-    <StackBase.Screen
-      name="TvaScreen"
-      component={TVA}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.TvaScreen.title,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    {/* НОВЫЕ АВТО */}
-    <StackBase.Screen
-      name="CarsStock"
-      component={CarsStock}
-      options={{headerShown: false}}
-    />
-    {/* Заявки */}
-    <StackOrders.Screen
-      name="ServiceScreen"
-      component={ServiceContainer}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.ServiceScreen.title,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    <StackOrders.Screen
-      name="ServiceScreenStep2"
-      component={ServiceScreenStep2}
-      options={ClassicHeaderWhite(
-        strings.ServiceScreen.title,
-        navigation,
-        route,
-      )}
-    />
-    {/* Подержаные автомобили */}
-    <StackOrders.Screen
-      name="OrderScreen"
-      component={OrderScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.OrderScreen.title,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    <StackOrders.Screen
-      name="TestDriveScreen"
-      component={TestDriveScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.TestDriveScreen.title,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    <StackOrders.Screen
-      name="OrderMyPriceScreen"
-      component={OrderMyPriceScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.OrderMyPriceScreen.title,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    <StackOrders.Screen
-      name="OrderCreditScreen"
-      component={OrderCreditScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.OrderCreditScreen.title,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    <StackOrders.Screen
-      name="OrderPartsScreen"
-      component={OrderPartsScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.OrderPartsScreen.title,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    <StackOrders.Screen
-      name="CarCostScreen"
-      component={CarCostScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.CarCostScreen.title,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    <StackOrders.Screen
-      name="CallMeBackScreen"
-      component={CallMeBackScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.CallMeBackScreen.title,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-  </StackBase.Navigator>
+              {
+                icon: 'md-close',
+                IconStyle: {
+                  fontSize: 42,
+                  width: 40,
+                  color: '#222B45',
+                },
+              },
+            );
+          },
+        })}
+      />
+      {/* ЭКО */}
+      <StackBase.Screen
+        name="ReviewsScreen"
+        component={EKO}
+        options={{headerShown: false}}
+      />
+      {/* ТВА */}
+      <StackBase.Screen
+        name="TvaScreen"
+        component={TVA}
+        options={BigCloseButton(navigation, route, {
+          ...TransitionPresets.ScaleFromCenterAndroid,
+          headerTitle: strings.TvaScreen.title,
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        })}
+      />
+      {/* НОВЫЕ АВТО */}
+      <StackBase.Screen
+        name="CarsStock"
+        component={CarsStock}
+        options={{headerShown: false}}
+      />
+      {/* Заявки */}
+      <StackOrders.Screen
+        name="ServiceScreen"
+        component={ServiceContainer}
+        options={BigCloseButton(navigation, route, {
+          ...TransitionPresets.ScaleFromCenterAndroid,
+          headerTitle: strings.ServiceScreen.title,
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        })}
+      />
+      <StackOrders.Screen
+        name="ServiceScreenStep2"
+        component={ServiceScreenStep2}
+        options={ClassicHeaderWhite(
+          strings.ServiceScreen.title,
+          navigation,
+          route,
+        )}
+      />
+      {/* Подержаные автомобили */}
+      <StackOrders.Screen
+        name="OrderScreen"
+        component={OrderScreen}
+        options={BigCloseButton(navigation, route, {
+          ...TransitionPresets.ScaleFromCenterAndroid,
+          headerTitle: strings.OrderScreen.title,
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        })}
+      />
+      <StackOrders.Screen
+        name="TestDriveScreen"
+        component={TestDriveScreen}
+        options={BigCloseButton(navigation, route, {
+          ...TransitionPresets.ScaleFromCenterAndroid,
+          headerTitle: strings.TestDriveScreen.title,
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        })}
+      />
+      <StackOrders.Screen
+        name="OrderMyPriceScreen"
+        component={OrderMyPriceScreen}
+        options={BigCloseButton(navigation, route, {
+          ...TransitionPresets.ScaleFromCenterAndroid,
+          headerTitle: strings.OrderMyPriceScreen.title,
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        })}
+      />
+      <StackOrders.Screen
+        name="OrderCreditScreen"
+        component={OrderCreditScreen}
+        options={BigCloseButton(navigation, route, {
+          ...TransitionPresets.ScaleFromCenterAndroid,
+          headerTitle: strings.OrderCreditScreen.title,
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        })}
+      />
+      <StackOrders.Screen
+        name="OrderPartsScreen"
+        component={OrderPartsScreen}
+        options={BigCloseButton(navigation, route, {
+          ...TransitionPresets.ScaleFromCenterAndroid,
+          headerTitle: strings.OrderPartsScreen.title,
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        })}
+      />
+      <StackOrders.Screen
+        name="CarCostScreen"
+        component={CarCostScreen}
+        options={BigCloseButton(navigation, route, {
+          ...TransitionPresets.ScaleFromCenterAndroid,
+          headerTitle: strings.CarCostScreen.title,
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        })}
+      />
+      <StackOrders.Screen
+        name="CallMeBackScreen"
+        component={CallMeBackScreen}
+        options={BigCloseButton(navigation, route, {
+          ...TransitionPresets.ScaleFromCenterAndroid,
+          headerTitle: strings.CallMeBackScreen.title,
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        })}
+      />
+    </StackBase.Navigator>
   );
 };
 
@@ -404,13 +404,16 @@ export const CarsStock = ({navigation, route}) => (
     <SearchStack.Screen
       name="NewCarListScreen"
       component={NewCarListScreen}
-      options={({ route }) => ({ 
+      options={({route}) => ({
         headerTitle: () => {
           return (
-            <Text style={stylesHeader.blueHeaderTitle} selectable={false}> 
-              {route?.params?.total?.count ? route?.params.total.count + ' авто' : null}
+            <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
+              {route?.params?.total?.count
+                ? route?.params.total.count + ' авто'
+                : null}
             </Text>
-        )},
+          );
+        },
         headerStyle: stylesHeader.blueHeader,
         headerTitleStyle: stylesHeader.blueHeaderTitle,
         headerLeft: () => {
@@ -447,15 +450,15 @@ export const CarsStock = ({navigation, route}) => (
                     cancelButtonIndex: 4,
                     title: 'Сортировать по',
                   },
-                  (buttonIndex) => {
-                    switch(buttonIndex) {
+                  buttonIndex => {
+                    switch (buttonIndex) {
                       case 0:
                         navigation.navigate('CarsStock', {
                           screen: 'NewCarListScreen',
                           params: {
                             sortBy: 'price',
-                            sortDirection: 'asc'
-                          }
+                            sortDirection: 'asc',
+                          },
                         });
                         break;
                       case 1:
@@ -463,8 +466,8 @@ export const CarsStock = ({navigation, route}) => (
                           screen: 'NewCarListScreen',
                           params: {
                             sortBy: 'price',
-                            sortDirection: 'desc'
-                          }
+                            sortDirection: 'desc',
+                          },
                         });
                         break;
                       case 2:
@@ -472,8 +475,8 @@ export const CarsStock = ({navigation, route}) => (
                           screen: 'NewCarListScreen',
                           params: {
                             sortBy: 'created',
-                            sortDirection: 'desc'
-                          }
+                            sortDirection: 'desc',
+                          },
                         });
                         break;
                       case 3:
@@ -481,8 +484,8 @@ export const CarsStock = ({navigation, route}) => (
                           screen: 'NewCarListScreen',
                           params: {
                             sortBy: 'created',
-                            sortDirection: 'asc'
-                          }
+                            sortDirection: 'asc',
+                          },
                         });
                         break;
                     }
@@ -551,13 +554,16 @@ export const UsedCars = ({navigation, route}) => (
     <StackCatalogUsed.Screen
       name="UsedCarListScreen"
       component={UsedCarListScreen}
-      options={({ route }) => ({ 
+      options={({route}) => ({
         headerTitle: () => {
           return (
-            <Text style={stylesHeader.blueHeaderTitle} selectable={false}> 
-              {route?.params?.total?.count ? route?.params.total.count + ' авто' : null}
+            <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
+              {route?.params?.total?.count
+                ? route?.params.total.count + ' авто'
+                : null}
             </Text>
-        )},
+          );
+        },
         headerStyle: stylesHeader.blueHeader,
         headerTitleStyle: stylesHeader.blueHeaderTitle,
         headerLeft: () => {
@@ -609,15 +615,15 @@ export const UsedCars = ({navigation, route}) => (
                     cancelButtonIndex: 6,
                     title: 'Сортировать по',
                   },
-                  (buttonIndex) => {
-                    switch(buttonIndex) {
+                  buttonIndex => {
+                    switch (buttonIndex) {
                       case 0:
                         navigation.navigate('UsedCarListScreen', {
                           screen: 'UsedCarListScreen',
                           params: {
                             sortBy: 'price',
-                            sortDirection: 'asc'
-                          }
+                            sortDirection: 'asc',
+                          },
                         });
                         break;
                       case 1:
@@ -625,8 +631,8 @@ export const UsedCars = ({navigation, route}) => (
                           screen: 'UsedCarListScreen',
                           params: {
                             sortBy: 'price',
-                            sortDirection: 'desc'
-                          }
+                            sortDirection: 'desc',
+                          },
                         });
                         break;
                       case 2:
@@ -634,8 +640,8 @@ export const UsedCars = ({navigation, route}) => (
                           screen: 'UsedCarListScreen',
                           params: {
                             sortBy: 'created',
-                            sortDirection: 'desc'
-                          }
+                            sortDirection: 'desc',
+                          },
                         });
                         break;
                       case 3:
@@ -643,8 +649,8 @@ export const UsedCars = ({navigation, route}) => (
                           screen: 'UsedCarListScreen',
                           params: {
                             sortBy: 'year',
-                            sortDirection: 'desc'
-                          }
+                            sortDirection: 'desc',
+                          },
                         });
                         break;
                       case 4:
@@ -652,8 +658,8 @@ export const UsedCars = ({navigation, route}) => (
                           screen: 'UsedCarListScreen',
                           params: {
                             sortBy: 'year',
-                            sortDirection: 'asc'
-                          }
+                            sortDirection: 'asc',
+                          },
                         });
                         break;
                       case 5:
@@ -661,8 +667,8 @@ export const UsedCars = ({navigation, route}) => (
                           screen: 'UsedCarListScreen',
                           params: {
                             sortBy: 'mileage',
-                            sortDirection: 'asc'
-                          }
+                            sortDirection: 'asc',
+                          },
                         });
                         break;
                     }
