@@ -159,8 +159,8 @@ const CleanStackView = () => {
   return <></>;
 };
 
-const _showOrdersMenu = (navigation) => {
-  orderFunctions.getOrders().then((data) => {
+const _showOrdersMenu = navigation => {
+  orderFunctions.getOrders().then(data => {
     ActionSheet.show(
       {
         options: data.BUTTONS,
@@ -168,7 +168,7 @@ const _showOrdersMenu = (navigation) => {
         title: data.TITLE,
         destructiveButtonIndex: data.DESTRUCTIVE_INDEX || null,
       },
-      (buttonIndex) => {
+      buttonIndex => {
         switch (data.BUTTONS[buttonIndex].id) {
           case 'callMeBack':
             navigation.navigate('CallMeBackScreen');
@@ -228,7 +228,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
         name="Search"
         component={CleanStackView}
         listeners={{
-          tabPress: (e) => {
+          tabPress: e => {
             e.preventDefault();
             navigation.navigate('CarsStock');
           },
@@ -276,7 +276,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
         name="Orders"
         component={CleanStackView}
         listeners={{
-          tabPress: (e) => {
+          tabPress: e => {
             e.preventDefault();
             _showOrdersMenu(navigation);
           },
