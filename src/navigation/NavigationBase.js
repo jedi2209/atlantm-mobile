@@ -396,7 +396,7 @@ export const CarsStock = ({navigation, route}) => (
       name="BrandModelsFilterScreen"
       component={BrandModelsFilterScreen}
       options={ClassicHeaderWhite(
-        strings.CarsFilterScreen.chooseBrandModel,
+        strings.CarsFilterScreen.chooseBrandModelTitle,
         navigation,
         route,
       )}
@@ -429,26 +429,26 @@ export const CarsStock = ({navigation, route}) => (
                       {
                         priority: 1,
                         id: 'priceAsc',
-                        text: 'Возрастанию цены',
+                        text: strings.Sort.price.asc,
                       },
                       {
                         priority: 2,
                         id: 'priceDesc',
-                        text: 'Убыванию цены',
+                        text: strings.Sort.price.desc,
                       },
                       {
                         priority: 3,
                         id: 'createdDesc',
-                        text: 'Дате размещения',
+                        text: strings.Sort.date.desc,
                       },
                       {
-                        priority: 5,
+                        priority: 4,
                         id: 'cancel',
-                        text: 'Отмена',
+                        text: strings.Base.cancel,
                       },
                     ],
-                    cancelButtonIndex: 4,
-                    title: 'Сортировать по',
+                    cancelButtonIndex: 3,
+                    title: strings.Sort.title,
                   },
                   buttonIndex => {
                     switch (buttonIndex) {
@@ -579,41 +579,41 @@ export const UsedCars = ({navigation, route}) => (
                       {
                         priority: 1,
                         id: 'priceAsc',
-                        text: 'Возрастанию цены',
+                        text: strings.Sort.price.asc,
                       },
                       {
                         priority: 2,
                         id: 'priceDesc',
-                        text: 'Убыванию цены',
+                        text: strings.Sort.price.desc,
                       },
                       {
                         priority: 3,
                         id: 'createdDesc',
-                        text: 'Дате размещения',
+                        text: strings.Sort.date.desc,
                       },
                       {
                         priority: 4,
                         id: 'yearDesc',
-                        text: 'Году: новее',
+                        text: strings.Sort.year.desc,
                       },
                       {
                         priority: 5,
                         id: 'yearAsc',
-                        text: 'Году: старше',
+                        text: strings.Sort.year.asc,
                       },
                       {
                         priority: 6,
                         id: 'mileageAsc',
-                        text: 'Пробегу',
+                        text: strings.Sort.mileage.asc,
                       },
                       {
                         priority: 7,
                         id: 'cancel',
-                        text: 'Отмена',
+                        text: strings.Base.cancel,
                       },
                     ],
                     cancelButtonIndex: 6,
-                    title: 'Сортировать по',
+                    title: strings.Sort.title,
                   },
                   buttonIndex => {
                     switch (buttonIndex) {

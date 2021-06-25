@@ -250,7 +250,7 @@ const CarsFilterScreen = ({
               navigation.navigate('BrandModelsFilterScreen');
             }}
             style={styles.cardItem}>
-            <Text>Выбрать марку и модель</Text>
+            <Text>{strings.CarsFilterScreen.chooseBrandModel}</Text>
             <Right>
               <Icon name="chevron-forward" />
             </Right>
@@ -277,7 +277,9 @@ const CarsFilterScreen = ({
               _onSubmitButtonPress();
             }}>
             <Text style={styles.resultButtonText}>
-              {totalCars ? `Показать ${totalCars} авто` : `Нет предложений`}
+              {totalCars
+                ? `${strings.CarsFilterScreen.resultsButton.show} ${totalCars} авто`
+                : `Нет предложений`}
             </Text>
           </Button>
         </Animated.View>
