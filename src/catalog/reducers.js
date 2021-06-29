@@ -59,28 +59,14 @@ import {
   CAR_COST__REQUEST,
   CAR_COST__SUCCESS,
   CAR_COST__FAIL,
-  CAR_COST_PHOTOS__FILL,
-  CAR_COST_BRAND__FILL,
-  CAR_COST_MODEL__FILL,
-  CAR_COST_YEAR__SELECT,
-  CAR_COST_MILEAGE__FILL,
-  CAR_COST_MILEAGE_UNIT__SELECT,
-  CAR_COST_ENGINE_VOLUME__FILL,
-  CAR_COST_ENGINE_TYPE__SELECT,
-  CAR_COST_GEARBOX__SELECT,
-  CAR_COST_COLOR__FILL,
-  CAR_COST_CAR_CONDITION__SELECT,
-  CAR_COST_COMMENT__FILL,
-  CAR_COST_VIN__FILL,
 
   // filtlers
   ACTION_SAVE_CAR_FILTERS__UPDATE,
+  CAR_FILTERS__UPDATE,
 } from './actionTypes';
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
 import {DEALER__SUCCESS} from '../dealer/actionTypes';
-
-import {MILEAGE_UNIT_KM} from './carcost/const';
 
 const usedCarItems = (state = [], action) => {
   switch (action.type) {
@@ -403,17 +389,6 @@ const newCarCity = (state = null, action) => {
   }
 };
 
-const newCarRegion = (state = null, action) => {
-  switch (action.type) {
-    case REHYDRATE:
-      return null;
-    case NEW_CAR_REGION__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
 const newCarFilterBrands = (state = [], action) => {
   switch (action.type) {
     case NEW_CAR_CITY__SELECT:
@@ -430,7 +405,7 @@ const newCarFilterModels = (state = [], action) => {
     case NEW_CAR_CITY__SELECT:
       return [];
     case NEW_CAR_FILTER_BRANDS__SELECT:
-      return state.filter((item) => {
+      return state.filter(item => {
         return action.payload.includes(item.brandId);
       });
     case NEW_CAR_FILTER_MODELS__SELECT:
@@ -644,149 +619,6 @@ const isCarCostRequest = (state = false, action) => {
   }
 };
 
-const carCostPhotos = (state = {}, action) => {
-  switch (action.type) {
-    case CAR_COST__SUCCESS:
-      return {};
-    case CAR_COST_PHOTOS__FILL:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const carCostBrand = (state = null, action) => {
-  switch (action.type) {
-    case CAR_COST__SUCCESS:
-      return null;
-    case CAR_COST_BRAND__FILL:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const carCostModel = (state = null, action) => {
-  switch (action.type) {
-    case CAR_COST__SUCCESS:
-      return null;
-    case CAR_COST_MODEL__FILL:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const carCostYear = (state = null, action) => {
-  switch (action.type) {
-    case CAR_COST__SUCCESS:
-      return null;
-    case CAR_COST_YEAR__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const carCostMileage = (state = null, action) => {
-  switch (action.type) {
-    case CAR_COST__SUCCESS:
-      return null;
-    case CAR_COST_MILEAGE__FILL:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const carCostMileageUnit = (state = MILEAGE_UNIT_KM, action) => {
-  switch (action.type) {
-    case CAR_COST__SUCCESS:
-      return MILEAGE_UNIT_KM;
-    case CAR_COST_MILEAGE_UNIT__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const carCostEngineVolume = (state = null, action) => {
-  switch (action.type) {
-    case CAR_COST__SUCCESS:
-      return null;
-    case CAR_COST_ENGINE_VOLUME__FILL:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const carCostEngineType = (state = null, action) => {
-  switch (action.type) {
-    case CAR_COST__SUCCESS:
-      return null;
-    case CAR_COST_ENGINE_TYPE__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const carCostGearbox = (state = null, action) => {
-  switch (action.type) {
-    case CAR_COST__SUCCESS:
-      return null;
-    case CAR_COST_GEARBOX__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const carCostColor = (state = null, action) => {
-  switch (action.type) {
-    case CAR_COST__SUCCESS:
-      return null;
-    case CAR_COST_COLOR__FILL:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const carCostCarCondition = (state = null, action) => {
-  switch (action.type) {
-    case CAR_COST__SUCCESS:
-      return null;
-    case CAR_COST_CAR_CONDITION__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const carCostVin = (state = null, action) => {
-  switch (action.type) {
-    case CAR_COST__SUCCESS:
-      return null;
-    case CAR_COST_VIN__FILL:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const carCostComment = (state = '', action) => {
-  switch (action.type) {
-    case CAR_COST__SUCCESS:
-      return '';
-    case CAR_COST_COMMENT__FILL:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
 const newCarFilters = (
   state = {
     brandFilters: [],
@@ -823,6 +655,18 @@ const usedCarFilters = (
       return {
         priceFilter: {},
       };
+    default:
+      return state;
+  }
+};
+
+const filtersData = (state = {}, action) => {
+  switch (action.type) {
+    case CAR_FILTERS__UPDATE:
+      return action.payload;
+    case DEALER__SUCCESS:
+    case USED_CAR_CITY__SELECT:
+      return {};
     default:
       return state;
   }
@@ -880,7 +724,6 @@ export default combineReducers({
     filterData: newCarFilterData,
     items: newCarByFilter,
     city: newCarCity,
-    region: newCarRegion,
     meta: combineReducers({
       needFetchFilterData,
       needFetchFilterDataAfterCity,
@@ -894,21 +737,12 @@ export default combineReducers({
   }),
 
   carCost: combineReducers({
-    photos: carCostPhotos,
-    brand: carCostBrand,
-    model: carCostModel,
-    year: carCostYear,
-    mileage: carCostMileage,
-    mileageUnit: carCostMileageUnit,
-    engineVolume: carCostEngineVolume,
-    engineType: carCostEngineType,
-    gearbox: carCostGearbox,
-    color: carCostColor,
-    comment: carCostComment,
-    vin: carCostVin,
-    carCondition: carCostCarCondition,
     meta: combineReducers({
       isCarCostRequest,
     }),
+  }),
+
+  filters: combineReducers({
+    data: filtersData,
   }),
 });

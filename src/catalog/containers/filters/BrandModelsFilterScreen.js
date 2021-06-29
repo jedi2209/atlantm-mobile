@@ -182,7 +182,6 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
     filterPriceSpecial: catalog.newCar.filterPriceSpecial,
 
     city: catalog.newCar.city,
-    region: catalog.newCar.region,
     needFetchFilterData: catalog.newCar.meta.needFetchFilterData,
     needFetchFilterDataAfterCity:
       catalog.newCar.meta.needFetchFilterDataAfterCity,
