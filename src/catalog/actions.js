@@ -22,14 +22,12 @@ import {
   USED_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
   USED_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
   NEW_CAR_CITY__SELECT,
-  NEW_CAR_REGION__SELECT,
   NEW_CAR_FILTER_DATA__REQUEST,
   NEW_CAR_FILTER_DATA__SUCCESS,
   NEW_CAR_FILTER_DATA__FAIL,
   NEW_CAR_BY_FILTER__REQUEST,
   NEW_CAR_BY_FILTER__SUCCESS,
   NEW_CAR_BY_FILTER__FAIL,
-  NEW_CAR_FILTER_BRANDS__SELECT,
   NEW_CAR_FILTER_MODELS__SELECT,
   NEW_CAR_FILTER_BODY__SELECT,
   NEW_CAR_FILTER_GEARBOX__SELECT,
@@ -78,17 +76,10 @@ import {
   CAR_COST_MODEL__FILL,
   CAR_COST_YEAR__SELECT,
   CAR_COST_MILEAGE__FILL,
-  CAR_COST_MILEAGE_UNIT__SELECT,
-  CAR_COST_ENGINE_VOLUME__FILL,
-  CAR_COST_ENGINE_TYPE__SELECT,
-  CAR_COST_GEARBOX__SELECT,
-  CAR_COST_COLOR__FILL,
-  CAR_COST_CAR_CONDITION__SELECT,
-  CAR_COST_COMMENT__FILL,
-  CAR_COST_VIN__FILL,
 
   // filters
   ACTION_SAVE_CAR_FILTERS__UPDATE,
+  CAR_FILTERS__UPDATE,
 } from './actionTypes';
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
@@ -531,15 +522,6 @@ export const actionSelectNewCarCity = city => {
   };
 };
 
-export const actionSelectNewCarRegion = region => {
-  return dispatch => {
-    return dispatch({
-      type: NEW_CAR_REGION__SELECT,
-      payload: region,
-    });
-  };
-};
-
 export const actionFetchNewCarFilterData = props => {
   return dispatch => {
     dispatch({
@@ -616,15 +598,6 @@ export const actionFetchNewCarByFilter = props => {
           },
         });
       });
-  };
-};
-
-export const actionSelectNewCarFilterBrands = brands => {
-  return dispatch => {
-    return dispatch({
-      type: NEW_CAR_FILTER_BRANDS__SELECT,
-      payload: brands,
-    });
   };
 };
 
@@ -816,123 +789,6 @@ export const actionUpdateNewCarPhotoViewerIndex = index => {
 };
 
 // carcost
-export const actionFillPhotosCarCost = photos => {
-  return dispatch => {
-    console.log('CAR_COST_PHOTOS__FILL', photos, dispatch);
-    return dispatch({
-      type: CAR_COST_PHOTOS__FILL,
-      payload: photos,
-    });
-  };
-};
-
-export const actionFillBrandCarCost = brand => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_BRAND__FILL,
-      payload: brand,
-    });
-  };
-};
-
-export const actionFillModelCarCost = model => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_MODEL__FILL,
-      payload: model,
-    });
-  };
-};
-
-export const actionFillColorCarCost = color => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_COLOR__FILL,
-      payload: color,
-    });
-  };
-};
-
-export const actionSelectYearCarCost = year => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_YEAR__SELECT,
-      payload: year,
-    });
-  };
-};
-
-export const actionFillMileageCarCost = mileage => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_MILEAGE__FILL,
-      payload: mileage,
-    });
-  };
-};
-
-export const actionSelectMileageUnitCarCost = mileageUnit => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_MILEAGE_UNIT__SELECT,
-      payload: mileageUnit,
-    });
-  };
-};
-
-export const actionFillEngineVolumeCarCost = engine => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_ENGINE_VOLUME__FILL,
-      payload: engine,
-    });
-  };
-};
-
-export const actionSelectEngineTypeCarCost = engine => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_ENGINE_TYPE__SELECT,
-      payload: engine,
-    });
-  };
-};
-
-export const actionFillVinCarCost = engine => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_VIN__FILL,
-      payload: engine,
-    });
-  };
-};
-
-export const actionSelectGearboxCarCost = gearbox => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_GEARBOX__SELECT,
-      payload: gearbox,
-    });
-  };
-};
-
-export const actionSelectCarConditionCarCost = carCondition => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_CAR_CONDITION__SELECT,
-      payload: carCondition,
-    });
-  };
-};
-
-export const actionFillCommentCarCost = comment => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_COMMENT__FILL,
-      payload: comment,
-    });
-  };
-};
 
 export const actionCarCostOrder = props => {
   return dispatch => {
