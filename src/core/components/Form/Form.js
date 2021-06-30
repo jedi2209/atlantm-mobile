@@ -236,11 +236,11 @@ class Form extends Component {
       duration: 250,
     };
     if (props.fields.groups) {
-      props.fields.groups.map((group) => {
-        group.fields = group.fields.filter((field) => {
+      props.fields.groups.map(group => {
+        group.fields = group.fields.filter(field => {
           return typeof field === 'object' && field.name && field.type;
         });
-        group.fields.map((field) => {
+        group.fields.map(field => {
           if (field.value && field.type !== 'component') {
             if (field.id) {
               this.state[field.name] = Object.assign(
@@ -277,7 +277,7 @@ class Form extends Component {
       if (props.fields.length === 1) {
         this.state.showSubmitButton = false;
       }
-      props.fields.map((field) => {
+      props.fields.map(field => {
         if (field.value && field.type !== 'component') {
           if (field.id) {
             this.state[field.name][field.id].value = field.value;
@@ -421,8 +421,9 @@ class Form extends Component {
   };
 
   //returns true if valid, false if not valid
-  _validateEmail = (email) => {
-    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Zа-яА-Я\-0-9]+\.)+[a-zA-Zа-яА-Я]{2,}))$/;
+  _validateEmail = email => {
+    var re =
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Zа-яА-Я\-0-9]+\.)+[a-zA-Zа-яА-Я]{2,}))$/;
     switch (typeof email) {
       case 'object':
         for (const [key, data] of Object.entries(email)) {
@@ -438,7 +439,7 @@ class Form extends Component {
     }
   };
 
-  _validateDateTime = (dateTime) => {
+  _validateDateTime = dateTime => {
     if (typeof dateTime === 'undefined' || !dateTime) {
       return false;
     }
@@ -449,7 +450,7 @@ class Form extends Component {
     }
   };
 
-  _validateDate = (date) => {
+  _validateDate = date => {
     if (typeof date === 'undefined' || !date) {
       return false;
     }
@@ -459,7 +460,7 @@ class Form extends Component {
   _validatePhone = ({formatted, pureValue, id, name, data, groupNum, num}) => {
     const countryCode = PhoneDetect.getCountryCodeByMask(formatted);
     if (id) {
-      this.setState((prevState) => {
+      this.setState(prevState => {
         let copyField = Object.assign({}, prevState[name]); // creating copy of state variable jasper
         copyField[id].value = formatted.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
         let maskLength = copyField[id].mask.replace(/[^0]/g, '');
@@ -532,7 +533,7 @@ class Form extends Component {
     }
   };
 
-  _setActive = (el) => {
+  _setActive = el => {
     if (typeof el === 'undefined') {
       return false;
     }
@@ -566,10 +567,10 @@ class Form extends Component {
     }
   };
 
-  onChangeField = (field) => (valueNew) => {
+  onChangeField = field => valueNew => {
     const {name, id} = field;
     if (field.id) {
-      this.setState((prevState) => {
+      this.setState(prevState => {
         let copyField = Object.assign({}, prevState[name]);
         if (typeof valueNew === 'undefined') {
           valueNew = null;
@@ -588,7 +589,7 @@ class Form extends Component {
     }
   };
 
-  _fieldsDivider = (key) => {
+  _fieldsDivider = key => {
     return <View style={styles.divider} key={key} />;
   };
 
@@ -801,7 +802,7 @@ class Form extends Component {
             value={this.state[name] || null}
             isActive={this.state.active[name] || false}
             onPressButton={() => {
-              this.setState((prevState) => {
+              this.setState(prevState => {
                 let copyField = Object.assign({}, prevState.active);
                 copyField[name] = true;
                 return {active: copyField};
@@ -815,7 +816,7 @@ class Form extends Component {
                 }
                 this.onChangeField(data)(currentDate);
               }
-              this.setState((prevState) => {
+              this.setState(prevState => {
                 let copyField = Object.assign({}, prevState.active);
                 copyField[name] = false;
                 return {active: copyField};
@@ -824,7 +825,7 @@ class Form extends Component {
             onChange={(_, selectedDate) => {
               const currentDate = selectedDate || this.state[name];
               if (Platform.OS !== 'ios') {
-                this.setState((prevState) => {
+                this.setState(prevState => {
                   let copyField = Object.assign({}, prevState.active);
                   copyField[name] = false;
                   return {active: copyField};
@@ -866,7 +867,7 @@ class Form extends Component {
           <ChooseDateTimeComponent
             label={label + (data.props && data.props.required ? '*' : '')}
             ref={this.inputRefs[groupNum + 'Input' + num]}
-            onFinishedSelection={(returnData) => {
+            onFinishedSelection={returnData => {
               this.onChangeField(data)(returnData);
               if (data.props.onChange) {
                 data.props.onChange(returnData);
@@ -917,14 +918,16 @@ class Form extends Component {
           </Text>
           <RNPickerSelect
             key={'rnYearPicker' + num + name}
+            ref={this.inputRefs[groupNum + 'Input' + num]}
+            touchableWrapperProps={{testID: 'Form.YearSelectInput.' + name}}
+            pickerProps={{testID: 'Form.YearPickerInput.' + name}}
             doneText={strings.Base.choose}
             onDonePress={() => {
               this._nextInput(groupNum, num);
             }}
-            onValueChange={(value) => {
+            onValueChange={value => {
               this.onChangeField(data)(value);
             }}
-            ref={this.inputRefs[groupNum + 'Input' + num]}
             style={{
               ...pickerSelectStyles,
               iconContainer: {
@@ -1064,9 +1067,9 @@ class Form extends Component {
             autoFormat={true}
             cancelText={strings.Base.cancel}
             confirmText={strings.Base.choose}
-            onSelectCountry={(iso2) => {
+            onSelectCountry={iso2 => {
               if (id) {
-                this.setState((prevState) => {
+                this.setState(prevState => {
                   let copyField = Object.assign({}, prevState[name]);
                   copyField[id] = {
                     value: null,
@@ -1203,7 +1206,7 @@ class Form extends Component {
                 data.props.onChange(this.state[name]);
               }
             }}
-            onValueChange={(value) => {
+            onValueChange={value => {
               this.onChangeField(data)(value);
               if (data.props.onChange && Platform.OS !== 'ios') {
                 data.props.onChange(value);
@@ -1300,16 +1303,16 @@ class Form extends Component {
                     if (this._validate()) {
                       this.setState({loading: true});
                       var promise = new Promise((resolve, reject) => {
-                        return this.props.onSubmit(this.state).then((data) => {
+                        return this.props.onSubmit(this.state).then(data => {
                           resolve(data);
                         });
                       });
                       promise
-                        .then((data) => {
+                        .then(data => {
                           this.setState({loading: false});
                           return data;
                         })
-                        .catch((error) => {
+                        .catch(error => {
                           console.error(error);
                           this.setState({loading: false});
                         });
@@ -1323,9 +1326,9 @@ class Form extends Component {
                 ]}
                 disabled={this.state.showSubmitButton ? false : true}
                 active={this.state.showSubmitButton ? true : false}
-                testID='Form.ButtonSubmit'
+                testID="Form.ButtonSubmit"
                 accessibilityValue={{
-                  text: this.state.showSubmitButton ? 'false' : 'true'
+                  text: this.state.showSubmitButton ? 'false' : 'true',
                 }}
                 {...this.props.SubmitButton.props}>
                 {this.state.loading ? (

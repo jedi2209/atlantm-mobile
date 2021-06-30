@@ -6,14 +6,6 @@ import {
   USED_CAR_LIST__REQUEST,
   USED_CAR_LIST__SUCCESS,
   USED_CAR_LIST__FAIL,
-  USED_CAR_LIST__RESET,
-  USED_CAR_LIST_UPDATE__SET,
-  USED_CAR_LIST_STOP_UPDATE__SET,
-  USED_CAR_CITY__SELECT,
-  USED_CAR_PRICE_RANGE__SELECT,
-  USED_CAR_REGION__SELECT,
-  USED_CAR_PRICE_FILTER__SHOW,
-  USED_CAR_PRICE_FILTER__HIDE,
   USED_CAR_DETAILS__REQUEST,
   USED_CAR_DETAILS__SUCCESS,
   USED_CAR_DETAILS__FAIL,
@@ -25,6 +17,9 @@ import {
   NEW_CAR_FILTER_DATA__REQUEST,
   NEW_CAR_FILTER_DATA__SUCCESS,
   NEW_CAR_FILTER_DATA__FAIL,
+  USED_CAR_FILTER_DATA__REQUEST,
+  USED_CAR_FILTER_DATA__SUCCESS,
+  USED_CAR_FILTER_DATA__FAIL,
   NEW_CAR_BY_FILTER__REQUEST,
   NEW_CAR_BY_FILTER__SUCCESS,
   NEW_CAR_BY_FILTER__FAIL,
@@ -84,7 +79,36 @@ import {
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
 
-export const actionFetchUsedCar = props => {
+export const actionFetchUsedCarByFilter = props => {
+  props.url = `/stock/trade-in/cars/get/city/${props.city}/`;
+  let urlParams = [];
+
+  if (props.sortBy) {
+    urlParams.push(`sortBy=${props.sortBy}`);
+  }
+
+  if (props.sortDirection) {
+    urlParams.push(`sortDirection=${props.sortDirection}`);
+  }
+
+  if (props.filters) {
+    for (const [key, value] of Object.entries(props.filters)) {
+      if (value) {
+        if (value === true) {
+          urlParams.push(`${key}=1`);
+        } else {
+          if (value !== false && value !== 'false') {
+            urlParams.push(`${key}=${value}`);
+          }
+        }
+      }
+    }
+  }
+
+  if (props.type !== EVENT_LOAD_MORE) {
+    props.url = props.url + '?' + urlParams.join('&');
+  }
+
   return dispatch => {
     dispatch({
       type: USED_CAR_LIST__REQUEST,
@@ -140,60 +164,6 @@ export const actionFetchUsedCar = props => {
           },
         });
       });
-  };
-};
-
-export const actionSelectUsedCarPriceRange = prices => {
-  return dispatch => {
-    dispatch({
-      type: USED_CAR_PRICE_RANGE__SELECT,
-      payload: prices,
-    });
-  };
-};
-
-export const actionSelectUsedCarCity = city => {
-  return dispatch => {
-    dispatch({
-      type: USED_CAR_CITY__SELECT,
-      payload: city,
-    });
-  };
-};
-
-export const actionSelectUsedCarRegion = region => {
-  return dispatch => {
-    return dispatch({
-      type: USED_CAR_REGION__SELECT,
-      payload: region,
-    });
-  };
-};
-
-export const actionResetUsedCarList = region => {
-  return dispatch => {
-    return dispatch({
-      type: USED_CAR_LIST__RESET,
-      payload: region,
-    });
-  };
-};
-
-export const actionShowPriceFilter = region => {
-  return dispatch => {
-    return dispatch({
-      type: USED_CAR_PRICE_FILTER__SHOW,
-      payload: region,
-    });
-  };
-};
-
-export const actionHidePriceFilter = region => {
-  return dispatch => {
-    return dispatch({
-      type: USED_CAR_PRICE_FILTER__HIDE,
-      payload: region,
-    });
   };
 };
 
@@ -495,23 +465,6 @@ export const actionUpdateUsedCarPhotoViewerIndex = index => {
     });
   };
 };
-
-export const actionSetNeedUpdateUsedCarList = () => {
-  return dispatch => {
-    dispatch({
-      type: USED_CAR_LIST_UPDATE__SET,
-    });
-  };
-};
-
-export const actionSetStopNeedUpdateUsedCarList = () => {
-  return dispatch => {
-    dispatch({
-      type: USED_CAR_LIST_STOP_UPDATE__SET,
-    });
-  };
-};
-
 // newcar
 export const actionSelectNewCarCity = city => {
   return dispatch => {
@@ -548,6 +501,39 @@ export const actionFetchNewCarFilterData = props => {
       .catch(error => {
         return dispatch({
           type: NEW_CAR_FILTER_DATA__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
+  };
+};
+export const actionFetchUsedCarFilterData = props => {
+  return dispatch => {
+    dispatch({
+      type: USED_CAR_FILTER_DATA__REQUEST,
+      payload: props,
+    });
+
+    return API.fetchUsedCarFilterData(props)
+      .then(res => {
+        if (res.error) {
+          return dispatch({
+            type: USED_CAR_FILTER_DATA__FAIL,
+            payload: {
+              error: res.error.message,
+            },
+          });
+        }
+
+        return dispatch({
+          type: USED_CAR_FILTER_DATA__SUCCESS,
+          payload: {...res},
+        });
+      })
+      .catch(error => {
+        return dispatch({
+          type: USED_CAR_FILTER_DATA__FAIL,
           payload: {
             error: error.message,
           },

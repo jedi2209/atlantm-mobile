@@ -3,7 +3,7 @@ import {StyleSheet, View, StatusBar} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
-import {actionFetchUsedCar} from '../../actions';
+import {actionFetchUsedCarByFilter} from '../../actions';
 
 // components
 import CarList from '../../components/CarList';
@@ -26,19 +26,18 @@ const mapStateToProps = ({dealer, catalog}) => {
   return {
     city: catalog.usedCar.city,
     items: catalog.usedCar.items,
-    total: catalog.usedCar.total,
     pages: catalog.usedCar.pages,
     prices: catalog.usedCar.prices,
-    priceRange: catalog.usedCar.priceRange,
     needUpdate: catalog.usedCar.meta.needUpdate,
     isFetchItems: catalog.usedCar.meta.isFetchItems,
     isPriceFilterShow: catalog.usedCar.meta.isPriceFilterShow,
     dealerSelected: dealer.selected,
+    filtersUsed: catalog.usedCar.filters.data,
   };
 };
 
 const mapDispatchToProps = {
-  actionFetchUsedCar,
+  actionFetchUsedCarByFilter,
 };
 
 const initialSort = {sortBy: 'price', sortDirection: 'asc'};
@@ -56,15 +55,14 @@ const sortReducer = (state, action) => {
 
 const UsedCarListScreen = ({
   city,
-  total,
   pages,
   prices,
-  priceRange,
   isFetchItems,
   navigation,
   route,
-  actionFetchUsedCar,
+  actionFetchUsedCarByFilter,
   dealerSelected,
+  filtersUsed,
   items,
 }) => {
   const [loading, setLoading] = useState(false);
@@ -74,12 +72,11 @@ const UsedCarListScreen = ({
     if (type === EVENT_REFRESH) {
       setLoading(true);
     }
-    return actionFetchUsedCar({
+    return actionFetchUsedCarByFilter({
       type,
-      priceRange: priceRangeFromFilter || priceRange,
       city: city ? city.id : dealerSelected.city.id,
       nextPage: pages?.next || null,
-      // nextPage: get(items, 'pages.next', null),
+      filters: filtersUsed.filters,
       sortBy: route?.params?.sortBy ? route.params.sortBy : sorting.sortBy,
       sortDirection: route?.params?.sortDirection
         ? route.params.sortDirection
@@ -101,8 +98,8 @@ const UsedCarListScreen = ({
     console.log('route.params', route?.params);
     if (typeof route.params?.sortDirection !== 'undefined') {
       if (
-        route.params?.sortDirection != sorting.sortDirection ||
-        route.params?.sortBy != sorting.sortBy
+        route.params?.sortDirection !== sorting.sortDirection ||
+        route.params?.sortBy !== sorting.sortBy
       ) {
         setSorting({
           type: 'all',

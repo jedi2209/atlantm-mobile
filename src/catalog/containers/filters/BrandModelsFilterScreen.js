@@ -9,7 +9,19 @@ import {
   StatusBar,
   StyleSheet,
 } from 'react-native';
-import { Container, Row, Button, Icon, Segment, Content, Text, Card, CardItem, Right, StyleProvider} from 'native-base';
+import {
+  Container,
+  Row,
+  Button,
+  Icon,
+  Segment,
+  Content,
+  Text,
+  Card,
+  CardItem,
+  Right,
+  StyleProvider,
+} from 'native-base';
 import getTheme from '../../../../native-base-theme/components';
 import {verticalScale} from '../../../utils/scale';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
@@ -86,12 +98,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
-  const {
-    brandFilters,
-    bodyFilters,
-    priceFilter,
-    modelFilter,
-  } = catalog.newCar.filters;
+  const {brandFilters, bodyFilters, priceFilter, modelFilter} =
+    catalog.newCar.filters;
 
   let filterBrands, filterBody, filterPrice, filterModels, isNotFilterBrands;
 
@@ -100,7 +108,7 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
   } else {
     filterBody =
       catalog.newCar.filterData && catalog.newCar.filterData.data.body
-        ? Object.keys(catalog.newCar.filterData.data.body).map((body) => ({
+        ? Object.keys(catalog.newCar.filterData.data.body).map(body => ({
             id: body,
             name: catalog.newCar.filterData.data.body[body],
           }))
@@ -117,7 +125,7 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
         isNotFilterBrands = true;
       } else {
         filterBrands = Object.keys(catalog.newCar.filterData.data.brand).map(
-          (body) => ({
+          body => ({
             id: body,
             checked: false,
             name: catalog.newCar.filterData.data.brand[body].name,
@@ -135,7 +143,7 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
   } else if (filterBrands && filterBrands.length > 0) {
     filterModels = filterBrands.reduce((acc, brand) => {
       if (brand.checked) {
-        Object.keys(brand.model).forEach((item) => {
+        Object.keys(brand.model).forEach(item => {
           acc.push({
             id: item,
             checked: false,
@@ -201,29 +209,32 @@ const mapDispatchToProps = {
 };
 
 class BrandModelsFilterScreen extends Component {
-    render() {
-      return (
-        <Container style={styles.container}>
-          <Content>
-            <Card noShadow style={[styles.row]}>
-              <CardItem style={styles.cardItem}>
-                <Text>Выбрать марку и модель</Text>
-                <Right>
-                  <Icon name="chevron-forward" />
-                </Right>
-              </CardItem>
-            </Card>
-            <Card noShadow style={[styles.row]}>
-              <CardItem style={styles.cardItem}>
-                <Text>Выбрать марку и модель</Text>
-                <Right>
-                  <Icon name="chevron-forward" />
-                </Right>
-              </CardItem>
-            </Card>
-          </Content>
-        </Container>
-      );
-    }
+  render() {
+    return (
+      <Container style={styles.container}>
+        <Content>
+          <Card noShadow style={[styles.row]}>
+            <CardItem style={styles.cardItem}>
+              <Text>Выбрать марку и модель</Text>
+              <Right>
+                <Icon name="chevron-forward" />
+              </Right>
+            </CardItem>
+          </Card>
+          <Card noShadow style={[styles.row]}>
+            <CardItem style={styles.cardItem}>
+              <Text>Выбрать марку и модель</Text>
+              <Right>
+                <Icon name="chevron-forward" />
+              </Right>
+            </CardItem>
+          </Card>
+        </Content>
+      </Container>
+    );
   }
-export default connect(mapStateToProps, mapDispatchToProps)(BrandModelsFilterScreen);
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(BrandModelsFilterScreen);

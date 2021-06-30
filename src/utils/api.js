@@ -164,43 +164,10 @@ export default {
     return this.request(`/eko/rating/get/${dealerId}/`, baseRequestParams);
   },
 
-  fetchUsedCar({
-    city,
-    nextPageUrl,
-    priceRange,
-    sortBy,
-    sortDirection,
-    isNextPage,
-  }) {
-    if (nextPageUrl) {
-      return this.request(nextPageUrl, baseRequestParams);
-    }
+  fetchUsedCar({nextPageUrl, url}) {
+    // __DEV__ && console.log('API fetchUsedCar url', url);
 
-    let url = `/stock/trade-in/cars/get/city/${city}/`;
-    let urlParams = [];
-
-    if (priceRange) {
-      url += `?price_from=${priceRange.minPrice}&price_to=${priceRange.maxPrice}`;
-      urlParams.push(
-        `price_from=${priceRange.minPrice}&price_to=${priceRange.maxPrice}`,
-      );
-    }
-
-    if (sortBy) {
-      urlParams.push(`sortBy=${sortBy}`);
-    }
-
-    if (sortDirection) {
-      urlParams.push(`sortDirection=${sortDirection}`);
-    }
-
-    if (!isNextPage) {
-      url = url + '?' + urlParams.join('&');
-    }
-
-    __DEV__ && console.log('API fetchUsedCar url', url);
-
-    return this.request(url, baseRequestParams);
+    return this.request(nextPageUrl ? nextPageUrl : url, baseRequestParams);
   },
 
   fetchUsedCarDetails(carId) {
@@ -241,6 +208,12 @@ export default {
 
   fetchNewCarFilterData({city}) {
     return this.request(`/stock/new/cars/search/?city=${city}`, {
+      ...baseRequestParams,
+    });
+  },
+
+  fetchUsedCarFilterData({city}) {
+    return this.request(`/stock/trade-in/cars/search/?city=${city}`, {
       ...baseRequestParams,
     });
   },
@@ -335,6 +308,14 @@ export default {
 
     if (sortDirection) {
       urlParams.push(`sortDirection=${sortDirection}`);
+    }
+
+    if (filters) {
+      for (const [key, value] of Object.entries(filters)) {
+        if (value) {
+          urlParams.push(`${key}=${value}`);
+        }
+      }
     }
 
     url = url + '?' + urlParams.join('&');
