@@ -269,6 +269,24 @@ export default {
     price: 'Ціна',
     brands: 'Бренди',
     models: 'Моделі',
+    filters: {
+      year: {
+        title: 'Год выпуска',
+        from: 'от',
+        to: 'до',
+      },
+      mileage: {
+        title: 'Пробег, км.',
+      },
+      price: {
+        title: 'Цена',
+        nds: 'НДС 20%',
+        special: 'Спец.цена',
+      },
+      power: {
+        title: 'Мощность, л.с',
+      },
+    },
   },
   Sort: {
     title: 'Сортувати за',

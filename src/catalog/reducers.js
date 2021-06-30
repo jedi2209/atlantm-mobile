@@ -4,14 +4,7 @@ import {
   USED_CAR_LIST__REQUEST,
   USED_CAR_LIST__SUCCESS,
   USED_CAR_LIST__FAIL,
-  USED_CAR_LIST__RESET,
-  USED_CAR_LIST_UPDATE__SET,
-  USED_CAR_LIST_STOP_UPDATE__SET,
   USED_CAR_CITY__SELECT,
-  USED_CAR_REGION__SELECT,
-  USED_CAR_PRICE_RANGE__SELECT,
-  USED_CAR_PRICE_FILTER__SHOW,
-  USED_CAR_PRICE_FILTER__HIDE,
   USED_CAR_DETAILS__REQUEST,
   USED_CAR_DETAILS__SUCCESS,
   USED_CAR_DETAILS__FAIL,
@@ -20,7 +13,6 @@ import {
   USED_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
   USED_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
   NEW_CAR_CITY__SELECT,
-  NEW_CAR_REGION__SELECT,
   NEW_CAR_FILTER_DATA__REQUEST,
   NEW_CAR_FILTER_DATA__SUCCESS,
   NEW_CAR_FILTER_DATA__FAIL,
@@ -72,7 +64,6 @@ const usedCarItems = (state = [], action) => {
   switch (action.type) {
     case REHYDRATE:
     case DEALER__SUCCESS:
-    case USED_CAR_LIST__RESET:
     case 'ACTION_SAVE_CAR_FILTERS_USED__UPDATE':
       return [];
     case USED_CAR_LIST__SUCCESS:
@@ -139,43 +130,6 @@ const usedCarPrices = (state = {}, action) => {
   }
 };
 
-const usedCarCity = (state = null, action) => {
-  switch (action.type) {
-    case REHYDRATE:
-      return null;
-    case DEALER__SUCCESS:
-      return null;
-    case USED_CAR_CITY__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const usedCarPriceRange = (state = null, action) => {
-  switch (action.type) {
-    case REHYDRATE:
-    case DEALER__SUCCESS:
-    case USED_CAR_CITY__SELECT:
-      return null;
-    case USED_CAR_PRICE_RANGE__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const usedCarRegion = (state = null, action) => {
-  switch (action.type) {
-    case REHYDRATE:
-      return null;
-    case USED_CAR_REGION__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
 const isFetchUsedCarItems = (state = false, action) => {
   switch (action.type) {
     case REHYDRATE:
@@ -183,19 +137,6 @@ const isFetchUsedCarItems = (state = false, action) => {
     case USED_CAR_LIST__FAIL:
       return false;
     case USED_CAR_LIST__REQUEST:
-      return true;
-    default:
-      return state;
-  }
-};
-
-const isUsedCarPriceFilterShow = (state = false, action) => {
-  switch (action.type) {
-    case REHYDRATE:
-      return false;
-    case USED_CAR_PRICE_FILTER__HIDE:
-      return false;
-    case USED_CAR_PRICE_FILTER__SHOW:
       return true;
     default:
       return state;
@@ -299,17 +240,6 @@ const usedCarPhotoViewerVisible = (state = false, action) => {
     case USED_CAR_DETAILS_PHOTO_VIEWER__CLOSE:
       return false;
     case USED_CAR_DETAILS_PHOTO_VIEWER__OPEN:
-      return true;
-    default:
-      return state;
-  }
-};
-
-const needUpdateUsedCarList = (state = false, action) => {
-  switch (action.type) {
-    case USED_CAR_LIST_STOP_UPDATE__SET:
-      return false;
-    case USED_CAR_LIST_UPDATE__SET:
       return true;
     default:
       return state;
@@ -641,12 +571,7 @@ const newCarFilters = (
   }
 };
 
-const usedCarFilters = (
-  state = {
-    priceFilter: {},
-  },
-  action,
-) => {
+const usedCarFilters = (state = {}, action) => {
   switch (action.type) {
     case 'ACTION_SAVE_CAR_FILTERS_USED__UPDATE':
       return action.payload;
@@ -655,6 +580,8 @@ const usedCarFilters = (
       return {
         priceFilter: {},
       };
+    case USED_CAR_LIST__REQUEST:
+      return action.payload;
     default:
       return state;
   }
@@ -689,20 +616,17 @@ export default combineReducers({
       photoViewerVisible: usedCarPhotoViewerVisible,
       photoViewerIndex: usedCarPhotoViewerIndex,
     }),
-    city: usedCarCity,
     total: usedCarTotal,
     pages: usedCarPages,
     items: usedCarItems,
     prices: usedCarPrices,
-    region: usedCarRegion,
-    priceRange: usedCarPriceRange,
     meta: combineReducers({
-      needUpdate: needUpdateUsedCarList,
       isFetchItems: isFetchUsedCarItems,
-      isPriceFilterShow: isUsedCarPriceFilterShow,
       isFetchingCarDetails: isFetchingUsedCarDetails,
     }),
-    filters: usedCarFilters,
+    filters: combineReducers({
+      data: usedCarFilters,
+    }),
   }),
 
   newCar: combineReducers({
@@ -733,16 +657,14 @@ export default combineReducers({
       isFetchingCarDetails: isFetchingNewCarDetails,
       isFetchingTDCarDetails: isFetchingTDCarDetails,
     }),
-    filters: newCarFilters,
+    filters: combineReducers({
+      data: filtersData,
+    }),
   }),
 
   carCost: combineReducers({
     meta: combineReducers({
       isCarCostRequest,
     }),
-  }),
-
-  filters: combineReducers({
-    data: filtersData,
   }),
 });

@@ -87,15 +87,8 @@ class CarCostScreen extends Component {
   constructor(props) {
     super(props);
 
-    const {
-      lastName,
-      firstName,
-      phone,
-      email,
-      carName,
-      carNumber,
-      carVIN,
-    } = props;
+    const {lastName, firstName, phone, email, carName, carNumber, carVIN} =
+      props;
 
     this.state = {
       email: email,
@@ -131,7 +124,7 @@ class CarCostScreen extends Component {
     email: PropTypes.string,
   };
 
-  onPressOrder = async (dataFromForm) => {
+  onPressOrder = async dataFromForm => {
     const isInternetExist = await isInternet();
     const nav = this.props.navigation;
 
@@ -497,7 +490,7 @@ class CarCostScreen extends Component {
                 value: (
                   <CarCostPhotos
                     photos={this.state.photos}
-                    photosFill={(photos) => {
+                    photosFill={photos => {
                       this.setState({
                         photos: photos,
                       });
