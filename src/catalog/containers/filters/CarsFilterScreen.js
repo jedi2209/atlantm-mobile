@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     paddingHorizontal: '5%',
     paddingVertical: 10,
+    zIndex: 10,
   },
   rowLast: {
     marginBottom: 50,
@@ -126,11 +127,18 @@ const styles = StyleSheet.create({
     color: styleConst.color.greyText5,
     width: '50%',
   },
-  resultButton: {
-    width: '90%',
-    marginHorizontal: '5%',
+  resultButtonWrapper: {
+    zIndex: 100,
     position: 'absolute',
-    bottom: 30,
+    width: '100%',
+    bottom: 0,
+    alignItems: 'center',
+    alignContent: 'center',
+  },
+  resultButton: {
+    zIndex: 99,
+    backgroundColor: styleConst.color.blue,
+    borderColor: styleConst.color.blue,
   },
   resultButtonText: {
     textTransform: 'uppercase',
@@ -153,6 +161,42 @@ const _animated = {
   SubmitButton: new Animated.Value(1),
   duration: 250,
 };
+
+const deviceWidth = Dimensions.get('window').width;
+const sliderWidth = (deviceWidth / 100) * 85;
+
+const modals = {
+  year: 'year',
+  mileage: 'mileage',
+  price: 'price',
+  power: 'power',
+  engineVolume: 'engineVolume',
+  gearbox: 'gearbox',
+  body: 'body',
+  enginetype: 'enginetype',
+  drive: 'drive',
+};
+
+const initialStateFilters = {
+  nds: false,
+  guarantee: false,
+  breakInsurance: false,
+  fullServiceHistory: false,
+  onlineOrder: false,
+};
+
+const yearItems = [];
+const minDate = new Date(substractYears(100)).getUTCFullYear();
+const maxDate = new Date().getUTCFullYear();
+if (minDate && maxDate) {
+  for (var i = minDate; i <= maxDate; i++) {
+    yearItems.push({
+      label: i.toString(),
+      value: i,
+    });
+  }
+}
+yearItems.reverse();
 
 const mapStateToProps = ({catalog, dealer}) => {
   return {
@@ -184,48 +228,12 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-const deviceWidth = Dimensions.get('window').width;
-const sliderWidth = (deviceWidth / 100) * 85;
-
-const modals = {
-  year: 'year',
-  mileage: 'mileage',
-  price: 'price',
-  power: 'power',
-  engineVolume: 'engineVolume',
-  gearbox: 'gearbox',
-  body: 'body',
-  enginetype: 'enginetype',
-  drive: 'drive',
-};
-
-const yearItems = [];
-const minDate = new Date(substractYears(100)).getUTCFullYear();
-const maxDate = new Date().getUTCFullYear();
-if (minDate && maxDate) {
-  for (var i = minDate; i <= maxDate; i++) {
-    yearItems.push({
-      label: i.toString(),
-      value: i,
-    });
-  }
-}
-yearItems.reverse();
-
 const _convertSelect = data => {
   let g = [];
   Object.keys(data).map(val => {
     return g.push({value: val, label: data[val]});
   });
   return g;
-};
-
-const initialStateFilters = {
-  nds: false,
-  guarantee: false,
-  breakInsurance: false,
-  fullServiceHistory: false,
-  onlineOrder: false,
 };
 
 const reducerFilters = (state = initialStateFilters, field) => {
@@ -241,6 +249,14 @@ const reducerFilters = (state = initialStateFilters, field) => {
     });
   }
   return res;
+};
+
+const _getSelectedLabels = (selectArr = []) => {
+  let labels = [];
+  selectArr.map(val => {
+    labels.push(val.label);
+  });
+  return labels.join(', ');
 };
 
 const CarsFilterScreen = ({
@@ -299,28 +315,6 @@ const CarsFilterScreen = ({
     }
     return setShowModal(type);
   };
-
-  // const _fetchCarsAPI = stockType => {
-  //   _showHideSubmitButton(false);
-  //   switch (stockType) {
-  //     case 'New':
-  //       actionFetchNewCar({
-  //         searchUrl: `/stock/new/cars/get/city/${dealerSelected.city.id}/`,
-  //       }).then(res => {
-  //         setTotalCars(res.payload.total.count);
-  //         _showHideSubmitButton(true);
-  //       });
-  //       break;
-  //     case 'Used':
-  //       actionFetchUsedCar({
-  //         city: dealerSelected.city.id,
-  //       }).then(res => {
-  //         setTotalCars(res.payload.total.count);
-  //         _showHideSubmitButton(true);
-  //       });
-  //       break;
-  //   }
-  // };
 
   const _fetchFiltersAPI = stockType => {
     _showHideSubmitButton(false);
@@ -461,14 +455,6 @@ const CarsFilterScreen = ({
         break;
     }
   }, [updateFromApi]);
-
-  const _getSelectedLabels = (selectArr = []) => {
-    let labels = [];
-    selectArr.map(val => {
-      labels.push(val.label);
-    });
-    return labels.join(', ');
-  };
 
   return (
     <Container style={styles.container}>
@@ -1490,26 +1476,20 @@ const CarsFilterScreen = ({
             </ModalView>
           ) : null}
         </Content>
-      ) : (
-        <ActivityIndicator
-          color={styleConst.color.blue}
-          style={[styles.resultButton, styleConst.spinner]}
-          size="small"
-        />
-      )}
+      ) : null}
       {stockLoading ? (
         <ActivityIndicator
           color={styleConst.color.blue}
-          style={[styles.resultButton, styleConst.spinner]}
+          style={[styles.resultButtonWrapper, styleConst.spinner, {bottom: 10}]}
           size="small"
         />
       ) : !loading ? (
         <Animated.View
-          style={{
+          style={[styles.resultButtonWrapper, {
             opacity: _animated.SubmitButton,
-          }}>
+          }]}>
           <Button
-            block
+            full
             style={[styles.resultButton]}
             disabled={!totalCars ? true : false}
             active={totalCars ? true : false}

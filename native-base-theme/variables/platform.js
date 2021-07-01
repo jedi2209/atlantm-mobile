@@ -110,7 +110,7 @@ export default {
   cardDefaultBg: '#fff',
 
   // Color
-  brandPrimary: platform === 'ios' ? '#007aff' : '#007aff',
+  brandPrimary: styleConst.color.blue,
   brandInfo: '#62B1F6',
   brandSuccess: '#34BD78',
   brandDanger: '#d9534f',
@@ -151,7 +151,7 @@ export default {
 
   // Header
   toolbarBtnColor: platform === 'ios' ? '#007aff' : '#fff',
-  toolbarDefaultBg: platform === 'ios' ? styleConst.color.bg : '#3F51B5',
+  toolbarDefaultBg: platform === 'ios' ? styleConst.color.bg : styleConst.color.blue,
   toolbarHeight: platform === 'ios' ? 64 : 56,
   toolbarIconSize: platform === 'ios' ? 20 : 22,
   toolbarSearchIconSize: platform === 'ios' ? 20 : 23,
@@ -159,7 +159,7 @@ export default {
   searchBarHeight: platform === 'ios' ? 30 : 40,
   toolbarInverseBg: '#222',
   toolbarTextColor: platform === 'ios' ? '#000' : '#fff',
-  toolbarDefaultBorder: platform === 'ios' ? '#a7a6ab' : '#3F51B5',
+  toolbarDefaultBorder: platform === 'ios' ? '#a7a6ab' : styleConst.color.blue,
   iosStatusbar: platform === 'ios' ? 'dark-content' : 'light-content',
   get statusBarColor() {
     return color(this.toolbarDefaultBg).darken(0.2).hex();
@@ -221,7 +221,7 @@ export default {
 
   // Radio Button
   radioBtnSize: platform === 'ios' ? 25 : 23,
-  radioSelectedColorAndroid: '#3F51B5',
+  radioSelectedColorAndroid: styleConst.color.blue,
 
   // New Variable
   radioBtnLineHeight: platform === 'ios' ? 29 : 24,

@@ -29,7 +29,7 @@ export default {
   screen: Dimensions.get('window'),
   spinner: {
     alignSelf: 'center',
-    marginTop: verticalScale(60),
+    marginTop: verticalScale(30),
   },
   shadow: {
     default: {
