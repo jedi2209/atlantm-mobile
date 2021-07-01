@@ -128,11 +128,11 @@ export default {
   // CheckBox
   CheckboxRadius: platform === PLATFORM.IOS ? 13 : 0,
   CheckboxBorderWidth: platform === PLATFORM.IOS ? 1 : 2,
-  CheckboxPaddingLeft: platform === PLATFORM.IOS ? 4 : 0,
+  CheckboxPaddingLeft: platform === PLATFORM.IOS ? 6 : 0,
   CheckboxPaddingBottom: platform === PLATFORM.IOS ? 0 : 0,
   CheckboxIconSize: platform === PLATFORM.IOS ? 19 : 17,
   CheckboxIconMarginTop: platform === PLATFORM.IOS ? undefined : 1,
-  CheckboxFontSize: platform === PLATFORM.IOS ? 12 / 0.9 : 18,
+  CheckboxFontSize: platform === PLATFORM.IOS ? 16 / 0.9 : 18,
   checkboxBgColor: styleConst.color.systemGray,
   checkboxSize: 20,
   checkboxTickColor: styleConst.color.white,

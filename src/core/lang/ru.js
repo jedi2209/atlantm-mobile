@@ -269,6 +269,7 @@ export default {
     price: 'Цена',
     brands: 'Бренды',
     models: 'Модели',
+    notFound: 'Нет предложений',
     filters: {
       year: {
         title: 'Год выпуска',

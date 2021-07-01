@@ -1,9 +1,11 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, Platform} from 'react-native';
 import {Button} from 'native-base';
 import Modal from 'react-native-modal';
 import styleConst from '../style-const';
 import {strings} from '../../core/lang/const';
+
+const isAndroid = Platform.OS === 'android';
 
 const styles = StyleSheet.create({
   modalView: {
@@ -33,7 +35,7 @@ const styles = StyleSheet.create({
   },
   modalButtonBottom: {
     marginVertical: 15,
-    height: 50,
+    height: isAndroid ? 50 : 60,
     borderRadius: 0,
   },
   modalButtonText: {

@@ -261,33 +261,34 @@ export default {
   },
   CarsFilterScreen: {
     title: 'Параметри',
-    chooseBrandModel: 'Выбрать марку и модель',
-    chooseBrandModelTitle: 'Выберите марки и модель',
+    chooseBrandModel: 'Вибрати марку і модель',
+    chooseBrandModelTitle: 'Виберіть марки і модель',
     resultsButton: {
-      show: 'Показать',
+      show: 'Показати',
     },
     price: 'Ціна',
     brands: 'Бренди',
     models: 'Моделі',
+    notFound: 'Немає пропозицій',
     filters: {
       year: {
-        title: 'Год выпуска',
-        from: 'от',
+        title: 'Рік випуску',
+        from: 'від',
         to: 'до',
       },
       mileage: {
         title: 'Пробег, км.',
       },
       price: {
-        title: 'Цена',
+        title: 'Ціна',
         nds: 'НДС 20%',
-        special: 'Спец.цена',
+        special: 'Спец.ціна',
       },
       power: {
-        title: 'Мощность, л.с',
+        title: 'Потужність, к.с.',
       },
       engineVolume: {
-        title: 'Объем двигателя, л.',
+        title: "Об'єм двигуна, л",
       },
       gearbox: {
         title: 'Коробка передач',
@@ -296,22 +297,22 @@ export default {
         title: 'Кузов',
       },
       enginetype: {
-        title: 'Тип двигателя',
+        title: 'Тип двигуна',
       },
       drive: {
-        title: 'Привод',
+        title: 'Тип приводу',
       },
       guarantee: {
-        title: 'На гарантии',
+        title: 'На гарантії',
       },
       breakInsurance: {
-        title: 'Застрахован от поломок',
+        title: 'Застрахований від поломок',
       },
       fullServiceHistory: {
-        title: 'Полная сервисная история',
+        title: 'Повна сервісна історія',
       },
       onlineOrder: {
-        title: 'Можно забронировать онлайн',
+        title: 'Можна забронювати онлайн',
       },
     },
   },

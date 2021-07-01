@@ -9,6 +9,7 @@ import {
   Dimensions,
   StatusBar,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import {
   Container,
@@ -42,7 +43,6 @@ import {
   actionFetchNewCarFilterData,
   actionFetchUsedCarFilterData,
   actionFetchUsedCarByFilter,
-  actionSaveCarFilters,
 } from '../../actions';
 
 // helpers
@@ -54,6 +54,8 @@ import {ScrollView} from 'react-native-gesture-handler';
 
 import {strings} from '../../../core/lang/const';
 import { color } from 'react-native-reanimated';
+
+const isAndroid = Platform.OS === 'android';
 
 const styles = StyleSheet.create({
   container: {
@@ -71,8 +73,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     zIndex: 10,
   },
+  noResultsRow: {
+    height: 200,
+  },
   rowLast: {
-    marginBottom: 60,
+    marginBottom: isAndroid ? 60 : 50,
   },
   rowStatic: {
     height: 65,
@@ -99,6 +104,14 @@ const styles = StyleSheet.create({
   },
   segmentTabTwo: {
     width: '50%',
+  },
+  segmentTabLeft: {
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5
+  },
+  segmentTabRight: {
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5
   },
   segmentButtonText: {
     fontFamily: styleConst.font.regular,
@@ -131,15 +144,17 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '90%',
     marginHorizontal: '5%',
-    bottom: 10,
+    bottom: isAndroid ? 10 : 30,
     alignItems: 'center',
     alignContent: 'center',
   },
   resultButton: {
     zIndex: 99,
+    borderRadius: 5,
+  },
+  resultButtonEnabled: {
     backgroundColor: styleConst.color.blue,
     borderColor: styleConst.color.blue,
-    borderRadius: 5,
   },
   resultButtonText: {
     textTransform: 'uppercase',
@@ -184,6 +199,7 @@ const initialStateFilters = {
   breakInsurance: false,
   fullServiceHistory: false,
   onlineOrder: false,
+  'price-special': false,
 };
 
 const yearItems = [];
@@ -239,6 +255,9 @@ const _convertSelect = data => {
 
 const reducerFilters = (state = initialStateFilters, field) => {
   let res = {};
+  if (!field) {
+    return res;
+  }
   if (typeof field === 'object' && field.length) {
     field.map(val => {
       state[val.name] = val.value;
@@ -273,7 +292,7 @@ const CarsFilterScreen = ({
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [updateFromApi, setUpdateFromApi] = useState(0);
-  const [stockLoading, setStockLoading] = useState(false);
+  const [stockLoading, setStockLoading] = useState(true);
   const [totalCars, setTotalCars] = useState(null);
   const [stockType, setStockType] = useState(
     route?.params?.stockTypeDefault
@@ -325,21 +344,25 @@ const CarsFilterScreen = ({
           city: dealerSelected.city.id,
         }).then(res => {
           setTotalCars(res.payload.total.count);
-          if (res.payload.data.gearbox) {
-            res.payload.data.gearbox = _convertSelect(res.payload.data.gearbox);
+          if (res.payload.data) {
+            if (res.payload.data.gearbox) {
+              res.payload.data.gearbox = _convertSelect(res.payload.data.gearbox);
+            }
+            if (res.payload.data.body) {
+              res.payload.data.body = _convertSelect(res.payload.data.body);
+            }
+            if (res.payload.data.enginetype) {
+              res.payload.data.enginetype = _convertSelect(
+                res.payload.data.enginetype,
+              );
+            }
+            if (res.payload.data.drive) {
+              res.payload.data.drive = _convertSelect(res.payload.data.drive);
+            }
+            setDataFilters(res.payload);
+          } else {
+            setDataFilters(null);
           }
-          if (res.payload.data.body) {
-            res.payload.data.body = _convertSelect(res.payload.data.body);
-          }
-          if (res.payload.data.enginetype) {
-            res.payload.data.enginetype = _convertSelect(
-              res.payload.data.enginetype,
-            );
-          }
-          if (res.payload.data.drive) {
-            res.payload.data.drive = _convertSelect(res.payload.data.drive);
-          }
-          setDataFilters(res.payload);
           _showHideSubmitButton(true);
         });
         break;
@@ -348,21 +371,25 @@ const CarsFilterScreen = ({
           city: dealerSelected.city.id,
         }).then(res => {
           setTotalCars(res.payload.total.count);
-          if (res.payload.data.gearbox) {
-            res.payload.data.gearbox = _convertSelect(res.payload.data.gearbox);
+          if (res.payload.data) {
+            if (res.payload.data.gearbox) {
+              res.payload.data.gearbox = _convertSelect(res.payload.data.gearbox);
+            }
+            if (res.payload.data.body) {
+              res.payload.data.body = _convertSelect(res.payload.data.body);
+            }
+            if (res.payload.data.enginetype) {
+              res.payload.data.enginetype = _convertSelect(
+                res.payload.data.enginetype,
+              );
+            }
+            if (res.payload.data.drive) {
+              res.payload.data.drive = _convertSelect(res.payload.data.drive);
+            }
+            setDataFilters(res.payload);
+          } else {
+            setDataFilters(null);
           }
-          if (res.payload.data.body) {
-            res.payload.data.body = _convertSelect(res.payload.data.body);
-          }
-          if (res.payload.data.enginetype) {
-            res.payload.data.enginetype = _convertSelect(
-              res.payload.data.enginetype,
-            );
-          }
-          if (res.payload.data.drive) {
-            res.payload.data.drive = _convertSelect(res.payload.data.drive);
-          }
-          setDataFilters(res.payload);
           _showHideSubmitButton(true);
         });
         break;
@@ -370,6 +397,7 @@ const CarsFilterScreen = ({
   };
 
   const updateStock = stockType => {
+    dispatchFilters(null, null);
     setDataFilters(null);
     setTotalCars(null);
     setStockLoading(true);
@@ -462,10 +490,11 @@ const CarsFilterScreen = ({
       <Segment style={[styles.row, styles.segmentWrapper]}>
         <Button
           first
-          style={[styles.segmentTab, styles.segmentTabTwo, {borderTopLeftRadius: 5, borderBottomLeftRadius: 5}]}
+          style={[styles.segmentTab, styles.segmentTabTwo, styles.segmentTabLeft]}
           onPress={() => {
             updateStock('New');
           }}
+          disabled={stockType === 'New' ? true : false}
           active={stockType === 'New' ? true : false}>
           <Text style={styles.segmentButtonText} uppercase={true}>
             {strings.NewCarListScreen.titleShort}
@@ -473,10 +502,11 @@ const CarsFilterScreen = ({
         </Button>
         <Button
           last
-          style={[styles.segmentTab, styles.segmentTabTwo, {borderTopRightRadius: 5, borderBottomRightRadius: 5}]}
+          style={[styles.segmentTab, styles.segmentTabTwo, styles.segmentTabRight]}
           onPress={() => {
             updateStock('Used');
           }}
+          disabled={stockType === 'Used' ? true : false}
           active={stockType === 'Used' ? true : false}>
           <Text style={styles.segmentButtonText} uppercase={true}>
             {strings.UsedCarListScreen.titleShort}
@@ -906,30 +936,30 @@ const CarsFilterScreen = ({
                 </Right>
               </CardItem>
             </Card>
-          ) : (
-            <Card noShadow style={[styles.row, styles.rowLast]}>
-              <CardItem
-                button
-                onPress={() => {
-                  _onChangeFilter('onlineOrder', !stateFilters.onlineOrder);
-                  setUpdateFromApi(updateFromApi + 1);
-                }}
-                style={styles.cardItem}>
-                <Text style={styles.fieldTitle}>
-                  {strings.CarsFilterScreen.filters.onlineOrder.title}
-                </Text>
-                <Right>
-                  <CheckBox
-                    checked={get(stateFilters, 'onlineOrder', false)}
-                    onPress={() => {
-                      _onChangeFilter('onlineOrder', !stateFilters.onlineOrder);
-                      setUpdateFromApi(updateFromApi + 1);
-                    }}
-                  />
-                </Right>
-              </CardItem>
-            </Card>
-          )}
+          ) : dealerSelected.region === 'by' ? (
+              <Card noShadow style={[styles.row, styles.rowLast]}>
+                <CardItem
+                  button
+                  onPress={() => {
+                    _onChangeFilter('onlineOrder', !stateFilters.onlineOrder);
+                    setUpdateFromApi(updateFromApi + 1);
+                  }}
+                  style={styles.cardItem}>
+                  <Text style={styles.fieldTitle}>
+                    {strings.CarsFilterScreen.filters.onlineOrder.title}
+                  </Text>
+                  <Right>
+                    <CheckBox
+                      checked={get(stateFilters, 'onlineOrder', false)}
+                      onPress={() => {
+                        _onChangeFilter('onlineOrder', !stateFilters.onlineOrder);
+                        setUpdateFromApi(updateFromApi + 1);
+                      }}
+                    />
+                  </Right>
+                </CardItem>
+              </Card>
+            ) : null}
 
           {/* Модалка Год выпуска */}
           {dataFilters.data.year ? (
@@ -1435,11 +1465,22 @@ const CarsFilterScreen = ({
             </ModalView>
           ) : null}
         </Content>
-      ) : null}
+      ) : !stockLoading ? (
+          <Content>
+            <Card noShadow style={[styles.row, styles.noResultsRow, {flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}]}>
+              <Icon
+                type="MaterialCommunityIcons"
+                style={{color: styleConst.color.greyBlue, fontWeight: 'lighter', fontSize: 120,}}
+                name="car-off"
+                />
+              <Text style={{color: styleConst.color.greyBlue, fontSize: 20, textTransform: 'uppercase'}}>{strings.CarsFilterScreen.notFound}</Text>
+            </Card>
+          </Content>
+        ) : null}
       {stockLoading ? (
         <ActivityIndicator
           color={styleConst.color.blue}
-          style={[styles.resultButtonWrapper, styleConst.spinner, {bottom: 10}]}
+          style={[styles.resultButtonWrapper, styleConst.spinner, {bottom: isAndroid ? 10 : 40}]}
           size="small"
         />
       ) : !loading ? (
@@ -1449,8 +1490,8 @@ const CarsFilterScreen = ({
           }]}>
           <Button
             full
-            style={[styles.resultButton, styleConst.shadow.default]}
-            disabled={!totalCars ? true : false}
+            style={[styles.resultButton, totalCars ? styles.resultButtonEnabled : null, styleConst.shadow.default]}
+            disabled={!totalCars || totalCars === 0 ? true : false}
             active={totalCars ? true : false}
             onPress={() => {
               _onSubmitButtonPress();
@@ -1458,7 +1499,7 @@ const CarsFilterScreen = ({
             <Text style={styles.resultButtonText}>
               {totalCars
                 ? `${strings.CarsFilterScreen.resultsButton.show} ${totalCars} авто`
-                : `Нет предложений`}
+                : strings.CarsFilterScreen.notFound}
             </Text>
           </Button>
         </Animated.View>
