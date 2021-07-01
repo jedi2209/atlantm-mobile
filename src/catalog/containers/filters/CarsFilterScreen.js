@@ -22,9 +22,7 @@ import {
   CardItem,
   Right,
   CheckBox,
-  StyleProvider,
 } from 'native-base';
-import getTheme from '../../../../native-base-theme/components';
 import {verticalScale} from '../../../utils/scale';
 
 import ModalView from '../../../core/components/ModalView';
@@ -55,6 +53,7 @@ import numberWithGap from '../../../utils/number-with-gap';
 import {ScrollView} from 'react-native-gesture-handler';
 
 import {strings} from '../../../core/lang/const';
+import { color } from 'react-native-reanimated';
 
 const styles = StyleSheet.create({
   container: {
@@ -73,7 +72,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   rowLast: {
-    marginBottom: 50,
+    marginBottom: 60,
   },
   rowStatic: {
     height: 65,
@@ -130,8 +129,9 @@ const styles = StyleSheet.create({
   resultButtonWrapper: {
     zIndex: 100,
     position: 'absolute',
-    width: '100%',
-    bottom: 0,
+    width: '90%',
+    marginHorizontal: '5%',
+    bottom: 10,
     alignItems: 'center',
     alignContent: 'center',
   },
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     zIndex: 99,
     backgroundColor: styleConst.color.blue,
     borderColor: styleConst.color.blue,
+    borderRadius: 5,
   },
   resultButtonText: {
     textTransform: 'uppercase',
@@ -461,23 +462,23 @@ const CarsFilterScreen = ({
       <Segment style={[styles.row, styles.segmentWrapper]}>
         <Button
           first
-          style={[styles.segmentTab, styles.segmentTabTwo]}
+          style={[styles.segmentTab, styles.segmentTabTwo, {borderTopLeftRadius: 5, borderBottomLeftRadius: 5}]}
           onPress={() => {
             updateStock('New');
           }}
           active={stockType === 'New' ? true : false}>
-          <Text style={styles.segmentButtonText}>
+          <Text style={styles.segmentButtonText} uppercase={true}>
             {strings.NewCarListScreen.titleShort}
           </Text>
         </Button>
         <Button
           last
-          style={[styles.segmentTab, styles.segmentTabTwo]}
+          style={[styles.segmentTab, styles.segmentTabTwo, {borderTopRightRadius: 5, borderBottomRightRadius: 5}]}
           onPress={() => {
             updateStock('Used');
           }}
           active={stockType === 'Used' ? true : false}>
-          <Text style={styles.segmentButtonText}>
+          <Text style={styles.segmentButtonText} uppercase={true}>
             {strings.UsedCarListScreen.titleShort}
           </Text>
         </Button>
@@ -984,52 +985,6 @@ const CarsFilterScreen = ({
                     })}
                   </Picker>
                 </View>
-                {/* <RNPickerSelect
-                  items={yearItems}
-                  doneText={strings.Base.choose}
-                  value={get(
-                    stateFilters,
-                    'year[from]',
-                    dataFilters?.data?.year?.min,
-                  )}
-                  textInputProps={{
-                    style: {
-                      fontSize: 19,
-                      color: '#9EA0A4',
-                    },
-                  }}
-                  placeholder={{
-                    label: strings.CarsFilterScreen.filters.year.from,
-                    value: null,
-                    color: '#9EA0A4',
-                  }}
-                  onValueChange={value => {
-                    _onChangeFilter('year[from]', value);
-                  }}
-                />
-                <RNPickerSelect
-                  items={yearItems}
-                  doneText={strings.Base.choose}
-                  value={get(
-                    stateFilters,
-                    'year[to]',
-                    dataFilters?.data?.year?.max,
-                  )}
-                  textInputProps={{
-                    style: {
-                      fontSize: 19,
-                      color: '#9EA0A4',
-                    },
-                  }}
-                  placeholder={{
-                    label: strings.CarsFilterScreen.filters.year.to,
-                    value: null,
-                    color: '#9EA0A4',
-                  }}
-                  onValueChange={value => {
-                    _onChangeFilter('year[to]', value);
-                  }}
-                /> */}
               </View>
             </ModalView>
           ) : null}
@@ -1213,6 +1168,7 @@ const CarsFilterScreen = ({
                 }}>
                 <SelectMultiple
                   items={dataFilters?.data?.gearbox}
+                  labelStyle={{color: styleConst.color.greyText2}}
                   selectedItems={get(stateFilters, 'gearboxType')}
                   onSelectionsChange={(selectedAll, selectedItem) => {
                     _onChangeFilter('gearboxType', selectedAll);
@@ -1239,6 +1195,7 @@ const CarsFilterScreen = ({
                 }}>
                 <SelectMultiple
                   items={dataFilters?.data?.body}
+                  labelStyle={{color: styleConst.color.greyText2}}
                   selectedItems={get(stateFilters, 'bodyType')}
                   onSelectionsChange={(selectedAll, selectedItem) => {
                     _onChangeFilter('bodyType', selectedAll);
@@ -1265,6 +1222,7 @@ const CarsFilterScreen = ({
                 }}>
                 <SelectMultiple
                   items={dataFilters?.data?.enginetype}
+                  labelStyle={{color: styleConst.color.greyText2}}
                   selectedItems={get(stateFilters, 'enginetypeType')}
                   onSelectionsChange={(selectedAll, selectedItem) => {
                     _onChangeFilter('enginetypeType', selectedAll);
@@ -1467,6 +1425,7 @@ const CarsFilterScreen = ({
                 }}>
                 <SelectMultiple
                   items={dataFilters?.data?.drive}
+                  labelStyle={{color: styleConst.color.greyText2}}
                   selectedItems={get(stateFilters, 'driveType')}
                   onSelectionsChange={(selectedAll, selectedItem) => {
                     _onChangeFilter('driveType', selectedAll);
@@ -1490,7 +1449,7 @@ const CarsFilterScreen = ({
           }]}>
           <Button
             full
-            style={[styles.resultButton]}
+            style={[styles.resultButton, styleConst.shadow.default]}
             disabled={!totalCars ? true : false}
             active={totalCars ? true : false}
             onPress={() => {

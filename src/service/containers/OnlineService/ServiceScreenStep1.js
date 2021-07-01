@@ -532,12 +532,14 @@ class ServiceScreenStep1 extends Component {
                               style={{
                                 marginRight: 10,
                                 paddingTop: 2,
+                                color: styleConst.color.greyText,
                               }}>
                               {strings.ServiceScreenStep1.price}{' '}
                               <Text
                                 style={{
                                   fontSize: 18,
                                   fontWeight: 'bold',
+                                  color: styleConst.color.greyText,
                                 }}>
                                 {showPrice(
                                   parseFloat(

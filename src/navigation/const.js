@@ -29,6 +29,7 @@ const ClassicHeaderWhite = (title, navigation, route, options) => {
     headerLeft: () => {
       return ArrowBack(navigation, route);
     },
+    headerRight: () => (<></>),
     ...options,
   };
 };
@@ -41,6 +42,7 @@ const ClassicHeaderBlue = (title, navigation, route, options) => {
     headerLeft: () => {
       return ArrowBack(navigation, route, {theme: 'white'});
     },
+    headerRight: () => (<></>),
     ...options,
   };
 };
@@ -58,6 +60,7 @@ const TransparentBack = (navigation, route, options, buttonOptions) => {
         ...buttonOptions,
       });
     },
+    headerRight: () => (<></>),
     ...options,
   };
 };

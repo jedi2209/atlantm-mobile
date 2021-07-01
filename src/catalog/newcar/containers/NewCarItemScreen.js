@@ -19,7 +19,6 @@ import {
   Icon,
   Grid,
   Button,
-  StyleProvider,
   Accordion,
 } from 'native-base';
 import * as NavigationService from '../../../navigation/NavigationService';
@@ -40,7 +39,6 @@ import ColorBox from '../../../core/components/ColorBox';
 import Badge from '../../../core/components/Badge';
 
 // helpers
-import getTheme from '../../../../native-base-theme/components';
 import {get, indexOf} from 'lodash';
 import PropTypes from 'prop-types';
 import UserData from '../../../utils/user';
@@ -566,6 +564,10 @@ class NewCarItemScreen extends Component {
         get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
     };
 
+    if (CarPrices.standart.standart == 0) {
+      return (<View style={stylesFooter.orderPriceContainer}></View>);
+    }
+
     return (
       <View
         style={[
@@ -683,504 +685,498 @@ class NewCarItemScreen extends Component {
     }
 
     return (
-      <StyleProvider style={getTheme()}>
-        <View style={styles.safearea} testID="NewCarItemScreen.Wrapper">
-          <ScrollView
-            style={styles.safearea}
-            // scrollEventThrottle={0}
-            // onScroll={(e) => this.onScroll(e)}
-          >
-            <StatusBar hidden />
-            <View style={{flex: 1, position: 'relative'}}>
+      <View testID="NewCarItemScreen.Wrapper">
+        <ScrollView>
+          <StatusBar hidden />
+          <View style={{flex: 1, position: 'relative'}}>
+            <View
+              style={{
+                position: 'absolute',
+                height: 400,
+                width: '100%',
+                zIndex: 20,
+                marginTop: isCarImgReal ? -12 : -12,
+              }}>
+              {get(carDetails, 'color.picker.codes.hex', null) ? (
+                <ColorBox
+                  ref={input => {
+                    return (this.ColorBox = input);
+                  }}
+                  containerStyle={{
+                    position: 'absolute',
+                    right: 0,
+                    top: 280,
+                    zIndex: 1000,
+                    padding: 20,
+                  }}
+                  color={get(carDetails, 'color')}
+                />
+              ) : null}
+              {badge && badge.length ? (
+                <View
+                  testID="NewCarItemScreen.BadgesWrapper"
+                  style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    position: 'absolute',
+                    left: 5,
+                    top: 290,
+                    zIndex: 1000,
+                  }}>
+                  {badge.map((item, index) => {
+                    if (item.name.toLowerCase() === 'спец.цена') {
+                      item.name = strings.CarList.badges.specialPrice;
+                    }
+                    return (
+                      <Badge
+                        id={carDetails.id.api}
+                        key={'badgeItem' + carDetails.id.api + index}
+                        index={index}
+                        bgColor={item.background}
+                        name={item.name}
+                        textColor={item.textColor}
+                      />
+                    );
+                  })}
+                </View>
+              ) : null}
+              <PhotoSlider
+                height={370}
+                photos={photos}
+                resizeMode={isCarImgReal ? 'cover' : null}
+                paginationStyle={{marginBottom: 35}}
+                dotColor={isCarImgReal ? styleConst.color.white : null}
+                onPressItem={() => this.onPressPhoto}
+                onIndexChanged={() => this.onChangePhotoIndex}
+              />
+            </View>
+
+            <View
+              style={[
+                styleConst.shadow.light,
+                {
+                  position: 'relative',
+                  marginTop: isCarImgReal ? 335 : 335,
+                  marginBottom: -5,
+                  backgroundColor: styleConst.color.white,
+                  borderTopLeftRadius: 30,
+                  borderTopRightRadius: 30,
+                  paddingTop: 20,
+                  paddingBottom: 14,
+                  zIndex: 30,
+                },
+              ]}>
               <View
                 style={{
-                  position: 'absolute',
-                  height: 400,
-                  width: '100%',
-                  zIndex: 20,
-                  marginTop: isCarImgReal ? -12 : -12,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  paddingHorizontal: '2%',
                 }}>
-                {get(carDetails, 'color.picker.codes.hex', null) ? (
-                  <ColorBox
-                    ref={input => {
-                      return (this.ColorBox = input);
-                    }}
-                    containerStyle={{
-                      position: 'absolute',
-                      right: 0,
-                      top: 280,
-                      zIndex: 1000,
-                      padding: 20,
-                    }}
-                    color={get(carDetails, 'color')}
-                  />
-                ) : null}
-                {badge && badge.length ? (
-                  <View
-                    testID="NewCarItemScreen.BadgesWrapper"
-                    style={{
-                      flex: 1,
-                      flexDirection: 'row',
-                      position: 'absolute',
-                      left: 5,
-                      top: 290,
-                      zIndex: 1000,
-                    }}>
-                    {badge.map((item, index) => {
-                      if (item.name.toLowerCase() === 'спец.цена') {
-                        item.name = strings.CarList.badges.specialPrice;
-                      }
-                      return (
-                        <Badge
-                          id={carDetails.id.api}
-                          key={'badgeItem' + carDetails.id.api + index}
-                          index={index}
-                          bgColor={item.background}
-                          name={item.name}
-                          textColor={item.textColor}
-                        />
-                      );
-                    })}
-                  </View>
-                ) : null}
-                <PhotoSlider
-                  height={370}
-                  photos={photos}
-                  resizeMode={isCarImgReal ? 'cover' : null}
-                  paginationStyle={{marginBottom: 35}}
-                  dotColor={isCarImgReal ? styleConst.color.white : null}
-                  onPressItem={() => this.onPressPhoto}
-                  onIndexChanged={() => this.onChangePhotoIndex}
-                />
+                <View style={{marginBottom: 10, flexShrink: 1}}>
+                  <Text style={{fontSize: 16, fontWeight: '600', color: styleConst.color.greyText}}>
+                    {`${brandName} ${modelName}`}
+                  </Text>
+                  <Text style={{fontSize: 11, fontWeight: '600', color: styleConst.color.greyText2}}>
+                    {get(carDetails, 'complectation.name', '') +
+                      ' ' +
+                      get(carDetails, 'year')}
+                  </Text>
+                </View>
+                {this.renderPrice({carDetails, filterData, currency})}
               </View>
 
-              <View
-                style={[
-                  styleConst.shadow.light,
-                  {
-                    position: 'relative',
-                    marginTop: isCarImgReal ? 335 : 335,
-                    marginBottom: -5,
-                    backgroundColor: styleConst.color.white,
-                    borderTopLeftRadius: 30,
-                    borderTopRightRadius: 30,
-                    paddingTop: 20,
-                    paddingBottom: 14,
-                    zIndex: 30,
-                  },
-                ]}>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                bounces={true}
+                testID="NewCarItemScreen.PlatesWrapper"
+                ref={ref => {
+                  this.platesScrollView = ref;
+                }}>
                 <View
                   style={{
                     display: 'flex',
                     flexDirection: 'row',
-                    justifyContent: 'space-between',
                     paddingHorizontal: '2%',
+                    marginBottom: 10,
                   }}>
-                  <View style={{marginBottom: 10, flexShrink: 1}}>
-                    <Text style={{fontSize: 16, fontWeight: '600'}}>
-                      {`${brandName} ${modelName}`}
-                    </Text>
-                    <Text style={{fontSize: 11, fontWeight: '600'}}>
-                      {get(carDetails, 'complectation.name', '') +
-                        ' ' +
-                        get(carDetails, 'year')}
-                    </Text>
-                  </View>
-                  {this.renderPrice({carDetails, filterData, currency})}
+                  <OptionPlate
+                    title={strings.NewCarItemScreen.plates.complectation}
+                    testID="NewCarItemScreen.Plates.Complectation"
+                    subtitle={get(carDetails, 'complectation.name')}
+                  />
+                  {get(carDetails, 'engine.id') &&
+                  get(carDetails, 'engine.id') !== 4 ? (
+                    <OptionPlate
+                      title={strings.NewCarItemScreen.plates.engine}
+                      testID="NewCarItemScreen.Plates.Engine"
+                      subtitle={
+                        get(carDetails, 'engine.volume.short').toFixed(1) +
+                        ' л. ' +
+                        get(carDetails, 'engine.type')
+                      }
+                    />
+                  ) : null}
+                  <OptionPlate
+                    title={strings.NewCarItemScreen.plates.gearbox.name}
+                    testID="NewCarItemScreen.Plates.Gearbox"
+                    subtitle={`${
+                      get(carDetails, 'gearbox.count')
+                        ? get(carDetails, 'gearbox.count') + '-ст.'
+                        : ''
+                    } ${
+                      get(carDetails, 'gearbox.name')
+                        .replace(/^(Механическая)/i, 'МКПП')
+                        .replace(/^(Автоматическая)/i, 'АКПП')
+                        .split('/')[0]
+                    }`}
+                  />
+                  {wheelName ? (
+                    <OptionPlate
+                      title={strings.NewCarItemScreen.plates.wheel}
+                      testID="NewCarItemScreen.Plates.Wheel"
+                      subtitle={wheelName.toLowerCase()}
+                    />
+                  ) : null}
+                  {get(carDetails, 'color.name.simple') ? (
+                    <OptionPlate
+                      onPress={() => {
+                        this.ColorBox.click();
+                      }}
+                      title={strings.NewCarItemScreen.plates.color}
+                      testID="NewCarItemScreen.Plates.Color"
+                      subtitle={colorName}
+                    />
+                  ) : null}
                 </View>
-
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  bounces={true}
-                  testID="NewCarItemScreen.PlatesWrapper"
-                  ref={ref => {
-                    this.platesScrollView = ref;
-                  }}>
-                  <View
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      paddingHorizontal: '2%',
-                      marginBottom: 10,
-                    }}>
-                    <OptionPlate
-                      title={strings.NewCarItemScreen.plates.complectation}
-                      testID="NewCarItemScreen.Plates.Complectation"
-                      subtitle={get(carDetails, 'complectation.name')}
+              </ScrollView>
+              {get(carDetails, 'location.coords') ? (
+                <TouchableWithoutFeedback
+                  onPress={this.onPressMap}
+                  style={styles.mapCard}>
+                  <View style={styles.mapCardContainer}>
+                    <Icon
+                      type="MaterialCommunityIcons"
+                      name="map-marker-outline"
+                      style={styles.mapCardIcon}
                     />
-                    {get(carDetails, 'engine.id') &&
-                    get(carDetails, 'engine.id') !== 4 ? (
-                      <OptionPlate
-                        title={strings.NewCarItemScreen.plates.engine}
-                        testID="NewCarItemScreen.Plates.Engine"
-                        subtitle={
-                          get(carDetails, 'engine.volume.short').toFixed(1) +
-                          ' л. ' +
-                          get(carDetails, 'engine.type')
-                        }
-                      />
-                    ) : null}
-                    <OptionPlate
-                      title={strings.NewCarItemScreen.plates.gearbox.name}
-                      testID="NewCarItemScreen.Plates.Gearbox"
-                      subtitle={`${
-                        get(carDetails, 'gearbox.count')
-                          ? get(carDetails, 'gearbox.count') + '-ст.'
-                          : ''
-                      } ${
-                        get(carDetails, 'gearbox.name')
-                          .replace(/^(Механическая)/i, 'МКПП')
-                          .replace(/^(Автоматическая)/i, 'АКПП')
-                          .split('/')[0]
-                      }`}
-                    />
-                    {wheelName ? (
-                      <OptionPlate
-                        title={strings.NewCarItemScreen.plates.wheel}
-                        testID="NewCarItemScreen.Plates.Wheel"
-                        subtitle={wheelName.toLowerCase()}
-                      />
-                    ) : null}
-                    {get(carDetails, 'color.name.simple') ? (
-                      <OptionPlate
-                        onPress={() => {
-                          this.ColorBox.click();
-                        }}
-                        title={strings.NewCarItemScreen.plates.color}
-                        testID="NewCarItemScreen.Plates.Color"
-                        subtitle={colorName}
-                      />
-                    ) : null}
-                  </View>
-                </ScrollView>
-                {get(carDetails, 'location.coords') ? (
-                  <TouchableWithoutFeedback
-                    onPress={this.onPressMap}
-                    style={styles.mapCard}>
-                    <View style={styles.mapCardContainer}>
-                      <Icon
-                        type="MaterialCommunityIcons"
-                        name="map-marker-outline"
-                        style={styles.mapCardIcon}
-                      />
-                      <View style={styles.mapCardTextContainer}>
-                        <Text style={styles.mapCardTitle}>
-                          {strings.NewCarItemScreen.carLocation}
-                        </Text>
-                        <Text
-                          style={styles.mapCardDealer}
-                          numberOfLines={1}
-                          ellipsizeMode="tail">
-                          {`${get(carDetails, 'location.city.name')}, ${get(
-                            carDetails,
-                            'location.name',
-                          )}`}
-                        </Text>
-                      </View>
+                    <View style={styles.mapCardTextContainer}>
+                      <Text style={styles.mapCardTitle}>
+                        {strings.NewCarItemScreen.carLocation}
+                      </Text>
+                      <Text
+                        style={styles.mapCardDealer}
+                        numberOfLines={1}
+                        ellipsizeMode="tail">
+                        {`${get(carDetails, 'location.city.name')}, ${get(
+                          carDetails,
+                          'location.name',
+                        )}`}
+                      </Text>
                     </View>
-                  </TouchableWithoutFeedback>
-                ) : null}
-              </View>
-
-              <Accordion
-                style={{
-                  borderBottomColor: '#d5d5e0',
-                  borderBottomWidth: 1,
-                  marginBottom: 140,
-                }}
-                dataArray={[
-                  {
-                    title: strings.NewCarItemScreen.tech.title,
-                    content: (
-                      <View testID="NewCarItemScreen.TechWrapper">
-                        {this.renderTechData(
-                          strings.NewCarItemScreen.tech.base,
-                          [
-                            {
-                              name: strings.NewCarItemScreen.tech.body.type,
-                              value: 'body.name',
-                              alternate: bodyName,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.year,
-                              value: 'year',
-                            },
-                          ],
-                        )}
-                        {this.renderTechData(
-                          strings.NewCarItemScreen.tech.engine.title,
-                          [
-                            {
-                              name: strings.NewCarItemScreen.tech.engine.type,
-                              value: 'engine.type',
-                              alternate: engineName,
-                            },
-                            (() => {
-                              if (
-                                get(carDetails, 'engine.id') &&
-                                get(carDetails, 'engine.id') === 4
-                              ) {
-                                return false;
-                              }
-                              return {
-                                name: strings.NewCarItemScreen.tech.engine
-                                  .volume,
-                                value: 'engine.volume.full',
-                                postfix: 'см³',
-                              };
-                            })(),
-                            {
-                              name: strings.NewCarItemScreen.tech.engine.power
-                                .hp,
-                              value: 'power.hp',
-                              postfix: strings.NewCarItemScreen.shortUnits.hp,
-                            },
-                          ],
-                        )}
-                        {this.renderTechData(
-                          strings.NewCarItemScreen.tech.gearbox.title,
-                          [
-                            {
-                              name: strings.NewCarItemScreen.tech.gearbox.type,
-                              value: 'gearbox.name',
-                              alternate: gearboxName,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.gearbox.count,
-                              value: 'gearbox.count',
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.gearbox.wheel,
-                              value: 'gearbox.wheel.name',
-                              alternate: wheelName,
-                            },
-                          ],
-                        )}
-                        {this.renderTechData(
-                          strings.NewCarItemScreen.tech.body.title,
-                          [
-                            {
-                              name: strings.NewCarItemScreen.tech.body.width,
-                              value: 'body.width',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.milimetrs,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.body.height,
-                              value: 'body.height',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.milimetrs,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.body.high,
-                              value: 'body.high',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.milimetrs,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.body.clirens,
-                              value: 'body.clirens',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.milimetrs,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.body.trunk,
-                              value: 'body.trunk.min',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.litres,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.tech.body.fuel,
-                              value: 'fuel.fuel',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.litres,
-                            },
-                          ],
-                        )}
-                        {this.renderTechData(
-                          strings.NewCarItemScreen.techData.title,
-                          [
-                            {
-                              name: strings.NewCarItemScreen.techData.maxSpeed,
-                              value: 'speed.max',
-                              postfix: 'км/ч.',
-                            },
-                            {
-                              name: strings.NewCarItemScreen.techData.dispersal,
-                              value: 'speed.dispersal',
-                              postfix: 'сек.',
-                            },
-                            {
-                              name: strings.NewCarItemScreen.techData.fuel.city,
-                              value: 'fuel.city',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.litres,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.techData.fuel
-                                .track,
-                              value: 'fuel.track',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.litres,
-                            },
-                            {
-                              name: strings.NewCarItemScreen.techData.fuel.both,
-                              value: 'fuel.both',
-                              postfix:
-                                strings.NewCarItemScreen.shortUnits.litres,
-                            },
-                          ],
-                        )}
-                      </View>
-                    ),
-                  },
-                  {
-                    title: strings.NewCarItemScreen.complectation.title,
-                    content: (
-                      <View
-                        style={styles.tabContent}
-                        testID="NewCarItemScreen.ComplectationWrapper">
-                        {stockKeys.length ? (
-                          <View>
-                            {stockKeys.map(key => {
-                              return this.renderComplectationItem(
-                                stock[key].name,
-                                stock[key].data,
-                              );
-                            })}
-                          </View>
-                        ) : null}
-
-                        {additionalKeys.length ? (
-                          <View>
-                            {additionalKeys.map(key => {
-                              return this.renderComplectationItem(
-                                additional[key].name,
-                                additional[key].data,
-                              );
-                            })}
-                          </View>
-                        ) : null}
-
-                        {carDetails.text ? (
-                          <View style={styles.descrContainer}>
-                            <Text style={styles.descr}>{carDetails.text}</Text>
-                          </View>
-                        ) : null}
-                      </View>
-                    ),
-                  },
-                ]}
-                expanded={[0]}
-                animation={true}
-                renderHeader={(item, expanded) => (
-                  <View
-                    testID={'NewCarItemScreen.AccordionTitle_' + item.title}
-                    style={{
-                      height: 64,
-                      paddingHorizontal: '2%',
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      backgroundColor: styleConst.color.white,
-                      borderTopWidth: 0.75,
-                      borderColor: '#d5d5e0',
-                    }}>
-                    <Text style={{fontSize: 18}}>{item.title}</Text>
-                    {expanded ? (
-                      <Icon
-                        type="FontAwesome5"
-                        style={{color: '#0061ED', fontWeight: 'normal'}}
-                        name="angle-down"
-                      />
-                    ) : (
-                      <Icon
-                        type="FontAwesome5"
-                        style={{color: '#131314', fontWeight: 'normal'}}
-                        name="angle-right"
-                      />
-                    )}
                   </View>
-                )}
-                renderContent={item => {
-                  return (
+                </TouchableWithoutFeedback>
+              ) : null}
+            </View>
+
+            <Accordion
+              style={{
+                borderBottomColor: '#d5d5e0',
+                borderBottomWidth: 1,
+                marginBottom: 140,
+              }}
+              dataArray={[
+                {
+                  title: strings.NewCarItemScreen.tech.title,
+                  content: (
+                    <View testID="NewCarItemScreen.TechWrapper">
+                      {this.renderTechData(
+                        strings.NewCarItemScreen.tech.base,
+                        [
+                          {
+                            name: strings.NewCarItemScreen.tech.body.type,
+                            value: 'body.name',
+                            alternate: bodyName,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.year,
+                            value: 'year',
+                          },
+                        ],
+                      )}
+                      {this.renderTechData(
+                        strings.NewCarItemScreen.tech.engine.title,
+                        [
+                          {
+                            name: strings.NewCarItemScreen.tech.engine.type,
+                            value: 'engine.type',
+                            alternate: engineName,
+                          },
+                          (() => {
+                            if (
+                              get(carDetails, 'engine.id') &&
+                              get(carDetails, 'engine.id') === 4
+                            ) {
+                              return false;
+                            }
+                            return {
+                              name: strings.NewCarItemScreen.tech.engine
+                                .volume,
+                              value: 'engine.volume.full',
+                              postfix: 'см³',
+                            };
+                          })(),
+                          {
+                            name: strings.NewCarItemScreen.tech.engine.power
+                              .hp,
+                            value: 'power.hp',
+                            postfix: strings.NewCarItemScreen.shortUnits.hp,
+                          },
+                        ],
+                      )}
+                      {this.renderTechData(
+                        strings.NewCarItemScreen.tech.gearbox.title,
+                        [
+                          {
+                            name: strings.NewCarItemScreen.tech.gearbox.type,
+                            value: 'gearbox.name',
+                            alternate: gearboxName,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.gearbox.count,
+                            value: 'gearbox.count',
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.gearbox.wheel,
+                            value: 'gearbox.wheel.name',
+                            alternate: wheelName,
+                          },
+                        ],
+                      )}
+                      {this.renderTechData(
+                        strings.NewCarItemScreen.tech.body.title,
+                        [
+                          {
+                            name: strings.NewCarItemScreen.tech.body.width,
+                            value: 'body.width',
+                            postfix:
+                              strings.NewCarItemScreen.shortUnits.milimetrs,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.body.height,
+                            value: 'body.height',
+                            postfix:
+                              strings.NewCarItemScreen.shortUnits.milimetrs,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.body.high,
+                            value: 'body.high',
+                            postfix:
+                              strings.NewCarItemScreen.shortUnits.milimetrs,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.body.clirens,
+                            value: 'body.clirens',
+                            postfix:
+                              strings.NewCarItemScreen.shortUnits.milimetrs,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.body.trunk,
+                            value: 'body.trunk.min',
+                            postfix:
+                              strings.NewCarItemScreen.shortUnits.litres,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.body.fuel,
+                            value: 'fuel.fuel',
+                            postfix:
+                              strings.NewCarItemScreen.shortUnits.litres,
+                          },
+                        ],
+                      )}
+                      {this.renderTechData(
+                        strings.NewCarItemScreen.techData.title,
+                        [
+                          {
+                            name: strings.NewCarItemScreen.techData.maxSpeed,
+                            value: 'speed.max',
+                            postfix: 'км/ч.',
+                          },
+                          {
+                            name: strings.NewCarItemScreen.techData.dispersal,
+                            value: 'speed.dispersal',
+                            postfix: 'сек.',
+                          },
+                          {
+                            name: strings.NewCarItemScreen.techData.fuel.city,
+                            value: 'fuel.city',
+                            postfix:
+                              strings.NewCarItemScreen.shortUnits.litres,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.techData.fuel
+                              .track,
+                            value: 'fuel.track',
+                            postfix:
+                              strings.NewCarItemScreen.shortUnits.litres,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.techData.fuel.both,
+                            value: 'fuel.both',
+                            postfix:
+                              strings.NewCarItemScreen.shortUnits.litres,
+                          },
+                        ],
+                      )}
+                    </View>
+                  ),
+                },
+                {
+                  title: strings.NewCarItemScreen.complectation.title,
+                  content: (
                     <View
-                      style={{
-                        // height: 200,
-                        backgroundColor: styleConst.color.white,
-                        paddingHorizontal: '3%',
-                      }}>
-                      {item.content}
+                      style={styles.tabContent}
+                      testID="NewCarItemScreen.ComplectationWrapper">
+                      {stockKeys.length ? (
+                        <View>
+                          {stockKeys.map(key => {
+                            return this.renderComplectationItem(
+                              stock[key].name,
+                              stock[key].data,
+                            );
+                          })}
+                        </View>
+                      ) : null}
+
+                      {additionalKeys.length ? (
+                        <View>
+                          {additionalKeys.map(key => {
+                            return this.renderComplectationItem(
+                              additional[key].name,
+                              additional[key].data,
+                            );
+                          })}
+                        </View>
+                      ) : null}
+
+                      {carDetails.text ? (
+                        <View style={styles.descrContainer}>
+                          <Text style={styles.descr}>{carDetails.text}</Text>
+                        </View>
+                      ) : null}
                     </View>
-                  );
+                  ),
+                },
+              ]}
+              expanded={[0]}
+              animation={true}
+              renderHeader={(item, expanded) => (
+                <View
+                  testID={'NewCarItemScreen.AccordionTitle_' + item.title}
+                  style={{
+                    height: 64,
+                    paddingHorizontal: '2%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    backgroundColor: styleConst.color.white,
+                    borderTopWidth: 0.75,
+                    borderColor: '#d5d5e0',
+                  }}>
+                  <Text style={{fontSize: 18, color: styleConst.color.greyText}}>{item.title}</Text>
+                  {expanded ? (
+                    <Icon
+                      type="FontAwesome5"
+                      style={{color: styleConst.color.greyText4, fontWeight: 'normal'}}
+                      name="angle-down"
+                    />
+                  ) : (
+                    <Icon
+                      type="FontAwesome5"
+                      style={{color: styleConst.color.greyText, fontWeight: 'normal'}}
+                      name="angle-right"
+                    />
+                  )}
+                </View>
+              )}
+              renderContent={item => {
+                return (
+                  <View
+                    style={{
+                      // height: 200,
+                      backgroundColor: styleConst.color.white,
+                      paddingHorizontal: '3%',
+                    }}>
+                    {item.content}
+                  </View>
+                );
+              }}
+            />
+          </View>
+        </ScrollView>
+        <View style={[styleConst.shadow.default, stylesFooter.footer]}>
+          {this.renderPriceFooter({
+            carDetails,
+            filterData,
+            currency,
+          })}
+          <View style={[stylesFooter.footerButtons]}>
+            {/* {carDetails.testDriveCars &&
+            carDetails.testDriveCars.length > 0 ? ( */}
+            <Button
+              testID="NewCarItemScreen.Button.TestDrive"
+              onPress={this.onPressTestDrive}
+              full
+              iconLeft
+              style={[stylesFooter.button, stylesFooter.buttonLeft]}
+              activeOpacity={0.8}>
+              <Icon
+                type="MaterialCommunityIcons"
+                name="steering"
+                selectable={false}
+                style={{
+                  color: styleConst.color.white,
+                  fontSize: 24,
+                  marginTop: -2,
                 }}
               />
-            </View>
-          </ScrollView>
-          <View style={[styleConst.shadow.default, stylesFooter.footer]}>
-            {this.renderPriceFooter({
-              carDetails,
-              filterData,
-              currency,
-            })}
-            <View style={[stylesFooter.footerButtons]}>
-              {/* {carDetails.testDriveCars &&
-              carDetails.testDriveCars.length > 0 ? ( */}
-              <Button
-                testID="NewCarItemScreen.Button.TestDrive"
-                onPress={this.onPressTestDrive}
-                full
-                iconLeft
-                style={[stylesFooter.button, stylesFooter.buttonLeft]}
-                activeOpacity={0.8}>
-                <Icon
-                  type="MaterialCommunityIcons"
-                  name="steering"
-                  selectable={false}
-                  style={{
-                    color: styleConst.color.white,
-                    fontSize: 24,
-                    marginTop: -2,
-                  }}
-                />
-                <Text style={styles.buttonText} selectable={false}>
-                  {strings.NewCarItemScreen.testDrive}
-                </Text>
-              </Button>
-              {/* ) : null} */}
-              <Button
-                testID="NewCarItemScreen.Button.Order"
-                onPress={this.onPressOrder}
-                full
-                style={[
-                  stylesFooter.button,
-                  stylesFooter.buttonRight,
-                  // !carDetails.testDriveCars ||
-                  // carDetails.testDriveCars.length === 0
-                  //   ? stylesFooter.buttonOnlyOne
-                  //   : null,
-                ]}
-                activeOpacity={0.8}>
-                <Text style={styles.buttonText} selectable={false}>
-                  {strings.NewCarItemScreen.wannaCar}
-                </Text>
-              </Button>
-            </View>
+              <Text style={styles.buttonText} selectable={false}>
+                {strings.NewCarItemScreen.testDrive}
+              </Text>
+            </Button>
+            {/* ) : null} */}
+            <Button
+              testID="NewCarItemScreen.Button.Order"
+              onPress={this.onPressOrder}
+              full
+              style={[
+                stylesFooter.button,
+                stylesFooter.buttonRight,
+                // !carDetails.testDriveCars ||
+                // carDetails.testDriveCars.length === 0
+                //   ? stylesFooter.buttonOnlyOne
+                //   : null,
+              ]}
+              activeOpacity={0.8}>
+              <Text style={styles.buttonText} selectable={false}>
+                {strings.NewCarItemScreen.wannaCar}
+              </Text>
+            </Button>
           </View>
-          {photoViewerItems.length ? (
-            <PhotoViewer
-              index={photoViewerIndex}
-              visible={photoViewerVisible}
-              items={photoViewerItems}
-              enableScale={true}
-              onChange={this.onChangePhotoIndex}
-              onPressClose={this.onClosePhoto}
-            />
-          ) : null}
         </View>
-      </StyleProvider>
+        {photoViewerItems.length ? (
+          <PhotoViewer
+            index={photoViewerIndex}
+            visible={photoViewerVisible}
+            items={photoViewerItems}
+            enableScale={true}
+            onChange={this.onChangePhotoIndex}
+            onPressClose={this.onClosePhoto}
+          />
+        ) : null}
+      </View>
     );
   }
 }

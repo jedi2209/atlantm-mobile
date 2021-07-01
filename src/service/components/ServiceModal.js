@@ -30,7 +30,7 @@ export const ServiceModal = ({visible, onClose, data}) => {
       borderTopRightRadius: 10,
     },
     wrapper: {
-      paddingHorizontal: 14,
+      paddingHorizontal: '5%',
       paddingVertical: 10,
     },
     tabContainer: {
@@ -181,7 +181,7 @@ const tableStyles = StyleSheet.create({
   sectionTitle: {
     letterSpacing: styleConst.ui.letterSpacing,
     fontSize: 14,
-    color: '#141414',
+    color: styleConst.color.greyText,
     fontFamily: styleConst.font.regular,
     marginBottom: 15,
   },
@@ -195,11 +195,12 @@ const tableStyles = StyleSheet.create({
   sectionPropText: {
     letterSpacing: styleConst.ui.letterSpacing,
     fontSize: 14,
-    color: '#141414',
+    color: styleConst.color.greyText,
   },
   sectionValueText: {
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
     fontSize: 16,
+    color: styleConst.color.greyText3,
   },
 });

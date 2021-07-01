@@ -26,7 +26,7 @@ import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
-  safearea: {
+  mainContainer: {
     flex: 1,
     backgroundColor: styleConst.color.white,
   },
@@ -94,9 +94,10 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.white,
     borderTopWidth: styleConst.ui.borderWidth,
     borderTopColor: styleConst.color.systemGray,
-    marginVertical: 30,
     marginHorizontal: 20,
     borderRadius: 5,
+    marginBottom: 50,
+    marginTop: 30,
   },
   buttonText: {
     fontFamily: styleConst.font.medium,
@@ -339,12 +340,12 @@ class BonusScreen extends Component {
 
     if (isEmpty(bonus) || !bonus.items) {
       return (
-        <SafeAreaView style={styles.safearea}>
+        <View style={styles.mainContainer}>
           <Text style={styles.emptyText}>
             {strings.ProfileScreenInfo.bonus.empty.text}
           </Text>
           {this.renderBonusButton()}
-        </SafeAreaView>
+        </View>
       );
     }
 
@@ -353,25 +354,21 @@ class BonusScreen extends Component {
       saldoValue = get(bonus, 'saldo.value', 0);
     }
     return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <Content>
-            {Object.keys(get(bonus, 'items'), []).length
-              ? this.renderLevel1(bonus.items)
-              : null}
+      <Content>
+        {Object.keys(get(bonus, 'items'), []).length
+          ? this.renderLevel1(bonus.items)
+          : null}
 
-            <View style={styles.total}>
-              <Text style={styles.totalText}>
-                {strings.ProfileScreenInfo.bonus.total}:{' '}
-                <Text style={styles.totalValue}>
-                  {parseFloat(saldoValue, 'ru-RU')}
-                </Text>{' '}
-              </Text>
-            </View>
-            {this.renderBonusButton()}
-          </Content>
-        </SafeAreaView>
-      </StyleProvider>
+        <View style={styles.total}>
+          <Text style={styles.totalText}>
+            {strings.ProfileScreenInfo.bonus.total}:{' '}
+            <Text style={styles.totalValue}>
+              {parseFloat(saldoValue, 'ru-RU')}
+            </Text>{' '}
+          </Text>
+        </View>
+        {this.renderBonusButton()}
+      </Content>
     );
   }
 }

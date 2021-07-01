@@ -1,10 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {PureComponent} from 'react';
 import {ActivityIndicator} from 'react-native';
-import {Root} from 'native-base';
+import {Root, StyleProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import getTheme from '../../../native-base-theme/components';
+
 
 // redux
 import {connect} from 'react-redux';
@@ -169,11 +171,13 @@ class App extends PureComponent {
     }
     return (
       <SafeAreaProvider>
-        <Root>
-          <NavigationContainer ref={NavigationService.navigationRef}>
-            <Nav.Base />
-          </NavigationContainer>
-        </Root>
+        <StyleProvider style={getTheme()}>
+          <Root>
+            <NavigationContainer ref={NavigationService.navigationRef}>
+              <Nav.Base />
+            </NavigationContainer>
+          </Root>
+        </StyleProvider>
       </SafeAreaProvider>
     );
   }

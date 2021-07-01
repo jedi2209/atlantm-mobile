@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
     fontSize: 14,
+    color: styleConst.color.greyText,
   },
   sectionHelperText: {
     // letterSpacing: styleConst.ui.letterSpacing,
@@ -178,6 +179,11 @@ class CarHistoryDetailsScreen extends Component {
             message = ERROR_NETWORK;
           }
         }
+        setTimeout(() => {
+          navigation.setParams({
+            mainTitle: 'Заказ-наряд #' + workId,
+          });
+        }, 150)
       },
     );
   }

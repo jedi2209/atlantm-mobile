@@ -245,6 +245,7 @@ class ProfileScreenInfo extends Component {
               fontWeight: '600',
               marginHorizontal: 20,
               marginTop: 10,
+              color: styleConst.color.greyText6,
             }}>
             {`${this.props.login.NAME || ''} ${
               this.props.login.LAST_NAME || ''

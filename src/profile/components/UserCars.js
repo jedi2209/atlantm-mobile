@@ -219,6 +219,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
             style={{
               fontSize: 16,
               fontWeight: '600',
+              color: styleConst.color.greyText4,
             }}>
             {strings.UserCars.title}
           </Text>
