@@ -286,6 +286,33 @@ export default {
       power: {
         title: 'Мощность, л.с',
       },
+      engineVolume: {
+        title: 'Объем двигателя, л.',
+      },
+      gearbox: {
+        title: 'Коробка передач',
+      },
+      body: {
+        title: 'Кузов',
+      },
+      enginetype: {
+        title: 'Тип двигателя',
+      },
+      drive: {
+        title: 'Привод',
+      },
+      guarantee: {
+        title: 'На гарантии',
+      },
+      breakInsurance: {
+        title: 'Застрахован от поломок',
+      },
+      fullServiceHistory: {
+        title: 'Полная сервисная история',
+      },
+      onlineOrder: {
+        title: 'Можно забронировать онлайн',
+      },
     },
   },
   Sort: {

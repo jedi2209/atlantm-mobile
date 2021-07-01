@@ -94,6 +94,9 @@ export const actionFetchUsedCarByFilter = props => {
   if (props.filters) {
     for (const [key, value] of Object.entries(props.filters)) {
       if (value) {
+        if (typeof value === 'object') {
+          continue;
+        }
         if (value === true) {
           urlParams.push(`${key}=1`);
         } else {
