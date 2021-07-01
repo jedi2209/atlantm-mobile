@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   timeBlocksContainer: {
-    marginTop: 10,
+    marginVertical: 10,
     paddingLeft: 15,
     display: 'flex',
     flexDirection: 'row',
@@ -40,7 +40,8 @@ const styles = StyleSheet.create({
     width: 60,
     height: 40,
     marginRight: '3%',
-    marginVertical: 5,
+    marginTop: 5,
+    marginBottom: 5,
     justifyContent: 'center',
     alignItems: 'center',
     borderColor: '#027aff',

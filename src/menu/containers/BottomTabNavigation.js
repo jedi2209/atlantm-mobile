@@ -1,5 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
+import {Text} from 'react-native';
 import {Icon, ActionSheet} from 'native-base';
 import orderFunctions from '../../utils/orders';
 
@@ -30,6 +31,7 @@ import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 
 import {
+  ArrowBack,
   ClassicHeaderWhite,
   ClassicHeaderBlue,
   BigCloseButton,
@@ -107,7 +109,23 @@ const ProfileStackView = ({navigation, route}) => (
     <ProfileStack.Screen
       name="CarHistoryDetailsScreen"
       component={CarHistoryDetailsScreen}
-      options={ClassicHeaderWhite('', navigation, route)}
+      options={({route}) => ({
+        headerTitle: () => {
+          return (
+            <Text style={stylesHeader.whiteHeaderTitle} selectable={false}>
+              {route?.params?.mainTitle
+                ? route?.params?.mainTitle
+                : null}
+            </Text>
+          );
+        },
+        headerStyle: stylesHeader.whiteHeader,
+        headerTitleStyle: stylesHeader.whiteHeaderTitle,
+        headerLeft: () => {
+          return ArrowBack(navigation, route, {theme: 'blue'});
+        },
+        headerRight: () => (<></>),
+      })}
     />
     <ProfileStack.Screen
       name="BonusScreen"
@@ -149,6 +167,9 @@ const MenuStackView = ({navigation, route}) => (
         headerStyle: {
           height: 120,
           backgroundColor: 'transparent',
+          borderBottom: 0,
+          elevation: 0,
+          shadowOpacity: 0,
         },
       }}
     />

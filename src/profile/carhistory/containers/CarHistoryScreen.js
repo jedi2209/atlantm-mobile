@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
   },
   dealer: {
-    color: styleConst.color.greyBlueText,
+    color: styleConst.color.greyText,
     fontSize: 14,
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
@@ -91,10 +91,10 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   mileage: {
-    color: styleConst.color.lightBlue,
+    color: styleConst.color.greyBlueText,
     fontSize: 14,
     letterSpacing: styleConst.ui.letterSpacing,
-    fontFamily: styleConst.font.regular,
+    fontFamily: styleConst.font.light,
     marginTop: 5,
     fontWeight: '400',
     paddingBottom: 10,
@@ -111,11 +111,13 @@ const styles = StyleSheet.create({
   sectionPropText: {
     letterSpacing: styleConst.ui.letterSpacing,
     fontSize: 15,
+    color: styleConst.color.greyText,
   },
   sectionValueText: {
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
     fontSize: 16,
+    color: styleConst.color.greyText,
   },
   sectionValueReduceText: {
     letterSpacing: styleConst.ui.letterSpacing,
@@ -254,10 +256,7 @@ class CarHistoryScreen extends Component {
         </Col>
         <Col style={styles.sectionValue}>
           <Text
-            style={
-              ([styles.sectionValueText],
-              color ? {color: styleConst.color.lightBlue} : null)
-            }>
+            style={[styles.sectionValueText, color ? {color: styleConst.color.lightBlue} : null]}>
             {value}
           </Text>
         </Col>

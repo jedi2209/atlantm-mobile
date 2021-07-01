@@ -15,7 +15,6 @@ import {
 
 import {
   Text,
-  StyleProvider,
   Icon,
   Button,
   ActionSheet,
@@ -39,7 +38,6 @@ import {Offer} from '../../core/components/Offer';
 import Analytics from '../../utils/amplitude-analytics';
 import orderFunctions from '../../utils/orders';
 import {get} from 'lodash';
-import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import {ERROR_NETWORK} from '../../core/const';
 import Carousel from 'react-native-snap-carousel';
@@ -339,278 +337,276 @@ class ContactsScreen extends Component {
     const phones = get(dealerSelected, 'phone', PHONES);
 
     return (
-      <StyleProvider style={getTheme()}>
-        <View style={styleConst.safearea.default} testID='ContactsScreen.Wrapper'>
-          <StatusBar hidden />
-          <Button
-            full
-            onPress={() => {
-              navigation.navigate('ChooseDealerScreen');
-            }}
-            style={[styles.buttonPrimary, styleConst.shadow.default]}>
-            {dealerSelected.brands &&
-              dealerSelected.brands.length &&
-              dealerSelected.brands.map((brand) => {
-                return (
-                  <BrandLogo
-                    brand={brand.id}
-                    height={25}
-                    style={styles.brand}
-                    key={'ChooseDealerBrand' + brand.id}
-                  />
-                );
-              })}
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <Text style={styles.buttonPrimaryText}>
-                {dealerSelected.name}
-              </Text>
-              <Icon
-                type="FontAwesome5"
-                name="angle-right"
-                style={styles.iconRow}
-              />
-            </View>
-          </Button>
-          <ScrollView
-            contentContainerStyle={{paddingBottom: 24}}
-            ref={(ref) => {
-              this.mainScrollView = ref;
-            }}
-            showsHorizontalScrollIndicator={false}
-            bounces={false}>
-            <Image
-              style={styles.imgHero}
-              source={{uri: get(dealerSelected, 'img.10000x440')}}
-            />
-            <View style={{marginTop: HEADER_MAX_HEIGHT - 65}}>
-              <View style={styles.blackBack} />
-              <TouchableOpacity
-                style={styles.address}
-                testID='ContactsScreen.PressMap'
-                onPress={() => {
-                  this.onPressMap();
-                }}>
-                <Icon
-                  style={styles.point}
-                  type="MaterialIcons"
-                  name="navigation"
+      <View style={styleConst.safearea.default} testID='ContactsScreen.Wrapper'>
+        <StatusBar hidden />
+        <Button
+          full
+          onPress={() => {
+            navigation.navigate('ChooseDealerScreen');
+          }}
+          style={[styles.buttonPrimary, styleConst.shadow.default]}>
+          {dealerSelected.brands &&
+            dealerSelected.brands.length &&
+            dealerSelected.brands.map((brand) => {
+              return (
+                <BrandLogo
+                  brand={brand.id}
+                  height={25}
+                  style={styles.brand}
+                  key={'ChooseDealerBrand' + brand.id}
                 />
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                  style={styles.addressText}>
-                  {dealerSelected.city.name ? dealerSelected.city.name : null}
-                  {dealerSelected.address
-                    ? ', ' + dealerSelected.address
-                    : null}
-                </Text>
-              </TouchableOpacity>
-              <ScrollView
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                contentContainerStyle={{paddingRight: 30}}
-                style={styles.scrollView}>
-                <View style={styles.scrollViewInner}>
-                  <Plate
-                    title={strings.ContactsScreen.call}
-                    status={
-                      this.getStatusWorktime(
-                        get(dealerSelected, 'divisions', null),
-                        'RC',
-                      )
-                        ? 'enabled'
-                        : 'disabled'
-                    }
-                    subtitle={phones[0]}
-                    onPress={() => {
-                      const isOpened = this.getStatusWorktime(
-                        get(dealerSelected, 'divisions', null),
-                        'RC',
+              );
+            })}
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <Text style={styles.buttonPrimaryText}>
+              {dealerSelected.name}
+            </Text>
+            <Icon
+              type="FontAwesome5"
+              name="angle-right"
+              style={styles.iconRow}
+            />
+          </View>
+        </Button>
+        <ScrollView
+          contentContainerStyle={{paddingBottom: 24}}
+          ref={(ref) => {
+            this.mainScrollView = ref;
+          }}
+          showsHorizontalScrollIndicator={false}
+          bounces={false}>
+          <Image
+            style={styles.imgHero}
+            source={{uri: get(dealerSelected, 'img.10000x440')}}
+          />
+          <View style={{marginTop: HEADER_MAX_HEIGHT - 65}}>
+            <View style={styles.blackBack} />
+            <TouchableOpacity
+              style={styles.address}
+              testID='ContactsScreen.PressMap'
+              onPress={() => {
+                this.onPressMap();
+              }}>
+              <Icon
+                style={styles.point}
+                type="MaterialIcons"
+                name="navigation"
+              />
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={styles.addressText}>
+                {dealerSelected.city.name ? dealerSelected.city.name : null}
+                {dealerSelected.address
+                  ? ', ' + dealerSelected.address
+                  : null}
+              </Text>
+            </TouchableOpacity>
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              contentContainerStyle={{paddingRight: 30}}
+              style={styles.scrollView}>
+              <View style={styles.scrollViewInner}>
+                <Plate
+                  title={strings.ContactsScreen.call}
+                  status={
+                    this.getStatusWorktime(
+                      get(dealerSelected, 'divisions', null),
+                      'RC',
+                    )
+                      ? 'enabled'
+                      : 'disabled'
+                  }
+                  subtitle={phones[0]}
+                  onPress={() => {
+                    const isOpened = this.getStatusWorktime(
+                      get(dealerSelected, 'divisions', null),
+                      'RC',
+                    );
+                    if (!isOpened) {
+                      Alert.alert(
+                        strings.ContactsScreen.closedDealer.title,
+                        strings.ContactsScreen.closedDealer.text,
+                        [
+                          {
+                            text: strings.ContactsScreen.closedDealer.no,
+                            style: 'cancel',
+                          },
+                          {
+                            text: strings.ContactsScreen.closedDealer.yes,
+                            onPress: () => {
+                              navigation.navigate('CallMeBackScreen');
+                            },
+                          },
+                        ],
+                        {cancelable: false},
                       );
-                      if (!isOpened) {
-                        Alert.alert(
-                          strings.ContactsScreen.closedDealer.title,
-                          strings.ContactsScreen.closedDealer.text,
-                          [
-                            {
-                              text: strings.ContactsScreen.closedDealer.no,
-                              style: 'cancel',
-                            },
-                            {
-                              text: strings.ContactsScreen.closedDealer.yes,
-                              onPress: () => {
-                                navigation.navigate('CallMeBackScreen');
-                              },
-                            },
-                          ],
-                          {cancelable: false},
-                        );
-                      } else {
-                        Linking.openURL(
-                          'tel:' + phones[0].replace(/[^+\d]+/g, ''),
-                        );
-                      }
-                    }}
-                  />
-                  <Plate
-                    testID='ContactsScreen.ButtonCallMe'
-                    title={strings.ContactsScreen.callOrder}
-                    subtitle=""
-                    onPress={this.onPressCallMe}
-                  />
-                  {/* <Plate
-                    title="Чат"
-                    subtitle="Мы на связи с 9 до 20"
-                    kind="primary"
-                  /> */}
-                  <Plate
-                    title={strings.ContactsScreen.order}
-                    subtitle={strings.ContactsScreen.sendOrder}
-                    type="primary"
-                    testID='ContactsScreen.ButtonOrders'
-                    onPress={() => {
-                      orderFunctions.getOrders().then((ordersData) => {
-                        ActionSheet.show(
-                          {
-                            options: ordersData.BUTTONS,
-                            cancelButtonIndex: ordersData.CANCEL_INDEX,
-                            title: ordersData.TITLE,
-                            destructiveButtonIndex:
-                              ordersData.DESTRUCTIVE_INDEX || null,
-                          },
-                          (buttonIndex) => {
-                            switch (ordersData.BUTTONS[buttonIndex].id) {
-                              case 'callMeBack':
-                                navigation.navigate('CallMeBackScreen');
-                                break;
-                              case 'orderService':
-                                navigation.navigate('ServiceScreen');
-                                break;
-                              case 'orderParts':
-                                navigation.navigate('OrderPartsScreen');
-                                break;
-                              case 'carCost':
-                                navigation.navigate('CarCostScreen');
-                                break;
-                            }
-                          },
-                        );
-                      });
-                    }}
-                  />
-                  <Plate
-                    title={
-                      this.sitesSubtitle && this.sitesSubtitle.sites.length > 1
-                        ? strings.ContactsScreen.sites
-                        : strings.ContactsScreen.site
+                    } else {
+                      Linking.openURL(
+                        'tel:' + phones[0].replace(/[^+\d]+/g, ''),
+                      );
                     }
-                    subtitle={
-                      this.sitesSubtitle && this.sitesSubtitle.sites.length > 1
-                        ? this.sitesSubtitle.sites.join('\r\n')
-                        : this.sitesSubtitle.sites[0]
+                  }}
+                />
+                <Plate
+                  testID='ContactsScreen.ButtonCallMe'
+                  title={strings.ContactsScreen.callOrder}
+                  subtitle=""
+                  onPress={this.onPressCallMe}
+                />
+                {/* <Plate
+                  title="Чат"
+                  subtitle="Мы на связи с 9 до 20"
+                  kind="primary"
+                /> */}
+                <Plate
+                  title={strings.ContactsScreen.order}
+                  subtitle={strings.ContactsScreen.sendOrder}
+                  type="primary"
+                  testID='ContactsScreen.ButtonOrders'
+                  onPress={() => {
+                    orderFunctions.getOrders().then((ordersData) => {
+                      ActionSheet.show(
+                        {
+                          options: ordersData.BUTTONS,
+                          cancelButtonIndex: ordersData.CANCEL_INDEX,
+                          title: ordersData.TITLE,
+                          destructiveButtonIndex:
+                            ordersData.DESTRUCTIVE_INDEX || null,
+                        },
+                        (buttonIndex) => {
+                          switch (ordersData.BUTTONS[buttonIndex].id) {
+                            case 'callMeBack':
+                              navigation.navigate('CallMeBackScreen');
+                              break;
+                            case 'orderService':
+                              navigation.navigate('ServiceScreen');
+                              break;
+                            case 'orderParts':
+                              navigation.navigate('OrderPartsScreen');
+                              break;
+                            case 'carCost':
+                              navigation.navigate('CarCostScreen');
+                              break;
+                          }
+                        },
+                      );
+                    });
+                  }}
+                />
+                <Plate
+                  title={
+                    this.sitesSubtitle && this.sitesSubtitle.sites.length > 1
+                      ? strings.ContactsScreen.sites
+                      : strings.ContactsScreen.site
+                  }
+                  subtitle={
+                    this.sitesSubtitle && this.sitesSubtitle.sites.length > 1
+                      ? this.sitesSubtitle.sites.join('\r\n')
+                      : this.sitesSubtitle.sites[0]
+                  }
+                  testID='ContactsScreen.ButtonSites'
+                  type="red"
+                  onPress={() => {
+                    if (
+                      this.sitesSubtitle &&
+                      this.sitesSubtitle.sites.length > 1
+                    ) {
+                      ActionSheet.show(
+                        {
+                          options: this.sitesSubtitle.buttons,
+                          cancelButtonIndex:
+                            this.sitesSubtitle.buttons.length - 1,
+                          title: strings.ContactsScreen.dealerSites,
+                        },
+                        (buttonIndex) => {
+                          switch (
+                            this.sitesSubtitle.buttons[buttonIndex].id
+                          ) {
+                            case 'cancel':
+                              break;
+                            default:
+                              Linking.openURL(
+                                this.sitesSubtitle.buttons[buttonIndex].site,
+                              );
+                              break;
+                          }
+                        },
+                      );
+                    } else {
+                      Linking.openURL(get(dealerSelected, 'site[0]')).catch(
+                        console.log(
+                          'get(dealerSelected, "site[0]") failed',
+                          get(dealerSelected, 'site[0]'),
+                        ),
+                      );
                     }
-                    testID='ContactsScreen.ButtonSites'
-                    type="red"
-                    onPress={() => {
-                      if (
-                        this.sitesSubtitle &&
-                        this.sitesSubtitle.sites.length > 1
-                      ) {
-                        ActionSheet.show(
-                          {
-                            options: this.sitesSubtitle.buttons,
-                            cancelButtonIndex:
-                              this.sitesSubtitle.buttons.length - 1,
-                            title: strings.ContactsScreen.dealerSites,
-                          },
-                          (buttonIndex) => {
-                            switch (
-                              this.sitesSubtitle.buttons[buttonIndex].id
-                            ) {
-                              case 'cancel':
-                                break;
-                              default:
-                                Linking.openURL(
-                                  this.sitesSubtitle.buttons[buttonIndex].site,
-                                );
-                                break;
-                            }
-                          },
-                        );
-                      } else {
-                        Linking.openURL(get(dealerSelected, 'site[0]')).catch(
-                          console.log(
-                            'get(dealerSelected, "site[0]") failed',
-                            get(dealerSelected, 'site[0]'),
-                          ),
-                        );
-                      }
-                    }}
-                  />
-                </View>
-              </ScrollView>
-              {!isFetchInfoList ? (
-                list && list.length ? (
+                  }}
+                />
+              </View>
+            </ScrollView>
+            {!isFetchInfoList ? (
+              list && list.length ? (
+                <View
+                  style={{
+                    marginTop: 16,
+                    paddingVertical: 0,
+                  }}
+                  testID='ContactsScreen.currentActionsHeading'>
                   <View
                     style={{
-                      marginTop: 16,
-                      paddingVertical: 0,
-                    }}
-                    testID='ContactsScreen.currentActionsHeading'>
-                    <View
-                      style={{
-                        paddingHorizontal: 20,
-                        marginBottom: 20,
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Text style={{fontSize: 14, fontWeight: '500'}}>
-                        {strings.ContactsScreen.currentActions}
-                      </Text>
-                      <Text
-                        onPress={() => {
-                          navigation.navigate('InfoList');
-                        }}
-                        style={{
-                          color: styleConst.color.lightBlue,
-                          fontSize: 14,
-                          paddingLeft: 24,
-                        }}>
-                        {strings.Base.all}
-                      </Text>
-                    </View>
-                    <Carousel
-                      data={list}
-                      renderItem={(item) => {
-                        return (
-                          <Offer
-                            key={`carousel-article-${item.hash}`}
-                            data={item}
-                            width={cardWidth}
-                            height={190}
-                          />
-                        );
+                      paddingHorizontal: 20,
+                      marginBottom: 20,
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Text style={{fontSize: 14, fontWeight: '500'}}>
+                      {strings.ContactsScreen.currentActions}
+                    </Text>
+                    <Text
+                      onPress={() => {
+                        navigation.navigate('InfoList');
                       }}
-                      sliderWidth={deviceWidth}
-                      itemWidth={cardWidth}
-                      inactiveSlideScale={0.97}
-                      activeSlideAlignment={'center'}
-                    />
+                      style={{
+                        color: styleConst.color.lightBlue,
+                        fontSize: 14,
+                        paddingLeft: 24,
+                      }}>
+                      {strings.Base.all}
+                    </Text>
                   </View>
-                ) : null
-              ) : (
-                <View style={styles.spinnerContainer}>
-                  <ActivityIndicator
-                    color={styleConst.color.blue}
-                    style={styleConst.spinner}
+                  <Carousel
+                    data={list}
+                    renderItem={(item) => {
+                      return (
+                        <Offer
+                          key={`carousel-article-${item.hash}`}
+                          data={item}
+                          width={cardWidth}
+                          height={190}
+                        />
+                      );
+                    }}
+                    sliderWidth={deviceWidth}
+                    itemWidth={cardWidth}
+                    inactiveSlideScale={0.97}
+                    activeSlideAlignment={'center'}
                   />
                 </View>
-              )}
-            </View>
-          </ScrollView>
-        </View>
-      </StyleProvider>
+              ) : null
+            ) : (
+              <View style={styles.spinnerContainer}>
+                <ActivityIndicator
+                  color={styleConst.color.blue}
+                  style={styleConst.spinner}
+                />
+              </View>
+            )}
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 }

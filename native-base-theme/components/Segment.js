@@ -1,46 +1,54 @@
-import isIphoneX from '../../src/utils/is_iphone_x';
-import variable from "./../variables/platform";
+// @flow
 
-export default (variables = variable) => {
+import variable from './../variables/platform';
+import { PLATFORM } from './../variables/commonColor';
+
+export default (variables /* : * */ = variable) => {
   const platform = variables.platform;
 
   const segmentTheme = {
-    height: null,
-
+    height: 45,
     borderColor: variables.segmentBorderColorMain,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'center',
     backgroundColor: variables.segmentBackgroundColor,
-    "NativeBase.Button": {
-      alignSelf: "space-between",
+    'NativeBase.Button': {
+      alignSelf: 'center',
       borderRadius: 0,
-      marginHorizontal: 10,
-      height: null,
-      backgroundColor: "transparent",
-      borderBottomWidth: 2,
-      borderBottomColor: variables.segmentBorderColor,
+      paddingTop: 3,
+      paddingBottom: 3,
+      height: 30,
+      backgroundColor: 'transparent',
+      borderWidth: 1,
+      borderLeftWidth: 0,
+      borderColor: variables.segmentBorderColor,
       elevation: 0,
-      ".active": {
+      '.active': {
         backgroundColor: variables.segmentActiveBackgroundColor,
-        borderBottomColor: '#F5A623',
-        "NativeBase.Text": {
-          color: variables.segmentActiveTextColor,
+        'NativeBase.Text': {
+          color: variables.segmentActiveTextColor
+        },
+        'NativeBase.Icon': {
+          color: variables.segmentActiveTextColor
         }
       },
-      ".first": {
-        borderTopLeftRadius: platform === "ios" ? 5 : undefined,
-        borderBottomLeftRadius: platform === "ios" ? 5 : undefined,
-        borderRightWidth: 0
+      '.first': {
+        borderTopLeftRadius: platform === PLATFORM.IOS ? 5 : undefined,
+        borderBottomLeftRadius: platform === PLATFORM.IOS ? 5 : undefined,
+        borderLeftWidth: 1
       },
-      ".last": {
-        borderTopRightRadius: platform === "ios" ? 5 : undefined,
-        borderBottomRightRadius: platform === "ios" ? 5 : undefined,
-        borderLeftWidth: 0
+      '.last': {
+        borderTopRightRadius: platform === PLATFORM.IOS ? 5 : undefined,
+        borderBottomRightRadius: platform === PLATFORM.IOS ? 5 : undefined
       },
-      "NativeBase.Text": {
+      'NativeBase.Text': {
         color: variables.segmentTextColor,
-        fontSize: 12,
-        textAlign: 'center',
+        fontSize: 14
+      },
+      'NativeBase.Icon': {
+        fontSize: 22,
+        paddingTop: 0,
+        color: variables.segmentTextColor
       }
     }
   };
