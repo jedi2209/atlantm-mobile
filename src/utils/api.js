@@ -313,7 +313,16 @@ export default {
     if (filters) {
       for (const [key, value] of Object.entries(filters)) {
         if (value) {
-          urlParams.push(`${key}=${value}`);
+          if (typeof value === 'object') {
+            continue;
+          }
+          if (value === true) {
+            urlParams.push(`${key}=1`);
+          } else {
+            if (value !== false && value !== 'false') {
+              urlParams.push(`${key}=${value}`);
+            }
+          }
         }
       }
     }

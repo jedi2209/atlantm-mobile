@@ -159,7 +159,7 @@ class NewCarItemScreen extends Component {
   componentDidMount() {
     const carId = get(this.props.route, 'params.carId');
 
-    this.props.actionFetchNewCarDetails(carId).then((res) => {
+    this.props.actionFetchNewCarDetails(carId).then(res => {
       if (res && res.type && res.payload) {
         switch (res.type) {
           case 'NEW_CAR_DETAILS__SUCCESS':
@@ -225,7 +225,7 @@ class NewCarItemScreen extends Component {
     );
   }
 
-  onScroll = (event) => {
+  onScroll = event => {
     const {navigation, route} = this.props;
     const currentOffset = event.nativeEvent.contentOffset.y;
     const dif = currentOffset - (this.offset || 0);
@@ -365,7 +365,7 @@ class NewCarItemScreen extends Component {
 
   onPressPhoto = () => this.props.actionOpenNewCarPhotoViewer();
 
-  onChangePhotoIndex = (index) =>
+  onChangePhotoIndex = index =>
     this.props.actionUpdateNewCarPhotoViewerIndex(index);
 
   // renderDealer = (dealerName) => {
@@ -391,7 +391,7 @@ class NewCarItemScreen extends Component {
   renderTechData = (title, data) => {
     const {carDetails} = this.props;
     if (typeof data === 'object' && data.length) {
-      let resRaw = data.map((element) => {
+      let resRaw = data.map(element => {
         let name = '';
         if (element.alternate) {
           name = element.alternate;
@@ -400,7 +400,7 @@ class NewCarItemScreen extends Component {
         }
         return this.renderItem(element.name + ':', name, element.postfix);
       });
-      let res = resRaw.filter((el) => {
+      let res = resRaw.filter(el => {
         return el != null;
       });
       return res ? (
@@ -478,7 +478,7 @@ class NewCarItemScreen extends Component {
     return (
       <View key={title} style={{marginBottom: 10}}>
         <Text style={styles.sectionTitle}>{title}</Text>
-        {data.map((item) => {
+        {data.map(item => {
           const key = md5(item.name + item.id);
           return (
             <Grid key={key}>
@@ -518,8 +518,11 @@ class NewCarItemScreen extends Component {
 
     const CarPrices = {
       sale: get(carDetails, 'price.app.sale', 0),
-      standart:
-        get(carDetails, 'price.app.standart', get(carDetails, 'price.app')),
+      standart: get(
+        carDetails,
+        'price.app.standart',
+        get(carDetails, 'price.app'),
+      ),
     };
 
     return (
@@ -659,17 +662,17 @@ class NewCarItemScreen extends Component {
 
     let photos = [];
     let isCarImgReal = false;
-    if (get(carDetails, 'imgReal.thumb.0')) { // 105
+    if (get(carDetails, 'imgReal.thumb.0')) {
+      // 105
       isCarImgReal = true;
-      get(carDetails, 'imgReal.thumb').forEach((element) => {
+      get(carDetails, 'imgReal.thumb').forEach(element => {
         photos.push(element + '1000x1000');
       });
     } else {
-      get(carDetails, 'img.thumb').forEach((element) => {
+      get(carDetails, 'img.thumb').forEach(element => {
         photos.push(element + '1000x440');
       });
     }
-
 
     let colorName = strings.Colors[Number(get(carDetails, 'color.picker.id'))];
     if (!colorName) {
@@ -681,7 +684,7 @@ class NewCarItemScreen extends Component {
 
     return (
       <StyleProvider style={getTheme()}>
-        <View style={styles.safearea} testID='NewCarItemScreen.Wrapper'>
+        <View style={styles.safearea} testID="NewCarItemScreen.Wrapper">
           <ScrollView
             style={styles.safearea}
             // scrollEventThrottle={0}
@@ -699,7 +702,7 @@ class NewCarItemScreen extends Component {
                 }}>
                 {get(carDetails, 'color.picker.codes.hex', null) ? (
                   <ColorBox
-                    ref={(input) => {
+                    ref={input => {
                       return (this.ColorBox = input);
                     }}
                     containerStyle={{
@@ -714,7 +717,7 @@ class NewCarItemScreen extends Component {
                 ) : null}
                 {badge && badge.length ? (
                   <View
-                    testID='NewCarItemScreen.BadgesWrapper'
+                    testID="NewCarItemScreen.BadgesWrapper"
                     style={{
                       flex: 1,
                       flexDirection: 'row',
@@ -790,8 +793,8 @@ class NewCarItemScreen extends Component {
                   horizontal
                   showsHorizontalScrollIndicator={false}
                   bounces={true}
-                  testID='NewCarItemScreen.PlatesWrapper'
-                  ref={(ref) => {
+                  testID="NewCarItemScreen.PlatesWrapper"
+                  ref={ref => {
                     this.platesScrollView = ref;
                   }}>
                   <View
@@ -803,14 +806,14 @@ class NewCarItemScreen extends Component {
                     }}>
                     <OptionPlate
                       title={strings.NewCarItemScreen.plates.complectation}
-                      testID='NewCarItemScreen.Plates.Complectation'
+                      testID="NewCarItemScreen.Plates.Complectation"
                       subtitle={get(carDetails, 'complectation.name')}
                     />
                     {get(carDetails, 'engine.id') &&
                     get(carDetails, 'engine.id') !== 4 ? (
                       <OptionPlate
                         title={strings.NewCarItemScreen.plates.engine}
-                        testID='NewCarItemScreen.Plates.Engine'
+                        testID="NewCarItemScreen.Plates.Engine"
                         subtitle={
                           get(carDetails, 'engine.volume.short').toFixed(1) +
                           ' л. ' +
@@ -820,7 +823,7 @@ class NewCarItemScreen extends Component {
                     ) : null}
                     <OptionPlate
                       title={strings.NewCarItemScreen.plates.gearbox.name}
-                      testID='NewCarItemScreen.Plates.Gearbox'
+                      testID="NewCarItemScreen.Plates.Gearbox"
                       subtitle={`${
                         get(carDetails, 'gearbox.count')
                           ? get(carDetails, 'gearbox.count') + '-ст.'
@@ -835,7 +838,7 @@ class NewCarItemScreen extends Component {
                     {wheelName ? (
                       <OptionPlate
                         title={strings.NewCarItemScreen.plates.wheel}
-                        testID='NewCarItemScreen.Plates.Wheel'
+                        testID="NewCarItemScreen.Plates.Wheel"
                         subtitle={wheelName.toLowerCase()}
                       />
                     ) : null}
@@ -845,7 +848,7 @@ class NewCarItemScreen extends Component {
                           this.ColorBox.click();
                         }}
                         title={strings.NewCarItemScreen.plates.color}
-                        testID='NewCarItemScreen.Plates.Color'
+                        testID="NewCarItemScreen.Plates.Color"
                         subtitle={colorName}
                       />
                     ) : null}
@@ -890,7 +893,7 @@ class NewCarItemScreen extends Component {
                   {
                     title: strings.NewCarItemScreen.tech.title,
                     content: (
-                      <View testID='NewCarItemScreen.TechWrapper'>
+                      <View testID="NewCarItemScreen.TechWrapper">
                         {this.renderTechData(
                           strings.NewCarItemScreen.tech.base,
                           [
@@ -921,15 +924,15 @@ class NewCarItemScreen extends Component {
                                 return false;
                               }
                               return {
-                                name:
-                                  strings.NewCarItemScreen.tech.engine.volume,
+                                name: strings.NewCarItemScreen.tech.engine
+                                  .volume,
                                 value: 'engine.volume.full',
                                 postfix: 'см³',
                               };
                             })(),
                             {
-                              name:
-                                strings.NewCarItemScreen.tech.engine.power.hp,
+                              name: strings.NewCarItemScreen.tech.engine.power
+                                .hp,
                               value: 'power.hp',
                               postfix: strings.NewCarItemScreen.shortUnits.hp,
                             },
@@ -1015,8 +1018,8 @@ class NewCarItemScreen extends Component {
                                 strings.NewCarItemScreen.shortUnits.litres,
                             },
                             {
-                              name:
-                                strings.NewCarItemScreen.techData.fuel.track,
+                              name: strings.NewCarItemScreen.techData.fuel
+                                .track,
                               value: 'fuel.track',
                               postfix:
                                 strings.NewCarItemScreen.shortUnits.litres,
@@ -1035,10 +1038,12 @@ class NewCarItemScreen extends Component {
                   {
                     title: strings.NewCarItemScreen.complectation.title,
                     content: (
-                      <View style={styles.tabContent} testID='NewCarItemScreen.ComplectationWrapper'>
+                      <View
+                        style={styles.tabContent}
+                        testID="NewCarItemScreen.ComplectationWrapper">
                         {stockKeys.length ? (
                           <View>
-                            {stockKeys.map((key) => {
+                            {stockKeys.map(key => {
                               return this.renderComplectationItem(
                                 stock[key].name,
                                 stock[key].data,
@@ -1049,7 +1054,7 @@ class NewCarItemScreen extends Component {
 
                         {additionalKeys.length ? (
                           <View>
-                            {additionalKeys.map((key) => {
+                            {additionalKeys.map(key => {
                               return this.renderComplectationItem(
                                 additional[key].name,
                                 additional[key].data,
@@ -1099,7 +1104,7 @@ class NewCarItemScreen extends Component {
                     )}
                   </View>
                 )}
-                renderContent={(item) => {
+                renderContent={item => {
                   return (
                     <View
                       style={{
@@ -1124,7 +1129,7 @@ class NewCarItemScreen extends Component {
               {/* {carDetails.testDriveCars &&
               carDetails.testDriveCars.length > 0 ? ( */}
               <Button
-                testID='NewCarItemScreen.Button.TestDrive'
+                testID="NewCarItemScreen.Button.TestDrive"
                 onPress={this.onPressTestDrive}
                 full
                 iconLeft
@@ -1146,7 +1151,7 @@ class NewCarItemScreen extends Component {
               </Button>
               {/* ) : null} */}
               <Button
-                testID='NewCarItemScreen.Button.Order'
+                testID="NewCarItemScreen.Button.Order"
                 onPress={this.onPressOrder}
                 full
                 style={[
