@@ -46,16 +46,13 @@ const CarList = props => {
     }
   }, [data]);
 
-  const _renderEmptyComponent = () => {
-    return isFetchItems ? (
-      <ActivityIndicator
-        color={styleConst.color.blue}
-        style={styleConst.spinner}
-      />
-    ) : (
-      <EmptyMessage text={strings.CarList.emptyMessage} />
-    );
-  };
+  const _renderEmptyComponent = () => isFetchItems ? (
+    <ActivityIndicator
+      color={styleConst.color.blue}
+      style={styleConst.spinner} />
+  ) : (
+    <EmptyMessage text={strings.CarList.emptyMessage} />
+  );
 
   const _renderItem = ({item}) => {
     if (item.type === 'empty') {

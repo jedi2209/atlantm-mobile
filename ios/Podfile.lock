@@ -324,6 +324,8 @@ PODS:
     - React-jsi (= 0.64.2)
     - React-perflogger (= 0.64.2)
   - React-jsinspector (0.64.2)
+  - react-native-blurhash (1.1.4):
+    - React-Core
   - react-native-fbsdk (3.0.0):
     - React
     - react-native-fbsdk/Core (= 3.0.0)
@@ -558,6 +560,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
+  - react-native-blurhash (from `../node_modules/react-native-blurhash`)
   - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
@@ -668,6 +671,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
+  react-native-blurhash:
+    :path: "../node_modules/react-native-blurhash"
   react-native-fbsdk:
     :path: "../node_modules/react-native-fbsdk"
   react-native-flipper:
@@ -797,6 +802,7 @@ SPEC CHECKSUMS:
   React-jsi: 67747b9722f6dab2ffe15b011bcf6b3f2c3f1427
   React-jsiexecutor: 80c46bd381fd06e418e0d4f53672dc1d1945c4c3
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
+  react-native-blurhash: ec98d751a9cb9075cef0b9e3188244c517d6ab22
   react-native-fbsdk: 8e92c7a334fd8d9c2b5d8b8fcd7ae2c314161099
   react-native-flipper: 5747805d48aed98aa521074c9d71a99ae28e07cf
   react-native-google-maps: 46dea4aa4acb7300beff508f64d9f8c84e9fb106

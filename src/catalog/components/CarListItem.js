@@ -8,6 +8,8 @@ import {
   TouchableHighlight,
   Platform,
 } from 'react-native';
+import RNBounceable from "@freakycoder/react-native-bounceable";
+import { Blurhash } from 'react-native-blurhash';
 import LinearGradient from 'react-native-linear-gradient';
 
 // components
@@ -45,6 +47,7 @@ const styles = StyleSheet.create({
     height: 220,
     borderTopRightRadius: 5,
     borderTopLeftRadius: 5,
+    width: '100%',
   },
   imageReal: {
     height: 300,
@@ -370,7 +373,7 @@ const CarListItem = ({car, prices, itemScreen, resizeMode, dealerSelected, curre
           photos.push(element + '1000x440');
         });
       }
-      console.log('photos', photos);
+      console.log('photos PhotoSlider', photos);
       return (
         <PhotoSlider
           height={CarImgsReal ? 300 : 220}
@@ -381,7 +384,6 @@ const CarListItem = ({car, prices, itemScreen, resizeMode, dealerSelected, curre
           ]}
           dotColor={styleConst.color.white}
           photos={photos}
-          onPressItem={_onPressPhoto}
           paginationStyle={{marginBottom: 0}}
           onIndexChanged={_onChangePhotoIndex}
         />
@@ -390,126 +392,129 @@ const CarListItem = ({car, prices, itemScreen, resizeMode, dealerSelected, curre
   };
 
   return (
-    <TouchableHighlight
+    <RNBounceable
       onPress={!ordered ? _onPress : _onPressOrder}
       testID={testID + '-' + key}
       accessibilityLabel={testID}
       accessibilityRole='button'
-      style={[
-        !ordered ? styleConst.shadow.light : null,
-        styles.container,
-        isSale ? styles.containerSpecial : null,
-      ]}
-      underlayColor={styleConst.color.select}>
-      <View style={styles.card} key={'carID-' + key}>
-        <LinearGradient
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 0}}
-          useAngle
-          angle={itemScreen === 'NewCarItemScreen' ? 60 : 170}
-          colors={['rgba(51, 51, 51, 0.75)', 'rgba(51, 51, 51, 0.25)']}
-          style={styles.titleBackground}
-        />
-        <View style={[styles.titleContainer]}>
-          {isNewCar ? (
-            <View style={{flexDirection: 'row'}}>
-              <View style={{width: '12%', minWidth: 50}}>
-                <BrandLogo
-                  brand={get(car, 'brand.id')}
-                  width={45}
-                  type="white"
-                  style={styles.brandLogo}
-                  key={'brandLogo' + get(car, 'brand.id')}
-                />
+      >
+      <View
+        style={[
+          !ordered ? styleConst.shadow.light : null,
+          styles.container,
+          isSale ? styles.containerSpecial : null,
+        ]}
+        underlayColor={styleConst.color.select}>
+        <View style={styles.card} key={'carID-' + key}>
+          <LinearGradient
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 0}}
+            useAngle
+            angle={itemScreen === 'NewCarItemScreen' ? 60 : 170}
+            colors={['rgba(51, 51, 51, 0.75)', 'rgba(51, 51, 51, 0.25)']}
+            style={styles.titleBackground}
+          />
+          <View style={[styles.titleContainer]}>
+            {isNewCar ? (
+              <View style={{flexDirection: 'row'}}>
+                <View style={{width: '12%', minWidth: 50}}>
+                  <BrandLogo
+                    brand={get(car, 'brand.id')}
+                    width={45}
+                    type="white"
+                    style={styles.brandLogo}
+                    key={'brandLogo' + get(car, 'brand.id')}
+                  />
+                </View>
+                <View style={{flexDirection: 'column', width: '88%'}}>
+                  <Text
+                    style={styles.title}
+                    ellipsizeMode="tail"
+                    selectable={false}
+                    numberOfLines={1}>
+                    {`${modelName || ''} ${complectationName}`}
+                  </Text>
+                  {year ? (
+                    <Text style={styles.year} selectable={false}>
+                      {year + ' ' + strings.NewCarItemScreen.shortUnits.year}{' '}
+                    </Text>
+                  ) : null}
+                </View>
               </View>
-              <View style={{flexDirection: 'column', width: '88%'}}>
+            ) : (
+              <>
                 <Text
                   style={styles.title}
                   ellipsizeMode="tail"
                   selectable={false}
                   numberOfLines={1}>
-                  {`${modelName || ''} ${complectationName}`}
+                  {`${get(car, 'brand.name')} ${
+                    modelName || ''
+                  } ${complectationName}`}
                 </Text>
                 {year ? (
-                  <Text style={styles.year} selectable={false}>
-                    {year + ' ' + strings.NewCarItemScreen.shortUnits.year}{' '}
+                  <Text style={styles.year}>
+                    {year + ' ' + strings.NewCarItemScreen.shortUnits.year}
                   </Text>
                 ) : null}
-              </View>
-            </View>
-          ) : (
-            <>
+              </>
+            )}
+          </View>
+          {_renderImage({ordered})}
+          <View
+            style={[
+              styles.price,
+              ordered ? styles.ordered : null,
+              itemScreen === 'NewCarItemScreen'
+                ? {
+                    marginTop:
+                      (Platform.OS !== 'ios' ? -6 : 0) +
+                      (CarImgReal ? (isSale ? -80 : -60) : -20),
+                  }
+                : null,
+            ]}>
+            {_renderPrice({car, prices})}
+          </View>
+          <View style={styles.carTechContainer}>
+            {mileage ? (
               <Text
-                style={styles.title}
-                ellipsizeMode="tail"
                 selectable={false}
-                numberOfLines={1}>
-                {`${get(car, 'brand.name')} ${
-                  modelName || ''
-                } ${complectationName}`}
+                style={
+                  CarImgReal ? styles.commonReal : styles.common
+                }>{`${numberWithGap(mileage)} км.`}</Text>
+            ) : null}
+            {engineVolume &&
+            get(car, 'engine.id') &&
+            get(car, 'engine.id') !== 4 ? (
+              <Text
+                selectable={false}
+                style={
+                  CarImgReal ? styles.commonReal : styles.common
+                }>{`${engineVolume} см³`}</Text>
+            ) : null}
+            {get(car, 'engine.type') ? (
+              <Text
+                selectable={false}
+                style={
+                  CarImgReal ? styles.commonReal : styles.common
+                }>{`${engineName.toLowerCase()}`}</Text>
+            ) : null}
+            {gearboxName ? (
+              <Text
+                selectable={false}
+                style={
+                  CarImgReal ? styles.commonReal : styles.common
+                }>{`${gearboxName.toLowerCase()}`}</Text>
+            ) : null}
+            {idSAP && isNewCar ? (
+              <Text style={CarImgReal ? styles.commonReal : styles.common}>
+                {`#${idSAP}`}
               </Text>
-              {year ? (
-                <Text style={styles.year}>
-                  {year + ' ' + strings.NewCarItemScreen.shortUnits.year}
-                </Text>
-              ) : null}
-            </>
-          )}
-        </View>
-        {_renderImage({ordered})}
-        <View
-          style={[
-            styles.price,
-            ordered ? styles.ordered : null,
-            itemScreen === 'NewCarItemScreen'
-              ? {
-                  marginTop:
-                    (Platform.OS !== 'ios' ? -6 : 0) +
-                    (CarImgReal ? (isSale ? -80 : -60) : -20),
-                }
-              : null,
-          ]}>
-          {_renderPrice({car, prices})}
-        </View>
-        <View style={styles.carTechContainer}>
-          {mileage ? (
-            <Text
-              selectable={false}
-              style={
-                CarImgReal ? styles.commonReal : styles.common
-              }>{`${numberWithGap(mileage)} км.`}</Text>
-          ) : null}
-          {engineVolume &&
-          get(car, 'engine.id') &&
-          get(car, 'engine.id') !== 4 ? (
-            <Text
-              selectable={false}
-              style={
-                CarImgReal ? styles.commonReal : styles.common
-              }>{`${engineVolume} см³`}</Text>
-          ) : null}
-          {get(car, 'engine.type') ? (
-            <Text
-              selectable={false}
-              style={
-                CarImgReal ? styles.commonReal : styles.common
-              }>{`${engineName.toLowerCase()}`}</Text>
-          ) : null}
-          {gearboxName ? (
-            <Text
-              selectable={false}
-              style={
-                CarImgReal ? styles.commonReal : styles.common
-              }>{`${gearboxName.toLowerCase()}`}</Text>
-          ) : null}
-          {idSAP && isNewCar ? (
-            <Text style={CarImgReal ? styles.commonReal : styles.common}>
-              {`#${idSAP}`}
-            </Text>
-          ) : null}
+            ) : null}
+          </View>
         </View>
       </View>
-    </TouchableHighlight>
+    </RNBounceable>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 
 // components
@@ -7,86 +7,84 @@ import {SvgCssUri} from 'react-native-svg';
 import styleConst from '../style-const';
 import {verticalScale} from '../../utils/scale';
 
-export default class Imager extends PureComponent {
-  static propTypes = {
-    source: PropTypes.shape({
-      uri: PropTypes.string.isRequired,
-    }).isRequired,
-  };
+const styles = StyleSheet.create({
+  loader: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: verticalScale(60),
+  },
+  svgWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
 
-  static defaultProps = {
-    testID: 'Imager.Wrapper',
-  };
+const Imager = (props) => {
+  [isLoading, setLoading] = useState(true);
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      imagePath: this.props.source.uri,
-      animatingLoader: true,
-    };
+  const path = props.source.uri.toString();
+  const extension = path.split('.').pop();
+  console.log('Imager path', extension, path);
+  if (extension === 'svg') {
+    setLoading(false);
   }
 
-  componentDidMount() {
-    this.state.animating = false;
-  }
-
-  render() {
-    if (!this.state.imagePath) {
-      return;
-    }
-
-    const path = this.state.imagePath;
-
-    const extension = path.split('.').pop();
-
-    if (extension === 'svg') {
-      this.setState({animatingLoader: false});
-    }
-
-    return (
-      <View testID={this.props.testID}>
-        <ActivityIndicator
-          animating={this.state.animatingLoader}
-          color={styleConst.color.blue}
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            right: 0,
-            bottom: 0,
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginTop: verticalScale(60),
+  return (
+    <View testID={props.testID}>
+      <ActivityIndicator
+        animating={isLoading}
+        color={styleConst.color.blue}
+        style={styles.loader}
+      />
+      {extension === 'svg' ? (
+        <View
+          style={[
+            StyleSheet.absoluteFill,
+            styles.svgWrapper,
+            {...props.style},
+          ]}>
+          <SvgCssUri
+            width="100%"
+            height="100%"
+            uri={path}
+          />
+        </View>
+      ) : (
+        <Image
+          {...props}
+          source={{
+            uri: path,
+            headers: {
+              Pragma: 'no-cache'
+            },
+            cache: 'only-if-cached'
           }}
-        />
-        {extension === 'svg' ? (
-          <View
-            style={[
-              StyleSheet.absoluteFill,
-              {alignItems: 'center', justifyContent: 'center'},
-              {...this.props.style},
-            ]}>
-            <SvgCssUri
-              width="100%"
-              height="100%"
-              uri={this.state.imagePath.toString()}
-            />
-          </View>
-        ) : (
-          <Image
-            {...this.props}
-            source={{uri: this.state.imagePath.toString()}}
-            // onLoadStart={() => { console.log('Image on load start'); }}
-            // onLoad={() => { this.setState({animatingLoader: false}); console.log('Image on load'); }}
-            onLoadEnd={() => {
-              this.setState({animatingLoader: false});
-              //  console.log('Image ' + this.state.imagePath + ' on load end');
-            }}>
-            {this.props.children}
-          </Image>
-        )}
-      </View>
-    );
-  }
+          onError={({ nativeEvent: {error} }) => {
+            console.log('Image error', error);
+          }}
+          onLoadEnd={() => {
+            setLoading(false);
+          }}>
+          {props.children}
+        </Image>
+      )}
+    </View>
+  );
 }
+
+Imager.propTypes = {
+  source: PropTypes.shape({
+    uri: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+Imager.defaultProps = {
+  testID: 'Imager.Wrapper',
+};
+
+export default Imager;

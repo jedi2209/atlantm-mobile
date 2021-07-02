@@ -7,9 +7,11 @@ import {
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
+  Image,
 } from 'react-native';
 import TransitionView from '../../core/components/TransitionView';
 import {StyleProvider, Content, Button} from 'native-base';
+import ResponsiveImageView from 'react-native-responsive-image-view';
 
 // redux
 import {connect} from 'react-redux';
@@ -31,62 +33,6 @@ import {strings} from '../../core/lang/const';
 
 // image
 const {width: screenWidth} = Dimensions.get('window');
-const IMAGE_WIDTH = screenWidth;
-const IMAGE_HEIGHT = 300;
-
-const styles = StyleSheet.create({
-  spinner: {
-    alignSelf: 'center',
-    marginTop: verticalScale(60),
-    height: 300,
-  },
-  buttonWrapper: {
-    marginBottom: 20,
-    position: 'absolute',
-    bottom: 10,
-    height: 50,
-    width: '100%',
-    paddingHorizontal: '2%',
-    flex: 1,
-    flexDirection: 'row',
-  },
-  button: {
-    backgroundColor: styleConst.color.lightBlue,
-    color: 'white',
-    borderTopWidth: 0,
-    width: '47%',
-    borderRadius: 0,
-    alignContent: 'center',
-    justifyContent: 'center',
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-  buttonText: {
-    color: styleConst.color.white,
-    fontFamily: styleConst.font.medium,
-    fontSize: 14,
-    textTransform: 'uppercase',
-  },
-  textContainer: {
-    flex: 1,
-    marginVertical: 10,
-    marginHorizontal: 0,
-    marginBottom: 90,
-  },
-  date: {
-    color: styleConst.color.greyText2,
-    fontFamily: styleConst.font.regular,
-    fontSize: 14,
-    marginHorizontal: 10,
-    letterSpacing: styleConst.ui.letterSpacing,
-    marginTop: verticalScale(5),
-  },
-  image: {
-    width: IMAGE_WIDTH,
-    height: IMAGE_HEIGHT,
-    top: 0,
-  },
-});
 
 const mapStateToProps = ({dealer, info, profile, core}) => {
   return {
@@ -116,8 +62,7 @@ class InfoPostScreen extends Component {
     super(props);
 
     this.state = {
-      imageWidth: IMAGE_WIDTH,
-      imageHeight: IMAGE_HEIGHT,
+      imageLoaded: 0,
       webViewWidth: screenWidth - styleConst.ui.verticalGap,
       refreshing: false,
     };
@@ -136,12 +81,6 @@ class InfoPostScreen extends Component {
       id: id,
     });
   }
-
-  onLayoutImage = e => {
-    const {height: imageDynamicHeight} = e.nativeEvent.layout;
-
-    this.setState({imageHeight: imageDynamicHeight});
-  };
 
   onLayoutWebView = e => {
     const {width: webViewWidth} = e.nativeEvent.layout;
@@ -287,6 +226,22 @@ class InfoPostScreen extends Component {
     }
   }
 
+  _renderImageView = ({ getViewProps, getImageProps }) => (
+    <View {...getViewProps()}>
+      <Imager {...getImageProps()} />
+    </View>
+  );
+
+  _renderImageViewonLoad = () => {
+    this.setState({
+      imageLoaded: 1,
+    });
+  };
+
+  _renderImageViewonError = (err) => {
+    console.error(err);
+  };
+
   render() {
     const {currLang} = this.props;
     const post = this.getPost();
@@ -325,21 +280,16 @@ class InfoPostScreen extends Component {
               />
             ) : (
               <View>
-                <View style={styles.imageContainer} ref="imageContainer">
-                  {imageUrl && resizeMode ? (
-                    <Imager
-                      resizeMode={resizeMode}
-                      onLayout={this.onLayoutImage}
-                      style={[
-                        styles.image,
-                        {
-                          width: this.state.imageWidth,
-                          height: this.state.imageHeight,
-                        },
-                      ]}
-                      source={{uri: imageUrl}}
-                    />
-                  ) : null}
+                <View style={[styles.imageContainer, {opacity: this.state.imageLoaded}]} ref="imageContainer">
+                {imageUrl ? (
+                  <ResponsiveImageView
+                    onLoad={this._renderImageViewonLoad}
+                    onError={this._renderImageViewonError}
+                    source={{ uri: imageUrl }}
+                    >
+                    {this._renderImageView}
+                  </ResponsiveImageView>
+                ) : null}
                 </View>
                 <View
                   style={styles.textContainer}
@@ -400,5 +350,54 @@ class InfoPostScreen extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  spinner: {
+    alignSelf: 'center',
+    marginTop: verticalScale(60),
+    height: 300,
+  },
+  buttonWrapper: {
+    marginBottom: 20,
+    position: 'absolute',
+    bottom: 10,
+    height: 50,
+    width: '100%',
+    paddingHorizontal: '2%',
+    flex: 1,
+    flexDirection: 'row',
+  },
+  button: {
+    backgroundColor: styleConst.color.lightBlue,
+    color: 'white',
+    borderTopWidth: 0,
+    width: '47%',
+    borderRadius: 0,
+    alignContent: 'center',
+    justifyContent: 'center',
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
+  buttonText: {
+    color: styleConst.color.white,
+    fontFamily: styleConst.font.medium,
+    fontSize: 14,
+    textTransform: 'uppercase',
+  },
+  textContainer: {
+    flex: 1,
+    marginVertical: 10,
+    marginHorizontal: 0,
+    marginBottom: 90,
+  },
+  date: {
+    color: styleConst.color.greyText2,
+    fontFamily: styleConst.font.regular,
+    fontSize: 14,
+    marginHorizontal: 10,
+    letterSpacing: styleConst.ui.letterSpacing,
+    marginTop: verticalScale(5),
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(InfoPostScreen);
