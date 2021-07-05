@@ -314,6 +314,9 @@ export default {
       onlineOrder: {
         title: 'Можна забронювати онлайн',
       },
+      colors: {
+        title: 'Цвет',
+      },
     },
   },
   Sort: {

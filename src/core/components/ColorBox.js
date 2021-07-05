@@ -1,10 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {PureComponent} from 'react';
+import React, {useState} from 'react';
 import {View, Text, TouchableHighlight, StyleSheet} from 'react-native';
 
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../style-const';
+import {get} from 'lodash';
 import ModalView from './ModalView';
 import {strings} from '../lang/const';
 
@@ -18,51 +19,26 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class ColorBox extends PureComponent {
-  static propTypes = {
-    color: PropTypes.object,
-    touchableStyle: PropTypes.object,
-    containerStyle: PropTypes.object,
-  };
+const ColorBox = (props) => {
+  const [isModalVisible, setModalVisible] = useState(false);
 
-  constructor(props) {
-    super(props);
+  const color = props.color;
+  const backgroundColor = get(props, 'color.picker.codes.hex', 'color.codes.hex', null);
 
-    this.state = {
-      isModalVisible: false,
-    };
-  }
-
-  click() {
-    this.setState({
-      isModalVisible: true,
-    });
-  }
-
-  render() {
-    const {color} = this.props;
-    const backgroundColor =
-      color && color.picker && color.picker.codes && color.picker.codes.hex
-        ? color.picker.codes.hex
-        : 'none';
     return (
-      <View style={[this.props.containerStyle]}>
+      <View style={[props?.containerStyle]}>
         <ModalView
-          isModalVisible={this.state.isModalVisible}
+          isModalVisible={isModalVisible}
           animationIn="slideInRight"
           animationOut="slideOutLeft"
-          onHide={() => {
-            this.setState({
-              isModalVisible: false,
-            });
-          }}
+          onHide={() => setModalVisible(false)}
           selfClosed={true}>
           <View style={{padding: 10}}>
-            {color.name.official ? (
+            {color?.name?.official ? (
               <Text
                 ellipsizeMode="clip"
                 style={{fontSize: 18, marginBottom: 10}}>
-                {color.name.official}
+                {color?.name?.official}
               </Text>
             ) : null}
             <View style={{flexDirection: 'row'}}>
@@ -87,12 +63,8 @@ export default class ColorBox extends PureComponent {
           </View>
         </ModalView>
         <TouchableHighlight
-          onPress={() => {
-            this.setState({
-              isModalVisible: true,
-            });
-          }}
-          style={[this.props.touchableStyle]}
+          onPress={() => setModalVisible(true)}
+          style={[props?.touchableStyle]}
           underlayColor={'none'}>
           <View
             style={[
@@ -102,10 +74,17 @@ export default class ColorBox extends PureComponent {
                 backgroundColor: backgroundColor,
               },
             ]}
-            {...this.props}
+            {...props}
           />
         </TouchableHighlight>
       </View>
     );
-  }
 }
+
+ColorBox.propTypes = {
+  color: PropTypes.object,
+  touchableStyle: PropTypes.object,
+  containerStyle: PropTypes.object,
+};
+
+export default ColorBox;
