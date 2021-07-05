@@ -34,7 +34,7 @@
     "e2e:android-debug": "detox test -c android.emu.debug"
   },
   "dependencies": {
-    "@alessiocancian/react-native-actionsheet": "^2.4.11",
+    "@alessiocancian/react-native-actionsheet": "^3.0.0",
     "@amplitude/react-native": "^2.2.0",
     "@freakycoder/react-native-bounceable": "^0.2.5",
     "@invertase/react-native-apple-authentication": "^2.1.0",
@@ -138,7 +138,7 @@
     "jest-circus": "^27.0.1",
     "metro-react-native-babel-preset": "^0.66.0",
     "patch-package": "^6.2.2",
-    "react-native-flipper": "^0.95.0",
+    "react-native-flipper": "^0.96.0",
     "react-test-renderer": "^17.0.2",
     "reactotron-react-native": "^5.0.0",
     "reactotron-redux": "^3.1.3",
