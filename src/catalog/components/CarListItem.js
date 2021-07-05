@@ -9,7 +9,6 @@ import {
   Platform,
 } from 'react-native';
 import RNBounceable from "@freakycoder/react-native-bounceable";
-import { Blurhash } from 'react-native-blurhash';
 import LinearGradient from 'react-native-linear-gradient';
 
 // components
@@ -25,168 +24,6 @@ import numberWithGap from '../../utils/number-with-gap';
 import showPrice from '../../utils/price';
 import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
-
-const styles = StyleSheet.create({
-  container: {
-    marginHorizontal: '3%',
-    marginVertical: 10,
-    backgroundColor: styleConst.color.white,
-    borderRadius: 5,
-  },
-  containerSpecial: {
-    // backgroundColor: '#1f1f1f',
-  },
-  ordered: {
-    opacity: 0.6,
-  },
-  card: {
-    flexDirection: 'column',
-    paddingBottom: 10,
-  },
-  image: {
-    height: 220,
-    borderTopRightRadius: 5,
-    borderTopLeftRadius: 5,
-    width: '100%',
-  },
-  imageReal: {
-    height: 300,
-    borderTopRightRadius: 5,
-    borderTopLeftRadius: 5,
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
-  },
-  titleBackgroundold: {
-    flex: 1,
-    position: 'absolute',
-    zIndex: 15,
-    backgroundColor: 'black',
-    opacity: 0.5,
-    height: 50,
-    width: '100%',
-    borderTopRightRadius: 5,
-    borderTopLeftRadius: 5,
-  },
-  titleBackground: {
-    flex: 1,
-    zIndex: 15,
-    position: 'absolute',
-    backgroundColor: 'transparent',
-    opacity: 1,
-    height: 50,
-    width: '100%',
-    borderTopLeftRadius: 5,
-    borderTopRightRadius: 5,
-  },
-  titleContainer: {
-    flex: 1,
-    zIndex: 20,
-    position: 'absolute',
-    marginVertical: 5,
-    marginHorizontal: '1%',
-  },
-  priceContainer: {
-    flexDirection: 'column',
-    marginHorizontal: 15,
-    marginTop: 10,
-  },
-  priceDefault: {
-    textDecorationLine: 'line-through',
-    fontSize: 12,
-    marginTop: 4,
-    color: '#8d99ae',
-  },
-  priceSpecial: {
-    color: '#e63946',
-    marginRight: 10,
-  },
-  // extra: {
-  //   borderColor: '#e63946',
-  //   borderWidth: 1,
-  //   borderStyle: 'solid',
-  //   flexDirection: 'row',
-  // },
-  // extraItem: {
-  //   marginRight: 10,
-  // },
-  // extraText: {
-  //   fontFamily: styleConst.font.regular,
-  //   fontSize: 12,
-  //   color: styleConst.color.greyText3,
-  // },
-  year: {
-    color: styleConst.color.white,
-    fontSize: 12,
-    zIndex: 2,
-    marginVertical: 5,
-  },
-  title: {
-    color: styleConst.color.white,
-    fontSize: 16,
-    fontWeight: 'bold',
-    zIndex: 2,
-    // marginBottom: 10,
-  },
-  price: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    zIndex: 2,
-  },
-  priceBackground: {
-    flex: 1,
-    zIndex: 1,
-    position: 'absolute',
-    backgroundColor: 'transparent',
-    opacity: 1,
-    width: '80%',
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
-    bottom: 0,
-  },
-  common: {
-    fontSize: 13,
-    color: '#2b2d42',
-    marginRight: 7,
-  },
-  commonReal: {
-    fontSize: 13,
-    color: styleConst.color.white,
-    marginRight: 7,
-  },
-  saleContainer: {
-    marginTop: 2,
-    marginHorizontal: 10,
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-    paddingTop: 3,
-    backgroundColor: '#e63946',
-    borderRadius: 5,
-    textAlign: 'center',
-    alignContent: 'center',
-    width: 65,
-    height: 15,
-  },
-  priceSpecialText: {
-    color: 'white',
-    fontSize: 10,
-    lineHeight: 10,
-  },
-  brandLogo: {
-    height: 30,
-    zIndex: 2,
-    alignContent: 'flex-start',
-    flex: 1,
-    marginBottom: 2,
-  },
-  carTechContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginHorizontal: 15,
-    zIndex: 2,
-    justifyContent: 'flex-start',
-  },
-});
 
 const mapStateToProps = ({dealer}) => {
   return {
@@ -215,8 +52,8 @@ const CarListItem = ({car, prices, itemScreen, resizeMode, dealerSelected, curre
   }
 
   const year = get(car, 'year');
-  let ordered = null;
-  switch (get(car, 'ordered', 1)) {
+  let ordered = get(car, 'ordered', 1);
+  switch (ordered) {
     case 2:
     case 3:
       ordered = true;
@@ -225,10 +62,7 @@ const CarListItem = ({car, prices, itemScreen, resizeMode, dealerSelected, curre
   const idSAP = get(car, 'id.sap', null);
   const isSale = car.sale === true;
   const isNewCar = itemScreen === 'NewCarItemScreen';
-  let CarImgReal = false;
-  if (get(car, 'imgReal.thumb')) {
-    CarImgReal = true;
-  }
+  let CarImgReal = get(car, 'imgReal.thumb', false);
 
   const _onPress = () => {
     navigation.navigate(itemScreen, {carId: car.id.api, currency, code: prices.curr.code});
@@ -254,11 +88,6 @@ const CarListItem = ({car, prices, itemScreen, resizeMode, dealerSelected, curre
   const _renderPrice = ({car}) => {
     const isSale = car.sale === true;
     const badge = get(car, 'badge', []);
-
-    let CarImgReal = false;
-    if (get(car, 'imgReal.thumb.0')) {
-      CarImgReal = true;
-    }
 
     const CarPrices = {
       sale: get(car, 'price.app.sale', 0),
@@ -340,7 +169,7 @@ const CarListItem = ({car, prices, itemScreen, resizeMode, dealerSelected, curre
       return (
         <>
           <Imager
-            resizeMode={resizeMode ? resizeMode : 'cover'}
+            resizeMode={resizeMode}
             style={[
               CarImgsReal ? styles.imageReal : styles.image,
               ordered ? styles.ordered : null,
@@ -377,7 +206,7 @@ const CarListItem = ({car, prices, itemScreen, resizeMode, dealerSelected, curre
       return (
         <PhotoSlider
           height={CarImgsReal ? 300 : 220}
-          resizeMode={resizeMode ? resizeMode : 'cover'}
+          resizeMode={resizeMode}
           style={[
             CarImgsReal ? styles.imageReal : styles.image,
             car?.ordered ? styles.ordered : null,
@@ -530,7 +359,154 @@ CarListItem.defaultProps = {
   prices: {},
   itemScreen: null,
   currency: 'руб',
+  resizeMode: 'cover',
   key: '',
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginHorizontal: '3%',
+    marginVertical: 10,
+    backgroundColor: styleConst.color.white,
+    borderRadius: 5,
+  },
+  containerSpecial: {
+  },
+  ordered: {
+    opacity: .7,
+  },
+  card: {
+    flexDirection: 'column',
+    paddingBottom: 10,
+  },
+  image: {
+    height: 220,
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
+    width: '100%',
+  },
+  imageReal: {
+    height: 300,
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+  },
+  titleBackgroundold: {
+    flex: 1,
+    position: 'absolute',
+    zIndex: 15,
+    backgroundColor: 'black',
+    opacity: 0.5,
+    height: 50,
+    width: '100%',
+    borderTopRightRadius: 5,
+    borderTopLeftRadius: 5,
+  },
+  titleBackground: {
+    flex: 1,
+    zIndex: 15,
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    opacity: 1,
+    height: 50,
+    width: '100%',
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
+  },
+  titleContainer: {
+    flex: 1,
+    zIndex: 20,
+    position: 'absolute',
+    marginVertical: 5,
+    marginHorizontal: '1%',
+  },
+  priceContainer: {
+    flexDirection: 'column',
+    marginHorizontal: 15,
+    marginTop: 10,
+  },
+  priceDefault: {
+    textDecorationLine: 'line-through',
+    fontSize: 12,
+    marginTop: 4,
+    color: '#8d99ae',
+  },
+  priceSpecial: {
+    color: '#e63946',
+    marginRight: 10,
+  },
+  year: {
+    color: styleConst.color.white,
+    fontSize: 12,
+    zIndex: 2,
+    marginVertical: 5,
+  },
+  title: {
+    color: styleConst.color.white,
+    fontSize: 16,
+    fontWeight: 'bold',
+    zIndex: 2,
+  },
+  price: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    zIndex: 2,
+  },
+  priceBackground: {
+    flex: 1,
+    zIndex: 1,
+    position: 'absolute',
+    backgroundColor: 'transparent',
+    opacity: 1,
+    width: '80%',
+    borderBottomLeftRadius: 5,
+    borderBottomRightRadius: 5,
+    bottom: 0,
+  },
+  common: {
+    fontSize: 13,
+    color: '#2b2d42',
+    marginRight: 7,
+  },
+  commonReal: {
+    fontSize: 13,
+    color: styleConst.color.white,
+    marginRight: 7,
+  },
+  saleContainer: {
+    marginTop: 2,
+    marginHorizontal: 10,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    paddingTop: 3,
+    backgroundColor: '#e63946',
+    borderRadius: 5,
+    textAlign: 'center',
+    alignContent: 'center',
+    width: 65,
+    height: 15,
+  },
+  priceSpecialText: {
+    color: 'white',
+    fontSize: 10,
+    lineHeight: 10,
+  },
+  brandLogo: {
+    height: 30,
+    zIndex: 2,
+    alignContent: 'flex-start',
+    flex: 1,
+    marginBottom: 2,
+  },
+  carTechContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginHorizontal: 15,
+    zIndex: 2,
+    justifyContent: 'flex-start',
+  },
+});
 
 export default connect(mapStateToProps)(CarListItem);

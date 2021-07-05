@@ -32,6 +32,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
 import SelectMultiple from 'react-native-select-multiple';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import ColorBox from '../../../core/components/ColorBox';
 
 import styleConst from '../../../core/style-const';
 // redux
@@ -171,6 +172,19 @@ const styles = StyleSheet.create({
   pickerStyle: {
     width: '100%',
   },
+  colorWrapper: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+  },
+  colorBox: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: styleConst.color.darkBg,
+  },
 });
 
 const _animated = {
@@ -191,6 +205,7 @@ const modals = {
   body: 'body',
   enginetype: 'enginetype',
   drive: 'drive',
+  colors: 'colors',
 };
 
 const initialStateFilters = {
@@ -303,6 +318,7 @@ const CarsFilterScreen = ({
     reducerFilters,
     initialStateFilters,
   );
+  const [colors, setColors] = useState({});
 
   const [dataFilters, setDataFilters] = useState(null);
 
@@ -359,6 +375,16 @@ const CarsFilterScreen = ({
             if (res.payload.data.drive) {
               res.payload.data.drive = _convertSelect(res.payload.data.drive);
             }
+            if (res.payload.data.colors) {
+              let colorsTmp = [];
+              let colorsNames = {};
+              Object.keys(res.payload.data.colors).map(val => {
+                colorsTmp.push({value: val, label: res.payload.data.colors[val].name});
+                colorsNames[res.payload.data.colors[val].name.toString()] = res.payload.data.colors[val];
+              });
+              res.payload.data.colors = colorsTmp;
+              setColors(colorsNames);
+            }
             setDataFilters(res.payload);
           } else {
             setDataFilters(null);
@@ -385,6 +411,16 @@ const CarsFilterScreen = ({
             }
             if (res.payload.data.drive) {
               res.payload.data.drive = _convertSelect(res.payload.data.drive);
+            }
+            if (res.payload.data.colors) {
+              let colorsTmp = [];
+              let colorsNames = {};
+              Object.keys(res.payload.data.colors).map(val => {
+                colorsTmp.push({value: val, label: res.payload.data.colors[val].name});
+                colorsNames[res.payload.data.colors[val].name.toString()] = res.payload.data.colors[val];
+              });
+              res.payload.data.colors = colorsTmp;
+              setColors(colorsNames);
             }
             setDataFilters(res.payload);
           } else {
@@ -460,6 +496,13 @@ const CarsFilterScreen = ({
       stateFilters['driveType'].map(val => {
         Object.assign(filtersLocal, stateFilters, {
           ['drive[' + val.value + ']']: parseInt(val.value, 10),
+        });
+      });
+    }
+    if (stateFilters['colorType']) {
+      stateFilters['colorType'].map(val => {
+        Object.assign(filtersLocal, stateFilters, {
+          ['colors[' + val.value + ']']: parseInt(val.value, 10),
         });
       });
     }
@@ -857,6 +900,28 @@ const CarsFilterScreen = ({
                 </View>
                 <Right>
                   <Icon type={'MaterialCommunityIcons'} name="car-settings" />
+                </Right>
+              </CardItem>
+            ) : null}
+            {dataFilters && dataFilters.data.colors ? (
+              <CardItem
+                button
+                onPress={() => {
+                  _showHideModal(true, modals.colors);
+                }}
+                style={styles.cardItem}>
+                <View style={styles.fieldCaptionWrapper}>
+                  <Text style={styles.fieldTitle}>
+                    {strings.CarsFilterScreen.filters.colors.title}
+                  </Text>
+                  <View style={styles.fieldCaptionValues}>
+                    <Text style={styles.fieldValueOne}>
+                      {_getSelectedLabels(get(stateFilters, 'colorType'))}
+                    </Text>
+                  </View>
+                </View>
+                <Right>
+                  <Icon type={'Ionicons'} name="md-color-palette-outline" />
                 </Right>
               </CardItem>
             ) : null}
@@ -1459,6 +1524,49 @@ const CarsFilterScreen = ({
                   selectedItems={get(stateFilters, 'driveType')}
                   onSelectionsChange={(selectedAll, selectedItem) => {
                     _onChangeFilter('driveType', selectedAll);
+                  }}
+                />
+              </View>
+            </ModalView>
+          ) : null}
+          {/* Модалка Цвета */}
+          {dataFilters.data.colors ? (
+            <ModalView
+              isModalVisible={showModal === modals.colors}
+              onHide={() => {
+                _showHideModal(false);
+              }}
+              onSwipeComplete={null}
+              stylesWrapperContent={{
+                height: dataFilters?.data?.colors.length > 10 ? '83%' : 'auto',
+                justifyContent: 'flex-end',
+              }}
+              title={strings.CarsFilterScreen.filters.colors.title}
+              type={'bottom'}
+              confirmBtnText={strings.Base.choose}
+              selfClosed={false}>
+              <View
+                style={{
+                  justifyContent: 'flex-end',
+                  paddingHorizontal: '5%',
+                  bottom: 0,
+                }}>
+                <SelectMultiple
+                  items={dataFilters?.data?.colors}
+                  renderLabel={(text) => {
+                    const colorHex = get(colors[text.toString()], 'codes.hex');
+                    return (
+                      <View style={styles.colorWrapper}>
+                        <View style={[styles.colorBox, {
+                          backgroundColor: colorHex,
+                        }]} />
+                        <Text>{text}</Text>
+                      </View>
+                    );
+                  }}
+                  selectedItems={get(stateFilters, 'colorType')}
+                  onSelectionsChange={(selectedAll, selectedItem) => {
+                    _onChangeFilter('colorType', selectedAll);
                   }}
                 />
               </View>

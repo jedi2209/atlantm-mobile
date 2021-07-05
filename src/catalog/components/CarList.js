@@ -37,7 +37,6 @@ const CarList = props => {
   const [isRefreshing, setRefreshing] = useState(false);
   const [loadingNextPage, setLoadingNextPage] = useState(false);
 
-  // Аналогично componentDidMount и componentDidUpdate:
   useEffect(() => {
     console.log('== CarList ==');
 
@@ -79,7 +78,7 @@ const CarList = props => {
 
     return (
       <View style={styles.footer}>
-        <ActivityIndicator animating color={styleConst.color.blue} />
+        <ActivityIndicator animating size='large' color={styleConst.color.blue} />
       </View>
     );
   };
@@ -105,7 +104,8 @@ const CarList = props => {
 
   return (
     <FlatList
-      onEndReachedThreshold={0.4}
+      onEndReached={handleLoadMore}
+      onEndReachedThreshold={.7}
       testID='CarList.Wrapper'
       initialNumToRender={10}
       maxToRenderPerBatch={20} // Increase time between renders
@@ -126,7 +126,6 @@ const CarList = props => {
           );
         }
       }}
-      onEndReached={handleLoadMore}
       {...props}
     />
   );
@@ -146,6 +145,7 @@ CarList.defaultProps = {
   data: null,
   itemScreen: null,
   isFetchItems: false,
+  resizeMode: 'cover',
 };
 
 export default CarList;
