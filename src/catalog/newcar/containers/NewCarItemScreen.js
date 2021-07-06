@@ -743,7 +743,7 @@ class NewCarItemScreen extends Component {
               <PhotoSlider
                 height={370}
                 photos={photos}
-                resizeMode={isCarImgReal ? 'cover' : null}
+                resizeMode={isCarImgReal ? 'cover' : 'contain'}
                 paginationStyle={{marginBottom: 35}}
                 dotColor={isCarImgReal ? styleConst.color.white : null}
                 onPressItem={() => this.onPressPhoto}
