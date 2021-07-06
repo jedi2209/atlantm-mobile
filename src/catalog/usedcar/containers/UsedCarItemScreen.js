@@ -589,7 +589,7 @@ class UsedCarItemScreen extends Component {
                               styles.bodyButtonText,
                               {
                                 color: styleConst.color.red,
-                                width: '70%',
+                                paddingLeft: '5%',
                               },
                             ]}>
                             {strings.UsedCarItemScreen.creditCalculate}
@@ -635,10 +635,11 @@ class UsedCarItemScreen extends Component {
                           <Text
                             selectable={false}
                             style={[
+                              styles.bodyButtonText,
                               {
                                 color: styleConst.color.blue,
+                                paddingRight: '5%',
                               },
-                              styles.bodyButtonText,
                             ]}>
                             {strings.UsedCarItemScreen.myPrice}
                           </Text>

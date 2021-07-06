@@ -343,7 +343,7 @@ export default {
   UsedCarItemScreen: {
     showFull: 'Показати повний опис...',
     showLess: 'Згорнути',
-    creditCalculate: 'розрахувати кредит',
+    creditCalculate: 'розрахувати\r\nкредит',
     myPrice: 'запропонувати\r\nсвою ціну',
   },
   UsedCarFilterScreen: {
