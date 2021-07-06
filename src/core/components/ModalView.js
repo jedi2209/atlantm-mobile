@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
   modalWindowBottom: {
     borderRadius: 0,
     backgroundColor: styleConst.color.white,
+    justifyContent: 'flex-end',
   },
   titleText: {
     fontSize: 20,
@@ -52,6 +53,7 @@ const ModalView = props => {
         style={[
           styles.modalView,
           props.type === 'bottom' ? styles.ModalViewBottom : null,
+          props?.stylesModal
         ]}
         useNativeDriver={true}
         isVisible={props.isModalVisible}
@@ -65,8 +67,9 @@ const ModalView = props => {
               ? styles.modalWindow
               : styles.modalWindowBottom,
             styleConst.shadow.default,
+            props?.stylesWrapper,
           ]}>
-          <View style={[props.type === 'bottom' ? {padding: 10} : null]}>
+          <View style={[props.type === 'bottom' ? {padding: 10} : null, props?.stylesWrapperContent,]}>
             {props.title ? (
               <Text style={styles.titleText}>{props.title}</Text>
             ) : null}

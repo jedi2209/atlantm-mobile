@@ -109,7 +109,6 @@ const DealerCard = (props) => {
           <Imager
             key={`dealer-cover-' + ${item.id}`}
             style={styles.image}
-            resizeMode="cover"
             source={{uri: CarImg}}
           />
         </View>

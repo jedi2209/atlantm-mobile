@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 
 // components
@@ -9,14 +9,14 @@ import {verticalScale} from '../../utils/scale';
 
 const styles = StyleSheet.create({
   loader: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    right: 0,
-    bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: verticalScale(60),
+    marginTop: verticalScale(50),
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
   svgWrapper: {
     alignItems: 'center',
@@ -25,22 +25,13 @@ const styles = StyleSheet.create({
 });
 
 const Imager = (props) => {
-  [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
 
   const path = props.source.uri.toString();
   const extension = path.split('.').pop();
-  console.log('Imager path', extension, path);
-  if (extension === 'svg') {
-    setLoading(false);
-  }
 
   return (
     <View testID={props.testID}>
-      <ActivityIndicator
-        animating={isLoading}
-        color={styleConst.color.blue}
-        style={styles.loader}
-      />
       {extension === 'svg' ? (
         <View
           style={[
@@ -55,23 +46,35 @@ const Imager = (props) => {
           />
         </View>
       ) : (
-        <Image
-          {...props}
-          source={{
-            uri: path,
-            headers: {
-              Pragma: 'no-cache'
-            },
-            cache: 'only-if-cached'
-          }}
-          onError={({ nativeEvent: {error} }) => {
-            console.log('Image error', error);
-          }}
-          onLoadEnd={() => {
-            setLoading(false);
-          }}>
-          {props.children}
-        </Image>
+        <>
+          <Image
+            {...props}
+            source={{
+              uri: path,
+              headers: {
+                Pragma: 'no-cache'
+              },
+              cache: 'reload'
+            }}
+            onError={({ nativeEvent: {error} }) => {
+              console.log('Image error', error);
+              setLoading(false);
+            }}
+            onLoadStart={() => {
+              setLoading(true);
+            }}
+            onLoadEnd={() => {
+              setLoading(false);
+            }}
+            >
+            {props.children}
+          </Image>
+          <ActivityIndicator
+            animating={isLoading}
+            color={styleConst.color.blue}
+            style={styles.loader}
+          />
+        </>
       )}
     </View>
   );
