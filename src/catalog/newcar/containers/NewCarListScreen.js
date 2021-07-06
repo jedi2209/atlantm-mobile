@@ -30,17 +30,6 @@ const mapStateToProps = ({dealer, catalog}) => {
     items: catalog.newCar.items,
     filterData: catalog.newCar.filterData || {},
     isFetchingNewCarByFilter: catalog.newCar.meta.isFetchingNewCarByFilter,
-
-    filterModels: catalog.newCar.filters.modelFilter,
-    filterBody: catalog.newCar.filters.bodyFilters,
-    filterPrice: catalog.newCar.filters.priceFilter,
-
-    filterGearbox: catalog.newCar.filterGearbox,
-    filterDrive: catalog.newCar.filterDrive,
-    filterEngineType: catalog.newCar.filterEngineType,
-    filterPriceSpecial: catalog.newCar.filterPriceSpecial,
-
-    filters: catalog.newCar.filters,
   };
 };
 
@@ -117,6 +106,8 @@ const NewCarListScreen = ({
     }
 
     const defaultSearchUrl = `/stock/new/cars/get/city/${dealerSelected.city.id}/`;
+
+    console.log('filterData', filterData);
 
     const searchUrl = filterData.search_url || defaultSearchUrl;
     Analytics.logEvent('screen', 'catalog/newcar/list', {

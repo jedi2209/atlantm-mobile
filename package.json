@@ -83,6 +83,7 @@
     "react-native-map-link": "^2.7.17",
     "react-native-maps": "^0.28.0",
     "react-native-modal": "^12.0.2",
+    "react-native-nested-listview": "^0.10.0",
     "react-native-onesignal": "^3.8.1",
     "react-native-pager-view": "^5.2.1",
     "react-native-paper": "^4.9.1",

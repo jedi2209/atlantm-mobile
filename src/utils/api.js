@@ -238,8 +238,8 @@ export default {
   fetchNewCarByFilter({
     filters,
     searchUrl,
-    filterBrands,
-    filterModels,
+    brandFilter,
+    modelFilter,
     filterBody,
     filterPrice,
     sortBy,
@@ -253,54 +253,6 @@ export default {
     let urlParams = [];
     let isAmp = false;
     const setParamDivider = () => (isAmp ? '&' : '?');
-
-    if (filterBrands) {
-      filterBrands.forEach(({id, checked}) => {
-        if (checked) {
-          url += `${setParamDivider()}brand[${id}]=${id}`;
-          urlParams.push(`brand[${id}]=${id}`);
-          if (!isAmp) {
-            isAmp = true;
-          }
-        }
-      });
-    }
-
-    if (filterModels) {
-      filterModels.forEach(({id, checked}) => {
-        if (checked) {
-          url += `${setParamDivider()}model[${id}]=${id}`;
-          urlParams.push(`model[${id}]=${id}`);
-          if (!isAmp) {
-            isAmp = true;
-          }
-        }
-      });
-    }
-
-    if (filterBody) {
-      filterBody.forEach(({id, checked}) => {
-        if (checked) {
-          url += `${setParamDivider()}body[${id}]=${id}`;
-          urlParams.push(`body[${id}]=${id}`);
-          if (!isAmp) {
-            isAmp = true;
-          }
-        }
-      });
-    }
-
-    if (filterPrice && filterPrice.min && filterPrice.max) {
-      url += `${setParamDivider()}price_from=${filterPrice.min}&price_to=${
-        filterPrice.max
-      }`;
-      urlParams.push(
-        `price_from=${filterPrice.min}&price_to=${filterPrice.max}`,
-      );
-      if (!isAmp) {
-        isAmp = true;
-      }
-    }
 
     if (sortBy) {
       urlParams.push(`sortBy=${sortBy}`);

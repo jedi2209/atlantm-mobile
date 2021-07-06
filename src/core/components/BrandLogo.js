@@ -16,6 +16,72 @@ const requireALeast = requireALeastOne({
   height: PropTypes.number,
 });
 
+const BrandLogo = (props) => {
+    let width = 30;
+    let height = props.width / props.aspectRatio;
+    if (props.height) {
+      width = props.height * props.aspectRatio;
+      height = props.height;
+    } else {
+      if (props.width) {
+        width = props.width;
+        height = props.width / props.aspectRatio;
+      }
+    }
+
+    if (
+      props.brandsAssets[props.type] &&
+      props.brandsAssets[props.type].includes(props.brand) &&
+      brandsSVG[props.type][props.brand]
+    ) {
+      return (
+        <View style={[{}, {...props.style}]} testID={props.testID}>
+          <View
+            style={[
+              styles.containerSVG,
+              {
+                aspectRatio: props.aspectRatio,
+                width: props.width,
+                height: props.height,
+              },
+            ]}>
+            {brandsSVG[props.type][props.brand]}
+          </View>
+        </View>
+      );
+    } else {
+      if (props.brands && props.brands[props.brand]) {
+        return (
+          <Imager
+            resizeMode="contain"
+            source={{uri: props.brands[props.brand].logo}}
+            {...props}
+          />
+        );
+      }
+    }
+    return <View />;
+};
+
+BrandLogo.propTypes = {
+  brand: PropTypes.number.isRequired,
+  type: PropTypes.oneOf(['black', 'white']),
+  width: requireALeast,
+  height: requireALeast,
+  aspectRatio: PropTypes.number,
+};
+
+BrandLogo.defaultProps = {
+  type: 'black',
+  aspectRatio: 1.5,
+  brandsAssets: {
+    black: [6, 7, 9, 10, 12, 13, 14, 19, 20],
+    white: [6, 7, 9, 10, 12, 13, 14, 19, 20],
+  },
+  testID: 'BrandLogo.Wrapper'
+};
+
+
 const styles = StyleSheet.create({
   imageSVG: {
     width: '100%',
@@ -142,72 +208,5 @@ const brandsSVG = {
     ),
   },
 };
-
-class BrandLogo extends PureComponent {
-  static propTypes = {
-    brand: PropTypes.number.isRequired,
-    type: PropTypes.oneOf(['black', 'white']),
-    width: requireALeast,
-    height: requireALeast,
-    aspectRatio: PropTypes.number,
-  };
-
-  static defaultProps = {
-    type: 'black',
-    aspectRatio: 1.5,
-    brandsAssets: {
-      black: [6, 7, 9, 10, 12, 13, 14, 19, 20],
-      white: [6, 7, 9, 10, 12, 13, 14, 19, 20],
-    },
-    testID: 'BrandLogo.Wrapper'
-  };
-
-  render() {
-    const {type, brand, brands, brandsAssets, aspectRatio} = this.props;
-    let width = 30;
-    let height = width / aspectRatio;
-    if (this.props.height) {
-      width = this.props.height * aspectRatio;
-      height = this.props.height;
-    } else {
-      if (this.props.width) {
-        width = this.props.width;
-        height = this.props.width / aspectRatio;
-      }
-    }
-    if (
-      brandsAssets[type] &&
-      brandsAssets[type].includes(brand) &&
-      brandsSVG[type][brand]
-    ) {
-      return (
-        <View style={[{}, {...this.props.style}]} testID={this.props.testID}>
-          <View
-            style={[
-              styles.containerSVG,
-              {
-                aspectRatio,
-                width,
-                height,
-              },
-            ]}>
-            {brandsSVG[type][brand]}
-          </View>
-        </View>
-      );
-    } else {
-      if (brands && brands[brand]) {
-        return (
-          <Imager
-            resizeMode="contain"
-            source={{uri: brands[brand].logo}}
-            {...this.props}
-          />
-        );
-      }
-    }
-    return <View />;
-  }
-}
 
 export default connect(mapStateToProps)(BrandLogo);
