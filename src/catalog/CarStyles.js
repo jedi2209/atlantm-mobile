@@ -211,17 +211,17 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 0,
-    width: '45%',
+    width: '40%',
     marginBottom: 10,
   },
   bodyButtonIcon: {
     fontSize: 28,
-    width: '20%',
+    width: '15%',
   },
   bodyButtonText: {
     fontSize: 15,
     fontFamily: styleConst.font.light,
     textAlign: 'center',
-    width: '80%',
+    width: '85%',
   },
 });
