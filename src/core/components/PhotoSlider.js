@@ -1,5 +1,5 @@
 // base
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Image,
@@ -78,90 +78,82 @@ const Slide = (props) => {
   );
 };
 
-export default class PhotoSlider extends Component {
-  constructor(props) {
-    super(props);
+const PhotoSlider = ({height, photos, paginationStyle, dotColor, onIndexChanged, onPressItem, resizeMode}) => {
+  [isLoaded, setLoaded] = useState(false);
+  [loadQueue, setLoadQueue] = useState({});
 
-    const height = props.height ? props.height : 300;
+  useEffect(() => {
+    setLoadQueue(new Array(photos.length).fill(0));
+  }, [photos.length]);
 
-    this.state = {
-      loadQueue: new Array(this.props.photos.length).fill(0),
-      isLoaded: false,
-      height: height,
-    };
+  const _loadHandle = (i) => {
+    let loadQueueTmp = {};
+    loadQueueTmp[i] = 1;
+    setLoadQueue(loadQueueTmp);
+  };
+  
+  // Супер грязный хак, триггерим изменение высота для обновления слайдера
+  // по-другому починить не получилось, попробовал много вариантов.
+  // p.s. нравится компонент, хотел оставить.
+  if (Platform.OS === 'android' && !this.state.isLoaded) {
+    // if (Platform.OS === 'android') {
+    setTimeout(() => {
+      setLoaded(true);
+    }, 5);
   }
 
-  static propTypes = {
-    photos: PropTypes.array,
-    resizeMode: PropTypes.string,
-    paginationStyle: PropTypes.object,
-    onPressItem: PropTypes.func,
-    onIndexChanged: PropTypes.func,
-    height: PropTypes.number,
-  };
+  return (
+    <Swiper
+      id={1}
+      containerStyle={styles.container}
+      paginationStyle={[
+        {
+          marginBottom: 5,
+        },
+        paginationStyle,
+      ]}
+      dotColor={dotColor}
+      showsButtons={false}
+      autoplay={false}
+      showsPagination={true}
+      height={height}
+      rootStyle={styles.photoSlider}
+      loadMinimal={true}
+      onIndexChanged={onIndexChanged}>
+      {photos.map((photo, idx) => {
+        return (
+          <Slide
+            onPress={onPressItem}
+            resizeMode={resizeMode}
+            height={height}
+            loadHandle={_loadHandle}
+            loaded={!!loadQueue[idx]}
+            url={photo}
+            i={idx}
+            key={photo}
+          />
+        );
+      })}
+    </Swiper>
+  );
 
-  static defaultProps = {
-    photos: [],
-  };
-
-  loadHandle = (i) => {
-    const loadQueue = this.state.loadQueue;
-    loadQueue[i] = 1;
-    this.setState({
-      loadQueue,
-      // height: height + 1,
-    });
-  };
-
-  render() {
-    // Супер грязный хак, триггерим изменение высота для обновления слайдера
-    // по-другому починить не получилось, попробовал много вариантов.
-    // p.s. нравится компонент, хотел оставить.
-    if (Platform.OS === 'android' && !this.state.isLoaded) {
-      // if (Platform.OS === 'android') {
-      setTimeout(() => {
-        this.setState({
-          isLoaded: true,
-          // height: height + 1,
-        });
-      }, 0);
-    }
-
-    return (
-      <Swiper
-        id={1}
-        containerStyle={styles.container}
-        paginationStyle={[
-          {
-            marginBottom: 5,
-          },
-          this.props.paginationStyle,
-        ]}
-        dotColor={this.props.dotColor ? this.props.dotColor : 'rgba(0,0,0,.2)'}
-        showsButtons={false}
-        autoplay={false}
-        showsPagination={true}
-        height={this.state.height}
-        rootStyle={styles.photoSlider}
-        loadMinimal={true}
-        onIndexChanged={this.props.onIndexChanged}>
-        {this.props.photos.map((photo, idx) => {
-          return (
-            <Slide
-              onPress={this.props.onPressItem}
-              resizeMode={
-                this.props.resizeMode ? this.props.resizeMode : 'contain'
-              }
-              height={this.state.height}
-              loadHandle={this.loadHandle}
-              loaded={!!this.state.loadQueue[idx]}
-              url={photo}
-              i={idx}
-              key={photo}
-            />
-          );
-        })}
-      </Swiper>
-    );
-  }
 }
+
+PhotoSlider.propTypes = {
+  photos: PropTypes.array,
+  resizeMode: PropTypes.string,
+  paginationStyle: PropTypes.object,
+  onPressItem: PropTypes.func,
+  onIndexChanged: PropTypes.func,
+  height: PropTypes.number,
+};
+
+PhotoSlider.defaultProps = {
+  photos: [],
+  height: 300,
+  paginationStyle: {},
+  dotColor: 'rgba(0,0,0,.2)',
+  resizeMode: 'contain',
+};
+
+export default PhotoSlider;
