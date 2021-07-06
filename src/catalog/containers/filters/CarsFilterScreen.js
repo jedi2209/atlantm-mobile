@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Dimensions,
   StatusBar,
+  Image,
   StyleSheet,
   Platform,
 } from 'react-native';
@@ -33,6 +34,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import SelectMultiple from 'react-native-select-multiple';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import ColorBox from '../../../core/components/ColorBox';
+import Imager from '../../../core/components/Imager';
 
 import styleConst from '../../../core/style-const';
 // redux
@@ -57,135 +59,6 @@ import {strings} from '../../../core/lang/const';
 import { color } from 'react-native-reanimated';
 
 const isAndroid = Platform.OS === 'android';
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: styleConst.color.accordeonGrey1,
-    borderWidth: 0,
-  },
-  footer: {
-    borderWidth: 0,
-    backgroundColor: 'transparent',
-  },
-  row: {
-    backgroundColor: styleConst.color.white,
-    marginBottom: 2,
-    paddingHorizontal: '5%',
-    paddingVertical: 10,
-    zIndex: 10,
-  },
-  noResultsRow: {
-    height: 200,
-  },
-  rowLast: {
-    marginBottom: isAndroid ? 60 : 50,
-  },
-  rowStatic: {
-    height: 65,
-  },
-  cardItem: {
-    paddingLeft: 0,
-    paddingRight: 0,
-    paddingTop: 0,
-    paddingBottom: 0,
-    justifyContent: 'space-between',
-    flex: 1,
-    marginVertical: 15,
-  },
-  cardItemStatic: {
-    marginVertical: 0,
-  },
-  segmentWrapper: {
-    alignItems: 'center',
-  },
-  segmentTab: {
-    justifyContent: 'center',
-    alignContent: 'center',
-    height: 40,
-  },
-  segmentTabTwo: {
-    width: '50%',
-  },
-  segmentTabLeft: {
-    borderTopLeftRadius: 5,
-    borderBottomLeftRadius: 5
-  },
-  segmentTabRight: {
-    borderTopRightRadius: 5,
-    borderBottomRightRadius: 5
-  },
-  segmentButtonText: {
-    fontFamily: styleConst.font.regular,
-    fontSize: 15,
-  },
-  fieldCaptionWrapper: {
-    flex: 1,
-    flexDirection: 'column',
-  },
-  fieldCaptionValues: {
-    flex: 1,
-    flexDirection: 'row',
-    marginTop: 5,
-  },
-  fieldTitle: {
-    fontSize: 16,
-    color: styleConst.color.greyText4,
-  },
-  fieldValueOne: {
-    fontSize: 13,
-    color: styleConst.color.greyText5,
-  },
-  fieldValues: {
-    fontSize: 13,
-    color: styleConst.color.greyText5,
-    width: '50%',
-  },
-  resultButtonWrapper: {
-    zIndex: 100,
-    position: 'absolute',
-    width: '90%',
-    marginHorizontal: '5%',
-    bottom: isAndroid ? 10 : 30,
-    alignItems: 'center',
-    alignContent: 'center',
-  },
-  resultButton: {
-    zIndex: 99,
-    borderRadius: 5,
-  },
-  resultButtonEnabled: {
-    backgroundColor: styleConst.color.blue,
-    borderColor: styleConst.color.blue,
-  },
-  resultButtonText: {
-    textTransform: 'uppercase',
-  },
-  pickerWrapper: {
-    flexDirection: 'column',
-    width: '50%',
-    alignItems: 'center',
-  },
-  pickerCaption: {
-    fontSize: 16,
-    color: styleConst.color.greyText5,
-  },
-  pickerStyle: {
-    width: '100%',
-  },
-  colorWrapper: {
-    flexDirection: 'row',
-    flex: 1,
-    alignItems: 'center',
-  },
-  colorBox: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-    borderWidth: 1,
-    borderRadius: 5,
-    borderColor: styleConst.color.darkBg,
-  },
-});
 
 const _animated = {
   SubmitButton: new Animated.Value(1),
@@ -319,6 +192,7 @@ const CarsFilterScreen = ({
     initialStateFilters,
   );
   const [colors, setColors] = useState({});
+  const [bodys, setBody] = useState({});
 
   const [dataFilters, setDataFilters] = useState(null);
 
@@ -365,6 +239,11 @@ const CarsFilterScreen = ({
               res.payload.data.gearbox = _convertSelect(res.payload.data.gearbox);
             }
             if (res.payload.data.body) {
+              let bodyNames = {};
+              Object.keys(res.payload.data.body).map(val => {
+                bodyNames[res.payload.data.body[val].toString()] = Number(val);
+              });
+              setBody(bodyNames);
               res.payload.data.body = _convertSelect(res.payload.data.body);
             }
             if (res.payload.data.enginetype) {
@@ -402,6 +281,11 @@ const CarsFilterScreen = ({
               res.payload.data.gearbox = _convertSelect(res.payload.data.gearbox);
             }
             if (res.payload.data.body) {
+              let bodyNames = {};
+              Object.keys(res.payload.data.body).map(val => {
+                bodyNames[res.payload.data.body[val].toString()] = Number(val);
+              });
+              setBody(bodyNames);
               res.payload.data.body = _convertSelect(res.payload.data.body);
             }
             if (res.payload.data.enginetype) {
@@ -443,10 +327,10 @@ const CarsFilterScreen = ({
   const _onSubmitButtonPress = () => {
     switch (stockType) {
       case 'New':
-        navigation.navigate('NewCarListScreen');
+        navigation.navigate('NewCarListScreen', {total: totalCars, itemsLength: totalCars});
         break;
       case 'Used':
-        navigation.navigate('UsedCarListScreen');
+        navigation.navigate('UsedCarListScreen', {total: totalCars, itemsLength: totalCars});
         break;
     }
   };
@@ -903,7 +787,7 @@ const CarsFilterScreen = ({
                 </Right>
               </CardItem>
             ) : null}
-            {dataFilters && dataFilters.data.colors ? (
+            {stockType != 'Used' && dataFilters && dataFilters.data.colors ? (
               <CardItem
                 button
                 onPress={() => {
@@ -1295,6 +1179,17 @@ const CarsFilterScreen = ({
                   onSelectionsChange={(selectedAll, selectedItem) => {
                     _onChangeFilter('bodyType', selectedAll);
                   }}
+                  renderLabel={(text) => {
+                    const path = 'https://cdn.atlantm.com/icons/bodyType/svg/'+ bodys[text.toString()] +'.svg';
+                    return (
+                      <View style={styles.colorWrapper}>
+                        <Text style={styles.colorText}>{text}</Text>
+                        <View style={styles.bodyTypeBox}>
+                          <Imager style={styles.bodyTypeBox} source={{uri: path}}/>
+                        </View>
+                      </View>
+                    );
+                  }}
                 />
               </View>
             </ModalView>
@@ -1557,10 +1452,10 @@ const CarsFilterScreen = ({
                     const colorHex = get(colors[text.toString()], 'codes.hex');
                     return (
                       <View style={styles.colorWrapper}>
+                        <Text style={styles.colorText}>{text}</Text>
                         <View style={[styles.colorBox, {
                           backgroundColor: colorHex,
                         }]} />
-                        <Text>{text}</Text>
                       </View>
                     );
                   }}
@@ -1619,5 +1514,140 @@ const CarsFilterScreen = ({
 CarsFilterScreen.defaultProps = {
   stockTypeDefault: 'New',
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: styleConst.color.accordeonGrey1,
+    borderWidth: 0,
+  },
+  footer: {
+    borderWidth: 0,
+    backgroundColor: 'transparent',
+  },
+  row: {
+    backgroundColor: styleConst.color.white,
+    marginBottom: 2,
+    paddingHorizontal: '5%',
+    paddingVertical: 10,
+    zIndex: 10,
+  },
+  noResultsRow: {
+    height: 200,
+  },
+  rowLast: {
+    marginBottom: isAndroid ? 60 : 50,
+  },
+  rowStatic: {
+    height: 65,
+  },
+  cardItem: {
+    paddingLeft: 0,
+    paddingRight: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    justifyContent: 'space-between',
+    flex: 1,
+    marginVertical: 15,
+  },
+  cardItemStatic: {
+    marginVertical: 0,
+  },
+  segmentWrapper: {
+    alignItems: 'center',
+  },
+  segmentTab: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    height: 40,
+  },
+  segmentTabTwo: {
+    width: '50%',
+  },
+  segmentTabLeft: {
+    borderTopLeftRadius: 5,
+    borderBottomLeftRadius: 5
+  },
+  segmentTabRight: {
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5
+  },
+  segmentButtonText: {
+    fontFamily: styleConst.font.regular,
+    fontSize: 15,
+  },
+  fieldCaptionWrapper: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  fieldCaptionValues: {
+    flex: 1,
+    flexDirection: 'row',
+    marginTop: 5,
+  },
+  fieldTitle: {
+    fontSize: 16,
+    color: styleConst.color.greyText4,
+  },
+  fieldValueOne: {
+    fontSize: 13,
+    color: styleConst.color.greyText5,
+  },
+  fieldValues: {
+    fontSize: 13,
+    color: styleConst.color.greyText5,
+    width: '50%',
+  },
+  resultButtonWrapper: {
+    zIndex: 100,
+    position: 'absolute',
+    width: '90%',
+    marginHorizontal: '5%',
+    bottom: isAndroid ? 10 : 30,
+    alignItems: 'center',
+    alignContent: 'center',
+  },
+  resultButton: {
+    zIndex: 99,
+    borderRadius: 5,
+  },
+  resultButtonEnabled: {
+    backgroundColor: styleConst.color.blue,
+    borderColor: styleConst.color.blue,
+  },
+  resultButtonText: {
+    textTransform: 'uppercase',
+  },
+  pickerWrapper: {
+    flexDirection: 'column',
+    width: '50%',
+    alignItems: 'center',
+  },
+  pickerCaption: {
+    fontSize: 16,
+    color: styleConst.color.greyText5,
+  },
+  pickerStyle: {
+    width: '100%',
+  },
+  colorWrapper: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  colorText: {
+  },
+  colorBox: {
+    width: 30,
+    height: 30,
+    borderWidth: 1,
+    borderRadius: 15,
+    borderColor: styleConst.color.darkBg,
+  },
+  bodyTypeBox: {
+    width: 40,
+    height: 30,
+  }
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(CarsFilterScreen);

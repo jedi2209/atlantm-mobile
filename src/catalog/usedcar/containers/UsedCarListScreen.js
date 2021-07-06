@@ -95,7 +95,6 @@ const UsedCarListScreen = ({
   useEffect(() => {
     console.log('== UsedCarListScreen ==');
     Analytics.logEvent('screen', 'catalog/usedcar/list');
-    console.log('route.params', route?.params);
     if (typeof route.params?.sortDirection !== 'undefined') {
       if (
         route.params?.sortDirection !== sorting.sortDirection ||
@@ -113,7 +112,7 @@ const UsedCarListScreen = ({
         }, 100);
       }
     }
-  });
+  }, [route?.params]);
   // componentDidMount() {
   //   setTimeout(() => {
   //     this.props.navigation.setParams({
