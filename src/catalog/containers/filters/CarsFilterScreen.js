@@ -15,6 +15,7 @@ import {
 import {
   Container,
   Row,
+  Accordion,
   Button,
   Icon,
   Segment,
@@ -25,6 +26,7 @@ import {
   Right,
   CheckBox,
 } from 'native-base';
+import NestedListView, {NestedRow} from 'react-native-nested-listview'
 import {verticalScale} from '../../../utils/scale';
 
 import ModalView from '../../../core/components/ModalView';
@@ -35,6 +37,7 @@ import SelectMultiple from 'react-native-select-multiple';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import ColorBox from '../../../core/components/ColorBox';
 import Imager from '../../../core/components/Imager';
+import BrandLogo from '../../../core/components/BrandLogo';
 
 import styleConst from '../../../core/style-const';
 // redux
@@ -69,6 +72,7 @@ const deviceWidth = Dimensions.get('window').width;
 const sliderWidth = (deviceWidth / 100) * 85;
 
 const modals = {
+  brandModels: 'brandModels',
   year: 'year',
   mileage: 'mileage',
   price: 'price',
@@ -159,12 +163,64 @@ const reducerFilters = (state = initialStateFilters, field) => {
   return res;
 };
 
+const reducerBrandFilter = (state = {}, action) => {
+  if (state[action.id]) {
+    delete(state[action.id]);
+  } else {
+    state[action.id] = action.id;
+  }
+  return state;
+}
+
+const reducerModelFilter = (state = {}, action) => {
+  switch (action.type) {
+    case 'delete':
+      if (action?.items) {
+        action.items.map(val => {
+          delete(state[val.id]);
+        });
+      } else {
+        delete(state[action.id]);
+      }
+      break;
+    case 'add':
+      if (action?.items) {
+        action.items.map(val => {
+          state[val.id] = val.id;
+        });
+      } else {
+        state[action.id] = action.id;
+      }
+  }
+  return state;
+}
+
 const _getSelectedLabels = (selectArr = []) => {
   let labels = [];
   selectArr.map(val => {
     labels.push(val.label);
   });
   return labels.join(', ');
+};
+
+const _getSelectedModels = (selectedModels, models) => {
+  let labels = [];
+  if (!selectedModels) {
+    return null;
+  }
+  models.map(val => {
+    val.items.map(el => {
+      if (selectedModels[el.id]) {
+        labels.push(el.label);
+      }
+    });
+  });
+  return (
+    <View style={styles.fieldCaptionValues}>
+    <Text style={styles.fieldValueOne}>
+      {labels.length + ' авто'}
+    </Text>
+  </View>);
 };
 
 const CarsFilterScreen = ({
@@ -191,8 +247,21 @@ const CarsFilterScreen = ({
     reducerFilters,
     initialStateFilters,
   );
+
+  const [brandFilter, setBrandFilter] = useReducer(
+    reducerBrandFilter,
+    {},
+  );
+  const [modelFilter, setModelFilter] = useReducer(
+    reducerModelFilter,
+    {},
+  );
+  
+  const [nestedListUpdate, setUpdateNestedList] = useState(false);
   const [colors, setColors] = useState({});
   const [bodys, setBody] = useState({});
+  const [brandNames, setBrandNames] = useState({});
+  const [accordionModels, setAccordion] = useState({});
 
   const [dataFilters, setDataFilters] = useState(null);
 
@@ -226,6 +295,18 @@ const CarsFilterScreen = ({
     return setShowModal(type);
   };
 
+  const _onChangeFilter = (field, value) => {
+    if (typeof field === 'object') {
+      let data = [];
+      Object.keys(field).map(val => {
+        data.push({name: val, value: field[val]});
+      });
+      return dispatchFilters(data);
+    } else {
+      return dispatchFilters({name: field, value});
+    }
+  };
+
   const _fetchFiltersAPI = stockType => {
     _showHideSubmitButton(false);
     switch (stockType) {
@@ -235,6 +316,32 @@ const CarsFilterScreen = ({
         }).then(res => {
           setTotalCars(res.payload.total.count);
           if (res.payload.data) {
+            if (res.payload.data.brand) {
+              let brandsTmp = [];
+              let modelsTmp = [];
+              let modelsAccordionTmp = [];
+              let brandsNames = {};
+              Object.keys(res.payload.data.brand).map(val => {
+                const brandID = Number(val);
+                const brandName = res.payload.data.brand[val].name.toString();
+                const models = res.payload.data.brand[val].model;
+                modelsTmp[brandID] = [];
+                brandsTmp.push({value: brandID, label: brandName});
+                brandsNames[brandName] = brandID;
+                Object.keys(models).map(modelID => {
+                  modelsTmp[brandID].push({id: Number(modelID), label: models[modelID], type: 'model'});
+                });
+                modelsAccordionTmp.push({
+                  label: brandName,
+                  id: brandID,
+                  items: modelsTmp[brandID],
+                  type: 'brand',
+                });
+              });
+              setAccordion(modelsAccordionTmp);
+              res.payload.data.brand = brandsTmp;
+              res.payload.data.model = modelsTmp;
+            }
             if (res.payload.data.gearbox) {
               res.payload.data.gearbox = _convertSelect(res.payload.data.gearbox);
             }
@@ -277,6 +384,32 @@ const CarsFilterScreen = ({
         }).then(res => {
           setTotalCars(res.payload.total.count);
           if (res.payload.data) {
+            if (res.payload.data.brand) {
+              let brandsTmp = [];
+              let modelsTmp = [];
+              let modelsAccordionTmp = [];
+              let brandsNames = {};
+              Object.keys(res.payload.data.brand).map(val => {
+                const brandID = Number(val);
+                const brandName = res.payload.data.brand[val].name.toString();
+                const models = res.payload.data.brand[val].model;
+                modelsTmp[brandID] = [];
+                brandsTmp.push({value: brandID, label: brandName});
+                brandsNames[brandName] = brandID;
+                Object.keys(models).map(modelID => {
+                  modelsTmp[brandID].push({id: modelID, label: models[modelID], type: 'model'});
+                });
+                modelsAccordionTmp.push({
+                  label: brandName,
+                  id: brandID,
+                  items: modelsTmp[brandID],
+                  type: 'brand',
+                });
+              });
+              setAccordion(modelsAccordionTmp);
+              res.payload.data.brand = brandsTmp;
+              res.payload.data.model = modelsTmp;
+            }
             if (res.payload.data.gearbox) {
               res.payload.data.gearbox = _convertSelect(res.payload.data.gearbox);
             }
@@ -335,18 +468,6 @@ const CarsFilterScreen = ({
     }
   };
 
-  const _onChangeFilter = (field, value) => {
-    if (typeof field === 'object') {
-      let data = [];
-      Object.keys(field).map(val => {
-        data.push({name: val, value: field[val]});
-      });
-      return dispatchFilters(data);
-    } else {
-      return dispatchFilters({name: field, value});
-    }
-  };
-
   useEffect(() => {
     _fetchFiltersAPI(stockType);
   }, [stockType]);
@@ -355,6 +476,20 @@ const CarsFilterScreen = ({
     _showHideSubmitButton(false);
     let filtersLocal = {};
     Object.assign(filtersLocal, stateFilters);
+    if (stateFilters['brandFilter']) {
+      Object.keys(stateFilters['brandFilter']).map(key => {
+        Object.assign(filtersLocal, stateFilters, {
+          ['brand[' + key + ']']: parseInt(key, 10),
+        });
+      });
+    }
+    if (stateFilters['modelFilter']) {
+      Object.keys(stateFilters['modelFilter']).map(key => {
+        Object.assign(filtersLocal, stateFilters, {
+          ['model[' + key + ']']: key
+        });
+      });
+    }
     if (stateFilters['gearboxType']) {
       stateFilters['gearboxType'].map(val => {
         Object.assign(filtersLocal, stateFilters, {
@@ -442,19 +577,26 @@ const CarsFilterScreen = ({
       </Segment>
       {dataFilters && dataFilters.data ? (
         <Content>
-          {/* <Card noShadow style={[styles.row, styles.rowStatic]}>
+          {dataFilters && dataFilters.data.brand ? (
+          <Card noShadow style={[styles.row, styles.rowStatic]}>
             <CardItem
               button
               onPress={() => {
-                navigation.navigate('BrandModelsFilterScreen');
+                  _showHideModal(true, modals.brandModels);
               }}
               style={[styles.cardItem, styles.cardItemStatic]}>
-              <Text>{strings.CarsFilterScreen.chooseBrandModel}</Text>
+              <View style={styles.fieldCaptionWrapper}>
+                  <Text style={styles.fieldTitle}>
+                    {strings.CarsFilterScreen.chooseBrandModel}
+                  </Text>
+                  {_getSelectedModels(get(stateFilters, 'modelFilter'), accordionModels)}
+                </View>
               <Right>
                 <Icon name="chevron-forward" />
               </Right>
             </CardItem>
-          </Card> */}
+          </Card>
+          ) : null}
           {stockType === 'Used' && dataFilters && dataFilters.data ? (
             <Card noShadow style={[styles.row]}>
               {dataFilters && dataFilters.data.year ? (
@@ -910,6 +1052,98 @@ const CarsFilterScreen = ({
               </Card>
             ) : null}
 
+          {/* Модалка Бренд+Модель */}
+          {dataFilters.data.brand ? (
+            <ModalView
+              isModalVisible={showModal === modals.brandModels}
+              onHide={() => {
+                _showHideModal(false);
+              }}
+              onSwipeComplete={null}
+              stylesWrapper={{
+                height: '80%',
+                justifyContent: 'flex-start',
+              }}
+              stylesWrapperContent={{
+                height: '90%',
+                justifyContent: 'flex-start',
+              }}
+              title={strings.CarsFilterScreen.filters.body.title}
+              type={'bottom'}
+              confirmBtnText={strings.Base.choose}
+              selfClosed={false}>
+              <NestedListView
+                data={accordionModels}
+                extraData={nestedListUpdate}
+                onNodePressed={(node) => {
+                  const id = node.id;
+                  const isBrand = node.type === 'brand';
+                  if (!isBrand) {
+                    let typeTmp = 'add';
+                    if (modelFilter[id]) {
+                      typeTmp = 'delete';
+                    }
+                    setModelFilter({id: id, type: typeTmp});
+                    _onChangeFilter('modelFilter', modelFilter);
+                    setUpdateNestedList(!nestedListUpdate);
+                  }
+                }}
+                renderNode={(node, level, isLastLevel) => {
+                  return (
+                  <NestedRow
+                    level={level}
+                    style={styles[`nestedRow${level}${node.opened ? 'Opened' : 'Closed'}`]}
+                    >
+                    {level === 1 && node.id ? (
+                      <View style={{flexDirection: 'row', flex: 1}}>
+                        <Icon type={'Ionicons'} style={styles.brandCaret} name={node.opened ? 'caret-down' : 'caret-forward'} />
+                        <View style={styles.colorWrapper}>
+                          <View style={{flexDirection: 'row'}}>
+                          {stockType != 'Used' ? (
+                            <BrandLogo
+                                brand={node.id}
+                                width={30}
+                                style={styles.brandLogo}
+                                key={'brandLogo' + node.id}
+                              />) : null}
+                            <Text style={styles.colorText}>{node.label}</Text>
+                          </View>
+                          <CheckBox
+                            onPress={() => {
+                              let typeTmp = 'add';
+                              if (brandFilter[node.id]) {
+                                typeTmp = 'delete';
+                              }
+                              setModelFilter({items: node?.items, type: typeTmp});
+                              setBrandFilter({id: node.id});
+                              _onChangeFilter('brandFilter', brandFilter);
+                              _onChangeFilter('modelFilter', modelFilter);
+                              setUpdateNestedList(!nestedListUpdate);
+                            }}
+                            checked={brandFilter && brandFilter[node.id] ? true : false} />
+                        </View>
+                      </View>
+                    ) : (
+                    <View style={{flexDirection: 'row', paddingLeft: (level * 6) + '%', flex: 1, justifyContent: 'space-between'}}>
+                      <Text style={{fontSize: 14,}}>{node.label}</Text>
+                      <CheckBox
+                        onPress={() => {
+                          let typeTmp = 'add';
+                          if (modelFilter[node.id]) {
+                            typeTmp = 'delete';
+                          }
+                          setModelFilter({id: node.id, type: typeTmp});
+                          _onChangeFilter('modelFilter', modelFilter);
+                          setUpdateNestedList(!nestedListUpdate);
+                        }}
+                        checked={modelFilter && modelFilter[node.id] ? true : false}
+                      />
+                    </View>)}
+                  </NestedRow>
+                )}}
+              />
+            </ModalView>
+          ) : null}
           {/* Модалка Год выпуска */}
           {dataFilters.data.year ? (
             <ModalView
@@ -1531,6 +1765,33 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     zIndex: 10,
   },
+  nestedRow: {
+
+  },
+  nestedRow1Closed: {
+    marginBottom: 2,
+    paddingHorizontal: '5%',
+    paddingVertical: 20,
+    borderTopWidth: 1,
+    borderColor: styleConst.color.bg,
+  },
+  nestedRow1Opened: {
+    marginBottom: 2,
+    paddingHorizontal: '5%',
+    paddingVertical: 20,
+    borderTopWidth: 1,
+    borderColor: styleConst.color.bg,
+  },
+  nestedRow2Closed: {
+    marginBottom: 2,
+    paddingHorizontal: '5%',
+    paddingVertical: 10,
+  },
+  nestedRow2Opened: {
+    marginBottom: 2,
+    paddingHorizontal: '5%',
+    paddingVertical: 10,
+  },
   noResultsRow: {
     height: 200,
   },
@@ -1636,6 +1897,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   colorText: {
+    fontSize: 17,
+    fontFamily: styleConst.font.regular,
   },
   colorBox: {
     width: 30,
@@ -1647,7 +1910,23 @@ const styles = StyleSheet.create({
   bodyTypeBox: {
     width: 40,
     height: 30,
-  }
+  },
+  brandLogo: {
+    width: 35,
+    alignContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+    marginTop: 1,
+  },
+  brandLogoWrapper: {
+  },
+  brandCaret: {
+    fontSize: 26,
+    marginTop: -4,
+    marginRight: '5%',
+    padding: 0,
+    color: styleConst.color.systemGray,
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CarsFilterScreen);
