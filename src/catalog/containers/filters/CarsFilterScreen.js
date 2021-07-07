@@ -4,18 +4,13 @@ import PropTypes from 'prop-types';
 import {
   Animated,
   View,
-  TouchableOpacity,
   ActivityIndicator,
   Dimensions,
-  StatusBar,
-  Image,
   StyleSheet,
   Platform,
 } from 'react-native';
 import {
   Container,
-  Row,
-  Accordion,
   Button,
   Icon,
   Segment,
@@ -27,22 +22,16 @@ import {
   CheckBox,
 } from 'native-base';
 import NestedListView, {NestedRow} from 'react-native-nested-listview'
-import {verticalScale} from '../../../utils/scale';
 
 import ModalView from '../../../core/components/ModalView';
 import {Picker} from '@react-native-picker/picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import RNPickerSelect from 'react-native-picker-select';
-import SelectMultiple from 'react-native-select-multiple';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import ColorBox from '../../../core/components/ColorBox';
-import Imager from '../../../core/components/Imager';
 import BrandLogo from '../../../core/components/BrandLogo';
+import CheckboxList from '../../components/CheckboxList';
 
 import styleConst from '../../../core/style-const';
 // redux
 import {connect} from 'react-redux';
-import API from '../../../utils/api';
 import {substractYears} from '../../../utils/date';
 import {
   actionFetchNewCarByFilter,
@@ -54,12 +43,9 @@ import {
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
-import showPrice from '../../../utils/price';
 import numberWithGap from '../../../utils/number-with-gap';
-import {ScrollView} from 'react-native-gesture-handler';
 
 import {strings} from '../../../core/lang/const';
-import { color } from 'react-native-reanimated';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -215,6 +201,9 @@ const _getSelectedModels = (selectedModels, models) => {
       }
     });
   });
+  if (labels.length === 0) {
+    return null;
+  }
   return (
     <View style={styles.fieldCaptionValues}>
     <Text style={styles.fieldValueOne}>
@@ -260,7 +249,6 @@ const CarsFilterScreen = ({
   const [nestedListUpdate, setUpdateNestedList] = useState(false);
   const [colors, setColors] = useState({});
   const [bodys, setBody] = useState({});
-  const [brandNames, setBrandNames] = useState({});
   const [accordionModels, setAccordion] = useState({});
 
   const [dataFilters, setDataFilters] = useState(null);
@@ -343,30 +331,42 @@ const CarsFilterScreen = ({
               res.payload.data.model = modelsTmp;
             }
             if (res.payload.data.gearbox) {
-              res.payload.data.gearbox = _convertSelect(res.payload.data.gearbox);
+              let tmp = {};
+              Object.keys(res.payload.data.gearbox).map(val => {
+                tmp[Number(val)] = strings.CarParams.gearbox[Number(val)];
+              });
+              res.payload.data.gearbox = _convertSelect(tmp);
             }
             if (res.payload.data.body) {
               let bodyNames = {};
+              let tmp = {};
               Object.keys(res.payload.data.body).map(val => {
-                bodyNames[res.payload.data.body[val].toString()] = Number(val);
+                tmp[Number(val)] = strings.CarParams.body[Number(val)];
+                bodyNames[strings.CarParams.body[Number(val)]] = Number(val);
               });
               setBody(bodyNames);
-              res.payload.data.body = _convertSelect(res.payload.data.body);
+              res.payload.data.body = _convertSelect(tmp);
             }
             if (res.payload.data.enginetype) {
-              res.payload.data.enginetype = _convertSelect(
-                res.payload.data.enginetype,
-              );
+              let tmp = {};
+              Object.keys(res.payload.data.enginetype).map(val => {
+                tmp[Number(val)] = strings.CarParams.engine[Number(val)];
+              });
+              res.payload.data.enginetype = _convertSelect(tmp);
             }
             if (res.payload.data.drive) {
-              res.payload.data.drive = _convertSelect(res.payload.data.drive);
+              let driveTmp = {};
+              Object.keys(res.payload.data.drive).map(val => {
+                driveTmp[Number(val)] = strings.CarParams.wheels[Number(val)];
+              });
+              res.payload.data.drive = _convertSelect(driveTmp);
             }
             if (res.payload.data.colors) {
               let colorsTmp = [];
               let colorsNames = {};
               Object.keys(res.payload.data.colors).map(val => {
-                colorsTmp.push({value: val, label: res.payload.data.colors[val].name});
-                colorsNames[res.payload.data.colors[val].name.toString()] = res.payload.data.colors[val];
+                colorsTmp.push({value: val, label: strings.Colors[Number(val)]});
+                colorsNames[strings.Colors[Number(val)]] = res.payload.data.colors[val];
               });
               res.payload.data.colors = colorsTmp;
               setColors(colorsNames);
@@ -406,35 +406,48 @@ const CarsFilterScreen = ({
                   type: 'brand',
                 });
               });
+              modelsAccordionTmp.sort((a,b) => (a.label > b.label) ? 1 : ((b.label > a.label) ? -1 : 0));
               setAccordion(modelsAccordionTmp);
               res.payload.data.brand = brandsTmp;
               res.payload.data.model = modelsTmp;
             }
             if (res.payload.data.gearbox) {
-              res.payload.data.gearbox = _convertSelect(res.payload.data.gearbox);
+              let tmp = {};
+              Object.keys(res.payload.data.gearbox).map(val => {
+                tmp[Number(val)] = strings.CarParams.gearbox[Number(val)];
+              });
+              res.payload.data.gearbox = _convertSelect(tmp);
             }
             if (res.payload.data.body) {
               let bodyNames = {};
+              let tmp = {};
               Object.keys(res.payload.data.body).map(val => {
-                bodyNames[res.payload.data.body[val].toString()] = Number(val);
+                tmp[Number(val)] = strings.CarParams.body[Number(val)];
+                bodyNames[strings.CarParams.body[Number(val)]] = Number(val);
               });
               setBody(bodyNames);
-              res.payload.data.body = _convertSelect(res.payload.data.body);
+              res.payload.data.body = _convertSelect(tmp);
             }
             if (res.payload.data.enginetype) {
-              res.payload.data.enginetype = _convertSelect(
-                res.payload.data.enginetype,
-              );
+              let tmp = {};
+              Object.keys(res.payload.data.enginetype).map(val => {
+                tmp[Number(val)] = strings.CarParams.engine[Number(val)];
+              });
+              res.payload.data.enginetype = _convertSelect(tmp);
             }
             if (res.payload.data.drive) {
-              res.payload.data.drive = _convertSelect(res.payload.data.drive);
+              let driveTmp = {};
+              Object.keys(res.payload.data.drive).map(val => {
+                driveTmp[Number(val)] = strings.CarParams.wheels[Number(val)];
+              });
+              res.payload.data.drive = _convertSelect(driveTmp);
             }
             if (res.payload.data.colors) {
               let colorsTmp = [];
               let colorsNames = {};
               Object.keys(res.payload.data.colors).map(val => {
-                colorsTmp.push({value: val, label: res.payload.data.colors[val].name});
-                colorsNames[res.payload.data.colors[val].name.toString()] = res.payload.data.colors[val];
+                colorsTmp.push({value: val, label: strings.Colors[Number(val)]});
+                colorsNames[strings.Colors[Number(val)]] = res.payload.data.colors[val];
               });
               res.payload.data.colors = colorsTmp;
               setColors(colorsNames);
@@ -456,6 +469,75 @@ const CarsFilterScreen = ({
     setStockLoading(true);
     setStockType(stockType);
   };
+
+  const _onNestedNodePress = (node) => {
+    const id = node.id;
+    const isBrand = node.type === 'brand';
+    if (!isBrand) {
+      let typeTmp = 'add';
+      if (modelFilter[id]) {
+        typeTmp = 'delete';
+      }
+      setModelFilter({id: id, type: typeTmp});
+      _onChangeFilter('modelFilter', modelFilter);
+      setUpdateNestedList(!nestedListUpdate);
+    }
+  };
+
+  const _renderNodeNested = (node, level, isLastLevel) => {
+    return (
+      <NestedRow
+        level={level}
+        style={styles[`nestedRow${level}${node.opened ? 'Opened' : 'Closed'}`]}
+        >
+        {level === 1 && node.id ? (
+          <View style={{flexDirection: 'row', flex: 1}}>
+            <Icon type={'Ionicons'} style={styles.brandCaret} name={node.opened ? 'caret-down' : 'caret-forward'} />
+            <View style={styles.colorWrapper}>
+              <View style={{flexDirection: 'row'}}>
+              {stockType != 'Used' ? (
+                <BrandLogo
+                    brand={node.id}
+                    width={30}
+                    style={styles.brandLogo}
+                    key={'brandLogo' + node.id}
+                  />) : null}
+                <Text style={styles.colorText}>{node.label}</Text>
+              </View>
+              <CheckBox
+                onPress={() => {
+                  let typeTmp = 'add';
+                  if (brandFilter[node.id]) {
+                    typeTmp = 'delete';
+                  }
+                  setModelFilter({items: node?.items, type: typeTmp});
+                  setBrandFilter({id: node.id});
+                  _onChangeFilter('brandFilter', brandFilter);
+                  _onChangeFilter('modelFilter', modelFilter);
+                  setUpdateNestedList(!nestedListUpdate);
+                }}
+                checked={brandFilter && brandFilter[node.id] ? true : false} />
+            </View>
+          </View>
+        ) : (
+        <View style={{flexDirection: 'row', paddingLeft: (level * 6) + '%', flex: 1, justifyContent: 'space-between'}}>
+          <Text style={{fontSize: 14,}}>{node.label}</Text>
+          <CheckBox
+            onPress={() => {
+              let typeTmp = 'add';
+              if (modelFilter[node.id]) {
+                typeTmp = 'delete';
+              }
+              setModelFilter({id: node.id, type: typeTmp});
+              _onChangeFilter('modelFilter', modelFilter);
+              setUpdateNestedList(!nestedListUpdate);
+            }}
+            checked={modelFilter && modelFilter[node.id] ? true : false}
+          />
+        </View>)}
+      </NestedRow>
+    );
+  }
 
   const _onSubmitButtonPress = () => {
     switch (stockType) {
@@ -587,7 +669,7 @@ const CarsFilterScreen = ({
               style={[styles.cardItem, styles.cardItemStatic]}>
               <View style={styles.fieldCaptionWrapper}>
                   <Text style={styles.fieldTitle}>
-                    {strings.CarsFilterScreen.chooseBrandModel}
+                    {strings.CarsFilterScreen.chooseBrandModel.title}
                   </Text>
                   {_getSelectedModels(get(stateFilters, 'modelFilter'), accordionModels)}
                 </View>
@@ -689,7 +771,7 @@ const CarsFilterScreen = ({
                   </Text>
                   <View style={styles.fieldCaptionValues}>
                     <Text style={styles.fieldValues}>
-                      от{' '}
+                      {strings.CarsFilterScreen.filters.year.from}{' '}
                       {numberWithGap(
                         get(
                           stateFilters,
@@ -699,7 +781,7 @@ const CarsFilterScreen = ({
                       )}
                     </Text>
                     <Text style={styles.fieldValues}>
-                      до{' '}
+                    {strings.CarsFilterScreen.filters.year.to}{' '}
                       {numberWithGap(
                         get(stateFilters, 'price[to]', dataFilters.prices.max),
                       )}
@@ -764,7 +846,7 @@ const CarsFilterScreen = ({
           </Card>
           <Card
             noShadow
-            style={[styles.row]}>
+            style={[styles.row, stockType !== 'Used' && dealerSelected.region !== 'by' ? styles.rowLast : null]}>
             {dataFilters && dataFilters.data.gearbox ? (
               <CardItem
                 button
@@ -1056,91 +1138,27 @@ const CarsFilterScreen = ({
           {dataFilters.data.brand ? (
             <ModalView
               isModalVisible={showModal === modals.brandModels}
-              onHide={() => {
-                _showHideModal(false);
-              }}
+              onHide={() => _showHideModal(false)}
               onSwipeComplete={null}
               stylesWrapper={{
-                height: '80%',
                 justifyContent: 'flex-start',
               }}
               stylesWrapperContent={{
                 height: '90%',
                 justifyContent: 'flex-start',
               }}
-              title={strings.CarsFilterScreen.filters.body.title}
+              title={strings.CarsFilterScreen.chooseBrandModel.title2}
               type={'bottom'}
               confirmBtnText={strings.Base.choose}
+              modalButtonTextStyle={styles.modalButtonTextStyle}
+              titleTextStyle={styles.modalTitleTextStyle}
+              stylesWrapper={styles.modalStylesWrapper}
               selfClosed={false}>
               <NestedListView
                 data={accordionModels}
                 extraData={nestedListUpdate}
-                onNodePressed={(node) => {
-                  const id = node.id;
-                  const isBrand = node.type === 'brand';
-                  if (!isBrand) {
-                    let typeTmp = 'add';
-                    if (modelFilter[id]) {
-                      typeTmp = 'delete';
-                    }
-                    setModelFilter({id: id, type: typeTmp});
-                    _onChangeFilter('modelFilter', modelFilter);
-                    setUpdateNestedList(!nestedListUpdate);
-                  }
-                }}
-                renderNode={(node, level, isLastLevel) => {
-                  return (
-                  <NestedRow
-                    level={level}
-                    style={styles[`nestedRow${level}${node.opened ? 'Opened' : 'Closed'}`]}
-                    >
-                    {level === 1 && node.id ? (
-                      <View style={{flexDirection: 'row', flex: 1}}>
-                        <Icon type={'Ionicons'} style={styles.brandCaret} name={node.opened ? 'caret-down' : 'caret-forward'} />
-                        <View style={styles.colorWrapper}>
-                          <View style={{flexDirection: 'row'}}>
-                          {stockType != 'Used' ? (
-                            <BrandLogo
-                                brand={node.id}
-                                width={30}
-                                style={styles.brandLogo}
-                                key={'brandLogo' + node.id}
-                              />) : null}
-                            <Text style={styles.colorText}>{node.label}</Text>
-                          </View>
-                          <CheckBox
-                            onPress={() => {
-                              let typeTmp = 'add';
-                              if (brandFilter[node.id]) {
-                                typeTmp = 'delete';
-                              }
-                              setModelFilter({items: node?.items, type: typeTmp});
-                              setBrandFilter({id: node.id});
-                              _onChangeFilter('brandFilter', brandFilter);
-                              _onChangeFilter('modelFilter', modelFilter);
-                              setUpdateNestedList(!nestedListUpdate);
-                            }}
-                            checked={brandFilter && brandFilter[node.id] ? true : false} />
-                        </View>
-                      </View>
-                    ) : (
-                    <View style={{flexDirection: 'row', paddingLeft: (level * 6) + '%', flex: 1, justifyContent: 'space-between'}}>
-                      <Text style={{fontSize: 14,}}>{node.label}</Text>
-                      <CheckBox
-                        onPress={() => {
-                          let typeTmp = 'add';
-                          if (modelFilter[node.id]) {
-                            typeTmp = 'delete';
-                          }
-                          setModelFilter({id: node.id, type: typeTmp});
-                          _onChangeFilter('modelFilter', modelFilter);
-                          setUpdateNestedList(!nestedListUpdate);
-                        }}
-                        checked={modelFilter && modelFilter[node.id] ? true : false}
-                      />
-                    </View>)}
-                  </NestedRow>
-                )}}
+                onNodePressed={(node) => _onNestedNodePress(node)}
+                renderNode={(node, level, isLastLevel) => _renderNodeNested(node, level, isLastLevel)}
               />
             </ModalView>
           ) : null}
@@ -1148,18 +1166,15 @@ const CarsFilterScreen = ({
           {dataFilters.data.year ? (
             <ModalView
               isModalVisible={showModal === modals.year}
-              onHide={() => {
-                _showHideModal(false);
-              }}
+              onHide={() => _showHideModal(false)}
               title={strings.CarsFilterScreen.filters.year.title}
               type={'bottom'}
               confirmBtnText={strings.Base.choose}
+              stylesWrapper={styles.modalStylesWrapper}
+              modalButtonTextStyle={styles.modalButtonTextStyle}
+              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
+              <View style={styles.yearWrapper}>
                 <View style={styles.pickerWrapper}>
                   <Text style={styles.pickerCaption}>от</Text>
                   <Picker
@@ -1205,30 +1220,19 @@ const CarsFilterScreen = ({
           {dataFilters.data.mileage ? (
             <ModalView
               isModalVisible={showModal === modals.mileage}
-              onHide={() => {
-                _showHideModal(false);
-              }}
+              onHide={() => _showHideModal(false)}
               title={strings.CarsFilterScreen.filters.mileage.title}
               type={'bottom'}
               confirmBtnText={strings.Base.choose}
+              stylesWrapper={styles.modalStylesWrapper}
+              modalButtonTextStyle={styles.modalButtonTextStyle}
+              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
-              <View
-                style={{
-                  justifyContent: 'space-between',
-                  paddingHorizontal: '5%',
-                }}>
+              <View style={styles.multiSliderViewWrapper}>
                 <MultiSlider
                   values={[
-                    get(
-                      stateFilters,
-                      'mileage[from]',
-                      dataFilters?.data?.mileage?.min,
-                    ),
-                    get(
-                      stateFilters,
-                      'mileage[to]',
-                      dataFilters?.data?.mileage?.max,
-                    ),
+                    get(stateFilters, 'mileage[from]', dataFilters?.data?.mileage?.min),
+                    get(stateFilters, 'mileage[to]', dataFilters?.data?.mileage?.max),
                   ]}
                   step={10000}
                   min={dataFilters.data.mileage.min}
@@ -1240,33 +1244,19 @@ const CarsFilterScreen = ({
                       'mileage[to]': values[1],
                     });
                   }}
-                  trackStyle={{
-                    backgroundColor: '#d5d5e0',
-                  }}
-                  selectedStyle={{
-                    backgroundColor: styleConst.color.lightBlue,
-                  }}
+                  trackStyle={styles.multiSliderTrackStyle}
+                  selectedStyle={styles.multiSliderSelectedStyle}
                   customMarker={() => (
                     <View
                       style={[
                         styleConst.shadow.default,
-                        {
-                          height: 21,
-                          width: 21,
-                          borderRadius: 7,
-                          backgroundColor: styleConst.color.lightBlue,
-                        },
+                        styles.multiSliderCustomMarker,
                       ]}
                     />
                   )}
                 />
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text style={{color: '#74747A', fontSize: 14}}>
+                <View style={styles.multiSliderCaptionView}>
+                  <Text style={styles.multiSliderCaptionText}>
                     {numberWithGap(
                       get(
                         stateFilters,
@@ -1275,7 +1265,7 @@ const CarsFilterScreen = ({
                       ),
                     )}
                   </Text>
-                  <Text style={{color: '#74747A', fontSize: 14}}>
+                  <Text style={styles.multiSliderCaptionText}>
                     {numberWithGap(
                       get(
                         stateFilters,
@@ -1292,18 +1282,15 @@ const CarsFilterScreen = ({
           {dataFilters.prices ? (
             <ModalView
               isModalVisible={showModal === modals.price}
-              onHide={() => {
-                _showHideModal(false);
-              }}
+              onHide={() => _showHideModal(false)}
               title={strings.CarsFilterScreen.filters.price.title}
               type={'bottom'}
               confirmBtnText={strings.Base.choose}
+              stylesWrapper={styles.modalStylesWrapper}
+              modalButtonTextStyle={styles.modalButtonTextStyle}
+              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
-              <View
-                style={{
-                  justifyContent: 'space-between',
-                  paddingHorizontal: '5%',
-                }}>
+              <View style={styles.multiSliderViewWrapper}>
                 <MultiSlider
                   values={[
                     get(stateFilters, 'price[from]', dataFilters?.prices?.min),
@@ -1319,33 +1306,19 @@ const CarsFilterScreen = ({
                       'price[to]': values[1],
                     });
                   }}
-                  trackStyle={{
-                    backgroundColor: '#d5d5e0',
-                  }}
-                  selectedStyle={{
-                    backgroundColor: styleConst.color.lightBlue,
-                  }}
+                  trackStyle={styles.multiSliderTrackStyle}
+                  selectedStyle={styles.multiSliderSelectedStyle}
                   customMarker={() => (
                     <View
                       style={[
                         styleConst.shadow.default,
-                        {
-                          height: 21,
-                          width: 21,
-                          borderRadius: 7,
-                          backgroundColor: styleConst.color.lightBlue,
-                        },
+                        styles.multiSliderCustomMarker,
                       ]}
                     />
                   )}
                 />
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text style={{color: '#74747A', fontSize: 14}}>
+                <View style={styles.multiSliderCaptionView}>
+                  <Text style={styles.multiSliderCaptionText}>
                     {numberWithGap(
                       get(
                         stateFilters,
@@ -1354,7 +1327,7 @@ const CarsFilterScreen = ({
                       ),
                     )}
                   </Text>
-                  <Text style={{color: '#74747A', fontSize: 14}}>
+                  <Text style={styles.multiSliderCaptionText}>
                     {numberWithGap(
                       get(stateFilters, 'price[to]', dataFilters?.prices?.max),
                     )}
@@ -1367,25 +1340,20 @@ const CarsFilterScreen = ({
           {dataFilters.data.gearbox ? (
             <ModalView
               isModalVisible={showModal === modals.gearbox}
-              onHide={() => {
-                _showHideModal(false);
-              }}
+              onHide={() => _showHideModal(false)}
               title={strings.CarsFilterScreen.filters.gearbox.title}
               type={'bottom'}
               confirmBtnText={strings.Base.choose}
+              stylesWrapper={styles.modalStylesWrapper}
+              modalButtonTextStyle={styles.modalButtonTextStyle}
+              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
               <View
-                style={{
-                  justifyContent: 'space-between',
-                  paddingHorizontal: '5%',
-                }}>
-                <SelectMultiple
+                style={styles.selectMultipleWrapper}>
+                <CheckboxList
                   items={dataFilters?.data?.gearbox}
-                  labelStyle={{color: styleConst.color.greyText2}}
                   selectedItems={get(stateFilters, 'gearboxType')}
-                  onSelectionsChange={(selectedAll, selectedItem) => {
-                    _onChangeFilter('gearboxType', selectedAll);
-                  }}
+                  onPressCallback={(selectedAll) => {_onChangeFilter('gearboxType', selectedAll)}}
                 />
               </View>
             </ModalView>
@@ -1394,36 +1362,22 @@ const CarsFilterScreen = ({
           {dataFilters.data.body ? (
             <ModalView
               isModalVisible={showModal === modals.body}
-              onHide={() => {
-                _showHideModal(false);
-              }}
+              onHide={() => _showHideModal(false)}
               title={strings.CarsFilterScreen.filters.body.title}
               type={'bottom'}
               confirmBtnText={strings.Base.choose}
+              stylesWrapper={styles.modalStylesWrapper}
+              modalButtonTextStyle={styles.modalButtonTextStyle}
+              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
               <View
-                style={{
-                  justifyContent: 'space-between',
-                  paddingHorizontal: '5%',
-                }}>
-                <SelectMultiple
+                style={styles.selectMultipleWrapper}>
+                <CheckboxList
                   items={dataFilters?.data?.body}
-                  labelStyle={{color: styleConst.color.greyText2}}
                   selectedItems={get(stateFilters, 'bodyType')}
-                  onSelectionsChange={(selectedAll, selectedItem) => {
-                    _onChangeFilter('bodyType', selectedAll);
-                  }}
-                  renderLabel={(text) => {
-                    const path = 'https://cdn.atlantm.com/icons/bodyType/svg/'+ bodys[text.toString()] +'.svg';
-                    return (
-                      <View style={styles.colorWrapper}>
-                        <Text style={styles.colorText}>{text}</Text>
-                        <View style={styles.bodyTypeBox}>
-                          <Imager style={styles.bodyTypeBox} source={{uri: path}}/>
-                        </View>
-                      </View>
-                    );
-                  }}
+                  dataExtra={bodys}
+                  type={'body'}
+                  onPressCallback={(selectedAll) => {_onChangeFilter('bodyType', selectedAll)}}
                 />
               </View>
             </ModalView>
@@ -1432,25 +1386,20 @@ const CarsFilterScreen = ({
           {dataFilters.data.enginetype ? (
             <ModalView
               isModalVisible={showModal === modals.enginetype}
-              onHide={() => {
-                _showHideModal(false);
-              }}
+              onHide={() => _showHideModal(false)}
               title={strings.CarsFilterScreen.filters.enginetype.title}
               type={'bottom'}
               confirmBtnText={strings.Base.choose}
+              stylesWrapper={styles.modalStylesWrapper}
+              modalButtonTextStyle={styles.modalButtonTextStyle}
+              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
               <View
-                style={{
-                  justifyContent: 'space-between',
-                  paddingHorizontal: '5%',
-                }}>
-                <SelectMultiple
+                style={styles.selectMultipleWrapper}>
+                <CheckboxList
                   items={dataFilters?.data?.enginetype}
-                  labelStyle={{color: styleConst.color.greyText2}}
                   selectedItems={get(stateFilters, 'enginetypeType')}
-                  onSelectionsChange={(selectedAll, selectedItem) => {
-                    _onChangeFilter('enginetypeType', selectedAll);
-                  }}
+                  onPressCallback={(selectedAll) => {_onChangeFilter('enginetypeType', selectedAll)}}
                 />
               </View>
             </ModalView>
@@ -1459,33 +1408,22 @@ const CarsFilterScreen = ({
           {dataFilters.data.engineVolume ? (
             <ModalView
               isModalVisible={showModal === modals.engineVolume}
-              onHide={() => {
-                _showHideModal(false);
-              }}
+              onHide={() => _showHideModal(false)}
               title={strings.CarsFilterScreen.filters.engineVolume.title}
               type={'bottom'}
               confirmBtnText={strings.Base.choose}
+              stylesWrapper={styles.modalStylesWrapper}
+              modalButtonTextStyle={styles.modalButtonTextStyle}
+              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
-              <View
-                style={{
-                  justifyContent: 'space-between',
-                  paddingHorizontal: '5%',
-                }}>
+              <View style={styles.multiSliderViewWrapper}>
                 <MultiSlider
                   values={[
                     parseFloat(
-                      get(
-                        stateFilters,
-                        'engineVolumeShort[from]',
-                        dataFilters?.data?.engineVolume?.short?.min,
-                      ),
+                      get(stateFilters, 'engineVolumeShort[from]', dataFilters?.data?.engineVolume?.short?.min),
                     ).toFixed(1),
                     parseFloat(
-                      get(
-                        stateFilters,
-                        'engineVolumeShort[to]',
-                        dataFilters?.data?.engineVolume?.short?.max,
-                      ),
+                      get(stateFilters, 'engineVolumeShort[to]', dataFilters?.data?.engineVolume?.short?.max),
                     ).toFixed(1),
                   ]}
                   step={dataFilters.data.engineVolume.short.step}
@@ -1500,48 +1438,26 @@ const CarsFilterScreen = ({
                       'engineVolumeShort[to]': parseFloat(values[1]).toFixed(1),
                     });
                   }}
-                  trackStyle={{
-                    backgroundColor: '#d5d5e0',
-                  }}
-                  selectedStyle={{
-                    backgroundColor: styleConst.color.lightBlue,
-                  }}
+                  trackStyle={styles.multiSliderTrackStyle}
+                  selectedStyle={styles.multiSliderSelectedStyle}
                   customMarker={() => (
                     <View
                       style={[
                         styleConst.shadow.default,
-                        {
-                          height: 21,
-                          width: 21,
-                          borderRadius: 7,
-                          backgroundColor: styleConst.color.lightBlue,
-                        },
+                        styles.multiSliderCustomMarker
                       ]}
                     />
                   )}
                 />
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text style={{color: '#74747A', fontSize: 14}}>
+                <View style={styles.multiSliderCaptionView}>
+                  <Text style={styles.multiSliderCaptionText}>
                     {parseFloat(
-                      get(
-                        stateFilters,
-                        'engineVolumeShort[from]',
-                        dataFilters?.data.engineVolume?.short?.min,
-                      ),
+                      get(stateFilters, 'engineVolumeShort[from]', dataFilters?.data.engineVolume?.short?.min),
                     ).toFixed(1)}
                   </Text>
-                  <Text style={{color: '#74747A', fontSize: 14}}>
+                  <Text style={styles.multiSliderCaptionText}>
                     {parseFloat(
-                      get(
-                        stateFilters,
-                        'engineVolumeShort[to]',
-                        dataFilters?.data.engineVolume?.short?.max,
-                      ),
+                      get(stateFilters, 'engineVolumeShort[to]', dataFilters?.data.engineVolume?.short?.max),
                     ).toFixed(1)}
                   </Text>
                 </View>
@@ -1552,30 +1468,19 @@ const CarsFilterScreen = ({
           {dataFilters.data.power ? (
             <ModalView
               isModalVisible={showModal === modals.power}
-              onHide={() => {
-                _showHideModal(false);
-              }}
+              onHide={() => _showHideModal(false)}
               title={strings.CarsFilterScreen.filters.power.title}
               type={'bottom'}
               confirmBtnText={strings.Base.choose}
+              stylesWrapper={styles.modalStylesWrapper}
+              modalButtonTextStyle={styles.modalButtonTextStyle}
+              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
-              <View
-                style={{
-                  justifyContent: 'space-between',
-                  paddingHorizontal: '5%',
-                }}>
+              <View style={styles.multiSliderViewWrapper}>
                 <MultiSlider
                   values={[
-                    get(
-                      stateFilters,
-                      'power_from',
-                      dataFilters?.data?.power?.min,
-                    ),
-                    get(
-                      stateFilters,
-                      'power_to',
-                      dataFilters?.data?.power?.max,
-                    ),
+                    get(stateFilters, 'power_from', dataFilters?.data?.power?.min),
+                    get(stateFilters, 'power_to', dataFilters?.data?.power?.max),
                   ]}
                   step={10}
                   min={dataFilters.data.power.min}
@@ -1587,73 +1492,46 @@ const CarsFilterScreen = ({
                       power_to: values[1],
                     });
                   }}
-                  trackStyle={{
-                    backgroundColor: '#d5d5e0',
-                  }}
-                  selectedStyle={{
-                    backgroundColor: styleConst.color.lightBlue,
-                  }}
+                  trackStyle={styles.multiSliderTrackStyle}
+                  selectedStyle={styles.multiSliderSelectedStyle}
                   customMarker={() => (
                     <View
                       style={[
                         styleConst.shadow.default,
-                        {
-                          height: 21,
-                          width: 21,
-                          borderRadius: 7,
-                          backgroundColor: styleConst.color.lightBlue,
-                        },
+                        styles.multiSliderCustomMarker
                       ]}
                     />
                   )}
                 />
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text style={{color: '#74747A', fontSize: 14}}>
-                    {get(
-                      stateFilters,
-                      'power_from',
-                      dataFilters?.data.power?.min,
-                    )}
+                <View style={styles.multiSliderCaptionView}>
+                  <Text style={styles.multiSliderCaptionText}>
+                    {get(stateFilters, 'power_from', dataFilters?.data.power?.min)}
                   </Text>
-                  <Text style={{color: '#74747A', fontSize: 14}}>
-                    {get(
-                      stateFilters,
-                      'power_to',
-                      dataFilters?.data.power?.max,
-                    )}
+                  <Text style={styles.multiSliderCaptionText}>
+                    {get(stateFilters, 'power_to', dataFilters?.data.power?.max)}
                   </Text>
                 </View>
               </View>
             </ModalView>
           ) : null}
-          {/* Модалка Тип двигателя */}
+          {/* Модалка Привод */}
           {dataFilters.data.drive ? (
             <ModalView
               isModalVisible={showModal === modals.drive}
-              onHide={() => {
-                _showHideModal(false);
-              }}
+              onHide={() => _showHideModal(false)}
               title={strings.CarsFilterScreen.filters.drive.title}
               type={'bottom'}
               confirmBtnText={strings.Base.choose}
+              stylesWrapper={styles.modalStylesWrapper}
+              modalButtonTextStyle={styles.modalButtonTextStyle}
+              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
               <View
-                style={{
-                  justifyContent: 'space-between',
-                  paddingHorizontal: '5%',
-                }}>
-                <SelectMultiple
+                style={styles.selectMultipleWrapper}>
+                <CheckboxList
                   items={dataFilters?.data?.drive}
-                  labelStyle={{color: styleConst.color.greyText2}}
                   selectedItems={get(stateFilters, 'driveType')}
-                  onSelectionsChange={(selectedAll, selectedItem) => {
-                    _onChangeFilter('driveType', selectedAll);
-                  }}
+                  onPressCallback={(selectedAll) => {_onChangeFilter('driveType', selectedAll)}}
                 />
               </View>
             </ModalView>
@@ -1662,9 +1540,7 @@ const CarsFilterScreen = ({
           {dataFilters.data.colors ? (
             <ModalView
               isModalVisible={showModal === modals.colors}
-              onHide={() => {
-                _showHideModal(false);
-              }}
+              onHide={() => _showHideModal(false)}
               onSwipeComplete={null}
               stylesWrapperContent={{
                 height: dataFilters?.data?.colors.length > 10 ? '83%' : 'auto',
@@ -1673,30 +1549,18 @@ const CarsFilterScreen = ({
               title={strings.CarsFilterScreen.filters.colors.title}
               type={'bottom'}
               confirmBtnText={strings.Base.choose}
+              stylesWrapper={styles.modalStylesWrapper}
+              modalButtonTextStyle={styles.modalButtonTextStyle}
+              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={false}>
               <View
-                style={{
-                  justifyContent: 'flex-end',
-                  paddingHorizontal: '5%',
-                  bottom: 0,
-                }}>
-                <SelectMultiple
+                style={styles.selectMultipleColorsWrapper}>
+                <CheckboxList
                   items={dataFilters?.data?.colors}
-                  renderLabel={(text) => {
-                    const colorHex = get(colors[text.toString()], 'codes.hex');
-                    return (
-                      <View style={styles.colorWrapper}>
-                        <Text style={styles.colorText}>{text}</Text>
-                        <View style={[styles.colorBox, {
-                          backgroundColor: colorHex,
-                        }]} />
-                      </View>
-                    );
-                  }}
+                  type={'colors'}
+                  dataExtra={colors}
                   selectedItems={get(stateFilters, 'colorType')}
-                  onSelectionsChange={(selectedAll, selectedItem) => {
-                    _onChangeFilter('colorType', selectedAll);
-                  }}
+                  onPressCallback={(selectedAll) => {_onChangeFilter('colorType', selectedAll)}}
                 />
               </View>
             </ModalView>
@@ -1858,6 +1722,40 @@ const styles = StyleSheet.create({
     color: styleConst.color.greyText5,
     width: '50%',
   },
+  selectMultipleWrapper: {
+    justifyContent: 'space-between',
+    paddingHorizontal: '5%',
+  },
+  selectMultipleColorsWrapper: {
+    justifyContent: 'flex-end',
+    paddingHorizontal: '5%',
+    bottom: 0,
+  },
+  multiSliderViewWrapper: {
+    justifyContent: 'space-between',
+    paddingHorizontal: '5%',
+  },
+  multiSliderSelectedStyle: {
+    backgroundColor: styleConst.color.lightBlue,
+  },
+  multiSliderTrackStyle: {
+    backgroundColor: '#d5d5e0',
+  },
+  multiSliderCaptionView: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  multiSliderCaptionText: {
+    color: '#74747A',
+    fontSize: 14,
+  },
+  multiSliderCustomMarker: {
+    height: 21,
+    width: 21,
+    borderRadius: 7,
+    backgroundColor: styleConst.color.lightBlue,
+  },
   resultButtonWrapper: {
     zIndex: 100,
     position: 'absolute',
@@ -1903,9 +1801,11 @@ const styles = StyleSheet.create({
   colorBox: {
     width: 30,
     height: 30,
-    borderWidth: 1,
     borderRadius: 15,
-    borderColor: styleConst.color.darkBg,
+  },
+  colorBox_white: {
+    borderWidth: 1,
+    borderColor: styleConst.color.greyText5,
   },
   bodyTypeBox: {
     width: 40,
@@ -1926,6 +1826,20 @@ const styles = StyleSheet.create({
     marginRight: '5%',
     padding: 0,
     color: styleConst.color.systemGray,
+  },
+  modalStylesWrapper: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  modalButtonTextStyle: {
+    fontSize: 18,
+  },
+  modalTitleTextStyle: {
+    marginLeft: 10,
+  },
+  yearWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 
