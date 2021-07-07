@@ -20,7 +20,6 @@ import NewCarFilterScreen from '../catalog/newcar/containers/NewCarFilterScreen'
 
 // Filters
 import CarsFilterScreen from '../catalog/containers/filters/CarsFilterScreen';
-import BrandModelsFilterScreen from '../catalog/containers/filters/BrandModelsFilterScreen';
 
 // Used Cars Catalog
 import UsedCarListScreen from '../catalog/usedcar/containers/UsedCarListScreen';
@@ -391,15 +390,6 @@ export const CarsStock = ({navigation, route}) => (
           {color: '#222B45'},
         ],
       })}
-    />
-    <SearchStack.Screen
-      name="BrandModelsFilterScreen"
-      component={BrandModelsFilterScreen}
-      options={ClassicHeaderWhite(
-        strings.CarsFilterScreen.chooseBrandModelTitle,
-        navigation,
-        route,
-      )}
     />
     <SearchStack.Screen
       name="NewCarListScreen"

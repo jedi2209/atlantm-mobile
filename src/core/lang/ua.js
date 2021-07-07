@@ -261,8 +261,10 @@ export default {
   },
   CarsFilterScreen: {
     title: 'Параметри',
-    chooseBrandModel: 'Вибрати марку і модель',
-    chooseBrandModelTitle: 'Виберіть марки і модель',
+    chooseBrandModel: {
+      title: 'Вибрати марку і модель',
+      title2: 'Виберіть марки і модель',
+    },
     resultsButton: {
       show: 'Показати',
     },
@@ -315,7 +317,7 @@ export default {
         title: 'Можна забронювати онлайн',
       },
       colors: {
-        title: 'Цвет',
+        title: 'Колір',
       },
     },
   },

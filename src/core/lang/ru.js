@@ -261,8 +261,10 @@ export default {
   },
   CarsFilterScreen: {
     title: 'Параметры',
-    chooseBrandModel: 'Выбрать марку и модель',
-    chooseBrandModelTitle: 'Выберите марки и модель',
+    chooseBrandModel: {
+      title: 'Выбрать марку и модель',
+      title2: 'Выберите марки и модель',
+    },
     resultsButton: {
       show: 'Показать',
     },
