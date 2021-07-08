@@ -493,8 +493,9 @@ class UsedCarItemScreen extends Component {
                         <OptionPlate
                           title={strings.NewCarItemScreen.plates.engine}
                           subtitle={
+                            get(carDetails, 'engine.volume.short') ? 
                             get(carDetails, 'engine.volume.short').toFixed(1) +
-                            ' л. ' +
+                            ' л. ' : '' +
                             engineName
                           }
                         />

@@ -722,6 +722,7 @@ export default {
     or: 'или',
     all: 'Все',
     cancel: 'Отмена',
+    reset: 'Сброс',
     choose: 'Выбрать',
   },
   CarParams: {

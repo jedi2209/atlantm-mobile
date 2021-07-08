@@ -1,12 +1,11 @@
-import React, {useState, useReducer, useEffect} from 'react';
-import {View, StyleSheet, Text, Platform, TouchableHighlight} from 'react-native';
+import React, {useReducer, useEffect} from 'react';
+import {View, StyleSheet, Text, TouchableHighlight} from 'react-native';
+import RNBounceable from "@freakycoder/react-native-bounceable";
 import {CheckBox} from 'native-base';
+import Imager from '../../core/components/Imager';
 import {get} from 'lodash';
 
 import PropTypes from 'prop-types';
-
-import Imager from '../../core/components/Imager';
-
 import styleConst from '../../core/style-const';
 
 const reducer = (state = [], action) => {
@@ -19,10 +18,23 @@ const reducer = (state = [], action) => {
     return state;
 }
 
-const def = [];
+const excludeValFromSelect = list => {
+    if (!list) {
+        return [];
+    }
+    let tmp = [];
+    Object.keys(list).map(val => {
+        tmp.push(list[val].value);
+    });
+    return tmp;
+};
 
 const CheckboxList = ({items, selectedItems, type, dataExtra, onPressCallback}) => {
-    const [selected, dispatchSelected] = useReducer(reducer, def);
+    let def = excludeValFromSelect(selectedItems);
+
+    console.log('selectedItems', def, selectedItems);
+
+    // const [selected, dispatchSelected] = useReducer(reducer, def);
     const forceUpdate = useReducer(bool => !bool)[1];
 
     let itemsArr = {};
@@ -30,13 +42,20 @@ const CheckboxList = ({items, selectedItems, type, dataExtra, onPressCallback}) 
         itemsArr[item.value] = item.label;
     });
 
-    useEffect(() => {
-        let res = [];
-        selected.map(val => {
-            res.push({label: itemsArr[val], value: val});
+    const _onSelect = val => {
+        Object.keys(val).map(item => {
+            onPressCallback({label: itemsArr[val[item]], value: val[item]});
         });
-        onPressCallback(res);
-    }, [selected.length]);
+    };
+
+    // useEffect(() => {
+    //     let res = [];
+    //     selected.map(val => {
+    //         res.push({label: itemsArr[val], value: val});
+    //     });
+    //     console.log('res', selected, res, selectedItems);
+    //     onPressCallback(res);
+    // }, [def.length]);
 
     return (
         <View>
@@ -45,10 +64,11 @@ const CheckboxList = ({items, selectedItems, type, dataExtra, onPressCallback}) 
             const id = Number(val.value);
             return (
                 <TouchableHighlight
-                    onPressOut={() => {
-                        dispatchSelected({id});
+                    onPress={() => {
+                        _onSelect({id});
                         forceUpdate();
                     }}
+                    key={'checkboxWrapper' + id}
                     activeOpacity={.7}
                     underlayColor={styleConst.color.white}>
                     <View style={styles.row}>
@@ -65,11 +85,14 @@ const CheckboxList = ({items, selectedItems, type, dataExtra, onPressCallback}) 
                         </View>
                         ) : null}
                         <View style={styles.wrapper}>
-                            <Text style={styles.text}>{text}</Text>
+                            <RNBounceable onPress={() => {_onSelect({id}); forceUpdate();}}>
+                                <Text style={styles.text}>{text}</Text>
+                            </RNBounceable>
                             <CheckBox
-                                checked={selected.includes(id) ? true : false}
+                                color={styleConst.color.blue}
+                                checked={def.includes(id) ? true : false}
                                 onPress={() => {
-                                    dispatchSelected({id});
+                                    _onSelect({id});
                                     forceUpdate();
                                 }}
                             />
@@ -96,6 +119,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 17,
         fontFamily: styleConst.font.regular,
+        color: styleConst.color.greyText6,
     },
     colorBoxWrapper: {
         marginRight: 15,
