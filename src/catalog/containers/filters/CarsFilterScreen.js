@@ -28,7 +28,7 @@ import ModalViewFilter from '../../components/ModalViewFilter';
 import {Picker} from '@react-native-picker/picker';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import BrandLogo from '../../../core/components/BrandLogo';
-import CheckboxList from '../../components/CheckboxList';
+import CheckboxList from '../../../core/components/CheckboxList';
 
 import styleConst from '../../../core/style-const';
 // redux
