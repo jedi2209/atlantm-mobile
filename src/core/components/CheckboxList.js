@@ -1,22 +1,12 @@
-import React, {useReducer, useEffect} from 'react';
+import React, {useReducer} from 'react';
 import {View, StyleSheet, Text, TouchableHighlight} from 'react-native';
 import RNBounceable from "@freakycoder/react-native-bounceable";
 import {CheckBox} from 'native-base';
-import Imager from '../../core/components/Imager';
+import Imager from './Imager';
 import {get} from 'lodash';
 
 import PropTypes from 'prop-types';
-import styleConst from '../../core/style-const';
-
-const reducer = (state = [], action) => {
-    const idTmp = Number(action.id);
-    if (state.includes(idTmp)) {
-        state.splice(state.indexOf(idTmp), 1);
-    } else {
-        state.push(idTmp);
-    }
-    return state;
-}
+import styleConst from '../style-const';
 
 const excludeValFromSelect = list => {
     if (!list) {
@@ -31,10 +21,6 @@ const excludeValFromSelect = list => {
 
 const CheckboxList = ({items, selectedItems, type, dataExtra, onPressCallback}) => {
     let def = excludeValFromSelect(selectedItems);
-
-    console.log('selectedItems', def, selectedItems);
-
-    // const [selected, dispatchSelected] = useReducer(reducer, def);
     const forceUpdate = useReducer(bool => !bool)[1];
 
     let itemsArr = {};
@@ -47,15 +33,6 @@ const CheckboxList = ({items, selectedItems, type, dataExtra, onPressCallback}) 
             onPressCallback({label: itemsArr[val[item]], value: val[item]});
         });
     };
-
-    // useEffect(() => {
-    //     let res = [];
-    //     selected.map(val => {
-    //         res.push({label: itemsArr[val], value: val});
-    //     });
-    //     console.log('res', selected, res, selectedItems);
-    //     onPressCallback(res);
-    // }, [def.length]);
 
     return (
         <View>
