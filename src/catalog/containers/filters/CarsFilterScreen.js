@@ -23,7 +23,8 @@ import {
 } from 'native-base';
 import NestedListView, {NestedRow} from 'react-native-nested-listview'
 
-import ModalView from '../../../core/components/ModalView';
+import RNBounceable from "@freakycoder/react-native-bounceable";
+import ModalViewFilter from '../../components/ModalViewFilter';
 import {Picker} from '@react-native-picker/picker';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import BrandLogo from '../../../core/components/BrandLogo';
@@ -77,6 +78,7 @@ const initialStateFilters = {
   breakInsurance: false,
   fullServiceHistory: false,
   onlineOrder: false,
+  enginetypeType: [],
   'price-special': false,
 };
 
@@ -237,6 +239,8 @@ const CarsFilterScreen = ({
     initialStateFilters,
   );
 
+  console.log('stateFilters', stateFilters);
+
   const [brandFilter, setBrandFilter] = useReducer(
     reducerBrandFilter,
     {},
@@ -291,6 +295,29 @@ const CarsFilterScreen = ({
       });
       return dispatchFilters(data);
     } else {
+      if (typeof stateFilters[field] === 'undefined') {
+        let tmp = [];
+        tmp.push(value);
+        value = tmp;
+      } else {
+        if (value && value.value) {
+          let currentFilterState = stateFilters[field];
+          let tmp = {};
+          const selected = Object.values(currentFilterState).find(obj => {
+            return obj.value == value.value;
+          });
+          if (!selected) {
+            currentFilterState.push(value);
+          } else {
+            currentFilterState.map((toDelete, i) => {
+              if (toDelete.value === value.value) {
+                currentFilterState.splice(i, 1);
+              }
+            });
+          }
+          value = currentFilterState;
+        }
+      }
       return dispatchFilters({name: field, value});
     }
   };
@@ -682,115 +709,118 @@ const CarsFilterScreen = ({
           {stockType === 'Used' && dataFilters && dataFilters.data ? (
             <Card noShadow style={[styles.row]}>
               {dataFilters && dataFilters.data.year ? (
-                <CardItem
-                  button
-                  onPress={() => {
-                    _showHideModal(true, modals.year);
-                  }}
-                  style={styles.cardItem}>
-                  <View style={styles.fieldCaptionWrapper}>
-                    <Text style={styles.fieldTitle}>
-                      {strings.CarsFilterScreen.filters.year.title}
-                    </Text>
-                    <View style={styles.fieldCaptionValues}>
-                      <Text style={styles.fieldValues}>
-                        от{' '}
-                        {get(
-                          stateFilters,
-                          'year[from]',
-                          dataFilters?.data?.year?.min,
-                        )}
+                <CardItem style={styles.cardItem}>
+                  <RNBounceable
+                    style={styles.bounceRow}
+                    onPress={() => {
+                      _showHideModal(true, modals.year);
+                    }}>
+                    <View style={styles.fieldCaptionWrapper}>
+                      <Text style={styles.fieldTitle}>
+                        {strings.CarsFilterScreen.filters.year.title}
                       </Text>
-                      <Text style={styles.fieldValues}>
-                        до{' '}
-                        {get(
-                          stateFilters,
-                          'year[to]',
-                          dataFilters?.data?.year?.max,
-                        )}
-                      </Text>
+                      <View style={styles.fieldCaptionValues}>
+                        <Text style={styles.fieldValues}>
+                          от{' '}
+                          {get(
+                            stateFilters,
+                            'year[from]',
+                            dataFilters?.data?.year?.min,
+                          )}
+                        </Text>
+                        <Text style={styles.fieldValues}>
+                          до{' '}
+                          {get(
+                            stateFilters,
+                            'year[to]',
+                            dataFilters?.data?.year?.max,
+                          )}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                  <Right>
-                    <Icon name="calendar" />
-                  </Right>
+                    <Right>
+                      <Icon name="calendar" />
+                    </Right>
+                  </RNBounceable>
                 </CardItem>
               ) : null}
               {dataFilters && dataFilters.data.mileage ? (
-                <CardItem
-                  button
-                  onPress={() => {
-                    _showHideModal(true, modals.mileage);
-                  }}
-                  style={styles.cardItem}>
-                  <View style={styles.fieldCaptionWrapper}>
-                    <Text style={styles.fieldTitle}>
-                      {strings.CarsFilterScreen.filters.mileage.title}
-                    </Text>
-                    <View style={styles.fieldCaptionValues}>
-                      <Text style={styles.fieldValues}>
-                        от{' '}
-                        {numberWithGap(
-                          get(
-                            stateFilters,
-                            'mileage[from]',
-                            dataFilters.data.mileage.min,
-                          ),
-                        )}
+                <CardItem style={styles.cardItem}>
+                  <RNBounceable
+                    style={styles.bounceRow}
+                    onPress={() => {
+                      _showHideModal(true, modals.mileage);
+                    }}>
+                    <View style={styles.fieldCaptionWrapper}>
+                      <Text style={styles.fieldTitle}>
+                        {strings.CarsFilterScreen.filters.mileage.title}
                       </Text>
-                      <Text style={styles.fieldValues}>
-                        до{' '}
-                        {numberWithGap(
-                          get(
-                            stateFilters,
-                            'mileage[to]',
-                            dataFilters.data.mileage.max,
-                          ),
-                        )}
-                      </Text>
+                      <View style={styles.fieldCaptionValues}>
+                        <Text style={styles.fieldValues}>
+                          от{' '}
+                          {numberWithGap(
+                            get(
+                              stateFilters,
+                              'mileage[from]',
+                              dataFilters.data.mileage.min,
+                            ),
+                          )}
+                        </Text>
+                        <Text style={styles.fieldValues}>
+                          до{' '}
+                          {numberWithGap(
+                            get(
+                              stateFilters,
+                              'mileage[to]',
+                              dataFilters.data.mileage.max,
+                            ),
+                          )}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                  <Right>
-                    <Icon name="speedometer" />
-                  </Right>
+                    <Right>
+                      <Icon name="speedometer" />
+                    </Right>
+                  </RNBounceable>
                 </CardItem>
               ) : null}
             </Card>
           ) : null}
           <Card noShadow style={[styles.row]}>
             {dataFilters && dataFilters.prices ? (
-              <CardItem
-                button
-                onPress={() => {
-                  _showHideModal(true, modals.price);
-                }}
-                style={styles.cardItem}>
-                <View style={styles.fieldCaptionWrapper}>
-                  <Text style={styles.fieldTitle}>
-                    {strings.CarsFilterScreen.filters.price.title}
-                  </Text>
-                  <View style={styles.fieldCaptionValues}>
-                    <Text style={styles.fieldValues}>
-                      {strings.CarsFilterScreen.filters.year.from}{' '}
-                      {numberWithGap(
-                        get(
-                          stateFilters,
-                          'price[from]',
-                          dataFilters.prices.min,
-                        ),
-                      )}
+              <CardItem style={styles.cardItem}>
+                <RNBounceable
+                  style={styles.bounceRow}
+                  onPress={() => {
+                    _showHideModal(true, modals.price);
+                  }}>
+                  <View style={styles.fieldCaptionWrapper}>
+                    <Text style={styles.fieldTitle}>
+                      {strings.CarsFilterScreen.filters.price.title}
                     </Text>
-                    <Text style={styles.fieldValues}>
-                    {strings.CarsFilterScreen.filters.year.to}{' '}
-                      {numberWithGap(
-                        get(stateFilters, 'price[to]', dataFilters.prices.max),
-                      )}
-                    </Text>
+                    <View style={styles.fieldCaptionValues}>
+                      <Text style={styles.fieldValues}>
+                        {strings.CarsFilterScreen.filters.year.from}{' '}
+                        {numberWithGap(
+                          get(
+                            stateFilters,
+                            'price[from]',
+                            dataFilters.prices.min,
+                          ),
+                        )}
+                      </Text>
+                      <Text style={styles.fieldValues}>
+                      {strings.CarsFilterScreen.filters.year.to}{' '}
+                        {numberWithGap(
+                          get(stateFilters, 'price[to]', dataFilters.prices.max),
+                        )}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-                <Right>
-                  <Icon name="pricetag" />
-                </Right>
+                  <Right>
+                    <Icon name="pricetag" />
+                  </Right>
+                </RNBounceable>
               </CardItem>
             ) : null}
             {/* НДС */}
@@ -848,189 +878,196 @@ const CarsFilterScreen = ({
             noShadow
             style={[styles.row, stockType !== 'Used' && dealerSelected.region !== 'by' ? styles.rowLast : null]}>
             {dataFilters && dataFilters.data.gearbox ? (
-              <CardItem
-                button
-                onPress={() => {
-                  _showHideModal(true, modals.gearbox);
-                }}
-                style={styles.cardItem}>
-                <View style={styles.fieldCaptionWrapper}>
-                  <Text style={styles.fieldTitle}>
-                    {strings.CarsFilterScreen.filters.gearbox.title}
-                  </Text>
-                  <View style={styles.fieldCaptionValues}>
-                    <Text style={styles.fieldValueOne}>
-                      {_getSelectedLabels(get(stateFilters, 'gearboxType'))}
+              <CardItem style={styles.cardItem}>
+                <RNBounceable
+                  style={styles.bounceRow}
+                  onPress={() => {
+                    _showHideModal(true, modals.gearbox);
+                  }}>
+                  <View style={styles.fieldCaptionWrapper}>
+                    <Text style={styles.fieldTitle}>
+                      {strings.CarsFilterScreen.filters.gearbox.title}
                     </Text>
+                    <View style={styles.fieldCaptionValues}>
+                      <Text style={styles.fieldValueOne}>
+                        {_getSelectedLabels(get(stateFilters, 'gearboxType'))}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-                <Right>
-                  <Icon
-                    type={'MaterialCommunityIcons'}
-                    name="car-shift-pattern"
-                  />
-                </Right>
+                  <Right>
+                    <Icon
+                      type={'MaterialCommunityIcons'}
+                      name="car-shift-pattern"
+                    />
+                  </Right>
+                </RNBounceable>
               </CardItem>
             ) : null}
             {dataFilters && dataFilters.data.body ? (
-              <CardItem
-                button
-                onPress={() => {
-                  _showHideModal(true, modals.body);
-                }}
-                style={styles.cardItem}>
-                <View style={styles.fieldCaptionWrapper}>
-                  <Text style={styles.fieldTitle}>
-                    {strings.CarsFilterScreen.filters.body.title}
-                  </Text>
-                  <View style={styles.fieldCaptionValues}>
-                    <Text style={styles.fieldValueOne}>
-                      {_getSelectedLabels(get(stateFilters, 'bodyType'))}
+              <CardItem style={styles.cardItem}>
+                <RNBounceable
+                  style={styles.bounceRow}
+                  onPress={() => {
+                    _showHideModal(true, modals.body);
+                  }}>
+                  <View style={styles.fieldCaptionWrapper}>
+                    <Text style={styles.fieldTitle}>
+                      {strings.CarsFilterScreen.filters.body.title}
                     </Text>
+                    <View style={styles.fieldCaptionValues}>
+                      <Text style={styles.fieldValueOne}>
+                        {_getSelectedLabels(get(stateFilters, 'bodyType'))}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-                <Right>
-                  <Icon
-                    type={'MaterialCommunityIcons'}
-                    name="car-convertible"
-                  />
-                </Right>
+                  <Right>
+                    <Icon
+                      type={'MaterialCommunityIcons'}
+                      name="car-convertible"
+                    />
+                  </Right>
+                </RNBounceable>
               </CardItem>
             ) : null}
             {dataFilters && dataFilters.data.enginetype ? (
-              <CardItem
-                button
-                onPress={() => {
-                  _showHideModal(true, modals.enginetype);
-                }}
-                style={styles.cardItem}>
-                <View style={styles.fieldCaptionWrapper}>
-                  <Text style={styles.fieldTitle}>
-                    {strings.CarsFilterScreen.filters.enginetype.title}
-                  </Text>
-                  <View style={styles.fieldCaptionValues}>
-                    <Text style={styles.fieldValueOne}>
-                      {_getSelectedLabels(get(stateFilters, 'enginetypeType'))}
+              <CardItem style={styles.cardItem}>
+                <RNBounceable
+                  style={styles.bounceRow}
+                  onPress={() => {
+                    _showHideModal(true, modals.enginetype);
+                  }}>
+                  <View style={styles.fieldCaptionWrapper}>
+                    <Text style={styles.fieldTitle}>
+                      {strings.CarsFilterScreen.filters.enginetype.title}
                     </Text>
+                    <View style={styles.fieldCaptionValues}>
+                      <Text style={styles.fieldValueOne}>
+                        {_getSelectedLabels(get(stateFilters, 'enginetypeType'))}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-                <Right>
-                  <Icon type={'MaterialCommunityIcons'} name="engine" />
-                </Right>
+                  <Right>
+                    <Icon type={'MaterialCommunityIcons'} name="engine" />
+                  </Right>
+                </RNBounceable>
               </CardItem>
             ) : null}
             {dataFilters && dataFilters.data.engineVolume ? (
-              <CardItem
-                button
-                onPress={() => {
-                  _showHideModal(true, modals.engineVolume);
-                }}
-                style={styles.cardItem}>
-                <View style={styles.fieldCaptionWrapper}>
-                  <Text style={styles.fieldTitle}>
-                    {strings.CarsFilterScreen.filters.engineVolume.title}
-                  </Text>
-                  <View style={styles.fieldCaptionValues}>
-                    <Text style={styles.fieldValues}>
-                      от{' '}
-                      {get(
-                        stateFilters,
-                        'engineVolumeShort[from]',
-                        dataFilters.data.engineVolume.short.min.toFixed(1),
-                      )}
+              <CardItem style={styles.cardItem}>
+                <RNBounceable
+                  style={styles.bounceRow}
+                  onPress={() => {
+                    _showHideModal(true, modals.engineVolume);
+                  }}>
+                  <View style={styles.fieldCaptionWrapper}>
+                    <Text style={styles.fieldTitle}>
+                      {strings.CarsFilterScreen.filters.engineVolume.title}
                     </Text>
-                    <Text style={styles.fieldValues}>
-                      до{' '}
-                      {get(
-                        stateFilters,
-                        'engineVolumeShort[to]',
-                        dataFilters.data.engineVolume.short.max.toFixed(1),
-                      )}
-                    </Text>
+                    <View style={styles.fieldCaptionValues}>
+                      <Text style={styles.fieldValues}>
+                        от{' '}
+                        {get(
+                          stateFilters,
+                          'engineVolumeShort[from]',
+                          dataFilters.data.engineVolume.short.min.toFixed(1),
+                        )}
+                      </Text>
+                      <Text style={styles.fieldValues}>
+                        до{' '}
+                        {get(
+                          stateFilters,
+                          'engineVolumeShort[to]',
+                          dataFilters.data.engineVolume.short.max.toFixed(1),
+                        )}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-                <Right>
-                  <Icon type={'MaterialCommunityIcons'} name="gauge" />
-                </Right>
+                  <Right>
+                    <Icon type={'MaterialCommunityIcons'} name="gauge" />
+                  </Right>
+                </RNBounceable>
               </CardItem>
             ) : null}
             {dataFilters && dataFilters.data.power ? (
-              <CardItem
-                button
-                onPress={() => {
-                  _showHideModal(true, modals.power);
-                }}
-                style={styles.cardItem}>
-                <View style={styles.fieldCaptionWrapper}>
-                  <Text style={styles.fieldTitle}>
-                    {strings.CarsFilterScreen.filters.power.title}
-                  </Text>
-                  <View style={styles.fieldCaptionValues}>
-                    <Text style={styles.fieldValues}>
-                      от{' '}
-                      {get(
-                        stateFilters,
-                        'power_from',
-                        dataFilters.data.power.min,
-                      )}
+              <CardItem style={styles.cardItem}>
+                <RNBounceable
+                  style={styles.bounceRow}
+                  onPress={() => {
+                    _showHideModal(true, modals.power);
+                  }}>
+                  <View style={styles.fieldCaptionWrapper}>
+                    <Text style={styles.fieldTitle}>
+                      {strings.CarsFilterScreen.filters.power.title}
                     </Text>
-                    <Text style={styles.fieldValues}>
-                      до{' '}
-                      {get(
-                        stateFilters,
-                        'power_to',
-                        dataFilters.data.power.max,
-                      )}
-                    </Text>
+                    <View style={styles.fieldCaptionValues}>
+                      <Text style={styles.fieldValues}>
+                        от{' '}
+                        {get(
+                          stateFilters,
+                          'power_from',
+                          dataFilters.data.power.min,
+                        )}
+                      </Text>
+                      <Text style={styles.fieldValues}>
+                        до{' '}
+                        {get(
+                          stateFilters,
+                          'power_to',
+                          dataFilters.data.power.max,
+                        )}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-                <Right>
-                  <Icon type={'SimpleLineIcons'} name="speedometer" />
-                </Right>
+                  <Right>
+                    <Icon type={'SimpleLineIcons'} name="speedometer" />
+                  </Right>
+                </RNBounceable>
               </CardItem>
             ) : null}
             {dataFilters && dataFilters.data.drive ? (
-              <CardItem
-                button
-                onPress={() => {
-                  _showHideModal(true, modals.drive);
-                }}
-                style={styles.cardItem}>
-                <View style={styles.fieldCaptionWrapper}>
-                  <Text style={styles.fieldTitle}>
-                    {strings.CarsFilterScreen.filters.drive.title}
-                  </Text>
-                  <View style={styles.fieldCaptionValues}>
-                    <Text style={styles.fieldValueOne}>
-                      {_getSelectedLabels(get(stateFilters, 'driveType'))}
+              <CardItem style={styles.cardItem}>
+                <RNBounceable
+                  style={styles.bounceRow}
+                  onPress={() => {
+                    _showHideModal(true, modals.drive);
+                  }}>
+                  <View style={styles.fieldCaptionWrapper}>
+                    <Text style={styles.fieldTitle}>
+                      {strings.CarsFilterScreen.filters.drive.title}
                     </Text>
+                    <View style={styles.fieldCaptionValues}>
+                      <Text style={styles.fieldValueOne}>
+                        {_getSelectedLabels(get(stateFilters, 'driveType'))}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-                <Right>
-                  <Icon type={'MaterialCommunityIcons'} name="car-settings" />
-                </Right>
+                  <Right>
+                    <Icon type={'MaterialCommunityIcons'} name="car-settings" />
+                  </Right>
+                </RNBounceable>
               </CardItem>
             ) : null}
             {stockType != 'Used' && dataFilters && dataFilters.data.colors ? (
-              <CardItem
-                button
-                onPress={() => {
-                  _showHideModal(true, modals.colors);
-                }}
-                style={styles.cardItem}>
-                <View style={styles.fieldCaptionWrapper}>
-                  <Text style={styles.fieldTitle}>
-                    {strings.CarsFilterScreen.filters.colors.title}
-                  </Text>
-                  <View style={styles.fieldCaptionValues}>
-                    <Text style={styles.fieldValueOne}>
-                      {_getSelectedLabels(get(stateFilters, 'colorType'))}
+              <CardItem style={styles.cardItem}>
+                <RNBounceable
+                  style={styles.bounceRow}
+                  onPress={() => {
+                    _showHideModal(true, modals.colors);
+                  }}>
+                  <View style={styles.fieldCaptionWrapper}>
+                    <Text style={styles.fieldTitle}>
+                      {strings.CarsFilterScreen.filters.colors.title}
                     </Text>
+                    <View style={styles.fieldCaptionValues}>
+                      <Text style={styles.fieldValueOne}>
+                        {_getSelectedLabels(get(stateFilters, 'colorType'))}
+                      </Text>
+                    </View>
                   </View>
-                </View>
-                <Right>
-                  <Icon type={'Ionicons'} name="md-color-palette-outline" />
-                </Right>
+                  <Right>
+                    <Icon type={'Ionicons'} name="md-color-palette-outline" />
+                  </Right>
+                </RNBounceable>
               </CardItem>
             ) : null}
           </Card>
@@ -1136,23 +1173,17 @@ const CarsFilterScreen = ({
 
           {/* Модалка Бренд+Модель */}
           {dataFilters.data.brand ? (
-            <ModalView
+            <ModalViewFilter
               isModalVisible={showModal === modals.brandModels}
               onHide={() => _showHideModal(false)}
+              onReset={() => _onChangeFilter({
+                'modelFilter': {},
+                'brandFilter': {}
+              })}
               onSwipeComplete={null}
-              stylesWrapper={{
-                justifyContent: 'flex-start',
-              }}
-              stylesWrapperContent={{
-                height: '90%',
-                justifyContent: 'flex-start',
-              }}
               title={strings.CarsFilterScreen.chooseBrandModel.title2}
+              titleRowView={styles.modalTitleRow}
               type={'bottom'}
-              confirmBtnText={strings.Base.choose}
-              modalButtonTextStyle={styles.modalButtonTextStyle}
-              titleTextStyle={styles.modalTitleTextStyle}
-              stylesWrapper={styles.modalStylesWrapper}
               selfClosed={false}>
               <NestedListView
                 data={accordionModels}
@@ -1160,19 +1191,19 @@ const CarsFilterScreen = ({
                 onNodePressed={(node) => _onNestedNodePress(node)}
                 renderNode={(node, level, isLastLevel) => _renderNodeNested(node, level, isLastLevel)}
               />
-            </ModalView>
+            </ModalViewFilter>
           ) : null}
           {/* Модалка Год выпуска */}
           {dataFilters.data.year ? (
-            <ModalView
+            <ModalViewFilter
               isModalVisible={showModal === modals.year}
               onHide={() => _showHideModal(false)}
+              onReset={() => _onChangeFilter({
+                'year[from]': dataFilters?.data?.year?.min,
+                'year[to]': dataFilters?.data?.year?.max,
+              })}
               title={strings.CarsFilterScreen.filters.year.title}
               type={'bottom'}
-              confirmBtnText={strings.Base.choose}
-              stylesWrapper={styles.modalStylesWrapper}
-              modalButtonTextStyle={styles.modalButtonTextStyle}
-              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
               <View style={styles.yearWrapper}>
                 <View style={styles.pickerWrapper}>
@@ -1183,13 +1214,14 @@ const CarsFilterScreen = ({
                       'year[from]',
                       dataFilters?.data?.year?.min,
                     )}
+                    key={'yearPickerFrom'}
                     style={styles.pickerStyle}
                     onValueChange={(itemValue, itemIndex) =>
                       _onChangeFilter('year[from]', itemValue)
                     }>
                     {yearItems.map(item => {
                       return (
-                        <Picker.Item label={item.label} value={item.value} />
+                        <Picker.Item key={'yearPickerItemFrom' + item.value} label={item.label} value={item.value} />
                       );
                     })}
                   </Picker>
@@ -1202,31 +1234,32 @@ const CarsFilterScreen = ({
                       'year[to]',
                       dataFilters?.data?.year?.max,
                     )}
+                    key={'yearPickerTo'}
                     style={styles.pickerStyle}
                     onValueChange={(itemValue, itemIndex) =>
                       _onChangeFilter('year[to]', itemValue)
                     }>
                     {yearItems.map(item => {
                       return (
-                        <Picker.Item label={item.label} value={item.value} />
+                        <Picker.Item key={'yearPickerItemTo' + item.value} label={item.label} value={item.value} />
                       );
                     })}
                   </Picker>
                 </View>
               </View>
-            </ModalView>
+            </ModalViewFilter>
           ) : null}
           {/* Модалка Пробег */}
           {dataFilters.data.mileage ? (
-            <ModalView
+            <ModalViewFilter
               isModalVisible={showModal === modals.mileage}
               onHide={() => _showHideModal(false)}
+              onReset={() => _onChangeFilter({
+                'mileage[from]': dataFilters?.data?.mileage?.min,
+                'mileage[to]': dataFilters?.data?.mileage?.max,
+              })}
               title={strings.CarsFilterScreen.filters.mileage.title}
               type={'bottom'}
-              confirmBtnText={strings.Base.choose}
-              stylesWrapper={styles.modalStylesWrapper}
-              modalButtonTextStyle={styles.modalButtonTextStyle}
-              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
               <View style={styles.multiSliderViewWrapper}>
                 <MultiSlider
@@ -1276,19 +1309,19 @@ const CarsFilterScreen = ({
                   </Text>
                 </View>
               </View>
-            </ModalView>
+            </ModalViewFilter>
           ) : null}
           {/* Модалка Цена */}
           {dataFilters.prices ? (
-            <ModalView
+            <ModalViewFilter
               isModalVisible={showModal === modals.price}
               onHide={() => _showHideModal(false)}
+              onReset={() => _onChangeFilter({
+                'price[from]': dataFilters?.prices?.min,
+                'price[to]': dataFilters?.prices?.max,
+              })}
               title={strings.CarsFilterScreen.filters.price.title}
               type={'bottom'}
-              confirmBtnText={strings.Base.choose}
-              stylesWrapper={styles.modalStylesWrapper}
-              modalButtonTextStyle={styles.modalButtonTextStyle}
-              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
               <View style={styles.multiSliderViewWrapper}>
                 <MultiSlider
@@ -1334,41 +1367,37 @@ const CarsFilterScreen = ({
                   </Text>
                 </View>
               </View>
-            </ModalView>
+            </ModalViewFilter>
           ) : null}
           {/* Модалка Коробка передач */}
           {dataFilters.data.gearbox ? (
-            <ModalView
+            <ModalViewFilter
               isModalVisible={showModal === modals.gearbox}
               onHide={() => _showHideModal(false)}
+              onReset={() => _onChangeFilter('gearboxType', [])}
               title={strings.CarsFilterScreen.filters.gearbox.title}
               type={'bottom'}
-              confirmBtnText={strings.Base.choose}
-              stylesWrapper={styles.modalStylesWrapper}
-              modalButtonTextStyle={styles.modalButtonTextStyle}
-              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
               <View
                 style={styles.selectMultipleWrapper}>
                 <CheckboxList
                   items={dataFilters?.data?.gearbox}
                   selectedItems={get(stateFilters, 'gearboxType')}
-                  onPressCallback={(selectedAll) => {_onChangeFilter('gearboxType', selectedAll)}}
+                  onPressCallback={({value, label}) => {
+                    _onChangeFilter('gearboxType', {value, label})
+                  }}
                 />
               </View>
-            </ModalView>
+            </ModalViewFilter>
           ) : null}
           {/* Модалка Кузов */}
           {dataFilters.data.body ? (
-            <ModalView
+            <ModalViewFilter
               isModalVisible={showModal === modals.body}
               onHide={() => _showHideModal(false)}
+              onReset={() => _onChangeFilter('bodyType', [])}
               title={strings.CarsFilterScreen.filters.body.title}
               type={'bottom'}
-              confirmBtnText={strings.Base.choose}
-              stylesWrapper={styles.modalStylesWrapper}
-              modalButtonTextStyle={styles.modalButtonTextStyle}
-              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
               <View
                 style={styles.selectMultipleWrapper}>
@@ -1377,44 +1406,50 @@ const CarsFilterScreen = ({
                   selectedItems={get(stateFilters, 'bodyType')}
                   dataExtra={bodys}
                   type={'body'}
-                  onPressCallback={(selectedAll) => {_onChangeFilter('bodyType', selectedAll)}}
+                  onPressCallback={({value, label}) => {_onChangeFilter('bodyType', {value, label})}}
                 />
               </View>
-            </ModalView>
+            </ModalViewFilter>
           ) : null}
           {/* Модалка Тип двигателя */}
           {dataFilters.data.enginetype ? (
-            <ModalView
+            <ModalViewFilter
               isModalVisible={showModal === modals.enginetype}
               onHide={() => _showHideModal(false)}
+              onReset={() => _onChangeFilter('enginetypeType', [])}
               title={strings.CarsFilterScreen.filters.enginetype.title}
               type={'bottom'}
-              confirmBtnText={strings.Base.choose}
-              stylesWrapper={styles.modalStylesWrapper}
-              modalButtonTextStyle={styles.modalButtonTextStyle}
-              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
               <View
                 style={styles.selectMultipleWrapper}>
                 <CheckboxList
                   items={dataFilters?.data?.enginetype}
-                  selectedItems={get(stateFilters, 'enginetypeType')}
-                  onPressCallback={(selectedAll) => {_onChangeFilter('enginetypeType', selectedAll)}}
+                  selectedItems={() => {
+                    const selectedItems = get(stateFilters, 'enginetypeType', false);
+                    if (selectedItems) {
+                      let tmp = [];
+                      selectedItems.map(item => {
+                        tmp.push(item.value);
+                      });
+                      return tmp;
+                    }
+                  }}
+                  onPressCallback={({value, label}) => {_onChangeFilter('enginetypeType', {value, label})}}
                 />
               </View>
-            </ModalView>
+            </ModalViewFilter>
           ) : null}
           {/* Модалка Объём двигателя */}
           {dataFilters.data.engineVolume ? (
-            <ModalView
+            <ModalViewFilter
               isModalVisible={showModal === modals.engineVolume}
               onHide={() => _showHideModal(false)}
+              onReset={() => _onChangeFilter({
+                'engineVolumeShort[from]': dataFilters?.data?.engineVolume?.short?.min,
+                'engineVolumeShort[to]': dataFilters?.data?.engineVolume?.short?.max,
+              })}
               title={strings.CarsFilterScreen.filters.engineVolume.title}
               type={'bottom'}
-              confirmBtnText={strings.Base.choose}
-              stylesWrapper={styles.modalStylesWrapper}
-              modalButtonTextStyle={styles.modalButtonTextStyle}
-              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
               <View style={styles.multiSliderViewWrapper}>
                 <MultiSlider
@@ -1432,9 +1467,7 @@ const CarsFilterScreen = ({
                   sliderLength={sliderWidth}
                   onValuesChange={values => {
                     _onChangeFilter({
-                      'engineVolumeShort[from]': parseFloat(values[0]).toFixed(
-                        1,
-                      ),
+                      'engineVolumeShort[from]': parseFloat(values[0]).toFixed(1),
                       'engineVolumeShort[to]': parseFloat(values[1]).toFixed(1),
                     });
                   }}
@@ -1462,19 +1495,19 @@ const CarsFilterScreen = ({
                   </Text>
                 </View>
               </View>
-            </ModalView>
+            </ModalViewFilter>
           ) : null}
           {/* Модалка Мощность */}
           {dataFilters.data.power ? (
-            <ModalView
+            <ModalViewFilter
               isModalVisible={showModal === modals.power}
               onHide={() => _showHideModal(false)}
+              onReset={() => _onChangeFilter({
+                power_from: dataFilters?.data?.power?.min,
+                power_to: dataFilters?.data?.power?.max,
+              })}
               title={strings.CarsFilterScreen.filters.power.title}
               type={'bottom'}
-              confirmBtnText={strings.Base.choose}
-              stylesWrapper={styles.modalStylesWrapper}
-              modalButtonTextStyle={styles.modalButtonTextStyle}
-              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
               <View style={styles.multiSliderViewWrapper}>
                 <MultiSlider
@@ -1512,35 +1545,33 @@ const CarsFilterScreen = ({
                   </Text>
                 </View>
               </View>
-            </ModalView>
+            </ModalViewFilter>
           ) : null}
           {/* Модалка Привод */}
           {dataFilters.data.drive ? (
-            <ModalView
+            <ModalViewFilter
               isModalVisible={showModal === modals.drive}
               onHide={() => _showHideModal(false)}
+              onReset={() => _onChangeFilter('driveType', [])}
               title={strings.CarsFilterScreen.filters.drive.title}
               type={'bottom'}
-              confirmBtnText={strings.Base.choose}
-              stylesWrapper={styles.modalStylesWrapper}
-              modalButtonTextStyle={styles.modalButtonTextStyle}
-              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={true}>
               <View
                 style={styles.selectMultipleWrapper}>
                 <CheckboxList
                   items={dataFilters?.data?.drive}
                   selectedItems={get(stateFilters, 'driveType')}
-                  onPressCallback={(selectedAll) => {_onChangeFilter('driveType', selectedAll)}}
+                  onPressCallback={({value, label}) => {_onChangeFilter('driveType', {value, label})}}
                 />
               </View>
-            </ModalView>
+            </ModalViewFilter>
           ) : null}
           {/* Модалка Цвета */}
           {dataFilters.data.colors ? (
-            <ModalView
+            <ModalViewFilter
               isModalVisible={showModal === modals.colors}
               onHide={() => _showHideModal(false)}
+              onReset={() => _onChangeFilter('colorType', [])}
               onSwipeComplete={null}
               stylesWrapperContent={{
                 height: dataFilters?.data?.colors.length > 10 ? '83%' : 'auto',
@@ -1548,10 +1579,6 @@ const CarsFilterScreen = ({
               }}
               title={strings.CarsFilterScreen.filters.colors.title}
               type={'bottom'}
-              confirmBtnText={strings.Base.choose}
-              stylesWrapper={styles.modalStylesWrapper}
-              modalButtonTextStyle={styles.modalButtonTextStyle}
-              titleTextStyle={styles.modalTitleTextStyle}
               selfClosed={false}>
               <View
                 style={styles.selectMultipleColorsWrapper}>
@@ -1560,10 +1587,10 @@ const CarsFilterScreen = ({
                   type={'colors'}
                   dataExtra={colors}
                   selectedItems={get(stateFilters, 'colorType')}
-                  onPressCallback={(selectedAll) => {_onChangeFilter('colorType', selectedAll)}}
+                  onPressCallback={({value, label}) => {_onChangeFilter('colorType', {value, label})}}
                 />
               </View>
-            </ModalView>
+            </ModalViewFilter>
           ) : null}
         </Content>
       ) : !stockLoading ? (
@@ -1628,6 +1655,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: '5%',
     paddingVertical: 10,
     zIndex: 10,
+  },
+  bounceRow: {
+    flexDirection: 'row',
   },
   nestedRow: {
 
@@ -1827,15 +1857,9 @@ const styles = StyleSheet.create({
     padding: 0,
     color: styleConst.color.systemGray,
   },
-  modalStylesWrapper: {
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-  },
-  modalButtonTextStyle: {
-    fontSize: 18,
-  },
-  modalTitleTextStyle: {
-    marginLeft: 10,
+  modalTitleRow: {
+    marginLeft: 5,
+    marginTop: 20,
   },
   yearWrapper: {
     flexDirection: 'row',
