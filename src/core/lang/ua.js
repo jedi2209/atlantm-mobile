@@ -721,7 +721,7 @@ export default {
     or: 'чи',
     all: 'Всі',
     cancel: 'Скасувати',
-    reset: 'Сброс',
+    reset: 'Очистити',
     choose: 'Вибрати',
   },
   CarParams: {

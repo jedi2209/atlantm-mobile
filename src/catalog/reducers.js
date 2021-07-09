@@ -5,6 +5,7 @@ import {
   USED_CAR_LIST__SUCCESS,
   USED_CAR_LIST__FAIL,
   USED_CAR_CITY__SELECT,
+  USED_CAR_FILTER_DATA__SUCCESS,
   USED_CAR_DETAILS__REQUEST,
   USED_CAR_DETAILS__SUCCESS,
   USED_CAR_DETAILS__FAIL,
@@ -19,16 +20,6 @@ import {
   NEW_CAR_BY_FILTER__REQUEST,
   NEW_CAR_BY_FILTER__SUCCESS,
   NEW_CAR_BY_FILTER__FAIL,
-  NEW_CAR_FILTER_BRANDS__SELECT,
-  NEW_CAR_FILTER_MODELS__SELECT,
-  NEW_CAR_FILTER_BODY__SELECT,
-  NEW_CAR_FILTER_GEARBOX__SELECT,
-  NEW_CAR_FILTER_ENGINE_TYPE__SELECT,
-  NEW_CAR_FILTER_DRIVE__SELECT,
-  NEW_CAR_FILTER_PRICE__SELECT,
-  NEW_CAR_FILTER_PRICE__SHOW,
-  NEW_CAR_FILTER_PRICE__HIDE,
-  NEW_CAR_FILTER_PRICE_SPECIAL__SET,
   NEW_CAR_DETAILS__REQUEST,
   NEW_CAR_DETAILS__SUCCESS,
   NEW_CAR_DETAILS__FAIL,
@@ -277,7 +268,7 @@ const newCarFilterData = (state = null, action) => {
     case NEW_CAR_FILTER_DATA__REQUEST:
       return null;
     case NEW_CAR_FILTER_DATA__SUCCESS:
-      return action.payload;
+      return action.payload.data;
     default:
       return state;
   }
@@ -319,121 +310,8 @@ const newCarCity = (state = null, action) => {
   }
 };
 
-const newCarFilterBrands = (state = [], action) => {
-  switch (action.type) {
-    case NEW_CAR_CITY__SELECT:
-      return [];
-    case NEW_CAR_FILTER_BRANDS__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const newCarFilterModels = (state = [], action) => {
-  switch (action.type) {
-    case NEW_CAR_CITY__SELECT:
-      return [];
-    case NEW_CAR_FILTER_BRANDS__SELECT:
-      return state.filter(item => {
-        return action.payload.includes(item.brandId);
-      });
-    case NEW_CAR_FILTER_MODELS__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const newCarFilterPriceSpecial = (state = false, action) => {
-  switch (action.type) {
-    case NEW_CAR_CITY__SELECT:
-      return false;
-    case NEW_CAR_FILTER_PRICE_SPECIAL__SET:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const newCarFilterBody = (state = [], action) => {
-  switch (action.type) {
-    case NEW_CAR_CITY__SELECT:
-      return [];
-    case NEW_CAR_FILTER_BODY__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const newCarFilterGearbox = (state = [], action) => {
-  switch (action.type) {
-    case NEW_CAR_CITY__SELECT:
-      return [];
-    case NEW_CAR_FILTER_GEARBOX__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const newCarFilterEngineType = (state = [], action) => {
-  switch (action.type) {
-    case NEW_CAR_CITY__SELECT:
-      return [];
-    case NEW_CAR_FILTER_ENGINE_TYPE__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const newCarFilterDrive = (state = [], action) => {
-  switch (action.type) {
-    case NEW_CAR_CITY__SELECT:
-      return [];
-    case NEW_CAR_FILTER_DRIVE__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const newCarFilterPrice = (state = null, action) => {
-  switch (action.type) {
-    case NEW_CAR_CITY__SELECT:
-      return null;
-    case NEW_CAR_FILTER_PRICE__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const isNewCarFilterPriceShow = (state = false, action) => {
-  switch (action.type) {
-    case REHYDRATE:
-      return false;
-    case NEW_CAR_FILTER_PRICE__HIDE:
-      return false;
-    case NEW_CAR_FILTER_PRICE__SHOW:
-      return true;
-    default:
-      return state;
-  }
-};
-
 const needFetchFilterData = (state = false, action) => {
   switch (action.type) {
-    case NEW_CAR_FILTER_BRANDS__SELECT:
-    case NEW_CAR_FILTER_MODELS__SELECT:
-    case NEW_CAR_FILTER_BODY__SELECT:
-    case NEW_CAR_FILTER_GEARBOX__SELECT:
-    case NEW_CAR_FILTER_ENGINE_TYPE__SELECT:
-    case NEW_CAR_FILTER_DRIVE__SELECT:
-    case NEW_CAR_FILTER_PRICE__SELECT:
-    case NEW_CAR_FILTER_PRICE_SPECIAL__SET:
     case ACTION_SAVE_CAR_FILTERS__UPDATE:
       return true;
     case NEW_CAR_FILTER_DATA__REQUEST:
@@ -573,15 +451,15 @@ const newCarFilters = (
 
 const usedCarFilters = (state = {}, action) => {
   switch (action.type) {
+    case CAR_FILTERS__UPDATE:
     case 'ACTION_SAVE_CAR_FILTERS_USED__UPDATE':
       return action.payload;
     case DEALER__SUCCESS:
     case USED_CAR_CITY__SELECT:
-      return {
-        priceFilter: {},
-      };
+      return {};
     case USED_CAR_LIST__REQUEST:
-      return action.payload;
+    case USED_CAR_FILTER_DATA__SUCCESS:
+      return action.payload.data;
     default:
       return state;
   }
@@ -637,28 +515,18 @@ export default combineReducers({
       photoViewerVisible: newCarPhotoViewerVisible,
       photoViewerIndex: newCarPhotoViewerIndex,
     }),
-    filterBrands: newCarFilterBrands,
-    filterModels: newCarFilterModels,
-    filterBody: newCarFilterBody,
-    filterGearbox: newCarFilterGearbox,
-    filterDrive: newCarFilterDrive,
-    filterEngineType: newCarFilterEngineType,
-    filterPrice: newCarFilterPrice,
-    filterPriceSpecial: newCarFilterPriceSpecial,
-    filterData: newCarFilterData,
     items: newCarByFilter,
     city: newCarCity,
     meta: combineReducers({
       needFetchFilterData,
       needFetchFilterDataAfterCity,
       isFetchingFilterData,
-      isNewCarFilterPriceShow,
       isFetchingNewCarByFilter,
       isFetchingCarDetails: isFetchingNewCarDetails,
       isFetchingTDCarDetails: isFetchingTDCarDetails,
     }),
     filters: combineReducers({
-      data: filtersData,
+      data: newCarFilterData,
     }),
   }),
 

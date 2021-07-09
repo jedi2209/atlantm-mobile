@@ -17,8 +17,9 @@ const ModalViewFilter = props => {
         isVisible={props.isModalVisible}
         onBackButtonPress={props.onHide}
         onBackdropPress={props.selfClosed ? props.onHide : null}
-        swipeDirection={['down']}
-        onSwipeComplete={props.onHide}
+        swipeDirection={props.selfClosed ? ['down'] : []}
+        onSwipeComplete={props.selfClosed ? props.onHide : null}
+        selfClosed={props.selfClosed}
         {...props}>
         <View
             style={[styles.modalWindow, styleConst.shadow.default, props?.stylesWrapper]}>
@@ -108,9 +109,9 @@ const ModalViewFilter = props => {
         borderRadius: 0,
     },
     modalButtonText: {
-        color: styleConst.color.red,
+        color: styleConst.color.blue,
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: '600',
     },
     modalButtonTextCancel: {
         color: styleConst.color.systemGray,
@@ -121,6 +122,7 @@ const ModalViewFilter = props => {
 
   ModalViewFilter.defaultProps = {
     isModalVisible: false,
+    selfClosed: true,
   }
   
   export default ModalViewFilter;

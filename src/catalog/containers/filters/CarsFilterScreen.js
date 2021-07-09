@@ -152,6 +152,9 @@ const reducerFilters = (state = initialStateFilters, field) => {
 };
 
 const reducerBrandFilter = (state = {}, action) => {
+  if (action.type && action.type === 'clear') {
+    return {};
+  }
   if (state[action.id]) {
     delete(state[action.id]);
   } else {
@@ -179,6 +182,10 @@ const reducerModelFilter = (state = {}, action) => {
       } else {
         state[action.id] = action.id;
       }
+      break;
+    case 'clear':
+      state = {};
+      break;
   }
   return state;
 }
@@ -214,6 +221,32 @@ const _getSelectedModels = (selectedModels, models) => {
   </View>);
 };
 
+const _makeFilterData = (field, value) => {
+  if (typeof field === 'undefined') {
+    let tmp = [];
+    tmp.push(value);
+    value = tmp;
+  } else {
+    if (value && value.value) {
+      let currentFilterState = field;
+      const selected = Object.values(currentFilterState).find(obj => {
+        return obj.value == value.value;
+      });
+      if (!selected) {
+        currentFilterState.push(value);
+      } else {
+        currentFilterState.map((toDelete, i) => {
+          if (toDelete.value === value.value) {
+            currentFilterState.splice(i, 1);
+          }
+        });
+      }
+      value = currentFilterState;
+    }
+  }
+  return value;
+};
+
 const CarsFilterScreen = ({
   navigation,
   route,
@@ -226,7 +259,7 @@ const CarsFilterScreen = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [updateFromApi, setUpdateFromApi] = useState(0);
+  const [updateFromApi, setUpdateFromApi] = useState(true);
   const [stockLoading, setStockLoading] = useState(true);
   const [totalCars, setTotalCars] = useState(null);
   const [stockType, setStockType] = useState(
@@ -238,8 +271,6 @@ const CarsFilterScreen = ({
     reducerFilters,
     initialStateFilters,
   );
-
-  console.log('stateFilters', stateFilters);
 
   const [brandFilter, setBrandFilter] = useReducer(
     reducerBrandFilter,
@@ -256,6 +287,8 @@ const CarsFilterScreen = ({
   const [accordionModels, setAccordion] = useState({});
 
   const [dataFilters, setDataFilters] = useState(null);
+
+  console.log('stateFilters', stateFilters, nestedListUpdate);
 
   const _showHideSubmitButton = show => {
     if (show) {
@@ -281,10 +314,11 @@ const CarsFilterScreen = ({
 
   const _showHideModal = (show = false, type) => {
     if (!show) {
-      setUpdateFromApi(updateFromApi + 1);
-      return setShowModal(null);
+      setShowModal(null);
+      setUpdateFromApi(!updateFromApi);
+    } else {
+      setShowModal(type);
     }
-    return setShowModal(type);
   };
 
   const _onChangeFilter = (field, value) => {
@@ -293,32 +327,9 @@ const CarsFilterScreen = ({
       Object.keys(field).map(val => {
         data.push({name: val, value: field[val]});
       });
-      return dispatchFilters(data);
+      dispatchFilters(data);
     } else {
-      if (typeof stateFilters[field] === 'undefined') {
-        let tmp = [];
-        tmp.push(value);
-        value = tmp;
-      } else {
-        if (value && value.value) {
-          let currentFilterState = stateFilters[field];
-          let tmp = {};
-          const selected = Object.values(currentFilterState).find(obj => {
-            return obj.value == value.value;
-          });
-          if (!selected) {
-            currentFilterState.push(value);
-          } else {
-            currentFilterState.map((toDelete, i) => {
-              if (toDelete.value === value.value) {
-                currentFilterState.splice(i, 1);
-              }
-            });
-          }
-          value = currentFilterState;
-        }
-      }
-      return dispatchFilters({name: field, value});
+      dispatchFilters({name: field, value});
     }
   };
 
@@ -539,8 +550,10 @@ const CarsFilterScreen = ({
                   }
                   setModelFilter({items: node?.items, type: typeTmp});
                   setBrandFilter({id: node.id});
-                  _onChangeFilter('brandFilter', brandFilter);
-                  _onChangeFilter('modelFilter', modelFilter);
+                  _onChangeFilter({
+                    'brandFilter': brandFilter,
+                    'modelFilter': modelFilter,
+                  });
                   setUpdateNestedList(!nestedListUpdate);
                 }}
                 checked={brandFilter && brandFilter[node.id] ? true : false} />
@@ -721,7 +734,7 @@ const CarsFilterScreen = ({
                       </Text>
                       <View style={styles.fieldCaptionValues}>
                         <Text style={styles.fieldValues}>
-                          от{' '}
+                          {strings.CarsFilterScreen.filters.year.from}{' '}
                           {get(
                             stateFilters,
                             'year[from]',
@@ -729,7 +742,7 @@ const CarsFilterScreen = ({
                           )}
                         </Text>
                         <Text style={styles.fieldValues}>
-                          до{' '}
+                          {strings.CarsFilterScreen.filters.year.to}{' '}
                           {get(
                             stateFilters,
                             'year[to]',
@@ -757,7 +770,7 @@ const CarsFilterScreen = ({
                       </Text>
                       <View style={styles.fieldCaptionValues}>
                         <Text style={styles.fieldValues}>
-                          от{' '}
+                          {strings.CarsFilterScreen.filters.year.from}{' '}
                           {numberWithGap(
                             get(
                               stateFilters,
@@ -767,7 +780,7 @@ const CarsFilterScreen = ({
                           )}
                         </Text>
                         <Text style={styles.fieldValues}>
-                          до{' '}
+                        {strings.CarsFilterScreen.filters.year.to}{' '}
                           {numberWithGap(
                             get(
                               stateFilters,
@@ -827,10 +840,7 @@ const CarsFilterScreen = ({
             {stockType === 'Used' ? (
               <CardItem
                 button
-                onPress={() => {
-                  _onChangeFilter('nds', !stateFilters.nds);
-                  setUpdateFromApi(updateFromApi + 1);
-                }}
+                onPress={() => _onChangeFilter('nds', !stateFilters.nds)}
                 style={styles.cardItem}>
                 <Text style={styles.fieldTitle}>
                   {strings.CarsFilterScreen.filters.price.nds}
@@ -838,10 +848,7 @@ const CarsFilterScreen = ({
                 <Right>
                   <CheckBox
                     checked={get(stateFilters, 'nds', false)}
-                    onPress={() => {
-                      _onChangeFilter('nds', !stateFilters.nds);
-                      setUpdateFromApi(updateFromApi + 1);
-                    }}
+                    onPress={() => _onChangeFilter('nds', !stateFilters.nds)}
                   />
                 </Right>
               </CardItem>
@@ -849,13 +856,7 @@ const CarsFilterScreen = ({
             {/* Спец.цена */}
             <CardItem
               button
-              onPress={() => {
-                _onChangeFilter(
-                  'price-special',
-                  !stateFilters['price-special'],
-                );
-                setUpdateFromApi(updateFromApi + 1);
-              }}
+              onPress={() => _onChangeFilter('price-special', !stateFilters['price-special'])}
               style={styles.cardItem}>
               <Text style={styles.fieldTitle}>
                 {strings.CarsFilterScreen.filters.price.special}
@@ -863,13 +864,7 @@ const CarsFilterScreen = ({
               <Right>
                 <CheckBox
                   checked={get(stateFilters, 'price-special', false)}
-                  onPress={() => {
-                    _onChangeFilter(
-                      'price-special',
-                      !stateFilters['price-special'],
-                    );
-                    setUpdateFromApi(updateFromApi + 1);
-                  }}
+                  onPress={() => _onChangeFilter('price-special', !stateFilters['price-special'])}
                 />
               </Right>
             </CardItem>
@@ -965,7 +960,7 @@ const CarsFilterScreen = ({
                     </Text>
                     <View style={styles.fieldCaptionValues}>
                       <Text style={styles.fieldValues}>
-                        от{' '}
+                        {strings.CarsFilterScreen.filters.year.from}{' '}
                         {get(
                           stateFilters,
                           'engineVolumeShort[from]',
@@ -973,7 +968,7 @@ const CarsFilterScreen = ({
                         )}
                       </Text>
                       <Text style={styles.fieldValues}>
-                        до{' '}
+                        {strings.CarsFilterScreen.filters.year.to}{' '}
                         {get(
                           stateFilters,
                           'engineVolumeShort[to]',
@@ -1001,7 +996,7 @@ const CarsFilterScreen = ({
                     </Text>
                     <View style={styles.fieldCaptionValues}>
                       <Text style={styles.fieldValues}>
-                        от{' '}
+                        {strings.CarsFilterScreen.filters.year.from}{' '}
                         {get(
                           stateFilters,
                           'power_from',
@@ -1009,7 +1004,7 @@ const CarsFilterScreen = ({
                         )}
                       </Text>
                       <Text style={styles.fieldValues}>
-                        до{' '}
+                        {strings.CarsFilterScreen.filters.year.to}{' '}
                         {get(
                           stateFilters,
                           'power_to',
@@ -1075,10 +1070,7 @@ const CarsFilterScreen = ({
             <Card noShadow style={[styles.row, styles.rowLast]}>
               <CardItem
                 button
-                onPress={() => {
-                  _onChangeFilter('guarantee', !stateFilters.guarantee);
-                  setUpdateFromApi(updateFromApi + 1);
-                }}
+                onPress={() => _onChangeFilter('guarantee', !stateFilters.guarantee)}
                 style={styles.cardItem}>
                 <Text style={styles.fieldTitle}>
                   {strings.CarsFilterScreen.filters.guarantee.title}
@@ -1086,22 +1078,13 @@ const CarsFilterScreen = ({
                 <Right>
                   <CheckBox
                     checked={get(stateFilters, 'guarantee', false)}
-                    onPress={() => {
-                      _onChangeFilter('guarantee', !stateFilters.guarantee);
-                      setUpdateFromApi(updateFromApi + 1);
-                    }}
+                    onPress={() => _onChangeFilter('guarantee', !stateFilters.guarantee)}
                   />
                 </Right>
               </CardItem>
               <CardItem
                 button
-                onPress={() => {
-                  _onChangeFilter(
-                    'breakInsurance',
-                    !stateFilters.breakInsurance,
-                  );
-                  setUpdateFromApi(updateFromApi + 1);
-                }}
+                onPress={() => _onChangeFilter('breakInsurance', !stateFilters.breakInsurance)}
                 style={styles.cardItem}>
                 <Text style={styles.fieldTitle}>
                   {strings.CarsFilterScreen.filters.breakInsurance.title}
@@ -1109,25 +1092,13 @@ const CarsFilterScreen = ({
                 <Right>
                   <CheckBox
                     checked={get(stateFilters, 'breakInsurance', false)}
-                    onPress={() => {
-                      _onChangeFilter(
-                        'breakInsurance',
-                        !stateFilters.breakInsurance,
-                      );
-                      setUpdateFromApi(updateFromApi + 1);
-                    }}
+                    onPress={() => _onChangeFilter('breakInsurance', !stateFilters.breakInsurance)}
                   />
                 </Right>
               </CardItem>
               <CardItem
                 button
-                onPress={() => {
-                  _onChangeFilter(
-                    'fullServiceHistory',
-                    !stateFilters.fullServiceHistory,
-                  );
-                  setUpdateFromApi(updateFromApi + 1);
-                }}
+                onPress={() => _onChangeFilter('fullServiceHistory', !stateFilters.fullServiceHistory)}
                 style={styles.cardItem}>
                 <Text style={styles.fieldTitle}>
                   {strings.CarsFilterScreen.filters.fullServiceHistory.title}
@@ -1135,13 +1106,7 @@ const CarsFilterScreen = ({
                 <Right>
                   <CheckBox
                     checked={get(stateFilters, 'fullServiceHistory', false)}
-                    onPress={() => {
-                      _onChangeFilter(
-                        'fullServiceHistory',
-                        !stateFilters.fullServiceHistory,
-                      );
-                      setUpdateFromApi(updateFromApi + 1);
-                    }}
+                    onPress={() => _onChangeFilter('fullServiceHistory', !stateFilters.fullServiceHistory)}
                   />
                 </Right>
               </CardItem>
@@ -1150,10 +1115,7 @@ const CarsFilterScreen = ({
               <Card noShadow style={[styles.row, styles.rowLast]}>
                 <CardItem
                   button
-                  onPress={() => {
-                    _onChangeFilter('onlineOrder', !stateFilters.onlineOrder);
-                    setUpdateFromApi(updateFromApi + 1);
-                  }}
+                  onPress={() => _onChangeFilter('onlineOrder', !stateFilters.onlineOrder)}
                   style={styles.cardItem}>
                   <Text style={styles.fieldTitle}>
                     {strings.CarsFilterScreen.filters.onlineOrder.title}
@@ -1161,10 +1123,7 @@ const CarsFilterScreen = ({
                   <Right>
                     <CheckBox
                       checked={get(stateFilters, 'onlineOrder', false)}
-                      onPress={() => {
-                        _onChangeFilter('onlineOrder', !stateFilters.onlineOrder);
-                        setUpdateFromApi(updateFromApi + 1);
-                      }}
+                      onPress={() => _onChangeFilter('onlineOrder', !stateFilters.onlineOrder)}
                     />
                   </Right>
                 </CardItem>
@@ -1176,14 +1135,14 @@ const CarsFilterScreen = ({
             <ModalViewFilter
               isModalVisible={showModal === modals.brandModels}
               onHide={() => _showHideModal(false)}
-              onReset={() => _onChangeFilter({
-                'modelFilter': {},
-                'brandFilter': {}
-              })}
-              onSwipeComplete={null}
-              title={strings.CarsFilterScreen.chooseBrandModel.title2}
+              onReset={() => {
+                _onChangeFilter({modelFilter: {}, brandFilter: {}});
+                setModelFilter({type: 'clear'});
+                setBrandFilter({type: 'clear'});
+                setUpdateNestedList(!nestedListUpdate);
+              }}
+              title={strings.CarsFilterScreen.chooseBrandModel.title}
               titleRowView={styles.modalTitleRow}
-              type={'bottom'}
               selfClosed={false}>
               <NestedListView
                 data={accordionModels}
@@ -1203,11 +1162,10 @@ const CarsFilterScreen = ({
                 'year[to]': dataFilters?.data?.year?.max,
               })}
               title={strings.CarsFilterScreen.filters.year.title}
-              type={'bottom'}
-              selfClosed={true}>
+              selfClosed={false}>
               <View style={styles.yearWrapper}>
                 <View style={styles.pickerWrapper}>
-                  <Text style={styles.pickerCaption}>от</Text>
+                  <Text style={styles.pickerCaption}>{strings.CarsFilterScreen.filters.year.from}</Text>
                   <Picker
                     selectedValue={get(
                       stateFilters,
@@ -1227,7 +1185,7 @@ const CarsFilterScreen = ({
                   </Picker>
                 </View>
                 <View style={styles.pickerWrapper}>
-                  <Text style={styles.pickerCaption}>до</Text>
+                  <Text style={styles.pickerCaption}>{strings.CarsFilterScreen.filters.year.to}</Text>
                   <Picker
                     selectedValue={get(
                       stateFilters,
@@ -1258,9 +1216,7 @@ const CarsFilterScreen = ({
                 'mileage[from]': dataFilters?.data?.mileage?.min,
                 'mileage[to]': dataFilters?.data?.mileage?.max,
               })}
-              title={strings.CarsFilterScreen.filters.mileage.title}
-              type={'bottom'}
-              selfClosed={true}>
+              title={strings.CarsFilterScreen.filters.mileage.title}>
               <View style={styles.multiSliderViewWrapper}>
                 <MultiSlider
                   values={[
@@ -1271,12 +1227,7 @@ const CarsFilterScreen = ({
                   min={dataFilters.data.mileage.min}
                   max={dataFilters.data.mileage.max}
                   sliderLength={sliderWidth}
-                  onValuesChange={values => {
-                    _onChangeFilter({
-                      'mileage[from]': values[0],
-                      'mileage[to]': values[1],
-                    });
-                  }}
+                  onValuesChange={values => _onChangeFilter({'mileage[from]': values[0], 'mileage[to]': values[1]})}
                   trackStyle={styles.multiSliderTrackStyle}
                   selectedStyle={styles.multiSliderSelectedStyle}
                   customMarker={() => (
@@ -1321,8 +1272,7 @@ const CarsFilterScreen = ({
                 'price[to]': dataFilters?.prices?.max,
               })}
               title={strings.CarsFilterScreen.filters.price.title}
-              type={'bottom'}
-              selfClosed={true}>
+              selfClosed={false}>
               <View style={styles.multiSliderViewWrapper}>
                 <MultiSlider
                   values={[
@@ -1333,12 +1283,7 @@ const CarsFilterScreen = ({
                   min={dataFilters.prices.min}
                   max={dataFilters.prices.max}
                   sliderLength={sliderWidth}
-                  onValuesChange={values => {
-                    _onChangeFilter({
-                      'price[from]': values[0],
-                      'price[to]': values[1],
-                    });
-                  }}
+                  onValuesChange={values => _onChangeFilter({'price[from]': values[0], 'price[to]': values[1]})}
                   trackStyle={styles.multiSliderTrackStyle}
                   selectedStyle={styles.multiSliderSelectedStyle}
                   customMarker={() => (
@@ -1375,17 +1320,15 @@ const CarsFilterScreen = ({
               isModalVisible={showModal === modals.gearbox}
               onHide={() => _showHideModal(false)}
               onReset={() => _onChangeFilter('gearboxType', [])}
-              title={strings.CarsFilterScreen.filters.gearbox.title}
-              type={'bottom'}
-              selfClosed={true}>
+              title={strings.CarsFilterScreen.filters.gearbox.title}>
               <View
                 style={styles.selectMultipleWrapper}>
                 <CheckboxList
                   items={dataFilters?.data?.gearbox}
                   selectedItems={get(stateFilters, 'gearboxType')}
-                  onPressCallback={({value, label}) => {
-                    _onChangeFilter('gearboxType', {value, label})
-                  }}
+                  onPressCallback={({value, label}) => 
+                    _onChangeFilter('gearboxType', _makeFilterData(stateFilters['gearboxType'], {value, label}))
+                  }
                 />
               </View>
             </ModalViewFilter>
@@ -1396,9 +1339,7 @@ const CarsFilterScreen = ({
               isModalVisible={showModal === modals.body}
               onHide={() => _showHideModal(false)}
               onReset={() => _onChangeFilter('bodyType', [])}
-              title={strings.CarsFilterScreen.filters.body.title}
-              type={'bottom'}
-              selfClosed={true}>
+              title={strings.CarsFilterScreen.filters.body.title}>
               <View
                 style={styles.selectMultipleWrapper}>
                 <CheckboxList
@@ -1406,7 +1347,9 @@ const CarsFilterScreen = ({
                   selectedItems={get(stateFilters, 'bodyType')}
                   dataExtra={bodys}
                   type={'body'}
-                  onPressCallback={({value, label}) => {_onChangeFilter('bodyType', {value, label})}}
+                  onPressCallback={({value, label}) => 
+                    _onChangeFilter('bodyType', _makeFilterData(stateFilters['bodyType'], {value, label}))
+                  }
                 />
               </View>
             </ModalViewFilter>
@@ -1417,24 +1360,15 @@ const CarsFilterScreen = ({
               isModalVisible={showModal === modals.enginetype}
               onHide={() => _showHideModal(false)}
               onReset={() => _onChangeFilter('enginetypeType', [])}
-              title={strings.CarsFilterScreen.filters.enginetype.title}
-              type={'bottom'}
-              selfClosed={true}>
+              title={strings.CarsFilterScreen.filters.enginetype.title}>
               <View
                 style={styles.selectMultipleWrapper}>
                 <CheckboxList
                   items={dataFilters?.data?.enginetype}
-                  selectedItems={() => {
-                    const selectedItems = get(stateFilters, 'enginetypeType', false);
-                    if (selectedItems) {
-                      let tmp = [];
-                      selectedItems.map(item => {
-                        tmp.push(item.value);
-                      });
-                      return tmp;
-                    }
-                  }}
-                  onPressCallback={({value, label}) => {_onChangeFilter('enginetypeType', {value, label})}}
+                  selectedItems={get(stateFilters, 'enginetypeType')}
+                  onPressCallback={({value, label}) => 
+                    _onChangeFilter('enginetypeType', _makeFilterData(stateFilters['enginetypeType'], {value, label}))
+                  }
                 />
               </View>
             </ModalViewFilter>
@@ -1448,9 +1382,7 @@ const CarsFilterScreen = ({
                 'engineVolumeShort[from]': dataFilters?.data?.engineVolume?.short?.min,
                 'engineVolumeShort[to]': dataFilters?.data?.engineVolume?.short?.max,
               })}
-              title={strings.CarsFilterScreen.filters.engineVolume.title}
-              type={'bottom'}
-              selfClosed={true}>
+              title={strings.CarsFilterScreen.filters.engineVolume.title}>
               <View style={styles.multiSliderViewWrapper}>
                 <MultiSlider
                   values={[
@@ -1465,12 +1397,12 @@ const CarsFilterScreen = ({
                   min={dataFilters.data.engineVolume.short.min}
                   max={dataFilters.data.engineVolume.short.max}
                   sliderLength={sliderWidth}
-                  onValuesChange={values => {
+                  onValuesChange={values => 
                     _onChangeFilter({
                       'engineVolumeShort[from]': parseFloat(values[0]).toFixed(1),
                       'engineVolumeShort[to]': parseFloat(values[1]).toFixed(1),
-                    });
-                  }}
+                    })
+                  }
                   trackStyle={styles.multiSliderTrackStyle}
                   selectedStyle={styles.multiSliderSelectedStyle}
                   customMarker={() => (
@@ -1506,9 +1438,7 @@ const CarsFilterScreen = ({
                 power_from: dataFilters?.data?.power?.min,
                 power_to: dataFilters?.data?.power?.max,
               })}
-              title={strings.CarsFilterScreen.filters.power.title}
-              type={'bottom'}
-              selfClosed={true}>
+              title={strings.CarsFilterScreen.filters.power.title}>
               <View style={styles.multiSliderViewWrapper}>
                 <MultiSlider
                   values={[
@@ -1519,12 +1449,12 @@ const CarsFilterScreen = ({
                   min={dataFilters.data.power.min}
                   max={dataFilters.data.power.max}
                   sliderLength={sliderWidth}
-                  onValuesChange={values => {
+                  onValuesChange={values => 
                     _onChangeFilter({
                       power_from: values[0],
                       power_to: values[1],
-                    });
-                  }}
+                    })
+                  }
                   trackStyle={styles.multiSliderTrackStyle}
                   selectedStyle={styles.multiSliderSelectedStyle}
                   customMarker={() => (
@@ -1553,15 +1483,15 @@ const CarsFilterScreen = ({
               isModalVisible={showModal === modals.drive}
               onHide={() => _showHideModal(false)}
               onReset={() => _onChangeFilter('driveType', [])}
-              title={strings.CarsFilterScreen.filters.drive.title}
-              type={'bottom'}
-              selfClosed={true}>
+              title={strings.CarsFilterScreen.filters.drive.title}>
               <View
                 style={styles.selectMultipleWrapper}>
                 <CheckboxList
                   items={dataFilters?.data?.drive}
                   selectedItems={get(stateFilters, 'driveType')}
-                  onPressCallback={({value, label}) => {_onChangeFilter('driveType', {value, label})}}
+                  onPressCallback={({value, label}) => 
+                    _onChangeFilter('driveType', _makeFilterData(stateFilters['driveType'], {value, label}))
+                  }
                 />
               </View>
             </ModalViewFilter>
@@ -1572,13 +1502,11 @@ const CarsFilterScreen = ({
               isModalVisible={showModal === modals.colors}
               onHide={() => _showHideModal(false)}
               onReset={() => _onChangeFilter('colorType', [])}
-              onSwipeComplete={null}
               stylesWrapperContent={{
                 height: dataFilters?.data?.colors.length > 10 ? '83%' : 'auto',
                 justifyContent: 'flex-end',
               }}
               title={strings.CarsFilterScreen.filters.colors.title}
-              type={'bottom'}
               selfClosed={false}>
               <View
                 style={styles.selectMultipleColorsWrapper}>
@@ -1587,7 +1515,9 @@ const CarsFilterScreen = ({
                   type={'colors'}
                   dataExtra={colors}
                   selectedItems={get(stateFilters, 'colorType')}
-                  onPressCallback={({value, label}) => {_onChangeFilter('colorType', {value, label})}}
+                  onPressCallback={({value, label}) => 
+                    _onChangeFilter('colorType', _makeFilterData(stateFilters['colorType'], {value, label}))
+                  }
                 />
               </View>
             </ModalViewFilter>
