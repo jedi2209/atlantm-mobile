@@ -19,7 +19,7 @@ const excludeValFromSelect = list => {
     return tmp;
 };
 
-const CheckboxList = ({items, selectedItems, type, dataExtra, onPressCallback}) => {
+const CheckboxList = ({items, selectedItems, type, dataExtra, onPressCallback, checkboxColor}) => {
     let def = excludeValFromSelect(selectedItems);
     const forceUpdate = useReducer(bool => !bool)[1];
 
@@ -66,7 +66,7 @@ const CheckboxList = ({items, selectedItems, type, dataExtra, onPressCallback}) 
                                 <Text style={styles.text}>{text}</Text>
                             </RNBounceable>
                             <CheckBox
-                                color={styleConst.color.blue}
+                                color={checkboxColor}
                                 checked={def.includes(id) ? true : false}
                                 onPress={() => {
                                     _onSelect({id});

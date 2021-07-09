@@ -16,7 +16,6 @@ import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRating
 
 import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
-import NewCarFilterScreen from '../catalog/newcar/containers/NewCarFilterScreen';
 
 // Filters
 import CarsFilterScreen from '../catalog/containers/filters/CarsFilterScreen';
@@ -24,7 +23,6 @@ import CarsFilterScreen from '../catalog/containers/filters/CarsFilterScreen';
 // Used Cars Catalog
 import UsedCarListScreen from '../catalog/usedcar/containers/UsedCarListScreen';
 import UsedCarItemScreen from '../catalog/usedcar/containers/UsedCarItemScreen';
-import UsedCarFilterScreen from '../catalog/usedcar/containers/UsedCarFilterScreen';
 
 import ContactsScreen from '../contacts/containers/ContactsScreen';
 import InfoListScreen from '../info/containers/InfoListScreen';
@@ -518,18 +516,6 @@ export const CarsStock = ({navigation, route}) => (
         },
       )}
     />
-    <SearchStack.Screen
-      name="NewCarFilterScreen"
-      component={NewCarFilterScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.CarsFilterScreen.title,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
 
     <StackBase.Screen
       name="UsedCarListScreen"
@@ -683,18 +669,6 @@ export const UsedCars = ({navigation, route}) => (
       name="UsedCarItemScreen"
       component={UsedCarItemScreen}
       options={TransparentBack(navigation, route)}
-    />
-    <StackCatalogUsed.Screen
-      name="UsedCarFilterScreen"
-      component={UsedCarFilterScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.CarsFilterScreen.title,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
     />
   </StackCatalogUsed.Navigator>
 );

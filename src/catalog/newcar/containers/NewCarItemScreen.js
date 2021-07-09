@@ -60,7 +60,6 @@ const mapStateToProps = ({catalog, dealer, profile, nav}) => {
     listRussia: dealer.listRussia,
     listUkraine: dealer.listUkraine,
     listBelarussia: dealer.listBelarussia,
-    filterData: catalog.newCar.filterData,
     carDetails: catalog.newCar.carDetails.data,
     profile,
     photoViewerItems: catalog.newCar.carDetails.photoViewerItems,
@@ -511,7 +510,7 @@ class NewCarItemScreen extends Component {
     );
   };
 
-  renderPrice = ({carDetails, filterData = {}, currency}) => {
+  renderPrice = ({carDetails, currency}) => {
     const isSale = carDetails.sale === true;
 
     const CarPrices = {
@@ -555,7 +554,7 @@ class NewCarItemScreen extends Component {
     );
   };
 
-  renderPriceFooter = ({carDetails, filterData, currency}) => {
+  renderPriceFooter = ({carDetails, currency}) => {
     const isSale = carDetails.sale === true;
 
     const CarPrices = {
@@ -606,7 +605,6 @@ class NewCarItemScreen extends Component {
 
   render() {
     const {
-      filterData,
       carDetails,
       photoViewerIndex,
       photoViewerItems,
@@ -783,7 +781,7 @@ class NewCarItemScreen extends Component {
                       get(carDetails, 'year')}
                   </Text>
                 </View>
-                {this.renderPrice({carDetails, filterData, currency})}
+                {this.renderPrice({carDetails, currency})}
               </View>
 
               <ScrollView
@@ -1119,7 +1117,6 @@ class NewCarItemScreen extends Component {
         <View style={[styleConst.shadow.default, stylesFooter.footer]}>
           {this.renderPriceFooter({
             carDetails,
-            filterData,
             currency,
           })}
           <View style={[stylesFooter.footerButtons]}>

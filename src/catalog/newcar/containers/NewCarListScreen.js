@@ -28,7 +28,6 @@ const mapStateToProps = ({dealer, catalog}) => {
     brands: dealer.listBrands,
     city: catalog.newCar.city,
     items: catalog.newCar.items,
-    filterData: catalog.newCar.filterData || {},
     isFetchingNewCarByFilter: catalog.newCar.meta.isFetchingNewCarByFilter,
   };
 };
@@ -50,7 +49,6 @@ const NewCarListScreen = ({
   items,
   navigation,
   route,
-  filterData,
   actionFetchNewCarByFilter,
   dealerSelected,
   isFetchingNewCarByFilter,
@@ -67,9 +65,7 @@ const NewCarListScreen = ({
 
     return actionFetchNewCarByFilter({
       type: type ? type : null,
-      searchUrl:
-        filterData.search_url ||
-        `/stock/new/cars/get/city/${dealerSelected.city.id}/`,
+      searchUrl: `/stock/new/cars/get/city/${dealerSelected.city.id}/`,
       nextPage: get(items, 'pages.next', null),
       sortBy: route?.params?.sortBy ? route.params.sortBy : sorting.sortBy,
       sortDirection: route?.params?.sortDirection
@@ -105,11 +101,7 @@ const NewCarListScreen = ({
       }
     }
 
-    const defaultSearchUrl = `/stock/new/cars/get/city/${dealerSelected.city.id}/`;
-
-    console.log('filterData', filterData);
-
-    const searchUrl = filterData.search_url || defaultSearchUrl;
+    const searchUrl = `/stock/new/cars/get/city/${dealerSelected.city.id}/`;
     Analytics.logEvent('screen', 'catalog/newcar/list', {
       search_url: searchUrl,
     });
