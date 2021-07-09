@@ -271,7 +271,6 @@ const CarsFilterScreen = ({
     reducerFilters,
     initialStateFilters,
   );
-
   const [brandFilter, setBrandFilter] = useReducer(
     reducerBrandFilter,
     {},
@@ -285,10 +284,7 @@ const CarsFilterScreen = ({
   const [colors, setColors] = useState({});
   const [bodys, setBody] = useState({});
   const [accordionModels, setAccordion] = useState({});
-
   const [dataFilters, setDataFilters] = useState(null);
-
-  console.log('stateFilters', stateFilters, nestedListUpdate);
 
   const _showHideSubmitButton = show => {
     if (show) {

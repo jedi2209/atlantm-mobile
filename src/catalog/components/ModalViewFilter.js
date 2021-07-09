@@ -1,4 +1,4 @@
-import React, {forwardRef, useRef} from 'react';
+import React from 'react';
 import {View, StyleSheet, Text, Platform} from 'react-native';
 import {Button, Icon} from 'native-base';
 import Modal from 'react-native-modal';
@@ -12,6 +12,7 @@ const ModalViewFilter = props => {
     return (
     <View onPress={props.onHide}>
         <Modal
+        statusBarTranslucent
         style={[styles.modalView, props?.stylesModal]}
         useNativeDriver={true}
         isVisible={props.isModalVisible}
@@ -34,7 +35,7 @@ const ModalViewFilter = props => {
                             type="Ionicons"
                             style={styles.closeButton}
                             name="close-outline"
-                            onPress={props.onHide}
+                            onPress={props.onHide ? props.onHide : props.onClose}
                         />
                     </Button>
                 </View>
@@ -78,7 +79,10 @@ const ModalViewFilter = props => {
         borderTopRightRadius: 20,
         backgroundColor: styleConst.color.white,
         justifyContent: 'flex-end',
-        paddingTop: 10,
+        paddingTop: isAndroid ? 0 : 10,
+    },
+    closeButtonWrapper: {
+        marginTop: isAndroid ? 15 : 0,
     },
     titleRowView: {
         flexDirection: 'row',
@@ -123,6 +127,7 @@ const ModalViewFilter = props => {
   ModalViewFilter.defaultProps = {
     isModalVisible: false,
     selfClosed: true,
+    onClose: () => {},
   }
   
   export default ModalViewFilter;
