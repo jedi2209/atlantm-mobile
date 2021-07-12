@@ -457,9 +457,10 @@ const usedCarFilters = (state = {}, action) => {
     case DEALER__SUCCESS:
     case USED_CAR_CITY__SELECT:
       return {};
-    case USED_CAR_LIST__REQUEST:
     case USED_CAR_FILTER_DATA__SUCCESS:
       return action.payload.data;
+    case USED_CAR_LIST__REQUEST:
+      return action.payload;
     default:
       return state;
   }
