@@ -4,8 +4,6 @@ import {
   USED_CAR_LIST__REQUEST,
   USED_CAR_LIST__SUCCESS,
   USED_CAR_LIST__FAIL,
-  USED_CAR_CITY__SELECT,
-  USED_CAR_FILTER_DATA__SUCCESS,
   USED_CAR_DETAILS__REQUEST,
   USED_CAR_DETAILS__SUCCESS,
   USED_CAR_DETAILS__FAIL,
@@ -14,9 +12,6 @@ import {
   USED_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
   USED_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
   NEW_CAR_CITY__SELECT,
-  NEW_CAR_FILTER_DATA__REQUEST,
-  NEW_CAR_FILTER_DATA__SUCCESS,
-  NEW_CAR_FILTER_DATA__FAIL,
   NEW_CAR_BY_FILTER__REQUEST,
   NEW_CAR_BY_FILTER__SUCCESS,
   NEW_CAR_BY_FILTER__FAIL,
@@ -44,8 +39,8 @@ import {
   CAR_COST__FAIL,
 
   // filtlers
-  ACTION_SAVE_CAR_FILTERS__UPDATE,
-  CAR_FILTERS__UPDATE,
+  SAVE_USEDCAR_FILTERS,
+  SAVE_NEWCAR_FILTERS,
 } from './actionTypes';
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
@@ -55,7 +50,6 @@ const usedCarItems = (state = [], action) => {
   switch (action.type) {
     case REHYDRATE:
     case DEALER__SUCCESS:
-    case 'ACTION_SAVE_CAR_FILTERS_USED__UPDATE':
       return [];
     case USED_CAR_LIST__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {
@@ -238,17 +232,6 @@ const usedCarPhotoViewerVisible = (state = false, action) => {
 };
 
 // newCar
-const isFetchingFilterData = (state = false, action) => {
-  switch (action.type) {
-    case NEW_CAR_FILTER_DATA__REQUEST:
-      return true;
-    case NEW_CAR_FILTER_DATA__SUCCESS:
-    case NEW_CAR_FILTER_DATA__FAIL:
-      return false;
-    default:
-      return state;
-  }
-};
 
 const isFetchingNewCarByFilter = (state = false, action) => {
   switch (action.type) {
@@ -262,25 +245,11 @@ const isFetchingNewCarByFilter = (state = false, action) => {
   }
 };
 
-const newCarFilterData = (state = null, action) => {
-  switch (action.type) {
-    case DEALER__SUCCESS:
-    case NEW_CAR_FILTER_DATA__REQUEST:
-      return null;
-    case NEW_CAR_FILTER_DATA__SUCCESS:
-      return action.payload.data;
-    default:
-      return state;
-  }
-};
-
 const newCarByFilter = (state = {}, action) => {
   switch (action.type) {
     case DEALER__SUCCESS:
       return {};
     case NEW_CAR_CITY__SELECT:
-      return {};
-    case ACTION_SAVE_CAR_FILTERS__UPDATE:
       return {};
     case NEW_CAR_BY_FILTER__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {
@@ -305,30 +274,6 @@ const newCarCity = (state = null, action) => {
       return null;
     case NEW_CAR_CITY__SELECT:
       return action.payload;
-    default:
-      return state;
-  }
-};
-
-const needFetchFilterData = (state = false, action) => {
-  switch (action.type) {
-    case ACTION_SAVE_CAR_FILTERS__UPDATE:
-      return true;
-    case NEW_CAR_FILTER_DATA__REQUEST:
-    case NEW_CAR_BY_FILTER__REQUEST:
-      return false;
-    default:
-      return state;
-  }
-};
-
-const needFetchFilterDataAfterCity = (state = false, action) => {
-  switch (action.type) {
-    case NEW_CAR_CITY__SELECT:
-      return true;
-    case NEW_CAR_FILTER_DATA__REQUEST:
-    case NEW_CAR_BY_FILTER__REQUEST:
-      return false;
     default:
       return state;
   }
@@ -427,52 +372,33 @@ const isCarCostRequest = (state = false, action) => {
   }
 };
 
-const newCarFilters = (
-  state = {
-    brandFilters: [],
-    bodyFilters: [],
-    priceFilter: {},
-  },
-  action,
-) => {
+const usedCarFiltersData = (state = {}, action) => {
   switch (action.type) {
-    case ACTION_SAVE_CAR_FILTERS__UPDATE:
-      return action.payload;
+    case REHYDRATE:
     case DEALER__SUCCESS:
+      return {};
+    case SAVE_USEDCAR_FILTERS:
       return {
-        brandFilters: [],
-        bodyFilters: [],
-        priceFilter: {},
+        filters: action?.payload?.filters || null,
+        sorting: action?.payload?.sorting || null,
+        url: action?.payload?.url || null
       };
     default:
       return state;
   }
 };
 
-const usedCarFilters = (state = {}, action) => {
+const newCarFiltersData = (state = {}, action) => {
   switch (action.type) {
-    case CAR_FILTERS__UPDATE:
-    case 'ACTION_SAVE_CAR_FILTERS_USED__UPDATE':
-      return action.payload;
+    case REHYDRATE:
     case DEALER__SUCCESS:
-    case USED_CAR_CITY__SELECT:
       return {};
-    case USED_CAR_FILTER_DATA__SUCCESS:
-      return action.payload.data;
-    case USED_CAR_LIST__REQUEST:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-const filtersData = (state = {}, action) => {
-  switch (action.type) {
-    case CAR_FILTERS__UPDATE:
-      return action.payload;
-    case DEALER__SUCCESS:
-    case USED_CAR_CITY__SELECT:
-      return {};
+    case SAVE_NEWCAR_FILTERS:
+      return {
+        filters: action?.payload?.filters || null,
+        sorting: action?.payload?.sorting || null,
+        url: action?.payload?.url || null
+      };
     default:
       return state;
   }
@@ -503,9 +429,7 @@ export default combineReducers({
       isFetchItems: isFetchUsedCarItems,
       isFetchingCarDetails: isFetchingUsedCarDetails,
     }),
-    filters: combineReducers({
-      data: usedCarFilters,
-    }),
+    filters: usedCarFiltersData,
   }),
 
   newCar: combineReducers({
@@ -519,16 +443,11 @@ export default combineReducers({
     items: newCarByFilter,
     city: newCarCity,
     meta: combineReducers({
-      needFetchFilterData,
-      needFetchFilterDataAfterCity,
-      isFetchingFilterData,
       isFetchingNewCarByFilter,
       isFetchingCarDetails: isFetchingNewCarDetails,
       isFetchingTDCarDetails: isFetchingTDCarDetails,
     }),
-    filters: combineReducers({
-      data: newCarFilterData,
-    }),
+    filters: newCarFiltersData,
   }),
 
   carCost: combineReducers({

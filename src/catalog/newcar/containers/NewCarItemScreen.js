@@ -151,6 +151,7 @@ class NewCarItemScreen extends Component {
       tabName: 'base',
     };
     this.platesScrollView = React.createRef();
+    this.colorbox = React.createRef();
   }
 
   componentDidMount() {
@@ -684,43 +685,22 @@ class NewCarItemScreen extends Component {
 
     return (
       <View testID="NewCarItemScreen.Wrapper">
-        <ScrollView>
           <StatusBar hidden />
-          <View style={{flex: 1, position: 'relative'}}>
+          <ScrollView>
             <View
-              style={{
-                position: 'absolute',
-                height: 400,
-                width: '100%',
-                zIndex: 20,
+              style={[styles.colorboxWrapper, {
                 marginTop: isCarImgReal ? -12 : -12,
-              }}>
+              }]}>
               {get(carDetails, 'color.picker.codes.hex', null) ? (
                 <ColorBox
-                  ref={input => {
-                    return (this.ColorBox = input);
-                  }}
-                  containerStyle={{
-                    position: 'absolute',
-                    right: 0,
-                    top: 280,
-                    zIndex: 1000,
-                    padding: 20,
-                  }}
+                  containerStyle={styles.colorboxContainer}
                   color={get(carDetails, 'color')}
                 />
               ) : null}
               {badge && badge.length ? (
                 <View
                   testID="NewCarItemScreen.BadgesWrapper"
-                  style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    position: 'absolute',
-                    left: 5,
-                    top: 290,
-                    zIndex: 1000,
-                  }}>
+                  style={styles.badgesView}>
                   {badge.map((item, index) => {
                     if (item.name.toLowerCase() === 'спец.цена') {
                       item.name = strings.CarList.badges.specialPrice;
@@ -752,30 +732,18 @@ class NewCarItemScreen extends Component {
             <View
               style={[
                 styleConst.shadow.light,
+                styles.carTopWrapper,
                 {
-                  position: 'relative',
                   marginTop: isCarImgReal ? 335 : 335,
-                  marginBottom: -5,
-                  backgroundColor: styleConst.color.white,
-                  borderTopLeftRadius: 30,
-                  borderTopRightRadius: 30,
-                  paddingTop: 20,
-                  paddingBottom: 14,
-                  zIndex: 30,
                 },
               ]}>
               <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  paddingHorizontal: '2%',
-                }}>
+                style={styles.modelBrandView}>
                 <View style={{marginBottom: 10, flexShrink: 1}}>
-                  <Text style={{fontSize: 16, fontWeight: '600', color: styleConst.color.greyText}}>
+                  <Text style={styles.modelBrandText}>
                     {`${brandName} ${modelName}`}
                   </Text>
-                  <Text style={{fontSize: 11, fontWeight: '600', color: styleConst.color.greyText2}}>
+                  <Text style={styles.complectationText}>
                     {get(carDetails, 'complectation.name', '') +
                       ' ' +
                       get(carDetails, 'year')}
@@ -879,11 +847,7 @@ class NewCarItemScreen extends Component {
             </View>
 
             <Accordion
-              style={{
-                borderBottomColor: '#d5d5e0',
-                borderBottomWidth: 1,
-                marginBottom: 140,
-              }}
+              style={styles.accordion}
               dataArray={[
                 {
                   title: strings.NewCarItemScreen.tech.title,
@@ -1072,18 +1036,8 @@ class NewCarItemScreen extends Component {
               renderHeader={(item, expanded) => (
                 <View
                   testID={'NewCarItemScreen.AccordionTitle_' + item.title}
-                  style={{
-                    height: 64,
-                    paddingHorizontal: '2%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    backgroundColor: styleConst.color.white,
-                    borderTopWidth: 0.75,
-                    borderColor: '#d5d5e0',
-                  }}>
-                  <Text style={{fontSize: 18, color: styleConst.color.greyText}}>{item.title}</Text>
+                  style={styles.accordionHeader}>
+                  <Text style={styles.accordionHeaderTitle}>{item.title}</Text>
                   {expanded ? (
                     <Icon
                       type="FontAwesome5"
@@ -1101,19 +1055,14 @@ class NewCarItemScreen extends Component {
               )}
               renderContent={item => {
                 return (
-                  <View
-                    style={{
-                      // height: 200,
-                      backgroundColor: styleConst.color.white,
-                      paddingHorizontal: '3%',
-                    }}>
+                  <ScrollView
+                    style={styles.accordionContent}>
                     {item.content}
-                  </View>
+                  </ScrollView>
                 );
               }}
             />
-          </View>
-        </ScrollView>
+          </ScrollView>
         <View style={[styleConst.shadow.default, stylesFooter.footer]}>
           {this.renderPriceFooter({
             carDetails,

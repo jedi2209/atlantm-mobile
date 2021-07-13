@@ -164,9 +164,8 @@ export default {
     return this.request(`/eko/rating/get/${dealerId}/`, baseRequestParams);
   },
 
-  fetchUsedCar({nextPageUrl, url}) {
+  fetchStock({nextPageUrl, url}) {
     // __DEV__ && console.log('API fetchUsedCar url', url);
-
     return this.request(nextPageUrl ? nextPageUrl : url, baseRequestParams);
   },
 
@@ -233,57 +232,6 @@ export default {
       `/lkk/cars/history/item/?userid=${userid}&token=${token}&vin=${vin}&dealer=${workDealer}&id=${workId}`,
       baseRequestParams,
     );
-  },
-
-  fetchNewCarByFilter({
-    filters,
-    searchUrl,
-    brandFilter,
-    modelFilter,
-    filterBody,
-    filterPrice,
-    sortBy,
-    sortDirection,
-    isNextPage,
-  }) {
-    if (isNextPage) {
-      return this.request(searchUrl, baseRequestParams);
-    }
-    let url = searchUrl;
-    let urlParams = [];
-    let isAmp = false;
-    const setParamDivider = () => (isAmp ? '&' : '?');
-
-    if (sortBy) {
-      urlParams.push(`sortBy=${sortBy}`);
-    }
-
-    if (sortDirection) {
-      urlParams.push(`sortDirection=${sortDirection}`);
-    }
-
-    if (filters) {
-      for (const [key, value] of Object.entries(filters)) {
-        if (value) {
-          if (typeof value === 'object') {
-            continue;
-          }
-          if (value === true) {
-            urlParams.push(`${key}=1`);
-          } else {
-            if (value !== false && value !== 'false') {
-              urlParams.push(`${key}=${value}`);
-            }
-          }
-        }
-      }
-    }
-
-    url = url + '?' + urlParams.join('&');
-
-    __DEV__ && console.log('API fetchNewCarByFilter url', url);
-
-    return this.request(url, baseRequestParams);
   },
 
   callMe(props) {

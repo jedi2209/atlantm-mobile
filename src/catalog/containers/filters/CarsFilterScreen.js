@@ -252,6 +252,7 @@ const CarsFilterScreen = ({
   route,
   dealerSelected,
   stockTypeDefault,
+  updateFromApiDefault,
   actionFetchNewCar,
   actionFetchUsedCar,
   actionFetchNewCarFilters,
@@ -259,7 +260,7 @@ const CarsFilterScreen = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [updateFromApi, setUpdateFromApi] = useState(true);
+  const [updateFromApi, setUpdateFromApi] = useState(updateFromApiDefault);
   const [stockLoading, setStockLoading] = useState(true);
   const [totalCars, setTotalCars] = useState(null);
   const [stockType, setStockType] = useState(
@@ -285,6 +286,8 @@ const CarsFilterScreen = ({
   const [bodys, setBody] = useState({});
   const [accordionModels, setAccordion] = useState({});
   const [dataFilters, setDataFilters] = useState(null);
+
+  const firstUpdate = useRef(true);
 
   const _showHideSubmitButton = show => {
     if (show) {
@@ -409,6 +412,8 @@ const CarsFilterScreen = ({
           } else {
             setDataFilters(null);
           }
+          setModelFilter({type: 'clear'});
+          setBrandFilter({type: 'clear'});
           _showHideSubmitButton(true);
         });
         break;
@@ -490,6 +495,8 @@ const CarsFilterScreen = ({
           } else {
             setDataFilters(null);
           }
+          setModelFilter({type: 'clear'});
+          setBrandFilter({type: 'clear'});
           _showHideSubmitButton(true);
         });
         break;
@@ -578,10 +585,24 @@ const CarsFilterScreen = ({
   const _onSubmitButtonPress = () => {
     switch (stockType) {
       case 'New':
-        navigation.navigate('NewCarListScreen', {total: totalCars, itemsLength: totalCars});
+        navigation.navigate('NewCarListScreen', 
+        {
+          screen: 'NewCarListScreen',
+          total: {
+            count: totalCars
+          },
+        });
         break;
       case 'Used':
-        navigation.navigate('UsedCarListScreen', {total: totalCars, itemsLength: totalCars});
+        navigation.navigate('UsedCarListScreen', 
+        {
+          screen: 'UsedCarListScreen',
+          params: {
+            total: {
+              count: totalCars
+            }
+          },
+        });
         break;
     }
   };
@@ -591,6 +612,10 @@ const CarsFilterScreen = ({
   }, [stockType]);
 
   useEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
     _showHideSubmitButton(false);
     let filtersLocal = {};
     Object.assign(filtersLocal, stateFilters);
@@ -647,7 +672,7 @@ const CarsFilterScreen = ({
       case 'New':
         actionFetchNewCar({
           filters: filtersLocal,
-          searchUrl: `/stock/new/cars/get/city/${dealerSelected.city.id}/`,
+          city: dealerSelected.city.id,
         }).then(res => {
           setTotalCars(res.payload.total.count);
           _showHideSubmitButton(true);
@@ -836,7 +861,7 @@ const CarsFilterScreen = ({
             {stockType === 'Used' ? (
               <CardItem
                 button
-                onPress={() => _onChangeFilter('nds', !stateFilters.nds)}
+                onPress={() => {_onChangeFilter('nds', !stateFilters.nds); setUpdateFromApi(!updateFromApi);}}
                 style={styles.cardItem}>
                 <Text style={styles.fieldTitle}>
                   {strings.CarsFilterScreen.filters.price.nds}
@@ -844,7 +869,7 @@ const CarsFilterScreen = ({
                 <Right>
                   <CheckBox
                     checked={get(stateFilters, 'nds', false)}
-                    onPress={() => _onChangeFilter('nds', !stateFilters.nds)}
+                    onPress={() => {_onChangeFilter('nds', !stateFilters.nds); setUpdateFromApi(!updateFromApi);}}
                   />
                 </Right>
               </CardItem>
@@ -852,7 +877,7 @@ const CarsFilterScreen = ({
             {/* Спец.цена */}
             <CardItem
               button
-              onPress={() => _onChangeFilter('price-special', !stateFilters['price-special'])}
+              onPress={() => {_onChangeFilter('price-special', !stateFilters['price-special']); setUpdateFromApi(!updateFromApi);}}
               style={styles.cardItem}>
               <Text style={styles.fieldTitle}>
                 {strings.CarsFilterScreen.filters.price.special}
@@ -860,7 +885,7 @@ const CarsFilterScreen = ({
               <Right>
                 <CheckBox
                   checked={get(stateFilters, 'price-special', false)}
-                  onPress={() => _onChangeFilter('price-special', !stateFilters['price-special'])}
+                  onPress={() => {_onChangeFilter('price-special', !stateFilters['price-special']); setUpdateFromApi(!updateFromApi);}}
                 />
               </Right>
             </CardItem>
@@ -1066,7 +1091,7 @@ const CarsFilterScreen = ({
             <Card noShadow style={[styles.row, styles.rowLast]}>
               <CardItem
                 button
-                onPress={() => _onChangeFilter('guarantee', !stateFilters.guarantee)}
+                onPress={() => {_onChangeFilter('guarantee', !stateFilters.guarantee); setUpdateFromApi(!updateFromApi);}}
                 style={styles.cardItem}>
                 <Text style={styles.fieldTitle}>
                   {strings.CarsFilterScreen.filters.guarantee.title}
@@ -1074,13 +1099,13 @@ const CarsFilterScreen = ({
                 <Right>
                   <CheckBox
                     checked={get(stateFilters, 'guarantee', false)}
-                    onPress={() => _onChangeFilter('guarantee', !stateFilters.guarantee)}
+                    onPress={() => {_onChangeFilter('guarantee', !stateFilters.guarantee); setUpdateFromApi(!updateFromApi);}}
                   />
                 </Right>
               </CardItem>
               <CardItem
                 button
-                onPress={() => _onChangeFilter('breakInsurance', !stateFilters.breakInsurance)}
+                onPress={() => {_onChangeFilter('breakInsurance', !stateFilters.breakInsurance); setUpdateFromApi(!updateFromApi);}}
                 style={styles.cardItem}>
                 <Text style={styles.fieldTitle}>
                   {strings.CarsFilterScreen.filters.breakInsurance.title}
@@ -1088,13 +1113,13 @@ const CarsFilterScreen = ({
                 <Right>
                   <CheckBox
                     checked={get(stateFilters, 'breakInsurance', false)}
-                    onPress={() => _onChangeFilter('breakInsurance', !stateFilters.breakInsurance)}
+                    onPress={() => {_onChangeFilter('breakInsurance', !stateFilters.breakInsurance); setUpdateFromApi(!updateFromApi);}}
                   />
                 </Right>
               </CardItem>
               <CardItem
                 button
-                onPress={() => _onChangeFilter('fullServiceHistory', !stateFilters.fullServiceHistory)}
+                onPress={() => {_onChangeFilter('fullServiceHistory', !stateFilters.fullServiceHistory); setUpdateFromApi(!updateFromApi);}}
                 style={styles.cardItem}>
                 <Text style={styles.fieldTitle}>
                   {strings.CarsFilterScreen.filters.fullServiceHistory.title}
@@ -1102,7 +1127,7 @@ const CarsFilterScreen = ({
                 <Right>
                   <CheckBox
                     checked={get(stateFilters, 'fullServiceHistory', false)}
-                    onPress={() => _onChangeFilter('fullServiceHistory', !stateFilters.fullServiceHistory)}
+                    onPress={() => {_onChangeFilter('fullServiceHistory', !stateFilters.fullServiceHistory); setUpdateFromApi(!updateFromApi);}}
                   />
                 </Right>
               </CardItem>
@@ -1111,7 +1136,7 @@ const CarsFilterScreen = ({
               <Card noShadow style={[styles.row, styles.rowLast]}>
                 <CardItem
                   button
-                  onPress={() => _onChangeFilter('onlineOrder', !stateFilters.onlineOrder)}
+                  onPress={() => {_onChangeFilter('onlineOrder', !stateFilters.onlineOrder); setUpdateFromApi(!updateFromApi);}}
                   style={styles.cardItem}>
                   <Text style={styles.fieldTitle}>
                     {strings.CarsFilterScreen.filters.onlineOrder.title}
@@ -1119,7 +1144,7 @@ const CarsFilterScreen = ({
                   <Right>
                     <CheckBox
                       checked={get(stateFilters, 'onlineOrder', false)}
-                      onPress={() => _onChangeFilter('onlineOrder', !stateFilters.onlineOrder)}
+                      onPress={() => {_onChangeFilter('onlineOrder', !stateFilters.onlineOrder); setUpdateFromApi(!updateFromApi);}}
                     />
                   </Right>
                 </CardItem>
@@ -1564,6 +1589,7 @@ const CarsFilterScreen = ({
 
 CarsFilterScreen.defaultProps = {
   stockTypeDefault: 'New',
+  updateFromApiDefault: false,
 };
 
 const styles = StyleSheet.create({
