@@ -21,11 +21,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingTop: 5,
     paddingBottom: 10,
+    marginLeft: 0,
   },
   city: {
     color: styleConst.color.greyText,
     fontFamily: styleConst.font.light,
     fontSize: 14,
+    marginLeft: 0,
   },
   iconCheck: {
     fontSize: 30,
@@ -35,6 +37,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#A8ABBE',
     paddingVertical: 5,
+    marginLeft: 0,
   },
   image: {
     width: '100%',
@@ -45,7 +48,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'row',
-    padding: 16,
+    padding: 15,
     backgroundColor: styleConst.color.white,
   },
   bodyView: {

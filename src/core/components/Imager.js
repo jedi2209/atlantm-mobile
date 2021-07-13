@@ -11,7 +11,6 @@ const styles = StyleSheet.create({
   loader: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: verticalScale(50),
     position: 'absolute',
     top: 0,
     bottom: 0,
