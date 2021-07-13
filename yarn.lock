@@ -3594,9 +3594,9 @@ detox-recorder@^1.0.151:
   integrity sha512-a4ZPo7AR5XJJiLy8Xqml8YXxrIz6R7RKfiGmG9u5MBxG2I+w+yGJTj7ZhYDfoi5StpUD+dKHTCdvycZTOQ84Cw==
 
 detox@^18.15.0:
-  version "18.18.1"
-  resolved "https://registry.yarnpkg.com/detox/-/detox-18.18.1.tgz#11fdfbcf698ee79f6baaecc7f09bacc37134841b"
-  integrity sha512-H3KouvWnuPjeqV6R+f/SN5ZGSXIQMwMG/24lcynRmaq2ASSjSaJqKWRCimreIr3WKkhkaEmY9cPKtj0nAJHOmw==
+  version "18.19.0"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-18.19.0.tgz#f6779b4a42a0c40b22fe8ea129321a74d2d97576"
+  integrity sha512-l/RFuLXsCbcY8x2iqapcKrlijHE35gFXiZzTKRzOyY8nODKctf6aRhYPBSX9xaSKRa3rKPTYi/ffdUIIKZIFoA==
   dependencies:
     bunyan "^1.8.12"
     bunyan-debug-stream "^1.1.0"
@@ -10226,10 +10226,15 @@ ws@^6.1.4:
   dependencies:
     async-limiter "~1.0.0"
 
-ws@^7, ws@^7.0.0:
+ws@^7:
   version "7.5.0"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.0.tgz#0033bafea031fb9df041b2026fc72a571ca44691"
   integrity sha512-6ezXvzOZupqKj4jUqbQ9tXuJNo+BR2gU8fFRk3XCP3e0G6WT414u5ELe6Y0vtp7kmSJ3F7YWObSNr1ESsgi4vw==
+
+ws@^7.0.0:
+  version "7.5.3"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.3.tgz#160835b63c7d97bfab418fc1b8a9fced2ac01a74"
+  integrity sha512-kQ/dHIzuLrS6Je9+uv81ueZomEwH0qVYstcAQ4/Z93K8zeko9gtAbttJWzoC5ukqXY1PpoouV3+VSOqEAFt5wg==
 
 ws@^7.4.5:
   version "7.5.1"

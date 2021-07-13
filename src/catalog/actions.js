@@ -23,15 +23,6 @@ import {
   NEW_CAR_BY_FILTER__REQUEST,
   NEW_CAR_BY_FILTER__SUCCESS,
   NEW_CAR_BY_FILTER__FAIL,
-  NEW_CAR_FILTER_MODELS__SELECT,
-  NEW_CAR_FILTER_BODY__SELECT,
-  NEW_CAR_FILTER_GEARBOX__SELECT,
-  NEW_CAR_FILTER_ENGINE_TYPE__SELECT,
-  NEW_CAR_FILTER_DRIVE__SELECT,
-  NEW_CAR_FILTER_PRICE__SELECT,
-  NEW_CAR_FILTER_PRICE__SHOW,
-  NEW_CAR_FILTER_PRICE__HIDE,
-  NEW_CAR_FILTER_PRICE_SPECIAL__SET,
   NEW_CAR_DETAILS__REQUEST,
   NEW_CAR_DETAILS__SUCCESS,
   NEW_CAR_DETAILS__FAIL,
@@ -66,30 +57,19 @@ import {
   CAR_COST__REQUEST,
   CAR_COST__SUCCESS,
   CAR_COST__FAIL,
-  CAR_COST_PHOTOS__FILL,
-  CAR_COST_BRAND__FILL,
-  CAR_COST_MODEL__FILL,
-  CAR_COST_YEAR__SELECT,
-  CAR_COST_MILEAGE__FILL,
 
   // filters
-  ACTION_SAVE_CAR_FILTERS__UPDATE,
-  CAR_FILTERS__UPDATE,
+  SAVE_USEDCAR_FILTERS,
+  SAVE_NEWCAR_FILTERS,
 } from './actionTypes';
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
 
-export const actionFetchUsedCarByFilter = props => {
-  props.url = `/stock/trade-in/cars/get/city/${props.city}/`;
+export const actionFetchNewCarByFilter = props => {
+  props.url = `/stock/new/cars/get/city/${props.city}/`;
   let urlParams = [];
-
-  if (props.sortBy) {
-    urlParams.push(`sortBy=${props.sortBy}`);
-  }
-
-  if (props.sortDirection) {
-    urlParams.push(`sortDirection=${props.sortDirection}`);
-  }
+  let filtersRaw = {};
+  let sortingRaw = {};
 
   if (props.filters) {
     for (const [key, value] of Object.entries(props.filters)) {
@@ -99,17 +79,113 @@ export const actionFetchUsedCarByFilter = props => {
         }
         if (value === true) {
           urlParams.push(`${key}=1`);
+          filtersRaw[key] = 1;
         } else {
           if (value !== false && value !== 'false') {
             urlParams.push(`${key}=${value}`);
+            filtersRaw[key] = value;
           }
         }
       }
     }
   }
 
-  if (props.type !== EVENT_LOAD_MORE) {
-    props.url = props.url + '?' + urlParams.join('&');
+  return dispatch => {
+    dispatch({
+      type: NEW_CAR_BY_FILTER__REQUEST,
+      payload: props,
+    });
+
+    if (props.sortBy) {
+      sortingRaw['sortBy'] = props.sortBy;
+    }
+  
+    if (props.sortDirection) {
+      sortingRaw['sortDirection'] = props.sortDirection;
+    }
+
+    if (props.type !== EVENT_LOAD_MORE) {
+      dispatch({
+        type: SAVE_NEWCAR_FILTERS,
+        payload: {
+          filters: filtersRaw,
+          sorting: sortingRaw,
+          url: props.url + '?' + urlParams.join('&'),
+        },
+      });
+    }
+
+    if (props.sortBy) {
+      urlParams.push(`sortBy=${props.sortBy}`);
+    }
+  
+    if (props.sortDirection) {
+      urlParams.push(`sortDirection=${props.sortDirection}`);
+    }
+  
+    if (props.type !== EVENT_LOAD_MORE) {
+      props.url = props.url + '?' + urlParams.join('&');
+    }
+
+    const newProps = {...props};
+
+    if (props.type === EVENT_LOAD_MORE) {
+      newProps.nextPageUrl = props.nextPage;
+    }
+
+    return API.fetchStock(newProps)
+      .then(response => {
+        console.log('API fetchStock url responce', response);
+        if (response.error) {
+          return dispatch({
+            type: NEW_CAR_BY_FILTER__FAIL,
+            payload: {
+              error: response.error.message,
+            },
+          });
+        }
+
+        return dispatch({
+          type: NEW_CAR_BY_FILTER__SUCCESS,
+          payload: {
+            ...response,
+            type: props.type,
+          },
+        });
+      })
+      .catch(error => {
+        return dispatch({
+          type: NEW_CAR_BY_FILTER__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
+  };
+};
+export const actionFetchUsedCarByFilter = props => {
+  props.url = `/stock/trade-in/cars/get/city/${props.city}/`;
+  let urlParams = [];
+  let filtersRaw = {};
+  let sortingRaw = {};
+
+  if (props.filters) {
+    for (const [key, value] of Object.entries(props.filters)) {
+      if (value) {
+        if (typeof value === 'object') {
+          continue;
+        }
+        if (value === true) {
+          urlParams.push(`${key}=1`);
+          filtersRaw[key] = 1;
+        } else {
+          if (value !== false && value !== 'false') {
+            urlParams.push(`${key}=${value}`);
+            filtersRaw[key] = value;
+          }
+        }
+      }
+    }
   }
 
   return dispatch => {
@@ -118,6 +194,37 @@ export const actionFetchUsedCarByFilter = props => {
       payload: props,
     });
 
+    if (props.sortBy) {
+      sortingRaw['sortBy'] = props.sortBy;
+    }
+  
+    if (props.sortDirection) {
+      sortingRaw['sortDirection'] = props.sortDirection;
+    }
+
+    if (props.type !== EVENT_LOAD_MORE) {
+      dispatch({
+        type: SAVE_USEDCAR_FILTERS,
+        payload: {
+          filters: filtersRaw,
+          sorting: sortingRaw,
+          url: props.url + '?' + urlParams.join('&'),
+        },
+      });
+    }
+
+    if (props.sortBy) {
+      urlParams.push(`sortBy=${props.sortBy}`);
+    }
+  
+    if (props.sortDirection) {
+      urlParams.push(`sortDirection=${props.sortDirection}`);
+    }
+  
+    if (props.type !== EVENT_LOAD_MORE) {
+      props.url = props.url + '?' + urlParams.join('&');
+    }
+
     const newProps = {...props};
 
     if (props.type === EVENT_LOAD_MORE) {
@@ -125,7 +232,7 @@ export const actionFetchUsedCarByFilter = props => {
       newProps.isNextPage = true;
     }
 
-    return API.fetchUsedCar(newProps)
+    return API.fetchStock(newProps)
       .then(res => {
         let {data, error, total, pages, prices} = res;
 
@@ -545,126 +652,6 @@ export const actionFetchUsedCarFilterData = props => {
   };
 };
 
-export const actionFetchNewCarByFilter = props => {
-  return dispatch => {
-    dispatch({
-      type: NEW_CAR_BY_FILTER__REQUEST,
-      payload: props,
-    });
-
-    const newProps = {...props};
-
-    if (props.type === EVENT_LOAD_MORE) {
-      newProps.searchUrl = props.nextPage;
-      newProps.isNextPage = true;
-    }
-
-    return API.fetchNewCarByFilter(newProps)
-      .then(response => {
-        console.log('API fetchNewCarByFilter url responce', response);
-        if (response.error) {
-          return dispatch({
-            type: NEW_CAR_BY_FILTER__FAIL,
-            payload: {
-              error: response.error.message,
-            },
-          });
-        }
-
-        return dispatch({
-          type: NEW_CAR_BY_FILTER__SUCCESS,
-          payload: {
-            ...response,
-            type: props.type,
-          },
-        });
-      })
-      .catch(error => {
-        return dispatch({
-          type: NEW_CAR_BY_FILTER__FAIL,
-          payload: {
-            error: error.message,
-          },
-        });
-      });
-  };
-};
-
-export const actionSetNewCarFilterPriceSpecial = priceSpecial => {
-  return dispatch => {
-    return dispatch({
-      type: NEW_CAR_FILTER_PRICE_SPECIAL__SET,
-      payload: priceSpecial,
-    });
-  };
-};
-
-export const actionSelectNewCarFilterModels = models => {
-  return dispatch => {
-    return dispatch({
-      type: NEW_CAR_FILTER_MODELS__SELECT,
-      payload: models,
-    });
-  };
-};
-
-export const actionSelectNewCarFilterBody = body => {
-  return dispatch => {
-    return dispatch({
-      type: NEW_CAR_FILTER_BODY__SELECT,
-      payload: body,
-    });
-  };
-};
-
-export const actionSelectNewCarFilterGearbox = gearbox => {
-  return dispatch => {
-    dispatch({
-      type: NEW_CAR_FILTER_GEARBOX__SELECT,
-      payload: gearbox,
-    });
-  };
-};
-
-export const actionSelectNewCarFilterDrive = drive => {
-  return dispatch => {
-    dispatch({
-      type: NEW_CAR_FILTER_DRIVE__SELECT,
-      payload: drive,
-    });
-  };
-};
-
-export const actionSelectNewCarFilterEngineType = engineType => {
-  return dispatch => {
-    dispatch({
-      type: NEW_CAR_FILTER_ENGINE_TYPE__SELECT,
-      payload: engineType,
-    });
-  };
-};
-
-export const actionSelectNewCarFilterPrice = prices => {
-  return dispatch => {
-    dispatch({
-      type: NEW_CAR_FILTER_PRICE__SELECT,
-      payload: prices,
-    });
-  };
-};
-
-export const actionShowNewCarFilterPrice = () => {
-  return dispatch => {
-    return dispatch({type: NEW_CAR_FILTER_PRICE__SHOW});
-  };
-};
-
-export const actionHideNewCarFilterPrice = () => {
-  return dispatch => {
-    return dispatch({type: NEW_CAR_FILTER_PRICE__HIDE});
-  };
-};
-
 export const actionFetchNewCarDetails = carId => {
   return dispatch => {
     dispatch({
@@ -824,11 +811,15 @@ export const actionCarCostOrder = props => {
 /**
  * Сохраняет список выбранных фильтров.
  */
-export const actionSaveCarFilters = filters => {
+export const actionSaveNewCarFilters = ({filters, sorting, url}) => {
   return dispatch => {
     return dispatch({
-      type: ACTION_SAVE_CAR_FILTERS__UPDATE,
-      payload: filters,
+      type: SAVE_NEWCAR_FILTERS,
+      payload: {
+        filters,
+        sorting,
+        url
+      }
     });
   };
 };
@@ -836,11 +827,15 @@ export const actionSaveCarFilters = filters => {
 /**
  * Сохраняет список выбранных фильтров на странице подержанных авто.
  */
-export const actionSaveCarUsedFilters = filters => {
+export const actionSaveUsedCarFilters = ({filters, sorting, url}) => {
   return dispatch => {
     return dispatch({
-      type: 'ACTION_SAVE_CAR_FILTERS_USED__UPDATE',
-      payload: filters,
+      type: SAVE_USEDCAR_FILTERS,
+      payload: {
+        filters,
+        sorting,
+        url
+      }
     });
   };
 };

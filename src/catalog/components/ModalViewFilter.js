@@ -114,13 +114,13 @@ const ModalViewFilter = props => {
     },
     modalButtonText: {
         color: styleConst.color.blue,
-        fontSize: 18,
+        fontSize: 17,
         fontWeight: '600',
+        textTransform: 'uppercase',
     },
     modalButtonTextCancel: {
-        color: styleConst.color.systemGray,
+        color: styleConst.color.greyText,
         fontWeight: 'normal',
-        textTransform: 'lowercase',
     },
   });
 

@@ -26,8 +26,8 @@ const mapStateToProps = ({dealer, catalog}) => {
   return {
     dealerSelected: dealer.selected,
     brands: dealer.listBrands,
-    city: catalog.newCar.city,
     items: catalog.newCar.items,
+    filters: catalog.newCar.filters,
     isFetchingNewCarByFilter: catalog.newCar.meta.isFetchingNewCarByFilter,
   };
 };
@@ -49,6 +49,7 @@ const NewCarListScreen = ({
   items,
   navigation,
   route,
+  filters,
   actionFetchNewCarByFilter,
   dealerSelected,
   isFetchingNewCarByFilter,
@@ -64,9 +65,10 @@ const NewCarListScreen = ({
     }
 
     return actionFetchNewCarByFilter({
-      type: type ? type : null,
-      searchUrl: `/stock/new/cars/get/city/${dealerSelected.city.id}/`,
-      nextPage: get(items, 'pages.next', null),
+      type,
+      city: dealerSelected.city.id,
+      nextPage: pages?.next || null,
+      filters: filters.filters,
       sortBy: route?.params?.sortBy ? route.params.sortBy : sorting.sortBy,
       sortDirection: route?.params?.sortDirection
         ? route.params.sortDirection

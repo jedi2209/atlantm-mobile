@@ -24,15 +24,12 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({dealer, catalog}) => {
   return {
-    city: catalog.usedCar.city,
     items: catalog.usedCar.items,
     pages: catalog.usedCar.pages,
     prices: catalog.usedCar.prices,
-    needUpdate: catalog.usedCar.meta.needUpdate,
     isFetchItems: catalog.usedCar.meta.isFetchItems,
-    isPriceFilterShow: catalog.usedCar.meta.isPriceFilterShow,
     dealerSelected: dealer.selected,
-    filtersUsed: catalog.usedCar.filters.data,
+    filters: catalog.usedCar.filters,
   };
 };
 
@@ -54,7 +51,6 @@ const sortReducer = (state, action) => {
 };
 
 const UsedCarListScreen = ({
-  city,
   pages,
   prices,
   isFetchItems,
@@ -62,21 +58,21 @@ const UsedCarListScreen = ({
   route,
   actionFetchUsedCarByFilter,
   dealerSelected,
-  filtersUsed,
+  filters,
   items,
 }) => {
   const [loading, setLoading] = useState(false);
   const [sorting, setSorting] = useReducer(sortReducer, initialSort);
 
-  const _fetchUsedCar = (type, priceRangeFromFilter) => {
+  const _fetchUsedCar = (type) => {
     if (type === EVENT_REFRESH) {
       setLoading(true);
     }
     return actionFetchUsedCarByFilter({
       type,
-      city: city ? city.id : dealerSelected.city.id,
+      city: dealerSelected.city.id,
       nextPage: pages?.next || null,
-      filters: filtersUsed.filters,
+      filters: filters.filters,
       sortBy: route?.params?.sortBy ? route.params.sortBy : sorting.sortBy,
       sortDirection: route?.params?.sortDirection
         ? route.params.sortDirection
@@ -86,7 +82,6 @@ const UsedCarListScreen = ({
       return setTimeout(() => {
         navigation.setParams({
           total: get(items, 'total', get(res, 'payload.total')),
-          itemsLength: items && items.length,
         });
       }, 150);
     });
@@ -113,14 +108,6 @@ const UsedCarListScreen = ({
       }
     }
   }, [route?.params]);
-  // componentDidMount() {
-  //   setTimeout(() => {
-  //     this.props.navigation.setParams({
-  //       total: this.props.total,
-  //       itemsLength: this.props.items && this.props.items.length,
-  //     });
-  //   }, 200);
-  // }
 
   // componentDidUpdate() {
   //   const {
@@ -169,7 +156,6 @@ const UsedCarListScreen = ({
   //     this.props.priceRange !== nextProps.priceRange
   //   );
   // }
-
   return (
     <View style={styles.content} testID="UserCarListSreen.Wrapper">
       <StatusBar hidden />
