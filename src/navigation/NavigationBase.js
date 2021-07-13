@@ -383,6 +383,7 @@ export const CarsStock = ({navigation, route}) => (
       options={BigCloseButton(navigation, route, {
         ...TransitionPresets.ScaleFromCenterAndroid,
         headerTitle: strings.CarsFilterScreen.title,
+        headerRight: () => (<></>),
         headerTitleStyle: [
           stylesHeader.transparentHeaderTitle,
           {color: '#222B45'},

@@ -7,7 +7,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
-  Image,
+  StatusBar,
 } from 'react-native';
 import TransitionView from '../../core/components/TransitionView';
 import {StyleProvider, Content, Button} from 'native-base';
@@ -265,6 +265,7 @@ class InfoPostScreen extends Component {
     return (
       <StyleProvider style={getTheme()}>
         <View style={styleConst.safearea.default}>
+          <StatusBar hidden />
           <Content
             style={{margin: 0, marginTop: -50, padding: 0}}
             refreshControl={

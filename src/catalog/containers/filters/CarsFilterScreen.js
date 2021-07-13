@@ -729,7 +729,7 @@ const CarsFilterScreen = ({
               }}
               style={[styles.cardItem, styles.cardItemStatic]}>
               <View style={styles.fieldCaptionWrapper}>
-                  <Text style={styles.fieldTitle}>
+                  <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                     {strings.CarsFilterScreen.chooseBrandModel.title}
                   </Text>
                   {_getSelectedModels(get(stateFilters, 'modelFilter'), accordionModels)}
@@ -750,7 +750,7 @@ const CarsFilterScreen = ({
                       _showHideModal(true, modals.year);
                     }}>
                     <View style={styles.fieldCaptionWrapper}>
-                      <Text style={styles.fieldTitle}>
+                      <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                         {strings.CarsFilterScreen.filters.year.title}
                       </Text>
                       <View style={styles.fieldCaptionValues}>
@@ -786,7 +786,7 @@ const CarsFilterScreen = ({
                       _showHideModal(true, modals.mileage);
                     }}>
                     <View style={styles.fieldCaptionWrapper}>
-                      <Text style={styles.fieldTitle}>
+                      <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                         {strings.CarsFilterScreen.filters.mileage.title}
                       </Text>
                       <View style={styles.fieldCaptionValues}>
@@ -829,7 +829,7 @@ const CarsFilterScreen = ({
                     _showHideModal(true, modals.price);
                   }}>
                   <View style={styles.fieldCaptionWrapper}>
-                    <Text style={styles.fieldTitle}>
+                    <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                       {strings.CarsFilterScreen.filters.price.title}
                     </Text>
                     <View style={styles.fieldCaptionValues}>
@@ -863,7 +863,7 @@ const CarsFilterScreen = ({
                 button
                 onPress={() => {_onChangeFilter('nds', !stateFilters.nds); setUpdateFromApi(!updateFromApi);}}
                 style={styles.cardItem}>
-                <Text style={styles.fieldTitle}>
+                <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                   {strings.CarsFilterScreen.filters.price.nds}
                 </Text>
                 <Right>
@@ -879,7 +879,7 @@ const CarsFilterScreen = ({
               button
               onPress={() => {_onChangeFilter('price-special', !stateFilters['price-special']); setUpdateFromApi(!updateFromApi);}}
               style={styles.cardItem}>
-              <Text style={styles.fieldTitle}>
+              <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                 {strings.CarsFilterScreen.filters.price.special}
               </Text>
               <Right>
@@ -901,7 +901,7 @@ const CarsFilterScreen = ({
                     _showHideModal(true, modals.gearbox);
                   }}>
                   <View style={styles.fieldCaptionWrapper}>
-                    <Text style={styles.fieldTitle}>
+                    <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                       {strings.CarsFilterScreen.filters.gearbox.title}
                     </Text>
                     <View style={styles.fieldCaptionValues}>
@@ -927,7 +927,7 @@ const CarsFilterScreen = ({
                     _showHideModal(true, modals.body);
                   }}>
                   <View style={styles.fieldCaptionWrapper}>
-                    <Text style={styles.fieldTitle}>
+                    <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                       {strings.CarsFilterScreen.filters.body.title}
                     </Text>
                     <View style={styles.fieldCaptionValues}>
@@ -953,7 +953,7 @@ const CarsFilterScreen = ({
                     _showHideModal(true, modals.enginetype);
                   }}>
                   <View style={styles.fieldCaptionWrapper}>
-                    <Text style={styles.fieldTitle}>
+                    <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                       {strings.CarsFilterScreen.filters.enginetype.title}
                     </Text>
                     <View style={styles.fieldCaptionValues}>
@@ -976,7 +976,7 @@ const CarsFilterScreen = ({
                     _showHideModal(true, modals.engineVolume);
                   }}>
                   <View style={styles.fieldCaptionWrapper}>
-                    <Text style={styles.fieldTitle}>
+                    <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                       {strings.CarsFilterScreen.filters.engineVolume.title}
                     </Text>
                     <View style={styles.fieldCaptionValues}>
@@ -1012,7 +1012,7 @@ const CarsFilterScreen = ({
                     _showHideModal(true, modals.power);
                   }}>
                   <View style={styles.fieldCaptionWrapper}>
-                    <Text style={styles.fieldTitle}>
+                    <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                       {strings.CarsFilterScreen.filters.power.title}
                     </Text>
                     <View style={styles.fieldCaptionValues}>
@@ -1048,7 +1048,7 @@ const CarsFilterScreen = ({
                     _showHideModal(true, modals.drive);
                   }}>
                   <View style={styles.fieldCaptionWrapper}>
-                    <Text style={styles.fieldTitle}>
+                    <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                       {strings.CarsFilterScreen.filters.drive.title}
                     </Text>
                     <View style={styles.fieldCaptionValues}>
@@ -1071,7 +1071,7 @@ const CarsFilterScreen = ({
                     _showHideModal(true, modals.colors);
                   }}>
                   <View style={styles.fieldCaptionWrapper}>
-                    <Text style={styles.fieldTitle}>
+                    <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                       {strings.CarsFilterScreen.filters.colors.title}
                     </Text>
                     <View style={styles.fieldCaptionValues}>
@@ -1093,7 +1093,7 @@ const CarsFilterScreen = ({
                 button
                 onPress={() => {_onChangeFilter('guarantee', !stateFilters.guarantee); setUpdateFromApi(!updateFromApi);}}
                 style={styles.cardItem}>
-                <Text style={styles.fieldTitle}>
+                <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                   {strings.CarsFilterScreen.filters.guarantee.title}
                 </Text>
                 <Right>
@@ -1107,7 +1107,7 @@ const CarsFilterScreen = ({
                 button
                 onPress={() => {_onChangeFilter('breakInsurance', !stateFilters.breakInsurance); setUpdateFromApi(!updateFromApi);}}
                 style={styles.cardItem}>
-                <Text style={styles.fieldTitle}>
+                <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                   {strings.CarsFilterScreen.filters.breakInsurance.title}
                 </Text>
                 <Right>
@@ -1121,7 +1121,7 @@ const CarsFilterScreen = ({
                 button
                 onPress={() => {_onChangeFilter('fullServiceHistory', !stateFilters.fullServiceHistory); setUpdateFromApi(!updateFromApi);}}
                 style={styles.cardItem}>
-                <Text style={styles.fieldTitle}>
+                <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                   {strings.CarsFilterScreen.filters.fullServiceHistory.title}
                 </Text>
                 <Right>
@@ -1138,7 +1138,7 @@ const CarsFilterScreen = ({
                   button
                   onPress={() => {_onChangeFilter('onlineOrder', !stateFilters.onlineOrder); setUpdateFromApi(!updateFromApi);}}
                   style={styles.cardItem}>
-                  <Text style={styles.fieldTitle}>
+                  <Text style={styles.fieldTitle} numberOfLines={1} ellipsizeMode={'tail'}>
                     {strings.CarsFilterScreen.filters.onlineOrder.title}
                   </Text>
                   <Right>
