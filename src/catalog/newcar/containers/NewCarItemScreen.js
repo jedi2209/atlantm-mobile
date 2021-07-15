@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {
   View,
   TouchableOpacity,
@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
   ScrollView,
+  SafeAreaView,
   StatusBar,
   StyleSheet,
   Linking,
@@ -14,6 +15,10 @@ import {
   Alert,
 } from 'react-native';
 import {
+  Card,
+  Container,
+  Content,
+  Footer,
   Col,
   Row,
   Icon,
@@ -40,6 +45,7 @@ import Badge from '../../../core/components/Badge';
 
 // helpers
 import {get, indexOf} from 'lodash';
+import getTheme from '../../../../native-base-theme/components';
 import PropTypes from 'prop-types';
 import UserData from '../../../utils/user';
 import Analytics from '../../../utils/amplitude-analytics';
@@ -140,7 +146,7 @@ const OptionPlate = ({
   );
 };
 
-class NewCarItemScreen extends Component {
+class NewCarItemScreen extends PureComponent {
   static propTypes = {
     dealerSelected: PropTypes.object,
   };
@@ -150,7 +156,7 @@ class NewCarItemScreen extends Component {
     this.state = {
       tabName: 'base',
     };
-    this.platesScrollView = React.createRef();
+    // this.platesScrollView = React.createRef();
     this.colorbox = React.createRef();
   }
 
@@ -187,7 +193,11 @@ class NewCarItemScreen extends Component {
       }
     });
 
-    if (this.props.carDetails && !this.props.isFetchingCarDetails) {
+    if (
+      this.props.carDetails &&
+      !this.props.isFetchingCarDetails &&
+      this.platesScrollView
+    ) {
       setTimeout(() => {
         this.platesScrollView &&
           this.platesScrollView.scrollToEnd({duration: 500});
@@ -199,29 +209,29 @@ class NewCarItemScreen extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    const {
-      carDetails,
-      dealerSelected,
-      photoViewerItems,
-      photoViewerIndex,
-      photoViewerVisible,
-      isFetchingCarDetails,
-    } = this.props;
-    const nav = nextProps.nav.newState;
-    const isActiveScreen =
-      nav.routes[nav.index].routeName === 'NewCarItemScreen';
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   const {
+  //     carDetails,
+  //     dealerSelected,
+  //     photoViewerItems,
+  //     photoViewerIndex,
+  //     photoViewerVisible,
+  //     isFetchingCarDetails,
+  //   } = this.props;
+  //   const nav = nextProps.nav.newState;
+  //   const isActiveScreen =
+  //     nav.routes[nav.index].routeName === 'NewCarItemScreen';
 
-    return (
-      (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-      this.state.tabName !== nextState.tabName ||
-      photoViewerIndex !== nextProps.photoViewerIndex ||
-      photoViewerItems.length !== nextProps.photoViewerItems.length ||
-      photoViewerVisible !== nextProps.photoViewerVisible ||
-      isFetchingCarDetails !== nextProps.isFetchingCarDetails ||
-      get(carDetails, 'id.api') !== get(nextProps, 'carDetails.id.api')
-    );
-  }
+  //   return (
+  //     (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
+  //     this.state.tabName !== nextState.tabName ||
+  //     photoViewerIndex !== nextProps.photoViewerIndex ||
+  //     photoViewerItems.length !== nextProps.photoViewerItems.length ||
+  //     photoViewerVisible !== nextProps.photoViewerVisible ||
+  //     isFetchingCarDetails !== nextProps.isFetchingCarDetails ||
+  //     get(carDetails, 'id.api') !== get(nextProps, 'carDetails.id.api')
+  //   );
+  // }
 
   onScroll = event => {
     const {navigation, route} = this.props;
@@ -565,7 +575,7 @@ class NewCarItemScreen extends Component {
     };
 
     if (CarPrices.standart.standart == 0) {
-      return (<View style={stylesFooter.orderPriceContainer}></View>);
+      return <View style={stylesFooter.orderPriceContainer}></View>;
     }
 
     return (
@@ -623,12 +633,14 @@ class NewCarItemScreen extends Component {
 
     if (!carDetails || isFetchingCarDetails) {
       return (
-        <View style={styles.spinnerContainer}>
-          <ActivityIndicator
-            color={styleConst.color.blue}
-            style={styleConst.spinner}
-          />
-        </View>
+        <Container style={styles.spinnerContainer}>
+          <Content>
+            <ActivityIndicator
+              color={styleConst.color.blue}
+              style={styleConst.spinner}
+            />
+          </Content>
+        </Container>
       );
     }
 
@@ -684,61 +696,57 @@ class NewCarItemScreen extends Component {
     }
 
     return (
-      <View testID="NewCarItemScreen.Wrapper">
+      <Container testID="NewCarItemScreen.Wrapper">
+        <Content>
           <StatusBar hidden />
-          <ScrollView>
-            <View
-              style={[styles.colorboxWrapper, {
-                marginTop: isCarImgReal ? -12 : -12,
-              }]}>
-              {get(carDetails, 'color.picker.codes.hex', null) ? (
-                <ColorBox
-                  containerStyle={styles.colorboxContainer}
-                  color={get(carDetails, 'color')}
-                />
-              ) : null}
-              {badge && badge.length ? (
-                <View
-                  testID="NewCarItemScreen.BadgesWrapper"
-                  style={styles.badgesView}>
-                  {badge.map((item, index) => {
-                    if (item.name.toLowerCase() === 'спец.цена') {
-                      item.name = strings.CarList.badges.specialPrice;
-                    }
-                    return (
-                      <Badge
-                        id={carDetails.id.api}
-                        key={'badgeItem' + carDetails.id.api + index}
-                        index={index}
-                        bgColor={item.background}
-                        name={item.name}
-                        textColor={item.textColor}
-                      />
-                    );
-                  })}
-                </View>
-              ) : null}
-              <PhotoSlider
-                height={370}
-                photos={photos}
-                resizeMode={isCarImgReal ? 'cover' : 'contain'}
-                paginationStyle={{marginBottom: 35}}
-                dotColor={isCarImgReal ? styleConst.color.white : null}
-                onPressItem={() => this.onPressPhoto}
-                onIndexChanged={() => this.onChangePhotoIndex}
+          <View>
+            {get(carDetails, 'color.picker.codes.hex', null) ? (
+              <ColorBox
+                containerStyle={styles.colorboxContainer}
+                color={get(carDetails, 'color')}
               />
-            </View>
-
-            <View
-              style={[
-                styleConst.shadow.light,
-                styles.carTopWrapper,
-                {
-                  marginTop: isCarImgReal ? 335 : 335,
-                },
-              ]}>
+            ) : null}
+            {badge && badge.length ? (
               <View
-                style={styles.modelBrandView}>
+                testID="NewCarItemScreen.BadgesWrapper"
+                style={styles.badgesView}>
+                {badge.map((item, index) => {
+                  if (item.name.toLowerCase() === 'спец.цена') {
+                    item.name = strings.CarList.badges.specialPrice;
+                  }
+                  return (
+                    <Badge
+                      id={carDetails.id.api}
+                      key={'badgeItem' + carDetails.id.api + index}
+                      index={index}
+                      bgColor={item.background}
+                      name={item.name}
+                      textColor={item.textColor}
+                    />
+                  );
+                })}
+              </View>
+            ) : null}
+            <PhotoSlider
+              height={250}
+              photos={photos}
+              resizeMode={isCarImgReal ? 'cover' : 'contain'}
+              paginationStyle={{marginBottom: -40}}
+              dotColor={isCarImgReal ? styleConst.color.white : null}
+              // onPressItem={() => this.onPressPhoto}
+              // onIndexChanged={() => this.onChangePhotoIndex}
+            />
+          </View>
+          <View
+            style={[
+              styleConst.shadow.default,
+              styles.carTopWrapper,
+              {
+                marginTop: isCarImgReal ? 25 : 25,
+              },
+            ]}>
+            <View>
+              <View style={styles.modelBrandView}>
                 <View style={{marginBottom: 10, flexShrink: 1}}>
                   <Text style={styles.modelBrandText}>
                     {`${brandName} ${modelName}`}
@@ -807,9 +815,9 @@ class NewCarItemScreen extends Component {
                   ) : null}
                   {get(carDetails, 'color.name.simple') ? (
                     <OptionPlate
-                      onPress={() => {
-                        this.ColorBox.click();
-                      }}
+                      // onPress={() => {
+                      //   this.ColorBox.click();
+                      // }}
                       title={strings.NewCarItemScreen.plates.color}
                       testID="NewCarItemScreen.Plates.Color"
                       subtitle={colorName}
@@ -845,7 +853,6 @@ class NewCarItemScreen extends Component {
                 </TouchableWithoutFeedback>
               ) : null}
             </View>
-
             <Accordion
               style={styles.accordion}
               dataArray={[
@@ -853,20 +860,17 @@ class NewCarItemScreen extends Component {
                   title: strings.NewCarItemScreen.tech.title,
                   content: (
                     <View testID="NewCarItemScreen.TechWrapper">
-                      {this.renderTechData(
-                        strings.NewCarItemScreen.tech.base,
-                        [
-                          {
-                            name: strings.NewCarItemScreen.tech.body.type,
-                            value: 'body.name',
-                            alternate: bodyName,
-                          },
-                          {
-                            name: strings.NewCarItemScreen.tech.year,
-                            value: 'year',
-                          },
-                        ],
-                      )}
+                      {this.renderTechData(strings.NewCarItemScreen.tech.base, [
+                        {
+                          name: strings.NewCarItemScreen.tech.body.type,
+                          value: 'body.name',
+                          alternate: bodyName,
+                        },
+                        {
+                          name: strings.NewCarItemScreen.tech.year,
+                          value: 'year',
+                        },
+                      ])}
                       {this.renderTechData(
                         strings.NewCarItemScreen.tech.engine.title,
                         [
@@ -883,15 +887,13 @@ class NewCarItemScreen extends Component {
                               return false;
                             }
                             return {
-                              name: strings.NewCarItemScreen.tech.engine
-                                .volume,
+                              name: strings.NewCarItemScreen.tech.engine.volume,
                               value: 'engine.volume.full',
                               postfix: 'см³',
                             };
                           })(),
                           {
-                            name: strings.NewCarItemScreen.tech.engine.power
-                              .hp,
+                            name: strings.NewCarItemScreen.tech.engine.power.hp,
                             value: 'power.hp',
                             postfix: strings.NewCarItemScreen.shortUnits.hp,
                           },
@@ -946,14 +948,12 @@ class NewCarItemScreen extends Component {
                           {
                             name: strings.NewCarItemScreen.tech.body.trunk,
                             value: 'body.trunk.min',
-                            postfix:
-                              strings.NewCarItemScreen.shortUnits.litres,
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
                           },
                           {
                             name: strings.NewCarItemScreen.tech.body.fuel,
                             value: 'fuel.fuel',
-                            postfix:
-                              strings.NewCarItemScreen.shortUnits.litres,
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
                           },
                         ],
                       )}
@@ -973,21 +973,17 @@ class NewCarItemScreen extends Component {
                           {
                             name: strings.NewCarItemScreen.techData.fuel.city,
                             value: 'fuel.city',
-                            postfix:
-                              strings.NewCarItemScreen.shortUnits.litres,
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
                           },
                           {
-                            name: strings.NewCarItemScreen.techData.fuel
-                              .track,
+                            name: strings.NewCarItemScreen.techData.fuel.track,
                             value: 'fuel.track',
-                            postfix:
-                              strings.NewCarItemScreen.shortUnits.litres,
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
                           },
                           {
                             name: strings.NewCarItemScreen.techData.fuel.both,
                             value: 'fuel.both',
-                            postfix:
-                              strings.NewCarItemScreen.shortUnits.litres,
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
                           },
                         ],
                       )}
@@ -1041,13 +1037,19 @@ class NewCarItemScreen extends Component {
                   {expanded ? (
                     <Icon
                       type="FontAwesome5"
-                      style={{color: styleConst.color.greyText4, fontWeight: 'normal'}}
+                      style={{
+                        color: styleConst.color.greyText4,
+                        fontWeight: 'normal',
+                      }}
                       name="angle-down"
                     />
                   ) : (
                     <Icon
                       type="FontAwesome5"
-                      style={{color: styleConst.color.greyText, fontWeight: 'normal'}}
+                      style={{
+                        color: styleConst.color.greyText,
+                        fontWeight: 'normal',
+                      }}
                       name="angle-right"
                     />
                   )}
@@ -1055,15 +1057,23 @@ class NewCarItemScreen extends Component {
               )}
               renderContent={item => {
                 return (
-                  <ScrollView
-                    style={styles.accordionContent}>
-                    {item.content}
-                  </ScrollView>
+                  <View style={styles.accordionContent}>{item.content}</View>
                 );
               }}
             />
-          </ScrollView>
-        <View style={[styleConst.shadow.default, stylesFooter.footer]}>
+          </View>
+          {photoViewerItems.length ? (
+            <PhotoViewer
+              index={photoViewerIndex}
+              visible={photoViewerVisible}
+              items={photoViewerItems}
+              enableScale={true}
+              // onChange={this.onChangePhotoIndex}
+              onPressClose={this.onClosePhoto}
+            />
+          ) : null}
+        </Content>
+        <Footer style={[styleConst.shadow.default, stylesFooter.footer]}>
           {this.renderPriceFooter({
             carDetails,
             currency,
@@ -1111,18 +1121,8 @@ class NewCarItemScreen extends Component {
               </Text>
             </Button>
           </View>
-        </View>
-        {photoViewerItems.length ? (
-          <PhotoViewer
-            index={photoViewerIndex}
-            visible={photoViewerVisible}
-            items={photoViewerItems}
-            enableScale={true}
-            onChange={this.onChangePhotoIndex}
-            onPressClose={this.onClosePhoto}
-          />
-        ) : null}
-      </View>
+        </Footer>
+      </Container>
     );
   }
 }

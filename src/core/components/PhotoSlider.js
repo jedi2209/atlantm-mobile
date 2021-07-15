@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Slide = (props) => {
+const Slide = props => {
   return (
     <View style={[styles.item, {height: props.height}]}>
       <TouchableWithoutFeedback onPress={props.onPress}>
@@ -78,24 +78,32 @@ const Slide = (props) => {
   );
 };
 
-const PhotoSlider = ({height, photos, paginationStyle, dotColor, onIndexChanged, onPressItem, resizeMode}) => {
-  [isLoaded, setLoaded] = useState(false);
-  [loadQueue, setLoadQueue] = useState({});
+const PhotoSlider = ({
+  height,
+  photos,
+  paginationStyle,
+  dotColor,
+  onIndexChanged,
+  onPressItem,
+  resizeMode,
+}) => {
+  const [isLoaded, setLoaded] = useState(false);
+  const [loadQueue, setLoadQueue] = useState({});
 
   useEffect(() => {
     setLoadQueue(new Array(photos.length).fill(0));
   }, [photos.length]);
 
-  const _loadHandle = (i) => {
+  const _loadHandle = i => {
     let loadQueueTmp = {};
     loadQueueTmp[i] = 1;
     setLoadQueue(loadQueueTmp);
   };
-  
+
   // Супер грязный хак, триггерим изменение высота для обновления слайдера
   // по-другому починить не получилось, попробовал много вариантов.
   // p.s. нравится компонент, хотел оставить.
-  if (Platform.OS === 'android' && !this.state.isLoaded) {
+  if (Platform.OS === 'android' && !isLoaded) {
     // if (Platform.OS === 'android') {
     setTimeout(() => {
       setLoaded(true);
@@ -136,8 +144,7 @@ const PhotoSlider = ({height, photos, paginationStyle, dotColor, onIndexChanged,
       })}
     </Swiper>
   );
-
-}
+};
 
 PhotoSlider.propTypes = {
   photos: PropTypes.array,
