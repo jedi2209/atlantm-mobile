@@ -21,6 +21,7 @@
         "@tva": "./src/tva",
         "@utils": "./src/utils"
       }
-    }]
+    }],
+    "react-native-reanimated/plugin",
   ]
 }
