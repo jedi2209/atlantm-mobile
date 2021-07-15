@@ -2,7 +2,17 @@ import React, {useCallback, useMemo, useRef, useState, useEffect} from 'react';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import {Icon, ActionSheet, Button} from 'native-base';
+import {
+  Header,
+  Container,
+  Card,
+  CardItem,
+  Content,
+  Right,
+  Icon,
+  ActionSheet,
+  Button,
+} from 'native-base';
 import {EVENT_REFRESH} from '../core/actionTypes';
 import {
   BottomSheetModal,
@@ -383,6 +393,20 @@ const CarsStock = ({navigation, route}) => {
   const bottomSheetModalRef = useRef(null);
   const [bottomSheeetState, setBottomState] = useState(false);
 
+  const sorting = useSelector(state => state.catalog.newCar.filters.sorting);
+  let isSorted = 'priceAsc';
+
+  switch (sorting?.sortBy) {
+    case 'date':
+      isSorted = 'dateDesc';
+      break;
+    case 'price':
+      if (sorting?.sortDirection === 'desc') {
+        isSorted = 'priceDesc';
+      }
+      break;
+  }
+
   const snapPoints = useMemo(() => [-1, '30%'], []);
   // callbacks
   const handlePresentModalPress = useCallback(() => {
@@ -445,11 +469,7 @@ const CarsStock = ({navigation, route}) => {
                   <Icon
                     type="MaterialCommunityIcons"
                     name="sort"
-                    style={{
-                      color: styleConst.color.white,
-                      fontSize: 25,
-                      marginRight: 20,
-                    }}
+                    style={styles.sortHeaderButton}
                   />
                 </TouchableOpacity>
               </View>
@@ -485,256 +505,514 @@ const CarsStock = ({navigation, route}) => {
         />
       </SearchStack.Navigator>
       <BottomSheetModalProvider>
-        <View>
-          <BottomSheetModal
-            snapPoints={snapPoints}
-            index={1}
-            style={styleConst.shadow.light}
-            ref={bottomSheetModalRef}
-            onChange={handleSheetChanges}>
-            <View style={styles.sortingBottomSheetWrapper}>
+        <BottomSheetModal
+          snapPoints={snapPoints}
+          index={1}
+          style={styleConst.shadow.light}
+          ref={bottomSheetModalRef}
+          onChange={handleSheetChanges}>
+          <Container>
+            <Header style={{backgroundColor: styleConst.color.white}}>
               <Text style={styles.sortingBottomSheetTitle}>
                 {strings.Sort.title}
               </Text>
-              <Button
-                full
-                transparent
-                iconLeft
-                style={styles.sortingButton}
-                onPress={() => {
-                  handleClosePress();
-                  navigation.navigate('NewCarListScreen', {
-                    sortBy: 'price',
-                    sortDirection: 'asc',
-                  });
-                }}>
-                <Icon
-                  style={styles.sortingButtonIcon}
-                  type="FontAwesome5"
-                  name="sort-numeric-up"
-                />
-                <Text
-                  style={[
-                    styles.sortingButtonText,
-                    route?.params?.sortBy === 'price' &&
-                    route?.params?.sortDirection === 'asc'
-                      ? styles.sortingButtonTextSelected
-                      : null,
-                  ]}>
-                  {strings.Sort.price.asc}
-                </Text>
-              </Button>
-              <Button
-                full
-                transparent
-                iconLeft
-                style={styles.sortingButton}
-                onPress={() => {
-                  handleClosePress();
-                  navigation.navigate('NewCarListScreen', {
-                    sortBy: 'price',
-                    sortDirection: 'desc',
-                  });
-                }}>
-                <Icon
-                  style={styles.sortingButtonIcon}
-                  type="FontAwesome5"
-                  name="sort-numeric-down-alt"
-                />
-                <Text
-                  style={[
-                    styles.sortingButtonText,
-                    route?.params?.sortBy === 'price' &&
-                    route?.params?.sortDirection === 'desc'
-                      ? styles.sortingButtonTextSelected
-                      : null,
-                  ]}>
-                  {strings.Sort.price.desc}
-                </Text>
-              </Button>
-              <Button
-                full
-                transparent
-                iconLeft
-                style={styles.sortingButton}
-                onPress={() => {
-                  handleClosePress();
-                  navigation.navigate('NewCarListScreen', {
-                    sortBy: 'date',
-                    sortDirection: 'desc',
-                  });
-                }}>
-                <Icon
-                  style={styles.sortingButtonIcon}
-                  type="FontAwesome5"
-                  name="sort-amount-down"
-                />
-                <Text
-                  style={[
-                    styles.sortingButtonText,
-                    route?.params?.sortBy === 'date' &&
-                    route?.params?.sortDirection === 'desc'
-                      ? styles.sortingButtonTextSelected
-                      : null,
-                  ]}>
-                  {strings.Sort.date.desc}
-                </Text>
-              </Button>
-            </View>
-          </BottomSheetModal>
-        </View>
+            </Header>
+            <Content>
+              <Card transparent>
+                <CardItem
+                  button
+                  first
+                  onPress={() => {
+                    handleClosePress();
+                    navigation.navigate('NewCarListScreen', {
+                      sortBy: 'price',
+                      sortDirection: 'asc',
+                    });
+                  }}>
+                  <Icon
+                    active
+                    style={[
+                      styles.sortingButtonIcon,
+                      isSorted === 'priceAsc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}
+                    type="FontAwesome5"
+                    name="sort-numeric-up"
+                  />
+                  <Text
+                    style={[
+                      styles.sortingButtonText,
+                      isSorted === 'priceAsc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}>
+                    {strings.Sort.price.asc}
+                  </Text>
+                  <Right>
+                    {isSorted === 'priceAsc' ? (
+                      <Icon
+                        type="FontAwesome5"
+                        name="check"
+                        style={styles.sortingColorSelected}
+                      />
+                    ) : null}
+                  </Right>
+                </CardItem>
+                <CardItem
+                  button
+                  onPress={() => {
+                    handleClosePress();
+                    navigation.navigate('NewCarListScreen', {
+                      sortBy: 'price',
+                      sortDirection: 'desc',
+                    });
+                  }}>
+                  <Icon
+                    active
+                    style={[
+                      styles.sortingButtonIcon,
+                      isSorted === 'priceDesc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}
+                    type="FontAwesome5"
+                    name="sort-numeric-down-alt"
+                  />
+                  <Text
+                    style={[
+                      styles.sortingButtonText,
+                      isSorted === 'priceDesc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}>
+                    {strings.Sort.price.desc}
+                  </Text>
+                  <Right>
+                    {isSorted === 'priceDesc' ? (
+                      <Icon
+                        type="FontAwesome5"
+                        name="check"
+                        style={styles.sortingColorSelected}
+                      />
+                    ) : null}
+                  </Right>
+                </CardItem>
+                <CardItem
+                  button
+                  last
+                  onPress={() => {
+                    handleClosePress();
+                    navigation.navigate('NewCarListScreen', {
+                      sortBy: 'date',
+                      sortDirection: 'desc',
+                    });
+                  }}>
+                  <Icon
+                    active
+                    style={[
+                      styles.sortingButtonIcon,
+                      isSorted === 'dateDesc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}
+                    type="FontAwesome5"
+                    name="sort-amount-down"
+                  />
+                  <Text
+                    style={[
+                      styles.sortingButtonText,
+                      isSorted === 'dateDesc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}>
+                    {strings.Sort.date.desc}
+                  </Text>
+                  <Right>
+                    {isSorted === 'dateDesc' ? (
+                      <Icon
+                        type="FontAwesome5"
+                        name="check"
+                        style={styles.sortingColorSelected}
+                      />
+                    ) : null}
+                  </Right>
+                </CardItem>
+              </Card>
+            </Content>
+          </Container>
+        </BottomSheetModal>
       </BottomSheetModalProvider>
     </>
   );
 };
 
-const UsedCars = ({navigation, route}) => (
-  <StackCatalogUsed.Navigator initialRouteName="UsedCarListScreen">
-    <StackCatalogUsed.Screen
-      name="UsedCarListScreen"
-      component={UsedCarListScreen}
-      options={({route}) => ({
-        headerTitle: () => {
-          return (
-            <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
-              {route?.params?.total?.count
-                ? route?.params.total.count + ' авто'
-                : null}
-            </Text>
-          );
-        },
-        headerStyle: stylesHeader.blueHeader,
-        headerTitleStyle: stylesHeader.blueHeaderTitle,
-        headerLeft: () => {
-          return ArrowBack(navigation, route, {theme: 'white'});
-        },
-        headerRight: () => (
-          <View style={stylesHeader.headerRightStyle}>
-            <TouchableOpacity
-              onPress={() => {
-                ActionSheet.show(
-                  {
-                    options: [
-                      {
-                        priority: 1,
-                        id: 'priceAsc',
-                        text: strings.Sort.price.asc,
+const UsedCars = ({navigation, route}) => {
+  const bottomSheetModalRefUsed = useRef(null);
+  const [bottomSheeetState, setBottomState] = useState(false);
+
+  const sorting = useSelector(state => state.catalog.usedCar.filters?.sorting);
+  let isSorted = 'priceAsc';
+
+  switch (sorting?.sortBy) {
+    case 'price':
+      if (sorting?.sortDirection === 'desc') {
+        isSorted = 'priceDesc';
+      }
+      break;
+    case 'created':
+      isSorted = 'createdDesc';
+      break;
+    case 'year':
+      isSorted = 'yearAsc';
+      if (sorting?.sortDirection === 'desc') {
+        isSorted = 'yearDesc';
+      }
+      break;
+    case 'mileage':
+      isSorted = 'mileageAsc';
+      break;
+  }
+
+  const snapPoints = useMemo(() => [-1, '40%'], []);
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    if (bottomSheeetState) {
+      bottomSheetModalRefUsed.current?.close();
+    } else {
+      bottomSheetModalRefUsed.current?.present();
+    }
+  }, [bottomSheeetState]);
+  const handleSheetChanges = useCallback(index => {
+    if (index > 0) {
+      setBottomState(true);
+    } else {
+      setBottomState(false);
+    }
+    console.log('handleSheetChanges', index);
+  }, []);
+  const handleClosePress = () => bottomSheetModalRefUsed.current.close();
+
+  return (
+    <>
+      <StackCatalogUsed.Navigator initialRouteName="UsedCarListScreen">
+        <StackCatalogUsed.Screen
+          name="UsedCarListScreen"
+          component={UsedCarListScreen}
+          options={({route}) => ({
+            headerTitle: () => {
+              return (
+                <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
+                  {route?.params?.total?.count
+                    ? route?.params.total.count + ' авто'
+                    : null}
+                </Text>
+              );
+            },
+            headerStyle: stylesHeader.blueHeader,
+            headerTitleStyle: stylesHeader.blueHeaderTitle,
+            headerLeft: () => {
+              return ArrowBack(navigation, route, {theme: 'white'});
+            },
+            headerRight: () => (
+              <View style={stylesHeader.headerRightStyle}>
+                <TouchableOpacity onPress={handlePresentModalPress}>
+                  <Icon
+                    type="MaterialCommunityIcons"
+                    name="sort"
+                    style={styles.sortHeaderButton}
+                  />
+                </TouchableOpacity>
+              </View>
+            ),
+          })}
+        />
+        <StackCatalogUsed.Screen
+          name="UsedCarItemScreen"
+          component={UsedCarItemScreen}
+          options={TransparentBack(navigation, route)}
+        />
+      </StackCatalogUsed.Navigator>
+      <BottomSheetModalProvider>
+        <BottomSheetModal
+          snapPoints={snapPoints}
+          index={1}
+          style={styleConst.shadow.light}
+          ref={bottomSheetModalRefUsed}
+          onChange={handleSheetChanges}>
+          <Container>
+            <Header style={{backgroundColor: styleConst.color.white}}>
+              <Text style={styles.sortingBottomSheetTitle}>
+                {strings.Sort.title}
+              </Text>
+            </Header>
+            <Content>
+              <Card transparent>
+                <CardItem
+                  button
+                  first
+                  onPress={() => {
+                    handleClosePress();
+                    navigation.navigate('UsedCarListScreen', {
+                      screen: 'UsedCarListScreen',
+                      params: {
+                        sortBy: 'price',
+                        sortDirection: 'asc',
                       },
-                      {
-                        priority: 2,
-                        id: 'priceDesc',
-                        text: strings.Sort.price.desc,
+                    });
+                  }}>
+                  <Icon
+                    active
+                    style={[
+                      styles.sortingButtonIcon,
+                      isSorted === 'priceAsc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}
+                    type="FontAwesome5"
+                    name="sort-numeric-up"
+                  />
+                  <Text
+                    style={[
+                      styles.sortingButtonText,
+                      isSorted === 'priceAsc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}>
+                    {strings.Sort.price.asc}
+                  </Text>
+                  <Right>
+                    {isSorted === 'priceAsc' ? (
+                      <Icon
+                        type="FontAwesome5"
+                        name="check"
+                        style={styles.sortingColorSelected}
+                      />
+                    ) : null}
+                  </Right>
+                </CardItem>
+                <CardItem
+                  button
+                  onPress={() => {
+                    handleClosePress();
+                    navigation.navigate('UsedCarListScreen', {
+                      screen: 'UsedCarListScreen',
+                      params: {
+                        sortBy: 'price',
+                        sortDirection: 'desc',
                       },
-                      {
-                        priority: 3,
-                        id: 'createdDesc',
-                        text: strings.Sort.date.desc,
+                    });
+                  }}>
+                  <Icon
+                    active
+                    style={[
+                      styles.sortingButtonIcon,
+                      isSorted === 'priceDesc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}
+                    type="FontAwesome5"
+                    name="sort-numeric-down-alt"
+                  />
+                  <Text
+                    style={[
+                      styles.sortingButtonText,
+                      isSorted === 'priceDesc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}>
+                    {strings.Sort.price.desc}
+                  </Text>
+                  <Right>
+                    {isSorted === 'priceDesc' ? (
+                      <Icon
+                        type="FontAwesome5"
+                        name="check"
+                        style={styles.sortingColorSelected}
+                      />
+                    ) : null}
+                  </Right>
+                </CardItem>
+                <CardItem
+                  button
+                  last
+                  onPress={() => {
+                    handleClosePress();
+                    navigation.navigate('UsedCarListScreen', {
+                      screen: 'UsedCarListScreen',
+                      params: {
+                        sortBy: 'created',
+                        sortDirection: 'desc',
                       },
-                      {
-                        priority: 4,
-                        id: 'yearDesc',
-                        text: strings.Sort.year.desc,
+                    });
+                  }}>
+                  <Icon
+                    active
+                    style={[
+                      styles.sortingButtonIcon,
+                      isSorted === 'createdDesc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}
+                    type="FontAwesome5"
+                    name="sort-amount-down"
+                  />
+                  <Text
+                    style={[
+                      styles.sortingButtonText,
+                      isSorted === 'createdDesc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}>
+                    {strings.Sort.date.desc}
+                  </Text>
+                  <Right>
+                    {isSorted === 'createdDesc' ? (
+                      <Icon
+                        type="FontAwesome5"
+                        name="check"
+                        style={styles.sortingColorSelected}
+                      />
+                    ) : null}
+                  </Right>
+                </CardItem>
+                <CardItem
+                  button
+                  last
+                  onPress={() => {
+                    handleClosePress();
+                    navigation.navigate('UsedCarListScreen', {
+                      screen: 'UsedCarListScreen',
+                      params: {
+                        sortBy: 'year',
+                        sortDirection: 'desc',
                       },
-                      {
-                        priority: 5,
-                        id: 'yearAsc',
-                        text: strings.Sort.year.asc,
+                    });
+                  }}>
+                  <Icon
+                    active
+                    style={[
+                      styles.sortingButtonIcon,
+                      isSorted === 'yearDesc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}
+                    type="FontAwesome5"
+                    name="sort-amount-down"
+                  />
+                  <Text
+                    style={[
+                      styles.sortingButtonText,
+                      isSorted === 'yearDesc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}>
+                    {strings.Sort.year.desc}
+                  </Text>
+                  <Right>
+                    {isSorted === 'yearDesc' ? (
+                      <Icon
+                        type="FontAwesome5"
+                        name="check"
+                        style={styles.sortingColorSelected}
+                      />
+                    ) : null}
+                  </Right>
+                </CardItem>
+                <CardItem
+                  button
+                  last
+                  onPress={() => {
+                    handleClosePress();
+                    navigation.navigate('UsedCarListScreen', {
+                      screen: 'UsedCarListScreen',
+                      params: {
+                        sortBy: 'year',
+                        sortDirection: 'asc',
                       },
-                      {
-                        priority: 6,
-                        id: 'mileageAsc',
-                        text: strings.Sort.mileage.asc,
+                    });
+                  }}>
+                  <Icon
+                    active
+                    style={[
+                      styles.sortingButtonIcon,
+                      isSorted === 'yearAsc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}
+                    type="FontAwesome5"
+                    name="sort-numeric-down-alt"
+                  />
+                  <Text
+                    style={[
+                      styles.sortingButtonText,
+                      isSorted === 'yearAsc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}>
+                    {strings.Sort.year.asc}
+                  </Text>
+                  <Right>
+                    {isSorted === 'yearAsc' ? (
+                      <Icon
+                        type="FontAwesome5"
+                        name="check"
+                        style={styles.sortingColorSelected}
+                      />
+                    ) : null}
+                  </Right>
+                </CardItem>
+                <CardItem
+                  button
+                  last
+                  onPress={() => {
+                    handleClosePress();
+                    navigation.navigate('UsedCarListScreen', {
+                      screen: 'UsedCarListScreen',
+                      params: {
+                        sortBy: 'mileage',
+                        sortDirection: 'asc',
                       },
-                      {
-                        priority: 7,
-                        id: 'cancel',
-                        text: strings.Base.cancel,
-                      },
-                    ],
-                    cancelButtonIndex: 6,
-                    title: strings.Sort.title,
-                  },
-                  buttonIndex => {
-                    switch (buttonIndex) {
-                      case 0:
-                        navigation.navigate('UsedCarListScreen', {
-                          screen: 'UsedCarListScreen',
-                          params: {
-                            sortBy: 'price',
-                            sortDirection: 'asc',
-                          },
-                        });
-                        break;
-                      case 1:
-                        navigation.navigate('UsedCarListScreen', {
-                          screen: 'UsedCarListScreen',
-                          params: {
-                            sortBy: 'price',
-                            sortDirection: 'desc',
-                          },
-                        });
-                        break;
-                      case 2:
-                        navigation.navigate('UsedCarListScreen', {
-                          screen: 'UsedCarListScreen',
-                          params: {
-                            sortBy: 'created',
-                            sortDirection: 'desc',
-                          },
-                        });
-                        break;
-                      case 3:
-                        navigation.navigate('UsedCarListScreen', {
-                          screen: 'UsedCarListScreen',
-                          params: {
-                            sortBy: 'year',
-                            sortDirection: 'desc',
-                          },
-                        });
-                        break;
-                      case 4:
-                        navigation.navigate('UsedCarListScreen', {
-                          screen: 'UsedCarListScreen',
-                          params: {
-                            sortBy: 'year',
-                            sortDirection: 'asc',
-                          },
-                        });
-                        break;
-                      case 5:
-                        navigation.navigate('UsedCarListScreen', {
-                          screen: 'UsedCarListScreen',
-                          params: {
-                            sortBy: 'mileage',
-                            sortDirection: 'asc',
-                          },
-                        });
-                        break;
-                    }
-                  },
-                );
-              }}>
-              <Icon
-                type="MaterialCommunityIcons"
-                name="sort"
-                style={{
-                  color: styleConst.color.white,
-                  fontSize: 25,
-                  marginRight: 20,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        ),
-      })}
-    />
-    <StackCatalogUsed.Screen
-      name="UsedCarItemScreen"
-      component={UsedCarItemScreen}
-      options={TransparentBack(navigation, route)}
-    />
-  </StackCatalogUsed.Navigator>
-);
+                    });
+                  }}>
+                  <Icon
+                    active
+                    style={[
+                      styles.sortingButtonIcon,
+                      isSorted === 'mileageAsc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}
+                    type="FontAwesome5"
+                    name="sort-amount-down-alt"
+                  />
+                  <Text
+                    style={[
+                      styles.sortingButtonText,
+                      isSorted === 'mileageAsc'
+                        ? styles.sortingColorSelected
+                        : null,
+                    ]}>
+                    {strings.Sort.mileage.asc}
+                  </Text>
+                  <Right>
+                    {isSorted === 'mileageAsc' ? (
+                      <Icon
+                        type="FontAwesome5"
+                        name="check"
+                        style={styles.sortingColorSelected}
+                      />
+                    ) : null}
+                  </Right>
+                </CardItem>
+              </Card>
+            </Content>
+          </Container>
+        </BottomSheetModal>
+      </BottomSheetModalProvider>
+    </>
+  );
+};
 
 // export const Orders = () => (
 // );
@@ -774,17 +1052,23 @@ const styles = StyleSheet.create({
   MapHeaderIconStyle: {
     marginLeft: 5,
   },
+  sortHeaderButton: {
+    color: styleConst.color.white,
+    fontSize: 25,
+    marginRight: 20,
+  },
   sortingBottomSheetWrapper: {
     paddingHorizontal: 15,
     flex: 1,
     alignItems: 'flex-start',
   },
   sortingBottomSheetTitle: {
-    fontSize: 28,
+    fontSize: 26,
     fontFamily: styleConst.font.light,
     fontWeight: '800',
     marginTop: 10,
     marginBottom: 20,
+    // textTransform: 'lowercase',
   },
   sortingButton: {
     marginBottom: 5,
@@ -801,7 +1085,7 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.light,
     flex: 1,
   },
-  sortingButtonTextSelected: {
-    color: 'red',
+  sortingColorSelected: {
+    color: styleConst.color.blue,
   },
 });

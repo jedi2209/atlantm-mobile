@@ -74,7 +74,7 @@ const UsedCarListScreen = ({
 
   useEffect(() => {
     _fetchUsedCar(EVENT_REFRESH);
-  }, [filters.sorting.sortDirection, filters.sorting.sortBy]);
+  }, [filters.sorting?.sortDirection, filters.sorting?.sortBy]);
 
   useEffect(() => {
     actionSaveUsedCarFilters({
