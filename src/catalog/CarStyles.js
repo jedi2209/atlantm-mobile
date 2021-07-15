@@ -200,7 +200,7 @@ export default StyleSheet.create({
   bodyButtonsContainer: {
     flex: 1,
     flexDirection: 'row',
-    width: '110%',
+    width: '100%',
     // marginHorizontal: '2%',
     alignSelf: 'center',
     alignItems: 'center',
@@ -214,9 +214,32 @@ export default StyleSheet.create({
     width: '40%',
     marginBottom: 10,
   },
+  bodyButtonLeft: {
+    borderBottomLeftRadius: 0,
+    borderTopLeftRadius: 0,
+    borderEndColor: styleConst.color.red,
+    borderTopColor: styleConst.color.red,
+    borderBottomColor: styleConst.color.red,
+    borderLeftWidth: 0,
+  },
+  bodyButtonRight: {
+    borderBottomRightRadius: 0,
+    borderTopRightRadius: 0,
+    borderStartColor: styleConst.color.blue,
+    borderTopColor: styleConst.color.blue,
+    borderBottomColor: styleConst.color.blue,
+    borderRightWidth: 0,
+  },
   bodyButtonIcon: {
     fontSize: 28,
     width: '15%',
+  },
+  bodyButtonIconLeft: {
+    color: styleConst.color.red,
+    fontSize: 26,
+  },
+  bodyButtonIconRight: {
+    color: styleConst.color.blue,
   },
   bodyButtonText: {
     fontSize: 15,
@@ -224,16 +247,23 @@ export default StyleSheet.create({
     textAlign: 'center',
     width: '85%',
   },
+  bodyButtonTextLeft: {
+    color: styleConst.color.red,
+    paddingLeft: '5%',
+  },
+  bodyButtonTextRight: {
+    color: styleConst.color.blue,
+    paddingRight: '5%',
+  },
   colorboxWrapper: {
     position: 'absolute',
-    height: 400,
     width: '100%',
     zIndex: 20,
   },
   colorboxContainer: {
     position: 'absolute',
-    right: 0,
-    top: 280,
+    right: 10,
+    top: 190,
     zIndex: 1000,
     padding: 20,
   },
@@ -242,7 +272,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute',
     left: 5,
-    top: 290,
+    top: 220,
     zIndex: 1000,
   },
   accordion: {
@@ -271,13 +301,13 @@ export default StyleSheet.create({
   },
   carTopWrapper: {
     position: 'relative',
-    marginBottom: -5,
     backgroundColor: styleConst.color.white,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingTop: 20,
     paddingBottom: 14,
     zIndex: 30,
+    marginHorizontal: 10,
   },
   modelBrandView: {
     display: 'flex',

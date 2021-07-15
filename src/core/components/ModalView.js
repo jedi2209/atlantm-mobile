@@ -15,7 +15,7 @@ const ModalView = props => {
         style={[
           styles.modalView,
           props.type === 'bottom' ? styles.ModalViewBottom : null,
-          props?.stylesModal
+          props?.stylesModal,
         ]}
         useNativeDriver={true}
         isVisible={props.isModalVisible}
@@ -31,9 +31,15 @@ const ModalView = props => {
             styleConst.shadow.default,
             props?.stylesWrapper,
           ]}>
-          <View style={[props.type === 'bottom' ? {padding: 10} : null, props?.stylesWrapperContent,]}>
+          <View
+            style={[
+              props.type === 'bottom' ? {padding: 10} : null,
+              props?.stylesWrapperContent,
+            ]}>
             {props.title ? (
-              <Text style={[styles.titleText, props?.titleTextStyle]}>{props.title}</Text>
+              <Text style={[styles.titleText, props?.titleTextStyle]}>
+                {props.title}
+              </Text>
             ) : null}
             {props.content ? props.content : props.children}
           </View>
@@ -72,7 +78,7 @@ const ModalView = props => {
           style={[
             styles.modalView,
             props.type === 'bottom' ? styles.ModalViewBottom : null,
-            props?.stylesModal
+            props?.stylesModal,
           ]}
           useNativeDriver={true}
           isVisible={props.isModalVisible}
@@ -91,7 +97,9 @@ const ModalView = props => {
             ]}>
             <View style={[props.type === 'bottom' ? {padding: 10} : null]}>
               {props.title ? (
-                <Text style={[styles.titleText, props?.titleTextStyle]}>{props.title}</Text>
+                <Text style={[styles.titleText, props?.titleTextStyle]}>
+                  {props.title}
+                </Text>
               ) : null}
               {props.content ? props.content : props.children}
             </View>
@@ -104,7 +112,8 @@ const ModalView = props => {
                     ? styles.modalButton
                     : styles.modalButtonBottom,
                 ]}>
-                <Text style={[styles.modalButtonText, props.modalButtonTextStyle]}>
+                <Text
+                  style={[styles.modalButtonText, props.modalButtonTextStyle]}>
                   {props.confirmBtnText
                     ? props.confirmBtnText
                     : strings.ModalView.close}

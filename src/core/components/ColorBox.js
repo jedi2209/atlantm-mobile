@@ -1,6 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {View, Text, TouchableHighlight, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableHighlight,
+  StyleSheet,
+  StatusBar,
+} from 'react-native';
 
 // helpers
 import PropTypes from 'prop-types';
@@ -19,49 +25,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const ColorBox = (props) => {
+const ColorBox = props => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const color = props.color;
-  const backgroundColor = get(props, 'color.picker.codes.hex', 'color.codes.hex', null);
+  const backgroundColor = get(
+    props,
+    'color.picker.codes.hex',
+    'color.codes.hex',
+    null,
+  );
 
-    return (
+  return (
+    <>
       <View style={[props?.containerStyle]}>
-        <ModalView
-          isModalVisible={isModalVisible}
-          animationIn="slideInRight"
-          animationOut="slideOutLeft"
-          onHide={() => setModalVisible(false)}
-          selfClosed={true}>
-          <View style={{padding: 10}}>
-            {color?.name?.official ? (
-              <Text
-                ellipsizeMode="clip"
-                style={{fontSize: 18, marginBottom: 10}}>
-                {color?.name?.official}
-              </Text>
-            ) : null}
-            <View style={{flexDirection: 'row'}}>
-              <View
-                style={[
-                  styleConst.shadow.default,
-                  styles.boxStyle,
-                  {
-                    backgroundColor: backgroundColor,
-                    width: 100,
-                    height: 100,
-                    marginRight: 10,
-                  },
-                ]}
-              />
-              {color.code ? (
-                <Text style={{fontSize: 16}} selectable={true}>
-                  {strings.ColorBox.code} - {color.code}
-                </Text>
-              ) : null}
-            </View>
-          </View>
-        </ModalView>
+        <StatusBar hidden />
         <TouchableHighlight
           onPress={() => setModalVisible(true)}
           style={[props?.touchableStyle]}
@@ -78,8 +56,43 @@ const ColorBox = (props) => {
           />
         </TouchableHighlight>
       </View>
-    );
-}
+      <ModalView
+        statusBarTranslucent
+        isModalVisible={isModalVisible}
+        animationIn="slideInRight"
+        animationOut="slideOutLeft"
+        onHide={() => setModalVisible(false)}
+        selfClosed={true}>
+        <View style={{padding: 10}}>
+          {color?.name?.official ? (
+            <Text ellipsizeMode="clip" style={{fontSize: 18, marginBottom: 10}}>
+              {color?.name?.official}
+            </Text>
+          ) : null}
+          <View style={{flexDirection: 'row'}}>
+            <View
+              style={[
+                styleConst.shadow.default,
+                styles.boxStyle,
+                {
+                  backgroundColor: backgroundColor,
+                  width: 100,
+                  height: 100,
+                  marginRight: 10,
+                },
+              ]}
+            />
+            {color.code ? (
+              <Text style={{fontSize: 16}} selectable={true}>
+                {strings.ColorBox.code} - {color.code}
+              </Text>
+            ) : null}
+          </View>
+        </View>
+      </ModalView>
+    </>
+  );
+};
 
 ColorBox.propTypes = {
   color: PropTypes.object,

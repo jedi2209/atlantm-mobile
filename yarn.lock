@@ -3917,6 +3917,13 @@ eslint-plugin-prettier@3.1.2:
   dependencies:
     prettier-linter-helpers "^1.0.0"
 
+eslint-plugin-prettier@^3.4.0:
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-prettier/-/eslint-plugin-prettier-3.4.0.tgz#cdbad3bf1dbd2b177e9825737fe63b476a08f0c7"
+  integrity sha512-UDK6rJT6INSfcOo545jiaOwB701uAIt2/dR7WnFQoGCVl1/EMqdANBmwUaqqQ45aXprsTGzSa39LI1PyuRBxxw==
+  dependencies:
+    prettier-linter-helpers "^1.0.0"
+
 eslint-plugin-react-hooks@^4.0.7, eslint-plugin-react-hooks@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-4.2.0.tgz#8c229c268d468956334c943bb45fc860280f5556"
@@ -7993,10 +8000,10 @@ react-native-flipper@^0.34.0:
   resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.34.0.tgz#7df1f38ba5d97a9321125fe0fccbe47d99e6fa1d"
   integrity sha512-48wgm29HJTOlZ0DibBsvXueEOY0EPIVL0wWKbwRfgrk86+luSEuLW3aZC50oJa95zSFb9qYShTV/6dWqh4Jamg==
 
-react-native-flipper@^0.96.0:
-  version "0.96.1"
-  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.96.1.tgz#f62fb648c17718aeb8d529c560e64824ae45f9ec"
-  integrity sha512-IOqaLWwX8mHlXoTsenugON8khe74GIOIOZamQFNc17ZGRLLazJmLMYGUivMeTffk6bRr5RCC+xveyEA0apluWw==
+react-native-flipper@^0.98.0:
+  version "0.98.0"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.98.0.tgz#6ada370cd730d3a9d53b569f7e29dafe0af7abd5"
+  integrity sha512-11XsZexSH6yiCHrFLkPftbL2x8qruejnY+gcRE3QOchyK6rwBYbs/R5RSZHe3Mrp5D4xsUh+dToo8q0Vbhi9Yg==
 
 react-native-gallery-swiper@^1.26.0:
   version "1.26.4"
