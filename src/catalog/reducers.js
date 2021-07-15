@@ -380,8 +380,11 @@ const usedCarFiltersData = (state = {}, action) => {
     case SAVE_USEDCAR_FILTERS:
       return {
         filters: action?.payload?.filters || null,
-        sorting: action?.payload?.sorting || null,
-        url: action?.payload?.url || null
+        sorting: action?.payload?.sorting || {
+          sortBy: 'price',
+          sortDirection: 'asc',
+        },
+        url: action?.payload?.url || null,
       };
     default:
       return state;
@@ -396,8 +399,11 @@ const newCarFiltersData = (state = {}, action) => {
     case SAVE_NEWCAR_FILTERS:
       return {
         filters: action?.payload?.filters || null,
-        sorting: action?.payload?.sorting || null,
-        url: action?.payload?.url || null
+        sorting: action?.payload?.sorting || {
+          sortBy: 'price',
+          sortDirection: 'asc',
+        },
+        url: action?.payload?.url || state.url,
       };
     default:
       return state;

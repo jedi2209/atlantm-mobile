@@ -156,7 +156,7 @@ class NewCarItemScreen extends PureComponent {
     this.state = {
       tabName: 'base',
     };
-    // this.platesScrollView = React.createRef();
+    this.platesScrollView = React.createRef();
     this.colorbox = React.createRef();
   }
 

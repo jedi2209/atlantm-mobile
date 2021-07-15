@@ -109,6 +109,7 @@ class UsedCarItemScreen extends Component {
   constructor(props) {
     super(props);
 
+    this.platesScrollView = React.createRef();
     this.state = {tabName: 'base'};
   }
 
@@ -122,6 +123,21 @@ class UsedCarItemScreen extends Component {
       brand_name: get(this.props.carDetails, 'brand.name'),
       model_name: get(this.props.carDetails, 'model.name'),
     });
+
+    if (
+      this.props.carDetails &&
+      !this.props.isFetchingCarDetails &&
+      this.platesScrollView
+    ) {
+      setTimeout(() => {
+        this.platesScrollView &&
+          this.platesScrollView.scrollToEnd({duration: 500});
+        setTimeout(() => {
+          this.platesScrollView &&
+            this.platesScrollView.scrollTo({x: 0, y: 0, animated: true});
+        }, 500);
+      }, 3000);
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {

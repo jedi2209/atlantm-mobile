@@ -45,13 +45,15 @@ const CarList = props => {
     }
   }, [data]);
 
-  const _renderEmptyComponent = () => isFetchItems ? (
-    <ActivityIndicator
-      color={styleConst.color.blue}
-      style={styleConst.spinner} />
-  ) : (
-    <EmptyMessage text={strings.CarList.emptyMessage} />
-  );
+  const _renderEmptyComponent = () =>
+    isFetchItems ? (
+      <ActivityIndicator
+        color={styleConst.color.blue}
+        style={styleConst.spinner}
+      />
+    ) : (
+      <EmptyMessage text={strings.CarList.emptyMessage} />
+    );
 
   const _renderItem = ({item}) => {
     if (item.type === 'empty') {
@@ -62,7 +64,7 @@ const CarList = props => {
         resizeMode={resizeMode}
         key={item.hash ? item.hash : item.id.api}
         currency={prices.curr.name}
-        testID='CarListItem.Wrapper'
+        testID="CarListItem.Wrapper"
         car={item}
         prices={prices}
         itemScreen={itemScreen}
@@ -78,7 +80,11 @@ const CarList = props => {
 
     return (
       <View style={styles.footer}>
-        <ActivityIndicator animating size='large' color={styleConst.color.blue} />
+        <ActivityIndicator
+          animating
+          size="large"
+          color={styleConst.color.blue}
+        />
       </View>
     );
   };
@@ -105,8 +111,8 @@ const CarList = props => {
   return (
     <FlatList
       onEndReached={handleLoadMore}
-      onEndReachedThreshold={.7}
-      testID='CarList.Wrapper'
+      onEndReachedThreshold={0.7}
+      testID="CarList.Wrapper"
       initialNumToRender={10}
       maxToRenderPerBatch={20} // Increase time between renders
       onRefresh={_onRefresh}
