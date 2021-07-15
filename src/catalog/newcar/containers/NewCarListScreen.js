@@ -3,7 +3,10 @@ import {StyleSheet, View, StatusBar} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
-import {actionFetchNewCarByFilter} from '../../actions';
+import {
+  actionFetchNewCarByFilter,
+  actionSaveNewCarFilters,
+} from '../../actions';
 
 // components
 import CarList from '../../components/CarList';
@@ -32,30 +35,17 @@ const mapStateToProps = ({dealer, catalog}) => {
   };
 };
 
-const initialSort = {sortBy: 'price', sortDirection: 'asc'};
-const sortReducer = (state, action) => {
-  console.log('state, action', state, action);
-  switch (action.type) {
-    case 'sortBy':
-      return {sortBy: action.value, sortDirection: state.sortDirection};
-    case 'sortDirection':
-      return {sortBy: state.sortBy, sortDirection: action.value};
-    case 'all':
-      return action.value;
-  }
-};
-
 const NewCarListScreen = ({
   items,
   navigation,
   route,
   filters,
   actionFetchNewCarByFilter,
+  actionSaveNewCarFilters,
   dealerSelected,
   isFetchingNewCarByFilter,
 }) => {
-  const [loading, setLoading] = useState(false);
-  const [sorting, setSorting] = useReducer(sortReducer, initialSort);
+  const [loading, setLoading] = useState(true);
 
   const {data, pages, prices} = items;
 
@@ -69,10 +59,8 @@ const NewCarListScreen = ({
       city: dealerSelected.city.id,
       nextPage: pages?.next || null,
       filters: filters.filters,
-      sortBy: route?.params?.sortBy ? route.params.sortBy : sorting.sortBy,
-      sortDirection: route?.params?.sortDirection
-        ? route.params.sortDirection
-        : sorting.sortDirection,
+      sortBy: filters.sorting.sortBy,
+      sortDirection: filters.sorting.sortDirection,
     }).then(res => {
       return setTimeout(() => {
         setLoading(false);
@@ -83,31 +71,27 @@ const NewCarListScreen = ({
     });
   };
 
+  useEffect(() => {
+    _fetchNewCars(EVENT_REFRESH);
+  }, [filters.sorting.sortDirection, filters.sorting.sortBy]);
+
+  useEffect(() => {
+    actionSaveNewCarFilters({
+      filters: filters.filters,
+      sorting: {
+        sortBy: route?.params?.sortBy,
+        sortDirection: route?.params?.sortDirection,
+      },
+    });
+  }, [route.params.sortDirection, route.params.sortBy]);
+
   // Аналогично componentDidMount и componentDidUpdate:
   useEffect(() => {
-    if (typeof route.params?.sortDirection !== 'undefined') {
-      if (
-        route.params?.sortDirection != sorting.sortDirection ||
-        route.params?.sortBy != sorting.sortBy
-      ) {
-        setSorting({
-          type: 'all',
-          value: {
-            sortDirection: route.params.sortDirection,
-            sortBy: route.params.sortBy,
-          },
-        });
-        setTimeout(() => {
-          _fetchNewCars(EVENT_REFRESH);
-        }, 100);
-      }
-    }
-
-    const searchUrl = `/stock/new/cars/get/city/${dealerSelected.city.id}/`;
     Analytics.logEvent('screen', 'catalog/newcar/list', {
-      search_url: searchUrl,
+      search_url: `/stock/new/cars/get/city/${dealerSelected.city.id}/`,
     });
-  }, [route?.params?.sortBy, route?.params?.sortDirection]);
+  }, [dealerSelected.city.id]);
+
   return (
     <View style={styles.content} testID="NewCarsListSreen.Wrapper">
       <StatusBar hidden />
@@ -131,6 +115,7 @@ const NewCarListScreen = ({
 
 const mapDispatchToProps = {
   actionFetchNewCarByFilter,
+  actionSaveNewCarFilters,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewCarListScreen);

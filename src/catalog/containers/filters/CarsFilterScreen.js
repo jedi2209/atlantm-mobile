@@ -609,7 +609,8 @@ const CarsFilterScreen = ({
     switch (stockType) {
       case 'New':
         navigation.navigate('NewCarListScreen', {
-          screen: 'NewCarListScreen',
+          sortBy: 'price',
+          sortDirection: 'asc',
           total: {
             count: totalCars,
           },
@@ -619,6 +620,8 @@ const CarsFilterScreen = ({
         navigation.navigate('UsedCarListScreen', {
           screen: 'UsedCarListScreen',
           params: {
+            sortBy: 'price',
+            sortDirection: 'asc',
             total: {
               count: totalCars,
             },
@@ -633,10 +636,10 @@ const CarsFilterScreen = ({
   }, [stockType]);
 
   useEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      return;
-    }
+    // if (firstUpdate.current) {
+    //   firstUpdate.current = false;
+    //   return;
+    // }
     _showHideSubmitButton(false);
     let filtersLocal = {};
     Object.assign(filtersLocal, stateFilters);

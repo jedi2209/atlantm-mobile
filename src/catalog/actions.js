@@ -71,6 +71,8 @@ export const actionFetchNewCarByFilter = props => {
   let filtersRaw = {};
   let sortingRaw = {};
 
+  console.log('actionFetchNewCarByFilter props', props);
+
   if (props.filters) {
     for (const [key, value] of Object.entries(props.filters)) {
       if (value) {
@@ -97,11 +99,11 @@ export const actionFetchNewCarByFilter = props => {
     });
 
     if (props.sortBy) {
-      sortingRaw['sortBy'] = props.sortBy;
+      sortingRaw.sortBy = props.sortBy;
     }
-  
+
     if (props.sortDirection) {
-      sortingRaw['sortDirection'] = props.sortDirection;
+      sortingRaw.sortDirection = props.sortDirection;
     }
 
     if (props.type !== EVENT_LOAD_MORE) {
@@ -118,11 +120,11 @@ export const actionFetchNewCarByFilter = props => {
     if (props.sortBy) {
       urlParams.push(`sortBy=${props.sortBy}`);
     }
-  
+
     if (props.sortDirection) {
       urlParams.push(`sortDirection=${props.sortDirection}`);
     }
-  
+
     if (props.type !== EVENT_LOAD_MORE) {
       props.url = props.url + '?' + urlParams.join('&');
     }
@@ -195,11 +197,11 @@ export const actionFetchUsedCarByFilter = props => {
     });
 
     if (props.sortBy) {
-      sortingRaw['sortBy'] = props.sortBy;
+      sortingRaw.sortBy = props.sortBy;
     }
-  
+
     if (props.sortDirection) {
-      sortingRaw['sortDirection'] = props.sortDirection;
+      sortingRaw.sortDirection = props.sortDirection;
     }
 
     if (props.type !== EVENT_LOAD_MORE) {
@@ -216,11 +218,11 @@ export const actionFetchUsedCarByFilter = props => {
     if (props.sortBy) {
       urlParams.push(`sortBy=${props.sortBy}`);
     }
-  
+
     if (props.sortDirection) {
       urlParams.push(`sortDirection=${props.sortDirection}`);
     }
-  
+
     if (props.type !== EVENT_LOAD_MORE) {
       props.url = props.url + '?' + urlParams.join('&');
     }
@@ -818,8 +820,8 @@ export const actionSaveNewCarFilters = ({filters, sorting, url}) => {
       payload: {
         filters,
         sorting,
-        url
-      }
+        url,
+      },
     });
   };
 };
@@ -834,8 +836,8 @@ export const actionSaveUsedCarFilters = ({filters, sorting, url}) => {
       payload: {
         filters,
         sorting,
-        url
-      }
+        url,
+      },
     });
   };
 };

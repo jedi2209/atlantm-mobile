@@ -3,7 +3,10 @@ import {StyleSheet, View, StatusBar} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
-import {actionFetchUsedCarByFilter} from '../../actions';
+import {
+  actionFetchUsedCarByFilter,
+  actionSaveUsedCarFilters,
+} from '../../actions';
 
 // components
 import CarList from '../../components/CarList';
@@ -33,23 +36,6 @@ const mapStateToProps = ({dealer, catalog}) => {
   };
 };
 
-const mapDispatchToProps = {
-  actionFetchUsedCarByFilter,
-};
-
-const initialSort = {sortBy: 'price', sortDirection: 'asc'};
-const sortReducer = (state, action) => {
-  console.log('state, action', state, action);
-  switch (action.type) {
-    case 'sortBy':
-      return {sortBy: action.value, sortDirection: state.sortDirection};
-    case 'sortDirection':
-      return {sortBy: state.sortBy, sortDirection: action.value};
-    case 'all':
-      return action.value;
-  }
-};
-
 const UsedCarListScreen = ({
   pages,
   prices,
@@ -57,29 +43,28 @@ const UsedCarListScreen = ({
   navigation,
   route,
   actionFetchUsedCarByFilter,
+  actionSaveUsedCarFilters,
   dealerSelected,
   filters,
   items,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [sorting, setSorting] = useReducer(sortReducer, initialSort);
 
-  const _fetchUsedCar = (type) => {
+  const _fetchUsedCar = type => {
     if (type === EVENT_REFRESH) {
       setLoading(true);
     }
+
     return actionFetchUsedCarByFilter({
       type,
       city: dealerSelected.city.id,
       nextPage: pages?.next || null,
       filters: filters.filters,
-      sortBy: route?.params?.sortBy ? route.params.sortBy : sorting.sortBy,
-      sortDirection: route?.params?.sortDirection
-        ? route.params.sortDirection
-        : sorting.sortDirection,
+      sortBy: filters.sorting.sortBy,
+      sortDirection: filters.sorting.sortDirection,
     }).then(res => {
-      setLoading(false);
       return setTimeout(() => {
+        setLoading(false);
         navigation.setParams({
           total: get(items, 'total', get(res, 'payload.total')),
         });
@@ -88,74 +73,25 @@ const UsedCarListScreen = ({
   };
 
   useEffect(() => {
+    _fetchUsedCar(EVENT_REFRESH);
+  }, [filters.sorting.sortDirection, filters.sorting.sortBy]);
+
+  useEffect(() => {
+    actionSaveUsedCarFilters({
+      filters: filters.filters,
+      sorting: {
+        sortBy: route?.params?.sortBy,
+        sortDirection: route?.params?.sortDirection,
+      },
+    });
+  }, [route.params.sortDirection, route.params.sortBy]);
+
+  // Аналогично componentDidMount и componentDidUpdate:
+  useEffect(() => {
     console.log('== UsedCarListScreen ==');
     Analytics.logEvent('screen', 'catalog/usedcar/list');
-    if (typeof route.params?.sortDirection !== 'undefined') {
-      if (
-        route.params?.sortDirection !== sorting.sortDirection ||
-        route.params?.sortBy !== sorting.sortBy
-      ) {
-        setSorting({
-          type: 'all',
-          value: {
-            sortDirection: route.params.sortDirection,
-            sortBy: route.params.sortBy,
-          },
-        });
-        setTimeout(() => {
-          _fetchUsedCar(EVENT_REFRESH);
-        }, 100);
-      }
-    }
-  }, [route?.params]);
+  }, [dealerSelected.city.id]);
 
-  // componentDidUpdate() {
-  //   const {
-  //     total,
-  //     navigation,
-  //     needUpdate,
-  //     isFetchItems,
-  //     actionSetStopNeedUpdateUsedCarList,
-  //   } = this.props;
-
-  //   if (needUpdate && !isFetchItems) {
-  //     this.fetchUsedCar('default').then(() => {
-  //       actionSetStopNeedUpdateUsedCarList();
-  //       setTimeout(() => {
-  //         this.props.navigation.setParams({
-  //           total: this.props.total,
-  //           itemsLength: this.props.items && this.props.items.length,
-  //         });
-  //       }, 200);
-  //     });
-  //   }
-  // }
-
-  // shouldComponentUpdate(nextProps) {
-  //   const {
-  //     total,
-  //     items,
-  //     needUpdate,
-  //     isFetchItems,
-  //     dealerSelected,
-  //     isPriceFilterShow,
-  //   } = this.props;
-
-  //   const nav = nextProps.nav.newState;
-  //   const isActiveScreen =
-  //     nav.routes[nav.index].routeName === 'UsedCarListScreen';
-
-  //   return (
-  //     (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-  //     items.length !== nextProps.items.length ||
-  //     isFetchItems !== nextProps.isFetchItems ||
-  //     total.count !== nextProps.total.count ||
-  //     isPriceFilterShow !== nextProps.isPriceFilterShow ||
-  //     // city.id !== nextProps.city.id ||
-  //     needUpdate !== nextProps.needUpdate ||
-  //     this.props.priceRange !== nextProps.priceRange
-  //   );
-  // }
   return (
     <View style={styles.content} testID="UserCarListSreen.Wrapper">
       <StatusBar hidden />
@@ -174,6 +110,11 @@ const UsedCarListScreen = ({
       )}
     </View>
   );
+};
+
+const mapDispatchToProps = {
+  actionFetchUsedCarByFilter,
+  actionSaveUsedCarFilters,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsedCarListScreen);
