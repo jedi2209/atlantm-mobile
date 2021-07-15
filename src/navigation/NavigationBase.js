@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {useCallback, useMemo, useRef, useState, useEffect} from 'react';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import {Icon, ActionSheet} from 'native-base';
+import {Icon, ActionSheet, Button} from 'native-base';
 import {EVENT_REFRESH} from '../core/actionTypes';
-// import ActionSheet from '@alessiocancian/react-native-actionsheet';
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetBackdrop,
+} from '@gorhom/bottom-sheet';
 
 // EKO
 import ReviewsScreen from '../eko/reviews/containers/ReviewsScreen';
@@ -314,13 +318,13 @@ export const Base = ({navigation, route}) => {
   );
 };
 
-export const Contacts = ({navigation, route}) => (
+const Contacts = ({navigation, route}) => (
   <StackContacts.Navigator initialRouteName="ContactsScreen">
     <StackContacts.Screen name="ContactsScreen" component={ContactsScreen} />
   </StackContacts.Navigator>
 );
 
-export const EKO = ({navigation, route}) => (
+const EKO = ({navigation, route}) => (
   <StackEKO.Navigator initialRouteName="ReviewsScreen">
     <StackEKO.Screen
       name="ReviewsScreen"
@@ -375,158 +379,216 @@ export const EKO = ({navigation, route}) => (
   </StackEKO.Navigator>
 );
 
-export const CarsStock = ({navigation, route}) => (
-  <SearchStack.Navigator initialRouteName="CarsFilterScreen">
-    <SearchStack.Screen
-      name="CarsFilterScreen"
-      component={CarsFilterScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.CarsFilterScreen.title,
-        headerRight: () => (<></>),
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    <SearchStack.Screen
-      name="NewCarListScreen"
-      component={NewCarListScreen}
-      options={({route}) => ({
-        headerTitle: () => {
-          return (
-            <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
-              {route?.params?.total?.count
-                ? route?.params.total.count + ' авто'
-                : null}
-            </Text>
-          );
-        },
-        headerStyle: stylesHeader.blueHeader,
-        headerTitleStyle: stylesHeader.blueHeaderTitle,
-        headerLeft: () => {
-          return ArrowBack(navigation, route, {theme: 'white'});
-        },
-        headerRight: () => (
-          <View style={stylesHeader.headerRightStyle}>
-            <TouchableOpacity
-              onPress={() => {
-                ActionSheet.show(
-                  {
-                    options: [
-                      {
-                        priority: 1,
-                        id: 'priceAsc',
-                        text: strings.Sort.price.asc,
-                      },
-                      {
-                        priority: 2,
-                        id: 'priceDesc',
-                        text: strings.Sort.price.desc,
-                      },
-                      {
-                        priority: 3,
-                        id: 'createdDesc',
-                        text: strings.Sort.date.desc,
-                      },
-                      {
-                        priority: 4,
-                        id: 'cancel',
-                        text: strings.Base.cancel,
-                      },
-                    ],
-                    cancelButtonIndex: 3,
-                    title: strings.Sort.title,
-                  },
-                  buttonIndex => {
-                    switch (buttonIndex) {
-                      case 0:
-                        navigation.navigate('CarsStock', {
-                          screen: 'NewCarListScreen',
-                          params: {
-                            sortBy: 'price',
-                            sortDirection: 'asc',
-                          },
-                        });
-                        break;
-                      case 1:
-                        navigation.navigate('CarsStock', {
-                          screen: 'NewCarListScreen',
-                          params: {
-                            sortBy: 'price',
-                            sortDirection: 'desc',
-                          },
-                        });
-                        break;
-                      case 2:
-                        navigation.navigate('CarsStock', {
-                          screen: 'NewCarListScreen',
-                          params: {
-                            sortBy: 'created',
-                            sortDirection: 'desc',
-                          },
-                        });
-                        break;
-                      case 3:
-                        navigation.navigate('CarsStock', {
-                          screen: 'NewCarListScreen',
-                          params: {
-                            sortBy: 'created',
-                            sortDirection: 'asc',
-                          },
-                        });
-                        break;
-                    }
-                  },
-                );
-              }}>
-              <Icon
-                type="MaterialCommunityIcons"
-                name="sort"
-                style={{
-                  color: styleConst.color.white,
-                  fontSize: 25,
-                  marginRight: 20,
-                }}
-              />
-            </TouchableOpacity>
-          </View>
-        ),
-      })}
-    />
-    <SearchStack.Screen
-      name="NewCarItemScreen"
-      component={NewCarItemScreen}
-      options={TransparentBack(
-        navigation,
-        route,
-        {
-          ...TransitionPresets.ModalTransition,
-          headerTitle: '',
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
-        },
-        {
-          icon: 'close',
-          IconStyle: {
-            fontSize: 24,
-          },
-        },
-      )}
-    />
+const CarsStock = ({navigation, route}) => {
+  const bottomSheetModalRef = useRef(null);
+  const [bottomSheeetState, setBottomState] = useState(false);
 
-    <StackBase.Screen
-      name="UsedCarListScreen"
-      component={UsedCars}
-      options={{headerShown: false}}
-    />
-  </SearchStack.Navigator>
-);
+  const snapPoints = useMemo(() => [-1, '30%'], []);
+  // callbacks
+  const handlePresentModalPress = useCallback(() => {
+    if (bottomSheeetState) {
+      bottomSheetModalRef.current?.close();
+    } else {
+      bottomSheetModalRef.current?.present();
+    }
+  }, [bottomSheeetState]);
+  const handleSheetChanges = useCallback(index => {
+    if (index > 0) {
+      setBottomState(true);
+    } else {
+      setBottomState(false);
+    }
+    console.log('handleSheetChanges', index);
+  }, []);
+  const handleClosePress = () => bottomSheetModalRef.current.close();
 
-export const UsedCars = ({navigation, route}) => (
+  return (
+    <>
+      <SearchStack.Navigator initialRouteName="CarsFilterScreen">
+        <SearchStack.Screen
+          name="CarsFilterScreen"
+          component={CarsFilterScreen}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ScaleFromCenterAndroid,
+            headerTitle: strings.CarsFilterScreen.title,
+            headerRight: () => <></>,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+        <SearchStack.Screen
+          name="NewCarListScreen"
+          component={NewCarListScreen}
+          options={({route}) => ({
+            safeAreaInsets: {
+              bottom: 0,
+            },
+            headerTitle: () => {
+              return (
+                <Text style={stylesHeader.blueHeaderTitle} selectable={false}>
+                  {route?.params?.total?.count
+                    ? route?.params.total.count + ' авто'
+                    : null}
+                </Text>
+              );
+            },
+            headerStyle: stylesHeader.blueHeader,
+            headerTitleStyle: stylesHeader.blueHeaderTitle,
+            headerLeft: () => {
+              return ArrowBack(navigation, route, {theme: 'white'});
+            },
+            headerRight: () => (
+              <View style={stylesHeader.headerRightStyle}>
+                <TouchableOpacity onPress={handlePresentModalPress}>
+                  <Icon
+                    type="MaterialCommunityIcons"
+                    name="sort"
+                    style={{
+                      color: styleConst.color.white,
+                      fontSize: 25,
+                      marginRight: 20,
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
+            ),
+          })}
+        />
+        <SearchStack.Screen
+          name="NewCarItemScreen"
+          component={NewCarItemScreen}
+          options={TransparentBack(
+            navigation,
+            route,
+            {
+              ...TransitionPresets.ModalTransition,
+              headerTitle: '',
+              headerTitleStyle: [
+                stylesHeader.transparentHeaderTitle,
+                {color: '#222B45'},
+              ],
+            },
+            {
+              icon: 'close',
+              IconStyle: {
+                fontSize: 24,
+              },
+            },
+          )}
+        />
+        <StackBase.Screen
+          name="UsedCarListScreen"
+          component={UsedCars}
+          options={{headerShown: false}}
+        />
+      </SearchStack.Navigator>
+      <BottomSheetModalProvider>
+        <View>
+          <BottomSheetModal
+            snapPoints={snapPoints}
+            index={1}
+            style={styleConst.shadow.light}
+            ref={bottomSheetModalRef}
+            onChange={handleSheetChanges}>
+            <View style={styles.sortingBottomSheetWrapper}>
+              <Text style={styles.sortingBottomSheetTitle}>
+                {strings.Sort.title}
+              </Text>
+              <Button
+                full
+                transparent
+                iconLeft
+                style={styles.sortingButton}
+                onPress={() => {
+                  handleClosePress();
+                  navigation.navigate('NewCarListScreen', {
+                    sortBy: 'price',
+                    sortDirection: 'asc',
+                  });
+                }}>
+                <Icon
+                  style={styles.sortingButtonIcon}
+                  type="FontAwesome5"
+                  name="sort-numeric-up"
+                />
+                <Text
+                  style={[
+                    styles.sortingButtonText,
+                    route?.params?.sortBy === 'price' &&
+                    route?.params?.sortDirection === 'asc'
+                      ? styles.sortingButtonTextSelected
+                      : null,
+                  ]}>
+                  {strings.Sort.price.asc}
+                </Text>
+              </Button>
+              <Button
+                full
+                transparent
+                iconLeft
+                style={styles.sortingButton}
+                onPress={() => {
+                  handleClosePress();
+                  navigation.navigate('NewCarListScreen', {
+                    sortBy: 'price',
+                    sortDirection: 'desc',
+                  });
+                }}>
+                <Icon
+                  style={styles.sortingButtonIcon}
+                  type="FontAwesome5"
+                  name="sort-numeric-down-alt"
+                />
+                <Text
+                  style={[
+                    styles.sortingButtonText,
+                    route?.params?.sortBy === 'price' &&
+                    route?.params?.sortDirection === 'desc'
+                      ? styles.sortingButtonTextSelected
+                      : null,
+                  ]}>
+                  {strings.Sort.price.desc}
+                </Text>
+              </Button>
+              <Button
+                full
+                transparent
+                iconLeft
+                style={styles.sortingButton}
+                onPress={() => {
+                  handleClosePress();
+                  navigation.navigate('NewCarListScreen', {
+                    sortBy: 'date',
+                    sortDirection: 'desc',
+                  });
+                }}>
+                <Icon
+                  style={styles.sortingButtonIcon}
+                  type="FontAwesome5"
+                  name="sort-amount-down"
+                />
+                <Text
+                  style={[
+                    styles.sortingButtonText,
+                    route?.params?.sortBy === 'date' &&
+                    route?.params?.sortDirection === 'desc'
+                      ? styles.sortingButtonTextSelected
+                      : null,
+                  ]}>
+                  {strings.Sort.date.desc}
+                </Text>
+              </Button>
+            </View>
+          </BottomSheetModal>
+        </View>
+      </BottomSheetModalProvider>
+    </>
+  );
+};
+
+const UsedCars = ({navigation, route}) => (
   <StackCatalogUsed.Navigator initialRouteName="UsedCarListScreen">
     <StackCatalogUsed.Screen
       name="UsedCarListScreen"
@@ -677,7 +739,7 @@ export const UsedCars = ({navigation, route}) => (
 // export const Orders = () => (
 // );
 
-export const TVA = ({navigation, route}) => (
+const TVA = ({navigation, route}) => (
   <StackTVA.Navigator initialRouteName="TvaScreen">
     <StackTVA.Screen
       name="TvaScreen"
@@ -711,5 +773,35 @@ const styles = StyleSheet.create({
   },
   MapHeaderIconStyle: {
     marginLeft: 5,
+  },
+  sortingBottomSheetWrapper: {
+    paddingHorizontal: 15,
+    flex: 1,
+    alignItems: 'flex-start',
+  },
+  sortingBottomSheetTitle: {
+    fontSize: 28,
+    fontFamily: styleConst.font.light,
+    fontWeight: '800',
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  sortingButton: {
+    marginBottom: 5,
+    justifyContent: 'space-between',
+  },
+  sortingButtonIcon: {
+    marginRight: 10,
+    fontSize: 22,
+    width: 40,
+    marginLeft: 0,
+  },
+  sortingButtonText: {
+    fontSize: 16,
+    fontFamily: styleConst.font.light,
+    flex: 1,
+  },
+  sortingButtonTextSelected: {
+    color: 'red',
   },
 });

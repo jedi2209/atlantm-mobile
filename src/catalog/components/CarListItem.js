@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
+import React, {useEffect} from 'react';
+import {useNavigation} from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import {
   Text,
@@ -8,7 +8,7 @@ import {
   TouchableHighlight,
   Platform,
 } from 'react-native';
-import RNBounceable from "@freakycoder/react-native-bounceable";
+import RNBounceable from '@freakycoder/react-native-bounceable';
 import LinearGradient from 'react-native-linear-gradient';
 
 // components
@@ -31,7 +31,16 @@ const mapStateToProps = ({dealer}) => {
   };
 };
 
-const CarListItem = ({car, prices, itemScreen, resizeMode, dealerSelected, currency, testID, key}) => {
+const CarListItem = ({
+  car,
+  prices,
+  itemScreen,
+  resizeMode,
+  dealerSelected,
+  currency,
+  testID,
+  key,
+}) => {
   const navigation = useNavigation();
 
   const modelName = get(car, 'model.name', '');
@@ -65,7 +74,11 @@ const CarListItem = ({car, prices, itemScreen, resizeMode, dealerSelected, curre
   let CarImgReal = get(car, 'imgReal.thumb', false);
 
   const _onPress = () => {
-    navigation.navigate(itemScreen, {carId: car.id.api, currency, code: prices.curr.code});
+    navigation.navigate(itemScreen, {
+      carId: car.id.api,
+      currency,
+      code: prices.curr.code,
+    });
   };
 
   const _onPressOrder = () => {
@@ -198,7 +211,7 @@ const CarListItem = ({car, prices, itemScreen, resizeMode, dealerSelected, curre
     } else {
       let photos = [];
       if (get(car, 'img.thumb')) {
-        get(car, 'img.thumb').forEach((element) => {
+        get(car, 'img.thumb').forEach(element => {
           photos.push(element + '1000x440');
         });
       }
@@ -225,8 +238,7 @@ const CarListItem = ({car, prices, itemScreen, resizeMode, dealerSelected, curre
       onPress={!ordered ? _onPress : _onPressOrder}
       testID={testID + '-' + key}
       accessibilityLabel={testID}
-      accessibilityRole='button'
-      >
+      accessibilityRole="button">
       <View
         style={[
           !ordered ? styleConst.shadow.light : null,
@@ -345,7 +357,7 @@ const CarListItem = ({car, prices, itemScreen, resizeMode, dealerSelected, curre
       </View>
     </RNBounceable>
   );
-}
+};
 
 CarListItem.propTypes = {
   car: PropTypes.object,
@@ -370,10 +382,9 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.white,
     borderRadius: 5,
   },
-  containerSpecial: {
-  },
+  containerSpecial: {},
   ordered: {
-    opacity: .7,
+    opacity: 0.7,
   },
   card: {
     flexDirection: 'column',
