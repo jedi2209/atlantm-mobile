@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 
 const MENU_SCREEN_NAME = 'BottomTabNavigation';
 
-const HeaderBackButton = (props) => {
+const HeaderBackButton = props => {
   const onPressBack = () => {
     const {returnScreen} = props;
 
@@ -65,7 +65,7 @@ const HeaderBackButton = (props) => {
   return (
     <TouchableOpacity
       style={[styles.container, props.ContainerStyle]}
-      testID='HeaderIconBack.Button'
+      testID="HeaderIconBack.Button"
       onPress={onPressBack}>
       <View style={[styles.inner]}>
         <Icon

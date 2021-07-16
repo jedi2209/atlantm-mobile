@@ -413,7 +413,7 @@ export default {
   ReviewAddRatingStepScreen: {
     title: 'Новый отзыв',
     mainReview: 'Общее впечатление',
-    mainReview2: 'Насколько в целом вы удовлетворены?',
+    mainReview2: 'Насколько вы удовлетворены?',
     addReview: 'Поставь оценку нашей работе...',
     approve: 'Я разрешаю опубликовать мой отзыв',
     Notifications: {
