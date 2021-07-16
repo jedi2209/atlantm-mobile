@@ -1351,7 +1351,7 @@ const CarsFilterScreen = ({
                       dataFilters?.data?.year?.min,
                     )}
                     key={'yearPickerFrom'}
-                    style={styles.pickerStyle}
+                    style={styles.pickerStyleYear}
                     onValueChange={(itemValue, itemIndex) =>
                       _onChangeFilter('year[from]', itemValue)
                     }>
@@ -1377,7 +1377,7 @@ const CarsFilterScreen = ({
                       dataFilters?.data?.year?.max,
                     )}
                     key={'yearPickerTo'}
-                    style={styles.pickerStyle}
+                    style={styles.pickerStyleYear}
                     onValueChange={(itemValue, itemIndex) =>
                       _onChangeFilter('year[to]', itemValue)
                     }>
@@ -2050,6 +2050,10 @@ const styles = StyleSheet.create({
   },
   pickerStyle: {
     width: '100%',
+  },
+  pickerStyleYear: {
+    width: isAndroid ? 100 : '100%',
+    justifyContent: 'center',
   },
   colorWrapper: {
     flexDirection: 'row',
