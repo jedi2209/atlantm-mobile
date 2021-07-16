@@ -5,6 +5,8 @@ import DeviceInfo from 'react-native-device-info';
 import {STORE_LINK, API_MAIN_URL} from '../core/const';
 import {strings} from '../core/lang/const';
 
+import RNFetchBlob from 'rn-fetch-blob';
+
 const isAndroid = Platform.OS === 'android';
 
 const headers = {
@@ -656,30 +658,48 @@ export default {
       props.gearbox && {name: 'f_Gearbox', value: String(props.gearbox)},
     ]);
 
+    let formDataNew = [];
+
     formBody.map(val => {
       formData.append(val.name, val.value);
+      formDataNew.push({name: val.name, data: val.value});
     });
 
+    let cnt = 0;
+
     props.photos.map(photo => {
-      formData.append('f_Photo[]', {
-        name: photo.filename,
+      const path = photo.path;
+      const fileName = path.split('\\').pop().split('/').pop();
+      formDataNew.push({
+        name: 'f_Photo[' + cnt + ']',
+        filename: fileName,
+        type: photo.mime,
+        data: photo.data,
+      });
+      formData.append('f_Photo[' + cnt + ']', {
+        name: fileName,
+        filename: fileName,
         type: photo.mime,
         uri: photo.path,
       });
+      cnt++;
     });
 
-    const body = formData;
+    const headersNew = _.merge({}, headers, {
+      'Content-Type': 'multipart/form-data; ',
+    });
 
-    __DEV__ && console.log('API carcost body', body, props);
+    __DEV__ && console.log('API carcost body', formData, formDataNew, props, headersNew);
+
+    // `${API_MAIN_URL}/orders/usedbuy/post/`,
 
     return (async () => {
-      const rawResponse = await fetch(`${API_MAIN_URL}/orders/usedbuy/post/`, {
-        method: 'POST',
-        headers: _.merge({}, headers, {
-          'Content-Type': 'multipart/form-data',
-        }),
-        body: body,
-      });
+      const rawResponse = await RNFetchBlob.fetch(
+        'POST',
+        'https://api-backend.atlantm.com/orders/usedbuy/post/',
+        headersNew,
+        formDataNew,
+      );
       if (rawResponse) {
         let txt = await rawResponse.text();
         console.log('rawResponse', txt);
