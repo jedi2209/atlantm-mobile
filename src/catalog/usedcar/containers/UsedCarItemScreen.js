@@ -420,455 +420,457 @@ class UsedCarItemScreen extends Component {
     }
 
     return (
-      <Container testID="UsedCarItemScreen.Wrapper">
-        <Content>
-          <StatusBar hidden />
-          <View>
-            {badge && badge.length ? (
-              <View
-                testID="NewCarItemScreen.BadgesWrapper"
-                style={styles.badgesView}>
-                {badge.map((item, index) => {
-                  if (item.name.toLowerCase() === 'спец.цена') {
-                    item.name = strings.CarList.badges.specialPrice;
-                  }
-                  return (
-                    <Badge
-                      id={carDetails.id.api}
-                      key={'badgeItem' + carDetails.id.api + index}
-                      index={index}
-                      bgColor={item.background}
-                      name={item.name}
-                      textColor={item.textColor}
-                    />
-                  );
-                })}
-              </View>
-            ) : null}
-            <PhotoSlider
-              height={310}
-              photos={photos}
-              resizeMode={'cover'}
-              paginationStyle={{marginBottom: 0}}
-              dotColor={styleConst.color.white}
-              // onPressItem={() => this.onPressPhoto}
-              // onIndexChanged={() => this.onChangePhotoIndex}
-            />
-          </View>
-          <View
-            style={[
-              styleConst.shadow.default,
-              styles.carTopWrapper,
-              {
-                marginTop: -25,
-              },
-            ]}>
+      <>
+        <Container testID="UsedCarItemScreen.Wrapper">
+          <Content>
+            <StatusBar hidden />
             <View>
-              <View style={styles.modelBrandView}>
-                <View style={{marginBottom: 10, flexShrink: 1}}>
-                  <Text style={styles.modelBrandText}>
-                    {`${brandName} ${modelName}`}
-                  </Text>
-                  <Text style={styles.complectationText}>
-                    {get(carDetails, 'year')}
-                  </Text>
-                </View>
-                {this.renderPrice({carDetails, currency})}
-              </View>
-
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                bounces={true}
-                testID="NewCarItemScreen.PlatesWrapper"
-                ref={ref => {
-                  this.platesScrollView = ref;
-                }}>
+              {badge && badge.length ? (
                 <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    paddingHorizontal: '2%',
-                    marginBottom: 10,
-                  }}>
-                  {get(carDetails, 'mileage') ? (
-                    <OptionPlate
-                      title={strings.NewCarItemScreen.plates.mileage}
-                      subtitle={
-                        numberWithGap(get(carDetails, 'mileage')) + ' км.'
-                      }
-                    />
-                  ) : null}
-                  {engineName ? (
-                    <OptionPlate
-                      title={strings.NewCarItemScreen.plates.engine}
-                      subtitle={
-                        get(carDetails, 'engine.volume.short')
-                          ? get(carDetails, 'engine.volume.short').toFixed(1) +
-                            ' л. '
-                          : '' + engineName
-                      }
-                    />
-                  ) : null}
-                  {get(carDetails, 'gearbox.GearboxCount') &&
-                  get(carDetails, 'gearbox.name') ? (
-                    <OptionPlate
-                      title={strings.NewCarItemScreen.plates.gearbox.name}
-                      subtitle={`${
-                        get(carDetails, 'gearbox.GearboxCount.Value')
-                          ? get(carDetails, 'gearbox.GearboxCount.Value') +
-                            '-ст.'
-                          : ''
-                      } ${
-                        get(carDetails, 'gearbox.name')
-                          .replace(/^(Механическая)/i, 'МКПП')
-                          .replace(/^(Автоматическая)/i, 'АКПП')
-                          .split('/')[0]
-                      }`}
-                    />
-                  ) : null}
-                  {wheelName ? (
-                    <OptionPlate
-                      title={strings.NewCarItemScreen.plates.wheel}
-                      subtitle={wheelName.toLowerCase()}
-                    />
-                  ) : null}
-                  {get(carDetails, 'color.name.simple') ? (
-                    <OptionPlate
-                      title={strings.NewCarItemScreen.plates.color}
-                      subtitle={colorName}
-                    />
-                  ) : null}
-                </View>
-              </ScrollView>
-              {carDetails.dealer && carDetails.dealer.name ? (
-                <TouchableWithoutFeedback
-                  onPress={this.onPressMap}
-                  style={styles.mapCard}>
-                  <View style={styles.mapCardContainer}>
-                    <Icon
-                      type="MaterialCommunityIcons"
-                      name="map-marker-outline"
-                      style={styles.mapCardIcon}
-                    />
-                    <View style={styles.mapCardTextContainer}>
-                      <Text style={styles.mapCardTitle}>
-                        {strings.NewCarItemScreen.carLocation}
-                      </Text>
-                      <Text
-                        style={styles.mapCardDealer}
-                        numberOfLines={1}
-                        ellipsizeMode="tail">
-                        {this._renderAddress()}
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableWithoutFeedback>
-              ) : null}
-              {carDetails.text ? (
-                <View style={styles.descrContainer}>
-                  <ReadMore
-                    numberOfLines={4}
-                    renderTruncatedFooter={this._renderTruncatedFooter}
-                    renderRevealedFooter={this._renderRevealedFooter}
-                    onReady={this._handleTextReady}>
-                    <Text style={styles.descr}>{carDetails.text}</Text>
-                  </ReadMore>
-                </View>
-              ) : null}
-              {carDetails.creditAvailable || carDetails.customPriceAvailable ? (
-                <View style={styles.bodyButtonsContainer}>
-                  {carDetails.creditAvailable ? (
-                    <Button
-                      block
-                      iconRight
-                      transparent
-                      activeOpacity={0.5}
-                      onPress={this.onPressCredit}
-                      style={[styles.bodyButton, styles.bodyButtonLeft]}>
-                      <Text
-                        selectable={false}
-                        style={[
-                          styles.bodyButtonText,
-                          styles.bodyButtonTextLeft,
-                        ]}>
-                        {strings.UsedCarItemScreen.creditCalculate}
-                      </Text>
-                      <Icon
-                        type="Octicons"
-                        name="credit-card"
-                        selectable={false}
-                        style={[
-                          styles.bodyButtonIcon,
-                          styles.bodyButtonIconLeft,
-                        ]}
+                  testID="NewCarItemScreen.BadgesWrapper"
+                  style={styles.badgesView}>
+                  {badge.map((item, index) => {
+                    if (item.name.toLowerCase() === 'спец.цена') {
+                      item.name = strings.CarList.badges.specialPrice;
+                    }
+                    return (
+                      <Badge
+                        id={carDetails.id.api}
+                        key={'badgeItem' + carDetails.id.api + index}
+                        index={index}
+                        bgColor={item.background}
+                        name={item.name}
+                        textColor={item.textColor}
                       />
-                    </Button>
-                  ) : null}
-                  {carDetails.customPriceAvailable ? (
-                    <Button
-                      block
-                      iconLeft
-                      transparent
-                      activeOpacity={0.5}
-                      onPress={this.onPressMyPrice}
-                      style={[styles.bodyButton, styles.bodyButtonRight]}>
-                      <Icon
-                        type="Entypo"
-                        name="price-tag"
-                        selectable={false}
-                        style={[
-                          styles.bodyButtonIcon,
-                          styles.bodyButtonIconRight,
-                        ]}
-                      />
-                      <Text
-                        selectable={false}
-                        style={[
-                          styles.bodyButtonText,
-                          styles.bodyButtonTextRight,
-                        ]}>
-                        {strings.UsedCarItemScreen.myPrice}
-                      </Text>
-                    </Button>
-                  ) : null}
+                    );
+                  })}
                 </View>
               ) : null}
+              <PhotoSlider
+                height={310}
+                photos={photos}
+                resizeMode={'cover'}
+                paginationStyle={{marginBottom: 0}}
+                dotColor={styleConst.color.white}
+                // onPressItem={() => this.onPressPhoto}
+                // onIndexChanged={() => this.onChangePhotoIndex}
+              />
             </View>
-            <Accordion
-              style={styles.accordion}
-              dataArray={[
+            <View
+              style={[
+                styleConst.shadow.default,
+                styles.carTopWrapper,
                 {
-                  title: strings.NewCarItemScreen.tech.title,
-                  content: (
-                    <View style={styles.tabContent}>
-                      <Text style={styles.sectionTitle}>
-                        {strings.NewCarItemScreen.tech.base}
-                      </Text>
-                      <Grid>
-                        {carDetails.year ? (
-                          <Row style={styles.sectionRow}>
-                            <Col style={styles.sectionProp}>
-                              <Text style={styles.sectionPropText}>
-                                {strings.NewCarItemScreen.tech.year}:
-                              </Text>
-                            </Col>
-                            <Col style={styles.sectionValue}>
-                              <Text
-                                style={
-                                  styles.sectionValueText
-                                }>{`${carDetails.year} г.`}</Text>
-                            </Col>
-                          </Row>
-                        ) : null}
-                        {carDetails.mileage ? (
-                          <Row style={styles.sectionRow}>
-                            <Col style={styles.sectionProp}>
-                              <Text
-                                selectable={false}
-                                style={styles.sectionPropText}>
-                                {strings.NewCarItemScreen.plates.mileage}:
-                              </Text>
-                            </Col>
-                            <Col style={styles.sectionValue}>
-                              <Text
-                                style={
-                                  styles.sectionValueText
-                                }>{`${numberWithGap(
-                                carDetails.mileage,
-                              )} км.`}</Text>
-                            </Col>
-                          </Row>
-                        ) : null}
-                        {carDetails.engine && carDetails.engine.type ? (
-                          <Row style={styles.sectionRow}>
-                            <Col style={styles.sectionProp}>
-                              <Text style={styles.sectionPropText}>
-                                {strings.NewCarItemScreen.tech.engine.fuel}:
-                              </Text>
-                            </Col>
-                            <Col style={styles.sectionValue}>
-                              <Text style={styles.sectionValueText}>
-                                {carDetails.engine.type}
-                              </Text>
-                            </Col>
-                          </Row>
-                        ) : null}
-                        {carDetails.engine &&
-                        carDetails.engine.volume &&
-                        carDetails.engine.volume.full ? (
-                          <Row style={styles.sectionRow}>
-                            <Col style={styles.sectionProp}>
-                              <Text
-                                selectable={false}
-                                style={styles.sectionPropText}>
-                                {strings.NewCarItemScreen.tech.engine.title}:
-                              </Text>
-                            </Col>
-                            <Col style={styles.sectionValue}>
-                              <Text
-                                style={
-                                  styles.sectionValueText
-                                }>{`${carDetails.engine.volume.full} см³`}</Text>
-                            </Col>
-                          </Row>
-                        ) : null}
-                        {carDetails.gearbox && carDetails.gearbox.name ? (
-                          <Row style={styles.sectionRow}>
-                            <Col style={styles.sectionProp}>
-                              <Text
-                                selectable={false}
-                                style={styles.sectionPropText}>
-                                {strings.NewCarItemScreen.plates.gearbox.name}:
-                              </Text>
-                            </Col>
-                            <Col style={styles.sectionValue}>
-                              <Text style={styles.sectionValueText}>
-                                {gearboxName}
-                              </Text>
-                            </Col>
-                          </Row>
-                        ) : null}
-                        {carDetails.color &&
-                        carDetails.color.name &&
-                        carDetails.color.name.official ? (
-                          <Row style={styles.sectionRow}>
-                            <Col style={styles.sectionProp}>
-                              <Text
-                                selectable={false}
-                                style={styles.sectionPropText}>
-                                {strings.NewCarItemScreen.plates.color}:
-                              </Text>
-                            </Col>
-                            <Col style={styles.sectionValue}>
-                              <Text style={styles.sectionValueText}>
-                                {carDetails.color.name.official}
-                              </Text>
-                            </Col>
-                          </Row>
-                        ) : null}
-                        {carDetails.body && carDetails.body.name ? (
-                          <Row style={styles.sectionRow}>
-                            <Col style={styles.sectionProp}>
-                              <Text
-                                selectable={false}
-                                style={styles.sectionPropText}>
-                                {strings.NewCarItemScreen.tech.body.type}:
-                              </Text>
-                            </Col>
-                            <Col style={styles.sectionValue}>
-                              <Text style={styles.sectionValueText}>
-                                {bodyName}
-                              </Text>
-                            </Col>
-                          </Row>
-                        ) : null}
-                        {carDetails.interior && carDetails.interior.name ? (
-                          <Row style={styles.sectionRow}>
-                            <Col style={styles.sectionProp}>
-                              <Text
-                                selectable={false}
-                                style={styles.sectionPropText}>
-                                {strings.NewCarItemScreen.tech.interior.title}:
-                              </Text>
-                            </Col>
-                            <Col style={styles.sectionValue}>
-                              <Text style={styles.sectionValueText}>
-                                {carDetails.interior.name}
-                              </Text>
-                            </Col>
-                          </Row>
-                        ) : null}
-                      </Grid>
-                    </View>
-                  ),
+                  marginTop: -25,
                 },
-                additional &&
-                  additional.length && {
-                    title: strings.NewCarItemScreen.plates.complectation,
+              ]}>
+              <View>
+                <View style={styles.modelBrandView}>
+                  <View style={{marginBottom: 10, flexShrink: 1}}>
+                    <Text style={styles.modelBrandText}>
+                      {`${brandName} ${modelName}`}
+                    </Text>
+                    <Text style={styles.complectationText}>
+                      {get(carDetails, 'year')}
+                    </Text>
+                  </View>
+                  {this.renderPrice({carDetails, currency})}
+                </View>
+
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  bounces={true}
+                  testID="NewCarItemScreen.PlatesWrapper"
+                  ref={ref => {
+                    this.platesScrollView = ref;
+                  }}>
+                  <View
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      paddingHorizontal: '2%',
+                      marginBottom: 10,
+                    }}>
+                    {get(carDetails, 'mileage') ? (
+                      <OptionPlate
+                        title={strings.NewCarItemScreen.plates.mileage}
+                        subtitle={
+                          numberWithGap(get(carDetails, 'mileage')) + ' км.'
+                        }
+                      />
+                    ) : null}
+                    {engineName ? (
+                      <OptionPlate
+                        title={strings.NewCarItemScreen.plates.engine}
+                        subtitle={
+                          get(carDetails, 'engine.volume.short')
+                            ? get(carDetails, 'engine.volume.short').toFixed(1) +
+                              ' л. '
+                            : '' + engineName
+                        }
+                      />
+                    ) : null}
+                    {get(carDetails, 'gearbox.GearboxCount') &&
+                    get(carDetails, 'gearbox.name') ? (
+                      <OptionPlate
+                        title={strings.NewCarItemScreen.plates.gearbox.name}
+                        subtitle={`${
+                          get(carDetails, 'gearbox.GearboxCount.Value')
+                            ? get(carDetails, 'gearbox.GearboxCount.Value') +
+                              '-ст.'
+                            : ''
+                        } ${
+                          get(carDetails, 'gearbox.name')
+                            .replace(/^(Механическая)/i, 'МКПП')
+                            .replace(/^(Автоматическая)/i, 'АКПП')
+                            .split('/')[0]
+                        }`}
+                      />
+                    ) : null}
+                    {wheelName ? (
+                      <OptionPlate
+                        title={strings.NewCarItemScreen.plates.wheel}
+                        subtitle={wheelName.toLowerCase()}
+                      />
+                    ) : null}
+                    {get(carDetails, 'color.name.simple') ? (
+                      <OptionPlate
+                        title={strings.NewCarItemScreen.plates.color}
+                        subtitle={colorName}
+                      />
+                    ) : null}
+                  </View>
+                </ScrollView>
+                {carDetails.dealer && carDetails.dealer.name ? (
+                  <TouchableWithoutFeedback
+                    onPress={this.onPressMap}
+                    style={styles.mapCard}>
+                    <View style={styles.mapCardContainer}>
+                      <Icon
+                        type="MaterialCommunityIcons"
+                        name="map-marker-outline"
+                        style={styles.mapCardIcon}
+                      />
+                      <View style={styles.mapCardTextContainer}>
+                        <Text style={styles.mapCardTitle}>
+                          {strings.NewCarItemScreen.carLocation}
+                        </Text>
+                        <Text
+                          style={styles.mapCardDealer}
+                          numberOfLines={1}
+                          ellipsizeMode="tail">
+                          {this._renderAddress()}
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableWithoutFeedback>
+                ) : null}
+                {carDetails.text ? (
+                  <View style={styles.descrContainer}>
+                    <ReadMore
+                      numberOfLines={4}
+                      renderTruncatedFooter={this._renderTruncatedFooter}
+                      renderRevealedFooter={this._renderRevealedFooter}
+                      onReady={this._handleTextReady}>
+                      <Text style={styles.descr}>{carDetails.text}</Text>
+                    </ReadMore>
+                  </View>
+                ) : null}
+                {carDetails.creditAvailable || carDetails.customPriceAvailable ? (
+                  <View style={styles.bodyButtonsContainer}>
+                    {carDetails.creditAvailable ? (
+                      <Button
+                        block
+                        iconRight
+                        transparent
+                        activeOpacity={0.5}
+                        onPress={this.onPressCredit}
+                        style={[styles.bodyButton, styles.bodyButtonLeft]}>
+                        <Text
+                          selectable={false}
+                          style={[
+                            styles.bodyButtonText,
+                            styles.bodyButtonTextLeft,
+                          ]}>
+                          {strings.UsedCarItemScreen.creditCalculate}
+                        </Text>
+                        <Icon
+                          type="Octicons"
+                          name="credit-card"
+                          selectable={false}
+                          style={[
+                            styles.bodyButtonIcon,
+                            styles.bodyButtonIconLeft,
+                          ]}
+                        />
+                      </Button>
+                    ) : null}
+                    {carDetails.customPriceAvailable ? (
+                      <Button
+                        block
+                        iconLeft
+                        transparent
+                        activeOpacity={0.5}
+                        onPress={this.onPressMyPrice}
+                        style={[styles.bodyButton, styles.bodyButtonRight]}>
+                        <Icon
+                          type="Entypo"
+                          name="price-tag"
+                          selectable={false}
+                          style={[
+                            styles.bodyButtonIcon,
+                            styles.bodyButtonIconRight,
+                          ]}
+                        />
+                        <Text
+                          selectable={false}
+                          style={[
+                            styles.bodyButtonText,
+                            styles.bodyButtonTextRight,
+                          ]}>
+                          {strings.UsedCarItemScreen.myPrice}
+                        </Text>
+                      </Button>
+                    ) : null}
+                  </View>
+                ) : null}
+              </View>
+              <Accordion
+                style={styles.accordion}
+                dataArray={[
+                  {
+                    title: strings.NewCarItemScreen.tech.title,
                     content: (
                       <View style={styles.tabContent}>
                         <Text style={styles.sectionTitle}>
-                          {get(carDetails, 'options.additional.1.name')}
+                          {strings.NewCarItemScreen.tech.base}
                         </Text>
-                        {additional.map((item, num) => {
-                          return (
-                            <Grid key={'OptionsAdditional-' + num}>
-                              {item.name && item.value ? (
-                                <Row style={styles.sectionRow}>
-                                  <Col style={styles.sectionProp}>
-                                    <Text style={styles.sectionPropText}>
-                                      {item.name}
-                                    </Text>
-                                  </Col>
-                                  <Col style={styles.sectionValue}>
-                                    <Text style={styles.sectionValueText}>
-                                      {item.value}
-                                    </Text>
-                                  </Col>
-                                </Row>
-                              ) : (
-                                <Text
-                                  style={[
-                                    styles.sectionPropText,
-                                    styles.sectionRow,
-                                  ]}>
-                                  {item.name}
+                        <Grid>
+                          {carDetails.year ? (
+                            <Row style={styles.sectionRow}>
+                              <Col style={styles.sectionProp}>
+                                <Text style={styles.sectionPropText}>
+                                  {strings.NewCarItemScreen.tech.year}:
                                 </Text>
-                              )}
-                            </Grid>
-                          );
-                        })}
+                              </Col>
+                              <Col style={styles.sectionValue}>
+                                <Text
+                                  style={
+                                    styles.sectionValueText
+                                  }>{`${carDetails.year} г.`}</Text>
+                              </Col>
+                            </Row>
+                          ) : null}
+                          {carDetails.mileage ? (
+                            <Row style={styles.sectionRow}>
+                              <Col style={styles.sectionProp}>
+                                <Text
+                                  selectable={false}
+                                  style={styles.sectionPropText}>
+                                  {strings.NewCarItemScreen.plates.mileage}:
+                                </Text>
+                              </Col>
+                              <Col style={styles.sectionValue}>
+                                <Text
+                                  style={
+                                    styles.sectionValueText
+                                  }>{`${numberWithGap(
+                                  carDetails.mileage,
+                                )} км.`}</Text>
+                              </Col>
+                            </Row>
+                          ) : null}
+                          {carDetails.engine && carDetails.engine.type ? (
+                            <Row style={styles.sectionRow}>
+                              <Col style={styles.sectionProp}>
+                                <Text style={styles.sectionPropText}>
+                                  {strings.NewCarItemScreen.tech.engine.fuel}:
+                                </Text>
+                              </Col>
+                              <Col style={styles.sectionValue}>
+                                <Text style={styles.sectionValueText}>
+                                  {carDetails.engine.type}
+                                </Text>
+                              </Col>
+                            </Row>
+                          ) : null}
+                          {carDetails.engine &&
+                          carDetails.engine.volume &&
+                          carDetails.engine.volume.full ? (
+                            <Row style={styles.sectionRow}>
+                              <Col style={styles.sectionProp}>
+                                <Text
+                                  selectable={false}
+                                  style={styles.sectionPropText}>
+                                  {strings.NewCarItemScreen.tech.engine.title}:
+                                </Text>
+                              </Col>
+                              <Col style={styles.sectionValue}>
+                                <Text
+                                  style={
+                                    styles.sectionValueText
+                                  }>{`${carDetails.engine.volume.full} см³`}</Text>
+                              </Col>
+                            </Row>
+                          ) : null}
+                          {carDetails.gearbox && carDetails.gearbox.name ? (
+                            <Row style={styles.sectionRow}>
+                              <Col style={styles.sectionProp}>
+                                <Text
+                                  selectable={false}
+                                  style={styles.sectionPropText}>
+                                  {strings.NewCarItemScreen.plates.gearbox.name}:
+                                </Text>
+                              </Col>
+                              <Col style={styles.sectionValue}>
+                                <Text style={styles.sectionValueText}>
+                                  {gearboxName}
+                                </Text>
+                              </Col>
+                            </Row>
+                          ) : null}
+                          {carDetails.color &&
+                          carDetails.color.name &&
+                          carDetails.color.name.official ? (
+                            <Row style={styles.sectionRow}>
+                              <Col style={styles.sectionProp}>
+                                <Text
+                                  selectable={false}
+                                  style={styles.sectionPropText}>
+                                  {strings.NewCarItemScreen.plates.color}:
+                                </Text>
+                              </Col>
+                              <Col style={styles.sectionValue}>
+                                <Text style={styles.sectionValueText}>
+                                  {carDetails.color.name.official}
+                                </Text>
+                              </Col>
+                            </Row>
+                          ) : null}
+                          {carDetails.body && carDetails.body.name ? (
+                            <Row style={styles.sectionRow}>
+                              <Col style={styles.sectionProp}>
+                                <Text
+                                  selectable={false}
+                                  style={styles.sectionPropText}>
+                                  {strings.NewCarItemScreen.tech.body.type}:
+                                </Text>
+                              </Col>
+                              <Col style={styles.sectionValue}>
+                                <Text style={styles.sectionValueText}>
+                                  {bodyName}
+                                </Text>
+                              </Col>
+                            </Row>
+                          ) : null}
+                          {carDetails.interior && carDetails.interior.name ? (
+                            <Row style={styles.sectionRow}>
+                              <Col style={styles.sectionProp}>
+                                <Text
+                                  selectable={false}
+                                  style={styles.sectionPropText}>
+                                  {strings.NewCarItemScreen.tech.interior.title}:
+                                </Text>
+                              </Col>
+                              <Col style={styles.sectionValue}>
+                                <Text style={styles.sectionValueText}>
+                                  {carDetails.interior.name}
+                                </Text>
+                              </Col>
+                            </Row>
+                          ) : null}
+                        </Grid>
                       </View>
                     ),
                   },
-              ].filter(Boolean)}
-              expanded={[0]}
-              animation={true}
-              renderHeader={(item, expanded) => (
-                <View
-                  style={{
-                    height: 64,
-                    paddingHorizontal: '2%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    backgroundColor: styleConst.color.white,
-                    borderTopWidth: 0.75,
-                    borderColor: '#d5d5e0',
-                  }}>
-                  <Text style={{fontSize: 18}}>{item.title}</Text>
-                  {expanded ? (
-                    <Icon
-                      type="FontAwesome5"
-                      style={{color: '#0061ED', fontWeight: 'normal'}}
-                      name="angle-down"
-                    />
-                  ) : (
-                    <Icon
-                      type="FontAwesome5"
-                      style={{color: '#131314', fontWeight: 'normal'}}
-                      name="angle-right"
-                    />
-                  )}
-                </View>
-              )}
-              renderContent={item => {
-                return (
+                  additional &&
+                    additional.length && {
+                      title: strings.NewCarItemScreen.plates.complectation,
+                      content: (
+                        <View style={styles.tabContent}>
+                          <Text style={styles.sectionTitle}>
+                            {get(carDetails, 'options.additional.1.name')}
+                          </Text>
+                          {additional.map((item, num) => {
+                            return (
+                              <Grid key={'OptionsAdditional-' + num}>
+                                {item.name && item.value ? (
+                                  <Row style={styles.sectionRow}>
+                                    <Col style={styles.sectionProp}>
+                                      <Text style={styles.sectionPropText}>
+                                        {item.name}
+                                      </Text>
+                                    </Col>
+                                    <Col style={styles.sectionValue}>
+                                      <Text style={styles.sectionValueText}>
+                                        {item.value}
+                                      </Text>
+                                    </Col>
+                                  </Row>
+                                ) : (
+                                  <Text
+                                    style={[
+                                      styles.sectionPropText,
+                                      styles.sectionRow,
+                                    ]}>
+                                    {item.name}
+                                  </Text>
+                                )}
+                              </Grid>
+                            );
+                          })}
+                        </View>
+                      ),
+                    },
+                ].filter(Boolean)}
+                expanded={[0]}
+                animation={true}
+                renderHeader={(item, expanded) => (
                   <View
                     style={{
+                      height: 64,
+                      paddingHorizontal: '2%',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                       backgroundColor: styleConst.color.white,
-                      paddingHorizontal: '3%',
+                      borderTopWidth: 0.75,
+                      borderColor: '#d5d5e0',
                     }}>
-                    {item.content}
+                    <Text style={{fontSize: 18}}>{item.title}</Text>
+                    {expanded ? (
+                      <Icon
+                        type="FontAwesome5"
+                        style={{color: '#0061ED', fontWeight: 'normal'}}
+                        name="angle-down"
+                      />
+                    ) : (
+                      <Icon
+                        type="FontAwesome5"
+                        style={{color: '#131314', fontWeight: 'normal'}}
+                        name="angle-right"
+                      />
+                    )}
                   </View>
-                );
-              }}
-            />
-          </View>
-        </Content>
-        <Footer style={[styleConst.shadow.default, stylesFooter.footer]}>
+                )}
+                renderContent={item => {
+                  return (
+                    <View
+                      style={{
+                        backgroundColor: styleConst.color.white,
+                        paddingHorizontal: '3%',
+                      }}>
+                      {item.content}
+                    </View>
+                  );
+                }}
+              />
+            </View>
+          </Content>
+        </Container>
+        <View style={[styleConst.shadow.default, stylesFooter.footer]}>
           {isSale ? (
             <View
               style={[
@@ -939,8 +941,8 @@ class UsedCarItemScreen extends Component {
               </Text>
             </Button>
           </View>
-        </Footer>
-      </Container>
+        </View>
+      </>
     );
   }
 }
