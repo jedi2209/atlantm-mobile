@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  StatusBar,
 } from 'react-native';
 import CarCostPhotos from '../components/CarCostPhotos';
 import {Content} from 'native-base';
@@ -193,7 +194,6 @@ class CarCostScreen extends Component {
   };
 
   render() {
-    console.log('this.props', this.props);
     this.FormConfig = {
       fields: {
         groups: [
@@ -269,6 +269,9 @@ class CarCostScreen extends Component {
                 props: {
                   placeholder: null,
                   autoCapitalize: 'characters',
+                  onSubmitEditing: () => {},
+                  returnKeyType: 'done',
+                  blurOnSubmit: true,
                 },
               },
               {
@@ -286,27 +289,8 @@ class CarCostScreen extends Component {
                     value: null,
                     color: '#9EA0A4',
                   },
-                  // Icon: () => {
-                  //   return (
-                  //     <Icon
-                  //       type="MaterialIcons"
-                  //       name="date-range"
-                  //       size={24}
-                  //       color="gray"
-                  //     />
-                  //   );
-                  // },
                 },
               },
-              // {
-              //   name: 'CARCOLOR',
-              //   type: 'input',
-              //   label: 'Цвет',
-              //   value: this.props.carColor,
-              //   props: {
-              //     placeholder: null,
-              //   },
-              // },
               {
                 name: 'CARMILEAGE',
                 type: 'input',
@@ -318,6 +302,9 @@ class CarCostScreen extends Component {
                   keyboardType: 'number-pad',
                   required: true,
                   placeholder: null,
+                  onSubmitEditing: () => {},
+                  returnKeyType: 'done',
+                  blurOnSubmit: true,
                 },
               },
               {
@@ -358,16 +345,6 @@ class CarCostScreen extends Component {
                     value: null,
                     color: '#9EA0A4',
                   },
-                  // Icon: () => {
-                  //   return (
-                  //     <Icon
-                  //       type="MaterialCommunityIcons"
-                  //       name="engine"
-                  //       size={24}
-                  //       color="gray"
-                  //     />
-                  //   );
-                  // },
                 },
               },
               {
@@ -378,6 +355,9 @@ class CarCostScreen extends Component {
                 props: {
                   keyboardType: 'number-pad',
                   placeholder: null,
+                  onSubmitEditing: () => {},
+                  returnKeyType: 'done',
+                  blurOnSubmit: true,
                 },
               },
               {
@@ -418,16 +398,6 @@ class CarCostScreen extends Component {
                     value: null,
                     color: '#9EA0A4',
                   },
-                  // Icon: () => {
-                  //   return (
-                  //     <Icon
-                  //       type="FontAwesome"
-                  //       name="gears"
-                  //       size={24}
-                  //       color="red"
-                  //     />
-                  //   );
-                  // },
                 },
               },
             ],
@@ -517,7 +487,7 @@ class CarCostScreen extends Component {
         ],
       },
     };
-
+    console.log('this.state', this.state);
     console.log('== CarCost ==');
 
     return (
@@ -534,6 +504,7 @@ class CarCostScreen extends Component {
             keyboardShouldPersistTaps={
               Platform.OS === 'android' ? 'always' : 'never'
             }>
+            <StatusBar hidden />
             <Form
               fields={this.FormConfig.fields}
               barStyle={'light-content'}

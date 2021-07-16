@@ -5,6 +5,7 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  StatusBar,
 } from 'react-native';
 
 // components
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
 
 export default class CarCostPhotos extends Component {
   static propTypes = {
-    photos: PropTypes.array || PropTypes.object,
+    photos: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     photosFill: PropTypes.func,
   };
 
@@ -75,8 +76,8 @@ export default class CarCostPhotos extends Component {
     this.state.itemWidth = this.getItemWidth(width);
 
     // генерируем хендлеры для actionSheet для каждого фото
-    [1, 2, 3, 4, 5, 6].map((photoIndex) => {
-      this[`handlePhotoPress${photoIndex}`] = (i) => {
+    [1, 2, 3, 4, 5, 6].map(photoIndex => {
+      this[`handlePhotoPress${photoIndex}`] = i => {
         this.handlePhotoPress(i, photoIndex, props.photosFill);
       };
 
@@ -98,11 +99,13 @@ export default class CarCostPhotos extends Component {
     }[i];
 
     const settings = {
-      cropping: false,
+      cropping: true,
       compressImageMaxWidth: 1400,
       compressImageMaxHeight: 1400,
-      // compressImageQuality: 0.9,
+      compressImageQuality: 0.9,
       mediaType: 'photo',
+      includeBase64: true,
+      includeExif: true,
       forceJpg: true,
     };
 
@@ -128,7 +131,7 @@ export default class CarCostPhotos extends Component {
     }
   }
 
-  renderItem = (photoIndex) => {
+  renderItem = photoIndex => {
     const {photos} = this.props;
     const photo = photos[photoIndex];
     const source = photo ? {uri: photo.path} : thumbs[photoIndex - 1];
@@ -176,27 +179,26 @@ export default class CarCostPhotos extends Component {
     );
   };
 
-  getItemWidth = (contentWidth) => (contentWidth - 70) / 3;
+  getItemWidth = contentWidth => (contentWidth - 70) / 3;
 
   shouldComponentUpdate(nextProps) {
     return this.props.photos !== nextProps.photos;
   }
 
-  onLayout = (e) => {
+  onLayout = e => {
     return false;
   };
 
   render() {
     return (
       <View style={styles.container} onLayout={this.onLayout}>
-        {[1, 2, 3, 4, 5, 6].map((photoIndex) => {
+        <StatusBar hidden />
+        {[1, 2, 3, 4, 5, 6].map(photoIndex => {
           return (
             <ActionSheet
               key={photoIndex}
               cancelButtonIndex={0}
-              ref={(component) =>
-                (this[`actionSheet${photoIndex}`] = component)
-              }
+              ref={component => (this[`actionSheet${photoIndex}`] = component)}
               title={strings.CarCostScreen.chooseFoto}
               options={[strings.Base.cancel, 'Галерея', 'Камера']}
               onPress={this[`handlePhotoPress${photoIndex}`]}
