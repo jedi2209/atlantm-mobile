@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useReducer} from 'react';
-import {StyleSheet, View, StatusBar} from 'react-native';
+import {StyleSheet, View, StatusBar, ActivityIndicator} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -10,7 +10,6 @@ import {
 
 // components
 import CarList from '../../components/CarList';
-import Spinner from 'react-native-loading-spinner-overlay';
 
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
@@ -96,7 +95,10 @@ const UsedCarListScreen = ({
     <View style={styles.content} testID="UserCarListSreen.Wrapper">
       <StatusBar hidden />
       {loading ? (
-        <Spinner visible={true} color={styleConst.color.blue} />
+        <ActivityIndicator
+          color={styleConst.color.blue}
+          style={styleConst.spinner}
+        />
       ) : (
         <CarList
           data={items}

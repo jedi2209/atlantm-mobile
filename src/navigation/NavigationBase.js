@@ -407,7 +407,7 @@ const CarsStock = ({navigation, route}) => {
       break;
   }
 
-  const snapPoints = useMemo(() => [-1, '30%'], []);
+  const snapPoints = useMemo(() => [-1, 220], []);
   // callbacks
   const handlePresentModalPress = useCallback(() => {
     if (bottomSheeetState) {
@@ -512,8 +512,8 @@ const CarsStock = ({navigation, route}) => {
           ref={bottomSheetModalRef}
           onChange={handleSheetChanges}>
           <Container>
-            <Header style={{backgroundColor: styleConst.color.white}}>
-              <Text style={styles.sortingBottomSheetTitle}>
+            <Header noShadow style={{backgroundColor: styleConst.color.white}}>
+              <Text selectable={false} style={styles.sortingBottomSheetTitle}>
                 {strings.Sort.title}
               </Text>
             </Header>
@@ -541,6 +541,7 @@ const CarsStock = ({navigation, route}) => {
                     name="sort-numeric-up"
                   />
                   <Text
+                    selectable={false}
                     style={[
                       styles.sortingButtonText,
                       isSorted === 'priceAsc'
@@ -580,6 +581,7 @@ const CarsStock = ({navigation, route}) => {
                     name="sort-numeric-down-alt"
                   />
                   <Text
+                    selectable={false}
                     style={[
                       styles.sortingButtonText,
                       isSorted === 'priceDesc'
@@ -620,6 +622,7 @@ const CarsStock = ({navigation, route}) => {
                     name="sort-amount-down"
                   />
                   <Text
+                    selectable={false}
                     style={[
                       styles.sortingButtonText,
                       isSorted === 'dateDesc'
@@ -674,7 +677,7 @@ const UsedCars = ({navigation, route}) => {
       break;
   }
 
-  const snapPoints = useMemo(() => [-1, '40%'], []);
+  const snapPoints = useMemo(() => [-1, 350], []);
   // callbacks
   const handlePresentModalPress = useCallback(() => {
     if (bottomSheeetState) {
@@ -741,8 +744,8 @@ const UsedCars = ({navigation, route}) => {
           ref={bottomSheetModalRefUsed}
           onChange={handleSheetChanges}>
           <Container>
-            <Header style={{backgroundColor: styleConst.color.white}}>
-              <Text style={styles.sortingBottomSheetTitle}>
+            <Header noShadow style={{backgroundColor: styleConst.color.white}}>
+              <Text selectable={false} style={styles.sortingBottomSheetTitle}>
                 {strings.Sort.title}
               </Text>
             </Header>
@@ -773,6 +776,7 @@ const UsedCars = ({navigation, route}) => {
                     name="sort-numeric-up"
                   />
                   <Text
+                    selectable={false}
                     style={[
                       styles.sortingButtonText,
                       isSorted === 'priceAsc'
@@ -815,6 +819,7 @@ const UsedCars = ({navigation, route}) => {
                     name="sort-numeric-down-alt"
                   />
                   <Text
+                    selectable={false}
                     style={[
                       styles.sortingButtonText,
                       isSorted === 'priceDesc'
@@ -858,6 +863,7 @@ const UsedCars = ({navigation, route}) => {
                     name="sort-amount-down"
                   />
                   <Text
+                    selectable={false}
                     style={[
                       styles.sortingButtonText,
                       isSorted === 'createdDesc'
@@ -901,6 +907,7 @@ const UsedCars = ({navigation, route}) => {
                     name="sort-amount-down"
                   />
                   <Text
+                    selectable={false}
                     style={[
                       styles.sortingButtonText,
                       isSorted === 'yearDesc'
@@ -944,6 +951,7 @@ const UsedCars = ({navigation, route}) => {
                     name="sort-numeric-down-alt"
                   />
                   <Text
+                    selectable={false}
                     style={[
                       styles.sortingButtonText,
                       isSorted === 'yearAsc'
@@ -987,6 +995,7 @@ const UsedCars = ({navigation, route}) => {
                     name="sort-amount-down-alt"
                   />
                   <Text
+                    selectable={false}
                     style={[
                       styles.sortingButtonText,
                       isSorted === 'mileageAsc'
@@ -1067,7 +1076,7 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.light,
     fontWeight: '800',
     marginTop: 10,
-    marginBottom: 20,
+    marginBottom: 15,
     // textTransform: 'lowercase',
   },
   sortingButton: {
