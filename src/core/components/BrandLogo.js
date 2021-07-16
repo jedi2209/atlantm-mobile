@@ -16,51 +16,51 @@ const requireALeast = requireALeastOne({
   height: PropTypes.number,
 });
 
-const BrandLogo = (props) => {
-    let width = 30;
-    let height = props.width / props.aspectRatio;
-    if (props.height) {
-      width = props.height * props.aspectRatio;
-      height = props.height;
-    } else {
-      if (props.width) {
-        width = props.width;
-        height = props.width / props.aspectRatio;
-      }
+const BrandLogo = props => {
+  let width = 30;
+  let height = props.width / props.aspectRatio;
+  if (props.height) {
+    width = props.height * props.aspectRatio;
+    height = props.height;
+  } else {
+    if (props.width) {
+      width = props.width;
+      height = props.width / props.aspectRatio;
     }
+  }
 
-    if (
-      props.brandsAssets[props.type] &&
-      props.brandsAssets[props.type].includes(props.brand) &&
-      brandsSVG[props.type][props.brand]
-    ) {
-      return (
-        <View style={[{}, {...props.style}]} testID={props.testID}>
-          <View
-            style={[
-              styles.containerSVG,
-              {
-                aspectRatio: props.aspectRatio,
-                width: props.width,
-                height: props.height,
-              },
-            ]}>
-            {brandsSVG[props.type][props.brand]}
-          </View>
+  if (
+    props.brandsAssets[props.type] &&
+    props.brandsAssets[props.type].includes(props.brand) &&
+    brandsSVG[props.type][props.brand]
+  ) {
+    return (
+      <View style={[{}, {...props.style}]} testID={props.testID}>
+        <View
+          style={[
+            styles.containerSVG,
+            {
+              aspectRatio: props.aspectRatio,
+              width: props.width,
+              height: props.height,
+            },
+          ]}>
+          {brandsSVG[props.type][props.brand]}
         </View>
+      </View>
+    );
+  } else {
+    if (props.brands && props.brands[props.brand]) {
+      return (
+        <Imager
+          resizeMode="contain"
+          source={{uri: props.brands[props.brand].logo}}
+          {...props}
+        />
       );
-    } else {
-      if (props.brands && props.brands[props.brand]) {
-        return (
-          <Imager
-            resizeMode="contain"
-            source={{uri: props.brands[props.brand].logo}}
-            {...props}
-          />
-        );
-      }
     }
-    return <View />;
+  }
+  return <View />;
 };
 
 BrandLogo.propTypes = {
@@ -78,9 +78,8 @@ BrandLogo.defaultProps = {
     black: [6, 7, 9, 10, 12, 13, 14, 19, 20],
     white: [6, 7, 9, 10, 12, 13, 14, 19, 20],
   },
-  testID: 'BrandLogo.Wrapper'
+  testID: 'BrandLogo.Wrapper',
 };
-
 
 const styles = StyleSheet.create({
   imageSVG: {

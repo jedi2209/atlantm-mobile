@@ -120,14 +120,14 @@ class OrderScreen extends Component {
         orderedCar ? 'или аналог' : null,
       ]
         .filter(Boolean)
-        .join(' '); 
+        .join(' ');
     }
 
     const dealer = get(props.route, 'params.car.dealer');
     let listDealers = [];
     if (dealer) {
       if (dealer.length) {
-        dealer.map((el) => {
+        dealer.map(el => {
           listDealers.push({
             label: el.name,
             value: el.id,
@@ -204,23 +204,27 @@ class OrderScreen extends Component {
                     type: 'input',
                     label: strings.Form.field.label.dealer,
                     value:
-                    listDealers[0] && listDealers[0].label ? listDealers[0].label : null,
+                      listDealers[0] && listDealers[0].label
+                        ? listDealers[0].label
+                        : null,
                     props: {
                       editable: false,
                       placeholder: strings.Form.field.placeholder.dealer,
                     },
                   },
-              carName ? {
-                name: 'CARNAME',
-                type: 'input',
-                label: isNewCar
-                  ? strings.Form.field.label.carNameComplectation
-                  : strings.Form.field.label.carNameYear,
-                value: carName,
-                props: {
-                  editable: false,
-                },
-              } : {},
+              carName
+                ? {
+                    name: 'CARNAME',
+                    type: 'input',
+                    label: isNewCar
+                      ? strings.Form.field.label.carNameComplectation
+                      : strings.Form.field.label.carNameYear,
+                    value: carName,
+                    props: {
+                      editable: false,
+                    },
+                  }
+                : {},
             ],
           },
           {
@@ -317,7 +321,7 @@ class OrderScreen extends Component {
     return false;
   }
 
-  onPressOrder = async (data) => {
+  onPressOrder = async data => {
     const isInternetExist = await isInternet();
     const nav = this.props.navigation;
 
@@ -396,7 +400,7 @@ class OrderScreen extends Component {
       <KeyboardAvoidingView onPress={Keyboard.dismiss}>
         <TouchableWithoutFeedback
           style={styleConst.form.scrollView}
-          testID='OrderScreen.Wrapper'
+          testID="OrderScreen.Wrapper"
           onPress={Keyboard.dismiss}>
           <Content
             style={styles.container}
@@ -405,7 +409,7 @@ class OrderScreen extends Component {
               Platform.OS === 'android' ? 'always' : 'never'
             }>
             <Form
-              testID='OrderScreen.Form'
+              testID="OrderScreen.Form"
               fields={this.FormConfig.fields}
               barStyle={'light-content'}
               SubmitButton={{text: strings.Form.button.send}}

@@ -132,7 +132,7 @@ class TestDriveScreen extends PureComponent {
     const dealer = get(props.route, 'params.car.dealer');
     this.listAll = [];
     if (dealer && dealer.length > 1) {
-      dealer.map((el) => {
+      dealer.map(el => {
         this.listAll.push({
           label: el.name,
           value: el.id,
@@ -179,7 +179,7 @@ class TestDriveScreen extends PureComponent {
     // }
   }
 
-  onPressOrder = async (data) => {
+  onPressOrder = async data => {
     const isInternetExist = await isInternet();
     const nav = this.props.navigation;
 
@@ -372,12 +372,12 @@ class TestDriveScreen extends PureComponent {
     );
   }
 
-  fetchTDCars = async (dealerID) => {
+  fetchTDCars = async dealerID => {
     this.setState({carFetch: true});
     const tdcarsTmp = get(this.props.route, 'params.testDriveCars');
     let tdCarsApi = [];
     if (typeof tdcarsTmp !== 'undefined') {
-      tdcarsTmp.map((el) => {
+      tdcarsTmp.map(el => {
         tdCarsApi.push(el.id);
       });
 
@@ -391,7 +391,7 @@ class TestDriveScreen extends PureComponent {
           case TD_CAR_DETAILS__SUCCESS:
             let tdCarsArr = [];
             if (!carsAwait.payload.model) {
-              Object.values(carsAwait.payload).map((el) => {
+              Object.values(carsAwait.payload).map(el => {
                 return tdCarsArr.push({
                   label: el.name,
                   value: el.id,
@@ -634,7 +634,7 @@ class TestDriveScreen extends PureComponent {
       <KeyboardAvoidingView onPress={Keyboard.dismiss}>
         <TouchableWithoutFeedback
           style={styleConst.form.scrollView}
-          testID='TestDriveScreen.Wrapper'
+          testID="TestDriveScreen.Wrapper"
           onPress={Keyboard.dismiss}>
           <Content
             style={styles.container}

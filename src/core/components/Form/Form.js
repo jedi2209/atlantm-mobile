@@ -537,12 +537,13 @@ class Form extends Component {
     if (typeof el === 'undefined') {
       return false;
     }
-    if (typeof el.current.focus === 'function') {
-      el.current.focus();
+    if (typeof el.current?.focus === 'function') {
+      return el.current.focus();
     } else {
-      if (typeof el.current.input.focus === 'function') {
-        el.current.input.focus();
+      if (typeof el?.current?.input?.focus === 'function') {
+        return el.current.input.focus();
       }
+      return false;
     }
   };
 
@@ -1188,15 +1189,17 @@ class Form extends Component {
           ]}
           testID={'Form.SelectWrapper.' + name}
           key={'field' + num + name}>
-          <Text selectable={false} style={styles.selectLabel}>
+          <Text selectable={false} numberOfLines={1} style={styles.selectLabel}>
             {label}
             {data.props && data.props.required ? '*' : null}
           </Text>
           <RNPickerSelect
-            key={'rnpicker' + num + name}
             ref={this.inputRefs[groupNum + 'Input' + num]}
             touchableWrapperProps={{testID: 'Form.SelectInput.' + name}}
-            pickerProps={{testID: 'Form.PickerInput.' + name}}
+            pickerProps={{
+              key: 'rnpicker' + num + name,
+              testID: 'Form.PickerInput.' + name,
+            }}
             doneText={strings.Base.choose}
             onDonePress={() => {
               if (data.props.focusNextInput) {

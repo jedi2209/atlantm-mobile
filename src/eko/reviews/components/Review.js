@@ -108,7 +108,7 @@ export default class Review extends Component {
     onPressHandler && onPressHandler(review);
   };
 
-  processDate = (date) => dayMonthYear(date);
+  processDate = date => dayMonthYear(date);
 
   checkVisited = () => {
     const {visited, review} = this.props;
@@ -143,12 +143,12 @@ export default class Review extends Component {
     );
   };
 
-  renderPlusReview = (text) => this.renderReview('plus', text);
+  renderPlusReview = text => this.renderReview('plus', text);
 
-  renderMinusReview = (text) => this.renderReview('minus', text);
+  renderMinusReview = text => this.renderReview('minus', text);
 
   renderReview = (type, text) => {
-    if (!text) {
+    if (!text || text === 'null') {
       return null;
     }
 

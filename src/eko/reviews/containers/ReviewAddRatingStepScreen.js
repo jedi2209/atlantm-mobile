@@ -7,6 +7,7 @@ import {
   Keyboard,
   Platform,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 
 // redux
@@ -24,7 +25,6 @@ import stylesList from '../../../core/components/Lists/style';
 
 // components
 import {Label, Switch, Body, ListItem, Right} from 'native-base';
-import Spinner from 'react-native-loading-spinner-overlay';
 
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
@@ -253,17 +253,8 @@ class ReviewAddRatingStepScreen extends Component {
     return isActiveScreen;
   }
 
-  onChangeField = (fieldName) => (value) => {
-    this.setState({[fieldName]: value});
-  };
-
-  onPressButton = (dataFromForm) => {
-    const {
-      dealerSelected,
-      navigation,
-      publicAgree,
-      reviewAddRating,
-    } = this.props;
+  onPressButton = dataFromForm => {
+    const {dealerSelected, navigation, publicAgree} = this.props;
 
     const name = [
       dataFromForm.NAME,
@@ -287,7 +278,7 @@ class ReviewAddRatingStepScreen extends Component {
         publicAgree,
         rating: get(dataFromForm, 'RATING', ''),
       })
-      .then((action) => {
+      .then(action => {
         if (action.type === REVIEW_ADD__SUCCESS) {
           Analytics.logEvent('order', 'eko/review_add');
 
@@ -349,13 +340,12 @@ class ReviewAddRatingStepScreen extends Component {
             <View
               style={{
                 flex: 1,
-                paddingTop: 20,
-                marginBottom: 160,
                 paddingHorizontal: 14,
               }}>
-              <Spinner
-                visible={isReviewAddRequest}
+              <ActivityIndicator
                 color={styleConst.color.blue}
+                style={styleConst.spinner}
+                animating={isReviewAddRequest}
               />
               {this.renderPublicAgree()}
               <Form
