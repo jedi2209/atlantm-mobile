@@ -373,18 +373,23 @@ const isCarCostRequest = (state = false, action) => {
 };
 
 const usedCarFiltersData = (state = {}, action) => {
+  const def = {
+    filters: null,
+    sorting: {
+      sortBy: 'price',
+      sortDirection: 'asc',
+    },
+    url: '',
+  };
   switch (action.type) {
     case REHYDRATE:
     case DEALER__SUCCESS:
-      return {};
+      return def;
     case SAVE_USEDCAR_FILTERS:
       return {
-        filters: action?.payload?.filters || null,
-        sorting: action?.payload?.sorting || {
-          sortBy: 'price',
-          sortDirection: 'asc',
-        },
-        url: action?.payload?.url || null,
+        filters: action?.payload?.filters || def.filters,
+        sorting: action?.payload?.sorting || def.sorting,
+        url: action?.payload?.url || state.url || def.url,
       };
     default:
       return state;
@@ -392,18 +397,23 @@ const usedCarFiltersData = (state = {}, action) => {
 };
 
 const newCarFiltersData = (state = {}, action) => {
+  const def = {
+    filters: null,
+    sorting: {
+      sortBy: 'price',
+      sortDirection: 'asc',
+    },
+    url: '',
+  };
   switch (action.type) {
     case REHYDRATE:
     case DEALER__SUCCESS:
-      return {};
+      return def;
     case SAVE_NEWCAR_FILTERS:
       return {
-        filters: action?.payload?.filters || null,
-        sorting: action?.payload?.sorting || {
-          sortBy: 'price',
-          sortDirection: 'asc',
-        },
-        url: action?.payload?.url || state.url,
+        filters: action?.payload?.filters || def.filters,
+        sorting: action?.payload?.sorting || def.sorting,
+        url: action?.payload?.url || state.url || def.url,
       };
     default:
       return state;
