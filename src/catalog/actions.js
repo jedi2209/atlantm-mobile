@@ -65,6 +65,86 @@ import {
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
 
+export const actionFetchNewCarFilterData = props => {
+  return dispatch => {
+    dispatch({
+      type: NEW_CAR_FILTER_DATA__REQUEST,
+      payload: props,
+    });
+
+    return API.fetchNewCarFilterData(props)
+      .then(res => {
+        if (res.error) {
+          return dispatch({
+            type: NEW_CAR_FILTER_DATA__FAIL,
+            payload: {
+              error: res.error.message,
+            },
+          });
+        }
+
+        dispatch({
+          type: SAVE_NEWCAR_FILTERS,
+          payload: {
+            url: `/stock/new/cars/get/city/${props.city}/`,
+          },
+        });
+
+        return dispatch({
+          type: NEW_CAR_FILTER_DATA__SUCCESS,
+          payload: {...res},
+        });
+      })
+      .catch(error => {
+        return dispatch({
+          type: NEW_CAR_FILTER_DATA__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
+  };
+};
+export const actionFetchUsedCarFilterData = props => {
+  return dispatch => {
+    dispatch({
+      type: USED_CAR_FILTER_DATA__REQUEST,
+      payload: props,
+    });
+
+    return API.fetchUsedCarFilterData(props)
+      .then(res => {
+        if (res.error) {
+          return dispatch({
+            type: USED_CAR_FILTER_DATA__FAIL,
+            payload: {
+              error: res.error.message,
+            },
+          });
+        }
+
+        dispatch({
+          type: SAVE_USEDCAR_FILTERS,
+          payload: {
+            url: `/stock/trade-in/cars/get/city/${props.city}/`,
+          },
+        });
+
+        return dispatch({
+          type: USED_CAR_FILTER_DATA__SUCCESS,
+          payload: {...res},
+        });
+      })
+      .catch(error => {
+        return dispatch({
+          type: USED_CAR_FILTER_DATA__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
+  };
+};
 export const actionFetchNewCarByFilter = props => {
   props.url = `/stock/new/cars/get/city/${props.city}/`;
   let urlParams = [];
@@ -584,73 +664,6 @@ export const actionSelectNewCarCity = city => {
       type: NEW_CAR_CITY__SELECT,
       payload: city,
     });
-  };
-};
-
-export const actionFetchNewCarFilterData = props => {
-  return dispatch => {
-    dispatch({
-      type: NEW_CAR_FILTER_DATA__REQUEST,
-      payload: props,
-    });
-
-    return API.fetchNewCarFilterData(props)
-      .then(res => {
-        if (res.error) {
-          return dispatch({
-            type: NEW_CAR_FILTER_DATA__FAIL,
-            payload: {
-              error: res.error.message,
-            },
-          });
-        }
-
-        return dispatch({
-          type: NEW_CAR_FILTER_DATA__SUCCESS,
-          payload: {...res},
-        });
-      })
-      .catch(error => {
-        return dispatch({
-          type: NEW_CAR_FILTER_DATA__FAIL,
-          payload: {
-            error: error.message,
-          },
-        });
-      });
-  };
-};
-export const actionFetchUsedCarFilterData = props => {
-  return dispatch => {
-    dispatch({
-      type: USED_CAR_FILTER_DATA__REQUEST,
-      payload: props,
-    });
-
-    return API.fetchUsedCarFilterData(props)
-      .then(res => {
-        if (res.error) {
-          return dispatch({
-            type: USED_CAR_FILTER_DATA__FAIL,
-            payload: {
-              error: res.error.message,
-            },
-          });
-        }
-
-        return dispatch({
-          type: USED_CAR_FILTER_DATA__SUCCESS,
-          payload: {...res},
-        });
-      })
-      .catch(error => {
-        return dispatch({
-          type: USED_CAR_FILTER_DATA__FAIL,
-          payload: {
-            error: error.message,
-          },
-        });
-      });
   };
 };
 
