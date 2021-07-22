@@ -42,9 +42,9 @@ const mapStateToProps = ({dealer, info, profile, core}) => {
     phone: profile.phone,
     email: profile.email,
     dealersList: {
-      'ru': dealer.listRussia,
-      'by': dealer.listBelarussia,
-      'ua': dealer.listUkraine,
+      ru: dealer.listRussia,
+      by: dealer.listBelarussia,
+      ua: dealer.listUkraine,
     },
     dealerSelected: dealer.selected,
     currLang: core.language.selected,
@@ -57,7 +57,6 @@ const mapDispatchToProps = {
 };
 
 class InfoPostScreen extends Component {
-
   constructor(props) {
     super(props);
 
@@ -142,7 +141,7 @@ class InfoPostScreen extends Component {
       actionID: id,
       region: this.props.dealerSelected.region,
     });
-  }
+  };
 
   _onPressService = ({dealers}) => {
     const {navigation, route, dealersList, dealerSelected} = this.props;
@@ -163,7 +162,7 @@ class InfoPostScreen extends Component {
       actionID: id,
       region: this.props.dealerSelected.region,
     });
-  }
+  };
 
   processDate(date = {}) {
     return `${strings.InfoPostScreen.filter.from} ${dayMonth(date.from)} ${
@@ -194,39 +193,65 @@ class InfoPostScreen extends Component {
     }
     switch (type.id) {
       case 1: // buy
-        return (<Button
-          uppercase={false}
-          title={strings.NewCarItemScreen.sendQuery}
-          style={[styles.button, styleConst.button.footer.buttonLeft, {backgroundColor: styleConst.color.white, width: '53%'}]}
-          onPress={() => {this._onPressOrder({dealers})}}>
-          <Text style={[styles.buttonText, {color: styleConst.color.greyText}]} selectable={false}>
-            {strings.NewCarItemScreen.sendQuery}
-          </Text>
-        </Button>);
+        return (
+          <Button
+            uppercase={false}
+            title={strings.NewCarItemScreen.sendQuery}
+            style={[
+              styles.button,
+              styleConst.button.footer.buttonLeft,
+              {backgroundColor: styleConst.color.white, width: '53%'},
+            ]}
+            onPress={() => {
+              this._onPressOrder({dealers});
+            }}>
+            <Text
+              style={[styles.buttonText, {color: styleConst.color.greyText}]}
+              selectable={false}>
+              {strings.NewCarItemScreen.sendQuery}
+            </Text>
+          </Button>
+        );
       case 2: // service
-        return (<Button
-          uppercase={false}
-          title={strings.NewCarItemScreen.sendQuery}
-          style={[styles.button, styleConst.button.footer.buttonLeft, {backgroundColor: styleConst.color.orange, width: '53%'}]}
-          onPress={() => {this._onPressService({dealers})}}>
-          <Text style={styles.buttonText} selectable={false}>
-            {strings.NewCarItemScreen.sendQuery}
-          </Text>
-        </Button>);
+        return (
+          <Button
+            uppercase={false}
+            title={strings.NewCarItemScreen.sendQuery}
+            style={[
+              styles.button,
+              styleConst.button.footer.buttonLeft,
+              {backgroundColor: styleConst.color.orange, width: '53%'},
+            ]}
+            onPress={() => {
+              this._onPressService({dealers});
+            }}>
+            <Text style={styles.buttonText} selectable={false}>
+              {strings.NewCarItemScreen.sendQuery}
+            </Text>
+          </Button>
+        );
       case 3: // parts
-        return (<Button
-          uppercase={false}
-          title={strings.NewCarItemScreen.sendQuery}
-          style={[styles.button, styleConst.button.footer.buttonLeft, {backgroundColor: styleConst.color.green, width: '53%'}]}
-          onPress={() => {this._onPressParts({dealers})}}>
-          <Text style={styles.buttonText}>
-            {strings.NewCarItemScreen.sendQuery}
-          </Text>
-        </Button>);
+        return (
+          <Button
+            uppercase={false}
+            title={strings.NewCarItemScreen.sendQuery}
+            style={[
+              styles.button,
+              styleConst.button.footer.buttonLeft,
+              {backgroundColor: styleConst.color.green, width: '53%'},
+            ]}
+            onPress={() => {
+              this._onPressParts({dealers});
+            }}>
+            <Text style={styles.buttonText}>
+              {strings.NewCarItemScreen.sendQuery}
+            </Text>
+          </Button>
+        );
     }
-  }
+  };
 
-  _renderImageView = ({ getViewProps, getImageProps }) => (
+  _renderImageView = ({getViewProps, getImageProps}) => (
     <View {...getViewProps()}>
       <Imager {...getImageProps()} />
     </View>
@@ -238,7 +263,7 @@ class InfoPostScreen extends Component {
     });
   };
 
-  _renderImageViewonError = (err) => {
+  _renderImageViewonError = err => {
     console.error(err);
   };
 
@@ -267,7 +292,7 @@ class InfoPostScreen extends Component {
         <View style={styleConst.safearea.default}>
           <StatusBar hidden />
           <Content
-            style={{margin: 0, marginTop: -50, padding: 0}}
+            style={{margin: 0, padding: 0}}
             refreshControl={
               <RefreshControl
                 refreshing={this.state.refreshing}
@@ -281,16 +306,20 @@ class InfoPostScreen extends Component {
               />
             ) : (
               <View>
-                <View style={[styles.imageContainer, {opacity: this.state.imageLoaded}]} ref="imageContainer">
-                {imageUrl ? (
-                  <ResponsiveImageView
-                    onLoad={this._renderImageViewonLoad}
-                    onError={this._renderImageViewonError}
-                    source={{ uri: imageUrl }}
-                    >
-                    {this._renderImageView}
-                  </ResponsiveImageView>
-                ) : null}
+                <View
+                  style={[
+                    styles.imageContainer,
+                    {opacity: this.state.imageLoaded},
+                  ]}
+                  ref="imageContainer">
+                  {imageUrl ? (
+                    <ResponsiveImageView
+                      onLoad={this._renderImageViewonLoad}
+                      onError={this._renderImageViewonError}
+                      source={{uri: imageUrl}}>
+                      {this._renderImageView}
+                    </ResponsiveImageView>
+                  ) : null}
                 </View>
                 <View
                   style={styles.textContainer}
@@ -328,24 +357,30 @@ class InfoPostScreen extends Component {
             )}
           </Content>
           {type ? (
-          <TransitionView
-            animation={styleConst.animation.zoomIn}
-            duration={350}
-            index={1}
-            delay={3000}
-            style={[styleConst.shadow.default, styles.buttonWrapper]}>
-          {this._renderOrderButton({type, dealers})}
-          <Button
-          uppercase={false}
-          title={strings.InfoPostScreen.button.callMe}
-          style={[styles.button, styleConst.button.footer.buttonRight, {backgroundColor: styleConst.color.lightBlue}]}
-          onPress={() => {this._onPressCallMe()}}>
-          <Text style={styles.buttonText} selectable={false}>
-            {strings.InfoPostScreen.button.callMe}
-          </Text>
-        </Button>
-        </TransitionView>
-        ) : null}
+            <TransitionView
+              animation={styleConst.animation.zoomIn}
+              duration={350}
+              index={1}
+              delay={3000}
+              style={[styleConst.shadow.default, styles.buttonWrapper]}>
+              {this._renderOrderButton({type, dealers})}
+              <Button
+                uppercase={false}
+                title={strings.InfoPostScreen.button.callMe}
+                style={[
+                  styles.button,
+                  styleConst.button.footer.buttonRight,
+                  {backgroundColor: styleConst.color.lightBlue},
+                ]}
+                onPress={() => {
+                  this._onPressCallMe();
+                }}>
+                <Text style={styles.buttonText} selectable={false}>
+                  {strings.InfoPostScreen.button.callMe}
+                </Text>
+              </Button>
+            </TransitionView>
+          ) : null}
         </View>
       </StyleProvider>
     );
