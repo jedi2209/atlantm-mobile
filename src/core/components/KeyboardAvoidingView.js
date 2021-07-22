@@ -12,8 +12,8 @@ export const KeyboardAvoidingView = ({children}) => {
     <KeyboardAvoidingNativeView
       style={{flex: 1}}
       contentContainerStyle={{flex: 1}}
-      behavior={Platform.select({ios: 'position', android: 'position'})}
-      keyboardVerticalOffset={-offset}>
+      behavior={Platform.select({ios: 'position', android: null})}
+      keyboardVerticalOffset={offset}>
       {children}
     </KeyboardAvoidingNativeView>
   );

@@ -1,9 +1,9 @@
-export default (checkProps) => {
+export default checkProps => {
   return function (props, propName, compName) {
     const requirePropNames = Object.keys(checkProps);
     let notFound = true;
 
-    requirePropNames.map((el) => {
+    requirePropNames.map(el => {
       if (props[el]) {
         notFound = false;
       }

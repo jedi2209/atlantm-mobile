@@ -34,6 +34,7 @@ import styleConst from '../../../core/style-const';
 // redux
 import {connect} from 'react-redux';
 import {substractYears} from '../../../utils/date';
+import {declOfNum} from '../../../utils/decl-of-num';
 import {
   actionFetchNewCarByFilter,
   actionFetchNewCarFilterData,
@@ -215,7 +216,14 @@ const _getSelectedModels = (selectedModels, models) => {
   }
   return (
     <View style={styles.fieldCaptionValues}>
-      <Text style={styles.fieldValueOne}>{labels.length + ' авто'}</Text>
+      <Text style={styles.fieldValueOne}>
+        {labels.length +
+          ' ' +
+          declOfNum(
+            labels.length,
+            strings.CarsFilterScreen.chooseBrandModel.titles,
+          )}
+      </Text>
     </View>
   );
 };
@@ -279,8 +287,6 @@ const CarsFilterScreen = ({
   const [bodys, setBody] = useState({});
   const [accordionModels, setAccordion] = useState({});
   const [dataFilters, setDataFilters] = useState(null);
-
-  const firstUpdate = useRef(true);
 
   const _showHideSubmitButton = show => {
     if (show) {
@@ -519,6 +525,8 @@ const CarsFilterScreen = ({
     setDataFilters(null);
     setTotalCars(null);
     setStockLoading(true);
+    setModelFilter({type: 'clear'});
+    setBrandFilter({type: 'clear'});
     setStockType(stockType);
   };
 
@@ -632,14 +640,19 @@ const CarsFilterScreen = ({
   };
 
   useEffect(() => {
+    dispatchFilters(null, null);
+    setDataFilters(null);
+    setTotalCars(null);
+    setStockLoading(true);
+    setModelFilter({type: 'clear'});
+    setBrandFilter({type: 'clear'});
+  }, [dealerSelected]);
+
+  useEffect(() => {
     _fetchFiltersAPI(stockType);
   }, [stockType]);
 
   useEffect(() => {
-    // if (firstUpdate.current) {
-    //   firstUpdate.current = false;
-    //   return;
-    // }
     _showHideSubmitButton(false);
     let filtersLocal = {};
     Object.assign(filtersLocal, stateFilters);
