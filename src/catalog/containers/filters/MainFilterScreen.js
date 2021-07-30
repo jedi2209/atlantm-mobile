@@ -21,13 +21,11 @@ import {
   Right,
   CheckBox,
 } from 'native-base';
-import NestedListView, {NestedRow} from 'react-native-nested-listview';
 
 import RNBounceable from '@freakycoder/react-native-bounceable';
 import ModalViewFilter from '../../components/ModalViewFilter';
 import {Picker} from '@react-native-picker/picker';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import BrandLogo from '../../../core/components/BrandLogo';
 import CheckboxList from '../../../core/components/CheckboxList';
 
 import styleConst from '../../../core/style-const';
@@ -106,6 +104,10 @@ const mapStateToProps = ({catalog, dealer}) => {
     items: catalog.newCar.items,
 
     city: catalog.newCar.city,
+    brandModel: {
+      New: catalog.newCar.brandModelFilter,
+      Used: catalog.usedCar.brandModelFilter,
+    },
   };
 };
 
@@ -150,45 +152,6 @@ const reducerFilters = (state = initialStateFilters, field) => {
     });
   }
   return res;
-};
-
-const reducerBrandFilter = (state = {}, action) => {
-  if (action.type && action.type === 'clear') {
-    return {};
-  }
-  if (state[action.id]) {
-    delete state[action.id];
-  } else {
-    state[action.id] = action.id;
-  }
-  return state;
-};
-
-const reducerModelFilter = (state = {}, action) => {
-  switch (action.type) {
-    case 'delete':
-      if (action?.items) {
-        action.items.map(val => {
-          delete state[val.id];
-        });
-      } else {
-        delete state[action.id];
-      }
-      break;
-    case 'add':
-      if (action?.items) {
-        action.items.map(val => {
-          state[val.id] = val.id;
-        });
-      } else {
-        state[action.id] = action.id;
-      }
-      break;
-    case 'clear':
-      state = {};
-      break;
-  }
-  return state;
 };
 
 const _getSelectedLabels = (selectArr = []) => {
@@ -254,7 +217,7 @@ const _makeFilterData = (field, value) => {
   return value;
 };
 
-const CarsFilterScreen = ({
+const MainFilterScreen = ({
   navigation,
   route,
   dealerSelected,
@@ -264,6 +227,7 @@ const CarsFilterScreen = ({
   actionFetchUsedCar,
   actionFetchNewCarFilters,
   actionFetchUsedCarFilters,
+  brandModel,
 }) => {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -279,10 +243,6 @@ const CarsFilterScreen = ({
     reducerFilters,
     initialStateFilters,
   );
-  const [brandFilter, setBrandFilter] = useReducer(reducerBrandFilter, {});
-  const [modelFilter, setModelFilter] = useReducer(reducerModelFilter, {});
-
-  const [nestedListUpdate, setUpdateNestedList] = useState(false);
   const [colors, setColors] = useState({});
   const [bodys, setBody] = useState({});
   const [accordionModels, setAccordion] = useState({});
@@ -419,8 +379,6 @@ const CarsFilterScreen = ({
           } else {
             setDataFilters(null);
           }
-          setModelFilter({type: 'clear'});
-          setBrandFilter({type: 'clear'});
           _showHideSubmitButton(true);
         });
         break;
@@ -512,8 +470,6 @@ const CarsFilterScreen = ({
           } else {
             setDataFilters(null);
           }
-          setModelFilter({type: 'clear'});
-          setBrandFilter({type: 'clear'});
           _showHideSubmitButton(true);
         });
         break;
@@ -525,92 +481,9 @@ const CarsFilterScreen = ({
     setDataFilters(null);
     setTotalCars(null);
     setStockLoading(true);
-    setModelFilter({type: 'clear'});
-    setBrandFilter({type: 'clear'});
+    // setModelFilter({type: 'clear'});
+    // setBrandFilter({type: 'clear'});
     setStockType(stockType);
-  };
-
-  const _onNestedNodePress = node => {
-    const id = node.id;
-    const isBrand = node.type === 'brand';
-    if (!isBrand) {
-      let typeTmp = 'add';
-      if (modelFilter[id]) {
-        typeTmp = 'delete';
-      }
-      setModelFilter({id: id, type: typeTmp});
-      _onChangeFilter('modelFilter', modelFilter);
-      setUpdateNestedList(!nestedListUpdate);
-    }
-  };
-
-  const _renderNodeNested = (node, level, isLastLevel) => {
-    return (
-      <NestedRow
-        level={level}
-        style={styles[`nestedRow${level}${node.opened ? 'Opened' : 'Closed'}`]}>
-        {level === 1 && node.id ? (
-          <View style={{flexDirection: 'row', flex: 1}}>
-            <Icon
-              type={'Ionicons'}
-              style={styles.brandCaret}
-              name={node.opened ? 'caret-down' : 'caret-forward'}
-            />
-            <View style={styles.colorWrapper}>
-              <View style={{flexDirection: 'row'}}>
-                {stockType != 'Used' ? (
-                  <BrandLogo
-                    brand={node.id}
-                    width={30}
-                    style={styles.brandLogo}
-                    key={'brandLogo' + node.id}
-                  />
-                ) : null}
-                <Text style={styles.colorText}>{node.label}</Text>
-              </View>
-              <CheckBox
-                onPress={() => {
-                  let typeTmp = 'add';
-                  if (brandFilter[node.id]) {
-                    typeTmp = 'delete';
-                  }
-                  setModelFilter({items: node?.items, type: typeTmp});
-                  setBrandFilter({id: node.id});
-                  _onChangeFilter({
-                    brandFilter: brandFilter,
-                    modelFilter: modelFilter,
-                  });
-                  setUpdateNestedList(!nestedListUpdate);
-                }}
-                checked={brandFilter && brandFilter[node.id] ? true : false}
-              />
-            </View>
-          </View>
-        ) : (
-          <View
-            style={{
-              flexDirection: 'row',
-              paddingLeft: level * 6 + '%',
-              flex: 1,
-              justifyContent: 'space-between',
-            }}>
-            <Text style={{fontSize: 14}}>{node.label}</Text>
-            <CheckBox
-              onPress={() => {
-                let typeTmp = 'add';
-                if (modelFilter[node.id]) {
-                  typeTmp = 'delete';
-                }
-                setModelFilter({id: node.id, type: typeTmp});
-                _onChangeFilter('modelFilter', modelFilter);
-                setUpdateNestedList(!nestedListUpdate);
-              }}
-              checked={modelFilter && modelFilter[node.id] ? true : false}
-            />
-          </View>
-        )}
-      </NestedRow>
-    );
   };
 
   const _onSubmitButtonPress = () => {
@@ -644,8 +517,6 @@ const CarsFilterScreen = ({
     setDataFilters(null);
     setTotalCars(null);
     setStockLoading(true);
-    setModelFilter({type: 'clear'});
-    setBrandFilter({type: 'clear'});
   }, [dealerSelected]);
 
   useEffect(() => {
@@ -656,15 +527,15 @@ const CarsFilterScreen = ({
     _showHideSubmitButton(false);
     let filtersLocal = {};
     Object.assign(filtersLocal, stateFilters);
-    if (stateFilters['brandFilter']) {
-      Object.keys(stateFilters['brandFilter']).map(key => {
+    if (brandModel[stockType]['brand']) {
+      Object.keys(brandModel[stockType]['brand']).map(key => {
         Object.assign(filtersLocal, stateFilters, {
           ['brand[' + key + ']']: parseInt(key, 10),
         });
       });
     }
-    if (stateFilters['modelFilter']) {
-      Object.keys(stateFilters['modelFilter']).map(key => {
+    if (brandModel[stockType]['model']) {
+      Object.keys(brandModel[stockType]['model']).map(key => {
         Object.assign(filtersLocal, stateFilters, {
           ['model[' + key + ']']: key,
         });
@@ -725,7 +596,7 @@ const CarsFilterScreen = ({
         });
         break;
     }
-  }, [updateFromApi]);
+  }, [updateFromApi, brandModel[stockType]]);
 
   return (
     <Container style={styles.container}>
@@ -770,7 +641,11 @@ const CarsFilterScreen = ({
               <CardItem
                 button
                 onPress={() => {
-                  _showHideModal(true, modals.brandModels);
+                  navigation.navigate('BrandModelFilterScreen', {
+                    stockType,
+                    data: accordionModels,
+                  });
+                  // _showHideModal(true, modals.brandModels);
                 }}
                 style={[styles.cardItem, styles.cardItemStatic]}>
                 <View style={styles.fieldCaptionWrapper}>
@@ -781,7 +656,7 @@ const CarsFilterScreen = ({
                     {strings.CarsFilterScreen.chooseBrandModel.title}
                   </Text>
                   {_getSelectedModels(
-                    get(stateFilters, 'modelFilter'),
+                    get(brandModel[stockType], 'model'),
                     accordionModels,
                   )}
                 </View>
@@ -1315,31 +1190,6 @@ const CarsFilterScreen = ({
             </Card>
           ) : null}
 
-          {/* Модалка Бренд+Модель */}
-          {dataFilters.data.brand ? (
-            <ModalViewFilter
-              isModalVisible={showModal === modals.brandModels}
-              onHide={() => _showHideModal(false)}
-              onReset={() => {
-                _onChangeFilter({modelFilter: {}, brandFilter: {}});
-                setModelFilter({type: 'clear'});
-                setBrandFilter({type: 'clear'});
-                setUpdateNestedList(!nestedListUpdate);
-              }}
-              title={strings.CarsFilterScreen.chooseBrandModel.title}
-              titleRowView={styles.modalTitleRow}
-              selfClosed={false}>
-              <NestedListView
-                data={accordionModels}
-                extraData={nestedListUpdate}
-                onNodePressed={node => _onNestedNodePress(node)}
-                renderNode={(node, level, isLastLevel) =>
-                  _renderNodeNested(node, level, isLastLevel)
-                }
-              />
-            </ModalViewFilter>
-          ) : null}
-          {/* Модалка Год выпуска */}
           {dataFilters.data.year ? (
             <ModalViewFilter
               isModalVisible={showModal === modals.year}
@@ -1883,7 +1733,7 @@ const CarsFilterScreen = ({
   );
 };
 
-CarsFilterScreen.defaultProps = {
+MainFilterScreen.defaultProps = {
   stockTypeDefault: 'New',
   updateFromApiDefault: false,
 };
@@ -2116,4 +1966,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(CarsFilterScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(MainFilterScreen);

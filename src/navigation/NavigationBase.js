@@ -32,7 +32,8 @@ import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
 
 // Filters
-import CarsFilterScreen from '../catalog/containers/filters/CarsFilterScreen';
+import MainFilterScreen from '../catalog/containers/filters/MainFilterScreen';
+import BrandModelFilterScreen from '../catalog/containers/filters/BrandModelFilterScreen';
 
 // Used Cars Catalog
 import UsedCarListScreen from '../catalog/usedcar/containers/UsedCarListScreen';
@@ -428,13 +429,26 @@ const CarsStock = ({navigation, route}) => {
 
   return (
     <>
-      <SearchStack.Navigator initialRouteName="CarsFilterScreen">
+      <SearchStack.Navigator initialRouteName="MainFilterScreen">
         <SearchStack.Screen
-          name="CarsFilterScreen"
-          component={CarsFilterScreen}
+          name="MainFilterScreen"
+          component={MainFilterScreen}
           options={BigCloseButton(navigation, route, {
             ...TransitionPresets.ScaleFromCenterAndroid,
             headerTitle: strings.CarsFilterScreen.title,
+            headerRight: () => <></>,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+        <SearchStack.Screen
+          name="BrandModelFilterScreen"
+          component={BrandModelFilterScreen}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ScaleFromCenterAndroid,
+            headerTitle: strings.CarsFilterScreen.chooseBrandModel.title,
             headerRight: () => <></>,
             headerTitleStyle: [
               stylesHeader.transparentHeaderTitle,

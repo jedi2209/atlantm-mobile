@@ -41,6 +41,8 @@ import {
   // filtlers
   SAVE_USEDCAR_FILTERS,
   SAVE_NEWCAR_FILTERS,
+  SAVE_BRANDMODEL_FILTERS_NEW,
+  SAVE_BRANDMODEL_FILTERS_USED,
 } from './actionTypes';
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
@@ -228,6 +230,34 @@ const usedCarPhotoViewerVisible = (state = false, action) => {
       return true;
     default:
       return state;
+  }
+};
+
+const saveBrandModelNew = (state, action) => {
+  switch (action.type) {
+    case REHYDRATE:
+      return {};
+    case SAVE_BRANDMODEL_FILTERS_NEW:
+      return {
+        brand: action?.payload?.brandFilter || {},
+        model: action?.payload?.modelFilter || {},
+      };
+    default:
+      return state ? state : {};
+  }
+};
+
+const saveBrandModelUsed = (state, action) => {
+  switch (action.type) {
+    case REHYDRATE:
+      return {};
+    case SAVE_BRANDMODEL_FILTERS_USED:
+      return {
+        brand: action?.payload?.brandFilter || {},
+        model: action?.payload?.modelFilter || {},
+      };
+    default:
+      return state ? state : {};
   }
 };
 
@@ -446,6 +476,7 @@ export default combineReducers({
       isFetchingCarDetails: isFetchingUsedCarDetails,
     }),
     filters: usedCarFiltersData,
+    brandModelFilter: saveBrandModelUsed,
   }),
 
   newCar: combineReducers({
@@ -464,6 +495,7 @@ export default combineReducers({
       isFetchingTDCarDetails: isFetchingTDCarDetails,
     }),
     filters: newCarFiltersData,
+    brandModelFilter: saveBrandModelNew,
   }),
 
   carCost: combineReducers({
