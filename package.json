@@ -6,7 +6,7 @@
     "node": ">=12"
   },
   "scripts": {
-    "build": "bundle exec fastlane ios localNoCompile; npm run android-build;",
+    "build": "bundle exec fastlane ios localNoCompile; yarn run android-build;",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "postinstall": "npx patch-package; npx pod-install;",
     "react": "npx react-native start --reset-cache",
@@ -53,7 +53,6 @@
     "@react-navigation/stack": "^5.14.3",
     "@sentry/react-native": "^2.5.1",
     "acorn": "^8.4.0",
-    "color": "^4.0.0",
     "currency.js": "^2.0.3-83da51b1",
     "detox": "^18.15.0",
     "graceful-fs": "^4.2.6",

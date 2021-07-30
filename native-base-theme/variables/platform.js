@@ -1,7 +1,7 @@
 // @flow
 
 import color from 'color';
-import { Platform, Dimensions, PixelRatio } from 'react-native';
+import {Platform, Dimensions, PixelRatio} from 'react-native';
 import styleConst from '../../src/core/style-const';
 
 const PLATFORM = {
@@ -193,7 +193,8 @@ export default {
 
   // Footer
   footerHeight: 55,
-  footerDefaultBg: platform === PLATFORM.IOS ? styleConst.color.bg : styleConst.color.blue,
+  footerDefaultBg:
+    platform === PLATFORM.IOS ? styleConst.color.bg : styleConst.color.blue,
   footerPaddingBottom: 0,
 
   // FooterTab
@@ -201,26 +202,27 @@ export default {
   tabBarTextSize: platform === PLATFORM.IOS ? 14 : 11,
   activeTab: platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
   sTabBarActiveTextColor: '#007aff',
-  tabBarActiveTextColor: platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
-  tabActiveBgColor: platform === PLATFORM.IOS ? '#cde1f9' : styleConst.color.blue,
+  tabBarActiveTextColor:
+    platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
+  tabActiveBgColor:
+    platform === PLATFORM.IOS ? '#cde1f9' : styleConst.color.blue,
 
   // Header
-  toolbarBtnColor: platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
-  toolbarDefaultBg: platform === PLATFORM.IOS ? styleConst.color.bg : styleConst.color.blue,
+  toolbarBtnColor:
+    platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
+  toolbarDefaultBg:
+    platform === PLATFORM.IOS ? styleConst.color.bg : styleConst.color.blue,
   toolbarHeight: platform === PLATFORM.IOS ? 64 : 56,
   toolbarSearchIconSize: platform === PLATFORM.IOS ? 20 : 23,
-  toolbarInputColor: platform === PLATFORM.IOS ? '#CECDD2' : styleConst.color.white,
+  toolbarInputColor:
+    platform === PLATFORM.IOS ? '#CECDD2' : styleConst.color.white,
   searchBarHeight: platform === PLATFORM.IOS ? 30 : 40,
   searchBarInputHeight: platform === PLATFORM.IOS ? 30 : 50,
-  toolbarBtnTextColor: platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
-  toolbarDefaultBorder: platform === PLATFORM.IOS ? '#a7a6ab' : styleConst.color.blue,
+  toolbarBtnTextColor:
+    platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
+  toolbarDefaultBorder:
+    platform === PLATFORM.IOS ? '#a7a6ab' : styleConst.color.blue,
   iosStatusbar: platform === PLATFORM.IOS ? 'dark-content' : 'light-content',
-  get statusBarColor() {
-    return color(this.toolbarDefaultBg).darken(0.2).hex();
-  },
-  get darkenHeader() {
-    return color(this.tabBgColor).darken(0.03).hex();
-  },
 
   // Icon
   iconFamily: 'Ionicons',
@@ -246,7 +248,8 @@ export default {
   lineHeightH2: 27,
   lineHeightH3: 25,
   lineHeight: platform === PLATFORM.IOS ? 20 : 24,
-  listItemSelected: platform === PLATFORM.IOS ? '#007aff' : styleConst.color.blue,
+  listItemSelected:
+    platform === PLATFORM.IOS ? '#007aff' : styleConst.color.blue,
 
   // List
   listBg: 'transparent',
@@ -285,9 +288,12 @@ export default {
   tabBarDisabledTextColor: '#BDBDBD',
   tabDefaultBg: styleConst.color.bg,
   topTabBarTextColor: platform === PLATFORM.IOS ? '#6b6b6b' : '#b3c7f9',
-  topTabBarActiveTextColor: platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
-  topTabBarBorderColor: platform === PLATFORM.IOS ? '#a7a6ab' : styleConst.color.white,
-  topTabBarActiveBorderColor: platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
+  topTabBarActiveTextColor:
+    platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
+  topTabBarBorderColor:
+    platform === PLATFORM.IOS ? '#a7a6ab' : styleConst.color.white,
+  topTabBarActiveBorderColor:
+    platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
 
   // Tabs
   tabBgColor: styleConst.color.bg,

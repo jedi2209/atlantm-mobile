@@ -100,8 +100,8 @@ export default class CarCostPhotos extends Component {
 
     const settings = {
       cropping: true,
-      compressImageMaxWidth: 1400,
-      compressImageMaxHeight: 1400,
+      compressImageMaxWidth: 2800,
+      compressImageMaxHeight: 2800,
       compressImageQuality: 0.9,
       mediaType: 'photo',
       includeBase64: true,
