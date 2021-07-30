@@ -61,6 +61,8 @@ import {
   // filters
   SAVE_USEDCAR_FILTERS,
   SAVE_NEWCAR_FILTERS,
+  SAVE_BRANDMODEL_FILTERS_NEW,
+  SAVE_BRANDMODEL_FILTERS_USED,
 } from './actionTypes';
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
@@ -145,6 +147,26 @@ export const actionFetchUsedCarFilterData = props => {
       });
   };
 };
+
+export const actionSaveBrandModelFilter = props => {
+  switch (props.stockType) {
+    case 'New':
+      return dispatch => {
+        dispatch({
+          type: SAVE_BRANDMODEL_FILTERS_NEW,
+          payload: props.stateFilters,
+        });
+      };
+    case 'Used':
+      return dispatch => {
+        dispatch({
+          type: SAVE_BRANDMODEL_FILTERS_USED,
+          payload: props.stateFilters,
+        });
+      };
+  }
+};
+
 export const actionFetchNewCarByFilter = props => {
   props.url = `/stock/new/cars/get/city/${props.city}/`;
   let urlParams = [];

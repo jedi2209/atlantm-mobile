@@ -145,11 +145,11 @@ const MenuScreen = (props) => {
       navigate: {
         url: 'CarsStock',
         params: {
-          screen: 'CarsFilterScreen',
+          screen: 'MainFilterScreen',
           params: {
             stockTypeDefault: 'New',
-          }
-        }
+          },
+        },
       },
       type: 'new',
       icon: <Image source={require('../assets/Car-new.svg')} />,
@@ -161,11 +161,11 @@ const MenuScreen = (props) => {
       navigate: {
         url: 'CarsStock',
         params: {
-          screen: 'CarsFilterScreen',
+          screen: 'MainFilterScreen',
           params: {
             stockTypeDefault: 'Used',
-          }
-        }
+          },
+        },
       },
       type: 'not_new',
       icon: <Image source={require('../assets/Car-used.svg')} />,
