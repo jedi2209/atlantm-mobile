@@ -264,7 +264,7 @@ export default {
     chooseBrandModel: {
       title: 'Марка і модель',
       title2: 'Виберіть марку і модель',
-      titles: ['модель', 'модели', 'моделей'],
+      titles: ['модель', 'моделі', 'моделей'],
     },
     resultsButton: {
       show: 'Показати',
