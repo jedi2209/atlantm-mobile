@@ -340,7 +340,7 @@ PODS:
   - react-native-fbsdk/Share (3.0.0):
     - FBSDKShareKit (~> 8.1)
     - React
-  - react-native-flipper (0.98.0):
+  - react-native-flipper (0.100.0):
     - React-Core
   - react-native-google-maps (0.28.0):
     - Google-Maps-iOS-Utils (= 2.1.0)
@@ -353,7 +353,7 @@ PODS:
   - react-native-onesignal (3.9.4):
     - OneSignal (= 2.16.5)
     - React (< 1.0.0, >= 0.13.0)
-  - react-native-pager-view (5.3.2):
+  - react-native-pager-view (5.4.0):
     - React-Core
   - react-native-safe-area-context (3.2.0):
     - React-Core
@@ -448,7 +448,7 @@ PODS:
     - React-Core
   - RNDateTimePicker (3.5.2):
     - React-Core
-  - RNDeviceInfo (8.1.4):
+  - RNDeviceInfo (8.1.5):
     - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
@@ -498,16 +498,16 @@ PODS:
   - RNScreens (3.4.0):
     - React-Core
     - React-RCTImage
-  - RNSentry (2.6.0):
+  - RNSentry (2.6.1):
     - React-Core
-    - Sentry (= 7.0.0)
+    - Sentry (= 7.1.4)
   - RNSVG (12.1.1):
     - React
   - RNVectorIcons (8.1.0):
     - React-Core
-  - Sentry (7.0.0):
-    - Sentry/Core (= 7.0.0)
-  - Sentry/Core (7.0.0)
+  - Sentry (7.1.4):
+    - Sentry/Core (= 7.1.4)
+  - Sentry/Core (7.1.4)
   - TOCropViewController (2.6.0)
   - VK-ios-sdk (1.6.2)
   - Yoga (1.14.0)
@@ -804,12 +804,12 @@ SPEC CHECKSUMS:
   React-jsinspector: cc614ec18a9ca96fd275100c16d74d62ee11f0ae
   react-native-blurhash: ec98d751a9cb9075cef0b9e3188244c517d6ab22
   react-native-fbsdk: 8e92c7a334fd8d9c2b5d8b8fcd7ae2c314161099
-  react-native-flipper: 80b71629f5bf7b942dfae7af0c5f88526d19b3ca
+  react-native-flipper: 1943b82f2e494c77b741eb1ed257b6734a334b83
   react-native-google-maps: 46dea4aa4acb7300beff508f64d9f8c84e9fb106
   react-native-in-app-review: 00a66a085c61dbd4474041dc14e7bfee81a86130
   react-native-maps: 2d405b4e8cee0282e4c02bac434d81450dfea877
   react-native-onesignal: 5187b12401c959102a64bde48fbca39c5e3b8136
-  react-native-pager-view: d641c8b97ffd120b9e8e06c80e008ac22735e6aa
+  react-native-pager-view: 54970cc27fdef14db2dcfedadb091d711e88065d
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
   react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
@@ -835,17 +835,17 @@ SPEC CHECKSUMS:
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: 61c7a0645b9e4ac67960aa7f22a3effcecfdfb8d
   RNDateTimePicker: 7658208086d86d09e1627b5c34ba0cf237c60140
-  RNDeviceInfo: 0b3e0154c1c659ea9779cb3e883e66ece92326a9
+  RNDeviceInfo: b7b76016bf0d89c0446365dde551273195e0f525
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNImageCropPicker: 35a3ceb837446fa11547704709bb22b5fac6d584
   RNRate: cb88d5a0aa7be8bfae67dafbbbba2c9cd5e6faf2
   RNReanimated: 9c13c86454bfd54dab7505c1a054470bfecd2563
   RNScreens: 21b73c94c9117e1110a79ee0ee80c93ccefed8ce
-  RNSentry: a2b02b326ae4fce91ce7c57d3f7dcf8df4f72269
+  RNSentry: af7873b080a0beb74c020644644d247ef4771644
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
-  Sentry: 89d26e036063b9cb9caa59b6951dd2f8277aa13b
+  Sentry: 1d3eb1a25f8c5333c88dd5603904a6d461cd9fcf
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   VK-ios-sdk: 5bcf00a2014a7323f98db9328b603d4f96635caa
   Yoga: 575c581c63e0d35c9a83f4b46d01d63abc1100ac

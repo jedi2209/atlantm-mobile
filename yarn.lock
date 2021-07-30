@@ -1757,9 +1757,9 @@
     tslib "^1.9.3"
 
 "@sentry/cli@^1.52.4":
-  version "1.66.0"
-  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.66.0.tgz#0526f1bc1c0570ce72ed817190af92f3b63a2e9a"
-  integrity sha512-2pZ+JHnvKqwyJWcGkKg/gCM/zURYronAnruBNllI+rH2g5IL0N90deMmjB1xcqXS66J222+MPTtWrGEK1Vl0/w==
+  version "1.68.0"
+  resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.68.0.tgz#2ced8fac67ee01e746a45e8ee45a518d4526937e"
+  integrity sha512-zc7+cxKDqpHLREGJKRH6KwE8fZW8bnczg3OLibJ0czleXoWPdAuOK1Xm1BTMcOnaXfg3VKAh0rI7S1PTdj+SrQ==
   dependencies:
     https-proxy-agent "^5.0.0"
     mkdirp "^0.5.5"
@@ -1808,9 +1808,9 @@
     tslib "^1.9.3"
 
 "@sentry/react-native@^2.5.1":
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-2.6.0.tgz#1674ffa8c447581cde5e3566841841aa2bbbc25b"
-  integrity sha512-Sajrg7GWSZ1S26X2mIHRt+wCuc7CuPjdmx8tQfDg6cpswXgqryb0fv99VCpImb4ZB/WiaCTu2z9BSGUiZahnBg==
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-2.6.1.tgz#22ca62ad045fb1709f1b860c0f6ae0f2093e4b52"
+  integrity sha512-Lnm9DzHDp2cVFgFBrhTpe9bNgPWV+2TV4SrNhFJ19Ew4v96GNCCL8LZLW34BiqMnSi8EupAmHoTufdWnXi3DrQ==
   dependencies:
     "@sentry/browser" "6.7.1"
     "@sentry/core" "6.7.1"
@@ -1859,9 +1859,9 @@
     tslib "^1.9.3"
 
 "@sentry/wizard@^1.2.2":
-  version "1.2.9"
-  resolved "https://registry.yarnpkg.com/@sentry/wizard/-/wizard-1.2.9.tgz#ddccec63f766d87cb1863e7c5f33618d80277ec7"
-  integrity sha512-j6OdWF2W3Q24EmIXnNiomspJWKXicAPYnAUF1kcE4c+RuKxv/WFmPkSgg57BZRQ4613GUeHrs3eHGW6FDovolg==
+  version "1.2.10"
+  resolved "https://registry.yarnpkg.com/@sentry/wizard/-/wizard-1.2.10.tgz#93d751a33558bbfe4566683369fb3ac160408f02"
+  integrity sha512-KIMAvVoeCQU1RpQAJzvvCGWOeIEMB1TxQtMLBQED1YfJbhRTzKjnWgUSSrSVWb1nEnlm0iX/IOWJRH0nHMDHnQ==
   dependencies:
     "@sentry/cli" "^1.52.4"
     chalk "^2.4.1"
@@ -3178,6 +3178,14 @@ color-string@^1.5.4:
     color-name "^1.0.0"
     simple-swizzle "^0.2.2"
 
+color-string@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/color-string/-/color-string-1.6.0.tgz#c3915f61fe267672cb7e1e064c9d692219f6c312"
+  integrity sha512-c/hGS+kRWJutUBEngKKmk4iH3sD59MBkoxVapS/0wgpCz2u7XsNloxknyvBhzwEs1IbV36D9PwqLPJ2DTu3vMA==
+  dependencies:
+    color-name "^1.0.0"
+    simple-swizzle "^0.2.2"
+
 color-support@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/color-support/-/color-support-1.1.3.tgz#93834379a1cc9a0c61f82f52f0d04322251bd5a2"
@@ -3190,6 +3198,14 @@ color@^3.1.2, color@^3.1.3, color@~3.1.2:
   dependencies:
     color-convert "^1.9.1"
     color-string "^1.5.4"
+
+color@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/color/-/color-4.0.0.tgz#7f0c89d3fcf04c45e20c81c7c24cd73314acac1f"
+  integrity sha512-aVUOa5aYWJSimvei14J5rdxLeljG0EB/uXTovVaaSokW+D4MsAz3MrKsRNaKqPa2KL7Wfvh7PZyIIaaX4lYdzQ==
+  dependencies:
+    color-convert "^2.0.1"
+    color-string "^1.6.0"
 
 colorette@^1.0.7, colorette@^1.2.2:
   version "1.2.2"
@@ -3459,17 +3475,17 @@ debug@2.6.9, debug@^2.2.0, debug@^2.3.3:
   dependencies:
     ms "2.0.0"
 
-debug@4, debug@^4.3.1:
-  version "4.3.1"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.1.tgz#f0d229c505e0c6d8c49ac553d1b13dc183f6b2ee"
-  integrity sha512-doEwdvm4PCeK4K3RQN2ZC2BYUBaxwLARCqZmMjtF8a51J2Rb0xpVloFRnCODwqjpwnAoao4pelN8l3RJdv3gRQ==
-  dependencies:
-    ms "2.1.2"
-
-debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
+debug@4, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.2.tgz#f0a49c18ac8779e31d4a0c6029dfb76873c7428b"
   integrity sha512-mOp8wKcvj7XxC78zLgw/ZA+6TSgkoE2C/ienthhRD298T7UNwAg9diBpLRxC0mOezLl4B0xV7M0cCO6P/O0Xhw==
+  dependencies:
+    ms "2.1.2"
+
+debug@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.1.tgz#f0d229c505e0c6d8c49ac553d1b13dc183f6b2ee"
+  integrity sha512-doEwdvm4PCeK4K3RQN2ZC2BYUBaxwLARCqZmMjtF8a51J2Rb0xpVloFRnCODwqjpwnAoao4pelN8l3RJdv3gRQ==
   dependencies:
     ms "2.1.2"
 
@@ -3674,9 +3690,9 @@ detox-recorder@^1.0.151:
   integrity sha512-a4ZPo7AR5XJJiLy8Xqml8YXxrIz6R7RKfiGmG9u5MBxG2I+w+yGJTj7ZhYDfoi5StpUD+dKHTCdvycZTOQ84Cw==
 
 detox@^18.15.0:
-  version "18.19.0"
-  resolved "https://registry.yarnpkg.com/detox/-/detox-18.19.0.tgz#f6779b4a42a0c40b22fe8ea129321a74d2d97576"
-  integrity sha512-l/RFuLXsCbcY8x2iqapcKrlijHE35gFXiZzTKRzOyY8nODKctf6aRhYPBSX9xaSKRa3rKPTYi/ffdUIIKZIFoA==
+  version "18.20.0"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-18.20.0.tgz#4c5897b6ee75c614995a63d6c00e2de2a59be963"
+  integrity sha512-FamjX+TP2oXXe5ukEtzNzvWyIcS7REpwFxSequ6YGMixtIL/9TPwW/Qf0cdKsb9sIN98CbiVGoZ45JGLJELrfQ==
   dependencies:
     bunyan "^1.8.12"
     bunyan-debug-stream "^1.1.0"
@@ -8021,9 +8037,9 @@ react-native-animatable@1.3.3, react-native-animatable@^1.3.1, react-native-anim
     prop-types "^15.7.2"
 
 react-native-awesome-alerts@^1.3.4:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/react-native-awesome-alerts/-/react-native-awesome-alerts-1.5.1.tgz#77b66969a5562bc4cc3fc2d8c502d16482acd4be"
-  integrity sha512-sq+b2THQyLz0+aAvP0XPscU3QU3qE8+z8mVM6U1fhsgE2VTmMwdHq2CT0oWCNaZgasOXC0+4FbgWjjnys43bkQ==
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-awesome-alerts/-/react-native-awesome-alerts-1.5.2.tgz#eb8e05a8bc22ac304c59f82eab6be19308942c32"
+  integrity sha512-PPTzKLpwDKbjeghvrRkg7OunND4C7d4bQORVLBnhqUK2z2PfZiI3UCULU0tczzeOyavv5hVSrYNXKPXlvhfmVg==
   dependencies:
     prop-types "^15.7.2"
 
@@ -8052,9 +8068,9 @@ react-native-communications@^2.2.1:
   integrity sha1-eIO1ayCgAu63kMET+GFuqGksp5U=
 
 react-native-device-info@^8.0.1:
-  version "8.1.4"
-  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-8.1.4.tgz#709a424b64cd01b26e91000e9b7e2c36e8b832f0"
-  integrity sha512-PiYRJf3GBaVnGAUUB9YKzaGc5h6Rmn7NniD328JUXLeepKvLaDhK6EvFWU98YiZ2jePOF9/jg2cxfyN4jhZ2LA==
+  version "8.1.5"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-8.1.5.tgz#6ee3fe919b66675a1938b4d13c740de7868be308"
+  integrity sha512-w92x+FGIZdzEmU4SN+Zr+0zESubKb+zWRmHFECr0l+AtQlOZZ6AvO9WNwe2RBGpPkOUf54d7k8D0YgGvnRGIdQ==
 
 react-native-drawer@2.5.1:
   version "2.5.1"
@@ -8092,15 +8108,15 @@ react-native-fbsdk@3.0.0:
   resolved "https://registry.yarnpkg.com/react-native-fbsdk/-/react-native-fbsdk-3.0.0.tgz#07ef41758bb17a0acaff744008af625a45ef9a01"
   integrity sha512-i0JocuzLlGk13J0xFDjm8GlX7SADAL2kh/syE/HOn5HHdW+PFjC31MNj5AtzIw2TicHXpHGO6VPKNfdWFbxboA==
 
+react-native-flipper@^0.100.0:
+  version "0.100.0"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.100.0.tgz#fbcd568a82060592f107f3ea5ccecdb971c6f8f7"
+  integrity sha512-UsRlT9UAPHs9K+w1gVi/QEZgYem+W1Z2YXwr5NToAwNMsmTCfl0OpfWS0Xw9FiNQIOcpT2MTlPDHzL3sAQH44A==
+
 react-native-flipper@^0.34.0:
   version "0.34.0"
   resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.34.0.tgz#7df1f38ba5d97a9321125fe0fccbe47d99e6fa1d"
   integrity sha512-48wgm29HJTOlZ0DibBsvXueEOY0EPIVL0wWKbwRfgrk86+luSEuLW3aZC50oJa95zSFb9qYShTV/6dWqh4Jamg==
-
-react-native-flipper@^0.98.0:
-  version "0.98.0"
-  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.98.0.tgz#6ada370cd730d3a9d53b569f7e29dafe0af7abd5"
-  integrity sha512-11XsZexSH6yiCHrFLkPftbL2x8qruejnY+gcRE3QOchyK6rwBYbs/R5RSZHe3Mrp5D4xsUh+dToo8q0Vbhi9Yg==
 
 react-native-gallery-swiper@^1.26.0:
   version "1.26.4"
@@ -8203,9 +8219,9 @@ react-native-modal@^10.0.0:
     react-native-animatable "^1.3.1"
 
 react-native-modal@^12.0.2:
-  version "12.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-12.0.2.tgz#c7d737330600916d1ff9527e1000629bde2f63c6"
-  integrity sha512-UAQIqB3sg9b4LaQT3GY0JUtnXDonCzGv61JFQl9DZIBPgxrqoKmGtUcjBERu+xnBYJGogFFMyswQ8vLgAvh17w==
+  version "12.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-12.0.3.tgz#95c0e62573b93c5408d84d29b6afb25a79057905"
+  integrity sha512-dfceW9w6qeMsxzMgWGR/aCdUb4ku3uvykRgrYDvrBXDghS84eGtEQUyTHO5GMwClQJbC/JtsLmDz/GfiFOkmqw==
   dependencies:
     prop-types "^15.6.2"
     react-native-animatable "1.3.3"
@@ -8237,9 +8253,9 @@ react-native-page-list@^1.1.3:
     react-native-scrolling "^1.0.2"
 
 react-native-pager-view@^5.2.1:
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.3.2.tgz#11c1210c60d3953aecf2588754d465bebe32a858"
-  integrity sha512-IYMxRg5gvoyOBhXeo8+LrA2TN1NjxmvTCyaTnbzVIScUTucYZwHL/8raXBi1k3p71JL2WjyA1KW/j6gVDzBOiQ==
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-5.4.0.tgz#8e30a391a68da26e59f4ae724341b9208924b2ee"
+  integrity sha512-pYy3I8p5s6cPaymT1GibuDRHmicY3JdHHZyTH+Fra1S0wupaJhoZy33f2prrMJqQfk9kaqwCsb3pVmj4GuJTjA==
 
 react-native-paper@^4.9.1:
   version "4.9.2"
