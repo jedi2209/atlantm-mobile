@@ -236,6 +236,7 @@ const usedCarPhotoViewerVisible = (state = false, action) => {
 const saveBrandModelNew = (state, action) => {
   switch (action.type) {
     case REHYDRATE:
+    case 'CLEAR_BRANDMODEL_FILTERS_NEW':
       return {};
     case SAVE_BRANDMODEL_FILTERS_NEW:
       return {
@@ -250,6 +251,7 @@ const saveBrandModelNew = (state, action) => {
 const saveBrandModelUsed = (state, action) => {
   switch (action.type) {
     case REHYDRATE:
+    case 'CLEAR_BRANDMODEL_FILTERS_USED':
       return {};
     case SAVE_BRANDMODEL_FILTERS_USED:
       return {
