@@ -94,7 +94,7 @@ export default StyleSheet.create({
     paddingVertical: isAndroid ? 10 : 0,
     borderRadius: 15,
     marginLeft: 5,
-    marginTop: isAndroid ? 5 : 0,
+    marginTop: isAndroid ? 5 : 10,
     zIndex: 1000,
   },
   headerBackButtonIcon: {

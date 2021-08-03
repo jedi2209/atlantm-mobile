@@ -9,7 +9,7 @@ const mapStateToProps = ({profile}) => {
   return profile;
 };
 
-const AuthContainer = (props) => {
+const AuthContainer = props => {
   const navigation = useNavigation();
 
   if (props.login.ID) {

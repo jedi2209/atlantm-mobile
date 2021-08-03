@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, SafeAreaView} from 'react-native';
 import {Content, Row, Col, Segment, Button} from 'native-base';
-import {useHeaderHeight} from '@react-navigation/stack';
+// import {useHeaderHeight} from '@react-navigation/stack';
 import Modal from 'react-native-modal';
 
 import showPrice from '../../utils/price';
@@ -10,7 +10,7 @@ import isIPhoneX from '../../utils/is_iphone_x';
 import {strings} from '../../core/lang/const';
 
 export const ServiceModal = ({visible, onClose, data}) => {
-  const headerHeight = useHeaderHeight();
+  // const headerHeight = useHeaderHeight();
   let defaultTab = 'works';
   if (data && (!data['works'] || !data['works'].length)) {
     defaultTab = 'parts';
@@ -21,7 +21,7 @@ export const ServiceModal = ({visible, onClose, data}) => {
   const modalStyles = StyleSheet.create({
     host: {
       margin: 0,
-      marginTop: headerHeight + (isIPhoneX() ? 32 : 0),
+      marginTop: isIPhoneX() ? 52 : 0,
     },
     container: {
       flex: 1,

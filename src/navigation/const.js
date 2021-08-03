@@ -29,7 +29,7 @@ const ClassicHeaderWhite = (title, navigation, route, options) => {
     headerLeft: () => {
       return ArrowBack(navigation, route);
     },
-    headerRight: () => (<></>),
+    headerRight: () => <></>,
     ...options,
   };
 };
@@ -42,14 +42,14 @@ const ClassicHeaderBlue = (title, navigation, route, options) => {
     headerLeft: () => {
       return ArrowBack(navigation, route, {theme: 'white'});
     },
-    headerRight: () => (<></>),
+    headerRight: () => <></>,
     ...options,
   };
 };
 
 const TransparentBack = (navigation, route, options, buttonOptions) => {
   return {
-    headerTitle: null,
+    headerTitle: '',
     headerTitleStyle: stylesHeader.transparentHeaderTitle,
     headerTransparent: true,
     headerLeft: () => {
@@ -60,7 +60,7 @@ const TransparentBack = (navigation, route, options, buttonOptions) => {
         ...buttonOptions,
       });
     },
-    headerRight: () => (<></>),
+    headerRight: () => <></>,
     ...options,
   };
 };
@@ -73,7 +73,7 @@ const BigCloseButton = (navigation, route, options) => {
         backgroundColor: styleConst.color.bg,
       },
     ],
-    headerTitle: null,
+    headerTitle: '',
     headerTitleStyle: stylesHeader.transparentHeaderTitle,
     headerLeft: () => {
       return ArrowBack(navigation, route, {
@@ -90,7 +90,6 @@ const BigCloseButton = (navigation, route, options) => {
 };
 
 const isTabBarVisible = (navigation, route) => {
-  console.log('route', route);
   if (
     !route ||
     !route.state?.routes[route.index] ||

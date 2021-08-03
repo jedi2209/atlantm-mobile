@@ -60,8 +60,7 @@ const ProfileStackView = ({navigation, route}) => (
   <ProfileStack.Navigator
     initialRouteName="LoginScreen"
     mode="modal"
-    headerShown={false}
-    headerTransparent={true}>
+    screenOptions={{headerShown: false, headerTransparent: true}}>
     <ProfileStack.Screen
       name="LoginScreen"
       component={AuthContainer}
@@ -113,9 +112,7 @@ const ProfileStackView = ({navigation, route}) => (
         headerTitle: () => {
           return (
             <Text style={stylesHeader.whiteHeaderTitle} selectable={false}>
-              {route?.params?.mainTitle
-                ? route?.params?.mainTitle
-                : null}
+              {route?.params?.mainTitle ? route?.params?.mainTitle : null}
             </Text>
           );
         },
@@ -124,7 +121,7 @@ const ProfileStackView = ({navigation, route}) => (
         headerLeft: () => {
           return ArrowBack(navigation, route, {theme: 'blue'});
         },
-        headerRight: () => (<></>),
+        headerRight: () => <></>,
       })}
     />
     <ProfileStack.Screen
@@ -212,22 +209,22 @@ const _showOrdersMenu = navigation => {
 export const BottomTabNavigation = ({navigation, route}) => {
   return (
     <Tab.Navigator
-      // barStyle={{backgroundColor: styleConst.color.accordeonGrey1}}
-      // shifting={false}
-      // labeled={true}
-      // activeColor={styleConst.color.lightBlue}
-      // inactiveColor={styleConst.new.passive}
       initialRouteName="Home"
-      tabBarOptions={{
-        activeTintColor: styleConst.color.lightBlue,
-        inactiveTintColor: styleConst.new.passive,
+      screenOptions={{
+        tabBarActiveTintColor: styleConst.color.lightBlue,
+        tabBarInactiveTintColor: styleConst.new.passive,
+        tabBarStyle: [
+          {
+            display: 'flex',
+          },
+          null,
+        ],
       }}>
       <Tab.Screen
         name="Home"
         component={ContactsScreen}
         options={{
-          headerTransparent: true,
-          headerTitle: null,
+          headerShown: false,
           tabBarLabel: strings.Menu.bottom.dealer,
           tabBarTestID: 'BottomMenu.Home',
           tabBarIcon: ({color}) => (
@@ -255,6 +252,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
           },
         }}
         options={{
+          headerShown: false,
           tabBarLabel: strings.Menu.bottom.search,
           tabBarTestID: 'BottomMenu.NewCars',
           tabBarIcon: ({color}) => (
@@ -276,6 +274,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
         name="About"
         component={ProfileStackView}
         options={{
+          headerShown: false,
           tabBarLabel: strings.Menu.bottom.lkk,
           tabBarTestID: 'BottomMenu.Profile',
           tabBarIcon: ({color}) => (
@@ -324,6 +323,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
         name="Menu"
         component={MenuStackView}
         options={{
+          headerShown: false,
           tabBarLabel: strings.Menu.bottom.menu,
           tabBarTestID: 'BottomMenu.Menu',
           tabBarIcon: ({color}) => (
