@@ -513,7 +513,7 @@ const CarsStock = ({navigation, route}) => {
           )}
         />
         <StackBase.Screen
-          name="UsedCarListScreen"
+          name="UsedCarListScreenStack"
           component={UsedCars}
           options={{headerShown: false}}
         />
@@ -706,7 +706,7 @@ const UsedCars = ({navigation, route}) => {
     } else {
       setBottomState(false);
     }
-    console.log('handleSheetChanges', index);
+    // console.log('handleSheetChanges', index);
   }, []);
   const handleClosePress = () => bottomSheetModalRefUsed.current.close();
 
@@ -770,7 +770,7 @@ const UsedCars = ({navigation, route}) => {
                   first
                   onPress={() => {
                     handleClosePress();
-                    navigation.navigate('UsedCarListScreen', {
+                    navigation.navigate('UsedCarListScreenStack', {
                       screen: 'UsedCarListScreen',
                       params: {
                         sortBy: 'price',
@@ -813,7 +813,7 @@ const UsedCars = ({navigation, route}) => {
                   button
                   onPress={() => {
                     handleClosePress();
-                    navigation.navigate('UsedCarListScreen', {
+                    navigation.navigate('UsedCarListScreenStack', {
                       screen: 'UsedCarListScreen',
                       params: {
                         sortBy: 'price',
@@ -857,7 +857,7 @@ const UsedCars = ({navigation, route}) => {
                   last
                   onPress={() => {
                     handleClosePress();
-                    navigation.navigate('UsedCarListScreen', {
+                    navigation.navigate('UsedCarListScreenStack', {
                       screen: 'UsedCarListScreen',
                       params: {
                         sortBy: 'created',
@@ -901,7 +901,7 @@ const UsedCars = ({navigation, route}) => {
                   last
                   onPress={() => {
                     handleClosePress();
-                    navigation.navigate('UsedCarListScreen', {
+                    navigation.navigate('UsedCarListScreenStack', {
                       screen: 'UsedCarListScreen',
                       params: {
                         sortBy: 'year',
@@ -945,7 +945,7 @@ const UsedCars = ({navigation, route}) => {
                   last
                   onPress={() => {
                     handleClosePress();
-                    navigation.navigate('UsedCarListScreen', {
+                    navigation.navigate('UsedCarListScreenStack', {
                       screen: 'UsedCarListScreen',
                       params: {
                         sortBy: 'year',
@@ -989,7 +989,7 @@ const UsedCars = ({navigation, route}) => {
                   last
                   onPress={() => {
                     handleClosePress();
-                    navigation.navigate('UsedCarListScreen', {
+                    navigation.navigate('UsedCarListScreenStack', {
                       screen: 'UsedCarListScreen',
                       params: {
                         sortBy: 'mileage',

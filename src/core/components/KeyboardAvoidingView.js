@@ -3,11 +3,12 @@ import {
   KeyboardAvoidingView as KeyboardAvoidingNativeView,
   Platform,
 } from 'react-native';
-import {useHeaderHeight} from '@react-navigation/stack';
+// import {useHeaderHeight} from '@react-navigation/stack';
 
 export const KeyboardAvoidingView = ({children}) => {
-  const headerHeight = useHeaderHeight();
-  const offset = headerHeight - 28;
+  // const headerHeight = useHeaderHeight();
+  // const offset = headerHeight - 28;
+  const offset = 28;
   return (
     <KeyboardAvoidingNativeView
       style={{flex: 1}}
