@@ -150,6 +150,17 @@ export const actionFetchUsedCarFilterData = props => {
 
 export const actionSaveBrandModelFilter = props => {
   switch (props.stockType) {
+    case 'clear':
+      return dispatch => {
+        dispatch({
+          type: 'CLEAR_BRANDMODEL_FILTERS_NEW',
+          payload: props.stateFilters,
+        });
+        dispatch({
+          type: 'CLEAR_BRANDMODEL_FILTERS_USED',
+          payload: props.stateFilters,
+        });
+      };
     case 'New':
       return dispatch => {
         dispatch({
@@ -335,7 +346,6 @@ export const actionFetchUsedCarByFilter = props => {
       newProps.nextPageUrl = props.nextPage;
       newProps.isNextPage = true;
     }
-
     return API.fetchStock(newProps)
       .then(res => {
         let {data, error, total, pages, prices} = res;

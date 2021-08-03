@@ -38,6 +38,7 @@ import {
   actionFetchNewCarFilterData,
   actionFetchUsedCarFilterData,
   actionFetchUsedCarByFilter,
+  actionSaveBrandModelFilter,
 } from '../../actions';
 
 // helpers
@@ -124,6 +125,9 @@ const mapDispatchToProps = dispatch => {
     },
     actionFetchUsedCarFilters: data => {
       return dispatch(actionFetchUsedCarFilterData(data));
+    },
+    clearBrandModelFilters: () => {
+      return dispatch(actionSaveBrandModelFilter({stockType: 'clear'}));
     },
   };
 };
@@ -227,6 +231,7 @@ const MainFilterScreen = ({
   actionFetchUsedCar,
   actionFetchNewCarFilters,
   actionFetchUsedCarFilters,
+  clearBrandModelFilters,
   brandModel,
 }) => {
   const [loading, setLoading] = useState(false);
@@ -474,15 +479,15 @@ const MainFilterScreen = ({
         });
         break;
     }
+    return null;
   };
 
   const updateStock = stockType => {
     dispatchFilters(null, null);
     setDataFilters(null);
     setTotalCars(null);
-    setStockLoading(true);
-    // setModelFilter({type: 'clear'});
-    // setBrandFilter({type: 'clear'});
+    _showHideSubmitButton(false);
+    clearBrandModelFilters();
     setStockType(stockType);
   };
 
@@ -498,7 +503,7 @@ const MainFilterScreen = ({
         });
         break;
       case 'Used':
-        navigation.navigate('UsedCarListScreen', {
+        navigation.navigate('UsedCarListScreenStack', {
           screen: 'UsedCarListScreen',
           params: {
             sortBy: 'price',
@@ -516,7 +521,8 @@ const MainFilterScreen = ({
     dispatchFilters(null, null);
     setDataFilters(null);
     setTotalCars(null);
-    setStockLoading(true);
+    _showHideSubmitButton(false);
+    clearBrandModelFilters();
   }, [dealerSelected]);
 
   useEffect(() => {
@@ -1005,7 +1011,7 @@ const MainFilterScreen = ({
                         {strings.CarsFilterScreen.filters.year.from}{' '}
                         {get(
                           stateFilters,
-                          'power_from',
+                          'power[from]',
                           dataFilters.data.power.min,
                         )}
                       </Text>
@@ -1013,7 +1019,7 @@ const MainFilterScreen = ({
                         {strings.CarsFilterScreen.filters.year.to}{' '}
                         {get(
                           stateFilters,
-                          'power_to',
+                          'power[to]',
                           dataFilters.data.power.max,
                         )}
                       </Text>
@@ -1543,8 +1549,8 @@ const MainFilterScreen = ({
               onHide={() => _showHideModal(false)}
               onReset={() =>
                 _onChangeFilter({
-                  power_from: dataFilters?.data?.power?.min,
-                  power_to: dataFilters?.data?.power?.max,
+                  'power[from]': dataFilters?.data?.power?.min,
+                  'power[to]': dataFilters?.data?.power?.max,
                 })
               }
               title={strings.CarsFilterScreen.filters.power.title}>
@@ -1553,12 +1559,12 @@ const MainFilterScreen = ({
                   values={[
                     get(
                       stateFilters,
-                      'power_from',
+                      'power[from]',
                       dataFilters?.data?.power?.min,
                     ),
                     get(
                       stateFilters,
-                      'power_to',
+                      'power[to]',
                       dataFilters?.data?.power?.max,
                     ),
                   ]}
@@ -1568,8 +1574,8 @@ const MainFilterScreen = ({
                   sliderLength={sliderWidth}
                   onValuesChange={values =>
                     _onChangeFilter({
-                      power_from: values[0],
-                      power_to: values[1],
+                      'power[from]': values[0],
+                      'power[to]': values[1],
                     })
                   }
                   trackStyle={styles.multiSliderTrackStyle}
@@ -1587,14 +1593,14 @@ const MainFilterScreen = ({
                   <Text style={styles.multiSliderCaptionText}>
                     {get(
                       stateFilters,
-                      'power_from',
+                      'power[from]',
                       dataFilters?.data.power?.min,
                     )}
                   </Text>
                   <Text style={styles.multiSliderCaptionText}>
                     {get(
                       stateFilters,
-                      'power_to',
+                      'power[to]',
                       dataFilters?.data.power?.max,
                     )}
                   </Text>
@@ -1701,7 +1707,7 @@ const MainFilterScreen = ({
           ]}
           size="small"
         />
-      ) : !loading ? (
+      ) : (
         <Animated.View
           style={[
             styles.resultButtonWrapper,
@@ -1728,7 +1734,7 @@ const MainFilterScreen = ({
             </Text>
           </Button>
         </Animated.View>
-      ) : null}
+      )}
     </Container>
   );
 };
