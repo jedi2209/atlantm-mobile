@@ -26,6 +26,8 @@ const ClassicHeaderWhite = (title, navigation, route, options) => {
       stylesHeader.headerTitleStyle,
       stylesHeader.whiteHeaderTitle,
     ],
+    headerShown: true,
+    headerTransparent: false,
     headerLeft: () => {
       return ArrowBack(navigation, route);
     },
@@ -39,6 +41,8 @@ const ClassicHeaderBlue = (title, navigation, route, options) => {
     headerTitle: title ? title : null,
     headerStyle: [stylesHeader.common, stylesHeader.blueHeader],
     headerTitleStyle: stylesHeader.blueHeaderTitle,
+    headerShown: true,
+    headerTransparent: false,
     headerLeft: () => {
       return ArrowBack(navigation, route, {theme: 'white'});
     },
@@ -75,6 +79,8 @@ const BigCloseButton = (navigation, route, options) => {
     ],
     headerTitle: '',
     headerTitleStyle: stylesHeader.transparentHeaderTitle,
+    headerShown: true,
+    headerTransparent: false,
     headerLeft: () => {
       return ArrowBack(navigation, route, {
         icon: 'md-close',
