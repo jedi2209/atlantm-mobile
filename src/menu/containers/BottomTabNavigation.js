@@ -1,12 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
-import {Text} from 'react-native';
 import {Icon, ActionSheet} from 'native-base';
 import orderFunctions from '../../utils/orders';
 
 // import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 
 import LogoTitle from '../../core/components/LogoTitle';
 
@@ -14,12 +13,8 @@ import LogoTitle from '../../core/components/LogoTitle';
 import ContactsScreen from '../../contacts/containers/ContactsScreen';
 
 import AuthContainer from '../../profile/containers/AuthContainer';
-import ProfileSettingsScreen from '../../profile/containers/ProfileSettingsScreen';
 import PhoneChangeScreen from '../../profile/containers/PhoneChangeScreen';
-import TOHistory from '../../profile/carhistory/containers/CarHistoryScreen';
-import CarHistoryDetailsScreen from '../../profile/carhistory/containers/CarHistoryDetailsScreen';
 import BonusScreen from '../../profile/bonus/containers/BonusScreen';
-import BonusScreenInfo from '../../profile/bonus/containers/BonusInfoScreen';
 import DiscountsScreen from '../../profile/discounts/containers/DiscountsScreen';
 import ReestablishScreen from '../../profile/containers/ReestablishScreen';
 
@@ -59,8 +54,11 @@ const MenuStack = createStackNavigator();
 const ProfileStackView = ({navigation, route}) => (
   <ProfileStack.Navigator
     initialRouteName="LoginScreen"
-    mode="modal"
-    screenOptions={{headerShown: false, headerTransparent: true}}>
+    screenOptions={{
+      headerShown: false,
+      headerTransparent: true,
+      presentation: 'modal',
+    }}>
     <ProfileStack.Screen
       name="LoginScreen"
       component={AuthContainer}
@@ -70,22 +68,12 @@ const ProfileStackView = ({navigation, route}) => (
       name="PhoneChangeScreen"
       component={PhoneChangeScreen}
       options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ModalTransition,
         headerTitle: strings.ProfileSettingsScreen.title,
         headerTitleStyle: [
           stylesHeader.transparentHeaderTitle,
           {color: '#222B45'},
         ],
       })}
-    />
-    <ProfileStack.Screen
-      name="ProfileSettingsScreen"
-      component={ProfileSettingsScreen}
-      options={ClassicHeaderWhite(
-        strings.ProfileSettingsScreen.title,
-        navigation,
-        route,
-      )}
     />
     <ProfileStack.Screen
       name="ReestablishScreen"
@@ -97,56 +85,22 @@ const ProfileStackView = ({navigation, route}) => (
       )}
     />
     <ProfileStack.Screen
-      name="TOHistory"
-      component={TOHistory}
-      options={ClassicHeaderWhite(
-        strings.CarHistoryScreen.title,
-        navigation,
-        route,
-      )}
-    />
-    <ProfileStack.Screen
-      name="CarHistoryDetailsScreen"
-      component={CarHistoryDetailsScreen}
-      options={({route}) => ({
-        headerTitle: () => {
-          return (
-            <Text style={stylesHeader.whiteHeaderTitle} selectable={false}>
-              {route?.params?.mainTitle ? route?.params?.mainTitle : null}
-            </Text>
-          );
-        },
-        headerStyle: stylesHeader.whiteHeader,
-        headerTitleStyle: stylesHeader.whiteHeaderTitle,
-        headerLeft: () => {
-          return ArrowBack(navigation, route, {theme: 'blue'});
-        },
-        headerRight: () => <></>,
-      })}
-    />
-    <ProfileStack.Screen
       name="BonusScreen"
       component={BonusScreen}
-      options={ClassicHeaderWhite(
-        strings.ProfileScreenInfo.bonus.title,
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        presentation: null,
+        headerTitle: strings.ProfileScreenInfo.bonus.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
     <ProfileStack.Screen
       name="DiscountsScreen"
       component={DiscountsScreen}
       options={ClassicHeaderWhite(
         strings.DiscountsScreen.title,
-        navigation,
-        route,
-      )}
-    />
-    <ProfileStack.Screen
-      name="BonusScreenInfo"
-      component={BonusScreenInfo}
-      options={ClassicHeaderWhite(
-        strings.BonusInfoScreen.title,
         navigation,
         route,
       )}

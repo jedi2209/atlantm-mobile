@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useRef, useState, useEffect} from 'react';
+import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
@@ -10,15 +10,9 @@ import {
   Content,
   Right,
   Icon,
-  ActionSheet,
-  Button,
 } from 'native-base';
 import {EVENT_REFRESH} from '../core/actionTypes';
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-  BottomSheetBackdrop,
-} from '@gorhom/bottom-sheet';
+import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
 // EKO
 import ReviewsScreen from '../eko/reviews/containers/ReviewsScreen';
@@ -69,6 +63,11 @@ import MapScreen from '../contacts/map/containers/MapScreen';
 import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
 import SettingsScreen from '../settings/containers/SettingsScreen';
 
+import ProfileSettingsScreen from '../profile/containers/ProfileSettingsScreen';
+import BonusScreenInfo from '../profile/bonus/containers/BonusInfoScreen';
+import TOHistory from '../profile/carhistory/containers/CarHistoryScreen';
+import CarHistoryDetailsScreen from '../profile/carhistory/containers/CarHistoryDetailsScreen';
+
 import {strings} from '../core/lang/const';
 import stylesHeader from '../core/components/Header/style';
 import styleConst from '../core/style-const';
@@ -78,7 +77,6 @@ import {
   ClassicHeaderBlue,
   BigCloseButton,
   TransparentBack,
-  isTabBarVisible,
 } from './const';
 import nav from './reducers';
 
@@ -89,6 +87,7 @@ const StackCatalogUsed = createStackNavigator();
 const StackTVA = createStackNavigator();
 
 const StackBase = createStackNavigator();
+const StackProfile = createStackNavigator();
 const StackOrders = createStackNavigator();
 const StackContacts = createStackNavigator();
 
@@ -323,6 +322,70 @@ export const Base = ({navigation, route}) => {
             stylesHeader.transparentHeaderTitle,
             {color: '#222B45'},
           ],
+        })}
+      />
+
+      {/* Профиль */}
+      <StackProfile.Screen
+        name="ProfileSettingsScreen"
+        component={ProfileSettingsScreen}
+        options={BigCloseButton(navigation, route, {
+          presentation: 'modal',
+          headerTitle: strings.ProfileSettingsScreen.title,
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        })}
+      />
+      <StackProfile.Screen
+        name="BonusScreenInfo"
+        component={BonusScreenInfo}
+        options={ClassicHeaderWhite(
+          strings.BonusInfoScreen.title,
+          navigation,
+          route,
+        )}
+      />
+      <StackProfile.Screen
+        name="TOHistory"
+        component={TOHistory}
+        options={ClassicHeaderWhite(
+          strings.CarHistoryScreen.title,
+          navigation,
+          route,
+          {
+            presentation: 'card',
+          },
+        )}
+      />
+      <StackProfile.Screen
+        name="CarHistoryDetailsScreen"
+        component={CarHistoryDetailsScreen}
+        options={({route}) => ({
+          headerShown: true,
+          headerTransparent: false,
+          presentation: 'modal',
+          headerTitle: () => {
+            return (
+              <Text style={stylesHeader.whiteHeaderTitle} selectable={false}>
+                {route?.params?.mainTitle ? route?.params?.mainTitle : null}
+              </Text>
+            );
+          },
+          headerStyle: stylesHeader.whiteHeader,
+          headerTitleStyle: stylesHeader.whiteHeaderTitle,
+          headerLeft: () => {
+            return ArrowBack(navigation, route, {
+              icon: 'md-close',
+              IconStyle: {
+                fontSize: 42,
+                width: 40,
+                color: '#222B45',
+              },
+            });
+          },
+          headerRight: () => <></>,
         })}
       />
     </StackBase.Navigator>
@@ -747,7 +810,24 @@ const UsedCars = ({navigation, route}) => {
         <StackCatalogUsed.Screen
           name="UsedCarItemScreen"
           component={UsedCarItemScreen}
-          options={TransparentBack(navigation, route)}
+          options={TransparentBack(
+            navigation,
+            route,
+            {
+              ...TransitionPresets.ModalTransition,
+              headerTitle: '',
+              headerTitleStyle: [
+                stylesHeader.transparentHeaderTitle,
+                {color: '#222B45'},
+              ],
+            },
+            {
+              icon: 'close',
+              IconStyle: {
+                fontSize: 24,
+              },
+            },
+          )}
         />
       </StackCatalogUsed.Navigator>
       <BottomSheetModalProvider>

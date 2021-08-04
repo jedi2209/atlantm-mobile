@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Linking} from 'react-native';
 import WebView from 'react-native-webview';
 import styleConst from '../style-const';
@@ -88,29 +88,26 @@ const styleCSS = `
   </style>
 `;
 
-const codeInject = (html) => {
+const codeInject = html => {
   html = html.replace(BODY_OPEN_TAG_PATTERN, '');
   html = html.replace(BODY_CLOSE_TAG_PATTERN, '');
   html = `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">${styleCSS}</head><body>${html}<script>${script}</script></body></html>`;
   return html;
 };
 
-export default class WebViewAutoHeight extends PureComponent {
-  static defaultProps = {
-    minHeight: 200,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      realContentHeight: this.props.minHeight,
-    };
-
-    this.html = codeInject(this.props.source.html);
+const WebViewAutoHeight = ({
+  onNavigationStateChange,
+  source,
+  style,
+  minHeight,
+  ...otherProps
+}) => {
+  if (!minHeight) {
+    minHeight = 400;
   }
-
-  handleNavigationChange = (navState) => {
+  const [contentHeight, setContentHeight] = useState(minHeight);
+  let webview = useRef(null);
+  const _handleNavigationChange = navState => {
     if (
       navState.url &&
       (navState.url.indexOf('https://') !== -1 ||
@@ -118,43 +115,42 @@ export default class WebViewAutoHeight extends PureComponent {
         navState.url.indexOf('tel:') !== -1 ||
         navState.url.indexOf('mailto:') !== -1)
     ) {
-      this.webview.stopLoading();
-      this.webview.goBack();
+      webview.stopLoading();
+      webview.goBack();
       Linking.openURL(navState.url);
     } else {
-      if (typeof this.props.onNavigationStateChange === 'function') {
-        this.props.onNavigationStateChange(navState);
+      if (typeof onNavigationStateChange === 'function') {
+        onNavigationStateChange(navState);
       }
       if (navState.title) {
         const realContentHeight = parseInt(navState.title, 10) || 0; // turn NaN to 0
-        this.setState({realContentHeight});
+        setContentHeight(realContentHeight);
       }
     }
   };
 
-  render() {
-    const {style, minHeight, ...otherProps} = this.props;
+  return (
+    <WebView
+      {...otherProps}
+      source={{html: codeInject(source.html)}}
+      scrollEnabled={false}
+      style={[style, {height: Math.max(contentHeight, minHeight)}]}
+      ref={ref => {
+        webview = ref;
+      }}
+      javaScriptEnabled
+      onNavigationStateChange={_handleNavigationChange}
+      dataDetectorTypes="all"
+      allowsFullscreenVideo={true}
+      allowsInlineMediaPlayback={true}
+      // incognito={true}
+      originWhitelist={['http://', 'https://', 'tel://', 'mailto://']}
+    />
+  );
+};
 
-    return (
-      <WebView
-        {...otherProps}
-        source={{html: this.html}}
-        scrollEnabled={false}
-        style={[
-          style,
-          {height: Math.max(this.state.realContentHeight, minHeight)},
-        ]}
-        ref={(ref) => {
-          this.webview = ref;
-        }}
-        javaScriptEnabled
-        onNavigationStateChange={this.handleNavigationChange}
-        dataDetectorTypes="all"
-        allowsFullscreenVideo={true}
-        allowsInlineMediaPlayback={true}
-        // incognito={true}
-        originWhitelist={['http://', 'https://', 'tel://', 'mailto://']}
-      />
-    );
-  }
-}
+WebViewAutoHeight.defaultProps = {
+  minHeight: 200,
+};
+
+export default WebViewAutoHeight;

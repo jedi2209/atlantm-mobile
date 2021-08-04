@@ -2,6 +2,8 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, ScrollView, Alert} from 'react-native';
 import {connect} from 'react-redux';
+import {Container, StyleProvider} from 'native-base';
+import getTheme from '../../../native-base-theme/components';
 import {substractYears} from '../../utils/date';
 
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
@@ -17,14 +19,8 @@ import {strings} from '../../core/lang/const';
 class ProfileSettingsScreen extends Component {
   constructor(props) {
     super(props);
-    const {
-      NAME,
-      LAST_NAME,
-      SECOND_NAME,
-      EMAIL,
-      PHONE,
-      BIRTHDATE,
-    } = this.props.profile;
+    const {NAME, LAST_NAME, SECOND_NAME, EMAIL, PHONE, BIRTHDATE} =
+      this.props.profile;
 
     let emailData = [];
     let phoneData = [];
@@ -156,7 +152,7 @@ class ProfileSettingsScreen extends Component {
     Analytics.logEvent('screen', 'profile/edit');
   }
 
-  onPressSave = (props) => {
+  onPressSave = props => {
     const nav = this.props.navigation;
     this.setState({loading: true});
     let emailValue = [];
@@ -214,7 +210,7 @@ class ProfileSettingsScreen extends Component {
 
     return this.props
       .actionSaveProfileToAPI(profileToSend)
-      .then((data) => {
+      .then(data => {
         Alert.alert(
           strings.Notifications.success.title,
           strings.Notifications.success.textProfileUpdate,
@@ -244,24 +240,26 @@ class ProfileSettingsScreen extends Component {
       });
   };
 
-  onChangeProfileField = (fieldName) => (value) => {
+  onChangeProfileField = fieldName => value => {
     this.setState({[fieldName]: value});
   };
 
   render() {
     return (
-      <KeyboardAvoidingView>
-        <ScrollView style={styleConst.form.scrollView}>
-          <View style={styles.container}>
-            <Form
-              fields={this.FormConfig.fields}
-              barStyle={'light-content'}
-              SubmitButton={{text: strings.ProfileSettingsScreen.save}}
-              onSubmit={this.onPressSave}
-            />
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+      <StyleProvider style={getTheme()}>
+        <KeyboardAvoidingView>
+          <ScrollView style={styleConst.form.scrollView}>
+            <Container style={styles.container}>
+              <Form
+                fields={this.FormConfig.fields}
+                barStyle={'light-content'}
+                SubmitButton={{text: strings.ProfileSettingsScreen.save}}
+                onSubmit={this.onPressSave}
+              />
+            </Container>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </StyleProvider>
     );
   }
 }

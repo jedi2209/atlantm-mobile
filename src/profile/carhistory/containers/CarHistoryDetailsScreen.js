@@ -280,7 +280,6 @@ class CarHistoryDetailsScreen extends Component {
 
     return (
       <SafeAreaView style={styles.safearea}>
-        <StatusBar barStyle="dark-content" />
         <ScrollView>
           <Content>
             <Segment style={styles.segment}>
