@@ -171,13 +171,13 @@ const CarListItem = ({
   };
 
   const _renderImage = ({ordered}) => {
-    let CarImgs = get(car, 'img.thumb.0');
-    let CarImgsReal = get(car, 'imgReal.thumb.0');
+    let CarImgs = get(car, 'img.thumb');
+    let CarImgsReal = get(car, 'imgReal.thumb');
     const isNewCar = itemScreen === 'NewCarItemScreen';
     const isSale = car.sale === true;
 
-    if (typeof CarImgs === 'string' || typeof CarImgsReal === 'string') {
-      let path = CarImgsReal ? CarImgsReal : CarImgs;
+    if (typeof CarImgs !== 'undefined' && CarImgs.length === 1) {
+      let path = CarImgsReal ? CarImgsReal[0] : CarImgs[0];
       path += '1000x440';
       return (
         <>
@@ -215,7 +215,6 @@ const CarListItem = ({
           photos.push(element + '1000x440');
         });
       }
-      console.log('photos PhotoSlider', photos);
       return (
         <PhotoSlider
           height={CarImgsReal ? 300 : 220}
@@ -226,8 +225,8 @@ const CarListItem = ({
           ]}
           dotColor={styleConst.color.white}
           photos={photos}
-          paginationStyle={{marginBottom: 0}}
-          onIndexChanged={_onChangePhotoIndex}
+          paginationStyle={{marginBottom: CarImgsReal ? 25 : -15}}
+          onPressItem={!ordered ? _onPress : _onPressOrder}
         />
       );
     }
@@ -395,6 +394,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 5,
     borderTopLeftRadius: 5,
     width: '100%',
+    zIndex: 1,
   },
   imageReal: {
     height: 300,
@@ -402,6 +402,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
+    zIndex: 10,
   },
   titleBackgroundold: {
     flex: 1,
@@ -450,23 +451,23 @@ const styles = StyleSheet.create({
   year: {
     color: styleConst.color.white,
     fontSize: 12,
-    zIndex: 2,
+    zIndex: 10,
     marginVertical: 5,
   },
   title: {
     color: styleConst.color.white,
     fontSize: 16,
     fontWeight: 'bold',
-    zIndex: 2,
+    zIndex: 10,
   },
   price: {
     fontSize: 18,
     fontWeight: 'bold',
-    zIndex: 2,
+    zIndex: 20,
   },
   priceBackground: {
     flex: 1,
-    zIndex: 1,
+    zIndex: 20,
     position: 'absolute',
     backgroundColor: 'transparent',
     opacity: 1,
@@ -515,7 +516,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginHorizontal: 15,
-    zIndex: 2,
+    zIndex: 20,
     justifyContent: 'flex-start',
   },
 });
