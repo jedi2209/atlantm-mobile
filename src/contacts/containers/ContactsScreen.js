@@ -13,13 +13,7 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {
-  Text,
-  Icon,
-  Button,
-  ActionSheet,
-  Toast,
-} from 'native-base';
+import {Text, Icon, Button, ActionSheet, Toast} from 'native-base';
 import BrandLogo from '../../core/components/BrandLogo';
 import Plate from '../../core/components/Plate';
 import RateThisApp from '../../core/components/RateThisApp';
@@ -202,7 +196,7 @@ class ContactsScreen extends Component {
     }
 
     console.log('== Contacts ==');
-    fetchInfoList(region, dealerID).then((action) => {
+    fetchInfoList(region, dealerID).then(action => {
       if (action && action.type && action.type === INFO_LIST__FAIL) {
         let message = get(
           action,
@@ -281,7 +275,7 @@ class ContactsScreen extends Component {
       currentDealerLocale = locales[this.props.dealerSelected.region];
     }
     const res = divisions
-      .map((division) => {
+      .map(division => {
         const currDate = new Date();
         const today = currDate.getDay() - 1;
         if (
@@ -337,7 +331,7 @@ class ContactsScreen extends Component {
     const phones = get(dealerSelected, 'phone', PHONES);
 
     return (
-      <View style={styleConst.safearea.default} testID='ContactsScreen.Wrapper'>
+      <View style={styleConst.safearea.default} testID="ContactsScreen.Wrapper">
         <StatusBar hidden />
         <Button
           full
@@ -347,7 +341,7 @@ class ContactsScreen extends Component {
           style={[styles.buttonPrimary, styleConst.shadow.default]}>
           {dealerSelected.brands &&
             dealerSelected.brands.length &&
-            dealerSelected.brands.map((brand) => {
+            dealerSelected.brands.map(brand => {
               return (
                 <BrandLogo
                   brand={brand.id}
@@ -358,9 +352,7 @@ class ContactsScreen extends Component {
               );
             })}
           <View style={{flex: 1, flexDirection: 'row'}}>
-            <Text style={styles.buttonPrimaryText}>
-              {dealerSelected.name}
-            </Text>
+            <Text style={styles.buttonPrimaryText}>{dealerSelected.name}</Text>
             <Icon
               type="FontAwesome5"
               name="angle-right"
@@ -370,7 +362,7 @@ class ContactsScreen extends Component {
         </Button>
         <ScrollView
           contentContainerStyle={{paddingBottom: 24}}
-          ref={(ref) => {
+          ref={ref => {
             this.mainScrollView = ref;
           }}
           showsHorizontalScrollIndicator={false}
@@ -383,7 +375,7 @@ class ContactsScreen extends Component {
             <View style={styles.blackBack} />
             <TouchableOpacity
               style={styles.address}
-              testID='ContactsScreen.PressMap'
+              testID="ContactsScreen.PressMap"
               onPress={() => {
                 this.onPressMap();
               }}>
@@ -397,9 +389,7 @@ class ContactsScreen extends Component {
                 ellipsizeMode="tail"
                 style={styles.addressText}>
                 {dealerSelected.city.name ? dealerSelected.city.name : null}
-                {dealerSelected.address
-                  ? ', ' + dealerSelected.address
-                  : null}
+                {dealerSelected.address ? ', ' + dealerSelected.address : null}
               </Text>
             </TouchableOpacity>
             <ScrollView
@@ -450,7 +440,7 @@ class ContactsScreen extends Component {
                   }}
                 />
                 <Plate
-                  testID='ContactsScreen.ButtonCallMe'
+                  testID="ContactsScreen.ButtonCallMe"
                   title={strings.ContactsScreen.callOrder}
                   subtitle=""
                   onPress={this.onPressCallMe}
@@ -464,9 +454,9 @@ class ContactsScreen extends Component {
                   title={strings.ContactsScreen.order}
                   subtitle={strings.ContactsScreen.sendOrder}
                   type="primary"
-                  testID='ContactsScreen.ButtonOrders'
+                  testID="ContactsScreen.ButtonOrders"
                   onPress={() => {
-                    orderFunctions.getOrders().then((ordersData) => {
+                    orderFunctions.getOrders().then(ordersData => {
                       ActionSheet.show(
                         {
                           options: ordersData.BUTTONS,
@@ -475,7 +465,7 @@ class ContactsScreen extends Component {
                           destructiveButtonIndex:
                             ordersData.DESTRUCTIVE_INDEX || null,
                         },
-                        (buttonIndex) => {
+                        buttonIndex => {
                           switch (ordersData.BUTTONS[buttonIndex].id) {
                             case 'callMeBack':
                               navigation.navigate('CallMeBackScreen');
@@ -506,7 +496,7 @@ class ContactsScreen extends Component {
                       ? this.sitesSubtitle.sites.join('\r\n')
                       : this.sitesSubtitle.sites[0]
                   }
-                  testID='ContactsScreen.ButtonSites'
+                  testID="ContactsScreen.ButtonSites"
                   type="red"
                   onPress={() => {
                     if (
@@ -520,10 +510,8 @@ class ContactsScreen extends Component {
                             this.sitesSubtitle.buttons.length - 1,
                           title: strings.ContactsScreen.dealerSites,
                         },
-                        (buttonIndex) => {
-                          switch (
-                            this.sitesSubtitle.buttons[buttonIndex].id
-                          ) {
+                        buttonIndex => {
+                          switch (this.sitesSubtitle.buttons[buttonIndex].id) {
                             case 'cancel':
                               break;
                             default:
@@ -553,7 +541,7 @@ class ContactsScreen extends Component {
                     marginTop: 16,
                     paddingVertical: 0,
                   }}
-                  testID='ContactsScreen.currentActionsHeading'>
+                  testID="ContactsScreen.currentActionsHeading">
                   <View
                     style={{
                       paddingHorizontal: 20,
@@ -579,7 +567,7 @@ class ContactsScreen extends Component {
                   </View>
                   <Carousel
                     data={list}
-                    renderItem={(item) => {
+                    renderItem={item => {
                       return (
                         <Offer
                           key={`carousel-article-${item.hash}`}
