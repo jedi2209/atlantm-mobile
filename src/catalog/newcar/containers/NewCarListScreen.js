@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect, useReducer} from 'react';
 import {StyleSheet, View, StatusBar, ActivityIndicator} from 'react-native';
 

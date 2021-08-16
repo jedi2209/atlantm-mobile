@@ -1,13 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import PropTypes from 'prop-types';
-import {
-  Text,
-  View,
-  StyleSheet,
-  TouchableHighlight,
-  Platform,
-} from 'react-native';
+import {Text, View, StyleSheet, Platform} from 'react-native';
 import RNBounceable from '@freakycoder/react-native-bounceable';
 import LinearGradient from 'react-native-linear-gradient';
 
