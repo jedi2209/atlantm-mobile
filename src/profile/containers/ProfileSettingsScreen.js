@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {StyleSheet, View, ScrollView, Alert} from 'react-native';
+import {StyleSheet, Platform, ScrollView, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {Container, StyleProvider} from 'native-base';
 import getTheme from '../../../native-base-theme/components';
@@ -247,7 +247,8 @@ class ProfileSettingsScreen extends Component {
   render() {
     return (
       <StyleProvider style={getTheme()}>
-        <KeyboardAvoidingView>
+        <KeyboardAvoidingView
+          behavior={Platform.select({ios: 'height', android: null})}>
           <ScrollView style={styleConst.form.scrollView}>
             <Container style={styles.container}>
               <Form

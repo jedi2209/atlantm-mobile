@@ -56,7 +56,7 @@ export default {
   form: {
     scrollView: {
       flex: 1,
-      backgroundColor: '#eee'
+      backgroundColor: '#eee',
     },
   },
   font: {
@@ -149,7 +149,7 @@ export default {
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
       },
-    }
+    },
   },
   animation: {
     zoomIn: {
@@ -184,7 +184,7 @@ export default {
       position: 'relative',
       backgroundColor: '#F8F8F8',
     },
-  }
+  },
 };
 
 // fonts: https://github.com/react-native-training/react-native-fonts
