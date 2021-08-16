@@ -153,7 +153,7 @@ class OrderCreditScreen extends Component {
     comment: PropTypes.string,
   };
 
-  onPressOrder = async (data) => {
+  onPressOrder = async data => {
     const isInternetExist = await isInternet();
     const nav = this.props.navigation;
 
@@ -250,7 +250,7 @@ class OrderCreditScreen extends Component {
                       max={this.carPrice}
                       sliderLength={this.sliderWidth}
                       optionsArray={this.optionsPrice}
-                      onValuesChange={(e) => {
+                      onValuesChange={e => {
                         this.setState({
                           summ: e[0],
                         });
@@ -362,7 +362,7 @@ class OrderCreditScreen extends Component {
       <KeyboardAvoidingView onPress={Keyboard.dismiss}>
         <TouchableWithoutFeedback
           style={styleConst.form.scrollView}
-          testID='OrderCreditScreen.Wrapper'
+          testID="OrderCreditScreen.Wrapper"
           onPress={Keyboard.dismiss}>
           <Content
             style={styles.container}
