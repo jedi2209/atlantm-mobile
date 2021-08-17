@@ -11,6 +11,7 @@ import {
   DEALER__FAIL,
   DEALERS__REQUEST,
   DEALERS__SUCCESS,
+  ALL_DEALERS__SUCCESS,
   DEALERS__FAIL,
   BRANDS__REQUEST,
   BRANDS__SUCCESS,
@@ -135,6 +136,17 @@ function listCities(state = {}, action) {
   }
 }
 
+function listDealers(state = {}, action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'dealer.listDealers', {});
+    case ALL_DEALERS__SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 function isFetchDealersList(state = false, action) {
   switch (action.type) {
     case DEALERS__REQUEST:
@@ -237,11 +249,12 @@ export default combineReducers({
   selectedLocal,
   region,
   listRussia,
-  listUkraine,
-  listBelarussia,
   listRussiaByCities,
+  listUkraine,
   listUkraineByCities,
+  listBelarussia,
   listBelarussiaByCities,
+  listDealers,
   listCities,
   listBrands,
   meta: combineReducers({

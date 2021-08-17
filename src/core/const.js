@@ -16,4 +16,6 @@ export const API_MAIN_URL = 'https://api.atlantm.com/v1';
 
 export const APP_EMAIL = 'atlant-m.corp@atlantm.com';
 
+export const ONESIGNAL = 'XXXX';
+
 export const VK_APP_ID = XXXX;

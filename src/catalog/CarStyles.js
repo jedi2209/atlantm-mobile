@@ -325,4 +325,10 @@ export default StyleSheet.create({
     fontWeight: '600',
     color: styleConst.color.greyText2,
   },
+  platesWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingHorizontal: '2%',
+    marginBottom: 10,
+  },
 });

@@ -263,7 +263,7 @@ class CarHistoryDetailsScreen extends Component {
     const isActivePartsTab = tabName === TABS.PARTS;
     const {isFetchCarHistoryDetails, details} = this.props;
 
-    console.log('== CarHistoryDetails ==');
+    console.info('== CarHistoryDetails ==');
 
     if (isFetchCarHistoryDetails) {
       return (
@@ -275,8 +275,6 @@ class CarHistoryDetailsScreen extends Component {
 
     const works = get(details, 'works');
     const parts = get(details, 'parts');
-
-    console.log('works, parts', works, parts);
 
     return (
       <SafeAreaView style={styles.safearea}>

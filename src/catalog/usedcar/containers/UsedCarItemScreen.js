@@ -295,7 +295,6 @@ class UsedCarItemScreen extends Component {
     const cityID = get(carDetails, 'location.city.id');
     let city_name = get(carDetails, 'location.city.name');
     if (cityID) {
-      console.log('listCities', listCities, listCities[cityID]);
       city_name = listCities[cityID].name;
     }
 
@@ -364,7 +363,7 @@ class UsedCarItemScreen extends Component {
       );
     }
 
-    console.log('== UsedCarItemScreen ==');
+    console.info('== UsedCarItemScreen ==');
 
     let photos = [];
     if (get(carDetails, 'img.original')) {
@@ -485,13 +484,7 @@ class UsedCarItemScreen extends Component {
                   ref={ref => {
                     this.platesScrollView = ref;
                   }}>
-                  <View
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      paddingHorizontal: '2%',
-                      marginBottom: 10,
-                    }}>
+                  <View style={styles.platesWrapper}>
                     {get(carDetails, 'mileage') ? (
                       <OptionPlate
                         title={strings.NewCarItemScreen.plates.mileage}

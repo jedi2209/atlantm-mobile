@@ -42,8 +42,8 @@ export default {
   },
 
   _getFBToken(callbackFn) {
-    AccessToken.getCurrentAccessToken().then((auth) => {
-      this.fetchProfileFromFacebook(auth.accessToken).then((data) => {
+    AccessToken.getCurrentAccessToken().then(auth => {
+      this.fetchProfileFromFacebook(auth.accessToken).then(data => {
         callbackFn({...data, networkName: 'fb'});
       });
     });
@@ -53,17 +53,17 @@ export default {
     LoginManager.logInWithPermissions(['email']).then(
       function (result) {
         if (result.isCancelled) {
-          console.log('Login cancelled');
+          console.warn('Facebook signIn Login cancelled', result);
         } else {
-          console.log(
-            'Login success with permissions: ' +
+          console.info(
+            'Facebook Login success with permissions: ' +
               result.grantedPermissions.toString(),
           );
           this._getFBToken(callbackFn);
         }
       }.bind(this),
       function (error) {
-        console.log('Login fail with error: ' + error);
+        console.error('Facebook signIn Login fail with error: ' + error);
       },
     );
   },

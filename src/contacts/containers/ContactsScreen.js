@@ -195,7 +195,7 @@ class ContactsScreen extends Component {
       }
     }
 
-    console.log('== Contacts ==');
+    console.info('== Contacts ==');
     fetchInfoList(region, dealerID).then(action => {
       if (action && action.type && action.type === INFO_LIST__FAIL) {
         let message = get(
@@ -524,7 +524,7 @@ class ContactsScreen extends Component {
                       );
                     } else {
                       Linking.openURL(get(dealerSelected, 'site[0]')).catch(
-                        console.log(
+                        console.error(
                           'get(dealerSelected, "site[0]") failed',
                           get(dealerSelected, 'site[0]'),
                         ),

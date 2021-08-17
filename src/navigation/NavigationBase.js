@@ -486,7 +486,6 @@ const CarsStock = ({navigation, route}) => {
     } else {
       setBottomState(false);
     }
-    console.log('handleSheetChanges', index);
   }, []);
   const handleClosePress = () => bottomSheetModalRef.current.close();
 
@@ -769,7 +768,6 @@ const UsedCars = ({navigation, route}) => {
     } else {
       setBottomState(false);
     }
-    // console.log('handleSheetChanges', index);
   }, []);
   const handleClosePress = () => bottomSheetModalRefUsed.current.close();
 

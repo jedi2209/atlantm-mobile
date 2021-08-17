@@ -90,7 +90,7 @@ class IndicatorsScreen extends Component {
       return <EmptyMessage text={strings.IndicatorsScreen.empty.text} />;
     }
 
-    console.log('== IndicatorsScreen ==');
+    console.info('== IndicatorsScreen ==');
 
     return (
       <StyleProvider style={getTheme()}>

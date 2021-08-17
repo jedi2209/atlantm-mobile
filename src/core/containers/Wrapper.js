@@ -1,10 +1,15 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, Appearance, ActivityIndicator} from 'react-native';
-
+import React, {useEffect} from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  Appearance,
+  ActivityIndicator,
+} from 'react-native';
 
 // redux
 import {Provider} from 'react-redux';
-import {PersistGate} from 'redux-persist/es/integration/react'
+import {PersistGate} from 'redux-persist/es/integration/react';
 import {store, persistStore} from '../store';
 
 // components
@@ -12,72 +17,44 @@ import SplashScreen from 'react-native-splash-screen';
 
 // components
 import App from './App';
-import { LogBox } from 'react-native';
+import {LogBox} from 'react-native';
 
 import styleConst from '../style-const';
 
 const colorScheme = Appearance.getColorScheme();
 
-if (!__DEV__) {
- // eslint-disable-line no-undef
- [
-  'assert',
-  'clear',
-  'count',
-  'debug',
-  'dir',
-  'dirxml',
-  'error',
-  'exception',
-  'group',
-  'groupCollapsed',
-  'groupEnd',
-  'info',
-  'log',
-  'profile',
-  'profileEnd',
-  'table',
-  'time',
-  'timeEnd',
-  'timeStamp',
-  'trace',
-  'warn',
-  ].forEach((methodName) => {
-    console[methodName] = () => {
-      /* noop */
-    };
-  });
-} else {
+if (__DEV__) {
   LogBox.ignoreAllLogs();
 }
 
 const _defaultHandler = ErrorUtils.getGlobalHandler();
 
 const _wrapGlobalHandler = async (error, isFatal) => {
-  console.log('Wrapper ====>', 'wrapGlobalHandler', error, isFatal);
   if (isFatal && !__DEV__) {
+    console.error('_wrapGlobalHandler error', error, isFatal);
     persistStore.purge();
   }
   _defaultHandler(error, isFatal);
-}
+};
 
 const _onBeforeLift = () => {
-  console.log('_onBeforeLift');
   SplashScreen.hide();
-}
+};
 
 const Loader = () => (
-  <View style={{flex:1, flexDirection:'row', alignItems:'center', justifyContent:'center', backgroundColor: styleConst.color.blue}}>
-    <ActivityIndicator animating size={'large'} style={[styleConst.spinner]} color={styleConst.color.white} />
+  <View style={styles.loader}>
+    <ActivityIndicator
+      animating
+      size={'large'}
+      style={[styleConst.spinner]}
+      color={styleConst.color.white}
+    />
   </View>
 );
 
 const Wrapper = () => {
-  const [rehydrated, setRehydrated] = useState(false);
-
   // Аналогично componentDidMount и componentDidUpdate:
   useEffect(() => {
-    console.log('Wrapper ====>', 'componentDidMount useEffect');    
     ErrorUtils.setGlobalHandler(_wrapGlobalHandler.bind(this));
 
     Text.defaultProps = Text.defaultProps || {};
@@ -88,11 +65,24 @@ const Wrapper = () => {
 
   return (
     <Provider store={store}>
-      <PersistGate onBeforeLift={_onBeforeLift} loading={<Loader />} persistor={persistStore}>
+      <PersistGate
+        onBeforeLift={_onBeforeLift}
+        loading={<Loader />}
+        persistor={persistStore}>
         <App colorScheme={colorScheme} />
       </PersistGate>
     </Provider>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  loader: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: styleConst.color.blue,
+  },
+});
 
 export default Wrapper;

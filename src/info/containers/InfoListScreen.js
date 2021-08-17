@@ -161,7 +161,7 @@ class InfoListScreen extends Component {
 
     if (pushActionSubscribeState === false) {
       PushNotifications.subscribeToTopic('actions', dealerSelected.id).then(
-        (isPermission) => {
+        isPermission => {
           actionSetPushActionSubscribe(isPermission);
           this.props.navigation.setParams({
             pushActionSubscribeState: isPermission,
@@ -205,7 +205,7 @@ class InfoListScreen extends Component {
 
     if (!isFetchInfoList) {
       actionListReset();
-      fetchInfoList(region, dealer, this.state.type).then((action) => {
+      fetchInfoList(region, dealer, this.state.type).then(action => {
         if (action.type === INFO_LIST__FAIL) {
           let message = get(
             action,
@@ -234,24 +234,7 @@ class InfoListScreen extends Component {
     });
   };
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   const nav = nextProps.nav.newState;
-  //   let isActiveScreen = false;
-
-  //   if (nav) {
-  //     const rootLevel = nav.routes[nav.index];
-  //     if (rootLevel) {
-  //       isActiveScreen =
-  //         get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
-  //         'InfoListScreen';
-  //     }
-  //   }
-
-  //   return true;
-  //   // return isActiveScreen;
-  // }
-
-  renderItem = (data) => {
+  renderItem = data => {
     return (
       <TransitionView
         animation={this.zoomIn}
@@ -305,7 +288,7 @@ class InfoListScreen extends Component {
 
     const {region, id: dealer} = dealerSelected;
 
-    console.log('== InfoListScreen ==');
+    console.info('== InfoListScreen ==');
     return (
       <StyleProvider style={getTheme()}>
         <Container
@@ -345,14 +328,13 @@ class InfoListScreen extends Component {
                               type: el.id,
                             },
                             () => {
-                              console.log(this.state);
                               if (!isFetchInfoList) {
                                 actionListReset();
                                 fetchInfoList(
                                   region,
                                   dealer,
                                   this.state.type,
-                                ).then((action) => {
+                                ).then(action => {
                                   if (action.type === INFO_LIST__FAIL) {
                                     let message = get(
                                       action,
@@ -384,7 +366,7 @@ class InfoListScreen extends Component {
                 ListEmptyComponent={this.renderEmptyComponent}
                 style={styles.list}
                 renderItem={this.renderItem}
-                keyExtractor={(item) => `${item.hash.toString()}`}
+                keyExtractor={item => `${item.hash.toString()}`}
               />
             </>
           ) : (

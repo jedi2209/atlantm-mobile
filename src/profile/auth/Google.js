@@ -19,7 +19,7 @@ export default {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
 
-      console.log('Login success, get userInfo', userInfo);
+      console.info('Login success, get userInfo', userInfo);
 
       const profile = {
         id: userInfo.user.id,
@@ -32,16 +32,16 @@ export default {
       callbackFn({...profile, networkName: 'gl'});
     } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        console.log('Google auth cancelled', error);
+        console.warn('Google auth cancelled', error);
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
-        console.log('Google auth in process', error);
+        console.info('Google auth in process', error);
         // operation (e.g. sign in) is in progress already
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        console.log('Google auth play services', error);
+        console.error('Google auth play services', error);
         // play services not available or outdated
       } else {
-        console.log('Google auth error', error);
+        console.error('Google auth error', error);
         // some other error happened
       }
     }

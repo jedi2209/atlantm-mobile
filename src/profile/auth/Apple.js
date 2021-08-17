@@ -26,7 +26,7 @@ export default {
         };
         callbackFn({...profile, networkName: 'apple'});
       } catch (error) {
-        // console.log('error', error);
+        console.error('Apple signIn error', error);
       }
     }
   },

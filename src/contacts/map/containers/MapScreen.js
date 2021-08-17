@@ -178,13 +178,13 @@ class MapScreen extends Component {
     const apps = [strings.Base.cancel.toLowerCase()];
     const baseParams = {latitude, longitude};
 
-    const checkAppAvailable = (name) => {
+    const checkAppAvailable = name => {
       return Linking.canOpenURL(
         this.getNaviLink({
           ...baseParams,
           name,
         }),
-      ).then((isAppAvailable) => {
+      ).then(isAppAvailable => {
         return {name, isAppAvailable};
       });
     };
@@ -196,8 +196,8 @@ class MapScreen extends Component {
       checkAppAvailable(strings.MapScreen.apps.uber),
       checkAppAvailable(strings.MapScreen.apps.googleMaps),
       checkAppAvailable(strings.MapScreen.apps.appleMaps),
-    ]).then((results) => {
-      results.forEach((app) => {
+    ]).then(results => {
+      results.forEach(app => {
         if (app.isAppAvailable) {
           apps.push(app.name);
         }
@@ -239,9 +239,9 @@ class MapScreen extends Component {
     return link;
   };
 
-  openDirections = (url) => {
-    return Linking.openURL(url).catch((err) => {
-      __DEV__ && console.log('err', err);
+  openDirections = url => {
+    return Linking.openURL(url).catch(err => {
+      console.error('err', err);
 
       setTimeout(() =>
         Alert.alert(
@@ -252,7 +252,7 @@ class MapScreen extends Component {
     });
   };
 
-  onPressRouteVariant = (index) => {
+  onPressRouteVariant = index => {
     let url;
 
     if (index === 0) {
@@ -309,7 +309,7 @@ class MapScreen extends Component {
     return this.openDirections(url);
   };
 
-  handleRef = (ref) => {
+  handleRef = ref => {
     this.map = ref;
 
     if (!this.map) {
@@ -341,7 +341,7 @@ class MapScreen extends Component {
   render() {
     const {dealerSelected, availableNaviApps} = this.props;
 
-    console.log('== MapScreen == ');
+    console.info('== MapScreen == ');
 
     return this.state.loading ? (
       // <View style={styles.safearea}>
@@ -353,9 +353,17 @@ class MapScreen extends Component {
         style={[styleConst.spinner, styles.spinner]}
       />
     ) : (
-      <SafeAreaView style={[styleConst.safearea.default, {paddingBottom: isAndroid ? styleConst.ui.footerHeightAndroid : styleConst.ui.footerHeightIphone}]}>
+      <SafeAreaView
+        style={[
+          styleConst.safearea.default,
+          {
+            paddingBottom: isAndroid
+              ? styleConst.ui.footerHeightAndroid
+              : styleConst.ui.footerHeightIphone,
+          },
+        ]}>
         <StatusBar barStyle="default" />
-        <View style={styles.mapContainer} testID='MapScreen.MapView'>
+        <View style={styles.mapContainer} testID="MapScreen.MapView">
           <MapView
             ref={this.handleRef}
             provider={PROVIDER_GOOGLE}
@@ -379,7 +387,7 @@ class MapScreen extends Component {
               }}
               pinColor={styleConst.color.blue}
               title={dealerSelected.name}
-              ref={(marker) => {
+              ref={marker => {
                 this.marker = marker;
               }}
               description={this._getDescription()}
@@ -388,14 +396,14 @@ class MapScreen extends Component {
 
           <ActionSheet
             cancelButtonIndex={0}
-            ref={(component) => (this.actionSheet = component)}
+            ref={component => (this.actionSheet = component)}
             title={strings.MapScreen.chooseApp}
             options={availableNaviApps}
             onPress={this.onPressRouteVariant}
           />
           <Button
             full
-            testID='MapScreen.makeRouteButton'
+            testID="MapScreen.makeRouteButton"
             style={[styleConst.shadow.default, styles.button]}
             title={strings.MapScreen.makeRoute}
             onPress={this.onPressRoute}>

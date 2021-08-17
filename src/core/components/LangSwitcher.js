@@ -61,8 +61,8 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
-const LangSwitcher = (props) => {
-  const _onValueChange = (value) => {
+const LangSwitcher = props => {
+  const _onValueChange = value => {
     if (value !== 'ru' && value !== 'ua') {
       value = 'ru';
     }
@@ -72,9 +72,7 @@ const LangSwitcher = (props) => {
 
   const _onDonePress = () => {};
 
-  const _onClose = (value) => {
-    console.log('_onClose', value);
-  };
+  const _onClose = value => {};
 
   return (
     <View
@@ -88,7 +86,7 @@ const LangSwitcher = (props) => {
         doneText={strings.Picker.choose}
         onDonePress={() => _onDonePress()}
         useNativeAndroidPickerStyle={false}
-        onValueChange={(value) => _onValueChange(value)}
+        onValueChange={value => _onValueChange(value)}
         onClose={() => _onClose}
         style={{...pickerSelectStyles}}
         textInputProps={{

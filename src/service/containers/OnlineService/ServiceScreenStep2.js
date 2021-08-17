@@ -111,8 +111,6 @@ class ServiceScreenStep2 extends Component {
         parseInt(dateFromForm.time) +
         parseInt(this.serviceInfo.summary[0].time.total);
     }
-    // console.log('onPressOrder', this.orderLead, data, format(dateFromForm));
-    // return true;
     if (this.state.orderLead) {
       const dataToSend = {
         brand: get(data, 'car.brand', ''),

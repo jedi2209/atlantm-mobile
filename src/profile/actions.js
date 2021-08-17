@@ -43,8 +43,8 @@ import {
 
 import PushNotifications from '../core/components/PushNotifications';
 
-export const actionSetBonusLevel1 = (hash) => {
-  return (dispatch) => {
+export const actionSetBonusLevel1 = hash => {
+  return dispatch => {
     dispatch({
       type: PROFILE_BONUS_LEVEL1__SET,
       payload: hash,
@@ -52,8 +52,8 @@ export const actionSetBonusLevel1 = (hash) => {
   };
 };
 
-export const actionSetBonusLevel2 = (hash) => {
-  return (dispatch) => {
+export const actionSetBonusLevel2 = hash => {
+  return dispatch => {
     dispatch({
       type: PROFILE_BONUS_LEVEL2__SET,
       payload: hash,
@@ -61,8 +61,8 @@ export const actionSetBonusLevel2 = (hash) => {
   };
 };
 
-export const actionSetCarHistoryLevel1 = (hash) => {
-  return (dispatch) => {
+export const actionSetCarHistoryLevel1 = hash => {
+  return dispatch => {
     dispatch({
       type: CAR_HISTORY_LEVEL1__SET,
       payload: hash,
@@ -70,8 +70,8 @@ export const actionSetCarHistoryLevel1 = (hash) => {
   };
 };
 
-export const actionSetCarHistoryLevel2 = (hash) => {
-  return (dispatch) => {
+export const actionSetCarHistoryLevel2 = hash => {
+  return dispatch => {
     dispatch({
       type: CAR_HISTORY_LEVEL2__SET,
       payload: hash,
@@ -80,13 +80,13 @@ export const actionSetCarHistoryLevel2 = (hash) => {
 };
 
 export const actionLogout = () => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({type: LOGOUT});
   };
 };
 
-export const actionRequestForgotPass = (login) => {
-  return async (dispatch) => {
+export const actionRequestForgotPass = login => {
+  return async dispatch => {
     function onError(error) {
       return dispatch({
         type: FORGOT_PASS_REQUEST__FAIL,
@@ -132,8 +132,8 @@ export const actionRequestForgotPass = (login) => {
   };
 };
 
-export const actionFetchCarHistory = (props) => {
-  return async (dispatch) => {
+export const actionFetchCarHistory = props => {
+  return async dispatch => {
     function onError(error) {
       return dispatch({
         type: CAR_HISTORY__FAIL,
@@ -154,7 +154,7 @@ export const actionFetchCarHistory = (props) => {
       const {error, status, data} = res;
 
       if (status !== 'success') {
-        //__DEV__ && console.log('error fetch car history', res);
+        console.error('actionFetchCarHistory error fetch', res);
         return onError(error);
       }
 
@@ -171,7 +171,7 @@ export const actionFetchCarHistory = (props) => {
 };
 
 export const actionToggleCar = (car, userSAP) => {
-  return async (dispatch) => {
+  return async dispatch => {
     function onError(error) {
       return dispatch({
         type: CAR_HIDE__FAIL,
@@ -192,7 +192,7 @@ export const actionToggleCar = (car, userSAP) => {
       const {error, status, data} = res;
 
       if (status !== 'success') {
-        __DEV__ && console.log('error toggleArchieveCar', res);
+        console.error('actionToggleCar error', res);
         return onError(error);
       }
 
@@ -212,8 +212,8 @@ export const actionToggleCar = (car, userSAP) => {
   };
 };
 
-export const actionFetchCarHistoryDetails = (props) => {
-  return async (dispatch) => {
+export const actionFetchCarHistoryDetails = props => {
+  return async dispatch => {
     function onError(error) {
       return dispatch({
         type: CAR_HISTORY_DETAILS__FAIL,
@@ -234,7 +234,7 @@ export const actionFetchCarHistoryDetails = (props) => {
       const {error, data} = res;
 
       if (get(error, 'code') !== 200) {
-        //__DEV__ && console.log('error fetch car history details', res);
+        console.error('actionFetchCarHistoryDetails error fetch', res);
         return onError(error);
       }
 
@@ -252,8 +252,8 @@ export const actionFetchCarHistoryDetails = (props) => {
   };
 };
 
-export const actionFetchBonusInfo = (props) => {
-  return async (dispatch) => {
+export const actionFetchBonusInfo = props => {
+  return async dispatch => {
     function onError(error) {
       return dispatch({
         type: PROFILE_BONUS_INFO__FAIL,
@@ -276,7 +276,7 @@ export const actionFetchBonusInfo = (props) => {
       // TODO: запросить у API данные по принятой структуре данных
       // if (get(error, 'code') !== 200) {
       if (status !== 'success') {
-        //__DEV__ && console.log('error fetch car bonus info', res);
+        console.error('actionFetchBonusInfo error fetch', res);
         return onError({
           code: 404,
           message: 'Ошибка при получении информации о бонусной программе',
@@ -294,14 +294,14 @@ export const actionFetchBonusInfo = (props) => {
   };
 };
 
-export const actionGetPhoneCode = (props) => {
-  return (dispatch) => {
+export const actionGetPhoneCode = props => {
+  return dispatch => {
     dispatch({
       type: 'SAVE_PROFILE__REQUEST_WITH_PHONE',
       payload: props,
     });
 
-    return API.loginWithPhone(props).then((response) => {
+    return API.loginWithPhone(props).then(response => {
       if (response.error) {
         return response.error;
       }
@@ -311,7 +311,7 @@ export const actionGetPhoneCode = (props) => {
 };
 
 export const getProfileSapData = ({id, sap, curr}) => {
-  return async (dispatch) => {
+  return async dispatch => {
     const user = await API.getProfile(id);
     const userSAP = user.SAP || {};
     let result = {};
@@ -340,11 +340,10 @@ export const getProfileSapData = ({id, sap, curr}) => {
   };
 };
 
-export const actionSavePofile = (props) => {
+export const actionSavePofile = props => {
   // этот блок для авторизации через телефон
-  console.log('actionSavePofile props', props);
   if (props.ID) {
-    return (dispatch) => {
+    return dispatch => {
       dispatch({
         type: SAVE_PROFILE__UPDATE,
         payload: {...props},
@@ -353,14 +352,14 @@ export const actionSavePofile = (props) => {
   }
 
   // а этот через соц сети
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: SAVE_PROFILE__REQUEST,
       payload: props,
     });
 
     return API.loginWith(props)
-      .then((response) => {
+      .then(response => {
         const {status, error} = response;
 
         if (status && status !== 'success') {
@@ -390,7 +389,7 @@ export const actionSavePofile = (props) => {
           },
         });
       })
-      .catch((error) => {
+      .catch(error => {
         return dispatch({
           type: SAVE_PROFILE__FAIL,
           payload: {
@@ -401,7 +400,7 @@ export const actionSavePofile = (props) => {
   };
 };
 
-export const actionSaveProfileByUser = (props) => {
+export const actionSaveProfileByUser = props => {
   const {SAP, isReestablish, user} = props;
   let dataToSend = props;
   if (isReestablish) {
@@ -431,14 +430,14 @@ export const actionSaveProfileByUser = (props) => {
   //   }
   // }
 
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: SAVE_PROFILE__REQUEST,
       payload: dataToSend,
     });
 
     return API.updateProfile(dataToSend)
-      .then(async (data) => {
+      .then(async data => {
         dispatch({
           type: SAVE_PROFILE__UPDATE,
           payload: {
@@ -448,7 +447,7 @@ export const actionSaveProfileByUser = (props) => {
 
         return props;
       })
-      .catch((error) => {
+      .catch(error => {
         dispatch({
           type: SAVE_PROFILE__FAIL,
           payload: {
@@ -459,15 +458,15 @@ export const actionSaveProfileByUser = (props) => {
   };
 };
 
-export const actionSaveProfileToAPI = (props) => {
-  return (dispatch) => {
+export const actionSaveProfileToAPI = props => {
+  return dispatch => {
     dispatch({
       type: SAVE_PROFILE__REQUEST,
       payload: props,
     });
 
     return API.updateProfile(props)
-      .then(async (data) => {
+      .then(async data => {
         dispatch({
           type: SAVE_PROFILE__UPDATE,
           payload: {
@@ -477,7 +476,7 @@ export const actionSaveProfileToAPI = (props) => {
 
         return props;
       })
-      .catch((error) => {
+      .catch(error => {
         dispatch({
           type: SAVE_PROFILE__FAIL,
           payload: {
@@ -488,12 +487,12 @@ export const actionSaveProfileToAPI = (props) => {
   };
 };
 
-export const nameFill = (name) => {
+export const nameFill = name => {
   if (name && name.length <= 3) {
     name = name.trim();
   }
 
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: PROFILE_NAME__FILL,
       payload: name,
@@ -501,8 +500,8 @@ export const nameFill = (name) => {
   };
 };
 
-export const phoneFill = (phone) => {
-  return (dispatch) => {
+export const phoneFill = phone => {
+  return dispatch => {
     dispatch({
       type: PROFILE_PHONE__FILL,
       payload: phone ? phone.trim() : '',
@@ -510,8 +509,8 @@ export const phoneFill = (phone) => {
   };
 };
 
-export const emailFill = (email) => {
-  return (dispatch) => {
+export const emailFill = email => {
+  return dispatch => {
     dispatch({
       type: PROFILE_EMAIL__FILL,
       payload: email ? email.trim() : '',
@@ -519,19 +518,19 @@ export const emailFill = (email) => {
   };
 };
 
-export const localUserDataUpdate = (userObject) => (dispatch) => {
+export const localUserDataUpdate = userObject => dispatch => {
   dispatch({
     type: UPDATE_LOCAL_USER,
     payload: userObject,
   });
 };
 
-export const carNameFill = (car) => {
+export const carNameFill = car => {
   if (car && car.length <= 3) {
     car = car.trim();
   }
 
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: PROFILE_CAR__FILL,
       payload: car,
@@ -539,22 +538,22 @@ export const carNameFill = (car) => {
   };
 };
 
-export const carVINFill = (carVIN) => {
-  return (dispatch) => {
+export const carVINFill = carVIN => {
+  return dispatch => {
     dispatch({
       type: PROFILE_CAR_VIN__FILL,
       payload: carVIN,
     });
   };
-}
+};
 
-export const carNumberFill = (carNumber) => {
+export const carNumberFill = carNumber => {
   const result = (carNumber = carNumber
     .replace(/\s/g, '')
     .replace(/\(/g, '')
     .replace(/\)/g, ''));
 
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: PROFILE_CAR_NUMBER__FILL,
       payload: result,
@@ -576,14 +575,14 @@ export const connectSocialMedia = ({profile, im}) => {
   delete dataToSend.cars;
   delete dataToSend.bonus;
 
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: SAVE_PROFILE__REQUEST,
       payload: dataToSend,
     });
 
     return API.updateProfile(dataToSend)
-      .then(async (response) => {
+      .then(async response => {
         dispatch({
           type: SAVE_PROFILE__UPDATE,
           payload: response.data,
@@ -591,7 +590,7 @@ export const connectSocialMedia = ({profile, im}) => {
 
         return response.data;
       })
-      .catch((error) => {
+      .catch(error => {
         dispatch({
           type: SAVE_PROFILE__FAIL,
           payload: {
@@ -602,17 +601,17 @@ export const connectSocialMedia = ({profile, im}) => {
   };
 };
 
-export const actionLogin = (props) => {
+export const actionLogin = props => {
   const id = props.id;
 
-  return async (dispatch) => {
+  return async dispatch => {
     dispatch({
       type: 'LOGIN__REQUEST_OLD_LKK',
       payload: {...props},
     });
 
     function onError(error) {
-      //console.log('error', error);
+      console.error('actionLogin error', error);
 
       return dispatch({
         type: 'LOGIN__FAIL_OLD_LKK',
@@ -628,7 +627,7 @@ export const actionLogin = (props) => {
       const {error, status, data} = authResponse;
 
       if (status !== 'success') {
-        // __DEV__ && console.log('error auth', authResponse);
+        console.error('actionLogin error authResponse', authResponse);
         return onError(error);
       }
 
@@ -664,7 +663,7 @@ async function getUserCars(token, userid) {
   if (carsResponseCode === 200 && carsResponse.data) {
     cars = orderBy(carsResponse.data, ['owner'], ['desc']);
   } else {
-    //__DEV__ && console.log('error get profile cars', carsResponse);
+    console.error('getUserCars error get', carsResponse);
   }
   return cars;
 }
@@ -676,7 +675,7 @@ async function getUserBonus(token, userid, curr) {
   if (bonusResponseCode === 200 && bonusResponse.data) {
     bonus = bonusResponse.data;
   } else {
-    //__DEV__ && console.log('error get profile bonus', bonusResponse);
+    console.error('getUserBonus error get profile bonus', bonusResponse);
   }
   return bonus;
 }
@@ -688,7 +687,10 @@ async function getUserDiscounts(token, userid) {
   if (discountsResponseCode === 200 && discountsResponse.data) {
     discounts = discountsResponse.data;
   } else {
-    //__DEV__ && console.log('error get profile discounts', discountsResponse);
+    console.error(
+      'getUserDiscounts error get profile discounts',
+      discountsResponse,
+    );
   }
   return discounts;
 }
@@ -697,7 +699,6 @@ async function getProfileData({token, userid, curr}) {
   const cars = await getUserCars(token, userid);
   const bonus = await getUserBonus(token, userid, curr);
   const discounts = await getUserDiscounts(token, userid);
-  // console.log('cars bonus discounts', cars, bonus, discounts);
   return {
     cars,
     bonus,

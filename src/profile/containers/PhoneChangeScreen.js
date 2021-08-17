@@ -114,8 +114,8 @@ class PhoneChangeScreen extends PureComponent {
     Analytics.logEvent('screen', 'profile/PhoneViaAuth');
   }
 
-  _onOtpChange = (index) => {
-    return (value) => {
+  _onOtpChange = index => {
+    return value => {
       if (isNaN(Number(value))) {
         // do nothing when a non digit is pressed
         return;
@@ -138,7 +138,7 @@ class PhoneChangeScreen extends PureComponent {
     };
   };
 
-  _onOtpKeyPress = (index) => {
+  _onOtpKeyPress = index => {
     return ({nativeEvent: {key: value}}) => {
       if (Number(value)) {
         if (index > 0 && index < 3 && this.otpArray[index] !== '') {
@@ -172,12 +172,12 @@ class PhoneChangeScreen extends PureComponent {
     };
   };
 
-  _verifyCode = (phone) => {
+  _verifyCode = phone => {
     this.setState({loadingVerify: true});
     // this.props.navigation.setParams({
     //   verifyCode: true,
     // });
-    this.props.actionGetPhoneCode({phone}).then((response) => {
+    this.props.actionGetPhoneCode({phone}).then(response => {
       if (response.code >= 300) {
         this.setState({
           code: false,
@@ -245,7 +245,6 @@ class PhoneChangeScreen extends PureComponent {
         profile.update = 0; // сначала проверяем наличие пользователя в принципе
         const actionCheckUser = await this.props.actionSavePofile(profile);
         if (actionCheckUser && actionCheckUser.type) {
-          console.log('actionCheckUser.type', actionCheckUser.type);
           switch (actionCheckUser.type) {
             case 'SAVE_PROFILE__FAIL':
               if (actionCheckUser.payload.code) {
@@ -286,7 +285,7 @@ class PhoneChangeScreen extends PureComponent {
                   code,
                   crmID,
                 })
-                .then((response) => {
+                .then(response => {
                   if (response.code === 200) {
                     this.setState({loading: false});
                     this.props.navigation.navigate('LoginScreen');
@@ -310,7 +309,7 @@ class PhoneChangeScreen extends PureComponent {
     return true;
   };
 
-  _onInputCode = (text) => {
+  _onInputCode = text => {
     if (text.length === 4) {
       this.setState({codeValue: text}, () => {
         this._verifyCodeStepTwo();
@@ -318,7 +317,7 @@ class PhoneChangeScreen extends PureComponent {
     }
   };
 
-  _onPressSubmit = (data) => {
+  _onPressSubmit = data => {
     this.setState(
       {
         phone: data.PHONE,
@@ -369,7 +368,7 @@ class PhoneChangeScreen extends PureComponent {
                       key={'textCode' + index}
                       textContentType="oneTimeCode"
                       keyboardType="number-pad"
-                      ref={(input) => {
+                      ref={input => {
                         this.CodeInput[index] = input;
                       }}
                       maxLength={1}

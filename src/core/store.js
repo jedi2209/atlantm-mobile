@@ -28,22 +28,18 @@ let store;
 if (__DEV__) {
   store = createStore(
     persistedReducer,
-    composeEnhancer(applyMiddleware(...middleware), Reactotron.createEnhancer())
+    composeEnhancer(
+      applyMiddleware(...middleware),
+      Reactotron.createEnhancer(),
+    ),
   );
 } else {
-  store = createStore(
-    persistedReducer,
-    applyMiddleware(...middleware)
-  );
+  store = createStore(persistedReducer, applyMiddleware(...middleware));
 }
 
-console.log('Wrapper ====>', 'getPersistStore');
-const persistStore = makeStore(
-    store,
-    () => {
-      console.log('store in getPersistStore', store.getState());
-      this.setState({rehydrated: true});
-    },
-  );
+const persistStore = makeStore(store, () => {
+  console.info('store in getPersistStore', store.getState());
+  this.setState({rehydrated: true});
+});
 
 export {store, persistStore};

@@ -188,16 +188,13 @@ class ProfileScreenInfo extends Component {
         }
         this.setState({loading: false});
       })
-      .catch((err) => {
-        console.log(
-          'ERROR если что-то идет не так то разлогиниваем пользователя',
-          err,
-        );
+      .catch(err => {
+        console.error('getUserData ERROR', err);
         this.props.actionLogout();
       });
   }
 
-  renderBonus = (region) => {
+  renderBonus = region => {
     let saldoValue = get(this.props.bonus, 'data.saldo.convert.value', null);
     if (!saldoValue) {
       saldoValue = get(this.props.bonus, 'data.saldo.value', 0);

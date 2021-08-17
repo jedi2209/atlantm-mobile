@@ -19,10 +19,10 @@ export default {
         auth.access_token;
       const response = await fetch(url);
       const userData = await response.json();
-      console.log('Login success, get userData', userData);
+      console.info('Login success, get userData', userData);
       return Object.assign(auth, userData.response);
     } catch (err) {
-      console.log('apiGetDataError', err);
+      console.error('_GetUserDataVK apiGetDataError', err);
     }
   },
 
@@ -41,7 +41,7 @@ export default {
       };
       callbackFn({...profile, networkName: 'vk'});
     } catch (error) {
-      console.log('error', error);
+      console.error('VK signIn error', error);
     }
   },
 };

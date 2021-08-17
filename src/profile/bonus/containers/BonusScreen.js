@@ -332,7 +332,7 @@ class BonusScreen extends Component {
   };
 
   render() {
-    console.log('== Bonus Screen ==');
+    console.info('== Bonus Screen ==');
 
     const {bonus} = this.props;
 

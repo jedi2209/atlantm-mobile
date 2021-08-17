@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   Keyboard,
+  Platform,
 } from 'react-native';
 import {Toast} from 'native-base';
 
@@ -125,7 +126,7 @@ class TvaScreen extends Component {
     }
   }
 
-  onPressButton = async (pushProps) => {
+  onPressButton = async pushProps => {
     this.setState({loading: true});
 
     const dealerId = pushProps.DEALER.id;
@@ -140,8 +141,6 @@ class TvaScreen extends Component {
       dealer: dealerId,
       pushTracking,
     });
-
-    // console.log('action', action);
 
     this.setState({loading: false});
     if (action) {
@@ -249,10 +248,10 @@ class TvaScreen extends Component {
     }
   };
 
-  onPressPushTracking = (isPushTracking) => {
+  onPressPushTracking = isPushTracking => {
     const {actionSetPushTracking} = this.props;
     if (isPushTracking === true) {
-      PushNotifications.subscribeToTopic('tva', '').then((isPushTracking) => {
+      PushNotifications.subscribeToTopic('tva', '').then(isPushTracking => {
         actionSetPushTracking(isPushTracking);
       });
     } else {
@@ -263,7 +262,8 @@ class TvaScreen extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView>
+      <KeyboardAvoidingView
+        behavior={Platform.select({ios: 'height', android: null})}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView style={styleConst.form.scrollView}>
             <View

@@ -5,6 +5,7 @@ import {
   DEALERS__FAIL,
   DEALERS_BY_CITIES__SET,
   DEALER__REQUEST,
+  ALL_DEALERS__SUCCESS,
   DEALER__SUCCESS,
   DEALER__SUCCESS__LOCAL,
   CLEAR_LOCAL_DEALER,
@@ -28,8 +29,8 @@ import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
 
-export const selectRegion = (region) => {
-  return (dispatch) => {
+export const selectRegion = region => {
+  return dispatch => {
     return dispatch({
       type: DEALERS_REGION__SELECT,
       payload: region,
@@ -38,7 +39,7 @@ export const selectRegion = (region) => {
 };
 
 export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: DEALER__REQUEST,
       payload: {
@@ -48,7 +49,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
     });
 
     return API.fetchDealer(dealerBaseData.id)
-      .then((response) => {
+      .then(response => {
         if (response.error) {
           return dispatch({
             type: DEALER__FAIL,
@@ -66,10 +67,10 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
         dealer.divisionTypes = [];
 
         if (dealer.divisions) {
-          Object.keys(dealer.divisions).map((val) => {
+          Object.keys(dealer.divisions).map(val => {
             if (dealer.divisions[val].type) {
               const divisionObj = dealer.divisions[val].type;
-              Object.keys(divisionObj).map((el) => {
+              Object.keys(divisionObj).map(el => {
                 const divisionType = divisionObj[el];
                 if (typeof dealer.divisionTypes[divisionType] === 'undefined') {
                   dealer.divisionTypes.push(divisionType);
@@ -125,8 +126,8 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
           });
         }
       })
-      .catch((error) => {
-        console.log('catch error', error);
+      .catch(error => {
+        console.error('selectDealer action catch error', error);
         return dispatch({
           type: DEALER__FAIL,
           payload: {
@@ -138,19 +139,19 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
 };
 
 export const localDealerClear = () => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: CLEAR_LOCAL_DEALER,
     });
   };
 };
 
-export const fetchDealers = (isLocal) => {
-  return (dispatch) => {
+export const fetchDealers = isLocal => {
+  return dispatch => {
     dispatch({type: DEALERS__REQUEST});
 
     return API.fetchDealers(isLocal)
-      .then((response) => {
+      .then(response => {
         const {data: dealers, error} = response;
 
         if (error) {
@@ -188,6 +189,16 @@ export const fetchDealers = (isLocal) => {
           payload: cities,
         });
 
+        let allDealers = {};
+        dealers.forEach(element => {
+          allDealers[element.id] = element;
+        });
+
+        dispatch({
+          type: ALL_DEALERS__SUCCESS,
+          payload: allDealers,
+        });
+
         if (!isLocal) {
           return dispatch({
             type: DEALERS__SUCCESS,
@@ -200,7 +211,7 @@ export const fetchDealers = (isLocal) => {
           });
         }
       })
-      .catch((error) => {
+      .catch(error => {
         return dispatch({
           type: DEALERS__FAIL,
           payload: {
@@ -212,11 +223,11 @@ export const fetchDealers = (isLocal) => {
 };
 
 export const fetchBrands = () => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({type: BRANDS__REQUEST});
 
     return API.fetchBrands()
-      .then((response) => {
+      .then(response => {
         const {data: brandsSource, error} = response;
 
         if (error) {
@@ -230,7 +241,7 @@ export const fetchBrands = () => {
         }
 
         let brands = {};
-        brandsSource.map((val) => {
+        brandsSource.map(val => {
           brands[val.id] = val;
         });
 
@@ -239,7 +250,7 @@ export const fetchBrands = () => {
           payload: brands,
         });
       })
-      .catch((error) => {
+      .catch(error => {
         return dispatch({
           type: BRANDS__FAIL,
           payload: {
@@ -250,8 +261,8 @@ export const fetchBrands = () => {
   };
 };
 
-export const actionSetDealersByCities = (dealersByRegions) => {
-  return (dispatch) => {
+export const actionSetDealersByCities = dealersByRegions => {
+  return dispatch => {
     return dispatch({
       type: DEALERS_BY_CITIES__SET,
       payload: dealersByRegions,

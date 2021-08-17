@@ -34,12 +34,12 @@ const styles = StyleSheet.create({
   TabsActiveTabStyle: {},
 });
 
-const renderTabBar = (props) => {
+const renderTabBar = props => {
   props.tabStyle = Object.create(props.tabStyle);
   return <DefaultTabBar {...props} />;
 };
 
-const _onRefresh = (props) => {
+const _onRefresh = props => {
   const {setRefreshing} = props;
   setRefreshing(true);
   props.props.dataHandler().then(() => {
@@ -50,11 +50,14 @@ const _onRefresh = (props) => {
 
 const _EmptyComponent = () => (
   <View style={styles.spinnerContainer}>
-    <ActivityIndicator color={styleConst.color.blue} style={styleConst.spinner} />
+    <ActivityIndicator
+      color={styleConst.color.blue}
+      style={styleConst.spinner}
+    />
   </View>
 );
 
-const _renderItem = (props) => {
+const _renderItem = props => {
   const {
     navigation,
     selectedItem,
@@ -81,7 +84,7 @@ const _renderItem = (props) => {
   );
 };
 
-const SelectListByCountry = (props) => {
+const SelectListByCountry = props => {
   const {
     region,
     itemLayout,
@@ -107,17 +110,17 @@ const SelectListByCountry = (props) => {
   let customListRUS = [];
   let customListUA = [];
   if (listAll && listAll.length) {
-    listBelarussia.map((el) => {
+    listBelarussia.map(el => {
       if (listAll.includes(el.id)) {
         customListBYN.push(el);
       }
     });
-    listRussia.map((el) => {
+    listRussia.map(el => {
       if (listAll.includes(el.id)) {
         customListRUS.push(el);
       }
     });
-    listUkraine.map((el) => {
+    listUkraine.map(el => {
       if (listAll.includes(el.id)) {
         customListUA.push(el);
       }
@@ -150,10 +153,10 @@ const SelectListByCountry = (props) => {
                   }}
                   refreshing={isRefreshing}
                   ListEmptyComponent={_EmptyComponent}
-                  renderItem={(item) => {
+                  renderItem={item => {
                     return _renderItem({...props, ...item, navigation});
                   }}
-                  keyExtractor={(item) => `${item.hash.toString()}`}
+                  keyExtractor={item => `${item.hash.toString()}`}
                 />
               </Tab>
             ) : null}
@@ -173,10 +176,10 @@ const SelectListByCountry = (props) => {
                   }}
                   refreshing={isRefreshing}
                   ListEmptyComponent={_EmptyComponent}
-                  renderItem={(item) => {
+                  renderItem={item => {
                     return _renderItem({...props, ...item, navigation});
                   }}
-                  keyExtractor={(item) => `${item.hash.toString()}`}
+                  keyExtractor={item => `${item.hash.toString()}`}
                 />
               </Tab>
             ) : null}
@@ -196,10 +199,10 @@ const SelectListByCountry = (props) => {
                   }}
                   refreshing={isRefreshing}
                   ListEmptyComponent={_EmptyComponent}
-                  renderItem={(item) => {
+                  renderItem={item => {
                     return _renderItem({...props, ...item, navigation});
                   }}
-                  keyExtractor={(item) => `${item.hash.toString()}`}
+                  keyExtractor={item => `${item.hash.toString()}`}
                 />
               </Tab>
             ) : null}
@@ -231,10 +234,10 @@ const SelectListByCountry = (props) => {
                 }}
                 refreshing={isRefreshing}
                 ListEmptyComponent={_EmptyComponent}
-                renderItem={(item) => {
+                renderItem={item => {
                   return _renderItem({...props, ...item, navigation});
                 }}
-                keyExtractor={(item) => `${item.hash.toString()}`}
+                keyExtractor={item => `${item.hash.toString()}`}
               />
             </Tab>
             <Tab
@@ -252,10 +255,10 @@ const SelectListByCountry = (props) => {
                 }}
                 refreshing={isRefreshing}
                 ListEmptyComponent={_EmptyComponent}
-                renderItem={(item) => {
+                renderItem={item => {
                   return _renderItem({...props, ...item, navigation});
                 }}
-                keyExtractor={(item) => `${item.hash.toString()}`}
+                keyExtractor={item => `${item.hash.toString()}`}
               />
             </Tab>
             <Tab
@@ -273,10 +276,10 @@ const SelectListByCountry = (props) => {
                 }}
                 refreshing={isRefreshing}
                 ListEmptyComponent={_EmptyComponent}
-                renderItem={(item) => {
+                renderItem={item => {
                   return _renderItem({...props, ...item, navigation});
                 }}
-                keyExtractor={(item) => `${item.hash.toString()}`}
+                keyExtractor={item => `${item.hash.toString()}`}
               />
             </Tab>
           </Tabs>

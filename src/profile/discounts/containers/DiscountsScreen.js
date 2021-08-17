@@ -118,7 +118,7 @@ class DiscountsScreen extends Component {
   };
 
   render() {
-    console.log('== DiscountsScreen ==');
+    console.info('== DiscountsScreen ==');
     Analytics.logEvent('screen', 'lkk/discounts');
 
     const {discounts} = this.props;

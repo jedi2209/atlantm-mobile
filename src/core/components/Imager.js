@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 // components
 import {Image, View, ActivityIndicator, StyleSheet} from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {SvgCssUri} from 'react-native-svg';
 import styleConst from '../style-const';
 import {verticalScale} from '../../utils/scale';
@@ -23,7 +24,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Imager = (props) => {
+const Imager = props => {
   const [isLoading, setLoading] = useState(false);
 
   const path = props.source.uri.toString();
@@ -38,46 +39,43 @@ const Imager = (props) => {
             styles.svgWrapper,
             {...props.style},
           ]}>
-          <SvgCssUri
-            width="100%"
-            height="100%"
-            uri={path}
-          />
+          <SvgCssUri width="100%" height="100%" uri={path} />
         </View>
       ) : (
-        <>
-          <Image
-            {...props}
-            source={{
-              uri: path,
-              headers: {
-                Pragma: 'no-cache'
-              },
-              cache: 'reload'
-            }}
-            onError={({ nativeEvent: {error} }) => {
-              console.log('Image error', error);
-              setLoading(false);
-            }}
-            onLoadStart={() => {
-              setLoading(true);
-            }}
-            onLoadEnd={() => {
-              setLoading(false);
-            }}
-            >
-            {props.children}
-          </Image>
+        <View
+          shouldRasterizeIOS={isLoading ? true : false}
+          renderToHardwareTextureAndroid={isLoading ? true : false}>
+          <View style={{opacity: isLoading ? 0.4 : 1}}>
+            <FastImage
+              {...props}
+              source={{
+                uri: path,
+                priority: FastImage.priority[props.priority],
+              }}
+              resizeMode={FastImage.resizeMode[props.resizeMode]}
+              onLoadStart={() => {
+                setLoading(true);
+              }}
+              onError={() => {
+                console.error('Image error');
+                setLoading(false);
+              }}
+              onLoadEnd={() => {
+                setLoading(false);
+              }}
+            />
+          </View>
           <ActivityIndicator
             animating={isLoading}
+            hidesWhenStopped={true}
             color={styleConst.color.blue}
             style={styles.loader}
           />
-        </>
+        </View>
       )}
     </View>
   );
-}
+};
 
 Imager.propTypes = {
   source: PropTypes.shape({
@@ -87,6 +85,7 @@ Imager.propTypes = {
 
 Imager.defaultProps = {
   testID: 'Imager.Wrapper',
+  priority: 'normal',
 };
 
 export default Imager;
