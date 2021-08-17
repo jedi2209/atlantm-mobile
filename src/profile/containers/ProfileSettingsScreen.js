@@ -286,5 +286,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 14,
+    backgroundColor: styleConst.color.bg,
   },
 });

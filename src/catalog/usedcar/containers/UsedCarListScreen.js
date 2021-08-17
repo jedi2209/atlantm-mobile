@@ -88,7 +88,7 @@ const UsedCarListScreen = ({
 
   // Аналогично componentDidMount и componentDidUpdate:
   useEffect(() => {
-    console.log('== UsedCarListScreen ==');
+    console.info('== UsedCarListScreen ==');
     Analytics.logEvent('screen', 'catalog/usedcar/list');
   }, [dealerSelected.city.id]);
 

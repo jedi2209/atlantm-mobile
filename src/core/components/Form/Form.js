@@ -356,7 +356,6 @@ class Form extends Component {
     }
     this.allFields.map((val, index) => {
       valid = true;
-      // console.log('this.state' + val.name, this.state[val.name]);
       if (
         this.state[val.name] &&
         this.state[val.name] !== null &&
@@ -1108,13 +1107,7 @@ class Form extends Component {
                   textContentType={'telephoneNumber'}
                   enablesReturnKeyAutomatically={true}
                   editable={true}
-                  onEndEditing={() => {
-                    // console.log(
-                    //   'onEndEditing',
-                    //   this.state,
-                    //   this.state['mask_' + name],
-                    // );
-                  }}
+                  onEndEditing={() => {}}
                   onChangeText={(formatted, pureValue) => {
                     return this._validatePhone({
                       formatted,
@@ -1296,11 +1289,11 @@ class Form extends Component {
                 onPress={async () => {
                   if (!this.state.loading) {
                     if (!this.props.onSubmit) {
-                      console.log(
+                      console.error(
                         'Undefined required onSubmit prop for Form component',
+                        this.props,
+                        this.state,
                       );
-                      console.log('this.props', this.props);
-                      console.log('onSubmit handler', this.state);
                       return false;
                     }
                     if (this._validate()) {

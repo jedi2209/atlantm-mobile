@@ -39,7 +39,7 @@ const CarList = props => {
   const [loadingNextPage, setLoadingNextPage] = useState(false);
 
   useEffect(() => {
-    console.log('== CarList ==');
+    console.info('== CarList ==');
 
     if ((!data || data.length === 0) && !isFetchItems) {
       dataHandler(EVENT_DEFAULT);
@@ -101,7 +101,6 @@ const CarList = props => {
       return false;
     }
 
-    __DEV__ && console.log('handleLoadMore');
     setLoadingNextPage(true);
 
     return dataHandler(EVENT_LOAD_MORE).then(() => {
@@ -114,8 +113,11 @@ const CarList = props => {
       onEndReached={handleLoadMore}
       onEndReachedThreshold={0.7}
       testID="CarList.Wrapper"
-      initialNumToRender={10}
-      maxToRenderPerBatch={20} // Increase time between renders
+      initialNumToRender={5}
+      maxToRenderPerBatch={5} // Increase time between renders
+      updateCellsBatchingPeriod={50}
+      windowSize={4}
+      removeClippedSubviews={false}
       onRefresh={_onRefresh}
       refreshing={isRefreshing}
       ListEmptyComponent={_renderEmptyComponent}

@@ -71,7 +71,7 @@ class ReviewScreen extends Component {
       return null;
     }
 
-    console.log('== ReviewScreen ==');
+    console.info('== ReviewScreen ==');
 
     if (isFetchDealerRating) {
       return <SpinnerView />;

@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
   ScrollView,
-  SafeAreaView,
   StatusBar,
   StyleSheet,
   Linking,
@@ -15,10 +14,8 @@ import {
   Alert,
 } from 'react-native';
 import {
-  Card,
   Container,
   Content,
-  Footer,
   Col,
   Row,
   Icon,
@@ -245,7 +242,6 @@ class NewCarItemScreen extends PureComponent {
       navigation.setParams({showTabBar: false}) ||
         NavigationService.dispatch({showTabBar: false});
     }
-    console.log('route', route);
     this.offset = currentOffset;
   };
 
@@ -644,7 +640,7 @@ class NewCarItemScreen extends PureComponent {
       );
     }
 
-    console.log('== NewCarItemScreen ==');
+    console.info('== NewCarItemScreen ==');
     const currency = get(route, 'params.currency');
     const brandName = get(carDetails, 'brand.name');
     const modelName = get(carDetails, 'model.name');

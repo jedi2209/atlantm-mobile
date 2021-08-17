@@ -331,7 +331,7 @@ class ReviewAddRatingStepScreen extends Component {
   render() {
     const {isReviewAddRequest} = this.props;
 
-    console.log('== ReviewAddRatingStepScreen ==');
+    console.info('== ReviewAddRatingStepScreen ==');
 
     return (
       <KeyboardAvoidingView>

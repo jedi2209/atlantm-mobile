@@ -6,7 +6,8 @@ import {STORE_LINK} from '../const';
 // import InAppReview from 'react-native-in-app-review';
 
 const RateThisApp = ({onSuccess}) => {
-  let alert_buttons = { // такое задротство из-за разного положения кнопок на iOS / Android. Нужно, чтобы кнопки были одинаково расположены
+  let alert_buttons = {
+    // такое задротство из-за разного положения кнопок на iOS / Android. Нужно, чтобы кнопки были одинаково расположены
     android: [
       {
         text: strings.RateThisApp.no,
@@ -21,23 +22,8 @@ const RateThisApp = ({onSuccess}) => {
       },
       {
         text: strings.RateThisApp.rate,
-        onPress: () => { Linking.openURL(STORE_LINK[Platform.OS]);
-            // if (!InAppReview.isAvailable()) {
-            //     Linking.openURL(STORE_LINK[Platform.OS]);
-            // } else {
-            //     Rate.rate({
-            //         GooglePackageName: GooglePackageName,
-            //         preferredAndroidMarket: AndroidMarket.Google,
-            //         preferInApp: true,
-            //       },
-            //       (success) => {
-            //           if (success) {
-            //               onSuccess && onSuccess();
-            //             } else {
-            //                 onAskLater && onAskLater();
-            //             }
-            //     });
-            // }
+        onPress: () => {
+          Linking.openURL(STORE_LINK[Platform.OS]);
         },
       },
     ],
@@ -45,30 +31,7 @@ const RateThisApp = ({onSuccess}) => {
       {
         text: strings.RateThisApp.rate,
         onPress: () => {
-            Linking.openURL(STORE_LINK[Platform.OS]);
-            // if (!InAppReview.isAvailable()) {
-            //     Linking.openURL(STORE_LINK[Platform.OS]);
-            // }
-            // // Rate.rate({
-            // //     AppleAppID: AppleAppID,
-            // //     preferInApp: true,
-            // //     inAppDelay: 1.0,
-            // // }, (success) => {
-            // //     // if (success) {
-            // //     //   props.onSuccess && props.onSuccess();
-            // //     // } else {
-            // //     //   props.onAskLater && props.onAskLater();
-            // //     // }
-            // // });
-            // InAppReview.RequestInAppReview()
-            // .then((hasFlowFinishedSuccessfully) => {
-            //     if (hasFlowFinishedSuccessfully) {
-            //         onSuccess && onSuccess();
-            //     }
-            // })
-            // .catch((error) => {
-            //     console.log('InAppReview.RequestInAppReview ERROR', error);
-            // });
+          Linking.openURL(STORE_LINK[Platform.OS]);
         },
         style: 'default',
       },
@@ -86,14 +49,14 @@ const RateThisApp = ({onSuccess}) => {
     ],
   };
 
-    Alert.alert(
-      strings.RateThisApp.title,
-      strings.RateThisApp.text,
-      alert_buttons[Platform.OS],
-      {
-        cancelable: false
-      },
-    );
-}
+  Alert.alert(
+    strings.RateThisApp.title,
+    strings.RateThisApp.text,
+    alert_buttons[Platform.OS],
+    {
+      cancelable: false,
+    },
+  );
+};
 
 export default RateThisApp;

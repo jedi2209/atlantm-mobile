@@ -28,6 +28,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F6F6F6',
     marginLeft: 0,
     paddingRight: 0,
+    paddingTop: 0,
+    paddingBottom: 12,
     borderBottomWidth: 0,
   },
 });
@@ -42,7 +44,7 @@ const mapDispatchToProps = {
   selectDealer,
 };
 
-const _onPressDealerItem = (props) => {
+const _onPressDealerItem = props => {
   const {
     returnScreen,
     returnState,
@@ -50,48 +52,43 @@ const _onPressDealerItem = (props) => {
     goBack,
     onSelect,
     selectedItem,
-    selectDealer,
     navigation,
     isLocal,
   } = props;
-  // console.log('_onPressDealerItem props', props);
-  const mainScreen = 'Home';
-  selectDealer({
-    dealerBaseData: item,
-    dealerSelected: selectedItem,
-    isLocal,
-  }).then((action) => {
-    const newDealer = get(action, 'payload.newDealer');
-    const prevDealer = get(action, 'payload.prevDealer');
-    // console.log('_onPressDealerItem action', action);
-    if (
-      action &&
-      (action.type === DEALER__SUCCESS ||
-        action.type === DEALER__SUCCESS__LOCAL)
-    ) {
-      // console.log('_onPressDealerItem onSelect', onSelect);
-      if (onSelect) {
-        onSelect({
-          newDealer: newDealer,
-          prevDealer: prevDealer,
-          isLocal: isLocal,
-        });
+  props
+    .selectDealer({
+      dealerBaseData: item,
+      dealerSelected: selectedItem,
+      isLocal,
+    })
+    .then(action => {
+      const newDealer = get(action, 'payload.newDealer');
+      const prevDealer = get(action, 'payload.prevDealer');
+      if (
+        action &&
+        (action.type === DEALER__SUCCESS ||
+          action.type === DEALER__SUCCESS__LOCAL)
+      ) {
+        if (onSelect) {
+          onSelect({
+            newDealer: newDealer,
+            prevDealer: prevDealer,
+            isLocal: isLocal,
+          });
+        }
+        if (goBack) {
+          return navigation.goBack();
+        }
+        NavigationService.reset(returnScreen, returnState);
       }
-      // console.log('_onPressDealerItem goBack', goBack, Boolean(goBack));
-      if (Boolean(goBack)) {
-        return navigation.goBack();
-      }
-      // console.log('NavigationService', NavigationService);
-      NavigationService.reset(returnScreen, returnState);
-    }
 
-    if (action && action.type === DEALER__FAIL) {
-      Alert.alert(
-        strings.SelectItemByCountry.error.title,
-        strings.SelectItemByCountry.error.text,
-      );
-    }
-  });
+      if (action && action.type === DEALER__FAIL) {
+        Alert.alert(
+          strings.SelectItemByCountry.error.title,
+          strings.SelectItemByCountry.error.text,
+        );
+      }
+    });
 };
 
 // const _onPressCityItem = (props) => {
@@ -101,7 +98,7 @@ const _onPressDealerItem = (props) => {
 //   navigation.goBack();
 // };
 
-const _renderDealer = (props) => {
+const SelectItemByCountry = props => {
   const {item} = props;
   if (item.virtual !== false && item.id !== 177) {
     // фикс для НЕ вывода виртуальных КО в списке
@@ -113,80 +110,10 @@ const _renderDealer = (props) => {
       onPress={() => {
         return _onPressDealerItem(props);
       }}
-      style={[
-        stylesList.listItem,
-        styles.listItem,
-        {
-          paddingTop: 0,
-          paddingBottom: 12,
-        },
-      ]}>
+      style={[stylesList.listItem, styles.listItem]}>
       <DealerCard item={item} />
     </ListItem>
   );
-};
-
-// const _renderCity = (props) => {
-//   const {item, selectedItem} = props;
-
-//   let existBrands = [];
-
-//   return (
-//     <ListItem onPress={() => {return onPressCityItem(props); }} style={stylesList.listItem}>
-//       <Body>
-//         {item.name ? <Text style={styles.city}>{item.name}</Text> : null}
-//         {item.dealers && item.dealers.length !== 0 ? (
-//           <View style={styles.brands}>
-//             {item.dealers.map((dealer) => {
-//               if (dealer.virtual !== false && item.id !== 177) {
-//                 // фикс для НЕ вывода виртуальных КО в списке
-//                 return true;
-//               }
-//               return (
-//                 <View key={dealer.id} style={styles.brands}>
-//                   {dealer.brands &&
-//                     dealer.brands.length &&
-//                     dealer.brands.map((brand) => {
-//                       const name =
-//                         brand.name === 'land rover' ? 'landrover' : brand.name;
-
-//                       if (
-//                         existBrands.includes(name) ||
-//                         dealer.virtual !== false
-//                       ) {
-//                         return null;
-//                       } else {
-//                         existBrands.push(name);
-//                       }
-
-//                       if (brand.logo) {
-//                         return (
-//                           <Imager
-//                             resizeMode="contain"
-//                             key={'brandLogo' + brand.id}
-//                             style={styles.brandLogo}
-//                             source={{uri: brand.logo}}
-//                           />
-//                         );
-//                       }
-//                     })}
-//                 </View>
-//               );
-//             })}
-//           </View>
-//         ) : null}
-//       </Body>
-//     </ListItem>
-//   );
-// };
-
-const SelectItemByCountry = (props) => {
-  const navigation = useNavigation();
-
-  // return itemLayout === 'dealer'
-  //   ? _renderDealer({...props, navigation})
-  //   : _renderCity({...props, navigation});
-  return _renderDealer({...props, navigation});
 };
 
 SelectItemByCountry.propTypes = {

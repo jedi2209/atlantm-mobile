@@ -194,8 +194,6 @@ class TestDriveScreen extends PureComponent {
       : this.state.dealerID;
     const isNewCar = get(this.props.route, 'params.isNewCar');
     const time = get(data, 'DATETIME.time');
-    // console.log('onPressOrder', this.state, carID, dealerID, data);
-    // return true;
     if (!this.state.isLead) {
       // делаем online-запись
       const action = await this.props.actionOrderTestDrive({
@@ -364,10 +362,6 @@ class TestDriveScreen extends PureComponent {
       },
       () => {
         return true;
-        // console.log('onDealerChoose', this.state, value);
-        // if (!isNaN(value)) {
-        //   this.fetchTDCars(value);
-        // }
       },
     );
   }

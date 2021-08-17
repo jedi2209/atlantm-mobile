@@ -36,8 +36,8 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
 };
 
-const _onSelectDealer = (props) => {
-  const {pushActionSubscribeState, prevDealer, newDealer, isLocal} = props;
+const _onSelectDealer = props => {
+  const {pushActionSubscribeState, newDealer} = props;
   // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
 
   if (pushActionSubscribeState) {
@@ -47,16 +47,13 @@ const _onSelectDealer = (props) => {
   }
 };
 
-const ChooseDealerScreen = (props) => {
+const ChooseDealerScreen = props => {
   const {
     region,
     listRussia,
     listUkraine,
     listBelarussia,
     isFetchDealer,
-    navigation,
-    fetchDealers,
-    fetchBrands,
     dealerSelected,
     isFetchDealersList,
   } = props;
@@ -71,14 +68,14 @@ const ChooseDealerScreen = (props) => {
     props.fetchBrands();
   }
 
-  console.log('== ChooseDealer ==', props);
+  console.info('== ChooseDealer ==', props);
 
   return (
     <>
       <SelectListByCountry
         itemLayout="dealer"
         region={region}
-        dataHandler={fetchDealers}
+        dataHandler={props.fetchDealers}
         isFetchList={isFetchDealersList || isFetchDealer}
         listRussia={listRussia}
         listUkraine={listUkraine}

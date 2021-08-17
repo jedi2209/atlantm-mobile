@@ -285,7 +285,7 @@ class InfoPostScreen extends Component {
       text = processHtml(text, this.state.webViewWidth);
     }
 
-    console.log('== InfoPost ==');
+    console.info('== InfoPost ==');
 
     return (
       <StyleProvider style={getTheme()}>

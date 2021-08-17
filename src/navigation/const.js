@@ -4,8 +4,6 @@ import HeaderIconBack from '../core/components/HeaderIconBack/HeaderIconBack';
 import styleConst from '../core/style-const';
 
 const ArrowBack = (navigation, route, AdditionalProps) => {
-  // console.log('ArrowBack navigation', navigation);
-  // console.log('ArrowBack route', route);
   return (
     <HeaderIconBack
       returnScreen={route?.params?.returnScreen}

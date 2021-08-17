@@ -83,7 +83,7 @@ class ReviewAddMessageStepScreen extends PureComponent {
   render() {
     const {dealerSelected} = this.props;
 
-    console.log('== ReviewAddMessageStepScreen ==');
+    console.info('== ReviewAddMessageStepScreen ==');
 
     return (
       <KeyboardAvoidingView>

@@ -1,12 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {PureComponent} from 'react';
-import {ActivityIndicator} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, ActivityIndicator} from 'react-native';
 import {Root, StyleProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import getTheme from '../../../native-base-theme/components';
-
 
 // redux
 import {connect} from 'react-redux';
@@ -16,8 +15,8 @@ import {
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
   actionStoreUpdated,
-  actionToggleModal,
 } from '../actions';
+import {fetchDealers} from '../../dealer/actions';
 
 import {APP_STORE_UPDATED} from '../../core/actionTypes';
 
@@ -28,6 +27,7 @@ import API from '../../utils/api';
 import {get} from 'lodash';
 import OneSignal from 'react-native-onesignal';
 import PushNotifications from '../components/PushNotifications';
+import {ONESIGNAL} from '../../core/const';
 import styleConst from '../../core/style-const';
 
 // components
@@ -40,6 +40,7 @@ const mapStateToProps = ({core, dealer, modal}) => {
     isStoreUpdated: core.isStoreUpdated,
     modal,
     currentLanguage: core.language.selected,
+    dealer,
   };
 };
 
@@ -48,43 +49,50 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
   actionStoreUpdated,
-  actionToggleModal,
+  fetchDealers,
 };
 
-class App extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isloading: true,
-    };
+const App = props => {
+  const [isLoading, setLoading] = useState(true);
 
-    this.mainScreen = 'BottomTabNavigation';
-    this.storeVersion = '2021-02-02';
+  const {
+    auth,
+    actionSetPushGranted,
+    actionSetPushActionSubscribe,
+    actionMenuOpenedCount,
+    actionStoreUpdated,
+    dealer,
+    menuOpenedCount,
+    isStoreUpdated,
+    fetchDealers,
+  } = props;
 
-    const currentVersion = DeviceInfo.getVersion();
-    if (currentVersion) {
-      API.fetchVersion(currentVersion);
-    }
+  const mainScreen = 'BottomTabNavigation';
+  const storeVersion = '2021-02-02';
+
+  const currentVersion = DeviceInfo.getVersion();
+  if (currentVersion) {
+    API.fetchVersion(currentVersion);
   }
 
-  _awaitStoreToUpdate = async () => {
+  const currentLanguage = get(props, 'currentLanguage', 'ru');
+
+  const _awaitStoreToUpdate = async () => {
     const storeData = store.getState();
 
     const currentDealer = get(storeData, 'dealer.selected.id', false);
     const isStoreUpdatedCurrent = get(storeData, 'core.isStoreUpdated', false);
 
-    if (currentDealer && isStoreUpdatedCurrent === this.storeVersion) {
+    if (currentDealer && isStoreUpdatedCurrent === storeVersion) {
       // уже всё обновлено, открываем экран автоцентра
-      return this.mainScreen;
+      return mainScreen;
     }
 
     try {
-      this.setState({
-        isloading: true,
-      });
+      setLoading(true);
       // если мы ещё не очищали стор
-      this.props.actionMenuOpenedCount(0);
-      const action = await this.props.actionStoreUpdated(this.storeVersion);
+      props.actionMenuOpenedCount(0);
+      const action = await props.actionStoreUpdated(storeVersion);
       if (action && action.type) {
         let result;
         if (action.type === APP_STORE_UPDATED) {
@@ -93,43 +101,36 @@ class App extends PureComponent {
         return result;
       }
     } catch (error) {
-      console.log('error', error);
+      console.error('_awaitStoreToUpdate error', error);
     }
   };
 
-  componentDidMount() {
-    const {
-      auth,
-      actionSetPushGranted,
-      actionSetPushActionSubscribe,
-      menuOpenedCount,
-      isStoreUpdated,
-    } = this.props;
-
+  useEffect(() => {
     NavigationService.setTopLevelNavigator(NavigationService.navigationRef);
 
-    this._awaitStoreToUpdate().then((res) => {
+    if (dealer && dealer.listDealers && !dealer.listDealers[177]) {
+      fetchDealers();
+    }
+
+    _awaitStoreToUpdate().then(res => {
       if (typeof res === 'undefined' || !res) {
         res = 'IntroScreen';
       }
-      this.setState({
-        isloading: false,
-      });
+      setLoading(false);
     });
 
-    const currentLanguage = get(this.props, 'currentLanguage', 'ru');
     strings.setLanguage(currentLanguage);
 
     if (get(auth, 'login') === 'zteam') {
       window.atlantmDebug = true;
     }
 
-    OneSignal.init('2094a3e1-3c9a-479d-90ae-93adfcd15dab', {
+    OneSignal.init(ONESIGNAL, {
       kOSSettingsKeyAutoPrompt: true,
       kOSSettingsKeyInFocusDisplayOption: 2,
     });
 
-    OneSignal.promptForPushNotificationsWithUserResponse((status) => {
+    OneSignal.promptForPushNotificationsWithUserResponse(status => {
       if (status) {
         actionSetPushGranted(true);
 
@@ -155,20 +156,19 @@ class App extends PureComponent {
     OneSignal.enableVibrate(true);
 
     PushNotifications.init();
-  }
+  });
 
-  render() {
-    if (this.state.isloading || !NavigationContainer) {
-      return (
-        <SafeAreaProvider>
-          <ActivityIndicator
-            style={{width: '100%', height: '100%'}}
-            color={styleConst.color.blue}
-            size="large"
-          />
-        </SafeAreaProvider>
-      );
-    }
+  if (isLoading || !NavigationContainer) {
+    return (
+      <SafeAreaProvider>
+        <ActivityIndicator
+          style={styles.activityIndicator}
+          color={styleConst.color.blue}
+          size="large"
+        />
+      </SafeAreaProvider>
+    );
+  } else {
     return (
       <SafeAreaProvider>
         <StyleProvider style={getTheme()}>
@@ -181,6 +181,13 @@ class App extends PureComponent {
       </SafeAreaProvider>
     );
   }
-}
+};
+
+const styles = StyleSheet.create({
+  activityIndicator: {
+    width: '100%',
+    height: '100%',
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

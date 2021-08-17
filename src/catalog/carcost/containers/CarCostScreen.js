@@ -487,8 +487,7 @@ class CarCostScreen extends Component {
         ],
       },
     };
-    console.log('this.state', this.state);
-    console.log('== CarCost ==');
+    console.info('== CarCost ==');
 
     return (
       <KeyboardAvoidingView onPress={Keyboard.dismiss}>

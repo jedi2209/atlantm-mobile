@@ -184,8 +184,6 @@ export const actionFetchNewCarByFilter = props => {
   let filtersRaw = {};
   let sortingRaw = {};
 
-  console.log('actionFetchNewCarByFilter props', props);
-
   if (props.filters) {
     for (const [key, value] of Object.entries(props.filters)) {
       if (value) {
@@ -250,7 +248,6 @@ export const actionFetchNewCarByFilter = props => {
 
     return API.fetchStock(newProps)
       .then(response => {
-        console.log('API fetchStock url responce', response);
         if (response.error) {
           return dispatch({
             type: NEW_CAR_BY_FILTER__FAIL,
@@ -449,7 +446,6 @@ export const actionOrderTestDrive = props => {
 
     return API.orderTestDrive(props)
       .then(res => {
-        console.log('res', res);
         const {error, status} = res;
 
         if (status !== 'success') {
@@ -485,7 +481,6 @@ export const actionOrderCar = props => {
 
     return API.orderCar(props)
       .then(res => {
-        console.log('res', res);
         const {error, status} = res;
 
         if (status !== 'success') {
@@ -521,7 +516,6 @@ export const actionOrderCreditCar = props => {
 
     return API.orderCreditCar(props)
       .then(res => {
-        console.log('res', res);
         const {error, status} = res;
 
         if (status !== 'success') {
@@ -556,7 +550,6 @@ export const actionOrderMyPrice = props => {
 
     return API.orderMyPrice(props)
       .then(res => {
-        console.log('res', res);
         const {error, status} = res;
 
         if (status !== 'success') {
@@ -591,7 +584,6 @@ export const actionOrderTestDriveLead = props => {
 
     return API.orderTestDriveLead(props)
       .then(res => {
-        console.log('res', res);
         const {error, status} = res;
 
         if (status !== 'success') {
@@ -823,7 +815,6 @@ export const actionCarCostOrder = props => {
     return API.carCostOrder(props)
       .then(data => {
         try {
-          __DEV__ && console.log('carCostOrder result', data);
           const {status, error} = data;
 
           if (status !== 'success') {
@@ -838,8 +829,6 @@ export const actionCarCostOrder = props => {
 
           return dispatch({type: CAR_COST__SUCCESS});
         } catch (parseError) {
-          __DEV__ && console.log('carCostOrder parse error', parseError);
-
           return dispatch({type: CAR_COST__FAIL});
         }
       })

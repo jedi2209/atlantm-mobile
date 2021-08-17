@@ -154,7 +154,7 @@ class ReviewsFilterRatingScreen extends Component {
   };
 
   render() {
-    console.log('== ReviewsFilterDateScreen ==');
+    console.info('== ReviewsFilterDateScreen ==');
 
     return (
       <StyleProvider style={getTheme()}>

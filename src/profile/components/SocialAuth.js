@@ -74,7 +74,6 @@ class SocialAuth extends PureComponent {
   }
 
   _connectGoogle = async () => {
-    console.log('_connectGoogle');
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
@@ -85,7 +84,7 @@ class SocialAuth extends PureComponent {
   };
 
   getFBToken = () => {
-    AccessToken.getCurrentAccessToken().then((auth) => {
+    AccessToken.getCurrentAccessToken().then(auth => {
       const im = {VALUE: auth.userID, VALUE_TYPE: 'facebook'};
       this.props.connectSocialMedia({profile: this.props.login, im});
       this.setState({isSigninInProgress: false});
@@ -97,18 +96,18 @@ class SocialAuth extends PureComponent {
     LoginManager.logInWithPermissions(['email']).then(
       function (result) {
         if (result.isCancelled) {
-          console.log('Login cancelled');
+          console.warn('_connectFB Login cancelled');
           this.setState({isSigninInProgress: false});
         } else {
-          console.log(
-            'Login success with permissions: ' +
+          console.info(
+            '_connectFB Login success with permissions: ' +
               result.grantedPermissions.toString(),
           );
           this.getFBToken();
         }
       }.bind(this),
       function (error) {
-        console.log('Login fail with error: ' + error);
+        console.error('_connectFB Login fail with error: ' + error);
         this.setState({isSigninInProgress: false});
       },
     );
@@ -132,21 +131,19 @@ class SocialAuth extends PureComponent {
       const userData = await response.json();
       return Object.assign(auth, userData.response);
     } catch (err) {
-      console.log('apiGetDataError', err);
+      console.error('_GetUserDataVK apiGetDataError', err);
       this.setState({isSigninInProgress: false});
     }
   };
 
   _connectVK = async () => {
-    console.log('_connectVK');
     VKLogin.initialize(7255802);
     try {
       const userData = await this._GetUserDataVK();
-      console.log('userData', userData);
       const im = {VALUE: userData.user_id, VALUE_TYPE: 'vk'};
       this.props.connectSocialMedia({profile: this.props.login, im});
     } catch (error) {
-      console.log('error', error);
+      console.error('_connectVK error', error);
     }
     this.setState({isSigninInProgress: false});
   };
@@ -170,13 +167,13 @@ class SocialAuth extends PureComponent {
         const im = {VALUE: appleAuthRequestResponse.user, VALUE_TYPE: 'apple'};
         this.props.connectSocialMedia({profile: this.props.login, im});
       } catch (error) {
-        // console.log('error', error);
+        console.error('_signInWithApple error', error);
       }
       this.setState({isSigninInProgress: false});
     }
   };
 
-  _renderLoginButtons = (region) => {
+  _renderLoginButtons = region => {
     const isAndroid = Platform.OS === 'android';
     let VKenabled = true;
     let ButtonWidth = '25%';

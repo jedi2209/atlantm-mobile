@@ -15,7 +15,7 @@ export default {
   },
 
   onReceived(notification) {
-    console.log('Notification received: ', notification);
+    console.info('Notification received: ', notification);
     Analytics.logEvent('action', 'PushNotification/received', {
       id: notification.payload.notificationID,
     });
@@ -28,10 +28,6 @@ export default {
       id: openResult.notification.payload.notificationID,
     });
 
-    // console.log('Message: ', openResult.notification.payload.body);
-    // console.log('Data: ', openResult.notification.payload.additionalData);
-    // console.log('isActive: ', openResult.notification.isAppInFocus);
-    console.log('openResult: ', openResult);
     const notif = openResult.notification.payload.additionalData;
 
     const target = get(notif, 'target');
@@ -72,23 +68,18 @@ export default {
     OneSignal.removeExternalUserId();
   },
 
-  onIds(device) {
-    console.log('Device info: ', device);
-  },
+  onIds(device) {},
 
   addTag(name, value) {
-    console.log('addTag name:', name);
-    console.log('addTag value:', value);
     OneSignal.sendTag(name, value.toString());
   },
 
   removeTag(name) {
-    console.log('removeTag', name);
     OneSignal.deleteTag(name);
   },
 
   subscribeToTopic(topic, id) {
-    return this.checkPermission().then((isPermission) => {
+    return this.checkPermission().then(isPermission => {
       if (isPermission) {
         OneSignal.setSubscription(true);
         OneSignal.sendTag(topic, id.toString());
@@ -105,14 +96,10 @@ export default {
     //OneSignal.setEmail(value);
   },
 
-  // logoutEmail() {
-  //     OneSignal.logoutEmail();
-  // },
-
   checkPermission() {
     return new Promise((resolve, reject) => {
       // Check push notification and OneSignal subscription statuses
-      OneSignal.getPermissionSubscriptionState((status) => {
+      OneSignal.getPermissionSubscriptionState(status => {
         if (status.notificationsEnabled) {
           return resolve(true);
         } else {

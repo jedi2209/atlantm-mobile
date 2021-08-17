@@ -61,10 +61,18 @@ class CallMeBackScreen extends React.Component {
   constructor(props) {
     super(props);
 
+    let dealerCustom = null;
+
+    if (this.props.route?.params && this.props.route.params?.dealerCustom) {
+      dealerCustom = this.props.route?.params?.dealerCustom;
+    }
+
     this.state = {
       loading: false,
       success: false,
-      dealerSelectedLocal: this.props.dealerSelected,
+      dealerSelectedLocal: dealerCustom
+        ? dealerCustom
+        : this.props.dealerSelected,
     };
     this.props.localDealerClear();
   }
@@ -87,14 +95,11 @@ class CallMeBackScreen extends React.Component {
     return false;
   }
 
-  onPressCallMe = async (props) => {
+  onPressCallMe = async props => {
     const isInternetExist = await isInternet();
     let actionID = null;
 
-    if (
-      this.props.route?.params &&
-      this.props.route.params?.actionID
-    ) {
+    if (this.props.route?.params && this.props.route.params?.actionID) {
       actionID = this.props.route?.params?.actionID;
     }
 

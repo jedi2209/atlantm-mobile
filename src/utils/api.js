@@ -1,11 +1,17 @@
 import _ from 'lodash';
 
-import {Platform, Linking, Alert, BackHandler} from 'react-native';
+import {
+  Platform,
+  Linking,
+  Alert,
+  BackHandler,
+  NativeModules,
+} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import {STORE_LINK, API_MAIN_URL} from '../core/const';
 import {strings} from '../core/lang/const';
 
-import RNFetchBlob from 'rn-fetch-blob';
+const RNFetchBlob = NativeModules.RNFetchBlob;
 
 const isAndroid = Platform.OS === 'android';
 
@@ -89,9 +95,6 @@ export default {
     const url = `/tva/get/?number=${number}&region=${region}&dealer=${dealer}&notify=${pushTracking}&platform=${
       isAndroid ? 1 : 2
     }`;
-
-    // __DEV__ && console.log('API fetchTva url', url);
-
     return this.request(url, baseRequestParams);
   },
 
@@ -167,7 +170,6 @@ export default {
   },
 
   fetchStock({nextPageUrl, url}) {
-    // __DEV__ && console.log('API fetchUsedCar url', url);
     return this.request(nextPageUrl ? nextPageUrl : url, baseRequestParams);
   },
 
@@ -385,9 +387,6 @@ export default {
 
     const url = isNewCar ? '/orders/stock/post/' : '/orders/trade-in/post/';
 
-    // __DEV__ && console.log('API order car url', url);
-    // __DEV__ && console.log('API order car body', body);
-
     return this.request(url, requestParams);
   },
 
@@ -427,9 +426,6 @@ export default {
     });
 
     const url = '/orders/credit/post/';
-
-    // __DEV__ && console.log('API order car url', url);
-    // __DEV__ && console.log('API order car body', body);
 
     return this.request(url, requestParams);
   },
@@ -471,9 +467,6 @@ export default {
 
     const url = '/orders/testdrive/post/';
 
-    // __DEV__ && console.log('API order car url', url);
-    // __DEV__ && console.log('API order car body', body);
-
     return this.request(url, requestParams);
   },
 
@@ -513,9 +506,6 @@ export default {
     });
 
     const url = '/orders/my-price/post/';
-
-    // __DEV__ && console.log('API order car url', url);
-    // __DEV__ && console.log('API order car body', body);
 
     return this.request(url, requestParams);
   },
@@ -558,8 +548,6 @@ export default {
 
     const url = isNewCar ? '/order/test-drive/' : null;
 
-    __DEV__ && console.log('API orderTestDrive car body', body);
-
     return this.request(url, requestParams);
   },
 
@@ -572,8 +560,6 @@ export default {
       },
       body,
     });
-
-    // __DEV__ && console.log('API tva message body', body);
 
     return this.request('/tva/message/post/', requestParams);
   },
@@ -607,8 +593,6 @@ export default {
       `f_TextMinus=${messageMinus}`,
     ].join('&');
 
-    // console.log('body', body);
-
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
       headers: {
@@ -616,8 +600,6 @@ export default {
       },
       body,
     });
-
-    // __DEV__ && console.log('API review add body', body);
 
     return await this.request('/eko/review/post/', requestParams);
   },
@@ -689,8 +671,6 @@ export default {
       'Content-Type': 'multipart/form-data; ',
     });
 
-    __DEV__ && console.log('API carcost body', formData, formDataNew, props, headersNew);
-
     // `${API_MAIN_URL}/orders/usedbuy/post/`,
 
     return (async () => {
@@ -702,7 +682,6 @@ export default {
       );
       if (rawResponse) {
         let txt = await rawResponse.text();
-        console.log('rawResponse', txt);
         return JSON.parse(txt);
       }
     })();
@@ -720,7 +699,6 @@ export default {
 
   loginRequest({login, password}) {
     // __DEV__ &&
-    //   console.log('API register login: %s, password: %s', login, password);
     if (!login || !password) {
       return false;
     }
@@ -749,8 +727,6 @@ export default {
       },
       body,
     });
-
-    // __DEV__ && console.log('API register body', body);
 
     return this.request('/lkk/register/', requestParams);
   },
@@ -824,7 +800,7 @@ export default {
         return response;
       })
       .catch(err => {
-        console.log('loginWith(profile) error', err);
+        console.error('loginWith(profile) error', err);
       });
   },
 
@@ -850,23 +826,21 @@ export default {
         return response;
       })
       .catch(err => {
-        console.log('error', err);
+        console.error('loginWithPhone error', err);
       });
   },
 
   async getProfile(id) {
     return await this.request(`/lkk/user/${id}/`, baseRequestParams)
       .then(response => {
-        console.log('getProfile >>>>>>>>', response);
         return response.data;
       })
       .catch(err => {
-        console.log('error', err);
+        console.error('getProfile error', err);
       });
   },
 
   async updateProfile(profile) {
-    // console.log('profile', profile);
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PATCH',
       headers: {
@@ -882,7 +856,7 @@ export default {
       profile.ID === '' ||
       profile.ID === null
     ) {
-      console.log(
+      console.error(
         'updateProfile error',
         'required param profile.ID has been not found',
       );
@@ -894,7 +868,7 @@ export default {
         return response;
       })
       .catch(err => {
-        console.log('error', err);
+        console.error('updateProfile request error', err);
       });
   },
 
@@ -925,7 +899,7 @@ export default {
       const response = await this.request('/lkk/cars/', requestParams);
       return response;
     } catch (err) {
-      console.log('error', err);
+      console.error('toggleArchieveCar request error', err);
     }
   },
 
@@ -987,17 +961,9 @@ export default {
     try {
       const response = await fetch(url, requestParams);
       const res = await response.json();
-      if (res) {
-        console.log(
-          '>>> apiGetData url, requestParams ==> res \r\n',
-          url + '\r\n',
-          requestParams,
-          res,
-        );
-      }
       return res;
     } catch (err) {
-      console.log('apiGetDataError URL: ' + url, err);
+      console.error('apiGetDataError URL: ' + url, err);
     }
   },
 };
