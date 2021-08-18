@@ -156,7 +156,7 @@ const App = props => {
     OneSignal.enableVibrate(true);
 
     PushNotifications.init();
-  });
+  }, []);
 
   if (isLoading || !NavigationContainer) {
     return (
