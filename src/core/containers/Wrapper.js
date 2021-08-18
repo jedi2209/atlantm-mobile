@@ -61,7 +61,7 @@ const Wrapper = () => {
     Text.defaultProps.allowFontScaling = false;
     Text.defaultProps.maxFontSizeMultiplier = 0;
     Text.defaultProps.selectable = true;
-  });
+  }, []);
 
   return (
     <Provider store={store}>

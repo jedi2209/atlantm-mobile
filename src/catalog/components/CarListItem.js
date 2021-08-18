@@ -360,7 +360,14 @@ const CarListItem = ({
           });
         },
         onPressCall: () => {
-          console.log('car', car.manager.phone);
+          let phone = dealerList[car.dealer.id]?.phone;
+          if (car?.manager?.phone) {
+            phone = car.manager.phone;
+          }
+          if (!phone || phone === '') {
+            return false;
+          }
+          Linking.openURL('tel:' + phone.replace(/[^+\d]+/g, ''));
         },
         onPressWantACar: () => {
           navigation.navigate('OrderScreen', {
@@ -381,7 +388,7 @@ const CarListItem = ({
     return (
       <View
         style={{
-          height: 190,
+          height: itemScreen === 'NewCarItemScreen' ? 210 : 190,
           marginTop: 45,
         }}>
         <ImageCarousel
