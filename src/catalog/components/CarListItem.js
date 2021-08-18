@@ -343,6 +343,7 @@ const CarListItem = ({
         onPressCallMe: () => {
           navigation.navigate('CallMeBackScreen', {
             dealerCustom: dealerList[car.dealer.id],
+            goBack: true,
           });
         },
         onPressTD: () => {
@@ -466,7 +467,6 @@ const CarListItem = ({
                 <BrandLogo
                   brand={get(car, 'brand.id')}
                   width={45}
-                  type="white"
                   style={styles.brandLogo}
                   key={'brandLogo' + get(car, 'brand.id')}
                 />

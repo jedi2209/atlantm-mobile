@@ -651,7 +651,6 @@ const MainFilterScreen = ({
                     stockType,
                     data: accordionModels,
                   });
-                  // _showHideModal(true, modals.brandModels);
                 }}
                 style={[styles.cardItem, styles.cardItemStatic]}>
                 <View style={styles.fieldCaptionWrapper}>

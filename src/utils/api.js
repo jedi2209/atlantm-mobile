@@ -1,17 +1,10 @@
 import _ from 'lodash';
 
-import {
-  Platform,
-  Linking,
-  Alert,
-  BackHandler,
-  NativeModules,
-} from 'react-native';
+import {Platform, Linking, Alert, BackHandler} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import RNFetchBlob from 'rn-fetch-blob';
 import {STORE_LINK, API_MAIN_URL} from '../core/const';
 import {strings} from '../core/lang/const';
-
-const RNFetchBlob = NativeModules.RNFetchBlob;
 
 const isAndroid = Platform.OS === 'android';
 

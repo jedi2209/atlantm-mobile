@@ -95,57 +95,69 @@ const ImageCarousel = ({
           return (
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <View style={{flexDirection: 'column'}}>
+              {item.onPressCallMe || item.onPressCall ? (
+                <View style={{flexDirection: 'column'}}>
+                  {item.onPressCallMe ? (
+                    <Button
+                      onPress={item.onPressCallMe}
+                      style={[
+                        styles.itemOrder,
+                        styles.itemOrderTop,
+                        styles.itemOrderCallBack,
+                        {height: height / 2 - 1},
+                      ]}>
+                      <Icon
+                        type="MaterialCommunityIcons"
+                        name="phone-incoming"
+                        selectable={false}
+                        style={styles.iconButtonSm}
+                      />
+                      <Text style={styles.iconTextSm}>
+                        {strings.ContactsScreen.callOrder}
+                      </Text>
+                    </Button>
+                  ) : null}
+                  {item.onPressCall ? (
+                    <Button
+                      onPress={item.onPressCall}
+                      style={[
+                        styles.itemOrder,
+                        styles.itemOrderBottom,
+                        styles.itemOrderCall,
+                        {height: height / 2 - 1},
+                      ]}>
+                      <Icon
+                        type="MaterialCommunityIcons"
+                        name="phone-outgoing"
+                        selectable={false}
+                        style={styles.iconButtonSm}
+                      />
+                      <Text style={styles.iconTextSm}>
+                        {strings.ContactsScreen.call}
+                      </Text>
+                    </Button>
+                  ) : null}
+                </View>
+              ) : null}
+              {item.onPressWantACar ? (
                 <Button
-                  onPress={item.onPressCallMe}
+                  onPress={item.onPressWantACar}
                   style={[
                     styles.itemOrder,
-                    styles.itemOrderTop,
-                    styles.itemOrderCallBack,
-                    {height: height / 2 - 1},
+                    styles.itemOrderWantACar,
+                    {height},
                   ]}>
                   <Icon
                     type="MaterialCommunityIcons"
-                    name="phone-incoming"
+                    name="wallet-giftcard"
                     selectable={false}
-                    style={styles.iconButtonSm}
+                    style={styles.iconButton}
                   />
-                  <Text style={styles.iconTextSm}>
-                    {strings.ContactsScreen.callOrder}
+                  <Text style={styles.iconText}>
+                    {strings.NewCarItemScreen.wannaCar}
                   </Text>
                 </Button>
-                <Button
-                  onPress={item.onPressCall}
-                  style={[
-                    styles.itemOrder,
-                    styles.itemOrderBottom,
-                    styles.itemOrderCall,
-                    {height: height / 2 - 1},
-                  ]}>
-                  <Icon
-                    type="MaterialCommunityIcons"
-                    name="phone-outgoing"
-                    selectable={false}
-                    style={styles.iconButtonSm}
-                  />
-                  <Text style={styles.iconTextSm}>
-                    {strings.ContactsScreen.call}
-                  </Text>
-                </Button>
-              </View>
-              <Button
-                onPress={item.onPressWantACar}
-                style={[styles.itemOrder, styles.itemOrderWantACar, {height}]}>
-                <Icon
-                  type="MaterialCommunityIcons"
-                  name="wallet-giftcard"
-                  selectable={false}
-                  style={styles.iconButton}
-                />
-                <Text style={styles.iconText}>
-                  {strings.NewCarItemScreen.wannaCar}
-                </Text>
-              </Button>
+              ) : null}
             </View>
           );
       }
@@ -172,6 +184,7 @@ const ImageCarousel = ({
         }}
         removeClippedSubviews={false}
         useScrollView={true}
+        enableSnap={false}
         lockScrollWhileSnapping={true}
         firstItem={firstItem}
         data={entries}
