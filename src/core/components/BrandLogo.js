@@ -97,55 +97,55 @@ const brandsSVG = {
   black: {
     6: (
       <Image
-        source={require(`../assets/brands/black/brand-6.svg`)}
+        source={require('../assets/brands/black/brand-6.svg')}
         style={styles.imageSVG}
       />
     ),
     7: (
       <Image
-        source={require(`../assets/brands/black/brand-7.svg`)}
+        source={require('../assets/brands/black/brand-7.svg')}
         style={styles.imageSVG}
       />
     ),
     9: (
       <Image
-        source={require(`../assets/brands/black/brand-9.svg`)}
+        source={require('../assets/brands/black/brand-9.svg')}
         style={styles.imageSVG}
       />
     ),
     10: (
       <Image
-        source={require(`../assets/brands/black/brand-10.svg`)}
+        source={require('../assets/brands/black/brand-10.svg')}
         style={styles.imageSVG}
       />
     ),
     12: (
       <Image
-        source={require(`../assets/brands/black/brand-12.svg`)}
+        source={require('../assets/brands/black/brand-12.svg')}
         style={styles.imageSVG}
       />
     ),
     13: (
       <Image
-        source={require(`../assets/brands/black/brand-13.svg`)}
+        source={require('../assets/brands/black/brand-13.svg')}
         style={styles.imageSVG}
       />
     ),
     14: (
       <Image
-        source={require(`../assets/brands/black/brand-14.svg`)}
+        source={require('../assets/brands/black/brand-14.svg')}
         style={styles.imageSVG}
       />
     ),
     19: (
       <Image
-        source={require(`../assets/brands/black/brand-19.svg`)}
+        source={require('../assets/brands/black/brand-19.svg')}
         style={styles.imageSVG}
       />
     ),
     20: (
       <Image
-        source={require(`../assets/brands/black/brand-20.svg`)}
+        source={require('../assets/brands/black/brand-20.svg')}
         style={styles.imageSVG}
       />
     ),
@@ -153,55 +153,55 @@ const brandsSVG = {
   white: {
     6: (
       <Image
-        source={require(`../assets/brands/white/brand-6.svg`)}
+        source={require('../assets/brands/white/brand-6.svg')}
         style={styles.imageSVG}
       />
     ),
     7: (
       <Image
-        source={require(`../assets/brands/white/brand-7.svg`)}
+        source={require('../assets/brands/white/brand-7.svg')}
         style={styles.imageSVG}
       />
     ),
     9: (
       <Image
-        source={require(`../assets/brands/white/brand-9.svg`)}
+        source={require('../assets/brands/white/brand-9.svg')}
         style={styles.imageSVG}
       />
     ),
     10: (
       <Image
-        source={require(`../assets/brands/white/brand-10.svg`)}
+        source={require('../assets/brands/white/brand-10.svg')}
         style={styles.imageSVG}
       />
     ),
     12: (
       <Image
-        source={require(`../assets/brands/white/brand-12.svg`)}
+        source={require('../assets/brands/white/brand-12.svg')}
         style={styles.imageSVG}
       />
     ),
     13: (
       <Image
-        source={require(`../assets/brands/white/brand-13.svg`)}
+        source={require('../assets/brands/white/brand-13.svg')}
         style={styles.imageSVG}
       />
     ),
     14: (
       <Image
-        source={require(`../assets/brands/white/brand-14.svg`)}
+        source={require('../assets/brands/white/brand-14.svg')}
         style={styles.imageSVG}
       />
     ),
     19: (
       <Image
-        source={require(`../assets/brands/white/brand-19.svg`)}
+        source={require('../assets/brands/white/brand-19.svg')}
         style={styles.imageSVG}
       />
     ),
     20: (
       <Image
-        source={require(`../assets/brands/white/brand-20.svg`)}
+        source={require('../assets/brands/white/brand-20.svg')}
         style={styles.imageSVG}
       />
     ),

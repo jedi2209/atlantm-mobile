@@ -829,10 +829,12 @@ export const actionCarCostOrder = props => {
 
           return dispatch({type: CAR_COST__SUCCESS});
         } catch (parseError) {
+          console.error('actionCarCostOrder parseError', parseError);
           return dispatch({type: CAR_COST__FAIL});
         }
       })
       .catch(error => {
+        console.error('actionCarCostOrder API.carCostOrder error', error);
         return dispatch({
           type: CAR_COST__FAIL,
           payload: {

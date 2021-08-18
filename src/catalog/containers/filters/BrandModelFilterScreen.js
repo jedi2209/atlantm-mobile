@@ -1,26 +1,7 @@
-import React, {useState, useEffect, useRef, useReducer} from 'react';
+import React, {useState, useReducer} from 'react';
 import PropTypes from 'prop-types';
-import {
-  Animated,
-  View,
-  ActivityIndicator,
-  Dimensions,
-  StyleSheet,
-  Platform,
-  ScrollView,
-} from 'react-native';
-import {
-  Container,
-  Button,
-  Icon,
-  Segment,
-  Content,
-  Text,
-  Card,
-  CardItem,
-  Right,
-  CheckBox,
-} from 'native-base';
+import {View, ActivityIndicator, StyleSheet, Platform} from 'react-native';
+import {Container, Button, Icon, Content, Text, CheckBox} from 'native-base';
 import BrandLogo from '../../../core/components/BrandLogo';
 import NestedListView, {NestedRow} from 'react-native-nested-listview';
 import {connect} from 'react-redux';
@@ -28,7 +9,6 @@ import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 import {actionSaveBrandModelFilter} from '../../actions';
 import {strings} from '../../../core/lang/const';
-import nav from '../../../navigation/reducers';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -50,6 +30,9 @@ const mapDispatchToProps = dispatch => {
   return {
     saveBrandModelFilter: data => {
       return dispatch(actionSaveBrandModelFilter(data));
+    },
+    clearBrandModelFilters: () => {
+      return dispatch(actionSaveBrandModelFilter({stockType: 'clear'}));
     },
   };
 };
@@ -116,6 +99,7 @@ const BrandModelFilterScreen = ({
   navigation,
   route,
   saveBrandModelFilter,
+  clearBrandModelFilters,
 }) => {
   const stockType = get(route, 'params.stockType');
 
@@ -252,12 +236,29 @@ const BrandModelFilterScreen = ({
       </Content>
       <View style={styles.resultButtonWrapper}>
         <Button
-          full
+          transparent
+          onPress={() => {
+            setModelFilter({type: 'clear'});
+            setBrandFilter({type: 'clear'});
+            _onChangeFilter({
+              brandFilter: {},
+              modelFilter: {},
+            });
+            setUpdateNestedList(!nestedListUpdate);
+            clearBrandModelFilters();
+          }}
+          style={[styles.modalButton]}>
+          <Text style={[styles.modalButtonText, styles.modalButtonTextCancel]}>
+            {strings.Base.reset}
+          </Text>
+        </Button>
+        <Button
           style={[
             styles.resultButton,
             styles.resultButtonEnabled,
             styleConst.shadow.default,
           ]}
+          block
           disabled={false}
           active={true}
           onPress={() => {
@@ -346,10 +347,14 @@ const styles = StyleSheet.create({
     bottom: isAndroid ? 10 : 30,
     alignItems: 'center',
     alignContent: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   resultButton: {
     zIndex: 99,
     borderRadius: 5,
+    width: '70%',
   },
   resultButtonEnabled: {
     backgroundColor: styleConst.color.blue,
@@ -357,6 +362,16 @@ const styles = StyleSheet.create({
   },
   resultButtonText: {
     textTransform: 'uppercase',
+  },
+  modalButtonText: {
+    color: styleConst.color.blue,
+    fontSize: 17,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+  },
+  modalButtonTextCancel: {
+    color: styleConst.color.greyText,
+    fontWeight: 'normal',
   },
 });
 

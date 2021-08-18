@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {
   Alert,
@@ -84,7 +84,7 @@ const mapDispatchToProps = {
   actionCarCostOrder,
 };
 
-class CarCostScreen extends Component {
+class CarCostScreen extends PureComponent {
   constructor(props) {
     super(props);
 

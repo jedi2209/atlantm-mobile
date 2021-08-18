@@ -135,7 +135,11 @@ class CallMeBackScreen extends React.Component {
           {
             text: 'ОК',
             onPress: () => {
-              NavigationService.reset();
+              if (this.props.route?.params && this.props.route.params?.goBack) {
+                NavigationService.goBack();
+              } else {
+                NavigationService.reset();
+              }
             },
           },
         ],
