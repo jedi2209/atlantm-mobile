@@ -331,4 +331,26 @@ export default StyleSheet.create({
     paddingHorizontal: '2%',
     marginBottom: 10,
   },
+  plateUsed: {
+    borderRadius: 10,
+    backgroundColor: '#0061ED',
+    paddingHorizontal: 12,
+    marginRight: 8,
+    height: 52,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  plateUsedText: {
+    color: '#d8d8d8',
+    fontSize: 14,
+    fontWeight: '300',
+    paddingBottom: 5,
+  },
+  plateUsedText2: {
+    color: styleConst.color.white,
+    fontSize: 14,
+    fontWeight: '600',
+  },
 });

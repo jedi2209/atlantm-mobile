@@ -27,12 +27,7 @@ import * as NavigationService from '../../../navigation/NavigationService';
 
 // redux
 import {connect} from 'react-redux';
-import {
-  actionFetchNewCarDetails,
-  actionOpenNewCarPhotoViewer,
-  actionCloseNewCarPhotoViewer,
-  actionUpdateNewCarPhotoViewerIndex,
-} from '../../actions';
+import {actionFetchNewCarDetails} from '../../actions';
 
 // components
 import PhotoSlider from '../../../core/components/PhotoSlider';
@@ -41,8 +36,7 @@ import ColorBox from '../../../core/components/ColorBox';
 import Badge from '../../../core/components/Badge';
 
 // helpers
-import {get, indexOf} from 'lodash';
-import getTheme from '../../../../native-base-theme/components';
+import {get} from 'lodash';
 import PropTypes from 'prop-types';
 import UserData from '../../../utils/user';
 import Analytics from '../../../utils/amplitude-analytics';
@@ -65,18 +59,12 @@ const mapStateToProps = ({catalog, dealer, profile, nav}) => {
     listBelarussia: dealer.listBelarussia,
     carDetails: catalog.newCar.carDetails.data,
     profile,
-    photoViewerItems: catalog.newCar.carDetails.photoViewerItems,
-    photoViewerVisible: catalog.newCar.carDetails.photoViewerVisible,
-    photoViewerIndex: catalog.newCar.carDetails.photoViewerIndex,
     isFetchingCarDetails: catalog.newCar.meta.isFetchingCarDetails,
   };
 };
 
 const mapDispatchToProps = {
   actionFetchNewCarDetails,
-  actionOpenNewCarPhotoViewer,
-  actionCloseNewCarPhotoViewer,
-  actionUpdateNewCarPhotoViewerIndex,
 };
 
 const ActiveComponentPlate = ({testID, onPress, children}) => {
@@ -205,30 +193,6 @@ class NewCarItemScreen extends PureComponent {
       }, 3000);
     }
   }
-
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   const {
-  //     carDetails,
-  //     dealerSelected,
-  //     photoViewerItems,
-  //     photoViewerIndex,
-  //     photoViewerVisible,
-  //     isFetchingCarDetails,
-  //   } = this.props;
-  //   const nav = nextProps.nav.newState;
-  //   const isActiveScreen =
-  //     nav.routes[nav.index].routeName === 'NewCarItemScreen';
-
-  //   return (
-  //     (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-  //     this.state.tabName !== nextState.tabName ||
-  //     photoViewerIndex !== nextProps.photoViewerIndex ||
-  //     photoViewerItems.length !== nextProps.photoViewerItems.length ||
-  //     photoViewerVisible !== nextProps.photoViewerVisible ||
-  //     isFetchingCarDetails !== nextProps.isFetchingCarDetails ||
-  //     get(carDetails, 'id.api') !== get(nextProps, 'carDetails.id.api')
-  //   );
-  // }
 
   onScroll = event => {
     const {navigation, route} = this.props;
@@ -364,13 +328,6 @@ class NewCarItemScreen extends PureComponent {
       isNewCar: true,
     });
   };
-
-  onClosePhoto = () => this.props.actionCloseNewCarPhotoViewer();
-
-  onPressPhoto = () => this.props.actionOpenNewCarPhotoViewer();
-
-  onChangePhotoIndex = index =>
-    this.props.actionUpdateNewCarPhotoViewerIndex(index);
 
   // renderDealer = (dealerName) => {
   //   return dealerName ? (
@@ -611,14 +568,7 @@ class NewCarItemScreen extends PureComponent {
   };
 
   render() {
-    const {
-      carDetails,
-      photoViewerIndex,
-      photoViewerItems,
-      photoViewerVisible,
-      isFetchingCarDetails,
-      route,
-    } = this.props;
+    const {carDetails, photoViewerItems, isFetchingCarDetails, route} = this.props;
 
     const badge = get(carDetails, 'badge', []);
 
@@ -691,6 +641,17 @@ class NewCarItemScreen extends PureComponent {
       colorName = colorName.toLowerCase();
     }
 
+    let photosData = [];
+    if (photos && photos.length) {
+      photos.map((el, index) => {
+        photosData.push({
+          url: el,
+          type: 'image',
+          index,
+        });
+      });
+    }
+
     return (
       <>
         <Container testID="NewCarItemScreen.Wrapper">
@@ -725,13 +686,10 @@ class NewCarItemScreen extends PureComponent {
                 </View>
               ) : null}
               <PhotoSlider
-                height={250}
-                photos={photos}
+                height={290}
+                photos={photosData}
                 resizeMode={isCarImgReal ? 'cover' : 'contain'}
-                paginationStyle={{marginBottom: -40}}
-                dotColor={isCarImgReal ? styleConst.color.white : null}
-                // onPressItem={() => this.onPressPhoto}
-                // onIndexChanged={() => this.onChangePhotoIndex}
+                dotColor={!isCarImgReal ? styleConst.color.black : null}
               />
             </View>
             <View
@@ -739,7 +697,7 @@ class NewCarItemScreen extends PureComponent {
                 styleConst.shadow.default,
                 styles.carTopWrapper,
                 {
-                  marginTop: isCarImgReal ? 25 : 25,
+                  marginTop: isCarImgReal ? 0 : 0,
                 },
               ]}>
               <View>
@@ -1072,16 +1030,6 @@ class NewCarItemScreen extends PureComponent {
                 }}
               />
             </View>
-            {photoViewerItems.length ? (
-              <PhotoViewer
-                index={photoViewerIndex}
-                visible={photoViewerVisible}
-                items={photoViewerItems}
-                enableScale={true}
-                // onChange={this.onChangePhotoIndex}
-                onPressClose={this.onClosePhoto}
-              />
-            ) : null}
           </Content>
         </Container>
         <View style={[styleConst.shadow.default, stylesFooter.footer]}>
