@@ -10,7 +10,6 @@ import Imager from '../../core/components/Imager';
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../style-const';
-import {strings} from '../../core/lang/const';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -21,6 +20,7 @@ const PhotoSlider = ({
   photos,
   paginationStyle,
   dotColor,
+  loop,
   onPressItem,
   resizeMode,
 }) => {
@@ -76,13 +76,13 @@ const PhotoSlider = ({
         // enableSnap={true}
         // lockScrollWhileSnapping={true}
         firstItem={firstItem}
-        loop={true}
+        loop={loop}
         data={entries}
         renderItem={renderItem}
         onLayout={() => {
-          if (entries.length > 3) {
+          if (entries.length > 3 && firstItem !== 0) {
             setTimeout(() => {
-              carouselRef?.current?.snapToItem(firstItem, false);
+              carouselRef?.current?.snapToItem(firstItem, true);
             }, 100);
           }
         }}
@@ -128,6 +128,7 @@ PhotoSlider.defaultProps = {
   dotColor: 'rgba(0,0,0,.2)',
   resizeMode: 'contain',
   firstItem: 0,
+  loop: false,
 };
 
 const styles = StyleSheet.create({
@@ -136,13 +137,13 @@ const styles = StyleSheet.create({
   },
   item: {
     width: screenWidth * 0.94,
-    height: 150,
+    height: 300,
     borderRadius: 5,
     flex: 1,
   },
   imageContainer: {
     marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
-    backgroundColor: 'white',
+    backgroundColor: styleConst.color.white,
     borderRadius: 5,
   },
   dotStyle: {

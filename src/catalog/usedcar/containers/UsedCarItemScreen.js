@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {
   View,
@@ -212,13 +213,14 @@ class UsedCarItemScreen extends Component {
         style={{
           flex: 1,
           flexDirection: 'column',
-          alignItems: 'flex-end',
+          alignItems: 'flex-start',
           minWidth: 100,
+          marginBottom: 12,
         }}>
         {isSale && (
           <Text
             style={{
-              fontSize: 14,
+              fontSize: 24,
               fontWeight: '600',
               color: '#D0021B',
             }}>
@@ -227,10 +229,9 @@ class UsedCarItemScreen extends Component {
         )}
         <Text
           style={{
-            lineHeight: 20,
-            fontSize: isSale ? 12 : 14,
+            fontSize: isSale ? 16 : 24,
             fontWeight: '600',
-            lineHeight: isSale ? 14 : 20,
+            lineHeight: isSale ? 18 : 30,
             color: '#000',
             textDecorationLine: isSale ? 'line-through' : 'none',
           }}>
@@ -379,11 +380,41 @@ class UsedCarItemScreen extends Component {
         <Container testID="UsedCarItemScreen.Wrapper">
           <Content>
             <StatusBar hidden />
+            <View
+              style={[
+                styles.modelBrandView,
+                {marginTop: 70, flexDirection: 'column'},
+              ]}>
+              <View
+                style={{
+                  marginBottom: 10,
+                  flexShrink: 1,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                }}>
+                <Text
+                  style={[
+                    styles.modelBrandText,
+                    {fontSize: 24, maxWidth: '90%'},
+                  ]}>
+                  {`${brandName} ${modelName}`}
+                </Text>
+                <Text
+                  style={[
+                    styles.modelBrandText,
+                    {fontSize: 24, minWidth: '10%'},
+                  ]}>
+                  {get(carDetails, 'year')}
+                </Text>
+              </View>
+              {this.renderPrice({carDetails, currency})}
+            </View>
             <View>
               {badge && badge.length ? (
                 <View
                   testID="NewCarItemScreen.BadgesWrapper"
-                  style={styles.badgesView}>
+                  style={[styles.badgesView, {left: 15}]}>
                   {badge.map((item, index) => {
                     if (item.name.toLowerCase() === 'спец.цена') {
                       item.name = strings.CarList.badges.specialPrice;
@@ -402,7 +433,7 @@ class UsedCarItemScreen extends Component {
                 </View>
               ) : null}
               <PhotoSlider
-                height={250}
+                height={290}
                 photos={photosData}
                 resizeMode={'cover'}
                 dotColor={styleConst.color.white}
@@ -417,18 +448,6 @@ class UsedCarItemScreen extends Component {
                 },
               ]}>
               <View>
-                <View style={styles.modelBrandView}>
-                  <View style={{marginBottom: 10, flexShrink: 1}}>
-                    <Text style={styles.modelBrandText}>
-                      {`${brandName} ${modelName}`}
-                    </Text>
-                    <Text style={styles.complectationText}>
-                      {get(carDetails, 'year')}
-                    </Text>
-                  </View>
-                  {this.renderPrice({carDetails, currency})}
-                </View>
-
                 <ScrollView
                   horizontal
                   showsHorizontalScrollIndicator={false}
@@ -451,8 +470,9 @@ class UsedCarItemScreen extends Component {
                         title={strings.NewCarItemScreen.plates.engine}
                         subtitle={
                           get(carDetails, 'engine.volume.short')
-                            ? get(carDetails, 'engine.volume.short').toFixed(1) +
-                              ' л. '
+                            ? get(carDetails, 'engine.volume.short').toFixed(
+                                1,
+                              ) + ' л. '
                             : '' + engineName
                         }
                       />
@@ -523,7 +543,8 @@ class UsedCarItemScreen extends Component {
                     </ReadMore>
                   </View>
                 ) : null}
-                {carDetails.creditAvailable || carDetails.customPriceAvailable ? (
+                {carDetails.creditAvailable ||
+                carDetails.customPriceAvailable ? (
                   <View style={styles.bodyButtonsContainer}>
                     {carDetails.creditAvailable ? (
                       <Button
@@ -666,7 +687,8 @@ class UsedCarItemScreen extends Component {
                                 <Text
                                   selectable={false}
                                   style={styles.sectionPropText}>
-                                  {strings.NewCarItemScreen.plates.gearbox.name}:
+                                  {strings.NewCarItemScreen.plates.gearbox.name}
+                                  :
                                 </Text>
                               </Col>
                               <Col style={styles.sectionValue}>
@@ -716,7 +738,8 @@ class UsedCarItemScreen extends Component {
                                 <Text
                                   selectable={false}
                                   style={styles.sectionPropText}>
-                                  {strings.NewCarItemScreen.tech.interior.title}:
+                                  {strings.NewCarItemScreen.tech.interior.title}
+                                  :
                                 </Text>
                               </Col>
                               <Col style={styles.sectionValue}>

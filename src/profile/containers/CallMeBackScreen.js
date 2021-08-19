@@ -12,17 +12,20 @@ import {
 // redux
 import {connect} from 'react-redux';
 import {get} from 'lodash';
-import {localUserDataUpdate} from '../../profile/actions';
-import {localDealerClear} from '../../dealer/actions';
 import {CALL_ME__SUCCESS, CALL_ME__FAIL} from '../../contacts/actionTypes';
 import * as NavigationService from '../../navigation/NavigationService';
 import Analytics from '../../utils/amplitude-analytics';
 
 import Form from '../../core/components/Form/Form';
 
+import {localUserDataUpdate} from '../../profile/actions';
+import {localDealerClear} from '../../dealer/actions';
+
 import {ERROR_NETWORK} from '../../core/const';
 import {strings} from '../../core/lang/const';
 import styleConst from '../../core/style-const';
+
+let callMe = require('../../contacts/actions').callMe;
 
 const mapStateToProps = ({dealer, profile, contacts, nav}) => {
   return {
@@ -56,8 +59,7 @@ const mapDispatchToProps = {
   callMe,
 };
 
-let isInternet,
-  callMe = null;
+let isInternet = null;
 class CallMeBackScreen extends PureComponent {
   constructor(props) {
     super(props);
@@ -172,9 +174,6 @@ class CallMeBackScreen extends PureComponent {
 
     const dealerID = this.state.dealerSelectedLocal.id;
 
-    if (callMe == null) {
-      callMe = require('../../contacts/actions').callMe;
-    }
     const action = await this.props.callMe({
       dealerID,
       name: name || '',
