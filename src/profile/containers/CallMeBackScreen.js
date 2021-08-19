@@ -1,27 +1,25 @@
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
-// redux
-import {connect} from 'react-redux';
-import {get} from 'lodash';
-import {callMe} from '../../contacts/actions';
-import {localUserDataUpdate} from '../../profile/actions';
-import {localDealerClear} from '../../dealer/actions';
-import {CALL_ME__SUCCESS, CALL_ME__FAIL} from '../../contacts/actionTypes';
-import * as NavigationService from '../../navigation/NavigationService';
-import Analytics from '../../utils/amplitude-analytics';
+import React, {PureComponent} from 'react';
 import {
   Alert,
   View,
   ScrollView,
   Keyboard,
   TouchableWithoutFeedback,
+  StyleSheet,
 } from 'react-native';
+// redux
+import {connect} from 'react-redux';
+import {get} from 'lodash';
+import {localUserDataUpdate} from '../../profile/actions';
+import {localDealerClear} from '../../dealer/actions';
+import {CALL_ME__SUCCESS, CALL_ME__FAIL} from '../../contacts/actionTypes';
+import * as NavigationService from '../../navigation/NavigationService';
+import Analytics from '../../utils/amplitude-analytics';
 
-import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
 
-import isInternet from '../../utils/internet';
 import {ERROR_NETWORK} from '../../core/const';
 import {strings} from '../../core/lang/const';
 import styleConst from '../../core/style-const';
@@ -57,7 +55,10 @@ const mapDispatchToProps = {
   localDealerClear,
   callMe,
 };
-class CallMeBackScreen extends React.Component {
+
+let isInternet,
+  callMe = null;
+class CallMeBackScreen extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -75,92 +76,7 @@ class CallMeBackScreen extends React.Component {
         : this.props.dealerSelected,
     };
     this.props.localDealerClear();
-  }
 
-  componentDidUpdate(prevProps) {
-    if (
-      this.props.dealerSelectedLocal &&
-      this.state.dealerSelectedLocal &&
-      this.props.dealerSelectedLocal.id !== this.state.dealerSelectedLocal.id
-    ) {
-      this.setState(
-        {
-          dealerSelectedLocal: this.props.dealerSelectedLocal,
-        },
-        () => {
-          return true;
-        },
-      );
-    }
-    return false;
-  }
-
-  onPressCallMe = async props => {
-    const isInternetExist = await isInternet();
-    let actionID = null;
-
-    if (this.props.route?.params && this.props.route.params?.actionID) {
-      actionID = this.props.route?.params?.actionID;
-    }
-
-    if (!isInternetExist) {
-      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
-    }
-
-    const name = [props.NAME, props.SECOND_NAME].filter(Boolean).join(' ');
-
-    this.setState({loading: true});
-
-    const dealerID = this.state.dealerSelectedLocal.id;
-
-    const action = await this.props.callMe({
-      dealerID,
-      name: name || '',
-      actionID,
-      phone: get(props, 'PHONE', ''),
-    });
-
-    if (action.type === CALL_ME__SUCCESS) {
-      const _this = this;
-      Analytics.logEvent('order', 'contacts/callme');
-      _this.props.localUserDataUpdate({
-        NAME: props.NAME,
-        SECOND_NAME: props.SECOND_NAME,
-        PHONE: props.PHONE,
-      });
-      Alert.alert(
-        strings.Notifications.success.title,
-        strings.Notifications.success.textOrder,
-        [
-          {
-            text: 'ОК',
-            onPress: () => {
-              if (this.props.route?.params && this.props.route.params?.goBack) {
-                NavigationService.goBack();
-              } else {
-                NavigationService.reset();
-              }
-            },
-          },
-        ],
-      );
-      this.setState({success: true, loading: false});
-    }
-
-    if (action.type === CALL_ME__FAIL) {
-      this.setState({loading: false});
-      setTimeout(
-        () =>
-          Alert.alert(
-            strings.Notifications.error.title,
-            strings.Notifications.error.text,
-          ),
-        100,
-      );
-    }
-  };
-
-  render() {
     this.FormConfig = {
       fields: {
         groups: [
@@ -216,31 +132,123 @@ class CallMeBackScreen extends React.Component {
         ],
       },
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      this.props.dealerSelectedLocal &&
+      this.state.dealerSelectedLocal &&
+      this.props.dealerSelectedLocal.id !== this.state.dealerSelectedLocal.id
+    ) {
+      this.setState(
+        {
+          dealerSelectedLocal: this.props.dealerSelectedLocal,
+        },
+        () => {
+          return true;
+        },
+      );
+    }
+    return false;
+  }
+
+  onPressCallMe = async props => {
+    if (isInternet == null) {
+      isInternet = require('../../utils/internet').default;
+    }
+    const isInternetExist = await isInternet();
+    if (!isInternetExist) {
+      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    }
+
+    let actionID = null;
+    if (this.props.route?.params && this.props.route.params?.actionID) {
+      actionID = this.props.route?.params?.actionID;
+    }
+
+    const name = [props.NAME, props.SECOND_NAME].filter(Boolean).join(' ');
+
+    this.setState({loading: true});
+
+    const dealerID = this.state.dealerSelectedLocal.id;
+
+    if (callMe == null) {
+      callMe = require('../../contacts/actions').callMe;
+    }
+    const action = await this.props.callMe({
+      dealerID,
+      name: name || '',
+      actionID,
+      phone: get(props, 'PHONE', ''),
+    });
+
+    if (action.type === CALL_ME__SUCCESS) {
+      const _this = this;
+      Analytics.logEvent('order', 'contacts/callme');
+      _this.props.localUserDataUpdate({
+        NAME: props.NAME,
+        SECOND_NAME: props.SECOND_NAME,
+        PHONE: props.PHONE,
+      });
+      Alert.alert(
+        strings.Notifications.success.title,
+        strings.Notifications.success.textOrder,
+        [
+          {
+            text: 'ОК',
+            onPress: () => {
+              if (this.props.route?.params && this.props.route.params?.goBack) {
+                NavigationService.goBack();
+              } else {
+                NavigationService.reset();
+              }
+            },
+          },
+        ],
+      );
+      this.setState({success: true, loading: false});
+    }
+
+    if (action.type === CALL_ME__FAIL) {
+      this.setState({loading: false});
+      setTimeout(
+        () =>
+          Alert.alert(
+            strings.Notifications.error.title,
+            strings.Notifications.error.text,
+          ),
+        100,
+      );
+    }
+  };
+
+  render() {
     return (
-      <KeyboardAvoidingView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={styleConst.form.scrollView}>
-            <View
-              style={{
-                flex: 1,
-                paddingTop: 20,
-                marginBottom: 160,
-                paddingHorizontal: 14,
-              }}>
-              <Form
-                fields={this.FormConfig.fields}
-                barStyle={'light-content'}
-                SubmitButton={{
-                  text: strings.CallMeBackScreen.button,
-                }}
-                onSubmit={this.onPressCallMe}
-              />
-            </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView style={styleConst.form.scrollView}>
+          <View style={styles.wrapper}>
+            <Form
+              fields={this.FormConfig.fields}
+              barStyle={'light-content'}
+              SubmitButton={{
+                text: strings.CallMeBackScreen.button,
+              }}
+              onSubmit={this.onPressCallMe}
+            />
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    paddingTop: 20,
+    marginBottom: 160,
+    paddingHorizontal: 14,
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(CallMeBackScreen);

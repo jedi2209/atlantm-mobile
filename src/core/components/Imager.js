@@ -6,7 +6,6 @@ import {Image, View, ActivityIndicator, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {SvgCssUri} from 'react-native-svg';
 import styleConst from '../style-const';
-import {verticalScale} from '../../utils/scale';
 
 const styles = StyleSheet.create({
   loader: {

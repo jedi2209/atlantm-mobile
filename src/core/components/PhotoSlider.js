@@ -1,148 +1,114 @@
 // base
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Image,
-  StyleSheet,
-  ActivityIndicator,
-  Dimensions,
-  Platform,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import React, {useRef, useState, useEffect} from 'react';
+import {View, StyleSheet, Dimensions, Platform, Pressable} from 'react-native';
+import {Button, Icon} from 'native-base';
 
 // components
-import Swiper from 'react-native-swiper';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+import Imager from '../../core/components/Imager';
 
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../style-const';
+import {strings} from '../../core/lang/const';
 
-const {width} = Dimensions.get('window');
-
-const styles = StyleSheet.create({
-  container: {
-    zIndex: 10,
-  },
-  photoSlider: {
-    width,
-    position: 'relative',
-    padding: 0,
-    zIndex: 10,
-  },
-  item: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 0,
-    zIndex: 10,
-  },
-  image: {
-    alignSelf: 'center',
-    width,
-    padding: 0,
-    zIndex: 10,
-  },
-  spinner: {
-    position: 'absolute',
-    alignSelf: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-    padding: 10,
-  },
-});
-
-const Slide = props => {
-  return (
-    <View style={[styles.item, {height: props.height}]}>
-      <TouchableWithoutFeedback onPress={props.onPress}>
-        <Image
-          resizeMode={props.resizeMode}
-          style={[styles.image, {height: props.height}]}
-          onLoad={props.loadHandle.bind(null, props.i)}
-          source={{
-            uri: props.url,
-            width: props.width,
-            height: props.height,
-          }}
-        />
-      </TouchableWithoutFeedback>
-      {!props.loaded && (
-        <ActivityIndicator
-          size="large"
-          color={styleConst.color.blue}
-          style={styles.spinner}
-        />
-      )}
-    </View>
-  );
-};
+const {width: screenWidth} = Dimensions.get('window');
 
 const PhotoSlider = ({
   height,
+  firstItem,
+  styleWrapper,
   photos,
   paginationStyle,
   dotColor,
-  onIndexChanged,
   onPressItem,
   resizeMode,
 }) => {
-  const [isLoaded, setLoaded] = useState(false);
-  const [loadQueue, setLoadQueue] = useState({});
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const [entries, setEntries] = useState([]);
+  const carouselRef = useRef(null);
 
   useEffect(() => {
-    setLoadQueue(new Array(photos.length).fill(0));
-  }, [photos.length]);
+    setEntries(photos);
+  }, [photos]);
 
-  const _loadHandle = i => {
-    let loadQueueTmp = {};
-    loadQueueTmp[i] = 1;
-    setLoadQueue(loadQueueTmp);
+  const renderItem = ({item, index}) => {
+    let priority = 'low';
+    switch (index) {
+      case 0:
+      case 1:
+        priority = 'high';
+        break;
+      case 2:
+      case 3:
+        priority = 'normal';
+        break;
+    }
+    if (item.url && item?.type === 'image') {
+      return (
+        <Pressable onPress={onPressItem} style={[styles.item, {height}]}>
+          <Imager
+            key={'Imager-' + item.url}
+            resizeMode={resizeMode}
+            priority={priority}
+            source={{
+              uri: item.url,
+            }}
+            style={[styles.imageContainer, {height}]}
+          />
+        </Pressable>
+      );
+    }
   };
 
-  // Супер грязный хак, триггерим изменение высота для обновления слайдера
-  // по-другому починить не получилось, попробовал много вариантов.
-  // p.s. нравится компонент, хотел оставить.
-  if (Platform.OS === 'android' && !isLoaded) {
-    // if (Platform.OS === 'android') {
-    setTimeout(() => {
-      setLoaded(true);
-    }, 5);
-  }
-
   return (
-    <Swiper
-      id={1}
-      containerStyle={styles.container}
-      paginationStyle={[
-        {
-          marginBottom: 5,
-        },
-        paginationStyle,
-      ]}
-      dotColor={dotColor}
-      showsButtons={false}
-      autoplay={false}
-      showsPagination={true}
-      height={height}
-      rootStyle={styles.photoSlider}
-      loadMinimal={true}
-      onIndexChanged={onIndexChanged}>
-      {photos.map((photo, idx) => {
-        return (
-          <Slide
-            onPress={onPressItem}
-            resizeMode={resizeMode}
-            height={height}
-            loadHandle={_loadHandle}
-            loaded={!!loadQueue[idx]}
-            url={photo}
-            i={idx}
-            key={photo}
-          />
-        );
-      })}
-    </Swiper>
+    <View style={[styles.container, styleWrapper]}>
+      <Carousel
+        ref={carouselRef}
+        sliderWidth={screenWidth}
+        sliderHeight={height}
+        itemWidth={screenWidth * 0.95}
+        inactiveSlideOpacity={1}
+        inactiveSlideScale={1}
+        removeClippedSubviews={false}
+        useScrollView={true}
+        // enableSnap={true}
+        // lockScrollWhileSnapping={true}
+        firstItem={firstItem}
+        loop={true}
+        data={entries}
+        renderItem={renderItem}
+        onLayout={() => {
+          if (entries.length > 3) {
+            setTimeout(() => {
+              carouselRef?.current?.snapToItem(firstItem, false);
+            }, 100);
+          }
+        }}
+        onSnapToItem={index => setActiveSlide(index)}
+      />
+      {dotColor ? (
+        <Pagination
+          dotsLength={entries.length}
+          activeDotIndex={activeSlide}
+          containerStyle={[styles.paginationStyle, paginationStyle]}
+          dotStyle={[
+            styles.dotStyle,
+            {
+              backgroundColor: dotColor,
+            },
+          ]}
+          inactiveDotStyle={
+            {
+              // Define styles for inactive dots here
+            }
+          }
+          inactiveDotOpacity={0.4}
+          inactiveDotScale={0.6}
+        />
+      ) : null}
+    </View>
   );
 };
 
@@ -161,6 +127,34 @@ PhotoSlider.defaultProps = {
   paginationStyle: {},
   dotColor: 'rgba(0,0,0,.2)',
   resizeMode: 'contain',
+  firstItem: 0,
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  item: {
+    width: screenWidth * 0.94,
+    height: 150,
+    borderRadius: 5,
+    flex: 1,
+  },
+  imageContainer: {
+    marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
+    backgroundColor: 'white',
+    borderRadius: 5,
+  },
+  dotStyle: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+  },
+  paginationStyle: {
+    position: 'absolute',
+    bottom: 0,
+    justifyContent: 'space-between',
+  },
+});
 
 export default PhotoSlider;

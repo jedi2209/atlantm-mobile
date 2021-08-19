@@ -24,16 +24,10 @@ import {
 
 // redux
 import {connect} from 'react-redux';
-import {
-  actionFetchUsedCarDetails,
-  actionOpenUsedCarPhotoViewer,
-  actionCloseUsedCarPhotoViewer,
-  actionUpdateUsedCarPhotoViewerIndex,
-} from '../../actions';
+import {actionFetchUsedCarDetails} from '../../actions';
 
 // components
 import PhotoSlider from '../../../core/components/PhotoSlider';
-import PhotoViewer from '../../../core/components/PhotoViewer';
 import ReadMore from 'react-native-read-more-text';
 import Badge from '../../../core/components/Badge';
 
@@ -43,7 +37,6 @@ import PropTypes from 'prop-types';
 import Analytics from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
 import numberWithGap from '../../../utils/number-with-gap';
-import getTheme from '../../../../native-base-theme/components';
 import showPrice from '../../../utils/price';
 import {strings} from '../../../core/lang/const';
 
@@ -65,37 +58,14 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
 
 const mapDispatchToProps = {
   actionFetchUsedCarDetails,
-  actionOpenUsedCarPhotoViewer,
-  actionCloseUsedCarPhotoViewer,
-  actionUpdateUsedCarPhotoViewerIndex,
 };
 
 const OptionPlate = ({title, subtitle}) => (
-  <View
-    style={{
-      borderRadius: 10,
-      backgroundColor: '#0061ED',
-      paddingHorizontal: 12,
-      marginRight: 8,
-      height: 52,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-    }}>
-    <Text
-      selectable={false}
-      style={{
-        color: '#d8d8d8',
-        fontSize: 14,
-        fontWeight: '300',
-        paddingBottom: 5,
-      }}>
+  <View style={styles.plateUsed}>
+    <Text selectable={false} style={styles.plateUsedText}>
       {title}
     </Text>
-    <Text
-      selectable={false}
-      style={{color: styleConst.color.white, fontSize: 14, fontWeight: '600'}}>
+    <Text selectable={false} style={styles.plateUsedText2}>
       {subtitle}
     </Text>
   </View>
@@ -141,14 +111,7 @@ class UsedCarItemScreen extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const {
-      carDetails,
-      dealerSelected,
-      photoViewerItems,
-      photoViewerIndex,
-      photoViewerVisible,
-      isFetchingCarDetails,
-    } = this.props;
+    const {carDetails, dealerSelected, isFetchingCarDetails} = this.props;
     const nav = nextProps.nav.newState;
     const isActiveScreen =
       nav.routes[nav.index].routeName === 'UsedCarItemScreen';
@@ -156,9 +119,6 @@ class UsedCarItemScreen extends Component {
     return (
       (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
       this.state.tabName !== nextState.tabName ||
-      photoViewerIndex !== nextProps.photoViewerIndex ||
-      photoViewerItems.length !== nextProps.photoViewerItems.length ||
-      photoViewerVisible !== nextProps.photoViewerVisible ||
       isFetchingCarDetails !== nextProps.isFetchingCarDetails ||
       get(carDetails, 'id.api') !== get(nextProps, 'carDetails.id.api')
     );
@@ -231,13 +191,6 @@ class UsedCarItemScreen extends Component {
       isNewCar: false,
     });
   };
-
-  onClosePhoto = () => this.props.actionCloseUsedCarPhotoViewer();
-
-  onPressPhoto = () => this.props.actionOpenUsedCarPhotoViewer();
-
-  onChangePhotoIndex = index =>
-    this.props.actionUpdateUsedCarPhotoViewerIndex(index);
 
   selectBaseTab = () => this.setState({tabName: 'base'});
 
@@ -339,13 +292,7 @@ class UsedCarItemScreen extends Component {
   };
 
   render() {
-    const {
-      carDetails,
-      photoViewerIndex,
-      photoViewerItems,
-      photoViewerVisible,
-      isFetchingCarDetails,
-    } = this.props;
+    const {carDetails, isFetchingCarDetails} = this.props;
 
     const currency = get(this.props.route, 'params.currency');
     this.props.navigation.setParams({
@@ -418,6 +365,15 @@ class UsedCarItemScreen extends Component {
       colorName = colorName.toLowerCase();
     }
 
+    let photosData = [];
+    photos.map((el, index) => {
+      photosData.push({
+        url: el,
+        type: 'image',
+        index,
+      });
+    });
+
     return (
       <>
         <Container testID="UsedCarItemScreen.Wrapper">
@@ -446,13 +402,10 @@ class UsedCarItemScreen extends Component {
                 </View>
               ) : null}
               <PhotoSlider
-                height={310}
-                photos={photos}
+                height={250}
+                photos={photosData}
                 resizeMode={'cover'}
-                paginationStyle={{marginBottom: 0}}
                 dotColor={styleConst.color.white}
-                // onPressItem={() => this.onPressPhoto}
-                // onIndexChanged={() => this.onChangePhotoIndex}
               />
             </View>
             <View
@@ -913,11 +866,7 @@ class UsedCarItemScreen extends Component {
                 type="MaterialCommunityIcons"
                 name="steering"
                 selectable={false}
-                style={{
-                  color: styleConst.color.white,
-                  fontSize: 24,
-                  marginTop: -2,
-                }}
+                style={styles.iconTDButton}
               />
               <Text style={styles.buttonText} selectable={false}>
                 {strings.NewCarItemScreen.show}
@@ -998,6 +947,11 @@ const stylesFooter = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     minWidth: 100,
+  },
+  iconTDButton: {
+    color: styleConst.color.white,
+    fontSize: 24,
+    marginTop: -2,
   },
 });
 
