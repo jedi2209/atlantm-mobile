@@ -692,14 +692,7 @@ class NewCarItemScreen extends PureComponent {
                 dotColor={!isCarImgReal ? styleConst.color.black : null}
               />
             </View>
-            <View
-              style={[
-                styleConst.shadow.default,
-                styles.carTopWrapper,
-                {
-                  marginTop: isCarImgReal ? 0 : 0,
-                },
-              ]}>
+            <View style={[styleConst.shadow.default, styles.carTopWrapper]}>
               <View>
                 <View style={styles.modelBrandView}>
                   <View style={{marginBottom: 10, flexShrink: 1}}>
