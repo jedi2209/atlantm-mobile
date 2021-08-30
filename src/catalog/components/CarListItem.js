@@ -120,41 +120,39 @@ const CarListItem = ({
         style={[
           styles.priceContainer,
           {
-            marginBottom: CarImgReal ? 0 : 5,
+            marginTop: CarImgReal ? 0 : 5,
           },
         ]}>
-        <View style={styles.flexRow}>
-          {isSale ? (
-            <>
-              <Text
-                style={[
-                  styles.price,
-                  {
-                    color: CarImgReal ? styleConst.color.white : '#2A2A43',
-                  },
-                  styles.priceSpecial,
-                ]}>
-                {showPrice(CarPrices.sale, dealerSelected.region)}
-              </Text>
-              {badge &&
-                badge.map((item, index) => {
-                  if (item.name.toLowerCase() === 'спец.цена') {
-                    item.name = strings.CarList.badges.specialPrice;
-                  }
-                  return (
-                    <Badge
-                      id={car.id.api}
-                      key={'badgeItem' + car.id.api + index}
-                      index={index}
-                      bgColor={item.background}
-                      name={item.name}
-                      textColor={item.textColor}
-                    />
-                  );
-                })}
-            </>
-          ) : null}
-        </View>
+        {isSale ? (
+          <View style={styles.flexRow}>
+            <Text
+              style={[
+                styles.price,
+                {
+                  color: CarImgReal ? styleConst.color.white : '#2A2A43',
+                },
+                styles.priceSpecial,
+              ]}>
+              {showPrice(CarPrices.sale, dealerSelected.region)}
+            </Text>
+            {badge &&
+              badge.map((item, index) => {
+                if (item.name.toLowerCase() === 'спец.цена') {
+                  item.name = strings.CarList.badges.specialPrice;
+                }
+                return (
+                  <Badge
+                    id={car.id.api}
+                    key={'badgeItem' + car.id.api + index}
+                    index={index}
+                    bgColor={item.background}
+                    name={item.name}
+                    textColor={item.textColor}
+                  />
+                );
+              })}
+          </View>
+        ) : null}
         <View style={styles.flexRow}>
           <Text
             style={[
@@ -389,8 +387,10 @@ const CarListItem = ({
     return (
       <View
         style={{
-          height: itemScreen === 'NewCarItemScreen' ? 210 : 190,
-          marginTop: 45,
+          height: itemScreen === 'NewCarItemScreen' ? 170 : 190,
+          position: 'relative',
+          marginTop: 40,
+          backgroundColor: styleConst.color.white,
         }}>
         <ImageCarousel
           style={[
@@ -482,12 +482,12 @@ const CarListItem = ({
                   selectable={false}
                   numberOfLines={1}>
                   {`${modelName || ''} ${complectationName}`}
+                  {year ? ' ' + year : null}
                 </Text>
-                {year ? (
-                  <Text style={styles.year} selectable={false}>
-                    {year + ' ' + strings.NewCarItemScreen.shortUnits.year}
-                  </Text>
-                ) : null}
+                {_renderPrice({
+                  car,
+                  prices,
+                })}
               </View>
             </View>
           ) : (
@@ -506,6 +506,10 @@ const CarListItem = ({
                   {year + ' ' + strings.NewCarItemScreen.shortUnits.year}
                 </Text>
               ) : null}
+              {_renderPrice({
+                car,
+                prices,
+              })}
             </>
           )}
         </Pressable>
@@ -523,12 +527,7 @@ const CarListItem = ({
                     (CarImgReal ? (isSale ? -80 : -60) : -20),
                 }
               : null,
-          ]}>
-          {_renderPrice({
-            car,
-            prices,
-          })}
-        </Pressable>
+          ]}></Pressable>
         <Pressable
           onPress={!ordered ? _onPress : _onPressOrder}
           style={styles.carTechContainer}>
@@ -647,13 +646,12 @@ const styles = StyleSheet.create({
   },
   priceContainer: {
     flexDirection: 'column',
-    marginHorizontal: '5%',
   },
   priceDefault: {
     textDecorationLine: 'line-through',
     fontSize: 12,
-    marginTop: 4,
-    color: '#8d99ae',
+    marginTop: 2,
+    color: styleConst.color.greyText2,
   },
   priceSpecial: {
     color: '#e63946',
@@ -661,20 +659,20 @@ const styles = StyleSheet.create({
   },
   year: {
     color: styleConst.color.greyText4,
-    fontSize: 12,
+    fontSize: 15,
     zIndex: 10,
     marginVertical: 5,
   },
   title: {
     color: styleConst.color.greyText4,
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     zIndex: 10,
   },
   price: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    zIndex: 20,
+    fontSize: 16,
+    fontWeight: '600',
+    zIndex: 10,
   },
   priceBackground: {
     flex: 1,
@@ -725,6 +723,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginLeft: '5%',
+    marginTop: 20,
     zIndex: 20,
     justifyContent: 'space-between',
   },
