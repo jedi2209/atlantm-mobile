@@ -88,7 +88,7 @@ export default StyleSheet.create({
   buttonText: {
     color: styleConst.color.white,
     fontFamily: styleConst.font.medium,
-    fontSize: 16,
+    fontSize: 14,
     letterSpacing: styleConst.ui.letterSpacing,
     textTransform: 'uppercase',
   },
@@ -196,6 +196,17 @@ export default StyleSheet.create({
     color: styleConst.color.greyText,
     fontFamily: styleConst.font.regular,
     fontStyle: 'italic',
+  },
+  additionalServiceIcon: {
+    fontSize: 24,
+    marginLeft: 0,
+    marginRight: 5,
+    color: styleConst.color.blue,
+  },
+  additionalServiceText: {
+    color: styleConst.color.greyText4,
+    fontFamily: styleConst.font.regular,
+    lineHeight: 22,
   },
   bodyButtonsContainer: {
     flex: 1,

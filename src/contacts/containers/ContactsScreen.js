@@ -31,6 +31,7 @@ import {Offer} from '../../core/components/Offer';
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
 import orderFunctions from '../../utils/orders';
+import getStatusWorktime from '../../utils/worktime-status';
 import {get} from 'lodash';
 import styleConst from '../../core/style-const';
 import {ERROR_NETWORK} from '../../core/const';
@@ -258,77 +259,13 @@ class ContactsScreen extends Component {
     });
   };
 
-  getStatusWorktime = (divisions, checkType) => {
-    if (!divisions || !checkType) {
-      return false;
-    }
-    const locales = {
-      by: 'Europe/Minsk',
-      ru: 'Europe/Moscow',
-      ua: 'Europe/Kiev',
-    };
-    let currentDealerLocale = 'by';
-    if (
-      this.props.dealerSelected.region &&
-      locales[this.props.dealerSelected.region]
-    ) {
-      currentDealerLocale = locales[this.props.dealerSelected.region];
-    }
-    const res = divisions
-      .map(division => {
-        const currDate = new Date();
-        const today = currDate.getDay() - 1;
-        if (
-          division.worktime &&
-          division.worktime[today] &&
-          division.type &&
-          division.type[checkType]
-        ) {
-          const currTime = currDate.getTime();
-          const worktime = division.worktime[today];
-          const timeOpen = new Date();
-          const timeClose = new Date();
-          timeOpen.setHours(worktime.start.hour, worktime.start.min, 0);
-          timeClose.setHours(worktime.finish.hour, worktime.finish.min, 0);
-
-          if (currTime > timeOpen.getTime() && currTime < timeClose.getTime()) {
-            return true;
-          } else {
-            return false;
-          }
-        }
-      })
-      .filter(function (element) {
-        return element !== undefined;
-      });
-    if (res && res.length && res[0]) {
-      return res[0];
-    } else {
-      const currDate = new Date();
-      const currTimezone = currDate.getTimezoneOffset();
-      const currTime = currDate.getTime();
-      const timeOpen = new Date();
-      const timeClose = new Date();
-      timeOpen.setHours(9, 0, 0);
-      timeClose.setHours(20, 0, 0);
-
-      if (currTime > timeOpen.getTime() && currTime < timeClose.getTime()) {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  };
-
   _onAppRateSuccess = () => {
     !this.props.isAppRated && this.props.actionAppRated();
   };
 
   render() {
     const {dealerSelected, navigation, list, isFetchInfoList} = this.props;
-
-    const PHONES = [];
-    const phones = get(dealerSelected, 'phone', PHONES);
+    const phones = get(dealerSelected, 'phone', []);
 
     return (
       <View style={styleConst.safearea.default} testID="ContactsScreen.Wrapper">
@@ -401,19 +338,13 @@ class ContactsScreen extends Component {
                 <Plate
                   title={strings.ContactsScreen.call}
                   status={
-                    this.getStatusWorktime(
-                      get(dealerSelected, 'divisions', null),
-                      'RC',
-                    )
+                    getStatusWorktime(dealerSelected, 'RC')
                       ? 'enabled'
                       : 'disabled'
                   }
                   subtitle={phones[0]}
                   onPress={() => {
-                    const isOpened = this.getStatusWorktime(
-                      get(dealerSelected, 'divisions', null),
-                      'RC',
-                    );
+                    const isOpened = getStatusWorktime(dealerSelected, 'RC');
                     if (!isOpened) {
                       Alert.alert(
                         strings.ContactsScreen.closedDealer.title,

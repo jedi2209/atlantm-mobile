@@ -387,16 +387,16 @@ const CarListItem = ({
     return (
       <View
         style={{
-          height: itemScreen === 'NewCarItemScreen' ? 170 : 190,
+          height: 170,
           position: 'relative',
-          marginTop: 40,
+          marginTop: itemScreen === 'NewCarItemScreen' ? 40 : 75,
           backgroundColor: styleConst.color.white,
         }}>
         <ImageCarousel
           style={[
             ordered ? styles.ordered : {},
             {
-              paddingVertical: 10,
+              paddingVertical: itemScreen === 'NewCarItemScreen' ? 10 : 0,
             },
           ]}
           resizeMode={resizeMode}
@@ -491,26 +491,22 @@ const CarListItem = ({
               </View>
             </View>
           ) : (
-            <>
+            <View>
               <Text
                 style={styles.title}
                 ellipsizeMode="tail"
                 selectable={false}
                 numberOfLines={1}>
-                {`${get(car, 'brand.name')} ${
-                  modelName || ''
-                } ${complectationName}`}
+                {`${get(car, 'brand.name')} ${modelName} ${complectationName} `}
+                {year
+                  ? year + ' ' + strings.NewCarItemScreen.shortUnits.year
+                  : null}
               </Text>
-              {year ? (
-                <Text style={styles.year}>
-                  {year + ' ' + strings.NewCarItemScreen.shortUnits.year}
-                </Text>
-              ) : null}
               {_renderPrice({
                 car,
                 prices,
               })}
-            </>
+            </View>
           )}
         </Pressable>
         {_renderImage({
@@ -665,12 +661,12 @@ const styles = StyleSheet.create({
   },
   title: {
     color: styleConst.color.greyText4,
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 15,
+    fontWeight: '500',
     zIndex: 10,
   },
   price: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
     zIndex: 10,
   },

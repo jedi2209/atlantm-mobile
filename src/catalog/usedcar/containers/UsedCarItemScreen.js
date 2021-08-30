@@ -8,7 +8,10 @@ import {
   TouchableWithoutFeedback,
   StatusBar,
   StyleSheet,
+  Pressable,
   ScrollView,
+  Alert,
+  Linking,
 } from 'react-native';
 import {
   Container,
@@ -19,7 +22,6 @@ import {
   Icon,
   Grid,
   Button,
-  StyleProvider,
   Accordion,
 } from 'native-base';
 
@@ -40,6 +42,7 @@ import styleConst from '../../../core/style-const';
 import numberWithGap from '../../../utils/number-with-gap';
 import showPrice from '../../../utils/price';
 import {strings} from '../../../core/lang/const';
+import getStatusWorktime from '../../../utils/worktime-status';
 
 // styles
 import styles from '../../CarStyles';
@@ -82,6 +85,7 @@ class UsedCarItemScreen extends Component {
 
     this.platesScrollView = React.createRef();
     this.state = {tabName: 'base'};
+    this.openStatus = getStatusWorktime(this.props.dealerSelected, 'RC', true);
   }
 
   componentDidMount() {
@@ -193,6 +197,37 @@ class UsedCarItemScreen extends Component {
     });
   };
 
+  onPressCallMe = () => {
+    const {navigation, carDetails, dealerSelected} = this.props;
+    const phones = get(dealerSelected, 'phone', []);
+    const phoneManager = get(carDetails, 'carDetails.phone.manager');
+    if (!this.openStatus) {
+      Alert.alert(
+        strings.ContactsScreen.closedDealer.title,
+        strings.ContactsScreen.closedDealer.text,
+        [
+          {
+            text: strings.ContactsScreen.closedDealer.no,
+            style: 'cancel',
+          },
+          {
+            text: strings.ContactsScreen.closedDealer.yes,
+            onPress: () => {
+              navigation.navigate('CallMeBackScreen');
+            },
+          },
+        ],
+        {cancelable: false},
+      );
+    } else {
+      Linking.openURL(
+        'tel:' + phoneManager
+          ? phoneManager
+          : phones[0].replace(/[^+\d]+/g, ''),
+      );
+    }
+  };
+
   selectBaseTab = () => this.setState({tabName: 'base'});
 
   selectOptionsTab = () => this.setState({tabName: 'options'});
@@ -216,6 +251,7 @@ class UsedCarItemScreen extends Component {
           alignItems: 'flex-start',
           minWidth: 100,
           marginBottom: 12,
+          marginTop: 10,
         }}>
         {isSale && (
           <Text
@@ -238,6 +274,79 @@ class UsedCarItemScreen extends Component {
           {showPrice(CarPrices.standart, this.props.dealerSelected.region)}
         </Text>
       </View>
+    );
+  };
+
+  renderAdditionalServices = element => {
+    if (!element) {
+      return false;
+    }
+
+    return (
+      <View style={{flexDirection: 'row', width: '90%'}}>
+        <Icon
+          type="MaterialCommunityIcons"
+          name="check"
+          style={styles.additionalServiceIcon}
+        />
+        <Text
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          style={styles.additionalServiceText}>
+          {element.name}
+        </Text>
+      </View>
+    );
+  };
+
+  renderCarCostBlock = () => {
+    return (
+      <Pressable
+        onPress={() => {
+          this.props.navigation.navigate('CarCostScreen');
+        }}
+        style={{
+          height: 150,
+          width: '96%',
+          marginHorizontal: '2%',
+          marginBottom: 20,
+          backgroundColor: styleConst.color.greyBlue,
+          borderRadius: 5,
+          paddingHorizontal: 20,
+          paddingVertical: 10,
+        }}>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            fontFamily: styleConst.font.medium,
+            color: styleConst.color.white,
+            width: '60%',
+            marginBottom: 20,
+          }}>
+          Обменяйте свой автомобиль на этот
+        </Text>
+        <Text
+          style={{
+            fontSize: 16,
+            fontFamily: styleConst.font.regular,
+            color: styleConst.color.bg,
+            width: '70%',
+          }}>
+          Оставьте заявку на трейд-ин и мы примем ваш авто в зачёт этого
+        </Text>
+        <Icon
+          type="MaterialCommunityIcons"
+          name="car-multiple"
+          style={{
+            position: 'absolute',
+            fontSize: 102,
+            right: 10,
+            top: 30,
+            color: styleConst.color.white,
+          }}
+        />
+      </Pressable>
     );
   };
 
@@ -321,6 +430,7 @@ class UsedCarItemScreen extends Component {
     }
     const brandName = get(carDetails, 'brand.name');
     const modelName = get(carDetails, 'model.name');
+    const generationName = get(carDetails, 'model.generation.name');
     const additional = get(carDetails, 'options.additional.1.data', []);
     const badge = get(carDetails, 'badge', null);
     const isSale = carDetails.sale === true;
@@ -387,7 +497,6 @@ class UsedCarItemScreen extends Component {
               ]}>
               <View
                 style={{
-                  marginBottom: 10,
                   flexShrink: 1,
                   display: 'flex',
                   flexDirection: 'row',
@@ -396,18 +505,19 @@ class UsedCarItemScreen extends Component {
                 <Text
                   style={[
                     styles.modelBrandText,
-                    {fontSize: 24, maxWidth: '90%'},
+                    {fontSize: 22, maxWidth: '90%'},
                   ]}>
                   {`${brandName} ${modelName}`}
                 </Text>
                 <Text
                   style={[
                     styles.modelBrandText,
-                    {fontSize: 24, minWidth: '10%'},
+                    {fontSize: 22, minWidth: '10%'},
                   ]}>
                   {get(carDetails, 'year')}
                 </Text>
               </View>
+              <Text style={styles.modelBrandText}>{generationName}</Text>
               {this.renderPrice({carDetails, currency})}
             </View>
             <View>
@@ -541,8 +651,12 @@ class UsedCarItemScreen extends Component {
                       onReady={this._handleTextReady}>
                       <Text style={styles.descr}>{carDetails.text}</Text>
                     </ReadMore>
+                    {get(carDetails, 'additionalServices', []).map((el, i) =>
+                      this.renderAdditionalServices(el),
+                    )}
                   </View>
                 ) : null}
+                {this.renderCarCostBlock()}
                 {carDetails.creditAvailable ||
                 carDetails.customPriceAvailable ? (
                   <View style={styles.bodyButtonsContainer}>
@@ -882,18 +996,30 @@ class UsedCarItemScreen extends Component {
               testID="UsedCarItemScreen.Button.TestDrive"
               onPress={this.onPressTestDrive}
               full
-              iconLeft
               style={[stylesFooter.button, stylesFooter.buttonLeft]}
               activeOpacity={0.8}>
               <Icon
                 type="MaterialCommunityIcons"
                 name="steering"
                 selectable={false}
-                style={styles.iconTDButton}
+                style={stylesFooter.iconTDButton}
               />
               <Text style={styles.buttonText} selectable={false}>
                 {strings.NewCarItemScreen.show}
               </Text>
+            </Button>
+            <Button
+              testID="UsedCarItemScreen.Button.CallMe"
+              onPress={this.onPressCallMe}
+              full
+              style={[stylesFooter.button, stylesFooter.buttonCenter]}
+              activeOpacity={0.8}>
+              <Icon
+                type="MaterialCommunityIcons"
+                name="phone"
+                selectable={false}
+                style={stylesFooter.iconCallButton}
+              />
             </Button>
             <Button
               testID="UsedCarItemScreen.Button.Order"
@@ -931,7 +1057,7 @@ const stylesFooter = StyleSheet.create({
     flexDirection: 'row',
   },
   button: {
-    width: '50%',
+    width: '38%',
     height: 40,
     borderWidth: 1,
   },
@@ -939,6 +1065,11 @@ const stylesFooter = StyleSheet.create({
     borderBottomLeftRadius: 5,
     backgroundColor: styleConst.color.orange,
     borderColor: styleConst.color.orange,
+  },
+  buttonCenter: {
+    width: '24%',
+    backgroundColor: styleConst.color.green,
+    borderColor: styleConst.color.green,
   },
   buttonRight: {
     borderBottomRightRadius: 5,
@@ -973,8 +1104,17 @@ const stylesFooter = StyleSheet.create({
   },
   iconTDButton: {
     color: styleConst.color.white,
+    fontSize: 20,
+    marginTop: -2,
+    marginRight: 2,
+    marginLeft: 0,
+  },
+  iconCallButton: {
+    color: styleConst.color.white,
     fontSize: 24,
     marginTop: -2,
+    marginRight: 0,
+    marginLeft: 0,
   },
 });
 
