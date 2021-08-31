@@ -456,6 +456,8 @@ class UsedCarItemScreen extends Component {
       engineName = strings.CarParams.engine[engineId];
     }
 
+    const engineVolumeShort = get(carDetails, 'engine.volume.short');
+
     const bodyId = get(carDetails, 'body.id');
     let bodyName = get(carDetails, 'body.name');
     if (bodyId) {
@@ -517,7 +519,9 @@ class UsedCarItemScreen extends Component {
                   {get(carDetails, 'year')}
                 </Text>
               </View>
-              <Text style={styles.modelBrandText}>{generationName}</Text>
+              {generationName ? (
+                <Text style={styles.modelBrandText}>{generationName}</Text>
+              ) : null}
               {this.renderPrice({carDetails, currency})}
             </View>
             <View>
@@ -579,10 +583,8 @@ class UsedCarItemScreen extends Component {
                       <OptionPlate
                         title={strings.NewCarItemScreen.plates.engine}
                         subtitle={
-                          get(carDetails, 'engine.volume.short')
-                            ? get(carDetails, 'engine.volume.short').toFixed(
-                                1,
-                              ) + ' л. '
+                          engineVolumeShort
+                            ? engineVolumeShort.toFixed(1) + ' л. '
                             : '' + engineName
                         }
                       />

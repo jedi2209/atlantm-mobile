@@ -594,6 +594,7 @@ class NewCarItemScreen extends PureComponent {
     const currency = get(route, 'params.currency');
     const brandName = get(carDetails, 'brand.name');
     const modelName = get(carDetails, 'model.name');
+    const generationName = get(carDetails, 'model.generation.name');
 
     const gearboxId = get(carDetails, 'gearbox.id');
     let gearboxName = get(carDetails, 'gearbox.name');
@@ -606,6 +607,8 @@ class NewCarItemScreen extends PureComponent {
     if (engineId) {
       engineName = strings.CarParams.engine[engineId];
     }
+
+    const engineVolumeShort = get(carDetails, 'engine.volume.short');
 
     const bodyId = get(carDetails, 'body.id');
     let bodyName = get(carDetails, 'body.name');
@@ -705,6 +708,9 @@ class NewCarItemScreen extends PureComponent {
                         get(carDetails, 'year')}
                     </Text>
                   </View>
+                  {generationName ? (
+                    <Text style={styles.modelBrandText}>{generationName}</Text>
+                  ) : null}
                   {this.renderPrice({carDetails, currency})}
                 </View>
 
@@ -728,15 +734,14 @@ class NewCarItemScreen extends PureComponent {
                       testID="NewCarItemScreen.Plates.Complectation"
                       subtitle={get(carDetails, 'complectation.name')}
                     />
-                    {get(carDetails, 'engine.id') &&
-                    get(carDetails, 'engine.id') !== 4 ? (
+                    {engineId && engineId !== 4 ? (
                       <OptionPlate
                         title={strings.NewCarItemScreen.plates.engine}
                         testID="NewCarItemScreen.Plates.Engine"
                         subtitle={
-                          get(carDetails, 'engine.volume.short').toFixed(1) +
-                          ' л. ' +
-                          get(carDetails, 'engine.type')
+                          engineVolumeShort
+                            ? engineVolumeShort.toFixed(1) + ' л. '
+                            : '' + get(carDetails, 'engine.type')
                         }
                       />
                     ) : null}
