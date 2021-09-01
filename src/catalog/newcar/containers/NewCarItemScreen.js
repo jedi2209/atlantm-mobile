@@ -700,7 +700,7 @@ class NewCarItemScreen extends PureComponent {
                 <View style={styles.modelBrandView}>
                   <View style={{marginBottom: 10, flexShrink: 1}}>
                     <Text style={styles.modelBrandText}>
-                      {[brandName, modelName].join(' ')}
+                      {[brandName, modelName, generationName].join(' ')}
                     </Text>
                     <Text style={styles.complectationText}>
                       {[
@@ -709,9 +709,9 @@ class NewCarItemScreen extends PureComponent {
                       ].join(', ')}
                     </Text>
                   </View>
-                  {generationName ? (
+                  {/* {generationName ? (
                     <Text style={styles.modelBrandText}>{generationName}</Text>
-                  ) : null}
+                  ) : null} */}
                   {this.renderPrice({carDetails, currency})}
                 </View>
 

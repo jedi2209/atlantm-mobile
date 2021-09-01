@@ -287,8 +287,8 @@ class UsedCarItemScreen extends Component {
           style={styles.additionalServiceIcon}
         />
         <Text
-          numberOfLines={1}
-          ellipsizeMode="tail"
+          // numberOfLines={1}
+          // ellipsizeMode="tail"
           style={styles.additionalServiceText}>
           {element.name}
         </Text>
@@ -316,7 +316,8 @@ class UsedCarItemScreen extends Component {
           height: 150,
           width: '96%',
           marginHorizontal: '2%',
-          marginBottom: 20,
+          marginBottom: 90,
+          marginTop: 10,
           backgroundColor: styleConst.color.greyBlue,
           borderRadius: 5,
           paddingHorizontal: 20,
@@ -324,7 +325,7 @@ class UsedCarItemScreen extends Component {
         }}>
         <Text
           style={{
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: 'bold',
             fontFamily: styleConst.font.medium,
             color: styleConst.color.white,
@@ -335,7 +336,7 @@ class UsedCarItemScreen extends Component {
         </Text>
         <Text
           style={{
-            fontSize: 16,
+            fontSize: 15,
             fontFamily: styleConst.font.regular,
             color: styleConst.color.bg,
             width: '70%',
@@ -522,22 +523,24 @@ class UsedCarItemScreen extends Component {
                     styles.modelBrandText,
                     {fontSize: 22, maxWidth: '90%'},
                   ]}>
-                  {`${brandName} ${modelName}`}
+                  {[brandName, modelName].join(' ')}
                 </Text>
                 <Text
                   style={[
                     styles.modelBrandText,
                     {fontSize: 22, minWidth: '10%'},
                   ]}>
-                  {get(carDetails, 'year')}
+                  {[
+                    get(carDetails, 'year'),
+                    strings.NewCarItemScreen.shortUnits.year,
+                  ].join(' ')}
                 </Text>
               </View>
               {generationName ? (
                 <Text style={styles.modelBrandText}>{generationName}</Text>
               ) : null}
-              {this.renderPrice({carDetails, currency})}
             </View>
-            <View>
+            <View style={{marginTop: 10}}>
               {badge && badge.length ? (
                 <View
                   testID="NewCarItemScreen.BadgesWrapper"
@@ -671,7 +674,6 @@ class UsedCarItemScreen extends Component {
                     )}
                   </View>
                 ) : null}
-                {this.renderCarCostBlock()}
                 {carDetails.creditAvailable ||
                 carDetails.customPriceAvailable ? (
                   <View style={styles.bodyButtonsContainer}>
@@ -965,6 +967,7 @@ class UsedCarItemScreen extends Component {
                   );
                 }}
               />
+              {this.renderCarCostBlock()}
             </View>
           </Content>
         </Container>

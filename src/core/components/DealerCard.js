@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const _getSite = (sites) => {
+const _getSite = sites => {
   if (typeof sites === 'undefined' || !sites) {
     return null;
   }
@@ -72,15 +72,15 @@ const _getSite = (sites) => {
 
   let res = [];
 
-  sites.forEach((val) => {
+  sites.forEach(val => {
     res.push(val.replace(/^(?:https?:\/\/)?(?:www\.)?/i, '').split('/')[0]);
   });
   return res.join('\r\n');
 };
 
-const DealerCard = (props) => {
+const DealerCard = props => {
   const {item} = props;
-  const CarImg = get(item, 'img.10000x440');
+  const CarImg = get(item, 'img.thumb');
   const sites = get(item, 'site');
   return (
     <Body style={styles.body} testID={`DealerCard_${item.id}`}>
@@ -95,7 +95,7 @@ const DealerCard = (props) => {
         <View style={styles.brands}>
           {item.brands &&
             item.brands.length &&
-            item.brands.map((brand) => {
+            item.brands.map(brand => {
               return (
                 <BrandLogo
                   brand={brand.id}
@@ -112,7 +112,7 @@ const DealerCard = (props) => {
           <Imager
             key={`dealer-cover-' + ${item.id}`}
             style={styles.image}
-            source={{uri: CarImg}}
+            source={{uri: CarImg + '600x600'}}
           />
         </View>
       ) : null}

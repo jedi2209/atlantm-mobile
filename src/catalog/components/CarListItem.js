@@ -387,9 +387,9 @@ const CarListItem = ({
     return (
       <View
         style={{
-          height: 170,
+          height: itemScreen === 'NewCarItemScreen' ? 180 : 170,
           position: 'relative',
-          marginTop: itemScreen === 'NewCarItemScreen' ? 40 : 75,
+          marginTop: itemScreen === 'NewCarItemScreen' ? 60 : 75,
           backgroundColor: styleConst.color.white,
         }}>
         <ImageCarousel
@@ -400,7 +400,7 @@ const CarListItem = ({
             },
           ]}
           resizeMode={resizeMode}
-          height={170}
+          height={itemScreen === 'NewCarItemScreen' ? 150 : 170}
           data={photos}
           onPressCustom={!ordered ? _onPress : _onPressOrder}
         />
@@ -719,7 +719,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginLeft: '5%',
-    marginTop: 20,
+    marginTop: 10,
     zIndex: 20,
     justifyContent: 'space-between',
   },
