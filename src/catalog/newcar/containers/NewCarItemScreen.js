@@ -700,12 +700,13 @@ class NewCarItemScreen extends PureComponent {
                 <View style={styles.modelBrandView}>
                   <View style={{marginBottom: 10, flexShrink: 1}}>
                     <Text style={styles.modelBrandText}>
-                      {`${brandName} ${modelName}`}
+                      {[brandName, modelName].join(' ')}
                     </Text>
                     <Text style={styles.complectationText}>
-                      {get(carDetails, 'complectation.name', '') +
-                        ' ' +
-                        get(carDetails, 'year')}
+                      {[
+                        get(carDetails, 'complectation.name', ''),
+                        get(carDetails, 'year'),
+                      ].join(', ')}
                     </Text>
                   </View>
                   {generationName ? (
@@ -796,10 +797,10 @@ class NewCarItemScreen extends PureComponent {
                           style={styles.mapCardDealer}
                           numberOfLines={1}
                           ellipsizeMode="tail">
-                          {`${get(carDetails, 'location.city.name')}, ${get(
-                            carDetails,
-                            'location.name',
-                          )}`}
+                          {[
+                            get(carDetails, 'location.city.name'),
+                            get(carDetails, 'location.name'),
+                          ].join(', ')}
                         </Text>
                       </View>
                     </View>
