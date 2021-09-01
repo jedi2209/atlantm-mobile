@@ -116,6 +116,12 @@ class CarCostScreen extends PureComponent {
         get(carFromNavigation, 'model'),
       ].join(' ');
     }
+
+    console.log('this.props.route.params', this.props.route.params);
+
+    if (this.props.route?.params && this.props.route.params?.Text) {
+      this.Text = this.props.route?.params?.Text;
+    }
   }
 
   static propTypes = {
@@ -477,7 +483,7 @@ class CarCostScreen extends PureComponent {
                 name: 'COMMENT',
                 type: 'textarea',
                 label: strings.Form.field.label.comment,
-                value: this.props.Text,
+                value: this.Text,
                 props: {
                   placeholder: strings.Form.field.placeholder.comment,
                 },

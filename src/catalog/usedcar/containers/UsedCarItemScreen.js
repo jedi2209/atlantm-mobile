@@ -52,6 +52,7 @@ const mapStateToProps = ({catalog, dealer, nav}) => {
     nav,
     dealerSelected: dealer.selected,
     listCities: dealer.listCities,
+    listDealers: dealer.listDealers,
     carDetails: catalog.usedCar.carDetails.data,
     photoViewerItems: catalog.usedCar.carDetails.photoViewerItems,
     photoViewerVisible: catalog.usedCar.carDetails.photoViewerVisible,
@@ -197,10 +198,8 @@ class UsedCarItemScreen extends Component {
     });
   };
 
-  onPressCallMe = () => {
-    const {navigation, carDetails, dealerSelected} = this.props;
-    const phones = get(dealerSelected, 'phone', []);
-    const phoneManager = get(carDetails, 'carDetails.phone.manager');
+  onPressCallMe = phone => {
+    const {navigation, carDetails, listDealers} = this.props;
     if (!this.openStatus) {
       Alert.alert(
         strings.ContactsScreen.closedDealer.title,
@@ -213,18 +212,16 @@ class UsedCarItemScreen extends Component {
           {
             text: strings.ContactsScreen.closedDealer.yes,
             onPress: () => {
-              navigation.navigate('CallMeBackScreen');
+              navigation.navigate('CallMeBackScreen', {
+                dealerCustom: listDealers[carDetails.dealer.id],
+              });
             },
           },
         ],
         {cancelable: false},
       );
     } else {
-      Linking.openURL(
-        'tel:' + phoneManager
-          ? phoneManager
-          : phones[0].replace(/[^+\d]+/g, ''),
-      );
+      Linking.openURL('tel:' + phone);
     }
   };
 
@@ -300,10 +297,20 @@ class UsedCarItemScreen extends Component {
   };
 
   renderCarCostBlock = () => {
+    const {navigation, carDetails} = this.props;
     return (
       <Pressable
         onPress={() => {
-          this.props.navigation.navigate('CarCostScreen');
+          navigation.navigate('CarCostScreen', {
+            Text:
+              'Интересует обмен на ' +
+              [
+                get(carDetails, 'brand.name'),
+                get(carDetails, 'model.name'),
+                get(carDetails, 'model.generation.name'),
+                '#' + get(carDetails, 'id.sap', null),
+              ].join(' '),
+          });
         }}
         style={{
           height: 150,
@@ -402,7 +409,7 @@ class UsedCarItemScreen extends Component {
   };
 
   render() {
-    const {carDetails, isFetchingCarDetails} = this.props;
+    const {carDetails, isFetchingCarDetails, listDealers} = this.props;
 
     const currency = get(this.props.route, 'params.currency');
     this.props.navigation.setParams({
@@ -443,6 +450,12 @@ class UsedCarItemScreen extends Component {
         get(carDetails, 'price.app'),
       ),
     };
+
+    const phone = get(
+      carDetails,
+      'carDetails.phone.manager',
+      get(listDealers[carDetails.dealer.id], 'phone', null),
+    );
 
     const gearboxId = get(carDetails, 'gearbox.id');
     let gearboxName = get(carDetails, 'gearbox.name');
@@ -998,7 +1011,11 @@ class UsedCarItemScreen extends Component {
               testID="UsedCarItemScreen.Button.TestDrive"
               onPress={this.onPressTestDrive}
               full
-              style={[stylesFooter.button, stylesFooter.buttonLeft]}
+              style={[
+                stylesFooter.button,
+                stylesFooter.buttonLeft,
+                phone ? stylesFooter.buttonThree : stylesFooter.buttonTwo,
+              ]}
               activeOpacity={0.8}>
               <Icon
                 type="MaterialCommunityIcons"
@@ -1010,24 +1027,30 @@ class UsedCarItemScreen extends Component {
                 {strings.NewCarItemScreen.show}
               </Text>
             </Button>
-            <Button
-              testID="UsedCarItemScreen.Button.CallMe"
-              onPress={this.onPressCallMe}
-              full
-              style={[stylesFooter.button, stylesFooter.buttonCenter]}
-              activeOpacity={0.8}>
-              <Icon
-                type="MaterialCommunityIcons"
-                name="phone"
-                selectable={false}
-                style={stylesFooter.iconCallButton}
-              />
-            </Button>
+            {phone ? (
+              <Button
+                testID="UsedCarItemScreen.Button.CallMe"
+                onPress={() => this.onPressCallMe(phone)}
+                full
+                style={[stylesFooter.button, stylesFooter.buttonCenter]}
+                activeOpacity={0.8}>
+                <Icon
+                  type="MaterialCommunityIcons"
+                  name="phone"
+                  selectable={false}
+                  style={stylesFooter.iconCallButton}
+                />
+              </Button>
+            ) : null}
             <Button
               testID="UsedCarItemScreen.Button.Order"
               onPress={this.onPressOrder}
               full
-              style={[stylesFooter.button, stylesFooter.buttonRight]}
+              style={[
+                stylesFooter.button,
+                stylesFooter.buttonRight,
+                phone ? stylesFooter.buttonThree : stylesFooter.buttonTwo,
+              ]}
               activeOpacity={0.8}>
               <Text style={styles.buttonText} selectable={false}>
                 {strings.NewCarItemScreen.wannaCar}
@@ -1059,9 +1082,14 @@ const stylesFooter = StyleSheet.create({
     flexDirection: 'row',
   },
   button: {
-    width: '38%',
     height: 40,
     borderWidth: 1,
+  },
+  buttonTwo: {
+    width: '50%',
+  },
+  buttonThree: {
+    width: '38%',
   },
   buttonLeft: {
     borderBottomLeftRadius: 5,
