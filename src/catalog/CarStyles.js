@@ -289,7 +289,6 @@ export default StyleSheet.create({
   accordion: {
     borderBottomColor: '#d5d5e0',
     borderBottomWidth: 1,
-    marginBottom: 140,
   },
   accordionHeader: {
     height: 64,

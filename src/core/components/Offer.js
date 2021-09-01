@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 });
 
 export const Offer = ({data, height, cardWidth, theme}) => {
-  const currLang = useSelector((state) => state.core.language.selected);
+  const currLang = useSelector(state => state.core.language.selected);
   const params = {
     id: data.item.id,
     date: data.item.date,
@@ -40,7 +40,7 @@ export const Offer = ({data, height, cardWidth, theme}) => {
   };
   return (
     <TouchableWithoutFeedback
-      testID='OfferItemWrapper'
+      testID="OfferItemWrapper"
       onPress={() => {
         NavigationService.navigate('InfoPostScreen', params);
       }}
