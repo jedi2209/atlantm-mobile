@@ -2,6 +2,7 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {View, StyleSheet, Dimensions, Platform, Pressable} from 'react-native';
 import {Button, Icon} from 'native-base';
+import { useNavigation } from '@react-navigation/native';
 
 // components
 import Carousel, {Pagination} from 'react-native-snap-carousel';
@@ -18,16 +19,21 @@ const PhotoSlider = ({
   firstItem,
   styleWrapper,
   photos,
+  photosFull,
   paginationStyle,
   dotColor,
   loop,
   onPressItem,
   resizeMode,
+  themeFull,
+  fullScreen,
 }) => {
   const [activeSlide, setActiveSlide] = useState(0);
 
   const [entries, setEntries] = useState([]);
   const carouselRef = useRef(null);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     setEntries(photos);
@@ -46,8 +52,20 @@ const PhotoSlider = ({
         break;
     }
     if (item.url && item?.type === 'image') {
+      let onPress = onPressItem;
+      if (photosFull) {
+        onPress = () => {
+          navigation.navigate(fullScreen, {
+            images: photosFull,
+            imageIndex: index,
+            theme: themeFull,
+          });
+        };
+      }
       return (
-        <Pressable onPress={onPressItem} style={[styles.item, {height}]}>
+        <Pressable
+          onPress={onPress ? onPress : onPressItem}
+          style={[styles.item, {height}]}>
           <Imager
             key={'Imager-' + item.url}
             resizeMode={resizeMode}
@@ -129,6 +147,8 @@ PhotoSlider.defaultProps = {
   resizeMode: 'contain',
   firstItem: 0,
   loop: false,
+  themeFull: 'black',
+  fullScreen: 'FullScreenGallery',
 };
 
 const styles = StyleSheet.create({

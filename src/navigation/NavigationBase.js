@@ -24,6 +24,7 @@ import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRating
 
 import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
+import FullScreenGallery from '../core/components/FullScreenGallery';
 
 // Filters
 import MainFilterScreen from '../catalog/containers/filters/MainFilterScreen';
@@ -217,6 +218,19 @@ export const Base = ({navigation, route}) => {
         component={CarsStock}
         options={{headerShown: false}}
       />
+      <StackBase.Group>
+        <StackBase.Screen
+          name="FullScreenGallery"
+          component={FullScreenGallery}
+          options={{
+            presentation: 'transparentModal',
+            headerShown: false,
+            orientation: 'all',
+            statusBarHidden: true,
+            gestureEnabled: false,
+          }}
+        />
+      </StackBase.Group>
       {/* Заявки */}
       <StackOrders.Screen
         name="ServiceScreen"

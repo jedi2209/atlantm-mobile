@@ -389,7 +389,7 @@ const CarListItem = ({
         style={{
           height: itemScreen === 'NewCarItemScreen' ? 180 : 170,
           position: 'relative',
-          marginTop: itemScreen === 'NewCarItemScreen' ? 60 : 75,
+          marginTop: itemScreen === 'NewCarItemScreen' ? 70 : 75,
           backgroundColor: styleConst.color.white,
         }}>
         <ImageCarousel
@@ -481,8 +481,7 @@ const CarListItem = ({
                   ellipsizeMode="tail"
                   selectable={false}
                   numberOfLines={1}>
-                  {`${modelName || ''} ${complectationName}`}
-                  {year ? ' ' + year : null}
+                  {[modelName, complectationName, year].join(' ')}
                 </Text>
                 {_renderPrice({
                   car,

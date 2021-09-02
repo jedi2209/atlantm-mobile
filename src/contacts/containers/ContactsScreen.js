@@ -17,6 +17,7 @@ import {Text, Icon, Button, ActionSheet, Toast} from 'native-base';
 import BrandLogo from '../../core/components/BrandLogo';
 import Plate from '../../core/components/Plate';
 import RateThisApp from '../../core/components/RateThisApp';
+import Imager from '../../core/components/Imager';
 
 // redux
 import {connect} from 'react-redux';
@@ -304,9 +305,9 @@ class ContactsScreen extends Component {
           }}
           showsHorizontalScrollIndicator={false}
           bounces={false}>
-          <Image
+          <Imager
             style={styles.imgHero}
-            source={{uri: get(dealerSelected, 'img.10000x440')}}
+            source={{uri: get(dealerSelected, 'img.thumb') + '1000x1000'}}
           />
           <View style={{marginTop: HEADER_MAX_HEIGHT - 65}}>
             <View style={styles.blackBack} />
