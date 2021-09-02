@@ -363,4 +363,23 @@ export default StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
+  itemCallButton: {
+    height: 40,
+    width: '47%',
+    justifyContent: 'center',
+  },
+  iconButtonSm: {
+    marginRight: 5,
+    marginLeft: 10,
+  },
+  iconTextSm: {
+    fontSize: 16,
+    color: styleConst.color.white,
+  },
+  itemOrderCall: {
+    backgroundColor: styleConst.color.greyBlue,
+  },
+  itemOrderCallBack: {
+    backgroundColor: styleConst.color.green,
+  },
 });

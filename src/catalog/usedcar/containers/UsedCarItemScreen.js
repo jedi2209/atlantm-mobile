@@ -16,7 +16,6 @@ import {
 import {
   Container,
   Content,
-  Footer,
   Col,
   Row,
   Icon,
@@ -198,7 +197,7 @@ class UsedCarItemScreen extends Component {
     });
   };
 
-  onPressCallMe = phone => {
+  onPressCall = phone => {
     const {navigation, carDetails, listDealers} = this.props;
     if (!this.openStatus) {
       Alert.alert(
@@ -223,6 +222,13 @@ class UsedCarItemScreen extends Component {
     } else {
       Linking.openURL('tel:' + phone);
     }
+  };
+
+  onPressCallMe = () => {
+    const {navigation, carDetails, listDealers} = this.props;
+    navigation.navigate('CallMeBackScreen', {
+      dealerCustom: listDealers[carDetails.dealer.id],
+    });
   };
 
   selectBaseTab = () => this.setState({tabName: 'base'});
@@ -410,10 +416,11 @@ class UsedCarItemScreen extends Component {
   };
 
   render() {
-    const {carDetails, isFetchingCarDetails, listDealers} = this.props;
+    const {carDetails, isFetchingCarDetails, listDealers, navigation} =
+      this.props;
 
     const currency = get(this.props.route, 'params.currency');
-    this.props.navigation.setParams({
+    navigation.setParams({
       carDetails: carDetails,
     });
 
@@ -431,9 +438,11 @@ class UsedCarItemScreen extends Component {
     console.info('== UsedCarItemScreen ==');
 
     let photos = [];
-    if (get(carDetails, 'img.original')) {
-      get(carDetails, 'img.original').forEach(element => {
-        photos.push(element + '?d=440x400');
+    let photosFull = [];
+    if (get(carDetails, 'img.thumb')) {
+      get(carDetails, 'img.thumb').forEach(element => {
+        photos.push(element + '1200x600');
+        photosFull.push({uri: element + '1600x1600'});
       });
     }
     const brandName = get(carDetails, 'brand.name');
@@ -455,8 +464,8 @@ class UsedCarItemScreen extends Component {
     const phone = get(
       carDetails,
       'carDetails.phone.manager',
-      get(listDealers[carDetails.dealer.id], 'phone', null),
-    );
+      get(listDealers[carDetails.dealer.id], 'phone', ''),
+    ).replace(/[^+\d]+/g, '');
 
     const gearboxId = get(carDetails, 'gearbox.id');
     let gearboxName = get(carDetails, 'gearbox.name');
@@ -563,10 +572,12 @@ class UsedCarItemScreen extends Component {
                 </View>
               ) : null}
               <PhotoSlider
-                height={290}
+                height={300}
+                photosFull={photosFull}
                 photos={photosData}
                 resizeMode={'cover'}
                 dotColor={styleConst.color.white}
+                paginationStyle={{bottom: -20}}
               />
             </View>
             <View
@@ -574,7 +585,7 @@ class UsedCarItemScreen extends Component {
                 styleConst.shadow.default,
                 styles.carTopWrapper,
                 {
-                  marginTop: -25,
+                  marginTop: 10,
                 },
               ]}>
               <View>
@@ -660,6 +671,54 @@ class UsedCarItemScreen extends Component {
                     </View>
                   </TouchableWithoutFeedback>
                 ) : null}
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginHorizontal: '2%',
+                    justifyContent: phone ? 'space-between' : 'center',
+                  }}>
+                  <Button
+                    onPress={() => {
+                      this.onPressCallMe();
+                    }}
+                    full={!phone ? true : false}
+                    iconLeft
+                    style={[
+                      !phone
+                        ? stylesFooter.buttonOnlyOne
+                        : styles.itemCallButton,
+                      styles.itemOrderCallBack,
+                      {borderRadius: 5},
+                    ]}>
+                    <Icon
+                      type="MaterialCommunityIcons"
+                      name="phone-incoming"
+                      selectable={false}
+                      style={styles.iconButtonSm}
+                    />
+                    <Text style={styles.iconTextSm}>
+                      {strings.ContactsScreen.callOrder}
+                    </Text>
+                  </Button>
+                  {phone ? (
+                    <Button
+                      onPress={() => {
+                        this.onPressCall(phone);
+                      }}
+                      iconLeft
+                      style={[styles.itemCallButton, styles.itemOrderCall]}>
+                      <Icon
+                        type="MaterialCommunityIcons"
+                        name="phone-outgoing"
+                        selectable={false}
+                        style={styles.iconButtonSm}
+                      />
+                      <Text style={styles.iconTextSm}>
+                        {strings.ContactsScreen.call}
+                      </Text>
+                    </Button>
+                  ) : null}
+                </View>
                 {carDetails.text ? (
                   <View style={styles.descrContainer}>
                     <ReadMore
@@ -1016,8 +1075,8 @@ class UsedCarItemScreen extends Component {
               full
               style={[
                 stylesFooter.button,
+                stylesFooter.buttonTwo,
                 stylesFooter.buttonLeft,
-                phone ? stylesFooter.buttonThree : stylesFooter.buttonTwo,
               ]}
               activeOpacity={0.8}>
               <Icon
@@ -1030,29 +1089,14 @@ class UsedCarItemScreen extends Component {
                 {strings.NewCarItemScreen.show}
               </Text>
             </Button>
-            {phone ? (
-              <Button
-                testID="UsedCarItemScreen.Button.CallMe"
-                onPress={() => this.onPressCallMe(phone)}
-                full
-                style={[stylesFooter.button, stylesFooter.buttonCenter]}
-                activeOpacity={0.8}>
-                <Icon
-                  type="MaterialCommunityIcons"
-                  name="phone"
-                  selectable={false}
-                  style={stylesFooter.iconCallButton}
-                />
-              </Button>
-            ) : null}
             <Button
               testID="UsedCarItemScreen.Button.Order"
               onPress={this.onPressOrder}
               full
               style={[
                 stylesFooter.button,
+                stylesFooter.buttonTwo,
                 stylesFooter.buttonRight,
-                phone ? stylesFooter.buttonThree : stylesFooter.buttonTwo,
               ]}
               activeOpacity={0.8}>
               <Text style={styles.buttonText} selectable={false}>

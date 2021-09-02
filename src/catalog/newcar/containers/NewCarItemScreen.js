@@ -568,7 +568,13 @@ class NewCarItemScreen extends PureComponent {
   };
 
   render() {
-    const {carDetails, photoViewerItems, isFetchingCarDetails, route} = this.props;
+    const {
+      carDetails,
+      navigation,
+      photoViewerItems,
+      isFetchingCarDetails,
+      route,
+    } = this.props;
 
     const badge = get(carDetails, 'badge', []);
 
@@ -623,16 +629,19 @@ class NewCarItemScreen extends PureComponent {
     }
 
     let photos = [];
+    let photosFull = [];
     let isCarImgReal = false;
     if (get(carDetails, 'imgReal.thumb.0')) {
       // 105
       isCarImgReal = true;
       get(carDetails, 'imgReal.thumb').forEach(element => {
         photos.push(element + '1000x1000');
+        photosFull.push({uri: element + '1000x1000'});
       });
     } else {
       get(carDetails, 'img.thumb').forEach(element => {
         photos.push(element + '1000x440');
+        photosFull.push({uri: element + '1000x1000'});
       });
     }
 
@@ -690,12 +699,19 @@ class NewCarItemScreen extends PureComponent {
               ) : null}
               <PhotoSlider
                 height={290}
+                photosFull={photosFull}
+                themeFull={'white'}
                 photos={photosData}
                 resizeMode={isCarImgReal ? 'cover' : 'contain'}
                 dotColor={!isCarImgReal ? styleConst.color.black : null}
               />
             </View>
-            <View style={[styleConst.shadow.default, styles.carTopWrapper]}>
+            <View
+              style={[
+                styleConst.shadow.default,
+                styles.carTopWrapper,
+                {marginTop: -20},
+              ]}>
               <View>
                 <View style={styles.modelBrandView}>
                   <View style={{marginBottom: 10, flexShrink: 1}}>
@@ -709,9 +725,6 @@ class NewCarItemScreen extends PureComponent {
                       ].join(', ')}
                     </Text>
                   </View>
-                  {/* {generationName ? (
-                    <Text style={styles.modelBrandText}>{generationName}</Text>
-                  ) : null} */}
                   {this.renderPrice({carDetails, currency})}
                 </View>
 
@@ -808,7 +821,7 @@ class NewCarItemScreen extends PureComponent {
                 ) : null}
               </View>
               <Accordion
-                style={styles.accordion}
+                style={[styles.accordion, {marginBottom: 140}]}
                 dataArray={[
                   {
                     title: strings.NewCarItemScreen.tech.title,

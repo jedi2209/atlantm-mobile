@@ -8204,6 +8204,11 @@ react-native-image-transformer@^1.5.1:
     prop-types "^15.6.2"
     react-native-easy-view-transformer "^1.2.0"
 
+react-native-image-viewing@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-image-viewing/-/react-native-image-viewing-0.2.0.tgz#3c0bc67cfb9aa7607cec632139d7ef4c45e07e4e"
+  integrity sha512-j2JXv86WRXGNme4LPsNCJ/2MgX+oVbmJ5ZLbGrYbKXcCPe9OshqlQI5L3SdbAxWu/F5pubcMaXp0zoYNaZVuzA==
+
 react-native-in-app-review@^3.2.1:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/react-native-in-app-review/-/react-native-in-app-review-3.2.2.tgz#3f433c0d8f8578160f47614550b3a6beef015db9"

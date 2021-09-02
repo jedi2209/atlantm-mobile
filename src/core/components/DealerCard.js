@@ -88,7 +88,7 @@ const DealerCard = props => {
         {item.name ? <Text style={styles.name}>{item.name}</Text> : null}
         {item.city ? (
           <Text style={styles.city}>
-            {item.city.name + ', ' + item.address}
+            {[item.city.name, item.address].join(', ')}
           </Text>
         ) : null}
         <Text style={styles.site}>{_getSite(sites)}</Text>
@@ -112,7 +112,7 @@ const DealerCard = props => {
           <Imager
             key={`dealer-cover-' + ${item.id}`}
             style={styles.image}
-            source={{uri: CarImg + '600x600'}}
+            source={{uri: CarImg + '500x500'}}
           />
         </View>
       ) : null}
