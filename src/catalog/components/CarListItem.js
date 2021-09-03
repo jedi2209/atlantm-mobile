@@ -25,6 +25,7 @@ import {connect} from 'react-redux';
 import numberWithGap from '../../utils/number-with-gap';
 import showPrice from '../../utils/price';
 import UserData from '../../utils/user';
+import getStatusWorktime from '../../utils/worktime-status';
 import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
 
@@ -359,6 +360,11 @@ const CarListItem = ({
           });
         },
         onPressCall: () => {
+          // const openStatus = getStatusWorktime(
+          //   dealerList[car.dealer.id],
+          //   'RC',
+          //   true,
+          // );
           let phone = dealerList[car.dealer.id]?.phone;
           if (car?.manager?.phone) {
             phone = car.manager.phone;

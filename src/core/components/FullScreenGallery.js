@@ -40,6 +40,7 @@ const FullScreenGallery = ({
       imageIndex={imageIndex}
       visible={visible}
       presentationStyle={'overFullScreen'}
+      swipeToCloseEnabled={false}
       onRequestClose={() => {
         setIsVisible(false);
         navigation.goBack();

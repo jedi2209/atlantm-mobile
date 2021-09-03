@@ -706,7 +706,11 @@ class UsedCarItemScreen extends Component {
                         this.onPressCall(phone);
                       }}
                       iconLeft
-                      style={[styles.itemCallButton, styles.itemOrderCall]}>
+                      style={[
+                        styles.itemCallButton,
+                        styles.itemOrderCall,
+                        {borderRadius: 5},
+                      ]}>
                       <Icon
                         type="MaterialCommunityIcons"
                         name="phone-outgoing"

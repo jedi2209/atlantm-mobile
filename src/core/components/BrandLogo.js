@@ -51,9 +51,15 @@ const BrandLogo = props => {
     );
   } else {
     if (props.brands && props.brands[props.brand]) {
+      console.log('props.brands[props.brand]', props.brands[props.brand]);
       return (
         <Imager
           resizeMode="contain"
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+          key={props.brands[props.brand].hash}
           source={{uri: props.brands[props.brand].logo}}
           {...props}
         />
