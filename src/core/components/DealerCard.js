@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
   brandLogo: {
     marginRight: 10,
     height: 25,
+    width: 40,
   },
   name: {
     fontFamily: styleConst.font.regular,

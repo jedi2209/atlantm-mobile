@@ -365,12 +365,12 @@ export default StyleSheet.create({
   },
   itemCallButton: {
     height: 40,
-    width: '47%',
+    width: '48%',
     justifyContent: 'center',
   },
   iconButtonSm: {
     marginRight: 5,
-    marginLeft: 10,
+    marginLeft: 0,
   },
   iconTextSm: {
     fontSize: 16,

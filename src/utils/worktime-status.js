@@ -1,5 +1,5 @@
 const getStatusWorktime = (dealer, checkType, returnTime = false) => {
-  if (!dealer || !checkType) {
+  if (!dealer || !checkType || !dealer.divisions) {
     return false;
   }
   const locales = {
