@@ -325,11 +325,13 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
   },
   brandLogo: {
-    width: 35,
+    width: 40,
+    height: 30,
     alignContent: 'center',
     alignItems: 'center',
-    marginRight: 12,
-    marginTop: 1,
+    alignSelf: 'center',
+    marginRight: 10,
+    marginTop: 0,
   },
   brandLogoWrapper: {},
   brandCaret: {
