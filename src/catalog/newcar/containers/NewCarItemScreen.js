@@ -716,10 +716,11 @@ class NewCarItemScreen extends PureComponent {
                 <View style={styles.modelBrandView}>
                   <View style={{marginBottom: 10, flexShrink: 1}}>
                     <Text style={styles.modelBrandText}>
-                      {[brandName, modelName, generationName].join(' ')}
+                      {[brandName, modelName].join(' ')}
                     </Text>
                     <Text style={styles.complectationText}>
                       {[
+                        generationName,
                         get(carDetails, 'complectation.name', ''),
                         get(carDetails, 'year'),
                       ].join(', ')}

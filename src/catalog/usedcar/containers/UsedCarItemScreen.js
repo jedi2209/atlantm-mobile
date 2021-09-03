@@ -213,6 +213,7 @@ class UsedCarItemScreen extends Component {
             onPress: () => {
               navigation.navigate('CallMeBackScreen', {
                 dealerCustom: listDealers[carDetails.dealer.id],
+                goBack: true,
               });
             },
           },
@@ -228,6 +229,7 @@ class UsedCarItemScreen extends Component {
     const {navigation, carDetails, listDealers} = this.props;
     navigation.navigate('CallMeBackScreen', {
       dealerCustom: listDealers[carDetails.dealer.id],
+      goBack: true,
     });
   };
 
