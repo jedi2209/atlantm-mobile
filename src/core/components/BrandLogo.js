@@ -51,7 +51,6 @@ const BrandLogo = props => {
     );
   } else {
     if (props.brands && props.brands[props.brand]) {
-      console.log('props.brands[props.brand]', props.brands[props.brand]);
       return (
         <Imager
           resizeMode="contain"

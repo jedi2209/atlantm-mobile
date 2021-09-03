@@ -44,7 +44,6 @@ const Imager = props => {
         <View
           shouldRasterizeIOS={isLoading ? true : false}
           renderToHardwareTextureAndroid={isLoading ? true : false}>
-          {console.log('path', path, isLoading, props)}
           <View style={{opacity: isLoading ? 0.4 : 1}}>
             <FastImage
               {...props}
