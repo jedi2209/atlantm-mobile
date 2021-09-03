@@ -97,7 +97,7 @@ class InfoPostScreen extends Component {
   _onPressCallMe = () => {
     const {navigation, route} = this.props;
     const id = route.params.id;
-    navigation.navigate('CallMeBackScreen', {actionID: id});
+    navigation.navigate('CallMeBackScreen', {actionID: id, goBack: true});
   };
 
   _onPressOrder = ({dealers}) => {
