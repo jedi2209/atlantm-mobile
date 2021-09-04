@@ -6,6 +6,7 @@ import {
   Appearance,
   ActivityIndicator,
 } from 'react-native';
+import * as Sentry from '@sentry/react-native';
 
 // redux
 import {Provider} from 'react-redux';
@@ -19,6 +20,7 @@ import SplashScreen from 'react-native-splash-screen';
 import App from './App';
 import {LogBox} from 'react-native';
 
+import {SENTRY_DSN} from '../const';
 import styleConst from '../style-const';
 
 const colorScheme = Appearance.getColorScheme();
@@ -61,6 +63,7 @@ const Wrapper = () => {
     Text.defaultProps.allowFontScaling = false;
     Text.defaultProps.maxFontSizeMultiplier = 0;
     Text.defaultProps.selectable = true;
+    Sentry.init({dsn: SENTRY_DSN});
   }, []);
 
   return (
@@ -85,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Wrapper;
+export default Sentry.wrap(Wrapper);

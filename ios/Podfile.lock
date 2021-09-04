@@ -385,8 +385,8 @@ PODS:
     - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
-  - react-native-slider (3.0.3):
-    - React
+  - react-native-slider (4.1.6):
+    - React-Core
   - react-native-splash-screen (3.2.0):
     - React
   - react-native-text-input-mask (3.1.4):
@@ -396,7 +396,7 @@ PODS:
   - react-native-vkontakte-login (1.0.1):
     - React
     - VK-ios-sdk
-  - react-native-webview (11.6.5):
+  - react-native-webview (11.13.0):
     - React-Core
   - React-perflogger (0.65.1)
   - React-RCTActionSheet (0.65.1):
@@ -472,11 +472,11 @@ PODS:
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
-  - RNCPicker (1.16.1):
+  - RNCPicker (1.16.7):
     - React-Core
   - RNDateTimePicker (3.5.2):
     - React-Core
-  - RNDeviceInfo (8.1.5):
+  - RNDeviceInfo (8.3.1):
     - React-Core
   - RNFastImage (8.3.7):
     - React-Core
@@ -498,7 +498,7 @@ PODS:
     - TOCropViewController
   - RNRate (1.2.6):
     - React-Core
-  - RNReanimated (2.3.0-alpha.3):
+  - RNReanimated (2.3.0-alpha.2):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -527,12 +527,12 @@ PODS:
     - React-RCTVibration
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.5.0):
+  - RNScreens (3.6.0):
     - React-Core
     - React-RCTImage
-  - RNSentry (2.6.2):
+  - RNSentry (3.0.1):
     - React-Core
-    - Sentry (= 7.1.4)
+    - Sentry (= 7.2.6)
   - RNSVG (12.1.1):
     - React
   - RNVectorIcons (8.1.0):
@@ -543,9 +543,9 @@ PODS:
   - SDWebImageWebPCoder (0.6.1):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.7)
-  - Sentry (7.1.4):
-    - Sentry/Core (= 7.1.4)
-  - Sentry/Core (7.1.4)
+  - Sentry (7.2.6):
+    - Sentry/Core (= 7.2.6)
+  - Sentry/Core (7.2.6)
   - TOCropViewController (2.6.0)
   - VK-ios-sdk (1.6.2)
   - Yoga (1.14.0)
@@ -867,11 +867,11 @@ SPEC CHECKSUMS:
   react-native-onesignal: 5187b12401c959102a64bde48fbca39c5e3b8136
   react-native-pager-view: 43f51f45f37ec9715f6c188e4af46ccdf79872e8
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
-  react-native-slider: e99fc201cefe81270fc9d81714a7a0f5e566b168
+  react-native-slider: c983657bf7d95450c8d64cceb4b318452b24ccd0
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-text-input-mask: 36a546b378fadd2efe1b7484a859d34bc2c80395
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
-  react-native-webview: 2e8fe70dc32b50d3231c23043f8e8b5a5525d346
+  react-native-webview: 133a6a5149f963259646e710b4545c67ef35d7c9
   React-perflogger: fd28ee1f2b5b150b00043f0301d96bd417fdc339
   React-RCTActionSheet: 7f3fa0855c346aa5d7c60f9ced16e067db6d29fa
   React-RCTAnimation: 2119a18ee26159004b001bc56404ca5dbaae6077
@@ -889,22 +889,22 @@ SPEC CHECKSUMS:
   RNAppleAuthentication: e95bcfbd044013667f35c5ca20ae17d39500c009
   RNCAsyncStorage: 7102fe8985f889579a3ae148d957bbb3f308122b
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
-  RNCPicker: 61c7a0645b9e4ac67960aa7f22a3effcecfdfb8d
+  RNCPicker: 9865e85857650bbc553c660acc580ff86abd056a
   RNDateTimePicker: 7658208086d86d09e1627b5c34ba0cf237c60140
-  RNDeviceInfo: b7b76016bf0d89c0446365dde551273195e0f525
+  RNDeviceInfo: 7b82d1467b87f7e74d1c7ba9439a9a57d0c68ee9
   RNFastImage: a7384db75df352500261e8e8f1ac2026def26102
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNImageCropPicker: 35a3ceb837446fa11547704709bb22b5fac6d584
   RNRate: cb88d5a0aa7be8bfae67dafbbbba2c9cd5e6faf2
-  RNReanimated: 48e578538b2fad573d3d5ce2e80ad375e1534d87
-  RNScreens: 01ab149b5dd5c27f5ff26741b1d2bdf2cee1af35
-  RNSentry: 68644ef607b780551cc555f084869764f2566652
+  RNReanimated: f89561404f0efaa5352b627dc35e5a97a845a2cd
+  RNScreens: eb0dfb2d6b21d2d7f980ad46b14eb306d2f1062e
+  RNSentry: 701496f68e915395d2871a2b402a03df4d6ee51f
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
-  Sentry: 1d3eb1a25f8c5333c88dd5603904a6d461cd9fcf
+  Sentry: be2f8f7a63e5274cc83d0813e40c1680119c0153
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   VK-ios-sdk: 5bcf00a2014a7323f98db9328b603d4f96635caa
   Yoga: aa0cb45287ebe1004c02a13f279c55a95f1572f4
