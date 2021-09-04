@@ -14,6 +14,9 @@ export const STORE_LINK = {
 
 export const API_MAIN_URL = 'https://api.atlantm.com/v1';
 
+export const SENTRY_DSN =
+  'https://XXXX@sentry.io/219899';
+
 export const APP_EMAIL = 'atlant-m.corp@atlantm.com';
 
 export const ONESIGNAL = 'XXXX';

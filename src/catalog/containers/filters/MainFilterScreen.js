@@ -20,11 +20,12 @@ import {
   CardItem,
   Right,
   CheckBox,
+  Picker as SelectPicker,
 } from 'native-base';
 
 import RNBounceable from '@freakycoder/react-native-bounceable';
 import ModalViewFilter from '../../components/ModalViewFilter';
-import {Picker} from '@react-native-picker/picker';
+// import {Picker as SelectPicker} from '@react-native-picker/picker';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import CheckboxList from '../../../core/components/CheckboxList';
 
@@ -1212,7 +1213,7 @@ const MainFilterScreen = ({
                   <Text style={styles.pickerCaption}>
                     {strings.CarsFilterScreen.filters.year.from}
                   </Text>
-                  <Picker
+                  <SelectPicker
                     selectedValue={get(
                       stateFilters,
                       'year[from]',
@@ -1225,20 +1226,20 @@ const MainFilterScreen = ({
                     }>
                     {yearItems.map(item => {
                       return (
-                        <Picker.Item
+                        <SelectPicker.Item
                           key={'yearPickerItemFrom' + item.value}
                           label={item.label}
                           value={item.value}
                         />
                       );
                     })}
-                  </Picker>
+                  </SelectPicker>
                 </View>
                 <View style={styles.pickerWrapper}>
                   <Text style={styles.pickerCaption}>
                     {strings.CarsFilterScreen.filters.year.to}
                   </Text>
-                  <Picker
+                  <SelectPicker
                     selectedValue={get(
                       stateFilters,
                       'year[to]',
@@ -1251,14 +1252,14 @@ const MainFilterScreen = ({
                     }>
                     {yearItems.map(item => {
                       return (
-                        <Picker.Item
+                        <SelectPicker.Item
                           key={'yearPickerItemTo' + item.value}
                           label={item.label}
                           value={item.value}
                         />
                       );
                     })}
-                  </Picker>
+                  </SelectPicker>
                 </View>
               </View>
             </ModalViewFilter>

@@ -57,6 +57,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
+    zIndex: 10000,
   },
   blueHeaderTitle: {
     fontSize: 16,
@@ -95,10 +96,10 @@ export default StyleSheet.create({
     borderRadius: 15,
     marginLeft: 5,
     marginTop: isAndroid ? 5 : 10,
-    zIndex: 1000,
+    zIndex: 10000,
   },
   headerBackButtonIcon: {
     marginLeft: isAndroid ? 5 : 0,
-    zIndex: 1000,
+    zIndex: 10000,
   },
 });
