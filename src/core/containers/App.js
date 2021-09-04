@@ -68,7 +68,7 @@ const App = props => {
   } = props;
 
   const mainScreen = 'BottomTabNavigation';
-  const storeVersion = '2021-02-02';
+  const storeVersion = '2021-09-03';
 
   const currentVersion = DeviceInfo.getVersion();
   if (currentVersion) {
