@@ -485,7 +485,7 @@ const CarsStock = ({navigation, route}) => {
       break;
   }
 
-  const snapPoints = useMemo(() => [-1, 220], []);
+  const snapPoints = useMemo(() => [230, 230], []);
   // callbacks
   const handlePresentModalPress = useCallback(() => {
     if (bottomSheeetState) {
@@ -598,6 +598,7 @@ const CarsStock = ({navigation, route}) => {
         <BottomSheetModal
           snapPoints={snapPoints}
           index={1}
+          enablePanDownToClose={true}
           style={styleConst.shadow.light}
           ref={bottomSheetModalRef}
           onChange={handleSheetChanges}>
@@ -767,15 +768,8 @@ const UsedCars = ({navigation, route}) => {
       break;
   }
 
-  const snapPoints = useMemo(() => [-1, 350], []);
+  const snapPoints = useMemo(() => [370, 370], []);
   // callbacks
-  const handlePresentModalPress = useCallback(() => {
-    if (bottomSheeetState) {
-      bottomSheetModalRefUsed.current?.close();
-    } else {
-      bottomSheetModalRefUsed.current?.present();
-    }
-  }, [bottomSheeetState]);
   const handleSheetChanges = useCallback(index => {
     if (index > 0) {
       setBottomState(true);
@@ -783,6 +777,13 @@ const UsedCars = ({navigation, route}) => {
       setBottomState(false);
     }
   }, []);
+  const handlePresentModalPress = useCallback(() => {
+    if (bottomSheeetState) {
+      bottomSheetModalRefUsed.current?.close();
+    } else {
+      bottomSheetModalRefUsed.current?.present();
+    }
+  }, [bottomSheeetState]);
   const handleClosePress = () => bottomSheetModalRefUsed.current.close();
 
   return (
