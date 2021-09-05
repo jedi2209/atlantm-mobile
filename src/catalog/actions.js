@@ -195,7 +195,7 @@ export const actionFetchNewCarByFilter = props => {
 
   if (props.filters) {
     for (const [key, value] of Object.entries(props.filters)) {
-      if (value) {
+      if (value || value === 0) {
         if (typeof value === 'object') {
           continue;
         }
@@ -294,7 +294,7 @@ export const actionFetchUsedCarByFilter = props => {
 
   if (props.filters) {
     for (const [key, value] of Object.entries(props.filters)) {
-      if (value) {
+      if (value || value === 0) {
         if (typeof value === 'object') {
           continue;
         }

@@ -1,5 +1,4 @@
 import React from 'react';
-import {Platform} from 'react-native';
 import stylesHeader from '../core/components/Header/style';
 import HeaderIconBack from '../core/components/HeaderIconBack/HeaderIconBack';
 import styleConst from '../core/style-const';
@@ -54,7 +53,8 @@ const TransparentBack = (navigation, route, options, buttonOptions) => {
   return {
     headerTitle: '',
     headerTitleStyle: stylesHeader.transparentHeaderTitle,
-    headerMode: Platform.OS === 'ios' ? 'float' : 'screen',
+    headerMode: 'screen',
+    headerShown: true,
     headerTransparent: true,
     headerLeft: () => {
       return ArrowBack(navigation, route, {

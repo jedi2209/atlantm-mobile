@@ -725,20 +725,22 @@ class UsedCarItemScreen extends Component {
                     </Button>
                   ) : null}
                 </View>
-                {carDetails.text ? (
-                  <View style={styles.descrContainer}>
-                    <ReadMore
-                      numberOfLines={4}
-                      renderTruncatedFooter={this._renderTruncatedFooter}
-                      renderRevealedFooter={this._renderRevealedFooter}
-                      onReady={this._handleTextReady}>
-                      <Text style={styles.descr}>{carDetails.text}</Text>
-                    </ReadMore>
-                    {get(carDetails, 'additionalServices', []).map((el, i) =>
-                      this.renderAdditionalServices(el),
-                    )}
-                  </View>
-                ) : null}
+                <View style={styles.descrContainer}>
+                  {carDetails.text ? (
+                    <>
+                      <ReadMore
+                        numberOfLines={4}
+                        renderTruncatedFooter={this._renderTruncatedFooter}
+                        renderRevealedFooter={this._renderRevealedFooter}
+                        onReady={this._handleTextReady}>
+                        <Text style={styles.descr}>{carDetails.text}</Text>
+                      </ReadMore>
+                      {get(carDetails, 'additionalServices', []).map((el, i) =>
+                        this.renderAdditionalServices(el),
+                      )}
+                    </>
+                  ) : null}
+                </View>
                 {carDetails.creditAvailable ||
                 carDetails.customPriceAvailable ? (
                   <View style={styles.bodyButtonsContainer}>
