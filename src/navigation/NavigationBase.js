@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import {Text, View, Pressable, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {
@@ -145,11 +145,6 @@ export const Base = ({navigation, route}) => {
           route,
           {
             ...TransitionPresets.ModalTransition,
-            headerTitle: '',
-            headerTitleStyle: [
-              stylesHeader.transparentHeaderTitle,
-              {color: '#222B45'},
-            ],
           },
           {
             icon: 'close',
@@ -476,7 +471,8 @@ const CarsStock = ({navigation, route}) => {
 
   switch (sorting?.sortBy) {
     case 'date':
-      isSorted = 'dateDesc';
+    case 'created':
+      isSorted = 'createdDesc';
       break;
     case 'price':
       if (sorting?.sortDirection === 'desc') {
@@ -485,8 +481,11 @@ const CarsStock = ({navigation, route}) => {
       break;
   }
 
-  const snapPoints = useMemo(() => [230, 230], []);
+  const snapPoints = useMemo(() => [250], []);
   // callbacks
+
+  const handleClosePress = () => bottomSheetModalRef.current?.close();
+
   const handlePresentModalPress = useCallback(() => {
     if (bottomSheeetState) {
       bottomSheetModalRef.current?.close();
@@ -501,7 +500,6 @@ const CarsStock = ({navigation, route}) => {
       setBottomState(false);
     }
   }, []);
-  const handleClosePress = () => bottomSheetModalRef.current.close();
 
   return (
     <>
@@ -555,13 +553,14 @@ const CarsStock = ({navigation, route}) => {
             },
             headerRight: () => (
               <View style={stylesHeader.headerRightStyle}>
-                <TouchableOpacity onPress={handlePresentModalPress}>
+                <Pressable onPress={() => handlePresentModalPress()}>
                   <Icon
                     type="MaterialCommunityIcons"
                     name="sort"
+                    selectable={false}
                     style={styles.sortHeaderButton}
                   />
-                </TouchableOpacity>
+                </Pressable>
               </View>
             ),
           })}
@@ -574,11 +573,6 @@ const CarsStock = ({navigation, route}) => {
             route,
             {
               ...TransitionPresets.ModalTransition,
-              headerTitle: '',
-              headerTitleStyle: [
-                stylesHeader.transparentHeaderTitle,
-                {color: '#222B45'},
-              ],
             },
             {
               icon: 'close',
@@ -597,8 +591,7 @@ const CarsStock = ({navigation, route}) => {
       <BottomSheetModalProvider>
         <BottomSheetModal
           snapPoints={snapPoints}
-          index={1}
-          enablePanDownToClose={true}
+          index={0}
           style={styleConst.shadow.light}
           ref={bottomSheetModalRef}
           onChange={handleSheetChanges}>
@@ -628,6 +621,7 @@ const CarsStock = ({navigation, route}) => {
                         ? styles.sortingColorSelected
                         : null,
                     ]}
+                    selectable={false}
                     type="FontAwesome5"
                     name="sort-numeric-up"
                   />
@@ -646,6 +640,7 @@ const CarsStock = ({navigation, route}) => {
                       <Icon
                         type="FontAwesome5"
                         name="check"
+                        selectable={false}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
@@ -668,6 +663,7 @@ const CarsStock = ({navigation, route}) => {
                         ? styles.sortingColorSelected
                         : null,
                     ]}
+                    selectable={false}
                     type="FontAwesome5"
                     name="sort-numeric-down-alt"
                   />
@@ -684,6 +680,7 @@ const CarsStock = ({navigation, route}) => {
                   <Right>
                     {isSorted === 'priceDesc' ? (
                       <Icon
+                        selectable={false}
                         type="FontAwesome5"
                         name="check"
                         style={styles.sortingColorSelected}
@@ -697,7 +694,7 @@ const CarsStock = ({navigation, route}) => {
                   onPress={() => {
                     handleClosePress();
                     navigation.navigate('NewCarListScreen', {
-                      sortBy: 'date',
+                      sortBy: 'created',
                       sortDirection: 'desc',
                     });
                   }}>
@@ -705,10 +702,11 @@ const CarsStock = ({navigation, route}) => {
                     active
                     style={[
                       styles.sortingButtonIcon,
-                      isSorted === 'dateDesc'
+                      isSorted === 'createdDesc'
                         ? styles.sortingColorSelected
                         : null,
                     ]}
+                    selectable={false}
                     type="FontAwesome5"
                     name="sort-amount-down"
                   />
@@ -716,17 +714,18 @@ const CarsStock = ({navigation, route}) => {
                     selectable={false}
                     style={[
                       styles.sortingButtonText,
-                      isSorted === 'dateDesc'
+                      isSorted === 'createdDesc'
                         ? styles.sortingColorSelected
                         : null,
                     ]}>
                     {strings.Sort.date.desc}
                   </Text>
                   <Right>
-                    {isSorted === 'dateDesc' ? (
+                    {isSorted === 'createdDesc' ? (
                       <Icon
                         type="FontAwesome5"
                         name="check"
+                        selectable={false}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
@@ -768,7 +767,7 @@ const UsedCars = ({navigation, route}) => {
       break;
   }
 
-  const snapPoints = useMemo(() => [370, 370], []);
+  const snapPoints = useMemo(() => [370], []);
   // callbacks
   const handleSheetChanges = useCallback(index => {
     if (index > 0) {
@@ -809,13 +808,14 @@ const UsedCars = ({navigation, route}) => {
             },
             headerRight: () => (
               <View style={stylesHeader.headerRightStyle}>
-                <TouchableOpacity onPress={handlePresentModalPress}>
+                <Pressable onPress={() => handlePresentModalPress()}>
                   <Icon
                     type="MaterialCommunityIcons"
                     name="sort"
+                    selectable={false}
                     style={styles.sortHeaderButton}
                   />
-                </TouchableOpacity>
+                </Pressable>
               </View>
             ),
           })}
@@ -828,11 +828,6 @@ const UsedCars = ({navigation, route}) => {
             route,
             {
               ...TransitionPresets.ModalTransition,
-              headerTitle: '',
-              headerTitleStyle: [
-                stylesHeader.transparentHeaderTitle,
-                {color: '#222B45'},
-              ],
             },
             {
               icon: 'close',
@@ -846,7 +841,7 @@ const UsedCars = ({navigation, route}) => {
       <BottomSheetModalProvider>
         <BottomSheetModal
           snapPoints={snapPoints}
-          index={1}
+          index={0}
           style={styleConst.shadow.light}
           ref={bottomSheetModalRefUsed}
           onChange={handleSheetChanges}>
@@ -879,6 +874,7 @@ const UsedCars = ({navigation, route}) => {
                         ? styles.sortingColorSelected
                         : null,
                     ]}
+                    selectable={false}
                     type="FontAwesome5"
                     name="sort-numeric-up"
                   />
@@ -897,6 +893,7 @@ const UsedCars = ({navigation, route}) => {
                       <Icon
                         type="FontAwesome5"
                         name="check"
+                        selectable={false}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
@@ -923,6 +920,7 @@ const UsedCars = ({navigation, route}) => {
                         : null,
                     ]}
                     type="FontAwesome5"
+                    selectable={false}
                     name="sort-numeric-down-alt"
                   />
                   <Text
@@ -940,6 +938,7 @@ const UsedCars = ({navigation, route}) => {
                       <Icon
                         type="FontAwesome5"
                         name="check"
+                        selectable={false}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
@@ -966,6 +965,7 @@ const UsedCars = ({navigation, route}) => {
                         ? styles.sortingColorSelected
                         : null,
                     ]}
+                    selectable={false}
                     type="FontAwesome5"
                     name="sort-amount-down"
                   />
@@ -984,6 +984,7 @@ const UsedCars = ({navigation, route}) => {
                       <Icon
                         type="FontAwesome5"
                         name="check"
+                        selectable={false}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
@@ -1010,6 +1011,7 @@ const UsedCars = ({navigation, route}) => {
                         ? styles.sortingColorSelected
                         : null,
                     ]}
+                    selectable={false}
                     type="FontAwesome5"
                     name="sort-amount-down"
                   />
@@ -1028,6 +1030,7 @@ const UsedCars = ({navigation, route}) => {
                       <Icon
                         type="FontAwesome5"
                         name="check"
+                        selectable={false}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
@@ -1072,6 +1075,7 @@ const UsedCars = ({navigation, route}) => {
                       <Icon
                         type="FontAwesome5"
                         name="check"
+                        selectable={false}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
@@ -1100,6 +1104,7 @@ const UsedCars = ({navigation, route}) => {
                     ]}
                     type="FontAwesome5"
                     name="sort-amount-down-alt"
+                    selectable={false}
                   />
                   <Text
                     selectable={false}
@@ -1116,6 +1121,7 @@ const UsedCars = ({navigation, route}) => {
                       <Icon
                         type="FontAwesome5"
                         name="check"
+                        selectable={false}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}

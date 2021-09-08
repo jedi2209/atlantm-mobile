@@ -1,4 +1,5 @@
 import React from 'react';
+import {Platform} from 'react-native';
 import stylesHeader from '../core/components/Header/style';
 import HeaderIconBack from '../core/components/HeaderIconBack/HeaderIconBack';
 import styleConst from '../core/style-const';
@@ -53,8 +54,10 @@ const TransparentBack = (navigation, route, options, buttonOptions) => {
   return {
     headerTitle: '',
     headerTitleStyle: stylesHeader.transparentHeaderTitle,
-    headerMode: 'screen',
-    headerShown: true,
+    headerStyle: {
+      height: 55,
+    },
+    headerMode: Platform.OS === 'ios' ? 'screen' : 'float',
     headerTransparent: true,
     headerLeft: () => {
       return ArrowBack(navigation, route, {
@@ -78,8 +81,10 @@ const BigCloseButton = (navigation, route, options) => {
       },
     ],
     headerTitle: '',
+    headerBackTitleVisible: false,
+    headerBackVisible: false,
     headerTitleStyle: stylesHeader.transparentHeaderTitle,
-    headerShown: true,
+    headerShadowVisible: false,
     headerTransparent: false,
     headerLeft: () => {
       return ArrowBack(navigation, route, {

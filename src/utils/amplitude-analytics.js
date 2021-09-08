@@ -1,6 +1,7 @@
 import {store} from '../core/store';
 import {get} from 'lodash';
 import {Amplitude} from '@amplitude/react-native';
+import * as Sentry from '@sentry/react-native';
 
 export default class Analytics {
   static logEvent(category, action, params) {
@@ -13,9 +14,14 @@ export default class Analytics {
     const ampInstance = Amplitude.getInstance();
     const SAPID = get(store.getState(), 'profile.login.SAP.ID');
     const UserID = get(store.getState(), 'profile.login.id');
+    const UserEmail = get(store.getState(), 'profile.login.EMAIL[0].VALUE');
     ampInstance.init('XXXX');
     if (SAPID || UserID) {
       ampInstance.setUserId(SAPID ? SAPID : UserID);
+      Sentry.setUser({
+        id: SAPID ? SAPID : UserID,
+        email: UserEmail,
+      });
     }
     ampInstance.logEvent(`${category}:${action}`, params);
   }

@@ -273,9 +273,7 @@ class ContactsScreen extends Component {
         <StatusBar hidden />
         <Button
           full
-          onPress={() => {
-            navigation.navigate('ChooseDealerScreen');
-          }}
+          onPress={() => navigation.navigate('ChooseDealerScreen')}
           style={[styles.buttonPrimary, styleConst.shadow.default]}>
           {dealerSelected.brands &&
             dealerSelected.brands.length &&
@@ -314,9 +312,7 @@ class ContactsScreen extends Component {
             <TouchableOpacity
               style={styles.address}
               testID="ContactsScreen.PressMap"
-              onPress={() => {
-                this.onPressMap();
-              }}>
+              onPress={() => this.onPressMap()}>
               <Icon
                 style={styles.point}
                 type="MaterialIcons"
@@ -486,9 +482,7 @@ class ContactsScreen extends Component {
                       {strings.ContactsScreen.currentActions}
                     </Text>
                     <Text
-                      onPress={() => {
-                        navigation.navigate('InfoList');
-                      }}
+                      onPress={() => navigation.navigate('InfoList')}
                       style={{
                         color: styleConst.color.lightBlue,
                         fontSize: 14,

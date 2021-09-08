@@ -71,7 +71,6 @@ export default StyleSheet.create({
   whiteHeader: {
     ...commonStyles,
     // backgroundColor: styleConst.color.white,
-    color: styleConst.color.lightBlue,
     shadowRadius: 0,
     shadowOffset: {
       height: 0,

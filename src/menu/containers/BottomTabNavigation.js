@@ -26,11 +26,9 @@ import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 
 import {
-  ArrowBack,
   ClassicHeaderWhite,
   ClassicHeaderBlue,
   BigCloseButton,
-  isTabBarVisible,
 } from '../../navigation/const';
 
 const styles = {
@@ -56,13 +54,12 @@ const ProfileStackView = ({navigation, route}) => (
     initialRouteName="LoginScreen"
     screenOptions={{
       headerShown: false,
-      headerTransparent: true,
       presentation: 'modal',
     }}>
     <ProfileStack.Screen
       name="LoginScreen"
       component={AuthContainer}
-      options={{headerShown: false, headerTransparent: true}}
+      options={{headerShown: false}}
     />
     <ProfileStack.Screen
       name="PhoneChangeScreen"

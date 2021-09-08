@@ -349,6 +349,9 @@ export default {
     city: 'Місто',
     apply: 'Застосувати',
   },
+  FullScreenGallery: {
+    from: 'із',
+  },
   ContactsScreen: {
     closedDealer: {
       title: 'Автоцентр закритий',

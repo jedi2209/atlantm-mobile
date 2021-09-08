@@ -191,7 +191,7 @@ class SettingsScreen extends PureComponent {
 
     if (pushActionSubscribeState === false) {
       PushNotifications.subscribeToTopic('actions', dealerSelected.id).then(
-        (isPermission) => {
+        isPermission => {
           actionSetPushActionSubscribe(isPermission);
           if (isPermission) {
             this.setState({
@@ -310,7 +310,9 @@ class SettingsScreen extends PureComponent {
                 style={styles.buttonRate}
                 selectable={false}
                 onPress={() => {
-                  Analytics.logEvent('screen', 'ratePopup', {source: 'settings'});
+                  Analytics.logEvent('screen', 'ratePopup', {
+                    source: 'settings',
+                  });
                   return RateThisApp({onSuccess: this._onAppRateSuccess});
                   //return Linking.openURL(STORE_LINK[Platform.OS]);
                 }}>
@@ -353,7 +355,7 @@ class SettingsScreen extends PureComponent {
                 }}>
                 <Text
                   selectable={false}
-                  style={[styles.langHeading, {fontSize: 19, lineHeight: 22}]}>
+                  style={[styles.langHeading, {fontSize: 20, lineHeight: 20}]}>
                   {strings.SettingsScreen.mailtoUs}
                 </Text>
                 <Icon
