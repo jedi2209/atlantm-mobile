@@ -179,7 +179,7 @@ const ImageCarousel = ({
           if (entries.length > 3) {
             setTimeout(() => {
               carouselRef?.current?.snapToItem(firstItem + 1, false);
-            }, 100);
+            }, 300);
           }
         }}
         removeClippedSubviews={false}

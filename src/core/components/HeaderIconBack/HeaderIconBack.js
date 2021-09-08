@@ -13,7 +13,6 @@ import {Icon} from 'native-base';
 const containerSize = 40;
 const styles = StyleSheet.create({
   container: {
-    // paddingHorizontal: containerSize / 2,
     width: containerSize,
     height: containerSize,
     justifyContent: 'center',

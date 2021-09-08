@@ -189,7 +189,7 @@ export const actionSaveBrandModelFilter = props => {
 
 export const actionFetchNewCarByFilter = props => {
   props.url = `/stock/new/cars/get/city/${props.city}/`;
-  let urlParams = [];
+  let urlParams = ['recNum=12'];
   let filtersRaw = {};
   let sortingRaw = {};
 
@@ -288,7 +288,7 @@ export const actionFetchNewCarByFilter = props => {
 };
 export const actionFetchUsedCarByFilter = props => {
   props.url = `/stock/trade-in/cars/get/city/${props.city}/`;
-  let urlParams = [];
+  let urlParams = ['recNum=12'];
   let filtersRaw = {};
   let sortingRaw = {};
 

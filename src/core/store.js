@@ -1,5 +1,5 @@
 import thunkMiddleware from 'redux-thunk';
-import {persistStore as makeStore, persistReducer} from 'redux-persist';
+import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createStore, compose, applyMiddleware} from 'redux';
 import {createLogger} from 'redux-logger';
@@ -37,9 +37,8 @@ if (__DEV__) {
   store = createStore(persistedReducer, applyMiddleware(...middleware));
 }
 
-const persistStore = makeStore(store, () => {
-  console.info('store in getPersistStore', store.getState());
-  this.setState({rehydrated: true});
+const storePersist = persistStore(store, () => {
+  console.info('Store initial status', store.getState());
 });
 
-export {store, persistStore};
+export {store, storePersist};

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import styleConst from '../style-const';
+import {strings} from '../lang/const';
 
 const FullScreenGallery = ({
   navigation,
@@ -49,7 +50,11 @@ const FullScreenGallery = ({
         return (
           <View style={styles.container}>
             <Text style={[styles.captionText, styles['captionText' + theme]]}>
-              {imageIndex + 1} из {images.length}
+              {[
+                imageIndex + 1,
+                strings.FullScreenGallery.from,
+                images.length,
+              ].join(' ')}
             </Text>
           </View>
         );
