@@ -92,7 +92,9 @@ const Wrapper = () => {
         onBeforeLift={_onBeforeLift}
         loading={<Loader />}
         persistor={storePersist}>
-        <App colorScheme={colorScheme} />
+        <Sentry.TouchEventBoundary>
+          <App colorScheme={colorScheme} />
+        </Sentry.TouchEventBoundary>
       </PersistGate>
     </Provider>
   );

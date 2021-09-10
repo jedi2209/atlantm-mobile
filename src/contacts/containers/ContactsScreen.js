@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
     marginTop: 3,
     height: 25,
+    width: 30,
   },
   spinnerContainer: {
     flex: 1,

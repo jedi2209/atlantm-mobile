@@ -157,7 +157,19 @@ export const Base = ({navigation, route}) => {
       <StackBase.Screen
         name="MapScreen"
         component={MapScreen}
-        options={TransparentBack(navigation, route)}
+        options={TransparentBack(
+          navigation,
+          route,
+          {
+            ...TransitionPresets.ModalTransition,
+          },
+          {
+            icon: 'close',
+            IconStyle: {
+              fontSize: 24,
+            },
+          },
+        )}
       />
       <StackBase.Screen
         name="IndicatorsScreen"

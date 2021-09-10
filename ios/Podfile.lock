@@ -368,7 +368,7 @@ PODS:
   - react-native-fbsdk/Share (3.0.0):
     - FBSDKShareKit (~> 8.1)
     - React
-  - react-native-flipper (0.105.0):
+  - react-native-flipper (0.108.0):
     - React-Core
   - react-native-google-maps (0.29.3):
     - Google-Maps-iOS-Utils (= 2.1.0)
@@ -498,7 +498,7 @@ PODS:
     - TOCropViewController
   - RNRate (1.2.6):
     - React-Core
-  - RNReanimated (2.3.0-alpha.2):
+  - RNReanimated (2.2.1):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -527,7 +527,7 @@ PODS:
     - React-RCTVibration
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.6.0):
+  - RNScreens (3.7.0):
     - React-Core
     - React-RCTImage
   - RNSentry (3.0.3):
@@ -860,7 +860,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 41e58e5b8e3e0bf061fdf725b03f2144014a8fb0
   react-native-blurhash: d978f8017ed091d9e1179775fe7bac14297e6e1e
   react-native-fbsdk: 8e92c7a334fd8d9c2b5d8b8fcd7ae2c314161099
-  react-native-flipper: 5626e75999bce12c90f587d4f8e2199afd4fe1f9
+  react-native-flipper: 8f4efec0aa4a9e8fc752fdc9568577785746bce4
   react-native-google-maps: d6a30377b40a338bd09d6ad36ce48dc5d12b5792
   react-native-in-app-review: 00a66a085c61dbd4474041dc14e7bfee81a86130
   react-native-maps: 41d01d8e0afcebe32bec9eea3bd945adc1b18f7a
@@ -897,8 +897,8 @@ SPEC CHECKSUMS:
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNImageCropPicker: 35a3ceb837446fa11547704709bb22b5fac6d584
   RNRate: cb88d5a0aa7be8bfae67dafbbbba2c9cd5e6faf2
-  RNReanimated: f89561404f0efaa5352b627dc35e5a97a845a2cd
-  RNScreens: eb0dfb2d6b21d2d7f980ad46b14eb306d2f1062e
+  RNReanimated: d29057cf85e771be4f0180ba1d00a7185e423a7d
+  RNScreens: 2a71d74b4e530f051f5684c8111d7591176722cf
   RNSentry: bb7db0d29123fa7e1848f4fe91cc8407aabb2195
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
