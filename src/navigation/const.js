@@ -86,6 +86,7 @@ const BigCloseButton = (navigation, route, options) => {
     headerTitleStyle: stylesHeader.transparentHeaderTitle,
     headerShadowVisible: false,
     headerTransparent: false,
+    headerShown: true,
     headerLeft: () => {
       return ArrowBack(navigation, route, {
         icon: 'md-close',

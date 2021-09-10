@@ -397,11 +397,13 @@ class OrderScreen extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView>
         <TouchableWithoutFeedback
           style={styleConst.form.scrollView}
           testID="OrderScreen.Wrapper"
-          onPress={Keyboard.dismiss}>
+          onPress={() => {
+            Keyboard.dismiss();
+          }}>
           <Content
             style={styles.container}
             enableResetScrollToCoords={false}

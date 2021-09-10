@@ -85,6 +85,7 @@ Imager.propTypes = {
 Imager.defaultProps = {
   testID: 'Imager.Wrapper',
   priority: 'normal',
+  resizeMode: 'cover',
 };
 
 export default Imager;

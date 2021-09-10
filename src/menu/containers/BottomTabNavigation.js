@@ -115,7 +115,6 @@ const MenuStackView = ({navigation, route}) => (
         headerStyle: {
           height: 120,
           backgroundColor: 'transparent',
-          borderBottom: 0,
           elevation: 0,
           shadowOpacity: 0,
         },

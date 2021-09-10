@@ -145,17 +145,17 @@ class BonusScreen extends Component {
     return isActiveScreen;
   }
 
-  onPressLevel1 = (hash) => {
+  onPressLevel1 = hash => {
     this.props.actionSetBonusLevel1(this.isActiveLevel1(hash) ? null : hash);
   };
-  onPressLevel2 = (hash) => {
+  onPressLevel2 = hash => {
     this.props.actionSetBonusLevel2(this.isActiveLevel2(hash) ? null : hash);
   };
 
-  isActiveLevel1 = (hash) => this.props.level1hash === hash;
-  isActiveLevel2 = (hash) => this.props.level2hash === hash;
+  isActiveLevel1 = hash => this.props.level1hash === hash;
+  isActiveLevel2 = hash => this.props.level2hash === hash;
 
-  renderLevel1 = (bonuses) => {
+  renderLevel1 = bonuses => {
     return Object.keys(bonuses)
       .reverse()
       .map((bonusYear, idx, yearsArray) => {
@@ -192,7 +192,7 @@ class BonusScreen extends Component {
       });
   };
 
-  renderLevel2 = (bonusesByMonth) => {
+  renderLevel2 = bonusesByMonth => {
     return Object.keys(bonusesByMonth)
       .reverse()
       .map((bonusMonth, idx, monthArray) => {
@@ -225,7 +225,7 @@ class BonusScreen extends Component {
       });
   };
 
-  renderLevel3 = (history) => {
+  renderLevel3 = history => {
     return history.map((bonus, idx) => {
       return this.renderItemHeader(
         bonus.name,

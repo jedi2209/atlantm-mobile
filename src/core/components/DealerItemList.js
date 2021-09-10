@@ -20,6 +20,7 @@ const stylesDealerItemList = StyleSheet.create({
   brandLogo: {
     minWidth: 24,
     height: 20,
+    width: 35,
     marginRight: 4,
   },
   dealerCity: {
@@ -42,7 +43,7 @@ const stylesDealerItemList = StyleSheet.create({
   },
 });
 
-const _onPressDealer = (props) => {
+const _onPressDealer = props => {
   const {
     city,
     dealer,
@@ -64,7 +65,7 @@ const _onPressDealer = (props) => {
   });
 };
 
-const DealerItemList = (props) => {
+const DealerItemList = props => {
   const {
     city,
     dealer,
@@ -118,7 +119,7 @@ const DealerItemList = (props) => {
             <View style={stylesDealerItemList.brands}>
               {dealer.brands &&
                 dealer.brands.length &&
-                dealer.brands.map((brand) => {
+                dealer.brands.map(brand => {
                   if (brand.logo) {
                     return (
                       <BrandLogo
