@@ -20,7 +20,7 @@
     "android-build": "bundle exec fastlane android internal",
     "reinstall": "./reinstall.sh",
     "sonar": "open -a iTerm ./sonarqube/docker-start.sh; node ./sonarqube/init.js",
-    "cleanTmp": "rm -rf $TMPDIR/react-*; rm -rf $TMPDIR/haste-*; rm -rf $TMPDIR/metro-*; watchman watch-del-all; rm -rf ios/build/ android/app/build/ android/build/ ios/atlantm.xcodeproj/xcuserdata/",
+    "cleanTmp": "rm -rf $TMPDIR/react-*; rm -rf $TMPDIR/haste-*; rm -rf $TMPDIR/metro-*; watchman watch-del-all; rm -rf ios/build/ android/app/build/ android/build/ artifacts/ ios/atlantm.xcodeproj/xcuserdata/",
     "clean": "react-native clean-project-auto",
     "test": "jest",
     "version": "./version.sh",
@@ -94,7 +94,7 @@
     "react-native-picker-select": "^8.0.4",
     "react-native-rate": "^1.2.1",
     "react-native-read-more-text": "^1.1.2",
-    "react-native-reanimated": "2.2.1",
+    "react-native-reanimated": "^2.2.2",
     "react-native-responsive-image-view": "^2.1.0",
     "react-native-safe-area-context": "^3.3.0",
     "react-native-screens": "^3.6.0",
@@ -143,9 +143,9 @@
     "jest-circus": "^27.0.1",
     "metro-react-native-babel-preset": "^0.66.0",
     "patch-package": "^6.2.2",
-    "prettier": "2.4.0",
+    "prettier": "^2.4.0",
     "react-native-codegen": "^0.0.7",
-    "react-native-flipper": "^0.108.0",
+    "react-native-flipper": "^0.109.0",
     "react-test-renderer": "^17.0.2",
     "reactotron-react-native": "^5.0.0",
     "reactotron-redux": "^3.1.3",
@@ -155,7 +155,9 @@
   },
   "resolutions": {
     "graceful-fs": "^4.2.6",
-    "@react-native-picker/picker": "^2.0.0"
+    "@react-native-picker/picker": "^2.0.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "react-native-keyboard-aware-scroll-view": "^0.9.4"
   },
   "peerDependencies": {
     "flipper-plugin": "*"
