@@ -625,11 +625,10 @@ class TestDriveScreen extends PureComponent {
       },
     };
     return (
-      <KeyboardAvoidingView onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView>
         <TouchableWithoutFeedback
           style={styleConst.form.scrollView}
-          testID="TestDriveScreen.Wrapper"
-          onPress={Keyboard.dismiss}>
+          testID="TestDriveScreen.Wrapper">
           <Content
             style={styles.container}
             enableResetScrollToCoords={false}

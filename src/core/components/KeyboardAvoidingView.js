@@ -3,8 +3,8 @@ import {
   KeyboardAvoidingView as KeyboardAwareScrollView,
   Platform,
   StyleSheet,
+  View,
 } from 'react-native';
-// import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export const KeyboardAvoidingView = ({children, behavior}) => {
   // return <View style={styles.default}>{children}</View>;

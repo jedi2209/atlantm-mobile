@@ -295,7 +295,7 @@ class OrderMyPriceScreen extends Component {
       <KeyboardAvoidingView onPress={Keyboard.dismiss}>
         <TouchableWithoutFeedback
           style={styleConst.form.scrollView}
-          testID='OrderMyPriceScreen.Wrapper'
+          testID="OrderMyPriceScreen.Wrapper"
           onPress={Keyboard.dismiss}>
           <Content
             style={styles.container}

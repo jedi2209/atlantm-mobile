@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Platform,
+  View,
 } from 'react-native';
 import {Content} from 'native-base';
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
@@ -88,7 +89,6 @@ const mapStateToProps = ({dealer, catalog, profile}) => {
       ? UserData.get('EMAIL')
       : UserData.get('EMAIL'),
     profile,
-    comment: catalog.orderComment,
   };
 };
 
@@ -144,10 +144,6 @@ class OrderScreen extends Component {
         }
       }
     }
-    this.state = {
-      date: '',
-      comment: '',
-    };
 
     // const region = get(this.props.route, 'params.region');
 
@@ -304,22 +300,22 @@ class OrderScreen extends Component {
     comment: PropTypes.string,
   };
 
-  shouldComponentUpdate(nextProps) {
-    if (!this.props.dealerSelectedLocal) {
-      return false;
-    } else {
-      if (
-        this.props.dealerSelectedLocal &&
-        this.props.dealerSelectedLocal.id &&
-        nextProps.dealerSelectedLocal
-      ) {
-        return (
-          this.props.dealerSelectedLocal.id !== nextProps.dealerSelectedLocal.id
-        );
-      }
-    }
-    return false;
-  }
+  // shouldComponentUpdate(nextProps) {
+  //   if (!this.props.dealerSelectedLocal) {
+  //     return false;
+  //   } else {
+  //     if (
+  //       this.props.dealerSelectedLocal &&
+  //       this.props.dealerSelectedLocal.id &&
+  //       nextProps.dealerSelectedLocal
+  //     ) {
+  //       return (
+  //         this.props.dealerSelectedLocal.id !== nextProps.dealerSelectedLocal.id
+  //       );
+  //     }
+  //   }
+  //   return false;
+  // }
 
   onPressOrder = async data => {
     const isInternetExist = await isInternet();
@@ -397,13 +393,10 @@ class OrderScreen extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView>
+      <KeyboardAvoidingView onPress={Keyboard.dismiss}>
         <TouchableWithoutFeedback
           style={styleConst.form.scrollView}
-          testID="OrderScreen.Wrapper"
-          onPress={() => {
-            Keyboard.dismiss();
-          }}>
+          testID="OrderScreen.Wrapper">
           <Content
             style={styles.container}
             enableResetScrollToCoords={false}
