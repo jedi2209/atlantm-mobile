@@ -145,7 +145,7 @@
     "patch-package": "^6.2.2",
     "prettier": "^2.4.0",
     "react-native-codegen": "^0.0.7",
-    "react-native-flipper": "^0.109.0",
+    "react-native-flipper": "^0.110.0",
     "react-test-renderer": "^17.0.2",
     "reactotron-react-native": "^5.0.0",
     "reactotron-redux": "^3.1.3",

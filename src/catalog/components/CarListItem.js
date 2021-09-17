@@ -187,8 +187,8 @@ const CarListItem = ({
   };
 
   const _renderImage = ({ordered}) => {
-    let CarImgs = get(car, 'img.thumb');
-    let CarImgsReal = get(car, 'imgReal.thumb');
+    let CarImgs = get(car, 'img.thumb', false);
+    let CarImgsReal = get(car, 'imgReal.thumb', false);
     let photos = [];
     let carPhotos = CarImgs;
     if (CarImgsReal) {

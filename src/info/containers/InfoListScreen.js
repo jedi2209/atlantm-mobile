@@ -105,41 +105,41 @@ class InfoListScreen extends Component {
     };
   }
 
-  static navigationOptions = ({navigation}) => {
-    const returnScreen =
-      navigation.state.params && navigation.state.params.returnScreen;
+  // static navigationOptions = ({navigation}) => {
+  //   const returnScreen =
+  //     navigation.state.params && navigation.state.params.returnScreen;
 
-    let pushActionSubscribeState =
-      (navigation.state.params &&
-        navigation.state.params.pushActionSubscribeState) ||
-      false;
+  //   let pushActionSubscribeState =
+  //     (navigation.state.params &&
+  //       navigation.state.params.pushActionSubscribeState) ||
+  //     false;
 
-    let onSwitchSubscribe =
-      navigation.state.params && navigation.state.params.onSwitchSubscribe;
+  //   let onSwitchSubscribe =
+  //     navigation.state.params && navigation.state.params.onSwitchSubscribe;
 
-    let pushStatusLoaded =
-      navigation.state.params && navigation.state.params.pushStatusLoaded;
+  //   let pushStatusLoaded =
+  //     navigation.state.params && navigation.state.params.pushStatusLoaded;
 
-    return {
-      headerRight: () => {
-        return pushStatusLoaded ? (
-          <Icon
-            onPress={onSwitchSubscribe}
-            active={pushActionSubscribeState}
-            style={{
-              color: 'white',
-              marginHorizontal: 10,
-            }}
-            name={
-              pushActionSubscribeState
-                ? 'ios-notifications'
-                : 'ios-notifications-off'
-            }
-          />
-        ) : null;
-      },
-    };
-  };
+  //   return {
+  //     headerRight: () => {
+  //       return pushStatusLoaded ? (
+  //         <Icon
+  //           onPress={onSwitchSubscribe}
+  //           active={pushActionSubscribeState}
+  //           style={{
+  //             color: 'white',
+  //             marginHorizontal: 10,
+  //           }}
+  //           name={
+  //             pushActionSubscribeState
+  //               ? 'ios-notifications'
+  //               : 'ios-notifications-off'
+  //           }
+  //         />
+  //       ) : null;
+  //     },
+  //   };
+  // };
 
   static propTypes = {
     dealerSelected: PropTypes.object.isRequired,
