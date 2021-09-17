@@ -368,7 +368,7 @@ PODS:
   - react-native-fbsdk/Share (3.0.0):
     - FBSDKShareKit (~> 8.1)
     - React
-  - react-native-flipper (0.109.0):
+  - react-native-flipper (0.110.0):
     - React-Core
   - react-native-google-maps (0.29.3):
     - Google-Maps-iOS-Utils (= 2.1.0)
@@ -385,7 +385,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
-  - react-native-slider (4.1.6):
+  - react-native-slider (4.1.7):
     - React-Core
   - react-native-splash-screen (3.2.0):
     - React
@@ -478,7 +478,7 @@ PODS:
     - React-Core
   - RNDeviceInfo (8.3.3):
     - React-Core
-  - RNFastImage (8.5.6):
+  - RNFastImage (8.5.8):
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
@@ -860,14 +860,14 @@ SPEC CHECKSUMS:
   React-jsinspector: 41e58e5b8e3e0bf061fdf725b03f2144014a8fb0
   react-native-blurhash: d978f8017ed091d9e1179775fe7bac14297e6e1e
   react-native-fbsdk: 8e92c7a334fd8d9c2b5d8b8fcd7ae2c314161099
-  react-native-flipper: cec51aaf3322815bd4e3f3389a80031c1cf6a659
+  react-native-flipper: 19d1ae21290a3e77445fc68322745eb71a753a71
   react-native-google-maps: d6a30377b40a338bd09d6ad36ce48dc5d12b5792
   react-native-in-app-review: 00a66a085c61dbd4474041dc14e7bfee81a86130
   react-native-maps: 41d01d8e0afcebe32bec9eea3bd945adc1b18f7a
   react-native-onesignal: 5187b12401c959102a64bde48fbca39c5e3b8136
   react-native-pager-view: 5ab4d0b4b44d89f77310cb3eb8129745f274ce55
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
-  react-native-slider: c983657bf7d95450c8d64cceb4b318452b24ccd0
+  react-native-slider: 269d81247e2a87358ee03241da55b00c919e4d7a
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-text-input-mask: 36a546b378fadd2efe1b7484a859d34bc2c80395
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
@@ -892,7 +892,7 @@ SPEC CHECKSUMS:
   RNCPicker: f7a40b21b915b7a187624d52f52b7bc2f73ea413
   RNDateTimePicker: 7658208086d86d09e1627b5c34ba0cf237c60140
   RNDeviceInfo: cc7de0772378f85d8f36ae439df20f05c590a651
-  RNFastImage: 047bd977c73870c39cce48032cc6a7913cb4fc47
+  RNFastImage: adef7f9c9a7aeca0141807ee5a8be8a3eb240dd8
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNImageCropPicker: 35a3ceb837446fa11547704709bb22b5fac6d584

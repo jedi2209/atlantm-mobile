@@ -1810,9 +1810,9 @@
   integrity sha512-rQfMIGSR/1r/SyN87+VD8xHHzDYeHaJq6elOSCAD+0iLagXkSI2pfA0LmSXP21uw5i3em7GkkRjfJ8wpqWXZNw==
 
 "@react-native-community/slider@^4.1.6":
-  version "4.1.6"
-  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.1.6.tgz#5e6d886b8369b532bf4b91c3cda50ba43b8952ad"
-  integrity sha512-WI7VUWKQlj0LPK453RmpOEKj6gpe4gmSL5B6cDnhO6mqytlCCz92hVja5ZG6X/2NsHLTCl99GLVKXvCfkaY5xw==
+  version "4.1.7"
+  resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.1.7.tgz#b2c4e9547dcdcbcf3d0a0cda8545abcfdc089859"
+  integrity sha512-zVcxi3chX/Je/3lo8jI/83VpY6DL2h+JWNV8sg6rkxjRTau/8DfM/e98RymH0ujejBkuYX342IKNnxOHRK6KbQ==
   dependencies:
     flow-bin "0.113.0"
 
@@ -2527,7 +2527,7 @@ array-filter@~0.0.0:
   resolved "https://registry.yarnpkg.com/array-filter/-/array-filter-0.0.1.tgz#7da8cf2e26628ed732803581fd21f67cacd2eeec"
   integrity sha1-fajPLiZijtcygDWB/SH2fKzS7uw=
 
-array-includes@^3.1.2, array-includes@^3.1.3:
+array-includes@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/array-includes/-/array-includes-3.1.3.tgz#c7f619b382ad2afaf5326cddfdc0afc61af7690a"
   integrity sha512-gcem1KlBU7c9rB+Rq8/3PPKsK2kjqeEBa3bD5kkQo4nYlOHQCJqIJFqBXDEfwaRuYTT4E+FxA9xez7Gf/e3Q7A==
@@ -4022,21 +4022,22 @@ errorhandler@^1.5.0:
     escape-html "~1.0.3"
 
 es-abstract@^1.18.0-next.1, es-abstract@^1.18.0-next.2, es-abstract@^1.18.2:
-  version "1.18.5"
-  resolved "https://registry.yarnpkg.com/es-abstract/-/es-abstract-1.18.5.tgz#9b10de7d4c206a3581fd5b2124233e04db49ae19"
-  integrity sha512-DDggyJLoS91CkJjgauM5c0yZMjiD1uK3KcaCeAmffGwZ+ODWzOkPN4QwRbsK5DOFf06fywmyLci3ZD8jLGhVYA==
+  version "1.18.6"
+  resolved "https://registry.yarnpkg.com/es-abstract/-/es-abstract-1.18.6.tgz#2c44e3ea7a6255039164d26559777a6d978cb456"
+  integrity sha512-kAeIT4cku5eNLNuUKhlmtuk1/TRZvQoYccn6TO0cSVdf1kzB0T7+dYuVK9MWM7l+/53W2Q8M7N2c6MQvhXFcUQ==
   dependencies:
     call-bind "^1.0.2"
     es-to-primitive "^1.2.1"
     function-bind "^1.1.1"
     get-intrinsic "^1.1.1"
+    get-symbol-description "^1.0.0"
     has "^1.0.3"
     has-symbols "^1.0.2"
     internal-slot "^1.0.3"
-    is-callable "^1.2.3"
+    is-callable "^1.2.4"
     is-negative-zero "^2.0.1"
-    is-regex "^1.1.3"
-    is-string "^1.0.6"
+    is-regex "^1.1.4"
+    is-string "^1.0.7"
     object-inspect "^1.11.0"
     object-keys "^1.1.1"
     object.assign "^4.1.2"
@@ -4154,10 +4155,29 @@ eslint-plugin-react-native@^3.10.0:
     "@babel/traverse" "^7.7.4"
     eslint-plugin-react-native-globals "^0.1.1"
 
-eslint-plugin-react@^7.20.0, eslint-plugin-react@^7.20.6:
+eslint-plugin-react@^7.20.0:
   version "7.25.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.25.1.tgz#9286b7cd9bf917d40309760f403e53016eda8331"
   integrity sha512-P4j9K1dHoFXxDNP05AtixcJEvIT6ht8FhYKsrkY0MPCPaUMYijhpWwNiRDZVtA8KFuZOkGSeft6QwH8KuVpJug==
+  dependencies:
+    array-includes "^3.1.3"
+    array.prototype.flatmap "^1.2.4"
+    doctrine "^2.1.0"
+    estraverse "^5.2.0"
+    has "^1.0.3"
+    jsx-ast-utils "^2.4.1 || ^3.0.0"
+    minimatch "^3.0.4"
+    object.entries "^1.1.4"
+    object.fromentries "^2.0.4"
+    object.values "^1.1.4"
+    prop-types "^15.7.2"
+    resolve "^2.0.0-next.3"
+    string.prototype.matchall "^4.0.5"
+
+eslint-plugin-react@^7.20.6:
+  version "7.25.2"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.25.2.tgz#d567a217d306b76dd110561f28074e2328ae38f8"
+  integrity sha512-elx4585wgmryanJK4C5IoSKQyVZ+e7H0t2JOOtJNBql0cuercvSShvRReuLBbfx8687yW5yv+UL7pXwMsd6adQ==
   dependencies:
     array-includes "^3.1.3"
     array.prototype.flatmap "^1.2.4"
@@ -4884,6 +4904,14 @@ get-stream@^6.0.0:
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-6.0.1.tgz#a262d8eef67aced57c2852ad6167526a43cbf7b7"
   integrity sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==
 
+get-symbol-description@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/get-symbol-description/-/get-symbol-description-1.0.0.tgz#7fdb81c900101fbd564dd5f1a30af5aadc1e58d6"
+  integrity sha512-2EmdH1YvIQiZpltCNgkuiUnyukzxM/R6NDJX31Ke3BG1Nq5b0S2PhX59UKi9vZpPDQVdqn+1IcaAwnzTT5vCjw==
+  dependencies:
+    call-bind "^1.0.2"
+    get-intrinsic "^1.1.1"
+
 get-value@^2.0.3, get-value@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/get-value/-/get-value-2.0.6.tgz#dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
@@ -5372,7 +5400,7 @@ is-buffer@^1.1.5:
   resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
   integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
 
-is-callable@^1.1.4, is-callable@^1.2.3:
+is-callable@^1.1.4, is-callable@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/is-callable/-/is-callable-1.2.4.tgz#47301d58dd0259407865547853df6d61fe471945"
   integrity sha512-nsuwtxZfMX67Oryl9LCQ+upnC0Z0BgpwntpS89m1H/TLF0zNfzfLMV/9Wa/6MZsj0acpEjAO0KF1xT6ZdLl95w==
@@ -5554,7 +5582,7 @@ is-promise@^2.1.0:
   resolved "https://registry.yarnpkg.com/is-promise/-/is-promise-2.2.2.tgz#39ab959ccbf9a774cf079f7b40c7a26f763135f1"
   integrity sha512-+lP4/6lKUBfQjZ2pdxThZvLUAafmZb8OAxFb8XXtiQmS35INgr85hdOGoEs124ez1FCnZJt6jau/T+alh58QFQ==
 
-is-regex@^1.1.3:
+is-regex@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/is-regex/-/is-regex-1.1.4.tgz#eef5663cd59fa4c0ae339505323df6854bb15958"
   integrity sha512-kvRdxDsxZjhzUX07ZnLydzS1TU/TJlTUHHY4YLL87e37oUA49DfkLqgy+VjFocowy29cKvcSiu+kIv728jTTVg==
@@ -5577,7 +5605,7 @@ is-stream@^2.0.0:
   resolved "https://registry.yarnpkg.com/is-stream/-/is-stream-2.0.1.tgz#fac1e3d53b97ad5a9d0ae9cef2389f5810a5c077"
   integrity sha512-hFoiJiTl63nn+kstHGBtewWSKnQLpyb155KHheA1l39uvtO9nWIop1p3udqPcUd/xbF1VLMO4n7OI6p7RbngDg==
 
-is-string@^1.0.5, is-string@^1.0.6:
+is-string@^1.0.5, is-string@^1.0.7:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/is-string/-/is-string-1.0.7.tgz#0dd12bf2006f255bb58f695110eff7491eebc0fd"
   integrity sha512-tE2UXzivje6ofPW7l23cjDOMa09gb7xlAqG6jG5ej6uPV32TlWP3NKPigtaGeHNu9fohccRYvIiZMfOOnOYUtg==
@@ -6398,11 +6426,11 @@ jsprim@^1.2.2:
     verror "1.10.0"
 
 "jsx-ast-utils@^2.4.1 || ^3.0.0":
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/jsx-ast-utils/-/jsx-ast-utils-3.2.0.tgz#41108d2cec408c3453c1bbe8a4aae9e1e2bd8f82"
-  integrity sha512-EIsmt3O3ljsU6sot/J4E1zDRxfBNrhjyf/OKjlydwgEimQuznlM4Wv7U+ueONJMyEn1WRE0K8dhi3dVAXYT24Q==
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/jsx-ast-utils/-/jsx-ast-utils-3.2.1.tgz#720b97bfe7d901b927d87c3773637ae8ea48781b"
+  integrity sha512-uP5vu8xfy2F9A6LGC22KO7e2/vGTS1MhP+18f++ZNlf0Ohaxbc9nIEwHAsejlJKyzfZzU5UIhe5ItYkitcZnZA==
   dependencies:
-    array-includes "^3.1.2"
+    array-includes "^3.1.3"
     object.assign "^4.1.2"
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
@@ -8192,19 +8220,19 @@ react-native-easy-view-transformer@^1.2.0:
     react-native-scrolling "^1.0.2"
 
 react-native-fast-image@^8.3.7:
-  version "8.5.6"
-  resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.5.6.tgz#3a4062b88bdaa9cf4fc7f7d8e1cd2ee9745d556f"
-  integrity sha512-fkgxxnuvhrrnJQGYDp7H6tk3B9+/V0MK6p6QSGRxlbuQrWqVKPCbikjCgbwmzLDptV0DFlGPtnTkSiRoSqMn0A==
+  version "8.5.8"
+  resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.5.8.tgz#6f685ecbff5d8f74f33fc3c6b38c4eea9b33a6fd"
+  integrity sha512-yVVKKPIbk6HrFwC+RynJluGb23Vy8TVQ4gN/Y9LyGaohDoRaxbwZzWdUA4CuT63ILImf5IqOmokypuTVQAD99w==
 
 react-native-fbsdk@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/react-native-fbsdk/-/react-native-fbsdk-3.0.0.tgz#07ef41758bb17a0acaff744008af625a45ef9a01"
   integrity sha512-i0JocuzLlGk13J0xFDjm8GlX7SADAL2kh/syE/HOn5HHdW+PFjC31MNj5AtzIw2TicHXpHGO6VPKNfdWFbxboA==
 
-react-native-flipper@^0.109.0:
-  version "0.109.0"
-  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.109.0.tgz#17902a32dd0ac70335e9c71ad02e0e47ed219993"
-  integrity sha512-qT8Eh8THhpiICumC6g6kOgRR7qfCcZDPtAw6j2xbJTQ5e0jtayOW8dICsDz/EKgQyU5vzOFkjuvI4O3jjIbijw==
+react-native-flipper@^0.110.0:
+  version "0.110.0"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.110.0.tgz#d32975d1d2df3f55f234222a7f53b4d9ea70e450"
+  integrity sha512-VhHodD04j3SQoPUxHoSHV4jHZyxsdRn7svgA2XteAmw03kF/GF1/ytrcelq9yR/VvWXeUtdrJJ99az0b1nXLjQ==
 
 react-native-flipper@^0.34.0:
   version "0.34.0"
