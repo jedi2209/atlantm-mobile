@@ -197,11 +197,11 @@ class InfoListScreen extends Component {
     } = this.props;
     const {region, id: dealer} = dealerSelected;
 
-    navigation.setParams({
-      pushActionSubscribeState: this.props.pushActionSubscribeState,
-      onSwitchSubscribe: this.onSwitchActionSubscribe,
-      pushStatusLoaded: true,
-    });
+    // navigation.setParams({
+    //   pushActionSubscribeState: this.props.pushActionSubscribeState,
+    //   onSwitchSubscribe: this.onSwitchActionSubscribe,
+    //   pushStatusLoaded: true,
+    // });
 
     if (!isFetchInfoList) {
       actionListReset();
