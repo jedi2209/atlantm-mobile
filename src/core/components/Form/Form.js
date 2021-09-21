@@ -946,8 +946,8 @@ class Form extends Component {
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
 
-      if (id && typeof this.state[name][id].value !== 'undefined') {
-        userPhoneValue = this.state[name][id].value;
+      if (id && typeof this.state[name][id]?.value !== 'undefined') {
+        userPhoneValue = this.state[name][id]?.value;
       } else {
         userPhoneValue = this.state[name] || data.value;
       }
@@ -1022,6 +1022,7 @@ class Form extends Component {
             autoFormat={true}
             cancelText={strings.Base.cancel}
             confirmText={strings.Base.choose}
+            initialValue={userPhoneValue}
             onChangePhoneNumber={number => {
               if (
                 this.inputRefs[
@@ -1030,18 +1031,29 @@ class Form extends Component {
                 number.length &&
                 number.length > 9
               ) {
-                this.setState(
-                  {
-                    [name]: number.replace(/[^\d.+]/g, ''),
-                    showSubmitButton: true,
-                  },
-                  () => {
-                    this._showHideSubmitButton(true);
-                    if (data.props.focusNextInput) {
-                      this._nextInput(groupNum, num);
-                    }
-                  },
-                );
+                if (id) {
+                  this.setState(prevState => {
+                    let copyField = Object.assign({}, prevState[name]); // creating copy of state variable jasper
+                    copyField[id].value = number.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
+                    return {
+                      [name]: copyField,
+                      showSubmitButton: true,
+                    };
+                  });
+                } else {
+                  this.setState(
+                    {
+                      [name]: number.replace(/[^\d.+]/g, ''),
+                      showSubmitButton: true,
+                    },
+                    () => {
+                      this._showHideSubmitButton(true);
+                      if (data.props.focusNextInput) {
+                        this._nextInput(groupNum, num);
+                      }
+                    },
+                  );
+                }
               } else {
                 if (
                   this.state.showSubmitButton &&

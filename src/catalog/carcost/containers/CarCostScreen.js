@@ -117,8 +117,6 @@ class CarCostScreen extends PureComponent {
       ].join(' ');
     }
 
-    console.log('this.props.route.params', this.props.route.params);
-
     if (this.props.route?.params && this.props.route.params?.Text) {
       this.Text = this.props.route?.params?.Text;
     }

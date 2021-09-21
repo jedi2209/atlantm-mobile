@@ -9,6 +9,7 @@ import {
   RefreshControl,
   StatusBar,
 } from 'react-native';
+import {TransitionPresets} from '@react-navigation/stack';
 import TransitionView from '../../core/components/TransitionView';
 import {StyleProvider, Content, Button} from 'native-base';
 import ResponsiveImageView from 'react-native-responsive-image-view';
@@ -30,6 +31,8 @@ import Analytics from '../../utils/amplitude-analytics';
 import {verticalScale} from '../../utils/scale';
 import {dayMonth, dayMonthYear} from '../../utils/date';
 import {strings} from '../../core/lang/const';
+
+import {TransparentBack} from '../../navigation/const';
 
 // image
 const {width: screenWidth} = Dimensions.get('window');
@@ -84,7 +87,23 @@ class InfoPostScreen extends Component {
   onLayoutWebView = e => {
     const {width: webViewWidth} = e.nativeEvent.layout;
 
-    this.setState({webViewWidth});
+    this.setState({webViewWidth}, () => {
+      setTimeout(() => {
+        this.props.navigation.setOptions(
+          TransparentBack(
+            this.props.navigation,
+            this.props.route,
+            {...TransitionPresets.ModalTransition},
+            {
+              icon: 'close',
+              IconStyle: {
+                fontSize: 24,
+              },
+            },
+          ),
+        );
+      }, 150);
+    });
   };
 
   getPost = () => {
