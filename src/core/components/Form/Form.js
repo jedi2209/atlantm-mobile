@@ -456,78 +456,55 @@ class Form extends Component {
     return true;
   };
 
-  _validatePhone = ({formatted, pureValue, id, name, data, groupNum, num}) => {
-    const countryCode = PhoneDetect.getCountryCodeByMask(formatted);
+  _validatePhone = ({value, id, name, data, groupNum, num}) => {
+    const countryCode = PhoneDetect.getCountryCodeByMask(value);
     if (id) {
       this.setState(prevState => {
         let copyField = Object.assign({}, prevState[name]); // creating copy of state variable jasper
-        copyField[id].value = formatted.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
+        copyField[id].value = value.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
         let maskLength = copyField[id].mask.replace(/[^0]/g, '');
-        if (pureValue.length === maskLength.length) {
-          return {
-            [name]: copyField,
-            showSubmitButton: true,
-          };
-        } else {
-          if (this.state.showSubmitButton) {
-            return {
-              showSubmitButton: false,
-            };
-          }
-        }
+        // if (pureValue.length === maskLength.length) {
+        //   return {
+        //     [name]: copyField,
+        //     showSubmitButton: true,
+        //   };
+        // } else {
+        //   if (this.state.showSubmitButton) {
+        //     return {
+        //       showSubmitButton: false,
+        //     };
+        //   }
+        // }
       });
     } else {
-      let maskLength = this.state['mask_' + name].replace(/([^0])/g, '');
       switch (countryCode) {
         case 'ua':
-          if (pureValue.length + 1 === maskLength.length) {
-            this.setState(
-              {
-                [name]: formatted.replace(/[^\d.+]/g, ''),
-                showSubmitButton: true,
-              },
-              () => {
-                this._showHideSubmitButton(true);
-                if (data.props.focusNextInput) {
-                  this._nextInput(groupNum, num);
-                }
-              },
-            );
-          } else {
-            if (
-              this.state.showSubmitButton &&
-              data.props &&
-              data.props.required
-            ) {
-              this._showHideSubmitButton(false);
-            }
-          }
+          var valueFull = 16;
           break;
         case 'ru':
-        case 'by':
-          if (pureValue.length === maskLength.length) {
-            this.setState(
-              {
-                [name]: formatted.replace(/[^\d.+]/g, ''),
-                showSubmitButton: true,
-              },
-              () => {
-                this._showHideSubmitButton(true);
-                if (data.props.focusNextInput) {
-                  this._nextInput(groupNum, num);
-                }
-              },
-            );
-          } else {
-            if (
-              this.state.showSubmitButton &&
-              data.props &&
-              data.props.required
-            ) {
-              this._showHideSubmitButton(false);
-            }
-          }
+          var valueFull = 16;
           break;
+        case 'by':
+          var valueFull = 17;
+          break;
+      }
+      if (value.length === valueFull) {
+        this.setState(
+          {
+            [name]: value.replace(/[^\d.+]/g, ''),
+            showSubmitButton: true,
+          },
+          () => {
+            this._showHideSubmitButton(true);
+            if (data.props.focusNextInput) {
+              this._nextInput(groupNum, num);
+            }
+          },
+        );
+      } else {
+        if (this.state.showSubmitButton && data.props && data.props.required) {
+          this._showHideSubmitButton(false);
+        }
       }
     }
   };
@@ -965,7 +942,7 @@ class Form extends Component {
         groupNum = 1;
       }
 
-      this.inputRefs[groupNum + 'InputWrapper' + num] = React.createRef();
+      // this.inputRefs[groupNum + 'InputWrapper' + num] = React.createRef();
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
 
@@ -979,21 +956,6 @@ class Form extends Component {
         if (userPhoneRegion && userPhoneRegion !== countryCode) {
           countryCode = userPhoneRegion;
         }
-      }
-      let mask;
-
-      if (id && !this.state[name][id].mask) {
-        this.state[name][id].mask = MaskedPhone[countryCode];
-      } else {
-        if (!this.state['mask_' + name]) {
-          this.state['mask_' + name] = MaskedPhone[countryCode];
-        }
-      }
-
-      if (id && this.state[name][id].mask) {
-        mask = this.state[name][id].mask;
-      } else {
-        mask = this.state['mask_' + name];
       }
 
       let requiredStyle = {};
@@ -1024,15 +986,6 @@ class Form extends Component {
       }
 
       if (userPhoneValue && this.state.showSubmitButton === false) {
-        // this._validatePhone({
-        //   formatted: userPhoneValue,
-        //   pureValue: userPhoneValue,
-        //   id,
-        //   name,
-        //   data,
-        //   groupNum,
-        //   num,
-        // });
         this.setState(
           {
             showSubmitButton: true,
@@ -1058,7 +1011,9 @@ class Form extends Component {
           ]}
           key={'view' + num + name}>
           <PhoneInput
-            ref={this.inputRefs[groupNum + 'InputWrapper' + num]}
+            ref={ref => {
+              this.inputRefs[groupNum + 'InputWrapper' + num] = ref;
+            }}
             testID={'Form.PhoneWrapper.' + name}
             key={'field' + num + name}
             initialCountry={countryCode}
@@ -1067,70 +1022,79 @@ class Form extends Component {
             autoFormat={true}
             cancelText={strings.Base.cancel}
             confirmText={strings.Base.choose}
+            onChangePhoneNumber={number => {
+              if (
+                this.inputRefs[
+                  groupNum + 'InputWrapper' + num
+                ].isValidNumber() &&
+                number.length &&
+                number.length > 9
+              ) {
+                this.setState(
+                  {
+                    [name]: number.replace(/[^\d.+]/g, ''),
+                    showSubmitButton: true,
+                  },
+                  () => {
+                    this._showHideSubmitButton(true);
+                    if (data.props.focusNextInput) {
+                      this._nextInput(groupNum, num);
+                    }
+                  },
+                );
+              } else {
+                if (
+                  this.state.showSubmitButton &&
+                  data.props &&
+                  data.props.required
+                ) {
+                  this._showHideSubmitButton(false);
+                }
+              }
+              // return this._validatePhone({
+              //   value: number,
+              //   id,
+              //   name,
+              //   data,
+              //   groupNum,
+              //   num,
+              // });
+            }}
+            textProps={{
+              testID: 'Form.Phone.' + name,
+              key: 'fieldInternal' + name + num,
+              placeholderTextColor: '#afafaf',
+              keyboardType: 'phone-pad',
+              autoCompleteType: 'tel',
+              selectionColor: '#afafaf',
+              returnKeyType: 'go',
+              textContentType: 'telephoneNumber',
+              enablesReturnKeyAutomatically: true,
+              editable: true,
+              style: [
+                styles.PhoneTextInputComponent,
+                {...data.textStyle},
+                data.props && data.props.required
+                  ? !this.state[name]
+                    ? styles.labelRequiredFalse
+                    : styles.labelRequiredTrue
+                  : null,
+              ],
+            }}
             onSelectCountry={iso2 => {
               if (id) {
                 this.setState(prevState => {
                   let copyField = Object.assign({}, prevState[name]);
                   copyField[id] = {
                     value: null,
-                    mask: MaskedPhone[iso2],
                   };
                   return {[name]: copyField};
                 });
               } else {
                 this.setState({
                   [name]: null,
-                  ['mask_' + name]: MaskedPhone[iso2],
                 });
               }
-            }}
-            textComponent={() => {
-              const PhoneTextInputComponent = React.forwardRef((props, ref) => (
-                <TextInputMask
-                  className="PhoneTextInputComponent"
-                  ref={ref}
-                  {...props}
-                />
-              ));
-              return (
-                <PhoneTextInputComponent
-                  ref={this.inputRefs[groupNum + 'Input' + num]}
-                  testID={'Form.Phone.' + name}
-                  key={'fieldInternal' + name + num}
-                  value={userPhoneValue}
-                  placeholderTextColor={'#afafaf'}
-                  placeholder={data.label}
-                  keyboardType={'phone-pad'}
-                  autoCompleteType={'tel'}
-                  selectionColor={'#afafaf'}
-                  returnKeyType={'go'}
-                  textContentType={'telephoneNumber'}
-                  enablesReturnKeyAutomatically={true}
-                  editable={true}
-                  onEndEditing={() => {}}
-                  onChangeText={(formatted, pureValue) => {
-                    return this._validatePhone({
-                      formatted,
-                      pureValue,
-                      id,
-                      name,
-                      data,
-                      groupNum,
-                      num,
-                    });
-                  }}
-                  mask={mask}
-                  style={[
-                    styles.PhoneTextInputComponent,
-                    {...data.textStyle},
-                    data.props && data.props.required
-                      ? !this.state[name]
-                        ? styles.labelRequiredFalse
-                        : styles.labelRequiredTrue
-                      : null,
-                  ]}
-                />
-              );
             }}
             {...data.props}
           />
