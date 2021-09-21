@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {Text, View, Pressable, StyleSheet} from 'react-native';
+import {Text, View, Pressable, Platform, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {
@@ -140,19 +140,16 @@ export const Base = ({navigation, route}) => {
       <StackBase.Screen
         name="InfoPostScreen"
         component={InfoPostScreen}
-        options={TransparentBack(
-          navigation,
-          route,
-          {
-            ...TransitionPresets.ModalTransition,
+        options={{
+          headerTitle: '',
+          headerTitleStyle: stylesHeader.transparentHeaderTitle,
+          headerStyle: {
+            height: 55,
           },
-          {
-            icon: 'close',
-            IconStyle: {
-              fontSize: 24,
-            },
-          },
-        )}
+          presentation: 'modal',
+          headerTransparent: true,
+          headerLeft: null,
+        }}
       />
       <StackBase.Screen
         name="MapScreen"
