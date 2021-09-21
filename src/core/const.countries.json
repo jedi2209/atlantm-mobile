@@ -5,7 +5,7 @@
       "iso2": "by",
       "dialCode": "375",
       "priority": 0,
-      "areaCodes": null
+      "areaCodes": [25, 29, 33, 44]
     },
     {
       "name": "Россия",
@@ -19,7 +19,7 @@
       "iso2": "ua",
       "dialCode": "380",
       "priority": 2,
-      "areaCodes": null
+      "areaCodes": [39, 50, 63, 66, 67, 68, 73, 91, 92, 93, 94, 95, 96, 97, 98, 99]
     }
   ]
   

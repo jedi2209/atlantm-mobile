@@ -119,17 +119,6 @@ class LoginScreen extends Component {
             required: true,
             focusNextInput: false,
             offset: 5,
-            textProps: {
-              placeholderTextColor: '#afafaf',
-              placeholder: strings.Form.field.label.phone,
-              keyboardType: 'phone-pad',
-              autoCompleteType: 'tel',
-              selectionColor: '#afafaf',
-              returnKeyType: 'go',
-              textContentType: 'telephoneNumber',
-              enablesReturnKeyAutomatically: true,
-              editable: this.state.code ? false : true,
-            },
           },
         },
       ],
@@ -164,8 +153,8 @@ class LoginScreen extends Component {
     }
   };
 
-  _onOtpChange = (index) => {
-    return (value) => {
+  _onOtpChange = index => {
+    return value => {
       if (isNaN(Number(value))) {
         // do nothing when a non digit is pressed
         return;
@@ -188,7 +177,7 @@ class LoginScreen extends Component {
     };
   };
 
-  _onOtpKeyPress = (index) => {
+  _onOtpKeyPress = index => {
     return ({nativeEvent: {key: value}}) => {
       if (Number(value)) {
         if (index > 0 && index < 3 && this.otpArray[index] !== '') {
@@ -229,11 +218,11 @@ class LoginScreen extends Component {
     });
   };
 
-  _verifyCode = (data) => {
+  _verifyCode = data => {
     let phone = data.PHONE;
     this.setState({phone: phone});
     this.setState({loadingVerify: true});
-    return this.props.actionGetPhoneCode({phone}).then((response) => {
+    return this.props.actionGetPhoneCode({phone}).then(response => {
       if (response.code >= 300) {
         this._cancelVerify();
 
@@ -290,7 +279,7 @@ class LoginScreen extends Component {
     this.setState({loading: true, loadingVerify: true});
     this.props
       .actionGetPhoneCode({phone, code})
-      .then((data) => {
+      .then(data => {
         Keyboard.dismiss();
         PushNotifications.addTag('login', data.user.ID);
         if (data.user.SAP && data.user.SAP.ID) {
@@ -318,7 +307,7 @@ class LoginScreen extends Component {
     return this.props.actionSavePofile(profile);
   }
 
-  _checkPhone = async (data) => {
+  _checkPhone = async data => {
     data.update = 0;
     const res = await this._sendDataToApi(data);
     if (res) {
@@ -381,7 +370,7 @@ class LoginScreen extends Component {
     }
   };
 
-  onInputCode = (text) => {
+  onInputCode = text => {
     if (text.length === 4) {
       this.setState({codeValue: text}, () => {
         this._verifyCodeStepTwo();
@@ -389,7 +378,7 @@ class LoginScreen extends Component {
     }
   };
 
-  renderLoginButtons = (region) => {
+  renderLoginButtons = region => {
     let VKenabled = true;
     let ButtonWidth = '25%';
     let ButtonHeight = 50;
@@ -601,7 +590,7 @@ class LoginScreen extends Component {
                             key={'textCode' + index}
                             textContentType="oneTimeCode"
                             keyboardType="number-pad"
-                            ref={(input) => {
+                            ref={input => {
                               this.CodeInput[index] = input;
                             }}
                             maxLength={1}
@@ -673,7 +662,7 @@ class LoginScreen extends Component {
                           ? false
                           : true
                       }
-                      ref={(ref) => {
+                      ref={ref => {
                         this.getCodeButton = ref;
                       }}
                       style={[
