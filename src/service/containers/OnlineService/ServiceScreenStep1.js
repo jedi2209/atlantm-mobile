@@ -568,7 +568,7 @@ class ServiceScreenStep1 extends Component {
                   }
                 : {},
               this.state.serviceInfo &&
-              !this.state.serviceInfo.summary[0].summ.recommended
+              this.state.serviceInfo.summary[0].summ.recommended
                 ? {
                     name: 'recommended',
                     type: 'checkbox',
