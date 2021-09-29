@@ -127,7 +127,6 @@ PODS:
     - GTMSessionFetcher/Core (~> 1.5)
   - GTMSessionFetcher/Core (1.7.0)
   - hermes-engine (0.8.1)
-  - InputMask (6.1.0)
   - libevent (2.1.12)
   - libwebp (1.2.0):
     - libwebp/demux (= 1.2.0)
@@ -389,10 +388,6 @@ PODS:
     - React-Core
   - react-native-splash-screen (3.2.0):
     - React
-  - react-native-text-input-mask (3.1.4):
-    - InputMask (~> 6.1.0)
-    - React-Core
-    - React-RCTText
   - react-native-vkontakte-login (1.0.1):
     - React
     - VK-ios-sdk
@@ -611,7 +606,6 @@ DEPENDENCIES:
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
-  - react-native-text-input-mask (from `../node_modules/react-native-text-input-mask`)
   - react-native-vkontakte-login (from `../node_modules/react-native-vkontakte-login`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -671,7 +665,6 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - hermes-engine
-    - InputMask
     - libevent
     - libwebp
     - OneSignal
@@ -742,8 +735,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/slider"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
-  react-native-text-input-mask:
-    :path: "../node_modules/react-native-text-input-mask"
   react-native-vkontakte-login:
     :path: "../node_modules/react-native-vkontakte-login"
   react-native-webview:
@@ -841,7 +832,6 @@ SPEC CHECKSUMS:
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
   hermes-engine: 7dcd1dbd908e6353bd7e4a4add72dba7bf76bf84
-  InputMask: 71d291dc54d2deaeac6512afb6ec2304228c0bb7
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: e90b9c01d99205d03b6bb8f2c8c415e5a4ef66f0
   OneSignal: b72068b06b359f22e27404edee87338f4b68e783
@@ -869,7 +859,6 @@ SPEC CHECKSUMS:
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-slider: 269d81247e2a87358ee03241da55b00c919e4d7a
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
-  react-native-text-input-mask: 36a546b378fadd2efe1b7484a859d34bc2c80395
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
   react-native-webview: 3680f8b7d2b62e97b781efdc5e74a39179b2a5e2
   React-perflogger: fd28ee1f2b5b150b00043f0301d96bd417fdc339

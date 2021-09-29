@@ -62,7 +62,7 @@ class ServiceScreenStep2 extends Component {
     this.recommended = get(this.props.route, 'params.recommended', false);
   }
 
-  onPressOrder = async (dataFromForm) => {
+  onPressOrder = async dataFromForm => {
     const {navigation} = this.props;
 
     let dateFromForm = get(dataFromForm, 'DATE', null);

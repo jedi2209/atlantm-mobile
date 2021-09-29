@@ -577,8 +577,8 @@ class ServiceScreenStep1 extends Component {
                       '[+' +
                         showPrice(
                           parseFloat(
-                            // this.state.serviceInfo.summary[0].summ.recommended,
-                            '123,12',
+                            this.state.serviceInfo.summary[0].summ.recommended,
+                            // '123,12',
                           ),
                           this.props.dealerSelected.region,
                         ) +
