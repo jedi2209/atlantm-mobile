@@ -50,6 +50,7 @@ import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
 
 // orders
 import ServiceContainer from '../service/containers/ServiceContainer';
+import ServiceInfoModal from '../service/containers/OnlineService/ServiceInfoModal';
 import ServiceScreenStep2 from '../service/containers/OnlineService/ServiceScreenStep2';
 import OrderScreen from '../catalog/containers/OrderScreen';
 import TestDriveScreen from '../catalog/containers/TestDriveScreen';
@@ -247,6 +248,16 @@ export const Base = ({navigation, route}) => {
             {color: '#222B45'},
           ],
         })}
+      />
+      <StackOrders.Screen
+        name="ServiceInfoModal"
+        component={ServiceInfoModal}
+        options={{
+          presentation: 'modal',
+          headerShown: false,
+          statusBarHidden: true,
+          gestureEnabled: false,
+        }}
       />
       <StackOrders.Screen
         name="ServiceScreenStep2"

@@ -59,6 +59,7 @@ class ServiceScreenStep2 extends Component {
       carVIN: get(this.props.route, 'params.car.vin'),
       carNumber: get(this.props.route, 'params.car.plate'),
     };
+    this.recommended = get(this.props.route, 'params.recommended', false);
   }
 
   onPressOrder = async (dataFromForm) => {
@@ -97,6 +98,7 @@ class ServiceScreenStep2 extends Component {
       email: dataFromForm.EMAIL || null,
       tech_place: (dateFromForm && dateFromForm.tech_place) || null,
       service: (this.service && this.service.label) || null,
+      recommended: this.recommended || false,
       vin: this.car.carVIN || null,
       car: {
         brand: this.car.carBrand || null,

@@ -1,20 +1,27 @@
 import React, {useState} from 'react';
 import {StyleSheet, View, Text, SafeAreaView} from 'react-native';
-import {Content, Row, Col, Segment, Button} from 'native-base';
-// import {useHeaderHeight} from '@react-navigation/stack';
-import Modal from 'react-native-modal';
+import {Content, Row, Col, Tab, Tabs, DefaultTabBar, Button} from 'native-base';
 
-import showPrice from '../../utils/price';
-import styleConst from '../../core/style-const';
-import isIPhoneX from '../../utils/is_iphone_x';
-import {strings} from '../../core/lang/const';
+import showPrice from '../../../utils/price';
+import styleConst from '../../../core/style-const';
+import isIPhoneX from '../../../utils/is_iphone_x';
+import {strings} from '../../../core/lang/const';
+import style from '../../../core/components/Lists/style';
 
-export const ServiceModal = ({visible, onClose, data}) => {
-  // const headerHeight = useHeaderHeight();
+const ServiceInfoModal = ({onClose, data, route, navigation}) => {
   let defaultTab = 'works';
-  if (data && (!data['works'] || !data['works'].length)) {
+  if (!data || typeof data === 'undefined') {
+    data = route.params.data;
+  }
+  if (!onClose || typeof onClose === 'undefined') {
+    onClose = () => navigation.goBack();
+    if (route.params.onClose) {
+      onClose = () => route.params.onClose;
+    }
+  }
+  if (data && (!data.works || !data.works.length)) {
     defaultTab = 'parts';
-    data['works'] = [];
+    data.works = [];
   }
   const [activeTab, setActiveTab] = useState(defaultTab);
 
@@ -65,61 +72,53 @@ export const ServiceModal = ({visible, onClose, data}) => {
       textTransform: 'uppercase',
       fontSize: 16,
     },
+    TabsTextStyle: {
+      color: '#000',
+    },
+    TabsActiveTextStyle: {
+      color: styleConst.color.lightBlue,
+    },
   });
 
+  const renderTabBar = props => {
+    props.tabStyle = Object.create(props.tabStyle);
+    return <DefaultTabBar {...props} />;
+  };
+
   return (
-    <Modal
-      isVisible={visible}
-      useNativeDriver
-      onBackdropPress={onClose}
-      style={modalStyles.host}>
-      <View style={modalStyles.container}>
-        <SafeAreaView style={{flex: 1}}>
-          {data && (
-            <View style={modalStyles.content}>
-              <Segment style={modalStyles.tabContainer}>
-                {data['works'] && data['works'].length ? (
-                  <Button
-                    onPress={() => setActiveTab('works')}
-                    style={modalStyles.tabButton}>
-                    <Text
-                      selectable={false}
-                      style={[
-                        modalStyles.tabButtonText,
-                        activeTab === 'works' &&
-                          modalStyles.tabButtonActiveText,
-                      ]}>
-                      {strings.CarHistoryDetailsScreen.works}
-                    </Text>
-                  </Button>
-                ) : null}
-                {data['parts'] && data['parts'].length ? (
-                  <Button
-                    onPress={() => setActiveTab('parts')}
-                    style={modalStyles.tabButton}>
-                    <Text
-                      selectable={false}
-                      style={[
-                        modalStyles.tabButtonText,
-                        activeTab === 'parts' &&
-                          modalStyles.tabButtonActiveText,
-                      ]}>
-                      {strings.CarHistoryDetailsScreen.materials}
-                    </Text>
-                  </Button>
-                ) : null}
-              </Segment>
-              <ServiceTable data={data[activeTab]} />
-            </View>
-          )}
-          <View style={modalStyles.wrapper}>
-            <Button full style={modalStyles.button} onPress={onClose}>
-              <Text style={modalStyles.buttonText}>OK</Text>
-            </Button>
-          </View>
-        </SafeAreaView>
-      </View>
-    </Modal>
+    <View style={modalStyles.container}>
+      <SafeAreaView style={{flex: 1}}>
+        <Tabs
+          renderTabBar={renderTabBar}
+          tabBarUnderlineStyle={{
+            backgroundColor: styleConst.color.lightBlue,
+          }}>
+          {data.works && data.works.length ? (
+            <Tab
+              heading={strings.CarHistoryDetailsScreen.works}
+              textStyle={modalStyles.TabsTextStyle}
+              activeTextStyle={modalStyles.TabsActiveTextStyle}
+              activeTabStyle={modalStyles.TabsActiveTabStyle}>
+              <ServiceTable data={data.works} />
+            </Tab>
+          ) : null}
+          {data.parts && data.parts.length ? (
+            <Tab
+              heading={strings.CarHistoryDetailsScreen.materials}
+              textStyle={modalStyles.TabsTextStyle}
+              activeTextStyle={modalStyles.TabsActiveTextStyle}
+              activeTabStyle={modalStyles.TabsActiveTabStyle}>
+              <ServiceTable data={data.parts} />
+            </Tab>
+          ) : null}
+        </Tabs>
+        <View style={modalStyles.wrapper}>
+          <Button full style={modalStyles.button} onPress={onClose}>
+            <Text style={modalStyles.buttonText}>OK</Text>
+          </Button>
+        </View>
+      </SafeAreaView>
+    </View>
   );
 };
 
@@ -127,17 +126,24 @@ const ServiceTable = ({data}) => {
   return (
     <Content>
       {data
-        .filter((el) => {
+        .filter(el => {
           if ((el.name === '' || !el.name) && el.summ === 0) {
             return false;
           }
           return true;
         })
-        .map(({name, quantity, unit, summ, currency}, cnt) => (
+        .map(({name, quantity, unit, summ, currency, required}, cnt) => (
           <View
             style={tableStyles.section}
             key={'ServiceTable' + cnt + quantity + summ}>
-            {name ? <Text style={tableStyles.sectionTitle}>{name}</Text> : null}
+            {name ? (
+              <Text style={tableStyles.sectionTitle}>
+                {name}{' '}
+                {required ? (
+                  <Text style={tableStyles.sectionTitleRequired}>*</Text>
+                ) : null}
+              </Text>
+            ) : null}
             {quantity && unit ? (
               <ServiceTableItem label={strings.CarHistoryDetailsScreen.count}>
                 {unit === 'сек'
@@ -152,6 +158,9 @@ const ServiceTable = ({data}) => {
             ) : null}
           </View>
         ))}
+      <Text style={tableStyles.textRequired}>
+        * отмечены обязательные работы и з/ч
+      </Text>
     </Content>
   );
 };
@@ -185,6 +194,12 @@ const tableStyles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
     marginBottom: 15,
   },
+  sectionTitleRequired: {},
+  textRequired: {
+    marginHorizontal: '2%',
+    marginVertical: 20,
+    color: styleConst.color.greyText,
+  },
   sectionProp: {
     paddingRight: 5,
     marginTop: 5,
@@ -204,3 +219,5 @@ const tableStyles = StyleSheet.create({
     color: styleConst.color.greyText3,
   },
 });
+
+export default ServiceInfoModal;

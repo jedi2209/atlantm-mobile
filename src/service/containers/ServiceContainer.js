@@ -15,7 +15,7 @@ const mapStateToProps = ({dealer, profile}) => {
   };
 };
 
-const ServiceContainer = (props) => {
+const ServiceContainer = props => {
   const navigation = useNavigation();
   const route = useRoute();
   const actionID = get(route, 'params.actionID', null);

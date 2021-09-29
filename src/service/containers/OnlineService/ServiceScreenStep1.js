@@ -16,7 +16,6 @@ import {get, orderBy} from 'lodash';
 import styleConst from '../../../core/style-const';
 
 import {CarCard} from '../../../profile/components/CarCard';
-import {ServiceModal} from '../../components/ServiceModal';
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import Form from '../../../core/components/Form/Form';
 import UserData from '../../../utils/user';
@@ -39,7 +38,7 @@ const mapStateToProps = ({dealer, profile, nav}) => {
 
   if (profile.cars && typeof profile.cars === 'object') {
     let Cars = [];
-    profile.cars.map((item) => {
+    profile.cars.map(item => {
       if (!item.hidden) {
         Cars.push(item);
       }
@@ -139,6 +138,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: styleConst.color.white,
   },
+  textPriceTitle: {
+    marginRight: 10,
+    paddingTop: 6,
+    color: styleConst.color.greyText,
+  },
+  textPrice: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: styleConst.color.greyText,
+  },
 });
 
 class ServiceScreenStep1 extends Component {
@@ -173,7 +182,7 @@ class ServiceScreenStep1 extends Component {
     }
 
     this.myCars = [];
-    this.props.cars.map((item) => {
+    this.props.cars.map(item => {
       if (!item.hidden) {
         this.myCars.push(item);
       }
@@ -224,7 +233,7 @@ class ServiceScreenStep1 extends Component {
       });
     } else {
       let services = [];
-      data.data.map((el) => {
+      data.data.map(el => {
         services.push({
           label: el.name.toString(),
           value: el.id.toString(),
@@ -311,7 +320,7 @@ class ServiceScreenStep1 extends Component {
     return false;
   }
 
-  onPressOrder = async (dataFromForm) => {
+  onPressOrder = async dataFromForm => {
     const {navigation} = this.props;
 
     let service = '';
@@ -327,7 +336,7 @@ class ServiceScreenStep1 extends Component {
     }
 
     if (dataFromForm.SERVICE && this.state.services) {
-      service = this.state.services.find((x) => x.key === dataFromForm.SERVICE);
+      service = this.state.services.find(x => x.key === dataFromForm.SERVICE);
     }
 
     let data = {
@@ -335,6 +344,7 @@ class ServiceScreenStep1 extends Component {
       service: service || null,
       serviceInfo: this.state.serviceInfo || null,
       orderLead: this.state.orderLead,
+      recommended: dataFromForm.recommended || false,
       car: {
         brand: this.state.carBrand
           ? this.state.carBrand
@@ -405,7 +415,7 @@ class ServiceScreenStep1 extends Component {
                     horizontal
                     style={styles.carContainer}
                     contentContainerStyle={styles.carContainerContent}>
-                    {(this.myCars || []).map((item) => (
+                    {(this.myCars || []).map(item => (
                       <TouchableWithoutFeedback
                         activeOpacity={0.7}
                         key={item.vin}
@@ -513,7 +523,7 @@ class ServiceScreenStep1 extends Component {
                           }
                         </Text>
                       </>
-                    ) : (
+                    ) : this.state.serviceInfo ? (
                       <TouchableOpacity
                         style={{
                           paddingVertical: 5,
@@ -521,26 +531,20 @@ class ServiceScreenStep1 extends Component {
                           flexDirection: 'row',
                         }}
                         onPress={() => {
-                          this.setState({
-                            isModalVisible: !this.state.isModalVisible,
+                          this.props.navigation.navigate('ServiceInfoModal', {
+                            data: this.state.serviceInfo,
                           });
                         }}>
+                        {console.log(
+                          'this.state.serviceInfo',
+                          this.state.serviceInfo,
+                        )}
                         {this.state.serviceInfo.summary &&
                         this.state.serviceInfo.summary[0].summ ? (
                           <>
-                            <Text
-                              style={{
-                                marginRight: 10,
-                                paddingTop: 2,
-                                color: styleConst.color.greyText,
-                              }}>
+                            <Text style={styles.textPriceTitle}>
                               {strings.ServiceScreenStep1.price}{' '}
-                              <Text
-                                style={{
-                                  fontSize: 18,
-                                  fontWeight: 'bold',
-                                  color: styleConst.color.greyText,
-                                }}>
+                              <Text style={styles.textPrice}>
                                 {showPrice(
                                   parseFloat(
                                     this.state.serviceInfo.summary[0].summ
@@ -552,7 +556,7 @@ class ServiceScreenStep1 extends Component {
                             </Text>
                             <Icon
                               name="ios-information-circle-outline"
-                              size={20}
+                              size={24}
                               style={{
                                 color: styleConst.color.blue,
                               }}
@@ -560,7 +564,27 @@ class ServiceScreenStep1 extends Component {
                           </>
                         ) : null}
                       </TouchableOpacity>
-                    ),
+                    ) : null,
+                  }
+                : {},
+              this.state.serviceInfo &&
+              !this.state.serviceInfo.summary[0].summ.recommended
+                ? {
+                    name: 'recommended',
+                    type: 'checkbox',
+                    label: [
+                      'Рекомендуемые работы',
+                      '[+' +
+                        showPrice(
+                          parseFloat(
+                            // this.state.serviceInfo.summary[0].summ.recommended,
+                            '123,12',
+                          ),
+                          this.props.dealerSelected.region,
+                        ) +
+                        ']',
+                    ].join(' '),
+                    value: false,
                   }
                 : {},
             ],
@@ -592,15 +616,6 @@ class ServiceScreenStep1 extends Component {
                 parentState={this.state}
               />
             </View>
-            {this.state.serviceInfo ? (
-              <View>
-                <ServiceModal
-                  visible={this.state.isModalVisible}
-                  onClose={() => this.setState({isModalVisible: false})}
-                  data={this.state.serviceInfo}
-                />
-              </View>
-            ) : null}
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>

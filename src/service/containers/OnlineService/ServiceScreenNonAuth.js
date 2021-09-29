@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {get} from 'lodash';
 
-import {ServiceModal} from '../../components/ServiceModal';
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import Form from '../../../core/components/Form/Form';
 import {addDays, dayMonthYear, format} from '../../../utils/date';
@@ -102,7 +101,7 @@ class ServiceScreenNonAuth extends Component {
     this.props.localDealerClear();
   }
 
-  onPressOrder = async (dataFromForm) => {
+  onPressOrder = async dataFromForm => {
     const {navigation, route} = this.props;
 
     let dateFromForm = get(dataFromForm, 'DATETIME', null);
@@ -389,13 +388,6 @@ class ServiceScreenNonAuth extends Component {
                 onSubmit={this.onPressOrder}
                 SubmitButton={{text: strings.Form.button.send}}
                 parentState={this.state}
-              />
-            </View>
-            <View>
-              <ServiceModal
-                visible={this.state.isModalVisible}
-                onClose={() => this.setState({isModalVisible: false})}
-                data={this.state.serviceInfo}
               />
             </View>
           </ScrollView>
