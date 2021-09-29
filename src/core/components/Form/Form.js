@@ -9,9 +9,10 @@ import {
   ActivityIndicator,
   Platform,
   StatusBar,
+  Pressable,
 } from 'react-native';
 
-import {Text, Button, Switch, Toast} from 'native-base';
+import {Text, Button, Switch, Toast, CheckBox} from 'native-base';
 
 import {connect} from 'react-redux';
 
@@ -21,7 +22,6 @@ import {DatePickerCustom} from '../DatePickerCustom';
 import ChooseDateTimeComponent from '../../../service/components/ChooseDateTimeComponent';
 import RNPickerSelect from 'react-native-picker-select';
 import PhoneInput from 'react-native-phone-input';
-import TextInputMask from 'react-native-text-input-mask';
 import DealerItemList from '../DealerItemList';
 
 import PhoneDetect from '../../../utils/phoneDetect';
@@ -137,13 +137,24 @@ const styles = StyleSheet.create({
   switchWrapper: {
     marginVertical: 10,
   },
+  checkboxWrapper: {
+    marginVertical: 0,
+  },
   switchText: {
     marginTop: 5,
+    color: '#808080',
+  },
+  checkboxText: {
     color: '#808080',
   },
   switch: {
     right: 15,
     top: 10,
+    position: 'absolute',
+  },
+  checkbox: {
+    right: 15,
+    top: 15,
     position: 'absolute',
   },
   button: {
@@ -254,7 +265,11 @@ class Form extends Component {
               );
             } else {
               this.state[field.name] = field.value;
-              if (field.value && field.type !== 'phone') {
+              if (
+                field.value &&
+                field.type !== 'phone' &&
+                field.type !== 'checkbox'
+              ) {
                 this.state[field.name + '_Picker'] = null;
               }
             }
@@ -1032,14 +1047,22 @@ class Form extends Component {
                 number.length > 9
               ) {
                 if (id) {
-                  this.setState(prevState => {
-                    let copyField = Object.assign({}, prevState[name]); // creating copy of state variable jasper
-                    copyField[id].value = number.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
-                    return {
-                      [name]: copyField,
-                      showSubmitButton: true,
-                    };
-                  });
+                  this.setState(
+                    prevState => {
+                      let copyField = Object.assign({}, prevState[name]); // creating copy of state variable jasper
+                      copyField[id].value = number.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
+                      return {
+                        [name]: copyField,
+                        showSubmitButton: true,
+                      };
+                    },
+                    () => {
+                      this._showHideSubmitButton(true);
+                      if (data.props.focusNextInput) {
+                        this._nextInput(groupNum, num);
+                      }
+                    },
+                  );
                 } else {
                   this.setState(
                     {
@@ -1063,14 +1086,6 @@ class Form extends Component {
                   this._showHideSubmitButton(false);
                 }
               }
-              // return this._validatePhone({
-              //   value: number,
-              //   id,
-              //   name,
-              //   data,
-              //   groupNum,
-              //   num,
-              // });
             }}
             textProps={{
               testID: 'Form.Phone.' + name,
@@ -1221,9 +1236,37 @@ class Form extends Component {
         </View>
       );
     },
+    checkbox: (data, num, totalFields, groupNum) => {
+      const {name, value, label, id} = data;
+      this.inputRefs[groupNum + 'Input' + num] = React.createRef();
+      this._addToNav(groupNum, num);
+      return (
+        <Pressable
+          style={[styles.field, styles.textinput, styles.checkboxWrapper]}
+          onPress={() => {
+              this.onChangeField(data)(!this.state[name]);
+            }}
+          key={'field' + num + name}>
+          <Text selectable={false} style={styles.checkboxText}>
+            {label}
+          </Text>
+          <CheckBox
+            onPress={() => {
+              this.onChangeField(data)(!this.state[name]);
+            }}
+            checked={this.state[name]}
+            style={[styles.checkbox]}
+            color={styleConst.color.blue}
+            ref={this.inputRefs[groupNum + 'Input' + num]}
+            {...data.props}
+          />
+        </Pressable>
+      );
+    },
   };
 
   render() {
+    console.log('this.state', this.state);
     const res = (
       <View style={styles.safearea} testID={this.props.testID}>
         <StatusBar
