@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     paddingLeft: platformStyle[Platform.OS].select.paddingLeft,
   },
   selectLabel: {
-    color: '#808080',
+    color: styleConst.color.greyText7,
     fontSize: 14,
     position: 'absolute',
     paddingHorizontal: 15,
@@ -142,10 +142,10 @@ const styles = StyleSheet.create({
   },
   switchText: {
     marginTop: 5,
-    color: '#808080',
+    color: styleConst.color.greyText7,
   },
   checkboxText: {
-    color: '#808080',
+    color: styleConst.color.greyText7,
   },
   switch: {
     right: 15,
@@ -354,6 +354,9 @@ class Form extends Component {
           case 'date':
             valid = this._validateDate(this.state[val.name]);
             break;
+          case 'component':
+            valid = true;
+            break;
           default:
             if (
               typeof this.state[val.name] === 'undefined' ||
@@ -386,6 +389,9 @@ class Form extends Component {
             break;
           case 'date':
             valid = this._validateDate(this.state[val.name]);
+            break;
+          case 'component':
+            valid = true;
             break;
           default:
             if (
@@ -1129,13 +1135,16 @@ class Form extends Component {
       );
     },
     component: (data, num) => {
-      const {name} = data;
+      const {name, value} = data;
+      if (!value || typeof value === 'undefined') {
+        return <></>;
+      }
       return (
         <View
           testID={'Form.ComponentWrapper.' + name}
           style={[styles.field, styles.component]}
           key={'field' + num + name}>
-          {data.value}
+          {value}
         </View>
       );
     },
@@ -1244,8 +1253,8 @@ class Form extends Component {
         <Pressable
           style={[styles.field, styles.textinput, styles.checkboxWrapper]}
           onPress={() => {
-              this.onChangeField(data)(!this.state[name]);
-            }}
+            this.onChangeField(data)(!this.state[name]);
+          }}
           key={'field' + num + name}>
           <Text selectable={false} style={styles.checkboxText}>
             {label}
@@ -1266,7 +1275,6 @@ class Form extends Component {
   };
 
   render() {
-    console.log('this.state', this.state);
     const res = (
       <View style={styles.safearea} testID={this.props.testID}>
         <StatusBar

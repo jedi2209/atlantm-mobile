@@ -596,6 +596,7 @@ export default {
       },
     },
     price: 'Попередня вартість',
+    priceRecommended: 'Рекомендуемые работы',
   },
   OrderPartsScreen: {
     title: 'Замовлення запчастин',

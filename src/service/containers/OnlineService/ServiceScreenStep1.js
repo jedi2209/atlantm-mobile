@@ -11,7 +11,7 @@ import {
   Platform,
   TouchableOpacity,
 } from 'react-native';
-import {Icon, Button, Toast} from 'native-base';
+import {Icon, Button, Toast, CheckBox} from 'native-base';
 import {get, orderBy} from 'lodash';
 import styleConst from '../../../core/style-const';
 
@@ -139,14 +139,21 @@ const styles = StyleSheet.create({
     color: styleConst.color.white,
   },
   textPriceTitle: {
-    marginRight: 10,
+    marginLeft: 5,
     paddingTop: 6,
-    color: styleConst.color.greyText,
+    fontSize: 16,
+    fontFamily: styleConst.font.regular,
+    color: styleConst.color.greyText7,
   },
   textPrice: {
     fontSize: 18,
     fontWeight: 'bold',
     color: styleConst.color.greyText,
+  },
+  checkbox: {
+    right: 0,
+    top: 12,
+    position: 'absolute',
   },
 });
 
@@ -167,6 +174,7 @@ class ServiceScreenStep1 extends Component {
       carVIN: carVIN,
       carNumber: carNumber,
       orderLead: false,
+      recommended: false,
     };
 
     const carFromNavigation = get(this.props.route, 'params.car');
@@ -260,7 +268,7 @@ class ServiceScreenStep1 extends Component {
     });
 
     if (data.status !== 'success' && data.status !== 200) {
-      data.data = [];
+      data.data = undefined;
     }
 
     this.setState({
@@ -344,7 +352,7 @@ class ServiceScreenStep1 extends Component {
       service: service || null,
       serviceInfo: this.state.serviceInfo || null,
       orderLead: this.state.orderLead,
-      recommended: dataFromForm.recommended || false,
+      recommended: this.state.recommended || false,
       car: {
         brand: this.state.carBrand
           ? this.state.carBrand
@@ -533,15 +541,19 @@ class ServiceScreenStep1 extends Component {
                         onPress={() => {
                           this.props.navigation.navigate('ServiceInfoModal', {
                             data: this.state.serviceInfo,
+                            type: 'required',
                           });
                         }}>
-                        {console.log(
-                          'this.state.serviceInfo',
-                          this.state.serviceInfo,
-                        )}
                         {this.state.serviceInfo.summary &&
                         this.state.serviceInfo.summary[0].summ ? (
                           <>
+                            <Icon
+                              name="ios-information-circle-outline"
+                              size={24}
+                              style={{
+                                color: styleConst.color.blue,
+                              }}
+                            />
                             <Text style={styles.textPriceTitle}>
                               {strings.ServiceScreenStep1.price}{' '}
                               <Text style={styles.textPrice}>
@@ -554,13 +566,6 @@ class ServiceScreenStep1 extends Component {
                                 )}
                               </Text>
                             </Text>
-                            <Icon
-                              name="ios-information-circle-outline"
-                              size={24}
-                              style={{
-                                color: styleConst.color.blue,
-                              }}
-                            />
                           </>
                         ) : null}
                       </TouchableOpacity>
@@ -571,20 +576,57 @@ class ServiceScreenStep1 extends Component {
               this.state.serviceInfo.summary[0].summ.recommended
                 ? {
                     name: 'recommended',
-                    type: 'checkbox',
-                    label: [
-                      'Рекомендуемые работы',
-                      '[+' +
-                        showPrice(
-                          parseFloat(
-                            this.state.serviceInfo.summary[0].summ.recommended,
-                            // '123,12',
-                          ),
-                          this.props.dealerSelected.region,
-                        ) +
-                        ']',
-                    ].join(' '),
-                    value: false,
+                    type: 'component',
+                    value: (
+                      <TouchableOpacity
+                        style={{
+                          paddingVertical: 5,
+                          flex: 1,
+                          flexDirection: 'row',
+                        }}
+                        onPress={() => {
+                          this.props.navigation.navigate('ServiceInfoModal', {
+                            data: this.state.serviceInfo,
+                            type: 'recommended',
+                          });
+                        }}>
+                        {this.state.serviceInfo.summary &&
+                        this.state.serviceInfo.summary[0].summ ? (
+                          <>
+                            <Icon
+                              name="ios-information-circle-outline"
+                              size={24}
+                              style={{
+                                color: styleConst.color.blue,
+                              }}
+                            />
+                            <Text style={styles.textPriceTitle}>
+                              {strings.ServiceScreenStep1.priceRecommended}{' '}
+                              <Text style={styles.textPrice}>
+                                {'+'}
+                                {showPrice(
+                                  parseFloat(
+                                    this.state.serviceInfo.summary[0].summ
+                                      .recommended,
+                                  ),
+                                  this.props.dealerSelected.region,
+                                )}
+                              </Text>
+                            </Text>
+                            <CheckBox
+                              onPress={() => {
+                                this.setState({
+                                  recommended: !this.state.recommended,
+                                });
+                              }}
+                              checked={this.state.recommended}
+                              style={[styles.checkbox]}
+                              color={styleConst.color.blue}
+                            />
+                          </>
+                        ) : null}
+                      </TouchableOpacity>
+                    ),
                   }
                 : {},
             ],

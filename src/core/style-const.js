@@ -17,6 +17,7 @@ export default {
     greyText4: 'rgba(51,51,51,1)',
     greyText5: '#a8abbe',
     greyText6: '#757575',
+    greyText7: '#808080',
     greyBlue: '#616e7a',
     greyBlueText: '#a8b0b7',
     select: '#fafafa',

@@ -8,10 +8,12 @@ import isIPhoneX from '../../../utils/is_iphone_x';
 import {strings} from '../../../core/lang/const';
 import style from '../../../core/components/Lists/style';
 
-const ServiceInfoModal = ({onClose, data, route, navigation}) => {
-  let defaultTab = 'works';
+const ServiceInfoModal = ({onClose, data, route, navigation, type}) => {
   if (!data || typeof data === 'undefined') {
     data = route.params.data;
+  }
+  if (!type || typeof type === 'undefined') {
+    type = route.params.type;
   }
   if (!onClose || typeof onClose === 'undefined') {
     onClose = () => navigation.goBack();
@@ -20,10 +22,8 @@ const ServiceInfoModal = ({onClose, data, route, navigation}) => {
     }
   }
   if (data && (!data.works || !data.works.length)) {
-    defaultTab = 'parts';
     data.works = [];
   }
-  const [activeTab, setActiveTab] = useState(defaultTab);
 
   const modalStyles = StyleSheet.create({
     host: {
@@ -99,7 +99,7 @@ const ServiceInfoModal = ({onClose, data, route, navigation}) => {
               textStyle={modalStyles.TabsTextStyle}
               activeTextStyle={modalStyles.TabsActiveTextStyle}
               activeTabStyle={modalStyles.TabsActiveTabStyle}>
-              <ServiceTable data={data.works} />
+              <ServiceTable data={data.works} type={type} />
             </Tab>
           ) : null}
           {data.parts && data.parts.length ? (
@@ -108,7 +108,7 @@ const ServiceInfoModal = ({onClose, data, route, navigation}) => {
               textStyle={modalStyles.TabsTextStyle}
               activeTextStyle={modalStyles.TabsActiveTextStyle}
               activeTabStyle={modalStyles.TabsActiveTabStyle}>
-              <ServiceTable data={data.parts} />
+              <ServiceTable data={data.parts} type={type} />
             </Tab>
           ) : null}
         </Tabs>
@@ -122,45 +122,72 @@ const ServiceInfoModal = ({onClose, data, route, navigation}) => {
   );
 };
 
-const ServiceTable = ({data}) => {
+const ServiceTable = ({data, type}) => {
+  data = data.filter(el => {
+    if ((el.name === '' || !el.name) && el.summ === 0) {
+      return false;
+    }
+    return true;
+  });
+  switch (type) {
+    case 'required':
+      data = data.filter(el => {
+        if (el.required) {
+          return true;
+        }
+        return false;
+      });
+      break;
+    case 'recommended':
+      data = data.filter(el => {
+        if (el.required) {
+          return false;
+        }
+        return true;
+      });
+      break;
+    default:
+      data = data.filter(el => {
+        if ((el.name === '' || !el.name) && el.summ === 0) {
+          return false;
+        }
+        return true;
+      });
+      break;
+  }
   return (
     <Content>
-      {data
-        .filter(el => {
-          if ((el.name === '' || !el.name) && el.summ === 0) {
-            return false;
-          }
-          return true;
-        })
-        .map(({name, quantity, unit, summ, currency, required}, cnt) => (
-          <View
-            style={tableStyles.section}
-            key={'ServiceTable' + cnt + quantity + summ}>
-            {name ? (
-              <Text style={tableStyles.sectionTitle}>
-                {name}{' '}
-                {required ? (
-                  <Text style={tableStyles.sectionTitleRequired}>*</Text>
-                ) : null}
-              </Text>
-            ) : null}
-            {quantity && unit ? (
-              <ServiceTableItem label={strings.CarHistoryDetailsScreen.count}>
-                {unit === 'сек'
-                  ? quantity / 60 / 60 + ' ч.'
-                  : [quantity, unit].join(' ')}
-              </ServiceTableItem>
-            ) : null}
-            {summ && currency.name ? (
-              <ServiceTableItem label={strings.CarHistoryDetailsScreen.price}>
-                {showPrice(summ, currency.name)}
-              </ServiceTableItem>
-            ) : null}
-          </View>
-        ))}
-      <Text style={tableStyles.textRequired}>
-        * отмечены обязательные работы и з/ч
-      </Text>
+      {data.map(({name, quantity, unit, summ, currency, required}, cnt) => (
+        <View
+          style={tableStyles.section}
+          key={'ServiceTable' + cnt + quantity + summ}>
+          {name ? (
+            <Text style={tableStyles.sectionTitle}>
+              {name}{' '}
+              {required ? (
+                <Text style={tableStyles.sectionTitleRequired}>*</Text>
+              ) : null}
+            </Text>
+          ) : null}
+          {quantity && unit ? (
+            <ServiceTableItem label={strings.CarHistoryDetailsScreen.count}>
+              {unit === 'сек'
+                ? quantity / 60 / 60 + ' ч.'
+                : [quantity, unit].join(' ')}
+            </ServiceTableItem>
+          ) : null}
+          {summ && currency.name ? (
+            <ServiceTableItem label={strings.CarHistoryDetailsScreen.price}>
+              {showPrice(summ, currency.name)}
+            </ServiceTableItem>
+          ) : null}
+        </View>
+      ))}
+      {type && type !== 'required' && type !== 'recommended' ? (
+        <Text style={tableStyles.textRequired}>
+          * отмечены обязательные работы и з/ч
+        </Text>
+      ) : null}
     </Content>
   );
 };
