@@ -594,7 +594,8 @@ export default {
         calculatePrice: 'вычисляем предв.стоимость',
       },
     },
-    price: 'Предв.стоимость',
+    price: 'Обязательные работы',
+    priceRecommended: 'Рекомендуемые работы',
   },
   OrderPartsScreen: {
     title: 'Заказ зап.частей',

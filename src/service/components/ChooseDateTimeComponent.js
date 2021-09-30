@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   labelActive: {
-    color: '#808080',
+    color: styleConst.color.greyText7,
   },
   spinner: {
     marginVertical: 15,
@@ -244,7 +244,7 @@ export default class ChooseDateTimeComponent extends Component {
       <>
         <DatePickerCustom
           style={{width: '100%'}}
-          locale={"ru-RU"}
+          locale={'ru-RU'}
           styleContainer={{paddingLeft: 15}}
           confirmBtnText={strings.Picker.choose}
           value={this.state.date || null}
