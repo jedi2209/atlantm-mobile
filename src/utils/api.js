@@ -917,10 +917,10 @@ export default {
     );
   },
 
-  getPeriodForServiceInfo({dealer, date}) {
+  getPeriodForServiceInfo({dealer, date, service, seconds}) {
     // Дата в формате [YYYY-MM-DD] или [YYYYMMDD] или [DD.MM.YYYY]
     return this.request(
-      `/service/order/?dealer=${dealer}&date=${date}`,
+      `/service/order/?dealer=${dealer}&date=${date}&serviceID=${service}&seconds=${seconds}`,
       baseRequestParams,
     );
   },

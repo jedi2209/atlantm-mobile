@@ -595,7 +595,7 @@ export default {
       },
     },
     price: 'Обязательные работы',
-    priceRecommended: 'Рекомендуемые работы',
+    priceRecommended: 'Рекоменд.работы',
   },
   OrderPartsScreen: {
     title: 'Заказ зап.частей',

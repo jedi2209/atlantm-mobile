@@ -93,6 +93,8 @@ export default class ChooseDateTimeComponent extends Component {
       availablePeriodsFetch: false,
       modal: false,
       noTimeAlways: false,
+      serviceID: props.serviceID ? props.serviceID : undefined,
+      reqiredTime: props.reqiredTime ? props.reqiredTime : undefined,
     };
   }
 
@@ -147,6 +149,8 @@ export default class ChooseDateTimeComponent extends Component {
 
     const availablePeriods = await API.getPeriodForServiceInfo({
       date: yearMonthDay(date),
+      service: this.state?.serviceID,
+      seconds: this.state?.reqiredTime,
       dealer: this.props.dealer.id,
     });
 
@@ -343,7 +347,6 @@ export default class ChooseDateTimeComponent extends Component {
                 <View style={styles.timeBlocksContainer}>
                   {(this.state.availablePeriods || []).map((item, idx) => {
                     const from = time(item.from * 1000);
-                    const to = time(item.to * 1000);
                     // eslint-disable-next-line eqeqeq
                     const isActive = item.from == this.state.time;
                     return (

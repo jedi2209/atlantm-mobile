@@ -595,8 +595,8 @@ export default {
         calculatePrice: 'вираховуємо попередню вартість',
       },
     },
-    price: 'Попередня вартість',
-    priceRecommended: 'Рекомендуемые работы',
+    price: "Обов'язкові роботи",
+    priceRecommended: 'Рекоменд.работы',
   },
   OrderPartsScreen: {
     title: 'Замовлення запчастин',
