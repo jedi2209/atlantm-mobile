@@ -60,6 +60,7 @@ class ServiceScreenStep2 extends Component {
       carNumber: get(this.props.route, 'params.car.plate'),
     };
     this.recommended = get(this.props.route, 'params.recommended', false);
+    console.log('this.props.route', this.props.route);
   }
 
   onPressOrder = async dataFromForm => {
@@ -215,6 +216,10 @@ class ServiceScreenStep2 extends Component {
                   minimumDate: new Date(addDays(2)),
                   maximumDate: new Date(addDays(62)),
                   dealer: this.dealer,
+                  serviceID: this.service && this.service.value,
+                  reqiredTime: this.recommended
+                    ? get(this.serviceInfo, 'summary[0].time.total')
+                    : get(this.serviceInfo, 'summary[0].time.required'),
                 },
               },
             ],

@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: styleConst.font.regular,
     color: styleConst.color.greyText7,
+    width: '83%',
   },
   textPrice: {
     fontSize: 18,
@@ -154,6 +155,16 @@ const styles = StyleSheet.create({
     right: 0,
     top: 12,
     position: 'absolute',
+  },
+  scrollViewInner: {
+    flex: 1,
+    paddingLeft: 24,
+    paddingRight: 5,
+    marginVertical: 29.5,
+    textAlign: 'center',
+    alignContent: 'center',
+    width: '100%',
+    alignItems: 'center',
   },
 });
 
@@ -449,21 +460,7 @@ class ServiceScreenStep1 extends Component {
                     ))}
                   </ScrollView>
                 ) : (
-                  <View
-                    style={[
-                      styles.scrollViewInner,
-                      {
-                        flex: 1,
-                        paddingLeft: 24,
-                        paddingRight: 5,
-                        marginVertical: 29.5,
-                        textAlign: 'center',
-                        alignContent: 'center',
-                        width: '100%',
-                        alignItems: 'center',
-                      },
-                    ]}
-                    useNativeDriver>
+                  <View style={styles.scrollViewInner} useNativeDriver>
                     <Icon
                       type="MaterialCommunityIcons"
                       name="car-off"
