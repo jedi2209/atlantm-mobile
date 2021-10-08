@@ -37,11 +37,6 @@ const mapStateToProps = ({dealer, profile, contacts, nav}) => {
       : profile.localUserData.NAME
       ? profile.localUserData.NAME
       : '',
-    secondName: profile.login.SECOND_NAME
-      ? profile.login.SECOND_NAME
-      : profile.localUserData.SECOND_NAME
-      ? profile.localUserData.SECOND_NAME
-      : '',
     phone:
       profile.login.PHONE && profile.login.PHONE.length
         ? profile.login.PHONE[0].VALUE
@@ -120,15 +115,6 @@ class CallMeBackScreen extends PureComponent {
                   textContentType: 'name',
                 },
               },
-              {
-                name: 'SECOND_NAME',
-                type: 'input',
-                label: strings.Form.field.label.secondName,
-                value: this.props.secondName,
-                props: {
-                  textContentType: 'middleName',
-                },
-              },
             ],
           },
         ],
@@ -168,15 +154,13 @@ class CallMeBackScreen extends PureComponent {
       actionID = this.props.route?.params?.actionID;
     }
 
-    const name = [props.NAME, props.SECOND_NAME].filter(Boolean).join(' ');
-
     this.setState({loading: true});
 
     const dealerID = this.state.dealerSelectedLocal.id;
 
     const action = await this.props.callMe({
       dealerID,
-      name: name || '',
+      name: props.NAME || '',
       actionID,
       phone: get(props, 'PHONE', ''),
     });
@@ -186,7 +170,6 @@ class CallMeBackScreen extends PureComponent {
       Analytics.logEvent('order', 'contacts/callme');
       _this.props.localUserDataUpdate({
         NAME: props.NAME,
-        SECOND_NAME: props.SECOND_NAME,
         PHONE: props.PHONE,
       });
       Alert.alert(
