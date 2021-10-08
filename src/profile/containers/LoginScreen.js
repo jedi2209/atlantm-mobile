@@ -220,8 +220,7 @@ class LoginScreen extends Component {
 
   _verifyCode = data => {
     let phone = data.PHONE;
-    this.setState({phone: phone});
-    this.setState({loadingVerify: true});
+    this.setState({phone: phone, loadingVerify: true});
     return this.props.actionGetPhoneCode({phone}).then(response => {
       if (response.code >= 300) {
         this._cancelVerify();

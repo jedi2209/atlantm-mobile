@@ -27,6 +27,8 @@ import {
   actionSetPushGranted,
 } from '../../core/actions';
 
+import PushNotifications from '../../core/components/PushNotifications';
+
 import Analytics from '../../utils/amplitude-analytics';
 
 import {strings} from '../../core/lang/const';
@@ -174,9 +176,9 @@ class PhoneChangeScreen extends PureComponent {
 
   _verifyCode = phone => {
     this.setState({loadingVerify: true});
-    // this.props.navigation.setParams({
-    //   verifyCode: true,
-    // });
+    this.props.navigation.setParams({
+      verifyCode: true,
+    });
     this.props.actionGetPhoneCode({phone}).then(response => {
       if (response.code >= 300) {
         this.setState({
@@ -279,28 +281,43 @@ class PhoneChangeScreen extends PureComponent {
             case 'SAVE_PROFILE__NOPHONE': // пользователя нашли, но без телефона
               delete profile.update;
               const crmID = actionCheckUser.payload?.ID;
-              await this.props
+              this.props
                 .actionGetPhoneCode({
                   phone,
                   code,
                   crmID,
                 })
                 .then(response => {
-                  if (response.code === 200) {
-                    this.setState({loading: false});
-                    this.props.navigation.navigate('LoginScreen');
+                  if (response && response.code === 200) {
+                    Keyboard.dismiss();
+                    PushNotifications.addTag('login', response.user.ID);
+                    if (response.user.SAP && response.user.SAP.ID) {
+                      PushNotifications.addTag('sapID', response.user.SAP.ID);
+                      PushNotifications.setExternalUserId(response.user.SAP.ID);
+                    }
+                    return this.props.actionSavePofile(response.user);
                   } else {
+                    this.setState({loading: false});
                     Toast.show({
                       text: strings.Notifications.error.text,
                       position: 'bottom',
                       type: 'warning',
                     });
+                    return false;
                   }
+                })
+                .then(() => {
+                  this.setState({loading: false});
+                  this.props.navigation.navigate('LoginScreen', {
+                    verifyCode: false,
+                  });
                 });
               break;
             case 'SAVE_PROFILE__UPDATE': // пользователя нашли
               this.setState({loading: false});
-              this.props.navigation.navigate('LoginScreen');
+              this.props.navigation.navigate('LoginScreen', {
+                verifyCode: false,
+              });
               break;
           }
         }

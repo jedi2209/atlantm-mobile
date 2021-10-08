@@ -59,7 +59,10 @@ const ProfileStackView = ({navigation, route}) => (
     <ProfileStack.Screen
       name="LoginScreen"
       component={AuthContainer}
-      options={{headerShown: false}}
+      options={{
+        headerShown: false,
+        presentation: 'card',
+      }}
     />
     <ProfileStack.Screen
       name="PhoneChangeScreen"

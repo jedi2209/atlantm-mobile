@@ -56,7 +56,7 @@ function login(state = '', action) {
       return {...state, ...action.payload};
     case SAVE_PROFILE__FAIL:
     case LOGOUT:
-    // case APP_STORE_UPDATED:
+      // case APP_STORE_UPDATED:
       return {};
     default:
       return state;
@@ -116,7 +116,7 @@ function cars(state = [], action) {
     case CAR_HIDE__SUCCESS:
       return action.payload.cars;
     case LOGOUT:
-    // case APP_STORE_UPDATED:
+      // case APP_STORE_UPDATED:
       return [];
     default:
       return state;
@@ -192,7 +192,7 @@ function bonusData(state = {}, action) {
     case PROFILE_DATA__SUCCESS:
       return action.payload.bonus;
     case LOGOUT:
-    // case APP_STORE_UPDATED:
+      // case APP_STORE_UPDATED:
       return {};
     default:
       return state;
@@ -209,7 +209,7 @@ function bonusInfo(state = '', action) {
     case PROFILE_BONUS_INFO__SUCCESS:
       return action.payload;
     case LOGOUT:
-    // case APP_STORE_UPDATED:
+      // case APP_STORE_UPDATED:
       return '';
     default:
       return state;
@@ -236,7 +236,7 @@ function discounts(state = [], action) {
     case PROFILE_DATA__SUCCESS:
       return action.payload.discounts;
     case LOGOUT:
-    // case APP_STORE_UPDATED:
+      // case APP_STORE_UPDATED:
       return [];
     default:
       return state;
@@ -247,7 +247,7 @@ function level1Hash(state = null, action) {
   switch (action.type) {
     case REHYDRATE:
     case LOGOUT:
-    // case APP_STORE_UPDATED:
+      // case APP_STORE_UPDATED:
       return null;
     case PROFILE_BONUS_LEVEL1__SET:
       return action.payload;
@@ -260,7 +260,7 @@ function level2Hash(state = null, action) {
   switch (action.type) {
     case REHYDRATE:
     case LOGOUT:
-    // case APP_STORE_UPDATED:
+      // case APP_STORE_UPDATED:
       return null;
     case PROFILE_BONUS_LEVEL2__SET:
       return action.payload;
@@ -303,7 +303,7 @@ function carHistorylevel1Hash(state = null, action) {
     case REHYDRATE:
     case CAR_HISTORY__SUCCESS:
     case LOGOUT:
-    // case APP_STORE_UPDATED:
+      // case APP_STORE_UPDATED:
       return null;
     case CAR_HISTORY_LEVEL1__SET:
       return action.payload;
@@ -317,7 +317,7 @@ function carHistorylevel2Hash(state = null, action) {
     case REHYDRATE:
     case CAR_HISTORY__SUCCESS:
     case LOGOUT:
-    // case APP_STORE_UPDATED:
+      // case APP_STORE_UPDATED:
       return null;
     case CAR_HISTORY_LEVEL2__SET:
       return action.payload;
