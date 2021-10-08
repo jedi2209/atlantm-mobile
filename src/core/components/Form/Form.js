@@ -1330,7 +1330,7 @@ class Form extends Component {
                           resolve(data);
                         });
                       });
-                      promise
+                      await promise
                         .then(data => {
                           this.setState({loading: false});
                           return data;
