@@ -59,8 +59,7 @@ class ServiceScreenStep2 extends Component {
       carVIN: get(this.props.route, 'params.car.vin'),
       carNumber: get(this.props.route, 'params.car.plate'),
     };
-    this.recommended = get(this.props.route, 'params.recommended', false);
-    console.log('this.props.route', this.props.route);
+    this.recommended = get(this.props.route, 'params.recommended');
   }
 
   onPressOrder = async dataFromForm => {
@@ -109,10 +108,16 @@ class ServiceScreenStep2 extends Component {
       text: dataFromForm.COMMENT || null,
     };
 
-    if (this.serviceInfo && this.serviceInfo.summary[0].time.total) {
-      data.time.to =
-        parseInt(dateFromForm.time) +
-        parseInt(this.serviceInfo.summary[0].time.total);
+    if (this.serviceInfo && this.serviceInfo.summary[0].time) {
+      if (this.recommended) {
+        data.time.to =
+          parseInt(dateFromForm.time) +
+          parseInt(this.serviceInfo.summary[0].time.total);
+      } else {
+        data.time.to =
+          parseInt(dateFromForm.time) +
+          parseInt(this.serviceInfo.summary[0].time.required);
+      }
     }
     if (this.state.orderLead) {
       const dataToSend = {
