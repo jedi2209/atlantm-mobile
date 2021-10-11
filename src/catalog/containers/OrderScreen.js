@@ -221,19 +221,18 @@ class OrderScreen extends Component {
                     },
                   }
                 : {},
-                {
+                isNewCar ? {
                   name: 'TRADEIN',
                   type: 'checkbox',
                   label: strings.Form.field.label.tradeinWant,
                   value: false,
-                },
-                {
+                } : {},
+                isNewCar ? {
                   name: 'CREDIT',
                   type: 'checkbox',
                   label: strings.Form.field.label.creditWant,
                   value: false,
-                }
-                
+                } : {},
             ],
           },
           {
