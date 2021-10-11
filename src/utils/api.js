@@ -354,6 +354,8 @@ export default {
       dealerId,
       isNewCar,
       actionID,
+      tradeIn,
+      credit,
     } = props;
 
     const body = {
@@ -366,6 +368,8 @@ export default {
       f_Phone: phone,
       f_Email: email,
       f_Text: comment,
+      f_TradeIn: tradeIn,
+      f_Credit: credit,
       f_Source: 3,
     };
 

@@ -663,6 +663,8 @@ export default {
         carNameYear: 'Марка, модель і рік випуску',
         carNumber: 'Держ. номер автомобіля',
         creditSumm: 'Бажана сума кредиту',
+        creditWant: 'Цікавить кредит',
+        tradeinWant: 'Цікавить trade-in',
         carYourPrice: 'Ваша ціна за автомобіль',
         carBrand: 'Марка',
         carModel: 'Модель',

@@ -221,6 +221,19 @@ class OrderScreen extends Component {
                     },
                   }
                 : {},
+                {
+                  name: 'TRADEIN',
+                  type: 'checkbox',
+                  label: strings.Form.field.label.tradeinWant,
+                  value: false,
+                },
+                {
+                  name: 'CREDIT',
+                  type: 'checkbox',
+                  label: strings.Form.field.label.creditWant,
+                  value: false,
+                }
+                
             ],
           },
           {
@@ -345,6 +358,8 @@ class OrderScreen extends Component {
       lastName: get(data, 'LAST_NAME'),
       email: get(data, 'EMAIL'),
       phone: get(data, 'PHONE'),
+      tradeIn: get(data, 'TRADEIN', false),
+      credit: get(data, 'CREDIT', false),
       dealerId,
       carId,
       comment: data.COMMENT || '',

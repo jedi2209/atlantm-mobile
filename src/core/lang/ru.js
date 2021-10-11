@@ -662,6 +662,8 @@ export default {
         carNameYear: 'Марка, модель и год выпуска',
         carNumber: 'Гос.номер автомобиля',
         creditSumm: 'Желаемая сумма кредита',
+        creditWant: 'Хочу в кредит',
+        tradeinWant: 'У меня есть авто в зачёт',
         carYourPrice: 'Ваша стоимость за автомобиль',
         carBrand: 'Марка',
         carModel: 'Модель',
