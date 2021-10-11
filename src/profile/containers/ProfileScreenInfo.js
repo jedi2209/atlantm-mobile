@@ -86,11 +86,32 @@ const styles = StyleSheet.create({
     color: styleConst.color.lightBlue,
     paddingLeft: styleConst.ui.horizontalGapInList,
   },
+  bonusButtonWrapper: {
+    marginHorizontal: 20,
+    marginBottom: 8,
+  },
+  bonusButtonView: {
+    backgroundColor: '#0061ed',
+    borderRadius: 5,
+    padding: 14,
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  bonusButtonTextView: {
+    backgroundColor: styleConst.color.white,
+    width: 98,
+    height: 98,
+    borderRadius: 49,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 24,
+  },
 });
 
 import {verticalScale} from '../../utils/scale';
 import {get} from 'lodash';
-import {yearMonthDay} from '../../utils/date';
+import {yearMonthDay, dayMonthYear} from '../../utils/date';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
@@ -341,44 +362,98 @@ class ProfileScreenInfo extends Component {
                   </View>
                 </>
               )}
+              {this.props.login && this.props.login.CASHBACK ? (
+                <TouchableOpacity style={styles.bonusButtonWrapper}>
+                  <View
+                    style={[
+                      styleConst.shadow.default,
+                      styles.bonusButtonView,
+                      {
+                        backgroundColor: styleConst.color.greyBlue,
+                      }
+                    ]}>
+                    <View style={{flex: 1}}>
+                      <Text
+                        style={{
+                          color: styleConst.color.white,
+                          fontSize: 18,
+                          marginBottom: 8,
+                          fontWeight: '600',
+                        }}>
+                        {strings.ProfileScreenInfo.cashback.title}
+                      </Text>
+                      <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5}}>
+                      <Text
+                        style={{
+                          color: styleConst.color.white,
+                          fontSize: 12,
+                          lineHeight: 24,
+                          fontWeight: '600',
+                        }}>
+                        {strings.ProfileScreenInfo.cashback.statusText}
+                      </Text>
+                      <Text
+                      style={{
+                          color: styleConst.color.white,
+                          fontSize: 16,
+                          fontWeight: '600',
+                        }}>{this.props.login?.CASHBACK?.STATUS?.NAME}</Text>
+                      </View>
+                      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <Text
+                          style={{
+                            color: styleConst.color.white,
+                            fontSize: 12,
+                            lineHeight: 24,
+                            fontWeight: '600',
+                          }}>
+                          {strings.ProfileScreenInfo.cashback.deadline}
+                        </Text>
+                        <Text
+                          style={{
+                            color: styleConst.color.white,
+                            fontSize: 12,
+                            fontSize: 16,
+                            fontWeight: '600',
+                          }}>
+                          {dayMonthYear(this.props.login?.CASHBACK?.DATE?.TO)}
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={[styles.bonusButtonTextView, {width: 82, height: 82, marginLeft: 24, marginRight: 0}]}>
+                      <Text
+                        style={{
+                          color: '#0061ed',
+                          fontSize: 20,
+                          fontWeight: '600',
+                        }}>
+                        {this.props.login?.CASHBACK?.PERCENT
+                          ? parseFloat(this.props.login?.CASHBACK?.PERCENT, 'ru-RU') + ' %'
+                          : 0}
+                      </Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              ) : null}
               {this.props.bonus ? (
                 this.props.bonus.data && this.props.bonus.data.saldo ? (
                   <>
                     <TouchableOpacity
-                      style={[
-                        {
-                          marginHorizontal: 20,
-                          marginBottom: 8,
-                        },
-                      ]}
+                      style={styles.bonusButtonWrapper}
                       onPress={() =>
                         this.props.navigation.navigate('BonusScreen')
                       }>
                       <View
                         style={[
                           styleConst.shadow.default,
-                          {
-                            backgroundColor: '#0061ed',
-                            borderRadius: 5,
-                            padding: 14,
-                            display: 'flex',
-                            flexDirection: 'row',
-                          },
+                          styles.bonusButtonView,
                         ]}
                         onPress={() =>
                           this.props.navigation.navigate('BonusScreen')
                         }>
                         <View
-                          style={{
-                            backgroundColor: styleConst.color.white,
-                            width: 98,
-                            height: 98,
-                            borderRadius: 49,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginRight: 24,
-                          }}>
+                          style={styles.bonusButtonTextView}>
                           <Text
                             style={{
                               color: '#0061ed',

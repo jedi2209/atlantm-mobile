@@ -533,6 +533,11 @@ export default {
         text: 'Бонусов пока нет',
       },
     },
+    cashback: {
+      title: 'Cashback',
+      statusText: 'Текущий уровень ',
+      deadline: 'Действует до ',
+    },
     editData: 'Редактировать данные',
     exit: 'Выйти',
   },
