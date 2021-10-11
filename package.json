@@ -133,7 +133,7 @@
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "detox-recorder": "^1.0.151",
-    "eslint": "^7.18.0",
+    "eslint": "^8.0.0",
     "eslint-plugin-detox": "^1.0.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.20.6",
