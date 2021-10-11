@@ -368,8 +368,8 @@ export default {
       f_Phone: phone,
       f_Email: email,
       f_Text: comment,
-      f_TradeIn: tradeIn,
-      f_Credit: credit,
+      f_TradeIn: tradeIn ? tradeIn : false,
+      f_Credit: credit ? credit : false,
       f_Source: 3,
     };
 
