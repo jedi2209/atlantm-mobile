@@ -536,8 +536,8 @@ export default {
     },
     cashback: {
       title: 'Cashback',
-      statusText: 'Текущий уровень ',
-      deadline: 'Действует до ',
+      statusText: 'Поточний статус ',
+      deadline: 'Діє до ',
     },
     editData: 'Редагувати дані',
     exit: 'Вийти',
