@@ -66,7 +66,7 @@ const HeaderBackButton = props => {
       style={[styles.container, props.ContainerStyle]}
       testID="HeaderIconBack.Button"
       onPress={onPressBack}>
-      <View style={[styles.inner]}>
+      <View style={[styles.inner, props.InnerStyle]}>
         <Icon
           type={props.type}
           name={props.icon}
