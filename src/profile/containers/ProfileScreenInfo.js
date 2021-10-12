@@ -362,7 +362,7 @@ class ProfileScreenInfo extends Component {
                   </View>
                 </>
               )}
-              {this.props.login && this.props.login.CASHBACK ? (
+              {this.props.login && this.props.login.CASHBACK && (this.props.login.CASHBACK.STATUS.ID || this.props.login.CASHBACK.STATUS.NAME) ? (
                 <TouchableOpacity style={styles.bonusButtonWrapper}>
                   <View
                     style={[

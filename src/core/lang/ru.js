@@ -535,7 +535,7 @@ export default {
     },
     cashback: {
       title: 'Cashback',
-      statusText: 'Текущий уровень ',
+      statusText: 'Текущий статус ',
       deadline: 'Действует до ',
     },
     editData: 'Редактировать данные',
