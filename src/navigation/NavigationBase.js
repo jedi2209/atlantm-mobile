@@ -2,6 +2,8 @@ import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {Text, View, Pressable, Platform, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import {
   Header,
   Container,
@@ -88,6 +90,7 @@ const SearchStack = createStackNavigator();
 const StackCatalogUsed = createStackNavigator();
 const StackTVA = createStackNavigator();
 
+const StackFullScreen = createNativeStackNavigator();
 const StackBase = createStackNavigator();
 const StackProfile = createStackNavigator();
 const StackOrders = createStackNavigator();
@@ -101,7 +104,7 @@ export const Base = ({navigation, route}) => {
     initialRouteName = 'IntroScreen';
   }
   return (
-    <StackBase.Navigator initialRouteName={initialRouteName}>
+    <StackBase.Navigator initialRouteName={initialRouteName} screenOptions={{orientation: 'portrait'}}>
       <StackBase.Screen
         name="BottomTabNavigation"
         component={BottomTabNavigation}
@@ -223,19 +226,18 @@ export const Base = ({navigation, route}) => {
         component={CarsStock}
         options={{headerShown: false}}
       />
-      <StackBase.Group>
-        <StackBase.Screen
-          name="FullScreenGallery"
-          component={FullScreenGallery}
-          options={{
-            presentation: 'transparentModal',
-            headerShown: false,
-            orientation: 'all',
-            statusBarHidden: true,
-            gestureEnabled: false,
-          }}
-        />
-      </StackBase.Group>
+      <StackFullScreen.Screen
+        name="FullScreenGallery"
+        component={FullScreenGallery}
+        options={{
+          presentation: 'fullScreenModal',
+          headerShown: false,
+          animation: 'fade',
+          orientation: 'landscape',
+          statusBarHidden: true,
+          gestureEnabled: false,
+        }}
+      />
       {/* Заявки */}
       <StackOrders.Screen
         name="ServiceScreen"
@@ -254,6 +256,7 @@ export const Base = ({navigation, route}) => {
         component={ServiceInfoModal}
         options={{
           presentation: 'modal',
+          orientation: 'portrait',
           headerShown: false,
           statusBarHidden: true,
           gestureEnabled: false,
@@ -395,6 +398,7 @@ export const Base = ({navigation, route}) => {
           headerShown: true,
           headerTransparent: false,
           presentation: 'modal',
+          orientation: 'portrait',
           headerTitle: () => {
             return (
               <Text style={stylesHeader.whiteHeaderTitle} selectable={false}>
@@ -568,6 +572,7 @@ const CarsStock = ({navigation, route}) => {
             },
             headerStyle: stylesHeader.blueHeader,
             headerTitleStyle: stylesHeader.blueHeaderTitle,
+            orientation: 'portrait',
             headerLeft: () => {
               return ArrowBack(navigation, route, {theme: 'white'});
             },
