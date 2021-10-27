@@ -676,6 +676,7 @@ export default {
         carYear: 'Рік випуску',
         carVIN: 'VIN номер',
         gearbox: 'Тип КПП',
+        wheel: 'Привід',
         email: 'Email',
         phone: 'Телефон',
         foto: 'Завантажте фото',
@@ -689,6 +690,7 @@ export default {
       placeholder: {
         dealer: 'Виберіть автоцентр',
         engineType: 'Вкажіть тип двигуна...',
+        wheel: 'Укажите тип привіда...',
         comment: 'На випадок якщо потрібно передати нам більше інформації',
         gearbox: 'Виберіть коробку передач...',
         carYear: 'Виберіть рік випуску...',

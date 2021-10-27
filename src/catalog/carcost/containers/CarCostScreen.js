@@ -157,6 +157,7 @@ class CarCostScreen extends PureComponent {
         engineVolume: dataFromForm.CARENGINEVOLUME || '',
         engineType: dataFromForm.CARENGINETYPE || '',
         gearbox: dataFromForm.CARGEARBOXTYPE || '',
+        wheel: dataFromForm.CARWHEELTYPE || '',
       });
       switch (action.type) {
         case CAR_COST__SUCCESS:
@@ -399,6 +400,36 @@ class CarCostScreen extends PureComponent {
                   ],
                   placeholder: {
                     label: strings.Form.field.placeholder.gearbox,
+                    value: null,
+                    color: '#9EA0A4',
+                  },
+                },
+              },
+              {
+                name: 'CARWHEELTYPE',
+                type: 'select',
+                label: strings.Form.field.label.wheel,
+                value: this.props.carWheelType,
+                props: {
+                  items: [
+                    {
+                      label: strings.CarParams.wheels[1],
+                      value: 1,
+                      key: 1,
+                    },
+                    {
+                      label: strings.CarParams.wheels[3],
+                      value: 3,
+                      key: 3,
+                    },
+                    {
+                      label: strings.CarParams.wheels[4],
+                      value: 4,
+                      key: 4,
+                    },
+                  ],
+                  placeholder: {
+                    label: strings.Form.field.placeholder.wheel,
                     value: null,
                     color: '#9EA0A4',
                   },
