@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import {OrientationLocker, LANDSCAPE } from "react-native-orientation-locker";
 import ImageView from 'react-native-image-viewing';
+import Gallery from 'react-native-awesome-gallery';
 import styleConst from '../style-const';
 import {strings} from '../lang/const';
 
@@ -26,6 +28,12 @@ const FullScreenGallery = ({
     imageIndex = route.params.imageIndex;
   }
 
+  let imagesClean = [];
+
+  for (const [key, value] of Object.entries(images)) {
+    imagesClean.push(value.uri);
+  }
+
   switch (theme) {
     case 'black':
       break;
@@ -33,6 +41,18 @@ const FullScreenGallery = ({
       backgroundColor = styleConst.color.white;
       break;
   }
+
+  return (
+  <View style={{backgroundColor: backgroundColor}}>
+    <OrientationLocker orientation={LANDSCAPE}/>
+    <Gallery
+      data={imagesClean}
+      initialIndex={imageIndex}
+      // onIndexChange={(newIndex) => {
+      //   console.log(newIndex);
+      // }}
+    />
+  </View>);
 
   return (
     <ImageView
