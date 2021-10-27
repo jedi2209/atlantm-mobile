@@ -635,6 +635,7 @@ export default {
         value: String(props.engineType),
       },
       props.gearbox && {name: 'f_Gearbox', value: String(props.gearbox)},
+      props.wheel && {name: 'f_Wheel', value: String(props.wheel)},
     ]);
 
     let formDataNew = [];
