@@ -13,72 +13,77 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
   },
+  containerView: {
+    backgroundColor: '#fafafa',
+    marginLeft: 10,
+    marginRight: 10,
+    borderRadius: 5,
+    width: 150,
+    justifyContent: 'space-between',
+    paddingTop: 10,
+    marginBottom: 15,
+    marginTop: 15,
+  },
+  textBrandModel: {
+    color: styleConst.color.greyText,
+    fontSize: 14,
+    paddingBottom: 5,
+    marginLeft: 5,
+  },
+  textNumber: {
+    color: styleConst.color.greyText2,
+    fontSize: 19,
+    marginLeft: 5,
+  },
+  carIcon: {
+    fontSize: 54,
+    color: '#0061ed',
+    marginTop: 10,
+    marginLeft: 5,
+  },
+  checkboxContainer: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
+    zIndex: 10,
+  },
 };
 
 export const CarCard = ({data, type, checked, onPress}) => {
-  const {brand, model, number} = data;
+  const {brand, model, number, owner} = data;
   return (
     <StyleProvider style={getTheme()}>
       <View
         style={[
           styles.scrollViewInner,
           styleConst.shadow.default,
-          {
-            backgroundColor: '#fafafa',
-            marginLeft: 10,
-            marginRight: 10,
-            borderRadius: 5,
-            width: 150,
-            justifyContent: 'space-between',
-            paddingTop: 10,
-            marginBottom: 15,
-            marginTop: 15,
-          },
+          styles.containerView,
         ]}>
         <View>
           <Text
             ellipsizeMode="tail"
             numberOfLines={1}
             selectable={false}
-            style={{
-              color: styleConst.color.greyText,
-              fontSize: 14,
-              paddingBottom: 5,
-              marginLeft: 5,
-            }}>
+            style={styles.textBrandModel}>
             {`${brand} ${model}`}
           </Text>
           <Text
             ellipsizeMode="tail"
             numberOfLines={1}
             selectable={false}
-            style={{
-              color: styleConst.color.greyText2,
-              fontSize: 19,
-              marginLeft: 5,
-            }}>
-            {number}
+            style={styles.textNumber}>
+            {number && owner ? number : ' '}
           </Text>
         </View>
         <Icon
           name="car"
           type="FontAwesome5"
           selectable={false}
-          style={{
-            fontSize: 54,
-            color: '#0061ed',
-            marginTop: 10,
-            marginLeft: 5,
-          }}
+          style={styles.carIcon}
         />
         {type === 'check' && (
           <TouchableWithoutFeedback
-            containerStyle={{
-              position: 'absolute',
-              bottom: 16,
-              right: 16,
-              zIndex: 10,
-            }}>
+            containerStyle={styles.checkboxContainer}>
             <View>
               <CheckBox
                 onPress={() => {
