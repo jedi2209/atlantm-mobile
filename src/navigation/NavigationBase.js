@@ -1,7 +1,10 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
 import {Text, View, Pressable, Platform, StyleSheet} from 'react-native';
+import {OrientationLocker, PORTRAIT} from "react-native-orientation-locker";
 import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import {
   Header,
   Container,
@@ -88,6 +91,7 @@ const SearchStack = createStackNavigator();
 const StackCatalogUsed = createStackNavigator();
 const StackTVA = createStackNavigator();
 
+const StackFullScreen = createNativeStackNavigator();
 const StackBase = createStackNavigator();
 const StackProfile = createStackNavigator();
 const StackOrders = createStackNavigator();
@@ -101,7 +105,13 @@ export const Base = ({navigation, route}) => {
     initialRouteName = 'IntroScreen';
   }
   return (
-    <StackBase.Navigator initialRouteName={initialRouteName}>
+    <>
+    <OrientationLocker
+        orientation={PORTRAIT}
+        // onChange={orientation => console.log('onChange', orientation)}
+        // onDeviceChange={orientation => console.log('onDeviceChange', orientation)}
+      />
+    <StackBase.Navigator initialRouteName={initialRouteName} screenOptions={{orientation: 'portrait'}}>
       <StackBase.Screen
         name="BottomTabNavigation"
         component={BottomTabNavigation}
@@ -223,19 +233,46 @@ export const Base = ({navigation, route}) => {
         component={CarsStock}
         options={{headerShown: false}}
       />
-      <StackBase.Group>
-        <StackBase.Screen
-          name="FullScreenGallery"
-          component={FullScreenGallery}
-          options={{
-            presentation: 'transparentModal',
-            headerShown: false,
-            orientation: 'all',
-            statusBarHidden: true,
-            gestureEnabled: false,
-          }}
-        />
-      </StackBase.Group>
+      <StackFullScreen.Screen
+        name="FullScreenGallery"
+        component={FullScreenGallery}
+        options={TransparentBack(
+            navigation,
+            route,
+            {
+              presentation: 'fullScreenModal',
+              animation: 'fade',
+              statusBarHidden: true,
+              orientation: 'landscape',
+              headerStyle: {
+                height: 100,
+              }
+            },
+            {
+              icon: 'close',
+              IconStyle: {
+                fontSize: 28,
+              },
+              ContainerStyle: {
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                borderRadius: 15,
+                marginTop: 10,
+                marginLeft: 10,
+                width: 50,
+                height: 50,
+                zIndex: 10000,
+              }
+            },
+          )}
+        // options={{
+        //   presentation: 'fullScreenModal',
+        //   headerShown: false,
+        //   animation: 'fade',
+        //   orientation: 'landscape',
+        //   statusBarHidden: true,
+        //   gestureEnabled: false,
+        // }}
+      />
       {/* Заявки */}
       <StackOrders.Screen
         name="ServiceScreen"
@@ -254,6 +291,7 @@ export const Base = ({navigation, route}) => {
         component={ServiceInfoModal}
         options={{
           presentation: 'modal',
+          orientation: 'portrait',
           headerShown: false,
           statusBarHidden: true,
           gestureEnabled: false,
@@ -395,6 +433,7 @@ export const Base = ({navigation, route}) => {
           headerShown: true,
           headerTransparent: false,
           presentation: 'modal',
+          orientation: 'portrait',
           headerTitle: () => {
             return (
               <Text style={stylesHeader.whiteHeaderTitle} selectable={false}>
@@ -418,7 +457,7 @@ export const Base = ({navigation, route}) => {
         })}
       />
     </StackBase.Navigator>
-  );
+  </>);
 };
 
 const Contacts = ({navigation, route}) => (
@@ -568,6 +607,7 @@ const CarsStock = ({navigation, route}) => {
             },
             headerStyle: stylesHeader.blueHeader,
             headerTitleStyle: stylesHeader.blueHeaderTitle,
+            orientation: 'portrait',
             headerLeft: () => {
               return ArrowBack(navigation, route, {theme: 'white'});
             },
