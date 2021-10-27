@@ -27,7 +27,7 @@ import {CAR_COST__SUCCESS, CAR_COST__FAIL} from '../../actionTypes';
 
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
-import {get, valuesIn} from 'lodash';
+import {get, orderBy, valuesIn} from 'lodash';
 import {ERROR_NETWORK} from '../../../core/const';
 import styleConst from '../../../core/style-const';
 import isInternet from '../../../utils/internet';
@@ -35,29 +35,38 @@ import isInternet from '../../../utils/internet';
 import {strings} from '../../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, nav, catalog}) => {
+  const cars = orderBy(profile.cars, ['owner'], ['desc']);
   const carCost = get(catalog, 'carCost', {});
   let carLocalBrand = '';
   let carLocalModel = '';
   let carLocalNumber = '';
   let carLocalVin = '';
 
-  if (profile.cars && profile.cars[0]) {
-    if (profile.cars[0].brand) {
-      carLocalBrand = profile.cars[0].brand;
-    }
-    if (profile.cars[0].model) {
-      carLocalModel = profile.cars[0].model;
-    }
-    if (profile.cars[0].number) {
-      carLocalNumber = profile.cars[0].number || '';
-    }
-
-    if (profile.cars[0].vin) {
-      carLocalVin = profile.cars[0].vin || '';
+  if (cars && typeof cars === 'object') {
+    let Cars = [];
+    cars.map(item => {
+      if (!item.hidden) {
+        Cars.push(item);
+      }
+    });
+    if (Cars && Cars[0]) {
+      if (Cars[0].brand) {
+        carLocalBrand = Cars[0].brand;
+      }
+      if (Cars[0].model) {
+        carLocalModel = Cars[0].model;
+      }
+      if (Cars[0].number) {
+        carLocalNumber = Cars[0].number || '';
+      }
+      if (Cars[0].vin) {
+        carLocalVin = Cars[0].vin || '';
+      }
     }
   }
 
   return {
+    cars,
     nav,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
@@ -116,6 +125,13 @@ class CarCostScreen extends PureComponent {
         get(carFromNavigation, 'model'),
       ].join(' ');
     }
+
+    this.myCars = [];
+    this.props.cars.map(item => {
+      if (!item.hidden) {
+        this.myCars.push(item);
+      }
+    });
 
     if (this.props.route?.params && this.props.route.params?.Text) {
       this.Text = this.props.route?.params?.Text;
@@ -240,78 +256,92 @@ class CarCostScreen extends PureComponent {
           {
             name: strings.Form.group.car,
             fields: [
-              {
-                name: 'CARBRAND',
-                type: 'input',
-                label: strings.Form.field.label.carBrand,
-                value: this.state.carBrand
-                  ? this.state.carBrand
-                  : this.props.carBrand,
-                props: {
-                  required: true,
-                  placeholder: null,
-                },
-              },
-              {
-                name: 'CARMODEL',
-                type: 'input',
-                label: strings.Form.field.label.carModel,
-                value: this.state.carModel
-                  ? this.state.carModel
-                  : this.props.carModel,
-                props: {
-                  required: true,
-                  placeholder: null,
-                },
-              },
-              {
-                name: 'CARVIN',
-                type: 'input',
-                label: strings.Form.field.label.carVIN,
-                value: this.state.carVIN
-                  ? this.state.carVIN
-                  : this.props.carVIN,
-                props: {
-                  placeholder: null,
-                  autoCapitalize: 'characters',
-                  onSubmitEditing: () => {},
-                  returnKeyType: 'done',
-                  blurOnSubmit: true,
-                },
-              },
-              {
-                name: 'CARYEAR',
-                type: 'year',
-                label: strings.Form.field.label.carYear,
-                value: this.props.carYear,
-                props: {
-                  required: true,
-                  minDate: new Date(substractYears(100)),
-                  maxDate: new Date(),
-                  reverse: true,
-                  placeholder: {
-                    label: strings.Form.field.placeholder.carYear,
-                    value: null,
-                    color: '#9EA0A4',
+              true ? 
+                {
+                  name: 'CARBRAND',
+                  type: 'input',
+                  label: strings.Form.field.label.carBrand,
+                  value: this.state.carBrand
+                    ? this.state.carBrand
+                    : this.props.carBrand,
+                  props: {
+                    required: true,
+                    placeholder: null,
+                  },
+                } : 
+                {
+                  name: 'CARBRAND',
+                  type: 'input',
+                  label: strings.Form.field.label.carBrand,
+                  value: this.state.carBrand
+                    ? this.state.carBrand
+                    : this.props.carBrand,
+                  props: {
+                    required: true,
+                    placeholder: null,
                   },
                 },
-              },
-              {
-                name: 'CARMILEAGE',
-                type: 'input',
-                label: strings.Form.field.label.carMileage,
-                value: this.state.carMileage
-                  ? this.state.carMileage
-                  : this.props.carMileage,
-                props: {
-                  keyboardType: 'number-pad',
-                  required: true,
-                  placeholder: null,
-                  onSubmitEditing: () => {},
-                  returnKeyType: 'done',
-                  blurOnSubmit: true,
+                {
+                  name: 'CARMODEL',
+                  type: 'input',
+                  label: strings.Form.field.label.carModel,
+                  value: this.state.carModel
+                    ? this.state.carModel
+                    : this.props.carModel,
+                  props: {
+                    required: true,
+                    placeholder: null,
+                  },
                 },
-              },
+                {
+                  name: 'CARVIN',
+                  type: 'input',
+                  label: strings.Form.field.label.carVIN,
+                  value: this.state.carVIN
+                    ? this.state.carVIN
+                    : this.props.carVIN,
+                  props: {
+                    placeholder: null,
+                    autoCapitalize: 'characters',
+                    onSubmitEditing: () => {},
+                    returnKeyType: 'done',
+                    blurOnSubmit: true,
+                  },
+                },
+                {
+                  name: 'CARYEAR',
+                  type: 'year',
+                  label: strings.Form.field.label.carYear,
+                  value: this.props.carYear,
+                  props: {
+                    required: true,
+                    minDate: new Date(substractYears(100)),
+                    maxDate: new Date(),
+                    reverse: true,
+                    placeholder: {
+                      label: strings.Form.field.placeholder.carYear,
+                      value: null,
+                      color: '#9EA0A4',
+                    },
+                  },
+                },
+                {
+                  name: 'CARMILEAGE',
+                  type: 'input',
+                  label: strings.Form.field.label.carMileage,
+                  value: this.state.carMileage
+                    ? this.state.carMileage
+                    : this.props.carMileage,
+                  props: {
+                    keyboardType: 'number-pad',
+                    required: true,
+                    placeholder: null,
+                    onSubmitEditing: () => {},
+                    returnKeyType: 'done',
+                    blurOnSubmit: true,
+                  },
+                }
+              ,
               {
                 name: 'CARENGINETYPE',
                 type: 'select',
