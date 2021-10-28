@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   StatusBar,
+  Image,
 } from 'react-native';
 import {TransitionPresets} from '@react-navigation/stack';
 import TransitionView from '../../core/components/TransitionView';
@@ -19,7 +20,6 @@ import {connect} from 'react-redux';
 import {fetchInfoPost, callMeForInfo} from '../actions';
 
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
-import Imager from '../../core/components/Imager';
 import Badge from '../../core/components/Badge';
 
 // helpers
@@ -64,7 +64,6 @@ class InfoPostScreen extends Component {
     super(props);
 
     this.state = {
-      imageLoaded: 0,
       webViewWidth: screenWidth - styleConst.ui.verticalGap,
       refreshing: false,
     };
@@ -270,22 +269,6 @@ class InfoPostScreen extends Component {
     }
   };
 
-  _renderImageView = ({getViewProps, getImageProps}) => (
-    <View {...getViewProps()}>
-      <Imager {...getImageProps()} />
-    </View>
-  );
-
-  _renderImageViewonLoad = () => {
-    this.setState({
-      imageLoaded: 1,
-    });
-  };
-
-  _renderImageViewonError = err => {
-    console.error(err);
-  };
-
   render() {
     const {currLang} = this.props;
     const post = this.getPost();
@@ -326,17 +309,15 @@ class InfoPostScreen extends Component {
             ) : (
               <View>
                 <View
-                  style={[
-                    styles.imageContainer,
-                    {opacity: this.state.imageLoaded},
-                  ]}
+                  style={[styles.imageContainer]}
                   ref="imageContainer">
                   {imageUrl ? (
-                    <ResponsiveImageView
-                      onLoad={this._renderImageViewonLoad}
-                      onError={this._renderImageViewonError}
-                      source={{uri: imageUrl}}>
-                      {this._renderImageView}
+                    <ResponsiveImageView source={{ uri: imageUrl }}>
+                      {({ getViewProps, getImageProps }) => (
+                        <View {...getViewProps()}>
+                          <Image {...getImageProps()} />
+                        </View>
+                      )}
                     </ResponsiveImageView>
                   ) : null}
                 </View>
@@ -411,6 +392,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: verticalScale(60),
     height: 300,
+  },
+  imageContainer: {
+    minHeight: 50,
   },
   buttonWrapper: {
     marginBottom: 20,
