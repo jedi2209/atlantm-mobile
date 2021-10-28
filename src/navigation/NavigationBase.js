@@ -14,6 +14,7 @@ import {
   Right,
   Icon,
 } from 'native-base';
+import Orientation from "react-native-orientation-locker";
 import {EVENT_REFRESH} from '../core/actionTypes';
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
@@ -243,35 +244,29 @@ export const Base = ({navigation, route}) => {
               presentation: 'fullScreenModal',
               animation: 'fade',
               statusBarHidden: true,
-              orientation: 'landscape',
               headerStyle: {
-                height: 100,
+                height: null,
               }
             },
             {
               icon: 'close',
               IconStyle: {
-                fontSize: 28,
+                fontSize: 42,
               },
               ContainerStyle: {
                 backgroundColor: 'rgba(0, 0, 0, 0.6)',
                 borderRadius: 15,
                 marginTop: 10,
                 marginLeft: 10,
-                width: 50,
-                height: 50,
+                width: 55,
+                height: 55,
                 zIndex: 10000,
+              },
+              onPressBackCallBack: () => {
+                Orientation.lockToPortrait();
               }
             },
           )}
-        // options={{
-        //   presentation: 'fullScreenModal',
-        //   headerShown: false,
-        //   animation: 'fade',
-        //   orientation: 'landscape',
-        //   statusBarHidden: true,
-        //   gestureEnabled: false,
-        // }}
       />
       {/* Заявки */}
       <StackOrders.Screen
