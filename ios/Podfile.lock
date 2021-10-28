@@ -1,7 +1,7 @@
 PODS:
-  - Amplitude (8.2.0)
-  - amplitude-react-native (2.5.0):
-    - Amplitude (= 8.2.0)
+  - Amplitude (8.5.0)
+  - amplitude-react-native (2.6.0):
+    - Amplitude (= 8.5.0)
     - React-Core
   - AppAuth (1.4.0):
     - AppAuth/Core (= 1.4.0)
@@ -386,14 +386,14 @@ PODS:
     - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
-  - react-native-slider (4.1.9):
+  - react-native-slider (4.1.10):
     - React-Core
   - react-native-splash-screen (3.2.0):
     - React
   - react-native-vkontakte-login (1.0.1):
     - React
     - VK-ios-sdk
-  - react-native-webview (11.14.0):
+  - react-native-webview (11.14.1):
     - React-Core
   - React-perflogger (0.65.1)
   - React-RCTActionSheet (0.65.1):
@@ -473,7 +473,7 @@ PODS:
     - React-Core
   - RNDateTimePicker (3.5.2):
     - React-Core
-  - RNDeviceInfo (8.4.0):
+  - RNDeviceInfo (8.4.3):
     - React-Core
   - RNFastImage (8.5.11):
     - React-Core
@@ -495,7 +495,7 @@ PODS:
     - TOCropViewController
   - RNRate (1.2.9):
     - React-Core
-  - RNReanimated (2.2.2):
+  - RNReanimated (2.2.3):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -527,9 +527,9 @@ PODS:
   - RNScreens (3.8.0):
     - React-Core
     - React-RCTImage
-  - RNSentry (3.1.1):
+  - RNSentry (3.2.1):
     - React-Core
-    - Sentry (= 7.3.0)
+    - Sentry (= 7.4.8)
   - RNSVG (12.1.1):
     - React
   - RNVectorIcons (8.1.0):
@@ -540,9 +540,9 @@ PODS:
   - SDWebImageWebPCoder (0.8.4):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry (7.3.0):
-    - Sentry/Core (= 7.3.0)
-  - Sentry/Core (7.3.0)
+  - Sentry (7.4.8):
+    - Sentry/Core (= 7.4.8)
+  - Sentry/Core (7.4.8)
   - TOCropViewController (2.6.0)
   - VK-ios-sdk (1.6.2)
   - Yoga (1.14.0)
@@ -808,8 +808,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Amplitude: 263118b9e691e73a1c864b05bb08a3aff3636d16
-  amplitude-react-native: 507a86ab87cc755ea18e9195f6db0dd378e7cac1
+  Amplitude: ef9ed339ddd33c9183edf63fa4bbaa86cf873321
+  amplitude-react-native: fa5e830e59fd8ed440a74d58fd72ad4b37e7c946
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
@@ -863,10 +863,10 @@ SPEC CHECKSUMS:
   react-native-orientation-locker: 998c0744e26624407dac068c04c605b4af7304a2
   react-native-pager-view: 741e7606ee2f6e399fc7da777f5519454a4b38c5
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
-  react-native-slider: c4bee37b3fe65aaf3b266bb2173d56cb412cb5ae
+  react-native-slider: c98f8413776ec1218ec9cd4f8ed32bfd91d428fc
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
-  react-native-webview: d70bc760daaa0e2667dec569b93014882565819c
+  react-native-webview: db22ab831b8c5f7697957a67f7a7ac1cecfed18d
   React-perflogger: fd28ee1f2b5b150b00043f0301d96bd417fdc339
   React-RCTActionSheet: 7f3fa0855c346aa5d7c60f9ced16e067db6d29fa
   React-RCTAnimation: 2119a18ee26159004b001bc56404ca5dbaae6077
@@ -886,20 +886,20 @@ SPEC CHECKSUMS:
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: f7a40b21b915b7a187624d52f52b7bc2f73ea413
   RNDateTimePicker: 7658208086d86d09e1627b5c34ba0cf237c60140
-  RNDeviceInfo: 8a06046616c6b5c03787b04f265fa3b52b37c80b
+  RNDeviceInfo: 25a16a2a03049e88e800f3f41ca540e645b8a95a
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNImageCropPicker: 73891a709e6fd8a47d32104d942757971f220aee
   RNRate: 94f57c773e155ca0d0aeeba9c10a32bce9030daf
-  RNReanimated: ad24db8af24e3fe1b5c462785bc3db8d5baae2ee
+  RNReanimated: aaf2cf65595b293daae808015761a6014a97b284
   RNScreens: 6e1ea5787989f92b0671049b808aef64fa1ef98c
-  RNSentry: 49abc89b0190b4c8afe0fa5d065f98e36cb53233
+  RNSentry: 791f73292501ed1b2e95e62e9388b68fcc13261d
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
-  Sentry: 9a4e621430e2dae4477d791f2f7e905720b6efbf
+  Sentry: df92b78ba4ab86cf2a47ff4cdc07758a5ce18f03
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   VK-ios-sdk: 5bcf00a2014a7323f98db9328b603d4f96635caa
   Yoga: aa0cb45287ebe1004c02a13f279c55a95f1572f4
