@@ -108,15 +108,15 @@
     "react-native-vector-icons": "^8.0.0",
     "react-native-vkontakte-login": "^1.0.0",
     "react-native-webview": "^11.6.4",
-    "react-redux": "7.2.5",
+    "react-redux": "7.2.6",
     "reanimated-bottom-sheet": "^1.0.0-alpha.22",
     "reanimated-bottom-sheet-navigator": "osdnk/reanimated-bottom-sheet-navigator",
-    "redux": "4.1.1",
+    "redux": "4.1.2",
     "redux-form": "8.3.7",
     "redux-persist": "6.0.0",
-    "redux-thunk": "2.3.0",
+    "redux-thunk": "2.4.0",
     "rn-fetch-blob": "^0.12.0",
-    "sharp": "^0.29.0"
+    "sharp": "^0.29.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.5",
