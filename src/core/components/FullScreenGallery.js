@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {OrientationLocker, LANDSCAPE } from "react-native-orientation-locker";
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import Orientation from "react-native-orientation-locker";
 import ImageView from 'react-native-image-viewing';
 import Gallery from 'react-native-awesome-gallery';
 import styleConst from '../style-const';
@@ -16,6 +16,10 @@ const FullScreenGallery = ({
 }) => {
   const [visible, setIsVisible] = useState(true);
 
+  useEffect(() => {
+    Orientation.unlockAllOrientations();
+  });
+
   if (route?.params?.images) {
     images = route.params.images;
   }
@@ -27,6 +31,8 @@ const FullScreenGallery = ({
   if (route?.params?.imageIndex) {
     imageIndex = route.params.imageIndex;
   }
+
+  const [currIndex, setIndex] = useState(imageIndex);
 
   let imagesClean = [];
 
@@ -44,14 +50,23 @@ const FullScreenGallery = ({
 
   return (
   <View style={{backgroundColor: backgroundColor}}>
-    <OrientationLocker orientation={LANDSCAPE}/>
     <Gallery
       data={imagesClean}
       initialIndex={imageIndex}
-      // onIndexChange={(newIndex) => {
-      //   console.log(newIndex);
-      // }}
+      loop={true}
+      onIndexChange={(newIndex) => {
+        setIndex(newIndex);
+      }}
     />
+    <View style={styles.container}>
+      <Text style={[styles.captionText, styles['captionText' + theme]]}>
+        {[
+          currIndex + 1,
+          strings.FullScreenGallery.from,
+          images.length,
+        ].join(' ')}
+      </Text>
+    </View>
   </View>);
 
   return (
@@ -90,11 +105,16 @@ FullScreenGallery.defaultProps = {
   imageIndex: 0,
 };
 
+const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
-    marginBottom: 30,
+    height: 40,
+    width: screenWidth,
+    position: 'absolute',
+    top: screenHeight - 60,
+    zIndex: 1000,
   },
   captionText: {
     fontFamily: styleConst.font.regular,

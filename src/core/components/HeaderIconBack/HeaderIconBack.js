@@ -39,7 +39,11 @@ const MENU_SCREEN_NAME = 'BottomTabNavigation';
 
 const HeaderBackButton = props => {
   const onPressBack = () => {
-    const {returnScreen} = props;
+    const {returnScreen, onPressBackCallBack} = props;
+
+    if (onPressBackCallBack && typeof onPressBackCallBack === 'function') {
+      onPressBackCallBack();
+    }
 
     if (returnScreen === MENU_SCREEN_NAME) {
       _onPressBackHome();
