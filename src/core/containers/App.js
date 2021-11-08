@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, ActivityIndicator} from 'react-native';
+import {StyleSheet, ActivityIndicator, Platform} from 'react-native';
 import {Root, StyleProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
@@ -27,7 +27,6 @@ import API from '../../utils/api';
 import {get} from 'lodash';
 import OneSignal from 'react-native-onesignal';
 import PushNotifications from '../components/PushNotifications';
-import {ONESIGNAL} from '../../core/const';
 import styleConst from '../../core/style-const';
 
 // components
@@ -59,8 +58,6 @@ const App = props => {
     auth,
     actionSetPushGranted,
     actionSetPushActionSubscribe,
-    actionMenuOpenedCount,
-    actionStoreUpdated,
     dealer,
     menuOpenedCount,
     isStoreUpdated,
@@ -125,37 +122,31 @@ const App = props => {
       window.atlantmDebug = true;
     }
 
-    OneSignal.init(ONESIGNAL, {
-      kOSSettingsKeyAutoPrompt: true,
-      kOSSettingsKeyInFocusDisplayOption: 2,
-    });
-
-    OneSignal.promptForPushNotificationsWithUserResponse(status => {
-      if (status) {
-        actionSetPushGranted(true);
-
-        if (
-          Number(menuOpenedCount) <= 1 ||
-          menuOpenedCount === 0 ||
-          isStoreUpdated === false
-        ) {
-          actionSetPushActionSubscribe(true);
-        }
-
-        OneSignal.setSubscription(true);
-      } else {
-        actionSetPushGranted(false);
-        actionSetPushActionSubscribe(false);
-        PushNotifications.unsubscribeFromTopic('actions');
-        OneSignal.setSubscription(false);
-      }
-    });
-
-    OneSignal.setLogLevel(6, 0);
-    OneSignal.enableSound(true);
-    OneSignal.enableVibrate(true);
-
     PushNotifications.init();
+
+    if (Platform.OS === 'ios') {
+      //Prompt for push on iOS
+      OneSignal.promptForPushNotificationsWithUserResponse(status => {
+        if (status) {
+          actionSetPushGranted(true);
+
+          if (
+            Number(menuOpenedCount) <= 1 ||
+            menuOpenedCount === 0 ||
+            isStoreUpdated === false
+          ) {
+            actionSetPushActionSubscribe(true);
+          }
+
+          OneSignal.disablePush(false);
+        } else {
+          actionSetPushGranted(false);
+          actionSetPushActionSubscribe(false);
+          PushNotifications.unsubscribeFromTopic('actions');
+          OneSignal.disablePush(true);
+        }
+      });
+    }
   }, []);
 
   if (isLoading || !NavigationContainer) {
