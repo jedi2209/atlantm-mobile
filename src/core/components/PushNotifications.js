@@ -1,6 +1,7 @@
 import {Platform, PermissionsAndroid, Alert, Linking} from 'react-native';
 
 import OneSignal from 'react-native-onesignal';
+import {ONESIGNAL} from '../const';
 import Analytics from '../../utils/amplitude-analytics';
 import * as NavigationService from '../../navigation/NavigationService';
 import {get} from 'lodash';
@@ -9,55 +10,82 @@ import {get} from 'lodash';
 
 export default {
   init() {
-    OneSignal.addEventListener('received', this.onReceived);
-    OneSignal.addEventListener('opened', this.onOpened);
-    OneSignal.addEventListener('ids', this.onIds);
-  },
+    OneSignal.setLogLevel(6, 0);
+    OneSignal.setAppId(ONESIGNAL);
+    // OneSignal.addEventListener('received', this.onReceived);
+    // OneSignal.addEventListener('opened', this.onOpened);
+    //Method for handling notifications opened
+    this.setNotificationOpenedHandler();
+    //Method for handling notifications received while app in foreground
+    this.setNotificationWillShowInForegroundHandler();
 
-  onReceived(notification) {
-    console.info('Notification received: ', notification);
-    Analytics.logEvent('action', 'PushNotification/received', {
-      id: notification.payload.notificationID,
+    OneSignal.addPermissionObserver(event => {
+      console.log("OneSignal: permission changed:", event);
     });
   },
 
-  onOpened(openResult, listener) {
+  onReceived(data) {
+    console.info('Notification received: ', data);
+    Analytics.logEvent('action', 'PushNotification/received', {
+      id: data.notification.notificationId,
+    });
+  },
+
+  onOpened(data) {
     let routeName;
 
+    console.log('onOpened openResult', data);
+
     Analytics.logEvent('action', 'PushNotification/opened', {
-      id: openResult.notification.payload.notificationID,
+      id: data.notification.notificationId,
     });
 
-    const notif = openResult.notification.payload.additionalData;
+    const notif = data.notification.additionalData;
 
     const target = get(notif, 'target');
-    const dealer = get(notif, 'dealer');
-    const carNumber = get(notif, 'car_number');
-    const actionId = get(notif, 'action_id');
-    const actionDate = get(notif, 'action_date', {});
+    const dealer = get(notif, 'dealer', null);
+    const carNumber = get(notif, 'car_number', null);
+    const actionId = get(notif, 'action_id', null);
+    const actionDate = get(notif, 'action_date', null);
     const params = {};
 
-    if (target === 'tva') {
-      routeName = 'TvaResultsScreen';
-      params.isPush = true;
-      params.dealerId = dealer;
-      params.carNumber = carNumber;
-    }
-    if (target === 'action') {
-      routeName = 'InfoList';
-      params.isPush = true;
-      params.id = actionId;
-      params.date = actionDate;
-    }
-    if (!routeName) return;
+    params.isPush = true;
+
+    console.log('target', target);
 
     switch (target) {
+      case 'tva':
+        routeName = 'TvaResultsScreen';
+        params.dealerId = dealer;
+        params.carNumber = carNumber;
+        break;
       case 'action':
-        NavigationService.navigate('InfoPostScreen', params);
+        routeName = 'InfoPostScreen';
+        params.id = actionId;
+        return NavigationService.navigate(routeName, params);
         break;
       default:
         break;
     }
+    if (!routeName) return;
+  },
+
+  setNotificationWillShowInForegroundHandler() {
+    OneSignal.setNotificationWillShowInForegroundHandler(notificationReceivedEvent => {
+      console.log("OneSignal: notification will show in foreground:", notificationReceivedEvent);
+      let notification = notificationReceivedEvent.getNotification();
+      console.log("notification: ", notification);
+      const data = notification.additionalData
+      console.log("additionalData: ", data);
+      // Complete with null means don't show a notification.
+      notificationReceivedEvent.complete(notification);
+    });
+  },
+
+  setNotificationOpenedHandler() {
+    OneSignal.setNotificationOpenedHandler(notification => {
+      this.onOpened(notification);
+    });
   },
 
   setExternalUserId(userID) {
@@ -67,8 +95,6 @@ export default {
   removeExternalUserId() {
     OneSignal.removeExternalUserId();
   },
-
-  onIds(device) {},
 
   addTag(name, value) {
     OneSignal.sendTag(name, value.toString());
@@ -81,7 +107,7 @@ export default {
   subscribeToTopic(topic, id) {
     return this.checkPermission().then(isPermission => {
       if (isPermission) {
-        OneSignal.setSubscription(true);
+        OneSignal.disablePush(false);
         OneSignal.sendTag(topic, id.toString());
       }
       return isPermission;
@@ -93,16 +119,20 @@ export default {
   },
 
   setEmail(value) {
-    //OneSignal.setEmail(value);
+    OneSignal.setEmail(value);
+  },
+
+  async deviceState() {
+    return await OneSignal.getDeviceState();
   },
 
   checkPermission() {
     return new Promise((resolve, reject) => {
       // Check push notification and OneSignal subscription statuses
-      OneSignal.getPermissionSubscriptionState(status => {
-        if (status.notificationsEnabled) {
-          return resolve(true);
-        } else {
+      // OneSignal.promptForPushNotificationsWithUserResponse();
+      this.deviceState().then(deviceState => {
+        console.log('deviceState', deviceState);
+        if (deviceState.isSubscribed == false) {
           switch (Platform.OS) {
             case 'ios':
               setTimeout(() => {
@@ -127,6 +157,7 @@ export default {
           }
           return resolve(false);
         }
+        return resolve(true);
       });
     });
   },

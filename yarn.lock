@@ -8735,10 +8735,10 @@ react-native-nested-listview@^0.10.0:
     shortid "2.2.16"
     use-global-hook "0.2.1"
 
-react-native-onesignal@^3.8.1:
-  version "3.9.4"
-  resolved "https://registry.yarnpkg.com/react-native-onesignal/-/react-native-onesignal-3.9.4.tgz#886ea222471a8242aae5088e680684d1ae2a88c7"
-  integrity sha512-aQLLtqlz3+IUQPGM28VN6uoX/RKRw7JiHV9mun/Xd4P5wY1UtUwiT5RxwVGp2bn2ora8vCSNioaZdVhqupJLGg==
+react-native-onesignal@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/react-native-onesignal/-/react-native-onesignal-4.3.1.tgz#c6ec7b7f34100e2330ba2772d28ee7134da344cc"
+  integrity sha512-Clcsflp8aWoz29F2J0B+u3GCtw0Yyzx5sSRSsPETSRL9sPmawjShFa/cxtIB1D3tB5I6lvvIpQxYKbpuL5wGJQ==
   dependencies:
     invariant "^2.2.2"
 
