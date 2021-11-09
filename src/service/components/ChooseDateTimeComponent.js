@@ -91,6 +91,7 @@ export default class ChooseDateTimeComponent extends Component {
       date: props.value ? new Date(props.value) : undefined,
       availablePeriods: null,
       availablePeriodsFetch: false,
+      availablePeriodsFetchCounts: 0,
       modal: false,
       noTimeAlways: false,
       serviceID: props.serviceID ? props.serviceID : undefined,
@@ -156,22 +157,31 @@ export default class ChooseDateTimeComponent extends Component {
 
     if (availablePeriods.status === 'error') {
       if (availablePeriods.error.code !== 521) {
-        Toast.show({
-          text: availablePeriods.error.message,
-          position: 'bottom',
-          type: 'danger',
-          duration: 3000,
+        this.setState({
+          availablePeriodsFetch: false,
+          availablePeriods: false,
+          availablePeriodsFetchCounts: this.state.availablePeriodsFetchCounts + 1,
+        });
+        if (this.state.availablePeriodsFetchCounts < 3) {
+          Toast.show({
+            text: availablePeriods.error.message,
+            position: 'bottom',
+            type: 'danger',
+            duration: 3000,
+          });
+        } else {
+          this.props.onFinishedSelection({
+            date: yearMonthDay(date),
+            noTimeAlways: true,
+            time: undefined,
+          });
+        }
+      } else {
+        this.setState({
+          availablePeriodsFetch: false,
+          availablePeriods: false,
         });
       }
-      this.setState({
-        availablePeriodsFetch: false,
-        availablePeriods: false,
-      });
-      this.props.onFinishedSelection({
-        date: date,
-        noTimeAlways: true,
-        time: undefined,
-      });
       return true;
     }
 
@@ -363,7 +373,7 @@ export default class ChooseDateTimeComponent extends Component {
                         onPress={() => {
                           this.setState({time: item.from});
                           this.props.onFinishedSelection({
-                            date: this.state.date,
+                            date: yearMonthDay(this.state.date),
                             time: item.from,
                             tech_place: item.tech_place,
                           });

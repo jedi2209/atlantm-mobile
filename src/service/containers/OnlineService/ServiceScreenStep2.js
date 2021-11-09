@@ -47,9 +47,7 @@ class ServiceScreenStep2 extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      orderLead: get(this.props.route, 'params.orderLead'),
-    };
+    this.orderLead = get(this.props.route, 'params.orderLead', false);
     this.service = get(this.props.route, 'params.service');
     this.serviceInfo = get(this.props.route, 'params.serviceInfo');
     this.dealer = get(this.props.route, 'params.dealer');
@@ -67,10 +65,8 @@ class ServiceScreenStep2 extends Component {
 
     let dateFromForm = get(dataFromForm, 'DATE', null);
 
-    if (get(dateFromForm, 'noTimeAlways', false)) {
-      this.setState({
-        orderLead: true,
-      });
+    if (dateFromForm?.noTimeAlways) {
+      this.orderLead = true;
     }
 
     if (!dateFromForm) {
@@ -119,13 +115,13 @@ class ServiceScreenStep2 extends Component {
           parseInt(this.serviceInfo.summary[0].time.required);
       }
     }
-    if (this.state.orderLead) {
+    if (this.orderLead) {
       const dataToSend = {
         brand: get(data, 'car.brand', ''),
         model: get(data, 'car.model', ''),
         carNumber: get(data, 'car.plate', ''),
         vin: get(data, 'vin', ''),
-        date: format(dateFromForm),
+        date: dateFromForm.date,
         service: get(data, 'service', ''),
         firstName: get(data, 'f_FirstName', ''),
         secondName: get(data, 'f_SecondName', ''),
@@ -208,7 +204,7 @@ class ServiceScreenStep2 extends Component {
             fields: [
               {
                 name: 'DATE',
-                type: this.state.orderLead ? 'date' : 'dateTime',
+                type: this.orderLead ? 'date' : 'dateTime',
                 label: strings.Form.field.label.date,
                 value: null,
                 props: {
