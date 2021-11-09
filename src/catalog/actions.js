@@ -130,12 +130,23 @@ export const actionFetchUsedCarFilterData = props => {
           });
         }
 
-        dispatch({
-          type: SAVE_USEDCAR_FILTERS,
-          payload: {
-            url: `/stock/trade-in/cars/get/city/${props.city}/`,
-          },
-        });
+        if (props.region) {
+          dispatch({
+            type: SAVE_USEDCAR_FILTERS,
+            payload: {
+              url: `/stock/trade-in/cars/get/region/${props.region}/`,
+            },
+          });
+        } else {
+          if (props.city) {
+            dispatch({
+              type: SAVE_USEDCAR_FILTERS,
+              payload: {
+                url: `/stock/trade-in/cars/get/city/${props.city}/`,
+              },
+            });
+          }
+        }
 
         return dispatch({
           type: USED_CAR_FILTER_DATA__SUCCESS,
@@ -287,7 +298,12 @@ export const actionFetchNewCarByFilter = props => {
   };
 };
 export const actionFetchUsedCarByFilter = props => {
-  props.url = `/stock/trade-in/cars/get/city/${props.city}/`;
+  if (props.city) {
+    props.url = `/stock/trade-in/cars/get/city/${props.city}/`;
+  }
+  if (props.region) {
+    props.url = `/stock/trade-in/cars/get/region/${props.region}/`;
+  }
   let urlParams = ['recNum=12'];
   let filtersRaw = {};
   let sortingRaw = {};

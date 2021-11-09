@@ -271,6 +271,9 @@ export default {
     models: 'Моделі',
     notFound: 'Немає пропозицій',
     filters: {
+      city: {
+        title: 'Місто',
+      },
       year: {
         title: 'Рік випуску',
         from: 'від',

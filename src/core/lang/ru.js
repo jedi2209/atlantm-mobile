@@ -271,6 +271,9 @@ export default {
     models: 'Модели',
     notFound: 'Нет предложений',
     filters: {
+      city: {
+        title: 'Город',
+      },
       year: {
         title: 'Год выпуска',
         from: 'от',

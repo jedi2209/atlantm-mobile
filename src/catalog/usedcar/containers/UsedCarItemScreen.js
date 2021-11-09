@@ -283,7 +283,7 @@ class UsedCarItemScreen extends Component {
   };
 
   renderAdditionalServices = element => {
-    if (!element) {
+    if (!element && !element?.name) {
       return false;
     }
 
@@ -298,7 +298,7 @@ class UsedCarItemScreen extends Component {
           // numberOfLines={1}
           // ellipsizeMode="tail"
           style={styles.additionalServiceText}>
-          {element.name}
+          {element?.name}
         </Text>
       </View>
     );
@@ -373,7 +373,7 @@ class UsedCarItemScreen extends Component {
     const location_name = get(carDetails, 'location.address');
     const cityID = get(carDetails, 'location.city.id');
     let city_name = get(carDetails, 'location.city.name');
-    if (cityID) {
+    if (cityID && listCities[cityID]) {
       city_name = listCities[cityID].name;
     }
 
