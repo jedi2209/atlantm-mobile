@@ -193,6 +193,7 @@ export default {
       wheel: 'Привід',
       color: 'Колір',
     },
+    warranty: 'Гарантія',
     carLocation: 'Автомобіль знаходиться за адресою',
     tech: {
       title: 'Характеристики',
