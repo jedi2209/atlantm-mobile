@@ -60,6 +60,7 @@ const deviceWidth = Dimensions.get('window').width;
 const sliderWidth = (deviceWidth / 100) * 85;
 
 const modals = {
+  city: 'city',
   brandModels: 'brandModels',
   year: 'year',
   mileage: 'mileage',
@@ -391,9 +392,17 @@ const MainFilterScreen = ({
       case 'Used':
         actionFetchUsedCarFilters({
           city: dealerSelected.city.id,
+          region: dealerSelected.region,
         }).then(res => {
           setTotalCars(res.payload.total.count);
           if (res.payload.data) {
+            if (res.payload.data.city) {
+              let tmp = {};
+              Object.keys(res.payload.data.city).map(val => {
+                tmp[Number(val)] = res.payload.data.city[Number(val)];
+              });
+              res.payload.data.city = _convertSelect(tmp);
+            }
             if (res.payload.data.brand) {
               let brandsTmp = [];
               let modelsTmp = [];
@@ -534,6 +543,13 @@ const MainFilterScreen = ({
     _showHideSubmitButton(false);
     let filtersLocal = {};
     Object.assign(filtersLocal, stateFilters);
+    if (stateFilters['cityIDs']) {
+      stateFilters['cityIDs'].map(val => {
+        Object.assign(filtersLocal, stateFilters, {
+          ['city[' + val.value + ']']: parseInt(val.value, 10),
+        });
+      });
+    }
     if (brandModel[stockType]['brand']) {
       Object.keys(brandModel[stockType]['brand']).map(key => {
         Object.assign(filtersLocal, stateFilters, {
@@ -596,6 +612,7 @@ const MainFilterScreen = ({
       case 'Used':
         actionFetchUsedCar({
           filters: filtersLocal,
+          region: dealerSelected.region,
           city: dealerSelected.city.id,
         }).then(res => {
           setTotalCars(res.payload.total.count);
@@ -643,6 +660,37 @@ const MainFilterScreen = ({
       </Segment>
       {dataFilters && dataFilters.data ? (
         <Content>
+          {dataFilters && dataFilters.data.city ? (
+            <Card noShadow style={[styles.row, styles.rowStatic]}>
+              <CardItem style={styles.cardItem}>
+                <RNBounceable
+                  style={styles.bounceRow}
+                  onPress={() => {
+                    _showHideModal(true, modals.city);
+                  }}>
+                  <View style={styles.fieldCaptionWrapper}>
+                    <Text
+                      style={styles.fieldTitle}
+                      numberOfLines={1}
+                      ellipsizeMode={'tail'}>
+                      {strings.CarsFilterScreen.filters.city.title}
+                    </Text>
+                    <View style={styles.fieldCaptionValues}>
+                      <Text style={styles.fieldValueOne}>
+                        {_getSelectedLabels(get(stateFilters, 'cityIDs'))}
+                      </Text>
+                    </View>
+                  </View>
+                  <Right>
+                    <Icon
+                      type={'MaterialCommunityIcons'}
+                      name="home-city-outline"
+                    />
+                  </Right>
+                </RNBounceable>
+              </CardItem>
+            </Card>
+          ) : null}
           {dataFilters && dataFilters.data.brand ? (
             <Card noShadow style={[styles.row, styles.rowStatic]}>
               <CardItem
@@ -1195,7 +1243,31 @@ const MainFilterScreen = ({
               </CardItem>
             </Card>
           ) : null}
-
+          {/* Модалка Город */}
+          {dataFilters.data.city ? (
+            <ModalViewFilter
+              isModalVisible={showModal === modals.city}
+              onHide={() => _showHideModal(false)}
+              onReset={() => _onChangeFilter('cityIDs', [])}
+              title={strings.CarsFilterScreen.filters.city.title}>
+              <View style={styles.selectMultipleWrapper}>
+                <CheckboxList
+                  items={dataFilters?.data?.city}
+                  selectedItems={get(stateFilters, 'cityIDs')}
+                  onPressCallback={({value, label}) =>
+                    _onChangeFilter(
+                      'cityIDs',
+                      _makeFilterData(stateFilters['cityIDs'], {
+                        value,
+                        label,
+                      }),
+                    )
+                  }
+                />
+              </View>
+            </ModalViewFilter>
+          ) : null}
+          {/* Модалка Год */}
           {dataFilters.data.year ? (
             <ModalViewFilter
               isModalVisible={showModal === modals.year}

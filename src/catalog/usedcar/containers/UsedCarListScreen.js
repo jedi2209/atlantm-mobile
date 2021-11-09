@@ -58,6 +58,7 @@ const UsedCarListScreen = ({
     return actionFetchUsedCarByFilter({
       type,
       city: dealerSelected.city.id,
+      region: dealerSelected.region,
       nextPage: pages?.next || null,
       filters: filters.filters,
       sortBy: filters.sorting.sortBy,

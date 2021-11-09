@@ -208,10 +208,17 @@ export default {
     });
   },
 
-  fetchUsedCarFilterData({city}) {
-    return this.request(`/stock/trade-in/cars/search/?city=${city}`, {
-      ...baseRequestParams,
-    });
+  fetchUsedCarFilterData({city, region}) {
+    if (region) {
+      return this.request(`/stock/trade-in/cars/search/?region=${region}`, {
+        ...baseRequestParams,
+      });
+    }
+    if (city) {
+      return this.request(`/stock/trade-in/cars/search/?city=${city}`, {
+        ...baseRequestParams,
+      });
+    }
   },
 
   fetchCarHistory({vin, token, userid}) {
