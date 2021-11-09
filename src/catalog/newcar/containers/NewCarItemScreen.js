@@ -497,7 +497,7 @@ class NewCarItemScreen extends PureComponent {
         {isSale && (
           <Text
             style={{
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: '600',
               color: '#D0021B',
             }}>
@@ -506,9 +506,9 @@ class NewCarItemScreen extends PureComponent {
         )}
         <Text
           style={{
-            fontSize: isSale ? 12 : 14,
+            fontSize: isSale ? 12 : 16,
             fontWeight: '600',
-            lineHeight: isSale ? 14 : 20,
+            lineHeight: isSale ? 16 : 22,
             color: '#000',
             textDecorationLine: isSale ? 'line-through' : 'none',
           }}>
@@ -628,6 +628,8 @@ class NewCarItemScreen extends PureComponent {
       wheelName = strings.CarParams.wheels[wheelId];
     }
 
+    const warrantyText = get(carDetails, 'guarantee', null);
+
     let photos = [];
     let photosFull = [];
     let isCarImgReal = false;
@@ -743,6 +745,7 @@ class NewCarItemScreen extends PureComponent {
                       flexDirection: 'row',
                       paddingHorizontal: '2%',
                       marginBottom: 10,
+                      marginRight: 10,
                     }}>
                     <OptionPlate
                       title={strings.NewCarItemScreen.plates.complectation}
@@ -791,8 +794,40 @@ class NewCarItemScreen extends PureComponent {
                         subtitle={colorName}
                       />
                     ) : null}
+                    {warrantyText ? (
+                      <OptionPlate
+                        // onPress={() => {
+                        //   this.ColorBox.click();
+                        // }}
+                        title={strings.NewCarItemScreen.warranty}
+                        testID="NewCarItemScreen.Plates.Warranty"
+                        subtitle={warrantyText}
+                      />
+                    ) : null}
                   </View>
                 </ScrollView>
+                {warrantyText ? (
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    paddingHorizontal: '2%',
+                    marginBottom: 10,
+                    marginTop: 5,
+                }}>
+                  <Icon
+                    type="MaterialCommunityIcons"
+                    name="shield-car"
+                    selectable={false}
+                    style={{
+                      color: styleConst.color.green,
+                      fontSize: 32,
+                      marginTop: -4,
+                      marginRight: 5,
+                    }}/>
+                  <Text style={{paddingTop: 2, fontSize: 16}}>{[strings.NewCarItemScreen.warranty, warrantyText].join(' ')}</Text>
+                </View>
+              ) : null}
                 {get(carDetails, 'location.coords') ? (
                   <TouchableWithoutFeedback
                     onPress={this.onPressMap}

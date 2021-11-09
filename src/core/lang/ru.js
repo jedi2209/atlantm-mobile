@@ -193,6 +193,7 @@ export default {
       wheel: 'Привод',
       color: 'Цвет',
     },
+    warranty: 'Гарантия',
     carLocation: 'Автомобиль расположен по адресу',
     tech: {
       title: 'Характеристики',
