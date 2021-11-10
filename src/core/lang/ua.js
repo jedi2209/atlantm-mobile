@@ -573,6 +573,7 @@ export default {
     menu: {
       service: 'Записатися на сервіс',
       history: 'Історія обслуговування',
+      tocalc: 'Калькулятор ТО',
       makeCurrent: 'Зробити поточним',
       addToArchive: 'Відправити в архів',
     },
@@ -606,6 +607,7 @@ export default {
     },
     price: "Обов'язкові роботи",
     priceRecommended: 'Рекоменд.работы',
+    total: 'Разом',
   },
   OrderPartsScreen: {
     title: 'Замовлення запчастин',

@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   Platform,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {Icon, Button, Toast, CheckBox} from 'native-base';
 import {get, orderBy} from 'lodash';
@@ -140,11 +141,15 @@ const styles = StyleSheet.create({
   },
   textPriceTitle: {
     marginLeft: 5,
-    paddingTop: 6,
+    paddingTop: 7,
     fontSize: 16,
     fontFamily: styleConst.font.regular,
     color: styleConst.color.greyText7,
     width: '83%',
+  },
+  textPriceIcon: {
+    color: styleConst.color.blue,
+    marginTop: 3,
   },
   textPrice: {
     fontSize: 18,
@@ -153,7 +158,7 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     right: 0,
-    top: 12,
+    top: 14,
     position: 'absolute',
   },
   scrollViewInner: {
@@ -189,6 +194,7 @@ class ServiceScreenStep1 extends Component {
     };
 
     const carFromNavigation = get(this.props.route, 'params.car');
+    this.settingsFromNavigation = get(this.props.route, 'params.settings');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
       this.state.carVIN = carFromNavigation.vin;
       this.state.carBrand = get(carFromNavigation, 'brand');
@@ -208,30 +214,49 @@ class ServiceScreenStep1 extends Component {
     });
 
     this.props.localDealerClear();
+
+    this.dealerBlock = {
+      name: strings.Form.group.dealer,
+      fields: [
+        {
+          name: 'DEALER',
+          type: 'dealerSelect',
+          label: strings.Form.field.label.dealer,
+          value: this.props.dealerSelected,
+          props: {
+            goBack: false,
+            isLocal: false,
+          },
+        },
+      ],
+    };
   }
 
   onServiceChoose(value) {
-    this.setState(
-      {
-        service: value,
-        serviceInfo: undefined,
-        date: undefined,
-        time: undefined,
-      },
-      () => {
-        if (value !== null && value !== 'other') {
-          // если выбраны какие-то работы кроме "другое"
-          this._getServicesInfo(value);
-        } else {
-          this.setState({
-            orderLead: true,
-          });
-        }
-      },
-    );
+    if (typeof value !== 'undefined' && value !== null) {
+      this.setState(
+        {
+          service: value,
+          serviceInfo: undefined,
+          date: undefined,
+          time: undefined,
+        },
+        () => {
+          if (value !== null && value !== 'other') {
+            // если выбраны какие-то работы кроме "другое"
+            this._getServicesInfo(value);
+          } else {
+            this.setState({
+              orderLead: true,
+            });
+          }
+        },
+      );
+    }
   }
 
   async _getServices() {
+    const {navigation, route} = this.props;
     this.setState({
       servicesFetch: true,
     });
@@ -250,9 +275,26 @@ class ServiceScreenStep1 extends Component {
         date: undefined,
         time: undefined,
       });
+      if (get(this.settingsFromNavigation, 'returnOnFailFetchServices', false)) {
+        Alert.alert(
+          strings.Notifications.error.title,
+          'Какой-то текст про то, что калькулятор ТО на выбранном КО для этого авто не существует',
+          [
+            {
+              text: 'ОК',
+              onPress: () => {
+                navigation.goBack();
+              },
+            },
+          ],
+        );
+      }
     } else {
       let services = [];
       data.data.map(el => {
+        if (route.name === 'ServiceTOCalculatorScreen' && el.id.toString() === 'other') {
+          return;
+        }
         services.push({
           label: el.name.toString(),
           value: el.id.toString(),
@@ -388,21 +430,7 @@ class ServiceScreenStep1 extends Component {
     this.FormConfig = {
       fields: {
         groups: [
-          {
-            name: strings.Form.group.dealer,
-            fields: [
-              {
-                name: 'DEALER',
-                type: 'dealerSelect',
-                label: strings.Form.field.label.dealer,
-                value: this.props.dealerSelected,
-                props: {
-                  goBack: false,
-                  isLocal: false,
-                },
-              },
-            ],
-          },
+          !this.settingsFromNavigation?.disableDealer ? this.dealerBlock : {},
           {
             name: strings.Form.group.car,
             fields: [
@@ -439,9 +467,11 @@ class ServiceScreenStep1 extends Component {
                         activeOpacity={0.7}
                         key={item.vin}
                         onPress={() => {
-                          this._selectCar(item, () => {
-                            this._getServices();
-                          });
+                          if (!this.settingsFromNavigation?.disableCarBlock) {
+                            this._selectCar(item, () => {
+                              this._getServices();
+                            });
+                          }
                         }}>
                         <View>
                           <CarCard
@@ -449,10 +479,13 @@ class ServiceScreenStep1 extends Component {
                             data={item}
                             type="check"
                             checked={this.state.carVIN === item.vin}
+                            disabled={this.settingsFromNavigation?.disableCarBlock}
                             onPress={() => {
-                              this._selectCar(item, () => {
-                                this._getServices();
-                              });
+                                if (!this.settingsFromNavigation?.disableCarBlock) {
+                                  this._selectCar(item, () => {
+                                  this._getServices();
+                                });
+                              }
                             }}
                           />
                         </View>
@@ -505,7 +538,7 @@ class ServiceScreenStep1 extends Component {
                       },
                     },
                   }
-                : {},
+                : null,
               Boolean(this.state.serviceInfo || this.state.serviceInfoFetch)
                 ? {
                     name: 'serviceInfo',
@@ -547,9 +580,7 @@ class ServiceScreenStep1 extends Component {
                             <Icon
                               name="ios-information-circle-outline"
                               size={24}
-                              style={{
-                                color: styleConst.color.blue,
-                              }}
+                              style={styles.textPriceIcon}
                             />
                             <Text style={styles.textPriceTitle}>
                               {strings.ServiceScreenStep1.price}{' '}
@@ -575,59 +606,96 @@ class ServiceScreenStep1 extends Component {
                     name: 'recommended',
                     type: 'component',
                     value: (
-                      <TouchableOpacity
-                        style={{
-                          paddingVertical: 5,
-                          flex: 1,
-                          flexDirection: 'row',
-                        }}
-                        onPress={() => {
-                          this.props.navigation.navigate('ServiceInfoModal', {
-                            data: this.state.serviceInfo,
-                            type: 'recommended',
-                          });
-                        }}>
-                        {this.state.serviceInfo.summary &&
-                        this.state.serviceInfo.summary[0].summ ? (
-                          <>
-                            <Icon
-                              name="ios-information-circle-outline"
-                              size={24}
-                              style={{
-                                color: styleConst.color.blue,
-                              }}
-                            />
-                            <Text style={styles.textPriceTitle}>
-                              {strings.ServiceScreenStep1.priceRecommended}{' '}
-                              <Text style={styles.textPrice}>
-                                {'+'}
-                                {showPrice(
-                                  parseFloat(
-                                    this.state.serviceInfo.summary[0].summ
-                                      .recommended,
-                                  ),
-                                  this.props.dealerSelected.region,
-                                )}
+                        <TouchableOpacity
+                          style={{
+                            paddingVertical: 5,
+                            flex: 1,
+                            flexDirection: 'row',
+                          }}
+                          onPress={() => {
+                            this.props.navigation.navigate('ServiceInfoModal', {
+                              data: this.state.serviceInfo,
+                              type: 'recommended',
+                            });
+                          }}>
+                          {this.state.serviceInfo.summary &&
+                          this.state.serviceInfo.summary[0].summ ? (
+                            <>
+                              <Icon
+                                name="ios-information-circle-outline"
+                                size={24}
+                                style={styles.textPriceIcon}
+                              />
+                              <Text style={styles.textPriceTitle}>
+                                {strings.ServiceScreenStep1.priceRecommended}{' '}
+                                <Text style={styles.textPrice}>
+                                  {'+'}
+                                  {showPrice(
+                                    parseFloat(
+                                      this.state.serviceInfo.summary[0].summ
+                                        .recommended,
+                                    ),
+                                    this.props.dealerSelected.region,
+                                  )}
+                                </Text>
                               </Text>
-                            </Text>
-                            <CheckBox
-                              onPress={() => {
-                                this.setState({
-                                  recommended: !this.state.recommended,
-                                });
-                              }}
-                              checked={this.state.recommended}
-                              style={[styles.checkbox]}
-                              color={styleConst.color.blue}
-                            />
-                          </>
-                        ) : null}
-                      </TouchableOpacity>
+                              <CheckBox
+                                onPress={() => {
+                                  this.setState({
+                                    recommended: !this.state.recommended,
+                                  });
+                                }}
+                                checked={this.state.recommended}
+                                style={[styles.checkbox]}
+                                color={styleConst.color.blue}
+                              />
+                            </>
+                          ) : null}
+                        </TouchableOpacity>
                     ),
                   }
                 : {},
             ],
           },
+          this.state.serviceInfo && this.state.serviceInfo.summary[0].summ.total ? {
+            name: strings.ServiceScreenStep1.total,
+            fields: [
+              {
+                name: 'recommended',
+                type: 'component',
+                value: (
+                  <>
+                  <View
+                    style={{
+                        paddingVertical: 5,
+                        flex: 1,
+                        flexDirection: 'row',
+                      }}>
+                      <Icon
+                        name="money"
+                        type={"FontAwesome"}
+                        size={24}
+                        style={styles.textPriceIcon}
+                      />
+                      <Text style={styles.textPriceTitle}>
+                        {strings.ServiceScreenStep1.total}{' '}
+                        <Text style={styles.textPrice}>
+                          {showPrice(
+                            parseFloat(
+                              this.state.recommended ? 
+                              this.state.serviceInfo.summary[0].summ.total : this.state.serviceInfo.summary[0].summ.required
+                            ),
+                            this.props.dealerSelected.region,
+                          )}
+                        </Text>
+                      </Text>
+                  </View>
+                  <Text style={{fontSize: 14, color: styleConst.color.greyBlueText, marginTop: 10,}}>{this.state.serviceInfo.summary[0]?.text}</Text>
+                  </>
+                )
+              }
+            ],
+          } : {},
         ],
       },
     };
@@ -647,7 +715,7 @@ class ServiceScreenStep1 extends Component {
                 defaultCountryCode={this.props.dealerSelected.region}
                 onSubmit={this.onPressOrder}
                 SubmitButton={{
-                  text: strings.DatePickerCustom.chooseDateButton,
+                  text: get(this.props.route, 'params.settings.submitButtonText', false) ? get(this.props.route, 'params.settings.submitButtonText') : strings.DatePickerCustom.chooseDateButton,
                   style: {
                     backgroundColor: styleConst.color.darkBg,
                   },
