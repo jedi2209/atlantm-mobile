@@ -49,7 +49,7 @@ const styles = {
   },
 };
 
-export const CarCard = ({data, type, checked, onPress}) => {
+export const CarCard = ({data, type, checked, onPress, disabled}) => {
   const {brand, model, number, owner} = data;
   return (
     <StyleProvider style={getTheme()}>
@@ -81,7 +81,7 @@ export const CarCard = ({data, type, checked, onPress}) => {
           selectable={false}
           style={styles.carIcon}
         />
-        {type === 'check' && (
+        {type === 'check' && !disabled && (
           <TouchableWithoutFeedback
             containerStyle={styles.checkboxContainer}>
             <View>

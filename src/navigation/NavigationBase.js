@@ -72,6 +72,7 @@ import SettingsScreen from '../settings/containers/SettingsScreen';
 import ProfileSettingsScreen from '../profile/containers/ProfileSettingsScreen';
 import BonusScreenInfo from '../profile/bonus/containers/BonusInfoScreen';
 import TOHistory from '../profile/carhistory/containers/CarHistoryScreen';
+import ServiceTOCalculatorScreen from '../service/containers/ServiceTOCalculatorScreen';
 import CarHistoryDetailsScreen from '../profile/carhistory/containers/CarHistoryDetailsScreen';
 
 import {strings} from '../core/lang/const';
@@ -414,6 +415,18 @@ export const Base = ({navigation, route}) => {
         component={TOHistory}
         options={ClassicHeaderWhite(
           strings.CarHistoryScreen.title,
+          navigation,
+          route,
+          {
+            presentation: 'card',
+          },
+        )}
+      />
+      <StackProfile.Screen
+        name="ServiceTOCalculatorScreen"
+        component={ServiceTOCalculatorScreen}
+        options={ClassicHeaderWhite(
+          strings.UserCars.menu.tocalc,
           navigation,
           route,
           {

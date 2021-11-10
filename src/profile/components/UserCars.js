@@ -11,6 +11,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Platform,
+  Dimensions,
 } from 'react-native';
 import {store} from '../../core/store';
 import {get} from 'lodash';
@@ -82,12 +83,29 @@ let UserCars = ({actionToggleCar, activePanel}) => {
         cancelButtonIndex: ordersData.CANCEL_INDEX,
         destructiveButtonIndex: ordersData.DESTRUCTIVE_INDEX || null,
         title: carName,
+        style: {
+          maxHeight: Dimensions.get('window').height / 0.1,
+        }
       },
       (buttonIndex) => {
         switch (ordersData.BUTTONS[buttonIndex].id) {
           case 'orderService':
             navigation.navigate('ServiceScreen', {
               car: item,
+              settings: {
+                disableDealer: true,
+              }
+            });
+            break;
+          case 'TOCalculator':
+            navigation.navigate('ServiceTOCalculatorScreen', {
+              car: item,
+              settings: {
+                disableDealer: true,
+                disableCarBlock: true,
+                submitButtonText: strings.ServiceScreen.title,
+                returnOnFailFetchServices: true,
+              }
             });
             break;
           case 'orderParts':
@@ -157,7 +175,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
                     return _showMenu(ordersData, item, navigation);
                   });
                 } else {
-                  orderFunctions.getCarMenu().then((data) => {
+                  orderFunctions.getArchieveCarMenu().then((data) => {
                     return _showMenu(
                       data[CarType][Platform.OS],
                       item,

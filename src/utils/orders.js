@@ -24,12 +24,11 @@ async function getOrders(type = 'default') {
           priority: 15,
           id: 'cancel',
           text: strings.Base.cancel.toLowerCase(),
-          icon: 'close',
-          iconColor: 'red',
+          icon: 'ios-close',
+          iconColor: '#f70707',
         },
       ],
       CANCEL_INDEX: 0,
-      // DESTRUCTIVE_INDEX: 4,
     },
     ios: {
       TITLE: 'Заявки',
@@ -41,7 +40,6 @@ async function getOrders(type = 'default') {
         },
       ],
       CANCEL_INDEX: 0,
-      // DESTRUCTIVE_INDEX: 4,
     },
   };
   const divisions = get(storeState, 'dealer.selected.divisionTypes');
@@ -51,35 +49,54 @@ async function getOrders(type = 'default') {
   if (type === 'car') {
     res.android.BUTTONS.push(
       {
-        priority: 5,
+        priority: 6,
         id: 'TOhistory',
         text: strings.UserCars.menu.history,
-        icon: 'book-outline',
+        icon: 'layers-outline',
         iconColor: '#2c8ef4',
       },
       {
-        priority: 6,
+        priority: 7,
         id: 'hide',
         text: strings.UserCars.menu.addToArchive,
         icon: 'archive',
-        iconColor: '#2c8ef4',
+        iconColor: '#f4542c',
       },
     );
     res.ios.BUTTONS.push(
       {
-        priority: 5,
+        priority: 6,
         id: 'TOhistory',
         text: '📘' + strings.UserCars.menu.history,
       },
       {
-        priority: 6,
+        priority: 7,
         id: 'hide',
         text: '📥' + strings.UserCars.menu.addToArchive,
       },
     );
-    tmpArr.push(5, 6);
-    res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 2;
-    res.ios.CANCEL_INDEX = res.ios.CANCEL_INDEX + 2;
+    tmpArr.push(6, 7);
+    if (storeState.dealer.selected.region === 'by') {
+      res.android.BUTTONS.push(
+        {
+          priority: 3,
+          id: 'TOCalculator',
+          text: strings.UserCars.menu.tocalc,
+          icon: 'calculator-outline',
+          iconColor: '#2c8ef4',
+        },
+      );
+      res.ios.BUTTONS.push(
+        {
+          priority: 3,
+          id: 'TOCalculator',
+          text: '🧾' + strings.UserCars.menu.tocalc,
+        },
+      );
+      tmpArr.push(3);
+    }
+    res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + res.ios.BUTTONS.length;
+    res.ios.CANCEL_INDEX = res.ios.CANCEL_INDEX + res.ios.BUTTONS.length;
   } else {
     res.android.BUTTONS.push({
       priority: 1,
@@ -118,36 +135,36 @@ async function getOrders(type = 'default') {
 
     if (divisions.includes('ZZ') && !tmpArr.includes(3)) {
       res.android.BUTTONS.push({
-        priority: 3,
+        priority: 4,
         id: 'orderParts',
         text: strings.OrderPartsScreen.title2,
-        icon: 'settings',
+        icon: 'cart-outline',
         iconColor: '#2c8ef4',
       });
       res.ios.BUTTONS.push({
-        priority: 3,
+        priority: 4,
         id: 'orderParts',
         text: '🔩 ' + strings.OrderPartsScreen.title2,
       });
-      tmpArr.push(3);
+      tmpArr.push(4);
       res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 1;
       res.ios.CANCEL_INDEX = res.ios.CANCEL_INDEX + 1;
     }
 
     if (divisions.includes('TI') && !tmpArr.includes(4)) {
       res.android.BUTTONS.push({
-        priority: 4,
+        priority: 5,
         id: 'carCost',
         text: strings.CarCostScreen.action,
-        icon: 'pricetag',
+        icon: 'cash-outline',
         iconColor: '#2c8ef4',
       });
       res.ios.BUTTONS.push({
-        priority: 4,
+        priority: 5,
         id: 'carCost',
         text: strings.CarCostScreen.action,
       });
-      tmpArr.push(4);
+      tmpArr.push(5);
       res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 1;
       res.ios.CANCEL_INDEX = res.ios.CANCEL_INDEX + 1;
     }
@@ -162,7 +179,7 @@ async function getOrders(type = 'default') {
   return res[Platform.OS];
 }
 
-async function getCarMenu() {
+async function getArchieveCarMenu() {
   const CarMenu = {
     hidden: {
       android: {
@@ -211,5 +228,5 @@ async function getCarMenu() {
 
 export default {
   getOrders,
-  getCarMenu,
+  getArchieveCarMenu,
 };

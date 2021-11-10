@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 import {Text, Button, Switch, Toast, CheckBox} from 'native-base';
-
+import {get} from 'lodash';
 import {connect} from 'react-redux';
 
 // Form field types
@@ -248,45 +248,47 @@ class Form extends Component {
     };
     if (props.fields.groups) {
       props.fields.groups.map(group => {
-        group.fields = group.fields.filter(field => {
-          return typeof field === 'object' && field.name && field.type;
-        });
-        group.fields.map(field => {
-          if (field.value && field.type !== 'component') {
-            if (field.id) {
-              this.state[field.name] = Object.assign(
-                {},
-                this.state[field.name],
-                {
-                  [field.id]: {
-                    value: field.value,
+        if (group.fields) {
+          group.fields = group.fields.filter(field => {
+            return typeof field === 'object' && get(field, 'name', false) && get(field, 'type', false);
+          });
+          group.fields.map(field => {
+            if (field.value && field.type !== 'component') {
+              if (field.id) {
+                this.state[field.name] = Object.assign(
+                  {},
+                  this.state[field.name],
+                  {
+                    [field.id]: {
+                      value: field.value,
+                    },
                   },
-                },
-              );
-            } else {
-              this.state[field.name] = field.value;
-              if (
-                field.value &&
-                field.type !== 'phone' &&
-                field.type !== 'checkbox'
-              ) {
-                this.state[field.name + '_Picker'] = null;
+                );
+              } else {
+                this.state[field.name] = field.value;
+                if (
+                  field.value &&
+                  field.type !== 'phone' &&
+                  field.type !== 'checkbox'
+                ) {
+                  this.state[field.name + '_Picker'] = null;
+                }
               }
             }
-          }
-          this.allFields.push({
-            name: field.name,
-            type: field.type,
-            label: field.label,
-          });
-          if (field.props && field.props.required === true) {
-            requredFields.push({
+            this.allFields.push({
               name: field.name,
               type: field.type,
               label: field.label,
             });
-          }
-        });
+            if (field.props && field.props.required === true) {
+              requredFields.push({
+                name: field.name,
+                type: field.type,
+                label: field.label,
+              });
+            }
+          });
+        }
       });
     } else {
       if (props.fields.length === 1) {
@@ -409,7 +411,7 @@ class Form extends Component {
       }
     });
 
-    if (requredLabels.length) {
+    if (requredLabels && requredLabels.length) {
       if (requredLabels.length > 1) {
         Toast.show({
           text:
@@ -592,6 +594,9 @@ class Form extends Component {
   };
 
   _groupRender = (group, num) => {
+    if (group.fields && typeof group.fields === 'undefined' || typeof group.fields !== 'object') {
+      return;
+    }
     let totalFields = group.fields.length;
 
     return (
@@ -601,7 +606,7 @@ class Form extends Component {
         </Text>
         <View style={styles.groupFields}>
           {group.fields.map((field, fieldNum, totalFields) => {
-            if (typeof field === 'object' && field.type) {
+            if (field && typeof field === 'object' && field.type) {
               const returnField = this._fieldsRender[field.type](
                 field,
                 fieldNum,
