@@ -278,7 +278,7 @@ class ServiceScreenStep1 extends Component {
       if (get(this.settingsFromNavigation, 'returnOnFailFetchServices', false)) {
         Alert.alert(
           strings.Notifications.error.title,
-          'Какой-то текст про то, что калькулятор ТО на выбранном КО для этого авто не существует',
+          strings.ServiceScreenStep1.Notifications.error.wrongDealer,
           [
             {
               text: 'ОК',
