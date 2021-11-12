@@ -276,9 +276,21 @@ class ServiceScreenStep1 extends Component {
         time: undefined,
       });
       if (get(this.settingsFromNavigation, 'returnOnFailFetchServices', false)) {
+        let errorTitle = strings.Notifications.error.title;
+        switch (data?.error.code) {
+          case 6: // неправильное КО
+            errorText = strings.ServiceScreenStep1.Notifications.error.wrongDealer;
+            break;
+          case 7: // Для VIN не определены признаки ТО
+            errorText = strings.ServiceScreenStep1.Notifications.error.noData;
+            break;
+          default:
+            errorText = strings.ServiceScreenStep1.Notifications.error.wrongDealer;
+            break;
+        }
         Alert.alert(
-          strings.Notifications.error.title,
-          strings.ServiceScreenStep1.Notifications.error.wrongDealer,
+          errorTitle,
+          errorText,
           [
             {
               text: 'ОК',
@@ -462,7 +474,13 @@ class ServiceScreenStep1 extends Component {
                     horizontal
                     style={styles.carContainer}
                     contentContainerStyle={styles.carContainerContent}>
-                    {(this.myCars || []).map(item => (
+                    {(this.myCars || []).map(item => {
+                      if (this.settingsFromNavigation?.disableCarBlock && item && item.vin && this.state.carVIN) {
+                        if (item?.vin != this.state.carVIN) {
+                          return;
+                        }
+                      }
+                      return (
                       <TouchableWithoutFeedback
                         activeOpacity={0.7}
                         key={item.vin}
@@ -490,7 +508,7 @@ class ServiceScreenStep1 extends Component {
                           />
                         </View>
                       </TouchableWithoutFeedback>
-                    ))}
+                    )})}
                   </ScrollView>
                 ) : (
                   <View style={styles.scrollViewInner} useNativeDriver>

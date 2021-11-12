@@ -16,7 +16,7 @@ const ServiceTOCalculatorScreen = props => {
   const navigation = useNavigation();
   const route = useRoute();
   const actionID = get(route, 'params.actionID', null);
-  const {dealerSelected, loginID, cars} = props;
+  const {dealerSelected, loginID} = props;
   return <ServiceScreenStep1 navigation={navigation} route={route} />;
 };
 

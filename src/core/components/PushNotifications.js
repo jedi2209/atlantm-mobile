@@ -131,7 +131,6 @@ export default {
       // Check push notification and OneSignal subscription statuses
       // OneSignal.promptForPushNotificationsWithUserResponse();
       this.deviceState().then(deviceState => {
-        console.log('deviceState', deviceState);
         if (deviceState.isSubscribed == false) {
           switch (Platform.OS) {
             case 'ios':

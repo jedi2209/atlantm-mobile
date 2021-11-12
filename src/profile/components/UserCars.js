@@ -94,6 +94,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
               car: item,
               settings: {
                 disableDealer: true,
+                disableCarBlock: true,
               }
             });
             break;

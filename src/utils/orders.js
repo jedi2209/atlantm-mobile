@@ -133,7 +133,7 @@ async function getOrders(type = 'default') {
       res.ios.CANCEL_INDEX = res.ios.CANCEL_INDEX + 1;
     }
 
-    if (divisions.includes('ZZ') && !tmpArr.includes(3)) {
+    if (divisions.includes('ZZ') && !tmpArr.includes(4)) {
       res.android.BUTTONS.push({
         priority: 4,
         id: 'orderParts',
@@ -151,7 +151,7 @@ async function getOrders(type = 'default') {
       res.ios.CANCEL_INDEX = res.ios.CANCEL_INDEX + 1;
     }
 
-    if (divisions.includes('TI') && !tmpArr.includes(4)) {
+    if (divisions.includes('TI') && !tmpArr.includes(5)) {
       res.android.BUTTONS.push({
         priority: 5,
         id: 'carCost',

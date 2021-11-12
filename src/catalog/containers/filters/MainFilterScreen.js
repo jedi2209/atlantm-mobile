@@ -661,7 +661,7 @@ const MainFilterScreen = ({
       {dataFilters && dataFilters.data ? (
         <Content>
           {dataFilters && dataFilters.data.city ? (
-            <Card noShadow style={[styles.row, styles.rowStatic]}>
+            <Card noShadow style={[styles.row]}>
               <CardItem style={styles.cardItem}>
                 <RNBounceable
                   style={styles.bounceRow}
@@ -675,11 +675,13 @@ const MainFilterScreen = ({
                       ellipsizeMode={'tail'}>
                       {strings.CarsFilterScreen.filters.city.title}
                     </Text>
-                    <View style={styles.fieldCaptionValues}>
-                      <Text style={styles.fieldValueOne}>
-                        {_getSelectedLabels(get(stateFilters, 'cityIDs'))}
-                      </Text>
-                    </View>
+                    {_getSelectedLabels(get(stateFilters, 'cityIDs')) ? (
+                      <View style={styles.fieldCaptionValues}>
+                        <Text style={styles.fieldValueOne}>
+                          {_getSelectedLabels(get(stateFilters, 'cityIDs'))}
+                        </Text>
+                      </View>
+                    ) : null}
                   </View>
                   <Right>
                     <Icon
