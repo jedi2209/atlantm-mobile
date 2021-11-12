@@ -161,14 +161,7 @@ const ServiceTable = ({data, type}) => {
         <View
           style={tableStyles.section}
           key={'ServiceTable' + cnt + quantity + summ}>
-          {name ? (
-            <Text style={tableStyles.sectionTitle}>
-              {name}{' '}
-              {required ? (
-                <Text style={tableStyles.sectionTitleRequired}>*</Text>
-              ) : null}
-            </Text>
-          ) : null}
+          {name ? <Text style={tableStyles.sectionTitle}>{name}</Text> : null}
           {quantity && unit ? (
             <ServiceTableItem label={strings.CarHistoryDetailsScreen.count}>
               {unit === 'сек'

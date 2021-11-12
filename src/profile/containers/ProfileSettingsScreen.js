@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {StyleSheet, Platform, ScrollView, Alert} from 'react-native';
+import {StyleSheet, Platform, ScrollView, View, Alert} from 'react-native';
 import {connect} from 'react-redux';
 import {Container, StyleProvider} from 'native-base';
 import getTheme from '../../../native-base-theme/components';
@@ -249,16 +249,16 @@ class ProfileSettingsScreen extends Component {
       <StyleProvider style={getTheme()}>
         <KeyboardAvoidingView
           behavior={Platform.select({ios: 'height', android: null})}>
-          <ScrollView style={styleConst.form.scrollView}>
-            <Container style={styles.container}>
+          <View style={styleConst.form.scrollView}>
+            <View style={styles.container}>
               <Form
                 fields={this.FormConfig.fields}
                 barStyle={'light-content'}
                 SubmitButton={{text: strings.ProfileSettingsScreen.save}}
                 onSubmit={this.onPressSave}
               />
-            </Container>
-          </ScrollView>
+            </View>
+          </View>
         </KeyboardAvoidingView>
       </StyleProvider>
     );

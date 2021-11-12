@@ -794,16 +794,6 @@ class NewCarItemScreen extends PureComponent {
                         subtitle={colorName}
                       />
                     ) : null}
-                    {warrantyText ? (
-                      <OptionPlate
-                        // onPress={() => {
-                        //   this.ColorBox.click();
-                        // }}
-                        title={strings.NewCarItemScreen.warranty}
-                        testID="NewCarItemScreen.Plates.Warranty"
-                        subtitle={warrantyText}
-                      />
-                    ) : null}
                   </View>
                 </ScrollView>
                 {warrantyText ? (
