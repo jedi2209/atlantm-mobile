@@ -815,7 +815,7 @@ class NewCarItemScreen extends PureComponent {
                       marginTop: -4,
                       marginRight: 5,
                     }}/>
-                  <Text style={{paddingTop: 2, fontSize: 16}}>{[strings.NewCarItemScreen.warranty, warrantyText].join(' ')}</Text>
+                  <Text style={{paddingTop: 2, paddingRight: 2, fontSize: 15}}>{[strings.NewCarItemScreen.warranty, warrantyText].join(' ')}</Text>
                 </View>
               ) : null}
                 {get(carDetails, 'location.coords') ? (
