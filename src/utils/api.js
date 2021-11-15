@@ -966,6 +966,7 @@ export default {
     try {
       const response = await fetch(url, requestParams);
       const res = await response.json();
+      // console.log('url + requestParams', url, requestParams, res);
       return res;
     } catch (err) {
       console.error('apiGetDataError URL: ' + url, err);

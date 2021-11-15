@@ -155,7 +155,7 @@ export default class ChooseDateTimeComponent extends Component {
       dealer: this.props.dealer.id,
     });
 
-    if (availablePeriods.status === 'error') {
+    if (availablePeriods && availablePeriods.status === 'error') {
       if (availablePeriods.error.code !== 521) {
         this.setState({
           availablePeriodsFetch: false,
@@ -180,7 +180,11 @@ export default class ChooseDateTimeComponent extends Component {
         this.setState({
           availablePeriodsFetch: false,
           availablePeriods: false,
-        });
+        }, () => this.props.onFinishedSelection({
+            date: yearMonthDay(date),
+            noTimeAlways: true,
+            time: undefined,
+          }));
       }
       return true;
     }
