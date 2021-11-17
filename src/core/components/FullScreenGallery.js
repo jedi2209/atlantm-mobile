@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
 import Orientation from "react-native-orientation-locker";
-import ImageView from 'react-native-image-viewing';
+//import ImageView from 'react-native-image-viewing';
 import Gallery from 'react-native-awesome-gallery';
 import styleConst from '../style-const';
 import {strings} from '../lang/const';

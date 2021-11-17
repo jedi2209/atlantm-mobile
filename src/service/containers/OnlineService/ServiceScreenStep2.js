@@ -116,6 +116,18 @@ class ServiceScreenStep2 extends Component {
       }
     }
     if (this.orderLead) {
+      let textAdd = get(data, 'text', '');
+      if (this.service) {
+        textAdd = ['Требуемые работы:', data.service, '\r\n'].join(' ');
+        if (data.recommended) {
+          textAdd = [textAdd, 'Стоимость:', get(this.serviceInfo, 'summary[0].summ.total')].join(' ');
+        } else {
+          textAdd = [textAdd, 'Стоимость:', get(this.serviceInfo, 'summary[0].summ.required')].join(' ');
+        }
+        text = [textAdd, get(data, 'text', '')].join('\r\n');
+      } else {
+        text = get(data, 'text', '');
+      }
       const dataToSend = {
         brand: get(data, 'car.brand', ''),
         model: get(data, 'car.model', ''),
@@ -128,7 +140,7 @@ class ServiceScreenStep2 extends Component {
         lastName: get(data, 'f_LastName', ''),
         email: get(data, 'email', ''),
         phone: get(data, 'phone', ''),
-        text: get(data, 'text', ''),
+        text: text,
         dealerID: data.dealer,
       };
       const action = await this.props.orderService(dataToSend);
