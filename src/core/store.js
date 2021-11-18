@@ -17,7 +17,7 @@ const middleware = [
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['form', 'nav', 'modal', 'catalog'],
+  blacklist: ['nav', 'modal', 'catalog'],
   keyPrefix: 'atlantm',
 };
 
