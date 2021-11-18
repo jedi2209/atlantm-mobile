@@ -780,11 +780,12 @@ class Form extends Component {
       const {label, name, id} = data;
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
+      console.log('date data.props.required, !this.state[name]', data.props.required, !this.state[name], this.state[name]);
       return (
         <View
           style={[
             styles.field,
-            data.props && data.props.required && !this.state[name]
+            data.props && data.props.required
               ? !this.state[name]
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
@@ -847,6 +848,7 @@ class Form extends Component {
       const {label, name, id} = data;
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
+      console.log('dateTime data.props.required, !this.state[name]', data.props.required, !this.state[name]);
       return (
         <View
           style={[
