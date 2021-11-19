@@ -282,10 +282,10 @@ class ServiceScreenStep1 extends Component {
             errorText = strings.ServiceScreenStep1.Notifications.error.wrongDealer;
             break;
           case 7: // Для VIN не определены признаки ТО
-            errorText = strings.ServiceScreenStep1.Notifications.error.noData;
+            errorText = strings.ServiceScreenStep1.Notifications.error.noDataCar;
             break;
           default:
-            errorText = strings.ServiceScreenStep1.Notifications.error.wrongDealer;
+            errorText = strings.ServiceScreenStep1.Notifications.error.noData;
             break;
         }
         Alert.alert(
