@@ -230,6 +230,16 @@ class UsedCarItemScreen extends Component {
     navigation.navigate('CallMeBackScreen', {
       dealerCustom: listDealers[carDetails.dealer.id],
       goBack: true,
+      car: {
+        brand: get(carDetails, 'brand.name', ''),
+        model: get(carDetails, 'model', ''),
+        complectation: get(carDetails, 'complectation.name'),
+        year: get(carDetails, 'year'),
+      },
+      region: this.props.dealerSelected.region,
+      dealerId: get(carDetails, 'dealer.id'),
+      carId: carDetails.id.api,
+      isNewCar: false,
     });
   };
 
