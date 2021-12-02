@@ -611,7 +611,7 @@ class Form extends Component {
         <Text selectable={false} style={styles.groupName}>
           {group.name}
         </Text>
-        <View style={styles.groupFields}>
+        <View style={[styles.groupFields, group.style]}>
           {group.fields.map((field, fieldNum, totalFields) => {
             if (field && typeof field === 'object' && field.type) {
               const returnField = this._fieldsRender[field.type](

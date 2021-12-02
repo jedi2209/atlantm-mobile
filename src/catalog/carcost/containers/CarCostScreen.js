@@ -6,9 +6,13 @@ import {
   Keyboard,
   Platform,
   StatusBar,
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
 } from 'react-native';
 import CarCostPhotos from '../components/CarCostPhotos';
-import {Content} from 'native-base';
+import {Icon, Button, Content} from 'native-base';
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import {
   addDays,
@@ -17,6 +21,7 @@ import {
   substractYears,
 } from '../../../utils/date';
 import UserData from '../../../utils/user';
+import {CarCard} from '../../../profile/components/CarCard';
 
 import Form from '../../../core/components/Form/Form';
 
@@ -93,6 +98,18 @@ const mapDispatchToProps = {
   actionCarCostOrder,
 };
 
+const styles = StyleSheet.create({
+  carContainer: {
+    marginLeft: -16,
+    marginRight: -16,
+  },
+  carContainerContent: {
+    // Добавляем отрицательный оступ, для контейнера с карточками,
+    // т.к. в карточках отступ снизу больше чем сверху из-за места использования.
+    marginVertical: 0,
+  },
+});
+
 class CarCostScreen extends PureComponent {
   constructor(props) {
     super(props);
@@ -112,6 +129,16 @@ class CarCostScreen extends PureComponent {
       loading: false,
       success: false,
     };
+
+    this.myCars = [];
+    this.props.cars.map((item) => {
+      if (!item.hidden) {
+        this.myCars.push(item);
+      }
+    });
+    if (this.myCars.length === 1) {
+      this._selectCar(this.myCars[0]);
+    }
 
     const carFromNavigation = get(props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
@@ -145,6 +172,301 @@ class CarCostScreen extends PureComponent {
     email: PropTypes.string,
   };
 
+  _selectCar = (item) => {
+    this.setState({
+      carBrand: get(item, 'brand'),
+      carModel: get(item, 'model'),
+      carNumber: get(item, 'number'),
+      carMileage: get(item, 'mileage'),
+      carName: [get(item, 'bran'), get(item, 'model')].join(' '),
+      carVIN: get(item, 'vin'),
+    });
+  };
+
+  getCars = () => {
+    if (this.myCars &&  this.myCars.length) {
+      return [
+        {
+          name: 'CARNAME',
+          type: 'component',
+          label: strings.Form.field.label.car2,
+          value:
+            this.myCars && this.myCars.length ? (
+              <ScrollView
+                showsHorizontalScrollIndicator={false}
+                horizontal
+                style={styles.carContainer}
+                contentContainerStyle={styles.carContainerContent}>
+                {(this.myCars || []).map((item) => {
+                  return (
+                    <TouchableWithoutFeedback
+                      activeOpacity={0.7}
+                      key={item.vin}
+                      onPress={() => {
+                        this._selectCar(item);
+                      }}>
+                      <View>
+                        <CarCard
+                          key={item.vin}
+                          data={item}
+                          type="check"
+                          checked={this.state.carVIN === item.vin}
+                          onPress={() => {
+                            this._selectCar(item);
+                          }}
+                        />
+                      </View>
+                    </TouchableWithoutFeedback>
+                  );
+                })}
+              </ScrollView>
+            ) : (
+              <View
+                style={[
+                  styles.scrollViewInner,
+                  {
+                    flex: 1,
+                    paddingLeft: 24,
+                    paddingRight: 5,
+                    marginVertical: 29.5,
+                    textAlign: 'center',
+                    alignContent: 'center',
+                    width: '100%',
+                    alignItems: 'center',
+                  },
+                ]}
+                useNativeDriver>
+                <Icon
+                  type="MaterialCommunityIcons"
+                  name="car-off"
+                  fontSize={20}
+                />
+                <Text
+                  style={{
+                    marginTop: 5,
+                    marginLeft: 10,
+                    lineHeight: 20,
+                  }}>
+                  {strings.UserCars.empty.text + '\r\n'}
+                </Text>
+                <Button
+                  full
+                  bordered
+                  style={{borderRadius: 5}}
+                  onPress={() => {
+                    this.props.navigation.navigate('About', {
+                      screen: 'LoginScreen',
+                      activePanel: 'hidden',
+                    });
+                  }}>
+                  <Text style={{padding: 5}}>
+                    {strings.UserCars.archiveCheck}
+                  </Text>
+                </Button>
+              </View>
+            ),
+        },
+      ];
+    }
+    return [
+      {
+        name: 'CARBRAND',
+        type: 'input',
+        label: strings.Form.field.label.carBrand,
+        value: this.state.carBrand
+          ? this.state.carBrand
+          : this.props.carBrand,
+        props: {
+          required: true,
+          placeholder: null,
+        },
+      },
+      {
+        name: 'CARMODEL',
+        type: 'input',
+        label: strings.Form.field.label.carModel,
+        value: this.state.carModel
+          ? this.state.carModel
+          : this.props.carModel,
+        props: {
+          required: true,
+          placeholder: null,
+        },
+      },
+      {
+        name: 'CARVIN',
+        type: 'input',
+        label: strings.Form.field.label.carVIN,
+        value: this.state.carVIN
+          ? this.state.carVIN
+          : this.props.carVIN,
+        props: {
+          placeholder: null,
+          autoCapitalize: 'characters',
+          onSubmitEditing: () => {},
+          returnKeyType: 'done',
+          blurOnSubmit: true,
+        },
+      },
+      {
+        name: 'CARYEAR',
+        type: 'year',
+        label: strings.Form.field.label.carYear,
+        value: this.props.carYear,
+        props: {
+          required: true,
+          minDate: new Date(substractYears(100)),
+          maxDate: new Date(),
+          reverse: true,
+          placeholder: {
+            label: strings.Form.field.placeholder.carYear,
+            value: null,
+            color: '#9EA0A4',
+          },
+        },
+      },
+      {
+        name: 'CARMILEAGE',
+        type: 'input',
+        label: strings.Form.field.label.carMileage,
+        value: this.state.carMileage
+          ? this.state.carMileage
+          : this.props.carMileage,
+        props: {
+          keyboardType: 'number-pad',
+          required: true,
+          placeholder: null,
+          onSubmitEditing: () => {},
+          returnKeyType: 'done',
+          blurOnSubmit: true,
+        },
+      },
+      {
+        name: 'CARENGINETYPE',
+        type: 'select',
+        label: strings.Form.field.label.engineType,
+        value: this.props.carEngineType,
+        props: {
+          items: [
+            {
+              label: strings.Form.field.value.engineType.gasoline,
+              value: 1,
+              key: 1,
+            },
+            {
+              label: strings.Form.field.value.engineType.gasolineGas,
+              value: 9,
+              key: 9,
+            },
+            {
+              label: strings.Form.field.value.engineType.diesel,
+              value: 2,
+              key: 2,
+            },
+            {
+              label: strings.Form.field.value.engineType.hybrid,
+              value: 3,
+              key: 3,
+            },
+            {
+              label: strings.Form.field.value.engineType.electro,
+              value: 4,
+              key: 4,
+            },
+          ],
+          placeholder: {
+            label: strings.Form.field.placeholder.engineType,
+            value: null,
+            color: '#9EA0A4',
+          },
+        },
+      },
+      {
+        name: 'CARENGINEVOLUME',
+        type: 'input',
+        label: strings.Form.field.label.engineVolume,
+        value: this.props.carEngineVolume,
+        props: {
+          keyboardType: 'number-pad',
+          placeholder: null,
+          onSubmitEditing: () => {},
+          returnKeyType: 'done',
+          blurOnSubmit: true,
+        },
+      },
+      {
+        name: 'CARGEARBOXTYPE',
+        type: 'select',
+        label: strings.Form.field.label.gearbox,
+        value: this.props.carGearboxType,
+        props: {
+          items: [
+            {
+              label: strings.Form.field.value.gearbox.mechanical,
+              value: 1,
+              key: 1,
+            },
+            {
+              label: strings.Form.field.value.gearbox.automatic,
+              value: 4,
+              key: 4,
+            },
+            {
+              label: strings.Form.field.value.gearbox.dsg,
+              value: 11,
+              key: 11,
+            },
+            {
+              label: strings.Form.field.value.gearbox.robot,
+              value: 12,
+              key: 12,
+            },
+            {
+              label: strings.Form.field.value.gearbox.variator,
+              value: 13,
+              key: 13,
+            },
+          ],
+          placeholder: {
+            label: strings.Form.field.placeholder.gearbox,
+            value: null,
+            color: '#9EA0A4',
+          },
+        },
+      },
+      {
+        name: 'CARWHEELTYPE',
+        type: 'select',
+        label: strings.Form.field.label.wheel,
+        value: this.props.carWheelType,
+        props: {
+          items: [
+            {
+              label: strings.CarParams.wheels[1],
+              value: 1,
+              key: 1,
+            },
+            {
+              label: strings.CarParams.wheels[3],
+              value: 3,
+              key: 3,
+            },
+            {
+              label: strings.CarParams.wheels[4],
+              value: 4,
+              key: 4,
+            },
+          ],
+          placeholder: {
+            label: strings.Form.field.placeholder.wheel,
+            value: null,
+            color: '#9EA0A4',
+          },
+        },
+      },
+    ];
+  }
+
   onPressOrder = async dataFromForm => {
     const isInternetExist = await isInternet();
     const nav = this.props.navigation;
@@ -154,7 +476,7 @@ class CarCostScreen extends PureComponent {
     } else {
       const photoForUpload = valuesIn(this.state.photos);
 
-      const action = await this.props.actionCarCostOrder({
+      const dataToSend = {
         dealerId: this.props.dealerSelected.id,
         date: yearMonthDay(dataFromForm.DATE) || '',
         firstName: dataFromForm.NAME || '',
@@ -163,18 +485,20 @@ class CarCostScreen extends PureComponent {
         phone: dataFromForm.PHONE || '',
         email: dataFromForm.EMAIL || '',
         comment: dataFromForm.COMMENT || '',
-        vin: dataFromForm.CARVIN || '',
-        brand: dataFromForm.CARBRAND || '',
-        model: dataFromForm.CARMODEL || '',
-        year: dataFromForm.CARYEAR,
+        vin: dataFromForm.CARVIN || this.state.carVIN || '',
+        brand: dataFromForm.CARBRAND || this.state.carBrand || '--',
+        model: dataFromForm.CARMODEL || this.state.carModel || '--',
+        year: dataFromForm.CARYEAR || this.state.carYear || '',
         photos: photoForUpload,
-        mileage: dataFromForm.CARMILEAGE || '',
+        mileage: dataFromForm.CARMILEAGE || this.state.carMileage || '',
         mileageUnit: 'км',
         engineVolume: dataFromForm.CARENGINEVOLUME || '',
         engineType: dataFromForm.CARENGINETYPE || '',
         gearbox: dataFromForm.CARGEARBOXTYPE || '',
         wheel: dataFromForm.CARWHEELTYPE || '',
-      });
+      };
+
+      const action = await this.props.actionCarCostOrder(dataToSend);
       switch (action.type) {
         case CAR_COST__SUCCESS:
           Analytics.logEvent('order', 'catalog/carcost');
@@ -255,217 +579,7 @@ class CarCostScreen extends PureComponent {
           },
           {
             name: strings.Form.group.car,
-            fields: [
-              true ? 
-                {
-                  name: 'CARBRAND',
-                  type: 'input',
-                  label: strings.Form.field.label.carBrand,
-                  value: this.state.carBrand
-                    ? this.state.carBrand
-                    : this.props.carBrand,
-                  props: {
-                    required: true,
-                    placeholder: null,
-                  },
-                } : 
-                {
-                  name: 'CARBRAND',
-                  type: 'input',
-                  label: strings.Form.field.label.carBrand,
-                  value: this.state.carBrand
-                    ? this.state.carBrand
-                    : this.props.carBrand,
-                  props: {
-                    required: true,
-                    placeholder: null,
-                  },
-                },
-                {
-                  name: 'CARMODEL',
-                  type: 'input',
-                  label: strings.Form.field.label.carModel,
-                  value: this.state.carModel
-                    ? this.state.carModel
-                    : this.props.carModel,
-                  props: {
-                    required: true,
-                    placeholder: null,
-                  },
-                },
-                {
-                  name: 'CARVIN',
-                  type: 'input',
-                  label: strings.Form.field.label.carVIN,
-                  value: this.state.carVIN
-                    ? this.state.carVIN
-                    : this.props.carVIN,
-                  props: {
-                    placeholder: null,
-                    autoCapitalize: 'characters',
-                    onSubmitEditing: () => {},
-                    returnKeyType: 'done',
-                    blurOnSubmit: true,
-                  },
-                },
-                {
-                  name: 'CARYEAR',
-                  type: 'year',
-                  label: strings.Form.field.label.carYear,
-                  value: this.props.carYear,
-                  props: {
-                    required: true,
-                    minDate: new Date(substractYears(100)),
-                    maxDate: new Date(),
-                    reverse: true,
-                    placeholder: {
-                      label: strings.Form.field.placeholder.carYear,
-                      value: null,
-                      color: '#9EA0A4',
-                    },
-                  },
-                },
-                {
-                  name: 'CARMILEAGE',
-                  type: 'input',
-                  label: strings.Form.field.label.carMileage,
-                  value: this.state.carMileage
-                    ? this.state.carMileage
-                    : this.props.carMileage,
-                  props: {
-                    keyboardType: 'number-pad',
-                    required: true,
-                    placeholder: null,
-                    onSubmitEditing: () => {},
-                    returnKeyType: 'done',
-                    blurOnSubmit: true,
-                  },
-                }
-              ,
-              {
-                name: 'CARENGINETYPE',
-                type: 'select',
-                label: strings.Form.field.label.engineType,
-                value: this.props.carEngineType,
-                props: {
-                  items: [
-                    {
-                      label: strings.Form.field.value.engineType.gasoline,
-                      value: 1,
-                      key: 1,
-                    },
-                    {
-                      label: strings.Form.field.value.engineType.gasolineGas,
-                      value: 9,
-                      key: 9,
-                    },
-                    {
-                      label: strings.Form.field.value.engineType.diesel,
-                      value: 2,
-                      key: 2,
-                    },
-                    {
-                      label: strings.Form.field.value.engineType.hybrid,
-                      value: 3,
-                      key: 3,
-                    },
-                    {
-                      label: strings.Form.field.value.engineType.electro,
-                      value: 4,
-                      key: 4,
-                    },
-                  ],
-                  placeholder: {
-                    label: strings.Form.field.placeholder.engineType,
-                    value: null,
-                    color: '#9EA0A4',
-                  },
-                },
-              },
-              {
-                name: 'CARENGINEVOLUME',
-                type: 'input',
-                label: strings.Form.field.label.engineVolume,
-                value: this.props.carEngineVolume,
-                props: {
-                  keyboardType: 'number-pad',
-                  placeholder: null,
-                  onSubmitEditing: () => {},
-                  returnKeyType: 'done',
-                  blurOnSubmit: true,
-                },
-              },
-              {
-                name: 'CARGEARBOXTYPE',
-                type: 'select',
-                label: strings.Form.field.label.gearbox,
-                value: this.props.carGearboxType,
-                props: {
-                  items: [
-                    {
-                      label: strings.Form.field.value.gearbox.mechanical,
-                      value: 1,
-                      key: 1,
-                    },
-                    {
-                      label: strings.Form.field.value.gearbox.automatic,
-                      value: 4,
-                      key: 4,
-                    },
-                    {
-                      label: strings.Form.field.value.gearbox.dsg,
-                      value: 11,
-                      key: 11,
-                    },
-                    {
-                      label: strings.Form.field.value.gearbox.robot,
-                      value: 12,
-                      key: 12,
-                    },
-                    {
-                      label: strings.Form.field.value.gearbox.variator,
-                      value: 13,
-                      key: 13,
-                    },
-                  ],
-                  placeholder: {
-                    label: strings.Form.field.placeholder.gearbox,
-                    value: null,
-                    color: '#9EA0A4',
-                  },
-                },
-              },
-              {
-                name: 'CARWHEELTYPE',
-                type: 'select',
-                label: strings.Form.field.label.wheel,
-                value: this.props.carWheelType,
-                props: {
-                  items: [
-                    {
-                      label: strings.CarParams.wheels[1],
-                      value: 1,
-                      key: 1,
-                    },
-                    {
-                      label: strings.CarParams.wheels[3],
-                      value: 3,
-                      key: 3,
-                    },
-                    {
-                      label: strings.CarParams.wheels[4],
-                      value: 4,
-                      key: 4,
-                    },
-                  ],
-                  placeholder: {
-                    label: strings.Form.field.placeholder.wheel,
-                    value: null,
-                    color: '#9EA0A4',
-                  },
-                },
-              },
-            ],
+            fields: this.getCars(),
           },
           {
             name: strings.Form.group.contacts,
