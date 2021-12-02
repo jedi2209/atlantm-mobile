@@ -15,6 +15,7 @@ import {
 import {Text, Button, Switch, Toast, CheckBox} from 'native-base';
 import {get} from 'lodash';
 import {connect} from 'react-redux';
+import * as NavigationService from '../../../navigation/NavigationService';
 
 // Form field types
 import {TextInput} from '../TextInput';
@@ -180,6 +181,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     letterSpacing: 2,
     width: '100%',
+  },
+  userAgreementText: {
+    fontSize: 11,
+  },
+  userAgreementLink: {
+    color: styleConst.color.lightBlue,
   },
 });
 
@@ -780,7 +787,6 @@ class Form extends Component {
       const {label, name, id} = data;
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
-      console.log('date data.props.required, !this.state[name]', data.props.required, !this.state[name], this.state[name]);
       return (
         <View
           style={[
@@ -848,7 +854,6 @@ class Form extends Component {
       const {label, name, id} = data;
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
-      console.log('dateTime data.props.required, !this.state[name]', data.props.required, !this.state[name]);
       return (
         <View
           style={[
@@ -1316,6 +1321,11 @@ class Form extends Component {
                   opacity: this._animated.SubmitButton,
                 },
               ]}>
+              {!this.props.SubmitButton.noAgreement ? (
+              <View style={{marginBottom: 10}}>
+                <Text style={styles.userAgreementText}>{strings.Form.agreement.first} <Text style={[styles.userAgreementText, styles.userAgreementLink]} onPress={() => NavigationService.navigate('UserAgreementScreen')}>{strings.Form.agreement.second}</Text> {strings.Form.agreement.third}</Text>
+              </View>
+              ) : null}
               <Button
                 block
                 {...(this.props.SubmitButton.iconLeft ? 'iconLeft' : null)}

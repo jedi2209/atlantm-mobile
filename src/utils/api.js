@@ -129,6 +129,10 @@ export default {
     );
   },
 
+  fetchUserAgreement(region) {
+    return this.request(`/mobile/agreement/${region}/`, baseRequestParams);
+  },
+
   // TODO: проверить, продолжает ли падать на пустом ответе
   // @see https://github.com/facebook/react-native/commit/122b3791ede095345f44666691aa9ce5aa7f725a
   fetchReviews({
@@ -963,13 +967,15 @@ export default {
   },
 
   async apiGetData(url, requestParams) {
+    const response = await fetch(url, requestParams);
+    const resText = await response.text();
     try {
-      const response = await fetch(url, requestParams);
-      const res = await response.json();
-      // console.log('url + requestParams', url, requestParams, res);
-      return res;
+      // console.log('url + requestParams', url, requestParams, response);
+      const resJson = JSON.parse(resText);
+      return resJson;
     } catch (err) {
       console.error('apiGetDataError URL: ' + url, err);
+      return resText;
     }
   },
 };
