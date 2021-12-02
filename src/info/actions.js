@@ -89,18 +89,21 @@ export const fetchInfoPost = infoID => {
           });
         }
 
+        const actionInfo = {
+          id: infoID,
+          text: _.get(data, '0.text', ''),
+          date: _.get(data, '0.date', ''),
+          dealers: _.get(data, '0.dealers', ''),
+          img: _.get(data, '0.img', ''),
+          type: _.get(data, '0.type', ''),
+          imgCropAvailable: _.get(data, '0.imgCropAvailable', ''),
+        };
+
         dispatch({
           type: INFO_POST__SUCCESS,
-          payload: {
-            id: infoID,
-            text: _.get(data, '0.text', ''),
-            date: _.get(data, '0.date', ''),
-            dealers: _.get(data, '0.dealers', ''),
-            img: _.get(data, '0.img', ''),
-            type: _.get(data, '0.type', ''),
-            imgCropAvailable: _.get(data, '0.imgCropAvailable', ''),
-          },
+          payload: actionInfo,
         });
+        return actionInfo;
       })
       .catch(error => {
         return dispatch({
