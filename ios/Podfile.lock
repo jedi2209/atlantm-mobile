@@ -352,8 +352,6 @@ PODS:
     - React-jsi (= 0.65.1)
     - React-perflogger (= 0.65.1)
   - React-jsinspector (0.65.1)
-  - react-native-blurhash (1.1.7):
-    - React-Core
   - react-native-fbsdk (3.0.0):
     - React
     - react-native-fbsdk/Core (= 3.0.0)
@@ -472,7 +470,7 @@ PODS:
     - React
   - RNCPicker (2.2.1):
     - React-Core
-  - RNDateTimePicker (4.0.0):
+  - RNDateTimePicker (4.0.1):
     - React-Core
   - RNDeviceInfo (8.4.8):
     - React-Core
@@ -480,7 +478,7 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNGestureHandler (1.10.3):
+  - RNGestureHandler (2.0.0):
     - React-Core
   - RNGoogleSignin (5.0.0):
     - GoogleSignIn (~> 5.0.0)
@@ -525,7 +523,7 @@ PODS:
     - React-RCTVibration
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.9.0):
+  - RNScreens (3.10.0):
     - React-Core
     - React-RCTImage
   - RNSentry (3.2.4):
@@ -598,7 +596,6 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
-  - react-native-blurhash (from `../node_modules/react-native-blurhash`)
   - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
@@ -718,8 +715,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsiexecutor"
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
-  react-native-blurhash:
-    :path: "../node_modules/react-native-blurhash"
   react-native-fbsdk:
     :path: "../node_modules/react-native-fbsdk"
   react-native-flipper:
@@ -856,7 +851,6 @@ SPEC CHECKSUMS:
   React-jsi: 12913c841713a15f64eabf5c9ad98592c0ec5940
   React-jsiexecutor: 43f2542aed3c26e42175b339f8d37fe3dd683765
   React-jsinspector: 41e58e5b8e3e0bf061fdf725b03f2144014a8fb0
-  react-native-blurhash: e19ea985921732379d17951fd46c99ebe71e9cf3
   react-native-fbsdk: 8e92c7a334fd8d9c2b5d8b8fcd7ae2c314161099
   react-native-flipper: 33bba1cad647f4d56403012993f201e10518b78c
   react-native-google-maps: 34517207071d54f3bc23c68752bbec0217bfc79e
@@ -888,15 +882,15 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: ea6b5c280997b2b32a587793163b1f10e580c4f7
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: cb57c823d5ce8d2d0b5dfb45ad97b737260dc59e
-  RNDateTimePicker: 2224ee77a86b7123377597a015502435e2e49957
+  RNDateTimePicker: a654a0ebfa3dd78bbe5389421aa2d3d5b2744e47
   RNDeviceInfo: 0400a6d0c94186d1120c3cbd97b23abc022187a9
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
-  RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
+  RNGestureHandler: 51c9f32f43720c3a1c7660690a843f33acbcf01f
   RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNImageCropPicker: 448d3c6e923fde3466b49caf3c2457c2a0ba02dd
   RNRate: 94f57c773e155ca0d0aeeba9c10a32bce9030daf
   RNReanimated: f58d4f027fcea2197b63588138decdf5f8ac5e89
-  RNScreens: 4d79118be80f79fa1f4aa131909a1d6e86280af3
+  RNScreens: 03ba504f8c98607ad1f07808e71040e0afa335ec
   RNSentry: 29fb98c53edab5878ae299d6e68860dcbf070da3
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
