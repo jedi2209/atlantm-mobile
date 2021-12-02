@@ -610,6 +610,7 @@ class LoginScreen extends Component {
                           fields={this.FormConfig.fields}
                           SubmitButton={{
                             text: strings.Form.button.receiveCode,
+                            noAgreement: true,
                           }}
                           onSubmit={this._verifyCode}
                         />

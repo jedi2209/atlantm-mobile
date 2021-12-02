@@ -75,6 +75,8 @@ import TOHistory from '../profile/carhistory/containers/CarHistoryScreen';
 import ServiceTOCalculatorScreen from '../service/containers/ServiceTOCalculatorScreen';
 import CarHistoryDetailsScreen from '../profile/carhistory/containers/CarHistoryDetailsScreen';
 
+import UserAgreementScreen from '../core/components/Form/UserAgreementScreen';
+
 import {strings} from '../core/lang/const';
 import stylesHeader from '../core/components/Header/style';
 import styleConst from '../core/style-const';
@@ -153,6 +155,20 @@ export const Base = ({navigation, route}) => {
       <StackBase.Screen
         name="InfoPostScreen"
         component={InfoPostScreen}
+        options={{
+          headerTitle: '',
+          headerTitleStyle: stylesHeader.transparentHeaderTitle,
+          headerStyle: {
+            height: 55,
+          },
+          presentation: 'modal',
+          headerTransparent: true,
+          headerLeft: null,
+        }}
+      />
+      <StackBase.Screen
+        name="UserAgreementScreen"
+        component={UserAgreementScreen}
         options={{
           headerTitle: '',
           headerTitleStyle: stylesHeader.transparentHeaderTitle,
