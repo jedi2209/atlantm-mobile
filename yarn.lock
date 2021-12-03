@@ -2274,9 +2274,9 @@
     tslib "^1.9.3"
 
 "@sentry/react-native@^3.0.1":
-  version "3.2.4"
-  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-3.2.4.tgz#89b363b4ec4237b737918f83a161ae9e861c46f8"
-  integrity sha512-f5gqYd4mGYfkbNubbJTm5+Oggl0UslnKpvl2sOrJL6T8C9zVwePxd/2JbIbLGWdgrJsXDkHU6KxLkoUHpDb5ig==
+  version "3.2.5"
+  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-3.2.5.tgz#9aa4880873b70a7a52d7cdb9031f04d5d0b81162"
+  integrity sha512-/h0ylwTnu4e2Ksmvmhbr8GOHNgk3coL57i1qWmZUkx6TjN5Ff2bSe0sYMoz8o6DY7VMnmbJoVz4qW2hitNROqg==
   dependencies:
     "@sentry/browser" "6.12.0"
     "@sentry/cli" "^1.68.0"
@@ -4138,9 +4138,9 @@ detox-recorder@^1.0.151:
   integrity sha512-a4ZPo7AR5XJJiLy8Xqml8YXxrIz6R7RKfiGmG9u5MBxG2I+w+yGJTj7ZhYDfoi5StpUD+dKHTCdvycZTOQ84Cw==
 
 detox@^19.0.0:
-  version "19.1.0"
-  resolved "https://registry.yarnpkg.com/detox/-/detox-19.1.0.tgz#c17ca8a307c4e6f45ef29993beec0e505d330e7f"
-  integrity sha512-DdGj9HgEwFDtERt4TG6pHUxOvBcbE8JsTDqALFH/IlZ6SAxibJeIQ9yo65g2hQGJGHdAMJpUX5/30QD+PQfBaQ==
+  version "19.2.0"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-19.2.0.tgz#af632f2061843f8d3323983886e60eaa5b8a9dc5"
+  integrity sha512-zN3wevzQhcyiWCabXd5+Dwvanu299qKZxHSYc44mvmcSjcI3GZYOwFqAwqW//dY183GMxhvwQOpX1zPoHK8fRw==
   dependencies:
     ajv "^8.6.3"
     bunyan "^1.8.12"
@@ -10838,12 +10838,7 @@ ws@^7:
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.0.tgz#0033bafea031fb9df041b2026fc72a571ca44691"
   integrity sha512-6ezXvzOZupqKj4jUqbQ9tXuJNo+BR2gU8fFRk3XCP3e0G6WT414u5ELe6Y0vtp7kmSJ3F7YWObSNr1ESsgi4vw==
 
-ws@^7.0.0:
-  version "7.5.5"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.5.tgz#8b4bc4af518cfabd0473ae4f99144287b33eb881"
-  integrity sha512-BAkMFcAzl8as1G/hArkxOxq3G7pjUqQ3gzYbLL0/5zNkph70e+lCoxBGnm6AW1+/aiNeV4fnKqZ8m4GZewmH2w==
-
-ws@^7.4.6:
+ws@^7.0.0, ws@^7.4.6:
   version "7.5.6"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.6.tgz#e59fc509fb15ddfb65487ee9765c5a51dec5fe7b"
   integrity sha512-6GLgCqo2cy2A2rjCNFlxQS6ZljG/coZfZXclldI8FB/1G3CCI36Zd8xy2HrFVACi8tfk5XrgLQEk+P0Tnz9UcA==
