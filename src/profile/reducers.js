@@ -243,6 +243,34 @@ function discounts(state = [], action) {
   }
 }
 
+function insurance(state = [], action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'profile.insurance', []);
+    case PROFILE_DATA__SUCCESS:
+      return action.payload.insurance;
+    case LOGOUT:
+      // case APP_STORE_UPDATED:
+      return [];
+    default:
+      return state;
+  }
+}
+
+function additionalPurchase(state = [], action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'profile.additionalPurchase', []);
+    case PROFILE_DATA__SUCCESS:
+      return action.payload.additionalPurchase;
+    case LOGOUT:
+      // case APP_STORE_UPDATED:
+      return [];
+    default:
+      return state;
+  }
+}
+
 function level1Hash(state = null, action) {
   switch (action.type) {
     case REHYDRATE:
@@ -427,6 +455,8 @@ export default combineReducers({
   cars,
   carVIN,
   discounts,
+  insurance,
+  additionalPurchase,
 
   localUserData,
 

@@ -129,6 +129,26 @@ export default {
     );
   },
 
+  fetchInsurance({token, userid}) {
+    if (!token || !userid) {
+      return false;
+    }
+    return this.request(
+      `/lkk/insurance/list/?userid=${userid}&token=${token}`,
+      baseRequestParams,
+    );
+  },
+
+  fetchAdditionalPurchase({token, userid}) {
+    if (!token || !userid) {
+      return false;
+    }
+    return this.request(
+      `/lkk/purchase/list/?userid=${userid}&token=${token}`,
+      baseRequestParams,
+    );
+  },
+
   fetchUserAgreement(region) {
     return this.request(`/mobile/agreement/${region}/`, baseRequestParams);
   },
