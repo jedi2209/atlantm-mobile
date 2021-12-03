@@ -71,6 +71,7 @@ import SettingsScreen from '../settings/containers/SettingsScreen';
 
 import ProfileSettingsScreen from '../profile/containers/ProfileSettingsScreen';
 import BonusScreenInfo from '../profile/bonus/containers/BonusInfoScreen';
+import AdditionalPurchaseScreen from '../profile/additionalPurchase/containers/AdditionalPurchaseScreen';
 import TOHistory from '../profile/carhistory/containers/CarHistoryScreen';
 import ServiceTOCalculatorScreen from '../service/containers/ServiceTOCalculatorScreen';
 import CarHistoryDetailsScreen from '../profile/carhistory/containers/CarHistoryDetailsScreen';
@@ -429,6 +430,18 @@ export const Base = ({navigation, route}) => {
       <StackProfile.Screen
         name="TOHistory"
         component={TOHistory}
+        options={ClassicHeaderWhite(
+          strings.CarHistoryScreen.title,
+          navigation,
+          route,
+          {
+            presentation: 'card',
+          },
+        )}
+      />
+      <StackProfile.Screen
+        name="AdditionalPurchaseScreen"
+        component={AdditionalPurchaseScreen}
         options={ClassicHeaderWhite(
           strings.CarHistoryScreen.title,
           navigation,

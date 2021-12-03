@@ -335,6 +335,8 @@ export const getProfileSapData = ({id, sap, curr}) => {
         cars: result.cars || [],
         bonus: result.bonus || {},
         discounts: result.discounts || [],
+        insurance: result.insurance || [],
+        additionalPurchase: result.additionalPurchase || [],
       },
     });
   };
@@ -574,6 +576,9 @@ export const connectSocialMedia = ({profile, im}) => {
 
   delete dataToSend.cars;
   delete dataToSend.bonus;
+  delete dataToSend.discounts;
+  delete dataToSend.insurance;
+  delete dataToSend.additionalPurchase;
 
   return dispatch => {
     dispatch({
@@ -695,13 +700,47 @@ async function getUserDiscounts(token, userid) {
   return discounts;
 }
 
+async function getUserInsurance(token, userid) {
+  let insurance = [];
+  const insuranceResponse = await API.fetchInsurance({token, userid});
+  const insuranceResponseCode = get(insuranceResponse, 'error.code', 404);
+  if (insuranceResponseCode === 200 && insuranceResponse.data) {
+    insurance = insuranceResponse.data;
+  } else {
+    console.error(
+      'getUserInsurance error get profile discounts',
+      insuranceResponse,
+    );
+  }
+  return insurance;
+}
+
+async function getUserAdditionalPurchase(token, userid) {
+  let purchase = [];
+  const purchaseResponse = await API.fetchAdditionalPurchase({token, userid});
+  const purchaseResponseCode = get(purchaseResponse, 'error.code', 404);
+  if (purchaseResponseCode === 200 && purchaseResponse.data) {
+    purchase = purchaseResponse.data;
+  } else {
+    console.error(
+      'getUserAdditionalPurchase error get profile discounts',
+      purchaseResponse,
+    );
+  }
+  return purchase;
+}
+
 async function getProfileData({token, userid, curr}) {
   const cars = await getUserCars(token, userid);
   const bonus = await getUserBonus(token, userid, curr);
   const discounts = await getUserDiscounts(token, userid);
+  const insurance = await getUserInsurance(token, userid);
+  const additionalPurchase = await getUserAdditionalPurchase(token, userid);
   return {
     cars,
     bonus,
     discounts,
+    insurance,
+    additionalPurchase,
   };
 }

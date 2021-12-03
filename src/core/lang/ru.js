@@ -542,6 +542,10 @@ export default {
       statusText: 'Текущий статус ',
       deadline: 'Действует до ',
     },
+    additionalPurchase: {
+      title: 'Покупки',
+      text: 'История ваших покупок в автоцентрах Атлант-М',
+    },
     editData: 'Редактировать данные',
     exit: 'Выйти',
   },
