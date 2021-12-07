@@ -336,7 +336,7 @@ class UsedCarItemScreen extends Component {
           marginHorizontal: '2%',
           marginBottom: 90,
           marginTop: 10,
-          backgroundColor: styleConst.color.greyBlue,
+          backgroundColor: styleConst.color.purple,
           borderRadius: 5,
           paddingHorizontal: 20,
           paddingVertical: 10,

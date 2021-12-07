@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   additionalPurchaseView: {
-    backgroundColor: styleConst.color.orange,
+    backgroundColor: styleConst.color.green2,
     borderRadius: 5,
     padding: 14,
     display: 'flex',
@@ -114,6 +114,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 24,
   },
+  additionalPurchaseButtonTextView: {
+    backgroundColor: styleConst.color.white,
+    width: 78,
+    height: 78,
+    borderRadius: 49,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 34,
+    marginLeft: 10,  
+  }
 });
 
 import {verticalScale} from '../../utils/scale';
@@ -398,12 +409,12 @@ class ProfileScreenInfo extends Component {
             this.props.navigation.navigate('AdditionalPurchaseScreen')
           }>
           <View
-            style={styles.bonusButtonTextView}>
+            style={styles.additionalPurchaseButtonTextView}>
             <Icon
               type="Fontisto"
               name="shopping-bag-1"
-              fontSize={60}
-              style={{fontSize: 60}}
+              fontSize={40}
+              style={{fontSize: 40}}
             />
           </View>
           <View style={{flex: 1}}>
@@ -425,30 +436,6 @@ class ProfileScreenInfo extends Component {
               }}>
               {strings.ProfileScreenInfo.additionalPurchase.text}
             </Text>
-            <View style={{display: 'flex', flexDirection: 'row'}}>
-              <View>
-                <Text
-                  style={{
-                    color: styleConst.color.white,
-                    fontSize: 16,
-                    fontWeight: '600',
-                  }}
-                  onPress={() =>
-                    this.props.navigation.navigate('AdditionalPurchaseScreen')
-                  }>
-                  {strings.ProfileScreenInfo.bonus.show}
-                </Text>
-              </View>
-              <Icon
-                type="FontAwesome5"
-                name="angle-right"
-                style={{
-                  color: styleConst.color.white,
-                  fontSize: 20,
-                  marginLeft: 8,
-                }}
-              />
-            </View>
           </View>
         </View>
       </TouchableOpacity>
