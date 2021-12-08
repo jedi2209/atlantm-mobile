@@ -2268,7 +2268,7 @@
     "@sentry/types" "6.12.0"
     tslib "^1.9.3"
 
-"@sentry/react-native@^3.0.1":
+"@sentry/react-native@^3.2.6":
   version "3.2.6"
   resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-3.2.6.tgz#35f6258fd752f9000f7fa8db17c9553f5436fb85"
   integrity sha512-hGg8Gu6BJqVCAgDzC9rwhXu9uwUuYEzmfMduP37YuMLJ0JRq1Iwcc1Dthy2LRk4vbMZ9iPqEaF4e9Zdajp0vXw==
@@ -2362,10 +2362,10 @@
     ramda "^0.26.1"
     redent "^2.0.0"
 
-"@testing-library/react-native@^8.0.0":
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-8.0.0.tgz#f1b8f6bcc9f0ef6026b0ec7d072faf4af0e622fa"
-  integrity sha512-XwQIv4Amj8AYsPjASo+1XLFWY7qMm+FyV4+QU5j97CpRd+YasCBNnvfyDAZoudm/5Y0Yx55DYjAX36RugxasPQ==
+"@testing-library/react-native@^9.0.0":
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-native/-/react-native-9.0.0.tgz#e9c63411e93d2e8e70d744b12aeb78c58025c5fc"
+  integrity sha512-UE3FWOsDUr+2l3Pg6JTpn2rV5uzYsxIus6ZyN1uMOTmn30bIuBBDDlWQtdWGJx92YcY4xgJA4vViCEKv7wVzJA==
   dependencies:
     pretty-format "^27.0.0"
 
