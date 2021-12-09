@@ -20,6 +20,7 @@ import {
   Button,
 } from 'native-base';
 import DeviceInfo from 'react-native-device-info';
+import * as NavigationService from '../../navigation/NavigationService';
 
 // redux
 import {connect} from 'react-redux';
@@ -114,6 +115,11 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     margin: 0,
     flexDirection: 'row',
+  },
+  userAgreementText: {
+    fontSize: 12,
+    fontFamily: styleConst.font.light,
+    color: styleConst.color.lightBlue,
   },
 });
 
@@ -371,7 +377,17 @@ class SettingsScreen extends PureComponent {
             <TransitionView
               animation={styleConst.animation.opacityIn}
               duration={350}
-              index={5}
+              index={6}
+              style={[
+                styles.VersionContainer,
+                {width: cardWidth, marginHorizontal: 10, marginTop: 20},
+              ]}>
+                <Text onPress={() => NavigationService.navigate('UserAgreementScreen')} style={styles.userAgreementText}>{strings.Form.agreement.title}</Text>
+            </TransitionView>
+            <TransitionView
+              animation={styleConst.animation.opacityIn}
+              duration={350}
+              index={6}
               style={[
                 styles.VersionContainer,
                 {width: cardWidth, marginHorizontal: 10, marginTop: 20},

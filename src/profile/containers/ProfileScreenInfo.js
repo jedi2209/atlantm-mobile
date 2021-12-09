@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
   additionalPurchaseView: {
     backgroundColor: styleConst.color.green2,
     borderRadius: 5,
+    marginTop: 10,
     padding: 14,
     display: 'flex',
     flexDirection: 'row',
@@ -741,8 +742,8 @@ class ProfileScreenInfo extends Component {
               />
               {this.renderCars()}
               {this.renderCashBack()}
-              {this.renderAdditionalPurchase()}
               {this.renderBonus()}
+              {this.renderAdditionalPurchase()}
               <Button
                 block
                 onPress={() => {
