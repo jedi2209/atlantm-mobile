@@ -692,7 +692,7 @@ async function getUserDiscounts(token, userid) {
   if (discountsResponseCode === 200 && discountsResponse.data) {
     discounts = discountsResponse.data;
   } else {
-    console.error(
+    console.info(
       'getUserDiscounts error get profile discounts',
       discountsResponse,
     );
@@ -707,7 +707,7 @@ async function getUserInsurance(token, userid) {
   if (insuranceResponseCode === 200 && insuranceResponse.data) {
     insurance = insuranceResponse.data;
   } else {
-    console.error(
+    console.info(
       'getUserInsurance error get profile discounts',
       insuranceResponse,
     );
