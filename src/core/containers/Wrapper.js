@@ -37,6 +37,7 @@ let sentryParams = {
 
 if (__DEV__) {
   LogBox.ignoreAllLogs(true);
+  LogBox.ignoreLogs(['Require cycle:']);
   sentryParams = {
     dsn: SENTRY_DSN,
     debug: true,
