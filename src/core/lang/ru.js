@@ -589,6 +589,14 @@ export default {
   BonusInfoScreen: {
     title: 'Бонусная программа',
   },
+  AdditionalPurchaseScreen: {
+    title: 'Мои покупки',
+    tabs: {
+      cars: 'Автомобили',
+      additionalPurchase: 'Покупки',
+      insurance: 'Страховки',
+    },
+  },
   ServiceScreen: {
     title: 'Запись на сервис',
     Notifications: {

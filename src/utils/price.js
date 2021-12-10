@@ -71,6 +71,7 @@ const showPrice = (price, country = 'BY', float = false) => {
     options = {
       precision: 2,
       decimal: '.',
+      separator: ' ',
     };
   } else {
     price = parseInt(price, 10);

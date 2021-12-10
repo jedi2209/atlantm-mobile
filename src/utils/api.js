@@ -149,6 +149,16 @@ export default {
     );
   },
 
+  fetchAdditionalPurchaseItem({item, token, userid, dealer}) {
+    if (!token || !userid) {
+      return false;
+    }
+    return this.request(
+      `/lkk/purchase/item/${item}/?userid=${userid}&token=${token}&dealer=${dealer}`,
+      baseRequestParams,
+    );
+  },
+
   fetchUserAgreement(region) {
     return this.request(`/mobile/agreement/${region}/`, baseRequestParams);
   },

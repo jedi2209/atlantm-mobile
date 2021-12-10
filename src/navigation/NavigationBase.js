@@ -256,35 +256,35 @@ export const Base = ({navigation, route}) => {
         name="FullScreenGallery"
         component={FullScreenGallery}
         options={TransparentBack(
-            navigation,
-            route,
-            {
-              presentation: 'fullScreenModal',
-              animation: 'fade',
-              statusBarHidden: true,
-              headerStyle: {
-                height: null,
-              }
+          navigation,
+          route,
+          {
+            presentation: 'fullScreenModal',
+            animation: 'fade',
+            statusBarHidden: true,
+            headerStyle: {
+              height: null,
+            }
+          },
+          {
+            icon: 'close',
+            IconStyle: {
+              fontSize: 42,
             },
-            {
-              icon: 'close',
-              IconStyle: {
-                fontSize: 42,
-              },
-              ContainerStyle: {
-                backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                borderRadius: 15,
-                marginTop: 10,
-                marginLeft: 10,
-                width: 55,
-                height: 55,
-                zIndex: 10000,
-              },
-              onPressBackCallBack: () => {
-                Orientation.lockToPortrait();
-              }
+            ContainerStyle: {
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+              borderRadius: 15,
+              marginTop: 10,
+              marginLeft: 10,
+              width: 55,
+              height: 55,
+              zIndex: 10000,
             },
-          )}
+            onPressBackCallBack: () => {
+              Orientation.lockToPortrait();
+            }
+          },
+        )}
       />
       {/* Заявки */}
       <StackOrders.Screen
@@ -442,14 +442,14 @@ export const Base = ({navigation, route}) => {
       <StackProfile.Screen
         name="AdditionalPurchaseScreen"
         component={AdditionalPurchaseScreen}
-        options={ClassicHeaderWhite(
-          strings.CarHistoryScreen.title,
-          navigation,
-          route,
-          {
-            presentation: 'card',
-          },
-        )}
+        options={BigCloseButton(navigation, route, {
+          ...TransitionPresets.ScaleFromCenterAndroid,
+          headerTitle: strings.AdditionalPurchaseScreen.title,
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        })}
       />
       <StackProfile.Screen
         name="ServiceTOCalculatorScreen"
