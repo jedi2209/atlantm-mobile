@@ -6,9 +6,9 @@ import {
   View,
   Text,
   ScrollView,
-  StatusBar,
 } from 'react-native';
-import {Row, Col, Button, Content, Segment} from 'native-base';
+import {Row, Col, Button, Content, Tab, Tabs, DefaultTabBar} from 'native-base';
+import { Divider } from 'react-native-paper';
 
 // redux
 import {connect} from 'react-redux';
@@ -26,28 +26,12 @@ import showPrice from '../../../utils/price';
 import {ERROR_NETWORK} from '../../../core/const';
 import {strings} from '../../../core/lang/const';
 
-const TABS = {
-  WORKS: 'works',
-  PARTS: 'parts',
-};
-
 const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.white,
-  },
-  // section
   section: {
     paddingTop: styleConst.ui.horizontalGap,
     paddingRight: styleConst.ui.horizontalGap,
     paddingBottom: styleConst.ui.horizontalGap,
     marginLeft: styleConst.ui.horizontalGap,
-    borderBottomWidth: styleConst.ui.borderWidth,
-    borderBottomColor: styleConst.color.systemGray,
-  },
-  segment: {
-    marginHorizontal: styleConst.ui.horizontalGap,
-    marginBottom: 24,
   },
   sectionTitle: {
     letterSpacing: styleConst.ui.letterSpacing,
@@ -92,36 +76,34 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     fontSize: 20,
   },
-  tabText: {
-    fontFamily: styleConst.font.regular,
-    letterSpacing: styleConst.ui.letterSpacing,
-    color: '#141414',
-    fontSize: 20,
+});
+
+const modalStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: styleConst.color.white,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
   },
-  tabTextActive: {
+  wrapper: {
+    paddingHorizontal: '5%',
+    paddingVertical: 10,
+  },
+  button: {
+    backgroundColor: styleConst.color.lightBlue,
+    justifyContent: 'center',
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: styleConst.color.white,
+    textTransform: 'uppercase',
+    fontSize: 16,
+  },
+  TabsTextStyle: {
+    color: '#000',
+  },
+  TabsActiveTextStyle: {
     color: styleConst.color.lightBlue,
-    fontFamily: styleConst.font.regular,
-    letterSpacing: styleConst.ui.letterSpacing,
-    fontSize: 20,
-  },
-  tabButton: {
-    borderColor: 'transparent',
-    flex: 1,
-    justifyContent: 'center',
-    color: '#141414',
-    paddingLeft: 0,
-    paddingRight: 0,
-    height: 45,
-  },
-  tabButtonActive: {
-    backgroundColor: 'transparent',
-    borderColor: 'transparent',
-    borderBottomColor: styleConst.color.lightBlue,
-    flex: 1,
-    justifyContent: 'center',
-    paddingLeft: 0,
-    paddingRight: 0,
-    height: 45,
   },
 });
 
@@ -141,8 +123,6 @@ const mapDispatchToProps = {
 class CarHistoryDetailsScreen extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {tabName: TABS.WORKS};
   }
 
   static navigationOptions = ({navigation}) => {
@@ -188,55 +168,56 @@ class CarHistoryDetailsScreen extends Component {
     );
   }
 
-  selectWorksTab = () => this.setState({tabName: TABS.WORKS});
-  selectPartsTab = () => this.setState({tabName: TABS.PARTS});
 
   renderTable = ({name, count, units, summ}, idx) => {
     return (
-      <View key={`${name}${idx}`} style={styles.section}>
-        {name ? <Text style={styles.sectionTitle}>{name}</Text> : null}
-        {count
-          ? this.renderItem({
-              prop: strings.CarHistoryDetailsScreen.count,
-              value: `${count} ${units}.`,
-            })
-          : null}
-        {get(summ, 'value')
-          ? this.renderItem({
-              prop: strings.CarHistoryDetailsScreen.price,
-              value: showPrice(get(summ, 'value'), get(summ, 'currency'), true),
-            })
-          : null}
-        {/* {get(summ, 'sale')
-          ? this.renderHelper('-', styleConst.color.red)
-          : null} */}
-        {get(summ, 'sale')
-          ? this.renderItem({
-              prop: strings.CarHistoryDetailsScreen.sale,
-              value: showPrice(get(summ, 'sale'), get(summ, 'currency'), true),
-            })
-          : null}
-        {/* {get(summ, 'tax')
-          ? this.renderHelper('+', styleConst.color.green)
-          : null} */}
-        {get(summ, 'tax')
-          ? this.renderItem({
-              prop: strings.CarHistoryDetailsScreen.tax,
-              value: showPrice(get(summ, 'tax'), get(summ, 'currency'), true),
-            })
-          : null}
-        {get(summ, 'total')
-          ? this.renderItem({
-              prop: strings.CarHistoryDetailsScreen.total.nds,
-              value: showPrice(get(summ, 'total'), get(summ, 'currency'), true),
-            })
-          : null}
-      </View>
+      <>
+        <View key={`${name}${idx}`} style={styles.section}>
+          {name ? <Text style={styles.sectionTitle}>{name}</Text> : null}
+          {count
+            ? this.renderItem({
+                prop: strings.CarHistoryDetailsScreen.count,
+                value: `${count} ${units}.`,
+              })
+            : null}
+          {get(summ, 'value')
+            ? this.renderItem({
+                prop: strings.CarHistoryDetailsScreen.price,
+                value: showPrice(get(summ, 'value'), get(summ, 'currency'), true),
+              })
+            : null}
+          {/* {get(summ, 'sale')
+            ? this.renderHelper('-', styleConst.color.red)
+            : null} */}
+          {get(summ, 'sale')
+            ? this.renderItem({
+                prop: strings.CarHistoryDetailsScreen.sale,
+                value: showPrice(get(summ, 'sale'), get(summ, 'currency'), true),
+              })
+            : null}
+          {/* {get(summ, 'tax')
+            ? this.renderHelper('+', styleConst.color.green)
+            : null} */}
+          {get(summ, 'tax')
+            ? this.renderItem({
+                prop: strings.CarHistoryDetailsScreen.tax,
+                value: showPrice(get(summ, 'tax'), get(summ, 'currency'), true),
+              })
+            : null}
+          {get(summ, 'total')
+            ? this.renderItem({
+                prop: strings.CarHistoryDetailsScreen.total.nds,
+                value: showPrice(get(summ, 'total'), get(summ, 'currency'), true),
+              })
+            : null}
+        </View>
+        <Divider />
+      </>
     );
   };
 
   renderItem = ({prop, value}) => (
-    <Row style={styles.sectionRow}>
+    <Row>
       <Col style={styles.sectionProp}>
         <Text style={styles.sectionPropText}>{`${prop}:`}</Text>
       </Col>
@@ -246,21 +227,23 @@ class CarHistoryDetailsScreen extends Component {
     </Row>
   );
 
-  renderHelper = (value, color) => (
-    <Row style={styles.sectionHelperRow}>
-      <Col style={styles.sectionProp} />
-      <Col style={styles.sectionHelper}>
-        <Text style={[styles.sectionHelperText, color ? {color: color} : {}]}>
-          {value}
-        </Text>
-      </Col>
-    </Row>
-  );
+  // renderHelper = (value, color) => (
+  //   <Row style={styles.sectionHelperRow}>
+  //     <Col style={styles.sectionProp} />
+  //     <Col style={styles.sectionHelper}>
+  //       <Text style={[styles.sectionHelperText, color ? {color: color} : {}]}>
+  //         {value}
+  //       </Text>
+  //     </Col>
+  //   </Row>
+  // );
+
+  renderTabBar = props => {
+    props.tabStyle = Object.create(props.tabStyle);
+    return <DefaultTabBar {...props} />;
+  };
 
   render() {
-    const {tabName} = this.state;
-    const isActiveWorksTab = tabName === TABS.WORKS;
-    const isActivePartsTab = tabName === TABS.PARTS;
     const {isFetchCarHistoryDetails, details} = this.props;
 
     console.info('== CarHistoryDetails ==');
@@ -277,55 +260,51 @@ class CarHistoryDetailsScreen extends Component {
     const parts = get(details, 'parts');
 
     return (
-      <SafeAreaView style={styles.safearea}>
-        <ScrollView>
-          <Content>
-            <Segment style={styles.segment}>
-              {works ? (
-                <Button
-                  active={isActiveWorksTab}
-                  onPress={this.selectWorksTab}
-                  style={
-                    isActiveWorksTab ? styles.tabButtonActive : styles.tabButton
-                  }>
-                  <Text
-                    style={
-                      isActiveWorksTab ? styles.tabTextActive : styles.tabText
-                    }>
-                    {strings.CarHistoryDetailsScreen.works}
-                  </Text>
-                </Button>
-              ) : null}
-              {parts ? (
-                <Button
-                  active={isActivePartsTab}
-                  onPress={this.selectPartsTab}
-                  style={
-                    isActivePartsTab ? styles.tabButtonActive : styles.tabButton
-                  }>
-                  <Text
-                    style={
-                      isActivePartsTab ? styles.tabTextActive : styles.tabText
-                    }>
-                    {strings.CarHistoryDetailsScreen.materials}
-                  </Text>
-                </Button>
-              ) : null}
-            </Segment>
-
-            {isActiveWorksTab && works ? (
-              <View style={styles.tabContent}>
-                {works.map((item, idx) => this.renderTable(item, idx))}
-              </View>
+      <View style={modalStyles.container}>
+        <SafeAreaView style={{flex: 1}}>
+          <Tabs
+            renderTabBar={this.renderTabBar}
+            tabBarUnderlineStyle={{
+              backgroundColor: styleConst.color.lightBlue,
+            }}>
+            {works && works.length ? (
+              <Tab
+                heading={strings.CarHistoryDetailsScreen.works}
+                textStyle={modalStyles.TabsTextStyle}
+                activeTextStyle={modalStyles.TabsActiveTextStyle}
+                activeTabStyle={modalStyles.TabsActiveTabStyle}>
+                <ScrollView>
+                  <Content>
+                    <View style={styles.tabContent}>
+                      {works.map((item, idx) => this.renderTable(item, idx))}
+                    </View>
+                  </Content>
+                </ScrollView>
+              </Tab>
             ) : null}
-            {isActivePartsTab && parts ? (
-              <View style={styles.tabContent}>
-                {parts.map((item, idx) => this.renderTable(item, idx))}
-              </View>
+            {parts && parts.length ? (
+              <Tab
+                heading={strings.CarHistoryDetailsScreen.materials}
+                textStyle={modalStyles.TabsTextStyle}
+                activeTextStyle={modalStyles.TabsActiveTextStyle}
+                activeTabStyle={modalStyles.TabsActiveTabStyle}>
+                <ScrollView>
+                  <Content>
+                    <View style={styles.tabContent}>
+                      {parts.map((item, idx) => this.renderTable(item, idx))}
+                    </View>
+                  </Content>
+                </ScrollView>
+              </Tab>
             ) : null}
-          </Content>
-        </ScrollView>
-      </SafeAreaView>
+          </Tabs>
+          <View style={modalStyles.wrapper}>
+            <Button full style={modalStyles.button} onPress={() => this.props.navigation.goBack()}>
+              <Text style={modalStyles.buttonText}>{strings.ModalView.close}</Text>
+            </Button>
+          </View>
+        </SafeAreaView>
+      </View>
     );
   }
 }
