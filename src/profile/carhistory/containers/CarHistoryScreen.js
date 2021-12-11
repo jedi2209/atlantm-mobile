@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   Text,
   ScrollView,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import {
   StyleProvider,
@@ -18,6 +19,7 @@ import {
   Item,
   Label,
 } from 'native-base';
+import { List, DefaultTheme, Provider as PaperProvider, Divider, Card, Title, Paragraph } from 'react-native-paper';
 import Analytics from '../../../utils/amplitude-analytics';
 
 // redux
@@ -36,13 +38,20 @@ import stylesList from '../../../core/components/Lists/style';
 
 // helpers
 import {get, isEmpty} from 'lodash';
-import {dayMonthYear} from '../../../utils/date';
-import getTheme from '../../../../native-base-theme/components';
+import {dayMonthYear, dayMonth} from '../../../utils/date';
 import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
 import numberWithGap from '../../../utils/number-with-gap';
 import {ERROR_NETWORK} from '../../../core/const';
 import {strings} from '../../../core/lang/const';
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: styleConst.color.blue,
+  },
+};
 
 const styles = StyleSheet.create({
   safearea: {
@@ -137,24 +146,22 @@ const mapStateToProps = ({nav, profile}) => {
     nav,
     profile: profile.login,
     carHistory: profile.carHistory.data,
-    level1hash: profile.carHistory.level1Hash,
-    level2hash: profile.carHistory.level2Hash,
-    isFetchCarHistory: profile.carHistory.meta.isFetchCarHistory,
   };
 };
 
 const mapDispatchToProps = {
   actionFetchCarHistory,
-  // actionSetCarHistoryLevel1,
-  // actionSetCarHistoryLevel2,
 };
-class CarHistoryScreen extends Component {
-  componentDidMount() {
-    // eslint-disable-next-line no-shadow
-    const {profile, navigation, actionFetchCarHistory} = this.props;
-    const vin = get(this.props.route, 'params.car.vin');
+const CarHistoryScreen = ({profile, route, navigation, carHistory, actionFetchCarHistory}) => {
+
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const vin = get(route, 'params.car.vin');
     const token = profile.SAP.TOKEN;
     const userid = profile.SAP.ID;
+
+    Analytics.logEvent('screen', 'lkk/carhistory');
 
     actionFetchCarHistory({
       vin,
@@ -172,61 +179,32 @@ class CarHistoryScreen extends Component {
           message = ERROR_NETWORK;
         }
       }
+      setLoading(false);
     });
-  }
+    // return () => {
+    // }
+  }, []);
 
-  shouldComponentUpdate(nextProps) {
-    return nextProps.navigation.isFocused();
-  }
-
-  renderListItem = (label, value) => {
-    if (!value) {
-      return null;
-    }
-
-    return (
-      <View style={stylesList.listItemContainer}>
-        <ListItem style={[stylesList.listItem, stylesList.listItemReset]}>
-          <Body style={{width: '100%'}}>
-            <Item style={stylesList.inputItem} fixedLabel>
-              <Label style={stylesList.label}>{label}</Label>
-              <View style={stylesList.listItemValueContainer}>
-                <Text style={stylesList.listItemValue}>{value}</Text>
-              </View>
-            </Item>
-          </Body>
-        </ListItem>
-      </View>
-    );
-  };
-
-  renderLevel1 = (carHistory) => {
+  const renderData = (carHistory) => {
     return Object.keys(carHistory)
       .reverse()
-      .map((carHistoryYear, idx, yearsArray) => {
+      .map((carHistoryYear) => {
         const item = carHistory[carHistoryYear];
         const hash = item.hash;
-
-        return <View key={hash}>{this.renderLevel2(item.history)}</View>;
+        return (
+        <List.Accordion
+          key={'year' + hash}
+          title={carHistoryYear}
+          left={props => <List.Icon {...props} icon="calendar-multiple" />}>
+          {Object.keys(item.history).reverse().map((month) => renderLevel(item.history[month].history))}
+        </List.Accordion>);
       });
   };
 
-  renderLevel2 = (carHistoryItemByMonth) => {
-    return Object.keys(carHistoryItemByMonth)
-      .reverse()
-      .map((month, idx, monthArray) => {
-        const item = carHistoryItemByMonth[month];
-        const hash = item.hash;
-
-        return <View key={hash}>{this.renderLevel3(item.history)}</View>;
-      });
-  };
-
-  renderLevel3 = (works) => {
-    const {navigation, route} = this.props;
+  const renderLevel = (works) => {
     const vin = get(route, 'params.car.vin');
 
-    return works.map((work, idx) => {
+    return works.map(work => {
       const workId = get(work, 'document.number');
       const workDealer = get(work, 'dealer.id');
       const onPressHandler = () => {
@@ -238,34 +216,12 @@ class CarHistoryScreen extends Component {
         });
       };
 
-      return this.renderItemHeader({
-        work,
-        key: work.hash,
-        onPressHandler,
-        isArrowPress: true,
-        theme: 'itemLevel3',
-      });
+      return renderLevelContent({work, onPress: onPressHandler});
     });
   };
 
-  renderLevel3Item = ({prop, value, sale, color}) => {
-    return (
-      <Row>
-        <Col style={styles.sectionProp}>
-          <Text style={styles.sectionPropText}>{`${prop}:`}</Text>
-        </Col>
-        <Col style={styles.sectionValue}>
-          <Text
-            style={[styles.sectionValueText, color ? {color: styleConst.color.lightBlue} : null]}>
-            {value}
-          </Text>
-        </Col>
-      </Row>
-    );
-  };
-
-  renderLevel3Content = ({work}) => {
-    const {date, document, master, summ, car} = work;
+  const renderLevelContent = ({work, onPress}) => {
+    const {date, document, master, summ, car, hash} = work;
     const works = get(summ, 'works');
     const parts = get(summ, 'parts');
     const total = get(summ, 'total');
@@ -274,115 +230,110 @@ class CarHistoryScreen extends Component {
     // const sale = parseFloat(get(summ, 'sale.works') + get(summ, 'sale.parts'));
 
     return (
-      <Body style={[styles.body]}>
-        <View style={styles.dateContainer}>
-          {date ? <Text style={styles.date}>{dayMonthYear(date)}</Text> : null}
-          {car.mileage ? (
-            <Text style={styles.mileage}>
-              {strings.NewCarItemScreen.plates.mileage.toLowerCase() +
-                ' ' +
-                numberWithGap(car.mileage)}
-            </Text>
-          ) : null}
-        </View>
-        <View>
-          {dealerName ? <Text style={styles.dealer}>{dealerName}</Text> : null}
-        </View>
-        {document
-          ? this.renderLevel3Item({
-              prop: document.name,
-              value: `#${document.number}`,
-              color: true,
-            })
-          : null}
-        {master
-          ? this.renderLevel3Item({
-              prop: strings.CarHistoryScreen.master,
-              value: master,
-            })
-          : null}
-        {/* {works
-          ? this.renderLevel3Item({
-              prop: strings.CarHistoryScreen.price.work,
-              value: showPrice(works, currency, true),
-            })
-          : null}
-        {parts
-          ? this.renderLevel3Item({
-              prop: strings.CarHistoryScreen.price.materials,
-              value: showPrice(parts, currency, true),
-            })
-          : null} */}
-        {total
-          ? this.renderLevel3Item({
-              prop: strings.CarHistoryScreen.price.total,
-              value: showPrice(total, currency, true),
-            })
-          : null}
-        {/* {sale
-          ? this.renderLevel3Item({
-              prop: strings.CarHistoryScreen.sale,
-              value: showPrice(sale, currency, true),
-            })
-          : null} */}
-      </Body>
+      <List.Item
+        onPress={onPress}
+        key={'item' + hash}
+        descriptionNumberOfLines={2}
+        title={[[dayMonth(work.date)].join(' '), ['#' + work.document.number].join(' ')].join(', ')}
+        description={[
+          dealerName, 
+          [strings.NewCarItemScreen.plates.mileage.toLowerCase(), numberWithGap(car.mileage)].join(' '),
+          // master ? [strings.CarHistoryScreen.master, master].join(' ') : null,
+          ].join('\r\n')}
+        left={() => <List.Icon color={styleConst.color.blue} icon="car-info" />}
+        right={props => <View style={{justifyContent: 'center'}}><Text style={{textAlignVertical: 'center', fontSize: 16,}}>{[strings.CarHistoryScreen.price.total2, showPrice(total, currency, true)].join(' ')}</Text></View>}
+      />
     );
+
+    // return (
+    //   <Body style={[styles.body]}>
+    //     <View style={styles.dateContainer}>
+    //       {date ? <Text style={styles.date}>{dayMonthYear(date)}</Text> : null}
+    //       {car.mileage ? (
+    //         <Text style={styles.mileage}>
+    //           {strings.NewCarItemScreen.plates.mileage.toLowerCase() +
+    //             ' ' +
+    //             numberWithGap(car.mileage)}
+    //         </Text>
+    //       ) : null}
+    //     </View>
+    //     <View>
+    //       {dealerName ? <Text style={styles.dealer}>{dealerName}</Text> : null}
+    //     </View>
+    //     {document
+    //       ? this.renderLevel3Item({
+    //           prop: document.name,
+    //           value: `#${document.number}`,
+    //           color: true,
+    //         })
+    //       : null}
+    //     {master
+    //       ? this.renderLevel3Item({
+    //           prop: strings.CarHistoryScreen.master,
+    //           value: master,
+    //         })
+    //       : null}
+    //     {/* {works
+    //       ? this.renderLevel3Item({
+    //           prop: strings.CarHistoryScreen.price.work,
+    //           value: showPrice(works, currency, true),
+    //         })
+    //       : null}
+    //     {parts
+    //       ? this.renderLevel3Item({
+    //           prop: strings.CarHistoryScreen.price.materials,
+    //           value: showPrice(parts, currency, true),
+    //         })
+    //       : null} */}
+    //     {total
+    //       ? this.renderLevel3Item({
+    //           prop: strings.CarHistoryScreen.price.total,
+    //           value: showPrice(total, currency, true),
+    //         })
+    //       : null}
+    //     {/* {sale
+    //       ? this.renderLevel3Item({
+    //           prop: strings.CarHistoryScreen.sale,
+    //           value: showPrice(sale, currency, true),
+    //         })
+    //       : null} */}
+    //   </Body>
+    // );
   };
 
-  renderItemHeader = ({work, key, label, theme, onPressHandler}) => {
+  if (isLoading) {
     return (
-      <View key={key} style={{borderBottomWidth: 1}}>
-        <ListItem
-          icon
-          last
-          style={[stylesList.listItem, styles.listItem]}
-          onPress={onPressHandler}>
-          {this.renderLevel3Content({work})}
-          <Right />
-        </ListItem>
+      <View style={{flex:1}}>
+        <ActivityIndicator
+          color={styleConst.color.blue}
+          style={styleConst.spinner}
+        />
       </View>
     );
-  };
+  }
 
-  render() {
-    const {carHistory, isFetchCarHistory} = this.props;
-
-    Analytics.logEvent('screen', 'lkk/carhistory');
-
-    if (isFetchCarHistory) {
-      return (
-        <SpinnerView
-          containerStyle={{backgroundColor: styleConst.color.white}}
-        />
-      );
-    }
-
-    if (isEmpty(carHistory) || !carHistory.items) {
-      return (
-        <SafeAreaView style={styles.safearea}>
-          <StatusBar barStyle="dark-content" />
-          <Text style={styles.emptyText}>
-            {strings.CarHistoryScreen.empty.text}
-          </Text>
-        </SafeAreaView>
-      );
-    }
-
+  if (isEmpty(carHistory) || !carHistory.items) {
     return (
-      <ScrollView style={{backgroundColor: styleConst.color.white}}>
+      <SafeAreaView style={styles.safearea}>
         <StatusBar barStyle="dark-content" />
-        <View>
-          <StyleProvider style={getTheme()}>
-            <View>
-              {Object.keys(get(carHistory, 'items'), []).length
-                ? this.renderLevel1(carHistory.items)
-                : null}
-            </View>
-          </StyleProvider>
-        </View>
-      </ScrollView>
+        <Text style={styles.emptyText}>
+          {strings.CarHistoryScreen.empty.text}
+        </Text>
+      </SafeAreaView>
     );
   }
+
+  return (
+    <PaperProvider theme={theme}>
+      <ScrollView style={{backgroundColor: styleConst.color.white}}>
+        <View style={{flex:1}}>
+          {Object.keys(get(carHistory, 'items'), []).length
+            ? renderData(carHistory.items)
+            : null}
+        </View>
+      </ScrollView>
+    </PaperProvider>
+  );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CarHistoryScreen);
