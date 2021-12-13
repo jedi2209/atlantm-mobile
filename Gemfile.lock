@@ -62,7 +62,7 @@ GEM
     faraday_middleware (1.2.0)
       faraday (~> 1.0)
     fastimage (2.2.5)
-    fastlane (2.198.1)
+    fastlane (2.197.0)
       CFPropertyList (>= 2.3, < 4.0.0)
       addressable (>= 2.8, < 3.0.0)
       artifactory (~> 3.0)
@@ -210,9 +210,9 @@ PLATFORMS
   universal-darwin-20
 
 DEPENDENCIES
-  fastlane
+  fastlane (= 2.197.0)
   fastlane-plugin-increment_version_code
   fastlane-plugin-property_file_read
 
 BUNDLED WITH
-   2.2.3
+   2.2.33
