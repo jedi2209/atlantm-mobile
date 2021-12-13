@@ -737,6 +737,7 @@ class ServiceScreenStep1 extends Component {
                   style: {
                     backgroundColor: styleConst.color.darkBg,
                   },
+                  noAgreement: true,
                 }}
                 parentState={this.state}
               />
