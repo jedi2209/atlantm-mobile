@@ -337,6 +337,10 @@ class Form extends Component {
     }
   }
 
+  _setFieldValue(field) {
+
+  }
+
   static propTypes = {
     fields: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     barStyle: PropTypes.string,
@@ -688,7 +692,7 @@ class Form extends Component {
             }}
             blurOnSubmit={false}
             ref={this.inputRefs[groupNum + 'Input' + num]}
-            value={this.state[name] || ''}
+            value={this.state[name] ? this.state[name].toString() : ''}
             enablesReturnKeyAutomatically={true}
             onChangeText={this.onChangeField(data)}
             {...data.props}

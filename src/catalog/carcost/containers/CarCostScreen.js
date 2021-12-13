@@ -140,17 +140,9 @@ class CarCostScreen extends PureComponent {
       this._selectCar(this.myCars[0]);
     }
 
-    const carFromNavigation = get(props.route, 'params.car');
+    const carFromNavigation = get(this.props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
-      this.state.carVIN = carFromNavigation.vin;
-      this.state.carBrand = get(carFromNavigation, 'brand');
-      this.state.carModel = get(carFromNavigation, 'model');
-      this.state.carNumber = get(carFromNavigation, 'number');
-      this.state.carMileage = get(carFromNavigation, 'mileage');
-      this.state.carName = [
-        get(carFromNavigation, 'brand'),
-        get(carFromNavigation, 'model'),
-      ].join(' ');
+      this._selectCar(carFromNavigation);
     }
 
     this.myCars = [];
@@ -265,6 +257,20 @@ class CarCostScreen extends PureComponent {
                 </Button>
               </View>
             ),
+        },
+        {
+          name: 'CARMILEAGE',
+          type: 'input',
+          label: strings.Form.field.label.carMileage,
+          value: null,
+          props: {
+            keyboardType: 'number-pad',
+            required: true,
+            placeholder: null,
+            onSubmitEditing: () => {},
+            returnKeyType: 'done',
+            blurOnSubmit: true,
+          },
         },
       ];
     }
