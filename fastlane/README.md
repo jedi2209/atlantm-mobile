@@ -26,6 +26,11 @@ Commit iOS
 fastlane ios prepare
 ```
 Prepare the iOS app for dev or build
+### ios test
+```
+fastlane ios test
+```
+TEST
 ### ios beta
 ```
 fastlane ios beta

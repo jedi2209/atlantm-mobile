@@ -36,17 +36,17 @@ platform :ios do
     )
   end
 
-  desc "Prepare the iOS app for dev or build"
-  lane :prepare do
-    # puts "SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: #{ENV['SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER']}"
-    puts "FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: #{ENV['FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD']}"
-    ensure_git_status_clean
-    produce(
-        app_identifier: "com.atlantm.app.OneSignalNotificationServiceExtension",
-        app_name: "atlantm OneSignalNotificationServiceExtension",
-        skip_itc: true
-    )
-  end
+  # desc "Prepare the iOS app for dev or build"
+  # lane :prepare do
+  #   # puts "SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER: #{ENV['SPACESHIP_2FA_SMS_DEFAULT_PHONE_NUMBER']}"
+  #   puts "FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: #{ENV['FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD']}"
+  #   ensure_git_status_clean
+  #   produce(
+  #       app_identifier: "com.atlantm.app.OneSignalNotificationServiceExtension",
+  #       app_name: "atlantm OneSignalNotificationServiceExtension",
+  #       skip_itc: true
+  #   )
+  # end
 
   desc "Push a new beta build to TestFlight"
   lane :beta do
@@ -76,10 +76,6 @@ platform :ios do
         }
       }
     )
-    # update_code_signing_settings(
-    #   path: "./ios/atlantm.xcodeproj",
-    #   use_automatic_signing: true
-    # )
     # Generate the changelog based on commit messages since your last tag
     changelog_from_git_commits(
         pretty: "- %s",# Optional, lets you provide a custom format to apply to each commit when generating the changelog text
@@ -89,8 +85,15 @@ platform :ios do
         tag_match_pattern: "builds/iosbeta"
     )
     upload_to_testflight(
-        skip_waiting_for_build_processing: true,
-        skip_submission: true,
+        skip_waiting_for_build_processing: false,
+        skip_submission: false,
+        uses_non_exempt_encryption: true,
+        distribute_external: true,
+        notify_external_testers: true,
+        changelog: lane_context[SharedValues::FL_CHANGELOG],
+        groups: [
+          "Zavarka Team"
+        ],
         api_key: api_key
     )
     notification(
@@ -100,7 +103,7 @@ platform :ios do
       content_image: "./ios/atlantm/Images.xcassets/AppIcon.appiconset/AppStore Icon.png"
     )
     commit_version_bump(
-        message: "[fastlane][ios] Updated build number [skip ci]",    # create a commit with a custom message
+        message: "[fastlane][ios] Updated build number",    # create a commit with a custom message
         xcodeproj: "ios/atlantm.xcodeproj",
         force: true
     )

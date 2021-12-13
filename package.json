@@ -6,7 +6,7 @@
     "node": ">=12"
   },
   "scripts": {
-    "build": "bundle exec fastlane ios localNoCompile; yarn run android-build;",
+    "build": "yarn run android-build; yarn run ios-build;",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "postinstall": "npx patch-package; cd ios; pod update; cd ../; npx pod-install;",
     "react": "npx react-native start --reset-cache",
