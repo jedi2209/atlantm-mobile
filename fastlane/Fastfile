@@ -50,8 +50,18 @@ platform :ios do
 
   desc "Push a new beta build to TestFlight"
   lane :beta do
+    ensure_git_status_clean
+    api_key = app_store_connect_api_key(
+      key_id: "Z686FWXM49",
+      issuer_id: "XXXX",
+      key_filepath: "./ios/AuthKey_Z686FWXM49.p8",
+      duration: 1200, # optional (maximum 1200)
+      in_house: false # optional but may be required if using match/sigh
+    )
+    pilot(api_key: api_key)
     get_certificates           # invokes cert
     get_provisioning_profile   # invokes sigh
+    match(type: 'appstore', readonly: true)
     increment_build_number(
         xcodeproj: "./ios/atlantm.xcodeproj"
     )
@@ -63,8 +73,8 @@ platform :ios do
       export_xcargs: "-allowProvisioningUpdates",
       export_options: {
         provisioningProfiles: {
-          "com.atlantm.app" => "com.atlantm.app AppStore",
-          "com.atlantm.app.OneSignalNotificationServiceExtension" => "com.atlantm.app.OneSignalNotificationService"
+          "com.atlantm.app" => "com.atlantm.app",
+          "com.atlantm.app.OneSignalNotificationServiceExtension" => "com.atlantm.app.OneSignalNotificationServiceExtension"
         }
       }
     )
@@ -91,14 +101,21 @@ platform :ios do
       content_image: "./ios/atlantm/Images.xcassets/AppIcon.appiconset/AppStore Icon.png"
     )
     commit_version_bump(
-        message: "Version Bump iOS",    # create a commit with a custom message
-        xcodeproj: "ios/atlantm.xcodeproj"
+        message: "[fastlane][ios] Updated build number [skip ci]",    # create a commit with a custom message
+        xcodeproj: "ios/atlantm.xcodeproj",
+        force: true
     )
     add_git_tag(
         grouping: "builds",
         prefix: "v"
     )
-    push_to_git_remote
+    push_to_git_remote(
+      remote: "origin",         # optional, default: "origin"
+      local_branch: "HEAD",  # optional, aliased by "branch", default: "master"
+      remote_branch: "dev", # optional, default is set to local_branch
+      force: true,    # optional, default: false
+      tags: true     # optional, default: true
+    )
   end
 end
 
