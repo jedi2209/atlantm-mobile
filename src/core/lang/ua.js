@@ -545,7 +545,7 @@ export default {
     },
     additionalPurchase: {
       title: 'Покупки',
-      text: 'История ваших покупок в автоцентрах Атлант-М',
+      text: 'Історія ваших покупок в автоцентрах Атлант-М',
     },
     editData: 'Редагувати дані',
     exit: 'Вийти',
@@ -593,7 +593,7 @@ export default {
   AdditionalPurchaseScreen: {
     title: 'Мои покупки',
     tabs: {
-      cars: 'Автомобили',
+      cars: 'Автомобілі',
       additionalPurchase: 'Покупки',
       insurance: 'Страховки',
     },
