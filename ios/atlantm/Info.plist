@@ -154,5 +154,7 @@
 	<false/>
 	<key>VK_APP_ID</key>
 	<integer>7255802</integer>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 </dict>
 </plist>
