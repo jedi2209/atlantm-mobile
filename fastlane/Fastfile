@@ -142,7 +142,7 @@ platform :android do
   lane :internal do
     versionFile = File.read("../android/app/versioning/app_version.properties")
     re = /versionCode=(\d+)/
-    versionCode = versionFile[re, 1].to_i
+    versionCode = versionFile[re, 1].to_i+1
 
     changelog_from_git_commits(
         pretty: "- %s",# Optional, lets you provide a custom format to apply to each commit when generating the changelog text
