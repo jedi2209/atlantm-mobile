@@ -97,26 +97,29 @@ PODS:
     - FlipperKit/FlipperKitNetworkPlugin
   - fmt (6.2.1)
   - glog (0.3.5)
-  - Google-Maps-iOS-Utils (2.1.0):
-    - Google-Maps-iOS-Utils/Clustering (= 2.1.0)
-    - Google-Maps-iOS-Utils/Geometry (= 2.1.0)
-    - Google-Maps-iOS-Utils/Heatmap (= 2.1.0)
-    - Google-Maps-iOS-Utils/QuadTree (= 2.1.0)
+  - Google-Maps-iOS-Utils (3.10.3):
+    - Google-Maps-iOS-Utils/Clustering (= 3.10.3)
+    - Google-Maps-iOS-Utils/Geometry (= 3.10.3)
+    - Google-Maps-iOS-Utils/GeometryUtils (= 3.10.3)
+    - Google-Maps-iOS-Utils/Heatmap (= 3.10.3)
+    - Google-Maps-iOS-Utils/QuadTree (= 3.10.3)
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Clustering (2.1.0):
+  - Google-Maps-iOS-Utils/Clustering (3.10.3):
     - Google-Maps-iOS-Utils/QuadTree
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Geometry (2.1.0):
+  - Google-Maps-iOS-Utils/Geometry (3.10.3):
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Heatmap (2.1.0):
+  - Google-Maps-iOS-Utils/GeometryUtils (3.10.3):
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Heatmap (3.10.3):
     - Google-Maps-iOS-Utils/QuadTree
     - GoogleMaps
-  - Google-Maps-iOS-Utils/QuadTree (2.1.0):
+  - Google-Maps-iOS-Utils/QuadTree (3.10.3):
     - GoogleMaps
-  - GoogleMaps (3.5.0):
-    - GoogleMaps/Maps (= 3.5.0)
-  - GoogleMaps/Base (3.5.0)
-  - GoogleMaps/Maps (3.5.0):
+  - GoogleMaps (5.1.0):
+    - GoogleMaps/Maps (= 5.1.0)
+  - GoogleMaps/Base (5.1.0)
+  - GoogleMaps/Maps (5.1.0):
     - GoogleMaps/Base
   - GoogleSignIn (5.0.2):
     - AppAuth (~> 1.2)
@@ -137,7 +140,6 @@ PODS:
   - libwebp/mux (1.2.1):
     - libwebp/demux
   - libwebp/webp (1.2.1)
-  - OneSignal (3.9.1)
   - OneSignalXCFramework (3.9.1)
   - OpenSSL-Universal (1.1.180)
   - RCT-Folly (2021.06.28.00-v2):
@@ -371,13 +373,13 @@ PODS:
     - React
   - react-native-flipper (0.124.0):
     - React-Core
-  - react-native-google-maps (0.29.4):
-    - Google-Maps-iOS-Utils (= 2.1.0)
-    - GoogleMaps (= 3.5.0)
+  - react-native-google-maps (0.30.0):
+    - Google-Maps-iOS-Utils (= 3.10.3)
+    - GoogleMaps (= 5.1.0)
     - React-Core
   - react-native-in-app-review (3.2.3):
     - React
-  - react-native-maps (0.29.4):
+  - react-native-maps (0.30.0):
     - React-Core
   - react-native-onesignal (4.3.3):
     - OneSignalXCFramework (= 3.9.1)
@@ -529,7 +531,7 @@ PODS:
   - RNScreens (3.10.1):
     - React-Core
     - React-RCTImage
-  - RNSentry (3.2.7):
+  - RNSentry (3.2.8):
     - React-Core
     - Sentry (= 7.5.4)
   - RNSVG (12.1.1):
@@ -585,7 +587,7 @@ DEPENDENCIES:
   - GoogleSignIn (~> 5.0.2)
   - hermes-engine (~> 0.9.0)
   - libevent (~> 2.1.12)
-  - OneSignal (< 4.0, >= 3.0)
+  - OneSignalXCFramework (< 4.0, >= 3.0.0)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
@@ -672,7 +674,6 @@ SPEC REPOS:
     - hermes-engine
     - libevent
     - libwebp
-    - OneSignal
     - OneSignalXCFramework
     - OpenSSL-Universal
     - SDWebImage
@@ -836,15 +837,14 @@ SPEC CHECKSUMS:
   FlipperKit: d8d346844eca5d9120c17d441a2f38596e8ed2b9
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
   glog: 5337263514dd6f09803962437687240c5dc39aa4
-  Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
-  GoogleMaps: 32ca02de09de357a10ac773f2c70f1986751392d
+  Google-Maps-iOS-Utils: 95d5ca4d2004314eff88c1819b969db6cac37ab6
+  GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
   GoogleSignIn: 7137d297ddc022a7e0aa4619c86d72c909fa7213
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
   hermes-engine: bf7577d12ac6ccf53ab8b5af3c6ccf0dd8458c5c
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
-  OneSignal: 5df10ecd1efb83b5df69c6281ac97097b011cf2f
   OneSignalXCFramework: 27159b0a150cdfe528c85325215c9d78b2f973c7
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
   RCT-Folly: a21c126816d8025b547704b777a2ba552f3d9fa9
@@ -862,9 +862,9 @@ SPEC CHECKSUMS:
   React-logger: 933f80c97c633ee8965d609876848148e3fef438
   react-native-fbsdk: 8e92c7a334fd8d9c2b5d8b8fcd7ae2c314161099
   react-native-flipper: 17b49362fca1e5868cb068cdb844cd5f84443d0a
-  react-native-google-maps: 34517207071d54f3bc23c68752bbec0217bfc79e
+  react-native-google-maps: ae0e681cb0b481f3b6f3369cd2140c99c91c07ab
   react-native-in-app-review: 23f4f5b9fcd94339dd5d93c6230557f9c67c7dda
-  react-native-maps: a421fe6aeb74279597c4ea9598f25796108e2d89
+  react-native-maps: 96b2ccec1d0c01b1c63eb2186cb668a12cf07515
   react-native-onesignal: 9a543af01c2359b7567919cd3b1490051c553e21
   react-native-orientation-locker: 2da91e5391971dace445495821c899c111dcad7a
   react-native-pager-view: 3ee7d4c7697fb3ef788346e834a60cca97ed8540
@@ -900,7 +900,7 @@ SPEC CHECKSUMS:
   RNRate: 94f57c773e155ca0d0aeeba9c10a32bce9030daf
   RNReanimated: 569c269480a76e39196aa17a5df08ef1561db5ff
   RNScreens: 522705f2e5c9d27efb17f24aceb2bf8335bc7b8e
-  RNSentry: bf1f0970fffd3519a5cf553217f281bbb5b10de4
+  RNSentry: fe878ca3982d7871e502ccbb90072fe764c8d07d
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
@@ -911,6 +911,6 @@ SPEC CHECKSUMS:
   Yoga: e7dc4e71caba6472ff48ad7d234389b91dadc280
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 2d24fb31ec63f6572d30187cae68a6b13e634fb4
+PODFILE CHECKSUM: 7ec73cb4a23851c23f88231b047d565d9d5b102a
 
 COCOAPODS: 1.11.2
