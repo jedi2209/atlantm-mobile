@@ -138,6 +138,9 @@ class ServiceScreenNonAuth extends Component {
       text: dataFromForm.COMMENT || null,
     };
 
+    console.log(data, dataToSend, dataFromForm);
+    return true;
+
     if (this.state.orderLead) {
       // отправляем ЛИД
       const dataToSend = {
@@ -245,9 +248,7 @@ class ServiceScreenNonAuth extends Component {
                 value: null,
                 props: {
                   placeholder:
-                    strings.Form.field.placeholder.date +
-                    ' ' +
-                    dayMonthYear(addDays(2)),
+                    strings.Form.field.placeholder.date + dayMonthYear(addDays(2)),
                   required: true,
                   type: 'service',
                   minimumDate: new Date(addDays(2)),
