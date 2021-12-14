@@ -26,6 +26,7 @@
     "version": "./version.sh",
     "detox-server": "detox run-server",
     "detox:record": "detox recorder --bundleId 'com.atlantm.app' --simulatorId booted --outputTestFile './src/__tests__/test.js' --testName 'My Recorded Test' --record",
+    "e2e:ios:build": "detox build -c ios.sim.release",
     "e2e:ios": "detox test -c ios.sim.release",
     "e2e:ios-ci": "yarn run e2e:ios -- --workers 4 --retries 1 --jest-report-specs -l verbose",
     "e2e:android": "detox test -c android.emu.release",
