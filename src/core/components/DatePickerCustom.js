@@ -30,7 +30,7 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
                 display="spinner"
                 locale="ru-RU"
                 {...props}
-                value={props.value ? props.value : defaultDate}
+                value={props.value ? new Date(props.value) : defaultDate}
               />
             </ModalView>
           );
@@ -49,7 +49,7 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
                 display="inline"
                 locale="ru-RU"
                 {...props}
-                value={props.value ? props.value : defaultDate}
+                value={props.value ? new Date(props.value) : defaultDate}
               />
             </ModalView>
           );
