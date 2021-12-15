@@ -138,9 +138,6 @@ class ServiceScreenNonAuth extends Component {
       text: dataFromForm.COMMENT || null,
     };
 
-    console.log(data, dataToSend, dataFromForm);
-    return true;
-
     if (this.state.orderLead) {
       // отправляем ЛИД
       const dataToSend = {
@@ -174,6 +171,7 @@ class ServiceScreenNonAuth extends Component {
               CARNAME: [dataToSend.brand, dataToSend.model].join(' '),
               CARBRAND: dataToSend.brand,
               CARMODEL: dataToSend.model,
+              CARVIN: dataToSend.vin,
               CARNUMBER: dataToSend.carNumber,
             });
             Alert.alert(
