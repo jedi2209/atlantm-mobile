@@ -129,7 +129,7 @@ class ServiceScreenNonAuth extends Component {
       email: dataFromForm.EMAIL || null,
       tech_place: (dateFromForm && dateFromForm.tech_place) || null,
       serviceName: dataFromForm.SERVICE || null,
-      vin: dataFromForm.CARVIN || null,
+      vin: dataFromForm.CARVIN || this.state.carVIN,
       car: {
         brand: dataFromForm.CARBRAND || null,
         model: dataFromForm.CARMODEL || null,

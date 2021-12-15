@@ -138,6 +138,7 @@ class ServiceScreen extends Component {
   }
 
   _selectCar = (item) => {
+    console.log('item', item);
     this.setState({
       carBrand: item.brand,
       carModel: item.model,
@@ -182,7 +183,7 @@ class ServiceScreen extends Component {
       car: get(dataFromForm, 'CARNAME', ''),
       brand: get(dataFromForm, 'CARBRAND', ''),
       model: get(dataFromForm, 'CARMODEL', ''),
-      vin: get(dataFromForm, 'CARVIN', ''),
+      vin: get(dataFromForm, 'CARVIN', this.state?.carVIN),
       date: orderDate,
       firstName: get(dataFromForm, 'NAME', ''),
       secondName: get(dataFromForm, 'SECOND_NAME', ''),

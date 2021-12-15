@@ -20,7 +20,7 @@ export default {
     this.setNotificationWillShowInForegroundHandler();
 
     OneSignal.addPermissionObserver(event => {
-      console.log("OneSignal: permission changed:", event);
+      console.info("OneSignal: permission changed:", event);
     });
   },
 
@@ -33,8 +33,6 @@ export default {
 
   onOpened(data) {
     let routeName;
-
-    console.log('onOpened openResult', data);
 
     Analytics.logEvent('action', 'PushNotification/opened', {
       id: data.notification.notificationId,
@@ -50,8 +48,6 @@ export default {
     const params = {};
 
     params.isPush = true;
-
-    console.log('target', target);
 
     switch (target) {
       case 'tva':
@@ -72,11 +68,11 @@ export default {
 
   setNotificationWillShowInForegroundHandler() {
     OneSignal.setNotificationWillShowInForegroundHandler(notificationReceivedEvent => {
-      console.log("OneSignal: notification will show in foreground:", notificationReceivedEvent);
+      console.info("OneSignal: notification will show in foreground:", notificationReceivedEvent);
       let notification = notificationReceivedEvent.getNotification();
-      console.log("notification: ", notification);
+      console.info("notification: ", notification);
       const data = notification.additionalData
-      console.log("additionalData: ", data);
+      console.info("additionalData: ", data);
       // Complete with null means don't show a notification.
       notificationReceivedEvent.complete(notification);
     });
