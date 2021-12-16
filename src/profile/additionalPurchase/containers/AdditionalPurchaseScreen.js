@@ -61,8 +61,10 @@ const AdditionalPurchaseScreen = ({SAPuser, cars, additionalPurchase, insurance,
     res[key] = allData[key].filter(item => {
       switch (key) {
         case 'cars':
-          const price = get(item, 'purchaseData[0].price.total');
-          if (!price) return false;
+          const price = get(item, 'purchaseData[0].price.total', false);
+          if (!price) {
+            return false;
+          }
           break;
         case 'additionalPurchase':
         case 'insurance':
@@ -110,6 +112,9 @@ const AdditionalPurchaseScreen = ({SAPuser, cars, additionalPurchase, insurance,
           const dealerName = get(val, 'purchaseData[0].dealer.name');
           const manager = get(val, 'purchaseData[0].manager');
           const price = get(val, 'purchaseData[0].price.total');
+          if (!price) {
+            return false;
+          }
           return ( 
             <>
               <List.Item
