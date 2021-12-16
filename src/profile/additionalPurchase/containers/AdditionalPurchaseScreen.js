@@ -56,7 +56,23 @@ const mapStateToProps = ({profile}) => {
 };
 
 const AdditionalPurchaseScreen = ({SAPuser, cars, additionalPurchase, insurance, allData}) => {
-  const allDataFilter = Object.keys(allData).filter(key => allData[key].length);
+  let res = [];
+  const allDataFilter = Object.keys(allData).filter(key => {
+    res[key] = allData[key].filter(item => {
+      switch (key) {
+        case 'cars':
+          const price = get(item, 'purchaseData[0].price.total');
+          if (!price) return false;
+          break;
+        case 'additionalPurchase':
+        case 'insurance':
+        default:
+          break;
+      }
+      return true;
+    });
+    return res[key].length;
+  });
   const [activeTab, setActiveTab] = useState(allDataFilter[allDataFilter.length / 2 | 0]);
   const [expandedState, expand] = useReducer(reducer, initialState);
   const [isLoading, setLoading] = useState(false);
@@ -94,9 +110,6 @@ const AdditionalPurchaseScreen = ({SAPuser, cars, additionalPurchase, insurance,
           const dealerName = get(val, 'purchaseData[0].dealer.name');
           const manager = get(val, 'purchaseData[0].manager');
           const price = get(val, 'purchaseData[0].price.total');
-          if (!price) {
-            return false;
-          }
           return ( 
             <>
               <List.Item
@@ -197,17 +210,15 @@ const AdditionalPurchaseScreen = ({SAPuser, cars, additionalPurchase, insurance,
   return (
     <PaperProvider theme={theme}>
       <Container>
-        <Segment>
-          {Object.keys(allData).map((val, index) => {
-            if (allData[val] && allData[val].length > 0) {
-              return (
-                <Button onPress={() => setActiveTab(val)} active={activeTab === val ? true : false} first={index === 0 ? true : false} last={index === Object.keys(allData).length-1 ? true : false}>
-                  <Text>{strings.AdditionalPurchaseScreen.tabs[val]}</Text>
-                </Button>
-                );
-            }
+        {allDataFilter.length > 1 ? (<Segment>
+          {allDataFilter.map((val, index) => {
+            return (
+              <Button onPress={() => setActiveTab(val)} active={activeTab === val ? true : false} first={index === 0 ? true : false} last={index === allDataFilter.length-1 ? true : false}>
+                <Text>{strings.AdditionalPurchaseScreen.tabs[val]}</Text>
+              </Button>
+              );
           })}
-        </Segment>
+        </Segment>) : null}
         <Content>
           {isLoading ? (<ActivityIndicator color={styleConst.color.blue} style={styleConst.spinner} />) : renderTab(activeTab)}
         </Content>
