@@ -84,7 +84,6 @@ platform :ios do
         ],
         api_key: api_key
     )
-    upload_symbols_to_crashlytics(dsym_path: "./atlantm.app.dSYM.zip")
     notification(
       subtitle: "Build is finish!",
       message: "iOS beta AppStore version #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]})",
