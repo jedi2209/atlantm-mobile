@@ -13,7 +13,7 @@ import styleConst from '../../core/style-const';
 import {AccessToken, GraphRequestManager} from 'react-native-fbsdk';
 import {LoginManager} from 'react-native-fbsdk';
 import VKLogin from 'react-native-vkontakte-login';
-import {GoogleSignin} from '@react-native-community/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {
   appleAuth,
   AppleButton,
