@@ -137,8 +137,11 @@ android {
         }
         release {
             signingConfig signingConfigs.release
-            minifyEnabled false
-            shrinkResources false
+            minifyEnabled true
+            shrinkResources true
+            ndk {
+                debugSymbolLevel = 'FULL'
+            }
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             if (project.hasProperty('buildType')) {
                 if (buildType != "debug") {

@@ -30,7 +30,7 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
                 display="spinner"
                 locale="ru-RU"
                 {...props}
-                value={props.value ? props.value : defaultDate}
+                value={props.value ? new Date(props.value) : defaultDate}
               />
             </ModalView>
           );
@@ -49,7 +49,7 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
                 display="inline"
                 locale="ru-RU"
                 {...props}
-                value={props.value ? props.value : defaultDate}
+                value={props.value ? new Date(props.value) : defaultDate}
               />
             </ModalView>
           );
@@ -63,7 +63,7 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
             mode={props.mode}
             locale="ru-RU"
             {...props}
-            value={props.value ? props.value : defaultDate}
+            value={props.value ? new Date(props.value) : defaultDate}
           />
         );
     }
@@ -117,7 +117,7 @@ DatePickerCustom.propTypes = {
   styleContainer: PropTypes.object,
   confirmBtnText: PropTypes.string,
   placeholder: PropTypes.string,
-  value: PropTypes.object || PropTypes.string,
+  value: PropTypes.string,
   isActive: PropTypes.bool,
   onChange: PropTypes.func,
   onPressButton: PropTypes.func.isRequired,

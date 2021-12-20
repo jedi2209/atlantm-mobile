@@ -544,7 +544,7 @@ export default {
       deadline: 'Діє до ',
     },
     additionalPurchase: {
-      title: 'Покупки',
+      title: 'Мої покупки',
       text: 'Історія ваших покупок в автоцентрах Атлант-М',
     },
     editData: 'Редагувати дані',
@@ -591,7 +591,7 @@ export default {
     title: 'Бонусна програма',
   },
   AdditionalPurchaseScreen: {
-    title: 'Мои покупки',
+    title: 'Мої покупки',
     tabs: {
       cars: 'Автомобілі',
       additionalPurchase: 'Покупки',

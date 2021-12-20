@@ -138,6 +138,7 @@ class ServiceScreen extends Component {
   }
 
   _selectCar = (item) => {
+    console.log('item', item);
     this.setState({
       carBrand: item.brand,
       carModel: item.model,
@@ -182,6 +183,7 @@ class ServiceScreen extends Component {
       car: get(dataFromForm, 'CARNAME', ''),
       brand: get(dataFromForm, 'CARBRAND', ''),
       model: get(dataFromForm, 'CARMODEL', ''),
+      vin: get(dataFromForm, 'CARVIN', this.state?.carVIN),
       date: orderDate,
       firstName: get(dataFromForm, 'NAME', ''),
       secondName: get(dataFromForm, 'SECOND_NAME', ''),
@@ -210,6 +212,7 @@ class ServiceScreen extends Component {
               CARNAME: dataFromForm.CARNAME,
               CARBRAND: dataFromForm.CARBRAND,
               CARMODEL: dataFromForm.CARMODEL,
+              CARVIN: dataFromForm.CARVIN,
             });
             Alert.alert(
               strings.Notifications.success.title,
@@ -259,10 +262,7 @@ class ServiceScreen extends Component {
                 label: strings.Form.field.label.date,
                 value: null,
                 props: {
-                  placeholder:
-                    strings.Form.field.placeholder.date +
-                    ' ' +
-                    dayMonthYear(addDays(2)),
+                  placeholder: strings.Form.field.placeholder.date + dayMonthYear(addDays(2)),
                   required: true,
                   minimumDate: new Date(addDays(2)),
                   maximumDate: new Date(addDays(62)),
@@ -374,6 +374,19 @@ class ServiceScreen extends Component {
                     props: {
                       required: true,
                       placeholder: null,
+                    },
+                  },
+                  {
+                    name: 'CARVIN',
+                    type: 'input',
+                    label: strings.Form.field.label.carVIN,
+                    value: this.props.carVIN,
+                    props: {
+                      placeholder: null,
+                      autoCapitalize: 'characters',
+                      onSubmitEditing: () => {},
+                      returnKeyType: 'done',
+                      blurOnSubmit: true,
                     },
                   },
                 ],

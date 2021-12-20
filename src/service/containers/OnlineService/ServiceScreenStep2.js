@@ -133,7 +133,7 @@ class ServiceScreenStep2 extends Component {
         model: get(data, 'car.model', ''),
         carNumber: get(data, 'car.plate', ''),
         vin: get(data, 'vin', ''),
-        date: dateFromForm.date,
+        date: format(dateFromForm?.date ? dateFromForm.date : dateFromForm),
         service: get(data, 'service', ''),
         firstName: get(data, 'f_FirstName', ''),
         secondName: get(data, 'f_SecondName', ''),
