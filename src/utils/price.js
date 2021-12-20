@@ -79,6 +79,7 @@ const showPrice = (price, country = 'BY', float = false) => {
 
   const RUB = value => currencyJS(value, Object.assign({symbol: '₽', pattern: `#!`}, options));
   const BYN = value => currencyJS(value, Object.assign({symbol: 'BYN', pattern: `# !`}, options));
+  const BYR = value => currencyJS(value, Object.assign({symbol: 'BYR', pattern: `# !`}, options));
   const UAH = value => currencyJS(value, Object.assign({symbol: '₴', pattern: `#!`}, options));
 
   switch (country.toLowerCase()) {
@@ -90,6 +91,9 @@ const showPrice = (price, country = 'BY', float = false) => {
     case 'ua':
     case 'uah':
       result = UAH(price).format();
+      break;
+    case 'byr':
+      result = BYR(price).format();
       break;
     case 'by':
     case 'byn':

@@ -129,7 +129,7 @@ class ServiceScreenNonAuth extends Component {
       email: dataFromForm.EMAIL || null,
       tech_place: (dateFromForm && dateFromForm.tech_place) || null,
       serviceName: dataFromForm.SERVICE || null,
-      vin: dataFromForm.CARVIN || null,
+      vin: dataFromForm.CARVIN || this.state.carVIN,
       car: {
         brand: dataFromForm.CARBRAND || null,
         model: dataFromForm.CARMODEL || null,
@@ -171,6 +171,7 @@ class ServiceScreenNonAuth extends Component {
               CARNAME: [dataToSend.brand, dataToSend.model].join(' '),
               CARBRAND: dataToSend.brand,
               CARMODEL: dataToSend.model,
+              CARVIN: dataToSend.vin,
               CARNUMBER: dataToSend.carNumber,
             });
             Alert.alert(
@@ -245,9 +246,7 @@ class ServiceScreenNonAuth extends Component {
                 value: null,
                 props: {
                   placeholder:
-                    strings.Form.field.placeholder.date +
-                    ' ' +
-                    dayMonthYear(addDays(2)),
+                    strings.Form.field.placeholder.date + dayMonthYear(addDays(2)),
                   required: true,
                   type: 'service',
                   minimumDate: new Date(addDays(2)),

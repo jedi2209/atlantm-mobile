@@ -837,7 +837,7 @@ class Form extends Component {
               });
             }}
             onChange={(_, selectedDate) => {
-              const currentDate = selectedDate || this.state[name];
+              const currentDate = selectedDate && selectedDate.toUTCString() || this.state[name];
               if (Platform.OS !== 'ios') {
                 this.setState(prevState => {
                   let copyField = Object.assign({}, prevState.active);
