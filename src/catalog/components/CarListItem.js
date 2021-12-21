@@ -58,6 +58,8 @@ const CarListItem = ({
   const engineVolume = get(car, 'engine.volume.full');
   const mileage = get(car, 'mileage');
 
+  const statusName = get(car, 'status.name', '');
+
   const gearboxId = get(car, 'gearbox.id');
   let gearboxName = get(car, 'gearbox.name');
   if (gearboxId) {
@@ -136,22 +138,6 @@ const CarListItem = ({
               ]}>
               {showPrice(CarPrices.sale, dealerSelected.region)}
             </Text>
-            {badge &&
-              badge.map((item, index) => {
-                if (item.name.toLowerCase() === 'спец.цена') {
-                  item.name = strings.CarList.badges.specialPrice;
-                }
-                return (
-                  <Badge
-                    id={car.id.api}
-                    key={'badgeItem' + car.id.api + index}
-                    index={index}
-                    bgColor={item.background}
-                    name={item.name}
-                    textColor={item.textColor}
-                  />
-                );
-              })}
           </View>
         ) : null}
         <View style={styles.flexRow}>
@@ -167,20 +153,6 @@ const CarListItem = ({
             ]}>
             {showPrice(CarPrices.standart, dealerSelected.region)}
           </Text>
-          {!isSale &&
-            badge &&
-            badge.map((item, index) => {
-              return (
-                <Badge
-                  id={car.id.api}
-                  key={'badgeItem' + car.id.api + index}
-                  index={index}
-                  bgColor={item.background}
-                  name={item.name}
-                  textColor={item.textColor}
-                />
-              );
-            })}
         </View>
       </View>
     );
@@ -441,6 +413,37 @@ const CarListItem = ({
     );
   };
 
+  const _renderBadges = () => {
+    const badge = get(car, 'badge', []);
+    return (<>
+      {badge.map((item, index) => {
+        if (item.name.toLowerCase() === 'спец.цена') {
+          item.name = strings.CarList.badges.specialPrice;
+        }
+        return (
+          <Badge
+            id={car.id.api}
+            key={'badgeItem' + car.id.api + index}
+            index={index}
+            bgColor={item.background}
+            name={item.name}
+            textColor={item.textColor}
+          />
+        );
+      })}
+    {statusName ? (
+      <Badge
+        id={'badgeItemStatus' + car.id.api}
+        key={'badgeItemStatus' + car.id.api}
+        bgColor={styleConst.color.green}
+        name={statusName.toLowerCase()}
+        textColor={'#fff'}
+      />
+    ) : null}
+    </>
+    );
+  }
+
   return (
     <View
       testID={testID + '-' + key}
@@ -529,6 +532,7 @@ const CarListItem = ({
                 }
               : null,
           ]}></Pressable>
+        <View style={styles.carBadgeContainer}>{_renderBadges()}</View>
         <Pressable
           onPress={!ordered ? _onPress : _onPressOrder}
           style={styles.carTechContainer}>
@@ -727,6 +731,16 @@ const styles = StyleSheet.create({
     marginTop: 10,
     zIndex: 20,
     justifyContent: 'space-between',
+  },
+  carBadgeContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginHorizontal: '2%',
+    marginTop: 5,
+    height: 20,
+    zIndex: 20,
+    justifyContent: 'flex-end',
   },
   carID: {
     color: styleConst.color.greyText2,
