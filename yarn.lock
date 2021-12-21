@@ -1621,9 +1621,9 @@
   integrity sha512-CiuLZ2orueBiWHYxfaJF57jQY6HY2Q3z5pdAE4MKH8EqIImr/jgDJrJ/UxOVZHK1Ng9P+XlGIKfVIcuWZ6guuA==
 
 "@react-native-google-signin/google-signin@^7.0.1":
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/@react-native-google-signin/google-signin/-/google-signin-7.0.1.tgz#a03f1a3e43ddb1bb092679bfdd6e38ff6ed819a1"
-  integrity sha512-iG1OkFx1ohSupofWnlbV+Re74L2HF823SOL1KNl1gGDiVxzNKJTZm/wuaPuujzci4kr8GuwR9PRgxLShiAZwlg==
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/@react-native-google-signin/google-signin/-/google-signin-7.0.3.tgz#9fbf739d7b9fd44ec89c87d2bacebcec69bdbc9e"
+  integrity sha512-wwTy7TvJhVALb3jIgZjCiQPUCzktz1FDe4wSqS61ocU/kC7ZEEI/AeIlk/7fanGViXdX94f4sdPUbasMb59xjQ==
 
 "@react-native-picker/picker@^1.8.3", "@react-native-picker/picker@^1.9.7", "@react-native-picker/picker@^2.0.0":
   version "2.2.1"
@@ -1772,9 +1772,9 @@
     tslib "^1.9.3"
 
 "@sentry/react-native@^3.2.6":
-  version "3.2.8"
-  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-3.2.8.tgz#17b9dc865f91161abe76ba81f600163a56c54b43"
-  integrity sha512-qSFaUvNNppPtqYc0CtzBqq7l4RuGVGs5zL/Gfv/vWNPGhVPjtng4afj4l7PyjvL6A13W88DggesLaQnNhGUOXg==
+  version "3.2.9"
+  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-3.2.9.tgz#fbc6b4a8e701b7356a22ccec39a18c63e69d69e2"
+  integrity sha512-a4VimVyMLlPISwgKOS23CObI6Af7CRP2Sqly5mVDXUR6vREDjT9X+UDjMPN+R0GkdyskIG1cFhaM5VrtN9iIkw==
   dependencies:
     "@sentry/browser" "6.12.0"
     "@sentry/cli" "^1.68.0"

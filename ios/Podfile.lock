@@ -486,7 +486,7 @@ PODS:
     - SDWebImageWebPCoder (~> 0.8.4)
   - RNGestureHandler (2.1.0):
     - React-Core
-  - RNGoogleSignin (7.0.1):
+  - RNGoogleSignin (7.0.3):
     - GoogleSignIn (~> 6.0.0)
     - React-Core
   - RNImageCropPicker (0.37.2):
@@ -531,9 +531,9 @@ PODS:
   - RNScreens (3.10.1):
     - React-Core
     - React-RCTImage
-  - RNSentry (3.2.8):
+  - RNSentry (3.2.9):
     - React-Core
-    - Sentry (= 7.5.4)
+    - Sentry (= 7.7.0)
   - RNSVG (12.1.1):
     - React
   - RNVectorIcons (9.0.0):
@@ -544,9 +544,9 @@ PODS:
   - SDWebImageWebPCoder (0.8.4):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry (7.5.4):
-    - Sentry/Core (= 7.5.4)
-  - Sentry/Core (7.5.4)
+  - Sentry (7.7.0):
+    - Sentry/Core (= 7.7.0)
+  - Sentry/Core (7.7.0)
   - TOCropViewController (2.6.0)
   - VK-ios-sdk (1.6.2)
   - Yoga (1.14.0)
@@ -895,17 +895,17 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 0400a6d0c94186d1120c3cbd97b23abc022187a9
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
   RNGestureHandler: e5c7cab5f214503dcefd6b2b0cefb050e1f51c4a
-  RNGoogleSignin: a51c9c7419262c75748ddcee3f735bb42da5def1
+  RNGoogleSignin: aa9bb821ffb396bc64b4b6befc60bf41e6ae625f
   RNImageCropPicker: 448d3c6e923fde3466b49caf3c2457c2a0ba02dd
   RNRate: 94f57c773e155ca0d0aeeba9c10a32bce9030daf
   RNReanimated: da3860204e5660c0dd66739936732197d359d753
   RNScreens: 522705f2e5c9d27efb17f24aceb2bf8335bc7b8e
-  RNSentry: fe878ca3982d7871e502ccbb90072fe764c8d07d
+  RNSentry: e164f7a0f663acf21b3024cfd7982f57fafc279c
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
-  Sentry: 5c5dd4005f3b7b9765d5a8871232cddbd0d888b7
+  Sentry: e58e062056a061ae1145e22ad3dff6e506bff177
   TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   VK-ios-sdk: 5bcf00a2014a7323f98db9328b603d4f96635caa
   Yoga: e7dc4e71caba6472ff48ad7d234389b91dadc280
