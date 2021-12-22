@@ -138,7 +138,6 @@ class ServiceScreen extends Component {
   }
 
   _selectCar = (item) => {
-    console.log('item', item);
     this.setState({
       carBrand: item.brand,
       carModel: item.model,

@@ -15,25 +15,39 @@
       },
       "oauth_client": [
         {
+          "client_id": "53201529704-3vqvfs10fkb4ec26p3cip3s6fi1vtbp1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.atlantm",
+            "certificate_hash": "681c6dd00d4a177fd67761c95c8e6927c8dfe371"
+          }
+        },
+        {
           "client_id": "53201529704-ekmnngknqo6tdds5luqc795f39fk9e3v.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBYKsGfBwHXUDlM4jrJ2LL0Q3q66hhvyUQ"
+          "current_key": "AIzaSyBRqB8N3QvXpuIHGRUZekcCbPKtBII5M8E"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53201529704-4fl35lhveh4lvcdj9o3nli0fpk8c942r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "53201529704-o0puu7ivla2fmj9vo93ckmf5hv33d9l2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.atlant-m",
+                "app_store_id": "515931794"
+              }
+            }
+          ]
         }
       }
     }

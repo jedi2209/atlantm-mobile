@@ -39,6 +39,7 @@ import UsedCarListScreen from '../catalog/usedcar/containers/UsedCarListScreen';
 import UsedCarItemScreen from '../catalog/usedcar/containers/UsedCarItemScreen';
 
 import ContactsScreen from '../contacts/containers/ContactsScreen';
+import ChatScreen from '../contacts/containers/ChatScreen';
 import InfoListScreen from '../info/containers/InfoListScreen';
 import InfoPostScreen from '../info/containers/InfoPostScreen';
 
@@ -140,9 +141,19 @@ export const Base = ({navigation, route}) => {
         })}
       />
       <StackBase.Screen
-        name="ContactsScreen"
-        component={Contacts}
-        options={{headerShown: false}}
+        name="ChatScreen"
+        component={ChatScreen}
+        options={
+          BigCloseButton(navigation, route, {
+          ...TransitionPresets.ModalTransition,
+          presentation: 'modal',
+          headerTransparent: true,
+          headerTitle: strings.ChatScreen.title,
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        })}
       />
       <StackBase.Screen
         name="InfoList"

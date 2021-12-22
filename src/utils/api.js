@@ -84,6 +84,40 @@ export default {
     return req;
   },
 
+  chatAvailable() {
+    return this.request(`/jivo/status/`, baseRequestParams);
+  },
+
+  chatData(session) {
+    return this.request(`/jivo/status/${session}`, baseRequestParams);
+  },
+
+  chatSendMessage({user, message, session = null}) {
+    const body = {
+      "user": user,
+      "message": {
+          "text": message.text
+      }
+    };
+
+    const requestParams = _.merge({}, baseRequestParams, {
+      method: 'post',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
+
+    let url = '/jivo/send/';
+
+    if (session) {
+      url = '/jivo/send/' + session + '/';
+    }
+
+    return this.request(url, requestParams);
+  },
+
   fetchTva({dealer, region, number, pushTracking}) {
     const url = `/tva/get/?number=${number}&region=${region}&dealer=${dealer}&notify=${pushTracking}&platform=${
       isAndroid ? 1 : 2
