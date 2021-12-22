@@ -32,7 +32,9 @@ const types = {
   default: '#15CBB6',
   danger: '#EB0A1E',
   primary: '#134D7C',
-  red: '#EB1E4E',
+  // red: '#EB1E4E',
+  red: styleConst.color.red,
+  orange: styleConst.color.orange,
 };
 
 const status = {
@@ -84,7 +86,7 @@ Plate.propTypes = {
   title: PropTypes.string,
   subtitle: PropTypes.string,
   onPress: PropTypes.func,
-  type: PropTypes.oneOf(['default', 'danger', 'primary', 'red']),
+  type: PropTypes.oneOf(['default', 'danger', 'primary', 'red', 'orange']),
   active: PropTypes.oneOf(['enabled', 'disabled']),
 };
 

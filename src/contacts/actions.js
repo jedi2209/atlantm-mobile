@@ -8,6 +8,9 @@ import {
   CONTACTS_MAP_AVAILABLE_NAVIAPPS__SET,
   CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__REQUEST,
   CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__DONE,
+  CONTACTS_CHAT_SEND__REQUEST,
+  CONTACTS_CHAT_SEND__FAIL,
+  CONTACTS_CHAT_SEND__SUCCESS,
 } from './actionTypes';
 
 export const callMe = props => {
@@ -69,5 +72,45 @@ export const actionSetAvailableNaviApps = availableNaviApps => {
       type: CONTACTS_MAP_AVAILABLE_NAVIAPPS__SET,
       payload: availableNaviApps,
     });
+  };
+};
+
+export const actionChatSend = props => {
+  return dispatch => {
+    // dispatch({
+    //   type: CALL_ME__REQUEST,
+    //   payload: {...props},
+    // });
+    return API.chatSendMessage(props)
+      .then(res => {
+        const {error, status} = res;
+        if (status !== 'success') {
+          return dispatch({
+            type: CONTACTS_CHAT_SEND__FAIL,
+            payload: {
+              code: error.code,
+              error: error.message,
+            },
+          });
+        }
+
+        return dispatch({
+          type: CONTACTS_CHAT_SEND__SUCCESS,
+          payload: {
+            session: res.data.session,
+          }
+        });
+      })
+      .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage('chatSendMessage API.chatSendMessage error');
+        return dispatch({
+          type: CONTACTS_CHAT_SEND__FAIL,
+          payload: {
+            error: error.message,
+            code: error.code,
+          },
+        });
+      });
   };
 };

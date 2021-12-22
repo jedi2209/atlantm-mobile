@@ -391,6 +391,9 @@ export default {
       text: 'Не удалось открыть приложения для навигации, попробуем снова?',
     },
   },
+  ChatScreen: {
+    title: 'Онлайн чат',
+  },
   ChooseDealerScreen: {
     title: 'Выберите автоцентр',
   },

@@ -127,7 +127,6 @@ const mapStateToProps = ({dealer, info, nav, core}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
-    isFetchInfoList: info.meta.isFetchInfoList,
     pushActionSubscribeState: core.pushActionSubscribeState,
     currentLang: core.language.selected || 'ua',
     AppRateAskLater: core.AppRateAskLater,
