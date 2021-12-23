@@ -23,9 +23,7 @@
             "@tva": "./src/tva",
             "@utils": "./src/utils"
           }
-        }],
-        "react-native-reanimated/plugin",
-        ["transform-remove-console", {"exclude": ["error", "warn"] }]
+        }]
       ]
     },
     "development": {
@@ -51,8 +49,7 @@
             "@tva": "./src/tva",
             "@utils": "./src/utils"
           }
-        }],
-        "react-native-reanimated/plugin"
+        }]
       ]
     }
   }

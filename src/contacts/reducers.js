@@ -54,7 +54,7 @@ const chatID = (state = null, action) => {
     case CONTACTS_CHAT_SEND__SUCCESS:
       return action.payload.session;
     case REHYDRATE:
-      return get(action.payload, 'contacts.chat.id');
+      return get(action.payload, 'contacts.chat.id', null);
     default:
       return state;
   }
