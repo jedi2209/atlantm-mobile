@@ -61,6 +61,34 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
     "email": get(profile, 'login.EMAIL[0].VALUE', get(profile, 'email')),
   };
 
+  const renderTextMessage = ({message}) => {
+    console.log('data', message);
+    return (<View style={{height: 50, width: 100}}><Text style={{color: 'black', fontSize: 20}}>{message}</Text></View>);
+  };
+
+  const renderBubble = ({
+    child,
+    message,
+    nextMessageInGroup
+  }) => {
+    return (
+      <View
+        style={{
+          backgroundColor: user.id !== message.author.id ? '#ffffff' : '#1d1c21',
+          borderBottomLeftRadius:
+            !nextMessageInGroup && user.id !== message.author.id ? 20 : 0,
+          borderBottomRightRadius:
+            !nextMessageInGroup && user.id === message.author.id ? 20 : 0,
+          borderColor: '#1d1c21',
+          borderWidth: 1,
+          overflow: 'hidden',
+        }}
+      >
+        {child}
+      </View>
+    )
+  }
+
   const initChatData = (session, userID, isSubscribed = true) => {
     if (!session) {
       setLoading(false);
@@ -180,6 +208,8 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
       showUserAvatars={false}
       showUserNames={true}
       enableAnimation={true}
+      // renderBubble={renderBubble}
+      // renderTextMessage={renderTextMessage}
       locale='ru'
       theme={{
         ...defaultTheme,
