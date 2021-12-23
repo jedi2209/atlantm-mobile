@@ -468,6 +468,10 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
 
     console.info('== Contacts ==');
     let isSubscribedInterval = true;
+    chatStatus(isSubscribedInterval).then(res => {
+      setChatAvailable(res);
+    });
+
     interval.current = setInterval(() => {
       setCallAvailable(getStatusWorktime(dealerSelected, 'RC'));
       chatStatus(isSubscribedInterval).then(res => {
