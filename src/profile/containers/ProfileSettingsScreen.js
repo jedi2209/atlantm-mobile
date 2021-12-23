@@ -48,6 +48,9 @@ class ProfileSettingsScreen extends Component {
           label: strings.Form.field.label.phone,
           value: field.VALUE,
           country: field.COUNTRY,
+          textStyle: {
+            color: styleConst.color.greyText4,
+          }
         };
       });
     } else {
