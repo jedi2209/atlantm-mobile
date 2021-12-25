@@ -371,7 +371,7 @@ PODS:
   - react-native-fbsdk/Share (3.0.0):
     - FBSDKShareKit (~> 8.1)
     - React
-  - react-native-flipper (0.126.0):
+  - react-native-flipper (0.127.0):
     - React-Core
   - react-native-google-maps (0.30.0):
     - Google-Maps-iOS-Utils (= 3.10.3)
@@ -476,7 +476,7 @@ PODS:
     - React
   - RNCPicker (2.2.1):
     - React-Core
-  - RNDateTimePicker (5.0.2):
+  - RNDateTimePicker (5.1.0):
     - React-Core
   - RNDeviceInfo (8.4.8):
     - React-Core
@@ -486,7 +486,7 @@ PODS:
     - SDWebImageWebPCoder (~> 0.8.4)
   - RNGestureHandler (2.1.0):
     - React-Core
-  - RNGoogleSignin (7.0.3):
+  - RNGoogleSignin (7.0.4):
     - GoogleSignIn (~> 6.0.0)
     - React-Core
   - RNImageCropPicker (0.37.2):
@@ -531,7 +531,7 @@ PODS:
   - RNScreens (3.10.1):
     - React-Core
     - React-RCTImage
-  - RNSentry (3.2.9):
+  - RNSentry (3.2.10):
     - React-Core
     - Sentry (= 7.7.0)
   - RNSVG (12.1.1):
@@ -861,7 +861,7 @@ SPEC CHECKSUMS:
   React-jsinspector: d0374f7509d407d2264168b6d0fad0b54e300b85
   React-logger: 933f80c97c633ee8965d609876848148e3fef438
   react-native-fbsdk: 8e92c7a334fd8d9c2b5d8b8fcd7ae2c314161099
-  react-native-flipper: 7a3831caa612bd78c18811b22f7a7c9249e2668c
+  react-native-flipper: b9e2e817604af8da0d5a9ba20a8516e780e30f3c
   react-native-google-maps: ae0e681cb0b481f3b6f3369cd2140c99c91c07ab
   react-native-in-app-review: 23f4f5b9fcd94339dd5d93c6230557f9c67c7dda
   react-native-maps: 96b2ccec1d0c01b1c63eb2186cb668a12cf07515
@@ -891,16 +891,16 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: ea6b5c280997b2b32a587793163b1f10e580c4f7
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: cb57c823d5ce8d2d0b5dfb45ad97b737260dc59e
-  RNDateTimePicker: b829aa2110816633975f40161d04c42b64ca4459
+  RNDateTimePicker: 1dd15d7ed1ab7d999056bc77879a42920d139c12
   RNDeviceInfo: 0400a6d0c94186d1120c3cbd97b23abc022187a9
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
   RNGestureHandler: e5c7cab5f214503dcefd6b2b0cefb050e1f51c4a
-  RNGoogleSignin: aa9bb821ffb396bc64b4b6befc60bf41e6ae625f
+  RNGoogleSignin: c4381751eefd73c552b923ba347a9bfc6f18771c
   RNImageCropPicker: 448d3c6e923fde3466b49caf3c2457c2a0ba02dd
   RNRate: 94f57c773e155ca0d0aeeba9c10a32bce9030daf
   RNReanimated: da3860204e5660c0dd66739936732197d359d753
   RNScreens: 522705f2e5c9d27efb17f24aceb2bf8335bc7b8e
-  RNSentry: e164f7a0f663acf21b3024cfd7982f57fafc279c
+  RNSentry: 04bb48bfdd435f5b218cf363f89e6419e9a2460c
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 4143ba35feebab8fdbe6bc43d1e776b393d47ac8
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
