@@ -51,10 +51,10 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
   const interval = useRef();
-  const userAtlantM = { id: '06c33e8b-e835-4736-80f4-63f44b66666c', firstName: 'Атлант-М22', name: 'Атлант-М' };
+  const userAtlantM = { id: '06c33e8b-e835-4736-80f4-63f44b66666c', firstName: 'Атлант-М', name: 'Атлант-М' };
 
   const userTmp = {
-    "name": get(profile, 'login.NAME', get(profile, 'name')),
+    "name": [get(profile, 'login.NAME', get(profile, 'name')), get(profile, 'login.LAST_NAME', null)].join(' '),
     "avatarUrl": get(profile, 'login.UF_CRM_1639655792'),
     // "URL": "https://www.yandex.ru/",
     "phone": get(profile, 'login.PHONE[0].VALUE', get(profile, 'phone')),
@@ -62,7 +62,7 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
   };
 
   const renderTextMessage = ({message}) => {
-    console.log('data', message);
+    // console.log('data', message);
     return (<View style={{height: 50, width: 100}}><Text style={{color: 'black', fontSize: 20}}>{message}</Text></View>);
   };
 
