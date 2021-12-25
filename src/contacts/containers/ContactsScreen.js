@@ -348,6 +348,7 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
               }
             }}
           />
+          {dealerSelected.id == 120 ? (
           <Plate
             title="Чат"
             subtitle="Отвечаем с 9 до 20"
@@ -355,6 +356,7 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
             status={chatAvailable ? 'enabled' : 'disabled'}
             onPress={onPressChat}
           />
+          ) : null}
           <Plate
             testID="ContactsScreen.ButtonCallMe"
             title={strings.ContactsScreen.callOrder}
@@ -471,6 +473,7 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
     chatStatus(isSubscribedInterval).then(res => {
       setChatAvailable(res);
     });
+    setCallAvailable(getStatusWorktime(dealerSelected, 'RC'));
 
     interval.current = setInterval(() => {
       setCallAvailable(getStatusWorktime(dealerSelected, 'RC'));

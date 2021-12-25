@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
     marginTop: -2,
     fontSize: 16,
+    color: styleConst.color.greyText3,
   },
   row: {
     marginBottom: 7,
