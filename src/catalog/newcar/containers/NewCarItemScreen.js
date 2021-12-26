@@ -136,7 +136,7 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
   const carId = get(route, 'params.carId');
 
   const badge = get(carDetails, 'badge', []);
-  const statusName = get(carDetails, 'status.name', '');
+  const statusID = get(carDetails, 'status.id', '');
 
   const stock = get(carDetails, 'options.stock', {});
   const stockKeys = Object.keys(stock);
@@ -676,7 +676,7 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
                 color={get(carDetails, 'color')}
               />
             ) : null}
-            {badge && badge.length || statusName ? (
+            {badge && badge.length || statusID ? (
               <View
                 testID="NewCarItemScreen.BadgesWrapper"
                 style={styles.badgesView}>
@@ -695,12 +695,12 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
                     />
                   );
                 })}
-                {statusName ? (
+                {statusID ? (
                   <Badge
                     id={'badgeItemStatus' + carDetails.id.api}
                     key={'badgeItemStatus' + carDetails.id.api}
                     bgColor={styleConst.color.green}
-                    name={statusName.toLowerCase()}
+                    name={get(strings.CarParams.statusDelivery, 'statusID', '').toLowerCase()}
                     textColor={'#fff'}
                   />
                 ) : null}
