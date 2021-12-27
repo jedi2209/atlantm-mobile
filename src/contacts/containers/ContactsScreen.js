@@ -348,7 +348,7 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
               }
             }}
           />
-          {dealerSelected.id == 120 ? (
+          {dealerSelected.id == 129 ? (
           <Plate
             title="Чат"
             subtitle="Отвечаем с 9 до 20"
