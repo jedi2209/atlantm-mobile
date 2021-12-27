@@ -59,6 +59,10 @@ const CarListItem = ({
   const mileage = get(car, 'mileage');
 
   const statusID = get(car, 'status.id', '');
+  let statusName = '';
+  if (statusID) {
+    statusName = get(strings.CarParams.statusDelivery, statusID, '');
+  }
 
   const gearboxId = get(car, 'gearbox.id');
   let gearboxName = get(car, 'gearbox.name');
@@ -431,12 +435,12 @@ const CarListItem = ({
           />
         );
       })}
-    {statusID ? (
+    {statusName ? (
       <Badge
         id={'badgeItemStatus' + car.id.api}
         key={'badgeItemStatus' + car.id.api}
         bgColor={styleConst.color.green}
-        name={get(strings.CarParams.statusDelivery, 'statusID', '').toLowerCase()}
+        name={statusName.toLowerCase()}
         textColor={'#fff'}
       />
     ) : null}
