@@ -99,6 +99,9 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
         return false;
       }
       let messagesTmp = messages;
+      if (get(res, 'data', []).length > messagesTmp.length) {
+        
+      }
       get(res, 'data', []).map(val => {
         let userIDFinal = null;
         switch (val.message.type) {
