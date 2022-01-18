@@ -27,6 +27,7 @@ import API from '../../utils/api';
 import {get} from 'lodash';
 import OneSignal from 'react-native-onesignal';
 import PushNotifications from '../components/PushNotifications';
+// import notifee, { EventType } from '@notifee/react-native';
 import styleConst from '../../core/style-const';
 
 // components
@@ -147,6 +148,35 @@ const App = props => {
         }
       });
     }
+
+    // notifee.setNotificationCategories([
+    //   {
+    //     id: 'onlineChat',
+    //     actions: [
+    //       {
+    //         id: 'read',
+    //         title: 'Прочитать',
+    //       },
+    //     ],
+    //   },
+    // ]);
+
+    // return notifee.onForegroundEvent(({ type, detail }) => {
+    //   switch (type) {
+    //     case EventType.DISMISSED:
+    //       console.warn('User dismissed notification', detail);
+    //       break;
+    //     case EventType.PRESS:
+    //       const typePress = detail.notification?.ios?.categoryId;
+    //       console.warn('User pressed notification', detail, typePress);
+    //       switch (typePress) {
+    //         case 'ChatMessage':
+    //           NavigationService.navigate('ChatScreen', { update: true });
+    //           break;
+    //       }
+    //       break;
+    //   }
+    // });
   }, []);
 
   if (isLoading || !NavigationContainer) {

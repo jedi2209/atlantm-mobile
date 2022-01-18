@@ -16,5 +16,6 @@
 #   public *;
 #}
 -keep class com.facebook.hermes.unicode.** { *; }
+-keep class com.facebook.jni.** { *; }
 -keep class androidx.core.app.CoreComponentFactory { *; }
 -keep class com.swmansion.reanimated.** { *; }

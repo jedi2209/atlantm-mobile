@@ -4,6 +4,8 @@ import OneSignal from 'react-native-onesignal';
 import {ONESIGNAL} from '../const';
 import Analytics from '../../utils/amplitude-analytics';
 import * as NavigationService from '../../navigation/NavigationService';
+
+// import notifee from '@notifee/react-native';
 import {get} from 'lodash';
 
 // const isAndroid = Platform.OS === 'android';
@@ -58,12 +60,15 @@ export default {
       case 'action':
         routeName = 'InfoPostScreen';
         params.id = actionId;
-        return NavigationService.navigate(routeName, params);
         break;
+      case 'chat':
+        routeName = 'ChatScreen';
+        params.refresh = true;
       default:
         break;
     }
     if (!routeName) return;
+    return NavigationService.navigate(routeName, params);
   },
 
   setNotificationWillShowInForegroundHandler() {
@@ -156,4 +161,26 @@ export default {
       });
     });
   },
+
+  // async showLocalMessage({title, message, category}) {
+  //   if (!category) {
+  //     category = 'onlineChat';
+  //   }
+  //   const channelId = await notifee.createChannel({
+  //     id: category,
+  //     name: 'Онлайн-чат',
+  //   });
+
+  //   await notifee.displayNotification({
+  //     title,
+  //     body: message,
+  //     android: {
+  //       channelId,
+  //       // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
+  //     },
+  //     ios: {
+  //       categoryId: category,
+  //     },
+  //   });
+  // },
 };
