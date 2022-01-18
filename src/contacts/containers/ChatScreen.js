@@ -100,6 +100,7 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
       setLoading(false);
       return false;
     }
+    PushNotifications.addTag('ChatID', session);
     API.chatData(session).then(res => {
       if (!isSubscribed) {
         return false;
@@ -150,7 +151,6 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
   const updateChat = useCallback((userID) => {
     let isSubscribedInitChatData = true;
     initChatData(session, userID, isSubscribedInitChatData);
-    PushNotifications.addTag('ChatID', session);
     return () => {
       isSubscribedInitChatData = false;
       PushNotifications.removeTag('ChatID');
@@ -162,7 +162,6 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
     if (chatStart) {
       interval.current = setInterval(() => {
         initChatData(session, isSubscribedInterval);
-        PushNotifications.addTag('ChatID', session);
       }, intervalMiliSeconds);
     }
     return () => {
