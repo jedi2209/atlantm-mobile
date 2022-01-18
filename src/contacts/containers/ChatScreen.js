@@ -5,6 +5,8 @@ import {
     Text,
   } from 'react-native';
 
+
+
 import {actionChatSend} from '../actions';
 
 import { Chat, MessageType, defaultTheme } from '@flyerhq/react-native-chat-ui';
@@ -61,9 +63,13 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
     "email": get(profile, 'login.EMAIL[0].VALUE', get(profile, 'email')),
   };
 
-  const renderTextMessage = ({message}) => {
-    // console.log('data', message);
-    return (<View style={{height: 50, width: 100}}><Text style={{color: 'black', fontSize: 20}}>{message}</Text></View>);
+  const renderTextMessage = ({author, createdAt, id, text, type}) => {
+    return (
+      <View style={{padding: 10,}}>
+        <Text style={{color: 'black', fontSize: 12}}>{author?.firstName}</Text>
+        <Text style={{color: 'black', fontSize: 16}}>{text}</Text>
+      </View>
+    );
   };
 
   const renderBubble = ({
@@ -99,9 +105,9 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
         return false;
       }
       let messagesTmp = messages;
-      if (get(res, 'data', []).length > messagesTmp.length) {
-        
-      }
+      // if (get(res, 'data', []).length > messagesTmp.length) {
+      //   PushNotifications.showLocalMessage({title: 'Новое сообщение в чате', message: 'Наш оператор ответил вам'});
+      // }
       get(res, 'data', []).map(val => {
         let userIDFinal = null;
         switch (val.message.type) {
@@ -144,7 +150,11 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
   const updateChat = useCallback((userID) => {
     let isSubscribedInitChatData = true;
     initChatData(session, userID, isSubscribedInitChatData);
-    return () => (isSubscribedInitChatData = false)
+    PushNotifications.addTag('ChatID', session);
+    return () => {
+      isSubscribedInitChatData = false;
+      PushNotifications.removeTag('ChatID');
+    }
   }, [user]);
 
   useEffect(() => {
@@ -152,10 +162,12 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
     if (chatStart) {
       interval.current = setInterval(() => {
         initChatData(session, isSubscribedInterval);
+        PushNotifications.addTag('ChatID', session);
       }, intervalMiliSeconds);
     }
     return () => {
       isSubscribedInterval = false;
+      PushNotifications.removeTag('ChatID');
       if (interval && interval.current) {
         clearInterval(interval.current);
       }
