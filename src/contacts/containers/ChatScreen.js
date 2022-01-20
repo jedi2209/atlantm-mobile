@@ -3,6 +3,7 @@ import {
     View,
     ActivityIndicator,
     Text,
+    StyleSheet,
   } from 'react-native';
 
 
@@ -16,6 +17,38 @@ import API from '../../utils/api';
 
 import styleConst from '../../core/style-const';
 import { get } from 'lodash';
+
+const styles = StyleSheet.create({
+  textMessageView: {
+    padding: 10, 
+  },
+  authorName: {
+    color: styleConst.color.blue,
+    fontSize: 14,
+    fontFamily: styleConst.font.medium,
+    marginBottom: 10,
+  },
+  authorText: {
+    color: 'black',
+    fontSize: 16,
+  },
+  customText: {
+    color: styleConst.color.darkBg,
+    fontSize: 12,
+    fontStyle: 'italic',
+    fontFamily: styleConst.font.light,
+  },
+  messageText: {
+    color: 'white',
+    fontSize: 16,
+  },
+  customMessageView: {
+    padding: 0,
+  },
+  customMessageViewStopChat: {
+    paddingBottom: 8,
+  }
+});
 
 const mapStateToProps = ({dealer, profile, contacts}) => {
   return {
@@ -53,7 +86,12 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
   const interval = useRef();
-  const userAtlantM = { id: '06c33e8b-e835-4736-80f4-63f44b66666c', firstName: 'Атлант-М', name: 'Атлант-М' };
+  const userAtlantM = {
+    id: '06c33e8b-e835-4736-80f4-63f44b66666c',
+    firstName: 'Атлант-М',
+    name: 'Атлант-М',
+    avatarUrl: 'https://cdn.atlantm.com/logo/Blue-square-256.png',
+  };
 
   const userTmp = {
     "name": [get(profile, 'login.NAME', get(profile, 'name')), get(profile, 'login.LAST_NAME', null)].join(' '),
@@ -64,12 +102,33 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
   };
 
   const renderTextMessage = ({author, createdAt, id, text, type}) => {
+    if (author?.firstName) { // ответ Атлант-М
+      return (
+        <View style={styles.textMessageView}>
+          <Text style={styles.authorName}>{author?.firstName}</Text>
+          <Text style={styles.authorText}>{text}</Text>
+        </View>
+      );
+    }
     return (
-      <View style={{padding: 10,}}>
-        <Text style={{color: 'black', fontSize: 12}}>{author?.firstName}</Text>
-        <Text style={{color: 'black', fontSize: 16}}>{text}</Text>
+      <View style={styles.textMessageView}>
+        <Text style={styles.messageText}>{text}</Text>
       </View>
     );
+  };
+
+  const renderCustomMessage = ({author, createdAt, id, text, type, typeCustom}) => {
+    switch (typeCustom) {
+      case 'AGENT_STOP_CHAT':
+        return (
+          <View style={[styles.customMessageView, styles.customMessageViewStopChat]}>
+            <Text style={styles.customText}>{text}</Text>
+          </View>
+        );
+        break;
+      default:
+        break;
+    }
   };
 
   const renderBubble = ({
@@ -77,22 +136,32 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
     message,
     nextMessageInGroup
   }) => {
-    return (
-      <View
-        style={{
-          backgroundColor: user.id !== message.author.id ? '#ffffff' : '#1d1c21',
-          borderBottomLeftRadius:
-            !nextMessageInGroup && user.id !== message.author.id ? 20 : 0,
-          borderBottomRightRadius:
-            !nextMessageInGroup && user.id === message.author.id ? 20 : 0,
-          borderColor: '#1d1c21',
-          borderWidth: 1,
-          overflow: 'hidden',
-        }}
-      >
-        {child}
-      </View>
-    )
+    const borderRadius = 15;
+
+    switch (message?.typeCustom) {
+      case 'AGENT_STOP_CHAT':
+        return (<View style={{overflow: 'hidden'}}>{child}</View>);
+        break;
+      case 'USER_MESSAGE':
+      case 'AGENT_MESSAGE':
+      default:
+        return (
+          <View
+            style={{
+              backgroundColor: user.id !== message.author.id ? '#ffffff' : styleConst.color.blue,
+              borderBottomLeftRadius:
+                !nextMessageInGroup && user.id !== message.author.id ? 0 : borderRadius,
+              borderTopRightRadius: borderRadius,
+              borderTopLeftRadius: borderRadius,
+              borderBottomRightRadius:
+                !nextMessageInGroup && user.id === message.author.id ? 0 : borderRadius,
+              borderColor: styleConst.color.accordeonGrey2,
+              borderWidth: 1,
+              overflow: 'hidden',
+            }}>{child}</View>
+        )
+        break;
+    }
   }
 
   const initChatData = (session, userID, isSubscribed = true) => {
@@ -110,13 +179,24 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
       //   PushNotifications.showLocalMessage({title: 'Новое сообщение в чате', message: 'Наш оператор ответил вам'});
       // }
       get(res, 'data', []).map(val => {
-        let userIDFinal = null;
+        let userIDFinal, userAvatar, messageText = null;
+        let messageType = 'text';
         switch (val.message.type) {
           case 'USER_MESSAGE':
             userIDFinal = get(user, 'id', userID);
+            userAvatar = get(profile, 'login.UF_CRM_1639655792');
+            messageText = val.message.text;
             break;
           case 'AGENT_MESSAGE':
             userIDFinal = userAtlantM.id;
+            userAvatar = userAtlantM.avatarUrl;
+            messageText = val.message.text;
+            break;
+          case 'AGENT_STOP_CHAT':
+            userIDFinal = userAtlantM.id;
+            userAvatar = userAtlantM.avatarUrl;
+            messageType = 'custom';
+            messageText = val.message.text;
             break;
         }
         const textMessage = {
@@ -124,13 +204,17 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
             id: userIDFinal,
             firstName: val.user.name,
             email: val.user.email,
+            imageUrl: userAvatar,
           },
           createdAt: val.date*1000,
           id: val.message.id,
-          text: val.message.text,
-          type: 'text',
+          text: messageText,
+          type: messageType,
+          typeCustom: val.message.type,
         };
-        messagesTmp.push(textMessage);
+        if (textMessage.typeCustom !== 'AGENT_STOP_CHAT') { // todo: Убрать когда включим служебные оповещения
+          messagesTmp.push(textMessage);
+        }
       });
       updateMessages(messagesTmp);
       setTimeout(() => {
@@ -214,16 +298,18 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
   }
 
   return (
+    // todo: Убрать когда включим служебные оповещения
     <View style={{marginTop: 50, flex: 1}}>
     <Chat
       messages={messages}
       onSendPress={handleSendPress}
       user={user}
-      showUserAvatars={false}
+      showUserAvatars={true}
       showUserNames={true}
       enableAnimation={true}
       // renderBubble={renderBubble}
       // renderTextMessage={renderTextMessage}
+      // renderCustomMessage={renderCustomMessage}
       locale='ru'
       theme={{
         ...defaultTheme,
