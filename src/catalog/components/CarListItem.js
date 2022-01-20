@@ -744,7 +744,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     height: 20,
     zIndex: 20,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
   },
   carID: {
     color: styleConst.color.greyText2,
