@@ -154,6 +154,12 @@ class CallMeBackScreen extends PureComponent {
       actionID = this.props.route?.params?.actionID;
     }
 
+    let carID = null;
+
+    if (this.props.route?.params && this.props.route.params?.carId) {
+      carID = this.props.route?.params?.carId;
+    }
+
     this.setState({loading: true});
 
     const dealerID = this.state.dealerSelectedLocal.id;
@@ -162,6 +168,7 @@ class CallMeBackScreen extends PureComponent {
       dealerID,
       name: props.NAME || '',
       actionID,
+      carID,
       phone: get(props, 'PHONE', ''),
     });
 

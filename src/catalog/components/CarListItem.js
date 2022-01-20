@@ -319,6 +319,16 @@ const CarListItem = ({
           navigation.navigate('CallMeBackScreen', {
             dealerCustom: dealerList[car.dealer.id],
             goBack: true,
+            car: {
+              brand: get(car, 'brand.name', ''),
+              model: get(car, 'model', ''),
+              complectation: get(car, 'complectation.name'),
+              year: get(car, 'year'),
+              dealer: get(car, 'dealer'),
+            },
+            region: dealerSelected.region,
+            carId: car.id.api,
+            isNewCar: false,
           });
         },
         onPressTD: () => {
