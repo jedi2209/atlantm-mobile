@@ -24,6 +24,7 @@ const baseRequestParams = {
 };
 
 export default {
+  headers,
   fetchDealers() {
     return this.request('/dealer/info/get/', baseRequestParams);
   },

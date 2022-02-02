@@ -35,6 +35,9 @@ export const dayMonthYear = date =>
 export const dayMonthYearTime = date =>
   date ? moment(date).format('D.MM.YYYY, HH:mm') : null;
 
+export const humanDate = date =>
+  date ? moment(date).format('DD MMMM в HH:mm') : null;
+
 export const substructMonth = () =>
   moment().subtract(1, 'months').format('YYYY-MM-DD');
 
