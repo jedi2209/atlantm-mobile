@@ -13,6 +13,7 @@ export const STORE_LINK = {
 };
 
 export const API_MAIN_URL = 'https://api.atlantm.com/v1';
+export const CHAT_MAIN_SOCKET = 'wss://livechat.atlantm.com/v1';
 
 export const SENTRY_DSN =
   'https://2e35f2a2455b4a3d97a1687270845d33@sentry.io/219899';
