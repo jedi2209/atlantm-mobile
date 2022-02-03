@@ -75,42 +75,42 @@ export const actionSetAvailableNaviApps = availableNaviApps => {
   };
 };
 
-export const actionChatSend = props => {
+export const actionChatIDSave = senderID => {
   return dispatch => {
     // dispatch({
     //   type: CALL_ME__REQUEST,
     //   payload: {...props},
     // });
-    return API.chatSendMessage(props)
-      .then(res => {
-        const {error, status} = res;
-        if (status !== 'success') {
-          return dispatch({
-            type: CONTACTS_CHAT_SEND__FAIL,
-            payload: {
-              code: error.code,
-              error: error.message,
-            },
-          });
-        }
+    // return API.chatSendMessage(props)
+    //   .then(res => {
+    //     const {error, status} = res;
+    //     if (status !== 'success') {
+    //       return dispatch({
+    //         type: CONTACTS_CHAT_SEND__FAIL,
+    //         payload: {
+    //           code: error.code,
+    //           error: error.message,
+    //         },
+    //       });
+    //     }
 
         return dispatch({
           type: CONTACTS_CHAT_SEND__SUCCESS,
           payload: {
-            session: res.data.session,
+            session: senderID,
           }
         });
-      })
-      .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage('chatSendMessage API.chatSendMessage error');
-        return dispatch({
-          type: CONTACTS_CHAT_SEND__FAIL,
-          payload: {
-            error: error.message,
-            code: error.code,
-          },
-        });
-      });
+      // })
+      // .catch(error => {
+      //   Sentry.captureException(error);
+      //   Sentry.captureMessage('chatSendMessage API.chatSendMessage error');
+      //   return dispatch({
+      //     type: CONTACTS_CHAT_SEND__FAIL,
+      //     payload: {
+      //       error: error.message,
+      //       code: error.code,
+      //     },
+      //   });
+      // });
   };
 };

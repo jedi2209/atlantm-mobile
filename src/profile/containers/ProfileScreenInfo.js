@@ -394,7 +394,7 @@ class ProfileScreenInfo extends Component {
   };
 
   renderAdditionalPurchase = () => {
-    if (this.props.insurance || this.props.additionalPurchase) {
+    if (this.props.insurance && this.props.insurance.length || this.props.additionalPurchase && this.props.additionalPurchase.length) {
       return (
       <TouchableOpacity
         style={styles.bonusButtonWrapper}
