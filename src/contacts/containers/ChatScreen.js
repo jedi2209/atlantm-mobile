@@ -6,16 +6,14 @@ import {
     StyleSheet,
   } from 'react-native';
 
-
-
-// import {actionChatSend} from '../actions';
+import {actionChatIDSave} from '../actions';
 
 import { Chat, MessageType, defaultTheme } from '@flyerhq/react-native-chat-ui';
 import {connect} from 'react-redux';
 import PushNotifications from '../../core/components/PushNotifications';
 import API from '../../utils/api';
 import md5 from '../../utils/md5';
-import {humanDate} from '../../utils/date';
+import {time} from '../../utils/date';
 import {CHAT_MAIN_SOCKET} from '../../core/const';
 
 import styleConst from '../../core/style-const';
@@ -30,6 +28,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: styleConst.font.medium,
     marginBottom: 10,
+  },
+  userName: {
+    color: styleConst.color.white,
+    textAlign: 'right',
   },
   authorText: {
     color: 'black',
@@ -54,6 +56,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontFamily: styleConst.font.light,
     fontStyle: 'italic',
+    textAlign: 'right'
   },
   customMessageView: {
     paddingHorizontal: 10,
@@ -73,7 +76,7 @@ const mapStateToProps = ({dealer, profile, contacts}) => {
 };
 
 const mapDispatchToProps = {
-  // actionChatSend
+  actionChatIDSave
 };
 
 const uuidv4 = () => {
@@ -101,10 +104,11 @@ function connectSocket() {
 const intervalSecondsMini = 20;
 const intervalMiliSeconds = intervalSecondsMini * 100;
 
-const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
+const ChatScreen = ({dealer, profile, session, actionChatIDSave}) => {
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loadingSocket, setLoadingSocket] = useState(true);
+  const [loadingHistory, setLoadingHistory] = useState(true);
 
   const userAtlantM = {
     id: '06c33e8b-e835-4736-80f4-63f44b66666c',
@@ -114,6 +118,7 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
   };
 
   const userTmp = {
+    "id": session,
     "name": [get(profile, 'login.NAME', get(profile, 'name')), get(profile, 'login.LAST_NAME', null)].join(' '),
     "avatarUrl": get(profile, 'login.UF_CRM_1639655792'),
     // "URL": "https://www.yandex.ru/",
@@ -127,11 +132,11 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
 
   chatSocket.onopen = () => {
     // connection opened
-    setLoading(false);
+    setLoadingSocket(false);
   };
   chatSocket.onclose = (e) => {
     // connection closed
-    // console.warn('onClose', e.code, e.reason);
+    // connectSocket();
   };
   chatSocket.onmessage = (e) => {
     // a message was received
@@ -175,7 +180,7 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
   };
 
   const renderTextMessage = ({author, createdAt, id, text, type}) => {
-    const date = humanDate(new Date(createdAt));
+    const date = time(new Date(createdAt));
     if (author.id === userAtlantM.id) { // ответ Атлант-М
       return (
         <View style={styles.textMessageView}>
@@ -187,7 +192,7 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
     }
     return (
       <View style={styles.textMessageView}>
-        <Text style={[styles.authorName, {color: styleConst.color.white}]}>{author?.firstName}</Text>
+        <Text style={[styles.authorName, styles.userName]}>{author?.firstName}</Text>
         <Text style={styles.messageText}>{text}</Text>
         <Text style={styles.dateText}>{date}</Text>
       </View>
@@ -242,17 +247,7 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
     }
   }
 
-  // const initChatData = (userID, isSubscribed = true) => {
-  //   if (!userID) {
-  //     setLoading(false);
-  //     return false;
-  //   }
-  //   //PushNotifications.addTag('ChatID', session);
-      // 
-  //   // if (get(res, 'data', []).length > messagesTmp.length) {
-  //   //   PushNotifications.showLocalMessage({title: 'Новое сообщение в чате', message: 'Наш оператор ответил вам'});
-  //   // }
-  // };
+  // PushNotifications.showLocalMessage({title: 'Новое сообщение в чате', message: 'Наш оператор ответил вам'});
 
   const getUserID = (userID) => {
     let senderID = md5(JSON.stringify(userID));
@@ -267,9 +262,7 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
     return senderID;
   }
 
-  const updateChat = useCallback((userID) => {
-
-    const senderID = getUserID(userID);
+  const updateChat = useCallback((senderID) => { // история чата
 
     PushNotifications.addTag('ChatID', 'AtlantAPI_' + senderID);
     let isSubscribedInitChatData = true;
@@ -279,13 +272,16 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
         return false;
       }
       let messagesTmp = [];
-      get(res, 'data', []).map(val => {
+      let historyMessages = get(res, 'data', false);
+      if (!historyMessages) {
+        historyMessages = [];
+      }
+      historyMessages.map(val => {
         let userIDFinal, userAvatar, messageText, userName = null;
         let messageType = 'text';
-        let typeCustom = null;
         switch (val.message.type) {
           case 'USER_MESSAGE':
-            userIDFinal = userID;
+            userIDFinal = senderID;
             userAvatar = get(profile, 'login.UF_CRM_1639655792');
             messageText = val.message.text;
             break;
@@ -319,6 +315,7 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
         }
         updateMessages(messagesTmp);
       });
+      setLoadingHistory(false);
     });
     return () => {
       isSubscribedInitChatData = false;
@@ -331,12 +328,13 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
 
   useEffect(() => {
     PushNotifications.deviceState().then(res => {
-        setUser({id: res.userId});
-        if (chatSocket && chatSocket.readyState !== WebSocket.OPEN) {
+        const senderID = getUserID(res.userId);
+        setUser({id: senderID});
+        actionChatIDSave(senderID);
+        if (chatSocket && (chatSocket.readyState !== WebSocket.OPEN && chatSocket.readyState !== WebSocket.CONNECTING)) {
           chatSocket = connectSocket();
         }
-        setLoading(false);
-        updateChat(res.userId);
+        updateChat(senderID);
     });
     return () => {
       if (chatSocket && chatSocket.readyState !== WebSocket.CLOSED) {
@@ -345,13 +343,12 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
     };
   }, []);
 
-  const updateMessages = (messages) => {
+  const updateMessages = (messages) => { // обновление истории чата из API
     const filteredData = removeDuplicates(messages, 'id');
-    // filteredData.reverse();
     setMessages(filteredData);
   }
 
-  const addMessageToList = (message) => {
+  const addMessageToList = (message) => { // добавление сообщение в переписку
     const messagesToAdd = [message, ...messages];
     const filteredData = removeDuplicates(messagesToAdd, 'id');
     setMessages(filteredData);
@@ -391,7 +388,7 @@ const ChatScreen = ({dealer, profile, actionChatSend, session}) => {
     addUserMessage(textMessage);
   };
 
-  if (loading || !user) {
+  if (loadingSocket || loadingHistory || !user) {
     return (
       <View style={{marginTop: '30%'}}>
         <ActivityIndicator

@@ -76,13 +76,17 @@ const showPrice = (price, country = 'BY', float = false) => {
   } else {
     price = parseInt(price, 10);
   }
-
+  
+  const USD = value => currencyJS(value, Object.assign({symbol: '$', pattern: `# !`}, options));
   const RUB = value => currencyJS(value, Object.assign({symbol: '₽', pattern: `#!`}, options));
   const BYN = value => currencyJS(value, Object.assign({symbol: 'BYN', pattern: `# !`}, options));
   const BYR = value => currencyJS(value, Object.assign({symbol: 'BYR', pattern: `# !`}, options));
   const UAH = value => currencyJS(value, Object.assign({symbol: '₴', pattern: `#!`}, options));
 
   switch (country.toLowerCase()) {
+    case 'usd':
+      result = USD(price).format();
+      break;
     case 'ru':
     case 'rub':
     case 'rur':
