@@ -1,4 +1,4 @@
-import {Platform, PermissionsAndroid, Alert, Linking} from 'react-native';
+import {Platform, PermissionsAndroid, Alert, Linking, AppState} from 'react-native';
 
 import OneSignal from 'react-native-onesignal';
 import {ONESIGNAL} from '../const';
@@ -73,12 +73,16 @@ export default {
 
   setNotificationWillShowInForegroundHandler() {
     OneSignal.setNotificationWillShowInForegroundHandler(notificationReceivedEvent => {
+      const appState = AppState.currentState;
       console.info("OneSignal: notification will show in foreground:", notificationReceivedEvent);
       let notification = notificationReceivedEvent.getNotification();
       console.info("notification: ", notification);
       const data = notification.additionalData
       console.info("additionalData: ", data);
       // Complete with null means don't show a notification.
+      if (appState === 'active' && data.target === 'chat') {
+        notification = null;
+      }
       notificationReceivedEvent.complete(notification);
     });
   },
@@ -105,14 +109,13 @@ export default {
     OneSignal.deleteTag(name);
   },
 
-  subscribeToTopic(topic, id) {
-    return this.checkPermission().then(isPermission => {
-      if (isPermission) {
-        OneSignal.disablePush(false);
-        OneSignal.sendTag(topic, id.toString());
-      }
-      return isPermission;
-    });
+  async subscribeToTopic(topic, id) {
+    const isPermission = await this.checkPermission();
+    if (isPermission) {
+      OneSignal.disablePush(false);
+      OneSignal.sendTag(topic, id.toString());
+    }
+    return isPermission;
   },
 
   unsubscribeFromTopic(topic) {
