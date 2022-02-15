@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {Text, View, Pressable, Platform, StyleSheet} from 'react-native';
+import {Text, View, Pressable, Platform, StyleSheet, ActivityIndicator} from 'react-native';
 import {OrientationLocker, PORTRAIT} from "react-native-orientation-locker";
 import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
@@ -143,17 +143,50 @@ export const Base = ({navigation, route}) => {
       <StackBase.Screen
         name="ChatScreen"
         component={ChatScreen}
-        options={
-          BigCloseButton(navigation, route, {
-          ...TransitionPresets.ModalTransition,
+        options={({route}) => ({
+          headerStyle: [
+            stylesHeader.resetBorder,
+            {
+              backgroundColor: styleConst.color.bg,
+            },
+          ],
+          headerBackTitleVisible: false,
+          headerBackVisible: false,
+          headerShadowVisible: false,
+          headerShown: true,
+          headerLeft: () => {
+            return ArrowBack(navigation, route, {
+              icon: 'md-close',
+              IconStyle: {
+                fontSize: 42,
+                width: 40,
+                color: '#222B45',
+              },
+            });
+          },
           presentation: 'modal',
           headerTransparent: true,
-          headerTitle: strings.ChatScreen.title,
+          headerTitle: () => {
+            return (
+              <View style={{flexDirection: 'row'}}>
+              <Text style={[stylesHeader.whiteHeaderTitle, {marginRight: 10}]} selectable={false}>
+                {strings.ChatScreen.title}
+              </Text>
+              <Text>{route?.params?.serviceMessage}</Text>
+              {route?.params?.status?.color ? (
+                <View style={{width: 10, height: 10, backgroundColor: route.params.status.color, marginTop: 5, borderRadius: 10,}} />
+              ) : (
+                <ActivityIndicator color={styleConst.color.blue} size={'small'} />
+              )}
+              </View>
+            );
+          },
           headerTitleStyle: [
             stylesHeader.transparentHeaderTitle,
             {color: '#222B45'},
           ],
-        })}
+          ...TransitionPresets.ModalTransition,
+          })}
       />
       <StackBase.Screen
         name="InfoList"

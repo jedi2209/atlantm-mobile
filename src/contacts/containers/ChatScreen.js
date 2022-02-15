@@ -5,12 +5,13 @@ import {
     Text,
     StyleSheet,
   } from 'react-native';
-
-import {actionChatIDSave} from '../actions';
-
 import { Chat, MessageType, defaultTheme } from '@flyerhq/react-native-chat-ui';
 import {connect} from 'react-redux';
 import PushNotifications from '../../core/components/PushNotifications';
+import { useFocusEffect } from '@react-navigation/native';
+
+import {actionChatIDSave} from '../actions';
+
 import API from '../../utils/api';
 import md5 from '../../utils/md5';
 import {time} from '../../utils/date';
@@ -94,21 +95,16 @@ const removeDuplicates = (array, key) => {
   }, []);
 };
 
-function connectSocket() {
-  const chatSocket = new WebSocket(CHAT_MAIN_SOCKET, 'AtlantMChat', {
-    headers: API.headers,
-  });
-  return chatSocket;
-}
+const intervalSecondsMini = 3;
+const intervalMiliSeconds = intervalSecondsMini * 1000;
 
-const intervalSecondsMini = 20;
-const intervalMiliSeconds = intervalSecondsMini * 100;
-
-const ChatScreen = ({dealer, profile, session, actionChatIDSave}) => {
-  const [messages, setMessages] = useState([]);
-  const [user, setUser] = useState({});
-  const [loadingSocket, setLoadingSocket] = useState(true);
-  const [loadingHistory, setLoadingHistory] = useState(true);
+const reconnectingSocket = () => {
+  let client;
+  let isConnected = false;
+  let reconnectOnClose = true;
+  let messageListeners = [];
+  let stateChangeListeners = [];
+  let interval = null;
 
   const userAtlantM = {
     id: '06c33e8b-e835-4736-80f4-63f44b66666c',
@@ -116,6 +112,162 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave}) => {
     name: 'Атлант-М',
     imageUrl: 'https://cdn.atlantm.com/logo/Blue-square-256.png',
   };
+
+  const on = (fn) => {
+    messageListeners.push(fn);
+  }
+
+  const off = (fn) => {
+    messageListeners = messageListeners.filter(l => l !== fn);
+  }
+
+  const onStateChange = (fn) => {
+    stateChangeListeners.push(fn);
+    return () => {
+      stateChangeListeners = stateChangeListeners.filter(l => l !== fn);
+    };
+  }
+
+  const addMessageToList = (message) => { // добавление сообщение в переписку
+    messageListeners.forEach(fn => fn(message));
+  }
+
+  const updateMessages = (messages) => { // обновление истории чата из API
+    const filteredData = removeDuplicates(messages, 'id'); 
+    messageListeners.forEach(fn => fn(filteredData));
+  }
+
+  const start = () => {
+    client = new WebSocket(CHAT_MAIN_SOCKET, 'AtlantMChat', {
+      headers: API.headers,
+    });
+
+    client.onopen = (e) => {
+      console.warn('e onopen', e, client);
+      isConnected = true;
+      stateChangeListeners.forEach(fn => fn(true));
+      if (interval) {
+        clearInterval(interval);
+      }
+      interval = setInterval(() => {
+        client.send(JSON.stringify({
+          "action" : "statusPing"
+        }));
+      }, intervalMiliSeconds*3);
+    }
+
+    const close = client.close;
+
+    // Close without reconnecting;
+    client.close = () => {
+      reconnectOnClose = false;
+      close.call(client);
+      if (interval) {
+        clearInterval(interval);
+      }
+    }
+
+    client.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      console.warn('data', data);
+      if (data.body && data.body.Status) {
+        let messageText = '';
+        let type = 'text';
+        switch (data.body.Status) {
+          case 4: // Оператор закончил ввод сообщения
+          break;
+          case 3: // Оператор пишет сообщение
+          break;
+          case 5: // Оператор вышел из чата
+            messageText = data.body.Text;
+            userAtlantM.userEmail = data.body.UserEmail;
+            type = 'custom';
+            break;
+          case 2: // Сообщение
+            messageText = data.body.Text;
+            userAtlantM.userEmail = data.body.UserEmail;
+            break;
+        }
+        if (messageText) {
+            let message = {
+                author: userAtlantM,
+                createdAt: Date.now(),
+                id: uuidv4(),
+                text: messageText,
+                type
+            };
+            if (type == 'custom') {
+              message.typeCustom = 'status' + data.body.Status;
+            }
+            addMessageToList(message);
+        }
+      }
+    }
+
+    client.onerror = (e) => console.error(e);
+
+    client.onclose = () => {
+
+      isConnected = false;
+      stateChangeListeners.forEach(fn => fn(false));
+
+      if (!reconnectOnClose) {
+        console.warn('===== ws closed by app');
+        return;
+      }
+
+      console.warn('===== ws closed by server');
+
+      if (interval) {
+        clearInterval(interval);
+      }
+
+      setTimeout(start, intervalMiliSeconds);
+    }
+  }
+
+  start();
+
+  return {
+    on,
+    off,
+    onStateChange,
+    close: () => client.close(),
+    getClient: () => client,
+    isConnected: () => isConnected,
+    addMessageToList,
+    updateMessages,
+    userAtlantM,
+  };
+}
+
+const chatSocket = reconnectingSocket();
+
+const useMessages = () => {
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    function handleMessage(message) {
+      if (typeof message === 'object' && message.length) {
+        setMessages(message);
+      } else {
+        setMessages([message, ...messages]);
+      }
+    }
+    chatSocket.on(handleMessage);
+    return () => chatSocket.off(handleMessage);
+  }, [messages, setMessages]);
+
+  return messages;
+}
+
+const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) => {
+  const [user, setUser] = useState({});
+  const [loadingHistory, setLoadingHistory] = useState(true);
+
+  const messages = useMessages();
+
+  const [isConnected, setIsConnected] = useState(chatSocket.isConnected());
 
   const userTmp = {
     "id": session,
@@ -126,62 +278,32 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave}) => {
     "email": get(profile, 'login.EMAIL[0].VALUE', get(profile, 'email')),
   };
 
-  if (typeof chatSocket === 'undefined' || chatSocket.readyState === WebSocket.CLOSED) {
-    chatSocket = connectSocket();
-  }
+  useEffect(() => {
+    return chatSocket.onStateChange(setIsConnected);
+  }, [setIsConnected]);
 
-  chatSocket.onopen = () => {
-    // connection opened
-    setLoadingSocket(false);
-  };
-  chatSocket.onclose = (e) => {
-    // connection closed
-    // connectSocket();
-  };
-  chatSocket.onmessage = (e) => {
-    // a message was received
-    const data = JSON.parse(e.data);
-    if (data.body.Status) {
-      let messageText = '';
-      let type = 'text';
-      switch (data.body.Status) {
-        case 4: // Оператор закончил ввод сообщения
-        break;
-        case 3: // Оператор пишет сообщение
-        break;
-        case 5: // Оператор вышел из чата
-          messageText = data.body.Text;
-          userAtlantM.userEmail = data.body.UserEmail;
-          type = 'custom';
-          break;
-        case 2: // Сообщение
-          messageText = data.body.Text;
-          userAtlantM.userEmail = data.body.UserEmail;
-          break;
+  useEffect(() => {
+    navigation.setParams({
+      status: {
+        connected: isConnected,
+        color: isConnected ? styleConst.color.green : styleConst.color.red
       }
-      if (messageText) {
-          let message = {
-              author: userAtlantM,
-              createdAt: Date.now(),
-              id: uuidv4(),
-              text: messageText,
-              type
-          };
-          if (type == 'custom') {
-            message.typeCustom = 'status' + data.body.Status;
-          }
-          addMessageToList(message);
+    });
+  }, [isConnected]);
+
+  useFocusEffect(
+    useCallback(() => {
+      unsubscribe = () => {};
+      if (user && user.id) {
+        unsubscribe = updateChat(user.id);
       }
-    }
-  };
-  chatSocket.onerror = (e) => {
-    // an error occurred
-        // console.warn('onError', e.message);
-  };
+      return () => unsubscribe();
+    }, [user])
+  );
 
   const renderTextMessage = ({author, createdAt, id, text, type}) => {
     const date = time(new Date(createdAt));
-    if (author.id === userAtlantM.id) { // ответ Атлант-М
+    if (author.id === chatSocket.userAtlantM.id) { // ответ Атлант-М
       return (
         <View style={styles.textMessageView}>
           <Text style={styles.authorName}>{author?.firstName}</Text>
@@ -286,13 +408,13 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave}) => {
             messageText = val.message.text;
             break;
           case 'AGENT_MESSAGE':
-            userIDFinal = userAtlantM.id;
-            userAvatar = userAtlantM.imageUrl;
+            userIDFinal = chatSocket.userAtlantM.id;
+            userAvatar = chatSocket.userAtlantM.imageUrl;
             messageText = val.message.text;
             break;
           case 'AGENT_STOP_CHAT':
-            userIDFinal = userAtlantM.id;
-            userAvatar = userAtlantM.imageUrl;
+            userIDFinal = chatSocket.userAtlantM.id;
+            userAvatar = chatSocket.userAtlantM.imageUrl;
             messageType = 'custom';
             messageText = val.message.text;
             break;
@@ -313,46 +435,27 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave}) => {
         if (textMessage.typeCustom !== 'AGENT_STOP_CHAT') { // todo: Убрать когда включим служебные оповещения
           messagesTmp.push(textMessage);
         }
-        updateMessages(messagesTmp);
+        chatSocket.updateMessages(messagesTmp);
       });
       setLoadingHistory(false);
     });
     return () => {
       isSubscribedInitChatData = false;
-      PushNotifications.removeTag('ChatID');
-      if (chatSocket && chatSocket.readyState !== WebSocket.CLOSED) {
-        chatSocket.close();
-      }
+      // PushNotifications.removeTag('ChatID');
     }
   }, [user]);
 
   useEffect(() => {
-    PushNotifications.deviceState().then(res => {
+    if (!user?.id) {
+      PushNotifications.deviceState().then(res => {
         const senderID = getUserID(res.userId);
         setUser({id: senderID});
         actionChatIDSave(senderID);
-        if (chatSocket && (chatSocket.readyState !== WebSocket.OPEN && chatSocket.readyState !== WebSocket.CONNECTING)) {
-          chatSocket = connectSocket();
-        }
-        updateChat(senderID);
-    });
+      });
+    }
     return () => {
-      if (chatSocket && chatSocket.readyState !== WebSocket.CLOSED) {
-        chatSocket.close();
-      }
     };
   }, []);
-
-  const updateMessages = (messages) => { // обновление истории чата из API
-    const filteredData = removeDuplicates(messages, 'id');
-    setMessages(filteredData);
-  }
-
-  const addMessageToList = (message) => { // добавление сообщение в переписку
-    const messagesToAdd = [message, ...messages];
-    const filteredData = removeDuplicates(messagesToAdd, 'id');
-    setMessages(filteredData);
-  }
 
   const addUserMessage = (message) => {
     let messageToSend = {
@@ -364,19 +467,17 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave}) => {
             }
         }
     };
-
-    if (chatSocket && chatSocket.readyState === WebSocket.OPEN) {
-        chatSocket.send(JSON.stringify(messageToSend));
-    } else {
-        // console.warn('chatSocket.readyState', chatSocket.readyState);
-    }
-    addMessageToList(message);
+    chatSocket.addMessageToList(message);
+    chatSocket.getClient().send(JSON.stringify(messageToSend));
   };
 
   const handleSendPress = (message) => {
-    const userData = {
+    let userData = {
       id: user.id,
       firstName: userTmp.name,
+    }
+    if (userTmp.email) {
+      userData.email = userTmp.email;
     }
     const textMessage = {
       author: userData,
@@ -384,11 +485,12 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave}) => {
       id: uuidv4(),
       text: message.text,
       type: 'text',
+      typeCustom: 'USER_MESSAGE',
     };
     addUserMessage(textMessage);
   };
 
-  if (loadingSocket || loadingHistory || !user) {
+  if (!isConnected || loadingHistory || !user) {
     return (
       <View style={{marginTop: '30%'}}>
         <ActivityIndicator
