@@ -80,6 +80,7 @@ export const actionSetCarHistoryLevel2 = hash => {
 };
 
 export const actionLogout = () => {
+  PushNotifications.removeTag('ChatID');
   return dispatch => {
     dispatch({type: LOGOUT});
   };
