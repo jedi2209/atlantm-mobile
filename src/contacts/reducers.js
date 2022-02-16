@@ -11,6 +11,8 @@ import {
   CONTACTS_CHAT_SEND__SUCCESS,
   CONTACTS_CHAT_SEND__FAIL,
 } from './actionTypes';
+import {LOGOUT} from '../profile/actionTypes';
+
 import {get} from 'lodash';
 
 const isСallMeRequest = (state = false, action) => {
@@ -55,6 +57,8 @@ const chatID = (state = null, action) => {
       return action.payload.session;
     case REHYDRATE:
       return get(action.payload, 'contacts.chat.id', null);
+    case LOGOUT:
+      return null;
     default:
       return state;
   }

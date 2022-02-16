@@ -441,7 +441,6 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) =>
     });
     return () => {
       isSubscribedInitChatData = false;
-      // PushNotifications.removeTag('ChatID');
     }
   }, [user]);
 
