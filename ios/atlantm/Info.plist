@@ -53,8 +53,6 @@
 	<string>248</string>
 	<key>FacebookAdvertiserIDCollectionEnabled</key>
 	<true/>
-	<key>FacebookAppID</key>
-	<string>423573815015675</string>
 	<key>FacebookAutoLogAppEventsEnabled</key>
 	<true/>
 	<key>FacebookDisplayName</key>
@@ -80,6 +78,7 @@
 		<string>comgooglemaps</string>
 		<string>comgooglemaps-x-callback</string>
 		<string>maps</string>
+		<string>fb423573815015675</string>
 		<string>fbapi</string>
 		<string>fb-messenger-share-api</string>
 		<string>fbauth2</string>

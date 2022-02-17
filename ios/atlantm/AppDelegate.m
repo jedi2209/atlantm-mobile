@@ -4,6 +4,7 @@
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import <React/RCTLinkingManager.h>
 
 // modules
 #import "RNSplashScreen.h"
@@ -70,20 +71,26 @@ static void InitializeFlipper(UIApplication *application) {
             openURL:(NSURL *)url
             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
 
+  if ([[FBSDKApplicationDelegate sharedInstance] application:application openURL:url options:options]) {
+    return YES;
+  }
+
   BOOL handled = [[FBSDKApplicationDelegate sharedInstance]
                   application:application
                   openURL:url
                   sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
                   annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
-                ] || [RNGoogleSignin application:application openURL:url options:options]
+                  ]
+                || [RCTLinkingManager application:application openURL:url options:options] 
+                || [RNGoogleSignin application:application openURL:url options:options]
                 || [VKSdk processOpenURL:url fromApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]];
   // Add any custom logic here.
   return handled; 
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-  [FBSDKAppEvents activateApp];
-}
+// - (void)applicationDidBecomeActive:(UIApplication *)application {
+//   [FBSDKAppEvents activateApp];
+// }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
