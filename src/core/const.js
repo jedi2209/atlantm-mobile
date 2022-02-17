@@ -25,3 +25,9 @@ export const ONESIGNAL = 'XXXX';
 export const VK_APP_ID = XXXX;
 
 export const FB_APP_ID = XXXX;
+
+export const AWS_CONFIG = {
+  accessKeyId: 'XXXX',
+  secretAccessKey: 'XXXX/XXXX',
+  region: 'eu-west-1',
+};

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback, useRef} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
     View,
     ActivityIndicator,
@@ -15,6 +15,7 @@ import {actionChatIDSave} from '../actions';
 import API from '../../utils/api';
 import md5 from '../../utils/md5';
 import {time} from '../../utils/date';
+import {putData} from '../../utils/aws';
 import {CHAT_MAIN_SOCKET} from '../../core/const';
 
 import styleConst from '../../core/style-const';
@@ -98,13 +99,16 @@ const removeDuplicates = (array, key) => {
 const intervalSecondsMini = 3;
 const intervalMiliSeconds = intervalSecondsMini * 1000;
 
+
 const reconnectingSocket = () => {
   let client;
   let isConnected = false;
   let reconnectOnClose = true;
   let messageListeners = [];
   let stateChangeListeners = [];
+  let socketIDListeners = [];
   let interval = null;
+  let socketID = null;
 
   const userAtlantM = {
     id: '06c33e8b-e835-4736-80f4-63f44b66666c',
@@ -125,6 +129,13 @@ const reconnectingSocket = () => {
     stateChangeListeners.push(fn);
     return () => {
       stateChangeListeners = stateChangeListeners.filter(l => l !== fn);
+    };
+  }
+
+  const onSocketID = (fn) => {
+    socketIDListeners.push(fn);
+    return () => {
+      socketIDListeners = socketIDListeners.filter(l => l !== fn);
     };
   }
 
@@ -170,6 +181,10 @@ const reconnectingSocket = () => {
     client.onmessage = (e) => {
       const data = JSON.parse(e.data);
       console.warn('data', data);
+      if (data && data.connectionId) {
+        socketID = data.connectionId;
+        socketIDListeners.forEach(fn => fn(data.connectionId));
+      }
       if (data.body && data.body.Status) {
         let messageText = '';
         let type = 'text';
@@ -210,6 +225,7 @@ const reconnectingSocket = () => {
 
       isConnected = false;
       stateChangeListeners.forEach(fn => fn(false));
+      socketIDListeners.forEach(fn => fn(false));
 
       if (!reconnectOnClose) {
         console.warn('===== ws closed by app');
@@ -232,9 +248,12 @@ const reconnectingSocket = () => {
     on,
     off,
     onStateChange,
+    onSocketID,
     close: () => client.close(),
     getClient: () => client,
     isConnected: () => isConnected,
+    socketID: () => socketID,
+    start: () => start,
     addMessageToList,
     updateMessages,
     userAtlantM,
@@ -262,12 +281,87 @@ const useMessages = () => {
 }
 
 const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) => {
-  const [user, setUser] = useState({});
-  const [loadingHistory, setLoadingHistory] = useState(true);
-
   const messages = useMessages();
-
+  const [user, setUser] = useState({});
+  const [socketID, setSocketID] = useState(chatSocket.socketID());
+  const [loadingHistory, setLoadingHistory] = useState(true);
   const [isConnected, setIsConnected] = useState(chatSocket.isConnected());
+
+  // const checkSocket = async (socket) => {
+  //   console.warn('checkSocket socket', socket);
+  //   if (!socket || (socket && socket.readyState !== WebSocket.OPEN))
+  //   {
+  //     chatSocket.current = connectSocket();
+  //     chatSocket.current.onopen = (e) => {
+  //         // connection opened
+  //         setLoadingSocket(false);
+  //         setIsConnected(true);
+  //         setTimeout(() => {
+  //           chatSocket.current.send(JSON.stringify({
+  //             "action" : "statusPing"
+  //           }));
+  //         }, 2000);
+  //         // if (pingInterval && pingInterval.current) {
+  //         //   clearInterval(pingInterval.current);
+  //         // }
+  //         // pingInterval.current = setInterval(() => {
+  //         //   socket.send(JSON.stringify({
+  //         //     "action" : "statusPing"
+  //         //   }));
+  //         // }, intervalMiliSeconds);
+  //     };
+  //     chatSocket.current.onclose = (e) => {
+  //       // connection closed
+  //       console.warn('connection closed', e);
+  //       setIsConnected(false);
+  //     };
+  //     chatSocket.current.onmessage = (e) => {
+  //       // a message was received
+  //       const data = JSON.parse(e.data);
+  //       console.warn('data', data, user);
+  //       if (data.connectionId && user.id) {
+  //         setSocketID(data.connectionId);
+  //       }
+  //       if (data.body && data.body.Status) {
+  //         let messageText = '';
+  //         let type = 'text';
+  //         switch (data.body.Status) {
+  //           case 4: // Оператор закончил ввод сообщения
+  //           break;
+  //           case 3: // Оператор пишет сообщение
+  //           break;
+  //           case 5: // Оператор вышел из чата
+  //             messageText = data.body.Text;
+  //             userAtlantM.userEmail = data.body.UserEmail;
+  //             type = 'custom';
+  //             break;
+  //           case 2: // Сообщение
+  //             messageText = data.body.Text;
+  //             userAtlantM.userEmail = data.body.UserEmail;
+  //             break;
+  //         }
+  //         if (messageText) {
+  //           let message = {
+  //               author: userAtlantM,
+  //               createdAt: Date.now(),
+  //               id: uuidv4(),
+  //               text: messageText,
+  //               type
+  //           };
+  //           if (type == 'custom') {
+  //             message.typeCustom = 'status' + data.body.Status;
+  //           }
+  //           addMessageToList(message);
+  //         }
+  //       }
+  //     };
+  //     chatSocket.current.onerror = (e) => {
+  //       // an error occurred
+  //           console.warn('onError', e.message);
+  //     };
+  //     return chatSocket.current;
+  //   }
+  // }
 
   const userTmp = {
     "id": session,
@@ -283,23 +377,18 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) =>
   }, [setIsConnected]);
 
   useEffect(() => {
-    navigation.setParams({
-      status: {
-        connected: isConnected,
-        color: isConnected ? styleConst.color.green : styleConst.color.red
-      }
-    });
-  }, [isConnected]);
+    return chatSocket.onSocketID(setSocketID);
+  }, [setSocketID]);
 
-  useFocusEffect(
-    useCallback(() => {
-      let unsubscribe = () => {};
-      if (user && user.id) {
-        unsubscribe = updateChat(user.id);
-      }
-      return () => unsubscribe();
-    }, [user])
-  );
+  useEffect(() => {
+    if (user.id && socketID) {
+      putData('jivochat', {
+        connectionid: 'AtlantAPI_' + user.id,
+        socketID: socketID,
+        TTL: new Date().getTime() + 3600,
+      });
+    }
+  }, [socketID, user.id]);
 
   const renderTextMessage = ({author, createdAt, id, text, type}) => {
     const date = time(new Date(createdAt));
@@ -345,7 +434,6 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) =>
     switch (message?.typeCustom) {
       case 'AGENT_STOP_CHAT':
         return (<View style={{overflow: 'hidden'}}>{child}</View>);
-        break;
       case 'USER_MESSAGE':
       case 'AGENT_MESSAGE':
       default:
@@ -364,7 +452,6 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) =>
               overflow: 'hidden',
             }}>{child}</View>
         )
-        break;
     }
   }
 
@@ -388,7 +475,7 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) =>
     PushNotifications.addTag('ChatID', 'AtlantAPI_' + senderID);
     let isSubscribedInitChatData = true;
 
-    API.chatData(senderID).then(res => {
+    API.chatData(senderID).then((res) => {
       if (!isSubscribedInitChatData) {
         return false;
       }
@@ -398,7 +485,7 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) =>
         historyMessages = [];
       }
       historyMessages.map(val => {
-        let userIDFinal, userAvatar, messageText, userName = null;
+        let userIDFinal, userAvatar, messageText = null;
         let messageType = 'text';
         switch (val.message.type) {
           case 'USER_MESSAGE':
@@ -440,20 +527,38 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) =>
     });
     return () => {
       isSubscribedInitChatData = false;
+      PushNotifications.removeTag('ChatID');
+      console.warn('chatSocket222', chatSocket.getClient());
+      chatSocket.close();
     }
   }, [user]);
 
   useEffect(() => {
+    console.warn('useEffect');
+    chatSocket.start();
     if (!user?.id) {
       PushNotifications.deviceState().then(res => {
+        setLoadingHistory(true);
         const senderID = getUserID(res.userId);
         setUser({id: senderID});
         actionChatIDSave(senderID);
+        updateChat(senderID);
       });
     }
-    return () => {
+    return () => { // закрытие экрана чата 2
+      chatSocket.close();
+      // setIsConnected(false);
     };
   }, []);
+
+  useEffect(() => {
+    navigation.setParams({
+      status: {
+        connected: isConnected,
+        color: isConnected ? styleConst.color.green : styleConst.color.red
+      }
+    });
+  }, [isConnected]);
 
   const addUserMessage = (message) => {
     let messageToSend = {
@@ -465,17 +570,15 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) =>
             }
         }
     };
+
     chatSocket.addMessageToList(message);
     chatSocket.getClient().send(JSON.stringify(messageToSend));
   };
 
   const handleSendPress = (message) => {
-    let userData = {
+    const userData = {
       id: user.id,
       firstName: userTmp.name,
-    }
-    if (userTmp.email) {
-      userData.email = userTmp.email;
     }
     const textMessage = {
       author: userData,
@@ -483,7 +586,6 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) =>
       id: uuidv4(),
       text: message.text,
       type: 'text',
-      typeCustom: 'USER_MESSAGE',
     };
     addUserMessage(textMessage);
   };
