@@ -23,3 +23,5 @@ export const APP_EMAIL = 'atlant-m.corp@atlantm.com';
 export const ONESIGNAL = 'XXXX';
 
 export const VK_APP_ID = XXXX;
+
+export const FB_APP_ID = XXXX;

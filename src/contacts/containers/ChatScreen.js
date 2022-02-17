@@ -330,7 +330,6 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) =>
             <Text style={styles.customText}>{text}</Text>
           </View>
         );
-        break;
       default:
         break;
     }

@@ -10,14 +10,15 @@ import {connectSocialMedia} from '../actions';
 import styleConst from '../../core/style-const';
 
 // imports for auth
-import {AccessToken, GraphRequestManager} from 'react-native-fbsdk';
-import {LoginManager} from 'react-native-fbsdk';
+import {AccessToken, GraphRequestManager, LoginManager, Settings} from 'react-native-fbsdk-next';
 import VKLogin from 'react-native-vkontakte-login';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {
   appleAuth,
   AppleButton,
 } from '@invertase/react-native-apple-authentication';
+
+import {FB_APP_ID} from '../../core/const';
 
 GoogleSignin.configure({
   scopes: ['https://www.googleapis.com/auth/userinfo.email'], // what API you want to access on behalf of the user, default is email and profile
@@ -93,6 +94,8 @@ class SocialAuth extends PureComponent {
 
   _connectFB = () => {
     this.setState({isSigninInProgress: true});
+    Settings.initializeSDK();
+    Settings.setAppID(FB_APP_ID);
     LoginManager.logInWithPermissions(['email']).then(
       function (result) {
         if (result.isCancelled) {
