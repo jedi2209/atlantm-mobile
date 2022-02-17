@@ -21,7 +21,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import Form from '../../core/components/Form/Form';
 
 // imports for auth
-import {LoginManager} from 'react-native-fbsdk';
+import {LoginManager} from 'react-native-fbsdk-next';
 import Facebook from '../auth/Facebook';
 import Google from '../auth/Google';
 import VK from '../auth/VK';

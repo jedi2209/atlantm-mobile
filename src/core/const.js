@@ -23,3 +23,5 @@ export const APP_EMAIL = 'atlant-m.corp@atlantm.com';
 export const ONESIGNAL = '2094a3e1-3c9a-479d-90ae-93adfcd15dab';
 
 export const VK_APP_ID = 7255802;
+
+export const FB_APP_ID = 423573815015675;

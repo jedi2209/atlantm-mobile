@@ -2,9 +2,11 @@ import {
   AccessToken,
   GraphRequest,
   GraphRequestManager,
-} from 'react-native-fbsdk';
+  LoginManager,
+  Settings
+} from 'react-native-fbsdk-next';
 
-import {LoginManager} from 'react-native-fbsdk';
+import {FB_APP_ID} from '../../core/const';
 
 LoginManager.logOut();
 
@@ -50,6 +52,9 @@ export default {
   },
 
   signIn(callbackFn) {
+    Settings.initializeSDK();
+    Settings.setAppID(FB_APP_ID);
+
     LoginManager.logInWithPermissions(['email']).then(
       function (result) {
         if (result.isCancelled) {
