@@ -293,7 +293,7 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) =>
 
   useFocusEffect(
     useCallback(() => {
-      unsubscribe = () => {};
+      let unsubscribe = () => {};
       if (user && user.id) {
         unsubscribe = updateChat(user.id);
       }
