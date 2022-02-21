@@ -1,0 +1,26 @@
+[
+    {
+        "type": "Directory",
+        "name": "/Users/akvasha/Sites/Atlant-M/atlantm-mobile/ios",
+        "parent_id": null,
+        "workspaceRoot": "/Users/akvasha/Sites/Atlant-M/atlantm-mobile",
+        "workspacePath": "ios",
+        "id": "NoEzMtOiWSLc04J7"
+    },
+    {
+        "type": "Directory",
+        "name": "/Users/akvasha/Sites/Atlant-M/atlantm-mobile/src",
+        "parent_id": null,
+        "workspaceRoot": "/Users/akvasha/Sites/Atlant-M/atlantm-mobile",
+        "workspacePath": "src",
+        "id": "KE5DPLpOaS91c2Xx"
+    },
+    {
+        "type": "Directory",
+        "name": "/Users/akvasha/Sites/Atlant-M/atlantm-mobile/android",
+        "parent_id": null,
+        "workspaceRoot": "/Users/akvasha/Sites/Atlant-M/atlantm-mobile",
+        "workspacePath": "android",
+        "id": "gVZq1QhdXmPsCAwD"
+    }
+]

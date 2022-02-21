@@ -154,7 +154,6 @@ const reconnectingSocket = () => {
     });
 
     client.onopen = (e) => {
-      console.warn('e onopen', e, client);
       isConnected = true;
       stateChangeListeners.forEach(fn => fn(true));
       if (interval) {
@@ -164,7 +163,7 @@ const reconnectingSocket = () => {
         client.send(JSON.stringify({
           "action" : "statusPing"
         }));
-      }, intervalMiliSeconds*3);
+      }, intervalMiliSeconds*5);
     }
 
     const close = client.close;
@@ -180,7 +179,6 @@ const reconnectingSocket = () => {
 
     client.onmessage = (e) => {
       const data = JSON.parse(e.data);
-      console.warn('data', data);
       if (data && data.connectionId) {
         socketID = data.connectionId;
         socketIDListeners.forEach(fn => fn(data.connectionId));
@@ -528,14 +526,11 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) =>
     return () => {
       isSubscribedInitChatData = false;
       PushNotifications.removeTag('ChatID');
-      console.warn('chatSocket222', chatSocket.getClient());
-      chatSocket.close();
+      // chatSocket.close();
     }
   }, [user]);
 
   useEffect(() => {
-    console.warn('useEffect');
-    chatSocket.start();
     if (!user?.id) {
       PushNotifications.deviceState().then(res => {
         setLoadingHistory(true);
@@ -546,7 +541,7 @@ const ChatScreen = ({dealer, profile, session, actionChatIDSave, navigation}) =>
       });
     }
     return () => { // закрытие экрана чата 2
-      chatSocket.close();
+      // chatSocket.close();
       // setIsConnected(false);
     };
   }, []);
