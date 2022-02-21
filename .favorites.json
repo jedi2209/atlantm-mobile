@@ -22,5 +22,13 @@
         "workspaceRoot": "/Users/akvasha/Sites/Atlant-M/atlantm-mobile",
         "workspacePath": "android",
         "id": "gVZq1QhdXmPsCAwD"
+    },
+    {
+        "type": "File",
+        "name": "/Users/akvasha/Sites/Atlant-M/atlantm-mobile/package.json",
+        "parent_id": null,
+        "workspaceRoot": "/Users/akvasha/Sites/Atlant-M/atlantm-mobile",
+        "workspacePath": "package.json",
+        "id": "qzNKpTo5Lrd0fDnM"
     }
 ]
