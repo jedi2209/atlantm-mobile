@@ -22,9 +22,9 @@ export const APP_EMAIL = 'atlant-m.corp@atlantm.com';
 
 export const ONESIGNAL = '2094a3e1-3c9a-479d-90ae-93adfcd15dab';
 
-export const VK_APP_ID = 7255802;
+export const VK_APP_ID = '7255802';
 
-export const FB_APP_ID = 423573815015675;
+export const FB_APP_ID = '423573815015675';
 
 export const AWS_CONFIG = {
   accessKeyId: 'AKIAZDKV34JAX4U7TWK4',
