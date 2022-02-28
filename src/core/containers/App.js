@@ -7,6 +7,8 @@ import * as NavigationService from '../../navigation/NavigationService';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import getTheme from '../../../native-base-theme/components';
 
+import {firebase} from '@react-native-firebase/app-check';
+
 // redux
 import {connect} from 'react-redux';
 import {store} from '../store';
@@ -147,6 +149,8 @@ const App = props => {
           OneSignal.disablePush(true);
         }
       });
+    } else {
+      firebase.appCheck().activate('ignored', false);
     }
 
     // notifee.setNotificationCategories([

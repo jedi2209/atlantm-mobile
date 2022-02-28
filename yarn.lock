@@ -1758,10 +1758,20 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/slider/-/slider-4.2.0.tgz#47fa146b2f2c92e45c35c154b1df8a66e71b8048"
   integrity sha512-7LUDk63cbkDgmTqHBWn0pXzwF/VY9I3wDTnLWNehgQu7GlluHDn02qHgINxS9dRoG96JOqLFxRxnCEKkg5zcmQ==
 
-"@react-native-firebase/analytics@^14.1.0":
+"@react-native-firebase/analytics@^14.5.0":
   version "14.5.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-14.5.0.tgz#ee11d712a49886f114c0ddf6334df91accdbcc6b"
   integrity sha512-0Qq2m5uuG3VkgOohe/LEuJLfH2EBiZCcU12kZ426+kAi1CZaqB4JjkTteKJZ2hp3VGxCE1X60gdX4p9cya3vlg==
+
+"@react-native-firebase/app-check@^14.5.0":
+  version "14.5.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app-check/-/app-check-14.5.0.tgz#e89da881156f8b4243ccaae2db9154d8b030de03"
+  integrity sha512-wuf+wSo473oz5in5jf9l0MExjO79QnpCWZjsmxp2BNGM9IW/LSIci740Wp9vGPG2CpZ3sZvRPY9djdCSmFG+Ug==
+
+"@react-native-firebase/app-distribution@^14.5.0":
+  version "14.5.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/app-distribution/-/app-distribution-14.5.0.tgz#6333cfb6d09cbe6851aa93b81c74cffccd07e286"
+  integrity sha512-4Gh16OBAzIkj5Cj8dhoy5GPR2Y4LlTTYdGvEvkOzn6o40hq6avHq4lnbtFJZ5bExxEQtJdmv+JYU/B4N7z6y2w==
 
 "@react-native-firebase/app@^14.1.0":
   version "14.5.0"

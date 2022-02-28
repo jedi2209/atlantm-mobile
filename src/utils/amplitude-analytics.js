@@ -1,6 +1,7 @@
 import {store} from '../core/store';
 import {get} from 'lodash';
 import {Amplitude} from '@amplitude/react-native';
+// import analytics from '@react-native-firebase/analytics';
 import * as Sentry from '@sentry/react-native';
 
 export default class Analytics {
@@ -24,5 +25,6 @@ export default class Analytics {
       });
     }
     ampInstance.logEvent(`${category}:${action}`, params);
+    // analytics.logEvent(`${category}:${action}`, params);
   }
 }
