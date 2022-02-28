@@ -466,18 +466,18 @@ PODS:
   - React-jsinspector (0.67.3)
   - React-logger (0.67.3):
     - glog
-  - react-native-fbsdk-next (7.3.0):
+  - react-native-fbsdk-next (7.3.1):
     - React-Core
-    - react-native-fbsdk-next/Core (= 7.3.0)
-    - react-native-fbsdk-next/Login (= 7.3.0)
-    - react-native-fbsdk-next/Share (= 7.3.0)
-  - react-native-fbsdk-next/Core (7.3.0):
+    - react-native-fbsdk-next/Core (= 7.3.1)
+    - react-native-fbsdk-next/Login (= 7.3.1)
+    - react-native-fbsdk-next/Share (= 7.3.1)
+  - react-native-fbsdk-next/Core (7.3.1):
     - FBSDKCoreKit (~> 12.3.2)
     - React-Core
-  - react-native-fbsdk-next/Login (7.3.0):
+  - react-native-fbsdk-next/Login (7.3.1):
     - FBSDKLoginKit (~> 12.3.2)
     - React-Core
-  - react-native-fbsdk-next/Share (7.3.0):
+  - react-native-fbsdk-next/Share (7.3.1):
     - FBSDKShareKit (~> 12.3.2)
     - React-Core
   - react-native-flipper (0.136.0):
@@ -1029,7 +1029,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 15ea57ead631a11fad57634ff69f78e797113a39
   React-jsinspector: 1e1e03345cf6d47779e2061d679d0a87d9ae73d8
   React-logger: 1e10789cb84f99288479ba5f20822ce43ced6ffe
-  react-native-fbsdk-next: d5e5b109375495ea36380372d031af3245cee607
+  react-native-fbsdk-next: 6fcebe776fbe6d45c0259b5dd8bcf4d9b58898c0
   react-native-flipper: 29573afb547256573ba6acc3b3c101534ea0aa83
   react-native-google-maps: 17432eb7412df3c65d7c7c52ede085d0f5624f77
   react-native-in-app-review: 19f501795e776269dd216916e19e1ac4008b33d5

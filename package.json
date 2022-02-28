@@ -146,7 +146,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "jest": "^27.0.1",
     "jest-circus": "^27.0.1",
-    "metro-react-native-babel-preset": "0.68.0",
+    "metro-react-native-babel-preset": "0.69.0",
     "patch-package": "^6.2.2",
     "prettier": "^2.4.0",
     "react-native-clean-project": "^4.0.0",
