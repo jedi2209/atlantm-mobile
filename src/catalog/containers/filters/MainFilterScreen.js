@@ -501,7 +501,7 @@ const MainFilterScreen = ({
     setStockType(stockType);
   };
 
-  const _onSubmitButtonPress = () => {
+  const _onSubmitButtonPress = ({showPrices}) => {
     switch (stockType) {
       case 'New':
         navigation.navigate('NewCarListScreen', {
@@ -510,6 +510,7 @@ const MainFilterScreen = ({
           total: {
             count: totalCars,
           },
+          showPrices
         });
         break;
       case 'Used':
@@ -521,6 +522,7 @@ const MainFilterScreen = ({
             total: {
               count: totalCars,
             },
+            showPrices
           },
         });
         break;
@@ -809,7 +811,7 @@ const MainFilterScreen = ({
             </Card>
           ) : null}
           <Card noShadow style={[styles.row]}>
-            {dataFilters && dataFilters.prices ? (
+            {dataFilters && dataFilters.prices && !dataFilters.prices.hidden ? (
               <CardItem style={styles.cardItem}>
                 <RNBounceable
                   style={styles.bounceRow}
@@ -1799,7 +1801,7 @@ const MainFilterScreen = ({
             disabled={!totalCars || totalCars === 0 ? true : false}
             active={totalCars ? true : false}
             onPress={() => {
-              _onSubmitButtonPress();
+              _onSubmitButtonPress({showPrices: !dataFilters.prices.hidden});
             }}>
             <Text style={styles.resultButtonText}>
               {totalCars

@@ -90,6 +90,7 @@ class UsedCarItemScreen extends Component {
 
   componentDidMount() {
     const carId = get(this.props.route, 'params.carId');
+    this.isPriceShow = get(this.props.route, 'params.showPrice');
     this.props.actionFetchUsedCarDetails(carId);
 
     Analytics.logEvent('screen', 'catalog/usedcar/item', {
@@ -178,6 +179,7 @@ class UsedCarItemScreen extends Component {
       dealerId: get(carDetails, 'dealer.id'),
       carId: carDetails.id.api,
       isNewCar: false,
+      isPriceShow: this.isPriceShow,
     });
   };
 
@@ -247,50 +249,50 @@ class UsedCarItemScreen extends Component {
 
   selectOptionsTab = () => this.setState({tabName: 'options'});
 
-  renderPrice = ({carDetails, currency}) => {
-    const CarPrices = {
-      sale: get(carDetails, 'price.app.sale', 0),
-      standart: get(
-        carDetails,
-        'price.app.standart',
-        get(carDetails, 'price.app'),
-      ),
-    };
-    const isSale = carDetails.sale === true;
+  // renderPrice = ({carDetails, currency}) => {
+  //   const CarPrices = {
+  //     sale: get(carDetails, 'price.app.sale', 0),
+  //     standart: get(
+  //       carDetails,
+  //       'price.app.standart',
+  //       get(carDetails, 'price.app'),
+  //     ),
+  //   };
+  //   const isSale = carDetails.sale === true;
 
-    return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          minWidth: 100,
-          marginBottom: 12,
-          marginTop: 10,
-        }}>
-        {isSale && (
-          <Text
-            style={{
-              fontSize: 24,
-              fontWeight: '600',
-              color: '#D0021B',
-            }}>
-            {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
-          </Text>
-        )}
-        <Text
-          style={{
-            fontSize: isSale ? 16 : 24,
-            fontWeight: '600',
-            lineHeight: isSale ? 18 : 30,
-            color: '#000',
-            textDecorationLine: isSale ? 'line-through' : 'none',
-          }}>
-          {showPrice(CarPrices.standart, this.props.dealerSelected.region)}
-        </Text>
-      </View>
-    );
-  };
+  //   return (
+  //     <View
+  //       style={{
+  //         flex: 1,
+  //         flexDirection: 'column',
+  //         alignItems: 'flex-start',
+  //         minWidth: 100,
+  //         marginBottom: 12,
+  //         marginTop: 10,
+  //       }}>
+  //       {isSale && (
+  //         <Text
+  //           style={{
+  //             fontSize: 24,
+  //             fontWeight: '600',
+  //             color: '#D0021B',
+  //           }}>
+  //           {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
+  //         </Text>
+  //       )}
+  //       <Text
+  //         style={{
+  //           fontSize: isSale ? 16 : 24,
+  //           fontWeight: '600',
+  //           lineHeight: isSale ? 18 : 30,
+  //           color: '#000',
+  //           textDecorationLine: isSale ? 'line-through' : 'none',
+  //         }}>
+  //         {showPrice(CarPrices.standart, this.props.dealerSelected.region)}
+  //       </Text>
+  //     </View>
+  //   );
+  // };
 
   renderAdditionalServices = element => {
     if (!element && !element?.name) {
@@ -1048,44 +1050,45 @@ class UsedCarItemScreen extends Component {
             </View>
           </Content>
         </Container>
-        <View style={[styleConst.shadow.default, stylesFooter.footer]}>
-          {isSale ? (
-            <View
-              style={[
-                stylesFooter.orderPriceContainer,
-                stylesFooter.orderPriceContainerSale,
-              ]}>
-              <Text
-                style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
-                {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
-              </Text>
-              <Text
+        <View style={[styleConst.shadow.default, stylesFooter.footer, !this.isPriceShow ? stylesFooter.footerSmall : null]}>
+        {this.isPriceShow ? 
+          isSale ? (
+              <View
                 style={[
-                  styles.orderPriceText,
-                  styles.orderPriceDefaultText,
-                  styles.orderPriceSmallText,
+                  stylesFooter.orderPriceContainer,
+                  stylesFooter.orderPriceContainerSale,
                 ]}>
-                {showPrice(
-                  CarPrices.standart,
-                  this.props.dealerSelected.region,
-                )}
-              </Text>
-            </View>
-          ) : (
-            <View
-              style={[
-                stylesFooter.orderPriceContainer,
-                stylesFooter.orderPriceContainerNotSale,
-              ]}>
-              <Text
-                style={[styles.orderPriceText, styles.orderPriceDefaultText]}>
-                {showPrice(
-                  CarPrices.standart,
-                  this.props.dealerSelected.region,
-                )}
-              </Text>
-            </View>
-          )}
+                <Text
+                  style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
+                  {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
+                </Text>
+                <Text
+                  style={[
+                    styles.orderPriceText,
+                    styles.orderPriceDefaultText,
+                    styles.orderPriceSmallText,
+                  ]}>
+                  {showPrice(
+                    CarPrices.standart,
+                    this.props.dealerSelected.region,
+                  )}
+                </Text>
+              </View>
+            ) : (
+              <View
+                style={[
+                  stylesFooter.orderPriceContainer,
+                  stylesFooter.orderPriceContainerNotSale,
+                ]}>
+                <Text
+                  style={[styles.orderPriceText, styles.orderPriceDefaultText]}>
+                  {showPrice(
+                    CarPrices.standart,
+                    this.props.dealerSelected.region,
+                  )}
+                </Text>
+              </View>
+            ) : null}
           <View style={[stylesFooter.footerButtons]}>
             <Button
               testID="UsedCarItemScreen.Button.TestDrive"
@@ -1141,6 +1144,9 @@ const stylesFooter = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     zIndex: 10,
+  },
+  footerSmall: {
+    marginBottom: 0,
   },
   footerButtons: {
     flex: 1,
