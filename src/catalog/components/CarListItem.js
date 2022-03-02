@@ -94,6 +94,7 @@ const CarListItem = ({
       carId: car.id.api,
       currency,
       code: prices.curr.code,
+      showPrice: !prices?.hidden,
     });
   };
 
@@ -113,7 +114,10 @@ const CarListItem = ({
     });
   };
 
-  const _renderPrice = ({car}) => {
+  const _renderPrice = ({car, prices}) => {
+    if (prices?.hidden) {
+      return;
+    }
     const isSale = car.sale === true;
     const badge = get(car, 'badge', []);
 

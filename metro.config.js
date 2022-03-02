@@ -1,3 +1,8 @@
+const OriginalResolver = require("metro-resolver");
+const path = require("path");
+
+const blacklistedModules = ["https", "http", "zlib", "ansi-styles"];
+
 module.exports = {
   transformer: {
     getTransformOptions: async () => ({
@@ -18,5 +23,19 @@ module.exports = {
   },
   resolver: {
     useWatchman: true,
+    resolveRequest: (context, realModuleName, platform, moduleName) => {
+      if (blacklistedModules.includes(moduleName)) {
+        return {
+          filePath: path.resolve(__dirname + "/src/shim-module.js"),
+          type: "sourceFile"
+        };
+      } else {
+        return OriginalResolver.resolve(
+          { ...context, resolveRequest: undefined },
+          moduleName,
+          platform
+        );
+      }
+    }
   },
 };

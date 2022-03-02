@@ -104,6 +104,7 @@ class OrderCreditScreen extends Component {
   constructor(props) {
     super(props);
     this.isNewCar = get(props.route, 'params.isNewCar');
+    this.isPriceShow = get(props.route, 'params.isPriceShow');
     this.orderedCar = get(props.route, 'params.car.ordered');
     let model = '';
     if (this.isNewCar) {
@@ -237,7 +238,7 @@ class OrderCreditScreen extends Component {
                   editable: false,
                 },
               },
-              {
+              this.isPriceShow ? {
                 name: 'SUMM',
                 type: 'component',
                 label: strings.Form.field.creditSumm,
@@ -290,7 +291,7 @@ class OrderCreditScreen extends Component {
                     </View>
                   </View>
                 ),
-              },
+              } : {},
             ],
           },
           {

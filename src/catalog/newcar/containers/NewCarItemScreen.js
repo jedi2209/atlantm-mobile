@@ -147,6 +147,8 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
   const additional = get(carDetails, 'options.additional', {});
   const additionalKeys = Object.keys(additional);
 
+  const isPriceShow = get(route, 'params.showPrice');
+
   const currency = get(route, 'params.currency');
   const brandName = get(carDetails, 'brand.name');
   const modelName = get(carDetails, 'model.name');
@@ -564,6 +566,9 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
   };
 
   const _renderPrice = ({carDetails, currency}) => {
+    if (!isPriceShow) {
+      return;
+    }
     const isSale = carDetails.sale === true;
 
     const CarPrices = {

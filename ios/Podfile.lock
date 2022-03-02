@@ -482,18 +482,18 @@ PODS:
   - React-jsinspector (0.67.3)
   - React-logger (0.67.3):
     - glog
-  - react-native-fbsdk-next (7.3.1):
+  - react-native-fbsdk-next (7.3.2):
     - React-Core
-    - react-native-fbsdk-next/Core (= 7.3.1)
-    - react-native-fbsdk-next/Login (= 7.3.1)
-    - react-native-fbsdk-next/Share (= 7.3.1)
-  - react-native-fbsdk-next/Core (7.3.1):
+    - react-native-fbsdk-next/Core (= 7.3.2)
+    - react-native-fbsdk-next/Login (= 7.3.2)
+    - react-native-fbsdk-next/Share (= 7.3.2)
+  - react-native-fbsdk-next/Core (7.3.2):
     - FBSDKCoreKit (~> 12.3.2)
     - React-Core
-  - react-native-fbsdk-next/Login (7.3.1):
+  - react-native-fbsdk-next/Login (7.3.2):
     - FBSDKLoginKit (~> 12.3.2)
     - React-Core
-  - react-native-fbsdk-next/Share (7.3.1):
+  - react-native-fbsdk-next/Share (7.3.2):
     - FBSDKShareKit (~> 12.3.2)
     - React-Core
   - react-native-flipper (0.136.0):
@@ -513,8 +513,12 @@ PODS:
     - React-Core
   - react-native-pager-view (5.4.11):
     - React-Core
-  - react-native-safe-area-context (3.4.1):
-    - React-Core
+  - react-native-safe-area-context (4.1.2):
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React
+    - ReactCommon/turbomodule/core
   - react-native-slider (4.2.0):
     - React-Core
   - react-native-splash-screen (3.3.0):
@@ -599,7 +603,7 @@ PODS:
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
-  - RNCPicker (2.3.0):
+  - RNCPicker (2.3.1):
     - React-Core
   - RNDateTimePicker (5.1.0):
     - React-Core
@@ -632,7 +636,7 @@ PODS:
     - Firebase/Messaging (= 8.12.1)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.2.0):
+  - RNGestureHandler (2.3.0):
     - React-Core
   - RNGoogleSignin (7.1.0):
     - GoogleSignIn (~> 6.1.0)
@@ -676,14 +680,14 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.12.0):
+  - RNScreens (3.13.0):
     - React-Core
     - React-RCTImage
   - RNSentry (3.2.13):
     - React-Core
     - Sentry (= 7.9.0)
-  - RNSVG (12.1.1):
-    - React
+  - RNSVG (12.3.0):
+    - React-Core
   - RNVectorIcons (9.1.0):
     - React-Core
   - SDWebImage (5.11.1):
@@ -1063,7 +1067,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 15ea57ead631a11fad57634ff69f78e797113a39
   React-jsinspector: 1e1e03345cf6d47779e2061d679d0a87d9ae73d8
   React-logger: 1e10789cb84f99288479ba5f20822ce43ced6ffe
-  react-native-fbsdk-next: 6fcebe776fbe6d45c0259b5dd8bcf4d9b58898c0
+  react-native-fbsdk-next: 5d8803a1a933e0522a0ecb86eb4f750397e0ca54
   react-native-flipper: 29573afb547256573ba6acc3b3c101534ea0aa83
   react-native-google-maps: 17432eb7412df3c65d7c7c52ede085d0f5624f77
   react-native-in-app-review: 19f501795e776269dd216916e19e1ac4008b33d5
@@ -1071,7 +1075,7 @@ SPEC CHECKSUMS:
   react-native-onesignal: 7643517fe655b94cfda8e697ec16f9b9135648b8
   react-native-orientation-locker: 2da91e5391971dace445495821c899c111dcad7a
   react-native-pager-view: 7f00d63688f7df9fad86dfb0154814419cc5eb8d
-  react-native-safe-area-context: 9e40fb181dac02619414ba1294d6c2a807056ab9
+  react-native-safe-area-context: 114e9a74df2643012b9d6cc1460b94f3b6a90780
   react-native-slider: 37e1cf275dab20d3c015e40969aa9f5c309645a8
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
@@ -1093,7 +1097,7 @@ SPEC CHECKSUMS:
   RNAppleAuthentication: 63c2127ace11985b94f852fc480eb84145653712
   RNCAsyncStorage: b49b4e38a1548d03b74b30e558a1d18465b94be7
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
-  RNCPicker: c796ddf16cd93e980a5a5642eebcee9eb9da1e76
+  RNCPicker: f6c760d4b314585ff35165d8640d7917ae30afb1
   RNDateTimePicker: 1dd15d7ed1ab7d999056bc77879a42920d139c12
   RNDeviceInfo: 4944cf8787b9c5bffaf301fda68cc1a2ec003341
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
@@ -1103,14 +1107,14 @@ SPEC CHECKSUMS:
   RNFBAppDistribution: ef8492183b066b3b0f4ad2b07916054fb130b898
   RNFBInAppMessaging: 2a324b1e1b707f1ae3e1ad822f77a10620c31b12
   RNFBMessaging: 8e3575bb0303b43a852bf5decbe99c3272035048
-  RNGestureHandler: bf572f552ea324acd5b5464b8d30755b2d8c1de6
+  RNGestureHandler: 77d59828d40838c9fabb76a12d2d0a80c006906f
   RNGoogleSignin: 233fdfa02522216c19bf02a1e6c60b60a75ffb4c
   RNImageCropPicker: 44e2807bc410741f35d4c45b6586aedfe3da39d2
   RNRate: 94f57c773e155ca0d0aeeba9c10a32bce9030daf
   RNReanimated: 32c91e28f5780937b8efc07ddde1bab8d373fe0b
-  RNScreens: 2559f98b0835103cbef3b26ba77fa61d4bb37ae7
+  RNScreens: aa12070b21c1d6011b3627a0b1d09b627232b070
   RNSentry: 0aa1567f66c20390f3834637fc4f73380dcd0774
-  RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
+  RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
   RNVectorIcons: 7923e585eaeb139b9f4531d25a125a1500162a0b
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
