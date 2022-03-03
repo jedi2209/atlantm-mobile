@@ -11,6 +11,7 @@ apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 
 apply plugin: "com.android.application"
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.appdistribution'
 apply plugin: 'com.google.firebase.firebase-perf'
 
@@ -108,6 +109,9 @@ android {
             exclude "lib/armeabi-v7a/libmonochrome.so"
         }
         vectorDrawables.useSupportLibrary = true
+        configurations.all {
+            resolutionStrategy { force 'androidx.sqlite:sqlite-framework:2.1.0' }
+        }
     }
     splits {
         abi {
@@ -151,6 +155,10 @@ android {
                     saveChanges(project.ext.version.incr)
                 }
 	        }
+            firebaseCrashlytics {
+                nativeSymbolUploadEnabled true
+                unstrippedNativeLibsDir 'build/intermediates/merged_native_libs/release/out/lib'
+            }
         }
     }
     // applicationVariants are e.g. debug, release
