@@ -11,9 +11,6 @@ buildscript {
         compileSdkVersion = 30
         targetSdkVersion = 30
         supportLibVersion = "29.0.0"
-        // mediaCompatVersion = '1.0.1'
-        // supportV4Version = '1.0.0'
-        // firebaseIidVersion = "19.0.1"
         playServicesVersion = "17.0.0"
         googlePlayServicesIidVersion = "17.0.0"
         androidMapsUtilsVersion = "0.5+"
@@ -29,6 +26,7 @@ buildscript {
         classpath 'com.google.gms:google-services:4.3.10'
         classpath 'com.google.firebase:firebase-appdistribution-gradle:3.0.0'
         classpath 'com.google.firebase:perf-plugin:1.4.1'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
