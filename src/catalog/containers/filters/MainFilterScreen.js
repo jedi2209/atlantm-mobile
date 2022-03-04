@@ -257,14 +257,16 @@ const MainFilterScreen = ({
 
   const _showHideSubmitButton = show => {
     if (show) {
-      Animated.timing(_animated.SubmitButton, {
-        toValue: 1,
-        duration: _animated.duration,
-        useNativeDriver: true,
-      }).start(() => {
-        setLoading(false);
-        setStockLoading(false);
-      });
+      setTimeout(() => {
+        Animated.timing(_animated.SubmitButton, {
+          toValue: 1,
+          duration: _animated.duration,
+          useNativeDriver: true,
+        }).start(() => {
+          setLoading(false);
+          setStockLoading(false);
+        });
+      }, 1000);
     } else {
       Animated.timing(_animated.SubmitButton, {
         toValue: 0,
