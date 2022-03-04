@@ -54,7 +54,7 @@ export default {
       return false;
     }
     let requestedVersion = parseInt(version.replace(/\./gi, ''));
-    let req = await this.request(
+    let request = await this.request(
       '/mobile/check/version/',
       baseRequestParams,
     ).then(res => {
@@ -82,7 +82,7 @@ export default {
         }
       }
     });
-    return req;
+    return request;
   },
 
   chatAvailable() {

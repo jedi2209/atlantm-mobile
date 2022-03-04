@@ -71,9 +71,7 @@ const App = props => {
   const storeVersion = '2021-09-03';
 
   const currentVersion = DeviceInfo.getVersion();
-  if (currentVersion) {
-    API.fetchVersion(currentVersion);
-  }
+  API.fetchVersion(currentVersion || null);
 
   const currentLanguage = get(props, 'currentLanguage', 'ru');
 
