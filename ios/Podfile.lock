@@ -55,7 +55,7 @@ PODS:
   - Firebase/Messaging (8.12.1):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 8.12.0)
-  - FirebaseABTesting (8.12.0):
+  - FirebaseABTesting (8.13.0):
     - FirebaseCore (~> 8.0)
   - FirebaseAnalytics (8.12.0):
     - FirebaseAnalytics/AdIdSupport (= 8.12.0)
@@ -89,7 +89,7 @@ PODS:
     - FirebaseCoreDiagnostics (~> 8.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
-  - FirebaseCoreDiagnostics (8.12.0):
+  - FirebaseCoreDiagnostics (8.13.0):
     - GoogleDataTransport (~> 9.1)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/Logger (~> 7.7)
@@ -107,7 +107,7 @@ PODS:
     - FirebaseInstallations (~> 8.0)
     - GoogleUtilities/Environment (~> 7.7)
     - nanopb (~> 2.30908.0)
-  - FirebaseInstallations (8.12.0):
+  - FirebaseInstallations (8.13.0):
     - FirebaseCore (~> 8.0)
     - GoogleUtilities/Environment (~> 7.7)
     - GoogleUtilities/UserDefaults (~> 7.7)
@@ -492,21 +492,21 @@ PODS:
   - React-jsinspector (0.67.3)
   - React-logger (0.67.3):
     - glog
-  - react-native-fbsdk-next (7.3.2):
+  - react-native-fbsdk-next (7.3.3):
     - React-Core
-    - react-native-fbsdk-next/Core (= 7.3.2)
-    - react-native-fbsdk-next/Login (= 7.3.2)
-    - react-native-fbsdk-next/Share (= 7.3.2)
-  - react-native-fbsdk-next/Core (7.3.2):
+    - react-native-fbsdk-next/Core (= 7.3.3)
+    - react-native-fbsdk-next/Login (= 7.3.3)
+    - react-native-fbsdk-next/Share (= 7.3.3)
+  - react-native-fbsdk-next/Core (7.3.3):
     - FBSDKCoreKit (~> 12.3.2)
     - React-Core
-  - react-native-fbsdk-next/Login (7.3.2):
+  - react-native-fbsdk-next/Login (7.3.3):
     - FBSDKLoginKit (~> 12.3.2)
     - React-Core
-  - react-native-fbsdk-next/Share (7.3.2):
+  - react-native-fbsdk-next/Share (7.3.3):
     - FBSDKShareKit (~> 12.3.2)
     - React-Core
-  - react-native-flipper (0.136.0):
+  - react-native-flipper (0.138.0):
     - React-Core
   - react-native-google-maps (0.30.1):
     - Google-Maps-iOS-Utils (= 3.10.3)
@@ -523,13 +523,13 @@ PODS:
     - React-Core
   - react-native-pager-view (5.4.11):
     - React-Core
-  - react-native-safe-area-context (4.1.2):
+  - react-native-safe-area-context (4.1.4):
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
     - React
     - ReactCommon/turbomodule/core
-  - react-native-slider (4.2.0):
+  - react-native-slider (4.2.1):
     - React-Core
   - react-native-splash-screen (3.3.0):
     - React-Core
@@ -617,42 +617,42 @@ PODS:
     - React-Core
   - RNDateTimePicker (5.1.0):
     - React-Core
-  - RNDeviceInfo (8.4.9):
+  - RNDeviceInfo (8.5.0):
     - React-Core
   - RNFastImage (8.5.11):
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFBAnalytics (14.5.0):
+  - RNFBAnalytics (14.5.1):
     - Firebase/Analytics (= 8.12.1)
     - React-Core
     - RNFBApp
-  - RNFBApp (14.5.0):
+  - RNFBApp (14.5.1):
     - Firebase/CoreOnly (= 8.12.1)
     - React-Core
-  - RNFBAppCheck (14.5.0):
+  - RNFBAppCheck (14.5.1):
     - Firebase/AppCheck (= 8.12.1)
     - React-Core
     - RNFBApp
-  - RNFBAppDistribution (14.5.0):
+  - RNFBAppDistribution (14.5.1):
     - Firebase/AppDistribution (= 8.12.1)
     - React-Core
     - RNFBApp
-  - RNFBCrashlytics (14.5.0):
+  - RNFBCrashlytics (14.5.1):
     - Firebase/Crashlytics (= 8.12.1)
     - React-Core
     - RNFBApp
-  - RNFBInAppMessaging (14.5.0):
+  - RNFBInAppMessaging (14.5.1):
     - Firebase/InAppMessaging (= 8.12.1)
     - React-Core
     - RNFBApp
-  - RNFBMessaging (14.5.0):
+  - RNFBMessaging (14.5.1):
     - Firebase/Messaging (= 8.12.1)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.3.0):
+  - RNGestureHandler (2.3.2):
     - React-Core
-  - RNGoogleSignin (7.1.0):
+  - RNGoogleSignin (7.2.1):
     - GoogleSignIn (~> 6.1.0)
     - React-Core
   - RNImageCropPicker (0.37.3):
@@ -694,12 +694,12 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.13.0):
+  - RNScreens (3.13.1):
     - React-Core
     - React-RCTImage
-  - RNSentry (3.2.13):
+  - RNSentry (3.3.2):
     - React-Core
-    - Sentry (= 7.9.0)
+    - Sentry (= 7.10.1)
   - RNSVG (12.3.0):
     - React-Core
   - RNVectorIcons (9.1.0):
@@ -710,9 +710,9 @@ PODS:
   - SDWebImageWebPCoder (0.8.4):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry (7.9.0):
-    - Sentry/Core (= 7.9.0)
-  - Sentry/Core (7.9.0)
+  - Sentry (7.10.1):
+    - Sentry/Core (= 7.10.1)
+  - Sentry/Core (7.10.1)
   - TOCropViewController (2.6.1)
   - VK-ios-sdk (1.6.2)
   - Yoga (1.14.0)
@@ -1037,15 +1037,15 @@ SPEC CHECKSUMS:
   FBSDKLoginKit: 56d55e23fe66a6db045826190b0b4dbc0e1ca0a0
   FBSDKShareKit: 4ef957addab76816116ea92bd872e792f7137669
   Firebase: 580d09e8edafc3073ebf09c03fd42e4d80d35fe9
-  FirebaseABTesting: 1b05c92327b3f0a9545cea3bab4d93e82550e29b
+  FirebaseABTesting: c390fb900b9dd6e9c04888e34dda8e9e84b07195
   FirebaseAnalytics: bd10d7706ba8d6e01ea2816f8fe9e9b881cb0918
   FirebaseAppCheck: b91624d3f8c262eae9bfc1486b640d8c13787abc
   FirebaseAppDistribution: d1cf955c7e2d08567646b3eb453309d4ae850b23
   FirebaseCore: 8138de860a90ca7eec5e324da5788fb0ebf1d93c
-  FirebaseCoreDiagnostics: 3b40dfadef5b90433a60ae01f01e90fe87aa76aa
+  FirebaseCoreDiagnostics: c2836d254a8f0bbb4121ff18f2c2ea39d118fd08
   FirebaseCrashlytics: 7952ffd988006128325510664b99dc8ca5851dff
   FirebaseInAppMessaging: 871e8d04ed0d1ca77c9c0e4c246c13d010d7a8de
-  FirebaseInstallations: 25764cf322e77f99449395870a65b2bef88e1545
+  FirebaseInstallations: 60edbf7e11d91ae4c751d26c200dfd037099abe0
   FirebaseMessaging: 23db8bf05585e929ada8af0f0968933c25252808
   Flipper: 30e8eeeed6abdc98edaf32af0cda2f198be4b733
   Flipper-Boost-iOSX: fd1e2b8cbef7e662a122412d7ac5f5bea715403c
@@ -1086,16 +1086,16 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 15ea57ead631a11fad57634ff69f78e797113a39
   React-jsinspector: 1e1e03345cf6d47779e2061d679d0a87d9ae73d8
   React-logger: 1e10789cb84f99288479ba5f20822ce43ced6ffe
-  react-native-fbsdk-next: 5d8803a1a933e0522a0ecb86eb4f750397e0ca54
-  react-native-flipper: 29573afb547256573ba6acc3b3c101534ea0aa83
+  react-native-fbsdk-next: 6d497a06fc5c33360f5794b4428a0236789a60e6
+  react-native-flipper: 51a1b8f34ce185e028f8158382c3882d6ea3cccf
   react-native-google-maps: 17432eb7412df3c65d7c7c52ede085d0f5624f77
   react-native-in-app-review: 19f501795e776269dd216916e19e1ac4008b33d5
   react-native-maps: d752b0dd0e1951d815b1336332835aab6b4a836f
   react-native-onesignal: 7643517fe655b94cfda8e697ec16f9b9135648b8
   react-native-orientation-locker: 2da91e5391971dace445495821c899c111dcad7a
   react-native-pager-view: 7f00d63688f7df9fad86dfb0154814419cc5eb8d
-  react-native-safe-area-context: 114e9a74df2643012b9d6cc1460b94f3b6a90780
-  react-native-slider: 37e1cf275dab20d3c015e40969aa9f5c309645a8
+  react-native-safe-area-context: 989fa91e705bc7f2bc2a0d76d72104111f825c2a
+  react-native-slider: 241935e3ea8e47599c317f512f96ee8de607d4cb
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
   react-native-webview: 380c1a03ec94b7ed764dac8db1e7c9952d08c93a
@@ -1118,27 +1118,27 @@ SPEC CHECKSUMS:
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNCPicker: f6c760d4b314585ff35165d8640d7917ae30afb1
   RNDateTimePicker: 1dd15d7ed1ab7d999056bc77879a42920d139c12
-  RNDeviceInfo: 4944cf8787b9c5bffaf301fda68cc1a2ec003341
+  RNDeviceInfo: a674f06c5a5bd496aebb809cbc3be61cfd612a65
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
-  RNFBAnalytics: afd361a31db57b61853ef321a872a132df0f4519
-  RNFBApp: 06c8447270d295edc431bccd55970d8711a07a42
-  RNFBAppCheck: 352d528a34d40478165d6f4e9e5eb7f2951bb826
-  RNFBAppDistribution: ef8492183b066b3b0f4ad2b07916054fb130b898
-  RNFBCrashlytics: 0cfb53fcd558969ee498eb7030ee7065c7dacf8d
-  RNFBInAppMessaging: 2a324b1e1b707f1ae3e1ad822f77a10620c31b12
-  RNFBMessaging: 8e3575bb0303b43a852bf5decbe99c3272035048
-  RNGestureHandler: 77d59828d40838c9fabb76a12d2d0a80c006906f
-  RNGoogleSignin: 233fdfa02522216c19bf02a1e6c60b60a75ffb4c
+  RNFBAnalytics: 74cd9c60531ed33e5347b2dccafa172ae1a851a4
+  RNFBApp: 5bae3002117e55f3c9aa0fb38175dd16c8046c90
+  RNFBAppCheck: c59c77fa5c46115b7b760e85aeba4dbea1adfb8d
+  RNFBAppDistribution: dbd4a831d48c3eb1fbb6e68adc5b2ecb889fa871
+  RNFBCrashlytics: 33615211c6c6c4039ae71849091f6ac38ab65aba
+  RNFBInAppMessaging: 35d740fb11d8eb81a14e8839812756b7c668dcb5
+  RNFBMessaging: ae6c40883868cd01fa802395174ec7d61cfa0920
+  RNGestureHandler: 6e757e487a4834e7280e98e9bac66d2d9c575e9c
+  RNGoogleSignin: 824ef4924ecb709477fc9f39d6557baeded867c4
   RNImageCropPicker: 44e2807bc410741f35d4c45b6586aedfe3da39d2
   RNRate: 94f57c773e155ca0d0aeeba9c10a32bce9030daf
   RNReanimated: 32c91e28f5780937b8efc07ddde1bab8d373fe0b
-  RNScreens: aa12070b21c1d6011b3627a0b1d09b627232b070
-  RNSentry: 0aa1567f66c20390f3834637fc4f73380dcd0774
+  RNScreens: 40a2cb40a02a609938137a1e0acfbf8fc9eebf19
+  RNSentry: f8c14c77e400a93331b38538f735c2538f8108a8
   RNSVG: 302bfc9905bd8122f08966dc2ce2d07b7b52b9f8
   RNVectorIcons: 7923e585eaeb139b9f4531d25a125a1500162a0b
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
-  Sentry: 2f7e91f247cfb05b05bd01e0b5d0692557a7687b
+  Sentry: ddcd9fde63cfe7e9e2243da59d98daa382413e49
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   VK-ios-sdk: 5bcf00a2014a7323f98db9328b603d4f96635caa
   Yoga: 90dcd029e45d8a7c1ff059e8b3c6612ff409061a
