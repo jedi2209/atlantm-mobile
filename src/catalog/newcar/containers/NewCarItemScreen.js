@@ -750,25 +750,13 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
               {_renderOptionPlates()}
               {warrantyText ? (
               <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  paddingLeft: '2%',
-                  paddingRight: '4%',
-                  marginBottom: 10,
-                  marginTop: 5,
-              }}>
+                style={styles.warrantyView}>
                 <Icon
                   type="MaterialCommunityIcons"
                   name="shield-car"
                   selectable={false}
-                  style={{
-                    color: styleConst.color.green,
-                    fontSize: 32,
-                    marginTop: -4,
-                    marginRight: 5,
-                  }}/>
-                <Text style={{paddingTop: 2, paddingRight: 2, fontSize: 15}}>{[strings.NewCarItemScreen.warranty, warrantyText].join(' ')}</Text>
+                  style={styles.warrantyIcon}/>
+                <Text style={styles.warrantyText}>{[strings.NewCarItemScreen.warranty, warrantyText].join(' ')}</Text>
               </View>
             ) : null}
               {get(carDetails, 'location.coords') ? (

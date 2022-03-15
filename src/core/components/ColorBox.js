@@ -65,7 +65,7 @@ const ColorBox = props => {
         selfClosed={true}>
         <View style={{padding: 10}}>
           {color?.name?.official ? (
-            <Text ellipsizeMode="clip" style={{fontSize: 18, marginBottom: 10}}>
+            <Text ellipsizeMode="clip" style={{fontSize: 18, marginBottom: 10, color: styleConst.color.greyText4}}>
               {color?.name?.official}
             </Text>
           ) : null}
@@ -83,7 +83,7 @@ const ColorBox = props => {
               ]}
             />
             {color.code ? (
-              <Text style={{fontSize: 16}} selectable={true}>
+              <Text style={{fontSize: 16, color: styleConst.color.greyText2}} selectable={true}>
                 {strings.ColorBox.code} - {color.code}
               </Text>
             ) : null}

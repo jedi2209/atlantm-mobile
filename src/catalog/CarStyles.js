@@ -382,4 +382,24 @@ export default StyleSheet.create({
   itemOrderCallBack: {
     backgroundColor: styleConst.color.green,
   },
+  warrantyView: {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingLeft: '2%',
+    paddingRight: '4%',
+    marginBottom: 10,
+    marginTop: 5,
+  },
+  warrantyIcon: {
+    color: styleConst.color.green,
+    fontSize: 32,
+    marginTop: -4,
+    marginRight: 5,
+  },
+  warrantyText: {
+    paddingTop: 2,
+    paddingRight: 2,
+    fontSize: 15,
+    color: styleConst.color.darkBg,
+  }
 });

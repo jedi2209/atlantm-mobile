@@ -241,64 +241,9 @@ const CarHistoryScreen = ({profile, route, navigation, carHistory, actionFetchCa
           // master ? [strings.CarHistoryScreen.master, master].join(' ') : null,
           ].join('\r\n')}
         left={() => <List.Icon color={styleConst.color.blue} icon="car-info" />}
-        right={props => <View style={{justifyContent: 'center'}}><Text style={{textAlignVertical: 'center', fontSize: 16,}}>{[strings.CarHistoryScreen.price.total2, showPrice(total, currency, true)].join(' ')}</Text></View>}
+        right={props => <View style={{justifyContent: 'center'}}><Text style={{textAlignVertical: 'center', fontSize: 16, color: styleConst.color.darkBg}}>{[strings.CarHistoryScreen.price.total2, showPrice(total, currency, true)].join(' ')}</Text></View>}
       />
     );
-
-    // return (
-    //   <Body style={[styles.body]}>
-    //     <View style={styles.dateContainer}>
-    //       {date ? <Text style={styles.date}>{dayMonthYear(date)}</Text> : null}
-    //       {car.mileage ? (
-    //         <Text style={styles.mileage}>
-    //           {strings.NewCarItemScreen.plates.mileage.toLowerCase() +
-    //             ' ' +
-    //             numberWithGap(car.mileage)}
-    //         </Text>
-    //       ) : null}
-    //     </View>
-    //     <View>
-    //       {dealerName ? <Text style={styles.dealer}>{dealerName}</Text> : null}
-    //     </View>
-    //     {document
-    //       ? this.renderLevel3Item({
-    //           prop: document.name,
-    //           value: `#${document.number}`,
-    //           color: true,
-    //         })
-    //       : null}
-    //     {master
-    //       ? this.renderLevel3Item({
-    //           prop: strings.CarHistoryScreen.master,
-    //           value: master,
-    //         })
-    //       : null}
-    //     {/* {works
-    //       ? this.renderLevel3Item({
-    //           prop: strings.CarHistoryScreen.price.work,
-    //           value: showPrice(works, currency, true),
-    //         })
-    //       : null}
-    //     {parts
-    //       ? this.renderLevel3Item({
-    //           prop: strings.CarHistoryScreen.price.materials,
-    //           value: showPrice(parts, currency, true),
-    //         })
-    //       : null} */}
-    //     {total
-    //       ? this.renderLevel3Item({
-    //           prop: strings.CarHistoryScreen.price.total,
-    //           value: showPrice(total, currency, true),
-    //         })
-    //       : null}
-    //     {/* {sale
-    //       ? this.renderLevel3Item({
-    //           prop: strings.CarHistoryScreen.sale,
-    //           value: showPrice(sale, currency, true),
-    //         })
-    //       : null} */}
-    //   </Body>
-    // );
   };
 
   if (isLoading) {
