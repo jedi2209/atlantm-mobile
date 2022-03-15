@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, ActivityIndicator, Platform} from 'react-native';
+import {StyleSheet, ActivityIndicator, Platform, Alert} from 'react-native';
 import {Root, StyleProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
@@ -17,6 +17,7 @@ import {
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
   actionStoreUpdated,
+  actionSettingsLoaded,
 } from '../actions';
 import {fetchDealers} from '../../dealer/actions';
 
@@ -51,6 +52,7 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
   actionStoreUpdated,
+  actionSettingsLoaded,
   fetchDealers,
 };
 
@@ -70,9 +72,6 @@ const App = props => {
   const mainScreen = 'BottomTabNavigation';
   const storeVersion = '2021-09-03';
 
-  const currentVersion = DeviceInfo.getVersion();
-  API.fetchVersion(currentVersion || null);
-
   const currentLanguage = get(props, 'currentLanguage', 'ru');
 
   const _awaitStoreToUpdate = async () => {
@@ -80,6 +79,13 @@ const App = props => {
 
     const currentDealer = get(storeData, 'dealer.selected.id', false);
     const isStoreUpdatedCurrent = get(storeData, 'core.isStoreUpdated', false);
+
+    const currentVersion = DeviceInfo.getVersion();
+    API.fetchVersion(currentVersion || null).then(res => {
+      if (res && res.settings) {
+        props.actionSettingsLoaded(res.settings);
+      }
+    });
 
     if (currentDealer && isStoreUpdatedCurrent === storeVersion) {
       // уже всё обновлено, открываем экран автоцентра
@@ -105,10 +111,7 @@ const App = props => {
 
   useEffect(() => {
     NavigationService.setTopLevelNavigator(NavigationService.navigationRef);
-
-    if (dealer && dealer.listDealers && !dealer.listDealers[177]) {
-      fetchDealers();
-    }
+    fetchDealers();
 
     _awaitStoreToUpdate().then(res => {
       if (typeof res === 'undefined' || !res) {

@@ -219,27 +219,30 @@ const SelectListByCountry = props => {
             tabBarUnderlineStyle={{
               backgroundColor: styleConst.color.lightBlue,
             }}>
-            <Tab
-              heading="🇧🇾 Беларусь"
-              textStyle={styles.TabsTextStyle}
-              activeTextStyle={styles.TabsActiveTextStyle}
-              activeTabStyle={styles.TabsActiveTabStyle}>
-              <FlatList
-                style={styles.list}
-                data={listBelarussia}
-                onRefresh={() => {
-                  if (itemLayout === 'dealer') {
-                    return _onRefresh({props, isRefreshing, setRefreshing});
-                  }
-                }}
-                refreshing={isRefreshing}
-                ListEmptyComponent={_EmptyComponent}
-                renderItem={item => {
-                  return _renderItem({...props, ...item, navigation});
-                }}
-                keyExtractor={item => `${item.hash.toString()}`}
-              />
-            </Tab>
+            {listBelarussia && listBelarussia.length ? (
+              <Tab
+                heading="🇧🇾 Беларусь"
+                textStyle={styles.TabsTextStyle}
+                activeTextStyle={styles.TabsActiveTextStyle}
+                activeTabStyle={styles.TabsActiveTabStyle}>
+                <FlatList
+                  style={styles.list}
+                  data={listBelarussia}
+                  onRefresh={() => {
+                    if (itemLayout === 'dealer') {
+                      return _onRefresh({props, isRefreshing, setRefreshing});
+                    }
+                  }}
+                  refreshing={isRefreshing}
+                  ListEmptyComponent={_EmptyComponent}
+                  renderItem={item => {
+                    return _renderItem({...props, ...item, navigation});
+                  }}
+                  keyExtractor={item => `${item.hash.toString()}`}
+                />
+              </Tab>
+            ) : null}
+            {listRussia && listRussia.length ? (
             <Tab
               heading="🇷🇺 Россия"
               textStyle={styles.TabsTextStyle}
@@ -261,6 +264,8 @@ const SelectListByCountry = props => {
                 keyExtractor={item => `${item.hash.toString()}`}
               />
             </Tab>
+            ) : null}
+            {listUkraine && listUkraine.length ? (
             <Tab
               heading="🇺🇦 Україна"
               textStyle={styles.TabsTextStyle}
@@ -282,6 +287,7 @@ const SelectListByCountry = props => {
                 keyExtractor={item => `${item.hash.toString()}`}
               />
             </Tab>
+            ) : null}
           </Tabs>
         </Container>
       </StyleProvider>

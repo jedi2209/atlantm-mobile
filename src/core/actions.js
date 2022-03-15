@@ -6,6 +6,7 @@ import {
   APP_MENU_OPENED_COUNTER,
   APP_ACTION_RATED,
   APP_STORE_UPDATED,
+  APP_SETTINGS_LOADED,
 } from './actionTypes';
 
 export const actionSetPushGranted = isGranted => {
@@ -39,6 +40,15 @@ export const actionStoreUpdated = LastUpdateDate => {
     return dispatch({
       type: APP_STORE_UPDATED,
       payload: LastUpdateDate,
+    });
+  };
+};
+
+export const actionSettingsLoaded = settings => {
+  return dispatch => {
+    return dispatch({
+      type: APP_SETTINGS_LOADED,
+      payload: settings,
     });
   };
 };
