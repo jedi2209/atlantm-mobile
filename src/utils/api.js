@@ -54,7 +54,7 @@ export default {
       return false;
     }
     let requestedVersion = parseInt(version.replace(/\./gi, ''));
-    let request = await this.request(
+    return this.request(
       '/mobile/check/version/',
       baseRequestParams,
     ).then(res => {
@@ -81,8 +81,8 @@ export default {
           );
         }
       }
+      return res;
     });
-    return request;
   },
 
   chatAvailable() {
@@ -1036,7 +1036,7 @@ export default {
     const response = await fetch(url, requestParams);
     const resText = await response.text();
     try {
-      // console.log('url + requestParams', url, requestParams, response);
+      console.warn('url + requestParams', url, requestParams, response);
       const resJson = JSON.parse(resText);
       return resJson;
     } catch (err) {

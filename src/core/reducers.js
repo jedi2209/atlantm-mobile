@@ -19,6 +19,7 @@ import {
   APP_MENU_OPENED_COUNTER,
   APP_ACTION_RATED,
   APP_STORE_UPDATED,
+  APP_SETTINGS_LOADED,
 } from './actionTypes';
 
 import {DEALER__SUCCESS} from '../dealer/actionTypes';
@@ -85,6 +86,17 @@ const isStoreUpdated = (state = false, action) => {
   }
 };
 
+const settings = (state = null, action) => {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'core.settings', false);
+    case APP_SETTINGS_LOADED:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 const modal = (state = {application: false}, action) => {
   switch (action.type) {
     case 'TOGGLE_MODAL':
@@ -104,6 +116,7 @@ const coreReducer = combineReducers({
   isAppRated,
   isStoreUpdated,
   language,
+  settings,
 });
 
 const rootReducer = combineReducers({
