@@ -38,5 +38,13 @@
         "workspaceRoot": "/Users/akvasha/Sites/Atlant-M/atlantm-mobile",
         "workspacePath": "fastlane",
         "id": "VNYA8goK4sbGtIye"
+    },
+    {
+        "type": "Directory",
+        "name": "/Users/akvasha/Sites/Atlant-M/atlantm-mobile/patches",
+        "parent_id": null,
+        "workspaceRoot": "/Users/akvasha/Sites/Atlant-M/atlantm-mobile",
+        "workspacePath": "patches",
+        "id": "1IZWMwLtpHA9OjlY"
     }
 ]
