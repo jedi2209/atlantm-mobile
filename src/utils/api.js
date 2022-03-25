@@ -17,6 +17,7 @@ const headers = {
       : 'XXXX'
   }`,
   'App-Version': DeviceInfo.getVersion(),
+  'App-Name': DeviceInfo.getApplicationName(),
 };
 const baseRequestParams = {
   method: 'GET',
@@ -1036,7 +1037,7 @@ export default {
     const response = await fetch(url, requestParams);
     const resText = await response.text();
     try {
-      console.warn('url + requestParams', url, requestParams, response);
+      // console.warn('url + requestParams', url, requestParams, response);
       const resJson = JSON.parse(resText);
       return resJson;
     } catch (err) {
