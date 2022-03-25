@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 
 import {Text, Icon, Button, ActionSheet, Toast} from 'native-base';
+
 import BrandLogo from '../../core/components/BrandLogo';
 import Plate from '../../core/components/Plate';
 import RateThisApp from '../../core/components/RateThisApp';
@@ -348,7 +349,7 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
               }
             }}
           />
-          {dealerSelected.id == 129 ? (
+          {false ? (
           <Plate
             title="Чат"
             subtitle="Отвечаем с 9 до 20"
