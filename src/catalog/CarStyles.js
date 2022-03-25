@@ -44,6 +44,7 @@ export default StyleSheet.create({
   descr: {
     lineHeight: 18,
     fontFamily: styleConst.font.light,
+    color: styleConst.color.greyText3,
   },
   sectionTitle: {
     letterSpacing: styleConst.ui.letterSpacing,

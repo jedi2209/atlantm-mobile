@@ -1347,6 +1347,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: styleConst.font.light,
     flex: 1,
+    color: styleConst.color.greyText,
   },
   sortingColorSelected: {
     color: styleConst.color.blue,

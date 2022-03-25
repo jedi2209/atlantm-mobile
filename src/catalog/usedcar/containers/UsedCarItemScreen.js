@@ -84,7 +84,6 @@ class UsedCarItemScreen extends Component {
     super(props);
 
     this.platesScrollView = React.createRef();
-    this.state = {tabName: 'base'};
     this.openStatus = getStatusWorktime(this.props.dealerSelected, 'RC', true);
   }
 
@@ -124,7 +123,6 @@ class UsedCarItemScreen extends Component {
 
     return (
       (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-      this.state.tabName !== nextState.tabName ||
       isFetchingCarDetails !== nextProps.isFetchingCarDetails ||
       get(carDetails, 'id.api') !== get(nextProps, 'carDetails.id.api')
     );
@@ -244,10 +242,6 @@ class UsedCarItemScreen extends Component {
       isNewCar: false,
     });
   };
-
-  selectBaseTab = () => this.setState({tabName: 'base'});
-
-  selectOptionsTab = () => this.setState({tabName: 'options'});
 
   // renderPrice = ({carDetails, currency}) => {
   //   const CarPrices = {
@@ -1018,7 +1012,7 @@ class UsedCarItemScreen extends Component {
                       borderTopWidth: 0.75,
                       borderColor: '#d5d5e0',
                     }}>
-                    <Text style={{fontSize: 18}}>{item.title}</Text>
+                    <Text style={{fontSize: 18, color: styleConst.color.greyText}}>{item.title}</Text>
                     {expanded ? (
                       <Icon
                         type="FontAwesome5"
