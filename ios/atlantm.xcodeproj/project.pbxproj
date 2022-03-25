@@ -804,7 +804,7 @@
 				CODE_SIGN_ENTITLEMENTS = atlantm/atlantm.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 254;
+				CURRENT_PROJECT_VERSION = 255;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = XXXX;
 				ENABLE_BITCODE = NO;
@@ -838,7 +838,7 @@
 				CODE_SIGN_ENTITLEMENTS = atlantm/atlantm.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 254;
+				CURRENT_PROJECT_VERSION = 255;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = XXXX;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "";
@@ -875,7 +875,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 254;
+				CURRENT_PROJECT_VERSION = 255;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = XXXX;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -910,7 +910,7 @@
 				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 254;
+				CURRENT_PROJECT_VERSION = 255;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = XXXX;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
