@@ -26,6 +26,7 @@ const mapStateToProps = ({dealer, nav, core}) => {
     isFetchDealersList: dealer.meta.isFetchDealersList,
     isFetchDealer: dealer.meta.isFetchDealer,
     pushGranted: core.pushGranted,
+    settings: core.settings,
     pushActionSubscribeState: core.pushActionSubscribeState,
   };
 };
@@ -56,6 +57,7 @@ const ChooseDealerScreen = props => {
     isFetchDealer,
     dealerSelected,
     isFetchDealersList,
+    settings,
   } = props;
 
   const goBack = get(props.route, 'params.goBack', false);
@@ -86,6 +88,7 @@ const ChooseDealerScreen = props => {
         selectedItem={dealerSelected}
         goBack={goBack}
         isLocal={isLocal}
+        settings={settings}
         onSelect={_onSelectDealer}
       />
     </>
