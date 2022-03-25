@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: styleConst.font.light,
     letterSpacing: styleConst.ui.letterSpacing,
+    color: styleConst.color.greyText2,
   },
 });
 

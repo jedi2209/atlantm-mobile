@@ -613,6 +613,9 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
   };
 
   const _renderPriceFooter = ({carDetails, currency}) => {
+    if (!isPriceShow) {
+      return;
+    }
     const isSale = carDetails.sale === true;
 
     const CarPrices = {
@@ -1011,7 +1014,7 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
           </View>
         </Content>
       </Container>
-      <View style={[styleConst.shadow.default, stylesFooter.footer]}>
+      <View style={[styleConst.shadow.default, stylesFooter.footer, !isPriceShow ? stylesFooter.footerHidePrice : null]}>
         {_renderPriceFooter({
           carDetails,
           currency,
@@ -1024,7 +1027,7 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
             onPress={_onPressTestDrive}
             full
             iconLeft
-            style={[stylesFooter.button, stylesFooter.buttonLeft]}
+            style={[stylesFooter.button, stylesFooter.buttonLeft, !isPriceShow ? stylesFooter.buttonNoPriceLeft : null]}
             activeOpacity={0.8}>
             <Icon
               type="MaterialCommunityIcons"
@@ -1048,6 +1051,7 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
             style={[
               stylesFooter.button,
               stylesFooter.buttonRight,
+              !isPriceShow ? stylesFooter.buttonNoPriceRight : null
               // !carDetails.testDriveCars ||
               // carDetails.testDriveCars.length === 0
               //   ? stylesFooter.buttonOnlyOne
@@ -1082,6 +1086,10 @@ const stylesFooter = StyleSheet.create({
     bottom: 0,
     flexDirection: 'column',
   },
+  footerHidePrice: {
+    height: 45,
+    marginBottom: 20,
+  },
   footerButtons: {
     flex: 1,
     flexDirection: 'row',
@@ -1100,6 +1108,12 @@ const stylesFooter = StyleSheet.create({
     borderBottomRightRadius: 5,
     backgroundColor: styleConst.color.lightBlue,
     borderColor: styleConst.color.lightBlue,
+  },
+  buttonNoPriceLeft: {
+    borderTopLeftRadius: 5,
+  },
+  buttonNoPriceRight: {
+    borderTopRightRadius: 5,
   },
   buttonOnlyOne: {
     width: '100%',
