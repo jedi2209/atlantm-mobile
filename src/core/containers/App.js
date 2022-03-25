@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, ActivityIndicator, Platform, Alert} from 'react-native';
+import {StyleSheet, ActivityIndicator, Platform, NativeModules} from 'react-native';
 import {Root, StyleProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
@@ -120,12 +120,6 @@ const App = props => {
       setLoading(false);
     });
 
-    strings.setLanguage(currentLanguage);
-
-    if (get(auth, 'login') === 'zteam') {
-      window.atlantmDebug = true;
-    }
-
     PushNotifications.init();
 
     if (Platform.OS === 'ios') {
@@ -152,6 +146,17 @@ const App = props => {
       });
     } else {
       firebase.appCheck().activate('ignored', false);
+    }
+
+    const deviceLanguage = Platform.OS === 'ios'
+        ? NativeModules.SettingsManager.settings.AppleLocale ||
+          NativeModules.SettingsManager.settings.AppleLanguages[0] //iOS 13
+        : NativeModules.I18nManager.localeIdentifier;
+
+    strings.setLanguage(currentLanguage);
+
+    if (get(auth, 'login') === 'zteam') {
+      window.atlantmDebug = true;
     }
 
     // notifee.setNotificationCategories([

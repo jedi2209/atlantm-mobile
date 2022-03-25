@@ -43,7 +43,7 @@ const _onRefresh = props => {
   const {setRefreshing} = props;
   setRefreshing(true);
   props.props.dataHandler().then(() => {
-    //props.dataBrandsHandler();
+    // props.dataBrandsHandler();
     setRefreshing(false);
   });
 };
@@ -59,7 +59,6 @@ const _EmptyComponent = () => (
 
 const _renderItem = props => {
   const {
-    navigation,
     selectedItem,
     itemLayout,
     goBack,
@@ -67,8 +66,9 @@ const _renderItem = props => {
     onSelect,
     returnState,
     item,
+    route,
   } = props;
-  const returnScreen = get(props.route, 'params.returnScreen');
+  const returnScreen = get(route, 'params.returnScreen');
 
   return (
     <SelectItemByCountry
@@ -86,13 +86,13 @@ const _renderItem = props => {
 
 const SelectListByCountry = props => {
   const {
-    region,
     itemLayout,
     listRussia,
     listUkraine,
     listBelarussia,
     listAll,
     dataHandler,
+    settings,
     // dataBrandsHandler,
   } = props;
   const navigation = useNavigation();
@@ -109,22 +109,30 @@ const SelectListByCountry = props => {
   let customListBYN = [];
   let customListRUS = [];
   let customListUA = [];
+  const countrySettings = get(settings, 'country', []);
+
   if (listAll && listAll.length) {
-    listBelarussia.map(el => {
-      if (listAll.includes(el.id)) {
-        customListBYN.push(el);
-      }
-    });
-    listRussia.map(el => {
-      if (listAll.includes(el.id)) {
-        customListRUS.push(el);
-      }
-    });
-    listUkraine.map(el => {
-      if (listAll.includes(el.id)) {
-        customListUA.push(el);
-      }
-    });
+    if (countrySettings.includes('by')) {
+      listBelarussia.map(el => {
+        if (listAll.includes(el.id)) {
+          customListBYN.push(el);
+        }
+      });
+    }
+    if (countrySettings.includes('ru')) {
+      listRussia.map(el => {
+        if (listAll.includes(el.id)) {
+          customListRUS.push(el);
+        }
+      });
+    }
+    if (countrySettings.includes('ua')) {
+      listUkraine.map(el => {
+        if (listAll.includes(el.id)) {
+          customListUA.push(el);
+        }
+      });
+    }
   }
 
   if (listAll && listAll.length) {
@@ -219,7 +227,7 @@ const SelectListByCountry = props => {
             tabBarUnderlineStyle={{
               backgroundColor: styleConst.color.lightBlue,
             }}>
-            {listBelarussia && listBelarussia.length ? (
+            {listBelarussia && listBelarussia.length && countrySettings && countrySettings.includes('by') ? (
               <Tab
                 heading="🇧🇾 Беларусь"
                 textStyle={styles.TabsTextStyle}
@@ -242,7 +250,7 @@ const SelectListByCountry = props => {
                 />
               </Tab>
             ) : null}
-            {listRussia && listRussia.length ? (
+            {listRussia && listRussia.length && countrySettings && countrySettings.includes('ru') ? (
             <Tab
               heading="🇷🇺 Россия"
               textStyle={styles.TabsTextStyle}
@@ -265,7 +273,7 @@ const SelectListByCountry = props => {
               />
             </Tab>
             ) : null}
-            {listUkraine && listUkraine.length ? (
+            {listUkraine && listUkraine.length && countrySettings && countrySettings.includes('ua') ? (
             <Tab
               heading="🇺🇦 Україна"
               textStyle={styles.TabsTextStyle}
