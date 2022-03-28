@@ -190,12 +190,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({dealer, profile, nav}) => {
+const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
     region: dealer.region,
     profile,
+    settings: core.settings,
   };
 };
 
@@ -1035,6 +1036,14 @@ class Form extends Component {
           },
         );
       }
+      const countrySettings = get(this.props.settings, 'country', []);
+      let countriesListStatic = require('../../../core/const.countries.json');
+      let countriesList = [];
+      countriesListStatic.map(el => {
+        if (countrySettings.includes(el.iso2)) {
+          countriesList.push(el);
+        }
+      });
       return (
         <View
           style={[
@@ -1054,7 +1063,7 @@ class Form extends Component {
             testID={'Form.PhoneWrapper.' + name}
             key={'field' + num + name}
             initialCountry={countryCode}
-            countriesList={require('../../../core/const.countries.json')}
+            countriesList={countriesList}
             offset={20}
             autoFormat={true}
             cancelText={strings.Base.cancel}
