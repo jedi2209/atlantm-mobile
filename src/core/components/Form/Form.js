@@ -491,7 +491,7 @@ class Form extends Component {
     return true;
   };
 
-  _validatePhone = ({value, id, name, data, groupNum, num}) => {
+  _validatePhone = ({value, id, name, data, groupNum, num, countriesCodes}) => {
     const countryCode = PhoneDetect.getCountryCodeByMask(value);
     if (id) {
       this.setState(prevState => {
@@ -512,16 +512,20 @@ class Form extends Component {
         // }
       });
     } else {
-      switch (countryCode) {
-        case 'ua':
-          var valueFull = 16;
-          break;
-        case 'ru':
-          var valueFull = 16;
-          break;
-        case 'by':
-          var valueFull = 17;
-          break;
+      if (!countriesCodes[countryCode]) {
+        var valueFull = null;
+      } else {
+        switch (countryCode) {
+          case 'ua':
+            var valueFull = 16;
+            break;
+          case 'ru':
+            var valueFull = 16;
+            break;
+          case 'by':
+            var valueFull = 17;
+            break;
+        }
       }
       if (value.length === valueFull) {
         this.setState(
@@ -1023,6 +1027,17 @@ class Form extends Component {
         }
       }
 
+      const countrySettings = get(this.props.settings, 'country', []);
+      let countriesListStatic = require('../../../core/const.countries.json');
+      let countriesList = [];
+      let countriesCodes = {};
+      countriesListStatic.map(el => {
+        if (countrySettings.includes(el.iso2)) {
+          countriesList.push(el);
+          countriesCodes[el.iso2] = el;
+        }
+      });
+
       if (userPhoneValue && this.state.showSubmitButton === false) {
         this.setState(
           {
@@ -1036,14 +1051,6 @@ class Form extends Component {
           },
         );
       }
-      const countrySettings = get(this.props.settings, 'country', []);
-      let countriesListStatic = require('../../../core/const.countries.json');
-      let countriesList = [];
-      countriesListStatic.map(el => {
-        if (countrySettings.includes(el.iso2)) {
-          countriesList.push(el);
-        }
-      });
       return (
         <View
           style={[
@@ -1074,6 +1081,9 @@ class Form extends Component {
                 this.inputRefs[
                   groupNum + 'InputWrapper' + num
                 ].isValidNumber() &&
+                this.inputRefs[
+                  groupNum + 'InputWrapper' + num
+                ].getCountryCode() &&
                 number.length &&
                 number.length > 9
               ) {
