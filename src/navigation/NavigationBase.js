@@ -1331,6 +1331,7 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     marginTop: 10,
     marginBottom: 15,
+    color: styleConst.color.greyText,
     // textTransform: 'lowercase',
   },
   sortingButton: {
