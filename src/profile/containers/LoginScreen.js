@@ -43,6 +43,7 @@ import {
 
 import PushNotifications from '../../core/components/PushNotifications';
 import Analytics from '../../utils/amplitude-analytics';
+import PhoneDetect from '../../utils/phoneDetect';
 
 import {strings} from '../../core/lang/const';
 
@@ -111,14 +112,14 @@ class LoginScreen extends Component {
     this.FormConfig = {
       fields: [
         {
-          name: 'PHONE',
+          name: 'PHONELOGIN',
           type: 'phone',
           label: strings.Form.field.label.phone,
           value: this.props.phone,
           props: {
             required: true,
             focusNextInput: false,
-            offset: 5,
+            offset: 5
           },
         },
       ],
@@ -219,7 +220,17 @@ class LoginScreen extends Component {
   };
 
   _verifyCode = data => {
-    let phone = data.PHONE;
+    let phone = data.PHONELOGIN;
+    const phoneCountry = PhoneDetect.country(phone);
+    if (phoneCountry && phoneCountry.code === 'ua') {
+      Toast.show({
+        text: 'К сожалению вы не можете авторизоваться по этому номеру телефона',
+        position: 'top',
+        type: 'warning',
+        duration: 10000,
+      });
+      return false;
+    }
     this.setState({phone: phone, loadingVerify: true});
     return this.props.actionGetPhoneCode({phone}).then(response => {
       if (response.code >= 300) {
@@ -607,6 +618,7 @@ class LoginScreen extends Component {
                     ) : (
                       <View style={styles.PhoneWrapper}>
                         <Form
+                          key='loginPhoneForm'
                           fields={this.FormConfig.fields}
                           SubmitButton={{
                             text: strings.Form.button.receiveCode,

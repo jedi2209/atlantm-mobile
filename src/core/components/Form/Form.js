@@ -338,6 +338,14 @@ class Form extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.state = {};
+    this.inputRefs = [];
+    this.inputRefsNav = [];
+    let requredFields = [];
+    this.allFields = [];
+  }
+
   _setFieldValue(field) {
 
   }
@@ -984,7 +992,7 @@ class Form extends Component {
         groupNum = 1;
       }
 
-      // this.inputRefs[groupNum + 'InputWrapper' + num] = React.createRef();
+      this.inputRefs[groupNum + 'InputWrapper' + num] = React.createRef();
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
 
@@ -1026,8 +1034,12 @@ class Form extends Component {
           }
         }
       }
-
-      const countrySettings = get(this.props.settings, 'country', []);
+      let countrySettings = [];
+      if (data.props && data.props.countries) {
+        countrySettings = data.props.countries;
+      } else {
+        countrySettings = ['by', 'ru', 'ua'];
+      }
       let countriesListStatic = require('../../../core/const.countries.json');
       let countriesList = [];
       let countriesCodes = {};
@@ -1311,7 +1323,7 @@ class Form extends Component {
 
   render() {
     const res = (
-      <View style={styles.safearea} testID={this.props.testID}>
+      <View style={styles.safearea} testID={this.props.testID} key={this.props.key ? this.props.key : 'Form' + Math.round(new Date().getTime()/1000)}>
         <StatusBar
           barStyle={this.props.barStyle ? this.props.barStyle : 'default'}
         />
