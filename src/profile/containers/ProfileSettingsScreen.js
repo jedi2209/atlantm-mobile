@@ -50,7 +50,7 @@ class ProfileSettingsScreen extends Component {
           country: field.COUNTRY,
           textStyle: {
             color: styleConst.color.greyText4,
-          }
+          },
         };
       });
     } else {
@@ -255,6 +255,7 @@ class ProfileSettingsScreen extends Component {
           <View style={styleConst.form.scrollView}>
             <View style={styles.container}>
               <Form
+                key='ProfileSettingsScreenForm'
                 fields={this.FormConfig.fields}
                 barStyle={'light-content'}
                 SubmitButton={{text: strings.ProfileSettingsScreen.save}}
