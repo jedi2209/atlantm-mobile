@@ -636,6 +636,7 @@ class TestDriveScreen extends PureComponent {
               Platform.OS === 'android' ? 'always' : 'never'
             }>
             <Form
+              key='TestDriveForm'
               fields={this.FormConfig.fields}
               barStyle={'light-content'}
               SubmitButton={{text: strings.Form.button.send}}

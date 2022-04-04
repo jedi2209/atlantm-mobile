@@ -274,6 +274,7 @@ class TvaScreen extends Component {
                 paddingHorizontal: 14,
               }}>
               <Form
+                key='TVAForm'
                 fields={this.FormConfig.fields}
                 barStyle={'light-content'}
                 SubmitButton={{text: strings.Form.button.send}}

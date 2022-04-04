@@ -97,6 +97,7 @@ class ReviewAddMessageStepScreen extends PureComponent {
                 paddingTop: 20,
               }}>
               <Form
+                key='ReviewAddForm'
                 fields={this.FormConfig.fields}
                 barStyle={'light-content'}
                 SubmitButton={{text: strings.MessageForm.continue}}

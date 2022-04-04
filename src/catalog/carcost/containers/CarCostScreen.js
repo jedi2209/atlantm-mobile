@@ -690,6 +690,7 @@ class CarCostScreen extends PureComponent {
             }>
             <StatusBar hidden />
             <Form
+              key='CarCostForm'
               fields={this.FormConfig.fields}
               barStyle={'light-content'}
               SubmitButton={{text: strings.Form.button.send}}

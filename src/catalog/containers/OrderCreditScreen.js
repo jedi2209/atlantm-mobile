@@ -372,6 +372,7 @@ class OrderCreditScreen extends Component {
               Platform.OS === 'android' ? 'always' : 'never'
             }>
             <Form
+              key='OrderCreditForm'
               fields={FormConfig.fields}
               barStyle={'light-content'}
               SubmitButton={{text: strings.Form.button.send}}

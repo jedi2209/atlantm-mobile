@@ -338,13 +338,13 @@ class Form extends Component {
     }
   }
 
-  componentWillUnmount() {
-    this.state = {};
-    this.inputRefs = [];
-    this.inputRefsNav = [];
-    let requredFields = [];
-    this.allFields = [];
-  }
+  // componentWillUnmount() {
+  //   this.state = {};
+  //   this.inputRefs = [];
+  //   this.inputRefsNav = [];
+  //   let requredFields = [];
+  //   this.allFields = [];
+  // }
 
   _setFieldValue(field) {
 
@@ -1323,7 +1323,7 @@ class Form extends Component {
 
   render() {
     const res = (
-      <View style={styles.safearea} testID={this.props.testID} key={this.props.key ? this.props.key : 'Form' + Math.round(new Date().getTime()/1000)}>
+      <View style={styles.safearea} testID={this.props.testID} key={this.props.key ? this.props.key : 'Form' + Math.round(new Date().getDate())}>
         <StatusBar
           barStyle={this.props.barStyle ? this.props.barStyle : 'default'}
         />

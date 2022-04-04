@@ -729,6 +729,7 @@ class ServiceScreenStep1 extends Component {
                 paddingHorizontal: 14,
               }}>
               <Form
+                key='ServiceStep1Form'
                 fields={this.FormConfig.fields}
                 defaultCountryCode={this.props.dealerSelected.region}
                 onSubmit={this.onPressOrder}

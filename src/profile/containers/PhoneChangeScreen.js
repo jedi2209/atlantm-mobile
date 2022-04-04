@@ -410,6 +410,7 @@ class PhoneChangeScreen extends PureComponent {
                   {strings.PhoneChangeScreen.comment}
                 </Text>
                 <Form
+                  key='phoneChangeForm'
                   fields={this.FormConfig.fields}
                   barStyle={'light-content'}
                   SubmitButton={{

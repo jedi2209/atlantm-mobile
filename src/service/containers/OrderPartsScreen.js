@@ -488,6 +488,7 @@ class OrderPartsScreen extends Component {
                 paddingHorizontal: 14,
               }}>
               <Form
+                key='OrderPartsForm'
                 fields={this.FormConfig.fields}
                 barStyle={'light-content'}
                 SubmitButton={{text: strings.Form.button.send}}
