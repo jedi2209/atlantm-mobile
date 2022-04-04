@@ -418,6 +418,7 @@ class OrderScreen extends Component {
               Platform.OS === 'android' ? 'always' : 'never'
             }>
             <Form
+              key='OrderScreenForm'
               testID="OrderScreen.Form"
               fields={this.FormConfig.fields}
               barStyle={'light-content'}

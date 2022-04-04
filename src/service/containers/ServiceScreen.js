@@ -467,6 +467,7 @@ class ServiceScreen extends Component {
                 paddingHorizontal: 14,
               }}>
               <Form
+                key='ServiceForm'
                 fields={this.FormConfig.fields}
                 barStyle={'light-content'}
                 SubmitButton={{text: strings.Form.button.send}}

@@ -349,6 +349,7 @@ class ReviewAddRatingStepScreen extends Component {
               />
               {this.renderPublicAgree()}
               <Form
+                key='ReviewAddRatingForm'
                 fields={this.FormConfig.fields}
                 barStyle={'light-content'}
                 SubmitButton={{text: strings.Form.button.send}}

@@ -381,6 +381,7 @@ class ServiceScreenNonAuth extends Component {
                 paddingHorizontal: 14,
               }}>
               <Form
+                key='ServiceNonAuthForm'
                 fields={FormConfig.fields}
                 barStyle={'light-content'}
                 defaultCountryCode={this.props.dealerSelected.region}

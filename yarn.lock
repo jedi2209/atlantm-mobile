@@ -10,9 +10,9 @@
     "@react-native-community/blur" "^3.6.0"
 
 "@amplitude/react-native@^2.2.0":
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/@amplitude/react-native/-/react-native-2.10.0.tgz#4749366c32cde887e2911050b039aa622e0bb3d1"
-  integrity sha512-QaylRHUNYyLm5F/TrYRS5HHCanrg6KKDaBHeYlzttovDRTm5thHgd6XwE6OCCSWGlKSDSACQU4jisNYTepz01Q==
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/@amplitude/react-native/-/react-native-2.11.0.tgz#ea8a9e14fda5369b37ea5984e6554196ff2d7a4f"
+  integrity sha512-mSnB3FXHo5ajGCx7Xo4OFHlYB7X+Kbh50uazTx/zkcsuqkwqMrC9F2xr4w9O3dE+PC+9dbamccL+vveBID7tbA==
 
 "@ampproject/remapping@^2.1.0":
   version "2.1.2"
@@ -2719,9 +2719,9 @@ atob@^2.1.2:
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
 aws-sdk@^2.1084.0:
-  version "2.1105.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1105.0.tgz#3e63129f2aca254f1d6d5a1580b988bb786e98fa"
-  integrity sha512-YZ6IbKvtiw8noD/Iuyp3hXNX5NmhJ2xSU4598pZr55CfnIQ0oU5ZwtQqLPG8E07ouA363/moCYddIAVGYSkQ+A==
+  version "2.1106.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1106.0.tgz#5c536f57b484af56ca2e0b15fcf2e7d5846ffbd8"
+  integrity sha512-3dr0TTR2LI70ST8fa4IgXHpWdH4yv7FLnt9YEndwFQ8ar2EMCMpMU67wwCGBA72GUi0aOg4+lsLjGmCvIq3jug==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -5184,9 +5184,9 @@ got@^7.0.0:
     url-to-options "^1.0.1"
 
 graceful-fs@^4.1.10, graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.3, graceful-fs@^4.1.6, graceful-fs@^4.1.9, graceful-fs@^4.2.0, graceful-fs@^4.2.4, graceful-fs@^4.2.6, graceful-fs@^4.2.9:
-  version "4.2.9"
-  resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.9.tgz#041b05df45755e587a24942279b9d113146e1c96"
-  integrity sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==
+  version "4.2.10"
+  resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.10.tgz#147d3a006da4ca3ce14728c7aefc287c367d7a6c"
+  integrity sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==
 
 har-schema@^2.0.0:
   version "2.0.0"
@@ -7394,10 +7394,15 @@ mkdirp@^1.0.3:
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
 
-moment@^2.19.3, moment@^2.27.0:
+moment@^2.19.3:
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+
+moment@^2.27.0:
+  version "2.29.2"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.2.tgz#00910c60b20843bcba52d37d58c628b47b1f20e4"
+  integrity sha512-UgzG4rvxYpN15jgCmVJwac49h9ly9NurikMWGPdVxm8GZD6XjkKPxDTjQQ43gtGgnV3X0cAyWDdP2Wexoquifg==
 
 ms@2.0.0:
   version "2.0.0"
@@ -8209,9 +8214,9 @@ prettier@^2.0.2:
   integrity sha512-vBZcPRUR5MZJwoyi3ZoyQlc1rXeEck8KgeC9AwwOn+exuxLxq5toTRDTSaVrXHxelDMHy9zlicw8u66yxoSUFg==
 
 prettier@^2.4.0:
-  version "2.6.1"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.1.tgz#d472797e0d7461605c1609808e27b80c0f9cfe17"
-  integrity sha512-8UVbTBYGwN37Bs9LERmxCPjdvPxlEowx2urIL6urHzdb3SDq4B/Z6xLFCblrSnE4iKWcS6ziJ3aOYrc1kz/E2A==
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.6.2.tgz#e26d71a18a74c3d0f0597f55f01fb6c06c206032"
+  integrity sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==
 
 pretty-format@^24.9.0:
   version "24.9.0"
@@ -8844,9 +8849,9 @@ react-native-vkontakte-login@^1.0.0:
   integrity sha512-xZHuFBD97WodPk6b1fhDhV9TpNzVb0eO/uqpW9IUn7Y4Q/yPC4kvX/xpJrBGWS3NejX5HYniUdyZySA2bGyUBQ==
 
 react-native-webview@^11.15.0:
-  version "11.18.0"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.18.0.tgz#4536bf55d2bda28ed0e6662690f0e997e5630647"
-  integrity sha512-S7GXNZuM7jqBOY6R3Pp0KNRwpL8JJdbUB7f8J2WLlU++TOaUXDmsn5tlGnoycwyHotX5al5LypRgOPVFzrPxBA==
+  version "11.18.1"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-11.18.1.tgz#0a1893abd391c8f0e7d4c5874bfa737ca6311225"
+  integrity sha512-1VoVmkbsHJ44WA+frMhNfua64t0u2jq80h25sUWrKJRiYrO0XIsKBnJcqrzuOH1ZAT/zDHTqBB5OU+bxEHLJmQ==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"

@@ -1,8 +1,8 @@
 PODS:
-  - Amplitude (8.8.0):
+  - Amplitude (8.10.0):
     - AnalyticsConnector (~> 1.0.0)
-  - amplitude-react-native (2.10.0):
-    - Amplitude (= 8.8.0)
+  - amplitude-react-native (2.11.0):
+    - Amplitude (= 8.10.0)
     - React-Core
   - AnalyticsConnector (1.0.0)
   - AppAuth (1.5.0):
@@ -537,6 +537,8 @@ PODS:
   - react-native-vkontakte-login (1.0.1):
     - React
     - VK-ios-sdk
+  - react-native-webview (11.18.1):
+    - React-Core
   - React-perflogger (0.67.4)
   - React-RCTActionSheet (0.67.4):
     - React-Core/RCTActionSheetHeaders (= 0.67.4)
@@ -781,6 +783,7 @@ DEPENDENCIES:
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-vkontakte-login (from `../node_modules/react-native-vkontakte-login`)
+  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -939,6 +942,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-splash-screen"
   react-native-vkontakte-login:
     :path: "../node_modules/react-native-vkontakte-login"
+  react-native-webview:
+    :path: "../node_modules/react-native-webview"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -1017,8 +1022,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  Amplitude: 710116f3539c225e86fb70a8abdcd20015683132
-  amplitude-react-native: 0e7ad3adcea6e9e211f6e227d4ee7dd4d83d3f1b
+  Amplitude: 2904f346250510b9e19a4e2262017bcf1d4368f9
+  amplitude-react-native: ca6de4820ff4f1476006dd53d16c50b959b5617b
   AnalyticsConnector: 4c386d5972ac9da86e22d668564dbbac97558754
   AppAuth: 80317d99ac7ff2801a2f18ff86b48cd315ed465d
   boost: a7c83b31436843459a1961bfd74b96033dc77234
@@ -1094,6 +1099,7 @@ SPEC CHECKSUMS:
   react-native-slider: 241935e3ea8e47599c317f512f96ee8de607d4cb
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
+  react-native-webview: 0b7bd2bffced115aefd393e1841babd9b9a557b1
   React-perflogger: 0afaf2f01a47fd0fc368a93bfbb5bd3b26db6e7f
   React-RCTActionSheet: 59f35c4029e0b532fc42114241a06e170b7431a2
   React-RCTAnimation: aae4f4bed122e78bdab72f7118d291d70a932ce2
