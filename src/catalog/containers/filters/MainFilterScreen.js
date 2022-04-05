@@ -147,7 +147,7 @@ const reducerFilters = (state = initialStateFilters, field) => {
   if (!field) {
     return res;
   }
-  if (typeof field === 'object' && field.length) {
+  if (typeof field === 'object' && field && field.length) {
     field.map(val => {
       state[val.name] = val.value;
     });
@@ -180,7 +180,7 @@ const _getSelectedModels = (selectedModels, models) => {
       }
     });
   });
-  if (labels.length === 0) {
+  if (labels && labels.length === 0) {
     return null;
   }
   return (
@@ -189,7 +189,7 @@ const _getSelectedModels = (selectedModels, models) => {
         {labels.length +
           ' ' +
           declOfNum(
-            labels.length,
+            labels && labels.length,
             strings.CarsFilterScreen.chooseBrandModel.titles,
           )}
       </Text>
@@ -1717,7 +1717,7 @@ const MainFilterScreen = ({
               onHide={() => _showHideModal(false)}
               onReset={() => _onChangeFilter('colorType', [])}
               stylesWrapperContent={{
-                height: dataFilters?.data?.colors.length > 10 ? '83%' : 'auto',
+                height: dataFilters?.data?.colors?.length > 10 ? '83%' : 'auto',
                 justifyContent: 'flex-end',
               }}
               title={strings.CarsFilterScreen.filters.colors.title}

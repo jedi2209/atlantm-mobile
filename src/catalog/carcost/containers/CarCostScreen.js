@@ -675,7 +675,7 @@ class CarCostScreen extends PureComponent {
     console.info('== CarCost ==');
 
     return (
-      <KeyboardAvoidingView onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView>
         <TouchableWithoutFeedback style={styleConst.form.scrollView}>
           <Content
             style={{

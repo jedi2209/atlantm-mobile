@@ -231,7 +231,7 @@ const MenuScreen = (props) => {
           id: 6,
           name: strings.Menu.main.tva,
           navigate: {
-            url: 'TvaScreen',
+            url: 'TvaScreenBase',
           },
           type: 'new',
           icon: <Image source={require('../assets/Car-lifter.svg')} />,
