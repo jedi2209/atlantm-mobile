@@ -62,7 +62,7 @@ const platformStyle = {
 
 const styles = StyleSheet.create({
   group: {
-    marginBottom: 16,
+    marginBottom: 10,
   },
   groupName: {
     marginBottom: 10,
@@ -1323,11 +1323,11 @@ class Form extends Component {
 
   render() {
     const res = (
-      <View style={styles.safearea} testID={this.props.testID} key={this.props.key ? this.props.key : 'Form' + Math.round(new Date().getDate())}>
+      <View testID={this.props.testID} key={this.props.key ? this.props.key : 'Form' + Math.round(new Date().getDate())}>
         <StatusBar
           barStyle={this.props.barStyle ? this.props.barStyle : 'default'}
         />
-        <ScrollView contentContainerStyle={{paddingBottom: 24}}>
+        <ScrollView contentContainerStyle={{paddingBottom: 0}}>
           {this.props.fields.groups ? (
             this.props.fields.groups.map((group, num) => {
               return this._groupRender(group, num);

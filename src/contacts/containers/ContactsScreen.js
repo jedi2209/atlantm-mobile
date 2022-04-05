@@ -471,17 +471,17 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
 
     console.info('== Contacts ==');
     let isSubscribedInterval = true;
-    chatStatus(isSubscribedInterval).then(res => {
-      setChatAvailable(res);
-    });
+    // chatStatus(isSubscribedInterval).then(res => {
+    //   setChatAvailable(res);
+    // });
     setCallAvailable(getStatusWorktime(dealerSelected, 'RC'));
 
-    interval.current = setInterval(() => {
-      setCallAvailable(getStatusWorktime(dealerSelected, 'RC'));
-      chatStatus(isSubscribedInterval).then(res => {
-        setChatAvailable(res);
-      });
-    }, intervalMiliSeconds);
+    // interval.current = setInterval(() => {
+    //   setCallAvailable(getStatusWorktime(dealerSelected, 'RC'));
+    //   chatStatus(isSubscribedInterval).then(res => {
+    //     setChatAvailable(res);
+    //   });
+    // }, intervalMiliSeconds);
   return () => {
     isSubscribedInterval = false;
     if (interval && interval.current) {
@@ -510,7 +510,7 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
             );
           })}
         <View style={{flex: 1, flexDirection: 'row'}}>
-          <Text style={styles.buttonPrimaryText}>{dealerSelected.name}</Text>
+          <Text style={styles.buttonPrimaryText}>{get(dealerSelected, 'name')}</Text>
           <Icon
             type="FontAwesome5"
             name="angle-right"
@@ -542,7 +542,7 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
               numberOfLines={1}
               ellipsizeMode="tail"
               style={styles.addressText}>
-              {dealerSelected.city.name ? dealerSelected.city.name : null}
+              {dealerSelected && dealerSelected.city && dealerSelected.city.name ? dealerSelected.city.name : null}
               {dealerSelected.address ? ', ' + dealerSelected.address : null}
             </Text>
           </TouchableOpacity>

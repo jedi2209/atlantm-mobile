@@ -377,7 +377,7 @@ class ServiceScreenNonAuth extends Component {
               style={{
                 flex: 1,
                 paddingTop: 20,
-                marginBottom: 160,
+                marginBottom: 50,
                 paddingHorizontal: 14,
               }}>
               <Form

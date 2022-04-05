@@ -279,7 +279,7 @@ export const Base = ({navigation, route}) => {
       />
       {/* ТВА */}
       <StackBase.Screen
-        name="TvaScreen"
+        name="TvaScreenBase"
         component={TVA}
         options={BigCloseButton(navigation, route, {
           ...TransitionPresets.ScaleFromCenterAndroid,

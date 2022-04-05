@@ -292,7 +292,7 @@ class OrderMyPriceScreen extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView>
         <TouchableWithoutFeedback
           style={styleConst.form.scrollView}
           testID="OrderMyPriceScreen.Wrapper"

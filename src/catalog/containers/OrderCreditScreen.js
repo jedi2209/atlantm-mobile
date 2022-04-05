@@ -360,7 +360,7 @@ class OrderCreditScreen extends Component {
       },
     };
     return (
-      <KeyboardAvoidingView onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView>
         <TouchableWithoutFeedback
           style={styleConst.form.scrollView}
           testID="OrderCreditScreen.Wrapper"
