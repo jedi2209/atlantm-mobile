@@ -142,37 +142,39 @@ const AdditionalPurchaseScreen = ({SAPuser, cars, additionalPurchase, insurance,
             const docNumber = get(row, 'val.doc');
             const dealerName = get(row, 'val.dealer.name');
             const key = 'additionalPurchaseData' + get(row, 'val.doc', date+priceTotal);
-            return (
-              <List.Accordion
-                title={[docNumber ? '#' + docNumber : null, dayMonthYear(date)].filter(key => key !== null).join(', ')}
-                description={[manager, dealerName].filter(key => key !== null).join(', ')}
-                expanded={typeof expandedState[key] === 'undefined' ? true : expandedState[key]}
-                onPress={() => expand(key)}
-                onLongPress={() => expand(key)}
-                id={key}>
-                {row.data.map(valData => {
-                  const price = get(valData, 'price.base');
-                  return (
-                    <>
-                      <List.Item
-                        key={'additionalPurchaseItem' + get(valData, 'doc', Date.now())}
-                        titleNumberOfLines={2}
-                        descriptionNumberOfLines={3}
-                        title={[get(valData, 'name'), [get(valData, 'count'), get(valData, 'units', '').toLowerCase()].filter(key => key !== null).join(' ')].join(', ')}
-                        // description={[dayMonthYear(date), dealerName, '', manager].join('\r\n')}
-                        // description={[dayMonthYear(date), dealerName, '', manager ? 'менеджер: ' + manager : null].join('\r\n')}
-                        left={props => <List.Icon {...props} icon="cart-outline" />}
-                        right={props => {
-                          if (price) {
-                            return (<View style={{justifyContent: 'center'}}><Text style={{textAlignVertical: 'center'}}>{showPrice(price.total, price.curr, true)}</Text></View>);
-                          }
-                        }}
-                      />
-                      <Divider />
-                    </>
-                  );
-                })}
-              </List.Accordion>);
+            if (row && row.data) {
+              return (
+                <List.Accordion
+                  title={[docNumber ? '#' + docNumber : null, dayMonthYear(date)].filter(key => key !== null).join(', ')}
+                  description={[manager, dealerName].filter(key => key !== null).join(', ')}
+                  expanded={typeof expandedState[key] === 'undefined' ? true : expandedState[key]}
+                  onPress={() => expand(key)}
+                  onLongPress={() => expand(key)}
+                  id={key}>
+                  {row.data.map(valData => {
+                    const price = get(valData, 'price.base');
+                    return (
+                      <>
+                        <List.Item
+                          key={'additionalPurchaseItem' + get(valData, 'doc', Date.now())}
+                          titleNumberOfLines={2}
+                          descriptionNumberOfLines={3}
+                          title={[get(valData, 'name'), [get(valData, 'count'), get(valData, 'units', '').toLowerCase()].filter(key => key !== null).join(' ')].join(', ')}
+                          // description={[dayMonthYear(date), dealerName, '', manager].join('\r\n')}
+                          // description={[dayMonthYear(date), dealerName, '', manager ? 'менеджер: ' + manager : null].join('\r\n')}
+                          left={props => <List.Icon {...props} icon="cart-outline" />}
+                          right={props => {
+                            if (price) {
+                              return (<View style={{justifyContent: 'center'}}><Text style={{textAlignVertical: 'center'}}>{showPrice(price.total, price.curr, true)}</Text></View>);
+                            }
+                          }}
+                        />
+                        <Divider />
+                      </>
+                    );
+                  })}
+                </List.Accordion>);
+            }
           });
         break;
       case 'insurance':
