@@ -5,25 +5,25 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export const KeyboardAvoidingView = ({children, behavior}) => {
   const mainRef = useRef(null);
   const innerRef = useRef(null);
   return (
-    <KeyboardAwareScrollView
-      // ref={mainRef}
-      style={styles.default}
-      enableOnAndroid={true}
-      contentContainerStyle={styles.default}
-      // behavior={
-      //   behavior ? behavior : Platform.select({ios: 'padding', android: null})
-      // }
-      >
+    // <KeyboardAwareScrollView
+    //   // ref={mainRef}
+    //   style={styles.default}
+    //   enableOnAndroid={true}
+    //   contentContainerStyle={styles.default}
+    //   // behavior={
+    //   //   behavior ? behavior : Platform.select({ios: 'padding', android: null})
+    //   // }
+    //   >
       <View style={styles.default}>
         {children}
       </View>
-    </KeyboardAwareScrollView>
+    // </KeyboardAwareScrollView>
   );
 };
 

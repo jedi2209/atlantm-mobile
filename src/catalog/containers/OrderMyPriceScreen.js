@@ -292,26 +292,22 @@ class OrderMyPriceScreen extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView>
-        <TouchableWithoutFeedback
-          style={styleConst.form.scrollView}
-          testID="OrderMyPriceScreen.Wrapper"
-          onPress={Keyboard.dismiss}>
-          <Content
-            style={styles.container}
-            enableResetScrollToCoords={false}
-            keyboardShouldPersistTaps={
-              Platform.OS === 'android' ? 'always' : 'never'
-            }>
-            <Form
-              fields={this.FormConfig.fields}
-              barStyle={'light-content'}
-              SubmitButton={{text: strings.Form.button.send}}
-              onSubmit={this.onPressOrder}
-            />
-          </Content>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <Content
+        style={[styles.container]}
+        testID="OrderMyPriceScreen.Wrapper"
+        // enableResetScrollToCoords={false}
+        // keyboardShouldPersistTaps={
+        //   Platform.OS === 'android' ? 'always' : 'never'
+        // }
+        >
+        <Form
+          key='OrderMyPriceForm'
+          fields={this.FormConfig.fields}
+          barStyle={'light-content'}
+          SubmitButton={{text: strings.Form.button.send}}
+          onSubmit={this.onPressOrder}
+        />
+      </Content>
     );
   }
 }
