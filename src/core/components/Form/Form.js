@@ -1327,7 +1327,7 @@ class Form extends Component {
         <StatusBar
           barStyle={this.props.barStyle ? this.props.barStyle : 'default'}
         />
-        <ScrollView contentContainerStyle={{paddingBottom: 0}}>
+        <ScrollView contentContainerStyle={{paddingBottom: 20}}>
           {this.props.fields.groups ? (
             this.props.fields.groups.map((group, num) => {
               return this._groupRender(group, num);

@@ -217,6 +217,7 @@ class CallMeBackScreen extends PureComponent {
         <ScrollView style={styleConst.form.scrollView}>
           <View style={styles.wrapper}>
             <Form
+              key='CallMeBackForm'
               fields={this.FormConfig.fields}
               barStyle={'light-content'}
               SubmitButton={{

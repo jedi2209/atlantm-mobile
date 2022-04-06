@@ -675,30 +675,26 @@ class CarCostScreen extends PureComponent {
     console.info('== CarCost ==');
 
     return (
-      <KeyboardAvoidingView>
-        <TouchableWithoutFeedback style={styleConst.form.scrollView}>
-          <Content
-            style={{
-              flex: 1,
-              paddingTop: 20,
-              paddingHorizontal: 14,
-              backgroundColor: '#eee',
-            }}
-            enableResetScrollToCoords={false}
-            keyboardShouldPersistTaps={
-              Platform.OS === 'android' ? 'always' : 'never'
-            }>
-            <StatusBar hidden />
-            <Form
-              key='CarCostForm'
-              fields={this.FormConfig.fields}
-              barStyle={'light-content'}
-              SubmitButton={{text: strings.Form.button.send}}
-              onSubmit={this.onPressOrder}
-            />
-          </Content>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <Content
+        style={{
+          flex: 1,
+          paddingTop: 20,
+          paddingHorizontal: 14,
+          backgroundColor: '#eee',
+        }}
+        enableResetScrollToCoords={false}
+        keyboardShouldPersistTaps={
+          Platform.OS === 'android' ? 'always' : 'never'
+        }>
+        <StatusBar hidden />
+        <Form
+          key='CarCostForm'
+          fields={this.FormConfig.fields}
+          barStyle={'light-content'}
+          SubmitButton={{text: strings.Form.button.send}}
+          onSubmit={this.onPressOrder}
+        />
+      </Content>
     );
   }
 }
