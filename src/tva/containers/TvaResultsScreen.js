@@ -241,125 +241,120 @@ class TvaResultsScreen extends Component {
     });
 
     return (
-      <KeyboardAvoidingView>
-        <StatusBar barStyle="light-content" />
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView>
-            <View style={styles.container}>
-              <View style={styles.header}>
-                <Text style={styles.heading}>
-                  {`${titleCar}\r\n${titleCarNumber}`}
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.heading}>
+              {`${titleCar}\r\n${titleCarNumber}`}
+            </Text>
+          </View>
+          {this.state.success ? (
+            <View style={{flex: 1, justifyContent: 'center'}}>
+              <View style={styles.group}>
+                <Text
+                  style={{
+                    fontSize: 22,
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                  }}>
+                  {
+                    strings.TvaResultsScreen.Notifications.success
+                      .messageSent
+                  }
                 </Text>
               </View>
-              {this.state.success ? (
-                <View style={{flex: 1, justifyContent: 'center'}}>
-                  <View style={styles.group}>
-                    <Text
-                      style={{
-                        fontSize: 22,
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                      }}>
-                      {
-                        strings.TvaResultsScreen.Notifications.success
-                          .messageSent
-                      }
-                    </Text>
-                  </View>
-                  <View>
-                    <Button
-                      onPress={() =>
-                        this.props.navigation.navigate('BottomTabNavigation')
-                      }
-                      style={[styleConst.shadow.default, styles.button]}>
-                      <Text style={styles.buttonText}>
-                        {strings.Navigation.back}
-                      </Text>
-                    </Button>
-                  </View>
-                </View>
-              ) : (
-                <>
-                  {info.map((item) => (
-                    <View key={'ViewTvaResult' + item.id}>
-                      <View
-                        style={[
-                          styles.group,
-                          activeOrderId === item.id && {
-                            backgroundColor: styleConst.color.white,
-                          },
-                        ]}>
-                        <Text style={styles.groupLabel}>№ {item.id}</Text>
-                        <View style={styles.field}>
-                          <TextInput
-                            editable={false}
-                            style={styles.textinput}
-                            label={strings.TvaResultsScreen.serviceMan}
-                            value={item.name}
-                          />
-                        </View>
-                        <View style={styles.field}>
-                          <TextInput
-                            editable={false}
-                            style={styles.textinput}
-                            label={strings.TvaResultsScreen.time}
-                            value={this.processDate(item.date)}
-                          />
-                        </View>
-                        <View style={styles.field}>
-                          <TextInput
-                            editable={false}
-                            style={styles.textinput}
-                            label={strings.TvaResultsScreen.status}
-                            value={item.status}
-                          />
-                        </View>
-                      </View>
-                    </View>
-                  ))}
-                  <View style={styles.group}>
+              <View>
+                <Button
+                  onPress={() =>
+                    this.props.navigation.navigate('BottomTabNavigation')
+                  }
+                  style={[styleConst.shadow.default, styles.button]}>
+                  <Text style={styles.buttonText}>
+                    {strings.Navigation.back}
+                  </Text>
+                </Button>
+              </View>
+            </View>
+          ) : (
+            <>
+              {info.map((item) => (
+                <View key={'ViewTvaResult' + item.id}>
+                  <View
+                    style={[
+                      styles.group,
+                      activeOrderId === item.id && {
+                        backgroundColor: styleConst.color.white,
+                      },
+                    ]}>
+                    <Text style={styles.groupLabel}>№ {item.id}</Text>
                     <View style={styles.field}>
                       <TextInput
-                        multiline={true}
-                        numberOfLines={2}
-                        style={{
-                          height: Platform.OS === 'ios' ? 90 : 'auto',
-                          borderColor: '#d8d8d8',
-                          paddingTop: 25,
-                          borderBottomWidth: 1,
-                          color: '#222b45',
-                          fontSize: 18,
-                        }}
-                        label={strings.TvaResultsScreen.messageToServiceMan}
-                        value={this.state.comment}
-                        onChangeText={this.onChangeField('comment')}
+                        editable={false}
+                        style={styles.textinput}
+                        label={strings.TvaResultsScreen.serviceMan}
+                        value={item.name}
+                      />
+                    </View>
+                    <View style={styles.field}>
+                      <TextInput
+                        editable={false}
+                        style={styles.textinput}
+                        label={strings.TvaResultsScreen.time}
+                        value={this.processDate(item.date)}
+                      />
+                    </View>
+                    <View style={styles.field}>
+                      <TextInput
+                        editable={false}
+                        style={styles.textinput}
+                        label={strings.TvaResultsScreen.status}
+                        value={item.status}
                       />
                     </View>
                   </View>
-                  <View style={styles.group}>
-                    <Button
-                      full
-                      onPress={
-                        this.state.loading
-                          ? undefined
-                          : this.onPressMessageButton
-                      }
-                      style={[styleConst.shadow.default, styles.button]}>
-                      {this.state.loading ? (
-                        <ActivityIndicator color={styleConst.color.white} />
-                      ) : (
-                        <Text style={styles.buttonText}>
-                          {strings.Form.button.send}
-                        </Text>
-                      )}
-                    </Button>
-                  </View>
-                </>
-              )}
-            </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+                </View>
+              ))}
+              <View style={styles.group}>
+                <View style={styles.field}>
+                  <TextInput
+                    multiline={true}
+                    numberOfLines={2}
+                    style={{
+                      height: Platform.OS === 'ios' ? 90 : 'auto',
+                      borderColor: '#d8d8d8',
+                      paddingTop: 25,
+                      borderBottomWidth: 1,
+                      color: '#222b45',
+                      fontSize: 18,
+                    }}
+                    label={strings.TvaResultsScreen.messageToServiceMan}
+                    value={this.state.comment}
+                    onChangeText={this.onChangeField('comment')}
+                  />
+                </View>
+              </View>
+              <View style={styles.group}>
+                <Button
+                  full
+                  onPress={
+                    this.state.loading
+                      ? undefined
+                      : this.onPressMessageButton
+                  }
+                  style={[styleConst.shadow.default, styles.button]}>
+                  {this.state.loading ? (
+                    <ActivityIndicator color={styleConst.color.white} />
+                  ) : (
+                    <Text style={styles.buttonText}>
+                      {strings.Form.button.send}
+                    </Text>
+                  )}
+                </Button>
+              </View>
+            </>
+          )}
+        </View>
+      </ScrollView>
     );
   }
 }

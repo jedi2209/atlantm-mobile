@@ -8,8 +8,6 @@ import {
   Text,
   ImageBackground,
   Image,
-  KeyboardAvoidingView,
-  TouchableWithoutFeedback,
   ActivityIndicator,
   Platform,
   StyleSheet,
@@ -48,10 +46,8 @@ import PhoneDetect from '../../utils/phoneDetect';
 import {strings} from '../../core/lang/const';
 
 import {verticalScale} from '../../utils/scale';
-import {ScrollView} from 'react-native';
 import {get} from 'lodash';
 import UserData from '../../utils/user';
-import style from '../../core/components/Lists/style';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -272,7 +268,6 @@ class LoginScreen extends Component {
     // тут специально одно равно чтобы сработало приведение типов
     // eslint-disable-next-line eqeqeq
     if (code != this.state.checkCode) {
-      this.setState({codeValue: ''});
       this.CodeInput[0].clear();
       this.CodeInput[1].clear();
       this.CodeInput[2].clear();
@@ -287,7 +282,6 @@ class LoginScreen extends Component {
       });
       return;
     }
-    // this.keyboardHideListener.remove();
     this.setState({loading: true, loadingVerify: true});
     this.props
       .actionGetPhoneCode({phone, code})
@@ -301,11 +295,12 @@ class LoginScreen extends Component {
         return this.props.actionSavePofile(data.user);
       })
       .then(() => {
-        this.setState({loading: false});
+        this.setState({codeValue: '', loading: false, loadingVerify: false});
         this.props.navigation.navigate('LoginScreen');
       })
       .catch(() => {
-        this.setState({loading: false});
+        this.otpArray = [];
+        this.setState({codeValue: '', loading: false, loadingVerify: false});
         Toast.show({
           text: strings.Notifications.error.text,
           position: 'top',
@@ -602,8 +597,18 @@ class LoginScreen extends Component {
                       ))}
                     </>
                   ) : (
-                    <View style={styles.PhoneWrapper}>
                       <Form
+                        keyboardAvoidingViewProps={{
+                          enableAutomaticScroll: false,
+                        }}
+                        contentContainerStyle={{
+                          paddingHorizontal: 14,
+                          marginTop: 20,
+                          justifyContent: 'center',
+                        }}     
+                        formScrollViewStyle={{
+                          backgroundColor: 'none',
+                        }}                   
                         key='loginPhoneForm'
                         fields={this.FormConfig.fields}
                         SubmitButton={{
@@ -612,7 +617,6 @@ class LoginScreen extends Component {
                         }}
                         onSubmit={this._verifyCode}
                       />
-                    </View>
                   )}
                 </View>
                 {this.state.code ? (

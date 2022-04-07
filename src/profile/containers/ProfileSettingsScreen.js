@@ -2,11 +2,8 @@
 import React, {Component} from 'react';
 import {StyleSheet, Platform, ScrollView, View, Alert} from 'react-native';
 import {connect} from 'react-redux';
-import {Container, StyleProvider} from 'native-base';
-import getTheme from '../../../native-base-theme/components';
 import {substractYears} from '../../utils/date';
 
-import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
 import SocialAuth from '../components/SocialAuth';
 
@@ -249,22 +246,17 @@ class ProfileSettingsScreen extends Component {
 
   render() {
     return (
-      <StyleProvider style={getTheme()}>
-        <KeyboardAvoidingView
-          behavior={Platform.select({ios: 'height', android: null})}>
-          <View style={styleConst.form.scrollView}>
-            <View style={styles.container}>
-              <Form
-                key='ProfileSettingsScreenForm'
-                fields={this.FormConfig.fields}
-                barStyle={'light-content'}
-                SubmitButton={{text: strings.ProfileSettingsScreen.save}}
-                onSubmit={this.onPressSave}
-              />
-            </View>
-          </View>
-        </KeyboardAvoidingView>
-      </StyleProvider>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key='ProfileSettingsScreenForm'
+        fields={this.FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{text: strings.ProfileSettingsScreen.save}}
+        onSubmit={this.onPressSave}
+      />
     );
   }
 }

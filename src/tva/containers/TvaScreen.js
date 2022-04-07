@@ -1,21 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {
-  View,
-  TouchableWithoutFeedback,
-  ScrollView,
-  Keyboard,
-  Platform,
-} from 'react-native';
 import {Toast} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
 import {actionFetchTva, actionSetPushTracking} from '../actions';
 import {localUserDataUpdate} from '../../profile/actions';
-
-import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 
 // components
 import Form from '../../core/components/Form/Form';
@@ -24,7 +15,6 @@ import PushNotifications from '../../core/components/PushNotifications';
 // helpers
 import {get} from 'lodash';
 import {TVA__SUCCESS, TVA__FAIL} from '../actionTypes';
-import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
 
 const mapStateToProps = ({dealer, profile, tva, nav, core}) => {
@@ -262,28 +252,20 @@ class TvaScreen extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView
-        behavior={Platform.select({ios: 'height', android: null})}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={styleConst.form.scrollView}>
-            <View
-              style={{
-                flex: 1,
-                paddingTop: 20,
-                marginBottom: 50,
-                paddingHorizontal: 14,
-              }}>
-              <Form
-                key='TVAForm'
-                fields={this.FormConfig.fields}
-                barStyle={'light-content'}
-                SubmitButton={{text: strings.Form.button.send}}
-                onSubmit={this.onPressButton}
-              />
-            </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        keyboardAvoidingViewProps={{
+          enableAutomaticScroll: false,
+        }}
+        key='TVAForm'
+        fields={this.FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{text: strings.Form.button.send}}
+        onSubmit={this.onPressButton}
+      />
     );
   }
 }

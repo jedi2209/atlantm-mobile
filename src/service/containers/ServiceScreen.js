@@ -8,7 +8,6 @@ import {
   Alert,
   TouchableWithoutFeedback,
   ScrollView,
-  Keyboard,
   Text,
 } from 'react-native';
 import {Icon, Button} from 'native-base';
@@ -20,15 +19,12 @@ import {connect} from 'react-redux';
 import {orderService} from '../actions';
 import {localUserDataUpdate} from '../../profile/actions';
 
-import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
-
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import {addDays, dayMonthYear, yearMonthDay} from '../../utils/date';
 import {ERROR_NETWORK} from '../../core/const';
-import styleConst from '../../core/style-const';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
 
@@ -456,27 +452,17 @@ class ServiceScreen extends Component {
       },
     };
     return (
-      <KeyboardAvoidingView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={styleConst.form.scrollView}>
-            <View
-              style={{
-                flex: 1,
-                paddingTop: 20,
-                marginBottom: 50,
-                paddingHorizontal: 14,
-              }}>
-              <Form
-                key='ServiceForm'
-                fields={this.FormConfig.fields}
-                barStyle={'light-content'}
-                SubmitButton={{text: strings.Form.button.send}}
-                onSubmit={this.onPressOrder}
-              />
-            </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key='ServiceForm'
+        fields={this.FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{text: strings.Form.button.send}}
+        onSubmit={this.onPressOrder}
+      />
     );
   }
 }

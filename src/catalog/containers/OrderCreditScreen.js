@@ -6,13 +6,9 @@ import {
   View,
   Alert,
   Text,
-  TouchableWithoutFeedback,
-  Keyboard,
   Dimensions,
   Platform,
 } from 'react-native';
-import {Content} from 'native-base';
-import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 // redux
@@ -360,27 +356,17 @@ class OrderCreditScreen extends Component {
       },
     };
     return (
-      <KeyboardAvoidingView>
-        <TouchableWithoutFeedback
-          style={styleConst.form.scrollView}
-          testID="OrderCreditScreen.Wrapper"
-          onPress={Keyboard.dismiss}>
-          <Content
-            style={styles.container}
-            enableResetScrollToCoords={false}
-            keyboardShouldPersistTaps={
-              Platform.OS === 'android' ? 'always' : 'never'
-            }>
-            <Form
-              key='OrderCreditForm'
-              fields={FormConfig.fields}
-              barStyle={'light-content'}
-              SubmitButton={{text: strings.Form.button.send}}
-              onSubmit={this.onPressOrder}
-            />
-          </Content>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key='OrderCreditForm'
+        fields={FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{text: strings.Form.button.send}}
+        onSubmit={this.onPressOrder}
+      />
     );
   }
 }

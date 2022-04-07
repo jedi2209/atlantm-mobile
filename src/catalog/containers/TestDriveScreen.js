@@ -4,14 +4,10 @@ import PropTypes from 'prop-types';
 import {
   StyleSheet,
   Alert,
-  TouchableWithoutFeedback,
-  Keyboard,
   Platform,
   ActivityIndicator,
   Text,
 } from 'react-native';
-import {Content} from 'native-base';
-import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
 // redux
 import {connect} from 'react-redux';
@@ -625,26 +621,17 @@ class TestDriveScreen extends PureComponent {
       },
     };
     return (
-      <KeyboardAvoidingView>
-        <TouchableWithoutFeedback
-          style={styleConst.form.scrollView}
-          testID="TestDriveScreen.Wrapper">
-          <Content
-            style={styles.container}
-            enableResetScrollToCoords={false}
-            keyboardShouldPersistTaps={
-              Platform.OS === 'android' ? 'always' : 'never'
-            }>
-            <Form
-              key='TestDriveForm'
-              fields={this.FormConfig.fields}
-              barStyle={'light-content'}
-              SubmitButton={{text: strings.Form.button.send}}
-              onSubmit={this.onPressOrder}
-            />
-          </Content>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key='TestDriveForm'
+        fields={this.FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{text: strings.Form.button.send}}
+        onSubmit={this.onPressOrder}
+      />
     );
   }
 }

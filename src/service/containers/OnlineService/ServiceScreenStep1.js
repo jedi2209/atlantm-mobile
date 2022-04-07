@@ -6,7 +6,6 @@ import {
   Text,
   TouchableWithoutFeedback,
   ScrollView,
-  Keyboard,
   ActivityIndicator,
   Platform,
   TouchableOpacity,
@@ -17,7 +16,6 @@ import {get, orderBy} from 'lodash';
 import styleConst from '../../../core/style-const';
 
 import {CarCard} from '../../../profile/components/CarCard';
-import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import Form from '../../../core/components/Form/Form';
 import UserData from '../../../utils/user';
 import showPrice from '../../../utils/price';
@@ -718,34 +716,24 @@ class ServiceScreenStep1 extends Component {
       },
     };
     return (
-      <KeyboardAvoidingView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={styleConst.form.scrollView}>
-            <View
-              style={{
-                flex: 1,
-                paddingTop: 20,
-                marginBottom: 50,
-                paddingHorizontal: 14,
-              }}>
-              <Form
-                key='ServiceStep1Form'
-                fields={this.FormConfig.fields}
-                defaultCountryCode={this.props.dealerSelected.region}
-                onSubmit={this.onPressOrder}
-                SubmitButton={{
-                  text: get(this.props.route, 'params.settings.submitButtonText', false) ? get(this.props.route, 'params.settings.submitButtonText') : strings.DatePickerCustom.chooseDateButton,
-                  style: {
-                    backgroundColor: styleConst.color.darkBg,
-                  },
-                  noAgreement: true,
-                }}
-                parentState={this.state}
-              />
-            </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key='ServiceStep1Form'
+        fields={this.FormConfig.fields}
+        defaultCountryCode={this.props.dealerSelected.region}
+        onSubmit={this.onPressOrder}
+        SubmitButton={{
+          text: get(this.props.route, 'params.settings.submitButtonText', false) ? get(this.props.route, 'params.settings.submitButtonText') : strings.DatePickerCustom.chooseDateButton,
+          style: {
+            backgroundColor: styleConst.color.darkBg,
+          },
+          noAgreement: true,
+        }}
+        parentState={this.state}
+      />
     );
   }
 }
