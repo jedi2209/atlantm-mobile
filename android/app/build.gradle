@@ -3,8 +3,9 @@ apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
 
 react {
-    reactRoot = rootProject.file("../node_modules/react-native/")
+    root = rootProject.file('..')
     codegenDir = rootProject.file("../node_modules/react-native-codegen/")
+    reactNativeDir = rootProject.file('../node_modules/react-native')
 }
 
 import com.android.build.OutputFile
