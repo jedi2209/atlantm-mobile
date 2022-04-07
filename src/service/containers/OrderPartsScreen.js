@@ -8,7 +8,6 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   Alert,
-  Keyboard,
   Text,
 } from 'react-native';
 import {Icon, Button, Toast} from 'native-base';
@@ -20,18 +19,15 @@ import {connect} from 'react-redux';
 import {orderParts} from '../actions';
 import {localUserDataUpdate} from '../../profile/actions';
 
-import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
-
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import {ERROR_NETWORK} from '../../core/const';
-import styleConst from '../../core/style-const';
 import {PARTS_ORDER__SUCCESS, PARTS_ORDER__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
 
-const mapStateToProps = ({dealer, profile, service, nav}) => {
+const mapStateToProps = ({dealer, profile, nav}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
   let carLocalVin = '',
     carLocalBrand = '',
@@ -477,27 +473,17 @@ class OrderPartsScreen extends Component {
       },
     };
     return (
-      <KeyboardAvoidingView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={styleConst.form.scrollView}>
-            <View
-              style={{
-                flex: 1,
-                paddingTop: 20,
-                marginBottom: 50,
-                paddingHorizontal: 14,
-              }}>
-              <Form
-                key='OrderPartsForm'
-                fields={this.FormConfig.fields}
-                barStyle={'light-content'}
-                SubmitButton={{text: strings.Form.button.send}}
-                onSubmit={this.onPressOrder}
-              />
-            </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key='OrderPartsForm'
+        fields={this.FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{text: strings.Form.button.send}}
+        onSubmit={this.onPressOrder}
+      />
     );
   }
 }

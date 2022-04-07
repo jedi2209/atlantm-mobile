@@ -21,6 +21,7 @@ import * as NavigationService from '../../../navigation/NavigationService';
 import {TextInput} from '../TextInput';
 import {DatePickerCustom} from '../DatePickerCustom';
 import ChooseDateTimeComponent from '../../../service/components/ChooseDateTimeComponent';
+import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import RNPickerSelect from 'react-native-picker-select';
 import PhoneInput from 'react-native-phone-input';
 import DealerItemList from '../DealerItemList';
@@ -233,6 +234,13 @@ class Form extends Component {
     },
     testID: 'Form',
     barStyle: 'light-content',
+    contentContainerStyle: {},
+    formScrollViewStyle: {
+      flex: 1,
+      backgroundColor: '#eee',
+      paddingBottom: 0,
+    },
+    keyboardAvoidingViewProps: {},
   };
 
   constructor(props) {
@@ -1323,109 +1331,111 @@ class Form extends Component {
 
   render() {
     const res = (
-      <View testID={this.props.testID} key={this.props.key ? this.props.key : 'Form' + Math.round(new Date().getDate())}>
-        <StatusBar
-          barStyle={this.props.barStyle ? this.props.barStyle : 'default'}
-        />
-        <ScrollView contentContainerStyle={{paddingBottom: 20}}>
-          {this.props.fields.groups ? (
-            this.props.fields.groups.map((group, num) => {
-              return this._groupRender(group, num);
-            })
-          ) : (
-            <View style={styles.group} key={'group0'}>
-              <View style={styles.groupFields}>
-                {this.props.fields.map((field, num) => {
-                  if (field.type) {
-                    return this._fieldsRender[field.type](
-                      field,
-                      num,
-                      this.props.fields,
-                      1,
-                    );
-                  }
-                })}
-              </View>
-            </View>
-          )}
-          {this.state.showSubmitButton ? (
-            <Animated.View
-              style={[
-                styles.group,
-                {
-                  opacity: this._animated.SubmitButton,
-                },
-              ]}>
-              {!this.props.SubmitButton.noAgreement ? (
-              <View style={{marginBottom: 10}}>
-                <Text style={styles.userAgreementText}>{strings.Form.agreement.first} <Text style={[styles.userAgreementText, styles.userAgreementLink]} onPress={() => NavigationService.navigate('UserAgreementScreen')}>{strings.Form.agreement.second}</Text> {strings.Form.agreement.third}</Text>
-              </View>
-              ) : null}
-              <Button
-                block
-                {...(this.props.SubmitButton.iconLeft ? 'iconLeft' : null)}
-                {...(this.props.SubmitButton.iconRight ? 'iconRight' : null)}
-                onPress={async () => {
-                  if (!this.state.loading) {
-                    if (!this.props.onSubmit) {
-                      console.error(
-                        'Undefined required onSubmit prop for Form component',
-                        this.props,
-                        this.state,
+      <ScrollView style={this.props.formScrollViewStyle} testID={this.props.testID} key={this.props.key ? this.props.key : 'Form' + Math.round(new Date().getDate())}>
+        <KeyboardAvoidingView {...this.props.keyboardAvoidingViewProps}>
+          <StatusBar
+            barStyle={this.props.barStyle ? this.props.barStyle : 'default'}
+          />
+          <View style={[{paddingBottom: 20}, this.props.contentContainerStyle]}>
+            {this.props.fields.groups ? (
+              this.props.fields.groups.map((group, num) => {
+                return this._groupRender(group, num);
+              })
+            ) : (
+              <View style={styles.group} key={'group0'}>
+                <View style={styles.groupFields}>
+                  {this.props.fields.map((field, num) => {
+                    if (field.type) {
+                      return this._fieldsRender[field.type](
+                        field,
+                        num,
+                        this.props.fields,
+                        1,
                       );
-                      return false;
                     }
-                    if (this._validate()) {
-                      this.setState({loading: true});
-                      var promise = new Promise((resolve, reject) => {
-                        return this.props.onSubmit(this.state).then(data => {
-                          resolve(data);
-                        });
-                      });
-                      await promise
-                        .then(data => {
-                          this.setState({loading: false});
-                          return data;
-                        })
-                        .catch(error => {
-                          console.error(error);
-                          this.setState({loading: false});
-                        });
-                    }
-                  }
-                }}
+                  })}
+                </View>
+              </View>
+            )}
+            {this.state.showSubmitButton ? (
+              <Animated.View
                 style={[
-                  styleConst.shadow.default,
-                  styles.button,
-                  this.props.SubmitButton && this.props.SubmitButton.style,
-                ]}
-                disabled={this.state.showSubmitButton ? false : true}
-                active={this.state.showSubmitButton ? true : false}
-                testID="Form.ButtonSubmit"
-                accessibilityValue={{
-                  text: this.state.showSubmitButton ? 'false' : 'true',
-                }}
-                {...this.props.SubmitButton.props}>
-                {this.state.loading ? (
-                  <ActivityIndicator color={styleConst.color.white} />
-                ) : (
-                  <>
-                    {this.props.SubmitButton.iconLeft
-                      ? this.props.SubmitButton.iconLeft
-                      : null}
-                    <Text selectable={false} style={styles.buttonText}>
-                      {this.props.SubmitButton.text}
-                    </Text>
-                    {this.props.SubmitButton.iconRight
-                      ? this.props.SubmitButton.iconRight
-                      : null}
-                  </>
-                )}
-              </Button>
-            </Animated.View>
-          ) : null}
-        </ScrollView>
-      </View>
+                  styles.group,
+                  {
+                    opacity: this._animated.SubmitButton,
+                  },
+                ]}>
+                {!this.props.SubmitButton.noAgreement ? (
+                <View style={{marginBottom: 10}}>
+                  <Text style={styles.userAgreementText}>{strings.Form.agreement.first} <Text style={[styles.userAgreementText, styles.userAgreementLink]} onPress={() => NavigationService.navigate('UserAgreementScreen')}>{strings.Form.agreement.second}</Text> {strings.Form.agreement.third}</Text>
+                </View>
+                ) : null}
+                <Button
+                  block
+                  {...(this.props.SubmitButton.iconLeft ? 'iconLeft' : null)}
+                  {...(this.props.SubmitButton.iconRight ? 'iconRight' : null)}
+                  onPress={async () => {
+                    if (!this.state.loading) {
+                      if (!this.props.onSubmit) {
+                        console.error(
+                          'Undefined required onSubmit prop for Form component',
+                          this.props,
+                          this.state,
+                        );
+                        return false;
+                      }
+                      if (this._validate()) {
+                        this.setState({loading: true});
+                        var promise = new Promise((resolve, reject) => {
+                          return this.props.onSubmit(this.state).then(data => {
+                            resolve(data);
+                          });
+                        });
+                        await promise
+                          .then(data => {
+                            this.setState({loading: false});
+                            return data;
+                          })
+                          .catch(error => {
+                            console.error(error);
+                            this.setState({loading: false});
+                          });
+                      }
+                    }
+                  }}
+                  style={[
+                    styleConst.shadow.default,
+                    styles.button,
+                    this.props.SubmitButton && this.props.SubmitButton.style,
+                  ]}
+                  disabled={this.state.showSubmitButton ? false : true}
+                  active={this.state.showSubmitButton ? true : false}
+                  testID="Form.ButtonSubmit"
+                  accessibilityValue={{
+                    text: this.state.showSubmitButton ? 'false' : 'true',
+                  }}
+                  {...this.props.SubmitButton.props}>
+                  {this.state.loading ? (
+                    <ActivityIndicator color={styleConst.color.white} />
+                  ) : (
+                    <>
+                      {this.props.SubmitButton.iconLeft
+                        ? this.props.SubmitButton.iconLeft
+                        : null}
+                      <Text selectable={false} style={styles.buttonText}>
+                        {this.props.SubmitButton.text}
+                      </Text>
+                      {this.props.SubmitButton.iconRight
+                        ? this.props.SubmitButton.iconRight
+                        : null}
+                    </>
+                  )}
+                </Button>
+              </Animated.View>
+            ) : null}
+          </View>
+        </KeyboardAvoidingView>
+      </ScrollView>
     );
     return res;
   }

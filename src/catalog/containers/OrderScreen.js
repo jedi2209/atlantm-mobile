@@ -4,13 +4,8 @@ import PropTypes from 'prop-types';
 import {
   StyleSheet,
   Alert,
-  TouchableWithoutFeedback,
-  Keyboard,
   Platform,
-  View,
 } from 'react-native';
-import {Content} from 'native-base';
-import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
 // redux
 import {connect} from 'react-redux';
@@ -74,7 +69,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({dealer, catalog, profile}) => {
+const mapStateToProps = ({dealer, profile}) => {
   return {
     dealerSelectedLocal: dealer.selectedLocal,
     dealerSelected: dealer.selected,
@@ -407,27 +402,18 @@ class OrderScreen extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView>
-        <TouchableWithoutFeedback
-          style={styleConst.form.scrollView}
-          testID="OrderScreen.Wrapper">
-          <Content
-            style={styles.container}
-            enableResetScrollToCoords={false}
-            keyboardShouldPersistTaps={
-              Platform.OS === 'android' ? 'always' : 'never'
-            }>
-            <Form
-              key='OrderScreenForm'
-              testID="OrderScreen.Form"
-              fields={this.FormConfig.fields}
-              barStyle={'light-content'}
-              SubmitButton={{text: strings.Form.button.send}}
-              onSubmit={this.onPressOrder}
-            />
-          </Content>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key='OrderScreenForm'
+        testID="OrderScreen.Form"
+        fields={this.FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{text: strings.Form.button.send}}
+        onSubmit={this.onPressOrder}
+      />
     );
   }
 }

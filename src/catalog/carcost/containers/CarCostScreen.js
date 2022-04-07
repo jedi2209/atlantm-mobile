@@ -3,17 +3,13 @@ import PropTypes from 'prop-types';
 import {
   Alert,
   TouchableWithoutFeedback,
-  Keyboard,
-  Platform,
-  StatusBar,
   StyleSheet,
   View,
   Text,
   ScrollView,
 } from 'react-native';
 import CarCostPhotos from '../components/CarCostPhotos';
-import {Icon, Button, Content} from 'native-base';
-import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
+import {Icon, Button} from 'native-base';
 import {
   addDays,
   dayMonthYear,
@@ -34,7 +30,6 @@ import {CAR_COST__SUCCESS, CAR_COST__FAIL} from '../../actionTypes';
 import Analytics from '../../../utils/amplitude-analytics';
 import {get, orderBy, valuesIn} from 'lodash';
 import {ERROR_NETWORK} from '../../../core/const';
-import styleConst from '../../../core/style-const';
 import isInternet from '../../../utils/internet';
 
 import {strings} from '../../../core/lang/const';
@@ -574,7 +569,6 @@ class CarCostScreen extends PureComponent {
                 props: {
                   placeholder:
                     strings.Form.field.placeholder.date +
-                    ' ' +
                     dayMonthYear(addDays(2)),
                   required: true,
                   minimumDate: new Date(addDays(2)),
@@ -675,26 +669,16 @@ class CarCostScreen extends PureComponent {
     console.info('== CarCost ==');
 
     return (
-      <Content
-        style={{
-          flex: 1,
-          paddingTop: 20,
-          paddingHorizontal: 14,
-          backgroundColor: '#eee',
-        }}
-        enableResetScrollToCoords={false}
-        keyboardShouldPersistTaps={
-          Platform.OS === 'android' ? 'always' : 'never'
-        }>
-        <StatusBar hidden />
         <Form
+          contentContainerStyle={{
+            paddingHorizontal: 14,
+          }}
           key='CarCostForm'
           fields={this.FormConfig.fields}
           barStyle={'light-content'}
           SubmitButton={{text: strings.Form.button.send}}
           onSubmit={this.onPressOrder}
         />
-      </Content>
     );
   }
 }

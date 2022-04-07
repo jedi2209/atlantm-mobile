@@ -1,10 +1,4 @@
 import React, {PureComponent} from 'react';
-import {
-  ScrollView,
-  Keyboard,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import {Content} from 'native-base';
 import Form from '../../../core/components/Form/Form';
 import DealerCard from '../../../core/components/DealerCard';
 
@@ -12,12 +6,7 @@ import DealerCard from '../../../core/components/DealerCard';
 import {connect} from 'react-redux';
 import {actionAddReviewPlusFill, actionAddReviewMinusFill} from '../../actions';
 
-// components
-import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
-
 // helpers
-import getTheme from '../../../../native-base-theme/components';
-import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
 
 const mapStateToProps = ({dealer, eko, nav}) => {
@@ -40,6 +29,16 @@ class ReviewAddMessageStepScreen extends PureComponent {
     this.FormConfig = {
       fields: {
         groups: [
+          {
+            name: strings.Form.field.label.dealer,
+            fields: [
+              {
+                name: 'DEALER',
+                type: 'component',
+                value: <DealerCard key={'DealerBlock'} item={this.props.dealerSelected} />,
+              },
+            ]
+          },
           {
             name: strings.ReviewAddMessageForm.label.plus,
             fields: [
@@ -81,32 +80,20 @@ class ReviewAddMessageStepScreen extends PureComponent {
   };
 
   render() {
-    const {dealerSelected} = this.props;
-
     console.info('== ReviewAddMessageStepScreen ==');
 
     return (
-      <KeyboardAvoidingView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={{flex: 1}}>
-            <DealerCard key={'DealerBlock'} item={dealerSelected} />
-            <Content
-              style={{
-                flex: 1,
-                paddingHorizontal: 14,
-                paddingTop: 20,
-              }}>
-              <Form
-                key='ReviewAddForm'
-                fields={this.FormConfig.fields}
-                barStyle={'light-content'}
-                SubmitButton={{text: strings.MessageForm.continue}}
-                onSubmit={this.onPressOrder}
-              />
-            </Content>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key='ReviewAddForm'
+        fields={this.FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{text: strings.MessageForm.continue}}
+        onSubmit={this.onPressOrder}
+      />
     );
   }
 }

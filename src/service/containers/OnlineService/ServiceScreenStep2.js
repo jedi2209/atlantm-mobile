@@ -1,16 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {
-  View,
   Alert,
-  TouchableWithoutFeedback,
-  ScrollView,
-  Keyboard,
 } from 'react-native';
 import {Toast} from 'native-base';
 import {get} from 'lodash';
 
-import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import Form from '../../../core/components/Form/Form';
 import {addDays, dayMonthYear, format} from '../../../utils/date';
 import UserData from '../../../utils/user';
@@ -20,14 +15,13 @@ import {connect} from 'react-redux';
 import {orderService} from '../../actions';
 import {localUserDataUpdate} from '../../../profile/actions';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../../actionTypes';
-import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
 
 import Analytics from '../../../utils/amplitude-analytics';
 
 import API from '../../../utils/api';
 
-const mapStateToProps = ({dealer, service, nav}) => {
+const mapStateToProps = ({dealer, nav}) => {
   return {
     nav,
     firstName: UserData.get('NAME'),
@@ -222,7 +216,6 @@ class ServiceScreenStep2 extends Component {
                 props: {
                   placeholder:
                     strings.Form.field.placeholder.date +
-                    ' ' +
                     dayMonthYear(addDays(2)),
                   required: true,
                   type: 'service',
@@ -306,30 +299,20 @@ class ServiceScreenStep2 extends Component {
       },
     };
     return (
-      <KeyboardAvoidingView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={styleConst.form.scrollView}>
-            <View
-              style={{
-                flex: 1,
-                paddingTop: 20,
-                marginBottom: 50,
-                paddingHorizontal: 14,
-              }}>
-              <Form
-                key='ServiceStep2Form'
-                fields={this.FormConfig.fields}
-                defaultCountryCode={this.props.dealerSelected.region}
-                onSubmit={this.onPressOrder}
-                SubmitButton={{
-                  text: strings.ServiceScreen.button,
-                }}
-                parentState={this.state}
-              />
-            </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key='ServiceStep2Form'
+        fields={this.FormConfig.fields}
+        defaultCountryCode={this.props.dealerSelected.region}
+        onSubmit={this.onPressOrder}
+        SubmitButton={{
+          text: strings.ServiceScreen.button,
+        }}
+        parentState={this.state}
+      />
     );
   }
 }

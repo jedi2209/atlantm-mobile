@@ -1,15 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {
-  View,
   Alert,
-  TouchableWithoutFeedback,
-  ScrollView,
-  Keyboard,
 } from 'react-native';
 import {get} from 'lodash';
 
-import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import Form from '../../../core/components/Form/Form';
 import {addDays, dayMonthYear, format} from '../../../utils/date';
 import UserData from '../../../utils/user';
@@ -20,14 +15,13 @@ import {orderService} from '../../actions';
 import {localUserDataUpdate} from '../../../profile/actions';
 import {localDealerClear} from '../../../dealer/actions';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../../actionTypes';
-import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
 
 import Analytics from '../../../utils/amplitude-analytics';
 
 import API from '../../../utils/api';
 
-const mapStateToProps = ({dealer, profile, service, nav}) => {
+const mapStateToProps = ({dealer, service, nav}) => {
   let carLocalBrand = '';
   let carLocalModel = '';
   let carLocalNumber = '';
@@ -370,29 +364,19 @@ class ServiceScreenNonAuth extends Component {
       },
     };
     return (
-      <KeyboardAvoidingView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={styleConst.form.scrollView}>
-            <View
-              style={{
-                flex: 1,
-                paddingTop: 20,
-                marginBottom: 50,
-                paddingHorizontal: 14,
-              }}>
-              <Form
-                key='ServiceNonAuthForm'
-                fields={FormConfig.fields}
-                barStyle={'light-content'}
-                defaultCountryCode={this.props.dealerSelected.region}
-                onSubmit={this.onPressOrder}
-                SubmitButton={{text: strings.Form.button.send}}
-                parentState={this.state}
-              />
-            </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key='ServiceNonAuthForm'
+        fields={FormConfig.fields}
+        barStyle={'light-content'}
+        defaultCountryCode={this.props.dealerSelected.region}
+        onSubmit={this.onPressOrder}
+        SubmitButton={{text: strings.Form.button.send}}
+        parentState={this.state}
+      />
     );
   }
 }

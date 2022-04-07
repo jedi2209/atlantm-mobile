@@ -3,11 +3,7 @@ import {
   Alert,
   View,
   StyleSheet,
-  TouchableWithoutFeedback,
-  Keyboard,
   Platform,
-  ScrollView,
-  ActivityIndicator,
 } from 'react-native';
 
 // redux
@@ -31,7 +27,6 @@ import Analytics from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 
-import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import Form from '../../../core/components/Form/Form';
 import UserData from '../../../utils/user';
 import {
@@ -329,36 +324,23 @@ class ReviewAddRatingStepScreen extends Component {
   };
 
   render() {
-    const {isReviewAddRequest} = this.props;
-
     console.info('== ReviewAddRatingStepScreen ==');
 
     return (
-      <KeyboardAvoidingView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView style={styleConst.form.scrollView}>
-            <View
-              style={{
-                flex: 1,
-                paddingHorizontal: 14,
-              }}>
-              <ActivityIndicator
-                color={styleConst.color.blue}
-                style={styleConst.spinner}
-                animating={isReviewAddRequest}
-              />
-              {this.renderPublicAgree()}
-              <Form
-                key='ReviewAddRatingForm'
-                fields={this.FormConfig.fields}
-                barStyle={'light-content'}
-                SubmitButton={{text: strings.Form.button.send}}
-                onSubmit={this.onPressButton}
-              />
-            </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+      <View style={{marginTop: 10, flex: 1}}>
+        {this.renderPublicAgree()}
+        <Form
+          contentContainerStyle={{
+            paddingHorizontal: 14,
+            marginTop: 20,
+          }}
+          key='ReviewAddRatingForm'
+          fields={this.FormConfig.fields}
+          barStyle={'light-content'}
+          SubmitButton={{text: strings.Form.button.send}}
+          onSubmit={this.onPressButton}
+        />
+      </View>
     );
   }
 }

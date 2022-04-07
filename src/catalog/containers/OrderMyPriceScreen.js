@@ -4,12 +4,8 @@ import PropTypes from 'prop-types';
 import {
   StyleSheet,
   Alert,
-  TouchableWithoutFeedback,
-  Keyboard,
   Platform,
 } from 'react-native';
-import {Content} from 'native-base';
-import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import Form from '../../core/components/Form/Form';
 // redux
 import {connect} from 'react-redux';
@@ -292,22 +288,17 @@ class OrderMyPriceScreen extends Component {
 
   render() {
     return (
-      <Content
-        style={[styles.container]}
-        testID="OrderMyPriceScreen.Wrapper"
-        // enableResetScrollToCoords={false}
-        // keyboardShouldPersistTaps={
-        //   Platform.OS === 'android' ? 'always' : 'never'
-        // }
-        >
-        <Form
-          key='OrderMyPriceForm'
-          fields={this.FormConfig.fields}
-          barStyle={'light-content'}
-          SubmitButton={{text: strings.Form.button.send}}
-          onSubmit={this.onPressOrder}
-        />
-      </Content>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key='OrderMyPriceForm'
+        fields={this.FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{text: strings.Form.button.send}}
+        onSubmit={this.onPressOrder}
+      />
     );
   }
 }

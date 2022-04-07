@@ -233,161 +233,156 @@ class ReestablishScreen extends React.Component {
       });
     }
     return (
-      <KeyboardAvoidingView>
-        <StatusBar barStyle="light-content" />
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView>
-            <View style={styles.container}>
-              <View style={styles.header}>
-                <Icon
-                  type="MaterialCommunityIcons"
-                  name="emoticon-cry-outline"
-                  style={{fontSize: 48, position: 'absolute'}}
-                />
-                <Text style={[styles.caption, {marginLeft: 60}]}>
-                  {strings.ReestablishScreen.notFound.text} {'\n'}
-                  {strings.ReestablishScreen.notFound.text2}
-                </Text>
-                <Text style={[styles.caption]}>
-                  {strings.ReestablishScreen.notFound.caption} {'\n\n'}
-                  {strings.ReestablishScreen.notFound.caption2}
-                </Text>
-              </View>
-              <View style={styles.group}>
-                <View style={styles.field}>
-                  <TextInput
-                    autoCorrect={false}
-                    autoCompleteType="username"
-                    textContentType="username"
-                    autoCapitalize="none"
-                    style={styles.textinput}
-                    label={strings.Form.field.label.login}
-                    returnKeyType="next"
-                    onSubmitEditing={() => {
-                      this.fields.passInput.current.focus();
-                    }}
-                    ref={this.fields.loginInput}
-                    blurOnSubmit={false}
-                    value={this.state.login || ''}
-                    enablesReturnKeyAutomatically={true}
-                    onChangeText={this.onChangeField('login')}
-                  />
-                </View>
-                <View
-                  style={[
-                    styles.field,
-                    {
-                      flexDirection: 'row',
-                      flex: 1,
-                    },
-                  ]}>
-                  <TextInput
-                    style={styles.textinput}
-                    autoCompleteType="password"
-                    textContentType="password"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    label={strings.Form.field.label.pass}
-                    returnKeyType="send"
-                    value={this.state.password || ''}
-                    ref={this.fields.passInput}
-                    enablesReturnKeyAutomatically={true}
-                    onChangeText={this.onChangeField('password')}
-                    onSubmitEditing={() => {
-                      this.onPressLogin();
-                    }}
-                  />
-                  <Button
-                    transparent
-                    title={strings.ReestablishScreen.forgotPass}
-                    onPress={() => {
-                      this.setState({RequestForgotPassloading: true});
-                      if (!this.checkLogin()) {
-                        return false;
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Icon
+              type="MaterialCommunityIcons"
+              name="emoticon-cry-outline"
+              style={{fontSize: 48, position: 'absolute'}}
+            />
+            <Text style={[styles.caption, {marginLeft: 60}]}>
+              {strings.ReestablishScreen.notFound.text} {'\n'}
+              {strings.ReestablishScreen.notFound.text2}
+            </Text>
+            <Text style={[styles.caption]}>
+              {strings.ReestablishScreen.notFound.caption} {'\n\n'}
+              {strings.ReestablishScreen.notFound.caption2}
+            </Text>
+          </View>
+          <View style={styles.group}>
+            <View style={styles.field}>
+              <TextInput
+                autoCorrect={false}
+                autoCompleteType="username"
+                textContentType="username"
+                autoCapitalize="none"
+                style={styles.textinput}
+                label={strings.Form.field.label.login}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  this.fields.passInput.current.focus();
+                }}
+                ref={this.fields.loginInput}
+                blurOnSubmit={false}
+                value={this.state.login || ''}
+                enablesReturnKeyAutomatically={true}
+                onChangeText={this.onChangeField('login')}
+              />
+            </View>
+            <View
+              style={[
+                styles.field,
+                {
+                  flexDirection: 'row',
+                  flex: 1,
+                },
+              ]}>
+              <TextInput
+                style={styles.textinput}
+                autoCompleteType="password"
+                textContentType="password"
+                autoCapitalize="none"
+                autoCorrect={false}
+                label={strings.Form.field.label.pass}
+                returnKeyType="send"
+                value={this.state.password || ''}
+                ref={this.fields.passInput}
+                enablesReturnKeyAutomatically={true}
+                onChangeText={this.onChangeField('password')}
+                onSubmitEditing={() => {
+                  this.onPressLogin();
+                }}
+              />
+              <Button
+                transparent
+                title={strings.ReestablishScreen.forgotPass}
+                onPress={() => {
+                  this.setState({RequestForgotPassloading: true});
+                  if (!this.checkLogin()) {
+                    return false;
+                  }
+                  this.props
+                    .actionRequestForgotPass(this.state.login)
+                    .then((action) => {
+                      switch (action.type) {
+                        case 'FORGOT_PASS_REQUEST__SUCCESS':
+                          Toast.show({
+                            text: action.payload.message
+                              ? action.payload.message
+                              : strings.Notifications.success.title,
+                            position: 'bottom',
+                            type: 'success',
+                          });
+                          break;
+                        default:
+                          Toast.show({
+                            text: action.payload.message,
+                            position: 'bottom',
+                            type: 'danger',
+                          });
+                          break;
                       }
-                      this.props
-                        .actionRequestForgotPass(this.state.login)
-                        .then((action) => {
-                          switch (action.type) {
-                            case 'FORGOT_PASS_REQUEST__SUCCESS':
-                              Toast.show({
-                                text: action.payload.message
-                                  ? action.payload.message
-                                  : strings.Notifications.success.title,
-                                position: 'bottom',
-                                type: 'success',
-                              });
-                              break;
-                            default:
-                              Toast.show({
-                                text: action.payload.message,
-                                position: 'bottom',
-                                type: 'danger',
-                              });
-                              break;
-                          }
-                          this.setState({RequestForgotPassloading: false});
-                        });
-                    }}
+                      this.setState({RequestForgotPassloading: false});
+                    });
+                }}
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  top: 20,
+                  height: isAndroid ? 45 : 35,
+                  padding: isAndroid ? 25 : 15,
+                  elevation: 0,
+                }}>
+                {this.state.RequestForgotPassloading ? (
+                  <ActivityIndicator
+                    color={styleConst.color.lightBlue}
                     style={{
-                      position: 'absolute',
-                      right: 0,
-                      top: 20,
-                      height: isAndroid ? 45 : 35,
-                      padding: isAndroid ? 25 : 15,
+                      marginRight: 40,
+                    }}
+                  />
+                ) : (
+                  <Text
+                    style={{
+                      fontSize: 12,
+                      fontStyle: 'italic',
+                      shadowOpacity: 0,
+                      color: styleConst.color.lightBlue,
                       elevation: 0,
                     }}>
-                    {this.state.RequestForgotPassloading ? (
-                      <ActivityIndicator
-                        color={styleConst.color.lightBlue}
-                        style={{
-                          marginRight: 40,
-                        }}
-                      />
-                    ) : (
-                      <Text
-                        style={{
-                          fontSize: 12,
-                          fontStyle: 'italic',
-                          shadowOpacity: 0,
-                          color: styleConst.color.lightBlue,
-                          elevation: 0,
-                        }}>
-                        {strings.ReestablishScreen.forgotPass.toLowerCase()}
-                      </Text>
-                    )}
-                  </Button>
-                </View>
-              </View>
-              {!this.disableButton ? (
-                <Animated.View
-                  style={[
-                    styles.group,
-                    {
-                      opacity: this._animated.SubmitButton,
-                    },
-                  ]}>
-                  <Button
-                    full
-                    disabled={this.disableButton ? true : false}
-                    active={this.disableButton ? false : true}
-                    title={strings.ReestablishScreen.findMyData}
-                    onPress={this.state.loading ? undefined : this.onPressLogin}
-                    style={[styles.button, styleConst.shadow.default]}>
-                    {this.state.loading ? (
-                      <ActivityIndicator color={styleConst.color.white} />
-                    ) : (
-                      <Text style={styles.buttonText}>
-                        {strings.ReestablishScreen.findMyData}
-                      </Text>
-                    )}
-                  </Button>
-                </Animated.View>
-              ) : null}
+                    {strings.ReestablishScreen.forgotPass.toLowerCase()}
+                  </Text>
+                )}
+              </Button>
             </View>
-          </ScrollView>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+          </View>
+          {!this.disableButton ? (
+            <Animated.View
+              style={[
+                styles.group,
+                {
+                  opacity: this._animated.SubmitButton,
+                },
+              ]}>
+              <Button
+                full
+                disabled={this.disableButton ? true : false}
+                active={this.disableButton ? false : true}
+                title={strings.ReestablishScreen.findMyData}
+                onPress={this.state.loading ? undefined : this.onPressLogin}
+                style={[styles.button, styleConst.shadow.default]}>
+                {this.state.loading ? (
+                  <ActivityIndicator color={styleConst.color.white} />
+                ) : (
+                  <Text style={styles.buttonText}>
+                    {strings.ReestablishScreen.findMyData}
+                  </Text>
+                )}
+              </Button>
+            </Animated.View>
+          ) : null}
+        </View>
+      </ScrollView>
     );
   }
 }

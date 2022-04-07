@@ -3,10 +3,6 @@
 import React, {PureComponent} from 'react';
 import {
   Alert,
-  View,
-  ScrollView,
-  Keyboard,
-  TouchableWithoutFeedback,
   StyleSheet,
 } from 'react-native';
 // redux
@@ -23,7 +19,6 @@ import {localDealerClear} from '../../dealer/actions';
 
 import {ERROR_NETWORK} from '../../core/const';
 import {strings} from '../../core/lang/const';
-import styleConst from '../../core/style-const';
 
 let callMe = require('../../contacts/actions').callMe;
 
@@ -213,21 +208,22 @@ class CallMeBackScreen extends PureComponent {
 
   render() {
     return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView style={styleConst.form.scrollView}>
-          <View style={styles.wrapper}>
-            <Form
-              key='CallMeBackForm'
-              fields={this.FormConfig.fields}
-              barStyle={'light-content'}
-              SubmitButton={{
-                text: strings.CallMeBackScreen.button,
-              }}
-              onSubmit={this.onPressCallMe}
-            />
-          </View>
-        </ScrollView>
-      </TouchableWithoutFeedback>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        keyboardAvoidingViewProps={{
+          enableAutomaticScroll: false,
+        }}
+        key='CallMeBackForm'
+        fields={this.FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{
+          text: strings.CallMeBackScreen.button,
+        }}
+        onSubmit={this.onPressCallMe}
+      />
     );
   }
 }
