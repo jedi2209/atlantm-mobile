@@ -517,8 +517,6 @@ PODS:
   - react-native-fbsdk-next/Share (7.3.3):
     - FBSDKShareKit (~> 12.3.2)
     - React-Core
-  - react-native-flipper (0.140.0):
-    - React-Core
   - react-native-google-maps (0.30.1):
     - Google-Maps-iOS-Utils (= 3.10.3)
     - GoogleMaps (= 5.1.0)
@@ -783,7 +781,6 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-fbsdk-next (from `../node_modules/react-native-fbsdk-next`)
-  - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-in-app-review (from `../node_modules/react-native-in-app-review`)
   - react-native-maps (from `../node_modules/react-native-maps`)
@@ -934,8 +931,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-fbsdk-next:
     :path: "../node_modules/react-native-fbsdk-next"
-  react-native-flipper:
-    :path: "../node_modules/react-native-flipper"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-in-app-review:
@@ -1103,7 +1098,6 @@ SPEC CHECKSUMS:
   React-jsinspector: 90f0bfd5d04e0b066c29216a110ffb9a6c34f23f
   React-logger: 8474fefa09d05f573a13c044cb0dfd751d4e52e3
   react-native-fbsdk-next: 6d497a06fc5c33360f5794b4428a0236789a60e6
-  react-native-flipper: cfc4ad1de608a27b9dd9f544b820cb1e1897aceb
   react-native-google-maps: 17432eb7412df3c65d7c7c52ede085d0f5624f77
   react-native-in-app-review: 4c9d97e5d9b064b92bde27be935573bc3b76e56b
   react-native-maps: d752b0dd0e1951d815b1336332835aab6b4a836f
