@@ -57,6 +57,10 @@
 	<true/>
 	<key>FacebookDisplayName</key>
 	<string>Атлант-М</string>
+	<key>FacebookClientToken</key>
+	<string>XXXX</string>
+	<key>FacebookAppID</key>
+	<string>XXXX</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
