@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.8.0</string>
+	<string>8.0.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -50,17 +50,17 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>263</string>
+	<string>0</string>
 	<key>FacebookAdvertiserIDCollectionEnabled</key>
 	<true/>
-	<key>FacebookAutoLogAppEventsEnabled</key>
-	<true/>
-	<key>FacebookDisplayName</key>
-	<string>Атлант-М</string>
-	<key>FacebookClientToken</key>
-	<string>XXXX</string>
 	<key>FacebookAppID</key>
 	<string>XXXX</string>
+	<key>FacebookAutoLogAppEventsEnabled</key>
+	<true/>
+	<key>FacebookClientToken</key>
+	<string>XXXX</string>
+	<key>FacebookDisplayName</key>
+	<string>Атлант-М</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSApplicationQueriesSchemes</key>
