@@ -31,3 +31,12 @@ export const AWS_CONFIG = {
   secretAccessKey: 'XXXX/XXXX',
   region: 'eu-west-1',
 };
+
+export const AUTH_DATA = {
+  GoogleSignin: {
+    webClientId:
+      'XXXX-XXXX.apps.googleusercontent.com',
+    iosClientId:
+      'XXXX-XXXX.apps.googleusercontent.com',
+  },
+};
