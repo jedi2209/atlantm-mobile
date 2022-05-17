@@ -266,7 +266,11 @@ class Form extends Component {
       props.fields.groups.map(group => {
         if (group.fields) {
           group.fields = group.fields.filter(field => {
-            return typeof field === 'object' && get(field, 'name', false) && get(field, 'type', false);
+            return (
+              typeof field === 'object' &&
+              get(field, 'name', false) &&
+              get(field, 'type', false)
+            );
           });
           group.fields.map(field => {
             if (field.value && field.type !== 'component') {
@@ -354,9 +358,7 @@ class Form extends Component {
   //   this.allFields = [];
   // }
 
-  _setFieldValue(field) {
-
-  }
+  _setFieldValue(field) {}
 
   static propTypes = {
     fields: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
@@ -626,7 +628,10 @@ class Form extends Component {
   };
 
   _groupRender = (group, num) => {
-    if (group.fields && typeof group.fields === 'undefined' || typeof group.fields !== 'object') {
+    if (
+      (group.fields && typeof group.fields === 'undefined') ||
+      typeof group.fields !== 'object'
+    ) {
       return;
     }
     let totalFields = group.fields.length;
@@ -858,7 +863,9 @@ class Form extends Component {
               });
             }}
             onChange={(_, selectedDate) => {
-              const currentDate = selectedDate && selectedDate.toUTCString() || this.state[name];
+              const currentDate =
+                (selectedDate && selectedDate.toUTCString()) ||
+                this.state[name];
               if (Platform.OS !== 'ios') {
                 this.setState(prevState => {
                   let copyField = Object.assign({}, prevState.active);
@@ -1331,7 +1338,14 @@ class Form extends Component {
 
   render() {
     const res = (
-      <ScrollView style={this.props.formScrollViewStyle} testID={this.props.testID} key={this.props.key ? this.props.key : 'Form' + Math.round(new Date().getDate())}>
+      <ScrollView
+        style={this.props.formScrollViewStyle}
+        testID={this.props.testID}
+        key={
+          this.props.key
+            ? this.props.key
+            : 'Form' + Math.round(new Date().getDate())
+        }>
         <KeyboardAvoidingView {...this.props.keyboardAvoidingViewProps}>
           <StatusBar
             barStyle={this.props.barStyle ? this.props.barStyle : 'default'}
@@ -1366,9 +1380,22 @@ class Form extends Component {
                   },
                 ]}>
                 {!this.props.SubmitButton.noAgreement ? (
-                <View style={{marginBottom: 10}}>
-                  <Text style={styles.userAgreementText}>{strings.Form.agreement.first} <Text style={[styles.userAgreementText, styles.userAgreementLink]} onPress={() => NavigationService.navigate('UserAgreementScreen')}>{strings.Form.agreement.second}</Text> {strings.Form.agreement.third}</Text>
-                </View>
+                  <View style={{marginBottom: 10}}>
+                    <Text style={styles.userAgreementText}>
+                      {strings.Form.agreement.first}{' '}
+                      <Text
+                        style={[
+                          styles.userAgreementText,
+                          styles.userAgreementLink,
+                        ]}
+                        onPress={() =>
+                          NavigationService.navigate('UserAgreementScreen')
+                        }>
+                        {strings.Form.agreement.second}
+                      </Text>{' '}
+                      {strings.Form.agreement.third}
+                    </Text>
+                  </View>
                 ) : null}
                 <Button
                   block

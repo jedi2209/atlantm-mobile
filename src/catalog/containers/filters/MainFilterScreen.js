@@ -512,7 +512,7 @@ const MainFilterScreen = ({
           total: {
             count: totalCars,
           },
-          showPrices
+          showPrices,
         });
         break;
       case 'Used':
@@ -524,7 +524,7 @@ const MainFilterScreen = ({
             total: {
               count: totalCars,
             },
-            showPrices
+            showPrices,
           },
         });
         break;

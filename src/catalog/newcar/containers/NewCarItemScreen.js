@@ -53,6 +53,11 @@ const imgResize = '10000x440';
 const mapStateToProps = ({catalog, dealer, profile, nav}) => {
   return {
     nav,
+    dealersList: {
+      ru: dealer.listRussia,
+      by: dealer.listBelarussia,
+      ua: dealer.listUkraine,
+    },
     dealerSelected: dealer.selected,
     carDetails: catalog.newCar.carDetails.data,
     profile,
@@ -127,8 +132,16 @@ const OptionPlate = ({
   );
 };
 
-const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelected, photoViewerItems, actionFetchNewCarDetails}) => {
-
+const NewCarItemScreen = ({
+  navigation,
+  route,
+  carDetails,
+  profile,
+  dealersList,
+  dealerSelected,
+  photoViewerItems,
+  actionFetchNewCarDetails,
+}) => {
   const [tabName, setTabName] = useState('base');
   const platesScrollViewRef = useRef(null);
   const [isLoading, setLoading] = useState(true);
@@ -258,26 +271,18 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
       }
     });
 
-    if (
-      carDetails &&
-      !isLoading &&
-      platesScrollViewRef
-    ) {
+    if (carDetails && !isLoading && platesScrollViewRef) {
       setTimeout(() => {
-        platesScrollViewRef &&
-        platesScrollViewRef.current.scrollToEnd({duration: 500});
+        platesScrollViewRef?.current.scrollToEnd({duration: 500});
         setTimeout(() => {
-          platesScrollViewRef &&
-          platesScrollViewRef.current.scrollTo({x: 0, y: 0, animated: true});
+          platesScrollViewRef?.current.scrollTo({x: 0, y: 0, animated: true});
         }, 500);
       }, 3000);
     }
-    return () => {
-    }
+    return () => {};
   }, []);
 
   const _onPressOrder = () => {
-
     const CarPrices = {
       sale: get(carDetails, 'price.app.sale') || 0,
       standart:
@@ -688,7 +693,7 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
                 color={get(carDetails, 'color')}
               />
             ) : null}
-            {badge && badge.length || statusName ? (
+            {(badge && badge.length) || statusName ? (
               <View
                 testID="NewCarItemScreen.BadgesWrapper"
                 style={styles.badgesView}>
@@ -752,16 +757,20 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
 
               {_renderOptionPlates()}
               {warrantyText ? (
-              <View
-                style={styles.warrantyView}>
-                <Icon
-                  type="MaterialCommunityIcons"
-                  name="shield-car"
-                  selectable={false}
-                  style={styles.warrantyIcon}/>
-                <Text style={styles.warrantyText}>{[strings.NewCarItemScreen.warranty, warrantyText].join(' ')}</Text>
-              </View>
-            ) : null}
+                <View style={styles.warrantyView}>
+                  <Icon
+                    type="MaterialCommunityIcons"
+                    name="shield-car"
+                    selectable={false}
+                    style={styles.warrantyIcon}
+                  />
+                  <Text style={styles.warrantyText}>
+                    {[strings.NewCarItemScreen.warranty, warrantyText].join(
+                      ' ',
+                    )}
+                  </Text>
+                </View>
+              ) : null}
               {get(carDetails, 'location.coords') ? (
                 <TouchableWithoutFeedback
                   onPress={_onPressMap}
@@ -797,20 +806,17 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
                   title: strings.NewCarItemScreen.tech.title,
                   content: (
                     <View testID="NewCarItemScreen.TechWrapper">
-                      {_renderTechData(
-                        strings.NewCarItemScreen.tech.base,
-                        [
-                          {
-                            name: strings.NewCarItemScreen.tech.body.type,
-                            value: 'body.name',
-                            alternate: bodyName,
-                          },
-                          {
-                            name: strings.NewCarItemScreen.tech.year,
-                            value: 'year',
-                          },
-                        ],
-                      )}
+                      {_renderTechData(strings.NewCarItemScreen.tech.base, [
+                        {
+                          name: strings.NewCarItemScreen.tech.body.type,
+                          value: 'body.name',
+                          alternate: bodyName,
+                        },
+                        {
+                          name: strings.NewCarItemScreen.tech.year,
+                          value: 'year',
+                        },
+                      ])}
                       {_renderTechData(
                         strings.NewCarItemScreen.tech.engine.title,
                         [
@@ -827,15 +833,13 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
                               return false;
                             }
                             return {
-                              name: strings.NewCarItemScreen.tech.engine
-                                .volume,
+                              name: strings.NewCarItemScreen.tech.engine.volume,
                               value: 'engine.volume.full',
                               postfix: 'см³',
                             };
                           })(),
                           {
-                            name: strings.NewCarItemScreen.tech.engine.power
-                              .hp,
+                            name: strings.NewCarItemScreen.tech.engine.power.hp,
                             value: 'power.hp',
                             postfix: strings.NewCarItemScreen.shortUnits.hp,
                           },
@@ -890,14 +894,12 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
                           {
                             name: strings.NewCarItemScreen.tech.body.trunk,
                             value: 'body.trunk.min',
-                            postfix:
-                              strings.NewCarItemScreen.shortUnits.litres,
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
                           },
                           {
                             name: strings.NewCarItemScreen.tech.body.fuel,
                             value: 'fuel.fuel',
-                            postfix:
-                              strings.NewCarItemScreen.shortUnits.litres,
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
                           },
                         ],
                       )}
@@ -917,21 +919,17 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
                           {
                             name: strings.NewCarItemScreen.techData.fuel.city,
                             value: 'fuel.city',
-                            postfix:
-                              strings.NewCarItemScreen.shortUnits.litres,
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
                           },
                           {
-                            name: strings.NewCarItemScreen.techData.fuel
-                              .track,
+                            name: strings.NewCarItemScreen.techData.fuel.track,
                             value: 'fuel.track',
-                            postfix:
-                              strings.NewCarItemScreen.shortUnits.litres,
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
                           },
                           {
                             name: strings.NewCarItemScreen.techData.fuel.both,
                             value: 'fuel.both',
-                            postfix:
-                              strings.NewCarItemScreen.shortUnits.litres,
+                            postfix: strings.NewCarItemScreen.shortUnits.litres,
                           },
                         ],
                       )}
@@ -981,9 +979,7 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
                 <View
                   testID={'NewCarItemScreen.AccordionTitle_' + item.title}
                   style={styles.accordionHeader}>
-                  <Text style={styles.accordionHeaderTitle}>
-                    {item.title}
-                  </Text>
+                  <Text style={styles.accordionHeaderTitle}>{item.title}</Text>
                   {expanded ? (
                     <Icon
                       type="FontAwesome5"
@@ -1014,7 +1010,12 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
           </View>
         </Content>
       </Container>
-      <View style={[styleConst.shadow.default, stylesFooter.footer, !isPriceShow ? stylesFooter.footerHidePrice : null]}>
+      <View
+        style={[
+          styleConst.shadow.default,
+          stylesFooter.footer,
+          !isPriceShow ? stylesFooter.footerHidePrice : null,
+        ]}>
         {_renderPriceFooter({
           carDetails,
           currency,
@@ -1027,7 +1028,11 @@ const NewCarItemScreen = ({navigation, route, carDetails, profile, dealerSelecte
             onPress={_onPressTestDrive}
             full
             iconLeft
-            style={[stylesFooter.button, stylesFooter.buttonLeft, !isPriceShow ? stylesFooter.buttonNoPriceLeft : null]}
+            style={[
+              stylesFooter.button,
+              stylesFooter.buttonLeft,
+              !isPriceShow ? stylesFooter.buttonNoPriceLeft : null,
+            ]}
             activeOpacity={0.8}>
             <Icon
               type="MaterialCommunityIcons"

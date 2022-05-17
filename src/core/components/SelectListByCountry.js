@@ -227,7 +227,10 @@ const SelectListByCountry = props => {
             tabBarUnderlineStyle={{
               backgroundColor: styleConst.color.lightBlue,
             }}>
-            {listBelarussia && listBelarussia.length && countrySettings && countrySettings.includes('by') ? (
+            {listBelarussia &&
+            listBelarussia.length &&
+            countrySettings &&
+            countrySettings.includes('by') ? (
               <Tab
                 heading="🇧🇾 Беларусь"
                 textStyle={styles.TabsTextStyle}
@@ -250,51 +253,57 @@ const SelectListByCountry = props => {
                 />
               </Tab>
             ) : null}
-            {listRussia && listRussia.length && countrySettings && countrySettings.includes('ru') ? (
-            <Tab
-              heading="🇷🇺 Россия"
-              textStyle={styles.TabsTextStyle}
-              activeTextStyle={styles.TabsActiveTextStyle}
-              activeTabStyle={styles.TabsActiveTabStyle}>
-              <FlatList
-                style={styles.list}
-                data={listRussia}
-                onRefresh={() => {
-                  if (itemLayout === 'dealer') {
-                    return _onRefresh({props, isRefreshing, setRefreshing});
-                  }
-                }}
-                refreshing={isRefreshing}
-                ListEmptyComponent={_EmptyComponent}
-                renderItem={item => {
-                  return _renderItem({...props, ...item, navigation});
-                }}
-                keyExtractor={item => `${item.hash.toString()}`}
-              />
-            </Tab>
+            {listRussia &&
+            listRussia.length &&
+            countrySettings &&
+            countrySettings.includes('ru') ? (
+              <Tab
+                heading="🇷🇺 Россия"
+                textStyle={styles.TabsTextStyle}
+                activeTextStyle={styles.TabsActiveTextStyle}
+                activeTabStyle={styles.TabsActiveTabStyle}>
+                <FlatList
+                  style={styles.list}
+                  data={listRussia}
+                  onRefresh={() => {
+                    if (itemLayout === 'dealer') {
+                      return _onRefresh({props, isRefreshing, setRefreshing});
+                    }
+                  }}
+                  refreshing={isRefreshing}
+                  ListEmptyComponent={_EmptyComponent}
+                  renderItem={item => {
+                    return _renderItem({...props, ...item, navigation});
+                  }}
+                  keyExtractor={item => `${item.hash.toString()}`}
+                />
+              </Tab>
             ) : null}
-            {listUkraine && listUkraine.length && countrySettings && countrySettings.includes('ua') ? (
-            <Tab
-              heading="🇺🇦 Україна"
-              textStyle={styles.TabsTextStyle}
-              activeTextStyle={styles.TabsActiveTextStyle}
-              activeTabStyle={styles.TabsActiveTabStyle}>
-              <FlatList
-                style={styles.list}
-                data={listUkraine}
-                onRefresh={() => {
-                  if (itemLayout === 'dealer') {
-                    return _onRefresh({props, isRefreshing, setRefreshing});
-                  }
-                }}
-                refreshing={isRefreshing}
-                ListEmptyComponent={_EmptyComponent}
-                renderItem={item => {
-                  return _renderItem({...props, ...item, navigation});
-                }}
-                keyExtractor={item => `${item.hash.toString()}`}
-              />
-            </Tab>
+            {listUkraine &&
+            listUkraine.length &&
+            countrySettings &&
+            countrySettings.includes('ua') ? (
+              <Tab
+                heading="🇺🇦 Україна"
+                textStyle={styles.TabsTextStyle}
+                activeTextStyle={styles.TabsActiveTextStyle}
+                activeTabStyle={styles.TabsActiveTabStyle}>
+                <FlatList
+                  style={styles.list}
+                  data={listUkraine}
+                  onRefresh={() => {
+                    if (itemLayout === 'dealer') {
+                      return _onRefresh({props, isRefreshing, setRefreshing});
+                    }
+                  }}
+                  refreshing={isRefreshing}
+                  ListEmptyComponent={_EmptyComponent}
+                  renderItem={item => {
+                    return _renderItem({...props, ...item, navigation});
+                  }}
+                  keyExtractor={item => `${item.hash.toString()}`}
+                />
+              </Tab>
             ) : null}
           </Tabs>
         </Container>

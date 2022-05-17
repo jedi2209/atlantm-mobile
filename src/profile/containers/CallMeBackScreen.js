@@ -1,10 +1,7 @@
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react-native/no-inline-styles */
 import React, {PureComponent} from 'react';
-import {
-  Alert,
-  StyleSheet,
-} from 'react-native';
+import {Alert, StyleSheet} from 'react-native';
 // redux
 import {connect} from 'react-redux';
 import {get} from 'lodash';
@@ -216,7 +213,7 @@ class CallMeBackScreen extends PureComponent {
         keyboardAvoidingViewProps={{
           enableAutomaticScroll: false,
         }}
-        key='CallMeBackForm'
+        key="CallMeBackForm"
         fields={this.FormConfig.fields}
         barStyle={'light-content'}
         SubmitButton={{

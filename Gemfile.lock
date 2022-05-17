@@ -286,7 +286,7 @@ DEPENDENCIES
   fastlane-plugin-property_file_read
 
 RUBY VERSION
-   ruby 3.1.0p0
+   ruby 3.1.2p20
 
 BUNDLED WITH
    2.3.3
