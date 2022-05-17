@@ -2,4 +2,5 @@
     <string name="app_name">Atlant-M</string>
     <string name="facebook_app_id">423573815015675</string>
     <string name="fb_login_protocol_scheme">fb423573815015675</string>
+    <string name="facebook_client_token">3fdb9696664c46479e91a611dfafcc65</string>
 </resources>

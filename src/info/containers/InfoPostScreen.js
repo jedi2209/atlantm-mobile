@@ -12,7 +12,7 @@ import {
   BackHandler,
 } from 'react-native';
 import {TransitionPresets} from '@react-navigation/stack';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
 import TransitionView from '../../core/components/TransitionView';
 import {StyleProvider, Content, Button} from 'native-base';
 import ResponsiveImageView from 'react-native-responsive-image-view';
@@ -48,7 +48,7 @@ const onMessage = ({nativeEvent}) => {
   }
 };
 
-const processDate = (date) => {
+const processDate = date => {
   return `${strings.InfoPostScreen.filter.from} ${dayMonth(date?.from)} ${
     strings.InfoPostScreen.filter.to
   } ${dayMonthYear(date?.to)}`;
@@ -71,7 +71,15 @@ const mapDispatchToProps = {
   fetchInfoPost,
 };
 
-const InfoPostScreen = ({currLang, navigation, dealersList, dealerSelected, posts, route, fetchInfoPost}) => {
+const InfoPostScreen = ({
+  currLang,
+  navigation,
+  dealersList,
+  dealerSelected,
+  posts,
+  route,
+  fetchInfoPost,
+}) => {
   const postID = route.params.id;
 
   const [refreshing, setRefreshing] = useState(false);
@@ -92,7 +100,7 @@ const InfoPostScreen = ({currLang, navigation, dealersList, dealerSelected, post
 
       return () =>
         BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-    }, [isLoading])
+    }, [isLoading]),
   );
 
   useEffect(() => {
@@ -128,7 +136,6 @@ const InfoPostScreen = ({currLang, navigation, dealersList, dealerSelected, post
   };
 
   const _onPressOrder = ({dealers}) => {
-    
     let customDealersList = [];
     dealersList[dealerSelected.region].forEach(element => {
       if (dealers.includes(element.id)) {
@@ -276,7 +283,8 @@ const InfoPostScreen = ({currLang, navigation, dealersList, dealerSelected, post
   const dealers = get(postData, 'dealers');
   let resizeMode = null;
   if (postData) {
-    resizeMode = get(postData, 'imgCropAvailable') === true ? 'cover' : 'contain';
+    resizeMode =
+      get(postData, 'imgCropAvailable') === true ? 'cover' : 'contain';
   }
 
   if (text) {
@@ -290,10 +298,7 @@ const InfoPostScreen = ({currLang, navigation, dealersList, dealerSelected, post
         <Content
           style={{margin: 0, padding: 0}}
           refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={_onRefresh}
-            />
+            <RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
           }>
           {!text || isLoading ? (
             <ActivityIndicator
@@ -304,8 +309,8 @@ const InfoPostScreen = ({currLang, navigation, dealersList, dealerSelected, post
             <View>
               <View style={[styles.imageContainer]}>
                 {imageUrl ? (
-                  <ResponsiveImageView source={{ uri: imageUrl }}>
-                    {({ getViewProps, getImageProps }) => (
+                  <ResponsiveImageView source={{uri: imageUrl}}>
+                    {({getViewProps, getImageProps}) => (
                       <View {...getViewProps()}>
                         <Image {...getImageProps()} />
                       </View>
@@ -313,9 +318,7 @@ const InfoPostScreen = ({currLang, navigation, dealersList, dealerSelected, post
                   </ResponsiveImageView>
                 ) : null}
               </View>
-              <View
-                style={styles.textContainer}
-                onLayout={onLayoutWebView}>
+              <View style={styles.textContainer} onLayout={onLayoutWebView}>
                 {date ? (
                   <Text style={styles.date}>{processDate(date)}</Text>
                 ) : null}

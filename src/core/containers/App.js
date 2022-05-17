@@ -1,6 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, ActivityIndicator, Platform, NativeModules} from 'react-native';
+import {
+  StyleSheet,
+  ActivityIndicator,
+  Platform,
+  NativeModules,
+} from 'react-native';
 import {Root, StyleProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
@@ -148,7 +153,8 @@ const App = props => {
       firebase.appCheck().activate('ignored', false);
     }
 
-    const deviceLanguage = Platform.OS === 'ios'
+    const deviceLanguage =
+      Platform.OS === 'ios'
         ? NativeModules.SettingsManager.settings.AppleLocale ||
           NativeModules.SettingsManager.settings.AppleLanguages[0] //iOS 13
         : NativeModules.I18nManager.localeIdentifier;

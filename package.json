@@ -6,7 +6,7 @@
     "node": ">=12"
   },
   "scripts": {
-    "build": "yarn fix-dependencies; yarn run android-build; yarn run ios-build;",
+    "build": "yarn run android-build; yarn run ios-build;",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "postinstall": "npx patch-package; cd ios; pod update; cd ../; npx pod-install;",
     "react": "watchman watch-del $(pwd); watchman watch-project $(pwd); npx react-native start --reset-cache",

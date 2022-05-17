@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   triangleBorder: {
     zIndex: 1,
-    bottom: -(HEIGHT_TRIANGLE),
+    bottom: -(HEIGHT_TRIANGLE + 0),
     borderBottomColor: styleConst.color.systemGray,
   },
 });
@@ -82,17 +82,17 @@ export default class IndicatorRow extends PureComponent {
     // }
   }
 
-  isActive = (id) => this.props.activeItem.id === id;
+  isActive = id => this.props.activeItem.id === id;
 
   isActiveRow = () => {
     const {items, activeItem} = this.props;
 
-    return items.some((item) => item.id === activeItem.id);
+    return items.some(item => item.id === activeItem.id);
   };
 
-  getItemWidth = (contentWidth) => (contentWidth - 22) / 4 - 8;
+  getItemWidth = contentWidth => (contentWidth - 22) / 4 - 8;
 
-  renderIndicator = (indicator) => {
+  renderIndicator = indicator => {
     const {img, id} = indicator;
     const {onPressItem} = this.props;
     const isActive = this.isActive(id);
@@ -133,7 +133,7 @@ export default class IndicatorRow extends PureComponent {
     );
   };
 
-  renderDescription = (indicator) => {
+  renderDescription = indicator => {
     const {id, name, description} = indicator;
 
     if (!this.isActive(id)) return null;
@@ -143,7 +143,7 @@ export default class IndicatorRow extends PureComponent {
     );
   };
 
-  onLayout = (e) => {
+  onLayout = e => {
     // if (!isTablet)
     return false;
 
@@ -158,12 +158,12 @@ export default class IndicatorRow extends PureComponent {
     return (
       <View style={styles.container} onLayout={this.onLayout}>
         <View style={styles.iconsContainer}>
-          {items.map((indicator) => this.renderIndicator(indicator))}
+          {items.map(indicator => this.renderIndicator(indicator))}
         </View>
 
-        <View ref={(ref) => (this.descriptionRef = ref)}>
+        <View ref={ref => (this.descriptionRef = ref)}>
           {this.isActiveRow()
-            ? items.map((indicator) => this.renderDescription(indicator))
+            ? items.map(indicator => this.renderDescription(indicator))
             : null}
         </View>
       </View>

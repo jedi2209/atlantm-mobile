@@ -3,7 +3,7 @@ import {
   GraphRequest,
   GraphRequestManager,
   LoginManager,
-  Settings
+  Settings,
 } from 'react-native-fbsdk-next';
 
 import {FB_APP_ID} from '../../core/const';
