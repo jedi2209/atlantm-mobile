@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>ru</string>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<string>true</string>
 	<key>CFBundleDisplayName</key>
 	<string>Atlant-M</string>
 	<key>CFBundleExecutable</key>

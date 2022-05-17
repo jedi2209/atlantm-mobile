@@ -31,3 +31,12 @@ export const AWS_CONFIG = {
   secretAccessKey: 'glFURBouuyK5his3MWkhVDC/FOVPPxhfJhXueQj0',
   region: 'eu-west-1',
 };
+
+export const AUTH_DATA = {
+  GoogleSignin: {
+    webClientId:
+      '53201529704-4fl35lhveh4lvcdj9o3nli0fpk8c942r.apps.googleusercontent.com',
+    iosClientId:
+      '53201529704-pofi5bbpvo7dtnuu521lo00f3bl6qiq2.apps.googleusercontent.com',
+  },
+};
