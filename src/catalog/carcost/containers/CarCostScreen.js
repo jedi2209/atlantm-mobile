@@ -126,7 +126,7 @@ class CarCostScreen extends PureComponent {
     };
 
     this.myCars = [];
-    this.props.cars.map((item) => {
+    this.props.cars.map(item => {
       if (!item.hidden) {
         this.myCars.push(item);
       }
@@ -159,7 +159,7 @@ class CarCostScreen extends PureComponent {
     email: PropTypes.string,
   };
 
-  _selectCar = (item) => {
+  _selectCar = item => {
     this.setState({
       carBrand: get(item, 'brand'),
       carModel: get(item, 'model'),
@@ -171,7 +171,7 @@ class CarCostScreen extends PureComponent {
   };
 
   getCars = () => {
-    if (this.myCars &&  this.myCars.length) {
+    if (this.myCars && this.myCars.length) {
       return [
         {
           name: 'CARNAME',
@@ -184,7 +184,7 @@ class CarCostScreen extends PureComponent {
                 horizontal
                 style={styles.carContainer}
                 contentContainerStyle={styles.carContainerContent}>
-                {(this.myCars || []).map((item) => {
+                {(this.myCars || []).map(item => {
                   return (
                     <TouchableWithoutFeedback
                       activeOpacity={0.7}
@@ -237,8 +237,9 @@ class CarCostScreen extends PureComponent {
                   {strings.UserCars.empty.text + '\r\n'}
                 </Text>
                 <Button
+                  size="full"
                   full
-                  bordered
+                  variant="outline"
                   style={{borderRadius: 5}}
                   onPress={() => {
                     this.props.navigation.navigate('About', {
@@ -274,9 +275,7 @@ class CarCostScreen extends PureComponent {
         name: 'CARBRAND',
         type: 'input',
         label: strings.Form.field.label.carBrand,
-        value: this.state.carBrand
-          ? this.state.carBrand
-          : this.props.carBrand,
+        value: this.state.carBrand ? this.state.carBrand : this.props.carBrand,
         props: {
           required: true,
           placeholder: null,
@@ -286,9 +285,7 @@ class CarCostScreen extends PureComponent {
         name: 'CARMODEL',
         type: 'input',
         label: strings.Form.field.label.carModel,
-        value: this.state.carModel
-          ? this.state.carModel
-          : this.props.carModel,
+        value: this.state.carModel ? this.state.carModel : this.props.carModel,
         props: {
           required: true,
           placeholder: null,
@@ -298,9 +295,7 @@ class CarCostScreen extends PureComponent {
         name: 'CARVIN',
         type: 'input',
         label: strings.Form.field.label.carVIN,
-        value: this.state.carVIN
-          ? this.state.carVIN
-          : this.props.carVIN,
+        value: this.state.carVIN ? this.state.carVIN : this.props.carVIN,
         props: {
           placeholder: null,
           autoCapitalize: 'characters',
@@ -466,7 +461,7 @@ class CarCostScreen extends PureComponent {
         },
       },
     ];
-  }
+  };
 
   onPressOrder = async dataFromForm => {
     const isInternetExist = await isInternet();
@@ -669,16 +664,16 @@ class CarCostScreen extends PureComponent {
     console.info('== CarCost ==');
 
     return (
-        <Form
-          contentContainerStyle={{
-            paddingHorizontal: 14,
-          }}
-          key='CarCostForm'
-          fields={this.FormConfig.fields}
-          barStyle={'light-content'}
-          SubmitButton={{text: strings.Form.button.send}}
-          onSubmit={this.onPressOrder}
-        />
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+        }}
+        key="CarCostForm"
+        fields={this.FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{text: strings.Form.button.send}}
+        onSubmit={this.onPressOrder}
+      />
     );
   }
 }

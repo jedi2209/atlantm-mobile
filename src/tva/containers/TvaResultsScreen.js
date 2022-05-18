@@ -141,11 +141,8 @@ class TvaResultsScreen extends Component {
   }
 
   componentDidMount() {
-    const {
-      results,
-      actionTvaMessageFill,
-      actionSetActiveTvaOrderId,
-    } = this.props;
+    const {results, actionTvaMessageFill, actionSetActiveTvaOrderId} =
+      this.props;
     const activeTvaOrderId = get(results, 'info.0.id');
 
     actionTvaMessageFill('');
@@ -186,7 +183,7 @@ class TvaResultsScreen extends Component {
         text: message,
         id: activeOrderId,
         dealer: dealerSelected.id,
-      }).then((action) => {
+      }).then(action => {
         this.setState({loading: false});
         const {type, payload} = action;
 
@@ -213,11 +210,11 @@ class TvaResultsScreen extends Component {
     }
   };
 
-  onPressOrder = (orderId) => this.props.actionSetActiveTvaOrderId(orderId);
+  onPressOrder = orderId => this.props.actionSetActiveTvaOrderId(orderId);
 
-  processDate = (date) => dayMonthYearTime(date);
+  processDate = date => dayMonthYearTime(date);
 
-  onChangeField = (fieldName) => (value) => {
+  onChangeField = fieldName => value => {
     this.setState({[fieldName]: value});
   };
 
@@ -257,10 +254,7 @@ class TvaResultsScreen extends Component {
                     fontWeight: 'bold',
                     textAlign: 'center',
                   }}>
-                  {
-                    strings.TvaResultsScreen.Notifications.success
-                      .messageSent
-                  }
+                  {strings.TvaResultsScreen.Notifications.success.messageSent}
                 </Text>
               </View>
               <View>
@@ -277,7 +271,7 @@ class TvaResultsScreen extends Component {
             </View>
           ) : (
             <>
-              {info.map((item) => (
+              {info.map(item => (
                 <View key={'ViewTvaResult' + item.id}>
                   <View
                     style={[
@@ -335,11 +329,10 @@ class TvaResultsScreen extends Component {
               </View>
               <View style={styles.group}>
                 <Button
+                  size="full"
                   full
                   onPress={
-                    this.state.loading
-                      ? undefined
-                      : this.onPressMessageButton
+                    this.state.loading ? undefined : this.onPressMessageButton
                   }
                   style={[styleConst.shadow.default, styles.button]}>
                   {this.state.loading ? (

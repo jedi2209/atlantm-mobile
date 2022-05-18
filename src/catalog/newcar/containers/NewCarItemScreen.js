@@ -464,7 +464,7 @@ const NewCarItemScreen = ({
         </View>
       </ScrollView>
     );
-  }
+  };
 
   const _renderTechData = (title, data) => {
     if (typeof data === 'object' && data.length) {
@@ -1026,8 +1026,21 @@ const NewCarItemScreen = ({
           <Button
             testID="NewCarItemScreen.Button.TestDrive"
             onPress={_onPressTestDrive}
+            size="full"
             full
             iconLeft
+            leftIcon={
+              <Icon
+                type="MaterialCommunityIcons"
+                name="steering"
+                selectable={false}
+                style={{
+                  color: styleConst.color.white,
+                  fontSize: 24,
+                  marginTop: -2,
+                }}
+              />
+            }
             style={[
               stylesFooter.button,
               stylesFooter.buttonLeft,
@@ -1052,11 +1065,12 @@ const NewCarItemScreen = ({
           <Button
             testID="NewCarItemScreen.Button.Order"
             onPress={_onPressOrder}
+            size="full"
             full
             style={[
               stylesFooter.button,
               stylesFooter.buttonRight,
-              !isPriceShow ? stylesFooter.buttonNoPriceRight : null
+              !isPriceShow ? stylesFooter.buttonNoPriceRight : null,
               // !carDetails.testDriveCars ||
               // carDetails.testDriveCars.length === 0
               //   ? stylesFooter.buttonOnlyOne

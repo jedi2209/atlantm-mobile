@@ -72,7 +72,7 @@ const mapDispatchToProps = {
   actionMenuOpenedCount,
 };
 
-const MenuItem = (props) => {
+const MenuItem = props => {
   const {id, selected, type, name, icon, navigate} = props.data;
   const {navigation, rowHeight} = props;
 
@@ -117,7 +117,7 @@ const MenuItem = (props) => {
   );
 };
 
-const MenuScreen = (props) => {
+const MenuScreen = props => {
   const menu = [
     {
       id: 1,
@@ -252,7 +252,7 @@ const MenuScreen = (props) => {
   return (
     <View testID="MenuScreen.Wrapper">
       <List style={{marginTop: 0}}>
-        {menu.map((item) => (
+        {menu.map(item => (
           <MenuItem
             key={`menu-item-${item.id}`}
             data={item}
@@ -263,6 +263,7 @@ const MenuScreen = (props) => {
       </List>
       {/* <View>
           <Button
+            size="full"
             full
             onPress={() => {
               if (props.login.id) {

@@ -97,7 +97,7 @@ class OrderPartsScreen extends Component {
       isHaveCar: Boolean(props.cars.length > 0),
     };
     this.myCars = [];
-    this.props.cars.map((item) => {
+    this.props.cars.map(item => {
       if (!item.hidden) {
         this.myCars.push(item);
       }
@@ -116,10 +116,9 @@ class OrderPartsScreen extends Component {
     if (this.myCars.length === 1) {
       this.state.carBrand = this.myCars[0]?.brand;
       this.state.carModel = this.myCars[0]?.model;
-      this.state.carName = [
-        this.myCars[0]?.brand,
-        this.myCars[0]?.model,
-      ].join(' ');
+      this.state.carName = [this.myCars[0]?.brand, this.myCars[0]?.model].join(
+        ' ',
+      );
       this.state.carVIN = this.myCars[0]?.vin;
     }
 
@@ -127,7 +126,7 @@ class OrderPartsScreen extends Component {
     let listDealers = [];
     if (dealer) {
       if (dealer.length) {
-        dealer.map((el) => {
+        dealer.map(el => {
           listDealers.push({
             label: el.name,
             value: el.id,
@@ -152,7 +151,7 @@ class OrderPartsScreen extends Component {
     isOrderServiceRequest: PropTypes.bool,
   };
 
-  _selectCar = (item) => {
+  _selectCar = item => {
     this.setState({
       carBrand: item.brand,
       carModel: item.model,
@@ -161,7 +160,7 @@ class OrderPartsScreen extends Component {
     });
   };
 
-  onPressOrder = async (dataFromForm) => {
+  onPressOrder = async dataFromForm => {
     if (!dataFromForm.CARBRAND && this.state.carBrand) {
       dataFromForm.CARBRAND = this.state.carBrand;
     }
@@ -311,7 +310,7 @@ class OrderPartsScreen extends Component {
                           horizontal
                           style={styles.carContainer}
                           contentContainerStyle={styles.carContainerContent}>
-                          {(this.myCars || []).map((item) => {
+                          {(this.myCars || []).map(item => {
                             return (
                               <TouchableWithoutFeedback
                                 style={{
@@ -367,8 +366,9 @@ class OrderPartsScreen extends Component {
                             {strings.UserCars.empty.text + '\r\n'}
                           </Text>
                           <Button
+                            size="full"
                             full
-                            bordered
+                            variant="outline"
                             style={{borderRadius: 5}}
                             onPress={() => {
                               this.props.navigation.navigate('About', {
@@ -478,7 +478,7 @@ class OrderPartsScreen extends Component {
           paddingHorizontal: 14,
           marginTop: 20,
         }}
-        key='OrderPartsForm'
+        key="OrderPartsForm"
         fields={this.FormConfig.fields}
         barStyle={'light-content'}
         SubmitButton={{text: strings.Form.button.send}}

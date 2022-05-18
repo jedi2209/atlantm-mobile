@@ -12,62 +12,71 @@ import styleConst from '../../style-const';
 import {strings} from '../../lang/const';
 
 const mapStateToProps = ({dealer, profile}) => {
-    return {
-        region: dealer.selected.region,
-    };
+  return {
+    region: dealer.selected.region,
   };
+};
 
 const UserAgreementScreen = ({region, SubmitButton}) => {
-    const [HTML, setHTML] = useState(null);
+  const [HTML, setHTML] = useState(null);
 
-    useEffect(() => {
-        console.info('== UserAgreementScreen ==');
-        API.fetchUserAgreement(region).then(res => {
-            setHTML(res);
-        });
-      }, []);
+  useEffect(() => {
+    console.info('== UserAgreementScreen ==');
+    API.fetchUserAgreement(region).then(res => {
+      setHTML(res);
+    });
+  }, [region]);
 
-    if (HTML) {
-        return (
-            <>
-            <ScrollView style={styles.mainView}>
-            <WebViewAutoHeight
-                style={styles.webView}
-                key={moment().unix()}
-                source={{html: HTML}}
-                />
-            </ScrollView>
-            <Button full style={styles.submitButton} onPress={() => NavigationService.goBack()}>
-                <Text>{SubmitButton.text}</Text>
-            </Button>
-            </>
-        );
-    } else {
-        return <ActivityIndicator color={styleConst.color.blue} style={styleConst.spinner}/>;
-    }
-}
+  if (HTML) {
+    return (
+      <>
+        <ScrollView style={styles.mainView}>
+          <WebViewAutoHeight
+            style={styles.webView}
+            key={moment().unix()}
+            source={{html: HTML}}
+          />
+        </ScrollView>
+        <Button
+          size="full"
+          full
+          style={styles.submitButton}
+          onPress={() => NavigationService.goBack()}>
+          <Text>{SubmitButton.text}</Text>
+        </Button>
+      </>
+    );
+  } else {
+    return (
+      <ActivityIndicator
+        color={styleConst.color.blue}
+        style={styleConst.spinner}
+      />
+    );
+  }
+};
 
 UserAgreementScreen.defaultProps = {
-    SubmitButton: {
-        text: strings.ModalView.close,
-    },
+  SubmitButton: {
+    text: strings.ModalView.close,
+  },
 };
 
 const styles = StyleSheet.create({
-    submitButton: {
-        marginBottom: 25,
-        marginHorizontal: 10,
-        borderRadius: 5,
-    },
-    mainView: {
-        paddingHorizontal: 10,
-        flex: 1,
-        paddingBottom: 25,
-        backgroundColor: styleConst.color.bg,
-    },
-    webView: {
-        backgroundColor: styleConst.color.bg,
-    },
+  submitButton: {
+    marginBottom: 25,
+    marginHorizontal: 10,
+    borderRadius: 5,
+  },
+  mainView: {
+    paddingHorizontal: 10,
+    flex: 1,
+    paddingBottom: 25,
+    backgroundColor: styleConst.color.bg,
+  },
+  webView: {
+    backgroundColor: styleConst.color.bg,
+  },
 });
 
 export default connect(mapStateToProps)(UserAgreementScreen);

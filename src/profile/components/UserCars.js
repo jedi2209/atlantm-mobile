@@ -25,7 +25,7 @@ import {strings} from '../../core/lang/const';
 
 import {actionToggleCar} from '../actions';
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
     actionToggleCar: (item, id) => {
       return dispatch(actionToggleCar(item, id));
@@ -85,9 +85,9 @@ let UserCars = ({actionToggleCar, activePanel}) => {
         title: carName,
         style: {
           maxHeight: Dimensions.get('window').height / 0.1,
-        }
+        },
       },
-      (buttonIndex) => {
+      buttonIndex => {
         switch (ordersData.BUTTONS[buttonIndex].id) {
           case 'orderService':
             navigation.navigate('ServiceScreen', {
@@ -95,7 +95,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
               settings: {
                 disableDealer: true,
                 disableCarBlock: true,
-              }
+              },
             });
             break;
           case 'TOCalculator':
@@ -106,7 +106,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
                 disableCarBlock: true,
                 submitButtonText: strings.ServiceScreen.title,
                 returnOnFailFetchServices: true,
-              }
+              },
             });
             break;
           case 'orderParts':
@@ -127,7 +127,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
           case 'hide':
             setLoading(true);
             actionToggleCar(item, get(store.getState(), 'profile.login.SAP'))
-              .then((res) => {
+              .then(res => {
                 if (res.type && res.type === 'CAR_HIDE__SUCCESS') {
                   setActivePanel('default');
                   setLoading(false);
@@ -138,7 +138,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
                   });
                 }
               })
-              .catch((error) => {
+              .catch(error => {
                 setLoading(false);
                 Toast.show({
                   text: error,
@@ -159,7 +159,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
         horizontal
         contentContainerStyle={{paddingLeft: 12, paddingRight: 5}}
         ref={carsScrollView}>
-        {cars.map((item) => {
+        {cars.map(item => {
           let CarType = '';
           if (item.hidden === true) {
             CarType = 'hidden';
@@ -172,11 +172,11 @@ let UserCars = ({actionToggleCar, activePanel}) => {
               key={item.vin}
               onPress={() => {
                 if (CarType === 'active') {
-                  orderFunctions.getOrders('car').then((ordersData) => {
+                  orderFunctions.getOrders('car').then(ordersData => {
                     return _showMenu(ordersData, item, navigation);
                   });
                 } else {
-                  orderFunctions.getArchieveCarMenu().then((data) => {
+                  orderFunctions.getArchieveCarMenu().then(data => {
                     return _showMenu(
                       data[CarType][Platform.OS],
                       item,
@@ -204,7 +204,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
     hidden: [],
     owner: [],
   };
-  cars.map((item) => {
+  cars.map(item => {
     if (item.hidden) {
       myCars.hidden.push(item);
     } else {
@@ -323,8 +323,9 @@ let UserCars = ({actionToggleCar, activePanel}) => {
             {strings.UserCars.empty.text + '\r\n'}
           </Text>
           <Button
+            size="full"
             full
-            bordered
+            variant="outline"
             style={{borderRadius: 5}}
             onPress={() => setActivePanel('hidden')}>
             <Text style={{padding: 5}}>{strings.UserCars.archiveCheck}</Text>

@@ -691,6 +691,14 @@ class UsedCarItemScreen extends Component {
                     }}
                     full={!phone ? true : false}
                     iconLeft
+                    leftIcon={
+                      <Icon
+                        type="MaterialCommunityIcons"
+                        name="phone-incoming"
+                        selectable={false}
+                        style={styles.iconButtonSm}
+                      />
+                    }
                     style={[
                       !phone
                         ? stylesFooter.buttonOnlyOne
@@ -714,6 +722,14 @@ class UsedCarItemScreen extends Component {
                         this.onPressCall(phone);
                       }}
                       iconLeft
+                      leftIcon={
+                        <Icon
+                          type="MaterialCommunityIcons"
+                          name="phone-outgoing"
+                          selectable={false}
+                          style={styles.iconButtonSm}
+                        />
+                      }
                       style={[
                         styles.itemCallButton,
                         styles.itemOrderCall,
@@ -754,7 +770,7 @@ class UsedCarItemScreen extends Component {
                       <Button
                         block
                         iconRight
-                        transparent
+                        variant="unstyled"
                         activeOpacity={0.5}
                         onPress={this.onPressCredit}
                         style={[styles.bodyButton, styles.bodyButtonLeft]}>
@@ -781,10 +797,30 @@ class UsedCarItemScreen extends Component {
                       <Button
                         block
                         iconLeft
+                        leftIcon={
+                          <Icon
+                            type="Entypo"
+                            name="price-tag"
+                            selectable={false}
+                            style={[
+                              styles.bodyButtonIcon,
+                              styles.bodyButtonIconRight,
+                            ]}
+                          />
+                        }
+                        variant="unstyled"
                         transparent
                         activeOpacity={0.5}
                         onPress={this.onPressMyPrice}
                         style={[styles.bodyButton, styles.bodyButtonRight]}>
+                        <Text
+                          selectable={false}
+                          style={[
+                            styles.bodyButtonText,
+                            styles.bodyButtonTextRight,
+                          ]}>
+                          {strings.UsedCarItemScreen.myPrice}
+                        </Text>
                         <Icon
                           type="Entypo"
                           name="price-tag"
@@ -794,14 +830,6 @@ class UsedCarItemScreen extends Component {
                             styles.bodyButtonIconRight,
                           ]}
                         />
-                        <Text
-                          selectable={false}
-                          style={[
-                            styles.bodyButtonText,
-                            styles.bodyButtonTextRight,
-                          ]}>
-                          {strings.UsedCarItemScreen.myPrice}
-                        </Text>
                       </Button>
                     ) : null}
                   </View>
@@ -1012,7 +1040,10 @@ class UsedCarItemScreen extends Component {
                       borderTopWidth: 0.75,
                       borderColor: '#d5d5e0',
                     }}>
-                    <Text style={{fontSize: 18, color: styleConst.color.greyText}}>{item.title}</Text>
+                    <Text
+                      style={{fontSize: 18, color: styleConst.color.greyText}}>
+                      {item.title}
+                    </Text>
                     {expanded ? (
                       <Icon
                         type="FontAwesome5"
@@ -1044,9 +1075,14 @@ class UsedCarItemScreen extends Component {
             </View>
           </Content>
         </Container>
-        <View style={[styleConst.shadow.default, stylesFooter.footer, !this.isPriceShow ? stylesFooter.footerSmall : null]}>
-        {this.isPriceShow ? 
-          isSale ? (
+        <View
+          style={[
+            styleConst.shadow.default,
+            stylesFooter.footer,
+            !this.isPriceShow ? stylesFooter.footerSmall : null,
+          ]}>
+          {this.isPriceShow ? (
+            isSale ? (
               <View
                 style={[
                   stylesFooter.orderPriceContainer,
@@ -1082,11 +1118,13 @@ class UsedCarItemScreen extends Component {
                   )}
                 </Text>
               </View>
-            ) : null}
+            )
+          ) : null}
           <View style={[stylesFooter.footerButtons]}>
             <Button
               testID="UsedCarItemScreen.Button.TestDrive"
               onPress={this.onPressTestDrive}
+              size="full"
               full
               style={[
                 stylesFooter.button,
@@ -1107,6 +1145,7 @@ class UsedCarItemScreen extends Component {
             <Button
               testID="UsedCarItemScreen.Button.Order"
               onPress={this.onPressOrder}
+              size="full"
               full
               style={[
                 stylesFooter.button,

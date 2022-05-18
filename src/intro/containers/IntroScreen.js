@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
 });
 
 export default class IntroScreen extends Component {
-
   onPressButton = () => this.props.navigation.navigate('ChooseDealerScreen');
 
   render() {
@@ -61,9 +60,10 @@ export default class IntroScreen extends Component {
             source={require('../../menu/assets/logo-horizontal-white.svg')}
           />
           <Button
+            size="full"
             full
             title={strings.IntroScreen.button}
-            testID='IntroChooseDealerButton'
+            testID="IntroChooseDealerButton"
             onPress={this.onPressButton}
             style={[styleConst.shadow.default, styles.button]}>
             <Image

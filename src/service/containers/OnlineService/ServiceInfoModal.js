@@ -113,7 +113,7 @@ const ServiceInfoModal = ({onClose, data, route, navigation, type}) => {
           ) : null}
         </Tabs>
         <View style={modalStyles.wrapper}>
-          <Button full style={modalStyles.button} onPress={onClose}>
+          <Button size="full" full style={modalStyles.button} onPress={onClose}>
             <Text style={modalStyles.buttonText}>OK</Text>
           </Button>
         </View>

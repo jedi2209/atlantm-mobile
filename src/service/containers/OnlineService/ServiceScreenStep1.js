@@ -273,36 +273,39 @@ class ServiceScreenStep1 extends Component {
         date: undefined,
         time: undefined,
       });
-      if (get(this.settingsFromNavigation, 'returnOnFailFetchServices', false)) {
+      if (
+        get(this.settingsFromNavigation, 'returnOnFailFetchServices', false)
+      ) {
         let errorTitle = strings.Notifications.error.title;
+        let errorText = strings.ServiceScreenStep1.Notifications.error.noData;
         switch (data?.error.code) {
           case 6: // неправильное КО
-            errorText = strings.ServiceScreenStep1.Notifications.error.wrongDealer;
+            errorText =
+              strings.ServiceScreenStep1.Notifications.error.wrongDealer;
             break;
           case 7: // Для VIN не определены признаки ТО
-            errorText = strings.ServiceScreenStep1.Notifications.error.noDataCar;
+            errorText =
+              strings.ServiceScreenStep1.Notifications.error.noDataCar;
             break;
           default:
-            errorText = strings.ServiceScreenStep1.Notifications.error.noData;
             break;
         }
-        Alert.alert(
-          errorTitle,
-          errorText,
-          [
-            {
-              text: 'ОК',
-              onPress: () => {
-                navigation.goBack();
-              },
+        Alert.alert(errorTitle, errorText, [
+          {
+            text: 'ОК',
+            onPress: () => {
+              navigation.goBack();
             },
-          ],
-        );
+          },
+        ]);
       }
     } else {
       let services = [];
       data.data.map(el => {
-        if (route.name === 'ServiceTOCalculatorScreen' && el.id.toString() === 'other') {
+        if (
+          route.name === 'ServiceTOCalculatorScreen' &&
+          el.id.toString() === 'other'
+        ) {
           return;
         }
         services.push({
@@ -473,40 +476,50 @@ class ServiceScreenStep1 extends Component {
                     style={styles.carContainer}
                     contentContainerStyle={styles.carContainerContent}>
                     {(this.myCars || []).map(item => {
-                      if (this.settingsFromNavigation?.disableCarBlock && item && item.vin && this.state.carVIN) {
+                      if (
+                        this.settingsFromNavigation?.disableCarBlock &&
+                        item &&
+                        item.vin &&
+                        this.state.carVIN
+                      ) {
                         if (item?.vin != this.state.carVIN) {
                           return;
                         }
                       }
                       return (
-                      <TouchableWithoutFeedback
-                        activeOpacity={0.7}
-                        key={item.vin}
-                        onPress={() => {
-                          if (!this.settingsFromNavigation?.disableCarBlock) {
-                            this._selectCar(item, () => {
-                              this._getServices();
-                            });
-                          }
-                        }}>
-                        <View>
-                          <CarCard
-                            key={item.vin}
-                            data={item}
-                            type="check"
-                            checked={this.state.carVIN === item.vin}
-                            disabled={this.settingsFromNavigation?.disableCarBlock}
-                            onPress={() => {
-                                if (!this.settingsFromNavigation?.disableCarBlock) {
-                                  this._selectCar(item, () => {
-                                  this._getServices();
-                                });
+                        <TouchableWithoutFeedback
+                          activeOpacity={0.7}
+                          key={item.vin}
+                          onPress={() => {
+                            if (!this.settingsFromNavigation?.disableCarBlock) {
+                              this._selectCar(item, () => {
+                                this._getServices();
+                              });
+                            }
+                          }}>
+                          <View>
+                            <CarCard
+                              key={item.vin}
+                              data={item}
+                              type="check"
+                              checked={this.state.carVIN === item.vin}
+                              disabled={
+                                this.settingsFromNavigation?.disableCarBlock
                               }
-                            }}
-                          />
-                        </View>
-                      </TouchableWithoutFeedback>
-                    )})}
+                              onPress={() => {
+                                if (
+                                  !this.settingsFromNavigation?.disableCarBlock
+                                ) {
+                                  this._selectCar(item, () => {
+                                    this._getServices();
+                                  });
+                                }
+                              }}
+                            />
+                          </View>
+                        </TouchableWithoutFeedback>
+                      );
+                    })}
                   </ScrollView>
                 ) : (
                   <View style={styles.scrollViewInner} useNativeDriver>
@@ -520,8 +533,9 @@ class ServiceScreenStep1 extends Component {
                       {strings.UserCars.empty.text + '\r\n'}
                     </Text>
                     <Button
+                      size="full"
                       full
-                      bordered
+                      variant="outline"
                       style={{borderRadius: 5}}
                       onPress={() => {
                         this.props.navigation.navigate('About', {
@@ -622,96 +636,108 @@ class ServiceScreenStep1 extends Component {
                     name: 'recommended',
                     type: 'component',
                     value: (
-                        <TouchableOpacity
-                          style={{
-                            paddingVertical: 5,
-                            flex: 1,
-                            flexDirection: 'row',
-                          }}
-                          onPress={() => {
-                            this.props.navigation.navigate('ServiceInfoModal', {
-                              data: this.state.serviceInfo,
-                              type: 'recommended',
-                            });
-                          }}>
-                          {this.state.serviceInfo.summary &&
-                          this.state.serviceInfo.summary[0].summ ? (
-                            <>
-                              <Icon
-                                name="ios-information-circle-outline"
-                                size={24}
-                                style={styles.textPriceIcon}
-                              />
-                              <Text style={styles.textPriceTitle}>
-                                {strings.ServiceScreenStep1.priceRecommended}{' '}
-                                <Text style={styles.textPrice}>
-                                  {'+'}
-                                  {showPrice(
-                                    parseFloat(
-                                      this.state.serviceInfo.summary[0].summ
-                                        .recommended,
-                                    ),
-                                    this.props.dealerSelected.region,
-                                  )}
-                                </Text>
+                      <TouchableOpacity
+                        style={{
+                          paddingVertical: 5,
+                          flex: 1,
+                          flexDirection: 'row',
+                        }}
+                        onPress={() => {
+                          this.props.navigation.navigate('ServiceInfoModal', {
+                            data: this.state.serviceInfo,
+                            type: 'recommended',
+                          });
+                        }}>
+                        {this.state.serviceInfo.summary &&
+                        this.state.serviceInfo.summary[0].summ ? (
+                          <>
+                            <Icon
+                              name="ios-information-circle-outline"
+                              size={24}
+                              style={styles.textPriceIcon}
+                            />
+                            <Text style={styles.textPriceTitle}>
+                              {strings.ServiceScreenStep1.priceRecommended}{' '}
+                              <Text style={styles.textPrice}>
+                                {'+'}
+                                {showPrice(
+                                  parseFloat(
+                                    this.state.serviceInfo.summary[0].summ
+                                      .recommended,
+                                  ),
+                                  this.props.dealerSelected.region,
+                                )}
                               </Text>
-                              <CheckBox
-                                onPress={() => {
-                                  this.setState({
-                                    recommended: !this.state.recommended,
-                                  });
-                                }}
-                                checked={this.state.recommended}
-                                style={[styles.checkbox]}
-                                color={styleConst.color.blue}
-                              />
-                            </>
-                          ) : null}
-                        </TouchableOpacity>
+                            </Text>
+                            <CheckBox
+                              onPress={() => {
+                                this.setState({
+                                  recommended: !this.state.recommended,
+                                });
+                              }}
+                              checked={this.state.recommended}
+                              style={[styles.checkbox]}
+                              color={styleConst.color.blue}
+                            />
+                          </>
+                        ) : null}
+                      </TouchableOpacity>
                     ),
                   }
                 : {},
             ],
           },
-          this.state.serviceInfo && this.state.serviceInfo.summary[0].summ.total ? {
-            name: strings.ServiceScreenStep1.total,
-            fields: [
-              {
-                name: 'recommended',
-                type: 'component',
-                value: (
-                  <>
-                  <View
-                    style={{
-                        paddingVertical: 5,
-                        flex: 1,
-                        flexDirection: 'row',
-                      }}>
-                      <Icon
-                        name="money"
-                        type={"FontAwesome"}
-                        size={24}
-                        style={styles.textPriceIcon}
-                      />
-                      <Text style={styles.textPriceTitle}>
-                        {strings.ServiceScreenStep1.total}{' '}
-                        <Text style={styles.textPrice}>
-                          {showPrice(
-                            parseFloat(
-                              this.state.recommended ? 
-                              this.state.serviceInfo.summary[0].summ.total : this.state.serviceInfo.summary[0].summ.required
-                            ),
-                            this.props.dealerSelected.region,
-                          )}
+          this.state.serviceInfo && this.state.serviceInfo.summary[0].summ.total
+            ? {
+                name: strings.ServiceScreenStep1.total,
+                fields: [
+                  {
+                    name: 'recommended',
+                    type: 'component',
+                    value: (
+                      <>
+                        <View
+                          style={{
+                            paddingVertical: 5,
+                            flex: 1,
+                            flexDirection: 'row',
+                          }}>
+                          <Icon
+                            name="money"
+                            type={'FontAwesome'}
+                            size={24}
+                            style={styles.textPriceIcon}
+                          />
+                          <Text style={styles.textPriceTitle}>
+                            {strings.ServiceScreenStep1.total}{' '}
+                            <Text style={styles.textPrice}>
+                              {showPrice(
+                                parseFloat(
+                                  this.state.recommended
+                                    ? this.state.serviceInfo.summary[0].summ
+                                        .total
+                                    : this.state.serviceInfo.summary[0].summ
+                                        .required,
+                                ),
+                                this.props.dealerSelected.region,
+                              )}
+                            </Text>
+                          </Text>
+                        </View>
+                        <Text
+                          style={{
+                            fontSize: 14,
+                            color: styleConst.color.greyBlueText,
+                            marginTop: 10,
+                          }}>
+                          {this.state.serviceInfo.summary[0]?.text}
                         </Text>
-                      </Text>
-                  </View>
-                  <Text style={{fontSize: 14, color: styleConst.color.greyBlueText, marginTop: 10,}}>{this.state.serviceInfo.summary[0]?.text}</Text>
-                  </>
-                )
+                      </>
+                    ),
+                  },
+                ],
               }
-            ],
-          } : {},
+            : {},
         ],
       },
     };
@@ -721,12 +747,14 @@ class ServiceScreenStep1 extends Component {
           paddingHorizontal: 14,
           marginTop: 20,
         }}
-        key='ServiceStep1Form'
+        key="ServiceStep1Form"
         fields={this.FormConfig.fields}
         defaultCountryCode={this.props.dealerSelected.region}
         onSubmit={this.onPressOrder}
         SubmitButton={{
-          text: get(this.props.route, 'params.settings.submitButtonText', false) ? get(this.props.route, 'params.settings.submitButtonText') : strings.DatePickerCustom.chooseDateButton,
+          text: get(this.props.route, 'params.settings.submitButtonText', false)
+            ? get(this.props.route, 'params.settings.submitButtonText')
+            : strings.DatePickerCustom.chooseDateButton,
           style: {
             backgroundColor: styleConst.color.darkBg,
           },

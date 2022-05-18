@@ -422,6 +422,9 @@ class LoginScreen extends Component {
             }}
             disabled={this.state.isSigninInProgress}
             iconLeft
+            leftIcon={
+              <Icon name="google" type="FontAwesome5" style={{marginLeft: 0}} />
+            }
             style={[
               styleConst.shadow.default,
               styles.SocialLoginBt,
@@ -439,6 +442,13 @@ class LoginScreen extends Component {
             }}
             disabled={this.state.isSigninInProgress}
             iconLeft
+            leftIcon={
+              <Icon
+                name="facebook"
+                type="FontAwesome5"
+                style={{marginLeft: 0, fontSize: 35}}
+              />
+            }
             style={[
               styleConst.shadow.default,
               styles.SocialLoginBt,
@@ -463,6 +473,9 @@ class LoginScreen extends Component {
               }}
               disabled={this.state.isSigninInProgress}
               iconLeft
+              leftIcon={
+                <Icon name="vk" type="FontAwesome5" style={{marginLeft: 0}} />
+              }
               style={[
                 styleConst.shadow.default,
                 styles.SocialLoginBt,
@@ -662,6 +675,7 @@ class LoginScreen extends Component {
               ) : (
                 <Button
                   onPress={this._verifyCode}
+                  size="full"
                   full
                   disabled={
                     this.state.loadingVerify
@@ -706,8 +720,16 @@ class LoginScreen extends Component {
                       returnScreen: 'LoginScreen',
                     });
                   }}
+                  size="full"
                   full
                   iconLeft
+                  leftIcon={
+                    <Icon
+                      name="info"
+                      type="SimpleLineIcons"
+                      style={styles.BonusInfoButtonIcon}
+                    />
+                  }
                   style={styles.BonusInfoButton}>
                   <Icon
                     name="info"

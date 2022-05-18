@@ -311,8 +311,12 @@ class BonusScreen extends Component {
     return (
       <Button
         onPress={this.onPressBonusInfo}
+        size="full"
         full
         iconLeft
+        leftIcon={
+          <Icon name="price-ribbon" type="Entypo" style={styles.buttonIcon} />
+        }
         style={[
           styleConst.shadow.default,
           styles.button,

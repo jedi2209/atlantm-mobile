@@ -310,8 +310,10 @@ class SettingsScreen extends PureComponent {
                 {width: cardWidth},
               ]}>
               <Button
+                variant="unstyled"
                 transparent
                 full
+                size="full"
                 style={styles.buttonRate}
                 selectable={false}
                 onPress={() => {
@@ -351,8 +353,10 @@ class SettingsScreen extends PureComponent {
                 {width: cardWidth},
               ]}>
               <Button
+                variant="unstyled"
                 transparent
                 full
+                size="full"
                 style={styles.buttonRate}
                 selectable={false}
                 onPress={() => {
@@ -381,7 +385,13 @@ class SettingsScreen extends PureComponent {
                 styles.VersionContainer,
                 {width: cardWidth, marginHorizontal: 10, marginTop: 20},
               ]}>
-                <Text onPress={() => NavigationService.navigate('UserAgreementScreen')} style={styles.userAgreementText}>{strings.Form.agreement.title}</Text>
+              <Text
+                onPress={() =>
+                  NavigationService.navigate('UserAgreementScreen')
+                }
+                style={styles.userAgreementText}>
+                {strings.Form.agreement.title}
+              </Text>
             </TransitionView>
             <TransitionView
               animation={styleConst.animation.opacityIn}
@@ -392,8 +402,10 @@ class SettingsScreen extends PureComponent {
                 {width: cardWidth, marginHorizontal: 10, marginTop: 20},
               ]}>
               <Button
+                variant="unstyled"
                 transparent
                 full
+                size="full"
                 onPress={() => {
                   return Linking.openURL(STORE_LINK[Platform.OS]);
                 }}
