@@ -1,4 +1,5 @@
 import styleConst from '../core/style-const';
+import {APP_NAME} from '../core/const';
 
 const processHtml = (text, width) => {
   return `
@@ -7,7 +8,7 @@ const processHtml = (text, width) => {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Atlant-M</title>
+      <title>${APP_NAME}</title>
     </head>
     <body>
     <style>

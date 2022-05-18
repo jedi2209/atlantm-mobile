@@ -1,13 +1,12 @@
 import thunkMiddleware from 'redux-thunk';
 import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {createStore, compose, applyMiddleware} from 'redux';
 import {createLogger} from 'redux-logger';
 import Reactotron from './containers/ReactotronConfig';
 
-import rootReducer from './reducers';
+import {configureStore} from '@reduxjs/toolkit';
 
-const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+import rootReducer from './reducers';
 
 const middleware = [
   thunkMiddleware,
@@ -21,20 +20,21 @@ const persistConfig = {
   keyPrefix: 'atlantm',
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
 let store;
 
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 if (__DEV__) {
-  store = createStore(
-    persistedReducer,
-    composeEnhancer(
-      applyMiddleware(...middleware),
-      Reactotron.createEnhancer(),
-    ),
-  );
+  store = configureStore({
+    reducer: persistedReducer,
+    middleware,
+    enhancers: [Reactotron.createEnhancer()],
+  });
 } else {
-  store = createStore(persistedReducer, applyMiddleware(...middleware));
+  store = configureStore({
+    reducer: persistedReducer,
+    middleware,
+  });
 }
 
 const storePersist = persistStore(store, () => {
