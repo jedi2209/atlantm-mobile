@@ -124,8 +124,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 34,
-    marginLeft: 10,  
-  }
+    marginLeft: 10,
+  },
 });
 
 import {verticalScale} from '../../utils/scale';
@@ -245,205 +245,223 @@ class ProfileScreenInfo extends Component {
     }
   };
 
-  renderCarsData = () => <UserCars activePanel={this.props.navigation.params?.activePanel} />;
+  renderCarsData = () => (
+    <UserCars activePanel={this.props.navigation.params?.activePanel} />
+  );
   renderCarsNoData = () => {
-  return (
-    <>
-      <View
-        style={[
-          styleConst.shadow.default,
-          styles.scrollViewInner,
-          {
-            display: 'flex',
-            backgroundColor: '#979797',
-            marginTop: 10,
-            marginBottom: 10,
-            marginLeft: 20,
-            marginRight: 20,
-            borderRadius: 5,
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: 125,
-          },
-        ]}>
-        <Text
-          style={{
-            textAlign: 'center',
-            color: styleConst.color.white,
-            fontSize: 18,
-            paddingHorizontal: 20,
-          }}>
-          {strings.ProfileScreenInfo.empty.cars}
-        </Text>
-        <Button
-          full
-          onPress={() => {
-            this.props.navigation.navigate('ReestablishScreen');
-          }}
+    return (
+      <>
+        <View
           style={[
+            styleConst.shadow.default,
+            styles.scrollViewInner,
             {
-              position: 'absolute',
-              backgroundColor: 'none',
-              elevation: 0,
-              bottom: -10,
-              right: 5,
-              paddingHorizontal: 10,
-              paddingVertical: 5,
+              display: 'flex',
+              backgroundColor: '#979797',
+              marginTop: 10,
+              marginBottom: 10,
+              marginLeft: 20,
+              marginRight: 20,
+              borderRadius: 5,
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: 125,
             },
           ]}>
           <Text
+            style={{
+              textAlign: 'center',
+              color: styleConst.color.white,
+              fontSize: 18,
+              paddingHorizontal: 20,
+            }}>
+            {strings.ProfileScreenInfo.empty.cars}
+          </Text>
+          <Button
+            full
+            onPress={() => {
+              this.props.navigation.navigate('ReestablishScreen');
+            }}
             style={[
-              styles.buttonPrimaryText,
               {
-                color: styleConst.color.white,
-                fontSize: 14,
-                fontStyle: 'italic',
-                textDecorationStyle: 'dotted',
-                textDecorationColor: styleConst.color.white,
-                textDecorationLine: 'underline',
-                shadowOpacity: 0,
+                position: 'absolute',
+                backgroundColor: 'none',
                 elevation: 0,
+                bottom: -10,
+                right: 5,
+                paddingHorizontal: 10,
+                paddingVertical: 5,
               },
             ]}>
-            {strings.ProfileScreenInfo.empty.whereMyCars}
-          </Text>
-        </Button>
-      </View>
-    </>
+            <Text
+              style={[
+                styles.buttonPrimaryText,
+                {
+                  color: styleConst.color.white,
+                  fontSize: 14,
+                  fontStyle: 'italic',
+                  textDecorationStyle: 'dotted',
+                  textDecorationColor: styleConst.color.white,
+                  textDecorationLine: 'underline',
+                  shadowOpacity: 0,
+                  elevation: 0,
+                },
+              ]}>
+              {strings.ProfileScreenInfo.empty.whereMyCars}
+            </Text>
+          </Button>
+        </View>
+      </>
     );
   };
 
   renderCashBack = () => {
-    if (this.props.login && this.props.login.CASHBACK && (this.props.login.CASHBACK.STATUS.ID || this.props.login.CASHBACK.STATUS.NAME)) {
+    if (
+      this.props.login &&
+      this.props.login.CASHBACK &&
+      (this.props.login.CASHBACK.STATUS.ID ||
+        this.props.login.CASHBACK.STATUS.NAME)
+    ) {
       return (
-      <TouchableOpacity style={styles.bonusButtonWrapper}>
-        <View
-          style={[
-            styleConst.shadow.default,
-            styles.bonusButtonView,
-            {
-              backgroundColor: styleConst.color.greyBlue,
-            }
-          ]}>
-          <View style={{flex: 1}}>
-            <Text
-              style={{
-                color: styleConst.color.white,
-                fontSize: 18,
-                marginBottom: 8,
-                fontWeight: '600',
-              }}>
-              {strings.ProfileScreenInfo.cashback.title}
-            </Text>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 5}}>
-            <Text
-              style={{
-                color: styleConst.color.white,
-                fontSize: 12,
-                lineHeight: 24,
-                fontWeight: '600',
-              }}>
-              {strings.ProfileScreenInfo.cashback.statusText}
-            </Text>
-            <Text
-            style={{
-                color: styleConst.color.white,
-                fontSize: 16,
-                fontWeight: '600',
-              }}>{this.props.login?.CASHBACK?.STATUS?.NAME}</Text>
-            </View>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <Text
-                style={{
-                  color: styleConst.color.white,
-                  fontSize: 12,
-                  lineHeight: 24,
-                  fontWeight: '600',
-                }}>
-                {strings.ProfileScreenInfo.cashback.deadline}
-              </Text>
-              <Text
-                style={{
-                  color: styleConst.color.white,
-                  fontSize: 12,
-                  fontSize: 16,
-                  fontWeight: '600',
-                }}>
-                {dayMonthYear(this.props.login?.CASHBACK?.DATE?.TO)}
-              </Text>
-            </View>
-          </View>
+        <TouchableOpacity style={styles.bonusButtonWrapper}>
           <View
-            style={[styles.bonusButtonTextView, {width: 82, height: 82, marginLeft: 24, marginRight: 0}]}>
-            <Text
-              style={{
-                color: '#0061ed',
-                fontSize: 20,
-                fontWeight: '600',
-              }}>
-              {this.props.login?.CASHBACK?.PERCENT
-                ? parseFloat(this.props.login?.CASHBACK?.PERCENT, 'ru-RU') + ' %'
-                : 0}
-            </Text>
+            style={[
+              styleConst.shadow.default,
+              styles.bonusButtonView,
+              {
+                backgroundColor: styleConst.color.greyBlue,
+              },
+            ]}>
+            <View style={{flex: 1}}>
+              <Text
+                style={{
+                  color: styleConst.color.white,
+                  fontSize: 18,
+                  marginBottom: 8,
+                  fontWeight: '600',
+                }}>
+                {strings.ProfileScreenInfo.cashback.title}
+              </Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginBottom: 5,
+                }}>
+                <Text
+                  style={{
+                    color: styleConst.color.white,
+                    fontSize: 12,
+                    lineHeight: 24,
+                    fontWeight: '600',
+                  }}>
+                  {strings.ProfileScreenInfo.cashback.statusText}
+                </Text>
+                <Text
+                  style={{
+                    color: styleConst.color.white,
+                    fontSize: 16,
+                    fontWeight: '600',
+                  }}>
+                  {this.props.login?.CASHBACK?.STATUS?.NAME}
+                </Text>
+              </View>
+              <View
+                style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text
+                  style={{
+                    color: styleConst.color.white,
+                    fontSize: 12,
+                    lineHeight: 24,
+                    fontWeight: '600',
+                  }}>
+                  {strings.ProfileScreenInfo.cashback.deadline}
+                </Text>
+                <Text
+                  style={{
+                    color: styleConst.color.white,
+                    fontSize: 12,
+                    fontSize: 16,
+                    fontWeight: '600',
+                  }}>
+                  {dayMonthYear(this.props.login?.CASHBACK?.DATE?.TO)}
+                </Text>
+              </View>
+            </View>
+            <View
+              style={[
+                styles.bonusButtonTextView,
+                {width: 82, height: 82, marginLeft: 24, marginRight: 0},
+              ]}>
+              <Text
+                style={{
+                  color: '#0061ed',
+                  fontSize: 20,
+                  fontWeight: '600',
+                }}>
+                {this.props.login?.CASHBACK?.PERCENT
+                  ? parseFloat(this.props.login?.CASHBACK?.PERCENT, 'ru-RU') +
+                    ' %'
+                  : 0}
+              </Text>
+            </View>
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
       );
     }
     return <></>;
   };
 
   renderAdditionalPurchase = () => {
-    if (this.props.insurance && this.props.insurance.length || this.props.additionalPurchase && this.props.additionalPurchase.length) {
+    if (
+      (this.props.insurance && this.props.insurance.length) ||
+      (this.props.additionalPurchase && this.props.additionalPurchase.length)
+    ) {
       return (
-      <TouchableOpacity
-        style={styles.bonusButtonWrapper}
-        onPress={() =>
-          this.props.navigation.navigate('AdditionalPurchaseScreen')
-        }>
-        <View
-          style={[
-            styleConst.shadow.default,
-            styles.additionalPurchaseView,
-          ]}
+        <TouchableOpacity
+          style={styles.bonusButtonWrapper}
           onPress={() =>
             this.props.navigation.navigate('AdditionalPurchaseScreen')
           }>
           <View
-            style={styles.additionalPurchaseButtonTextView}>
-            <Icon
-              type="Fontisto"
-              name="shopping-bag-1"
-              fontSize={40}
-              style={{fontSize: 40}}
-            />
+            style={[styleConst.shadow.default, styles.additionalPurchaseView]}
+            onPress={() =>
+              this.props.navigation.navigate('AdditionalPurchaseScreen')
+            }>
+            <View style={styles.additionalPurchaseButtonTextView}>
+              <Icon
+                type="Fontisto"
+                name="shopping-bag-1"
+                fontSize={40}
+                style={{fontSize: 40}}
+              />
+            </View>
+            <View style={{flex: 1}}>
+              <Text
+                style={{
+                  color: styleConst.color.white,
+                  fontSize: 18,
+                  marginBottom: 8,
+                  fontWeight: '600',
+                }}>
+                {strings.ProfileScreenInfo.additionalPurchase.title}
+              </Text>
+              <Text
+                style={{
+                  color: styleConst.color.white,
+                  fontSize: 12,
+                  marginBottom: 16,
+                  fontWeight: '600',
+                }}>
+                {strings.ProfileScreenInfo.additionalPurchase.text}
+              </Text>
+            </View>
           </View>
-          <View style={{flex: 1}}>
-            <Text
-              style={{
-                color: styleConst.color.white,
-                fontSize: 18,
-                marginBottom: 8,
-                fontWeight: '600',
-              }}>
-              {strings.ProfileScreenInfo.additionalPurchase.title}
-            </Text>
-            <Text
-              style={{
-                color: styleConst.color.white,
-                fontSize: 12,
-                marginBottom: 16,
-                fontWeight: '600',
-              }}>
-              {strings.ProfileScreenInfo.additionalPurchase.text}
-            </Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
       );
     }
     return <></>;
-  }
+  };
 
   renderBonusSaldo = region => {
     let saldoValue = get(this.props.bonus, 'data.saldo.convert.value', null);
@@ -487,19 +505,11 @@ class ProfileScreenInfo extends Component {
           <>
             <TouchableOpacity
               style={styles.bonusButtonWrapper}
-              onPress={() =>
-                this.props.navigation.navigate('BonusScreen')
-              }>
+              onPress={() => this.props.navigation.navigate('BonusScreen')}>
               <View
-                style={[
-                  styleConst.shadow.default,
-                  styles.bonusButtonView,
-                ]}
-                onPress={() =>
-                  this.props.navigation.navigate('BonusScreen')
-                }>
-                <View
-                  style={styles.bonusButtonTextView}>
+                style={[styleConst.shadow.default, styles.bonusButtonView]}
+                onPress={() => this.props.navigation.navigate('BonusScreen')}>
+                <View style={styles.bonusButtonTextView}>
                   <Text
                     style={{
                       color: styleConst.color.blue,
@@ -581,9 +591,7 @@ class ProfileScreenInfo extends Component {
                 type="SimpleLineIcons"
                 style={styles.BonusInfoButtonIcon}
               />
-              <Text
-                numberOfLines={1}
-                style={styles.BonusInfoButtonText}>
+              <Text numberOfLines={1} style={styles.BonusInfoButtonText}>
                 {strings.Menu.main.bonus}
               </Text>
             </Button>
@@ -624,8 +632,7 @@ class ProfileScreenInfo extends Component {
                     alignItems: 'center',
                     marginRight: 24,
                   }}>
-                  {this.props.bonus.data &&
-                  this.props.bonus.data.saldo ? (
+                  {this.props.bonus.data && this.props.bonus.data.saldo ? (
                     <Text
                       style={{
                         color: '#0061ed',
@@ -638,7 +645,7 @@ class ProfileScreenInfo extends Component {
                     <Icon
                       name="frowno"
                       type="AntDesign"
-                      style={[{fontSize: 76, marginTop: 9}]}
+                      style={[{fontSize: 76, marginTop: 2}]}
                     />
                   )}
                 </View>
@@ -660,11 +667,8 @@ class ProfileScreenInfo extends Component {
                       fontWeight: '600',
                     }}>
                     {strings.ProfileScreenInfo.bonus.current.text}{' '}
-                    <Text style={{fontWeight: 'bold', fontSize: 22}}>
-                      0
-                    </Text>{' '}
-                    {strings.ProfileScreenInfo.bonus.current.text2}.
-                    {'\r\n'}
+                    <Text style={{fontWeight: 'bold', fontSize: 22}}>0</Text>{' '}
+                    {strings.ProfileScreenInfo.bonus.current.text2}.{'\r\n'}
                     {strings.ProfileScreenInfo.bonus.current.text3}
                   </Text>
                   <View style={{display: 'flex', flexDirection: 'row'}}>
@@ -675,10 +679,7 @@ class ProfileScreenInfo extends Component {
                           fontSize: 16,
                           fontWeight: '600',
                         }}>
-                        {
-                          strings.ProfileScreenInfo.bonus.current
-                            .giveMeMore
-                        }
+                        {strings.ProfileScreenInfo.bonus.current.giveMeMore}
                       </Text>
                     </View>
                     <Icon
@@ -699,8 +700,7 @@ class ProfileScreenInfo extends Component {
       }
     }
     return <></>;
-  }
-
+  };
 
   render() {
     return (

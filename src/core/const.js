@@ -18,6 +18,8 @@ export const CHAT_MAIN_SOCKET = 'wss://livechat.atlantm.com/v1';
 export const SENTRY_DSN =
   'https://XXXX@sentry.io/219899';
 
+export const APP_NAME = 'Atlant-M';
+
 export const APP_EMAIL = 'atlant-m.corp@atlantm.com';
 
 export const ONESIGNAL = 'XXXX';

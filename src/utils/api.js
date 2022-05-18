@@ -774,7 +774,6 @@ export default {
   },
 
   loginRequest({login, password}) {
-    // __DEV__ &&
     if (!login || !password) {
       return false;
     }
