@@ -36,7 +36,10 @@ const ModalViewFilter = props => {
                 </Text>
               ) : null}
             </View>
-            <Button transparent style={styles.closeButtonWrapper}>
+            <Button
+              variant="unstyled"
+              transparent
+              style={styles.closeButtonWrapper}>
               <Icon
                 type="Ionicons"
                 style={styles.closeButton}
@@ -48,6 +51,7 @@ const ModalViewFilter = props => {
           {get(props, 'children', 'content')}
           <View style={styles.buttonsView}>
             <Button
+              variant="unstyled"
               transparent
               onPress={props.onReset ? props.onReset : props.onHide}
               style={[styles.modalButton]}>
@@ -61,6 +65,7 @@ const ModalViewFilter = props => {
               </Text>
             </Button>
             <Button
+              variant="unstyled"
               transparent
               onPress={props.onHide}
               style={[styles.modalButton]}>

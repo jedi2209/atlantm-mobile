@@ -233,6 +233,13 @@ class SocialAuth extends PureComponent {
             onPress={this._connectGoogle}
             disabled={this.state.isSigninInProgress || Boolean(im.google)}
             iconLeft
+            leftIcon={
+              <Icon
+                name="google"
+                type="FontAwesome5"
+                style={{marginLeft: 0, color: styleConst.color.white}}
+              />
+            }
             style={[
               styleConst.shadow.default,
               styles.SocialLoginBt,
@@ -291,6 +298,13 @@ class SocialAuth extends PureComponent {
               onPress={this._connectVK}
               disabled={this.state.isSigninInProgress || Boolean(im.vk)}
               iconLeft
+              leftIcon={
+                <Icon
+                  name="vk"
+                  type="FontAwesome5"
+                  style={{marginLeft: 0, color: styleConst.color.white}}
+                />
+              }
               style={[
                 styleConst.shadow.default,
                 styles.SocialLoginBt,

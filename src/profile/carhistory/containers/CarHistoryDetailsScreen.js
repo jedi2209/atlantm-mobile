@@ -1,14 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, View, Text, ScrollView} from 'react-native';
 import {Row, Col, Button, Content, Tab, Tabs, DefaultTabBar} from 'native-base';
-import { Divider } from 'react-native-paper';
+import {Divider} from 'react-native-paper';
 
 // redux
 import {connect} from 'react-redux';
@@ -147,7 +141,7 @@ class CarHistoryDetailsScreen extends Component {
     navigation.setParams({title});
 
     actionFetchCarHistoryDetails({vin, token, userid, workId, workDealer}).then(
-      (action) => {
+      action => {
         if (action.type === CAR_HISTORY_DETAILS__FAIL) {
           let message = get(
             action,
@@ -163,11 +157,10 @@ class CarHistoryDetailsScreen extends Component {
           navigation.setParams({
             mainTitle: 'Заказ-наряд #' + workId,
           });
-        }, 150)
+        }, 150);
       },
     );
   }
-
 
   renderTable = ({name, count, units, summ}, idx) => {
     return (
@@ -183,7 +176,11 @@ class CarHistoryDetailsScreen extends Component {
           {get(summ, 'value')
             ? this.renderItem({
                 prop: strings.CarHistoryDetailsScreen.price,
-                value: showPrice(get(summ, 'value'), get(summ, 'currency'), true),
+                value: showPrice(
+                  get(summ, 'value'),
+                  get(summ, 'currency'),
+                  true,
+                ),
               })
             : null}
           {/* {get(summ, 'sale')
@@ -192,7 +189,11 @@ class CarHistoryDetailsScreen extends Component {
           {get(summ, 'sale')
             ? this.renderItem({
                 prop: strings.CarHistoryDetailsScreen.sale,
-                value: showPrice(get(summ, 'sale'), get(summ, 'currency'), true),
+                value: showPrice(
+                  get(summ, 'sale'),
+                  get(summ, 'currency'),
+                  true,
+                ),
               })
             : null}
           {/* {get(summ, 'tax')
@@ -207,7 +208,11 @@ class CarHistoryDetailsScreen extends Component {
           {get(summ, 'total')
             ? this.renderItem({
                 prop: strings.CarHistoryDetailsScreen.total.nds,
-                value: showPrice(get(summ, 'total'), get(summ, 'currency'), true),
+                value: showPrice(
+                  get(summ, 'total'),
+                  get(summ, 'currency'),
+                  true,
+                ),
               })
             : null}
         </View>
@@ -299,8 +304,13 @@ class CarHistoryDetailsScreen extends Component {
             ) : null}
           </Tabs>
           <View style={modalStyles.wrapper}>
-            <Button full style={modalStyles.button} onPress={() => this.props.navigation.goBack()}>
-              <Text style={modalStyles.buttonText}>{strings.ModalView.close}</Text>
+            <Button
+              size="full"
+              style={modalStyles.button}
+              onPress={() => this.props.navigation.goBack()}>
+              <Text style={modalStyles.buttonText}>
+                {strings.ModalView.close}
+              </Text>
             </Button>
           </View>
         </SafeAreaView>

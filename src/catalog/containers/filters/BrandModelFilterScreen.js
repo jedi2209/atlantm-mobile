@@ -236,6 +236,7 @@ const BrandModelFilterScreen = ({
       </Content>
       <View style={styles.resultButtonWrapper}>
         <Button
+          variant="unstyled"
           transparent
           onPress={() => {
             setModelFilter({type: 'clear'});

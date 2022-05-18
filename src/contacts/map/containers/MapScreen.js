@@ -402,6 +402,7 @@ class MapScreen extends Component {
             onPress={this.onPressRouteVariant}
           />
           <Button
+            size="full"
             full
             testID="MapScreen.makeRouteButton"
             style={[styleConst.shadow.default, styles.button]}

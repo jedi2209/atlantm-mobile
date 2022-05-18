@@ -42,10 +42,7 @@ const PhotoViewer = ({items, index, onPressClose, enableScale, onChange}) => {
   const [visible, setVisible] = useState(false);
   const [counter, setCounter] = useState(true);
   return (
-    <Modal
-      transparent={true}
-      visible={visible}
-      onRequestClose={onPressClose}>
+    <Modal transparent={true} visible={visible} onRequestClose={onPressClose}>
       <GallerySwiper
         images={items}
         // Change this to render how many items before it.
@@ -59,14 +56,12 @@ const PhotoViewer = ({items, index, onPressClose, enableScale, onChange}) => {
         style={styles.gallery}
       />
       {counter ? galleryCount(index, items.length) : null}
-      <TouchableOpacity
-        style={styles.close}
-        onPress={onPressClose}>
+      <TouchableOpacity style={styles.close} onPress={onPressClose}>
         <Icon style={styles.closeIcon} name="close" type="MaterialIcons" />
       </TouchableOpacity>
     </Modal>
   );
-}
+};
 
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 0;
 const positionTop = STATUSBAR_HEIGHT + 15;

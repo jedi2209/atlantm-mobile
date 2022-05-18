@@ -44,6 +44,7 @@ const ModalView = props => {
             {props.content ? props.content : props.children}
           </View>
           <Button
+            size="full"
             full
             onPress={props.onHide}
             style={[
@@ -105,6 +106,7 @@ const ModalView = props => {
             </View>
             {props.confirmBtnText ? (
               <Button
+                size="full"
                 full
                 onPress={props.onHide}
                 style={[

@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   spinnerContainer: {
     flex: 1,
-    marginTop: infoListHeight/2,
+    marginTop: infoListHeight / 2,
     height: infoListHeight,
     backgroundColor: styleConst.color.bg,
   },
@@ -155,12 +155,24 @@ const mapDispatchToProps = {
 const intervalSecondsMini = 60;
 const intervalMiliSeconds = intervalSecondsMini * 1000;
 
-const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, isFetchInfoList, isAppRated, menuOpenedCount, actionMenuOpenedCount, actionAppRated}) => {
+const ContactsScreen = ({
+  navigation,
+  dealerSelected,
+  infoList,
+  fetchInfoList,
+  isFetchInfoList,
+  isAppRated,
+  menuOpenedCount,
+  actionMenuOpenedCount,
+  actionAppRated,
+}) => {
   const [showRatePopup, setShowRatePopup] = useState(false);
   const [chatAvailable, setChatAvailable] = useState(false);
   const [callAvailable, setCallAvailable] = useState(false);
   const mainScrollView = useRef();
   const interval = useRef();
+  const isOpened = getStatusWorktime(dealerSelected, 'RC');
+  const [isSubscribedInterval, setSubscribedInterval] = useState(true);
 
   const fetchInfoData = () => {
     const {region, id: dealerID} = dealerSelected;
@@ -188,14 +200,14 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
         );
       }
     });
-  }
+  };
 
   const _sites = () => {
     let sitesSubtitle = {
       sites: [],
       buttons: [],
     };
-    
+
     get(dealerSelected, 'site', []).map((val, idx) => {
       if (val) {
         const siteName = val
@@ -316,14 +328,9 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
         <View style={styles.scrollViewInner}>
           <Plate
             title={strings.ContactsScreen.call}
-            status={
-              callAvailable
-                ? 'enabled'
-                : 'disabled'
-            }
+            status={callAvailable ? 'enabled' : 'disabled'}
             subtitle={phones[0]}
             onPress={() => {
-              isOpened = getStatusWorktime(dealerSelected, 'RC');
               if (!isOpened) {
                 Alert.alert(
                   strings.ContactsScreen.closedDealer.title,
@@ -343,20 +350,18 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
                   {cancelable: false},
                 );
               } else {
-                Linking.openURL(
-                  'tel:' + phones[0].replace(/[^+\d]+/g, ''),
-                );
+                Linking.openURL('tel:' + phones[0].replace(/[^+\d]+/g, ''));
               }
             }}
           />
           {false ? (
-          <Plate
-            title="Чат"
-            subtitle="Отвечаем с 9 до 20"
-            type="orange"
-            status={chatAvailable ? 'enabled' : 'disabled'}
-            onPress={onPressChat}
-          />
+            <Plate
+              title="Чат"
+              subtitle="Отвечаем с 9 до 20"
+              type="orange"
+              status={chatAvailable ? 'enabled' : 'disabled'}
+              onPress={onPressChat}
+            />
           ) : null}
           <Plate
             testID="ContactsScreen.ButtonCallMe"
@@ -413,15 +418,11 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
             testID="ContactsScreen.ButtonSites"
             type="red"
             onPress={() => {
-              if (
-                sitesSubtitle &&
-                sitesSubtitle.sites.length > 1
-              ) {
+              if (sitesSubtitle && sitesSubtitle.sites.length > 1) {
                 ActionSheet.show(
                   {
                     options: sitesSubtitle.buttons,
-                    cancelButtonIndex:
-                      sitesSubtitle.buttons.length - 1,
+                    cancelButtonIndex: sitesSubtitle.buttons.length - 1,
                     title: strings.ContactsScreen.dealerSites,
                   },
                   buttonIndex => {
@@ -451,7 +452,6 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
     );
   };
 
-
   useEffect(() => {
     Analytics.logEvent('screen', 'contacts');
 
@@ -470,7 +470,6 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
     fetchInfoData();
 
     console.info('== Contacts ==');
-    let isSubscribedInterval = true;
     // chatStatus(isSubscribedInterval).then(res => {
     //   setChatAvailable(res);
     // });
@@ -482,18 +481,19 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
     //     setChatAvailable(res);
     //   });
     // }, intervalMiliSeconds);
-  return () => {
-    isSubscribedInterval = false;
-    if (interval && interval.current) {
-      clearInterval(interval.current);
-    }
-  }
-}, []);
+    return () => {
+      setSubscribedInterval(false);
+      // if (interval) {
+      //   clearInterval(interval);
+      // }
+    };
+  }, []);
 
   return (
     <View style={styleConst.safearea.default} testID="ContactsScreen.Wrapper">
       <StatusBar hidden />
       <Button
+        size="full"
         full
         onPress={() => navigation.navigate('ChooseDealerScreen')}
         style={[styles.buttonPrimary, styleConst.shadow.default]}>
@@ -510,12 +510,10 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
             );
           })}
         <View style={{flex: 1, flexDirection: 'row'}}>
-          <Text style={styles.buttonPrimaryText}>{get(dealerSelected, 'name')}</Text>
-          <Icon
-            type="FontAwesome5"
-            name="angle-right"
-            style={styles.iconRow}
-          />
+          <Text style={styles.buttonPrimaryText}>
+            {get(dealerSelected, 'name')}
+          </Text>
+          <Icon type="FontAwesome5" name="angle-right" style={styles.iconRow} />
         </View>
       </Button>
       <ScrollView
@@ -533,16 +531,14 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
             style={styles.address}
             testID="ContactsScreen.PressMap"
             onPress={() => onPressMap()}>
-            <Icon
-              style={styles.point}
-              type="MaterialIcons"
-              name="navigation"
-            />
+            <Icon style={styles.point} type="MaterialIcons" name="navigation" />
             <Text
               numberOfLines={1}
               ellipsizeMode="tail"
               style={styles.addressText}>
-              {dealerSelected && dealerSelected.city && dealerSelected.city.name ? dealerSelected.city.name : null}
+              {dealerSelected && dealerSelected.city && dealerSelected.city.name
+                ? dealerSelected.city.name
+                : null}
               {dealerSelected.address ? ', ' + dealerSelected.address : null}
             </Text>
           </TouchableOpacity>
@@ -552,7 +548,6 @@ const ContactsScreen = ({navigation, dealerSelected, infoList, fetchInfoList, is
       </ScrollView>
     </View>
   );
-    
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactsScreen);

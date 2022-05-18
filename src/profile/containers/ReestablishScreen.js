@@ -118,7 +118,7 @@ class ReestablishScreen extends React.Component {
     this.disableButton = false;
   }
 
-  onChangeField = (fieldName) => (value) => {
+  onChangeField = fieldName => value => {
     this.setState({[fieldName]: value});
   };
 
@@ -159,7 +159,7 @@ class ReestablishScreen extends React.Component {
     }
     this.props
       .actionLogin({login, password, id: this.props.profile.login.ID})
-      .then((action) => {
+      .then(action => {
         switch (action.type) {
           case 'LOGIN__FAIL_OLD_LKK':
             if (login === 'zteam' && password === '4952121052') {
@@ -189,7 +189,7 @@ class ReestablishScreen extends React.Component {
                 },
                 isReestablish: true,
               })
-              .then((data) => {
+              .then(data => {
                 this.setState({loading: false});
                 const _this = this;
                 Toast.show({
@@ -295,6 +295,7 @@ class ReestablishScreen extends React.Component {
                 }}
               />
               <Button
+                variant="unstyled"
                 transparent
                 title={strings.ReestablishScreen.forgotPass}
                 onPress={() => {
@@ -304,7 +305,7 @@ class ReestablishScreen extends React.Component {
                   }
                   this.props
                     .actionRequestForgotPass(this.state.login)
-                    .then((action) => {
+                    .then(action => {
                       switch (action.type) {
                         case 'FORGOT_PASS_REQUEST__SUCCESS':
                           Toast.show({
@@ -365,6 +366,7 @@ class ReestablishScreen extends React.Component {
                 },
               ]}>
               <Button
+                size="full"
                 full
                 disabled={this.disableButton ? true : false}
                 active={this.disableButton ? false : true}

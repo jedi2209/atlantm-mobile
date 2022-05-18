@@ -278,6 +278,7 @@ class ProfileScreenInfo extends Component {
             {strings.ProfileScreenInfo.empty.cars}
           </Text>
           <Button
+            size="full"
             full
             onPress={() => {
               this.props.navigation.navigate('ReestablishScreen');
@@ -380,7 +381,6 @@ class ProfileScreenInfo extends Component {
                 <Text
                   style={{
                     color: styleConst.color.white,
-                    fontSize: 12,
                     fontSize: 16,
                     fontWeight: '600',
                   }}>
@@ -582,9 +582,18 @@ class ProfileScreenInfo extends Component {
                   returnScreen: 'LoginScreen',
                 });
               }}
+              size="full"
               full
               transparent
+              variant="unstyled"
               iconLeft
+              leftIcon={
+                <Icon
+                  name="info"
+                  type="SimpleLineIcons"
+                  style={styles.BonusInfoButtonIcon}
+                />
+              }
               style={styles.BonusInfoButton}>
               <Icon
                 name="info"
@@ -760,8 +769,10 @@ class ProfileScreenInfo extends Component {
               </Button>
               <View style={{textAlign: 'center', alignItems: 'center'}}>
                 <Button
+                  variant="unstyled"
                   transparent
                   full
+                  size="full"
                   onPress={() => {
                     this.props.actionLogout();
                   }}

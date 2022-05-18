@@ -93,6 +93,7 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
         </Text>
       ) : null}
       <Button
+        variant="unstyled"
         transparent
         onPress={props.onPressButton}
         ref={ref}

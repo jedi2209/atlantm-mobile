@@ -1794,6 +1794,7 @@ const MainFilterScreen = ({
             },
           ]}>
           <Button
+            size="full"
             full
             style={[
               styles.resultButton,
