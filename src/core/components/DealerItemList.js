@@ -1,11 +1,10 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {ListItem, Body, Right, Text} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 
 // component
-// import Imager from '../components/Imager';
 import BrandLogo from '../components/BrandLogo';
 
 // helpers
@@ -138,18 +137,6 @@ const DealerItemList = props => {
     </View>
   );
 };
-
-// shouldComponentUpdate(nextProps) {
-//   if (this.props.dealer && nextProps.dealer) {
-//     if (this.props.dealer.name && nextProps.dealer.name) {
-//       return this.props.dealer.name !== nextProps.dealer.name;
-//     } else {
-//       return false;
-//     }
-//   } else {
-//     return false;
-//   }
-// }
 
 DealerItemList.propTypes = {
   city: PropTypes.shape({

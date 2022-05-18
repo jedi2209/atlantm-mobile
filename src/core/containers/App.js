@@ -7,6 +7,7 @@ import {
   Platform,
   NativeModules,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {Root, StyleProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
@@ -72,7 +73,6 @@ const App = props => {
     dealer,
     menuOpenedCount,
     isStoreUpdated,
-    fetchDealers,
   } = props;
 
   const mainScreen = 'BottomTabNavigation';
@@ -117,7 +117,7 @@ const App = props => {
 
   useEffect(() => {
     NavigationService.setTopLevelNavigator(NavigationService.navigationRef);
-    fetchDealers();
+    props.fetchDealers();
 
     _awaitStoreToUpdate().then(res => {
       if (typeof res === 'undefined' || !res) {

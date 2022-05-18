@@ -36,8 +36,11 @@ let sentryParams = {
 };
 
 if (__DEV__) {
-  // LogBox.ignoreAllLogs(true);
-  // LogBox.ignoreLogs(['Require cycle:']);
+  LogBox.ignoreLogs([
+    "ViewPropTypes will be removed from React Native. Migrate to ViewPropTypes exported from 'deprecated-react-native-prop-types'.",
+    'NativeBase: The contrast ratio of',
+    "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
+  ]);
   sentryParams = {
     dsn: SENTRY_DSN,
     debug: true,
@@ -88,14 +91,22 @@ const Wrapper = () => {
   }, []);
 
   return (
+    // <Provider store={store}>
+    //   <PersistGate
+    //     onBeforeLift={_onBeforeLift}
+    //     loading={<Loader />}
+    //     persistor={storePersist}>
+    //     <Sentry.TouchEventBoundary>
+    //       <App colorScheme={colorScheme} />
+    //     </Sentry.TouchEventBoundary>
+    //   </PersistGate>
+    // </Provider>
     <Provider store={store}>
       <PersistGate
         onBeforeLift={_onBeforeLift}
         loading={<Loader />}
         persistor={storePersist}>
-        <Sentry.TouchEventBoundary>
-          <App colorScheme={colorScheme} />
-        </Sentry.TouchEventBoundary>
+        <App colorScheme={colorScheme} />
       </PersistGate>
     </Provider>
   );
