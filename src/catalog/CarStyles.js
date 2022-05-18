@@ -51,6 +51,7 @@ export default StyleSheet.create({
     fontSize: 16,
     fontFamily: styleConst.font.regular,
     marginBottom: 10,
+    color: styleConst.color.greyText3,
   },
   sectionRow: {
     marginBottom: 0,

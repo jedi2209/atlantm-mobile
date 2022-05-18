@@ -1,4 +1,4 @@
-import thunkMiddleware from 'redux-thunk';
+import thunk from 'redux-thunk';
 import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createLogger} from 'redux-logger';
@@ -9,7 +9,7 @@ import {configureStore} from '@reduxjs/toolkit';
 import rootReducer from './reducers';
 
 const middleware = [
-  thunkMiddleware,
+  thunk,
   __DEV__ && createLogger({collapsed: true, diff: true}),
 ].filter(Boolean);
 
@@ -22,13 +22,14 @@ const persistConfig = {
 
 let store;
 
+const createdEnhancer = Reactotron.createEnhancer();
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 if (__DEV__) {
   store = configureStore({
     reducer: persistedReducer,
-    middleware,
-    enhancers: [Reactotron.createEnhancer()],
+    middleware: middleware,
+    enhancers: [createdEnhancer],
   });
 } else {
   store = configureStore({

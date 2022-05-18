@@ -152,6 +152,212 @@ const mapDispatchToProps = {
   actionMenuOpenedCount,
 };
 
+const _renderPlates = params => {
+  const {
+    dealerSelected,
+    callAvailable,
+    isOpened,
+    navigation,
+    chatAvailable,
+    onPressCallMe,
+    onPressChat,
+    sitesSubtitle,
+  } = params;
+  const phones = get(dealerSelected, 'phone', []);
+  return (
+    <ScrollView
+      showsHorizontalScrollIndicator={false}
+      horizontal
+      contentContainerStyle={{paddingRight: 30}}
+      style={styles.scrollView}>
+      <View style={styles.scrollViewInner}>
+        <Plate
+          title={strings.ContactsScreen.call}
+          status={callAvailable ? 'enabled' : 'disabled'}
+          subtitle={phones[0]}
+          onPress={() => {
+            if (!isOpened) {
+              Alert.alert(
+                strings.ContactsScreen.closedDealer.title,
+                strings.ContactsScreen.closedDealer.text,
+                [
+                  {
+                    text: strings.ContactsScreen.closedDealer.no,
+                    style: 'cancel',
+                  },
+                  {
+                    text: strings.ContactsScreen.closedDealer.yes,
+                    onPress: () => {
+                      navigation.navigate('CallMeBackScreen');
+                    },
+                  },
+                ],
+                {cancelable: false},
+              );
+            } else {
+              Linking.openURL('tel:' + phones[0].replace(/[^+\d]+/g, ''));
+            }
+          }}
+        />
+        {false ? (
+          <Plate
+            title="Чат"
+            subtitle="Отвечаем с 9 до 20"
+            type="orange"
+            status={chatAvailable ? 'enabled' : 'disabled'}
+            onPress={onPressChat}
+          />
+        ) : null}
+        <Plate
+          testID="ContactsScreen.ButtonCallMe"
+          title={strings.ContactsScreen.callOrder}
+          subtitle=""
+          onPress={onPressCallMe}
+        />
+        <Plate
+          title={strings.ContactsScreen.order}
+          subtitle={strings.ContactsScreen.sendOrder}
+          type="primary"
+          testID="ContactsScreen.ButtonOrders"
+          onPress={() => {
+            orderFunctions.getOrders().then(ordersData => {
+              ActionSheet.show(
+                {
+                  options: ordersData.BUTTONS,
+                  cancelButtonIndex: ordersData.CANCEL_INDEX,
+                  title: ordersData.TITLE,
+                  destructiveButtonIndex: ordersData.DESTRUCTIVE_INDEX || null,
+                },
+                buttonIndex => {
+                  switch (ordersData.BUTTONS[buttonIndex].id) {
+                    case 'callMeBack':
+                      navigation.navigate('CallMeBackScreen');
+                      break;
+                    case 'orderService':
+                      navigation.navigate('ServiceScreen');
+                      break;
+                    case 'orderParts':
+                      navigation.navigate('OrderPartsScreen');
+                      break;
+                    case 'carCost':
+                      navigation.navigate('CarCostScreen');
+                      break;
+                  }
+                },
+              );
+            });
+          }}
+        />
+        <Plate
+          title={
+            sitesSubtitle && sitesSubtitle.sites.length > 1
+              ? strings.ContactsScreen.sites
+              : strings.ContactsScreen.site
+          }
+          subtitle={
+            sitesSubtitle && sitesSubtitle.sites.length > 1
+              ? sitesSubtitle.sites.join('\r\n')
+              : sitesSubtitle.sites[0]
+          }
+          testID="ContactsScreen.ButtonSites"
+          type="red"
+          onPress={() => {
+            if (sitesSubtitle && sitesSubtitle.sites.length > 1) {
+              ActionSheet.show(
+                {
+                  options: sitesSubtitle.buttons,
+                  cancelButtonIndex: sitesSubtitle.buttons.length - 1,
+                  title: strings.ContactsScreen.dealerSites,
+                },
+                buttonIndex => {
+                  switch (sitesSubtitle.buttons[buttonIndex].id) {
+                    case 'cancel':
+                      break;
+                    default:
+                      Linking.openURL(sitesSubtitle.buttons[buttonIndex].site);
+                      break;
+                  }
+                },
+              );
+            } else {
+              Linking.openURL(get(dealerSelected, 'site[0]')).catch(
+                console.error(
+                  'get(dealerSelected, "site[0]") failed',
+                  get(dealerSelected, 'site[0]'),
+                ),
+              );
+            }
+          }}
+        />
+      </View>
+    </ScrollView>
+  );
+};
+
+const _renderInfoList = params => {
+  const {isFetchInfoList, infoList, navigation} = params;
+  if (isFetchInfoList) {
+    return (
+      <View style={styles.spinnerContainer}>
+        <ActivityIndicator
+          color={styleConst.color.blue}
+          style={styleConst.spinner}
+        />
+      </View>
+    );
+  }
+  if (infoList && infoList.length) {
+    return (
+      <View
+        style={{
+          marginTop: 16,
+          paddingVertical: 0,
+        }}
+        testID="ContactsScreen.currentActionsHeading">
+        <View
+          style={{
+            paddingHorizontal: 20,
+            marginBottom: 20,
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <Text style={{fontSize: 14, fontWeight: '500'}}>
+            {strings.ContactsScreen.currentActions}
+          </Text>
+          <Text
+            onPress={() => navigation.navigate('InfoList')}
+            style={{
+              color: styleConst.color.lightBlue,
+              fontSize: 14,
+              paddingLeft: 24,
+            }}>
+            {strings.Base.all}
+          </Text>
+        </View>
+        <Carousel
+          data={infoList}
+          renderItem={item => {
+            return (
+              <Offer
+                key={`carousel-article-${item.hash}`}
+                data={item}
+                width={cardWidth}
+                height={infoListHeight}
+              />
+            );
+          }}
+          sliderWidth={deviceWidth}
+          itemWidth={cardWidth}
+          inactiveSlideScale={0.97}
+          activeSlideAlignment={'center'}
+        />
+      </View>
+    );
+  }
+  return <></>;
+};
+
 const intervalSecondsMini = 60;
 const intervalMiliSeconds = intervalSecondsMini * 1000;
 
@@ -166,11 +372,11 @@ const ContactsScreen = ({
   actionMenuOpenedCount,
   actionAppRated,
 }) => {
-  const [showRatePopup, setShowRatePopup] = useState(false);
+  // const [showRatePopup, setShowRatePopup] = useState(false);
   const [chatAvailable, setChatAvailable] = useState(false);
   const [callAvailable, setCallAvailable] = useState(false);
   const mainScrollView = useRef();
-  const interval = useRef();
+  // const interval = useRef();
   const isOpened = getStatusWorktime(dealerSelected, 'RC');
   const [isSubscribedInterval, setSubscribedInterval] = useState(true);
 
@@ -254,204 +460,6 @@ const ContactsScreen = ({
     !isAppRated && actionAppRated();
   };
 
-  const _renderInfoList = () => {
-    if (isFetchInfoList) {
-      return (
-        <View style={styles.spinnerContainer}>
-          <ActivityIndicator
-            color={styleConst.color.blue}
-            style={styleConst.spinner}
-          />
-        </View>
-      );
-    }
-    if (infoList && infoList.length) {
-      return (
-        <View
-          style={{
-            marginTop: 16,
-            paddingVertical: 0,
-          }}
-          testID="ContactsScreen.currentActionsHeading">
-          <View
-            style={{
-              paddingHorizontal: 20,
-              marginBottom: 20,
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={{fontSize: 14, fontWeight: '500'}}>
-              {strings.ContactsScreen.currentActions}
-            </Text>
-            <Text
-              onPress={() => navigation.navigate('InfoList')}
-              style={{
-                color: styleConst.color.lightBlue,
-                fontSize: 14,
-                paddingLeft: 24,
-              }}>
-              {strings.Base.all}
-            </Text>
-          </View>
-          <Carousel
-            data={infoList}
-            renderItem={item => {
-              return (
-                <Offer
-                  key={`carousel-article-${item.hash}`}
-                  data={item}
-                  width={cardWidth}
-                  height={infoListHeight}
-                />
-              );
-            }}
-            sliderWidth={deviceWidth}
-            itemWidth={cardWidth}
-            inactiveSlideScale={0.97}
-            activeSlideAlignment={'center'}
-          />
-        </View>
-      );
-    }
-    return <></>;
-  };
-
-  const _renderPlates = () => {
-    const phones = get(dealerSelected, 'phone', []);
-    return (
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        horizontal
-        contentContainerStyle={{paddingRight: 30}}
-        style={styles.scrollView}>
-        <View style={styles.scrollViewInner}>
-          <Plate
-            title={strings.ContactsScreen.call}
-            status={callAvailable ? 'enabled' : 'disabled'}
-            subtitle={phones[0]}
-            onPress={() => {
-              if (!isOpened) {
-                Alert.alert(
-                  strings.ContactsScreen.closedDealer.title,
-                  strings.ContactsScreen.closedDealer.text,
-                  [
-                    {
-                      text: strings.ContactsScreen.closedDealer.no,
-                      style: 'cancel',
-                    },
-                    {
-                      text: strings.ContactsScreen.closedDealer.yes,
-                      onPress: () => {
-                        navigation.navigate('CallMeBackScreen');
-                      },
-                    },
-                  ],
-                  {cancelable: false},
-                );
-              } else {
-                Linking.openURL('tel:' + phones[0].replace(/[^+\d]+/g, ''));
-              }
-            }}
-          />
-          {false ? (
-            <Plate
-              title="Чат"
-              subtitle="Отвечаем с 9 до 20"
-              type="orange"
-              status={chatAvailable ? 'enabled' : 'disabled'}
-              onPress={onPressChat}
-            />
-          ) : null}
-          <Plate
-            testID="ContactsScreen.ButtonCallMe"
-            title={strings.ContactsScreen.callOrder}
-            subtitle=""
-            onPress={onPressCallMe}
-          />
-          <Plate
-            title={strings.ContactsScreen.order}
-            subtitle={strings.ContactsScreen.sendOrder}
-            type="primary"
-            testID="ContactsScreen.ButtonOrders"
-            onPress={() => {
-              orderFunctions.getOrders().then(ordersData => {
-                ActionSheet.show(
-                  {
-                    options: ordersData.BUTTONS,
-                    cancelButtonIndex: ordersData.CANCEL_INDEX,
-                    title: ordersData.TITLE,
-                    destructiveButtonIndex:
-                      ordersData.DESTRUCTIVE_INDEX || null,
-                  },
-                  buttonIndex => {
-                    switch (ordersData.BUTTONS[buttonIndex].id) {
-                      case 'callMeBack':
-                        navigation.navigate('CallMeBackScreen');
-                        break;
-                      case 'orderService':
-                        navigation.navigate('ServiceScreen');
-                        break;
-                      case 'orderParts':
-                        navigation.navigate('OrderPartsScreen');
-                        break;
-                      case 'carCost':
-                        navigation.navigate('CarCostScreen');
-                        break;
-                    }
-                  },
-                );
-              });
-            }}
-          />
-          <Plate
-            title={
-              sitesSubtitle && sitesSubtitle.sites.length > 1
-                ? strings.ContactsScreen.sites
-                : strings.ContactsScreen.site
-            }
-            subtitle={
-              sitesSubtitle && sitesSubtitle.sites.length > 1
-                ? sitesSubtitle.sites.join('\r\n')
-                : sitesSubtitle.sites[0]
-            }
-            testID="ContactsScreen.ButtonSites"
-            type="red"
-            onPress={() => {
-              if (sitesSubtitle && sitesSubtitle.sites.length > 1) {
-                ActionSheet.show(
-                  {
-                    options: sitesSubtitle.buttons,
-                    cancelButtonIndex: sitesSubtitle.buttons.length - 1,
-                    title: strings.ContactsScreen.dealerSites,
-                  },
-                  buttonIndex => {
-                    switch (sitesSubtitle.buttons[buttonIndex].id) {
-                      case 'cancel':
-                        break;
-                      default:
-                        Linking.openURL(
-                          sitesSubtitle.buttons[buttonIndex].site,
-                        );
-                        break;
-                    }
-                  },
-                );
-              } else {
-                Linking.openURL(get(dealerSelected, 'site[0]')).catch(
-                  console.error(
-                    'get(dealerSelected, "site[0]") failed',
-                    get(dealerSelected, 'site[0]'),
-                  ),
-                );
-              }
-            }}
-          />
-        </View>
-      </ScrollView>
-    );
-  };
-
   useEffect(() => {
     Analytics.logEvent('screen', 'contacts');
 
@@ -523,7 +531,14 @@ const ContactsScreen = ({
         bounces={false}>
         <Imager
           style={styles.imgHero}
-          source={{uri: get(dealerSelected, 'img.thumb') + '1000x1000'}}
+          source={{
+            uri:
+              get(dealerSelected, 'img.thumb') +
+              '1000x1000' +
+              '&hash=' +
+              get(dealerSelected, 'hash'),
+            cache: 'web',
+          }}
         />
         <View style={{marginTop: HEADER_MAX_HEIGHT - 65}}>
           <View style={styles.blackBack} />
@@ -542,8 +557,17 @@ const ContactsScreen = ({
               {dealerSelected.address ? ', ' + dealerSelected.address : null}
             </Text>
           </TouchableOpacity>
-          {_renderPlates()}
-          {_renderInfoList()}
+          {_renderPlates({
+            dealerSelected,
+            callAvailable,
+            isOpened,
+            navigation,
+            chatAvailable,
+            onPressCallMe,
+            onPressChat,
+            sitesSubtitle,
+          })}
+          {_renderInfoList({isFetchInfoList, infoList, navigation})}
         </View>
       </ScrollView>
     </View>

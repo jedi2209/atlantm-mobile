@@ -55,35 +55,34 @@ export default {
       return false;
     }
     let requestedVersion = parseInt(version.replace(/\./gi, ''));
-    return this.request(
-      '/mobile/check/version/',
-      baseRequestParams,
-    ).then(res => {
-      if (res && res.version) {
-        let APPVersionFromApi = parseInt(res.version.replace(/\./gi, ''));
-        if (APPVersionFromApi > requestedVersion) {
-          Alert.alert(
-            strings.Notifications.UpdatePopup.title,
-            strings.Notifications.UpdatePopup.text,
-            [
-              {
-                text: strings.Notifications.UpdatePopup.later,
-                style: 'destructive',
-              },
-              {
-                text: `✅ ${strings.Notifications.UpdatePopup.update}`,
-                style: 'default',
-                onPress: () => {
-                  BackHandler.exitApp();
-                  Linking.openURL(STORE_LINK[Platform.OS]);
+    return this.request('/mobile/check/version/', baseRequestParams).then(
+      res => {
+        if (res && res.version) {
+          let APPVersionFromApi = parseInt(res.version.replace(/\./gi, ''));
+          if (APPVersionFromApi > requestedVersion) {
+            Alert.alert(
+              strings.Notifications.UpdatePopup.title,
+              strings.Notifications.UpdatePopup.text,
+              [
+                {
+                  text: strings.Notifications.UpdatePopup.later,
+                  style: 'destructive',
                 },
-              },
-            ],
-          );
+                {
+                  text: `✅ ${strings.Notifications.UpdatePopup.update}`,
+                  style: 'default',
+                  onPress: () => {
+                    BackHandler.exitApp();
+                    Linking.openURL(STORE_LINK[Platform.OS]);
+                  },
+                },
+              ],
+            );
+          }
         }
-      }
-      return res;
-    });
+        return res;
+      },
+    );
   },
 
   chatAvailable() {
@@ -96,10 +95,10 @@ export default {
 
   chatSendMessage({user, message, session = null}) {
     const body = {
-      "user": user,
-      "message": {
-          "text": message.text
-      }
+      user: user,
+      message: {
+        text: message.text,
+      },
     };
 
     const requestParams = _.merge({}, baseRequestParams, {

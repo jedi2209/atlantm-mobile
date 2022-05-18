@@ -132,14 +132,407 @@ const OptionPlate = ({
   );
 };
 
+const _renderOptionPlates = params => {
+  const {
+    platesScrollViewRef,
+    carDetails,
+    engineId,
+    engineVolumeShort,
+    wheelName,
+    colorName,
+  } = params;
+  return (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      bounces={true}
+      testID="NewCarItemScreen.PlatesWrapper"
+      ref={platesScrollViewRef}>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          paddingHorizontal: '2%',
+          marginBottom: 10,
+          marginRight: 10,
+        }}>
+        <OptionPlate
+          title={strings.NewCarItemScreen.plates.complectation}
+          testID="NewCarItemScreen.Plates.Complectation"
+          subtitle={get(carDetails, 'complectation.name')}
+        />
+        {engineId && engineId !== 4 ? (
+          <OptionPlate
+            title={strings.NewCarItemScreen.plates.engine}
+            testID="NewCarItemScreen.Plates.Engine"
+            subtitle={
+              engineVolumeShort
+                ? engineVolumeShort.toFixed(1) + ' л. '
+                : '' + get(carDetails, 'engine.type')
+            }
+          />
+        ) : null}
+        <OptionPlate
+          title={strings.NewCarItemScreen.plates.gearbox.name}
+          testID="NewCarItemScreen.Plates.Gearbox"
+          subtitle={`${
+            get(carDetails, 'gearbox.count')
+              ? get(carDetails, 'gearbox.count') + '-ст.'
+              : ''
+          } ${
+            get(carDetails, 'gearbox.name')
+              .replace(/^(Механическая)/i, 'МКПП')
+              .replace(/^(Автоматическая)/i, 'АКПП')
+              .split('/')[0]
+          }`}
+        />
+        {wheelName ? (
+          <OptionPlate
+            title={strings.NewCarItemScreen.plates.wheel}
+            testID="NewCarItemScreen.Plates.Wheel"
+            subtitle={wheelName.toLowerCase()}
+          />
+        ) : null}
+        {get(carDetails, 'color.name.simple') ? (
+          <OptionPlate
+            // onPress={() => {
+            //   this.ColorBox.click();
+            // }}
+            title={strings.NewCarItemScreen.plates.color}
+            testID="NewCarItemScreen.Plates.Color"
+            subtitle={colorName}
+          />
+        ) : null}
+      </View>
+    </ScrollView>
+  );
+};
+
+const _renderItem = (title, value, postfix) => {
+  const key = md5(title + value + postfix);
+  return value ? (
+    <Row key={key} style={styles.sectionRow}>
+      <View style={[styles.sectionProp, {flex: 1}]}>
+        <Text
+          style={styles.sectionPropText}
+          ellipsizeMode="tail"
+          numberOfLines={1}>
+          {title}
+        </Text>
+      </View>
+      <View style={[styles.sectionValue, {alignItems: 'flex-end'}]}>
+        <Text
+          style={styles.sectionValueText}
+          ellipsizeMode="tail"
+          numberOfLines={1}>
+          {value} {postfix || null}
+        </Text>
+      </View>
+    </Row>
+  ) : null;
+};
+
+const _renderTechData = (title, data, carDetails) => {
+  if (typeof data === 'object' && data.length) {
+    let resRaw = data.map(element => {
+      let name = '';
+      if (element.alternate) {
+        name = element.alternate;
+      } else {
+        name = get(carDetails, element.value, null);
+      }
+      return _renderItem(element.name + ':', name, element.postfix);
+    });
+    let res = resRaw.filter(el => {
+      return el != null;
+    });
+    return res ? (
+      <View style={styles.sectionOptions}>
+        <Text
+          style={styles.sectionTitle}
+          ellipsizeMode="tail"
+          numberOfLines={1}>
+          {title}
+        </Text>
+        <Grid>{res}</Grid>
+      </View>
+    ) : null;
+  }
+};
+
+const _renderComplectationItem = (title, data) => {
+  if (data.length === 0) {
+    return null;
+  }
+
+  switch (title.toLowerCase()) {
+    case 'заводская комплектация':
+      title = strings.NewCarItemScreen.complectation.main;
+      break;
+    case 'дополнительные опции':
+      title = strings.NewCarItemScreen.complectation.additional;
+      break;
+  }
+
+  return (
+    <View key={title} style={{marginBottom: 10}}>
+      <Text style={styles.sectionTitle}>{title}</Text>
+      {data.map(item => {
+        const key = md5(item.name + item.id);
+        return (
+          <Grid key={key}>
+            {item.name && item.value ? (
+              <Row style={styles.sectionRow}>
+                <Col style={styles.sectionProp}>
+                  <Text
+                    style={styles.sectionPropText}
+                    ellipsizeMode="tail"
+                    numberOfLines={2}>
+                    {item.name}
+                  </Text>
+                </Col>
+                <Col style={styles.sectionValue}>
+                  <Text
+                    style={styles.sectionValueText}
+                    ellipsizeMode="tail"
+                    numberOfLines={1}>
+                    {item.value}
+                  </Text>
+                </Col>
+              </Row>
+            ) : (
+              <Text style={[styles.sectionPropText, styles.sectionRow]}>
+                {item.name}
+              </Text>
+            )}
+          </Grid>
+        );
+      })}
+    </View>
+  );
+};
+
+const _renderPrice = ({carDetails, currency, isPriceShow, dealerSelected}) => {
+  if (!isPriceShow) {
+    return;
+  }
+  const isSale = carDetails.sale === true;
+
+  const CarPrices = {
+    sale: get(carDetails, 'price.app.sale', 0),
+    standart: get(
+      carDetails,
+      'price.app.standart',
+      get(carDetails, 'price.app'),
+    ),
+  };
+
+  return (
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        minWidth: 100,
+      }}>
+      {isSale && (
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: '600',
+            color: '#D0021B',
+          }}>
+          {showPrice(CarPrices.sale, dealerSelected.region)}
+        </Text>
+      )}
+      <Text
+        style={{
+          fontSize: isSale ? 12 : 16,
+          fontWeight: '600',
+          lineHeight: isSale ? 16 : 22,
+          color: '#000',
+          textDecorationLine: isSale ? 'line-through' : 'none',
+        }}>
+        {showPrice(CarPrices.standart, dealerSelected.region)}
+      </Text>
+    </View>
+  );
+};
+
+const _renderPriceFooter = ({
+  carDetails,
+  currency,
+  isPriceShow,
+  dealerSelected,
+}) => {
+  if (!isPriceShow) {
+    return;
+  }
+  const isSale = carDetails.sale === true;
+
+  const CarPrices = {
+    sale: get(carDetails, 'price.app.sale') || 0,
+    standart:
+      get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
+  };
+
+  const carPriceStandart = CarPrices.standart.standart === 0;
+  if (carPriceStandart) {
+    return <View style={stylesFooter.orderPriceContainer} />;
+  }
+
+  return (
+    <View
+      style={[
+        stylesFooter.orderPriceContainer,
+        !isSale ? stylesFooter.orderPriceContainerNotSale : null,
+      ]}>
+      {isSale ? (
+        <Text style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
+          {showPrice(CarPrices.sale, dealerSelected.region)}
+        </Text>
+      ) : null}
+      <Text
+        style={[
+          styles.orderPriceText,
+          !isSale ? styles.orderPriceDefaultText : styles.orderPriceSmallText,
+        ]}>
+        {showPrice(CarPrices.standart, dealerSelected.region)}
+      </Text>
+    </View>
+  );
+};
+
+const _onPressMap = ({carDetails, navigation}) => {
+  let coords = get(carDetails, 'location.coords');
+  if (!coords) {
+    coords = get(carDetails, 'coords');
+  }
+  navigation.navigate('MapScreen', {
+    name: get(carDetails, 'dealer.name'),
+    city: get(carDetails, 'city.name'),
+    address: get(carDetails, 'dealer.name'),
+    coords: coords,
+  });
+};
+
+const _onPressOrder = ({carDetails, profile, navigation, dealerSelected}) => {
+  const CarPrices = {
+    sale: get(carDetails, 'price.app.sale') || 0,
+    standart:
+      get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
+  };
+
+  const onlineLink = get(carDetails, 'onlineLink');
+
+  if (get(carDetails, 'online') && onlineLink) {
+    let userLink = '';
+    if (profile && profile.login && profile.login.SAP && profile.login.SAP.id) {
+      userLink = '&userID=' + profile.login.SAP.id;
+    }
+    const urlLink =
+      onlineLink +
+      '&phone=' +
+      UserData.get('PHONE') +
+      '&name=' +
+      UserData.get('NAME') +
+      '&secondname=' +
+      UserData.get('SECOND_NAME') +
+      '&lastname=' +
+      UserData.get('LAST_NAME') +
+      '&email=' +
+      UserData.get('EMAIL') +
+      '&utm_campaign=' +
+      Platform.OS +
+      '&utm_content=button' +
+      userLink;
+    Alert.alert(
+      strings.NewCarItemScreen.Notifications.buyType.title,
+      strings.NewCarItemScreen.Notifications.buyType.text,
+      [
+        {
+          text: strings.NewCarItemScreen.sendQuery,
+          onPress: () => {
+            navigation.navigate('OrderScreen', {
+              car: {
+                brand: get(carDetails, 'brand.name'),
+                model: get(carDetails, 'model.name'),
+                isSale: carDetails.sale === true,
+                price: CarPrices.standart,
+                priceSpecial: CarPrices.sale,
+                complectation: get(carDetails, 'complectation.name'),
+                year: get(carDetails, 'year'),
+                dealer: get(carDetails, 'dealer'),
+              },
+              region: dealerSelected.region,
+              carId: carDetails.id.api,
+              isNewCar: true,
+            });
+          },
+        },
+        {
+          text: strings.NewCarItemScreen.makeOrder,
+          onPress: () => {
+            Linking.openURL(urlLink);
+          },
+        },
+        {
+          text: strings.Base.cancel.toLowerCase(),
+          style: 'destructive',
+        },
+      ],
+      {cancelable: true},
+    );
+  } else {
+    navigation.navigate('OrderScreen', {
+      car: {
+        brand: get(carDetails, 'brand.name'),
+        model: get(carDetails, 'model.name'),
+        isSale: carDetails.sale === true,
+        price: CarPrices.standart,
+        priceSpecial: CarPrices.sale,
+        complectation: get(carDetails, 'complectation.name'),
+        year: get(carDetails, 'year'),
+        dealer: get(carDetails, 'dealer'),
+      },
+      region: dealerSelected.region,
+      carId: carDetails.id.api,
+      isNewCar: true,
+    });
+  }
+};
+
+const _onPressTestDrive = ({carDetails, navigation, dealerSelected}) => {
+  const CarPrices = {
+    sale: get(carDetails, 'price.app.sale') || 0,
+    standart:
+      get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
+  };
+
+  return navigation.navigate('TestDriveScreen', {
+    car: {
+      brand: get(carDetails, 'brand.name'),
+      model: get(carDetails, 'model.name'),
+      isSale: carDetails.sale === true,
+      price: CarPrices.standart,
+      priceSpecial: CarPrices.sale,
+      complectation: get(carDetails, 'complectation.name'),
+      year: get(carDetails, 'year'),
+      dealer: get(carDetails, 'dealer'),
+    },
+    region: dealerSelected.region,
+    carId: carDetails.id.api,
+    testDriveCars: carDetails.testDriveCars,
+    isNewCar: true,
+  });
+};
+
 const NewCarItemScreen = ({
   navigation,
   route,
   carDetails,
   profile,
-  dealersList,
   dealerSelected,
-  photoViewerItems,
   actionFetchNewCarDetails,
 }) => {
   const [tabName, setTabName] = useState('base');
@@ -282,392 +675,6 @@ const NewCarItemScreen = ({
     return () => {};
   }, []);
 
-  const _onPressOrder = () => {
-    const CarPrices = {
-      sale: get(carDetails, 'price.app.sale') || 0,
-      standart:
-        get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
-    };
-
-    const onlineLink = get(carDetails, 'onlineLink');
-
-    if (get(carDetails, 'online') && onlineLink) {
-      let userLink = '';
-      if (
-        profile &&
-        profile.login &&
-        profile.login.SAP &&
-        profile.login.SAP.id
-      ) {
-        userLink = '&userID=' + profile.login.SAP.id;
-      }
-      const urlLink =
-        onlineLink +
-        '&phone=' +
-        UserData.get('PHONE') +
-        '&name=' +
-        UserData.get('NAME') +
-        '&secondname=' +
-        UserData.get('SECOND_NAME') +
-        '&lastname=' +
-        UserData.get('LAST_NAME') +
-        '&email=' +
-        UserData.get('EMAIL') +
-        '&utm_campaign=' +
-        Platform.OS +
-        '&utm_content=button' +
-        userLink;
-      Alert.alert(
-        strings.NewCarItemScreen.Notifications.buyType.title,
-        strings.NewCarItemScreen.Notifications.buyType.text,
-        [
-          {
-            text: strings.NewCarItemScreen.sendQuery,
-            onPress: () => {
-              navigation.navigate('OrderScreen', {
-                car: {
-                  brand: get(carDetails, 'brand.name'),
-                  model: get(carDetails, 'model.name'),
-                  isSale: carDetails.sale === true,
-                  price: CarPrices.standart,
-                  priceSpecial: CarPrices.sale,
-                  complectation: get(carDetails, 'complectation.name'),
-                  year: get(carDetails, 'year'),
-                  dealer: get(carDetails, 'dealer'),
-                },
-                region: dealerSelected.region,
-                carId: carDetails.id.api,
-                isNewCar: true,
-              });
-            },
-          },
-          {
-            text: strings.NewCarItemScreen.makeOrder,
-            onPress: () => {
-              Linking.openURL(urlLink);
-            },
-          },
-          {
-            text: strings.Base.cancel.toLowerCase(),
-            style: 'destructive',
-          },
-        ],
-        {cancelable: true},
-      );
-    } else {
-      navigation.navigate('OrderScreen', {
-        car: {
-          brand: get(carDetails, 'brand.name'),
-          model: get(carDetails, 'model.name'),
-          isSale: carDetails.sale === true,
-          price: CarPrices.standart,
-          priceSpecial: CarPrices.sale,
-          complectation: get(carDetails, 'complectation.name'),
-          year: get(carDetails, 'year'),
-          dealer: get(carDetails, 'dealer'),
-        },
-        region: dealerSelected.region,
-        carId: carDetails.id.api,
-        isNewCar: true,
-      });
-    }
-  };
-
-  const _onPressTestDrive = () => {
-    const CarPrices = {
-      sale: get(carDetails, 'price.app.sale') || 0,
-      standart:
-        get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
-    };
-
-    return navigation.navigate('TestDriveScreen', {
-      car: {
-        brand: get(carDetails, 'brand.name'),
-        model: get(carDetails, 'model.name'),
-        isSale: carDetails.sale === true,
-        price: CarPrices.standart,
-        priceSpecial: CarPrices.sale,
-        complectation: get(carDetails, 'complectation.name'),
-        year: get(carDetails, 'year'),
-        dealer: get(carDetails, 'dealer'),
-      },
-      region: dealerSelected.region,
-      carId: carDetails.id.api,
-      testDriveCars: carDetails.testDriveCars,
-      isNewCar: true,
-    });
-  };
-
-  const _renderOptionPlates = () => {
-    return (
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        bounces={true}
-        testID="NewCarItemScreen.PlatesWrapper"
-        ref={platesScrollViewRef}>
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            paddingHorizontal: '2%',
-            marginBottom: 10,
-            marginRight: 10,
-          }}>
-          <OptionPlate
-            title={strings.NewCarItemScreen.plates.complectation}
-            testID="NewCarItemScreen.Plates.Complectation"
-            subtitle={get(carDetails, 'complectation.name')}
-          />
-          {engineId && engineId !== 4 ? (
-            <OptionPlate
-              title={strings.NewCarItemScreen.plates.engine}
-              testID="NewCarItemScreen.Plates.Engine"
-              subtitle={
-                engineVolumeShort
-                  ? engineVolumeShort.toFixed(1) + ' л. '
-                  : '' + get(carDetails, 'engine.type')
-              }
-            />
-          ) : null}
-          <OptionPlate
-            title={strings.NewCarItemScreen.plates.gearbox.name}
-            testID="NewCarItemScreen.Plates.Gearbox"
-            subtitle={`${
-              get(carDetails, 'gearbox.count')
-                ? get(carDetails, 'gearbox.count') + '-ст.'
-                : ''
-            } ${
-              get(carDetails, 'gearbox.name')
-                .replace(/^(Механическая)/i, 'МКПП')
-                .replace(/^(Автоматическая)/i, 'АКПП')
-                .split('/')[0]
-            }`}
-          />
-          {wheelName ? (
-            <OptionPlate
-              title={strings.NewCarItemScreen.plates.wheel}
-              testID="NewCarItemScreen.Plates.Wheel"
-              subtitle={wheelName.toLowerCase()}
-            />
-          ) : null}
-          {get(carDetails, 'color.name.simple') ? (
-            <OptionPlate
-              // onPress={() => {
-              //   this.ColorBox.click();
-              // }}
-              title={strings.NewCarItemScreen.plates.color}
-              testID="NewCarItemScreen.Plates.Color"
-              subtitle={colorName}
-            />
-          ) : null}
-        </View>
-      </ScrollView>
-    );
-  };
-
-  const _renderTechData = (title, data) => {
-    if (typeof data === 'object' && data.length) {
-      let resRaw = data.map(element => {
-        let name = '';
-        if (element.alternate) {
-          name = element.alternate;
-        } else {
-          name = get(carDetails, element.value, null);
-        }
-        return _renderItem(element.name + ':', name, element.postfix);
-      });
-      let res = resRaw.filter(el => {
-        return el != null;
-      });
-      return res ? (
-        <View style={styles.sectionOptions}>
-          <Text
-            style={styles.sectionTitle}
-            ellipsizeMode="tail"
-            numberOfLines={1}>
-            {title}
-          </Text>
-          <Grid>{res}</Grid>
-        </View>
-      ) : null;
-    }
-  };
-
-  const _renderItem = (title, value, postfix) => {
-    const key = md5(title + value + postfix);
-    return value ? (
-      <Row key={key} style={styles.sectionRow}>
-        <View style={[styles.sectionProp, {flex: 1}]}>
-          <Text
-            style={styles.sectionPropText}
-            ellipsizeMode="tail"
-            numberOfLines={1}>
-            {title}
-          </Text>
-        </View>
-        <View style={[styles.sectionValue, {alignItems: 'flex-end'}]}>
-          <Text
-            style={styles.sectionValueText}
-            ellipsizeMode="tail"
-            numberOfLines={1}>
-            {value} {postfix || null}
-          </Text>
-        </View>
-      </Row>
-    ) : null;
-  };
-
-  const _renderComplectationItem = (title, data) => {
-    if (data.length === 0) {
-      return null;
-    }
-
-    switch (title.toLowerCase()) {
-      case 'заводская комплектация':
-        title = strings.NewCarItemScreen.complectation.main;
-        break;
-      case 'дополнительные опции':
-        title = strings.NewCarItemScreen.complectation.additional;
-        break;
-    }
-
-    return (
-      <View key={title} style={{marginBottom: 10}}>
-        <Text style={styles.sectionTitle}>{title}</Text>
-        {data.map(item => {
-          const key = md5(item.name + item.id);
-          return (
-            <Grid key={key}>
-              {item.name && item.value ? (
-                <Row style={styles.sectionRow}>
-                  <Col style={styles.sectionProp}>
-                    <Text
-                      style={styles.sectionPropText}
-                      ellipsizeMode="tail"
-                      numberOfLines={2}>
-                      {item.name}
-                    </Text>
-                  </Col>
-                  <Col style={styles.sectionValue}>
-                    <Text
-                      style={styles.sectionValueText}
-                      ellipsizeMode="tail"
-                      numberOfLines={1}>
-                      {item.value}
-                    </Text>
-                  </Col>
-                </Row>
-              ) : (
-                <Text style={[styles.sectionPropText, styles.sectionRow]}>
-                  {item.name}
-                </Text>
-              )}
-            </Grid>
-          );
-        })}
-      </View>
-    );
-  };
-
-  const _renderPrice = ({carDetails, currency}) => {
-    if (!isPriceShow) {
-      return;
-    }
-    const isSale = carDetails.sale === true;
-
-    const CarPrices = {
-      sale: get(carDetails, 'price.app.sale', 0),
-      standart: get(
-        carDetails,
-        'price.app.standart',
-        get(carDetails, 'price.app'),
-      ),
-    };
-
-    return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          alignItems: 'flex-end',
-          minWidth: 100,
-        }}>
-        {isSale && (
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: '600',
-              color: '#D0021B',
-            }}>
-            {showPrice(CarPrices.sale, dealerSelected.region)}
-          </Text>
-        )}
-        <Text
-          style={{
-            fontSize: isSale ? 12 : 16,
-            fontWeight: '600',
-            lineHeight: isSale ? 16 : 22,
-            color: '#000',
-            textDecorationLine: isSale ? 'line-through' : 'none',
-          }}>
-          {showPrice(CarPrices.standart, dealerSelected.region)}
-        </Text>
-      </View>
-    );
-  };
-
-  const _renderPriceFooter = ({carDetails, currency}) => {
-    if (!isPriceShow) {
-      return;
-    }
-    const isSale = carDetails.sale === true;
-
-    const CarPrices = {
-      sale: get(carDetails, 'price.app.sale') || 0,
-      standart:
-        get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
-    };
-
-    if (CarPrices.standart.standart == 0) {
-      return <View style={stylesFooter.orderPriceContainer}></View>;
-    }
-
-    return (
-      <View
-        style={[
-          stylesFooter.orderPriceContainer,
-          !isSale ? stylesFooter.orderPriceContainerNotSale : null,
-        ]}>
-        {isSale ? (
-          <Text style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
-            {showPrice(CarPrices.sale, dealerSelected.region)}
-          </Text>
-        ) : null}
-        <Text
-          style={[
-            styles.orderPriceText,
-            !isSale ? styles.orderPriceDefaultText : styles.orderPriceSmallText,
-          ]}>
-          {showPrice(CarPrices.standart, dealerSelected.region)}
-        </Text>
-      </View>
-    );
-  };
-
-  const _onPressMap = () => {
-    let coords = get(carDetails, 'location.coords');
-    if (!coords) {
-      coords = get(carDetails, 'coords');
-    }
-    navigation.navigate('MapScreen', {
-      name: get(carDetails, 'dealer.name'),
-      city: get(carDetails, 'city.name'),
-      address: get(carDetails, 'dealer.name'),
-      coords: coords,
-    });
-  };
-
   if (!carDetails || isLoading) {
     return (
       <Container style={styles.spinnerContainer}>
@@ -752,10 +759,22 @@ const NewCarItemScreen = ({
                     ].join(', ')}
                   </Text>
                 </View>
-                {_renderPrice({carDetails, currency})}
+                {_renderPrice({
+                  carDetails,
+                  currency,
+                  isPriceShow,
+                  dealerSelected,
+                })}
               </View>
 
-              {_renderOptionPlates()}
+              {_renderOptionPlates({
+                platesScrollViewRef,
+                carDetails,
+                engineId,
+                engineVolumeShort,
+                wheelName,
+                colorName,
+              })}
               {warrantyText ? (
                 <View style={styles.warrantyView}>
                   <Icon
@@ -773,7 +792,7 @@ const NewCarItemScreen = ({
               ) : null}
               {get(carDetails, 'location.coords') ? (
                 <TouchableWithoutFeedback
-                  onPress={_onPressMap}
+                  onPress={() => _onPressMap({carDetails, navigation})}
                   style={styles.mapCard}>
                   <View style={styles.mapCardContainer}>
                     <Icon
@@ -806,17 +825,21 @@ const NewCarItemScreen = ({
                   title: strings.NewCarItemScreen.tech.title,
                   content: (
                     <View testID="NewCarItemScreen.TechWrapper">
-                      {_renderTechData(strings.NewCarItemScreen.tech.base, [
-                        {
-                          name: strings.NewCarItemScreen.tech.body.type,
-                          value: 'body.name',
-                          alternate: bodyName,
-                        },
-                        {
-                          name: strings.NewCarItemScreen.tech.year,
-                          value: 'year',
-                        },
-                      ])}
+                      {_renderTechData(
+                        strings.NewCarItemScreen.tech.base,
+                        [
+                          {
+                            name: strings.NewCarItemScreen.tech.body.type,
+                            value: 'body.name',
+                            alternate: bodyName,
+                          },
+                          {
+                            name: strings.NewCarItemScreen.tech.year,
+                            value: 'year',
+                          },
+                        ],
+                        carDetails,
+                      )}
                       {_renderTechData(
                         strings.NewCarItemScreen.tech.engine.title,
                         [
@@ -844,6 +867,7 @@ const NewCarItemScreen = ({
                             postfix: strings.NewCarItemScreen.shortUnits.hp,
                           },
                         ],
+                        carDetails,
                       )}
                       {_renderTechData(
                         strings.NewCarItemScreen.tech.gearbox.title,
@@ -863,6 +887,7 @@ const NewCarItemScreen = ({
                             alternate: wheelName,
                           },
                         ],
+                        carDetails,
                       )}
                       {_renderTechData(
                         strings.NewCarItemScreen.tech.body.title,
@@ -902,6 +927,7 @@ const NewCarItemScreen = ({
                             postfix: strings.NewCarItemScreen.shortUnits.litres,
                           },
                         ],
+                        carDetails,
                       )}
                       {_renderTechData(
                         strings.NewCarItemScreen.techData.title,
@@ -932,6 +958,7 @@ const NewCarItemScreen = ({
                             postfix: strings.NewCarItemScreen.shortUnits.litres,
                           },
                         ],
+                        carDetails,
                       )}
                     </View>
                   ),
@@ -1019,13 +1046,17 @@ const NewCarItemScreen = ({
         {_renderPriceFooter({
           carDetails,
           currency,
+          isPriceShow,
+          dealerSelected,
         })}
         <View style={[stylesFooter.footerButtons]}>
           {/* {carDetails.testDriveCars &&
           carDetails.testDriveCars.length > 0 ? ( */}
           <Button
             testID="NewCarItemScreen.Button.TestDrive"
-            onPress={_onPressTestDrive}
+            onPress={() =>
+              _onPressTestDrive({carDetails, navigation, dealerSelected})
+            }
             size="full"
             full
             iconLeft
@@ -1064,7 +1095,9 @@ const NewCarItemScreen = ({
           {/* ) : null} */}
           <Button
             testID="NewCarItemScreen.Button.Order"
-            onPress={_onPressOrder}
+            onPress={() =>
+              _onPressOrder({carDetails, profile, navigation, dealerSelected})
+            }
             size="full"
             full
             style={[

@@ -82,6 +82,7 @@ const _getSite = sites => {
 const DealerCard = props => {
   const {item} = props;
   const CarImg = get(item, 'img.thumb');
+  const hash = get(item, 'hash');
   const sites = get(item, 'site');
   return (
     <Body style={styles.body} testID={`DealerCard_${item.id}`}>
@@ -113,7 +114,10 @@ const DealerCard = props => {
           <Imager
             key={`dealer-cover-' + ${item.hash}`}
             style={styles.image}
-            source={{uri: CarImg + '500x500'}}
+            source={{
+              uri: CarImg + '500x500' + '&hash=' + hash,
+              cache: 'web',
+            }}
           />
         </View>
       ) : null}

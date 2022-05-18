@@ -46,10 +46,10 @@ const Imager = props => {
           renderToHardwareTextureAndroid={isLoading ? true : false}>
           <View style={{opacity: isLoading ? 0.4 : 1}}>
             <FastImage
-              {...props}
               source={{
                 uri: path,
                 priority: FastImage.priority[props.priority],
+                cache: FastImage.cacheControl.web,
               }}
               resizeMode={FastImage.resizeMode[props.resizeMode]}
               onLoadStart={() => {
@@ -62,6 +62,7 @@ const Imager = props => {
               onLoadEnd={() => {
                 setLoading(false);
               }}
+              {...props}
             />
           </View>
           <ActivityIndicator

@@ -149,7 +149,6 @@ export const localDealerClear = () => {
 export const fetchDealers = isLocal => {
   return dispatch => {
     dispatch({type: DEALERS__REQUEST});
-
     return API.fetchDealers(isLocal)
       .then(response => {
         const {data: dealers, error} = response;
