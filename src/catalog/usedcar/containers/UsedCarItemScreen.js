@@ -771,6 +771,7 @@ class UsedCarItemScreen extends Component {
                         block
                         iconRight
                         variant="unstyled"
+                        transparent
                         activeOpacity={0.5}
                         onPress={this.onPressCredit}
                         style={[styles.bodyButton, styles.bodyButtonLeft]}>
@@ -796,8 +797,8 @@ class UsedCarItemScreen extends Component {
                     {carDetails.customPriceAvailable ? (
                       <Button
                         block
-                        iconLeft
-                        leftIcon={
+                        iconRight
+                        rightIcon={
                           <Icon
                             type="Entypo"
                             name="price-tag"
