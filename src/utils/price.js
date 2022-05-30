@@ -1,65 +1,10 @@
 import {default as currencyJS} from 'currency.js';
 
-const showPriceOLD = (price, country = 'BY', float = false) => {
-  let country_code = 'ru-BE',
-    options = {
-      style: 'currency',
-      currencyDisplay: 'code',
-      minimumFractionDigits: 0,
-    };
-
-  switch (country.toLowerCase()) {
-    case 'ru':
-    case 'rub':
-    case 'rur':
-      country_code = 'ru-RU';
-      options = {
-        ...options,
-        currencyDisplay: 'symbol',
-        currency: 'RUB',
-      };
-      break;
-    case 'by':
-    case 'byn':
-      options = {
-        ...options,
-        currency: 'BYN',
-      };
-      country_code = 'ru-BE';
-      // isAndroid
-      break;
-    case 'byr':
-      options = {
-        ...options,
-        currency: 'BYR',
-      };
-      country_code = 'ru-BE';
-      // isAndroid
-      break;
-    case 'ua':
-    case 'uah':
-      country_code = 'ru-UA';
-      options = {
-        ...options,
-        currency: 'UAH',
-      };
-      break;
-    default:
-      country_code = 'ru-BE';
-      options = {
-        ...options,
-        currency: 'BYN',
-      };
-      break;
-  }
-  if (float) {
-    return parseFloat(price, 10).toLocaleString(country_code, options);
-  } else {
-    return parseInt(price, 10).toLocaleString(country_code, options);
-  }
-}
-
 const showPrice = (price, country = 'BY', float = false) => {
+  if (!price) {
+    return false;
+  }
+
   let result;
   let options = {
     precision: 0,
@@ -76,12 +21,17 @@ const showPrice = (price, country = 'BY', float = false) => {
   } else {
     price = parseInt(price, 10);
   }
-  
-  const USD = value => currencyJS(value, Object.assign({symbol: '$', pattern: `# !`}, options));
-  const RUB = value => currencyJS(value, Object.assign({symbol: '₽', pattern: `#!`}, options));
-  const BYN = value => currencyJS(value, Object.assign({symbol: 'BYN', pattern: `# !`}, options));
-  const BYR = value => currencyJS(value, Object.assign({symbol: 'BYR', pattern: `# !`}, options));
-  const UAH = value => currencyJS(value, Object.assign({symbol: '₴', pattern: `#!`}, options));
+
+  const USD = value =>
+    currencyJS(value, Object.assign({symbol: '$', pattern: `# !`}, options));
+  const RUB = value =>
+    currencyJS(value, Object.assign({symbol: '₽', pattern: `#!`}, options));
+  const BYN = value =>
+    currencyJS(value, Object.assign({symbol: 'BYN', pattern: `# !`}, options));
+  const BYR = value =>
+    currencyJS(value, Object.assign({symbol: 'BYR', pattern: `# !`}, options));
+  const UAH = value =>
+    currencyJS(value, Object.assign({symbol: '₴', pattern: `#!`}, options));
 
   switch (country.toLowerCase()) {
     case 'usd':
@@ -106,6 +56,6 @@ const showPrice = (price, country = 'BY', float = false) => {
       break;
   }
   return result;
-}
+};
 
 export default showPrice;
