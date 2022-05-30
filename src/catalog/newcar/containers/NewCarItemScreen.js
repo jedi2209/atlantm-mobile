@@ -372,13 +372,11 @@ const _renderPriceFooter = ({
 
   const CarPrices = {
     sale: get(carDetails, 'price.app.sale') || 0,
-    standart:
-      get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
+    standart: get(carDetails, 'price.app.standart'),
   };
 
-  const carPriceStandart = CarPrices.standart.standart === 0;
-  if (carPriceStandart) {
-    return <View style={stylesFooter.orderPriceContainer} />;
+  if (!CarPrices.standart) {
+    return false;
   }
 
   return (
@@ -687,6 +685,13 @@ const NewCarItemScreen = ({
       </Container>
     );
   }
+
+  const priceFooterContainer = _renderPriceFooter({
+    carDetails,
+    currency,
+    isPriceShow,
+    dealerSelected,
+  });
 
   return (
     <>
@@ -1041,14 +1046,11 @@ const NewCarItemScreen = ({
         style={[
           styleConst.shadow.default,
           stylesFooter.footer,
-          !isPriceShow ? stylesFooter.footerHidePrice : null,
+          !isPriceShow || !priceFooterContainer
+            ? stylesFooter.footerHidePrice
+            : null,
         ]}>
-        {_renderPriceFooter({
-          carDetails,
-          currency,
-          isPriceShow,
-          dealerSelected,
-        })}
+        {priceFooterContainer}
         <View style={[stylesFooter.footerButtons]}>
           {/* {carDetails.testDriveCars &&
           carDetails.testDriveCars.length > 0 ? ( */}
@@ -1075,7 +1077,9 @@ const NewCarItemScreen = ({
             style={[
               stylesFooter.button,
               stylesFooter.buttonLeft,
-              !isPriceShow ? stylesFooter.buttonNoPriceLeft : null,
+              !isPriceShow || !priceFooterContainer
+                ? stylesFooter.buttonNoPriceLeft
+                : null,
             ]}
             activeOpacity={0.8}>
             <Icon
@@ -1103,7 +1107,9 @@ const NewCarItemScreen = ({
             style={[
               stylesFooter.button,
               stylesFooter.buttonRight,
-              !isPriceShow ? stylesFooter.buttonNoPriceRight : null,
+              !isPriceShow || !priceFooterContainer
+                ? stylesFooter.buttonNoPriceRight
+                : null,
               // !carDetails.testDriveCars ||
               // carDetails.testDriveCars.length === 0
               //   ? stylesFooter.buttonOnlyOne
