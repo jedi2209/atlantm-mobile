@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, StatusBar, ActivityIndicator} from 'react-native';
+import {Icon, Fab} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -102,15 +103,28 @@ const UsedCarListScreen = ({
           style={styleConst.spinner}
         />
       ) : (
-        <CarList
-          data={items}
-          pages={pages}
-          prices={prices}
-          itemScreen="UsedCarItemScreen"
-          dataHandler={_fetchUsedCar}
-          dealerSelected={dealerSelected}
-          isFetchItems={isFetchItems}
-        />
+        <>
+          <CarList
+            data={items}
+            pages={pages}
+            prices={prices}
+            itemScreen="UsedCarItemScreen"
+            dataHandler={_fetchUsedCar}
+            dealerSelected={dealerSelected}
+            isFetchItems={isFetchItems}
+          />
+          <Fab
+            active={false}
+            direction="up"
+            containerStyle={{}}
+            style={{backgroundColor: styleConst.new.blueHeader}}
+            position="bottomRight"
+            onPress={() =>
+              navigation.navigate('ChatScreen', {chatType: 'tradein-cars'})
+            }>
+            <Icon type="Ionicons" name="chatbox-outline" />
+          </Fab>
+        </>
       )}
     </View>
   );

@@ -11,6 +11,7 @@ import {
 
 // components
 import CarList from '../../components/CarList';
+import {Icon, Fab} from 'native-base';
 
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
@@ -101,20 +102,35 @@ const NewCarListScreen = ({
           style={styleConst.spinner}
         />
       ) : (
-        <CarList
-          data={data}
-          pages={pages}
-          prices={prices}
-          resizeMode="contain"
-          itemScreen="NewCarItemScreen"
-          dataHandler={_fetchNewCars}
-          dealerSelected={dealerSelected}
-          isFetchItems={isFetchingNewCarByFilter}
-        />
+        <>
+          <CarList
+            data={data}
+            pages={pages}
+            prices={prices}
+            resizeMode="contain"
+            itemScreen="NewCarItemScreen"
+            dataHandler={_fetchNewCars}
+            dealerSelected={dealerSelected}
+            isFetchItems={isFetchingNewCarByFilter}
+          />
+          <Fab
+            active={false}
+            direction="up"
+            containerStyle={{}}
+            style={{backgroundColor: styleConst.new.blueHeader}}
+            position="bottomRight"
+            onPress={() =>
+              navigation.navigate('ChatScreen', {chatType: 'newcars'})
+            }>
+            <Icon type="Ionicons" name="chatbox-outline" />
+          </Fab>
+        </>
       )}
     </View>
   );
 };
+
+// navigation.navigate('ChatScreen');
 
 const mapDispatchToProps = {
   actionFetchNewCarByFilter,
