@@ -22,6 +22,7 @@ import {
   Grid,
   Button,
   Accordion,
+  Fab,
 } from 'native-base';
 
 // redux
@@ -1160,6 +1161,20 @@ class UsedCarItemScreen extends Component {
             </Button>
           </View>
         </View>
+        <Fab
+          active={false}
+          direction="up"
+          containerStyle={{marginBottom: 100}}
+          style={{backgroundColor: styleConst.new.blueHeader}}
+          position="bottomRight"
+          onPress={() =>
+            navigation.navigate('ChatScreen', {
+              chatType: 'tradein-cars',
+              carID: carDetails.id.api,
+            })
+          }>
+          <Icon type="Ionicons" name="chatbox-outline" />
+        </Fab>
       </>
     );
   }
