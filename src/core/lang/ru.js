@@ -132,6 +132,9 @@ export default {
     badges: {
       specialPrice: 'спец.цена',
     },
+    price: {
+      byRequest: 'Цена по запросу',
+    },
   },
   OrderCreditScreen: {
     title: 'Заявка на кредит',
