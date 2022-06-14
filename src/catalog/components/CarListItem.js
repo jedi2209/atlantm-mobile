@@ -102,7 +102,7 @@ const CarListItem = ({
     navigation.navigate('OrderScreen', {
       car: {
         brand: get(car, 'brand.name', ''),
-        model: get(car, 'model', ''),
+        model: get(car, 'model.name', ''),
         complectation: complectationName,
         year,
         ordered,
@@ -159,7 +159,9 @@ const CarListItem = ({
               },
               isSale ? styles.priceDefault : null,
             ]}>
-            {showPrice(CarPrices.standart, dealerSelected.region)}
+            {CarPrices.standart
+              ? showPrice(CarPrices.standart, dealerSelected.region)
+              : strings.CarList.price.byRequest}
           </Text>
         </View>
       </View>
@@ -169,6 +171,7 @@ const CarListItem = ({
   const _renderImage = ({ordered}) => {
     let CarImgs = get(car, 'img.thumb', false);
     let CarImgsReal = get(car, 'imgReal.thumb', false);
+    const isSale = car.sale === true;
     let photos = [];
     let carPhotos = CarImgs;
     if (CarImgsReal) {
@@ -383,16 +386,17 @@ const CarListItem = ({
     return (
       <View
         style={{
-          height: itemScreen === 'NewCarItemScreen' ? 180 : 170,
+          height: itemScreen === 'NewCarItemScreen' ? 175 : 170,
           position: 'relative',
-          marginTop: itemScreen === 'NewCarItemScreen' ? 70 : 75,
+          marginTop:
+            itemScreen === 'NewCarItemScreen' ? (isSale ? 60 : 45) : 75,
           backgroundColor: styleConst.color.white,
         }}>
         <ImageCarousel
           style={[
             ordered ? styles.ordered : {},
             {
-              paddingVertical: itemScreen === 'NewCarItemScreen' ? 10 : 0,
+              paddingVertical: itemScreen === 'NewCarItemScreen' ? 5 : 0,
             },
           ]}
           resizeMode={resizeMode}
@@ -473,7 +477,7 @@ const CarListItem = ({
         !ordered
           ? styleConst.shadow.light
           : {
-              backgroundColor: styleConst.color.bg,
+              backgroundColor: styleConst.color.white,
             },
         isSale ? styles.containerSpecial : null,
       ]}
@@ -755,7 +759,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginHorizontal: '2%',
+    marginHorizontal: '5%',
     marginTop: 5,
     height: 20,
     zIndex: 20,

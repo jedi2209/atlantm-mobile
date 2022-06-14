@@ -373,12 +373,15 @@ const _renderPriceFooter = ({
 
   const CarPrices = {
     sale: get(carDetails, 'price.app.sale') || 0,
-    standart: get(carDetails, 'price.app.standart'),
+    standart:
+      get(carDetails, 'price.app.standart') ||
+      get(carDetails, 'price.ust') ||
+      get(carDetails, 'price.rec'),
   };
 
-  if (!CarPrices.standart) {
-    return false;
-  }
+  // if (!CarPrices.standart) {
+  //   return false;
+  // }
 
   return (
     <View
@@ -396,7 +399,9 @@ const _renderPriceFooter = ({
           styles.orderPriceText,
           !isSale ? styles.orderPriceDefaultText : styles.orderPriceSmallText,
         ]}>
-        {showPrice(CarPrices.standart, dealerSelected.region)}
+        {CarPrices.standart
+          ? showPrice(CarPrices.standart, dealerSelected.region)
+          : strings.CarList.price.byRequest}
       </Text>
     </View>
   );
