@@ -55,8 +55,8 @@ const Imager = props => {
               onLoadStart={() => {
                 setLoading(true);
               }}
-              onError={() => {
-                console.error('Image error');
+              onError={e => {
+                console.error('Image error', e);
                 setLoading(false);
               }}
               onLoadEnd={() => {
