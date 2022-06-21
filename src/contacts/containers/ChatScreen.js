@@ -3,7 +3,6 @@ import {View, ActivityIndicator, Text, StyleSheet} from 'react-native';
 import {Chat, MessageType, defaultTheme} from '@flyerhq/react-native-chat-ui';
 import {connect} from 'react-redux';
 import PushNotifications from '../../core/components/PushNotifications';
-import {useFocusEffect} from '@react-navigation/native';
 
 import {actionChatIDSave} from '../actions';
 
@@ -149,7 +148,7 @@ const reconnectingSocket = () => {
       headers: API.headers,
     });
 
-    client.onopen = e => {
+    client.onopen = () => {
       isConnected = true;
       stateChangeListeners.forEach(fn => fn(true));
       if (interval) {
@@ -161,14 +160,14 @@ const reconnectingSocket = () => {
             action: 'statusPing',
           }),
         );
-      }, intervalMiliSeconds * 5);
+      }, intervalMiliSeconds);
     };
 
     const close = client.close;
 
     // Close without reconnecting;
     client.close = () => {
-      reconnectOnClose = false;
+      // reconnectOnClose = false;
       close.call(client);
       if (interval) {
         clearInterval(interval);
@@ -223,11 +222,8 @@ const reconnectingSocket = () => {
       socketIDListeners.forEach(fn => fn(false));
 
       if (!reconnectOnClose) {
-        console.warn('===== ws closed by app');
         return;
       }
-
-      console.warn('===== ws closed by server');
 
       if (interval) {
         clearInterval(interval);
@@ -248,7 +244,7 @@ const reconnectingSocket = () => {
     getClient: () => client,
     isConnected: () => isConnected,
     socketID: () => socketID,
-    start: () => start,
+    start: () => start(),
     addMessageToList,
     updateMessages,
     userAtlantM,
@@ -292,82 +288,6 @@ const ChatScreen = ({
   const chatType = get(route, 'params.chatType', null);
   const carID = get(route, 'params.carID', null);
 
-  // const checkSocket = async (socket) => {
-  //   console.warn('checkSocket socket', socket);
-  //   if (!socket || (socket && socket.readyState !== WebSocket.OPEN))
-  //   {
-  //     chatSocket.current = connectSocket();
-  //     chatSocket.current.onopen = (e) => {
-  //         // connection opened
-  //         setLoadingSocket(false);
-  //         setIsConnected(true);
-  //         setTimeout(() => {
-  //           chatSocket.current.send(JSON.stringify({
-  //             "action" : "statusPing"
-  //           }));
-  //         }, 2000);
-  //         // if (pingInterval && pingInterval.current) {
-  //         //   clearInterval(pingInterval.current);
-  //         // }
-  //         // pingInterval.current = setInterval(() => {
-  //         //   socket.send(JSON.stringify({
-  //         //     "action" : "statusPing"
-  //         //   }));
-  //         // }, intervalMiliSeconds);
-  //     };
-  //     chatSocket.current.onclose = (e) => {
-  //       // connection closed
-  //       console.warn('connection closed', e);
-  //       setIsConnected(false);
-  //     };
-  //     chatSocket.current.onmessage = (e) => {
-  //       // a message was received
-  //       const data = JSON.parse(e.data);
-  //       console.warn('data', data, user);
-  //       if (data.connectionId && user.id) {
-  //         setSocketID(data.connectionId);
-  //       }
-  //       if (data.body && data.body.Status) {
-  //         let messageText = '';
-  //         let type = 'text';
-  //         switch (data.body.Status) {
-  //           case 4: // Оператор закончил ввод сообщения
-  //           break;
-  //           case 3: // Оператор пишет сообщение
-  //           break;
-  //           case 5: // Оператор вышел из чата
-  //             messageText = data.body.Text;
-  //             userAtlantM.userEmail = data.body.UserEmail;
-  //             type = 'custom';
-  //             break;
-  //           case 2: // Сообщение
-  //             messageText = data.body.Text;
-  //             userAtlantM.userEmail = data.body.UserEmail;
-  //             break;
-  //         }
-  //         if (messageText) {
-  //           let message = {
-  //               author: userAtlantM,
-  //               createdAt: Date.now(),
-  //               id: uuidv4(),
-  //               text: messageText,
-  //               type
-  //           };
-  //           if (type == 'custom') {
-  //             message.typeCustom = 'status' + data.body.Status;
-  //           }
-  //           addMessageToList(message);
-  //         }
-  //       }
-  //     };
-  //     chatSocket.current.onerror = (e) => {
-  //       // an error occurred
-  //           console.warn('onError', e.message);
-  //     };
-  //     return chatSocket.current;
-  //   }
-  // }
-
   const userTmp = {
     id: session,
     name: [
@@ -379,10 +299,6 @@ const ChatScreen = ({
     phone: get(profile, 'login.PHONE[0].VALUE', get(profile, 'phone')),
     email: get(profile, 'login.EMAIL[0].VALUE', get(profile, 'email')),
   };
-
-  useEffect(() => {
-    return chatSocket.onStateChange(setIsConnected);
-  }, [setIsConnected]);
 
   useEffect(() => {
     return chatSocket.onSocketID(setSocketID);
@@ -563,7 +479,7 @@ const ChatScreen = ({
         // chatSocket.close();
       };
     },
-    [user],
+    [profile],
   );
 
   useEffect(() => {
@@ -578,8 +494,8 @@ const ChatScreen = ({
     }
     return () => {
       // закрытие экрана чата 2
-      // chatSocket.close();
-      // setIsConnected(false);
+      chatSocket.close();
+      setIsConnected(false);
     };
   }, []);
 
@@ -590,6 +506,14 @@ const ChatScreen = ({
         color: isConnected ? styleConst.color.green : styleConst.color.red,
       },
     });
+    const chatClient = chatSocket.getClient();
+    if (chatClient.readyState === 3) {
+      chatSocket.start();
+    }
+  }, [isConnected, navigation]);
+
+  useEffect(() => {
+    chatSocket.onStateChange(setIsConnected);
   }, [isConnected]);
 
   const addUserMessage = message => {
@@ -652,7 +576,7 @@ const ChatScreen = ({
         user={user}
         showUserAvatars={true}
         showUserNames={true}
-        enableAnimation={true}
+        enableAnimation={false}
         // renderBubble={renderBubble}
         renderTextMessage={renderTextMessage}
         renderCustomMessage={renderCustomMessage}
