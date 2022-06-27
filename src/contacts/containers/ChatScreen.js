@@ -494,8 +494,8 @@ const ChatScreen = ({
     }
     return () => {
       // закрытие экрана чата 2
-      chatSocket.close();
-      setIsConnected(false);
+      // chatSocket.close();
+      // setIsConnected(false);
     };
   }, []);
 
@@ -509,6 +509,13 @@ const ChatScreen = ({
     const chatClient = chatSocket.getClient();
     if (chatClient.readyState === 3) {
       chatSocket.start();
+      PushNotifications.deviceState().then(res => {
+        setLoadingHistory(true);
+        const senderID = get(user, 'id', getUserID(res.userId));
+        setUser({id: senderID});
+        actionChatIDSave(senderID);
+        updateChat(senderID);
+      });
     }
   }, [isConnected, navigation]);
 

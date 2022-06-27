@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {CommonActions, StackActions} from '@react-navigation/native';
-import { createNavigationContainerRef } from '@react-navigation/native';
+import {createNavigationContainerRef} from '@react-navigation/native';
 // import {navigationChange} from './actions';
 
 let _navigator;
@@ -9,7 +9,7 @@ const timeOut = 500;
 
 const navigationRef = createNavigationContainerRef();
 
-const setTopLevelNavigator = (navigatorRef) => {
+const setTopLevelNavigator = navigatorRef => {
   _navigator = navigatorRef;
 };
 
@@ -24,9 +24,9 @@ const navigate = (name, params) => {
   }
 };
 
-const dispatch = (params) => {
+const dispatch = params => {
   if (_navigator && _navigator.isReady()) {
-  _navigator.dispatch(CommonActions.setParams(params));
+    _navigator.dispatch(CommonActions.setParams(params));
   } else {
     setTimeout(() => {
       dispatch(params);
@@ -36,7 +36,7 @@ const dispatch = (params) => {
 
 const goBack = () => {
   if (_navigator && _navigator.isReady()) {
-  _navigator.dispatch(CommonActions.goBack());
+    _navigator.dispatch(CommonActions.goBack());
   } else {
     setTimeout(() => {
       goBack(params);
