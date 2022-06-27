@@ -1,4 +1,4 @@
-import {Platform, PermissionsAndroid, Alert, Linking, AppState} from 'react-native';
+import {Platform, Alert, Linking, AppState} from 'react-native';
 
 import OneSignal from 'react-native-onesignal';
 import {ONESIGNAL} from '../const';
@@ -22,7 +22,7 @@ export default {
     this.setNotificationWillShowInForegroundHandler();
 
     OneSignal.addPermissionObserver(event => {
-      console.info("OneSignal: permission changed:", event);
+      console.info('OneSignal: permission changed:', event);
     });
   },
 
@@ -72,19 +72,29 @@ export default {
   },
 
   setNotificationWillShowInForegroundHandler() {
-    OneSignal.setNotificationWillShowInForegroundHandler(notificationReceivedEvent => {
-      const appState = AppState.currentState;
-      console.info("OneSignal: notification will show in foreground:", notificationReceivedEvent);
-      let notification = notificationReceivedEvent.getNotification();
-      console.info("notification: ", notification);
-      const data = notification.additionalData
-      console.info("additionalData: ", data);
-      // Complete with null means don't show a notification.
-      if (appState === 'active' && data.target === 'chat') {
-        notification = null;
-      }
-      notificationReceivedEvent.complete(notification);
-    });
+    OneSignal.setNotificationWillShowInForegroundHandler(
+      notificationReceivedEvent => {
+        const appState = AppState.currentState;
+        console.info(
+          'OneSignal: notification will show in foreground:',
+          notificationReceivedEvent,
+        );
+        let notification = notificationReceivedEvent.getNotification();
+        console.info('notification: ', notification);
+        const data = notification.additionalData;
+        console.info('additionalData: ', data);
+        // Complete with null means don't show a notification.
+        if (
+          appState === 'active' &&
+          data.target === 'chat' &&
+          NavigationService.navigationRef.getCurrentRoute().name ===
+            'ChatScreen'
+        ) {
+          notification = null;
+        }
+        notificationReceivedEvent.complete(notification);
+      },
+    );
   },
 
   setNotificationOpenedHandler() {
