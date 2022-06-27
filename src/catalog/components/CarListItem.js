@@ -123,7 +123,7 @@ const CarListItem = ({
 
     const CarPrices = {
       sale: get(car, 'price.app.sale', 0),
-      standart: get(car, 'price.app.standart', get(car, 'price.app')),
+      standart: get(car, 'price.app.standart', get(car, 'price.app'), null),
     };
 
     return (
