@@ -416,7 +416,7 @@ const ChatScreen = ({
   const updateChat = useCallback(
     senderID => {
       // история чата
-      setLoadingHistory(true);
+
       PushNotifications.addTag('ChatID', 'AtlantAPI_' + senderID);
       let isSubscribedInitChatData = true;
 
@@ -483,15 +483,15 @@ const ChatScreen = ({
   );
 
   useEffect(() => {
-    let senderID = get(user, 'id') || null;
-    if (!senderID) {
+    if (!user?.id) {
       PushNotifications.deviceState().then(res => {
-        senderID = getUserID(res.userId);
+        setLoadingHistory(true);
+        const senderID = getUserID(res.userId);
         setUser({id: senderID});
         actionChatIDSave(senderID);
+        updateChat(senderID);
       });
     }
-    updateChat(senderID);
     return () => {
       // закрытие экрана чата 2
       // chatSocket.close();
@@ -506,17 +506,17 @@ const ChatScreen = ({
         color: isConnected ? styleConst.color.green : styleConst.color.red,
       },
     });
-    // const chatClient = chatSocket.getClient();
-    // if (chatClient.readyState === 3) {
-    //   alert('disconnected');
-    //   chatSocket.start();
-    //   PushNotifications.deviceState().then(res => {
-    //     const senderID = get(user, 'id', getUserID(res.userId));
-    //     setUser({id: senderID});
-    //     actionChatIDSave(senderID);
-    //     updateChat(senderID);
-    //   });
-    // }
+    const chatClient = chatSocket.getClient();
+    if (chatClient.readyState === 3) {
+      chatSocket.start();
+      PushNotifications.deviceState().then(res => {
+        setLoadingHistory(true);
+        const senderID = get(user, 'id', getUserID(res.userId));
+        setUser({id: senderID});
+        actionChatIDSave(senderID);
+        updateChat(senderID);
+      });
+    }
   }, [isConnected, navigation]);
 
   useEffect(() => {
