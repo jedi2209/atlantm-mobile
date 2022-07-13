@@ -35,9 +35,14 @@ class ReviewAddMessageStepScreen extends PureComponent {
               {
                 name: 'DEALER',
                 type: 'component',
-                value: <DealerCard key={'DealerBlock'} item={this.props.dealerSelected} />,
+                value: (
+                  <DealerCard
+                    key={'DealerBlock'}
+                    item={this.props.dealerSelected}
+                  />
+                ),
               },
-            ]
+            ],
           },
           {
             name: strings.ReviewAddMessageForm.label.plus,
@@ -88,7 +93,7 @@ class ReviewAddMessageStepScreen extends PureComponent {
           paddingHorizontal: 14,
           marginTop: 20,
         }}
-        key='ReviewAddForm'
+        key="ReviewAddForm"
         fields={this.FormConfig.fields}
         barStyle={'light-content'}
         SubmitButton={{text: strings.MessageForm.continue}}

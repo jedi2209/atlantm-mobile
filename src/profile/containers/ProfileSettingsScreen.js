@@ -1,17 +1,21 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {StyleSheet, Platform, ScrollView, View, Alert} from 'react-native';
+import {StyleSheet, Alert, Text, View, ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
+import {Icon, Button} from 'native-base';
+
 import {substractYears} from '../../utils/date';
 
 import Form from '../../core/components/Form/Form';
 import SocialAuth from '../components/SocialAuth';
 
-import {actionSaveProfileToAPI} from '../actions';
+import {actionSaveProfileToAPI, actionDeleteProfile} from '../actions';
 import styleConst from '../../core/style-const';
 
 import Analytics from '../../utils/amplitude-analytics';
 import {strings} from '../../core/lang/const';
+import style from '../../core/components/Lists/style';
+import nav from '../../navigation/reducers';
 
 class ProfileSettingsScreen extends Component {
   constructor(props) {
@@ -240,23 +244,93 @@ class ProfileSettingsScreen extends Component {
       });
   };
 
+  onPressDelete = () => {
+    const nav = this.props.navigation;
+    this.setState({loading: true});
+    return this.props
+      .actionDeleteProfile(this.props.profile)
+      .then(data => {
+        Alert.alert('', data.error.message, [
+          {
+            text: strings.Base.ok,
+            style: 'default',
+            onPress: () => {
+              nav.goBack(null);
+              nav.navigate('LoginScreen');
+            },
+          },
+        ]);
+      })
+      .catch(() => {
+        setTimeout(
+          () =>
+            Alert.alert(
+              strings.Notifications.error.title,
+              strings.Notifications.error.text,
+            ),
+          100,
+        );
+        this.setState({loading: false});
+        return false;
+      });
+  };
+
   onChangeProfileField = fieldName => value => {
     this.setState({[fieldName]: value});
   };
 
   render() {
+    if (this.state.loading) {
+      return (
+        <ActivityIndicator
+          color={styleConst.color.blue}
+          style={styleConst.spinner}
+        />
+      );
+    }
     return (
-      <Form
-        contentContainerStyle={{
-          paddingHorizontal: 14,
-          marginTop: 20,
-        }}
-        key='ProfileSettingsScreenForm'
-        fields={this.FormConfig.fields}
-        barStyle={'light-content'}
-        SubmitButton={{text: strings.ProfileSettingsScreen.save}}
-        onSubmit={this.onPressSave}
-      />
+      <>
+        <Form
+          contentContainerStyle={{
+            paddingHorizontal: 14,
+            marginTop: 20,
+          }}
+          key="ProfileSettingsScreenForm"
+          fields={this.FormConfig.fields}
+          barStyle={'light-content'}
+          SubmitButton={{text: strings.ProfileSettingsScreen.save}}
+          onSubmit={this.onPressSave}>
+          <Button
+            size="full"
+            full
+            transparent
+            variant="outline"
+            style={{borderRadius: 5, marginTop: -10}}
+            onPress={() => {
+              Alert.alert(
+                strings.ProfileSettingsScreen.Notifications.deleteAccount.title,
+                strings.ProfileSettingsScreen.Notifications.deleteAccount.text,
+                [
+                  {
+                    text: strings.Base.cancel,
+                    style: 'destructive',
+                  },
+                  {
+                    text: strings.Base.ok,
+                    style: 'default',
+                    onPress: () => {
+                      return this.onPressDelete();
+                    },
+                  },
+                ],
+              );
+            }}>
+            <Text style={{padding: 5, color: styleConst.color.red}}>
+              {strings.ProfileSettingsScreen.deleteAccount}
+            </Text>
+          </Button>
+        </Form>
+      </>
     );
   }
 }
@@ -270,6 +344,7 @@ const mapStateToProps = ({profile, dealer}) => {
 
 const mapDispatchToProps = {
   actionSaveProfileToAPI,
+  actionDeleteProfile,
 };
 
 export default connect(

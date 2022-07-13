@@ -1,11 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyleSheet,
-  Alert,
-  Platform,
-} from 'react-native';
+import {StyleSheet, Alert, Platform} from 'react-native';
 import Form from '../../core/components/Form/Form';
 // redux
 import {connect} from 'react-redux';
@@ -216,18 +212,22 @@ class OrderScreen extends Component {
                     },
                   }
                 : {},
-                isNewCar ? {
-                  name: 'TRADEIN',
-                  type: 'checkbox',
-                  label: strings.Form.field.label.tradeinWant,
-                  value: false,
-                } : {},
-                isNewCar ? {
-                  name: 'CREDIT',
-                  type: 'checkbox',
-                  label: strings.Form.field.label.creditWant,
-                  value: false,
-                } : {},
+              isNewCar
+                ? {
+                    name: 'TRADEIN',
+                    type: 'checkbox',
+                    label: strings.Form.field.label.tradeinWant,
+                    value: false,
+                  }
+                : {},
+              isNewCar
+                ? {
+                    name: 'CREDIT',
+                    type: 'checkbox',
+                    label: strings.Form.field.label.creditWant,
+                    value: false,
+                  }
+                : {},
             ],
           },
           {
@@ -407,7 +407,7 @@ class OrderScreen extends Component {
           paddingHorizontal: 14,
           marginTop: 20,
         }}
-        key='OrderScreenForm'
+        key="OrderScreenForm"
         testID="OrderScreen.Form"
         fields={this.FormConfig.fields}
         barStyle={'light-content'}

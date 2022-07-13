@@ -1,8 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {
-  Alert,
-} from 'react-native';
+import {Alert} from 'react-native';
 import {Toast} from 'native-base';
 import {get} from 'lodash';
 
@@ -114,9 +112,17 @@ class ServiceScreenStep2 extends Component {
       if (this.service) {
         textAdd = ['Требуемые работы:', data.service, '\r\n'].join(' ');
         if (data.recommended) {
-          textAdd = [textAdd, 'Стоимость:', get(this.serviceInfo, 'summary[0].summ.total')].join(' ');
+          textAdd = [
+            textAdd,
+            'Стоимость:',
+            get(this.serviceInfo, 'summary[0].summ.total'),
+          ].join(' ');
         } else {
-          textAdd = [textAdd, 'Стоимость:', get(this.serviceInfo, 'summary[0].summ.required')].join(' ');
+          textAdd = [
+            textAdd,
+            'Стоимость:',
+            get(this.serviceInfo, 'summary[0].summ.required'),
+          ].join(' ');
         }
         text = [textAdd, get(data, 'text', '')].join('\r\n');
       } else {
@@ -304,7 +310,7 @@ class ServiceScreenStep2 extends Component {
           paddingHorizontal: 14,
           marginTop: 20,
         }}
-        key='ServiceStep2Form'
+        key="ServiceStep2Form"
         fields={this.FormConfig.fields}
         defaultCountryCode={this.props.dealerSelected.region}
         onSubmit={this.onPressOrder}

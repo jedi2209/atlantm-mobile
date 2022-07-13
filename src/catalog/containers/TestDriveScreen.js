@@ -626,7 +626,7 @@ class TestDriveScreen extends PureComponent {
           paddingHorizontal: 14,
           marginTop: 20,
         }}
-        key='TestDriveForm'
+        key="TestDriveForm"
         fields={this.FormConfig.fields}
         barStyle={'light-content'}
         SubmitButton={{text: strings.Form.button.send}}

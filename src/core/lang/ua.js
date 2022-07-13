@@ -516,6 +516,7 @@ export default {
       },
     },
     save: 'Зберегти',
+    deleteAccount: 'Видалити акаунт',
   },
   ProfileScreenInfo: {
     empty: {

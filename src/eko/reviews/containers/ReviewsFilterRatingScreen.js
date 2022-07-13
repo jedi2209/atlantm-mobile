@@ -106,9 +106,9 @@ class ReviewsFilterRatingScreen extends Component {
     });
   };
 
-  isRatingFromSelected = (selectedRatingFrom) =>
+  isRatingFromSelected = selectedRatingFrom =>
     this.props.filterRatingFrom === selectedRatingFrom;
-  isRatingToSelected = (selectedRatingTo) =>
+  isRatingToSelected = selectedRatingTo =>
     this.props.filterRatingTo === selectedRatingTo;
 
   renderRatingFrom = () => {

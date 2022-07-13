@@ -1,11 +1,8 @@
 import React, {useRef} from 'react';
-import {
-  StyleSheet,
-  View,
-} from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import {StyleSheet, View} from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
-export const KeyboardAvoidingView = (props) => {
+export const KeyboardAvoidingView = props => {
   const mainRef = useRef(null);
   return (
     <KeyboardAwareScrollView
@@ -17,11 +14,8 @@ export const KeyboardAvoidingView = (props) => {
       //   behavior ? behavior : Platform.select({ios: 'padding', android: null})
       // behavior={Platform.select({ios: 'height', android: null})}
       // }
-      {...props}
-      >
-      <View style={styles.default}>
-        {props.children}
-      </View>
+      {...props}>
+      <View style={styles.default}>{props.children}</View>
     </KeyboardAwareScrollView>
   );
 };

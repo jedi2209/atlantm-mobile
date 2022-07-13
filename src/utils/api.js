@@ -914,6 +914,37 @@ export default {
       });
   },
 
+  async deleteProfile(profile) {
+    const requestParams = _.merge({}, baseRequestParams, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (
+      !profile.ID ||
+      typeof profile.ID === undefined ||
+      profile.ID === '' ||
+      profile.ID === null
+    ) {
+      console.error(
+        'updateProfile error',
+        'required param profile.ID has been not found',
+      );
+      return false;
+    }
+
+    return await this.request(`/lkk/user/${profile.ID}/`, requestParams)
+      .then(response => {
+        return response;
+      })
+      .catch(err => {
+        console.error('updateProfile request error', err);
+      });
+  },
+
   async updateProfile(profile) {
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PATCH',

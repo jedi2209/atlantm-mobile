@@ -234,60 +234,62 @@ class OrderCreditScreen extends Component {
                   editable: false,
                 },
               },
-              this.isPriceShow ? {
-                name: 'SUMM',
-                type: 'component',
-                label: strings.Form.field.creditSumm,
-                value: (
-                  <View>
-                    <MultiSlider
-                      values={[this.carPrice]}
-                      step={this.priceStep}
-                      min={0}
-                      max={this.carPrice}
-                      sliderLength={this.sliderWidth}
-                      optionsArray={this.optionsPrice}
-                      onValuesChange={e => {
-                        this.setState({
-                          summ: e[0],
-                        });
-                      }}
-                      trackStyle={{
-                        backgroundColor: '#d5d5e0',
-                      }}
-                      selectedStyle={{
-                        backgroundColor: styleConst.color.lightBlue,
-                      }}
-                      customMarker={() => (
-                        <View
-                          style={[
-                            styleConst.shadow.default,
-                            {
-                              height: 17,
-                              width: 17,
-                              borderRadius: 8.5,
-                              backgroundColor: styleConst.color.lightBlue,
-                            },
-                          ]}
+              this.isPriceShow
+                ? {
+                    name: 'SUMM',
+                    type: 'component',
+                    label: strings.Form.field.creditSumm,
+                    value: (
+                      <View>
+                        <MultiSlider
+                          values={[this.carPrice]}
+                          step={this.priceStep}
+                          min={0}
+                          max={this.carPrice}
+                          sliderLength={this.sliderWidth}
+                          optionsArray={this.optionsPrice}
+                          onValuesChange={e => {
+                            this.setState({
+                              summ: e[0],
+                            });
+                          }}
+                          trackStyle={{
+                            backgroundColor: '#d5d5e0',
+                          }}
+                          selectedStyle={{
+                            backgroundColor: styleConst.color.lightBlue,
+                          }}
+                          customMarker={() => (
+                            <View
+                              style={[
+                                styleConst.shadow.default,
+                                {
+                                  height: 17,
+                                  width: 17,
+                                  borderRadius: 8.5,
+                                  backgroundColor: styleConst.color.lightBlue,
+                                },
+                              ]}
+                            />
+                          )}
                         />
-                      )}
-                    />
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                      }}>
-                      <Text style={{color: '#74747A', fontSize: 14}}>
-                        {showPrice(0, this.region)}
-                      </Text>
-                      <Text style={{color: '#74747A', fontSize: 14}}>
-                        {showPrice(this.state.summ, this.region)}
-                      </Text>
-                    </View>
-                  </View>
-                ),
-              } : {},
+                        <View
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}>
+                          <Text style={{color: '#74747A', fontSize: 14}}>
+                            {showPrice(0, this.region)}
+                          </Text>
+                          <Text style={{color: '#74747A', fontSize: 14}}>
+                            {showPrice(this.state.summ, this.region)}
+                          </Text>
+                        </View>
+                      </View>
+                    ),
+                  }
+                : {},
             ],
           },
           {
@@ -361,7 +363,7 @@ class OrderCreditScreen extends Component {
           paddingHorizontal: 14,
           marginTop: 20,
         }}
-        key='OrderCreditForm'
+        key="OrderCreditForm"
         fields={FormConfig.fields}
         barStyle={'light-content'}
         SubmitButton={{text: strings.Form.button.send}}
