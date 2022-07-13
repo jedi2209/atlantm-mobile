@@ -53,7 +53,6 @@ deprecated-type=warn
 unsafe-getters-setters=warn
 inexact-spread=warn
 unnecessary-invariant=warn
-signature-verification-failure=warn
 
 [strict]
 deprecated-type
@@ -65,4 +64,4 @@ untyped-import
 untyped-type-import
 
 [version]
-^0.170.0
+^0.176.3
