@@ -1,8 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {
-  Alert,
-} from 'react-native';
+import {Alert} from 'react-native';
 import {get} from 'lodash';
 
 import Form from '../../../core/components/Form/Form';
@@ -240,7 +238,8 @@ class ServiceScreenNonAuth extends Component {
                 value: null,
                 props: {
                   placeholder:
-                    strings.Form.field.placeholder.date + dayMonthYear(addDays(2)),
+                    strings.Form.field.placeholder.date +
+                    dayMonthYear(addDays(2)),
                   required: true,
                   type: 'service',
                   minimumDate: new Date(addDays(2)),
@@ -369,7 +368,7 @@ class ServiceScreenNonAuth extends Component {
           paddingHorizontal: 14,
           marginTop: 20,
         }}
-        key='ServiceNonAuthForm'
+        key="ServiceNonAuthForm"
         fields={FormConfig.fields}
         barStyle={'light-content'}
         defaultCountryCode={this.props.dealerSelected.region}

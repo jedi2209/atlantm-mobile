@@ -260,7 +260,7 @@ class TvaScreen extends Component {
         keyboardAvoidingViewProps={{
           enableAutomaticScroll: false,
         }}
-        key='TVAForm'
+        key="TVAForm"
         fields={this.FormConfig.fields}
         barStyle={'light-content'}
         SubmitButton={{text: strings.Form.button.send}}

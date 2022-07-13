@@ -1,10 +1,5 @@
 import React, {Component} from 'react';
-import {
-  Alert,
-  View,
-  StyleSheet,
-  Platform,
-} from 'react-native';
+import {Alert, View, StyleSheet, Platform} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -334,7 +329,7 @@ class ReviewAddRatingStepScreen extends Component {
             paddingHorizontal: 14,
             marginTop: 20,
           }}
-          key='ReviewAddRatingForm'
+          key="ReviewAddRatingForm"
           fields={this.FormConfig.fields}
           barStyle={'light-content'}
           SubmitButton={{text: strings.Form.button.send}}

@@ -1,11 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyleSheet,
-  Alert,
-  Platform,
-} from 'react-native';
+import {StyleSheet, Alert, Platform} from 'react-native';
 import Form from '../../core/components/Form/Form';
 // redux
 import {connect} from 'react-redux';
@@ -223,7 +219,7 @@ class OrderMyPriceScreen extends Component {
     comment: PropTypes.string,
   };
 
-  onPressOrder = async (data) => {
+  onPressOrder = async data => {
     const isInternetExist = await isInternet();
     const nav = this.props.navigation;
 
@@ -293,7 +289,7 @@ class OrderMyPriceScreen extends Component {
           paddingHorizontal: 14,
           marginTop: 20,
         }}
-        key='OrderMyPriceForm'
+        key="OrderMyPriceForm"
         fields={this.FormConfig.fields}
         barStyle={'light-content'}
         SubmitButton={{text: strings.Form.button.send}}

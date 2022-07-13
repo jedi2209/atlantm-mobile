@@ -1462,6 +1462,7 @@ class Form extends Component {
             ) : null}
           </View>
         </KeyboardAvoidingView>
+        {this.props.children}
       </ScrollView>
     );
     return res;

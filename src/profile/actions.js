@@ -86,6 +86,36 @@ export const actionLogout = () => {
   };
 };
 
+export const actionDeleteProfile = profileID => {
+  //PushNotifications.removeTag('ChatID');
+  return async dispatch => {
+    function onError(error) {
+      return dispatch({
+        type: SAVE_PROFILE__FAIL,
+        payload: {
+          code: error.code,
+          message: error.message,
+        },
+      });
+    }
+
+    try {
+      const res = await API.deleteProfile(profileID);
+      const {status, error} = res;
+
+      if (status !== 'success') {
+        return onError(error);
+      }
+
+      dispatch({type: LOGOUT});
+
+      return res;
+    } catch (e) {
+      return onError(e);
+    }
+  };
+};
+
 export const actionRequestForgotPass = login => {
   return async dispatch => {
     function onError(error) {

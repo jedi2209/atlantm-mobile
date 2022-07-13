@@ -1,9 +1,16 @@
 import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {Text, View, Pressable, Platform, StyleSheet, ActivityIndicator} from 'react-native';
-import {OrientationLocker, PORTRAIT} from "react-native-orientation-locker";
+import {
+  Text,
+  View,
+  Pressable,
+  Platform,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
+import {OrientationLocker, PORTRAIT} from 'react-native-orientation-locker';
 import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {
   Header,
@@ -14,7 +21,7 @@ import {
   Right,
   Icon,
 } from 'native-base';
-import Orientation from "react-native-orientation-locker";
+import Orientation from 'react-native-orientation-locker';
 import {EVENT_REFRESH} from '../core/actionTypes';
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
@@ -112,433 +119,449 @@ export const Base = ({navigation, route}) => {
   }
   return (
     <>
-    <OrientationLocker
+      <OrientationLocker
         orientation={PORTRAIT}
         // onChange={orientation => console.log('onChange', orientation)}
         // onDeviceChange={orientation => console.log('onDeviceChange', orientation)}
       />
-    <StackBase.Navigator initialRouteName={initialRouteName} screenOptions={{orientation: 'portrait'}}>
-      <StackBase.Screen
-        name="BottomTabNavigation"
-        component={BottomTabNavigation}
-        options={{headerShown: false}}
-      />
-      <StackBase.Screen
-        name="IntroScreen"
-        component={IntroScreen}
-        options={{headerShown: false}}
-      />
-      <StackBase.Screen
-        name="ChooseDealerScreen"
-        component={ChooseDealerScreen}
-        options={BigCloseButton(navigation, route, {
-          ...TransitionPresets.ModalTransition,
-          headerTitle: strings.ChooseDealerScreen.title,
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
-        })}
-      />
-      <StackBase.Screen
-        name="ChatScreen"
-        component={ChatScreen}
-        options={({route}) => ({
-          headerStyle: [
-            stylesHeader.resetBorder,
-            {
-              backgroundColor: styleConst.color.bg,
-            },
-          ],
-          headerBackTitleVisible: false,
-          headerBackVisible: false,
-          headerShadowVisible: false,
-          headerShown: true,
-          headerLeft: () => {
-            return ArrowBack(navigation, route, {
-              icon: 'md-close',
-              IconStyle: {
-                fontSize: 42,
-                width: 40,
-                color: '#222B45',
-              },
-            });
-          },
-          presentation: 'modal',
-          headerTransparent: true,
-          headerTitle: () => {
-            return (
-              <View style={{flexDirection: 'row'}}>
-              <Text style={[stylesHeader.whiteHeaderTitle, {marginRight: 10}]} selectable={false}>
-                {strings.ChatScreen.title}
-              </Text>
-              <Text>{route?.params?.serviceMessage}</Text>
-              {route?.params?.status?.color ? (
-                <View style={{width: 10, height: 10, backgroundColor: route.params.status.color, marginTop: 5, borderRadius: 10,}} />
-              ) : (
-                <ActivityIndicator color={styleConst.color.blue} size={'small'} />
-              )}
-              </View>
-            );
-          },
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
-          ...TransitionPresets.ModalTransition,
-          })}
-      />
-      <StackBase.Screen
-        name="InfoList"
-        component={InfoListScreen}
-        options={ClassicHeaderWhite(
-          strings.InfoListScreen.title,
-          navigation,
-          route,
-        )}
-      />
-      <StackBase.Screen
-        name="InfoPostScreen"
-        component={InfoPostScreen}
-        options={{
-          headerTitle: '',
-          headerTitleStyle: stylesHeader.transparentHeaderTitle,
-          headerStyle: {
-            height: 55,
-          },
-          presentation: 'modal',
-          headerTransparent: true,
-          headerLeft: null,
-        }}
-      />
-      <StackBase.Screen
-        name="UserAgreementScreen"
-        component={UserAgreementScreen}
-        options={{
-          headerTitle: '',
-          headerTitleStyle: stylesHeader.transparentHeaderTitle,
-          headerStyle: {
-            height: 55,
-          },
-          presentation: 'modal',
-          headerTransparent: true,
-          headerLeft: null,
-        }}
-      />
-      <StackBase.Screen
-        name="MapScreen"
-        component={MapScreen}
-        options={TransparentBack(
-          navigation,
-          route,
-          {
+      <StackBase.Navigator
+        initialRouteName={initialRouteName}
+        screenOptions={{orientation: 'portrait'}}>
+        <StackBase.Screen
+          name="BottomTabNavigation"
+          component={BottomTabNavigation}
+          options={{headerShown: false}}
+        />
+        <StackBase.Screen
+          name="IntroScreen"
+          component={IntroScreen}
+          options={{headerShown: false}}
+        />
+        <StackBase.Screen
+          name="ChooseDealerScreen"
+          component={ChooseDealerScreen}
+          options={BigCloseButton(navigation, route, {
             ...TransitionPresets.ModalTransition,
-          },
-          {
-            icon: 'close',
-            IconStyle: {
-              fontSize: 24,
-            },
-          },
-        )}
-      />
-      <StackBase.Screen
-        name="IndicatorsScreen"
-        component={IndicatorsScreen}
-        options={BigCloseButton(navigation, route)}
-      />
-      <StackBase.Screen
-        name="SettingsScreen"
-        component={SettingsScreen}
-        options={BigCloseButton(navigation, route, {
-          headerLeft: () => {
-            return ArrowBack(
-              navigation,
+            headerTitle: strings.ChooseDealerScreen.title,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+        <StackBase.Screen
+          name="ChatScreen"
+          component={ChatScreen}
+          options={({route}) => ({
+            headerStyle: [
+              stylesHeader.resetBorder,
               {
-                params: {
-                  returnScreen: 'BottomTabNavigation',
-                },
+                backgroundColor: styleConst.color.bg,
               },
-              {
+            ],
+            headerBackTitleVisible: false,
+            headerBackVisible: false,
+            headerShadowVisible: false,
+            headerShown: true,
+            headerLeft: () => {
+              return ArrowBack(navigation, route, {
                 icon: 'md-close',
                 IconStyle: {
                   fontSize: 42,
                   width: 40,
                   color: '#222B45',
                 },
-              },
-            );
-          },
-        })}
-      />
-      {/* ЭКО */}
-      <StackBase.Screen
-        name="ReviewsScreen"
-        component={EKO}
-        options={{headerShown: false}}
-      />
-      {/* ТВА */}
-      <StackBase.Screen
-        name="TvaScreenBase"
-        component={TVA}
-        options={BigCloseButton(navigation, route, {
-          ...TransitionPresets.ScaleFromCenterAndroid,
-          headerTitle: strings.TvaScreen.title,
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
-        })}
-      />
-      {/* НОВЫЕ АВТО */}
-      <StackBase.Screen
-        name="CarsStock"
-        component={CarsStock}
-        options={{headerShown: false}}
-      />
-      <StackFullScreen.Screen
-        name="FullScreenGallery"
-        component={FullScreenGallery}
-        options={TransparentBack(
-          navigation,
-          route,
-          {
-            presentation: 'fullScreenModal',
-            animation: 'fade',
-            statusBarHidden: true,
+              });
+            },
+            presentation: 'modal',
+            headerTransparent: true,
+            headerTitle: () => {
+              return (
+                <View style={{flexDirection: 'row'}}>
+                  <Text
+                    style={[stylesHeader.whiteHeaderTitle, {marginRight: 10}]}
+                    selectable={false}>
+                    {strings.ChatScreen.title}
+                  </Text>
+                  <Text>{route?.params?.serviceMessage}</Text>
+                  {route?.params?.status?.color ? (
+                    <View
+                      style={{
+                        width: 10,
+                        height: 10,
+                        backgroundColor: route.params.status.color,
+                        marginTop: 5,
+                        borderRadius: 10,
+                      }}
+                    />
+                  ) : (
+                    <ActivityIndicator
+                      color={styleConst.color.blue}
+                      size={'small'}
+                    />
+                  )}
+                </View>
+              );
+            },
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+            ...TransitionPresets.ModalTransition,
+          })}
+        />
+        <StackBase.Screen
+          name="InfoList"
+          component={InfoListScreen}
+          options={ClassicHeaderWhite(
+            strings.InfoListScreen.title,
+            navigation,
+            route,
+          )}
+        />
+        <StackBase.Screen
+          name="InfoPostScreen"
+          component={InfoPostScreen}
+          options={{
+            headerTitle: '',
+            headerTitleStyle: stylesHeader.transparentHeaderTitle,
             headerStyle: {
-              height: null,
-            }
-          },
-          {
-            icon: 'close',
-            IconStyle: {
-              fontSize: 42,
-            },
-            ContainerStyle: {
-              backgroundColor: 'rgba(0, 0, 0, 0.6)',
-              borderRadius: 15,
-              marginTop: 10,
-              marginLeft: 10,
-              width: 55,
               height: 55,
-              zIndex: 10000,
             },
-            onPressBackCallBack: () => {
-              Orientation.lockToPortrait();
-            }
-          },
-        )}
-      />
-      {/* Заявки */}
-      <StackOrders.Screen
-        name="ServiceScreen"
-        component={ServiceContainer}
-        options={BigCloseButton(navigation, route, {
-          ...TransitionPresets.ScaleFromCenterAndroid,
-          headerTitle: strings.ServiceScreen.title,
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
-        })}
-      />
-      <StackOrders.Screen
-        name="ServiceInfoModal"
-        component={ServiceInfoModal}
-        options={{
-          presentation: 'modal',
-          orientation: 'portrait',
-          headerShown: false,
-          statusBarHidden: true,
-          gestureEnabled: false,
-        }}
-      />
-      <StackOrders.Screen
-        name="ServiceScreenStep2"
-        component={ServiceScreenStep2}
-        options={ClassicHeaderWhite(
-          strings.ServiceScreen.title,
-          navigation,
-          route,
-        )}
-      />
-      {/* Подержаные автомобили */}
-      <StackOrders.Screen
-        name="OrderScreen"
-        component={OrderScreen}
-        options={BigCloseButton(navigation, route, {
-          ...TransitionPresets.ScaleFromCenterAndroid,
-          headerTitle: strings.OrderScreen.title,
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
-        })}
-      />
-      <StackOrders.Screen
-        name="TestDriveScreen"
-        component={TestDriveScreen}
-        options={BigCloseButton(navigation, route, {
-          ...TransitionPresets.ScaleFromCenterAndroid,
-          headerTitle: strings.TestDriveScreen.title,
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
-        })}
-      />
-      <StackOrders.Screen
-        name="OrderMyPriceScreen"
-        component={OrderMyPriceScreen}
-        options={BigCloseButton(navigation, route, {
-          ...TransitionPresets.ScaleFromCenterAndroid,
-          headerTitle: strings.OrderMyPriceScreen.title,
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
-        })}
-      />
-      <StackOrders.Screen
-        name="OrderCreditScreen"
-        component={OrderCreditScreen}
-        options={BigCloseButton(navigation, route, {
-          ...TransitionPresets.ScaleFromCenterAndroid,
-          headerTitle: strings.OrderCreditScreen.title,
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
-        })}
-      />
-      <StackOrders.Screen
-        name="OrderPartsScreen"
-        component={OrderPartsScreen}
-        options={BigCloseButton(navigation, route, {
-          ...TransitionPresets.ScaleFromCenterAndroid,
-          headerTitle: strings.OrderPartsScreen.title,
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
-        })}
-      />
-      <StackOrders.Screen
-        name="CarCostScreen"
-        component={CarCostScreen}
-        options={BigCloseButton(navigation, route, {
-          ...TransitionPresets.ScaleFromCenterAndroid,
-          headerTitle: strings.CarCostScreen.title,
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
-        })}
-      />
-      <StackOrders.Screen
-        name="CallMeBackScreen"
-        component={CallMeBackScreen}
-        options={BigCloseButton(navigation, route, {
-          ...TransitionPresets.ScaleFromCenterAndroid,
-          headerTitle: strings.CallMeBackScreen.title,
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
-        })}
-      />
-
-      {/* Профиль */}
-      <StackProfile.Screen
-        name="ProfileSettingsScreen"
-        component={ProfileSettingsScreen}
-        options={BigCloseButton(navigation, route, {
-          presentation: 'modal',
-          headerTitle: strings.ProfileSettingsScreen.title,
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
-        })}
-      />
-      <StackProfile.Screen
-        name="BonusScreenInfo"
-        component={BonusScreenInfo}
-        options={ClassicHeaderWhite(
-          strings.BonusInfoScreen.title,
-          navigation,
-          route,
-        )}
-      />
-      <StackProfile.Screen
-        name="TOHistory"
-        component={TOHistory}
-        options={ClassicHeaderWhite(
-          strings.CarHistoryScreen.title,
-          navigation,
-          route,
-          {
-            presentation: 'card',
-          },
-        )}
-      />
-      <StackProfile.Screen
-        name="AdditionalPurchaseScreen"
-        component={AdditionalPurchaseScreen}
-        options={BigCloseButton(navigation, route, {
-          ...TransitionPresets.ScaleFromCenterAndroid,
-          headerTitle: strings.AdditionalPurchaseScreen.title,
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
-        })}
-      />
-      <StackProfile.Screen
-        name="ServiceTOCalculatorScreen"
-        component={ServiceTOCalculatorScreen}
-        options={ClassicHeaderWhite(
-          strings.UserCars.menu.tocalc,
-          navigation,
-          route,
-          {
-            presentation: 'card',
-          },
-        )}
-      />
-      <StackProfile.Screen
-        name="CarHistoryDetailsScreen"
-        component={CarHistoryDetailsScreen}
-        options={({route}) => ({
-          headerShown: true,
-          headerTransparent: false,
-          presentation: 'modal',
-          orientation: 'portrait',
-          headerTitle: () => {
-            return (
-              <Text style={stylesHeader.whiteHeaderTitle} selectable={false}>
-                {route?.params?.mainTitle ? route?.params?.mainTitle : null}
-              </Text>
-            );
-          },
-          headerStyle: stylesHeader.whiteHeader,
-          headerTitleStyle: stylesHeader.whiteHeaderTitle,
-          headerLeft: () => {
-            return ArrowBack(navigation, route, {
-              icon: 'md-close',
+            presentation: 'modal',
+            headerTransparent: true,
+            headerLeft: null,
+          }}
+        />
+        <StackBase.Screen
+          name="UserAgreementScreen"
+          component={UserAgreementScreen}
+          options={{
+            headerTitle: '',
+            headerTitleStyle: stylesHeader.transparentHeaderTitle,
+            headerStyle: {
+              height: 55,
+            },
+            presentation: 'modal',
+            headerTransparent: true,
+            headerLeft: null,
+          }}
+        />
+        <StackBase.Screen
+          name="MapScreen"
+          component={MapScreen}
+          options={TransparentBack(
+            navigation,
+            route,
+            {
+              ...TransitionPresets.ModalTransition,
+            },
+            {
+              icon: 'close',
+              IconStyle: {
+                fontSize: 24,
+              },
+            },
+          )}
+        />
+        <StackBase.Screen
+          name="IndicatorsScreen"
+          component={IndicatorsScreen}
+          options={BigCloseButton(navigation, route)}
+        />
+        <StackBase.Screen
+          name="SettingsScreen"
+          component={SettingsScreen}
+          options={BigCloseButton(navigation, route, {
+            headerLeft: () => {
+              return ArrowBack(
+                navigation,
+                {
+                  params: {
+                    returnScreen: 'BottomTabNavigation',
+                  },
+                },
+                {
+                  icon: 'md-close',
+                  IconStyle: {
+                    fontSize: 42,
+                    width: 40,
+                    color: '#222B45',
+                  },
+                },
+              );
+            },
+          })}
+        />
+        {/* ЭКО */}
+        <StackBase.Screen
+          name="ReviewsScreen"
+          component={EKO}
+          options={{headerShown: false}}
+        />
+        {/* ТВА */}
+        <StackBase.Screen
+          name="TvaScreenBase"
+          component={TVA}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ScaleFromCenterAndroid,
+            headerTitle: strings.TvaScreen.title,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+        {/* НОВЫЕ АВТО */}
+        <StackBase.Screen
+          name="CarsStock"
+          component={CarsStock}
+          options={{headerShown: false}}
+        />
+        <StackFullScreen.Screen
+          name="FullScreenGallery"
+          component={FullScreenGallery}
+          options={TransparentBack(
+            navigation,
+            route,
+            {
+              presentation: 'fullScreenModal',
+              animation: 'fade',
+              statusBarHidden: true,
+              headerStyle: {
+                height: null,
+              },
+            },
+            {
+              icon: 'close',
               IconStyle: {
                 fontSize: 42,
-                width: 40,
-                color: '#222B45',
               },
-            });
-          },
-          headerRight: () => <></>,
-        })}
-      />
-    </StackBase.Navigator>
-  </>);
+              ContainerStyle: {
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                borderRadius: 15,
+                marginTop: 10,
+                marginLeft: 10,
+                width: 55,
+                height: 55,
+                zIndex: 10000,
+              },
+              onPressBackCallBack: () => {
+                Orientation.lockToPortrait();
+              },
+            },
+          )}
+        />
+        {/* Заявки */}
+        <StackOrders.Screen
+          name="ServiceScreen"
+          component={ServiceContainer}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ScaleFromCenterAndroid,
+            headerTitle: strings.ServiceScreen.title,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+        <StackOrders.Screen
+          name="ServiceInfoModal"
+          component={ServiceInfoModal}
+          options={{
+            presentation: 'modal',
+            orientation: 'portrait',
+            headerShown: false,
+            statusBarHidden: true,
+            gestureEnabled: false,
+          }}
+        />
+        <StackOrders.Screen
+          name="ServiceScreenStep2"
+          component={ServiceScreenStep2}
+          options={ClassicHeaderWhite(
+            strings.ServiceScreen.title,
+            navigation,
+            route,
+          )}
+        />
+        {/* Подержаные автомобили */}
+        <StackOrders.Screen
+          name="OrderScreen"
+          component={OrderScreen}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ScaleFromCenterAndroid,
+            headerTitle: strings.OrderScreen.title,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+        <StackOrders.Screen
+          name="TestDriveScreen"
+          component={TestDriveScreen}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ScaleFromCenterAndroid,
+            headerTitle: strings.TestDriveScreen.title,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+        <StackOrders.Screen
+          name="OrderMyPriceScreen"
+          component={OrderMyPriceScreen}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ScaleFromCenterAndroid,
+            headerTitle: strings.OrderMyPriceScreen.title,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+        <StackOrders.Screen
+          name="OrderCreditScreen"
+          component={OrderCreditScreen}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ScaleFromCenterAndroid,
+            headerTitle: strings.OrderCreditScreen.title,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+        <StackOrders.Screen
+          name="OrderPartsScreen"
+          component={OrderPartsScreen}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ScaleFromCenterAndroid,
+            headerTitle: strings.OrderPartsScreen.title,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+        <StackOrders.Screen
+          name="CarCostScreen"
+          component={CarCostScreen}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ScaleFromCenterAndroid,
+            headerTitle: strings.CarCostScreen.title,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+        <StackOrders.Screen
+          name="CallMeBackScreen"
+          component={CallMeBackScreen}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ScaleFromCenterAndroid,
+            headerTitle: strings.CallMeBackScreen.title,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+
+        {/* Профиль */}
+        <StackProfile.Screen
+          name="ProfileSettingsScreen"
+          component={ProfileSettingsScreen}
+          options={BigCloseButton(navigation, route, {
+            presentation: 'modal',
+            headerTitle: strings.ProfileSettingsScreen.title,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+        <StackProfile.Screen
+          name="BonusScreenInfo"
+          component={BonusScreenInfo}
+          options={ClassicHeaderWhite(
+            strings.BonusInfoScreen.title,
+            navigation,
+            route,
+          )}
+        />
+        <StackProfile.Screen
+          name="TOHistory"
+          component={TOHistory}
+          options={ClassicHeaderWhite(
+            strings.CarHistoryScreen.title,
+            navigation,
+            route,
+            {
+              presentation: 'card',
+            },
+          )}
+        />
+        <StackProfile.Screen
+          name="AdditionalPurchaseScreen"
+          component={AdditionalPurchaseScreen}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ScaleFromCenterAndroid,
+            headerTitle: strings.AdditionalPurchaseScreen.title,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+        <StackProfile.Screen
+          name="ServiceTOCalculatorScreen"
+          component={ServiceTOCalculatorScreen}
+          options={ClassicHeaderWhite(
+            strings.UserCars.menu.tocalc,
+            navigation,
+            route,
+            {
+              presentation: 'card',
+            },
+          )}
+        />
+        <StackProfile.Screen
+          name="CarHistoryDetailsScreen"
+          component={CarHistoryDetailsScreen}
+          options={({route}) => ({
+            headerShown: true,
+            headerTransparent: false,
+            presentation: 'modal',
+            orientation: 'portrait',
+            headerTitle: () => {
+              return (
+                <Text style={stylesHeader.whiteHeaderTitle} selectable={false}>
+                  {route?.params?.mainTitle ? route?.params?.mainTitle : null}
+                </Text>
+              );
+            },
+            headerStyle: stylesHeader.whiteHeader,
+            headerTitleStyle: stylesHeader.whiteHeaderTitle,
+            headerLeft: () => {
+              return ArrowBack(navigation, route, {
+                icon: 'md-close',
+                IconStyle: {
+                  fontSize: 42,
+                  width: 40,
+                  color: '#222B45',
+                },
+              });
+            },
+            headerRight: () => <></>,
+          })}
+        />
+      </StackBase.Navigator>
+    </>
+  );
 };
 
 const Contacts = ({navigation, route}) => (
