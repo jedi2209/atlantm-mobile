@@ -1,0 +1,34 @@
+diff --git a/node_modules/@sentry/react-native/android/build/intermediates/aar_metadata/debug/aar-metadata.properties b/node_modules/@sentry/react-native/android/build/intermediates/aar_metadata/debug/aar-metadata.properties
+new file mode 100644
+index 0000000..8c9c699
+--- /dev/null
++++ b/node_modules/@sentry/react-native/android/build/intermediates/aar_metadata/debug/aar-metadata.properties
+@@ -0,0 +1,4 @@
++aarFormatVersion=1.0
++aarMetadataVersion=1.0
++minCompileSdk=1
++minAndroidGradlePluginVersion=1.0.0
+diff --git a/node_modules/@sentry/react-native/react-native.config.js b/node_modules/@sentry/react-native/react-native.config.js
+index f85fa01..19782b1 100644
+--- a/node_modules/@sentry/react-native/react-native.config.js
++++ b/node_modules/@sentry/react-native/react-native.config.js
+@@ -1,18 +1,10 @@
+ module.exports = {
+   dependency: {
+     platforms: {
+-      ios: {
+-        sharedLibraries: ['libz']
+-      },
++      ios: {},
+       android: {
+         packageInstance: 'new RNSentryPackage()'
+       }
+-    },
+-    hooks: {
+-      postlink:
+-        'node node_modules/@sentry/wizard/dist/bin.js -i reactNative -p ios android',
+-      postunlink:
+-        'node node_modules/@sentry/wizard/dist/bin.js -i reactNative -p ios android --uninstall'
+     }
+   }
+ };
