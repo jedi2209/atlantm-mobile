@@ -12,7 +12,6 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
-// import { SafeAreaView } from 'react-native-safe-area-context';
 import UserCars from '../components/UserCars';
 import {Button, Icon} from 'native-base';
 import PushNotifications from '../../core/components/PushNotifications';

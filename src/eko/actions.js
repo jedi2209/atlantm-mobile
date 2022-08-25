@@ -27,17 +27,8 @@ import {EVENT_LOAD_MORE} from '../core/actionTypes';
 
 import {strings} from '../core/lang/const';
 
-export const actionSelectAddReviewPublicAgree = (isAgree) => {
-  return (dispatch) => {
-    dispatch({
-      type: REVIEW_ADD_PUBLIC_AGREE__SELECT,
-      payload: isAgree,
-    });
-  };
-};
-
-export const actionSelectAddReviewRating = (rating) => {
-  return (dispatch) => {
+export const actionSelectAddReviewRating = rating => {
+  return dispatch => {
     dispatch({
       type: REVIEW_ADD_RATING_VALUE__SELECT,
       payload: rating,
@@ -45,8 +36,8 @@ export const actionSelectAddReviewRating = (rating) => {
   };
 };
 
-export const actionSelectAddReviewRatingVariant = (rating) => {
-  return (dispatch) => {
+export const actionSelectAddReviewRatingVariant = rating => {
+  return dispatch => {
     dispatch({
       type: REVIEW_ADD_RATING_VARIANT__SELECT,
       payload: rating,
@@ -54,8 +45,8 @@ export const actionSelectAddReviewRatingVariant = (rating) => {
   };
 };
 
-export const actionReviewVisit = (reviewId) => {
-  return (dispatch) => {
+export const actionReviewVisit = reviewId => {
+  return dispatch => {
     dispatch({
       type: REVIEW__VISIT,
       payload: reviewId,
@@ -63,8 +54,8 @@ export const actionReviewVisit = (reviewId) => {
   };
 };
 
-export const actionDateFromFill = (dateFrom) => {
-  return (dispatch) => {
+export const actionDateFromFill = dateFrom => {
+  return dispatch => {
     dispatch({
       type: REVIEWS_DATE_FROM__FILL,
       payload: dateFrom,
@@ -72,8 +63,8 @@ export const actionDateFromFill = (dateFrom) => {
   };
 };
 
-export const actionDateToFill = (dateTo) => {
-  return (dispatch) => {
+export const actionDateToFill = dateTo => {
+  return dispatch => {
     dispatch({
       type: REVIEWS_DATE_TO__FILL,
       payload: dateTo,
@@ -81,8 +72,8 @@ export const actionDateToFill = (dateTo) => {
   };
 };
 
-export const actionSelectFilterDatePeriod = (period) => {
-  return (dispatch) => {
+export const actionSelectFilterDatePeriod = period => {
+  return dispatch => {
     dispatch({
       type: REVIEWS_DATE_PERIOD__SELECT,
       payload: period,
@@ -90,8 +81,8 @@ export const actionSelectFilterDatePeriod = (period) => {
   };
 };
 
-export const actionSelectFilterRatingFrom = (rating) => {
-  return (dispatch) => {
+export const actionSelectFilterRatingFrom = rating => {
+  return dispatch => {
     dispatch({
       type: REVIEWS_RATING_FROM__SELECT,
       payload: rating,
@@ -99,8 +90,8 @@ export const actionSelectFilterRatingFrom = (rating) => {
   };
 };
 
-export const actionSelectFilterRatingTo = (rating) => {
-  return (dispatch) => {
+export const actionSelectFilterRatingTo = rating => {
+  return dispatch => {
     dispatch({
       type: REVIEWS_RATING_TO__SELECT,
       payload: rating,
@@ -108,8 +99,8 @@ export const actionSelectFilterRatingTo = (rating) => {
   };
 };
 
-export const actionAddReviewPlusFill = (message) => {
-  return (dispatch) => {
+export const actionAddReviewPlusFill = message => {
+  return dispatch => {
     dispatch({
       type: REVIEW_ADD_MESSAGE_PLUS__FILL,
       payload: message,
@@ -117,8 +108,8 @@ export const actionAddReviewPlusFill = (message) => {
   };
 };
 
-export const actionAddReviewMinusFill = (message) => {
-  return (dispatch) => {
+export const actionAddReviewMinusFill = message => {
+  return dispatch => {
     dispatch({
       type: REVIEW_ADD_MESSAGE_MINUS__FILL,
       payload: message,
@@ -127,13 +118,13 @@ export const actionAddReviewMinusFill = (message) => {
 };
 
 export const actionReviewsReset = () => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({type: REVIEWS__RESET});
   };
 };
 
-export const actionFetchReviews = (props) => {
-  return (dispatch) => {
+export const actionFetchReviews = props => {
+  return dispatch => {
     dispatch({
       type: REVIEWS__REQUEST,
       payload: {...props},
@@ -142,7 +133,7 @@ export const actionFetchReviews = (props) => {
     const nextPageUrl = props.type === EVENT_LOAD_MORE ? props.nextPage : null;
 
     return API.fetchReviews({...props, nextPageUrl})
-      .then((res) => {
+      .then(res => {
         if (res.error) {
           let message = res.error.message;
           if (res.error.code === 204) {
@@ -173,7 +164,7 @@ export const actionFetchReviews = (props) => {
           },
         });
       })
-      .catch((error) => {
+      .catch(error => {
         if (error.code === 204) {
           error.message = strings.EkoScreen.empty.text;
         }
@@ -188,14 +179,14 @@ export const actionFetchReviews = (props) => {
 };
 
 export const actionFetchDealerRating = ({dealerId}) => {
-  return (dispatch) => {
+  return dispatch => {
     dispatch({
       type: REVIEW_DEALER_RATING__REQUEST,
       payload: {dealerId},
     });
 
     return API.fetchDealerRating({dealerId})
-      .then((res) => {
+      .then(res => {
         const {data, error} = res;
 
         if (error || !data) {
@@ -216,7 +207,7 @@ export const actionFetchDealerRating = ({dealerId}) => {
           },
         });
       })
-      .catch((error) => {
+      .catch(error => {
         return dispatch({
           type: REVIEW_DEALER_RATING__FAIL,
           payload: {
@@ -227,15 +218,15 @@ export const actionFetchDealerRating = ({dealerId}) => {
   };
 };
 
-export const actionReviewAdd = (props) => {
-  return (dispatch) => {
+export const actionReviewAdd = props => {
+  return dispatch => {
     dispatch({
       type: REVIEW_ADD__REQUEST,
       payload: {...props},
     });
 
     return API.reviewAdd(props)
-      .then((res) => {
+      .then(res => {
         const {error, status} = res;
 
         if (status !== 'success') {
@@ -250,7 +241,7 @@ export const actionReviewAdd = (props) => {
 
         return dispatch({type: REVIEW_ADD__SUCCESS});
       })
-      .catch((error) => {
+      .catch(error => {
         return dispatch({
           type: REVIEW_ADD__FAIL,
           payload: {

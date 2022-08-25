@@ -5,7 +5,6 @@ import {View, Text} from 'react-native';
 import styleConst from '../../core/style-const';
 import {Icon, CheckBox, StyleProvider} from 'native-base';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import getTheme from '../../../native-base-theme/components';
 
 const styles = {
   scrollView: {},
@@ -52,56 +51,53 @@ const styles = {
 export const CarCard = ({data, type, checked, onPress, disabled}) => {
   const {brand, model, number, owner} = data;
   return (
-    <StyleProvider style={getTheme()}>
-      <View
-        style={[
-          styles.scrollViewInner,
-          styleConst.shadow.default,
-          styles.containerView,
-        ]}>
-        <View>
-          <Text
-            ellipsizeMode="tail"
-            numberOfLines={1}
-            selectable={false}
-            style={styles.textBrandModel}>
-            {`${brand} ${model}`}
-          </Text>
-          <Text
-            ellipsizeMode="tail"
-            numberOfLines={1}
-            selectable={false}
-            style={styles.textNumber}>
-            {number && owner ? number : ' '}
-          </Text>
-        </View>
-        <Icon
-          name="car"
-          type="FontAwesome5"
+    <View
+      style={[
+        styles.scrollViewInner,
+        styleConst.shadow.default,
+        styles.containerView,
+      ]}>
+      <View>
+        <Text
+          ellipsizeMode="tail"
+          numberOfLines={1}
           selectable={false}
-          style={styles.carIcon}
-        />
-        {type === 'check' && !disabled && (
-          <TouchableWithoutFeedback
-            containerStyle={styles.checkboxContainer}>
-            <View>
-              <CheckBox
-                onPress={() => {
-                  if (onPress) {
-                    return onPress();
-                  } else {
-                    return null;
-                  }
-                }}
-                checked={checked}
-                color="#027aff"
-                style={{marginRight: 10}}
-              />
-            </View>
-          </TouchableWithoutFeedback>
-        )}
-        {/* <Image style={{width: '100%'}} source={require('./Bitmap.png')} /> */}
+          style={styles.textBrandModel}>
+          {`${brand} ${model}`}
+        </Text>
+        <Text
+          ellipsizeMode="tail"
+          numberOfLines={1}
+          selectable={false}
+          style={styles.textNumber}>
+          {number && owner ? number : ' '}
+        </Text>
       </View>
-    </StyleProvider>
+      <Icon
+        name="car"
+        type="FontAwesome5"
+        selectable={false}
+        style={styles.carIcon}
+      />
+      {type === 'check' && !disabled && (
+        <TouchableWithoutFeedback containerStyle={styles.checkboxContainer}>
+          <View>
+            <CheckBox
+              onPress={() => {
+                if (onPress) {
+                  return onPress();
+                } else {
+                  return null;
+                }
+              }}
+              checked={checked}
+              color="#027aff"
+              style={{marginRight: 10}}
+            />
+          </View>
+        </TouchableWithoutFeedback>
+      )}
+      {/* <Image style={{width: '100%'}} source={require('./Bitmap.png')} /> */}
+    </View>
   );
 };

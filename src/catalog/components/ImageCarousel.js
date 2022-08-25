@@ -9,6 +9,7 @@ import {
   Pressable,
 } from 'react-native';
 import {Button, Icon} from 'native-base';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
 
 import Imager from '../../core/components/Imager';
 import styleConst from '../../core/style-const';
@@ -65,26 +66,40 @@ const ImageCarousel = ({
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Button
                 onPress={item.onPressWantACar}
-                style={[styles.itemOrder, styles.itemOrderWantACar, {height}]}>
-                <Icon
-                  type="MaterialCommunityIcons"
-                  name="wallet-giftcard"
-                  selectable={false}
-                  style={styles.iconButton}
-                />
+                style={[styles.itemOrder, styles.itemOrderWantACar, {height}]}
+                iconLeft={
+                  <Icon
+                    selectable={false}
+                    size={5}
+                    as={MaterialCommunityIcons}
+                    name="wallet-giftcard"
+                    color="white"
+                    _dark={{
+                      color: 'white',
+                    }}
+                    style={styles.iconButton}
+                  />
+                }>
                 <Text style={styles.iconText}>
                   {strings.NewCarItemScreen.wannaCar}
                 </Text>
               </Button>
               <Button
                 onPress={item.onPressTD}
-                style={[styles.itemOrder, styles.itemOrderTestDrive, {height}]}>
-                <Icon
-                  type="MaterialCommunityIcons"
-                  name="steering"
-                  selectable={false}
-                  style={styles.iconButton}
-                />
+                style={[styles.itemOrder, styles.itemOrderTestDrive, {height}]}
+                iconLeft={
+                  <Icon
+                    selectable={false}
+                    size={5}
+                    as={MaterialCommunityIcons}
+                    name="steering"
+                    color="white"
+                    _dark={{
+                      color: 'white',
+                    }}
+                    style={styles.iconButton}
+                  />
+                }>
                 <Text style={styles.iconText}>
                   {strings.NewCarItemScreen.testDrive}
                 </Text>
@@ -105,13 +120,20 @@ const ImageCarousel = ({
                         styles.itemOrderTop,
                         styles.itemOrderCallBack,
                         {height: height / 2 - 1},
-                      ]}>
-                      <Icon
-                        type="MaterialCommunityIcons"
-                        name="phone-incoming"
-                        selectable={false}
-                        style={styles.iconButtonSm}
-                      />
+                      ]}
+                      iconLeft={
+                        <Icon
+                          selectable={false}
+                          size={5}
+                          as={MaterialCommunityIcons}
+                          name="phone-incoming"
+                          color="white"
+                          _dark={{
+                            color: 'white',
+                          }}
+                          style={styles.iconButtonSm}
+                        />
+                      }>
                       <Text style={styles.iconTextSm}>
                         {strings.ContactsScreen.callOrder}
                       </Text>
@@ -125,13 +147,20 @@ const ImageCarousel = ({
                         styles.itemOrderBottom,
                         styles.itemOrderCall,
                         {height: height / 2 - 1},
-                      ]}>
-                      <Icon
-                        type="MaterialCommunityIcons"
-                        name="phone-outgoing"
-                        selectable={false}
-                        style={styles.iconButtonSm}
-                      />
+                      ]}
+                      iconLeft={
+                        <Icon
+                          selectable={false}
+                          size={5}
+                          as={MaterialCommunityIcons}
+                          name="phone-outgoing"
+                          color="white"
+                          _dark={{
+                            color: 'white',
+                          }}
+                          style={styles.iconButtonSm}
+                        />
+                      }>
                       <Text style={styles.iconTextSm}>
                         {strings.ContactsScreen.call}
                       </Text>
@@ -142,17 +171,20 @@ const ImageCarousel = ({
               {item.onPressWantACar ? (
                 <Button
                   onPress={item.onPressWantACar}
-                  style={[
-                    styles.itemOrder,
-                    styles.itemOrderWantACar,
-                    {height},
-                  ]}>
-                  <Icon
-                    type="MaterialCommunityIcons"
-                    name="wallet-giftcard"
-                    selectable={false}
-                    style={styles.iconButton}
-                  />
+                  style={[styles.itemOrder, styles.itemOrderWantACar, {height}]}
+                  iconLeft={
+                    <Icon
+                      selectable={false}
+                      size={5}
+                      as={MaterialCommunityIcons}
+                      name="wallet-giftcard"
+                      color="white"
+                      _dark={{
+                        color: 'white',
+                      }}
+                      style={styles.iconButton}
+                    />
+                  }>
                   <Text style={styles.iconText}>
                     {strings.NewCarItemScreen.wannaCar}
                   </Text>

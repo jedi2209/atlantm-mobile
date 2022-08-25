@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, View, Image, StyleSheet} from 'react-native';
+import {TouchableOpacity, Image, StyleSheet} from 'react-native';
 
 // components
-import {Footer} from 'native-base';
+import {View} from 'native-base';
 
 // helpers
 import PropTypes from 'prop-types';
@@ -68,13 +68,13 @@ export default class ReviewsFilter extends Component {
     const {onPressDate, onPressRating, onPressAddReview} = this.props;
 
     return (
-      <Footer style={[styleFooter.footerFilters, styleFooter.footer]}>
+      <View style={[styleFooter.footerFilters, styleFooter.footer]}>
         <View style={[styleConst.shadow.default, styles.container]}>
           {onPressRating ? this.renderIcon('rating', onPressRating) : null}
           {onPressDate ? this.renderIcon('date', onPressDate) : null}
           {onPressAddReview ? this.renderIcon('add', onPressAddReview) : null}
         </View>
-      </Footer>
+      </View>
     );
   }
 }

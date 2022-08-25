@@ -5,7 +5,6 @@ import {ONESIGNAL} from '../const';
 import Analytics from '../../utils/amplitude-analytics';
 import * as NavigationService from '../../navigation/NavigationService';
 
-// import notifee from '@notifee/react-native';
 import {get} from 'lodash';
 
 // const isAndroid = Platform.OS === 'android';
@@ -174,26 +173,4 @@ export default {
       });
     });
   },
-
-  // async showLocalMessage({title, message, category}) {
-  //   if (!category) {
-  //     category = 'onlineChat';
-  //   }
-  //   const channelId = await notifee.createChannel({
-  //     id: category,
-  //     name: 'Онлайн-чат',
-  //   });
-
-  //   await notifee.displayNotification({
-  //     title,
-  //     body: message,
-  //     android: {
-  //       channelId,
-  //       // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
-  //     },
-  //     ios: {
-  //       categoryId: category,
-  //     },
-  //   });
-  // },
 };

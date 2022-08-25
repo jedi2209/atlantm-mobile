@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, StatusBar} from 'react-native';
-import {StyleProvider} from 'native-base';
+import {SafeAreaView, StyleSheet} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -20,7 +19,6 @@ import ReviewsFilter from '../components/ReviewsFilter';
 import DealerItemList from '../../../core/components/DealerItemList';
 
 // helpers
-import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import {substractYears} from '../../../utils/date';
 import {strings} from '../../../core/lang/const';
@@ -72,7 +70,7 @@ class ReviewsScreen extends Component {
     }
   }
 
-  onPressItem = (review) => {
+  onPressItem = review => {
     const {navigation, actionReviewVisit} = this.props;
     navigation.navigate('ReviewScreen', {
       review,
@@ -81,7 +79,7 @@ class ReviewsScreen extends Component {
     this.props.actionReviewVisit(review.id);
   };
 
-  fetchReviews = (type) => {
+  fetchReviews = type => {
     let {
       pages,
       dateTo,
@@ -125,35 +123,27 @@ class ReviewsScreen extends Component {
     this.props.navigation.navigate('ReviewAddMessageStepScreen');
 
   render() {
-    const {
-      pages,
-      reviews,
-      navigation,
-      dealerSelected,
-      isFetchReviews,
-    } = this.props;
+    const {pages, reviews, navigation, dealerSelected, isFetchReviews} =
+      this.props;
 
     return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.content}>
-          <StatusBar barStyle="light-content" />
-          <DealerItemList dealer={dealerSelected} goBack={true} />
+      <SafeAreaView style={styles.content}>
+        <DealerItemList dealer={dealerSelected} goBack={true} />
 
-          <ReviewsList
-            items={reviews}
-            pages={pages}
-            dataHandler={this.fetchReviews}
-            onPressItemHandler={this.onPressItem}
-            isFetchItems={isFetchReviews}
-          />
+        <ReviewsList
+          items={reviews}
+          pages={pages}
+          dataHandler={this.fetchReviews}
+          onPressItemHandler={this.onPressItem}
+          isFetchItems={isFetchReviews}
+        />
 
-          <ReviewsFilter
-            onPressRating={this.onPressRating}
-            onPressDate={this.onPressDate}
-            onPressAddReview={this.onPressAddReview}
-          />
-        </SafeAreaView>
-      </StyleProvider>
+        <ReviewsFilter
+          onPressRating={this.onPressRating}
+          onPressDate={this.onPressDate}
+          onPressAddReview={this.onPressAddReview}
+        />
+      </SafeAreaView>
     );
   }
 }

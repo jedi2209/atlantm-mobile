@@ -1,10 +1,3 @@
-//
-//  NotificationService.m
-//  OneSignalNotificationServiceExtension
-//
-//  Created by Zavarka Team on 19/04/2020.
-//
-
 #import <OneSignal/OneSignal.h>
 
 #import "NotificationService.h"

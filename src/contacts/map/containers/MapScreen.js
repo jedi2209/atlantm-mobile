@@ -13,7 +13,11 @@ import {
 } from 'react-native';
 
 // Maps
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {
+  Marker,
+  enableLatestRenderer,
+  PROVIDER_GOOGLE,
+} from 'react-native-maps';
 
 // Redux
 import {connect} from 'react-redux';
@@ -25,6 +29,7 @@ import {
 
 // components
 import {Icon, Button} from 'native-base';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheet from '@alessiocancian/react-native-actionsheet';
 
 // Helpers
@@ -32,6 +37,8 @@ import {get} from 'lodash';
 import {verticalScale} from '../../../utils/scale';
 import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
+
+enableLatestRenderer();
 
 const isAndroid = Platform.OS === 'android';
 const {width, height} = Dimensions.get('window');
@@ -61,8 +68,6 @@ const styles = StyleSheet.create({
   },
   iconRoute: {
     marginLeft: 10,
-    fontSize: 30,
-    color: 'white',
   },
   spinner: {
     marginTop: verticalScale(260),
@@ -380,7 +385,7 @@ class MapScreen extends Component {
             loadingEnabled={true}
             loadingIndicatorColor={styleConst.color.blue}
             cacheEnabled={true}>
-            <MapView.Marker
+            <Marker
               coordinate={{
                 latitude: this.state.data.coords.latitude,
                 longitude: this.state.data.coords.longitude,
@@ -402,17 +407,23 @@ class MapScreen extends Component {
             onPress={this.onPressRouteVariant}
           />
           <Button
-            size="full"
-            full
+            size="md"
             testID="MapScreen.makeRouteButton"
             style={[styleConst.shadow.default, styles.button]}
             title={strings.MapScreen.makeRoute}
-            onPress={this.onPressRoute}>
-            <Icon
-              name="navigation"
-              style={styles.iconRoute}
-              type="MaterialCommunityIcons"
-            />
+            onPress={this.onPressRoute}
+            leftIcon={
+              <Icon
+                size={22}
+                as={MaterialCommunityIcons}
+                name="navigation"
+                color="white"
+                _dark={{
+                  color: 'white',
+                }}
+                style={styles.iconRoute}
+              />
+            }>
             <Text style={styles.buttonText}>
               {strings.MapScreen.makeRoute.toUpperCase()}
             </Text>

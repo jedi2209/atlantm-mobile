@@ -1,20 +1,18 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {
-  View,
   Text,
   Linking,
   Dimensions,
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
-  StatusBar,
   Image,
   BackHandler,
 } from 'react-native';
 import {TransitionPresets} from '@react-navigation/stack';
 import {useFocusEffect} from '@react-navigation/native';
 import TransitionView from '../../core/components/TransitionView';
-import {StyleProvider, Content, Button} from 'native-base';
+import {Button, ScrollView, View} from 'native-base';
 import ResponsiveImageView from 'react-native-responsive-image-view';
 
 // redux
@@ -26,7 +24,6 @@ import Badge from '../../core/components/Badge';
 
 // helpers
 import {get} from 'lodash';
-import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import processHtml from '../../utils/process-html';
 import Analytics from '../../utils/amplitude-analytics';
@@ -260,9 +257,6 @@ const InfoPostScreen = ({
           {...TransitionPresets.ModalTransition},
           {
             icon: 'close',
-            IconStyle: {
-              fontSize: 24,
-            },
           },
         ),
       );
@@ -288,94 +282,94 @@ const InfoPostScreen = ({
   }
 
   if (text) {
-    text = processHtml(text, webViewWidth);
+    //text = processHtml(text, webViewWidth);
   }
 
   return (
-    <StyleProvider style={getTheme()}>
-      <View style={styleConst.safearea.default}>
-        <StatusBar hidden />
-        <Content
-          style={{margin: 0, padding: 0}}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
-          }>
-          {!text || isLoading ? (
-            <ActivityIndicator
-              color={styleConst.color.blue}
-              style={styles.spinner}
-            />
-          ) : (
-            <View>
-              <View style={[styles.imageContainer]}>
-                {imageUrl ? (
-                  <ResponsiveImageView source={{uri: imageUrl}}>
-                    {({getViewProps, getImageProps}) => (
-                      <View {...getViewProps()}>
-                        <Image {...getImageProps()} />
-                      </View>
-                    )}
-                  </ResponsiveImageView>
-                ) : null}
-              </View>
-              <View style={styles.textContainer} onLayout={onLayoutWebView}>
-                {date ? (
-                  <Text style={styles.date}>{processDate(date)}</Text>
-                ) : null}
-                {type && type.badge ? (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      marginTop: 3,
-                      paddingHorizontal: 9,
-                    }}>
-                    <Badge
-                      id={type.id}
-                      key={'badgeItem' + type.id}
-                      index={0}
-                      bgColor={type?.badge?.background}
-                      name={type?.name[currLang]}
-                      textColor={type?.badge?.color}
-                    />
-                  </View>
-                ) : null}
-                <WebViewAutoHeight
-                  style={{
-                    backgroundColor: styleConst.color.bg,
-                  }}
-                  key={get(postData, 'hash')}
-                  source={{html: text}}
-                  onMessage={onMessage}
-                />
-              </View>
+    <View style={{flex: 1}} backgroundColor={'white'}>
+      <ScrollView
+        style={{margin: 0, padding: 0, flex: 1}}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
+        }>
+        {!text || isLoading ? (
+          <ActivityIndicator
+            color={styleConst.color.blue}
+            style={styles.spinner}
+          />
+        ) : (
+          <View style={{flex: 1}}>
+            <View style={[styles.imageContainer]}>
+              {imageUrl ? (
+                <ResponsiveImageView source={{uri: imageUrl}}>
+                  {({getViewProps, getImageProps}) => (
+                    <View {...getViewProps()}>
+                      <Image {...getImageProps()} />
+                    </View>
+                  )}
+                </ResponsiveImageView>
+              ) : null}
             </View>
-          )}
-        </Content>
-        {type ? (
-          <TransitionView
-            animation={styleConst.animation.zoomIn}
-            duration={350}
-            index={1}
-            delay={3000}
-            style={[styleConst.shadow.default, styles.buttonWrapper]}>
-            {renderOrderButton({type, dealers})}
-            <Button
-              uppercase={false}
-              title={strings.InfoPostScreen.button.callMe}
-              style={[
-                styles.button,
-                styleConst.button.footer.buttonRight,
-                {backgroundColor: styleConst.color.lightBlue},
-              ]}
-              onPress={() => _onPressCallMe()}>
-              <Text style={styles.buttonText} selectable={false}>
-                {strings.InfoPostScreen.button.callMe}
-              </Text>
-            </Button>
-          </TransitionView>
-        ) : null}
-      </View>
-    </StyleProvider>
+            <View
+              onLayout={onLayoutWebView}
+              style={{flex: 1}}
+              paddingBottom="1/3">
+              {date ? (
+                <Text style={styles.date}>{processDate(date)}</Text>
+              ) : null}
+              {type && type.badge ? (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginTop: 3,
+                    paddingHorizontal: 9,
+                  }}>
+                  <Badge
+                    id={type.id}
+                    key={'badgeItem' + type.id}
+                    index={0}
+                    bgColor={type?.badge?.background}
+                    name={type?.name[currLang]}
+                    textColor={type?.badge?.color}
+                  />
+                </View>
+              ) : null}
+              <WebViewAutoHeight
+                style={{
+                  backgroundColor: styleConst.color.bg,
+                }}
+                key={get(postData, 'hash')}
+                source={{html: text}}
+                onMessage={onMessage}
+              />
+            </View>
+          </View>
+        )}
+      </ScrollView>
+      {type ? (
+        <TransitionView
+          animation={styleConst.animation.zoomIn}
+          duration={350}
+          index={1}
+          delay={3000}
+          style={[styleConst.shadow.default, styles.buttonWrapper]}>
+          {renderOrderButton({type, dealers})}
+          <Button
+            uppercase={false}
+            title={strings.InfoPostScreen.button.callMe}
+            style={[
+              styles.button,
+              styleConst.button.footer.buttonRight,
+              {backgroundColor: styleConst.color.lightBlue},
+            ]}
+            onPress={() => _onPressCallMe()}>
+            <Text style={styles.buttonText} selectable={false}>
+              {strings.InfoPostScreen.button.callMe}
+            </Text>
+          </Button>
+        </TransitionView>
+      ) : null}
+    </View>
   );
 };
 

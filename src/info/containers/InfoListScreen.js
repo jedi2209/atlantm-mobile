@@ -8,9 +8,10 @@ import {
   ActivityIndicator,
   Dimensions,
   RefreshControl,
+  ScrollView,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Container, Text, StyleProvider, Icon} from 'native-base';
+import {Stack, Box, Text} from 'native-base';
 import {Offer} from '../../core/components/Offer';
 import Badge from '../../core/components/Badge';
 import TransitionView from '../../core/components/TransitionView';
@@ -30,7 +31,6 @@ import {INFO_LIST__FAIL} from '../actionTypes';
 // helpers
 import {get} from 'lodash';
 import {ERROR_NETWORK} from '../../core/const';
-import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import {verticalScale} from '../../utils/scale';
 import {strings} from '../../core/lang/const';
@@ -105,42 +105,6 @@ class InfoListScreen extends Component {
     };
   }
 
-  // static navigationOptions = ({navigation}) => {
-  //   const returnScreen =
-  //     navigation.state.params && navigation.state.params.returnScreen;
-
-  //   let pushActionSubscribeState =
-  //     (navigation.state.params &&
-  //       navigation.state.params.pushActionSubscribeState) ||
-  //     false;
-
-  //   let onSwitchSubscribe =
-  //     navigation.state.params && navigation.state.params.onSwitchSubscribe;
-
-  //   let pushStatusLoaded =
-  //     navigation.state.params && navigation.state.params.pushStatusLoaded;
-
-  //   return {
-  //     headerRight: () => {
-  //       return pushStatusLoaded ? (
-  //         <Icon
-  //           onPress={onSwitchSubscribe}
-  //           active={pushActionSubscribeState}
-  //           style={{
-  //             color: 'white',
-  //             marginHorizontal: 10,
-  //           }}
-  //           name={
-  //             pushActionSubscribeState
-  //               ? 'ios-notifications'
-  //               : 'ios-notifications-off'
-  //           }
-  //         />
-  //       ) : null;
-  //     },
-  //   };
-  // };
-
   static propTypes = {
     dealerSelected: PropTypes.object.isRequired,
     list: PropTypes.array.isRequired,
@@ -196,12 +160,6 @@ class InfoListScreen extends Component {
       actionListReset,
     } = this.props;
     const {region, id: dealer} = dealerSelected;
-
-    // navigation.setParams({
-    //   pushActionSubscribeState: this.props.pushActionSubscribeState,
-    //   onSwitchSubscribe: this.onSwitchActionSubscribe,
-    //   pushStatusLoaded: true,
-    // });
 
     if (!isFetchInfoList) {
       actionListReset();
@@ -290,93 +248,92 @@ class InfoListScreen extends Component {
 
     console.info('== InfoListScreen ==');
     return (
-      <StyleProvider style={getTheme()}>
-        <Container
-          style={styles.container}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this._onRefresh}
-              tintColor={styleConst.color.blue}
-              title={strings.InfoListScreen.refresh}
-              progressBackgroundColor={styleConst.color.blue}
-            />
-          }>
-          {!this.state.isRefreshing ? (
-            <>
-              {filters ? (
-                <View
-                  style={{
-                    marginBottom: 5,
-                    marginHorizontal: 10,
-                    flexDirection: 'row',
-                  }}>
-                  {filters.map((el, i) => {
-                    return (
-                      <Badge
-                        id={el.id}
-                        key={'badgeItem' + el.id + i}
-                        index={i}
-                        bgColor={el.badge?.background}
-                        name={el.name[currLang]}
-                        textColor={el.badge?.color}
-                        badgeContainerStyle={{marginRight: 20, padding: 10}}
-                        textStyle={{fontSize: 14}}
-                        onPress={() => {
-                          this.setState(
-                            {
-                              type: el.id,
-                            },
-                            () => {
-                              if (!isFetchInfoList) {
-                                actionListReset();
-                                fetchInfoList(
-                                  region,
-                                  dealer,
-                                  this.state.type,
-                                ).then(action => {
-                                  if (action.type === INFO_LIST__FAIL) {
-                                    let message = get(
-                                      action,
-                                      'payload.message',
-                                      strings.Notifications.error.text,
-                                    );
+      <Box
+        style={styles.container}
+        // refreshControl={
+        //   <RefreshControl
+        //     refreshing={this.state.refreshing}
+        //     onRefresh={this._onRefresh}
+        //     tintColor={styleConst.color.blue}
+        //     title={strings.InfoListScreen.refresh}
+        //     progressBackgroundColor={styleConst.color.blue}
+        //   />
+        // }
+      >
+        {!this.state.isRefreshing ? (
+          <>
+            {filters ? (
+              <View
+                style={{
+                  marginBottom: 5,
+                  marginHorizontal: 10,
+                  flexDirection: 'row',
+                }}>
+                {filters.map((el, i) => {
+                  return (
+                    <Badge
+                      id={el.id}
+                      key={'badgeItem' + el.id + i}
+                      index={i}
+                      bgColor={el.badge?.background}
+                      name={el.name[currLang]}
+                      textColor={el.badge?.color}
+                      badgeContainerStyle={{marginRight: 20, padding: 10}}
+                      textStyle={{fontSize: 14}}
+                      onPress={() => {
+                        this.setState(
+                          {
+                            type: el.id,
+                          },
+                          () => {
+                            if (!isFetchInfoList) {
+                              actionListReset();
+                              fetchInfoList(
+                                region,
+                                dealer,
+                                this.state.type,
+                              ).then(action => {
+                                if (action.type === INFO_LIST__FAIL) {
+                                  let message = get(
+                                    action,
+                                    'payload.message',
+                                    strings.Notifications.error.text,
+                                  );
 
-                                    if (message === 'Network request failed') {
-                                      message = ERROR_NETWORK;
-                                    }
-
-                                    setTimeout(() => Alert.alert(message), 100);
+                                  if (message === 'Network request failed') {
+                                    message = ERROR_NETWORK;
                                   }
-                                });
-                              }
-                            },
-                          );
-                        }}
-                      />
-                    );
-                  })}
-                </View>
-              ) : null}
-              <FlatList
-                data={list}
-                extraData={isFetchInfoList}
-                onRefresh={this._onRefresh}
-                refreshing={this.state.isRefreshing}
-                ListEmptyComponent={this.renderEmptyComponent}
-                style={styles.list}
-                renderItem={this.renderItem}
-                keyExtractor={item => `${item.hash.toString()}`}
-              />
-            </>
-          ) : (
-            <ActivityIndicator
-              color={styleConst.color.blue}
-              style={styles.spinner}
+
+                                  setTimeout(() => Alert.alert(message), 100);
+                                }
+                              });
+                            }
+                          },
+                        );
+                      }}
+                    />
+                  );
+                })}
+              </View>
+            ) : null}
+            <FlatList
+              data={list}
+              extraData={isFetchInfoList}
+              onRefresh={this._onRefresh}
+              refreshing={this.state.isRefreshing}
+              ListEmptyComponent={this.renderEmptyComponent}
+              style={styles.list}
+              renderItem={this.renderItem}
+              keyExtractor={item => `${item.hash.toString()}`}
             />
-          )}
-        </Container>
-      </StyleProvider>
+          </>
+        ) : (
+          <ActivityIndicator
+            color={styleConst.color.blue}
+            style={styles.spinner}
+          />
+        )}
+      </Box>
     );
   }
 }

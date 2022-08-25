@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {SafeAreaView, View, StatusBar} from 'react-native';
-import {Body, Label, Content, ListItem, StyleProvider} from 'native-base';
+import {SafeAreaView} from 'react-native';
+import {VStack, HStack, Box, Text, View, Button} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -15,7 +15,6 @@ import stylesList from '../../../core/components/Lists/style';
 
 // helpers
 import PropTypes from 'prop-types';
-import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import {
   substructMonth,
@@ -45,7 +44,7 @@ class ReviewsFilterDateScreen extends Component {
     return this.props.filterDatePeriod !== nextProps.filterDatePeriod;
   }
 
-  onPressItem = (selectedDatePeriod) => {
+  onPressItem = selectedDatePeriod => {
     const {actionSelectFilterDatePeriod} = this.props;
 
     requestAnimationFrame(() => {
@@ -59,7 +58,7 @@ class ReviewsFilterDateScreen extends Component {
     });
   };
 
-  processDate = (datePeriod) => {
+  processDate = datePeriod => {
     const {dateFrom, actionDateFromFill} = this.props;
     let newDateFrom = null;
 
@@ -83,45 +82,43 @@ class ReviewsFilterDateScreen extends Component {
     actionDateFromFill(newDateFrom);
   };
 
-  isDatePeriodSelected = (selectedDatePeriod) =>
+  isDatePeriodSelected = selectedDatePeriod =>
     this.props.filterDatePeriod === selectedDatePeriod;
 
   render() {
     return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styleConst.safearea.default}>
-          <StatusBar barStyle="light-content" />
-          <Content>
-            {[
-              strings.ReviewsFilterDateScreen.periods.all,
-              strings.ReviewsFilterDateScreen.periods.week,
-              strings.ReviewsFilterDateScreen.periods.month,
-              strings.ReviewsFilterDateScreen.periods.year,
-            ].map((period, idx, arrayPeriod) => {
-              const handler = () => this.onPressItem(period);
+      <SafeAreaView style={styleConst.safearea.default}>
+        <View>
+          {[
+            strings.ReviewsFilterDateScreen.periods.all,
+            strings.ReviewsFilterDateScreen.periods.week,
+            strings.ReviewsFilterDateScreen.periods.month,
+            strings.ReviewsFilterDateScreen.periods.year,
+          ].map((period, idx, arrayPeriod) => {
+            const handler = () => this.onPressItem(period);
 
-              return (
-                <View key={period} style={stylesList.listItemContainer}>
-                  <ListItem
-                    icon
-                    style={stylesList.listItemPressable}
-                    onPress={handler}>
+            return (
+              <View key={period} style={stylesList.listItemContainer}>
+                <Button
+                  style={stylesList.listItemPressable}
+                  onPress={handler}
+                  leftIcon={
                     <RadioIcon
                       containerStyle={{
                         marginTop: 5,
                       }}
                       selected={this.isDatePeriodSelected(period)}
                     />
-                    <Body style={stylesList.bodyWithLeftGap}>
-                      <Label style={stylesList.label}>{period}</Label>
-                    </Body>
-                  </ListItem>
-                </View>
-              );
-            })}
-          </Content>
-        </SafeAreaView>
-      </StyleProvider>
+                  }>
+                  <View style={stylesList.bodyWithLeftGap}>
+                    <Text style={stylesList.label}>{period}</Text>
+                  </View>
+                </Button>
+              </View>
+            );
+          })}
+        </View>
+      </SafeAreaView>
     );
   }
 }

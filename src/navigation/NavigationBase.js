@@ -1,29 +1,27 @@
-import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {
-  Text,
-  View,
-  Pressable,
-  Platform,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import React from 'react';
+import {StyleSheet, ActivityIndicator} from 'react-native';
 import {OrientationLocker, PORTRAIT} from 'react-native-orientation-locker';
 import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {
-  Header,
-  Container,
-  Card,
-  CardItem,
-  Content,
-  Right,
   Icon,
+  Actionsheet,
+  View,
+  Text,
+  Pressable,
+  Box,
+  VStack,
+  HStack,
+  useDisclose,
 } from 'native-base';
+
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
+
 import Orientation from 'react-native-orientation-locker';
 import {EVENT_REFRESH} from '../core/actionTypes';
-import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 
 // EKO
 import ReviewsScreen from '../eko/reviews/containers/ReviewsScreen';
@@ -258,16 +256,20 @@ export const Base = ({navigation, route}) => {
             },
             {
               icon: 'close',
-              IconStyle: {
-                fontSize: 24,
-              },
+              iconSize: 9,
             },
           )}
         />
         <StackBase.Screen
           name="IndicatorsScreen"
           component={IndicatorsScreen}
-          options={BigCloseButton(navigation, route)}
+          options={BigCloseButton(navigation, route, {
+            headerStyle: [
+              {
+                backgroundColor: styleConst.color.white,
+              },
+            ],
+          })}
         />
         <StackBase.Screen
           name="SettingsScreen"
@@ -283,8 +285,8 @@ export const Base = ({navigation, route}) => {
                 },
                 {
                   icon: 'md-close',
+                  iconSize: 12,
                   IconStyle: {
-                    fontSize: 42,
                     width: 40,
                     color: '#222B45',
                   },
@@ -334,9 +336,7 @@ export const Base = ({navigation, route}) => {
             },
             {
               icon: 'close',
-              IconStyle: {
-                fontSize: 42,
-              },
+              iconSize: 12,
               ContainerStyle: {
                 backgroundColor: 'rgba(0, 0, 0, 0.6)',
                 borderRadius: 15,
@@ -584,7 +584,23 @@ const EKO = ({navigation, route}) => (
     <StackEKO.Screen
       name="ReviewScreen"
       component={ReviewScreen}
-      options={ClassicHeaderBlue(strings.ReviewScreen.title, navigation, route)}
+      options={ClassicHeaderBlue(
+        strings.ReviewScreen.title,
+        navigation,
+        route,
+        {
+          headerLeft: () => {
+            return ArrowBack(navigation, route, {
+              icon: 'md-close',
+              iconSize: 12,
+              IconStyle: {
+                color: styleConst.color.white,
+              },
+            });
+          },
+          presentation: 'modal',
+        },
+      )}
     />
     <StackEKO.Screen
       name="ReviewsFilterDateScreen"
@@ -626,8 +642,7 @@ const EKO = ({navigation, route}) => (
 );
 
 const CarsStock = ({navigation, route}) => {
-  const bottomSheetModalRef = useRef(null);
-  const [bottomSheeetState, setBottomState] = useState(false);
+  const {isOpen, onOpen, onClose} = useDisclose();
 
   const sorting = useSelector(state => state.catalog.newCar.filters.sorting);
   let isSorted = 'priceAsc';
@@ -643,26 +658,6 @@ const CarsStock = ({navigation, route}) => {
       }
       break;
   }
-
-  const snapPoints = useMemo(() => [250], []);
-  // callbacks
-
-  const handleClosePress = () => bottomSheetModalRef.current?.close();
-
-  const handlePresentModalPress = useCallback(() => {
-    if (bottomSheeetState) {
-      bottomSheetModalRef.current?.close();
-    } else {
-      bottomSheetModalRef.current?.present();
-    }
-  }, [bottomSheeetState]);
-  const handleSheetChanges = useCallback(index => {
-    if (index > 0) {
-      setBottomState(true);
-    } else {
-      setBottomState(false);
-    }
-  }, []);
 
   return (
     <>
@@ -713,15 +708,23 @@ const CarsStock = ({navigation, route}) => {
             headerTitleStyle: stylesHeader.blueHeaderTitle,
             orientation: 'portrait',
             headerLeft: () => {
-              return ArrowBack(navigation, route, {theme: 'white'});
+              return ArrowBack(navigation, route, {
+                theme: 'white',
+                iconSize: 7,
+              });
             },
             headerRight: () => (
               <View style={stylesHeader.headerRightStyle}>
-                <Pressable onPress={() => handlePresentModalPress()}>
+                {/* <Pressable onPress={() => handlePresentModalPress()}> */}
+                <Pressable onPress={onOpen}>
                   <Icon
-                    type="MaterialCommunityIcons"
+                    size={7}
+                    as={MaterialCommunityIcons}
                     name="sort"
-                    selectable={false}
+                    color="white"
+                    _dark={{
+                      color: 'white',
+                    }}
                     style={styles.sortHeaderButton}
                   />
                 </Pressable>
@@ -740,9 +743,7 @@ const CarsStock = ({navigation, route}) => {
             },
             {
               icon: 'close',
-              IconStyle: {
-                fontSize: 24,
-              },
+              iconSize: 9,
             },
           )}
         />
@@ -752,161 +753,152 @@ const CarsStock = ({navigation, route}) => {
           options={{headerShown: false}}
         />
       </SearchStack.Navigator>
-      <BottomSheetModalProvider>
-        <BottomSheetModal
-          snapPoints={snapPoints}
-          index={0}
-          style={styleConst.shadow.light}
-          ref={bottomSheetModalRef}
-          onChange={handleSheetChanges}>
-          <Container>
-            <Header noShadow style={{backgroundColor: styleConst.color.white}}>
-              <Text selectable={false} style={styles.sortingBottomSheetTitle}>
+      <Actionsheet isOpen={isOpen} onClose={onClose}>
+        <Actionsheet.Content>
+          <View w="90%">
+            <Box h={60} justifyContent="center">
+              <Text
+                fontSize="xl"
+                color="gray.500"
+                _dark={{
+                  color: 'gray.300',
+                }}>
                 {strings.Sort.title}
               </Text>
-            </Header>
-            <Content>
-              <Card transparent>
-                <CardItem
-                  button
-                  first
+            </Box>
+            <Box>
+              <VStack space={4}>
+                <Pressable
                   onPress={() => {
-                    handleClosePress();
                     navigation.navigate('NewCarListScreen', {
                       sortBy: 'price',
                       sortDirection: 'asc',
                     });
+                    onClose();
                   }}>
-                  <Icon
-                    active
-                    style={[
-                      styles.sortingButtonIcon,
-                      isSorted === 'priceAsc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}
-                    selectable={false}
-                    type="FontAwesome5"
-                    name="sort-numeric-up"
-                  />
-                  <Text
-                    selectable={false}
-                    style={[
-                      styles.sortingButtonText,
-                      isSorted === 'priceAsc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}>
-                    {strings.Sort.price.asc}
-                  </Text>
-                  <Right>
+                  <HStack justifyContent="space-between">
+                    <Icon
+                      style={[
+                        styles.sortingButtonIcon,
+                        isSorted === 'priceAsc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}
+                      as={FontAwesome5}
+                      size={5}
+                      name="sort-numeric-up"
+                    />
+                    <Text
+                      selectable={false}
+                      style={[
+                        styles.sortingButtonText,
+                        isSorted === 'priceAsc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}>
+                      {strings.Sort.price.asc}
+                    </Text>
                     {isSorted === 'priceAsc' ? (
                       <Icon
-                        type="FontAwesome5"
+                        as={FontAwesome5}
                         name="check"
-                        selectable={false}
+                        size={5}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
-                  </Right>
-                </CardItem>
-                <CardItem
-                  button
+                  </HStack>
+                </Pressable>
+                <Pressable
                   onPress={() => {
-                    handleClosePress();
                     navigation.navigate('NewCarListScreen', {
                       sortBy: 'price',
                       sortDirection: 'desc',
                     });
+                    onClose();
                   }}>
-                  <Icon
-                    active
-                    style={[
-                      styles.sortingButtonIcon,
-                      isSorted === 'priceDesc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}
-                    selectable={false}
-                    type="FontAwesome5"
-                    name="sort-numeric-down-alt"
-                  />
-                  <Text
-                    selectable={false}
-                    style={[
-                      styles.sortingButtonText,
-                      isSorted === 'priceDesc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}>
-                    {strings.Sort.price.desc}
-                  </Text>
-                  <Right>
+                  <HStack justifyContent="space-between">
+                    <Icon
+                      style={[
+                        styles.sortingButtonIcon,
+                        isSorted === 'priceDesc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}
+                      as={FontAwesome5}
+                      size={5}
+                      name="sort-numeric-down-alt"
+                    />
+                    <Text
+                      selectable={false}
+                      style={[
+                        styles.sortingButtonText,
+                        isSorted === 'priceDesc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}>
+                      {strings.Sort.price.desc}
+                    </Text>
                     {isSorted === 'priceDesc' ? (
                       <Icon
-                        selectable={false}
-                        type="FontAwesome5"
+                        as={FontAwesome5}
                         name="check"
+                        size={5}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
-                  </Right>
-                </CardItem>
-                <CardItem
-                  button
-                  last
+                  </HStack>
+                </Pressable>
+                <Pressable
                   onPress={() => {
-                    handleClosePress();
                     navigation.navigate('NewCarListScreen', {
                       sortBy: 'created',
                       sortDirection: 'desc',
                     });
+                    onClose();
                   }}>
-                  <Icon
-                    active
-                    style={[
-                      styles.sortingButtonIcon,
-                      isSorted === 'createdDesc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}
-                    selectable={false}
-                    type="FontAwesome5"
-                    name="sort-amount-down"
-                  />
-                  <Text
-                    selectable={false}
-                    style={[
-                      styles.sortingButtonText,
-                      isSorted === 'createdDesc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}>
-                    {strings.Sort.date.desc}
-                  </Text>
-                  <Right>
+                  <HStack justifyContent="space-between">
+                    <Icon
+                      style={[
+                        styles.sortingButtonIcon,
+                        isSorted === 'createdDesc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}
+                      as={FontAwesome5}
+                      size={5}
+                      name="sort-amount-down"
+                    />
+                    <Text
+                      selectable={false}
+                      style={[
+                        styles.sortingButtonText,
+                        isSorted === 'createdDesc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}>
+                      {strings.Sort.date.desc}
+                    </Text>
                     {isSorted === 'createdDesc' ? (
                       <Icon
-                        type="FontAwesome5"
+                        as={FontAwesome5}
                         name="check"
-                        selectable={false}
+                        size={5}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
-                  </Right>
-                </CardItem>
-              </Card>
-            </Content>
-          </Container>
-        </BottomSheetModal>
-      </BottomSheetModalProvider>
+                  </HStack>
+                </Pressable>
+              </VStack>
+            </Box>
+          </View>
+        </Actionsheet.Content>
+      </Actionsheet>
     </>
   );
 };
 
 const UsedCars = ({navigation, route}) => {
-  const bottomSheetModalRefUsed = useRef(null);
-  const [bottomSheeetState, setBottomState] = useState(false);
+  const {isOpen, onOpen, onClose} = useDisclose();
 
   const sorting = useSelector(state => state.catalog.usedCar.filters?.sorting);
   let isSorted = 'priceAsc';
@@ -931,24 +923,6 @@ const UsedCars = ({navigation, route}) => {
       break;
   }
 
-  const snapPoints = useMemo(() => [370], []);
-  // callbacks
-  const handleSheetChanges = useCallback(index => {
-    if (index > 0) {
-      setBottomState(true);
-    } else {
-      setBottomState(false);
-    }
-  }, []);
-  const handlePresentModalPress = useCallback(() => {
-    if (bottomSheeetState) {
-      bottomSheetModalRefUsed.current?.close();
-    } else {
-      bottomSheetModalRefUsed.current?.present();
-    }
-  }, [bottomSheeetState]);
-  const handleClosePress = () => bottomSheetModalRefUsed.current.close();
-
   return (
     <>
       <StackCatalogUsed.Navigator initialRouteName="UsedCarListScreen">
@@ -968,16 +942,20 @@ const UsedCars = ({navigation, route}) => {
             headerStyle: stylesHeader.blueHeader,
             headerTitleStyle: stylesHeader.blueHeaderTitle,
             headerLeft: () => {
-              return ArrowBack(navigation, route, {theme: 'white'});
+              return ArrowBack(navigation, route, {
+                theme: 'white',
+                iconSize: 7,
+              });
             },
             headerRight: () => (
               <View style={stylesHeader.headerRightStyle}>
-                <Pressable onPress={() => handlePresentModalPress()}>
+                <Pressable onPress={() => onOpen()}>
                   <Icon
-                    type="MaterialCommunityIcons"
+                    as={MaterialCommunityIcons}
                     name="sort"
-                    selectable={false}
                     style={styles.sortHeaderButton}
+                    size={7}
+                    color="white"
                   />
                 </Pressable>
               </View>
@@ -995,33 +973,29 @@ const UsedCars = ({navigation, route}) => {
             },
             {
               icon: 'close',
-              IconStyle: {
-                fontSize: 24,
-              },
+              iconSize: 9,
             },
           )}
         />
       </StackCatalogUsed.Navigator>
-      <BottomSheetModalProvider>
-        <BottomSheetModal
-          snapPoints={snapPoints}
-          index={0}
-          style={styleConst.shadow.light}
-          ref={bottomSheetModalRefUsed}
-          onChange={handleSheetChanges}>
-          <Container>
-            <Header noShadow style={{backgroundColor: styleConst.color.white}}>
-              <Text selectable={false} style={styles.sortingBottomSheetTitle}>
+
+      <Actionsheet isOpen={isOpen} onClose={onClose}>
+        <Actionsheet.Content>
+          <View w="90%">
+            <Box h={60} justifyContent="center">
+              <Text
+                fontSize="xl"
+                color="gray.500"
+                _dark={{
+                  color: 'gray.300',
+                }}>
                 {strings.Sort.title}
               </Text>
-            </Header>
-            <Content>
-              <Card transparent>
-                <CardItem
-                  button
-                  first
+            </Box>
+            <Box>
+              <VStack space={4}>
+                <Pressable
                   onPress={() => {
-                    handleClosePress();
                     navigation.navigate('UsedCarListScreenStack', {
                       screen: 'UsedCarListScreen',
                       params: {
@@ -1029,44 +1003,42 @@ const UsedCars = ({navigation, route}) => {
                         sortDirection: 'asc',
                       },
                     });
+                    onClose();
                   }}>
-                  <Icon
-                    active
-                    style={[
-                      styles.sortingButtonIcon,
-                      isSorted === 'priceAsc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}
-                    selectable={false}
-                    type="FontAwesome5"
-                    name="sort-numeric-up"
-                  />
-                  <Text
-                    selectable={false}
-                    style={[
-                      styles.sortingButtonText,
-                      isSorted === 'priceAsc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}>
-                    {strings.Sort.price.asc}
-                  </Text>
-                  <Right>
+                  <HStack justifyContent="space-between">
+                    <Icon
+                      style={[
+                        styles.sortingButtonIcon,
+                        isSorted === 'priceAsc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}
+                      as={FontAwesome5}
+                      size={5}
+                      name="sort-numeric-up"
+                    />
+                    <Text
+                      selectable={false}
+                      style={[
+                        styles.sortingButtonText,
+                        isSorted === 'priceAsc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}>
+                      {strings.Sort.price.asc}
+                    </Text>
                     {isSorted === 'priceAsc' ? (
                       <Icon
-                        type="FontAwesome5"
+                        as={FontAwesome5}
                         name="check"
-                        selectable={false}
+                        size={5}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
-                  </Right>
-                </CardItem>
-                <CardItem
-                  button
+                  </HStack>
+                </Pressable>
+                <Pressable
                   onPress={() => {
-                    handleClosePress();
                     navigation.navigate('UsedCarListScreenStack', {
                       screen: 'UsedCarListScreen',
                       params: {
@@ -1074,45 +1046,42 @@ const UsedCars = ({navigation, route}) => {
                         sortDirection: 'desc',
                       },
                     });
+                    onClose();
                   }}>
-                  <Icon
-                    active
-                    style={[
-                      styles.sortingButtonIcon,
-                      isSorted === 'priceDesc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}
-                    type="FontAwesome5"
-                    selectable={false}
-                    name="sort-numeric-down-alt"
-                  />
-                  <Text
-                    selectable={false}
-                    style={[
-                      styles.sortingButtonText,
-                      isSorted === 'priceDesc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}>
-                    {strings.Sort.price.desc}
-                  </Text>
-                  <Right>
+                  <HStack justifyContent="space-between">
+                    <Icon
+                      style={[
+                        styles.sortingButtonIcon,
+                        isSorted === 'priceDesc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}
+                      as={FontAwesome5}
+                      size={5}
+                      name="sort-numeric-down-alt"
+                    />
+                    <Text
+                      selectable={false}
+                      style={[
+                        styles.sortingButtonText,
+                        isSorted === 'priceDesc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}>
+                      {strings.Sort.price.desc}
+                    </Text>
                     {isSorted === 'priceDesc' ? (
                       <Icon
-                        type="FontAwesome5"
+                        as={FontAwesome5}
                         name="check"
-                        selectable={false}
+                        size={5}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
-                  </Right>
-                </CardItem>
-                <CardItem
-                  button
-                  last
+                  </HStack>
+                </Pressable>
+                <Pressable
                   onPress={() => {
-                    handleClosePress();
                     navigation.navigate('UsedCarListScreenStack', {
                       screen: 'UsedCarListScreen',
                       params: {
@@ -1120,45 +1089,42 @@ const UsedCars = ({navigation, route}) => {
                         sortDirection: 'desc',
                       },
                     });
+                    onClose();
                   }}>
-                  <Icon
-                    active
-                    style={[
-                      styles.sortingButtonIcon,
-                      isSorted === 'createdDesc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}
-                    selectable={false}
-                    type="FontAwesome5"
-                    name="sort-amount-down"
-                  />
-                  <Text
-                    selectable={false}
-                    style={[
-                      styles.sortingButtonText,
-                      isSorted === 'createdDesc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}>
-                    {strings.Sort.date.desc}
-                  </Text>
-                  <Right>
+                  <HStack justifyContent="space-between">
+                    <Icon
+                      style={[
+                        styles.sortingButtonIcon,
+                        isSorted === 'createdDesc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}
+                      as={FontAwesome5}
+                      size={5}
+                      name="sort-amount-down"
+                    />
+                    <Text
+                      selectable={false}
+                      style={[
+                        styles.sortingButtonText,
+                        isSorted === 'createdDesc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}>
+                      {strings.Sort.date.desc}
+                    </Text>
                     {isSorted === 'createdDesc' ? (
                       <Icon
-                        type="FontAwesome5"
+                        as={FontAwesome5}
                         name="check"
-                        selectable={false}
+                        size={5}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
-                  </Right>
-                </CardItem>
-                <CardItem
-                  button
-                  last
+                  </HStack>
+                </Pressable>
+                <Pressable
                   onPress={() => {
-                    handleClosePress();
                     navigation.navigate('UsedCarListScreenStack', {
                       screen: 'UsedCarListScreen',
                       params: {
@@ -1166,45 +1132,42 @@ const UsedCars = ({navigation, route}) => {
                         sortDirection: 'desc',
                       },
                     });
+                    onClose();
                   }}>
-                  <Icon
-                    active
-                    style={[
-                      styles.sortingButtonIcon,
-                      isSorted === 'yearDesc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}
-                    selectable={false}
-                    type="FontAwesome5"
-                    name="sort-amount-down"
-                  />
-                  <Text
-                    selectable={false}
-                    style={[
-                      styles.sortingButtonText,
-                      isSorted === 'yearDesc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}>
-                    {strings.Sort.year.desc}
-                  </Text>
-                  <Right>
+                  <HStack justifyContent="space-between">
+                    <Icon
+                      style={[
+                        styles.sortingButtonIcon,
+                        isSorted === 'yearDesc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}
+                      as={FontAwesome5}
+                      size={5}
+                      name="sort-amount-down"
+                    />
+                    <Text
+                      selectable={false}
+                      style={[
+                        styles.sortingButtonText,
+                        isSorted === 'yearDesc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}>
+                      {strings.Sort.year.desc}
+                    </Text>
                     {isSorted === 'yearDesc' ? (
                       <Icon
-                        type="FontAwesome5"
+                        as={FontAwesome5}
                         name="check"
-                        selectable={false}
+                        size={5}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
-                  </Right>
-                </CardItem>
-                <CardItem
-                  button
-                  last
+                  </HStack>
+                </Pressable>
+                <Pressable
                   onPress={() => {
-                    handleClosePress();
                     navigation.navigate('UsedCarListScreenStack', {
                       screen: 'UsedCarListScreen',
                       params: {
@@ -1212,44 +1175,42 @@ const UsedCars = ({navigation, route}) => {
                         sortDirection: 'asc',
                       },
                     });
+                    onClose();
                   }}>
-                  <Icon
-                    active
-                    style={[
-                      styles.sortingButtonIcon,
-                      isSorted === 'yearAsc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}
-                    type="FontAwesome5"
-                    name="sort-numeric-down-alt"
-                  />
-                  <Text
-                    selectable={false}
-                    style={[
-                      styles.sortingButtonText,
-                      isSorted === 'yearAsc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}>
-                    {strings.Sort.year.asc}
-                  </Text>
-                  <Right>
+                  <HStack justifyContent="space-between">
+                    <Icon
+                      style={[
+                        styles.sortingButtonIcon,
+                        isSorted === 'yearAsc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}
+                      as={FontAwesome5}
+                      size={5}
+                      name="sort-numeric-down-alt"
+                    />
+                    <Text
+                      selectable={false}
+                      style={[
+                        styles.sortingButtonText,
+                        isSorted === 'yearAsc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}>
+                      {strings.Sort.year.asc}
+                    </Text>
                     {isSorted === 'yearAsc' ? (
                       <Icon
-                        type="FontAwesome5"
+                        as={FontAwesome5}
                         name="check"
-                        selectable={false}
+                        size={5}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
-                  </Right>
-                </CardItem>
-                <CardItem
-                  button
-                  last
+                  </HStack>
+                </Pressable>
+                <Pressable
                   onPress={() => {
-                    handleClosePress();
                     navigation.navigate('UsedCarListScreenStack', {
                       screen: 'UsedCarListScreen',
                       params: {
@@ -1257,45 +1218,45 @@ const UsedCars = ({navigation, route}) => {
                         sortDirection: 'asc',
                       },
                     });
+                    onClose();
                   }}>
-                  <Icon
-                    active
-                    style={[
-                      styles.sortingButtonIcon,
-                      isSorted === 'mileageAsc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}
-                    type="FontAwesome5"
-                    name="sort-amount-down-alt"
-                    selectable={false}
-                  />
-                  <Text
-                    selectable={false}
-                    style={[
-                      styles.sortingButtonText,
-                      isSorted === 'mileageAsc'
-                        ? styles.sortingColorSelected
-                        : null,
-                    ]}>
-                    {strings.Sort.mileage.asc}
-                  </Text>
-                  <Right>
+                  <HStack justifyContent="space-between">
+                    <Icon
+                      style={[
+                        styles.sortingButtonIcon,
+                        isSorted === 'mileageAsc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}
+                      as={FontAwesome5}
+                      size={5}
+                      name="sort-amount-down-alt"
+                    />
+                    <Text
+                      selectable={false}
+                      style={[
+                        styles.sortingButtonText,
+                        isSorted === 'mileageAsc'
+                          ? styles.sortingColorSelected
+                          : null,
+                      ]}>
+                      {strings.Sort.mileage.asc}
+                    </Text>
                     {isSorted === 'mileageAsc' ? (
                       <Icon
-                        type="FontAwesome5"
+                        as={FontAwesome5}
                         name="check"
-                        selectable={false}
+                        size={5}
                         style={styles.sortingColorSelected}
                       />
                     ) : null}
-                  </Right>
-                </CardItem>
-              </Card>
-            </Content>
-          </Container>
-        </BottomSheetModal>
-      </BottomSheetModalProvider>
+                  </HStack>
+                </Pressable>
+              </VStack>
+            </Box>
+          </View>
+        </Actionsheet.Content>
+      </Actionsheet>
     </>
   );
 };
@@ -1339,8 +1300,6 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   sortHeaderButton: {
-    color: styleConst.color.white,
-    fontSize: 25,
     marginRight: 20,
   },
   sortingBottomSheetWrapper: {

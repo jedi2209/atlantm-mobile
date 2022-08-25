@@ -20,7 +20,6 @@ import WebViewAutoHeight from '../../../core/components/WebViewAutoHeight';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 import Analytics from '../../../utils/amplitude-analytics';
-import getTheme from '../../../../native-base-theme/components';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -60,12 +59,8 @@ class BonusInfoScreen extends Component {
   }
 
   componentDidMount() {
-    const {
-      navigation,
-      bonusInfo,
-      actionFetchBonusInfo,
-      dealerSelected,
-    } = this.props;
+    const {navigation, bonusInfo, actionFetchBonusInfo, dealerSelected} =
+      this.props;
     const {region} = dealerSelected;
 
     let refererScreen = get(this.props.route, 'params.refererScreen', null);
@@ -77,7 +72,7 @@ class BonusInfoScreen extends Component {
     actionFetchBonusInfo({region});
   }
 
-  onLayoutWebView = (e) => {
+  onLayoutWebView = e => {
     const {width: webViewWidth} = e.nativeEvent.layout;
 
     this.setState({webViewWidth});
@@ -91,22 +86,20 @@ class BonusInfoScreen extends Component {
     }
 
     return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <StatusBar barStyle="dark-content" />
-          <Content>
-            {bonusInfo ? (
-              <View
-                style={styles.webviewContainer}
-                onLayout={this.onLayoutWebView}>
-                <WebViewAutoHeight source={{html: bonusInfo}} />
-              </View>
-            ) : (
-              <SpinnerView />
-            )}
-          </Content>
-        </SafeAreaView>
-      </StyleProvider>
+      <SafeAreaView style={styles.safearea}>
+        <StatusBar barStyle="dark-content" />
+        <Content>
+          {bonusInfo ? (
+            <View
+              style={styles.webviewContainer}
+              onLayout={this.onLayoutWebView}>
+              <WebViewAutoHeight source={{html: bonusInfo}} />
+            </View>
+          ) : (
+            <SpinnerView />
+          )}
+        </Content>
+      </SafeAreaView>
     );
   }
 }

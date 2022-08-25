@@ -1,7 +1,16 @@
 import React, {useState, useReducer} from 'react';
-import PropTypes from 'prop-types';
-import {View, ActivityIndicator, StyleSheet, Platform} from 'react-native';
-import {Container, Button, Icon, Content, Text, CheckBox} from 'native-base';
+import {ActivityIndicator, StyleSheet, Platform} from 'react-native';
+import {
+  VStack,
+  HStack,
+  Container,
+  View,
+  Button,
+  Icon,
+  Text,
+  Checkbox,
+} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import BrandLogo from '../../../core/components/BrandLogo';
 import NestedListView, {NestedRow} from 'react-native-nested-listview';
 import {connect} from 'react-redux';
@@ -152,14 +161,16 @@ const BrandModelFilterScreen = ({
         level={level}
         style={styles[`nestedRow${level}${node.opened ? 'Opened' : 'Closed'}`]}>
         {level === 1 && node.id ? (
-          <View style={{flexDirection: 'row', flex: 1}}>
-            <Icon
-              type={'Ionicons'}
-              style={styles.brandCaret}
-              name={node.opened ? 'caret-down' : 'caret-forward'}
-            />
+          <VStack>
             <View style={styles.colorWrapper}>
-              <View style={{flexDirection: 'row'}}>
+              <HStack>
+                <Icon
+                  as={Ionicons}
+                  size={5}
+                  color={'gray.300'}
+                  pt={1}
+                  name={node.opened ? 'caret-down' : 'caret-forward'}
+                />
                 {stockType != 'Used' ? (
                   <BrandLogo
                     brand={node.id}
@@ -169,9 +180,9 @@ const BrandModelFilterScreen = ({
                   />
                 ) : null}
                 <Text style={styles.colorText}>{node.label}</Text>
-              </View>
-              <CheckBox
-                onPress={() => {
+              </HStack>
+              <Checkbox
+                onChange={() => {
                   let typeTmp = 'add';
                   if (brandFilter[node.id]) {
                     typeTmp = 'delete';
@@ -184,15 +195,15 @@ const BrandModelFilterScreen = ({
                   });
                   setUpdateNestedList(!nestedListUpdate);
                 }}
-                checked={brandFilter && brandFilter[node.id] ? true : false}
+                isChecked={brandFilter && brandFilter[node.id] ? true : false}
               />
             </View>
-          </View>
+          </VStack>
         ) : (
           <View style={styles[`nestedRow${level}Inner`]}>
             <Text style={{fontSize: 14}}>{node.label}</Text>
-            <CheckBox
-              onPress={() => {
+            <Checkbox
+              onChange={() => {
                 let typeTmp = 'add';
                 if (modelFilter[node.id]) {
                   typeTmp = 'delete';
@@ -201,7 +212,7 @@ const BrandModelFilterScreen = ({
                 _onChangeFilter('modelFilter', modelFilter);
                 setUpdateNestedList(!nestedListUpdate);
               }}
-              checked={modelFilter && modelFilter[node.id] ? true : false}
+              isChecked={modelFilter && modelFilter[node.id] ? true : false}
             />
           </View>
         )}
@@ -224,8 +235,8 @@ const BrandModelFilterScreen = ({
   }
 
   return (
-    <Container style={styles.container}>
-      <Content style={{marginBottom: 50}}>
+    <View flex={1} backgroundColor={'white'}>
+      <View style={{paddingBottom: 70}}>
         <NestedListView
           data={accordionModels}
           onNodePressed={node => _onNestedNodePress(node)}
@@ -233,11 +244,18 @@ const BrandModelFilterScreen = ({
             _renderNodeNested(node, level, isLastLevel)
           }
         />
-      </Content>
-      <View style={styles.resultButtonWrapper}>
+      </View>
+      <Button.Group
+        position={'absolute'}
+        colorScheme="blue"
+        size={'md'}
+        px={'1/6'}
+        justifyContent="space-between"
+        width={'100%'}
+        bottom={isAndroid ? 10 : 30}
+        style={styles.resultButtonWrapper22}>
         <Button
           variant="unstyled"
-          transparent
           onPress={() => {
             setModelFilter({type: 'clear'});
             setBrandFilter({type: 'clear'});
@@ -248,28 +266,21 @@ const BrandModelFilterScreen = ({
             setUpdateNestedList(!nestedListUpdate);
             clearBrandModelFilters();
           }}
+          _text={[styles.modalButtonText, styles.modalButtonTextCancel]}
           style={[styles.modalButton]}>
-          <Text style={[styles.modalButtonText, styles.modalButtonTextCancel]}>
-            {strings.Base.reset}
-          </Text>
+          {strings.Base.reset}
         </Button>
         <Button
-          style={[
-            styles.resultButton,
-            styles.resultButtonEnabled,
-            styleConst.shadow.default,
-          ]}
-          block
-          disabled={false}
-          active={true}
+          shadow={7}
+          _text={{textTransform: 'uppercase'}}
           onPress={() => {
             saveBrandModelFilter({stateFilters, stockType});
             navigation.goBack();
           }}>
-          <Text style={styles.resultButtonText}>{strings.Base.choose}</Text>
+          {strings.Base.choose}
         </Button>
-      </View>
-    </Container>
+      </Button.Group>
+    </View>
   );
 };
 
@@ -332,27 +343,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     marginRight: 10,
-    marginTop: 0,
+    marginTop: 2,
   },
   brandLogoWrapper: {},
-  brandCaret: {
-    fontSize: 26,
-    marginTop: -4,
-    marginRight: '5%',
-    padding: 0,
-    color: styleConst.color.systemGray,
-  },
   resultButtonWrapper: {
     zIndex: 100,
-    position: 'absolute',
     width: '90%',
     marginHorizontal: '5%',
-    bottom: isAndroid ? 10 : 30,
     alignItems: 'center',
     alignContent: 'center',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   resultButton: {
     zIndex: 99,

@@ -1,7 +1,7 @@
 import React, {useReducer} from 'react';
 import {View, StyleSheet, Text, TouchableHighlight} from 'react-native';
 import RNBounceable from '@freakycoder/react-native-bounceable';
-import {CheckBox} from 'native-base';
+import {Checkbox, HStack, Pressable} from 'native-base';
 import Imager from './Imager';
 import {get} from 'lodash';
 
@@ -85,22 +85,24 @@ const CheckboxList = ({
                   />
                 </View>
               ) : null}
-              <View style={styles.wrapper}>
-                <RNBounceable
+              <View style={{flex: 1}}>
+                <Pressable
                   onPress={() => {
                     _onSelect({id});
                     forceUpdate();
                   }}>
-                  <Text style={styles.text}>{text}</Text>
-                </RNBounceable>
-                <CheckBox
-                  color={checkboxColor}
-                  checked={def.includes(id) ? true : false}
-                  onPress={() => {
-                    _onSelect({id});
-                    forceUpdate();
-                  }}
-                />
+                  <HStack justifyContent="space-between">
+                    <Text style={styles.text}>{text}</Text>
+                    <Checkbox
+                      color={checkboxColor}
+                      isChecked={def.includes(id) ? true : false}
+                      onChange={() => {
+                        _onSelect({id});
+                        forceUpdate();
+                      }}
+                    />
+                  </HStack>
+                </Pressable>
               </View>
             </View>
           </TouchableHighlight>
@@ -116,10 +118,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   wrapper: {
-    flex: 1,
-    flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingTop: 5,
   },
   text: {
     fontSize: 17,

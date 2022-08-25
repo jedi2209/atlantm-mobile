@@ -1,6 +1,5 @@
 import React from 'react';
-import {Alert, StyleSheet} from 'react-native';
-import {ListItem} from 'native-base';
+import {Alert, StyleSheet, Pressable} from 'react-native';
 import {connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 
@@ -106,13 +105,13 @@ const SelectItemByCountry = props => {
   }
 
   return (
-    <ListItem
+    <Pressable
       onPress={() => {
         return _onPressDealerItem(props);
       }}
       style={[stylesList.listItem, styles.listItem]}>
       <DealerCard item={item} />
-    </ListItem>
+    </Pressable>
   );
 };
 

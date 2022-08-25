@@ -4,11 +4,13 @@ import {View, Keyboard, StyleSheet, TouchableOpacity} from 'react-native';
 
 // components
 import * as NavigationService from '../../../navigation/NavigationService';
+import {Icon} from 'native-base';
 
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../../style-const';
-import {Icon} from 'native-base';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const containerSize = 40;
 const styles = StyleSheet.create({
@@ -27,11 +29,6 @@ const styles = StyleSheet.create({
     width: containerSize / 2,
     height: containerSize / 2,
     resizeMode: 'contain',
-  },
-  arrowFont: {
-    fontSize: 22,
-    // width: 22,
-    // marginTop: 4,
   },
 });
 
@@ -65,6 +62,14 @@ const HeaderBackButton = props => {
     blue: styleConst.color.lightBlue,
   };
 
+  let fontType = null;
+
+  switch (props.type) {
+    default:
+      fontType = Ionicons;
+      break;
+  }
+
   return (
     <TouchableOpacity
       style={[styles.container, props.ContainerStyle]}
@@ -72,10 +77,14 @@ const HeaderBackButton = props => {
       onPress={onPressBack}>
       <View style={[styles.inner, props.InnerStyle]}>
         <Icon
-          type={props.type}
+          size={props.iconSize}
+          as={fontType}
           name={props.icon}
+          color="white"
+          _dark={{
+            color: 'white',
+          }}
           style={[
-            styles.arrowFont,
             {
               color: fontColor[props.theme],
             },
@@ -96,6 +105,7 @@ HeaderBackButton.propTypes = {
 HeaderBackButton.defaultProps = {
   ContainerStyle: {},
   type: 'Ionicons',
+  iconSize: 10,
   icon: 'arrow-back',
   theme: 'blue',
 };

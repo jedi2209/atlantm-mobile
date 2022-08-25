@@ -90,9 +90,8 @@ const BigCloseButton = (navigation, route, options) => {
     headerLeft: () => {
       return ArrowBack(navigation, route, {
         icon: 'md-close',
+        iconSize: 10,
         IconStyle: {
-          fontSize: 42,
-          width: 40,
           color: '#222B45',
         },
       });

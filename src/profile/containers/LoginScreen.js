@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component, createRef} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {
   View,
   TextInput,
@@ -12,7 +12,10 @@ import {
   Platform,
   StyleSheet,
 } from 'react-native';
-import {Button, Icon, Toast} from 'native-base';
+import {Button, Icon, useToast} from 'native-base';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {store} from '../../core/store';
 import styleConst from '../../core/style-const';
 import LinearGradient from 'react-native-linear-gradient';
@@ -87,110 +90,78 @@ const mapDispatchToProps = {
   actionSavePofile,
   actionGetPhoneCode,
 };
-class LoginScreen extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      isSigninInProgress: false,
-      userInfo: {},
-      code: false,
-      checkCode: '',
-      phone: '',
-      codeValue: '',
-      vkLogin: false,
-      loading: false,
-      loadingVerify: false,
-      // pickerData: null,
-    };
+const LoginScreen = props => {
+  const toast = useToast();
+  const [isSigninInProgress, setSigninInProgress] = useState(false);
+  const [userInfo, setUserInfo] = useState({});
+  const [code, setCode] = useState(false);
+  const [checkCode, setCheckCode] = useState('');
+  const [phone, setPhone] = useState(props?.phone);
+  const [codeValue, setCodeValue] = useState('');
+  const [vkLogin, setVKLogin] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [loadingVerify, setLoadingVerify] = useState(false);
 
-    // this.scrollRef = createRef();
-    this.storeData = store.getState();
+  const storeData = store.getState();
 
-    this.FormConfig = {
-      fields: [
-        {
-          name: 'PHONELOGIN',
-          type: 'phone',
-          label: strings.Form.field.label.phone,
-          value: this.props.phone,
-          props: {
-            required: true,
-            focusNextInput: false,
-            offset: 5,
-          },
+  let CodeInput = [];
+  let otpArray = [];
+
+  const FormConfig = {
+    fields: [
+      {
+        name: 'PHONELOGIN',
+        type: 'phone',
+        label: strings.Form.field.label.phone,
+        value: phone,
+        props: {
+          required: true,
+          focusNextInput: false,
+          offset: 5,
         },
-      ],
-    };
-  }
+      },
+    ],
+  };
 
-  CodeInput = [];
-  otpArray = [];
-
-  componentDidMount() {
-    // this.keyboardShowListener = Keyboard.addListener(
-    //   'keyboardDidShow',
-    //   this.onKeyboardVisibleChange,
-    // );
-    // this.keyboardHideListener = Keyboard.addListener(
-    //   'keyboardDidHide',
-    //   this.onKeyboardVisibleChange,
-    // );
-    Analytics.logEvent('screen', 'profile/login');
-  }
-
-  componentWillUnmount() {
-    // this.keyboardShowListener.remove();
-    // this.keyboardHideListener.remove();
-  }
-
-  // onKeyboardVisibleChange = () => {
-  //   if (this.scrollRef && this.scrollRef.current) {
-  //     requestAnimationFrame(() => {
-  //       this.scrollRef.current.scrollToEnd();
-  //     });
-  //   }
-  // };
-
-  _onOtpChange = index => {
+  const _onOtpChange = index => {
     return value => {
       if (isNaN(Number(value))) {
         // do nothing when a non digit is pressed
         return;
       }
-      const otpArrayCopy = this.otpArray.concat();
+      const otpArrayCopy = otpArray.concat();
       otpArrayCopy[index] = value;
-      this.otpArray = otpArrayCopy;
-      this.onInputCode(this.otpArray.join(''));
+      otpArray = otpArrayCopy;
+      _onInputCode(otpArray.join(''));
 
       // auto focus to next InputText if value is not blank
       if (value !== '') {
         if (index < 3) {
-          this.CodeInput[Number(index + 1)].focus();
+          CodeInput[Number(index + 1)].focus();
         }
       } else {
         if (index > 0) {
-          this.CodeInput[Number(index - 1)].focus();
+          CodeInput[Number(index - 1)].focus();
         }
       }
     };
   };
 
-  _onOtpKeyPress = index => {
+  const _onOtpKeyPress = index => {
     return ({nativeEvent: {key: value}}) => {
       if (Number(value)) {
-        if (index > 0 && index < 3 && this.otpArray[index] !== '') {
-          this.CodeInput[Number(index + 1)].focus();
+        if (index > 0 && index < 3 && otpArray[index] !== '') {
+          CodeInput[Number(index + 1)].focus();
         }
       }
       // auto focus to previous InputText if value is blank and existing value is also blank
       if (
         value === 'Backspace' &&
-        (this.otpArray[index] === '' ||
-          typeof this.otpArray[index] === 'undefined')
+        (otpArray[index] === '' || typeof otpArray[index] === 'undefined')
       ) {
         if (index > 0) {
-          this.CodeInput[Number(index - 1)].focus();
+          CodeInput[Number(index - 1)].focus();
         }
         /**
          * clear the focused text box as well only on Android because on mweb onOtpChange will be also called
@@ -198,41 +169,95 @@ class LoginScreen extends Component {
          * todo check this behaviour on ios
          */
         if (isAndroid && index > 0) {
-          const otpArrayCopy = this.otpArray.concat();
+          const otpArrayCopy = otpArray.concat();
           otpArrayCopy[index - 1] = ''; // clear the previous box which will be in focus
-          this.otpArray = otpArrayCopy;
+          otpArray = otpArrayCopy;
         }
-        this.onInputCode(this.otpArray.join(''));
+        _onInputCode(otpArray.join(''));
       }
     };
   };
 
-  _cancelVerify = () => {
-    this.setState({
-      code: false,
-      loadingVerify: false,
-      checkCode: '',
-      codeValue: '',
-      phone: '',
-    });
+  const _onInputCode = text => {
+    if (text.length === 4) {
+      setCodeValue(text);
+      _verifyCodeStepTwo();
+    }
   };
 
-  _verifyCode = data => {
+  const _verifyCodeStepTwo = () => {
+    // тут специально одно равно чтобы сработало приведение типов
+    // eslint-disable-next-line eqeqeq
+    if (codeValue != checkCode) {
+      CodeInput[0].clear();
+      CodeInput[1].clear();
+      CodeInput[2].clear();
+      CodeInput[3].clear();
+      CodeInput[0].focus();
+      otpArray = [];
+      toast.show({
+        description: strings.ProfileScreen.Notifications.error.wrongCode,
+        placement: 'top',
+        status: 'warning',
+        variant: 'subtle',
+      });
+      return;
+    }
+    setLoadingVerify(true);
+    props
+      .actionGetPhoneCode({phone, codeValue})
+      .then(data => {
+        Keyboard.dismiss();
+        PushNotifications.addTag('login', data.user.ID);
+        if (data.user.SAP && data.user.SAP.ID) {
+          PushNotifications.addTag('sapID', data.user.SAP.ID);
+          PushNotifications.setExternalUserId(data.user.SAP.ID);
+        }
+        return props.actionSavePofile(data.user);
+      })
+      .then(() => {
+        setLoadingVerify(false);
+        setCodeValue('');
+        props.navigation.navigate('LoginScreen');
+      })
+      .catch(() => {
+        otpArray = [];
+        setLoadingVerify(false);
+        setCodeValue('');
+        // Toast.show({
+        //   text: strings.Notifications.error.text,
+        //   position: 'top',
+        //   type: 'warning',
+        // });
+      });
+  };
+
+  const _cancelVerify = () => {
+    setCode(false);
+    setLoadingVerify(false);
+    setCheckCode('');
+    setCodeValue('');
+    setPhone('');
+  };
+
+  const _verifyCode = data => {
     let phone = data.PHONELOGIN;
     const phoneCountry = PhoneDetect.country(phone);
     if (phoneCountry && phoneCountry.code === 'ua') {
-      Toast.show({
-        text: 'К сожалению вы не можете авторизоваться по этому номеру телефона',
-        position: 'top',
-        type: 'warning',
+      toast.show({
+        description:
+          'К сожалению вы не можете авторизоваться по этому номеру телефона',
+        placement: 'top',
+        variant: 'subtle',
         duration: 10000,
       });
       return false;
     }
-    this.setState({phone: phone, loadingVerify: true});
-    return this.props.actionGetPhoneCode({phone}).then(response => {
+    setLoadingVerify(true);
+    setPhone(phone);
+    return props.actionGetPhoneCode({phone}).then(response => {
       if (response.code >= 300) {
-        this._cancelVerify();
+        _cancelVerify();
 
         let message = strings.Notifications.error.text;
 
@@ -243,92 +268,42 @@ class LoginScreen extends Component {
         if (response.code === 406) {
           message = strings.ProfileScreen.Notifications.error.phoneProvider;
         }
-        Toast.show({
-          text: message,
-          position: 'top',
-          type: 'warning',
+        toast.show({
+          description: message,
+          placement: 'top',
+          variant: 'subtle',
         });
         return false;
       } else {
-        this.setState({
-          code: true,
-          loadingVerify: false,
-          checkCode: response.checkCode,
-        });
-        this.CodeInput[0].focus();
+        setLoadingVerify(false);
+        setCode(true);
+        setCheckCode(response.checkCode);
+        CodeInput[0].focus();
         return true;
       }
     });
   };
 
-  _verifyCodeStepTwo = () => {
-    const phone = this.state.phone;
-    const code = this.state.codeValue;
-
-    // тут специально одно равно чтобы сработало приведение типов
-    // eslint-disable-next-line eqeqeq
-    if (code != this.state.checkCode) {
-      this.CodeInput[0].clear();
-      this.CodeInput[1].clear();
-      this.CodeInput[2].clear();
-      this.CodeInput[3].clear();
-      this.CodeInput[0].focus();
-      this.otpArray = [];
-      Toast.show({
-        text: strings.ProfileScreen.Notifications.error.wrongCode,
-        buttonText: 'ОК',
-        position: 'top',
-        type: 'danger',
-      });
-      return;
-    }
-    this.setState({loading: true, loadingVerify: true});
-    this.props
-      .actionGetPhoneCode({phone, code})
-      .then(data => {
-        Keyboard.dismiss();
-        PushNotifications.addTag('login', data.user.ID);
-        if (data.user.SAP && data.user.SAP.ID) {
-          PushNotifications.addTag('sapID', data.user.SAP.ID);
-          PushNotifications.setExternalUserId(data.user.SAP.ID);
-        }
-        return this.props.actionSavePofile(data.user);
-      })
-      .then(() => {
-        this.setState({codeValue: '', loading: false, loadingVerify: false});
-        this.props.navigation.navigate('LoginScreen');
-      })
-      .catch(() => {
-        this.otpArray = [];
-        this.setState({codeValue: '', loading: false, loadingVerify: false});
-        Toast.show({
-          text: strings.Notifications.error.text,
-          position: 'top',
-          type: 'warning',
-        });
-      });
+  const _sendDataToApi = profile => {
+    setLoading(true);
+    return props.actionSavePofile(profile);
   };
 
-  _sendDataToApi(profile) {
-    this.setState({loading: true});
-    return this.props.actionSavePofile(profile);
-  }
-
-  _checkPhone = async data => {
+  const _checkPhone = async data => {
     data.update = 0;
-    const res = await this._sendDataToApi(data);
+    const res = await _sendDataToApi(data);
     if (res) {
       switch (res.type) {
         case 'SAVE_PROFILE__UPDATE':
           if (res.payload && res.payload.ID && res.payload.PHONE) {
             // нашли юзверя в CRM и у него есть телефон
-            this.setState({loading: false});
-            this.props.navigation.navigate('LoginScreen');
+            setLoading(false);
+            props.navigation.navigate('LoginScreen');
           }
           break;
         case 'SAVE_PROFILE__NOPHONE':
-          this.setState({loading: false});
-          this.props.navigation.navigate('PhoneChangeScreen', {
+          setLoading(false);
+          props.navigation.navigate('PhoneChangeScreen', {
             refererScreen: 'LoginScreen',
             returnScreen: 'LoginScreen',
             userSocialProfile: data,
@@ -340,8 +315,8 @@ class LoginScreen extends Component {
             switch (res.payload.code) {
               case 100: // Пользователь не зарегистрирован
                 delete data.update; // теперь будем регать пользователя по серьёзке
-                this.setState({loading: false});
-                this.props.navigation.navigate('PhoneChangeScreen', {
+                setLoading(false);
+                props.navigation.navigate('PhoneChangeScreen', {
                   refererScreen: 'LoginScreen',
                   returnScreen: 'LoginScreen',
                   userSocialProfile: data,
@@ -349,61 +324,44 @@ class LoginScreen extends Component {
                 });
                 break;
               default:
-                this.setState({loading: false});
-                Toast.show({
-                  text: strings.Notifications.error.text,
-                  position: 'top',
-                  type: 'warning',
+                setLoading(false);
+                toast.show({
+                  description: strings.Notifications.error.text,
+                  placement: 'top',
+                  variant: 'subtle',
                 });
                 break;
             }
           } else {
-            this.setState({loading: false});
-            Toast.show({
-              text: strings.Notifications.error.text,
-              position: 'top',
-              type: 'warning',
+            setLoading(false);
+            toast.show({
+              description: strings.Notifications.error.text,
+              placement: 'top',
+              variant: 'subtle',
             });
           }
           break;
       }
     } else {
-      this.setState({loading: false});
-      Toast.show({
-        text: strings.Notifications.error.text,
-        position: 'top',
-        type: 'warning',
+      setLoading(false);
+      toast.show({
+        description: strings.Notifications.error.text,
+        placement: 'top',
+        variant: 'subtle',
       });
     }
   };
 
-  onInputCode = text => {
-    if (text.length === 4) {
-      this.setState({codeValue: text}, () => {
-        this._verifyCodeStepTwo();
-      });
-    }
-  };
-
-  renderLoginButtons = region => {
+  const _renderLoginButtons = region => {
     let VKenabled = true;
     let ButtonWidth = '25%';
     let ButtonHeight = 50;
     const isAndroid = Platform.OS === 'android';
-    switch (region.toLowerCase()) {
-      case 'ua':
-        VKenabled = false;
-        ButtonWidth = '30%';
-        ButtonHeight = 60;
-        break;
-    }
     return (
       <View
         style={{
-          opacity: this.state.code ? 0 : 1,
-          height: this.state.code
-            ? Platform.select({ios: 'auto', android: 0})
-            : 'auto',
+          opacity: code ? 0 : 1,
+          height: code ? Platform.select({ios: 'auto', android: 0}) : 'auto',
           marginTop: 20,
           marginBottom: 10,
           width: '80%',
@@ -418,13 +376,10 @@ class LoginScreen extends Component {
           }}>
           <Button
             onPress={() => {
-              return Google.signIn(this._checkPhone);
+              return Google.signIn(_checkPhone);
             }}
-            disabled={this.state.isSigninInProgress}
-            iconLeft
-            leftIcon={
-              <Icon name="google" type="FontAwesome5" style={{marginLeft: 0}} />
-            }
+            disabled={isSigninInProgress}
+            leftIcon={<Icon name="google" size={7} as={FontAwesome5} />}
             style={[
               styleConst.shadow.default,
               styles.SocialLoginBt,
@@ -433,22 +388,14 @@ class LoginScreen extends Component {
                 height: ButtonHeight,
                 backgroundColor: '#4286F5',
               },
-            ]}>
-            <Icon name="google" type="FontAwesome5" style={{marginLeft: 0}} />
-          </Button>
+            ]}
+          />
           <Button
             onPress={() => {
-              return Facebook.signIn(this._checkPhone);
+              return Facebook.signIn(_checkPhone);
             }}
-            disabled={this.state.isSigninInProgress}
-            iconLeft
-            leftIcon={
-              <Icon
-                name="facebook"
-                type="FontAwesome5"
-                style={{marginLeft: 0, fontSize: 35}}
-              />
-            }
+            disabled={isSigninInProgress}
+            leftIcon={<Icon name="facebook" as={FontAwesome} size={10} />}
             style={[
               styleConst.shadow.default,
               styles.SocialLoginBt,
@@ -459,23 +406,15 @@ class LoginScreen extends Component {
                 marginVertical: 8,
                 paddingHorizontal: 8,
               },
-            ]}>
-            <Icon
-              name="facebook"
-              type="FontAwesome5"
-              style={{marginLeft: 0, fontSize: 35}}
-            />
-          </Button>
+            ]}
+          />
           {VKenabled ? (
             <Button
               onPress={() => {
-                return VK.signIn(this._checkPhone);
+                return VK.signIn(_checkPhone);
               }}
-              disabled={this.state.isSigninInProgress}
-              iconLeft
-              leftIcon={
-                <Icon name="vk" type="FontAwesome5" style={{marginLeft: 0}} />
-              }
+              disabled={isSigninInProgress}
+              leftIcon={<Icon name="vk" as={FontAwesome5} size={8} />}
               style={[
                 styleConst.shadow.default,
                 styles.SocialLoginBt,
@@ -484,9 +423,8 @@ class LoginScreen extends Component {
                   height: ButtonHeight,
                   backgroundColor: '#4680C2',
                 },
-              ]}>
-              <Icon name="vk" type="FontAwesome5" style={{marginLeft: 0}} />
-            </Button>
+              ]}
+            />
           ) : null}
         </View>
         {!isAndroid && appleAuth.isSupported ? (
@@ -502,7 +440,7 @@ class LoginScreen extends Component {
               },
             ]}
             onPress={() => {
-              return Apple.signIn(this._checkPhone);
+              return Apple.signIn(_checkPhone);
             }}
           />
         ) : null}
@@ -510,244 +448,215 @@ class LoginScreen extends Component {
     );
   };
 
-  render() {
-    if (this.state.loading) {
-      return (
-        <View style={{flex: 1}}>
-          <ActivityIndicator
-            color="#0061ED"
-            style={{
-              alignSelf: 'center',
-              marginTop: verticalScale(60),
-            }}
-          />
-        </View>
-      );
-    }
-
+  useEffect(() => {
+    Analytics.logEvent('screen', 'profile/login');
     LoginManager.logOut();
+  }, []);
+
+  if (loading) {
     return (
-      <View testID="LoginScreen.Wrapper" style={{flex: 1}}>
-        <ImageBackground
-          resizeMode="cover"
-          source={
-            {uri: get(this.props.dealerSelected, 'img.thumb') + '1000x1000'} ||
-            require('./bg.jpg')
-          }
+      <View style={{flex: 1}}>
+        <ActivityIndicator
+          color="#0061ED"
           style={{
-            width: '100%',
-            height: '100%',
-            flex: 1,
-            justifyContent: 'flex-start',
-          }}>
-          <View style={{marginBottom: 10}}>
-            <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 0, y: 1}}
-              colors={['rgba(0, 0, 0, 0.60)', 'rgba(51, 51, 51, 0)']}
-              style={styles.LinearGradient}
-            />
-            <View style={styles.ImageWrapper}>
-              <Image
-                resizeMode="contain"
-                source={require('../../menu/assets/logo-horizontal-white.svg')}
-              />
-            </View>
-            {!this.state.code
-              ? this.renderLoginButtons(this.props.dealerSelected.region)
-              : null}
-            <View
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                opacity: this.state.code ? 0 : 1,
-              }}>
-              <View
-                style={{
-                  marginTop: 5,
-                  marginBottom: 10,
-                  width: '80%',
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
-                  alignItems: 'center',
-                }}>
-                <View style={styles.LoginTextORLine} />
-                <Text
-                  style={{
-                    color: styleConst.color.accordeonGrey1,
-                    fontSize: 16,
-                    lineHeight: 16,
-                  }}>
-                  {strings.Base.or}
-                </Text>
-                <View style={styles.LoginTextORLine} />
-              </View>
-            </View>
-            <View
-              style={{
-                marginTop: this.state.code ? '5%' : 0,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  width: '80%',
-                  marginTop: this.state.code ? '20%' : 0,
-                }}>
-                {this.state.code ? (
-                  <>
-                    {[0, 1, 2, 3].map((element, index) => (
-                      <TextInput
-                        style={styles.TextInputCode}
-                        key={'textCode' + index}
-                        textContentType="oneTimeCode"
-                        keyboardType="number-pad"
-                        ref={input => {
-                          this.CodeInput[index] = input;
-                        }}
-                        maxLength={1}
-                        caretHidden={true}
-                        enablesReturnKeyAutomatically={true}
-                        returnKeyType="send"
-                        placeholderTextColor="#afafaf"
-                        autoCompleteType="off"
-                        onKeyPress={this._onOtpKeyPress(index)}
-                        onChangeText={this._onOtpChange(index)}
-                        selected={false}
-                      />
-                    ))}
-                  </>
-                ) : (
-                  <Form
-                    keyboardAvoidingViewProps={{
-                      enableAutomaticScroll: false,
-                    }}
-                    contentContainerStyle={{
-                      paddingHorizontal: 14,
-                      marginTop: 20,
-                      justifyContent: 'center',
-                    }}
-                    formScrollViewStyle={{
-                      backgroundColor: 'none',
-                    }}
-                    key="loginPhoneForm"
-                    fields={this.FormConfig.fields}
-                    SubmitButton={{
-                      text: strings.Form.button.receiveCode,
-                      noAgreement: true,
-                    }}
-                    onSubmit={this._verifyCode}
-                  />
-                )}
-              </View>
-              {this.state.code ? (
-                <>
-                  <Button
-                    disabled={this.state.loadingVerify}
-                    block
-                    onPress={this._verifyCodeStepTwo}
-                    style={[styleConst.shadow.default, styles.ApproveButton]}>
-                    {this.state.loadingVerify ? (
-                      <ActivityIndicator color={styleConst.color.white} />
-                    ) : (
-                      <Text style={{color: styleConst.color.white}}>
-                        {strings.ProfileScreen.approve}
-                      </Text>
-                    )}
-                  </Button>
-                  <Button
-                    disabled={this.state.loadingVerify}
-                    onPress={this._cancelVerify}
-                    style={[styleConst.shadow.default, styles.CancelButton]}>
-                    {this.state.loadingVerify ? (
-                      <ActivityIndicator color={styleConst.color.white} />
-                    ) : (
-                      <Text style={{color: styleConst.color.white}}>
-                        {strings.Base.cancel.toLowerCase()}
-                      </Text>
-                    )}
-                  </Button>
-                </>
-              ) : (
-                <Button
-                  onPress={this._verifyCode}
-                  size="full"
-                  full
-                  disabled={
-                    this.state.loadingVerify
-                      ? true
-                      : this.state.phone
-                      ? false
-                      : true
-                  }
-                  ref={ref => {
-                    this.getCodeButton = ref;
-                  }}
-                  style={[
-                    styleConst.shadow.default,
-                    {
-                      marginTop: 20,
-                      width: '80%',
-                      marginHorizontal: '10%',
-                      backgroundColor: '#34BD78',
-                      justifyContent: 'center',
-                      borderRadius: 5,
-                      opacity: this.state.loadingVerify
-                        ? 0
-                        : this.state.phone
-                        ? 1
-                        : 0,
-                    },
-                  ]}>
-                  {this.state.loadingVerify ? (
-                    <ActivityIndicator color={styleConst.color.white} />
-                  ) : (
-                    <Text style={{color: styleConst.color.white}}>
-                      {strings.ProfileScreen.getCode}
-                    </Text>
-                  )}
-                </Button>
-              )}
-              {!this.state.code && (
-                <Button
-                  onPress={() => {
-                    this.props.navigation.navigate('BonusScreenInfo', {
-                      refererScreen: 'LoginScreen',
-                      returnScreen: 'LoginScreen',
-                    });
-                  }}
-                  size="full"
-                  full
-                  iconLeft
-                  leftIcon={
-                    <Icon
-                      name="info"
-                      type="SimpleLineIcons"
-                      style={styles.BonusInfoButtonIcon}
-                    />
-                  }
-                  style={styles.BonusInfoButton}>
-                  <Icon
-                    name="info"
-                    type="SimpleLineIcons"
-                    style={styles.BonusInfoButtonIcon}
-                  />
-                  <Text numberOfLines={1} style={styles.BonusInfoButtonText}>
-                    {strings.Menu.main.bonus}
-                  </Text>
-                </Button>
-              )}
-            </View>
-          </View>
-        </ImageBackground>
+            alignSelf: 'center',
+            marginTop: verticalScale(60),
+          }}
+        />
       </View>
     );
   }
-}
+
+  return (
+    <View testID="LoginScreen.Wrapper" style={{flex: 1}}>
+      <ImageBackground
+        resizeMode="cover"
+        source={
+          {uri: get(props.dealerSelected, 'img.thumb') + '1000x1000'} ||
+          require('./bg.jpg')
+        }
+        style={{
+          width: '100%',
+          height: '100%',
+          flex: 1,
+          justifyContent: 'flex-start',
+        }}>
+        <View style={{marginBottom: 10}}>
+          <LinearGradient
+            start={{x: 0, y: 0}}
+            end={{x: 0, y: 1}}
+            colors={['rgba(0, 0, 0, 0.60)', 'rgba(51, 51, 51, 0)']}
+            style={styles.LinearGradient}
+          />
+          <View style={styles.ImageWrapper}>
+            <Image
+              resizeMode="contain"
+              source={require('../../menu/assets/logo-horizontal-white.svg')}
+            />
+          </View>
+          {!code ? _renderLoginButtons(props.dealerSelected.region) : null}
+          <View
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              opacity: code ? 0 : 1,
+            }}>
+            <View
+              style={{
+                marginTop: 5,
+                marginBottom: 10,
+                width: '80%',
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                alignItems: 'center',
+              }}>
+              <View style={styles.LoginTextORLine} />
+              <Text
+                style={{
+                  color: styleConst.color.accordeonGrey1,
+                  fontSize: 16,
+                  lineHeight: 16,
+                }}>
+                {strings.Base.or}
+              </Text>
+              <View style={styles.LoginTextORLine} />
+            </View>
+          </View>
+          <View
+            style={{
+              marginTop: code ? '5%' : 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '80%',
+                marginTop: code ? '20%' : 0,
+              }}>
+              {code ? (
+                <>
+                  {[0, 1, 2, 3].map((element, index) => (
+                    <TextInput
+                      style={styles.TextInputCode}
+                      key={'textCode' + index}
+                      textContentType="oneTimeCode"
+                      keyboardType="number-pad"
+                      ref={input => {
+                        CodeInput[index] = input;
+                      }}
+                      maxLength={1}
+                      caretHidden={true}
+                      enablesReturnKeyAutomatically={true}
+                      returnKeyType="send"
+                      placeholderTextColor="#afafaf"
+                      autoCompleteType="off"
+                      onKeyPress={_onOtpKeyPress(index)}
+                      onChangeText={_onOtpChange(index)}
+                      selected={false}
+                    />
+                  ))}
+                </>
+              ) : (
+                <Form
+                  keyboardAvoidingViewProps={{
+                    enableAutomaticScroll: false,
+                  }}
+                  contentContainerStyle={{
+                    paddingHorizontal: 14,
+                    marginTop: 20,
+                    justifyContent: 'center',
+                  }}
+                  formScrollViewStyle={{
+                    backgroundColor: 'none',
+                  }}
+                  key="loginPhoneForm"
+                  fields={FormConfig.fields}
+                  SubmitButton={{
+                    text: strings.Form.button.receiveCode,
+                    noAgreement: true,
+                  }}
+                  onSubmit={_verifyCode}
+                />
+              )}
+            </View>
+            {code ? (
+              <>
+                <Button
+                  disabled={loadingVerify}
+                  onPress={_verifyCodeStepTwo}
+                  style={[styleConst.shadow.default, styles.ApproveButton]}>
+                  {loadingVerify ? (
+                    <ActivityIndicator color={styleConst.color.white} />
+                  ) : (
+                    <Text style={{color: styleConst.color.white}}>
+                      {strings.ProfileScreen.approve}
+                    </Text>
+                  )}
+                </Button>
+                <Button
+                  disabled={loadingVerify}
+                  onPress={_cancelVerify}
+                  size="md"
+                  style={styles.CancelButton}>
+                  {loadingVerify ? (
+                    <ActivityIndicator color={styleConst.color.white} />
+                  ) : (
+                    <Text style={{color: styleConst.color.white}}>
+                      {strings.Base.cancel.toLowerCase()}
+                    </Text>
+                  )}
+                </Button>
+              </>
+            ) : (
+              <Button
+                onPress={_verifyCode}
+                size="md"
+                disabled={loadingVerify ? true : phone ? false : true}
+                style={[
+                  {
+                    marginTop: 20,
+                    width: '80%',
+                    marginHorizontal: '10%',
+                    backgroundColor: '#34BD78',
+                    justifyContent: 'center',
+                    borderRadius: 5,
+                    opacity: loadingVerify ? 0 : phone ? 1 : 0,
+                  },
+                ]}>
+                {loadingVerify ? (
+                  <ActivityIndicator color={styleConst.color.white} />
+                ) : (
+                  <Text style={{color: styleConst.color.white}}>
+                    {strings.ProfileScreen.getCode}
+                  </Text>
+                )}
+              </Button>
+            )}
+            {!code && (
+              <Button
+                onPress={() => {
+                  props.navigation.navigate('BonusScreenInfo', {
+                    refererScreen: 'LoginScreen',
+                    returnScreen: 'LoginScreen',
+                  });
+                }}
+                leftIcon={<Icon name="info" as={SimpleLineIcons} size={5} />}
+                style={styles.BonusInfoButton}>
+                <Text numberOfLines={1} style={styles.BonusInfoButtonText}>
+                  {strings.Menu.main.bonus}
+                </Text>
+              </Button>
+            )}
+          </View>
+        </View>
+      </ImageBackground>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   LinearGradient: {
@@ -793,7 +702,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   CancelButton: {
-    height: 30,
     width: '30%',
     marginHorizontal: '35%',
     backgroundColor: 'rgba(101, 101, 101, 0.7)',

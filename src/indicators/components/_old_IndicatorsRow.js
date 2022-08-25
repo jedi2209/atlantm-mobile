@@ -7,6 +7,8 @@ import {
   Image,
 } from 'react-native';
 
+import {Pressable, Popover, Button} from 'native-base';
+
 // components
 import IndicatorDescription from '../components/IndicatorDescription';
 
@@ -28,10 +30,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: styleConst.ui.horizontalGap,
-    zIndex: 2,
+    zIndex: 20,
   },
   iconItemContainer: {
     position: 'relative',
+    zIndex: 30,
   },
   iconItem: {
     backgroundColor: styleConst.color.white,
@@ -54,7 +57,7 @@ const styles = StyleSheet.create({
     borderRightColor: 'transparent',
   },
   triangleWhite: {
-    zIndex: 2,
+    zIndex: 20,
     bottom: -(HEIGHT_TRIANGLE + 1 + styleConst.ui.borderWidth),
     borderBottomColor: styleConst.color.white,
   },
@@ -76,10 +79,7 @@ export default class IndicatorRow extends PureComponent {
     super(props);
 
     this.state = {};
-
-    // if (!isTablet) {
     this.state.itemWidth = this.getItemWidth(width);
-    // }
   }
 
   isActive = id => this.props.activeItem.id === id;
@@ -90,7 +90,7 @@ export default class IndicatorRow extends PureComponent {
     return items.some(item => item.id === activeItem.id);
   };
 
-  getItemWidth = contentWidth => (contentWidth - 22) / 4 - 8;
+  getItemWidth = contentWidth => (contentWidth - 22) / 4;
 
   renderIndicator = indicator => {
     const {img, id} = indicator;
@@ -105,8 +105,20 @@ export default class IndicatorRow extends PureComponent {
     };
 
     return (
+      <Popover
+        trigger={triggerProps => {
+          return (
+            <Button {...triggerProps} colorScheme="danger">
+              Delete Customer
+            </Button>
+          );
+        }}></Popover>
+    );
+
+    {
+      /* return (
       <View key={`indicator-${id}`} style={styles.iconItemContainer}>
-        <TouchableHighlight
+        <Pressable
           onPress={() => onPressItem(this.descriptionRef, indicator)}
           style={[styles.iconItem, isActive ? styles.iconItemActive : null]}
           underlayColor={styleConst.color.accordeonGrey2}>
@@ -117,7 +129,7 @@ export default class IndicatorRow extends PureComponent {
               source={{uri: isActive ? img.white : img.blue}}
             />
           </View>
-        </TouchableHighlight>
+        </Pressable>
 
         {isActive ? (
           <View>
@@ -130,7 +142,8 @@ export default class IndicatorRow extends PureComponent {
           </View>
         ) : null}
       </View>
-    );
+    ); */
+    }
   };
 
   renderDescription = indicator => {

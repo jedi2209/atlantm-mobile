@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, Text, StyleSheet} from 'react-native';
+import {Text, StyleSheet} from 'react-native';
+import {View, Box} from 'native-base';
 
 // helpers
 import styleConst from '../../../core/style-const';
@@ -48,12 +49,19 @@ export default class ReviewDealerAnswer extends Component {
 
   render() {
     return (
-      <View style={[styleConst.shadow.default, styles.container]}>
+      <Box
+        shadow={3}
+        p={2}
+        pb={2}
+        mb={10}
+        mx={3}
+        borderRadius={5}
+        backgroundColor={'white'}>
         <Text style={styles.title}>
           {strings.ReviewDealerAnswer.dealerAnswer}
         </Text>
         <Text style={styles.text}>{this.props.text}</Text>
-      </View>
+      </Box>
     );
   }
 }

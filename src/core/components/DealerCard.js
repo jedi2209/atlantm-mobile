@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Text, Body} from 'native-base';
+import {Text} from 'native-base';
 import Imager from '../components/Imager';
 import BrandLogo from '../../core/components/BrandLogo';
 
@@ -85,7 +85,7 @@ const DealerCard = props => {
   const hash = get(item, 'hash');
   const sites = get(item, 'site');
   return (
-    <Body style={styles.body} testID={`DealerCard_${item.id}`}>
+    <View style={styles.body} testID={`DealerCard_${item.id}`}>
       <View style={styles.bodyView}>
         {item.name ? <Text style={styles.name}>{item.name}</Text> : null}
         {item.city ? (
@@ -121,7 +121,7 @@ const DealerCard = props => {
           />
         </View>
       ) : null}
-    </Body>
+    </View>
   );
 };
 
