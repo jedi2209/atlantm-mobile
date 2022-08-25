@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import {Image, View, StyleSheet} from 'react-native';
 import Imager from './Imager';
 import {connect} from 'react-redux';
@@ -7,7 +7,7 @@ import requireALeastOne from '../../utils/requireALeastOneProps';
 
 const mapStateToProps = ({dealer}) => {
   return {
-    brands: dealer.listBrands,
+    brandsAll: dealer.listBrands,
   };
 };
 
@@ -17,6 +17,8 @@ const requireALeast = requireALeastOne({
 });
 
 const BrandLogo = props => {
+  const {brand} = props;
+
   let width = 30;
   let height = props.width / props.aspectRatio;
   if (props.height) {
@@ -31,8 +33,8 @@ const BrandLogo = props => {
 
   if (
     props.brandsAssets[props.type] &&
-    props.brandsAssets[props.type].includes(props.brand) &&
-    brandsSVG[props.type][props.brand]
+    props.brandsAssets[props.type].includes(brand) &&
+    brandsSVG[props.type][brand]
   ) {
     return (
       <View style={[{}, {...props.style}]} testID={props.testID}>
@@ -45,12 +47,12 @@ const BrandLogo = props => {
               height: props.height,
             },
           ]}>
-          {brandsSVG[props.type][props.brand]}
+          {brandsSVG[props.type][brand]}
         </View>
       </View>
     );
   } else {
-    if (props.brands && props.brands[props.brand]) {
+    if (props.brands && props.brands[brand]) {
       return (
         <Imager
           resizeMode="contain"
@@ -58,8 +60,8 @@ const BrandLogo = props => {
             width: '100%',
             height: '100%',
           }}
-          key={props.brands[props.brand].hash}
-          source={{uri: props.brands[props.brand].logo}}
+          key={props.brands[brand].hash}
+          source={{uri: props.brands[brand].logo}}
           {...props}
         />
       );

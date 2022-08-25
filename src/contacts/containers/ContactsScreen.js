@@ -2,8 +2,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {
   Dimensions,
-  Pressable,
-  View,
   Alert,
   StyleSheet,
   ActivityIndicator,
@@ -13,7 +11,16 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {Text, Icon, ActionSheet, Toast, Box, HStack} from 'native-base';
+import {
+  Text,
+  Icon,
+  ActionSheet,
+  Toast,
+  Box,
+  HStack,
+  View,
+  Pressable,
+} from 'native-base';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -26,7 +33,6 @@ import Imager from '../../core/components/Imager';
 // redux
 import {connect} from 'react-redux';
 import {callMe} from '../actions';
-// import {fetchBrands} from '../../dealer/actions';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList, actionListReset} from '../../info/actions';
@@ -85,14 +91,9 @@ const styles = StyleSheet.create({
     marginRight: '1%',
   },
   scrollView: {paddingLeft: 20, zIndex: 3},
-  scrollViewInner: {display: 'flex', flexDirection: 'row'},
   iconRow: {
     position: 'absolute',
     right: 0,
-    color: styleConst.color.greyText4,
-    fontSize: 18,
-    marginRight: 0,
-    marginTop: 0,
   },
   buttonPrimary: {
     marginTop: 60,
@@ -166,7 +167,7 @@ const _renderPlates = params => {
       horizontal
       contentContainerStyle={{paddingRight: 30}}
       style={styles.scrollView}>
-      <View style={styles.scrollViewInner}>
+      <HStack>
         <Plate
           title={strings.ContactsScreen.call}
           status={callAvailable ? 'enabled' : 'disabled'}
@@ -285,7 +286,7 @@ const _renderPlates = params => {
             }
           }}
         />
-      </View>
+      </HStack>
     </ScrollView>
   );
 };
@@ -503,15 +504,15 @@ const ContactsScreen = ({
         <Box
           borderWidth={1}
           borderColor="coolGray.300"
-          shadow={3}
+          shadow={5}
           bg="coolGray.100"
           p={3}
           rounded={8}
           backgroundColor={styleConst.color.bg}>
           <HStack alignItems="center" justifyContent="space-between" space={2}>
-            {dealerSelected.brands && dealerSelected.brands.length ? (
+            {dealerSelected.brand && dealerSelected.brand.length ? (
               <HStack>
-                {dealerSelected.brands.map(brand => {
+                {dealerSelected.brand.map(brand => {
                   return (
                     <BrandLogo
                       brand={brand.id}
@@ -526,7 +527,13 @@ const ContactsScreen = ({
             <Text style={styles.buttonPrimaryText}>
               {get(dealerSelected, 'name')}
             </Text>
-            <FontAwesome5.Button name={'angle-right'} style={styles.iconRow} />
+            <Icon
+              size="sm"
+              as={FontAwesome5}
+              color={styleConst.color.greyText4}
+              name={'angle-right'}
+              style={styles.iconRow}
+            />
           </HStack>
         </Box>
       </Pressable>
@@ -547,31 +554,41 @@ const ContactsScreen = ({
           }}
         />
         <View style={{marginTop: HEADER_MAX_HEIGHT - 65}}>
-          <View style={styles.blackBack} />
-          <TouchableOpacity
-            style={styles.address}
-            testID="ContactsScreen.PressMap"
-            onPress={() => onPressMap()}>
-            <Icon
-              size={22}
-              as={MaterialIcons}
-              name="navigation"
-              color="warmGray.50"
-              _dark={{
-                color: 'warmGray.50',
-              }}
-              style={styles.point}
-            />
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={styles.addressText}>
-              {dealerSelected && dealerSelected.city && dealerSelected.city.name
-                ? dealerSelected.city.name
-                : null}
-              {dealerSelected.address ? ', ' + dealerSelected.address : null}
-            </Text>
-          </TouchableOpacity>
+          {dealerSelected.address ? (
+            <>
+              <View style={styles.blackBack} />
+              <TouchableOpacity
+                style={styles.address}
+                testID="ContactsScreen.PressMap"
+                onPress={() => onPressMap()}>
+                <Icon
+                  size={22}
+                  as={MaterialIcons}
+                  name="navigation"
+                  color="warmGray.50"
+                  _dark={{
+                    color: 'warmGray.50',
+                  }}
+                  style={styles.point}
+                />
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={styles.addressText}>
+                  {dealerSelected &&
+                  dealerSelected.city[0] &&
+                  dealerSelected.city[0].name
+                    ? dealerSelected.city[0].name
+                    : null}
+                  {dealerSelected.address
+                    ? ', ' + dealerSelected.address
+                    : null}
+                </Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <View h="8" />
+          )}
           {_renderPlates({
             dealerSelected,
             callAvailable,

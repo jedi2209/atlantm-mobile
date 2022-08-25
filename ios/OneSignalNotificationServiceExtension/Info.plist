@@ -8,6 +8,10 @@
 		<string>com.apple.usernotifications.service</string>
 		<key>NSExtensionPrincipalClass</key>
 		<string>NotificationService</string>
+		<key>CFBundleShortVersionString</key>
+		<string>8.3.0</string>
+		<key>CFBundleVersion</key>
+		<string>0</string>
 	</dict>
 </dict>
 </plist>

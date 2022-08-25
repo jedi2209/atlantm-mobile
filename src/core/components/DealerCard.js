@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Text} from 'native-base';
+import {HStack, Text} from 'native-base';
 import Imager from '../components/Imager';
 import BrandLogo from '../../core/components/BrandLogo';
 
@@ -19,10 +19,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontFamily: styleConst.font.regular,
-    fontSize: 16,
-    paddingTop: 5,
-    paddingBottom: 10,
-    marginLeft: 0,
+    fontSize: 15,
   },
   city: {
     color: styleConst.color.greyText,
@@ -79,35 +76,51 @@ const _getSite = sites => {
   return res.join('\r\n');
 };
 
+const drawBrands = brands => {
+  if (!brands || !brands.length) {
+    return false;
+  }
+  return brands.map(brand => {
+    return (
+      <BrandLogo
+        brand={brand.id}
+        height={25}
+        style={styles.brandLogo}
+        key={'brandLogo' + brand.id}
+      />
+    );
+  });
+};
+
+const drawCity = cityArr => {
+  if (!cityArr || !cityArr.length) {
+    return false;
+  }
+  let cities = [];
+  cityArr.map(city => {
+    cities.push(city.name);
+  });
+  return <Text style={styles.city}>{cities.join(', ')}</Text>;
+};
+
 const DealerCard = props => {
   const {item} = props;
-  const CarImg = get(item, 'img.thumb');
+
+  const CarImg = get(item, 'img[0]');
   const hash = get(item, 'hash');
-  const sites = get(item, 'site');
+  const brands = get(item, 'brands', []);
+  const name = get(item, 'name');
+
   return (
-    <View style={styles.body} testID={`DealerCard_${item.id}`}>
+    <HStack alignItems="flex-start" p="2" borderRadius="md">
       <View style={styles.bodyView}>
-        {item.name ? <Text style={styles.name}>{item.name}</Text> : null}
-        {item.city ? (
-          <Text style={styles.city}>
-            {[item.city.name, item.address].join(', ')}
+        {name ? (
+          <Text mt="0.5" mb="2" style={styles.name}>
+            {name}
           </Text>
         ) : null}
-        <Text style={styles.site}>{_getSite(sites)}</Text>
-        <View style={styles.brands}>
-          {item.brands &&
-            item.brands.length &&
-            item.brands.map(brand => {
-              return (
-                <BrandLogo
-                  brand={brand.id}
-                  height={25}
-                  style={styles.brandLogo}
-                  key={'brandLogo' + brand.id}
-                />
-              );
-            })}
-        </View>
+        <HStack mb="2">{drawBrands(brands)}</HStack>
+        {drawCity(get(item, 'city', []))}
       </View>
       {CarImg ? (
         <View style={styles.thumb}>
@@ -115,13 +128,13 @@ const DealerCard = props => {
             key={`dealer-cover-' + ${item.hash}`}
             style={styles.image}
             source={{
-              uri: CarImg + '500x500' + '&hash=' + hash,
+              uri: CarImg + '?d=500x500' + '&hash=' + hash,
               cache: 'web',
             }}
           />
         </View>
       ) : null}
-    </View>
+    </HStack>
   );
 };
 

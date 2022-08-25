@@ -63,21 +63,25 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
 
         dealer.id = dealerBaseData.id;
         dealer.region = dealerBaseData.region;
-        dealer.brands = dealerBaseData.brands;
+        dealer.brand = dealerBaseData.brands;
         dealer.divisionTypes = [];
 
-        if (dealer.divisions) {
-          Object.keys(dealer.divisions).map(val => {
-            if (dealer.divisions[val].type) {
-              const divisionObj = dealer.divisions[val].type;
-              Object.keys(divisionObj).map(el => {
-                const divisionType = divisionObj[el];
-                if (typeof dealer.divisionTypes[divisionType] === 'undefined') {
-                  dealer.divisionTypes.push(divisionType);
-                }
-              });
-            }
-            return dealer.divisionTypes;
+        if (dealer.locations) {
+          dealer.locations.map(dealerLocation => {
+            dealerLocation.divisions.map(val => {
+              if (val.type) {
+                const divisionObj = val.type;
+                Object.keys(divisionObj).map(el => {
+                  const divisionType = divisionObj[el];
+                  if (
+                    typeof dealer.divisionTypes[divisionType] === 'undefined'
+                  ) {
+                    dealer.divisionTypes.push(divisionType);
+                  }
+                });
+              }
+              return dealer.divisionTypes;
+            });
           });
           dealer.divisionTypes = dealer.divisionTypes.filter(
             (v, i, a) => a.indexOf(v) === i,
@@ -175,18 +179,18 @@ export const fetchDealers = isLocal => {
           },
         );
 
-        const cities = dealers.reduce((result, dealer) => {
-          result[dealer.city.id] = {
-            region: dealer.region,
-            name: dealer.city.name,
-          };
-          return result;
-        }, {});
+        // const cities = dealers.reduce((result, dealer) => {
+        //   result[dealer.city.id] = {
+        //     region: dealer.region,
+        //     name: dealer.city.name,
+        //   };
+        //   return result;
+        // }, {});
 
-        dispatch({
-          type: CITIES__SUCCESS,
-          payload: cities,
-        });
+        // dispatch({
+        //   type: CITIES__SUCCESS,
+        //   payload: cities,
+        // });
 
         let allDealers = {};
         dealers.forEach(element => {

@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   Platform,
   NativeModules,
-  SafeAreaView,
+  View,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {NativeBaseProvider} from 'native-base';
@@ -26,7 +26,7 @@ import {
   actionStoreUpdated,
   actionSettingsLoaded,
 } from '../actions';
-import {fetchDealers} from '../../dealer/actions';
+import {fetchDealers, fetchBrands} from '../../dealer/actions';
 
 import {APP_STORE_UPDATED} from '../../core/actionTypes';
 
@@ -61,6 +61,7 @@ const mapDispatchToProps = {
   actionStoreUpdated,
   actionSettingsLoaded,
   fetchDealers,
+  fetchBrands,
 };
 
 const App = props => {
@@ -76,7 +77,7 @@ const App = props => {
   } = props;
 
   const mainScreen = 'BottomTabNavigation';
-  const storeVersion = '2021-09-03';
+  const storeVersion = '2022-08-27';
 
   const currentLanguage = get(props, 'currentLanguage', 'ru');
 
@@ -94,8 +95,12 @@ const App = props => {
     });
 
     if (currentDealer && isStoreUpdatedCurrent === storeVersion) {
-      // уже всё обновлено, открываем экран автоцентра
-      return mainScreen;
+      const actionDealer = await props.fetchDealers(); // обновляем дилеров при каждом открытии прилаги
+      //props.fetchBrands(); // обновляем бренды при каждом открытии прилаги
+      if (actionDealer && actionDealer.type) {
+        // уже всё обновлено, открываем экран автоцентра
+        return mainScreen;
+      }
     }
 
     try {
@@ -104,11 +109,15 @@ const App = props => {
       props.actionMenuOpenedCount(0);
       const action = await props.actionStoreUpdated(storeVersion);
       if (action && action.type) {
-        let result;
-        if (action.type === APP_STORE_UPDATED) {
-          result = 'IntroScreen';
+        props.fetchBrands();
+        const actionDealer = await props.fetchDealers();
+        if (actionDealer && actionDealer.type) {
+          let result;
+          if (action.type === APP_STORE_UPDATED) {
+            result = 'IntroScreen';
+          }
+          return result;
         }
-        return result;
       }
     } catch (error) {
       console.error('_awaitStoreToUpdate error', error);
@@ -117,7 +126,6 @@ const App = props => {
 
   useEffect(() => {
     NavigationService.setTopLevelNavigator(NavigationService.navigationRef);
-    props.fetchDealers();
 
     _awaitStoreToUpdate().then(res => {
       if (typeof res === 'undefined' || !res) {
@@ -169,13 +177,13 @@ const App = props => {
 
   if (isLoading || !NavigationContainer) {
     return (
-      <SafeAreaView>
+      <View backgroundColor={styleConst.color.blue}>
         <ActivityIndicator
           style={styles.activityIndicator}
-          color={styleConst.color.blue}
+          color={styleConst.color.white}
           size="large"
         />
-      </SafeAreaView>
+      </View>
     );
   } else {
     return (

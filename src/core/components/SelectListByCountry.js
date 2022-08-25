@@ -7,11 +7,13 @@ import {
   ActivityIndicator,
   useWindowDimensions,
 } from 'react-native';
+import {connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import PropTypes from 'prop-types';
 
+import {fetchDealers} from '../../dealer/actions';
+
 // components
-import {Container} from 'native-base';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 import SelectItemByCountry from './SelectItemByCountry';
 
@@ -41,6 +43,20 @@ const styles = StyleSheet.create({
   TabsActiveTabStyle: {},
 });
 
+const mapStateToProps = ({dealer}) => {
+  return {
+    dealerSelected: dealer.selected,
+    region: dealer.region,
+    listRussia: dealer.listRussia,
+    listBrands: dealer.listBrands,
+    listBelarussia: dealer.listBelarussia,
+  };
+};
+
+const mapDispatchToProps = {
+  fetchDealers,
+};
+
 const renderTabBar = props => (
   <TabBar
     {...props}
@@ -63,7 +79,7 @@ const renderTabBar = props => (
 const _onRefresh = props => {
   const {setRefreshing} = props;
   setRefreshing(true);
-  props.props.dataHandler().then(() => {
+  props.props.fetchDealers().then(() => {
     // props.dataBrandsHandler();
     setRefreshing(false);
   });
@@ -106,16 +122,7 @@ const _renderItem = props => {
 };
 
 const SelectListByCountry = props => {
-  const {
-    itemLayout,
-    listRussia,
-    listUkraine,
-    listBelarussia,
-    listAll,
-    dataHandler,
-    settings,
-    // dataBrandsHandler,
-  } = props;
+  const {itemLayout, listRussia, listBelarussia, listAll, settings} = props;
   const navigation = useNavigation();
 
   const [isRefreshing, setRefreshing] = useState(false);
@@ -124,16 +131,15 @@ const SelectListByCountry = props => {
 
   const [index, setIndex] = useState(0);
 
-  useEffect(() => {
-    if (itemLayout === 'dealer') {
-      dataHandler();
-      //dataBrandsHandler();
-    }
-  }, [dataHandler, itemLayout]);
+  // useEffect(() => {
+  //   if (itemLayout === 'dealer') {
+  //     dataHandler();
+  //     //dataBrandsHandler();
+  //   }
+  // }, [dataHandler, itemLayout]);
 
   let customListBYN = [];
   let customListRUS = [];
-  let customListUA = [];
   let routesHead = [];
   const countrySettings = get(settings, 'country', []);
 
@@ -152,13 +158,6 @@ const SelectListByCountry = props => {
         }
       });
     }
-    if (countrySettings.includes('ua')) {
-      listUkraine.map(el => {
-        if (listAll.includes(el.id)) {
-          customListUA.push(el);
-        }
-      });
-    }
   }
   let TabBY, TabRU;
 
@@ -173,7 +172,11 @@ const SelectListByCountry = props => {
             data={customListBYN}
             onRefresh={() => {
               if (itemLayout === 'dealer') {
-                return _onRefresh({props, isRefreshing, setRefreshing});
+                return _onRefresh({
+                  props,
+                  isRefreshing,
+                  setRefreshing,
+                });
               }
             }}
             refreshing={isRefreshing}
@@ -196,7 +199,7 @@ const SelectListByCountry = props => {
             data={customListRUS}
             onRefresh={() => {
               if (itemLayout === 'dealer') {
-                return _onRefresh({props, isRefreshing, setRefreshing});
+                return _onRefresh({...props, isRefreshing, setRefreshing});
               }
             }}
             refreshing={isRefreshing}
@@ -218,13 +221,17 @@ const SelectListByCountry = props => {
     ) {
       routesHead.push({key: 'by', title: '🇧🇾 Беларусь'});
       TabBY = () => (
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, paddingBottom: 20}}>
           <FlatList
             style={styles.list}
             data={listBelarussia}
             onRefresh={() => {
               if (itemLayout === 'dealer') {
-                return _onRefresh({props, isRefreshing, setRefreshing});
+                return _onRefresh({
+                  props,
+                  isRefreshing,
+                  setRefreshing,
+                });
               }
             }}
             refreshing={isRefreshing}
@@ -246,13 +253,17 @@ const SelectListByCountry = props => {
     ) {
       routesHead.push({key: 'ru', title: '🇷🇺 Россия'});
       TabRU = () => (
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, paddingBottom: 20}}>
           <FlatList
             style={styles.list}
             data={listRussia}
             onRefresh={() => {
               if (itemLayout === 'dealer') {
-                return _onRefresh({props, isRefreshing, setRefreshing});
+                return _onRefresh({
+                  props,
+                  isRefreshing,
+                  setRefreshing,
+                });
               }
             }}
             refreshing={isRefreshing}
@@ -305,4 +316,7 @@ SelectListByCountry.defaultProps = {
   isLocal: false,
 };
 
-export default SelectListByCountry;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SelectListByCountry);

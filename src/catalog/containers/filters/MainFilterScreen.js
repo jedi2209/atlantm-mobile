@@ -315,7 +315,7 @@ const MainFilterScreen = ({
     switch (stockType) {
       case 'New':
         actionFetchNewCarFilters({
-          city: dealerSelected.city.id,
+          city: dealerSelected.city[0].id,
         }).then(res => {
           setTotalCars(res.payload.total.count);
           if (res.payload.data) {
@@ -403,7 +403,7 @@ const MainFilterScreen = ({
         break;
       case 'Used':
         actionFetchUsedCarFilters({
-          city: dealerSelected.city.id,
+          city: dealerSelected.city[0].id,
           region: dealerSelected.region,
         }).then(res => {
           setTotalCars(res.payload.total.count);
@@ -617,7 +617,7 @@ const MainFilterScreen = ({
       case 'New':
         actionFetchNewCar({
           filters: filtersLocal,
-          city: dealerSelected.city.id,
+          city: dealerSelected.city[0].id,
         }).then(res => {
           setTotalCars(res.payload.total.count);
           _showHideSubmitButton(true);
@@ -627,7 +627,7 @@ const MainFilterScreen = ({
         actionFetchUsedCar({
           filters: filtersLocal,
           region: dealerSelected.region,
-          city: dealerSelected.city.id,
+          city: dealerSelected.city[0].id,
         }).then(res => {
           setTotalCars(res.payload.total.count);
           _showHideSubmitButton(true);
