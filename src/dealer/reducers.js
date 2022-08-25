@@ -103,17 +103,6 @@ function listBelarussia(state = [], action) {
   }
 }
 
-function listUkraine(state = [], action) {
-  switch (action.type) {
-    case REHYDRATE:
-      return get(action.payload, 'dealer.listUkraine', []);
-    case DEALERS__SUCCESS:
-      return [...action.payload[UKRAINE]];
-    default:
-      return state;
-  }
-}
-
 function listBrands(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
@@ -186,9 +175,10 @@ function isFetchBrands(state = false, action) {
 
 // helper
 const processListsByCities = (action, region) => {
+  return [];
   const dealersByCities = get(action, `payload.${region}`, []).reduce(
     (result, dealer) => {
-      let cityDataIndex = findIndex(result, {id: dealer.city.id});
+      let cityDataIndex = findIndex(result, {id: dealer.city.id}); // dealer.city.id БОЛЬШЕ НЕТ !!!!!
 
       if (cityDataIndex !== -1) {
         result[cityDataIndex].dealers.push(dealer);
@@ -220,18 +210,6 @@ const listRussiaByCities = (state = [], action) => {
   }
 };
 
-const listUkraineByCities = (state = [], action) => {
-  switch (action.type) {
-    case REHYDRATE:
-      return get(action, 'payload.dealer.listUkraineByCities', []);
-    case DEALERS__SUCCESS:
-    case DEALERS_BY_CITIES__SET:
-      return processListsByCities(action, UKRAINE);
-    default:
-      return state;
-  }
-};
-
 const listBelarussiaByCities = (state = [], action) => {
   switch (action.type) {
     case REHYDRATE:
@@ -250,8 +228,6 @@ export default combineReducers({
   region,
   listRussia,
   listRussiaByCities,
-  listUkraine,
-  listUkraineByCities,
   listBelarussia,
   listBelarussiaByCities,
   listDealers,

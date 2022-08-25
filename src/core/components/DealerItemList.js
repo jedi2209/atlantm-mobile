@@ -13,9 +13,6 @@ import stylesList from '../../core/components/Lists/style';
 import {strings} from '../lang/const';
 
 const stylesDealerItemList = StyleSheet.create({
-  brands: {
-    flexDirection: 'row',
-  },
   brandLogo: {
     minWidth: 24,
     height: 20,
@@ -111,11 +108,11 @@ const DealerItemList = props => {
               </Text>
             ) : null}
           </View>
-          {dealer && dealer.brands ? (
-            <View style={stylesDealerItemList.brands}>
-              {dealer.brands &&
-                dealer.brands.length &&
-                dealer.brands.map(brand => {
+          {dealer && dealer.brand ? (
+            <HStack>
+              {dealer.brand &&
+                dealer.brand.length &&
+                dealer.brand.map(brand => {
                   if (brand.logo) {
                     return (
                       <BrandLogo
@@ -127,7 +124,7 @@ const DealerItemList = props => {
                     );
                   }
                 })}
-            </View>
+            </HStack>
           ) : null}
         </HStack>
       </Pressable>

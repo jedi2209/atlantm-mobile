@@ -1,7 +1,7 @@
 import React from 'react';
-import {Alert, StyleSheet, Pressable} from 'react-native';
+import {Alert, StyleSheet} from 'react-native';
+import {Pressable} from 'native-base';
 import {connect} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
 
 // components
 import * as NavigationService from '../../navigation/NavigationService';
@@ -21,17 +21,6 @@ import {
 import {selectDealer} from '../../dealer/actions';
 
 import {strings} from '../../core/lang/const';
-
-const styles = StyleSheet.create({
-  listItem: {
-    backgroundColor: '#F6F6F6',
-    marginLeft: 0,
-    paddingRight: 0,
-    paddingTop: 0,
-    paddingBottom: 12,
-    borderBottomWidth: 0,
-  },
-});
 
 const mapStateToProps = ({core}) => {
   return {
@@ -109,7 +98,11 @@ const SelectItemByCountry = props => {
       onPress={() => {
         return _onPressDealerItem(props);
       }}
-      style={[stylesList.listItem, styles.listItem]}>
+      mt="2"
+      mx="2"
+      shadow="1"
+      backgroundColor="white"
+      borderRadius="md">
       <DealerCard item={item} />
     </Pressable>
   );

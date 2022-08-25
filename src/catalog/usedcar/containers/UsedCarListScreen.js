@@ -61,7 +61,7 @@ const UsedCarListScreen = ({
 
     return actionFetchUsedCarByFilter({
       type,
-      city: dealerSelected.city.id,
+      city: dealerSelected.city[0].id,
       region: dealerSelected.region,
       nextPage: pages?.next || null,
       filters: filters.filters,
@@ -95,7 +95,7 @@ const UsedCarListScreen = ({
   useEffect(() => {
     console.info('== UsedCarListScreen ==');
     Analytics.logEvent('screen', 'catalog/usedcar/list');
-  }, [dealerSelected.city.id]);
+  }, [dealerSelected.city[0].id]);
 
   return (
     <View style={styles.content} testID="UserCarListSreen.Wrapper">

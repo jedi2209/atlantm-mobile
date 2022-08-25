@@ -60,7 +60,7 @@ const NewCarListScreen = ({
 
     return actionFetchNewCarByFilter({
       type,
-      city: dealerSelected.city.id,
+      city: dealerSelected.city[0].id,
       nextPage: pages?.next || null,
       filters: filters.filters,
       sortBy: filters.sorting.sortBy,
@@ -92,9 +92,9 @@ const NewCarListScreen = ({
   // Аналогично componentDidMount и componentDidUpdate:
   useEffect(() => {
     Analytics.logEvent('screen', 'catalog/newcar/list', {
-      search_url: `/stock/new/cars/get/city/${dealerSelected.city.id}/`,
+      search_url: `/stock/new/cars/get/city/${dealerSelected.city[0].id}/`,
     });
-  }, [dealerSelected.city.id]);
+  }, [dealerSelected.city[0].id]);
 
   return (
     <View style={styles.content} testID="NewCarsListSreen.Wrapper">

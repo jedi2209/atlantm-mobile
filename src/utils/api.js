@@ -27,11 +27,11 @@ const baseRequestParams = {
 export default {
   headers,
   fetchDealers() {
-    return this.request('/dealer/info/get/', baseRequestParams);
+    return this.request('/dealer/data/', baseRequestParams);
   },
 
   fetchDealer(id) {
-    return this.request(`/dealer/info/get/${id}/`, baseRequestParams);
+    return this.request(`/dealer/data/${id}/`, baseRequestParams);
   },
 
   fetchBrands() {
