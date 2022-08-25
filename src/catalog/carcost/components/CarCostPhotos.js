@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {
   StyleSheet,
-  View,
   Image,
   TouchableOpacity,
   Dimensions,
@@ -9,7 +8,8 @@ import {
 } from 'react-native';
 
 // components
-import {Grid, Row, Col, Icon} from 'native-base';
+import {HStack, VStack, Icon, View} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import ActionSheet from '@alessiocancian/react-native-actionsheet';
 import ImagePicker from 'react-native-image-crop-picker';
 
@@ -48,15 +48,10 @@ const styles = StyleSheet.create({
   removeIconContainer: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 1,
-    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  removeIcon: {
-    color: styleConst.color.white,
-  },
   photoShadow: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
     ...StyleSheet.absoluteFillObject,
     zIndex: 1,
   },
@@ -140,43 +135,39 @@ export default class CarCostPhotos extends Component {
     const size = this.state.itemWidth / 1.4;
 
     return (
-      <Col key={photoIndex} style={{width: width}}>
-        <View>
-          {photo ? (
-            <TouchableOpacity
-              style={styles.removeIconContainer}
-              onPress={this[`onPressRemovePhoto${photoIndex}`]}>
-              <Icon
-                name="md-close-circle"
-                selectable={false}
-                style={[
-                  styles.removeIcon,
-                  {fontSize: width / 2.5, marginTop: -12},
-                ]}
-              />
-            </TouchableOpacity>
-          ) : null}
+      <View key={photoIndex} style={{width: width}}>
+        {photo ? (
           <TouchableOpacity
-            activeOpacity={0.7}
-            style={[styles.item]}
-            onPress={this[`onPressPhoto${photoIndex}`]}>
-            {photo ? (
-              <View style={[styles.photoShadow, {height: size}]} />
-            ) : null}
-            <Image
-              style={[
-                styles.photo,
-                {
-                  width,
-                  height: size,
-                  marginBottom: 15,
-                },
-              ]}
-              source={source}
+            style={styles.removeIconContainer}
+            onPress={this[`onPressRemovePhoto${photoIndex}`]}>
+            <Icon
+              name="md-close-circle"
+              as={Ionicons}
+              size={12}
+              color="white"
             />
           </TouchableOpacity>
-        </View>
-      </Col>
+        ) : null}
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={[styles.item]}
+          onPress={this[`onPressPhoto${photoIndex}`]}>
+          {photo ? (
+            <View shadow={3} style={[styles.photoShadow, {height: size}]} />
+          ) : null}
+          <Image
+            style={[
+              styles.photo,
+              {
+                width,
+                height: size,
+                marginBottom: 15,
+              },
+            ]}
+            source={source}
+          />
+        </TouchableOpacity>
+      </View>
     );
   };
 
@@ -207,10 +198,14 @@ export default class CarCostPhotos extends Component {
           );
         })}
 
-        <Grid style={styles.menu}>
-          <Row style={styles.row}>{[1, 2, 3].map(this.renderItem)}</Row>
-          <Row style={styles.row}>{[4, 5, 6].map(this.renderItem)}</Row>
-        </Grid>
+        <VStack style={styles.menu}>
+          <HStack justifyContent="space-around">
+            {[1, 2, 3].map(this.renderItem)}
+          </HStack>
+          <HStack justifyContent="space-around">
+            {[4, 5, 6].map(this.renderItem)}
+          </HStack>
+        </VStack>
       </View>
     );
   }

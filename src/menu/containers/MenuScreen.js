@@ -1,8 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
 
-import {Text, View, Image, StyleSheet, Dimensions} from 'react-native';
-import {List, ListItem, Left, Button, Body} from 'native-base';
+import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  Dimensions,
+  Pressable,
+} from 'react-native';
+import {VStack, HStack, Box, Button} from 'native-base';
 
 import {actionMenuOpenedCount} from '../../core/actions';
 import {connect} from 'react-redux';
@@ -21,7 +28,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   ListItem: {
-    marginLeft: 0,
+    paddingLeft: 30,
     borderColor: 'transparent',
     backgroundColor: 'transparent',
     paddingTop: 2,
@@ -34,9 +41,10 @@ const styles = StyleSheet.create({
   },
   Body: {
     paddingLeft: 17,
+    justifyContent: 'center',
   },
   bodyText: {
-    fontSize: 16,
+    fontSize: 18,
   },
   menuButton: {
     paddingLeft: 17,
@@ -81,14 +89,13 @@ const MenuItem = props => {
   };
 
   return (
-    <ListItem
+    <Pressable
       key={`menu-list-item-${id}`}
       style={styles.ListItem}
       selected={selected}
       onPress={() => navigation.navigate(navigate?.url, params)}>
-      <Left style={styles.Left}>
+      <HStack space={3} justifyContent="flex-start">
         <Button
-          underlayColor={styles.buttonPrimaryText.color}
           style={[
             styles.menuButton,
             {
@@ -97,23 +104,23 @@ const MenuItem = props => {
             selected && typeof selected !== 'undefined'
               ? styleConst.new.menu.active
               : styleConst.new.menu.default,
-          ]}>
-          {icon}
-        </Button>
-      </Left>
-      <Body style={styles.Body}>
-        <Text
-          selectable={false}
-          style={[
-            styles.bodyText,
-            {
-              color: selected ? '#0061ED' : '#858997',
-            },
-          ]}>
-          {name}
-        </Text>
-      </Body>
-    </ListItem>
+          ]}
+          leftIcon={icon}
+        />
+        <Box style={styles.Body}>
+          <Text
+            selectable={false}
+            style={[
+              styles.bodyText,
+              {
+                color: selected ? '#0061ED' : '#858997',
+              },
+            ]}>
+            {name}
+          </Text>
+        </Box>
+      </HStack>
+    </Pressable>
   );
 };
 
@@ -251,7 +258,7 @@ const MenuScreen = props => {
 
   return (
     <View testID="MenuScreen.Wrapper">
-      <List style={{marginTop: 0}}>
+      <VStack style={{marginTop: 0}}>
         {menu.map(item => (
           <MenuItem
             key={`menu-item-${item.id}`}
@@ -260,7 +267,7 @@ const MenuScreen = props => {
             rowHeight={rowHeight}
           />
         ))}
-      </List>
+      </VStack>
       {/* <View>
           <Button
             size="full"

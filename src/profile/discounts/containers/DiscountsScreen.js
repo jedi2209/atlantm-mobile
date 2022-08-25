@@ -8,7 +8,6 @@ import {connect} from 'react-redux';
 // helpers
 import {get} from 'lodash';
 import PropTypes from 'prop-types';
-import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import Analytics from '../../../utils/amplitude-analytics';
 import {strings} from '../../../core/lang/const';
@@ -124,17 +123,15 @@ class DiscountsScreen extends Component {
     const {discounts} = this.props;
 
     return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <FlatList
-            data={discounts}
-            style={styles.list}
-            ListEmptyComponent={this.renderEmptyComponent}
-            renderItem={this.renderItem}
-            keyExtractor={item => `${item.hash.toString()}`}
-          />
-        </SafeAreaView>
-      </StyleProvider>
+      <SafeAreaView style={styles.safearea}>
+        <FlatList
+          data={discounts}
+          style={styles.list}
+          ListEmptyComponent={this.renderEmptyComponent}
+          renderItem={this.renderItem}
+          keyExtractor={item => `${item.hash.toString()}`}
+        />
+      </SafeAreaView>
     );
   }
 }

@@ -181,7 +181,6 @@ export default StyleSheet.create({
     color: '#2a2a43',
     fontSize: 14,
     fontWeight: '400',
-    width: '95%',
     fontFamily: styleConst.font.regular,
   },
   mapCardIcon: {
@@ -220,7 +219,6 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
   },
   bodyButton: {
-    height: 50,
     borderWidth: 1,
     borderRadius: 10,
     padding: 0,
@@ -294,12 +292,6 @@ export default StyleSheet.create({
   },
   accordionHeader: {
     height: 64,
-    paddingHorizontal: '2%',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: styleConst.color.white,
     borderTopWidth: 0.75,
     borderColor: '#d5d5e0',
   },
@@ -365,11 +357,6 @@ export default StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  itemCallButton: {
-    height: 40,
-    width: '48%',
-    justifyContent: 'center',
-  },
   iconButtonSm: {
     marginRight: 5,
     marginLeft: 0,
@@ -391,12 +378,6 @@ export default StyleSheet.create({
     paddingRight: '4%',
     marginBottom: 10,
     marginTop: 5,
-  },
-  warrantyIcon: {
-    color: styleConst.color.green,
-    fontSize: 32,
-    marginTop: -4,
-    marginRight: 5,
   },
   warrantyText: {
     paddingTop: 2,

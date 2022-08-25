@@ -12,6 +12,7 @@ import {
 // components
 import CarList from '../../components/CarList';
 import {Icon, Fab} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
@@ -49,6 +50,8 @@ const NewCarListScreen = ({
   const [loading, setLoading] = useState(true);
 
   const {data, pages, prices} = items;
+
+  const fabEnable = dealerSelected.region === 'by' ? true : false;
 
   const _fetchNewCars = type => {
     if (type === EVENT_REFRESH) {
@@ -113,17 +116,27 @@ const NewCarListScreen = ({
             dealerSelected={dealerSelected}
             isFetchItems={isFetchingNewCarByFilter}
           />
-          <Fab
-            active={false}
-            direction="up"
-            containerStyle={{}}
-            style={{backgroundColor: styleConst.new.blueHeader}}
-            position="bottomRight"
-            onPress={() =>
-              navigation.navigate('ChatScreen', {chatType: 'newcars'})
-            }>
-            <Icon type="Ionicons" name="chatbox-outline" />
-          </Fab>
+          {fabEnable ? (
+            <Fab
+              renderInPortal={false}
+              size="sm"
+              style={{backgroundColor: styleConst.new.blueHeader}}
+              onPress={() =>
+                navigation.navigate('ChatScreen', {chatType: 'newcars'})
+              }
+              icon={
+                <Icon
+                  size={7}
+                  as={Ionicons}
+                  name="chatbox-outline"
+                  color="warmGray.50"
+                  _dark={{
+                    color: 'warmGray.50',
+                  }}
+                />
+              }
+            />
+          ) : null}
         </>
       )}
     </View>

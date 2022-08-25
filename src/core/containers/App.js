@@ -6,13 +6,13 @@ import {
   ActivityIndicator,
   Platform,
   NativeModules,
+  SafeAreaView,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {Root, StyleProvider} from 'native-base';
+import {NativeBaseProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import getTheme from '../../../native-base-theme/components';
+// import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import {firebase} from '@react-native-firebase/app-check';
 
@@ -31,13 +31,13 @@ import {fetchDealers} from '../../dealer/actions';
 import {APP_STORE_UPDATED} from '../../core/actionTypes';
 
 import {strings} from '../lang/const';
+import {theme} from '../theme';
 
 // helpers
 import API from '../../utils/api';
 import {get} from 'lodash';
 import OneSignal from 'react-native-onesignal';
 import PushNotifications from '../components/PushNotifications';
-// import notifee, { EventType } from '@notifee/react-native';
 import styleConst from '../../core/style-const';
 
 // components
@@ -165,58 +165,25 @@ const App = props => {
     if (get(auth, 'login') === 'zteam') {
       window.atlantmDebug = true;
     }
-
-    // notifee.setNotificationCategories([
-    //   {
-    //     id: 'onlineChat',
-    //     actions: [
-    //       {
-    //         id: 'read',
-    //         title: 'Прочитать',
-    //       },
-    //     ],
-    //   },
-    // ]);
-
-    // return notifee.onForegroundEvent(({ type, detail }) => {
-    //   switch (type) {
-    //     case EventType.DISMISSED:
-    //       console.warn('User dismissed notification', detail);
-    //       break;
-    //     case EventType.PRESS:
-    //       const typePress = detail.notification?.ios?.categoryId;
-    //       console.warn('User pressed notification', detail, typePress);
-    //       switch (typePress) {
-    //         case 'ChatMessage':
-    //           NavigationService.navigate('ChatScreen', { update: true });
-    //           break;
-    //       }
-    //       break;
-    //   }
-    // });
   }, []);
 
   if (isLoading || !NavigationContainer) {
     return (
-      <SafeAreaProvider>
+      <SafeAreaView>
         <ActivityIndicator
           style={styles.activityIndicator}
           color={styleConst.color.blue}
           size="large"
         />
-      </SafeAreaProvider>
+      </SafeAreaView>
     );
   } else {
     return (
-      <SafeAreaProvider>
-        <StyleProvider style={getTheme()}>
-          <Root>
-            <NavigationContainer ref={NavigationService.navigationRef}>
-              <Nav.Base />
-            </NavigationContainer>
-          </Root>
-        </StyleProvider>
-      </SafeAreaProvider>
+      <NativeBaseProvider theme={theme}>
+        <NavigationContainer ref={NavigationService.navigationRef}>
+          <Nav.Base />
+        </NavigationContainer>
+      </NativeBaseProvider>
     );
   }
 };

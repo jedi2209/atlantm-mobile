@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Text, Platform} from 'react-native';
-import {Button, Icon} from 'native-base';
+import {Button, HStack, Icon, VStack} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Modal from 'react-native-modal';
 import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
@@ -28,7 +29,11 @@ const ModalViewFilter = props => {
             styleConst.shadow.default,
             props?.stylesWrapper,
           ]}>
-          <View style={[styles.titleRowView, props?.titleRowView]}>
+          <HStack
+            justifyContent="space-between"
+            my="1"
+            ml="5"
+            style={[props?.titleRowView]}>
             <View style={[styles.titleView]}>
               {props.title ? (
                 <Text style={[styles.titleText, props?.titleTextStyle]}>
@@ -38,23 +43,29 @@ const ModalViewFilter = props => {
             </View>
             <Button
               variant="unstyled"
-              transparent
-              style={styles.closeButtonWrapper}>
-              <Icon
-                type="Ionicons"
-                style={styles.closeButton}
-                name="close-outline"
-                onPress={props.onHide ? props.onHide : props.onClose}
-              />
-            </Button>
-          </View>
+              style={styles.closeButtonWrapper}
+              rightIcon={
+                <Icon
+                  size={12}
+                  as={Ionicons}
+                  name="close-outline"
+                  color="warmGray.50"
+                  _dark={{
+                    color: 'warmGray.50',
+                  }}
+                  style={styles.closeButton}
+                  onPress={props.onHide ? props.onHide : props.onClose}
+                />
+              }
+            />
+          </HStack>
           {get(props, 'children', 'content')}
-          <View style={styles.buttonsView}>
+          <HStack justifyContent="space-between" px="1">
             <Button
               variant="unstyled"
-              transparent
               onPress={props.onReset ? props.onReset : props.onHide}
-              style={[styles.modalButton]}>
+              py="10"
+              px="5">
               <Text
                 style={[
                   styles.modalButtonText,
@@ -66,9 +77,10 @@ const ModalViewFilter = props => {
             </Button>
             <Button
               variant="unstyled"
-              transparent
+              borderRadius="full"
               onPress={props.onHide}
-              style={[styles.modalButton]}>
+              py="10"
+              px="5">
               <Text
                 style={[styles.modalButtonText, props.modalButtonTextStyle]}>
                 {props.confirmBtnText
@@ -76,7 +88,7 @@ const ModalViewFilter = props => {
                   : strings.MessageForm.done}
               </Text>
             </Button>
-          </View>
+          </HStack>
         </View>
       </Modal>
     </View>
@@ -99,34 +111,28 @@ const styles = StyleSheet.create({
   closeButtonWrapper: {
     marginTop: isAndroid ? 15 : 0,
   },
-  titleRowView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingLeft: 10,
-    marginBottom: 20,
-    marginLeft: 10,
+  titleView: {
+    alignSelf: 'center',
   },
   titleText: {
     fontSize: 20,
     fontFamily: styleConst.font.medium,
     color: styleConst.color.greyText4,
-    marginTop: 15,
   },
   closeButton: {
     color: styleConst.color.greyBlue,
-    fontSize: 40,
   },
-  buttonsView: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: '5%',
-    marginBottom: 10,
-  },
-  modalButton: {
-    marginVertical: 15,
-    height: isAndroid ? 50 : 60,
-    borderRadius: 0,
-  },
+  // buttonsView: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   paddingHorizontal: '5%',
+  //   marginBottom: 10,
+  // },
+  // modalButton: {
+  //   marginVertical: 15,
+  //   height: isAndroid ? 50 : 60,
+  //   borderRadius: 0,
+  // },
   modalButtonText: {
     color: styleConst.color.blue,
     fontSize: 17,

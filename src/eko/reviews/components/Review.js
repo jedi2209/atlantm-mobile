@@ -1,7 +1,16 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {View, Text, StyleSheet} from 'react-native';
-import {Icon, ListItem, Body, Right} from 'native-base';
+import {Text, StyleSheet} from 'react-native';
+import {
+  Icon,
+  View,
+  VStack,
+  HStack,
+  Box,
+  Pressable,
+  ScrollView,
+} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {decode} from 'html-entities';
 
 // components
@@ -16,24 +25,18 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 3,
     minHeight: 150,
-    shadowOpacity: 0.1,
-    shadowRadius: 1.5,
-    elevation: 3,
-    backgroundColor: 'white',
     marginBottom: 10,
     marginHorizontal: 7,
     borderRadius: 5,
     padding: 10,
   },
   itemInList: {
-    paddingTop: 10,
     paddingBottom: 3,
     minHeight: 150,
-    shadowOpacity: 0.1,
-    shadowRadius: 1.0,
     backgroundColor: 'white',
     marginBottom: 10,
-    marginHorizontal: 7,
+    width: '96%',
+    marginHorizontal: '2%',
     borderRadius: 5,
     padding: 10,
   },
@@ -68,7 +71,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   reviewIcon: {
-    fontSize: 28,
     marginRight: 15,
   },
   reviewIconPlus: {
@@ -79,7 +81,6 @@ const styles = StyleSheet.create({
   },
   reviewText: {
     fontFamily: styleConst.font.light,
-    letterSpacing: styleConst.ui.letterSpacing,
     marginTop: -2,
     fontSize: 16,
     color: styleConst.color.greyText3,
@@ -159,20 +160,47 @@ export default class Review extends Component {
     text = decode(text, {level: 'xml'});
 
     return (
-      <View
-        style={[styles.review, styles.row, inList ? null : styles.reviewFull]}>
+      <HStack mb={1} style={[inList ? {width: '90%'} : styles.reviewFull]}>
         <Icon
           name={isPlus ? 'ios-add-circle-outline' : 'ios-remove-circle-outline'}
+          as={Ionicons}
+          size={6}
           style={[
             styles.reviewIcon,
             isPlus ? styles.reviewIconPlus : styles.reviewIconMinus,
           ]}
         />
-        <Text style={styles.reviewText} numberOfLines={inList ? 2 : null}>
+        <Text
+          style={styles.reviewText}
+          ellipsizeMode="tail"
+          numberOfLines={inList ? 2 : null}>
           {text}
         </Text>
-      </View>
+      </HStack>
     );
+  };
+
+  ReviewWrapper = props => {
+    if (!props.inList) {
+      return (
+        <Box
+          shadow={3}
+          backgroundColor="white"
+          p={2}
+          pb={2}
+          mb={5}
+          mx={3}
+          borderRadius={5}>
+          {props.children}
+        </Box>
+      );
+    } else {
+      return (
+        <Pressable onPress={this.onPress} shadow={3} style={styles.itemInList}>
+          {props.children}
+        </Pressable>
+      );
+    }
   };
 
   render() {
@@ -181,32 +209,28 @@ export default class Review extends Component {
     const isVisited = this.checkVisited();
 
     return (
-      <ListItem
-        onPress={inList ? this.onPress : null}
-        style={[
-          styleConst.shadow.default,
-          inList ? styles.itemInList : styles.itemFull,
-        ]}>
-        <Body>
-          {this.renderName(name, isVisited)}
-          {this.renderRatingAndDate(grade, date, id)}
-          {this.renderPlusReview(text.plus)}
-          {this.renderMinusReview(text.minus)}
-        </Body>
-        {inList ? (
-          <Right>
+      <this.ReviewWrapper inList={inList}>
+        <HStack>
+          <VStack w="96%">
+            {this.renderName(name, isVisited)}
+            {this.renderRatingAndDate(grade, date, id)}
+            {this.renderPlusReview(text.plus)}
+            {this.renderMinusReview(text.minus)}
+          </VStack>
+          {inList ? (
             <Icon
               name="chevron-forward"
+              as={Ionicons}
+              size={6}
               style={{
-                fontSize: 27,
                 color: isVisited
                   ? styleConst.color.systemGray
                   : styleConst.color.systemBlue,
               }}
             />
-          </Right>
-        ) : null}
-      </ListItem>
+          ) : null}
+        </HStack>
+      </this.ReviewWrapper>
     );
   }
 }

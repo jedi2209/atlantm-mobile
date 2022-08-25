@@ -1,7 +1,7 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Pressable} from 'react-native';
 import PropTypes from 'prop-types';
-import {ListItem, Body, Right, Text} from 'native-base';
+import {HStack, Box, Container, Text} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 
 // component
@@ -19,8 +19,8 @@ const stylesDealerItemList = StyleSheet.create({
   brandLogo: {
     minWidth: 24,
     height: 20,
-    width: 35,
-    marginRight: 4,
+    width: 45,
+    marginRight: 10,
   },
   dealerCity: {
     fontFamily: styleConst.font.light,
@@ -78,14 +78,13 @@ const DealerItemList = props => {
   const navigation = useNavigation();
 
   return (
-    <View style={style || {}}>
-      <ListItem
-        last
+    <Box rounded="lg" p="3" style={style || {}}>
+      <Pressable
         onPress={() => {
           return _onPressDealer({props, navigation});
         }}
         style={stylesList.listItem}>
-        <Body>
+        <HStack space={3} justifyContent="space-between" alignItems="center">
           {city && city.name ? (
             <Text
               style={stylesDealerItemList.city}
@@ -112,9 +111,7 @@ const DealerItemList = props => {
               </Text>
             ) : null}
           </View>
-        </Body>
-        {dealer && dealer.brands ? (
-          <Right>
+          {dealer && dealer.brands ? (
             <View style={stylesDealerItemList.brands}>
               {dealer.brands &&
                 dealer.brands.length &&
@@ -123,7 +120,7 @@ const DealerItemList = props => {
                     return (
                       <BrandLogo
                         brand={brand.id}
-                        width={35}
+                        width={45}
                         style={stylesDealerItemList.brandLogo}
                         key={'brandLogo' + brand.id}
                       />
@@ -131,10 +128,10 @@ const DealerItemList = props => {
                   }
                 })}
             </View>
-          </Right>
-        ) : null}
-      </ListItem>
-    </View>
+          ) : null}
+        </HStack>
+      </Pressable>
+    </Box>
   );
 };
 

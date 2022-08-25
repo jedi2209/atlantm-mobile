@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Platform, StyleSheet, TouchableOpacity} from 'react-native';
 import {Icon} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import styleConst from '../style-const';
@@ -26,7 +27,6 @@ const styles = StyleSheet.create({
         fontSize: size * 1.1,
         width: size,
         height: size,
-        // marginRight: 30,
         marginTop: 0,
       },
     }),
@@ -37,7 +37,16 @@ export default class HeaderIconReload extends Component {
   render() {
     return (
       <TouchableOpacity style={styles.container} onPress={this.props.onPress}>
-        <Icon name="ios-refresh" style={styles.icon} />
+        <Icon
+          size={22}
+          as={Ionicons}
+          name="ios-refresh"
+          color="primary.600"
+          _dark={{
+            color: 'warmGray.50',
+          }}
+          style={styles.icon}
+        />
       </TouchableOpacity>
     );
   }

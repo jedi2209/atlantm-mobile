@@ -12,7 +12,7 @@ import {
   Pressable,
 } from 'react-native';
 
-import {Text, Button, Switch, Toast, CheckBox} from 'native-base';
+import {Text, Button, Switch, Toast, Checkbox} from 'native-base';
 import {get} from 'lodash';
 import {connect} from 'react-redux';
 import * as NavigationService from '../../../navigation/NavigationService';
@@ -444,27 +444,23 @@ class Form extends Component {
     if (requredLabels && requredLabels.length) {
       if (requredLabels.length > 1) {
         Toast.show({
-          text:
+          description:
             strings.Form.status.fieldsRequired1 +
             '\r\n- ' +
             requredLabels.join('\r\n- ') +
             '\r\n\r\n' +
             strings.Form.status.fieldsRequired2,
-          position: 'bottom',
           duration: 3000,
-          type: 'warning',
         });
       } else {
         Toast.show({
-          text:
+          description:
             strings.Form.status.fieldRequired1 +
             ' "' +
             requredLabels.join(' ') +
             '" ' +
             strings.Form.status.fieldRequired2,
-          position: 'bottom',
           duration: 3000,
-          type: 'warning',
         });
       }
       return false;
@@ -1321,7 +1317,7 @@ class Form extends Component {
           <Text selectable={false} style={styles.checkboxText}>
             {label}
           </Text>
-          <CheckBox
+          <Checkbox
             onPress={() => {
               this.onChangeField(data)(!this.state[name]);
             }}
@@ -1398,7 +1394,6 @@ class Form extends Component {
                   </View>
                 ) : null}
                 <Button
-                  block
                   {...(this.props.SubmitButton.iconLeft ? 'iconLeft' : null)}
                   {...(this.props.SubmitButton.iconRight ? 'iconRight' : null)}
                   onPress={async () => {
@@ -1435,15 +1430,17 @@ class Form extends Component {
                     styles.button,
                     this.props.SubmitButton && this.props.SubmitButton.style,
                   ]}
-                  disabled={this.state.showSubmitButton ? false : true}
-                  active={this.state.showSubmitButton ? true : false}
+                  isDisabled={this.state.showSubmitButton ? false : true}
+                  isLoading={this.state.loading}
+                  variant={this.state.loading ? 'outline' : 'solid'}
+                  // active={this.state.showSubmitButton ? true : false}
                   testID="Form.ButtonSubmit"
                   accessibilityValue={{
                     text: this.state.showSubmitButton ? 'false' : 'true',
                   }}
                   {...this.props.SubmitButton.props}>
                   {this.state.loading ? (
-                    <ActivityIndicator color={styleConst.color.white} />
+                    {/* <ActivityIndicator color={styleConst.color.white} /> */}
                   ) : (
                     <>
                       {this.props.SubmitButton.iconLeft

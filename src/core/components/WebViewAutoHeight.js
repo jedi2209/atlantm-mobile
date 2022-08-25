@@ -1,12 +1,12 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {Linking} from 'react-native';
+import React, {useState, useRef} from 'react';
+import {Linking, View} from 'react-native';
 import WebView from 'react-native-webview';
 import styleConst from '../style-const';
 
 const BODY_OPEN_TAG_PATTERN = /\<body\>/;
 const BODY_CLOSE_TAG_PATTERN = /\<\/ *body\>/;
 
-const script = `
+const INJECTED_JAVASCRIPT = `
   ;(function() {
   var wrapper = document.createElement("div");
   wrapper.id = "height-wrapper";
@@ -21,8 +21,7 @@ const script = `
   }
   updateHeight();
   window.addEventListener("load", function() {
-      updateHeight();
-      setTimeout(updateHeight, 1000);
+      setTimeout(updateHeight, 100);
   });
   window.addEventListener("resize", updateHeight);
   }());
@@ -32,10 +31,10 @@ const styleCSS = `
   <style>
     body, html, #height-wrapper {
         margin: 0;
-        padding: 15;
+        padding: 15 15 120 15;
         font-size: 16px !important;
         font-family: "HelveticaNeue-Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        backgroundColor: ${styleConst.color.bg}
+        backgroundColor: ${styleConst.color.bg};
     }
     a, a:visited, a.hover {
         color: #0072e7;
@@ -89,9 +88,12 @@ const styleCSS = `
 `;
 
 const codeInject = html => {
+  if (!html || typeof html === 'undefined') {
+    return false;
+  }
   html = html.replace(BODY_OPEN_TAG_PATTERN, '');
   html = html.replace(BODY_CLOSE_TAG_PATTERN, '');
-  html = `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">${styleCSS}</head><body>${html}<script>${script}</script></body></html>`;
+  html = `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">${styleCSS}</head><body>${html}<script>${INJECTED_JAVASCRIPT}</script></body></html>`;
   return html;
 };
 
@@ -106,7 +108,7 @@ const WebViewAutoHeight = ({
     minHeight = 400;
   }
   const [contentHeight, setContentHeight] = useState(minHeight);
-  let webview = useRef(null);
+  let webviewRef = useRef(null);
   const _handleNavigationChange = navState => {
     if (
       navState.url &&
@@ -115,8 +117,8 @@ const WebViewAutoHeight = ({
         navState.url.indexOf('tel:') !== -1 ||
         navState.url.indexOf('mailto:') !== -1)
     ) {
-      webview.stopLoading();
-      webview.goBack();
+      webviewRef.stopLoading();
+      webviewRef.goBack();
       Linking.openURL(navState.url);
     } else {
       if (typeof onNavigationStateChange === 'function') {
@@ -136,9 +138,8 @@ const WebViewAutoHeight = ({
       scrollEnabled={false}
       style={[style, {height: Math.max(contentHeight, minHeight)}]}
       ref={ref => {
-        webview = ref;
+        webviewRef = ref;
       }}
-      javaScriptEnabled
       onNavigationStateChange={_handleNavigationChange}
       dataDetectorTypes="all"
       allowsFullscreenVideo={true}

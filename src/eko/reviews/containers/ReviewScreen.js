@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {SafeAreaView, View, StyleSheet} from 'react-native';
-import {Content, StyleProvider} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -15,9 +14,9 @@ import SpinnerView from '../../../core/components/SpinnerView';
 
 // helpers
 import {get} from 'lodash';
-import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
+import { ScrollView, VStack } from 'native-base';
 
 const styles = StyleSheet.create({
   review: {
@@ -42,11 +41,8 @@ const mapDispatchToProps = {
 
 class ReviewScreen extends Component {
   componentDidMount() {
-    const {
-      dealerSelected,
-      reviewDealerRating,
-      actionFetchDealerRating,
-    } = this.props;
+    const {dealerSelected, reviewDealerRating, actionFetchDealerRating} =
+      this.props;
 
     if (!reviewDealerRating) {
       actionFetchDealerRating({
@@ -83,21 +79,19 @@ class ReviewScreen extends Component {
     ];
 
     return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styleConst.safearea.default}>
-          <Content>
-            <View style={{marginTop: 10}}>
-              <HeaderSubtitle content={subtitle} isBig={true} />
-            </View>
+      <ScrollView>
+        <VStack>
+          <View style={{marginTop: 10}}>
+            <HeaderSubtitle content={subtitle} isBig={true} />
+          </View>
 
-            <View style={styles.review}>
-              <Review review={review} />
-            </View>
+          <View mb={2} style={styles.review}>
+            <Review review={review} />
+          </View>
 
-            {review.answer ? <ReviewDealerAnswer text={review.answer} /> : null}
-          </Content>
-        </SafeAreaView>
-      </StyleProvider>
+          {review.answer ? <ReviewDealerAnswer text={review.answer} /> : null}
+        </VStack>
+      </ScrollView>
     );
   }
 }

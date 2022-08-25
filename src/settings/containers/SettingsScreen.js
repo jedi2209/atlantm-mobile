@@ -6,7 +6,6 @@ import {
   View,
   Alert,
   StyleSheet,
-  StatusBar,
   Platform,
   Dimensions,
   Linking,
@@ -14,11 +13,15 @@ import {
 import {
   Container,
   Text,
-  StyleProvider,
   Switch,
   Icon,
   Button,
+  Box,
+  Pressable,
+  HStack,
+  VStack,
 } from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import DeviceInfo from 'react-native-device-info';
 import * as NavigationService from '../../navigation/NavigationService';
 
@@ -34,7 +37,6 @@ import TransitionView from '../../core/components/TransitionView';
 
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
-import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import {APP_EMAIL, STORE_LINK} from '../../core/const';
 import {strings} from '../../core/lang/const';
@@ -52,8 +54,6 @@ const styles = StyleSheet.create({
     color: styleConst.color.lightBlue,
   },
   block: {
-    borderRadius: 10,
-    padding: 20,
     marginVertical: 10,
     marginLeft: 10,
   },
@@ -74,7 +74,6 @@ const styles = StyleSheet.create({
   langHeading: {
     color: styleConst.color.white,
     fontFamily: styleConst.font.medium,
-    width: '80%',
     fontSize: 24,
   },
   pushHeading: {
@@ -115,6 +114,7 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
     margin: 0,
     flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   userAgreementText: {
     fontSize: 12,
@@ -128,7 +128,7 @@ const mapStateToProps = ({dealer, info, nav, core}) => {
     nav,
     dealerSelected: dealer.selected,
     pushActionSubscribeState: core.pushActionSubscribeState,
-    currentLang: core.language.selected || 'ua',
+    currentLang: core.language.selected || 'ru',
     AppRateAskLater: core.AppRateAskLater,
   };
 };
@@ -222,48 +222,30 @@ class SettingsScreen extends PureComponent {
 
   render() {
     return (
-      <StyleProvider style={getTheme()}>
-        <ScrollView style={styleConst.safearea.default}>
-          <Container style={styleConst.safearea.default}>
-            <Text selectable={false} style={styleConst.text.bigHead}>
-              {strings.Menu.main.settings}
-            </Text>
-            {this.props.dealerSelected.region === 'ua' ? (
-              <TransitionView
-                animation={styleConst.animation.zoomIn}
-                duration={250}
-                index={1}
-                style={[
-                  styleConst.shadow.default,
-                  styles.block,
-                  styles.blockLang,
-                  {
-                    width: cardWidth,
-                  },
-                ]}>
-                <Text selectable={false} style={styles.langHeading}>
-                  {strings.SettingsScreen.mainLanguage}
-                </Text>
-                <LangSwitcher
-                  items={languagesItems}
-                  bgColor={styleConst.color.darkBg}
-                  value={this.props.currentLang}
-                  style={styles.LangSwitcher}
-                  styleContainer={{width: '100%'}}
-                  textInputProps={styles.textInputProps}
-                />
-              </TransitionView>
-            ) : null}
-            <TransitionView
-              animation={styleConst.animation.zoomIn}
-              duration={250}
-              index={2}
-              style={[
-                styleConst.shadow.default,
-                styles.block,
-                styles.blockPush,
-                {width: cardWidth},
-              ]}>
+      <ScrollView style={styleConst.safearea.default}>
+        <Text selectable={false} style={styleConst.text.bigHead}>
+          {strings.Menu.main.settings}
+        </Text>
+        <TransitionView
+          animation={styleConst.animation.zoomIn}
+          duration={250}
+          index={2}>
+          <Box
+            borderWidth="1"
+            borderColor="coolGray.300"
+            shadow="3"
+            bg={styleConst.color.blue}
+            p="5"
+            rounded="8"
+            style={[
+              styleConst.shadow.default,
+              styles.block,
+              {width: cardWidth},
+            ]}>
+            <VStack
+              space={3}
+              justifyContent="space-between"
+              alignItems="flex-start">
               <View style={{flexDirection: 'row'}}>
                 <View style={{width: '80%'}}>
                   <Text selectable={false} style={styles.pushHeading}>
@@ -298,135 +280,142 @@ class SettingsScreen extends PureComponent {
                     strings.SettingsScreen.pushText2}
                 </Text>
               </View>
-            </TransitionView>
-            <TransitionView
-              animation={styleConst.animation.zoomIn}
-              duration={250}
-              index={3}
+            </VStack>
+          </Box>
+        </TransitionView>
+        <TransitionView
+          animation={styleConst.animation.zoomIn}
+          duration={250}
+          index={3}>
+          <Pressable
+            onPress={() => {
+              Analytics.logEvent('screen', 'ratePopup', {
+                source: 'settings',
+              });
+              return RateThisApp({onSuccess: this._onAppRateSuccess});
+              //return Linking.openURL(STORE_LINK[Platform.OS]);
+            }}>
+            <Box
+              borderWidth="1"
+              borderColor="coolGray.300"
+              shadow="3"
+              bg={styleConst.color.orange}
+              p="5"
+              rounded="8"
               style={[
                 styleConst.shadow.default,
                 styles.block,
-                styles.blockFeedback,
                 {width: cardWidth},
               ]}>
-              <Button
-                variant="unstyled"
-                transparent
-                full
-                size="full"
-                style={styles.buttonRate}
-                selectable={false}
-                onPress={() => {
-                  Analytics.logEvent('screen', 'ratePopup', {
-                    source: 'settings',
-                  });
-                  return RateThisApp({onSuccess: this._onAppRateSuccess});
-                  //return Linking.openURL(STORE_LINK[Platform.OS]);
-                }}>
-                <Text
-                  selectable={false}
-                  style={[styles.langHeading, {lineHeight: 30}]}>
-                  {strings.SettingsScreen.rateAppTitle}
-                </Text>
-                <Icon
-                  name={
-                    Platform.OS === 'android'
-                      ? 'logo-google-playstore'
-                      : 'logo-apple-appstore'
-                  }
-                  style={{
-                    color: 'white',
-                    fontSize: 55,
-                  }}
-                  selectable={false}
-                />
-              </Button>
-            </TransitionView>
-            <TransitionView
-              animation={styleConst.animation.zoomIn}
-              duration={250}
-              index={4}
-              style={[
-                styleConst.shadow.default,
-                styles.block,
-                styles.blockContactUs,
-                {width: cardWidth},
-              ]}>
-              <Button
-                variant="unstyled"
-                transparent
-                full
-                size="full"
-                style={styles.buttonRate}
-                selectable={false}
-                onPress={() => {
-                  return Linking.openURL('mailto:' + APP_EMAIL);
-                }}>
+              <HStack
+                space={3}
+                justifyContent="space-between"
+                alignItems="center">
                 <Text
                   selectable={false}
                   style={[styles.langHeading, {fontSize: 20, lineHeight: 20}]}>
                   {strings.SettingsScreen.mailtoUs}
                 </Text>
                 <Icon
-                  name={'mail-outline'}
-                  selectable={false}
-                  style={{
+                  size={55}
+                  as={Ionicons}
+                  name={
+                    Platform.OS === 'android'
+                      ? 'logo-google-playstore'
+                      : 'logo-apple-appstore'
+                  }
+                  color="white"
+                  _dark={{
                     color: 'white',
-                    fontSize: 55,
                   }}
+                  selectable={false}
                 />
-              </Button>
-            </TransitionView>
-            <TransitionView
-              animation={styleConst.animation.opacityIn}
-              duration={350}
-              index={6}
+              </HStack>
+            </Box>
+          </Pressable>
+        </TransitionView>
+        <TransitionView
+          animation={styleConst.animation.zoomIn}
+          duration={250}
+          index={4}>
+          <Pressable
+            onPress={() => {
+              return Linking.openURL('mailto:' + APP_EMAIL);
+            }}>
+            <Box
+              borderWidth="1"
+              borderColor="coolGray.300"
+              shadow="3"
+              bg={styleConst.color.green}
+              p="5"
+              rounded="8"
               style={[
-                styles.VersionContainer,
-                {width: cardWidth, marginHorizontal: 10, marginTop: 20},
+                styleConst.shadow.default,
+                styles.block,
+                {width: cardWidth},
               ]}>
-              <Text
-                onPress={() =>
-                  NavigationService.navigate('UserAgreementScreen')
-                }
-                style={styles.userAgreementText}>
-                {strings.Form.agreement.title}
-              </Text>
-            </TransitionView>
-            <TransitionView
-              animation={styleConst.animation.opacityIn}
-              duration={350}
-              index={6}
-              style={[
-                styles.VersionContainer,
-                {width: cardWidth, marginHorizontal: 10, marginTop: 20},
-              ]}>
-              <Button
-                variant="unstyled"
-                transparent
-                full
-                size="full"
-                onPress={() => {
-                  return Linking.openURL(STORE_LINK[Platform.OS]);
-                }}
-                style={{
-                  borderColor: styleConst.color.accordeonGrey1,
-                  borderWidth: 1,
-                  borderRadius: 10,
-                  marginBottom: 20,
-                }}>
-                <Text selectable={false} style={styles.TextVersionInfo}>
-                  {'ver. ' +
-                    DeviceInfo.getVersion() +
-                    ' (' +
-                    DeviceInfo.getBuildNumber() +
-                    ')'}
+              <HStack
+                space={3}
+                justifyContent="space-between"
+                alignItems="center">
+                <Text
+                  selectable={false}
+                  style={[styles.langHeading, {fontSize: 20, lineHeight: 20}]}>
+                  {strings.SettingsScreen.mailtoUs}
                 </Text>
-              </Button>
-            </TransitionView>
-          </Container>
-        </ScrollView>
-      </StyleProvider>
+                <Icon
+                  size={55}
+                  as={Ionicons}
+                  name={'mail-outline'}
+                  color="white"
+                  _dark={{
+                    color: 'white',
+                  }}
+                  selectable={false}
+                />
+              </HStack>
+            </Box>
+          </Pressable>
+        </TransitionView>
+        <TransitionView
+          animation={styleConst.animation.opacityIn}
+          duration={350}
+          index={6}
+          style={[
+            styles.VersionContainer,
+            {width: cardWidth, marginHorizontal: 10, marginTop: 20},
+          ]}>
+          <Text
+            onPress={() => NavigationService.navigate('UserAgreementScreen')}
+            style={styles.userAgreementText}>
+            {strings.Form.agreement.title}
+          </Text>
+        </TransitionView>
+        <TransitionView
+          animation={styleConst.animation.opacityIn}
+          duration={350}
+          index={6}
+          style={[
+            styles.VersionContainer,
+            {width: cardWidth, marginHorizontal: 10, marginTop: 20},
+          ]}>
+          <Button
+            variant="outline"
+            size="md"
+            borderColor={styleConst.color.accordeonGrey1}
+            onPress={() => {
+              return Linking.openURL(STORE_LINK[Platform.OS]);
+            }}>
+            <Text selectable={false} style={styles.TextVersionInfo}>
+              {'ver. ' +
+                DeviceInfo.getVersion() +
+                ' (' +
+                DeviceInfo.getBuildNumber() +
+                ')'}
+            </Text>
+          </Button>
+        </TransitionView>
+      </ScrollView>
     );
   }
 }

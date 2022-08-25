@@ -1,12 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState, useRef} from 'react';
 import {
-  View,
   TouchableOpacity,
   Text,
   ActivityIndicator,
   TouchableWithoutFeedback,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Linking,
@@ -14,17 +12,21 @@ import {
   Alert,
 } from 'react-native';
 import {
-  Container,
-  Content,
-  Col,
-  Row,
   Icon,
-  Grid,
   Button,
-  Accordion,
   Fab,
+  View,
+  VStack,
+  HStack,
+  ScrollView,
+  Pressable,
 } from 'native-base';
+import Accordion from 'react-native-collapsible/Accordion';
 import * as NavigationService from '../../../navigation/NavigationService';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // redux
 import {connect} from 'react-redux';
@@ -149,14 +151,7 @@ const _renderOptionPlates = params => {
       bounces={true}
       testID="NewCarItemScreen.PlatesWrapper"
       ref={platesScrollViewRef}>
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          paddingHorizontal: '2%',
-          marginBottom: 10,
-          marginRight: 10,
-        }}>
+      <HStack px="2%" mb="4" mr="10">
         <OptionPlate
           title={strings.NewCarItemScreen.plates.complectation}
           testID="NewCarItemScreen.Plates.Complectation"
@@ -204,7 +199,7 @@ const _renderOptionPlates = params => {
             subtitle={colorName}
           />
         ) : null}
-      </View>
+      </HStack>
     </ScrollView>
   );
 };
@@ -212,7 +207,7 @@ const _renderOptionPlates = params => {
 const _renderItem = (title, value, postfix) => {
   const key = md5(title + value + postfix);
   return value ? (
-    <Row key={key} style={styles.sectionRow}>
+    <HStack key={key} style={styles.sectionRow}>
       <View style={[styles.sectionProp, {flex: 1}]}>
         <Text
           style={styles.sectionPropText}
@@ -229,7 +224,7 @@ const _renderItem = (title, value, postfix) => {
           {value} {postfix || null}
         </Text>
       </View>
-    </Row>
+    </HStack>
   ) : null;
 };
 
@@ -248,15 +243,15 @@ const _renderTechData = (title, data, carDetails) => {
       return el != null;
     });
     return res ? (
-      <View style={styles.sectionOptions}>
+      <VStack style={styles.sectionOptions}>
         <Text
           style={styles.sectionTitle}
           ellipsizeMode="tail"
           numberOfLines={1}>
           {title}
         </Text>
-        <Grid>{res}</Grid>
-      </View>
+        <View>{res}</View>
+      </VStack>
     ) : null;
   }
 };
@@ -281,32 +276,32 @@ const _renderComplectationItem = (title, data) => {
       {data.map(item => {
         const key = md5(item.name + item.id);
         return (
-          <Grid key={key}>
+          <View key={key}>
             {item.name && item.value ? (
-              <Row style={styles.sectionRow}>
-                <Col style={styles.sectionProp}>
+              <HStack style={styles.sectionRow}>
+                <View style={styles.sectionProp}>
                   <Text
                     style={styles.sectionPropText}
                     ellipsizeMode="tail"
                     numberOfLines={2}>
                     {item.name}
                   </Text>
-                </Col>
-                <Col style={styles.sectionValue}>
+                </View>
+                <View style={styles.sectionValue}>
                   <Text
                     style={styles.sectionValueText}
                     ellipsizeMode="tail"
                     numberOfLines={1}>
                     {item.value}
                   </Text>
-                </Col>
-              </Row>
+                </View>
+              </HStack>
             ) : (
               <Text style={[styles.sectionPropText, styles.sectionRow]}>
                 {item.name}
               </Text>
             )}
-          </Grid>
+          </View>
         );
       })}
     </View>
@@ -543,6 +538,8 @@ const NewCarItemScreen = ({
   const platesScrollViewRef = useRef(null);
   const [isLoading, setLoading] = useState(true);
 
+  const [sectionActive, setSectionActive] = useState([0]);
+
   const carId = get(route, 'params.carId');
 
   const badge = get(carDetails, 'badge', []);
@@ -681,14 +678,12 @@ const NewCarItemScreen = ({
 
   if (!carDetails || isLoading) {
     return (
-      <Container style={styles.spinnerContainer}>
-        <Content>
-          <ActivityIndicator
-            color={styleConst.color.blue}
-            style={styleConst.spinner}
-          />
-        </Content>
-      </Container>
+      <View style={styles.spinnerContainer}>
+        <ActivityIndicator
+          color={styleConst.color.blue}
+          style={styleConst.spinner}
+        />
+      </View>
     );
   }
 
@@ -699,356 +694,354 @@ const NewCarItemScreen = ({
     dealerSelected,
   });
 
+  const SECTIONS = [
+    {
+      title: strings.NewCarItemScreen.tech.title,
+      content: (
+        <View testID="NewCarItemScreen.TechWrapper">
+          {_renderTechData(
+            strings.NewCarItemScreen.tech.base,
+            [
+              {
+                name: strings.NewCarItemScreen.tech.body.type,
+                value: 'body.name',
+                alternate: bodyName,
+              },
+              {
+                name: strings.NewCarItemScreen.tech.year,
+                value: 'year',
+              },
+            ],
+            carDetails,
+          )}
+          {_renderTechData(
+            strings.NewCarItemScreen.tech.engine.title,
+            [
+              {
+                name: strings.NewCarItemScreen.tech.engine.type,
+                value: 'engine.type',
+                alternate: engineName,
+              },
+              (() => {
+                if (
+                  get(carDetails, 'engine.id') &&
+                  get(carDetails, 'engine.id') === 4
+                ) {
+                  return false;
+                }
+                return {
+                  name: strings.NewCarItemScreen.tech.engine.volume,
+                  value: 'engine.volume.full',
+                  postfix: 'см³',
+                };
+              })(),
+              {
+                name: strings.NewCarItemScreen.tech.engine.power.hp,
+                value: 'power.hp',
+                postfix: strings.NewCarItemScreen.shortUnits.hp,
+              },
+            ],
+            carDetails,
+          )}
+          {_renderTechData(
+            strings.NewCarItemScreen.tech.gearbox.title,
+            [
+              {
+                name: strings.NewCarItemScreen.tech.gearbox.type,
+                value: 'gearbox.name',
+                alternate: gearboxName,
+              },
+              {
+                name: strings.NewCarItemScreen.tech.gearbox.count,
+                value: 'gearbox.count',
+              },
+              {
+                name: strings.NewCarItemScreen.tech.gearbox.wheel,
+                value: 'gearbox.wheel.name',
+                alternate: wheelName,
+              },
+            ],
+            carDetails,
+          )}
+          {_renderTechData(
+            strings.NewCarItemScreen.tech.body.title,
+            [
+              {
+                name: strings.NewCarItemScreen.tech.body.width,
+                value: 'body.width',
+                postfix: strings.NewCarItemScreen.shortUnits.milimetrs,
+              },
+              {
+                name: strings.NewCarItemScreen.tech.body.height,
+                value: 'body.height',
+                postfix: strings.NewCarItemScreen.shortUnits.milimetrs,
+              },
+              {
+                name: strings.NewCarItemScreen.tech.body.high,
+                value: 'body.high',
+                postfix: strings.NewCarItemScreen.shortUnits.milimetrs,
+              },
+              {
+                name: strings.NewCarItemScreen.tech.body.clirens,
+                value: 'body.clirens',
+                postfix: strings.NewCarItemScreen.shortUnits.milimetrs,
+              },
+              {
+                name: strings.NewCarItemScreen.tech.body.trunk,
+                value: 'body.trunk.min',
+                postfix: strings.NewCarItemScreen.shortUnits.litres,
+              },
+              {
+                name: strings.NewCarItemScreen.tech.body.fuel,
+                value: 'fuel.fuel',
+                postfix: strings.NewCarItemScreen.shortUnits.litres,
+              },
+            ],
+            carDetails,
+          )}
+          {_renderTechData(
+            strings.NewCarItemScreen.techData.title,
+            [
+              {
+                name: strings.NewCarItemScreen.techData.maxSpeed,
+                value: 'speed.max',
+                postfix: 'км/ч.',
+              },
+              {
+                name: strings.NewCarItemScreen.techData.dispersal,
+                value: 'speed.dispersal',
+                postfix: 'сек.',
+              },
+              {
+                name: strings.NewCarItemScreen.techData.fuel.city,
+                value: 'fuel.city',
+                postfix: strings.NewCarItemScreen.shortUnits.litres,
+              },
+              {
+                name: strings.NewCarItemScreen.techData.fuel.track,
+                value: 'fuel.track',
+                postfix: strings.NewCarItemScreen.shortUnits.litres,
+              },
+              {
+                name: strings.NewCarItemScreen.techData.fuel.both,
+                value: 'fuel.both',
+                postfix: strings.NewCarItemScreen.shortUnits.litres,
+              },
+            ],
+            carDetails,
+          )}
+        </View>
+      ),
+    },
+    {
+      title: strings.NewCarItemScreen.complectation.title,
+      content: (
+        <View
+          style={styles.tabContent}
+          testID="NewCarItemScreen.ComplectationWrapper">
+          {stockKeys.length ? (
+            <View>
+              {stockKeys.map(key => {
+                return _renderComplectationItem(
+                  stock[key].name,
+                  stock[key].data,
+                );
+              })}
+            </View>
+          ) : null}
+
+          {additionalKeys.length ? (
+            <View>
+              {additionalKeys.map(key => {
+                return _renderComplectationItem(
+                  additional[key].name,
+                  additional[key].data,
+                );
+              })}
+            </View>
+          ) : null}
+
+          {carDetails.text ? (
+            <View style={styles.descrContainer}>
+              <Text style={styles.descr}>{carDetails.text}</Text>
+            </View>
+          ) : null}
+        </View>
+      ),
+    },
+  ];
+
   return (
     <>
-      <Container testID="NewCarItemScreen.Wrapper">
-        <Content>
-          <StatusBar hidden />
-          <View>
-            {get(carDetails, 'color.picker.codes.hex', null) ? (
-              <ColorBox
-                containerStyle={styles.colorboxContainer}
-                color={get(carDetails, 'color')}
-              />
-            ) : null}
-            {(badge && badge.length) || statusName ? (
-              <View
-                testID="NewCarItemScreen.BadgesWrapper"
-                style={styles.badgesView}>
-                {badge.map((item, index) => {
-                  if (item.name.toLowerCase() === 'спец.цена') {
-                    item.name = strings.CarList.badges.specialPrice;
-                  }
-                  return (
-                    <Badge
-                      id={carDetails.id.api}
-                      key={'badgeItem' + carDetails.id.api + index}
-                      index={index}
-                      bgColor={item.background}
-                      name={item.name}
-                      textColor={item.textColor}
-                    />
-                  );
-                })}
-                {statusName ? (
-                  <Badge
-                    id={'badgeItemStatus' + carDetails.id.api}
-                    key={'badgeItemStatus' + carDetails.id.api}
-                    bgColor={styleConst.color.green}
-                    name={statusName.toLowerCase()}
-                    textColor={'#fff'}
-                  />
-                ) : null}
-              </View>
-            ) : null}
-            <PhotoSlider
-              height={290}
-              photosFull={photosFull}
-              themeFull={'white'}
-              photos={photosData}
-              resizeMode={isCarImgReal ? 'cover' : 'contain'}
-              dotColor={!isCarImgReal ? styleConst.color.black : null}
+      <ScrollView backgroundColor="white" testID="NewCarItemScreen.Wrapper">
+        <View>
+          {get(carDetails, 'color.picker.codes.hex', null) ? (
+            <ColorBox
+              containerStyle={styles.colorboxContainer}
+              color={get(carDetails, 'color')}
             />
-          </View>
-          <View
-            style={[
-              styleConst.shadow.default,
-              styles.carTopWrapper,
-              {marginTop: -20},
-            ]}>
-            <View>
-              <View style={styles.modelBrandView}>
-                <View style={{marginBottom: 10, flexShrink: 1}}>
-                  <Text style={styles.modelBrandText}>
-                    {[brandName, modelName].join(' ')}
-                  </Text>
-                  <Text style={styles.complectationText}>
-                    {[
-                      generationName,
-                      get(carDetails, 'complectation.name', ''),
-                      get(carDetails, 'year'),
-                    ].join(', ')}
-                  </Text>
-                </View>
-                {_renderPrice({
-                  carDetails,
-                  currency,
-                  isPriceShow,
-                  dealerSelected,
-                })}
-              </View>
-
-              {_renderOptionPlates({
-                platesScrollViewRef,
-                carDetails,
-                engineId,
-                engineVolumeShort,
-                wheelName,
-                colorName,
-              })}
-              {warrantyText ? (
-                <View style={styles.warrantyView}>
-                  <Icon
-                    type="MaterialCommunityIcons"
-                    name="shield-car"
-                    selectable={false}
-                    style={styles.warrantyIcon}
+          ) : null}
+          {(badge && badge.length) || statusName ? (
+            <View
+              testID="NewCarItemScreen.BadgesWrapper"
+              style={styles.badgesView}>
+              {badge.map((item, index) => {
+                if (item.name.toLowerCase() === 'спец.цена') {
+                  item.name = strings.CarList.badges.specialPrice;
+                }
+                return (
+                  <Badge
+                    id={carDetails.id.api}
+                    key={'badgeItem' + carDetails.id.api + index}
+                    index={index}
+                    bgColor={item.background}
+                    name={item.name}
+                    textColor={item.textColor}
                   />
-                  <Text style={styles.warrantyText}>
-                    {[strings.NewCarItemScreen.warranty, warrantyText].join(
-                      ' ',
-                    )}
-                  </Text>
-                </View>
-              ) : null}
-              {get(carDetails, 'location.coords') ? (
-                <TouchableWithoutFeedback
-                  onPress={() => _onPressMap({carDetails, navigation})}
-                  style={styles.mapCard}>
-                  <View style={styles.mapCardContainer}>
-                    <Icon
-                      type="MaterialCommunityIcons"
-                      name="map-marker-outline"
-                      style={styles.mapCardIcon}
-                    />
-                    <View style={styles.mapCardTextContainer}>
-                      <Text style={styles.mapCardTitle}>
-                        {strings.NewCarItemScreen.carLocation}
-                      </Text>
-                      <Text
-                        style={styles.mapCardDealer}
-                        numberOfLines={1}
-                        ellipsizeMode="tail">
-                        {[
-                          get(carDetails, 'location.city.name'),
-                          get(carDetails, 'location.name'),
-                        ].join(', ')}
-                      </Text>
-                    </View>
-                  </View>
-                </TouchableWithoutFeedback>
+                );
+              })}
+              {statusName ? (
+                <Badge
+                  id={'badgeItemStatus' + carDetails.id.api}
+                  key={'badgeItemStatus' + carDetails.id.api}
+                  bgColor={styleConst.color.green}
+                  name={statusName.toLowerCase()}
+                  textColor={'#fff'}
+                />
               ) : null}
             </View>
-            <Accordion
-              style={[styles.accordion, {marginBottom: 140}]}
-              dataArray={[
-                {
-                  title: strings.NewCarItemScreen.tech.title,
-                  content: (
-                    <View testID="NewCarItemScreen.TechWrapper">
-                      {_renderTechData(
-                        strings.NewCarItemScreen.tech.base,
-                        [
-                          {
-                            name: strings.NewCarItemScreen.tech.body.type,
-                            value: 'body.name',
-                            alternate: bodyName,
-                          },
-                          {
-                            name: strings.NewCarItemScreen.tech.year,
-                            value: 'year',
-                          },
-                        ],
-                        carDetails,
-                      )}
-                      {_renderTechData(
-                        strings.NewCarItemScreen.tech.engine.title,
-                        [
-                          {
-                            name: strings.NewCarItemScreen.tech.engine.type,
-                            value: 'engine.type',
-                            alternate: engineName,
-                          },
-                          (() => {
-                            if (
-                              get(carDetails, 'engine.id') &&
-                              get(carDetails, 'engine.id') === 4
-                            ) {
-                              return false;
-                            }
-                            return {
-                              name: strings.NewCarItemScreen.tech.engine.volume,
-                              value: 'engine.volume.full',
-                              postfix: 'см³',
-                            };
-                          })(),
-                          {
-                            name: strings.NewCarItemScreen.tech.engine.power.hp,
-                            value: 'power.hp',
-                            postfix: strings.NewCarItemScreen.shortUnits.hp,
-                          },
-                        ],
-                        carDetails,
-                      )}
-                      {_renderTechData(
-                        strings.NewCarItemScreen.tech.gearbox.title,
-                        [
-                          {
-                            name: strings.NewCarItemScreen.tech.gearbox.type,
-                            value: 'gearbox.name',
-                            alternate: gearboxName,
-                          },
-                          {
-                            name: strings.NewCarItemScreen.tech.gearbox.count,
-                            value: 'gearbox.count',
-                          },
-                          {
-                            name: strings.NewCarItemScreen.tech.gearbox.wheel,
-                            value: 'gearbox.wheel.name',
-                            alternate: wheelName,
-                          },
-                        ],
-                        carDetails,
-                      )}
-                      {_renderTechData(
-                        strings.NewCarItemScreen.tech.body.title,
-                        [
-                          {
-                            name: strings.NewCarItemScreen.tech.body.width,
-                            value: 'body.width',
-                            postfix:
-                              strings.NewCarItemScreen.shortUnits.milimetrs,
-                          },
-                          {
-                            name: strings.NewCarItemScreen.tech.body.height,
-                            value: 'body.height',
-                            postfix:
-                              strings.NewCarItemScreen.shortUnits.milimetrs,
-                          },
-                          {
-                            name: strings.NewCarItemScreen.tech.body.high,
-                            value: 'body.high',
-                            postfix:
-                              strings.NewCarItemScreen.shortUnits.milimetrs,
-                          },
-                          {
-                            name: strings.NewCarItemScreen.tech.body.clirens,
-                            value: 'body.clirens',
-                            postfix:
-                              strings.NewCarItemScreen.shortUnits.milimetrs,
-                          },
-                          {
-                            name: strings.NewCarItemScreen.tech.body.trunk,
-                            value: 'body.trunk.min',
-                            postfix: strings.NewCarItemScreen.shortUnits.litres,
-                          },
-                          {
-                            name: strings.NewCarItemScreen.tech.body.fuel,
-                            value: 'fuel.fuel',
-                            postfix: strings.NewCarItemScreen.shortUnits.litres,
-                          },
-                        ],
-                        carDetails,
-                      )}
-                      {_renderTechData(
-                        strings.NewCarItemScreen.techData.title,
-                        [
-                          {
-                            name: strings.NewCarItemScreen.techData.maxSpeed,
-                            value: 'speed.max',
-                            postfix: 'км/ч.',
-                          },
-                          {
-                            name: strings.NewCarItemScreen.techData.dispersal,
-                            value: 'speed.dispersal',
-                            postfix: 'сек.',
-                          },
-                          {
-                            name: strings.NewCarItemScreen.techData.fuel.city,
-                            value: 'fuel.city',
-                            postfix: strings.NewCarItemScreen.shortUnits.litres,
-                          },
-                          {
-                            name: strings.NewCarItemScreen.techData.fuel.track,
-                            value: 'fuel.track',
-                            postfix: strings.NewCarItemScreen.shortUnits.litres,
-                          },
-                          {
-                            name: strings.NewCarItemScreen.techData.fuel.both,
-                            value: 'fuel.both',
-                            postfix: strings.NewCarItemScreen.shortUnits.litres,
-                          },
-                        ],
-                        carDetails,
-                      )}
-                    </View>
-                  ),
-                },
-                {
-                  title: strings.NewCarItemScreen.complectation.title,
-                  content: (
-                    <View
-                      style={styles.tabContent}
-                      testID="NewCarItemScreen.ComplectationWrapper">
-                      {stockKeys.length ? (
-                        <View>
-                          {stockKeys.map(key => {
-                            return _renderComplectationItem(
-                              stock[key].name,
-                              stock[key].data,
-                            );
-                          })}
-                        </View>
-                      ) : null}
+          ) : null}
+          <PhotoSlider
+            height={290}
+            photosFull={photosFull}
+            themeFull={'white'}
+            photos={photosData}
+            resizeMode={isCarImgReal ? 'cover' : 'contain'}
+            dotColor={!isCarImgReal ? styleConst.color.black : null}
+          />
+        </View>
+        <View
+          shadow={7}
+          mb={'1/5'}
+          style={[styles.carTopWrapper, {marginTop: -20}]}>
+          <View>
+            <View style={styles.modelBrandView}>
+              <View style={{marginBottom: 10, flexShrink: 1}}>
+                <Text style={styles.modelBrandText}>
+                  {[brandName, modelName].join(' ')}
+                </Text>
+                <Text style={styles.complectationText}>
+                  {[
+                    generationName,
+                    get(carDetails, 'complectation.name', ''),
+                    get(carDetails, 'year'),
+                  ].join(', ')}
+                </Text>
+              </View>
+              {_renderPrice({
+                carDetails,
+                currency,
+                isPriceShow,
+                dealerSelected,
+              })}
+            </View>
 
-                      {additionalKeys.length ? (
-                        <View>
-                          {additionalKeys.map(key => {
-                            return _renderComplectationItem(
-                              additional[key].name,
-                              additional[key].data,
-                            );
-                          })}
-                        </View>
-                      ) : null}
-
-                      {carDetails.text ? (
-                        <View style={styles.descrContainer}>
-                          <Text style={styles.descr}>{carDetails.text}</Text>
-                        </View>
-                      ) : null}
-                    </View>
-                  ),
-                },
-              ]}
-              expanded={[0]}
-              animation={true}
-              renderHeader={(item, expanded) => (
-                <View
-                  testID={'NewCarItemScreen.AccordionTitle_' + item.title}
-                  style={styles.accordionHeader}>
-                  <Text style={styles.accordionHeaderTitle}>{item.title}</Text>
-                  {expanded ? (
-                    <Icon
-                      type="FontAwesome5"
-                      style={{
-                        color: styleConst.color.greyText4,
-                        fontWeight: 'normal',
-                      }}
-                      name="angle-down"
-                    />
-                  ) : (
-                    <Icon
-                      type="FontAwesome5"
-                      style={{
-                        color: styleConst.color.greyText,
-                        fontWeight: 'normal',
-                      }}
-                      name="angle-right"
-                    />
-                  )}
-                </View>
-              )}
-              renderContent={item => {
-                return (
-                  <View style={styles.accordionContent}>{item.content}</View>
-                );
-              }}
-            />
+            {_renderOptionPlates({
+              platesScrollViewRef,
+              carDetails,
+              engineId,
+              engineVolumeShort,
+              wheelName,
+              colorName,
+            })}
+            {warrantyText ? (
+              <HStack pl={'2%'} pr={'4%'} mb={4} alignItems="center">
+                <Icon
+                  as={MaterialCommunityIcons}
+                  name="shield-car"
+                  size={12}
+                  color={styleConst.color.green}
+                />
+                <Text style={styles.warrantyText}>
+                  {[strings.NewCarItemScreen.warranty, warrantyText].join(' ')}
+                </Text>
+              </HStack>
+            ) : null}
+            {get(carDetails, 'location.coords') ? (
+              <Pressable
+                onPress={() => _onPressMap({carDetails, navigation})}
+                style={styles.mapCard}>
+                <VStack style={styles.mapCardContainer}>
+                  <Icon
+                    as={MaterialCommunityIcons}
+                    name="map-marker-outline"
+                    size={12}
+                    color={styleConst.color.blue}
+                  />
+                  <View justifyContent={'space-around'}>
+                    <Text style={styles.mapCardTitle}>
+                      {strings.NewCarItemScreen.carLocation}
+                    </Text>
+                    <Text
+                      style={styles.mapCardDealer}
+                      numberOfLines={1}
+                      ellipsizeMode="tail">
+                      {[
+                        get(carDetails, 'location.city.name'),
+                        get(carDetails, 'location.name'),
+                      ].join(', ')}
+                    </Text>
+                  </View>
+                </VStack>
+              </Pressable>
+            ) : null}
           </View>
-        </Content>
-      </Container>
-      <View
+          <Accordion
+            sections={SECTIONS}
+            activeSections={sectionActive}
+            // renderSectionTitle={this._renderSectionTitle}
+            renderHeader={(item, index, expanded) => (
+              <HStack
+                justifyContent={'space-between'}
+                alignItems={'center'}
+                px="2%"
+                backgroundColor="white"
+                testID={'NewCarItemScreen.AccordionTitle_' + item.title}
+                style={styles.accordionHeader}>
+                <Text style={styles.accordionHeaderTitle}>{item.title}</Text>
+                {expanded ? (
+                  <Icon
+                    as={FontAwesome5}
+                    style={{
+                      color: styleConst.color.greyText4,
+                      fontWeight: 'normal',
+                    }}
+                    name="angle-down"
+                  />
+                ) : (
+                  <Icon
+                    as={FontAwesome5}
+                    style={{
+                      color: styleConst.color.greyText,
+                      fontWeight: 'normal',
+                    }}
+                    name="angle-right"
+                  />
+                )}
+              </HStack>
+            )}
+            renderContent={section => {
+              return (
+                <View style={styles.accordionContent}>{section.content}</View>
+              );
+            }}
+            onChange={setSectionActive}
+          />
+        </View>
+        <View height={90} />
+      </ScrollView>
+      <VStack
+        position="absolute"
         style={[
           styleConst.shadow.default,
           stylesFooter.footer,
@@ -1057,91 +1050,81 @@ const NewCarItemScreen = ({
             : null,
         ]}>
         {priceFooterContainer}
-        <View style={[stylesFooter.footerButtons]}>
-          {/* {carDetails.testDriveCars &&
-          carDetails.testDriveCars.length > 0 ? ( */}
-          <Button
-            testID="NewCarItemScreen.Button.TestDrive"
-            onPress={() =>
-              _onPressTestDrive({carDetails, navigation, dealerSelected})
-            }
-            size="full"
-            full
-            iconLeft
-            leftIcon={
-              <Icon
-                type="MaterialCommunityIcons"
-                name="steering"
-                selectable={false}
-                style={{
-                  color: styleConst.color.white,
-                  fontSize: 24,
-                  marginTop: -2,
-                }}
-              />
-            }
-            style={[
-              stylesFooter.button,
-              stylesFooter.buttonLeft,
-              !isPriceShow || !priceFooterContainer
-                ? stylesFooter.buttonNoPriceLeft
-                : null,
-            ]}
-            activeOpacity={0.8}>
-            <Icon
-              type="MaterialCommunityIcons"
-              name="steering"
-              selectable={false}
-              style={{
-                color: styleConst.color.white,
-                fontSize: 24,
-                marginTop: -2,
-              }}
-            />
-            <Text style={styles.buttonText} selectable={false}>
+        <HStack>
+          <Button.Group isAttached>
+            <Button
+              testID="NewCarItemScreen.Button.TestDrive"
+              onPress={() =>
+                _onPressTestDrive({carDetails, navigation, dealerSelected})
+              }
+              size="full"
+              _text={styles.buttonText}
+              leftIcon={
+                <Icon
+                  as={MaterialCommunityIcons}
+                  name="steering"
+                  size={6}
+                  color="white"
+                />
+              }
+              style={[
+                stylesFooter.button,
+                stylesFooter.buttonLeft,
+                !isPriceShow || !priceFooterContainer
+                  ? stylesFooter.buttonNoPriceLeft
+                  : null,
+              ]}
+              activeOpacity={0.8}>
               {strings.NewCarItemScreen.testDrive}
-            </Text>
-          </Button>
-          {/* ) : null} */}
-          <Button
-            testID="NewCarItemScreen.Button.Order"
-            onPress={() =>
-              _onPressOrder({carDetails, profile, navigation, dealerSelected})
-            }
-            size="full"
-            full
-            style={[
-              stylesFooter.button,
-              stylesFooter.buttonRight,
-              !isPriceShow || !priceFooterContainer
-                ? stylesFooter.buttonNoPriceRight
-                : null,
-              // !carDetails.testDriveCars ||
-              // carDetails.testDriveCars.length === 0
-              //   ? stylesFooter.buttonOnlyOne
-              //   : null,
-            ]}
-            activeOpacity={0.8}>
-            <Text style={styles.buttonText} selectable={false}>
+            </Button>
+            <Button
+              testID="NewCarItemScreen.Button.Order"
+              onPress={() =>
+                _onPressOrder({carDetails, profile, navigation, dealerSelected})
+              }
+              size="sm"
+              _text={styles.buttonText}
+              style={[
+                stylesFooter.button,
+                stylesFooter.buttonRight,
+                !isPriceShow || !priceFooterContainer
+                  ? stylesFooter.buttonNoPriceRight
+                  : null,
+                // !carDetails.testDriveCars ||
+                // carDetails.testDriveCars.length === 0
+                //   ? stylesFooter.buttonOnlyOne
+                //   : null,
+              ]}
+              activeOpacity={0.8}>
               {strings.NewCarItemScreen.wannaCar}
-            </Text>
-          </Button>
-        </View>
-      </View>
+            </Button>
+          </Button.Group>
+        </HStack>
+      </VStack>
       <Fab
-        active={false}
-        direction="up"
-        containerStyle={{marginBottom: 100}}
-        style={{backgroundColor: styleConst.new.blueHeader}}
-        position="bottomRight"
+        renderInPortal={false}
+        style={{backgroundColor: styleConst.new.blueHeader, marginBottom: 60}}
+        shadow={7}
+        size="xs"
+        icon={
+          <Icon
+            size={5}
+            as={Ionicons}
+            name="chatbox-outline"
+            color="warmGray.50"
+            _dark={{
+              color: 'warmGray.50',
+            }}
+          />
+        }
+        placement="bottom-right"
         onPress={() =>
           navigation.navigate('ChatScreen', {
             chatType: 'newcars',
             carID: carDetails.id.api,
           })
-        }>
-        <Icon type="Ionicons" name="chatbox-outline" />
-      </Fab>
+        }
+      />
     </>
   );
 };
@@ -1158,11 +1141,8 @@ const stylesFooter = StyleSheet.create({
     borderTopWidth: 0,
     marginHorizontal: '5%',
     width: '90%',
-    backgroundColor: 'rgba(0,0,0,0)',
     marginBottom: 20,
-    position: 'absolute',
     bottom: 0,
-    flexDirection: 'column',
   },
   footerHidePrice: {
     height: 45,

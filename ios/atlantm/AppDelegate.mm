@@ -8,16 +8,6 @@
 
 #import <React/RCTAppSetupUtils.h>
 
-// modules
-#import "Orientation.h"
-#import <FBSDKCoreKit/FBSDKCoreKit.h>
-#import <RNGoogleSignin/RNGoogleSignin.h>
-#if __has_include(<VKSdkFramework/VKSdkFramework.h>)
-#import <VKSdkFramework/VKSdkFramework.h>
-#else
-#import "VKSdk.h"
-#endif
-
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
 #import <React/RCTCxxBridgeDelegate.h>
@@ -104,7 +94,6 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
 }
-
 
 #if RCT_NEW_ARCH_ENABLED
 

@@ -21,7 +21,6 @@ import stylesList from '../../../core/components/Lists/style';
 import {get, isEmpty} from 'lodash';
 import {dayMonthYear} from '../../../utils/date';
 import Analytics from '../../../utils/amplitude-analytics';
-import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
 

@@ -3,7 +3,7 @@ import {View, Text} from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import {ListItem} from 'native-base';
+import {Pressable} from 'native-base';
 import RadioIcon from '../../core/components/RadioIcon';
 
 export default class ListItemHeader extends PureComponent {
@@ -26,7 +26,7 @@ export default class ListItemHeader extends PureComponent {
 
     return (
       <View>
-        <ListItem onPress={onPress} itemHeader>
+        <Pressable onPress={onPress}>
           {radio ? (
             <RadioIcon
               containerStyle={{
@@ -37,7 +37,7 @@ export default class ListItemHeader extends PureComponent {
             />
           ) : null}
           <Text style={textStyle}>{text}</Text>
-        </ListItem>
+        </Pressable>
       </View>
     );
   }

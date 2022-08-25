@@ -2,6 +2,7 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View, StatusBar, ActivityIndicator} from 'react-native';
 import {Icon, Fab} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // redux
 import {connect} from 'react-redux';
@@ -50,6 +51,8 @@ const UsedCarListScreen = ({
   items,
 }) => {
   const [loading, setLoading] = useState(false);
+
+  const fabEnable = dealerSelected.region === 'by' ? true : false;
 
   const _fetchUsedCar = type => {
     if (type === EVENT_REFRESH) {
@@ -113,17 +116,28 @@ const UsedCarListScreen = ({
             dealerSelected={dealerSelected}
             isFetchItems={isFetchItems}
           />
-          <Fab
-            active={false}
-            direction="up"
-            containerStyle={{}}
-            style={{backgroundColor: styleConst.new.blueHeader}}
-            position="bottomRight"
-            onPress={() =>
-              navigation.navigate('ChatScreen', {chatType: 'tradein-cars'})
-            }>
-            <Icon type="Ionicons" name="chatbox-outline" />
-          </Fab>
+          {fabEnable ? (
+            <Fab
+              renderInPortal={false}
+              size="sm"
+              style={{backgroundColor: styleConst.new.blueHeader}}
+              shadow={2}
+              onPress={() =>
+                navigation.navigate('ChatScreen', {chatType: 'tradein-cars'})
+              }
+              icon={
+                <Icon
+                  size={7}
+                  as={Ionicons}
+                  name="chatbox-outline"
+                  color="warmGray.50"
+                  _dark={{
+                    color: 'warmGray.50',
+                  }}
+                />
+              }
+            />
+          ) : null}
         </>
       )}
     </View>

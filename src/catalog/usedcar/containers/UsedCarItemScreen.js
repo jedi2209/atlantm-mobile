@@ -1,29 +1,32 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {
-  View,
   Text,
   SafeAreaView,
   ActivityIndicator,
   TouchableWithoutFeedback,
   StatusBar,
   StyleSheet,
-  Pressable,
-  ScrollView,
   Alert,
   Linking,
 } from 'react-native';
 import {
-  Container,
-  Content,
-  Col,
-  Row,
   Icon,
-  Grid,
   Button,
-  Accordion,
   Fab,
+  View,
+  VStack,
+  HStack,
+  ScrollView,
+  Pressable,
 } from 'native-base';
+import Accordion from 'react-native-collapsible/Accordion';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Octicons from 'react-native-vector-icons/Octicons';
+import Entypo from 'react-native-vector-icons/Entypo';
 
 // redux
 import {connect} from 'react-redux';
@@ -295,11 +298,14 @@ class UsedCarItemScreen extends Component {
     }
 
     return (
-      <View style={{flexDirection: 'row', width: '90%'}}>
+      <HStack w="90%" alignItems="center">
         <Icon
-          type="MaterialCommunityIcons"
+          as={MaterialCommunityIcons}
           name="check"
-          style={styles.additionalServiceIcon}
+          color={styleConst.color.blue}
+          size={6}
+          mr="2"
+          mt="0.5"
         />
         <Text
           // numberOfLines={1}
@@ -307,7 +313,7 @@ class UsedCarItemScreen extends Component {
           style={styles.additionalServiceText}>
           {element?.name}
         </Text>
-      </View>
+      </HStack>
     );
   };
 
@@ -327,16 +333,15 @@ class UsedCarItemScreen extends Component {
               ].join(' '),
           });
         }}
+        mx="2%"
+        mt="1"
+        mb="32"
+        backgroundColor={styleConst.color.purple}
+        px="6"
+        py="6"
         style={{
-          height: 150,
           width: '96%',
-          marginHorizontal: '2%',
-          marginBottom: 90,
-          marginTop: 10,
-          backgroundColor: styleConst.color.purple,
           borderRadius: 5,
-          paddingHorizontal: 20,
-          paddingVertical: 10,
         }}>
         <Text
           style={{
@@ -359,14 +364,14 @@ class UsedCarItemScreen extends Component {
           Оставьте заявку на трейд-ин и мы примем ваш авто в зачёт этого
         </Text>
         <Icon
-          type="MaterialCommunityIcons"
+          as={MaterialCommunityIcons}
           name="car-multiple"
+          color="white"
+          size="6xl"
           style={{
             position: 'absolute',
-            fontSize: 102,
-            right: 10,
+            right: 20,
             top: 30,
-            color: styleConst.color.white,
           }}
         />
       </Pressable>
@@ -521,9 +526,8 @@ class UsedCarItemScreen extends Component {
 
     return (
       <>
-        <Container testID="UsedCarItemScreen.Wrapper">
-          <Content>
-            <StatusBar hidden />
+        <ScrollView backgroundColor="white" testID="UsedCarItemScreen.Wrapper">
+          <View>
             <View
               style={[
                 styles.modelBrandView,
@@ -589,14 +593,7 @@ class UsedCarItemScreen extends Component {
                 paginationStyle={{bottom: -20}}
               />
             </View>
-            <View
-              style={[
-                styleConst.shadow.default,
-                styles.carTopWrapper,
-                {
-                  marginTop: 10,
-                },
-              ]}>
+            <View mt={4} shadow={7} style={[styles.carTopWrapper]}>
               <View>
                 <ScrollView
                   horizontal
@@ -606,7 +603,7 @@ class UsedCarItemScreen extends Component {
                   ref={ref => {
                     this.platesScrollView = ref;
                   }}>
-                  <View style={styles.platesWrapper}>
+                  <HStack px="2%" mb="3">
                     {get(carDetails, 'mileage') ? (
                       <OptionPlate
                         title={strings.NewCarItemScreen.plates.mileage}
@@ -654,19 +651,18 @@ class UsedCarItemScreen extends Component {
                         subtitle={colorName}
                       />
                     ) : null}
-                  </View>
+                  </HStack>
                 </ScrollView>
                 {carDetails.dealer && carDetails.dealer.name ? (
-                  <TouchableWithoutFeedback
-                    onPress={this.onPressMap}
-                    style={styles.mapCard}>
-                    <View style={styles.mapCardContainer}>
+                  <Pressable onPress={this.onPressMap}>
+                    <VStack style={styles.mapCardContainer}>
                       <Icon
-                        type="MaterialCommunityIcons"
+                        as={MaterialCommunityIcons}
                         name="map-marker-outline"
-                        style={styles.mapCardIcon}
+                        color="blue.100"
+                        size={12}
                       />
-                      <View style={styles.mapCardTextContainer}>
+                      <View justifyContent="space-around">
                         <Text style={styles.mapCardTitle}>
                           {strings.NewCarItemScreen.carLocation}
                         </Text>
@@ -677,77 +673,53 @@ class UsedCarItemScreen extends Component {
                           {this._renderAddress()}
                         </Text>
                       </View>
-                    </View>
-                  </TouchableWithoutFeedback>
+                    </VStack>
+                  </Pressable>
                 ) : null}
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    marginHorizontal: '2%',
-                    justifyContent: phone ? 'space-between' : 'center',
-                  }}>
+                <HStack
+                  mx="2%"
+                  justifyContent={phone ? 'space-between' : 'center'}>
                   <Button
                     onPress={() => {
                       this.onPressCallMe();
                     }}
-                    full={!phone ? true : false}
-                    iconLeft
+                    variant="solid"
+                    size="md"
                     leftIcon={
                       <Icon
-                        type="MaterialCommunityIcons"
+                        as={MaterialCommunityIcons}
                         name="phone-incoming"
-                        selectable={false}
-                        style={styles.iconButtonSm}
+                        size={6}
                       />
                     }
+                    _text={{fontSize: 16, color: 'white'}}
                     style={[
-                      !phone
-                        ? stylesFooter.buttonOnlyOne
-                        : styles.itemCallButton,
+                      !phone ? stylesFooter.buttonOnlyOne : null,
                       styles.itemOrderCallBack,
-                      {borderRadius: 5},
+                      {width: phone ? '48%' : '100%'},
                     ]}>
-                    <Icon
-                      type="MaterialCommunityIcons"
-                      name="phone-incoming"
-                      selectable={false}
-                      style={styles.iconButtonSm}
-                    />
-                    <Text style={styles.iconTextSm}>
-                      {strings.ContactsScreen.callOrder}
-                    </Text>
+                    {strings.ContactsScreen.callOrder}
                   </Button>
                   {phone ? (
                     <Button
                       onPress={() => {
                         this.onPressCall(phone);
                       }}
-                      iconLeft
+                      variant="solid"
+                      size="md"
                       leftIcon={
                         <Icon
-                          type="MaterialCommunityIcons"
+                          as={MaterialCommunityIcons}
                           name="phone-outgoing"
-                          selectable={false}
-                          style={styles.iconButtonSm}
+                          size={6}
                         />
                       }
-                      style={[
-                        styles.itemCallButton,
-                        styles.itemOrderCall,
-                        {borderRadius: 5},
-                      ]}>
-                      <Icon
-                        type="MaterialCommunityIcons"
-                        name="phone-outgoing"
-                        selectable={false}
-                        style={styles.iconButtonSm}
-                      />
-                      <Text style={styles.iconTextSm}>
-                        {strings.ContactsScreen.call}
-                      </Text>
+                      _text={{fontSize: 16, color: 'white'}}
+                      style={[styles.itemOrderCall, {width: '48%'}]}>
+                      {strings.ContactsScreen.call}
                     </Button>
                   ) : null}
-                </View>
+                </HStack>
                 <View style={styles.descrContainer}>
                   {carDetails.text ? (
                     <>
@@ -769,77 +741,53 @@ class UsedCarItemScreen extends Component {
                   <View style={styles.bodyButtonsContainer}>
                     {carDetails.creditAvailable ? (
                       <Button
-                        block
-                        iconRight
-                        variant="unstyled"
-                        transparent
+                        variant="outline"
                         activeOpacity={0.5}
                         onPress={this.onPressCredit}
-                        style={[styles.bodyButton, styles.bodyButtonLeft]}>
-                        <Text
-                          selectable={false}
-                          style={[
-                            styles.bodyButtonText,
-                            styles.bodyButtonTextLeft,
-                          ]}>
-                          {strings.UsedCarItemScreen.creditCalculate}
-                        </Text>
-                        <Icon
-                          type="Octicons"
-                          name="credit-card"
-                          selectable={false}
-                          style={[
-                            styles.bodyButtonIcon,
-                            styles.bodyButtonIconLeft,
-                          ]}
-                        />
+                        style={[styles.bodyButton, styles.bodyButtonLeft]}
+                        leftIcon={
+                          <Icon
+                            as={Octicons}
+                            name="credit-card"
+                            size={6}
+                            color="red.600"
+                          />
+                        }
+                        _text={{
+                          fontSize: 'sm',
+                          lineHeight: '14',
+                          color: 'red.600',
+                        }}>
+                        {strings.UsedCarItemScreen.creditCalculate}
                       </Button>
                     ) : null}
                     {carDetails.customPriceAvailable ? (
                       <Button
-                        block
-                        iconRight
-                        rightIcon={
-                          <Icon
-                            type="Entypo"
-                            name="price-tag"
-                            selectable={false}
-                            style={[
-                              styles.bodyButtonIcon,
-                              styles.bodyButtonIconRight,
-                            ]}
-                          />
-                        }
-                        variant="unstyled"
-                        transparent
+                        variant="outline"
                         activeOpacity={0.5}
                         onPress={this.onPressMyPrice}
-                        style={[styles.bodyButton, styles.bodyButtonRight]}>
-                        <Text
-                          selectable={false}
-                          style={[
-                            styles.bodyButtonText,
-                            styles.bodyButtonTextRight,
-                          ]}>
-                          {strings.UsedCarItemScreen.myPrice}
-                        </Text>
-                        <Icon
-                          type="Entypo"
-                          name="price-tag"
-                          selectable={false}
-                          style={[
-                            styles.bodyButtonIcon,
-                            styles.bodyButtonIconRight,
-                          ]}
-                        />
+                        style={[styles.bodyButton, styles.bodyButtonRight]}
+                        rightIcon={
+                          <Icon
+                            as={Entypo}
+                            name="price-tag"
+                            size={6}
+                            color="blue.600"
+                          />
+                        }
+                        _text={{
+                          fontSize: 'sm',
+                          lineHeight: '14',
+                          color: 'blue.600',
+                        }}>
+                        {strings.UsedCarItemScreen.myPrice}
                       </Button>
                     ) : null}
                   </View>
                 ) : null}
               </View>
               <Accordion
-                style={styles.accordion}
-                dataArray={[
+                sections={[
                   {
                     title: strings.NewCarItemScreen.tech.title,
                     content: (
@@ -847,143 +795,143 @@ class UsedCarItemScreen extends Component {
                         <Text style={styles.sectionTitle}>
                           {strings.NewCarItemScreen.tech.base}
                         </Text>
-                        <Grid>
+                        <VStack>
                           {carDetails.year ? (
-                            <Row style={styles.sectionRow}>
-                              <Col style={styles.sectionProp}>
+                            <HStack style={styles.sectionRow}>
+                              <View style={styles.sectionProp}>
                                 <Text style={styles.sectionPropText}>
                                   {strings.NewCarItemScreen.tech.year}:
                                 </Text>
-                              </Col>
-                              <Col style={styles.sectionValue}>
+                              </View>
+                              <View style={styles.sectionValue}>
                                 <Text
                                   style={
                                     styles.sectionValueText
                                   }>{`${carDetails.year} г.`}</Text>
-                              </Col>
-                            </Row>
+                              </View>
+                            </HStack>
                           ) : null}
                           {carDetails.mileage ? (
-                            <Row style={styles.sectionRow}>
-                              <Col style={styles.sectionProp}>
+                            <HStack style={styles.sectionRow}>
+                              <View style={styles.sectionProp}>
                                 <Text
                                   selectable={false}
                                   style={styles.sectionPropText}>
                                   {strings.NewCarItemScreen.plates.mileage}:
                                 </Text>
-                              </Col>
-                              <Col style={styles.sectionValue}>
+                              </View>
+                              <View style={styles.sectionValue}>
                                 <Text
                                   style={
                                     styles.sectionValueText
                                   }>{`${numberWithGap(
                                   carDetails.mileage,
                                 )} км.`}</Text>
-                              </Col>
-                            </Row>
+                              </View>
+                            </HStack>
                           ) : null}
                           {carDetails.engine && carDetails.engine.type ? (
-                            <Row style={styles.sectionRow}>
-                              <Col style={styles.sectionProp}>
+                            <HStack style={styles.sectionRow}>
+                              <View style={styles.sectionProp}>
                                 <Text style={styles.sectionPropText}>
                                   {strings.NewCarItemScreen.tech.engine.fuel}:
                                 </Text>
-                              </Col>
-                              <Col style={styles.sectionValue}>
+                              </View>
+                              <View style={styles.sectionValue}>
                                 <Text style={styles.sectionValueText}>
                                   {carDetails.engine.type}
                                 </Text>
-                              </Col>
-                            </Row>
+                              </View>
+                            </HStack>
                           ) : null}
                           {carDetails.engine &&
                           carDetails.engine.volume &&
                           carDetails.engine.volume.full ? (
-                            <Row style={styles.sectionRow}>
-                              <Col style={styles.sectionProp}>
+                            <HStack style={styles.sectionRow}>
+                              <View style={styles.sectionProp}>
                                 <Text
                                   selectable={false}
                                   style={styles.sectionPropText}>
                                   {strings.NewCarItemScreen.tech.engine.title}:
                                 </Text>
-                              </Col>
-                              <Col style={styles.sectionValue}>
+                              </View>
+                              <View style={styles.sectionValue}>
                                 <Text
                                   style={
                                     styles.sectionValueText
                                   }>{`${carDetails.engine.volume.full} см³`}</Text>
-                              </Col>
-                            </Row>
+                              </View>
+                            </HStack>
                           ) : null}
                           {carDetails.gearbox && carDetails.gearbox.name ? (
-                            <Row style={styles.sectionRow}>
-                              <Col style={styles.sectionProp}>
+                            <HStack style={styles.sectionRow}>
+                              <View style={styles.sectionProp}>
                                 <Text
                                   selectable={false}
                                   style={styles.sectionPropText}>
                                   {strings.NewCarItemScreen.plates.gearbox.name}
                                   :
                                 </Text>
-                              </Col>
-                              <Col style={styles.sectionValue}>
+                              </View>
+                              <View style={styles.sectionValue}>
                                 <Text style={styles.sectionValueText}>
                                   {gearboxName}
                                 </Text>
-                              </Col>
-                            </Row>
+                              </View>
+                            </HStack>
                           ) : null}
                           {carDetails.color &&
                           carDetails.color.name &&
                           carDetails.color.name.official ? (
-                            <Row style={styles.sectionRow}>
-                              <Col style={styles.sectionProp}>
+                            <HStack style={styles.sectionRow}>
+                              <View style={styles.sectionProp}>
                                 <Text
                                   selectable={false}
                                   style={styles.sectionPropText}>
                                   {strings.NewCarItemScreen.plates.color}:
                                 </Text>
-                              </Col>
-                              <Col style={styles.sectionValue}>
+                              </View>
+                              <View style={styles.sectionValue}>
                                 <Text style={styles.sectionValueText}>
                                   {carDetails.color.name.official}
                                 </Text>
-                              </Col>
-                            </Row>
+                              </View>
+                            </HStack>
                           ) : null}
                           {carDetails.body && carDetails.body.name ? (
-                            <Row style={styles.sectionRow}>
-                              <Col style={styles.sectionProp}>
+                            <HStack style={styles.sectionRow}>
+                              <View style={styles.sectionProp}>
                                 <Text
                                   selectable={false}
                                   style={styles.sectionPropText}>
                                   {strings.NewCarItemScreen.tech.body.type}:
                                 </Text>
-                              </Col>
-                              <Col style={styles.sectionValue}>
+                              </View>
+                              <View style={styles.sectionValue}>
                                 <Text style={styles.sectionValueText}>
                                   {bodyName}
                                 </Text>
-                              </Col>
-                            </Row>
+                              </View>
+                            </HStack>
                           ) : null}
                           {carDetails.interior && carDetails.interior.name ? (
-                            <Row style={styles.sectionRow}>
-                              <Col style={styles.sectionProp}>
+                            <HStack style={styles.sectionRow}>
+                              <View style={styles.sectionProp}>
                                 <Text
                                   selectable={false}
                                   style={styles.sectionPropText}>
                                   {strings.NewCarItemScreen.tech.interior.title}
                                   :
                                 </Text>
-                              </Col>
-                              <Col style={styles.sectionValue}>
+                              </View>
+                              <View style={styles.sectionValue}>
                                 <Text style={styles.sectionValueText}>
                                   {carDetails.interior.name}
                                 </Text>
-                              </Col>
-                            </Row>
+                              </View>
+                            </HStack>
                           ) : null}
-                        </Grid>
+                        </VStack>
                       </View>
                     ),
                   },
@@ -995,89 +943,89 @@ class UsedCarItemScreen extends Component {
                           <Text style={styles.sectionTitle}>
                             {get(carDetails, 'options.additional.1.name')}
                           </Text>
-                          {additional.map((item, num) => {
-                            return (
-                              <Grid key={'OptionsAdditional-' + num}>
-                                {item.name && item.value ? (
-                                  <Row style={styles.sectionRow}>
-                                    <Col style={styles.sectionProp}>
-                                      <Text style={styles.sectionPropText}>
-                                        {item.name}
-                                      </Text>
-                                    </Col>
-                                    <Col style={styles.sectionValue}>
-                                      <Text style={styles.sectionValueText}>
-                                        {item.value}
-                                      </Text>
-                                    </Col>
-                                  </Row>
-                                ) : (
-                                  <Text
-                                    style={[
-                                      styles.sectionPropText,
-                                      styles.sectionRow,
-                                    ]}>
-                                    {item.name}
-                                  </Text>
-                                )}
-                              </Grid>
-                            );
-                          })}
+                          <VStack>
+                            {additional.map((item, num) => {
+                              return (
+                                <View key={'OptionsAdditional-' + num}>
+                                  {item.name && item.value ? (
+                                    <HStack style={styles.sectionRow}>
+                                      <View style={styles.sectionProp}>
+                                        <Text style={styles.sectionPropText}>
+                                          {item.name}
+                                        </Text>
+                                      </View>
+                                      <View style={styles.sectionValue}>
+                                        <Text style={styles.sectionValueText}>
+                                          {item.value}
+                                        </Text>
+                                      </View>
+                                    </HStack>
+                                  ) : (
+                                    <Text
+                                      style={[
+                                        styles.sectionPropText,
+                                        styles.sectionRow,
+                                      ]}>
+                                      {item.name}
+                                    </Text>
+                                  )}
+                                </View>
+                              );
+                            })}
+                          </VStack>
                         </View>
                       ),
                     },
                 ].filter(Boolean)}
-                expanded={[0]}
-                animation={true}
-                renderHeader={(item, expanded) => (
-                  <View
-                    style={{
-                      height: 64,
-                      paddingHorizontal: '2%',
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      backgroundColor: styleConst.color.white,
-                      borderTopWidth: 0.75,
-                      borderColor: '#d5d5e0',
-                    }}>
-                    <Text
-                      style={{fontSize: 18, color: styleConst.color.greyText}}>
+                activeSections={[0, 1]}
+                // renderSectionTitle={this._renderSectionTitle}
+                renderHeader={(item, index, expanded) => (
+                  <HStack
+                    justifyContent={'space-between'}
+                    alignItems={'center'}
+                    px="2%"
+                    backgroundColor="white"
+                    testID={'NewCarItemScreen.AccordionTitle_' + item.title}
+                    style={styles.accordionHeader}>
+                    <Text style={styles.accordionHeaderTitle}>
                       {item.title}
                     </Text>
                     {expanded ? (
                       <Icon
-                        type="FontAwesome5"
-                        style={{color: '#0061ED', fontWeight: 'normal'}}
+                        as={FontAwesome5}
+                        style={{
+                          color: styleConst.color.greyText4,
+                          fontWeight: 'normal',
+                        }}
                         name="angle-down"
                       />
                     ) : (
                       <Icon
-                        type="FontAwesome5"
-                        style={{color: '#131314', fontWeight: 'normal'}}
+                        as={FontAwesome5}
+                        style={{
+                          color: styleConst.color.greyText,
+                          fontWeight: 'normal',
+                        }}
                         name="angle-right"
                       />
                     )}
-                  </View>
+                  </HStack>
                 )}
-                renderContent={item => {
+                renderContent={section => {
                   return (
-                    <View
-                      style={{
-                        backgroundColor: styleConst.color.white,
-                        paddingHorizontal: '3%',
-                      }}>
-                      {item.content}
+                    <View style={styles.accordionContent}>
+                      {section.content}
                     </View>
                   );
                 }}
+                // onChange={setSectionActive}
               />
               {this.renderCarCostBlock()}
             </View>
-          </Content>
-        </Container>
-        <View
+          </View>
+        </ScrollView>
+        <VStack
+          position="absolute"
           style={[
             styleConst.shadow.default,
             stylesFooter.footer,
@@ -1122,59 +1070,64 @@ class UsedCarItemScreen extends Component {
               </View>
             )
           ) : null}
-          <View style={[stylesFooter.footerButtons]}>
-            <Button
-              testID="UsedCarItemScreen.Button.TestDrive"
-              onPress={this.onPressTestDrive}
-              size="full"
-              full
-              style={[
-                stylesFooter.button,
-                stylesFooter.buttonTwo,
-                stylesFooter.buttonLeft,
-              ]}
-              activeOpacity={0.8}>
-              <Icon
-                type="MaterialCommunityIcons"
-                name="steering"
-                selectable={false}
-                style={stylesFooter.iconTDButton}
-              />
-              <Text style={styles.buttonText} selectable={false}>
+          <HStack>
+            <Button.Group isAttached>
+              <Button
+                testID="UsedCarItemScreen.Button.TestDrive"
+                onPress={this.onPressTestDrive}
+                size="md"
+                style={[stylesFooter.buttonTwo]}
+                activeOpacity={0.8}
+                backgroundColor={styleConst.color.orange}
+                leftIcon={
+                  <Icon
+                    as={MaterialCommunityIcons}
+                    name="steering"
+                    color="white"
+                    size={6}
+                  />
+                }
+                _text={styles.buttonText}>
                 {strings.NewCarItemScreen.show}
-              </Text>
-            </Button>
-            <Button
-              testID="UsedCarItemScreen.Button.Order"
-              onPress={this.onPressOrder}
-              size="full"
-              full
-              style={[
-                stylesFooter.button,
-                stylesFooter.buttonTwo,
-                stylesFooter.buttonRight,
-              ]}
-              activeOpacity={0.8}>
-              <Text style={styles.buttonText} selectable={false}>
+              </Button>
+              <Button
+                testID="UsedCarItemScreen.Button.Order"
+                onPress={this.onPressOrder}
+                size="md"
+                backgroundColor={styleConst.color.lightBlue}
+                style={[stylesFooter.buttonTwo]}
+                activeOpacity={0.8}
+                _text={styles.buttonText}>
                 {strings.NewCarItemScreen.wannaCar}
-              </Text>
-            </Button>
-          </View>
-        </View>
+              </Button>
+            </Button.Group>
+          </HStack>
+        </VStack>
         <Fab
-          active={false}
-          direction="up"
+          renderInPortal={false}
+          shadow={7}
+          size="xs"
           containerStyle={{marginBottom: 100}}
-          style={{backgroundColor: styleConst.new.blueHeader}}
-          position="bottomRight"
+          style={{backgroundColor: styleConst.new.blueHeader, marginBottom: 60}}
+          icon={
+            <Icon
+              size={5}
+              as={Ionicons}
+              name="chatbox-outline"
+              color="warmGray.50"
+              _dark={{
+                color: 'warmGray.50',
+              }}
+            />
+          }
+          placement="bottom-right"
           onPress={() =>
             navigation.navigate('ChatScreen', {
               chatType: 'tradein-cars',
               carID: carDetails.id.api,
             })
-          }>
-          <Icon type="Ionicons" name="chatbox-outline" />
-        </Fab>
+          }
+        />
       </>
     );
   }
@@ -1200,10 +1153,6 @@ const stylesFooter = StyleSheet.create({
   footerButtons: {
     flex: 1,
     flexDirection: 'row',
-  },
-  button: {
-    height: 40,
-    borderWidth: 1,
   },
   buttonTwo: {
     width: '50%',
@@ -1251,13 +1200,6 @@ const stylesFooter = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     minWidth: 100,
-  },
-  iconTDButton: {
-    color: styleConst.color.white,
-    fontSize: 20,
-    marginTop: -2,
-    marginRight: 2,
-    marginLeft: 0,
   },
   iconCallButton: {
     color: styleConst.color.white,

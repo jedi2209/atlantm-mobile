@@ -3,6 +3,7 @@ import {View, StyleSheet} from 'react-native';
 
 // components
 import {Icon} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import PropTypes from 'prop-types';
@@ -61,9 +62,10 @@ export default class RatingStars extends PureComponent {
             <Icon
               key={`star-${idx}-${itemId}`}
               name="ios-star"
+              as={Ionicons}
+              size={size === 's' ? 3 : 4}
+              mr={2}
               style={[
-                styles.star,
-                size === 's' ? styles.starSizeS : styles.starSizeM,
                 theme === 'grey' ? styles.starThemeGrey : styles.starThemeBlue,
               ]}
             />
@@ -75,13 +77,14 @@ export default class RatingStars extends PureComponent {
                 <Icon
                   key={`emptyStars-${idx}-${itemId}`}
                   name="ios-star-outline"
-                  style={[
-                    styles.star,
-                    size === 's' ? styles.starSizeS : styles.starSizeM,
+                  as={Ionicons}
+                  size={size === 's' ? 3 : 4}
+                  mr={2}
+                  color={
                     theme === 'grey'
-                      ? styles.starThemeGrey
-                      : styles.starThemeBlue,
-                  ]}
+                      ? styleConst.color.greyText2
+                      : styleConst.color.systemBlue
+                  }
                 />
               );
             })

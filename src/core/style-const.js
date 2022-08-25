@@ -115,6 +115,7 @@ export default {
     bigHead: {
       color: '#222B45',
       fontSize: 48,
+      lineHeight: 50,
       fontWeight: 'bold',
       fontFamily: 'HelveticaNeue-Medium',
       marginHorizontal: 10,

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {SafeAreaView, View, Alert, StatusBar} from 'react-native';
+import {SafeAreaView, Alert} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -9,7 +9,7 @@ import {
 } from '../../actions';
 
 // components
-import {Body, Content, ListItem, StyleProvider} from 'native-base';
+import {VStack, HStack, Box, View, Button} from 'native-base';
 import RadioIcon from '../../../core/components/RadioIcon';
 import ListItemHeader from '../../../profile/components/ListItemHeader';
 import RatingStars from '../components/RatingStars';
@@ -23,7 +23,6 @@ import {
   REVIEWS_RATING_TYPE__TO,
 } from '../../constants';
 import PropTypes from 'prop-types';
-import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
 
@@ -134,12 +133,13 @@ class ReviewsFilterRatingScreen extends Component {
   renderItem = (rating, isSelected, onPressHandler, key) => {
     return (
       <View key={key} style={stylesList.listItemContainer}>
-        <ListItem
-          icon
+        <Button
           style={stylesList.listItemPressable}
-          onPress={onPressHandler}>
-          <RadioIcon containerStyle={{marginTop: 5}} selected={isSelected} />
-          <Body style={stylesList.bodyWithLeftGap}>
+          onPress={onPressHandler}
+          leftIcon={
+            <RadioIcon containerStyle={{marginTop: 5}} selected={isSelected} />
+          }>
+          <View style={stylesList.bodyWithLeftGap}>
             <RatingStars
               size="M"
               theme="blue"
@@ -147,8 +147,8 @@ class ReviewsFilterRatingScreen extends Component {
               rating={rating}
               itemId={key}
             />
-          </Body>
-        </ListItem>
+          </View>
+        </Button>
       </View>
     );
   };
@@ -157,21 +157,18 @@ class ReviewsFilterRatingScreen extends Component {
     console.info('== ReviewsFilterDateScreen ==');
 
     return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styleConst.safearea.default}>
-          <StatusBar barStyle="light-content" />
-          <Content>
-            <ListItemHeader
-              text={strings.ReviewsFilterRatingScreen.rating.from.toUpperCase()}
-            />
-            {this.renderRatingFrom()}
-            <ListItemHeader
-              text={strings.ReviewsFilterRatingScreen.rating.to.toUpperCase()}
-            />
-            {this.renderRatingTo()}
-          </Content>
-        </SafeAreaView>
-      </StyleProvider>
+      <SafeAreaView style={styleConst.safearea.default}>
+        <View>
+          <ListItemHeader
+            text={strings.ReviewsFilterRatingScreen.rating.from.toUpperCase()}
+          />
+          {this.renderRatingFrom()}
+          <ListItemHeader
+            text={strings.ReviewsFilterRatingScreen.rating.to.toUpperCase()}
+          />
+          {this.renderRatingTo()}
+        </View>
+      </SafeAreaView>
     );
   }
 }

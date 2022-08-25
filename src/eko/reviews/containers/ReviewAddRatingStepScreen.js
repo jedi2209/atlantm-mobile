@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Alert, View, StyleSheet, Platform} from 'react-native';
+import {Alert, StyleSheet, Platform} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -7,7 +7,6 @@ import {REVIEW_ADD__SUCCESS, REVIEW_ADD__FAIL} from '../../actionTypes';
 import {
   actionReviewAdd,
   actionSelectAddReviewRating,
-  actionSelectAddReviewPublicAgree,
   actionSelectAddReviewRatingVariant,
 } from '../../actions';
 
@@ -15,7 +14,7 @@ import {
 import stylesList from '../../../core/components/Lists/style';
 
 // components
-import {Label, Switch, Body, ListItem, Right} from 'native-base';
+import {Checkbox, View} from 'native-base';
 
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
@@ -114,7 +113,6 @@ const mapStateToProps = ({dealer, eko, nav, profile}) => {
 const mapDispatchToProps = {
   actionReviewAdd,
   actionSelectAddReviewRating,
-  actionSelectAddReviewPublicAgree,
   actionSelectAddReviewRatingVariant,
 };
 
@@ -225,6 +223,10 @@ class ReviewAddRatingStepScreen extends Component {
         ],
       },
     };
+
+    this.state = {
+      publicAgree: true,
+    };
   }
 
   shouldComponentUpdate(nextProps) {
@@ -244,7 +246,7 @@ class ReviewAddRatingStepScreen extends Component {
   }
 
   onPressButton = dataFromForm => {
-    const {dealerSelected, navigation, publicAgree} = this.props;
+    const {dealerSelected, navigation} = this.props;
 
     const name = [
       dataFromForm.NAME,
@@ -265,7 +267,7 @@ class ReviewAddRatingStepScreen extends Component {
         name: name,
         messagePlus: get(this.reviewData, 'COMMENT_PLUS', null),
         messageMinus: get(this.reviewData, 'COMMENT_MINUS', null),
-        publicAgree,
+        publicAgree: this.state.publicAgree,
         rating: get(dataFromForm, 'RATING', ''),
       })
       .then(action => {
@@ -294,26 +296,15 @@ class ReviewAddRatingStepScreen extends Component {
   };
 
   renderPublicAgree = () => {
-    const {publicAgree, actionSelectAddReviewPublicAgree} = this.props;
-
-    const onPressHandler = () => actionSelectAddReviewPublicAgree(!publicAgree);
-
     return (
-      <View style={[styles.publicAgreeContainer, stylesList.listItemContainer]}>
-        <ListItem onPress={onPressHandler} style={stylesList.listItem}>
-          <Body>
-            <Label style={[stylesList.label, styles.publicAgreeText]}>
-              {strings.ReviewAddRatingStepScreen.approve}
-            </Label>
-          </Body>
-          <Right>
-            <Switch
-              onValueChange={onPressHandler}
-              style={styles.switch}
-              value={publicAgree}
-            />
-          </Right>
-        </ListItem>
+      <View py={5} backgroundColor="white" px={3}>
+        <Checkbox
+          defaultIsChecked
+          onChange={() =>
+            this.setState({publicAgree: !this.state.publicAgree})
+          }>
+          {strings.ReviewAddRatingStepScreen.approve}
+        </Checkbox>
       </View>
     );
   };

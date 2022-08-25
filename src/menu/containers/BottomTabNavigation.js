@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
-import {Icon, ActionSheet} from 'native-base';
+import {Icon, Actionsheet, Box, Text} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import orderFunctions from '../../utils/orders';
 
 // import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
@@ -25,25 +26,14 @@ import {strings} from '../../core/lang/const';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import {
   ClassicHeaderWhite,
   ClassicHeaderBlue,
   BigCloseButton,
 } from '../../navigation/const';
-
-const styles = {
-  shadow: {
-    fontSize: 23,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 1.0,
-    shadowColor: styleConst.color.white,
-    elevation: 1,
-  },
-};
 
 const Tab = createBottomTabNavigator();
 const ProfileStack = createStackNavigator();
@@ -130,169 +120,211 @@ const CleanStackView = () => {
   return <></>;
 };
 
-const _showOrdersMenu = navigation => {
-  orderFunctions.getOrders().then(data => {
-    ActionSheet.show(
-      {
+export const BottomTabNavigation = ({navigation, route}) => {
+  const [actionSheetStatus, setActionSheetStatus] = React.useState(false);
+  const [actionSheetData, setActionSheetData] = React.useState({});
+  const _showOrdersMenu = () => {
+    orderFunctions.getOrders().then(data => {
+      setActionSheetData({
         options: data.BUTTONS,
         cancelButtonIndex: data.CANCEL_INDEX,
         title: data.TITLE,
         destructiveButtonIndex: data.DESTRUCTIVE_INDEX || null,
-      },
-      buttonIndex => {
-        switch (data.BUTTONS[buttonIndex].id) {
-          case 'callMeBack':
-            navigation.navigate('CallMeBackScreen');
-            break;
-          case 'orderService':
-            navigation.navigate('ServiceScreen');
-            break;
-          case 'orderParts':
-            navigation.navigate('OrderPartsScreen');
-            break;
-          case 'carCost':
-            navigation.navigate('CarCostScreen');
-            break;
-        }
-      },
+      });
+      setActionSheetStatus(true);
+    });
+  };
+
+  const ActionSheetMenu = () => {
+    if (!actionSheetData || !actionSheetData['options']) {
+      return <></>;
+    }
+    return (
+      <Actionsheet
+        hideDragIndicator
+        size="full"
+        isOpen={actionSheetStatus}
+        onClose={() => {
+          setActionSheetStatus(false);
+        }}>
+        <Actionsheet.Content>
+          <Box w="100%" my={4} px={4} justifyContent="space-between">
+            <Text
+              fontSize="xl"
+              color="gray.500"
+              _dark={{
+                color: 'gray.300',
+              }}>
+              {strings.ContactsScreen.sendOrder}
+            </Text>
+          </Box>
+          {actionSheetData.options.map(el => {
+            return (
+              <Actionsheet.Item
+                onPress={() => {
+                  setActionSheetStatus(false);
+                  if (el.navigate) {
+                    navigation.navigate(el.navigate);
+                  }
+                }}
+                startIcon={
+                  <Icon
+                    as={Ionicons}
+                    color={el.iconColor}
+                    mr="1"
+                    size={6}
+                    name={el.icon}
+                  />
+                }>
+                {el.text}
+              </Actionsheet.Item>
+            );
+          })}
+        </Actionsheet.Content>
+      </Actionsheet>
     );
-  });
-};
+  };
 
-export const BottomTabNavigation = ({navigation, route}) => {
   return (
-    <Tab.Navigator
-      initialRouteName="Home"
-      screenOptions={{
-        tabBarActiveTintColor: styleConst.color.lightBlue,
-        tabBarInactiveTintColor: styleConst.new.passive,
-        tabBarStyle: [
-          {
-            display: 'flex',
-          },
-          null,
-        ],
-      }}>
-      <Tab.Screen
-        name="Home"
-        component={ContactsScreen}
-        options={{
-          headerShown: false,
-          tabBarLabel: strings.Menu.bottom.dealer,
-          tabBarTestID: 'BottomMenu.Home',
-          tabBarIcon: ({color}) => (
-            <Icon
-              name="building"
-              type="FontAwesome5"
-              style={[
-                styles.shadow,
-                {
-                  color,
-                },
-              ]}
-            />
-          ),
-        }}
-      />
+    <>
+      <Tab.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          tabBarActiveTintColor: styleConst.color.lightBlue,
+          tabBarInactiveTintColor: styleConst.new.passive,
+        }}>
+        <Tab.Screen
+          name="Home"
+          component={ContactsScreen}
+          options={{
+            headerShown: false,
+            tabBarLabel: strings.Menu.bottom.dealer,
+            tabBarLabelStyle: {
+              fontSize: 14,
+            },
+            tabBarTestID: 'BottomMenu.Home',
+            tabBarIcon: ({color}) => (
+              <Icon
+                size={5}
+                as={FontAwesome5}
+                name="building"
+                color={color}
+                _dark={{
+                  color: color,
+                }}
+              />
+            ),
+          }}
+        />
 
-      <Tab.Screen
-        name="Search"
-        component={CleanStackView}
-        listeners={{
-          tabPress: e => {
-            e.preventDefault();
-            navigation.navigate('CarsStock');
-          },
-        }}
-        options={{
-          headerShown: false,
-          tabBarLabel: strings.Menu.bottom.search,
-          tabBarTestID: 'BottomMenu.NewCars',
-          tabBarIcon: ({color}) => (
-            <Icon
-              name="search"
-              type="FontAwesome5"
-              style={[
-                styles.shadow,
-                {
-                  color,
-                },
-              ]}
-            />
-          ),
-        }}
-      />
+        <Tab.Screen
+          name="Search"
+          component={CleanStackView}
+          listeners={{
+            tabPress: e => {
+              e.preventDefault();
+              navigation.navigate('CarsStock');
+            },
+          }}
+          options={{
+            headerShown: false,
+            tabBarLabel: strings.Menu.bottom.search,
+            tabBarLabelStyle: {
+              fontSize: 14,
+            },
+            tabBarTestID: 'BottomMenu.NewCars',
+            tabBarIcon: ({color}) => (
+              <Icon
+                size={5}
+                as={FontAwesome5}
+                name="search"
+                color={color}
+                _dark={{
+                  color: color,
+                }}
+              />
+            ),
+          }}
+        />
 
-      <Tab.Screen
-        name="About"
-        component={ProfileStackView}
-        options={{
-          headerShown: false,
-          tabBarLabel: strings.Menu.bottom.lkk,
-          tabBarTestID: 'BottomMenu.Profile',
-          tabBarIcon: ({color}) => (
-            <Icon
-              name="user"
-              type="FontAwesome5"
-              style={[
-                styles.shadow,
-                {
-                  color,
-                },
-              ]}
-            />
-          ),
-        }}
-      />
+        <Tab.Screen
+          name="About"
+          component={ProfileStackView}
+          options={{
+            headerShown: false,
+            tabBarLabel: strings.Menu.bottom.lkk,
+            tabBarLabelStyle: {
+              fontSize: 14,
+            },
+            tabBarTestID: 'BottomMenu.Profile',
+            tabBarIcon: ({color}) => (
+              <Icon
+                size={6}
+                as={FontAwesome5}
+                name="user"
+                color={color}
+                _dark={{
+                  color: color,
+                }}
+              />
+            ),
+          }}
+        />
 
-      <Tab.Screen
-        name="Orders"
-        component={CleanStackView}
-        listeners={{
-          tabPress: e => {
-            e.preventDefault();
-            _showOrdersMenu(navigation);
-          },
-        }}
-        options={{
-          tabBarLabel: strings.Menu.bottom.order,
-          tabBarTestID: 'BottomMenu.Orders',
-          tabBarIcon: ({color}) => (
-            <Icon
-              name="comments"
-              type="FontAwesome5"
-              style={[
-                styles.shadow,
-                {
-                  color,
-                },
-              ]}
-            />
-          ),
-        }}
-      />
+        <Tab.Screen
+          name="Orders"
+          component={CleanStackView}
+          listeners={{
+            tabPress: e => {
+              e.preventDefault();
+              _showOrdersMenu();
+            },
+          }}
+          options={{
+            tabBarLabel: strings.Menu.bottom.order,
+            tabBarLabelStyle: {
+              fontSize: 14,
+            },
+            tabBarTestID: 'BottomMenu.Orders',
+            tabBarIcon: ({color}) => (
+              <Icon
+                size={6}
+                as={MaterialCommunityIcons}
+                name="phone-message"
+                color={color}
+                _dark={{
+                  color: {color},
+                }}
+              />
+            ),
+          }}
+        />
 
-      <Tab.Screen
-        name="Menu"
-        component={MenuStackView}
-        options={{
-          headerShown: false,
-          tabBarLabel: strings.Menu.bottom.menu,
-          tabBarTestID: 'BottomMenu.Menu',
-          tabBarIcon: ({color}) => (
-            <Icon
-              name="bars"
-              type="FontAwesome5"
-              style={[
-                styles.shadow,
-                {
-                  color,
-                },
-              ]}
-            />
-          ),
-        }}
-      />
-    </Tab.Navigator>
+        <Tab.Screen
+          name="Menu"
+          component={MenuStackView}
+          options={{
+            headerShown: false,
+            tabBarLabel: strings.Menu.bottom.menu,
+            tabBarLabelStyle: {
+              fontSize: 14,
+            },
+            tabBarTestID: 'BottomMenu.Menu',
+            tabBarIcon: ({color}) => (
+              <Icon
+                size={5}
+                as={FontAwesome5}
+                name="bars"
+                color={color}
+                _dark={{
+                  color: color,
+                }}
+              />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+      <ActionSheetMenu />
+    </>
   );
 };

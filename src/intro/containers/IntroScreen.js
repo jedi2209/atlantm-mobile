@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import {StyleSheet, Image, View, Text} from 'react-native';
+import {SafeAreaView, StyleSheet, Image, View, Text} from 'react-native';
 import {Button} from 'native-base';
-
-import {SafeAreaView} from 'react-native-safe-area-context';
 
 // helpers
 import styleConst from '../../core/style-const';
@@ -52,7 +50,6 @@ export default class IntroScreen extends Component {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.logoContainer}>
-          {/* <Image style={styles.logo} source={require('../assets/logo.png')} /> */}
           <Image
             style={styles.logo}
             testID="IntroChooseDealerScreenLogo"
@@ -60,17 +57,18 @@ export default class IntroScreen extends Component {
             source={require('../../menu/assets/logo-horizontal-white.svg')}
           />
           <Button
-            size="full"
-            full
+            size="md"
             title={strings.IntroScreen.button}
             testID="IntroChooseDealerButton"
             onPress={this.onPressButton}
-            style={[styleConst.shadow.default, styles.button]}>
-            <Image
-              style={styles.image}
-              resizeMode="contain"
-              source={require('../../menu/assets/Home.svg')}
-            />
+            style={[styleConst.shadow.default, styles.button]}
+            leftIcon={
+              <Image
+                style={styles.image}
+                resizeMode="contain"
+                source={require('../../menu/assets/Home.svg')}
+              />
+            }>
             <Text style={styles.buttonText}>{strings.IntroScreen.button}</Text>
           </Button>
         </View>

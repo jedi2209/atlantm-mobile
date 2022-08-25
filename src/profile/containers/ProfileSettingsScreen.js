@@ -14,8 +14,6 @@ import styleConst from '../../core/style-const';
 
 import Analytics from '../../utils/amplitude-analytics';
 import {strings} from '../../core/lang/const';
-import style from '../../core/components/Lists/style';
-import nav from '../../navigation/reducers';
 
 class ProfileSettingsScreen extends Component {
   constructor(props) {

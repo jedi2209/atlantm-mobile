@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Badge = (props) => {
+const Badge = props => {
   return props?.onPress ? (
     <TouchableHighlight
       activeOpacity={0.6}

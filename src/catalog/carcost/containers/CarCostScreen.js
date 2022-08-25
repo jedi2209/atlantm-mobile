@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import CarCostPhotos from '../components/CarCostPhotos';
 import {Icon, Button} from 'native-base';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   addDays,
   dayMonthYear,
@@ -224,9 +225,14 @@ class CarCostScreen extends PureComponent {
                 ]}
                 useNativeDriver>
                 <Icon
-                  type="MaterialCommunityIcons"
+                  size={20}
+                  as={MaterialCommunityIcons}
                   name="car-off"
-                  fontSize={20}
+                  color="warmGray.50"
+                  _dark={{
+                    color: 'warmGray.50',
+                  }}
+                  style={styles.point}
                 />
                 <Text
                   style={{
@@ -237,19 +243,17 @@ class CarCostScreen extends PureComponent {
                   {strings.UserCars.empty.text + '\r\n'}
                 </Text>
                 <Button
-                  size="full"
-                  full
+                  size="md"
                   variant="outline"
                   style={{borderRadius: 5}}
+                  _text={{padding: 5}}
                   onPress={() => {
                     this.props.navigation.navigate('About', {
                       screen: 'LoginScreen',
                       activePanel: 'hidden',
                     });
                   }}>
-                  <Text style={{padding: 5}}>
-                    {strings.UserCars.archiveCheck}
-                  </Text>
+                  {strings.UserCars.archiveCheck}
                 </Button>
               </View>
             ),

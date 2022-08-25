@@ -1,8 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect, useCallback, useRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Dimensions,
-  Image,
+  Pressable,
   View,
   Alert,
   StyleSheet,
@@ -13,7 +13,10 @@ import {
   StatusBar,
 } from 'react-native';
 
-import {Text, Icon, Button, ActionSheet, Toast} from 'native-base';
+import {Text, Icon, ActionSheet, Toast, Box, HStack} from 'native-base';
+
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import BrandLogo from '../../core/components/BrandLogo';
 import Plate from '../../core/components/Plate';
@@ -72,10 +75,8 @@ const styles = StyleSheet.create({
     zIndex: 3,
   },
   point: {
-    fontSize: 22,
     marginTop: 3,
     marginRight: 10,
-    color: styleConst.color.white,
   },
   addressText: {
     color: styleConst.color.white,
@@ -96,11 +97,6 @@ const styles = StyleSheet.create({
   buttonPrimary: {
     marginTop: 60,
     marginHorizontal: '2%',
-    backgroundColor: styleConst.color.bg,
-    borderColor: '#afafaf',
-    borderRadius: 5,
-    borderStyle: 'solid',
-    borderWidth: 1,
     paddingHorizontal: 10,
     position: 'absolute',
     zIndex: 100,
@@ -113,7 +109,7 @@ const styles = StyleSheet.create({
   },
   brand: {
     marginLeft: 5,
-    marginRight: 5,
+    marginRight: 15,
     marginTop: 3,
     height: 25,
     width: 30,
@@ -394,16 +390,16 @@ const ContactsScreen = ({
           message = ERROR_NETWORK;
         }
 
-        setTimeout(
-          () =>
-            Toast.show({
-              text: message,
-              type: 'warning',
-              position: 'bottom',
-              duration: 1000,
-            }),
-          100,
-        );
+        // setTimeout(
+        //   () =>
+        //     Toast.show({
+        //       text: message,
+        //       type: 'warning',
+        //       position: 'bottom',
+        //       duration: 1000,
+        //     }),
+        //   100,
+        // );
       }
     });
   };
@@ -495,35 +491,45 @@ const ContactsScreen = ({
       //   clearInterval(interval);
       // }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <View style={styleConst.safearea.default} testID="ContactsScreen.Wrapper">
       <StatusBar hidden />
-      <Button
-        size="full"
-        full
+      <Pressable
         onPress={() => navigation.navigate('ChooseDealerScreen')}
-        style={[styles.buttonPrimary, styleConst.shadow.default]}>
-        {dealerSelected.brands &&
-          dealerSelected.brands.length &&
-          dealerSelected.brands.map(brand => {
-            return (
-              <BrandLogo
-                brand={brand.id}
-                height={25}
-                style={styles.brand}
-                key={'ChooseDealerBrand' + brand.id}
-              />
-            );
-          })}
-        <View style={{flex: 1, flexDirection: 'row'}}>
-          <Text style={styles.buttonPrimaryText}>
-            {get(dealerSelected, 'name')}
-          </Text>
-          <Icon type="FontAwesome5" name="angle-right" style={styles.iconRow} />
-        </View>
-      </Button>
+        style={[styles.buttonPrimary]}>
+        <Box
+          borderWidth={1}
+          borderColor="coolGray.300"
+          shadow={3}
+          bg="coolGray.100"
+          p={3}
+          rounded={8}
+          backgroundColor={styleConst.color.bg}>
+          <HStack alignItems="center" justifyContent="space-between" space={2}>
+            {dealerSelected.brands && dealerSelected.brands.length ? (
+              <HStack>
+                {dealerSelected.brands.map(brand => {
+                  return (
+                    <BrandLogo
+                      brand={brand.id}
+                      height={25}
+                      style={styles.brand}
+                      key={'ChooseDealerBrand' + brand.id}
+                    />
+                  );
+                })}
+              </HStack>
+            ) : null}
+            <Text style={styles.buttonPrimaryText}>
+              {get(dealerSelected, 'name')}
+            </Text>
+            <FontAwesome5.Button name={'angle-right'} style={styles.iconRow} />
+          </HStack>
+        </Box>
+      </Pressable>
       <ScrollView
         contentContainerStyle={{paddingBottom: 24}}
         ref={mainScrollView}
@@ -546,7 +552,16 @@ const ContactsScreen = ({
             style={styles.address}
             testID="ContactsScreen.PressMap"
             onPress={() => onPressMap()}>
-            <Icon style={styles.point} type="MaterialIcons" name="navigation" />
+            <Icon
+              size={22}
+              as={MaterialIcons}
+              name="navigation"
+              color="warmGray.50"
+              _dark={{
+                color: 'warmGray.50',
+              }}
+              style={styles.point}
+            />
             <Text
               numberOfLines={1}
               ellipsizeMode="tail"

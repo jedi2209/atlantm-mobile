@@ -1,7 +1,22 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {findNodeHandle, Text} from 'react-native';
-import {Container, Content, StyleProvider} from 'native-base';
+import {
+  findNodeHandle,
+  Text,
+  View,
+  ScrollView,
+  Image,
+  Dimensions,
+} from 'react-native';
+import {
+  Container,
+  Stack,
+  Box,
+  Popover,
+  Button,
+  IconButton,
+  StatusBar,
+} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -10,12 +25,13 @@ import {actionSetActiveIndicator, actionFetchIndicators} from '../actions';
 // components
 import SpinnerView from '../../core/components/SpinnerView';
 import EmptyMessage from '../../core/components/EmptyMessage';
-import IndicatorsRow from '../components/IndicatorsRow';
+// import IndicatorsRow from '../components/_old_IndicatorsRow';
 
 // helpers
-import getTheme from '../../../native-base-theme/components';
 import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
+
+const {width: screenWidth} = Dimensions.get('window');
 
 const mapStateToProps = ({nav, indicators, core}) => {
   return {
@@ -42,11 +58,8 @@ class IndicatorsScreen extends Component {
   };
 
   componentDidMount() {
-    const {
-      actionFetchIndicators,
-      actionSetActiveIndicator,
-      region,
-    } = this.props;
+    const {actionFetchIndicators, actionSetActiveIndicator, region} =
+      this.props;
 
     actionSetActiveIndicator({});
     actionFetchIndicators(region);
@@ -72,7 +85,7 @@ class IndicatorsScreen extends Component {
 
   setScrollPosition(descriptionRef) {
     const target = findNodeHandle(descriptionRef);
-    this.scrollView._root.scrollToFocusedInput(target);
+    // this.scrollView._root.scrollToFocusedInput(target);
   }
 
   render() {
@@ -80,9 +93,7 @@ class IndicatorsScreen extends Component {
 
     if (isRequest) {
       return (
-        <SpinnerView
-          containerStyle={{backgroundColor: styleConst.color.bg}}
-        />
+        <SpinnerView containerStyle={{backgroundColor: styleConst.color.bg}} />
       );
     }
 
@@ -93,28 +104,66 @@ class IndicatorsScreen extends Component {
     console.info('== IndicatorsScreen ==');
 
     return (
-      <StyleProvider style={getTheme()}>
-        <Container style={styleConst.safearea.default}>
-          <Content
-            ref={(scrollView) => {
-              this.scrollView = scrollView;
+      <>
+        <StatusBar hidden={false} />
+        <ScrollView style={{backgroundColor: styleConst.color.white}}>
+          <Text style={styleConst.text.bigHead}>
+            {strings.Menu.main.indicators}
+          </Text>
+          <View
+            style={{
+              flex: 1,
+              flexWrap: 'wrap',
+              flexDirection: 'row',
+              marginLeft: 10,
+              justifyContent: 'space-between',
             }}>
-            <Text style={styleConst.text.bigHead}>
-              {strings.Menu.main.indicators}
-            </Text>
-            {items.map((indicators, idx) => {
+            {items.map(indicator => {
               return (
-                <IndicatorsRow
-                  key={`indicator-row-${idx}`}
-                  items={indicators}
-                  activeItem={activeItem}
-                  onPressItem={this.onPressIndicator}
-                />
+                <Popover
+                  trigger={triggerProps => {
+                    return (
+                      <IconButton
+                        {...triggerProps}
+                        style={{
+                          marginBottom: 10,
+                          backgroundColor: triggerProps['aria-expanded']
+                            ? styleConst.color.systemBlue
+                            : styleConst.color.white,
+                        }}
+                        icon={
+                          <Image
+                            resizeMode="contain"
+                            style={{
+                              width: screenWidth / 5,
+                              height: screenWidth / 5,
+                            }}
+                            source={{
+                              uri: triggerProps['aria-expanded']
+                                ? indicator.img.white
+                                : indicator.img.blue,
+                            }}
+                          />
+                        }
+                      />
+                    );
+                  }}>
+                  <Popover.Content accessibilityLabel={indicator.name}>
+                    <Popover.Arrow />
+                    <Popover.CloseButton />
+                    <Popover.Header backgroundColor={styleConst.color.white}>
+                      {indicator.name}
+                    </Popover.Header>
+                    <Popover.Body backgroundColor={styleConst.color.white}>
+                      {indicator.description}
+                    </Popover.Body>
+                  </Popover.Content>
+                </Popover>
               );
             })}
-          </Content>
-        </Container>
-      </StyleProvider>
+          </View>
+        </ScrollView>
+      </>
     );
   }
 }
