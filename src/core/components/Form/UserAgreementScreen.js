@@ -38,11 +38,9 @@ const UserAgreementScreen = ({region, SubmitButton}) => {
           />
         </ScrollView>
         <Button
-          size="full"
-          full
           style={styles.submitButton}
           onPress={() => NavigationService.goBack()}>
-          <Text>{SubmitButton.text}</Text>
+          {SubmitButton.text}
         </Button>
       </>
     );
@@ -64,9 +62,8 @@ UserAgreementScreen.defaultProps = {
 
 const styles = StyleSheet.create({
   submitButton: {
-    marginBottom: 25,
+    marginBottom: 35,
     marginHorizontal: 10,
-    borderRadius: 5,
   },
   mainView: {
     paddingHorizontal: 10,

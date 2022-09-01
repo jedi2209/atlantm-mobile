@@ -28,10 +28,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
-// import SegmentedControl from 'rn-segmented-control';
-
-import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
-
 import RNBounceable from '@freakycoder/react-native-bounceable';
 import FilterRow from '../../components/FilterRow';
 import ModalViewFilter from '../../components/ModalViewFilter';
@@ -729,7 +725,7 @@ const MainFilterScreen = ({
             ) : null}
             {stockType === 'Used' && dataFilters && dataFilters.data ? (
               <Box px="3" py="3" mt="1" bg="white">
-                <VStack space="4" divider={<Divider />}>
+                <VStack space="4" divider={<Divider bg="gray.100" thickness="1" />}>
                   {dataFilters && dataFilters.data.year ? (
                     <FilterRow
                       onPress={() => {
@@ -801,7 +797,7 @@ const MainFilterScreen = ({
               borderColor={'gray.100'}
               borderTopWidth="5"
               bg="white">
-              <VStack space="2" divider={<Divider />}>
+              <VStack space="2" divider={<Divider bg="gray.100" thickness="1" />}>
                 {dataFilters &&
                 dataFilters.prices &&
                 !dataFilters.prices.hidden ? (
@@ -872,7 +868,7 @@ const MainFilterScreen = ({
               borderColor={'gray.100'}
               borderTopWidth="5"
               bg="white">
-              <VStack space="2" divider={<Divider />}>
+              <VStack space="2" divider={<Divider bg="gray.100" thickness="1" />}>
                 {dataFilters && dataFilters.data.gearbox ? (
                   <FilterRow
                     onPress={() => {
@@ -1034,7 +1030,7 @@ const MainFilterScreen = ({
               borderTopWidth="5"
               bg="white">
               {stockType === 'Used' ? (
-                <VStack space="2" divider={<Divider />}>
+                <VStack space="2" divider={<Divider bg="gray.100" thickness="1" />}>
                   <FilterRow
                     onPress={() => {
                       _onChangeFilter('guarantee', !stateFilters.guarantee);
@@ -1077,13 +1073,13 @@ const MainFilterScreen = ({
                   />
                 </VStack>
               ) : dealerSelected.region === 'by' ? (
-                <VStack space="2" divider={<Divider />}>
+                <VStack space="2" divider={<Divider bg="gray.100" thickness="1" />}>
                   <FilterRow
                     onPress={() => {
                       _onChangeFilter('onlineOrder', !stateFilters.onlineOrder);
                       setUpdateFromApi(!updateFromApi);
                     }}
-                    title={strings.CarsFilterScreen.filters.guarantee.title}
+                    title={strings.CarsFilterScreen.filters.onlineOrder.title}
                     isChecked={get(stateFilters, 'onlineOrder', false)}
                     bounceable={false}
                     type="singleCheckbox"
@@ -1600,7 +1596,7 @@ const MainFilterScreen = ({
           </View>
         ) : !stockLoading ? (
           <Box border="1" borderRadius="md">
-            <VStack space="4" divider={<Divider />}>
+            <VStack space="4" divider={<Divider bg="gray.100" thickness="1" />}>
               <Box
                 px="4"
                 pt="4"

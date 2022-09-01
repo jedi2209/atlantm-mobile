@@ -1,12 +1,6 @@
 import React, {Component} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Dimensions,
-  StatusBar,
-} from 'react-native';
-import {Content, StyleProvider} from 'native-base';
+import {StyleSheet, Dimensions} from 'react-native';
+import {View, ScrollView} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -33,6 +27,7 @@ const styles = StyleSheet.create({
   },
   webviewContainer: {
     flex: 1,
+    paddingHorizontal: '2%',
     paddingBottom: styleConst.ui.verticalGap - 5,
   },
 });
@@ -86,20 +81,15 @@ class BonusInfoScreen extends Component {
     }
 
     return (
-      <SafeAreaView style={styles.safearea}>
-        <StatusBar barStyle="dark-content" />
-        <Content>
-          {bonusInfo ? (
-            <View
-              style={styles.webviewContainer}
-              onLayout={this.onLayoutWebView}>
-              <WebViewAutoHeight source={{html: bonusInfo}} />
-            </View>
-          ) : (
-            <SpinnerView />
-          )}
-        </Content>
-      </SafeAreaView>
+      <ScrollView style={styles.safearea}>
+        {bonusInfo ? (
+          <View style={styles.webviewContainer} onLayout={this.onLayoutWebView}>
+            <WebViewAutoHeight source={{html: bonusInfo}} />
+          </View>
+        ) : (
+          <SpinnerView />
+        )}
+      </ScrollView>
     );
   }
 }

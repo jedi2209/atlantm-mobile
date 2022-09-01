@@ -14,7 +14,7 @@ import {
 import {
   Text,
   Icon,
-  ActionSheet,
+  Actionsheet,
   Toast,
   Box,
   HStack,
@@ -24,6 +24,7 @@ import {
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import BrandLogo from '../../core/components/BrandLogo';
 import Plate from '../../core/components/Plate';
@@ -159,6 +160,7 @@ const _renderPlates = params => {
     onPressCallMe,
     onPressChat,
     sitesSubtitle,
+    onPressOrders,
   } = params;
   const phones = get(dealerSelected, 'phone', []);
   return (
@@ -216,34 +218,7 @@ const _renderPlates = params => {
           subtitle={strings.ContactsScreen.sendOrder}
           type="primary"
           testID="ContactsScreen.ButtonOrders"
-          onPress={() => {
-            orderFunctions.getOrders().then(ordersData => {
-              ActionSheet.show(
-                {
-                  options: ordersData.BUTTONS,
-                  cancelButtonIndex: ordersData.CANCEL_INDEX,
-                  title: ordersData.TITLE,
-                  destructiveButtonIndex: ordersData.DESTRUCTIVE_INDEX || null,
-                },
-                buttonIndex => {
-                  switch (ordersData.BUTTONS[buttonIndex].id) {
-                    case 'callMeBack':
-                      navigation.navigate('CallMeBackScreen');
-                      break;
-                    case 'orderService':
-                      navigation.navigate('ServiceScreen');
-                      break;
-                    case 'orderParts':
-                      navigation.navigate('OrderPartsScreen');
-                      break;
-                    case 'carCost':
-                      navigation.navigate('CarCostScreen');
-                      break;
-                  }
-                },
-              );
-            });
-          }}
+          onPress={onPressOrders}
         />
         <Plate
           title={
@@ -258,33 +233,33 @@ const _renderPlates = params => {
           }
           testID="ContactsScreen.ButtonSites"
           type="red"
-          onPress={() => {
-            if (sitesSubtitle && sitesSubtitle.sites.length > 1) {
-              ActionSheet.show(
-                {
-                  options: sitesSubtitle.buttons,
-                  cancelButtonIndex: sitesSubtitle.buttons.length - 1,
-                  title: strings.ContactsScreen.dealerSites,
-                },
-                buttonIndex => {
-                  switch (sitesSubtitle.buttons[buttonIndex].id) {
-                    case 'cancel':
-                      break;
-                    default:
-                      Linking.openURL(sitesSubtitle.buttons[buttonIndex].site);
-                      break;
-                  }
-                },
-              );
-            } else {
-              Linking.openURL(get(dealerSelected, 'site[0]')).catch(
-                console.error(
-                  'get(dealerSelected, "site[0]") failed',
-                  get(dealerSelected, 'site[0]'),
-                ),
-              );
-            }
-          }}
+          // onPress={() => {
+          //   if (sitesSubtitle && sitesSubtitle.sites.length > 1) {
+          //     ActionSheet.show(
+          //       {
+          //         options: sitesSubtitle.buttons,
+          //         cancelButtonIndex: sitesSubtitle.buttons.length - 1,
+          //         title: strings.ContactsScreen.dealerSites,
+          //       },
+          //       buttonIndex => {
+          //         switch (sitesSubtitle.buttons[buttonIndex].id) {
+          //           case 'cancel':
+          //             break;
+          //           default:
+          //             Linking.openURL(sitesSubtitle.buttons[buttonIndex].site);
+          //             break;
+          //         }
+          //       },
+          //     );
+          //   } else {
+          //     Linking.openURL(get(dealerSelected, 'site[0]')).catch(
+          //       console.error(
+          //         'get(dealerSelected, "site[0]") failed',
+          //         get(dealerSelected, 'site[0]'),
+          //       ),
+          //     );
+          //   }
+          // }}
         />
       </HStack>
     </ScrollView>
@@ -377,6 +352,21 @@ const ContactsScreen = ({
   const isOpened = getStatusWorktime(dealerSelected, 'RC');
   const [isSubscribedInterval, setSubscribedInterval] = useState(true);
 
+  const [actionSheetStatus, setActionSheetStatus] = React.useState(false);
+  const [actionSheetData, setActionSheetData] = React.useState({});
+
+  const _showOrdersMenu = () => {
+    orderFunctions.getOrders().then(data => {
+      setActionSheetData({
+        options: data.BUTTONS,
+        cancelButtonIndex: data.CANCEL_INDEX,
+        title: data.TITLE,
+        destructiveButtonIndex: data.DESTRUCTIVE_INDEX || null,
+      });
+      setActionSheetStatus(true);
+    });
+  };
+
   const fetchInfoData = () => {
     const {region, id: dealerID} = dealerSelected;
     fetchInfoList(region, dealerID).then(action => {
@@ -439,6 +429,38 @@ const ContactsScreen = ({
     navigation.navigate('CallMeBackScreen');
   };
 
+  const onPressOrders = () => {
+    _showOrdersMenu();
+    // onPress={() => {
+    //   orderFunctions.getOrders().then(ordersData => {
+    //     ActionSheet.show(
+    //       {
+    //         options: ordersData.BUTTONS,
+    //         cancelButtonIndex: ordersData.CANCEL_INDEX,
+    //         title: ordersData.TITLE,
+    //         destructiveButtonIndex: ordersData.DESTRUCTIVE_INDEX || null,
+    //       },
+    //       buttonIndex => {
+    //         switch (ordersData.BUTTONS[buttonIndex].id) {
+    //           case 'callMeBack':
+    //             navigation.navigate('CallMeBackScreen');
+    //             break;
+    //           case 'orderService':
+    //             navigation.navigate('ServiceScreen');
+    //             break;
+    //           case 'orderParts':
+    //             navigation.navigate('OrderPartsScreen');
+    //             break;
+    //           case 'carCost':
+    //             navigation.navigate('CarCostScreen');
+    //             break;
+    //         }
+    //       },
+    //     );
+    //   });
+    // }}
+  };
+
   const onPressChat = () => {
     navigation.navigate('ChatScreen');
   };
@@ -451,6 +473,56 @@ const ContactsScreen = ({
       address: get(dealerSelected, 'address'),
       coords: get(dealerSelected, 'coords'),
     });
+  };
+
+  const ActionSheetMenu = () => {
+    if (!actionSheetData || !actionSheetData['options']) {
+      return <></>;
+    }
+    return (
+      <Actionsheet
+        hideDragIndicator
+        size="full"
+        isOpen={actionSheetStatus}
+        onClose={() => {
+          setActionSheetStatus(false);
+        }}>
+        <Actionsheet.Content>
+          <Box w="100%" my={4} px={4} justifyContent="space-between">
+            <Text
+              fontSize="xl"
+              color="gray.500"
+              _dark={{
+                color: 'gray.300',
+              }}>
+              {strings.ContactsScreen.sendOrder}
+            </Text>
+          </Box>
+          {actionSheetData.options.map(el => {
+            return (
+              <Actionsheet.Item
+                onPress={() => {
+                  setActionSheetStatus(false);
+                  if (el.navigate) {
+                    navigation.navigate(el.navigate);
+                  }
+                }}
+                startIcon={
+                  <Icon
+                    as={Ionicons}
+                    color={el.iconColor}
+                    mr="1"
+                    size={6}
+                    name={el.icon}
+                  />
+                }>
+                {el.text}
+              </Actionsheet.Item>
+            );
+          })}
+        </Actionsheet.Content>
+      </Actionsheet>
+    );
   };
 
   const _onAppRateSuccess = () => {
@@ -496,113 +568,119 @@ const ContactsScreen = ({
   }, []);
 
   return (
-    <View style={styleConst.safearea.default} testID="ContactsScreen.Wrapper">
-      <StatusBar hidden />
-      <Pressable
-        onPress={() => navigation.navigate('ChooseDealerScreen')}
-        style={[styles.buttonPrimary]}>
-        <Box
-          borderWidth={1}
-          borderColor="coolGray.300"
-          shadow={5}
-          bg="coolGray.100"
-          p={3}
-          rounded={8}
-          backgroundColor={styleConst.color.bg}>
-          <HStack alignItems="center" justifyContent="space-between" space={2}>
-            {dealerSelected.brand && dealerSelected.brand.length ? (
-              <HStack>
-                {dealerSelected.brand.map(brand => {
-                  return (
-                    <BrandLogo
-                      brand={brand.id}
-                      height={25}
-                      style={styles.brand}
-                      key={'ChooseDealerBrand' + brand.id}
-                    />
-                  );
-                })}
-              </HStack>
-            ) : null}
-            <Text style={styles.buttonPrimaryText}>
-              {get(dealerSelected, 'name')}
-            </Text>
-            <Icon
-              size="sm"
-              as={FontAwesome5}
-              color={styleConst.color.greyText4}
-              name={'angle-right'}
-              style={styles.iconRow}
-            />
-          </HStack>
-        </Box>
-      </Pressable>
-      <ScrollView
-        contentContainerStyle={{paddingBottom: 24}}
-        ref={mainScrollView}
-        showsHorizontalScrollIndicator={false}
-        bounces={false}>
-        <Imager
-          style={styles.imgHero}
-          source={{
-            uri:
-              get(dealerSelected, 'img.thumb') +
-              '1000x1000' +
-              '&hash=' +
-              get(dealerSelected, 'hash'),
-            cache: 'web',
-          }}
-        />
-        <View style={{marginTop: HEADER_MAX_HEIGHT - 65}}>
-          {dealerSelected.address ? (
-            <>
-              <View style={styles.blackBack} />
-              <TouchableOpacity
-                style={styles.address}
-                testID="ContactsScreen.PressMap"
-                onPress={() => onPressMap()}>
-                <Icon
-                  size={22}
-                  as={MaterialIcons}
-                  name="navigation"
-                  color="warmGray.50"
-                  _dark={{
-                    color: 'warmGray.50',
-                  }}
-                  style={styles.point}
-                />
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                  style={styles.addressText}>
-                  {dealerSelected &&
-                  dealerSelected.city[0] &&
-                  dealerSelected.city[0].name
-                    ? dealerSelected.city[0].name
-                    : null}
-                  {dealerSelected.address
-                    ? ', ' + dealerSelected.address
-                    : null}
-                </Text>
-              </TouchableOpacity>
-            </>
-          ) : (
-            <View h="8" />
-          )}
-          {_renderPlates({
-            dealerSelected,
-            callAvailable,
-            isOpened,
-            navigation,
-            chatAvailable,
-            onPressCallMe,
-            onPressChat,
-            sitesSubtitle,
-          })}
-          {_renderInfoList({isFetchInfoList, infoList, navigation})}
-        </View>
-      </ScrollView>
-    </View>
+    <>
+      <View style={styleConst.safearea.default} testID="ContactsScreen.Wrapper">
+        <Pressable
+          onPress={() => navigation.navigate('ChooseDealerScreen')}
+          style={[styles.buttonPrimary]}>
+          <Box
+            borderWidth={1}
+            borderColor="coolGray.300"
+            shadow={5}
+            bg="coolGray.100"
+            p={3}
+            rounded={8}
+            backgroundColor={styleConst.color.bg}>
+            <HStack
+              alignItems="center"
+              justifyContent="space-between"
+              space={2}>
+              {dealerSelected.brand && dealerSelected.brand.length ? (
+                <HStack>
+                  {dealerSelected.brand.map(brand => {
+                    return (
+                      <BrandLogo
+                        brand={brand.id}
+                        height={25}
+                        style={styles.brand}
+                        key={'ChooseDealerBrand' + brand.id}
+                      />
+                    );
+                  })}
+                </HStack>
+              ) : null}
+              <Text style={styles.buttonPrimaryText}>
+                {get(dealerSelected, 'name')}
+              </Text>
+              <Icon
+                size="sm"
+                as={FontAwesome5}
+                color={styleConst.color.greyText4}
+                name={'angle-right'}
+                style={styles.iconRow}
+              />
+            </HStack>
+          </Box>
+        </Pressable>
+        <ScrollView
+          contentContainerStyle={{paddingBottom: 24}}
+          ref={mainScrollView}
+          showsHorizontalScrollIndicator={false}
+          bounces={false}>
+          <Imager
+            style={styles.imgHero}
+            source={{
+              uri:
+                get(dealerSelected, 'img.thumb') +
+                '1000x1000' +
+                '&hash=' +
+                get(dealerSelected, 'hash'),
+              cache: 'web',
+            }}
+          />
+          <View style={{marginTop: HEADER_MAX_HEIGHT - 65}}>
+            {dealerSelected.address ? (
+              <>
+                <View style={styles.blackBack} />
+                <TouchableOpacity
+                  style={styles.address}
+                  testID="ContactsScreen.PressMap"
+                  onPress={() => onPressMap()}>
+                  <Icon
+                    size={22}
+                    as={MaterialIcons}
+                    name="navigation"
+                    color="warmGray.50"
+                    _dark={{
+                      color: 'warmGray.50',
+                    }}
+                    style={styles.point}
+                  />
+                  <Text
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                    style={styles.addressText}>
+                    {dealerSelected &&
+                    dealerSelected.city[0] &&
+                    dealerSelected.city[0].name
+                      ? dealerSelected.city[0].name
+                      : null}
+                    {dealerSelected.address
+                      ? ', ' + dealerSelected.address
+                      : null}
+                  </Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <View h="8" />
+            )}
+            {_renderPlates({
+              dealerSelected,
+              callAvailable,
+              isOpened,
+              navigation,
+              chatAvailable,
+              onPressCallMe,
+              onPressChat,
+              sitesSubtitle,
+              onPressOrders,
+            })}
+            {_renderInfoList({isFetchInfoList, infoList, navigation})}
+          </View>
+        </ScrollView>
+      </View>
+      <ActionSheetMenu />
+    </>
   );
 };
 

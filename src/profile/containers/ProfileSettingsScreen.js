@@ -1,8 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {StyleSheet, Alert, Text, View, ActivityIndicator} from 'react-native';
+import {StyleSheet, Alert, ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
-import {Icon, Button} from 'native-base';
+import {Icon, Button, Text, View,} from 'native-base';
 
 import {substractYears} from '../../utils/date';
 
@@ -299,11 +299,9 @@ class ProfileSettingsScreen extends Component {
           SubmitButton={{text: strings.ProfileSettingsScreen.save}}
           onSubmit={this.onPressSave}>
           <Button
-            size="full"
-            full
-            transparent
-            variant="outline"
-            style={{borderRadius: 5, marginTop: -10}}
+            variant="link"
+            style={{borderRadius: 5, marginTop: -10, marginBottom: 30}}
+            _text={{padding: 5, color: styleConst.color.red}}
             onPress={() => {
               Alert.alert(
                 strings.ProfileSettingsScreen.Notifications.deleteAccount.title,
@@ -323,9 +321,7 @@ class ProfileSettingsScreen extends Component {
                 ],
               );
             }}>
-            <Text style={{padding: 5, color: styleConst.color.red}}>
-              {strings.ProfileSettingsScreen.deleteAccount}
-            </Text>
+            {strings.ProfileSettingsScreen.deleteAccount}
           </Button>
         </Form>
       </>

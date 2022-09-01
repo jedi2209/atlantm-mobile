@@ -14,6 +14,8 @@ import {Icon, Button, Toast} from 'native-base';
 import Form from '../../core/components/Form/Form';
 import {CarCard} from '../../profile/components/CarCard';
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 // redux
 import {connect} from 'react-redux';
 import {orderParts} from '../actions';
@@ -353,7 +355,7 @@ class OrderPartsScreen extends Component {
                           ]}
                           useNativeDriver>
                           <Icon
-                            type="MaterialCommunityIcons"
+                            as={MaterialCommunityIcons}
                             name="car-off"
                             fontSize={20}
                           />

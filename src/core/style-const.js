@@ -9,7 +9,7 @@ export default {
     green2: '#4cd864',
     orange: '#FFA51D',
     bg: '#F8F8F8',
-    white: '#fff',
+    white: '#ffffff',
     accordeonGrey1: '#ededed',
     accordeonGrey2: '#dedfe0',
     greyText: 'rgba(97,110,122,1)',

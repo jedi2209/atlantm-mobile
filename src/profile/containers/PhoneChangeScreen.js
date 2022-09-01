@@ -11,6 +11,9 @@ import {
   StyleSheet,
 } from 'react-native';
 import {Icon, Toast} from 'native-base';
+
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
 import styleConst from '../../core/style-const';
 import Form from '../../core/components/Form/Form';
 
@@ -421,7 +424,7 @@ class PhoneChangeScreen extends PureComponent {
                     iconRight: (
                       <Icon
                         name="sms"
-                        type="MaterialIcons"
+                        as={MaterialIcons}
                         style={styles.BonusInfoButtonIcon}
                       />
                     ),

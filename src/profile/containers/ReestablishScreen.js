@@ -19,6 +19,8 @@ import {
 
 import {Button, Icon, Toast} from 'native-base';
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
 import styleConst from '../../core/style-const';
@@ -237,7 +239,7 @@ class ReestablishScreen extends React.Component {
         <View style={styles.container}>
           <View style={styles.header}>
             <Icon
-              type="MaterialCommunityIcons"
+              as={MaterialCommunityIcons}
               name="emoticon-cry-outline"
               style={{fontSize: 48, position: 'absolute'}}
             />

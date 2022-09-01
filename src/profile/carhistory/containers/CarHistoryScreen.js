@@ -19,7 +19,15 @@ import {
   Item,
   Label,
 } from 'native-base';
-import { List, DefaultTheme, Provider as PaperProvider, Divider, Card, Title, Paragraph } from 'react-native-paper';
+import {
+  List,
+  DefaultTheme,
+  Provider as PaperProvider,
+  Divider,
+  Card,
+  Title,
+  Paragraph,
+} from 'react-native-paper';
 import Analytics from '../../../utils/amplitude-analytics';
 
 // redux
@@ -152,8 +160,13 @@ const mapStateToProps = ({nav, profile}) => {
 const mapDispatchToProps = {
   actionFetchCarHistory,
 };
-const CarHistoryScreen = ({profile, route, navigation, carHistory, actionFetchCarHistory}) => {
-
+const CarHistoryScreen = ({
+  profile,
+  route,
+  navigation,
+  carHistory,
+  actionFetchCarHistory,
+}) => {
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -167,7 +180,7 @@ const CarHistoryScreen = ({profile, route, navigation, carHistory, actionFetchCa
       vin,
       token,
       userid,
-    }).then((action) => {
+    }).then(action => {
       if (action.type === CAR_HISTORY__FAIL) {
         let message = get(
           action,
@@ -185,23 +198,26 @@ const CarHistoryScreen = ({profile, route, navigation, carHistory, actionFetchCa
     // }
   }, []);
 
-  const renderData = (carHistory) => {
+  const renderData = carHistory => {
     return Object.keys(carHistory)
       .reverse()
-      .map((carHistoryYear) => {
+      .map(carHistoryYear => {
         const item = carHistory[carHistoryYear];
         const hash = item.hash;
         return (
-        <List.Accordion
-          key={'year' + hash}
-          title={carHistoryYear}
-          left={props => <List.Icon {...props} icon="calendar-multiple" />}>
-          {Object.keys(item.history).reverse().map((month) => renderLevel(item.history[month].history))}
-        </List.Accordion>);
+          <List.Accordion
+            key={'year' + hash}
+            title={carHistoryYear}
+            left={props => <List.Icon {...props} icon="calendar-multiple" />}>
+            {Object.keys(item.history)
+              .reverse()
+              .map(month => renderLevel(item.history[month].history))}
+          </List.Accordion>
+        );
       });
   };
 
-  const renderLevel = (works) => {
+  const renderLevel = works => {
     const vin = get(route, 'params.car.vin');
 
     return works.map(work => {
@@ -234,21 +250,41 @@ const CarHistoryScreen = ({profile, route, navigation, carHistory, actionFetchCa
         onPress={onPress}
         key={'item' + hash}
         descriptionNumberOfLines={2}
-        title={[[dayMonth(work.date)].join(' '), ['#' + work.document.number].join(' ')].join(', ')}
+        title={[
+          [dayMonth(work.date)].join(' '),
+          ['#' + work.document.number].join(' '),
+        ].join(', ')}
         description={[
-          dealerName, 
-          [strings.NewCarItemScreen.plates.mileage.toLowerCase(), numberWithGap(car.mileage)].join(' '),
+          dealerName,
+          [
+            strings.NewCarItemScreen.plates.mileage.toLowerCase(),
+            numberWithGap(car.mileage),
+          ].join(' '),
           // master ? [strings.CarHistoryScreen.master, master].join(' ') : null,
-          ].join('\r\n')}
+        ].join('\r\n')}
         left={() => <List.Icon color={styleConst.color.blue} icon="car-info" />}
-        right={props => <View style={{justifyContent: 'center'}}><Text style={{textAlignVertical: 'center', fontSize: 16, color: styleConst.color.darkBg}}>{[strings.CarHistoryScreen.price.total2, showPrice(total, currency, true)].join(' ')}</Text></View>}
+        right={props => (
+          <View style={{justifyContent: 'center'}}>
+            <Text
+              style={{
+                textAlignVertical: 'center',
+                fontSize: 16,
+                color: styleConst.color.darkBg,
+              }}>
+              {[
+                strings.CarHistoryScreen.price.total2,
+                showPrice(total, currency, true),
+              ].join(' ')}
+            </Text>
+          </View>
+        )}
       />
     );
   };
 
   if (isLoading) {
     return (
-      <View style={{flex:1}}>
+      <View style={{flex: 1}}>
         <ActivityIndicator
           color={styleConst.color.blue}
           style={styleConst.spinner}
@@ -271,7 +307,7 @@ const CarHistoryScreen = ({profile, route, navigation, carHistory, actionFetchCa
   return (
     <PaperProvider theme={theme}>
       <ScrollView style={{backgroundColor: styleConst.color.white}}>
-        <View style={{flex:1}}>
+        <View style={{flex: 1}}>
           {Object.keys(get(carHistory, 'items'), []).length
             ? renderData(carHistory.items)
             : null}
@@ -279,6 +315,6 @@ const CarHistoryScreen = ({profile, route, navigation, carHistory, actionFetchCa
       </ScrollView>
     </PaperProvider>
   );
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CarHistoryScreen);

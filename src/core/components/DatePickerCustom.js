@@ -94,19 +94,15 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
       ) : null}
       <Button
         variant="unstyled"
-        transparent
         onPress={props.onPressButton}
         ref={ref}
-        style={styles.button}>
-        <Text
-          selectable={false}
-          style={[styles.text, dateHuman && styles.textSelected]}>
-          {dateHuman
-            ? dateHuman
-            : props.placeholder
-            ? props.placeholder
-            : strings.DatePickerCustom.chooseDate}
-        </Text>
+        style={styles.button}
+        _text={[styles.text, dateHuman && styles.textSelected]}>
+        {dateHuman
+          ? dateHuman
+          : props.placeholder
+          ? props.placeholder
+          : strings.DatePickerCustom.chooseDate}
       </Button>
       {DatePicker(props.isActive)}
     </View>
@@ -165,5 +161,6 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     height: 40,
+    justifyContent: 'flex-start',
   },
 });

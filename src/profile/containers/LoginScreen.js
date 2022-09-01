@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component, useEffect, useState} from 'react';
+import React, {Component, useEffect, useState, useRef} from 'react';
 import {
   View,
   TextInput,
@@ -103,9 +103,10 @@ const LoginScreen = props => {
   const [loading, setLoading] = useState(false);
   const [loadingVerify, setLoadingVerify] = useState(false);
 
+  const CodeInput = useRef(null);
+
   const storeData = store.getState();
 
-  let CodeInput = [];
   let otpArray = [];
 
   const FormConfig = {
@@ -179,21 +180,18 @@ const LoginScreen = props => {
   };
 
   const _onInputCode = text => {
+    setCodeValue(text);
     if (text.length === 4) {
-      setCodeValue(text);
-      _verifyCodeStepTwo();
+      _verifyCodeStepTwo(text);
     }
   };
 
-  const _verifyCodeStepTwo = () => {
+  const _verifyCodeStepTwo = codeValueVal => {
     // тут специально одно равно чтобы сработало приведение типов
     // eslint-disable-next-line eqeqeq
-    if (codeValue != checkCode) {
-      CodeInput[0].clear();
-      CodeInput[1].clear();
-      CodeInput[2].clear();
-      CodeInput[3].clear();
-      CodeInput[0].focus();
+    if (codeValueVal != checkCode) {
+      CodeInput.current.clear();
+      CodeInput.current.focus();
       otpArray = [];
       toast.show({
         description: strings.ProfileScreen.Notifications.error.wrongCode,
@@ -205,8 +203,9 @@ const LoginScreen = props => {
     }
     setLoadingVerify(true);
     props
-      .actionGetPhoneCode({phone, codeValue})
+      .actionGetPhoneCode({phone, code: codeValueVal})
       .then(data => {
+        console.error('data', data);
         Keyboard.dismiss();
         PushNotifications.addTag('login', data.user.ID);
         if (data.user.SAP && data.user.SAP.ID) {
@@ -220,7 +219,7 @@ const LoginScreen = props => {
         setCodeValue('');
         props.navigation.navigate('LoginScreen');
       })
-      .catch(() => {
+      .catch(message => {
         otpArray = [];
         setLoadingVerify(false);
         setCodeValue('');
@@ -278,7 +277,7 @@ const LoginScreen = props => {
         setLoadingVerify(false);
         setCode(true);
         setCheckCode(response.checkCode);
-        CodeInput[0].focus();
+        CodeInput.current.focus();
         return true;
       }
     });
@@ -539,26 +538,22 @@ const LoginScreen = props => {
               }}>
               {code ? (
                 <>
-                  {[0, 1, 2, 3].map((element, index) => (
-                    <TextInput
-                      style={styles.TextInputCode}
-                      key={'textCode' + index}
-                      textContentType="oneTimeCode"
-                      keyboardType="number-pad"
-                      ref={input => {
-                        CodeInput[index] = input;
-                      }}
-                      maxLength={1}
-                      caretHidden={true}
-                      enablesReturnKeyAutomatically={true}
-                      returnKeyType="send"
-                      placeholderTextColor="#afafaf"
-                      autoCompleteType="off"
-                      onKeyPress={_onOtpKeyPress(index)}
-                      onChangeText={_onOtpChange(index)}
-                      selected={false}
-                    />
-                  ))}
+                  <TextInput
+                    style={styles.TextInputCode}
+                    key={'textCode'}
+                    textContentType="oneTimeCode"
+                    keyboardType="number-pad"
+                    ref={CodeInput}
+                    maxLength={4}
+                    caretHidden={false}
+                    enablesReturnKeyAutomatically={true}
+                    returnKeyType="send"
+                    placeholderTextColor="#afafaf"
+                    autoCompleteType="off"
+                    // onKeyPress={_onInputCode()}
+                    onChangeText={text => _onInputCode(text)}
+                    selected={false}
+                  />
                 </>
               ) : (
                 <Form
@@ -697,8 +692,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     fontSize: 50,
     letterSpacing: 0,
-    marginLeft: '3%',
-    width: '22%',
+    width: '100%',
     textAlign: 'center',
   },
   CancelButton: {

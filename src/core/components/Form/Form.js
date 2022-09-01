@@ -12,7 +12,7 @@ import {
   Pressable,
 } from 'react-native';
 
-import {Text, Button, Switch, Toast, Checkbox} from 'native-base';
+import {Text, Button, Switch, Toast, Checkbox, HStack} from 'native-base';
 import {get} from 'lodash';
 import {connect} from 'react-redux';
 import * as NavigationService from '../../../navigation/NavigationService';
@@ -152,11 +152,6 @@ const styles = StyleSheet.create({
   switch: {
     right: 15,
     top: 10,
-    position: 'absolute',
-  },
-  checkbox: {
-    right: 15,
-    top: 15,
     position: 'absolute',
   },
   button: {
@@ -530,9 +525,6 @@ class Form extends Component {
         var valueFull = null;
       } else {
         switch (countryCode) {
-          case 'ua':
-            var valueFull = 16;
-            break;
           case 'ru':
             var valueFull = 16;
             break;
@@ -833,7 +825,7 @@ class Form extends Component {
             ref={this.inputRefs[groupNum + 'Input' + num]}
             label={label + (data.props && data.props.required ? '*' : '')}
             locale={this.locale}
-            styleContainer={{paddingLeft: 15}}
+            styleContainer={{paddingLeft: 3}}
             confirmBtnText={strings.Base.choose.toLowerCase()}
             value={this.state[name] || null}
             isActive={this.state.active[name] || false}
@@ -1049,7 +1041,7 @@ class Form extends Component {
       if (data.props && data.props.countries) {
         countrySettings = data.props.countries;
       } else {
-        countrySettings = ['by', 'ru', 'ua'];
+        countrySettings = ['by', 'ru'];
       }
       let countriesListStatic = require('../../../core/const.countries.json');
       let countriesList = [];
@@ -1314,19 +1306,21 @@ class Form extends Component {
             this.onChangeField(data)(!this.state[name]);
           }}
           key={'field' + num + name}>
-          <Text selectable={false} style={styles.checkboxText}>
-            {label}
-          </Text>
-          <Checkbox
-            onPress={() => {
-              this.onChangeField(data)(!this.state[name]);
-            }}
-            checked={this.state[name]}
-            style={[styles.checkbox]}
-            color={styleConst.color.blue}
-            ref={this.inputRefs[groupNum + 'Input' + num]}
-            {...data.props}
-          />
+          <HStack justifyContent={'space-between'}>
+            <Text selectable={false} style={styles.checkboxText}>
+              {label}
+            </Text>
+            <Checkbox
+              onChange={() => {
+                this.onChangeField(data)(!this.state[name]);
+              }}
+              isChecked={this.state[name] ? true : false}
+              defaultIsChecked={this.state[name] ? true : false}
+              color={styleConst.color.blue}
+              ref={this.inputRefs[groupNum + 'Input' + num]}
+              {...data.props}
+            />
+          </HStack>
         </Pressable>
       );
     },
@@ -1440,7 +1434,9 @@ class Form extends Component {
                   }}
                   {...this.props.SubmitButton.props}>
                   {this.state.loading ? (
-                    {/* <ActivityIndicator color={styleConst.color.white} /> */}
+                    {
+                      /* <ActivityIndicator color={styleConst.color.white} /> */
+                    }
                   ) : (
                     <>
                       {this.props.SubmitButton.iconLeft

@@ -23,6 +23,8 @@ import {
   AppleButton,
 } from '@invertase/react-native-apple-authentication';
 
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 import {FB_APP_ID, AUTH_DATA} from '../../core/const';
 
 GoogleSignin.configure({
@@ -55,12 +57,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#afafaf',
   },
   CheckCircleIcon: {
-    fontSize: 14,
     position: 'absolute',
-    bottom: 4,
-    right: 5,
-    marginRight: 0,
-    marginLeft: 0,
+    top: 6,
+    left: -2,
     color: styleConst.color.white,
   },
 });
@@ -236,8 +235,10 @@ class SocialAuth extends PureComponent {
             leftIcon={
               <Icon
                 name="google"
-                type="FontAwesome5"
-                style={{marginLeft: 0, color: styleConst.color.white}}
+                as={FontAwesome5}
+                size={10}
+                color={styleConst.color.white}
+                style={{marginLeft: 0}}
               />
             }
             style={[
@@ -250,15 +251,11 @@ class SocialAuth extends PureComponent {
               },
               im.google ? styles.SocialLoginBtActive : null,
             ]}>
-            <Icon
-              name="google"
-              type="FontAwesome5"
-              style={{marginLeft: 0, color: styleConst.color.white}}
-            />
             {im.google ? (
               <Icon
                 name="check-circle"
-                type="FontAwesome5"
+                size={4}
+                as={FontAwesome5}
                 style={styles.CheckCircleIcon}
               />
             ) : null}
@@ -266,6 +263,17 @@ class SocialAuth extends PureComponent {
           <Button
             onPress={this._connectFB}
             disabled={this.state.isSigninInProgress || Boolean(im.facebook)}
+            leftIcon={
+              <Icon
+                name="facebook"
+                size={10}
+                as={FontAwesome5}
+                style={{
+                  marginLeft: 0,
+                  color: styleConst.color.white,
+                }}
+              />
+            }
             style={[
               styleConst.shadow.default,
               styles.SocialLoginBt,
@@ -276,19 +284,11 @@ class SocialAuth extends PureComponent {
               },
               im.facebook ? styles.SocialLoginBtActive : null,
             ]}>
-            <Icon
-              name="facebook"
-              type="FontAwesome5"
-              style={{
-                marginLeft: 0,
-                color: styleConst.color.white,
-                fontSize: 35,
-              }}
-            />
             {im.facebook ? (
               <Icon
                 name="check-circle"
-                type="FontAwesome5"
+                size={4}
+                as={FontAwesome5}
                 style={styles.CheckCircleIcon}
               />
             ) : null}
@@ -297,11 +297,11 @@ class SocialAuth extends PureComponent {
             <Button
               onPress={this._connectVK}
               disabled={this.state.isSigninInProgress || Boolean(im.vk)}
-              iconLeft
               leftIcon={
                 <Icon
                   name="vk"
-                  type="FontAwesome5"
+                  size={10}
+                  as={FontAwesome5}
                   style={{marginLeft: 0, color: styleConst.color.white}}
                 />
               }
@@ -315,15 +315,11 @@ class SocialAuth extends PureComponent {
                 },
                 im.vk ? styles.SocialLoginBtActive : null,
               ]}>
-              <Icon
-                name="vk"
-                type="FontAwesome5"
-                style={{marginLeft: 0, color: styleConst.color.white}}
-              />
               {im.vk ? (
                 <Icon
                   name="check-circle"
-                  type="FontAwesome5"
+                  size={4}
+                  as={FontAwesome5}
                   style={styles.CheckCircleIcon}
                 />
               ) : null}
@@ -352,8 +348,9 @@ class SocialAuth extends PureComponent {
             {im.apple ? (
               <Icon
                 name="check-circle"
-                type="FontAwesome5"
-                style={styles.CheckCircleIcon}
+                size={4}
+                as={FontAwesome5}
+                style={[styles.CheckCircleIcon, {top: 40, left: 275}]}
               />
             ) : null}
           </View>
