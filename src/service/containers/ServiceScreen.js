@@ -14,6 +14,8 @@ import {Icon, Button} from 'native-base';
 import Form from '../../core/components/Form/Form';
 import {CarCard} from '../../profile/components/CarCard';
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 // redux
 import {connect} from 'react-redux';
 import {orderService} from '../actions';
@@ -321,7 +323,7 @@ class ServiceScreen extends Component {
                           ]}
                           useNativeDriver>
                           <Icon
-                            type="MaterialCommunityIcons"
+                            as={MaterialCommunityIcons}
                             name="car-off"
                             fontSize={20}
                           />
@@ -334,8 +336,6 @@ class ServiceScreen extends Component {
                             {strings.UserCars.empty.text + '\r\n'}
                           </Text>
                           <Button
-                            size="full"
-                            full
                             variant="outline"
                             style={{borderRadius: 5}}
                             onPress={() => {

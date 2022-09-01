@@ -44,19 +44,16 @@ const ModalView = props => {
             {props.content ? props.content : props.children}
           </View>
           <Button
-            size="full"
-            full
             onPress={props.onHide}
+            _text={[styles.modalButtonText, props.modalButtonTextStyle]}
             style={[
               props.type !== 'bottom'
                 ? styles.modalButton
                 : styles.modalButtonBottom,
             ]}>
-            <Text style={[styles.modalButtonText, props.modalButtonTextStyle]}>
-              {props.confirmBtnText
-                ? props.confirmBtnText
-                : strings.ModalView.close}
-            </Text>
+            {props.confirmBtnText
+              ? props.confirmBtnText
+              : strings.ModalView.close}
           </Button>
           {props.cancelBtnText && (
             <Button
@@ -153,6 +150,8 @@ const styles = StyleSheet.create({
     marginBottom: 25,
   },
   modalButton: {
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
   },

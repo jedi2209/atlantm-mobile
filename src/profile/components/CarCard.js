@@ -3,8 +3,10 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 import styleConst from '../../core/style-const';
-import {Icon, CheckBox, StyleProvider} from 'native-base';
+import {Icon, Checkbox} from 'native-base';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const styles = {
   scrollView: {},
@@ -35,7 +37,6 @@ const styles = {
     marginLeft: 5,
   },
   carIcon: {
-    fontSize: 54,
     color: '#0061ed',
     marginTop: 10,
     marginLeft: 5,
@@ -75,29 +76,30 @@ export const CarCard = ({data, type, checked, onPress, disabled}) => {
       </View>
       <Icon
         name="car"
-        type="FontAwesome5"
-        selectable={false}
-        style={styles.carIcon}
+        size={16}
+        as={FontAwesome5}
+        color={styleConst.color.blue}
+        mt={3}
+        ml={2}
       />
       {type === 'check' && !disabled && (
         <TouchableWithoutFeedback containerStyle={styles.checkboxContainer}>
           <View>
-            <CheckBox
-              onPress={() => {
+            <Checkbox
+              onChange={() => {
                 if (onPress) {
                   return onPress();
                 } else {
                   return null;
                 }
               }}
-              checked={checked}
+              defaultIsChecked={checked ? true : false}
               color="#027aff"
               style={{marginRight: 10}}
             />
           </View>
         </TouchableWithoutFeedback>
       )}
-      {/* <Image style={{width: '100%'}} source={require('./Bitmap.png')} /> */}
     </View>
   );
 };

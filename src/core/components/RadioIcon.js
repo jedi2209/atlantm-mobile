@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {StyleSheet} from 'react-native';
 import {Icon} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import styleConst from '../style-const';
@@ -29,6 +30,7 @@ export default class RadioIcon extends Component {
       <Icon
         name={selected ? 'md-radio-button-on' : 'md-radio-button-off'}
         style={[styles.icon, containerStyle]}
+        as={Ionicons}
       />
     );
   }

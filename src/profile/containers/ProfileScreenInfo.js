@@ -3,7 +3,6 @@
 import React, {Component} from 'react';
 
 import {
-  View,
   StyleSheet,
   ScrollView,
   Text,
@@ -13,7 +12,13 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import UserCars from '../components/UserCars';
-import {Button, Icon} from 'native-base';
+import {Button, Icon, View} from 'native-base';
+
+import Fontisto from 'react-native-vector-icons/Fontisto';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import PushNotifications from '../../core/components/PushNotifications';
 import DealerItemList from '../../core/components/DealerItemList';
 
@@ -277,38 +282,34 @@ class ProfileScreenInfo extends Component {
             {strings.ProfileScreenInfo.empty.cars}
           </Text>
           <Button
-            size="full"
-            full
             onPress={() => {
               this.props.navigation.navigate('ReestablishScreen');
             }}
+            _text={[
+              styles.buttonPrimaryText,
+              {
+                color: styleConst.color.white,
+                fontSize: 14,
+                fontStyle: 'italic',
+                textDecorationStyle: 'dotted',
+                textDecorationColor: styleConst.color.white,
+                textDecorationLine: 'underline',
+                shadowOpacity: 0,
+                elevation: 0,
+              },
+            ]}
             style={[
               {
                 position: 'absolute',
                 backgroundColor: 'none',
                 elevation: 0,
-                bottom: -10,
+                bottom: 0,
                 right: 5,
                 paddingHorizontal: 10,
                 paddingVertical: 5,
               },
             ]}>
-            <Text
-              style={[
-                styles.buttonPrimaryText,
-                {
-                  color: styleConst.color.white,
-                  fontSize: 14,
-                  fontStyle: 'italic',
-                  textDecorationStyle: 'dotted',
-                  textDecorationColor: styleConst.color.white,
-                  textDecorationLine: 'underline',
-                  shadowOpacity: 0,
-                  elevation: 0,
-                },
-              ]}>
-              {strings.ProfileScreenInfo.empty.whereMyCars}
-            </Text>
+            {strings.ProfileScreenInfo.empty.whereMyCars}
           </Button>
         </View>
       </>
@@ -428,12 +429,7 @@ class ProfileScreenInfo extends Component {
               this.props.navigation.navigate('AdditionalPurchaseScreen')
             }>
             <View style={styles.additionalPurchaseButtonTextView}>
-              <Icon
-                type="Fontisto"
-                name="shopping-bag-1"
-                fontSize={40}
-                style={{fontSize: 40}}
-              />
+              <Icon as={Fontisto} name="shopping-bag-1" size={10} />
             </View>
             <View style={{flex: 1}}>
               <Text
@@ -562,11 +558,11 @@ class ProfileScreenInfo extends Component {
                       </Text>
                     </View>
                     <Icon
-                      type="FontAwesome5"
+                      as={FontAwesome5}
+                      size={3}
+                      color={styleConst.color.white}
                       name="angle-right"
                       style={{
-                        color: styleConst.color.white,
-                        fontSize: 20,
                         marginLeft: 8,
                       }}
                     />
@@ -581,27 +577,17 @@ class ProfileScreenInfo extends Component {
                   returnScreen: 'LoginScreen',
                 });
               }}
-              size="full"
-              full
-              transparent
               variant="unstyled"
-              iconLeft
+              _text={{numberOfLines: 1, style: styles.BonusInfoButtonText}}
               leftIcon={
                 <Icon
                   name="info"
-                  type="SimpleLineIcons"
+                  as={SimpleLineIcons}
                   style={styles.BonusInfoButtonIcon}
                 />
               }
               style={styles.BonusInfoButton}>
-              <Icon
-                name="info"
-                type="SimpleLineIcons"
-                style={styles.BonusInfoButtonIcon}
-              />
-              <Text numberOfLines={1} style={styles.BonusInfoButtonText}>
-                {strings.Menu.main.bonus}
-              </Text>
+              {strings.Menu.main.bonus}
             </Button>
           </>
         );
@@ -652,8 +638,9 @@ class ProfileScreenInfo extends Component {
                   ) : (
                     <Icon
                       name="frowno"
-                      type="AntDesign"
-                      style={[{fontSize: 76, marginTop: 2}]}
+                      as={AntDesign}
+                      size={20}
+                      style={[{marginTop: 1}]}
                     />
                   )}
                 </View>
@@ -691,11 +678,11 @@ class ProfileScreenInfo extends Component {
                       </Text>
                     </View>
                     <Icon
-                      type="FontAwesome5"
+                      as={FontAwesome5}
+                      color={styleConst.color.white}
+                      size={6}
                       name="angle-right"
                       style={{
-                        color: styleConst.color.white,
-                        fontSize: 20,
                         marginLeft: 8,
                       }}
                     />
@@ -712,88 +699,75 @@ class ProfileScreenInfo extends Component {
 
   render() {
     return (
-      <SafeAreaView style={{flex: 1}} testID="ProfileScreen.Wrapper">
-        <ScrollView>
-          <Text
+      <ScrollView style={{flex: 1}} testID="ProfileScreen.Wrapper">
+        <Text
+          style={{
+            fontSize: 35,
+            fontWeight: '600',
+            marginHorizontal: 20,
+            marginTop: 50,
+            color: styleConst.color.greyText6,
+          }}>
+          {`${this.props.login.NAME || ''} ${this.props.login.LAST_NAME || ''}`}
+        </Text>
+        {this.state.loading ? (
+          <ActivityIndicator
+            color="#0061ED"
             style={{
-              fontSize: 35,
-              fontWeight: '600',
-              marginHorizontal: 20,
-              marginTop: 10,
-              color: styleConst.color.greyText6,
-            }}>
-            {`${this.props.login.NAME || ''} ${
-              this.props.login.LAST_NAME || ''
-            }`}
-          </Text>
-          {this.state.loading ? (
-            <ActivityIndicator
-              color="#0061ED"
-              style={{
-                alignSelf: 'center',
-                marginTop: verticalScale(60),
-                marginBottom: verticalScale(60),
-              }}
+              alignSelf: 'center',
+              marginTop: verticalScale(60),
+              marginBottom: verticalScale(60),
+            }}
+          />
+        ) : (
+          <>
+            <DealerItemList
+              key={'dealerSelect'}
+              dealer={this.props.dealerSelected}
+              style={[
+                {
+                  paddingHorizontal: 5,
+                  paddingTop: 10,
+                },
+              ]}
+              returnScreen={this.props.navigation.state?.routeName}
             />
-          ) : (
-            <>
-              <DealerItemList
-                key={'dealerSelect'}
-                dealer={this.props.dealerSelected}
-                style={[
-                  {
-                    paddingHorizontal: 5,
-                    paddingTop: 10,
-                  },
-                ]}
-                returnScreen={this.props.navigation.state?.routeName}
-              />
-              {this.renderCars()}
-              {this.renderCashBack()}
-              {this.renderBonus()}
-              {this.renderAdditionalPurchase()}
+            {this.renderCars()}
+            {this.renderCashBack()}
+            {this.renderBonus()}
+            {this.renderAdditionalPurchase()}
+            <Button
+              onPress={() => {
+                this.props.navigation.navigate('ProfileSettingsScreen');
+              }}
+              _text={styles.buttonPrimaryText}
+              style={[
+                styleConst.shadow.default,
+                styles.buttonPrimary,
+                {backgroundColor: styleConst.color.green, marginTop: 20},
+              ]}>
+              {strings.ProfileScreenInfo.editData}
+            </Button>
+            <View style={{textAlign: 'center', alignItems: 'center'}}>
               <Button
-                block
+                variant="link"
+                mx={20}
+                my={5}
                 onPress={() => {
-                  this.props.navigation.navigate('ProfileSettingsScreen');
+                  this.props.actionLogout();
                 }}
-                style={[
-                  styleConst.shadow.default,
-                  styles.buttonPrimary,
-                  {backgroundColor: styleConst.color.green, marginTop: 20},
+                _text={[
+                  styles.buttonPrimaryText,
+                  {
+                    color: styleConst.color.lightBlue,
+                  },
                 ]}>
-                <Text style={styles.buttonPrimaryText}>
-                  {strings.ProfileScreenInfo.editData}
-                </Text>
+                {strings.ProfileScreenInfo.exit}
               </Button>
-              <View style={{textAlign: 'center', alignItems: 'center'}}>
-                <Button
-                  variant="unstyled"
-                  transparent
-                  full
-                  size="full"
-                  onPress={() => {
-                    this.props.actionLogout();
-                  }}
-                  style={{
-                    paddingHorizontal: 20,
-                    marginVertical: 5,
-                  }}>
-                  <Text
-                    style={[
-                      styles.buttonPrimaryText,
-                      {
-                        color: styleConst.color.lightBlue,
-                      },
-                    ]}>
-                    {strings.ProfileScreenInfo.exit}
-                  </Text>
-                </Button>
-              </View>
-            </>
-          )}
-        </ScrollView>
-      </SafeAreaView>
+            </View>
+          </>
+        )}
+      </ScrollView>
     );
   }
 }

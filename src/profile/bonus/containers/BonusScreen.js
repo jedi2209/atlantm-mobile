@@ -11,6 +11,8 @@ import {
   Button,
 } from 'native-base';
 
+import Entypo from 'react-native-vector-icons/Entypo';
+
 // redux
 import {connect} from 'react-redux';
 import {actionSetBonusLevel1, actionSetBonusLevel2} from '../../actions';
@@ -314,7 +316,7 @@ class BonusScreen extends Component {
         full
         iconLeft
         leftIcon={
-          <Icon name="price-ribbon" type="Entypo" style={styles.buttonIcon} />
+          <Icon name="price-ribbon" as={Entypo} style={styles.buttonIcon} />
         }
         style={[
           styleConst.shadow.default,
@@ -326,7 +328,7 @@ class BonusScreen extends Component {
             borderRightWidth: 0,
           },
         ]}>
-        <Icon name="price-ribbon" type="Entypo" style={styles.buttonIcon} />
+        <Icon name="price-ribbon" as={Entypo} style={styles.buttonIcon} />
         <Text numberOfLines={1} style={styles.buttonText}>
           {strings.ProfileScreenInfo.bonus.moreInfo}
         </Text>

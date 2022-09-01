@@ -15,6 +15,10 @@ import {Icon, Button, Toast, CheckBox} from 'native-base';
 import {get, orderBy} from 'lodash';
 import styleConst from '../../../core/style-const';
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import {CarCard} from '../../../profile/components/CarCard';
 import Form from '../../../core/components/Form/Form';
 import UserData from '../../../utils/user';
@@ -524,7 +528,7 @@ class ServiceScreenStep1 extends Component {
                 ) : (
                   <View style={styles.scrollViewInner} useNativeDriver>
                     <Icon
-                      type="MaterialCommunityIcons"
+                      as={MaterialCommunityIcons}
                       name="car-off"
                       fontSize={20}
                     />
@@ -533,19 +537,15 @@ class ServiceScreenStep1 extends Component {
                       {strings.UserCars.empty.text + '\r\n'}
                     </Text>
                     <Button
-                      size="full"
-                      full
                       variant="outline"
-                      style={{borderRadius: 5}}
+                      _text={{padding: 5}}
                       onPress={() => {
                         this.props.navigation.navigate('About', {
                           screen: 'LoginScreen',
                           activePanel: 'hidden',
                         });
                       }}>
-                      <Text style={{padding: 5}}>
-                        {strings.UserCars.archiveCheck}
-                      </Text>
+                      {strings.UserCars.archiveCheck}
                     </Button>
                   </View>
                 ),
@@ -608,8 +608,9 @@ class ServiceScreenStep1 extends Component {
                         this.state.serviceInfo.summary[0].summ ? (
                           <>
                             <Icon
-                              name="ios-information-circle-outline"
-                              size={24}
+                              name="car-info"
+                              size={8}
+                              as={MaterialCommunityIcons}
                               style={styles.textPriceIcon}
                             />
                             <Text style={styles.textPriceTitle}>
@@ -653,7 +654,8 @@ class ServiceScreenStep1 extends Component {
                           <>
                             <Icon
                               name="ios-information-circle-outline"
-                              size={24}
+                              size={8}
+                              as={Ionicons}
                               style={styles.textPriceIcon}
                             />
                             <Text style={styles.textPriceTitle}>
@@ -704,8 +706,8 @@ class ServiceScreenStep1 extends Component {
                           }}>
                           <Icon
                             name="money"
-                            type={'FontAwesome'}
-                            size={24}
+                            as={FontAwesome}
+                            size={8}
                             style={styles.textPriceIcon}
                           />
                           <Text style={styles.textPriceTitle}>

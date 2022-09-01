@@ -20,6 +20,7 @@ import {
 
 import GallerySwiper from 'react-native-gallery-swiper';
 import {Icon} from 'native-base';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import styleConst from '../style-const';
 import {strings} from '../../core/lang/const';
@@ -57,7 +58,7 @@ const PhotoViewer = ({items, index, onPressClose, enableScale, onChange}) => {
       />
       {counter ? galleryCount(index, items.length) : null}
       <TouchableOpacity style={styles.close} onPress={onPressClose}>
-        <Icon style={styles.closeIcon} name="close" type="MaterialIcons" />
+        <Icon style={styles.closeIcon} name="close" as={MaterialIcons} />
       </TouchableOpacity>
     </Modal>
   );

@@ -249,13 +249,14 @@ const BrandModelFilterScreen = ({
         position={'absolute'}
         colorScheme="blue"
         size={'md'}
-        px={'1/6'}
+        px={'5%'}
         justifyContent="space-between"
         width={'100%'}
         bottom={isAndroid ? 10 : 30}
         style={styles.resultButtonWrapper22}>
         <Button
-          variant="unstyled"
+          variant="link"
+          w={'30%'}
           onPress={() => {
             setModelFilter({type: 'clear'});
             setBrandFilter({type: 'clear'});
@@ -272,6 +273,7 @@ const BrandModelFilterScreen = ({
         </Button>
         <Button
           shadow={7}
+          w={'70%'}
           _text={{textTransform: 'uppercase'}}
           onPress={() => {
             saveBrandModelFilter({stateFilters, stockType});

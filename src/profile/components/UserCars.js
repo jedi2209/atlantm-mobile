@@ -16,8 +16,11 @@ import {
 import {store} from '../../core/store';
 import {get} from 'lodash';
 import {CarCard} from './CarCard';
-import {Icon, Button, ActionSheet, Toast} from 'native-base';
+import {Icon, Button, Toast, HStack, Actionsheet, Box} from 'native-base';
 // import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import {verticalScale} from '../../utils/scale';
 import styleConst from '../../core/style-const';
 import orderFunctions from '../../utils/orders';
@@ -57,6 +60,9 @@ let UserCars = ({actionToggleCar, activePanel}) => {
   const [loading, setLoading] = useState(false);
   const [carsPanel, setActivePanel] = useState(activePanel);
 
+  const [actionSheetStatus, setActionSheetStatus] = useState(false);
+  const [actionSheetData, setActionSheetData] = useState({});
+
   let carsScrollView = useRef(null);
 
   useEffect(() => {
@@ -72,87 +78,145 @@ let UserCars = ({actionToggleCar, activePanel}) => {
     }, 2500);
   }, []);
 
-  const _showMenu = (ordersData, item, navigation) => {
-    let carName = [item.brand, item.model].join(' ');
-    if (item.number) {
-      carName += ['-- [' + item.number + ']'].join(' ');
+  const ActionSheetMenu = () => {
+    if (!actionSheetData || !actionSheetData['options']) {
+      return <></>;
     }
-    return ActionSheet.show(
-      {
-        options: ordersData.BUTTONS,
-        cancelButtonIndex: ordersData.CANCEL_INDEX,
-        destructiveButtonIndex: ordersData.DESTRUCTIVE_INDEX || null,
-        title: carName,
-        style: {
-          maxHeight: Dimensions.get('window').height / 0.1,
-        },
-      },
-      buttonIndex => {
-        switch (ordersData.BUTTONS[buttonIndex].id) {
-          case 'orderService':
-            navigation.navigate('ServiceScreen', {
-              car: item,
-              settings: {
-                disableDealer: true,
-                disableCarBlock: true,
-              },
-            });
-            break;
-          case 'TOCalculator':
-            navigation.navigate('ServiceTOCalculatorScreen', {
-              car: item,
-              settings: {
-                disableDealer: true,
-                disableCarBlock: true,
-                submitButtonText: strings.ServiceScreen.title,
-                returnOnFailFetchServices: true,
-              },
-            });
-            break;
-          case 'orderParts':
-            navigation.navigate('OrderPartsScreen', {
-              car: item,
-            });
-            break;
-          case 'carCost':
-            navigation.navigate('CarCostScreen', {
-              car: item,
-            });
-            break;
-          case 'TOhistory':
-            navigation.navigate('TOHistory', {
-              car: item,
-            });
-            break;
-          case 'hide':
-            setLoading(true);
-            actionToggleCar(item, get(store.getState(), 'profile.login.SAP'))
-              .then(res => {
-                if (res.type && res.type === 'CAR_HIDE__SUCCESS') {
-                  setActivePanel('default');
-                  setLoading(false);
-                  Toast.show({
-                    text: strings.UserCars.Notifications.success.statusUpdate,
-                    type: 'success',
-                    position: 'top',
-                  });
-                }
-              })
-              .catch(error => {
-                setLoading(false);
-                Toast.show({
-                  text: error,
-                  type: 'danger',
-                  position: 'top',
-                });
-              });
-            break;
-        }
-      },
+    return (
+      <Actionsheet
+        hideDragIndicator
+        size="full"
+        isOpen={actionSheetStatus}
+        onClose={() => {
+          setActionSheetStatus(false);
+        }}>
+        <Actionsheet.Content>
+          <Box w="100%" my={4} px={4} justifyContent="space-between">
+            <Text
+              fontSize="xl"
+              color="gray.500"
+              _dark={{
+                color: 'gray.300',
+              }}>
+              {actionSheetData.title}
+            </Text>
+          </Box>
+          {actionSheetData.options.map(el => {
+            switch (el.id) {
+              case 'orderService':
+                el.navigate = {
+                  screen: 'ServiceScreen',
+                  params: {
+                    car: actionSheetData.item,
+                    settings: {
+                      disableDealer: true,
+                      disableCarBlock: true,
+                    },
+                  },
+                };
+                break;
+              case 'TOCalculator':
+                el.navigate = {
+                  screen: 'ServiceTOCalculatorScreen',
+                  params: {
+                    car: actionSheetData.item,
+                    settings: {
+                      disableDealer: true,
+                      disableCarBlock: true,
+                      submitButtonText: strings.ServiceScreen.title,
+                      returnOnFailFetchServices: true,
+                    },
+                  },
+                };
+                break;
+              case 'orderParts':
+                el.navigate = {
+                  screen: 'OrderPartsScreen',
+                  params: {
+                    car: actionSheetData.item,
+                  },
+                };
+                break;
+              case 'carCost':
+                el.navigate = {
+                  screen: 'CarCostScreen',
+                  params: {
+                    car: actionSheetData.item,
+                  },
+                };
+                break;
+              case 'TOhistory':
+                el.navigate = {
+                  screen: 'TOHistory',
+                  params: {
+                    car: actionSheetData.item,
+                  },
+                };
+                break;
+              case 'hide':
+                el.action = () => {
+                  setLoading(true);
+                  actionToggleCar(
+                    actionSheetData.item,
+                    get(store.getState(), 'profile.login.SAP'),
+                  )
+                    .then(res => {
+                      if (res.type && res.type === 'CAR_HIDE__SUCCESS') {
+                        setActivePanel('default');
+                        setLoading(false);
+                        {
+                          Toast.show({
+                            description:
+                              strings.UserCars.Notifications.success
+                                .statusUpdate,
+                          });
+                        }
+                      }
+                    })
+                    .catch(error => {
+                      setLoading(false);
+                      {
+                        Toast.show({
+                          description: error,
+                        });
+                      }
+                    });
+                };
+                break;
+            }
+            return (
+              <Actionsheet.Item
+                onPress={() => {
+                  setActionSheetStatus(false);
+                  if (el.navigate && el.navigate.screen) {
+                    navigation.navigate(
+                      el.navigate.screen,
+                      el.navigate.params ? el.navigate.params : null,
+                    );
+                  }
+                  if (el.action) {
+                    el.action();
+                  }
+                }}
+                startIcon={
+                  <Icon
+                    as={Ionicons}
+                    color={el.iconColor}
+                    mr="1"
+                    size={6}
+                    name={el.icon}
+                  />
+                }>
+                {el.text}
+              </Actionsheet.Item>
+            );
+          })}
+        </Actionsheet.Content>
+      </Actionsheet>
     );
   };
 
-  const _renderCarsItems = ({cars, navigation}) => {
+  const _renderCarsItems = ({cars}) => {
     return (
       <ScrollView
         showsHorizontalScrollIndicator={false}
@@ -160,6 +224,10 @@ let UserCars = ({actionToggleCar, activePanel}) => {
         contentContainerStyle={{paddingLeft: 12, paddingRight: 5}}
         ref={carsScrollView}>
         {cars.map(item => {
+          let carName = [item.brand, item.model].join(' ');
+          if (item.number) {
+            carName += ['-- [' + item.number + ']'].join(' ');
+          }
           let CarType = '';
           if (item.hidden === true) {
             CarType = 'hidden';
@@ -173,15 +241,28 @@ let UserCars = ({actionToggleCar, activePanel}) => {
               onPress={() => {
                 if (CarType === 'active') {
                   orderFunctions.getOrders('car').then(ordersData => {
-                    return _showMenu(ordersData, item, navigation);
+                    setActionSheetData({
+                      options: ordersData.BUTTONS,
+                      cancelButtonIndex: ordersData.CANCEL_INDEX,
+                      title: carName,
+                      destructiveButtonIndex:
+                        ordersData.DESTRUCTIVE_INDEX || null,
+                      item,
+                    });
+                    setActionSheetStatus(true);
                   });
                 } else {
                   orderFunctions.getArchieveCarMenu().then(data => {
-                    return _showMenu(
-                      data[CarType][Platform.OS],
+                    setActionSheetData({
+                      options: data[CarType][Platform.OS].BUTTONS,
+                      cancelButtonIndex:
+                        data[CarType][Platform.OS].CANCEL_INDEX,
+                      title: carName,
+                      destructiveButtonIndex:
+                        data[CarType][Platform.OS].DESTRUCTIVE_INDEX || null,
                       item,
-                      navigation,
-                    );
+                    });
+                    setActionSheetStatus(true);
                   });
                 }
               }}>
@@ -222,10 +303,8 @@ let UserCars = ({actionToggleCar, activePanel}) => {
   }
   return (
     <>
-      <View
+      <HStack
         style={{
-          flex: 1,
-          flexDirection: 'row',
           marginHorizontal: 20,
           marginTop: 10,
           alignItems: 'center',
@@ -243,10 +322,9 @@ let UserCars = ({actionToggleCar, activePanel}) => {
             {strings.UserCars.title}
           </Text>
         </View>
-        <View
+        <HStack
           style={{
             flex: 0.5,
-            flexDirection: 'row',
           }}>
           {myCars.default.length > 0 ? (
             <TouchableOpacity
@@ -287,8 +365,8 @@ let UserCars = ({actionToggleCar, activePanel}) => {
               </Text>
             </TouchableOpacity>
           ) : null}
-        </View>
-      </View>
+        </HStack>
+      </HStack>
       {loading ? (
         <ActivityIndicator
           color="#0061ED"
@@ -318,20 +396,19 @@ let UserCars = ({actionToggleCar, activePanel}) => {
             },
           ]}
           useNativeDriver>
-          <Icon type="MaterialCommunityIcons" name="car-off" fontSize={20} />
+          <Icon as={MaterialCommunityIcons} name="car-off" size={12} />
           <Text style={{marginTop: 5, marginLeft: 10, lineHeight: 20}}>
             {strings.UserCars.empty.text + '\r\n'}
           </Text>
           <Button
-            size="full"
-            full
             variant="outline"
-            style={{borderRadius: 5}}
+            _text={{padding: 1}}
             onPress={() => setActivePanel('hidden')}>
-            <Text style={{padding: 5}}>{strings.UserCars.archiveCheck}</Text>
+            {strings.UserCars.archiveCheck}
           </Button>
         </View>
       )}
+      <ActionSheetMenu />
     </>
   );
 };
