@@ -8,18 +8,17 @@ import {
   Linking,
   ScrollView,
   TouchableOpacity,
-  StatusBar,
 } from 'react-native';
 
 import {
   Text,
   Icon,
   Actionsheet,
-  Toast,
   Box,
   HStack,
   View,
   Pressable,
+  useToast,
 } from 'native-base';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -30,6 +29,8 @@ import BrandLogo from '../../core/components/BrandLogo';
 import Plate from '../../core/components/Plate';
 import RateThisApp from '../../core/components/RateThisApp';
 import Imager from '../../core/components/Imager';
+
+import ToastAlert from '../../core/components/ToastAlert';
 
 // redux
 import {connect} from 'react-redux';
@@ -163,6 +164,7 @@ const _renderPlates = params => {
     onPressOrders,
   } = params;
   const phones = get(dealerSelected, 'phone', []);
+  console.error(JSON.stringify(dealerSelected));
   return (
     <ScrollView
       showsHorizontalScrollIndicator={false}
@@ -355,6 +357,8 @@ const ContactsScreen = ({
   const [actionSheetStatus, setActionSheetStatus] = React.useState(false);
   const [actionSheetData, setActionSheetData] = React.useState({});
 
+  const toast = useToast();
+
   const _showOrdersMenu = () => {
     orderFunctions.getOrders().then(data => {
       setActionSheetData({
@@ -381,16 +385,15 @@ const ContactsScreen = ({
           message = ERROR_NETWORK;
         }
 
-        // setTimeout(
-        //   () =>
-        //     Toast.show({
-        //       text: message,
-        //       type: 'warning',
-        //       position: 'bottom',
-        //       duration: 1000,
-        //     }),
-        //   100,
-        // );
+        setTimeout(
+          () => 
+          toast.show({
+            render: ({id}) => {
+              return <ToastAlert id={id} description={message} title="Ошибка" />;
+            },
+          }),
+          100,
+        );
       }
     });
   };
@@ -427,38 +430,6 @@ const ContactsScreen = ({
 
   const onPressCallMe = async () => {
     navigation.navigate('CallMeBackScreen');
-  };
-
-  const onPressOrders = () => {
-    _showOrdersMenu();
-    // onPress={() => {
-    //   orderFunctions.getOrders().then(ordersData => {
-    //     ActionSheet.show(
-    //       {
-    //         options: ordersData.BUTTONS,
-    //         cancelButtonIndex: ordersData.CANCEL_INDEX,
-    //         title: ordersData.TITLE,
-    //         destructiveButtonIndex: ordersData.DESTRUCTIVE_INDEX || null,
-    //       },
-    //       buttonIndex => {
-    //         switch (ordersData.BUTTONS[buttonIndex].id) {
-    //           case 'callMeBack':
-    //             navigation.navigate('CallMeBackScreen');
-    //             break;
-    //           case 'orderService':
-    //             navigation.navigate('ServiceScreen');
-    //             break;
-    //           case 'orderParts':
-    //             navigation.navigate('OrderPartsScreen');
-    //             break;
-    //           case 'carCost':
-    //             navigation.navigate('CarCostScreen');
-    //             break;
-    //         }
-    //       },
-    //     );
-    //   });
-    // }}
   };
 
   const onPressChat = () => {
@@ -673,7 +644,7 @@ const ContactsScreen = ({
               onPressCallMe,
               onPressChat,
               sitesSubtitle,
-              onPressOrders,
+              onPressOrders: _showOrdersMenu,
             })}
             {_renderInfoList({isFetchInfoList, infoList, navigation})}
           </View>
