@@ -10,7 +10,7 @@ import {
   Platform,
   StyleSheet,
 } from 'react-native';
-import {Icon, Toast} from 'native-base';
+import {Icon} from 'native-base';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -44,10 +44,6 @@ export const isAndroid = Platform.OS === 'android';
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
     nav,
-    listRussia: dealer.listRussia,
-    listUkraine: dealer.listUkraine,
-    listBelarussia: dealer.listBelarussia,
-    dealerSelected: dealer.selected,
     name: profile.name,
     phone: UserData.get('PHONE')
       ? UserData.get('PHONE')
@@ -200,11 +196,11 @@ class PhoneChangeScreen extends PureComponent {
         if (response.code === 406) {
           message = strings.ProfileScreen.Notifications.error.phoneProvider;
         }
-        Toast.show({
-          text: message,
-          position: 'top',
-          type: 'warning',
-        });
+        // Toast.show({
+        //   text: message,
+        //   position: 'top',
+        //   type: 'warning',
+        // });
       } else {
         this.setState({
           code: true,
@@ -231,12 +227,12 @@ class PhoneChangeScreen extends PureComponent {
       this.CodeInput[3].clear();
       this.CodeInput[0].focus();
       this.otpArray = [];
-      Toast.show({
-        text: strings.ProfileScreen.Notifications.error.wrongCode,
-        buttonText: 'ОК',
-        position: 'top',
-        type: 'danger',
-      });
+      // Toast.show({
+      //   text: strings.ProfileScreen.Notifications.error.wrongCode,
+      //   buttonText: 'ОК',
+      //   position: 'top',
+      //   type: 'danger',
+      // });
       return;
     }
     this.setState({loading: true, loadingVerify: true});
@@ -264,21 +260,21 @@ class PhoneChangeScreen extends PureComponent {
                         this.setState({loading: false});
                         this.props.navigation.navigate('LoginScreen');
                       } else {
-                        Toast.show({
-                          text: strings.Notifications.error.text,
-                          position: 'bottom',
-                          type: 'warning',
-                        });
+                        // Toast.show({
+                        //   text: strings.Notifications.error.text,
+                        //   position: 'bottom',
+                        //   type: 'warning',
+                        // });
                       }
                     }
                     break;
                 }
               } else {
-                Toast.show({
-                  text: strings.Notifications.error.text,
-                  position: 'bottom',
-                  type: 'warning',
-                });
+                // Toast.show({
+                //   text: strings.Notifications.error.text,
+                //   position: 'bottom',
+                //   type: 'warning',
+                // });
               }
               break;
             case 'SAVE_PROFILE__NOPHONE': // пользователя нашли, но без телефона
@@ -301,11 +297,11 @@ class PhoneChangeScreen extends PureComponent {
                     return this.props.actionSavePofile(response.user);
                   } else {
                     this.setState({loading: false});
-                    Toast.show({
-                      text: strings.Notifications.error.text,
-                      position: 'bottom',
-                      type: 'warning',
-                    });
+                    // Toast.show({
+                    //   text: strings.Notifications.error.text,
+                    //   position: 'bottom',
+                    //   type: 'warning',
+                    // });
                     return false;
                   }
                 })

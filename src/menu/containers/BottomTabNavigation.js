@@ -167,7 +167,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
                     navigation.navigate(el.navigate);
                   }
                 }}
-                startIcon={
+                startIcon={el.icon ? (
                   <Icon
                     as={Ionicons}
                     color={el.iconColor}
@@ -175,7 +175,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
                     size={6}
                     name={el.icon}
                   />
-                }>
+                ) : null}>
                 {el.text}
               </Actionsheet.Item>
             );

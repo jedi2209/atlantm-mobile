@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect, useRef, useReducer} from 'react';
-import PropTypes from 'prop-types';
+import React, {useState, useEffect, useReducer} from 'react';
 import {
   Animated,
   ActivityIndicator,
@@ -18,20 +17,17 @@ import {
   Box,
   View,
   Divider,
-  Checkbox,
-  Pressable,
-  Select as SelectPicker,
   ScrollView,
 } from 'native-base';
+
+import RNPickerSelect from 'react-native-picker-select';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
-import RNBounceable from '@freakycoder/react-native-bounceable';
 import FilterRow from '../../components/FilterRow';
 import ModalViewFilter from '../../components/ModalViewFilter';
-// import {Picker as SelectPicker} from '@react-native-picker/picker';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import CheckboxList from '../../../core/components/CheckboxList';
 
@@ -102,6 +98,24 @@ if (minDate && maxDate) {
   }
 }
 yearItems.reverse();
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 6,
+    paddingTop: 24,
+    paddingLeft: 1,
+    color: '#222b45',
+    // paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: 16,
+    paddingVertical: 6,
+    paddingTop: 25,
+    color: '#222b45',
+    // paddingRight: 30, // to ensure the text is never behind the icon
+  },
+});
 
 const mapStateToProps = ({catalog, dealer}) => {
   return {
@@ -1124,60 +1138,62 @@ const MainFilterScreen = ({
                 }
                 title={strings.CarsFilterScreen.filters.year.title}
                 selfClosed={false}>
-                <View style={styles.yearWrapper}>
-                  <View style={styles.pickerWrapper}>
-                    <Text style={styles.pickerCaption}>
+                <HStack justifyContent="space-between" mx="24">
+                  <VStack alignItems="center">
+                    <Text fontSize={"md"} color={styleConst.color.greyText5}>
                       {strings.CarsFilterScreen.filters.year.from}
                     </Text>
-                    <SelectPicker
-                      selectedValue={get(
+                    <RNPickerSelect
+                      key={'yearPickerFrom'}
+                      placeholder={''}
+                      touchableWrapperProps={{testID: 'Form.YearSelectInput.YearFrom'}}
+                      pickerProps={{testID: 'Form.YearPickerInput.YearFrom'}}
+                      doneText={strings.Base.choose}
+                      onValueChange={itemValue => {
+                        _onChangeFilter('year[from]', itemValue)
+                      }}
+                      style={{
+                        ...pickerSelectStyles,
+                      }}
+                      value={get(
                         stateFilters,
                         'year[from]',
                         dataFilters?.data?.year?.min,
                       )}
-                      key={'yearPickerFrom'}
-                      style={styles.pickerStyleYear}
-                      onValueChange={(itemValue, itemIndex) =>
-                        _onChangeFilter('year[from]', itemValue)
-                      }>
-                      {yearItems.map(item => {
-                        return (
-                          <SelectPicker.Item
-                            key={'yearPickerItemFrom' + item.value}
-                            label={item.label}
-                            value={item.value}
-                          />
-                        );
-                      })}
-                    </SelectPicker>
-                  </View>
-                  <View style={styles.pickerWrapper}>
-                    <Text style={styles.pickerCaption}>
+                      minDate={minDate}
+                      maxDate={maxDate}
+                      reverse={true}
+                      items={yearItems}
+                    />
+                  </VStack>
+                  <VStack alignItems="center">
+                    <Text fontSize={"md"} color={styleConst.color.greyText5}>
                       {strings.CarsFilterScreen.filters.year.to}
                     </Text>
-                    <SelectPicker
-                      selectedValue={get(
+                    <RNPickerSelect
+                      key={'yearPickerTo'}
+                      placeholder={''}
+                      touchableWrapperProps={{testID: 'Form.YearSelectInput.YearTo'}}
+                      pickerProps={{testID: 'Form.YearPickerInput.YearTo'}}
+                      doneText={strings.Base.choose}
+                      onValueChange={itemValue => {
+                        _onChangeFilter('year[to]', itemValue)
+                      }}
+                      style={{
+                        ...pickerSelectStyles,
+                      }}
+                      value={get(
                         stateFilters,
                         'year[to]',
                         dataFilters?.data?.year?.max,
                       )}
-                      key={'yearPickerTo'}
-                      style={styles.pickerStyleYear}
-                      onValueChange={(itemValue, itemIndex) =>
-                        _onChangeFilter('year[to]', itemValue)
-                      }>
-                      {yearItems.map(item => {
-                        return (
-                          <SelectPicker.Item
-                            key={'yearPickerItemTo' + item.value}
-                            label={item.label}
-                            value={item.value}
-                          />
-                        );
-                      })}
-                    </SelectPicker>
-                  </View>
-                </View>
+                      minDate={minDate}
+                      maxDate={maxDate}
+                      reverse={true}
+                      items={yearItems}
+                    />
+                  </VStack>
+                </HStack>
               </ModalViewFilter>
             ) : null}
             {/* Модалка Пробег */}
@@ -1825,22 +1841,13 @@ const styles = StyleSheet.create({
   resultButtonText: {
     textTransform: 'uppercase',
   },
-  pickerWrapper: {
-    flexDirection: 'column',
-    width: '50%',
-    alignItems: 'center',
-  },
-  pickerCaption: {
-    fontSize: 16,
-    color: styleConst.color.greyText5,
-  },
   pickerStyle: {
     width: '100%',
   },
-  pickerStyleYear: {
-    width: isAndroid ? 100 : '100%',
-    justifyContent: 'center',
-  },
+  // pickerStyleYear: {
+  //   width: isAndroid ? 100 : '100%',
+  //   justifyContent: 'center',
+  // },
   colorWrapper: {
     flexDirection: 'row',
     flex: 1,
@@ -1882,10 +1889,6 @@ const styles = StyleSheet.create({
   modalTitleRow: {
     marginLeft: 5,
     marginTop: 20,
-  },
-  yearWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
 });
 

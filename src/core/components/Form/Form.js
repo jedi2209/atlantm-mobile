@@ -154,12 +154,6 @@ const styles = StyleSheet.create({
     top: 10,
     position: 'absolute',
   },
-  button: {
-    backgroundColor: styleConst.color.lightBlue,
-    borderRadius: 5,
-    justifyContent: 'center',
-    height: 55,
-  },
   buttonText: {
     color: styleConst.color.white,
     textTransform: 'uppercase',
@@ -1419,37 +1413,30 @@ class Form extends Component {
                       }
                     }
                   }}
+                  color="blue.500"
                   style={[
-                    styleConst.shadow.default,
-                    styles.button,
                     this.props.SubmitButton && this.props.SubmitButton.style,
                   ]}
+                  size="lg"
+                  shadow={this.state.loading ? 1 : 4}
                   isDisabled={this.state.showSubmitButton ? false : true}
                   isLoading={this.state.loading}
-                  variant={this.state.loading ? 'outline' : 'solid'}
-                  // active={this.state.showSubmitButton ? true : false}
+                  spinnerPlacement="start"
+                  isLoadingText="Отправляем..."
+                  variant="solid"
                   testID="Form.ButtonSubmit"
                   accessibilityValue={{
                     text: this.state.showSubmitButton ? 'false' : 'true',
                   }}
+                  _text={styles.buttonText}
                   {...this.props.SubmitButton.props}>
-                  {this.state.loading ? (
-                    {
-                      /* <ActivityIndicator color={styleConst.color.white} /> */
-                    }
-                  ) : (
-                    <>
-                      {this.props.SubmitButton.iconLeft
-                        ? this.props.SubmitButton.iconLeft
-                        : null}
-                      <Text selectable={false} style={styles.buttonText}>
-                        {this.props.SubmitButton.text}
-                      </Text>
-                      {this.props.SubmitButton.iconRight
-                        ? this.props.SubmitButton.iconRight
-                        : null}
-                    </>
-                  )}
+                    {/* {this.props.SubmitButton.iconLeft
+                      ? this.props.SubmitButton.iconLeft
+                      : null} */}
+                    {this.props.SubmitButton.text}
+                    {/* {this.props.SubmitButton.iconRight
+                      ? this.props.SubmitButton.iconRight
+                      : null} */}
                 </Button>
               </Animated.View>
             ) : null}

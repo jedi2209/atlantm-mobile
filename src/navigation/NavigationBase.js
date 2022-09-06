@@ -18,7 +18,7 @@ import {
 } from 'native-base';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Orientation from 'react-native-orientation-locker';
 import {EVENT_REFRESH} from '../core/actionTypes';
@@ -864,9 +864,9 @@ const CarsStock = ({navigation, route}) => {
                           ? styles.sortingColorSelected
                           : null,
                       ]}
-                      as={FontAwesome5}
+                      as={MaterialCommunityIcons}
                       size={5}
-                      name="sort-amount-down"
+                      name="sort-clock-ascending"
                     />
                     <Text
                       selectable={false}
@@ -1099,9 +1099,9 @@ const UsedCars = ({navigation, route}) => {
                           ? styles.sortingColorSelected
                           : null,
                       ]}
-                      as={FontAwesome5}
+                      as={MaterialCommunityIcons}
                       size={5}
-                      name="sort-amount-down"
+                      name="sort-clock-ascending-outline"
                     />
                     <Text
                       selectable={false}
@@ -1142,9 +1142,9 @@ const UsedCars = ({navigation, route}) => {
                           ? styles.sortingColorSelected
                           : null,
                       ]}
-                      as={FontAwesome5}
+                      as={MaterialCommunityIcons}
                       size={5}
-                      name="sort-amount-down"
+                      name="sort-calendar-descending"
                     />
                     <Text
                       selectable={false}
@@ -1185,9 +1185,9 @@ const UsedCars = ({navigation, route}) => {
                           ? styles.sortingColorSelected
                           : null,
                       ]}
-                      as={FontAwesome5}
+                      as={MaterialCommunityIcons}
                       size={5}
-                      name="sort-numeric-down-alt"
+                      name="sort-calendar-ascending"
                     />
                     <Text
                       selectable={false}
