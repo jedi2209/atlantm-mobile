@@ -1,11 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   Text,
   SafeAreaView,
   ActivityIndicator,
-  TouchableWithoutFeedback,
-  StatusBar,
   StyleSheet,
   Alert,
   Linking,
@@ -79,63 +77,17 @@ const OptionPlate = ({title, subtitle}) => (
   </View>
 );
 
-class UsedCarItemScreen extends Component {
-  static propTypes = {
-    dealerSelected: PropTypes.object,
-  };
+const UsedCarItemScreen = (props) => {
 
-  constructor(props) {
-    super(props);
+  const {navigation, carDetails, dealerSelected, listDealers, listCities, isFetchingCarDetails, route} = props;
 
-    this.platesScrollView = React.createRef();
-    this.openStatus = getStatusWorktime(this.props.dealerSelected, 'RC', true);
-  }
+  const platesScrollView = useRef(null);
+  const [sectionActive, setSectionActive] = useState([0]);
 
-  componentDidMount() {
-    const carId = get(this.props.route, 'params.carId');
-    this.isPriceShow = get(this.props.route, 'params.showPrice');
-    this.props.actionFetchUsedCarDetails(carId);
+  const carId = get(route, 'params.carId');
+  const isPriceShow = get(route, 'params.showPrice');
 
-    Analytics.logEvent('screen', 'catalog/usedcar/item', {
-      id_api: get(this.props.carDetails, 'id.api'),
-      id_sap: get(this.props.carDetails, 'id.sap'),
-      brand_name: get(this.props.carDetails, 'brand.name'),
-      model_name: get(this.props.carDetails, 'model.name'),
-    });
-
-    if (
-      this.props.carDetails &&
-      !this.props.isFetchingCarDetails &&
-      this.platesScrollView
-    ) {
-      setTimeout(() => {
-        this.platesScrollView &&
-          this.platesScrollView.scrollToEnd({duration: 500});
-        setTimeout(() => {
-          this.platesScrollView &&
-            this.platesScrollView.scrollTo({x: 0, y: 0, animated: true});
-        }, 500);
-      }, 3000);
-    }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    const {carDetails, dealerSelected, isFetchingCarDetails} = this.props;
-    const nav = nextProps.nav.newState;
-    const isActiveScreen =
-      nav.routes[nav.index].routeName === 'UsedCarItemScreen';
-
-    return (
-      (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-      isFetchingCarDetails !== nextProps.isFetchingCarDetails ||
-      get(carDetails, 'id.api') !== get(nextProps, 'carDetails.id.api')
-    );
-  }
-
-  logGuard = false;
-
-  onPressOrder = () => {
-    const {navigation, carDetails} = this.props;
+  const onPressOrder = () => {
     navigation.navigate('OrderScreen', {
       car: {
         brand: get(carDetails, 'brand.name', ''),
@@ -144,14 +96,13 @@ class UsedCarItemScreen extends Component {
         year: get(carDetails, 'year'),
         dealer: get(carDetails, 'dealer'),
       },
-      region: this.props.dealerSelected.region,
+      region: dealerSelected.region,
       carId: carDetails.id.api,
       isNewCar: false,
     });
   };
 
-  onPressMyPrice = () => {
-    const {navigation, carDetails} = this.props;
+  const onPressMyPrice = () => {
     navigation.navigate('OrderMyPriceScreen', {
       car: {
         brand: get(carDetails, 'brand.name', ''),
@@ -159,15 +110,14 @@ class UsedCarItemScreen extends Component {
         complectation: get(carDetails, 'complectation.name'),
         year: get(carDetails, 'year'),
       },
-      region: this.props.dealerSelected.region,
+      region: dealerSelected.region,
       dealerId: get(carDetails, 'dealer.id'),
       carId: carDetails.id.api,
       isNewCar: false,
     });
   };
 
-  onPressCredit = () => {
-    const {navigation, carDetails} = this.props;
+  const onPressCredit = () => {
     navigation.navigate('OrderCreditScreen', {
       car: {
         brand: get(carDetails, 'brand.name', ''),
@@ -177,16 +127,15 @@ class UsedCarItemScreen extends Component {
         price:
           get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
       },
-      region: this.props.dealerSelected.region,
+      region: dealerSelected.region,
       dealerId: get(carDetails, 'dealer.id'),
       carId: carDetails.id.api,
       isNewCar: false,
-      isPriceShow: this.isPriceShow,
+      isPriceShow: isPriceShow,
     });
   };
 
-  onPressTestDrive = () => {
-    const {navigation, carDetails} = this.props;
+  const onPressTestDrive = () => {
     navigation.navigate('TestDriveScreen', {
       car: {
         brand: get(carDetails, 'brand.name', ''),
@@ -195,15 +144,14 @@ class UsedCarItemScreen extends Component {
         year: get(carDetails, 'year'),
         dealer: get(carDetails, 'dealer'),
       },
-      region: this.props.dealerSelected.region,
+      region: dealerSelected.region,
       carId: carDetails.id.api,
       isNewCar: false,
     });
   };
 
-  onPressCall = phone => {
-    const {navigation, carDetails, listDealers} = this.props;
-    if (!this.openStatus) {
+  const onPressCall = phone => {
+    if (!getStatusWorktime(dealerSelected, 'RC', true)) {
       Alert.alert(
         strings.ContactsScreen.closedDealer.title,
         strings.ContactsScreen.closedDealer.text,
@@ -229,8 +177,7 @@ class UsedCarItemScreen extends Component {
     }
   };
 
-  onPressCallMe = () => {
-    const {navigation, carDetails, listDealers} = this.props;
+  const onPressCallMe = () => {
     navigation.navigate('CallMeBackScreen', {
       dealerCustom: listDealers[carDetails.dealer.id],
       goBack: true,
@@ -240,59 +187,14 @@ class UsedCarItemScreen extends Component {
         complectation: get(carDetails, 'complectation.name'),
         year: get(carDetails, 'year'),
       },
-      region: this.props.dealerSelected.region,
+      region: dealerSelected.region,
       dealerId: get(carDetails, 'dealer.id'),
       carId: carDetails.id.api,
       isNewCar: false,
     });
   };
 
-  // renderPrice = ({carDetails, currency}) => {
-  //   const CarPrices = {
-  //     sale: get(carDetails, 'price.app.sale', 0),
-  //     standart: get(
-  //       carDetails,
-  //       'price.app.standart',
-  //       get(carDetails, 'price.app'),
-  //     ),
-  //   };
-  //   const isSale = carDetails.sale === true;
-
-  //   return (
-  //     <View
-  //       style={{
-  //         flex: 1,
-  //         flexDirection: 'column',
-  //         alignItems: 'flex-start',
-  //         minWidth: 100,
-  //         marginBottom: 12,
-  //         marginTop: 10,
-  //       }}>
-  //       {isSale && (
-  //         <Text
-  //           style={{
-  //             fontSize: 24,
-  //             fontWeight: '600',
-  //             color: '#D0021B',
-  //           }}>
-  //           {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
-  //         </Text>
-  //       )}
-  //       <Text
-  //         style={{
-  //           fontSize: isSale ? 16 : 24,
-  //           fontWeight: '600',
-  //           lineHeight: isSale ? 18 : 30,
-  //           color: '#000',
-  //           textDecorationLine: isSale ? 'line-through' : 'none',
-  //         }}>
-  //         {showPrice(CarPrices.standart, this.props.dealerSelected.region)}
-  //       </Text>
-  //     </View>
-  //   );
-  // };
-
-  renderAdditionalServices = element => {
+  const renderAdditionalServices = element => {
     if (!element && !element?.name) {
       return false;
     }
@@ -317,8 +219,7 @@ class UsedCarItemScreen extends Component {
     );
   };
 
-  renderCarCostBlock = () => {
-    const {navigation, carDetails} = this.props;
+  const renderCarCostBlock = () => {
     return (
       <Pressable
         onPress={() => {
@@ -378,9 +279,7 @@ class UsedCarItemScreen extends Component {
     );
   };
 
-  _renderAddress() {
-    const {carDetails, listCities} = this.props;
-
+  const _renderAddress = () => {
     let address;
     const location_name = get(carDetails, 'location.address');
     const cityID = get(carDetails, 'location.city.id');
@@ -397,7 +296,7 @@ class UsedCarItemScreen extends Component {
     return `${address}`;
   }
 
-  _renderTruncatedFooter = handlePress => {
+  const _renderTruncatedFooter = handlePress => {
     return (
       <Text
         selectable={false}
@@ -408,7 +307,7 @@ class UsedCarItemScreen extends Component {
     );
   };
 
-  _renderRevealedFooter = handlePress => {
+  const _renderRevealedFooter = handlePress => {
     return (
       <Text
         selectable={false}
@@ -419,8 +318,7 @@ class UsedCarItemScreen extends Component {
     );
   };
 
-  onPressMap = () => {
-    const {navigation, carDetails} = this.props;
+  const onPressMap = () => {
     navigation.navigate('MapScreen', {
       name: get(carDetails, 'dealer.name'),
       city: get(carDetails, 'location.city.name'),
@@ -429,709 +327,730 @@ class UsedCarItemScreen extends Component {
     });
   };
 
-  render() {
-    const {carDetails, isFetchingCarDetails, listDealers, navigation} =
-      this.props;
-
-    const currency = get(this.props.route, 'params.currency');
-    navigation.setParams({
-      carDetails: carDetails,
-    });
-
-    if (!carDetails || isFetchingCarDetails) {
-      return (
-        <SafeAreaView style={styles.spinnerContainer}>
-          <ActivityIndicator
-            color={styleConst.color.blue}
-            style={styleConst.spinner}
-          />
-        </SafeAreaView>
-      );
-    }
-
+  useEffect(() => {
     console.info('== UsedCarItemScreen ==');
 
-    let photos = [];
-    let photosFull = [];
-    if (get(carDetails, 'img.thumb')) {
-      get(carDetails, 'img.thumb').forEach(element => {
-        photos.push(element + '1200x600');
-        photosFull.push({uri: element + '1600x1600'});
-      });
-    }
-    const brandName = get(carDetails, 'brand.name');
-    const modelName = get(carDetails, 'model.name');
-    const generationName = get(carDetails, 'model.generation.name');
-    const additional = get(carDetails, 'options.additional.1.data', []);
-    const badge = get(carDetails, 'badge', null);
-    const isSale = carDetails.sale === true;
+    props.actionFetchUsedCarDetails(carId);
 
-    const CarPrices = {
-      sale: get(carDetails, 'price.app.sale', 0),
-      standart: get(
-        carDetails,
-        'price.app.standart',
-        get(carDetails, 'price.app'),
-      ),
-    };
-
-    const phone = get(
-      carDetails,
-      'carDetails.phone.manager',
-      get(listDealers[carDetails.dealer.id], 'phone', ''),
-    ).replace(/[^+\d]+/g, '');
-
-    const gearboxId = get(carDetails, 'gearbox.id');
-    let gearboxName = get(carDetails, 'gearbox.name');
-    if (gearboxId) {
-      gearboxName = strings.CarParams.gearbox[gearboxId];
-    }
-
-    const engineId = get(carDetails, 'engine.id');
-    let engineName = get(carDetails, 'engine.type');
-    if (engineId) {
-      engineName = strings.CarParams.engine[engineId];
-    }
-
-    const engineVolumeShort = get(carDetails, 'engine.volume.short');
-
-    const bodyId = get(carDetails, 'body.id');
-    let bodyName = get(carDetails, 'body.name');
-    if (bodyId) {
-      bodyName = strings.CarParams.body[Number(bodyId)];
-    }
-
-    const wheelId = get(carDetails, 'gearbox.wheel.id');
-    let wheelName = get(carDetails, 'gearbox.wheel.name');
-    if (wheelId) {
-      wheelName = strings.CarParams.wheels[wheelId];
-    }
-
-    let colorName = strings.Colors[Number(get(carDetails, 'color.id'))];
-    if (!colorName) {
-      colorName = get(carDetails, 'color.name.simple', null);
-    }
-    if (colorName) {
-      colorName = colorName.toLowerCase();
-    }
-
-    let photosData = [];
-    photos.map((el, index) => {
-      photosData.push({
-        url: el,
-        type: 'image',
-        index,
-      });
+    Analytics.logEvent('screen', 'catalog/usedcar/item', {
+      id_api: get(carDetails, 'id.api'),
+      id_sap: get(carDetails, 'id.sap'),
+      brand_name: get(carDetails, 'brand.name'),
+      model_name: get(carDetails, 'model.name'),
     });
 
+    if (
+      carDetails &&
+      !isFetchingCarDetails &&
+      platesScrollView?.current
+    ) {
+      const currency = get(route, 'params.currency');
+      navigation.setParams({
+        carDetails: carDetails,
+      });
+      setTimeout(() => {
+        platesScrollView &&
+          platesScrollView?.current.scrollToEnd({duration: 500});
+        setTimeout(() => {
+          platesScrollView &&
+            platesScrollView?.current.scrollTo({x: 0, y: 0, animated: true});
+        }, 500);
+      }, 3000);
+    }
+  }, []);
+
+  if (!carDetails || isFetchingCarDetails) {
     return (
-      <>
-        <ScrollView backgroundColor="white" testID="UsedCarItemScreen.Wrapper">
-          <View>
+      <SafeAreaView style={styles.spinnerContainer}>
+        <ActivityIndicator
+          color={styleConst.color.blue}
+          style={styleConst.spinner}
+        />
+      </SafeAreaView>
+    );
+  }
+
+  let photos = [];
+  let photosFull = [];
+  if (get(carDetails, 'img.thumb')) {
+    get(carDetails, 'img.thumb').forEach(element => {
+      photos.push(element + '1200x600');
+      photosFull.push({uri: element + '1600x1600'});
+    });
+  }
+  const brandName = get(carDetails, 'brand.name');
+  const modelName = get(carDetails, 'model.name');
+  const generationName = get(carDetails, 'model.generation.name');
+  const additional = get(carDetails, 'options.additional.1.data', []);
+  const badge = get(carDetails, 'badge', null);
+  const isSale = carDetails.sale === true;
+
+  const CarPrices = {
+    sale: get(carDetails, 'price.app.sale', 0),
+    standart: get(
+      carDetails,
+      'price.app.standart',
+      get(carDetails, 'price.app'),
+    ),
+  };
+
+  const phone = get(
+    carDetails,
+    'phone.manager',
+    get(carDetails, 'location.phone[0]'),
+  ).replace(/[^+\d]+/g, '');
+
+  const gearboxId = get(carDetails, 'gearbox.id');
+  let gearboxName = get(carDetails, 'gearbox.name');
+  if (gearboxId) {
+    gearboxName = strings.CarParams.gearbox[gearboxId];
+  }
+
+  const engineId = get(carDetails, 'engine.id');
+  let engineName = get(carDetails, 'engine.type');
+  if (engineId) {
+    engineName = strings.CarParams.engine[engineId];
+  }
+
+  const engineVolumeShort = get(carDetails, 'engine.volume.short');
+
+  const bodyId = get(carDetails, 'body.id');
+  let bodyName = get(carDetails, 'body.name');
+  if (bodyId) {
+    bodyName = strings.CarParams.body[Number(bodyId)];
+  }
+
+  const wheelId = get(carDetails, 'gearbox.wheel.id');
+  let wheelName = get(carDetails, 'gearbox.wheel.name');
+  if (wheelId) {
+    wheelName = strings.CarParams.wheels[wheelId];
+  }
+
+  let colorName = strings.Colors[Number(get(carDetails, 'color.id'))];
+  if (!colorName) {
+    colorName = get(carDetails, 'color.name.simple', null);
+  }
+  if (colorName) {
+    colorName = colorName.toLowerCase();
+  }
+
+  let photosData = [];
+  photos.map((el, index) => {
+    photosData.push({
+      url: el,
+      type: 'image',
+      index,
+    });
+  });
+
+  return (
+    <>
+      <ScrollView backgroundColor="white" testID="UsedCarItemScreen.Wrapper">
+        <View>
+          <View
+            style={[
+              styles.modelBrandView,
+              {marginTop: 70, flexDirection: 'column'},
+            ]}>
             <View
-              style={[
-                styles.modelBrandView,
-                {marginTop: 70, flexDirection: 'column'},
-              ]}>
+              style={{
+                flexShrink: 1,
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <Text
+                style={[
+                  styles.modelBrandText,
+                  {fontSize: 22, maxWidth: '90%'},
+                ]}>
+                {[brandName, modelName].join(' ')}
+              </Text>
+              <Text
+                style={[
+                  styles.modelBrandText,
+                  {fontSize: 22, minWidth: '10%'},
+                ]}>
+                {[
+                  get(carDetails, 'year'),
+                  strings.NewCarItemScreen.shortUnits.year,
+                ].join(' ')}
+              </Text>
+            </View>
+            {generationName ? (
+              <Text style={styles.modelBrandText}>{generationName}</Text>
+            ) : null}
+          </View>
+          <View style={{marginTop: 10}}>
+            {badge && badge.length ? (
               <View
-                style={{
-                  flexShrink: 1,
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}>
-                <Text
-                  style={[
-                    styles.modelBrandText,
-                    {fontSize: 22, maxWidth: '90%'},
-                  ]}>
-                  {[brandName, modelName].join(' ')}
-                </Text>
-                <Text
-                  style={[
-                    styles.modelBrandText,
-                    {fontSize: 22, minWidth: '10%'},
-                  ]}>
-                  {[
-                    get(carDetails, 'year'),
-                    strings.NewCarItemScreen.shortUnits.year,
-                  ].join(' ')}
-                </Text>
+                testID="NewCarItemScreen.BadgesWrapper"
+                style={[styles.badgesView, {left: 15}]}>
+                {badge.map((item, index) => {
+                  if (item.name.toLowerCase() === 'спец.цена') {
+                    item.name = strings.CarList.badges.specialPrice;
+                  }
+                  return (
+                    <Badge
+                      id={carDetails.id.api}
+                      key={'badgeItem' + carDetails.id.api + index}
+                      index={index}
+                      bgColor={item.background}
+                      name={item.name}
+                      textColor={item.textColor}
+                    />
+                  );
+                })}
               </View>
-              {generationName ? (
-                <Text style={styles.modelBrandText}>{generationName}</Text>
+            ) : null}
+            <PhotoSlider
+              height={300}
+              photosFull={photosFull}
+              photos={photosData}
+              resizeMode={'cover'}
+              dotColor={styleConst.color.white}
+              paginationStyle={{bottom: -20}}
+            />
+          </View>
+          <View mt={4} shadow={7} style={[styles.carTopWrapper]}>
+            <View>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                bounces={true}
+                testID="NewCarItemScreen.PlatesWrapper"
+                ref={platesScrollView}>
+                <HStack px="2%" mb="3">
+                  {get(carDetails, 'mileage') ? (
+                    <OptionPlate
+                      title={strings.NewCarItemScreen.plates.mileage}
+                      subtitle={
+                        numberWithGap(get(carDetails, 'mileage')) + ' км.'
+                      }
+                    />
+                  ) : null}
+                  {engineName ? (
+                    <OptionPlate
+                      title={strings.NewCarItemScreen.plates.engine}
+                      subtitle={
+                        engineVolumeShort
+                          ? engineVolumeShort.toFixed(1) + ' л. '
+                          : '' + engineName
+                      }
+                    />
+                  ) : null}
+                  {get(carDetails, 'gearbox.GearboxCount') &&
+                  get(carDetails, 'gearbox.name') ? (
+                    <OptionPlate
+                      title={strings.NewCarItemScreen.plates.gearbox.name}
+                      subtitle={`${
+                        get(carDetails, 'gearbox.GearboxCount.Value')
+                          ? get(carDetails, 'gearbox.GearboxCount.Value') +
+                            '-ст.'
+                          : ''
+                      } ${
+                        get(carDetails, 'gearbox.name')
+                          .replace(/^(Механическая)/i, 'МКПП')
+                          .replace(/^(Автоматическая)/i, 'АКПП')
+                          .split('/')[0]
+                      }`}
+                    />
+                  ) : null}
+                  {wheelName ? (
+                    <OptionPlate
+                      title={strings.NewCarItemScreen.plates.wheel}
+                      subtitle={wheelName.toLowerCase()}
+                    />
+                  ) : null}
+                  {get(carDetails, 'color.name.simple') ? (
+                    <OptionPlate
+                      title={strings.NewCarItemScreen.plates.color}
+                      subtitle={colorName}
+                    />
+                  ) : null}
+                </HStack>
+              </ScrollView>
+              {carDetails.dealer && carDetails.dealer.name ? (
+                <Pressable onPress={onPressMap}>
+                  <VStack style={styles.mapCardContainer}>
+                    <Icon
+                      as={MaterialCommunityIcons}
+                      name="map-marker-outline"
+                      color="blue.100"
+                      size={12}
+                    />
+                    <View justifyContent="space-around">
+                      <Text style={styles.mapCardTitle}>
+                        {strings.NewCarItemScreen.carLocation}
+                      </Text>
+                      <Text
+                        style={styles.mapCardDealer}
+                        numberOfLines={1}
+                        ellipsizeMode="tail">
+                        {_renderAddress()}
+                      </Text>
+                    </View>
+                  </VStack>
+                </Pressable>
               ) : null}
-            </View>
-            <View style={{marginTop: 10}}>
-              {badge && badge.length ? (
-                <View
-                  testID="NewCarItemScreen.BadgesWrapper"
-                  style={[styles.badgesView, {left: 15}]}>
-                  {badge.map((item, index) => {
-                    if (item.name.toLowerCase() === 'спец.цена') {
-                      item.name = strings.CarList.badges.specialPrice;
-                    }
-                    return (
-                      <Badge
-                        id={carDetails.id.api}
-                        key={'badgeItem' + carDetails.id.api + index}
-                        index={index}
-                        bgColor={item.background}
-                        name={item.name}
-                        textColor={item.textColor}
-                      />
-                    );
-                  })}
-                </View>
-              ) : null}
-              <PhotoSlider
-                height={300}
-                photosFull={photosFull}
-                photos={photosData}
-                resizeMode={'cover'}
-                dotColor={styleConst.color.white}
-                paginationStyle={{bottom: -20}}
-              />
-            </View>
-            <View mt={4} shadow={7} style={[styles.carTopWrapper]}>
-              <View>
-                <ScrollView
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  bounces={true}
-                  testID="NewCarItemScreen.PlatesWrapper"
-                  ref={ref => {
-                    this.platesScrollView = ref;
-                  }}>
-                  <HStack px="2%" mb="3">
-                    {get(carDetails, 'mileage') ? (
-                      <OptionPlate
-                        title={strings.NewCarItemScreen.plates.mileage}
-                        subtitle={
-                          numberWithGap(get(carDetails, 'mileage')) + ' км.'
-                        }
-                      />
-                    ) : null}
-                    {engineName ? (
-                      <OptionPlate
-                        title={strings.NewCarItemScreen.plates.engine}
-                        subtitle={
-                          engineVolumeShort
-                            ? engineVolumeShort.toFixed(1) + ' л. '
-                            : '' + engineName
-                        }
-                      />
-                    ) : null}
-                    {get(carDetails, 'gearbox.GearboxCount') &&
-                    get(carDetails, 'gearbox.name') ? (
-                      <OptionPlate
-                        title={strings.NewCarItemScreen.plates.gearbox.name}
-                        subtitle={`${
-                          get(carDetails, 'gearbox.GearboxCount.Value')
-                            ? get(carDetails, 'gearbox.GearboxCount.Value') +
-                              '-ст.'
-                            : ''
-                        } ${
-                          get(carDetails, 'gearbox.name')
-                            .replace(/^(Механическая)/i, 'МКПП')
-                            .replace(/^(Автоматическая)/i, 'АКПП')
-                            .split('/')[0]
-                        }`}
-                      />
-                    ) : null}
-                    {wheelName ? (
-                      <OptionPlate
-                        title={strings.NewCarItemScreen.plates.wheel}
-                        subtitle={wheelName.toLowerCase()}
-                      />
-                    ) : null}
-                    {get(carDetails, 'color.name.simple') ? (
-                      <OptionPlate
-                        title={strings.NewCarItemScreen.plates.color}
-                        subtitle={colorName}
-                      />
-                    ) : null}
-                  </HStack>
-                </ScrollView>
-                {carDetails.dealer && carDetails.dealer.name ? (
-                  <Pressable onPress={this.onPressMap}>
-                    <VStack style={styles.mapCardContainer}>
-                      <Icon
-                        as={MaterialCommunityIcons}
-                        name="map-marker-outline"
-                        color="blue.100"
-                        size={12}
-                      />
-                      <View justifyContent="space-around">
-                        <Text style={styles.mapCardTitle}>
-                          {strings.NewCarItemScreen.carLocation}
-                        </Text>
-                        <Text
-                          style={styles.mapCardDealer}
-                          numberOfLines={1}
-                          ellipsizeMode="tail">
-                          {this._renderAddress()}
-                        </Text>
-                      </View>
-                    </VStack>
-                  </Pressable>
-                ) : null}
-                <HStack
-                  mx="2%"
-                  justifyContent={phone ? 'space-between' : 'center'}>
+              <HStack
+                mx="2%"
+                justifyContent={phone ? 'space-between' : 'center'}>
+                <Button
+                  onPress={() => {
+                    onPressCallMe();
+                  }}
+                  variant="solid"
+                  size="md"
+                  leftIcon={
+                    <Icon
+                      as={MaterialCommunityIcons}
+                      name="phone-incoming"
+                      size={6}
+                    />
+                  }
+                  _text={{fontSize: 16, color: 'white'}}
+                  style={[
+                    !phone ? stylesFooter.buttonOnlyOne : null,
+                    styles.itemOrderCallBack,
+                    {width: phone ? '48%' : '100%'},
+                  ]}>
+                  {strings.ContactsScreen.callOrder}
+                </Button>
+                {phone ? (
                   <Button
                     onPress={() => {
-                      this.onPressCallMe();
+                      onPressCall(phone);
                     }}
                     variant="solid"
                     size="md"
                     leftIcon={
                       <Icon
                         as={MaterialCommunityIcons}
-                        name="phone-incoming"
+                        name="phone-outgoing"
                         size={6}
                       />
                     }
                     _text={{fontSize: 16, color: 'white'}}
-                    style={[
-                      !phone ? stylesFooter.buttonOnlyOne : null,
-                      styles.itemOrderCallBack,
-                      {width: phone ? '48%' : '100%'},
-                    ]}>
-                    {strings.ContactsScreen.callOrder}
+                    style={[styles.itemOrderCall, {width: '48%'}]}>
+                    {strings.ContactsScreen.call}
                   </Button>
-                  {phone ? (
-                    <Button
-                      onPress={() => {
-                        this.onPressCall(phone);
-                      }}
-                      variant="solid"
-                      size="md"
-                      leftIcon={
-                        <Icon
-                          as={MaterialCommunityIcons}
-                          name="phone-outgoing"
-                          size={6}
-                        />
-                      }
-                      _text={{fontSize: 16, color: 'white'}}
-                      style={[styles.itemOrderCall, {width: '48%'}]}>
-                      {strings.ContactsScreen.call}
-                    </Button>
-                  ) : null}
-                </HStack>
-                <View style={styles.descrContainer}>
-                  {carDetails.text ? (
-                    <>
-                      <ReadMore
-                        numberOfLines={4}
-                        renderTruncatedFooter={this._renderTruncatedFooter}
-                        renderRevealedFooter={this._renderRevealedFooter}
-                        onReady={this._handleTextReady}>
-                        <Text style={styles.descr}>{carDetails.text}</Text>
-                      </ReadMore>
-                      {get(carDetails, 'additionalServices', []).map((el, i) =>
-                        this.renderAdditionalServices(el),
-                      )}
-                    </>
-                  ) : null}
-                </View>
-                {carDetails.creditAvailable ||
-                carDetails.customPriceAvailable ? (
-                  <View style={styles.bodyButtonsContainer}>
-                    {carDetails.creditAvailable ? (
-                      <Button
-                        variant="outline"
-                        activeOpacity={0.5}
-                        onPress={this.onPressCredit}
-                        style={[styles.bodyButton, styles.bodyButtonLeft]}
-                        leftIcon={
-                          <Icon
-                            as={Octicons}
-                            name="credit-card"
-                            size={6}
-                            color="red.600"
-                          />
-                        }
-                        _text={{
-                          fontSize: 'sm',
-                          lineHeight: '14',
-                          color: 'red.600',
-                        }}>
-                        {strings.UsedCarItemScreen.creditCalculate}
-                      </Button>
-                    ) : null}
-                    {carDetails.customPriceAvailable ? (
-                      <Button
-                        variant="outline"
-                        activeOpacity={0.5}
-                        onPress={this.onPressMyPrice}
-                        style={[styles.bodyButton, styles.bodyButtonRight]}
-                        rightIcon={
-                          <Icon
-                            as={Entypo}
-                            name="price-tag"
-                            size={6}
-                            color="blue.600"
-                          />
-                        }
-                        _text={{
-                          fontSize: 'sm',
-                          lineHeight: '14',
-                          color: 'blue.600',
-                        }}>
-                        {strings.UsedCarItemScreen.myPrice}
-                      </Button>
-                    ) : null}
-                  </View>
+                ) : null}
+              </HStack>
+              <View style={styles.descrContainer}>
+                {carDetails.text ? (
+                  <>
+                    <ReadMore
+                      numberOfLines={4}
+                      renderTruncatedFooter={_renderTruncatedFooter}
+                      renderRevealedFooter={_renderRevealedFooter}>
+                      <Text style={styles.descr}>{carDetails.text}</Text>
+                    </ReadMore>
+                    {get(carDetails, 'additionalServices', []).map((el, i) =>
+                      renderAdditionalServices(el),
+                    )}
+                  </>
                 ) : null}
               </View>
-              <Accordion
-                sections={[
-                  {
-                    title: strings.NewCarItemScreen.tech.title,
+              {carDetails.creditAvailable ||
+              carDetails.customPriceAvailable ? (
+                <View style={styles.bodyButtonsContainer}>
+                  {carDetails.creditAvailable ? (
+                    <Button
+                      variant="outline"
+                      activeOpacity={0.5}
+                      onPress={onPressCredit}
+                      style={[styles.bodyButton, styles.bodyButtonLeft]}
+                      leftIcon={
+                        <Icon
+                          as={Octicons}
+                          name="credit-card"
+                          size={6}
+                          color="red.600"
+                        />
+                      }
+                      _text={{
+                        fontSize: 'sm',
+                        lineHeight: '14',
+                        color: 'red.600',
+                      }}>
+                      {strings.UsedCarItemScreen.creditCalculate}
+                    </Button>
+                  ) : null}
+                  {carDetails.customPriceAvailable ? (
+                    <Button
+                      variant="outline"
+                      activeOpacity={0.5}
+                      onPress={onPressMyPrice}
+                      style={[styles.bodyButton, styles.bodyButtonRight]}
+                      rightIcon={
+                        <Icon
+                          as={Entypo}
+                          name="price-tag"
+                          size={6}
+                          color="blue.600"
+                        />
+                      }
+                      _text={{
+                        fontSize: 'sm',
+                        lineHeight: '14',
+                        color: 'blue.600',
+                      }}>
+                      {strings.UsedCarItemScreen.myPrice}
+                    </Button>
+                  ) : null}
+                </View>
+              ) : null}
+            </View>
+            <Accordion
+              sections={[
+                {
+                  title: strings.NewCarItemScreen.tech.title,
+                  content: (
+                    <View style={styles.tabContent}>
+                      <Text style={styles.sectionTitle}>
+                        {strings.NewCarItemScreen.tech.base}
+                      </Text>
+                      <VStack>
+                        {carDetails.year ? (
+                          <HStack style={styles.sectionRow}>
+                            <View style={styles.sectionProp}>
+                              <Text style={styles.sectionPropText}>
+                                {strings.NewCarItemScreen.tech.year}:
+                              </Text>
+                            </View>
+                            <View style={styles.sectionValue}>
+                              <Text
+                                style={
+                                  styles.sectionValueText
+                                }>{`${carDetails.year} г.`}</Text>
+                            </View>
+                          </HStack>
+                        ) : null}
+                        {carDetails.mileage ? (
+                          <HStack style={styles.sectionRow}>
+                            <View style={styles.sectionProp}>
+                              <Text
+                                selectable={false}
+                                style={styles.sectionPropText}>
+                                {strings.NewCarItemScreen.plates.mileage}:
+                              </Text>
+                            </View>
+                            <View style={styles.sectionValue}>
+                              <Text
+                                style={
+                                  styles.sectionValueText
+                                }>{`${numberWithGap(
+                                carDetails.mileage,
+                              )} км.`}</Text>
+                            </View>
+                          </HStack>
+                        ) : null}
+                        {carDetails.engine && carDetails.engine.type ? (
+                          <HStack style={styles.sectionRow}>
+                            <View style={styles.sectionProp}>
+                              <Text style={styles.sectionPropText}>
+                                {strings.NewCarItemScreen.tech.engine.fuel}:
+                              </Text>
+                            </View>
+                            <View style={styles.sectionValue}>
+                              <Text style={styles.sectionValueText}>
+                                {carDetails.engine.type}
+                              </Text>
+                            </View>
+                          </HStack>
+                        ) : null}
+                        {carDetails.engine &&
+                        carDetails.engine.volume &&
+                        carDetails.engine.volume.full ? (
+                          <HStack style={styles.sectionRow}>
+                            <View style={styles.sectionProp}>
+                              <Text
+                                selectable={false}
+                                style={styles.sectionPropText}>
+                                {strings.NewCarItemScreen.tech.engine.title}:
+                              </Text>
+                            </View>
+                            <View style={styles.sectionValue}>
+                              <Text
+                                style={
+                                  styles.sectionValueText
+                                }>{`${carDetails.engine.volume.full} см³`}</Text>
+                            </View>
+                          </HStack>
+                        ) : null}
+                        {carDetails.gearbox && carDetails.gearbox.name ? (
+                          <HStack style={styles.sectionRow}>
+                            <View style={styles.sectionProp}>
+                              <Text
+                                selectable={false}
+                                style={styles.sectionPropText}>
+                                {strings.NewCarItemScreen.plates.gearbox.name}
+                                :
+                              </Text>
+                            </View>
+                            <View style={styles.sectionValue}>
+                              <Text style={styles.sectionValueText}>
+                                {gearboxName}
+                              </Text>
+                            </View>
+                          </HStack>
+                        ) : null}
+                        {carDetails.color &&
+                        carDetails.color.name &&
+                        carDetails.color.name.official ? (
+                          <HStack style={styles.sectionRow}>
+                            <View style={styles.sectionProp}>
+                              <Text
+                                selectable={false}
+                                style={styles.sectionPropText}>
+                                {strings.NewCarItemScreen.plates.color}:
+                              </Text>
+                            </View>
+                            <View style={styles.sectionValue}>
+                              <Text style={styles.sectionValueText}>
+                                {carDetails.color.name.official}
+                              </Text>
+                            </View>
+                          </HStack>
+                        ) : null}
+                        {carDetails.body && carDetails.body.name ? (
+                          <HStack style={styles.sectionRow}>
+                            <View style={styles.sectionProp}>
+                              <Text
+                                selectable={false}
+                                style={styles.sectionPropText}>
+                                {strings.NewCarItemScreen.tech.body.type}:
+                              </Text>
+                            </View>
+                            <View style={styles.sectionValue}>
+                              <Text style={styles.sectionValueText}>
+                                {bodyName}
+                              </Text>
+                            </View>
+                          </HStack>
+                        ) : null}
+                        {carDetails.interior && carDetails.interior.name ? (
+                          <HStack style={styles.sectionRow}>
+                            <View style={styles.sectionProp}>
+                              <Text
+                                selectable={false}
+                                style={styles.sectionPropText}>
+                                {strings.NewCarItemScreen.tech.interior.title}
+                                :
+                              </Text>
+                            </View>
+                            <View style={styles.sectionValue}>
+                              <Text style={styles.sectionValueText}>
+                                {carDetails.interior.name}
+                              </Text>
+                            </View>
+                          </HStack>
+                        ) : null}
+                      </VStack>
+                    </View>
+                  ),
+                },
+                additional &&
+                  additional.length && {
+                    title: strings.NewCarItemScreen.plates.complectation,
                     content: (
                       <View style={styles.tabContent}>
                         <Text style={styles.sectionTitle}>
-                          {strings.NewCarItemScreen.tech.base}
+                          {get(carDetails, 'options.additional.1.name')}
                         </Text>
                         <VStack>
-                          {carDetails.year ? (
-                            <HStack style={styles.sectionRow}>
-                              <View style={styles.sectionProp}>
-                                <Text style={styles.sectionPropText}>
-                                  {strings.NewCarItemScreen.tech.year}:
-                                </Text>
+                          {additional.map((item, num) => {
+                            return (
+                              <View key={'OptionsAdditional-' + num}>
+                                {item.name && item.value ? (
+                                  <HStack style={styles.sectionRow}>
+                                    <View style={styles.sectionProp}>
+                                      <Text style={styles.sectionPropText}>
+                                        {item.name}
+                                      </Text>
+                                    </View>
+                                    <View style={styles.sectionValue}>
+                                      <Text style={styles.sectionValueText}>
+                                        {item.value}
+                                      </Text>
+                                    </View>
+                                  </HStack>
+                                ) : (
+                                  <Text
+                                    style={[
+                                      styles.sectionPropText,
+                                      styles.sectionRow,
+                                    ]}>
+                                    {item.name}
+                                  </Text>
+                                )}
                               </View>
-                              <View style={styles.sectionValue}>
-                                <Text
-                                  style={
-                                    styles.sectionValueText
-                                  }>{`${carDetails.year} г.`}</Text>
-                              </View>
-                            </HStack>
-                          ) : null}
-                          {carDetails.mileage ? (
-                            <HStack style={styles.sectionRow}>
-                              <View style={styles.sectionProp}>
-                                <Text
-                                  selectable={false}
-                                  style={styles.sectionPropText}>
-                                  {strings.NewCarItemScreen.plates.mileage}:
-                                </Text>
-                              </View>
-                              <View style={styles.sectionValue}>
-                                <Text
-                                  style={
-                                    styles.sectionValueText
-                                  }>{`${numberWithGap(
-                                  carDetails.mileage,
-                                )} км.`}</Text>
-                              </View>
-                            </HStack>
-                          ) : null}
-                          {carDetails.engine && carDetails.engine.type ? (
-                            <HStack style={styles.sectionRow}>
-                              <View style={styles.sectionProp}>
-                                <Text style={styles.sectionPropText}>
-                                  {strings.NewCarItemScreen.tech.engine.fuel}:
-                                </Text>
-                              </View>
-                              <View style={styles.sectionValue}>
-                                <Text style={styles.sectionValueText}>
-                                  {carDetails.engine.type}
-                                </Text>
-                              </View>
-                            </HStack>
-                          ) : null}
-                          {carDetails.engine &&
-                          carDetails.engine.volume &&
-                          carDetails.engine.volume.full ? (
-                            <HStack style={styles.sectionRow}>
-                              <View style={styles.sectionProp}>
-                                <Text
-                                  selectable={false}
-                                  style={styles.sectionPropText}>
-                                  {strings.NewCarItemScreen.tech.engine.title}:
-                                </Text>
-                              </View>
-                              <View style={styles.sectionValue}>
-                                <Text
-                                  style={
-                                    styles.sectionValueText
-                                  }>{`${carDetails.engine.volume.full} см³`}</Text>
-                              </View>
-                            </HStack>
-                          ) : null}
-                          {carDetails.gearbox && carDetails.gearbox.name ? (
-                            <HStack style={styles.sectionRow}>
-                              <View style={styles.sectionProp}>
-                                <Text
-                                  selectable={false}
-                                  style={styles.sectionPropText}>
-                                  {strings.NewCarItemScreen.plates.gearbox.name}
-                                  :
-                                </Text>
-                              </View>
-                              <View style={styles.sectionValue}>
-                                <Text style={styles.sectionValueText}>
-                                  {gearboxName}
-                                </Text>
-                              </View>
-                            </HStack>
-                          ) : null}
-                          {carDetails.color &&
-                          carDetails.color.name &&
-                          carDetails.color.name.official ? (
-                            <HStack style={styles.sectionRow}>
-                              <View style={styles.sectionProp}>
-                                <Text
-                                  selectable={false}
-                                  style={styles.sectionPropText}>
-                                  {strings.NewCarItemScreen.plates.color}:
-                                </Text>
-                              </View>
-                              <View style={styles.sectionValue}>
-                                <Text style={styles.sectionValueText}>
-                                  {carDetails.color.name.official}
-                                </Text>
-                              </View>
-                            </HStack>
-                          ) : null}
-                          {carDetails.body && carDetails.body.name ? (
-                            <HStack style={styles.sectionRow}>
-                              <View style={styles.sectionProp}>
-                                <Text
-                                  selectable={false}
-                                  style={styles.sectionPropText}>
-                                  {strings.NewCarItemScreen.tech.body.type}:
-                                </Text>
-                              </View>
-                              <View style={styles.sectionValue}>
-                                <Text style={styles.sectionValueText}>
-                                  {bodyName}
-                                </Text>
-                              </View>
-                            </HStack>
-                          ) : null}
-                          {carDetails.interior && carDetails.interior.name ? (
-                            <HStack style={styles.sectionRow}>
-                              <View style={styles.sectionProp}>
-                                <Text
-                                  selectable={false}
-                                  style={styles.sectionPropText}>
-                                  {strings.NewCarItemScreen.tech.interior.title}
-                                  :
-                                </Text>
-                              </View>
-                              <View style={styles.sectionValue}>
-                                <Text style={styles.sectionValueText}>
-                                  {carDetails.interior.name}
-                                </Text>
-                              </View>
-                            </HStack>
-                          ) : null}
+                            );
+                          })}
                         </VStack>
                       </View>
                     ),
                   },
-                  additional &&
-                    additional.length && {
-                      title: strings.NewCarItemScreen.plates.complectation,
-                      content: (
-                        <View style={styles.tabContent}>
-                          <Text style={styles.sectionTitle}>
-                            {get(carDetails, 'options.additional.1.name')}
-                          </Text>
-                          <VStack>
-                            {additional.map((item, num) => {
-                              return (
-                                <View key={'OptionsAdditional-' + num}>
-                                  {item.name && item.value ? (
-                                    <HStack style={styles.sectionRow}>
-                                      <View style={styles.sectionProp}>
-                                        <Text style={styles.sectionPropText}>
-                                          {item.name}
-                                        </Text>
-                                      </View>
-                                      <View style={styles.sectionValue}>
-                                        <Text style={styles.sectionValueText}>
-                                          {item.value}
-                                        </Text>
-                                      </View>
-                                    </HStack>
-                                  ) : (
-                                    <Text
-                                      style={[
-                                        styles.sectionPropText,
-                                        styles.sectionRow,
-                                      ]}>
-                                      {item.name}
-                                    </Text>
-                                  )}
-                                </View>
-                              );
-                            })}
-                          </VStack>
-                        </View>
-                      ),
-                    },
-                ].filter(Boolean)}
-                activeSections={[0, 1]}
-                // renderSectionTitle={this._renderSectionTitle}
-                renderHeader={(item, index, expanded) => (
-                  <HStack
-                    justifyContent={'space-between'}
-                    alignItems={'center'}
-                    px="2%"
-                    backgroundColor="white"
-                    testID={'NewCarItemScreen.AccordionTitle_' + item.title}
-                    style={styles.accordionHeader}>
-                    <Text style={styles.accordionHeaderTitle}>
-                      {item.title}
-                    </Text>
-                    {expanded ? (
-                      <Icon
-                        as={FontAwesome5}
-                        style={{
-                          color: styleConst.color.greyText4,
-                          fontWeight: 'normal',
-                        }}
-                        name="angle-down"
-                      />
-                    ) : (
-                      <Icon
-                        as={FontAwesome5}
-                        style={{
-                          color: styleConst.color.greyText,
-                          fontWeight: 'normal',
-                        }}
-                        name="angle-right"
-                      />
-                    )}
-                  </HStack>
-                )}
-                renderContent={section => {
-                  return (
-                    <View style={styles.accordionContent}>
-                      {section.content}
-                    </View>
-                  );
-                }}
-                // onChange={setSectionActive}
-              />
-              {this.renderCarCostBlock()}
-            </View>
-          </View>
-        </ScrollView>
-        <VStack
-          position="absolute"
-          style={[
-            styleConst.shadow.default,
-            stylesFooter.footer,
-            !this.isPriceShow ? stylesFooter.footerSmall : null,
-          ]}>
-          {this.isPriceShow ? (
-            isSale ? (
-              <View
-                style={[
-                  stylesFooter.orderPriceContainer,
-                  stylesFooter.orderPriceContainerSale,
-                ]}>
-                <Text
-                  style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
-                  {showPrice(CarPrices.sale, this.props.dealerSelected.region)}
-                </Text>
-                <Text
-                  style={[
-                    styles.orderPriceText,
-                    styles.orderPriceDefaultText,
-                    styles.orderPriceSmallText,
-                  ]}>
-                  {showPrice(
-                    CarPrices.standart,
-                    this.props.dealerSelected.region,
+              ].filter(Boolean)}
+              activeSections={sectionActive}
+              // renderSectionTitle={this._renderSectionTitle}
+              renderHeader={(item, index, expanded) => (
+                <HStack
+                  justifyContent={'space-between'}
+                  alignItems={'center'}
+                  px="2%"
+                  backgroundColor="white"
+                  testID={'NewCarItemScreen.AccordionTitle_' + item.title}
+                  style={styles.accordionHeader}>
+                  <Text style={styles.accordionHeaderTitle}>
+                    {item.title}
+                  </Text>
+                  {expanded ? (
+                    <Icon
+                      as={FontAwesome5}
+                      style={{
+                        color: styleConst.color.greyText4,
+                        fontWeight: 'normal',
+                      }}
+                      name="angle-down"
+                    />
+                  ) : (
+                    <Icon
+                      as={FontAwesome5}
+                      style={{
+                        color: styleConst.color.greyText,
+                        fontWeight: 'normal',
+                      }}
+                      name="angle-right"
+                    />
                   )}
-                </Text>
-              </View>
-            ) : (
-              <View
-                style={[
-                  stylesFooter.orderPriceContainer,
-                  stylesFooter.orderPriceContainerNotSale,
-                ]}>
-                <Text
-                  style={[styles.orderPriceText, styles.orderPriceDefaultText]}>
-                  {showPrice(
-                    CarPrices.standart,
-                    this.props.dealerSelected.region,
-                  )}
-                </Text>
-              </View>
-            )
-          ) : null}
-          <HStack>
-            <Button.Group isAttached>
-              <Button
-                testID="UsedCarItemScreen.Button.TestDrive"
-                onPress={this.onPressTestDrive}
-                size="md"
-                style={[stylesFooter.buttonTwo]}
-                activeOpacity={0.8}
-                backgroundColor={styleConst.color.orange}
-                leftIcon={
-                  <Icon
-                    as={MaterialCommunityIcons}
-                    name="steering"
-                    color="white"
-                    size={6}
-                  />
-                }
-                _text={styles.buttonText}>
-                {strings.NewCarItemScreen.show}
-              </Button>
-              <Button
-                testID="UsedCarItemScreen.Button.Order"
-                onPress={this.onPressOrder}
-                size="md"
-                backgroundColor={styleConst.color.lightBlue}
-                style={[stylesFooter.buttonTwo]}
-                activeOpacity={0.8}
-                _text={styles.buttonText}>
-                {strings.NewCarItemScreen.wannaCar}
-              </Button>
-            </Button.Group>
-          </HStack>
-        </VStack>
-        <Fab
-          renderInPortal={false}
-          shadow={7}
-          size="xs"
-          containerStyle={{marginBottom: 100}}
-          style={{backgroundColor: styleConst.new.blueHeader, marginBottom: 60}}
-          icon={
-            <Icon
-              size={5}
-              as={Ionicons}
-              name="chatbox-outline"
-              color="warmGray.50"
-              _dark={{
-                color: 'warmGray.50',
+                </HStack>
+              )}
+              renderContent={section => {
+                return (
+                  <View style={styles.accordionContent}>
+                    {section.content}
+                  </View>
+                );
               }}
+              onChange={setSectionActive}
             />
-          }
-          placement="bottom-right"
-          onPress={() =>
-            navigation.navigate('ChatScreen', {
-              chatType: 'tradein-cars',
-              carID: carDetails.id.api,
-            })
-          }
-        />
-      </>
-    );
-  }
-}
+            {renderCarCostBlock()}
+          </View>
+        </View>
+      </ScrollView>
+      <VStack
+        position="absolute"
+        style={[
+          styleConst.shadow.default,
+          stylesFooter.footer,
+          !isPriceShow ? stylesFooter.footerSmall : null,
+        ]}>
+        {isPriceShow ? (
+          isSale ? (
+            <View
+              style={[
+                stylesFooter.orderPriceContainer,
+                stylesFooter.orderPriceContainerSale,
+              ]}>
+              <Text
+                style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
+                {showPrice(CarPrices.sale, dealerSelected.region)}
+              </Text>
+              <Text
+                style={[
+                  styles.orderPriceText,
+                  styles.orderPriceDefaultText,
+                  styles.orderPriceSmallText,
+                ]}>
+                {showPrice(
+                  CarPrices.standart,
+                  dealerSelected.region,
+                )}
+              </Text>
+            </View>
+          ) : (
+            <View
+              style={[
+                stylesFooter.orderPriceContainer,
+                stylesFooter.orderPriceContainerNotSale,
+              ]}>
+              <Text
+                style={[styles.orderPriceText, styles.orderPriceDefaultText]}>
+                {showPrice(
+                  CarPrices.standart,
+                  dealerSelected.region,
+                )}
+              </Text>
+            </View>
+          )
+        ) : null}
+        <HStack>
+          <Button.Group isAttached>
+            <Button
+              testID="UsedCarItemScreen.Button.TestDrive"
+              onPress={onPressTestDrive}
+              size="md"
+              style={[stylesFooter.buttonTwo]}
+              activeOpacity={0.8}
+              backgroundColor={styleConst.color.orange}
+              leftIcon={
+                <Icon
+                  as={MaterialCommunityIcons}
+                  name="steering"
+                  color="white"
+                  size={6}
+                />
+              }
+              _text={styles.buttonText}>
+              {strings.NewCarItemScreen.show}
+            </Button>
+            <Button
+              testID="UsedCarItemScreen.Button.Order"
+              onPress={onPressOrder}
+              size="md"
+              backgroundColor={styleConst.color.lightBlue}
+              style={[stylesFooter.buttonTwo]}
+              activeOpacity={0.8}
+              _text={styles.buttonText}>
+              {strings.NewCarItemScreen.wannaCar}
+            </Button>
+          </Button.Group>
+        </HStack>
+      </VStack>
+      <Fab
+        renderInPortal={false}
+        shadow={7}
+        size="xs"
+        containerStyle={{marginBottom: 100}}
+        style={{backgroundColor: styleConst.new.blueHeader, marginBottom: 60}}
+        icon={
+          <Icon
+            size={5}
+            as={Ionicons}
+            name="chatbox-outline"
+            color="warmGray.50"
+            _dark={{
+              color: 'warmGray.50',
+            }}
+          />
+        }
+        placement="bottom-right"
+        onPress={() =>
+          navigation.navigate('ChatScreen', {
+            chatType: 'tradein-cars',
+            carID: carDetails.id.api,
+          })
+        }
+      />
+    </>
+  );
+};
+
+UsedCarItemScreen.propTypes = {
+  dealerSelected: PropTypes.object,
+};
 
 const stylesFooter = StyleSheet.create({
   footer: {

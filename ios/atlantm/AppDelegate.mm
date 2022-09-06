@@ -8,6 +8,11 @@
 
 #import <React/RCTAppSetupUtils.h>
 
+// modules
+#import "Orientation.h"
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <RNGoogleSignin/RNGoogleSignin.h>
+
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
 #import <React/RCTCxxBridgeDelegate.h>

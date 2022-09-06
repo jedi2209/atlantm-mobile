@@ -292,6 +292,7 @@ const LoginScreen = props => {
     data.update = 0;
     const res = await _sendDataToApi(data);
     if (res) {
+      alert(res.type);
       switch (res.type) {
         case 'SAVE_PROFILE__UPDATE':
           if (res.payload && res.payload.ID && res.payload.PHONE) {

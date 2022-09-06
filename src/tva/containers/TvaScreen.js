@@ -1,7 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {Toast} from 'native-base';
+import {useToast} from 'native-base';
+import ToastAlert from '../../core/components/ToastAlert';
 
 // redux
 import {connect} from 'react-redux';
@@ -39,100 +40,88 @@ const mapDispatchToProps = {
   actionSetPushTracking,
 };
 
-class TvaScreen extends Component {
-  static propTypes = {
-    dealerSelected: PropTypes.object,
-    isTvaRequest: PropTypes.bool,
-    actionFetchTva: PropTypes.func,
-    pushTracking: PropTypes.bool,
+const TvaScreen = (props) => {
+  const {dealerSelectedLocal, dealerSelected, navigation, route, carNumber, actionFetchTva, localUserDataUpdate, actionSetPushTracking} = props;
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const toast = useToast();
+
+  const FormConfig = {
+    fields: {
+      groups: [
+        {
+          name: strings.Form.group.dealer,
+          fields: [
+            {
+              name: 'DEALER',
+              type: 'dealerSelect',
+              label: strings.Form.field.label.dealer,
+              value:
+                dealerSelectedLocal &&
+                dealerSelectedLocal.id
+                  ? dealerSelectedLocal
+                  : dealerSelected,
+              props: {
+                goBack: false,
+                isLocal: true,
+                returnScreen: navigation.state?.routeName,
+              },
+            },
+          ],
+        },
+        {
+          name: strings.Form.group.car,
+          fields: [
+            {
+              name: 'CARNUMBER',
+              type: 'input',
+              label: strings.Form.field.label.carNumber,
+              value: carNumber,
+              props: {
+                required: true,
+                placeholder: null,
+              },
+            },
+            // {
+            //   name: 'PUSHSWITCH',
+            //   type: 'switch',
+            //   label: 'Отслеживать изменения',
+            //   value: PushTracking,
+            //   props: {
+            //     onValueChange: onPressPushTracking,
+            //   },
+            // },
+          ],
+        },
+      ],
+    },
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      loading: false,
-      success: false,
-    };
-
-    this.FormConfig = {
-      fields: {
-        groups: [
-          {
-            name: strings.Form.group.dealer,
-            fields: [
-              {
-                name: 'DEALER',
-                type: 'dealerSelect',
-                label: strings.Form.field.label.dealer,
-                value:
-                  this.props.dealerSelectedLocal &&
-                  this.props.dealerSelectedLocal.id
-                    ? this.props.dealerSelectedLocal
-                    : this.props.dealerSelected,
-                props: {
-                  goBack: false,
-                  isLocal: true,
-                  returnScreen: this.props.navigation.state?.routeName,
-                },
-              },
-            ],
-          },
-          {
-            name: strings.Form.group.car,
-            fields: [
-              {
-                name: 'CARNUMBER',
-                type: 'input',
-                label: strings.Form.field.label.carNumber,
-                value: this.props.carNumber,
-                props: {
-                  required: true,
-                  placeholder: null,
-                },
-              },
-              // {
-              //   name: 'PUSHSWITCH',
-              //   type: 'switch',
-              //   label: 'Отслеживать изменения',
-              //   value: this.props.PushTracking,
-              //   props: {
-              //     onValueChange: this.onPressPushTracking,
-              //   },
-              // },
-            ],
-          },
-        ],
-      },
-    };
-  }
-
-  componentDidMount() {
-    const {navigation, route} = this.props;
+  useEffect(() => {
     const params = get(route, 'params', {});
 
     if (params.isPush) {
-      this.onPressButton(params);
+      onPressButton(params);
     }
-  }
-
-  onPressButton = async pushProps => {
-    this.setState({loading: true});
+  }, []);
+  
+  const _onPressButton = async pushProps => {
+    setLoading(true);
 
     const dealerId = pushProps.DEALER.id;
     const carNumber = pushProps.CARNUMBER;
 
     let pushTracking = false;
-    this.onPressPushTracking(false);
+    onPressPushTracking(false);
 
-    const action = await this.props.actionFetchTva({
+    const action = await actionFetchTva({
       number: carNumber,
       region: pushProps.DEALER.region,
       dealer: dealerId,
       pushTracking,
     });
 
-    this.setState({loading: false});
+    setLoading(false);
     if (action) {
       switch (action.type) {
         case TVA__SUCCESS:
@@ -206,7 +195,7 @@ class TvaScreen extends Component {
               return carNumber_replace[carNumber_find.indexOf(s)];
             },
           );
-          this.props.localUserDataUpdate({
+          localUserDataUpdate({
             CARNUMBER: carNumberChanged.toUpperCase(),
           });
 
@@ -218,19 +207,18 @@ class TvaScreen extends Component {
           } else {
             PushNotifications.unsubscribeFromTopic('tva');
           }
-          this.props.navigation.navigate('TvaResultsScreen');
+          navigation.navigate('TvaResultsScreen');
           break;
         case TVA__FAIL:
-          Toast.show({
-            text: action.payload.message,
-            position: 'bottom',
-            type: 'danger',
-            duration: 3000,
-          });
+          toast.show({
+            render: ({id}) => {
+              return <ToastAlert id={id} status="error" duration={3000} description={action.payload.message} title="Ошибка" />;
+            },
+          })
           setTimeout(() => {
             if (pushTracking === true) {
               PushNotifications.unsubscribeFromTopic('tva');
-              this.onPressPushTracking(false);
+              onPressPushTracking(false);
             }
           }, 250);
           break;
@@ -238,8 +226,7 @@ class TvaScreen extends Component {
     }
   };
 
-  onPressPushTracking = isPushTracking => {
-    const {actionSetPushTracking} = this.props;
+  const onPressPushTracking = isPushTracking => {
     if (isPushTracking === true) {
       PushNotifications.subscribeToTopic('tva', '').then(isPushTracking => {
         actionSetPushTracking(isPushTracking);
@@ -250,24 +237,30 @@ class TvaScreen extends Component {
     }
   };
 
-  render() {
-    return (
-      <Form
-        contentContainerStyle={{
-          paddingHorizontal: 14,
-          marginTop: 20,
-        }}
-        keyboardAvoidingViewProps={{
-          enableAutomaticScroll: false,
-        }}
-        key="TVAForm"
-        fields={this.FormConfig.fields}
-        barStyle={'light-content'}
-        SubmitButton={{text: strings.Form.button.send}}
-        onSubmit={this.onPressButton}
-      />
-    );
-  }
-}
+  return (
+    <Form
+      contentContainerStyle={{
+        paddingHorizontal: 14,
+        marginTop: 20,
+      }}
+      keyboardAvoidingViewProps={{
+        enableAutomaticScroll: false,
+      }}
+      key="TVAForm"
+      fields={FormConfig.fields}
+      barStyle={'light-content'}
+      SubmitButton={{text: strings.Form.button.send}}
+      onSubmit={_onPressButton}
+    />
+  );
+
+};
+
+TvaScreen.propTypes = {
+  dealerSelected: PropTypes.object,
+  isTvaRequest: PropTypes.bool,
+  actionFetchTva: PropTypes.func,
+  pushTracking: PropTypes.bool,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TvaScreen);

@@ -137,6 +137,8 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
     brands: dealer.listBrands,
     dealerSelected: dealer.selected,
     isСallMeRequest: contacts.isСallMeRequest,
+    phones: dealer.selected.phones || [],
+    sites: dealer.selected.sites || [],
 
     isAppRated: core.isAppRated,
     menuOpenedCount: core.menuOpenedCount,
@@ -149,123 +151,6 @@ const mapDispatchToProps = {
   actionListReset,
   actionAppRated,
   actionMenuOpenedCount,
-};
-
-const _renderPlates = params => {
-  const {
-    dealerSelected,
-    callAvailable,
-    isOpened,
-    navigation,
-    chatAvailable,
-    onPressCallMe,
-    onPressChat,
-    sitesSubtitle,
-    onPressOrders,
-  } = params;
-  const phones = get(dealerSelected, 'phone', []);
-  console.error(JSON.stringify(dealerSelected));
-  return (
-    <ScrollView
-      showsHorizontalScrollIndicator={false}
-      horizontal
-      contentContainerStyle={{paddingRight: 30}}
-      style={styles.scrollView}>
-      <HStack>
-        <Plate
-          title={strings.ContactsScreen.call}
-          status={callAvailable ? 'enabled' : 'disabled'}
-          subtitle={phones[0]}
-          onPress={() => {
-            if (!isOpened) {
-              Alert.alert(
-                strings.ContactsScreen.closedDealer.title,
-                strings.ContactsScreen.closedDealer.text,
-                [
-                  {
-                    text: strings.ContactsScreen.closedDealer.no,
-                    style: 'cancel',
-                  },
-                  {
-                    text: strings.ContactsScreen.closedDealer.yes,
-                    onPress: () => {
-                      navigation.navigate('CallMeBackScreen');
-                    },
-                  },
-                ],
-                {cancelable: false},
-              );
-            } else {
-              Linking.openURL('tel:' + phones[0].replace(/[^+\d]+/g, ''));
-            }
-          }}
-        />
-        {false ? (
-          <Plate
-            title="Чат"
-            subtitle="Отвечаем с 9 до 20"
-            type="orange"
-            status={chatAvailable ? 'enabled' : 'disabled'}
-            onPress={onPressChat}
-          />
-        ) : null}
-        <Plate
-          testID="ContactsScreen.ButtonCallMe"
-          title={strings.ContactsScreen.callOrder}
-          subtitle=""
-          onPress={onPressCallMe}
-        />
-        <Plate
-          title={strings.ContactsScreen.order}
-          subtitle={strings.ContactsScreen.sendOrder}
-          type="primary"
-          testID="ContactsScreen.ButtonOrders"
-          onPress={onPressOrders}
-        />
-        <Plate
-          title={
-            sitesSubtitle && sitesSubtitle.sites.length > 1
-              ? strings.ContactsScreen.sites
-              : strings.ContactsScreen.site
-          }
-          subtitle={
-            sitesSubtitle && sitesSubtitle.sites.length > 1
-              ? sitesSubtitle.sites.join('\r\n')
-              : sitesSubtitle.sites[0]
-          }
-          testID="ContactsScreen.ButtonSites"
-          type="red"
-          // onPress={() => {
-          //   if (sitesSubtitle && sitesSubtitle.sites.length > 1) {
-          //     ActionSheet.show(
-          //       {
-          //         options: sitesSubtitle.buttons,
-          //         cancelButtonIndex: sitesSubtitle.buttons.length - 1,
-          //         title: strings.ContactsScreen.dealerSites,
-          //       },
-          //       buttonIndex => {
-          //         switch (sitesSubtitle.buttons[buttonIndex].id) {
-          //           case 'cancel':
-          //             break;
-          //           default:
-          //             Linking.openURL(sitesSubtitle.buttons[buttonIndex].site);
-          //             break;
-          //         }
-          //       },
-          //     );
-          //   } else {
-          //     Linking.openURL(get(dealerSelected, 'site[0]')).catch(
-          //       console.error(
-          //         'get(dealerSelected, "site[0]") failed',
-          //         get(dealerSelected, 'site[0]'),
-          //       ),
-          //     );
-          //   }
-          // }}
-        />
-      </HStack>
-    </ScrollView>
-  );
 };
 
 const _renderInfoList = params => {
@@ -338,6 +223,8 @@ const intervalMiliSeconds = intervalSecondsMini * 1000;
 const ContactsScreen = ({
   navigation,
   dealerSelected,
+  sites,
+  phones,
   infoList,
   fetchInfoList,
   isFetchInfoList,
@@ -359,12 +246,145 @@ const ContactsScreen = ({
 
   const toast = useToast();
 
+  const _renderPlates = params => {
+    const {
+      callAvailable,
+      isOpened,
+      navigation,
+      chatAvailable,
+      onPressCallMe,
+      onPressChat,
+      onPressOrders,
+    } = params;
+  
+    return (
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        horizontal
+        contentContainerStyle={{paddingRight: 30}}
+        style={styles.scrollView}>
+        <HStack>
+          <Plate
+            title={strings.ContactsScreen.call}
+            status={callAvailable ? 'enabled' : 'disabled'}
+            subtitle={get(dealerSelected, 'phones[0].subtitle', null)}
+            onPress={() => {
+              if (!isOpened) {
+                Alert.alert(
+                  strings.ContactsScreen.closedDealer.title,
+                  strings.ContactsScreen.closedDealer.text,
+                  [
+                    {
+                      text: strings.ContactsScreen.closedDealer.no,
+                      style: 'cancel',
+                    },
+                    {
+                      text: strings.ContactsScreen.closedDealer.yes,
+                      onPress: () => {
+                        navigation.navigate('CallMeBackScreen');
+                      },
+                    },
+                  ],
+                  {cancelable: false},
+                );
+              } else {
+                if (phones.length > 1) {
+                  setActionSheetData({
+                    options: phones.concat([{
+                      priority: phones.length + 1,
+                      id: 'cancel',
+                      text: strings.Base.cancel.toLowerCase(),
+                      icon: 'ios-close',
+                      iconColor: '#f70707',
+                    }]),
+                    cancelButtonIndex: phones.length - 1,
+                    title: strings.ContactsScreen.call,
+                    destructiveButtonIndex: phones.length || null,
+                  });
+                  setActionSheetStatus(true);
+                } else {
+                  Linking.openURL(phones[0].link).catch(
+                  console.error(
+                    'phones[0].link failed',
+                    phones,
+                  ),
+                );
+                }
+              }
+            }}
+          />
+          {false ? (
+            <Plate
+              title="Чат"
+              subtitle="Отвечаем с 9 до 20"
+              type="orange"
+              status={chatAvailable ? 'enabled' : 'disabled'}
+              onPress={onPressChat}
+            />
+          ) : null}
+          <Plate
+            testID="ContactsScreen.ButtonCallMe"
+            title={strings.ContactsScreen.callOrder}
+            subtitle=""
+            onPress={onPressCallMe}
+          />
+          <Plate
+            title={strings.ContactsScreen.order}
+            subtitle={strings.ContactsScreen.sendOrder}
+            type="primary"
+            testID="ContactsScreen.ButtonOrders"
+            onPress={onPressOrders}
+          />
+          {sites.length ? (<Plate
+            title={
+              sites && sites.length > 1
+                ? strings.ContactsScreen.sites
+                : strings.ContactsScreen.site
+            }
+            subtitle={
+              sites && sites?.length < 3 ? 
+              sites.length > 1
+                ? _sites().join('\r\n')
+                : sites[0].subtitle
+            : null}
+            testID="ContactsScreen.ButtonSites"
+            type="red"
+            onPress={() => {
+              if (sites.length > 1) {
+                setActionSheetData({
+                  options: sites.concat([{
+                    priority: sites.length + 1,
+                    id: 'cancel',
+                    text: strings.Base.cancel.toLowerCase(),
+                    icon: 'ios-close',
+                    iconColor: '#f70707',
+                  }]),
+                  cancelButtonIndex: sites.length - 1,
+                  title: strings.ContactsScreen.dealerSites,
+                  destructiveButtonIndex: sites.length || null,
+                });
+                setActionSheetStatus(true);
+              } else {
+                Linking.openURL(sites[0].link).catch(
+                  console.error(
+                    'sites[0].link failed',
+                    sites,
+                  ),
+                );
+              }
+            }}
+          />) : null}
+        </HStack>
+      </ScrollView>
+    );
+  };
+
   const _showOrdersMenu = () => {
     orderFunctions.getOrders().then(data => {
       setActionSheetData({
         options: data.BUTTONS,
         cancelButtonIndex: data.CANCEL_INDEX,
-        title: data.TITLE,
+        title: strings.ContactsScreen.sendOrder,
         destructiveButtonIndex: data.DESTRUCTIVE_INDEX || null,
       });
       setActionSheetStatus(true);
@@ -399,34 +419,16 @@ const ContactsScreen = ({
   };
 
   const _sites = () => {
-    let sitesSubtitle = {
-      sites: [],
-      buttons: [],
-    };
-
-    get(dealerSelected, 'site', []).map((val, idx) => {
-      if (val) {
-        const siteName = val
-          .replace(/^(?:https?:\/\/)?(?:www\.)?/i, '')
-          .split('/')[0];
-        sitesSubtitle.sites.push(siteName);
-        sitesSubtitle.buttons.push({
-          id: 'site' + idx,
-          text: siteName,
-          site: val,
-        });
-      }
-    });
-    if (sitesSubtitle.sites.length > 1) {
-      sitesSubtitle.buttons.push({
-        id: 'cancel',
-        text: strings.Base.cancel.toLowerCase(),
+    let sitesText = [];
+    if (sites) {
+      sites.map(site => {
+        if (site.subtitle) {
+          sitesText.push(site.subtitle);
+        }
       });
     }
-    return sitesSubtitle;
+    return sitesText;
   };
-
-  const sitesSubtitle = _sites();
 
   const onPressCallMe = async () => {
     navigation.navigate('CallMeBackScreen');
@@ -459,16 +461,16 @@ const ContactsScreen = ({
           setActionSheetStatus(false);
         }}>
         <Actionsheet.Content>
-          <Box w="100%" my={4} px={4} justifyContent="space-between">
+          {actionSheetData?.title ? (<Box w="100%" my={4} px={4} justifyContent="space-between">
             <Text
               fontSize="xl"
-              color="gray.500"
+              color="gray.800"
               _dark={{
                 color: 'gray.300',
               }}>
-              {strings.ContactsScreen.sendOrder}
+              {actionSheetData.title}
             </Text>
-          </Box>
+          </Box>) : null}
           {actionSheetData.options.map(el => {
             return (
               <Actionsheet.Item
@@ -476,9 +478,18 @@ const ContactsScreen = ({
                   setActionSheetStatus(false);
                   if (el.navigate) {
                     navigation.navigate(el.navigate);
+                  } else {
+                    if (el?.link) {
+                      Linking.openURL(el.link);
+                    }
                   }
                 }}
-                startIcon={
+                _text={{
+                  fontSize: "md",
+                  color:"gray.600",
+                  w: '100%'
+                }}
+                startIcon={el.icon ? (
                   <Icon
                     as={Ionicons}
                     color={el.iconColor}
@@ -486,8 +497,9 @@ const ContactsScreen = ({
                     size={6}
                     name={el.icon}
                   />
-                }>
-                {el.text}
+                ) : null}>
+                {el?.text}
+                {el?.subtitle ? (<Text color={"gray.500"}>{el.subtitle}</Text>) : null}
               </Actionsheet.Item>
             );
           })}
@@ -554,7 +566,7 @@ const ContactsScreen = ({
             backgroundColor={styleConst.color.bg}>
             <HStack
               alignItems="center"
-              justifyContent="space-between"
+              justifyContent="flex-start"
               space={2}>
               {dealerSelected.brand && dealerSelected.brand.length ? (
                 <HStack>
@@ -636,14 +648,12 @@ const ContactsScreen = ({
               <View h="8" />
             )}
             {_renderPlates({
-              dealerSelected,
               callAvailable,
               isOpened,
               navigation,
               chatAvailable,
               onPressCallMe,
               onPressChat,
-              sitesSubtitle,
               onPressOrders: _showOrdersMenu,
             })}
             {_renderInfoList({isFetchInfoList, infoList, navigation})}
