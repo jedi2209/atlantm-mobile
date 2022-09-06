@@ -52,7 +52,7 @@ const BrandLogo = props => {
       </View>
     );
   } else {
-    if (props.brands && props.brands[brand]) {
+    if (props.brandsAll && props.brandsAll[brand]) {
       return (
         <Imager
           resizeMode="contain"
@@ -60,8 +60,8 @@ const BrandLogo = props => {
             width: '100%',
             height: '100%',
           }}
-          key={props.brands[brand].hash}
-          source={{uri: props.brands[brand].logo}}
+          key={props.brandsAll[brand].hash}
+          source={{uri: props.brandsAll[brand].logo}}
           {...props}
         />
       );
