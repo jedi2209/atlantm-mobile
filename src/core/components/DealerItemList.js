@@ -1,13 +1,14 @@
 import React from 'react';
 import {StyleSheet, View, Pressable} from 'react-native';
 import PropTypes from 'prop-types';
-import {HStack, Box, Container, Text} from 'native-base';
+import {HStack, Box, Text} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 
 // component
 import BrandLogo from '../components/BrandLogo';
 
 // helpers
+import {get} from 'lodash';
 import styleConst from '../../core/style-const';
 import stylesList from '../../core/components/Lists/style';
 import {strings} from '../lang/const';
@@ -108,11 +109,9 @@ const DealerItemList = props => {
               </Text>
             ) : null}
           </View>
-          {dealer && dealer.brand ? (
+          {get(dealer, 'brand') ? (
             <HStack>
-              {dealer.brand &&
-                dealer.brand.length &&
-                dealer.brand.map(brand => {
+              {get(dealer, 'brand').map(brand => {
                   if (brand.logo) {
                     return (
                       <BrandLogo
