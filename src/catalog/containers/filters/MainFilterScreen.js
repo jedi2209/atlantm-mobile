@@ -94,6 +94,7 @@ if (minDate && maxDate) {
     yearItems.push({
       label: i.toString(),
       value: i,
+      key: i,
     });
   }
 }
@@ -657,6 +658,7 @@ const MainFilterScreen = ({
               base: 'auto',
               md: 0,
             }}
+            shadow="5"
             size="md">
             <Button
               isPressed={stockType === 'New' ? true : false}
@@ -665,7 +667,6 @@ const MainFilterScreen = ({
               isLoadingText={strings.NewCarListScreen.titleShort}
               _spinner={{color: 'white'}}
               width="45%"
-              shadow="5"
               _text={{textTransform: 'uppercase'}}
               onPress={() => updateStock('New')}>
               {strings.NewCarListScreen.titleShort}
@@ -678,7 +679,6 @@ const MainFilterScreen = ({
               spinnerPlacement="end"
               _spinner={{color: 'white'}}
               width="45%"
-              shadow="5"
               _text={{textTransform: 'uppercase'}}
               onPress={() => updateStock('Used')}>
               {strings.UsedCarListScreen.titleShort}

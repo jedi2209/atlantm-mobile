@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState, useRef} from 'react';
 import {
-  Text,
   SafeAreaView,
   ActivityIndicator,
   StyleSheet,
@@ -9,6 +8,7 @@ import {
   Linking,
 } from 'react-native';
 import {
+  Text,
   Icon,
   Button,
   Fab,
@@ -961,7 +961,6 @@ const UsedCarItemScreen = (props) => {
               <Text
                 style={[
                   styles.orderPriceText,
-                  styles.orderPriceDefaultText,
                   styles.orderPriceSmallText,
                 ]}>
                 {showPrice(

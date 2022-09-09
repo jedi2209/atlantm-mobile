@@ -108,8 +108,6 @@ export default StyleSheet.create({
   orderPriceSmallText: {
     fontSize: 12,
     textDecorationLine: 'line-through',
-    flex: 1,
-    flexDirection: 'row',
   },
   orderPriceSpecialText: {
     color: '#D0021B',
