@@ -77,7 +77,7 @@ const App = props => {
   } = props;
 
   const mainScreen = 'BottomTabNavigation';
-  const storeVersion = '2022-08-27';
+  const storeVersion = '2022-09-01';
 
   const currentLanguage = get(props, 'currentLanguage', 'ru');
 

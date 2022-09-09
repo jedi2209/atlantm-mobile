@@ -138,6 +138,7 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
     dealerSelected: dealer.selected,
     isСallMeRequest: contacts.isСallMeRequest,
     phones: dealer.selected.phones || [],
+    phonesMobile: dealer.selected.phonesMobile || [],
     sites: dealer.selected.sites || [],
 
     isAppRated: core.isAppRated,
@@ -225,6 +226,7 @@ const ContactsScreen = ({
   dealerSelected,
   sites,
   phones,
+  phonesMobile,
   infoList,
   fetchInfoList,
   isFetchInfoList,
@@ -267,7 +269,7 @@ const ContactsScreen = ({
           <Plate
             title={strings.ContactsScreen.call}
             status={callAvailable ? 'enabled' : 'disabled'}
-            subtitle={get(dealerSelected, 'phones[0].subtitle', null)}
+            subtitle={get(dealerSelected, 'phonesMobile[0].subtitle', get(dealerSelected, 'phones[0].subtitle', null))}
             onPress={() => {
               if (!isOpened) {
                 Alert.alert(
@@ -288,25 +290,25 @@ const ContactsScreen = ({
                   {cancelable: false},
                 );
               } else {
-                if (phones.length > 1) {
+                if (phonesMobile.length > 1) {
                   setActionSheetData({
-                    options: phones.concat([{
-                      priority: phones.length + 1,
+                    options: phonesMobile.concat([{
+                      priority: phonesMobile.length + 1,
                       id: 'cancel',
                       text: strings.Base.cancel.toLowerCase(),
                       icon: 'ios-close',
                       iconColor: '#f70707',
                     }]),
-                    cancelButtonIndex: phones.length - 1,
+                    cancelButtonIndex: phonesMobile.length - 1,
                     title: strings.ContactsScreen.call,
-                    destructiveButtonIndex: phones.length || null,
+                    destructiveButtonIndex: phonesMobile.length || null,
                   });
                   setActionSheetStatus(true);
                 } else {
-                  Linking.openURL(phones[0].link).catch(
+                  Linking.openURL(phonesMobile[0].link).catch(
                   console.error(
-                    'phones[0].link failed',
-                    phones,
+                    'phonesMobile[0].link failed',
+                    phonesMobile,
                   ),
                 );
                 }
