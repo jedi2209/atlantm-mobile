@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import UserCars from '../components/UserCars';
-import {Button, Icon, View} from 'native-base';
+import {Button, HStack, Icon, View} from 'native-base';
 
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -85,10 +85,7 @@ const styles = StyleSheet.create({
     paddingRight: styleConst.ui.horizontalGapInList,
   },
   BonusInfoButtonIcon: {
-    fontSize: 20,
-    marginRight: 10,
-    color: styleConst.color.lightBlue,
-    paddingLeft: styleConst.ui.horizontalGapInList,
+    marginRight: 2,
   },
   bonusButtonWrapper: {
     marginHorizontal: 20,
@@ -543,7 +540,7 @@ class ProfileScreenInfo extends Component {
                     }}>
                     {strings.ProfileScreenInfo.bonus.text}
                   </Text>
-                  <View style={{display: 'flex', flexDirection: 'row'}}>
+                  <HStack>
                     <View>
                       <Text
                         style={{
@@ -566,7 +563,7 @@ class ProfileScreenInfo extends Component {
                         marginLeft: 8,
                       }}
                     />
-                  </View>
+                  </HStack>
                 </View>
               </View>
             </TouchableOpacity>
@@ -577,12 +574,14 @@ class ProfileScreenInfo extends Component {
                   returnScreen: 'LoginScreen',
                 });
               }}
-              variant="unstyled"
+              variant="link"
               _text={{numberOfLines: 1, style: styles.BonusInfoButtonText}}
               leftIcon={
                 <Icon
                   name="info"
                   as={SimpleLineIcons}
+                  size={5}
+                  color={styleConst.color.lightBlue}
                   style={styles.BonusInfoButtonIcon}
                 />
               }
@@ -666,7 +665,7 @@ class ProfileScreenInfo extends Component {
                     {strings.ProfileScreenInfo.bonus.current.text2}.{'\r\n'}
                     {strings.ProfileScreenInfo.bonus.current.text3}
                   </Text>
-                  <View style={{display: 'flex', flexDirection: 'row'}}>
+                  <HStack>
                     <View>
                       <Text
                         style={{
@@ -686,7 +685,7 @@ class ProfileScreenInfo extends Component {
                         marginLeft: 8,
                       }}
                     />
-                  </View>
+                  </HStack>
                 </View>
               </View>
             </View>
