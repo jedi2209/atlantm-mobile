@@ -12,10 +12,10 @@ import {
   Platform,
   StyleSheet,
 } from 'react-native';
-import {Button, Icon, useToast} from 'native-base';
+import {Button, Icon, IconButton, useToast} from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {store} from '../../core/store';
 import styleConst from '../../core/style-const';
 import LinearGradient from 'react-native-linear-gradient';
@@ -49,7 +49,7 @@ import PhoneDetect from '../../utils/phoneDetect';
 import {strings} from '../../core/lang/const';
 
 import {verticalScale} from '../../utils/scale';
-import {get} from 'lodash';
+import {get, size} from 'lodash';
 import UserData from '../../utils/user';
 
 export const isAndroid = Platform.OS === 'android';
@@ -292,7 +292,6 @@ const LoginScreen = props => {
     data.update = 0;
     const res = await _sendDataToApi(data);
     if (res) {
-      alert(res.type);
       switch (res.type) {
         case 'SAVE_PROFILE__UPDATE':
           if (res.payload && res.payload.ID && res.payload.PHONE) {
@@ -374,14 +373,19 @@ const LoginScreen = props => {
             alignItems: 'center',
             justifyContent: 'space-between',
           }}>
-          <Button
+          <IconButton
             onPress={() => {
               return Google.signIn(_checkPhone);
             }}
-            disabled={isSigninInProgress}
-            leftIcon={<Icon name="google" size={7} as={FontAwesome5} />}
+            isDisabled={isSigninInProgress}
+            _icon={{
+              as: FontAwesome5,
+              name: "google",
+              size: 7,
+              color: "white",
+            }}
+            shadow={3}
             style={[
-              styleConst.shadow.default,
               styles.SocialLoginBt,
               {
                 width: ButtonWidth,
@@ -390,14 +394,19 @@ const LoginScreen = props => {
               },
             ]}
           />
-          <Button
+          <IconButton
             onPress={() => {
               return Facebook.signIn(_checkPhone);
             }}
-            disabled={isSigninInProgress}
-            leftIcon={<Icon name="facebook" as={FontAwesome} size={10} />}
+            isDisabled={isSigninInProgress}
+            _icon={{
+              as: FontAwesome5,
+              name: "facebook",
+              size: 10,
+              color: "white",
+            }}
+            shadow={3}
             style={[
-              styleConst.shadow.default,
               styles.SocialLoginBt,
               {
                 backgroundColor: '#4167B2',
@@ -409,14 +418,19 @@ const LoginScreen = props => {
             ]}
           />
           {VKenabled ? (
-            <Button
+            <IconButton
               onPress={() => {
                 return VK.signIn(_checkPhone);
               }}
-              disabled={isSigninInProgress}
-              leftIcon={<Icon name="vk" as={FontAwesome5} size={8} />}
+              isDisabled={isSigninInProgress}
+              _icon={{
+                as: FontAwesome5,
+                name: "vk",
+                size: 8,
+                color: "white",
+              }}
+              shadow={3}
               style={[
-                styleConst.shadow.default,
                 styles.SocialLoginBt,
                 {
                   width: ButtonWidth,
@@ -543,6 +557,7 @@ const LoginScreen = props => {
                     style={styles.TextInputCode}
                     key={'textCode'}
                     textContentType="oneTimeCode"
+                    autoComplete="sms-otp"
                     keyboardType="number-pad"
                     ref={CodeInput}
                     maxLength={4}
@@ -550,7 +565,6 @@ const LoginScreen = props => {
                     enablesReturnKeyAutomatically={true}
                     returnKeyType="send"
                     placeholderTextColor="#afafaf"
-                    autoCompleteType="off"
                     // onKeyPress={_onInputCode()}
                     onChangeText={text => _onInputCode(text)}
                     selected={false}
@@ -574,6 +588,12 @@ const LoginScreen = props => {
                   SubmitButton={{
                     text: strings.Form.button.receiveCode,
                     noAgreement: true,
+                    rightIcon: (
+                      <Icon
+                        name="sms"
+                        as={MaterialIcons}
+                      />
+                    )
                   }}
                   onSubmit={_verifyCode}
                 />
@@ -593,22 +613,33 @@ const LoginScreen = props => {
                     </Text>
                   )}
                 </Button>
+                {!loadingVerify ? (
                 <Button
                   disabled={loadingVerify}
                   onPress={_cancelVerify}
                   size="md"
                   style={styles.CancelButton}>
-                  {loadingVerify ? (
-                    <ActivityIndicator color={styleConst.color.white} />
-                  ) : (
                     <Text style={{color: styleConst.color.white}}>
                       {strings.Base.cancel.toLowerCase()}
                     </Text>
-                  )}
                 </Button>
+                ) : null}
               </>
             ) : (
               <Button
+                onPress={() => {
+                  props.navigation.navigate('BonusScreenInfo', {
+                    refererScreen: 'LoginScreen',
+                    returnScreen: 'LoginScreen',
+                  });
+                }}
+                _text={styles.BonusInfoButtonText}
+                leftIcon={<Icon name="info" as={SimpleLineIcons} size={5} />}
+                style={styles.BonusInfoButton}>
+                  {strings.Menu.main.bonus}
+              </Button>
+            )}
+              {/* <Button
                 onPress={_verifyCode}
                 size="md"
                 disabled={loadingVerify ? true : phone ? false : true}
@@ -630,23 +661,7 @@ const LoginScreen = props => {
                     {strings.ProfileScreen.getCode}
                   </Text>
                 )}
-              </Button>
-            )}
-            {!code && (
-              <Button
-                onPress={() => {
-                  props.navigation.navigate('BonusScreenInfo', {
-                    refererScreen: 'LoginScreen',
-                    returnScreen: 'LoginScreen',
-                  });
-                }}
-                leftIcon={<Icon name="info" as={SimpleLineIcons} size={5} />}
-                style={styles.BonusInfoButton}>
-                <Text numberOfLines={1} style={styles.BonusInfoButtonText}>
-                  {strings.Menu.main.bonus}
-                </Text>
-              </Button>
-            )}
+              </Button> */}
           </View>
         </View>
       </ImageBackground>
@@ -692,7 +707,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(75, 75, 75, 1)',
     borderRadius: 5,
     fontSize: 50,
-    letterSpacing: 0,
+    letterSpacing: 20,
     width: '100%',
     textAlign: 'center',
   },

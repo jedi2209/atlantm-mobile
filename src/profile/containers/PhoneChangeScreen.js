@@ -417,7 +417,7 @@ class PhoneChangeScreen extends PureComponent {
                   }}
                   SubmitButton={{
                     text: strings.Form.button.receiveCode,
-                    iconRight: (
+                    rightIcon: (
                       <Icon
                         name="sms"
                         as={MaterialIcons}
