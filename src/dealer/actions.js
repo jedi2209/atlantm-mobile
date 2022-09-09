@@ -22,6 +22,7 @@ import {fetchInfoList} from '../info/actions/';
 import {strings} from '../core/lang/const';
 
 import API from '../utils/api';
+import {get} from 'lodash';
 
 import {RUSSIA, BELARUSSIA, UKRAINE} from '../core/const';
 
@@ -67,23 +68,26 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
         dealer.divisionTypes = [];
         dealer.sites = [];
         dealer.phones = [];
+        dealer.phonesMobile = [];
 
-        let phoneTmp = [], sitesTmp = [];
+        let phoneTmp = [], phoneMobileTmp = [], sitesTmp = [];
 
         if (dealer.locations) {
           let i = 1;
           dealer.locations.map(dealerLocation => {
-            const link = dealerLocation.site[0].replace('https://', '').replace('http://', '');
-            if (!sitesTmp.includes(link)) {
-              sitesTmp.push(link);
-              dealer.sites.push({
-                priority: i,
-                id: 'websiteLocation' + dealerLocation.id,
-                text: dealerLocation.name,
-                subtitle: link,
-                link: dealerLocation.site[0],
-              });
-            }
+            get(dealerLocation, 'site', []).map((siteItem, indx) => {
+              const link = siteItem.replace('https://', '').replace('http://', '');
+              if (!sitesTmp.includes(link)) {
+                sitesTmp.push(link);
+                dealer.sites.push({
+                  priority: i,
+                  id: 'websiteLocation' + dealerLocation.id + indx,
+                  text: dealerLocation.name,
+                  subtitle: link,
+                  link: siteItem,
+                });
+              }
+            });
 
             if (!phoneTmp.includes(dealerLocation.phone[0])) {
               phoneTmp.push(dealerLocation.phone[0]);
@@ -93,6 +97,17 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
                 text: dealerLocation.name,
                 subtitle: dealerLocation.phone[0],
                 link: 'tel:' + dealerLocation.phone[0].replace(/[^+\d]+/g, '')
+              });
+            }
+
+            if (!phoneMobileTmp.includes(dealerLocation.phoneMobile[0])) {
+              phoneMobileTmp.push(dealerLocation.phoneMobile[0]);
+              dealer.phonesMobile.push({
+                priority: i,
+                id: 'phoneMobileLocation' + dealerLocation.id,
+                text: dealerLocation.name,
+                subtitle: dealerLocation.phoneMobile[0],
+                link: 'tel:' + dealerLocation.phoneMobile[0].replace(/[^+\d]+/g, '')
               });
             }
             //   if (!get(division, 'phone[0]') || phoneTmp.includes(division.phone[0])) {
