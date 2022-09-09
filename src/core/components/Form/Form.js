@@ -1382,8 +1382,8 @@ class Form extends Component {
                   </View>
                 ) : null}
                 <Button
-                  {...(this.props.SubmitButton.iconLeft ? 'iconLeft' : null)}
-                  {...(this.props.SubmitButton.iconRight ? 'iconRight' : null)}
+                  rightIcon={(this.props.SubmitButton.rightIcon ? this.props.SubmitButton.rightIcon : null)}
+                  leftIcon={(this.props.SubmitButton.leftIcon ? this.props.SubmitButton.leftIcon : null)}
                   onPress={async () => {
                     if (!this.state.loading) {
                       if (!this.props.onSubmit) {
@@ -1430,13 +1430,7 @@ class Form extends Component {
                   }}
                   _text={styles.buttonText}
                   {...this.props.SubmitButton.props}>
-                    {/* {this.props.SubmitButton.iconLeft
-                      ? this.props.SubmitButton.iconLeft
-                      : null} */}
                     {this.props.SubmitButton.text}
-                    {/* {this.props.SubmitButton.iconRight
-                      ? this.props.SubmitButton.iconRight
-                      : null} */}
                 </Button>
               </Animated.View>
             ) : null}

@@ -231,7 +231,6 @@ class SocialAuth extends PureComponent {
           <Button
             onPress={this._connectGoogle}
             disabled={this.state.isSigninInProgress || Boolean(im.google)}
-            iconLeft
             leftIcon={
               <Icon
                 name="google"

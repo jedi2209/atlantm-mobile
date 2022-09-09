@@ -1,14 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {SafeAreaView, StyleSheet, View, Text} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {
   Icon,
-  Content,
-  ListItem,
-  StyleProvider,
-  Body,
-  Right,
   Button,
+  HStack,
+  View,
+  Text,
+  ScrollView,
 } from 'native-base';
 
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -52,14 +51,6 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginTop: 5,
-  },
-  listItem: {
-    height: null,
-  },
-  body: {
-    height: null,
-    minHeight: styleConst.ui.listHeight,
-    marginLeft: 20,
   },
   date: {
     fontSize: 15,
@@ -255,12 +246,8 @@ class BonusScreen extends Component {
 
     return (
       <View key={key} style={[stylesList.listItemContainer, styles[theme]]}>
-        <ListItem
-          icon
-          last
-          style={[stylesList.listItem, isLevel3 ? styles.listItem : null]}
-          onPress={onPressHandler}>
-          <Body style={isLevel3 ? styles.body : null}>
+        <HStack alignItems={"center"} justifyContent={'space-between'} onPress={onPressHandler}>
+          <View ml={isLevel3 ? 2 : 0}>
             <Text style={[stylesList.label, isLevel3 ? styles.label : null]}>
               {label}
             </Text>
@@ -270,34 +257,23 @@ class BonusScreen extends Component {
                 <Text style={[styles.date]}>{dayMonthYear(date)}</Text>
               </>
             ) : null}
-          </Body>
-          <Right>
-            {isLevel3 && (total || total === 0) ? (
-              <>
-                <Text
-                  style={[
-                    stylesList.badgeText,
-                    {
-                      color:
-                        total > 0
-                          ? styleConst.color.green
-                          : styleConst.color.red,
-                    },
-                  ]}>
-                  {parseFloat(total).toLocaleString('ru-RU')}
-                </Text>
-                {/* <Text
-                  style={{
-                    marginLeft: 2,
-                    color: styleConst.color.greyText,
-                    fontSize: 12,
-                  }}>
-                  {curr}
-                </Text> */}
-              </>
-            ) : null}
-          </Right>
-        </ListItem>
+          </View>
+          {isLevel3 && (total || total === 0) ? (
+            <Text
+              mr={1}
+              style={[
+                stylesList.badgeText,
+                {
+                  color:
+                    total > 0
+                      ? styleConst.color.green
+                      : styleConst.color.red,
+                },
+              ]}>
+              {parseFloat(total).toLocaleString('ru-RU')}
+            </Text>
+          ) : null}
+        </HStack>
       </View>
     );
   };
@@ -312,12 +288,10 @@ class BonusScreen extends Component {
     return (
       <Button
         onPress={this.onPressBonusInfo}
-        size="full"
-        full
-        iconLeft
         leftIcon={
           <Icon name="price-ribbon" as={Entypo} style={styles.buttonIcon} />
         }
+        _text={styles.buttonText}
         style={[
           styleConst.shadow.default,
           styles.button,
@@ -328,10 +302,7 @@ class BonusScreen extends Component {
             borderRightWidth: 0,
           },
         ]}>
-        <Icon name="price-ribbon" as={Entypo} style={styles.buttonIcon} />
-        <Text numberOfLines={1} style={styles.buttonText}>
-          {strings.ProfileScreenInfo.bonus.moreInfo}
-        </Text>
+        {strings.ProfileScreenInfo.bonus.moreInfo}
       </Button>
     );
   };
@@ -359,7 +330,7 @@ class BonusScreen extends Component {
       saldoValue = get(bonus, 'saldo.value', 0);
     }
     return (
-      <Content>
+      <ScrollView>
         {Object.keys(get(bonus, 'items'), []).length
           ? this.renderLevel1(bonus.items)
           : null}
@@ -373,7 +344,7 @@ class BonusScreen extends Component {
           </Text>
         </View>
         {this.renderBonusButton()}
-      </Content>
+      </ScrollView>
     );
   }
 }
