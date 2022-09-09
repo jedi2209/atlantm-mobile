@@ -8,8 +8,8 @@ import {
   Text,
   Pressable,
 } from 'react-native';
-import {Button, Icon} from 'native-base';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialIcons';
+import {Button, HStack, Icon, VStack} from 'native-base';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Imager from '../../core/components/Imager';
 import styleConst from '../../core/style-const';
@@ -67,9 +67,8 @@ const ImageCarousel = ({
               <Button
                 onPress={item.onPressWantACar}
                 style={[styles.itemOrder, styles.itemOrderWantACar, {height}]}
-                iconLeft={
+                leftIcon={
                   <Icon
-                    selectable={false}
                     size={5}
                     as={MaterialCommunityIcons}
                     name="wallet-giftcard"
@@ -77,19 +76,16 @@ const ImageCarousel = ({
                     _dark={{
                       color: 'white',
                     }}
-                    style={styles.iconButton}
                   />
-                }>
-                <Text style={styles.iconText}>
-                  {strings.NewCarItemScreen.wannaCar}
-                </Text>
+                }
+                _text={styles.iconText}>
+                {strings.NewCarItemScreen.wannaCar}
               </Button>
               <Button
                 onPress={item.onPressTD}
                 style={[styles.itemOrder, styles.itemOrderTestDrive, {height}]}
-                iconLeft={
+                leftIcon={
                   <Icon
-                    selectable={false}
                     size={5}
                     as={MaterialCommunityIcons}
                     name="steering"
@@ -97,21 +93,18 @@ const ImageCarousel = ({
                     _dark={{
                       color: 'white',
                     }}
-                    style={styles.iconButton}
                   />
-                }>
-                <Text style={styles.iconText}>
-                  {strings.NewCarItemScreen.testDrive}
-                </Text>
+                }
+                _text={styles.iconText}>
+                {strings.NewCarItemScreen.testDrive}
               </Button>
             </View>
           );
         case 'usedCar':
           return (
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <HStack justifyContent="space-between">
               {item.onPressCallMe || item.onPressCall ? (
-                <View style={{flexDirection: 'column'}}>
+                <VStack>
                   {item.onPressCallMe ? (
                     <Button
                       onPress={item.onPressCallMe}
@@ -121,9 +114,8 @@ const ImageCarousel = ({
                         styles.itemOrderCallBack,
                         {height: height / 2 - 1},
                       ]}
-                      iconLeft={
+                      leftIcon={
                         <Icon
-                          selectable={false}
                           size={5}
                           as={MaterialCommunityIcons}
                           name="phone-incoming"
@@ -131,12 +123,10 @@ const ImageCarousel = ({
                           _dark={{
                             color: 'white',
                           }}
-                          style={styles.iconButtonSm}
                         />
-                      }>
-                      <Text style={styles.iconTextSm}>
-                        {strings.ContactsScreen.callOrder}
-                      </Text>
+                      }
+                      _text={styles.iconTextSm}>
+                      {strings.ContactsScreen.callOrder}
                     </Button>
                   ) : null}
                   {item.onPressCall ? (
@@ -148,9 +138,8 @@ const ImageCarousel = ({
                         styles.itemOrderCall,
                         {height: height / 2 - 1},
                       ]}
-                      iconLeft={
+                      leftIcon={
                         <Icon
-                          selectable={false}
                           size={5}
                           as={MaterialCommunityIcons}
                           name="phone-outgoing"
@@ -158,39 +147,35 @@ const ImageCarousel = ({
                           _dark={{
                             color: 'white',
                           }}
-                          style={styles.iconButtonSm}
                         />
-                      }>
-                      <Text style={styles.iconTextSm}>
-                        {strings.ContactsScreen.call}
-                      </Text>
+                      }
+                      _text={styles.iconTextSm}>
+                      {strings.ContactsScreen.call}
                     </Button>
                   ) : null}
-                </View>
+                </VStack>
               ) : null}
               {item.onPressWantACar ? (
                 <Button
                   onPress={item.onPressWantACar}
                   style={[styles.itemOrder, styles.itemOrderWantACar, {height}]}
-                  iconLeft={
+                  leftIcon={
                     <Icon
                       selectable={false}
-                      size={5}
+                      size={8}
                       as={MaterialCommunityIcons}
                       name="wallet-giftcard"
                       color="white"
                       _dark={{
                         color: 'white',
                       }}
-                      style={styles.iconButton}
                     />
-                  }>
-                  <Text style={styles.iconText}>
-                    {strings.NewCarItemScreen.wannaCar}
-                  </Text>
+                  }
+                  _text={styles.iconText}>
+                  {strings.NewCarItemScreen.wannaCar}
                 </Button>
               ) : null}
-            </View>
+            </HStack>
           );
       }
     }
@@ -275,16 +260,6 @@ const styles = StyleSheet.create({
     marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
     backgroundColor: 'white',
     borderRadius: 5,
-  },
-  iconButton: {
-    color: styleConst.color.white,
-    fontSize: 40,
-    marginBottom: 10,
-  },
-  iconButtonSm: {
-    color: styleConst.color.white,
-    fontSize: 34,
-    marginBottom: 5,
   },
   iconText: {
     fontSize: 15,

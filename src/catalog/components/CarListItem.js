@@ -353,12 +353,12 @@ const CarListItem = ({
           });
         },
         onPressCall: () => {
-          // const openStatus = getStatusWorktime(
-          //   dealerList[car.dealer.id],
-          //   'RC',
-          //   true,
-          // );
-          let phone = dealerList[car.dealer.id]?.phone;
+          const openStatus = getStatusWorktime(
+            dealerList[car.dealer.id],
+            'RC',
+            true,
+          );
+          let phone = get(car, 'location.phone[0]');
           if (car?.manager?.phone) {
             phone = car.manager.phone;
           }
