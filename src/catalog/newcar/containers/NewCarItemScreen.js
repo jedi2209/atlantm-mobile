@@ -871,6 +871,8 @@ const NewCarItemScreen = ({
     },
   ];
 
+  const fabEnable = dealerSelected.region === 'by' ? true : false;
+
   return (
     <>
       <ScrollView backgroundColor="white" testID="NewCarItemScreen.Wrapper">
@@ -1101,7 +1103,7 @@ const NewCarItemScreen = ({
           </Button.Group>
         </HStack>
       </VStack>
-      <Fab
+      {fabEnable ? (<Fab
         renderInPortal={false}
         style={{backgroundColor: styleConst.new.blueHeader, marginBottom: 60}}
         shadow={7}
@@ -1124,7 +1126,7 @@ const NewCarItemScreen = ({
             carID: carDetails.id.api,
           })
         }
-      />
+      />) : null}
     </>
   );
 };

@@ -366,6 +366,7 @@ export default {
       yes: 'Да',
       no: 'Нет',
     },
+    navigate: 'Как проехать?',
     call: 'Позвонить',
     callOrder: 'Заказать звонок',
     order: 'Заявка',

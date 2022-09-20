@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 
 import {Text, Button, Switch, Toast, Checkbox, HStack} from 'native-base';
+import ToastAlert from '../ToastAlert';
 import {get} from 'lodash';
 import {connect} from 'react-redux';
 import * as NavigationService from '../../../navigation/NavigationService';
@@ -433,23 +434,23 @@ class Form extends Component {
     if (requredLabels && requredLabels.length) {
       if (requredLabels.length > 1) {
         Toast.show({
-          description:
-            strings.Form.status.fieldsRequired1 +
-            '\r\n- ' +
-            requredLabels.join('\r\n- ') +
-            '\r\n\r\n' +
-            strings.Form.status.fieldsRequired2,
-          duration: 3000,
+          render: ({id}) => {
+            return <ToastAlert id={id} status="warning" duration={3000} description={strings.Form.status.fieldsRequired1 +
+              '\r\n- ' +
+              requredLabels.join('\r\n- ') +
+              '\r\n\r\n' +
+              strings.Form.status.fieldsRequired2} title="Не заполнены обязательные поля" />;
+          },
         });
       } else {
         Toast.show({
-          description:
-            strings.Form.status.fieldRequired1 +
-            ' "' +
-            requredLabels.join(' ') +
-            '" ' +
-            strings.Form.status.fieldRequired2,
-          duration: 3000,
+          render: ({id}) => {
+            return <ToastAlert id={id} status="warning" duration={3000} description={strings.Form.status.fieldRequired1 +
+              ' "' +
+              requredLabels.join(' ') +
+              '" ' +
+              strings.Form.status.fieldRequired2} title="Не заполнены обязательные поля" />;
+          },
         });
       }
       return false;

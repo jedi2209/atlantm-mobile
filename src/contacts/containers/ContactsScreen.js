@@ -139,6 +139,7 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
     isСallMeRequest: contacts.isСallMeRequest,
     phones: dealer.selected.phones || [],
     phonesMobile: dealer.selected.phonesMobile || [],
+    addresses: dealer.selected.addresses || [],
     sites: dealer.selected.sites || [],
 
     isAppRated: core.isAppRated,
@@ -227,6 +228,7 @@ const ContactsScreen = ({
   sites,
   phones,
   phonesMobile,
+  addresses,
   infoList,
   fetchInfoList,
   isFetchInfoList,
@@ -247,6 +249,82 @@ const ContactsScreen = ({
   const [actionSheetData, setActionSheetData] = React.useState({});
 
   const toast = useToast();
+
+  const _renderAddress = (addresses) => {
+    if (!addresses) {
+      return (<View h="8" />);
+    }
+
+    if (addresses.length > 1 ) {
+      return (
+        <>
+          <View style={styles.blackBack} />
+          <TouchableOpacity
+            style={styles.address}
+            testID="ContactsScreen.PressMap"
+            onPress={() => {
+              setActionSheetData({
+                options: addresses.concat([{
+                  priority: addresses.length + 1,
+                  id: 'cancel',
+                  text: strings.Base.cancel.toLowerCase(),
+                  icon: 'ios-close',
+                  iconColor: '#f70707',
+                }]),
+                cancelButtonIndex: addresses.length - 1,
+                title: strings.ContactsScreen.navigate,
+                destructiveButtonIndex: addresses.length || null,
+              });
+              setActionSheetStatus(true);
+            }}>
+            <Icon
+              size={22}
+              as={MaterialIcons}
+              name="navigation"
+              color="warmGray.50"
+              _dark={{
+                color: 'warmGray.50',
+              }}
+              style={styles.point}
+            />
+            <Text
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={styles.addressText}>
+              {strings.ContactsScreen.navigate}
+            </Text>
+          </TouchableOpacity>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <View style={styles.blackBack} />
+          <TouchableOpacity
+            style={styles.address}
+            testID="ContactsScreen.PressMap"
+            onPress={() => onPressMap(addresses[0])}>
+            <Icon
+              size={22}
+              as={MaterialIcons}
+              name="navigation"
+              color="warmGray.50"
+              _dark={{
+                color: 'warmGray.50',
+              }}
+              style={styles.point}
+            />
+            <Text
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={styles.addressText}>
+              {addresses[0].text}
+            </Text>
+          </TouchableOpacity>
+        </>
+      );
+    } 
+  };
 
   const _renderPlates = params => {
     const {
@@ -440,13 +518,13 @@ const ContactsScreen = ({
     navigation.navigate('ChatScreen');
   };
 
-  const onPressMap = () => {
+  const onPressMap = (addressData) => {
     navigation.navigate('MapScreen', {
       returnScreen: 'Home',
-      name: get(dealerSelected, 'name'),
-      city: get(dealerSelected, 'city.name'),
-      address: get(dealerSelected, 'address'),
-      coords: get(dealerSelected, 'coords'),
+      name: get(addressData, 'text'),
+      city: get(addressData, 'city.name'),
+      address: get(addressData, 'address'),
+      coords: get(addressData, 'coords'),
     });
   };
 
@@ -479,7 +557,7 @@ const ContactsScreen = ({
                 onPress={() => {
                   setActionSheetStatus(false);
                   if (el.navigate) {
-                    navigation.navigate(el.navigate);
+                    navigation.navigate(el.navigate, el.navigateOptions);
                   } else {
                     if (el?.link) {
                       Linking.openURL(el.link);
@@ -614,41 +692,7 @@ const ContactsScreen = ({
             }}
           />
           <View style={{marginTop: HEADER_MAX_HEIGHT - 65}}>
-            {dealerSelected.address ? (
-              <>
-                <View style={styles.blackBack} />
-                <TouchableOpacity
-                  style={styles.address}
-                  testID="ContactsScreen.PressMap"
-                  onPress={() => onPressMap()}>
-                  <Icon
-                    size={22}
-                    as={MaterialIcons}
-                    name="navigation"
-                    color="warmGray.50"
-                    _dark={{
-                      color: 'warmGray.50',
-                    }}
-                    style={styles.point}
-                  />
-                  <Text
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                    style={styles.addressText}>
-                    {dealerSelected &&
-                    dealerSelected.city[0] &&
-                    dealerSelected.city[0].name
-                      ? dealerSelected.city[0].name
-                      : null}
-                    {dealerSelected.address
-                      ? ', ' + dealerSelected.address
-                      : null}
-                  </Text>
-                </TouchableOpacity>
-              </>
-            ) : (
-              <View h="8" />
-            )}
+            {_renderAddress(addresses)}
             {_renderPlates({
               callAvailable,
               isOpened,
