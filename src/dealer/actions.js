@@ -67,10 +67,11 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
         dealer.brand = dealerBaseData.brands;
         dealer.divisionTypes = [];
         dealer.sites = [];
+        dealer.addresses = [];
         dealer.phones = [];
         dealer.phonesMobile = [];
 
-        let phoneTmp = [], phoneMobileTmp = [], sitesTmp = [];
+        let phoneTmp = [], phoneMobileTmp = [], sitesTmp = addressesTmp = [];
 
         if (dealer.locations) {
           let i = 1;
@@ -108,6 +109,26 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
                 text: dealerLocation.name,
                 subtitle: dealerLocation.phoneMobile[0],
                 link: 'tel:' + dealerLocation.phoneMobile[0].replace(/[^+\d]+/g, '')
+              });
+            }
+
+            if (!addressesTmp.includes(dealerLocation.address)) {
+              addressesTmp.push(dealerLocation.address);
+              dealer.addresses.push({
+                priority: i,
+                id: 'addressLocation' + dealerLocation.id,
+                text: [get(dealerLocation, 'city.name'), dealerLocation.address].filter(Boolean).join(', '),
+                city: get(dealerLocation, 'city'),
+                address: dealerLocation.address,
+                coords: dealerLocation.coords,
+                navigate: 'MapScreen',
+                navigateOptions: {
+                  returnScreen: 'Home',
+                  name: [get(dealerLocation, 'city.name'), dealerLocation.address].filter(Boolean).join(', '),
+                  city: get(dealerLocation, 'city.name'),
+                  address: dealerLocation.address,
+                  coords: dealerLocation.coords,
+                }
               });
             }
             //   if (!get(division, 'phone[0]') || phoneTmp.includes(division.phone[0])) {
