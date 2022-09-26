@@ -116,7 +116,7 @@ GEM
     faraday_middleware (1.2.0)
       faraday (~> 1.0)
     fastimage (2.2.6)
-    fastlane (2.206.2)
+    fastlane (2.210.1)
       CFPropertyList (>= 2.3, < 4.0.0)
       addressable (>= 2.8, < 3.0.0)
       artifactory (~> 3.0)
@@ -280,7 +280,7 @@ PLATFORMS
 
 DEPENDENCIES
   cocoapods (~> 1.11, >= 1.11.2)
-  fastlane (= 2.206.2)
+  fastlane (= 2.210.1)
   fastlane-plugin-increment_version_code
   fastlane-plugin-property_file_read
 
