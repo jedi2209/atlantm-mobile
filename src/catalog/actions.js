@@ -871,6 +871,7 @@ export const actionCarCostOrder = props => {
 
     return API.carCostOrder(props)
       .then(data => {
+        console.error('data', JSON.stringify(data));
         try {
           const {status, error} = data;
 
@@ -886,12 +887,14 @@ export const actionCarCostOrder = props => {
 
           return dispatch({type: CAR_COST__SUCCESS});
         } catch (parseError) {
+          console.error('parseError', JSON.stringify(parseError));
           Sentry.captureException(parseError);
           Sentry.captureMessage('actionCarCostOrder parseError');
           return dispatch({type: CAR_COST__FAIL});
         }
       })
       .catch(error => {
+        console.error('error', JSON.stringify(error));
         Sentry.captureException(error);
         Sentry.captureMessage('actionCarCostOrder API.carCostOrder error');
         return dispatch({
