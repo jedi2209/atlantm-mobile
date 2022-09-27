@@ -1,8 +1,7 @@
 // base
 import React, {useRef, useState, useEffect} from 'react';
 import {View, StyleSheet, Dimensions, Platform, Pressable} from 'react-native';
-import {Button, Icon} from 'native-base';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 // components
 import Carousel, {Pagination} from 'react-native-snap-carousel';

@@ -1103,30 +1103,32 @@ const NewCarItemScreen = ({
           </Button.Group>
         </HStack>
       </VStack>
-      {fabEnable ? (<Fab
-        renderInPortal={false}
-        style={{backgroundColor: styleConst.new.blueHeader, marginBottom: 60}}
-        shadow={7}
-        size="xs"
-        icon={
-          <Icon
-            size={5}
-            as={Ionicons}
-            name="chatbox-outline"
-            color="warmGray.50"
-            _dark={{
-              color: 'warmGray.50',
-            }}
-          />
-        }
-        placement="bottom-right"
-        onPress={() =>
-          navigation.navigate('ChatScreen', {
-            chatType: 'newcars',
-            carID: carDetails.id.api,
-          })
-        }
-      />) : null}
+      {fabEnable ? (
+        <Fab
+          renderInPortal={false}
+          style={{backgroundColor: styleConst.new.blueHeader, marginBottom: 60}}
+          shadow={7}
+          size="xs"
+          icon={
+            <Icon
+              size={5}
+              as={Ionicons}
+              name="chatbox-outline"
+              color="warmGray.50"
+              _dark={{
+                color: 'warmGray.50',
+              }}
+            />
+          }
+          placement="bottom-right"
+          onPress={() =>
+            navigation.navigate('ChatScreen', {
+              chatType: 'newcars',
+              carID: carDetails.id.api,
+            })
+          }
+        />
+      ) : null}
     </>
   );
 };

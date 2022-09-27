@@ -358,10 +358,11 @@ const CarListItem = ({
             'RC',
             true,
           );
-          let phone = get(car, 'location.phone[0]');
-          if (car?.manager?.phone) {
-            phone = car.manager.phone;
-          }
+          const phone = get(
+            car,
+            'phone.manager',
+            get(car, 'location.phoneMobile[0]', get(car, 'location.phone[0]')),
+          );
           if (!phone || phone === '') {
             return false;
           }

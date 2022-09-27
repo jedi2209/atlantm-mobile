@@ -1,6 +1,10 @@
 import React from 'react';
 import {StyleSheet, ActivityIndicator} from 'react-native';
-import {OrientationLocker, PORTRAIT} from 'react-native-orientation-locker';
+import Orientation, {
+  OrientationLocker,
+  PORTRAIT,
+  LANDSCAPE,
+} from 'react-native-orientation-locker';
 import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -20,7 +24,6 @@ import {
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Orientation from 'react-native-orientation-locker';
 import {EVENT_REFRESH} from '../core/actionTypes';
 
 // EKO

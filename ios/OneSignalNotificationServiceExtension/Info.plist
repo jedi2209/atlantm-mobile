@@ -4,14 +4,14 @@
 <dict>
 	<key>NSExtension</key>
 	<dict>
-		<key>NSExtensionPointIdentifier</key>
-		<string>com.apple.usernotifications.service</string>
-		<key>NSExtensionPrincipalClass</key>
-		<string>NotificationService</string>
 		<key>CFBundleShortVersionString</key>
 		<string>8.3.0</string>
 		<key>CFBundleVersion</key>
 		<string>7</string>
+		<key>NSExtensionPointIdentifier</key>
+		<string>com.apple.usernotifications.service</string>
+		<key>NSExtensionPrincipalClass</key>
+		<string>NotificationService</string>
 	</dict>
 </dict>
 </plist>
