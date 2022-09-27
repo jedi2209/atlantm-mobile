@@ -77,9 +77,16 @@ const OptionPlate = ({title, subtitle}) => (
   </View>
 );
 
-const UsedCarItemScreen = (props) => {
-
-  const {navigation, carDetails, dealerSelected, listDealers, listCities, isFetchingCarDetails, route} = props;
+const UsedCarItemScreen = props => {
+  const {
+    navigation,
+    carDetails,
+    dealerSelected,
+    listDealers,
+    listCities,
+    isFetchingCarDetails,
+    route,
+  } = props;
 
   const platesScrollView = useRef(null);
   const [sectionActive, setSectionActive] = useState([0]);
@@ -294,7 +301,7 @@ const UsedCarItemScreen = (props) => {
       address = city_name + ', ' + get(carDetails, 'dealer.name');
     }
     return `${address}`;
-  }
+  };
 
   const _renderTruncatedFooter = handlePress => {
     return (
@@ -339,11 +346,7 @@ const UsedCarItemScreen = (props) => {
       model_name: get(carDetails, 'model.name'),
     });
 
-    if (
-      carDetails &&
-      !isFetchingCarDetails &&
-      platesScrollView?.current
-    ) {
+    if (carDetails && !isFetchingCarDetails && platesScrollView?.current) {
       const currency = get(route, 'params.currency');
       navigation.setParams({
         carDetails: carDetails,
@@ -397,7 +400,11 @@ const UsedCarItemScreen = (props) => {
   const phone = get(
     carDetails,
     'phone.manager',
-    get(carDetails, 'location.phone[0]'),
+    get(
+      carDetails,
+      'location.phoneMobile[0]',
+      get(carDetails, 'location.phone[0]'),
+    ),
   ).replace(/[^+\d]+/g, '');
 
   const gearboxId = get(carDetails, 'gearbox.id');
@@ -652,8 +659,7 @@ const UsedCarItemScreen = (props) => {
                   </>
                 ) : null}
               </View>
-              {carDetails.creditAvailable ||
-              carDetails.customPriceAvailable ? (
+              {carDetails.creditAvailable || carDetails.customPriceAvailable ? (
                 <View style={styles.bodyButtonsContainer}>
                   {carDetails.creditAvailable ? (
                     <Button
@@ -785,8 +791,7 @@ const UsedCarItemScreen = (props) => {
                               <Text
                                 selectable={false}
                                 style={styles.sectionPropText}>
-                                {strings.NewCarItemScreen.plates.gearbox.name}
-                                :
+                                {strings.NewCarItemScreen.plates.gearbox.name}:
                               </Text>
                             </View>
                             <View style={styles.sectionValue}>
@@ -836,8 +841,7 @@ const UsedCarItemScreen = (props) => {
                               <Text
                                 selectable={false}
                                 style={styles.sectionPropText}>
-                                {strings.NewCarItemScreen.tech.interior.title}
-                                :
+                                {strings.NewCarItemScreen.tech.interior.title}:
                               </Text>
                             </View>
                             <View style={styles.sectionValue}>
@@ -903,9 +907,7 @@ const UsedCarItemScreen = (props) => {
                   backgroundColor="white"
                   testID={'NewCarItemScreen.AccordionTitle_' + item.title}
                   style={styles.accordionHeader}>
-                  <Text style={styles.accordionHeaderTitle}>
-                    {item.title}
-                  </Text>
+                  <Text style={styles.accordionHeaderTitle}>{item.title}</Text>
                   {expanded ? (
                     <Icon
                       as={FontAwesome5}
@@ -929,9 +931,7 @@ const UsedCarItemScreen = (props) => {
               )}
               renderContent={section => {
                 return (
-                  <View style={styles.accordionContent}>
-                    {section.content}
-                  </View>
+                  <View style={styles.accordionContent}>{section.content}</View>
                 );
               }}
               onChange={setSectionActive}
@@ -958,15 +958,8 @@ const UsedCarItemScreen = (props) => {
                 style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
                 {showPrice(CarPrices.sale, dealerSelected.region)}
               </Text>
-              <Text
-                style={[
-                  styles.orderPriceText,
-                  styles.orderPriceSmallText,
-                ]}>
-                {showPrice(
-                  CarPrices.standart,
-                  dealerSelected.region,
-                )}
+              <Text style={[styles.orderPriceText, styles.orderPriceSmallText]}>
+                {showPrice(CarPrices.standart, dealerSelected.region)}
               </Text>
             </View>
           ) : (
@@ -977,10 +970,7 @@ const UsedCarItemScreen = (props) => {
               ]}>
               <Text
                 style={[styles.orderPriceText, styles.orderPriceDefaultText]}>
-                {showPrice(
-                  CarPrices.standart,
-                  dealerSelected.region,
-                )}
+                {showPrice(CarPrices.standart, dealerSelected.region)}
               </Text>
             </View>
           )
