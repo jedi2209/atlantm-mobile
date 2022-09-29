@@ -42,7 +42,7 @@ const status = {
   disabled: '#d62828',
 };
 
-const Plate = (props) => {
+const Plate = props => {
   return (
     <TouchableWithoutFeedback onPress={props.onPress}>
       <View
@@ -69,13 +69,27 @@ const Plate = (props) => {
             style={styles.plateTitle}>
             {props.title}
           </Text>
-          <Text
-            selectable={false}
-            ellipsizeMode="tail"
-            numberOfLines={3}
-            style={styles.plateSubTitle}>
-            {props.subtitle}
-          </Text>
+          {typeof props.subtitle === 'object' ? (
+            props.subtitle.map(el => {
+              return (
+                <Text
+                  selectable={false}
+                  ellipsizeMode="tail"
+                  numberOfLines={1}
+                  style={styles.plateSubTitle}>
+                  {el}
+                </Text>
+              );
+            })
+          ) : (
+            <Text
+              selectable={false}
+              ellipsizeMode="tail"
+              numberOfLines={3}
+              style={styles.plateSubTitle}>
+              {props.subtitle}
+            </Text>
+          )}
         </View>
       </View>
     </TouchableWithoutFeedback>

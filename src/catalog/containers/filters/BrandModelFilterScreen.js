@@ -1,15 +1,6 @@
 import React, {useState, useReducer} from 'react';
 import {ActivityIndicator, StyleSheet, Platform} from 'react-native';
-import {
-  VStack,
-  HStack,
-  Container,
-  View,
-  Button,
-  Icon,
-  Text,
-  Checkbox,
-} from 'native-base';
+import {VStack, HStack, View, Button, Icon, Text, Checkbox} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import BrandLogo from '../../../core/components/BrandLogo';
 import NestedListView, {NestedRow} from 'react-native-nested-listview';
