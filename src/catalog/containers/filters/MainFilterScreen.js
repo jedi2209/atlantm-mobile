@@ -739,7 +739,9 @@ const MainFilterScreen = ({
             ) : null}
             {stockType === 'Used' && dataFilters && dataFilters.data ? (
               <Box px="3" py="3" mt="1" bg="white">
-                <VStack space="4" divider={<Divider bg="gray.100" thickness="1" />}>
+                <VStack
+                  space="4"
+                  divider={<Divider bg="gray.100" thickness="1" />}>
                   {dataFilters && dataFilters.data.year ? (
                     <FilterRow
                       onPress={() => {
@@ -811,7 +813,9 @@ const MainFilterScreen = ({
               borderColor={'gray.100'}
               borderTopWidth="5"
               bg="white">
-              <VStack space="2" divider={<Divider bg="gray.100" thickness="1" />}>
+              <VStack
+                space="2"
+                divider={<Divider bg="gray.100" thickness="1" />}>
                 {dataFilters &&
                 dataFilters.prices &&
                 !dataFilters.prices.hidden ? (
@@ -882,7 +886,9 @@ const MainFilterScreen = ({
               borderColor={'gray.100'}
               borderTopWidth="5"
               bg="white">
-              <VStack space="2" divider={<Divider bg="gray.100" thickness="1" />}>
+              <VStack
+                space="2"
+                divider={<Divider bg="gray.100" thickness="1" />}>
                 {dataFilters && dataFilters.data.gearbox ? (
                   <FilterRow
                     onPress={() => {
@@ -1044,7 +1050,9 @@ const MainFilterScreen = ({
               borderTopWidth="5"
               bg="white">
               {stockType === 'Used' ? (
-                <VStack space="2" divider={<Divider bg="gray.100" thickness="1" />}>
+                <VStack
+                  space="2"
+                  divider={<Divider bg="gray.100" thickness="1" />}>
                   <FilterRow
                     onPress={() => {
                       _onChangeFilter('guarantee', !stateFilters.guarantee);
@@ -1087,7 +1095,9 @@ const MainFilterScreen = ({
                   />
                 </VStack>
               ) : dealerSelected.region === 'by' ? (
-                <VStack space="2" divider={<Divider bg="gray.100" thickness="1" />}>
+                <VStack
+                  space="2"
+                  divider={<Divider bg="gray.100" thickness="1" />}>
                   <FilterRow
                     onPress={() => {
                       _onChangeFilter('onlineOrder', !stateFilters.onlineOrder);
@@ -1140,17 +1150,19 @@ const MainFilterScreen = ({
                 selfClosed={false}>
                 <HStack justifyContent="space-between" mx="24">
                   <VStack alignItems="center">
-                    <Text fontSize={"md"} color={styleConst.color.greyText5}>
+                    <Text fontSize={'md'} color={styleConst.color.greyText5}>
                       {strings.CarsFilterScreen.filters.year.from}
                     </Text>
                     <RNPickerSelect
                       key={'yearPickerFrom'}
                       placeholder={''}
-                      touchableWrapperProps={{testID: 'Form.YearSelectInput.YearFrom'}}
+                      touchableWrapperProps={{
+                        testID: 'Form.YearSelectInput.YearFrom',
+                      }}
                       pickerProps={{testID: 'Form.YearPickerInput.YearFrom'}}
                       doneText={strings.Base.choose}
                       onValueChange={itemValue => {
-                        _onChangeFilter('year[from]', itemValue)
+                        _onChangeFilter('year[from]', itemValue);
                       }}
                       style={{
                         ...pickerSelectStyles,
@@ -1167,17 +1179,19 @@ const MainFilterScreen = ({
                     />
                   </VStack>
                   <VStack alignItems="center">
-                    <Text fontSize={"md"} color={styleConst.color.greyText5}>
+                    <Text fontSize={'md'} color={styleConst.color.greyText5}>
                       {strings.CarsFilterScreen.filters.year.to}
                     </Text>
                     <RNPickerSelect
                       key={'yearPickerTo'}
                       placeholder={''}
-                      touchableWrapperProps={{testID: 'Form.YearSelectInput.YearTo'}}
+                      touchableWrapperProps={{
+                        testID: 'Form.YearSelectInput.YearTo',
+                      }}
                       pickerProps={{testID: 'Form.YearPickerInput.YearTo'}}
                       doneText={strings.Base.choose}
                       onValueChange={itemValue => {
-                        _onChangeFilter('year[to]', itemValue)
+                        _onChangeFilter('year[to]', itemValue);
                       }}
                       style={{
                         ...pickerSelectStyles,

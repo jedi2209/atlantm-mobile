@@ -250,12 +250,12 @@ const ContactsScreen = ({
 
   const toast = useToast();
 
-  const _renderAddress = (addresses) => {
+  const _renderAddress = addresses => {
     if (!addresses) {
-      return (<View h="8" />);
+      return <View h="8" />;
     }
 
-    if (addresses.length > 1 ) {
+    if (addresses.length > 1) {
       return (
         <>
           <View style={styles.blackBack} />
@@ -264,13 +264,15 @@ const ContactsScreen = ({
             testID="ContactsScreen.PressMap"
             onPress={() => {
               setActionSheetData({
-                options: addresses.concat([{
-                  priority: addresses.length + 1,
-                  id: 'cancel',
-                  text: strings.Base.cancel.toLowerCase(),
-                  icon: 'ios-close',
-                  iconColor: '#f70707',
-                }]),
+                options: addresses.concat([
+                  {
+                    priority: addresses.length + 1,
+                    id: 'cancel',
+                    text: strings.Base.cancel.toLowerCase(),
+                    icon: 'ios-close',
+                    iconColor: '#f70707',
+                  },
+                ]),
                 cancelButtonIndex: addresses.length - 1,
                 title: strings.ContactsScreen.navigate,
                 destructiveButtonIndex: addresses.length || null,
@@ -323,7 +325,7 @@ const ContactsScreen = ({
           </TouchableOpacity>
         </>
       );
-    } 
+    }
   };
 
   const _renderPlates = params => {
@@ -336,7 +338,7 @@ const ContactsScreen = ({
       onPressChat,
       onPressOrders,
     } = params;
-  
+
     return (
       <ScrollView
         showsHorizontalScrollIndicator={false}
@@ -347,7 +349,11 @@ const ContactsScreen = ({
           <Plate
             title={strings.ContactsScreen.call}
             status={callAvailable ? 'enabled' : 'disabled'}
-            subtitle={get(dealerSelected, 'phonesMobile[0].subtitle', get(dealerSelected, 'phones[0].subtitle', null))}
+            subtitle={get(
+              dealerSelected,
+              'phonesMobile[0].subtitle',
+              get(dealerSelected, 'phones[0].subtitle', null),
+            )}
             onPress={() => {
               if (!isOpened) {
                 Alert.alert(
@@ -370,13 +376,15 @@ const ContactsScreen = ({
               } else {
                 if (phonesMobile.length > 1) {
                   setActionSheetData({
-                    options: phonesMobile.concat([{
-                      priority: phonesMobile.length + 1,
-                      id: 'cancel',
-                      text: strings.Base.cancel.toLowerCase(),
-                      icon: 'ios-close',
-                      iconColor: '#f70707',
-                    }]),
+                    options: phonesMobile.concat([
+                      {
+                        priority: phonesMobile.length + 1,
+                        id: 'cancel',
+                        text: strings.Base.cancel.toLowerCase(),
+                        icon: 'ios-close',
+                        iconColor: '#f70707',
+                      },
+                    ]),
                     cancelButtonIndex: phonesMobile.length - 1,
                     title: strings.ContactsScreen.call,
                     destructiveButtonIndex: phonesMobile.length || null,
@@ -384,11 +392,8 @@ const ContactsScreen = ({
                   setActionSheetStatus(true);
                 } else {
                   Linking.openURL(phonesMobile[0].link).catch(
-                  console.error(
-                    'phonesMobile[0].link failed',
-                    phonesMobile,
-                  ),
-                );
+                    console.error('phonesMobile[0].link failed', phonesMobile),
+                  );
                 }
               }
             }}
@@ -415,45 +420,47 @@ const ContactsScreen = ({
             testID="ContactsScreen.ButtonOrders"
             onPress={onPressOrders}
           />
-          {sites.length ? (<Plate
-            title={
-              sites && sites.length > 1
-                ? strings.ContactsScreen.sites
-                : strings.ContactsScreen.site
-            }
-            subtitle={
-              sites && sites?.length < 3 ? 
-              sites.length > 1
-                ? _sites().join('\r\n')
-                : sites[0].subtitle
-            : null}
-            testID="ContactsScreen.ButtonSites"
-            type="red"
-            onPress={() => {
-              if (sites.length > 1) {
-                setActionSheetData({
-                  options: sites.concat([{
-                    priority: sites.length + 1,
-                    id: 'cancel',
-                    text: strings.Base.cancel.toLowerCase(),
-                    icon: 'ios-close',
-                    iconColor: '#f70707',
-                  }]),
-                  cancelButtonIndex: sites.length - 1,
-                  title: strings.ContactsScreen.dealerSites,
-                  destructiveButtonIndex: sites.length || null,
-                });
-                setActionSheetStatus(true);
-              } else {
-                Linking.openURL(sites[0].link).catch(
-                  console.error(
-                    'sites[0].link failed',
-                    sites,
-                  ),
-                );
+          {sites.length ? (
+            <Plate
+              title={
+                sites && sites.length > 1
+                  ? strings.ContactsScreen.sites
+                  : strings.ContactsScreen.site
               }
-            }}
-          />) : null}
+              subtitle={
+                sites && sites?.length < 3
+                  ? sites.length > 1
+                    ? _sites()
+                    : sites[0].subtitle
+                  : null
+              }
+              testID="ContactsScreen.ButtonSites"
+              type="red"
+              onPress={() => {
+                if (sites.length > 1) {
+                  setActionSheetData({
+                    options: sites.concat([
+                      {
+                        priority: sites.length + 1,
+                        id: 'cancel',
+                        text: strings.Base.cancel.toLowerCase(),
+                        icon: 'ios-close',
+                        iconColor: '#f70707',
+                      },
+                    ]),
+                    cancelButtonIndex: sites.length - 1,
+                    title: strings.ContactsScreen.dealerSites,
+                    destructiveButtonIndex: sites.length || null,
+                  });
+                  setActionSheetStatus(true);
+                } else {
+                  Linking.openURL(sites[0].link).catch(
+                    console.error('sites[0].link failed', sites),
+                  );
+                }
+              }}
+            />
+          ) : null}
         </HStack>
       </ScrollView>
     );
@@ -486,12 +493,14 @@ const ContactsScreen = ({
         }
 
         setTimeout(
-          () => 
-          toast.show({
-            render: ({id}) => {
-              return <ToastAlert id={id} description={message} title="Ошибка" />;
-            },
-          }),
+          () =>
+            toast.show({
+              render: ({id}) => {
+                return (
+                  <ToastAlert id={id} description={message} title="Ошибка" />
+                );
+              },
+            }),
           100,
         );
       }
@@ -518,7 +527,7 @@ const ContactsScreen = ({
     navigation.navigate('ChatScreen');
   };
 
-  const onPressMap = (addressData) => {
+  const onPressMap = addressData => {
     navigation.navigate('MapScreen', {
       returnScreen: 'Home',
       name: get(addressData, 'text'),
@@ -541,16 +550,18 @@ const ContactsScreen = ({
           setActionSheetStatus(false);
         }}>
         <Actionsheet.Content>
-          {actionSheetData?.title ? (<Box w="100%" my={4} px={4} justifyContent="space-between">
-            <Text
-              fontSize="xl"
-              color="gray.800"
-              _dark={{
-                color: 'gray.300',
-              }}>
-              {actionSheetData.title}
-            </Text>
-          </Box>) : null}
+          {actionSheetData?.title ? (
+            <Box w="100%" my={4} px={4} justifyContent="space-between">
+              <Text
+                fontSize="xl"
+                color="gray.800"
+                _dark={{
+                  color: 'gray.300',
+                }}>
+                {actionSheetData.title}
+              </Text>
+            </Box>
+          ) : null}
           {actionSheetData.options.map(el => {
             return (
               <Actionsheet.Item
@@ -565,21 +576,25 @@ const ContactsScreen = ({
                   }
                 }}
                 _text={{
-                  fontSize: "md",
-                  color:"gray.600",
-                  w: '100%'
+                  fontSize: 'md',
+                  color: 'gray.600',
+                  w: '100%',
                 }}
-                startIcon={el.icon ? (
-                  <Icon
-                    as={Ionicons}
-                    color={el.iconColor}
-                    mr="1"
-                    size={6}
-                    name={el.icon}
-                  />
-                ) : null}>
+                startIcon={
+                  el.icon ? (
+                    <Icon
+                      as={Ionicons}
+                      color={el.iconColor}
+                      mr="1"
+                      size={6}
+                      name={el.icon}
+                    />
+                  ) : null
+                }>
                 {el?.text}
-                {el?.subtitle ? (<Text color={"gray.500"}>{el.subtitle}</Text>) : null}
+                {el?.subtitle ? (
+                  <Text color={'gray.500'}>{el.subtitle}</Text>
+                ) : null}
               </Actionsheet.Item>
             );
           })}
@@ -644,10 +659,7 @@ const ContactsScreen = ({
             p={3}
             rounded={8}
             backgroundColor={styleConst.color.bg}>
-            <HStack
-              alignItems="center"
-              justifyContent="flex-start"
-              space={2}>
+            <HStack alignItems="center" justifyContent="flex-start" space={2}>
               {dealerSelected.brand && dealerSelected.brand.length ? (
                 <HStack>
                   {dealerSelected.brand.map(brand => {
