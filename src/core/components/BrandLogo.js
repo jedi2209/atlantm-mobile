@@ -102,6 +102,12 @@ const styles = StyleSheet.create({
 
 const brandsSVG = {
   black: {
+    2: (
+      <Image
+        source={require('../assets/brands/black/brand-2.svg')}
+        style={styles.imageSVG}
+      />
+    ),
     6: (
       <Image
         source={require('../assets/brands/black/brand-6.svg')}
@@ -158,6 +164,12 @@ const brandsSVG = {
     ),
   },
   white: {
+    2: (
+      <Image
+        source={require('../assets/brands/white/brand-2.svg')}
+        style={styles.imageSVG}
+      />
+    ),
     6: (
       <Image
         source={require('../assets/brands/white/brand-6.svg')}
