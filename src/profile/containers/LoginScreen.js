@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component, useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   TextInput,
@@ -11,6 +11,7 @@ import {
   ActivityIndicator,
   Platform,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import {Button, Icon, IconButton, useToast} from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -32,6 +33,8 @@ import {
   appleAuth,
   AppleButton,
 } from '@invertase/react-native-apple-authentication';
+
+import OtpAutoFillViewManager from 'react-native-otp-auto-fill';
 
 // redux
 import {connect} from 'react-redux';
@@ -99,6 +102,7 @@ const LoginScreen = props => {
   const [checkCode, setCheckCode] = useState('');
   const [phone, setPhone] = useState(props?.phone);
   const [codeValue, setCodeValue] = useState('');
+  const [codeSize, setCodeSize] = useState(4);
   const [vkLogin, setVKLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingVerify, setLoadingVerify] = useState(false);
@@ -123,6 +127,19 @@ const LoginScreen = props => {
         },
       },
     ],
+  };
+
+  const handleComplete = event => {
+    const code = event.nativeEvent.code;
+    setCodeValue(code);
+    if (code.length === codeSize) {
+      _verifyCodeStepTwo(code);
+    }
+  };
+
+  // This is only needed once to get the Android Signature key for SMS body
+  const handleOnAndroidSignature = code => {
+    console.error('Android Signature Key for SMS body:', code);
   };
 
   const _onOtpChange = index => {
@@ -190,9 +207,11 @@ const LoginScreen = props => {
     // тут специально одно равно чтобы сработало приведение типов
     // eslint-disable-next-line eqeqeq
     if (codeValueVal != checkCode) {
-      CodeInput.current.clear();
-      CodeInput.current.focus();
-      otpArray = [];
+      if (CodeInput && CodeInput.current) {
+        otpArray = [];
+        CodeInput.current.clear();
+        CodeInput.current.focus();
+      }
       toast.show({
         description: strings.ProfileScreen.Notifications.error.wrongCode,
         placement: 'top',
@@ -277,6 +296,7 @@ const LoginScreen = props => {
         setLoadingVerify(false);
         setCode(true);
         setCheckCode(response.checkCode);
+        setCodeSize(response?.checkCode?.toString().length);
         CodeInput.current.focus();
         return true;
       }
@@ -380,9 +400,9 @@ const LoginScreen = props => {
             isDisabled={isSigninInProgress}
             _icon={{
               as: FontAwesome5,
-              name: "google",
+              name: 'google',
               size: 7,
-              color: "white",
+              color: 'white',
             }}
             shadow={3}
             style={[
@@ -401,9 +421,9 @@ const LoginScreen = props => {
             isDisabled={isSigninInProgress}
             _icon={{
               as: FontAwesome5,
-              name: "facebook",
+              name: 'facebook',
               size: 10,
-              color: "white",
+              color: 'white',
             }}
             shadow={3}
             style={[
@@ -425,9 +445,9 @@ const LoginScreen = props => {
               isDisabled={isSigninInProgress}
               _icon={{
                 as: FontAwesome5,
-                name: "vk",
+                name: 'vk',
                 size: 8,
-                color: "white",
+                color: 'white',
               }}
               shadow={3}
               style={[
@@ -553,14 +573,20 @@ const LoginScreen = props => {
               }}>
               {code ? (
                 <>
-                  <TextInput
+                  <OtpAutoFillViewManager
+                    onComplete={handleComplete}
+                    onAndroidSignature={handleOnAndroidSignature}
+                    style={styles.TextInputCode}
+                    length={codeSize} // Define the length of OTP code. This is a must.
+                  />
+                  {/* <TextInput
                     style={styles.TextInputCode}
                     key={'textCode'}
                     textContentType="oneTimeCode"
                     autoComplete="sms-otp"
                     keyboardType="number-pad"
                     ref={CodeInput}
-                    maxLength={4}
+                    maxLength={codeSize}
                     caretHidden={false}
                     enablesReturnKeyAutomatically={true}
                     returnKeyType="send"
@@ -568,7 +594,7 @@ const LoginScreen = props => {
                     // onKeyPress={_onInputCode()}
                     onChangeText={text => _onInputCode(text)}
                     selected={false}
-                  />
+                  /> */}
                 </>
               ) : (
                 <Form
@@ -588,12 +614,7 @@ const LoginScreen = props => {
                   SubmitButton={{
                     text: strings.Form.button.receiveCode,
                     noAgreement: true,
-                    rightIcon: (
-                      <Icon
-                        name="sms"
-                        as={MaterialIcons}
-                      />
-                    )
+                    rightIcon: <Icon name="sms" as={MaterialIcons} />,
                   }}
                   onSubmit={_verifyCode}
                 />
@@ -614,15 +635,15 @@ const LoginScreen = props => {
                   )}
                 </Button>
                 {!loadingVerify ? (
-                <Button
-                  disabled={loadingVerify}
-                  onPress={_cancelVerify}
-                  size="md"
-                  style={styles.CancelButton}>
-                    <Text style={{color: styleConst.color.white}}>
+                  <Button
+                    disabled={loadingVerify}
+                    onPress={_cancelVerify}
+                    size="md"
+                    style={styles.CancelButton}>
+                    <Text style={{color: styleConst.color.greyText}}>
                       {strings.Base.cancel.toLowerCase()}
                     </Text>
-                </Button>
+                  </Button>
                 ) : null}
               </>
             ) : (
@@ -636,10 +657,10 @@ const LoginScreen = props => {
                 _text={styles.BonusInfoButtonText}
                 leftIcon={<Icon name="info" as={SimpleLineIcons} size={5} />}
                 style={styles.BonusInfoButton}>
-                  {strings.Menu.main.bonus}
+                {strings.Menu.main.bonus}
               </Button>
             )}
-              {/* <Button
+            {/* <Button
                 onPress={_verifyCode}
                 size="md"
                 disabled={loadingVerify ? true : phone ? false : true}
@@ -678,7 +699,7 @@ const styles = StyleSheet.create({
   ImageWrapper: {
     display: 'flex',
     alignItems: 'center',
-    paddingTop: '10%',
+    paddingTop: '20%',
     justifyContent: 'center',
   },
   SocialLoginBt: {
@@ -701,10 +722,8 @@ const styles = StyleSheet.create({
     height: 80,
     paddingHorizontal: 10,
     paddingVertical: 8,
-    borderColor: styleConst.color.white,
     borderWidth: 0.6,
-    color: styleConst.color.white,
-    backgroundColor: 'rgba(75, 75, 75, 1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 5,
     fontSize: 50,
     letterSpacing: 20,
@@ -714,7 +733,7 @@ const styles = StyleSheet.create({
   CancelButton: {
     width: '30%',
     marginHorizontal: '35%',
-    backgroundColor: 'rgba(101, 101, 101, 0.7)',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     justifyContent: 'center',
     borderColor: styleConst.color.white,
     borderWidth: 0.6,
