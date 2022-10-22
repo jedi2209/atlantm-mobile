@@ -139,7 +139,12 @@ const LoginScreen = props => {
 
   // This is only needed once to get the Android Signature key for SMS body
   const handleOnAndroidSignature = code => {
-    console.error('Android Signature Key for SMS body:', code);
+    alert('Android Signature Key for SMS body:' + code);
+    alert(
+      'Android Signature Key for SMS body 2:' +
+        JSON.stringify(code?.nativeEvent),
+    );
+    alert('Android Signature Key for SMS body 3:' + code?.nativeEvent?.code);
   };
 
   const _onOtpChange = index => {
