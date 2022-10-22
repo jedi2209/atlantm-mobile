@@ -137,16 +137,6 @@ const LoginScreen = props => {
     }
   };
 
-  // This is only needed once to get the Android Signature key for SMS body
-  const handleOnAndroidSignature = code => {
-    alert('Android Signature Key for SMS body:' + code);
-    alert(
-      'Android Signature Key for SMS body 2:' +
-        JSON.stringify(code?.nativeEvent),
-    );
-    alert('Android Signature Key for SMS body 3:' + code?.nativeEvent?.code);
-  };
-
   const _onOtpChange = index => {
     return value => {
       if (isNaN(Number(value))) {
@@ -580,7 +570,6 @@ const LoginScreen = props => {
                 <>
                   <OtpAutoFillViewManager
                     onComplete={handleComplete}
-                    onAndroidSignature={handleOnAndroidSignature}
                     style={styles.TextInputCode}
                     length={codeSize} // Define the length of OTP code. This is a must.
                   />
