@@ -35,6 +35,7 @@ import {
 } from '@invertase/react-native-apple-authentication';
 
 import OtpAutoFillViewManager from 'react-native-otp-auto-fill';
+import OTPInputView from '@twotalltotems/react-native-otp-input';
 
 // redux
 import {connect} from 'react-redux';
@@ -568,11 +569,20 @@ const LoginScreen = props => {
               }}>
               {code ? (
                 <>
-                  <OtpAutoFillViewManager
+                  <OTPInputView
+                    pinCount={codeSize}
+                    autoFocusOnLoad
+                    codeInputFieldStyle={styles.underlineStyleBase}
+                    codeInputHighlightStyle={styles.underlineStyleHighLighted}
+                    onCodeFilled={code => {
+                      console.error(`Code is ${code}, you are good to go!`);
+                    }}
+                  />
+                  {/* <OtpAutoFillViewManager
                     onComplete={handleComplete}
                     style={styles.TextInputCode}
                     length={codeSize} // Define the length of OTP code. This is a must.
-                  />
+                  /> */}
                   {/* <TextInput
                     style={styles.TextInputCode}
                     key={'textCode'}
@@ -685,6 +695,25 @@ const LoginScreen = props => {
 };
 
 const styles = StyleSheet.create({
+  borderStyleBase: {
+    width: 30,
+    height: 45,
+  },
+
+  borderStyleHighLighted: {
+    borderColor: '#03DAC6',
+  },
+
+  underlineStyleBase: {
+    width: 30,
+    height: 45,
+    borderWidth: 0,
+    borderBottomWidth: 1,
+  },
+
+  underlineStyleHighLighted: {
+    borderColor: '#03DAC6',
+  },
   LinearGradient: {
     height: '80%',
     width: '100%',
