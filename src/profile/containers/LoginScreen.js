@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
   Platform,
   StyleSheet,
-  Alert,
+  NativeSyntheticEvent,
 } from 'react-native';
 import {Button, Icon, IconButton, useToast} from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -35,7 +35,6 @@ import {
 } from '@invertase/react-native-apple-authentication';
 
 import OtpAutoFillViewManager from 'react-native-otp-auto-fill';
-import OTPInputView from '@twotalltotems/react-native-otp-input';
 
 // redux
 import {connect} from 'react-redux';
@@ -569,20 +568,13 @@ const LoginScreen = props => {
               }}>
               {code ? (
                 <>
-                  <OTPInputView
-                    pinCount={codeSize}
-                    autoFocusOnLoad
-                    codeInputFieldStyle={styles.underlineStyleBase}
-                    codeInputHighlightStyle={styles.underlineStyleHighLighted}
-                    onCodeFilled={code => {
-                      console.error(`Code is ${code}, you are good to go!`);
-                    }}
-                  />
-                  {/* <OtpAutoFillViewManager
+                  <OtpAutoFillViewManager
                     onComplete={handleComplete}
+                    fontSize={50}
+                    space={0.7}
                     style={styles.TextInputCode}
                     length={codeSize} // Define the length of OTP code. This is a must.
-                  /> */}
+                  />
                   {/* <TextInput
                     style={styles.TextInputCode}
                     key={'textCode'}
@@ -695,25 +687,6 @@ const LoginScreen = props => {
 };
 
 const styles = StyleSheet.create({
-  borderStyleBase: {
-    width: 30,
-    height: 45,
-  },
-
-  borderStyleHighLighted: {
-    borderColor: '#03DAC6',
-  },
-
-  underlineStyleBase: {
-    width: 30,
-    height: 45,
-    borderWidth: 0,
-    borderBottomWidth: 1,
-  },
-
-  underlineStyleHighLighted: {
-    borderColor: '#03DAC6',
-  },
   LinearGradient: {
     height: '80%',
     width: '100%',
@@ -742,16 +715,15 @@ const styles = StyleSheet.create({
     width: '40%',
   },
   TextInputCode: {
-    height: 80,
+    height: 75,
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderWidth: 0.6,
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
     borderRadius: 5,
-    fontSize: 50,
-    letterSpacing: 20,
     width: '100%',
     textAlign: 'center',
+    textAlignVertical: 'center',
   },
   CancelButton: {
     width: '30%',
