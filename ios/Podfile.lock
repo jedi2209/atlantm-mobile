@@ -577,7 +577,7 @@ PODS:
     - RCTTypeSafety
     - React-Core
     - ReactCommon/turbomodule/core
-  - react-native-slider (4.3.1):
+  - react-native-slider (4.3.2):
     - React-Core
   - react-native-splash-screen (3.3.0):
     - React-Core
@@ -660,9 +660,9 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.17.10):
     - React-Core
-  - RNCMaskedView (0.2.7):
+  - RNCMaskedView (0.2.8):
     - React-Core
-  - RNCPicker (2.4.4):
+  - RNCPicker (2.4.8):
     - React-Core
   - RNDateTimePicker (6.3.5):
     - React-Core
@@ -703,8 +703,8 @@ PODS:
     - RNFBApp
   - RNGestureHandler (2.6.2):
     - React-Core
-  - RNGoogleSignin (8.0.0):
-    - GoogleSignIn (~> 6.2.2)
+  - RNGoogleSignin (8.0.1):
+    - GoogleSignIn (~> 6.2)
     - React-Core
   - RNImageCropPicker (0.38.0):
     - React-Core
@@ -1165,7 +1165,7 @@ SPEC CHECKSUMS:
   react-native-otp-auto-fill: 722b3b99ddad3a2e92b6dacafdad6ab533e6ae2a
   react-native-pager-view: da490aa1f902c9a5aeecf0909cc975ad0e92e53e
   react-native-safe-area-context: dfe5aa13bee37a0c7e8059d14f72ffc076d120e9
-  react-native-slider: d3ae4270cf8a8cc45a69912db0cc42b151560d5a
+  react-native-slider: e540525ea731783850802b7af457d8551edb0711
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
   react-native-webview: d33e2db8925d090871ffeb232dfa50cb3a727581
@@ -1185,8 +1185,8 @@ SPEC CHECKSUMS:
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba
   RNAppleAuthentication: 0571c08da8c327ae2afc0261b48b4a515b0286a6
   RNCAsyncStorage: 0c357f3156fcb16c8589ede67cc036330b6698ca
-  RNCMaskedView: cb9670ea9239998340eaab21df13fa12a1f9de15
-  RNCPicker: 0b65be85fe7954fbb2062ef079e3d1cde252d888
+  RNCMaskedView: bc0170f389056201c82a55e242e5d90070e18e5a
+  RNCPicker: 0bf8ef8f7800524f32d2bb2a8bcadd53eda0ecd1
   RNDateTimePicker: aa967ff49ba197c8235d1013ddeb7514aededae4
   RNDeviceInfo: 8b83e99e290deaf1bab71673cc636776ef647b6f
   RNFastImage: 3207b9eb17c2425d574ca40db35185db6e324f4e
@@ -1198,7 +1198,7 @@ SPEC CHECKSUMS:
   RNFBInAppMessaging: 09aaee0a0a41dd5c1df42e1552f493e48f764f96
   RNFBMessaging: a57c9c22d2e0a535e5090fecaa68381f0cb2e784
   RNGestureHandler: 4defbd70b2faf3d6761b82fa7880285241762cb0
-  RNGoogleSignin: b2179ba653c759b936404a7746fc5302f9de6a5a
+  RNGoogleSignin: ec96ded826fcdca71ab5f58b1d086e969cabe67b
   RNImageCropPicker: ffbba608264885c241cbf3a8f78eb7aeeb978241
   RNRate: 94f57c773e155ca0d0aeeba9c10a32bce9030daf
   RNReanimated: 60e291d42c77752a0f6d6f358387bdf225a87c6e

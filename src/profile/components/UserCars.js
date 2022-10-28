@@ -96,7 +96,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
               fontSize="xl"
               color="gray.500"
               _dark={{
-                color: 'gray.300',
+                color: 'gray.500',
               }}>
               {actionSheetData.title}
             </Text>
