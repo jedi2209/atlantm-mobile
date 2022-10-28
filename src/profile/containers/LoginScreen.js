@@ -13,7 +13,7 @@ import {
   StyleSheet,
   NativeSyntheticEvent,
 } from 'react-native';
-import {Button, Icon, IconButton, useToast} from 'native-base';
+import {Button, HStack, Icon, IconButton, useToast} from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -477,6 +477,33 @@ const LoginScreen = props => {
     );
   };
 
+  const _show_background_code = items => {
+    if (!items) {
+      return;
+    }
+    let res = [];
+    const width = 100 / items - items;
+    for (let index = 0; index < items; index++) {
+      let left = width * index + items * index;
+      if (index === 0) {
+        left = width * index;
+      }
+      res.push(
+        <View
+          style={{
+            height: 75,
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: 5,
+            width: width + '%',
+          }}
+        />,
+      );
+    }
+    return res.map(el => {
+      return el;
+    });
+  };
+
   useEffect(() => {
     Analytics.logEvent('screen', 'profile/login');
     LoginManager.logOut();
@@ -568,10 +595,16 @@ const LoginScreen = props => {
               }}>
               {code ? (
                 <>
+                  <HStack
+                    justifyContent={'space-between'}
+                    position={'absolute'}
+                    w={'100%'}>
+                    {_show_background_code(codeSize)}
+                  </HStack>
                   <OtpAutoFillViewManager
                     onComplete={handleComplete}
                     fontSize={50}
-                    space={0.7}
+                    space={1.75}
                     style={styles.TextInputCode}
                     length={codeSize} // Define the length of OTP code. This is a must.
                   />
@@ -719,11 +752,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderWidth: 0.6,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderRadius: 5,
     width: '100%',
-    textAlign: 'center',
-    textAlignVertical: 'center',
+    textAlign: 'left',
+    alignItems: 'flex-start',
+    alignSelf: 'flex-start',
+    justifyContent: 'flex-start',
   },
   CancelButton: {
     width: '30%',

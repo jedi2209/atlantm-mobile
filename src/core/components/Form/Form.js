@@ -435,21 +435,41 @@ class Form extends Component {
       if (requredLabels.length > 1) {
         Toast.show({
           render: ({id}) => {
-            return <ToastAlert id={id} status="warning" duration={3000} description={strings.Form.status.fieldsRequired1 +
-              '\r\n- ' +
-              requredLabels.join('\r\n- ') +
-              '\r\n\r\n' +
-              strings.Form.status.fieldsRequired2} title="Не заполнены обязательные поля" />;
+            return (
+              <ToastAlert
+                id={id}
+                status="warning"
+                duration={3000}
+                description={
+                  strings.Form.status.fieldsRequired1 +
+                  '\r\n- ' +
+                  requredLabels.join('\r\n- ') +
+                  '\r\n\r\n' +
+                  strings.Form.status.fieldsRequired2
+                }
+                title="Не заполнены обязательные поля"
+              />
+            );
           },
         });
       } else {
         Toast.show({
           render: ({id}) => {
-            return <ToastAlert id={id} status="warning" duration={3000} description={strings.Form.status.fieldRequired1 +
-              ' "' +
-              requredLabels.join(' ') +
-              '" ' +
-              strings.Form.status.fieldRequired2} title="Не заполнены обязательные поля" />;
+            return (
+              <ToastAlert
+                id={id}
+                status="warning"
+                duration={3000}
+                description={
+                  strings.Form.status.fieldRequired1 +
+                  ' "' +
+                  requredLabels.join(' ') +
+                  '" ' +
+                  strings.Form.status.fieldRequired2
+                }
+                title="Не заполнены обязательные поля"
+              />
+            );
           },
         });
       }
@@ -1383,8 +1403,16 @@ class Form extends Component {
                   </View>
                 ) : null}
                 <Button
-                  rightIcon={(this.props.SubmitButton.rightIcon ? this.props.SubmitButton.rightIcon : null)}
-                  leftIcon={(this.props.SubmitButton.leftIcon ? this.props.SubmitButton.leftIcon : null)}
+                  rightIcon={
+                    this.props.SubmitButton.rightIcon
+                      ? this.props.SubmitButton.rightIcon
+                      : null
+                  }
+                  leftIcon={
+                    this.props.SubmitButton.leftIcon
+                      ? this.props.SubmitButton.leftIcon
+                      : null
+                  }
                   onPress={async () => {
                     if (!this.state.loading) {
                       if (!this.props.onSubmit) {
@@ -1431,7 +1459,7 @@ class Form extends Component {
                   }}
                   _text={styles.buttonText}
                   {...this.props.SubmitButton.props}>
-                    {this.props.SubmitButton.text}
+                  {this.props.SubmitButton.text}
                 </Button>
               </Animated.View>
             ) : null}

@@ -136,7 +136,7 @@ export default {
   checkboxBgColor: styleConst.color.systemGray,
   checkboxSize: 20,
   checkboxTickColor: styleConst.color.white,
-  checkboxDefaultColor: 'transparent',
+  // checkboxDefaultColor: 'transparent',
   checkboxTextShadowRadius: 0,
 
   // Color

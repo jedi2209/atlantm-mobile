@@ -49,7 +49,14 @@ const SingleCheckboxType = props => {
             ellipsizeMode={'tail'}>
             {props.title}
           </Text>
-          <Checkbox isChecked={props.isChecked} onChange={props.onPress} />
+          <Checkbox
+            isChecked={props.isChecked}
+            color="warmGray.50"
+            _dark={{
+              color: 'warmGray.50',
+            }}
+            onChange={props.onPress}
+          />
         </HStack>
       </WrapperFilterRow>
     </Box>
