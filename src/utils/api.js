@@ -751,7 +751,7 @@ export default {
     return (async () => {
       const rawResponse = await RNFetchBlob.fetch(
         'POST',
-        'https://api-backend.atlantm.com/orders/usedbuy/post/',
+        'https://atlantm-admin.zteam.pw/orders/usedbuy/post/',
         headersNew,
         formDataNew,
       );
