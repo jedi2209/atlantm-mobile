@@ -1,0 +1,26 @@
+diff --git a/node_modules/react-native-otp-auto-fill/android/src/main/res/layout/otp_view_layout.xml b/node_modules/react-native-otp-auto-fill/android/src/main/res/layout/otp_view_layout.xml
+index cac77d7..8483c91 100644
+--- a/node_modules/react-native-otp-auto-fill/android/src/main/res/layout/otp_view_layout.xml
++++ b/node_modules/react-native-otp-auto-fill/android/src/main/res/layout/otp_view_layout.xml
+@@ -6,7 +6,7 @@
+     android:id="@+id/numberText"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+-    android:gravity="center"
++    android:gravity="left"
+     android:background="@android:color/transparent"
+     android:inputType="number"
+     />
+diff --git a/node_modules/react-native-otp-auto-fill/ios/OtpAutoFillViewManager.swift b/node_modules/react-native-otp-auto-fill/ios/OtpAutoFillViewManager.swift
+index 67bf7ae..6a1202c 100644
+--- a/node_modules/react-native-otp-auto-fill/ios/OtpAutoFillViewManager.swift
++++ b/node_modules/react-native-otp-auto-fill/ios/OtpAutoFillViewManager.swift
+@@ -56,7 +56,7 @@ class OtpAutoFillView : UIView, UITextFieldDelegate {
+         textField.font = UIFont.systemFont(ofSize: CGFloat(fontSize), weight: .heavy)
+         textField.textContentType = .oneTimeCode
+         textField.keyboardType = .numberPad
+-        textField.textAlignment = .center
++        // textField.textAlignment = .center
+ 
+         // Add text field to UIView
+         self.addSubview(textField)
