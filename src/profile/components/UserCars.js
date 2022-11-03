@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {
   View,
-  Text,
   ScrollView,
   TouchableOpacity,
   StyleSheet,
@@ -16,7 +15,7 @@ import {
 import {store} from '../../core/store';
 import {get} from 'lodash';
 import {CarCard} from './CarCard';
-import {Icon, Button, Toast, HStack, Actionsheet, Box} from 'native-base';
+import {Icon, Button, Toast, HStack, Actionsheet, Box, Text} from 'native-base';
 // import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
