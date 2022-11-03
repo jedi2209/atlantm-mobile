@@ -668,7 +668,7 @@ PODS:
     - React-Core
   - RNDeviceInfo (10.2.0):
     - React-Core
-  - RNFastImage (8.6.1):
+  - RNFastImage (8.6.3):
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
@@ -701,7 +701,7 @@ PODS:
     - FirebaseCoreExtension (= 9.6.0)
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.6.2):
+  - RNGestureHandler (2.8.0):
     - React-Core
   - RNGoogleSignin (8.0.1):
     - GoogleSignIn (~> 6.2)
@@ -717,7 +717,7 @@ PODS:
     - TOCropViewController
   - RNRate (1.2.9):
     - React-Core
-  - RNReanimated (2.10.0):
+  - RNReanimated (2.12.0):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -744,13 +744,13 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.17.0):
+  - RNScreens (3.18.2):
     - React-Core
     - React-RCTImage
   - RNSentry (4.4.0):
     - React-Core
     - Sentry (= 7.25.1)
-  - RNSVG (13.2.0):
+  - RNSVG (13.5.0):
     - React-Core
   - RNVectorIcons (9.2.0):
     - React-Core
@@ -1189,7 +1189,7 @@ SPEC CHECKSUMS:
   RNCPicker: 0bf8ef8f7800524f32d2bb2a8bcadd53eda0ecd1
   RNDateTimePicker: aa967ff49ba197c8235d1013ddeb7514aededae4
   RNDeviceInfo: 8b83e99e290deaf1bab71673cc636776ef647b6f
-  RNFastImage: 3207b9eb17c2425d574ca40db35185db6e324f4e
+  RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFBAnalytics: 0c7c1378e1eef64920df02fa620a3780fec014bb
   RNFBApp: c14c5e27a6b0bf026fc1c60702603ae94eba6fb1
   RNFBAppCheck: eeef7b10298820e93b544e4c318fb1d1bfc953f3
@@ -1197,14 +1197,14 @@ SPEC CHECKSUMS:
   RNFBCrashlytics: aac7fa5e9545fe7efa3c3cf0bfc89a2a8f78e3c6
   RNFBInAppMessaging: 09aaee0a0a41dd5c1df42e1552f493e48f764f96
   RNFBMessaging: a57c9c22d2e0a535e5090fecaa68381f0cb2e784
-  RNGestureHandler: 4defbd70b2faf3d6761b82fa7880285241762cb0
+  RNGestureHandler: 62232ba8f562f7dea5ba1b3383494eb5bf97a4d3
   RNGoogleSignin: ec96ded826fcdca71ab5f58b1d086e969cabe67b
   RNImageCropPicker: ffbba608264885c241cbf3a8f78eb7aeeb978241
   RNRate: 94f57c773e155ca0d0aeeba9c10a32bce9030daf
-  RNReanimated: 60e291d42c77752a0f6d6f358387bdf225a87c6e
-  RNScreens: 0df01424e9e0ed7827200d6ed1087ddd06c493f9
+  RNReanimated: 2a91e85fcd343f8af3c58d3425b99fdd285590a5
+  RNScreens: 34cc502acf1b916c582c60003dc3089fa01dc66d
   RNSentry: 6386245031a4dc3091523b941de8241c03e7f214
-  RNSVG: 07037623c36f12e41312730622d5f6b3656227ca
+  RNSVG: 38ca962c970dbce1ca38991a5aebf26d163f9efb
   RNVectorIcons: fcc2f6cb32f5735b586e66d14103a74ce6ad61f8
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
