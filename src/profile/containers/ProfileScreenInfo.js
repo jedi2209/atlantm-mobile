@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
   },
   BonusInfoButton: {
-    height: 25,
+    height: 45,
     marginVertical: 0,
     paddingTop: 0,
     paddingBottom: 0,

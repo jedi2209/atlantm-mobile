@@ -603,9 +603,9 @@ const LoginScreen = props => {
                   </HStack>
                   <OtpAutoFillViewManager
                     onComplete={handleComplete}
-                    fontSize={50}
-                    space={1.75}
-                    style={styles.TextInputCode}
+                    fontSize={isAndroid ? 50 : 42}
+                    space={isAndroid ? 1.68 : 65}
+                    style={[styles.TextInputCode, {borderWidth: 0}]}
                     length={codeSize} // Define the length of OTP code. This is a must.
                   />
                   {/* <TextInput
@@ -748,15 +748,10 @@ const styles = StyleSheet.create({
     width: '40%',
   },
   TextInputCode: {
-    height: 75,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
+    height: 70,
+    marginLeft: isAndroid ? 0 : 25,
     borderWidth: 0.6,
     width: '100%',
-    textAlign: 'left',
-    alignItems: 'flex-start',
-    alignSelf: 'flex-start',
-    justifyContent: 'flex-start',
   },
   CancelButton: {
     width: '30%',

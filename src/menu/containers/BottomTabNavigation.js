@@ -253,6 +253,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
           options={{
             headerShown: false,
             tabBarLabel: strings.Menu.bottom.lkk,
+            tabBarHideOnKeyboard: true,
             tabBarLabelStyle: {
               fontSize: 14,
             },
