@@ -153,7 +153,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
               fontSize="xl"
               color="gray.500"
               _dark={{
-                color: 'gray.300',
+                color: 'gray.500',
               }}>
               {strings.ContactsScreen.sendOrder}
             </Text>
@@ -167,15 +167,17 @@ export const BottomTabNavigation = ({navigation, route}) => {
                     navigation.navigate(el.navigate);
                   }
                 }}
-                startIcon={el.icon ? (
-                  <Icon
-                    as={Ionicons}
-                    color={el.iconColor}
-                    mr="1"
-                    size={6}
-                    name={el.icon}
-                  />
-                ) : null}>
+                startIcon={
+                  el.icon ? (
+                    <Icon
+                      as={Ionicons}
+                      color={el.iconColor}
+                      mr="1"
+                      size={6}
+                      name={el.icon}
+                    />
+                  ) : null
+                }>
                 {el.text}
               </Actionsheet.Item>
             );

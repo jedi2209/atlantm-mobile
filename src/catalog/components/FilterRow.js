@@ -1,26 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Animated,
-  ActivityIndicator,
-  Dimensions,
-  StyleSheet,
-  Platform,
-} from 'react-native';
-import {
-  Container,
-  Button,
-  Icon,
-  View,
-  Text,
-  HStack,
-  VStack,
-  Box,
-  Divider,
-  Checkbox,
-  Pressable,
-  Select as SelectPicker,
-} from 'native-base';
+import {StyleSheet} from 'react-native';
+import {Icon, View, Text, HStack, Box, Checkbox, Pressable} from 'native-base';
 
 import styleConst from '../../core/style-const';
 
