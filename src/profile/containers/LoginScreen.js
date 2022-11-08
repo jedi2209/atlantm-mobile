@@ -3,7 +3,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
-  TextInput,
   Keyboard,
   Text,
   ImageBackground,
@@ -11,7 +10,7 @@ import {
   ActivityIndicator,
   Platform,
   StyleSheet,
-  NativeSyntheticEvent,
+  Dimensions,
 } from 'react-native';
 import {Button, HStack, Icon, IconButton, useToast} from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -482,26 +481,43 @@ const LoginScreen = props => {
       return;
     }
     let res = [];
-    const width = 100 / items - items;
+    const width = 100 / (items + 2);
+    const screenWidth = Dimensions.get('screen').width;
+    const widthElement = (screenWidth / 100) * width;
+    const buttonSpace = (screenWidth * 0.75) / (items + 1);
+    const buttonSpaceAndroid = parseFloat('1' + buttonSpace) / 100;
+
     for (let index = 0; index < items; index++) {
-      let left = width * index + items * index;
-      if (index === 0) {
-        left = width * index;
-      }
       res.push(
         <View
           style={{
             height: 75,
             backgroundColor: 'rgba(255, 255, 255, 0.9)',
             borderRadius: 5,
-            width: width + '%',
+            width: widthElement,
           }}
         />,
       );
     }
-    return res.map(el => {
-      return el;
-    });
+    return (
+      <>
+        <HStack
+          justifyContent={'space-between'}
+          position={'absolute'}
+          w={'100%'}>
+          {res.map(el => {
+            return el;
+          })}
+        </HStack>
+        <OtpAutoFillViewManager
+          onComplete={handleComplete}
+          fontSize={isAndroid ? 50 : 42}
+          space={isAndroid ? buttonSpaceAndroid : buttonSpace}
+          style={[styles.TextInputCode, {borderWidth: 0}]}
+          length={codeSize} // Define the length of OTP code. This is a must.
+        />
+      </>
+    );
   };
 
   useEffect(() => {
@@ -594,37 +610,9 @@ const LoginScreen = props => {
                 marginTop: code ? '20%' : 0,
               }}>
               {code ? (
-                <>
-                  <HStack
-                    justifyContent={'space-between'}
-                    position={'absolute'}
-                    w={'100%'}>
-                    {_show_background_code(codeSize)}
-                  </HStack>
-                  <OtpAutoFillViewManager
-                    onComplete={handleComplete}
-                    fontSize={isAndroid ? 50 : 42}
-                    space={isAndroid ? 1.68 : 65}
-                    style={[styles.TextInputCode, {borderWidth: 0}]}
-                    length={codeSize} // Define the length of OTP code. This is a must.
-                  />
-                  {/* <TextInput
-                    style={styles.TextInputCode}
-                    key={'textCode'}
-                    textContentType="oneTimeCode"
-                    autoComplete="sms-otp"
-                    keyboardType="number-pad"
-                    ref={CodeInput}
-                    maxLength={codeSize}
-                    caretHidden={false}
-                    enablesReturnKeyAutomatically={true}
-                    returnKeyType="send"
-                    placeholderTextColor="#afafaf"
-                    // onKeyPress={_onInputCode()}
-                    onChangeText={text => _onInputCode(text)}
-                    selected={false}
-                  /> */}
-                </>
+                !loadingVerify ? (
+                  _show_background_code(codeSize)
+                ) : null
               ) : (
                 <Form
                   keyboardAvoidingViewProps={{
@@ -652,26 +640,21 @@ const LoginScreen = props => {
             {code ? (
               <>
                 <Button
-                  disabled={loadingVerify}
                   onPress={_verifyCodeStepTwo}
+                  isLoadingText={'Входим в личный кабинет...'}
+                  isLoading={loadingVerify}
+                  _text={{color: styleConst.color.white}}
                   style={[styleConst.shadow.default, styles.ApproveButton]}>
-                  {loadingVerify ? (
-                    <ActivityIndicator color={styleConst.color.white} />
-                  ) : (
-                    <Text style={{color: styleConst.color.white}}>
-                      {strings.ProfileScreen.approve}
-                    </Text>
-                  )}
+                  {strings.ProfileScreen.approve}
                 </Button>
                 {!loadingVerify ? (
                   <Button
                     disabled={loadingVerify}
                     onPress={_cancelVerify}
                     size="md"
-                    style={styles.CancelButton}>
-                    <Text style={{color: styleConst.color.greyText}}>
-                      {strings.Base.cancel.toLowerCase()}
-                    </Text>
+                    style={styles.CancelButton}
+                    _text={{color: styleConst.color.greyText}}>
+                    {strings.Base.cancel.toLowerCase()}
                   </Button>
                 ) : null}
               </>
@@ -689,29 +672,6 @@ const LoginScreen = props => {
                 {strings.Menu.main.bonus}
               </Button>
             )}
-            {/* <Button
-                onPress={_verifyCode}
-                size="md"
-                disabled={loadingVerify ? true : phone ? false : true}
-                style={[
-                  {
-                    marginTop: 20,
-                    width: '80%',
-                    marginHorizontal: '10%',
-                    backgroundColor: '#34BD78',
-                    justifyContent: 'center',
-                    borderRadius: 5,
-                    opacity: loadingVerify ? 0 : phone ? 1 : 0,
-                  },
-                ]}>
-                {loadingVerify ? (
-                  <ActivityIndicator color={styleConst.color.white} />
-                ) : (
-                  <Text style={{color: styleConst.color.white}}>
-                    {strings.ProfileScreen.getCode}
-                  </Text>
-                )}
-              </Button> */}
           </View>
         </View>
       </ImageBackground>
