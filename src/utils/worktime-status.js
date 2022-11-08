@@ -40,7 +40,7 @@ const getStatusWorktime = (dealer, checkType, returnTime = false) => {
       });
   });
 
-  if (res && res.length && res[0]) {
+  if (res && res.length && res[0] && res[0].length) {
     return res[0];
   } else {
     const currDate = new Date();
