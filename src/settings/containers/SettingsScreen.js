@@ -11,7 +11,6 @@ import {
   Linking,
 } from 'react-native';
 import {
-  Container,
   Text,
   Switch,
   Icon,

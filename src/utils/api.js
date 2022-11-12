@@ -855,7 +855,7 @@ export default {
       `socialData[PERSONAL_GENDER]=${
         typeof personal_gender !== 'undefined' ? personal_gender : ''
       }`,
-      `update=${typeof update !== 'undefined' ? update : ''}`,
+      `update=${typeof update !== 'undefined' ? update : 0}`,
     ].join('&');
 
     const requestParams = _.merge({}, baseRequestParams, {
