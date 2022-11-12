@@ -1,7 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Alert, VStack, HStack, Text, IconButton, CloseIcon, useToast } from 'native-base';
-
+import {
+  Alert,
+  VStack,
+  HStack,
+  Text,
+  IconButton,
+  CloseIcon,
+  useToast,
+} from 'native-base';
 
 const ToastAlert = ({
   id,
@@ -13,40 +20,82 @@ const ToastAlert = ({
   ...rest
 }) => {
   const toast = useToast();
-  return <Alert maxWidth="95%" alignSelf="center" flexDirection="row" status={status ? status : "info"} variant={variant} {...rest}>
+  return (
+    <Alert
+      maxWidth="95%"
+      alignSelf="center"
+      flexDirection="row"
+      status={status ? status : 'info'}
+      variant={variant}
+      {...rest}>
       <VStack space={1} flexShrink={1} w="100%">
-        <HStack flexShrink={1} alignItems="center" justifyContent="space-between">
+        <HStack
+          flexShrink={1}
+          alignItems="center"
+          justifyContent="space-between">
           <HStack space={2} flexShrink={1} alignItems="center">
             <Alert.Icon />
-            <Text fontSize="md" fontWeight="medium" flexShrink={1} color={variant === "solid" ? "lightText" : variant !== "outline" ? "darkText" : null}>
+            <Text
+              fontSize="md"
+              fontWeight="medium"
+              flexShrink={1}
+              color={
+                variant === 'solid'
+                  ? 'lightText'
+                  : variant !== 'outline'
+                  ? 'darkText'
+                  : null
+              }>
               {title}
             </Text>
           </HStack>
-          {isClosable ? <IconButton variant="unstyled" icon={<CloseIcon size="3" />} _icon={{
-          color: variant === "solid" ? "lightText" : "darkText"
-        }} onPress={() => toast.close(id)} /> : null}
+          {isClosable ? (
+            <IconButton
+              variant="unstyled"
+              icon={<CloseIcon size="3" />}
+              _icon={{
+                color: variant === 'solid' ? 'lightText' : 'darkText',
+              }}
+              onPress={() => toast.close(id)}
+            />
+          ) : null}
         </HStack>
-        <Text px="6" color={variant === "solid" ? "lightText" : variant !== "outline" ? "darkText" : null}>
+        <Text
+          px="6"
+          color={
+            variant === 'solid'
+              ? 'lightText'
+              : variant !== 'outline'
+              ? 'darkText'
+              : null
+          }>
           {description}
         </Text>
       </VStack>
-    </Alert>;
+    </Alert>
+  );
 };
 
 ToastAlert.propTypes = {
   title: PropTypes.string.isRequired,
-  variant: PropTypes.oneOf(['solid', 'subtle', 'left-accent', 'top-accent', 'outline']),
+  variant: PropTypes.oneOf([
+    'solid',
+    'subtle',
+    'left-accent',
+    'top-accent',
+    'outline',
+  ]),
   status: PropTypes.oneOf(['info', 'warning', 'success', 'error']),
   description: PropTypes.string.isRequired,
   isClosable: PropTypes.bool,
 };
 
 ToastAlert.defaultProps = {
-  title: "Ошибка",
-  variant: "left-accent",
-  description: "Произошла ошибка",
+  title: 'Ошибка',
+  variant: 'left-accent',
+  description: 'Произошла ошибка',
   isClosable: true,
-  status: "error",
+  status: 'error',
 };
 
 export default ToastAlert;

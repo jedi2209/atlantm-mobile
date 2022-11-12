@@ -96,21 +96,13 @@ const mapDispatchToProps = {
 const LoginScreen = props => {
   const toast = useToast();
   const [isSigninInProgress, setSigninInProgress] = useState(false);
-  const [userInfo, setUserInfo] = useState({});
   const [code, setCode] = useState(false);
   const [checkCode, setCheckCode] = useState('');
   const [phone, setPhone] = useState(props?.phone);
   const [codeValue, setCodeValue] = useState('');
   const [codeSize, setCodeSize] = useState(4);
-  const [vkLogin, setVKLogin] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingVerify, setLoadingVerify] = useState(false);
-
-  const CodeInput = useRef(null);
-
-  const storeData = store.getState();
-
-  let otpArray = [];
 
   const FormConfig = {
     fields: [
@@ -136,76 +128,10 @@ const LoginScreen = props => {
     }
   };
 
-  const _onOtpChange = index => {
-    return value => {
-      if (isNaN(Number(value))) {
-        // do nothing when a non digit is pressed
-        return;
-      }
-      const otpArrayCopy = otpArray.concat();
-      otpArrayCopy[index] = value;
-      otpArray = otpArrayCopy;
-      _onInputCode(otpArray.join(''));
-
-      // auto focus to next InputText if value is not blank
-      if (value !== '') {
-        if (index < 3) {
-          CodeInput[Number(index + 1)].focus();
-        }
-      } else {
-        if (index > 0) {
-          CodeInput[Number(index - 1)].focus();
-        }
-      }
-    };
-  };
-
-  const _onOtpKeyPress = index => {
-    return ({nativeEvent: {key: value}}) => {
-      if (Number(value)) {
-        if (index > 0 && index < 3 && otpArray[index] !== '') {
-          CodeInput[Number(index + 1)].focus();
-        }
-      }
-      // auto focus to previous InputText if value is blank and existing value is also blank
-      if (
-        value === 'Backspace' &&
-        (otpArray[index] === '' || typeof otpArray[index] === 'undefined')
-      ) {
-        if (index > 0) {
-          CodeInput[Number(index - 1)].focus();
-        }
-        /**
-         * clear the focused text box as well only on Android because on mweb onOtpChange will be also called
-         * doing this thing for us
-         * todo check this behaviour on ios
-         */
-        if (isAndroid && index > 0) {
-          const otpArrayCopy = otpArray.concat();
-          otpArrayCopy[index - 1] = ''; // clear the previous box which will be in focus
-          otpArray = otpArrayCopy;
-        }
-        _onInputCode(otpArray.join(''));
-      }
-    };
-  };
-
-  const _onInputCode = text => {
-    setCodeValue(text);
-    if (text.length === 4) {
-      _verifyCodeStepTwo(text);
-    }
-  };
-
   const _verifyCodeStepTwo = codeValueVal => {
     // тут специально одно равно чтобы сработало приведение типов
     // eslint-disable-next-line eqeqeq
     if (codeValueVal != checkCode) {
-      if (CodeInput && CodeInput.current) {
-        otpArray = [];
-        CodeInput.current.clear();
-        CodeInput.current.focus();
-      }
       toast.show({
         description: strings.ProfileScreen.Notifications.error.wrongCode,
         placement: 'top',
@@ -233,7 +159,6 @@ const LoginScreen = props => {
         props.navigation.navigate('LoginScreen');
       })
       .catch(message => {
-        otpArray = [];
         setLoadingVerify(false);
         setCodeValue('');
         // Toast.show({
@@ -291,7 +216,6 @@ const LoginScreen = props => {
         setCode(true);
         setCheckCode(response.checkCode);
         setCodeSize(response?.checkCode?.toString().length);
-        CodeInput.current.focus();
         return true;
       }
     });

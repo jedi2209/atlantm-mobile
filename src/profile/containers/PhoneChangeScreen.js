@@ -1,29 +1,28 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {PureComponent} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
-  View,
-  TextInput,
   Keyboard,
   Text,
   TouchableWithoutFeedback,
   ActivityIndicator,
   Platform,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
-import {Icon} from 'native-base';
+import {View, Button, HStack, Icon, useToast} from 'native-base';
+
+import OtpAutoFillViewManager from 'react-native-otp-auto-fill';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import styleConst from '../../core/style-const';
+import TransitionView from '../../core/components/TransitionView';
+import ToastAlert from '../../core/components/ToastAlert';
 import Form from '../../core/components/Form/Form';
 
 // redux
 import {connect} from 'react-redux';
-import {
-  actionSavePofile,
-  actionSaveProfileToAPI,
-  actionGetPhoneCode,
-} from '../actions';
+import {actionSavePofile, actionGetPhoneCode} from '../actions';
 
 import {
   actionSetPushActionSubscribe,
@@ -33,6 +32,8 @@ import {
 import PushNotifications from '../../core/components/PushNotifications';
 
 import Analytics from '../../utils/amplitude-analytics';
+
+import PhoneDetect from '../../utils/phoneDetect';
 
 import {strings} from '../../core/lang/const';
 
@@ -71,121 +72,66 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
 
   actionSavePofile,
-  actionSaveProfileToAPI,
   actionGetPhoneCode,
 };
 
-class PhoneChangeScreen extends PureComponent {
-  constructor(props) {
-    super(props);
+const PhoneChangeScreen = props => {
+  const toast = useToast();
+  const [code, setCode] = useState(false);
+  const [checkCode, setCheckCode] = useState('');
+  const [phone, setPhone] = useState(props?.phone);
+  const [codeSize, setCodeSize] = useState(4);
+  const [loading, setLoading] = useState(false);
+  const [loadingVerify, setLoadingVerify] = useState(false);
 
-    this.state = {
-      isSigninInProgress: false,
-      userInfo: {},
-      code: false,
-      checkCode: '',
-      phone: '',
-      codeValue: '',
-      vkLogin: false,
-      loading: false,
-      loadingVerify: false,
-      pickerData: null,
-    };
+  const CodeInput = useRef(null);
 
-    this.FormConfig = {
-      fields: [
-        {
-          name: 'PHONE',
-          type: 'phone',
-          label: strings.Form.field.label.phone,
-          value: this.props.phone,
-          props: {
-            required: true,
-            focusNextInput: false,
-          },
+  const FormConfig = {
+    fields: [
+      {
+        name: 'PHONE',
+        type: 'phone',
+        label: strings.Form.field.label.phone,
+        value: phone,
+        props: {
+          required: true,
+          focusNextInput: false,
         },
-      ],
-    };
-  }
-
-  CodeInput = [];
-  otpArray = [];
-
-  componentDidMount() {
-    Analytics.logEvent('screen', 'profile/PhoneViaAuth');
-  }
-
-  _onOtpChange = index => {
-    return value => {
-      if (isNaN(Number(value))) {
-        // do nothing when a non digit is pressed
-        return;
-      }
-      const otpArrayCopy = this.otpArray.concat();
-      otpArrayCopy[index] = value;
-      this.otpArray = otpArrayCopy;
-      this._onInputCode(this.otpArray.join(''));
-
-      // auto focus to next InputText if value is not blank
-      if (value !== '') {
-        if (index < 3) {
-          this.CodeInput[Number(index + 1)].focus();
-        }
-      } else {
-        if (index > 0) {
-          this.CodeInput[Number(index - 1)].focus();
-        }
-      }
-    };
+      },
+    ],
   };
 
-  _onOtpKeyPress = index => {
-    return ({nativeEvent: {key: value}}) => {
-      if (Number(value)) {
-        if (index > 0 && index < 3 && this.otpArray[index] !== '') {
-          this.CodeInput[Number(index + 1)].focus();
-        }
-      }
-      // auto focus to previous InputText if value is blank and existing value is also blank
-      if (value === 'Backspace') {
-        if (
-          this.otpArray[index] === '' ||
-          typeof this.otpArray[index] === 'undefined'
-        ) {
-          if (index > 0) {
-            this.CodeInput[Number(index - 1)].focus();
-            this.CodeInput[Number(index - 1)].clear();
-            this.otpArray[Number(index - 1)] = '';
-          }
-        }
-        /**
-         * clear the focused text box as well only on Android because on mweb onOtpChange will be also called
-         * doing this thing for us
-         * todo check this behaviour on ios
-         */
-        if (isAndroid && index > 0) {
-          const otpArrayCopy = this.otpArray.concat();
-          otpArrayCopy[index - 1] = ''; // clear the previous box which will be in focus
-          this.otpArray = otpArrayCopy;
-        }
-        this._onInputCode(this.otpArray.join(''));
-      }
-    };
+  const handleComplete = event => {
+    const code = event.nativeEvent.code;
+    if (code.length === codeSize) {
+      _verifyCodeStepTwo(code);
+    }
   };
 
-  _verifyCode = phone => {
-    this.setState({loadingVerify: true});
-    this.props.navigation.setParams({
-      verifyCode: true,
-    });
-    this.props.actionGetPhoneCode({phone}).then(response => {
+  const _verifyCode = data => {
+    let phone = data.PHONE;
+    const phoneCountry = PhoneDetect.country(phone);
+    if (phoneCountry && phoneCountry.code === 'ua') {
+      toast.show({
+        render: ({id}) => {
+          return (
+            <ToastAlert
+              id={id}
+              description={
+                'К сожалению вы не можете авторизоваться по этому номеру телефона'
+              }
+              title="Ошибка"
+            />
+          );
+        },
+      });
+      return false;
+    }
+    setLoadingVerify(true);
+    setPhone(phone);
+    return props.actionGetPhoneCode({phone}).then(response => {
       if (response.code >= 300) {
-        this.setState({
-          code: false,
-          loadingVerify: false,
-          checkCode: '',
-          codeValue: '',
-        });
+        _cancelVerify();
 
         let message = strings.Notifications.error.text;
 
@@ -196,91 +142,95 @@ class PhoneChangeScreen extends PureComponent {
         if (response.code === 406) {
           message = strings.ProfileScreen.Notifications.error.phoneProvider;
         }
-        // Toast.show({
-        //   text: message,
-        //   position: 'top',
-        //   type: 'warning',
-        // });
-      } else {
-        this.setState({
-          code: true,
-          loadingVerify: false,
-          checkCode: response.checkCode,
+        toast.show({
+          render: ({id}) => {
+            return <ToastAlert id={id} description={message} title="Ошибка" />;
+          },
         });
-        this.CodeInput[0].focus();
+        return false;
+      } else {
+        setLoadingVerify(false);
+        setCode(true);
+        setCheckCode(response.checkCode);
+        setCodeSize(response?.checkCode?.toString().length);
+        return true;
       }
-      return;
     });
   };
 
-  _verifyCodeStepTwo = async () => {
-    const phone = this.state.phone;
-    const code = this.state.codeValue;
-
+  const _verifyCodeStepTwo = async codeValueVal => {
     // тут специально одно равно чтобы сработало приведение типов
     // eslint-disable-next-line eqeqeq
-    if (code != this.state.checkCode) {
-      this.setState({codeValue: ''});
-      this.CodeInput[0].clear();
-      this.CodeInput[1].clear();
-      this.CodeInput[2].clear();
-      this.CodeInput[3].clear();
-      this.CodeInput[0].focus();
-      this.otpArray = [];
-      // Toast.show({
-      //   text: strings.ProfileScreen.Notifications.error.wrongCode,
-      //   buttonText: 'ОК',
-      //   position: 'top',
-      //   type: 'danger',
-      // });
-      return;
+    if (codeValueVal != checkCode) {
+      toast.show({
+        render: ({id}) => {
+          return (
+            <ToastAlert
+              id={id}
+              description={strings.ProfileScreen.Notifications.error.wrongCode}
+              isClosable={false}
+              title="Ошибка"
+            />
+          );
+        },
+      });
+      return false;
     }
-    this.setState({loading: true, loadingVerify: true});
-
-    let profile = this.props.route.params.userSocialProfile;
+    setLoadingVerify(true);
+    let profile = props.route.params.userSocialProfile;
     profile.phone = phone;
-    const typeUpdate = this.props.route.params.type;
+    const typeUpdate = props.route.params.type;
 
     switch (typeUpdate) {
       case 'auth': // авторизация
         profile.update = 0; // сначала проверяем наличие пользователя в принципе
-        const actionCheckUser = await this.props.actionSavePofile(profile);
+        const actionCheckUser = await props.actionSavePofile(profile);
         if (actionCheckUser && actionCheckUser.type) {
           switch (actionCheckUser.type) {
             case 'SAVE_PROFILE__FAIL':
               if (actionCheckUser.payload.code) {
                 switch (actionCheckUser.payload.code) {
                   case 100: // Пользователь не зарегистрирован
-                    delete profile.update; // теперь будем регать пользователя по серьёзке
-                    const actionAddUser = await this.props.actionSavePofile(
-                      profile,
-                    );
+                    profile.update = true; // теперь будем регать пользователя по серьёзке
+                    const actionAddUser = await props.actionSavePofile(profile);
                     if (actionAddUser) {
                       if (actionAddUser.payload.ID) {
-                        this.setState({loading: false});
-                        this.props.navigation.navigate('LoginScreen');
+                        setLoadingVerify(false);
+                        props.navigation.navigate('LoginScreen');
                       } else {
-                        // Toast.show({
-                        //   text: strings.Notifications.error.text,
-                        //   position: 'bottom',
-                        //   type: 'warning',
-                        // });
+                        toast.show({
+                          render: ({id}) => {
+                            return (
+                              <ToastAlert
+                                id={id}
+                                description={strings.Notifications.error.text}
+                                title="Ошибка"
+                              />
+                            );
+                          },
+                        });
                       }
                     }
                     break;
                 }
               } else {
-                // Toast.show({
-                //   text: strings.Notifications.error.text,
-                //   position: 'bottom',
-                //   type: 'warning',
-                // });
+                toast.show({
+                  render: ({id}) => {
+                    return (
+                      <ToastAlert
+                        id={id}
+                        description={strings.Notifications.error.text}
+                        title="Ошибка"
+                      />
+                    );
+                  },
+                });
               }
               break;
             case 'SAVE_PROFILE__NOPHONE': // пользователя нашли, но без телефона
               delete profile.update;
               const crmID = actionCheckUser.payload?.ID;
-              this.props
+              props
                 .actionGetPhoneCode({
                   phone,
                   code,
@@ -294,27 +244,33 @@ class PhoneChangeScreen extends PureComponent {
                       PushNotifications.addTag('sapID', response.user.SAP.ID);
                       PushNotifications.setExternalUserId(response.user.SAP.ID);
                     }
-                    return this.props.actionSavePofile(response.user);
+                    return props.actionSavePofile(response.user);
                   } else {
-                    this.setState({loading: false});
-                    // Toast.show({
-                    //   text: strings.Notifications.error.text,
-                    //   position: 'bottom',
-                    //   type: 'warning',
-                    // });
+                    setLoadingVerify(false);
+                    toast.show({
+                      render: ({id}) => {
+                        return (
+                          <ToastAlert
+                            id={id}
+                            description={strings.Notifications.error.text}
+                            title="Ошибка"
+                          />
+                        );
+                      },
+                    });
                     return false;
                   }
                 })
                 .then(() => {
-                  this.setState({loading: false});
-                  this.props.navigation.navigate('LoginScreen', {
+                  setLoadingVerify(false);
+                  props.navigation.navigate('LoginScreen', {
                     verifyCode: false,
                   });
                 });
               break;
             case 'SAVE_PROFILE__UPDATE': // пользователя нашли
-              this.setState({loading: false});
-              this.props.navigation.navigate('LoginScreen', {
+              setLoadingVerify(false);
+              props.navigation.navigate('LoginScreen', {
                 verifyCode: false,
               });
               break;
@@ -325,116 +281,157 @@ class PhoneChangeScreen extends PureComponent {
     return true;
   };
 
-  _onInputCode = text => {
-    if (text.length === 4) {
-      this.setState({codeValue: text}, () => {
-        this._verifyCodeStepTwo();
-      });
+  const _cancelVerify = () => {
+    setCode(false);
+    setLoadingVerify(false);
+    setCheckCode('');
+    setPhone('');
+  };
+
+  const _show_background_code = items => {
+    if (!items) {
+      return;
     }
-  };
+    let res = [];
+    const width = 100 / (items + 2);
+    const screenWidth = Dimensions.get('screen').width;
+    const widthElement = (screenWidth / 100) * width;
+    const buttonSpace = screenWidth / (items + 1);
+    //const buttonSpaceAndroid = parseFloat('1' + buttonSpace) / 100;
+    const buttonSpaceAndroid = 1.04;
 
-  _onPressSubmit = data => {
-    this.setState(
-      {
-        phone: data.PHONE,
-      },
-      () => {
-        if (data.PHONE) {
-          this._verifyCode(data.PHONE);
-        }
-      },
-    );
-  };
-
-  render() {
-    if (this.state.loading) {
-      return (
-        <View style={styles.mainView}>
-          <ActivityIndicator
-            color="#0061ED"
-            style={{
-              alignSelf: 'center',
-              marginTop: verticalScale(60),
-            }}
-          />
-        </View>
+    for (let index = 0; index < items; index++) {
+      res.push(
+        <View
+          style={{
+            height: 75,
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: 5,
+            width: widthElement,
+          }}
+        />,
       );
     }
-
     return (
-      <TouchableWithoutFeedback
-        style={styles.mainView}
-        onPress={Keyboard.dismiss}>
-        <View style={styles.mainView}>
-          <View
-            style={{
-              flex: 1,
-              marginTop: 40,
-              paddingHorizontal: 14,
-            }}>
-            {this.state.code ? (
-              <>
-                <Text style={styles.CodeTitleText}>
-                  {strings.PhoneChangeScreen.enterCode}
-                </Text>
-                <View style={styles.CodeWrapper}>
-                  {[0, 1, 2, 3].map((element, index) => (
-                    <TextInput
-                      style={styles.CodeTextInput}
-                      key={'textCode' + index}
-                      textContentType="oneTimeCode"
-                      keyboardType="number-pad"
-                      ref={input => {
-                        this.CodeInput[index] = input;
-                      }}
-                      maxLength={1}
-                      caretHidden={true}
-                      enablesReturnKeyAutomatically={true}
-                      returnKeyType="send"
-                      placeholderTextColor="#afafaf"
-                      autoCompleteType="off"
-                      onKeyPress={this._onOtpKeyPress(index)}
-                      onChangeText={this._onOtpChange(index)}
-                      selected={false}
-                    />
-                  ))}
-                </View>
-              </>
-            ) : (
-              <>
-                <Text style={styles.TitleText}>
-                  {strings.PhoneChangeScreen.title}
-                </Text>
-                <Text style={styles.TitleCommentText}>
-                  {strings.PhoneChangeScreen.comment}
-                </Text>
-                <Form
-                  key="phoneChangeForm"
-                  fields={this.FormConfig.fields}
-                  barStyle={'light-content'}
-                  keyboardAvoidingViewProps={{
-                    enableAutomaticScroll: false,
-                  }}
-                  SubmitButton={{
-                    text: strings.Form.button.receiveCode,
-                    rightIcon: (
-                      <Icon
-                        name="sms"
-                        as={MaterialIcons}
-                        style={styles.BonusInfoButtonIcon}
-                      />
-                    ),
-                  }}
-                  onSubmit={this._onPressSubmit}
-                />
-              </>
-            )}
+      <TransitionView
+        animation={styleConst.animation.opacityIn}
+        duration={350}
+        index={1}>
+        <Text style={styles.TitleText}>
+          {strings.PhoneChangeScreen.enterCode}
+        </Text>
+        {!loadingVerify ? (
+          <View mb={12}>
+            <HStack
+              justifyContent={'space-between'}
+              position={'absolute'}
+              w={'100%'}>
+              {res.map(el => {
+                return el;
+              })}
+            </HStack>
+            <OtpAutoFillViewManager
+              ref={CodeInput}
+              onComplete={handleComplete}
+              fontSize={isAndroid ? 50 : 45}
+              space={isAndroid ? buttonSpaceAndroid : buttonSpace}
+              style={[styles.TextInputCode, {borderWidth: 0}]}
+              length={codeSize} // Define the length of OTP code. This is a must.
+            />
           </View>
-        </View>
-      </TouchableWithoutFeedback>
+        ) : null}
+        <TransitionView
+          animation={styleConst.animation.zoomIn}
+          duration={250}
+          index={2}>
+          {loadingVerify ? (
+            <ActivityIndicator
+              color="#0061ED"
+              style={{
+                alignSelf: 'center',
+                marginTop: verticalScale(60),
+              }}
+            />
+          ) : null}
+          <Button
+            isLoadingText={'Входим в личный кабинет...'}
+            isLoading={loadingVerify}
+            onPress={_cancelVerify}
+            size="md"
+            style={styles.CancelButton}
+            _text={{color: styleConst.color.greyText}}>
+            {strings.Base.cancel.toLowerCase()}
+          </Button>
+        </TransitionView>
+      </TransitionView>
+    );
+  };
+
+  useEffect(() => {
+    Analytics.logEvent('screen', 'profile/PhoneViaAuth');
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={{flex: 1}}>
+        <ActivityIndicator
+          color="#0061ED"
+          style={{
+            alignSelf: 'center',
+            marginTop: verticalScale(60),
+          }}
+        />
+      </View>
     );
   }
-}
+
+  return (
+    <TouchableWithoutFeedback
+      style={styles.mainView}
+      onPress={Keyboard.dismiss}>
+      <View style={styles.mainView}>
+        <View
+          style={{
+            flex: 1,
+            marginTop: 40,
+            paddingHorizontal: 14,
+          }}>
+          {code ? (
+            _show_background_code(codeSize)
+          ) : (
+            <>
+              <Text style={styles.TitleText}>
+                {strings.PhoneChangeScreen.title}
+              </Text>
+              <Text style={styles.TitleCommentText}>
+                {strings.PhoneChangeScreen.comment}
+              </Text>
+              <Form
+                key="phoneChangeForm"
+                fields={FormConfig.fields}
+                barStyle={'light-content'}
+                keyboardAvoidingViewProps={{
+                  enableAutomaticScroll: false,
+                }}
+                SubmitButton={{
+                  text: strings.Form.button.receiveCode,
+                  rightIcon: (
+                    <Icon
+                      name="sms"
+                      as={MaterialIcons}
+                      style={styles.BonusInfoButtonIcon}
+                    />
+                  ),
+                }}
+                onSubmit={_verifyCode}
+              />
+            </>
+          )}
+        </View>
+      </View>
+    </TouchableWithoutFeedback>
+  );
+};
 
 const styles = StyleSheet.create({
   mainView: {
@@ -459,32 +456,30 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
     marginBottom: 25,
   },
-  CodeTitleText: {
-    color: '#222B45',
-    fontSize: 48,
-    fontWeight: 'bold',
-    fontFamily: styleConst.font.medium,
-    marginBottom: 25,
+  TextInputCode: {
+    height: 70,
+    marginLeft: isAndroid ? 0 : 25,
+    borderWidth: 0.6,
+    width: '100%',
   },
-  CodeWrapper: {
-    flexDirection: 'row',
-    width: '90%',
-    marginHorizontal: '5%',
-  },
-  CodeTextInput: {
-    height: 100,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderColor: 'gray',
-    borderWidth: 1,
-    color: styleConst.color.white,
-    backgroundColor: 'rgba(175, 175, 175, 0.7)',
+  CancelButton: {
+    width: '80%',
+    marginHorizontal: '10%',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    justifyContent: 'center',
+    borderColor: styleConst.color.white,
+    borderWidth: 0.6,
+    padding: 10,
     borderRadius: 5,
-    fontSize: 80,
-    letterSpacing: 0,
-    marginLeft: '3%',
-    width: '22%',
-    textAlign: 'center',
+    marginTop: 20,
+  },
+  ApproveButton: {
+    marginTop: 10,
+    width: '80%',
+    marginHorizontal: '10%',
+    backgroundColor: '#34BD78',
+    justifyContent: 'center',
+    borderRadius: 5,
   },
 });
 

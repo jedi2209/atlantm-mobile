@@ -58,6 +58,7 @@ const ProfileStackView = ({navigation, route}) => (
       name="PhoneChangeScreen"
       component={PhoneChangeScreen}
       options={BigCloseButton(navigation, route, {
+        tabBarHideOnKeyboard: true,
         headerTitle: strings.ProfileSettingsScreen.title,
         headerTitleStyle: [
           stylesHeader.transparentHeaderTitle,
