@@ -10,14 +10,22 @@ import {
   StyleSheet,
   ActivityIndicator,
   Platform,
-  Dimensions,
 } from 'react-native';
 import {store} from '../../core/store';
 import {get} from 'lodash';
 import {CarCard} from './CarCard';
-import {Icon, Button, Toast, HStack, Actionsheet, Box, Text} from 'native-base';
+import {
+  Icon,
+  Button,
+  HStack,
+  Actionsheet,
+  Box,
+  Text,
+  useToast,
+} from 'native-base';
 // import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ToastAlert from '../../core/components/ToastAlert';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {verticalScale} from '../../utils/scale';
@@ -54,6 +62,7 @@ const styles = StyleSheet.create({
 });
 
 let UserCars = ({actionToggleCar, activePanel}) => {
+  const toast = useToast();
   const navigation = useNavigation();
   const cars = get(store.getState(), 'profile.cars');
   const [loading, setLoading] = useState(false);
@@ -164,10 +173,21 @@ let UserCars = ({actionToggleCar, activePanel}) => {
                         setActivePanel('default');
                         setLoading(false);
                         {
-                          Toast.show({
-                            description:
-                              strings.UserCars.Notifications.success
-                                .statusUpdate,
+                          toast.show({
+                            render: ({id}) => {
+                              return (
+                                <ToastAlert
+                                  id={id}
+                                  status={'success'}
+                                  isClosable={false}
+                                  description={
+                                    strings.UserCars.Notifications.success
+                                      .statusUpdate
+                                  }
+                                  title="Ошибка"
+                                />
+                              );
+                            },
                           });
                         }
                       }
@@ -175,8 +195,16 @@ let UserCars = ({actionToggleCar, activePanel}) => {
                     .catch(error => {
                       setLoading(false);
                       {
-                        Toast.show({
-                          description: error,
+                        toast.show({
+                          render: ({id}) => {
+                            return (
+                              <ToastAlert
+                                id={id}
+                                description={error}
+                                title="Ошибка"
+                              />
+                            );
+                          },
                         });
                       }
                     });
