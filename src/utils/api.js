@@ -147,11 +147,14 @@ export default {
     return this.request(url, baseRequestParams);
   },
 
-  fetchBonusInfo({region}) {
-    if (!region) {
+  fetchBonusInfo({region, dealerID}) {
+    if (!region && !dealerID) {
       return false;
     }
-    return this.request(`/info/bonus/get/?region=${region}`, baseRequestParams);
+    return this.request(
+      `/info/bonus/get/?region=${region}&dealer=${dealerID}`,
+      baseRequestParams,
+    );
   },
 
   fetchDiscounts({token, userid}) {
