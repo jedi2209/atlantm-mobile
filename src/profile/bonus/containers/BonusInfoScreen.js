@@ -56,15 +56,18 @@ class BonusInfoScreen extends Component {
   componentDidMount() {
     const {navigation, bonusInfo, actionFetchBonusInfo, dealerSelected} =
       this.props;
-    const {region} = dealerSelected;
+    const {region, id} = dealerSelected;
 
     let refererScreen = get(this.props.route, 'params.refererScreen', null);
     if (!refererScreen) {
       refererScreen = get(this.props.route, 'params.returnScreen', null);
     }
 
-    Analytics.logEvent('screen', `${refererScreen}/bonus_info`, {region});
-    actionFetchBonusInfo({region});
+    Analytics.logEvent('screen', `${refererScreen}/bonus_info`, {
+      region,
+      dealer: id,
+    });
+    actionFetchBonusInfo({region, dealerID: id});
   }
 
   onLayoutWebView = e => {
