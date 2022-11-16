@@ -53,12 +53,6 @@ const FullScreenGallery = ({
     //Orientation.unlockAllOrientations();
   });
 
-  // useDeviceOrientationChange(o => {
-  //   // alert(1);
-  //   console.error(o);
-  //   // Handle device orientation change
-  // });
-
   useOrientationChange(o => {
     if (o === 'LANDSCAPE-LEFT') {
       setTimeout(() => {
