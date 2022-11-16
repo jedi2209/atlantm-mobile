@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import {HStack, Text} from 'native-base';
 import Imager from '../components/Imager';
 import BrandLogo from '../../core/components/BrandLogo';
@@ -104,12 +104,21 @@ const drawCity = cityArr => {
 };
 
 const DealerCard = props => {
-  const {item} = props;
+  const {item, loading} = props;
 
   const CarImg = get(item, 'img[0]');
   const hash = get(item, 'hash');
   const brands = get(item, 'brands', []);
   const name = get(item, 'name');
+
+  if (loading) {
+    return (
+      <ActivityIndicator
+        color={styleConst.color.blue}
+        style={styleConst.spinner}
+      />
+    );
+  }
 
   return (
     <HStack alignItems="flex-start" p="2" borderRadius="md">

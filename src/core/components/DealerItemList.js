@@ -53,13 +53,15 @@ const _onPressDealer = props => {
     navigation,
   } = props;
 
-  return navigation.navigate('ChooseDealerScreen', {
-    returnScreen,
-    returnState,
-    goBack,
-    isLocal,
-    listAll,
-  });
+  alert(1);
+
+  // return navigation.navigate('ChooseDealerScreen', {
+  //   returnScreen,
+  //   returnState,
+  //   goBack,
+  //   isLocal,
+  //   listAll,
+  // });
 };
 
 const DealerItemList = props => {
@@ -112,17 +114,17 @@ const DealerItemList = props => {
           {get(dealer, 'brand') ? (
             <HStack>
               {get(dealer, 'brand').map(brand => {
-                  if (brand.logo) {
-                    return (
-                      <BrandLogo
-                        brand={brand.id}
-                        width={45}
-                        style={stylesDealerItemList.brandLogo}
-                        key={'brandLogo' + brand.id}
-                      />
-                    );
-                  }
-                })}
+                if (brand.logo) {
+                  return (
+                    <BrandLogo
+                      brand={brand.id}
+                      width={45}
+                      style={stylesDealerItemList.brandLogo}
+                      key={'brandLogo' + brand.id}
+                    />
+                  );
+                }
+              })}
             </HStack>
           ) : null}
         </HStack>

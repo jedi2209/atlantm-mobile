@@ -1,5 +1,5 @@
-import React from 'react';
-import {Alert, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {Alert} from 'react-native';
 import {Pressable} from 'native-base';
 import {connect} from 'react-redux';
 
@@ -88,6 +88,8 @@ const _onPressDealerItem = props => {
 
 const SelectItemByCountry = props => {
   const {item} = props;
+  const [loading, setLoading] = useState(false);
+
   if (item.virtual !== false && item.id !== 177) {
     // фикс для НЕ вывода виртуальных КО в списке
     return true;
@@ -96,6 +98,7 @@ const SelectItemByCountry = props => {
   return (
     <Pressable
       onPress={() => {
+        setLoading(true);
         return _onPressDealerItem(props);
       }}
       mt="2"
@@ -103,7 +106,7 @@ const SelectItemByCountry = props => {
       shadow="1"
       backgroundColor="white"
       borderRadius="md">
-      <DealerCard item={item} />
+      <DealerCard loading={loading} item={item} />
     </Pressable>
   );
 };

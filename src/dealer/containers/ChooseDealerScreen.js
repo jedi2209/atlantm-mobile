@@ -9,6 +9,7 @@ import SelectListByCountry from '../../core/components/SelectListByCountry';
 import PushNotifications from '../../core/components/PushNotifications';
 
 // helpers
+import styleConst from '../../core/style-const';
 import {get} from 'lodash';
 
 const mapStateToProps = ({dealer, nav, core}) => {
@@ -26,17 +27,6 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
 };
 
-const _onSelectDealer = props => {
-  const {pushActionSubscribeState, newDealer} = props;
-  // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
-
-  if (pushActionSubscribeState) {
-    PushNotifications.subscribeToTopic('actions', newDealer.id);
-  } else {
-    PushNotifications.unsubscribeFromTopic('actions');
-  }
-};
-
 const ChooseDealerScreen = props => {
   const {region, isFetchDealer, isFetchDealersList, settings} = props;
 
@@ -47,6 +37,16 @@ const ChooseDealerScreen = props => {
   const listAll = get(props.route, 'params.listAll', null);
 
   console.info('== ChooseDealer ==', props);
+
+  const _onSelectDealer = props => {
+    const {pushActionSubscribeState, newDealer} = props;
+    // статистика вне пушей, по тегу смотрим у какого дилера сколько пользователей
+    if (pushActionSubscribeState) {
+      PushNotifications.subscribeToTopic('actions', newDealer.id);
+    } else {
+      PushNotifications.unsubscribeFromTopic('actions');
+    }
+  };
 
   return (
     <>

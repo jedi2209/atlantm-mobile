@@ -1,14 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {StyleSheet} from 'react-native';
-import {
-  Icon,
-  Button,
-  HStack,
-  View,
-  Text,
-  ScrollView,
-} from 'native-base';
+import {Icon, Button, HStack, View, Text, ScrollView} from 'native-base';
 
 import Entypo from 'react-native-vector-icons/Entypo';
 
@@ -246,7 +239,10 @@ class BonusScreen extends Component {
 
     return (
       <View key={key} style={[stylesList.listItemContainer, styles[theme]]}>
-        <HStack alignItems={"center"} justifyContent={'space-between'} onPress={onPressHandler}>
+        <HStack
+          alignItems={'center'}
+          justifyContent={'space-between'}
+          onPress={onPressHandler}>
           <View ml={isLevel3 ? 2 : 0}>
             <Text style={[stylesList.label, isLevel3 ? styles.label : null]}>
               {label}
@@ -265,9 +261,7 @@ class BonusScreen extends Component {
                 stylesList.badgeText,
                 {
                   color:
-                    total > 0
-                      ? styleConst.color.green
-                      : styleConst.color.red,
+                    total > 0 ? styleConst.color.green : styleConst.color.red,
                 },
               ]}>
               {parseFloat(total).toLocaleString('ru-RU')}
