@@ -137,9 +137,9 @@ class TestDriveScreen extends PureComponent {
       });
     } else {
       this.listAll.push({
-        label: dealer.name,
-        value: dealer.id,
-        key: dealer.id,
+        label: dealer[0].name,
+        value: dealer[0].id,
+        key: dealer[0].id,
       });
     }
 
