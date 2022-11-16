@@ -233,7 +233,7 @@ const PhoneChangeScreen = props => {
               props
                 .actionGetPhoneCode({
                   phone,
-                  code,
+                  code: codeValueVal,
                   crmID,
                 })
                 .then(response => {
