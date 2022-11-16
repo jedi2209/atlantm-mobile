@@ -86,6 +86,8 @@ const PhoneChangeScreen = props => {
 
   const CodeInput = useRef(null);
 
+  const paddingHorizontalMargin = 14;
+
   const FormConfig = {
     fields: [
       {
@@ -294,7 +296,8 @@ const PhoneChangeScreen = props => {
     }
     let res = [];
     const width = 100 / (items + 2);
-    const screenWidth = Dimensions.get('screen').width;
+    const screenWidth =
+      Dimensions.get('screen').width - paddingHorizontalMargin * 2;
     const widthElement = (screenWidth / 100) * width;
     const buttonSpace = screenWidth / (items + 1);
     //const buttonSpaceAndroid = parseFloat('1' + buttonSpace) / 100;
@@ -394,7 +397,7 @@ const PhoneChangeScreen = props => {
           style={{
             flex: 1,
             marginTop: 40,
-            paddingHorizontal: 14,
+            paddingHorizontal: paddingHorizontalMargin,
           }}>
           {code ? (
             _show_background_code(codeSize)

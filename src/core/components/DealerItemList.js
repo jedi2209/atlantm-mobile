@@ -53,8 +53,6 @@ const _onPressDealer = props => {
     navigation,
   } = props;
 
-  alert(1);
-
   // return navigation.navigate('ChooseDealerScreen', {
   //   returnScreen,
   //   returnState,
