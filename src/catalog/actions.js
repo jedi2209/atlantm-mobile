@@ -871,7 +871,6 @@ export const actionCarCostOrder = props => {
 
     return API.carCostOrder(props)
       .then(data => {
-        console.error('data', JSON.stringify(data));
         try {
           const {status, error} = data;
 

@@ -149,7 +149,7 @@ const UsedCarItemScreen = props => {
         model: get(carDetails, 'model', ''),
         complectation: get(carDetails, 'complectation.name'),
         year: get(carDetails, 'year'),
-        dealer: get(carDetails, 'dealer'),
+        dealer: [get(carDetails, 'dealer')],
       },
       region: dealerSelected.region,
       carId: carDetails.id.api,
