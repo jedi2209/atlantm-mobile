@@ -22,6 +22,8 @@ const FullScreenGallery = ({
   const [loading, setLoading] = useState(true);
   const [currIndex, setIndex] = useState(imageIndex);
 
+  const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
+
   if (route?.params?.images) {
     images = route.params.images;
   }
@@ -49,16 +51,20 @@ const FullScreenGallery = ({
   }
 
   useEffect(() => {
-    Orientation.lockToLandscapeLeft();
-    //Orientation.unlockAllOrientations();
+    // Orientation.lockToLandscapeLeft();
+    Orientation.unlockAllOrientations();
+    // setTimeout(() => {
+    //   setLoading(false);
+    // }, 2000);
   });
 
   useOrientationChange(o => {
-    if (o === 'LANDSCAPE-LEFT') {
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-    }
+    setLoading(true);
+    //if (o === 'LANDSCAPE-LEFT') {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+    //}
   });
 
   if (loading) {
@@ -79,7 +85,11 @@ const FullScreenGallery = ({
           setIndex(newIndex);
         }}
       />
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          {width: screenWidth, top: screenHeight - 60},
+        ]}>
         <View
           style={{
             backgroundColor: backgroundColor,
@@ -98,34 +108,6 @@ const FullScreenGallery = ({
       </View>
     </View>
   );
-
-  return (
-    <ImageView
-      images={images}
-      backgroundColor={backgroundColor}
-      imageIndex={imageIndex}
-      visible={visible}
-      presentationStyle={'overFullScreen'}
-      swipeToCloseEnabled={false}
-      onRequestClose={() => {
-        setIsVisible(false);
-        navigation.goBack();
-      }}
-      FooterComponent={({imageIndex}) => {
-        return (
-          <View style={styles.container}>
-            <Text style={[styles.captionText, styles['captionText' + theme]]}>
-              {[
-                imageIndex + 1,
-                strings.FullScreenGallery.from,
-                images.length,
-              ].join(' ')}
-            </Text>
-          </View>
-        );
-      }}
-    />
-  );
 };
 
 FullScreenGallery.defaultProps = {
@@ -135,15 +117,11 @@ FullScreenGallery.defaultProps = {
   imageIndex: 0,
 };
 
-const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
-
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     height: 40,
-    width: screenWidth,
     position: 'absolute',
-    top: screenHeight - 60,
     zIndex: 1000,
   },
   captionText: {

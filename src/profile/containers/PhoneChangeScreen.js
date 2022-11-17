@@ -296,10 +296,9 @@ const PhoneChangeScreen = props => {
     }
     let res = [];
     const width = 100 / (items + 2);
-    const screenWidth =
-      Dimensions.get('screen').width - paddingHorizontalMargin * 2;
+    const screenWidth = Dimensions.get('screen').width;
     const widthElement = (screenWidth / 100) * width;
-    const buttonSpace = screenWidth / (items + 1);
+    const buttonSpace = screenWidth / (items + 0.8);
     //const buttonSpaceAndroid = parseFloat('1' + buttonSpace) / 100;
     const buttonSpaceAndroid = 1.04;
 
@@ -336,7 +335,7 @@ const PhoneChangeScreen = props => {
             <OtpAutoFillViewManager
               ref={CodeInput}
               onComplete={handleComplete}
-              fontSize={isAndroid ? 50 : 45}
+              fontSize={isAndroid ? 50 : 42}
               space={isAndroid ? buttonSpaceAndroid : buttonSpace}
               style={[styles.TextInputCode, {borderWidth: 0}]}
               length={codeSize} // Define the length of OTP code. This is a must.
@@ -461,7 +460,7 @@ const styles = StyleSheet.create({
   },
   TextInputCode: {
     height: 70,
-    marginLeft: isAndroid ? 0 : 25,
+    marginLeft: isAndroid ? 0 : 22,
     borderWidth: 0.6,
     width: '100%',
   },
