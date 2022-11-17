@@ -41,25 +41,16 @@ const stylesDealerItemList = StyleSheet.create({
 });
 
 const _onPressDealer = props => {
-  const {
-    city,
-    dealer,
-    style,
-    isLocal,
-    goBack,
-    returnScreen,
-    listAll,
-    returnState,
-    navigation,
-  } = props;
+  const {isLocal, goBack, returnScreen, listAll, returnState, navigation} =
+    props;
 
-  // return navigation.navigate('ChooseDealerScreen', {
-  //   returnScreen,
-  //   returnState,
-  //   goBack,
-  //   isLocal,
-  //   listAll,
-  // });
+  return navigation.navigate('ChooseDealerScreen', {
+    returnScreen,
+    returnState,
+    goBack,
+    isLocal,
+    listAll,
+  });
 };
 
 const DealerItemList = props => {

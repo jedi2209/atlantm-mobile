@@ -52,7 +52,7 @@ const PhotoSlider = ({
     }
     if (item.url && item?.type === 'image') {
       let onPress = onPressItem;
-      if (photosFull) {
+      if (photosFull) { console.error(JSON.stringify(photosFull));
         onPress = () => {
           navigation.navigate(fullScreen, {
             images: photosFull,
