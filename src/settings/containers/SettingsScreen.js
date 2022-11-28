@@ -30,7 +30,6 @@ import {actionSetPushActionSubscribe, actionAppRated} from '../../core/actions';
 
 // components
 import PushNotifications from '../../core/components/PushNotifications';
-import LangSwitcher from '../../core/components/LangSwitcher';
 import RateThisApp from '../../core/components/RateThisApp';
 import TransitionView from '../../core/components/TransitionView';
 
@@ -136,19 +135,6 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
   actionAppRated,
 };
-
-const languagesItems = [
-  {
-    label: '🇷🇺 Русский',
-    value: 'ru',
-    key: 1,
-  },
-  {
-    label: '🇺🇦 Українська',
-    value: 'ua',
-    key: 2,
-  },
-];
 
 const deviceWidth = Dimensions.get('window').width;
 const cardWidth = deviceWidth - 20;

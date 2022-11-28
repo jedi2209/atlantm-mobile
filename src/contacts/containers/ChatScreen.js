@@ -105,8 +105,8 @@ const reconnectingSocket = () => {
 
   const userAtlantM = {
     id: '06c33e8b-e835-4736-80f4-63f44b66666c',
-    firstName: 'Атлант-М',
-    name: 'Атлант-М',
+    firstName: 'Автодім Атлант',
+    name: 'Автодім Атлант',
     imageUrl: 'https://cdn.atlantm.com/logo/Blue-square-256.png',
   };
 

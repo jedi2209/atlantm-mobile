@@ -180,7 +180,7 @@ class SocialAuth extends PureComponent {
 
   _renderLoginButtons = region => {
     const isAndroid = Platform.OS === 'android';
-    let VKenabled = true;
+    let VKenabled = false;
     let ButtonWidth = '25%';
     let ButtonHeight = 50;
 
@@ -361,7 +361,7 @@ class SocialAuth extends PureComponent {
   render() {
     let {region} = this.props;
     if (!region) {
-      region = 'by';
+      region = 'ua';
     }
     return this._renderLoginButtons(region);
   }

@@ -1,6 +1,6 @@
 import {default as currencyJS} from 'currency.js';
 
-const showPrice = (price, country = 'BY', float = false) => {
+const showPrice = (price, country = 'UA', float = false) => {
   if (!price) {
     return false;
   }
@@ -42,17 +42,17 @@ const showPrice = (price, country = 'BY', float = false) => {
     case 'rur':
       result = RUB(price).format();
       break;
-    case 'ua':
-    case 'uah':
-      result = UAH(price).format();
-      break;
     case 'byr':
       result = BYR(price).format();
       break;
     case 'by':
     case 'byn':
-    default:
       result = BYN(price).format();
+      break;
+    case 'ua':
+    case 'uah':
+    default:
+      result = UAH(price).format();
       break;
   }
   return result;

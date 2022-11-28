@@ -63,8 +63,8 @@ const pickerSelectStyles = StyleSheet.create({
 
 const LangSwitcher = props => {
   const _onValueChange = value => {
-    if (value !== 'ru' && value !== 'ua') {
-      value = 'ru';
+    if (value !== 'ua') {
+      value = 'ua';
     }
     props.actionSetGlobalLanguage(value);
     strings.setLanguage(value);

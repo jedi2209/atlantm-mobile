@@ -13,7 +13,7 @@ switch (currLang) {
     moment.locale('ru');
     break;
   default:
-    moment.locale('ru');
+    moment.locale('uk');
     break;
 }
 

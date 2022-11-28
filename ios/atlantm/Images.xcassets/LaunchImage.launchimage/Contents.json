@@ -163,6 +163,7 @@
       "extent" : "full-screen",
       "filename" : "9.7__iPad_Pro__7.9__iPad_mini__9.7__iPad_Air__9.7__iPad_landscape.png",
       "idiom" : "ipad",
+      "minimum-system-version" : "7.0",
       "orientation" : "landscape",
       "scale" : "2x"
     }

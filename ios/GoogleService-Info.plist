@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>53201529704-pofi5bbpvo7dtnuu521lo00f3bl6qiq2.apps.googleusercontent.com</string>
+	<string>53201529704-si8a87cj8tto6rmrlkmv9bookjmvn36n.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.53201529704-pofi5bbpvo7dtnuu521lo00f3bl6qiq2</string>
+	<string>com.googleusercontent.apps.53201529704-si8a87cj8tto6rmrlkmv9bookjmvn36n</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>53201529704-3vqvfs10fkb4ec26p3cip3s6fi1vtbp1.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,23 +15,23 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.atlantm.app</string>
+	<string>ua.atlantm.app</string>
 	<key>PROJECT_ID</key>
 	<string>atlant-m</string>
 	<key>STORAGE_BUCKET</key>
 	<string>atlant-m.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false></false>
+	<false/>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_GCM_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true></true>
+	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:53201529704:ios:ab5cd4d1f0dc7c752704dd</string>
+	<string>1:53201529704:ios:c4cb71b39472e5992704dd</string>
 	<key>DATABASE_URL</key>
 	<string>https://atlant-m.firebaseio.com</string>
 </dict>

@@ -47,9 +47,8 @@ const mapStateToProps = ({dealer}) => {
   return {
     dealerSelected: dealer.selected,
     region: dealer.region,
-    listRussia: dealer.listRussia,
+    listUkraine: dealer.listUkraine,
     listBrands: dealer.listBrands,
-    listBelarussia: dealer.listBelarussia,
   };
 };
 
@@ -122,7 +121,7 @@ const _renderItem = props => {
 };
 
 const SelectListByCountry = props => {
-  const {itemLayout, listRussia, listBelarussia, listAll, settings} = props;
+  const {itemLayout, listUkraine, listAll, settings} = props;
   const navigation = useNavigation();
 
   const [isRefreshing, setRefreshing] = useState(false);
@@ -131,45 +130,30 @@ const SelectListByCountry = props => {
 
   const [index, setIndex] = useState(0);
 
-  // useEffect(() => {
-  //   if (itemLayout === 'dealer') {
-  //     dataHandler();
-  //     //dataBrandsHandler();
-  //   }
-  // }, [dataHandler, itemLayout]);
-
-  let customListBYN = [];
-  let customListRUS = [];
+  let customListUA = [];
   let routesHead = [];
   const countrySettings = get(settings, 'country', []);
 
   if (listAll && listAll.length) {
-    if (countrySettings.includes('by')) {
-      listBelarussia.map(el => {
+    if (countrySettings.includes('ua')) {
+      listUkraine.map(el => {
         if (listAll.includes(el.id)) {
-          customListBYN.push(el);
-        }
-      });
-    }
-    if (countrySettings.includes('ru')) {
-      listRussia.map(el => {
-        if (listAll.includes(el.id)) {
-          customListRUS.push(el);
+          customListUA.push(el);
         }
       });
     }
   }
-  let TabBY, TabRU;
+  let TabUA;
 
   if (listAll && listAll.length) {
     // кастомный список дилеров
-    if (customListBYN && customListBYN.length) {
-      routesHead.push({key: 'by', title: '🇧🇾 Беларусь'});
-      TabBY = () => (
+    if (customListUA && customListUA.length) {
+      routesHead.push({key: 'ua', title: '🇺🇦 Все буде Україна!'});
+      TabUA = () => (
         <View style={{flex: 1}}>
           <FlatList
             style={styles.list}
-            data={customListBYN}
+            data={customListUA}
             onRefresh={() => {
               if (itemLayout === 'dealer') {
                 return _onRefresh({
@@ -177,29 +161,6 @@ const SelectListByCountry = props => {
                   isRefreshing,
                   setRefreshing,
                 });
-              }
-            }}
-            refreshing={isRefreshing}
-            ListEmptyComponent={_EmptyComponent}
-            renderItem={item => {
-              return _renderItem({...props, ...item, navigation});
-            }}
-            keyExtractor={item => `${item.hash.toString()}`}
-          />
-        </View>
-      );
-    }
-
-    if (customListRUS && customListRUS.length) {
-      routesHead.push({key: 'ru', title: '🇷🇺 Россия'});
-      TabRU = () => (
-        <View style={{flex: 1}}>
-          <FlatList
-            style={styles.list}
-            data={customListRUS}
-            onRefresh={() => {
-              if (itemLayout === 'dealer') {
-                return _onRefresh({...props, isRefreshing, setRefreshing});
               }
             }}
             refreshing={isRefreshing}
@@ -214,49 +175,17 @@ const SelectListByCountry = props => {
     }
   } else {
     if (
-      listBelarussia &&
-      listBelarussia.length &&
+      listUkraine &&
+      listUkraine.length &&
       countrySettings &&
-      countrySettings.includes('by')
+      countrySettings.includes('ua')
     ) {
-      routesHead.push({key: 'by', title: '🇧🇾 Беларусь'});
-      TabBY = () => (
+      routesHead.push({key: 'ua', title: '🇺🇦 Все буде Україна!'});
+      TabUA = () => (
         <View style={{flex: 1, paddingBottom: 20}}>
           <FlatList
             style={styles.list}
-            data={listBelarussia}
-            onRefresh={() => {
-              if (itemLayout === 'dealer') {
-                return _onRefresh({
-                  props,
-                  isRefreshing,
-                  setRefreshing,
-                });
-              }
-            }}
-            refreshing={isRefreshing}
-            ListEmptyComponent={_EmptyComponent}
-            renderItem={item => {
-              return _renderItem({...props, ...item, navigation});
-            }}
-            keyExtractor={item => `${item.hash.toString()}`}
-          />
-        </View>
-      );
-    }
-
-    if (
-      listRussia &&
-      listRussia.length &&
-      countrySettings &&
-      countrySettings.includes('ru')
-    ) {
-      routesHead.push({key: 'ru', title: '🇷🇺 Россия'});
-      TabRU = () => (
-        <View style={{flex: 1, paddingBottom: 20}}>
-          <FlatList
-            style={styles.list}
-            data={listRussia}
+            data={listUkraine}
             onRefresh={() => {
               if (itemLayout === 'dealer') {
                 return _onRefresh({
@@ -281,8 +210,7 @@ const SelectListByCountry = props => {
   const [routes] = useState(routesHead);
 
   const renderScene = SceneMap({
-    by: TabBY,
-    ru: TabRU,
+    ua: TabUA,
   });
 
   return (
@@ -298,8 +226,6 @@ const SelectListByCountry = props => {
 
 SelectListByCountry.propTypes = {
   region: PropTypes.string,
-  listRussia: PropTypes.array,
-  listBelarussia: PropTypes.array,
   listUkraine: PropTypes.array,
   isFetchList: PropTypes.bool,
   dataHandler: PropTypes.func,

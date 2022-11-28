@@ -7,7 +7,7 @@ const getStatusWorktime = (dealer, checkType, returnTime = false) => {
     ru: 'Europe/Moscow',
     ua: 'Europe/Kiev',
   };
-  let currentDealerLocale = 'by';
+  let currentDealerLocale = 'ua';
   if (dealer.region && locales[dealer.region]) {
     currentDealerLocale = locales[dealer.region];
   }

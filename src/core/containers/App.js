@@ -37,6 +37,7 @@ import {theme} from '../theme';
 import API from '../../utils/api';
 import {get} from 'lodash';
 import OneSignal from 'react-native-onesignal';
+import moment from 'moment';
 import PushNotifications from '../components/PushNotifications';
 import styleConst from '../../core/style-const';
 
@@ -77,9 +78,10 @@ const App = props => {
   } = props;
 
   const mainScreen = 'BottomTabNavigation';
-  const storeVersion = '2022-09-20';
+  const storeVersion = '2022-11-10';
 
-  const currentLanguage = get(props, 'currentLanguage', 'ru');
+  const currentLanguage = get(props, 'currentLanguage', 'uk');
+  moment.locale(currentLanguage === 'ua' ? 'uk' : currentLanguage);
 
   const _awaitStoreToUpdate = async () => {
     const storeData = store.getState();

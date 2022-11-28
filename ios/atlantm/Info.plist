@@ -5,9 +5,9 @@
 	<key>CFBundleAllowMixedLocalizations</key>
 	<string>true</string>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>ru</string>
+	<string>uk</string>
 	<key>CFBundleDisplayName</key>
-	<string>Atlant-M</string>
+	<string>Автодім Атлант</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -29,7 +29,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb423573815015675</string>
+				<string>fb700128474599615</string>
 			</array>
 		</dict>
 		<dict>
@@ -37,7 +37,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.53201529704-pofi5bbpvo7dtnuu521lo00f3bl6qiq2</string>
+				<string>com.googleusercontent.apps.53201529704-si8a87cj8tto6rmrlkmv9bookjmvn36n</string>
 			</array>
 		</dict>
 		<dict>
@@ -52,17 +52,17 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>291</string>
+	<string>302</string>
 	<key>FacebookAdvertiserIDCollectionEnabled</key>
 	<true/>
 	<key>FacebookAppID</key>
-	<string>423573815015675</string>
+	<string>700128474599615</string>
 	<key>FacebookAutoLogAppEventsEnabled</key>
 	<true/>
 	<key>FacebookClientToken</key>
-	<string>3fdb9696664c46479e91a611dfafcc65</string>
+	<string>3d94b4c9fa70d5b68d99dbfb8707d654</string>
 	<key>FacebookDisplayName</key>
-	<string>Атлант-М</string>
+	<string>Автодім Атлант</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>itms-apps</string>

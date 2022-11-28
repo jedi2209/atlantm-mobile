@@ -9,7 +9,6 @@ import SelectListByCountry from '../../core/components/SelectListByCountry';
 import PushNotifications from '../../core/components/PushNotifications';
 
 // helpers
-import styleConst from '../../core/style-const';
 import {get} from 'lodash';
 
 const mapStateToProps = ({dealer, nav, core}) => {

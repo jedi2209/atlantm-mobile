@@ -1,6 +1,7 @@
 <resources>
-    <string name="app_name">Atlant-M</string>
-    <string name="facebook_app_id">423573815015675</string>
-    <string name="fb_login_protocol_scheme">fb423573815015675</string>
-    <string name="facebook_client_token">3fdb9696664c46479e91a611dfafcc65</string>
+    <string name="app_name">Autodom-Atlant</string>
+    <string name="facebook_app_id">700128474599615</string>
+    <string name="fb_login_protocol_scheme">fb700128474599615</string>
+    <string name="facebook_client_token">3d94b4c9fa70d5b68d99dbfb8707d654</string>
+    <string name="google_geo_API_KEY">AIzaSyBRqB8N3QvXpuIHGRUZekcCbPKtBII5M8E</string>
 </resources>

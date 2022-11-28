@@ -113,7 +113,10 @@ const PhoneChangeScreen = props => {
   const _verifyCode = data => {
     let phone = data.PHONE;
     const phoneCountry = PhoneDetect.country(phone);
-    if (phoneCountry && phoneCountry.code === 'ua') {
+    if (
+      phoneCountry &&
+      (phoneCountry.code === 'by' || phoneCountry.code === 'ru')
+    ) {
       toast.show({
         render: ({id}) => {
           return (

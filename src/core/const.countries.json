@@ -13,6 +13,13 @@
       "dialCode": "7",
       "priority": 1,
       "areaCodes": null
+    },
+    {
+      "name": "Україна",
+      "iso2": "ua",
+      "dialCode": "380",
+      "priority": 2,
+      "areaCodes": [39, 50, 63, 66, 67, 68, 73, 91, 92, 93, 94, 95, 96, 97, 98, 99]
     }
   ]
   

@@ -220,8 +220,9 @@ class Form extends Component {
     SubmitButton: {
       text: strings.Form.button.send,
       props: {},
-      region: 'ru',
+      region: 'ua',
     },
+    region: 'ua',
     testID: 'Form',
     barStyle: 'light-content',
     contentContainerStyle: {},
@@ -236,7 +237,7 @@ class Form extends Component {
   constructor(props) {
     super(props);
     this.defaultCountryCode =
-      this.props.defaultCountryCode || this.props.dealerSelected.region || 'by';
+      this.props.defaultCountryCode || this.props.dealerSelected.region || 'ua';
     this.state = {
       parentState: props.parentState,
       required: [],
@@ -327,17 +328,7 @@ class Form extends Component {
       });
     }
     this.state.required = requredFields;
-    this.locale = 'ru-RU';
-    if (this.props.region) {
-      switch (this.props.region) {
-        case 'ru':
-          this.locale = 'ru-RU';
-          break;
-        case 'ua':
-          this.locale = 'uk-Uk';
-          break;
-      }
-    }
+    this.locale = 'uk-UK';
   }
 
   // componentWillUnmount() {
@@ -540,11 +531,8 @@ class Form extends Component {
         var valueFull = null;
       } else {
         switch (countryCode) {
-          case 'ru':
+          case 'ua':
             var valueFull = 16;
-            break;
-          case 'by':
-            var valueFull = 17;
             break;
         }
       }
@@ -1056,7 +1044,7 @@ class Form extends Component {
       if (data.props && data.props.countries) {
         countrySettings = data.props.countries;
       } else {
-        countrySettings = ['by', 'ru'];
+        countrySettings = ['ua'];
       }
       let countriesListStatic = require('../../../core/const.countries.json');
       let countriesList = [];

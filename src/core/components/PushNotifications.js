@@ -150,14 +150,14 @@ export default {
               setTimeout(() => {
                 return Alert.alert(
                   'Уведомления выключены',
-                  'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
+                  'Необходимо разрешить получение push-уведомлений для приложения Автодім Атлант в настройках',
                   [
                     {text: 'Позже', style: 'destructive'},
                     {
                       text: 'Разрешить',
                       onPress: () => {
                         Linking.openURL(
-                          'app-settings://notification/com.atlantm.app',
+                          'app-settings://notification/ua.atlantm.app',
                         );
                       },
                       style: 'cancel',

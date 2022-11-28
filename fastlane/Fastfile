@@ -40,9 +40,9 @@ platform :ios do
   lane :beta do
     ensure_git_status_clean
     api_key = app_store_connect_api_key(
-      key_id: "Q33ZD34MUU",
-      issuer_id: "69a6de94-2377-47e3-e053-5b8c7c11a4d1",
-      key_filepath: "./ios/AuthKey_Q33ZD34MUU.p8",
+      key_id: "23A53WCGZ8",
+      issuer_id: "95b4440d-9826-46de-831e-38ab185d4a06",
+      key_filepath: "./ios/AuthKey_23A53WCGZ8.p8",
       duration: 1200, # optional (maximum 1200)
       in_house: false # optional but may be required if using match/sigh
     )
@@ -59,8 +59,8 @@ platform :ios do
       export_xcargs: "-allowProvisioningUpdates",
       export_options: {
         provisioningProfiles: {
-          "com.atlantm.app" => "com.atlantm.app AppStore",
-          "com.atlantm.app.OneSignalNotificationServiceExtension" => "comatlantmappOneSignalNotificationServiceExtension"
+          "ua.atlantm.app" => "AtlantMUA",
+          "ua.atlantm.app.OneSignalNotificationServiceExtension" => "OneSignalNotificationServiceExtension"
         }
       }
     )
@@ -107,7 +107,7 @@ platform :ios do
       tags: true     # optional, default: true
     )
     slack(
-      message: "Встречаем новый билд #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]}) на iOS для Атлант-М!\r\n\r\nИзменения в #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]}):\r\n\r\n#{lane_context[SharedValues::FL_CHANGELOG]}",
+      message: "Встречаем новый билд #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]}) на iOS для Автодім Атлант!\r\n\r\nИзменения в #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]}):\r\n\r\n#{lane_context[SharedValues::FL_CHANGELOG]}",
       channel: "#_notify-bot",  # Optional, by default will post to the default channel configured for the POST URL.
       success: true,        # Optional, defaults to true.
       slack_url: ENV['SLACK_URL'],
@@ -131,7 +131,7 @@ platform :android do
     )
     gradle(
         project_dir: "./android/",
-        task: "clean assemble",
+        task: "clean bundle",
         build_type: "Release",
         flags: "-PbuildType=debug",
         print_command_output: true
@@ -153,7 +153,7 @@ platform :android do
     )
     gradle(
         project_dir: "./android/",
-        task: "clean assemble",
+        task: "clean bundle",
         build_type: "Release",
         flags: "-PbuildType=release",
         print_command_output: true
@@ -185,7 +185,7 @@ platform :android do
     )
     push_to_git_remote
     slack(
-      message: "Встречаем новый билд #{lane_context[SharedValues::VERSION_NUMBER]}.#{versionCode} на Android для Атлант-М!\r\n\r\nИзменения в #{lane_context[SharedValues::VERSION_NUMBER]}.#{versionCode}:\n#{lane_context[SharedValues::FL_CHANGELOG]}",
+      message: "Встречаем новый билд #{lane_context[SharedValues::VERSION_NUMBER]}.#{versionCode} на Android для Автодім Атлант!\r\n\r\nИзменения в #{lane_context[SharedValues::VERSION_NUMBER]}.#{versionCode}:\n#{lane_context[SharedValues::FL_CHANGELOG]}",
       channel: "#_notify-bot",  # Optional, by default will post to the default channel configured for the POST URL.
       success: true,        # Optional, defaults to true.
       slack_url: ENV['SLACK_URL'],
@@ -200,7 +200,7 @@ platform :android do
   lane :release do
     gradle(
         project_dir: "./android/",
-        task: "clean assemble",
+        task: "clean bundle",
         build_type: "Release",
         flags: "-PbuildType=release",
         print_command_output: true

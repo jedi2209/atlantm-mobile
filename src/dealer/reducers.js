@@ -68,10 +68,10 @@ function selectedLocal(state = {}, action) {
   }
 }
 
-function region(state = BELARUSSIA, action) {
+function region(state = UKRAINE, action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'dealer.region', BELARUSSIA);
+      return get(action.payload, 'dealer.region', UKRAINE);
     case DEALERS_REGION__SELECT:
       return action.payload;
     case DEALER__SUCCESS:
@@ -98,6 +98,17 @@ function listBelarussia(state = [], action) {
       return get(action.payload, 'dealer.listBelarussia', []);
     case DEALERS__SUCCESS:
       return [...action.payload[BELARUSSIA]];
+    default:
+      return state;
+  }
+}
+
+function listUkraine(state = [], action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'dealer.listUkraine', []);
+    case DEALERS__SUCCESS:
+      return [...action.payload[UKRAINE]];
     default:
       return state;
   }
@@ -222,6 +233,18 @@ const listBelarussiaByCities = (state = [], action) => {
   }
 };
 
+const listUkraineByCities = (state = [], action) => {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action, 'payload.dealer.listUkraineByCities', []);
+    case DEALERS__SUCCESS:
+    case DEALERS_BY_CITIES__SET:
+      return processListsByCities(action, BELARUSSIA);
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   selected,
   selectedLocal,
@@ -230,6 +253,8 @@ export default combineReducers({
   listRussiaByCities,
   listBelarussia,
   listBelarussiaByCities,
+  listUkraine,
+  listUkraineByCities,
   listDealers,
   listCities,
   listBrands,

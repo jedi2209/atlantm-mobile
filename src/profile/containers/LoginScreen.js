@@ -180,7 +180,10 @@ const LoginScreen = props => {
   const _verifyCode = data => {
     let phone = data.PHONELOGIN;
     const phoneCountry = PhoneDetect.country(phone);
-    if (phoneCountry && phoneCountry.code === 'ua') {
+    if (
+      phoneCountry &&
+      (phoneCountry.code === 'by' || phoneCountry.code === 'ru')
+    ) {
       toast.show({
         description:
           'К сожалению вы не можете авторизоваться по этому номеру телефона',
@@ -290,7 +293,7 @@ const LoginScreen = props => {
   };
 
   const _renderLoginButtons = region => {
-    let VKenabled = true;
+    let VKenabled = false;
     let ButtonWidth = '25%';
     let ButtonHeight = 50;
     const isAndroid = Platform.OS === 'android';
