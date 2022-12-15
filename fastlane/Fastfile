@@ -102,7 +102,7 @@ platform :ios do
     push_to_git_remote(
       remote: "origin",         # optional, default: "origin"
       local_branch: "HEAD",  # optional, aliased by "branch", default: "master"
-      remote_branch: "dev", # optional, default is set to local_branch
+      # remote_branch: "dev", # optional, default is set to local_branch
       force: true,    # optional, default: false
       tags: true     # optional, default: true
     )
