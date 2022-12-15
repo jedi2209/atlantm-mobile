@@ -366,6 +366,7 @@ export default {
       yes: 'Да',
       no: 'Нет',
     },
+    timework: 'часы работы',
     navigate: 'Как проехать?',
     call: 'Позвонить',
     callOrder: 'Заказать звонок',
@@ -375,6 +376,9 @@ export default {
     sites: 'Сайты',
     dealerSites: 'Сайты автоцентра',
     currentActions: 'Текущие акции автоцентра',
+  },
+  WorkTimeScreen: {
+    weeekdayShort: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],
   },
   MapScreen: {
     apps: {

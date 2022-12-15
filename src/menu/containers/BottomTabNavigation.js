@@ -1,17 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
-import {Icon, Actionsheet, Box, Text} from 'native-base';
+import {Icon, Actionsheet, useDisclose, Box, Text} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import orderFunctions from '../../utils/orders';
 
 // import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 
 import LogoTitle from '../../core/components/LogoTitle';
 
 // screens
 import ContactsScreen from '../../contacts/containers/ContactsScreen';
+import WorkTimeScreen from '../../contacts/containers/WorkTimeScreen';
 
 import AuthContainer from '../../profile/containers/AuthContainer';
 import PhoneChangeScreen from '../../profile/containers/PhoneChangeScreen';
@@ -33,11 +34,14 @@ import {
   ClassicHeaderWhite,
   ClassicHeaderBlue,
   BigCloseButton,
+  TransparentBack,
+  ArrowBack,
 } from '../../navigation/const';
 
 const Tab = createBottomTabNavigator();
 const ProfileStack = createStackNavigator();
 const MenuStack = createStackNavigator();
+const StackContacts = createStackNavigator();
 
 const ProfileStackView = ({navigation, route}) => (
   <ProfileStack.Navigator
@@ -117,12 +121,43 @@ const MenuStackView = ({navigation, route}) => (
   </MenuStack.Navigator>
 );
 
+const ContactsStackView = ({navigation, route}) => (
+  <StackContacts.Navigator
+    initialRouteName="ContactsScreen"
+    options={{
+      headerShown: false,
+    }}>
+    <StackContacts.Screen
+      name="ContactsScreen"
+      component={ContactsScreen}
+      options={{
+        headerShown: false,
+      }}
+    />
+    <StackContacts.Screen
+      name="WorkTimeScreen"
+      component={WorkTimeScreen}
+      options={TransparentBack(
+        navigation,
+        route,
+        {
+          ...TransitionPresets.ModalTransition,
+        },
+        {
+          icon: 'close',
+          iconSize: 12,
+        },
+      )}
+    />
+  </StackContacts.Navigator>
+);
+
 const CleanStackView = () => {
   return <></>;
 };
 
 export const BottomTabNavigation = ({navigation, route}) => {
-  const [actionSheetStatus, setActionSheetStatus] = React.useState(false);
+  const {isOpen, onOpen, onClose} = useDisclose();
   const [actionSheetData, setActionSheetData] = React.useState({});
   const _showOrdersMenu = () => {
     orderFunctions.getOrders().then(data => {
@@ -132,7 +167,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
         title: data.TITLE,
         destructiveButtonIndex: data.DESTRUCTIVE_INDEX || null,
       });
-      setActionSheetStatus(true);
+      onOpen();
     });
   };
 
@@ -144,10 +179,8 @@ export const BottomTabNavigation = ({navigation, route}) => {
       <Actionsheet
         hideDragIndicator
         size="full"
-        isOpen={actionSheetStatus}
-        onClose={() => {
-          setActionSheetStatus(false);
-        }}>
+        isOpen={isOpen}
+        onClose={onClose}>
         <Actionsheet.Content>
           <Box w="100%" my={4} px={4} justifyContent="space-between">
             <Text
@@ -163,7 +196,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
             return (
               <Actionsheet.Item
                 onPress={() => {
-                  setActionSheetStatus(false);
+                  onClose();
                   if (el.navigate) {
                     navigation.navigate(el.navigate);
                   }
@@ -198,7 +231,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
         }}>
         <Tab.Screen
           name="Home"
-          component={ContactsScreen}
+          component={ContactsStackView}
           options={{
             headerShown: false,
             tabBarLabel: strings.Menu.bottom.dealer,
