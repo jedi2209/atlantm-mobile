@@ -567,12 +567,6 @@ export const Base = ({navigation, route}) => {
   );
 };
 
-const Contacts = ({navigation, route}) => (
-  <StackContacts.Navigator initialRouteName="ContactsScreen">
-    <StackContacts.Screen name="ContactsScreen" component={ContactsScreen} />
-  </StackContacts.Navigator>
-);
-
 const EKO = ({navigation, route}) => (
   <StackEKO.Navigator initialRouteName="ReviewsScreen">
     <StackEKO.Screen

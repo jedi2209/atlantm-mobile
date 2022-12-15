@@ -71,13 +71,18 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
         dealer.phones = [];
         dealer.phonesMobile = [];
 
-        let phoneTmp = [], phoneMobileTmp = [], sitesTmp = addressesTmp = [];
+        let phoneTmp = [],
+          phoneMobileTmp = [],
+          sitesTmp = [],
+          addressesTmp = [];
 
         if (dealer.locations) {
           let i = 1;
           dealer.locations.map(dealerLocation => {
             get(dealerLocation, 'site', []).map((siteItem, indx) => {
-              const link = siteItem.replace('https://', '').replace('http://', '');
+              const link = siteItem
+                .replace('https://', '')
+                .replace('http://', '');
               if (!sitesTmp.includes(link)) {
                 sitesTmp.push(link);
                 dealer.sites.push({
@@ -97,7 +102,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
                 id: 'phoneLocation' + dealerLocation.id,
                 text: dealerLocation.name,
                 subtitle: dealerLocation.phone[0],
-                link: 'tel:' + dealerLocation.phone[0].replace(/[^+\d]+/g, '')
+                link: 'tel:' + dealerLocation.phone[0].replace(/[^+\d]+/g, ''),
               });
             }
 
@@ -108,7 +113,9 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
                 id: 'phoneMobileLocation' + dealerLocation.id,
                 text: dealerLocation.name,
                 subtitle: dealerLocation.phoneMobile[0],
-                link: 'tel:' + dealerLocation.phoneMobile[0].replace(/[^+\d]+/g, '')
+                link:
+                  'tel:' +
+                  dealerLocation.phoneMobile[0].replace(/[^+\d]+/g, ''),
               });
             }
 
@@ -117,18 +124,25 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
               dealer.addresses.push({
                 priority: i,
                 id: 'addressLocation' + dealerLocation.id,
-                text: [get(dealerLocation, 'city.name'), dealerLocation.address].filter(Boolean).join(', '),
+                text: [get(dealerLocation, 'city.name'), dealerLocation.address]
+                  .filter(Boolean)
+                  .join(', '),
                 city: get(dealerLocation, 'city'),
                 address: dealerLocation.address,
                 coords: dealerLocation.coords,
                 navigate: 'MapScreen',
                 navigateOptions: {
                   returnScreen: 'Home',
-                  name: [get(dealerLocation, 'city.name'), dealerLocation.address].filter(Boolean).join(', '),
+                  name: [
+                    get(dealerLocation, 'city.name'),
+                    dealerLocation.address,
+                  ]
+                    .filter(Boolean)
+                    .join(', '),
                   city: get(dealerLocation, 'city.name'),
                   address: dealerLocation.address,
                   coords: dealerLocation.coords,
-                }
+                },
               });
             }
             //   if (!get(division, 'phone[0]') || phoneTmp.includes(division.phone[0])) {

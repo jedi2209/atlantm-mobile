@@ -19,6 +19,7 @@ import {
   Button,
   HStack,
   Actionsheet,
+  useDisclose,
   Box,
   Text,
   useToast,
@@ -68,7 +69,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
   const [loading, setLoading] = useState(false);
   const [carsPanel, setActivePanel] = useState(activePanel);
 
-  const [actionSheetStatus, setActionSheetStatus] = useState(false);
+  const {isOpen, onOpen, onClose} = useDisclose();
   const [actionSheetData, setActionSheetData] = useState({});
 
   let carsScrollView = useRef(null);
@@ -94,10 +95,8 @@ let UserCars = ({actionToggleCar, activePanel}) => {
       <Actionsheet
         hideDragIndicator
         size="full"
-        isOpen={actionSheetStatus}
-        onClose={() => {
-          setActionSheetStatus(false);
-        }}>
+        isOpen={isOpen}
+        onClose={onClose}>
         <Actionsheet.Content>
           <Box w="100%" my={4} px={4} justifyContent="space-between">
             <Text
@@ -214,7 +213,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
             return (
               <Actionsheet.Item
                 onPress={() => {
-                  setActionSheetStatus(false);
+                  onClose();
                   if (el.navigate && el.navigate.screen) {
                     navigation.navigate(
                       el.navigate.screen,
@@ -276,7 +275,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
                         ordersData.DESTRUCTIVE_INDEX || null,
                       item,
                     });
-                    setActionSheetStatus(true);
+                    onOpen();
                   });
                 } else {
                   orderFunctions.getArchieveCarMenu().then(data => {
@@ -289,7 +288,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
                         data[CarType][Platform.OS].DESTRUCTIVE_INDEX || null,
                       item,
                     });
-                    setActionSheetStatus(true);
+                    onOpen();
                   });
                 }
               }}>
