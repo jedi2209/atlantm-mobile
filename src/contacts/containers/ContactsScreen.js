@@ -319,7 +319,7 @@ const ContactsScreen = ({
                     color: 'warmGray.50',
                   }}
                 />
-                <Text style={{color: 'white', fontSize: 10}}>
+                <Text style={{color: 'white', fontSize: 10, lineHeight: 12}}>
                   {strings.ContactsScreen.timework}
                 </Text>
                 {/* <VStack alignItems={'center'}>
@@ -383,7 +383,7 @@ const ContactsScreen = ({
                     color: 'warmGray.50',
                   }}
                 />
-                <Text style={{color: 'white', fontSize: 10}}>
+                <Text style={{color: 'white', fontSize: 10, lineHeight: 12}}>
                   {strings.ContactsScreen.timework}
                 </Text>
                 {/* <VStack alignItems={'center'}>
@@ -410,6 +410,7 @@ const ContactsScreen = ({
       onPressCallMe,
       onPressChat,
       onPressOrders,
+      onPressTime,
     } = params;
 
     return (
@@ -492,6 +493,14 @@ const ContactsScreen = ({
             type="primary"
             testID="ContactsScreen.ButtonOrders"
             onPress={onPressOrders}
+          />
+          <Plate
+            testID="ContactsScreen.ButtonTimework"
+            title={strings.ContactsScreen.timework2}
+            subtitle=""
+            type="orange"
+            status={callAvailable ? 'enabled' : 'disabled'}
+            onPress={onPressTime}
           />
           {sites.length ? (
             <Plate
@@ -788,6 +797,7 @@ const ContactsScreen = ({
               navigation,
               chatAvailable,
               onPressCallMe,
+              onPressTime,
               onPressChat,
               onPressOrders: _showOrdersMenu,
             })}

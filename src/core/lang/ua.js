@@ -366,6 +366,7 @@ export default {
       no: 'Ні',
     },
     timework: 'графік роботи',
+    timework2: 'Графік роботи',
     navigate: 'Як проїхати?',
     call: 'Зателефонувати',
     callOrder: 'Замовити дзвінок',

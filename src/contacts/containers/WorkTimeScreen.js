@@ -57,15 +57,45 @@ const _renderDivision = divisions => {
         <Stack p="4" space={3}>
           <Heading size="sm">{get(div, 'name')}</Heading>
           <HStack justifyContent={'space-between'} alignItems="flex-start">
+            {/* <VStack fontWeight="400" space={1} justifyContent="space-between"> */}
+            {renderDayTimeShort(get(div, 'worktimeShort', []), true)}
+            {/* </VStack>
             <VStack fontWeight="400" space={1} justifyContent="space-between">
-              {renderDayTime(get(div, 'worktime', []), true)}
-            </VStack>
-            <VStack fontWeight="400" space={1} justifyContent="space-between">
-              {renderDayTime(get(div, 'worktime', []), false)}
-            </VStack>
+              {renderDayTimeShort(get(div, 'worktimeShort', []), false)}
+            </VStack> */}
           </HStack>
         </Stack>
       </Box>
+    );
+  });
+};
+
+const renderDayTimeShort = (worktime, first) => {
+  const divider = 4;
+  return worktime.map((day, dayNum) => {
+    // if (first) {
+    //   if (dayNum >= divider) {
+    //     return;
+    //   }
+    // } else {
+    //   if (dayNum < divider) {
+    //     return;
+    //   }
+    // }
+    const start = get(day, 'time.start', null);
+    const finish = get(day, 'time.finish', null);
+    return (
+      <HStack alignItems="center" justifyContent={'space-between'}>
+        <Text
+          color="coolGray.600"
+          _dark={{
+            color: 'warmGray.200',
+          }}
+          fontWeight="400">
+          {get(day, 'days.ru', null)}:{' '}
+        </Text>
+        <Text>{start && finish ? start + '-' + finish : null}</Text>
+      </HStack>
     );
   });
 };
@@ -115,7 +145,13 @@ const WorkTimeScreen = ({dealerSelected, navigation, phonesMobile}) => {
         <View>
           <Stack space={2} px={2} mt={2} mb={2}>
             <HStack justifyContent={'space-between'}>
-              <Heading size="md">{get(val, 'address')}</Heading>
+              <Heading
+                size="md"
+                ellipsizeMode="tail"
+                numberOfLines={1}
+                w={'87%'}>
+                {get(val, 'name')}
+              </Heading>
               <Pressable
                 borderColor="blue.500"
                 borderWidth="1"
@@ -178,7 +214,7 @@ const WorkTimeScreen = ({dealerSelected, navigation, phonesMobile}) => {
               }}
               fontWeight="500"
               mt="-6">
-              {get(val, 'city.name')}
+              {[get(val, 'city.name'), get(val, 'address')].join(', ')}
             </Text>
           </Stack>
           <VStack space={3} px={2} mb={4}>
