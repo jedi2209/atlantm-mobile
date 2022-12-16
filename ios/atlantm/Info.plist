@@ -63,6 +63,8 @@
 	<string>3fdb9696664c46479e91a611dfafcc65</string>
 	<key>FacebookDisplayName</key>
 	<string>Атлант-М</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>itms-apps</string>
