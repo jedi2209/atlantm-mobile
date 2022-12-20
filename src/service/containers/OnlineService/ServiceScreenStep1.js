@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {Icon, Button, Toast, CheckBox} from 'native-base';
+import {Icon, Button, Toast, Checkbox, HStack} from 'native-base';
 import {get, orderBy} from 'lodash';
 import styleConst from '../../../core/style-const';
 
@@ -157,11 +157,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: styleConst.color.greyText,
-  },
-  checkbox: {
-    right: 0,
-    top: 14,
-    position: 'absolute',
   },
   scrollViewInner: {
     flex: 1,
@@ -337,13 +332,17 @@ class ServiceScreenStep1 extends Component {
       vin: this.state.carVIN,
     });
 
+    let orderLeadStatus = false;
+
     if (data.status !== 'success' && data.status !== 200) {
       data.data = undefined;
+      orderLeadStatus = true;
     }
 
     this.setState({
       serviceInfo: data.data,
       serviceInfoFetch: false,
+      orderLead: orderLeadStatus,
     });
   }
 
@@ -632,7 +631,7 @@ class ServiceScreenStep1 extends Component {
                   }
                 : {},
               this.state.serviceInfo &&
-              this.state.serviceInfo.summary[0].summ.recommended
+              get(this.state.serviceInfo, 'summary[0].summ.recommended', false)
                 ? {
                     name: 'recommended',
                     type: 'component',
@@ -650,8 +649,15 @@ class ServiceScreenStep1 extends Component {
                           });
                         }}>
                         {this.state.serviceInfo.summary &&
-                        this.state.serviceInfo.summary[0].summ ? (
-                          <>
+                        get(
+                          this.state.serviceInfo,
+                          'summary[0].summ',
+                          false,
+                        ) ? (
+                          <HStack
+                            alignContent={'center'}
+                            alignItems={'center'}
+                            alignSelf={'center'}>
                             <Icon
                               name="ios-information-circle-outline"
                               size={8}
@@ -671,17 +677,16 @@ class ServiceScreenStep1 extends Component {
                                 )}
                               </Text>
                             </Text>
-                            <CheckBox
-                              onPress={() => {
+                            <Checkbox
+                              onChange={() => {
                                 this.setState({
                                   recommended: !this.state.recommended,
                                 });
                               }}
-                              checked={this.state.recommended}
+                              defaultIsChecked={this.state.recommended}
                               style={[styles.checkbox]}
-                              color={styleConst.color.blue}
                             />
-                          </>
+                          </HStack>
                         ) : null}
                       </TouchableOpacity>
                     ),
