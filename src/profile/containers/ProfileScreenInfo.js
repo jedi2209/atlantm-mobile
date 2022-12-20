@@ -21,6 +21,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import PushNotifications from '../../core/components/PushNotifications';
 import DealerItemList from '../../core/components/DealerItemList';
+import RefreshSpinner from '../../core/components/RefreshSpinner';
 
 // redux
 import {connect} from 'react-redux';
@@ -392,7 +393,7 @@ class ProfileScreenInfo extends Component {
               ]}>
               <Text
                 style={{
-                  color: '#0061ed',
+                  color: styleConst.color.blue,
                   fontSize: 20,
                   fontWeight: '600',
                 }}>
@@ -608,7 +609,7 @@ class ProfileScreenInfo extends Component {
               ]}>
               <View
                 style={{
-                  backgroundColor: '#0061ed',
+                  backgroundColor: styleConst.color.blue,
                   borderRadius: 5,
                   padding: 14,
                   display: 'flex',
@@ -628,7 +629,7 @@ class ProfileScreenInfo extends Component {
                   {this.props.bonus.data && this.props.bonus.data.saldo ? (
                     <Text
                       style={{
-                        color: '#0061ed',
+                        color: styleConst.color.blue,
                         fontSize: 20,
                         fontWeight: '600',
                       }}>
@@ -698,7 +699,17 @@ class ProfileScreenInfo extends Component {
 
   render() {
     return (
-      <ScrollView style={{flex: 1}} testID="ProfileScreen.Wrapper">
+      <ScrollView
+        style={{flex: 1}}
+        testID="ProfileScreen.Wrapper"
+        refreshControl={
+          <RefreshSpinner
+            onRefresh={() => {
+              return this.getUserData();
+            }}
+            isRequest={this.state.loading}
+          />
+        }>
         <Text
           style={{
             fontSize: 35,
@@ -711,7 +722,8 @@ class ProfileScreenInfo extends Component {
         </Text>
         {this.state.loading ? (
           <ActivityIndicator
-            color="#0061ED"
+            color={styleConst.color.blue}
+            size="large"
             style={{
               alignSelf: 'center',
               marginTop: verticalScale(60),
