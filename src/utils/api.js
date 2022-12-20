@@ -1071,7 +1071,6 @@ export default {
 
   async apiGetData(url, requestParams) {
     const method = requestParams.method;
-    console.info('apiGetData', url, requestParams);
     let body = null;
     if (requestParams?.body) {
       body = JSON.stringify(requestParams?.body);
@@ -1087,14 +1086,13 @@ export default {
         switch (status) {
           case 200:
             let json = res.json();
-            console.info(json);
             return json;
           default:
             break;
         }
       })
       .catch(err => {
-        console.info('apiGetDataError URL: ' + url, err);
+        console.error('apiGetDataError URL: ' + url, err);
       });
   },
 };
