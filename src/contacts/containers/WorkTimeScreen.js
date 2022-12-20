@@ -41,32 +41,34 @@ const mapDispatchToProps = {
 
 const _renderDivision = divisions => {
   return divisions.map((div, divNum) => {
-    return (
-      <Box
-        rounded="lg"
-        borderColor="coolGray.200"
-        borderWidth="1"
-        _dark={{
-          borderColor: 'coolGray.600',
-          backgroundColor: 'gray.700',
-        }}
-        _light={{
-          backgroundColor: 'gray.50',
-        }}
-        key={'division' + get(div, 'id') + divNum}>
-        <Stack p="4" space={3}>
-          <Heading size="sm">{get(div, 'name')}</Heading>
-          <HStack justifyContent={'space-between'} alignItems="flex-start">
-            {/* <VStack fontWeight="400" space={1} justifyContent="space-between"> */}
-            {renderDayTimeShort(get(div, 'worktimeShort', []), true)}
-            {/* </VStack>
+    if (get(div, 'worktimeShort', []).length) {
+      return (
+        <Box
+          rounded="lg"
+          borderColor="coolGray.200"
+          borderWidth="1"
+          _dark={{
+            borderColor: 'coolGray.600',
+            backgroundColor: 'gray.700',
+          }}
+          _light={{
+            backgroundColor: 'gray.50',
+          }}
+          key={'division' + get(div, 'id') + divNum}>
+          <Stack p="4" space={3}>
+            <Heading size="sm">{get(div, 'name')}</Heading>
+            <HStack justifyContent={'space-between'} alignItems="flex-start">
+              {/* <VStack fontWeight="400" space={1} justifyContent="space-between"> */}
+              {renderDayTimeShort(get(div, 'worktimeShort', []), true)}
+              {/* </VStack>
             <VStack fontWeight="400" space={1} justifyContent="space-between">
               {renderDayTimeShort(get(div, 'worktimeShort', []), false)}
             </VStack> */}
-          </HStack>
-        </Stack>
-      </Box>
-    );
+            </HStack>
+          </Stack>
+        </Box>
+      );
+    }
   });
 };
 
@@ -204,21 +206,32 @@ const WorkTimeScreen = ({dealerSelected, navigation, phonesMobile}) => {
                 />
               </Pressable>
             </HStack>
-            <Text
-              fontSize="sm"
-              _light={{
-                color: 'blue.500',
-              }}
-              _dark={{
-                color: 'blue.400',
-              }}
-              fontWeight="500"
-              mt="-6">
-              {[get(val, 'city.name'), get(val, 'address')].join(', ')}
-            </Text>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('MapScreen', {
+                  returnScreen: 'Home',
+                  name: get(val, 'name'),
+                  city: get(val, 'city.name'),
+                  address: get(val, 'address'),
+                  coords: get(val, 'coords'),
+                });
+              }}>
+              <Text
+                fontSize="sm"
+                _light={{
+                  color: 'blue.500',
+                }}
+                _dark={{
+                  color: 'blue.400',
+                }}
+                fontWeight="500"
+                mt="-6">
+                {[get(val, 'city.name'), get(val, 'address')].join(', ')}
+              </Text>
+            </Pressable>
           </Stack>
           <VStack space={3} px={2} mb={4}>
-            {_renderDivision(get(val, 'divisions', []))}
+            {_renderDivision(get(val, 'divisions', null))}
           </VStack>
         </View>
       );
