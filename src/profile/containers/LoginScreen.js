@@ -454,7 +454,7 @@ const LoginScreen = props => {
     return (
       <View style={{flex: 1}}>
         <ActivityIndicator
-          color="#0061ED"
+          color={styleConst.color.blue}
           style={{
             alignSelf: 'center',
             marginTop: verticalScale(60),

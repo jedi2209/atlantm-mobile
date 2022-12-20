@@ -100,7 +100,7 @@ const OptionPlate = ({
         style={[
           {
             borderRadius: 10,
-            backgroundColor: '#0061ED',
+            backgroundColor: styleConst.color.blue,
             paddingHorizontal: 12,
             marginRight: 8,
             height: 52,
