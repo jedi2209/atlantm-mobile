@@ -21,6 +21,7 @@ const headers = {
 };
 const baseRequestParams = {
   method: 'GET',
+  timeout: 30 * 1000,
   headers,
 };
 
@@ -882,19 +883,22 @@ export default {
   },
 
   async loginWithPhone({phone, code, crmID}) {
-    let body = `contact=${phone ? phone : ''}`;
+    // let body = `contact=${phone ? phone : ''}`;
+    let body = {
+      contact: phone ? phone : '',
+    };
     if (code) {
-      body = body + `&code=${code ? code : ''}`;
+      body.code = code ? code : '';
     }
     if (crmID) {
-      body = body + `&crm_id=${crmID ? crmID : ''}`;
+      body.crmID = crmID ? crmID : '';
     }
 
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      // headers: {
+      //   'Content-Type': 'application/x-www-form-urlencoded',
+      // },
       body,
     });
 
@@ -1066,15 +1070,31 @@ export default {
   },
 
   async apiGetData(url, requestParams) {
-    const response = await fetch(url, requestParams);
-    const resText = await response.text();
-    try {
-      // console.warn('url + requestParams', url, requestParams, response);
-      const resJson = JSON.parse(resText);
-      return resJson;
-    } catch (err) {
-      console.info('apiGetDataError URL: ' + url, err);
-      return resText;
+    const method = requestParams.method;
+    console.info('apiGetData', url, requestParams);
+    let body = null;
+    if (requestParams?.body) {
+      body = JSON.stringify(requestParams?.body);
     }
+    return await RNFetchBlob.config({
+      timeout: requestParams.timeout,
+      followRedirect: true,
+      indicator: true,
+    })
+      .fetch(method, url, requestParams?.headers, body)
+      .then(res => {
+        let status = res.info().status;
+        switch (status) {
+          case 200:
+            let json = res.json();
+            console.info(json);
+            return json;
+          default:
+            break;
+        }
+      })
+      .catch(err => {
+        console.info('apiGetDataError URL: ' + url, err);
+      });
   },
 };
