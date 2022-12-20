@@ -37,7 +37,7 @@ const styles = {
     marginLeft: 5,
   },
   carIcon: {
-    color: '#0061ed',
+    color: styleConst.color.blue,
     marginTop: 10,
     marginLeft: 5,
   },

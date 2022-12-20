@@ -395,7 +395,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
       </HStack>
       {loading ? (
         <ActivityIndicator
-          color="#0061ED"
+          color={styleConst.color.blue}
           style={{
             alignSelf: 'center',
             marginTop: verticalScale(56),

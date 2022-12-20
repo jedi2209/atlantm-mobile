@@ -113,7 +113,7 @@ const MenuItem = props => {
             style={[
               styles.bodyText,
               {
-                color: selected ? '#0061ED' : '#858997',
+                color: selected ? styleConst.color.blue : '#858997',
               },
             ]}>
             {name}
