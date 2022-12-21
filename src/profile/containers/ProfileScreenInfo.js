@@ -175,6 +175,7 @@ class ProfileScreenInfo extends Component {
 
     this.state = {
       loading: false,
+      refreshing: false,
       cars: 'default',
     };
   }
@@ -707,7 +708,7 @@ class ProfileScreenInfo extends Component {
             onRefresh={() => {
               return this.getUserData();
             }}
-            isRequest={this.state.loading}
+            isRequest={this.state.refreshing}
           />
         }>
         <Text

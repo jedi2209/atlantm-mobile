@@ -1083,16 +1083,20 @@ export default {
       .fetch(method, url, requestParams?.headers, body)
       .then(res => {
         let status = res.info().status;
+        let json = '';
         switch (status) {
           case 200:
-            let json = res.json();
-            return json;
+          case 404:
+            json = res.json();
           default:
+            json = res.json();
             break;
         }
+        return json;
       })
       .catch(err => {
         console.error('apiGetDataError URL: ' + url, err);
+        return false;
       });
   },
 };

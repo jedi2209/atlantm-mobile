@@ -192,9 +192,10 @@ export const BottomTabNavigation = ({navigation, route}) => {
               {strings.ContactsScreen.sendOrder}
             </Text>
           </Box>
-          {actionSheetData.options.map(el => {
+          {actionSheetData.options.map((el, index) => {
             return (
               <Actionsheet.Item
+                key={'bottomMainMenuActionSheet' + index}
                 onPress={() => {
                   onClose();
                   if (el.navigate) {
