@@ -738,8 +738,10 @@ class ProfileScreenInfo extends Component {
               dealer={this.props.dealerSelected}
               style={[
                 {
-                  paddingHorizontal: 5,
-                  paddingTop: 10,
+                  marginHorizontal: 15,
+                  marginTop: 10,
+                  paddingLeft: 10,
+                  backgroundColor: styleConst.color.white,
                 },
               ]}
               returnScreen={this.props.navigation.state?.routeName}

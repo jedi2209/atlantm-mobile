@@ -761,7 +761,10 @@ const ContactsScreen = ({
                   })}
                 </HStack>
               ) : null}
-              <Text style={styles.buttonPrimaryText}>
+              <Text
+                style={styles.buttonPrimaryText}
+                ellipsizeMode="tail"
+                numberOfLines={1}>
                 {get(dealerSelected, 'name')}
               </Text>
               <Icon
