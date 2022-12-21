@@ -190,16 +190,16 @@ class ServiceScreenStep1 extends Component {
       recommended: false,
     };
 
-    const carFromNavigation = get(this.props.route, 'params.car');
+    this.carFromNavigation = get(this.props.route, 'params.car');
     this.settingsFromNavigation = get(this.props.route, 'params.settings');
-    if (carFromNavigation && get(carFromNavigation, 'vin')) {
-      this.state.carVIN = carFromNavigation.vin;
-      this.state.carBrand = get(carFromNavigation, 'brand');
-      this.state.carModel = get(carFromNavigation, 'model');
-      this.state.carNumber = get(carFromNavigation, 'number');
+    if (this.carFromNavigation && get(this.carFromNavigation, 'vin')) {
+      this.state.carVIN = this.carFromNavigation.vin;
+      this.state.carBrand = get(this.carFromNavigation, 'brand');
+      this.state.carModel = get(this.carFromNavigation, 'model');
+      this.state.carNumber = get(this.carFromNavigation, 'number');
       this.state.carName = [
-        get(carFromNavigation, 'brand'),
-        get(carFromNavigation, 'model'),
+        get(this.carFromNavigation, 'brand'),
+        get(this.carFromNavigation, 'model'),
       ].join(' ');
     }
 
@@ -297,6 +297,10 @@ class ServiceScreenStep1 extends Component {
             },
           },
         ]);
+      } else {
+        if (this.carFromNavigation || this.myCars.length === 1) {
+          this.onPressOrder();
+        }
       }
     } else {
       let services = [];
@@ -401,7 +405,6 @@ class ServiceScreenStep1 extends Component {
     const {navigation} = this.props;
 
     let service = '';
-
     if (this.state.services && !this.state.service) {
       Toast.show({
         text: strings.ServiceScreenStep1.Notifications.error.chooseService,
@@ -411,8 +414,10 @@ class ServiceScreenStep1 extends Component {
       });
       return false;
     }
-
-    if (dataFromForm.SERVICE && this.state.services) {
+    if (
+      get(dataFromForm, 'SERVICE', false) &&
+      get(this.state, 'services', false)
+    ) {
       service = this.state.services.find(x => x.key === dataFromForm.SERVICE);
     }
 
@@ -683,6 +688,7 @@ class ServiceScreenStep1 extends Component {
                                   recommended: !this.state.recommended,
                                 });
                               }}
+                              isChecked={this.state.recommended}
                               defaultIsChecked={this.state.recommended}
                               style={[styles.checkbox]}
                             />

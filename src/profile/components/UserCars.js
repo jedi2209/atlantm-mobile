@@ -108,7 +108,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
               {actionSheetData.title}
             </Text>
           </Box>
-          {actionSheetData.options.map(el => {
+          {actionSheetData.options.map((el, index) => {
             switch (el.id) {
               case 'orderService':
                 el.navigate = {
@@ -212,6 +212,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
             }
             return (
               <Actionsheet.Item
+                key={'userCarsActionSheet' + index}
                 onPress={() => {
                   onClose();
                   if (el.navigate && el.navigate.screen) {

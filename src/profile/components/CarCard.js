@@ -93,7 +93,8 @@ export const CarCard = ({data, type, checked, onPress, disabled}) => {
                   return null;
                 }
               }}
-              defaultIsChecked={checked ? true : false}
+              isChecked={checked}
+              defaultIsChecked={checked}
               color="#027aff"
               style={{marginRight: 10}}
             />

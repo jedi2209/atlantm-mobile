@@ -261,9 +261,10 @@ const WorkTimeScreen = ({dealerSelected, navigation, phonesMobile}) => {
               </Text>
             </Box>
           ) : null}
-          {actionSheetData.options.map(el => {
+          {actionSheetData.options.map((el, index) => {
             return (
               <Actionsheet.Item
+                key={'workTimeScreenActionSheet' + index}
                 onPress={() => {
                   onClose();
                   if (el.navigate) {

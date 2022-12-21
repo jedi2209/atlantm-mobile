@@ -299,7 +299,8 @@ class ReviewAddRatingStepScreen extends Component {
     return (
       <View py={5} backgroundColor="white" px={3}>
         <Checkbox
-          defaultIsChecked
+          defaultIsChecked={true}
+          isChecked={this.state.publicAgree}
           onChange={() =>
             this.setState({publicAgree: !this.state.publicAgree})
           }>

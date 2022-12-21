@@ -648,9 +648,10 @@ const ContactsScreen = ({
               </Text>
             </Box>
           ) : null}
-          {actionSheetData.options.map(el => {
+          {actionSheetData.options.map((el, index) => {
             return (
               <Actionsheet.Item
+                key={'contactsScreenActionSheet' + index}
                 onPress={() => {
                   onClose();
                   if (el.navigate) {
