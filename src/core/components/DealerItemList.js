@@ -1,7 +1,7 @@
 import React from 'react';
-import {StyleSheet, View, Pressable} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';
-import {HStack, Box, Text} from 'native-base';
+import {HStack, Box, Text, Pressable, VStack} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 
 // component
@@ -10,10 +10,14 @@ import BrandLogo from '../components/BrandLogo';
 // helpers
 import {get} from 'lodash';
 import styleConst from '../../core/style-const';
-import stylesList from '../../core/components/Lists/style';
+// import stylesList from '../../core/components/Lists/style';
 import {strings} from '../lang/const';
+// import style from '../../core/components/Lists/style';
 
 const stylesDealerItemList = StyleSheet.create({
+  wrapper: {
+    backgroundColor: styleConst.color.white,
+  },
   brandLogo: {
     minWidth: 24,
     height: 20,
@@ -23,9 +27,7 @@ const stylesDealerItemList = StyleSheet.create({
   dealerCity: {
     fontFamily: styleConst.font.light,
     fontSize: 14,
-    letterSpacing: styleConst.ui.letterSpacing,
-    color: styleConst.color.greyText,
-    marginLeft: 0,
+    color: styleConst.color.blue,
   },
   city: {
     fontFamily: styleConst.font.regular,
@@ -33,10 +35,7 @@ const stylesDealerItemList = StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
   },
   name: {
-    fontFamily: styleConst.font.light,
     fontSize: 17,
-    letterSpacing: styleConst.ui.letterSpacing,
-    marginLeft: 0,
   },
 });
 
@@ -67,58 +66,60 @@ const DealerItemList = props => {
   const navigation = useNavigation();
 
   return (
-    <Box rounded="lg" p="3" style={style || {}}>
-      <Pressable
-        onPress={() => {
-          return _onPressDealer({props, navigation});
-        }}
-        style={stylesList.listItem}>
-        <HStack space={3} justifyContent="space-between" alignItems="center">
-          {city && city.name ? (
+    <Pressable
+      rounded="lg"
+      px="2"
+      py="3"
+      shadow={'1'}
+      style={[stylesDealerItemList.wrapper, style]}
+      onPress={() => {
+        return _onPressDealer({props, navigation});
+      }}>
+      <HStack space={3} justifyContent="space-between" alignItems="center">
+        {city && city.name ? (
+          <Text
+            style={stylesDealerItemList.city}
+            ellipsizeMode="tail"
+            numberOfLines={1}>
+            {city && city.name ? city.name : dealer.city.name}
+          </Text>
+        ) : null}
+        <VStack>
+          <Text
+            style={stylesDealerItemList.name}
+            ellipsizeMode="tail"
+            numberOfLines={1}>
+            {dealer && dealer.name
+              ? dealer.name
+              : strings.DealerItemList.chooseDealer}
+          </Text>
+          {false && dealer && dealer.city ? (
             <Text
-              style={stylesDealerItemList.city}
+              style={stylesDealerItemList.dealerCity}
               ellipsizeMode="tail"
               numberOfLines={1}>
-              {city && city.name ? city.name : dealer.city.name}
+              {dealer.city.name}
             </Text>
           ) : null}
-          <View>
-            <Text
-              style={stylesDealerItemList.name}
-              ellipsizeMode="tail"
-              numberOfLines={1}>
-              {dealer && dealer.name
-                ? dealer.name
-                : strings.DealerItemList.chooseDealer}
-            </Text>
-            {dealer && dealer.city ? (
-              <Text
-                style={stylesDealerItemList.dealerCity}
-                ellipsizeMode="tail"
-                numberOfLines={1}>
-                {dealer.city.name}
-              </Text>
-            ) : null}
-          </View>
-          {get(dealer, 'brand') ? (
-            <HStack>
-              {get(dealer, 'brand').map(brand => {
-                if (brand.logo) {
-                  return (
-                    <BrandLogo
-                      brand={brand.id}
-                      width={45}
-                      style={stylesDealerItemList.brandLogo}
-                      key={'brandLogo' + brand.id}
-                    />
-                  );
-                }
-              })}
-            </HStack>
-          ) : null}
-        </HStack>
-      </Pressable>
-    </Box>
+        </VStack>
+        {get(dealer, 'brand') ? (
+          <HStack>
+            {get(dealer, 'brand').map(brand => {
+              if (brand.logo) {
+                return (
+                  <BrandLogo
+                    brand={brand.id}
+                    width={45}
+                    style={stylesDealerItemList.brandLogo}
+                    key={'brandLogo' + brand.id}
+                  />
+                );
+              }
+            })}
+          </HStack>
+        ) : null}
+      </HStack>
+    </Pressable>
   );
 };
 
