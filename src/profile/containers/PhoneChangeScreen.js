@@ -356,7 +356,7 @@ const PhoneChangeScreen = props => {
             />
           ) : null}
           <Button
-            isLoadingText={'Входим в личный кабинет...'}
+            isLoadingText={strings.PhoneChangeScreen.isLoading}
             isLoading={loadingVerify}
             onPress={_cancelVerify}
             size="md"
