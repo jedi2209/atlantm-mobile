@@ -1,4 +1,5 @@
 import VKLogin from 'react-native-vkontakte-login';
+import API from '../../utils/api';
 
 import {VK_APP_ID} from '../../core/const';
 
@@ -17,8 +18,9 @@ export default {
         auth.user_id +
         '&v=5.103&fields=contacts&access_token=' +
         auth.access_token;
-      const response = await fetch(url);
-      const userData = await response.json();
+      const userData = await API.apiGetData(url, {
+        method: 'GET',
+      });
       console.info('Login success, get userData', userData);
       return Object.assign(auth, userData.response);
     } catch (err) {
@@ -30,13 +32,16 @@ export default {
     VKLogin.initialize(VK_APP_ID);
     try {
       const userData = await this._GetUserDataVK();
+      if (!userData) {
+        return false;
+      }
       const profile = {
-        id: userData.user_id,
-        email: userData.email || '',
-        first_name: userData.first_name || '',
-        last_name: userData.last_name || '',
-        personal_birthday: userData.bdate || '',
-        personal_gender: userData.sex === 2 ? 'M' : 'F',
+        id: userData?.user_id,
+        email: userData?.email || '',
+        first_name: userData?.first_name || '',
+        last_name: userData?.last_name || '',
+        personal_birthday: userData?.bdate || '',
+        personal_gender: userData?.sex === 2 ? 'M' : 'F',
         // phone: userData.phone,
       };
       callbackFn({...profile, networkName: 'vk'});

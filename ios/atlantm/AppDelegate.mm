@@ -12,6 +12,11 @@
 #import "Orientation.h"
 #import <FBSDKCoreKit/FBSDKCoreKit-swift.h>
 #import <RNGoogleSignin/RNGoogleSignin.h>
+#if __has_include(<VKSdkFramework/VKSdkFramework.h>)
+#import <VKSdkFramework/VKSdkFramework.h>
+#else
+#import "VKSdk.h"
+#endif
 
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
@@ -40,6 +45,8 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 {
   [FIRApp configure];
   [GMSServices provideAPIKey:@"XXXX"];
+  [[FBSDKApplicationDelegate sharedInstance] application:application
+                       didFinishLaunchingWithOptions:launchOptions];
   RCTAppSetupPrepareApp(application);
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
@@ -67,6 +74,16 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   return YES;
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    if ([[FBSDKApplicationDelegate sharedInstance] application:app openURL:url options:options]) {
+      return YES;
+    }
+    if ([VKSdk processOpenURL:url fromApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]]) {
+      return YES;
+    }
+    return NO;
 }
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
