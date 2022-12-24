@@ -53,7 +53,6 @@ import {strings} from '../../core/lang/const';
 import {verticalScale} from '../../utils/scale';
 import {get, size} from 'lodash';
 import UserData from '../../utils/user';
-import { string } from 'prop-types';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -416,6 +415,7 @@ const LoginScreen = props => {
     for (let index = 0; index < items; index++) {
       res.push(
         <View
+          key={'backgroundInputCode' + index}
           style={{
             height: 75,
             backgroundColor: 'rgba(255, 255, 255, 0.9)',
