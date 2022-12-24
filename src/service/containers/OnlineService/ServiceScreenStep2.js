@@ -63,10 +63,7 @@ class ServiceScreenStep2 extends Component {
 
     if (!dateFromForm) {
       Toast.show({
-        text: strings.ServiceScreen.Notifications.error.chooseDate,
-        position: 'bottom',
-        duration: 3000,
-        type: 'warning',
+        title: strings.ServiceScreen.Notifications.error.chooseDate,
       });
       return false;
     }
@@ -109,6 +106,7 @@ class ServiceScreenStep2 extends Component {
     }
     if (this.orderLead) {
       let textAdd = get(data, 'text', '');
+      let text = '';
       if (this.service) {
         textAdd = ['Требуемые работы:', data.service, '\r\n'].join(' ');
         if (data.recommended) {

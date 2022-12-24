@@ -118,6 +118,7 @@ export default {
     },
     error: {
       title: 'Хьюстон, у нас проблемы...',
+      title2: 'Упс...',
       text: 'Произошла ошибка, попробуем снова?',
     },
     UpdatePopup: {

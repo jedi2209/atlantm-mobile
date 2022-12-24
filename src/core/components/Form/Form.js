@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import PropTypes, {element} from 'prop-types';
+import PropTypes from 'prop-types';
 
 import {
   Animated,
   StyleSheet,
   View,
   ScrollView,
-  ActivityIndicator,
   Platform,
   StatusBar,
   Pressable,

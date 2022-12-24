@@ -407,10 +407,7 @@ class ServiceScreenStep1 extends Component {
     let service = '';
     if (this.state.services && !this.state.service) {
       Toast.show({
-        text: strings.ServiceScreenStep1.Notifications.error.chooseService,
-        position: 'bottom',
-        duration: 3000,
-        type: 'warning',
+        title: strings.ServiceScreenStep1.Notifications.error.chooseService,
       });
       return false;
     }

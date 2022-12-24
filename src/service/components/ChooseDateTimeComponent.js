@@ -14,6 +14,7 @@ import {
 import {Button, Toast} from 'native-base';
 import {DatePickerCustom} from '../../core/components/DatePickerCustom';
 import {time, yearMonthDay} from '../../utils/date';
+import ToastAlert from '../../core/components/ToastAlert';
 import styleConst from '../../core/style-const';
 import API from '../../utils/api';
 import {strings} from '../../core/lang/const';
@@ -160,14 +161,21 @@ export default class ChooseDateTimeComponent extends Component {
         this.setState({
           availablePeriodsFetch: false,
           availablePeriods: false,
-          availablePeriodsFetchCounts: this.state.availablePeriodsFetchCounts + 1,
+          availablePeriodsFetchCounts:
+            this.state.availablePeriodsFetchCounts + 1,
         });
         if (this.state.availablePeriodsFetchCounts < 3) {
           Toast.show({
-            text: availablePeriods.error.message,
-            position: 'bottom',
-            type: 'danger',
-            duration: 3000,
+            render: ({id}) => {
+              return (
+                <ToastAlert
+                  id={id}
+                  status="info"
+                  duration={3000}
+                  description={availablePeriods.error.message}
+                />
+              );
+            },
           });
         } else {
           this.props.onFinishedSelection({
@@ -177,24 +185,37 @@ export default class ChooseDateTimeComponent extends Component {
           });
         }
       } else {
-        this.setState({
-          availablePeriodsFetch: false,
-          availablePeriods: false,
-        }, () => this.props.onFinishedSelection({
-            date: yearMonthDay(date),
-            noTimeAlways: true,
-            time: undefined,
-          }));
+        this.setState(
+          {
+            availablePeriodsFetch: false,
+            availablePeriods: false,
+          },
+          () =>
+            this.props.onFinishedSelection({
+              date: yearMonthDay(date),
+              noTimeAlways: true,
+              time: undefined,
+            }),
+        );
       }
       return true;
     }
 
     if (availablePeriods.data === null) {
       Toast.show({
-        text: strings.ChooseDateTimeComponent.Notifications.error.period,
-        position: 'bottom',
-        type: 'danger',
-        duration: 3000,
+        render: ({id}) => {
+          return (
+            <ToastAlert
+              id={id}
+              status="info"
+              duration={3000}
+              title={strings.Notifications.error.title2}
+              description={
+                strings.ChooseDateTimeComponent.Notifications.error.period
+              }
+            />
+          );
+        },
       });
       this.setState({
         availablePeriodsFetch: false,

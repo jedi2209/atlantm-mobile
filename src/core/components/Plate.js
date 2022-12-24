@@ -70,9 +70,10 @@ const Plate = props => {
             {props.title}
           </Text>
           {typeof props.subtitle === 'object' ? (
-            props.subtitle.map(el => {
+            props.subtitle.map((el, num) => {
               return (
                 <Text
+                  key={'plateTextSubtitle' + num}
                   selectable={false}
                   ellipsizeMode="tail"
                   numberOfLines={1}
@@ -98,7 +99,7 @@ const Plate = props => {
 
 Plate.propTypes = {
   title: PropTypes.string,
-  subtitle: PropTypes.string,
+  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
   onPress: PropTypes.func,
   type: PropTypes.oneOf(['default', 'danger', 'primary', 'red', 'orange']),
   active: PropTypes.oneOf(['enabled', 'disabled']),

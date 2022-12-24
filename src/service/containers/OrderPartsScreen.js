@@ -180,9 +180,7 @@ class OrderPartsScreen extends Component {
 
     if (!isInternetExist) {
       Toast.show({
-        text: ERROR_NETWORK,
-        position: 'bottom',
-        type: 'danger',
+        title: ERROR_NETWORK,
       });
     }
 
@@ -249,9 +247,7 @@ class OrderPartsScreen extends Component {
             break;
           case PARTS_ORDER__FAIL:
             Toast.show({
-              text: strings.Notifications.error.title,
-              position: 'bottom',
-              type: 'danger',
+              title: strings.Notifications.error.title,
             });
             break;
         }
