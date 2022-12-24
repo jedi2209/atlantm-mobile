@@ -128,9 +128,7 @@ class ReestablishScreen extends React.Component {
     const {login, password} = this.state;
     if (login.length === 0 || password.length === 0) {
       Toast.show({
-        text: strings.ReestablishScreen.fieldsRequired,
-        position: 'bottom',
-        type: 'warning',
+        title: strings.ReestablishScreen.fieldsRequired,
       });
       this.setState({loading: false});
       return false;
@@ -142,9 +140,7 @@ class ReestablishScreen extends React.Component {
     const {login} = this.state;
     if (login.length === 0) {
       Toast.show({
-        text: strings.ReestablishScreen.loginRequired,
-        position: 'bottom',
-        type: 'warning',
+        title: strings.ReestablishScreen.loginRequired,
       });
       this.setState({loading: false});
       return false;
@@ -172,9 +168,7 @@ class ReestablishScreen extends React.Component {
             const code = get(action, 'payload.code');
             const message = get(action, 'payload.message');
             Toast.show({
-              text: !code || code === 500 ? defaultMessage : message,
-              position: 'bottom',
-              type: 'danger',
+              title: !code || code === 500 ? defaultMessage : message,
             });
             this.setState({loading: false});
             break;
@@ -195,9 +189,7 @@ class ReestablishScreen extends React.Component {
                 this.setState({loading: false});
                 const _this = this;
                 Toast.show({
-                  text: strings.Notifications.success.title,
-                  position: 'bottom',
-                  type: 'success',
+                  title: strings.Notifications.success.title,
                 });
                 setTimeout(() => {
                   _this.props.navigation.navigate('LoginScreen');
@@ -206,9 +198,7 @@ class ReestablishScreen extends React.Component {
               .catch(() => {
                 this.setState({loading: false});
                 Toast.show({
-                  text: strings.Notifications.error.text,
-                  position: 'bottom',
-                  type: 'danger',
+                  title: strings.Notifications.error.text,
                 });
               });
             break;
@@ -311,18 +301,14 @@ class ReestablishScreen extends React.Component {
                       switch (action.type) {
                         case 'FORGOT_PASS_REQUEST__SUCCESS':
                           Toast.show({
-                            text: action.payload.message
+                            title: action.payload.message
                               ? action.payload.message
                               : strings.Notifications.success.title,
-                            position: 'bottom',
-                            type: 'success',
                           });
                           break;
                         default:
                           Toast.show({
-                            text: action.payload.message,
-                            position: 'bottom',
-                            type: 'danger',
+                            title: action.payload.message,
                           });
                           break;
                       }

@@ -406,11 +406,31 @@ const LoginScreen = props => {
     }
     let res = [];
     const width = 100 / (items + 2);
-    const screenWidth = Dimensions.get('screen').width;
+    const screenWidth = Number.parseInt(
+      Dimensions.get('window').width.toFixed(),
+    );
     const widthElement = (screenWidth / 100) * width;
     const buttonSpace = (screenWidth * 0.75) / (items + 1);
+    console.info('screenWidth', Dimensions.get('window'), screenWidth);
+    let buttonSpaceAndroid = 1;
     //const buttonSpaceAndroid = parseFloat('1' + buttonSpace) / 100;
-    const buttonSpaceAndroid = 1.04;
+    switch (screenWidth) {
+      case 540:
+        buttonSpaceAndroid = 1.55;
+        break;
+      case 411:
+      case 393:
+        // scale 3.5
+        // scale 2.75
+        buttonSpaceAndroid = 1.05;
+        break;
+      case 674:
+        // scale 2.625
+        buttonSpaceAndroid = 2.06;
+        break;
+      default:
+        break;
+    }
 
     for (let index = 0; index < items; index++) {
       res.push(
@@ -437,7 +457,7 @@ const LoginScreen = props => {
         </HStack>
         <OtpAutoFillViewManager
           onComplete={handleComplete}
-          fontSize={isAndroid ? 50 : 45}
+          fontSize={isAndroid ? 52 : 45}
           space={isAndroid ? buttonSpaceAndroid : buttonSpace}
           style={[styles.TextInputCode, {borderWidth: 0}]}
           length={codeSize} // Define the length of OTP code. This is a must.

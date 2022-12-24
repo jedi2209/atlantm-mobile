@@ -630,12 +630,16 @@ export default {
   },
 
   tvaMessageSend({id, dealer, text}) {
-    const body = `id=${id}&dealer=${dealer}&text=${text}`;
+    const body = {
+      id: id,
+      dealer: dealer,
+      text: text,
+    };
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      // headers: {
+      //   'Content-Type': 'application/x-www-form-urlencoded',
+      // },
       body,
     });
 
@@ -655,27 +659,27 @@ export default {
     messagePlus,
     messageMinus,
   }) {
-    const body = [
-      'posting=1',
-      'f_Source=3',
-      `f_Dealer=${dealerId}`,
-      `f_Name=${name}`,
-      `f_FirstName=${firstName}`,
-      `f_SecondName=${secondName}`,
-      `f_LastName=${lastName}`,
-      `f_Phone=${phone}`,
-      `f_Email=${email}`,
-      `f_Grade=${rating}`,
-      `f_PublicAgree=${publicAgree}`,
-      `f_TextPlus=${messagePlus}`,
-      `f_TextMinus=${messageMinus}`,
-    ].join('&');
+    const body = {
+      posting: 1,
+      f_Source: 3,
+      f_Dealer: dealerId,
+      f_Name: name,
+      f_FirstName: firstName,
+      f_SecondName: secondName,
+      f_LastName: lastName,
+      f_Phone: phone,
+      f_Email: email,
+      f_Grade: rating,
+      f_PublicAgree: publicAgree,
+      f_TextPlus: messagePlus,
+      f_TextMinus: messageMinus,
+    };
 
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      // headers: {
+      //   'Content-Type': 'application/x-www-form-urlencoded',
+      // },
       body,
     });
 
@@ -787,22 +791,22 @@ export default {
   },
 
   registerRequest({dealerId, name, phone, email, carVIN, carNumber}) {
-    const body = [
-      'posting=1',
-      `f_Dealer=${dealerId}`,
-      `f_Name=${name}`,
-      `f_Phone=${phone}`,
-      `f_Email=${email}`,
-      'f_Source=3',
-      `f_VIN=${carVIN}`,
-      `f_Number=${carNumber}`,
-    ].join('&');
+    const body = {
+      posting: 1,
+      f_Dealer: dealerId,
+      f_Name: name,
+      f_Phone: phone,
+      f_Email: email,
+      f_Source: 3,
+      f_VIN: carVIN,
+      f_Number: carNumber,
+    };
 
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      // headers: {
+      //   'Content-Type': 'application/x-www-form-urlencoded',
+      // },
       body,
     });
 
@@ -841,32 +845,30 @@ export default {
       update,
     } = profile;
 
-    const body = [
-      `networkName=${networkName}`,
-      `socialData[XML_ID]=${id}`,
-      `socialData[EMAIL]=${typeof email !== 'undefined' ? email : ''}`,
-      `socialData[SECOND_NAME]=${
-        typeof second_name !== 'undefined' ? second_name : ''
-      }`,
-      `socialData[NAME]=${typeof first_name !== 'undefined' ? first_name : ''}`,
-      `socialData[LAST_NAME]=${
-        typeof last_name !== 'undefined' ? last_name : ''
-      }`,
-      `socialData[PHONE]=${typeof phone !== 'undefined' ? phone : ''}`,
-      `socialData[PERSONAL_BIRTHDAY]=${
-        typeof personal_birthday !== 'undefined' ? personal_birthday : ''
-      }`,
-      `socialData[PERSONAL_GENDER]=${
-        typeof personal_gender !== 'undefined' ? personal_gender : ''
-      }`,
-      `update=${typeof update !== 'undefined' ? update : 0}`,
-    ].join('&');
+    const socialData = {
+      XML_ID: id,
+      EMAIL: typeof email !== 'undefined' ? email : '',
+      SECOND_NAME: typeof second_name !== 'undefined' ? second_name : '',
+      NAME: typeof first_name !== 'undefined' ? first_name : '',
+      LAST_NAME: typeof last_name !== 'undefined' ? last_name : '',
+      PHONE: typeof phone !== 'undefined' ? phone : '',
+      PERSONAL_BIRTHDAY:
+        typeof personal_birthday !== 'undefined' ? personal_birthday : '',
+      PERSONAL_GENDER:
+        typeof personal_gender !== 'undefined' ? personal_gender : '',
+    };
+
+    const body = {
+      networkName: networkName,
+      socialData,
+      update: typeof update !== 'undefined' ? update : 0,
+    };
 
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+      // headers: {
+      //   'Content-Type': 'application/x-www-form-urlencoded',
+      // },
       body,
     });
 
@@ -883,7 +885,6 @@ export default {
   },
 
   async loginWithPhone({phone, code, crmID}) {
-    // let body = `contact=${phone ? phone : ''}`;
     let body = {
       contact: phone ? phone : '',
     };
