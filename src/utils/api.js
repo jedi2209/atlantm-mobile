@@ -108,7 +108,7 @@ export default {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body,
     });
 
     let url = '/jivo/send/';
@@ -329,7 +329,7 @@ export default {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body,
     });
 
     return this.request('/orders/callme/post/', requestParams);
@@ -374,7 +374,7 @@ export default {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body,
     });
 
     return this.request('/orders/parts/post/', requestParams);
@@ -417,7 +417,7 @@ export default {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body,
     });
 
     return this.request('/orders/service/post/', requestParams);
@@ -460,7 +460,7 @@ export default {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body,
     });
 
     const url = isNewCar ? '/orders/stock/post/' : '/orders/trade-in/post/';
@@ -500,7 +500,7 @@ export default {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body,
     });
 
     const url = '/orders/credit/post/';
@@ -540,7 +540,7 @@ export default {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body,
     });
 
     const url = '/orders/testdrive/post/';
@@ -580,7 +580,7 @@ export default {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body,
     });
 
     const url = '/orders/my-price/post/';
@@ -621,7 +621,7 @@ export default {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(body),
+      body,
     });
 
     const url = isNewCar ? '/order/test-drive/' : null;
@@ -960,7 +960,7 @@ export default {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(profile),
+      body: profile,
     });
 
     if (
@@ -1001,11 +1001,11 @@ export default {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
+      body: {
         vin: car.vin,
         userid: userSAP.ID,
         token: userSAP.TOKEN,
-      }),
+      },
     });
 
     try {
@@ -1045,14 +1045,14 @@ export default {
     );
   },
 
-  saveOrderToService(data) {
+  saveOrderToService(body) {
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body,
     });
 
     return this.request('/service/order/', requestParams);
@@ -1073,7 +1073,7 @@ export default {
   async apiGetData(url, requestParams) {
     const method = requestParams.method;
     let body = null;
-    if (requestParams?.body) {
+    if (requestParams?.body && typeof requestParams?.body === 'object') {
       body = JSON.stringify(requestParams?.body);
     }
     return await RNFetchBlob.config({
@@ -1083,17 +1083,22 @@ export default {
     })
       .fetch(method, url, requestParams?.headers, body)
       .then(res => {
-        let status = res.info().status;
-        let json = '';
-        switch (status) {
-          case 200:
-          case 404:
-            json = res.json();
+        let answer = '';
+        switch (res.info().respType) {
+          case 'json':
+            answer = res.json();
+            break;
+          case 'text':
+            answer = res?.data;
+            break;
           default:
-            json = res.json();
+            console.error(
+              'apiGetDataError res.info().respType: ' + url,
+              res.info().respType,
+            );
             break;
         }
-        return json;
+        return answer;
       })
       .catch(err => {
         console.error('apiGetDataError URL: ' + url, err);
