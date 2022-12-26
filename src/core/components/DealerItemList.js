@@ -1,11 +1,12 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
-import {HStack, Box, Text, Pressable, VStack} from 'native-base';
+import {HStack, Text, Pressable, VStack, Icon} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 
 // component
 import BrandLogo from '../components/BrandLogo';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 // helpers
 import {get} from 'lodash';
@@ -20,7 +21,7 @@ const stylesDealerItemList = StyleSheet.create({
   },
   brandLogo: {
     minWidth: 24,
-    height: 20,
+    height: 28,
     width: 45,
     marginRight: 10,
   },
@@ -53,16 +54,7 @@ const _onPressDealer = props => {
 };
 
 const DealerItemList = props => {
-  const {
-    city,
-    dealer,
-    style,
-    isLocal,
-    goBack,
-    returnScreen,
-    listAll,
-    returnState,
-  } = props;
+  const {city, dealer, style} = props;
   const navigation = useNavigation();
 
   return (
@@ -103,7 +95,7 @@ const DealerItemList = props => {
           ) : null}
         </VStack>
         {get(dealer, 'brand') ? (
-          <HStack>
+          <HStack alignItems={'center'}>
             {get(dealer, 'brand').map(brand => {
               if (brand.logo) {
                 return (
@@ -116,6 +108,13 @@ const DealerItemList = props => {
                 );
               }
             })}
+            <Icon
+              size="sm"
+              as={FontAwesome5}
+              color={styleConst.color.greyText4}
+              name={'angle-right'}
+              mr={1}
+            />
           </HStack>
         ) : null}
       </HStack>

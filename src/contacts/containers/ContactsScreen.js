@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   Linking,
   ScrollView,
-  TouchableOpacity,
 } from 'react-native';
 
 import {
@@ -23,12 +22,11 @@ import {
   VStack,
 } from 'native-base';
 
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import BrandLogo from '../../core/components/BrandLogo';
+import DealerItemList from '../../core/components/DealerItemList';
 import Plate from '../../core/components/Plate';
 import RateThisApp from '../../core/components/RateThisApp';
 import Imager from '../../core/components/Imager';
@@ -96,10 +94,6 @@ const styles = StyleSheet.create({
     color: styleConst.color.accordeonGrey2,
   },
   scrollView: {paddingLeft: 20, zIndex: 3},
-  iconRow: {
-    position: 'absolute',
-    right: 0,
-  },
   buttonPrimary: {
     marginTop: 60,
     marginHorizontal: '2%',
@@ -738,44 +732,19 @@ const ContactsScreen = ({
         <Pressable
           onPress={() => navigation.navigate('ChooseDealerScreen')}
           style={[styles.buttonPrimary]}>
-          <Box
-            borderWidth={1}
-            borderColor="coolGray.300"
-            shadow={5}
-            bg="coolGray.100"
-            p={3}
-            rounded={8}
-            backgroundColor={styleConst.color.bg}>
-            <HStack alignItems="center" justifyContent="flex-start" space={2}>
-              {dealerSelected.brand && dealerSelected.brand.length ? (
-                <HStack>
-                  {dealerSelected.brand.map(brand => {
-                    return (
-                      <BrandLogo
-                        brand={brand.id}
-                        height={25}
-                        style={styles.brand}
-                        key={'ChooseDealerBrand' + brand.id}
-                      />
-                    );
-                  })}
-                </HStack>
-              ) : null}
-              <Text
-                style={styles.buttonPrimaryText}
-                ellipsizeMode="tail"
-                numberOfLines={1}>
-                {get(dealerSelected, 'name')}
-              </Text>
-              <Icon
-                size="sm"
-                as={FontAwesome5}
-                color={styleConst.color.greyText4}
-                name={'angle-right'}
-                style={styles.iconRow}
-              />
-            </HStack>
-          </Box>
+          <DealerItemList
+            key={'dealerSelect'}
+            dealer={dealerSelected}
+            style={[
+              {
+                // marginHorizontal: 15,
+                marginTop: 10,
+                paddingLeft: 10,
+                backgroundColor: styleConst.color.white,
+              },
+            ]}
+            returnScreen={navigation.state?.routeName}
+          />
         </Pressable>
         <ScrollView
           contentContainerStyle={{paddingBottom: 24}}

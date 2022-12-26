@@ -111,7 +111,17 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
   },
   dealerSelect: {
-    paddingBottom: 5,
+    shadowOpacity: 0,
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowRadius: 0,
+    elevation: 0,
+    borderBottomRightRadius: 0,
+    borderBottomLeftRadius: 0,
+    borderBottomWidth: 0,
+    paddingLeft: 14,
   },
   select: {
     marginVertical: 0,
@@ -638,12 +648,22 @@ class Form extends Component {
     }
     let totalFields = group.fields.length;
 
+    let groupStyle = [styles.groupFields, group.style];
+
+    if (
+      typeof group.fields.find(e => e.type === 'dealerSelect') !==
+        'undefined' &&
+      totalFields === 1
+    ) {
+      groupStyle = [group.style];
+    }
+
     return (
       <View style={styles.group} key={'group' + num}>
         <Text selectable={false} style={styles.groupName}>
           {group.name}
         </Text>
-        <View style={[styles.groupFields, group.style]}>
+        <View style={[groupStyle]}>
           {group.fields.map((field, fieldNum, totalFields) => {
             if (field && typeof field === 'object' && field.type) {
               const returnField = this._fieldsRender[field.type](
@@ -1214,12 +1234,16 @@ class Form extends Component {
     },
     dealerSelect: (data, num, totalFields, groupNum) => {
       const {name, value} = data;
+      let fieldStyle = [];
+      if (totalFields?.length > 1) {
+        fieldStyle = [styles.dealerSelect];
+      }
       return (
         <DealerItemList
           key={'field' + num + name}
           dealer={value}
           isLocal={true}
-          style={[styles.dealerSelect]}
+          style={fieldStyle}
           {...data.props}
         />
       );
