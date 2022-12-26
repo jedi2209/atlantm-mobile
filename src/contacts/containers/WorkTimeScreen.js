@@ -87,7 +87,10 @@ const renderDayTimeShort = (worktime, first) => {
     const start = get(day, 'time.start', null);
     const finish = get(day, 'time.finish', null);
     return (
-      <HStack alignItems="center" justifyContent={'space-between'}>
+      <HStack
+        key={'dayTimeShort' + dayNum}
+        alignItems="center"
+        justifyContent={'space-between'}>
         <Text
           color="coolGray.600"
           _dark={{

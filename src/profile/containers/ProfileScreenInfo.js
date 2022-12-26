@@ -8,7 +8,6 @@ import {
   Text,
   TouchableWithoutFeedback,
   ActivityIndicator,
-  SafeAreaView,
   TouchableOpacity,
 } from 'react-native';
 import UserCars from '../components/UserCars';
