@@ -5,7 +5,6 @@ import {
   Dimensions,
   StyleSheet,
   ActivityIndicator,
-  RefreshControl,
   Image,
   BackHandler,
 } from 'react-native';
@@ -287,11 +286,7 @@ const InfoPostScreen = ({
 
   return (
     <View style={{flex: 1}} backgroundColor={'white'}>
-      <ScrollView
-        style={{margin: 0, padding: 0, flex: 1}}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={_onRefresh} />
-        }>
+      <ScrollView style={{margin: 0, padding: 0, flex: 1}}>
         {!text || isLoading ? (
           <ActivityIndicator
             color={styleConst.color.blue}

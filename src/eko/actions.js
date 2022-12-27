@@ -228,6 +228,7 @@ export const actionReviewAdd = props => {
     return API.reviewAdd(props)
       .then(res => {
         const {error, status} = res;
+        console.info('res', res);
 
         if (status !== 'success') {
           return dispatch({

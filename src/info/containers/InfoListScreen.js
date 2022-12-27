@@ -7,8 +7,6 @@ import {
   StyleSheet,
   ActivityIndicator,
   Dimensions,
-  RefreshControl,
-  ScrollView,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {Stack, Box, Text} from 'native-base';
@@ -248,18 +246,7 @@ class InfoListScreen extends Component {
 
     console.info('== InfoListScreen ==');
     return (
-      <Box
-        style={styles.container}
-        // refreshControl={
-        //   <RefreshControl
-        //     refreshing={this.state.refreshing}
-        //     onRefresh={this._onRefresh}
-        //     tintColor={styleConst.color.blue}
-        //     title={strings.InfoListScreen.refresh}
-        //     progressBackgroundColor={styleConst.color.blue}
-        //   />
-        // }
-      >
+      <Box style={styles.container}>
         {!this.state.isRefreshing ? (
           <>
             {filters ? (
