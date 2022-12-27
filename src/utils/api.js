@@ -677,9 +677,9 @@ export default {
 
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'post',
-      // headers: {
-      //   'Content-Type': 'application/x-www-form-urlencoded',
-      // },
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
       body,
     });
 
@@ -1072,10 +1072,18 @@ export default {
 
   async apiGetData(url, requestParams) {
     const method = requestParams.method;
-    let body = null;
-    if (requestParams?.body && typeof requestParams?.body === 'object') {
-      body = JSON.stringify(requestParams?.body);
+    let body = requestParams?.body;
+    if (requestParams?.body && typeof body === 'object') {
+      if (
+        requestParams?.headers['Content-Type'] !==
+        'application/x-www-form-urlencoded'
+      ) {
+        body = JSON.stringify(body);
+      } else {
+        body = new URLSearchParams(body).toString();
+      }
     }
+    console.info('body', body);
     return await RNFetchBlob.config({
       timeout: requestParams.timeout,
       followRedirect: true,
@@ -1084,6 +1092,7 @@ export default {
       .fetch(method, url, requestParams?.headers, body)
       .then(res => {
         let answer = '';
+        console.info('res', res);
         switch (res.info().respType) {
           case 'json':
             answer = res.json();
@@ -1092,10 +1101,10 @@ export default {
             answer = res?.data;
             break;
           default:
-            console.error(
-              'apiGetDataError res.info().respType: ' + url,
-              res.info().respType,
-            );
+            if (res?.data) {
+              answer = res?.data;
+            }
+            console.error('apiGetDataError res.info().respType: ' + url);
             break;
         }
         return answer;

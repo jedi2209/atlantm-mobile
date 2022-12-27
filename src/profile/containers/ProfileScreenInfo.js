@@ -20,7 +20,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import PushNotifications from '../../core/components/PushNotifications';
 import DealerItemList from '../../core/components/DealerItemList';
-import RefreshSpinner from '../../core/components/RefreshSpinner';
+// import RefreshSpinner from '../../core/components/RefreshSpinner';
 
 // redux
 import {connect} from 'react-redux';
@@ -699,17 +699,7 @@ class ProfileScreenInfo extends Component {
 
   render() {
     return (
-      <ScrollView
-        style={{flex: 1}}
-        testID="ProfileScreen.Wrapper"
-        refreshControl={
-          <RefreshSpinner
-            onRefresh={() => {
-              return this.getUserData();
-            }}
-            isRequest={this.state.refreshing}
-          />
-        }>
+      <ScrollView style={{flex: 1}} testID="ProfileScreen.Wrapper">
         <Text
           style={{
             fontSize: 35,

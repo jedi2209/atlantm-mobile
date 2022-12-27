@@ -271,6 +271,7 @@ class ReviewAddRatingStepScreen extends Component {
         rating: get(dataFromForm, 'RATING', ''),
       })
       .then(action => {
+        console.info('action', action);
         if (action.type === REVIEW_ADD__SUCCESS) {
           Analytics.logEvent('order', 'eko/review_add');
 
@@ -295,15 +296,12 @@ class ReviewAddRatingStepScreen extends Component {
       });
   };
 
-  renderPublicAgree = () => {
+  renderPublicAgree = isChecked => {
     return (
       <View py={5} backgroundColor="white" px={3}>
         <Checkbox
-          defaultIsChecked={true}
-          isChecked={this.state.publicAgree}
-          onChange={() =>
-            this.setState({publicAgree: !this.state.publicAgree})
-          }>
+          isChecked={isChecked}
+          onChange={this.setState({publicAgree: !isChecked})}>
           {strings.ReviewAddRatingStepScreen.approve}
         </Checkbox>
       </View>
@@ -315,7 +313,7 @@ class ReviewAddRatingStepScreen extends Component {
 
     return (
       <View style={{marginTop: 10, flex: 1}}>
-        {this.renderPublicAgree()}
+        {this.renderPublicAgree(this.state.publicAgree)}
         <Form
           contentContainerStyle={{
             paddingHorizontal: 14,
