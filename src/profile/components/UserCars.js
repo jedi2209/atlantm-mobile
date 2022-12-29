@@ -183,7 +183,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
                                     strings.UserCars.Notifications.success
                                       .statusUpdate
                                   }
-                                  title="Ошибка"
+                                  title={strings.Notifications.success.title}
                                 />
                               );
                             },
@@ -200,7 +200,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
                               <ToastAlert
                                 id={id}
                                 description={error}
-                                title="Ошибка"
+                                title={strings.Notifications.error.title2}
                               />
                             );
                           },

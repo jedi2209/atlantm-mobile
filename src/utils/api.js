@@ -925,10 +925,6 @@ export default {
   async deleteProfile(profile) {
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
     });
 
     if (
@@ -996,11 +992,7 @@ export default {
       method = 'PUT';
     }
     const requestParams = _.merge({}, baseRequestParams, {
-      method: method,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+      method,
       body: {
         vin: car.vin,
         userid: userSAP.ID,
@@ -1071,9 +1063,9 @@ export default {
   },
 
   async apiGetData(url, requestParams) {
-    const method = requestParams.method;
+    const method = requestParams.method.toString().toLowerCase();
     let body = requestParams?.body;
-    if (requestParams?.body && typeof body === 'object') {
+    if (body && typeof body === 'object') {
       if (
         requestParams?.headers['Content-Type'] !==
         'application/x-www-form-urlencoded'
@@ -1083,35 +1075,50 @@ export default {
         body = new URLSearchParams(body).toString();
       }
     }
-    console.info('body', body);
-    return await RNFetchBlob.config({
-      timeout: requestParams.timeout,
-      followRedirect: true,
-      indicator: true,
-    })
-      .fetch(method, url, requestParams?.headers, body)
-      .then(res => {
-        let answer = '';
-        console.info('res', res);
-        switch (res.info().respType) {
-          case 'json':
-            answer = res.json();
-            break;
-          case 'text':
-            answer = res?.data;
-            break;
-          default:
-            if (res?.data) {
-              answer = res?.data;
-            }
-            console.error('apiGetDataError res.info().respType: ' + url);
-            break;
-        }
-        return answer;
-      })
-      .catch(err => {
-        console.error('apiGetDataError URL: ' + url, err);
-        return false;
+
+    if (method === 'delete') {
+      const res = await fetch(url, {
+        method: method,
+        headers: requestParams?.headers,
+        body: body,
       });
+      const resText = await res.text();
+      try {
+        const resJson = JSON.parse(resText);
+        return resJson;
+      } catch (err) {
+        console.info('apiGetDataError DELETE URL: ' + url, err);
+        return resText;
+      }
+    } else {
+      return await RNFetchBlob.config({
+        timeout: requestParams.timeout,
+        followRedirect: true,
+        indicator: true,
+      })
+        .fetch(method, url, requestParams?.headers, body)
+        .then(res => {
+          let answer = '';
+          switch (res.info().respType) {
+            case 'json':
+              answer = res.json();
+              break;
+            case 'text':
+              answer = res?.data;
+              break;
+            default:
+              if (res?.data) {
+                answer = res?.data;
+              }
+              console.error('apiGetDataError res.info().respType: ' + url);
+              break;
+          }
+          return answer;
+        })
+        .catch(err => {
+          console.error('apiGetDataError URL: ' + url, err);
+          return false;
+        });
+    }
   },
 };
