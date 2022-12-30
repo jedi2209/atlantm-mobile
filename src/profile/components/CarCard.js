@@ -51,6 +51,10 @@ const styles = {
 
 export const CarCard = ({data, type, checked, onPress, disabled}) => {
   const {brand, model, number, owner} = data;
+  let modelName = model;
+  if (typeof model === 'object') {
+    modelName = model?.name;
+  }
   return (
     <View
       style={[
@@ -64,7 +68,7 @@ export const CarCard = ({data, type, checked, onPress, disabled}) => {
           numberOfLines={1}
           selectable={false}
           style={styles.textBrandModel}>
-          {`${brand} ${model}`}
+          {`${brand} ${modelName}`}
         </Text>
         <Text
           ellipsizeMode="tail"
