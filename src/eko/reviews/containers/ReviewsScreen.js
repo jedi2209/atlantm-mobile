@@ -128,7 +128,11 @@ class ReviewsScreen extends Component {
 
     return (
       <SafeAreaView style={styles.content}>
-        <DealerItemList dealer={dealerSelected} goBack={true} />
+        <DealerItemList
+          dealer={dealerSelected}
+          goBack={true}
+          style={{marginHorizontal: 8}}
+        />
 
         <ReviewsList
           items={reviews}

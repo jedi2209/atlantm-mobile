@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {TouchableOpacity, Image, StyleSheet} from 'react-native';
 
 // components
@@ -43,20 +43,10 @@ const icons = {
   add: require('../../assets/add_review.png'),
 };
 
-export default class ReviewsFilter extends Component {
-  static propTypes = {
-    onPressDate: PropTypes.func,
-    onPressRating: PropTypes.func,
-    onPressAddReview: PropTypes.func,
-  };
+const ReviewsFilter = props => {
+  const {onPressDate, onPressRating, onPressAddReview} = props;
 
-  static defaultProps = {
-    onPressDate: null,
-    onPressRating: null,
-    onPressAddReview: null,
-  };
-
-  renderIcon = (iconName, onPressHandler) => (
+  const _renderIcon = (iconName, onPressHandler) => (
     <TouchableOpacity style={styles.icon} onPress={onPressHandler}>
       <View style={styles.iconInner}>
         <Image style={styles.image} source={icons[iconName]} />
@@ -64,17 +54,27 @@ export default class ReviewsFilter extends Component {
     </TouchableOpacity>
   );
 
-  render() {
-    const {onPressDate, onPressRating, onPressAddReview} = this.props;
-
-    return (
-      <View style={[styleFooter.footerFilters, styleFooter.footer]}>
-        <View style={[styleConst.shadow.default, styles.container]}>
-          {onPressRating ? this.renderIcon('rating', onPressRating) : null}
-          {onPressDate ? this.renderIcon('date', onPressDate) : null}
-          {onPressAddReview ? this.renderIcon('add', onPressAddReview) : null}
-        </View>
+  return (
+    <View style={[styleFooter.footerFilters, styleFooter.footer]}>
+      <View style={[styleConst.shadow.default, styles.container]}>
+        {onPressRating ? _renderIcon('rating', onPressRating) : null}
+        {onPressDate ? _renderIcon('date', onPressDate) : null}
+        {onPressAddReview ? _renderIcon('add', onPressAddReview) : null}
       </View>
-    );
-  }
-}
+    </View>
+  );
+};
+
+ReviewsFilter.defaultProps = {
+  onPressDate: null,
+  onPressRating: null,
+  onPressAddReview: null,
+};
+
+ReviewsFilter.propTypes = {
+  onPressDate: PropTypes.func,
+  onPressRating: PropTypes.func,
+  onPressAddReview: PropTypes.func,
+};
+
+export default ReviewsFilter;

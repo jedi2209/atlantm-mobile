@@ -572,11 +572,15 @@ const EKO = ({navigation, route}) => (
     <StackEKO.Screen
       name="ReviewsScreen"
       component={ReviewsScreen}
-      options={ClassicHeaderBlue(
-        strings.ReviewsScreen.title,
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.ReviewsScreen.title,
+        headerRight: () => <></>,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
     <StackEKO.Screen
       name="ReviewScreen"
@@ -602,20 +606,28 @@ const EKO = ({navigation, route}) => (
     <StackEKO.Screen
       name="ReviewsFilterDateScreen"
       component={ReviewsFilterDateScreen}
-      options={ClassicHeaderBlue(
-        strings.ReviewsFilterDateScreen.title,
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.ReviewsFilterDateScreen.title,
+        headerRight: () => <></>,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
     <StackEKO.Screen
       name="ReviewsFilterRatingScreen"
       component={ReviewsFilterRatingScreen}
-      options={ClassicHeaderBlue(
-        strings.ReviewsFilterRatingScreen.title,
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.ReviewsFilterRatingScreen.title,
+        headerRight: () => <></>,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
     <StackEKOAddReview.Screen
       name="ReviewAddMessageStepScreen"
