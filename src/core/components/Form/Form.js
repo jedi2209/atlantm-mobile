@@ -651,7 +651,7 @@ class Form extends Component {
     let groupStyle = [styles.groupFields, group.style];
 
     if (
-      typeof group.fields.find(e => e.type === 'dealerSelect') !==
+      typeof group.fields.find(e => e?.type === 'dealerSelect') !==
         'undefined' &&
       totalFields === 1
     ) {
