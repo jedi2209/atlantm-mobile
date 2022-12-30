@@ -128,7 +128,7 @@ class ServiceScreenStep2 extends Component {
       }
       const dataToSend = {
         brand: get(data, 'car.brand', ''),
-        model: get(data, 'car.model', ''),
+        model: get(data, 'car.model.name', 'car.model', ''),
         carNumber: get(data, 'car.plate', ''),
         vin: get(data, 'vin', ''),
         date: format(dateFromForm?.date ? dateFromForm.date : dateFromForm),

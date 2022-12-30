@@ -107,10 +107,10 @@ class OrderPartsScreen extends Component {
     const carFromNavigation = get(this.props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
       this.state.carBrand = get(carFromNavigation, 'brand');
-      this.state.carModel = get(carFromNavigation, 'model');
+      this.state.carModel = get(carFromNavigation, 'model.name', 'model');
       this.state.carName = [
         get(carFromNavigation, 'brand'),
-        get(carFromNavigation, 'model'),
+        get(carFromNavigation, 'model.name', 'model'),
       ].join(' ');
       this.state.carVIN = carFromNavigation.vin;
     }
@@ -155,10 +155,10 @@ class OrderPartsScreen extends Component {
 
   _selectCar = item => {
     this.setState({
-      carBrand: item.brand,
-      carModel: item.model,
-      carName: [item.brand, item.model].join(' '),
-      carVIN: item.vin,
+      carBrand: item?.brand,
+      carModel: get(item, 'model.name', 'model', ''),
+      carName: [item?.brand, get(item, 'model.name', 'model', '')].join(' '),
+      carVIN: item?.vin,
     });
   };
 
@@ -200,7 +200,7 @@ class OrderPartsScreen extends Component {
     const dataToSend = {
       car: get(dataFromForm, 'CARNAME', ''),
       brand: get(dataFromForm, 'CARBRAND', ''),
-      model: get(dataFromForm, 'CARMODEL', ''),
+      model: get(dataFromForm, 'CARMODEL.name', 'CARMODEL'),
       vin: get(dataFromForm, 'CARVIN', ''),
       firstName: get(dataFromForm, 'NAME', ''),
       secondName: get(dataFromForm, 'SECOND_NAME', ''),

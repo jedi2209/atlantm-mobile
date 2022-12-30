@@ -412,11 +412,7 @@ export default {
       f_Source: 3,
     };
     const requestParams = _.merge({}, baseRequestParams, {
-      method: 'post',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+      method: 'POST',
       body,
     });
 
@@ -455,12 +451,8 @@ export default {
     };
 
     const requestParams = _.merge({}, baseRequestParams, {
-      method: 'post',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body,
+      method: 'POST',
+      body: body,
     });
 
     const url = isNewCar ? '/orders/stock/post/' : '/orders/trade-in/post/';
@@ -495,12 +487,8 @@ export default {
     };
 
     const requestParams = _.merge({}, baseRequestParams, {
-      method: 'post',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body,
+      method: 'POST',
+      body: body,
     });
 
     const url = '/orders/credit/post/';
@@ -535,12 +523,8 @@ export default {
     };
 
     const requestParams = _.merge({}, baseRequestParams, {
-      method: 'post',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body,
+      method: 'POST',
+      body: body,
     });
 
     const url = '/orders/testdrive/post/';
@@ -575,12 +559,8 @@ export default {
     };
 
     const requestParams = _.merge({}, baseRequestParams, {
-      method: 'post',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body,
+      method: 'POST',
+      body: body,
     });
 
     const url = '/orders/my-price/post/';
@@ -617,11 +597,7 @@ export default {
 
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body,
+      body: body,
     });
 
     const url = isNewCar ? '/order/test-drive/' : null;
@@ -640,7 +616,7 @@ export default {
       // headers: {
       //   'Content-Type': 'application/x-www-form-urlencoded',
       // },
-      body,
+      body: body,
     });
 
     return this.request('/tva/message/post/', requestParams);
@@ -680,7 +656,7 @@ export default {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body,
+      body: body,
     });
 
     return await this.request('/eko/review/post/', requestParams);
@@ -803,11 +779,11 @@ export default {
     };
 
     const requestParams = _.merge({}, baseRequestParams, {
-      method: 'post',
+      method: 'POST',
       // headers: {
       //   'Content-Type': 'application/x-www-form-urlencoded',
       // },
-      body,
+      body: body,
     });
 
     return this.request('/lkk/register/', requestParams);
@@ -865,11 +841,11 @@ export default {
     };
 
     const requestParams = _.merge({}, baseRequestParams, {
-      method: 'post',
+      method: 'POST',
       // headers: {
       //   'Content-Type': 'application/x-www-form-urlencoded',
       // },
-      body,
+      body: body,
     });
 
     return await this.request('/lkk/auth/social/', requestParams)
@@ -896,11 +872,11 @@ export default {
     }
 
     const requestParams = _.merge({}, baseRequestParams, {
-      method: 'post',
+      method: 'POST',
       // headers: {
       //   'Content-Type': 'application/x-www-form-urlencoded',
       // },
-      body,
+      body: body,
     });
 
     return await this.request('/lkk/auth/validate/', requestParams)
@@ -1040,11 +1016,7 @@ export default {
   saveOrderToService(body) {
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body,
+      body: body,
     });
 
     return this.request('/service/order/', requestParams);
@@ -1075,7 +1047,6 @@ export default {
         body = new URLSearchParams(body).toString();
       }
     }
-
     if (method === 'delete') {
       const res = await fetch(url, {
         method: method,
