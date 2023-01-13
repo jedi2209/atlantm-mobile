@@ -121,9 +121,15 @@ export default {
   },
 
   fetchTva({dealer, region, number, pushTracking}) {
-    const url = `/tva/get/?number=${number}&region=${region}&dealer=${dealer}&notify=${pushTracking}&platform=${
-      isAndroid ? 1 : 2
-    }`;
+    const url =
+      '/tva/get/?' +
+      new URLSearchParams({
+        number,
+        region,
+        dealer,
+        notify: pushTracking,
+        platform: isAndroid ? 1 : 2,
+      });
     return this.request(url, baseRequestParams);
   },
 
