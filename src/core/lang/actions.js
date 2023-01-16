@@ -4,9 +4,9 @@ import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
 
-export const actionSetGlobalLanguage = (lang) => {
-  return (dispatch) => {
-    if (lang !== 'ru' && lang !== 'ua') {
+export const actionSetGlobalLanguage = lang => {
+  return dispatch => {
+    if (lang !== 'ru') {
       lang = 'ru';
     }
     dispatch({
@@ -17,6 +17,7 @@ export const actionSetGlobalLanguage = (lang) => {
     strings.setLanguage(lang);
     switch (lang) {
       case 'ua':
+      case 'uk':
         moment.locale('uk');
         break;
       case 'ru':

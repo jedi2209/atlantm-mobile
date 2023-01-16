@@ -42,3 +42,14 @@ export const AUTH_DATA = {
       '53201529704-pofi5bbpvo7dtnuu521lo00f3bl6qiq2.apps.googleusercontent.com',
   },
 };
+
+export const API_MAIN_KEY = {
+  ru: {
+    Android: 'M8ttryMRXs6aTqfH4zNFSPUC78eKoVr3bw5cRwDe',
+    iOS: 'kZJt475LBU3B7aL82j43l7IBab165xbiuIqIqcv9',
+  },
+  ua: {
+    Android: 'r8dz07065z5vyddYaPx2C8K4FuHQRbsM13hPlX1O',
+    iOS: 'HzKtwpq5Nd1KL4jMUKS2K5lz6sSGTS8X1dLZ5tgR',
+  },
+};

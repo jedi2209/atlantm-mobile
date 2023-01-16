@@ -8,11 +8,9 @@ import {
   NativeModules,
   View,
 } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import {NativeBaseProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
-// import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import {firebase} from '@react-native-firebase/app-check';
 
@@ -37,6 +35,7 @@ import {theme} from '../theme';
 import API from '../../utils/api';
 import {get} from 'lodash';
 import OneSignal from 'react-native-onesignal';
+import moment from 'moment';
 import PushNotifications from '../components/PushNotifications';
 import styleConst from '../../core/style-const';
 
@@ -80,6 +79,7 @@ const App = props => {
   const storeVersion = '2022-09-20';
 
   const currentLanguage = get(props, 'currentLanguage', 'ru');
+  moment.locale(currentLanguage === 'ua' ? 'uk' : currentLanguage);
 
   const _awaitStoreToUpdate = async () => {
     const storeData = store.getState();

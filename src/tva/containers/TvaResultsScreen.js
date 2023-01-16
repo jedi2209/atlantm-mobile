@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {
   Text,
@@ -8,7 +8,6 @@ import {
   StyleSheet,
   ScrollView,
   Platform,
-  ActivityIndicator,
 } from 'react-native';
 import {Button} from 'native-base';
 import {localUserDataUpdate} from '../../profile/actions';
@@ -110,8 +109,19 @@ const mapDispatchToProps = {
   localUserDataUpdate,
 };
 
-const TvaResultsScreen = (props) => {
-  const {dealerSelected, results, actionTvaMessageFill, actionSetActiveTvaOrderId, message, navigation, activeOrderId, isMessageSending, localUserDataUpdate, actionTvaMessageSend} = props;
+const TvaResultsScreen = props => {
+  const {
+    dealerSelected,
+    results,
+    actionTvaMessageFill,
+    actionSetActiveTvaOrderId,
+    message,
+    navigation,
+    activeOrderId,
+    isMessageSending,
+    localUserDataUpdate,
+    actionTvaMessageSend,
+  } = props;
   const [comment, setComment] = useState(message || '');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -187,11 +197,6 @@ const TvaResultsScreen = (props) => {
     }
   };
 
-  // onChangeField = fieldName => value => {
-  //   this.setState({[fieldName]: value});
-  // };
-  
-
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -218,10 +223,8 @@ const TvaResultsScreen = (props) => {
                 _text={styles.buttonText}
                 size="lg"
                 shadow={4}
-                onPress={() =>
-                  navigation.navigate('BottomTabNavigation')
-                }>
-                  {strings.Navigation.back}
+                onPress={() => navigation.navigate('BottomTabNavigation')}>
+                {strings.Navigation.back}
               </Button>
             </View>
           </View>
@@ -286,17 +289,15 @@ const TvaResultsScreen = (props) => {
             <View style={styles.group}>
               <Button
                 variant="solid"
-                onPress={
-                  loading ? undefined : onPressMessageButton
-                }
+                onPress={loading ? undefined : onPressMessageButton}
                 isLoading={loading}
                 _text={styles.buttonText}
                 spinnerPlacement="start"
-                isLoadingText="Отправляем..."
+                isLoadingText={strings.Form.button.sending}
                 size="lg"
                 shadow={loading ? 1 : 4}
                 style={styles.button}>
-                  {strings.Form.button.send}
+                {strings.Form.button.send}
               </Button>
             </View>
           </>

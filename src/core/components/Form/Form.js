@@ -456,7 +456,7 @@ class Form extends Component {
                   '\r\n\r\n' +
                   strings.Form.status.fieldsRequired2
                 }
-                title="Не заполнены обязательные поля"
+                title={strings.Form.status.fieldRequiredMiss}
               />
             );
           },
@@ -476,7 +476,7 @@ class Form extends Component {
                   '" ' +
                   strings.Form.status.fieldRequired2
                 }
-                title="Не заполнены обязательные поля"
+                title={strings.Form.status.fieldRequiredMiss}
               />
             );
           },
@@ -550,6 +550,7 @@ class Form extends Component {
       } else {
         switch (countryCode) {
           case 'ru':
+          case 'ua':
             var valueFull = 16;
             break;
           case 'by':
@@ -1077,7 +1078,7 @@ class Form extends Component {
       } else {
         countrySettings = ['by', 'ru'];
       }
-      let countriesListStatic = require('../../../core/const.countries.json');
+      let countriesListStatic = require('../../../core/const.countries_by.json');
       let countriesList = [];
       let countriesCodes = {};
       countriesListStatic.map(el => {
@@ -1474,7 +1475,7 @@ class Form extends Component {
                   isDisabled={this.state.showSubmitButton ? false : true}
                   isLoading={this.state.loading}
                   spinnerPlacement="start"
-                  isLoadingText="Отправляем..."
+                  isLoadingText={strings.Form.button.sending}
                   variant="solid"
                   testID="Form.ButtonSubmit"
                   accessibilityValue={{

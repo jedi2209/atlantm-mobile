@@ -9,7 +9,7 @@ import {
 } from '../../actions';
 
 // components
-import {VStack, HStack, Box, View, Button, Pressable} from 'native-base';
+import {HStack, View, Pressable} from 'native-base';
 import RadioIcon from '../../../core/components/RadioIcon';
 import ListItemHeader from '../../../profile/components/ListItemHeader';
 import RatingStars from '../components/RatingStars';
@@ -23,7 +23,7 @@ import {
   REVIEWS_RATING_TYPE__TO,
 } from '../../constants';
 import PropTypes from 'prop-types';
-import styleConst from '../../../core/style-const';
+
 import {strings} from '../../../core/lang/const';
 
 const RATING_ARRAY = [1, 2, 3, 4, 5];

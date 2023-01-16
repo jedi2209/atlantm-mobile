@@ -103,6 +103,17 @@ function listBelarussia(state = [], action) {
   }
 }
 
+function listUkraine(state = [], action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'dealer.listUkraine', []);
+    case DEALERS__SUCCESS:
+      return [...action.payload[UKRAINE]];
+    default:
+      return state;
+  }
+}
+
 function listBrands(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
@@ -222,6 +233,18 @@ const listBelarussiaByCities = (state = [], action) => {
   }
 };
 
+const listUkraineByCities = (state = [], action) => {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action, 'payload.dealer.listUkraineByCities', []);
+    case DEALERS__SUCCESS:
+    case DEALERS_BY_CITIES__SET:
+      return processListsByCities(action, BELARUSSIA);
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   selected,
   selectedLocal,
@@ -230,6 +253,8 @@ export default combineReducers({
   listRussiaByCities,
   listBelarussia,
   listBelarussiaByCities,
+  listUkraine,
+  listUkraineByCities,
   listDealers,
   listCities,
   listBrands,
