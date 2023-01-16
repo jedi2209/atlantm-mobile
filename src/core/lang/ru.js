@@ -766,9 +766,11 @@ export default {
       fieldsRequired2: 'обязательны для заполнения',
       fieldRequired1: 'Поле',
       fieldRequired2: 'обязательно для заполнения',
+      fieldRequiredMiss: 'Не заполнены обязательные поля',
     },
     button: {
       send: 'Отправить',
+      sending: 'Отправляем...',
       receiveCode: 'Получить код',
     },
     agreement: {

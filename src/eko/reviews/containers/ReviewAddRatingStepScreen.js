@@ -10,9 +10,6 @@ import {
   actionSelectAddReviewRatingVariant,
 } from '../../actions';
 
-// styles
-import stylesList from '../../../core/components/Lists/style';
-
 // components
 import {Checkbox, View} from 'native-base';
 
@@ -271,7 +268,6 @@ class ReviewAddRatingStepScreen extends Component {
         rating: get(dataFromForm, 'RATING', ''),
       })
       .then(action => {
-        console.info('action', action);
         if (action.type === REVIEW_ADD__SUCCESS) {
           Analytics.logEvent('order', 'eko/review_add');
 

@@ -184,6 +184,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
             case 'ua':
               moment.locale('uk');
               break;
+            case 'by':
             case 'ru':
               moment.locale('ru');
               break;

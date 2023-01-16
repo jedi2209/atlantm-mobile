@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
-import {SafeAreaView} from 'react-native';
-import {VStack, HStack, Box, Text, View, Button, Pressable} from 'native-base';
+import React from 'react';
+import {VStack, HStack, Text, View, Pressable} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -15,7 +14,7 @@ import stylesList from '../../../core/components/Lists/style';
 
 // helpers
 import PropTypes from 'prop-types';
-import styleConst from '../../../core/style-const';
+
 import {
   substructMonth,
   substractWeek,

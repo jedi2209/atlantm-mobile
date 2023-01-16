@@ -42,3 +42,14 @@ export const AUTH_DATA = {
       'XXXX-XXXX.apps.googleusercontent.com',
   },
 };
+
+export const API_MAIN_KEY = {
+  ru: {
+    Android: 'XXXX',
+    iOS: 'XXXX',
+  },
+  ua: {
+    Android: 'XXXX',
+    iOS: 'XXXX',
+  },
+};

@@ -118,6 +118,7 @@ export default {
     },
     error: {
       title: 'Хьюстон, у нас проблеми...',
+      title2: 'Упс...',
       text: 'Сталася помилка, спробуємо знову?',
     },
     UpdatePopup: {
@@ -764,6 +765,7 @@ export default {
       fieldsRequired2: "є обов'язковими для заповнення",
       fieldRequired1: 'Поле',
       fieldRequired2: "є обов'язковим для заповнення",
+      fieldRequiredMiss: "Не заповнені обов'язкові поля",
     },
     button: {
       send: 'Відправити',
