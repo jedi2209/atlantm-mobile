@@ -308,14 +308,7 @@ export const Base = ({navigation, route}) => {
         <StackBase.Screen
           name="TvaScreenBase"
           component={TVA}
-          options={BigCloseButton(navigation, route, {
-            ...TransitionPresets.ScaleFromCenterAndroid,
-            headerTitle: strings.TvaScreen.title,
-            headerTitleStyle: [
-              stylesHeader.transparentHeaderTitle,
-              {color: '#222B45'},
-            ],
-          })}
+          options={{headerShown: false, presentation: 'modal'}}
         />
         {/* НОВЫЕ АВТО */}
         <StackBase.Screen
@@ -1278,16 +1271,27 @@ const TVA = ({navigation, route}) => (
     <StackTVA.Screen
       name="TvaScreen"
       component={TvaScreen}
-      options={{headerShown: false}}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.TvaScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
     <StackTVA.Screen
       name="TvaResultsScreen"
       component={TvaResultsScreen}
-      options={ClassicHeaderWhite(
-        strings.TvaResultsScreen.title,
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ScaleFromCenterAndroid,
+        headerTitle: strings.TvaResultsScreen.title,
+        headerRight: () => <></>,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
     />
   </StackTVA.Navigator>
 );

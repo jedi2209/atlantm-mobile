@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import PropTypes from 'prop-types';
 import {
   Alert,
@@ -9,6 +9,7 @@ import {
   CloseIcon,
   useToast,
 } from 'native-base';
+import {strings} from '../lang/const';
 
 const ToastAlert = ({
   id,
@@ -20,6 +21,7 @@ const ToastAlert = ({
   ...rest
 }) => {
   const toast = useToast();
+  const toastRef = useRef();
   return (
     <Alert
       maxWidth="95%"
@@ -27,6 +29,7 @@ const ToastAlert = ({
       flexDirection="row"
       status={status ? status : 'info'}
       variant={variant}
+      ref={toastRef}
       {...rest}>
       <VStack space={1} flexShrink={1} w="100%">
         <HStack
@@ -52,7 +55,7 @@ const ToastAlert = ({
           {isClosable ? (
             <IconButton
               variant="unstyled"
-              icon={<CloseIcon size="3" />}
+              icon={<CloseIcon size={4} />}
               _icon={{
                 color: variant === 'solid' ? 'lightText' : 'darkText',
               }}
@@ -91,9 +94,9 @@ ToastAlert.propTypes = {
 };
 
 ToastAlert.defaultProps = {
-  title: 'Ошибка',
+  title: strings.Notifications.error.title,
   variant: 'left-accent',
-  description: 'Произошла ошибка',
+  description: strings.Notifications.error.text,
   isClosable: true,
   status: 'error',
 };
