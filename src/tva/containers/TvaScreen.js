@@ -1,8 +1,9 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useState, useEffect } from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {useToast} from 'native-base';
 import ToastAlert from '../../core/components/ToastAlert';
+import {useNavigation} from '@react-navigation/native';
 
 // redux
 import {connect} from 'react-redux';
@@ -18,9 +19,8 @@ import {get} from 'lodash';
 import {TVA__SUCCESS, TVA__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
 
-const mapStateToProps = ({dealer, profile, tva, nav, core}) => {
+const mapStateToProps = ({dealer, profile, tva, core}) => {
   return {
-    nav,
     dealerSelected: dealer.selected,
     dealerSelectedLocal: dealer.selectedLocal,
     isTvaRequest: tva.meta.isRequest,
@@ -40,11 +40,19 @@ const mapDispatchToProps = {
   actionSetPushTracking,
 };
 
-const TvaScreen = (props) => {
-  const {dealerSelectedLocal, dealerSelected, navigation, route, carNumber, actionFetchTva, localUserDataUpdate, actionSetPushTracking} = props;
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+const TvaScreen = props => {
+  const {
+    dealerSelectedLocal,
+    dealerSelected,
+    route,
+    carNumber,
+    actionFetchTva,
+    localUserDataUpdate,
+    actionSetPushTracking,
+  } = props;
+
   const toast = useToast();
+  const navigation = useNavigation();
 
   const FormConfig = {
     fields: {
@@ -57,8 +65,7 @@ const TvaScreen = (props) => {
               type: 'dealerSelect',
               label: strings.Form.field.label.dealer,
               value:
-                dealerSelectedLocal &&
-                dealerSelectedLocal.id
+                dealerSelectedLocal && dealerSelectedLocal.id
                   ? dealerSelectedLocal
                   : dealerSelected,
               props: {
@@ -101,13 +108,11 @@ const TvaScreen = (props) => {
     const params = get(route, 'params', {});
 
     if (params.isPush) {
-      onPressButton(params);
+      _onPressButton(params);
     }
   }, []);
-  
-  const _onPressButton = async pushProps => {
-    setLoading(true);
 
+  const _onPressButton = async pushProps => {
     const dealerId = pushProps.DEALER.id;
     const carNumber = pushProps.CARNUMBER;
 
@@ -121,7 +126,6 @@ const TvaScreen = (props) => {
       pushTracking,
     });
 
-    setLoading(false);
     if (action) {
       switch (action.type) {
         case TVA__SUCCESS:
@@ -212,9 +216,17 @@ const TvaScreen = (props) => {
         case TVA__FAIL:
           toast.show({
             render: ({id}) => {
-              return <ToastAlert id={id} status="error" duration={3000} description={action.payload.message} title="Ошибка" />;
+              return (
+                <ToastAlert
+                  id={id}
+                  status="error"
+                  duration={3000}
+                  description={action.payload.message}
+                  title={strings.Notifications.error.title}
+                />
+              );
             },
-          })
+          });
           setTimeout(() => {
             if (pushTracking === true) {
               PushNotifications.unsubscribeFromTopic('tva');
@@ -253,7 +265,6 @@ const TvaScreen = (props) => {
       onSubmit={_onPressButton}
     />
   );
-
 };
 
 TvaScreen.propTypes = {

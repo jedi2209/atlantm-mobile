@@ -1,15 +1,19 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
+import {Alert, StyleSheet, Platform} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import {
-  Text,
+  Button,
   View,
-  Alert,
-  StyleSheet,
+  Text,
   ScrollView,
-  Platform,
-} from 'react-native';
-import {Button} from 'native-base';
+  HStack,
+  Heading,
+  Box,
+  VStack,
+  useToast,
+} from 'native-base';
 import {localUserDataUpdate} from '../../profile/actions';
 
 // redux
@@ -21,6 +25,7 @@ import {
 } from '../actions';
 
 import {TextInput} from '../../core/components/TextInput';
+import ToastAlert from '../../core/components/ToastAlert';
 
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
@@ -52,26 +57,14 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 20,
     paddingHorizontal: 14,
-    backgroundColor: styleConst.color.white,
   },
   header: {
     marginBottom: 36,
   },
   heading: {
-    fontSize: 30,
+    fontSize: 20,
     fontWeight: 'bold',
-  },
-  field: {
-    marginBottom: 18,
-  },
-  group: {
-    marginBottom: 36,
-    padding: 8,
-    borderRadius: 4,
-  },
-  groupLabel: {
-    marginBottom: 24,
-    fontSize: 18,
+    lineHeight: 24,
   },
   textinput: {
     height: Platform.OS === 'ios' ? 50 : 'auto',
@@ -91,9 +84,8 @@ const styles = StyleSheet.create({
 
 const processDate = date => dayMonthYearTime(date);
 
-const mapStateToProps = ({dealer, nav, tva}) => {
+const mapStateToProps = ({dealer, tva}) => {
   return {
-    nav,
     dealerSelected: dealer.selected,
     results: tva.results,
     comment: tva.message,
@@ -116,7 +108,6 @@ const TvaResultsScreen = props => {
     actionTvaMessageFill,
     actionSetActiveTvaOrderId,
     message,
-    navigation,
     activeOrderId,
     isMessageSending,
     localUserDataUpdate,
@@ -124,12 +115,16 @@ const TvaResultsScreen = props => {
   } = props;
   const [comment, setComment] = useState(message || '');
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [successSent, setsuccessSent] = useState(false);
+
+  const messageField = useRef();
+
+  const toast = useToast();
+  const navigation = useNavigation();
 
   const {car, info = []} = results;
   const titleCar = `${car.brand} ${car.model}`;
   const titleCarNumber = car.number;
-  const textList = [titleCar, titleCarNumber];
 
   localUserDataUpdate({
     CARBRAND: car.brand,
@@ -158,9 +153,20 @@ const TvaResultsScreen = props => {
       }
 
       if (!comment) {
-        setLoading(false);
         setTimeout(() => {
-          Alert.alert('Введи текст сообщения');
+          toast.show({
+            render: ({id}) => {
+              return (
+                <ToastAlert
+                  id={id}
+                  status={'error'}
+                  description={'Введите текст сообщения'}
+                  title={strings.Notifications.error.title}
+                />
+              );
+            },
+          });
+          setLoading(false);
         }, 100);
 
         return;
@@ -171,25 +177,46 @@ const TvaResultsScreen = props => {
         id: activeOrderId,
         dealer: dealerSelected.id,
       }).then(action => {
-        setLoading(false);
         const {type, payload} = action;
 
         if (type === TVA_SEND_MESSAGE__SUCCESS) {
           Analytics.logEvent('order', 'tva/message');
 
           setTimeout(() => {
+            toast.show({
+              render: ({id}) => {
+                return (
+                  <ToastAlert
+                    id={id}
+                    status={'success'}
+                    description={payload.status}
+                    title={strings.Notifications.success.title}
+                  />
+                );
+              },
+            });
             actionTvaMessageFill('');
-            Alert.alert(payload.status);
+            setComment('');
+            messageField?.current.blur();
+            setLoading(false);
           }, 100);
         }
 
         if (type === TVA_SEND_MESSAGE__FAIL) {
           setTimeout(
             () =>
-              Alert.alert(
-                strings.Notifications.error.title,
-                strings.Notifications.error.text,
-              ),
+              toast.show({
+                render: ({id}) => {
+                  return (
+                    <ToastAlert
+                      id={id}
+                      status={'error'}
+                      description={strings.Notifications.error.text}
+                      title={strings.Notifications.error.title}
+                    />
+                  );
+                },
+              }),
             100,
           );
         }
@@ -198,16 +225,15 @@ const TvaResultsScreen = props => {
   };
 
   return (
-    <ScrollView>
+    <ScrollView flex={1}>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.heading}>
-            {`${titleCar}\r\n${titleCarNumber}`}
-          </Text>
-        </View>
-        {success ? (
+        <HStack justifyContent="space-between" mb={2}>
+          <Text style={styles.heading}>{titleCar}</Text>
+          <Text style={styles.heading}>{titleCarNumber}</Text>
+        </HStack>
+        {successSent ? (
           <View style={{flex: 1, justifyContent: 'center'}}>
-            <View style={styles.group}>
+            <View rounded={'md'} mb={'1/6'} p={3}>
               <Text
                 style={{
                   fontSize: 22,
@@ -231,62 +257,57 @@ const TvaResultsScreen = props => {
         ) : (
           <>
             {info.map(item => (
-              <View key={'ViewTvaResult' + item.id}>
-                <View
-                  style={[
-                    styles.group,
-                    activeOrderId === item.id && {
-                      backgroundColor: styleConst.color.white,
-                    },
-                  ]}>
-                  <Text style={styles.groupLabel}>№ {item.id}</Text>
-                  <View style={styles.field}>
-                    <TextInput
-                      editable={false}
-                      style={styles.textinput}
-                      label={strings.TvaResultsScreen.serviceMan}
-                      value={item.name}
-                    />
-                  </View>
-                  <View style={styles.field}>
-                    <TextInput
-                      editable={false}
-                      style={styles.textinput}
-                      label={strings.TvaResultsScreen.time}
-                      value={processDate(item.date)}
-                    />
-                  </View>
-                  <View style={styles.field}>
-                    <TextInput
-                      editable={false}
-                      style={styles.textinput}
-                      label={strings.TvaResultsScreen.status}
-                      value={item.status}
-                    />
-                  </View>
-                </View>
-              </View>
+              <Box
+                key={'ViewTvaResult' + item.id}
+                rounded={'md'}
+                mb={8}
+                p={3}
+                style={[
+                  activeOrderId === item.id && {
+                    backgroundColor: styleConst.color.white,
+                  },
+                ]}>
+                <Heading mb={2} fontSize={18}>
+                  № {item.id}
+                </Heading>
+                <VStack space={'md'}>
+                  <HStack justifyContent="space-between">
+                    <Text>{strings.TvaResultsScreen.serviceMan}</Text>
+                    <Text>{item.name}</Text>
+                  </HStack>
+                  <HStack justifyContent="space-between">
+                    <Text>{strings.TvaResultsScreen.time}</Text>
+                    <Text>{processDate(item.date)}</Text>
+                  </HStack>
+                  <HStack justifyContent="space-between">
+                    <Text>{strings.TvaResultsScreen.status}</Text>
+                    <Text>{item.status}</Text>
+                  </HStack>
+                </VStack>
+              </Box>
             ))}
-            <View style={styles.group}>
-              <View style={styles.field}>
-                <TextInput
-                  multiline={true}
-                  numberOfLines={2}
-                  style={{
-                    height: Platform.OS === 'ios' ? 90 : 'auto',
-                    borderColor: '#d8d8d8',
-                    paddingTop: 25,
-                    borderBottomWidth: 1,
-                    color: '#222b45',
-                    fontSize: 18,
-                  }}
-                  label={strings.TvaResultsScreen.messageToServiceMan}
-                  value={comment}
-                  onChangeText={setComment}
-                />
-              </View>
+            <View mb={4}>
+              <TextInput
+                ref={messageField}
+                multiline={true}
+                numberOfLines={4}
+                style={{
+                  height: Platform.OS === 'ios' ? 90 : 'auto',
+                  color: '#222b45',
+                  paddingTop: 25,
+                  paddingLeft: 15,
+                  paddingBottom: 0,
+                  paddingHorizontal: 0,
+                  maxHeight: 150,
+                  backgroundColor: 'white',
+                  fontSize: 18,
+                }}
+                label={strings.TvaResultsScreen.messageToServiceMan}
+                value={comment}
+                onChangeText={setComment}
+              />
             </View>
-            <View style={styles.group}>
+            <View>
               <Button
                 variant="solid"
                 onPress={loading ? undefined : onPressMessageButton}
