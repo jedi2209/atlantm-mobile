@@ -30,6 +30,8 @@ import PhoneDetect from '../../../utils/phoneDetect';
 
 import styleConst from '../../style-const';
 
+import {APP_REGION} from '../../const';
+
 import {strings} from '../../lang/const';
 
 const platformStyle = {
@@ -1079,6 +1081,9 @@ class Form extends Component {
         countrySettings = ['by', 'ru'];
       }
       let countriesListStatic = require('../../../core/const.countries_by.json');
+      if (APP_REGION === 'ua') {
+        countriesListStatic = require('../../../core/const.countries_ua.json');
+      }
       let countriesList = [];
       let countriesCodes = {};
       countriesListStatic.map(el => {
