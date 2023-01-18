@@ -37,6 +37,7 @@ import {get} from 'lodash';
 import {verticalScale} from '../../../utils/scale';
 import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
+import {APP_REGION} from '../../../core/const';
 
 enableLatestRenderer();
 
@@ -194,14 +195,29 @@ class MapScreen extends Component {
       });
     };
 
-    Promise.all([
-      checkAppAvailable(strings.MapScreen.apps.yaNavi),
-      checkAppAvailable(strings.MapScreen.apps.yaMaps),
-      checkAppAvailable(strings.MapScreen.apps.yaTaxi),
-      checkAppAvailable(strings.MapScreen.apps.uber),
-      checkAppAvailable(strings.MapScreen.apps.googleMaps),
-      checkAppAvailable(strings.MapScreen.apps.appleMaps),
-    ]).then(results => {
+    let NavApps = [];
+
+    switch (APP_REGION) {
+      case 'by':
+        NavApps = [
+          checkAppAvailable(strings.MapScreen.apps.yaNavi),
+          checkAppAvailable(strings.MapScreen.apps.yaMaps),
+          checkAppAvailable(strings.MapScreen.apps.yaTaxi),
+          checkAppAvailable(strings.MapScreen.apps.uber),
+          checkAppAvailable(strings.MapScreen.apps.googleMaps),
+          checkAppAvailable(strings.MapScreen.apps.appleMaps),
+        ];
+        break;
+      case 'ua':
+        NavApps = [
+          checkAppAvailable(strings.MapScreen.apps.uber),
+          checkAppAvailable(strings.MapScreen.apps.googleMaps),
+          checkAppAvailable(strings.MapScreen.apps.appleMaps),
+        ];
+        break;
+    }
+
+    Promise.all(NavApps).then(results => {
       results.forEach(app => {
         if (app.isAppAvailable) {
           apps.push(app.name);
