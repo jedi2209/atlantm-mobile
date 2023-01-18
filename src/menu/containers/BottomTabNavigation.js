@@ -6,13 +6,12 @@ import orderFunctions from '../../utils/orders';
 
 // import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 
 import LogoTitle from '../../core/components/LogoTitle';
 
 // screens
 import ContactsScreen from '../../contacts/containers/ContactsScreen';
-import WorkTimeScreen from '../../contacts/containers/WorkTimeScreen';
 
 import AuthContainer from '../../profile/containers/AuthContainer';
 import PhoneChangeScreen from '../../profile/containers/PhoneChangeScreen';
@@ -133,21 +132,6 @@ const ContactsStackView = ({navigation, route}) => (
       options={{
         headerShown: false,
       }}
-    />
-    <StackContacts.Screen
-      name="WorkTimeScreen"
-      component={WorkTimeScreen}
-      options={TransparentBack(
-        navigation,
-        route,
-        {
-          ...TransitionPresets.ModalTransition,
-        },
-        {
-          icon: 'close',
-          iconSize: 12,
-        },
-      )}
     />
   </StackContacts.Navigator>
 );
