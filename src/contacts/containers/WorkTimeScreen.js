@@ -144,10 +144,10 @@ const WorkTimeScreen = ({dealerSelected, navigation, phonesMobile}) => {
   const {isOpen, onOpen, onClose} = useDisclose();
 
   const renderLocations = locations => {
-    return locations.map(val => {
+    return locations.map((val, num) => {
       const phoneMobile = get(val, 'phoneMobile', []);
       return (
-        <View>
+        <View key={'dealerLocation' + num}>
           <Stack space={2} px={2} mt={2} mb={2}>
             <HStack justifyContent={'space-between'}>
               <Heading

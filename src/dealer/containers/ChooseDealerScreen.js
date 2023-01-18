@@ -27,15 +27,13 @@ const mapDispatchToProps = {
 };
 
 const ChooseDealerScreen = props => {
-  const {region, isFetchDealer, isFetchDealersList, settings} = props;
+  const {isFetchDealer, isFetchDealersList, settings} = props;
 
   const goBack = get(props.route, 'params.goBack', false);
   const isLocal = get(props.route, 'params.isLocal', false);
   const returnScreen = get(props.route, 'params.returnScreen', null);
   const returnState = get(props.route, 'params.returnState', null);
   const listAll = get(props.route, 'params.listAll', null);
-
-  console.info('== ChooseDealer ==', props);
 
   const _onSelectDealer = props => {
     const {pushActionSubscribeState, newDealer} = props;

@@ -46,7 +46,7 @@ import BrandModelFilterScreen from '../catalog/containers/filters/BrandModelFilt
 import UsedCarListScreen from '../catalog/usedcar/containers/UsedCarListScreen';
 import UsedCarItemScreen from '../catalog/usedcar/containers/UsedCarItemScreen';
 
-import ContactsScreen from '../contacts/containers/ContactsScreen';
+import WorkTimeScreen from '../contacts/containers/WorkTimeScreen';
 import ChatScreen from '../contacts/containers/ChatScreen';
 import InfoListScreen from '../info/containers/InfoListScreen';
 import InfoPostScreen from '../info/containers/InfoPostScreen';
@@ -97,7 +97,6 @@ import {
   BigCloseButton,
   TransparentBack,
 } from './const';
-import nav from './reducers';
 
 const StackEKO = createStackNavigator();
 const StackEKOAddReview = createStackNavigator();
@@ -149,6 +148,21 @@ export const Base = ({navigation, route}) => {
               {color: '#222B45'},
             ],
           })}
+        />
+        <StackContacts.Screen
+          name="WorkTimeScreen"
+          component={WorkTimeScreen}
+          options={TransparentBack(
+            navigation,
+            route,
+            {
+              ...TransitionPresets.ModalTransition,
+            },
+            {
+              icon: 'close',
+              iconSize: 12,
+            },
+          )}
         />
         <StackBase.Screen
           name="ChatScreen"
