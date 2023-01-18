@@ -3,7 +3,12 @@ import _ from 'lodash';
 import {Platform, Linking, Alert, BackHandler} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import RNFetchBlob from 'rn-fetch-blob';
-import {STORE_LINK, API_MAIN_URL, API_MAIN_KEY} from '../core/const';
+import {
+  STORE_LINK,
+  API_MAIN_URL,
+  API_MAIN_KEY,
+  APP_REGION,
+} from '../core/const';
 import {strings} from '../core/lang/const';
 
 const isAndroid = Platform.OS === 'android';
@@ -11,7 +16,9 @@ const isAndroid = Platform.OS === 'android';
 const headers = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
-  'x-api-key': `${isAndroid ? API_MAIN_KEY.ru.Android : API_MAIN_KEY.ru.iOS}`,
+  'x-api-key': `${
+    isAndroid ? API_MAIN_KEY[APP_REGION].Android : API_MAIN_KEY[APP_REGION].iOS
+  }`,
   'App-Version': DeviceInfo.getVersion(),
   'App-Name': DeviceInfo.getApplicationName(),
 };

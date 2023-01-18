@@ -11,6 +11,8 @@ import {connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import PropTypes from 'prop-types';
 
+import {APP_REGION} from '../../core/const';
+
 import {fetchDealers} from '../../dealer/actions';
 
 // components
@@ -221,7 +223,7 @@ const SelectListByCountry = props => {
       );
     }
 
-    if (customListUA && customListUA.length && false) {
+    if (customListUA && customListUA.length && APP_REGION === 'ua') {
       routesHead.push({key: 'ua', title: '🇺🇦 Все буде Україна!'});
       TabUA = () => (
         <View style={{flex: 1}}>
@@ -313,7 +315,7 @@ const SelectListByCountry = props => {
     }
 
     if (
-      false &&
+      APP_REGION === 'ua' &&
       listUkraine &&
       listUkraine.length &&
       countrySettings &&
@@ -348,11 +350,21 @@ const SelectListByCountry = props => {
 
   const [routes] = useState(routesHead);
 
-  const renderScene = SceneMap({
-    by: TabBY,
-    ru: TabRU,
-    // ua: TabUA,
-  });
+  let renderScene = null;
+
+  switch (APP_REGION) {
+    case 'by':
+      renderScene = SceneMap({
+        by: TabBY,
+        ru: TabRU,
+      });
+      break;
+    case 'ua':
+      renderScene = SceneMap({
+        ua: TabUA,
+      });
+      break;
+  }
 
   return (
     <TabView
