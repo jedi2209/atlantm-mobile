@@ -1,13 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {
-  StyleSheet,
-  ActivityIndicator,
-  Platform,
-  NativeModules,
-  View,
-} from 'react-native';
+import {StyleSheet, ActivityIndicator, Platform, View} from 'react-native';
 import {NativeBaseProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
@@ -27,6 +21,7 @@ import {
 import {fetchDealers, fetchBrands} from '../../dealer/actions';
 
 import {APP_STORE_UPDATED} from '../../core/actionTypes';
+import {APP_LANG} from '../const';
 
 import {strings} from '../lang/const';
 import {theme} from '../theme';
@@ -78,8 +73,7 @@ const App = props => {
   const mainScreen = 'BottomTabNavigation';
   const storeVersion = '2022-09-20';
 
-  const currentLanguage = get(props, 'currentLanguage', 'ru');
-  moment.locale(currentLanguage === 'ua' ? 'uk' : currentLanguage);
+  moment.locale(APP_LANG);
 
   const _awaitStoreToUpdate = async () => {
     const storeData = store.getState();
@@ -162,13 +156,13 @@ const App = props => {
       firebase.appCheck().activate('ignored', false);
     }
 
-    const deviceLanguage =
-      Platform.OS === 'ios'
-        ? NativeModules.SettingsManager.settings.AppleLocale ||
-          NativeModules.SettingsManager.settings.AppleLanguages[0] //iOS 13
-        : NativeModules.I18nManager.localeIdentifier;
+    // const deviceLanguage =
+    //   Platform.OS === 'ios'
+    //     ? NativeModules.SettingsManager.settings.AppleLocale ||
+    //       NativeModules.SettingsManager.settings.AppleLanguages[0] //iOS 13
+    //     : NativeModules.I18nManager.localeIdentifier;
 
-    strings.setLanguage(currentLanguage);
+    strings.setLanguage(APP_LANG);
 
     if (get(auth, 'login') === 'zteam') {
       window.atlantmDebug = true;

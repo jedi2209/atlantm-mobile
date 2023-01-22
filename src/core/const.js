@@ -9,6 +9,7 @@ let appRegion,
   appName,
   sentryDSN,
   oneSignalKey,
+  appLang,
   fbAppID = null;
 
 export const RUSSIA = 'ru';
@@ -19,6 +20,7 @@ switch (bundle) {
   case 'com.atlantm.app': // iOS BY
   case 'com.atlantm': // Android BY
     appRegion = BELARUSSIA;
+    appLang = 'ru';
     errorNetwork = 'Отсутствует интернет соединение';
     appleID = '1492492166';
     googleID = 'com.atlantm';
@@ -29,6 +31,7 @@ switch (bundle) {
     break;
   case 'ua.atlantm.app': // iOS UA + Android UA
     appRegion = UKRAINE;
+    appLang = 'uk';
     errorNetwork = "Відсутнє інтернет з'єднання";
     appleID = '1619839155';
     googleID = 'ua.atlantm.app';
@@ -40,6 +43,7 @@ switch (bundle) {
     break;
 }
 
+export const APP_LANG = appLang;
 export const APP_REGION = appRegion;
 
 export const ERROR_NETWORK = errorNetwork;

@@ -1,21 +1,19 @@
 import {APP_LANG_SET} from './actionTypes';
 import {strings} from './const';
+import {APP_LANG} from '../const';
 import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
 
 export const actionSetGlobalLanguage = lang => {
   return dispatch => {
-    if (lang !== 'ru') {
-      lang = 'ru';
-    }
     dispatch({
       type: APP_LANG_SET,
-      payload: lang,
+      payload: APP_LANG,
     });
 
-    strings.setLanguage(lang);
-    switch (lang) {
+    strings.setLanguage(APP_LANG);
+    switch (APP_LANG) {
       case 'ua':
       case 'uk':
         moment.locale('uk');
