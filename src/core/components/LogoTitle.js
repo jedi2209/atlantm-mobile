@@ -1,14 +1,14 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import {View, Image, Platform, StyleSheet} from 'react-native';
 
 import styleConst from '../style-const';
 
 import {connect} from 'react-redux';
-import LangSwitcher from './LangSwitcher';
+import {APP_LANG} from '../const';
 
 const mapStateToProps = ({dealer, core}) => {
   return {
-    currentLang: core.language.selected || 'ua',
+    currentLang: core.language.selected || APP_LANG,
     dealerSelected: dealer.selected,
   };
 };
@@ -43,29 +43,27 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: isAndroid ? '80%' : '85%',
   },
-  LangSwitcherContainer: {
-    width: isAndroid ? '20%' : '15%',
-    minWidth: 95,
-  },
-  LangSwitcher: {
-    fontSize: 14,
-    fontFamily: styleConst.font.light,
-    color: styleConst.color.lightBlue,
-  },
+  // LangSwitcherContainer: {
+  //   width: isAndroid ? '20%' : '15%',
+  //   minWidth: 95,
+  // },
+  // LangSwitcher: {
+  //   fontSize: 14,
+  //   fontFamily: styleConst.font.light,
+  //   color: styleConst.color.lightBlue,
+  // },
 });
 
-class LogoTitle extends PureComponent {
-  render() {
-    return (
-      <View style={styles.Container}>
-        <Image
-          resizeMode="contain"
-          style={styles.Image}
-          source={require('../../menu/assets/logo-horizontal.svg')}
-        />
-      </View>
-    );
-  }
-}
+const LogoTitle = () => {
+  return (
+    <View style={styles.Container}>
+      <Image
+        resizeMode="contain"
+        style={styles.Image}
+        source={require('../../menu/assets/logo-horizontal.svg')}
+      />
+    </View>
+  );
+};
 
 export default connect(mapStateToProps)(LogoTitle);
