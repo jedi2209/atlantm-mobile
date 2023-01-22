@@ -342,6 +342,7 @@ class Form extends Component {
     if (this.props.region) {
       switch (this.props.region) {
         case 'ru':
+        case 'by':
           this.locale = 'ru-RU';
           break;
         case 'ua':

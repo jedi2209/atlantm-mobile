@@ -573,7 +573,11 @@ const ContactsScreen = ({
             toast.show({
               render: ({id}) => {
                 return (
-                  <ToastAlert id={id} description={message} title="Ошибка" />
+                  <ToastAlert
+                    id={id}
+                    description={message}
+                    title={strings.Notifications.error.title2}
+                  />
                 );
               },
             }),

@@ -361,7 +361,7 @@ class SocialAuth extends PureComponent {
   render() {
     let {region} = this.props;
     if (!region) {
-      region = 'by';
+      region = APP_REGION;
     }
     return this._renderLoginButtons(region);
   }
