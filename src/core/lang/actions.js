@@ -21,6 +21,7 @@ export const actionSetGlobalLanguage = lang => {
         moment.locale('uk');
         break;
       case 'ru':
+      case 'by':
         moment.locale('ru');
         break;
       default:

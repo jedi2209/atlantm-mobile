@@ -11,10 +11,14 @@ let appRegion,
   oneSignalKey,
   fbAppID = null;
 
+export const RUSSIA = 'ru';
+export const BELARUSSIA = 'by';
+export const UKRAINE = 'ua';
+
 switch (bundle) {
   case 'com.atlantm.app': // iOS BY
   case 'com.atlantm': // Android BY
-    appRegion = 'by';
+    appRegion = BELARUSSIA;
     errorNetwork = 'Отсутствует интернет соединение';
     appleID = '1492492166';
     googleID = 'com.atlantm';
@@ -24,7 +28,7 @@ switch (bundle) {
     fbAppID = '423573815015675';
     break;
   case 'ua.atlantm.app': // iOS UA + Android UA
-    appRegion = 'ua';
+    appRegion = UKRAINE;
     errorNetwork = "Відсутнє інтернет з'єднання";
     appleID = '1619839155';
     googleID = 'ua.atlantm.app';
@@ -37,10 +41,6 @@ switch (bundle) {
 }
 
 export const APP_REGION = appRegion;
-
-export const RUSSIA = 'ru';
-export const BELARUSSIA = 'by';
-export const UKRAINE = 'ua';
 
 export const ERROR_NETWORK = errorNetwork;
 
