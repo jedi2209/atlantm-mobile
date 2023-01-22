@@ -23,7 +23,7 @@
     "reinstall": "./reinstall.sh",
     "sonar": "open -a iTerm ./sonarqube/docker-start.sh; node ./sonarqube/init.js",
     "cleanTmp": "rm -rf $TMPDIR/react-*; rm -rf $TMPDIR/haste-*; rm -rf $TMPDIR/metro-*; watchman watch-del-all; rm -rf ios/build/ android/app/build/ android/build/ artifacts/ ios/atlantm.xcodeproj/xcuserdata/",
-    "clean": "npx react-native clean-project",
+    "clean": "npx react-native clean-project-auto; rm -rf ./ios/Podfile.lock; rm -rf ~/Library/Developer/Xcode/DerivedData/*;",
     "test": "jest",
     "version": "./version.sh",
     "detox-server": "detox run-server",
