@@ -1,3 +1,4 @@
+// import auth from '@react-native-firebase/auth';
 import {
   GoogleSignin,
   statusCodes,
@@ -31,6 +32,14 @@ export default {
         last_name: userInfo.user.familyName || '',
         photo: userInfo.user.photo || '',
       };
+
+      // Create a Google credential with the token
+      // if (userInfo?.idToken) {
+      //   const googleCredential = auth.GoogleAuthProvider.credential(
+      //     userInfo.idToken,
+      //   );
+      //   auth().signInWithCredential(googleCredential);
+      // }
 
       callbackFn({...profile, networkName: 'gl'});
     } catch (error) {
