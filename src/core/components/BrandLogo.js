@@ -82,8 +82,8 @@ BrandLogo.defaultProps = {
   type: 'black',
   aspectRatio: 1.5,
   brandsAssets: {
-    black: [6, 7, 9, 10, 12, 13, 14, 19, 20],
-    white: [6, 7, 9, 10, 12, 13, 14, 19, 20],
+    black: [2, 3, 6, 7, 9, 10, 12, 13, 14, 19, 20],
+    white: [2, 3, 6, 7, 9, 10, 12, 13, 14, 19, 20],
   },
   testID: 'BrandLogo.Wrapper',
 };
@@ -105,6 +105,12 @@ const brandsSVG = {
     2: (
       <Image
         source={require('../assets/brands/black/brand-2.svg')}
+        style={styles.imageSVG}
+      />
+    ),
+    3: (
+      <Image
+        source={require('../assets/brands/black/brand-3.svg')}
         style={styles.imageSVG}
       />
     ),
@@ -167,6 +173,12 @@ const brandsSVG = {
     2: (
       <Image
         source={require('../assets/brands/white/brand-2.svg')}
+        style={styles.imageSVG}
+      />
+    ),
+    3: (
+      <Image
+        source={require('../assets/brands/black/brand-3.svg')}
         style={styles.imageSVG}
       />
     ),
