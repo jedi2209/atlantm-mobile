@@ -1056,7 +1056,7 @@ export default {
         body = new URLSearchParams(body).toString();
       }
     }
-    if (method === 'delete') {
+    if (method === 'delete' || method === 'patch') {
       const res = await fetch(url, {
         method: method,
         headers: requestParams?.headers,
@@ -1067,7 +1067,7 @@ export default {
         const resJson = JSON.parse(resText);
         return resJson;
       } catch (err) {
-        console.info('apiGetDataError DELETE URL: ' + url, err);
+        console.info('apiGetDataError ' + method + ' URL: ' + url, err);
         return resText;
       }
     } else {
