@@ -496,6 +496,34 @@ const ContactsScreen = ({
             status={callAvailable ? 'enabled' : 'disabled'}
             onPress={onPressTime}
           />
+          <Plate
+            testID="ContactsScreen.ButtonTimework"
+            title={strings.ContactsScreen.address}
+            subtitle={addresses.length === 1 ? addresses[0].text : ''}
+            type="default"
+            status={callAvailable ? 'enabled' : 'disabled'}
+            onPress={() => {
+              if (addresses.length > 1) {
+                setActionSheetData({
+                  options: addresses.concat([
+                    {
+                      priority: addresses.length + 1,
+                      id: 'cancel',
+                      text: strings.Base.cancel.toLowerCase(),
+                      icon: 'ios-close',
+                      iconColor: '#f70707',
+                    },
+                  ]),
+                  cancelButtonIndex: addresses.length - 1,
+                  title: strings.ContactsScreen.navigate,
+                  destructiveButtonIndex: addresses.length || null,
+                });
+                return onOpen();
+              } else {
+                return onPressMap(addresses[0]);
+              }
+            }}
+          />
           {sites.length ? (
             <Plate
               title={
