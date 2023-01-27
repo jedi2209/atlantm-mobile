@@ -114,7 +114,7 @@ DatePickerCustom.propTypes = {
   styleContainer: PropTypes.object,
   confirmBtnText: PropTypes.string,
   placeholder: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   isActive: PropTypes.bool,
   onChange: PropTypes.func,
   onPressButton: PropTypes.func.isRequired,
