@@ -243,7 +243,6 @@ const UsedCarItemScreen = props => {
         }}
         mx="2%"
         mt="1"
-        mb="32"
         backgroundColor={styleConst.color.purple}
         px="6"
         py="6"
@@ -519,7 +518,14 @@ const UsedCarItemScreen = props => {
               paginationStyle={{bottom: -20}}
             />
           </View>
-          <View mt={4} shadow={7} style={[styles.carTopWrapper]}>
+          <View
+            mt={4}
+            mb={32}
+            pt={4}
+            pb={6}
+            shadow={7}
+            borderRadius={30}
+            style={[styles.carTopWrapper]}>
             <View>
               <ScrollView
                 horizontal

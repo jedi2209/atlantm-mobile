@@ -273,7 +273,7 @@ export const Base = ({navigation, route}) => {
             },
             {
               icon: 'close',
-              iconSize: 9,
+              iconSize: 12,
             },
           )}
         />
@@ -759,7 +759,7 @@ const CarsStock = ({navigation, route}) => {
             },
             {
               icon: 'close',
-              iconSize: 9,
+              iconSize: 12,
             },
           )}
         />
@@ -989,7 +989,7 @@ const UsedCars = ({navigation, route}) => {
             },
             {
               icon: 'close',
-              iconSize: 9,
+              iconSize: 12,
             },
           )}
         />

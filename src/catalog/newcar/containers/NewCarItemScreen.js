@@ -923,8 +923,11 @@ const NewCarItemScreen = ({
           />
         </View>
         <View
-          shadow={7}
           mb={'1/5'}
+          pt={4}
+          pb={6}
+          shadow={7}
+          borderRadius={30}
           style={[styles.carTopWrapper, {marginTop: -20}]}>
           <View>
             <View style={styles.modelBrandView}>

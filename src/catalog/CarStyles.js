@@ -304,10 +304,6 @@ export default StyleSheet.create({
   carTopWrapper: {
     position: 'relative',
     backgroundColor: styleConst.color.white,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingTop: 20,
-    paddingBottom: 14,
     zIndex: 30,
     marginHorizontal: 10,
   },

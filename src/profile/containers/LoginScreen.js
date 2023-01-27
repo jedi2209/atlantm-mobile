@@ -419,10 +419,12 @@ const LoginScreen = props => {
         buttonSpaceAndroid = 1.55;
         break;
       case 411:
-      case 393:
-        // scale 3.5
         // scale 2.75
         buttonSpaceAndroid = 1.05;
+        break;
+      case 393:
+        // scale 3.5
+        buttonSpaceAndroid = 0.97;
         break;
       case 674:
         // scale 2.625
