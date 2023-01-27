@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
 import {HStack, Text, Pressable, VStack, Icon} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
@@ -53,6 +53,14 @@ const _onPressDealer = props => {
   });
 };
 
+const deviceWidth = Dimensions.get('window').width;
+let nameWidth = '5/6';
+let logoWidth = '1/6';
+if (deviceWidth <= 480) {
+  nameWidth = '3/4';
+  logoWidth = '1/4';
+}
+
 const DealerItemList = props => {
   const {city, dealer, style} = props;
   const navigation = useNavigation();
@@ -76,7 +84,7 @@ const DealerItemList = props => {
             {city && city.name ? city.name : dealer.city.name}
           </Text>
         ) : null}
-        <VStack>
+        <VStack w={nameWidth}>
           <Text
             style={stylesDealerItemList.name}
             ellipsizeMode="tail"
@@ -95,7 +103,7 @@ const DealerItemList = props => {
           ) : null}
         </VStack>
         {get(dealer, 'brand') ? (
-          <HStack alignItems={'center'}>
+          <HStack alignItems={'center'} w={logoWidth}>
             {get(dealer, 'brand').map(brand => {
               if (brand.logo) {
                 return (
