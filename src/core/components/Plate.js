@@ -66,7 +66,7 @@ const Plate = props => {
             selectable={false}
             ellipsizeMode="tail"
             numberOfLines={1}
-            style={styles.plateTitle}>
+            style={[styles.plateTitle, props.titleStyle]}>
             {props.title}
           </Text>
           {typeof props.subtitle === 'object' ? (
