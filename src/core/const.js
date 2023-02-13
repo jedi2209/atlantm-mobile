@@ -9,6 +9,7 @@ let appRegion,
   appName,
   sentryDSN,
   oneSignalKey,
+  amplitudeKey,
   appLang,
   fbAppID = null;
 
@@ -27,6 +28,7 @@ switch (bundle) {
     appName = 'Atlant-M';
     sentryDSN = 'https://2e35f2a2455b4a3d97a1687270845d33@sentry.io/219899';
     oneSignalKey = '2094a3e1-3c9a-479d-90ae-93adfcd15dab';
+    amplitudeKey = '2716d7eebc63593e80e4fd172fc8b6f3';
     fbAppID = '423573815015675';
     break;
   case 'ua.atlantm.app': // iOS UA + Android UA
@@ -39,6 +41,7 @@ switch (bundle) {
     sentryDSN =
       'https://3bf79e8300e2427ca03f48301da3a7d9@o76005.ingest.sentry.io/6367469';
     oneSignalKey = '23d97877-865c-41a5-ba26-2a569779716a';
+    amplitudeKey = 'e3e297635704d21c9a67617977dc3a61';
     fbAppID = '700128474599615';
     break;
 }
@@ -66,6 +69,8 @@ export const APP_NAME = appName;
 export const APP_EMAIL = 'atlant-m.corp@atlantm.com';
 
 export const ONESIGNAL = oneSignalKey;
+
+export const AMPLITUDE_KEY = amplitudeKey;
 
 export const VK_APP_ID = '7255802';
 
