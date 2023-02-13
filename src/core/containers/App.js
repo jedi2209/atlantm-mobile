@@ -181,7 +181,13 @@ const App = props => {
     );
   } else {
     return (
-      <NativeBaseProvider theme={theme}>
+      <NativeBaseProvider
+        theme={theme}
+        config={{
+          dependencies: {
+            'linear-gradient': require('react-native-linear-gradient').default,
+          },
+        }}>
         <NavigationContainer ref={NavigationService.navigationRef}>
           <Nav.Base />
         </NavigationContainer>

@@ -17,6 +17,7 @@ const ToastAlert = ({
   variant,
   title,
   description,
+  duration,
   isClosable,
   ...rest
 }) => {
@@ -29,6 +30,7 @@ const ToastAlert = ({
       flexDirection="row"
       status={status ? status : 'info'}
       variant={variant}
+      duration={duration}
       ref={toastRef}
       {...rest}>
       <VStack space={1} flexShrink={1} w="100%">
@@ -99,6 +101,7 @@ ToastAlert.defaultProps = {
   description: strings.Notifications.error.text,
   isClosable: true,
   status: 'error',
+  duration: 3000,
 };
 
 export default ToastAlert;

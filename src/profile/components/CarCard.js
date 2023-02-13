@@ -1,12 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/react-in-jsx-scope */
 import React from 'react';
-import {View, Text} from 'react-native';
 import styleConst from '../../core/style-const';
-import {Icon, Checkbox} from 'native-base';
+import {Icon, Checkbox, View, Text, Box} from 'native-base';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {get} from 'lodash';
 
 const styles = {
   scrollView: {},
@@ -25,11 +25,14 @@ const styles = {
     marginBottom: 15,
     marginTop: 15,
   },
+  textBrand: {
+    color: styleConst.color.greyText4,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   textBrandModel: {
-    color: styleConst.color.greyText,
+    color: styleConst.color.greyText3,
     fontSize: 14,
-    paddingBottom: 5,
-    marginLeft: 5,
   },
   textNumber: {
     color: styleConst.color.greyText2,
@@ -51,24 +54,46 @@ const styles = {
 
 export const CarCard = ({data, type, checked, onPress, disabled}) => {
   const {brand, model, number, owner} = data;
+  const carColor = get(data, 'carInfo.color.picker.codes.hex', false);
   let modelName = model;
   if (typeof model === 'object') {
     modelName = model?.name;
   }
   return (
-    <View
-      style={[
-        styles.scrollViewInner,
-        styleConst.shadow.default,
-        styles.containerView,
-      ]}>
+    <Box
+      bg={{
+        linearGradient: {
+          colors: ['coolGray.200', 'coolGray.300'],
+          start: [0, 0],
+          end: [1, 1],
+        },
+      }}
+      marginX={2}
+      marginY={4}
+      paddingTop={4}
+      borderRadius={'lg'}
+      justifyContent={'space-between'}
+      width={48}
+      display={'flex'}
+      flexDirection={'column'}>
       <View>
         <Text
           ellipsizeMode="tail"
           numberOfLines={1}
           selectable={false}
+          pb={1}
+          ml={2}
+          style={styles.textBrand}>
+          {brand ? brand : '--'}
+        </Text>
+        <Text
+          ellipsizeMode="tail"
+          numberOfLines={1}
+          selectable={false}
+          ml={2}
+          pb={2}
           style={styles.textBrandModel}>
-          {`${brand} ${modelName}`}
+          {modelName ? modelName : '--'}
         </Text>
         <Text
           ellipsizeMode="tail"
@@ -82,8 +107,8 @@ export const CarCard = ({data, type, checked, onPress, disabled}) => {
         name="car"
         size={16}
         as={FontAwesome5}
-        color={styleConst.color.blue}
-        mt={3}
+        color={carColor ? carColor : styleConst.color.blue}
+        mt={4}
         ml={2}
       />
       {type === 'check' && !disabled && (
@@ -105,6 +130,6 @@ export const CarCard = ({data, type, checked, onPress, disabled}) => {
           </View>
         </TouchableWithoutFeedback>
       )}
-    </View>
+    </Box>
   );
 };
