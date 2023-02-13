@@ -6,6 +6,7 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 
+#import <React/RCTLinkingManager.h>
 #import <React/RCTAppSetupUtils.h>
 
 // modules
@@ -45,8 +46,9 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
 {
   [FIRApp configure];
   [GMSServices provideAPIKey:@"XXXX"];
+  [FBSDKApplicationDelegate.sharedInstance initializeSDK];
   [[FBSDKApplicationDelegate sharedInstance] application:application
-                       didFinishLaunchingWithOptions:launchOptions];
+                      didFinishLaunchingWithOptions:launchOptions];
   RCTAppSetupPrepareApp(application);
 
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
@@ -76,13 +78,21 @@ static NSString *const kRNConcurrentRoot = @"concurrentRoot";
   return YES;
 }
 
-- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-    if ([[FBSDKApplicationDelegate sharedInstance] application:app openURL:url options:options]) {
-      return YES;
-    }
-    if ([VKSdk processOpenURL:url fromApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]]) {
-      return YES;
-    }
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  if ([[FBSDKApplicationDelegate sharedInstance] application:app openURL:url options:options]) {
+    return YES;
+  }
+  
+  if ([VKSdk processOpenURL:url fromApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]]) {
+    return YES;
+  }
+  
+  if ([RCTLinkingManager application:app openURL:url options:options]) {
+    return YES;
+  }
     return NO;
 }
 
