@@ -257,7 +257,7 @@ const AdditionalPurchaseScreen = ({
           return (
             <>
               <List.Item
-                key={'insurance' + val.doc}
+                key={'insurance' + val.doc + date + VIN}
                 title={name}
                 titleNumberOfLines={2}
                 descriptionNumberOfLines={4}
@@ -336,7 +336,7 @@ const AdditionalPurchaseScreen = ({
             </Button.Group>
           </Box>
         ) : null}
-        <ScrollView pb={7} mt={16}>
+        <ScrollView pb={7} mt={allDataFilter.length > 1 ? 16 : 2}>
           {isLoading ? (
             <ActivityIndicator
               color={styleConst.color.blue}
