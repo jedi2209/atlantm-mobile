@@ -148,7 +148,7 @@ const CarInfoScreen = props => {
         backgroundColor: get(
           car,
           'carInfo.color.picker.codes.hex',
-          'coolGray.300',
+          styleConst.color.bg,
         ),
       },
     });
@@ -257,6 +257,7 @@ const CarInfoScreen = props => {
           {ordersData.map(el => {
             return (
               <Pressable
+                key={'ordersButtons' + el.id}
                 backgroundColor={styleConst.color.white}
                 onPress={() => {
                   switch (el.id) {
