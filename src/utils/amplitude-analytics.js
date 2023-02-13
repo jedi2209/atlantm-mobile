@@ -4,6 +4,8 @@ import {Amplitude} from '@amplitude/react-native';
 // import analytics from '@react-native-firebase/analytics';
 import * as Sentry from '@sentry/react-native';
 
+import {AMPLITUDE_KEY} from '../core/const';
+
 export default class Analytics {
   static logEvent(category, action, params) {
     if (__DEV__) {
@@ -16,7 +18,7 @@ export default class Analytics {
     const SAPID = get(store.getState(), 'profile.login.SAP.ID');
     const UserID = get(store.getState(), 'profile.login.id');
     const UserEmail = get(store.getState(), 'profile.login.EMAIL[0].VALUE');
-    ampInstance.init('XXXX');
+    ampInstance.init(AMPLITUDE_KEY);
     if (SAPID || UserID) {
       ampInstance.setUserId(SAPID ? SAPID : UserID);
       Sentry.setUser({

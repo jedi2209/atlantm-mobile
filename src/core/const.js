@@ -9,6 +9,7 @@ let appRegion,
   appName,
   sentryDSN,
   oneSignalKey,
+  amplitudeKey,
   appLang,
   fbAppID = null;
 
@@ -27,6 +28,7 @@ switch (bundle) {
     appName = 'Atlant-M';
     sentryDSN = 'https://XXXX@sentry.io/219899';
     oneSignalKey = 'XXXX';
+    amplitudeKey = 'XXXX';
     fbAppID = 'XXXX';
     break;
   case 'ua.atlantm.app': // iOS UA + Android UA
@@ -39,6 +41,7 @@ switch (bundle) {
     sentryDSN =
       'https://XXXX@o76005.ingest.sentry.io/6367469';
     oneSignalKey = 'XXXX';
+    amplitudeKey = 'XXXX';
     fbAppID = 'XXXX';
     break;
 }
@@ -66,6 +69,8 @@ export const APP_NAME = appName;
 export const APP_EMAIL = 'atlant-m.corp@atlantm.com';
 
 export const ONESIGNAL = oneSignalKey;
+
+export const AMPLITUDE_KEY = amplitudeKey;
 
 export const VK_APP_ID = 'XXXX';
 
