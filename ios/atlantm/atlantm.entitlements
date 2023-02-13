@@ -23,5 +23,7 @@
 	<array>
 		<string>group.com.atlantm.app.onesignal</string>
 	</array>
+	<key>keychain-access-groups</key>
+	<array/>
 </dict>
 </plist>
