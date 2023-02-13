@@ -82,6 +82,7 @@ import ProfileSettingsScreen from '../profile/containers/ProfileSettingsScreen';
 import BonusScreenInfo from '../profile/bonus/containers/BonusInfoScreen';
 import AdditionalPurchaseScreen from '../profile/additionalPurchase/containers/AdditionalPurchaseScreen';
 import TOHistory from '../profile/carhistory/containers/CarHistoryScreen';
+import CarInfoScreen from '../profile/containers/CarInfoScreen';
 import ServiceTOCalculatorScreen from '../service/containers/ServiceTOCalculatorScreen';
 import CarHistoryDetailsScreen from '../profile/carhistory/containers/CarHistoryDetailsScreen';
 
@@ -536,6 +537,27 @@ export const Base = ({navigation, route}) => {
             route,
             {
               presentation: 'card',
+            },
+          )}
+        />
+        <StackProfile.Screen
+          name="CarInfoScreen"
+          component={CarInfoScreen}
+          options={TransparentBack(
+            navigation,
+            route,
+            {
+              ...TransitionPresets.ModalTransition,
+              presentation: 'modal',
+              headerTitle: strings.CarInfoScreen.title,
+              headerTitleStyle: [
+                stylesHeader.transparentHeaderTitle,
+                {color: '#222B45'},
+              ],
+            },
+            {
+              icon: 'close',
+              iconSize: 12,
             },
           )}
         />

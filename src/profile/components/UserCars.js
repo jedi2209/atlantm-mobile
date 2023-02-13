@@ -4,8 +4,6 @@ import React, {useState, useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {
-  View,
-  ScrollView,
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
@@ -22,6 +20,8 @@ import {
   useDisclose,
   Box,
   Text,
+  View,
+  ScrollView,
   useToast,
 } from 'native-base';
 // import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
@@ -266,6 +266,8 @@ let UserCars = ({actionToggleCar, activePanel}) => {
               activeOpacity={1}
               key={item.vin}
               onPress={() => {
+                navigation.navigate('CarInfoScreen', {car: item});
+                return;
                 if (CarType === 'active') {
                   orderFunctions.getOrders('car').then(ordersData => {
                     setActionSheetData({
