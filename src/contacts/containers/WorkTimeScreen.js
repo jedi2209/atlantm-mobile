@@ -23,6 +23,7 @@ import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
 
 import Imager from '../../core/components/Imager';
+import ActionSheetMenu from '../../core/components/ActionSheetMenu';
 
 import {callMe} from '../actions';
 import {fetchInfoList, actionListReset} from '../../info/actions';
@@ -150,13 +151,33 @@ const WorkTimeScreen = ({dealerSelected, navigation, phonesMobile}) => {
         <View key={'dealerLocation' + num}>
           <Stack space={2} px={2} mt={2} mb={2}>
             <HStack justifyContent={'space-between'}>
-              <Heading
-                size="md"
-                ellipsizeMode="tail"
-                numberOfLines={1}
-                w={'87%'}>
-                {get(val, 'name')}
-              </Heading>
+              <VStack w={'87%'}>
+                <Heading size="md" ellipsizeMode="tail" numberOfLines={1}>
+                  {get(val, 'name')}
+                </Heading>
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate('MapScreen', {
+                      returnScreen: 'Home',
+                      name: get(val, 'name'),
+                      city: get(val, 'city.name'),
+                      address: get(val, 'address'),
+                      coords: get(val, 'coords'),
+                    });
+                  }}>
+                  <Text
+                    fontSize="sm"
+                    _light={{
+                      color: 'blue.500',
+                    }}
+                    _dark={{
+                      color: 'blue.400',
+                    }}
+                    fontWeight="500">
+                    {[get(val, 'city.name'), get(val, 'address')].join(', ')}
+                  </Text>
+                </Pressable>
+              </VStack>
               <Pressable
                 borderColor="blue.500"
                 borderWidth="1"
@@ -181,8 +202,10 @@ const WorkTimeScreen = ({dealerSelected, navigation, phonesMobile}) => {
                           priority: phonesMobile.length + 1,
                           id: 'cancel',
                           text: strings.Base.cancel.toLowerCase(),
-                          icon: 'ios-close',
-                          iconColor: '#f70707',
+                          icon: {
+                            name: 'ios-close',
+                            color: '#f70707',
+                          },
                         },
                       ]),
                       cancelButtonIndex: phonesMobile.length - 1,
@@ -209,29 +232,6 @@ const WorkTimeScreen = ({dealerSelected, navigation, phonesMobile}) => {
                 />
               </Pressable>
             </HStack>
-            <Pressable
-              onPress={() => {
-                navigation.navigate('MapScreen', {
-                  returnScreen: 'Home',
-                  name: get(val, 'name'),
-                  city: get(val, 'city.name'),
-                  address: get(val, 'address'),
-                  coords: get(val, 'coords'),
-                });
-              }}>
-              <Text
-                fontSize="sm"
-                _light={{
-                  color: 'blue.500',
-                }}
-                _dark={{
-                  color: 'blue.400',
-                }}
-                fontWeight="500"
-                mt="-6">
-                {[get(val, 'city.name'), get(val, 'address')].join(', ')}
-              </Text>
-            </Pressable>
           </Stack>
           <VStack space={3} px={2} mb={4}>
             {_renderDivision(get(val, 'divisions', null))}
@@ -239,71 +239,6 @@ const WorkTimeScreen = ({dealerSelected, navigation, phonesMobile}) => {
         </View>
       );
     });
-  };
-
-  const ActionSheetMenu = ({actionSheetData}) => {
-    if (!actionSheetData || !actionSheetData['options']) {
-      return <></>;
-    }
-    return (
-      <Actionsheet
-        hideDragIndicator
-        size="full"
-        isOpen={isOpen}
-        onClose={onClose}>
-        <Actionsheet.Content>
-          {actionSheetData?.title ? (
-            <Box w="100%" my={4} px={4} justifyContent="space-between">
-              <Text
-                fontSize="xl"
-                color="gray.800"
-                _dark={{
-                  color: 'gray.300',
-                }}>
-                {actionSheetData.title}
-              </Text>
-            </Box>
-          ) : null}
-          {actionSheetData.options.map((el, index) => {
-            return (
-              <Actionsheet.Item
-                key={'workTimeScreenActionSheet' + index}
-                onPress={() => {
-                  onClose();
-                  if (el.navigate) {
-                    navigation.navigate(el.navigate, el.navigateOptions);
-                  } else {
-                    if (el?.link) {
-                      Linking.openURL(el.link);
-                    }
-                  }
-                }}
-                _text={{
-                  fontSize: 'md',
-                  color: 'gray.600',
-                  w: '100%',
-                }}
-                startIcon={
-                  el.icon ? (
-                    <Icon
-                      as={Ionicons}
-                      color={el.iconColor}
-                      mr="1"
-                      size={6}
-                      name={el.icon}
-                    />
-                  ) : null
-                }>
-                {el?.text}
-                {el?.subtitle ? (
-                  <Text color={'gray.500'}>{el.subtitle}</Text>
-                ) : null}
-              </Actionsheet.Item>
-            );
-          })}
-        </Actionsheet.Content>
-      </Actionsheet>
-    );
   };
 
   return (
@@ -322,7 +257,12 @@ const WorkTimeScreen = ({dealerSelected, navigation, phonesMobile}) => {
         />
         <View>{renderLocations(dealerSelected.locations)}</View>
       </ScrollView>
-      <ActionSheetMenu actionSheetData={actionSheetData} />
+      <ActionSheetMenu
+        onOpen={onOpen}
+        onClose={onClose}
+        isOpen={isOpen}
+        actionSheetData={actionSheetData}
+      />
     </>
   );
 };

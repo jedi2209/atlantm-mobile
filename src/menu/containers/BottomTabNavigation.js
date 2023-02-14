@@ -28,6 +28,7 @@ import stylesHeader from '../../core/components/Header/style';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ActionSheetMenu from '../../core/components/ActionSheetMenu';
 
 import {
   ClassicHeaderWhite,
@@ -153,57 +154,6 @@ export const BottomTabNavigation = ({navigation, route}) => {
       });
       onOpen();
     });
-  };
-
-  const ActionSheetMenu = () => {
-    if (!actionSheetData || !actionSheetData['options']) {
-      return <></>;
-    }
-    return (
-      <Actionsheet
-        hideDragIndicator
-        size="full"
-        isOpen={isOpen}
-        onClose={onClose}>
-        <Actionsheet.Content>
-          <Box w="100%" my={4} px={4} justifyContent="space-between">
-            <Text
-              fontSize="xl"
-              color="gray.500"
-              _dark={{
-                color: 'gray.500',
-              }}>
-              {strings.ContactsScreen.sendOrder}
-            </Text>
-          </Box>
-          {actionSheetData.options.map((el, index) => {
-            return (
-              <Actionsheet.Item
-                key={'bottomMainMenuActionSheet' + index}
-                onPress={() => {
-                  onClose();
-                  if (el.navigate) {
-                    navigation.navigate(el.navigate);
-                  }
-                }}
-                startIcon={
-                  el.icon ? (
-                    <Icon
-                      as={Ionicons}
-                      color={el.iconColor}
-                      mr="1"
-                      size={6}
-                      name={el.icon}
-                    />
-                  ) : null
-                }>
-                {el.text}
-              </Actionsheet.Item>
-            );
-          })}
-        </Actionsheet.Content>
-      </Actionsheet>
-    );
   };
 
   return (
@@ -346,7 +296,12 @@ export const BottomTabNavigation = ({navigation, route}) => {
           }}
         />
       </Tab.Navigator>
-      <ActionSheetMenu />
+      <ActionSheetMenu
+        onOpen={onOpen}
+        onClose={onClose}
+        isOpen={isOpen}
+        actionSheetData={actionSheetData}
+      />
     </>
   );
 };
