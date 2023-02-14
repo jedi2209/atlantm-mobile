@@ -65,6 +65,11 @@ const DealerItemList = props => {
   const {city, dealer, style} = props;
   const navigation = useNavigation();
 
+  if (deviceWidth <= 480 && get(dealer, 'brand', []).length > 1) {
+    nameWidth = '64%';
+    logoWidth = '36%';
+  }
+
   return (
     <Pressable
       rounded="lg"
