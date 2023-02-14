@@ -253,7 +253,7 @@ const CarInfoScreen = props => {
             );
           })}
         </Box>
-        <HStack flexWrap={'wrap'} space={'5%'} marginLeft={'5%'}>
+        <HStack flexWrap={'wrap'} marginLeft={'5%'}>
           {ordersData.map(el => {
             return (
               <Pressable
@@ -376,6 +376,7 @@ const CarInfoScreen = props => {
                 }}
                 marginY={4}
                 width={'45%'}
+                marginRight={4}
                 paddingY={2}
                 borderRadius={'lg'}
                 shadow={6}
