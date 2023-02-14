@@ -24,8 +24,10 @@ async function getOrders(type = 'default') {
           priority: 15,
           id: 'cancel',
           text: strings.Base.cancel.toLowerCase(),
-          icon: 'ios-close',
-          iconColor: '#f70707',
+          icon: {
+            name: 'ios-close',
+            color: '#f70707',
+          },
         },
       ],
       CANCEL_INDEX: 0,
@@ -37,8 +39,10 @@ async function getOrders(type = 'default') {
           priority: 15,
           id: 'cancel',
           text: strings.Base.cancel.toLowerCase(),
-          icon: 'ios-close',
-          iconColor: '#f70707',
+          icon: {
+            name: 'ios-close',
+            color: '#f70707',
+          },
         },
       ],
       CANCEL_INDEX: 0,
@@ -54,15 +58,19 @@ async function getOrders(type = 'default') {
         priority: 6,
         id: 'TOhistory',
         text: strings.UserCars.menu.history,
-        icon: 'layers-outline',
-        iconColor: '#2c8ef4',
+        icon: {
+          name: 'layers-outline',
+          color: '#2c8ef4',
+        },
       },
       {
         priority: 7,
         id: 'hide',
         text: strings.UserCars.menu.addToArchive,
-        icon: 'archive',
-        iconColor: '#f4542c',
+        icon: {
+          name: 'archive',
+          color: '#f4542c',
+        },
       },
     );
     res.ios.BUTTONS.push(
@@ -70,15 +78,19 @@ async function getOrders(type = 'default') {
         priority: 6,
         id: 'TOhistory',
         text: strings.UserCars.menu.history,
-        icon: 'layers-outline',
-        iconColor: '#2c8ef4',
+        icon: {
+          name: 'layers-outline',
+          color: '#2c8ef4',
+        },
       },
       {
         priority: 7,
         id: 'hide',
         text: strings.UserCars.menu.addToArchive,
-        icon: 'archive',
-        iconColor: '#f4542c',
+        icon: {
+          name: 'archive',
+          color: '#f4542c',
+        },
       },
     );
     tmpArr.push(6, 7);
@@ -87,15 +99,19 @@ async function getOrders(type = 'default') {
         priority: 3,
         id: 'TOCalculator',
         text: strings.UserCars.menu.tocalc,
-        icon: 'calculator-outline',
-        iconColor: '#2c8ef4',
+        icon: {
+          name: 'calculator-outline',
+          color: '#2c8ef4',
+        },
       });
       res.ios.BUTTONS.push({
         priority: 3,
         id: 'TOCalculator',
         text: strings.UserCars.menu.tocalc,
-        icon: 'calculator-outline',
-        iconColor: '#2c8ef4',
+        icon: {
+          name: 'calculator-outline',
+          color: '#2c8ef4',
+        },
       });
       tmpArr.push(3);
     }
@@ -107,16 +123,20 @@ async function getOrders(type = 'default') {
       priority: 1,
       id: 'callMeBack',
       text: strings.CallMeBackScreen.title,
-      icon: 'call',
-      iconColor: '#2c8ef4',
+      icon: {
+        name: 'call',
+        color: '#2c8ef4',
+      },
       navigate: 'CallMeBackScreen',
     });
     res.ios.BUTTONS.push({
       priority: 1,
       id: 'callMeBack',
       text: strings.CallMeBackScreen.title,
-      icon: 'call',
-      iconColor: '#2c8ef4',
+      icon: {
+        name: 'call',
+        color: '#2c8ef4',
+      },
       navigate: 'CallMeBackScreen',
     });
     tmpArr.push(1);
@@ -129,16 +149,20 @@ async function getOrders(type = 'default') {
         priority: 2,
         id: 'orderService',
         text: strings.UserCars.menu.service,
-        icon: 'construct',
-        iconColor: '#2c8ef4',
+        icon: {
+          name: 'construct',
+          color: '#2c8ef4',
+        },
         navigate: 'ServiceScreen',
       });
       res.ios.BUTTONS.push({
         priority: 2,
         id: 'orderService',
         text: strings.UserCars.menu.service,
-        icon: 'construct',
-        iconColor: '#2c8ef4',
+        icon: {
+          name: 'construct',
+          color: '#2c8ef4',
+        },
         navigate: 'ServiceScreen',
       });
       tmpArr.push(2);
@@ -151,16 +175,20 @@ async function getOrders(type = 'default') {
         priority: 4,
         id: 'orderParts',
         text: strings.OrderPartsScreen.title2,
-        icon: 'cart-outline',
-        iconColor: '#2c8ef4',
+        icon: {
+          name: 'cart-outline',
+          color: '#2c8ef4',
+        },
         navigate: 'OrderPartsScreen',
       });
       res.ios.BUTTONS.push({
         priority: 4,
         id: 'orderParts',
         text: strings.OrderPartsScreen.title2,
-        icon: 'cart-outline',
-        iconColor: '#2c8ef4',
+        icon: {
+          name: 'cart-outline',
+          color: '#2c8ef4',
+        },
         navigate: 'OrderPartsScreen',
       });
       tmpArr.push(4);
@@ -173,16 +201,20 @@ async function getOrders(type = 'default') {
         priority: 5,
         id: 'carCost',
         text: strings.CarCostScreen.action,
-        icon: 'cash-outline',
-        iconColor: '#2c8ef4',
+        icon: {
+          name: 'cash-outline',
+          color: '#2c8ef4',
+        },
         navigate: 'CarCostScreen',
       });
       res.ios.BUTTONS.push({
         priority: 5,
         id: 'carCost',
         text: strings.CarCostScreen.action,
-        icon: 'cash-outline',
-        iconColor: '#2c8ef4',
+        icon: {
+          name: 'cash-outline',
+          color: '#2c8ef4',
+        },
         navigate: 'CarCostScreen',
       });
       tmpArr.push(5);
@@ -208,20 +240,26 @@ async function getArchieveCarMenu() {
           {
             id: 'TOhistory',
             text: strings.UserCars.menu.history,
-            icon: 'book-outline',
-            iconColor: '#2c8ef4',
+            icon: {
+              name: 'book-outline',
+              color: '#2c8ef4',
+            },
           },
           {
             id: 'hide',
             text: strings.UserCars.menu.makeCurrent,
-            icon: 'swap-horizontal',
-            iconColor: '#2c8ef4',
+            icon: {
+              name: 'swap-horizontal',
+              color: '#2c8ef4',
+            },
           },
           {
             id: 'cancel',
             text: strings.Base.cancel.toLowerCase(),
-            icon: 'close',
-            iconColor: 'red',
+            icon: {
+              name: 'close',
+              color: 'red',
+            },
           },
         ],
         DESTRUCTIVE_INDEX: 1,
@@ -232,20 +270,26 @@ async function getArchieveCarMenu() {
           {
             id: 'TOhistory',
             text: strings.UserCars.menu.history,
-            icon: 'book-outline',
-            iconColor: '#2c8ef4',
+            icon: {
+              name: 'book-outline',
+              color: '#2c8ef4',
+            },
           },
           {
             id: 'hide',
             text: strings.UserCars.menu.makeCurrent,
-            icon: 'swap-horizontal',
-            iconColor: '#2c8ef4',
+            icon: {
+              name: 'swap-horizontal',
+              color: '#2c8ef4',
+            },
           },
           {
             id: 'cancel',
             text: strings.Base.cancel.toLowerCase(),
-            icon: 'close',
-            iconColor: 'red',
+            icon: {
+              name: 'close',
+              color: 'red',
+            },
           },
         ],
         DESTRUCTIVE_INDEX: 1,

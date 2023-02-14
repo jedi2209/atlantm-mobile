@@ -382,11 +382,11 @@ const CarInfoScreen = props => {
                 shadow={6}
                 alignItems={'center'}>
                 <Icon
-                  as={Ionicons}
-                  color={el.iconColor}
+                  as={el.icon?.font ? el.icon?.font : Ionicons}
+                  color={el.icon?.color}
                   mr={1}
                   size={12}
-                  name={el.icon}
+                  name={el.icon?.name}
                 />
                 <Text>{el.text}</Text>
               </Pressable>

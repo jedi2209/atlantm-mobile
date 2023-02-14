@@ -24,7 +24,6 @@ import {
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import DealerItemList from '../../core/components/DealerItemList';
 import Plate from '../../core/components/Plate';
@@ -32,6 +31,8 @@ import RateThisApp from '../../core/components/RateThisApp';
 import Imager from '../../core/components/Imager';
 
 import ToastAlert from '../../core/components/ToastAlert';
+
+import ActionSheetMenu from '../../core/components/ActionSheetMenu';
 
 // redux
 import {connect} from 'react-redux';
@@ -137,6 +138,7 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
     phones: dealer.selected.phones || [],
     phonesMobile: dealer.selected.phonesMobile || [],
     addresses: dealer.selected.addresses || [],
+    socialNetworks: dealer.selected.socialNetworks || [],
     sites: dealer.selected.sites || [],
 
     isAppRated: core.isAppRated,
@@ -226,6 +228,7 @@ const ContactsScreen = ({
   phones,
   phonesMobile,
   addresses,
+  socialNetworks,
   infoList,
   fetchInfoList,
   isFetchInfoList,
@@ -268,8 +271,10 @@ const ContactsScreen = ({
                         priority: addresses.length + 1,
                         id: 'cancel',
                         text: strings.Base.cancel.toLowerCase(),
-                        icon: 'ios-close',
-                        iconColor: '#f70707',
+                        icon: {
+                          name: 'ios-close',
+                          color: '#f70707',
+                        },
                       },
                     ]),
                     cancelButtonIndex: addresses.length - 1,
@@ -449,8 +454,10 @@ const ContactsScreen = ({
                         priority: phonesMobile.length + 1,
                         id: 'cancel',
                         text: strings.Base.cancel.toLowerCase(),
-                        icon: 'ios-close',
-                        iconColor: '#f70707',
+                        icon: {
+                          name: 'ios-close',
+                          color: '#f70707',
+                        },
                       },
                     ]),
                     cancelButtonIndex: phonesMobile.length - 1,
@@ -510,8 +517,10 @@ const ContactsScreen = ({
                       priority: addresses.length + 1,
                       id: 'cancel',
                       text: strings.Base.cancel.toLowerCase(),
-                      icon: 'ios-close',
-                      iconColor: '#f70707',
+                      icon: {
+                        name: 'ios-close',
+                        color: '#f70707',
+                      },
                     },
                   ]),
                   cancelButtonIndex: addresses.length - 1,
@@ -548,8 +557,10 @@ const ContactsScreen = ({
                         priority: sites.length + 1,
                         id: 'cancel',
                         text: strings.Base.cancel.toLowerCase(),
-                        icon: 'ios-close',
-                        iconColor: '#f70707',
+                        icon: {
+                          name: 'ios-close',
+                          color: '#f70707',
+                        },
                       },
                     ]),
                     cancelButtonIndex: sites.length - 1,
@@ -562,6 +573,37 @@ const ContactsScreen = ({
                     console.error('sites[0].link failed', sites),
                   );
                 }
+              }}
+            />
+          ) : null}
+          {socialNetworks && socialNetworks?.length ? (
+            <Plate
+              title={strings.ContactsScreen.socialNetworks.title}
+              subtitle={strings.ContactsScreen.socialNetworks.subtitle}
+              type="orange"
+              status={'enabled'}
+              onPress={() => {
+                setActionSheetData({
+                  options: socialNetworks.concat([
+                    {
+                      priority: socialNetworks.length + 1,
+                      id: 'cancel',
+                      text: strings.Base.cancel.toLowerCase(),
+                      icon: {
+                        name: 'ios-close',
+                        color: '#f70707',
+                      },
+                    },
+                  ]),
+                  cancelButtonIndex: socialNetworks.length - 1,
+                  // title:
+                  //   strings.ContactsScreen.socialNetworks.subtitle
+                  //     .charAt(0)
+                  //     .toUpperCase() +
+                  //   strings.ContactsScreen.socialNetworks.subtitle.slice(1),
+                  destructiveButtonIndex: socialNetworks.length || null,
+                });
+                onOpen();
               }}
             />
           ) : null}
@@ -649,71 +691,6 @@ const ContactsScreen = ({
     navigation.navigate('WorkTimeScreen', {
       returnScreen: 'Home',
     });
-  };
-
-  const ActionSheetMenu = () => {
-    if (!actionSheetData || !actionSheetData['options']) {
-      return <></>;
-    }
-    return (
-      <Actionsheet
-        hideDragIndicator
-        size="full"
-        isOpen={isOpen}
-        onClose={onClose}>
-        <Actionsheet.Content>
-          {actionSheetData?.title ? (
-            <Box w="100%" my={4} px={4} justifyContent="space-between">
-              <Text
-                fontSize="xl"
-                color="gray.800"
-                _dark={{
-                  color: 'gray.300',
-                }}>
-                {actionSheetData.title}
-              </Text>
-            </Box>
-          ) : null}
-          {actionSheetData.options.map((el, index) => {
-            return (
-              <Actionsheet.Item
-                key={'contactsScreenActionSheet' + index}
-                onPress={() => {
-                  onClose();
-                  if (el.navigate) {
-                    navigation.navigate(el.navigate, el.navigateOptions);
-                  } else {
-                    if (el?.link) {
-                      Linking.openURL(el.link);
-                    }
-                  }
-                }}
-                _text={{
-                  fontSize: 'md',
-                  color: 'gray.600',
-                  w: '100%',
-                }}
-                startIcon={
-                  el.icon ? (
-                    <Icon
-                      as={Ionicons}
-                      color={el.iconColor}
-                      mr="1"
-                      size={6}
-                      name={el.icon}
-                    />
-                  ) : null
-                }>
-                {el?.text}
-                {el?.subtitle ? (
-                  <Text color={'gray.500'}>{el.subtitle}</Text>
-                ) : null}
-              </Actionsheet.Item>
-            );
-          })}
-        </Actionsheet.Content>
-      </Actionsheet>
-    );
   };
 
   const _onAppRateSuccess = () => {
@@ -810,7 +787,13 @@ const ContactsScreen = ({
           </View>
         </ScrollView>
       </View>
-      <ActionSheetMenu />
+      <ActionSheetMenu
+        actionSheetData={actionSheetData}
+        onOpen={onOpen}
+        onClose={onClose}
+        isOpen={isOpen}
+        hideDragIndicator={false}
+      />
     </>
   );
 };

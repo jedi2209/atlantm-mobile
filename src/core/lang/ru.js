@@ -380,6 +380,10 @@ export default {
     sites: 'Сайты',
     dealerSites: 'Сайты автоцентра',
     currentActions: 'Текущие акции автоцентра',
+    socialNetworks: {
+      title: 'Будем на связи!',
+      subtitle: 'cоц.сети и мессенджеры',
+    },
   },
   WorkTimeScreen: {
     weeekdayShort: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'],

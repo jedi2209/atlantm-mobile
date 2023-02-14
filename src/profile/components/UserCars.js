@@ -87,7 +87,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
     }, 2500);
   }, []);
 
-  const ActionSheetMenu = () => {
+  const _ActionSheetMenu = () => {
     if (!actionSheetData || !actionSheetData['options']) {
       return <></>;
     }
@@ -437,7 +437,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
           </Button>
         </View>
       )}
-      <ActionSheetMenu />
+      {/* <ActionSheetMenu /> */}
     </>
   );
 };

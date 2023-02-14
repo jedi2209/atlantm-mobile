@@ -26,9 +26,12 @@ import {get} from 'lodash';
 
 import {RUSSIA, BELARUSSIA, UKRAINE} from '../core/const';
 
+import FontAwesome5Brands from 'react-native-vector-icons/FontAwesome5';
+
 import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
+import styleConst from '../core/style-const';
 
 export const selectRegion = region => {
   return dispatch => {
@@ -70,11 +73,13 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
         dealer.addresses = [];
         dealer.phones = [];
         dealer.phonesMobile = [];
+        dealer.socialNetworks = [];
 
         let phoneTmp = [],
           phoneMobileTmp = [],
           sitesTmp = [],
-          addressesTmp = [];
+          addressesTmp = [],
+          socialNetworksTmp = [];
 
         if (dealer.locations) {
           let i = 1;
@@ -91,6 +96,59 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
                   text: dealerLocation.name,
                   subtitle: link,
                   link: siteItem,
+                });
+              }
+            });
+
+            get(dealerLocation, 'socialLinks', []).map((siteItem, indx) => {
+              let type = get(siteItem, 'type', false);
+              if (type && type.includes('vk.message')) {
+                return;
+              }
+              const link = siteItem?.url
+                .replace('https://www.', '')
+                .replace('http://www.', '')
+                .replace('https://', '')
+                .replace('http://', '');
+              const socialName = siteItem?.type.split('.');
+              const groupName = get(siteItem, 'name', link);
+              let publicSocialName = socialName;
+              let iconName = socialName[0];
+              let iconColor = siteItem?.color
+                ? siteItem?.color
+                : styleConst.color.blue;
+              switch (socialName[0]) {
+                case 'tlgrm':
+                  publicSocialName = 'Telegram';
+                  iconName = 'telegram';
+                  break;
+                case 'ok':
+                  publicSocialName = 'Одноклассники';
+                  iconName = 'odnoklassniki';
+                  break;
+                case 'vk':
+                  publicSocialName = 'ВКонтакте';
+                  break;
+                default:
+                  publicSocialName =
+                    socialName[0].charAt(0).toUpperCase() +
+                    socialName[0].slice(1);
+                  break;
+              }
+              if (!socialNetworksTmp.includes(link)) {
+                socialNetworksTmp.push(link);
+                dealer.socialNetworks.push({
+                  priority: i,
+                  id: 'socialNetwork' + dealerLocation.id + indx,
+                  text: publicSocialName,
+                  icon: {
+                    font: FontAwesome5Brands,
+                    name: iconName,
+                    color: iconColor,
+                  },
+                  subtitle: groupName,
+                  // subtitle: link,
+                  link: siteItem?.url,
                 });
               }
             });
