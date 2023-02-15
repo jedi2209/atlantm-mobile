@@ -53,21 +53,21 @@ const _onPressDealer = props => {
   });
 };
 
-const deviceWidth = Dimensions.get('window').width;
-let nameWidth = '5/6';
-let logoWidth = '1/6';
-if (deviceWidth <= 480) {
-  nameWidth = '3/4';
-  logoWidth = '1/4';
-}
-
 const DealerItemList = props => {
   const {city, dealer, style} = props;
   const navigation = useNavigation();
 
-  if (deviceWidth <= 480 && get(dealer, 'brand', []).length > 1) {
-    nameWidth = '64%';
-    logoWidth = '36%';
+  const deviceWidth = Dimensions.get('window').width;
+  let nameWidth = '5/6';
+  let logoWidth = '1/6';
+  if (deviceWidth <= 480) {
+    if (get(dealer, 'brand', []).length > 1) {
+      nameWidth = '64%';
+      logoWidth = '36%';
+    } else {
+      nameWidth = '3/4';
+      logoWidth = '1/4';
+    }
   }
 
   return (
