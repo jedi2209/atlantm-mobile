@@ -129,6 +129,14 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
                 case 'vk':
                   publicSocialName = 'ВКонтакте';
                   break;
+                case 'facebook':
+                  if (socialName[1] === 'message') {
+                    iconName = 'facebook-messenger';
+                  }
+                  publicSocialName =
+                    socialName[0].charAt(0).toUpperCase() +
+                    socialName[0].slice(1);
+                  break;
                 default:
                   publicSocialName =
                     socialName[0].charAt(0).toUpperCase() +
