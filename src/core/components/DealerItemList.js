@@ -69,6 +69,12 @@ const DealerItemList = props => {
       logoWidth = '1/4';
     }
   }
+  if (deviceWidth <= 390) {
+    if (get(dealer, 'brand', []).length > 1) {
+      nameWidth = '63%';
+      logoWidth = '37%';
+    }
+  }
 
   return (
     <Pressable

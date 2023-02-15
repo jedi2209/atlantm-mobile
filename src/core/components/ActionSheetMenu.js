@@ -13,7 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ActionSheetMenuWrapper = ({actionSheetData, children}) => {
-  if (actionSheetData?.options?.length > 10) {
+  if (actionSheetData?.options?.length > 8) {
     return <ScrollView w={'100%'}>{children}</ScrollView>;
   } else {
     return children;
