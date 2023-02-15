@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {TouchableHighlight, Platform, ActivityIndicator} from 'react-native';
 
@@ -11,14 +11,10 @@ import {
   Icon,
   View,
   Text,
-  VStack,
-  Actionsheet,
-  useDisclose,
   Pressable,
   HStack,
   ScrollView,
   useToast,
-  Button,
 } from 'native-base';
 
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -26,7 +22,6 @@ import ToastAlert from '../../core/components/ToastAlert';
 
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Feather from 'react-native-vector-icons/Feather';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {strings} from '../../core/lang/const';
@@ -63,53 +58,45 @@ const CarInfoScreen = props => {
 
   const copyToClipboard = (name, string) => {
     Clipboard.setString(string);
-    setTimeout(
-      () =>
-        toast.show({
-          render: ({id}) => {
-            return (
-              <ToastAlert
-                id={id}
-                status={'success'}
-                variant={'subtle'}
-                description={[name, string].join(': ')}
-                isClosable={false}
-                duration={1000}
-                title={strings.Notifications.success.copy}
-              />
-            );
-          },
-        }),
-      100,
-    );
+    toast.show({
+      title: strings.Notifications.success.copy,
+      description: [string].join(': '),
+      duration: 1500,
+      placement: 'bottom',
+    });
   };
 
   const car = get(props, 'route.params.car', get(props, 'cars[0]'));
 
-  const carBrandName = get(car, 'carInfo.brand.name', get(car, 'brand'));
-  let carModelName = get(car, 'carInfo.model.name', null);
+  const carBrandName = get(car, 'brand', null);
+  let carModelName = get(car, 'model', null);
 
-  if (
-    carModelName === 'null' ||
-    carModelName === null ||
-    carModelName === 'false' ||
-    carModelName === false ||
-    carModelName === 'undefined' ||
-    carModelName === undefined ||
-    typeof carModelName === 'undefined'
-  ) {
-    carModelName = get(car, 'model');
-  }
+  // if (
+  //   carModelName === 'null' ||
+  //   carModelName === null ||
+  //   carModelName === 'false' ||
+  //   carModelName === false ||
+  //   carModelName === 'undefined' ||
+  //   carModelName === undefined ||
+  //   typeof carModelName === 'undefined'
+  // ) {
+  //   carModelName = get(car, 'model');
+  // }
 
   if (typeof carModelName === 'object') {
     carModelName = get(carModelName, 'name');
   }
 
   let carData = [];
-  carData.push({name: 'VIN', value: get(car, 'vin', null)});
+  carData.push({
+    name: 'VIN',
+    value: get(car, 'vin', null),
+    copyAvailable: true,
+  });
   carData.push({
     name: strings.Form.field.label.carNumber,
     value: get(car, 'number', null),
+    copyAvailable: true,
   });
   // carData.push({name: strings.Form.field.label.carBrand, value: carBrandName});
   // carData.push({name: strings.Form.field.label.carModel, value: carModelName});
@@ -117,21 +104,20 @@ const CarInfoScreen = props => {
     carData.push({
       name: strings.Form.field.label.carYear,
       value: format(get(car, 'carInfo.year'), 'YYYY'),
+      copyAvailable: true,
     });
   }
   carData.push({
     name: strings.Form.field.label.carMileage,
     value: numberWithGap(get(car, 'mileage', null)),
+    copyAvailable: true,
   });
 
   carData = carData.filter(function (el) {
-    return el != null;
+    return el.value != null && el.value !== 0;
   });
 
   let carName = [carBrandName, carModelName].join(' ');
-  if (get(car, 'number', null)) {
-    carName += ['-- [' + get(car, 'number', null) + ']'].join(' ');
-  }
 
   let carType;
 
@@ -225,13 +211,18 @@ const CarInfoScreen = props => {
           marginY={2}
           background={'gray.100'}
           borderRadius={'lg'}>
-          <Heading mt={1}>{[carBrandName, carModelName].join(' ')}</Heading>
+          <Heading mt={1}>{carName}</Heading>
           {carData.map((el, indx) => {
             return (
               <TouchableHighlight
                 key={'val' + el.value}
-                underlayColor={styleConst.color.accordeonGrey1}
-                onPress={() => copyToClipboard(el.name, el.value)}>
+                underlayColor={'gray.300'}
+                onPress={() => {
+                  if (!el.copyAvailable) {
+                    return;
+                  }
+                  copyToClipboard(el.name, el.value);
+                }}>
                 <View marginY={1} paddingY={2}>
                   <Text fontSize={'sm'} color={styleConst.color.greyText7}>
                     {el.name}
@@ -240,13 +231,15 @@ const CarInfoScreen = props => {
                     <Text fontSize={'md'} color={styleConst.color.greyText4}>
                       {el.value}
                     </Text>
-                    <Icon
-                      name="copy"
-                      as={Feather}
-                      ml={3}
-                      mt={1}
-                      color={'gray.300'}
-                    />
+                    {el.copyAvailable ? (
+                      <Icon
+                        name="copy"
+                        as={Feather}
+                        ml={3}
+                        mt={1}
+                        color={'gray.300'}
+                      />
+                    ) : null}
                   </HStack>
                 </View>
               </TouchableHighlight>
