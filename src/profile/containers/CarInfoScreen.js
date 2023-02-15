@@ -103,7 +103,7 @@ const CarInfoScreen = props => {
   if (get(car, 'carInfo.year', false)) {
     carData.push({
       name: strings.Form.field.label.carYear,
-      value: format(get(car, 'carInfo.year'), 'YYYY'),
+      value: format('01-01-' + get(car, 'carInfo.year'), 'YYYY'),
       copyAvailable: true,
     });
   }
