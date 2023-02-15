@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Keyboard,
@@ -16,7 +16,7 @@ import {Button, HStack, Icon, IconButton, useToast} from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {store} from '../../core/store';
+
 import styleConst from '../../core/style-const';
 import LinearGradient from 'react-native-linear-gradient';
 import Form from '../../core/components/Form/Form';
@@ -334,6 +334,7 @@ const LoginScreen = props => {
           />
           <IconButton
             onPress={() => {
+              // return Facebook.onFacebookButtonPress();
               return Facebook.signIn(_checkPhone);
             }}
             isDisabled={isSigninInProgress}
@@ -410,7 +411,7 @@ const LoginScreen = props => {
       Dimensions.get('window').width.toFixed(),
     );
     const widthElement = (screenWidth / 100) * width;
-    const buttonSpace = (screenWidth * 0.75) / (items + 1);
+    let buttonSpace = (screenWidth * 0.75) / (items + 1);
     console.info('screenWidth', Dimensions.get('window'), screenWidth);
     let buttonSpaceAndroid = 1;
     //const buttonSpaceAndroid = parseFloat('1' + buttonSpace) / 100;
@@ -419,7 +420,9 @@ const LoginScreen = props => {
         buttonSpaceAndroid = 1.55;
         break;
       case 411:
+      case 414:
         // scale 2.75
+        buttonSpace = (screenWidth * 0.72) / (items + 1);
         buttonSpaceAndroid = 1.05;
         break;
       case 393:
@@ -453,9 +456,18 @@ const LoginScreen = props => {
           justifyContent={'space-between'}
           position={'absolute'}
           w={'100%'}>
-          {res.map(el => {
+          {/* {res.map(el => {
             return el;
-          })}
+          })} */}
+          <View
+            key={'backgroundInputCodeMain'}
+            style={{
+              height: 75,
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              borderRadius: 5,
+              width: '100%',
+            }}
+          />
         </HStack>
         <OtpAutoFillViewManager
           onComplete={handleComplete}
