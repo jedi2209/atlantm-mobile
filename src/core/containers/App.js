@@ -18,7 +18,7 @@ import {
   actionStoreUpdated,
   actionSettingsLoaded,
 } from '../actions';
-import {fetchDealers, fetchBrands} from '../../dealer/actions';
+import {fetchDealers, selectDealer, fetchBrands} from '../../dealer/actions';
 
 import {APP_STORE_UPDATED} from '../../core/actionTypes';
 import {APP_LANG} from '../const';
@@ -55,6 +55,7 @@ const mapDispatchToProps = {
   actionStoreUpdated,
   actionSettingsLoaded,
   fetchDealers,
+  selectDealer,
   fetchBrands,
 };
 
@@ -90,8 +91,14 @@ const App = props => {
 
     if (currentDealer && isStoreUpdatedCurrent === storeVersion) {
       const actionDealer = await props.fetchDealers(); // обновляем дилеров при каждом открытии прилаги
+      const currDealerItem = get(storeData, 'dealer.selected');
+      const currentDealerUpdated = await props.selectDealer({
+        dealerBaseData: currDealerItem,
+        dealerSelected: currDealerItem,
+        isLocal: false,
+      });
       //props.fetchBrands(); // обновляем бренды при каждом открытии прилаги
-      if (actionDealer && actionDealer.type) {
+      if (currentDealerUpdated && actionDealer && actionDealer.type) {
         // уже всё обновлено, открываем экран автоцентра
         return mainScreen;
       }

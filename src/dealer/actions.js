@@ -26,8 +26,6 @@ import {get} from 'lodash';
 
 import {RUSSIA, BELARUSSIA, UKRAINE} from '../core/const';
 
-import FontAwesome5Brands from 'react-native-vector-icons/FontAwesome5';
-
 import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
@@ -150,7 +148,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
                   id: 'socialNetwork' + dealerLocation.id + indx,
                   text: publicSocialName,
                   icon: {
-                    font: FontAwesome5Brands,
+                    font: 'FontAwesome5Brands',
                     name: iconName,
                     color: iconColor,
                   },
