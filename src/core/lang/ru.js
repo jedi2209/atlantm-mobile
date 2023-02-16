@@ -15,7 +15,7 @@ export default {
     },
     bottom: {
       // нижнее меню
-      search: 'Поиск',
+      search: 'Авто',
       dealer: 'Автоцентр',
       lkk: 'Кабинет',
       order: 'Заявка',
