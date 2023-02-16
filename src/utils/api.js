@@ -1067,7 +1067,7 @@ export default {
         const resJson = JSON.parse(resText);
         return resJson;
       } catch (err) {
-        console.info('apiGetDataError ' + method + ' URL: ' + url, err);
+        console.error('apiGetDataError ' + method + ' URL: ' + url, err);
         return resText;
       }
     } else {

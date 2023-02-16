@@ -63,9 +63,9 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
 
         const dealer = {...response.data};
 
-        dealer.id = dealerBaseData.id;
-        dealer.region = dealerBaseData.region;
-        dealer.brand = dealerBaseData.brands;
+        dealer.id = dealer.id;
+        dealer.region = dealer.region;
+        dealer.brand = dealer.brand;
         dealer.divisionTypes = [];
         dealer.sites = [];
         dealer.addresses = [];
@@ -79,7 +79,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
           addressesTmp = [],
           socialNetworksTmp = [];
 
-        if (dealer.locations) {
+        if (dealer && dealer.locations) {
           let i = 1;
           dealer.locations.map(dealerLocation => {
             get(dealerLocation, 'site', []).map((siteItem, indx) => {

@@ -26,6 +26,7 @@ import {strings} from '../../core/lang/const';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheetMenu from '../../core/components/ActionSheetMenu';
@@ -177,8 +178,8 @@ export const BottomTabNavigation = ({navigation, route}) => {
             tabBarIcon: ({color}) => (
               <Icon
                 size={5}
-                as={FontAwesome5}
-                name="building"
+                as={FontAwesome}
+                name="building-o"
                 color={color}
                 _dark={{
                   color: color,
@@ -208,7 +209,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
               <Icon
                 size={5}
                 as={FontAwesome5}
-                name="search"
+                name="car"
                 color={color}
                 _dark={{
                   color: color,
