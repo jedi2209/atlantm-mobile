@@ -55,7 +55,7 @@ async function getOrders(type = 'default') {
   if (type === 'car') {
     res.android.BUTTONS.push(
       {
-        priority: 6,
+        priority: 3,
         id: 'TOhistory',
         text: strings.UserCars.menu.history,
         icon: {
@@ -75,7 +75,7 @@ async function getOrders(type = 'default') {
     );
     res.ios.BUTTONS.push(
       {
-        priority: 6,
+        priority: 3,
         id: 'TOhistory',
         text: strings.UserCars.menu.history,
         icon: {
@@ -93,10 +93,10 @@ async function getOrders(type = 'default') {
         },
       },
     );
-    tmpArr.push(6, 7);
+    tmpArr.push(3, 7);
     if (storeState.dealer.selected.region === 'by') {
       res.android.BUTTONS.push({
-        priority: 3,
+        priority: 6,
         id: 'TOCalculator',
         text: strings.UserCars.menu.tocalc,
         icon: {
@@ -105,7 +105,7 @@ async function getOrders(type = 'default') {
         },
       });
       res.ios.BUTTONS.push({
-        priority: 3,
+        priority: 6,
         id: 'TOCalculator',
         text: strings.UserCars.menu.tocalc,
         icon: {
@@ -113,7 +113,7 @@ async function getOrders(type = 'default') {
           color: '#2c8ef4',
         },
       });
-      tmpArr.push(3);
+      tmpArr.push(6);
     }
     res.android.CANCEL_INDEX =
       res.android.CANCEL_INDEX + res.ios.BUTTONS.length;
