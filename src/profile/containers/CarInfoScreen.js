@@ -100,10 +100,10 @@ const CarInfoScreen = props => {
   });
   // carData.push({name: strings.Form.field.label.carBrand, value: carBrandName});
   // carData.push({name: strings.Form.field.label.carModel, value: carModelName});
-  if (get(car, 'carInfo.year', false)) {
+  if (get(car, 'carInfo.year')) {
     carData.push({
       name: strings.Form.field.label.carYear,
-      value: format('01-01-' + get(car, 'carInfo.year'), 'YYYY'),
+      value: format(get(car, 'carInfo.year') + '-01-02', 'YYYY'),
       copyAvailable: true,
     });
   }

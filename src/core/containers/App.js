@@ -94,7 +94,7 @@ const App = props => {
       const currDealerItem = get(storeData, 'dealer.selected');
       const currentDealerUpdated = await props.selectDealer({
         dealerBaseData: currDealerItem,
-        dealerSelected: currDealerItem,
+        dealerSelected: undefined,
         isLocal: false,
       });
       //props.fetchBrands(); // обновляем бренды при каждом открытии прилаги
