@@ -1,16 +1,10 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Linking} from 'react-native';
-import {
-  Text,
-  Icon,
-  Actionsheet,
-  Box,
-  useDisclose,
-  ScrollView,
-} from 'native-base';
+import {Text, Icon, Actionsheet, Box, ScrollView} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome5Brands from 'react-native-vector-icons/FontAwesome5';
 
 const ActionSheetMenuWrapper = ({actionSheetData, children}) => {
   if (actionSheetData?.options?.length > 8) {
@@ -49,6 +43,15 @@ const ActionSheetMenu = props => {
         ) : null}
         <ActionSheetMenuWrapper actionSheetData={actionSheetData}>
           {actionSheetData.options.map((el, index) => {
+            let fontIcon = Ionicons;
+            switch (el.icon?.font) {
+              case 'FontAwesome5Brands':
+                fontIcon = FontAwesome5Brands;
+                break;
+              default:
+                fontIcon = Ionicons;
+                break;
+            }
             return (
               <Actionsheet.Item
                 key={'contactsScreenActionSheet' + index}
@@ -70,7 +73,7 @@ const ActionSheetMenu = props => {
                 startIcon={
                   el.icon ? (
                     <Icon
-                      as={el.icon?.font ? el.icon.font : Ionicons}
+                      as={fontIcon}
                       color={el.icon?.color}
                       mr="1"
                       size={el.icon?.size ? el.icon.size : 6}
