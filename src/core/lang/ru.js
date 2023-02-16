@@ -133,6 +133,7 @@ export default {
     emptyMessage: 'Нет автомобилей для отображения',
     badges: {
       specialPrice: 'спец.цена',
+      ordered: ['', 'в резерве', 'продан'],
     },
     price: {
       byRequest: 'Цена по запросу',
@@ -140,6 +141,7 @@ export default {
   },
   OrderCreditScreen: {
     title: 'Заявка на кредит',
+    analog: 'или аналог',
   },
   OrderMyPriceScreen: {
     title: 'Предложите свою цену',

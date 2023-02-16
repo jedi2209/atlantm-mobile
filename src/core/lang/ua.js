@@ -15,7 +15,7 @@ export default {
     },
     bottom: {
       // нижнее меню
-      search: 'Пошук',
+      search: 'Авто',
       dealer: 'Автоцентр',
       lkk: 'Кабінет',
       order: 'Запит',
@@ -115,6 +115,7 @@ export default {
         'Ви успішно підписалися на отримання PUSH-повідомлень!\r\n\r\nВони не будуть часто приходити, тільки лише при появі нових цікавих акцій.',
       textPushSad: 'Нам буде не вистачати вас...\r\nПовертайтеся швидше!',
       textProfileUpdate: 'Дані успішно оновлено',
+      copy: 'Успішно скопійовано!',
     },
     error: {
       title: 'Хьюстон, у нас проблеми...',
@@ -133,6 +134,9 @@ export default {
     badges: {
       specialPrice: 'спец.ціна',
       ordered: ['', 'зарезервований', 'продан'],
+    },
+    price: {
+      byRequest: 'Ціна за запитом',
     },
   },
   OrderCreditScreen: {
@@ -369,6 +373,7 @@ export default {
     timework: 'графік роботи',
     timework2: 'Графік роботи',
     navigate: 'Як проїхати?',
+    address: 'Адреса',
     call: 'Зателефонувати',
     callOrder: 'Замовити дзвінок',
     order: 'Запит',
@@ -377,6 +382,10 @@ export default {
     sites: 'Сайти',
     dealerSites: 'Сайти автоцентру',
     currentActions: 'Діючі акції автоцентру',
+    socialNetworks: {
+      title: 'Будемо на зв’язку!',
+      subtitle: 'соцмережі і месенджери',
+    },
   },
   WorkTimeScreen: {
     weeekdayShort: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'нд'],
@@ -531,6 +540,9 @@ export default {
     save: 'Зберегти',
     deleteAccount: 'Видалити акаунт',
   },
+  CarInfoScreen: {
+    title: 'Інформація про автомобіль',
+  },
   ProfileScreenInfo: {
     empty: {
       cars: 'Поки ще не має автомобілів, про які ми знаємо...',
@@ -587,6 +599,7 @@ export default {
     title: 'Мої автомобілі',
     current: 'поточні',
     archive: 'архів',
+    intoArchive: 'в архіві',
     archiveCheck: 'Перевіримо архів?',
     empty: {
       text: 'У вас немає поточних автомобілів.',
