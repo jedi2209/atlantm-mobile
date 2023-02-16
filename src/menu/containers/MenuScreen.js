@@ -9,7 +9,9 @@ import {
   Dimensions,
   Pressable,
 } from 'react-native';
-import {VStack, HStack, Box, Button} from 'native-base';
+import {VStack, HStack, Box, Button, Icon} from 'native-base';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import {actionMenuOpenedCount} from '../../core/actions';
 import {connect} from 'react-redux';
@@ -133,7 +135,15 @@ const MenuScreen = props => {
         url: 'Home',
       },
       type: 'home',
-      icon: <Image source={require('../assets/Home.svg')} />,
+      //icon: <Image source={require('../assets/Home.svg')} />,
+      icon: (
+        <Icon
+          as={FontAwesome}
+          size={8}
+          color={styleConst.color.darkBg}
+          name="building-o"
+        />
+      ),
       selected: false,
     },
     {
