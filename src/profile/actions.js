@@ -762,11 +762,14 @@ async function getUserAdditionalPurchase(token, userid) {
 }
 
 async function getProfileData({token, userid, curr}) {
-  const cars = await getUserCars(token, userid);
-  const bonus = await getUserBonus(token, userid, curr);
-  const discounts = await getUserDiscounts(token, userid);
-  const insurance = await getUserInsurance(token, userid);
-  const additionalPurchase = await getUserAdditionalPurchase(token, userid);
+  let [cars, bonus, discounts, insurance, additionalPurchase] =
+    await Promise.all([
+      getUserCars(token, userid),
+      getUserBonus(token, userid, curr),
+      getUserDiscounts(token, userid),
+      getUserInsurance(token, userid),
+      getUserAdditionalPurchase(token, userid),
+    ]);
   return {
     cars,
     bonus,
