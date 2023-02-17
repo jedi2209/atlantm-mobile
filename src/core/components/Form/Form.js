@@ -256,7 +256,9 @@ class Form extends Component {
   constructor(props) {
     super(props);
     this.defaultCountryCode =
-      this.props.defaultCountryCode || this.props.dealerSelected.region || 'by';
+      this.props.defaultCountryCode ||
+      this.props.dealerSelected.region ||
+      APP_REGION;
     this.state = {
       parentState: props.parentState,
       required: [],

@@ -33,7 +33,7 @@ import {CAR_COST__SUCCESS} from '../catalog/actionTypes';
 
 import {APP_STORE_UPDATED} from '../core/actionTypes';
 
-import {RUSSIA, BELARUSSIA, UKRAINE} from '../core/const';
+import {APP_REGION, RUSSIA, BELARUSSIA, UKRAINE} from '../core/const';
 
 function selected(state = {}, action) {
   switch (action.type) {
@@ -68,10 +68,10 @@ function selectedLocal(state = {}, action) {
   }
 }
 
-function region(state = BELARUSSIA, action) {
+function region(state = APP_REGION, action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'dealer.region', BELARUSSIA);
+      return get(action.payload, 'dealer.region', APP_REGION);
     case DEALERS_REGION__SELECT:
       return action.payload;
     case DEALER__SUCCESS:
