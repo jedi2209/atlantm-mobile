@@ -52,6 +52,7 @@ const mapDispatchToProps = dispatch => {
 };
 
 const CarInfoScreen = props => {
+  const {navigation} = props;
   const toast = useToast();
   const [ordersData, setOrdersData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -128,7 +129,7 @@ const CarInfoScreen = props => {
   }
 
   useEffect(() => {
-    props.navigation.setOptions({
+    navigation.setOptions({
       headerTitle: '',
       headerStyle: {
         backgroundColor: get(
@@ -139,7 +140,7 @@ const CarInfoScreen = props => {
       },
     });
     setLoading(false);
-  }, [car, props.navigation]);
+  }, [car, navigation]);
 
   useEffect(() => {
     if (carType === 'active') {
@@ -336,7 +337,9 @@ const CarInfoScreen = props => {
                               }
                             }
                             setLoading(false);
-                            props.navigation.goBack();
+                            navigation.navigate('LoginScreen', {
+                              activePanel: 'default',
+                            });
                           })
                           .catch(error => {
                             {
@@ -358,7 +361,7 @@ const CarInfoScreen = props => {
                       break;
                   }
                   if (el.navigate && el.navigate.screen) {
-                    props.navigation.navigate(
+                    navigation.navigate(
                       el.navigate.screen,
                       el.navigate.params ? el.navigate.params : null,
                     );
