@@ -53,6 +53,7 @@ import {strings} from '../../core/lang/const';
 import {verticalScale} from '../../utils/scale';
 import {get, size} from 'lodash';
 import UserData from '../../utils/user';
+import {APP_PHONE_RESTRICTED, APP_REGION, UKRAINE} from '../../core/const';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -180,10 +181,9 @@ const LoginScreen = props => {
   const _verifyCode = data => {
     let phone = data.PHONELOGIN;
     const phoneCountry = PhoneDetect.country(phone);
-    if (phoneCountry && phoneCountry.code === 'ua') {
+    if (phoneCountry && APP_PHONE_RESTRICTED.includes(phoneCountry.code)) {
       toast.show({
-        description:
-          'К сожалению вы не можете авторизоваться по этому номеру телефона',
+        description: strings.ProfileScreen.restrictedPhone,
         placement: 'top',
         variant: 'subtle',
         duration: 10000,
@@ -293,6 +293,15 @@ const LoginScreen = props => {
     let VKenabled = true;
     let ButtonWidth = '25%';
     let ButtonHeight = 50;
+    switch (region.toLowerCase()) {
+      case UKRAINE:
+        VKenabled = false;
+        ButtonWidth = '30%';
+        ButtonHeight = 60;
+        break;
+      default:
+        break;
+    }
     const isAndroid = Platform.OS === 'android';
     return (
       <View
@@ -526,7 +535,9 @@ const LoginScreen = props => {
               source={require('../../menu/assets/logo-horizontal-white.svg')}
             />
           </View>
-          {!code ? _renderLoginButtons(props.dealerSelected.region) : null}
+          {!code
+            ? _renderLoginButtons(props.dealerSelected.region || APP_REGION)
+            : null}
           <View
             style={{
               display: 'flex',

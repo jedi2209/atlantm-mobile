@@ -30,7 +30,15 @@ import PhoneDetect from '../../../utils/phoneDetect';
 
 import styleConst from '../../style-const';
 
-import {APP_REGION} from '../../const';
+import {
+  APP_REGION,
+  APP_LOCALE,
+  APP_COUNTRY_SETTINGS,
+  APP_COUNTRY_LIST,
+  RUSSIA,
+  BELARUSSIA,
+  UKRAINE,
+} from '../../const';
 
 import {strings} from '../../lang/const';
 
@@ -231,8 +239,9 @@ class Form extends Component {
     SubmitButton: {
       text: strings.Form.button.send,
       props: {},
-      region: 'ru',
+      region: APP_REGION,
     },
+    region: APP_REGION,
     testID: 'Form',
     barStyle: 'light-content',
     contentContainerStyle: {},
@@ -338,18 +347,7 @@ class Form extends Component {
       });
     }
     this.state.required = requredFields;
-    this.locale = 'ru-RU';
-    if (this.props.region) {
-      switch (this.props.region) {
-        case 'ru':
-        case 'by':
-          this.locale = 'ru-RU';
-          break;
-        case 'ua':
-          this.locale = 'uk-Uk';
-          break;
-      }
-    }
+    this.locale = APP_LOCALE[APP_REGION];
   }
 
   // componentWillUnmount() {
@@ -552,11 +550,11 @@ class Form extends Component {
         var valueFull = null;
       } else {
         switch (countryCode) {
-          case 'ru':
-          case 'ua':
+          case RUSSIA:
+          case UKRAINE:
             var valueFull = 16;
             break;
-          case 'by':
+          case BELARUSSIA:
             var valueFull = 17;
             break;
         }
@@ -1079,12 +1077,9 @@ class Form extends Component {
       if (data.props && data.props.countries) {
         countrySettings = data.props.countries;
       } else {
-        countrySettings = ['by', 'ru'];
+        countrySettings = APP_COUNTRY_SETTINGS;
       }
-      let countriesListStatic = require('../../../core/const.countries_by.json');
-      if (APP_REGION === 'ua') {
-        countriesListStatic = require('../../../core/const.countries_ua.json');
-      }
+      let countriesListStatic = APP_COUNTRY_LIST;
       let countriesList = [];
       let countriesCodes = {};
       countriesListStatic.map(el => {

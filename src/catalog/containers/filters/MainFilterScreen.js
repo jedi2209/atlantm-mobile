@@ -1686,15 +1686,12 @@ const MainFilterScreen = ({
             px="1/4"
             shadow="7"
             isDisabled={!totalCars || totalCars === 0 ? true : false}
-            // active={totalCars ? true : false}
             onPress={() => {
               _onSubmitButtonPress({showPrices: !dataFilters.prices.hidden});
             }}>
-            {/* <Text style={styles.resultButtonText}> */}
             {totalCars
               ? `${strings.CarsFilterScreen.resultsButton.show} ${totalCars} авто`
               : strings.CarsFilterScreen.notFound}
-            {/* </Text> */}
           </Button>
         </Animated.View>
       )}
@@ -1859,10 +1856,6 @@ const styles = StyleSheet.create({
   pickerStyle: {
     width: '100%',
   },
-  // pickerStyleYear: {
-  //   width: isAndroid ? 100 : '100%',
-  //   justifyContent: 'center',
-  // },
   colorWrapper: {
     flexDirection: 'row',
     flex: 1,

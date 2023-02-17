@@ -25,7 +25,7 @@ import {
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import {FB_APP_ID, AUTH_DATA, APP_REGION} from '../../core/const';
+import {FB_APP_ID, AUTH_DATA, APP_REGION, UKRAINE} from '../../core/const';
 
 GoogleSignin.configure({
   scopes: ['https://www.googleapis.com/auth/userinfo.email'], // what API you want to access on behalf of the user, default is email and profile
@@ -185,7 +185,7 @@ class SocialAuth extends PureComponent {
     let ButtonHeight = 50;
 
     switch (region.toLowerCase()) {
-      case 'ua':
+      case UKRAINE:
         VKenabled = false;
         ButtonWidth = '30%';
         ButtonHeight = 60;

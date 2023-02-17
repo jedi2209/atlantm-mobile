@@ -417,7 +417,6 @@ const CarListItem = ({
             }}
             useAngle
             angle={itemScreen === 'NewCarItemScreen' ? 60 : 170}
-            // colors={['rgba(15, 102, 178, 1)', 'rgba(0, 97, 237, 0)']}
             colors={['rgba(51, 51, 51, .4)', 'rgba(51, 51, 51, 0)']}
             style={[
               styles.priceBackground,

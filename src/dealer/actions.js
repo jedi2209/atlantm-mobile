@@ -24,7 +24,7 @@ import {strings} from '../core/lang/const';
 import API from '../utils/api';
 import {get} from 'lodash';
 
-import {RUSSIA, BELARUSSIA, UKRAINE} from '../core/const';
+import {RUSSIA, BELARUSSIA, UKRAINE, APP_LANG} from '../core/const';
 
 import moment from 'moment';
 import 'moment/locale/ru';
@@ -244,18 +244,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
 
         if (dealer && dealer.region) {
           strings.setLanguage(dealer.region);
-          switch (dealer.region) {
-            case 'ua':
-              moment.locale('uk');
-              break;
-            case 'by':
-            case 'ru':
-              moment.locale('ru');
-              break;
-            default:
-              moment.locale('ru');
-              break;
-          }
+          moment.locale(APP_LANG);
           dispatch({
             type: APP_LANG_SET,
             payload: dealer.region,

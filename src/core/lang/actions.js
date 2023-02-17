@@ -12,19 +12,7 @@ export const actionSetGlobalLanguage = lang => {
       payload: APP_LANG,
     });
 
-    strings.setLanguage(APP_LANG);
-    switch (APP_LANG) {
-      case 'ua':
-      case 'uk':
-        moment.locale('uk');
-        break;
-      case 'ru':
-      case 'by':
-        moment.locale('ru');
-        break;
-      default:
-        moment.locale('ru');
-        break;
-    }
+    strings.setLanguage(lang || APP_LANG);
+    moment.locale(lang || APP_LANG);
   };
 };

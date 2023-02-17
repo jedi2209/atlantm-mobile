@@ -36,7 +36,7 @@ import TransitionView from '../../core/components/TransitionView';
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
-import {APP_EMAIL, STORE_LINK} from '../../core/const';
+import {APP_EMAIL, APP_REGION, STORE_LINK} from '../../core/const';
 import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
@@ -120,7 +120,7 @@ const mapStateToProps = ({dealer, info, nav, core}) => {
     nav,
     dealerSelected: dealer.selected,
     pushActionSubscribeState: core.pushActionSubscribeState,
-    currentLang: core.language.selected || 'ru',
+    currentLang: core.language.selected || APP_REGION,
     AppRateAskLater: core.AppRateAskLater,
   };
 };

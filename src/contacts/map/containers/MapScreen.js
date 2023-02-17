@@ -37,7 +37,7 @@ import {get} from 'lodash';
 import {verticalScale} from '../../../utils/scale';
 import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
-import {APP_REGION} from '../../../core/const';
+import {APP_REGION, RUSSIA, BELARUSSIA, UKRAINE} from '../../../core/const';
 
 enableLatestRenderer();
 
@@ -198,7 +198,8 @@ class MapScreen extends Component {
     let NavApps = [];
 
     switch (APP_REGION) {
-      case 'by':
+      case RUSSIA:
+      case BELARUSSIA:
         NavApps = [
           checkAppAvailable(strings.MapScreen.apps.yaNavi),
           checkAppAvailable(strings.MapScreen.apps.yaMaps),
@@ -208,7 +209,7 @@ class MapScreen extends Component {
           checkAppAvailable(strings.MapScreen.apps.appleMaps),
         ];
         break;
-      case 'ua':
+      case UKRAINE:
         NavApps = [
           checkAppAvailable(strings.MapScreen.apps.uber),
           checkAppAvailable(strings.MapScreen.apps.googleMaps),
@@ -365,9 +366,6 @@ class MapScreen extends Component {
     console.info('== MapScreen == ');
 
     return this.state.loading ? (
-      // <View style={styles.safearea}>
-      //   <Text style={styles.errorText}>{strings.MapScreen.empty.text}</Text>
-      // </View>
       <ActivityIndicator
         size="large"
         color={styleConst.color.blue}

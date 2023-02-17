@@ -122,17 +122,6 @@ const styles = StyleSheet.create({
   closeButton: {
     color: styleConst.color.greyBlue,
   },
-  // buttonsView: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-between',
-  //   paddingHorizontal: '5%',
-  //   marginBottom: 10,
-  // },
-  // modalButton: {
-  //   marginVertical: 15,
-  //   height: isAndroid ? 50 : 60,
-  //   borderRadius: 0,
-  // },
   modalButtonText: {
     color: styleConst.color.blue,
     fontSize: 17,

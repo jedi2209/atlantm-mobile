@@ -39,6 +39,7 @@ import {strings} from '../../core/lang/const';
 
 import {verticalScale} from '../../utils/scale';
 import UserData from '../../utils/user';
+import {APP_PHONE_RESTRICTED} from '../../core/const';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -113,7 +114,7 @@ const PhoneChangeScreen = props => {
   const _verifyCode = data => {
     let phone = data.PHONE;
     const phoneCountry = PhoneDetect.country(phone);
-    if (phoneCountry && phoneCountry.code === 'ua') {
+    if (phoneCountry && APP_PHONE_RESTRICTED.includes(phoneCountry.code)) {
       toast.show({
         render: ({id}) => {
           return (
