@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {
   StyleSheet,
@@ -9,6 +9,8 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
   TouchableOpacity,
+  Box,
+  Progress,
 } from 'react-native';
 import UserCars from '../components/UserCars';
 import {Button, HStack, Icon, View} from 'native-base';
@@ -131,7 +133,7 @@ const styles = StyleSheet.create({
 
 import {verticalScale} from '../../utils/scale';
 import {get} from 'lodash';
-import {yearMonthDay, dayMonthYear} from '../../utils/date';
+import {dayMonthYear} from '../../utils/date';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
@@ -168,43 +170,31 @@ const mapDispatchToProps = {
   actionToggleCar,
 };
 
-class ProfileScreenInfo extends Component {
-  constructor(props) {
-    super(props);
+const ProfileScreenInfo = props => {
+  const {
+    dealerSelected,
+    login,
+    navigation,
+    insurance,
+    additionalPurchase,
+    bonus,
+  } = props;
+  const [loading, setLoading] = useState(false);
 
-    this.state = {
-      loading: false,
-      refreshing: false,
-      cars: 'default',
-    };
-  }
-
-  componentDidMount() {
-    if (this.props.login.ID) {
-      this.getUserData();
-    }
-
+  useEffect(() => {
     Analytics.logEvent('screen', 'profile/main');
-  }
+  }, []);
 
-  componentDidUpdate(nextProps) {
-    if (this.props.login.ID && this.props.login.ID !== nextProps.login.ID) {
-      this.getUserData();
+  useEffect(() => {
+    if (login?.ID) {
+      _getUserData();
     }
+  }, [login?.ID]);
 
-    if (
-      this.props.login.SAP &&
-      this.props.login.SAP.ID !==
-        (nextProps.login.SAP ? nextProps.login.SAP.ID : null)
-    ) {
-      this.getUserData();
-    }
-  }
-
-  getUserData() {
-    this.setState({loading: true});
-    const {ID, SAP} = this.props.login;
-    const userRegion = get(this.props, 'dealerSelected.region', null);
+  const _getUserData = () => {
+    setLoading(true);
+    const {ID, SAP} = login;
+    const userRegion = get(dealerSelected, 'region', null);
 
     let curr = null;
 
@@ -220,7 +210,7 @@ class ProfileScreenInfo extends Component {
         break;
     }
 
-    this.props
+    props
       .getProfileSapData({
         id: ID,
         sap: SAP,
@@ -231,26 +221,25 @@ class ProfileScreenInfo extends Component {
           PushNotifications.addTag('sapID', SAP.ID);
           PushNotifications.setExternalUserId(SAP.ID);
         }
-        this.setState({loading: false});
+        setLoading(false);
       })
       .catch(err => {
         console.error('getUserData ERROR', err);
-        this.props.actionLogout();
+        props.actionLogout();
       });
-  }
+  };
 
-  renderCars = () => {
-    if (this.props.cars && this.props.cars.length > 0) {
-      return this.renderCarsData();
+  const _renderCars = () => {
+    if (props.cars && props.cars.length > 0) {
+      return _renderCarsData();
     } else {
-      return this.renderCarsNoData();
+      return _renderCarsNoData();
     }
   };
 
-  renderCarsData = () => (
-    <UserCars activePanel={this.props.navigation.params?.activePanel} />
-  );
-  renderCarsNoData = () => {
+  const _renderCarsData = () => <UserCars />;
+
+  const _renderCarsNoData = () => {
     return (
       <>
         <View
@@ -281,7 +270,7 @@ class ProfileScreenInfo extends Component {
           </Text>
           <Button
             onPress={() => {
-              this.props.navigation.navigate('ReestablishScreen');
+              navigation.navigate('ReestablishScreen');
             }}
             _text={[
               styles.buttonPrimaryText,
@@ -314,12 +303,11 @@ class ProfileScreenInfo extends Component {
     );
   };
 
-  renderCashBack = () => {
+  const _renderCashBack = () => {
     if (
-      this.props.login &&
-      this.props.login.CASHBACK &&
-      (this.props.login.CASHBACK.STATUS.ID ||
-        this.props.login.CASHBACK.STATUS.NAME)
+      login &&
+      login.CASHBACK &&
+      (login.CASHBACK.STATUS.ID || login.CASHBACK.STATUS.NAME)
     ) {
       return (
         <TouchableOpacity style={styles.bonusButtonWrapper}>
@@ -362,7 +350,7 @@ class ProfileScreenInfo extends Component {
                     fontSize: 16,
                     fontWeight: '600',
                   }}>
-                  {this.props.login?.CASHBACK?.STATUS?.NAME}
+                  {login?.CASHBACK?.STATUS?.NAME}
                 </Text>
               </View>
               <View
@@ -382,7 +370,7 @@ class ProfileScreenInfo extends Component {
                     fontSize: 16,
                     fontWeight: '600',
                   }}>
-                  {dayMonthYear(this.props.login?.CASHBACK?.DATE?.TO)}
+                  {dayMonthYear(login?.CASHBACK?.DATE?.TO)}
                 </Text>
               </View>
             </View>
@@ -397,9 +385,8 @@ class ProfileScreenInfo extends Component {
                   fontSize: 20,
                   fontWeight: '600',
                 }}>
-                {this.props.login?.CASHBACK?.PERCENT
-                  ? parseFloat(this.props.login?.CASHBACK?.PERCENT, 'ru-RU') +
-                    ' %'
+                {login?.CASHBACK?.PERCENT
+                  ? parseFloat(login?.CASHBACK?.PERCENT, 'ru-RU') + ' %'
                   : 0}
               </Text>
             </View>
@@ -410,22 +397,18 @@ class ProfileScreenInfo extends Component {
     return <></>;
   };
 
-  renderAdditionalPurchase = () => {
+  const _renderAdditionalPurchase = () => {
     if (
-      (this.props.insurance && this.props.insurance.length) ||
-      (this.props.additionalPurchase && this.props.additionalPurchase.length)
+      (insurance && insurance.length) ||
+      (additionalPurchase && additionalPurchase.length)
     ) {
       return (
         <TouchableOpacity
           style={styles.bonusButtonWrapper}
-          onPress={() =>
-            this.props.navigation.navigate('AdditionalPurchaseScreen')
-          }>
+          onPress={() => navigation.navigate('AdditionalPurchaseScreen')}>
           <View
             style={[styleConst.shadow.default, styles.additionalPurchaseView]}
-            onPress={() =>
-              this.props.navigation.navigate('AdditionalPurchaseScreen')
-            }>
+            onPress={() => navigation.navigate('AdditionalPurchaseScreen')}>
             <View style={styles.additionalPurchaseButtonTextView}>
               <Icon as={Fontisto} name="shopping-bag-1" size={10} />
             </View>
@@ -456,14 +439,14 @@ class ProfileScreenInfo extends Component {
     return <></>;
   };
 
-  renderBonusSaldo = region => {
-    let saldoValue = get(this.props.bonus, 'data.saldo.convert.value', null);
+  const _renderBonusSaldo = region => {
+    let saldoValue = get(bonus, 'data.saldo.convert.value', null);
     if (!saldoValue) {
-      saldoValue = get(this.props.bonus, 'data.saldo.value', 0);
+      saldoValue = get(bonus, 'data.saldo.value', 0);
     }
 
     let saldoCurr = get(
-      this.props.bonus,
+      bonus,
       'data.saldo.convert.curr',
       strings.ProfileScreenInfo.bonus.current.bonuses,
     );
@@ -490,18 +473,18 @@ class ProfileScreenInfo extends Component {
     }
   };
 
-  renderBonus = () => {
-    const bonus = this.renderBonusSaldo(this.props.dealerSelected.region);
-    if (this.props.bonus) {
-      if (this.props.bonus.data && this.props.bonus.data.saldo) {
+  const _renderBonus = () => {
+    const bonusData = _renderBonusSaldo(dealerSelected.region);
+    if (bonus) {
+      if (bonus.data && bonus.data.saldo) {
         return (
           <>
             <TouchableOpacity
               style={styles.bonusButtonWrapper}
-              onPress={() => this.props.navigation.navigate('BonusScreen')}>
+              onPress={() => navigation.navigate('BonusScreen')}>
               <View
                 style={[styleConst.shadow.default, styles.bonusButtonView]}
-                onPress={() => this.props.navigation.navigate('BonusScreen')}>
+                onPress={() => navigation.navigate('BonusScreen')}>
                 <View style={styles.bonusButtonTextView}>
                   <Text
                     style={{
@@ -509,8 +492,8 @@ class ProfileScreenInfo extends Component {
                       fontSize: 20,
                       fontWeight: '600',
                     }}>
-                    {bonus.saldoValue
-                      ? parseFloat(bonus.saldoValue, 'ru-RU')
+                    {bonusData.saldoValue
+                      ? parseFloat(bonusData.saldoValue, 'ru-RU')
                       : 0}
                   </Text>
                   <Text
@@ -519,7 +502,7 @@ class ProfileScreenInfo extends Component {
                       fontSize: 11,
                       fontWeight: '600',
                     }}>
-                    {bonus.saldoText}
+                    {bonusData.saldoText}
                   </Text>
                 </View>
                 <View style={{flex: 1}}>
@@ -549,9 +532,7 @@ class ProfileScreenInfo extends Component {
                           fontSize: 16,
                           fontWeight: '600',
                         }}
-                        onPress={() =>
-                          this.props.navigation.navigate('BonusScreen')
-                        }>
+                        onPress={() => navigation.navigate('BonusScreen')}>
                         {strings.ProfileScreenInfo.bonus.show}
                       </Text>
                     </View>
@@ -570,7 +551,7 @@ class ProfileScreenInfo extends Component {
             </TouchableOpacity>
             <Button
               onPress={() => {
-                this.props.navigation.navigate('BonusScreenInfo', {
+                navigation.navigate('BonusScreenInfo', {
                   refererScreen: 'LoginScreen',
                   returnScreen: 'LoginScreen',
                 });
@@ -595,7 +576,7 @@ class ProfileScreenInfo extends Component {
         return (
           <TouchableWithoutFeedback
             onPress={() =>
-              this.props.navigation.navigate('BonusScreenInfo', {
+              navigation.navigate('BonusScreenInfo', {
                 refererScreen: 'LoginScreen',
                 returnScreen: 'LoginScreen',
               })
@@ -626,14 +607,14 @@ class ProfileScreenInfo extends Component {
                     alignItems: 'center',
                     marginRight: 24,
                   }}>
-                  {this.props.bonus.data && this.props.bonus.data.saldo ? (
+                  {bonus.data && bonus.data.saldo ? (
                     <Text
                       style={{
                         color: styleConst.color.blue,
                         fontSize: 20,
                         fontWeight: '600',
                       }}>
-                      {this.props.bonus.data.saldo.value}
+                      {bonus.data.saldo.value}
                     </Text>
                   ) : (
                     <Icon
@@ -697,82 +678,96 @@ class ProfileScreenInfo extends Component {
     return <></>;
   };
 
-  render() {
+  if (loading) {
     return (
-      <ScrollView style={{flex: 1}} testID="ProfileScreen.Wrapper">
-        <Text
-          style={{
-            fontSize: 35,
-            fontWeight: '600',
-            marginHorizontal: 20,
-            marginTop: 50,
-            color: styleConst.color.greyText6,
-          }}>
-          {`${this.props.login.NAME || ''} ${this.props.login.LAST_NAME || ''}`}
-        </Text>
-        {this.state.loading ? (
-          <ActivityIndicator
-            color={styleConst.color.blue}
-            size="large"
-            style={{
-              alignSelf: 'center',
-              marginTop: verticalScale(60),
-              marginBottom: verticalScale(60),
-            }}
-          />
-        ) : (
-          <>
-            <DealerItemList
-              key={'dealerSelect'}
-              dealer={this.props.dealerSelected}
-              style={[
-                {
-                  marginHorizontal: 15,
-                  marginTop: 10,
-                  paddingLeft: 10,
-                  backgroundColor: styleConst.color.white,
-                },
-              ]}
-              returnScreen={this.props.navigation.state?.routeName}
-            />
-            {this.renderCars()}
-            {this.renderCashBack()}
-            {this.renderBonus()}
-            {this.renderAdditionalPurchase()}
-            <Button
-              onPress={() => {
-                this.props.navigation.navigate('ProfileSettingsScreen');
-              }}
-              _text={styles.buttonPrimaryText}
-              style={[
-                styleConst.shadow.default,
-                styles.buttonPrimary,
-                {backgroundColor: styleConst.color.green, marginTop: 20},
-              ]}>
-              {strings.ProfileScreenInfo.editData}
-            </Button>
-            <View style={{textAlign: 'center', alignItems: 'center'}}>
-              <Button
-                variant="link"
-                mx={20}
-                my={5}
-                onPress={() => {
-                  this.props.actionLogout();
-                }}
-                _text={[
-                  styles.buttonPrimaryText,
-                  {
-                    color: styleConst.color.lightBlue,
-                  },
-                ]}>
-                {strings.ProfileScreenInfo.exit}
-              </Button>
-            </View>
-          </>
-        )}
-      </ScrollView>
+      <ActivityIndicator
+        color={styleConst.color.blue}
+        size="large"
+        style={{
+          alignSelf: 'center',
+          marginTop: verticalScale(60),
+          marginBottom: verticalScale(60),
+        }}
+      />
     );
   }
-}
+
+  return (
+    <ScrollView style={{flex: 1}} testID="ProfileScreen.Wrapper">
+      <Text
+        style={{
+          fontSize: 35,
+          fontWeight: '600',
+          marginHorizontal: 20,
+          marginTop: 70,
+          color: styleConst.color.greyText6,
+        }}>
+        {[login.NAME, login.LAST_NAME].join(' ')}
+      </Text>
+      <DealerItemList
+        key={'dealerSelect'}
+        dealer={dealerSelected}
+        style={[
+          {
+            marginHorizontal: 15,
+            marginTop: 10,
+            paddingLeft: 10,
+            backgroundColor: styleConst.color.white,
+          },
+        ]}
+        returnScreen={navigation.state?.routeName}
+      />
+      {_renderCars()}
+      {_renderCashBack()}
+      {_renderBonus()}
+      {_renderAdditionalPurchase()}
+      <Button
+        onPress={() => {
+          navigation.navigate('ProfileSettingsScreen');
+        }}
+        _text={styles.buttonPrimaryText}
+        style={[
+          styleConst.shadow.default,
+          styles.buttonPrimary,
+          {backgroundColor: styleConst.color.green, marginTop: 20},
+        ]}>
+        {strings.ProfileScreenInfo.editData}
+      </Button>
+      <View style={{textAlign: 'center', alignItems: 'center'}}>
+        <Button
+          variant="link"
+          mx={20}
+          my={5}
+          onPress={() => {
+            props.actionLogout();
+          }}
+          _text={[
+            styles.buttonPrimaryText,
+            {
+              color: styleConst.color.lightBlue,
+            },
+          ]}>
+          {strings.ProfileScreenInfo.exit}
+        </Button>
+      </View>
+    </ScrollView>
+  );
+};
+
+// class ProfileScreenInfoSS extends Component {
+//   // componentDidUpdate(nextProps) {
+//   //   if (this.props.login.ID && this.props.login.ID !== nextProps.login.ID) {
+//   //     this.getUserData();
+//   //   }
+
+//   //   if (
+//   //     this.props.login.SAP &&
+//   //     this.props.login.SAP.ID !==
+//   //       (nextProps.login.SAP ? nextProps.login.SAP.ID : null)
+//   //   ) {
+//   //     this.getUserData();
+//   //   }
+//   // }
+// }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreenInfo);

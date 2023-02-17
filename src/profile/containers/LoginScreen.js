@@ -145,7 +145,6 @@ const LoginScreen = props => {
     props
       .actionGetPhoneCode({phone, code: codeValueVal})
       .then(data => {
-        console.error('data', data);
         Keyboard.dismiss();
         PushNotifications.addTag('login', data.user.ID);
         if (data.user.SAP && data.user.SAP.ID) {
