@@ -3,44 +3,20 @@
 import React, {useState, useEffect, useRef} from 'react';
 import {connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
-import {
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-  Platform,
-} from 'react-native';
-import {store} from '../../core/store';
+import {TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
 import {get} from 'lodash';
 import {CarCard} from './CarCard';
-import {
-  Icon,
-  Button,
-  HStack,
-  Actionsheet,
-  useDisclose,
-  Box,
-  Text,
-  View,
-  ScrollView,
-  useToast,
-} from 'native-base';
+import {Icon, Button, HStack, Text, View, ScrollView} from 'native-base';
 // import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import ToastAlert from '../../core/components/ToastAlert';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {verticalScale} from '../../utils/scale';
 import styleConst from '../../core/style-const';
-import orderFunctions from '../../utils/orders';
 import {strings} from '../../core/lang/const';
 
-import {actionToggleCar} from '../actions';
-
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = ({profile}) => {
   return {
-    actionToggleCar: (item, id) => {
-      return dispatch(actionToggleCar(item, id));
-    },
+    cars: profile.cars,
   };
 };
 
@@ -62,17 +38,53 @@ const styles = StyleSheet.create({
   },
 });
 
-let UserCars = ({actionToggleCar, activePanel}) => {
-  const toast = useToast();
+let UserCars = ({activePanel, cars}) => {
   const navigation = useNavigation();
-  const cars = get(store.getState(), 'profile.cars');
   const [loading, setLoading] = useState(false);
   const [carsPanel, setActivePanel] = useState(activePanel);
-
-  const {isOpen, onOpen, onClose} = useDisclose();
-  const [actionSheetData, setActionSheetData] = useState({});
+  const [myCars, setMyCars] = useState({default: [], hidden: [], owner: []});
 
   let carsScrollView = useRef(null);
+
+  useEffect(() => {
+    const myCarsTmp = {
+      default: [],
+      hidden: [],
+      owner: [],
+    };
+
+    cars.map(item => {
+      if (item.hidden) {
+        myCarsTmp.hidden.push(item);
+      } else {
+        myCarsTmp.default.push(item);
+      }
+      if (item.owner) {
+        myCarsTmp.owner.push(item);
+      }
+    });
+    if (myCarsTmp.hidden.length) {
+      myCarsTmp.hidden.sort((a, b) => b.owner - a.owner);
+    }
+    if (myCarsTmp.default.length) {
+      myCarsTmp.default.sort((a, b) => b.owner - a.owner);
+    }
+    if (
+      myCarsTmp.default.length ||
+      myCarsTmp.hidden.length ||
+      myCarsTmp.owner.length
+    ) {
+      setMyCars(myCarsTmp);
+    }
+  }, [cars]);
+
+  useEffect(() => {
+    if (!get(myCars, 'hidden.length')) {
+      setActivePanel('default');
+    } else if (!get(myCars, 'default.length')) {
+      setActivePanel('hidden');
+    }
+  }, [myCars]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -87,14 +99,14 @@ let UserCars = ({actionToggleCar, activePanel}) => {
     }, 2500);
   }, []);
 
-  const _renderCarsItems = ({cars}) => {
+  const _renderCarsItems = ({carsData}) => {
     return (
       <ScrollView
         showsHorizontalScrollIndicator={false}
         horizontal
         contentContainerStyle={{paddingLeft: 12, paddingRight: 5}}
         ref={carsScrollView}>
-        {cars.map(item => {
+        {carsData.map(item => {
           return (
             <TouchableOpacity
               activeOpacity={1}
@@ -117,27 +129,6 @@ let UserCars = ({actionToggleCar, activePanel}) => {
     );
   };
 
-  let myCars = {
-    default: [],
-    hidden: [],
-    owner: [],
-  };
-  cars.map(item => {
-    if (item.hidden) {
-      myCars.hidden.push(item);
-    } else {
-      myCars.default.push(item);
-    }
-    if (item.owner) {
-      myCars.owner.push(item);
-    }
-  });
-  if (myCars.hidden.length) {
-    myCars.hidden.sort((a, b) => b.owner - a.owner);
-  }
-  if (myCars.default.length) {
-    myCars.default.sort((a, b) => b.owner - a.owner);
-  }
   return (
     <>
       <HStack
@@ -215,8 +206,7 @@ let UserCars = ({actionToggleCar, activePanel}) => {
         />
       ) : myCars[carsPanel].length > 0 ? (
         _renderCarsItems({
-          cars: myCars[carsPanel],
-          navigation: navigation,
+          carsData: myCars[carsPanel],
         })
       ) : (
         <View
@@ -254,4 +244,4 @@ UserCars.defaultProps = {
   activePanel: 'default',
 };
 
-export default connect(null, mapDispatchToProps)(UserCars);
+export default connect(mapStateToProps, {})(UserCars);
