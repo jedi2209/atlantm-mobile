@@ -34,7 +34,6 @@ import {
 } from '../actionTypes';
 import {ERROR_NETWORK} from '../../core/const';
 
-// import API from '../../utils/api';
 import {yearMonthDay, addDays, dayMonthYear} from '../../utils/date';
 
 import {strings} from '../../core/lang/const';
@@ -168,12 +167,6 @@ class TestDriveScreen extends PureComponent {
     email: PropTypes.string,
     comment: PropTypes.string,
   };
-
-  componentDidMount() {
-    // if (this.state.dealerID) {
-    //   this.fetchTDCars(this.state.dealerID);
-    // }
-  }
 
   onPressOrder = async data => {
     const isInternetExist = await isInternet();

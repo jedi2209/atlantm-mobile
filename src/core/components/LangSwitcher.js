@@ -6,6 +6,7 @@ import styleConst from '../style-const';
 import RNPickerSelect from 'react-native-picker-select';
 import {actionSetGlobalLanguage} from '../../core/lang/actions';
 import {strings} from '../../core/lang/const';
+import {APP_LANG, UKRAINE} from '../const';
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -63,8 +64,8 @@ const pickerSelectStyles = StyleSheet.create({
 
 const LangSwitcher = props => {
   const _onValueChange = value => {
-    if (value !== 'ru' && value !== 'ua') {
-      value = 'ru';
+    if (value !== APP_LANG && value !== UKRAINE) {
+      value = APP_LANG;
     }
     props.actionSetGlobalLanguage(value);
     strings.setLanguage(value);

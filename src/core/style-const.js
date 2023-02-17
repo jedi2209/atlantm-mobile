@@ -19,8 +19,6 @@ export default {
     greyText5: '#a8abbe',
     greyText6: '#757575',
     greyText7: '#808080',
-    // greyBlue: '#0D0221',
-    // greyBlue: '#0D1821',
     greyBlue: '#616e7a',
     greyBlueText: '#a8b0b7',
     select: '#fafafa',
@@ -33,7 +31,6 @@ export default {
   screen: Dimensions.get('window'),
   spinner: {
     alignSelf: 'center',
-    // marginTop: verticalScale(30),
   },
   shadow: {
     default: {

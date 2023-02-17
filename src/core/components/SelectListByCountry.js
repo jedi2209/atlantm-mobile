@@ -11,7 +11,7 @@ import {connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import PropTypes from 'prop-types';
 
-import {APP_REGION} from '../../core/const';
+import {APP_REGION, RUSSIA, BELARUSSIA, UKRAINE} from '../../core/const';
 
 import {fetchDealers} from '../../dealer/actions';
 
@@ -147,21 +147,21 @@ const SelectListByCountry = props => {
   const countrySettings = get(settings, 'country', []);
 
   if (listAll && listAll.length) {
-    if (countrySettings.includes('by')) {
+    if (countrySettings.includes(BELARUSSIA)) {
       listBelarussia.map(el => {
         if (listAll.includes(el.id)) {
           customListBYN.push(el);
         }
       });
     }
-    if (countrySettings.includes('ru')) {
+    if (countrySettings.includes(RUSSIA)) {
       listRussia.map(el => {
         if (listAll.includes(el.id)) {
           customListRUS.push(el);
         }
       });
     }
-    if (countrySettings.includes('ua')) {
+    if (countrySettings.includes(UKRAINE)) {
       listUkraine.map(el => {
         if (listAll.includes(el.id)) {
           customListUA.push(el);
@@ -174,7 +174,7 @@ const SelectListByCountry = props => {
   if (listAll && listAll.length) {
     // кастомный список дилеров
     if (customListBYN && customListBYN.length) {
-      routesHead.push({key: 'by', title: '🇧🇾 Беларусь'});
+      routesHead.push({key: BELARUSSIA, title: '🇧🇾 Беларусь'});
       TabBY = () => (
         <View style={{flex: 1}}>
           <FlatList
@@ -201,7 +201,7 @@ const SelectListByCountry = props => {
     }
 
     if (customListRUS && customListRUS.length) {
-      routesHead.push({key: 'ru', title: '🇷🇺 Россия'});
+      routesHead.push({key: RUSSIA, title: '🇷🇺 Россия'});
       TabRU = () => (
         <View style={{flex: 1}}>
           <FlatList
@@ -223,8 +223,8 @@ const SelectListByCountry = props => {
       );
     }
 
-    if (customListUA && customListUA.length && APP_REGION === 'ua') {
-      routesHead.push({key: 'ua', title: '🇺🇦 Все буде Україна!'});
+    if (customListUA && customListUA.length && APP_REGION === UKRAINE) {
+      routesHead.push({key: UKRAINE, title: '🇺🇦 Все буде Україна!'});
       TabUA = () => (
         <View style={{flex: 1}}>
           <FlatList
@@ -254,9 +254,9 @@ const SelectListByCountry = props => {
       listBelarussia &&
       listBelarussia.length &&
       countrySettings &&
-      countrySettings.includes('by')
+      countrySettings.includes(BELARUSSIA)
     ) {
-      routesHead.push({key: 'by', title: '🇧🇾 Беларусь'});
+      routesHead.push({key: BELARUSSIA, title: '🇧🇾 Беларусь'});
       TabBY = () => (
         <View style={{flex: 1, paddingBottom: 20}}>
           <FlatList
@@ -286,9 +286,9 @@ const SelectListByCountry = props => {
       listRussia &&
       listRussia.length &&
       countrySettings &&
-      countrySettings.includes('ru')
+      countrySettings.includes(RUSSIA)
     ) {
-      routesHead.push({key: 'ru', title: '🇷🇺 Россия'});
+      routesHead.push({key: RUSSIA, title: '🇷🇺 Россия'});
       TabRU = () => (
         <View style={{flex: 1, paddingBottom: 20}}>
           <FlatList
@@ -315,13 +315,13 @@ const SelectListByCountry = props => {
     }
 
     if (
-      APP_REGION === 'ua' &&
+      APP_REGION === UKRAINE &&
       listUkraine &&
       listUkraine.length &&
       countrySettings &&
-      countrySettings.includes('ua')
+      countrySettings.includes(UKRAINE)
     ) {
-      routesHead.push({key: 'ua', title: '🇺🇦 Все буде Україна!'});
+      routesHead.push({key: UKRAINE, title: '🇺🇦 Все буде Україна!'});
       TabUA = () => (
         <View style={{flex: 1, paddingBottom: 20}}>
           <FlatList
@@ -353,13 +353,13 @@ const SelectListByCountry = props => {
   let renderScene = null;
 
   switch (APP_REGION) {
-    case 'by':
+    case BELARUSSIA:
       renderScene = SceneMap({
         by: TabBY,
         ru: TabRU,
       });
       break;
-    case 'ua':
+    case UKRAINE:
       renderScene = SceneMap({
         ua: TabUA,
       });

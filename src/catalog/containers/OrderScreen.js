@@ -136,32 +136,6 @@ class OrderScreen extends Component {
       }
     }
 
-    // const region = get(this.props.route, 'params.region');
-
-    // let dealersList = null;
-    // let dealersSelect = [];
-
-    // if (listAll) {
-    //   switch (region) {
-    //     case 'by':
-    //       dealersList = this.props.listBelarussia;
-    //       break;
-    //     case 'ru':
-    //       dealersList = this.props.listRussia;
-    //       break;
-    //     case 'ua':
-    //       dealersList = this.props.listUkraine;
-    //       break;
-    //   }
-    //   if (dealersList) {
-    //     dealersList.map((el) => {
-    //     });
-    //   }
-    // } else {
-    //   dealersSelect.push({
-    //   });
-    // }
-
     this.FormConfig = {
       fields: {
         groups: [
@@ -306,23 +280,6 @@ class OrderScreen extends Component {
     email: PropTypes.string,
     comment: PropTypes.string,
   };
-
-  // shouldComponentUpdate(nextProps) {
-  //   if (!this.props.dealerSelectedLocal) {
-  //     return false;
-  //   } else {
-  //     if (
-  //       this.props.dealerSelectedLocal &&
-  //       this.props.dealerSelectedLocal.id &&
-  //       nextProps.dealerSelectedLocal
-  //     ) {
-  //       return (
-  //         this.props.dealerSelectedLocal.id !== nextProps.dealerSelectedLocal.id
-  //       );
-  //     }
-  //   }
-  //   return false;
-  // }
 
   onPressOrder = async data => {
     const isInternetExist = await isInternet();

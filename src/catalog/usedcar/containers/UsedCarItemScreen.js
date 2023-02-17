@@ -216,12 +216,7 @@ const UsedCarItemScreen = props => {
           mr="2"
           mt="0.5"
         />
-        <Text
-          // numberOfLines={1}
-          // ellipsizeMode="tail"
-          style={styles.additionalServiceText}>
-          {element?.name}
-        </Text>
+        <Text style={styles.additionalServiceText}>{element?.name}</Text>
       </HStack>
     );
   };

@@ -94,23 +94,23 @@ export const actionChatIDSave = senderID => {
     //       });
     //     }
 
-        return dispatch({
-          type: CONTACTS_CHAT_SEND__SUCCESS,
-          payload: {
-            session: senderID,
-          }
-        });
-      // })
-      // .catch(error => {
-      //   Sentry.captureException(error);
-      //   Sentry.captureMessage('chatSendMessage API.chatSendMessage error');
-      //   return dispatch({
-      //     type: CONTACTS_CHAT_SEND__FAIL,
-      //     payload: {
-      //       error: error.message,
-      //       code: error.code,
-      //     },
-      //   });
-      // });
+    return dispatch({
+      type: CONTACTS_CHAT_SEND__SUCCESS,
+      payload: {
+        session: senderID,
+      },
+    });
+    // })
+    // .catch(error => {
+    //   Sentry.captureException(error);
+    //   Sentry.captureMessage('chatSendMessage API.chatSendMessage error');
+    //   return dispatch({
+    //     type: CONTACTS_CHAT_SEND__FAIL,
+    //     payload: {
+    //       error: error.message,
+    //       code: error.code,
+    //     },
+    //   });
+    // });
   };
 };

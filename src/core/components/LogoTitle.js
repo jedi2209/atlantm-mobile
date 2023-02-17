@@ -1,8 +1,6 @@
 import React from 'react';
 import {View, Image, Platform, StyleSheet} from 'react-native';
 
-import styleConst from '../style-const';
-
 import {connect} from 'react-redux';
 import {APP_LANG} from '../const';
 
@@ -12,19 +10,6 @@ const mapStateToProps = ({dealer, core}) => {
     dealerSelected: dealer.selected,
   };
 };
-
-const languagesItems = [
-  {
-    label: '🇷🇺',
-    value: 'ru',
-    key: 1,
-  },
-  {
-    label: '🇺🇦',
-    value: 'ua',
-    key: 2,
-  },
-];
 
 const isAndroid = Platform.OS === 'android';
 
@@ -43,15 +28,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: isAndroid ? '80%' : '85%',
   },
-  // LangSwitcherContainer: {
-  //   width: isAndroid ? '20%' : '15%',
-  //   minWidth: 95,
-  // },
-  // LangSwitcher: {
-  //   fontSize: 14,
-  //   fontFamily: styleConst.font.light,
-  //   color: styleConst.color.lightBlue,
-  // },
 });
 
 const LogoTitle = () => {

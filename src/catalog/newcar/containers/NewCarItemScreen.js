@@ -374,10 +374,6 @@ const _renderPriceFooter = ({
       get(carDetails, 'price.rec'),
   };
 
-  // if (!CarPrices.standart) {
-  //   return false;
-  // }
-
   return (
     <View
       style={[
@@ -1004,7 +1000,6 @@ const NewCarItemScreen = ({
           <Accordion
             sections={SECTIONS}
             activeSections={sectionActive}
-            // renderSectionTitle={this._renderSectionTitle}
             renderHeader={(item, index, expanded) => (
               <HStack
                 justifyContent={'space-between'}
@@ -1095,10 +1090,6 @@ const NewCarItemScreen = ({
                 !isPriceShow || !priceFooterContainer
                   ? stylesFooter.buttonNoPriceRight
                   : null,
-                // !carDetails.testDriveCars ||
-                // carDetails.testDriveCars.length === 0
-                //   ? stylesFooter.buttonOnlyOne
-                //   : null,
               ]}
               activeOpacity={0.8}>
               {strings.NewCarItemScreen.wannaCar}

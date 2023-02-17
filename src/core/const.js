@@ -11,6 +11,9 @@ let appRegion,
   oneSignalKey,
   amplitudeKey,
   appLang,
+  countrySettings,
+  countryList,
+  phoneRestricted,
   fbAppID = null;
 
 export const RUSSIA = 'ru';
@@ -22,6 +25,9 @@ switch (bundle) {
   case 'com.atlantm': // Android BY
     appRegion = BELARUSSIA;
     appLang = 'ru';
+    countrySettings = ['by', 'ru'];
+    countryList = require('./const.countries_by.json');
+    phoneRestricted = 'ua';
     errorNetwork = 'Отсутствует интернет соединение';
     appleID = '1492492166';
     googleID = 'com.atlantm';
@@ -34,6 +40,9 @@ switch (bundle) {
   case 'ua.atlantm.app': // iOS UA + Android UA
     appRegion = UKRAINE;
     appLang = 'uk';
+    countrySettings = ['ua'];
+    phoneRestricted = ['ru', 'by'];
+    countryList = require('./const.countries_by.json');
     errorNetwork = "Відсутнє інтернет з'єднання";
     appleID = '1619839155';
     googleID = 'ua.atlantm.app';
@@ -46,8 +55,17 @@ switch (bundle) {
     break;
 }
 
+export const APP_LOCALE = {
+  ru: 'ru-RU',
+  by: 'ru-RU',
+  ua: 'uk-UK',
+};
+
 export const APP_LANG = appLang;
 export const APP_REGION = appRegion;
+export const APP_COUNTRY_SETTINGS = countrySettings;
+export const APP_COUNTRY_LIST = countryList;
+export const APP_PHONE_RESTRICTED = phoneRestricted;
 
 export const ERROR_NETWORK = errorNetwork;
 

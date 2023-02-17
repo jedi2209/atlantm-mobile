@@ -1,13 +1,15 @@
 import {Platform, Alert, Linking, AppState} from 'react-native';
 
 import OneSignal from 'react-native-onesignal';
+import DeviceInfo from 'react-native-device-info';
 import {ONESIGNAL} from '../const';
 import Analytics from '../../utils/amplitude-analytics';
 import * as NavigationService from '../../navigation/NavigationService';
+import {strings} from '../lang/const';
 
 import {get} from 'lodash';
 
-// const isAndroid = Platform.OS === 'android';
+const bundle = DeviceInfo.getBundleId();
 
 export default {
   init() {
@@ -144,20 +146,23 @@ export default {
       // Check push notification and OneSignal subscription statuses
       // OneSignal.promptForPushNotificationsWithUserResponse();
       this.deviceState().then(deviceState => {
-        if (deviceState.isSubscribed == false) {
+        if (deviceState.isSubscribed === false) {
           switch (Platform.OS) {
             case 'ios':
               setTimeout(() => {
                 return Alert.alert(
-                  'Уведомления выключены',
-                  'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
+                  strings.Notifications.PushAlert.title,
+                  strings.Notifications.PushAlert.text,
                   [
-                    {text: 'Позже', style: 'destructive'},
                     {
-                      text: 'Разрешить',
+                      text: strings.Notifications.PushAlert.later,
+                      style: 'destructive',
+                    },
+                    {
+                      text: strings.Notifications.PushAlert.approve,
                       onPress: () => {
                         Linking.openURL(
-                          'app-settings://notification/com.atlantm.app',
+                          'app-settings://notification/' + bundle,
                         );
                       },
                       style: 'cancel',
