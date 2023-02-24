@@ -554,6 +554,10 @@ const MainFilterScreen = ({
   };
 
   useEffect(() => {
+    Analytics.logEvent('screen', 'catalog/mainFilters');
+  }, []);
+
+  useEffect(() => {
     dispatchFilters(null, null);
     setDataFilters(null);
     setTotalCars(null);
