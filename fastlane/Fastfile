@@ -1,4 +1,4 @@
-fastlane_version '2.197.0'
+fastlane_version '2.212.0'
 
 fastlane_require 'dotenv'
 
