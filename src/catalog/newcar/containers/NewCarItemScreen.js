@@ -884,8 +884,14 @@ const NewCarItemScreen = ({
               testID="NewCarItemScreen.BadgesWrapper"
               style={styles.badgesView}>
               {badge.map((item, index) => {
-                if (item.name.toLowerCase() === 'спец.цена') {
-                  item.name = strings.CarList.badges.specialPrice;
+                switch (item.name.toLowerCase()) {
+                  case 'спец.цена':
+                    item.name = strings.CarList.badges.specialPrice;
+                    break;
+                  case 'в резерве':
+                    item.name =
+                      strings.CarList.badges.ordered[carDetails?.ordered];
+                    break;
                 }
                 return (
                   <Badge
