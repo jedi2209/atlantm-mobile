@@ -1,7 +1,9 @@
-// const OriginalResolver = require('metro-resolver');
-// const path = require('path');
-
-// const blacklistedModules = ['https', 'http', 'zlib', 'ansi-styles'];
+/**
+ * Metro configuration for React Native
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ */
 
 module.exports = {
   transformer: {

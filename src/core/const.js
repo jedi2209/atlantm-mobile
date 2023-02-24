@@ -42,7 +42,7 @@ switch (bundle) {
     appLang = 'uk';
     countrySettings = ['ua'];
     phoneRestricted = ['ru', 'by'];
-    countryList = require('./const.countries_by.json');
+    countryList = require('./const.countries_ua.json');
     errorNetwork = "Відсутнє інтернет з'єднання";
     appleID = '1619839155';
     googleID = 'ua.atlantm.app';
