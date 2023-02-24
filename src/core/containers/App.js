@@ -19,8 +19,9 @@ import {
   actionSettingsLoaded,
 } from '../actions';
 import {fetchDealers, selectDealer, fetchBrands} from '../../dealer/actions';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
-import {APP_STORE_UPDATED} from '../../core/actionTypes';
+import {APP_STORE_UPDATED} from '../actionTypes';
 import {APP_LANG} from '../const';
 
 import {strings} from '../lang/const';
@@ -32,7 +33,7 @@ import {get} from 'lodash';
 import OneSignal from 'react-native-onesignal';
 import moment from 'moment';
 import PushNotifications from '../components/PushNotifications';
-import styleConst from '../../core/style-const';
+import styleConst from '../style-const';
 
 // components
 import DeviceInfo from 'react-native-device-info';
@@ -188,17 +189,19 @@ const App = props => {
     );
   } else {
     return (
-      <NativeBaseProvider
-        theme={theme}
-        config={{
-          dependencies: {
-            'linear-gradient': require('react-native-linear-gradient').default,
-          },
-        }}>
-        <NavigationContainer ref={NavigationService.navigationRef}>
-          <Nav.Base />
-        </NavigationContainer>
-      </NativeBaseProvider>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <NativeBaseProvider
+          theme={theme}
+          config={{
+            dependencies: {
+              'linear-gradient': require('react-native-linear-gradient').default,
+            },
+          }}>
+          <NavigationContainer ref={NavigationService.navigationRef}>
+            <Nav.Base />
+          </NavigationContainer>
+        </NativeBaseProvider>
+      </GestureHandlerRootView>
     );
   }
 };

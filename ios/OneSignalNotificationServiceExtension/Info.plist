@@ -4,10 +4,6 @@
 <dict>
 	<key>NSExtension</key>
 	<dict>
-		<key>CFBundleShortVersionString</key>
-		<string>8.3.2</string>
-		<key>CFBundleVersion</key>
-		<string>324</string>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.usernotifications.service</string>
 		<key>NSExtensionPrincipalClass</key>
