@@ -3,6 +3,7 @@ import * as React from 'react';
 import {Icon, Actionsheet, useDisclose, Box, Text} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import orderFunctions from '../../utils/orders';
+import Analytics from '../../utils/amplitude-analytics';
 
 // import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -168,6 +169,11 @@ export const BottomTabNavigation = ({navigation, route}) => {
         <Tab.Screen
           name="Home"
           component={ContactsStackView}
+          listeners={{
+            tabPress: e => {
+              Analytics.logEvent('click', 'bottomMenu/home');
+            },
+          }}
           options={{
             headerShown: false,
             tabBarLabel: strings.Menu.bottom.dealer,
@@ -195,6 +201,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
           listeners={{
             tabPress: e => {
               e.preventDefault();
+              Analytics.logEvent('click', 'bottomMenu/catalogSearch');
               navigation.navigate('CarsStock');
             },
           }}
@@ -222,6 +229,11 @@ export const BottomTabNavigation = ({navigation, route}) => {
         <Tab.Screen
           name="About"
           component={ProfileStackView}
+          listeners={{
+            tabPress: e => {
+              Analytics.logEvent('click', 'bottomMenu/profile');
+            },
+          }}
           options={{
             headerShown: false,
             tabBarLabel: strings.Menu.bottom.lkk,
@@ -250,6 +262,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
           listeners={{
             tabPress: e => {
               e.preventDefault();
+              Analytics.logEvent('click', 'bottomMenu/orders');
               _showOrdersMenu();
             },
           }}
@@ -276,6 +289,11 @@ export const BottomTabNavigation = ({navigation, route}) => {
         <Tab.Screen
           name="Menu"
           component={MenuStackView}
+          listeners={{
+            tabPress: e => {
+              Analytics.logEvent('click', 'bottomMenu/menu');
+            },
+          }}
           options={{
             headerShown: false,
             tabBarLabel: strings.Menu.bottom.menu,
