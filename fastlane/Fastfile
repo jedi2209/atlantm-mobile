@@ -39,6 +39,7 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
     ensure_git_status_clean
+    # ENV["NO_FLIPPER"] = "1"
     api_key = app_store_connect_api_key(
       key_id: "XXXX",
       issuer_id: "XXXX",
@@ -84,6 +85,7 @@ platform :ios do
         ],
         api_key: api_key
     )
+    # ENV["NO_FLIPPER"] = "0"
     notification(
       subtitle: "Build is finish!",
       message: "iOS beta AppStore version #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]})",

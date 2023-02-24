@@ -52,7 +52,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>326</string>
 	<key>FacebookAdvertiserIDCollectionEnabled</key>
 	<true/>
 	<key>FacebookAppID</key>
@@ -136,7 +136,6 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
-		<string>processing</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
