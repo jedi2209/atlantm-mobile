@@ -82,15 +82,15 @@ BrandLogo.defaultProps = {
   type: 'black',
   aspectRatio: 1.5,
   brandsAssets: {
-    black: [2, 3, 6, 7, 9, 10, 12, 13, 14, 19, 20],
-    white: [2, 3, 6, 7, 9, 10, 12, 13, 14, 19, 20],
+    black: [2, 3, 6, 7, 9, 10, 12, 13, 14, 19, 20, 23],
+    white: [2, 3, 6, 7, 9, 10, 12, 13, 14, 19, 20, 23],
   },
   testID: 'BrandLogo.Wrapper',
 };
 
 const styles = StyleSheet.create({
   imageSVG: {
-    width: '100%',
+    maxWidth: '100%',
     height: '100%',
   },
   containerSVG: {
@@ -168,6 +168,12 @@ const brandsSVG = {
         style={styles.imageSVG}
       />
     ),
+    23: (
+      <Image
+        source={require('../assets/brands/black/brand-23.svg')}
+        style={[styles.imageSVG, {height: '83%'}]}
+      />
+    ),
   },
   white: {
     2: (
@@ -233,6 +239,12 @@ const brandsSVG = {
     20: (
       <Image
         source={require('../assets/brands/white/brand-20.svg')}
+        style={styles.imageSVG}
+      />
+    ),
+    23: (
+      <Image
+        source={require('../assets/brands/white/brand-23.svg')}
         style={styles.imageSVG}
       />
     ),
