@@ -22,8 +22,6 @@ import {
   APP_SETTINGS_LOADED,
 } from './actionTypes';
 
-import {DEALER__SUCCESS} from '../dealer/actionTypes';
-
 const pushGranted = (state = false, action) => {
   switch (action.type) {
     case APP_PUSH_GRANTED__SET:

@@ -1,5 +1,3 @@
-import API from '../utils/api';
-
 import {
   APP_PUSH_GRANTED__SET,
   APP_PUSH_ACTION_SUBSCRIBE__SET,
