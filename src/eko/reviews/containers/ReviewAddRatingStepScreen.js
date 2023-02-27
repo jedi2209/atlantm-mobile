@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Alert, StyleSheet, Platform} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Alert} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -16,7 +16,6 @@ import {Checkbox, View} from 'native-base';
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
-import styleConst from '../../../core/style-const';
 
 import Form from '../../../core/components/Form/Form';
 import UserData from '../../../utils/user';
@@ -28,63 +27,6 @@ import {
   REVIEW_ADD_RATING_1,
 } from '../../constants';
 import {strings} from '../../../core/lang/const';
-
-const $size = 40;
-const styles = StyleSheet.create({
-  publicAgreeContainer: {
-    marginBottom: 5,
-    borderRadius: 5,
-  },
-  publicAgreeText: {
-    fontSize: 14,
-    paddingVertical: 5,
-  },
-  switch: {
-    marginTop: 2,
-  },
-  list: {
-    paddingBottom: $size,
-  },
-  serviceForm: {
-    marginTop: $size,
-  },
-  // Скопировано из ProfileSettingsScreen.
-  container: {
-    flex: 1,
-    paddingVertical: 20,
-    paddingHorizontal: 14,
-    backgroundColor: styleConst.color.white,
-  },
-  header: {
-    marginBottom: 36,
-  },
-  heading: {
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  field: {
-    marginBottom: 18,
-  },
-  group: {
-    marginBottom: 36,
-  },
-  textinput: {
-    height: Platform.OS === 'ios' ? 40 : 'auto',
-    borderColor: '#d8d8d8',
-    borderBottomWidth: 1,
-    color: '#222b45',
-    fontSize: 18,
-  },
-  button: {
-    backgroundColor: '#0F66B2',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    color: styleConst.color.white,
-    textTransform: 'uppercase',
-    fontSize: 16,
-  },
-});
 
 const mapStateToProps = ({dealer, eko, nav, profile}) => {
   return {
@@ -113,137 +55,17 @@ const mapDispatchToProps = {
   actionSelectAddReviewRatingVariant,
 };
 
-class ReviewAddRatingStepScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.reviewData = props.route?.params;
-    this.FormConfig = {
-      fields: {
-        groups: [
-          {
-            name: strings.ReviewAddRatingStepScreen.mainReview,
-            fields: [
-              {
-                name: 'RATING',
-                type: 'select',
-                label: strings.ReviewAddRatingStepScreen.mainReview2,
-                value: '',
-                props: {
-                  items: [
-                    {
-                      label: REVIEW_ADD_RATING_5,
-                      value: 5,
-                      key: 5,
-                    },
-                    {
-                      label: REVIEW_ADD_RATING_4,
-                      value: 4,
-                      key: 4,
-                    },
-                    {
-                      label: REVIEW_ADD_RATING_3,
-                      value: 3,
-                      key: 3,
-                    },
-                    {
-                      label: REVIEW_ADD_RATING_2,
-                      value: 2,
-                      key: 2,
-                    },
-                    {
-                      label: REVIEW_ADD_RATING_1,
-                      value: 1,
-                      key: 1,
-                    },
-                  ],
-                  required: true,
-                  placeholder: {
-                    label: strings.ReviewAddRatingStepScreen.addReview,
-                    value: null,
-                    color: '#9EA0A4',
-                  },
-                },
-              },
-            ],
-          },
-          {
-            name: strings.Form.group.contacts,
-            fields: [
-              {
-                name: 'NAME',
-                type: 'input',
-                label: strings.Form.field.label.name,
-                value: this.props.firstName,
-                props: {
-                  required: true,
-                  textContentType: 'name',
-                },
-              },
-              {
-                name: 'SECOND_NAME',
-                type: 'input',
-                label: strings.Form.field.label.secondName,
-                value: this.props.secondName,
-                props: {
-                  textContentType: 'middleName',
-                },
-              },
-              {
-                name: 'LAST_NAME',
-                type: 'input',
-                label: strings.Form.field.label.lastName,
-                value: this.props.lastName,
-                props: {
-                  textContentType: 'familyName',
-                },
-              },
-              {
-                name: 'PHONE',
-                type: 'phone',
-                label: strings.Form.field.label.phone,
-                value: this.props.phone,
-                props: {
-                  required: true,
-                },
-              },
-              {
-                name: 'EMAIL',
-                type: 'email',
-                label: strings.Form.field.label.email,
-                value: this.props.email,
-                props: {
-                  required: true,
-                },
-              },
-            ],
-          },
-        ],
-      },
-    };
+const ReviewAddRatingStepScreen = props => {
+  const [publicAgree, setPublicAgree] = useState(true);
 
-    this.state = {
-      publicAgree: true,
-    };
-  }
+  const reviewData = props.route?.params;
 
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
+  useEffect(() => {
+    console.info('== ReviewAddRatingStepScreen ==');
+  }, []);
 
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen =
-          get(rootLevel, `routes[${rootLevel.index}].routeName`) ===
-          'ReviewAddRatingStepScreen';
-      }
-    }
-
-    return isActiveScreen;
-  }
-
-  onPressButton = dataFromForm => {
-    const {dealerSelected, navigation} = this.props;
+  const _onPressButton = dataFromForm => {
+    const {dealerSelected, navigation} = props;
 
     const name = [
       dataFromForm.NAME,
@@ -253,78 +75,178 @@ class ReviewAddRatingStepScreen extends Component {
       .filter(Boolean)
       .join(' ');
 
-    return this.props
-      .actionReviewAdd({
-        dealerId: dealerSelected.id,
-        firstName: get(dataFromForm, 'NAME', ''),
-        secondName: get(dataFromForm, 'SECOND_NAME', ''),
-        lastName: get(dataFromForm, 'LAST_NAME', ''),
-        email: get(dataFromForm, 'EMAIL', ''),
-        phone: get(dataFromForm, 'PHONE', ''),
-        name: name,
-        messagePlus: get(this.reviewData, 'COMMENT_PLUS', null),
-        messageMinus: get(this.reviewData, 'COMMENT_MINUS', null),
-        publicAgree: this.state.publicAgree,
-        rating: get(dataFromForm, 'RATING', ''),
-      })
-      .then(action => {
-        if (action.type === REVIEW_ADD__SUCCESS) {
-          Analytics.logEvent('order', 'eko/review_add');
+    const dataToSend = {
+      dealerId: dealerSelected.id,
+      firstName: get(dataFromForm, 'NAME', ''),
+      secondName: get(dataFromForm, 'SECOND_NAME', ''),
+      lastName: get(dataFromForm, 'LAST_NAME', ''),
+      email: get(dataFromForm, 'EMAIL', ''),
+      phone: get(dataFromForm, 'PHONE', ''),
+      name: name,
+      messagePlus: get(reviewData, 'COMMENT_PLUS', null),
+      messageMinus: get(reviewData, 'COMMENT_MINUS', null),
+      publicAgree,
+      rating: get(dataFromForm, 'RATING', ''),
+    };
 
-          setTimeout(() => {
-            Alert.alert(
-              strings.ReviewAddRatingStepScreen.Notifications.success.text,
-            );
-            navigation.navigate('ReviewsScreen');
-          }, 100);
-        }
+    return props.actionReviewAdd(dataToSend).then(action => {
+      if (action.type === REVIEW_ADD__SUCCESS) {
+        Analytics.logEvent('order', 'eko/review_add');
 
-        if (action.type === REVIEW_ADD__FAIL) {
-          setTimeout(
-            () =>
-              Alert.alert(
-                strings.Notifications.error.title,
-                strings.Notifications.error.text,
-              ),
-            100,
+        setTimeout(() => {
+          Alert.alert(
+            strings.ReviewAddRatingStepScreen.Notifications.success.text,
           );
-        }
-      });
+          navigation.navigate('ReviewsScreen');
+        }, 100);
+      }
+
+      if (action.type === REVIEW_ADD__FAIL) {
+        setTimeout(
+          () =>
+            Alert.alert(
+              strings.Notifications.error.title,
+              strings.Notifications.error.text,
+            ),
+          100,
+        );
+      }
+    });
   };
 
-  renderPublicAgree = isChecked => {
+  const _renderPublicAgree = isChecked => {
     return (
       <View py={5} backgroundColor="white" px={3}>
         <Checkbox
           isChecked={isChecked}
-          onChange={this.setState({publicAgree: !isChecked})}>
+          onChange={() => setPublicAgree(!isChecked)}>
           {strings.ReviewAddRatingStepScreen.approve}
         </Checkbox>
       </View>
     );
   };
 
-  render() {
-    console.info('== ReviewAddRatingStepScreen ==');
+  const FormConfig = {
+    fields: {
+      groups: [
+        {
+          name: strings.ReviewAddRatingStepScreen.mainReview,
+          fields: [
+            {
+              name: 'RATING',
+              type: 'select',
+              label: strings.ReviewAddRatingStepScreen.mainReview2,
+              value: '',
+              props: {
+                items: [
+                  {
+                    label: REVIEW_ADD_RATING_5,
+                    value: 5,
+                    key: 5,
+                  },
+                  {
+                    label: REVIEW_ADD_RATING_4,
+                    value: 4,
+                    key: 4,
+                  },
+                  {
+                    label: REVIEW_ADD_RATING_3,
+                    value: 3,
+                    key: 3,
+                  },
+                  {
+                    label: REVIEW_ADD_RATING_2,
+                    value: 2,
+                    key: 2,
+                  },
+                  {
+                    label: REVIEW_ADD_RATING_1,
+                    value: 1,
+                    key: 1,
+                  },
+                ],
+                required: true,
+                placeholder: {
+                  label: strings.ReviewAddRatingStepScreen.addReview,
+                  value: null,
+                  color: '#9EA0A4',
+                },
+              },
+            },
+          ],
+        },
+        {
+          name: strings.Form.group.contacts,
+          fields: [
+            {
+              name: 'NAME',
+              type: 'input',
+              label: strings.Form.field.label.name,
+              value: props.firstName,
+              props: {
+                required: true,
+                textContentType: 'name',
+              },
+            },
+            {
+              name: 'SECOND_NAME',
+              type: 'input',
+              label: strings.Form.field.label.secondName,
+              value: props.secondName,
+              props: {
+                textContentType: 'middleName',
+              },
+            },
+            {
+              name: 'LAST_NAME',
+              type: 'input',
+              label: strings.Form.field.label.lastName,
+              value: props.lastName,
+              props: {
+                textContentType: 'familyName',
+              },
+            },
+            {
+              name: 'PHONE',
+              type: 'phone',
+              label: strings.Form.field.label.phone,
+              value: props.phone,
+              props: {
+                required: true,
+              },
+            },
+            {
+              name: 'EMAIL',
+              type: 'email',
+              label: strings.Form.field.label.email,
+              value: props.email,
+              props: {
+                required: true,
+              },
+            },
+          ],
+        },
+      ],
+    },
+  };
 
-    return (
-      <View style={{marginTop: 10, flex: 1}}>
-        {this.renderPublicAgree(this.state.publicAgree)}
-        <Form
-          contentContainerStyle={{
-            paddingHorizontal: 14,
-            marginTop: 20,
-          }}
-          key="ReviewAddRatingForm"
-          fields={this.FormConfig.fields}
-          barStyle={'light-content'}
-          SubmitButton={{text: strings.Form.button.send}}
-          onSubmit={this.onPressButton}
-        />
-      </View>
-    );
-  }
-}
+  return (
+    <View style={{marginTop: 10, flex: 1}}>
+      {_renderPublicAgree(publicAgree)}
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key="ReviewAddRatingForm"
+        fields={FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{text: strings.Form.button.send}}
+        onSubmit={_onPressButton}
+      />
+    </View>
+  );
+};
 
 export default connect(
   mapStateToProps,
