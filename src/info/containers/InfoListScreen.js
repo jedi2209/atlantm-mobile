@@ -111,44 +111,6 @@ class InfoListScreen extends Component {
     isFetchInfoList: PropTypes.bool.isRequired,
   };
 
-  onSwitchActionSubscribe = () => {
-    const {
-      dealerSelected,
-      actionSetPushActionSubscribe,
-      pushActionSubscribeState,
-    } = this.props;
-
-    let text,
-      title = '';
-
-    if (pushActionSubscribeState === false) {
-      PushNotifications.subscribeToTopic('actions', dealerSelected.id).then(
-        isPermission => {
-          actionSetPushActionSubscribe(isPermission);
-          this.props.navigation.setParams({
-            pushActionSubscribeState: isPermission,
-            pushStatusLoaded: true,
-          });
-          if (isPermission) {
-            title = strings.Notifications.success.title;
-            text = strings.Notifications.success.textPush;
-            Alert.alert(title, text);
-          }
-        },
-      );
-    } else {
-      PushNotifications.unsubscribeFromTopic('actions');
-      actionSetPushActionSubscribe(false);
-      this.props.navigation.setParams({
-        pushActionSubscribeState: false,
-        pushStatusLoaded: true,
-      });
-      title = strings.Notifications.success.titleSad;
-      text = strings.Notifications.success.textPushSad;
-      Alert.alert(title, text);
-    }
-  };
-
   componentDidMount() {
     const {
       navigation,
