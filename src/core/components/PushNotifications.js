@@ -144,9 +144,9 @@ export default {
   checkPermission() {
     return new Promise((resolve, reject) => {
       // Check push notification and OneSignal subscription statuses
-      // OneSignal.promptForPushNotificationsWithUserResponse();
+      OneSignal.promptForPushNotificationsWithUserResponse();
       this.deviceState().then(deviceState => {
-        if (deviceState.isSubscribed === false) {
+        if (deviceState.hasNotificationPermission === false) {
           switch (Platform.OS) {
             case 'ios':
               setTimeout(() => {
