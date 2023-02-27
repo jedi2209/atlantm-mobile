@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {SafeAreaView, View, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -16,7 +16,7 @@ import SpinnerView from '../../../core/components/SpinnerView';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
-import { ScrollView, VStack } from 'native-base';
+import {ScrollView, VStack} from 'native-base';
 
 const styles = StyleSheet.create({
   review: {

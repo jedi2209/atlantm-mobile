@@ -71,7 +71,7 @@ class ReviewsScreen extends Component {
   }
 
   onPressItem = review => {
-    const {navigation, actionReviewVisit} = this.props;
+    const {navigation} = this.props;
     navigation.navigate('ReviewScreen', {
       review,
       returnScreen: 'ReviewsScreen',
