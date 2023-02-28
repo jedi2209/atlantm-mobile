@@ -12,8 +12,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import {Button, HStack, Icon, IconButton, useToast} from 'native-base';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {Button, HStack, Icon, useToast, VStack} from 'native-base';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -22,16 +21,12 @@ import LinearGradient from 'react-native-linear-gradient';
 import Form from '../../core/components/Form/Form';
 
 // imports for auth
+import {SocialAuthButton} from '../components/SocialAuthButton';
 import {LoginManager} from 'react-native-fbsdk-next';
 import Facebook from '../auth/Facebook';
 import Google from '../auth/Google';
 import VK from '../auth/VK';
 import Apple from '../auth/Apple';
-
-import {
-  appleAuth,
-  AppleButton,
-} from '@invertase/react-native-apple-authentication';
 
 import OtpAutoFillViewManager from 'react-native-otp-auto-fill';
 
@@ -312,97 +307,48 @@ const LoginScreen = props => {
           width: '80%',
           marginHorizontal: '10%',
         }}>
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}>
-          <IconButton
-            onPress={() => {
-              return Google.signIn(_checkPhone);
-            }}
+        <HStack justifyContent={'space-between'} alignItems={'center'}>
+          <SocialAuthButton
+            type="Google"
+            onPress={() => Google.signIn(_checkPhone)}
             isDisabled={isSigninInProgress}
-            _icon={{
-              as: FontAwesome5,
-              name: 'google',
-              size: 7,
-              color: 'white',
+            style={{
+              width: ButtonWidth,
+              height: ButtonHeight,
             }}
-            shadow={3}
-            style={[
-              styles.SocialLoginBt,
-              {
-                width: ButtonWidth,
-                height: ButtonHeight,
-                backgroundColor: '#4286F5',
-              },
-            ]}
           />
-          <IconButton
+          <SocialAuthButton
+            type="Facebook"
             onPress={() => {
               // return Facebook.onFacebookButtonPress();
               return Facebook.signIn(_checkPhone);
             }}
             isDisabled={isSigninInProgress}
-            _icon={{
-              as: FontAwesome5,
-              name: 'facebook',
-              size: 10,
-              color: 'white',
+            style={{
+              width: VKenabled ? '29%' : ButtonWidth,
+              height: 60,
+              marginVertical: 8,
+              paddingHorizontal: 8,
             }}
-            shadow={3}
-            style={[
-              styles.SocialLoginBt,
-              {
-                backgroundColor: '#4167B2',
-                width: VKenabled ? '29%' : ButtonWidth,
-                height: 60,
-                marginVertical: 8,
-                paddingHorizontal: 8,
-              },
-            ]}
           />
           {VKenabled ? (
-            <IconButton
+            <SocialAuthButton
+              type="VK"
               onPress={() => {
                 return VK.signIn(_checkPhone);
               }}
               isDisabled={isSigninInProgress}
-              _icon={{
-                as: FontAwesome5,
-                name: 'vk',
-                size: 8,
-                color: 'white',
+              style={{
+                width: ButtonWidth,
+                height: ButtonHeight,
               }}
-              shadow={3}
-              style={[
-                styles.SocialLoginBt,
-                {
-                  width: ButtonWidth,
-                  height: ButtonHeight,
-                  backgroundColor: '#4680C2',
-                },
-              ]}
             />
           ) : null}
-        </View>
-        {!isAndroid && appleAuth.isSupported ? (
-          <AppleButton
-            buttonStyle={AppleButton.Style.WHITE_OUTLINE}
-            buttonType={AppleButton.Type.SIGN_IN}
-            cornerRadius={5}
-            style={[
-              styles.SocialLoginBt,
-              {
-                justifyContent: 'space-between',
-                height: 45,
-              },
-            ]}
-            onPress={() => {
-              return Apple.signIn(_checkPhone);
-            }}
+        </HStack>
+        {!isAndroid ? (
+          <SocialAuthButton
+            type="Apple"
+            onPress={() => Apple.signIn(_checkPhone)}
           />
         ) : null}
       </View>
@@ -544,15 +490,12 @@ const LoginScreen = props => {
               alignItems: 'center',
               opacity: code ? 0 : 1,
             }}>
-            <View
-              style={{
-                marginTop: 5,
-                marginBottom: 10,
-                width: '80%',
-                flexDirection: 'row',
-                justifyContent: 'space-around',
-                alignItems: 'center',
-              }}>
+            <HStack
+              mt={2}
+              mb={3}
+              w={'4/5'}
+              alignItems={'center'}
+              justifyContent={'space-around'}>
               <View style={styles.LoginTextORLine} />
               <Text
                 style={{
@@ -563,22 +506,13 @@ const LoginScreen = props => {
                 {strings.Base.or}
               </Text>
               <View style={styles.LoginTextORLine} />
-            </View>
+            </HStack>
           </View>
-          <View
-            style={{
-              marginTop: code ? '5%' : 0,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                width: '80%',
-                marginTop: code ? '20%' : 0,
-              }}>
+          <VStack
+            alignItems={'center'}
+            justifyContent={'center'}
+            mt={code ? '5%' : 0}>
+            <HStack w={'80%'} mt={code ? '20%' : 0}>
               {code ? (
                 !loadingVerify ? (
                   _show_background_code(codeSize)
@@ -589,7 +523,6 @@ const LoginScreen = props => {
                     enableAutomaticScroll: false,
                   }}
                   contentContainerStyle={{
-                    paddingHorizontal: 14,
                     marginTop: 20,
                     justifyContent: 'center',
                   }}
@@ -606,7 +539,7 @@ const LoginScreen = props => {
                   onSubmit={_verifyCode}
                 />
               )}
-            </View>
+            </HStack>
             {code ? (
               <>
                 <Button
@@ -642,7 +575,7 @@ const LoginScreen = props => {
                 {strings.Menu.main.bonus}
               </Button>
             )}
-          </View>
+          </VStack>
         </View>
       </ImageBackground>
     </View>
@@ -710,9 +643,9 @@ const styles = StyleSheet.create({
     borderWidth: 0.6,
     opacity: 0.95,
     borderRadius: 5,
-    width: '80%',
+    width: '70%',
     marginVertical: 10,
-    marginHorizontal: '10%',
+    marginHorizontal: '15%',
   },
   BonusInfoButtonText: {
     fontFamily: styleConst.font.medium,
