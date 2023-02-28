@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {
   Alert,
@@ -35,16 +35,15 @@ import isInternet from '../../../utils/internet';
 
 import {strings} from '../../../core/lang/const';
 
-const mapStateToProps = ({dealer, profile, nav, catalog}) => {
+const mapStateToProps = ({dealer, profile, catalog}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
-  const carCost = get(catalog, 'carCost', {});
   let carLocalBrand = '';
   let carLocalModel = '';
   let carLocalNumber = '';
   let carLocalVin = '';
+  let Cars = [];
 
   if (cars && typeof cars === 'object') {
-    let Cars = [];
     cars.map(item => {
       if (!item.hidden) {
         Cars.push(item);
@@ -67,8 +66,7 @@ const mapStateToProps = ({dealer, profile, nav, catalog}) => {
   }
 
   return {
-    cars,
-    nav,
+    cars: Cars,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
     lastName: UserData.get('LAST_NAME'),
@@ -90,7 +88,6 @@ const mapStateToProps = ({dealer, profile, nav, catalog}) => {
 };
 
 const mapDispatchToProps = {
-  // carcost
   actionCarCostOrder,
 };
 
@@ -106,101 +103,301 @@ const styles = StyleSheet.create({
   },
 });
 
-class CarCostScreen extends PureComponent {
-  constructor(props) {
-    super(props);
+const CarCostScreen = ({
+  dealerSelected,
+  dealerSelectedLocal,
+  firstName,
+  secondName,
+  lastName,
+  phone,
+  email,
+  carBrand,
+  carModel,
+  carName,
+  carNumber,
+  carVIN,
+  cars,
+  myCars,
+  navigation,
+  route,
+}) => {
+  const [carSelected, setCarData] = useState({
+    carBrand,
+    carModel,
+    carName,
+    carNumber,
+    carMileage: null,
+    carVIN,
+    carYear: null,
+    carEngineType: null,
+    carEngineVolume: null,
+    carGearboxType: null,
+    carWheelType: null,
+  });
 
-    const {lastName, firstName, phone, email, carName, carNumber, carVIN} =
-      props;
+  const [photos, setPhotos] = useState([]);
+  const [userComment, setUserComment] = useState('');
 
-    this.state = {
-      email: email,
-      phone: phone,
-      name: [firstName, lastName].join(' '),
-      carName: carName,
-      carNumber: carNumber,
-      carVIN: carVIN,
-      carYear: null,
-      photos: [],
-      loading: false,
-      success: false,
-    };
+  const [FormConfig, setFormConfig] = useState({});
 
-    this.myCars = [];
-    this.props.cars.map(item => {
-      if (!item.hidden) {
-        this.myCars.push(item);
-      }
-    });
-    if (this.myCars.length === 1) {
-      this._selectCar(this.myCars[0]);
+  useEffect(() => {
+    console.info('== CarCost ==');
+    Analytics.logEvent('screen', 'catalog/carcost');
+
+    if (cars.length === 1) {
+      _selectCar(cars[0]);
     }
+  }, []);
 
-    const carFromNavigation = get(this.props.route, 'params.car');
+  useEffect(() => {
+    const carFromNavigation = get(route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
-      this._selectCar(carFromNavigation);
+      _selectCar(carFromNavigation);
     }
+    const userTextFromNavigation = get(route, 'params.Text');
+    if (userTextFromNavigation) {
+      setUserComment(userTextFromNavigation);
+    }
+  }, [route]);
 
-    this.myCars = [];
-    this.props.cars.map(item => {
-      if (!item.hidden) {
-        this.myCars.push(item);
-      }
+  useEffect(() => {
+    setFormConfig({
+      fields: {
+        groups: [
+          {
+            name: strings.Form.group.dealer,
+            fields: [
+              {
+                name: 'DEALER',
+                type: 'dealerSelect',
+                label: strings.Form.field.label.dealer,
+                value:
+                  dealerSelectedLocal && dealerSelectedLocal.id
+                    ? dealerSelectedLocal
+                    : dealerSelected,
+                props: {
+                  goBack: false,
+                  isLocal: true,
+                  returnScreen: navigation.state?.routeName,
+                },
+              },
+              {
+                name: 'DATE',
+                type: 'date',
+                label: strings.Form.field.label.date,
+                value: null,
+                props: {
+                  placeholder:
+                    strings.Form.field.placeholder.date +
+                    dayMonthYear(addDays(2)),
+                  required: true,
+                  minimumDate: new Date(addDays(2)),
+                  maximumDate: new Date(addDays(62)),
+                },
+              },
+            ],
+          },
+          {
+            name: strings.Form.group.car,
+            fields: _getCars(),
+          },
+          {
+            name: strings.Form.group.contacts,
+            fields: [
+              {
+                name: 'NAME',
+                type: 'input',
+                label: strings.Form.field.label.name,
+                value: firstName,
+                props: {
+                  required: true,
+                  textContentType: 'name',
+                },
+              },
+              {
+                name: 'SECOND_NAME',
+                type: 'input',
+                label: strings.Form.field.label.secondName,
+                value: secondName,
+                props: {
+                  textContentType: 'middleName',
+                },
+              },
+              {
+                name: 'LAST_NAME',
+                type: 'input',
+                label: strings.Form.field.label.lastName,
+                value: lastName,
+                props: {
+                  textContentType: 'familyName',
+                },
+              },
+              {
+                name: 'PHONE',
+                type: 'phone',
+                label: strings.Form.field.label.phone,
+                value: phone,
+                props: {
+                  required: true,
+                },
+              },
+              {
+                name: 'EMAIL',
+                type: 'email',
+                label: strings.Form.field.label.email,
+                value: email,
+              },
+            ],
+          },
+          {
+            name: strings.Form.group.foto,
+            fields: [
+              {
+                name: 'FOTO',
+                type: 'component',
+                label: strings.Form.field.label.foto,
+                value: (
+                  <CarCostPhotos
+                    photos={photos}
+                    photosFill={photos => {
+                      setPhotos(photos);
+                    }}
+                  />
+                ),
+              },
+            ],
+          },
+          {
+            name: strings.Form.group.additional,
+            fields: [
+              {
+                name: 'COMMENT',
+                type: 'textarea',
+                label: strings.Form.field.label.comment,
+                value: userComment,
+                props: {
+                  placeholder: strings.Form.field.placeholder.comment,
+                },
+              },
+            ],
+          },
+        ],
+      },
     });
+  }, [carSelected, photos]);
 
-    if (this.props.route?.params && this.props.route.params?.Text) {
-      this.Text = this.props.route?.params?.Text;
-    }
-  }
-
-  static propTypes = {
-    dealerSelected: PropTypes.object,
-    name: PropTypes.string,
-    phone: PropTypes.string,
-    email: PropTypes.string,
-  };
-
-  _selectCar = item => {
-    this.setState({
+  const _selectCar = item => {
+    setCarData({
       carBrand: get(item, 'brand'),
       carModel: get(item, 'model'),
       carNumber: get(item, 'number'),
-      carMileage: get(item, 'mileage'),
-      carName: [get(item, 'bran'), get(item, 'model')].join(' '),
-      carVIN: get(item, 'vin'),
+      carMileage: get(item, 'mileage', null),
+      carName: [get(item, 'brand'), get(item, 'model')].join(' '),
+      carVIN: get(item, 'vin', null),
+      carYear: get(item, 'year', null),
     });
   };
 
-  getCars = () => {
-    if (this.myCars && this.myCars.length) {
+  const _onPressOrder = async dataFromForm => {
+    const isInternetExist = await isInternet();
+
+    if (!isInternetExist) {
+      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    } else {
+      const photoForUpload = valuesIn(photos);
+
+      const dataToSend = {
+        dealerId: dealerSelected.id,
+        date: yearMonthDay(dataFromForm.DATE) || '',
+        firstName: dataFromForm.NAME || '',
+        secondName: dataFromForm.SECOND_NAME || '',
+        lastName: dataFromForm.LAST_NAME || '',
+        phone: dataFromForm.PHONE || '',
+        email: dataFromForm.EMAIL || '',
+        comment: dataFromForm.COMMENT || '',
+        vin: dataFromForm.CARVIN || carSelected.carVIN || '',
+        brand: dataFromForm.CARBRAND || carSelected.carBrand || '--',
+        model: dataFromForm.CARMODEL || carSelected.carModel || '--',
+        year: dataFromForm.CARYEAR || carSelected.carYear || '',
+        photos: photoForUpload,
+        mileage: dataFromForm.CARMILEAGE || carSelected.carMileage || '',
+        mileageUnit: 'км',
+        engineVolume: dataFromForm.CARENGINEVOLUME || '',
+        engineType: dataFromForm.CARENGINETYPE || '',
+        gearbox: dataFromForm.CARGEARBOXTYPE || '',
+        wheel: dataFromForm.CARWHEELTYPE || '',
+      };
+
+      const action = await actionCarCostOrder(dataToSend);
+      switch (action.type) {
+        case CAR_COST__SUCCESS:
+          Analytics.logEvent('order', 'catalog/carcost');
+
+          setTimeout(() => {
+            Alert.alert(
+              strings.Notifications.success.title,
+              strings.Notifications.success.textOrder,
+              [
+                {
+                  text: 'ОК',
+                  onPress: () => {
+                    navigation.goBack();
+                  },
+                },
+              ],
+            );
+          }, 100);
+          break;
+        case CAR_COST__FAIL:
+          let message = get(
+            action,
+            'payload.message',
+            strings.Notifications.error.text,
+          );
+
+          if (message === 'Network request failed') {
+            message = ERROR_NETWORK;
+          }
+
+          setTimeout(
+            () => Alert.alert(strings.Notifications.error.title, message),
+            100,
+          );
+          break;
+      }
+    }
+  };
+
+  const _getCars = () => {
+    if (cars && cars.length) {
       return [
         {
           name: 'CARNAME',
           type: 'component',
           label: strings.Form.field.label.car2,
           value:
-            this.myCars && this.myCars.length ? (
+            cars && cars.length ? (
               <ScrollView
                 showsHorizontalScrollIndicator={false}
                 horizontal
                 style={styles.carContainer}
                 contentContainerStyle={styles.carContainerContent}>
-                {(this.myCars || []).map(item => {
+                {(cars || []).map(item => {
                   return (
                     <TouchableWithoutFeedback
                       activeOpacity={0.7}
                       key={item.vin}
                       onPress={() => {
-                        this._selectCar(item);
+                        _selectCar(item);
                       }}>
                       <View>
                         <CarCard
                           key={item.vin}
                           data={item}
                           type="check"
-                          checked={this.state.carVIN === item.vin}
+                          checked={carSelected.carVIN === item.vin}
                           onPress={() => {
-                            this._selectCar(item);
+                            return _selectCar(item);
                           }}
                         />
                       </View>
@@ -248,7 +445,7 @@ class CarCostScreen extends PureComponent {
                   style={{borderRadius: 5}}
                   _text={{padding: 5}}
                   onPress={() => {
-                    this.props.navigation.navigate('About', {
+                    navigation.navigate('About', {
                       screen: 'LoginScreen',
                       activePanel: 'hidden',
                     });
@@ -262,7 +459,74 @@ class CarCostScreen extends PureComponent {
           name: 'CARMILEAGE',
           type: 'input',
           label: strings.Form.field.label.carMileage,
-          value: null,
+          value: carSelected.carMileage,
+          props: {
+            keyboardType: 'numeric',
+            required: true,
+            placeholder: null,
+            onSubmitEditing: () => {},
+            returnKeyType: 'done',
+            blurOnSubmit: true,
+          },
+        },
+      ];
+    } else {
+      return [
+        {
+          name: 'CARBRAND',
+          type: 'input',
+          label: strings.Form.field.label.carBrand,
+          value: carSelected.carBrand,
+          props: {
+            required: true,
+            placeholder: null,
+          },
+        },
+        {
+          name: 'CARMODEL',
+          type: 'input',
+          label: strings.Form.field.label.carModel,
+          value: carSelected.carModel,
+          props: {
+            required: true,
+            placeholder: null,
+          },
+        },
+        {
+          name: 'CARVIN',
+          type: 'input',
+          label: strings.Form.field.label.carVIN,
+          value: carSelected.carVIN,
+          props: {
+            placeholder: null,
+            autoCapitalize: 'characters',
+            onSubmitEditing: () => {},
+            returnKeyType: 'done',
+            blurOnSubmit: true,
+          },
+        },
+        {
+          name: 'CARYEAR',
+          type: 'year',
+          label: strings.Form.field.label.carYear,
+          value: carSelected.carYear,
+          props: {
+            required: true,
+            minDate: new Date(substractYears(100)),
+            maxDate: new Date(),
+            reverse: true,
+            placeholder: {
+              label: strings.Form.field.placeholder.carYear,
+              value: null,
+              color: '#9EA0A4',
+            },
+          },
+        },
+        {
+          name: 'CARMILEAGE',
+          type: 'input',
+          label: strings.Form.field.label.carMileage,
+          value: carSelected.carMileage,
           props: {
             keyboardType: 'number-pad',
             required: true,
@@ -272,414 +536,156 @@ class CarCostScreen extends PureComponent {
             blurOnSubmit: true,
           },
         },
+        {
+          name: 'CARENGINETYPE',
+          type: 'select',
+          label: strings.Form.field.label.engineType,
+          value: carSelected.carEngineType,
+          props: {
+            items: [
+              {
+                label: strings.Form.field.value.engineType.gasoline,
+                value: 1,
+                key: 1,
+              },
+              {
+                label: strings.Form.field.value.engineType.gasolineGas,
+                value: 9,
+                key: 9,
+              },
+              {
+                label: strings.Form.field.value.engineType.diesel,
+                value: 2,
+                key: 2,
+              },
+              {
+                label: strings.Form.field.value.engineType.hybrid,
+                value: 3,
+                key: 3,
+              },
+              {
+                label: strings.Form.field.value.engineType.electro,
+                value: 4,
+                key: 4,
+              },
+            ],
+            placeholder: {
+              label: strings.Form.field.placeholder.engineType,
+              value: null,
+              color: '#9EA0A4',
+            },
+          },
+        },
+        {
+          name: 'CARENGINEVOLUME',
+          type: 'input',
+          label: strings.Form.field.label.engineVolume,
+          value: carSelected.carEngineVolume,
+          props: {
+            keyboardType: 'number-pad',
+            placeholder: null,
+            onSubmitEditing: () => {},
+            returnKeyType: 'done',
+            blurOnSubmit: true,
+          },
+        },
+        {
+          name: 'CARGEARBOXTYPE',
+          type: 'select',
+          label: strings.Form.field.label.gearbox,
+          value: carSelected.carGearboxType,
+          props: {
+            items: [
+              {
+                label: strings.Form.field.value.gearbox.mechanical,
+                value: 1,
+                key: 1,
+              },
+              {
+                label: strings.Form.field.value.gearbox.automatic,
+                value: 4,
+                key: 4,
+              },
+              {
+                label: strings.Form.field.value.gearbox.dsg,
+                value: 11,
+                key: 11,
+              },
+              {
+                label: strings.Form.field.value.gearbox.robot,
+                value: 12,
+                key: 12,
+              },
+              {
+                label: strings.Form.field.value.gearbox.variator,
+                value: 13,
+                key: 13,
+              },
+            ],
+            placeholder: {
+              label: strings.Form.field.placeholder.gearbox,
+              value: null,
+              color: '#9EA0A4',
+            },
+          },
+        },
+        {
+          name: 'CARWHEELTYPE',
+          type: 'select',
+          label: strings.Form.field.label.wheel,
+          value: carSelected.carWheelType,
+          props: {
+            items: [
+              {
+                label: strings.CarParams.wheels[1],
+                value: 1,
+                key: 1,
+              },
+              {
+                label: strings.CarParams.wheels[3],
+                value: 3,
+                key: 3,
+              },
+              {
+                label: strings.CarParams.wheels[4],
+                value: 4,
+                key: 4,
+              },
+            ],
+            placeholder: {
+              label: strings.Form.field.placeholder.wheel,
+              value: null,
+              color: '#9EA0A4',
+            },
+          },
+        },
       ];
     }
-    return [
-      {
-        name: 'CARBRAND',
-        type: 'input',
-        label: strings.Form.field.label.carBrand,
-        value: this.state.carBrand ? this.state.carBrand : this.props.carBrand,
-        props: {
-          required: true,
-          placeholder: null,
-        },
-      },
-      {
-        name: 'CARMODEL',
-        type: 'input',
-        label: strings.Form.field.label.carModel,
-        value: this.state.carModel ? this.state.carModel : this.props.carModel,
-        props: {
-          required: true,
-          placeholder: null,
-        },
-      },
-      {
-        name: 'CARVIN',
-        type: 'input',
-        label: strings.Form.field.label.carVIN,
-        value: this.state.carVIN ? this.state.carVIN : this.props.carVIN,
-        props: {
-          placeholder: null,
-          autoCapitalize: 'characters',
-          onSubmitEditing: () => {},
-          returnKeyType: 'done',
-          blurOnSubmit: true,
-        },
-      },
-      {
-        name: 'CARYEAR',
-        type: 'year',
-        label: strings.Form.field.label.carYear,
-        value: this.props.carYear,
-        props: {
-          required: true,
-          minDate: new Date(substractYears(100)),
-          maxDate: new Date(),
-          reverse: true,
-          placeholder: {
-            label: strings.Form.field.placeholder.carYear,
-            value: null,
-            color: '#9EA0A4',
-          },
-        },
-      },
-      {
-        name: 'CARMILEAGE',
-        type: 'input',
-        label: strings.Form.field.label.carMileage,
-        value: this.state.carMileage
-          ? this.state.carMileage
-          : this.props.carMileage,
-        props: {
-          keyboardType: 'number-pad',
-          required: true,
-          placeholder: null,
-          onSubmitEditing: () => {},
-          returnKeyType: 'done',
-          blurOnSubmit: true,
-        },
-      },
-      {
-        name: 'CARENGINETYPE',
-        type: 'select',
-        label: strings.Form.field.label.engineType,
-        value: this.props.carEngineType,
-        props: {
-          items: [
-            {
-              label: strings.Form.field.value.engineType.gasoline,
-              value: 1,
-              key: 1,
-            },
-            {
-              label: strings.Form.field.value.engineType.gasolineGas,
-              value: 9,
-              key: 9,
-            },
-            {
-              label: strings.Form.field.value.engineType.diesel,
-              value: 2,
-              key: 2,
-            },
-            {
-              label: strings.Form.field.value.engineType.hybrid,
-              value: 3,
-              key: 3,
-            },
-            {
-              label: strings.Form.field.value.engineType.electro,
-              value: 4,
-              key: 4,
-            },
-          ],
-          placeholder: {
-            label: strings.Form.field.placeholder.engineType,
-            value: null,
-            color: '#9EA0A4',
-          },
-        },
-      },
-      {
-        name: 'CARENGINEVOLUME',
-        type: 'input',
-        label: strings.Form.field.label.engineVolume,
-        value: this.props.carEngineVolume,
-        props: {
-          keyboardType: 'number-pad',
-          placeholder: null,
-          onSubmitEditing: () => {},
-          returnKeyType: 'done',
-          blurOnSubmit: true,
-        },
-      },
-      {
-        name: 'CARGEARBOXTYPE',
-        type: 'select',
-        label: strings.Form.field.label.gearbox,
-        value: this.props.carGearboxType,
-        props: {
-          items: [
-            {
-              label: strings.Form.field.value.gearbox.mechanical,
-              value: 1,
-              key: 1,
-            },
-            {
-              label: strings.Form.field.value.gearbox.automatic,
-              value: 4,
-              key: 4,
-            },
-            {
-              label: strings.Form.field.value.gearbox.dsg,
-              value: 11,
-              key: 11,
-            },
-            {
-              label: strings.Form.field.value.gearbox.robot,
-              value: 12,
-              key: 12,
-            },
-            {
-              label: strings.Form.field.value.gearbox.variator,
-              value: 13,
-              key: 13,
-            },
-          ],
-          placeholder: {
-            label: strings.Form.field.placeholder.gearbox,
-            value: null,
-            color: '#9EA0A4',
-          },
-        },
-      },
-      {
-        name: 'CARWHEELTYPE',
-        type: 'select',
-        label: strings.Form.field.label.wheel,
-        value: this.props.carWheelType,
-        props: {
-          items: [
-            {
-              label: strings.CarParams.wheels[1],
-              value: 1,
-              key: 1,
-            },
-            {
-              label: strings.CarParams.wheels[3],
-              value: 3,
-              key: 3,
-            },
-            {
-              label: strings.CarParams.wheels[4],
-              value: 4,
-              key: 4,
-            },
-          ],
-          placeholder: {
-            label: strings.Form.field.placeholder.wheel,
-            value: null,
-            color: '#9EA0A4',
-          },
-        },
-      },
-    ];
   };
 
-  onPressOrder = async dataFromForm => {
-    const isInternetExist = await isInternet();
-    const nav = this.props.navigation;
-
-    if (!isInternetExist) {
-      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
-    } else {
-      const photoForUpload = valuesIn(this.state.photos);
-
-      const dataToSend = {
-        dealerId: this.props.dealerSelected.id,
-        date: yearMonthDay(dataFromForm.DATE) || '',
-        firstName: dataFromForm.NAME || '',
-        secondName: dataFromForm.SECOND_NAME || '',
-        lastName: dataFromForm.LAST_NAME || '',
-        phone: dataFromForm.PHONE || '',
-        email: dataFromForm.EMAIL || '',
-        comment: dataFromForm.COMMENT || '',
-        vin: dataFromForm.CARVIN || this.state.carVIN || '',
-        brand: dataFromForm.CARBRAND || this.state.carBrand || '--',
-        model: dataFromForm.CARMODEL || this.state.carModel || '--',
-        year: dataFromForm.CARYEAR || this.state.carYear || '',
-        photos: photoForUpload,
-        mileage: dataFromForm.CARMILEAGE || this.state.carMileage || '',
-        mileageUnit: 'км',
-        engineVolume: dataFromForm.CARENGINEVOLUME || '',
-        engineType: dataFromForm.CARENGINETYPE || '',
-        gearbox: dataFromForm.CARGEARBOXTYPE || '',
-        wheel: dataFromForm.CARWHEELTYPE || '',
-      };
-
-      const action = await this.props.actionCarCostOrder(dataToSend);
-      switch (action.type) {
-        case CAR_COST__SUCCESS:
-          Analytics.logEvent('order', 'catalog/carcost');
-
-          setTimeout(() => {
-            Alert.alert(
-              strings.Notifications.success.title,
-              strings.Notifications.success.textOrder,
-              [
-                {
-                  text: 'ОК',
-                  onPress: () => {
-                    nav.goBack();
-                  },
-                },
-              ],
-            );
-          }, 100);
-          break;
-        case CAR_COST__FAIL:
-          let message = get(
-            action,
-            'payload.message',
-            strings.Notifications.error.text,
-          );
-
-          if (message === 'Network request failed') {
-            message = ERROR_NETWORK;
-          }
-
-          setTimeout(
-            () => Alert.alert(strings.Notifications.error.title, message),
-            100,
-          );
-          break;
-      }
-    }
-  };
-
-  render() {
-    this.FormConfig = {
-      fields: {
-        groups: [
-          {
-            name: strings.Form.group.dealer,
-            fields: [
-              {
-                name: 'DEALER',
-                type: 'dealerSelect',
-                label: strings.Form.field.label.dealer,
-                value:
-                  this.props.dealerSelectedLocal &&
-                  this.props.dealerSelectedLocal.id
-                    ? this.props.dealerSelectedLocal
-                    : this.props.dealerSelected,
-                props: {
-                  goBack: false,
-                  isLocal: true,
-                  returnScreen: this.props.navigation.state?.routeName,
-                },
-              },
-              {
-                name: 'DATE',
-                type: 'date',
-                label: strings.Form.field.label.date,
-                value: null,
-                props: {
-                  placeholder:
-                    strings.Form.field.placeholder.date +
-                    dayMonthYear(addDays(2)),
-                  required: true,
-                  minimumDate: new Date(addDays(2)),
-                  maximumDate: new Date(addDays(62)),
-                },
-              },
-            ],
-          },
-          {
-            name: strings.Form.group.car,
-            fields: this.getCars(),
-          },
-          {
-            name: strings.Form.group.contacts,
-            fields: [
-              {
-                name: 'NAME',
-                type: 'input',
-                label: strings.Form.field.label.name,
-                value: this.props.firstName,
-                props: {
-                  required: true,
-                  textContentType: 'name',
-                },
-              },
-              {
-                name: 'SECOND_NAME',
-                type: 'input',
-                label: strings.Form.field.label.secondName,
-                value: this.props.secondName,
-                props: {
-                  textContentType: 'middleName',
-                },
-              },
-              {
-                name: 'LAST_NAME',
-                type: 'input',
-                label: strings.Form.field.label.lastName,
-                value: this.props.lastName,
-                props: {
-                  textContentType: 'familyName',
-                },
-              },
-              {
-                name: 'PHONE',
-                type: 'phone',
-                label: strings.Form.field.label.phone,
-                value: this.props.phone,
-                props: {
-                  required: true,
-                },
-              },
-              {
-                name: 'EMAIL',
-                type: 'email',
-                label: strings.Form.field.label.email,
-                value: this.props.email,
-              },
-            ],
-          },
-          {
-            name: strings.Form.group.foto,
-            fields: [
-              {
-                name: 'FOTO',
-                type: 'component',
-                label: strings.Form.field.label.foto,
-                value: (
-                  <CarCostPhotos
-                    photos={this.state.photos}
-                    photosFill={photos => {
-                      this.setState({
-                        photos: photos,
-                      });
-                    }}
-                  />
-                ),
-              },
-            ],
-          },
-          {
-            name: strings.Form.group.additional,
-            fields: [
-              {
-                name: 'COMMENT',
-                type: 'textarea',
-                label: strings.Form.field.label.comment,
-                value: this.Text,
-                props: {
-                  placeholder: strings.Form.field.placeholder.comment,
-                },
-              },
-            ],
-          },
-        ],
-      },
-    };
-    console.info('== CarCost ==');
-
-    return (
-      <Form
-        contentContainerStyle={{
-          paddingHorizontal: 14,
-        }}
-        key="CarCostForm"
-        fields={this.FormConfig.fields}
-        barStyle={'light-content'}
-        SubmitButton={{text: strings.Form.button.send}}
-        onSubmit={this.onPressOrder}
-      />
-    );
+  if (!FormConfig || !FormConfig?.fields) {
+    return <></>;
   }
-}
+
+  return (
+    <Form
+      contentContainerStyle={{
+        paddingHorizontal: 14,
+      }}
+      key="CarCostForm"
+      fields={FormConfig.fields}
+      barStyle={'light-content'}
+      SubmitButton={{text: strings.Form.button.send}}
+      onSubmit={_onPressOrder}
+    />
+  );
+};
+
+CarCostScreen.propTypes = {
+  dealerSelected: PropTypes.object,
+  name: PropTypes.string,
+  phone: PropTypes.string,
+  email: PropTypes.string,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CarCostScreen);

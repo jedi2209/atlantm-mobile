@@ -715,12 +715,20 @@ class Form extends Component {
       const {label, name, id} = data;
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
+      let val = this.state[name] || '';
+      switch (get(data, 'props.keyboardType', 'default')) {
+        case 'number-pad':
+          break;
+        default:
+          val = val.toString();
+          break;
+      }
       return (
         <View
           style={[
             styles.field,
             data.props && data.props.required
-              ? !this.state[name]
+              ? !val
                 ? styles.fieldRequiredFalse
                 : styles.fieldRequiredTrue
               : {},
@@ -744,7 +752,7 @@ class Form extends Component {
             }}
             blurOnSubmit={false}
             ref={this.inputRefs[groupNum + 'Input' + num]}
-            value={this.state[name] ? this.state[name].toString() : ''}
+            value={val}
             enablesReturnKeyAutomatically={true}
             onChangeText={this.onChangeField(data)}
             {...data.props}
