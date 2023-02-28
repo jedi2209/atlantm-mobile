@@ -12,9 +12,7 @@ import {
 import {
   Text,
   Icon,
-  Actionsheet,
   useDisclose,
-  Box,
   HStack,
   View,
   Pressable,
