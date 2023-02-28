@@ -169,7 +169,7 @@ const reducerFilters = (state = initialStateFilters, field) => {
   if (!field) {
     return res;
   }
-  if (typeof field === 'object' && field && field.length) {
+  if (typeof field === 'object' && field && field?.length) {
     field.map(val => {
       state[val.name] = val.value;
     });
@@ -202,7 +202,7 @@ const _getSelectedModels = (selectedModels, models) => {
       }
     });
   });
-  if (labels && labels.length === 0) {
+  if (labels && !labels.length) {
     return null;
   }
   return (
@@ -329,7 +329,8 @@ const MainFilterScreen = ({
         actionFetchNewCarFilters({
           city: dealerSelected.city[0].id,
         }).then(res => {
-          setTotalCars(res.payload.total.count);
+          const totalCarsCount = get(res, 'payload.total.count', 0);
+          setTotalCars(totalCarsCount);
           if (res.payload.data) {
             if (res.payload.data.brand) {
               let brandsTmp = [];
@@ -418,7 +419,8 @@ const MainFilterScreen = ({
           city: dealerSelected.city[0].id,
           region: dealerSelected.region,
         }).then(res => {
-          setTotalCars(res.payload.total.count);
+          const totalCarsCount = get(res, 'payload.total.count', 0);
+          setTotalCars(totalCarsCount);
           if (res.payload.data) {
             if (res.payload.data.city) {
               let tmp = {};
@@ -635,7 +637,8 @@ const MainFilterScreen = ({
           filters: filtersLocal,
           city: dealerSelected.city[0].id,
         }).then(res => {
-          setTotalCars(res.payload.total.count);
+          const totalCarsCount = get(res, 'payload.total.count', 0);
+          setTotalCars(totalCarsCount);
           _showHideSubmitButton(true);
         });
         break;
@@ -645,7 +648,8 @@ const MainFilterScreen = ({
           region: dealerSelected.region,
           city: dealerSelected.city[0].id,
         }).then(res => {
-          setTotalCars(res.payload.total.count);
+          const totalCarsCount = get(res, 'payload.total.count', 0);
+          setTotalCars(totalCarsCount);
           _showHideSubmitButton(true);
         });
         break;

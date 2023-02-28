@@ -354,7 +354,7 @@ const ContactsScreen = ({
                       numberOfLines={1}
                       ellipsizeMode="tail"
                       style={styles.addressText}>
-                      {addresses[0].text}
+                      {addresses.length === 1 ? addresses[0]?.text : ''}
                     </Text>
                     <Text
                       numberOfLines={1}
@@ -504,7 +504,7 @@ const ContactsScreen = ({
           <Plate
             testID="ContactsScreen.ButtonTimework"
             title={strings.ContactsScreen.address}
-            subtitle={addresses.length === 1 ? addresses[0].text : ''}
+            subtitle={addresses.length === 1 ? addresses[0]?.text : ''}
             type="default"
             status={callAvailable ? 'enabled' : 'disabled'}
             onPress={() => {
