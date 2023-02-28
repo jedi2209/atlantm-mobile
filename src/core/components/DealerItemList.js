@@ -58,10 +58,11 @@ const DealerItemList = props => {
   const navigation = useNavigation();
 
   const deviceWidth = Dimensions.get('window').width;
+  const dealerBrand = get(dealer, 'brand', []);
   let nameWidth = '5/6';
   let logoWidth = '1/6';
   if (deviceWidth <= 480) {
-    if (get(dealer, 'brand', []).length > 1) {
+    if (dealerBrand && dealerBrand?.length > 1) {
       nameWidth = '64%';
       logoWidth = '36%';
     } else {
@@ -70,7 +71,7 @@ const DealerItemList = props => {
     }
   }
   if (deviceWidth <= 390) {
-    if (get(dealer, 'brand', []).length > 1) {
+    if (dealerBrand && dealerBrand?.length > 1) {
       nameWidth = '63%';
       logoWidth = '37%';
     }

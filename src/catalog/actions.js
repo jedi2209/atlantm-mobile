@@ -386,7 +386,7 @@ export const actionFetchUsedCarByFilter = props => {
           });
         }
 
-        if (data.length === 0) {
+        if (data && !data?.length) {
           data.push({type: 'empty', id: {api: 1}});
 
           // TODO: разобраться, почему перестает работать priceFilter если null
@@ -676,7 +676,8 @@ export const actionFetchUsedCarDetails = carId => {
         const details = {...response.data};
 
         // если есть фото нужного размера, записываем их в стор в нужной структуре данных
-        const photoViewerItems = get(details, 'img.original', []).map(photo => {
+        let photoViewerItems = [];
+        photoViewerItems = get(details, 'img.original', []).map(photo => {
           return {source: {uri: photo + '?d=800x600'}};
         });
 
