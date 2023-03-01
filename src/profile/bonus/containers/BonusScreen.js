@@ -243,8 +243,11 @@ class BonusScreen extends Component {
           alignItems={'center'}
           justifyContent={'space-between'}
           onPress={onPressHandler}>
-          <View ml={isLevel3 ? 2 : 0}>
-            <Text style={[stylesList.label, isLevel3 ? styles.label : null]}>
+          <View w={'4/5'} ml={isLevel3 ? 2 : 0}>
+            <Text
+              lineBreakMode="tail"
+              numberOfLines={2}
+              style={[stylesList.label, isLevel3 ? styles.label : null]}>
               {label}
             </Text>
             {isLevel3 ? (
@@ -255,17 +258,18 @@ class BonusScreen extends Component {
             ) : null}
           </View>
           {isLevel3 && (total || total === 0) ? (
-            <Text
-              mr={1}
-              style={[
-                stylesList.badgeText,
-                {
-                  color:
-                    total > 0 ? styleConst.color.green : styleConst.color.red,
-                },
-              ]}>
-              {parseFloat(total).toLocaleString('ru-RU')}
-            </Text>
+            <View w={'1/5'} alignItems={'flex-end'} pr={2}>
+              <Text
+                style={[
+                  stylesList.badgeText,
+                  {
+                    color:
+                      total > 0 ? styleConst.color.green : styleConst.color.red,
+                  },
+                ]}>
+                {parseFloat(total).toLocaleString('ru-RU')}
+              </Text>
+            </View>
           ) : null}
         </HStack>
       </View>

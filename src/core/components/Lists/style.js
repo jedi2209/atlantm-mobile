@@ -30,7 +30,7 @@ export default StyleSheet.create({
   },
   listItemContainer: {
     backgroundColor: styleConst.color.white,
-    paddingLeft: 10,
+    paddingLeft: 5,
   },
   listItemContainerFirst: {
     borderTopWidth: styleConst.ui.borderWidth,
