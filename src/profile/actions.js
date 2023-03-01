@@ -765,7 +765,7 @@ async function getProfileData({token, userid, curr}) {
   let [cars, bonus, discounts, insurance, additionalPurchase] =
     await Promise.all([
       getUserCars(token, userid),
-      // getUserBonus(token, userid, curr),
+      getUserBonus(token, userid, curr),
       // getUserDiscounts(token, userid),
       // getUserInsurance(token, userid),
       // getUserAdditionalPurchase(token, userid),
