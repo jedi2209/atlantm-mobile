@@ -766,9 +766,9 @@ async function getProfileData({token, userid, curr}) {
     await Promise.all([
       getUserCars(token, userid),
       getUserBonus(token, userid, curr),
-      // getUserDiscounts(token, userid),
-      // getUserInsurance(token, userid),
-      // getUserAdditionalPurchase(token, userid),
+      getUserDiscounts(token, userid),
+      getUserInsurance(token, userid),
+      getUserAdditionalPurchase(token, userid),
     ]);
   return {
     cars,
