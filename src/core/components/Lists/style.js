@@ -30,7 +30,6 @@ export default StyleSheet.create({
   },
   listItemContainer: {
     backgroundColor: styleConst.color.white,
-    paddingLeft: 5,
   },
   listItemContainerFirst: {
     borderTopWidth: styleConst.ui.borderWidth,
@@ -74,7 +73,6 @@ export default StyleSheet.create({
     color: styleConst.color.greyText3,
     fontSize: 17,
     letterSpacing: styleConst.ui.letterSpacing,
-    fontFamily: styleConst.font.regular,
     marginLeft: 10,
   },
 });
