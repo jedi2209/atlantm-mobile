@@ -261,7 +261,7 @@ class BonusScreen extends Component {
             ) : null}
           </View>
           {isLevel3 && (total || total === 0) ? (
-            <View w={'1/5'} alignItems={'flex-end'} pr={1}>
+            <View w={'1/5'} alignItems={'flex-end'} pr={3}>
               <Text
                 style={[
                   stylesList.badgeText,
