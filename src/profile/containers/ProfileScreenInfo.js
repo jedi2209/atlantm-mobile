@@ -680,15 +680,16 @@ const ProfileScreenInfo = props => {
 
   if (loading) {
     return (
-      <ActivityIndicator
-        color={styleConst.color.blue}
-        size="large"
-        style={{
-          alignSelf: 'center',
-          marginTop: verticalScale(60),
-          marginBottom: verticalScale(60),
-        }}
-      />
+      <View style={{flex: 1}}>
+        <ActivityIndicator
+          color={styleConst.color.blue}
+          size="large"
+          style={{
+            alignSelf: 'center',
+            marginTop: verticalScale(60),
+          }}
+        />
+      </View>
     );
   }
 
