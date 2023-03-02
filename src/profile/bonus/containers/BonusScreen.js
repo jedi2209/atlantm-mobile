@@ -238,12 +238,15 @@ class BonusScreen extends Component {
     const isLevel3 = theme === 'itemLevel3';
 
     return (
-      <View key={key} style={[stylesList.listItemContainer, styles[theme]]}>
+      <View
+        key={key}
+        pl={1}
+        style={[stylesList.listItemContainer, styles[theme]]}>
         <HStack
           alignItems={'center'}
           justifyContent={'space-between'}
           onPress={onPressHandler}>
-          <View w={'4/5'} ml={isLevel3 ? 2 : 0}>
+          <View w={'4/5'} pl={isLevel3 ? 2 : 0}>
             <Text
               lineBreakMode="tail"
               numberOfLines={2}
@@ -258,7 +261,7 @@ class BonusScreen extends Component {
             ) : null}
           </View>
           {isLevel3 && (total || total === 0) ? (
-            <View w={'1/5'} alignItems={'flex-end'} pr={2}>
+            <View w={'1/5'} alignItems={'flex-end'} pr={1}>
               <Text
                 style={[
                   stylesList.badgeText,
