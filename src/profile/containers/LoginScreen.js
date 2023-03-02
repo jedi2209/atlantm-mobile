@@ -23,10 +23,6 @@ import Form from '../../core/components/Form/Form';
 // imports for auth
 import {SocialAuthButton} from '../components/SocialAuthButton';
 import {LoginManager} from 'react-native-fbsdk-next';
-import Facebook from '../auth/Facebook';
-import Google from '../auth/Google';
-import VK from '../auth/VK';
-import Apple from '../auth/Apple';
 
 import OtpAutoFillViewManager from 'react-native-otp-auto-fill';
 
@@ -46,7 +42,7 @@ import PhoneDetect from '../../utils/phoneDetect';
 import {strings} from '../../core/lang/const';
 
 import {verticalScale} from '../../utils/scale';
-import {get, size} from 'lodash';
+import {get} from 'lodash';
 import UserData from '../../utils/user';
 import {APP_PHONE_RESTRICTED, APP_REGION, UKRAINE} from '../../core/const';
 
@@ -310,7 +306,7 @@ const LoginScreen = props => {
         <HStack justifyContent={'space-between'} alignItems={'center'}>
           <SocialAuthButton
             type="Google"
-            onPress={() => Google.signIn(_checkPhone)}
+            onPress={_checkPhone}
             isDisabled={isSigninInProgress}
             style={{
               width: ButtonWidth,
@@ -319,10 +315,7 @@ const LoginScreen = props => {
           />
           <SocialAuthButton
             type="Facebook"
-            onPress={() => {
-              // return Facebook.onFacebookButtonPress();
-              return Facebook.signIn(_checkPhone);
-            }}
+            onPress={_checkPhone}
             isDisabled={isSigninInProgress}
             style={{
               width: VKenabled ? '29%' : ButtonWidth,
@@ -334,9 +327,7 @@ const LoginScreen = props => {
           {VKenabled ? (
             <SocialAuthButton
               type="VK"
-              onPress={() => {
-                return VK.signIn(_checkPhone);
-              }}
+              onPress={_checkPhone}
               isDisabled={isSigninInProgress}
               style={{
                 width: ButtonWidth,
@@ -346,10 +337,7 @@ const LoginScreen = props => {
           ) : null}
         </HStack>
         {!isAndroid ? (
-          <SocialAuthButton
-            type="Apple"
-            onPress={() => Apple.signIn(_checkPhone)}
-          />
+          <SocialAuthButton type="Apple" onPress={_checkPhone} />
         ) : null}
       </View>
     );

@@ -329,9 +329,18 @@ const PhoneChangeScreen = props => {
               justifyContent={'space-between'}
               position={'absolute'}
               w={'100%'}>
-              {res.map(el => {
+              {/* {res.map(el => {
                 return el;
-              })}
+              })} */}
+              <View
+                key={'backgroundInputCodeMain'}
+                style={{
+                  height: 75,
+                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  borderRadius: 5,
+                  width: '100%',
+                }}
+              />
             </HStack>
             <OtpAutoFillViewManager
               ref={CodeInput}

@@ -6,6 +6,11 @@ import {
   AppleButton,
 } from '@invertase/react-native-apple-authentication';
 
+import Apple from '../auth/Apple';
+import Facebook from '../auth/Facebook';
+import Google from '../auth/Google';
+import VK from '../auth/VK';
+
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 export const SocialAuthButton = props => {
@@ -23,8 +28,9 @@ export const SocialAuthButton = props => {
           buttonStyle={AppleButton.Style.WHITE_OUTLINE}
           buttonType={AppleButton.Type.SIGN_IN}
           cornerRadius={5}
-          style={[styles.SocialLoginBt, styles.buttonApple, extStyle]}
           {...propsData}
+          style={[styles.SocialLoginBt, styles.buttonApple, extStyle]}
+          onPress={() => Apple.signIn(props.onPress)}
         />
       );
     case 'facebook':
@@ -37,8 +43,9 @@ export const SocialAuthButton = props => {
             color: 'white',
           }}
           shadow={3}
-          style={[styles.SocialLoginBt, styles.colorFacebook, extStyle]}
           {...propsData}
+          style={[styles.SocialLoginBt, styles.colorFacebook, extStyle]}
+          onPress={() => Facebook.signIn(props.onPress)}
         />
       );
     case 'google':
@@ -51,8 +58,9 @@ export const SocialAuthButton = props => {
             color: 'white',
           }}
           shadow={3}
-          style={[styles.SocialLoginBt, styles.colorGoogle, extStyle]}
           {...propsData}
+          style={[styles.SocialLoginBt, styles.colorGoogle, extStyle]}
+          onPress={() => Google.signIn(props.onPress)}
         />
       );
     case 'vk':
@@ -65,8 +73,9 @@ export const SocialAuthButton = props => {
             color: 'white',
           }}
           shadow={3}
-          style={[styles.SocialLoginBt, styles.colorVK, extStyle]}
           {...propsData}
+          style={[styles.SocialLoginBt, styles.colorVK, extStyle]}
+          onPress={() => VK.signIn(props.onPress)}
         />
       );
 
