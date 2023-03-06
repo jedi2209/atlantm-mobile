@@ -8,9 +8,9 @@ import {
   StyleSheet,
   Dimensions,
   Pressable,
+  Platform,
 } from 'react-native';
 import {VStack, HStack, Box, Button, Icon} from 'native-base';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import {actionMenuOpenedCount} from '../../core/actions';
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
 });
 
 const heightScreen = Dimensions.get('window').height;
+const isAndroid = Platform.OS === 'android';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
@@ -188,16 +189,18 @@ const MenuScreen = props => {
       icon: <Image source={require('../assets/Car-used.svg')} />,
       selected: false,
     },
-    {
-      id: 7,
-      name: strings.Menu.main.reviews,
-      navigate: {
-        url: 'ReviewsScreen',
-      },
-      type: 'reviews',
-      icon: <Image source={require('../assets/Eko.svg')} />,
-      selected: false,
-    },
+    !isAndroid
+      ? {
+          id: 7,
+          name: strings.Menu.main.reviews,
+          navigate: {
+            url: 'ReviewsScreen',
+          },
+          type: 'reviews',
+          icon: <Image source={require('../assets/Eko.svg')} />,
+          selected: false,
+        }
+      : {id: null},
     {
       id: 8,
       name: strings.Menu.main.indicators,
@@ -258,13 +261,15 @@ const MenuScreen = props => {
     }
   }
 
+  menu.filter(el => {
+    return el.id !== null;
+  });
+
   menu.sort((a, b) => {
     return a.id - b.id;
   });
 
   const rowHeight = (heightScreen - 246) / menu.length;
-
-  const [count] = useState(props.menuOpenedCount);
 
   return (
     <View testID="MenuScreen.Wrapper">
