@@ -67,7 +67,7 @@ const _onBeforeLift = () => {
 };
 
 const Loader = () => (
-  <View style={styles.loader}>
+  <View style={styles.loader} flex={1}>
     <ActivityIndicator
       animating
       size={'large'}
@@ -103,7 +103,7 @@ const Wrapper = () => {
     <Provider store={store}>
       <PersistGate
         onBeforeLift={_onBeforeLift}
-        loading={<Loader />}
+        loading={<View style={styles.loader} flex={1} />}
         persistor={storePersist}>
         <App colorScheme={colorScheme} />
       </PersistGate>
