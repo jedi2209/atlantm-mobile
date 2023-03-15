@@ -87,6 +87,7 @@ import ServiceTOCalculatorScreen from '../service/containers/ServiceTOCalculator
 import CarHistoryDetailsScreen from '../profile/carhistory/containers/CarHistoryDetailsScreen';
 
 import UserAgreementScreen from '../core/components/Form/UserAgreementScreen';
+import WebviewScreen from '../core/containers/WebviewScreen';
 
 import {strings} from '../core/lang/const';
 import stylesHeader from '../core/components/Header/style';
@@ -258,6 +259,16 @@ export const Base = ({navigation, route}) => {
             headerStyle: {
               height: 55,
             },
+            presentation: 'modal',
+            headerTransparent: true,
+            headerLeft: null,
+          }}
+        />
+        <StackBase.Screen
+          name="WebviewScreen"
+          component={WebviewScreen}
+          options={{
+            headerTitle: '',
             presentation: 'modal',
             headerTransparent: true,
             headerLeft: null,
