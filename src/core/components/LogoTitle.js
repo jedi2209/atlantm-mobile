@@ -30,14 +30,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const LogoTitle = () => {
+const LogoTitle = props => {
+  let logoPath = require('../../menu/assets/logo-horizontal.svg');
+  if (props?.theme === 'white') {
+    logoPath = require('../../menu/assets/logo-horizontal-white.svg');
+  }
   return (
     <View style={styles.Container}>
-      <Image
-        resizeMode="contain"
-        style={styles.Image}
-        source={require('../../menu/assets/logo-horizontal.svg')}
-      />
+      <Image resizeMode="contain" style={styles.Image} source={logoPath} />
     </View>
   );
 };

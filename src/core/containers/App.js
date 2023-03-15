@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, ActivityIndicator, Platform, View} from 'react-native';
+import {StyleSheet, Platform, View} from 'react-native';
 import {NativeBaseProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
@@ -38,6 +38,7 @@ import styleConst from '../style-const';
 // components
 import DeviceInfo from 'react-native-device-info';
 import * as Nav from '../../navigation/NavigationBase';
+import LogoTitle from '../components/LogoTitle';
 
 const mapStateToProps = ({core, dealer, modal}) => {
   return {
@@ -164,12 +165,6 @@ const App = props => {
       firebase.appCheck().activate('ignored', false);
     }
 
-    // const deviceLanguage =
-    //   Platform.OS === 'ios'
-    //     ? NativeModules.SettingsManager.settings.AppleLocale ||
-    //       NativeModules.SettingsManager.settings.AppleLanguages[0] //iOS 13
-    //     : NativeModules.I18nManager.localeIdentifier;
-
     strings.setLanguage(APP_LANG);
 
     if (get(auth, 'login') === 'zteam') {
@@ -179,12 +174,11 @@ const App = props => {
 
   if (isLoading || !NavigationContainer) {
     return (
-      <View backgroundColor={styleConst.color.blue}>
-        <ActivityIndicator
-          style={styles.activityIndicator}
-          color={styleConst.color.white}
-          size="large"
-        />
+      <View
+        flex={1}
+        style={styles.center}
+        backgroundColor={styleConst.color.blue}>
+        <LogoTitle theme={'white'} />
       </View>
     );
   } else {
@@ -208,8 +202,11 @@ const App = props => {
 
 const styles = StyleSheet.create({
   activityIndicator: {
-    width: '100%',
-    height: '100%',
+    marginTop: 20,
+  },
+  center: {
+    justifyContent: 'center',
+    alignContent: 'center',
   },
 });
 
