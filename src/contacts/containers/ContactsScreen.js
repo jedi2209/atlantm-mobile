@@ -18,6 +18,8 @@ import {
   Pressable,
   useToast,
   VStack,
+  Image,
+  Heading,
 } from 'native-base';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -27,6 +29,7 @@ import DealerItemList from '../../core/components/DealerItemList';
 import Plate from '../../core/components/Plate';
 import RateThisApp from '../../core/components/RateThisApp';
 import Imager from '../../core/components/Imager';
+import RNBounceable from '@freakycoder/react-native-bounceable';
 
 import ToastAlert from '../../core/components/ToastAlert';
 
@@ -214,6 +217,63 @@ const _renderInfoList = params => {
     );
   }
   return <></>;
+};
+
+const _renderEmergencyManager = ({emergencyManagerInfo, navigation}) => {
+  if (!emergencyManagerInfo) {
+    return null;
+  }
+  return (
+    <RNBounceable
+      onPress={() => {
+        navigation.navigate('WebviewScreen', {html: emergencyManagerInfo});
+      }}>
+      <View
+        w={'90%'}
+        h={'24'}
+        backgroundColor={styleConst.color.blue}
+        shadow={6}
+        zIndex={1000}
+        rounded={'lg'}
+        marginX={'5%'}
+        marginTop={'5%'}>
+        <Heading
+          alignSelf={'center'}
+          size={'lg'}
+          style={{
+            position: 'absolute',
+            color: styleConst.color.white,
+            textTransform: 'uppercase',
+            bottom: 1,
+            zIndex: 10,
+            fontFamily: styleConst.font.regular,
+          }}>
+          Аварийный менеджер
+        </Heading>
+        <View
+          rounded={'lg'}
+          style={{
+            backgroundColor: '#000',
+            width: '100%',
+            height: '35%',
+            bottom: 0,
+            position: 'absolute',
+            zIndex: 1,
+            opacity: 0.6,
+            borderTopLeftRadius: 0,
+            borderTopRightRadius: 0,
+          }}
+        />
+        <Image
+          key={'Imager-emergencyManager'}
+          source={require('../../../assets/accidental_manager.jpg')}
+          resizeMode="cover"
+          size={'100%'}
+          rounded={'lg'}
+        />
+      </View>
+    </RNBounceable>
+  );
 };
 
 const intervalSecondsMini = 60;
@@ -780,6 +840,10 @@ const ContactsScreen = ({
               onPressTime,
               onPressChat,
               onPressOrders: _showOrdersMenu,
+            })}
+            {_renderEmergencyManager({
+              emergencyManagerInfo: dealerSelected.emergencyManagerInfo,
+              navigation,
             })}
             {_renderInfoList({isFetchInfoList, infoList, navigation})}
           </View>
