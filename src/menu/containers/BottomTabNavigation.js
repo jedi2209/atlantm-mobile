@@ -165,6 +165,22 @@ export const BottomTabNavigation = ({navigation, route}) => {
         screenOptions={{
           tabBarActiveTintColor: styleConst.color.lightBlue,
           tabBarInactiveTintColor: styleConst.new.passive,
+          tabBarHideOnKeyboard: true,
+          tabBarStyle: {
+            // position: 'absolute',
+            // bottom: 20,
+            // left: 10,
+            // right: 10,
+            marginBottom: 25,
+            marginHorizontal: 15,
+            elevation: 0,
+            borderRadius: 15,
+            height: 60,
+            paddingBottom: 5,
+            paddingHorizontal: 5,
+            ...styleConst.shadow.default,
+          },
+          // tabBarShowLabel: false,
         }}>
         <Tab.Screen
           name="Home"
