@@ -795,7 +795,9 @@ const ContactsScreen = ({
 
   return (
     <>
-      <View style={styleConst.safearea.default} testID="ContactsScreen.Wrapper">
+      <View
+        style={[styleConst.safearea.default, {marginBottom: 70}]}
+        testID="ContactsScreen.Wrapper">
         <Pressable
           onPress={() => navigation.navigate('ChooseDealerScreen')}
           style={[styles.buttonPrimary]}>
