@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
-import {HStack, Text, Pressable, VStack, Icon} from 'native-base';
+import {HStack, Text, Pressable, VStack, Icon, View} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 
 // component
@@ -54,7 +54,7 @@ const _onPressDealer = props => {
 };
 
 const DealerItemList = props => {
-  const {city, dealer, style} = props;
+  const {city, dealer, style, readonly} = props;
   const navigation = useNavigation();
 
   const deviceWidth = Dimensions.get('window').width;
@@ -77,11 +77,21 @@ const DealerItemList = props => {
     }
   }
 
+  const MainWrapper = props => {
+    if (!props.readonly) {
+      return <Pressable {...props} />;
+    } else {
+      delete props.onPress;
+      return <View {...props} />;
+    }
+  };
+
   return (
-    <Pressable
+    <MainWrapper
       rounded="lg"
       px="2"
       py="3"
+      readonly={props.readonly}
       shadow={'1'}
       style={[stylesDealerItemList.wrapper, style]}
       onPress={() => {
@@ -138,7 +148,7 @@ const DealerItemList = props => {
           </HStack>
         ) : null}
       </HStack>
-    </Pressable>
+    </MainWrapper>
   );
 };
 
@@ -150,6 +160,7 @@ DealerItemList.propTypes = {
   returnScreen: PropTypes.string,
   goBack: PropTypes.bool,
   isLocal: PropTypes.bool,
+  readonly: PropTypes.bool,
 };
 
 DealerItemList.defaultProps = {
@@ -158,6 +169,7 @@ DealerItemList.defaultProps = {
   returnScreen: null,
   goBack: false,
   isLocal: false,
+  readonly: false,
 };
 
 export default DealerItemList;
