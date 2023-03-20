@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import * as React from 'react';
-import {Icon, Actionsheet, useDisclose, Box, Text} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import React, {useState} from 'react';
+import {Icon, useDisclose} from 'native-base';
 import orderFunctions from '../../utils/orders';
 import Analytics from '../../utils/amplitude-analytics';
 
@@ -36,8 +35,6 @@ import {
   ClassicHeaderWhite,
   ClassicHeaderBlue,
   BigCloseButton,
-  TransparentBack,
-  ArrowBack,
 } from '../../navigation/const';
 
 const Tab = createBottomTabNavigator();
@@ -145,7 +142,7 @@ const CleanStackView = () => {
 
 export const BottomTabNavigation = ({navigation, route}) => {
   const {isOpen, onOpen, onClose} = useDisclose();
-  const [actionSheetData, setActionSheetData] = React.useState({});
+  const [actionSheetData, setActionSheetData] = useState({});
   const _showOrdersMenu = () => {
     orderFunctions.getOrders().then(data => {
       setActionSheetData({
