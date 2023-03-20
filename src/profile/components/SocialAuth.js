@@ -58,8 +58,8 @@ const styles = StyleSheet.create({
   },
   CheckCircleIcon: {
     position: 'absolute',
-    top: 6,
-    left: -2,
+    bottom: 0,
+    right: -8,
     color: styleConst.color.white,
   },
 });
@@ -207,6 +207,8 @@ class SocialAuth extends PureComponent {
       return acc;
     }, {});
 
+    console.info('im', im);
+
     return (
       <View
         style={[
@@ -240,6 +242,16 @@ class SocialAuth extends PureComponent {
                 style={{marginLeft: 0}}
               />
             }
+            rightIcon={
+              im.google ? (
+                <Icon
+                  name="check-circle"
+                  size={4}
+                  as={FontAwesome5}
+                  style={styles.CheckCircleIcon}
+                />
+              ) : null
+            }
             style={[
               styleConst.shadow.default,
               styles.SocialLoginBt,
@@ -249,16 +261,7 @@ class SocialAuth extends PureComponent {
                 backgroundColor: '#4286F5',
               },
               im.google ? styles.SocialLoginBtActive : null,
-            ]}>
-            {im.google ? (
-              <Icon
-                name="check-circle"
-                size={4}
-                as={FontAwesome5}
-                style={styles.CheckCircleIcon}
-              />
-            ) : null}
-          </Button>
+            ]}></Button>
           <Button
             onPress={this._connectFB}
             disabled={this.state.isSigninInProgress || Boolean(im.facebook)}
@@ -273,6 +276,16 @@ class SocialAuth extends PureComponent {
                 }}
               />
             }
+            rightIcon={
+              im.facebook ? (
+                <Icon
+                  name="check-circle"
+                  size={4}
+                  as={FontAwesome5}
+                  style={[styles.CheckCircleIcon, {right: -12, bottom: -5}]}
+                />
+              ) : null
+            }
             style={[
               styleConst.shadow.default,
               styles.SocialLoginBt,
@@ -282,16 +295,7 @@ class SocialAuth extends PureComponent {
                 height: 60,
               },
               im.facebook ? styles.SocialLoginBtActive : null,
-            ]}>
-            {im.facebook ? (
-              <Icon
-                name="check-circle"
-                size={4}
-                as={FontAwesome5}
-                style={styles.CheckCircleIcon}
-              />
-            ) : null}
-          </Button>
+            ]}></Button>
           {VKenabled ? (
             <Button
               onPress={this._connectVK}
@@ -304,6 +308,16 @@ class SocialAuth extends PureComponent {
                   style={{marginLeft: 0, color: styleConst.color.white}}
                 />
               }
+              rightIcon={
+                im.vk ? (
+                  <Icon
+                    name="check-circle"
+                    size={4}
+                    as={FontAwesome5}
+                    style={[styles.CheckCircleIcon, {right: -8, bottom: -1}]}
+                  />
+                ) : null
+              }
               style={[
                 styleConst.shadow.default,
                 styles.SocialLoginBt,
@@ -313,16 +327,7 @@ class SocialAuth extends PureComponent {
                   backgroundColor: '#4680C2',
                 },
                 im.vk ? styles.SocialLoginBtActive : null,
-              ]}>
-              {im.vk ? (
-                <Icon
-                  name="check-circle"
-                  size={4}
-                  as={FontAwesome5}
-                  style={styles.CheckCircleIcon}
-                />
-              ) : null}
-            </Button>
+              ]}></Button>
           ) : null}
         </View>
         {!isAndroid && appleAuth.isSupported ? (
@@ -349,7 +354,7 @@ class SocialAuth extends PureComponent {
                 name="check-circle"
                 size={4}
                 as={FontAwesome5}
-                style={[styles.CheckCircleIcon, {top: 40, left: 275}]}
+                style={[styles.CheckCircleIcon, {bottom: 5, right: 5}]}
               />
             ) : null}
           </View>
