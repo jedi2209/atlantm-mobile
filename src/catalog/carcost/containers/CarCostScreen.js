@@ -136,9 +136,11 @@ const CarCostScreen = ({
   });
 
   const [photos, setPhotos] = useState([]);
-  const [userComment, setUserComment] = useState('');
 
   const [FormConfig, setFormConfig] = useState({});
+
+  const dealerFromNavigation = get(route, 'params.dealer', false);
+  const userTextFromNavigation = get(route, 'params.Text', '');
 
   useEffect(() => {
     console.info('== CarCost ==');
@@ -154,10 +156,6 @@ const CarCostScreen = ({
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
       _selectCar(carFromNavigation);
     }
-    const userTextFromNavigation = get(route, 'params.Text');
-    if (userTextFromNavigation) {
-      setUserComment(userTextFromNavigation);
-    }
   }, [route]);
 
   useEffect(() => {
@@ -171,14 +169,14 @@ const CarCostScreen = ({
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: strings.Form.field.label.dealer,
-                value:
-                  dealerSelectedLocal && dealerSelectedLocal.id
-                    ? dealerSelectedLocal
-                    : dealerSelected,
+                value: dealerFromNavigation
+                  ? dealerFromNavigation
+                  : dealerSelected,
                 props: {
                   goBack: false,
                   isLocal: true,
                   returnScreen: navigation.state?.routeName,
+                  readonly: dealerFromNavigation ? true : false,
                 },
               },
               {
@@ -274,7 +272,7 @@ const CarCostScreen = ({
                 name: 'COMMENT',
                 type: 'textarea',
                 label: strings.Form.field.label.comment,
-                value: userComment,
+                value: userTextFromNavigation,
                 props: {
                   placeholder: strings.Form.field.placeholder.comment,
                 },
@@ -284,7 +282,7 @@ const CarCostScreen = ({
         ],
       },
     });
-  }, [carSelected, photos]);
+  }, [carSelected, photos, dealerFromNavigation]);
 
   const _selectCar = item => {
     setCarData({
@@ -307,7 +305,10 @@ const CarCostScreen = ({
       const photoForUpload = valuesIn(photos);
 
       const dataToSend = {
-        dealerId: dealerSelected.id,
+        dealerId:
+          dealerFromNavigation && get(dealerFromNavigation, 'id')
+            ? dealerFromNavigation.id
+            : dealerSelected.id,
         date: yearMonthDay(dataFromForm.DATE) || '',
         firstName: dataFromForm.NAME || '',
         secondName: dataFromForm.SECOND_NAME || '',

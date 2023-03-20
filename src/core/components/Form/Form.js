@@ -764,6 +764,7 @@ class Form extends Component {
       const {label, name, id} = data;
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
+      let val = this.state[name] || data?.value || '';
       return (
         <View
           style={[
@@ -790,7 +791,7 @@ class Form extends Component {
             label={label + (data.props && data.props.required ? '*' : '')}
             name={name}
             ref={this.inputRefs[groupNum + 'Input' + num]}
-            value={this.state[name] || ''}
+            value={val}
             enablesReturnKeyAutomatically={true}
             onChangeText={this.onChangeField(data)}
             {...data.props}
