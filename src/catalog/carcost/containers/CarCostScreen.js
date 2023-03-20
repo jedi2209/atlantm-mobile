@@ -105,7 +105,6 @@ const styles = StyleSheet.create({
 
 const CarCostScreen = ({
   dealerSelected,
-  dealerSelectedLocal,
   firstName,
   secondName,
   lastName,
@@ -120,6 +119,7 @@ const CarCostScreen = ({
   myCars,
   navigation,
   route,
+  actionCarCostOrder,
 }) => {
   const [carSelected, setCarData] = useState({
     carBrand,
@@ -299,16 +299,15 @@ const CarCostScreen = ({
   const _onPressOrder = async dataFromForm => {
     const isInternetExist = await isInternet();
 
+    const dealerId = get(dealerFromNavigation, 'id', dealerSelected.id);
+
     if (!isInternetExist) {
       return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
     } else {
       const photoForUpload = valuesIn(photos);
 
       const dataToSend = {
-        dealerId:
-          dealerFromNavigation && get(dealerFromNavigation, 'id')
-            ? dealerFromNavigation.id
-            : dealerSelected.id,
+        dealerId,
         date: yearMonthDay(dataFromForm.DATE) || '',
         firstName: dataFromForm.NAME || '',
         secondName: dataFromForm.SECOND_NAME || '',
@@ -329,42 +328,44 @@ const CarCostScreen = ({
         wheel: dataFromForm.CARWHEELTYPE || '',
       };
 
-      const action = await actionCarCostOrder(dataToSend);
-      switch (action.type) {
-        case CAR_COST__SUCCESS:
-          Analytics.logEvent('order', 'catalog/carcost');
+      const actionData = actionCarCostOrder(dataToSend);
+      if (actionData) {
+        switch (actionData.type) {
+          case CAR_COST__SUCCESS:
+            Analytics.logEvent('order', 'catalog/carcost');
 
-          setTimeout(() => {
-            Alert.alert(
-              strings.Notifications.success.title,
-              strings.Notifications.success.textOrder,
-              [
-                {
-                  text: 'ОК',
-                  onPress: () => {
-                    navigation.goBack();
+            setTimeout(() => {
+              Alert.alert(
+                strings.Notifications.success.title,
+                strings.Notifications.success.textOrder,
+                [
+                  {
+                    text: 'ОК',
+                    onPress: () => {
+                      navigation.goBack();
+                    },
                   },
-                },
-              ],
+                ],
+              );
+            }, 100);
+            break;
+          case CAR_COST__FAIL:
+            let message = get(
+              actionData,
+              'payload.message',
+              strings.Notifications.error.text,
             );
-          }, 100);
-          break;
-        case CAR_COST__FAIL:
-          let message = get(
-            action,
-            'payload.message',
-            strings.Notifications.error.text,
-          );
 
-          if (message === 'Network request failed') {
-            message = ERROR_NETWORK;
-          }
+            if (message === 'Network request failed') {
+              message = ERROR_NETWORK;
+            }
 
-          setTimeout(
-            () => Alert.alert(strings.Notifications.error.title, message),
-            100,
-          );
-          break;
+            setTimeout(
+              () => Alert.alert(strings.Notifications.error.title, message),
+              100,
+            );
+            break;
+        }
       }
     }
   };
