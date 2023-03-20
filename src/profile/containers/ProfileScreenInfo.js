@@ -694,9 +694,7 @@ const ProfileScreenInfo = props => {
   }
 
   return (
-    <ScrollView
-      style={{flex: 1, marginBottom: 70}}
-      testID="ProfileScreen.Wrapper">
+    <ScrollView style={{flex: 1}} testID="ProfileScreen.Wrapper">
       <Text
         style={{
           fontSize: 35,
