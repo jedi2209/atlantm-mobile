@@ -740,7 +740,6 @@ export default {
     });
 
     // `${API_MAIN_URL}/orders/usedbuy/post/`,
-
     return (async () => {
       const rawResponse = await RNFetchBlob.fetch(
         'POST',
