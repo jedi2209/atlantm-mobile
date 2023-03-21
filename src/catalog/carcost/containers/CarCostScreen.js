@@ -328,7 +328,7 @@ const CarCostScreen = ({
         wheel: dataFromForm.CARWHEELTYPE || '',
       };
 
-      const actionData = actionCarCostOrder(dataToSend);
+      const actionData = await actionCarCostOrder(dataToSend);
       if (actionData) {
         switch (actionData.type) {
           case CAR_COST__SUCCESS:
