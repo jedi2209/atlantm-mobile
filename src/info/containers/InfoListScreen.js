@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Alert,
@@ -9,9 +9,10 @@ import {
   Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import {Stack, Box, Text} from 'native-base';
+import {Pressable, Box, Text, Badge, Icon, Fab} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Offer} from '../../core/components/Offer';
-import Badge from '../../core/components/Badge';
+// import Badge from '../../core/components/Badge';
 import TransitionView from '../../core/components/TransitionView';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -35,6 +36,7 @@ import {strings} from '../../core/lang/const';
 
 // components
 import PushNotifications from '../../core/components/PushNotifications';
+import style from '../../core/components/Footer/style';
 
 const styles = StyleSheet.create({
   container: {
@@ -76,54 +78,40 @@ const mapDispatchToProps = {
   actionSetPushActionSubscribe,
 };
 
-class InfoListScreen extends Component {
-  static defaultProps = {
-    type: null,
+const InfoListScreen = ({
+  navigation,
+  dealerSelected,
+  fetchInfoList,
+  isFetchInfoList,
+  actionListReset,
+  list,
+  filters,
+  currLang,
+}) => {
+  const [isRefreshing, setRefreshing] = useState(false);
+  const [filterType, setFilterType] = useState(null);
+  const zoomIn = {
+    1: {
+      opacity: 1,
+      scale: 1,
+    },
+    0.5: {
+      opacity: 0.5,
+      scale: 0.4,
+    },
+    0: {
+      opacity: 0,
+      scale: 0,
+    },
   };
+  const {region, id: dealer} = dealerSelected;
+  const fabEnable = region === 'by' ? true : false;
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isRefreshing: false,
-      type: null,
-    };
-    this.zoomIn = {
-      1: {
-        opacity: 1,
-        scale: 1,
-      },
-      0.5: {
-        opacity: 0.5,
-        scale: 0.4,
-      },
-      0: {
-        opacity: 0,
-        scale: 0,
-      },
-    };
-  }
-
-  static propTypes = {
-    dealerSelected: PropTypes.object.isRequired,
-    list: PropTypes.array.isRequired,
-    visited: PropTypes.array.isRequired,
-    fetchInfoList: PropTypes.func.isRequired,
-    isFetchInfoList: PropTypes.bool.isRequired,
-  };
-
-  componentDidMount() {
-    const {
-      navigation,
-      dealerSelected,
-      fetchInfoList,
-      isFetchInfoList,
-      actionListReset,
-    } = this.props;
-    const {region, id: dealer} = dealerSelected;
-
+  useEffect(() => {
+    console.info('== InfoListScreen ==');
     if (!isFetchInfoList) {
       actionListReset();
-      fetchInfoList(region, dealer, this.state.type).then(action => {
+      fetchInfoList(region, dealer, filterType).then(action => {
         if (action.type === INFO_LIST__FAIL) {
           let message = get(
             action,
@@ -139,23 +127,19 @@ class InfoListScreen extends Component {
         }
       });
     }
-  }
+  }, [filterType]);
 
-  _onRefresh = () => {
-    const {dealerSelected} = this.props;
-    const {region, id: dealer} = dealerSelected;
-
-    this.setState({isRefreshing: true});
-
-    this.props.fetchInfoList(region, dealer, this.state.type).then(() => {
-      this.setState({isRefreshing: false});
+  const _onRefresh = () => {
+    setRefreshing(true);
+    fetchInfoList(region, dealer, filterType).then(() => {
+      setRefreshing(false);
     });
   };
 
-  renderItem = data => {
+  const renderItem = data => {
     return (
       <TransitionView
-        animation={this.zoomIn}
+        animation={zoomIn}
         duration={350}
         index={data.index}
         style={[
@@ -174,14 +158,14 @@ class InfoListScreen extends Component {
           data={data}
           width={cardWidth}
           height={200}
-          navigation={this.props.navigation.navigate}
+          navigation={navigation.navigate}
         />
       </TransitionView>
     );
   };
 
-  renderEmptyComponent = () => {
-    return this.props.isFetchInfoList ? (
+  const renderEmptyComponent = () => {
+    return isFetchInfoList ? (
       <View style={styles.spinnerContainer}>
         <ActivityIndicator
           color={styleConst.color.blue}
@@ -193,23 +177,10 @@ class InfoListScreen extends Component {
     );
   };
 
-  render() {
-    const {
-      list,
-      filters,
-      fetchInfoList,
-      actionListReset,
-      isFetchInfoList,
-      dealerSelected,
-      currLang,
-    } = this.props;
-
-    const {region, id: dealer} = dealerSelected;
-
-    console.info('== InfoListScreen ==');
-    return (
+  return (
+    <>
       <Box style={styles.container}>
-        {!this.state.isRefreshing ? (
+        {!isRefreshing ? (
           <>
             {filters ? (
               <View
@@ -220,47 +191,44 @@ class InfoListScreen extends Component {
                 }}>
                 {filters.map((el, i) => {
                   return (
-                    <Badge
-                      id={el.id}
-                      key={'badgeItem' + el.id + i}
-                      index={i}
-                      bgColor={el.badge?.background}
-                      name={el.name[currLang]}
-                      textColor={el.badge?.color}
-                      badgeContainerStyle={{marginRight: 20, padding: 10}}
-                      textStyle={{fontSize: 14}}
+                    <Pressable
                       onPress={() => {
-                        this.setState(
-                          {
-                            type: el.id,
-                          },
-                          () => {
-                            if (!isFetchInfoList) {
-                              actionListReset();
-                              fetchInfoList(
-                                region,
-                                dealer,
-                                this.state.type,
-                              ).then(action => {
-                                if (action.type === INFO_LIST__FAIL) {
-                                  let message = get(
-                                    action,
-                                    'payload.message',
-                                    strings.Notifications.error.text,
-                                  );
-
-                                  if (message === 'Network request failed') {
-                                    message = ERROR_NETWORK;
-                                  }
-
-                                  setTimeout(() => Alert.alert(message), 100);
-                                }
-                              });
-                            }
-                          },
-                        );
+                        filterType === el.id
+                          ? setFilterType(null)
+                          : setFilterType(el.id);
                       }}
-                    />
+                      key={'pressableFilter' + el.id + i}
+                      mr={1}
+                      padding={0.5}>
+                      <Badge
+                        key={'badgeItem' + el.id + i}
+                        variant={'outline'}
+                        alignSelf="center"
+                        bgColor={
+                          !filterType || filterType === el.id
+                            ? el.badge?.background
+                            : 'muted.300'
+                        }
+                        _text={{fontSize: 14, color: el.badge?.color}}
+                        borderColor={styleConst.color.white}
+                        rounded={6}
+                        rightIcon={
+                          filterType === el.id ? (
+                            <Icon
+                              size={4}
+                              as={Ionicons}
+                              name="ios-close-outline"
+                              color="warmGray.50"
+                              _dark={{
+                                color: 'warmGray.50',
+                              }}
+                              mt={1}
+                            />
+                          ) : null
+                        }>
+                        {el.name[currLang]}
+                      </Badge>
+                    </Pressable>
                   );
                 })}
               </View>
@@ -268,11 +236,11 @@ class InfoListScreen extends Component {
             <FlatList
               data={list}
               extraData={isFetchInfoList}
-              onRefresh={this._onRefresh}
-              refreshing={this.state.isRefreshing}
-              ListEmptyComponent={this.renderEmptyComponent}
+              onRefresh={_onRefresh}
+              refreshing={isRefreshing}
+              ListEmptyComponent={renderEmptyComponent}
               style={styles.list}
-              renderItem={this.renderItem}
+              renderItem={renderItem}
               keyExtractor={item => `${item.hash.toString()}`}
             />
           </>
@@ -283,8 +251,41 @@ class InfoListScreen extends Component {
           />
         )}
       </Box>
-    );
-  }
-}
+      {fabEnable && !isFetchInfoList ? (
+        <Fab
+          renderInPortal={false}
+          size="sm"
+          style={{backgroundColor: styleConst.new.blueHeader}}
+          onPress={() =>
+            navigation.navigate('ChatScreen', {chatType: 'newcars'})
+          }
+          icon={
+            <Icon
+              size={7}
+              as={Ionicons}
+              name="chatbox-outline"
+              color="warmGray.50"
+              _dark={{
+                color: 'warmGray.50',
+              }}
+            />
+          }
+        />
+      ) : null}
+    </>
+  );
+};
+
+InfoListScreen.defaultProps = {
+  type: null,
+};
+
+InfoListScreen.propTypes = {
+  dealerSelected: PropTypes.object.isRequired,
+  list: PropTypes.array.isRequired,
+  visited: PropTypes.array.isRequired,
+  fetchInfoList: PropTypes.func.isRequired,
+  isFetchInfoList: PropTypes.bool.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(InfoListScreen);
