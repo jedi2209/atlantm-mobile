@@ -1,9 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {useToast} from 'native-base';
+import {Fab, Icon, useToast} from 'native-base';
 import ToastAlert from '../../core/components/ToastAlert';
 import {useNavigation} from '@react-navigation/native';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // redux
 import {connect} from 'react-redux';
@@ -18,6 +20,8 @@ import PushNotifications from '../../core/components/PushNotifications';
 import {get} from 'lodash';
 import {TVA__SUCCESS, TVA__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
+import styleConst from '../../core/style-const';
+import {JIVO_CHAT_URI} from '../../core/const';
 
 const mapStateToProps = ({dealer, profile, tva, core}) => {
   return {
@@ -53,6 +57,8 @@ const TvaScreen = props => {
 
   const toast = useToast();
   const navigation = useNavigation();
+
+  const fabEnable = dealerSelected.region === 'by' ? true : false;
 
   const FormConfig = {
     fields: {
@@ -250,20 +256,44 @@ const TvaScreen = props => {
   };
 
   return (
-    <Form
-      contentContainerStyle={{
-        paddingHorizontal: 14,
-        marginTop: 20,
-      }}
-      keyboardAvoidingViewProps={{
-        enableAutomaticScroll: false,
-      }}
-      key="TVAForm"
-      fields={FormConfig.fields}
-      barStyle={'light-content'}
-      SubmitButton={{text: strings.Form.button.send}}
-      onSubmit={_onPressButton}
-    />
+    <>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        keyboardAvoidingViewProps={{
+          enableAutomaticScroll: false,
+        }}
+        key="TVAForm"
+        fields={FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{text: strings.Form.button.send}}
+        onSubmit={_onPressButton}
+      />
+      {fabEnable ? (
+        <Fab
+          renderInPortal={false}
+          size="sm"
+          style={{backgroundColor: styleConst.new.blueHeader}}
+          mb={8}
+          onPress={() =>
+            navigation.navigate('ChatScreen', {uri: JIVO_CHAT_URI})
+          }
+          icon={
+            <Icon
+              size={7}
+              as={Ionicons}
+              name="chatbox-outline"
+              color="warmGray.50"
+              _dark={{
+                color: 'warmGray.50',
+              }}
+            />
+          }
+        />
+      ) : null}
+    </>
   );
 };
 

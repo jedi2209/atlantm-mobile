@@ -52,7 +52,7 @@ import chatStatus from '../../utils/chatStatus';
 
 import {get} from 'lodash';
 import styleConst from '../../core/style-const';
-import {ERROR_NETWORK} from '../../core/const';
+import {ERROR_NETWORK, JIVO_CHAT_URI} from '../../core/const';
 import Carousel from 'react-native-snap-carousel';
 import {strings} from '../../core/lang/const';
 
@@ -299,7 +299,7 @@ const ContactsScreen = ({
   const [chatAvailable, setChatAvailable] = useState(false);
   const [callAvailable, setCallAvailable] = useState(false);
   const mainScrollView = useRef();
-  // const interval = useRef();
+  const interval = useRef();
   const isOpened = getStatusWorktime(dealerSelected, 'RC');
   const [isSubscribedInterval, setSubscribedInterval] = useState(true);
 
@@ -531,20 +531,18 @@ const ContactsScreen = ({
               }
             }}
           />
-          {false ? (
-            <Plate
-              title="Чат"
-              subtitle="Отвечаем с 9 до 20"
-              type="orange"
-              status={chatAvailable ? 'enabled' : 'disabled'}
-              onPress={onPressChat}
-            />
-          ) : null}
           <Plate
             testID="ContactsScreen.ButtonCallMe"
             title={strings.ContactsScreen.callOrder}
             subtitle=""
             onPress={onPressCallMe}
+          />
+          <Plate
+            title="Чат"
+            subtitle="Отвечаем с 9 до 20"
+            type="orange"
+            status={chatAvailable ? 'enabled' : 'disabled'}
+            onPress={onPressChat}
           />
           <Plate
             title={strings.ContactsScreen.order}
@@ -732,7 +730,9 @@ const ContactsScreen = ({
   };
 
   const onPressChat = () => {
-    navigation.navigate('ChatScreen');
+    navigation.navigate('ChatScreen', {
+      uri: JIVO_CHAT_URI,
+    });
   };
 
   const onPressMap = addressData => {
@@ -773,22 +773,22 @@ const ContactsScreen = ({
     fetchInfoData();
 
     console.info('== Contacts ==');
-    // chatStatus(isSubscribedInterval).then(res => {
-    //   setChatAvailable(res);
-    // });
+    chatStatus(isSubscribedInterval).then(res => {
+      setChatAvailable(res);
+    });
     setCallAvailable(getStatusWorktime(dealerSelected, 'RC'));
 
-    // interval.current = setInterval(() => {
-    //   setCallAvailable(getStatusWorktime(dealerSelected, 'RC'));
-    //   chatStatus(isSubscribedInterval).then(res => {
-    //     setChatAvailable(res);
-    //   });
-    // }, intervalMiliSeconds);
+    interval.current = setInterval(() => {
+      setCallAvailable(getStatusWorktime(dealerSelected, 'RC'));
+      chatStatus(isSubscribedInterval).then(res => {
+        setChatAvailable(res);
+      });
+    }, intervalMiliSeconds);
     return () => {
       setSubscribedInterval(false);
-      // if (interval) {
-      //   clearInterval(interval);
-      // }
+      if (interval) {
+        clearInterval(interval);
+      }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

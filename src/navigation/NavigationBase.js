@@ -180,50 +180,41 @@ export const Base = ({navigation, route}) => {
             headerBackVisible: false,
             headerShadowVisible: false,
             headerShown: true,
-            headerLeft: () => {
-              return ArrowBack(navigation, route, {
-                icon: 'md-close',
-                IconStyle: {
-                  fontSize: 42,
-                  width: 40,
-                  color: '#222B45',
-                },
-              });
-            },
+            headerLeft: null,
+            headerRight: null,
+            // headerRight: () => {
+            //   return ArrowBack(navigation, route, {
+            //     icon: 'md-close',
+            //     IconStyle: {
+            //       fontSize: 42,
+            //       width: 40,
+            //       color: '#fff',
+            //     },
+            //     ContainerStyle: {
+            //       marginRight: 10,
+            //       marginTop: 20,
+            //     },
+            //   });
+            // },
             presentation: 'modal',
             headerTransparent: true,
-            headerTitle: () => {
-              return (
-                <View style={{flexDirection: 'row'}}>
-                  <Text
-                    style={[stylesHeader.whiteHeaderTitle, {marginRight: 10}]}
-                    selectable={false}>
-                    {strings.ChatScreen.title}
-                  </Text>
-                  <Text>{route?.params?.serviceMessage}</Text>
-                  {route?.params?.status?.color ? (
-                    <View
-                      style={{
-                        width: 10,
-                        height: 10,
-                        backgroundColor: route.params.status.color,
-                        marginTop: 5,
-                        borderRadius: 10,
-                      }}
-                    />
-                  ) : (
-                    <ActivityIndicator
-                      color={styleConst.color.blue}
-                      size={'small'}
-                    />
-                  )}
-                </View>
-              );
-            },
-            headerTitleStyle: [
-              stylesHeader.transparentHeaderTitle,
-              {color: '#222B45'},
-            ],
+            headerTitle: '',
+            // headerTitle: () => {
+            //   return (
+            //     <View style={{flexDirection: 'row'}}>
+            //       <Text
+            //         style={[stylesHeader.whiteHeaderTitle, {marginRight: 10}]}
+            //         selectable={false}>
+            //         {strings.ChatScreen.title}
+            //       </Text>
+            //       <Text>{route?.params?.serviceMessage}</Text>
+            //     </View>
+            //   );
+            // },
+            // headerTitleStyle: [
+            //   stylesHeader.transparentHeaderTitle,
+            //   {color: '#222B45'},
+            // ],
             ...TransitionPresets.ModalTransition,
           })}
         />

@@ -9,13 +9,12 @@ import {
   TouchableWithoutFeedback,
   ActivityIndicator,
   TouchableOpacity,
-  Box,
-  Progress,
 } from 'react-native';
 import UserCars from '../components/UserCars';
-import {Button, HStack, Icon, View} from 'native-base';
+import {Button, HStack, Icon, View, Fab} from 'native-base';
 
 import Fontisto from 'react-native-vector-icons/Fontisto';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -40,6 +39,7 @@ import {
 import Analytics from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
+import {JIVO_CHAT_URI} from '../../core/const';
 
 const styles = StyleSheet.create({
   buttonText: {
@@ -180,6 +180,8 @@ const ProfileScreenInfo = props => {
     bonus,
   } = props;
   const [loading, setLoading] = useState(false);
+
+  const fabEnable = dealerSelected.region === 'by' ? true : false;
 
   useEffect(() => {
     Analytics.logEvent('screen', 'profile/main');
@@ -694,64 +696,89 @@ const ProfileScreenInfo = props => {
   }
 
   return (
-    <ScrollView style={{flex: 1}} testID="ProfileScreen.Wrapper">
-      <Text
-        style={{
-          fontSize: 35,
-          fontWeight: '600',
-          marginHorizontal: 20,
-          marginTop: 70,
-          color: styleConst.color.greyText6,
-        }}>
-        {[login.NAME, login.LAST_NAME].join(' ')}
-      </Text>
-      <DealerItemList
-        key={'dealerSelect'}
-        dealer={dealerSelected}
-        style={[
-          {
-            marginHorizontal: 15,
-            marginTop: 10,
-            paddingLeft: 10,
-            backgroundColor: styleConst.color.white,
-          },
-        ]}
-        returnScreen={navigation.state?.routeName}
-      />
-      {_renderCars()}
-      {_renderCashBack()}
-      {_renderBonus()}
-      {_renderAdditionalPurchase()}
-      <Button
-        onPress={() => {
-          navigation.navigate('ProfileSettingsScreen');
-        }}
-        _text={styles.buttonPrimaryText}
-        style={[
-          styleConst.shadow.default,
-          styles.buttonPrimary,
-          {backgroundColor: styleConst.color.green, marginTop: 20},
-        ]}>
-        {strings.ProfileScreenInfo.editData}
-      </Button>
-      <View style={{textAlign: 'center', alignItems: 'center'}}>
-        <Button
-          variant="link"
-          mx={20}
-          my={5}
-          onPress={() => {
-            props.actionLogout();
-          }}
-          _text={[
-            styles.buttonPrimaryText,
+    <>
+      <ScrollView style={{flex: 1}} testID="ProfileScreen.Wrapper">
+        <Text
+          style={{
+            fontSize: 35,
+            fontWeight: '600',
+            marginHorizontal: 20,
+            marginTop: 70,
+            color: styleConst.color.greyText6,
+          }}>
+          {[login.NAME, login.LAST_NAME].join(' ')}
+        </Text>
+        <DealerItemList
+          key={'dealerSelect'}
+          dealer={dealerSelected}
+          style={[
             {
-              color: styleConst.color.lightBlue,
+              marginHorizontal: 15,
+              marginTop: 10,
+              paddingLeft: 10,
+              backgroundColor: styleConst.color.white,
             },
+          ]}
+          returnScreen={navigation.state?.routeName}
+        />
+        {_renderCars()}
+        {_renderCashBack()}
+        {_renderBonus()}
+        {_renderAdditionalPurchase()}
+        <Button
+          onPress={() => {
+            navigation.navigate('ProfileSettingsScreen');
+          }}
+          _text={styles.buttonPrimaryText}
+          style={[
+            styleConst.shadow.default,
+            styles.buttonPrimary,
+            {backgroundColor: styleConst.color.green, marginTop: 20},
           ]}>
-          {strings.ProfileScreenInfo.exit}
+          {strings.ProfileScreenInfo.editData}
         </Button>
-      </View>
-    </ScrollView>
+        <View style={{textAlign: 'center', alignItems: 'center'}}>
+          <Button
+            variant="link"
+            mx={20}
+            my={5}
+            onPress={() => {
+              props.actionLogout();
+            }}
+            _text={[
+              styles.buttonPrimaryText,
+              {
+                color: styleConst.color.lightBlue,
+              },
+            ]}>
+            {strings.ProfileScreenInfo.exit}
+          </Button>
+        </View>
+      </ScrollView>
+      {fabEnable ? (
+        <Fab
+          renderInPortal={false}
+          size="sm"
+          style={{backgroundColor: styleConst.new.blueHeader}}
+          onPress={() =>
+            navigation.navigate('ChatScreen', {
+              uri: JIVO_CHAT_URI,
+            })
+          }
+          icon={
+            <Icon
+              size={7}
+              as={Ionicons}
+              name="chatbox-outline"
+              color="warmGray.50"
+              _dark={{
+                color: 'warmGray.50',
+              }}
+            />
+          }
+        />
+      ) : null}
+    </>
   );
 };
 

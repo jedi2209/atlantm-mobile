@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, ActivityIndicator} from 'react-native';
-import {Text, Button, View, ScrollView} from 'native-base';
+import React, {useEffect, useState, useRef} from 'react';
+import {StyleSheet, ActivityIndicator, Dimensions} from 'react-native';
+import {Button, View, ScrollView} from 'native-base';
 import {connect} from 'react-redux';
 
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
 import * as NavigationService from '../../navigation/NavigationService';
 
@@ -10,36 +11,54 @@ import moment from 'moment';
 import styleConst from '../style-const';
 import {strings} from '../lang/const';
 
+const deviceHeight = Dimensions.get('window').height;
+
 const mapStateToProps = ({dealer, profile}) => {
   return {
     region: dealer.selected.region,
   };
 };
 
-const WebviewScreen = ({route, region, SubmitButton, html}) => {
-  const [HTML, setHTML] = useState(null);
+const WebviewScreen = ({route, region, SubmitButton, minHeight}) => {
+  const [data, setData] = useState(null);
+  const mainRef = useRef(null);
 
   useEffect(() => {
     console.info('== WebviewScreen ==');
-    setHTML(route.params.html);
-  }, [route?.params?.html]);
+    if (route.params?.html) {
+      setData({html: route.params.html});
+    }
+    if (route.params?.uri) {
+      setData({uri: route.params.uri});
+    }
+  }, [route?.params?.html, route?.params?.uri]);
 
-  if (HTML) {
+  if (data) {
     return (
-      <>
-        <ScrollView style={styles.mainView}>
+      <View style={[route.params?.mainViewStyle]} flex={1}>
+        <KeyboardAwareScrollView
+          ref={mainRef}
+          enableOnAndroid={true}
+          contentContainerStyle={styles.default}
+          extraScrollHeight={30}
+          style={[styles.mainView, route.params?.mainScrollViewStyle]}>
           <WebViewAutoHeight
-            style={styles.webView}
+            style={[styles.webView, route.params?.webViewStyle]}
             key={moment().unix()}
-            source={{html: HTML}}
+            source={data}
+            minHeight={
+              route.params?.minHeight
+                ? route.params?.minHeight
+                : deviceHeight - 150
+            }
           />
-        </ScrollView>
+        </KeyboardAwareScrollView>
         <Button
           style={styles.submitButton}
           onPress={() => NavigationService.goBack()}>
           {SubmitButton.text}
         </Button>
-      </>
+      </View>
     );
   } else {
     return (
