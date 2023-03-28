@@ -47,6 +47,7 @@ import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
 import md5 from '../../../utils/md5';
 import {strings} from '../../../core/lang/const';
+import {JIVO_CHAT_URI} from '../../../core/const';
 
 // styles
 import styles from '../../CarStyles';
@@ -1123,8 +1124,7 @@ const NewCarItemScreen = ({
           placement="bottom-right"
           onPress={() =>
             navigation.navigate('ChatScreen', {
-              chatType: 'newcars',
-              carID: carDetails.id.api,
+              uri: JIVO_CHAT_URI,
             })
           }
         />

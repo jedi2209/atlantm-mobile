@@ -29,7 +29,7 @@ import {INFO_LIST__FAIL} from '../actionTypes';
 
 // helpers
 import {get} from 'lodash';
-import {ERROR_NETWORK} from '../../core/const';
+import {ERROR_NETWORK, JIVO_CHAT_URI} from '../../core/const';
 import styleConst from '../../core/style-const';
 import {verticalScale} from '../../utils/scale';
 import {strings} from '../../core/lang/const';
@@ -257,7 +257,7 @@ const InfoListScreen = ({
           size="sm"
           style={{backgroundColor: styleConst.new.blueHeader}}
           onPress={() =>
-            navigation.navigate('ChatScreen', {chatType: 'newcars'})
+            navigation.navigate('ChatScreen', {uri: JIVO_CHAT_URI})
           }
           icon={
             <Icon

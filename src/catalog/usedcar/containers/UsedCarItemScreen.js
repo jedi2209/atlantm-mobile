@@ -44,6 +44,7 @@ import numberWithGap from '../../../utils/number-with-gap';
 import showPrice from '../../../utils/price';
 import {strings} from '../../../core/lang/const';
 import getStatusWorktime from '../../../utils/worktime-status';
+import {JIVO_CHAT_URI} from '../../../core/const';
 
 // styles
 import styles from '../../CarStyles';
@@ -1034,12 +1035,7 @@ const UsedCarItemScreen = props => {
           />
         }
         placement="bottom-right"
-        onPress={() =>
-          navigation.navigate('ChatScreen', {
-            chatType: 'tradein-cars',
-            carID: carDetails.id.api,
-          })
-        }
+        onPress={() => navigation.navigate('ChatScreen', {uri: JIVO_CHAT_URI})}
       />
     </>
   );

@@ -131,16 +131,27 @@ const WebViewAutoHeight = ({
     }
   };
 
+  let sourceModified;
+
+  if (source?.html) {
+    sourceModified = {html: codeInject(source.html)};
+  }
+  if (source?.uri) {
+    sourceModified = {uri: source?.uri};
+  }
+
   return (
     <WebView
       {...otherProps}
-      source={{html: codeInject(source.html)}}
+      source={sourceModified}
       scrollEnabled={false}
       style={[style, {height: Math.max(contentHeight, minHeight)}]}
       ref={ref => {
         webviewRef = ref;
       }}
-      onNavigationStateChange={_handleNavigationChange}
+      onNavigationStateChange={
+        sourceModified?.html ? _handleNavigationChange : null
+      }
       dataDetectorTypes="all"
       allowsFullscreenVideo={true}
       allowsInlineMediaPlayback={true}
