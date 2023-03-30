@@ -19,7 +19,7 @@ import Analytics from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 import {EVENT_REFRESH} from '../../../core/actionTypes';
-import {JIVO_CHAT_URI} from '../../../core/const';
+import {JIVO_CHAT} from '../../../core/const';
 
 const styles = StyleSheet.create({
   content: {
@@ -123,7 +123,9 @@ const NewCarListScreen = ({
               size="sm"
               style={{backgroundColor: styleConst.new.blueHeader}}
               onPress={() =>
-                navigation.navigate('ChatScreen', {uri: JIVO_CHAT_URI})
+                navigation.navigate('ChatScreen', {
+                  prevScreen: 'Список новых авто',
+                })
               }
               icon={
                 <Icon
@@ -143,8 +145,6 @@ const NewCarListScreen = ({
     </View>
   );
 };
-
-// navigation.navigate('ChatScreen');
 
 const mapDispatchToProps = {
   actionFetchNewCarByFilter,

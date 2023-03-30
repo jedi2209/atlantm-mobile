@@ -44,7 +44,7 @@ import numberWithGap from '../../../utils/number-with-gap';
 import showPrice from '../../../utils/price';
 import {strings} from '../../../core/lang/const';
 import getStatusWorktime from '../../../utils/worktime-status';
-import {JIVO_CHAT_URI} from '../../../core/const';
+import {JIVO_CHAT} from '../../../core/const';
 
 // styles
 import styles from '../../CarStyles';
@@ -1035,7 +1035,22 @@ const UsedCarItemScreen = props => {
           />
         }
         placement="bottom-right"
-        onPress={() => navigation.navigate('ChatScreen', {uri: JIVO_CHAT_URI})}
+        onPress={() =>
+          navigation.navigate('ChatScreen', {
+            prevScreen:
+              'Поддержанное авто ' +
+              [
+                get(carDetails, 'brand.name'),
+                get(carDetails, 'model.name'),
+                ' #' + get(carDetails, 'id.api'),
+              ].join(' '),
+            car: {
+              type: 'used',
+              id: get(carDetails, 'id.api'),
+              link: 'https://atlantm.by/cars/amp/' + get(carDetails, 'id.api'),
+            },
+          })
+        }
       />
     </>
   );

@@ -21,7 +21,7 @@ import {get} from 'lodash';
 import {TVA__SUCCESS, TVA__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
 import styleConst from '../../core/style-const';
-import {JIVO_CHAT_URI} from '../../core/const';
+import {JIVO_CHAT} from '../../core/const';
 
 const mapStateToProps = ({dealer, profile, tva, core}) => {
   return {
@@ -278,7 +278,9 @@ const TvaScreen = props => {
           style={{backgroundColor: styleConst.new.blueHeader}}
           mb={8}
           onPress={() =>
-            navigation.navigate('ChatScreen', {uri: JIVO_CHAT_URI})
+            navigation.navigate('ChatScreen', {
+              prevScreen: carNumber ? 'ТВА -- ' + carNumber : 'ТВА',
+            })
           }
           icon={
             <Icon

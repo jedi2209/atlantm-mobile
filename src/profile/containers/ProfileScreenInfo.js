@@ -39,7 +39,7 @@ import {
 import Analytics from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
-import {JIVO_CHAT_URI} from '../../core/const';
+import {JIVO_CHAT} from '../../core/const';
 
 const styles = StyleSheet.create({
   buttonText: {
@@ -762,7 +762,7 @@ const ProfileScreenInfo = props => {
           style={{backgroundColor: styleConst.new.blueHeader}}
           onPress={() =>
             navigation.navigate('ChatScreen', {
-              uri: JIVO_CHAT_URI,
+              prevScreen: 'ЛКК -- главный',
             })
           }
           icon={

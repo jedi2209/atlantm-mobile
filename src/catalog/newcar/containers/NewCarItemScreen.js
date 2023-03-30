@@ -47,7 +47,7 @@ import styleConst from '../../../core/style-const';
 import showPrice from '../../../utils/price';
 import md5 from '../../../utils/md5';
 import {strings} from '../../../core/lang/const';
-import {JIVO_CHAT_URI} from '../../../core/const';
+import {JIVO_CHAT} from '../../../core/const';
 
 // styles
 import styles from '../../CarStyles';
@@ -1124,7 +1124,19 @@ const NewCarItemScreen = ({
           placement="bottom-right"
           onPress={() =>
             navigation.navigate('ChatScreen', {
-              uri: JIVO_CHAT_URI,
+              prevScreen:
+                'Новое авто ' +
+                [
+                  get(carDetails, 'brand.name'),
+                  get(carDetails, 'model.name'),
+                  ' #' + get(carDetails, 'id.api'),
+                ].join(' '),
+              car: {
+                type: 'new',
+                id: get(carDetails, 'id.api'),
+                link:
+                  'https://atlantm.by/cars/new/' + get(carDetails, 'id.api'),
+              },
             })
           }
         />
