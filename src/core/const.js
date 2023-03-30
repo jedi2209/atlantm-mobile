@@ -15,7 +15,7 @@ let appRegion,
   countryList,
   phoneRestricted,
   fbAppID,
-  jivoChatLink = null;
+  jivoChat = null;
 
 export const RUSSIA = 'ru';
 export const BELARUSSIA = 'by';
@@ -37,7 +37,11 @@ switch (bundle) {
     oneSignalKey = 'XXXX';
     amplitudeKey = 'XXXX';
     fbAppID = 'XXXX';
-    jivoChatLink = 'https://jivo.chat/bzkKHXDrBT';
+    jivoChat = {
+      chatPage: 'https://jivo.chat/bzkKHXDrBT',
+      chatID: 'bzkKHXDrBT',
+      secret: 'XXXX$C&F)J@NcRfUj',
+    };
     break;
   case 'ua.atlantm.app': // iOS UA + Android UA
     appRegion = UKRAINE;
@@ -54,7 +58,11 @@ switch (bundle) {
     oneSignalKey = 'XXXX';
     amplitudeKey = 'XXXX';
     fbAppID = 'XXXX';
-    jivoChatLink = 'https://jivo.chat/bzkKHXDrBT';
+    jivoChat = {
+      chatPage: 'https://jivo.chat/bzkKHXDrBT',
+      chatID: 'bzkKHXDrBT',
+      secret: 'XXXX$C&F)J@NcRfUj',
+    };
     break;
 }
 
@@ -97,7 +105,7 @@ export const VK_APP_ID = 'XXXX';
 
 export const FB_APP_ID = fbAppID;
 
-export const JIVO_CHAT_URI = jivoChatLink;
+export const JIVO_CHAT = jivoChat;
 
 export const AWS_CONFIG = {
   accessKeyId: 'XXXX',

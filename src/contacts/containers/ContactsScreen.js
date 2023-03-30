@@ -52,7 +52,7 @@ import chatStatus from '../../utils/chatStatus';
 
 import {get} from 'lodash';
 import styleConst from '../../core/style-const';
-import {ERROR_NETWORK, JIVO_CHAT_URI} from '../../core/const';
+import {ERROR_NETWORK, JIVO_CHAT} from '../../core/const';
 import Carousel from 'react-native-snap-carousel';
 import {strings} from '../../core/lang/const';
 
@@ -730,9 +730,7 @@ const ContactsScreen = ({
   };
 
   const onPressChat = () => {
-    navigation.navigate('ChatScreen', {
-      uri: JIVO_CHAT_URI,
-    });
+    navigation.navigate('ChatScreen', {prevScreen: 'Главный (автоцентр)'});
   };
 
   const onPressMap = addressData => {
