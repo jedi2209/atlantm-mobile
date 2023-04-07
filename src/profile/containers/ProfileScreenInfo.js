@@ -270,36 +270,6 @@ const ProfileScreenInfo = props => {
             }}>
             {strings.ProfileScreenInfo.empty.cars}
           </Text>
-          <Button
-            onPress={() => {
-              navigation.navigate('ReestablishScreen');
-            }}
-            _text={[
-              styles.buttonPrimaryText,
-              {
-                color: styleConst.color.white,
-                fontSize: 14,
-                fontStyle: 'italic',
-                textDecorationStyle: 'dotted',
-                textDecorationColor: styleConst.color.white,
-                textDecorationLine: 'underline',
-                shadowOpacity: 0,
-                elevation: 0,
-              },
-            ]}
-            style={[
-              {
-                position: 'absolute',
-                backgroundColor: 'none',
-                elevation: 0,
-                bottom: 0,
-                right: 5,
-                paddingHorizontal: 10,
-                paddingVertical: 5,
-              },
-            ]}>
-            {strings.ProfileScreenInfo.empty.whereMyCars}
-          </Button>
         </View>
       </>
     );

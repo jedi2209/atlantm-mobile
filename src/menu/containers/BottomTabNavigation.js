@@ -17,7 +17,7 @@ import AuthContainer from '../../profile/containers/AuthContainer';
 import PhoneChangeScreen from '../../profile/containers/PhoneChangeScreen';
 import BonusScreen from '../../profile/bonus/containers/BonusScreen';
 import DiscountsScreen from '../../profile/discounts/containers/DiscountsScreen';
-import ReestablishScreen from '../../profile/containers/ReestablishScreen';
+// import ReestablishScreen from '../../profile/containers/_old-ReestablishScreen';
 
 import MenuScreen from './MenuScreen';
 
@@ -69,7 +69,7 @@ const ProfileStackView = ({navigation, route}) => (
         ],
       })}
     />
-    <ProfileStack.Screen
+    {/* <ProfileStack.Screen
       name="ReestablishScreen"
       component={ReestablishScreen}
       options={ClassicHeaderBlue(
@@ -77,7 +77,7 @@ const ProfileStackView = ({navigation, route}) => (
         navigation,
         route,
       )}
-    />
+    /> */}
     <ProfileStack.Screen
       name="BonusScreen"
       component={BonusScreen}
