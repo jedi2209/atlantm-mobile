@@ -237,7 +237,7 @@ const _renderEmergencyManager = ({emergencyManagerInfo, navigation}) => {
         rounded={'lg'}
         marginX={'5%'}
         marginTop={'5%'}>
-        <Heading
+        {/* <Heading
           alignSelf={'center'}
           size={'lg'}
           style={{
@@ -263,10 +263,10 @@ const _renderEmergencyManager = ({emergencyManagerInfo, navigation}) => {
             borderTopLeftRadius: 0,
             borderTopRightRadius: 0,
           }}
-        />
+        /> */}
         <Image
           key={'Imager-emergencyManager'}
-          source={require('../../../assets/accidental_manager.jpg')}
+          source={require('../../../assets/emergency_manager.jpg')}
           resizeMode="cover"
           size={'100%'}
           rounded={'lg'}
