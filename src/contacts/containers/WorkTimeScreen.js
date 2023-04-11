@@ -45,7 +45,7 @@ const _renderDivision = divisions => {
     if (get(div, 'worktimeShort', []).length) {
       return (
         <Box
-          rounded="lg"
+          rounded={'lg'}
           borderColor="coolGray.200"
           borderWidth="1"
           _dark={{
@@ -182,7 +182,7 @@ const WorkTimeScreen = ({dealerSelected, navigation, phonesMobile}) => {
                 borderColor="blue.500"
                 borderWidth="1"
                 p={1}
-                rounded="lg"
+                rounded={'lg'}
                 onPress={() => {
                   if (phoneMobile.length > 1) {
                     phonesMobile = [];

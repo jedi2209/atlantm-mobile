@@ -2,7 +2,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import {
-  View,
   Keyboard,
   Text,
   ImageBackground,
@@ -12,7 +11,7 @@ import {
   StyleSheet,
   Dimensions,
 } from 'react-native';
-import {Button, HStack, Icon, useToast, VStack} from 'native-base';
+import {Button, HStack, Icon, useToast, VStack, View} from 'native-base';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
@@ -383,10 +382,10 @@ const LoginScreen = props => {
       res.push(
         <View
           key={'backgroundInputCode' + index}
+          rounded={'md'}
           style={{
             height: 75,
             backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            borderRadius: 5,
             width: widthElement,
           }}
         />,
@@ -406,9 +405,9 @@ const LoginScreen = props => {
             style={{
               height: 75,
               backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              borderRadius: 5,
               width: '100%',
             }}
+            rounded={'sm'}
           />
         </HStack>
         <OtpAutoFillViewManager
@@ -536,6 +535,7 @@ const LoginScreen = props => {
                   isLoadingText={strings.PhoneChangeScreen.isLoading}
                   isLoading={loadingVerify}
                   _text={{color: styleConst.color.white}}
+                  rounded={'sm'}
                   style={[styleConst.shadow.default, styles.ApproveButton]}>
                   {strings.ProfileScreen.approve}
                 </Button>
@@ -544,6 +544,7 @@ const LoginScreen = props => {
                     disabled={loadingVerify}
                     onPress={_cancelVerify}
                     size="md"
+                    rounded={'sm'}
                     style={styles.CancelButton}
                     _text={{color: styleConst.color.greyText}}>
                     {strings.Base.cancel.toLowerCase()}
@@ -560,6 +561,7 @@ const LoginScreen = props => {
                 }}
                 _text={styles.BonusInfoButtonText}
                 leftIcon={<Icon name="info" as={SimpleLineIcons} size={5} />}
+                rounded={'sm'}
                 style={styles.BonusInfoButton}>
                 {strings.Menu.main.bonus}
               </Button>
@@ -582,12 +584,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: '20%',
     justifyContent: 'center',
-  },
-  SocialLoginBt: {
-    marginVertical: 8,
-    paddingHorizontal: 8,
-    justifyContent: 'center',
-    borderRadius: 5,
   },
   PhoneWrapper: {
     flex: 1,
@@ -613,7 +609,6 @@ const styles = StyleSheet.create({
     borderColor: styleConst.color.white,
     borderWidth: 0.6,
     padding: 10,
-    borderRadius: 5,
     marginTop: 20,
   },
   ApproveButton: {
@@ -622,7 +617,6 @@ const styles = StyleSheet.create({
     marginHorizontal: '10%',
     backgroundColor: '#34BD78',
     justifyContent: 'center',
-    borderRadius: 5,
   },
   BonusInfoButton: {
     paddingTop: 10,
@@ -631,7 +625,6 @@ const styles = StyleSheet.create({
     borderColor: styleConst.color.white,
     borderWidth: 0.6,
     opacity: 0.95,
-    borderRadius: 5,
     width: '70%',
     marginVertical: 10,
     marginHorizontal: '15%',

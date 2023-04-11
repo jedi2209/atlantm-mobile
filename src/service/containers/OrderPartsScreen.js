@@ -367,7 +367,7 @@ class OrderPartsScreen extends Component {
                             size="full"
                             full
                             variant="outline"
-                            style={{borderRadius: 5}}
+                            rounded={'lg'}
                             onPress={() => {
                               this.props.navigation.navigate('About', {
                                 screen: 'LoginScreen',

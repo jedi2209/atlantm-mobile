@@ -55,20 +55,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     marginLeft: 10,
   },
-  blockLang: {
-    backgroundColor: styleConst.color.darkBg,
-  },
-  blockPush: {
-    backgroundColor: styleConst.color.blue,
-  },
-  blockFeedback: {
-    backgroundColor: styleConst.color.orange,
-    height: 100,
-  },
-  blockContactUs: {
-    backgroundColor: styleConst.color.green,
-    height: 100,
-  },
   langHeading: {
     color: styleConst.color.white,
     fontFamily: styleConst.font.medium,
@@ -89,24 +75,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 10,
     marginBottom: 0,
-  },
-  textInputProps: {
-    marginTop: 14,
-    padding: 10,
-    color: styleConst.color.white,
-    borderColor: styleConst.color.white,
-    borderWidth: 1,
-    borderRadius: 5,
-  },
-  buttonRate: {
-    height: 'auto',
-    paddingLeft: 0,
-    paddingRight: 0,
-    paddingTop: 0,
-    paddingBottom: 0,
-    margin: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   userAgreementText: {
     fontSize: 12,
@@ -182,7 +150,7 @@ const SettingsScreen = props => {
           shadow="3"
           bg={styleConst.color.blue}
           p="5"
-          rounded="8"
+          rounded={'lg'}
           style={[styleConst.shadow.default, styles.block, {width: cardWidth}]}>
           <VStack
             space={3}
@@ -243,7 +211,7 @@ const SettingsScreen = props => {
             shadow="3"
             bg={styleConst.color.orange}
             p="5"
-            rounded="8"
+            rounded={'lg'}
             style={[
               styleConst.shadow.default,
               styles.block,
@@ -290,7 +258,7 @@ const SettingsScreen = props => {
             shadow="3"
             bg={styleConst.color.green}
             p="5"
-            rounded="8"
+            rounded={'lg'}
             style={[
               styleConst.shadow.default,
               styles.block,

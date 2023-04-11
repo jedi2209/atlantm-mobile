@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
   buttonPrimary: {
     marginVertical: 10,
     marginHorizontal: 20,
-    borderRadius: 5,
     backgroundColor: styleConst.color.lightBlue,
   },
   buttonPrimaryText: {
@@ -95,14 +94,12 @@ const styles = StyleSheet.create({
   },
   bonusButtonView: {
     backgroundColor: styleConst.color.blue,
-    borderRadius: 5,
     padding: 14,
     display: 'flex',
     flexDirection: 'row',
   },
   additionalPurchaseView: {
     backgroundColor: styleConst.color.green2,
-    borderRadius: 5,
     marginTop: 10,
     padding: 14,
     display: 'flex',
@@ -245,6 +242,7 @@ const ProfileScreenInfo = props => {
     return (
       <>
         <View
+          rounded={'lg'}
           style={[
             styleConst.shadow.default,
             styles.scrollViewInner,
@@ -255,7 +253,6 @@ const ProfileScreenInfo = props => {
               marginBottom: 10,
               marginLeft: 20,
               marginRight: 20,
-              borderRadius: 5,
               justifyContent: 'center',
               alignItems: 'center',
               height: 125,
@@ -284,6 +281,7 @@ const ProfileScreenInfo = props => {
       return (
         <TouchableOpacity style={styles.bonusButtonWrapper}>
           <View
+            rounded={'lg'}
             style={[
               styleConst.shadow.default,
               styles.bonusButtonView,
@@ -379,6 +377,7 @@ const ProfileScreenInfo = props => {
           style={styles.bonusButtonWrapper}
           onPress={() => navigation.navigate('AdditionalPurchaseScreen')}>
           <View
+            rounded={'lg'}
             style={[styleConst.shadow.default, styles.additionalPurchaseView]}
             onPress={() => navigation.navigate('AdditionalPurchaseScreen')}>
             <View style={styles.additionalPurchaseButtonTextView}>
@@ -455,6 +454,7 @@ const ProfileScreenInfo = props => {
               style={styles.bonusButtonWrapper}
               onPress={() => navigation.navigate('BonusScreen')}>
               <View
+                rounded={'lg'}
                 style={[styleConst.shadow.default, styles.bonusButtonView]}
                 onPress={() => navigation.navigate('BonusScreen')}>
                 <View style={styles.bonusButtonTextView}>
@@ -561,9 +561,9 @@ const ProfileScreenInfo = props => {
                 },
               ]}>
               <View
+                rounded={'lg'}
                 style={{
                   backgroundColor: styleConst.color.blue,
-                  borderRadius: 5,
                   padding: 14,
                   display: 'flex',
                   flexDirection: 'row',
@@ -700,6 +700,7 @@ const ProfileScreenInfo = props => {
             navigation.navigate('ProfileSettingsScreen');
           }}
           _text={styles.buttonPrimaryText}
+          rounded={'lg'}
           style={[
             styleConst.shadow.default,
             styles.buttonPrimary,

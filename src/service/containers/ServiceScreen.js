@@ -337,7 +337,7 @@ class ServiceScreen extends Component {
                           </Text>
                           <Button
                             variant="outline"
-                            style={{borderRadius: 5}}
+                            rounded={'lg'}
                             onPress={() => {
                               this.props.navigation.navigate('About', {
                                 screen: 'LoginScreen',
