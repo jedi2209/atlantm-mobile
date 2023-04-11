@@ -8,12 +8,9 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  Keyboard,
   Text,
   Platform,
-  TouchableWithoutFeedback,
   ActivityIndicator,
-  StatusBar,
   Dimensions,
 } from 'react-native';
 
@@ -21,7 +18,6 @@ import {Button, Icon, Toast} from 'native-base';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import {TextInput} from '../../core/components/TextInput';
 import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
@@ -89,7 +85,6 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: styleConst.color.lightBlue,
     justifyContent: 'center',
-    borderRadius: 5,
     padding: 15,
   },
   buttonText: {
@@ -360,6 +355,7 @@ class ReestablishScreen extends React.Component {
                 active={this.disableButton ? false : true}
                 title={strings.ReestablishScreen.findMyData}
                 onPress={this.state.loading ? undefined : this.onPressLogin}
+                rounded={'sm'}
                 style={[styles.button, styleConst.shadow.default]}>
                 {this.state.loading ? (
                   <ActivityIndicator color={styleConst.color.white} />

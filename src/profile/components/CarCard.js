@@ -9,22 +9,6 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {get} from 'lodash';
 
 const styles = {
-  scrollView: {},
-  scrollViewInner: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  containerView: {
-    backgroundColor: '#fafafa',
-    marginLeft: 10,
-    marginRight: 10,
-    borderRadius: 5,
-    width: 150,
-    justifyContent: 'space-between',
-    paddingTop: 10,
-    marginBottom: 15,
-    marginTop: 15,
-  },
   textBrand: {
     color: styleConst.color.greyText4,
     fontSize: 16,
@@ -37,11 +21,6 @@ const styles = {
   textNumber: {
     color: styleConst.color.greyText2,
     fontSize: 19,
-    marginLeft: 5,
-  },
-  carIcon: {
-    color: styleConst.color.blue,
-    marginTop: 10,
     marginLeft: 5,
   },
   checkboxContainer: {
@@ -71,7 +50,7 @@ export const CarCard = ({data, type, checked, onPress, disabled}) => {
       marginX={2}
       marginY={4}
       paddingTop={4}
-      borderRadius={'lg'}
+      rounded={'md'}
       justifyContent={'space-between'}
       width={48}
       display={'flex'}

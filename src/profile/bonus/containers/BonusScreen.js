@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
     borderTopWidth: styleConst.ui.borderWidth,
     borderTopColor: styleConst.color.systemGray,
     marginHorizontal: 20,
-    borderRadius: 5,
     marginBottom: 50,
     marginTop: 30,
   },
@@ -293,6 +292,7 @@ class BonusScreen extends Component {
           <Icon name="price-ribbon" as={Entypo} style={styles.buttonIcon} />
         }
         _text={styles.buttonText}
+        rounded={'md'}
         style={[
           styleConst.shadow.default,
           styles.button,

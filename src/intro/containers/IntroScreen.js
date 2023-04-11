@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
     bottom: '10%',
     width: '80%',
     marginHorizontal: '10%',
-    borderRadius: 5,
     position: 'absolute',
   },
   buttonText: {
@@ -61,6 +60,7 @@ export default class IntroScreen extends Component {
             title={strings.IntroScreen.button}
             testID="IntroChooseDealerButton"
             onPress={this.onPressButton}
+            rounded={'md'}
             style={[styleConst.shadow.default, styles.button]}
             leftIcon={
               <Image

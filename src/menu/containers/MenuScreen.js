@@ -20,15 +20,6 @@ import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
 
 const styles = StyleSheet.create({
-  buttonPrimary: {
-    marginTop: 10,
-    marginHorizontal: 20,
-    backgroundColor: styleConst.color.white,
-    borderColor: '#2E3A59',
-    borderRadius: 5,
-    borderStyle: 'solid',
-    borderWidth: 1,
-  },
   ListItem: {
     paddingLeft: 30,
     borderColor: 'transparent',
@@ -57,11 +48,6 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 0,
     borderTopRightRadius: 80,
     borderBottomRightRadius: 80,
-  },
-  buttonPrimaryText: {
-    color: '#2E3A59',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 
@@ -283,21 +269,6 @@ const MenuScreen = props => {
           />
         ))}
       </VStack>
-      {/* <View>
-          <Button
-            size="full"
-            full
-            onPress={() => {
-              if (props.login.id) {
-                props.navigation.navigate('LoginScreen');
-              } else {
-                props.navigation.navigate('ProfileScreen');
-              }
-            }}
-            style={styles.buttonPrimary}>
-            <Text style={styles.buttonPrimaryText}>ЛИЧНЫЙ КАБИНЕТ</Text>
-          </Button>
-        </View> */}
     </View>
   );
 };

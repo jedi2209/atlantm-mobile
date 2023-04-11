@@ -233,7 +233,7 @@ const TvaResultsScreen = props => {
         </HStack>
         {successSent ? (
           <View style={{flex: 1, justifyContent: 'center'}}>
-            <View rounded={'md'} mb={'1/6'} p={3}>
+            <View rounded={'lg'} mb={'1/6'} p={3}>
               <Text
                 style={{
                   fontSize: 22,
@@ -259,7 +259,7 @@ const TvaResultsScreen = props => {
             {info.map(item => (
               <Box
                 key={'ViewTvaResult' + item.id}
-                rounded={'md'}
+                rounded={'lg'}
                 mb={8}
                 p={3}
                 style={[

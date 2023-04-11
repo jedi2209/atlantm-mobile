@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {SafeAreaView, StyleSheet, Text, ScrollView} from 'react-native';
+import {StyleSheet, Text, ScrollView} from 'react-native';
 import {Button, HStack, View} from 'native-base';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 import {Divider} from 'react-native-paper';
@@ -83,7 +83,6 @@ const modalStyles = StyleSheet.create({
   button: {
     backgroundColor: styleConst.color.lightBlue,
     justifyContent: 'center',
-    borderRadius: 5,
   },
   buttonText: {
     color: styleConst.color.white,
@@ -302,6 +301,7 @@ const CarHistoryDetailsScreen = props => {
       ) : null}
       <View py={7} px={'5%'} shadow={5}>
         <Button
+          rounded={'md'}
           style={modalStyles.button}
           _text={modalStyles.buttonText}
           onPress={() => navigation.goBack()}>

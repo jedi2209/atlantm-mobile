@@ -1340,13 +1340,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
     marginRight: 15,
   },
-  MapHeaderStyle: {
-    backgroundColor: 'rgba(0,0,0, 0.2)',
-    paddingHorizontal: 5,
-    paddingVertical: 5,
-    borderRadius: 20,
-    marginLeft: 5,
-  },
   MapHeaderIconStyle: {
     marginLeft: 5,
   },

@@ -211,7 +211,7 @@ const CarInfoScreen = props => {
           shadow={6}
           marginY={2}
           background={'gray.100'}
-          borderRadius={'lg'}>
+          rounded={'lg'}>
           <Heading mt={1}>{carName}</Heading>
           {carData.map((el, indx) => {
             return (
@@ -374,7 +374,7 @@ const CarInfoScreen = props => {
                 width={'45%'}
                 marginRight={4}
                 paddingY={2}
-                borderRadius={'lg'}
+                rounded={'lg'}
                 shadow={6}
                 alignItems={'center'}>
                 <Icon

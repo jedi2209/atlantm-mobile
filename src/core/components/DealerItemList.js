@@ -88,7 +88,7 @@ const DealerItemList = props => {
 
   return (
     <MainWrapper
-      rounded="lg"
+      rounded={'lg'}
       px="2"
       py="3"
       readonly={props.readonly}

@@ -211,7 +211,7 @@ const InfoListScreen = ({
                         }
                         _text={{fontSize: 14, color: el.badge?.color}}
                         borderColor={styleConst.color.white}
-                        rounded={6}
+                        rounded={'lg'}
                         rightIcon={
                           filterType === el.id ? (
                             <Icon
