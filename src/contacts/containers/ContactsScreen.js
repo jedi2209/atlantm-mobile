@@ -730,7 +730,7 @@ const ContactsScreen = ({
   };
 
   const onPressChat = () => {
-    navigation.navigate('ChatScreen', {prevScreen: 'Главный (автоцентр)'});
+    navigation.navigate('ChatScreen', {prevScreen: 'Экран автоцентра'});
   };
 
   const onPressMap = addressData => {

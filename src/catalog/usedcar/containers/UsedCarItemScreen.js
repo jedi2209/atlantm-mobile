@@ -1042,7 +1042,7 @@ const UsedCarItemScreen = props => {
               [
                 get(carDetails, 'brand.name'),
                 get(carDetails, 'model.name'),
-                ' #' + get(carDetails, 'id.api'),
+                '#' + get(carDetails, 'id.api'),
               ].join(' '),
             car: {
               type: 'used',

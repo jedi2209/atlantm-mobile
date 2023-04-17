@@ -38,8 +38,8 @@ switch (bundle) {
     amplitudeKey = 'XXXX';
     fbAppID = 'XXXX';
     jivoChat = {
-      chatPage: 'https://jivo.chat/bzkKHXDrBT',
-      chatID: 'bzkKHXDrBT',
+      chatPage: 'https://api.atlantm.com/v1/jivo/widget/XXXX/',
+      chatID: 'XXXX',
       secret: 'XXXX$C&F)J@NcRfUj',
     };
     break;
@@ -59,8 +59,8 @@ switch (bundle) {
     amplitudeKey = 'XXXX';
     fbAppID = 'XXXX';
     jivoChat = {
-      chatPage: 'https://jivo.chat/bzkKHXDrBT',
-      chatID: 'bzkKHXDrBT',
+      chatPage: 'https://api.atlantm.com/v1/jivo/widget/XXXX/',
+      chatID: 'XXXX',
       secret: 'XXXX$C&F)J@NcRfUj',
     };
     break;

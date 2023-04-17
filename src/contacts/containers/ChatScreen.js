@@ -12,14 +12,14 @@ import {sign} from 'react-native-pure-jwt';
 
 import PushNotifications from '../../core/components/PushNotifications';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {store} from '../../core/store';
 // import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import WebView from 'react-native-webview';
 
 import * as NavigationService from '../../navigation/NavigationService';
 
-import {actionChatIDSave} from '../actions';
+import {actionChatIDSave, saveCookies} from '../actions';
 
-import moment from 'moment';
 import {get} from 'lodash';
 import md5 from '../../utils/md5';
 import styleConst from '../../core/style-const';
@@ -39,6 +39,7 @@ const mapStateToProps = ({dealer, profile, contacts}) => {
 
 const mapDispatchToProps = {
   actionChatIDSave,
+  saveCookies,
 };
 
 let template = `<!doctype html>
@@ -47,9 +48,6 @@ let template = `<!doctype html>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
         <title>Чат</title>
-        <script>
-          window.jivo_chat_page = true;
-        </script>
         <script src="https://code.jivo.ru/widget/${JIVO_CHAT.chatID}" async></script>
         <script>
           ##JScontent##
@@ -65,6 +63,7 @@ const ChatScreen = ({
   minHeight,
   profile,
   session,
+  saveCookies,
 }) => {
   const [data, setData] = useState(null);
   const mainRef = useRef(null);
@@ -73,6 +72,7 @@ const ChatScreen = ({
   const [pageInfo, setPageInfo] = useState('');
   const [userToken, setUserToken] = useState('');
   const [senderID, setSenderID] = useState(null);
+  const [cookies, setCookies] = useState('');
 
   const userTmp = {
     id: session,
@@ -107,13 +107,10 @@ const ChatScreen = ({
           typ: 'JWT',
         },
       )
-        .then(token => setUserToken(`jivo_api.setUserToken('${token}');`))
+        .then(token => setUserToken(token))
         .catch(message => console.error('JWT chat token sign error', message)); // possible errors
     }
-
-    if (route?.params?.prevScreen) {
-      setPageInfo(`jivo_api.sendPageTitle('${route?.params?.prevScreen}');`);
-    }
+    loadCookies();
   }, []);
 
   useEffect(() => {
@@ -122,60 +119,119 @@ const ChatScreen = ({
   }, [route?.params?.uri]);
 
   useEffect(() => {
-    console.info('useEffect profile?.login');
+    const userID = get(profile, 'login.ID', '');
+    const ebdk = get(profile, 'login.SAP.ID', '');
+    const pageName = get(route, 'params.prevScreen', '');
+    const urlJivo =
+      JIVO_CHAT.chatPage +
+      '?' +
+      new URLSearchParams({
+        userID,
+        ebdk,
+        userToken,
+        utm_source: 'mobile',
+        utm_campaign: 'chat',
+        pageName,
+      });
+    console.info('urlJivo', urlJivo);
+    setData({uri: urlJivo});
+  }, [profile, route, userToken]);
 
-    let carLink = '';
-    if (route.params?.car) {
-      carLink = `, "link": "${route.params?.car?.link}"`;
+  // useEffect(() => {
+  //   console.info('useEffect profile?.login');
+
+  //   let carLink = '';
+  //   if (route.params?.car) {
+  //     carLink = `, "link": "${route.params?.car?.link}"`;
+  //   }
+
+  //   if (profile?.login) {
+  //     setUserData(`
+  //       jivo_api.setContactInfo({
+  //         name: "${userTmp.name}",
+  //         email: "${userTmp.email}",
+  //         phone: "${userTmp.phone}",
+  //         description: ""
+  //       });`);
+
+  //     setUserCustomData(`jivo_api.setCustomData([
+  //         {
+  //           "key": "ЕБДК ID",
+  //           "content": "${profile?.login?.SAP.ID}"
+  //         },
+  //         {
+  //           "key": "Экран",
+  //           "content": "${route?.params?.prevScreen}"${carLink}
+  //         },
+  //         {
+  //           "title": "Действия",
+  //           "content": "Посмотреть контакт в CRM",
+  //           "link": "https://bitrix.atlantm.com/crm/contact/details/${profile?.login.ID}/"
+  //         }
+  //       ]);`);
+  //   } else {
+  //     setUserCustomData(`jivo_api.setCustomData([
+  //         {
+  //           "key": "Экран",
+  //           "content": "${route?.params?.prevScreen}"${carLink}
+  //         }
+  //       ]);`);
+  //   }
+  // }, [profile?.login]);
+
+  // useEffect(() => {
+  //   console.info('useEffect userData, userCustomData, pageInfo, userToken');
+  //   const jsOnloadCallback = `
+  //     function jivo_onLoadCallback() {
+  //       ${userData}
+  //       ${userCustomData}
+  //       ${pageInfo}
+  //       ${userToken}
+  //       jivo_api.open({start: 'chat'});
+  //     }`;
+  //   const html = template.replace('##JScontent##', jsOnloadCallback);
+  //   setData({html});
+  // }, [userData, userCustomData, pageInfo, userToken]);
+
+  const loadCookies = async () => {
+    const cookie = await get(store.getState(), 'contacts.chat.cookies');
+    if (cookie) {
+      setCookies(cookie);
     }
+  };
 
-    if (profile?.login) {
-      setUserData(`
-        jivo_api.setContactInfo({
-          name: "${userTmp.name}",
-          email: "${userTmp.email}",
-          phone: "${userTmp.phone}",
-          description: ""
-        });`);
-
-      setUserCustomData(`jivo_api.setCustomData([
-          {
-            "key": "ЕБДК ID",
-            "content": "${profile?.login?.SAP.ID}"
-          },
-          {
-            "key": "Экран",
-            "content": "${route?.params?.prevScreen}"${carLink}
-          },
-          {
-            "title": "Действия",
-            "content": "Посмотреть контакт в CRM",
-            "link": "https://bitrix.atlantm.com/crm/contact/details/${profile?.login.ID}/"
-          }
-        ]);`);
-    } else {
-      setUserCustomData(`jivo_api.setCustomData([
-          {
-            "key": "Экран",
-            "content": "${route?.params?.prevScreen}"${carLink}
-          }
-        ]);`);
+  const handleCookies = event => {
+    if (!event.nativeEvent?.data) {
+      return;
     }
-  }, [profile?.login]);
-
-  useEffect(() => {
-    console.info('useEffect userData, userCustomData, pageInfo, userToken');
-    const jsOnloadCallback = `
-      function jivo_onLoadCallback() {
-        ${userData}
-        ${userCustomData}
-        ${pageInfo}
-        ${userToken}
-      }`;
-    const html = template.replace('##JScontent##', jsOnloadCallback);
-    console.info('html', html);
-    setData({html});
-  }, [userData, userCustomData, pageInfo, userToken]);
+    const data = JSON.parse(event.nativeEvent.data);
+    if (typeof data.type === 'undefined') {
+      return;
+    }
+    switch (data.type) {
+      case 'cookieData':
+        const cookiesArray = data.data.split(';');
+        const cookiesToSave = cookiesArray.reduce((acc, cookie) => {
+          const [name, value] = cookie.split('=');
+          if (!name || !value || value === 'undefined') {
+            return false;
+          }
+          acc += `${name}=${value};`;
+          return acc;
+        }, '');
+        if (cookiesToSave) {
+          saveCookies(cookiesToSave);
+          setCookies(cookiesToSave);
+        }
+        break;
+      case 'action':
+        if (data.data === 'close') {
+          NavigationService.goBack();
+        }
+        break;
+    }
+    return;
+  };
 
   const getUserID = userID => {
     let senderID = md5(JSON.stringify(userID));
@@ -209,9 +265,12 @@ const ChatScreen = ({
             key={'session_' + session}
             source={data}
             thirdPartyCookiesEnabled={true}
-            sharedCookiesEnabled={true}
             allowsLinkPreview={true}
             startInLoadingState={true}
+            onMessage={handleCookies}
+            injectedJavaScript="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'cookieData', data: document.cookie}))"
+            sharedCookiesEnabled={true}
+            javaScriptEnabled={true}
             renderLoading={() => (
               <View flex={1} alignContent={'center'} justifyContent={'center'}>
                 <ActivityIndicator
