@@ -15,7 +15,7 @@ $RNFirebaseAsStaticFramework = true
 #   dependencies: {
 #     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
 # ```
-flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled(["Debug", "Release"], {'Flipper' => '0.189.0'})
+flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled(["Debug"], {'Flipper' => '0.189.0'})
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
