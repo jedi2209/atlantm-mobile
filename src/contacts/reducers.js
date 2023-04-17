@@ -7,9 +7,9 @@ import {
   CONTACTS_MAP_AVAILABLE_NAVIAPPS__SET,
   CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__REQUEST,
   CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__DONE,
-
   CONTACTS_CHAT_SEND__SUCCESS,
   CONTACTS_CHAT_SEND__FAIL,
+  CONTACTS_CHAT_SAVE__COOKIE,
 } from './actionTypes';
 import {LOGOUT} from '../profile/actionTypes';
 
@@ -64,6 +64,17 @@ const chatID = (state = null, action) => {
   }
 };
 
+const chatCookies = (state = '', action) => {
+  switch (action.type) {
+    case CONTACTS_CHAT_SAVE__COOKIE:
+      return action.payload.cookiesData;
+    case REHYDRATE:
+      return get(action.payload, 'contacts.chat.cookies', '');
+    default:
+      return state;
+  }
+};
+
 export default combineReducers({
   isСallMeRequest,
   map: combineReducers({
@@ -72,5 +83,6 @@ export default combineReducers({
   }),
   chat: combineReducers({
     id: chatID,
+    cookies: chatCookies,
   }),
 });

@@ -11,6 +11,7 @@ import {
   CONTACTS_CHAT_SEND__REQUEST,
   CONTACTS_CHAT_SEND__FAIL,
   CONTACTS_CHAT_SEND__SUCCESS,
+  CONTACTS_CHAT_SAVE__COOKIE,
 } from './actionTypes';
 
 export const callMe = props => {
@@ -77,40 +78,22 @@ export const actionSetAvailableNaviApps = availableNaviApps => {
 
 export const actionChatIDSave = senderID => {
   return dispatch => {
-    // dispatch({
-    //   type: CALL_ME__REQUEST,
-    //   payload: {...props},
-    // });
-    // return API.chatSendMessage(props)
-    //   .then(res => {
-    //     const {error, status} = res;
-    //     if (status !== 'success') {
-    //       return dispatch({
-    //         type: CONTACTS_CHAT_SEND__FAIL,
-    //         payload: {
-    //           code: error.code,
-    //           error: error.message,
-    //         },
-    //       });
-    //     }
-
     return dispatch({
       type: CONTACTS_CHAT_SEND__SUCCESS,
       payload: {
         session: senderID,
       },
     });
-    // })
-    // .catch(error => {
-    //   Sentry.captureException(error);
-    //   Sentry.captureMessage('chatSendMessage API.chatSendMessage error');
-    //   return dispatch({
-    //     type: CONTACTS_CHAT_SEND__FAIL,
-    //     payload: {
-    //       error: error.message,
-    //       code: error.code,
-    //     },
-    //   });
-    // });
+  };
+};
+
+export const saveCookies = cookiesData => {
+  return dispatch => {
+    return dispatch({
+      type: CONTACTS_CHAT_SAVE__COOKIE,
+      payload: {
+        cookiesData,
+      },
+    });
   };
 };
