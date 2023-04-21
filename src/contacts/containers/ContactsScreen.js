@@ -538,8 +538,8 @@ const ContactsScreen = ({
             onPress={onPressCallMe}
           />
           <Plate
-            title="Чат"
-            subtitle="Отвечаем с 9 до 20"
+            title={strings.ContactsScreen.chat.title}
+            subtitle={strings.ContactsScreen.chat.subTitle}
             type="orange"
             status={chatAvailable ? 'enabled' : 'disabled'}
             onPress={onPressChat}
