@@ -114,7 +114,6 @@ const ChatScreen = ({
   }, []);
 
   useEffect(() => {
-    console.info('useEffect route?.params?.uri');
     setData({uri: route.params.uri});
   }, [route?.params?.uri]);
 
@@ -133,7 +132,6 @@ const ChatScreen = ({
         utm_campaign: 'chat',
         pageName,
       });
-    console.info('urlJivo', urlJivo);
     setData({uri: urlJivo});
   }, [profile, route, userToken]);
 
@@ -256,9 +254,8 @@ const ChatScreen = ({
         flex={1}>
         <KeyboardAvoidingView
           ref={mainRef}
-          // behavior={isAndroid ? 'padding' : 'position'}
-          // behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}
           behavior={'padding'}
+          enabled={!isAndroid}
           style={[styles.mainView, route.params?.mainScrollViewStyle]}>
           <WebView
             style={[styles.webView, route.params?.webViewStyle]}
@@ -283,7 +280,7 @@ const ChatScreen = ({
               route.params?.minHeight
                 ? route.params?.minHeight
                 : isAndroid
-                ? deviceHeight - 80
+                ? 'auto'
                 : deviceHeight - 170
             }
           />
@@ -322,7 +319,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     flex: 1,
     paddingBottom: isAndroid ? 5 : 25,
-    backgroundColor: styleConst.color.white,
+    backgroundColor: styleConst.color.blue,
   },
   webView: {
     backgroundColor: styleConst.color.white,
