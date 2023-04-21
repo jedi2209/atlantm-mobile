@@ -51,20 +51,14 @@ const FullScreenGallery = ({
   }
 
   useEffect(() => {
-    // Orientation.lockToLandscapeLeft();
     Orientation.unlockAllOrientations();
-    // setTimeout(() => {
-    //   setLoading(false);
-    // }, 2000);
-  });
+  }, []);
 
   useOrientationChange(o => {
     setLoading(true);
-    //if (o === 'LANDSCAPE-LEFT') {
     setTimeout(() => {
       setLoading(false);
     }, 1000);
-    //}
   });
 
   if (loading) {

@@ -7,6 +7,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
+import org.wonday.orientation.OrientationActivityLifecycle;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
 
@@ -58,5 +59,6 @@ public class MainApplication extends Application implements ReactApplication {
       DefaultNewArchitectureEntryPoint.load();
     }
     ReactNativeFlipper.initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+    registerActivityLifecycleCallbacks(OrientationActivityLifecycle.getInstance());
   }
 }
