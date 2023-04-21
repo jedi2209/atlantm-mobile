@@ -376,6 +376,10 @@ export default {
       yes: 'Да',
       no: 'Нет',
     },
+    emergencyManager: {
+      title: 'Аварийный менеджер Атлант-М',
+      subTitle: 'комплексная помощь при ДТП 24/7',
+    },
     timework: 'часы работы',
     timework2: 'Время работы',
     navigate: 'Построить маршрут',

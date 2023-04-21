@@ -19,7 +19,6 @@ import {
   useToast,
   VStack,
   Image,
-  Heading,
 } from 'native-base';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -228,50 +227,51 @@ const _renderEmergencyManager = ({emergencyManagerInfo, navigation}) => {
       onPress={() => {
         navigation.navigate('WebviewScreen', {html: emergencyManagerInfo});
       }}>
-      <View
+      <HStack
         w={'90%'}
         h={'24'}
-        backgroundColor={styleConst.color.blue}
+        backgroundColor={styleConst.color.white}
         shadow={6}
         zIndex={1000}
         rounded={'lg'}
         marginX={'5%'}
         marginTop={'5%'}>
-        {/* <Heading
-          alignSelf={'center'}
-          size={'lg'}
-          style={{
-            position: 'absolute',
-            color: styleConst.color.white,
-            textTransform: 'uppercase',
-            bottom: 1,
-            zIndex: 10,
-            fontFamily: styleConst.font.regular,
-          }}>
-          Аварийный менеджер
-        </Heading>
-        <View
-          rounded={'lg'}
-          style={{
-            backgroundColor: '#000',
-            width: '100%',
-            height: '35%',
-            bottom: 0,
-            position: 'absolute',
-            zIndex: 1,
-            opacity: 0.6,
-            borderTopLeftRadius: 0,
-            borderTopRightRadius: 0,
-          }}
-        /> */}
         <Image
           key={'Imager-emergencyManager'}
           source={require('../../../assets/emergency_manager.jpg')}
+          alt="emergency_manager"
           resizeMode="cover"
-          size={'100%'}
+          width={'50%'}
+          height={'100%'}
           rounded={'lg'}
+          roundedTopRight={0}
+          roundedBottomRight={0}
         />
-      </View>
+        <View w={'50%'} paddingLeft={2} paddingTop={1}>
+          <Text
+            color={styleConst.color.blueNew}
+            fontFamily={styleConst.font.brand}
+            lineHeight={18}>
+            {strings.ContactsScreen.emergencyManager.title}
+          </Text>
+          <Text
+            color={styleConst.color.blueNew}
+            fontFamily={styleConst.font.brand}
+            marginTop={1}
+            fontSize={9}>
+            {strings.ContactsScreen.emergencyManager.subTitle}
+          </Text>
+          <Image
+            source={require('../../menu/assets/logo-sm.svg')}
+            maxWidth={9}
+            height={5}
+            position={'absolute'}
+            bottom={1}
+            right={4}
+            alt="small-logo"
+          />
+        </View>
+      </HStack>
     </RNBounceable>
   );
 };

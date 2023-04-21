@@ -4,6 +4,7 @@ import {verticalScale} from '../utils/scale';
 export default {
   color: {
     blue: '#0061ED',
+    blueNew: '#013da7',
     lightBlue: '#027aff',
     green: '#34BD78',
     green2: '#4cd864',
@@ -64,6 +65,7 @@ export default {
     regular: 'Helvetica Neue',
     medium: 'HelveticaNeue-Medium',
     light: 'HelveticaNeue-Light',
+    brand: 'Montserrat',
   },
   ui: {
     // хак чтобы в новой версии native-base футер прижимался к низу
