@@ -119,6 +119,7 @@ class IndicatorsScreen extends Component {
             {items.map(indicator => {
               return (
                 <Popover
+                  key={'popover-indicator-' + indicator.id}
                   trigger={triggerProps => {
                     return (
                       <IconButton
