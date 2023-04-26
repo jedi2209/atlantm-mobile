@@ -18,6 +18,7 @@ import {strings} from '../../../core/lang/const';
 import {get} from 'lodash';
 
 import styleConst from '../../../core/style-const';
+import LogoLoader from '../../../core/components/LogoLoader';
 
 const theme = {
   ...DefaultTheme,
@@ -337,14 +338,7 @@ const AdditionalPurchaseScreen = ({
           </Box>
         ) : null}
         <ScrollView pb={7} mt={allDataFilter.length > 1 ? 16 : 2}>
-          {isLoading ? (
-            <ActivityIndicator
-              color={styleConst.color.blue}
-              style={styleConst.spinner}
-            />
-          ) : (
-            renderTab(activeTab)
-          )}
+          {isLoading ? <LogoLoader mode={'relative'} /> : renderTab(activeTab)}
         </ScrollView>
       </View>
     </PaperProvider>

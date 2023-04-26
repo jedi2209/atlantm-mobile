@@ -13,6 +13,7 @@ import {
 import CarList from '../../components/CarList';
 import {Icon, Fab} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import LogoLoader from '../../../core/components/LogoLoader';
 
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
@@ -101,10 +102,7 @@ const NewCarListScreen = ({
     <View style={styles.content} testID="NewCarsListSreen.Wrapper">
       <StatusBar hidden />
       {loading ? (
-        <ActivityIndicator
-          color={styleConst.color.blue}
-          style={styleConst.spinner}
-        />
+        <LogoLoader />
       ) : (
         <>
           <CarList

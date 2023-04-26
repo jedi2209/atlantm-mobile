@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import {actionFetchBonusInfo} from '../../actions';
 
 // components
-import SpinnerView from '../../../core/components/SpinnerView';
+import LogoLoader from '../../../core/components/LogoLoader';
 import WebViewAutoHeight from '../../../core/components/WebViewAutoHeight';
 
 // helpers
@@ -80,7 +80,7 @@ class BonusInfoScreen extends Component {
     let {bonusInfo, isFetchBonusInfo} = this.props;
 
     if (isFetchBonusInfo) {
-      return <SpinnerView style={styles.spinner} />;
+      return <LogoLoader />;
     }
 
     return (
@@ -90,7 +90,7 @@ class BonusInfoScreen extends Component {
             <WebViewAutoHeight source={{html: bonusInfo}} />
           </View>
         ) : (
-          <SpinnerView />
+          <LogoLoader />
         )}
       </ScrollView>
     );

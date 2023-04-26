@@ -37,6 +37,7 @@ import PhotoSlider from '../../../core/components/PhotoSlider';
 import PhotoViewer from '../../../core/components/PhotoViewer';
 import ColorBox from '../../../core/components/ColorBox';
 import Badge from '../../../core/components/Badge';
+import LogoLoader from '../../../core/components/LogoLoader';
 
 // helpers
 import {get} from 'lodash';
@@ -674,14 +675,7 @@ const NewCarItemScreen = ({
   }, []);
 
   if (!carDetails || isLoading) {
-    return (
-      <View style={styles.spinnerContainer}>
-        <ActivityIndicator
-          color={styleConst.color.blue}
-          style={styleConst.spinner}
-        />
-      </View>
-    );
+    return <LogoLoader />;
   }
 
   const priceFooterContainer = _renderPriceFooter({

@@ -131,6 +131,7 @@ const styles = StyleSheet.create({
 import {verticalScale} from '../../utils/scale';
 import {get} from 'lodash';
 import {dayMonthYear} from '../../utils/date';
+import LogoLoader from '../../core/components/LogoLoader';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
@@ -651,18 +652,7 @@ const ProfileScreenInfo = props => {
   };
 
   if (loading) {
-    return (
-      <View style={{flex: 1}}>
-        <ActivityIndicator
-          color={styleConst.color.blue}
-          size="large"
-          style={{
-            alignSelf: 'center',
-            marginTop: verticalScale(60),
-          }}
-        />
-      </View>
-    );
+    return <LogoLoader />;
   }
 
   return (
