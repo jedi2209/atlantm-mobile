@@ -196,6 +196,7 @@ const AdditionalPurchaseScreen = ({
                   }
                   onPress={() => expand(key)}
                   onLongPress={() => expand(key)}
+                  key={key}
                   id={key}>
                   {row.data.map(valData => {
                     const price = get(valData, 'price.base');

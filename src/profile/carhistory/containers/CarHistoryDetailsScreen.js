@@ -127,8 +127,8 @@ const CarHistoryDetailsScreen = props => {
 
   const _renderTable = ({name, count, units, summ}, idx) => {
     return (
-      <>
-        <View key={`${name}${idx}`} style={styles.section}>
+      <View key={`${name}${idx}`}>
+        <View style={styles.section}>
           {name ? <Text style={styles.sectionTitle}>{name}</Text> : null}
           {count
             ? _renderItem({
@@ -180,7 +180,7 @@ const CarHistoryDetailsScreen = props => {
             : null}
         </View>
         <Divider />
-      </>
+      </View>
     );
   };
 

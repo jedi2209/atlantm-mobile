@@ -219,14 +219,6 @@ const ChatScreen = ({
             injectedJavaScript="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'cookieData', data: document.cookie}))"
             sharedCookiesEnabled={true}
             javaScriptEnabled={true}
-            // renderLoading={() => (
-            //   <View flex={1} alignContent={'center'} justifyContent={'center'}>
-            //     <ActivityIndicator
-            //       color={styleConst.color.blue}
-            //       style={styleConst.spinner}
-            //     />
-            //   </View>
-            // )}
             minHeight={
               route.params?.minHeight
                 ? route.params?.minHeight
@@ -263,7 +255,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     flex: 1,
     paddingBottom: isAndroid ? 5 : 25,
-    backgroundColor: styleConst.color.blue,
+    backgroundColor: styleConst.color.white,
   },
   webView: {
     backgroundColor: styleConst.color.white,
