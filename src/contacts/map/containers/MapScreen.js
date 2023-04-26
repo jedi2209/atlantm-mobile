@@ -38,6 +38,7 @@ import {verticalScale} from '../../../utils/scale';
 import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
 import {APP_REGION, RUSSIA, BELARUSSIA, UKRAINE} from '../../../core/const';
+import LogoLoader from '../../../core/components/LogoLoader';
 
 enableLatestRenderer();
 
@@ -366,11 +367,7 @@ class MapScreen extends Component {
     console.info('== MapScreen == ');
 
     return this.state.loading ? (
-      <ActivityIndicator
-        size="large"
-        color={styleConst.color.blue}
-        style={[styleConst.spinner, styles.spinner]}
-      />
+      <LogoLoader />
     ) : (
       <SafeAreaView
         style={[

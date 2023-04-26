@@ -34,6 +34,7 @@ import {actionFetchUsedCarDetails} from '../../actions';
 import PhotoSlider from '../../../core/components/PhotoSlider';
 import ReadMore from 'react-native-read-more-text';
 import Badge from '../../../core/components/Badge';
+import LogoLoader from '../../../core/components/LogoLoader';
 
 // helpers
 import {get} from 'lodash';
@@ -361,10 +362,7 @@ const UsedCarItemScreen = props => {
   if (!carDetails || isFetchingCarDetails) {
     return (
       <SafeAreaView style={styles.spinnerContainer}>
-        <ActivityIndicator
-          color={styleConst.color.blue}
-          style={styleConst.spinner}
-        />
+        <LogoLoader />
       </SafeAreaView>
     );
   }

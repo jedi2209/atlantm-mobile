@@ -4,7 +4,7 @@ import {FlatList, View, StyleSheet} from 'react-native';
 // components
 import Review from './Review';
 import EmptyMessage from '../../../core/components/EmptyMessage';
-import SpinnerView from '../../../core/components/SpinnerView';
+import LogoLoader from '../../../core/components/LogoLoader';
 import FlatListFooter from '../../../core/components/FlatListFooter';
 
 // helpers
@@ -61,7 +61,7 @@ export default class ReviewsList extends Component {
     const {isFetchItems} = this.props;
 
     return isFetchItems ? (
-      <SpinnerView />
+      <LogoLoader mode={'relative'} />
     ) : (
       <EmptyMessage text={strings.EkoScreen.empty.text} />
     );

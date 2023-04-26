@@ -37,6 +37,7 @@ import {strings} from '../../core/lang/const';
 // components
 import PushNotifications from '../../core/components/PushNotifications';
 import style from '../../core/components/Footer/style';
+import LogoLoader from '../../core/components/LogoLoader';
 
 const styles = StyleSheet.create({
   container: {
@@ -167,9 +168,10 @@ const InfoListScreen = ({
   const renderEmptyComponent = () => {
     return isFetchInfoList ? (
       <View style={styles.spinnerContainer}>
-        <ActivityIndicator
-          color={styleConst.color.blue}
-          style={styles.spinner}
+        <LogoLoader
+          style={{
+            position: 'relative',
+          }}
         />
       </View>
     ) : (

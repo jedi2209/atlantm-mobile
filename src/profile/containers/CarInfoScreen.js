@@ -34,6 +34,7 @@ import {verticalScale} from '../../utils/scale';
 import orderFunctions from '../../utils/orders';
 
 import {actionToggleCar} from '../actions';
+import LogoLoader from '../../core/components/LogoLoader';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
@@ -167,16 +168,7 @@ const CarInfoScreen = props => {
   }, [carType]);
 
   if (loading) {
-    return (
-      <ActivityIndicator
-        color={styleConst.color.blue}
-        style={{
-          alignSelf: 'center',
-          marginTop: verticalScale(56),
-          marginBottom: verticalScale(55),
-        }}
-      />
-    );
+    return <LogoLoader />;
   }
 
   return (

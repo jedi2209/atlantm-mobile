@@ -23,7 +23,7 @@ import {connect} from 'react-redux';
 import {actionSetActiveIndicator, actionFetchIndicators} from '../actions';
 
 // components
-import SpinnerView from '../../core/components/SpinnerView';
+import LogoLoader from '../../core/components/LogoLoader';
 import EmptyMessage from '../../core/components/EmptyMessage';
 // import IndicatorsRow from '../components/_old_IndicatorsRow';
 
@@ -92,9 +92,7 @@ class IndicatorsScreen extends Component {
     const {items, activeItem, isRequest} = this.props;
 
     if (isRequest) {
-      return (
-        <SpinnerView containerStyle={{backgroundColor: styleConst.color.bg}} />
-      );
+      return <LogoLoader />;
     }
 
     if (items.length === 0) {

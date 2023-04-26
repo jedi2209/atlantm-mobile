@@ -39,7 +39,7 @@ import {
   // actionSetCarHistoryLevel2,
 } from '../../actions';
 
-import SpinnerView from '../../../core/components/SpinnerView';
+import LogoLoader from '../../../core/components/LogoLoader';
 
 // styles
 import stylesList from '../../../core/components/Lists/style';
@@ -283,14 +283,7 @@ const CarHistoryScreen = ({
   };
 
   if (isLoading) {
-    return (
-      <View style={{flex: 1}}>
-        <ActivityIndicator
-          color={styleConst.color.blue}
-          style={styleConst.spinner}
-        />
-      </View>
-    );
+    return <LogoLoader />;
   }
 
   if (isEmpty(carHistory) || !carHistory.items) {

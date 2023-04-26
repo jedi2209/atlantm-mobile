@@ -13,6 +13,7 @@ import {
 // components
 import EmptyMessage from '../../core/components/EmptyMessage';
 import CarListItem from './CarListItem';
+import LogoLoader from '../../core/components/LogoLoader';
 
 // helpers
 import styleConst from '../../core/style-const';
@@ -48,10 +49,7 @@ const CarList = props => {
 
   const _renderEmptyComponent = () =>
     isFetchItems ? (
-      <ActivityIndicator
-        color={styleConst.color.blue}
-        style={styleConst.spinner}
-      />
+      <LogoLoader />
     ) : (
       <EmptyMessage text={strings.CarList.emptyMessage} />
     );
@@ -79,15 +77,7 @@ const CarList = props => {
       return null;
     }
 
-    return (
-      <View style={styles.footer}>
-        <ActivityIndicator
-          animating
-          size="large"
-          color={styleConst.color.blue}
-        />
-      </View>
-    );
+    return <LogoLoader />;
   };
 
   const _onRefresh = () => {

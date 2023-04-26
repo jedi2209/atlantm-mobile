@@ -11,7 +11,7 @@ import {CAR_HISTORY_DETAILS__FAIL} from '../../actionTypes';
 import {actionFetchCarHistoryDetails} from '../../actions';
 
 // components
-import SpinnerView from '../../../core/components/SpinnerView';
+import LogoLoader from '../../../core/components/LogoLoader';
 
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
@@ -280,9 +280,7 @@ const CarHistoryDetailsScreen = props => {
   }
 
   if (isFetchCarHistoryDetails) {
-    return (
-      <SpinnerView containerStyle={{backgroundColor: styleConst.color.white}} />
-    );
+    return <LogoLoader />;
   }
 
   console.info('== CarHistoryDetails ==');

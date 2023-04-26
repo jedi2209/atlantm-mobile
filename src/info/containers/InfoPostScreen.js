@@ -31,6 +31,7 @@ import {dayMonth, dayMonthYear} from '../../utils/date';
 import {strings} from '../../core/lang/const';
 
 import {TransparentBack} from '../../navigation/const';
+import LogoLoader from '../../core/components/LogoLoader';
 
 // image
 const {width: screenWidth} = Dimensions.get('window');
@@ -288,9 +289,11 @@ const InfoPostScreen = ({
     <View style={{flex: 1}} backgroundColor={'white'}>
       <ScrollView style={{margin: 0, padding: 0, flex: 1}}>
         {!text || isLoading ? (
-          <ActivityIndicator
-            color={styleConst.color.blue}
-            style={styles.spinner}
+          <LogoLoader
+            style={{
+              height: Dimensions.get('window').height - 100,
+              position: 'relative',
+            }}
           />
         ) : (
           <View style={{flex: 1}}>

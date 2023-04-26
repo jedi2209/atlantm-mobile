@@ -13,6 +13,7 @@ import {
 
 // components
 import CarList from '../../components/CarList';
+import LogoLoader from '../../../core/components/LogoLoader';
 
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
@@ -102,10 +103,7 @@ const UsedCarListScreen = ({
     <View style={styles.content} testID="UserCarListSreen.Wrapper">
       <StatusBar hidden />
       {loading ? (
-        <ActivityIndicator
-          color={styleConst.color.blue}
-          style={styleConst.spinner}
-        />
+        <LogoLoader />
       ) : (
         <>
           <CarList

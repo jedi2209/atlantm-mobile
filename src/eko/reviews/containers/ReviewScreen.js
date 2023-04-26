@@ -10,7 +10,7 @@ import {actionFetchDealerRating} from '../../actions';
 import Review from '../components/Review';
 import ReviewDealerAnswer from '../components/ReviewDealerAnswer';
 import HeaderSubtitle from '../../../core/components/HeaderSubtitle';
-import SpinnerView from '../../../core/components/SpinnerView';
+import LogoLoader from '../../../core/components/LogoLoader';
 
 // helpers
 import {get} from 'lodash';
@@ -70,7 +70,7 @@ class ReviewScreen extends Component {
     console.info('== ReviewScreen ==');
 
     if (isFetchDealerRating) {
-      return <SpinnerView />;
+      return <LogoLoader />;
     }
 
     const subtitle = [

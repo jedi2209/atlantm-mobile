@@ -9,12 +9,14 @@ import {
 import {Button, View} from 'native-base';
 import {connect} from 'react-redux';
 import {sign} from 'react-native-pure-jwt';
+import {FadeIn, FadeOut, Transitioning} from 'react-native-reanimated';
 
 import PushNotifications from '../../core/components/PushNotifications';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {store} from '../../core/store';
 // import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import WebView from 'react-native-webview';
+import LogoLoader from '../../core/components/LogoLoader';
 
 import * as NavigationService from '../../navigation/NavigationService';
 
@@ -74,6 +76,8 @@ const ChatScreen = ({
   const [senderID, setSenderID] = useState(null);
   const [cookies, setCookies] = useState('');
 
+  //const LogoLoaderAnimated = Animated.createAnimatedComponent(LogoLoader);
+
   const userTmp = {
     id: session,
     name: [
@@ -93,22 +97,10 @@ const ChatScreen = ({
         let senderIDNew = getUserID(res.userId);
         setSenderID(senderIDNew);
         actionChatIDSave(senderIDNew);
-        userID = senderIDNew;
+        makeUserToken(senderIDNew);
       });
-    }
-    if (userID && userID !== null && userID !== undefined) {
-      sign(
-        {
-          id: userID,
-        }, // body
-        JIVO_CHAT.secret, // secret
-        {
-          alg: 'HS256',
-          typ: 'JWT',
-        },
-      )
-        .then(token => setUserToken(token))
-        .catch(message => console.error('JWT chat token sign error', message)); // possible errors
+    } else {
+      makeUserToken(userID);
     }
     loadCookies();
   }, []);
@@ -134,62 +126,6 @@ const ChatScreen = ({
       });
     setData({uri: urlJivo});
   }, [profile, route, userToken]);
-
-  // useEffect(() => {
-  //   console.info('useEffect profile?.login');
-
-  //   let carLink = '';
-  //   if (route.params?.car) {
-  //     carLink = `, "link": "${route.params?.car?.link}"`;
-  //   }
-
-  //   if (profile?.login) {
-  //     setUserData(`
-  //       jivo_api.setContactInfo({
-  //         name: "${userTmp.name}",
-  //         email: "${userTmp.email}",
-  //         phone: "${userTmp.phone}",
-  //         description: ""
-  //       });`);
-
-  //     setUserCustomData(`jivo_api.setCustomData([
-  //         {
-  //           "key": "ЕБДК ID",
-  //           "content": "${profile?.login?.SAP.ID}"
-  //         },
-  //         {
-  //           "key": "Экран",
-  //           "content": "${route?.params?.prevScreen}"${carLink}
-  //         },
-  //         {
-  //           "title": "Действия",
-  //           "content": "Посмотреть контакт в CRM",
-  //           "link": "https://bitrix.atlantm.com/crm/contact/details/${profile?.login.ID}/"
-  //         }
-  //       ]);`);
-  //   } else {
-  //     setUserCustomData(`jivo_api.setCustomData([
-  //         {
-  //           "key": "Экран",
-  //           "content": "${route?.params?.prevScreen}"${carLink}
-  //         }
-  //       ]);`);
-  //   }
-  // }, [profile?.login]);
-
-  // useEffect(() => {
-  //   console.info('useEffect userData, userCustomData, pageInfo, userToken');
-  //   const jsOnloadCallback = `
-  //     function jivo_onLoadCallback() {
-  //       ${userData}
-  //       ${userCustomData}
-  //       ${pageInfo}
-  //       ${userToken}
-  //       jivo_api.open({start: 'chat'});
-  //     }`;
-  //   const html = template.replace('##JScontent##', jsOnloadCallback);
-  //   setData({html});
-  // }, [userData, userCustomData, pageInfo, userToken]);
 
   const loadCookies = async () => {
     const cookie = await get(store.getState(), 'contacts.chat.cookies');
@@ -218,8 +154,8 @@ const ChatScreen = ({
           return acc;
         }, '');
         if (cookiesToSave) {
-          saveCookies(cookiesToSave);
-          setCookies(cookiesToSave);
+          saveCookies(cookiesToSave); // save cookies to ActiveStorage
+          setCookies(cookiesToSave); // set cookies to WebView
         }
         break;
       case 'action':
@@ -229,6 +165,21 @@ const ChatScreen = ({
         break;
     }
     return;
+  };
+
+  const makeUserToken = userID => {
+    sign(
+      {
+        id: userID,
+      }, // body
+      JIVO_CHAT.secret, // secret
+      {
+        alg: 'HS256',
+        typ: 'JWT',
+      },
+    )
+      .then(token => setUserToken(token))
+      .catch(message => console.error('JWT chat token sign error', message)); // possible errors
   };
 
   const getUserID = userID => {
@@ -263,19 +214,19 @@ const ChatScreen = ({
             source={data}
             thirdPartyCookiesEnabled={true}
             allowsLinkPreview={true}
-            startInLoadingState={true}
+            startInLoadingState={false}
             onMessage={handleCookies}
             injectedJavaScript="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'cookieData', data: document.cookie}))"
             sharedCookiesEnabled={true}
             javaScriptEnabled={true}
-            renderLoading={() => (
-              <View flex={1} alignContent={'center'} justifyContent={'center'}>
-                <ActivityIndicator
-                  color={styleConst.color.blue}
-                  style={styleConst.spinner}
-                />
-              </View>
-            )}
+            // renderLoading={() => (
+            //   <View flex={1} alignContent={'center'} justifyContent={'center'}>
+            //     <ActivityIndicator
+            //       color={styleConst.color.blue}
+            //       style={styleConst.spinner}
+            //     />
+            //   </View>
+            // )}
             minHeight={
               route.params?.minHeight
                 ? route.params?.minHeight
@@ -293,14 +244,7 @@ const ChatScreen = ({
       </View>
     );
   } else {
-    return (
-      <View flex={1} alignContent={'center'} justifyContent={'center'}>
-        <ActivityIndicator
-          color={styleConst.color.blue}
-          style={styleConst.spinner}
-        />
-      </View>
-    );
+    return <LogoLoader />;
   }
 };
 
