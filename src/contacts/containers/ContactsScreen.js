@@ -251,6 +251,7 @@ const _renderEmergencyManager = ({emergencyManagerInfo, navigation}) => {
           <Text
             color={styleConst.color.blueNew}
             fontFamily={styleConst.font.brand}
+            fontWeight={600}
             lineHeight={18}>
             {strings.ContactsScreen.emergencyManager.title}
           </Text>
@@ -258,7 +259,7 @@ const _renderEmergencyManager = ({emergencyManagerInfo, navigation}) => {
             color={styleConst.color.blueNew}
             fontFamily={styleConst.font.brand}
             marginTop={1}
-            fontSize={9}>
+            fontSize={9.5}>
             {strings.ContactsScreen.emergencyManager.subTitle}
           </Text>
           <Image
