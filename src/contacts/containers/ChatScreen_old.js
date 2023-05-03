@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import {View, ActivityIndicator, Text, StyleSheet} from 'react-native';
-import {Chat, MessageType, defaultTheme} from '@flyerhq/react-native-chat-ui';
+import {Chat, defaultTheme} from '@flyerhq/react-native-chat-ui';
 import {connect} from 'react-redux';
 import PushNotifications from '../../core/components/PushNotifications';
 

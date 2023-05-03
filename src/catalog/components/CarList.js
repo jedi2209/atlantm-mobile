@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {View, FlatList, StyleSheet, ActivityIndicator} from 'react-native';
+import {FlatList, StyleSheet} from 'react-native';
 
 // redux
 import {

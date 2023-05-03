@@ -4,7 +4,6 @@ import {
   Linking,
   Dimensions,
   StyleSheet,
-  ActivityIndicator,
   Image,
   BackHandler,
 } from 'react-native';
@@ -24,7 +23,6 @@ import Badge from '../../core/components/Badge';
 // helpers
 import {get} from 'lodash';
 import styleConst from '../../core/style-const';
-import processHtml from '../../utils/process-html';
 import Analytics from '../../utils/amplitude-analytics';
 import {verticalScale} from '../../utils/scale';
 import {dayMonth, dayMonthYear} from '../../utils/date';

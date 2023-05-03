@@ -8,7 +8,6 @@ import {
   Platform,
 } from 'react-native';
 import {
-  Container,
   Button,
   Icon,
   Text,

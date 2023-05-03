@@ -9,7 +9,6 @@ import {
   Dimensions,
   SafeAreaView,
   StatusBar,
-  ActivityIndicator,
 } from 'react-native';
 
 // Maps
