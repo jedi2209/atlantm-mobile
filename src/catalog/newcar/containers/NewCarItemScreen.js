@@ -3,9 +3,6 @@ import React, {useEffect, useState, useRef} from 'react';
 import {
   TouchableOpacity,
   Text,
-  ActivityIndicator,
-  TouchableWithoutFeedback,
-  StatusBar,
   StyleSheet,
   Linking,
   Platform,
@@ -34,7 +31,6 @@ import {actionFetchNewCarDetails} from '../../actions';
 
 // components
 import PhotoSlider from '../../../core/components/PhotoSlider';
-import PhotoViewer from '../../../core/components/PhotoViewer';
 import ColorBox from '../../../core/components/ColorBox';
 import Badge from '../../../core/components/Badge';
 import LogoLoader from '../../../core/components/LogoLoader';

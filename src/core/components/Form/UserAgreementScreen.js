@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, ScrollView, ActivityIndicator} from 'react-native';
-import {Text, Button} from 'native-base';
+import {StyleSheet, ScrollView, ActivityIndicator} from 'react-native';
+import {Button} from 'native-base';
 import {connect} from 'react-redux';
 
 import API from '../../../utils/api';

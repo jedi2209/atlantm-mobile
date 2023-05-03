@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 
-import {TouchableHighlight, Platform, ActivityIndicator} from 'react-native';
+import {TouchableHighlight, Platform} from 'react-native';
 
 import {connect} from 'react-redux';
 import {get} from 'lodash';
@@ -29,7 +29,6 @@ import styleConst from '../../core/style-const';
 
 import {format} from '../../utils/date';
 import numberWithGap from '../../utils/number-with-gap';
-import {verticalScale} from '../../utils/scale';
 
 import orderFunctions from '../../utils/orders';
 

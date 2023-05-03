@@ -1,6 +1,5 @@
 import React, {useEffect, useState, useReducer} from 'react';
 import {connect} from 'react-redux';
-import {ActivityIndicator} from 'react-native';
 
 import {
   List,

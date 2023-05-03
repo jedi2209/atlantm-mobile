@@ -1,14 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState, useRef} from 'react';
+import {SafeAreaView, StyleSheet, Alert, Linking} from 'react-native';
 import {
-  SafeAreaView,
-  ActivityIndicator,
-  StyleSheet,
-  Alert,
-  Linking,
-} from 'react-native';
-import {
-  Text,
   Icon,
   Button,
   Fab,

@@ -7,7 +7,6 @@ import {
   ScrollView,
   Text,
   TouchableWithoutFeedback,
-  ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
 import UserCars from '../components/UserCars';

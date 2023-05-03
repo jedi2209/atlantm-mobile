@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Dimensions, ActivityIndicator} from 'react-native';
+import {StyleSheet, Dimensions} from 'react-native';
 import Orientation, {
   useDeviceOrientationChange,
   useOrientationChange,
@@ -11,14 +11,12 @@ import {strings} from '../lang/const';
 import {View, Text, Spinner} from 'native-base';
 
 const FullScreenGallery = ({
-  navigation,
   route,
   imageIndex,
   images,
   backgroundColor,
   theme,
 }) => {
-  const [visible, setIsVisible] = useState(true);
   const [loading, setLoading] = useState(true);
   const [currIndex, setIndex] = useState(imageIndex);
 

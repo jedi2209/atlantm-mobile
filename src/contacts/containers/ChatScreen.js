@@ -1,7 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {
   StyleSheet,
-  ActivityIndicator,
   Dimensions,
   Platform,
   KeyboardAvoidingView,
@@ -9,12 +8,9 @@ import {
 import {Button, View} from 'native-base';
 import {connect} from 'react-redux';
 import {sign} from 'react-native-pure-jwt';
-import {FadeIn, FadeOut, Transitioning} from 'react-native-reanimated';
 
 import PushNotifications from '../../core/components/PushNotifications';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {store} from '../../core/store';
-// import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import WebView from 'react-native-webview';
 import LogoLoader from '../../core/components/LogoLoader';
 
@@ -58,25 +54,12 @@ let template = `<!doctype html>
     <body></body>
 </html>`;
 
-const ChatScreen = ({
-  route,
-  region,
-  SubmitButton,
-  minHeight,
-  profile,
-  session,
-  saveCookies,
-}) => {
+const ChatScreen = ({route, SubmitButton, profile, session, saveCookies}) => {
   const [data, setData] = useState(null);
   const mainRef = useRef(null);
-  const [userCustomData, setUserCustomData] = useState('');
-  const [userData, setUserData] = useState('');
-  const [pageInfo, setPageInfo] = useState('');
   const [userToken, setUserToken] = useState('');
   const [senderID, setSenderID] = useState(null);
   const [cookies, setCookies] = useState('');
-
-  //const LogoLoaderAnimated = Animated.createAnimatedComponent(LogoLoader);
 
   const userTmp = {
     id: session,
