@@ -3,6 +3,7 @@ import DeviceInfo from 'react-native-device-info';
 const bundle = DeviceInfo.getBundleId();
 
 let appRegion,
+  apiLang,
   errorNetwork,
   appleID,
   googleID,
@@ -26,6 +27,7 @@ switch (bundle) {
   case 'com.atlantm': // Android BY
     appRegion = BELARUSSIA;
     appLang = 'ru';
+    apiLang = 'ru';
     countrySettings = ['by', 'ru'];
     countryList = require('./const.countries_by.json');
     phoneRestricted = 'ua';
@@ -46,6 +48,7 @@ switch (bundle) {
   case 'ua.atlantm.app': // iOS UA + Android UA
     appRegion = UKRAINE;
     appLang = 'uk';
+    apiLang = 'ua';
     countrySettings = ['ua'];
     phoneRestricted = ['ru', 'by'];
     countryList = require('./const.countries_ua.json');
@@ -73,6 +76,8 @@ export const APP_LOCALE = {
 };
 
 export const APP_LANG = appLang;
+
+export const API_LANG = apiLang;
 export const APP_REGION = appRegion;
 export const APP_COUNTRY_SETTINGS = countrySettings;
 export const APP_COUNTRY_LIST = countryList;
