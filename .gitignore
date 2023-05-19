@@ -72,3 +72,5 @@ release/
 vendor/
 .scannerwork
 codesigndoc_exports/
+
+.vscode/
