@@ -28,6 +28,8 @@ import ActionSheetMenu from '../../core/components/ActionSheetMenu';
 import {callMe} from '../actions';
 import {fetchInfoList, actionListReset} from '../../info/actions';
 
+import {API_LANG} from '../../core/const';
+
 const mapStateToProps = ({dealer}) => {
   return {
     dealerSelected: dealer.selected,
@@ -58,14 +60,8 @@ const _renderDivision = divisions => {
           key={'division' + get(div, 'id') + divNum}>
           <Stack p="4" space={3}>
             <Heading size="sm">{get(div, 'name')}</Heading>
-            <HStack justifyContent={'space-between'} alignItems="flex-start">
-              {/* <VStack fontWeight="400" space={1} justifyContent="space-between"> */}
-              {renderDayTimeShort(get(div, 'worktimeShort', []), true)}
-              {/* </VStack>
-            <VStack fontWeight="400" space={1} justifyContent="space-between">
-              {renderDayTimeShort(get(div, 'worktimeShort', []), false)}
-            </VStack> */}
-            </HStack>
+            {renderDayTimeShort(get(div, 'worktimeShort', []), 0, 2)}
+            {renderDayTimeShort(get(div, 'worktimeShort', []), 2, 3)}
           </Stack>
         </Box>
       );
@@ -73,37 +69,41 @@ const _renderDivision = divisions => {
   });
 };
 
-const renderDayTimeShort = (worktime, first) => {
-  const divider = 4;
-  return worktime.map((day, dayNum) => {
-    // if (first) {
-    //   if (dayNum >= divider) {
-    //     return;
-    //   }
-    // } else {
-    //   if (dayNum < divider) {
-    //     return;
-    //   }
-    // }
-    const start = get(day, 'time.start', null);
-    const finish = get(day, 'time.finish', null);
-    return (
-      <HStack
-        key={'dayTimeShort' + dayNum}
-        alignItems="center"
-        justifyContent={'space-between'}>
-        <Text
-          color="coolGray.600"
-          _dark={{
-            color: 'warmGray.200',
-          }}
-          fontWeight="400">
-          {get(day, 'days.ru', null)}:{' '}
-        </Text>
-        <Text>{start && finish ? start + '-' + finish : null}</Text>
-      </HStack>
-    );
-  });
+const renderDayTimeShort = (worktime, first = 0, last = null) => {
+  let mode = 'space-between';
+  if (last) {
+    worktime = worktime.slice(first, last);
+  }
+  if (worktime.length === 1) {
+    mode = 'center';
+  }
+  if (!worktime.length) {
+    return;
+  }
+  return (
+    <HStack justifyContent={mode} alignItems="flex-start">
+      {worktime.map((day, dayNum) => {
+        const start = get(day, 'time.start', null);
+        const finish = get(day, 'time.finish', null);
+        return (
+          <HStack
+            key={'dayTimeShort' + dayNum}
+            alignItems="center"
+            justifyContent={mode}>
+            <Text
+              color="coolGray.600"
+              _dark={{
+                color: 'warmGray.200',
+              }}
+              fontWeight="400">
+              {get(day, 'days.' + API_LANG, null)}:{' '}
+            </Text>
+            <Text>{start && finish ? start + '-' + finish : null}</Text>
+          </HStack>
+        );
+      })}
+    </HStack>
+  );
 };
 
 const renderDayTime = (worktime, first) => {
