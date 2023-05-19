@@ -1,6 +1,7 @@
 import {default as currencyJS} from 'currency.js';
+import {APP_REGION} from '../core/const';
 
-const showPrice = (price, country = 'BY', float = false) => {
+const showPrice = (price, country = APP_REGION, float = false) => {
   if (!price) {
     return false;
   }

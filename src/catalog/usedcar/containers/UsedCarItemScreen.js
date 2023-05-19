@@ -10,6 +10,7 @@ import {
   HStack,
   ScrollView,
   Pressable,
+  Text,
 } from 'native-base';
 import Accordion from 'react-native-collapsible/Accordion';
 
