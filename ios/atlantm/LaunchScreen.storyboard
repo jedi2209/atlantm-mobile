@@ -16,7 +16,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="430" height="932"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" fixedFrame="YES" image="SplashIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Omf-a3-JeO">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" fixedFrame="YES" image="SplashLogo" translatesAutoresizingMaskIntoConstraints="NO" id="Omf-a3-JeO">
                                 <rect key="frame" x="27" y="410" width="376" height="112"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -31,6 +31,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="SplashIcon" width="233.33332824707031" height="80.333335876464844"/>
+        <image name="SplashLogo" width="233.33332824707031" height="80.333335876464844"/>
     </resources>
 </document>
